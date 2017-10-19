@@ -1,0 +1,44 @@
+<div class="panel_head">
+	<h1>html标签扩展</h1>
+</div>
+<hr/>
+<!-- html标签扩展 start-->
+<div class="panel_box">
+	<div class="panel_title">
+		<span class="panel_icon"><i class="icon icon_bookmark"></i></span>
+		<h5>html标签扩展</h5>
+	</div>
+	<div class="panel_content">
+		<h5>Ajax链接扩展</h5>
+		<code>&lt;a href="hellowold.html" target="ajax" rel="container"&gt;Hello World&lt;/a&gt;</code>
+		<p>rel：为需要ajax返回值填充div的id</p>
+		<hr/>
+		<h5>当前navTab中链接ajax post扩展</h5>
+		<code>&lt;a href="user.do?method=remove" target="ajaxTodo" [title="确定要删除吗？"callback="myfunction"]&gt;删除&lt;/a&gt;</code>
+		<p>title：操作执行前的confirm弹框提示内容</p>
+		<p>callback：为ajax回调，默认为navTabAjaxDone</p>
+		<hr/>
+		<h5>dialog链接扩展——弹页面</h5>
+		<code>&lt;a href="dialog.html" target="dialog" [rel="dialogId"]&gt;弹页面&lt;/a&gt;</code>
+		<p>rel：标识此弹出层的ID，会替换同rel的dialog</p>
+		<p>关闭弹框：在弹出窗口页面内按钮添加class="closeDialog"即可。</p>
+		<hr/>
+		<h5>dialog链接扩展——弹div</h5>
+		<code>&lt;a href="javascript:;" target="dialog" isDiv="#divId" [rel="dialogId"]&gt;弹DIV&lt;/a&gt;</code>
+		<p>弹出div时，href值为要弹出div的选择器字符串</p>
+		<hr/>
+		<h5>navTab链接扩展</h5>
+		<code>&lt;a href="hellowold.html" target="navTab" [rel="tabId" fresh="true" external="true"]&gt;新页&lt;/a&gt;</code>
+		<p>rel：为navTab的ID值，后续可以用来重载该页面时使用，如当前页新增或删除数据可以通过该ID进行通知JS重载。注意rel的值区分大小写</p>
+		<p>fresh： 表示重复打开navTab时是否重新加载数据</p>
+		<p>external： 为external="true"或者href是外网连接时，以iframe方式打开navTab页面</p>
+		<hr/>
+		<h5>简单编辑器</h5>
+		<code>&lt;textarea class="editor" name="description"&gt;内容&lt;/a&gt;</code>
+		<hr/>
+		<h5>装载登录界面扩展</h5>
+		<code>&lt;div class="cciglogin"&gt;装载登录到这里，这里会被清空&lt;/a&gt;</code>
+		<hr/>
+	</div>
+</div>
+<!-- html标签扩展 end-->

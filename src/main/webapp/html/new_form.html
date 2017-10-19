@@ -1,0 +1,91 @@
+<div class="panel_box">
+	<div class="panel_content nopadding">
+		<form action="/html/new_form.html" class="required-validate" method="post" onsubmit="return validateCallback(this, navTabAjaxDone);">
+			<div class="form_item">
+				<label class="form_label">用户名：</label>
+				<div class="form_ctrl">
+					<input type="text" name="username" class="{required:true,messages:{required:'为什么不输入一点文字呢'}}" placeholder="请输入"/>
+				</div>
+			</div>
+			<div class="form_item">
+				<label class="form_label">密码：</label>
+				<div class="form_ctrl">
+					<input type="password" name="pwd" class="required unchinese {rangelength:[6,18]}" placeholder="请输入"/>
+					<span class="help-block">密码为6~18位哦~</span>
+				</div>
+			</div>
+			<div class="form_item">
+				<label class="form_label">确认密码：</label>
+				<div class="form_ctrl">
+					<input type="password" name="confirmpwd" class="required {rangelength:[6,18],equalTo:'[name=pwd]',messages:{equalTo:'两次输入不一致哦'}}" placeholder="请确认"/>
+				</div>
+			</div>
+			<div class="form_item">
+				<div class="form_tag"><b>更多详情：</b></div>
+			</div>
+			<div class="form_item">
+				<label class="form_label">性别：</label>
+				<div class="form_ctrl">
+					<label><input type="radio" name="sex" value="0" class="ipt_radio"/>女</label>
+					<label><input type="radio" name="sex" value="1" class="ipt_radio"/>男</label>
+				</div>
+			</div>
+			<div class="form_item">
+				<label class="form_label">爱好：</label>
+				<div class="form_ctrl">
+					<label><input type="checkbox" name="hobby" value="0" class="ipt_checkbox"/>Dota1</label>
+					<label><input type="checkbox" name="hobby" value="1" class="ipt_checkbox"/>Dota2</label>
+					<label><input type="checkbox" name="hobby" value="3" class="ipt_checkbox"/>其他</label>
+				</div>
+			</div>
+			<div class="form_item">
+				<label class="form_label">生日：</label>
+				<div class="form_ctrl">
+					<input type="text" name="birthday" class="date dateicon required" readonly="readonly"/>
+				</div>
+			</div>
+			<div class="form_item">
+				<label class="form_label">职业：</label>
+				<div class="form_ctrl">
+					<select name="job" class="required">
+						<option value="-1">--请选择--</option>
+						<option value="0">在校学生</option>
+						<option value="1">固定工作者</option>
+						<option value="2">自由职业者</option>
+						<option value="3">待业/无业/失业</option>
+						<option value="4">退休</option>
+						<option value="5">其他</option>
+					</select>
+				</div>
+			</div>
+			<div class="form_item">
+				<label class="form_label">联动select：</label>
+				<div class="form_ctrl">
+					<select name="job" sub="job2" suburl="xxxx">
+						<option value="-1">--请选择--</option>
+						<option value="0">在校学生</option>
+						<option value="1">固定工作者</option>
+						<option value="2">自由职业者</option>
+						<option value="3">待业/无业/失业</option>
+						<option value="4">退休</option>
+						<option value="5">其他</option>
+					</select>
+					<select name="job2"><option value="-1">--请选择--</option></select>
+				</div>
+			</div>
+			<div class="form_item">
+				<label class="form_label">自我介绍：</label>
+				<div class="form_ctrl">
+					<!-- <textarea class="editor" name="description" rows="6" cols="100">custom(自定义)</textarea> -->
+					<textarea class="editor" name="description" id="myEditor" rows="5" cols="34">这里写你的初始化内容</textarea>
+				</div>
+			</div>
+			<div class="form_actions">
+				<input type="submit" class="btn btn_add" value="保存"/>
+				<input type="reset" class="btn btn_manage" value="重置"/>
+				<input type="reset" class="btn btn_modify" value="编辑"/>
+				<input type="button" class="btn btn_del closeDialog" value="取消"/>
+			</div>
+		</form>
+	</div>
+</div>

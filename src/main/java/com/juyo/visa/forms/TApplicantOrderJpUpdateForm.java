@@ -1,0 +1,44 @@
+package com.juyo.visa.forms;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import com.uxuexi.core.web.form.ModForm;
+
+import java.io.Serializable;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class TApplicantOrderJpUpdateForm extends ModForm implements Serializable{
+	private static final long serialVersionUID = 1L;
+		
+	/**日本订单id*/
+	private Integer orderId;
+		
+	/**申请人id*/
+	private Integer applicantId;
+		
+	/**是否为统一联系人*/
+	private Integer isSameLinker;
+		
+	/**是否是主申请人*/
+	private Integer isMainApplicant;
+		
+	/**与主申请人的关系*/
+	private Integer mainRelation;
+		
+	/**与主申请人关系备注*/
+	private String relationRemark;
+		
+	/**出行信息是否同主*/
+	private Integer sameMainTrip;
+		
+	/**财富信息是否同主*/
+	private Integer sameMainWealth;
+		
+	/**工作信息是否同主*/
+	private Integer sameMainWork;
+		
+	/**视频地址*/
+	private String videoUrl;
+		
+}

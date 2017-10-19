@@ -1,0 +1,10 @@
+/*------------------------Login-----------------------------*/
+.bodySll{overflow-x: hidden !important;}
+.LoginLabel{position: relative;top: 10px;}
+.LoginLabel label{color: #808080 !important;}
+.marginBott5{margin-bottom: 5px;}
+.LoginBtn{position: relative;top: 18px;margin-bottom: 35px;}
+.authText{width: 40%;}
+.authImg{width: 40%;background-color: #e47365;height: 30px;float: right;position: relative;margin-top: -30px;border-radius: 3px;}
+.loginTitle{color: #367fa9; font-weight: 200;font-family: "HanHei SC","PingHei","PingFang SC","STHeitiSC-Light","Helvetica Neue","Helvetica","Arial",sans-serif !important;}
+.loginTitle i{font-size: 20px;}
