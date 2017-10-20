@@ -148,7 +148,6 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		}
 
 		return JsonResult.success("添加成功");
-		;
 	}
 
 	//跳转到编辑页面
