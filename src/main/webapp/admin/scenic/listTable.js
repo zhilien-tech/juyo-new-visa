@@ -67,7 +67,21 @@ function initDatatable() {
 		            columnDefs: [{}]
 	});
 }
+$("#searchBtn").on('click',function(){
+	var searchStr = $("#searchStr").val();
+	var param = {
+		"searchStr": searchStr,
+	};
+	datatable.settings()[0].ajax.data = param;
+	datatable.ajax.reload();
+});
 
+function onkeyEnter(){
+    var e = window.event || arguments.callee.caller.arguments[0];
+    if(e && e.keyCode == 13){
+		 $("#searchBtn").click();
+	 }
+}
 /* layer添加 */
 function add(){
 	layer.open({

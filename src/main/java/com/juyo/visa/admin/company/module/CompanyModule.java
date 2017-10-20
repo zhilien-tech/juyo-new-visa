@@ -33,7 +33,7 @@ public class CompanyModule {
 	@GET
 	@Ok("jsp")
 	public Object list() {
-		return null;
+		return companyViewService.toListCompanyPage();
 	}
 	
 	/**

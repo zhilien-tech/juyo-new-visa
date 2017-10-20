@@ -29,23 +29,11 @@
 
 						<div class="row form-right">
 							<div class="col-md-2 left-5px right-0px">
-								<select class="input-class input-sm">
-									<option>状态</option>
-								</select>
-							</div>
-							<div class="col-md-2 left-5px right-0px">
-								<input id="" name="" type="text" class="input-sm input-class"
-									placeholder="搜索条件" />
-							</div>
-							<div class="col-md-3 left-5px right-0px">
-								<input id="" name="" type="text"
-									class="input-sm input-class picker" onClick="WdatePicker()" />
-								<span class="picker-span">至</span> <input id="" name=""
-									type="text" class="input-sm input-class picker"
-									onClick="WdatePicker()" />
+								<input id="searchStr" name="searchStr" type="text" class="input-sm input-class"
+									placeholder="收件人/电话/收件地址" onkeypress="onkeyEnter();"/>
 							</div>
 							<div class="col-md-5 left-5px">
-								<a id="" class="btn btn-primary btn-sm pull-left" onclick="">搜索</a>
+								<a id="searchBtn" type="button" class="btn btn-primary btn-sm pull-left" onclick="">搜索</a>
 								<a id="addBtn" class="btn btn-primary btn-sm pull-right"
 									onclick="add();">添加</a>
 							</div>

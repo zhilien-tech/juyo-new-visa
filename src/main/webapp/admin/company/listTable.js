@@ -173,6 +173,30 @@ function initDatatable() {
     });
 }
 
+$("#searchBtn").on('click', function () {
+	var companyName = $("#searchStr").val();
+	var comType = $('#comType').val();
+    var param = {
+        "searchStr": companyName,
+		"comType" : comType
+    };
+    datatable.settings()[0].ajax.data = param;
+    datatable.ajax.reload();
+});
+
+/*回车事件*/
+function onkeyEnter(){
+    var e = window.event || arguments.callee.caller.arguments[0];
+    if(e && e.keyCode == 13){
+		 $("#searchBtn").click();
+	 }
+}
+
+/*公司类型change事件*/
+function selectListData(){
+	  $("#searchBtn").click();
+}
+
 /* layer添加 */
 function add(){
       layer.open({

@@ -14,6 +14,7 @@ import org.nutz.mvc.annotation.Param;
 import com.juyo.visa.admin.hotel.service.HotelViewService;
 import com.juyo.visa.forms.THotelAddForm;
 import com.juyo.visa.forms.THotelForm;
+import com.juyo.visa.forms.THotelSearchForm;
 import com.juyo.visa.forms.THotelUpdateForm;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
@@ -105,6 +106,10 @@ public class HotelModule {
 	public Object batchDelete(@Param("ids") final Long[] ids) {
 		hotelViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
+	}
+
+	public Object hotelSearch(THotelSearchForm searchForm) {
+		return hotelViewService.hotelSearch(searchForm);
 	}
 
 }

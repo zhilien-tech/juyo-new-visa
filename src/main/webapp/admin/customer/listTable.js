@@ -102,6 +102,14 @@ function initDatatable() {
 		            columnDefs: [{}]
 	});
 }
+$("#searchBtn").on('click',function(){
+	var searchStr = $("#searchStr").val();
+	var param = {
+		"searchStr": searchStr,
+	};
+	datatable.settings()[0].ajax.data = param;
+	datatable.ajax.reload();
+});
 
 /* layer添加 */
 function add(){

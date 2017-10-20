@@ -10,6 +10,7 @@ import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.THotelEntity;
 import com.juyo.visa.forms.THotelAddForm;
 import com.juyo.visa.forms.THotelForm;
+import com.juyo.visa.forms.THotelSearchForm;
 import com.juyo.visa.forms.THotelUpdateForm;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
@@ -37,6 +38,10 @@ public class HotelViewService extends BaseService<THotelEntity> {
 		updateForm.setCreateTime(hotel.getCreateTime());
 		this.update(updateForm);
 		return JsonResult.success("修改成功");
+	}
+
+	public Object hotelSearch(THotelSearchForm searchForm) {
+		return null;
 	}
 
 }

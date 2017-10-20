@@ -98,17 +98,21 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>起飞城市：</label> <input id="takeOffCityId"
-									name="takeOffCityId" type="text" class="form-control input-sm"
-									placeholder=" " />
+								<label><span>*</span>起飞城市：</label> 
+								<select id = "takeOffCityId" name="takeOffCityId"
+										class="form-control select2 cityselect2" multiple="multiple"
+										data-placeholder="">
+								</select>
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>降落城市：</label> <input id="landingCityId"
-									name="landingCityId" type="text" class="form-control input-sm"
-									placeholder=" " />
+								<label><span>*</span>降落城市：</label> 
+								<select id = "landingCityId" name="landingCityId"
+										class="form-control select2 cityselect2" multiple="multiple"
+										data-placeholder="">
+								</select>
 							</div>
 						</div>
 					</div>
@@ -172,7 +176,10 @@
 	<script
 		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-
+	<!-- select2 -->
+		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+	<script src="${base}/references/common/js/select2/initSelect2.js"></script>
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
@@ -231,14 +238,14 @@
 									takeOffCityId : {
 						validators : {
 							notEmpty : {
-								message : '起飞城市id不能为空'
+								message : '起飞城市不能为空'
 							}
 						}
 					},
 									landingCityId : {
 						validators : {
 							notEmpty : {
-								message : '降落城市id不能为空'
+								message : '降落城市不能为空'
 							}
 						}
 					},
@@ -273,6 +280,7 @@
 									
 				}
 			});
+			initCustNeedsSelect2();
 		});
 		/* 页面初始化加载完毕 */
 		
