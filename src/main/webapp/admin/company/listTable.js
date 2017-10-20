@@ -62,6 +62,13 @@ function initDatatable() {
 		            		return "";
 		            	}else{
 		            		/*comtype = '<span data-toggle="tooltip" data-placement="right" title="'+comtype+'">'+comtype+'<span>';*/
+		            		if(1==comtype){
+		            			comtype="送签社";
+		            		}else if(2==comtype){
+		            			comtype="地接社";
+		            		}else{
+		            			comtype="undefined";
+		            		}
 		            		return comtype;
 		            	}
 		            } 	

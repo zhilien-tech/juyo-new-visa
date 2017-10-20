@@ -31,13 +31,13 @@
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
-					<input name="id" type="hidden" value="${obj.id}">
+					<input name="id" type="hidden" value="${obj.company.id}">
 
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>公司全称：</label> <input id="name" name="name"
-									value="${obj.name}" type="text" class="form-control input-sm"
+									value="${obj.company.name}" type="text" class="form-control input-sm"
 									placeholder=" " />
 							</div>
 						</div>
@@ -45,7 +45,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>公司简称：</label> <input id="shortName"
-									name="shortName" value="${obj.shortName}" type="text"
+									name="shortName" value="${obj.company.shortName}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -62,7 +62,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>联系人：</label> <input id="linkman"
-									name="linkman" value="${obj.linkman}" type="text"
+									name="linkman" value="${obj.company.linkman}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -72,7 +72,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>电话：</label> <input id="mobile"
-									name="mobile" value="${obj.mobile}" type="text"
+									name="mobile" value="${obj.company.mobile}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -80,7 +80,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>邮箱：</label> <input id="email" name="email"
-									value="${obj.email}" type="text" class="form-control input-sm"
+									value="${obj.company.email}" type="text" class="form-control input-sm"
 									placeholder=" " />
 							</div>
 						</div>
@@ -90,7 +90,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>地址：</label> <input id="address"
-									name="address" value="${obj.address}" type="text"
+									name="address" value="${obj.company.address}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -99,9 +99,18 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>公司类型：</label> <input id="comType"
-									name="comType" value="${obj.comType}" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>公司类型：</label>
+								<%-- <input id="comType"
+									name="comType" value="${obj.company.comType}" type="text"
+									class="form-control input-sm" placeholder=" " /> --%>
+								<select class="form-control input-sm inpImportant"
+									name="comType" id="comType">
+									<option value="">请选择</option>
+									<option value="1"
+										<c:if test="${'1' eq obj.company.comType}">selected</c:if>>送签社</option>
+									<option value="2"
+										<c:if test="${'2' eq obj.company.comType}">selected</c:if>>地接社</option>
+								</select>
 							</div>
 						</div>
 						<div class="col-sm-6">
@@ -116,7 +125,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>营业执照：</label> <input id="license"
-									name="license" value="${obj.license}" type="text"
+									name="license" value="${obj.company.license}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>

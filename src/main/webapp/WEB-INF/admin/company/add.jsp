@@ -95,9 +95,17 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>公司类型：</label> <input id="comType"
+								<label><span>*</span>公司类型：</label>
+								<!-- <input id="comType"
 									name="comType" type="text" class="form-control input-sm"
-									placeholder=" " />
+									placeholder=" " /> -->
+								<select class="form-control input-sm inpImportant"
+									name="comType">
+									<option value="">请选择</option>
+									<c:forEach var="map" items="${obj.companyTypeEnum}">
+										<option value="${map.key}">${map.value}</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 						<div class="col-sm-6">
@@ -214,14 +222,6 @@
 							}
 						}
 					},
-					opId : {
-						validators : {
-							notEmpty : {
-								message : '操作人不能为空'
-							}
-						}
-					},
-
 				}
 			});
 		});
