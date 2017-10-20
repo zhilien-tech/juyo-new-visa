@@ -30,6 +30,9 @@ public class TCompanyForm extends DataTablesParamForm {
 	/**管理员账号id*/
 	private Integer adminId;
 
+	/**用户名*/
+	private String adminLoginName;
+
 	/**联系人*/
 	private String linkman;
 

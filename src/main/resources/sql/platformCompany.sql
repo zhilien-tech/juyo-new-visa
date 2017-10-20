@@ -4,7 +4,7 @@ SELECT
 	c.`name`,
 	c.shortName,
 	c.adminId,
-	u.`name` AS username,
+	u.`name` AS adminLoginName,
 	c.linkman,
 	c.mobile,
 	c.email,
