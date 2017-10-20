@@ -15,6 +15,7 @@ import com.juyo.visa.admin.company.service.CompanyViewService;
 import com.juyo.visa.forms.TCompanyAddForm;
 import com.juyo.visa.forms.TCompanyForm;
 import com.juyo.visa.forms.TCompanyUpdateForm;
+import com.uxuexi.core.db.dao.IDbDao;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
@@ -24,6 +25,12 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 public class CompanyModule {
 
 	private static final Log log = Logs.get();
+
+	/**
+	 * 注入容器中的dbDao对象，用于数据库查询、持久操作
+	 */
+	@Inject
+	private IDbDao dbDao;
 
 	@Inject
 	private CompanyViewService companyViewService;
@@ -35,7 +42,7 @@ public class CompanyModule {
 	@GET
 	@Ok("jsp")
 	public Object list() {
-		return null;
+		return companyViewService.toListCompanyPage();
 	}
 
 	/**
