@@ -22,6 +22,13 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		return listPage4Datatables(queryForm);
 	}
 
+	//加载列表页
+	public Object toListCompanyPage() {
+		Map<String, Object> obj = MapUtil.map();
+		obj.put("companyTypeEnum", EnumUtil.enum2(CompanyTypeEnum.class));
+		return obj;
+	}
+
 	//跳转到添加页面
 	public Object toAddCompanyPage() {
 		Map<String, Object> obj = MapUtil.map();
