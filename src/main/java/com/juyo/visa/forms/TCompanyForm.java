@@ -84,7 +84,7 @@ public class TCompanyForm extends DataTablesParamForm {
 		//TODO 添加自定义查询条件（可选）
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup expg = new SqlExpressionGroup();
-			expg.and("c.name", "LIKE", "%" + searchStr + "%").or("u.name", "LIKE", "%" + searchStr + "%")
+			expg.and("c.name", "LIKE", "%" + searchStr + "%").or("u.mobile", "LIKE", "%" + searchStr + "%")
 					.or("c.linkman", "LIKE", "%" + searchStr + "%").or("c.mobile", "LIKE", "%" + searchStr + "%")
 					.or("c.email", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);

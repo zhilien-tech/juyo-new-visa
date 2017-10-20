@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.nutz.dao.Cnd;
-import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.testng.collections.Maps;
 
+import com.google.common.collect.Maps;
 import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -33,19 +35,12 @@ import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.common.util.Util;
-import com.uxuexi.core.db.dao.IDbDao;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 public class CompanyViewService extends BaseService<TCompanyEntity> {
 	private static final Log log = Logs.get();
-
-	/**
-	 * 注入容器中的dbDao对象，用于数据库查询、持久操作
-	 */
-	@Inject
-	private IDbDao dbDao;
 
 	//管理员所在的部门
 	private static final String MANAGE_DEPART = "公司管理部";
@@ -76,7 +71,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 	public Object addCompany(TCompanyAddForm addForm) {
 		Integer comType = addForm.getComType();
 		Date nowDate = DateUtil.nowDate();
-		String adminLoginName = addForm.getAdminLoginName();//用户名
+		String adminLoginName = addForm.getAdminLoginName();//用户 名
 
 		//公司管理员信息
 		TUserEntity user = new TUserEntity();
@@ -110,7 +105,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		String businessScopes = addForm.getBusinessScopes();
 		Map<String, Object> map = getScopeList(businessScopes, comId);
 		if (!Util.isEmpty(map)) {
-			List<TComBusinessscopeEntity> scopeLists = (List<TComBusinessscopeEntity>) map.get("scopeLists");
+			List<TComBusinessscopeEntity> scopeLists = (List<TComBusinessscopeEntity>) map.get("scopeList");
 			if (!Util.isEmpty(scopeLists)) {
 				dbDao.insert(scopeLists);
 			}
@@ -153,9 +148,17 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 	//跳转到编辑页面
 	public Map<String, Object> getCompanyPageInfo(long id) {
 		Map<String, Object> obj = new HashMap<String, Object>();
-		TCompanyEntity companyEntity = this.fetch(id);
+
+		String sqlString = sqlManager.get("platformCompany_list");
+		Sql sql = Sqls.create(sqlString);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("c.id", "=", id);
+		sql.setCondition(cnd);
+		sql.setCallback(Sqls.callback.records());
+		dbDao.execute(sql);
+		List<Record> list = (List<Record>) sql.getResult();
 		//公司数据
-		obj.put("company", companyEntity);
+		obj.put("company", list.get(0));
 		//用户名
 		//obj.put("telephone", dbDao.fetch(TUserEntity.class, companyEntity.getAdminId()).getUserName());
 		//公司类型
@@ -200,7 +203,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		String businessScopes = updateForm.getBusinessScopes();
 		Map<String, Object> map = getScopeList(businessScopes, comIdInt);
 		if (!Util.isEmpty(map)) {
-			List<TComBusinessscopeEntity> comScopesAfter = (List<TComBusinessscopeEntity>) map.get("scopeLists");
+			List<TComBusinessscopeEntity> comScopesAfter = (List<TComBusinessscopeEntity>) map.get("scopeList");
 			if (!Util.isEmpty(comScopesAfter)) {
 				dbDao.updateRelations(comScopesBefore, comScopesAfter);
 			}
@@ -247,6 +250,10 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 
 	//获取公司权限
 	public List<TComFunctionEntity> getComFunctionList(Integer comId, Integer comType, String scopeStr) {
+		int strLength = scopeStr.length();
+		if (strLength > 1) {
+			scopeStr = scopeStr.substring(0, strLength - 1);
+		}
 		Cnd cnd = Cnd.NEW();
 		cnd.and("compType", "=", comType);
 		cnd.and("countryId", "in", scopeStr);
@@ -256,7 +263,6 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			for (TBusinessscopeFunctionEntity sFunction : scopeFunctions) {
 				TComFunctionEntity comFunction = new TComFunctionEntity();
 				Integer companyType = sFunction.getCompType();
-				Integer scopeId = sFunction.getCountryId();
 				Integer funId = sFunction.getFunId();
 				if (Util.eq(comType, companyType)) {
 					comFunction.setComId(comId);
