@@ -20,4 +20,11 @@ public class CommonConstants {
 	 * 验证码-session key
 	 */
 	public static final String CONFIRMCODE = "confirmcode";
+
+	/**数据状态:@see DataStatusEnum*/
+	/**数据状态-启用中*/
+	public static final Integer DATA_STATUS_VALID = 1;
+
+	/**数据状态-冻结*/
+	public static final Integer DATA_STATUS_INVALID = 0;
 }

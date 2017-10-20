@@ -9,7 +9,11 @@ package com.juyo.visa.admin.login.service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
+
 import com.juyo.visa.admin.login.form.LoginForm;
+import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.access.AccessConfig;
 import com.juyo.visa.common.access.sign.MD5;
 import com.juyo.visa.common.comstants.CommonConstants;
@@ -26,6 +30,7 @@ import com.uxuexi.core.web.base.service.BaseService;
  * @author   刘旭利
  * @Date	 2017年10月19日 	 
  */
+@IocBean
 public class LoginService extends BaseService<TUserEntity> {
 
 	public static final String IS_LOGIN_KEY = "isLogin";
@@ -34,6 +39,9 @@ public class LoginService extends BaseService<TUserEntity> {
 	public static final String FUNCTION_MAP_KEY = "functionMap";
 	public static final String USER_COMPANY_KEY = "user_company";
 	public static final String LOGINUSER = "loginuser";
+
+	@Inject
+	private UserViewService userViewService;
 
 	/**
 	 * 获取当前登录用户
@@ -97,6 +105,18 @@ public class LoginService extends BaseService<TUserEntity> {
 		}
 
 		String passwd = MD5.sign(form.getPassword(), AccessConfig.password_secret, AccessConfig.INPUT_CHARSET);
+
+		TUserEntity user = userViewService.findUser(loginName, passwd);
+		if (user == null) {
+			form.setErrMsg("用户名或密码错误");
+			return false;
+		} else {
+			if (CommonConstants.DATA_STATUS_VALID != user.getIsDisable()) {
+				form.setErrMsg("账号未激活");
+				return false;
+			}
+			int userType = user.getUserType();
+		}
 		return true;
 	}
 
