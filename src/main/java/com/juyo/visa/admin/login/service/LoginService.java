@@ -6,9 +6,13 @@
 
 package com.juyo.visa.admin.login.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.Sqls;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
@@ -17,9 +21,11 @@ import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.access.AccessConfig;
 import com.juyo.visa.common.access.sign.MD5;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.UserJobStatusEnum;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.db.util.DbSqlUtil;
 import com.uxuexi.core.web.base.service.BaseService;
 
 /**
@@ -116,6 +122,10 @@ public class LoginService extends BaseService<TUserEntity> {
 				return false;
 			}
 			int userType = user.getUserType();
+			Sql companySql = Sqls.create(sqlManager.get("select_login_company"));
+			companySql.params().set("userId", user.getId());
+			companySql.params().set("jobStatus", UserJobStatusEnum.ON.intKey());
+			List<TCompanyEntity> companyLst = DbSqlUtil.query(dbDao, TCompanyEntity.class, companySql);
 		}
 		return true;
 	}
