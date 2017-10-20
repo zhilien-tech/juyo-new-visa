@@ -52,15 +52,21 @@
 							<table id="datatableId" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
-										<th><span>公司全称</span></th>
-										<th><span>公司简称</span></th>
-										<th><span>用户名</span></th>
-										<th><span>公司类型</span></th>
-										<th><span>经营范围</span></th>
-										<th><span>联系人</span></th>
-										<th><span>电话</span></th>
-										<th><span>邮箱</span></th>
-										<th><span>操作</span></th>
+										<th><span>序号</span></th>
+																					<th><span>公司名称</span></th>
+																					<th><span>公司简称</span></th>
+																					<th><span>管理员账号id</span></th>
+																					<th><span>联系人</span></th>
+																					<th><span>联系人手机号</span></th>
+																					<th><span>邮箱</span></th>
+																					<th><span>地址</span></th>
+																					<th><span>公司类型</span></th>
+																					<th><span>营业执照</span></th>
+																					<th><span>操作人</span></th>
+																					<th><span>创建时间</span></th>
+																					<th><span>修改时间</span></th>
+																					<th><span>删除标识</span></th>
+																				<th><span>操作</span></th>
 									</tr>
 								</thead>
 								<tbody>

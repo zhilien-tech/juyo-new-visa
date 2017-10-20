@@ -17,20 +17,15 @@ function initDatatable() {
             } */
         },
         /* 列表序号 */
-        "fnDrawCallback"    : function(){
-        	var api = this.api();
-        	var startIndex= api.context[0]._iDisplayStart;
-		　　    api.column(0).nodes().each(function(cell, i) {
-			   　　　　cell.innerHTML = startIndex + i + 1;
-			});
-      	},
+//        "fnDrawCallback"    : function(){
+//        	var api = this.api();
+//        	var startIndex= api.context[0]._iDisplayStart;
+//		　　    api.column(0).nodes().each(function(cell, i) {
+//			   　　　　cell.innerHTML = startIndex + i + 1;
+//			});
+//      	},
 
         "columns": [
-        			{"data": "", "bSortable": false,render: function(data, type, row, meta) {
-	                		
-	                		return "";
-	                    } 	
-	                },
                     						{"data": "flightnum", "bSortable": false,render: function(data, type, row, meta) {
 		                		 var flightnum = row.flightnum;
 		                		 if(null==flightnum || ""==flightnum){
@@ -51,123 +46,103 @@ function initDatatable() {
 		                		 }
 		                    } 	
 		                },
-											{"data": "takeOffName", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var takeOffName = row.takeOffName;
-		                		 if(null==takeOffName || ""==takeOffName){
+											{"data": "takeoffname", "bSortable": false,render: function(data, type, row, meta) {
+		                		 var takeoffname = row.takeoffname;
+		                		 if(null==takeoffname || ""==takeoffname){
 		                			 return "";
 		                		 }else{
 		                		 	/*takeOffName = '<span data-toggle="tooltip" data-placement="right" title="'+takeOffName+'">'+takeOffName+'<span>';*/
-		                		 	return takeOffName;
+		                		 	return takeoffname;
 		                		 }
 		                    } 	
 		                },
-											{"data": "takeOffCode", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var takeOffCode = row.takeOffCode;
-		                		 if(null==takeOffCode || ""==takeOffCode){
+											{"data": "takeoffcode", "bSortable": false,render: function(data, type, row, meta) {
+		                		 var takeoffcode = row.takeoffcode;
+		                		 if(null==takeoffcode || ""==takeoffcode){
 		                			 return "";
 		                		 }else{
 		                		 	/*takeOffCode = '<span data-toggle="tooltip" data-placement="right" title="'+takeOffCode+'">'+takeOffCode+'<span>';*/
-		                		 	return takeOffCode;
+		                		 	return takeoffcode;
 		                		 }
 		                    } 	
 		                },
-											{"data": "landingName", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var landingName = row.landingName;
-		                		 if(null==landingName || ""==landingName){
+											{"data": "landingname", "bSortable": false,render: function(data, type, row, meta) {
+		                		 var landingname = row.landingname;
+		                		 if(null==landingname || ""==landingname){
 		                			 return "";
 		                		 }else{
 		                		 	/*landingName = '<span data-toggle="tooltip" data-placement="right" title="'+landingName+'">'+landingName+'<span>';*/
-		                		 	return landingName;
+		                		 	return landingname;
 		                		 }
 		                    } 	
 		                },
-											{"data": "landingCode", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var landingCode = row.landingCode;
-		                		 if(null==landingCode || ""==landingCode){
+											{"data": "landingcode", "bSortable": false,render: function(data, type, row, meta) {
+		                		 var landingcode = row.landingcode;
+		                		 if(null==landingcode || ""==landingcode){
 		                			 return "";
 		                		 }else{
 		                		 	/*landingCode = '<span data-toggle="tooltip" data-placement="right" title="'+landingCode+'">'+landingCode+'<span>';*/
-		                		 	return landingCode;
+		                		 	return landingcode;
 		                		 }
 		                    } 	
 		                },
-											{"data": "takeOffCityId", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var takeOffCityId = row.takeOffCityId;
-		                		 if(null==takeOffCityId || ""==takeOffCityId){
+											{"data": "takeoffcityid", "bSortable": false,render: function(data, type, row, meta) {
+		                		 var takeoffcityid = row.takeoffcityid;
+		                		 if(null==takeoffcityid || ""==takeoffcityid){
 		                			 return "";
 		                		 }else{
 		                		 	/*takeOffCityId = '<span data-toggle="tooltip" data-placement="right" title="'+takeOffCityId+'">'+takeOffCityId+'<span>';*/
-		                		 	return takeOffCityId;
+		                		 	return takeoffcityid;
 		                		 }
 		                    } 	
 		                },
-											{"data": "landingCityId", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var landingCityId = row.landingCityId;
-		                		 if(null==landingCityId || ""==landingCityId){
+											{"data": "landingcityid", "bSortable": false,render: function(data, type, row, meta) {
+		                		 var landingcityid = row.landingcityid;
+		                		 if(null==landingcityid || ""==landingcityid){
 		                			 return "";
 		                		 }else{
 		                		 	/*landingCityId = '<span data-toggle="tooltip" data-placement="right" title="'+landingCityId+'">'+landingCityId+'<span>';*/
-		                		 	return landingCityId;
+		                		 	return landingcityid;
 		                		 }
 		                    } 	
 		                },
-											{"data": "takeOffTime", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var takeOffTime = row.takeOffTime;
-		                		 if(null==takeOffTime || ""==takeOffTime){
+											{"data": "takeofftime", "bSortable": false,render: function(data, type, row, meta) {
+		                		 var takeofftime = row.takeofftime;
+		                		 if(null==takeofftime || ""==takeofftime){
 		                			 return "";
 		                		 }else{
 		                		 	/*takeOffTime = '<span data-toggle="tooltip" data-placement="right" title="'+takeOffTime+'">'+takeOffTime+'<span>';*/
-		                		 	return takeOffTime;
+		                		 	return takeofftime;
 		                		 }
 		                    } 	
 		                },
-											{"data": "landingTime", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var landingTime = row.landingTime;
-		                		 if(null==landingTime || ""==landingTime){
+											{"data": "landingtime", "bSortable": false,render: function(data, type, row, meta) {
+		                		 var landingtime = row.landingtime;
+		                		 if(null==landingtime || ""==landingtime){
 		                			 return "";
 		                		 }else{
 		                		 	/*landingTime = '<span data-toggle="tooltip" data-placement="right" title="'+landingTime+'">'+landingTime+'<span>';*/
-		                		 	return landingTime;
+		                		 	return landingtime;
 		                		 }
 		                    } 	
 		                },
-											{"data": "takeOffTerminal", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var takeOffTerminal = row.takeOffTerminal;
-		                		 if(null==takeOffTerminal || ""==takeOffTerminal){
+											{"data": "takeoffterminal", "bSortable": false,render: function(data, type, row, meta) {
+		                		 var takeoffterminal = row.takeoffterminal;
+		                		 if(null==takeoffterminal || ""==takeoffterminal){
 		                			 return "";
 		                		 }else{
 		                		 	/*takeOffTerminal = '<span data-toggle="tooltip" data-placement="right" title="'+takeOffTerminal+'">'+takeOffTerminal+'<span>';*/
-		                		 	return takeOffTerminal;
+		                		 	return takeoffterminal;
 		                		 }
 		                    } 	
 		                },
-											{"data": "landingTerminal", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var landingTerminal = row.landingTerminal;
-		                		 if(null==landingTerminal || ""==landingTerminal){
+											{"data": "landingterminal", "bSortable": false,render: function(data, type, row, meta) {
+		                		 var landingterminal = row.landingterminal;
+		                		 if(null==landingterminal || ""==landingterminal){
 		                			 return "";
 		                		 }else{
 		                		 	/*landingTerminal = '<span data-toggle="tooltip" data-placement="right" title="'+landingTerminal+'">'+landingTerminal+'<span>';*/
-		                		 	return landingTerminal;
-		                		 }
-		                    } 	
-		                },
-											{"data": "createTime", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var createTime = row.createTime;
-		                		 if(null==createTime || ""==createTime){
-		                			 return "";
-		                		 }else{
-		                		 	/*createTime = '<span data-toggle="tooltip" data-placement="right" title="'+createTime+'">'+createTime+'<span>';*/
-		                		 	return createTime;
-		                		 }
-		                    } 	
-		                },
-											{"data": "updateTime", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var updateTime = row.updateTime;
-		                		 if(null==updateTime || ""==updateTime){
-		                			 return "";
-		                		 }else{
-		                		 	/*updateTime = '<span data-toggle="tooltip" data-placement="right" title="'+updateTime+'">'+updateTime+'<span>';*/
-		                		 	return updateTime;
+		                		 	return landingterminal;
 		                		 }
 		                    } 	
 		                },

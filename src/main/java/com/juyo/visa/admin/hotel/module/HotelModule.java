@@ -1,31 +1,33 @@
 package com.juyo.visa.admin.hotel.module;
 
-import com.juyo.visa.admin.hotel.service.HotelViewService;
-import com.juyo.visa.forms.THotelUpdateForm;
-import com.juyo.visa.forms.THotelAddForm;
-import com.juyo.visa.forms.THotelForm;
-
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.dao.pager.Pager;
-import org.nutz.mvc.annotation.*;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.GET;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
+import org.nutz.mvc.annotation.Param;
 
-import com.uxuexi.core.web.base.page.Pagination;
+import com.juyo.visa.admin.hotel.service.HotelViewService;
+import com.juyo.visa.forms.THotelAddForm;
+import com.juyo.visa.forms.THotelForm;
+import com.juyo.visa.forms.THotelUpdateForm;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 @At("/admin/hotel")
 @Filters({//@By(type = AuthFilter.class)
-	})
+})
 public class HotelModule {
 
 	private static final Log log = Logs.get();
-	
+
 	@Inject
 	private HotelViewService hotelViewService;
-	
+
 	/**
 	 * 跳转到list页面
 	 */
@@ -35,28 +37,28 @@ public class HotelModule {
 	public Object list() {
 		return null;
 	}
-	
+
 	/**
 	 * 分页查询
 	 */
 	/*@At
 	@Ok("jsp")
 	public Pagination list(@Param("..") final THotelForm sqlParamForm,@Param("..") final Pager pager) {
-    	return hotelViewService.listPage(sqlParamForm,pager);
-    }*/
-    @At
+		return hotelViewService.listPage(sqlParamForm,pager);
+	}*/
+	@At
 	public Object listData(@Param("..") final THotelForm sqlParamForm) {
 		return hotelViewService.listData(sqlParamForm);
 	}
-    
-    /**
+
+	/**
 	 * 跳转到'添加操作'的录入数据页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
 	public Object add() {
-		return null ;
+		return null;
 	}
 
 	/**
@@ -64,8 +66,8 @@ public class HotelModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..")THotelAddForm addForm) {
-		return hotelViewService.add(addForm);
+	public Object add(@Param("..") THotelAddForm addForm) {
+		return hotelViewService.addHotel(addForm);
 	}
 
 	/**
@@ -83,8 +85,8 @@ public class HotelModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..")THotelUpdateForm updateForm) {
-		return hotelViewService.update(updateForm);
+	public Object update(@Param("..") THotelUpdateForm updateForm) {
+		return hotelViewService.updateHotel(updateForm);
 	}
 
 	/**
@@ -104,5 +106,5 @@ public class HotelModule {
 		hotelViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
 	}
-	
+
 }

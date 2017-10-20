@@ -1,4 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java"
+	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
 
 <c:set var="url" value="${base}/admin/flight" />
@@ -6,175 +7,173 @@
 <!DOCTYPE HTML>
 <html lang="en-US" id="updateHtml">
 <head>
-	<meta charset="UTF-8">
-	<title>更新</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<meta charset="UTF-8">
+<title>更新</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet"
+	href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 </head>
 <body>
-	
+
 	<div class="modal-content">
 		<form id="flightUpdateForm">
 			<div class="modal-header">
-			<span class="heading">编辑</span>
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消"/>
-				<input id="updateBtn" type="button" onclick="save()" class="btn btn-primary pull-right btn-sm btn-right" value="保存"/>
+				<span class="heading">编辑</span> <input id="backBtn" type="button"
+					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
+					data-dismiss="modal" value="取消" /> <input id="updateBtn"
+					type="button" onclick="save()"
+					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
 					<input name="id" type="hidden" value="${obj.id}">
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>航班号：</label>
-										<input id="flightnum" name="flightnum" value="${obj.flightnum}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																												<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>航空公司：</label>
-												<input id="airlinecomp" name="airlinecomp" value="${obj.airlinecomp}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																				</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>起飞机场：</label>
-										<input id="takeOffName" name="takeOffName" value="${obj.takeOffName}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																														<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>起飞机场三字代码：</label>
-												<input id="takeOffCode" name="takeOffCode" value="${obj.takeOffCode}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																		</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>降落机场：</label>
-										<input id="landingName" name="landingName" value="${obj.landingName}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																																																																<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>降落机场三字代码：</label>
-												<input id="landingCode" name="landingCode" value="${obj.landingCode}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>起飞城市id：</label>
-										<input id="takeOffCityId" name="takeOffCityId" value="${obj.takeOffCityId}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																																																																																																		<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>降落城市id：</label>
-												<input id="landingCityId" name="landingCityId" value="${obj.landingCityId}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																														</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>起飞时间：</label>
-										<input id="takeOffTime" name="takeOffTime" value="${obj.takeOffTime}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																																																																																																																																				<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>降落时间：</label>
-												<input id="landingTime" name="landingTime" value="${obj.landingTime}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																												</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>起飞航站楼：</label>
-										<input id="takeOffTerminal" name="takeOffTerminal" value="${obj.takeOffTerminal}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																																																																																																																																																																						<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>降落航站楼：</label>
-												<input id="landingTerminal" name="landingTerminal" value="${obj.landingTerminal}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																										</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>创建时间：</label>
-										<input id="createTime" name="createTime" value="${obj.createTime}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																																																																																																																																																																																																								<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>更新时间：</label>
-												<input id="updateTime" name="updateTime" value="${obj.updateTime}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																								</div>
-											
-										
-											
-										
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>航班号：</label> <input id="flightnum"
+									name="flightnum" value="${obj.flightnum}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>航空公司：</label> <input id="airlinecomp"
+									name="airlinecomp" value="${obj.airlinecomp}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+
+
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>起飞机场：</label> <input id="takeOffName"
+									name="takeOffName" value="${obj.takeOffName}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>起飞机场三字代码：</label> <input id="takeOffCode"
+									name="takeOffCode" value="${obj.takeOffCode}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+
+
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>降落机场：</label> <input id="landingName"
+									name="landingName" value="${obj.landingName}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>降落机场三字代码：</label> <input id="landingCode"
+									name="landingCode" value="${obj.landingCode}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+
+
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>起飞城市：</label> <input id="takeOffCityId"
+									name="takeOffCityId" value="${obj.takeOffCityId}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>降落城市：</label> <input id="landingCityId"
+									name="landingCityId" value="${obj.landingCityId}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+
+
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>起飞时间：</label> <input id="takeOffTime"
+									name="takeOffTime" value="${obj.takeOffTime}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>降落时间：</label> <input id="landingTime"
+									name="landingTime" value="${obj.landingTime}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+
+
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>起飞航站楼：</label> <input id="takeOffTerminal"
+									name="takeOffTerminal" value="${obj.takeOffTerminal}"
+									type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>降落航站楼：</label> <input id="landingTerminal"
+									name="landingTerminal" value="${obj.landingTerminal}"
+									type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</form>
 	</div>
-	
+
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
 	<!-- jQuery 2.2.3 -->
-	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script
+		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script
+		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	
+
 	<script type="text/javascript">
 		var base = "${base}";
 
@@ -272,20 +271,6 @@
 								}
 							}
 						},
-											createTime : {
-							validators : {
-								notEmpty : {
-									message : '创建时间不能为空'
-								}
-							}
-						},
-											updateTime : {
-							validators : {
-								notEmpty : {
-									message : '更新时间不能为空'
-								}
-							}
-						},
 									}
 			});
 		}
@@ -363,17 +348,6 @@
 						layer.msg('landingTerminal不能为空');
 						return;
 					}
-									var createTime = $("#createTime").val();
-					if(createTime==""){
-						layer.msg('createTime不能为空');
-						return;
-					}
-									var updateTime = $("#updateTime").val();
-					if(updateTime==""){
-						layer.msg('updateTime不能为空');
-						return;
-					}
-								
 				
 				$.ajax({
 					type : 'POST',
@@ -399,8 +373,8 @@
         	parent.layer.close(index);
 		}
 	</script>
-	
-	
+
+
 </body>
 </html>
 

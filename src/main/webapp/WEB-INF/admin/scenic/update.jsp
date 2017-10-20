@@ -1,4 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java"
+	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
 
 <c:set var="url" value="${base}/admin/scenic" />
@@ -6,91 +7,89 @@
 <!DOCTYPE HTML>
 <html lang="en-US" id="updateHtml">
 <head>
-	<meta charset="UTF-8">
-	<title>更新</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<meta charset="UTF-8">
+<title>更新</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet"
+	href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 </head>
 <body>
-	
+
 	<div class="modal-content">
 		<form id="scenicUpdateForm">
 			<div class="modal-header">
-			<span class="heading">编辑</span>
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消"/>
-				<input id="updateBtn" type="button" onclick="save()" class="btn btn-primary pull-right btn-sm btn-right" value="保存"/>
+				<span class="heading">编辑</span> <input id="backBtn" type="button"
+					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
+					data-dismiss="modal" value="取消" /> <input id="updateBtn"
+					type="button" onclick="save()"
+					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
 					<input name="id" type="hidden" value="${obj.id}">
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>景点(中文)：</label>
-										<input id="name" name="name" value="${obj.name}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																												<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>景点(原文)：</label>
-												<input id="namejp" name="namejp" value="${obj.namejp}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																											</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>所属城市id：</label>
-										<input id="cityId" name="cityId" value="${obj.cityId}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																														<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>创建时间：</label>
-												<input id="createTime" name="createTime" value="${obj.createTime}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																									</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>更新时间：</label>
-										<input id="updateTime" name="updateTime" value="${obj.updateTime}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																																																				</div>
-											
-										
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>景点(中文)：</label> <input id="name"
+									name="name" value="${obj.name}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>景点(原文)：</label> <input id="namejp"
+									name="namejp" value="${obj.namejp}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>所属城市：</label> 
+								<select id = "cityId" name="cityId"
+										class="form-control select2 cityselect2" multiple="multiple"
+										data-placeholder="">
+								</select>
+							</div>
+						</div>
+
+
+					</div>
+
+
 				</div>
 			</div>
 		</form>
 	</div>
-	
+
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
 	<!-- jQuery 2.2.3 -->
-	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script
+		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script
+		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	
+	<!-- select2 -->
+		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+	<script src="${base}/references/common/js/select2/initSelect2.js"></script>
 	<script type="text/javascript">
 		var base = "${base}";
 
@@ -121,21 +120,7 @@
 											cityId : {
 							validators : {
 								notEmpty : {
-									message : '所属城市id不能为空'
-								}
-							}
-						},
-											createTime : {
-							validators : {
-								notEmpty : {
-									message : '创建时间不能为空'
-								}
-							}
-						},
-											updateTime : {
-							validators : {
-								notEmpty : {
-									message : '更新时间不能为空'
+									message : '所属城市不能为空'
 								}
 							}
 						},
@@ -149,6 +134,7 @@
 		}
 		
 	    initvalidate();
+	    initCustNeedsSelect2();
 		$('#scenicUpdateForm').bootstrapValidator('validate');
 		function save() {
 			$('#scenicUpdateForm').bootstrapValidator('validate');
@@ -171,18 +157,6 @@
 						layer.msg('cityId不能为空');
 						return;
 					}
-									var createTime = $("#createTime").val();
-					if(createTime==""){
-						layer.msg('createTime不能为空');
-						return;
-					}
-									var updateTime = $("#updateTime").val();
-					if(updateTime==""){
-						layer.msg('updateTime不能为空');
-						return;
-					}
-								
-				
 				$.ajax({
 					type : 'POST',
 					data : $("#scenicUpdateForm").serialize(),
@@ -207,8 +181,8 @@
         	parent.layer.close(index);
 		}
 	</script>
-	
-	
+
+
 </body>
 </html>
 

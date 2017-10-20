@@ -1,31 +1,33 @@
 package com.juyo.visa.admin.flight.module;
 
-import com.juyo.visa.admin.flight.service.FlightViewService;
-import com.juyo.visa.forms.TFlightUpdateForm;
-import com.juyo.visa.forms.TFlightAddForm;
-import com.juyo.visa.forms.TFlightForm;
-
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.dao.pager.Pager;
-import org.nutz.mvc.annotation.*;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.GET;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
+import org.nutz.mvc.annotation.Param;
 
-import com.uxuexi.core.web.base.page.Pagination;
+import com.juyo.visa.admin.flight.service.FlightViewService;
+import com.juyo.visa.forms.TFlightAddForm;
+import com.juyo.visa.forms.TFlightForm;
+import com.juyo.visa.forms.TFlightUpdateForm;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 @At("/admin/flight")
 @Filters({//@By(type = AuthFilter.class)
-	})
+})
 public class FlightModule {
 
 	private static final Log log = Logs.get();
-	
+
 	@Inject
 	private FlightViewService flightViewService;
-	
+
 	/**
 	 * 跳转到list页面
 	 */
@@ -35,28 +37,28 @@ public class FlightModule {
 	public Object list() {
 		return null;
 	}
-	
+
 	/**
 	 * 分页查询
 	 */
 	/*@At
 	@Ok("jsp")
 	public Pagination list(@Param("..") final TFlightForm sqlParamForm,@Param("..") final Pager pager) {
-    	return flightViewService.listPage(sqlParamForm,pager);
-    }*/
-    @At
+		return flightViewService.listPage(sqlParamForm,pager);
+	}*/
+	@At
 	public Object listData(@Param("..") final TFlightForm sqlParamForm) {
 		return flightViewService.listData(sqlParamForm);
 	}
-    
-    /**
+
+	/**
 	 * 跳转到'添加操作'的录入数据页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
 	public Object add() {
-		return null ;
+		return null;
 	}
 
 	/**
@@ -64,8 +66,8 @@ public class FlightModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..")TFlightAddForm addForm) {
-		return flightViewService.add(addForm);
+	public Object add(@Param("..") TFlightAddForm addForm) {
+		return flightViewService.addFlight(addForm);
 	}
 
 	/**
@@ -83,8 +85,8 @@ public class FlightModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..")TFlightUpdateForm updateForm) {
-		return flightViewService.update(updateForm);
+	public Object update(@Param("..") TFlightUpdateForm updateForm) {
+		return flightViewService.updateFlight(updateForm);
 	}
 
 	/**
@@ -104,5 +106,5 @@ public class FlightModule {
 		flightViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
 	}
-	
+
 }

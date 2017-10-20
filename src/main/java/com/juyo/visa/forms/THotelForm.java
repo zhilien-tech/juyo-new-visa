@@ -1,17 +1,18 @@
 package com.juyo.visa.forms;
 
-import com.uxuexi.core.db.util.EntityUtil;
+import java.util.Date;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import com.juyo.visa.entities.THotelEntity;
-import com.uxuexi.core.web.form.DataTablesParamForm;
-import java.util.Date;
 
-import java.io.Serializable;
+import com.juyo.visa.entities.THotelEntity;
+import com.uxuexi.core.db.util.EntityUtil;
+import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -19,31 +20,34 @@ public class THotelForm extends DataTablesParamForm {
 	private static final long serialVersionUID = 1L;
 	/**主键id*/
 	private Integer id;
-	
+
 	/**酒店名称(中文)*/
 	private String name;
-	
+
 	/**酒店名称(原文)*/
 	private String namejp;
-	
+
 	/**酒店地址(中文)*/
 	private String address;
-	
+
 	/**酒店地址(原文)*/
 	private String addressjp;
-	
+
 	/**电话*/
 	private String mobile;
-	
+
 	/**所属城市id*/
 	private Integer cityId;
-	
+
+	/**所属城市*/
+	private String cityName;
+
 	/**创建时间*/
 	private Date createTime;
-	
+
 	/**更新时间*/
 	private Date updateTime;
-	
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**
