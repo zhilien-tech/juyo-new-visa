@@ -1,0 +1,31 @@
+/*------------------------company.css 公司管理 样式 -----------------------------*/
+.btnVal input{position: relative;top: 5px;margin-right: 5px;background-color: #fff;}
+.btn-state1{border:solid 1px #d6e6fd;color: #3280e4 !important;}
+.btn-state2{border: solid 1px #d1d5dd;color: #9d9d9d !important;}
+.companyChopBtn {opacity:0;width:128px;height:31px;cursor:pointer; position:relative;top:-25px;}
+.companyChopA{background-color:#0172c6;color:#fff;padding:8px 15px;font-size:13px;}
+.imgPreview{width: 99.5%; height: 200px;text-align: center;line-height: 200px;}
+.sqImgPreview{width: 99.5%; height: 200px;text-align: center;line-height: 200px;}
+#img{width: 99.5%; height: 200px;text-align: center;line-height: 200px;border: solid 1px #c9c9c9;}
+#sqImg{display: block;width: 100%; height: 200px;text-align: center;line-height: 200px;border: solid 1px #c9c9c9;}
+#uploadFile-button{width:100px !important;}
+#uploadSQFile-button{width:100px !important;}
+object#SWFUpload_0 {width: 100px !important;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
