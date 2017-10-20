@@ -14,15 +14,12 @@
 		<div class="wrapper">
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper"  style="min-height: 848px;">
-				<!-- Main content -->
+				<ul class="title">
+					<li>酒店管理</li>
+					<!-- <li class="arrow"></li>
+					<li></li> -->
+				</ul>
 				<section class="content">
-				
-					<ul class="title">
-						<li>酒店管理</li>
-						<!-- <li class="arrow"></li>
-						<li></li> -->
-					</ul>
-				
 					<div class="box">
 						<div class="box-header">
 						
