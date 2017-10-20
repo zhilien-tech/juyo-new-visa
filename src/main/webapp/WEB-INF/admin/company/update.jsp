@@ -179,7 +179,7 @@
 					adminId : {
 						validators : {
 							notEmpty : {
-								message : '管理员账号id不能为空'
+								message : '用户名不能为空'
 							}
 						}
 					},
@@ -245,47 +245,47 @@
 				//获取必填项信息
 				var name = $("#name").val();
 				if (name == "") {
-					layer.msg('name不能为空');
+					layer.msg('公司全称不能为空');
 					return;
 				}
 				var shortName = $("#shortName").val();
 				if (shortName == "") {
-					layer.msg('shortName不能为空');
+					layer.msg('公司简称不能为空');
 					return;
 				}
-				var adminId = $("#adminId").val();
+				/* var adminId = $("#adminId").val();
 				if (adminId == "") {
-					layer.msg('adminId不能为空');
+					layer.msg('用户名不能为空');
 					return;
-				}
+				} */
 				var linkman = $("#linkman").val();
 				if (linkman == "") {
-					layer.msg('linkman不能为空');
+					layer.msg('联系人不能为空');
 					return;
 				}
 				var mobile = $("#mobile").val();
 				if (mobile == "") {
-					layer.msg('mobile不能为空');
+					layer.msg('电话不能为空');
 					return;
 				}
 				var email = $("#email").val();
 				if (email == "") {
-					layer.msg('email不能为空');
+					layer.msg('邮箱不能为空');
 					return;
 				}
 				var address = $("#address").val();
 				if (address == "") {
-					layer.msg('address不能为空');
+					layer.msg('地址不能为空');
 					return;
 				}
 				var comType = $("#comType").val();
 				if (comType == "") {
-					layer.msg('comType不能为空');
+					layer.msg('公司类型不能为空');
 					return;
 				}
 				var license = $("#license").val();
 				if (license == "") {
-					layer.msg('license不能为空');
+					layer.msg('营业执照不能为空');
 					return;
 				}
 
