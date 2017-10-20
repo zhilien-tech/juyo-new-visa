@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="juyo-new-visa">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="we-core-web-www-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/we-core-web-www/we-core-web-www">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="we-core-web-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/we-core-web/we-core-web">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="we-core-db-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/we-core-db/we-core-db">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="we-core-common-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/we-core-common/we-core-common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="we-core-redis-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/we-core-redis/we-core-redis">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="juyo-new-visa"/>
+        <property name="java-output-path" value="/juyo-new-visa/src/main/webapp/WEB-INF/classes"/>
+    </wb-module>
+</project-modules>
