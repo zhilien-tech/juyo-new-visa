@@ -122,6 +122,7 @@
 								<div class="multiselectBtn form-control input-sm"></div>
 								<div class="btnVal">
 									<input type="button" value="日本" class="btn btn-sm btn-state1" />
+									<input type="button" value="美国" class="btn btn-sm btn-state1" />
 								</div>
 							</div>
 						</div>
@@ -140,8 +141,7 @@
 						<div class="col-xs-3">
 							<div class="form-group">
 								<div class="upload-btn">
-									<input id="license" name="license"
-										class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
+									<input id="license" name="license" class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
 								</div>
 							</div>
 						</div>
