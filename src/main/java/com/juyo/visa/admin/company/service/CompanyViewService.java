@@ -25,6 +25,7 @@ import com.juyo.visa.entities.TComFunctionEntity;
 import com.juyo.visa.entities.TComJobEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TDepartmentEntity;
+import com.juyo.visa.entities.TFunctionEntity;
 import com.juyo.visa.entities.TJobEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.entities.TUserJobEntity;
@@ -35,6 +36,7 @@ import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.db.util.DbSqlUtil;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
@@ -275,6 +277,21 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		}
 
 		return comFunctionList;
+	}
+
+	/**
+	 * TODO 获取公司所有的权限
+	 * <p>
+	 * TODO 通过公司id获取公司拥有的权限
+	 *
+	 * @param comId
+	 * @return TODO comid 公司id
+	 */
+	public List<TFunctionEntity> getCompanyFunctions(int comId) {
+		String sqlstr = sqlManager.get("get_company_functions_list");
+		Sql sql = Sqls.create(sqlstr);
+		sql.setParam("comId", comId);
+		return DbSqlUtil.query(dbDao, TFunctionEntity.class, sql);
 	}
 
 }

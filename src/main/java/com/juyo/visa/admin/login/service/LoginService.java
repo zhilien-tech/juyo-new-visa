@@ -17,6 +17,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Lists;
+import com.juyo.visa.admin.company.service.CompanyViewService;
 import com.juyo.visa.admin.login.form.LoginForm;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.access.AccessConfig;
@@ -50,6 +51,8 @@ public class LoginService extends BaseService<TUserEntity> {
 
 	@Inject
 	private UserViewService userViewService;
+	@Inject
+	private CompanyViewService companyViewService;
 
 	/**
 	 * 获取当前登录用户
@@ -134,6 +137,10 @@ public class LoginService extends BaseService<TUserEntity> {
 				return false;
 			}
 			int userType = user.getUserType();
+			if (userType == UserLoginEnum.TOURIST_IDENTITY.intKey()) {
+				form.setErrMsg("该用户不是工作人员");
+				return false;
+			}
 			Sql companySql = Sqls.create(sqlManager.get("select_login_company"));
 			companySql.params().set("userid", user.getId());
 			List<TCompanyEntity> companyLst = DbSqlUtil.query(dbDao, TCompanyEntity.class, companySql);
@@ -150,7 +157,7 @@ public class LoginService extends BaseService<TUserEntity> {
 			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType
 					|| UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType) {
 				//公司管理员
-
+				allUserFunction = companyViewService.getCompanyFunctions(company.getId());
 			} else {
 				//普通用户
 				allUserFunction = userViewService.getUserFunctions(user.getId());
@@ -158,11 +165,14 @@ public class LoginService extends BaseService<TUserEntity> {
 			//控制页面跳转
 			if (UserLoginEnum.ADMIN.intKey() == userType) {
 				//平台管理员跳转页面
+				form.setReturnUrl(">>:/admin/Company/list.html");
 			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType
 					|| UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType) {
 				//公司管理员条跳转页面
+				form.setReturnUrl(">>:/admin/Company/list.html");
 			} else {
 				//普通员工跳转页面
+				form.setReturnUrl(">>:/admin/Company/list.html");
 			}
 			//将用户权限保存到session中
 			//session.setAttribute(FUNCTION_MAP_KEY, functionMap); //功能

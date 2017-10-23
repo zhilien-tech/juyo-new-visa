@@ -16,3 +16,10 @@ FROM
 	t_company c
 LEFT JOIN t_user u ON c.adminId = u.id
 $condition
+
+/*get_company_functions_list*/
+select tf.*
+from t_company tc
+INNER JOIN t_com_function tcf
+INNER JOIN t_function tf
+where tc.id = @comId
