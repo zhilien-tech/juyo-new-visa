@@ -77,7 +77,7 @@ public class FunctionModule {
 	@GET
 	@Ok("jsp")
 	public Object update(@Param("id") final long id) {
-		return functionViewService.fetch(id);
+		return functionViewService.getFunctionById(id);
 	}
 
 	/**

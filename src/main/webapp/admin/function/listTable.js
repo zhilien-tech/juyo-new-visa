@@ -31,13 +31,13 @@ function initDatatable() {
 		            	return "";
 		            } 	
 		            },*/
-		            {"data": "parentid", "bSortable": false,render: function(data, type, row, meta) {
-		            	var parentid = row.parentid;
-		            	if(null==parentid || ""==parentid){
+		            {"data": "parentname", "bSortable": false,render: function(data, type, row, meta) {
+		            	var parentname = row.parentname;
+		            	if(null==parentname || ""==parentname){
 		            		return "";
 		            	}else{
-		            		/*parentid = '<span data-toggle="tooltip" data-placement="right" title="'+parentid+'">'+parentid+'<span>';*/
-		            		return parentid;
+		            		/*parentname = '<span data-toggle="tooltip" data-placement="right" title="'+parentname+'">'+parentname+'<span>';*/
+		            		return parentname;
 		            	}
 		            } 	
 		            },

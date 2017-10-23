@@ -118,14 +118,13 @@
 					validating : 'glyphicon glyphicon-refresh'
 				},
 				fields : {
-
-					parentId : {
+					/* parentId : {
 						validators : {
 							notEmpty : {
 								message : '上级功能不能为空'
 							}
 						}
-					},
+					}, */
 					funName : {
 						validators : {
 							notEmpty : {
@@ -178,49 +177,34 @@
 			bootstrapValidator.validate();
 			if (bootstrapValidator.isValid()) {
 				//获取必填项信息
-				var parentId = $("#parentId").val();
+				/* var parentId = $("#parentId").val();
 				if (parentId == "") {
 					layer.msg('parentId不能为空');
 					return;
-				}
+				} */
 				var funName = $("#funName").val();
 				if (funName == "") {
-					layer.msg('funName不能为空');
+					layer.msg('功能名称不能为空');
 					return;
 				}
 				var url = $("#url").val();
 				if (url == "") {
-					layer.msg('url不能为空');
+					layer.msg('功能地址不能为空');
 					return;
 				}
 				var level = $("#level").val();
 				if (level == "") {
-					layer.msg('level不能为空');
-					return;
-				}
-				var createTime = $("#createTime").val();
-				if (createTime == "") {
-					layer.msg('createTime不能为空');
-					return;
-				}
-				var updateTime = $("#updateTime").val();
-				if (updateTime == "") {
-					layer.msg('updateTime不能为空');
+					layer.msg('功能等级不能为空');
 					return;
 				}
 				var remark = $("#remark").val();
 				if (remark == "") {
-					layer.msg('remark不能为空');
+					layer.msg('备注不能为空');
 					return;
 				}
 				var sort = $("#sort").val();
 				if (sort == "") {
-					layer.msg('sort不能为空');
-					return;
-				}
-				var portrait = $("#portrait").val();
-				if (portrait == "") {
-					layer.msg('portrait不能为空');
+					layer.msg('序号不能为空');
 					return;
 				}
 

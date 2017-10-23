@@ -28,7 +28,7 @@
 						
 							<div class="row form-right">
 								<div class="col-md-2 left-5px right-0px">
-									<select name="funId" onchange="selectFunName();" class="form-control input-sm">
+									<select id="funId" name="funId" onchange="selectFunName();" class="form-control input-sm">
 										<option value="-1">全部</option>
 										<c:forEach items="${obj.functions}" var="pro">
 											<c:choose>
