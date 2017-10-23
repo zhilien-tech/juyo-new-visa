@@ -94,6 +94,32 @@
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
+						
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>公司类型：</label> 
+								<select class="form-control input-sm inpImportant" name="comType" id="comType">
+									<option value="">请选择</option>
+									<option value="1"
+										<c:if test="${'1' eq obj.function.comType}">selected</c:if>>送签社</option>
+									<option value="2"
+										<c:if test="${'2' eq obj.function.comType}">selected</c:if>>地接社</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>经营范围：</label> 
+								<select id="bScope" name="bScope" class="form-control input-sm selectHeight">
+									<option value="">请选择</option>
+									<option value="1"
+										<c:if test="${'1' eq obj.function.bScope}">selected</c:if>>日本</option>
+								</select>
+							</div>
+						</div>
 					</div>
 
 				</div>
@@ -166,6 +192,20 @@
 						validators : {
 							notEmpty : {
 								message : '序号不能为空'
+							}
+						}
+					},
+					comType : {
+						validators : {
+							notEmpty : {
+								message : '公司类型不能为空'
+							}
+						}
+					},
+					bScope : {
+						validators : {
+							notEmpty : {
+								message : '经营范围不能为空'
 							}
 						}
 					},

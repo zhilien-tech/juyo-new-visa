@@ -58,7 +58,7 @@ public class FunctionModule {
 	@GET
 	@Ok("jsp")
 	public Object add() {
-		return functionViewService.getFunctions();
+		return functionViewService.toAddFunctionPage();
 	}
 
 	/**

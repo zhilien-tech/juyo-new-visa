@@ -53,6 +53,12 @@ public class TFunctionForm extends DataTablesParamForm {
 	/**检索字段*/
 	private String searchStr;
 
+	/**公司类型*/
+	private Integer comType;
+
+	/**经营范围*/
+	private Integer bScope;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**

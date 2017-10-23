@@ -10,7 +10,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * @Date	 2017年10月20日
  */
 public enum BusinessScopesEnum implements IEnum {
-	JAPAN(1, "日本"), FRANCE(2, "法国");
+	JAPAN(1, "日本");
 	private int key;
 	private String value;
 

@@ -42,8 +42,8 @@
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>上级功能：</label> 
-								<select id="parentId" name="parentId" class="form-control input-sm">
+								<label><span>*</span>上级功能：</label> <select id="parentId"
+									name="parentId" class="form-control input-sm">
 									<option value="">请选择</option>
 									<c:forEach items="${obj.functions}" var="pro">
 										<option value="${pro.id}">${pro.funName}</option>
@@ -84,6 +84,31 @@
 								<label><span>*</span>备注：</label> <input id="remark"
 									name="remark" type="text" class="form-control input-sm"
 									placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>公司类型：</label> <select id="comType"
+									name="comType" class="form-control input-sm inpImportant">
+									<option value="">请选择</option>
+									<c:forEach var="map" items="${obj.companyType}">
+										<option value="${map.key}">${map.value}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>经营范围：</label> <select id="bScope"
+									name="bScope" class="form-control input-sm selectHeight">
+									<option value="">请选择</option>
+									<c:forEach var="map" items="${obj.businessScopes}">
+										<option value="${map.key}">${map.value}</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 					</div>
@@ -157,6 +182,20 @@
 						validators : {
 							notEmpty : {
 								message : '序号不能为空'
+							}
+						}
+					},
+					comType : {
+						validators : {
+							notEmpty : {
+								message : '公司类型不能为空'
+							}
+						}
+					},
+					bScope : {
+						validators : {
+							notEmpty : {
+								message : '经营范围不能为空'
 							}
 						}
 					},
