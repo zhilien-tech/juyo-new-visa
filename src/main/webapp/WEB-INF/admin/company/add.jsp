@@ -1,4 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java"
+	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
 <c:set var="url" value="${base}/admin/company" />
 <!DOCTYPE HTML>
@@ -6,19 +7,26 @@
 <head>
 <meta charset="UTF-8">
 <title>添加</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/company.css">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet"
+	href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/company.css">
 </head>
 <body>
 	<div class="modal-content">
 		<form id="companyAddForm">
 			<div class="modal-header">
-				<span class="heading">添加</span> 
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<span class="heading">添加</span> <input id="backBtn" type="button"
+					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
+					data-dismiss="modal" value="取消" /> <input id="addBtn"
+					type="button" onclick="save();"
+					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
@@ -42,8 +50,9 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>用户名：</label> <input id="" name=""
-									type="text" class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>用户名：</label> <input id="adminLoginName"
+									name="adminLoginName" type="text" class="form-control input-sm"
+									placeholder=" " />
 							</div>
 						</div>
 
@@ -59,15 +68,16 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>电话：</label> 
-								<input id="mobile" name="mobile" type="text" class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>电话：</label> <input id="mobile"
+									name="mobile" type="text" class="form-control input-sm"
+									placeholder=" " />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>邮箱：</label> 
-								<input id="email" name="email" type="text" class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>邮箱：</label> <input id="email" name="email"
+									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -75,17 +85,17 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
-								<label><span>*</span>地址：</label> 
-								<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>地址：</label> <input id="address"
+									name="address" type="text" class="form-control input-sm"
+									placeholder=" " />
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>公司类型：</label>
-								<select class="form-control input-sm selectHeight"
-									name="comType">
+								<label><span>*</span>公司类型：</label> <select
+									class="form-control input-sm selectHeight" name="comType">
 									<option value="">请选择</option>
 									<c:forEach var="map" items="${obj.companyTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
@@ -96,9 +106,12 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>经营范围：</label> 
-								<input id="businessScope" name="" type="text" class="form-control input-sm" placeholder=" " />
+								<!-- <input id="businessScope" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
+								<div class="multiselectBtn form-control input-sm"></div>
 								<div class="btnVal">
 									<input type="button" value="日本" class="btn btn-sm btn-state1" />
+									<input type="button" value="美国" class="btn btn-sm btn-state1" />
+									<input type="button" value="澳大利亚" class="btn btn-sm btn-state1" />
 								</div>
 							</div>
 						</div>
@@ -112,24 +125,25 @@
 							</div>
 						</div>
 					</div> -->
-	                    <!-- 上传营业执照  -->
-			        	<div class="row" style="margin-top:15px;">
-				            <div class="col-xs-3">
-				               <div class="form-group">
-									<div class="upload-btn">
-									    <input id="license" name="license" class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
-									</div>
+					<!-- 上传营业执照  -->
+					<div class="row" style="margin-top: 15px;">
+						<div class="col-xs-3">
+							<div class="form-group">
+								<div class="upload-btn">
+									<input id="license" name="license"
+										class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
 								</div>
-				            </div>
-				            <div class="col-xs-6">
-			                    <div class="form-group">
-			                        <div class="sqImgPreview">
-			                            <img alt="营业执照" src="" id="sqImg" >
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
-						<!-- end 上传营业执照 -->
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="form-group">
+								<div class="sqImgPreview">
+									<img alt="营业执照" src="" id="sqImg">
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- end 上传营业执照 -->
 
 				</div>
 			</div>
@@ -139,12 +153,14 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
-	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script
+		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script
+		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	
+
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
@@ -231,16 +247,19 @@
 				   $(this).removeClass("btn-state1");//清除蓝色按钮 样式
 				   var btnText=$(this).val();
 				   //console.log(btnText);
-				   $("#businessScope").attr("value",btnText);
+				   $(".multiselectBtn").append("<span>"+ btnText +"，</span>");
 			   }else if($(this).hasClass("btn-state2")){//灰色按钮
 				   $(this).addClass("btn-state1");//变蓝
 				   $(this).removeClass("btn-state2");//清除灰色按钮 样式
 				   var btnText=$(this).val();
-				   $("#businessScope").attr("value","");
+				   $(".multiselectBtn span").each(function(){
+					   var spanVal = $(this).text();
+					   if((btnText + "，") == spanVal){
+						   $(this).remove();
+					   };
+				   });
 			   }
 		   });
-		   	
-		   
 		   //-------------------------end 经营范围 js-------------------------
 		});
 		/* 页面初始化加载完毕 */

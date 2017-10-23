@@ -2,46 +2,46 @@
 <%@include file="/WEB-INF/common/tld.jsp"%>
 <%@include file="/WEB-INF/public/header.jsp"%>
 <%@include file="/WEB-INF/public/aside.jsp"%>
-<c:set var="url" value="${base}/admin/company" />
+<c:set var="url" value="${base}/admin/function" />
 <!DOCTYPE html>
 <html lang="en-US">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>公司管理</title>
+		<title>功能管理</title>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper">
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper"  style="min-height: 848px;">
-				<ul class="title">
-						<li>公司管理</li>
+				<!-- Main content -->
+				<section class="content">
+				
+					<ul class="title">
+						<li>功能管理</li>
 						<!-- <li class="arrow"></li>
 						<li></li> -->
-				</ul>
-				<section class="content">
+					</ul>
+				
 					<div class="box">
 						<div class="box-header">
 						
 							<div class="row form-right">
 								<div class="col-md-2 left-5px right-0px">
-									<select id="comType" name="comType" class="form-control input-sm inpImportant" onchange="selectListData();">
-										<option value="">请选择</option>
-										<c:forEach var="map" items="${obj.companyTypeEnum}">
-											<option value="${map.key}">${map.value}</option>
-										</c:forEach>
+									<select class="input-class input-sm">
+										<option>状态</option>
 									</select>
 								</div>
 								<div class="col-md-2 left-5px right-0px">
-									<input id="searchStr" name="searchStr" type="text" class="input-sm input-class" placeholder="公司全称/用户名/联系人/电话/邮箱" onkeypress="onkeyEnter();"/>
+									<input id="" name="" type="text" class="input-sm input-class" placeholder="搜索条件" />
 								</div>
-								<!-- <div class="col-md-3 left-5px right-0px">
+								<div class="col-md-3 left-5px right-0px">
 									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
 									<span class="picker-span">至</span>
 									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
-								</div> -->
-								<div class="col-md-8 left-5px">
-									<a id="searchBtn" type="button" class="btn btn-primary btn-sm pull-left">搜索</a>
+								</div>
+								<div class="col-md-5 left-5px">
+									<a id="" class="btn btn-primary btn-sm pull-left" onclick="" >搜索</a>
 									<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 								</div>
 							</div>
@@ -52,15 +52,17 @@
 							<table id="datatableId" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
-										<th><span>公司全称</span></th>
-										<th><span>公司简称</span></th>
-										<th><span>用户名</span></th>
-										<th><span>公司类型</span></th>
-										<th><span>经营范围</span></th>
-										<th><span>联系人</span></th>
-										<th><span>电话</span></th>
-										<th><span>邮箱</span></th>
-										<th><span>操作</span></th>
+										<th><span>序号</span></th>
+																					<th><span>上级功能id</span></th>
+																					<th><span>功能名称</span></th>
+																					<th><span>访问地址</span></th>
+																					<th><span>功能等级，是指在功能树中所处的层级</span></th>
+																					<th><span>创建时间</span></th>
+																					<th><span>更新时间</span></th>
+																					<th><span>备注</span></th>
+																					<th><span>序号</span></th>
+																					<th><span>菜单栏图标</span></th>
+																				<th><span>操作</span></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -91,7 +93,7 @@
 		<!-- 公用js文件 -->
 		<script src="${base}/references/common/js/base/base.js"></script>
 		<!-- 引入DataTables JS -->
-		<script src="${base}/admin/company/listTable.js"></script>
+		<script src="${base}/admin/function/listTable.js"></script>
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
 			$(function () {

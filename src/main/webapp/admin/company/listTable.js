@@ -51,9 +51,13 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
-		            {"data": "", "bSortable": false,render: function(data, type, row, meta) {
-
-		            	return "";
+		            {"data": "adminloginname", "bSortable": false,render: function(data, type, row, meta) {
+		            	var adminloginname = row.adminloginname;
+		            	if(null==adminloginname || ""==adminloginname){
+		            		return "";
+		            	}else{
+		            		return adminloginname;
+		            	}
 		            } 	
 		            },
 		            {"data": "comtype", "bSortable": false,render: function(data, type, row, meta) {
@@ -108,11 +112,12 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
-		            {"data": " ", "bSortable": false, "width":120,
+		            {"data": " ", "bSortable": false, "width":50,
 		            	render: function(data, type, row, meta) {
 		            		var modify = '<a style="cursor:pointer;" class="edit-icon" onclick="edit('+row.id+');"></a>';
-		            		var judge = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.id+');"></a>';
-		            		return modify+judge;
+		            		var deleteC = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.id+');"></a>';
+		            		/*return modify+deleteC;*/
+		            		return modify;
 		            	}	
 		            } 
 		            ],
