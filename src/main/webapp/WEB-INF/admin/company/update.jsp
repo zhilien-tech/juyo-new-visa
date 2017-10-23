@@ -118,11 +118,11 @@
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>经营范围：</label> <input id="businessScope"
-									readonly="readonly" name="businessScopes" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>经营范围：</label> 
+								<div class="multiselectBtn form-control input-sm"></div>
 								<div class="btnVal">
 									<input type="button" value="日本" class="btn btn-sm btn-state1" />
+									<input type="button" value="美国" class="btn btn-sm btn-state1" />
 								</div>
 							</div>
 						</div>
@@ -141,8 +141,7 @@
 						<div class="col-xs-3">
 							<div class="form-group">
 								<div class="upload-btn">
-									<input id="license" name="license"
-										class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
+									<input id="license" name="license" class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
 								</div>
 							</div>
 						</div>
@@ -348,23 +347,28 @@
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 		}
-		$(function() {
-			//---------------------------经营范围 js---------------------------	
-			$(".btnVal input").click(function() {
-				if ($(this).hasClass("btn-state1")) {//蓝色按钮
-					$(this).addClass("btn-state2");//变灰
-					$(this).removeClass("btn-state1");//清除蓝色按钮 样式
-					var btnText = $(this).val();
-					//console.log(btnText);
-					$("#businessScope").attr("value", btnText);
-				} else if ($(this).hasClass("btn-state2")) {//灰色按钮
-					$(this).addClass("btn-state1");//变蓝
-					$(this).removeClass("btn-state2");//清除灰色按钮 样式
-					var btnText = $(this).val();
-					$("#businessScope").attr("value", "");
-				}
-			});
-			//-------------------------end 经营范围 js-------------------------
+		$(function(){
+			 //---------------------------经营范围 js---------------------------	
+			 $(".btnVal input").click(function(){
+			   if($(this).hasClass("btn-state1")){//蓝色按钮
+				   $(this).addClass("btn-state2");//变灰
+				   $(this).removeClass("btn-state1");//清除蓝色按钮 样式
+				   var btnText=$(this).val();
+				   //console.log(btnText);
+				   $(".multiselectBtn").append("<span>"+ btnText +"，</span>");
+			   }else if($(this).hasClass("btn-state2")){//灰色按钮
+				   $(this).addClass("btn-state1");//变蓝
+				   $(this).removeClass("btn-state2");//清除灰色按钮 样式
+				   var btnText=$(this).val();
+				   $(".multiselectBtn span").each(function(){
+					   var spanVal = $(this).text();
+					   if((btnText + "，") == spanVal){
+						   $(this).remove();
+					   };
+				   });
+			   }
+		   	 });
+			 //-------------------------end 经营范围 js-------------------------
 		});
 	</script>
 
