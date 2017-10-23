@@ -6,20 +6,28 @@
 
 package com.juyo.visa.admin.login.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.Sqls;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.google.common.collect.Lists;
 import com.juyo.visa.admin.login.form.LoginForm;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.access.AccessConfig;
 import com.juyo.visa.common.access.sign.MD5;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TFunctionEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.db.util.DbSqlUtil;
 import com.uxuexi.core.web.base.service.BaseService;
 
 /**
@@ -77,6 +85,16 @@ public class LoginService extends BaseService<TUserEntity> {
 		return company;
 	}
 
+	/**
+	 * 用户登录
+	 * <p>
+	 * TODO工作人员登录（密码登录）
+	 *
+	 * @param form
+	 * @param session
+	 * @param req
+	 * @return TODO form 用户登录信息、session 用户session req request
+	 */
 	public boolean login(final LoginForm form, final HttpSession session, final HttpServletRequest req) {
 
 		form.setReturnUrl("jsp:admin.login");
@@ -116,6 +134,43 @@ public class LoginService extends BaseService<TUserEntity> {
 				return false;
 			}
 			int userType = user.getUserType();
+			Sql companySql = Sqls.create(sqlManager.get("select_login_company"));
+			companySql.params().set("userid", user.getId());
+			List<TCompanyEntity> companyLst = DbSqlUtil.query(dbDao, TCompanyEntity.class, companySql);
+			if (UserLoginEnum.ADMIN.intKey() != userType && companyLst.size() != 1) {
+				throw new IllegalArgumentException("用户必须且只能在一家公司就职");
+			}
+			TCompanyEntity company = companyLst.get(0);
+			session.setAttribute(USER_COMPANY_KEY, company); //公司
+			//用户所包含的功能
+			List<TFunctionEntity> allUserFunction = Lists.newArrayList();
+			if (!Util.isEmpty(user) && CommonConstants.SUPER_ADMIN.equals(user.getName())) {
+				//超级管理员
+				allUserFunction = dbDao.query(TFunctionEntity.class, null, null);
+			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType
+					|| UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType) {
+				//公司管理员
+
+			} else {
+				//普通用户
+				allUserFunction = userViewService.getUserFunctions(user.getId());
+			}
+			//控制页面跳转
+			if (UserLoginEnum.ADMIN.intKey() == userType) {
+				//平台管理员跳转页面
+			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType
+					|| UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType) {
+				//公司管理员条跳转页面
+			} else {
+				//普通员工跳转页面
+			}
+			//将用户权限保存到session中
+			//session.setAttribute(FUNCTION_MAP_KEY, functionMap); //功能
+			//session.setAttribute(MENU_KEY, menus); //菜单
+			session.setAttribute(AUTHS_KEY, allUserFunction); //所有功能
+			session.setAttribute(LOGINUSER, user);
+			session.setAttribute(IS_LOGIN_KEY, true);
+			session.setAttribute("currentPageIndex", 0);
 		}
 		return true;
 	}
