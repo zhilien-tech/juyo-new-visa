@@ -112,7 +112,7 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
-		            {"data": " ", "bSortable": false, "width":120,
+		            {"data": " ", "bSortable": false, "width":50,
 		            	render: function(data, type, row, meta) {
 		            		var modify = '<a style="cursor:pointer;" class="edit-icon" onclick="edit('+row.id+');"></a>';
 		            		var deleteC = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.id+');"></a>';
