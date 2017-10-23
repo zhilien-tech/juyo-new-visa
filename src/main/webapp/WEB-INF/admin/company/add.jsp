@@ -96,9 +96,12 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>经营范围：</label> 
-								<input id="businessScope" name="" type="text" class="form-control input-sm" placeholder=" " />
+								<!-- <input id="businessScope" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
+								<div class="multiselectBtn form-control input-sm"></div>
 								<div class="btnVal">
 									<input type="button" value="日本" class="btn btn-sm btn-state1" />
+									<input type="button" value="美国" class="btn btn-sm btn-state1" />
+									<input type="button" value="澳大利亚" class="btn btn-sm btn-state1" />
 								</div>
 							</div>
 						</div>
@@ -231,16 +234,19 @@
 				   $(this).removeClass("btn-state1");//清除蓝色按钮 样式
 				   var btnText=$(this).val();
 				   //console.log(btnText);
-				   $("#businessScope").attr("value",btnText);
+				   $(".multiselectBtn").append("<span>"+ btnText +"，</span>");
 			   }else if($(this).hasClass("btn-state2")){//灰色按钮
 				   $(this).addClass("btn-state1");//变蓝
 				   $(this).removeClass("btn-state2");//清除灰色按钮 样式
 				   var btnText=$(this).val();
-				   $("#businessScope").attr("value","");
+				   $(".multiselectBtn span").each(function(){
+					   var spanVal = $(this).text();
+					   if((btnText + "，") == spanVal){
+						   $(this).remove();
+					   };
+				   });
 			   }
 		   });
-		   	
-		   
 		   //-------------------------end 经营范围 js-------------------------
 		});
 		/* 页面初始化加载完毕 */
