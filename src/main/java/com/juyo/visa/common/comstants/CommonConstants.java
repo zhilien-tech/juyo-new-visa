@@ -27,4 +27,6 @@ public class CommonConstants {
 
 	/**数据状态-冻结*/
 	public static final Integer DATA_STATUS_INVALID = 0;
+
+	public static final String SUPER_ADMIN = "xhh";
 }
