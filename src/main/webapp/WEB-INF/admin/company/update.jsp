@@ -9,11 +9,16 @@
 <head>
 <meta charset="UTF-8">
 <title>更新</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/company.css">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet"
+	href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/company.css">
 </head>
 <body>
 
@@ -34,8 +39,8 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>公司全称：</label> <input id="name" name="name"
-									value="${obj.company.name}" type="text" class="form-control input-sm"
-									placeholder=" " />
+									value="${obj.company.name}" type="text"
+									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 
@@ -51,7 +56,8 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>用户名：</label> <input id="" name="" value=""
+								<label><span>*</span>用户名：</label> <input id="adminLoginName"
+									name="adminLoginName" value="${obj.company.username}"
 									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -77,8 +83,8 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>邮箱：</label> <input id="email" name="email"
-									value="${obj.company.email}" type="text" class="form-control input-sm"
-									placeholder=" " />
+									value="${obj.company.email}" type="text"
+									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -129,27 +135,28 @@
 							</div>
 						</div>
 					</div> -->
-	                    <!-- 上传营业执照  -->
-			        	<div class="row" style="margin-top:15px;">
-				            <div class="col-xs-3">
-				               <div class="form-group">
-									<div class="upload-btn">
-									    <input id="license" name="license" class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
-									</div>
+					<!-- 上传营业执照  -->
+					<div class="row" style="margin-top: 15px;">
+						<div class="col-xs-3">
+							<div class="form-group">
+								<div class="upload-btn">
+									<input id="license" name="license"
+										class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
 								</div>
-				            </div>
-				            <div class="col-xs-6">
-			                    <div class="form-group">
-			                        <div class="sqImgPreview">
-			                            <img alt="营业执照" src="" id="sqImg" >
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
-						<!-- end 上传营业执照 -->
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="form-group">
+								<div class="sqImgPreview">
+									<img alt="营业执照" src="" id="sqImg">
+								</div>
+							</div>
+						</div>
 					</div>
+					<!-- end 上传营业执照 -->
+				</div>
 
-					<%-- <div class="row">
+				<%-- <div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>营业执照：</label> <input id="license"
@@ -159,9 +166,9 @@
 						</div>
 					</div> --%>
 
-				</div>
 			</div>
-		</form>
+	</div>
+	</form>
 	</div>
 
 	<script type="text/javascript">

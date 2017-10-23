@@ -74,7 +74,13 @@ public class CompanyModule {
 	@At
 	@POST
 	public Object add(@Param("..") TCompanyAddForm addForm) {
-		return companyViewService.addCompany(addForm);
+		try {
+			companyViewService.addCompany(addForm);
+			return JsonResult.success("添加成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return JsonResult.error("添加失败");
+		}
 	}
 
 	/**
@@ -93,7 +99,13 @@ public class CompanyModule {
 	@At
 	@POST
 	public Object update(@Param("..") TCompanyUpdateForm updateForm) {
-		return companyViewService.update(updateForm);
+		try {
+			companyViewService.updateCompany(updateForm);
+			return JsonResult.success("修改成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return JsonResult.error("修改失败");
+		}
 	}
 
 	/**
