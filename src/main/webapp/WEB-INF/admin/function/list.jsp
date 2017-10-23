@@ -33,13 +33,13 @@
 									</select>
 								</div>
 								<div class="col-md-2 left-5px right-0px">
-									<input id="" name="" type="text" class="input-sm input-class" placeholder="搜索条件" />
+									<input id="" name="" type="text" class="input-sm input-class" placeholder="功能名称" />
 								</div>
-								<div class="col-md-3 left-5px right-0px">
+								<!-- <div class="col-md-3 left-5px right-0px">
 									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
 									<span class="picker-span">至</span>
 									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
-								</div>
+								</div> -->
 								<div class="col-md-5 left-5px">
 									<a id="" class="btn btn-primary btn-sm pull-left" onclick="" >搜索</a>
 									<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
@@ -52,17 +52,14 @@
 							<table id="datatableId" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
+										<th><span>上级功能</span></th>
+										<th><span>访问地址</span></th>
+										<th><span>功能名称</span></th>
+										<th><span>功能等级</span></th>
+										<th><span>创建时间</span></th>
+										<th><span>备注</span></th>
 										<th><span>序号</span></th>
-																					<th><span>上级功能id</span></th>
-																					<th><span>功能名称</span></th>
-																					<th><span>访问地址</span></th>
-																					<th><span>功能等级，是指在功能树中所处的层级</span></th>
-																					<th><span>创建时间</span></th>
-																					<th><span>更新时间</span></th>
-																					<th><span>备注</span></th>
-																					<th><span>序号</span></th>
-																					<th><span>菜单栏图标</span></th>
-																				<th><span>操作</span></th>
+										<th><span>操作</span></th>
 									</tr>
 								</thead>
 								<tbody>
