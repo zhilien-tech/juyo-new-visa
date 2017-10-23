@@ -56,9 +56,9 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>用户名：</label> <input id="adminLoginName"
-									name="adminLoginName" value="${obj.company.username}"
-									type="text" class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>用户名：</label> 
+								<input id="adminId" name="adminId" value="${obj.company.adminId}" type="hidden"/>
+								<input id="adminLoginName" name="adminLoginName" value="${obj.company.adminloginname}" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 
