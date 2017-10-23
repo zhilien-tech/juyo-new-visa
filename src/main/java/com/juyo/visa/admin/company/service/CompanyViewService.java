@@ -53,7 +53,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		return listPage4Datatables(queryForm);
 	}
 
-	//加载列表页
+	//调整到列表页
 	public Object toListCompanyPage() {
 		Map<String, Object> obj = MapUtil.map();
 		obj.put("companyTypeEnum", EnumUtil.enum2(CompanyTypeEnum.class));
@@ -157,8 +157,10 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		sql.setCallback(Sqls.callback.records());
 		dbDao.execute(sql);
 		List<Record> list = (List<Record>) sql.getResult();
-		//公司数据
-		obj.put("company", list.get(0));
+		if (!Util.isEmpty(list)) {
+			//公司数据
+			obj.put("company", list.get(0));
+		}
 		//用户名
 		//obj.put("telephone", dbDao.fetch(TUserEntity.class, companyEntity.getAdminId()).getUserName());
 		//公司类型

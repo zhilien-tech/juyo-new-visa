@@ -28,8 +28,11 @@
 						
 							<div class="row form-right">
 								<div class="col-md-2 left-5px right-0px">
-									<select class="input-class input-sm">
-										<option>状态</option>
+									<select id="comType" name="comType" class="form-control input-sm inpImportant" onchange="selectListData();">
+										<option value="">请选择</option>
+										<c:forEach var="map" items="${obj.functions}">
+											<option value="${map.key}">${map.value}</option>
+										</c:forEach>
 									</select>
 								</div>
 								<div class="col-md-2 left-5px right-0px">
