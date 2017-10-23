@@ -48,14 +48,14 @@
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
-						
+
 					</div>
 
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>功能等级：</label> <input
-									id="level" name="level" value="${obj.level}" type="text"
+								<label><span>*</span>功能等级：</label> <input id="level"
+									name="level" value="${obj.level}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -106,7 +106,7 @@
 	<script type="text/javascript">
 		var base = "${base}";
 
-		function initvalidate(){
+		function initvalidate() {
 			//校验
 			$('#functionUpdateForm').bootstrapValidator({
 				message : '验证不通过',
@@ -116,133 +116,112 @@
 					validating : 'glyphicon glyphicon-refresh'
 				},
 				fields : {
-											parentId : {
-							validators : {
-								notEmpty : {
-									message : '上级功能id不能为空'
-								}
+					parentId : {
+						validators : {
+							notEmpty : {
+								message : '上级功能不能为空'
 							}
-						},
-											funName : {
-							validators : {
-								notEmpty : {
-									message : '功能名称不能为空'
-								}
+						}
+					},
+					funName : {
+						validators : {
+							notEmpty : {
+								message : '功能名称不能为空'
 							}
-						},
-											url : {
-							validators : {
-								notEmpty : {
-									message : '访问地址不能为空'
-								}
+						}
+					},
+					url : {
+						validators : {
+							notEmpty : {
+								message : '访问地址不能为空'
 							}
-						},
-											level : {
-							validators : {
-								notEmpty : {
-									message : '功能等级，是指在功能树中所处的层级不能为空'
-								}
+						}
+					},
+					level : {
+						validators : {
+							notEmpty : {
+								message : '功能等级不能为空'
 							}
-						},
-											createTime : {
-							validators : {
-								notEmpty : {
-									message : '创建时间不能为空'
-								}
+						}
+					},
+					remark : {
+						validators : {
+							notEmpty : {
+								message : '备注不能为空'
 							}
-						},
-											updateTime : {
-							validators : {
-								notEmpty : {
-									message : '更新时间不能为空'
-								}
+						}
+					},
+					sort : {
+						validators : {
+							notEmpty : {
+								message : '序号不能为空'
 							}
-						},
-											remark : {
-							validators : {
-								notEmpty : {
-									message : '备注不能为空'
-								}
-							}
-						},
-											sort : {
-							validators : {
-								notEmpty : {
-									message : '序号不能为空'
-								}
-							}
-						},
-											portrait : {
-							validators : {
-								notEmpty : {
-									message : '菜单栏图标不能为空'
-								}
-							}
-						},
-									}
+						}
+					},
+				}
 			});
 		}
-		
+
 		//更新时刷新页面
 		function update() {
 			window.location.reload();
 		}
-		
-	    initvalidate();
+
+		initvalidate();
 		$('#functionUpdateForm').bootstrapValidator('validate');
 		function save() {
 			$('#functionUpdateForm').bootstrapValidator('validate');
-			var bootstrapValidator = $("#functionUpdateForm").data('bootstrapValidator');
+			var bootstrapValidator = $("#functionUpdateForm").data(
+					'bootstrapValidator');
 			if (bootstrapValidator.isValid()) {
-			
+
 				//获取必填项信息
-									var parentId = $("#parentId").val();
-					if(parentId==""){
-						layer.msg('parentId不能为空');
-						return;
-					}
-									var funName = $("#funName").val();
-					if(funName==""){
-						layer.msg('funName不能为空');
-						return;
-					}
-									var url = $("#url").val();
-					if(url==""){
-						layer.msg('url不能为空');
-						return;
-					}
-									var level = $("#level").val();
-					if(level==""){
-						layer.msg('level不能为空');
-						return;
-					}
-									var createTime = $("#createTime").val();
-					if(createTime==""){
-						layer.msg('createTime不能为空');
-						return;
-					}
-									var updateTime = $("#updateTime").val();
-					if(updateTime==""){
-						layer.msg('updateTime不能为空');
-						return;
-					}
-									var remark = $("#remark").val();
-					if(remark==""){
-						layer.msg('remark不能为空');
-						return;
-					}
-									var sort = $("#sort").val();
-					if(sort==""){
-						layer.msg('sort不能为空');
-						return;
-					}
-									var portrait = $("#portrait").val();
-					if(portrait==""){
-						layer.msg('portrait不能为空');
-						return;
-					}
-								
-				
+				var parentId = $("#parentId").val();
+				if (parentId == "") {
+					layer.msg('parentId不能为空');
+					return;
+				}
+				var funName = $("#funName").val();
+				if (funName == "") {
+					layer.msg('funName不能为空');
+					return;
+				}
+				var url = $("#url").val();
+				if (url == "") {
+					layer.msg('url不能为空');
+					return;
+				}
+				var level = $("#level").val();
+				if (level == "") {
+					layer.msg('level不能为空');
+					return;
+				}
+				var createTime = $("#createTime").val();
+				if (createTime == "") {
+					layer.msg('createTime不能为空');
+					return;
+				}
+				var updateTime = $("#updateTime").val();
+				if (updateTime == "") {
+					layer.msg('updateTime不能为空');
+					return;
+				}
+				var remark = $("#remark").val();
+				if (remark == "") {
+					layer.msg('remark不能为空');
+					return;
+				}
+				var sort = $("#sort").val();
+				if (sort == "") {
+					layer.msg('sort不能为空');
+					return;
+				}
+				var portrait = $("#portrait").val();
+				if (portrait == "") {
+					layer.msg('portrait不能为空');
+					return;
+				}
+
 				$.ajax({
 					type : 'POST',
 					data : $("#functionUpdateForm").serialize(),
@@ -260,11 +239,11 @@
 				});
 			}
 		}
-	
+
 		//返回刷新页面 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-        	parent.layer.close(index);
+			parent.layer.close(index);
 		}
 	</script>
 

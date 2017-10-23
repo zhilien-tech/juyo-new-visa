@@ -35,7 +35,7 @@ public class FunctionModule {
 	@GET
 	@Ok("jsp")
 	public Object list() {
-		return functionViewService.toListFunctionPage();
+		return functionViewService.getFunctions();
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class FunctionModule {
 	@GET
 	@Ok("jsp")
 	public Object add() {
-		return null;
+		return functionViewService.getFunctions();
 	}
 
 	/**

@@ -113,6 +113,29 @@ function initDatatable() {
 	});
 }
 
+//搜索
+$("#searchBtn").on('click', function () {
+	var funName = $("#searchStr").val();
+	var funId = $("#funId").val();
+	var param = {
+        "searchStr": funName,
+		"funId":funId
+    };
+    datatable.settings()[0].ajax.data = param;
+	datatable.ajax.reload();
+});
+
+//搜索回车事件
+function onkeyEnter(){
+	 if(event.keyCode==13){
+		 $("#searchBtn").click();
+	 }
+}
+//筛选条件自动切换
+function selectFunName(){
+	$("#searchBtn").click();
+}
+
 /* layer添加 */
 function add(){
 	layer.open({

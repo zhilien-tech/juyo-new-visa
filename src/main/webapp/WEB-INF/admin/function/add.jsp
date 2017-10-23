@@ -42,9 +42,13 @@
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>上级功能：</label> <input id="parentId"
-									name="parentId" type="text" class="form-control input-sm"
-									placeholder=" " />
+								<label><span>*</span>上级功能：</label> 
+								<select id="parentId" name="parentId" class="form-control input-sm">
+									<option value="">请选择</option>
+									<c:forEach items="${obj.functions}" var="pro">
+										<option value="${pro.id}">${pro.funName}</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 					</div>
@@ -118,7 +122,7 @@
 					parentId : {
 						validators : {
 							notEmpty : {
-								message : '上级功能id不能为空'
+								message : '上级功能不能为空'
 							}
 						}
 					},
@@ -139,21 +143,7 @@
 					level : {
 						validators : {
 							notEmpty : {
-								message : '功能等级，是指在功能树中所处的层级不能为空'
-							}
-						}
-					},
-					createTime : {
-						validators : {
-							notEmpty : {
-								message : '创建时间不能为空'
-							}
-						}
-					},
-					updateTime : {
-						validators : {
-							notEmpty : {
-								message : '更新时间不能为空'
+								message : '功能等级不能为空'
 							}
 						}
 					},
@@ -168,13 +158,6 @@
 						validators : {
 							notEmpty : {
 								message : '序号不能为空'
-							}
-						}
-					},
-					portrait : {
-						validators : {
-							notEmpty : {
-								message : '菜单栏图标不能为空'
 							}
 						}
 					},

@@ -16,17 +16,16 @@ import com.uxuexi.core.web.base.service.BaseService;
 public class FunctionViewService extends BaseService<TFunctionEntity> {
 	private static final Log log = Logs.get();
 
-	//跳转到列表页
-	public Object toListFunctionPage() {
-		Map<String, Object> obj = MapUtil.map();
-		List<TFunctionEntity> functionList = dbDao.query(TFunctionEntity.class, null, null);
-		obj.put("functions", functionList);
-		return obj;
-	}
-
 	//分页数据
 	public Object listData(TFunctionForm queryForm) {
 		return listPage4Datatables(queryForm);
 	}
 
+	//统计功能
+	public Object getFunctions() {
+		Map<String, Object> obj = MapUtil.map();
+		List<TFunctionEntity> functionList = dbDao.query(TFunctionEntity.class, null, null);
+		obj.put("functions", functionList);
+		return obj;
+	}
 }

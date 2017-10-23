@@ -28,15 +28,22 @@
 						
 							<div class="row form-right">
 								<div class="col-md-2 left-5px right-0px">
-									<select id="comType" name="comType" class="form-control input-sm inpImportant" onchange="selectListData();">
-										<option value="">请选择</option>
-										<c:forEach var="map" items="${obj.functions}">
-											<option value="${map.key}">${map.value}</option>
+									<select name="funId" onchange="selectFunName();" class="form-control input-sm">
+										<option value="-1">全部</option>
+										<c:forEach items="${obj.functions}" var="pro">
+											<c:choose>
+												<c:when test="${pro.id == obj.parentId}">
+													<option value="${pro.id}" selected="selected">${pro.funName}</option>
+												</c:when>
+												<c:otherwise>
+													<option value="${pro.id}">${pro.funName}</option>
+												</c:otherwise>
+											</c:choose>
 										</c:forEach>
 									</select>
 								</div>
 								<div class="col-md-2 left-5px right-0px">
-									<input id="" name="" type="text" class="input-sm input-class" placeholder="功能名称" />
+									<input id="searchStr" name="searchStr" onkeypress="onkeyEnter();" type="text" class="input-sm input-class" placeholder="功能名称" />
 								</div>
 								<!-- <div class="col-md-3 left-5px right-0px">
 									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
@@ -44,7 +51,7 @@
 									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
 								</div> -->
 								<div class="col-md-5 left-5px">
-									<a id="" class="btn btn-primary btn-sm pull-left" onclick="" >搜索</a>
+									<a id="searchBtn" class="btn btn-primary btn-sm pull-left">搜索</a>
 									<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 								</div>
 							</div>

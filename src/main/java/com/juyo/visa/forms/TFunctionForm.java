@@ -1,17 +1,19 @@
 package com.juyo.visa.forms;
 
-import com.uxuexi.core.db.util.EntityUtil;
+import java.util.Date;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import com.juyo.visa.entities.TFunctionEntity;
-import com.uxuexi.core.web.form.DataTablesParamForm;
-import java.util.Date;
 
-import java.io.Serializable;
+import com.juyo.visa.entities.TFunctionEntity;
+import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.db.util.EntityUtil;
+import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -19,34 +21,40 @@ public class TFunctionForm extends DataTablesParamForm {
 	private static final long serialVersionUID = 1L;
 	/**主键*/
 	private Integer id;
-	
+
 	/**上级功能id*/
 	private Integer parentId;
-	
+
 	/**功能名称*/
 	private String funName;
-	
+
 	/**访问地址*/
 	private String url;
-	
+
 	/**功能等级，是指在功能树中所处的层级*/
 	private Integer level;
-	
+
 	/**创建时间*/
 	private Date createTime;
-	
+
 	/**更新时间*/
 	private Date updateTime;
-	
+
 	/**备注*/
 	private String remark;
-	
+
 	/**序号*/
 	private Integer sort;
-	
+
 	/**菜单栏图标*/
 	private String portrait;
-	
+
+	/**功能id*/
+	private String funId;
+
+	/**检索字段*/
+	private String searchStr;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**
@@ -62,7 +70,13 @@ public class TFunctionForm extends DataTablesParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		//TODO 添加自定义查询条件（可选）
-		cnd.orderBy("id", "DESC");
+		if (!Util.isEmpty(searchStr)) {
+			cnd.and("funName", "like", "%" + searchStr + "%");
+		}
+		if (Util.eq("-1", funId)) {
+			cnd.and("id", "=", funId);
+		}
+		cnd.orderBy("sort", "ASC");
 		return cnd;
 	}
 }
