@@ -46,6 +46,9 @@ public class TCompanyAddForm extends AddForm implements Serializable {
 	/**营业执照*/
 	private String license;
 
+	/**经营范围*/
+	private String businessScopes;
+
 	/**操作人*/
 	private Integer opId;
 
