@@ -11,7 +11,7 @@ SELECT
 	c.address,
 	c.comType,
 	c.license,
-c.createTime
+	c.createTime
 FROM
 	t_company c
 LEFT JOIN t_user u ON c.adminId = u.id
