@@ -6,21 +6,18 @@
 <c:set var="url" value="${base}/admin/user" />
 <!DOCTYPE html>
 <html lang="en-US">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>员工管理</title>
-</head>
-<body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper">
-		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper" style="min-height: 848px;">
-			<!-- Main content -->
-			<section class="content">
-
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>员工管理</title>
+	</head>
+	<body class="hold-transition skin-blue sidebar-mini">
+		<div class="wrapper">
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper"  style="min-height: 848px;">
 				<ul class="title">
-					<li>员工管理</li>
-					<!-- <li class="arrow"></li>
+						<li>员工管理</li>
+						<!-- <li class="arrow"></li>
 						<li></li> -->
 				</ul>
 

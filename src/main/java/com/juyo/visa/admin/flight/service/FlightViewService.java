@@ -1,11 +1,14 @@
 package com.juyo.visa.admin.flight.service;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import com.google.common.collect.Maps;
+import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.forms.TFlightAddForm;
 import com.juyo.visa.forms.TFlightForm;
@@ -19,6 +22,17 @@ public class FlightViewService extends BaseService<TFlightEntity> {
 
 	public Object listData(TFlightForm queryForm) {
 		return listPage4Datatables(queryForm);
+	}
+
+	public Object fetchFlight(final long id) {
+		Map<String, Object> result = Maps.newHashMap();
+		TFlightEntity flight = this.fetch(id);
+		TCityEntity takeOffCity = dbDao.fetch(TCityEntity.class, new Long(flight.getTakeOffCityId()).intValue());
+		TCityEntity landingCity = dbDao.fetch(TCityEntity.class, new Long(flight.getLandingCityId()).intValue());
+		result.put("flight", flight);
+		result.put("takeOffCity", takeOffCity);
+		result.put("landingCity", landingCity);
+		return result;
 	}
 
 	public Object addFlight(TFlightAddForm addForm) {

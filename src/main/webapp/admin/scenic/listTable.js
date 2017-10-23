@@ -46,13 +46,13 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
-		            {"data": "cityid", "bSortable": false,render: function(data, type, row, meta) {
-		            	var cityid = row.cityid;
-		            	if(null==cityid || ""==cityid){
+		            {"data": "city", "bSortable": false,render: function(data, type, row, meta) {
+		            	var city = row.city;
+		            	if(null==city || ""==city){
 		            		return "";
 		            	}else{
 		            		/*cityId = '<span data-toggle="tooltip" data-placement="right" title="'+cityId+'">'+cityId+'<span>';*/
-		            		return cityid;
+		            		return city;
 		            	}
 		            } 	
 		            },

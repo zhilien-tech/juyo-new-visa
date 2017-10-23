@@ -6,12 +6,13 @@
 <!DOCTYPE HTML>
 <html lang="en-US" id="updateHtml">
 <head>
-	<meta charset="UTF-8">
-	<title>更新</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<meta charset="UTF-8">
+<title>更新</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/company.css">
 </head>
 <body>
 	
@@ -24,133 +25,137 @@
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
-					<input name="id" type="hidden" value="${obj.id}">
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>公司名称：</label>
-										<input id="name" name="name" value="${obj.name}" type="text" class="form-control input-sm" placeholder=" " />
+					<input name="id" type="hidden" value="${obj.company.id}">
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>公司全称：</label> <input id="name" name="name"
+									value="${obj.company.name}" type="text" class="form-control input-sm"
+									placeholder=" " />
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>公司简称：</label> <input id="shortName"
+									name="shortName" value="${obj.company.shortName}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>用户名：</label> <input id="" name="" value=""
+									type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>联系人：</label> <input id="linkman"
+									name="linkman" value="${obj.company.linkman}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>电话：</label> <input id="mobile"
+									name="mobile" value="${obj.company.mobile}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>邮箱：</label> <input id="email" name="email"
+									value="${obj.company.email}" type="text" class="form-control input-sm"
+									placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label><span>*</span>地址：</label> <input id="address"
+									name="address" value="${obj.company.address}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>公司类型：</label>
+								<%-- <input id="comType"
+									name="comType" value="${obj.company.comType}" type="text"
+									class="form-control input-sm" placeholder=" " /> --%>
+								<select class="form-control input-sm inpImportant"
+									name="comType" id="comType">
+									<option value="">请选择</option>
+									<option value="1"
+										<c:if test="${'1' eq obj.company.comType}">selected</c:if>>送签社</option>
+									<option value="2"
+										<c:if test="${'2' eq obj.company.comType}">selected</c:if>>地接社</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>经营范围：</label> 
+								<input id="businessScope" name="" type="text" class="form-control input-sm" placeholder=" " />
+								<div class="btnVal">
+									<input type="button" value="日本" class="btn btn-sm btn-state1" />
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- <div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>营业执照：</label> 
+								<input id="license" name="license" type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div> -->
+	                    <!-- 上传营业执照  -->
+			        	<div class="row" style="margin-top:15px;">
+				            <div class="col-xs-3">
+				               <div class="form-group">
+									<div class="upload-btn">
+									    <input id="license" name="license" class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
 									</div>
 								</div>
-																
-																																												<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>公司简称：</label>
-												<input id="shortName" name="shortName" value="${obj.shortName}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																			</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>管理员账号id：</label>
-										<input id="adminId" name="adminId" value="${obj.adminId}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																														<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>联系人：</label>
-												<input id="linkman" name="linkman" value="${obj.linkman}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																	</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>联系人手机号：</label>
-										<input id="mobile" name="mobile" value="${obj.mobile}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																																																																<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>邮箱：</label>
-												<input id="email" name="email" value="${obj.email}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																															</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>地址：</label>
-										<input id="address" name="address" value="${obj.address}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																																																																																																		<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>公司类型：</label>
-												<input id="comType" name="comType" value="${obj.comType}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																													</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>营业执照：</label>
-										<input id="license" name="license" value="${obj.license}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																																																																																																																																				<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>操作人：</label>
-												<input id="opId" name="opId" value="${obj.opId}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																											</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>创建时间：</label>
-										<input id="createTime" name="createTime" value="${obj.createTime}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																																																																																																																																																																						<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>修改时间：</label>
-												<input id="updateTime" name="updateTime" value="${obj.updateTime}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																									</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>删除标识：</label>
-										<input id="deletestatus" name="deletestatus" value="${obj.deletestatus}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																																																																																																																																																																																												</div>
-											
-										
+				            </div>
+				            <div class="col-xs-6">
+			                    <div class="form-group">
+			                        <div class="sqImgPreview">
+			                            <img alt="营业执照" src="" id="sqImg" >
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+						<!-- end 上传营业执照 -->
+					</div>
+
+					<%-- <div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>营业执照：</label> <input id="license"
+									name="license" value="${obj.company.license}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div> --%>
+
 				</div>
 			</div>
 		</form>
@@ -378,6 +383,24 @@
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
         	parent.layer.close(index);
 		}
+		$(function(){
+			 //---------------------------经营范围 js---------------------------	
+			   $(".btnVal input").click(function(){
+				   if($(this).hasClass("btn-state1")){//蓝色按钮
+					   $(this).addClass("btn-state2");//变灰
+					   $(this).removeClass("btn-state1");//清除蓝色按钮 样式
+					   var btnText=$(this).val();
+					   //console.log(btnText);
+					   $("#businessScope").attr("value",btnText);
+				   }else if($(this).hasClass("btn-state2")){//灰色按钮
+					   $(this).addClass("btn-state1");//变蓝
+					   $(this).removeClass("btn-state2");//清除灰色按钮 样式
+					   var btnText=$(this).val();
+					   $("#businessScope").attr("value","");
+				   }
+			   });
+			   //-------------------------end 经营范围 js-------------------------
+		});
 	</script>
 	
 	

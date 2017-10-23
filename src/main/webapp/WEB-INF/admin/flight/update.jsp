@@ -13,6 +13,7 @@
 	content="width=device-width, initial-scale=1, minimum-scale=1">
 <link rel="stylesheet"
 	href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet"
@@ -37,7 +38,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>航班号：</label> <input id="flightnum"
-									name="flightnum" value="${obj.flightnum}" type="text"
+									name="flightnum" value="${obj.flight.flightnum}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -45,7 +46,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>航空公司：</label> <input id="airlinecomp"
-									name="airlinecomp" value="${obj.airlinecomp}" type="text"
+									name="airlinecomp" value="${obj.flight.airlinecomp}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -58,7 +59,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>起飞机场：</label> <input id="takeOffName"
-									name="takeOffName" value="${obj.takeOffName}" type="text"
+									name="takeOffName" value="${obj.flight.takeOffName}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -66,7 +67,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>起飞机场三字代码：</label> <input id="takeOffCode"
-									name="takeOffCode" value="${obj.takeOffCode}" type="text"
+									name="takeOffCode" value="${obj.flight.takeOffCode}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -79,7 +80,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>降落机场：</label> <input id="landingName"
-									name="landingName" value="${obj.landingName}" type="text"
+									name="landingName" value="${obj.flight.landingName}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -87,7 +88,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>降落机场三字代码：</label> <input id="landingCode"
-									name="landingCode" value="${obj.landingCode}" type="text"
+									name="landingCode" value="${obj.flight.landingCode}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -99,17 +100,23 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>起飞城市：</label> <input id="takeOffCityId"
-									name="takeOffCityId" value="${obj.takeOffCityId}" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>起飞城市：</label> 
+								<select id = "takeOffCityId" name="takeOffCityId" 
+										class="form-control select2 cityselect2" multiple="multiple"
+										data-placeholder="">
+										<option value="${obj.takeOffCity.id }" selected="selected">${obj.takeOffCity.city}</option>
+								</select>
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>降落城市：</label> <input id="landingCityId"
-									name="landingCityId" value="${obj.landingCityId}" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>降落城市：</label> 
+								<select id = "landingCityId" name="landingCityId" 
+										class="form-control select2 cityselect2" multiple="multiple"
+										data-placeholder="">
+										<option value="${obj.landingCity.id }" selected="selected">${obj.landingCity.city}</option>
+								</select>
 							</div>
 						</div>
 					</div>
@@ -121,7 +128,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>起飞时间：</label> <input id="takeOffTime"
-									name="takeOffTime" value="${obj.takeOffTime}" type="text"
+									name="takeOffTime" value="${obj.flight.takeOffTime}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -129,7 +136,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>降落时间：</label> <input id="landingTime"
-									name="landingTime" value="${obj.landingTime}" type="text"
+									name="landingTime" value="${obj.flight.landingTime}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -142,7 +149,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>起飞航站楼：</label> <input id="takeOffTerminal"
-									name="takeOffTerminal" value="${obj.takeOffTerminal}"
+									name="takeOffTerminal" value="${obj.flight.takeOffTerminal}"
 									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -150,7 +157,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>降落航站楼：</label> <input id="landingTerminal"
-									name="landingTerminal" value="${obj.landingTerminal}"
+									name="landingTerminal" value="${obj.flight.landingTerminal}"
 									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -173,7 +180,10 @@
 	<script
 		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-
+	<!-- select2 -->
+		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+	<script src="${base}/references/common/js/select2/initSelect2.js"></script>
 	<script type="text/javascript">
 		var base = "${base}";
 
@@ -279,8 +289,8 @@
 		function update() {
 			window.location.reload();
 		}
-		
 	    initvalidate();
+	    initCustNeedsSelect2();
 		$('#flightUpdateForm').bootstrapValidator('validate');
 		function save() {
 			$('#flightUpdateForm').bootstrapValidator('validate');

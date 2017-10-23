@@ -1,19 +1,18 @@
-/************************************客户需求加载下拉列表 start ************************************/
 function initCustNeedsSelect2(){
 	//加载城市下拉
-	$("#cityId").select2({
+	var cityName = $("#cityId").select2({
 		ajax : {
 			url : BASE_PATH + "/admin/city/getCustomerCitySelect",
 			dataType : 'json',
 			delay : 250,
 			type : 'post',
 			data : function(params) {
-				var cArrivalcity = $('#cArrivalcity').val();
-				if(cArrivalcity){
-					cArrivalcity = cArrivalcity.join(',');
-				}
+//				var cArrivalcity = $('#cArrivalcity').val();
+//				if(cArrivalcity){
+//					cArrivalcity = cArrivalcity.join(',');
+//				}
 				return {
-					exname : cArrivalcity,
+//					exname : cArrivalcity,
 					cityname : params.term, // search term
 					page : params.page
 				};
@@ -39,7 +38,7 @@ function initCustNeedsSelect2(){
 		maximumInputLength : 20,
 		language : "zh-CN", //设置 提示语言
 		maximumSelectionLength : 1, //设置最多可以选择多少项
-		tags : false //设置必须存在的选项 才能选中
+		tags : false, //设置必须存在的选项 才能选中
 	});
 	
 	$("#takeOffCityId").select2({
@@ -49,12 +48,12 @@ function initCustNeedsSelect2(){
 			delay : 250,
 			type : 'post',
 			data : function(params) {
-				var cArrivalcity = $('#cArrivalcity').val();
-				if(cArrivalcity){
-					cArrivalcity = cArrivalcity.join(',');
-				}
+//				var cArrivalcity = $('#cArrivalcity').val();
+//				if(cArrivalcity){
+//					cArrivalcity = cArrivalcity.join(',');
+//				}
 				return {
-					exname : cArrivalcity,
+					//exname : cArrivalcity,
 					cityname : params.term, // search term
 					page : params.page
 				};
@@ -89,12 +88,12 @@ function initCustNeedsSelect2(){
 			delay : 250,
 			type : 'post',
 			data : function(params) {
-				var cArrivalcity = $('#cArrivalcity').val();
-				if(cArrivalcity){
-					cArrivalcity = cArrivalcity.join(',');
-				}
+//				var cArrivalcity = $('#cArrivalcity').val();
+//				if(cArrivalcity){
+//					cArrivalcity = cArrivalcity.join(',');
+//				}
 				return {
-					exname : cArrivalcity,
+					//exname : cArrivalcity,
 					cityname : params.term, // search term
 					page : params.page
 				};

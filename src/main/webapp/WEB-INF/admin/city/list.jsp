@@ -6,21 +6,18 @@
 <c:set var="url" value="${base}/admin/city" />
 <!DOCTYPE html>
 <html lang="en-US">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>城市管理</title>
-</head>
-<body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper">
-		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper" style="min-height: 848px;">
-			<!-- Main content -->
-			<section class="content">
-
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>城市管理</title>
+	</head>
+	<body class="hold-transition skin-blue sidebar-mini">
+		<div class="wrapper">
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper"  style="min-height: 848px;">
 				<ul class="title">
-					<li>城市管理</li>
-					<!-- <li class="arrow"></li>
+						<li>城市管理</li>
+						<!-- <li class="arrow"></li>
 						<li></li> -->
 				</ul>
 
@@ -29,8 +26,11 @@
 
 						<div class="row form-right">
 							<div class="col-md-1 left-5px right-0px">
-								<select class="input-class input-sm" id="country">
-									<option>国家</option>
+								<select  id="country" name="country" class="form-control input-sm inpImportant" onchange="selectListData();">
+									<option value="">国家</option>
+									<c:forEach var="map" items="${obj.country}">
+											<option value="${map.key}">${map.value}</option>
+										</c:forEach>
 								</select>
 							</div>
 							<div class="col-md-1 left-5px right-0px">
@@ -44,12 +44,12 @@
 								</select>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<input id="citySearch" name="citySearch" type="text" class="input-sm input-class"
-									placeholder="国家/省/城市" />
+								<input id="searchStr" name="searchStr" type="text" class="input-sm input-class"
+									placeholder="国家/省/城市" onkeypress="onkeyEnter();"/>
 							</div>
 							<div class="col-md-5 left-5px">
 								<a id="searchBtn" class="btn btn-primary btn-sm pull-left"
-									onclick="searchCity();">搜索</a> <a id="addBtn"
+									>搜索</a> <a id="addBtn"
 									class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 							</div>
 						</div>
@@ -107,10 +107,6 @@
 		var BASE_PATH = '${base}';
 		$(function() {
 			initDatatable();
-		});
-		
-		$("#searchBtn").on('click', function () {
-			
 		});
 	</script>
 </body>

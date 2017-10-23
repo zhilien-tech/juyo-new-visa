@@ -11,9 +11,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
-import com.juyo.visa.entities.TFlightEntity;
 import com.uxuexi.core.common.util.Util;
-import com.uxuexi.core.db.util.EntityUtil;
 import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
@@ -74,7 +72,7 @@ public class TFlightForm extends DataTablesParamForm {
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
-		String sqlString = EntityUtil.entityCndSql(TFlightEntity.class);
+		String sqlString = sqlManager.get("platformFlight_list");
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
 		return sql;
@@ -85,8 +83,9 @@ public class TFlightForm extends DataTablesParamForm {
 		//TODO 添加自定义查询条件（可选）
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup expg = new SqlExpressionGroup();
-			expg.and("flightnum", "LIKE", "%" + searchStr + "%").or("airlinecomp", "LIKE", "%" + searchStr + "%")
-					.or("takeOffName", "LIKE", "%" + searchStr + "%").or("landingName", "LIKE", "%" + searchStr + "%");
+			expg.and("f.flightnum", "LIKE", "%" + searchStr + "%").or("f.airlinecomp", "LIKE", "%" + searchStr + "%")
+					.or("f.takeOffName", "LIKE", "%" + searchStr + "%")
+					.or("f.landingName", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
 		cnd.orderBy("createTime", "DESC");

@@ -11,9 +11,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
-import com.juyo.visa.entities.THotelEntity;
 import com.uxuexi.core.common.util.Util;
-import com.uxuexi.core.db.util.EntityUtil;
 import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
@@ -59,7 +57,7 @@ public class THotelForm extends DataTablesParamForm {
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
-		String sqlString = EntityUtil.entityCndSql(THotelEntity.class);
+		String sqlString = sqlManager.get("platformHotel_list");
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
 		return sql;
@@ -70,8 +68,8 @@ public class THotelForm extends DataTablesParamForm {
 		//TODO 添加自定义查询条件（可选）
 		if (!Util.isEmpty(hotelSearch)) {
 			SqlExpressionGroup expg = new SqlExpressionGroup();
-			expg.and("name", "LIKE", "%" + hotelSearch + "%").or("nameJp", "LIKE", "%" + hotelSearch + "%")
-					.or("mobile", "LIKE", "%" + hotelSearch + "%").or("cityId", "LIKE", "%" + hotelSearch + "%");
+			expg.and("h.name", "LIKE", "%" + hotelSearch + "%").or("h.nameJp", "LIKE", "%" + hotelSearch + "%")
+					.or("h.mobile", "LIKE", "%" + hotelSearch + "%").or("c.city", "LIKE", "%" + hotelSearch + "%");
 			cnd.and(expg);
 		}
 		cnd.orderBy("createTime", "DESC");

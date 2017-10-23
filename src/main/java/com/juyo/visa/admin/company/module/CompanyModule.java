@@ -64,8 +64,8 @@ public class CompanyModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..")TCompanyAddForm addForm) {
-		return companyViewService.add(addForm);
+	public Object add(@Param("..") TCompanyAddForm addForm) {
+		return companyViewService.addCompany(addForm);
 	}
 
 	/**

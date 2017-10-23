@@ -77,7 +77,7 @@ public class ScenicModule {
 	@GET
 	@Ok("jsp")
 	public Object update(@Param("id") final long id) {
-		return scenicViewService.fetch(id);
+		return scenicViewService.fetchScenic(id);
 	}
 
 	/**

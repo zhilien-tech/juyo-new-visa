@@ -6,21 +6,18 @@
 <c:set var="url" value="${base}/admin/customer" />
 <!DOCTYPE html>
 <html lang="en-US">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>客户管理</title>
-</head>
-<body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper">
-		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper" style="min-height: 848px;">
-			<!-- Main content -->
-			<section class="content">
-
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>客户管理</title>
+	</head>
+	<body class="hold-transition skin-blue sidebar-mini">
+		<div class="wrapper">
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper"  style="min-height: 848px;">
 				<ul class="title">
-					<li>客户管理</li>
-					<!-- <li class="arrow"></li>
+						<li>客户管理</li>
+						<!-- <li class="arrow"></li>
 						<li></li> -->
 				</ul>
 

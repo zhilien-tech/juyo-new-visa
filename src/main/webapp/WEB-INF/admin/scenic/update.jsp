@@ -11,6 +11,7 @@
 <title>更新</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 <link rel="stylesheet"
 	href="${base}/references/public/bootstrap/css/bootstrap.css">
 <link rel="stylesheet"
@@ -37,7 +38,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>景点(中文)：</label> <input id="name"
-									name="name" value="${obj.name}" type="text"
+									name="name" value="${obj.scenic.name}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -47,7 +48,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>景点(原文)：</label> <input id="namejp"
-									name="namejp" value="${obj.namejp}" type="text"
+									name="namejp" value="${obj.scenic.namejp}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -61,6 +62,7 @@
 								<select id = "cityId" name="cityId"
 										class="form-control select2 cityselect2" multiple="multiple"
 										data-placeholder="">
+										<option value="${obj.city.id }" selected="selected">${obj.city.city }</option>
 								</select>
 							</div>
 						</div>

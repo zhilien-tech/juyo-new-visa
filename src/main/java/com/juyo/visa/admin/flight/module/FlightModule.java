@@ -77,7 +77,7 @@ public class FlightModule {
 	@GET
 	@Ok("jsp")
 	public Object update(@Param("id") final long id) {
-		return flightViewService.fetch(id);
+		return flightViewService.fetchFlight(id);
 	}
 
 	/**

@@ -128,19 +128,21 @@ function deleteById(id) {
 		// 取消之后不用处理
 	});
 }
-function searchCity(){
-	var hotelSearch = $("#hotelSearch").val();
-	alert(hotelSearch);
-	$.ajax({
-		type:'POST',
-		url:BASE_PATH + '/admin/hotel/hotelSearch',
-		data:{
-			country : hotelSearch
-		},
-		dataType:'json',
-		success : function(data){
-			
-		}
-	});
+function selectListData(){
+	  $("#searchBtn").click();
 }
+$("#searchBtn").on('click',function(){
+	var searchStr = $("#searchStr").val();
+	var param = {
+		"searchStr": searchStr,
+	};
+	datatable.settings()[0].ajax.data = param;
+	datatable.ajax.reload();
+});
 
+function onkeyEnter(){
+    var e = window.event || arguments.callee.caller.arguments[0];
+    if(e && e.keyCode == 13){
+		 $("#searchBtn").click();
+	 }
+}

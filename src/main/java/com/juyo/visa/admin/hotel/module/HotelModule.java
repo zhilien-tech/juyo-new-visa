@@ -14,7 +14,6 @@ import org.nutz.mvc.annotation.Param;
 import com.juyo.visa.admin.hotel.service.HotelViewService;
 import com.juyo.visa.forms.THotelAddForm;
 import com.juyo.visa.forms.THotelForm;
-import com.juyo.visa.forms.THotelSearchForm;
 import com.juyo.visa.forms.THotelUpdateForm;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
@@ -78,7 +77,7 @@ public class HotelModule {
 	@GET
 	@Ok("jsp")
 	public Object update(@Param("id") final long id) {
-		return hotelViewService.fetch(id);
+		return hotelViewService.fetchHotel(id);
 	}
 
 	/**
@@ -108,8 +107,12 @@ public class HotelModule {
 		return JsonResult.success("删除成功");
 	}
 
-	public Object hotelSearch(THotelSearchForm searchForm) {
-		return hotelViewService.hotelSearch(searchForm);
+	/**
+	 * 搜索
+	 */
+	@At
+	public Object searchHotel() {
+		return null;
 	}
 
 }

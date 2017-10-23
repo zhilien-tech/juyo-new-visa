@@ -12,6 +12,7 @@
 <title>添加</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 <link rel="stylesheet"
 	href="${base}/references/public/bootstrap/css/bootstrap.css">
 <link rel="stylesheet"

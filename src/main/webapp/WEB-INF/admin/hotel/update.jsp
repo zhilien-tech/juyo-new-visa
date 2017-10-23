@@ -13,6 +13,7 @@
 	content="width=device-width, initial-scale=1, minimum-scale=1">
 <link rel="stylesheet"
 	href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet"
@@ -31,13 +32,13 @@
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
-					<input name="id" type="hidden" value="${obj.id}">
+					<input name="id" type="hidden" value="${obj.hotel.id}">
 
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>酒店名称(中文)：</label> <input id="name"
-									name="name" value="${obj.name}" type="text"
+									name="name" value="${obj.hotel.name}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -47,7 +48,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>酒店名称(原文)：</label> <input id="namejp"
-									name="namejp" value="${obj.namejp}" type="text"
+									name="namejp" value="${obj.hotel.namejp}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -58,7 +59,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>酒店地址(中文)：</label> <input id="address"
-									name="address" value="${obj.address}" type="text"
+									name="address" value="${obj.hotel.address}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -68,7 +69,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>酒店地址(原文)：</label> <input id="addressjp"
-									name="addressjp" value="${obj.addressjp}" type="text"
+									name="addressjp" value="${obj.hotel.addressjp}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -79,7 +80,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>电话：</label> <input id="mobile"
-									name="mobile" value="${obj.mobile}" type="text"
+									name="mobile" value="${obj.hotel.mobile}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -87,9 +88,10 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>所属城市：</label> 
-								<select id = "cityId" name="cityId"
+								<select id = "cityId" name="cityId" 
 										class="form-control select2 cityselect2" multiple="multiple"
 										data-placeholder="">
+										<option value="${obj.city.id }" selected="selected">${obj.city.city }</option>
 								</select>
 							</div>
 						</div>
@@ -117,7 +119,6 @@
 	<script src="${base}/references/common/js/select2/initSelect2.js"></script>
 	<script type="text/javascript">
 		var base = "${base}";
-
 		function initvalidate() {
 			//校验
 			$('#hotelUpdateForm').bootstrapValidator({
@@ -173,12 +174,12 @@
 				}
 			});
 		}
+		
 
 		//更新时刷新页面
 		function update() {
 			window.location.reload();
 		}
-
 		initvalidate();
 		initCustNeedsSelect2();
 		$('#hotelUpdateForm').bootstrapValidator('validate');
@@ -214,9 +215,9 @@
 					layer.msg('mobile不能为空');
 					return;
 				}
-				var cityId = $("#cityId").val();
-				if (cityId == "") {
-					layer.msg('cityId不能为空');
+				var city = $("#cityId").val();
+				if (city == "") {
+					layer.msg('city不能为空');
 					return;
 				}
 

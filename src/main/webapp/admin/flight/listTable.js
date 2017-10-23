@@ -86,23 +86,23 @@ function initDatatable() {
 		                		 }
 		                    } 	
 		                },
-											{"data": "takeoffcityid", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var takeoffcityid = row.takeoffcityid;
-		                		 if(null==takeoffcityid || ""==takeoffcityid){
+											{"data": "takeoffcity", "bSortable": false,render: function(data, type, row, meta) {
+		                		 var takeoffcity = row.takeoffcity;
+		                		 if(null==takeoffcity || ""==takeoffcity){
 		                			 return "";
 		                		 }else{
 		                		 	/*takeOffCityId = '<span data-toggle="tooltip" data-placement="right" title="'+takeOffCityId+'">'+takeOffCityId+'<span>';*/
-		                		 	return takeoffcityid;
+		                		 	return takeoffcity;
 		                		 }
 		                    } 	
 		                },
-											{"data": "landingcityid", "bSortable": false,render: function(data, type, row, meta) {
-		                		 var landingcityid = row.landingcityid;
-		                		 if(null==landingcityid || ""==landingcityid){
+											{"data": "landingcity", "bSortable": false,render: function(data, type, row, meta) {
+		                		 var landingcity = row.landingcity;
+		                		 if(null==landingcity || ""==landingcity){
 		                			 return "";
 		                		 }else{
 		                		 	/*landingCityId = '<span data-toggle="tooltip" data-placement="right" title="'+landingCityId+'">'+landingCityId+'<span>';*/
-		                		 	return landingcityid;
+		                		 	return landingcity;
 		                		 }
 		                    } 	
 		                },
