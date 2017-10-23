@@ -66,6 +66,8 @@
 										<th><span>访问地址</span></th>
 										<th><span>功能名称</span></th>
 										<th><span>功能等级</span></th>
+										<th><span>公司类型</span></th>
+										<th><span>经营范围</span></th>
 										<th><span>创建时间</span></th>
 										<th><span>备注</span></th>
 										<th><span>序号</span></th>

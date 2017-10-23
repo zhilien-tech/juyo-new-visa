@@ -1,11 +1,13 @@
 package com.juyo.visa.admin.function.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
@@ -13,10 +15,16 @@ import org.nutz.log.Logs;
 
 import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.CompanyTypeEnum;
+import com.juyo.visa.entities.TBusinessscopeFunctionEntity;
+import com.juyo.visa.entities.TComFunctionEntity;
 import com.juyo.visa.entities.TFunctionEntity;
+import com.juyo.visa.forms.TFunctionAddForm;
 import com.juyo.visa.forms.TFunctionForm;
+import com.juyo.visa.forms.TFunctionUpdateForm;
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
 @IocBean
@@ -38,6 +46,47 @@ public class FunctionViewService extends BaseService<TFunctionEntity> {
 		return obj;
 	}
 
+	//添加功能
+	public Object addFunction(TFunctionAddForm addForm) {
+		int comType = addForm.getComType();//公司类型
+		int bScope = addForm.getBScope();//经营范围
+		//功能信息
+		Date nowDate = DateUtil.nowDate();
+		addForm.setCreateTime(nowDate);
+		addForm.setUpdateTime(nowDate);
+		TFunctionEntity function = this.add(addForm);
+
+		if (!Util.isEmpty(function)) {
+			int funId = function.getId();
+
+			//经营范围类型功能信息
+			TBusinessscopeFunctionEntity bsFun = new TBusinessscopeFunctionEntity();
+			bsFun.setCompType(comType);
+			bsFun.setCountryId(bScope);
+			bsFun.setFunId(funId);
+			dbDao.insert(bsFun);
+
+			//公司功能关联表
+			String sqlString = sqlManager.get("function_company_cnd");
+			Sql sql = Sqls.create(sqlString);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("c.comType", "=", comType);
+			cnd.and("cbs.countryId", "=", bScope);
+			List<Record> comIdList = dbDao.query(sql, cnd, null);
+			if (!Util.isEmpty(comIdList)) {
+				for (Record record : comIdList) {
+					TComFunctionEntity comFun = new TComFunctionEntity();
+					String comId = record.getString("id");
+					comFun.setComId(Integer.valueOf(comId));
+					comFun.setFunId(funId);
+					dbDao.insert(comFun);
+				}
+			}
+		}
+
+		return null;
+	}
+
 	//跳转到编辑页面
 	public Object getFunctionById(long id) {
 		Map<String, Object> obj = new HashMap<String, Object>();
@@ -52,6 +101,14 @@ public class FunctionViewService extends BaseService<TFunctionEntity> {
 		sql.setCondition(Cnd.where("f.id", "=", id));
 		obj.put("function", dbDao.fetch(sql));
 		return obj;
+	}
+
+	//编辑功能
+	public Object updateFunction(TFunctionUpdateForm updateForm) {
+		Date nowDate = DateUtil.nowDate();
+		updateForm.setUpdateTime(nowDate);
+		int update = this.update(updateForm);
+		return update;
 	}
 
 	//统计功能

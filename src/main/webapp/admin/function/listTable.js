@@ -71,13 +71,39 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
-		            {"data": "createTime", "bSortable": false,render: function(data, type, row, meta) {
-		            	var createTime = row.createTime;
-		            	if(null==createTime || ""==createTime){
+		            {"data": "comtype", "bSortable": false,render: function(data, type, row, meta) {
+		            	var comtype = row.comtype;
+		            	if(null==comtype || ""==comtype){
 		            		return "";
 		            	}else{
-		            		/*createTime = '<span data-toggle="tooltip" data-placement="right" title="'+createTime+'">'+createTime+'<span>';*/
-		            		return createTime;
+		            		if("1" == comtype){
+		            			comtype = "送签社";
+		            		}else if("2" == comtype){
+		            			comtype = "地接社";
+		            		}
+		            		return comtype;
+		            	}
+		            } 	
+		            },
+		            {"data": "bscope", "bSortable": false,render: function(data, type, row, meta) {
+		            	var bscope = row.bscope;
+		            	if(null==bscope || ""==bscope){
+		            		return "";
+		            	}else{
+		            		if("1"==bscope){
+		            			bscope = "日本";
+		            		}
+		            		return bscope;
+		            	}
+		            } 	
+		            },
+		            {"data": "createtime", "bSortable": false,render: function(data, type, row, meta) {
+		            	var createtime = row.createtime;
+		            	if(null==createtime || ""==createtime){
+		            		return "";
+		            	}else{
+		            		/*createtime = '<span data-toggle="tooltip" data-placement="right" title="'+createtime+'">'+createtime+'<span>';*/
+		            		return createtime;
 		            	}
 		            } 	
 		            },
@@ -104,8 +130,9 @@ function initDatatable() {
 		            {"data": " ", "bSortable": false, "width":120,
 		            	render: function(data, type, row, meta) {
 		            		var modify = '<a style="cursor:pointer;" class="edit-icon" onclick="edit('+row.id+');"></a>';
-		            		var judge = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.id+');"></a>';
-		            		return modify+judge;
+		            		/*var judge = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.id+');"></a>';
+		            		return modify+delete;*/
+		            		return modify;
 		            	}	
 		            } 
 		            ],

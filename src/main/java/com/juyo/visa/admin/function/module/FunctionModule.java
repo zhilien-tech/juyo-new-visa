@@ -67,7 +67,13 @@ public class FunctionModule {
 	@At
 	@POST
 	public Object add(@Param("..") TFunctionAddForm addForm) {
-		return functionViewService.add(addForm);
+		try {
+			functionViewService.addFunction(addForm);
+			return JsonResult.success("添加成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return JsonResult.error("添加失败");
+		}
 	}
 
 	/**
@@ -86,7 +92,13 @@ public class FunctionModule {
 	@At
 	@POST
 	public Object update(@Param("..") TFunctionUpdateForm updateForm) {
-		return functionViewService.update(updateForm);
+		try {
+			functionViewService.updateFunction(updateForm);
+			return JsonResult.success("编辑成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return JsonResult.error("编辑失败");
+		}
 	}
 
 	/**

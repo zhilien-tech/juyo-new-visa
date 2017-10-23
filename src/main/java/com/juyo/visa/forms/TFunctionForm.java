@@ -79,7 +79,7 @@ public class TFunctionForm extends DataTablesParamForm {
 			cnd.and("f.funName", "like", "%" + searchStr + "%");
 		}
 		if (!Util.isEmpty(funId) && !Util.eq("-1", funId)) {
-			cnd.and("f.parentId", "=", funId);
+			cnd.and("f.id", "=", funId);
 		}
 		cnd.orderBy("f.id", "ASC");
 		return cnd;

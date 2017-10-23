@@ -101,7 +101,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>公司类型：</label> 
-								<select class="form-control input-sm inpImportant" name="comType" id="comType">
+								<select disabled="disabled" class="form-control input-sm inpImportant" name="comType" id="comType">
 									<option value="">请选择</option>
 									<option value="1"
 										<c:if test="${'1' eq obj.function.comType}">selected</c:if>>送签社</option>
@@ -113,7 +113,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>经营范围：</label> 
-								<select id="bScope" name="bScope" class="form-control input-sm selectHeight">
+								<select id="bScope" name="bScope" disabled="disabled" class="form-control input-sm selectHeight">
 									<option value="">请选择</option>
 									<option value="1"
 										<c:if test="${'1' eq obj.function.bScope}">selected</c:if>>日本</option>
