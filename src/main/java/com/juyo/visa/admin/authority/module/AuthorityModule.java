@@ -1,31 +1,33 @@
 package com.juyo.visa.admin.authority.module;
 
-import com.juyo.visa.admin.authority.service.AuthorityViewService;
-import com.juyo.visa.forms.TDepartmentUpdateForm;
-import com.juyo.visa.forms.TDepartmentAddForm;
-import com.juyo.visa.forms.TDepartmentForm;
-
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.dao.pager.Pager;
-import org.nutz.mvc.annotation.*;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.GET;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
+import org.nutz.mvc.annotation.Param;
 
-import com.uxuexi.core.web.base.page.Pagination;
+import com.juyo.visa.admin.authority.form.TAuthoritySqlForm;
+import com.juyo.visa.admin.authority.service.AuthorityViewService;
+import com.juyo.visa.forms.TDepartmentAddForm;
+import com.juyo.visa.forms.TDepartmentUpdateForm;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 @At("/admin/authority")
 @Filters({//@By(type = AuthFilter.class)
-	})
+})
 public class AuthorityModule {
 
 	private static final Log log = Logs.get();
-	
+
 	@Inject
 	private AuthorityViewService authorityViewService;
-	
+
 	/**
 	 * 跳转到list页面
 	 */
@@ -35,28 +37,23 @@ public class AuthorityModule {
 	public Object list() {
 		return null;
 	}
-	
+
 	/**
 	 * 分页查询
 	 */
-	/*@At
-	@Ok("jsp")
-	public Pagination list(@Param("..") final TDepartmentForm sqlParamForm,@Param("..") final Pager pager) {
-    	return authorityViewService.listPage(sqlParamForm,pager);
-    }*/
-    @At
-	public Object listData(@Param("..") final TDepartmentForm sqlParamForm) {
+	@At
+	public Object listData(@Param("..") final TAuthoritySqlForm sqlParamForm) {
 		return authorityViewService.listData(sqlParamForm);
 	}
-    
-    /**
+
+	/**
 	 * 跳转到'添加操作'的录入数据页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
 	public Object add() {
-		return null ;
+		return null;
 	}
 
 	/**
@@ -64,7 +61,7 @@ public class AuthorityModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..")TDepartmentAddForm addForm) {
+	public Object add(@Param("..") TDepartmentAddForm addForm) {
 		return authorityViewService.add(addForm);
 	}
 
@@ -83,7 +80,7 @@ public class AuthorityModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..")TDepartmentUpdateForm updateForm) {
+	public Object update(@Param("..") TDepartmentUpdateForm updateForm) {
 		return authorityViewService.update(updateForm);
 	}
 
@@ -104,5 +101,5 @@ public class AuthorityModule {
 		authorityViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
 	}
-	
+
 }

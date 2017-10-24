@@ -52,14 +52,10 @@
 							<table id="datatableId" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
-										<th><span>序号</span></th>
-																					<th><span>公司id</span></th>
-																					<th><span>部门名称</span></th>
-																					<th><span>创建时间</span></th>
-																					<th><span>修改时间</span></th>
-																					<th><span>备注</span></th>
-																					<th><span>操作人id</span></th>
-																				<th><span>操作</span></th>
+										<th><span>部门名称</span></th>
+										<th><span>模块</span></th>
+										<th><span>职位名称</span></th>
+										<th><span>操作</span></th>
 									</tr>
 								</thead>
 								<tbody>
