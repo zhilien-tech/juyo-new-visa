@@ -194,7 +194,20 @@
 		    <artifactId>spring-webmvc</artifactId>
 		    <version>4.1.6.RELEASE</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>com.we</groupId>
+			<artifactId>we-business-sms-api</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.we</groupId>
+			<artifactId>we-business-sms-provider</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>${pgroupId}</groupId>
+			<artifactId>we-core-redis</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

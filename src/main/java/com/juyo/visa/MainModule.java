@@ -34,4 +34,10 @@ public class MainModule {
 	public Object main() {
 		return null;
 	}
+
+	@At("/tlogin")
+	@Ok("jsp:tlogin")
+	public Object tlogin() {
+		return null;
+	}
 }

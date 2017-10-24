@@ -84,4 +84,24 @@ public class LoginModule {
 	public void logout(final HttpSession session) {
 		loginService.logout(session);
 	}
+
+	/**
+	 * 发送手机验证码
+	 */
+	@At
+	@Filters
+	@POST
+	public Object sendValidateCode(final String mobilenum) {
+		return loginService.sendValidateCode(mobilenum);
+	}
+
+	/**
+	 * 短信验证码登录
+	 */
+	@At
+	@Filters
+	@POST
+	public Object messageLogin(@Param("..") final LoginForm form, final HttpSession session) {
+		return loginService.messageLogin(form, session);
+	}
 }
