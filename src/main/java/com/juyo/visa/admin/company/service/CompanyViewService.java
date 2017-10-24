@@ -164,7 +164,11 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		List<Record> list = (List<Record>) sql.getResult();
 		if (!Util.isEmpty(list)) {
 			//公司数据
-			obj.put("company", list.get(0));
+			Record record = list.get(0);
+			List<TComBusinessscopeEntity> comBusiness = dbDao.query(TComBusinessscopeEntity.class,
+					Cnd.where("comId", "=", id), null);
+			record.set("comBusinesss", comBusiness);
+			obj.put("company", record);
 		}
 		//用户名
 		//obj.put("telephone", dbDao.fetch(TUserEntity.class, companyEntity.getAdminId()).getUserName());
