@@ -1,5 +1,6 @@
 
-<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java"
+	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
 
 <c:set var="url" value="${base}/admin/authority" />
@@ -7,86 +8,58 @@
 <!DOCTYPE HTML>
 <html lang="en-US" id="addHtml">
 <head>
-	<meta charset="UTF-8">
-	<title>添加</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<meta charset="UTF-8">
+<title>添加</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet"
+	href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<!-- zTree -->
+<link rel="stylesheet" href="${base}/references/common/js/zTree/css/zTreeStyle/zTreeStyle.css">
 </head>
 <body>
 	<div class="modal-content">
 		<form id="authorityAddForm">
 			<div class="modal-header">
-				<span class="heading">添加</span>
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消"/>
-				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存"/>
+				<span class="heading">添加</span> <input id="backBtn" type="button"
+					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
+					data-dismiss="modal" value="取消" /> <input id="addBtn"
+					type="button" onclick="save();"
+					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
-			<div class="modal-body">
-				<div class="tab-content">
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>公司id：</label>
-										<input id="comId" name="comId" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																												<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>部门名称：</label>
-												<input id="deptName" name="deptName" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																												</div>
-												
-										
-												
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>创建时间：</label>
-										<input id="createTime" name="createTime" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																														<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>修改时间：</label>
-												<input id="updateTime" name="updateTime" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																										</div>
-												
-										
-												
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>备注：</label>
-										<input id="remark" name="remark" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-																
-																																																																																																																<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>操作人id：</label>
-												<input id="opId" name="opId" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																								</div>
-												
-										
-												
-										
+			<div class="modal-body" style="height: 435px; overflow-y: auto;">
+				<div class="departmentName form-group">
+					<!--部门权限 设置-->
+					<ul class="addDepartment">
+						<input id="jobJson" name="jobJson" type="hidden" value="" />
+						<li><label class=" text-right">部门名称：</label></li>
+						<li class="li-input">
+							<div>
+								<input id="deptName" name="deptName" type="text"
+									class="form-control input-sm inputText" placeholder="请输入部门名称">
+								<span class="prompt">*</span>
+							</div>
+						</li>
+						<li>
+							<button type="button" class="btn btn-primary btn-sm btnPadding" id="addJob">添加职位</button>
+						</li>
+					</ul>
 				</div>
+				<!--end 部门权限 设置-->
+
+				<div class="jobName cf">
+					<!--begin 职位权限 设置-->
+
+				</div>
+				<!--end 职位权限 设置-->
 			</div>
 		</form>
 	</div>
-	
+
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
@@ -97,6 +70,108 @@
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<!--zTree -->
+	<script src="${base}/references/common/js/zTree/jquery.ztree.core-3.5.js"></script>
+	<script src="${base}/references/common/js/zTree/jquery.ztree.excheck-3.5.js"></script>
+	<script src="${base}/references/common/js/zTree/jquery.ztree.exedit-3.5.js"></script>
+
+
+	<script type="text/javascript">
+		var setting = {
+				check: {
+					enable: true,//显示复选框
+					chkStyle: "checkbox",
+					chkboxType: { "Y": "ps", "N": "ps" }
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				callback: {
+					beforeCheck: zTreeBeforeCheck
+				}
+			};
+		//默认选中个人信息和操作台
+		function zTreeBeforeCheck(treeId, treeNode) {
+			if((treeNode.id == 43 || treeNode.id == 44) && treeNode.checked){
+				return false ;
+			}else{
+				return true;
+			}
+		};
+		//遍历得到的对象
+		var zNodes =[
+			 {id:"0", pId:"0", name:"职位权限设置", open:true},
+			 <c:forEach var="p" items="${obj.moduleList}">
+				<c:choose>
+					<c:when test="${p.id eq 43 || p.id eq 44}">
+						{ id:"${p.id }", pId:"${p.parentId }", name:"${p.funName }", open:true,checked:true},
+					</c:when>
+					<c:otherwise>
+						{ id:"${p.id }", pId:"${p.parentId }", name:"${p.funName }", open:true,checked:"${p.checked}"},
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+		];
+	 	
+	   var treeIndex = 0 ;
+	   $(function () {
+			//部门职位 添加职位
+		    $('#addJob').click(function(){
+		       $(".job_container .ztree").hide();
+		       $('.jobName').append('<div class="job_container form-group"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName'+(treeIndex)+'" type="text" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn" >删除</button></li></ul>'
+		       +'<div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div></div>');
+		       treeIndex++;
+			   var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
+		       var treeId = ztree_container.attr("id") ;
+		       var treeObj = $.fn.zTree.getZTreeObj(treeId);
+		       if(null == treeObj || undefined == treeObj){
+			      	//初始化ztree
+				    $.fn.zTree.init(ztree_container, setting, zNodes);
+		      	}
+		    });
+		    //删除按钮
+		    $('.jobName').on("click","#deleteBtn",function() {
+		      $(this).parent().parent().next().remove();
+		      $(this).closest('.job_container').remove();
+		
+		    });
+		    //设置权限 按钮
+		    $('.jobName').on("click","#settingsPermis",function() {
+		    	$(this).parents('.marHei').next().toggle('500');
+		        $(this).parents(".job_container").siblings().children('.ztree').hide();
+		      	var ztree_container = $(this).parents(".marHei").next("div.ztree").find("ul:first");
+		      	var treeId = ztree_container.attr("id") ;
+		      	
+		      	var treeObj = $.fn.zTree.getZTreeObj(treeId);
+		      	if(null == treeObj || undefined == treeObj){
+		      	//初始化ztree
+			    	$.fn.zTree.init(ztree_container, setting, zNodes);
+		      	}
+		    });
+	    });
+	   //设置功能
+		function setFunc(){
+		   var jobInfos = [];
+		   //取所有树
+		   $(".job_container").each(function(index,container){
+			   var jobName = $(container).find("input[id='jobName']").val();
+			   var treeObj = $.fn.zTree.getZTreeObj("tree_" + index);
+			   var nodes =  treeObj.getCheckedNodes(true);
+			   var funcIds = "" ;
+				$(nodes).each(function(i,node){
+					funcIds += node.id + ",";
+				});
+			   var job = new Object();
+			   job.jobName=jobName;
+			   job.functionIds=funcIds;
+			   jobInfos.push(job);
+		   });
+		   var jobJson = JSON.stringify(jobInfos) ;
+		   $("#jobJson").val(jobJson) ;
+		}
+	</script>
 
 	<script type="text/javascript">
 		var base = "${base}";
@@ -110,96 +185,36 @@
 					validating : 'glyphicon glyphicon-refresh'
 				},
 				fields : {
-				
-									comId : {
-						validators : {
-							notEmpty : {
-								message : '公司id不能为空'
-							}
-						}
-					},
-									deptName : {
+					deptName : {
 						validators : {
 							notEmpty : {
 								message : '部门名称不能为空'
 							}
 						}
 					},
-									createTime : {
-						validators : {
-							notEmpty : {
-								message : '创建时间不能为空'
-							}
-						}
-					},
-									updateTime : {
-						validators : {
-							notEmpty : {
-								message : '修改时间不能为空'
-							}
-						}
-					},
-									remark : {
-						validators : {
-							notEmpty : {
-								message : '备注不能为空'
-							}
-						}
-					},
-									opId : {
-						validators : {
-							notEmpty : {
-								message : '操作人id不能为空'
-							}
-						}
-					},
-									
+
 				}
 			});
 		});
 		/* 页面初始化加载完毕 */
-		
-		/*保存页面*/ 
+
+		/*保存页面*/
 		function save() {
 			//初始化验证插件
 			$('#authorityAddForm').bootstrapValidator('validate');
 			//得到获取validator对象或实例 
-			var bootstrapValidator = $("#authorityAddForm").data('bootstrapValidator');
+			var bootstrapValidator = $("#authorityAddForm").data(
+					'bootstrapValidator');
 			// 执行表单验证 
 			bootstrapValidator.validate();
 			if (bootstrapValidator.isValid()) {
 				//获取必填项信息
-									var comId = $("#comId").val();
-					if(comId==""){
-						layer.msg('comId不能为空');
-						return;
-					}
-									var deptName = $("#deptName").val();
-					if(deptName==""){
-						layer.msg('deptName不能为空');
-						return;
-					}
-									var createTime = $("#createTime").val();
-					if(createTime==""){
-						layer.msg('createTime不能为空');
-						return;
-					}
-									var updateTime = $("#updateTime").val();
-					if(updateTime==""){
-						layer.msg('updateTime不能为空');
-						return;
-					}
-									var remark = $("#remark").val();
-					if(remark==""){
-						layer.msg('remark不能为空');
-						return;
-					}
-									var opId = $("#opId").val();
-					if(opId==""){
-						layer.msg('opId不能为空');
-						return;
-					}
-								
+				var deptName = $("#deptName").val();
+				if (deptName == "") {
+					layer.msg('deptName不能为空');
+					return;
+				}
+
 				$.ajax({
 					type : 'POST',
 					data : $("#authorityAddForm").serialize(),
@@ -217,14 +232,14 @@
 				});
 			}
 		}
-		
+
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 		}
 	</script>
-	
-	
+
+
 </body>
 </html>

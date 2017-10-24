@@ -1,9 +1,9 @@
 package com.juyo.visa.admin.authority.module;
 
+import javax.servlet.http.HttpSession;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.log.Log;
-import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
@@ -23,7 +23,8 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 })
 public class AuthorityModule {
 
-	private static final Log log = Logs.get();
+	/**无效数据id*/
+	public static final int INVALID_DATA_ID = -1;
 
 	@Inject
 	private AuthorityViewService authorityViewService;
@@ -52,8 +53,8 @@ public class AuthorityModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object add() {
-		return null;
+	public Object add(final HttpSession session) throws CloneNotSupportedException {
+		return authorityViewService.findCompanyFunctions(INVALID_DATA_ID, session);
 	}
 
 	/**
