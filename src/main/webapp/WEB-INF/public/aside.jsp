@@ -52,6 +52,10 @@
 				href="/admin/function/list.html?currentPageIndex=9"> <img
 					src="${base}/references/public/dist/newvisacss/img/index.png" /> <font>功能管理</font>
 			</a></li>
+			<li id="10"><a
+				href="/admin/authority/list.html?currentPageIndex=10"> <img
+					src="${base}/references/public/dist/newvisacss/img/index.png" /> <font>权限管理</font>
+			</a></li>
 		</ul>
 		<!-- /.sidebar-menu -->
 	</section>
