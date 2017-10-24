@@ -51,6 +51,9 @@ public class TCompanyForm extends DataTablesParamForm {
 	/**营业执照*/
 	private String license;
 
+	/**经营范围*/
+	private String comScopes;
+
 	/**操作人*/
 	private Integer opId;
 

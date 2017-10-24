@@ -10,6 +10,16 @@ SELECT
 	c.email,
 	c.address,
 	c.comType,
+	(
+		SELECT
+			GROUP_CONCAT(
+				cast(cbs.countryId AS CHAR) SEPARATOR ','
+			)
+		FROM
+			t_com_businessscope cbs
+		WHERE
+			cbs.comId = c.id
+	) AS scopes,
 	c.license,
 	c.createTime
 FROM
