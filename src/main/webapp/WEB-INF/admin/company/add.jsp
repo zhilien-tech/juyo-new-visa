@@ -105,13 +105,14 @@
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>经营范围：</label> 
+								<label><span>*</span>经营范围：</label>
 								<!-- <input id="businessScope" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
-								<div class="multiselectBtn form-control input-sm"></div>
+								<input id="businessScopes" name="businessScopes" type="hidden"/>
+								<div id="scopeDiv" name="scopeDiv" class="multiselectBtn form-control input-sm"></div>
 								<div class="btnVal">
 									<input type="button" value="日本" class="btn btn-sm btn-state1" />
-									<input type="button" value="美国" class="btn btn-sm btn-state1" />
-									<input type="button" value="澳大利亚" class="btn btn-sm btn-state1" />
+									<!-- <input type="button" value="美国" class="btn btn-sm btn-state1" />
+									<input type="button" value="澳大利亚" class="btn btn-sm btn-state1" /> -->
 								</div>
 							</div>
 						</div>
@@ -188,13 +189,13 @@
 							}
 						}
 					},
-					/* adminId : {
+					adminLoginName : {
 						validators : {
 							notEmpty : {
 								message : '用户名不能为空'
 							}
 						}
-					}, */
+					},
 					linkman : {
 						validators : {
 							notEmpty : {
@@ -237,30 +238,47 @@
 							}
 						}
 					},
+					scopeDiv : {
+						validators : {
+							notEmpty : {
+								message : '经营范围不能为空'
+							}
+						}
+					},
 				}
 			});
-			
-		   //---------------------------经营范围 js---------------------------	
-		   $(".btnVal input").click(function(){
-			   if($(this).hasClass("btn-state1")){//蓝色按钮
-				   $(this).addClass("btn-state2");//变灰
-				   $(this).removeClass("btn-state1");//清除蓝色按钮 样式
-				   var btnText=$(this).val();
-				   //console.log(btnText);
-				   $(".multiselectBtn").append("<span>"+ btnText +"，</span>");
-			   }else if($(this).hasClass("btn-state2")){//灰色按钮
-				   $(this).addClass("btn-state1");//变蓝
-				   $(this).removeClass("btn-state2");//清除灰色按钮 样式
-				   var btnText=$(this).val();
-				   $(".multiselectBtn span").each(function(){
-					   var spanVal = $(this).text();
-					   if((btnText + "，") == spanVal){
-						   $(this).remove();
-					   };
-				   });
-			   }
-		   });
-		   //-------------------------end 经营范围 js-------------------------
+
+			//---------------------------经营范围 js---------------------------	
+			$(".btnVal input").click(
+				function() {
+					if ($(this).hasClass("btn-state1")) {//蓝色按钮
+						$(this).addClass("btn-state2");//变灰
+						$(this).removeClass("btn-state1");//清除蓝色按钮 样式
+						var btnText = $(this).val();
+						//console.log(btnText);
+						$(".multiselectBtn").append("<span>" + btnText + ",</span>");
+					} else if ($(this).hasClass("btn-state2")) {//灰色按钮
+						$(this).addClass("btn-state1");//变蓝
+						$(this).removeClass("btn-state2");//清除灰色按钮 样式
+						var btnText = $(this).val();
+						var scopes = "";
+						$(".multiselectBtn span").each(function() {
+							var spanVal = $(this).text();
+							if ((btnText + ",") == spanVal) {
+								$(this).remove();
+							}
+							;
+							scopes += spanVal;
+						});
+					}
+					var busScopes = "";
+					$(".multiselectBtn span").each(function() {
+						var spanVal = $(this).text();
+						busScopes += spanVal;
+					});
+					$("#businessScopes").val(busScopes);
+				});
+			//-------------------------end 经营范围 js-------------------------
 		});
 		/* 页面初始化加载完毕 */
 
@@ -285,11 +303,11 @@
 					layer.msg('公司简称不能为空');
 					return;
 				}
-				/* var adminId = $("#adminId").val();
-				if (adminId == "") {
+				var adminLoginName = $("#adminLoginName").val();
+				if (adminLoginName == "") {
 					layer.msg('用户名不能为空');
 					return;
-				} */
+				}
 				var linkman = $("#linkman").val();
 				if (linkman == "") {
 					layer.msg('联系人不能为空');
@@ -318,6 +336,11 @@
 				var license = $("#license").val();
 				if (license == "") {
 					layer.msg('营业执照不能为空');
+					return;
+				}
+				var scopes = $("#businessScopes").val();
+				if (scopes == "") {
+					layer.msg('经营范围不能为空');
 					return;
 				}
 
