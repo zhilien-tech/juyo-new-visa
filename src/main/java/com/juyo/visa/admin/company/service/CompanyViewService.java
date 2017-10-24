@@ -231,7 +231,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 	public Map<String, Object> getScopeList(String businessScopes, Integer comId) {
 		Map<String, Object> map = Maps.newHashMap();
 		Map<String, String> scopeMap = EnumUtil.enum2(BusinessScopesEnum.class);
-		String[] scopes = businessScopes.split("、");
+		String[] scopes = businessScopes.split(",");
 		String scopeStr = "";//经营范围","拼接
 		List<TComBusinessscopeEntity> scopeList = new ArrayList<TComBusinessscopeEntity>();
 		if (!Util.isEmpty(scopes)) {
