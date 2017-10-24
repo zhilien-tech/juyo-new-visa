@@ -1,10 +1,37 @@
 /*------------------------Login-----------------------------*/
-.bodySll{overflow-x: hidden !important;}
-.LoginLabel{position: relative;top: 10px;}
-.LoginLabel label{color: #808080 !important;}
-.marginBott5{margin-bottom: 5px;}
-.LoginBtn{position: relative;top: 18px;margin-bottom: 35px;}
-.authText{width: 40%;}
-.authImg{width: 40%;background-color: #e47365;height: 30px;float: right;position: relative;margin-top: -30px;border-radius: 3px;}
-.loginTitle{color: #367fa9; font-weight: 200;font-family: "HanHei SC","PingHei","PingFang SC","STHeitiSC-Light","Helvetica Neue","Helvetica","Arial",sans-serif !important;}
-.loginTitle i{font-size: 20px;}
+*{margin:0;padding:0;}
+
+/* 清浮动 */
+.cf:before,.cf:after {display: table; content: " ";}
+.cf:after {clear: both;}
+.cf {*zoom: 1; overflow: hidden;}
+
+li{list-style: none;}
+.none{display:none;}
+.login{background-image:url(../img/login-background.jpg);width: 100%;height: 100%;background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}
+.login .login-content{padding:30px;display:block;width:330px;height: 410px;background-color:rgba(255, 255, 255, 0.54);margin:0 auto;position:relative;top:25%;border-radius:7px;}
+.tab-ul li{cursor: pointer;width: 50%;height: 35px;display: inline-block;text-align: center;font-size: 16px;color: #575757;border-bottom: solid 2px #fff;border-radius: 2px;}
+.tab-ul .active{border-bottom: solid 4px #67a1ea;color: #134d96;}
+.login-txt{height:34px;font-size: 9px;}
+.verificationCode{width:100px;height:27px;background-color:#f1f1f1;display:block;float:right;position:relative;top:-30px;right:4px;}
+.login-btn{width: 100%;background-color: #008df9;color: #fff;border: solid 1px #008df9;height: 34px;border-radius:3px;font-size: 17px;}
+.checkbox{padding-left: 35px;color: #595659;margin-bottom: 0;}
+.checkbox .login-check{}
+.phoneBtn{outline: none !important;float: right;position: relative;top: -28px;right: 14px;border: solid 1px #008df9;background-color: #008df9;color: #fff;padding: 2px 7px;border-radius: 6px;font-size: 12px;}
+.phoneBtn:focus{border:solid 1px #0375cc;background-color: #0375cc;}
+.top-8{position: relative; top: -8px;}
+.top-30{position: relative; top: -30px;}
+.top-38{position: relative; top: -38px;}
+.marTop36{position: relative;top: 8px;margin-top: 36px;}
+.top-60{position: relative;top: 60px;}
+
+
+
+
+
+
+
+
+
+
+

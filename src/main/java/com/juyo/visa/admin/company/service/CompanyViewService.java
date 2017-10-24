@@ -15,6 +15,8 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.common.access.AccessConfig;
+import com.juyo.visa.common.access.sign.MD5;
 import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -78,7 +80,8 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		//公司管理员信息
 		TUserEntity user = new TUserEntity();
 		user.setMobile(adminLoginName);//用户名
-		user.setPassword(MANAGE_PASSWORD);//密码
+		String password = MD5.sign(MANAGE_PASSWORD, AccessConfig.password_secret, AccessConfig.INPUT_CHARSET);//密码加密
+		user.setPassword(password);//密码
 		user.setCreateTime(nowDate);//创建时间
 		user.setUpdateTime(nowDate);//上次更新时间
 		//TODO
@@ -161,7 +164,11 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		List<Record> list = (List<Record>) sql.getResult();
 		if (!Util.isEmpty(list)) {
 			//公司数据
-			obj.put("company", list.get(0));
+			Record record = list.get(0);
+			List<TComBusinessscopeEntity> comBusiness = dbDao.query(TComBusinessscopeEntity.class,
+					Cnd.where("comId", "=", id), null);
+			record.set("comBusinesss", comBusiness);
+			obj.put("company", record);
 		}
 		//用户名
 		//obj.put("telephone", dbDao.fetch(TUserEntity.class, companyEntity.getAdminId()).getUserName());
@@ -228,7 +235,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 	public Map<String, Object> getScopeList(String businessScopes, Integer comId) {
 		Map<String, Object> map = Maps.newHashMap();
 		Map<String, String> scopeMap = EnumUtil.enum2(BusinessScopesEnum.class);
-		String[] scopes = businessScopes.split("、");
+		String[] scopes = businessScopes.split(",");
 		String scopeStr = "";//经营范围","拼接
 		List<TComBusinessscopeEntity> scopeList = new ArrayList<TComBusinessscopeEntity>();
 		if (!Util.isEmpty(scopes)) {
