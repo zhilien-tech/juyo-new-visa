@@ -77,9 +77,22 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
-		            {"data": "", "bSortable": false,render: function(data, type, row, meta) {
-
-		            	return "";
+		            {"data": "scopes", "bSortable": false,render: function(data, type, row, meta) {
+		            	var scopes = row.scopes;
+		            	if(null==scopes || ""==scopes){
+		            		return "";
+		            	}else{
+		            		var arr = scopes.split(',');
+		            		var scopeStr = "";
+		            		for(var i=0;i<arr.length;i++){
+		            			if(arr[i] == 1){
+		            				scopeStr += "日";
+		            			}else if(arr[i] == 2){
+		            				
+		            			}
+		            		}
+		            		return scopeStr;
+		            	}
 		            } 	
 		            },
 		            {"data": "linkman", "bSortable": false,render: function(data, type, row, meta) {
@@ -128,25 +141,25 @@ function initDatatable() {
 $("#searchBtn").on('click', function () {
 	var companyName = $("#searchStr").val();
 	var comType = $('#comType').val();
-    var param = {
-        "searchStr": companyName,
-		"comType" : comType
-    };
-    datatable.settings()[0].ajax.data = param;
-    datatable.ajax.reload();
+	    var param = {
+			        "searchStr": companyName,
+			"comType" : comType
+			    };
+	    datatable.settings()[0].ajax.data = param;
+	datatable.ajax.reload();
 });
 
 /*回车事件*/
 function onkeyEnter(){
-    var e = window.event || arguments.callee.caller.arguments[0];
-    if(e && e.keyCode == 13){
-		 $("#searchBtn").click();
-	 }
+	var e = window.event || arguments.callee.caller.arguments[0];
+	if(e && e.keyCode == 13){
+		$("#searchBtn").click();
+	}
 }
 
 /*公司类型change事件*/
 function selectListData(){
-	  $("#searchBtn").click();
+	$("#searchBtn").click();
 }
 
 /* layer添加 */
