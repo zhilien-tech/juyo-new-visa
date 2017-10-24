@@ -118,4 +118,17 @@ public class FunctionViewService extends BaseService<TFunctionEntity> {
 		obj.put("functions", functionList);
 		return obj;
 	}
+
+	/**
+	 * TODO 通过URL获取功能
+	 * <p>
+	 * TODO 通过URL获取功能
+	 *
+	 * @param requestPath
+	 * @return TODO 访问的URl
+	 */
+	public TFunctionEntity findFuctionByRequestPath(String requestPath) {
+		return dbDao.fetch(TFunctionEntity.class, Cnd.where("url", "LIKE", "%" + requestPath + "%"));
+
+	}
 }
