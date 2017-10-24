@@ -1,10 +1,12 @@
 package com.juyo.visa.common.actionfilter;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.nutz.json.JsonFormat;
 import org.nutz.mvc.ActionContext;
 import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.View;
@@ -12,12 +14,16 @@ import org.nutz.mvc.view.JspView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.juyo.visa.admin.function.service.FunctionViewService;
 import com.juyo.visa.admin.login.service.LoginService;
+import com.juyo.visa.common.base.MobileResult;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.util.IpUtil;
 import com.juyo.visa.entities.TFunctionEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.StringUtil;
 import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.web.view.Utf8JsonTransferView;
 
 public class AuthFilter extends BaseActionFilter {
 
@@ -49,7 +55,7 @@ public class AuthFilter extends BaseActionFilter {
 
 		isAllowed = hasPermission(session, requestPath);
 
-		/*FunctionViewService funcService = Mvcs.getIoc().get(FunctionViewService.class, "functionViewService");
+		FunctionViewService funcService = Mvcs.getIoc().get(FunctionViewService.class, "functionViewService");
 		TFunctionEntity function = funcService.findFuctionByRequestPath(requestPath);
 
 		if (Util.isEmpty(function)) {
@@ -57,7 +63,7 @@ public class AuthFilter extends BaseActionFilter {
 			logger.info("注意:访问地址:[" + requestPath + "]未设置未功能.");
 		} else {
 			logger.info("当前访问路径:[" + requestPath + "].");
-			logger.info((null == user ? "--游客" : user.getName()) + "--访问后台功能:[" + function.getName()
+			logger.info((null == user ? "--游客" : user.getName()) + "--访问后台功能:[" + function.getFunName()
 					+ (isAllowed == true ? "]--允许" : "]--权限不足"));
 		}
 
@@ -81,8 +87,8 @@ public class AuthFilter extends BaseActionFilter {
 			} else {
 				return new JspView("common.auth_msg");
 			}
-		}*/
-		return new JspView("common.auth_msg");
+		}
+		//return new JspView("common.auth_msg");
 	}
 
 	public boolean hasPermission(final HttpSession session, final String requestPath) {

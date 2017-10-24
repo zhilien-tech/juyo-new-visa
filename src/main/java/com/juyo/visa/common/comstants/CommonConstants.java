@@ -27,6 +27,14 @@ public class CommonConstants {
 
 	/**数据状态-冻结*/
 	public static final Integer DATA_STATUS_INVALID = 0;
-
+	/**超级管理员*/
 	public static final String SUPER_ADMIN = "xhh";
+	/**游客公司职位id*/
+	public static final int COMPANY_JOB_ID = 2;
+	/**游客所在公司id*/
+	public static final int COMPANY_TOURIST_ID = 2;
+	/**游客所在部门id*/
+	public static final int DEPARTMENT_TOURIST_ID = 2;
+	/**游客所在职位id*/
+	public static final int JOB_TOURIST_ID = 2;
 }
