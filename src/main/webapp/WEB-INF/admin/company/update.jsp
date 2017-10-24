@@ -357,6 +357,12 @@
 			parent.layer.close(index);
 		}
 		$(function() {
+			/* var scope = "1,2";
+			if(scope != null){
+				
+				$(".multiselectBtn").append( "<span>" + btnText + ",</span>");
+			} */
+			
 			//---------------------------经营范围 js---------------------------	
 			$(".btnVal input").click(
 					function() {
@@ -375,8 +381,7 @@
 								var spanVal = $(this).text();
 								if ((btnText + ",") == spanVal) {
 									$(this).remove();
-								}
-								;
+								};
 							});
 						}
 						var busScopes = "";
