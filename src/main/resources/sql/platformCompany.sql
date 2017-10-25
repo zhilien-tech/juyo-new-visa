@@ -28,8 +28,10 @@ LEFT JOIN t_user u ON c.adminId = u.id
 $condition
 
 /*get_company_functions_list*/
-select tf.*
-from t_company tc
-INNER JOIN t_com_function tcf
-INNER JOIN t_function tf
+SELECT
+	tf.*
+FROM
+	t_company tc
+INNER JOIN t_com_function tcf ON tc.id = tcf.comId
+INNER JOIN t_function tf ON tcf.funId = tf.id
 where tc.id = @comId
