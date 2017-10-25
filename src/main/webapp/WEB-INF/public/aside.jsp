@@ -17,12 +17,39 @@
 				<img src="${base}/references/public/dist/newvisacss/img/02.jpg" />
 			</div>
 			<c:forEach items="${auths }" var="function" varStatus="status">
-				<li id="${status.index+1 }"><a href="${function.url }?currentPageIndex=${status.index+1 }">
-					<img src="${base}/references/public/dist/newvisacss/img/index.png" />
-					<font>${function.funName }</font>
-				</a></li>
+				<li id="${status.index+1 }">
+					<a href="${function.url }?currentPageIndex=${status.index+1 }">
+						<img src="${base}/references/public/dist/newvisacss/img/index.png" />
+						<font>${function.funName }</font>
+					</a>
+				</li>
 			</c:forEach>
-
+			
+			
+				<!-- 有二级的menu -->
+				<li id="16" class="menu1">
+			       <a href="#">
+			          <img src="${base}/references/public/dist/newvisacss/img/index.png" />
+			          <font>某某管理</font>
+			       </a>
+			    </li>
+			    <ul class="none menu-ul">
+				   <li><a href="javascript:;">职位管理</a></li>
+				</ul>
+				<!-- end 有二级的menu -->
+				
+				<!-- 有二级的menu -->
+				<li id="17" class="menu1">
+			       <a href="#">
+			          <img src="${base}/references/public/dist/newvisacss/img/index.png" />
+			          <font>某某管理</font>
+			       </a>
+			    </li>
+			    <ul class="none menu-ul">
+				   <li><a href="javascript:;">职位管理</a></li>
+				</ul>
+				<!-- end 有二级的menu -->
+				
 			<%-- <li id="1"><a href="/admin/flight/list.html?currentPageIndex=1">
 					<img src="${base}/references/public/dist/newvisacss/img/index.png" />
 					<font>航班管理</font>
@@ -58,7 +85,13 @@
 			<li id="9"><a
 				href="/admin/function/list.html?currentPageIndex=9"> <img
 					src="${base}/references/public/dist/newvisacss/img/index.png" /> <font>功能管理</font>
-			</a></li> --%>
+
+			</a></li>
+			<li id="10"><a
+				href="/admin/authority/list.html?currentPageIndex=10"> <img
+					src="${base}/references/public/dist/newvisacss/img/index.png" /> <font>权限管理</font>
+			</a></li>--%>
+
 		</ul>
 		<!-- /.sidebar-menu -->
 	</section>

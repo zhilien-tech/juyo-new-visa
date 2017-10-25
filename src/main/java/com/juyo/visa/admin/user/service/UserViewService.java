@@ -2,6 +2,9 @@ package com.juyo.visa.admin.user.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -10,18 +13,24 @@ import org.nutz.dao.util.cri.SqlExpressionGroup;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.testng.collections.Maps;
 
 import com.google.common.collect.Lists;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
+import com.juyo.visa.common.enums.UserStatusEnum;
+import com.juyo.visa.entities.TDepartmentEntity;
 import com.juyo.visa.entities.TFunctionEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.entities.TUserJobEntity;
+import com.juyo.visa.forms.TUserAddForm;
 import com.juyo.visa.forms.TUserForm;
+import com.juyo.visa.forms.TUserUpdateForm;
 import com.uxuexi.core.db.util.DbSqlUtil;
 import com.uxuexi.core.web.base.service.BaseService;
+import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 public class UserViewService extends BaseService<TUserEntity> {
@@ -29,6 +38,34 @@ public class UserViewService extends BaseService<TUserEntity> {
 
 	public Object listData(TUserForm queryForm) {
 		return listPage4Datatables(queryForm);
+	}
+
+	public Object toAddUserPage(HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		List<TDepartmentEntity> departments = dbDao.query(TDepartmentEntity.class, null, null);
+
+		return result;
+	}
+
+	public Object addUser(TUserAddForm addForm) {
+		addForm.setOpId(0);
+		addForm.setCreateTime(new Date());
+		this.add(addForm);
+		return JsonResult.success("添加成功");
+	}
+
+	public Object updateUser(TUserUpdateForm updateForm) {
+		updateForm.setUpdateTime(new Date());
+		TUserEntity tUser = this.fetch(updateForm.getId());
+		updateForm.setCreateTime(tUser.getCreateTime());
+		this.update(updateForm);
+		return JsonResult.success("修改成功");
+	}
+
+	public TUserEntity findUser(String loginName, String passwd) {
+		TUserEntity user = dbDao.fetch(TUserEntity.class, Cnd.where("name", "=", loginName)
+				.and("password", "=", passwd).and("isDisable", "=", UserStatusEnum.VALID.intKey()));
+		return user;
 	}
 
 	/**

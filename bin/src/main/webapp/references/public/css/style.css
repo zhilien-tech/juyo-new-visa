@@ -1,0 +1,13 @@
+/*公司管理---->公司人员*/
+.SelectWid{width: 150px;}
+.marWid{margin-left: -10px !important;}
+.textWidth{width: 200px;}
+.marHead{padding: 24px 15px 5px;}
+.form-control{font-size: 13px;}
+.inpImportant{width: 96%;display: inline-block;}
+.inpImpWid{width:98.5%;display: inline-block;}
+
+/*公司管理*/
+.padLeft{padding-left: 14px;font-size: 14px;margin: 15px 0 2px 0;}
+.paddiLeAdd{padding-left: inherit;}
+.returnMargi {position: relative;top: 15px;}

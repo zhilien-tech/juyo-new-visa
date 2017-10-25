@@ -95,6 +95,7 @@ public class TCompanyForm extends DataTablesParamForm {
 		if (!Util.isEmpty(comType)) {
 			cnd.and("c.comType", "=", comType);
 		}
+		cnd.and("c.comType", "!=", "-1");
 		cnd.orderBy("c.createTime", "DESC");
 		cnd.orderBy("c.updateTime", "DESC");
 		return cnd;
