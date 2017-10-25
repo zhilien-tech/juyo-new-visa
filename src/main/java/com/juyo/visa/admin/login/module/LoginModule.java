@@ -21,6 +21,7 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.login.enums.LoginTypeEnum;
 import com.juyo.visa.admin.login.form.LoginForm;
 import com.juyo.visa.admin.login.service.LoginService;
 
@@ -68,6 +69,7 @@ public class LoginModule {
 			ViewModel model) {
 		loginService.login(form, session, req);
 		model.setv("errMsg", form.getErrMsg());
+		session.setAttribute("logintype", LoginTypeEnum.WORK.intKey());
 		return form.getReturnUrl();
 	}
 
@@ -88,6 +90,7 @@ public class LoginModule {
 		loginService.login(form, session, req);
 		model.setv("errMsg", form.getErrMsg());
 		model.setv("passwordlogin", 1);
+		session.setAttribute("logintype", LoginTypeEnum.TOURST.intKey());
 		return form.getReturnUrl();
 	}
 
@@ -102,8 +105,8 @@ public class LoginModule {
 	@Filters
 	//@Ok(">>:/")
 	@Ok("re")
-	public Object logout(final HttpSession session) {
-		return loginService.logout(session);
+	public Object logout(final HttpSession session, @Param("logintype") Integer logintype) {
+		return loginService.logout(session, logintype);
 	}
 
 	/**
@@ -126,6 +129,7 @@ public class LoginModule {
 	public Object messageLogin(@Param("..") final LoginForm form, final HttpSession session, ViewModel model) {
 		loginService.messageLogin(form, session);
 		model.setv("errMsg", form.getErrMsg());
+		session.setAttribute("logintype", LoginTypeEnum.TOURST.intKey());
 		return form.getReturnUrl();
 	}
 

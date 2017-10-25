@@ -19,8 +19,8 @@ import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Lists;
 import com.juyo.visa.admin.company.service.CompanyViewService;
+import com.juyo.visa.admin.login.enums.LoginTypeEnum;
 import com.juyo.visa.admin.login.form.LoginForm;
-import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.access.AccessConfig;
 import com.juyo.visa.common.access.sign.MD5;
@@ -170,8 +170,7 @@ public class LoginService extends BaseService<TUserEntity> {
 	 *
 	 * @param session 需要清除session的内容
 	 */
-	public Object logout(final HttpSession session) {
-		TUserEntity user = LoginUtil.getLoginUser(session);
+	public Object logout(final HttpSession session, Integer logintype) {
 		session.removeAttribute(USER_COMPANY_KEY);
 		//session.removeAttribute(FUNCTION_MAP_KEY);
 		//session.removeAttribute(MENU_KEY);
@@ -179,7 +178,7 @@ public class LoginService extends BaseService<TUserEntity> {
 		session.removeAttribute(LOGINUSER);
 		session.removeAttribute(IS_LOGIN_KEY);
 		session.invalidate();
-		if (user.getUserType() == UserLoginEnum.TOURIST_IDENTITY.intKey()) {
+		if (LoginTypeEnum.TOURST.intKey() == logintype) {
 			return ">>:/tlogin.html";
 		} else {
 			return ">>:/";
