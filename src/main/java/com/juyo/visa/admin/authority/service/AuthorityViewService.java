@@ -9,30 +9,45 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.Chain;
+import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
+import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.juyo.visa.admin.authority.form.DeptJobForm;
+import com.juyo.visa.admin.authority.form.JobDto;
 import com.juyo.visa.admin.authority.form.TAuthoritySqlForm;
+import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.entities.TComFunctionEntity;
+import com.juyo.visa.entities.TComJobEntity;
+import com.juyo.visa.entities.TComfunctionJobEntity;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TDepartmentEntity;
 import com.juyo.visa.entities.TFunctionEntity;
+import com.juyo.visa.entities.TJobEntity;
 import com.uxuexi.core.common.util.BeanUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.util.DbSqlUtil;
 import com.uxuexi.core.web.base.service.BaseService;
+import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 	private static final Log log = Logs.get();
 
 	//列表分页数据
-	public Object listData(TAuthoritySqlForm sqlForm) {
-		/*TCompanyEntity company = (TCompanyEntity) session.getAttribute(LoginService.USER_COMPANY_KEY);
-		Long companyId = company.getId();//得到公司的id
-		sqlForm.setComId(companyId);*/
+	public Object listData(TAuthoritySqlForm sqlForm, HttpSession session) {
+		TCompanyEntity company = LoginUtil.getLoginCompany(session);
+		int companyId = company.getId();
+		sqlForm.setComId(companyId);
 		return listPage4Datatables(sqlForm);
 	}
 
@@ -40,12 +55,9 @@ public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 	 * 新增部门职位或者修改部门职位时查询该公司的全部功能，如果传递了职位id，则查询职位的功能并设置选中
 	 * @throws CloneNotSupportedException 
 	 */
-	public Map<String, Object> findCompanyFunctions(long jobId, final HttpSession session)
-			throws CloneNotSupportedException {
+	public Map<String, Object> findCompanyFunctions(long jobId, HttpSession session) throws CloneNotSupportedException {
 		Map<String, Object> obj = new HashMap<String, Object>();
-
 		List<TFunctionEntity> allModule = getComFuns(session);
-
 		DeptJobForm deptJobForm = new DeptJobForm();
 		if (jobId > 0) {
 			allModule = getJobFuns(jobId, allModule);
@@ -58,12 +70,119 @@ public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 		return obj;
 	}
 
+	//保存数据
+	@Aop("txDb")
+	public Map<String, String> saveDeptJobData(DeptJobForm addForm, final HttpSession session) {
+		//通过session获取公司的id
+		TCompanyEntity company = LoginUtil.getLoginCompany(session);
+		int companyId = company.getId();
+
+		String jobJson = addForm.getJobJson();
+
+		//1,先添加部门，拿到部门id
+		Sql sql1 = Sqls.create(sqlManager.get("authority_com_dep"));
+		sql1.params().set("deptName", addForm.getDeptName());
+		sql1.params().set("comId", companyId);
+		TDepartmentEntity newDept = DbSqlUtil.fetchEntity(dbDao, TDepartmentEntity.class, sql1);
+		if (Util.isEmpty(newDept)) {
+			newDept = new TDepartmentEntity();
+			newDept.setComId(companyId);
+			newDept.setDeptName(addForm.getDeptName());
+			newDept = dbDao.insert(newDept);
+		}
+		//获取到部门id
+		int deptId = newDept.getId();
+		if (deptId > 0) {
+			JobDto[] jobJsonArray = Json.fromJsonAsArray(JobDto.class, jobJson);
+
+			if (!Util.isEmpty(jobJsonArray)) {
+				for (JobDto jobDto : jobJsonArray) {
+					int jobId = 0;
+					saveOrUpdateSingleJob(deptId, jobId, companyId, jobDto.getJobName(), jobDto.getFunctionIds());
+				}
+			}
+		}
+
+		return JsonResult.success("添加成功!");
+	}
+
+	//保存或更新职位
+	private void saveOrUpdateSingleJob(int deptId, int jobId, int companyId, String jobName, String functionIds) {
+		//1，判断操作类型，执行职位新增或者修改
+		if (Util.isEmpty(jobId) || jobId <= 0) {
+			//添加操作
+			Sql sql = Sqls.create(sqlManager.get("authority_com_job"));
+			sql.params().set("comId", companyId);
+			sql.params().set("jobName", jobName);
+			TJobEntity newJob = DbSqlUtil.fetchEntity(dbDao, TJobEntity.class, sql);
+
+			if (Util.isEmpty(newJob)) {
+				//职位不存在则新增
+				newJob = new TJobEntity();
+				newJob.setJobName(jobName);
+				newJob.setDeptId(deptId);
+				newJob = dbDao.insert(newJob);
+				jobId = newJob.getId();//得到职位id
+				//该公司添加新的职位
+				TComJobEntity newComJob = new TComJobEntity();
+				newComJob.setComId(companyId);
+				newComJob.setJobId(jobId);
+				dbDao.insert(newComJob);
+			} else {
+				//如果职位名称已存在
+				throw new IllegalArgumentException("该公司此职位已存在,无法添加,职位名称:" + jobName);
+			}
+
+		} else {
+			//更新操作
+			TJobEntity newJob = dbDao.fetch(TJobEntity.class, Cnd.where("id", "=", jobId));
+			if (Util.isEmpty(newJob)) {
+				throw new IllegalArgumentException("欲更新的职位不存在,jobId:" + jobId);
+			}
+
+			//判断该公司是否存在同名的其他职位
+			Sql sql = Sqls.create(sqlManager.get("authoritymanage_companyJob_update"));
+			sql.params().set("comId", companyId);
+			sql.params().set("jobName", jobName);
+			sql.params().set("jobId", jobId);
+			TJobEntity existsJob = DbSqlUtil.fetchEntity(dbDao, TJobEntity.class, sql);
+
+			if (!Util.isEmpty(existsJob)) {
+				//如果职位名称已存在
+				throw new IllegalArgumentException("该公司此职位已存在,无法修改,职位名称:" + jobName);
+			}
+
+			dbDao.update(TJobEntity.class, Chain.make("name", jobName), Cnd.where("id", "=", newJob.getId()));
+		}
+
+		//2，截取功能模块id，根据功能id和公司id查询出公司功能id，用公司功能id和职位id往公司功能职位表添加数据
+		if (!Util.isEmpty(functionIds)) {
+			Iterable<String> funcIdIter = Splitter.on(",").omitEmptyStrings().split(functionIds);
+			String funcIds = Joiner.on(",").join(funcIdIter);
+
+			List<TComfunctionJobEntity> before = dbDao.query(TComfunctionJobEntity.class,
+					Cnd.where("jobId", "=", jobId), null);
+			List<TComFunctionEntity> comFucs = dbDao.query(TComFunctionEntity.class, Cnd.where("comId", "=", companyId)
+					.and("funId", "IN", funcIds), null);
+			//欲更新为
+			List<TComfunctionJobEntity> after = Lists.newArrayList();
+			for (TComFunctionEntity cf : comFucs) {
+				TComfunctionJobEntity newComFun = new TComfunctionJobEntity();
+				newComFun.setJobId(jobId);
+				if (!Util.isEmpty(cf)) {
+					newComFun.setComFunId(cf.getId());
+				}
+				after.add(newComFun);
+			}
+			dbDao.updateRelations(before, after);
+		}
+	}
+
 	//查询公司权限功能
 	public List<TFunctionEntity> getComFuns(HttpSession session) {
 		//查询该公司拥有的所有功能
-		/*TCompanyEntity company = (TCompanyEntity) session.getAttribute(LoginService.USER_COMPANY_KEY);
-		int companyId = company.getId();*/
-		int companyId = 5;
+		TCompanyEntity company = LoginUtil.getLoginCompany(session);
+		int companyId = company.getId();
 		Sql comFunSql = Sqls.fetchEntity(sqlManager.get("authority_com_fun"));
 		comFunSql.params().set("comId", companyId);
 		List<TFunctionEntity> allModule = DbSqlUtil.query(dbDao, TFunctionEntity.class, comFunSql);
@@ -110,6 +229,41 @@ public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 			}
 		}
 		return newFunctions;
+	}
+
+	//校验部门名称唯一性
+	public Object checkDeptNameExist(final String deptName, final Long deptId, final HttpSession session) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		//通过session获取公司的id
+		TCompanyEntity company = LoginUtil.getLoginCompany(session);
+		int companyId = company.getId();
+		int count = 0;
+		if (Util.isEmpty(deptId)) {
+			//add
+			count = nutDao.count(TDepartmentEntity.class,
+					Cnd.where("deptName", "=", deptName).and("comId", "=", companyId));
+		} else {
+			//update
+			count = nutDao.count(TDepartmentEntity.class, Cnd.where("deptName", "=", deptName).and("id", "!=", deptId)
+					.and("comId", "=", companyId));
+		}
+		map.put("valid", count <= 0);
+		return map;
+	}
+
+	//校验职位名称唯一性
+	public Object checkJobNameExist(final String jobName, final Long jobId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		int count = 0;
+		if (Util.isEmpty(jobId)) {
+			//add
+			count = nutDao.count(TJobEntity.class, Cnd.where("name", "=", jobName));
+		} else {
+			//update
+			count = nutDao.count(TJobEntity.class, Cnd.where("name", "=", jobName).and("id", "!=", jobId));
+		}
+		map.put("valid", count <= 0);
+		return map;
 	}
 
 }

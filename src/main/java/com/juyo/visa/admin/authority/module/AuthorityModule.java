@@ -11,9 +11,9 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.authority.form.DeptJobForm;
 import com.juyo.visa.admin.authority.form.TAuthoritySqlForm;
 import com.juyo.visa.admin.authority.service.AuthorityViewService;
-import com.juyo.visa.forms.TDepartmentAddForm;
 import com.juyo.visa.forms.TDepartmentUpdateForm;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
@@ -43,8 +43,8 @@ public class AuthorityModule {
 	 * 分页查询
 	 */
 	@At
-	public Object listData(@Param("..") final TAuthoritySqlForm sqlParamForm) {
-		return authorityViewService.listData(sqlParamForm);
+	public Object listData(@Param("..") final TAuthoritySqlForm sqlParamForm, final HttpSession session) {
+		return authorityViewService.listData(sqlParamForm, session);
 	}
 
 	/**
@@ -62,8 +62,8 @@ public class AuthorityModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..") TDepartmentAddForm addForm) {
-		return authorityViewService.add(addForm);
+	public Object add(@Param("..") DeptJobForm addForm, final HttpSession session) {
+		return authorityViewService.saveDeptJobData(addForm, session);
 	}
 
 	/**
@@ -101,6 +101,45 @@ public class AuthorityModule {
 	public Object batchDelete(@Param("ids") final Long[] ids) {
 		authorityViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
+	}
+
+	/**
+	 * 校验部门名称唯一性
+	 *
+	 * @param deptName
+	 * @param deptId
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	@At
+	public Object checkDeptNameExist(@Param("deptName") final String deptName, @Param("deptId") final Long deptId,
+			final HttpSession session) {
+		try {
+			authorityViewService.checkDeptNameExist(deptName, deptId, session);
+			return JsonResult.success("校验成功");
+		} catch (Exception e) {
+			// TODO: handle exception
+			return JsonResult.success("校验成功");
+		}
+	}
+
+	/**
+	 * 校验职位名称唯一性
+	 *
+	 * @param jobName
+	 * @param jobId
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	@At
+	public Object checkJobNameExist(@Param("jobName") final String jobName, @Param("jobId") final Long jobId) {
+		try {
+			authorityViewService.checkJobNameExist(jobName, jobId);
+			return JsonResult.success("校验成功");
+		} catch (Exception e) {
+			// TODO: handle exception
+			return JsonResult.success("校验成功");
+		}
+
 	}
 
 }

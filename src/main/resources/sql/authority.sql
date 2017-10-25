@@ -52,6 +52,33 @@ LEFT JOIN t_com_function cf ON cf.id = cfm.comFunId
 LEFT JOIN t_function tf ON tf.id = cf.funId
 WHERE cfm.jobId=@jobId
 
+/*authority_com_dep*/
+SELECT
+	d.id,
+	d.deptName,
+	d.comId,
+	d.remark
+FROM
+	t_department d
+INNER JOIN t_company c ON c.id = d.comId
+WHERE
+	c.id =@comId
+AND d.deptName =@deptName
+
+/*authority_com_job*/
+SELECT
+	j.id,
+	j.createTime,
+	j.deptId,
+	j.remark,
+	j.jobName AS name
+FROM
+	t_job j
+INNER JOIN t_department d ON j.deptId = d.id
+INNER JOIN t_company c ON c.id = d.comId
+WHERE c.id=@comId
+AND j.jobName`=@jobName
+
 /*authority_deptJob_select*/
 SELECT
 	tj.id AS jobId,

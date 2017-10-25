@@ -25,11 +25,9 @@
 	<div class="modal-content">
 		<form id="authorityAddForm">
 			<div class="modal-header">
-				<span class="heading">添加</span> <input id="backBtn" type="button"
-					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
-					data-dismiss="modal" value="取消" /> <input id="addBtn"
-					type="button" onclick="save();"
-					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<span class="heading">添加</span> 
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
+				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 			<div class="modal-body" style="height: 435px; overflow-y: auto;">
 				<div class="departmentName form-group">
@@ -185,13 +183,44 @@
 					validating : 'glyphicon glyphicon-refresh'
 				},
 				fields : {
-					deptName : {
-						validators : {
-							notEmpty : {
-								message : '部门名称不能为空'
-							}
-						}
-					},
+					deptName: {
+		                validators: {
+		                    notEmpty: {
+		                        message: '部门名称不能为空!'
+		                    },
+		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+		                         url: '${base}/admin/authority/checkDeptNameExist.html',//验证地址
+		                         message: '部门名称已存在，请重新输入!',//提示消息
+		                         delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+		                         type: 'POST',//请求方式
+		                         //自定义提交数据，默认值提交当前input value
+		                         data: function(validator) {
+		                            return {
+		                            	deptName:$('#deptName').val()
+		                            };
+		                         }
+		                     }
+		                }
+		            },
+		            jobName: {
+		                validators: {
+		                    notEmpty: {
+		                        message: '职位名称不能为空!'
+		                    },
+		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+		                         url: '${base}/admin/authority/checkJobNameExist.html',//验证地址
+		                         message: '此职位已存在，请重新输入!',//提示消息
+		                         delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+		                         type: 'POST',//请求方式
+		                         //自定义提交数据，默认值提交当前input value
+		                         data: function(validator) {
+		                            return {
+		                            	jobName:$('#jobName').val()
+		                            };
+		                         }
+		                     }
+		                }
+		            }
 
 				}
 			});
@@ -216,20 +245,25 @@
 				}
 
 				$.ajax({
-					type : 'POST',
-					data : $("#authorityAddForm").serialize(),
-					url : '${base}/admin/authority/add.html',
-					success : function(data) {
-						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-						layer.close(index);
-						window.parent.layer.msg("添加成功", "", 3000);
-						parent.layer.close(index);
-						parent.datatable.ajax.reload();
-					},
-					error : function(xhr) {
-						layer.msg("添加失败", "", 3000);
-					}
-				});
+		           cache: false,
+		           type: "POST",
+		           url:'${base}/admin/authority/add.html',
+		           data:{
+						deptName:_deptName,
+						jobJson:_jobJson
+				   },
+		           error: function(request) {
+		              layer.msg('添加失败!',{time:2000});
+		           },
+		            success: function(data) {
+					layer.load(1, {
+						 shade: [0.1,'#fff'] //0.1透明度的白色背景
+					});
+					  var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					  parent.layer.close(index);
+					  window.parent.successCallback('1');
+		           }
+		       });
 			}
 		}
 
