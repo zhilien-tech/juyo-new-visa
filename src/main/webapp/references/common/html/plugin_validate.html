@@ -1,0 +1,140 @@
+<div class="panel_head">
+	<h1>表单校验</h1>
+</div>
+<div class="panel_box">
+	<div class="panel_title">
+		<span class="panel_icon"><i class="icon icon_bookmark"></i></span>
+		<h5>添加方式</h5>
+	</div>
+	<div class="panel_content">
+		<h5>需要校验的form添加class="required-validate"，并添加 onsubmit="return validateCallback(this, [navTabAjaxDone || dialogAjaxDown]);"</h5>
+		<code>&lt;form action="/html/new_form.html" class="required-validate" method="post" onsubmit="return validateCallback(this, navTabAjaxDone);"&gt;...&lt;/form&gt;</code>
+		<hr/>
+		<h5>需要校验的字段添加相应class即可</h5>
+		<p>如：必填<code>(class="required")</code></p>
+		<hr/>
+		<h5>自定义提示信息</h5>
+		<p>如：必填<code>(class="{required:true,messages:{required:'为什么不输入一点文字呢'}}")</code></p>
+		<hr/>
+		<h5 class="red">注意：给form上添加class="required-validate"就会实时检测！否则只在点击提交且表单onsubmit="return validateCallback(this)"时才会验证</h5>
+	</div>
+</div>
+<div class="panel_box">
+	<div class="panel_title">
+		<span class="panel_icon"><i class="icon icon_bookmark"></i></span>
+		<h5>常用验证类型</h5>
+	</div>
+	<div class="panel_content">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>名称</th>
+					<th>添加方式</th>
+					<th>自定义提示</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><span>必填</span></td>
+					<td><code>(class="required")</code></td>
+					<td><code>(class="{required:true,messages:{required:'为什么不输入一点文字呢'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>邮箱</span></td>
+					<td><code>(class="email")</code></td>
+					<td><code>(class="{email:true,messages:{email:'这好像不是一个邮箱哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>手机号</span></td>
+					<td><code>(class="mobile")</code></td>
+					<td><code>(class="{mobile:true,messages:{mobile:'这好像不是一个手机号哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>QQ号</span></td>
+					<td><code>(class="qq")</code></td>
+					<td><code>(class="{qq:true,messages:{mobile:'这好像不是个QQ号哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>中文</span></td>
+					<td><code>(class="chinese")</code></td>
+					<td><code>(class="{chinese:true,messages:{chinese:'这里需要中文哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>数字</span></td>
+					<td><code>(class="number")</code></td>
+					<td><code>(class="{number:true,messages:{number:'这里需要数字哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>正整数</span></td>
+					<td><code>(class="digits")</code></td>
+					<td><code>(class="{digits:true,messages:{digits:'这里需要一个正整数哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>字符串</span></td>
+					<td><code>(class="chars")</code></td>
+					<td><code>(class="{chars:true,messages:{chars:'请输入英文字母开头，只含有英文字母、数字和下划线'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>网址</span></td>
+					<td><code>(class="url")</code></td>
+					<td><code>(class="{url:true,messages:{url:'这里好像不是个网址哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>日期</span></td>
+					<td><code>(class="date")</code></td>
+					<td><code>(class="{date:true,messages:{date:'日期格式有误哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>最大值</span></td>
+					<td><code>(max="3")</code></td>
+					<td><code>(class="{max:3,messages:{max:'最大值为 {0} 哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>最小值</span></td>
+					<td><code>(min="3")</code></td>
+					<td><code>(class="{min:3,messages:{min:'最小值为 {0} 哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>取值范围</span></td>
+					<td><code>(class="{range:[5,10]}")</code></td>
+					<td><code>(class="{range:[5,10],messages:{range:'这里需要只能输入 {0} 和 {1} 之间的数哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>最大长度</span></td>
+					<td><code>(maxlength="3")</code></td>
+					<td><code>(class="{maxlength:3,messages:{maxlength:'长度最大为 {0} 哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>最小长度</span></td>
+					<td><code>(minlength="3")</code></td>
+					<td><code>(class="{minlength:3,messages:{minlength:'长度最小为 {0} 哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>长度范围</span></td>
+					<td><code>(class="{rangelength:[5,10]}")</code></td>
+					<td><code>(class="{rangelength:[5,10],messages:{rangelength:'这里需要长度 {0} 至 {1} 之间的字符串哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>ajax判重</span></td>
+					<td><code>(class="remote")</code></td>
+					<td><code>(class="{remote:true,messages:{remote:'这个已经有啦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>跨域ajax判断</span></td>
+					<td><code>(class="remotep")</code></td>
+					<td><code>(class="{remotep:true,messages:{remotep:'这个已经有啦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>相等确认</span></td>
+					<td><code>(equalTo="#pwd")</code></td>
+					<td><code>(class="{equalTo:'#pwd',messages:{equalTo:'两次输入不一致哦'}}")</code></td>
+				</tr>
+				<tr>
+					<td><span>不等确认</span></td>
+					<td><code>(unequalTo="[name=hobby]")</code></td>
+					<td><code>(class="{unequalTo:'[name=hobby]',messages:{unequalTo:'两次输入一致啦'}}")</code></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

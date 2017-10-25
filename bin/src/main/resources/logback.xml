@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="true" scanPeriod="1000 seconds">
+	<timestamp key="date" datePattern="yyyyMMdd" />
+	<!-- Output to Console -->
+	<appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%d{yyyy-MM-dd hh:mm:ss:sss z}] %t %5p %c{2}: %m%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+	<!-- Output to File -->
+	<!--  
+	<appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>/var/logs/web-demo.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>
+				/var/logs/web-demo.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+			<MaxHistory>10</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%d{yyyy-MM-dd hh:mm:ss:sss z}] %t %5p %c{2}: %m%n</pattern>
+			<charset>GBK</charset>
+		</encoder>
+	</appender>
+	-->
+	<root level="INFO">
+		<appender-ref ref="Console" />
+	</root>
+</configuration>
