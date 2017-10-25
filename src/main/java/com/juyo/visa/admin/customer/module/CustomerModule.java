@@ -1,5 +1,7 @@
 package com.juyo.visa.admin.customer.module;
 
+import javax.servlet.http.HttpSession;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
@@ -47,8 +49,8 @@ public class CustomerModule {
 		return customerViewService.listPage(sqlParamForm,pager);
 	}*/
 	@At
-	public Object listData(@Param("..") final TCustomerForm sqlParamForm) {
-		return customerViewService.listData(sqlParamForm);
+	public Object listData(@Param("..") final TCustomerForm sqlParamForm, final HttpSession session) {
+		return customerViewService.listData(sqlParamForm, session);
 	}
 
 	/**
@@ -66,8 +68,8 @@ public class CustomerModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..") TCustomerAddForm addForm) {
-		return customerViewService.addCustomer(addForm);
+	public Object add(@Param("..") TCustomerAddForm addForm, final HttpSession session) {
+		return customerViewService.addCustomer(addForm, session);
 	}
 
 	/**

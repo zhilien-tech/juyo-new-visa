@@ -26,6 +26,9 @@ public class TCustomerForm extends DataTablesParamForm {
 	/**用户id*/
 	private Integer userId;
 
+	/**用户类型*/
+	private Integer userType;
+
 	/**公司id*/
 	private Integer compId;
 
@@ -76,6 +79,11 @@ public class TCustomerForm extends DataTablesParamForm {
 			expg.and("name", "LIKE", "%" + searchStr + "%").or("mobile", "LIKE", "%" + searchStr + "%")
 					.or("linkman", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
+		}
+		if (userType == 3) {
+		}
+		if (userType == 1) {
+			cnd.and("userId", "=", userId);
 		}
 		cnd.orderBy("createTime", "DESC");
 		return cnd;

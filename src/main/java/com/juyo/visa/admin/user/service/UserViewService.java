@@ -2,6 +2,7 @@ package com.juyo.visa.admin.user.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -10,6 +11,7 @@ import org.nutz.dao.util.cri.SqlExpressionGroup;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.testng.collections.Maps;
 
 import com.google.common.collect.Lists;
 import com.juyo.visa.admin.user.form.ApplicantUser;
@@ -17,6 +19,7 @@ import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.UserStatusEnum;
+import com.juyo.visa.entities.TDepartmentEntity;
 import com.juyo.visa.entities.TFunctionEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.entities.TUserJobEntity;
@@ -33,6 +36,13 @@ public class UserViewService extends BaseService<TUserEntity> {
 
 	public Object listData(TUserForm queryForm) {
 		return listPage4Datatables(queryForm);
+	}
+
+	public Object toAddUserPage() {
+		Map<String, Object> result = Maps.newHashMap();
+		List<TDepartmentEntity> departments = dbDao.query(TDepartmentEntity.class, null, null);
+
+		return result;
 	}
 
 	public Object addUser(TUserAddForm addForm) {

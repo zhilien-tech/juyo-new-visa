@@ -3,12 +3,17 @@ package com.juyo.visa.admin.customer.service;
 import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCustomerEntity;
+import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TCustomerAddForm;
 import com.juyo.visa.forms.TCustomerForm;
 import com.juyo.visa.forms.TCustomerUpdateForm;
@@ -21,8 +26,10 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 public class CustomerViewService extends BaseService<TCustomerEntity> {
 	private static final Log log = Logs.get();
 
-	public Object listData(TCustomerForm queryForm) {
-		return listPage4Datatables(queryForm);
+	public Object listData(TCustomerForm sqlParamForm, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		sqlParamForm.setUserType(loginUser.getUserType());
+		return listPage4Datatables(sqlParamForm);
 	}
 
 	public Object toAddCustomerPage() {
@@ -31,7 +38,11 @@ public class CustomerViewService extends BaseService<TCustomerEntity> {
 		return obj;
 	}
 
-	public Object addCustomer(TCustomerAddForm addForm) {
+	public Object addCustomer(TCustomerAddForm addForm, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		addForm.setCompId(loginCompany.getId());
+		addForm.setUserId(loginUser.getId());
 		addForm.setCreateTime(new Date());
 		this.add(addForm);
 		return JsonResult.success("添加成功");
