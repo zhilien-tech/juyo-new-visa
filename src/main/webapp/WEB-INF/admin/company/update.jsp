@@ -126,7 +126,7 @@
 								<div class="multiselectBtn form-control input-sm"></div>
 								<div class="btnVal">
 									<input type="button" value="日本" class="btn btn-sm btn-state1" />
-									<!-- <input type="button" value="美国" class="btn btn-sm btn-state1" /> -->
+									<input type="button" value="美国" class="btn btn-sm btn-state1" />
 								</div>
 							</div>
 						</div>
@@ -356,18 +356,40 @@
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 		}
+		
 		$(function() {
 			if((${obj.company.scopes}) != null){
 				var scopesVal = $("#csopestr").val();
-				for(var i=0;i<scopesVal.length;i++ ){
-					console.log(scopesVal[i]);
+				var scopesList = scopesVal.split(",");
+				
+				for(var i=0;i<scopesList.length;i++ ){
+					if(scopesList[i] == 1){
+						$(".multiselectBtn").append( "<span>日本,</span>");
+						$(".btnVal input").each(function(){
+							var btnVal = $(this).val();//按钮 text
+							if((btnVal+",") == "日本,"){
+								$(this).addClass("btn-state2");//变灰
+								$(this).removeClass("btn-state1");//清除蓝色按钮 样式
+							}
+						});
+					}else if(scopesList[i] == 2){
+						$(".multiselectBtn").append( "<span>美国,</span>");
+						$(".btnVal input").each(function(){
+							var btnVal = $(this).val();//按钮 text
+							if((btnVal+",") == "美国,"){
+								$(this).addClass("btn-state2");//变灰
+								$(this).removeClass("btn-state1");//清除蓝色按钮 样式
+							}
+						});	
+					}
+					
 				}
-				/*$(".multiselectBtn").append( "<span>" + btnText + ",</span>");*/
+				
 			} 
 			
 			//---------------------------经营范围 js---------------------------	
 			$(".btnVal input").click(
-					function() {
+					function(){
 						if ($(this).hasClass("btn-state1")) {//蓝色按钮
 							$(this).addClass("btn-state2");//变灰
 							$(this).removeClass("btn-state1");//清除蓝色按钮 样式
