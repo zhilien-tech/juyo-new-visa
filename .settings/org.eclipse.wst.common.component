@@ -5,6 +5,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <dependent-module archiveName="we-core-web-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/we-core-web/we-core-web">
             <dependency-type>uses</dependency-type>
         </dependent-module>

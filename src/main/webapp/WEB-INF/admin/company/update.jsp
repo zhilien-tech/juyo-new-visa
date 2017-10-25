@@ -118,6 +118,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>经营范围：</label>
+								<input id="csopestr" name="csopestr" type="hidden" value="${obj.company.scopes}"/> 
 								<input id="businessScopes" name="businessScopes" type="hidden"/>
 								<div class="multiselectBtn form-control input-sm"></div>
 								<div class="btnVal">
@@ -378,16 +379,40 @@
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
         	parent.layer.close(index);
 		}
+		
 		$(function() {
-			/* var scope = "1,2";
-			if(scope != null){
+			var scopesVal = $("#csopestr").val();
+			if(scopesVal != null){
+				var scopesList = scopesVal.split(",");
 				
-				$(".multiselectBtn").append( "<span>" + btnText + ",</span>");
-			} */
+				for(var i=0;i<scopesList.length;i++){
+					if(scopesList[i] == 1){
+						$(".multiselectBtn").append( "<span>日本,</span>");
+						$(".btnVal input").each(function(){
+							var btnVal = $(this).val();//按钮 text
+							if((btnVal+",") == "日本,"){
+								$(this).addClass("btn-state2");//变灰
+								$(this).removeClass("btn-state1");//清除蓝色按钮 样式
+							}
+						});
+					}else if(scopesList[i] == 2){
+						/* $(".multiselectBtn").append( "<span>美国,</span>");
+						$(".btnVal input").each(function(){
+							var btnVal = $(this).val();//按钮 text
+							if((btnVal+",") == "美国,"){
+								$(this).addClass("btn-state2");//变灰
+								$(this).removeClass("btn-state1");//清除蓝色按钮 样式
+							}
+						});	 */
+					}
+					
+				}
+				
+			} 
 			
 			//---------------------------经营范围 js---------------------------	
 			$(".btnVal input").click(
-					function() {
+					function(){
 						if ($(this).hasClass("btn-state1")) {//蓝色按钮
 							$(this).addClass("btn-state2");//变灰
 							$(this).removeClass("btn-state1");//清除蓝色按钮 样式
@@ -414,6 +439,8 @@
 						$("#businessScopes").val(busScopes);
 					});
 			//-------------------------end 经营范围 js-------------------------
+			
+			
 		});
 	</script>
 	

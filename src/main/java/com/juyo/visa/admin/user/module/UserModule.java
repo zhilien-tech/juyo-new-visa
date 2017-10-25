@@ -58,7 +58,7 @@ public class UserModule {
 	@GET
 	@Ok("jsp")
 	public Object add() {
-		return userViewService.toAddUserPage();
+		return null;
 	}
 
 	/**

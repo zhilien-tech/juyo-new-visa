@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
@@ -38,7 +40,7 @@ public class UserViewService extends BaseService<TUserEntity> {
 		return listPage4Datatables(queryForm);
 	}
 
-	public Object toAddUserPage() {
+	public Object toAddUserPage(HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 		List<TDepartmentEntity> departments = dbDao.query(TDepartmentEntity.class, null, null);
 
