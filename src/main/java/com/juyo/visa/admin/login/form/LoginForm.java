@@ -23,4 +23,6 @@ public class LoginForm {
 	private String returnUrl;
 	/**判断是否为手机端登录*/
 	private String flag;
+	/**判断 是工作人员还是游客登录*/
+	private int isTourist;
 }

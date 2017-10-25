@@ -40,7 +40,7 @@
 									<span class="picker-span">至</span>
 									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
 								</div> -->
-								<div class="col-md-5 left-5px">
+								<div class="col-md-8 left-5px">
 									<a id="searchBtn" type="button" class="btn btn-primary btn-sm pull-left">搜索</a>
 									<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 								</div>
@@ -86,16 +86,16 @@
 		<!-- ./wrapper -->
 	
 		<!-- jQuery 2.2.3 -->
-		<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		<script src="${base}/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 		<!-- Bootstrap 3.3.6 -->
-		<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
+		<script src="${base}/public/bootstrap/js/bootstrap.min.js"></script>
 		<!-- DataTables -->
-		<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
-		<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
-		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
-		<script src="${base}/references/common/js/layer/layer.js"></script>
+		<script src="${base}/public/plugins/datatables/jquery.dataTables.min.js"></script>
+		<script src="${base}/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
+		<script src="${base}/common/js/My97DatePicker/WdatePicker.js"></script>
+		<script src="${base}/common/js/layer/layer.js"></script>
 		<!-- 公用js文件 -->
-		<script src="${base}/references/common/js/base/base.js"></script>
+		<script src="${base}/common/js/base/base.js"></script>
 		<!-- 引入DataTables JS -->
 		<script src="${base}/admin/company/listTable.js"></script>
 		<script type="text/javascript">

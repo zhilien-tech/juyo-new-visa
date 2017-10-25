@@ -11,12 +11,12 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" output="src/main/webapp/WEB-INF/classes" path="src/main/resources">
+	<classpathentry excluding="**" kind="src" output="src/main/webapp/WEB-INF/classes" path="src/main/resources">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" output="src/main/webapp/WEB-INF/test-classes" path="src/test/resources">
+	<classpathentry excluding="**" kind="src" output="src/main/webapp/WEB-INF/test-classes" path="src/test/resources">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
