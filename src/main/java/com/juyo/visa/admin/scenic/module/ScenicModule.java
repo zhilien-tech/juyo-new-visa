@@ -1,31 +1,33 @@
 package com.juyo.visa.admin.scenic.module;
 
-import com.juyo.visa.admin.scenic.service.ScenicViewService;
-import com.juyo.visa.forms.TScenicUpdateForm;
-import com.juyo.visa.forms.TScenicAddForm;
-import com.juyo.visa.forms.TScenicForm;
-
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.dao.pager.Pager;
-import org.nutz.mvc.annotation.*;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.GET;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
+import org.nutz.mvc.annotation.Param;
 
-import com.uxuexi.core.web.base.page.Pagination;
+import com.juyo.visa.admin.scenic.service.ScenicViewService;
+import com.juyo.visa.forms.TScenicAddForm;
+import com.juyo.visa.forms.TScenicForm;
+import com.juyo.visa.forms.TScenicUpdateForm;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 @At("/admin/scenic")
 @Filters({//@By(type = AuthFilter.class)
-	})
+})
 public class ScenicModule {
 
 	private static final Log log = Logs.get();
-	
+
 	@Inject
 	private ScenicViewService scenicViewService;
-	
+
 	/**
 	 * 跳转到list页面
 	 */
@@ -35,28 +37,28 @@ public class ScenicModule {
 	public Object list() {
 		return null;
 	}
-	
+
 	/**
 	 * 分页查询
 	 */
 	/*@At
 	@Ok("jsp")
 	public Pagination list(@Param("..") final TScenicForm sqlParamForm,@Param("..") final Pager pager) {
-    	return scenicViewService.listPage(sqlParamForm,pager);
-    }*/
-    @At
+		return scenicViewService.listPage(sqlParamForm,pager);
+	}*/
+	@At
 	public Object listData(@Param("..") final TScenicForm sqlParamForm) {
 		return scenicViewService.listData(sqlParamForm);
 	}
-    
-    /**
+
+	/**
 	 * 跳转到'添加操作'的录入数据页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
 	public Object add() {
-		return null ;
+		return null;
 	}
 
 	/**
@@ -64,8 +66,8 @@ public class ScenicModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..")TScenicAddForm addForm) {
-		return scenicViewService.add(addForm);
+	public Object add(@Param("..") TScenicAddForm addForm) {
+		return scenicViewService.addScenic(addForm);
 	}
 
 	/**
@@ -75,7 +77,7 @@ public class ScenicModule {
 	@GET
 	@Ok("jsp")
 	public Object update(@Param("id") final long id) {
-		return scenicViewService.fetch(id);
+		return scenicViewService.fetchScenic(id);
 	}
 
 	/**
@@ -83,8 +85,8 @@ public class ScenicModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..")TScenicUpdateForm updateForm) {
-		return scenicViewService.update(updateForm);
+	public Object update(@Param("..") TScenicUpdateForm updateForm) {
+		return scenicViewService.updateScenic(updateForm);
 	}
 
 	/**
@@ -104,5 +106,5 @@ public class ScenicModule {
 		scenicViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
 	}
-	
+
 }

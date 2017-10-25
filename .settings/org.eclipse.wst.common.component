@@ -4,9 +4,8 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="we-business-sms-api-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/we-business-sms-api/we-business-sms-api">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <dependent-module archiveName="we-core-web-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/we-core-web/we-core-web">
             <dependency-type>uses</dependency-type>
         </dependent-module>
@@ -14,9 +13,6 @@
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="we-core-db-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/we-core-db/we-core-db">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="we-business-sms-provider-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/we-business-sms-provider/we-business-sms-provider">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="we-core-redis-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/we-core-redis/we-core-redis">
