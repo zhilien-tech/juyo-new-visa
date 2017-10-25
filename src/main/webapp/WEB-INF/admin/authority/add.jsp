@@ -92,7 +92,7 @@
 					beforeCheck: zTreeBeforeCheck
 				}
 			};
-		//默认选中个人信息和操作台
+		//默认选中的功能
 		function zTreeBeforeCheck(treeId, treeNode) {
 			if((treeNode.id == 43 || treeNode.id == 44) && treeNode.checked){
 				return false ;

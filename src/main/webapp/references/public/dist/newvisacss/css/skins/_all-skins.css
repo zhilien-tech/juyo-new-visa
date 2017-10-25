@@ -59,7 +59,7 @@
 .skin-blue .wrapper,
 .skin-blue .main-sidebar,
 .skin-blue .left-side {
-  background-color: #fff;
+  background-color: #242d34;
 }
 .skin-blue .user-panel > .info,
 .skin-blue .user-panel > .info > a {
@@ -74,14 +74,15 @@
 }
 .skin-blue .sidebar-menu > li.active > a {
   /*color: #4588e6 !important;*/
-  background: #eef5ff;
+  background:#294461;
   border-left-color: #2f86f0;
   padding: 14px;
 }
 .skin-blue .sidebar-menu > li:hover > a{
-  background: #eef5ff;
+  background: #294461;
   border-left-color: #2f86f0;
   padding: 14px;
+  color:#fff !important;
 }
 .skin-blue .sidebar-menu > li > .treeview-menu {
   margin: 0 1px;

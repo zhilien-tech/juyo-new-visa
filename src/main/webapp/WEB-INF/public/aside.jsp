@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@include file="/WEB-INF/common/tld.jsp"%>
 <style type="text/css">
 .sidebar-mini .wrapper .wrapper footer:nth-child(even) {
 	display: none;
@@ -15,8 +16,14 @@
 			<div class="hamburgerImg">
 				<img src="${base}/references/public/dist/newvisacss/img/02.jpg" />
 			</div>
+			<c:forEach items="${auths }" var="function" varStatus="status">
+				<li id="${status.index+1 }"><a href="${function.url }?currentPageIndex=${status.index+1 }">
+					<img src="${base}/references/public/dist/newvisacss/img/index.png" />
+					<font>${function.funName }</font>
+				</a></li>
+			</c:forEach>
 
-			<li id="1"><a href="/admin/flight/list.html?currentPageIndex=1">
+			<%-- <li id="1"><a href="/admin/flight/list.html?currentPageIndex=1">
 					<img src="${base}/references/public/dist/newvisacss/img/index.png" />
 					<font>航班管理</font>
 			</a></li>
@@ -51,11 +58,13 @@
 			<li id="9"><a
 				href="/admin/function/list.html?currentPageIndex=9"> <img
 					src="${base}/references/public/dist/newvisacss/img/index.png" /> <font>功能管理</font>
+
 			</a></li>
 			<li id="10"><a
 				href="/admin/authority/list.html?currentPageIndex=10"> <img
 					src="${base}/references/public/dist/newvisacss/img/index.png" /> <font>权限管理</font>
-			</a></li>
+			</a></li>--%>
+
 		</ul>
 		<!-- /.sidebar-menu -->
 	</section>
