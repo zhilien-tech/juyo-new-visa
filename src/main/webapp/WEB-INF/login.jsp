@@ -8,7 +8,7 @@
 		<title>用户登录</title>
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/login.css" />
-		<link rel="stylesheet" href="${base }/public/dist/css/bootstrapValidator.css"/>
+		<link rel="stylesheet" href="${base}/public/dist/css/bootstrapValidator.css"/>
 	</head>
 	<body>
 		<div class="login">

@@ -121,6 +121,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>经营范围：</label>
+								<input id="csopestr" name="csopestr" type="hidden" value="${obj.company.scopes}"/> 
 								<input id="businessScopes" name="businessScopes" type="hidden"/>
 								<div class="multiselectBtn form-control input-sm"></div>
 								<div class="btnVal">
@@ -277,8 +278,7 @@
 		$('#companyUpdateForm').bootstrapValidator('validate');
 		function save() {
 			$('#companyUpdateForm').bootstrapValidator('validate');
-			var bootstrapValidator = $("#companyUpdateForm").data(
-					'bootstrapValidator');
+			var bootstrapValidator = $("#companyUpdateForm").data('bootstrapValidator');
 			if (bootstrapValidator.isValid()) {
 
 				//获取必填项信息
@@ -357,11 +357,13 @@
 			parent.layer.close(index);
 		}
 		$(function() {
-			/* var scope = "1,2";
-			if(scope != null){
-				
-				$(".multiselectBtn").append( "<span>" + btnText + ",</span>");
-			} */
+			if((${obj.company.scopes}) != null){
+				var scopesVal = $("#csopestr").val();
+				for(var i=0;i<scopesVal.length;i++ ){
+					console.log(scopesVal[i]);
+				}
+				/*$(".multiselectBtn").append( "<span>" + btnText + ",</span>");*/
+			} 
 			
 			//---------------------------经营范围 js---------------------------	
 			$(".btnVal input").click(
@@ -392,6 +394,8 @@
 						$("#businessScopes").val(busScopes);
 					});
 			//-------------------------end 经营范围 js-------------------------
+			
+			
 		});
 	</script>
 
