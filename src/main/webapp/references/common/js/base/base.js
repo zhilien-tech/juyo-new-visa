@@ -34,15 +34,17 @@
 	}
 		 
 	//二级菜单 显示隐藏
-	if($('.menu1').parent().is('.active')){
-		$(this).find('.menu-ul').show();
+	if($('.menu1').is('.active')){
+		$(this).next('.menu-ul').show();
 	}else{
-		$(this).find('.menu-ul').hide();
+		$(this).next('.menu-ul').hide();
 	}
 		
 	$('.menu1').click(function(){//点击一级菜单 二级显示/隐藏
-		$(this).next('ul').toggle();
+		$(this).siblings(".menu1").next(".menu-ul").hide();
+		$(this).next('.menu-ul').toggle();
 	}); 
+	
 	
 	var sessionMenu = sessionStorage.menuWhetherMini;
 	//alert(sessionMenu);
