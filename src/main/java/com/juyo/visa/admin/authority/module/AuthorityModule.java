@@ -72,8 +72,8 @@ public class AuthorityModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object update(@Param("id") final long id) {
-		return authorityViewService.fetch(id);
+	public Object update(@Param("id") final long deptId, final HttpSession session) {
+		return authorityViewService.loadJobJosn(deptId, session);
 	}
 
 	/**

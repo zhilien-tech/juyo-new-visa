@@ -77,7 +77,7 @@ FROM
 INNER JOIN t_department d ON j.deptId = d.id
 INNER JOIN t_company c ON c.id = d.comId
 WHERE c.id=@comId
-AND j.jobName`=@jobName
+AND j.jobName=@jobName
 
 /*authority_deptJob_select*/
 SELECT
