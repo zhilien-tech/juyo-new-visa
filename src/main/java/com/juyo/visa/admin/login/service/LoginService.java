@@ -64,40 +64,6 @@ public class LoginService extends BaseService<TUserEntity> {
 	SMSService smsService = new HuaxinSMSServiceImpl(redisDao);
 
 	/**
-	 * 获取当前登录用户
-	 * <p>
-	 * TODO获取当前登录用户
-	 *
-	 * @param session
-	 * @return TODO获取当前登录用户
-	 */
-	public static TUserEntity getLoginUser(final HttpSession session) {
-		TUserEntity user = null;
-		Object loginuser = session.getAttribute(LOGINUSER);
-		if (loginuser instanceof TUserEntity) {
-			user = (TUserEntity) loginuser;
-		}
-		return user;
-	}
-
-	/**
-	 * 获取当前公司
-	 * <p>
-	 * TODO获取当前登录用户所在公司
-	 *
-	 * @param session
-	 * @return TODO获取当前登录用户所在的公司
-	 */
-	public static TCompanyEntity getLoginCompany(final HttpSession session) {
-		TCompanyEntity company = null;
-		Object logincompany = session.getAttribute(LOGINUSER);
-		if (logincompany instanceof TCompanyEntity) {
-			company = (TCompanyEntity) logincompany;
-		}
-		return company;
-	}
-
-	/**
 	 * 用户登录
 	 * <p>
 	 * TODO工作人员登录（密码登录）
@@ -170,14 +136,14 @@ public class LoginService extends BaseService<TUserEntity> {
 			//控制页面跳转
 			if (UserLoginEnum.ADMIN.intKey() == userType) {
 				//平台管理员跳转页面
-				form.setReturnUrl(">>:/admin/Company/list.html");
+				form.setReturnUrl(">>:/admin/company/list.html");
 			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType
 					|| UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType) {
 				//公司管理员条跳转页面
-				form.setReturnUrl(">>:/admin/Company/list.html");
+				form.setReturnUrl(">>:/admin/company/list.html");
 			} else {
 				//普通员工跳转页面
-				form.setReturnUrl(">>:/admin/Company/list.html");
+				form.setReturnUrl(">>:/admin/company/list.html");
 			}
 			//将用户权限保存到session中
 			//session.setAttribute(FUNCTION_MAP_KEY, functionMap); //功能
