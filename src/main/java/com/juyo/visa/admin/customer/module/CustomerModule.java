@@ -1,31 +1,35 @@
 package com.juyo.visa.admin.customer.module;
 
-import com.juyo.visa.admin.customer.service.CustomerViewService;
-import com.juyo.visa.forms.TCustomerUpdateForm;
-import com.juyo.visa.forms.TCustomerAddForm;
-import com.juyo.visa.forms.TCustomerForm;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.dao.pager.Pager;
-import org.nutz.mvc.annotation.*;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.GET;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
+import org.nutz.mvc.annotation.Param;
 
-import com.uxuexi.core.web.base.page.Pagination;
+import com.juyo.visa.admin.customer.service.CustomerViewService;
+import com.juyo.visa.forms.TCustomerAddForm;
+import com.juyo.visa.forms.TCustomerForm;
+import com.juyo.visa.forms.TCustomerUpdateForm;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 @At("/admin/customer")
 @Filters({//@By(type = AuthFilter.class)
-	})
+})
 public class CustomerModule {
 
 	private static final Log log = Logs.get();
-	
+
 	@Inject
 	private CustomerViewService customerViewService;
-	
+
 	/**
 	 * 跳转到list页面
 	 */
@@ -35,28 +39,28 @@ public class CustomerModule {
 	public Object list() {
 		return null;
 	}
-	
+
 	/**
 	 * 分页查询
 	 */
 	/*@At
 	@Ok("jsp")
 	public Pagination list(@Param("..") final TCustomerForm sqlParamForm,@Param("..") final Pager pager) {
-    	return customerViewService.listPage(sqlParamForm,pager);
-    }*/
-    @At
-	public Object listData(@Param("..") final TCustomerForm sqlParamForm) {
-		return customerViewService.listData(sqlParamForm);
+		return customerViewService.listPage(sqlParamForm,pager);
+	}*/
+	@At
+	public Object listData(@Param("..") final TCustomerForm sqlParamForm, final HttpSession session) {
+		return customerViewService.listData(sqlParamForm, session);
 	}
-    
-    /**
+
+	/**
 	 * 跳转到'添加操作'的录入数据页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
 	public Object add() {
-		return null ;
+		return customerViewService.toAddCustomerPage();
 	}
 
 	/**
@@ -64,8 +68,8 @@ public class CustomerModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..")TCustomerAddForm addForm) {
-		return customerViewService.add(addForm);
+	public Object add(@Param("..") TCustomerAddForm addForm, final HttpSession session) {
+		return customerViewService.addCustomer(addForm, session);
 	}
 
 	/**
@@ -75,7 +79,7 @@ public class CustomerModule {
 	@GET
 	@Ok("jsp")
 	public Object update(@Param("id") final long id) {
-		return customerViewService.fetch(id);
+		return customerViewService.fetchCustomer(id);
 	}
 
 	/**
@@ -83,8 +87,8 @@ public class CustomerModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..")TCustomerUpdateForm updateForm) {
-		return customerViewService.update(updateForm);
+	public Object update(@Param("..") TCustomerUpdateForm updateForm) {
+		return customerViewService.updateCustomer(updateForm);
 	}
 
 	/**
@@ -104,5 +108,5 @@ public class CustomerModule {
 		customerViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
 	}
-	
+
 }

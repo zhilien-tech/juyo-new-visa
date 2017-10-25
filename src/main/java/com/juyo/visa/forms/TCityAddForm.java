@@ -26,5 +26,6 @@ public class TCityAddForm extends AddForm implements Serializable{
 		
 	/**更新时间*/
 	private Date updateTime;
+	
 		
 }
