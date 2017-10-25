@@ -126,7 +126,7 @@
 								<div class="multiselectBtn form-control input-sm"></div>
 								<div class="btnVal">
 									<input type="button" value="日本" class="btn btn-sm btn-state1" />
-									<input type="button" value="美国" class="btn btn-sm btn-state1" />
+									<!-- <input type="button" value="美国" class="btn btn-sm btn-state1" /> -->
 								</div>
 							</div>
 						</div>
@@ -358,11 +358,11 @@
 		}
 		
 		$(function() {
-			if((${obj.company.scopes}) != null){
-				var scopesVal = $("#csopestr").val();
+			var scopesVal = $("#csopestr").val();
+			if(scopesVal != null){
 				var scopesList = scopesVal.split(",");
 				
-				for(var i=0;i<scopesList.length;i++ ){
+				for(var i=0;i<scopesList.length;i++){
 					if(scopesList[i] == 1){
 						$(".multiselectBtn").append( "<span>日本,</span>");
 						$(".btnVal input").each(function(){
@@ -373,14 +373,14 @@
 							}
 						});
 					}else if(scopesList[i] == 2){
-						$(".multiselectBtn").append( "<span>美国,</span>");
+						/* $(".multiselectBtn").append( "<span>美国,</span>");
 						$(".btnVal input").each(function(){
 							var btnVal = $(this).val();//按钮 text
 							if((btnVal+",") == "美国,"){
 								$(this).addClass("btn-state2");//变灰
 								$(this).removeClass("btn-state1");//清除蓝色按钮 样式
 							}
-						});	
+						});	 */
 					}
 					
 				}
