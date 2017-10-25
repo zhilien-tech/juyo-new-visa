@@ -131,6 +131,7 @@ public class UserViewService extends BaseService<TUserEntity> {
 		TUserEntity user = new TUserEntity();
 		user.setComId(CommonConstants.COMPANY_TOURIST_ID);
 		user.setName(applyuser.getUsername());
+		user.setMobile(applyuser.getMobile());
 		user.setPassword(applyuser.getPassword());
 		user.setDepartmentId(CommonConstants.DEPARTMENT_TOURIST_ID);
 		user.setIsDisable(IsYesOrNoEnum.YES.intKey());
