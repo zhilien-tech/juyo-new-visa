@@ -14,7 +14,6 @@ import org.nutz.mvc.annotation.Param;
 import com.juyo.visa.admin.authority.form.DeptJobForm;
 import com.juyo.visa.admin.authority.form.TAuthoritySqlForm;
 import com.juyo.visa.admin.authority.service.AuthorityViewService;
-import com.juyo.visa.forms.TDepartmentUpdateForm;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
@@ -81,8 +80,14 @@ public class AuthorityModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..") TDepartmentUpdateForm updateForm) {
-		return authorityViewService.update(updateForm);
+	public Object update(@Param("..") DeptJobForm updateForm, @Param("deptId") final Long deptId,
+			final HttpSession session) {
+		try {
+			authorityViewService.updateJobFunctions(updateForm, deptId, session);
+		} catch (Exception e) {
+			return JsonResult.error(e.getMessage());
+		}
+		return JsonResult.success("修改成功!");
 	}
 
 	/**

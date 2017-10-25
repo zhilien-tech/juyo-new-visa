@@ -79,10 +79,25 @@ INNER JOIN t_company c ON c.id = d.comId
 WHERE c.id=@comId
 AND j.jobName=@jobName
 
+/*authority_com_job_update*/
+SELECT
+	j.id,
+	j.createTime,
+	j.deptId,
+	j.remark,
+	j.jobName AS name
+FROM
+	t_job j
+INNER JOIN t_department d ON j.deptId = d.id
+INNER JOIN t_company c ON c.id = d.comId
+WHERE c.id=@comId
+AND j.jobName=@jobName
+AND j.id !=@jobId
+
 /*authority_deptJob_select*/
 SELECT
 	tj.id AS jobId,
-	tj.`name` AS jobName,
+	tj.jobName,
 	dp.id AS deptId,
 	dp.deptName
 FROM

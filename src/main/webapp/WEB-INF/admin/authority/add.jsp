@@ -301,12 +301,13 @@
 		              layer.msg('添加失败!',{time:2000});
 		           },
 		            success: function(data) {
-					layer.load(1, {
-						 shade: [0.1,'#fff'] //0.1透明度的白色背景
-					});
-					  var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					  parent.layer.close(index);
-					  window.parent.successCallback('1');
+						layer.load(1, {
+							 shade: [0.1,'#fff'] //0.1透明度的白色背景
+						});
+						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						parent.layer.close(index);
+						parent.datatable.ajax.reload();
+						window.parent.successCallback('1');
 		           }
 		       });
 			}

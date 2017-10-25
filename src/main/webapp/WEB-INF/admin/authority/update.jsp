@@ -26,25 +26,23 @@
 	<div class="modal-content">
 		<form id="authorityUpdateForm" method="POST">
 			<div class="modal-header">
-				<span class="heading">编辑</span> <input id="backBtn" type="button"
-					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
-					data-dismiss="modal" value="取消" /> <input id="updateBtn"
-					type="button" onclick="save()"
-					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<span class="heading">编辑</span> 
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" />
+				<input id="submit" type="button" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 			<div class="modal-body" style="height: 435px; overflow-y: auto;">
 				<div class="departmentName form-group">
 					<!--部门权限 设置-->
-					<input id="jobJson" name="jobJson" type="hidden" value="" /> <input
-						name="id" type="hidden" value="${obj.dept.id}" />
+					<input id="jobJson" name="jobJson" type="hidden" value="" /> 
+					<input id="id" name="id" type="hidden" value="${obj.dept.id}" />
 					<ul class="addDepartment">
 						<li><label class=" text-right">部门名称：</label></li>
-						<li class="li-input"><input id="deptName" name="deptName"
-							type="text" class="form-control input-sm inputText"
-							value="${obj.dept.deptName }"> <span class="prompt">*</span>
+						<li class="li-input">
+							<input id="deptName" name="deptName" type="text" class="form-control input-sm inputText" value="${obj.dept.deptName }"> <span class="prompt">*</span>
 						</li>
-						<li><button type="button"
-								class="btn btn-primary btn-sm btnPadding" id="addJob">添加职位</button></li>
+						<li>
+							<button type="button" class="btn btn-primary btn-sm btnPadding" id="addJob">添加职位</button>
+						</li>
 					</ul>
 				</div>
 				<!--end 部门权限 设置-->
@@ -238,7 +236,7 @@
 		
 	    initvalidate();
 		$('#authorityUpdateForm').bootstrapValidator('validate');
-		function save() {
+		/* function save() {
 			$('#authorityUpdateForm').bootstrapValidator('validate');
 			var bootstrapValidator = $("#authorityUpdateForm").data('bootstrapValidator');
 			if (bootstrapValidator.isValid()) {
@@ -267,8 +265,61 @@
 					}
 				});
 			}
-		}
+		} */
 	
+		
+		//编辑保存
+		$("#submit").click(function(){
+			setFunc();
+			$('#authorityUpdateForm').bootstrapValidator('validate');
+			var bootstrapValidator = $("#authorityUpdateForm").data('bootstrapValidator');
+			var _deptName = $("input#deptName").val();
+			var _jobJson = $("input#jobJson").val();
+			
+			try{
+				$("input[name='jobName']").each(function(index,element){
+					var eachJobName = $(element).val();
+					if(null == eachJobName || undefined == eachJobName || "" == eachJobName || "" == $.trim(eachJobName)){
+						throw "职位名称不能为空";
+					}
+				}) ;
+			}catch(e){
+				layer.msg("职位不能为空且至少存在一个") ;
+				return false ;
+			}
+			
+			if(bootstrapValidator.isValid()){
+				var loadLayer = layer.load(1, {
+					 shade: [0.1,'#fff'] //0.1透明度的白色背景
+				});
+				$.ajax({
+		           type: "POST",
+		           url:'${base}/admin/authority/update.html',
+		           data:{
+						deptName:_deptName,
+						jobJson:_jobJson,
+						deptId:"${obj.dept.id}"
+				   },
+		           error: function(request) {
+		              layer.msg('编辑失败!',{time:2000});
+		           },
+		           success: function(data) {
+						console.log(JSON.stringify(data));
+						if(data.status == '200'){
+							layer.close(loadLayer) ;
+							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							parent.layer.close(index);
+							parent.datatable.ajax.reload();
+							window.parent.layer.msg("编辑成功", "", 3000);
+						}else{
+							layer.close(loadLayer) ;
+							layer.msg("职位不能为空且至少存在一个") ;
+						}
+		           }
+		       });
+			}
+		});
+		
 		//返回刷新页面 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
