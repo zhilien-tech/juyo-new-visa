@@ -39,7 +39,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>员工姓名：</label> <input id="name" name="name"
-									value="${obj.name}" type="text" class="form-control input-sm"
+									value="${obj.user.name}" type="text" class="form-control input-sm"
 									placeholder=" " />
 							</div>
 						</div>
@@ -47,7 +47,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>用户名/手机号：</label> <input id="mobile"
-									name="mobile" value="${obj.mobile}" type="text"
+									name="mobile" value="${obj.user.mobile}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -57,14 +57,14 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>QQ：</label> <input id="qq" name="qq"
-									value="${obj.qq}" type="text" class="form-control input-sm"
+									value="${obj.user.qq}" type="text" class="form-control input-sm"
 									placeholder=" " />
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>E-mail：</label> <input id="email"
-									name="email" value="${obj.email}" type="text"
+									name="email" value="${obj.user.email}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -72,16 +72,26 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>部门：</label> <input id="departmentId"
-									name="departmentId" value="${obj.departmentId}" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>部门：</label> 
+								<select id="departmentId" name="departmentId"  class="form-control input-sm inputWidth">
+		                         	<c:forEach items="${obj.department}" var="one">
+										<option value='${one.id}'
+											${one.id==obj.user.departmentId?'selected':''}>
+											${one.deptName }</option>
+									</c:forEach>
+		                        </select>
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>职位：</label> <input id="jobId"
-									name="jobId" value="${obj.jobId}" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>职位：</label> 
+								<select id="jobId" name="jobId" class="form-control input-sm inputWidth">
+								<c:forEach items="${obj.job}" var="one">
+										<option value='${one.id}'
+											${one.id==obj.user.jobId?'selected':''}>
+											${one.jobName }</option>
+									</c:forEach>
+		              			 </select>
 							</div>
 						</div>
 					</div>
@@ -89,7 +99,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>禁用：</label> <input id="isDisable"
-									name="isDisable" value="${obj.isDisable}" type="text"
+									name="isDisable" value="${obj.user.isDisable}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -115,7 +125,27 @@
 
 	<script type="text/javascript">
 		var base = "${base}";
-
+		/*加载job*/
+		$("#departmentId").change(function () {
+		        $("#jobId").empty();  
+		        var departmentId = $("#departmentId").val();
+		        $.ajax({  
+		            type: "post",  
+		            url: BASE_PATH + "/admin/user/getJob",  
+		            data: {
+		            	departmentId: departmentId
+		            	},
+		            success: function (data) {
+		                $('#jobId').append("<option value=''  >" + '--请选择--' + "</option>");  
+		                for (var i = 0; i < data.length; i++) {  
+		                    $('#jobId').append("<option value='" + data[i].id + "' >" + data[i].jobName + "</option>");  
+		                }
+		            },  
+		            error: function () {  
+		                alert("加载职位失败");  
+		            }  
+		        });
+	     });
 		function initvalidate(){
 			//校验
 			$('#userUpdateForm').bootstrapValidator({

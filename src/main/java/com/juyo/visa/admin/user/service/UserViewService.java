@@ -65,13 +65,17 @@ public class UserViewService extends BaseService<TUserEntity> {
 	}
 
 	public Object fetchUser(long id, HttpSession session) {
-		TUserEntity user = dbDao.fetch(TUserEntity.class, id);
+		Map<String, Object> result = MapUtil.map();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity user = dbDao.fetch(TUserEntity.class, id);
 		List<TDepartmentEntity> departmentList = dbDao.query(TDepartmentEntity.class,
 				Cnd.where("comId", "=", loginCompany.getId()), null);
-		for (int i = 0; i < departmentList.size(); i++) {
-		}
-		return null;
+		List<TJobEntity> jobList = dbDao
+				.query(TJobEntity.class, Cnd.where("deptId", "=", user.getDepartmentId()), null);
+		result.put("department", departmentList);
+		result.put("job", jobList);
+		result.put("user", user);
+		return result;
 	}
 
 	public Object updateUser(TUserUpdateForm updateForm) {
