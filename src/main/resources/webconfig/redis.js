@@ -7,7 +7,7 @@ var ioc = {
 		fields : {
 			config : {
 				type : 'com.uxuexi.core.redis.support.RedisConfig',
-				args : [ '192.168.1.11', 6379, 10000 ]
+				args : [ '192.168.1.66', 6379, 10000 ]
 			}
 		}
 	},

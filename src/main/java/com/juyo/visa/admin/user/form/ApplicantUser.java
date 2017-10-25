@@ -26,8 +26,6 @@ public class ApplicantUser {
 
 	private String password;
 
-	private String mobile;
-
 	private int opid;
 
 	public void setPassword(String password) {

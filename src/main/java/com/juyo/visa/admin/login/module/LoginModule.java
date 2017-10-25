@@ -21,7 +21,6 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
-import com.juyo.visa.admin.login.enums.LoginTypeEnum;
 import com.juyo.visa.admin.login.form.LoginForm;
 import com.juyo.visa.admin.login.service.LoginService;
 
@@ -69,28 +68,6 @@ public class LoginModule {
 			ViewModel model) {
 		loginService.login(form, session, req);
 		model.setv("errMsg", form.getErrMsg());
-		session.setAttribute("logintype", LoginTypeEnum.WORK.intKey());
-		return form.getReturnUrl();
-	}
-
-	/**
-	 * 游客登录
-	 * @param username 用户名
-	 * @param password 密码
-	 * @param session session会话对象
-	 * @return 
-	*/
-	@At
-	@POST
-	@Filters
-	@Ok("re")
-	//登录成功返回主页,失败返回登录页
-	public Object tlogin(@Param("..") final LoginForm form, final HttpSession session, final HttpServletRequest req,
-			ViewModel model) {
-		loginService.login(form, session, req);
-		model.setv("errMsg", form.getErrMsg());
-		model.setv("passwordlogin", 1);
-		session.setAttribute("logintype", LoginTypeEnum.TOURST.intKey());
 		return form.getReturnUrl();
 	}
 
@@ -103,10 +80,9 @@ public class LoginModule {
 	 */
 	@At
 	@Filters
-	//@Ok(">>:/")
-	@Ok("re")
-	public Object logout(final HttpSession session, @Param("logintype") Integer logintype) {
-		return loginService.logout(session, logintype);
+	@Ok(">>:/")
+	public void logout(final HttpSession session) {
+		loginService.logout(session);
 	}
 
 	/**
@@ -115,7 +91,7 @@ public class LoginModule {
 	@At
 	@Filters
 	@POST
-	public Object sendValidateCode(@Param("mobile") final String mobilenum) {
+	public Object sendValidateCode(final String mobilenum) {
 		return loginService.sendValidateCode(mobilenum);
 	}
 
@@ -125,21 +101,7 @@ public class LoginModule {
 	@At
 	@Filters
 	@POST
-	@Ok("re")
-	public Object messageLogin(@Param("..") final LoginForm form, final HttpSession session, ViewModel model) {
-		loginService.messageLogin(form, session);
-		model.setv("errMsg", form.getErrMsg());
-		session.setAttribute("logintype", LoginTypeEnum.TOURST.intKey());
-		return form.getReturnUrl();
-	}
-
-	/**
-	 * 验证游客是否存在
-	 */
-	@At
-	@Filters
-	@POST
-	public Object validateMobile(@Param("mobile") String mobile) {
-		return loginService.validateMobile(mobile);
+	public Object messageLogin(@Param("..") final LoginForm form, final HttpSession session) {
+		return loginService.messageLogin(form, session);
 	}
 }

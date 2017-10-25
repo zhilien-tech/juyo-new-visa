@@ -52,7 +52,7 @@
              <a href="javascript:;">设置<img class="setUp" src="${base}/references/public/dist/newvisacss/img/setUp.jpg"></a>
           </li>
           <li class="signOut-li">
-             <a href="${base}/admin/logout.html?logintype=${logintype}">退出<img class="setUp" src="${base}/references/public/dist/newvisacss/img/signOut.jpg"></a>
+             <a href="${base}/admin/logout.html">退出<img class="setUp" src="${base}/references/public/dist/newvisacss/img/signOut.jpg"></a>
           </li>
           
         </ul>

@@ -34,14 +34,13 @@ import com.uxuexi.core.web.view.WeViewMaker;
 public class MainModule {
 
 	@At("/")
-	@Ok("jsp:admin.login")
+	@Ok("jsp:login")
 	public Object main() {
 		return null;
 	}
 
 	@At("/tlogin")
-	@Ok("jsp:admin.tlogin")
-	@Filters
+	@Ok("jsp:tlogin")
 	public Object tlogin() {
 		return null;
 	}
