@@ -26,21 +26,27 @@
 
 						<div class="row form-right">
 							<div class="col-md-1 left-5px right-0px">
-								<select  id="country" name="country" class="form-control input-sm inpImportant" onchange="selectListData();">
+								<select  id="country" name="country" class="form-control input-sm inpImportant" onchange="countryChange();">
 									<option value="">国家</option>
 									<c:forEach var="map" items="${obj.country}">
-											<option value="${map.key}">${map.value}</option>
+											<option value="${map.value}">${map.value}</option>
 										</c:forEach>
 								</select>
 							</div>
 							<div class="col-md-1 left-5px right-0px">
-								<select class="input-class input-sm" id="province">
-									<option>省/州/县</option>
+								<select  id="province" name="province" class="form-control input-sm inpImportant" onchange="provinceChange();">
+									<option value="">省/州/县</option>
+									<%-- <c:forEach var="map" items="${obj.province}">
+											<option value="${map.value}">${map.value}</option>
+										</c:forEach> --%>
 								</select>
 							</div>
 							<div class="col-md-1 left-5px right-0px">
-								<select class="input-class input-sm" id="city">
-									<option>城市</option>
+								<select  id="city" name="city" class="form-control input-sm inpImportant" onchange="cityChange();">
+									<option value="">城市</option>
+									<%-- <c:forEach var="map" items="${obj.city}">
+											<option value="${map.value}">${map.value}</option>
+										</c:forEach> --%>
 								</select>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
@@ -107,7 +113,71 @@
 		var BASE_PATH = '${base}';
 		$(function() {
 			initDatatable();
+			  /*var country = $("#country").val();
+			/*加载国家下拉选 
+		    $(function () {  
+		        $.ajax({  
+		            type: "post",  
+		            url: BASE_PATH + "/admin/city/list",  
+		            success: function (data) { 
+		            	$('#country').append("<option value=''  >" + '国家' + "</option>");
+		            	$('#province').append("<option value=''  >" + '省/州/县' + "</option>");  
+		                $('#city').append("<option value='' selected='selected' >" + '城市' + "</option>");
+		                for (var i = 0; i < data.length; i++) {  
+		                    $('#country').append("<option value='" + data[i] + "' >" + data[i] + "</option>");  
+		                }  
+		            },  
+		            error: function () {  
+		                alert("加载国家失败");  
+		            }  
+		        });  
+		    }); */   
+		      
 		});
+		/*加载省下拉选*/  
+	     $("#country").change(function () {
+	    	 $("#searchBtn").click();
+		        $("#province").empty();  
+		        $("#city").empty();  
+		        var country = $("#country").val();
+		        $.ajax({  
+		            type: "post",  
+		            url: BASE_PATH + "/admin/city/getProvince",  
+		            data: {
+		            	country: country
+		            	},
+		            success: function (data) {  
+		                $('#province').append("<option value=''  >" + '省/州/县' + "</option>");  
+		                $('#city').append("<option value=''  >" + '城市' + "</option>");  
+		                for (var i = 0; i < data.length; i++) {  
+		                    $('#province').append("<option value='" + data[i] + "' >" + data[i] + "</option>");  
+		                }
+		            },  
+		            error: function () {  
+		                alert("加载省/州/县失败");  
+		            }  
+		        });
+	     });
+	    /*加载城市下拉选*/  
+	    $("#province").change(function () {
+	    	$("#searchBtn").click();
+	    	var province = $("#province").val();
+	        $("#city").empty();  
+	        $.ajax({  
+	            type: "post",  
+	            url: BASE_PATH + "/admin/city/getCity",  
+	            data: {province: province},  
+	            success: function (data) {
+	                $('#city').append("<option value=''  >" + '城市' + "</option>");  
+	                for (var i = 0; i < data.length; i++) {  
+	                    $('#city').append("<option value='" + data[i] + "'  >" + data[i] + "</option>");  
+	                }  
+	            },  
+	            error: function () {  
+	                alert("加载城市失败");  
+	            }  
+	        });
+	    });
 	</script>
 </body>
 </html>

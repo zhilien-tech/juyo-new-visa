@@ -62,7 +62,17 @@ public class TCityForm extends DataTablesParamForm {
 					.or("city", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
+		if (!Util.isEmpty(country)) {
+			cnd.and("country", "=", country);
+		}
+		if (!Util.isEmpty(province)) {
+			cnd.and("province", "=", province);
+		}
+		if (!Util.isEmpty(city)) {
+			cnd.and("city", "=", city);
+		}
 		cnd.orderBy("createTime", "DESC");
+		cnd.orderBy("updateTime", "DESC");
 		return cnd;
 	}
 }

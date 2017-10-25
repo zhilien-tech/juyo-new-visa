@@ -128,13 +128,32 @@ function deleteById(id) {
 		// 取消之后不用处理
 	});
 }
-function selectListData(){
+/*function countryChange(){
+	  $("#searchBtn").click();
+	  $("#province").change();
+}
+function provinceChange(){
+	  $("#searchBtn").click();
+	  $("#city").change();
+}*/
+function cityChange(){
 	  $("#searchBtn").click();
 }
 $("#searchBtn").on('click',function(){
 	var searchStr = $("#searchStr").val();
+	var country = $("#country").val();
+	var province = $("#province").val();
+	var city;
+	if(province != ""){
+		city = "";
+	}else{
+		city = $("#city").val();
+	}
 	var param = {
 		"searchStr": searchStr,
+		"country" : country,
+		"province" : province,
+		"city" : city
 	};
 	datatable.settings()[0].ajax.data = param;
 	datatable.ajax.reload();

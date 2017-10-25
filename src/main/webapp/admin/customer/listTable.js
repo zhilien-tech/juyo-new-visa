@@ -57,7 +57,19 @@ function initDatatable() {
 		            		return "";
 		            	}else{
 		            		/*source = '<span data-toggle="tooltip" data-placement="right" title="'+source+'">'+source+'<span>';*/
-		            		return source;
+		            		if(source == 1){
+		            			return "线上";
+		            		}
+		            		if(source == 2){
+		            			return "OTS";
+		            		}
+		            		if(source == 3){
+		            			return "直客";
+		            		}
+		            		if(source == 4){
+		            			return "线下";
+		            		}
+		            		
 		            	}
 		            } 	
 		            },

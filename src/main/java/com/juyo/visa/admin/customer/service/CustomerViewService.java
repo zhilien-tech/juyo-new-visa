@@ -1,15 +1,19 @@
 package com.juyo.visa.admin.customer.service;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.entities.TCustomerEntity;
 import com.juyo.visa.forms.TCustomerAddForm;
 import com.juyo.visa.forms.TCustomerForm;
 import com.juyo.visa.forms.TCustomerUpdateForm;
+import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
@@ -21,10 +25,32 @@ public class CustomerViewService extends BaseService<TCustomerEntity> {
 		return listPage4Datatables(queryForm);
 	}
 
+	public Object toAddCustomerPage() {
+		Map<String, Object> obj = MapUtil.map();
+		obj.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
+		return obj;
+	}
+
 	public Object addCustomer(TCustomerAddForm addForm) {
 		addForm.setCreateTime(new Date());
 		this.add(addForm);
 		return JsonResult.success("添加成功");
+	}
+
+	public Object fetchCustomer(final long id) {
+		Map<String, Object> result = MapUtil.map();
+		TCustomerEntity customer = dbDao.fetch(TCustomerEntity.class, new Long(id).intValue());
+		String sourceType = String.valueOf(customer.getSource().intValue());
+		Map<String, String> customerEnum = EnumUtil.enum2(CustomerTypeEnum.class);
+		if (customerEnum.containsKey(sourceType)) {
+			String sourceTypeName = customerEnum.get(sourceType);
+			customerEnum.remove(sourceType);
+			result.put("sourceType", sourceTypeName);
+		}
+
+		result.put("customer", customer);
+		result.put("customerTypeEnum", customerEnum);
+		return result;
 	}
 
 	public Object updateCustomer(TCustomerUpdateForm updateForm) {

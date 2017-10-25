@@ -163,14 +163,14 @@
 									departmentId : {
 						validators : {
 							notEmpty : {
-								message : '所属部门id不能为空'
+								message : '所属部门不能为空'
 							}
 						}
 					},
 									jobId : {
 						validators : {
 							notEmpty : {
-								message : '用户职位id不能为空'
+								message : '用户职位不能为空'
 							}
 						}
 					},

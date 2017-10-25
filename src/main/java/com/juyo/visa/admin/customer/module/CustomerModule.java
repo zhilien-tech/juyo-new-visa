@@ -58,7 +58,7 @@ public class CustomerModule {
 	@GET
 	@Ok("jsp")
 	public Object add() {
-		return null;
+		return customerViewService.toAddCustomerPage();
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class CustomerModule {
 	@GET
 	@Ok("jsp")
 	public Object update(@Param("id") final long id) {
-		return customerViewService.fetch(id);
+		return customerViewService.fetchCustomer(id);
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package com.juyo.visa.admin.city.module;
 
+import java.util.List;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
@@ -35,7 +37,7 @@ public class CityModule {
 	@GET
 	@Ok("jsp")
 	public Object list() {
-		return null;
+		return cityViewService.listCountrySearch();
 	}
 
 	/**
@@ -116,6 +118,24 @@ public class CityModule {
 	@POST
 	public Object getCustomerCitySelect(@Param("cityname") String cityname, @Param("exname") String exname) {
 		return cityViewService.getCustomerCitySelect(cityname, exname);
+	}
+
+	/**国家省城市三级联动*/
+	//	@At
+	//	public List<TCityEntity> getCountry() {
+	//		return cityViewService.queryCity(0);
+	//	}
+
+	@At
+	@POST
+	public List<String> getProvince(@Param("country") String country) {
+		return cityViewService.queryProvince(country);
+	}
+
+	@At
+	@POST
+	public List<String> getCity(@Param("province") String province) {
+		return cityViewService.queryCity(province);
 	}
 
 }

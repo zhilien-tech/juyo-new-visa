@@ -3,6 +3,7 @@ package com.juyo.visa.admin.city.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -10,6 +11,7 @@ import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import com.google.common.collect.Maps;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.forms.TCityAddForm;
 import com.juyo.visa.forms.TCityForm;
@@ -24,6 +26,53 @@ public class CityViewService extends BaseService<TCityEntity> {
 
 	public Object listData(TCityForm queryForm) {
 		return listPage4Datatables(queryForm);
+	}
+
+	public List<String> queryProvince(String country) {
+		List<String> provinceList = new ArrayList<>();
+		List<TCityEntity> city = dbDao.query(TCityEntity.class, Cnd.where("country", "=", country), null);
+		for (TCityEntity tCityEntity : city) {
+			if (!provinceList.contains(tCityEntity.getProvince())) {
+				provinceList.add(tCityEntity.getProvince());
+			}
+		}
+		return provinceList;
+	}
+
+	public List<String> queryCity(String province) {
+		List<String> cityList = new ArrayList<>();
+		List<TCityEntity> city = dbDao.query(TCityEntity.class, Cnd.where("province", "=", province), null);
+		for (TCityEntity tCityEntity : city) {
+			if (!cityList.contains(tCityEntity.getCity())) {
+				cityList.add(tCityEntity.getCity());
+			}
+		}
+		return cityList;
+	}
+
+	public Object listCountrySearch() {
+		Map<String, Object> result = Maps.newHashMap();
+		Map<Integer, String> cityMapByCountry = Maps.newHashMap();
+		Map<Integer, String> cityMapByProvince = Maps.newHashMap();
+		Map<Integer, String> cityMapByCity = Maps.newHashMap();
+		List<TCityEntity> tCityList = dbDao.query(TCityEntity.class, null, null);
+		for (TCityEntity tCityEntity : tCityList) {
+			//TCityEntity cityByCountry = dbDao.fetch(TCityEntity.class, Cnd.where("country", "=", tCityEntity.getCountry()));
+			if (!cityMapByCountry.containsValue(tCityEntity.getCountry())) {
+				cityMapByCountry.put(tCityEntity.getId(), tCityEntity.getCountry());
+			}
+
+			if (!cityMapByProvince.containsValue(tCityEntity.getProvince())) {
+				cityMapByProvince.put(tCityEntity.getId(), tCityEntity.getProvince());
+			}
+			if (!cityMapByCity.containsValue(tCityEntity.getCity())) {
+				cityMapByCity.put(tCityEntity.getId(), tCityEntity.getCity());
+			}
+		}
+		result.put("country", cityMapByCountry);
+		result.put("province", cityMapByProvince);
+		result.put("city", cityMapByCity);
+		return result;
 	}
 
 	public Object addCity(TCityAddForm addForm) {

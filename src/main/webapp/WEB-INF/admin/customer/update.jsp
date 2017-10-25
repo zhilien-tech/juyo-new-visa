@@ -36,9 +36,13 @@
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label><span>*</span>客户来源：</label> <input id="source"
-									name="source" value="${obj.source}" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>客户来源：</label> 
+								<select id="customerType" name="source" class="form-control input-sm inpImportant" onchange="selectListData();">
+										<option value="${obj.sourceType }" selected="selected">${obj.sourceType }</option>
+										<c:forEach var="map" items="${obj.customerTypeEnum}">
+											<option value="${map.key}" >${map.value}</option>
+										</c:forEach>
+									</select>
 							</div>
 						</div>
 					</div>
@@ -47,7 +51,7 @@
 						<div class="col-sm-8">
 							<div class="form-group">
 								<label><span>*</span>公司全称：</label> <input id="name" name="name"
-									value="${obj.name}" type="text" class="form-control input-sm"
+									value="${obj.customer.name}" type="text" class="form-control input-sm"
 									placeholder=" " />
 							</div>
 						</div>
@@ -55,7 +59,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>公司简称：</label> <input id="shortname"
-									name="shortname" value="${obj.shortname}" type="text"
+									name="shortname" value="${obj.customer.shortname}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -65,14 +69,14 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>联系人：</label> <input id="linkman"
-									name="linkman" value="${obj.linkman}" type="text"
+									name="linkman" value="${obj.customer.linkman}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>手机：</label> <input id="mobile"
-									name="mobile" value="${obj.mobile}" type="text"
+									name="mobile" value="${obj.customer.mobile}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -80,7 +84,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>邮箱：</label> <input id="email" name="email"
-									value="${obj.email}" type="text" class="form-control input-sm"
+									value="${obj.customer.email}" type="text" class="form-control input-sm"
 									placeholder=" " />
 							</div>
 						</div>
@@ -119,14 +123,14 @@
 											userId : {
 							validators : {
 								notEmpty : {
-									message : '用户id不能为空'
+									message : '用户不能为空'
 								}
 							}
 						},
 											compId : {
 							validators : {
 								notEmpty : {
-									message : '公司id不能为空'
+									message : '公司不能为空'
 								}
 							}
 						},
@@ -209,7 +213,7 @@
 						layer.msg('shortname不能为空');
 						return;
 					}
-									var source = $("#source").val();
+									var source = $("#customerType").val();
 					if(source==""){
 						layer.msg('source不能为空');
 						return;
@@ -236,6 +240,7 @@
 					data : $("#customerUpdateForm").serialize(),
 					url : '${base}/admin/customer/update.html',
 					success : function(data) {
+						//alert(JSON.stringify(data));
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						layer.close(index);
 						window.parent.layer.msg("编辑成功", "", 3000);

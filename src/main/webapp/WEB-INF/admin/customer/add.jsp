@@ -35,9 +35,12 @@
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label><span>*</span>客户来源：</label> <input id="source"
-									name="source" type="text" class="form-control input-sm"
-									placeholder=" " />
+							<label><span>*</span>客户来源：</label>
+								<select id="customerType" name="source" class="form-control input-sm inpImportant" onchange="selectListData();">
+										<c:forEach var="map" items="${obj.customerTypeEnum}">
+											<option value="${map.key}">${map.value}</option>
+										</c:forEach>
+									</select>
 							</div>
 						</div>
 					</div>
@@ -115,14 +118,14 @@
 									userId : {
 						validators : {
 							notEmpty : {
-								message : '用户id不能为空'
+								message : '用户不能为空'
 							}
 						}
 					},
 									compId : {
 						validators : {
 							notEmpty : {
-								message : '公司id不能为空'
+								message : '公司不能为空'
 							}
 						}
 					},
@@ -204,7 +207,7 @@
 						layer.msg('shortname不能为空');
 						return;
 					}
-									var source = $("#source").val();
+									var source = $("#customerType").val();
 					if(source==""){
 						layer.msg('source不能为空');
 						return;
