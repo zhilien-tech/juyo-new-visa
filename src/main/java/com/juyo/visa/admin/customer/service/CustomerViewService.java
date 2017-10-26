@@ -53,12 +53,12 @@ public class CustomerViewService extends BaseService<TCustomerEntity> {
 		TCustomerEntity customer = dbDao.fetch(TCustomerEntity.class, new Long(id).intValue());
 		String sourceType = String.valueOf(customer.getSource().intValue());
 		Map<String, String> customerEnum = EnumUtil.enum2(CustomerTypeEnum.class);
-		if (customerEnum.containsKey(sourceType)) {
-			String sourceTypeName = customerEnum.get(sourceType);
-			customerEnum.remove(sourceType);
-			result.put("sourceType", sourceTypeName);
-		}
-
+		//		if (customerEnum.containsKey(sourceType)) {
+		//			String sourceTypeName = customerEnum.get(sourceType);
+		//			customerEnum.remove(sourceType);
+		//			result.put("sourceType", sourceTypeName);
+		//		}
+		result.put("sourceType", customerEnum);
 		result.put("customer", customer);
 		result.put("customerTypeEnum", customerEnum);
 		return result;

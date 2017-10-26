@@ -51,23 +51,23 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
-		            {"data": "departmentid", "bSortable": false,render: function(data, type, row, meta) {
-		            	var departmentid = row.departmentid;
-		            	if(null==departmentid || ""==departmentid){
+		            {"data": "deptname", "bSortable": false,render: function(data, type, row, meta) {
+		            	var deptname = row.deptname;
+		            	if(null==deptname || ""==deptname){
 		            		return "";
 		            	}else{
 		            		/*departmentId = '<span data-toggle="tooltip" data-placement="right" title="'+departmentId+'">'+departmentId+'<span>';*/
-		            		return departmentid;
+		            		return deptname;
 		            	}
 		            } 	
 		            },
-		            {"data": "jobid", "bSortable": false,render: function(data, type, row, meta) {
-		            	var jobid = row.jobid;
-		            	if(null==jobid || ""==jobid){
+		            {"data": "jobname", "bSortable": false,render: function(data, type, row, meta) {
+		            	var jobname = row.jobname;
+		            	if(null==jobname || ""==jobname){
 		            		return "";
 		            	}else{
 		            		/*jobId = '<span data-toggle="tooltip" data-placement="right" title="'+jobId+'">'+jobId+'<span>';*/
-		            		return jobid;
+		            		return jobname;
 		            	}
 		            } 	
 		            },

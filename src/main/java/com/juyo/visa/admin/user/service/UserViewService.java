@@ -13,21 +13,24 @@ import org.nutz.dao.util.cri.SqlExpressionGroup;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.testng.collections.Maps;
 
 import com.google.common.collect.Lists;
+import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.UserStatusEnum;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TDepartmentEntity;
 import com.juyo.visa.entities.TFunctionEntity;
+import com.juyo.visa.entities.TJobEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.entities.TUserJobEntity;
 import com.juyo.visa.forms.TUserAddForm;
 import com.juyo.visa.forms.TUserForm;
 import com.juyo.visa.forms.TUserUpdateForm;
+import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.db.util.DbSqlUtil;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
@@ -41,10 +44,17 @@ public class UserViewService extends BaseService<TUserEntity> {
 	}
 
 	public Object toAddUserPage(HttpSession session) {
-		Map<String, Object> result = Maps.newHashMap();
-		List<TDepartmentEntity> departments = dbDao.query(TDepartmentEntity.class, null, null);
-
+		Map<String, Object> result = MapUtil.map();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		List<TDepartmentEntity> departmentList = dbDao.query(TDepartmentEntity.class,
+				Cnd.where("comId", "=", loginCompany.getId()), null);
+		result.put("department", departmentList);
 		return result;
+	}
+
+	public Object queryJobs(Integer departmentId) {
+		List<TJobEntity> jobList = dbDao.query(TJobEntity.class, Cnd.where("deptId", "=", departmentId), null);
+		return jobList;
 	}
 
 	public Object addUser(TUserAddForm addForm) {
@@ -52,6 +62,20 @@ public class UserViewService extends BaseService<TUserEntity> {
 		addForm.setCreateTime(new Date());
 		this.add(addForm);
 		return JsonResult.success("添加成功");
+	}
+
+	public Object fetchUser(long id, HttpSession session) {
+		Map<String, Object> result = MapUtil.map();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity user = dbDao.fetch(TUserEntity.class, id);
+		List<TDepartmentEntity> departmentList = dbDao.query(TDepartmentEntity.class,
+				Cnd.where("comId", "=", loginCompany.getId()), null);
+		List<TJobEntity> jobList = dbDao
+				.query(TJobEntity.class, Cnd.where("deptId", "=", user.getDepartmentId()), null);
+		result.put("department", departmentList);
+		result.put("job", jobList);
+		result.put("user", user);
+		return result;
 	}
 
 	public Object updateUser(TUserUpdateForm updateForm) {

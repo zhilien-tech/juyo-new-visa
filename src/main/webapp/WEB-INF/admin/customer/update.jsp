@@ -31,16 +31,16 @@
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
-					<input name="id" type="hidden" value="${obj.id}">
+					<input name="id" type="hidden" value="${obj.customer.id}">
 
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>客户来源：</label> 
 								<select id="customerType" name="source" class="form-control input-sm inpImportant" onchange="selectListData();">
-										<option value="${obj.sourceType }" selected="selected">${obj.sourceType }</option>
+										<%-- <option value="${obj.sourceType }" selected="selected">${obj.sourceType }</option> --%>
 										<c:forEach var="map" items="${obj.customerTypeEnum}">
-											<option value="${map.key}" >${map.value}</option>
+											<option value="${map.key}" ${map.key==obj.customer.source?'selected':''}>${map.value}</option>
 										</c:forEach>
 									</select>
 							</div>
@@ -240,7 +240,6 @@
 					data : $("#customerUpdateForm").serialize(),
 					url : '${base}/admin/customer/update.html',
 					success : function(data) {
-						//alert(JSON.stringify(data));
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						layer.close(index);
 						window.parent.layer.msg("编辑成功", "", 3000);
