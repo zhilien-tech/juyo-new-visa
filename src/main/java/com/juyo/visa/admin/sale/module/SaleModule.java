@@ -6,6 +6,7 @@
 
 package com.juyo.visa.admin.sale.module;
 
+import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
@@ -18,6 +19,8 @@ import org.nutz.mvc.annotation.Ok;
  * @author   ...
  * @Date	 XXXX年XX月XX日 	 
  */
+@IocBean
+@At("admin/sale")
 public class SaleModule {
 	/**
 	 * 跳转到list页面

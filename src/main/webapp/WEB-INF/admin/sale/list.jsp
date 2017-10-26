@@ -9,6 +9,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>销售-日本</title>
+	<link rel="stylesheet" href="${base}/references/public/css/saleJapan.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -27,10 +28,33 @@
 									<option></option>
 								</select>
 							</div>
-							<div class="col-md-3 left-5px right-0px">
-								<input type="text" class="input-sm input-class" placeholder="订单号/联系人/电话/邮箱/申请人" />
+							<div class="col-md-2 left-5px right-0px">
+								<select class="input-class input-sm">
+									<option>客户来源</option>
+									<option></option>
+								</select>
 							</div>
-							<div class="col-md-7 left-5px">
+							<div class="col-md-2 left-5px right-0px">
+								<select class="input-class input-sm">
+									<option>签证类型</option>
+									<option></option>
+								</select>
+							</div>
+							<div class="col-md-3 left-5px right-0px">
+								<input type="text" class="input-sm input-class" placeholder="订单号/护照/公司简介/联系人/电话/邮箱/申请人" />
+							</div>
+						</div>
+						<div class="row form-right">
+							<div class="col-md-2 left-5px right-0px">
+								<input type="text" class="input-sm input-class" placeholder="2017-10-10 ~ 2017-11-11" />
+							</div>
+							<div class="col-md-2 left-5px right-0px">
+								<input type="text" class="input-sm input-class" placeholder="送签时间" />
+							</div>
+							<div class="col-md-2 left-5px right-0px">
+								<input type="text" class="input-sm input-class" placeholder="出签时间" />
+							</div>
+							<div class="col-md-6 left-5px">
 								<a class="btn btn-primary btn-sm pull-left" onclick="" id="">搜索</a>
 								<a class="btn btn-primary btn-sm pull-right" onclick="" id="addBtn">拍视频</a>
 							</div>
@@ -47,26 +71,24 @@
 									<i> </i>
 									<i> </i>
 									<i> </i>
+									<i> </i>
+									<i> </i>
 								</div>
 							</div>
 							<ul class="card-content">
 								<li class="everybody-info" v-for="item in data.everybodyInfo">
-									<div><label>申请人：</label><span>{{item.applicant}}</span></div>
-									<div><label>护照号：</label><span>{{item.passportNo}}</span></div>
-									<div><label>快递号：</label><span>316252136</span></div>
-									<div><label>方式：</label><span>门市送</span></div>
-									<div><label>资料类型：</label><span>在职</span></div>
-									<div><label>真实资料：</label><span>护照&nbsp;身份证&nbsp;一寸照片&nbsp;退休证明&nbsp;学生证&nbsp;健康证明</span></div>
-									<div><label>状态：</label><span>{{item.state}}</span></div>
-									<div><i> </i></div>
+									<div><label>公司简称：</label><span>{{item.companyAbbreviation}}</span></div>
+									<div><label>客户来源：</label><span>直客</span></div>
+									<div><label>联系人：</label><span>张三</span></div>
+									<div><label>电话：</label><span>{{item.passportNo}}</span></div>
+									<div><label>申请人：</label><span>张望&nbsp;锚斯&nbsp;马六</span></div>
+									<div><!-- <i> </i> --></div>
 								</li>
 							</ul>
 						</div>
 					</div><!-- end 卡片列表 -->
 				</section>
 			</div>
-			
-	
 		</div>
 
 	<!-- jQuery 2.2.3 -->

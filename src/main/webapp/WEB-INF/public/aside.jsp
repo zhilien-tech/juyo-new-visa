@@ -25,7 +25,7 @@
 				</li> --%>
 				<c:if test="${function.level eq 1}">
 					<!-- 一级菜单 -->
-					<li id="${status.index+1 }" class="menu1">
+				<li id="${status.index+1 }" class="menu1">
 					<c:choose>
 						<c:when test="${empty function.url }">
 							<a href="#">
@@ -119,6 +119,13 @@
 				href="/admin/authority/list.html?currentPageIndex=10"> <img
 					src="${base}/references/public/dist/newvisacss/img/index.png" /> <font>权限管理</font>
 			</a></li>--%>
+			
+				<li id="666" class="menu1">
+					<a href="/admin/sale/list.html?currentPageIndex=666">
+						<img src="${base}/references/public/dist/newvisacss/img/index.png" />
+						<font>销售日本</font>
+					</a>
+				</li>
 
 		</ul>
 		<!-- /.sidebar-menu -->
