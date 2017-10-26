@@ -279,7 +279,7 @@ public class AuthorityViewService extends BaseService<DeptJobForm> {
 		String afterjobIds = "";
 		if (jobJsonArray.length >= 1) {
 			for (JobDto jobDto : jobJsonArray) {
-				int jobId = jobDto.getJobId();
+				long jobId = jobDto.getJobId();
 				afterjobIds += String.valueOf(jobId) + ",";
 			}
 		}
@@ -311,7 +311,7 @@ public class AuthorityViewService extends BaseService<DeptJobForm> {
 		if (!Util.isEmpty(jobJsonArray)) {
 			for (JobDto jobDto : jobJsonArray) {
 				int depId = dept.getId();
-				int jobId = jobDto.getJobId();
+				int jobId = Integer.valueOf(jobDto.getJobId() + "");
 				saveOrUpdateSingleJob(userId, depId, jobId, companyId, jobDto.getJobName(), jobDto.getFunctionIds());
 			}
 		}
