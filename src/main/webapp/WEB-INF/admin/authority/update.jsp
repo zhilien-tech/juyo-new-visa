@@ -41,7 +41,7 @@
 							<input id="deptName" name="deptName" type="text" class="form-control input-sm inputText" value="${obj.dept.deptName }"> <span class="prompt">*</span>
 						</li>
 						<li>
-							<button type="button" class="btn btn-primary btn-sm btnPadding" id="addJob">添加职位</button>
+							<button id="addJob" type="button" class="btn btn-primary btn-sm btnPadding">添加职位</button>
 						</li>
 					</ul>
 				</div>
@@ -86,23 +86,16 @@
 		var BASE_PATH = '${base}';
 	</script>
 	<!-- jQuery 2.2.3 -->
-	<script
-		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script
-		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<!--zTree -->
-	<script
-		src="${base}/references/common/js/zTree/jquery.ztree.core-3.5.js"></script>
-	<script
-		src="${base}/references/common/js/zTree/jquery.ztree.excheck-3.5.js"></script>
-	<script
-		src="${base}/references/common/js/zTree/jquery.ztree.exedit-3.5.js"></script>
+	<script src="${base}/references/common/js/zTree/jquery.ztree.core-3.5.js"></script>
+	<script src="${base}/references/common/js/zTree/jquery.ztree.excheck-3.5.js"></script>
+	<script src="${base}/references/common/js/zTree/jquery.ztree.exedit-3.5.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-
-
 
 	<script type="text/javascript">
 		var setting = {
@@ -303,7 +296,6 @@
 		              layer.msg('编辑失败!',{time:2000});
 		           },
 		           success: function(data) {
-						console.log(JSON.stringify(data));
 						if(data.status == '200'){
 							layer.close(loadLayer) ;
 							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -312,6 +304,7 @@
 							window.parent.layer.msg("编辑成功", "", 3000);
 						}else{
 							layer.close(loadLayer) ;
+							console.log("==================="+JSON.stringify(data));
 							layer.msg("职位不能为空且至少存在一个") ;
 						}
 		           }

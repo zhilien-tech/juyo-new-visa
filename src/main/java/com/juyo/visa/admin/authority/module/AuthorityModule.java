@@ -80,29 +80,10 @@ public class AuthorityModule {
 	public Object update(@Param("..") DeptJobForm updateForm, @Param("deptId") final Long deptId,
 			final HttpSession session) {
 		try {
-			authorityViewService.updateJobFunctions(updateForm, deptId, session);
+			return authorityViewService.updateJobFunctions(updateForm, deptId, session);
 		} catch (Exception e) {
 			return JsonResult.error(e.getMessage());
 		}
-		return JsonResult.success("修改成功!");
-	}
-
-	/**
-	 * 删除记录
-	 */
-	@At
-	public Object delete(@Param("id") final long id) {
-		authorityViewService.deleteById(id);
-		return JsonResult.success("删除成功");
-	}
-
-	/**
-	 * 批量删除记录
-	 */
-	@At
-	public Object batchDelete(@Param("ids") final Long[] ids) {
-		authorityViewService.batchDelete(ids);
-		return JsonResult.success("删除成功");
 	}
 
 	/**
@@ -111,8 +92,8 @@ public class AuthorityModule {
 	@At
 	public Object delete(@Param("jobId") final long jobId, final HttpSession session) {
 		try {
-			authorityViewService.deleteJob(jobId, session);
-			return JsonResult.success("删除成功!");
+
+			return authorityViewService.deleteJob(jobId, session);
 		} catch (Exception e) {
 			return JsonResult.success("删除失败!");
 		}
@@ -131,8 +112,7 @@ public class AuthorityModule {
 	public Object checkDeptNameExist(@Param("deptName") final String deptName, @Param("deptId") final Long deptId,
 			final HttpSession session) {
 		try {
-			authorityViewService.checkDeptNameExist(deptName, deptId, session);
-			return JsonResult.success("校验成功");
+			return authorityViewService.checkDeptNameExist(deptName, deptId, session);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return JsonResult.success("校验成功");
@@ -149,8 +129,7 @@ public class AuthorityModule {
 	@At
 	public Object checkJobNameExist(@Param("jobName") final String jobName, @Param("jobId") final Long jobId) {
 		try {
-			authorityViewService.checkJobNameExist(jobName, jobId);
-			return JsonResult.success("校验成功");
+			return authorityViewService.checkJobNameExist(jobName, jobId);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return JsonResult.success("校验成功");
