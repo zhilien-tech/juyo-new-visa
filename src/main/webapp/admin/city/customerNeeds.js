@@ -31,7 +31,7 @@ function initCityNeedsSelect2(){
 			},
 			cache : false
 		},
-		templateSelection: formatRepoSelection,
+		//templateSelection: formatRepoSelection,
 		escapeMarkup : function(markup) {
 			return markup;
 		}, // let our custom formatter work
@@ -75,7 +75,7 @@ function initCityNeedsSelect2(){
 			},
 			cache : false
 		},
-		templateSelection: formatRepoSelection,
+		//templateSelection: formatRepoSelection,
 		escapeMarkup : function(markup) {
 			return markup;
 		}, // let our custom formatter work
@@ -120,7 +120,7 @@ function initCityNeedsSelect2(){
 			},
 			cache : false
 		},
-		templateSelection: formatRepoSelection,
+		//templateSelection: formatRepoSelection,
 		escapeMarkup : function(markup) {
 			return markup;
 		}, // let our custom formatter work
