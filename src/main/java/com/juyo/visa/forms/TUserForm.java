@@ -11,9 +11,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
-import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.Util;
-import com.uxuexi.core.db.util.EntityUtil;
 import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
@@ -74,7 +72,7 @@ public class TUserForm extends DataTablesParamForm {
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
-		String sqlString = EntityUtil.entityCndSql(TUserEntity.class);
+		String sqlString = sqlManager.get("userManager_list");
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
 		return sql;

@@ -70,16 +70,21 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>部门：</label> <input id="departmentId"
-									name="departmentId" type="text" class="form-control input-sm"
-									placeholder=" " />
+								<label><span>*</span>部门：</label> 
+								<select id="departmentId" name="departmentId" class="form-control input-sm inpImportant" onchange="selectListData();">
+										<option>--请选择--</option>
+										<c:forEach var="map" items="${obj.department}">
+											<option value="${map.id}">${map.deptName}</option>
+										</c:forEach>
+									</select>
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>职位：</label> <input id="jobId"
-									name="jobId" type="text" class="form-control input-sm"
-									placeholder=" " />
+								<label><span>*</span>职位：</label> 
+								<select id="jobId" name="jobId" class="form-control input-sm inpImportant" >
+										<option>--请选择--</option>
+									</select>
 							</div>
 						</div>
 					</div>
@@ -204,6 +209,28 @@
 					},
 				}
 			});
+			
+			/*加载job*/
+			$("#departmentId").change(function () {
+			        $("#jobId").empty();  
+			        var departmentId = $("#departmentId").val();
+			        $.ajax({  
+			            type: "post",  
+			            url: BASE_PATH + "/admin/user/getJob",  
+			            data: {
+			            	departmentId: departmentId
+			            	},
+			            success: function (data) {
+			                $('#jobId').append("<option value=''  >" + '--请选择--' + "</option>");  
+			                for (var i = 0; i < data.length; i++) {  
+			                    $('#jobId').append("<option value='" + data[i].id + "' >" + data[i].jobName + "</option>");  
+			                }
+			            },  
+			            error: function () {  
+			                alert("加载职位失败");  
+			            }  
+			        });
+		     });
 		});
 		/* 页面初始化加载完毕 */
 		

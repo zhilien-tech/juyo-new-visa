@@ -1,5 +1,7 @@
 package com.juyo.visa.admin.receiveaddress.module;
 
+import javax.servlet.http.HttpSession;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
@@ -66,8 +68,8 @@ public class ReceiveaddressModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..") TReceiveaddressAddForm addForm) {
-		return receiveaddressViewService.addReceiveaddress(addForm);
+	public Object add(@Param("..") TReceiveaddressAddForm addForm, HttpSession session) {
+		return receiveaddressViewService.addReceiveaddress(addForm, session);
 	}
 
 	/**
