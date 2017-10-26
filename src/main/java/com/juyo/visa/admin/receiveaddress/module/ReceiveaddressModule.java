@@ -1,31 +1,33 @@
 package com.juyo.visa.admin.receiveaddress.module;
 
-import com.juyo.visa.admin.receiveaddress.service.ReceiveaddressViewService;
-import com.juyo.visa.forms.TReceiveaddressUpdateForm;
-import com.juyo.visa.forms.TReceiveaddressAddForm;
-import com.juyo.visa.forms.TReceiveaddressForm;
-
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.dao.pager.Pager;
-import org.nutz.mvc.annotation.*;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.GET;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
+import org.nutz.mvc.annotation.Param;
 
-import com.uxuexi.core.web.base.page.Pagination;
+import com.juyo.visa.admin.receiveaddress.service.ReceiveaddressViewService;
+import com.juyo.visa.forms.TReceiveaddressAddForm;
+import com.juyo.visa.forms.TReceiveaddressForm;
+import com.juyo.visa.forms.TReceiveaddressUpdateForm;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 @At("/admin/receiveaddress")
 @Filters({//@By(type = AuthFilter.class)
-	})
+})
 public class ReceiveaddressModule {
 
 	private static final Log log = Logs.get();
-	
+
 	@Inject
 	private ReceiveaddressViewService receiveaddressViewService;
-	
+
 	/**
 	 * 跳转到list页面
 	 */
@@ -35,28 +37,28 @@ public class ReceiveaddressModule {
 	public Object list() {
 		return null;
 	}
-	
+
 	/**
 	 * 分页查询
 	 */
 	/*@At
 	@Ok("jsp")
 	public Pagination list(@Param("..") final TReceiveaddressForm sqlParamForm,@Param("..") final Pager pager) {
-    	return receiveaddressViewService.listPage(sqlParamForm,pager);
-    }*/
-    @At
+		return receiveaddressViewService.listPage(sqlParamForm,pager);
+	}*/
+	@At
 	public Object listData(@Param("..") final TReceiveaddressForm sqlParamForm) {
 		return receiveaddressViewService.listData(sqlParamForm);
 	}
-    
-    /**
+
+	/**
 	 * 跳转到'添加操作'的录入数据页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
 	public Object add() {
-		return null ;
+		return null;
 	}
 
 	/**
@@ -64,8 +66,8 @@ public class ReceiveaddressModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..")TReceiveaddressAddForm addForm) {
-		return receiveaddressViewService.add(addForm);
+	public Object add(@Param("..") TReceiveaddressAddForm addForm) {
+		return receiveaddressViewService.addReceiveaddress(addForm);
 	}
 
 	/**
@@ -83,8 +85,8 @@ public class ReceiveaddressModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..")TReceiveaddressUpdateForm updateForm) {
-		return receiveaddressViewService.update(updateForm);
+	public Object update(@Param("..") TReceiveaddressUpdateForm updateForm) {
+		return receiveaddressViewService.updateReceiveaddress(updateForm);
 	}
 
 	/**
@@ -104,5 +106,5 @@ public class ReceiveaddressModule {
 		receiveaddressViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
 	}
-	
+
 }

@@ -19,11 +19,13 @@ import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Lists;
 import com.juyo.visa.admin.company.service.CompanyViewService;
+import com.juyo.visa.admin.login.enums.LoginTypeEnum;
 import com.juyo.visa.admin.login.form.LoginForm;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.access.AccessConfig;
 import com.juyo.visa.common.access.sign.MD5;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TFunctionEntity;
@@ -61,8 +63,6 @@ public class LoginService extends BaseService<TUserEntity> {
 	@Inject
 	private RedisDao redisDao;
 
-	SMSService smsService = new HuaxinSMSServiceImpl(redisDao);
-
 	/**
 	 * 用户登录
 	 * <p>
@@ -75,7 +75,11 @@ public class LoginService extends BaseService<TUserEntity> {
 	 */
 	public boolean login(final LoginForm form, final HttpSession session, final HttpServletRequest req) {
 
-		form.setReturnUrl("jsp:admin.login");
+		if (form.getIsTourist() == IsYesOrNoEnum.YES.intKey()) {
+			form.setReturnUrl("jsp:admin.tlogin");
+		} else {
+			form.setReturnUrl("jsp:admin.login");
+		}
 		String loginName = form.getLoginName();
 		if (Util.isEmpty(loginName)) {
 			form.setErrMsg("用户名不能为空");
@@ -136,14 +140,17 @@ public class LoginService extends BaseService<TUserEntity> {
 			//控制页面跳转
 			if (UserLoginEnum.ADMIN.intKey() == userType) {
 				//平台管理员跳转页面
-				form.setReturnUrl(">>:/admin/company/list.html");
+				form.setReturnUrl(">>:/admin/company/list.html?currentPageIndex=1");
 			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType
 					|| UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType) {
 				//公司管理员条跳转页面
-				form.setReturnUrl(">>:/admin/company/list.html");
+				form.setReturnUrl(">>:/admin/company/list.html?currentPageIndex=1");
+			} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
+				//游客跳转的页面
+				form.setReturnUrl(">>:/admin/applyvisa/list.html");
 			} else {
 				//普通员工跳转页面
-				form.setReturnUrl(">>:/admin/company/list.html");
+				form.setReturnUrl(">>:/admin/company/list.html?currentPageIndex=1");
 			}
 			//将用户权限保存到session中
 			//session.setAttribute(FUNCTION_MAP_KEY, functionMap); //功能
@@ -163,14 +170,19 @@ public class LoginService extends BaseService<TUserEntity> {
 	 *
 	 * @param session 需要清除session的内容
 	 */
-	public void logout(final HttpSession session) {
+	public Object logout(final HttpSession session, Integer logintype) {
 		session.removeAttribute(USER_COMPANY_KEY);
-		session.removeAttribute(FUNCTION_MAP_KEY);
-		session.removeAttribute(MENU_KEY);
+		//session.removeAttribute(FUNCTION_MAP_KEY);
+		//session.removeAttribute(MENU_KEY);
 		session.removeAttribute(AUTHS_KEY);
 		session.removeAttribute(LOGINUSER);
 		session.removeAttribute(IS_LOGIN_KEY);
 		session.invalidate();
+		if (LoginTypeEnum.TOURST.intKey() == logintype) {
+			return ">>:/tlogin.html";
+		} else {
+			return ">>:/";
+		}
 	}
 
 	/**
@@ -181,10 +193,11 @@ public class LoginService extends BaseService<TUserEntity> {
 	 * @param mobilenum TODO 手机号
 	 */
 	public String sendValidateCode(String mobilenum) {
-		String result = "error";
+		String result = "发送失败";
 		try {
+			SMSService smsService = new HuaxinSMSServiceImpl(redisDao);
 			smsService.sendCaptcha(SmsType.LOGIN, mobilenum);
-			result = "success";
+			result = "发送成功";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -201,17 +214,19 @@ public class LoginService extends BaseService<TUserEntity> {
 	 * @return TODO 验证码信息   session
 	 */
 	public boolean messageLogin(LoginForm form, HttpSession session) {
+		form.setReturnUrl("jsp:admin.tlogin");
+		SMSService smsService = new HuaxinSMSServiceImpl(redisDao);
 		String captcha = smsService.getCaptcha(SmsType.LOGIN, form.getLoginName());
-		if (!Util.isEmpty(captcha)) {
+		if (Util.isEmpty(captcha)) {
 			form.setErrMsg("验证码已失效，请重新获取");
 			return false;
-		} else if (!"captcha".equals(form.getValidateCode())) {
+		} else if (!captcha.equals(form.getValidateCode())) {
 			form.setErrMsg("验证码错误");
 			return false;
 		}
 		TUserEntity user = dbDao.fetch(
 				TUserEntity.class,
-				Cnd.where("name", "=", form.getLoginName()).and("userType", "=",
+				Cnd.where("mobile", "=", form.getLoginName()).and("userType", "=",
 						UserLoginEnum.TOURIST_IDENTITY.intKey()));
 		if (Util.isEmpty(user)) {
 			form.setErrMsg("该游客不存在");
@@ -236,9 +251,27 @@ public class LoginService extends BaseService<TUserEntity> {
 				session.setAttribute(IS_LOGIN_KEY, true);
 				session.setAttribute("currentPageIndex", 0);
 				//跳转到办理中的签证页面
-				form.setReturnUrl(">>:/admin/operationsArea/desktop.html");
+				form.setReturnUrl(">>:/admin/applyvisa/list.html");
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * TODO 验证游客是否存在
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param mobile
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object validateMobile(String mobile) {
+		boolean result = false;
+		TUserEntity user = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", mobile));
+		if (!Util.isEmpty(user)) {
+			result = true;
+		}
+		return result;
+
 	}
 }

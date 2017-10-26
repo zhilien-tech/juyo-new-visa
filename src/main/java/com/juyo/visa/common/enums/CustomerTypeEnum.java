@@ -1,0 +1,36 @@
+package com.juyo.visa.common.enums;
+
+import com.uxuexi.core.common.enums.IEnum;
+
+/**
+ * 
+ * 公司类型
+ * <p>
+ * 送签社 or 地接社
+ * @author   彭辉
+ * @Date	 2017年10月20日
+ */
+public enum CustomerTypeEnum implements IEnum {
+	XIANSHANG(1, "线上"), OTS(2, "OTS"), ZHIKE(3, "直客"), XIANXIA(4, "线下");
+	private int key;
+	private String value;
+
+	private CustomerTypeEnum(final int key, final String value) {
+		this.value = value;
+		this.key = key;
+	}
+
+	@Override
+	public String key() {
+		return String.valueOf(key);
+	}
+
+	@Override
+	public String value() {
+		return value;
+	}
+
+	public int intKey() {
+		return key;
+	}
+}

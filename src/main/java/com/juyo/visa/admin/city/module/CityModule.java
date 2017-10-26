@@ -1,31 +1,35 @@
 package com.juyo.visa.admin.city.module;
 
-import com.juyo.visa.admin.city.service.CityViewService;
-import com.juyo.visa.forms.TCityUpdateForm;
-import com.juyo.visa.forms.TCityAddForm;
-import com.juyo.visa.forms.TCityForm;
+import java.util.List;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.dao.pager.Pager;
-import org.nutz.mvc.annotation.*;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.GET;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
+import org.nutz.mvc.annotation.Param;
 
-import com.uxuexi.core.web.base.page.Pagination;
+import com.juyo.visa.admin.city.service.CityViewService;
+import com.juyo.visa.forms.TCityAddForm;
+import com.juyo.visa.forms.TCityForm;
+import com.juyo.visa.forms.TCityUpdateForm;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 @At("/admin/city")
 @Filters({//@By(type = AuthFilter.class)
-	})
+})
 public class CityModule {
 
 	private static final Log log = Logs.get();
-	
+
 	@Inject
 	private CityViewService cityViewService;
-	
+
 	/**
 	 * 跳转到list页面
 	 */
@@ -33,30 +37,30 @@ public class CityModule {
 	@GET
 	@Ok("jsp")
 	public Object list() {
-		return null;
+		return cityViewService.listCountrySearch();
 	}
-	
+
 	/**
 	 * 分页查询
 	 */
 	/*@At
 	@Ok("jsp")
 	public Pagination list(@Param("..") final TCityForm sqlParamForm,@Param("..") final Pager pager) {
-    	return cityViewService.listPage(sqlParamForm,pager);
-    }*/
-    @At
+		return cityViewService.listPage(sqlParamForm,pager);
+	}*/
+	@At
 	public Object listData(@Param("..") final TCityForm sqlParamForm) {
 		return cityViewService.listData(sqlParamForm);
 	}
-    
-    /**
+
+	/**
 	 * 跳转到'添加操作'的录入数据页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
 	public Object add() {
-		return null ;
+		return null;
 	}
 
 	/**
@@ -64,8 +68,8 @@ public class CityModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..")TCityAddForm addForm) {
-		return cityViewService.add(addForm);
+	public Object add(@Param("..") TCityAddForm addForm) {
+		return cityViewService.addCity(addForm);
 	}
 
 	/**
@@ -83,8 +87,8 @@ public class CityModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..")TCityUpdateForm updateForm) {
-		return cityViewService.update(updateForm);
+	public Object update(@Param("..") TCityUpdateForm updateForm) {
+		return cityViewService.updateCity(updateForm);
 	}
 
 	/**
@@ -104,5 +108,34 @@ public class CityModule {
 		cityViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
 	}
-	
+
+	@At
+	public Object searchByCityId(@Param("..") final TCityForm sqlParamForm) {
+		return cityViewService.searchByCityId(sqlParamForm);
+	}
+
+	@At
+	@POST
+	public Object getCustomerCitySelect(@Param("cityname") String cityname, @Param("exname") String exname) {
+		return cityViewService.getCustomerCitySelect(cityname, exname);
+	}
+
+	/**国家省城市三级联动*/
+	//	@At
+	//	public List<TCityEntity> getCountry() {
+	//		return cityViewService.queryCity(0);
+	//	}
+
+	@At
+	@POST
+	public List<String> getProvince(@Param("country") String country) {
+		return cityViewService.queryProvince(country);
+	}
+
+	@At
+	@POST
+	public List<String> getCity(@Param("province") String province) {
+		return cityViewService.queryCity(province);
+	}
+
 }
