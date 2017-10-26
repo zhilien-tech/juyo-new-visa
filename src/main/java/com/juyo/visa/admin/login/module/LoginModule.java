@@ -129,6 +129,7 @@ public class LoginModule {
 	public Object messageLogin(@Param("..") final LoginForm form, final HttpSession session, ViewModel model) {
 		loginService.messageLogin(form, session);
 		model.setv("errMsg", form.getErrMsg());
+		model.setv("messageErrMsg", form.getMessageErrMsg());
 		session.setAttribute("logintype", LoginTypeEnum.TOURST.intKey());
 		return form.getReturnUrl();
 	}

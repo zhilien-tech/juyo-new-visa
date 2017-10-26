@@ -8,7 +8,7 @@
 		<title>用户登录</title>
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/login.css" />
-		<link rel="stylesheet" href="${base }/public/dist/css/bootstrapValidator.css"/>
+		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	</head>
 	<body>
 		<div class="login">
@@ -64,8 +64,8 @@
 		<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 		<script src="${base}/admin/login.js"></script><!-- 本页面js文件 -->
 		<!-- iCheck -->
-		<script src="${base}/public/plugins/iCheck/icheck.min.js"></script>
-		<script src="${base}/public/dist/js/bootstrapValidator.js"></script>
+		<script src="${base}/references/public/plugins/iCheck/icheck.min.js"></script>
+		<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 		<script type="text/javascript">
 		//解决登录页面嵌套框架问题
 		if (top != window){
