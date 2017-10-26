@@ -5,7 +5,6 @@ import javax.servlet.http.HttpSession;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
-import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
@@ -18,8 +17,6 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 @At("/admin/authority")
-@Filters({//@By(type = AuthFilter.class)
-})
 public class AuthorityModule {
 
 	/**无效数据id*/
@@ -83,29 +80,24 @@ public class AuthorityModule {
 	public Object update(@Param("..") DeptJobForm updateForm, @Param("deptId") final Long deptId,
 			final HttpSession session) {
 		try {
-			authorityViewService.updateJobFunctions(updateForm, deptId, session);
+			return authorityViewService.updateJobFunctions(updateForm, deptId, session);
 		} catch (Exception e) {
 			return JsonResult.error(e.getMessage());
 		}
-		return JsonResult.success("修改成功!");
 	}
 
 	/**
 	 * 删除记录
 	 */
 	@At
-	public Object delete(@Param("id") final long id) {
-		authorityViewService.deleteById(id);
-		return JsonResult.success("删除成功");
-	}
+	public Object delete(@Param("jobId") final long jobId, final HttpSession session) {
+		try {
 
-	/**
-	 * 批量删除记录
-	 */
-	@At
-	public Object batchDelete(@Param("ids") final Long[] ids) {
-		authorityViewService.batchDelete(ids);
-		return JsonResult.success("删除成功");
+			return authorityViewService.deleteJob(jobId, session);
+		} catch (Exception e) {
+			return JsonResult.success("删除失败!");
+		}
+
 	}
 
 	/**
@@ -120,11 +112,10 @@ public class AuthorityModule {
 	public Object checkDeptNameExist(@Param("deptName") final String deptName, @Param("deptId") final Long deptId,
 			final HttpSession session) {
 		try {
-			authorityViewService.checkDeptNameExist(deptName, deptId, session);
-			return JsonResult.success("校验成功");
+			return authorityViewService.checkDeptNameExist(deptName, deptId, session);
 		} catch (Exception e) {
 			// TODO: handle exception
-			return JsonResult.success("校验成功");
+			return JsonResult.success("校验失败");
 		}
 	}
 
@@ -138,11 +129,10 @@ public class AuthorityModule {
 	@At
 	public Object checkJobNameExist(@Param("jobName") final String jobName, @Param("jobId") final Long jobId) {
 		try {
-			authorityViewService.checkJobNameExist(jobName, jobId);
-			return JsonResult.success("校验成功");
+			return authorityViewService.checkJobNameExist(jobName, jobId);
 		} catch (Exception e) {
 			// TODO: handle exception
-			return JsonResult.success("校验成功");
+			return JsonResult.success("校验失败");
 		}
 
 	}
