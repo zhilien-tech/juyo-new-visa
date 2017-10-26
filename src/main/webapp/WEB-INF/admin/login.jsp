@@ -67,6 +67,10 @@
 		<script src="${base}/public/plugins/iCheck/icheck.min.js"></script>
 		<script src="${base}/public/dist/js/bootstrapValidator.js"></script>
 		<script type="text/javascript">
+		//解决登录页面嵌套框架问题
+		if (top != window){
+		    top.location.href = window.location.href; 
+		}
 		$(function () {
 		    $('input').iCheck({
 		      checkboxClass: 'icheckbox_square-blue',
