@@ -35,8 +35,6 @@ import com.juyo.visa.admin.login.service.LoginService;
  */
 @IocBean
 @At("/admin")
-@Filters({//@By(type = AuthFilter.class)
-})
 public class LoginModule {
 
 	private static final Log log = Logs.get();
@@ -48,6 +46,7 @@ public class LoginModule {
 	 */
 	@At
 	@GET
+	@Filters
 	@Ok("jsp")
 	public Object login() {
 		return null;
@@ -102,7 +101,6 @@ public class LoginModule {
 	 * @param session 
 	 */
 	@At
-	@Filters
 	//@Ok(">>:/")
 	@Ok("re")
 	public Object logout(final HttpSession session, @Param("logintype") Integer logintype) {
@@ -129,6 +127,7 @@ public class LoginModule {
 	public Object messageLogin(@Param("..") final LoginForm form, final HttpSession session, ViewModel model) {
 		loginService.messageLogin(form, session);
 		model.setv("errMsg", form.getErrMsg());
+		model.setv("messageErrMsg", form.getMessageErrMsg());
 		session.setAttribute("logintype", LoginTypeEnum.TOURST.intKey());
 		return form.getReturnUrl();
 	}
