@@ -7,12 +7,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title> 优悦签</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <!-- <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"> -->
-  <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-  <!-- <link rel="stylesheet" href="${base}/references/public/font-awesome/css/font-awesome.min.css"> -->
-  <!-- <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/ionicons.min.css"> -->
   <!-- <link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css"> -->
   <!-- <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css"> -->
   <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
@@ -26,10 +21,8 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-
   <!-- Main Header -->
   <header class="main-header">
-
     <!-- Logo -->
     <a href="${base}/" class="logo">
       <span class="logo-lg"> 优悦签</span>
