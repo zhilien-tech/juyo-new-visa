@@ -16,23 +16,11 @@ function initDatatable() {
 
             } */
 		},
-		/* 列表序号 */
-		/*"fnDrawCallback"    : function(){
-			var api = this.api();
-			var startIndex= api.context[0]._iDisplayStart;
-			api.column(0).nodes().each(function(cell, i) {
-				cell.innerHTML = startIndex + i + 1;
-			});
-		},*/
 
 		"columns": [
-		            /*{"data": "", "bSortable": false,render: function(data, type, row, meta) {
-
-		            	return "";
-		            } 	
-		            },*/
 		            {"data": "name", "bSortable": false,render: function(data, type, row, meta) {
 		            	var name = row.name;
+		            	console.log(name);
 		            	if(null==name || ""==name){
 		            		return "";
 		            	}else{

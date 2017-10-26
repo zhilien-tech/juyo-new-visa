@@ -206,7 +206,7 @@
 					mobile : {
 						validators : {
 							notEmpty : {
-								message : '联系人手机号不能为空'
+								message : '电话不能为空'
 							}
 						}
 					},
@@ -238,13 +238,13 @@
 							}
 						}
 					},
-					scopeDiv : {
+					/* scopeDiv : {
 						validators : {
 							notEmpty : {
 								message : '经营范围不能为空'
 							}
 						}
-					},
+					}, */
 				}
 			});
 
