@@ -30,6 +30,8 @@ import com.juyo.visa.admin.authority.form.JobZnode;
 import com.juyo.visa.admin.authority.form.TAuthoritySqlForm;
 import com.juyo.visa.admin.authority.form.ZTreeNode;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.base.MobileResult;
+import com.juyo.visa.common.enums.UserJobStatusEnum;
 import com.juyo.visa.entities.TComFunctionEntity;
 import com.juyo.visa.entities.TComJobEntity;
 import com.juyo.visa.entities.TComfunctionJobEntity;
@@ -46,7 +48,7 @@ import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
-public class AuthorityViewService extends BaseService<TDepartmentEntity> {
+public class AuthorityViewService extends BaseService<DeptJobForm> {
 	private static final Log log = Logs.get();
 
 	//列表分页数据
@@ -365,6 +367,38 @@ public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 			}
 		}
 		return newFunctions;
+	}
+
+	/**
+	 * @param jobId
+	 * @param session
+	 * 删除职位,若此职位下面没有用户则可以删除;
+	 * 若是有用户使用则不可能删除，需提示有哪个用户在使用
+	 */
+	@Aop("txDb")
+	public Object deleteJob(final Long jobId, final HttpSession session) {
+		//通过session获取公司的id
+		TCompanyEntity company = LoginUtil.getLoginCompany(session);
+		int companyId = company.getId();
+
+		//查询出职位id,并查出该职位是否有用户正在使用
+		Sql sql = Sqls.create(sqlManager.get("authority_delete_job"));
+		sql.params().set("jobId", jobId);
+		sql.params().set("jobStatus", UserJobStatusEnum.ON.intKey());
+		sql.params().set("companyId", companyId);
+		List<TUserEntity> listUser = DbSqlUtil.query(dbDao, TUserEntity.class, sql);
+		//校验,若是该职位无用户使用，则可删除，反之亦然
+		if (Util.isEmpty(listUser)) {
+			//删除职位
+			nutDao.clear(TComJobEntity.class, Cnd.where("jobId", "=", jobId));
+			nutDao.clear(TComfunctionJobEntity.class, Cnd.where("jobId", "=", jobId));
+			nutDao.delete(TJobEntity.class, jobId);
+			return JsonResult.success("删除成功");
+		} else {
+			//返回此职位下的用户信息，提示不能删除
+			return MobileResult.error("删除失败", listUser);
+		}
+
 	}
 
 	//校验部门名称唯一性

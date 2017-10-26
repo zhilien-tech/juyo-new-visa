@@ -5,7 +5,6 @@ import javax.servlet.http.HttpSession;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
-import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
@@ -18,8 +17,6 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 @At("/admin/authority")
-@Filters({//@By(type = AuthFilter.class)
-})
 public class AuthorityModule {
 
 	/**无效数据id*/
@@ -106,6 +103,20 @@ public class AuthorityModule {
 	public Object batchDelete(@Param("ids") final Long[] ids) {
 		authorityViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
+	}
+
+	/**
+	 * 删除记录
+	 */
+	@At
+	public Object delete(@Param("jobId") final long jobId, final HttpSession session) {
+		try {
+			authorityViewService.deleteJob(jobId, session);
+			return JsonResult.success("删除成功!");
+		} catch (Exception e) {
+			return JsonResult.success("删除失败!");
+		}
+
 	}
 
 	/**

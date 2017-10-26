@@ -53,14 +53,13 @@
 						<div class="job_container">
 							<ul class="addDepartment marHei">
 								<li><label class="text-right">职位名称：</label></li>
-								<li class="li-input inpPadd"><input name="jobName"
-									type="text" class="form-control input-sm inputText"
-									value='${one.jobName }'> <input name="jobId"
-									type="hidden" value='${one.jobId }'></li>
-								<li><button type="button"
-										class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button>
-									<button type="button" class="btn btn-primary btn-sm btnPadding"
-										id="deleteBtn">删除</button></li>
+								<li class="li-input inpPadd">
+									<input name="jobName" type="text" class="form-control input-sm inputText" value='${one.jobName }'> 
+									<input name="jobId" type="hidden" value='${one.jobId }'></li>
+								<li>
+									<button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button>
+									<button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn">删除</button>
+								</li>
 							</ul>
 							<c:choose>
 								<c:when test="${stat.index == 0}">
@@ -319,6 +318,31 @@
 		       });
 			}
 		});
+		
+		//删除提示
+		$(document).on("click","#deleteBtn",function(jobId){
+			var dele= this;
+			layer.confirm("您确认删除信息吗？", {
+			    btn: ["是","否"], //按钮
+			    shade: false //不显示遮罩
+			},function(index){
+			     layer.close(index);
+			     $(dele).parent().parent().next().remove();
+			     $(dele).closest('.job_container').remove();
+			},function(index){
+				//点击否
+				layer.close(index);
+			});
+		});
+		
+		//删除不提示
+		$(document).on("click","#deleteBtn1",function(jobId){
+			var dele= this;
+			//删除按钮
+		    $(dele).parent().parent().next().remove();
+		    $(dele).closest('.job_container').remove();
+			
+		});	
 		
 		//返回刷新页面 
 		function closeWindow() {
