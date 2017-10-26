@@ -17,16 +17,44 @@
 				<img src="${base}/references/public/dist/newvisacss/img/02.jpg" />
 			</div>
 			<c:forEach items="${auths }" var="function" varStatus="status">
-				<li id="${status.index+1 }">
+				<%-- <li id="${status.index+1 }">
 					<a href="${function.url }?currentPageIndex=${status.index+1 }">
 						<img src="${base}/references/public/dist/newvisacss/img/index.png" />
 						<font>${function.funName }</font>
 					</a>
+				</li> --%>
+				<c:if test="${function.level eq 1}">
+					<!-- 一级菜单 -->
+				<li id="${status.index+1 }" class="menu1">
+					<c:choose>
+						<c:when test="${empty function.url }">
+							<a href="#">
+								<img src="${base}/references/public/dist/newvisacss/img/index.png" />
+								<font>${function.funName }</font>
+							</a>
+						</c:when>
+						<c:otherwise>
+							<a href="${function.url }?currentPageIndex=${status.index+1 }">
+								<img src="${base}/references/public/dist/newvisacss/img/index.png" />
+								<font>${function.funName }</font>
+							</a>
+						</c:otherwise>
+					</c:choose>
+					
 				</li>
+				<!-- 二级菜单 -->
+					<ul class="none menu-ul">
+					<c:forEach items="${auths }" var="twofun" varStatus="twostatus">
+						<c:if test="${twofun.level eq 2 and twofun.parentId eq function.id}">
+							<li id="${twostatus.index+(status.index+1)*100 }"><a href="${twofun.url }?currentPageIndex=${twostatus.index+(status.index+1)*100 }">${twofun.funName }</a></li>
+						</c:if>
+					</c:forEach>
+					</ul>
+				</c:if>
 			</c:forEach>
 			
 			
-				<!-- 有二级的menu -->
+				<%-- <!-- 有二级的menu -->
 				<li id="16" class="menu1">
 			       <a href="#">
 			          <img src="${base}/references/public/dist/newvisacss/img/index.png" />
@@ -47,7 +75,7 @@
 			    </li>
 			    <ul class="none menu-ul">
 				   <li><a href="javascript:;">职位管理</a></li>
-				</ul>
+				</ul> --%>
 				<!-- end 有二级的menu -->
 				
 			<%-- <li id="1"><a href="/admin/flight/list.html?currentPageIndex=1">
@@ -91,6 +119,13 @@
 				href="/admin/authority/list.html?currentPageIndex=10"> <img
 					src="${base}/references/public/dist/newvisacss/img/index.png" /> <font>权限管理</font>
 			</a></li>--%>
+			
+				<li id="666" class="menu1">
+					<a href="/admin/sale/list.html?currentPageIndex=666">
+						<img src="${base}/references/public/dist/newvisacss/img/index.png" />
+						<font>销售日本</font>
+					</a>
+				</li>
 
 		</ul>
 		<!-- /.sidebar-menu -->
