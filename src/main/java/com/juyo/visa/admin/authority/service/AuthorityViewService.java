@@ -19,12 +19,16 @@ import org.nutz.json.Json;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.juyo.visa.admin.authority.form.DeptJobForm;
 import com.juyo.visa.admin.authority.form.JobDto;
+import com.juyo.visa.admin.authority.form.JobZnode;
 import com.juyo.visa.admin.authority.form.TAuthoritySqlForm;
+import com.juyo.visa.admin.authority.form.ZTreeNode;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.entities.TComFunctionEntity;
 import com.juyo.visa.entities.TComJobEntity;
@@ -33,7 +37,9 @@ import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TDepartmentEntity;
 import com.juyo.visa.entities.TFunctionEntity;
 import com.juyo.visa.entities.TJobEntity;
+import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.BeanUtil;
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.util.DbSqlUtil;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -76,6 +82,9 @@ public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 		//通过session获取公司的id
 		TCompanyEntity company = LoginUtil.getLoginCompany(session);
 		int companyId = company.getId();
+		//当前登陆用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		int userId = loginUser.getId();
 
 		String jobJson = addForm.getJobJson();
 
@@ -87,7 +96,9 @@ public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 		if (Util.isEmpty(newDept)) {
 			newDept = new TDepartmentEntity();
 			newDept.setComId(companyId);
+			newDept.setOpId(userId);
 			newDept.setDeptName(addForm.getDeptName());
+			newDept.setCreateTime(DateUtil.nowDate());
 			newDept = dbDao.insert(newDept);
 		}
 		//获取到部门id
@@ -98,7 +109,8 @@ public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 			if (!Util.isEmpty(jobJsonArray)) {
 				for (JobDto jobDto : jobJsonArray) {
 					int jobId = 0;
-					saveOrUpdateSingleJob(deptId, jobId, companyId, jobDto.getJobName(), jobDto.getFunctionIds());
+					saveOrUpdateSingleJob(userId, deptId, jobId, companyId, jobDto.getJobName(),
+							jobDto.getFunctionIds());
 				}
 			}
 		}
@@ -107,7 +119,8 @@ public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 	}
 
 	//保存或更新职位
-	private void saveOrUpdateSingleJob(int deptId, int jobId, int companyId, String jobName, String functionIds) {
+	private void saveOrUpdateSingleJob(int userId, int deptId, int jobId, int companyId, String jobName,
+			String functionIds) {
 		//1，判断操作类型，执行职位新增或者修改
 		if (Util.isEmpty(jobId) || jobId <= 0) {
 			//添加操作
@@ -121,6 +134,8 @@ public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 				newJob = new TJobEntity();
 				newJob.setJobName(jobName);
 				newJob.setDeptId(deptId);
+				newJob.setOpId(userId);
+				newJob.setCreateTime(DateUtil.nowDate());
 				newJob = dbDao.insert(newJob);
 				jobId = newJob.getId();//得到职位id
 				//该公司添加新的职位
@@ -141,7 +156,7 @@ public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 			}
 
 			//判断该公司是否存在同名的其他职位
-			Sql sql = Sqls.create(sqlManager.get("authoritymanage_companyJob_update"));
+			Sql sql = Sqls.create(sqlManager.get("authority_com_job_update"));
 			sql.params().set("comId", companyId);
 			sql.params().set("jobName", jobName);
 			sql.params().set("jobId", jobId);
@@ -152,7 +167,7 @@ public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 				throw new IllegalArgumentException("该公司此职位已存在,无法修改,职位名称:" + jobName);
 			}
 
-			dbDao.update(TJobEntity.class, Chain.make("name", jobName), Cnd.where("id", "=", newJob.getId()));
+			dbDao.update(TJobEntity.class, Chain.make("jobName", jobName), Cnd.where("id", "=", newJob.getId()));
 		}
 
 		//2，截取功能模块id，根据功能id和公司id查询出公司功能id，用公司功能id和职位id往公司功能职位表添加数据
@@ -176,6 +191,127 @@ public class AuthorityViewService extends BaseService<TDepartmentEntity> {
 			}
 			dbDao.updateRelations(before, after);
 		}
+	}
+
+	//回显部门职位和职位功能
+	public Object loadJobJosn(final Long deptId, HttpSession session) {
+		Map<String, Object> map = Maps.newHashMap();
+
+		//校验
+		int deptCnt = nutDao.count(TDepartmentEntity.class, Cnd.where("id", "=", deptId));
+		if (deptCnt <= 0) {
+			return JsonResult.error("部门不存在!");
+		}
+
+		List<TJobEntity> jobList = dbDao.query(TJobEntity.class, Cnd.where("deptId", "=", deptId), null);
+		List<TFunctionEntity> allModule = getComFuns(session);
+
+		List<JobZnode> JobZnodes = Lists.newArrayList();
+		for (TJobEntity job : jobList) {
+			List<TFunctionEntity> functions = getJobFuns(job.getId(), allModule);
+
+			JobZnode jn = new JobZnode();
+			jn.setJobName(job.getJobName());
+			jn.setJobId(job.getId());
+
+			List<ZTreeNode> znodes = Lists.transform(functions, new Function<TFunctionEntity, ZTreeNode>() {
+				//将TFunctionEntity转换为ZTreeNode
+				@Override
+				public ZTreeNode apply(TFunctionEntity f) {
+					ZTreeNode n = new ZTreeNode();
+					n.setId(f.getId());
+					n.setPId(f.getParentId());
+					n.setOpen(true);
+					n.setName(f.getFunName());
+					n.setChecked(f.getChecked());
+					return n;
+				}
+			});//end of tansform
+			String jsonNodes = Json.toJson(znodes);
+			jn.setZnodes(jsonNodes);
+			JobZnodes.add(jn);
+		}
+
+		TDepartmentEntity dept = dbDao.fetch(TDepartmentEntity.class, Cnd.where("id", "=", deptId));
+		map.put("dept", dept);
+		map.put("list", JobZnodes);
+		map.put("zNodes", allModule);
+		return map;
+	}
+
+	/**更新部门职位权限的数据信息*/
+	@Aop("txDb")
+	public Object updateJobFunctions(DeptJobForm updateForm, Long deptId, final HttpSession session) {
+
+		//通过session获取公司的id
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		int companyId = loginCompany.getId();
+
+		//当前登陆用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		int userId = loginUser.getId();
+
+		//校验
+		TDepartmentEntity dept = dbDao.fetch(TDepartmentEntity.class, Cnd.where("id", "=", deptId));
+		if (Util.isEmpty(dept)) {
+			return JsonResult.error("部门不存在!");
+		}
+
+		//修改部门名称
+		dbDao.update(TDepartmentEntity.class, Chain.make("deptName", updateForm.getDeptName()),
+				Cnd.where("id", "=", updateForm.getDeptId()));
+
+		String jobJson = updateForm.getJobJson();
+		JobDto[] jobJsonArray = Json.fromJsonAsArray(JobDto.class, jobJson);
+		//根据部门id查出此部门下面职位之前的数据
+		String jobIds = "";
+		List<TJobEntity> beforeJob = dbDao.query(TJobEntity.class, Cnd.where("deptId", "=", deptId), null);
+		for (TJobEntity job : beforeJob) {
+			int jobId = job.getId();
+			jobIds += String.valueOf(jobId) + ",";
+		}
+		if (!Util.isEmpty(jobIds)) {
+			jobIds = jobIds.substring(0, jobIds.length() - 1);
+		}
+		//职位表欲更新为
+		String afterjobIds = "";
+		if (jobJsonArray.length >= 1) {
+			for (JobDto jobDto : jobJsonArray) {
+				int jobId = jobDto.getJobId();
+				afterjobIds += String.valueOf(jobId) + ",";
+			}
+		}
+		if (!Util.isEmpty(afterjobIds)) {
+			afterjobIds = afterjobIds.substring(0, afterjobIds.length() - 1);
+		}
+		List<TJobEntity> afterJob = null;
+		if (!Util.isEmpty(afterjobIds)) {
+			afterJob = dbDao.query(TJobEntity.class, Cnd.where("id", "in", afterjobIds), null);
+		}
+		dbDao.updateRelations(beforeJob, afterJob);
+
+		//根据职位id查询出公司功能职位表之前的数据
+		List<TComfunctionJobEntity> beforeComfunPos = dbDao.query(TComfunctionJobEntity.class,
+				Cnd.where("jobId", "in", jobIds), null);
+		//公司功能职位表欲更新为
+		List<TComfunctionJobEntity> afterComfunPos = dbDao.query(TComfunctionJobEntity.class,
+				Cnd.where("jobId", "in", afterjobIds), null);
+		dbDao.updateRelations(beforeComfunPos, afterComfunPos);
+		List<TComJobEntity> beforeComJob = dbDao.query(TComJobEntity.class,
+				Cnd.where("comId", "=", companyId).and("jobId", "in", jobIds), null);
+		//欲更新为
+		List<TComJobEntity> afterComJob = dbDao.query(TComJobEntity.class,
+				Cnd.where("comId", "=", companyId).and("jobId", "in", afterjobIds), null);
+		dbDao.updateRelations(beforeComJob, afterComJob);
+		if (!Util.isEmpty(jobJsonArray)) {
+			for (JobDto jobDto : jobJsonArray) {
+				int depId = dept.getId();
+				int jobId = jobDto.getJobId();
+				saveOrUpdateSingleJob(userId, depId, jobId, companyId, jobDto.getJobName(), jobDto.getFunctionIds());
+			}
+		}
+
+		return JsonResult.success("更新成功");
 	}
 
 	//查询公司权限功能

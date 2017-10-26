@@ -119,6 +119,7 @@
 	<!-- select2 -->
 		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+		<script src="${base}/admin/city/customerNeeds.js"></script>
 	<script src="${base}/references/common/js/select2/initSelect2.js"></script>
 
 	<script type="text/javascript">
@@ -178,7 +179,7 @@
 					},
 				}
 			});
-			initCustNeedsSelect2();
+			initCityNeedsSelect2();
 		});
 		/* 页面初始化加载完毕 */
 

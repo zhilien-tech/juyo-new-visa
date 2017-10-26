@@ -5,7 +5,6 @@
 <!DOCTYPE HTML>
 <html lang="en-US" id="addHtml">
 <head>
-
 <meta charset="UTF-8">
 <title>添加</title>
 <meta name="viewport"
@@ -151,7 +150,7 @@
 			</div>
 		</form>
 	</div>
-	
+
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
@@ -175,15 +174,15 @@
 					validating : 'glyphicon glyphicon-refresh'
 				},
 				fields : {
-				
-									name : {
+
+					name : {
 						validators : {
 							notEmpty : {
 								message : '公司名称不能为空'
 							}
 						}
 					},
-									shortName : {
+					shortName : {
 						validators : {
 							notEmpty : {
 								message : '公司简称不能为空'
@@ -193,7 +192,7 @@
 					adminLoginName : {
 						validators : {
 							notEmpty : {
-								message : '管理员账号id不能为空'
+								message : '用户名不能为空'
 							}
 						}
 					},
@@ -204,48 +203,42 @@
 							}
 						}
 					},
-									mobile : {
+					mobile : {
 						validators : {
 							notEmpty : {
 								message : '联系人手机号不能为空'
 							}
 						}
 					},
-									email : {
+					email : {
 						validators : {
 							notEmpty : {
 								message : '邮箱不能为空'
 							}
 						}
 					},
-									address : {
+					address : {
 						validators : {
 							notEmpty : {
 								message : '地址不能为空'
 							}
 						}
 					},
-									comType : {
+					comType : {
 						validators : {
 							notEmpty : {
 								message : '公司类型不能为空'
 							}
 						}
 					},
-									license : {
+					license : {
 						validators : {
 							notEmpty : {
 								message : '营业执照不能为空'
 							}
 						}
 					},
-					scopeDiv : {
-						validators : {
-							notEmpty : {
-								message : '经营范围不能为空'
-							}
-						}
-					},
+					
 				}
 			});
 
@@ -282,13 +275,14 @@
 			//-------------------------end 经营范围 js-------------------------
 		});
 		/* 页面初始化加载完毕 */
-		
-		/*保存页面*/ 
+
+		/*保存页面*/
 		function save() {
 			//初始化验证插件
 			$('#companyAddForm').bootstrapValidator('validate');
 			//得到获取validator对象或实例 
-			var bootstrapValidator = $("#companyAddForm").data('bootstrapValidator');
+			var bootstrapValidator = $("#companyAddForm").data(
+					'bootstrapValidator');
 			// 执行表单验证 
 			bootstrapValidator.validate();
 			if (bootstrapValidator.isValid()) {
@@ -361,14 +355,14 @@
 				});
 			}
 		}
-		
+
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 		}
 	</script>
-	
-	
+
+
 </body>
 </html>

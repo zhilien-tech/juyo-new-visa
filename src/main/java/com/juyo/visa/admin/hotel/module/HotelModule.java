@@ -106,13 +106,4 @@ public class HotelModule {
 		hotelViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
 	}
-
-	/**
-	 * 搜索
-	 */
-	@At
-	public Object searchHotel() {
-		return null;
-	}
-
 }

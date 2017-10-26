@@ -57,7 +57,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		return listPage4Datatables(queryForm);
 	}
 
-	//跳转到列表页
+	//调整到列表页
 	public Object toListCompanyPage() {
 		Map<String, Object> obj = MapUtil.map();
 		obj.put("companyTypeEnum", EnumUtil.enum2(CompanyTypeEnum.class));

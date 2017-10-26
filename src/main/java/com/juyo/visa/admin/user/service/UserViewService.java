@@ -13,21 +13,24 @@ import org.nutz.dao.util.cri.SqlExpressionGroup;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.testng.collections.Maps;
 
 import com.google.common.collect.Lists;
+import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.UserStatusEnum;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TDepartmentEntity;
 import com.juyo.visa.entities.TFunctionEntity;
+import com.juyo.visa.entities.TJobEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.entities.TUserJobEntity;
 import com.juyo.visa.forms.TUserAddForm;
 import com.juyo.visa.forms.TUserForm;
 import com.juyo.visa.forms.TUserUpdateForm;
+import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.db.util.DbSqlUtil;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
@@ -40,13 +43,47 @@ public class UserViewService extends BaseService<TUserEntity> {
 		return listPage4Datatables(queryForm);
 	}
 
+	/**
+	 * 
+	 * TODO 加载添加页面时加载部门下拉列表选项
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object toAddUserPage(HttpSession session) {
-		Map<String, Object> result = Maps.newHashMap();
-		List<TDepartmentEntity> departments = dbDao.query(TDepartmentEntity.class, null, null);
-
+		Map<String, Object> result = MapUtil.map();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		List<TDepartmentEntity> departmentList = dbDao.query(TDepartmentEntity.class,
+				Cnd.where("comId", "=", loginCompany.getId()), null);
+		result.put("department", departmentList);
 		return result;
 	}
 
+	/**
+	 * 
+	 * TODO 根据部门获取所有职位下拉选项
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param departmentId
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object queryJobs(Integer departmentId) {
+		List<TJobEntity> jobList = dbDao.query(TJobEntity.class, Cnd.where("deptId", "=", departmentId), null);
+		return jobList;
+	}
+
+	/**
+	 * 
+	 * TODO 添加
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param addForm
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object addUser(TUserAddForm addForm) {
 		addForm.setOpId(0);
 		addForm.setCreateTime(new Date());
@@ -54,6 +91,39 @@ public class UserViewService extends BaseService<TUserEntity> {
 		return JsonResult.success("添加成功");
 	}
 
+	/**
+	 * 
+	 * TODO 加载更新页面时回显
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param id
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object fetchUser(long id, HttpSession session) {
+		Map<String, Object> result = MapUtil.map();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity user = dbDao.fetch(TUserEntity.class, id);
+		List<TDepartmentEntity> departmentList = dbDao.query(TDepartmentEntity.class,
+				Cnd.where("comId", "=", loginCompany.getId()), null);
+		List<TJobEntity> jobList = dbDao
+				.query(TJobEntity.class, Cnd.where("deptId", "=", user.getDepartmentId()), null);
+		result.put("department", departmentList);
+		result.put("job", jobList);
+		result.put("user", user);
+		return result;
+	}
+
+	/**
+	 * 
+	 * TODO 更新
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param updateForm
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object updateUser(TUserUpdateForm updateForm) {
 		updateForm.setUpdateTime(new Date());
 		TUserEntity tUser = this.fetch(updateForm.getId());
@@ -131,6 +201,7 @@ public class UserViewService extends BaseService<TUserEntity> {
 		TUserEntity user = new TUserEntity();
 		user.setComId(CommonConstants.COMPANY_TOURIST_ID);
 		user.setName(applyuser.getUsername());
+		user.setMobile(applyuser.getMobile());
 		user.setPassword(applyuser.getPassword());
 		user.setDepartmentId(CommonConstants.DEPARTMENT_TOURIST_ID);
 		user.setIsDisable(IsYesOrNoEnum.YES.intKey());
