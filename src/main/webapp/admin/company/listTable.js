@@ -15,10 +15,7 @@ function initDatatable() {
             /* "data": function (d) {
             	
             } */
-
 		},
-
-
 		"columns": [
 		            {"data": "name", "bSortable": false,render: function(data, type, row, meta) {
 		            	var name = row.name;
