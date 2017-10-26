@@ -2,11 +2,16 @@ package com.juyo.visa.admin.receiveaddress.service;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpSession;
+
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TReceiveaddressEntity;
+import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TReceiveaddressAddForm;
 import com.juyo.visa.forms.TReceiveaddressForm;
 import com.juyo.visa.forms.TReceiveaddressUpdateForm;
@@ -21,7 +26,12 @@ public class ReceiveaddressViewService extends BaseService<TReceiveaddressEntity
 		return listPage4Datatables(queryForm);
 	}
 
-	public Object addReceiveaddress(TReceiveaddressAddForm addForm) {
+	public Object addReceiveaddress(TReceiveaddressAddForm addForm, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		addForm.setComId(loginCompany.getId());
+		addForm.setUserId(loginUser.getId());
+		addForm.setOpId(loginUser.getId());
 		addForm.setCreateTime(new Date());
 		this.add(addForm);
 		return JsonResult.success("添加成功");
