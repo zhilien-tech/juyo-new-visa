@@ -22,7 +22,6 @@ function initDatatable() {
 		"columns": [
 		            {"data": "name", "bSortable": false,render: function(data, type, row, meta) {
 		            	var name = row.name;
-		            	console.log(name);
 		            	if(null==name || ""==name){
 		            		return "";
 		            	}else{

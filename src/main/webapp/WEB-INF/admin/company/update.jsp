@@ -1,4 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java"
+	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
 
 <c:set var="url" value="${base}/admin/company" />
@@ -20,13 +21,15 @@
 	href="${base}/references/public/dist/newvisacss/css/company.css">
 </head>
 <body>
-	
+
 	<div class="modal-content">
 		<form id="companyUpdateForm">
 			<div class="modal-header">
-			<span class="heading">编辑</span>
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消"/>
-				<input id="updateBtn" type="button" onclick="save()" class="btn btn-primary pull-right btn-sm btn-right" value="保存"/>
+				<span class="heading">编辑</span> <input id="backBtn" type="button"
+					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
+					data-dismiss="modal" value="取消" /> <input id="updateBtn"
+					type="button" onclick="save()"
+					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
@@ -117,9 +120,9 @@
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>经营范围：</label>
-								<input id="csopestr" name="csopestr" type="hidden" value="${obj.company.scopes}"/> 
-								<input id="businessScopes" name="businessScopes" type="hidden"/>
+								<label><span>*</span>经营范围：</label> <input id="businessScopes"
+									name="businessScopes" value="${obj.company.scopes}"
+									type="hidden" />
 								<div class="multiselectBtn form-control input-sm"></div>
 								<div class="btnVal">
 									<input type="button" value="日本" class="btn btn-sm btn-state1" />
@@ -172,22 +175,24 @@
 	</div>
 	</form>
 	</div>
-	
+
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
 	<!-- jQuery 2.2.3 -->
-	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script
+		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script
+		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	
+
 	<script type="text/javascript">
 		var base = "${base}";
 
-		function initvalidate(){
+		function initvalidate() {
 			//校验
 			$('#companyUpdateForm').bootstrapValidator({
 				message : '验证不通过',
@@ -197,18 +202,17 @@
 					validating : 'glyphicon glyphicon-refresh'
 				},
 				fields : {
-											name : {
-							validators : {
-								notEmpty : {
-									message : '公司名称不能为空'
-								}
+					name : {
+						validators : {
+							notEmpty : {
+								message : '公司全称不能为空'
 							}
-						},
-											shortName : {
-							validators : {
-								notEmpty : {
-									message : '公司简称不能为空'
-								}
+						}
+					},
+					shortName : {
+						validators : {
+							notEmpty : {
+								message : '公司简称不能为空'
 							}
 						}
 					},
@@ -217,93 +221,67 @@
 							notEmpty : {
 								message : '用户名不能为空'
 							}
-						},
-											linkman : {
-							validators : {
-								notEmpty : {
-									message : '联系人不能为空'
-								}
+						}
+					},
+					linkman : {
+						validators : {
+							notEmpty : {
+								message : '联系人不能为空'
 							}
-						},
-											mobile : {
-							validators : {
-								notEmpty : {
-									message : '联系人手机号不能为空'
-								}
+						}
+					},
+					mobile : {
+						validators : {
+							notEmpty : {
+								message : '电话不能为空'
 							}
-						},
-											email : {
-							validators : {
-								notEmpty : {
-									message : '邮箱不能为空'
-								}
+						}
+					},
+					email : {
+						validators : {
+							notEmpty : {
+								message : '邮箱不能为空'
 							}
-						},
-											address : {
-							validators : {
-								notEmpty : {
-									message : '地址不能为空'
-								}
+						}
+					},
+					address : {
+						validators : {
+							notEmpty : {
+								message : '地址不能为空'
 							}
-						},
-											comType : {
-							validators : {
-								notEmpty : {
-									message : '公司类型不能为空'
-								}
+						}
+					},
+					comType : {
+						validators : {
+							notEmpty : {
+								message : '公司类型不能为空'
 							}
-						},
-											license : {
-							validators : {
-								notEmpty : {
-									message : '营业执照不能为空'
-								}
+						}
+					},
+					license : {
+						validators : {
+							notEmpty : {
+								message : '营业执照不能为空'
 							}
-						},
-											opId : {
-							validators : {
-								notEmpty : {
-									message : '操作人不能为空'
-								}
-							}
-						},
-											createTime : {
-							validators : {
-								notEmpty : {
-									message : '创建时间不能为空'
-								}
-							}
-						},
-											updateTime : {
-							validators : {
-								notEmpty : {
-									message : '修改时间不能为空'
-								}
-							}
-						},
-											deletestatus : {
-							validators : {
-								notEmpty : {
-									message : '删除标识不能为空'
-								}
-							}
-						},
-									}
+						}
+					},
+				}
 			});
 		}
-		
+
 		//更新时刷新页面
 		function update() {
 			window.location.reload();
 		}
-		
-	    initvalidate();
+
+		initvalidate();
 		$('#companyUpdateForm').bootstrapValidator('validate');
 		function save() {
 			$('#companyUpdateForm').bootstrapValidator('validate');
-			var bootstrapValidator = $("#companyUpdateForm").data('bootstrapValidator');
+			var bootstrapValidator = $("#companyUpdateForm").data(
+					'bootstrapValidator');
 			if (bootstrapValidator.isValid()) {
-			
+
 				//获取必填项信息
 				var name = $("#name").val();
 				if (name == "") {
@@ -373,29 +351,28 @@
 				});
 			}
 		}
-	
+
 		//返回刷新页面 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-        	parent.layer.close(index);
+			parent.layer.close(index);
 		}
-		
 		$(function() {
-			var scopesVal = $("#csopestr").val();
-			if(scopesVal != null){
+			var scopesVal = $("#businessScopes").val();
+			if (scopesVal != null) {
 				var scopesList = scopesVal.split(",");
-				
-				for(var i=0;i<scopesList.length;i++){
-					if(scopesList[i] == 1){
-						$(".multiselectBtn").append( "<span>日本,</span>");
-						$(".btnVal input").each(function(){
+
+				for (var i = 0; i < scopesList.length; i++) {
+					if (scopesList[i] == 1) {
+						$(".multiselectBtn").append("<span>日本,</span>");
+						$(".btnVal input").each(function() {
 							var btnVal = $(this).val();//按钮 text
-							if((btnVal+",") == "日本,"){
+							if ((btnVal + ",") == "日本,") {
 								$(this).addClass("btn-state2");//变灰
 								$(this).removeClass("btn-state1");//清除蓝色按钮 样式
 							}
 						});
-					}else if(scopesList[i] == 2){
+					} else if (scopesList[i] == 2) {
 						/* $(".multiselectBtn").append( "<span>美国,</span>");
 						$(".btnVal input").each(function(){
 							var btnVal = $(this).val();//按钮 text
@@ -405,14 +382,14 @@
 							}
 						});	 */
 					}
-					
+
 				}
-				
-			} 
-			
+
+			}
+
 			//---------------------------经营范围 js---------------------------	
 			$(".btnVal input").click(
-					function(){
+					function() {
 						if ($(this).hasClass("btn-state1")) {//蓝色按钮
 							$(this).addClass("btn-state2");//变灰
 							$(this).removeClass("btn-state1");//清除蓝色按钮 样式
@@ -428,7 +405,8 @@
 								var spanVal = $(this).text();
 								if ((btnText + ",") == spanVal) {
 									$(this).remove();
-								};
+								}
+								;
 							});
 						}
 						var busScopes = "";
@@ -439,12 +417,10 @@
 						$("#businessScopes").val(busScopes);
 					});
 			//-------------------------end 经营范围 js-------------------------
-			
-			
 		});
 	</script>
-	
-	
+
+
 </body>
 </html>
 
