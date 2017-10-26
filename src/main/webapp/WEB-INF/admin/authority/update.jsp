@@ -34,7 +34,7 @@
 				<div class="departmentName form-group">
 					<!--部门权限 设置-->
 					<input id="jobJson" name="jobJson" type="hidden" value="" /> 
-					<input id="id" name="id" type="hidden" value="${obj.dept.id}" />
+					<input id="deptId" name="id" type="hidden" value="${obj.dept.id}" />
 					<ul class="addDepartment">
 						<li><label class=" text-right">部门名称：</label></li>
 						<li class="li-input">
@@ -113,7 +113,7 @@
 					beforeCheck: zTreeBeforeCheck
 				}
 			};
-		//默认选中个人信息和操作台
+		//默认选中
 		function zTreeBeforeCheck(treeId, treeNode) {
 			if((treeNode.id == 43 || treeNode.id == 44) && treeNode.checked){
 				return false ;
@@ -216,8 +216,27 @@
 					validating : 'glyphicon glyphicon-refresh'
 				},
 				fields : {
-											
-				}
+					deptName: {
+		                validators: {
+		                    notEmpty: {
+		                        message: '部门名称不能为空!'
+		                    },
+		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+		                         url: '${base}/admin/authority/checkDeptNameExist.html',//验证地址
+		                         message: '部门名称已存在，请重新输入!',//提示消息
+		                         delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+		                         type: 'POST',//请求方式
+		                         //自定义提交数据，默认值提交当前input value
+		                         data: function(validator) {
+		                            return {
+		                            	deptName:$('#deptName').val(),
+		                            	deptId:$('#deptId').val()
+		                            };
+		                         }
+		                     }
+		                }
+		            }
+		        }					
 			});
 		}
 		

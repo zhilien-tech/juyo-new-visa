@@ -115,7 +115,7 @@ public class AuthorityModule {
 			return authorityViewService.checkDeptNameExist(deptName, deptId, session);
 		} catch (Exception e) {
 			// TODO: handle exception
-			return JsonResult.success("校验成功");
+			return JsonResult.success("校验失败");
 		}
 	}
 
@@ -132,7 +132,7 @@ public class AuthorityModule {
 			return authorityViewService.checkJobNameExist(jobName, jobId);
 		} catch (Exception e) {
 			// TODO: handle exception
-			return JsonResult.success("校验成功");
+			return JsonResult.success("校验失败");
 		}
 
 	}

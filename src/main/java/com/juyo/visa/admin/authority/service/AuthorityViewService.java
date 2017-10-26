@@ -290,7 +290,6 @@ public class AuthorityViewService extends BaseService<DeptJobForm> {
 		if (!Util.isEmpty(afterjobIds)) {
 			afterJob = dbDao.query(TJobEntity.class, Cnd.where("id", "in", afterjobIds), null);
 		}
-		dbDao.updateRelations(beforeJob, afterJob);
 
 		//根据职位id查询出公司功能职位表之前的数据
 		List<TComfunctionJobEntity> beforeComfunPos = dbDao.query(TComfunctionJobEntity.class,
@@ -305,6 +304,10 @@ public class AuthorityViewService extends BaseService<DeptJobForm> {
 		List<TComJobEntity> afterComJob = dbDao.query(TComJobEntity.class,
 				Cnd.where("comId", "=", companyId).and("jobId", "in", afterjobIds), null);
 		dbDao.updateRelations(beforeComJob, afterComJob);
+
+		//更新职位
+		dbDao.updateRelations(beforeJob, afterJob);
+
 		if (!Util.isEmpty(jobJsonArray)) {
 			for (JobDto jobDto : jobJsonArray) {
 				int depId = dept.getId();
