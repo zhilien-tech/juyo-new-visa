@@ -24,6 +24,15 @@ public class ScenicViewService extends BaseService<TScenicEntity> {
 		return listPage4Datatables(queryForm);
 	}
 
+	/**
+	 * 
+	 * TODO 加载更新页面时回显
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param id
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object fetchScenic(final long id) {
 		Map<String, Object> result = Maps.newHashMap();
 		TScenicEntity scenic = this.fetch(id);
@@ -33,12 +42,30 @@ public class ScenicViewService extends BaseService<TScenicEntity> {
 		return result;
 	}
 
+	/**
+	 * 
+	 * TODO 添加
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param addForm
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object addScenic(TScenicAddForm addForm) {
 		addForm.setCreateTime(new Date());
 		this.add(addForm);
 		return JsonResult.success("添加成功");
 	}
 
+	/**
+	 * 
+	 * TODO 更新
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param updateForm
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object updateScenic(TScenicUpdateForm updateForm) {
 		updateForm.setUpdateTime(new Date());
 		TScenicEntity scenic = this.fetch(updateForm.getId());

@@ -114,6 +114,9 @@ public class CityModule {
 		return cityViewService.searchByCityId(sqlParamForm);
 	}
 
+	/**
+	 * 获取城市下拉列表
+	 */
 	@At
 	@POST
 	public Object getCustomerCitySelect(@Param("cityname") String cityname, @Param("exname") String exname) {
@@ -121,10 +124,6 @@ public class CityModule {
 	}
 
 	/**国家省城市三级联动*/
-	//	@At
-	//	public List<TCityEntity> getCountry() {
-	//		return cityViewService.queryCity(0);
-	//	}
 
 	@At
 	@POST
