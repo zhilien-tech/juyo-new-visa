@@ -6,7 +6,7 @@
 	<title>游客登录</title>
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/login.css" />
-	<link rel="stylesheet" href="${base}/public/dist/css/bootstrapValidator.css"/>
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<style type="text/css">
 		html {height: 100%;width:100%;display: table;}
 		body {width:100%;display: table-cell;height: 100%;}
@@ -16,7 +16,7 @@
 	<div class="login">
 			<content class="login-content" style="height:360px;">
 				<ul class="tab-ul">
-					<li class="active">短信登录</li>
+					<li id="messagelogin" class="active">短信登录</li>
 					<li id="passwordlogin">密码登录</li>
 				</ul>
 				<div class="shortMessage"><!-- 短信登录 -->
@@ -90,15 +90,22 @@
 	
 		<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
+		<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 		<script src="${base}/references/common/js/layer/layer.js"></script>
 		<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 		<script src="${base}/admin/login.js"></script><!-- 本页面js文件 -->
 		<script type="text/javascript">
+			//切换卡
 			var passwordlogin = '${obj.passwordlogin}';
-			if(passwordlogin == 1){
-				$('#passwordlogin').trigger("click");
+			if(passwordlogin && passwordlogin != undefined){
+				$('#messagelogin').removeClass("active");
+				$('#passwordlogin').addClass("active");
 			}
-			
+			//登录失败消息
+			var messageErrMsg = '${obj.messageErrMsg}';
+			if(messageErrMsg && messageErrMsg != undefined){
+				layer.msg(messageErrMsg,{maxWidth:250});
+			}
 			function getMessageCode(){
 				var loginMobile = $('#loginMobile').val();
 				

@@ -26,6 +26,16 @@ public class ReceiveaddressViewService extends BaseService<TReceiveaddressEntity
 		return listPage4Datatables(queryForm);
 	}
 
+	/**
+	 * 
+	 * TODO 添加
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param addForm
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object addReceiveaddress(TReceiveaddressAddForm addForm, HttpSession session) {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -37,6 +47,15 @@ public class ReceiveaddressViewService extends BaseService<TReceiveaddressEntity
 		return JsonResult.success("添加成功");
 	}
 
+	/**
+	 * 
+	 * TODO 更新
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param updateForm
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object updateReceiveaddress(TReceiveaddressUpdateForm updateForm) {
 		updateForm.setUpdateTime(new Date());
 		TReceiveaddressEntity receiveaddress = this.fetch(updateForm.getId());
