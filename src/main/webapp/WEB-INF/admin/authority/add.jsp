@@ -16,8 +16,7 @@
 	href="${base}/references/public/bootstrap/css/bootstrap.css">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 <!-- zTree -->
 <link rel="stylesheet" href="${base}/references/common/js/zTree/css/zTreeStyle/zTreeStyle.css">
 </head>
@@ -90,7 +89,7 @@
 					beforeCheck: zTreeBeforeCheck
 				}
 			};
-		//默认选中的功能
+		//默认选中的功能     ***************暂时未用到****************
 		function zTreeBeforeCheck(treeId, treeNode) {
 			if((treeNode.id == 43 || treeNode.id == 44) && treeNode.checked){
 				return false ;
@@ -188,7 +187,7 @@
 		                    notEmpty: {
 		                        message: '部门名称不能为空!'
 		                    },
-		                   /*  remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+		                   remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 		                         url: '${base}/admin/authority/checkDeptNameExist.html',//验证地址
 		                         message: '部门名称已存在，请重新输入!',//提示消息
 		                         delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
@@ -199,7 +198,7 @@
 		                            	deptName:$('#deptName').val()
 		                            };
 		                         }
-		                     } */
+		                     }
 		                }
 		            },
 		            jobName: {
@@ -207,7 +206,7 @@
 		                    notEmpty: {
 		                        message: '职位名称不能为空!'
 		                    },
-		                   /*  remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 		                         url: '${base}/admin/authority/checkJobNameExist.html',//验证地址
 		                         message: '此职位已存在，请重新输入!',//提示消息
 		                         delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
@@ -218,7 +217,7 @@
 		                            	jobName:$('#jobName').val()
 		                            };
 		                         }
-		                     } */
+		                     }
 		                }
 		            }
 
@@ -307,12 +306,16 @@
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						parent.layer.close(index);
 						parent.datatable.ajax.reload();
-						window.parent.successCallback('1');
 		           }
 		       });
 			}
 		}); 
 
+		//提交时开始验证
+		$('#submit').click(function() {
+		    $('#addDeptForm').bootstrapValidator('validate');
+		});
+		 
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

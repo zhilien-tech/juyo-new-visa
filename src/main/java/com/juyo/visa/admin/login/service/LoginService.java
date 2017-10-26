@@ -178,7 +178,7 @@ public class LoginService extends BaseService<TUserEntity> {
 		session.removeAttribute(LOGINUSER);
 		session.removeAttribute(IS_LOGIN_KEY);
 		session.invalidate();
-		if (LoginTypeEnum.TOURST.intKey() == logintype) {
+		if (!Util.isEmpty(logintype) && LoginTypeEnum.TOURST.intKey() == logintype) {
 			return ">>:/tlogin.html";
 		} else {
 			return ">>:/";
@@ -215,13 +215,21 @@ public class LoginService extends BaseService<TUserEntity> {
 	 */
 	public boolean messageLogin(LoginForm form, HttpSession session) {
 		form.setReturnUrl("jsp:admin.tlogin");
+		if (Util.isEmpty(form.getLoginName())) {
+			form.setMessageErrMsg("手机号不能为空");
+			return false;
+		}
+		if (Util.isEmpty(form.getValidateCode())) {
+			form.setMessageErrMsg("验证码不能为空");
+			return false;
+		}
 		SMSService smsService = new HuaxinSMSServiceImpl(redisDao);
 		String captcha = smsService.getCaptcha(SmsType.LOGIN, form.getLoginName());
 		if (Util.isEmpty(captcha)) {
-			form.setErrMsg("验证码已失效，请重新获取");
+			form.setMessageErrMsg("验证码已失效，请重新获取");
 			return false;
 		} else if (!captcha.equals(form.getValidateCode())) {
-			form.setErrMsg("验证码错误");
+			form.setMessageErrMsg("验证码错误");
 			return false;
 		}
 		TUserEntity user = dbDao.fetch(
@@ -229,11 +237,11 @@ public class LoginService extends BaseService<TUserEntity> {
 				Cnd.where("mobile", "=", form.getLoginName()).and("userType", "=",
 						UserLoginEnum.TOURIST_IDENTITY.intKey()));
 		if (Util.isEmpty(user)) {
-			form.setErrMsg("该游客不存在");
+			form.setMessageErrMsg("该游客不存在");
 			return false;
 		} else {
 			if (CommonConstants.DATA_STATUS_VALID != user.getIsDisable()) {
-				form.setErrMsg("游客已被锁定，请联系管理员");
+				form.setMessageErrMsg("游客已被锁定，请联系管理员");
 				return false;
 			} else {
 				//登陆成功

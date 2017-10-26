@@ -25,4 +25,6 @@ public class LoginForm {
 	private String flag;
 	/**判断 是工作人员还是游客登录*/
 	private int isTourist;
+	/**短信登录错误消息*/
+	private String messageErrMsg;
 }
