@@ -1,5 +1,7 @@
 package com.juyo.visa.admin.user.module;
 
+import javax.servlet.http.HttpSession;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
@@ -57,8 +59,8 @@ public class UserModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object add() {
-		return null;
+	public Object add(final HttpSession session) {
+		return userViewService.toAddUserPage(session);
 	}
 
 	/**
@@ -76,8 +78,8 @@ public class UserModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object update(@Param("id") final long id) {
-		return userViewService.fetch(id);
+	public Object update(@Param("id") final long id, HttpSession session) {
+		return userViewService.fetchUser(id, session);
 	}
 
 	/**
@@ -105,6 +107,14 @@ public class UserModule {
 	public Object batchDelete(@Param("ids") final Long[] ids) {
 		userViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
+	}
+
+	/**
+	 * 加载职位
+	 */
+	@At
+	public Object getJob(@Param("departmentId") Integer departmentId) {
+		return userViewService.queryJobs(departmentId);
 	}
 
 }

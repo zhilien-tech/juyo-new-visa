@@ -28,6 +28,15 @@ public class CityViewService extends BaseService<TCityEntity> {
 		return listPage4Datatables(queryForm);
 	}
 
+	/**
+	 * 
+	 * TODO 根据所选国家获取所有省/州/县
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param country
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public List<String> queryProvince(String country) {
 		List<String> provinceList = new ArrayList<>();
 		List<TCityEntity> city = dbDao.query(TCityEntity.class, Cnd.where("country", "=", country), null);
@@ -39,6 +48,15 @@ public class CityViewService extends BaseService<TCityEntity> {
 		return provinceList;
 	}
 
+	/**
+	 * 
+	 * TODO 根据所选省/州/县 获取所有城市
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param province
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public List<String> queryCity(String province) {
 		List<String> cityList = new ArrayList<>();
 		List<TCityEntity> city = dbDao.query(TCityEntity.class, Cnd.where("province", "=", province), null);
@@ -50,6 +68,14 @@ public class CityViewService extends BaseService<TCityEntity> {
 		return cityList;
 	}
 
+	/**
+	 * 
+	 * TODO 页面加载时获取 国家 省/州/县 城市 所有的下拉选项
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object listCountrySearch() {
 		Map<String, Object> result = Maps.newHashMap();
 		Map<Integer, String> cityMapByCountry = Maps.newHashMap();
@@ -75,12 +101,30 @@ public class CityViewService extends BaseService<TCityEntity> {
 		return result;
 	}
 
+	/**
+	 * 
+	 * TODO 添加城市信息
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param addForm
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object addCity(TCityAddForm addForm) {
 		addForm.setCreateTime(new Date());
 		this.add(addForm);
 		return JsonResult.success("添加成功");
 	}
 
+	/**
+	 * 
+	 * TODO 修改城市信息
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param updateForm
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object updateCity(TCityUpdateForm updateForm) {
 		TCityEntity city = this.fetch(updateForm.getId());
 		updateForm.setCreateTime(city.getCreateTime());
@@ -89,11 +133,30 @@ public class CityViewService extends BaseService<TCityEntity> {
 		return JsonResult.success("修改成功");
 	}
 
+	/**
+	 * 
+	 * TODO 根据城市ID获取城市名称
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param sqlParamForm
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object searchByCityId(TCityForm sqlParamForm) {
 		sqlParamForm.getCity();
 		return sqlParamForm.getCity();
 	}
 
+	/**
+	 * 
+	 * TODO 获取城市所有下拉选项
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param cityname
+	 * @param exname
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object getCustomerCitySelect(String cityname, String exname) {
 		List<TCityEntity> citySelect = new ArrayList<TCityEntity>();
 		try {

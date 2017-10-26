@@ -1,31 +1,40 @@
 package com.juyo.visa.admin.company.module;
 
-import com.juyo.visa.admin.company.service.CompanyViewService;
-import com.juyo.visa.forms.TCompanyUpdateForm;
-import com.juyo.visa.forms.TCompanyAddForm;
-import com.juyo.visa.forms.TCompanyForm;
-
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.dao.pager.Pager;
-import org.nutz.mvc.annotation.*;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.GET;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
+import org.nutz.mvc.annotation.Param;
 
-import com.uxuexi.core.web.base.page.Pagination;
+import com.juyo.visa.admin.company.service.CompanyViewService;
+import com.juyo.visa.forms.TCompanyAddForm;
+import com.juyo.visa.forms.TCompanyForm;
+import com.juyo.visa.forms.TCompanyUpdateForm;
+import com.uxuexi.core.db.dao.IDbDao;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 @At("/admin/company")
 @Filters({//@By(type = AuthFilter.class)
-	})
+})
 public class CompanyModule {
 
 	private static final Log log = Logs.get();
-	
+
+	/**
+	 * 注入容器中的dbDao对象，用于数据库查询、持久操作
+	 */
+	@Inject
+	private IDbDao dbDao;
+
 	@Inject
 	private CompanyViewService companyViewService;
-	
+
 	/**
 	 * 跳转到list页面
 	 */
@@ -35,28 +44,28 @@ public class CompanyModule {
 	public Object list() {
 		return companyViewService.toListCompanyPage();
 	}
-	
+
 	/**
 	 * 分页查询
 	 */
 	/*@At
 	@Ok("jsp")
 	public Pagination list(@Param("..") final TCompanyForm sqlParamForm,@Param("..") final Pager pager) {
-    	return companyViewService.listPage(sqlParamForm,pager);
-    }*/
-    @At
+		return companyViewService.listPage(sqlParamForm,pager);
+	}*/
+	@At
 	public Object listData(@Param("..") final TCompanyForm sqlParamForm) {
 		return companyViewService.listData(sqlParamForm);
 	}
-    
-    /**
+
+	/**
 	 * 跳转到'添加操作'的录入数据页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
 	public Object add() {
-		return null ;
+		return companyViewService.toAddCompanyPage();
 	}
 
 	/**
@@ -81,7 +90,7 @@ public class CompanyModule {
 	@GET
 	@Ok("jsp")
 	public Object update(@Param("id") final long id) {
-		return companyViewService.fetch(id);
+		return companyViewService.getCompanyPageInfo(id);
 	}
 
 	/**
@@ -116,5 +125,5 @@ public class CompanyModule {
 		companyViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
 	}
-	
+
 }
