@@ -1,0 +1,9 @@
+.card-head div:nth-child(1){width:230px;}
+.card-head div:nth-child(2){width:180px;}
+.card-head div:nth-child(4){position:absolute;right:35px;}
+.everybody-info div:nth-child(1){width:12%;}
+.everybody-info div:nth-child(2){width:13%;}
+.everybody-info div:nth-child(3){width:11%;}
+.everybody-info div:nth-child(4){width:13%;}
+.everybody-info div:nth-child(5){width:30%;}
+.everybody-info div:last-child{float:right;width:74px;}	
