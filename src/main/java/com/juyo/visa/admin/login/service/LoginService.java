@@ -178,7 +178,7 @@ public class LoginService extends BaseService<TUserEntity> {
 		session.removeAttribute(LOGINUSER);
 		session.removeAttribute(IS_LOGIN_KEY);
 		session.invalidate();
-		if (LoginTypeEnum.TOURST.intKey() == logintype) {
+		if (!Util.isEmpty(logintype) && LoginTypeEnum.TOURST.intKey() == logintype) {
 			return ">>:/tlogin.html";
 		} else {
 			return ">>:/";
