@@ -12,7 +12,9 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.user.service.UserViewService;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.forms.TUserAddForm;
 import com.juyo.visa.forms.TUserForm;
 import com.juyo.visa.forms.TUserUpdateForm;
@@ -46,7 +48,9 @@ public class UserModule {
 		return userViewService.listPage(sqlParamForm,pager);
 	}*/
 	@At
-	public Object listData(@Param("..") final TUserForm sqlParamForm) {
+	public Object listData(@Param("..") final TUserForm sqlParamForm, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		sqlParamForm.setComId(loginCompany.getId());
 		return userViewService.listData(sqlParamForm);
 	}
 
