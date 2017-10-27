@@ -87,6 +87,7 @@ public class TUserForm extends DataTablesParamForm {
 					.or("departmentId", "LIKE", "%" + searchStr + "%").or("jobId", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
+		cnd.where("comId", "=", comId);
 		cnd.orderBy("createTime", "DESC");
 		return cnd;
 	}
