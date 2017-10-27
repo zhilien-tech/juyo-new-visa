@@ -40,7 +40,7 @@ public class TAuthoritySqlForm extends DataTablesParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		cnd.and("c.id", "=", comId);
-		cnd.and("f.parentId", "=", 0);
+		/*cnd.and("f.parentId", "=", 0);*/
 		cnd.groupBy("d.id");
 		cnd.orderBy("deptId", "DESC");
 		return cnd;

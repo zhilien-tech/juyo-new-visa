@@ -1,5 +1,7 @@
 package com.juyo.visa.admin.company.module;
 
+import javax.servlet.http.HttpSession;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
@@ -70,9 +72,9 @@ public class CompanyModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..") TCompanyAddForm addForm) {
+	public Object add(@Param("..") TCompanyAddForm addForm, final HttpSession session) {
 		try {
-			companyViewService.addCompany(addForm);
+			companyViewService.addCompany(addForm, session);
 			return JsonResult.success("添加成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -95,9 +97,9 @@ public class CompanyModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..") TCompanyUpdateForm updateForm) {
+	public Object update(@Param("..") TCompanyUpdateForm updateForm, final HttpSession session) {
 		try {
-			companyViewService.updateCompany(updateForm);
+			companyViewService.updateCompany(updateForm, session);
 			return JsonResult.success("修改成功");
 		} catch (Exception e) {
 			e.printStackTrace();

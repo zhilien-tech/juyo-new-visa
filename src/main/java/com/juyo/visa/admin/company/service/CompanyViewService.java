@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -15,6 +17,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.access.AccessConfig;
 import com.juyo.visa.common.access.sign.MD5;
 import com.juyo.visa.common.enums.BusinessScopesEnum;
@@ -72,10 +75,13 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 	}
 
 	//添加公司
-	public Object addCompany(TCompanyAddForm addForm) {
+	public Object addCompany(TCompanyAddForm addForm, HttpSession session) {
 		Integer comType = addForm.getComType();
 		Date nowDate = DateUtil.nowDate();
 		String adminLoginName = addForm.getAdminLoginName();//用户 名
+
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		int opId = loginUser.getId();
 
 		//公司管理员信息
 		TUserEntity user = new TUserEntity();
@@ -85,8 +91,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		user.setPassword(password);//密码
 		user.setCreateTime(nowDate);//创建时间
 		user.setUpdateTime(nowDate);//上次更新时间
-		//TODO
-		//user.setOpId();//操作人
+		user.setOpId(opId);//操作人
 		user.setIsDisable(Integer.valueOf(IsYesOrNoEnum.YES.intKey()));//状态可用
 		if (CompanyTypeEnum.SONGQIAN.intKey() == comType) {
 			user.setUserType(UserLoginEnum.SQ_COMPANY_ADMIN.intKey());//送签社公司管理员
@@ -100,6 +105,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			Integer userId = insertUser.getId();
 			addForm.setAdminId(userId);
 		}
+		addForm.setOpId(opId);
 		addForm.setCreateTime(nowDate);
 		addForm.setUpdateTime(nowDate);
 		TCompanyEntity company = this.add(addForm);
@@ -121,6 +127,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		//公司管理员所在的部门信息
 		TDepartmentEntity depart = new TDepartmentEntity();
 		depart.setComId(company.getId());
+		depart.setOpId(opId);
 		depart.setDeptName(MANAGE_DEPART);
 		TDepartmentEntity department = dbDao.insert(depart);
 		//公司管理员所在的职位信息
@@ -128,6 +135,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		jobEntity.setCreateTime(new Date());
 		jobEntity.setDeptId(department.getId());
 		jobEntity.setJobName(MANAGE_POSITION);
+		jobEntity.setOpId(opId);
 		TJobEntity job = dbDao.insert(jobEntity);
 		//管理员的公司职位信息
 		TComJobEntity companyJobEntity = new TComJobEntity();
@@ -179,11 +187,14 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 	}
 
 	//编辑公司
-	public Object updateCompany(TCompanyUpdateForm updateForm) {
+	public Object updateCompany(TCompanyUpdateForm updateForm, HttpSession session) {
 
 		Date nowDate = DateUtil.nowDate();
 		long comId = updateForm.getId(); //公司id
 		Integer comType = updateForm.getComType(); //公司类型
+
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		int opId = loginUser.getId();
 
 		//编辑管理员信息
 		Integer adminId = updateForm.getAdminId();
@@ -193,6 +204,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			if (!Util.isEmpty(adminLoginName)) {
 				user.setMobile(adminLoginName);
 				user.setName(adminLoginName);
+				user.setOpId(opId);
 			}
 			user.setName(updateForm.getAdminLoginName());
 			if (CompanyTypeEnum.SONGQIAN.intKey() == comType) {
