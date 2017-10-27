@@ -80,6 +80,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		//公司管理员信息
 		TUserEntity user = new TUserEntity();
 		user.setMobile(adminLoginName);//用户名
+		user.setName(adminLoginName);//用户名
 		String password = MD5.sign(MANAGE_PASSWORD, AccessConfig.password_secret, AccessConfig.INPUT_CHARSET);//密码加密
 		user.setPassword(password);//密码
 		user.setCreateTime(nowDate);//创建时间
@@ -188,7 +189,10 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		Integer adminId = updateForm.getAdminId();
 		TUserEntity user = dbDao.fetch(TUserEntity.class, Long.valueOf(adminId));
 		if (!Util.isEmpty(user)) {
-			user.setMobile(updateForm.getAdminLoginName());
+			String adminLoginName = updateForm.getAdminLoginName();
+			user.setMobile(adminLoginName);
+			user.setName(adminLoginName);
+			user.setName(updateForm.getAdminLoginName());
 			if (CompanyTypeEnum.SONGQIAN.intKey() == comType) {
 				user.setUserType(UserLoginEnum.SQ_COMPANY_ADMIN.intKey());//送签社公司管理员
 			} else if (CompanyTypeEnum.DIJI.intKey() == comType) {
