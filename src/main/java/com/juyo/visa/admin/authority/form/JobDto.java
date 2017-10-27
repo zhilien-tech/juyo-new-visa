@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 public class JobDto {
 
-	private Integer jobId;
+	private long jobId;
 
 	private String jobName;
 

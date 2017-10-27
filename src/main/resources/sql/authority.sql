@@ -104,3 +104,16 @@ FROM
 	t_job tj
 INNER JOIN t_department dp ON dp.id=tj.deptId
 WHERE tj.id=@jobId
+
+/*authority_delete_job*/
+SELECT
+	u.id,
+	u.userName
+FROM
+	t_user u
+INNER JOIN t_user_job uj ON u.id = uj.userid
+INNER JOIN t_company_job cj ON uj.companyJobId = cj.id
+WHERE
+	cj.posid = @jobId
+AND uj.status = @jobStatus
+AND cj.comId = @companyId

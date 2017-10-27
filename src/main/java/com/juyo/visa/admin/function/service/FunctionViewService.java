@@ -30,6 +30,7 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class FunctionViewService extends BaseService<TFunctionEntity> {
 	private static final Log log = Logs.get();
+	private static final int ZNODE_ROOT = 0;
 
 	//分页数据
 	public Object listData(TFunctionForm queryForm) {
@@ -51,6 +52,10 @@ public class FunctionViewService extends BaseService<TFunctionEntity> {
 		int comType = addForm.getComType();//公司类型
 		int bScope = addForm.getBScope();//经营范围
 		//功能信息
+		Integer parentId = addForm.getParentId();
+		if (Util.isEmpty(parentId)) {
+			addForm.setParentId(ZNODE_ROOT);
+		}
 		Date nowDate = DateUtil.nowDate();
 		addForm.setCreateTime(nowDate);
 		addForm.setUpdateTime(nowDate);
@@ -107,6 +112,10 @@ public class FunctionViewService extends BaseService<TFunctionEntity> {
 	public Object updateFunction(TFunctionUpdateForm updateForm) {
 		Date nowDate = DateUtil.nowDate();
 		updateForm.setUpdateTime(nowDate);
+		Integer parentId = updateForm.getParentId();
+		if (Util.isEmpty(parentId)) {
+			updateForm.setParentId(ZNODE_ROOT);
+		}
 		int update = this.update(updateForm);
 		return update;
 	}
