@@ -36,13 +36,15 @@
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label><span>*</span>客户来源：</label> 
-								<select id="customerType" name="source" class="form-control input-sm inpImportant" onchange="selectListData();">
-										<%-- <option value="${obj.sourceType }" selected="selected">${obj.sourceType }</option> --%>
-										<c:forEach var="map" items="${obj.customerTypeEnum}">
-											<option value="${map.key}" ${map.key==obj.customer.source?'selected':''}>${map.value}</option>
-										</c:forEach>
-									</select>
+								<label><span>*</span>客户来源：</label> <select id="customerType"
+									name="source" class="form-control input-sm inpImportant"
+									onchange="selectListData();">
+									<%-- <option value="${obj.sourceType }" selected="selected">${obj.sourceType }</option> --%>
+									<c:forEach var="map" items="${obj.customerTypeEnum}">
+										<option value="${map.key}"
+											${map.key==obj.customer.source?'selected':''}>${map.value}</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 					</div>
@@ -51,8 +53,8 @@
 						<div class="col-sm-8">
 							<div class="form-group">
 								<label><span>*</span>公司全称：</label> <input id="name" name="name"
-									value="${obj.customer.name}" type="text" class="form-control input-sm"
-									placeholder=" " />
+									value="${obj.customer.name}" type="text"
+									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 
@@ -84,8 +86,8 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>邮箱：</label> <input id="email" name="email"
-									value="${obj.customer.email}" type="text" class="form-control input-sm"
-									placeholder=" " />
+									value="${obj.customer.email}" type="text"
+									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -110,131 +112,141 @@
 	<script type="text/javascript">
 		var base = "${base}";
 
-		function initvalidate(){
+		function initvalidate() {
 			//校验
-			$('#customerUpdateForm').bootstrapValidator({
-				message : '验证不通过',
-				feedbackIcons : {
-					valid : 'glyphicon glyphicon-ok',
-					invalid : 'glyphicon glyphicon-remove',
-					validating : 'glyphicon glyphicon-refresh'
-				},
-				fields : {
-											userId : {
-							validators : {
-								notEmpty : {
-									message : '用户不能为空'
+			$('#customerUpdateForm')
+					.bootstrapValidator(
+							{
+								message : '验证不通过',
+								feedbackIcons : {
+									valid : 'glyphicon glyphicon-ok',
+									invalid : 'glyphicon glyphicon-remove',
+									validating : 'glyphicon glyphicon-refresh'
+								},
+								fields : {
+									userId : {
+										validators : {
+											notEmpty : {
+												message : '用户不能为空'
+											}
+										}
+									},
+									compId : {
+										validators : {
+											notEmpty : {
+												message : '公司不能为空'
+											}
+										}
+									},
+									name : {
+										validators : {
+											notEmpty : {
+												message : '公司名称不能为空'
+											}
+										}
+									},
+									shortname : {
+										validators : {
+											notEmpty : {
+												message : '公司简称不能为空'
+											}
+										}
+									},
+									source : {
+										validators : {
+											notEmpty : {
+												message : '客户来源不能为空'
+											}
+										}
+									},
+									linkman : {
+										validators : {
+											notEmpty : {
+												message : '联系人不能为空'
+											}
+										}
+									},
+									mobile : {
+										validators : {
+											notEmpty : {
+												message : '手机不能为空'
+											},
+											regexp : {
+												regexp : /^[1][34578][0-9]{9}$/,
+												message : '手机号格式错误'
+											}
+										}
+									},
+									email : {
+										validators : {
+											notEmpty : {
+												message : '邮箱不能为空'
+											},
+											regexp : {
+												regexp : /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+												message : '邮箱格式错误'
+											}
+										}
+									},
 								}
-							}
-						},
-											compId : {
-							validators : {
-								notEmpty : {
-									message : '公司不能为空'
-								}
-							}
-						},
-											name : {
-							validators : {
-								notEmpty : {
-									message : '公司名称不能为空'
-								}
-							}
-						},
-											shortname : {
-							validators : {
-								notEmpty : {
-									message : '公司简称不能为空'
-								}
-							}
-						},
-											source : {
-							validators : {
-								notEmpty : {
-									message : '客户来源不能为空'
-								}
-							}
-						},
-											linkman : {
-							validators : {
-								notEmpty : {
-									message : '联系人不能为空'
-								}
-							}
-						},
-											mobile : {
-							validators : {
-								notEmpty : {
-									message : '手机不能为空'
-								}
-							}
-						},
-											email : {
-							validators : {
-								notEmpty : {
-									message : '邮箱不能为空'
-								}
-							}
-						},
-									}
-			});
+							});
 		}
-		
+
 		//更新时刷新页面
 		function update() {
 			window.location.reload();
 		}
-		
-	    initvalidate();
+
+		initvalidate();
 		$('#customerUpdateForm').bootstrapValidator('validate');
 		function save() {
 			$('#customerUpdateForm').bootstrapValidator('validate');
-			var bootstrapValidator = $("#customerUpdateForm").data('bootstrapValidator');
+			var bootstrapValidator = $("#customerUpdateForm").data(
+					'bootstrapValidator');
 			if (bootstrapValidator.isValid()) {
-			
+
 				//获取必填项信息
-									var userId = $("#userId").val();
-					if(userId==""){
-						layer.msg('userId不能为空');
-						return;
-					}
-									var compId = $("#compId").val();
-					if(compId==""){
-						layer.msg('compId不能为空');
-						return;
-					}
-									var name = $("#name").val();
-					if(name==""){
-						layer.msg('name不能为空');
-						return;
-					}
-									var shortname = $("#shortname").val();
-					if(shortname==""){
-						layer.msg('shortname不能为空');
-						return;
-					}
-									var source = $("#customerType").val();
-					if(source==""){
-						layer.msg('source不能为空');
-						return;
-					}
-									var linkman = $("#linkman").val();
-					if(linkman==""){
-						layer.msg('linkman不能为空');
-						return;
-					}
-									var mobile = $("#mobile").val();
-					if(mobile==""){
-						layer.msg('mobile不能为空');
-						return;
-					}
-									var email = $("#email").val();
-					if(email==""){
-						layer.msg('email不能为空');
-						return;
-					}
-								
-				
+				var userId = $("#userId").val();
+				if (userId == "") {
+					layer.msg('userId不能为空');
+					return;
+				}
+				var compId = $("#compId").val();
+				if (compId == "") {
+					layer.msg('compId不能为空');
+					return;
+				}
+				var name = $("#name").val();
+				if (name == "") {
+					layer.msg('name不能为空');
+					return;
+				}
+				var shortname = $("#shortname").val();
+				if (shortname == "") {
+					layer.msg('shortname不能为空');
+					return;
+				}
+				var source = $("#customerType").val();
+				if (source == "") {
+					layer.msg('source不能为空');
+					return;
+				}
+				var linkman = $("#linkman").val();
+				if (linkman == "") {
+					layer.msg('linkman不能为空');
+					return;
+				}
+				var mobile = $("#mobile").val();
+				if (mobile == "") {
+					layer.msg('mobile不能为空');
+					return;
+				}
+				var email = $("#email").val();
+				if (email == "") {
+					layer.msg('email不能为空');
+					return;
+				}
+
 				$.ajax({
 					type : 'POST',
 					data : $("#customerUpdateForm").serialize(),
@@ -252,11 +264,11 @@
 				});
 			}
 		}
-	
+
 		//返回刷新页面 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-        	parent.layer.close(index);
+			parent.layer.close(index);
 		}
 	</script>
 

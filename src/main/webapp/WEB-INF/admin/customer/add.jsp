@@ -25,8 +25,8 @@
 			<div class="modal-header">
 				<span class="heading">添加</span> <input id="backBtn" type="button"
 					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
-					data-dismiss="modal" value="取消" /> <input id="addBtn" type="button"
-					onclick="save();"
+					data-dismiss="modal" value="取消" /> <input id="addBtn"
+					type="button" onclick="save();"
 					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 			<div class="modal-body">
@@ -35,12 +35,13 @@
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
-							<label><span>*</span>客户来源：</label>
-								<select id="customerType" name="source" class="form-control input-sm inpImportant" onchange="selectListData();">
-										<c:forEach var="map" items="${obj.customerTypeEnum}">
-											<option value="${map.key}">${map.value}</option>
-										</c:forEach>
-									</select>
+								<label><span>*</span>客户来源：</label> <select id="customerType"
+									name="source" class="form-control input-sm inpImportant"
+									onchange="selectListData();">
+									<c:forEach var="map" items="${obj.customerTypeEnum}">
+										<option value="${map.key}">${map.value}</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 					</div>
@@ -106,127 +107,138 @@
 		var base = "${base}";
 		$(function() {
 			//校验
-			$('#customerAddForm').bootstrapValidator({
-				message : '验证不通过',
-				feedbackIcons : {
-					valid : 'glyphicon glyphicon-ok',
-					invalid : 'glyphicon glyphicon-remove',
-					validating : 'glyphicon glyphicon-refresh'
-				},
-				fields : {
-				
+			$('#customerAddForm')
+					.bootstrapValidator(
+							{
+								message : '验证不通过',
+								feedbackIcons : {
+									valid : 'glyphicon glyphicon-ok',
+									invalid : 'glyphicon glyphicon-remove',
+									validating : 'glyphicon glyphicon-refresh'
+								},
+								fields : {
+
 									userId : {
-						validators : {
-							notEmpty : {
-								message : '用户不能为空'
-							}
-						}
-					},
+										validators : {
+											notEmpty : {
+												message : '用户不能为空'
+											}
+										}
+									},
 									compId : {
-						validators : {
-							notEmpty : {
-								message : '公司不能为空'
-							}
-						}
-					},
+										validators : {
+											notEmpty : {
+												message : '公司不能为空'
+											}
+										}
+									},
 									name : {
-						validators : {
-							notEmpty : {
-								message : '公司名称不能为空'
-							}
-						}
-					},
+										validators : {
+											notEmpty : {
+												message : '公司名称不能为空'
+											}
+										}
+									},
 									shortname : {
-						validators : {
-							notEmpty : {
-								message : '公司简称不能为空'
-							}
-						}
-					},
+										validators : {
+											notEmpty : {
+												message : '公司简称不能为空'
+											}
+										}
+									},
 									source : {
-						validators : {
-							notEmpty : {
-								message : '客户来源不能为空'
-							}
-						}
-					},
+										validators : {
+											notEmpty : {
+												message : '客户来源不能为空'
+											}
+										}
+									},
 									linkman : {
-						validators : {
-							notEmpty : {
-								message : '联系人不能为空'
-							}
-						}
-					},
+										validators : {
+											notEmpty : {
+												message : '联系人不能为空'
+											}
+										}
+									},
 									mobile : {
-						validators : {
-							notEmpty : {
-								message : '手机不能为空'
-							}
-						}
-					},
+										validators : {
+											notEmpty : {
+												message : '手机不能为空'
+											},
+											regexp : {
+												regexp : /^[1][34578][0-9]{9}$/,
+												message : '手机号格式错误'
+											}
+										}
+									},
 									email : {
-						validators : {
-							notEmpty : {
-								message : '邮箱不能为空'
-							}
-						}
-					},
-									
-				}
-			});
+										validators : {
+											notEmpty : {
+												message : '邮箱不能为空'
+											},
+											regexp : {
+												regexp : /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+												message : '邮箱格式错误'
+											}
+										}
+									},
+
+								}
+							});
 		});
 		/* 页面初始化加载完毕 */
-		
-		/*保存页面*/ 
+
+		/*保存页面*/
 		function save() {
 			//初始化验证插件
 			$('#customerAddForm').bootstrapValidator('validate');
 			//得到获取validator对象或实例 
-			var bootstrapValidator = $("#customerAddForm").data('bootstrapValidator');
+			var bootstrapValidator = $("#customerAddForm").data(
+					'bootstrapValidator');
 			// 执行表单验证 
 			bootstrapValidator.validate();
 			if (bootstrapValidator.isValid()) {
 				//获取必填项信息
-									var userId = $("#userId").val();
-					if(userId==""){
-						layer.msg('userId不能为空');
-						return;
-					}
-									var compId = $("#compId").val();
-					if(compId==""){
-						layer.msg('compId不能为空');
-						return;
-					}
-									var name = $("#name").val();
-					if(name==""){
-						layer.msg('name不能为空');
-						return;
-					}
-									var shortname = $("#shortname").val();
-					if(shortname==""){
-						layer.msg('shortname不能为空');
-						return;
-					}
-									var source = $("#customerType").val();
-					if(source==""){
-						layer.msg('source不能为空');
-						return;
-					}
-									var linkman = $("#linkman").val();
-					if(linkman==""){
-						layer.msg('linkman不能为空');
-						return;
-					}
-									var mobile = $("#mobile").val();
-					if(mobile==""){
-						layer.msg('mobile不能为空');
-						return;
-					}
-									var email = $("#email").val();
-					if(email==""){
-						layer.msg('email不能为空');
-						return;
-					}
+				var userId = $("#userId").val();
+				if (userId == "") {
+					layer.msg('userId不能为空');
+					return;
+				}
+				var compId = $("#compId").val();
+				if (compId == "") {
+					layer.msg('compId不能为空');
+					return;
+				}
+				var name = $("#name").val();
+				if (name == "") {
+					layer.msg('name不能为空');
+					return;
+				}
+				var shortname = $("#shortname").val();
+				if (shortname == "") {
+					layer.msg('shortname不能为空');
+					return;
+				}
+				var source = $("#customerType").val();
+				if (source == "") {
+					layer.msg('source不能为空');
+					return;
+				}
+				var linkman = $("#linkman").val();
+				if (linkman == "") {
+					layer.msg('linkman不能为空');
+					return;
+				}
+				var mobile = $("#mobile").val();
+				if (mobile == "") {
+					layer.msg('mobile不能为空');
+					return;
+				}
+				var email = $("#email").val();
+				if (email == "") {
+					layer.msg('email不能为空');
+					return;
+				}
 				$.ajax({
 					type : 'POST',
 					data : $("#customerAddForm").serialize(),
@@ -244,7 +256,7 @@
 				});
 			}
 		}
-		
+
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
