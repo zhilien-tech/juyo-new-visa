@@ -160,23 +160,28 @@
 	     });
 	    /*加载城市下拉选*/  
 	    $("#province").change(function () {
-	    	$("#searchBtn").click();
 	    	var province = $("#province").val();
-	        $("#city").empty();  
+	        //$("#city").empty();  
+	    	
 	        $.ajax({  
 	            type: "post",  
 	            url: BASE_PATH + "/admin/city/getCity",  
 	            data: {province: province},  
 	            success: function (data) {
-	                $('#city').append("<option value=''  >" + '城市' + "</option>");  
+	            	var str = '<option value="" >城市</option>';
+	                //$('#city').append("<option value=''  >" + '城市' + "</option>");  
 	                for (var i = 0; i < data.length; i++) {  
-	                    $('#city').append("<option value='" + data[i] + "'  >" + data[i] + "</option>");  
+	                    //$('#city').append("<option value='" + data[i] + "'  >" + data[i] + "</option>");  
+	                    str += '<option value="' + data[i] + '"  >' + data[i] + '</option>';  
 	                }  
+	                $('#city').html(str);
 	            },  
 	            error: function () {  
 	                alert("加载城市失败");  
-	            }  
+	            }
 	        });
+	        $("#city").val('');
+	    	$("#searchBtn").click();
 	    });
 	</script>
 </body>
