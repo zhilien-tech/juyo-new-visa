@@ -143,14 +143,21 @@ public class LoginService extends BaseService<TUserEntity> {
 				form.setReturnUrl(">>:/admin/company/list.html?currentPageIndex=1");
 			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType
 					|| UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType) {
-				//公司管理员条跳转页面
-				form.setReturnUrl(">>:/admin/company/list.html?currentPageIndex=1");
+				//公司管理员条跳转页面(权限管理)
+				form.setReturnUrl(">>:/admin/authority/list.html?currentPageIndex=1");
 			} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
 				//游客跳转的页面
 				form.setReturnUrl(">>:/admin/applyvisa/list.html");
 			} else {
-				//普通员工跳转页面
-				form.setReturnUrl(">>:/admin/company/list.html?currentPageIndex=1");
+				//普通员工跳转页面（默认第一个功能）
+				String url = "";
+				for (TFunctionEntity tFunctionEntity : allUserFunction) {
+					if (!Util.isEmpty(tFunctionEntity.getUrl())) {
+						url = tFunctionEntity.getUrl();
+						break;
+					}
+				}
+				form.setReturnUrl(">>:" + url + "?currentPageIndex=1");
 			}
 			//将用户权限保存到session中
 			//session.setAttribute(FUNCTION_MAP_KEY, functionMap); //功能
