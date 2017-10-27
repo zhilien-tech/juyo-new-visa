@@ -23,6 +23,7 @@ import com.juyo.visa.admin.sale.service.SaleViewService;
  * @Date	 XXXX年XX月XX日 	 
  */
 @IocBean
+@At("admin/sale")
 public class SaleModule {
 
 	@Inject

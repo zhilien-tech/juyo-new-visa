@@ -26,7 +26,7 @@
 					<div class="box">
 						<div class="box-header">
 						
-							<div class="row form-right">
+							<!-- <div class="row form-right">
 								<div class="col-md-2 left-5px right-0px">
 									<select class="input-class input-sm">
 										<option>状态</option>
@@ -44,7 +44,7 @@
 									<a id="" class="btn btn-primary btn-sm pull-left" onclick="" >搜索</a>
 									<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 								</div>
-							</div>
+							</div> -->
 							
 						</div>
 						<!-- /.box-header -->

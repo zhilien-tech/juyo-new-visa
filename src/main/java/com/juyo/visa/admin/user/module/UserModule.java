@@ -69,8 +69,8 @@ public class UserModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..") TUserAddForm addForm) {
-		return userViewService.addUser(addForm);
+	public Object add(@Param("..") TUserAddForm addForm, HttpSession session) {
+		return userViewService.addUser(addForm, session);
 	}
 
 	/**
