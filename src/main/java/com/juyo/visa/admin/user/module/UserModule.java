@@ -7,13 +7,14 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
-import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.user.service.UserViewService;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.forms.TUserAddForm;
 import com.juyo.visa.forms.TUserForm;
 import com.juyo.visa.forms.TUserUpdateForm;
@@ -21,8 +22,6 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 @At("/admin/user")
-@Filters({//@By(type = AuthFilter.class)
-})
 public class UserModule {
 
 	private static final Log log = Logs.get();
@@ -49,7 +48,9 @@ public class UserModule {
 		return userViewService.listPage(sqlParamForm,pager);
 	}*/
 	@At
-	public Object listData(@Param("..") final TUserForm sqlParamForm) {
+	public Object listData(@Param("..") final TUserForm sqlParamForm, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		sqlParamForm.setComId(loginCompany.getId());
 		return userViewService.listData(sqlParamForm);
 	}
 

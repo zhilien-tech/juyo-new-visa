@@ -6,10 +6,13 @@
 
 package com.juyo.visa.admin.sale.module;
 
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
+
+import com.juyo.visa.admin.sale.service.SaleViewService;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -20,8 +23,11 @@ import org.nutz.mvc.annotation.Ok;
  * @Date	 XXXX年XX月XX日 	 
  */
 @IocBean
-@At("admin/sale")
 public class SaleModule {
+
+	@Inject
+	private SaleViewService saleViewService;
+
 	/**
 	 * 跳转到list页面
 	 */
