@@ -32,7 +32,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
-					<input name="id" type="hidden" value="${obj.id}">
+					<input name="id" type="hidden" value="${obj.scenic.id}">
 
 					<div class="row">
 						<div class="col-sm-6">

@@ -83,11 +83,11 @@ public class TUserForm extends DataTablesParamForm {
 		//TODO 添加自定义查询条件（可选）
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup expg = new SqlExpressionGroup();
-			expg.and("name", "LIKE", "%" + searchStr + "%").or("mobile", "LIKE", "%" + searchStr + "%")
-					.or("departmentId", "LIKE", "%" + searchStr + "%").or("jobId", "LIKE", "%" + searchStr + "%");
+			expg.and("u.name", "LIKE", "%" + searchStr + "%").or("u.mobile", "LIKE", "%" + searchStr + "%")
+					.or("d.deptName", "LIKE", "%" + searchStr + "%").or("j.jobName", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
-		cnd.and("comId", "=", comId);
+		cnd.and("u.comId", "=", comId);
 		cnd.orderBy("createTime", "DESC");
 		return cnd;
 	}
