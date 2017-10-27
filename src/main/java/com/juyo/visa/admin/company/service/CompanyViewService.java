@@ -190,8 +190,10 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		TUserEntity user = dbDao.fetch(TUserEntity.class, Long.valueOf(adminId));
 		if (!Util.isEmpty(user)) {
 			String adminLoginName = updateForm.getAdminLoginName();
-			user.setMobile(adminLoginName);
-			user.setName(adminLoginName);
+			if (!Util.isEmpty(adminLoginName)) {
+				user.setMobile(adminLoginName);
+				user.setName(adminLoginName);
+			}
 			user.setName(updateForm.getAdminLoginName());
 			if (CompanyTypeEnum.SONGQIAN.intKey() == comType) {
 				user.setUserType(UserLoginEnum.SQ_COMPANY_ADMIN.intKey());//送签社公司管理员
