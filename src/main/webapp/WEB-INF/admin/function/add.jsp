@@ -157,13 +157,13 @@
 							}
 						}
 					},
-					url : {
+					/* url : {
 						validators : {
 							notEmpty : {
 								message : '访问地址不能为空'
 							}
 						}
-					},
+					}, */
 					level : {
 						validators : {
 							notEmpty : {
@@ -226,11 +226,11 @@
 					layer.msg('功能名称不能为空');
 					return;
 				}
-				var url = $("#url").val();
+				/* var url = $("#url").val();
 				if (url == "") {
 					layer.msg('功能地址不能为空');
 					return;
-				}
+				} */
 				var level = $("#level").val();
 				if (level == "") {
 					layer.msg('功能等级不能为空');

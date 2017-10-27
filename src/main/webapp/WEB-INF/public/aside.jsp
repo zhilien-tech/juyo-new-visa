@@ -120,12 +120,12 @@
 					src="${base}/references/public/dist/newvisacss/img/index.png" /> <font>权限管理</font>
 			</a></li>--%>
 			
-				<li id="666" class="menu1">
+				<%-- <li id="666" class="menu1">
 					<a href="/admin/sale/list.html?currentPageIndex=666">
 						<img src="${base}/references/public/dist/newvisacss/img/index.png" />
 						<font>销售日本</font>
 					</a>
-				</li>
+				</li> --%>
 
 		</ul>
 		<!-- /.sidebar-menu -->
