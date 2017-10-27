@@ -34,14 +34,14 @@
 				<div class="departmentName form-group">
 					<!--部门权限 设置-->
 					<input id="jobJson" name="jobJson" type="hidden" value="" /> 
-					<input id="id" name="id" type="hidden" value="${obj.dept.id}" />
+					<input id="deptId" name="id" type="hidden" value="${obj.dept.id}" />
 					<ul class="addDepartment">
 						<li><label class=" text-right">部门名称：</label></li>
 						<li class="li-input">
 							<input id="deptName" name="deptName" type="text" class="form-control input-sm inputText" value="${obj.dept.deptName }"> <span class="prompt">*</span>
 						</li>
 						<li>
-							<button type="button" class="btn btn-primary btn-sm btnPadding" id="addJob">添加职位</button>
+							<button id="addJob" type="button" class="btn btn-primary btn-sm btnPadding">添加职位</button>
 						</li>
 					</ul>
 				</div>
@@ -53,14 +53,13 @@
 						<div class="job_container">
 							<ul class="addDepartment marHei">
 								<li><label class="text-right">职位名称：</label></li>
-								<li class="li-input inpPadd"><input name="jobName"
-									type="text" class="form-control input-sm inputText"
-									value='${one.jobName }'> <input name="jobId"
-									type="hidden" value='${one.jobId }'></li>
-								<li><button type="button"
-										class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button>
-									<button type="button" class="btn btn-primary btn-sm btnPadding"
-										id="deleteBtn">删除</button></li>
+								<li class="li-input inpPadd">
+									<input name="jobName" type="text" class="form-control input-sm inputText" value='${one.jobName }'> 
+									<input name="jobId" type="hidden" value='${one.jobId }'></li>
+								<li>
+									<button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button>
+									<button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn">删除</button>
+								</li>
 							</ul>
 							<c:choose>
 								<c:when test="${stat.index == 0}">
@@ -87,23 +86,16 @@
 		var BASE_PATH = '${base}';
 	</script>
 	<!-- jQuery 2.2.3 -->
-	<script
-		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script
-		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<!--zTree -->
-	<script
-		src="${base}/references/common/js/zTree/jquery.ztree.core-3.5.js"></script>
-	<script
-		src="${base}/references/common/js/zTree/jquery.ztree.excheck-3.5.js"></script>
-	<script
-		src="${base}/references/common/js/zTree/jquery.ztree.exedit-3.5.js"></script>
+	<script src="${base}/references/common/js/zTree/jquery.ztree.core-3.5.js"></script>
+	<script src="${base}/references/common/js/zTree/jquery.ztree.excheck-3.5.js"></script>
+	<script src="${base}/references/common/js/zTree/jquery.ztree.exedit-3.5.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-
-
 
 	<script type="text/javascript">
 		var setting = {
@@ -121,7 +113,7 @@
 					beforeCheck: zTreeBeforeCheck
 				}
 			};
-		//默认选中个人信息和操作台
+		//默认选中
 		function zTreeBeforeCheck(treeId, treeNode) {
 			if((treeNode.id == 43 || treeNode.id == 44) && treeNode.checked){
 				return false ;
@@ -224,8 +216,27 @@
 					validating : 'glyphicon glyphicon-refresh'
 				},
 				fields : {
-											
-				}
+					deptName: {
+		                validators: {
+		                    notEmpty: {
+		                        message: '部门名称不能为空!'
+		                    },
+		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+		                         url: '${base}/admin/authority/checkDeptNameExist.html',//验证地址
+		                         message: '部门名称已存在，请重新输入!',//提示消息
+		                         delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+		                         type: 'POST',//请求方式
+		                         //自定义提交数据，默认值提交当前input value
+		                         data: function(validator) {
+		                            return {
+		                            	deptName:$('#deptName').val(),
+		                            	deptId:$('#deptId').val()
+		                            };
+		                         }
+		                     }
+		                }
+		            }
+		        }					
 			});
 		}
 		
@@ -304,7 +315,6 @@
 		              layer.msg('编辑失败!',{time:2000});
 		           },
 		           success: function(data) {
-						console.log(JSON.stringify(data));
 						if(data.status == '200'){
 							layer.close(loadLayer) ;
 							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -313,12 +323,38 @@
 							window.parent.layer.msg("编辑成功", "", 3000);
 						}else{
 							layer.close(loadLayer) ;
+							console.log("==================="+JSON.stringify(data));
 							layer.msg("职位不能为空且至少存在一个") ;
 						}
 		           }
 		       });
 			}
 		});
+		
+		//删除提示
+		$(document).on("click","#deleteBtn",function(jobId){
+			var dele= this;
+			layer.confirm("您确认删除信息吗？", {
+			    btn: ["是","否"], //按钮
+			    shade: false //不显示遮罩
+			},function(index){
+			     layer.close(index);
+			     $(dele).parent().parent().next().remove();
+			     $(dele).closest('.job_container').remove();
+			},function(index){
+				//点击否
+				layer.close(index);
+			});
+		});
+		
+		//删除不提示
+		$(document).on("click","#deleteBtn1",function(jobId){
+			var dele= this;
+			//删除按钮
+		    $(dele).parent().parent().next().remove();
+		    $(dele).closest('.job_container').remove();
+			
+		});	
 		
 		//返回刷新页面 
 		function closeWindow() {
