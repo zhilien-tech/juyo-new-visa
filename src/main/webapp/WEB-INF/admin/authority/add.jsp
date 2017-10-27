@@ -201,7 +201,7 @@
 		                     }
 		                }
 		            },
-		            jobName: {
+		            jobName:{
 		                validators: {
 		                    notEmpty: {
 		                        message: '职位名称不能为空!'
