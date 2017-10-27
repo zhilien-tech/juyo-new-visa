@@ -6,6 +6,8 @@
 
 package com.juyo.visa.admin.sale.service;
 
+import org.nutz.ioc.loader.annotation.IocBean;
+
 /**
  * TODO(这里用一句话描述这个类的作用)
  * <p>
@@ -14,7 +16,7 @@ package com.juyo.visa.admin.sale.service;
  * @author   孙斌
  * @Date	 2017年10月26日 	 
  */
+@IocBean
 public class SaleViewService {
 
 }
-

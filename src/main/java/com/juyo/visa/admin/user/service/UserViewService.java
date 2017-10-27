@@ -17,10 +17,13 @@ import org.nutz.log.Logs;
 import com.google.common.collect.Lists;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.user.form.ApplicantUser;
+import com.juyo.visa.common.access.AccessConfig;
+import com.juyo.visa.common.access.sign.MD5;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.UserStatusEnum;
+import com.juyo.visa.entities.TComJobEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TDepartmentEntity;
 import com.juyo.visa.entities.TFunctionEntity;
@@ -85,9 +88,20 @@ public class UserViewService extends BaseService<TUserEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object addUser(TUserAddForm addForm) {
+		String password = MD5.sign("000000", AccessConfig.password_secret, AccessConfig.INPUT_CHARSET);
+
+		addForm.setPassword(password);
+		addForm.setUserType(UserLoginEnum.PERSONNEL.intKey());
 		addForm.setOpId(0);
 		addForm.setCreateTime(new Date());
-		this.add(addForm);
+		TUserEntity user = this.add(addForm);
+		TComJobEntity comjob = dbDao.fetch(TComJobEntity.class, Cnd.where("jobid", "=", addForm.getJobId()));
+		TUserJobEntity userjob = new TUserJobEntity();
+		userjob.setComJobId(comjob.getId());
+		userjob.setEmpId(user.getId());
+		userjob.setHireDate(new Date());
+		userjob.setStatus(IsYesOrNoEnum.YES.intKey());
+		dbDao.insert(userjob);
 		return JsonResult.success("添加成功");
 	}
 
@@ -129,6 +143,10 @@ public class UserViewService extends BaseService<TUserEntity> {
 		TUserEntity tUser = this.fetch(updateForm.getId());
 		updateForm.setCreateTime(tUser.getCreateTime());
 		this.update(updateForm);
+		TUserJobEntity userjob = dbDao.fetch(TUserJobEntity.class, Cnd.where("empid", "=", updateForm.getId()));
+		TComJobEntity comjob = dbDao.fetch(TComJobEntity.class, Cnd.where("jobid", "=", updateForm.getJobId()));
+		userjob.setComJobId(comjob.getId());
+		dbDao.update(userjob);
 		return JsonResult.success("修改成功");
 	}
 
