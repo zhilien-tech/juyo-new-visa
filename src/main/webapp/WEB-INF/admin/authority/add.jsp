@@ -1,22 +1,16 @@
-
-<%@ page contentType="text/html; charset=UTF-8" language="java"
-	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-
 <c:set var="url" value="${base}/admin/authority" />
-
 <!DOCTYPE HTML>
 <html lang="en-US" id="addHtml">
 <head>
 <meta charset="UTF-8">
-<title>添加</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<title>权限管理-添加</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<link rel="stylesheet" href="${base}/references/public/css/authority.css"><!-- 本页面style -->
 <!-- zTree -->
 <link rel="stylesheet" href="${base}/references/common/js/zTree/css/zTreeStyle/zTreeStyle.css">
 </head>
@@ -28,29 +22,27 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="submit" type="button" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
-			<div class="modal-body" style="height: 435px; overflow-y: auto;">
+			<div class="modal-body" style="height:488px; overflow-y: auto;">
 				<div class="departmentName form-group">
 					<!--部门权限 设置-->
 					<ul class="addDepartment">
 						<input id="jobJson" name="jobJson" type="hidden" value="" />
-						<li><label class=" text-right">部门名称：</label></li>
+						<li><label><span>*</span>部门名称：</label></li>
 						<li class="li-input">
 							<div>
-								<input id="deptName" name="deptName" type="text"
-									class="form-control input-sm inputText" placeholder="请输入部门名称">
-								<span class="prompt">*</span>
+								<input id="deptName" name="deptName" type="text" class="form-control input-sm inputText" placeholder="请输入部门名称">
 							</div>
 						</li>
 						<li>
 							<button type="button" class="btn btn-primary btn-sm btnPadding" id="addJob">添加职位</button>
 						</li>
 					</ul>
+					<!--end 部门权限 设置-->
 				</div>
-				<!--end 部门权限 设置-->
+				
 
 				<div class="jobName cf">
 					<!--begin 职位权限 设置-->
-
 				</div>
 				<!--end 职位权限 设置-->
 			</div>

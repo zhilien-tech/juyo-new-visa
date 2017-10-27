@@ -143,12 +143,7 @@ $("#searchBtn").on('click',function(){
 	var searchStr = $("#searchStr").val();
 	var country = $("#country").val();
 	var province = $("#province").val();
-	var city;
-	if(province != ""){
-		city = "";
-	}else{
-		city = $("#city").val();
-	}
+	var city = $("#city").val();
 	var param = {
 		"searchStr": searchStr,
 		"country" : country,
