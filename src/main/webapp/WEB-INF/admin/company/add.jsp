@@ -103,7 +103,7 @@
 									<!-- <input type="button" value="美国" class="btn btn-sm btn-state1" />
 									<input type="button" value="澳大利亚" class="btn btn-sm btn-state1" /> -->
 								</div>
-								<small class="help-block" data-bv-validator="choice" data-bv-for="scopeBtn[]" data-bv-result="VALID" style="display: none;">经营范围不能为空</small>
+								<small class="help-block" data-bv-validator="choice" data-bv-result="VALID" style="display: none;">经营范围不能为空</small>
 							</div>
 						</div>
 					</div>
