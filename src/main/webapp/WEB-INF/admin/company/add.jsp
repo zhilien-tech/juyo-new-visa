@@ -151,28 +151,10 @@
 	<script
 		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-
+	<!-- 经营范围校验 -->
+	<script src="${base}/admin/company/validateScope.js"></script>
 	<script type="text/javascript">
 		var base = "${base}";
-		//自定义校验
-		function validateScope(){
-			var parentClass = "";
-			var nextDate = "";
-			var nextStyle = "";
-			var scopeSelStr = $("#businessScopes").val();
-			if(scopeSelStr != ""){
-				parentClass = "form-group has-feedback has-success";
-				nextDate = "VALID";
-				nextStyle = "display: none;";
-			}else{
-				parentClass = "form-group has-feedback has-error";
-				nextDate = "INVALID";
-				nextStyle = "display: block;";
-			}
-			$(".btnVal input").parent().parent().attr("class",parentClass);
-			$(".btnVal input").parent().next().attr("data-bv-result",nextDate);
-			$(".btnVal input").parent().next().attr("style",nextStyle);
-		}
 		$(function() {
 			//校验
 			$('#companyAddForm').bootstrapValidator({

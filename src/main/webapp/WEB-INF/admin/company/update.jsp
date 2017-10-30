@@ -128,6 +128,7 @@
 									<input type="button" value="日本" class="btn btn-sm btn-state1" />
 									<!-- <input type="button" value="美国" class="btn btn-sm btn-state1" /> -->
 								</div>
+								<small class="help-block" data-bv-validator="choice" data-bv-for="scopeBtn[]" data-bv-result="VALID" style="display: none;">经营范围不能为空</small>
 							</div>
 						</div>
 					</div>
@@ -188,7 +189,8 @@
 	<script
 		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-
+	<!-- 经营范围校验 -->
+	<script src="${base}/admin/company/validateScope.js"></script>
 	<script type="text/javascript">
 		var base = "${base}";
 
@@ -266,13 +268,7 @@
 							}
 						}
 					},
-					license : {
-						validators : {
-							notEmpty : {
-								message : '营业执照不能为空'
-							}
-						}
-					},
+					
 				}
 			});
 		}
@@ -285,6 +281,7 @@
 		initvalidate();
 		$('#companyUpdateForm').bootstrapValidator('validate');
 		function save() {
+			validateScope();
 			$('#companyUpdateForm').bootstrapValidator('validate');
 			var bootstrapValidator = $("#companyUpdateForm").data(
 					'bootstrapValidator');
@@ -338,7 +335,7 @@
 				}
 				var scopes = $("#businessScopes").val();
 				if (scopes == "") {
-					layer.msg('经营范围不能为空');
+					//layer.msg('经营范围不能为空');
 					return;
 				}
 
@@ -366,6 +363,7 @@
 			parent.layer.close(index);
 		}
 		$(function() {
+			validateScope();
 			var scopesVal = $("#businessScopes").val();
 			if (scopesVal != null) {
 				var scopesList = scopesVal.split(",");
@@ -423,6 +421,7 @@
 							busScopes += spanVal;
 						});
 						$("#businessScopes").val(busScopes);
+						validateScope();
 					});
 			//-------------------------end 经营范围 js-------------------------
 		});
