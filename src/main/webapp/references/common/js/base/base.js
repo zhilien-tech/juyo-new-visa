@@ -1,6 +1,6 @@
 /*
  *
- *公用的js文件 base.js
+ *公用的js文件   base.js
  * 
  */
 	var BASE_PATH = '${base}';
@@ -12,6 +12,13 @@
 		sessionStorage.currentPageIndex = _index;
 		$(".sidebar-menu > li").removeClass('active');
 	    $(this).addClass("active");//同时 添加记录样式
+	    if($(this).hasClass("active")){//当选中一级菜单时
+			//alert("含有.active");
+			$(this).siblings(".menu1").next(".menu-ul").hide();
+			$(this).next('.menu-ul').toggle();
+		}else{
+			//alert("不含有.active");
+		}
 	});
 	//cookie记录已点击的index
 	if(_index!=null && undefined != _index && _index != ""){
@@ -34,16 +41,18 @@
 	}
 		 
 	//二级菜单 显示隐藏
-	if($('.menu1').is('.active')){
+	/*if($('.menu1').is('.active')){
 		$(this).next('.menu-ul').show();
 	}else{
 		$(this).next('.menu-ul').hide();
-	}
+	}*/
+	
+	//二级菜单高亮
+	//$(".menu1 li").click(function(){
 		
-	$('.menu1').click(function(){//点击一级菜单 二级显示/隐藏
-		$(this).siblings(".menu1").next(".menu-ul").hide();
-		$(this).next('.menu-ul').toggle();
-	}); 
+	//});
+	
+	
 	
 	
 	var sessionMenu = sessionStorage.menuWhetherMini;

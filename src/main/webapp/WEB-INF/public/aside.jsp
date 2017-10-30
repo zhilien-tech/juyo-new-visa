@@ -119,14 +119,12 @@
 				href="/admin/authority/list.html?currentPageIndex=10"> <img
 					src="${base}/references/public/dist/newvisacss/img/index.png" /> <font>权限管理</font>
 			</a></li>--%>
-			
-				<%-- <li id="666" class="menu1">
-					<a href="/admin/sale/list.html?currentPageIndex=666">
-						<img src="${base}/references/public/dist/newvisacss/img/index.png" />
-						<font>销售日本</font>
-					</a>
-				</li> --%>
-
+			<li id="56">
+				<a href="/admin/visaJapan/visaList.html">
+					<img src="${base}/references/public/dist/newvisacss/img/index.png" />
+					<font>签证日本</font>
+				</a>
+			</li>
 		</ul>
 		<!-- /.sidebar-menu -->
 	</section>
