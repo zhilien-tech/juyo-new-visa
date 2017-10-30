@@ -11,3 +11,30 @@
 .padLeft{padding-left: 14px;font-size: 14px;margin: 15px 0 2px 0;}
 .paddiLeAdd{padding-left: inherit;}
 .returnMargi {position: relative;top: 15px;}
+/*new 签证布局*/
+body{min-width:1160px;overflow-x: auto;}
+.qz-head{height: 50px;border-bottom: solid 1px #cee1ff;background-color: #fff;padding-left: 30px;padding-right: 15px;}
+.qz-head p{display: inline-block;line-height: 50px;font-size: 15px;color: #2175e5;}
+.qz-head span{margin-right: 60px;}
+.qz-head input{position: relative;top: 11px;margin-right: 15px;font-size: 12px !important;}
+.info{width:100%;background-color: #fff;margin-bottom:15px;}
+.info-head{height: 35px;line-height: 36px;border-left:solid 3px #2f86f0;padding-left: 15px;margin-bottom: 0;}
+.info-head .btn{position: relative;top: 8px;margin-right: 1.5%;}
+.info-body,.info-body-from{width:100%;padding-left:4.5%;}
+.info-body{padding-right: 7%;}
+.info-body-from{padding-right: 2.8%;padding-bottom: 10px;}
+.add-btn,.remove-btn{cursor: pointer;display: block;width: 23px;height: 23px;position: relative;top: -60px; right: -6.5%; float: right;}
+.add-btn{background-image:url(../dist/img/add.png);}
+.remove-btn{background-image:url(../dist/img/remove.png);}
+.clone-module {height: 75px;}
+.clone-module .form-group{margin-bottom: 0;}
+.bulb{background-image:url(../dist/img/bulb.png);height: 23px;width: 16px;display: block;float: right;position: absolute;top: 41px;right: 5px;cursor: pointer;}
+.bulb1{background-image:url(../dist/img/bulb1.png);}
+.body-from-input div[class*="col-sm-3"]{padding-right: 3.5%;}
+.body-from-input div[class*="col-sm-3"] .form-group .bulb{right: 15.5%;}
+.body-from-input div[class*="col-sm-6"]{padding-right: 3.5%;}
+.body-from-input div[class*="col-sm-6"] .form-group .bulb{right: 7.9%;}
+.info .clone-module:last-child{height: 85px;}
+.info-table{padding: 15px 3% 0px 3%;}
+.switch{width: 41px; display: inline-block;padding-left: 8px;}
+#schedulingTable,#principalApplicantTable{border: 1px solid #f4f4f4;}
