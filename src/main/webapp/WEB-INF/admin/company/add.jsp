@@ -103,6 +103,7 @@
 									<!-- <input type="button" value="美国" class="btn btn-sm btn-state1" />
 									<input type="button" value="澳大利亚" class="btn btn-sm btn-state1" /> -->
 								</div>
+								<small class="help-block" data-bv-validator="choice" data-bv-for="scopeBtn[]" data-bv-result="VALID" style="display: none;">经营范围不能为空</small>
 							</div>
 						</div>
 					</div>
@@ -150,7 +151,8 @@
 	<script
 		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-
+	<!-- 经营范围校验 -->
+	<script src="${base}/admin/company/validateScope.js"></script>
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
@@ -235,7 +237,6 @@
 							}
 						}
 					},
-					
 				}
 			});
 
@@ -268,6 +269,8 @@
 						busScopes += spanVal;
 					});
 					$("#businessScopes").val(busScopes);
+					validateScope();
+					
 				});
 			//-------------------------end 经营范围 js-------------------------
 		});
@@ -275,6 +278,7 @@
 
 		/*保存页面*/
 		function save() {
+			validateScope();
 			//初始化验证插件
 			$('#companyAddForm').bootstrapValidator('validate');
 			//得到获取validator对象或实例 
@@ -331,7 +335,7 @@
 				}
 				var scopes = $("#businessScopes").val();
 				if (scopes == "") {
-					layer.msg('经营范围不能为空');
+					//layer.msg('经营范围不能为空');
 					return;
 				}
 
