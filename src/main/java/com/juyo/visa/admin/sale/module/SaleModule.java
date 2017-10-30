@@ -23,7 +23,6 @@ import com.juyo.visa.admin.sale.service.SaleViewService;
  * @Date	 XXXX年XX月XX日 	 
  */
 @IocBean
-@At("admin/sale")
 public class SaleModule {
 
 	@Inject
@@ -32,10 +31,21 @@ public class SaleModule {
 	/**
 	 * 跳转到list页面
 	 */
-	@At
+	@At("admin/sale/list")
 	@GET
 	@Ok("jsp")
 	public Object list() {
 		return null;
 	}
+
+	/**
+	 * 跳转到list页面
+	 */
+	@At("admin/visaJapan/visaList")
+	@GET
+	@Ok("jsp")
+	public Object visaList() {
+		return null;
+	}
+
 }

@@ -14,7 +14,7 @@ ul.tab-ul {margin-bottom: 17px;}
 .tab-ul li{cursor: pointer;width: 50%;height: 35px;display: inline-block;text-align: center;font-size: 16px;color: #575757;border-bottom: solid 2px #fff;border-radius: 2px;}
 .tab-ul .active{border-bottom: solid 4px #67a1ea;color: #134d96;}
 .login-txt{height:34px;font-size:12px;}
-.verificationCode{width:100px;height:27px;background-color:#f1f1f1;display:block;float:right;position:relative;top:-30px;right:4px;}
+.verificationCode{width:100px;height:27px;background-color:#fff;display:block;float:right;position:relative;top:-30px;right:4px;}
 .verificationCode img{width: 100%;height:100%;}
 .login-btn{width: 100%;background-color: #008df9;color: #fff;border: solid 1px #008df9;height: 34px;border-radius:3px;font-size: 17px;}
 .checkbox{padding-left: 35px;color: #595659;margin-bottom: 0;}
