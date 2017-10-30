@@ -57,7 +57,7 @@ public class TScenicForm extends DataTablesParamForm {
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup expg = new SqlExpressionGroup();
 			expg.and("name", "LIKE", "%" + searchStr + "%").or("nameJp", "LIKE", "%" + searchStr + "%")
-					.or("cityId", "LIKE", "%" + searchStr + "%");
+					.or("c.city", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
 		cnd.orderBy("createTime", "DESC");

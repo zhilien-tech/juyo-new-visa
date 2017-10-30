@@ -217,9 +217,22 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		}
 
 		//公司信息
-		TCompanyEntity company = dbDao.fetch(TCompanyEntity.class, Cnd.where("id", "=", updateForm.getId()));
+		long compId = updateForm.getId();
+		String name = updateForm.getName();
+		String shortName = updateForm.getShortName();
+		String linkman = updateForm.getLinkman();
+		String mobile = updateForm.getMobile();
+		String email = updateForm.getEmail();
+		String address = updateForm.getAddress();
+		TCompanyEntity company = dbDao.fetch(TCompanyEntity.class, Cnd.where("id", "=", compId));
 		if (!Util.isEmpty(company)) {
 			company.setComType(comType);
+			company.setName(name);
+			company.setShortName(shortName);
+			company.setLinkman(linkman);
+			company.setMobile(mobile);
+			company.setEmail(email);
+			company.setAddress(address);
 			company.setUpdateTime(nowDate);
 			dbDao.update(company);
 		}

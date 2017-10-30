@@ -1,28 +1,20 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java"
-	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-
 <c:set var="url" value="${base}/admin/authority" />
-
 <!DOCTYPE HTML>
 <html lang="en-US" id="updateHtml">
 <head>
-<meta charset="UTF-8">
-<title>更新</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-<!-- zTree -->
-<link rel="stylesheet"
-	href="${base }/references/common/js/zTree/css/zTreeStyle/zTreeStyle.css">
+	<meta charset="UTF-8">
+	<title>更新</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<link rel="stylesheet" href="${base}/references/public/css/authority.css"><!-- 本页面style -->
+	<!-- zTree -->
+	<link rel="stylesheet" href="${base }/references/common/js/zTree/css/zTreeStyle/zTreeStyle.css">
 </head>
 <body>
-
 	<div class="modal-content">
 		<form id="authorityUpdateForm" method="POST">
 			<div class="modal-header">
@@ -30,15 +22,15 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" />
 				<input id="submit" type="button" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
-			<div class="modal-body" style="height: 435px; overflow-y: auto;">
+			<div class="modal-body" style="height:488px; overflow-y: auto;">
 				<div class="departmentName form-group">
 					<!--部门权限 设置-->
 					<input id="jobJson" name="jobJson" type="hidden" value="" /> 
 					<input id="deptId" name="id" type="hidden" value="${obj.dept.id}" />
 					<ul class="addDepartment">
-						<li><label class=" text-right">部门名称：</label></li>
+						<li><label><span>*</span>部门名称：</label></li>
 						<li class="li-input">
-							<input id="deptName" name="deptName" type="text" class="form-control input-sm inputText" value="${obj.dept.deptName }"> <span class="prompt">*</span>
+							<input id="deptName" name="deptName" type="text" class="form-control input-sm inputText" value="${obj.dept.deptName }">
 						</li>
 						<li>
 							<button id="addJob" type="button" class="btn btn-primary btn-sm btnPadding">添加职位</button>

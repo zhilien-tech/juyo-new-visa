@@ -21,7 +21,7 @@
 				</ul>
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
-						<div class="row form-right">
+						<div class="row">
 							<div class="col-md-2 left-5px right-0px">
 								<select class="input-class input-sm">
 									<option>状态</option>
@@ -44,7 +44,7 @@
 								<input type="text" class="input-sm input-class" placeholder="订单号/护照/公司简介/联系人/电话/邮箱/申请人" />
 							</div>
 						</div>
-						<div class="row form-right">
+						<div class="row">
 							<div class="col-md-2 left-5px right-0px">
 								<input type="text" class="input-sm input-class" placeholder="2017-10-10 ~ 2017-11-11" />
 							</div>

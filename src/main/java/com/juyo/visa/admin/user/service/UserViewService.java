@@ -87,7 +87,9 @@ public class UserViewService extends BaseService<TUserEntity> {
 	 * @param addForm
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object addUser(TUserAddForm addForm) {
+	public Object addUser(TUserAddForm addForm, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		addForm.setComId(loginCompany.getId());
 		String password = MD5.sign("000000", AccessConfig.password_secret, AccessConfig.INPUT_CHARSET);
 
 		addForm.setPassword(password);
@@ -139,10 +141,16 @@ public class UserViewService extends BaseService<TUserEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object updateUser(TUserUpdateForm updateForm) {
-		updateForm.setUpdateTime(new Date());
-		TUserEntity tUser = this.fetch(updateForm.getId());
-		updateForm.setCreateTime(tUser.getCreateTime());
-		this.update(updateForm);
+		TUserEntity user = dbDao.fetch(TUserEntity.class, updateForm.getId());
+		user.setName(updateForm.getName());
+		user.setMobile(updateForm.getMobile());
+		user.setQq(updateForm.getQq());
+		user.setEmail(updateForm.getEmail());
+		user.setDepartmentId(updateForm.getDepartmentId());
+		user.setJobId(updateForm.getJobId());
+		user.setUpdateTime(new Date());
+		user.setIsDisable(updateForm.getIsDisable());
+		dbDao.update(user);
 		TUserJobEntity userjob = dbDao.fetch(TUserJobEntity.class, Cnd.where("empid", "=", updateForm.getId()));
 		TComJobEntity comjob = dbDao.fetch(TComJobEntity.class, Cnd.where("jobid", "=", updateForm.getJobId()));
 		userjob.setComJobId(comjob.getId());
