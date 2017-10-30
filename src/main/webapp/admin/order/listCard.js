@@ -7,9 +7,9 @@
 new Vue({
 	el: '#card',
 	data: {
-		url:
-		orderData:[
+		orderData:
 		    {
+		    	url:BASE_PATH + "admin/orderJp/list",
 				orderNumber:"170808-FR0001",
 				orderState:"移交签证",
 				number:2,
@@ -17,40 +17,7 @@ new Vue({
 				     {companyAbbreviation:"网先僧",passportNo:"316252136"},
 				     {companyAbbreviation:"事实上",passportNo:"022251229"}
 				]
-			},
-			{
-				orderNumber:"170808-FR0002",
-				orderState:"移交签证",
-				number:3,
-				everybodyInfo:[
-				     {companyAbbreviation:"利奴斯",passportNo:"3162598936"},
-				     {companyAbbreviation:"六李思三",passportNo:"022251229"},
-				     {companyAbbreviation:"哈哈哈",passportNo:"666231203"}
-				]
-			},
-			{
-				orderNumber:"170808-FR0003",
-				orderState:"移交签证",
-				number:4,
-				everybodyInfo:[
-				     {companyAbbreviation:"打码量",passportNo:"035602136"},
-				     {companyAbbreviation:"网显色",passportNo:"235502139"},
-				     {companyAbbreviation:"张先森",passportNo:"310002136"},
-				     {companyAbbreviation:"liuliu",passportNo:"022251229"}
-				]
-			},
-			{
-				orderNumber:"170808-FR0004",
-				orderState:"移交签证",
-				number:4,
-				everybodyInfo:[
-				     {companyAbbreviation:"的生日",passportNo:"066602136"},
-				     {companyAbbreviation:"发发发",passportNo:"235502999"},
-				     {companyAbbreviation:"电饭锅",passportNo:"318882136"},
-				     {companyAbbreviation:"规划局",passportNo:"022251000"}
-				]
 			}
-		]
 	}
 });
 

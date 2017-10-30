@@ -1,4 +1,4 @@
-package com.juyo.visa.admin.sale.form;
+package com.juyo.visa.admin.order.form;
 
 import java.util.Date;
 

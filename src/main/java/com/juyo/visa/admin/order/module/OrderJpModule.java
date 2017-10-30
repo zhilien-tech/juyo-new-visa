@@ -4,15 +4,17 @@
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
-package com.juyo.visa.admin.sale.module;
+package com.juyo.visa.admin.order.module;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.Param;
 
-import com.juyo.visa.admin.sale.service.SaleViewService;
+import com.juyo.visa.admin.order.service.OrderJpViewService;
+import com.juyo.visa.forms.TOrderJpForm;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -23,11 +25,11 @@ import com.juyo.visa.admin.sale.service.SaleViewService;
  * @Date	 XXXX年XX月XX日 	 
  */
 @IocBean
-@At("admin/sale")
-public class SaleModule {
+@At("admin/orderJp")
+public class OrderJpModule {
 
 	@Inject
-	private SaleViewService saleViewService;
+	private OrderJpViewService saleViewService;
 
 	/**
 	 * 跳转到list页面
@@ -37,5 +39,13 @@ public class SaleModule {
 	@Ok("jsp")
 	public Object list() {
 		return null;
+	}
+
+	/**
+	 * 查询
+	 */
+	@At
+	public Object list(@Param("..") final TOrderJpForm sqlParamForm) {
+		return saleViewService.listDate(sqlParamForm);
 	}
 }

@@ -2,7 +2,6 @@
 <%@include file="/WEB-INF/common/tld.jsp"%>
 <%@include file="/WEB-INF/public/header.jsp"%>
 <%@include file="/WEB-INF/public/aside.jsp"%>
-<c:set var="url" value="${base}/admin/sale" />
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -63,8 +62,8 @@
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in orderData">
 							<div class="card-head">
-								<div><label>订单号：</label><span>{{data.orderNumber}}</span></div>	
-								<div><label>订单状态：</label><span>{{data.orderState}}</span></div>	
+								<div><label>订单号：</label><span>{{data.orderNumb}}</span></div>	
+								<div><label>订单状态：</label><span>{{data.state}}</span></div>	
 								<div><label>订单人数：</label><span>{{data.number}}</span></div>	
 								<div>
 									<label>操作：</label>
@@ -77,7 +76,7 @@
 							</div>
 							<ul class="card-content">
 								<li class="everybody-info" v-for="item in data.everybodyInfo">
-									<div><label>公司简称：</label><span>{{item.companyAbbreviation}}</span></div>
+									<div><label>公司简称：</label><span>{{item.comShortName}}</span></div>
 									<div><label>客户来源：</label><span>直客</span></div>
 									<div><label>联系人：</label><span>张三</span></div>
 									<div><label>电话：</label><span>{{item.passportNo}}</span></div>
@@ -98,7 +97,7 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
-	<script src="${base}/admin/sale/listCard.js"></script>
+	<script src="${base}/admin/order/listCard.js"></script>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>

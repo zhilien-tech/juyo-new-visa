@@ -4,9 +4,13 @@
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
-package com.juyo.visa.admin.sale.service;
+package com.juyo.visa.admin.order.service;
 
 import org.nutz.ioc.loader.annotation.IocBean;
+
+import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.forms.TOrderJpForm;
+import com.uxuexi.core.web.base.service.BaseService;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -17,6 +21,10 @@ import org.nutz.ioc.loader.annotation.IocBean;
  * @Date	 2017年10月26日 	 
  */
 @IocBean
-public class SaleViewService {
+public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
+	public Object listDate(TOrderJpForm queryForm) {
+
+		return this.listDate(queryForm);
+	}
 }
