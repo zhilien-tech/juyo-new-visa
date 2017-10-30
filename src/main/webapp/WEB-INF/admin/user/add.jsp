@@ -97,7 +97,9 @@
 								<label><span>*</span>禁用：</label> 
 								<select id="isDisable" name="isDisable"
 									class="form-control input-sm inpImportant">
-									<option>--请选择--</option>
+									<c:forEach var="map" items="${obj.isDisableEnum}">
+										<option value="${map.key}" ${map.key==0?'selected':''}>${map.value}</option>
+									</c:forEach>
 								</select>
 							</div>
 						</div>

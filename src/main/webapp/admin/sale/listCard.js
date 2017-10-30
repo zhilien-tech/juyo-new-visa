@@ -7,6 +7,7 @@
 new Vue({
 	el: '#card',
 	data: {
+		url:
 		orderData:[
 		    {
 				orderNumber:"170808-FR0001",
