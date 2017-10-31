@@ -53,7 +53,7 @@
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit"> </i>
+									<i class="edit" onclick="edit()"> </i>
 									<i class="shiShou"> </i>
 									<i class="sendZB"> </i>
 									<i class="ZBchange"> </i>
@@ -112,6 +112,10 @@
             });
         }
 	});
+	//跳转 签证详情页
+	function edit(){
+		window.location.href = '${base}/admin/visaJapan/visaDetail.html';
+	}
 	function search(){
 		var status = $('#status').val();
 		var sendSignDate = $('#sendSignDate').val();
