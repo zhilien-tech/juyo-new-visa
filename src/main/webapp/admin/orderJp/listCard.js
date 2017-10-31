@@ -9,7 +9,6 @@ new Vue({
 	data: {
 		orderData:
 		    {
-		    	url:BASE_PATH + 'admin/orderJp/list',
 				orderNum:"170808-FR0001",
 				orderState:"移交签证",
 				number:2,

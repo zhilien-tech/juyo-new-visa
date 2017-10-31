@@ -41,6 +41,12 @@ public class OrderJpForm extends OrderForm {
 	/**检索条件*/
 	private String searchStr;
 
+	//页码
+	private Integer pageNumber = 1;
+
+	//每页多少条
+	private Integer pageSize = 10;
+
 	private Date start_time;
 	private Date end_time;
 
@@ -62,9 +68,9 @@ public class OrderJpForm extends OrderForm {
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup expg = new SqlExpressionGroup();
 			expg.and("o.orderNum", "LIKE", "%" + searchStr + "%").or("ap.passport", "LIKE", "%" + searchStr + "%")
-					.or("o.comShortName", "LIKE", "%" + searchStr + "%").or("o.linkman", "LIKE", "%" + searchStr + "%")
-					.or("o.email", "LIKE", "%" + searchStr + "%").or("o.telephone", "LIKE", "%" + searchStr + "%")
-					.or("a.firstname", "LIKE", "%" + searchStr + "%").or("a.lastname", "LIKE", "%" + searchStr + "%");
+					.or("tc.shortName", "LIKE", "%" + searchStr + "%").or("c.linkman", "LIKE", "%" + searchStr + "%")
+					.or("c.email", "LIKE", "%" + searchStr + "%").or("c.mobile", "LIKE", "%" + searchStr + "%")
+					.or("aj.applicants", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
 		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
@@ -77,13 +83,13 @@ public class OrderJpForm extends OrderForm {
 			SqlExpressionGroup e1 = Cnd.exps("o.createtime", ">=", start_time);
 			cnd.and(e1);
 		}
-		if (!Util.isEmpty(super.getStatus())) {
-			cnd.and("o.status", "=", super.getStatus());
+		if (!Util.isEmpty(getStatus())) {
+			cnd.and("o.status", "=", getStatus());
 		}
-		if (Util.isEmpty(source)) {
+		if (!Util.isEmpty(source)) {
 			cnd.and("c.source", "=", source);
 		}
-		if (Util.isEmpty(visaType)) {
+		if (!Util.isEmpty(visaType)) {
 			cnd.and("oj.visaType", "=", visaType);
 		}
 		cnd.orderBy("o.updatetime", "DESC");
