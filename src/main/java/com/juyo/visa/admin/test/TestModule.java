@@ -32,4 +32,10 @@ public class TestModule {
 	public Object schedulingEdit() {
 		return null;
 	}
+
+	@At("admin/orderJp/order")
+	@Ok("jsp")
+	public Object order() {
+		return null;
+	}
 }
