@@ -2,7 +2,7 @@
 <%@include file="/WEB-INF/common/tld.jsp"%>
 <%@include file="/WEB-INF/public/header.jsp"%>
 <%@include file="/WEB-INF/public/aside.jsp"%>
-<c:set var="url" value="${base}/admin/sale" />
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
