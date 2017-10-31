@@ -3,7 +3,7 @@
  * 
  * */
 
-new Vue({
+/*new Vue({
 	el: '#card',
 	data: {
 		visaJapanData:[
@@ -35,9 +35,22 @@ new Vue({
 			}
 		]
 	}
+});*/
+
+/*点击实收按钮*/
+$(".shiShou").click(function(){
+	layer.open({
+	    type: 2,
+	    title: false,
+	    closeBtn:false,
+	    fix: false,
+	    maxmin: false,
+	    shadeClose: false,
+	    scrollbar: false,
+	    area: ['900px', '550px'],
+	    content: '/admin/visaJapan/shiShou.html'
+	  });
 });
-
-
 
 
 

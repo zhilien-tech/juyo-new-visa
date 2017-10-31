@@ -37,5 +37,4 @@ public class SaleModule {
 	public Object list() {
 		return null;
 	}
-
 }
