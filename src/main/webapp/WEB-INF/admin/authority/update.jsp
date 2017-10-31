@@ -46,7 +46,7 @@
 							<ul class="addDepartment marHei">
 								<li><label class="text-right">职位名称：</label></li>
 								<li class="li-input inpPadd">
-									<input name="jobName" type="text" class="form-control input-sm inputText" value='${one.jobName }'> 
+									<input name="jobName" name="jobName[]" type="text" class="form-control input-sm inputText" value='${one.jobName }'> 
 									<input name="jobId" type="hidden" value='${one.jobId }'></li>
 								<li>
 									<button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button>
@@ -118,7 +118,7 @@
 			//部门职位 编辑职位
 		    $('#addJob').click(function(){
 		       $(".job_container .ztree").hide();
-		       $('.jobName').append('<div class="job_container"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName" type="text" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" style="width:70px;" class="btn btn-primary btn-sm btnPadding" id="deleteBtn1" >删除</button></li></ul>'
+		       $('.jobName').append('<div class="job_container"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName[]" type="text" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" style="width:70px;" class="btn btn-primary btn-sm btnPadding" id="deleteBtn1" >删除</button></li></ul>'
 		       +'<div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div></div>');
 		       treeIndex++;
 		       
@@ -223,6 +223,25 @@
 		                            return {
 		                            	deptName:$('#deptName').val(),
 		                            	deptId:$('#deptId').val()
+		                            };
+		                         }
+		                     }
+		                }
+		            },
+		            'jobName[]':{
+		                validators: {
+		                    notEmpty: {
+		                        message: '职位名称不能为空!'
+		                    },
+		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+		                         url: '${base}/admin/authority/checkJobNameExist.html',//验证地址
+		                         message: '此职位已存在，请重新输入!',//提示消息
+		                         delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+		                         type: 'POST',//请求方式
+		                         //自定义提交数据，默认值提交当前input value
+		                         data: function(validator) {
+		                            return {
+		                            	jobName:$('#jobName').val()
 		                            };
 		                         }
 		                     }

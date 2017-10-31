@@ -25,7 +25,7 @@
 							<div class="col-sm-12">
 								<div class="form-group">
 									<input id="loginMobile" name="loginName" type="text" class="form-control login-txt" placeholder="手机号码" />
-									<button type="button" class="phoneBtn" onclick="getMessageCode()">获取验证码</button>
+									<button type="button" class="phoneBtn" onclick="getMessageCode(this)">获取验证码</button>
 								</div>
 							</div>
 						</div>
@@ -106,7 +106,7 @@
 			if(messageErrMsg && messageErrMsg != undefined){
 				layer.msg(messageErrMsg,{maxWidth:250});
 			}
-			function getMessageCode(){
+			function getMessageCode(obj){
 				var loginMobile = $('#loginMobile').val();
 				
 				if(loginMobile){
@@ -119,10 +119,14 @@
 							data:{mobile:loginMobile}, 
 							success: function(data){
 					        	if(data){
+					        		time(obj);
 					        		sendMessage(loginMobile);
 					        	}else{
 					        		layer.msg('游客不存在！');
 					        	}
+					        },
+					        error:function(error,status){
+					        	layer.msg('服务器不可用！');
 					        }
 						});
 				    }else{
@@ -141,9 +145,36 @@
 					data:{mobile:loginMobile}, 
 					success: function(data){
 						layer.msg(data);
+			        },
+			        error:function(error,status){
+			        	layer.msg('服务器不可用！');
 			        }
 				});
 			}
+			
+			//60秒之后获取验证码
+			var wait=60; 
+			function time(obj) { 
+		        if (wait == 0) { 
+		        	obj.removeAttribute("disabled");    
+		        	obj.innerHTML="获取验证码";
+		        	obj.style.backgroundColor = '#008df9';
+		        	obj.style.border = 'solid 1px #008df9';
+		            wait = 60; 
+		        } else { 
+		        	obj.setAttribute("disabled", true); 
+		        	obj.innerHTML=wait+"秒后重新发送";
+		        	obj.style.backgroundColor = '#ABABAB';
+		        	obj.style.border = 'solid 1px #ABABAB';
+		            wait--; 
+		            setTimeout(function() { 
+		                time(obj) 
+		            }, 
+		            1000) 
+		        } 
+		    } 
+			//document.getElementById("btn").onclick=function(){time(this);} 
+
 		</script>
 </body>
 </html>

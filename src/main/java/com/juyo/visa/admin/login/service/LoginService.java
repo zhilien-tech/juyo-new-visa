@@ -149,6 +149,11 @@ public class LoginService extends BaseService<TUserEntity> {
 				//游客跳转的页面
 				form.setReturnUrl(">>:/admin/applyvisa/list.html");
 			} else {
+				//功能列表为空
+				if (Util.isEmpty(allUserFunction)) {
+					form.setErrMsg("未设置权限");
+					return false;
+				}
 				//普通员工跳转页面（默认第一个功能）
 				String url = "";
 				for (TFunctionEntity tFunctionEntity : allUserFunction) {
@@ -156,6 +161,11 @@ public class LoginService extends BaseService<TUserEntity> {
 						url = tFunctionEntity.getUrl();
 						break;
 					}
+				}
+				//所分配功能的URL地址全部为空
+				if (Util.isEmpty(url)) {
+					form.setErrMsg("未设置功能URL");
+					return false;
 				}
 				form.setReturnUrl(">>:" + url + "?currentPageIndex=1");
 			}
