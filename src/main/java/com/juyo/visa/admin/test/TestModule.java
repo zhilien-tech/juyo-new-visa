@@ -26,4 +26,10 @@ public class TestModule {
 	public Object ssss() {
 		return null;
 	}
+
+	@At("admin/visaJapan/schedulingEdit")
+	@Ok("jsp")
+	public Object schedulingEdit() {
+		return null;
+	}
 }
