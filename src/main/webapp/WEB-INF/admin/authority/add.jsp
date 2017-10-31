@@ -109,7 +109,7 @@
 			//部门职位 添加职位
 		    $('#addJob').click(function(){
 		       $(".job_container .ztree").hide();
-		       $('.jobName').append('<div class="job_container form-group"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName'+(treeIndex)+'" type="text" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn" >删除</button></li></ul>'
+		       $('.jobName').append('<div class="job_container form-group"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName[]" type="text" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn" >删除</button></li></ul>'
 		       +'<div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div></div>');
 		       treeIndex++;
 			   var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
@@ -160,12 +160,10 @@
 		   var jobJson = JSON.stringify(jobInfos) ;
 		   $("#jobJson").val(jobJson) ;
 		}
-	</script>
-
-	<script type="text/javascript">
-		var base = "${base}";
-		$(function() {
-			//校验
+	   
+	   //校验功能
+	   function validateForm(){
+		 //校验
 			$('#authorityAddForm').bootstrapValidator({
 				message : '验证不通过',
 				feedbackIcons : {
@@ -193,7 +191,7 @@
 		                     }
 		                }
 		            },
-		            jobName:{
+		            'jobName[]':{
 		                validators: {
 		                    notEmpty: {
 		                        message: '职位名称不能为空!'
@@ -215,6 +213,13 @@
 
 				}
 			});
+	   }
+	</script>
+
+	<script type="text/javascript">
+		var base = "${base}";
+		$(function() {
+			validateForm();
 		});
 		/* 页面初始化加载完毕 */
 
@@ -262,6 +267,7 @@
 		//保存
 		$("#submit").click(function(){
 			setFunc();
+			validateForm();
 			$('#authorityAddForm').bootstrapValidator('validate');
 			var bootstrapValidator = $("#authorityAddForm").data('bootstrapValidator');
 			var _deptName = $("input#deptName").val();
