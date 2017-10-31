@@ -2,7 +2,7 @@
 <%@include file="/WEB-INF/common/tld.jsp"%>
 <%@include file="/WEB-INF/public/header.jsp"%>
 <%@include file="/WEB-INF/public/aside.jsp"%>
-<c:set var="url" value="${base}/admin/sale" />
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -53,7 +53,7 @@
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit"> </i>
+									<i class="edit" onclick="edit()"> </i>
 									<i class="shiShou"> </i>
 									<i class="sendZB"> </i>
 									<i class="ZBchange"> </i>
@@ -110,6 +110,10 @@
             });
         }
 	});
+	//跳转 签证详情页
+	function edit(){
+		window.location.href = '${base}/admin/visaJapan/visaDetail.html';
+	}
 	function search(){
 		var status = $('#status').val();
 		var sendSignDate = $('#sendSignDate').val();
