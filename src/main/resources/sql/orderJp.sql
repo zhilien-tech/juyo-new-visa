@@ -1,28 +1,27 @@
 /*orderJp_list*/
-SELECT 
+SELECT
 o.orderNum,
 o.number,
 o.`status`,
-o.comShortName,
+tc.shortName,
 c.source,
-o.linkman,
-o.telephone,
-(
-		SELECT
-			GROUP_CONCAT(
-				cast(a.id AS CHAR) SEPARATOR ','
-			)
-		FROM
-			t_applicant a
-		WHERE
-			aoj.applicantId = a.id
-	) AS applicants
+c.linkman,
+c.mobile,
+aj.applicants
 FROM
 t_order o
-LEFT JOIN t_customer c ON o.customerId = c.id
 LEFT JOIN t_order_jp oj ON oj.orderId = o.id
-LEFT JOIN t_applicant_order_jp aoj ON aoj.orderId = oj.id
-LEFT JOIN t_applicant a ON aoj.applicantId = a.id
-LEFT JOIN t_applicant_passport ap ON ap.applicantId = a.id
+LEFT JOIN t_customer c ON o.customerId = c.id
+LEFT JOIN (
+	SELECT
+		aoj.orderId,a.id,
+		GROUP_CONCAT(CONCAT(a.firstName, a.lastName) SEPARATOR '、') applicants
+	FROM 
+	t_applicant a
+	LEFT JOIN 
+	t_applicant_order_jp aoj ON aoj.applicantId = a.id
+) aj ON aj.orderId = oj.id
+LEFT JOIN t_applicant_passport ap ON ap.applicantId = aj.id
+LEFT JOIN t_company tc ON tc.id = o.comId
 
 $condition

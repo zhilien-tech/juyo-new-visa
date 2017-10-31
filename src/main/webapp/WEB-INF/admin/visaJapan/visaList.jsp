@@ -106,8 +106,6 @@
             	type:'post',
             	success: function(data){
             		_self.visaJapanData = data.visaJapanData;
-            		console.log(JSON.stringify(data));
-            		//_self.data=eval("(" + data +")");
               	}
             });
         }
@@ -128,7 +126,6 @@
         	type:'post',
         	success: function(data){
         		_self.visaJapanData = data.visaJapanData;
-        		//console.log(JSON.stringify(data));
           	}
         });
 	}

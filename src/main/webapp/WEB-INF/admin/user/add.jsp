@@ -94,9 +94,13 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>禁用：</label> <input id="isDisable"
-									name="isDisable" type="text" class="form-control input-sm"
-									placeholder=" " />
+								<label><span>*</span>禁用：</label> 
+								<select id="isDisable" name="isDisable"
+									class="form-control input-sm inpImportant">
+									<c:forEach var="map" items="${obj.isDisableEnum}">
+										<option value="${map.key}" ${map.key==0?'selected':''}>${map.value}</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 					</div>
