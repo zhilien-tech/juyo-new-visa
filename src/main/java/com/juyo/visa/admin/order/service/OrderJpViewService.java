@@ -47,7 +47,23 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		sql.setPager(pager);
 		sql.setCallback(Sqls.callback.records());
 		nutDao.execute(sql);
+		//XIANSHANG(1, "线上"), OTS(2, "OTS"), ZHIKE(3, "直客"), XIANXIA(4, "线下");
 		List<Record> orderJp = (List<Record>) sql.getResult();
+		for (Record record : orderJp) {
+			int sourceInt = (int) record.get("source");
+			if (sourceInt == 1) {
+				record.set("source", "线上");
+			}
+			if (sourceInt == 2) {
+				record.set("source", "OTS");
+			}
+			if (sourceInt == 3) {
+				record.set("source", "直客");
+			}
+			if (sourceInt == 4) {
+				record.set("source", "线下");
+			}
+		}
 		result.put("orderJp", orderJp);
 		return result;
 
