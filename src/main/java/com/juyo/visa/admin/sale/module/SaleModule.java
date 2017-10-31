@@ -38,14 +38,4 @@ public class SaleModule {
 		return null;
 	}
 
-	/**
-	 * 跳转到list页面
-	 */
-	@At("admin/visaJapan/visaList")
-	@GET
-	@Ok("jsp")
-	public Object visaList() {
-		return null;
-	}
-
 }

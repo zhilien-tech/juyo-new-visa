@@ -35,3 +35,4 @@ FROM
 INNER JOIN t_com_function tcf ON tc.id = tcf.comId
 INNER JOIN t_function tf ON tcf.funId = tf.id
 where tc.id = @comId
+order by tf.sort asc
