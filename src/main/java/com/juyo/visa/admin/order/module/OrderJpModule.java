@@ -13,8 +13,8 @@ import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
-import com.juyo.visa.forms.TOrderJpForm;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -37,15 +37,7 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object list() {
-		return null;
-	}
-
-	/**
-	 * 查询
-	 */
-	@At
-	public Object list(@Param("..") final TOrderJpForm sqlParamForm) {
-		return saleViewService.listDate(sqlParamForm);
+	public Object list(@Param("..") final OrderJpForm sqlParamForm) {
+		return saleViewService.listData(sqlParamForm);
 	}
 }

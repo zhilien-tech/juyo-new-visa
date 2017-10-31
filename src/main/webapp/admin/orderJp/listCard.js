@@ -9,14 +9,18 @@ new Vue({
 	data: {
 		orderData:
 		    {
-		    	url:BASE_PATH + "admin/orderJp/list",
-				orderNumber:"170808-FR0001",
+		    	url:BASE_PATH + 'admin/orderJp/list',
+				orderNum:"170808-FR0001",
 				orderState:"移交签证",
 				number:2,
+				comShortName:22,
 				everybodyInfo:[
 				     {companyAbbreviation:"网先僧",passportNo:"316252136"},
 				     {companyAbbreviation:"事实上",passportNo:"022251229"}
 				]
+			},
+			everybodyInfo:{
+				
 			}
 	}
 });

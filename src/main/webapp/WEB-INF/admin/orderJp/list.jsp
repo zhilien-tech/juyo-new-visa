@@ -60,11 +60,12 @@
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div class="card-list" v-for="data in orderData">
+						<a v-bind:href="url"></a>
+						<div class="card-list" v-for="orderInfo in orderData">
 							<div class="card-head">
-								<div><label>订单号：</label><span>{{data.orderNumb}}</span></div>	
-								<div><label>订单状态：</label><span>{{data.state}}</span></div>	
-								<div><label>订单人数：</label><span>{{data.number}}</span></div>	
+								<div><label>订单号：</label><span>{{orderInfo.orderNumb}}</span></div>	
+								<div><label>订单状态：</label><span>{{orderInfo.state}}</span></div>	
+								<div><label>订单人数：</label><span>{{orderInfo.number}}</span></div>	
 								<div>
 									<label>操作：</label>
 									<i> </i>
@@ -97,7 +98,7 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
-	<script src="${base}/admin/order/listCard.js"></script>
+	<script src="${base}/admin/orderJp/listCard.js"></script>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>

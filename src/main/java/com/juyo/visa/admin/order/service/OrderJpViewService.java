@@ -6,10 +6,16 @@
 
 package com.juyo.visa.admin.order.service;
 
+import java.util.Map;
+
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.juyo.visa.admin.order.form.OrderJpForm;
+import com.juyo.visa.common.enums.CustomerTypeEnum;
+import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.entities.TOrderJpEntity;
-import com.juyo.visa.forms.TOrderJpForm;
+import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.web.base.service.BaseService;
 
 /**
@@ -23,8 +29,10 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
-	public Object listDate(TOrderJpForm queryForm) {
-
-		return this.listDate(queryForm);
+	public Object listData(OrderJpForm queryForm) {
+		Map<String, Object> result = MapUtil.map();
+		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
+		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(MainSaleVisaTypeEnum.class));
+		return result;
 	}
 }
