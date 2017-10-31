@@ -9,7 +9,7 @@ package com.juyo.visa.admin.visajp.service;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -20,8 +20,11 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
+import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -45,7 +48,14 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param request
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object visaListData(VisaListDataForm form, HttpServletRequest request) {
+	public Object visaListData(VisaListDataForm form, HttpSession session) {
+		//获取当前公司
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		//获取当前用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		form.setUserid(loginUser.getId());
+		form.setCompanyid(loginCompany.getId());
+		form.setAdminId(loginCompany.getAdminId());
 		Map<String, Object> result = Maps.newHashMap();
 		Sql sql = form.sql(sqlManager);
 

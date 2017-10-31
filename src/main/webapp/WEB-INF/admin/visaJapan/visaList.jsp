@@ -29,13 +29,13 @@
 								</select>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间" />
+								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onkeypress="onkeyEnter()"/>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" />
+								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/>
 							</div>
 							<div class="col-md-3 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照/公司简介/联系人/电话/邮箱/申请人" />
+								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter()"/>
 							</div>
 							<div class="col-md-3 left-5px">
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
@@ -127,6 +127,13 @@
         		//console.log(JSON.stringify(data));
           	}
         });
+	}
+	//回车事件
+	function onkeyEnter(){
+	    var e = window.event || arguments.callee.caller.arguments[0];
+	    if(e && e.keyCode == 13){
+	    	search();
+		 }
 	}
 	</script>
 </body>

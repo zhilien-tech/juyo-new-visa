@@ -6,7 +6,7 @@
 
 package com.juyo.visa.admin.visajp.module;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -59,7 +59,7 @@ public class VisaJapanModule {
 	 */
 	@At
 	@POST
-	public Object visaListData(@Param("..") VisaListDataForm form, HttpServletRequest request) {
-		return visaJapanService.visaListData(form, request);
+	public Object visaListData(@Param("..") VisaListDataForm form, HttpSession session) {
+		return visaJapanService.visaListData(form, session);
 	}
 }
