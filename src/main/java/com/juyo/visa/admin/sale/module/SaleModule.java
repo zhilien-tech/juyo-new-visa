@@ -37,25 +37,4 @@ public class SaleModule {
 	public Object list() {
 		return null;
 	}
-
-	/**
-	 * 跳转到list页面
-	 */
-	@At("admin/visaJapan/visaList")
-	@GET
-	@Ok("jsp")
-	public Object visaList() {
-		return null;
-	}
-
-	/**
-	 * 跳转到list页面
-	 */
-	@At("admin/visaJapan/shiShou")
-	@GET
-	@Ok("jsp")
-	public Object shiShou() {
-		return null;
-	}
-
 }

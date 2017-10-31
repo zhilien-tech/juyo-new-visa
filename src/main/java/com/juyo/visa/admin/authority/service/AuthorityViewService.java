@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -56,7 +57,19 @@ public class AuthorityViewService extends BaseService<DeptJobForm> {
 		TCompanyEntity company = LoginUtil.getLoginCompany(session);
 		int companyId = company.getId();
 		sqlForm.setComId(companyId);
-		return listPage4Datatables(sqlForm);
+		Map<String, Object> listPage4Datatables = listPage4Datatables(sqlForm);
+		List<Record> records = (List<Record>) listPage4Datatables.get("data");
+		if (!Util.isEmpty(records)) {
+			for (Record record : records) {
+				String moduleName = record.getString("modulename");
+				if (!Util.isEmpty(moduleName)) {
+					moduleName = moduleName.replaceAll("销售,|初审,|前台,|签证,|售后,", "");
+				}
+				record.put("modulename", moduleName);
+			}
+			listPage4Datatables.put("data", records);
+		}
+		return listPage4Datatables;
 	}
 
 	/**
