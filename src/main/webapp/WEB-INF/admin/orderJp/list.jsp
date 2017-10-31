@@ -61,7 +61,7 @@
 							</div>
 							<div class="col-md-6 left-5px">
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
-								<a class="btn btn-primary btn-sm pull-right" onclick="" id="addBtn">拍视频</a>
+								<a class="btn btn-primary btn-sm pull-right" onclick="order()" id="orderBtn">下单</a>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
@@ -144,6 +144,10 @@
 	        		//console.log(JSON.stringify(data));
 	          	}
 	        });
+		}
+		//跳转 签证详情页
+		function order(){
+			window.location.href = '${base}/admin/orderJp/order.html';
 		}
 	</script>
 </body>
