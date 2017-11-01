@@ -14,6 +14,7 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
+import org.nutz.dao.util.cri.SqlExpressionGroup;
 
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
@@ -41,6 +42,12 @@ public class VisaListDataForm implements SQLParamForm {
 	private Integer pageNumber = 1;
 	//每页多少条
 	private Integer pageSize = 10;
+	//公司id
+	private Integer companyid;
+	//用户id
+	private Integer userid;
+	//公司管理员id
+	private Integer adminId;
 
 	@Override
 	public Sql sql(SqlManager sqlManager) {
@@ -54,10 +61,24 @@ public class VisaListDataForm implements SQLParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		if (!Util.isEmpty(searchStr)) {
-			cnd.and("tr.orderNum", "like", "%" + searchStr + "%");
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.orderNum", "like", "%" + searchStr + "%").or("tc.linkman", "like", "%" + searchStr + "%")
+					.or("tc.mobile", "like", "%" + searchStr + "%").or("tc.email", "like", "%" + searchStr + "%")
+					.or("taj.applyname", "like", "%" + searchStr + "%");
+			cnd.and(exp);
+		}
+		if (!Util.isEmpty(sendSignDate)) {
+			cnd.and("tr.sendVisaDate", ">", sendSignDate);
+		}
+		if (!Util.isEmpty(signOutDate)) {
+			cnd.and("tr.outVisaDate", "<", signOutDate);
+		}
+		if (userid.equals(adminId)) {
+			//公司管理员
+		} else {
+			//普通的操作员
 		}
 		return cnd;
-
 	}
 
 }
