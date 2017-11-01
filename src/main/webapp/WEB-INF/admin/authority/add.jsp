@@ -1,4 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java"
+	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
 <c:set var="url" value="${base}/admin/authority" />
 <!DOCTYPE HTML>
@@ -6,23 +7,32 @@
 <head>
 <meta charset="UTF-8">
 <title>权限管理-添加</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-<link rel="stylesheet" href="${base}/references/public/css/authority.css"><!-- 本页面style -->
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet"
+	href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<link rel="stylesheet"
+	href="${base}/references/public/css/authority.css">
+<!-- 本页面style -->
 <!-- zTree -->
-<link rel="stylesheet" href="${base}/references/common/js/zTree/css/zTreeStyle/zTreeStyle.css">
+<link rel="stylesheet"
+	href="${base}/references/common/js/zTree/css/zTreeStyle/zTreeStyle.css">
 </head>
 <body>
 	<div class="modal-content">
 		<form id="authorityAddForm" method="post">
 			<div class="modal-header">
-				<span class="heading">添加</span> 
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="submit" type="button" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<span class="heading">添加</span> <input id="backBtn" type="button"
+					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
+					data-dismiss="modal" value="取消" /> <input id="submit"
+					type="button" class="btn btn-primary pull-right btn-sm btn-right"
+					value="保存" />
 			</div>
-			<div class="modal-body" style="height:488px; overflow-y: auto;">
+			<div class="modal-body" style="height: 488px; overflow-y: auto;">
 				<div class="departmentName form-group">
 					<!--部门权限 设置-->
 					<ul class="addDepartment">
@@ -30,16 +40,18 @@
 						<li><label><span>*</span>部门名称：</label></li>
 						<li class="li-input">
 							<div>
-								<input id="deptName" name="deptName" type="text" class="form-control input-sm inputText" placeholder="请输入部门名称">
+								<input id="deptName" name="deptName" type="text"
+									class="form-control input-sm inputText" placeholder="请输入部门名称">
 							</div>
 						</li>
 						<li>
-							<button type="button" class="btn btn-primary btn-sm btnPadding" id="addJob">添加职位</button>
+							<button type="button" class="btn btn-primary btn-sm btnPadding"
+								id="addJob">添加职位</button>
 						</li>
 					</ul>
 					<!--end 部门权限 设置-->
 				</div>
-				
+
 
 				<div class="jobName cf">
 					<!--begin 职位权限 设置-->
@@ -53,35 +65,25 @@
 		var BASE_PATH = '${base}';
 	</script>
 	<!-- jQuery 2.2.3 -->
-	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script
+		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script
+		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!--zTree -->
-	<script src="${base}/references/common/js/zTree/jquery.ztree.core-3.5.js"></script>
-	<script src="${base}/references/common/js/zTree/jquery.ztree.excheck-3.5.js"></script>
-	<script src="${base}/references/common/js/zTree/jquery.ztree.exedit-3.5.js"></script>
-
+	<script
+		src="${base}/references/common/js/zTree/jquery.ztree.core-3.5.js"></script>
+	<script
+		src="${base}/references/common/js/zTree/jquery.ztree.excheck-3.5.js"></script>
+	<script
+		src="${base}/references/common/js/zTree/jquery.ztree.exedit-3.5.js"></script>
+	<!-- 引入DataTables JS -->
+	<script src="${base}/admin/authority/validateJobName.js"></script>
 
 	<script type="text/javascript">
-	
-	  //jobName keyup事件
-	   function jobNameKeyup(e){
-		  var jobDiv = $(e).parent().parent().parent();
-		  var jobSmall = $(e).parent().parent().next().children().first();
-		  if(($(e).val()).length>0){
-			  jobDiv.attr("class", "job_container form-group has-success");
-			  jobSmall.attr("data-bv-result","VALID");
-			  jobSmall.attr("style","display: none;");
-		  }else{
-			  jobDiv.attr("class", "job_container form-group has-error");
-			  jobSmall.attr("data-bv-result","INVALID");
-			  jobSmall.attr("style","display: block;");
-		  }
-	   }
-	
 		var setting = {
 				check: {
 					enable: true,//显示复选框
@@ -283,6 +285,7 @@
 		//保存
 		$("#submit").click(function(){
 			setFunc();
+			validateJobName();
 			validateForm();
 			$('#authorityAddForm').bootstrapValidator('validate');
 			var bootstrapValidator = $("#authorityAddForm").data('bootstrapValidator');
