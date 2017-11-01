@@ -443,10 +443,10 @@ public class AuthorityViewService extends BaseService<DeptJobForm> {
 		int count = 0;
 		if (Util.isEmpty(jobId)) {
 			//add
-			count = nutDao.count(TJobEntity.class, Cnd.where("name", "=", jobName));
+			count = nutDao.count(TJobEntity.class, Cnd.where("jobName", "=", jobName));
 		} else {
 			//update
-			count = nutDao.count(TJobEntity.class, Cnd.where("name", "=", jobName).and("id", "!=", jobId));
+			count = nutDao.count(TJobEntity.class, Cnd.where("jobName", "=", jobName).and("id", "!=", jobId));
 		}
 		map.put("valid", count <= 0);
 		return map;

@@ -42,7 +42,7 @@
 				<div class="jobName cf">
 					<!--职位权限 设置-->
 					<c:forEach var="one" items="${obj.list}" varStatus="stat">
-						<div class="job_container has-success">
+						<div class="job_container form-group has-success">
 							<ul class="addDepartment marHei">
 								<li><label class="text-right">职位名称：</label></li>
 								<li class="li-input inpPadd">
@@ -57,12 +57,14 @@
 								<c:when test="${stat.index == 0}">
 									<div class="ztree none">
 										<small class="help-block" data-bv-validator="notEmpty" data-bv-for="jobName[]" data-bv-result="VALID" style="display: none;">职位名称不能为空</small>
+										<small class="help-block" data-bv-validator="remote" data-bv-for="jobName[]" data-bv-result="INVALID" style="display: none;">职位名称已存在，请重新输入</small>
 										<ul id="tree_${stat.index}"></ul>
 									</div>
 								</c:when>
 								<c:otherwise>
 									<div class="ztree none">
 										<small class="help-block" data-bv-validator="notEmpty" data-bv-for="jobName[]" data-bv-result="VALID" style="display: none;">职位名称不能为空</small>
+										<small class="help-block" data-bv-validator="remote" data-bv-for="jobName[]" data-bv-result="INVALID" style="display: none;">职位名称已存在，请重新输入</small>
 										<ul id="tree_${stat.index}"></ul>
 									</div>
 								</c:otherwise>
@@ -122,7 +124,7 @@
 		    $('#addJob').click(function(){
 		       $(".job_container .ztree").hide();
 		       $('.jobName').append('<div class="job_container has-success"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName[]" onkeyup="jobNameKeyup(this);" type="text" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" style="width:70px;" class="btn btn-primary btn-sm btnPadding" id="deleteBtn1" >删除</button></li></ul>'
-		       +'<div class="ztree"><small class="help-block" data-bv-validator="notEmpty" data-bv-for="jobName[]" data-bv-result="IVVALID" style="display: none;">职位名称不能为空</small><ul id="tree_'+treeIndex+'"></ul></div></div>');
+		       +'<div class="ztree"><small class="help-block" data-bv-validator="notEmpty" data-bv-for="jobName[]" data-bv-result="IVVALID" style="display: none;">职位名称不能为空</small><small class="help-block" data-bv-validator="remote" data-bv-for="jobName[]" data-bv-result="INVALID" style="display: none;">职位名称已存在，请重新输入</small><ul id="tree_'+treeIndex+'"></ul></div></div>');
 		       treeIndex++;
 		       
 		       var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
@@ -218,7 +220,7 @@
 		                    },
 		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 		                         url: '${base}/admin/authority/checkDeptNameExist.html',//验证地址
-		                         message: '部门名称已存在，请重新输入!',//提示消息
+		                         message: '部门名称已存在，请重新输入',//提示消息
 		                         delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
 		                         type: 'POST',//请求方式
 		                         //自定义提交数据，默认值提交当前input value
@@ -238,7 +240,7 @@
 		                    },
 		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 		                         url: '${base}/admin/authority/checkJobNameExist.html',//验证地址
-		                         message: '此职位已存在，请重新输入!',//提示消息
+		                         message: '此职位已存在，请重新输入',//提示消息
 		                         delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
 		                         type: 'POST',//请求方式
 		                         //自定义提交数据，默认值提交当前input value
@@ -297,6 +299,10 @@
 		$("#submit").click(function(){
 			setFunc();
 			validateJobName();
+			var hasClass = validateSave();
+			if(hasClass){
+				return false;
+			}
 			$('#authorityUpdateForm').bootstrapValidator('validate');
 			var bootstrapValidator = $("#authorityUpdateForm").data('bootstrapValidator');
 			var _deptName = $("input#deptName").val();
@@ -338,7 +344,7 @@
 							window.parent.layer.msg("编辑成功", "", 3000);
 						}else{
 							layer.close(loadLayer) ;
-							console.log("==================="+JSON.stringify(data));
+							console.log("==================="+JSON.stringify(data)); //职位名称已存在 或者其他。。。
 							layer.msg("职位不能为空且至少存在一个") ;
 						}
 		           }

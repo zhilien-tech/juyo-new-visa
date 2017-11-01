@@ -44,9 +44,9 @@
 									class="form-control input-sm inputText" placeholder="请输入部门名称">
 							</div>
 						</li>
-						<li>
-							<button type="button" class="btn btn-primary btn-sm btnPadding"
-								id="addJob">添加职位</button>
+						<li><input id="jobId" type="hidden" value=''></li>
+						<button type="button" class="btn btn-primary btn-sm btnPadding"
+							id="addJob">添加职位</button>
 						</li>
 					</ul>
 					<!--end 部门权限 设置-->
@@ -128,7 +128,7 @@
 		    $('#addJob').click(function(){
 		       $(".job_container .ztree").hide();
 		       $('.jobName').append('<div class="job_container form-group has-success"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName[]" type="text"  onkeyup="jobNameKeyup(this);" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn" >删除</button></li></ul>'
-		       +'<div class="ztree"><small class="help-block" data-bv-validator="notEmpty" data-bv-for="jobName[]" data-bv-result="IVVALID" style="display: none;">职位名称不能为空</small><ul id="tree_'+treeIndex+'"></ul></div></div>');
+		       +'<div class="ztree"><small class="help-block" data-bv-validator="notEmpty" data-bv-for="jobName[]" data-bv-result="IVVALID" style="display: none;">职位名称不能为空</small><small class="help-block" data-bv-validator="remote" data-bv-for="jobName[]" data-bv-result="INVALID" style="display: none;">职位名称已存在，请重新输入</small><ul id="tree_'+treeIndex+'"></ul></div></div>');
 		       treeIndex++;
 			   var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
 		       var treeId = ztree_container.attr("id") ;
@@ -158,6 +158,7 @@
 		      	}
 		    });
 	    });
+	   
 	   //设置功能
 		function setFunc(){
 		   var jobInfos = [];
@@ -178,7 +179,31 @@
 		   var jobJson = JSON.stringify(jobInfos) ;
 		   $("#jobJson").val(jobJson) ;
 		}
-	   
+		//校验职位权限是否为空
+		   function validateFuc(){
+			   var jobFunBoolean = "";
+			   $(".job_container").each(function(index,container){
+				   var jobName = $(container).find("input[id='jobName']").val();
+				   var treeObj = $.fn.zTree.getZTreeObj("tree_" + index);
+				   var nodes =  treeObj.getCheckedNodes(true);
+				   var funcIds = "" ;
+					$(nodes).each(function(i,node){
+						funcIds += node.id + ",";
+					});
+				   if(funcIds==""){
+					   jobFunBoolean += jobName+",";//表示没有功能
+				   }
+			   });
+			 
+			   if(jobFunBoolean.length>1){
+				   jobFunBoolean = jobFunBoolean.substring(0, jobFunBoolean.length-1); //职位权限为空的职位
+				   jobFunBoolean = "职位："+jobFunBoolean +" 的职位权限不能为空";
+			   }else{
+				   jobFunBoolean = "";
+			   }
+			   console.log(jobFunBoolean);
+			   return jobFunBoolean;
+		   }
 	   //校验功能
 	   function validateForm(){
 		 //校验
@@ -284,9 +309,18 @@
 		
 		//保存
 		$("#submit").click(function(){
-			setFunc();
 			validateJobName();
+			setFunc();
+			var funBoolean = validateFuc();
+			if(funBoolean!=""){
+				layer.msg(funBoolean,{time:2000});
+				return false;
+			}
 			validateForm();
+			var hasClass = validateSave();
+			if(hasClass){
+				return false;
+			}
 			$('#authorityAddForm').bootstrapValidator('validate');
 			var bootstrapValidator = $("#authorityAddForm").data('bootstrapValidator');
 			var _deptName = $("input#deptName").val();
