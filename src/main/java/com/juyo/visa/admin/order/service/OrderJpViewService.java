@@ -19,6 +19,7 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.juyo.visa.admin.order.form.OrderJpForm;
+import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.web.base.page.OffsetPager;
@@ -47,7 +48,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		sql.setPager(pager);
 		sql.setCallback(Sqls.callback.records());
 		nutDao.execute(sql);
+		//XIANSHANG(1, "线上"), OTS(2, "OTS"), ZHIKE(3, "直客"), XIANXIA(4, "线下");
 		List<Record> orderJp = (List<Record>) sql.getResult();
+		for (Record record : orderJp) {
+			int sourceInt = (int) record.get("source");
+			for (CustomerTypeEnum customerTypeEnum : CustomerTypeEnum.values()) {
+				if (sourceInt == customerTypeEnum.intKey()) {
+					record.put("source", customerTypeEnum.value());
+				}
+			}
+		}
 		result.put("orderJp", orderJp);
 		return result;
 

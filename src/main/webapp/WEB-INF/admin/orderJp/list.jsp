@@ -70,8 +70,8 @@
 						<div class="card-list" v-for="data in orderJpData">
 							<div class="card-head">
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>	
-								<div><label>订单状态：</label><span>{{data.status}}</span></div>	
-								<div><label>订单人数：</label><span>{{data.number}}</span></div>	
+								<div><label>人数：</label><span>{{data.peoplenum}}</span></div>	
+								<div><label>状态：</label><span>{{data.status}}</span></div>	
 								<div>
 									<label>操作：</label>
 									<i> </i>

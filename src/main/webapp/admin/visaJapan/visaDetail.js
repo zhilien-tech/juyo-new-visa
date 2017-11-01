@@ -31,10 +31,11 @@ $(function(){
 	});*/
 	
 	//生成行程安排 click按钮
-	$(".schedulingBtn").click(function(){
+	/*$(".schedulingBtn").click(function(){
 		$("#schedulingTable").toggle();
-	});
+	});*/
 });
+
 
 function schedulingEdit(){
 	layer.open({
@@ -49,3 +50,4 @@ function schedulingEdit(){
 	    content: '/admin/visaJapan/schedulingEdit.html'
 	});
 }
+
