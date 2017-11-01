@@ -66,6 +66,22 @@
 
 
 	<script type="text/javascript">
+	
+	  //jobName keyup事件
+	   function jobNameKeyup(e){
+		  var jobDiv = $(e).parent().parent().parent();
+		  var jobSmall = $(e).parent().parent().next().children().first();
+		  if(($(e).val()).length>0){
+			  jobDiv.attr("class", "job_container form-group has-success");
+			  jobSmall.attr("data-bv-result","VALID");
+			  jobSmall.attr("style","display: none;");
+		  }else{
+			  jobDiv.attr("class", "job_container form-group has-error");
+			  jobSmall.attr("data-bv-result","INVALID");
+			  jobSmall.attr("style","display: block;");
+		  }
+	   }
+	
 		var setting = {
 				check: {
 					enable: true,//显示复选框
@@ -109,8 +125,8 @@
 			//部门职位 添加职位
 		    $('#addJob').click(function(){
 		       $(".job_container .ztree").hide();
-		       $('.jobName').append('<div class="job_container form-group"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName[]" type="text" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn" >删除</button></li></ul>'
-		       +'<div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div></div>');
+		       $('.jobName').append('<div class="job_container form-group has-success"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName[]" type="text"  onkeyup="jobNameKeyup(this);" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn" >删除</button></li></ul>'
+		       +'<div class="ztree"><small class="help-block" data-bv-validator="notEmpty" data-bv-for="jobName[]" data-bv-result="IVVALID" style="display: none;">职位名称不能为空</small><ul id="tree_'+treeIndex+'"></ul></div></div>');
 		       treeIndex++;
 			   var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
 		       var treeId = ztree_container.attr("id") ;
@@ -175,7 +191,7 @@
 					deptName: {
 		                validators: {
 		                    notEmpty: {
-		                        message: '部门名称不能为空!'
+		                        message: '部门名称不能为空'
 		                    },
 		                   remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 		                         url: '${base}/admin/authority/checkDeptNameExist.html',//验证地址
@@ -194,7 +210,7 @@
 		            'jobName[]':{
 		                validators: {
 		                    notEmpty: {
-		                        message: '职位名称不能为空!'
+		                        message: '职位名称不能为空'
 		                    },
 		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 		                         url: '${base}/admin/authority/checkJobNameExist.html',//验证地址
