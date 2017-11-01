@@ -38,6 +38,7 @@
 								<label><span>*</span>客户来源：</label> <select id="customerType"
 									name="source" class="form-control input-sm inpImportant"
 									onchange="selectListData();">
+									<option>--请选择--</option>
 									<c:forEach var="map" items="${obj.customerTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
 									</c:forEach>

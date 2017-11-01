@@ -38,3 +38,21 @@ body{min-width:1160px;overflow-x: auto;}
 .info-table{padding: 15px 3% 0px 3%;}
 .switch{width: 41px; display: inline-block;padding-left: 8px;}
 #schedulingTable,#principalApplicantTable{border: 1px solid #f4f4f4;}
+.editHui,.resetHui{display: inline-block;cursor: pointer;width: 16px;height: 16px;margin: 0 5%;}
+.editHui{background-image: url(../dist/newvisacss/img/editHui.png);}
+.resetHui{background-image: url(../dist/newvisacss/img/resetHui.png);}
+.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
+.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
+.schedulingBtn,.addApplicantBtn,.addExpressInfoBtn{width: 30%;margin: 15px auto;display: block;}
+
+
+
+
+
+
+
+
+
+
+
+
