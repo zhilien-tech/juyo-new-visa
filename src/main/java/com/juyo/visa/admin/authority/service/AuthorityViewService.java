@@ -14,6 +14,7 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
+import org.nutz.dao.util.Daos;
 import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
@@ -438,15 +439,31 @@ public class AuthorityViewService extends BaseService<DeptJobForm> {
 	}
 
 	//校验职位名称唯一性
-	public Object checkJobNameExist(final String jobName, final Long jobId) {
+	public Object checkJobNameExist(final String jobName, final Long jobId, HttpSession session) {
+		//通过session获取公司的id
+		TCompanyEntity company = LoginUtil.getLoginCompany(session);
+		int comId = company.getId();
 		Map<String, Object> map = new HashMap<String, Object>();
-		int count = 0;
+		long count = 0;
+		Sql sql = Sqls.create(sqlManager.get("authority_delete_job"));
 		if (Util.isEmpty(jobId)) {
 			//add
-			count = nutDao.count(TJobEntity.class, Cnd.where("jobName", "=", jobName));
+			Cnd cnd = Cnd.NEW();
+			cnd.and("j.jobName", "=", jobName);
+			cnd.and("d.comId", "=", comId);
+			sql.setCondition(cnd);
+			count = Daos.queryCount(null, sql.toString());
+			//count = nutDao.count(TDepartmentEntity.class,Cnd.where("deptName", "=", deptName).and("comId", "=", companyId));
+
 		} else {
 			//update
-			count = nutDao.count(TJobEntity.class, Cnd.where("jobName", "=", jobName).and("id", "!=", jobId));
+			Cnd cnd = Cnd.NEW();
+			cnd.and("j.jobName", "=", jobName);
+			cnd.and("d.comId", "=", comId);
+			cnd.and("j.id", "!=", jobId);
+			sql.setCondition(cnd);
+			count = Daos.queryCount(null, sql.toString());
+			//count = nutDao.count(TJobEntity.class, Cnd.where("jobName", "=", jobName).and("id", "!=", jobId));
 		}
 		map.put("valid", count <= 0);
 		return map;
