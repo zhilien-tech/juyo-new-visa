@@ -80,7 +80,7 @@
 		src="${base}/references/common/js/zTree/jquery.ztree.excheck-3.5.js"></script>
 	<script
 		src="${base}/references/common/js/zTree/jquery.ztree.exedit-3.5.js"></script>
-	<!-- 引入DataTables JS -->
+	<!-- 引入validateJobName JS -->
 	<script src="${base}/admin/authority/validateJobName.js"></script>
 
 	<script type="text/javascript">
