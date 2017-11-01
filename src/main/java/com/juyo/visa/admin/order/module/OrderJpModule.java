@@ -34,12 +34,15 @@ import com.uxuexi.core.common.util.MapUtil;
  * @Date	 XXXX年XX月XX日 	 
  */
 @IocBean
-@At("admin/orderJp")
+@At("/admin/orderJp")
 public class OrderJpModule {
 
 	@Inject
 	private OrderJpViewService saleViewService;
 
+	/**
+	 * 跳转到list页面
+	 */
 	@At
 	@GET
 	@Ok("jsp")
@@ -51,7 +54,7 @@ public class OrderJpModule {
 	}
 
 	/**
-	 * 跳转到list页面
+	 * 加载list页面
 	 */
 	@At
 	@POST
