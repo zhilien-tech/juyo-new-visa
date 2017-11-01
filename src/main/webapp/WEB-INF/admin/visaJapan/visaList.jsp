@@ -53,7 +53,7 @@
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit" onclick="edit()"> </i>
+									<i class="edit" onclick="" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou"> </i>
 									<i class="sendZB"> </i>
 									<i class="ZBchange"> </i>
@@ -110,11 +110,19 @@
             		//_self.data=eval("(" + data +")");
               	}
             });
+        },
+        methods:{
+        	visaDetail:function(orderid){
+        		//跳转到签证详情页面
+        		window.location.href = '${base}/admin/visaJapan/visaDetail.html?orderid='+orderid;
+        		//console.log(message);
+        		//alert(JSON.stringify(event.target));
+        	}
         }
 	});
 	//跳转 签证详情页
-	function edit(){
-		window.location.href = '${base}/admin/visaJapan/visaDetail.html';
+	function edit(orderid){
+		window.location.href = '${base}/admin/visaJapan/visaDetail.html?orderid='+orderid;
 	}
 	function search(){
 		var status = $('#status').val();
