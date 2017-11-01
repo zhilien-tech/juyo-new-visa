@@ -36,6 +36,8 @@ function jobNameKeyup(e){
 		jobDiv.attr("class", "job_container form-group has-error");
 		jobSmall.attr("data-bv-result","INVALID");
 		jobSmall.attr("style","display: block;");
+		jobSmallExist.attr("data-bv-result","VALID");
+		jobSmallExist.attr("style","display: none;");
 	}
 
 }
