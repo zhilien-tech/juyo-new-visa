@@ -38,4 +38,10 @@ public class TestModule {
 	public Object order() {
 		return null;
 	}
+
+	@At("admin/orderJp/addApplicant")
+	@Ok("jsp")
+	public Object addApplicant() {
+		return null;
+	}
 }
