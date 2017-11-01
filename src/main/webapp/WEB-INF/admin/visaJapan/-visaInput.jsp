@@ -2,43 +2,27 @@
 <%@include file="/WEB-INF/common/tld.jsp"%>
 <%@include file="/WEB-INF/public/header.jsp"%>
 <%@include file="/WEB-INF/public/aside.jsp"%>
-
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>签证-日本</title>
+	<title>签证录入</title>
 	<link rel="stylesheet" href="${base}/references/public/css/visaJapan.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
 		<div class="content-wrapper"  style="min-height: 848px;">
 				<ul class="title">
-					<li>签证</li>
-					<li class="arrow"></li>
-					<li>日本</li>
+					<li>签证录入</li>
+					<!-- <li class="arrow"></li>
+					<li>日本</li> -->
 				</ul>
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
-							<div class="col-md-2 left-5px right-0px">
-								<select class="input-class input-sm" id="status" name="status">
-									<option value="">状态</option>
-									<option></option>
-								</select>
-							</div>
-							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间" />
-							</div>
-							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" />
-							</div>
-							<div class="col-md-3 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照/公司简介/联系人/电话/邮箱/申请人" />
-							</div>
-							<div class="col-md-3 left-5px">
-								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+							<div class="col-md-12">
+								<a class="btn btn-primary btn-sm pull-right" href="javascript:;" id="">添加已有签证</a>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
@@ -54,14 +38,6 @@
 								<div>
 									<label>操作：</label>
 									<i class="edit" onclick="edit()"> </i>
-									<i class="shiShou"> </i>
-									<i class="sendZB"> </i>
-									<i class="ZBchange"> </i>
-									<i class="ZBcancel"> </i>
-									<i class="download"> </i>
-									<i class="handoverTable"> </i>
-									<i class="visaInput" onclick="visaInput()"> </i>
-									<i class="afterSales"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
@@ -114,12 +90,6 @@
 	function edit(){
 		window.location.href = '${base}/admin/visaJapan/visaDetail.html';
 	}
-	
-	//跳转 签证录入页
-	function visaInput(){
-		window.location.href = '${base}/admin/visaJapan/visaInput.html';
-	}
-	
 	function search(){
 		var status = $('#status').val();
 		var sendSignDate = $('#sendSignDate').val();
