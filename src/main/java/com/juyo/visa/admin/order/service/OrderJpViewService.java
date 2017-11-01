@@ -19,8 +19,17 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.juyo.visa.admin.order.form.OrderJpForm;
+import com.juyo.visa.admin.order.form.OrderJpUpdateForm;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
+import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
+import com.juyo.visa.common.enums.MainBackMailTypeEnum;
+import com.juyo.visa.common.enums.MainSalePayTypeEnum;
+import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
+import com.juyo.visa.common.enums.MainSaleUrgentEnum;
+import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
+import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -61,5 +70,26 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("orderJp", orderJp);
 		return result;
 
+	}
+
+	public Object addOrder() {
+		Map<String, Object> result = MapUtil.map();
+		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
+		result.put("mainSaleUrgentEnum", EnumUtil.enum2(MainSaleUrgentEnum.class));
+		result.put("mainSaleUrgentTimeEnum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
+		result.put("mainSaleTripTypeEnum", EnumUtil.enum2(MainSaleTripTypeEnum.class));
+		result.put("mainSalePayTypeEnum", EnumUtil.enum2(MainSalePayTypeEnum.class));
+		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(MainSaleVisaTypeEnum.class));
+		result.put("mainBackMailSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
+		result.put("mainBackMailTypeEnum", EnumUtil.enum2(MainBackMailTypeEnum.class));
+		return result;
+	}
+
+	public Object fetchOrder(long id) {
+		return null;
+	}
+
+	public Object updateOrder(OrderJpUpdateForm updateForm) {
+		return null;
 	}
 }

@@ -66,7 +66,6 @@
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<a v-bind:href="url"></a>
 						<div class="card-list" v-for="data in orderJpData">
 							<div class="card-head">
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>	

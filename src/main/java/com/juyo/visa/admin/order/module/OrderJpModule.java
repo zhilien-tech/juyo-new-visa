@@ -19,6 +19,7 @@ import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.order.form.OrderJpForm;
+import com.juyo.visa.admin.order.form.OrderJpUpdateForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
@@ -61,4 +62,34 @@ public class OrderJpModule {
 	public Object listData(@Param("..") final OrderJpForm sqlParamForm, HttpSession session) {
 		return saleViewService.listData(sqlParamForm, session);
 	}
+
+	/**
+	 * 跳转到'添加操作'的录入数据页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object order() {
+		return saleViewService.addOrder();
+	}
+
+	/**
+	 * 跳转到'修改操作'的录入数据页面,实际就是[按照主键查询单个实体]
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object order(@Param("id") final long id) {
+		return saleViewService.fetchOrder(id);
+	}
+
+	/**
+	 * 执行'修改操作'
+	 */
+	@At
+	@POST
+	public Object order(@Param("..") OrderJpUpdateForm updateForm) {
+		return saleViewService.updateOrder(updateForm);
+	}
+
 }

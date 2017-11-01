@@ -17,7 +17,7 @@
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
-		<div class="wrapper">
+		<div class="wrapper" id="vueData">
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<div class="qz-head">
 					<span class="">订单号：<p>170202-JP0001</p></span>
@@ -32,14 +32,20 @@
 				</div>
 				<section class="content">
 					<!-- 客户信息 -->
-					<div class="info">
+					<div class="info" id="customerInfo">
 						<p class="info-head">客户信息</p>
 						<div class="info-body-from">
 							<div class="row body-from-input"><!-- 公司全称 -->
 								<div class="col-sm-3">
 									<div class="form-group">
+										
+									
 										<label><span>*</span>客户来源：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+										<select class="form-control input-sm" id="source" name="source" v-model="source">
+											<option v-for = "data in orderJpData" v-bind:value="data.customerTypeEnum.key">
+												{{data.customerTypeEnum.value}}
+											</option>
+										</select>
 										<i class="bulb"></i>
 									</div>
 								</div>
@@ -86,7 +92,7 @@
 					<!-- end 客户信息 -->
 	
 					<!-- 订单信息 -->
-					<div class="info">
+					<div class="orderInfo">
 						<p class="info-head">订单信息</p>
 						<div class="info-body-from">
 							<div class="row body-from-input"><!-- 人数/领区/加急 -->
@@ -258,7 +264,7 @@
 					<!-- end 订单信息 -->
 					
 					<!-- 快递信息 -->
-					<div class="info expressInfo none">
+					<div class="info expressInfo none" id="expressInfo">
 						<p class="info-head">快递信息</p>
 						<div class="info-body-from">
 							<div class="row body-from-input"><!-- 资料来源/回邮方式/回邮地址 -->
@@ -356,14 +362,36 @@
 			<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
 	
 		</div>
-		<script type="text/javascript">
-			var BASE_PATH = '${base}';
-		</script>
+		
 		<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 		<script src="${base}/references/common/js/layer/layer.js"></script>
+		<script src="${base}/references/common/js/vue/vue.min.js"></script>
 		<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 		<script src="${base}/admin/orderJp/order.js"></script><!-- 本页面js文件 -->
+		<script type="text/javascript">
+			var BASE_PATH = '${base}';
+			var url="${base}/admin/orderJp/order.html";
+		    //vue表格数据对象
+		    var _self;
+			new Vue({
+				el: '#vueData',
+				data: {orderJpData:""},
+				created:function(){
+		            _self=this;
+		            $.ajax({ 
+		            	url: url,
+		            	dataType:"json",
+		            	type:'get',
+		            	success: function(data){
+		            		alert(JSON.stringify(data));
+		            		_self.orderJpData = data.customerTypeEnum;
+		            		//_self.data=eval("(" + data +")");
+		              	}
+		            });
+		        }
+			}); 
+		</script>
 	</body>
 </html>
