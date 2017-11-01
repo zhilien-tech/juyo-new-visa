@@ -23,7 +23,7 @@
 			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
 			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
 			.deposit,.vehicle,.houseProperty{display: none;}
-			.schedulingBtn{width: 30%;margin: 15px auto;display: block;}
+			
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -323,7 +323,17 @@
 												</tr>
 											</thead>
 											<tbody>
-												
+												<tr>
+													<td>D2</td>
+													<td>2017-10-31</td>
+													<td>东京</td>
+													<td>KDFCHgkdvckgDVHG</td>
+													<td>SLchbLKXCBljhdc</td>
+													<td>
+														<i class="editHui" onclick="schedulingEdit()"></i>
+														<i class="resetHui"></i>
+													</td>
+												</tr>
 											</tbody>
 										</table>
 									</div>

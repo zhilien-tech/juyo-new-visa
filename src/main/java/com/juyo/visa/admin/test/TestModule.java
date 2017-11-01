@@ -7,6 +7,8 @@
 package com.juyo.visa.admin.test;
 
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Ok;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -19,4 +21,15 @@ import org.nutz.ioc.loader.annotation.IocBean;
 @IocBean
 public class TestModule {
 
+	@At("admin/visaJapan/schedulingEdit")
+	@Ok("jsp")
+	public Object schedulingEdit() {
+		return null;
+	}
+
+	@At("admin/orderJp/order")
+	@Ok("jsp")
+	public Object order() {
+		return null;
+	}
 }

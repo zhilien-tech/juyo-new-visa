@@ -35,3 +35,19 @@ $(function(){
 		$("#schedulingTable").toggle();
 	});*/
 });
+
+
+function schedulingEdit(){
+	layer.open({
+	    type: 2,
+	    title: false,
+	    closeBtn:false,
+	    fix: false,
+	    maxmin: false,
+	    shadeClose: false,
+	    scrollbar: false,
+	    area: ['800px', '400px'],
+	    content: '/admin/visaJapan/schedulingEdit.html'
+	});
+}
+

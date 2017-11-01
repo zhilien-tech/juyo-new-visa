@@ -33,6 +33,7 @@ import com.juyo.visa.entities.TUserJobEntity;
 import com.juyo.visa.forms.TUserAddForm;
 import com.juyo.visa.forms.TUserForm;
 import com.juyo.visa.forms.TUserUpdateForm;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.db.util.DbSqlUtil;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -60,6 +61,7 @@ public class UserViewService extends BaseService<TUserEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		List<TDepartmentEntity> departmentList = dbDao.query(TDepartmentEntity.class,
 				Cnd.where("comId", "=", loginCompany.getId()), null);
+		result.put("isDisableEnum", EnumUtil.enum2(IsYesOrNoEnum.class));
 		result.put("department", departmentList);
 		return result;
 	}
@@ -125,6 +127,7 @@ public class UserViewService extends BaseService<TUserEntity> {
 				Cnd.where("comId", "=", loginCompany.getId()), null);
 		List<TJobEntity> jobList = dbDao
 				.query(TJobEntity.class, Cnd.where("deptId", "=", user.getDepartmentId()), null);
+		result.put("isDisableEnum", EnumUtil.enum2(IsYesOrNoEnum.class));
 		result.put("department", departmentList);
 		result.put("job", jobList);
 		result.put("user", user);
