@@ -19,4 +19,22 @@ $(function(){
 	$(".addExpressInfoBtn").click(function(){
 		$(".expressInfo").removeClass("none");
 	});
+	
+	//保存
+	$("#saveOrder").click(function(){
+		$.ajax({
+			url:BASE_PATH + '/admin/orderJp/order',
+			type:'post',
+			data : {
+				$("#customerType").val(),
+				$("#compName").val()
+			}
+			success:function(data){
+				console.log(JSON.stringify(data));
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+	});
 });

@@ -18,6 +18,7 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.order.form.OrderJpAddForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.form.OrderJpUpdateForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
@@ -74,12 +75,21 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 添加
+	 */
+	@At
+	@POST
+	public Object order(@Param("..") OrderJpAddForm addForm, final HttpSession session) {
+		return saleViewService.saveOrder(addForm, session);
+	}
+
+	/**
 	 * 跳转到'修改操作'的录入数据页面,实际就是[按照主键查询单个实体]
 	 */
 	@At
 	@GET
 	@Ok("jsp")
-	public Object order(@Param("id") final long id) {
+	public Object getOrder(@Param("id") final long id) {
 		return saleViewService.fetchOrder(id);
 	}
 
@@ -88,7 +98,7 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object order(@Param("..") OrderJpUpdateForm updateForm) {
+	public Object updateOrder(@Param("..") OrderJpUpdateForm updateForm) {
 		return saleViewService.updateOrder(updateForm);
 	}
 

@@ -144,7 +144,7 @@
 	          	}
 	        });
 		}
-		//跳转 签证详情页
+		//跳转详情页
 		function order(){
 			window.location.href = '${base}/admin/orderJp/order.html';
 		}

@@ -245,6 +245,7 @@
 					data : $("#customerAddForm").serialize(),
 					url : '${base}/admin/customer/add.html',
 					success : function(data) {
+						console.log($("#customerAddForm").serialize());
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						layer.close(index);
 						window.parent.layer.msg("添加成功", "", 3000);
