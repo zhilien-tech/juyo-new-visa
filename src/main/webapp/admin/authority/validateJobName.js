@@ -1,7 +1,7 @@
 //jobName keyup事件
 function jobNameKeyup(e){
 	var jobName = $(e).val();
-	var jobId = $("#jobId").val();
+	var jobId = $(e).next().val();
 	var jobDiv = $(e).parent().parent().parent();
 	var jobSmall = $(e).parent().parent().next().children().eq(0);
 	var jobSmallExist = $(e).parent().parent().next().children().eq(1);
@@ -56,4 +56,29 @@ function validateSave(){
 		hasClass = $(e).hasClass("has-error");
 	});
 	return hasClass;
+}
+
+//校验职位权限是否为空
+function validateFuc(){
+	var jobFunBoolean = "";
+	$(".job_container").each(function(index,container){
+		var jobName = $(container).find("input[id='jobName']").val();
+		var treeObj = $.fn.zTree.getZTreeObj("tree_" + index);
+		var nodes =  treeObj.getCheckedNodes(true);
+		var funcIds = "" ;
+		$(nodes).each(function(i,node){
+			funcIds += node.id + ",";
+		});
+		if(funcIds==""){
+			jobFunBoolean += jobName+",";//表示没有功能
+		}
+	});
+
+	if(jobFunBoolean.length>1){
+		jobFunBoolean = jobFunBoolean.substring(0, jobFunBoolean.length-1); //职位权限为空的职位
+		jobFunBoolean = "职位："+jobFunBoolean +" 的职位权限不能为空";
+	}else{
+		jobFunBoolean = "";
+	}
+	return jobFunBoolean;
 }

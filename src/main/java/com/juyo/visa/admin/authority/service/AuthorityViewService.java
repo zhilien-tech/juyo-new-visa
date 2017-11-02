@@ -448,21 +448,22 @@ public class AuthorityViewService extends BaseService<DeptJobForm> {
 		Map<String, Object> map = new HashMap<String, Object>();
 		int count = 0;
 		Sql sql = Sqls.create(sqlManager.get("authority_jobName_count"));
-		Cnd cnd = Cnd.NEW();
 		if (Util.isEmpty(jobId)) {
 			//add
+			Cnd cnd = Cnd.NEW();
 			cnd.and("j.jobName", "=", jobName);
 			cnd.and("d.comId", "=", comId);
-
+			sql.setCondition(cnd);
 			//count = nutDao.count(TDepartmentEntity.class,Cnd.where("deptName", "=", deptName).and("comId", "=", companyId));
 		} else {
 			//update
+			Cnd cnd = Cnd.NEW();
 			cnd.and("j.jobName", "=", jobName);
 			cnd.and("d.comId", "=", comId);
 			cnd.and("j.id", "!=", jobId);
+			sql.setCondition(cnd);
 			//count = nutDao.count(TJobEntity.class, Cnd.where("jobName", "=", jobName).and("id", "!=", jobId));
 		}
-		sql.setCondition(cnd);
 		count = (int) Daos.queryCount(nutDao, sql.toString());
 		map.put("valid", count <= 0);
 		return map;

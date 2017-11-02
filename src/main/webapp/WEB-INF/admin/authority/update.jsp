@@ -299,6 +299,11 @@
 		$("#submit").click(function(){
 			setFunc();
 			validateJobName();
+			var funBoolean = validateFuc();
+			if(funBoolean!=""){
+				layer.msg(funBoolean,{time:2000});
+				return false;
+			}
 			var hasClass = validateSave();
 			if(hasClass){
 				return false;
