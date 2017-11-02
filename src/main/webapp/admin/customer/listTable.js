@@ -139,7 +139,7 @@ function add(){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '380px'],
+		area: ['800px', '400px'],
 		content: BASE_PATH + '/admin/customer/add.html'
 	});
 }
@@ -153,7 +153,7 @@ function edit(id){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '380px'],
+		area: ['800px', '400px'],
 		content: BASE_PATH + '/admin/customer/update.html?id='+id
 	});
 }

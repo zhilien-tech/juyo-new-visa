@@ -14,7 +14,7 @@
 		<ul class="sidebar-menu">
 
 			<div class="hamburgerImg">
-				<img src="${base}/references/public/dist/newvisacss/img/02.jpg" />
+				<img src="${base}/references/public/dist/newvisacss/img/02.png" />
 			</div>
 			<c:forEach items="${auths }" var="function" varStatus="status">
 				<%-- <li id="${status.index+1 }">
