@@ -125,8 +125,10 @@ public class AuthorityViewService extends BaseService<DeptJobForm> {
 			if (!Util.isEmpty(jobJsonArray)) {
 				for (JobDto jobDto : jobJsonArray) {
 					int jobId = 0;
-					saveOrUpdateSingleJob(userId, deptId, jobId, companyId, jobDto.getJobName(),
-							jobDto.getFunctionIds());
+					String functionIds = jobDto.getFunctionIds();
+					if (!Util.isEmpty(functionIds)) {
+						saveOrUpdateSingleJob(userId, deptId, jobId, companyId, jobDto.getJobName(), functionIds);
+					}
 				}
 			}
 		}
