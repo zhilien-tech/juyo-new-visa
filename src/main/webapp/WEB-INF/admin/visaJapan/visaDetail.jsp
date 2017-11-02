@@ -7,6 +7,8 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>签证详情</title>
+		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
+		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
@@ -33,7 +35,7 @@
 					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
 					<span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span>
 					<span class="">状态：<p>{{orderinfo.visastatus}}</p></span>
-					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:history.go(-1)"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="自动填报" class="btn btn-primary btn-sm pull-right" />
@@ -117,63 +119,113 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>签证类型：</label>
-										<select class="form-control input-sm" v-model="orderinfo.visatype">
+										<select id="visatype" class="form-control input-sm" v-model="orderinfo.visatype">
 											<c:forEach var="map" items="${obj.mainsalevisatypeenum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
 										</select>
 									</div>
 								</div>
-								<div class="col-sm-9">
-									<div class="form-group viseType-btn">
-										<label style="display:block;">&nbsp;</label>
-										<input type="button" value="冲绳县" class="btn btn-sm btnState">
-										<input type="button" value="青森县" class="btn btn-sm btnState">
-										<input type="button" value="岩手县" class="btn btn-sm btnState">
-										<input type="button" value="宫城县" class="btn btn-sm btnState">
-										<input type="button" value="秋田县" class="btn btn-sm btnState">
-										<input type="button" value="山形县" class="btn btn-sm btnState">
-										<input type="button" value="福鸟县" class="btn btn-sm btnState">
-									</div>
-								</div>
+								<c:choose>
+									<c:when test="${obj.jporderinfo.visaType == 2 }">
+										<div class="col-sm-9" id="visacounty">
+											<div class="form-group viseType-btn">
+												<label style="display:block;">&nbsp;</label>
+												<input name="visacounty" type="button" value="冲绳县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="青森县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="岩手县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="宫城县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="秋田县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="山形县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="福鸟县" class="btn btn-sm btnState">
+											</div>
+										</div>
+									</c:when>
+									<c:otherwise>
+										<div class="col-sm-9 none" id="visacounty">
+											<div class="form-group viseType-btn">
+												<label style="display:block;">&nbsp;</label>
+												<input name="visacounty" type="button" value="冲绳县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="青森县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="岩手县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="宫城县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="秋田县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="山形县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="福鸟县" class="btn btn-sm btnState">
+											</div>
+										</div>
+									
+									</c:otherwise>
+								</c:choose>
 							</div><!-- end 签证类型 -->
-							<div class="row body-from-input"><!-- 过去三年是否访问过 -->
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>过去三年是否访问过：</label>
-										<select class="form-control input-sm" v-model="orderinfo.isvisit">
-											<c:forEach var="map" items="${obj.isyesornoenum}">
-												<option value="${map.key}">${map.value}</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-								<div class="col-sm-9">
-									<div class="form-group">
-										<label style="display:block;">&nbsp;</label>
-										<input type="button" value="岩手县" class="btn btn-sm btnState btnState-true">
-										<input type="button" value="秋田县" class="btn btn-sm btnState btnState-true">
-										<input type="button" value="山形县" class="btn btn-sm btnState btnState-true">
-									</div>
-								</div>
-							</div><!-- end 过去三年是否访问过 -->
-							<div class="row body-from-input"><!-- 出行时间/停留天数/返回时间 -->
+							<c:choose>
+								<c:when test="${obj.jporderinfo.visaType == 2 }">
+									<div class="row body-from-input" id="threefangwen"><!-- 过去三年是否访问过 -->
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>过去三年是否访问过：</label>
+												<select class="form-control input-sm" v-model="orderinfo.isvisit">
+													<c:forEach var="map" items="${obj.isyesornoenum}">
+														<option value="${map.key}">${map.value}</option>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-9">
+											<div class="form-group viseType-btn">
+												<label style="display:block;">&nbsp;</label>
+												<input name="threecounty" type="button" value="岩手县" class="btn btn-sm btnState">
+												<input name="threecounty" type="button" value="秋田县" class="btn btn-sm btnState">
+												<input name="threecounty" type="button" value="山形县" class="btn btn-sm btnState">
+											</div>
+										</div>
+									</div><!-- end 过去三年是否访问过 -->
+								</c:when>
+								<c:otherwise>
+									<div class="row body-from-input none" id="threefangwen"><!-- 过去三年是否访问过 -->
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>过去三年是否访问过：</label>
+												<select class="form-control input-sm" v-model="orderinfo.isvisit">
+													<c:forEach var="map" items="${obj.isyesornoenum}">
+														<option value="${map.key}">${map.value}</option>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-9">
+											<div class="form-group viseType-btn">
+												<label style="display:block;">&nbsp;</label>
+												<input name="threecounty" type="button" value="岩手县" class="btn btn-sm btnState">
+												<input name="threecounty" type="button" value="秋田县" class="btn btn-sm btnState">
+												<input name="threecounty" type="button" value="山形县" class="btn btn-sm btnState">
+											</div>
+										</div>
+									</div><!-- end 过去三年是否访问过 -->
+								</c:otherwise>
+							</c:choose>
+							<div class="row body-from-input target"><!-- 出行时间/停留天数/返回时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行时间：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="orderinfo.gotripdate"/>
+										<input id="gotripdate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.gotripdate"/>
+										<!-- <date-picker field="myDate" placeholder="选择日期"
+											 :no-today="true"
+											 :value.sync="date3"
+											 :format="format"
+											 v-model="orderinfo.gotripdate"></date-picker> -->
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>停留天数：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="orderinfo.stayday"/>
+										<input id="" name="" type="text" class="form-control input-sm" v-model="orderinfo.stayday"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回时间：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="orderinfo.backtripdate"/>
+										<input id="backtripdate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.backtripdate"/>
 									</div>
 								</div>
 							</div><!-- end 出行时间/停留天数/返回时间 -->
@@ -181,13 +233,13 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>送签时间：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="orderinfo.sendvisadate"/>
+										<input id="sendvisadate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.sendvisadate"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出签时间：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="orderinfo.outvisadate"/>
+										<input id="outvisadate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.outvisadate"/>
 									</div>
 								</div>
 							</div><!-- end 送签时间/出签时间 -->
@@ -243,7 +295,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行目的：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.trippurpose"/>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.tripPurpose"/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -253,26 +305,32 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发日期：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.godate"/>
+										<input id="goDate" name="" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="travelinfo.goDate"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.godeparturecity"/>
+										<select id="goDepartureCity" class="form-control select2 select2City" multiple="multiple" v-model="travelinfo.goDepartureCity">
+											<option value="${obj.goleavecity.id}" selected="selected">${obj.goleavecity.city}</option>
+										</select>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>抵达城市：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.goarrivedcity"/>
+										<select id="goArrivedCity" class="form-control input-sm select2City" multiple="multiple" v-model="travelinfo.goArrivedCity">
+											<option value="${obj.goarrivecity.id}" selected="selected">${obj.goarrivecity.city}</option>
+										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.goflightnum"/>
+										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.goFlightNum">
+											<option value="${obj.goflightnum.id }" selected="selected">${obj.goflightnum.flightnum }</option>
+										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -282,26 +340,32 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回日期：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.returndate"/>
+										<input id="returnDate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="travelinfo.returnDate"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.returndeparturecity"/>
+										<select id="returnDepartureCity" class="form-control select2 select2City" multiple="multiple" v-model="travelinfo.returnDepartureCity">
+											<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
+										</select>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回城市：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.returnarrivedcity"/>
+										<select id="returnArrivedCity" class="form-control input-sm select2City" multiple="multiple" v-model="travelinfo.returnArrivedCity">
+											<option value="${obj.backarrivecity.id}" selected="selected">${obj.backarrivecity.city}</option>
+										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.returnflightnum"/>
+										<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.returnFlightNum">
+											<option value="${obj.returnflightnum.id }" selected="selected">${obj.returnflightnum.flightnum }</option>
+										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -322,16 +386,16 @@
 													<th><span>操作<span></th>
 												</tr>
 											</thead>
-											<tbody>
+											<tbody v-for="plan in travelplan">
 												<tr>
-													<td>D2</td>
-													<td>2017-10-31</td>
+													<td>{{plan.day}}</td>
+													<td>{{plan.outDate}}</td>
 													<td>东京</td>
-													<td>KDFCHgkdvckgDVHG</td>
-													<td>SLchbLKXCBljhdc</td>
+													<td>{{plan.scenic}}</td>
+													<td>{{plan.hotel}}</td>
 													<td>
-														<i class="editHui" onclick="schedulingEdit()"></i>
-														<i class="resetHui"></i>
+														<i class="editHui" v-on:click="schedulingEdit(plan.id)">修改</i>
+														<i class="resetHui" v-on:click="resetPlan(plan.id)">重置</i>
 													</td>
 												</tr>
 											</tbody>
@@ -347,52 +411,46 @@
 			<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
 	
 		</div>
-	
+		<script type="text/javascript">
+			var BASE_PATH = '${base}';
+			var orderid = '${obj.orderid}';
+		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 		<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 		<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
-		<script src="${base}/references/common/js/vue/vue.min.js"></script>
-		<script src="${base}/references/common/js/layer/layer.js"></script>
 		<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+		<script src="${base}/references/common/js/layer/layer.js"></script>
+		<!-- select2 -->
+		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+		<script src="${base}/references/common/js/vue/vue.min.js"></script>
+		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+		<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
 		<script src="${base}/admin/visaJapan/visaDetail.js"></script><!-- 本页面js文件 -->
 		<script type="text/javascript">
-		//VUE准备数据
-		//orderinfo订单信息 travelinfo出行信息 visainfo 签证信息 applyinfo申请人信息 travelplan行程安排
-		var orderobj;
-		new Vue({
-			el: '#wrapper',
-			data: {orderinfo:"",
-				   travelinfo:"",
-				   applyinfo:"",
-				   travelplan:""
-				   
-			},
-			created:function(){
-	            orderobj=this;
-	            var url = '${base}/admin/visaJapan/getJpVisaDetailData.html';
-	            var orderid = '${obj.orderid}';
-	            $.ajax({ 
-	            	url: url,
-	            	dataType:"json",
-	            	data:{orderid:orderid},
-	            	type:'post',
-	            	success: function(data){
-	            		orderobj.orderinfo = data.orderinfo;
-	            		orderobj.travelinfo = data.travelinfo;
-	            		orderobj.applyinfo = data.applyinfo;
-	            		orderobj.travelplan = data.travelplan;
-	            		console.log(JSON.stringify(data));
-	            		console.log("orderinfo:"+JSON.stringify(orderobj.orderinfo));
-	            		console.log("travelinfo:"+JSON.stringify(orderobj.travelinfo));
-	            		//orderobj.data=eval("(" + data +")");
-	              	}
-	            });
-	        }
-		});
-		function commitdata(){
-			console.log("orderinfo:"+JSON.stringify(orderobj.orderinfo));
-		}
+			var threecounty = '${obj.jporderinfo.visaCounty}';
+			if(threecounty){
+				var threecountys = threecounty.split(",");
+				for (var i = 0; i < threecountys.length; i++) {
+					$('[name=visacounty]').each(function(){
+						if(threecountys[i] == $(this).val()){
+							$(this).addClass('btnState-true');
+						}
+					});
+				}
+			}
+			var threecounty = '${obj.jporderinfo.threeCounty}';
+			if(threecounty){
+				var threecountys = threecounty.split(",");
+				for (var i = 0; i < threecountys.length; i++) {
+					$('[name=threecounty]').each(function(){
+						if(threecountys[i] == $(this).val()){
+							$(this).addClass('btnState-true');
+						}
+					});
+				}
+			}
 		</script>
 	</body>
 </html>
