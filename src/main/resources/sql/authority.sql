@@ -120,7 +120,8 @@ AND cj.comId = @companyId
 
 /*authority_jobName_count*/
 SELECT
-	*
+	j.id,
+	j.jobName
 FROM
 	t_job j
 LEFT JOIN t_department d ON j.deptId = d.id

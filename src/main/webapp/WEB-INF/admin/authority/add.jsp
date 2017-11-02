@@ -201,7 +201,6 @@
 			   }else{
 				   jobFunBoolean = "";
 			   }
-			   console.log(jobFunBoolean);
 			   return jobFunBoolean;
 		   }
 	   //校验功能
