@@ -15,6 +15,22 @@ $(function(){
 			console.log(btnInfo);
 		}
 	});
+	
+	//添加申请人 按钮 click
+	$(".addApplicantBtn").click(function(){
+		layer.open({
+			type: 2,
+			title: false,
+			closeBtn:false,
+			fix: false,
+			maxmin: false,
+			shadeClose: false,
+			scrollbar: false,
+			area: ['900px', '551px'],
+			content:'/admin/orderJp/addApplicant.html'
+		});
+	});
+	
 	//添加回邮信息 按钮  click
 	$(".addExpressInfoBtn").click(function(){
 		$(".expressInfo").removeClass("none");

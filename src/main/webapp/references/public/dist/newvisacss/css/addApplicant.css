@@ -1,0 +1,29 @@
+/*------------------------basicData.css 基本资料css文件-----------------------------*/
+.info-imgTop{height: 35px;width: 100%;}
+			.info-imgTop span{line-height: 35px;font-size: 12px;margin-right:25px;}
+			.info-imgTop .primary{color:#d81f20;}
+			.info-imgTop .vice{color:#5099f2;}
+			.info-imgTop input[type="checkbox"]{margin: 0 5px 0 0;position: relative;top: 2px;}
+			.info-imgUpload{height: 350px;width: 85%;border: solid 1px #f0f0f0;border-radius: 3px;overflow: hidden;}
+			.info-imgBottom{font-size: 12px;color: #fcd649;line-height: 35px;margin-bottom: 0;}
+			.info-imgBottom span{color: #c2c2c2;}
+			.preview,.empty{height: 18px;width: 18px;display: inline-block;margin-left: 25px;cursor: pointer;}
+			.btn-icon{height: 20px;width: 120px;float: right;position: relative;top: 6px;}
+			.empty-info{background-image:url(../dist/img/empty-info.png);height:22px;width:18px;display:block;float:right;cursor:pointer;position:absolute;right:30px;}
+			.padding-right-0{padding-right: 0 !important;}
+			.info-body-bottom{min-height:85px;}
+			.input-div1,.input-div2{padding-left: 0 !important;padding-right: 0 !important;}
+			.input-div1{width: 43.5% !important;}
+			.input-div2{float:right !important;width:44% !important;}
+/*基本信息*/
+.basic-info,.work-info{padding-bottom: 10px;}
+.front,.back{height: 200px;margin-top: 23px;margin:25px auto;}
+.spacingLeft{margin-left:3%;}
+.work-info-input-3{ width: 23% !important;}
+.work-info-input-5{width: 46.5% !important;}
+.work-info-input-12{width: 98.5% !important;}
+.work-info-input-3 .bulb{right: 19px;}
+.work-info-input-5 .bulb{right: 19px;}
+.work-info-input-12 .bulb{right: 19px;}
+.big-photo,#preview,#imghead{height: 100%;width: 100%;}
+.info-QRcode{width: 40%;height: 149px;margin: 15px auto 10px;border: #edefef solid 1px;}

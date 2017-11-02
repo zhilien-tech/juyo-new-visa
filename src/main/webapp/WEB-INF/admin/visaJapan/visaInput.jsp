@@ -1,0 +1,98 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@include file="/WEB-INF/common/tld.jsp"%>
+<c:set var="url" value="${base}/admin/visaJapan" />
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>签证录入</title>
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
+	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
+		<link rel="stylesheet" href="${base}/references/public/css/style.css">
+		<style type="text/css">
+			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
+			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
+			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
+			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
+			.card-head div:nth-child(1){width:10%;}
+			.card-head div:nth-child(2){width:12.5%;}
+			.card-head div:nth-child(3){ width: 66px;float: right;}
+			.everybody-info div:nth-child(1){width:10%;}
+			.everybody-info div:nth-child(2){width:12%;}
+			.everybody-info div:nth-child(3){width:12%;}
+			.everybody-info div:nth-child(4){width:14%;}
+			.everybody-info div:nth-child(5){width:11%;}
+			.card-list{height: 87px;}
+			.box-header{padding-right: 16px;}
+			.box-body{padding-top:15px;}
+		</style>
+	</head>
+	<body class="hold-transition skin-blue sidebar-mini">
+		<div class="wrapper">
+			<div class="content-wrapper"  style="min-height: 848px;">
+				<ul class="title">
+					<li>签证录入</li>
+				</ul>
+				<section class="content">
+					<div class="box-header"><!-- 检索条件 -->
+						<div class="row">
+							<div class="col-md-12">
+								<a class="btn btn-primary btn-sm pull-right" href="javascript:;" id="">添加已有签证</a>
+							</div>
+						</div>
+					</div><!-- end 检索条件 -->
+					
+					<div class="box-body" id="card"><!-- 卡片列表 -->
+						<div class="card-list" v-for="data in visaInputData">
+							<div class="card-head">
+								<div><label>国家：</label><span>{{data.country}}</span></div>	
+								<div><label>签证号：</label><span>{{data.visaNumber}}</span></div>	
+								<div>
+									<label>操作：</label>
+									<i class="edit" onclick="edit()"> </i>
+								</div>
+							</div>
+							<ul class="card-content cf">
+								<li class="everybody-info cf">
+									<div><label>签发地：</label><span>{{data.issueAt}}</span></div>
+									<div><label>签发编号：</label><span>{{data.issueNumber}}</span></div>
+									<div><label>签证类型：</label><span>{{data.issueType}}</span></div>
+									<div><label>签发时间：</label><span>{{data.issueTime}}</span></div>
+									<div><label>停留时间：</label><span>{{data.residenceTime}}天</span></div>
+									<div><label>有效期至：</label><span>{{data.expirationDate}}</span></div>
+								</li>
+							</ul>
+						</div>
+					</div><!-- end 卡片列表 -->
+				</section>
+			</div>
+			<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
+	
+		</div>
+	
+		<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
+		<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
+		<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
+		<script src="${base}/references/common/js/layer/layer.js"></script>
+		<script src="${base}/references/common/js/vue/vue.min.js"></script>
+		<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+		<script type="text/javascript">
+			new Vue({
+				el: '#card',
+				data: {
+					visaInputData:[
+				           {country:"日本",visaNumber:"938374",issueAt:"东京",issueNumber:"938374",issueType:"旅游三年",issueTime:"2017-11-01",residenceTime:"12",expirationDate:"2022-11-01"}, 
+				           {country:"韩国",visaNumber:"930001",issueAt:"首尔",issueNumber:"948366",issueType:"旅游半年",issueTime:"2017-11-01",residenceTime:"12",expirationDate:"2022-11-01"},
+				           {country:"日本",visaNumber:"938396",issueAt:"东京",issueNumber:"930071",issueType:"旅游一年",issueTime:"2017-11-01",residenceTime:"12",expirationDate:"2022-11-01"}
+				    ]}
+			});
+		</script>
+		
+	</body>
+</html>

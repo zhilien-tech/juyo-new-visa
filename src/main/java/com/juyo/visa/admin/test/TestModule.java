@@ -21,15 +21,23 @@ import org.nutz.mvc.annotation.Ok;
 @IocBean
 public class TestModule {
 
+
+	@At("admin/visaJapan/visaInput")
+	@Ok("jsp")
+	public Object visaInput() {
+		return null;
+	}
+
 	@At("admin/visaJapan/schedulingEdit")
 	@Ok("jsp")
 	public Object schedulingEdit() {
 		return null;
 	}
 
-	@At("admin/orderJp/order")
+
+	@At("admin/orderJp/addApplicant")
 	@Ok("jsp")
-	public Object order() {
+	public Object addApplicant() {
 		return null;
 	}
 }

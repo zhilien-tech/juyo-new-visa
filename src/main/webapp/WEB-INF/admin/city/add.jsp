@@ -29,7 +29,7 @@
 					type="button" onclick="save();"
 					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" style="height: 368px;">
 				<div class="tab-content">
 
 					<div class="row">
