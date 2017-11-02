@@ -20,7 +20,7 @@
 						<!-- <li class="arrow"></li>
 						<li></li> -->
 				</ul>
-
+				<section class="content">
 				<div class="box">
 					<div class="box-header">
 
@@ -29,7 +29,7 @@
 								<input id="searchStr" name="searchStr" type="text" class="input-sm input-class"
 									placeholder="收件人/电话/收件地址" onkeypress="onkeyEnter();"/>
 							</div>
-							<div class="col-md-5 left-5px">
+							<div class="col-md-10 left-5px">
 								<a id="searchBtn" type="button" class="btn btn-primary btn-sm pull-left" onclick="">搜索</a>
 								<a id="addBtn" class="btn btn-primary btn-sm pull-right"
 									onclick="add();">添加</a>
