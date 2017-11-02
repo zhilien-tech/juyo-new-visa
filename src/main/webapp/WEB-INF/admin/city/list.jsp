@@ -17,10 +17,8 @@
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<ul class="title">
 						<li>城市管理</li>
-						<!-- <li class="arrow"></li>
-						<li></li> -->
 				</ul>
-
+			<section class="content">
 				<div class="box">
 					<div class="box-header">
 
@@ -53,9 +51,8 @@
 								<input id="searchStr" name="searchStr" type="text" class="input-sm input-class"
 									placeholder="国家/省/城市" onkeypress="onkeyEnter();"/>
 							</div>
-							<div class="col-md-5 left-5px">
-								<a id="searchBtn" class="btn btn-primary btn-sm pull-left"
-									>搜索</a> <a id="addBtn"
+							<div class="col-md-7 left-5px">
+								<a id="searchBtn" class="btn btn-primary btn-sm pull-left">搜索</a> <a id="addBtn"
 									class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 							</div>
 						</div>

@@ -16,14 +16,13 @@
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
 			.form-control{height: 30px;}
-			.add-btn{top: -35px;right: -1.5%;}
+			.add-btn{top: -35px;right:-1.5%;}
 			.remove-btn{top: -35px;right: -1.5%;}
 			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
 			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
-			.deposit,.vehicle,.houseProperty{display: none;}
-			
+			.deposit,.vehicle,.houseProperty{display:none;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
