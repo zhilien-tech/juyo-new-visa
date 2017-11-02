@@ -14,14 +14,12 @@
 		<div class="wrapper">
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper"  style="min-height: 848px;">
-				<!-- Main content -->
-				<section class="content">
-				
-					<ul class="title">
+				<ul class="title">
 						<li>功能管理</li>
 						<!-- <li class="arrow"></li>
 						<li></li> -->
-					</ul>
+				</ul>
+				<section class="content">
 				
 					<div class="box">
 						<div class="box-header">
@@ -50,7 +48,7 @@
 									<span class="picker-span">至</span>
 									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
 								</div> -->
-								<div class="col-md-5 left-5px">
+								<div class="col-md-8 left-5px">
 									<a id="searchBtn" class="btn btn-primary btn-sm pull-left">搜索</a>
 									<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 								</div>

@@ -32,7 +32,7 @@
 										</c:forEach>
 									</select>
 								</div>
-								<div class="col-md-2 left-5px right-0px">
+								<div class="col-md-3 left-5px right-0px">
 									<input id="searchStr" name="searchStr" type="text" class="input-sm input-class" placeholder="公司全称/用户名/联系人/电话/邮箱" onkeypress="onkeyEnter();"/>
 								</div>
 								<!-- <div class="col-md-3 left-5px right-0px">
@@ -40,7 +40,7 @@
 									<span class="picker-span">至</span>
 									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
 								</div> -->
-								<div class="col-md-8 left-5px">
+								<div class="col-md-7 left-5px">
 									<a id="searchBtn" type="button" class="btn btn-primary btn-sm pull-left">搜索</a>
 									<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 								</div>

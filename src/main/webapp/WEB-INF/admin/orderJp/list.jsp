@@ -49,7 +49,7 @@
 								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照/公司简称/联系人/电话/邮箱/申请人" />
 							</div>
 						</div>
-						<div class="row">
+						<div class="row" style="margin-top:15px;"> 
 							<div class="col-md-2 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="start_time" name="start_time" placeholder="2017-10-10 ~ 2017-11-11" />
 							</div>

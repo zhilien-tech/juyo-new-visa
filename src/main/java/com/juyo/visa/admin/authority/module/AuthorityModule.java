@@ -111,12 +111,7 @@ public class AuthorityModule {
 	@At
 	public Object checkDeptNameExist(@Param("deptName") final String deptName, @Param("deptId") final Long deptId,
 			final HttpSession session) {
-		try {
-			return authorityViewService.checkDeptNameExist(deptName, deptId, session);
-		} catch (Exception e) {
-			// TODO: handle exception
-			return JsonResult.success("校验失败");
-		}
+		return authorityViewService.checkDeptNameExist(deptName, deptId, session);
 	}
 
 	/**
@@ -127,14 +122,9 @@ public class AuthorityModule {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	@At
-	public Object checkJobNameExist(@Param("jobName") final String jobName, @Param("jobId") final Long jobId) {
-		try {
-			return authorityViewService.checkJobNameExist(jobName, jobId);
-		} catch (Exception e) {
-			// TODO: handle exception
-			return JsonResult.success("校验失败");
-		}
-
+	public Object checkJobNameExist(@Param("jobName") final String jobName, @Param("jobId") final Long jobId,
+			final HttpSession session) {
+		return authorityViewService.checkJobNameExist(jobName, jobId, session);
 	}
 
 }
