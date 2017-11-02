@@ -297,6 +297,7 @@
 		
 		//编辑保存
 		$("#submit").click(function(){
+			$('#authorityUpdateForm').bootstrapValidator('validate');
 			setFunc();
 			validateJobName();
 			var funBoolean = validateFuc();
@@ -308,7 +309,6 @@
 			if(hasClass){
 				return false;
 			}
-			$('#authorityUpdateForm').bootstrapValidator('validate');
 			var bootstrapValidator = $("#authorityUpdateForm").data('bootstrapValidator');
 			var _deptName = $("input#deptName").val();
 			var _jobJson = $("input#jobJson").val();
