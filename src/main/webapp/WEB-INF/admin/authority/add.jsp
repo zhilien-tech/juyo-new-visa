@@ -285,6 +285,7 @@
 	
 		//保存
 		$("#submit").click(function(){
+			$('#authorityAddForm').bootstrapValidator('validate');
 			validateJobName();
 			setFunc();
 			var funBoolean = validateFuc();
@@ -297,7 +298,7 @@
 			if(hasClass){
 				return false;
 			}
-			$('#authorityAddForm').bootstrapValidator('validate');
+			
 			var bootstrapValidator = $("#authorityAddForm").data('bootstrapValidator');
 			var _deptName = $("input#deptName").val();
 			var _jobJson = $("input#jobJson").val();
@@ -315,6 +316,9 @@
 			}
 	
 			if(bootstrapValidator.isValid()){
+				var loadLayer = layer.load(1, {
+					 shade: [0.1,'#fff'] //0.1透明度的白色背景
+				});
 				$.ajax({
 		            cache: false,
 		            type: "POST",
@@ -327,6 +331,7 @@
 			            layer.msg('添加失败!',{time:2000});
 		            },
 			        success: function(data) {
+						layer.close(loadLayer) ;
 						layer.load(1, {
 							shade: [0.1,'#fff'] //0.1透明度的白色背景
 						});

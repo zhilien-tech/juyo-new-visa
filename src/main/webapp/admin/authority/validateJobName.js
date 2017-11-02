@@ -54,6 +54,9 @@ function validateSave(){
 	var hasClass = false;
 	$('div.job_container').each(function(index,e){
 		hasClass = $(e).hasClass("has-error");
+		if(hasClass){
+			return false;
+		}
 	});
 	return hasClass;
 }
@@ -73,9 +76,16 @@ function validateFuc(){
 			jobFunBoolean += jobName+",";//表示没有功能
 		}
 	});
-
-	if(jobFunBoolean.length>1){
-		jobFunBoolean = jobFunBoolean.substring(0, jobFunBoolean.length-1); //职位权限为空的职位
+	var nameStr = "";
+	var jobNames = jobFunBoolean.split(",");
+	$.each(jobNames, function(i,name){      
+		if(name!=""){
+			nameStr += name +",";
+		}
+	});
+	
+	if(nameStr.length>1){
+		jobFunBoolean = nameStr.substring(0, nameStr.length-1); //职位权限为空的职位
 		jobFunBoolean = "职位："+jobFunBoolean +" 的职位权限不能为空";
 	}else{
 		jobFunBoolean = "";
