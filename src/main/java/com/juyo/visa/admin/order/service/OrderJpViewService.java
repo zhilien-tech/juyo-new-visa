@@ -32,6 +32,9 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.forms.TApplicantForm;
+import com.juyo.visa.forms.TCustomerForm;
+import com.juyo.visa.forms.TOrderBackmailForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.web.base.page.OffsetPager;
@@ -90,7 +93,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object saveOrder(OrderJpAddForm addForm, HttpSession session) {
+	public Object test() {
+		return "test";
+	}
+
+	public Object saveOrder(TCustomerForm customerInfo, OrderJpAddForm orderInfo, TApplicantForm applicantInfo,
+			TOrderBackmailForm backmailInfo, HttpSession session) {
 		return null;
 	}
 

@@ -27,7 +27,7 @@ $(function(){
 			shadeClose: false,
 			scrollbar: false,
 			area: ['900px', '551px'],
-			content:'/admin/orderJp/addApplicant.html'
+			content:BASE_PATH + '/admin/orderJp/addApplicant.html'
 		});
 	});
 	
@@ -38,14 +38,28 @@ $(function(){
 	
 	//保存
 	$("#saveOrder").click(function(){
+		var customer = $("#customerInfo").serialize();
+		var order = $("#orderInfo").serialize();
+		var applicants = $("#applicantInfo").serialize();
+		if($(".expressInfo").hasClass("none")){
+			var backmail = $("#backmailInfo").serialize();
+		}
+		alert(customer);
+		alert(order);
+		alert(applicants);
+		alert(backmail);
 		$.ajax({
-			url:BASE_PATH + '/admin/orderJp/order',
-			type:'post',
+			type:'POST',
 			data : {
-				$("#customerType").val(),
-				$("#compName").val()
-			}
+				customerInfo:customer,
+				orderInfo:order,
+				applicantInfo:applicants,
+				backmailInfo:backmail
+				
+			},
+			url:BASE_PATH + '/admin/orderJp/order',
 			success:function(data){
+				alert(JSON.stringify(data));
 				console.log(JSON.stringify(data));
 			},
 			error:function(){

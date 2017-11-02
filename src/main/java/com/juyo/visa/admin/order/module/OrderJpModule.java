@@ -24,6 +24,9 @@ import com.juyo.visa.admin.order.form.OrderJpUpdateForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.forms.TApplicantForm;
+import com.juyo.visa.forms.TCustomerForm;
+import com.juyo.visa.forms.TOrderBackmailForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
 
@@ -75,12 +78,25 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 添加申请人页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object addApplicant() {
+		System.out.println("-------------");
+		return saleViewService.test();
+	}
+
+	/**
 	 * 添加
 	 */
 	@At
 	@POST
-	public Object order(@Param("..") OrderJpAddForm addForm, final HttpSession session) {
-		return saleViewService.saveOrder(addForm, session);
+	public Object order(@Param("customerInfo") TCustomerForm customerInfo,
+			@Param("orderInfo") OrderJpAddForm orderInfo, @Param("applicantInfo") TApplicantForm applicantInfo,
+			@Param("backmailInfo") TOrderBackmailForm backmailInfo, final HttpSession session) {
+		return saleViewService.saveOrder(customerInfo, orderInfo, applicantInfo, backmailInfo, session);
 	}
 
 	/**

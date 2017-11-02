@@ -59,9 +59,9 @@
 							<div class="col-md-2 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" />
 							</div>
-							<div class="col-md-6 left-5px">
+							<div class="col-md-6 left-5px" >
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
-								<a class="btn btn-primary btn-sm pull-right" onclick="order()" id="orderBtn">下单</a>
+								<a class="btn btn-primary btn-sm pull-right" onclick="order();" id="orderBtn"  v-on:click="order(data.id)">下单</a>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
@@ -124,7 +124,13 @@
 	            		//_self.data=eval("(" + data +")");
 	              	}
 	            });
-	        }
+	        },
+	        methods:{
+	        	order:function(orderid){
+	        		alert(orderid);
+	        		window.location.href = '${base}/admin/orderJp/order.html';
+	        	}
+	        } 
 		});
 		function search(){
 			var status = $('#status').val();
@@ -144,10 +150,10 @@
 	          	}
 	        });
 		}
-		//跳转详情页
+		//跳转添加页
 		function order(){
-			window.location.href = '${base}/admin/orderJp/order.html';
-		}
+			window.location.href = '${base}/admin/orderJp/order';
+		} 
 	</script>
 </body>
 </html>
