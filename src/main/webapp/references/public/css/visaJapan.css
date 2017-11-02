@@ -12,14 +12,3 @@
 .everybody-info div:nth-child(4){width:37%;}
 .everybody-info div:nth-child(5){width:30%;}
 /*.everybody-info div:last-child{float:right;width:74px;}	 */
-.edit{background-image:url(../dist/newvisacss/img/edit.png);}
-.shiShou{background-image:url(../dist/newvisacss/img/shiShou.png);}
-.sendZB,.ZBchange,.ZBcancel{width:24px !important;}
-.sendZB{background-image:url(../dist/newvisacss/img/sendZB.png);}
-.ZBchange{background-image:url(../dist/newvisacss/img/ZBchange.png);}
-.ZBcancel{background-image:url(../dist/newvisacss/img/ZBcancel.png);}
-.download{background-image:url(../dist/newvisacss/img/download.png);}
-.handoverTable{background-image:url(../dist/newvisacss/img/handoverTable.png);}
-.visaInput,.afterSales{width: 18px !important;}
-.visaInput{background-image:url(../dist/newvisacss/img/visaInput.png);}
-.afterSales{background-image:url(../dist/newvisacss/img/afterSales.png);}

@@ -42,12 +42,12 @@
 				<div class="jobName cf">
 					<!--职位权限 设置-->
 					<c:forEach var="one" items="${obj.list}" varStatus="stat">
-						<div class="job_container">
+						<div class="job_container form-group has-success">
 							<ul class="addDepartment marHei">
 								<li><label class="text-right">职位名称：</label></li>
 								<li class="li-input inpPadd">
-									<input name="jobName" name="jobName[]" type="text" class="form-control input-sm inputText" value='${one.jobName }'> 
-									<input name="jobId" type="hidden" value='${one.jobId }'></li>
+									<input id="jobName" name="jobName[]" onkeyup="jobNameKeyup(this);" type="text" class="form-control input-sm inputText" value='${one.jobName }'> 
+									<input id="jobId" type="hidden" value='${one.jobId }'></li>
 								<li>
 									<button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button>
 									<button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn">删除</button>
@@ -56,11 +56,15 @@
 							<c:choose>
 								<c:when test="${stat.index == 0}">
 									<div class="ztree none">
+										<small class="help-block" data-bv-validator="notEmpty" data-bv-for="jobName[]" data-bv-result="VALID" style="display: none;">职位名称不能为空</small>
+										<small class="help-block" data-bv-validator="remote" data-bv-for="jobName[]" data-bv-result="INVALID" style="display: none;">职位名称已存在，请重新输入</small>
 										<ul id="tree_${stat.index}"></ul>
 									</div>
 								</c:when>
 								<c:otherwise>
 									<div class="ztree none">
+										<small class="help-block" data-bv-validator="notEmpty" data-bv-for="jobName[]" data-bv-result="VALID" style="display: none;">职位名称不能为空</small>
+										<small class="help-block" data-bv-validator="remote" data-bv-for="jobName[]" data-bv-result="INVALID" style="display: none;">职位名称已存在，请重新输入</small>
 										<ul id="tree_${stat.index}"></ul>
 									</div>
 								</c:otherwise>
@@ -88,7 +92,8 @@
 	<script src="${base}/references/common/js/zTree/jquery.ztree.excheck-3.5.js"></script>
 	<script src="${base}/references/common/js/zTree/jquery.ztree.exedit-3.5.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-
+	<!-- 引入validateJobName JS -->
+	<script src="${base}/admin/authority/validateJobName.js"></script>
 	<script type="text/javascript">
 		var setting = {
 				check: {
@@ -118,8 +123,8 @@
 			//部门职位 编辑职位
 		    $('#addJob').click(function(){
 		       $(".job_container .ztree").hide();
-		       $('.jobName').append('<div class="job_container"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName[]" type="text" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" style="width:70px;" class="btn btn-primary btn-sm btnPadding" id="deleteBtn1" >删除</button></li></ul>'
-		       +'<div class="ztree"><ul id="tree_'+treeIndex+'"></ul></div></div>');
+		       $('.jobName').append('<div class="job_container has-success"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName[]" onkeyup="jobNameKeyup(this);" type="text" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" style="width:70px;" class="btn btn-primary btn-sm btnPadding" id="deleteBtn1" >删除</button></li></ul>'
+		       +'<div class="ztree"><small class="help-block" data-bv-validator="notEmpty" data-bv-for="jobName[]" data-bv-result="IVVALID" style="display: none;">职位名称不能为空</small><small class="help-block" data-bv-validator="remote" data-bv-for="jobName[]" data-bv-result="INVALID" style="display: none;">职位名称已存在，请重新输入</small><ul id="tree_'+treeIndex+'"></ul></div></div>');
 		       treeIndex++;
 		       
 		       var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
@@ -176,8 +181,8 @@
 		   var jobInfos = [];
 		   //取所有树
 		   $(".job_container").each(function(index,container){
-			   var jobName = $(container).find("input[name='jobName']").val();
-			   var jobId = $(container).find("input[name='jobId']").val();
+			   var jobName = $(container).find("input[id='jobName']").val();
+			   var jobId = $(container).find("input[id='jobId']").val();
 			   var treeObj = $.fn.zTree.getZTreeObj("tree_" + index);
 			   var nodes =  treeObj.getCheckedNodes(true);
 			   var funcIds = "" ;
@@ -215,7 +220,7 @@
 		                    },
 		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 		                         url: '${base}/admin/authority/checkDeptNameExist.html',//验证地址
-		                         message: '部门名称已存在，请重新输入!',//提示消息
+		                         message: '部门名称已存在，请重新输入',//提示消息
 		                         delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
 		                         type: 'POST',//请求方式
 		                         //自定义提交数据，默认值提交当前input value
@@ -228,14 +233,14 @@
 		                     }
 		                }
 		            },
-		            'jobName[]':{
+		            /* 'jobName[]':{
 		                validators: {
 		                    notEmpty: {
 		                        message: '职位名称不能为空!'
 		                    },
 		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 		                         url: '${base}/admin/authority/checkJobNameExist.html',//验证地址
-		                         message: '此职位已存在，请重新输入!',//提示消息
+		                         message: '此职位已存在，请重新输入',//提示消息
 		                         delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
 		                         type: 'POST',//请求方式
 		                         //自定义提交数据，默认值提交当前input value
@@ -246,7 +251,7 @@
 		                         }
 		                     }
 		                }
-		            }
+		            } */
 		        }					
 			});
 		}
@@ -292,14 +297,24 @@
 		
 		//编辑保存
 		$("#submit").click(function(){
-			setFunc();
 			$('#authorityUpdateForm').bootstrapValidator('validate');
+			setFunc();
+			validateJobName();
+			var funBoolean = validateFuc();
+			if(funBoolean!=""){
+				layer.msg(funBoolean,{time:2000});
+				return false;
+			}
+			var hasClass = validateSave();
+			if(hasClass){
+				return false;
+			}
 			var bootstrapValidator = $("#authorityUpdateForm").data('bootstrapValidator');
 			var _deptName = $("input#deptName").val();
 			var _jobJson = $("input#jobJson").val();
 			
 			try{
-				$("input[name='jobName']").each(function(index,element){
+				$("input[id='jobName']").each(function(index,element){
 					var eachJobName = $(element).val();
 					if(null == eachJobName || undefined == eachJobName || "" == eachJobName || "" == $.trim(eachJobName)){
 						throw "职位名称不能为空";
@@ -334,7 +349,7 @@
 							window.parent.layer.msg("编辑成功", "", 3000);
 						}else{
 							layer.close(loadLayer) ;
-							console.log("==================="+JSON.stringify(data));
+							console.log("==================="+JSON.stringify(data)); //职位名称已存在 或者其他。。。
 							layer.msg("职位不能为空且至少存在一个") ;
 						}
 		           }

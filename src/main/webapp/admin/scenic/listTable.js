@@ -92,7 +92,7 @@ function add(){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '380px'],
+		area: ['800px', '430px'],
 		content: BASE_PATH + '/admin/scenic/add.html'
 	});
 }
@@ -106,7 +106,7 @@ function edit(id){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '380px'],
+		area: ['800px', '430px'],
 		content: BASE_PATH + '/admin/scenic/update.html?id='+id
 	});
 }

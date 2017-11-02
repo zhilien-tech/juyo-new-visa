@@ -29,7 +29,7 @@
 								<input id="searchStr" name="searchStr" type="text" class="input-sm input-class"
 									placeholder="姓名/电话/部门/职位" onkeypress="onkeyEnter();"/>
 							</div>
-							<div class="col-md-5 left-5px">
+							<div class="col-md-10 left-5px">
 								<a id="searchBtn" type="button" class="btn btn-primary btn-sm pull-left" onclick="">搜索</a>
 								<a id="addBtn" class="btn btn-primary btn-sm pull-right"
 									onclick="add();">添加</a>

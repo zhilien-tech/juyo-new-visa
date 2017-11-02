@@ -98,7 +98,7 @@ function add(){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '300px'],
+		area: ['800px', '400px'],
 		content: BASE_PATH + '/admin/receiveaddress/add.html'
 	});
 }
@@ -112,7 +112,7 @@ function edit(id){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '300px'],
+		area: ['800px', '400px'],
 		content: BASE_PATH + '/admin/receiveaddress/update.html?id='+id
 	});
 }
