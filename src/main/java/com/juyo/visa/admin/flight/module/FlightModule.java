@@ -104,4 +104,13 @@ public class FlightModule {
 		return JsonResult.success("删除成功");
 	}
 
+	/**
+	 * 获取航班下拉框
+	 */
+	@At
+	@POST
+	public Object getFlightSelect(@Param("flight") String flight) {
+		return flightViewService.getFlightSelect(flight);
+	}
+
 }

@@ -56,6 +56,7 @@ $condition
 /*get_jp_visa_order_info_byid*/
 SELECT
 	tr.*, toj.visaCounty,
+	toj.id orderid,
 	toj.visaType,
 	toj.isVisit,
 	toj.threeCounty,
