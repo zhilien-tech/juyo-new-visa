@@ -33,40 +33,30 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>张三四</td>
-								<td>15132008217</td>
-								<td>zahngsan@163.com</td>
-								<td>退休</td>
-								<td class="certificates">
-									<span>护照</span>
-									<span>身份证</span>
-									<span>一寸照片</span>
-									<span>退休证明</span>
-									<span>健康证明</span>
-									<input id="" name="" type="text" class="addInp none">
-									<span class="addText">+</span>
-								</td>
-							</tr>
-							<tr>
-								<td>张三四</td>
-								<td>15132008217</td>
-								<td>zahngsan@163.com</td>
-								<td>退休</td>
-								<td class="certificates">
-									<span>学生证</span>
-									<span>健康证明</span>
-									<input id="" name="" type="text" class="addInp none">
-									<span class="addText">+</span>
-								</td>
-							</tr>
+							<c:forEach items="${obj.applicant }" var="apply">
+								<tr>
+									<td>${apply.applicant }</td>
+									<td>${apply.telephone }</td>
+									<td>${apply.email }</td>
+									<td>${apply.dataType }</td>
+									<td class="certificates">
+										<c:forEach items="${apply.revenue }" var="revenue">
+											<span>${revenue.realInfo }</span>
+											
+										</c:forEach>
+										<input id="" name="" type="text" class="addInp none">
+										<span class="addText">+</span>
+										<input type="hidden" id="applicatid" name="applicatid" value="${apply.applicatid }">
+									</td>
+								</tr>
+							</c:forEach>
 						</tbody>
 					</table>
-					<div class="row">
+					<div class="row" id="orderremark">
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>备注：</label> 
-								<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+								<input id="remark" name="remark" type="text" class="form-control input-sm" v-model="orderinfo.remark"/>
 							</div>
 						</div>
 					</div>
@@ -85,12 +75,13 @@
 	<!-- DataTables -->
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			$('#datatableId').DataTable({
+			/* $('#datatableId').DataTable({
 				"autoWidth":true,
 				"ordering": false,
 				"searching":false,
@@ -101,7 +92,7 @@
 				"language": {
 					"url": BASE_PATH + "/references/public/plugins/datatables/cn.json"
 				}
-			});
+			}); */
 			
 			/*点击表格中的加号标签*/
 			$(".addText").click(function(){
@@ -115,14 +106,60 @@
 					}
 				} */ 
 				$(this).siblings(".addInp").removeClass("none");
+				var applicatid = $(this).parent().find('#applicatid').val();
 				var inputVal = $(this).siblings(".addInp").val();
 				if(inputVal != null && inputVal != ""){
 					$(this).siblings(".addInp").before('<span>'+ inputVal +'</span>');//在input前面 添加span标签
 					$(this).siblings(".addInp").val("");
+					$.ajax({ 
+		            	url: '${base}/admin/visaJapan/saveApplicatRevenue.html',
+		            	data:{applicatid:applicatid,realInfo:inputVal},
+		            	dataType:"json",
+		            	type:'post',
+		            	success: function(data){
+		            		
+		              	}
+		            });
 				}
 			});
 		});
 
+		//vue表格数据对象
+	    var _self;
+		new Vue({
+			el: '#orderremark',
+			data: {orderinfo:""},
+			created:function(){
+	            _self=this;
+	            var orderid = '${obj.orderid}';
+	            $.ajax({ 
+	            	url: '${base}/admin/visaJapan/visaRevenue.html',
+	            	data:{orderid:orderid},
+	            	dataType:"json",
+	            	type:'post',
+	            	success: function(data){
+	            		_self.orderinfo = data.orderinfo;
+	            		console.log(JSON.stringify(_self.orderinfo));
+	              	}
+	            });
+	        }
+		});
+		//保存
+		function save(){
+			layer.load(1);
+			$.ajax({
+            	url: '${base}/admin/visaJapan/saveRealInfoData.html',
+            	data:_self.orderinfo,
+            	dataType:"json",
+            	type:'post',
+            	success: function(data){
+					layer.closeAll('loading');
+					parent.successCallBack(1);
+					closeWindow();
+
+              	}
+            });
+		}
 
 		//返回 
 		function closeWindow() {
@@ -130,7 +167,5 @@
 			parent.layer.close(index);
 		}
 	</script>
-
-
 </body>
 </html>

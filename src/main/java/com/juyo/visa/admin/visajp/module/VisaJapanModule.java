@@ -16,9 +16,12 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.admin.visajp.service.VisaJapanService;
+import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TOrderTravelplanJpEntity;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -100,5 +103,96 @@ public class VisaJapanModule {
 	@POST
 	public Object resetPlan(@Param("orderid") Integer orderid, @Param("planid") Integer planid) {
 		return visaJapanService.resetPlan(orderid, planid);
+	}
+
+	/**
+	 * 生成行程安排
+	 */
+	@At
+	@POST
+	public Object generatePlan(@Param("..") GeneratePlanForm planform, HttpSession session) {
+		return visaJapanService.generatePlan(planform, session);
+	}
+
+	/**
+	 * 跳转到修改计划页面
+	 */
+	@At
+	@Ok("jsp")
+	public Object schedulingEdit(@Param("planid") Integer planid) {
+		return visaJapanService.schedulingEdit(planid);
+	}
+
+	/**
+	 * 保存修改数据
+	 */
+	@At
+	@POST
+	public Object saveEditPlanData(@Param("..") TOrderTravelplanJpEntity travel, HttpSession session) {
+		return visaJapanService.saveEditPlanData(travel, session);
+	}
+
+	/**
+	 * 获取行程安排数据
+	 */
+	@At
+	@POST
+	public Object getTrvalPlanData(@Param("orderid") Integer orderid) {
+		return visaJapanService.getTravelPlanByOrderId(orderid);
+	}
+
+	/**
+	 * 跳转到实收页面
+	 */
+	@At
+	@Ok("jsp")
+	public Object revenue(HttpSession session, @Param("orderid") Integer orderid) {
+		return visaJapanService.revenue(session, orderid);
+	}
+
+	/**
+	 * 加载实收页面数据
+	 */
+	@At
+	@POST
+	public Object visaRevenue(HttpSession session, @Param("orderid") Integer orderid) {
+		return visaJapanService.visaRevenue(session, orderid);
+	}
+
+	/**
+	 * 保存申请人真实资料数据
+	 */
+	@At
+	@POST
+	public Object saveApplicatRevenue(@Param("applicatid") Integer applicatid, @Param("realInfo") String realInfo,
+			HttpSession session) {
+		return visaJapanService.saveApplicatRevenue(applicatid, realInfo, session);
+	}
+
+	/**
+	 * 保存真实资料备注
+	 */
+	@At
+	@POST
+	public Object saveRealInfoData(@Param("..") TOrderJpEntity orderjp) {
+		return visaJapanService.saveRealInfoData(orderjp);
+	}
+
+	/**
+	 * 跳转到签证录入页面
+	 */
+	@At
+	@Ok("jsp")
+	public Object visaInput(HttpSession session, @Param("applyid") Integer applyid) {
+		return visaJapanService.visaInput(session, applyid);
+	}
+
+	/**
+	 * 获取签证录入列表数据
+	 */
+	@At
+	@POST
+	public Object getJpVisaInputListData(@Param("applyid") Integer applyid) {
+		return visaJapanService.getJpVisaInputListData(applyid);
 	}
 }

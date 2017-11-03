@@ -53,14 +53,13 @@
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit" onclick="" v-on:click="visaDetail(data.id)"> </i>
-									<i class="shiShou"> </i>
+									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
+									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
 									<i class="sendZB"> </i>
 									<i class="ZBchange"> </i>
 									<i class="ZBcancel"> </i>
 									<i class="download"> </i>
 									<i class="handoverTable"> </i>
-									<i class="visaInput" onclick="visaInput()"> </i>
 									<i class="afterSales"> </i>
 								</div>
 							</div>
@@ -115,17 +114,25 @@
         		window.location.href = '${base}/admin/visaJapan/visaDetail.html?orderid='+orderid;
         		//console.log(message);
         		//alert(JSON.stringify(event.target));
+        	},
+        	revenue:function(orderid){
+        		layer.open({
+        		    type: 2,
+        		    title: false,
+        		    closeBtn:false,
+        		    fix: false,
+        		    maxmin: false,
+        		    shadeClose: false,
+        		    scrollbar: false,
+        		    area: ['900px', '550px'],
+        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
+        		  });
         	}
         }
 	});
 	//跳转 签证详情页
 	function edit(orderid){
 		window.location.href = '${base}/admin/visaJapan/visaDetail.html?orderid='+orderid;
-	}
-	
-	//跳转 签证录入页
-	function visaInput(){
-		window.location.href = '${base}/admin/visaJapan/visaInput.html';
 	}
 	
 	function search(){
@@ -149,6 +156,20 @@
 	    if(e && e.keyCode == 13){
 	    	search();
 		 }
+	}
+	
+	function successCallBack(status){
+		$.ajax({ 
+        	url: url,
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		_self.visaJapanData = data.visaJapanData;
+          	}
+        });
+		if(status){
+			layer.msg('保存成功');
+		}
 	}
 	</script>
 </body>

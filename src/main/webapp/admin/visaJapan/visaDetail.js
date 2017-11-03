@@ -113,6 +113,10 @@ new Vue({
             		layer.msg('重置成功');
               	}
             });
+    	},
+    	//签证录入
+    	visa:function(applyid){
+    		window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applyid;
     	}
     }
 });
@@ -305,4 +309,21 @@ $("#returnFlightNum").on("select2:select",function(e){
 		thisval += '';
 	}
 	orderobj.travelinfo.returnFlightNum = thisval;
+});
+
+//生成行程安排
+$(".schedulingBtn").click(function(){
+	var goArrivedCity = orderobj.travelinfo.goArrivedCity;
+	var goDate = $('#goDate').val();
+	var returnDate = $('#returnDate').val();
+	$.ajax({ 
+    	url: '/admin/visaJapan/generatePlan.html',
+    	dataType:"json",
+    	data:{orderid:orderid,goArrivedCity:goArrivedCity,goDate:goDate,returnDate:returnDate},
+    	type:'post',
+    	success: function(data){
+    		orderobj.travelplan = data;
+    		layer.msg('生成成功');
+      	}
+    });
 });

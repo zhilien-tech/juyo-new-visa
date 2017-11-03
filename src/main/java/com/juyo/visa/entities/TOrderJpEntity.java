@@ -44,4 +44,8 @@ public class TOrderJpEntity implements Serializable {
 	@Comment("签证状态")
 	private Integer visastatus;
 
+	@Column
+	@Comment("备注")
+	private String remark;
+
 }
