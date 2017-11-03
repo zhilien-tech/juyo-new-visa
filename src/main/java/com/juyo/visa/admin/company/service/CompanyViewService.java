@@ -343,6 +343,15 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		return DbSqlUtil.query(dbDao, TFunctionEntity.class, sql);
 	}
 
+	/**
+	 * 
+	 * 七牛云 上传文件
+	 * <p>
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception 
+	 */
 	public Object uploadFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding(CommonConstants.CHARACTER_ENCODING_PROJECT);//字符编码为utf-8
 		response.setCharacterEncoding(CommonConstants.CHARACTER_ENCODING_PROJECT);
