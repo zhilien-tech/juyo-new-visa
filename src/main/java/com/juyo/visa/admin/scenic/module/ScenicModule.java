@@ -104,4 +104,12 @@ public class ScenicModule {
 		return JsonResult.success("删除成功");
 	}
 
+	/**
+	 * 景区下拉框
+	 */
+	@At
+	@POST
+	public Object getScenicSelect(@Param("scenicname") String scenicname) {
+		return scenicViewService.getScenicSelect(scenicname);
+	}
 }

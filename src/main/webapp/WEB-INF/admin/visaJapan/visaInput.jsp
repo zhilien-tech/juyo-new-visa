@@ -42,7 +42,7 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-12">
-								<a class="btn btn-primary btn-sm pull-right" href="javascript:;" id="">添加已有签证</a>
+								<a class="btn btn-primary btn-sm pull-right" href="javascript:add();" id="">添加已有签证</a>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
@@ -50,21 +50,21 @@
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in visaInputData">
 							<div class="card-head">
-								<div><label>国家：</label><span>{{data.country}}</span></div>	
-								<div><label>签证号：</label><span>{{data.visaNumber}}</span></div>	
+								<div><label>国家：</label><span>{{data.visacountry}}</span></div>	
+								<div><label>签证号：</label><span>{{data.visanum}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit" onclick="edit()"> </i>
+									<i class="edit" v-on:click="edit(data.id)"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf">
-									<div><label>签发地：</label><span>{{data.issueAt}}</span></div>
-									<div><label>签发编号：</label><span>{{data.issueNumber}}</span></div>
-									<div><label>签证类型：</label><span>{{data.issueType}}</span></div>
-									<div><label>签发时间：</label><span>{{data.issueTime}}</span></div>
-									<div><label>停留时间：</label><span>{{data.residenceTime}}天</span></div>
-									<div><label>有效期至：</label><span>{{data.expirationDate}}</span></div>
+									<div><label>签发地：</label><span>{{data.visaaddress}}</span></div>
+									<div><label>签发编号：</label><span>{{data.visanum}}</span></div>
+									<div><label>签证类型：</label><span>{{data.visatypestr}} {{data.visayears}}年</span></div>
+									<div><label>签发时间：</label><span>{{data.visadatestr }}</span></div>
+									<div><label>停留时间：</label><span>{{data.staydays}}天</span></div>
+									<div><label>有效期至：</label><span>{{data.validdatestr }}</span></div>
 								</li>
 							</ul>
 						</div>
@@ -83,15 +83,69 @@
 		<script src="${base}/references/common/js/vue/vue.min.js"></script>
 		<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 		<script type="text/javascript">
-			new Vue({
-				el: '#card',
-				data: {
-					visaInputData:[
-				           {country:"日本",visaNumber:"938374",issueAt:"东京",issueNumber:"938374",issueType:"旅游三年",issueTime:"2017-11-01",residenceTime:"12",expirationDate:"2022-11-01"}, 
-				           {country:"韩国",visaNumber:"930001",issueAt:"首尔",issueNumber:"948366",issueType:"旅游半年",issueTime:"2017-11-01",residenceTime:"12",expirationDate:"2022-11-01"},
-				           {country:"日本",visaNumber:"938396",issueAt:"东京",issueNumber:"930071",issueType:"旅游一年",issueTime:"2017-11-01",residenceTime:"12",expirationDate:"2022-11-01"}
-				    ]}
-			});
+		var orderobj;
+		var applyid = '${obj.applyid}';
+		new Vue({
+			el: '#card',
+			data: {
+				visaInputData:""
+			},
+			created:function(){
+		        orderobj=this;
+		        var url = '${base}/admin/visaJapan/getJpVisaInputListData.html';
+		        $.ajax({ 
+		        	url: url,
+		        	dataType:"json",
+		        	data:{applyid:applyid},
+		        	type:'post',
+		        	success: function(data){
+		        		orderobj.visaInputData = data.visaInputData;
+		          	}
+		        });
+		    },
+		    methods:{
+		    	edit:function(visainputid){
+		    	      layer.open({
+		    	    	    type: 2,
+		    	    	    title: false,
+		    	    	    closeBtn:false,
+		    	    	    fix: false,
+		    	    	    maxmin: false,
+		    	    	    shadeClose: false,
+		    	    	    scrollbar: false,
+		    	    	    area: ['900px', '550px'],
+		    	    	    content: '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid
+		    	    	  });
+		    	}
+		    }
+		});
+		//新增签证录入
+		function add(){
+	      layer.open({
+	    	    type: 2,
+	    	    title: false,
+	    	    closeBtn:false,
+	    	    fix: false,
+	    	    maxmin: false,
+	    	    shadeClose: false,
+	    	    scrollbar: false,
+	    	    area: ['900px', '550px'],
+	    	    content: '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid
+	    	  });
+		 }
+		
+		function successCallBack(){
+			 var url = '${base}/admin/visaJapan/getJpVisaInputListData.html';
+	        $.ajax({ 
+	        	url: url,
+	        	dataType:"json",
+	        	data:{applyid:applyid},
+	        	type:'post',
+	        	success: function(data){
+	        		orderobj.visaInputData = data.visaInputData;
+	          	}
+	        });
+		}
 		</script>
 		
 	</body>

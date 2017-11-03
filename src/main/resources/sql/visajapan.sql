@@ -36,6 +36,9 @@ $condition
 SELECT
 	CONCAT(ta.firstName, ta.lastName) applicant,
 	tap.passport passportNo,
+	taoj.id applicatid,
+	ta.telephone,
+	ta.email,
 	tavpj.type dataType,
 	tavpj.data data
 FROM
@@ -91,3 +94,29 @@ LEFT JOIN (
 		applicantId
 ) tavpj ON tavpj.applicantId = taoj.id
 where taoj.orderId = @orderid
+
+/*get_travel_plan_by_orderid*/
+SELECT
+	totj.*, th.`name` hotelname
+FROM
+	t_order_travelplan_jp totj
+left JOIN t_hotel th ON totj.hotel = th.id
+where totj.orderId = @orderid
+order by outDate asc
+
+/*get_reset_travel_plan_scenic*/
+SELECT
+	ts.*
+FROM
+	t_scenic ts
+WHERE
+	NAME NOT IN (
+		SELECT
+			scenic
+		FROM
+			t_order_travelplan_jp
+		WHERE
+			orderId = @orderid
+		AND scenic != @scenicname
+	)
+and cityId = @cityid

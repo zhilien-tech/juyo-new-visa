@@ -257,7 +257,7 @@
 										<th><span>电话<span></th>
 										<th><span>护照号<span></th>
 										<th><span>资料类型<span></th>
-										<th><span>真是资料<span></th>
+										<th><span>真实资料<span></th>
 										<th><span>操作<span></th>
 									</tr>
 								</thead>
@@ -387,11 +387,11 @@
 											</thead>
 											<tbody v-for="plan in travelplan">
 												<tr>
-													<td>{{plan.day}}</td>
-													<td>{{plan.outDate}}</td>
-													<td>东京</td>
+													<td>第{{plan.day}}天</td>
+													<td>{{plan.outdate}}</td>
+													<td>{{plan.cityname}}</td>
 													<td>{{plan.scenic}}</td>
-													<td>{{plan.hotel}}</td>
+													<td>{{plan.hotelname}}</td>
 													<td>
 														<i class="editHui" v-on:click="schedulingEdit(plan.id)">修改</i>
 														<i class="resetHui" v-on:click="resetPlan(plan.id)">重置</i>
@@ -448,6 +448,21 @@
 							$(this).addClass('btnState-true');
 						}
 					});
+				}
+			}
+			
+			function successCallBack(status){
+				if(status == 1){
+					layer.msg('修改成功');
+					$.ajax({ 
+				    	url: BASE_PATH + '/admin/visaJapan/getTrvalPlanData.html',
+				    	dataType:"json",
+				    	data:{orderid:orderid},
+				    	type:'post',
+				    	success: function(data){
+				    		orderobj.travelplan = data;
+				      	}
+				    }); 
 				}
 			}
 		</script>
