@@ -1,5 +1,7 @@
 package com.juyo.visa.admin.company.module;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -123,6 +125,15 @@ public class CompanyModule {
 	public Object batchDelete(@Param("ids") final Long[] ids) {
 		companyViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
+	}
+
+	/**
+	 * 上传文件
+	 */
+	@At
+	@Ok("json")
+	public Object uploadFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return companyViewService.uploadFile(request, response);
 	}
 
 }
