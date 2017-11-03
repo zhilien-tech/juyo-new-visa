@@ -16,7 +16,6 @@
 	    if($(this).hasClass("active")){//当选中一级菜单时
 			$(this).siblings(".menu1").next(".menu-ul").hide();
 			$(this).next('.menu-ul').toggle();
-			
 		}else{
 			//alert("不含有.active");
 		}
@@ -49,7 +48,7 @@
 		    iconSrc.pop();//图标文件名之前的图标路径
 		    var flieSuffix = imgUrl.substr(-4);//图标 文件后缀名
 		    var newIconUrl = iconSrc + "1" + flieSuffix; //拼接新图标路径
-		    $("#"+_index).eq(_index).find("img").attr("src",newIconUrl);//更改选中菜单状态的图标颜色
+		    $("#"+_index).find("img").attr("src",newIconUrl);//更改选中菜单状态的图标颜色
 		}else{
 		    $(".sidebar-menu > li").eq(0).siblings().removeClass('active');
 		    $(".sidebar-menu > li").eq(0).addClass("active");//当前下标的元素添加样式
@@ -94,16 +93,12 @@
 
 	//点击汉堡图 左菜单栏收起 
 	$('.hamburgerImg').click(function(){
-		//$('.main-sidebar').toggleClass('min-sidebar');
-		//$('.content-wrapper').toggleClass('min-content-wrapper');
-		//$('.logo').toggleClass('min-logo');
-		//$('.logo-lg').toggle();
-		//$('.navbar-static-top').toggleClass('min-navbar-static-top');
 		var menuWhetherMini = $('.main-sidebar').hasClass('min-sidebar');//左菜单栏 是否缩进
 		if(menuWhetherMini == false){//缩进
 			$('.main-sidebar').addClass('min-sidebar');
 			$('.content-wrapper').addClass('min-content-wrapper');
 			sessionStorage.menuWhetherMini = "isMini"; //false
+			
 		}else if(menuWhetherMini == true){//展开
 			$('.main-sidebar').removeClass('min-sidebar');
 			$('.content-wrapper').removeClass('min-content-wrapper');
@@ -111,6 +106,18 @@
 		}
 
 	});
+	
+	
+	/*$(".min-sidebar .sidebar-menu .menu1").mouseover(function(){
+		var $this = $(this).next("ul");
+		if($this.hasClass("menu-ul")){
+			console.log("6666");
+		}else{
+			console.log("8888");
+		}
+	}).mouseout(function(){
+		
+	});*/
 	
 	/*----------------------------------------end aside JS部分---------------------------------------------*/  
 
