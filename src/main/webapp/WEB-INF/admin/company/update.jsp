@@ -146,15 +146,15 @@
 						<div class="col-xs-3">
 							<div class="form-group">
 								<div class="upload-btn">
-									<input id="license" name="license"
-										class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
+									<input id="license" name="license" type="hidden"/>
+									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
 								</div>
 							</div>
 						</div>
 						<div class="col-xs-6">
 							<div class="form-group">
 								<div class="sqImgPreview">
-									<img alt="营业执照" src="" id="sqImg">
+									<img id="sqImg" alt="营业执照" src="${obj.company.license}">
 								</div>
 							</div>
 						</div>
