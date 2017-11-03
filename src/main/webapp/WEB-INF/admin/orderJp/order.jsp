@@ -43,7 +43,7 @@
 										<i class="bulb"></i>
 									</div>
 								</div>
-								<div class="col-sm-9">
+								<div class="col-sm-9" style="padding-right: 3.5%;">
 									<div class="form-group">
 										<label><span>*</span>公司全称：</label>
 										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
