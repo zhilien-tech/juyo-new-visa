@@ -21,7 +21,6 @@ import org.nutz.mvc.annotation.Ok;
 @IocBean
 public class TestModule {
 
-
 	@At("admin/visaJapan/visaInput")
 	@Ok("jsp")
 	public Object visaInput() {
@@ -34,10 +33,10 @@ public class TestModule {
 		return null;
 	}
 
-
 	@At("admin/orderJp/addApplicant")
 	@Ok("jsp")
 	public Object addApplicant() {
 		return null;
 	}
+
 }
