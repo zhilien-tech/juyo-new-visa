@@ -257,6 +257,31 @@
 					</div>
 					<!-- end 订单信息 -->
 					
+					<!-- 主申请人 -->
+					<div class="info" id="mySwitch">
+						<p class="info-head">
+							主申请人
+							<input type="button" name="" value="添加" class="btn btn-primary btn-sm pull-right">
+						</p>
+						<div class="info-table">
+							<table id="principalApplicantTable" class="table table-hover" style="width:100%;">
+								<thead>
+									<tr>
+										<th><span>姓名<span></th>
+										<th><span>性别<span></th>
+										<th><span>电话<span></th>
+										<th><span>护照号<span></th>
+										<th><span>现住详细地址<span></th>
+										<th><span>操作<span></th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end 主申请人 -->
+					
 					<!-- 快递信息 -->
 					<div class="info expressInfo none">
 						<p class="info-head">快递信息</p>
