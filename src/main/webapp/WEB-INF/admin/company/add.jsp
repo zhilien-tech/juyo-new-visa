@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/company.css">
+	<link rel="stylesheet" href="${base}/references/public/plugins/uploadify/uploadify.css">
 </head>
 <body>
 	<div class="modal-content">
@@ -121,15 +122,15 @@
 						<div class="col-xs-3">
 							<div class="form-group">
 								<div class="upload-btn">
-									<input id="license" name="license"
-										class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
+									<input id="license" name="license" type="hidden"/>
+									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
 								</div>
 							</div>
 						</div>
 						<div class="col-xs-6">
 							<div class="form-group">
 								<div class="sqImgPreview">
-									<img alt="营业执照" src="" id="sqImg">
+									<img id="sqImg" alt="营业执照" src="">
 								</div>
 							</div>
 						</div>
@@ -148,14 +149,18 @@
 		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script
-		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<!-- uploadify -->
+	<script src="${base}/references/public/plugins/uploadify/jquery.uploadify.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- 经营范围校验 -->
 	<script src="${base}/admin/company/validateScope.js"></script>
+	<!-- 上传图片 -->
+	<script src="${base}/admin/company/uploadFile.js"></script>
 	<script type="text/javascript">
-		var base = "${base}";
 		$(function() {
+			//加载上传
+			uploadFile();
 			//校验
 			$('#companyAddForm').bootstrapValidator({
 				message : '验证不通过',

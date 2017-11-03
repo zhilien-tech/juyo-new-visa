@@ -9,7 +9,7 @@ Released under the MIT License <http://www.opensource.org/licenses/mit-license.p
 	margin-bottom: 1em;
 }
 .uploadify-button {
-	background-color: #367fa9;
+	background-color:#3087f1;
     border-color: #204d74;
     font: bold 12px Arial, Helvetica, sans-serif;
     text-align: center;
@@ -21,7 +21,7 @@ Released under the MIT License <http://www.opensource.org/licenses/mit-license.p
 .uploadify:hover .uploadify-button {
 	background-position: center bottom;
 	color: #fff;
-    background-color: #286090;
+    background-color: #3087f1;
     border-color: #204d74;
 }
 .uploadify-button.disabled {
