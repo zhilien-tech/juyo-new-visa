@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="${base}/references/public/css/saleJapan.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper">
+	<div class="wrapper" id="wrapper">
 		<div class="content-wrapper"  style="min-height: 848px;">
 				<ul class="title">
 					<li>销售</li>
@@ -61,7 +61,7 @@
 							</div>
 							<div class="col-md-6 left-5px" >
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
-								<a class="btn btn-primary btn-sm pull-right" onclick="order();" id="orderBtn"  v-on:click="order(data.id)">下单</a>
+								<a class="btn btn-primary btn-sm pull-right" id="orderBtn"  v-on:click="order(orderJpData.id)">下单</a>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
@@ -73,7 +73,7 @@
 								<div><label>状态：</label><span>{{data.status}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i> </i>
+									<i class="edit" onclick="" v-on:click="order(data.id)">编辑 </i>
 									<i> </i>
 									<i> </i>
 									<i> </i>
@@ -111,7 +111,7 @@
 	    //vue表格数据对象
 	    var _self;
 		new Vue({
-			el: '#card',
+			el: '#wrapper',
 			data: {orderJpData:""},
 			created:function(){
 	            _self=this;
@@ -121,14 +121,13 @@
 	            	type:'post',
 	            	success: function(data){
 	            		_self.orderJpData = data.orderJp;
-	            		//_self.data=eval("(" + data +")");
 	              	}
 	            });
 	        },
 	        methods:{
-	        	order:function(orderid){
-	        		alert(orderid);
-	        		window.location.href = '${base}/admin/orderJp/order.html';
+	        	order:function(id){
+	        			window.location.href = '${base}/admin/orderJp/order.html'+(id > 0?('?id='+id):'');
+	        			//window.location.href = '${base}/admin/orderJp/order.html?id='+id;
 	        	}
 	        } 
 		});
@@ -151,9 +150,9 @@
 	        });
 		}
 		//跳转添加页
-		function order(){
+		/* function order(){
 			window.location.href = '${base}/admin/orderJp/order';
-		} 
+		} */ 
 	</script>
 </body>
 </html>

@@ -37,8 +37,8 @@ $(function(){
 	});
 	
 	//保存
-	$("#saveOrder").click(function(){
-		var customer = $("#customerInfo").serialize();
+	/*$("#saveOrder").click(function(){
+		var customer = customerInfo;
 		var order = $("#orderInfo").serialize();
 		var applicants = $("#applicantInfo").serialize();
 		if($(".expressInfo").hasClass("none")){
@@ -66,5 +66,5 @@ $(function(){
 				alert("error");
 			}
 		});
-	});
+	});*/
 });

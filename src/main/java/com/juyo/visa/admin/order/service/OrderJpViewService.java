@@ -18,6 +18,7 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.google.common.collect.Maps;
 import com.juyo.visa.admin.order.form.OrderJpAddForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.form.OrderJpUpdateForm;
@@ -78,8 +79,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	}
 
-	public Object addOrder() {
+	public Object addOrder(Integer id) {
 		Map<String, Object> result = MapUtil.map();
+		result.put("orderId", id);
 		result.put("collarAreaEnum", EnumUtil.enum2(CollarAreaEnum.class));
 		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
 		result.put("mainSaleUrgentEnum", EnumUtil.enum2(MainSaleUrgentEnum.class));
@@ -102,8 +104,29 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
-	public Object fetchOrder(long id) {
-		return null;
+	public Object fetchOrder(Integer id) {
+		Map<String, Object> result = Maps.newHashMap();
+		//客户信息
+		String customerSqlstr = sqlManager.get("orderJp_list_customerInfo_byOrderId");
+		Sql customerSql = Sqls.create(customerSqlstr);
+		customerSql.setParam("id", id);
+		Record customerInfo = dbDao.fetch(customerSql);
+		result.put("customerInfo", customerInfo);
+		//订单信息
+		String orderSqlstr = sqlManager.get("orderJp_list_orderInfo_byOrderId");
+		Sql orderSql = Sqls.create(orderSqlstr);
+		orderSql.setParam("id", id);
+		Record orderInfo = dbDao.fetch(orderSql);
+		result.put("orderInfo", orderInfo);
+		//申请人信息
+		String applicantSqlstr = sqlManager.get("orderJp_list_applicantInfo_byOrderId");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		applicantSql.setParam("id", id);
+		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
+		result.put("applicantInfo", applicantInfo);
+		//回邮信息
+		result.put("backmailInfo", null);
+		return result;
 	}
 
 	public Object updateOrder(OrderJpUpdateForm updateForm) {

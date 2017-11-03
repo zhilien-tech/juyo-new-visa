@@ -3,7 +3,6 @@
 <%@include file="/WEB-INF/common/tld.jsp"%>
 <%@include file="/WEB-INF/public/header.jsp"%>
 <%@include file="/WEB-INF/public/aside.jsp"%>
-<c:set var="url" value="${base}/admin/orderJp" />
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -54,8 +53,7 @@
 			</div>
 			<section class="content">
 				<!-- 客户信息 -->
-				<form id="customerInfo">
-				<div class="info" id="customerInfo">
+				<div class="info" id="customerInfo" ref="customerInfo">
 					<p class="info-head">客户信息</p>
 					<div class="info-body-from">
 						<div class="row body-from-input">
@@ -63,7 +61,7 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>客户来源：</label> <select id="customerType"
-										name="source" class="form-control input-sm" v-model="">
+										name="source" class="form-control input-sm" v-model="customerInfo.source" >
 										<option value="">--请选择--</option>
 										<c:forEach var="map" items="${obj.customerTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
@@ -83,7 +81,7 @@
 							<div class="col-sm-9">
 								<div class="form-group">
 									<label><span>*</span>公司全称：</label> <input id="compName" name="compName"
-										type="text" class="form-control input-sm" placeholder=" " v-model=""/>
+										type="text" class="form-control input-sm" placeholder=" " v-model="customerInfo.name"/>
 									<i class="bulb"></i>
 								</div>
 							</div>
@@ -94,28 +92,28 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>公司简称：</label> <input id="comShortName" name="comShortName"
-										type="text" class="form-control input-sm" placeholder=" " v-model=""/>
+										type="text" class="form-control input-sm" placeholder=" " v-model="customerInfo.shortname"/>
 									<i class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>联系人：</label> <input id="linkman" name="linkman"
-										type="text" class="form-control input-sm" placeholder=" " v-model=""/>
+										type="text" class="form-control input-sm" placeholder=" " v-model="customerInfo.linkman"/>
 									<i class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>手机号：</label> <input id="telephone" name="telephone"
-										type="text" class="form-control input-sm" placeholder=" " v-model=""/>
+										type="text" class="form-control input-sm" placeholder=" " v-model="customerInfo.mobile"/>
 									<i class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>邮箱：</label> <input id="email" name="email"
-										type="text" class="form-control input-sm" placeholder=" " v-model=""/>
+										type="text" class="form-control input-sm" placeholder=" " v-model="customerInfo.email"/>
 									<i class="bulb"></i>
 								</div>
 							</div>
@@ -123,11 +121,9 @@
 						<!-- end 客户来源/联系人/手机号/邮箱 -->
 					</div>
 				</div>
-				</form>
 				<!-- end 客户信息 -->
 
 				<!-- 订单信息 -->
-				<form id="orderInfo">
 				<div class="orderInfo" id="orderInfo">
 					<p class="info-head">订单信息</p>
 					<div class="info-body-from">
@@ -136,7 +132,7 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>人数：</label> <input id="number" name="number"
-										type="text" class="form-control input-sm" placeholder=" " />
+										type="text" class="form-control input-sm" placeholder=" " v-model="orderInfo.number"/>
 									<!-- <i class="bulb"></i> 小灯泡-->
 								</div>
 							</div>
@@ -144,9 +140,9 @@
 								<div class="form-group">
 									<label><span>*</span>领区：</label> 
 									<select id="cityId"
-										name="cityId" class="form-control input-sm">
+										name="cityId" class="form-control input-sm" v-model="orderInfo.cityId">
 										<c:forEach var="map" items="${obj.collarAreaEnum}">
-											<option value="${map.key}">${map.value}</option>
+											<option value="${map.key}" >${map.value}</option>
 										</c:forEach>
 									</select>
 									<!-- <i class="bulb"></i> 小灯泡-->
@@ -156,9 +152,9 @@
 								<div class="form-group">
 									<label><span>*</span>加急：</label> 
 									<select id="urgentType"
-										name="urgentType" class="form-control input-sm" onchange="selectListData();">
+										name="urgentType" class="form-control input-sm" onchange="selectListData();" v-model="orderInfo.urgentType">
 										<c:forEach var="map" items="${obj.mainSaleUrgentEnum}">
-											<option value="${map.key}">${map.value}</option>
+											<option value="${map.key}"  ${map.key==1?'selected':''}>${map.value}</option>
 										</c:forEach>
 									</select>
 									<!-- <i class="bulb"></i> 小灯泡-->
@@ -168,7 +164,7 @@
 								<div class="form-group">
 									<label>&nbsp;</label> 
 									<select id="urgentDay"
-										name="urgentDay" class="form-control input-sm">
+										name="urgentDay" class="form-control input-sm" v-model="orderInfo.urgentDay">
 										<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -184,7 +180,7 @@
 								<div class="form-group">
 									<label><span>*</span>行程：</label> 
 									<select id="travel"
-										name="travel" class="form-control input-sm">
+										name="travel" class="form-control input-sm" v-model="orderInfo.travel">
 										<c:forEach var="map" items="${obj.mainSaleTripTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -195,7 +191,7 @@
 								<div class="form-group">
 									<label><span>*</span>付款方式：</label> 
 									<select id="payType"
-										name="payType" class="form-control input-sm">
+										name="payType" class="form-control input-sm" v-model="orderInfo.payType">
 										<c:forEach var="map" items="${obj.mainSalePayTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -205,7 +201,7 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>金额：</label> <input id="money" name="money"
-										type="text" class="form-control input-sm" placeholder=" " />
+										type="text" class="form-control input-sm" placeholder=" " v-model="orderInfo.money"/>
 								</div>
 							</div>
 						</div>
@@ -216,14 +212,14 @@
 								<div class="form-group">
 									<label><span>*</span>签证类型：</label> 
 									<select id="visaType"
-										name="visaType" class="form-control input-sm" onchange="selectListData();">
+										name="visaType" class="form-control input-sm" onchange="selectListData();" v-model="orderInfo.visaType">
 										<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-9 none" id="sixCounty">
+							<div class="col-sm-9 none" id="sixCounty" v-model="orderInfo.visaCounty">
 								<div class="form-group viseType-btn">
 									<label style="display: block;">&nbsp;</label> <input
 										type="button" value="冲绳县" class="btn btn-sm btnState">
@@ -243,14 +239,14 @@
 								<div class="form-group">
 									<label><span>*</span>过去三年是否访问过：</label> 
 									<select id="isVisit"
-										name="isVisit" class="form-control input-sm" onchange="selectListData();">
+										name="isVisit" class="form-control input-sm" onchange="selectListData();" v-model="orderInfo.isvisit">
 										<c:forEach var="map" items="${obj.threeYearsIsVisitedEnum}">
 											<option value="${map.key}" ${map.key==0?'selected':''}>${map.value}</option>
 										</c:forEach>
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-9 none" id="isVisited">
+							<div class="col-sm-9 none" id="isVisited" v-model="orderInfo.threeCounty">
 								<div class="form-group">
 									<label style="display: block;">&nbsp;</label> <input
 										type="button" value="岩手县"
@@ -269,20 +265,20 @@
 								<div class="form-group">
 									<label><span>*</span>出行时间：</label> <input id="goTripDate" name="goTripDate"
 										type="text" class="form-control input-sm" placeholder=" "
-										onClick="WdatePicker()" />
+										onClick="WdatePicker()" v-model="orderInfo.goTripDate"/>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>停留天数：</label> <input id="stayDay" name="stayDay"
-										type="text" class="form-control input-sm" placeholder=" " />
+										type="text" class="form-control input-sm" placeholder=" " v-model="orderInfo.stayDay"/>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>返回时间：</label> <input id="backTripDate" name="backTripDate"
 										type="text" class="form-control input-sm" placeholder=" "
-										onClick="WdatePicker()" />
+										onClick="WdatePicker()" v-model="orderInfo.backTripDate"/>
 								</div>
 							</div>
 						</div>
@@ -293,14 +289,14 @@
 								<div class="form-group">
 									<label><span>*</span>送签时间：</label> <input id="sendVisaDate" name="sendVisaDate"
 										type="text" class="form-control input-sm" placeholder=" "
-										onClick="WdatePicker()" />
+										onClick="WdatePicker()" v-model="orderInfo.sendVisaDate"/>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>出签时间：</label> <input id="outVisaDate" name="outVisaDate"
 										type="text" class="form-control input-sm" placeholder=" "
-										onClick="WdatePicker()" />
+										onClick="WdatePicker()" v-model="orderInfo.outVisaDate"/>
 								</div>
 							</div>
 						</div>
@@ -328,11 +324,9 @@
 						<!-- end 添加回邮信息 -->
 					</div>
 				</div>
-				</form>
 				<!-- end 订单信息 -->
 
 				<!-- 快递信息 -->
-				<form id="backmailInfo">
 				<div class="info expressInfo none" id="expressInfo" name="backmailInfo">
 					<p class="info-head">快递信息</p>
 					<div class="info-body-from">
@@ -342,7 +336,7 @@
 								<div class="form-group">
 									<label><span>*</span>资料来源：</label>
 									<select id="datasour"
-										name="datasour" class="form-control input-sm">
+										name="datasour" class="form-control input-sm" v-for="">
 										<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -354,7 +348,7 @@
 								<div class="form-group">
 									<label><span>*</span>回邮方式：</label> 
 									<select id="expressType"
-										name="expressType" class="form-control input-sm">
+										name="expressType" class="form-control input-sm" v-for="">
 										<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -432,20 +426,21 @@
 						<!-- end 团队名称/快递号/备注 -->
 					</div>
 				</div>
-				</form>
 				<!-- end 快递信息 -->
 
 			</section>
 		</div>
 		<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
 	</div>
-
+	<script type="text/javascript">
+		var BASE_PATH = '${base}';
+	</script>
 	<script
 		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script>
+	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<!-- 公用js文件 -->
 	<script
 		src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
@@ -475,28 +470,33 @@
 			}
 		}
 		
-		var BASE_PATH = '${base}';
-		var url = "${base}/admin/orderJp/order";
-		var _self;
-		/* new Vue({
+		
+		var url = "${base}/admin/orderJp/getOrder.html";
+		var orderobj;
+		new Vue({
 			el : '#wrapper',
 			data : {
 				customerInfo : "",
 				orderInfo : "",
-				applicantInfo : "",
-				backmailInfo : ""
+				applicantInfo : ""
+				//backmailInfo : ""
 			},
 			created : function() {
-				_self = this;
+				orderobj = this;
+				var id = '${obj.orderId}';
 				$.ajax({
 					url : url,
-					dataType : "json",
+					dataType : 'json',
 					type : 'POST',
+					data:{id : id},
 					success : function(data) {
-						this.customerInfo = data.customerInfo;
-						this.orderInfo = data.orderInfo;
-						this.applicantInfo = data.applicantInfo;
-						this.backmailInfo = data.backmailInfo;
+						orderobj.customerInfo = data.customerInfo;
+						orderobj.orderInfo = data.orderInfo;
+						orderobj.applicantInfo = data.applicantInfo;
+						//this.backmailInfo = data.backmailInfo;
+						console.log(JSON.stringify(orderobj.customerInfo));
+						console.log(JSON.stringify(orderobj.orderInfo.urgentType));
+						console.log(JSON.stringify(orderobj.applicantInfo));
 					},
 					error:function(){
 						alert("error");
@@ -505,12 +505,38 @@
 			},
 			methods:{
 	        	order:function(){
+	        		/* //orderobj.orderInfo = $("#orderInfo").serialize();
+	        		var customer = this.$refs.customerInfo;
+	        		//var customer = orderobj.customerInfo;
+	        		var order = orderobj.orderInfo;
+	        		var applicant = orderobj.applicantInfo;
+	        		console.log(order);
+	        		var backmail;
+	        		$.ajax({
+	        			type:'POST',
+	        			data : {
+	        				customerInfo:customer,
+	        				orderInfo:order,
+	        				applicantInfo:applicant,
+	        				backmailInfo:backmail
+	        				
+	        			},
+	        			url:'${base}/admin/orderJp/order',
+	        			success:function(data){
+	        				alert(JSON.stringify(data));
+	        				console.log(JSON.stringify(data));
+	        				//window.location.href = '${base}/admin/orderJp/order';
+	        			},
+	        			error:function(){
+	        				alert("error");
+	        			}
+	        		});
 	        		//window.location.href = '${base}/admin/orderJp/order';
 	        		//console.log(message);
-	        		//alert(JSON.stringify(event.target));
+	        		//alert(JSON.stringify(event.target)); */
 	        	}
 	        }
-		});     */
+		});      
 	</script>
 </body>
 </html>

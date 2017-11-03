@@ -73,8 +73,8 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object order() {
-		return saleViewService.addOrder();
+	public Object order(@Param("id") Integer orderid) {
+		return saleViewService.addOrder(orderid);
 	}
 
 	/**
@@ -103,10 +103,9 @@ public class OrderJpModule {
 	 * 跳转到'修改操作'的录入数据页面,实际就是[按照主键查询单个实体]
 	 */
 	@At
-	@GET
-	@Ok("jsp")
-	public Object getOrder(@Param("id") final long id) {
-		return saleViewService.fetchOrder(id);
+	@POST
+	public Object getOrder(@Param("id") Integer orderid) {
+		return saleViewService.fetchOrder(orderid);
 	}
 
 	/**
