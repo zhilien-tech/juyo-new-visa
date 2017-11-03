@@ -16,6 +16,7 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.admin.visajp.service.VisaJapanService;
 
@@ -82,4 +83,22 @@ public class VisaJapanModule {
 		return visaJapanService.getJpVisaDetailData(orderid);
 	}
 
+	/**
+	 * 保存签证详情数据
+	 */
+	@At
+	@POST
+	public Object saveJpVisaDetailInfo(@Param("..") VisaEditDataForm editDataForm,
+			@Param("travelinfo") String travelinfo, HttpSession session) {
+		return visaJapanService.saveJpVisaDetailInfo(editDataForm, travelinfo, session);
+	}
+
+	/**
+	 * 重置计划
+	 */
+	@At
+	@POST
+	public Object resetPlan(@Param("orderid") Integer orderid, @Param("planid") Integer planid) {
+		return visaJapanService.resetPlan(orderid, planid);
+	}
 }
