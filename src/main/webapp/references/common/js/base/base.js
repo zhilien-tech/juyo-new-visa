@@ -94,22 +94,30 @@
 
 	//点击汉堡图 左菜单栏收起 
 	$('.hamburgerImg').click(function(){
-		//$('.main-sidebar').toggleClass('min-sidebar');
-		//$('.content-wrapper').toggleClass('min-content-wrapper');
-		//$('.logo').toggleClass('min-logo');
-		//$('.logo-lg').toggle();
-		//$('.navbar-static-top').toggleClass('min-navbar-static-top');
 		var menuWhetherMini = $('.main-sidebar').hasClass('min-sidebar');//左菜单栏 是否缩进
 		if(menuWhetherMini == false){//缩进
 			$('.main-sidebar').addClass('min-sidebar');
 			$('.content-wrapper').addClass('min-content-wrapper');
 			sessionStorage.menuWhetherMini = "isMini"; //false
+			
 		}else if(menuWhetherMini == true){//展开
 			$('.main-sidebar').removeClass('min-sidebar');
 			$('.content-wrapper').removeClass('min-content-wrapper');
 			sessionStorage.menuWhetherMini = "noMini"; //true
 		}
 
+	});
+	
+	
+	$(".min-sidebar .sidebar-menu .menu1").mouseover(function(){
+		var $this = $(this).next("ul");
+		if($this.hasClass("menu-ul")){
+			console.log("6666");
+		}else{
+			console.log("8888");
+		}
+	}).mouseout(function(){
+		
 	});
 	
 	/*----------------------------------------end aside JS部分---------------------------------------------*/  
