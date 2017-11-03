@@ -11,14 +11,11 @@
 <title>更新</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/company.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/company.css">
+	<link rel="stylesheet" href="${base}/references/public/plugins/uploadify/uploadify.css">
 </head>
 <body>
 
@@ -186,14 +183,19 @@
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script
-		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<!-- uploadify -->
+	<script src="${base}/references/public/plugins/uploadify/jquery.uploadify.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- 经营范围校验 -->
 	<script src="${base}/admin/company/validateScope.js"></script>
+	<!-- 上传图片 -->
+	<script src="${base}/admin/company/uploadFile.js"></script>
 	<script type="text/javascript">
-		var base = "${base}";
-
+		$(function() {
+			//加载上传
+			uploadFile();
+		});
 		function initvalidate() {
 			//校验
 			$('#companyUpdateForm').bootstrapValidator({
