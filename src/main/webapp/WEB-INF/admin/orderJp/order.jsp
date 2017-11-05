@@ -336,7 +336,7 @@
 								<div class="form-group">
 									<label><span>*</span>资料来源：</label>
 									<select id="datasour"
-										name="datasour" class="form-control input-sm" v-for="">
+										name="datasour" class="form-control input-sm" >
 										<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -348,7 +348,7 @@
 								<div class="form-group">
 									<label><span>*</span>回邮方式：</label> 
 									<select id="expressType"
-										name="expressType" class="form-control input-sm" v-for="">
+										name="expressType" class="form-control input-sm" >
 										<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -447,28 +447,6 @@
 	<script src="${base}/admin/orderJp/order.js"></script>
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
-		function selectListData(){
-			var isVisited = $("#isVisit").val();
-			var visaType = $("#visaType").val();
-			var mainSaleUrgentEnum = $("#urgentType").val();
-			if(isVisited == 1){
-				$("#isVisited").removeClass("none");
-			}else{
-				$("#isVisited").addClass("none");
-			}
-			
-			if(visaType == 2){
-				$("#sixCounty").removeClass("none");
-			}else{
-				$("#sixCounty").addClass("none");
-			}
-			
-			if(mainSaleUrgentEnum != 1){
-				$("#urgentDay").removeClass("none");
-			}else{
-				$("#urgentDay").addClass("none");
-			}
-		}
 		
 		
 		var url = "${base}/admin/orderJp/getOrder.html";
@@ -490,6 +468,7 @@
 					type : 'POST',
 					data:{id : id},
 					success : function(data) {
+						console.log(JSON.stringify(data));
 						orderobj.customerInfo = data.customerInfo;
 						orderobj.orderInfo = data.orderInfo;
 						orderobj.applicantInfo = data.applicantInfo;
@@ -505,9 +484,7 @@
 			},
 			methods:{
 	        	order:function(){
-	        		/* //orderobj.orderInfo = $("#orderInfo").serialize();
-	        		var customer = this.$refs.customerInfo;
-	        		//var customer = orderobj.customerInfo;
+	        		var customer = orderobj.customerInfo;
 	        		var order = orderobj.orderInfo;
 	        		var applicant = orderobj.applicantInfo;
 	        		console.log(order);
@@ -533,10 +510,32 @@
 	        		});
 	        		//window.location.href = '${base}/admin/orderJp/order';
 	        		//console.log(message);
-	        		//alert(JSON.stringify(event.target)); */
+	        		//alert(JSON.stringify(event.target)); 
 	        	}
 	        }
-		});      
+		});    
+		function selectListData(){
+			var isVisited = $("#isVisit").val();
+			var visaType = $("#visaType").val();
+			var mainSaleUrgentEnum = $("#urgentType").val();
+			if(isVisited == 1){
+				$("#isVisited").removeClass("none");
+			}else{
+				$("#isVisited").addClass("none");
+			}
+			
+			if(visaType == 2){
+				$("#sixCounty").removeClass("none");
+			}else{
+				$("#sixCounty").addClass("none");
+			}
+			
+			if(mainSaleUrgentEnum != 1){
+				$("#urgentDay").removeClass("none");
+			}else{
+				$("#urgentDay").addClass("none");
+			}
+		}
 	</script>
 </body>
 </html>

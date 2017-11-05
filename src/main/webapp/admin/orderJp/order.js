@@ -27,7 +27,7 @@ $(function(){
 			shadeClose: false,
 			scrollbar: false,
 			area: ['900px', '551px'],
-			content:BASE_PATH + '/admin/orderJp/addApplicant.html'
+			content:'/admin/orderJp/addApplicant.html'
 		});
 	});
 	
