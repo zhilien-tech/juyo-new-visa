@@ -639,8 +639,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		for (TApplicantVisaJpEntity VisaJpEntity : visainputs) {
 			DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 			Map<String, Object> visainputmap = Maps.newHashMap();
-			visainputmap.put("visadatestr", format.format(VisaJpEntity.getVisaDate()));
-			visainputmap.put("validdatestr", format.format(VisaJpEntity.getValidDate()));
+			if (!Util.isEmpty(VisaJpEntity.getVisaDate())) {
+				visainputmap.put("visadatestr", format.format(VisaJpEntity.getVisaDate()));
+			}
+			if (!Util.isEmpty(VisaJpEntity.getValidDate())) {
+				visainputmap.put("validdatestr", format.format(VisaJpEntity.getValidDate()));
+			}
 			String visatypestr = "";
 			if (!Util.isEmpty(VisaJpEntity.getVisaType())) {
 				for (AlredyVisaTypeEnum typeEnum : AlredyVisaTypeEnum.values()) {
