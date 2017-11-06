@@ -1,10 +1,10 @@
 .select2-container {
   box-sizing: border-box;
-  display: inline-block;
+  display:block;
   margin: 0;
   position: relative;
   vertical-align: middle;
-  width: 100%;
+  /* width: 100%; */
    }
   .select2-container .select2-selection--single {
     box-sizing: border-box;
@@ -255,7 +255,7 @@
   outline: 0;
   box-shadow: none;
   -webkit-appearance: textfield;
-  font-size: 13px;
+  font-size: 12px;
   margin-top: 8px;
   margin-left: 7px;
    }
