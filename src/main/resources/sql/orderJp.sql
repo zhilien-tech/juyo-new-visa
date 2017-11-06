@@ -1,5 +1,7 @@
 /*orderJp_list*/
 SELECT
+oj.id,
+oj.orderid,
 o.orderNum,
 (
 	SELECT
@@ -38,3 +40,50 @@ LEFT JOIN t_applicant_passport ap ON ap.applicantId = aj.id
 LEFT JOIN t_company tc ON tc.id = o.comId
 
 $condition
+
+/*orderJp_list_customerInfo_byOrderId*/
+SELECT
+c.source,
+c.`name`,
+c.shortname,
+c.linkman,
+c.email,
+c.mobile
+FROM
+t_order o
+LEFT JOIN
+t_customer c ON o.customerId = c.id
+WHERE
+o.id = @id
+
+/*orderJp_list_orderInfo_byOrderId*/
+SELECT
+	o.*, 
+	oj.visaCounty,
+	oj.visaType,
+	oj.isVisit,
+	oj.threeCounty,
+	oj.acceptDesign,
+	oj.visastatus
+FROM
+	t_order o
+INNER JOIN t_order_jp oj ON oj.orderId = o.id
+WHERE
+	o.id = @id
+	
+/*orderJp_list_applicantInfo_byOrderId*/
+SELECT
+aoj.id,
+CONCAT(a.firstName, a.lastName) applyname,
+a.email,
+a.telephone,
+a.sex,
+ap.passport
+FROM
+t_applicant_order_jp aoj
+LEFT JOIN
+t_applicant a ON aoj.applicantId = a.id
+LEFT JOIN
+t_applicant_passport ap ON ap.applicantId = a.id
+WHERE
+aoj.orderId = @id

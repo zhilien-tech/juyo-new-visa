@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="${base}/references/public/css/saleJapan.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper">
+	<div class="wrapper" id="wrapper">
 		<div class="content-wrapper"  style="min-height: 848px;">
 				<ul class="title">
 					<li>销售</li>
@@ -59,14 +59,13 @@
 							<div class="col-md-2 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" />
 							</div>
-							<div class="col-md-6 left-5px">
+							<div class="col-md-6 left-5px" >
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
-								<a class="btn btn-primary btn-sm pull-right" onclick="order()" id="orderBtn">下单</a>
+								<a class="btn btn-primary btn-sm pull-right" id="orderBtn" onclick="addOrder();" v-on:click="">下单</a>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<a v-bind:href="url"></a>
 						<div class="card-list" v-for="data in orderJpData">
 							<div class="card-head">
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>	
@@ -74,7 +73,7 @@
 								<div><label>状态：</label><span>{{data.status}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i> </i>
+									<i class="edit" onclick="" v-on:click="order(data.orderid)">编辑 </i>
 									<i> </i>
 									<i> </i>
 									<i> </i>
@@ -82,7 +81,7 @@
 								</div>
 							</div>
 							<ul class="card-content">
-								<li class="everybody-info" v-for="data in orderJpData">
+								<li class="everybody-info" >
 									<div><label>公司简称：</label><span>{{data.shortname}}</span></div>
 									<div><label>客户来源：</label><span>{{data.source}}</span></div>
 									<div><label>联系人：</label><span>{{data.linkman}}</span></div>
@@ -112,7 +111,7 @@
 	    //vue表格数据对象
 	    var _self;
 		new Vue({
-			el: '#card',
+			el: '#wrapper',
 			data: {orderJpData:""},
 			created:function(){
 	            _self=this;
@@ -122,10 +121,15 @@
 	            	type:'post',
 	            	success: function(data){
 	            		_self.orderJpData = data.orderJp;
-	            		//_self.data=eval("(" + data +")");
 	              	}
 	            });
-	        }
+	        },
+	        methods:{
+	        	order:function(id){
+	        			window.location.href = '${base}/admin/orderJp/order.html'+(id > 0?('?id='+id):'');
+	        			//window.location.href = '${base}/admin/orderJp/order.html?id='+id;
+	        	}
+	        } 
 		});
 		function search(){
 			var status = $('#status').val();
@@ -145,10 +149,10 @@
 	          	}
 	        });
 		}
-		//跳转 签证详情页
-		function order(){
-			window.location.href = '${base}/admin/orderJp/order.html';
-		}
+		//跳转添加页
+		 function addOrder(){
+			window.location.href = '${base}/admin/orderJp/addOrder';
+		}  
 	</script>
 </body>
 </html>

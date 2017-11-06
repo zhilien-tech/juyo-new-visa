@@ -316,7 +316,6 @@
 					layer.msg('lastLoginTime不能为空');
 					return;
 				}
-
 				$.ajax({
 					type : 'POST',
 					data : $("#userAddForm").serialize(),
