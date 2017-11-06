@@ -59,7 +59,7 @@
 								</div>
 							</div>
 							<div class="col-sm-9">
-								<div class="form-group">
+								<div class="form-group" style="padding-right: 3%;">
 									<label><span>*</span>公司全称：</label> <input id="compName"
 										name="name" type="text" class="form-control input-sm"
 										placeholder=" " /> <i
@@ -107,7 +107,7 @@
 				</div>
 				<!-- end 客户信息 -->
 				<!-- 订单信息 -->
-				<div class="orderInfo" id="orderInfo">
+				<div class="orderInfo info" id="orderInfo">
 					<p class="info-head">订单信息</p>
 					<div class="info-body-from">
 						<div class="row body-from-input">
@@ -321,7 +321,7 @@
 						主申请人 <input type="button" name="" value="添加"
 							class="btn btn-primary btn-sm pull-right">
 					</p>
-					<div class="info-table">
+					<div class="info-table" style="padding-bottom: 1px;">
 						<table id="principalApplicantTable" class="table table-hover"
 							style="width: 100%;">
 							<thead>
