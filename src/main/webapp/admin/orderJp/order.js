@@ -35,4 +35,36 @@ $(function(){
 	$(".addExpressInfoBtn").click(function(){
 		$(".expressInfo").removeClass("none");
 	});
+	
+	//保存
+	/*$("#saveOrder").click(function(){
+		var customer = customerInfo;
+		var order = $("#orderInfo").serialize();
+		var applicants = $("#applicantInfo").serialize();
+		if($(".expressInfo").hasClass("none")){
+			var backmail = $("#backmailInfo").serialize();
+		}
+		alert(customer);
+		alert(order);
+		alert(applicants);
+		alert(backmail);
+		$.ajax({
+			type:'POST',
+			data : {
+				customerInfo:customer,
+				orderInfo:order,
+				applicantInfo:applicants,
+				backmailInfo:backmail
+				
+			},
+			url:BASE_PATH + '/admin/orderJp/order',
+			success:function(data){
+				alert(JSON.stringify(data));
+				console.log(JSON.stringify(data));
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+	});*/
 });

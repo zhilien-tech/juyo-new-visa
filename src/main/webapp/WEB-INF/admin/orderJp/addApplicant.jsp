@@ -15,11 +15,11 @@
 </head>
 <body>
 	<div class="modal-content">
-		<form id="">
+		<form id="applicantInfo">
 			<div class="modal-header">
 				<span class="heading">添加申请人</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存" onclick="saveApplicant();"/>
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
@@ -52,7 +52,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>姓/拼音：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="firstName" name="firstName" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -61,7 +61,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>名/拼音：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="lastName" name="lastName" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -70,14 +70,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>手机号：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>邮箱：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="email" name="email" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -86,14 +86,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>现居住地址省份：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="province" name="province" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>现居住地址城市：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="city" name="city" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -102,7 +102,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="detailedAddress" name="detailedAddress" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -111,7 +111,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>公民身份证：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="cardId" name="cardId" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -120,23 +120,23 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别：</label>
-									<select class="form-control input-sm selectHeight">
-										<option>男</option>
-										<option>女</option>
+									<select class="form-control input-sm selectHeight" id="sex" name="sex">
+										<option value="1">男</option>
+										<option value="2">女</option>
 									</select>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>民族：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="nation" name="nation" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生日期：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -145,7 +145,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>住宅：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -154,14 +154,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>有效期限：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
+									<input id="validStartDate" name="validStartDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label> &nbsp; &nbsp;</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
+									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -184,12 +184,30 @@
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<script src="${base}/admin/orderJp/applicant.js"></script>
 	
 	<script type="text/javascript">
 		var base = "${base}";
-		$(function() {
-			
-		});
+		function saveApplicant(){
+			var applicantInfo = $("#applicantInfo").serialize();
+			$.ajax({
+				type : 'POST',
+				data : applicantInfo,
+				url : '${base}/admin/orderJp/saveAddApplicant',
+				success : function(data) {
+					console.log(JSON.stringify(data));
+					var applicantId = data.id;
+					applicantinfo = data;
+					var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					layer.close(index);
+					parent.layer.close(index);
+					//parent.datatable.ajax.reload();
+				},
+				error : function() {
+					alert("error");
+				}
+			}); 
+		}
 
 
 		//返回 

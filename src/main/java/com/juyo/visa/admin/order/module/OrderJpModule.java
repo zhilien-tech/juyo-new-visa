@@ -18,10 +18,12 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.forms.TApplicantForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
 
@@ -34,12 +36,15 @@ import com.uxuexi.core.common.util.MapUtil;
  * @Date	 XXXX年XX月XX日 	 
  */
 @IocBean
-@At("admin/orderJp")
+@At("/admin/orderJp")
 public class OrderJpModule {
 
 	@Inject
 	private OrderJpViewService saleViewService;
 
+	/**
+	 * 跳转到list页面
+	 */
 	@At
 	@GET
 	@Ok("jsp")
@@ -51,11 +56,78 @@ public class OrderJpModule {
 	}
 
 	/**
-	 * 跳转到list页面
+	 * 加载list页面
 	 */
 	@At
 	@POST
 	public Object listData(@Param("..") final OrderJpForm sqlParamForm, HttpSession session) {
 		return saleViewService.listData(sqlParamForm, session);
+	}
+
+	/**
+	 * 跳转到'添加操作'的录入数据页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object order(@Param("id") Integer orderid) {
+		return saleViewService.addOrder(orderid);
+	}
+
+	/**
+	 * 下单
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object addOrder() {
+		return saleViewService.addOrder();
+	}
+
+	/**
+	 * 添加申请人页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object addApplicant() {
+		return null;
+	}
+
+	/**
+	 * 保存申请人
+	 */
+	@At
+	@POST
+	public Object saveAddApplicant(@Param("..") TApplicantForm applicantForm, HttpSession session) {
+		return saleViewService.addApplicant(applicantForm, session);
+	}
+
+	/**
+	 * 保存修改
+	 */
+	@At
+	@POST
+	public Object order(@Param("..") OrderEditDataForm orderInfo, @Param("customerinfo") String customerInfo,
+			final HttpSession session) {
+		return saleViewService.saveOrder(orderInfo, customerInfo, session);
+	}
+
+	/**
+	 * 下单保存
+	 */
+	@At
+	@POST
+	public Object saveAddOrderinfo(@Param("..") OrderEditDataForm orderInfo, final HttpSession session) {
+		return saleViewService.saveAddOrderinfo(orderInfo, session);
+	}
+
+	/**
+	 * 跳转到'修改操作'的录入数据页面,实际就是[按照主键查询单个实体]
+	 */
+	@At
+	@POST
+	public Object getOrder(@Param("id") Integer orderid) {
+		return saleViewService.fetchOrder(orderid);
 	}
 }
