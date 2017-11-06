@@ -161,12 +161,27 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		if (Util.isEmpty(travelinfo)) {
 			travelinfo = new TOrderTripJpEntity();
 		}
-		result.put("travelinfo", travelinfo);
+		Map<String, String> tralinfoMap = obj2Map(travelinfo);
+		if (!Util.isEmpty(travelinfo.getGoDate())) {
+			tralinfoMap.put("goDate", format.format(travelinfo.getGoDate()));
+		}
+		if (!Util.isEmpty(travelinfo.getReturnDate())) {
+			tralinfoMap.put("returnDate", format.format(travelinfo.getReturnDate()));
+		}
+		result.put("travelinfo", tralinfoMap);
 		//申请人信息
 		String applysqlstr = sqlManager.get("get_jporder_detail_applyinfo_byorderid");
 		Sql applysql = Sqls.create(applysqlstr);
 		applysql.setParam("orderid", orderid);
 		List<Record> applyinfo = dbDao.query(applysql, null, null);
+		for (Record record : applyinfo) {
+			Integer type = (Integer) record.get("type");
+			for (VisaDataTypeEnum visadatatype : VisaDataTypeEnum.values()) {
+				if (type.equals(visadatatype.intKey())) {
+					record.put("type", visadatatype.value());
+				}
+			}
+		}
 		result.put("applyinfo", applyinfo);
 		//行程安排
 		result.put("travelplan", getTravelPlanByOrderId(orderid));
@@ -286,39 +301,55 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//出行信息
 		@SuppressWarnings("unchecked")
 		Map<String, Object> travelmap = JsonUtil.fromJson(travelinfojson, Map.class);
-		Integer id = (Integer) travelmap.get("id");
+		Integer id = Integer.valueOf((String) travelmap.get("id"));
 		//出行信息是否存在
 		TOrderTripJpEntity travel = !Util.isEmpty(travelmap.get("id")) ? dbDao.fetch(TOrderTripJpEntity.class,
 				id.longValue()) : new TOrderTripJpEntity();
 		//travel = dbDao.fetch(TOrderTripJpEntity.class, (Integer.valueOf(travelmap.get("id"))).longValue());
-		travel.setTripPurpose(String.valueOf(travelmap.get("tripPurpose")));
+		travel.setTripPurpose(String.valueOf(travelmap.get("trippurpose")));
 		String godatestr = String.valueOf(travelmap.get("goDate"));
 		if (!Util.isEmpty(travelmap.get("goDate"))) {
 			Date godate = DateUtil.string2Date(godatestr, DateUtil.FORMAT_YYYY_MM_DD);
 			travel.setGoDate(godate);
+		} else {
+			travel.setGoDate(null);
 		}
 		String returndatestr = String.valueOf(travelmap.get("returnDate"));
 		if (!Util.isEmpty(travelmap.get("returnDate"))) {
 			Date returndate = DateUtil.string2Date(returndatestr, DateUtil.FORMAT_YYYY_MM_DD);
 			travel.setReturnDate(returndate);
+		} else {
+			travel.setReturnDate(null);
 		}
-		if (!Util.isEmpty(travelmap.get("goDepartureCity"))) {
-			travel.setGoDepartureCity(Integer.valueOf(String.valueOf(travelmap.get("goDepartureCity"))));
+		if (!Util.isEmpty(travelmap.get("godeparturecity"))) {
+			travel.setGoDepartureCity(Integer.valueOf(String.valueOf(travelmap.get("godeparturecity"))));
+		} else {
+			travel.setGoDepartureCity(null);
 		}
-		if (!Util.isEmpty(travelmap.get("goArrivedCity"))) {
-			travel.setGoArrivedCity(Integer.valueOf(String.valueOf(travelmap.get("goArrivedCity"))));
+		if (!Util.isEmpty(travelmap.get("goarrivedcity"))) {
+			travel.setGoArrivedCity(Integer.valueOf(String.valueOf(travelmap.get("goarrivedcity"))));
+		} else {
+			travel.setGoArrivedCity(null);
 		}
-		if (!Util.isEmpty(travelmap.get("goFlightNum"))) {
-			travel.setGoFlightNum(Integer.valueOf(String.valueOf(travelmap.get("goFlightNum"))));
+		if (!Util.isEmpty(travelmap.get("goflightnum"))) {
+			travel.setGoFlightNum(Integer.valueOf(String.valueOf(travelmap.get("goflightnum"))));
+		} else {
+			travel.setGoFlightNum(null);
 		}
-		if (!Util.isEmpty(travelmap.get("returnDepartureCity"))) {
-			travel.setReturnDepartureCity(Integer.valueOf(String.valueOf(travelmap.get("returnDepartureCity"))));
+		if (!Util.isEmpty(travelmap.get("returndeparturecity"))) {
+			travel.setReturnDepartureCity(Integer.valueOf(String.valueOf(travelmap.get("returndeparturecity"))));
+		} else {
+			travel.setReturnDepartureCity(null);
 		}
-		if (!Util.isEmpty(travelmap.get("returnArrivedCity"))) {
-			travel.setReturnArrivedCity(Integer.valueOf(String.valueOf(travelmap.get("returnArrivedCity"))));
+		if (!Util.isEmpty(travelmap.get("returnarrivedcity"))) {
+			travel.setReturnArrivedCity(Integer.valueOf(String.valueOf(travelmap.get("returnarrivedcity"))));
+		} else {
+			travel.setReturnArrivedCity(null);
 		}
-		if (!Util.isEmpty(travelmap.get("returnFlightNum"))) {
-			travel.setReturnFlightNum(Integer.valueOf(String.valueOf(travelmap.get("returnFlightNum"))));
+		if (!Util.isEmpty(travelmap.get("returnflightnum"))) {
+			travel.setReturnFlightNum(Integer.valueOf(String.valueOf(travelmap.get("returnflightnum"))));
+		} else {
+			travel.setReturnFlightNum(null);
 		}
 
 		//保存出行信息
@@ -372,7 +403,21 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @return TODO 通过抵达城市生成行程安排
 	 */
 	public Object generatePlan(GeneratePlanForm planform, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("status", "error");
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		if (Util.isEmpty(planform.getGoArrivedCity())) {
+			result.put("message", "请选择抵达城市");
+			return result;
+		}
+		if (Util.isEmpty(planform.getGoDate())) {
+			result.put("message", "请选择出发日期");
+			return result;
+		}
+		if (Util.isEmpty(planform.getReturnDate())) {
+			result.put("message", "请选择返回日期");
+			return result;
+		}
 		int daysBetween = DateUtil.daysBetween(planform.getGoDate(), planform.getReturnDate());
 		//获取城市
 		TCityEntity city = dbDao.fetch(TCityEntity.class, planform.getGoArrivedCity().longValue());
@@ -382,6 +427,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//获取城市所有的景区
 		List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class,
 				Cnd.where("cityId", "=", planform.getGoArrivedCity()), null);
+		if (scenics.size() < daysBetween) {
+			result.put("message", "没有更多的景区");
+			return result;
+		}
 		//需要生成的travelplan
 		List<TOrderTravelplanJpEntity> travelplans = Lists.newArrayList();
 		for (int i = 0; i < daysBetween; i++) {
@@ -410,8 +459,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				Cnd.where("orderid", "=", planform.getOrderid()), null);
 		//更新行程安排
 		dbDao.updateRelations(before, travelplans);
-
-		return getTravelPlanByOrderId(planform.getOrderid());
+		result.put("data", getTravelPlanByOrderId(planform.getOrderid()));
+		result.put("status", "success");
+		return result;
 	}
 
 	/**
@@ -427,6 +477,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		Sql sql = Sqls.create(sqlString);
 		sql.setParam("orderid", orderid);
 		List<Record> travelplans = dbDao.query(sql, null, null);
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		for (Record record : travelplans) {
+			Date outdate = (Date) record.get("outdate");
+			record.put("outdate", format.format(outdate));
+		}
 		return travelplans;
 	}
 

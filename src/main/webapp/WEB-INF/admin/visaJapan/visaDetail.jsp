@@ -299,7 +299,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行目的：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.tripPurpose"/>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.trippurpose"/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -316,7 +316,9 @@
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
 										<select id="goDepartureCity" class="form-control select2 select2City" multiple="multiple" v-model="travelinfo.goDepartureCity">
-											<option value="${obj.goleavecity.id}" selected="selected">${obj.goleavecity.city}</option>
+											<c:if test="${!empty obj.goleavecity.id}">
+												<option value="${obj.goleavecity.id}" selected="selected">${obj.goleavecity.city}</option>
+											</c:if>
 										</select>
 									</div>
 								</div>
@@ -324,7 +326,9 @@
 									<div class="form-group">
 										<label><span>*</span>抵达城市：</label>
 										<select id="goArrivedCity" class="form-control input-sm select2City" multiple="multiple" v-model="travelinfo.goArrivedCity">
-											<option value="${obj.goarrivecity.id}" selected="selected">${obj.goarrivecity.city}</option>
+											<c:if test="${!empty obj.goarrivecity.id}">
+												<option value="${obj.goarrivecity.id}" selected="selected">${obj.goarrivecity.city}</option>
+											</c:if>
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
@@ -333,7 +337,9 @@
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
 										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.goFlightNum">
-											<option value="${obj.goflightnum.id }" selected="selected">${obj.goflightnum.flightnum }</option>
+											<c:if test="${!empty obj.goflightnum.id }">
+												<option value="${obj.goflightnum.id }" selected="selected">${obj.goflightnum.flightnum }</option>
+											</c:if>
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
@@ -351,7 +357,9 @@
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
 										<select id="returnDepartureCity" class="form-control select2 select2City" multiple="multiple" v-model="travelinfo.returnDepartureCity">
-											<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
+											<c:if test="${!empty obj.backleavecity.id}">
+												<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
+											</c:if>
 										</select>
 									</div>
 								</div>
@@ -359,7 +367,9 @@
 									<div class="form-group">
 										<label><span>*</span>返回城市：</label>
 										<select id="returnArrivedCity" class="form-control input-sm select2City" multiple="multiple" v-model="travelinfo.returnArrivedCity">
-											<option value="${obj.backarrivecity.id}" selected="selected">${obj.backarrivecity.city}</option>
+											<c:if test="${!empty obj.backarrivecity.id}">
+												<option value="${obj.backarrivecity.id}" selected="selected">${obj.backarrivecity.city}</option>
+											</c:if>
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
@@ -368,7 +378,9 @@
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
 										<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.returnFlightNum">
-											<option value="${obj.returnflightnum.id }" selected="selected">${obj.returnflightnum.flightnum }</option>
+											<c:if test="${!empty obj.returnflightnum.id }">
+												<option value="${obj.returnflightnum.id }" selected="selected">${obj.returnflightnum.flightnum }</option>
+											</c:if>
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>

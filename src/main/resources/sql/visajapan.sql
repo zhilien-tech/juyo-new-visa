@@ -28,7 +28,7 @@ LEFT JOIN (
 		t_applicant ta
 	INNER JOIN t_applicant_order_jp taoj ON taoj.applicantId = ta.id
 	GROUP BY
-		ta.id
+		taoj.orderId
 ) taj ON taj.orderId = toj.id
 $condition
 
@@ -82,7 +82,7 @@ SELECT
 FROM
 	t_applicant_order_jp taoj
 INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
-INNER JOIN t_applicant_passport tap ON tap.applicantId = ta.id
+LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
 LEFT JOIN (
 	SELECT
 		applicantId,
