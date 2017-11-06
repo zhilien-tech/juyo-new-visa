@@ -28,6 +28,7 @@
 			.everybody-info div:nth-child(4){width:14%;}
 			.everybody-info div:nth-child(5){width:11%;}
 			.card-list{height: 87px;}
+			.card-list:hover{height: 87px !important;min-height: 87px !important;}
 			.box-header{padding-right: 16px;}
 			.box-body{padding-top:15px;}
 		</style>
