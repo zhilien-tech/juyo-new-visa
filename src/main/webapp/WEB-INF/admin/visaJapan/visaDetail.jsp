@@ -29,7 +29,6 @@
 			#applicantTable tbody tr td:nth-child(2){width: 10%;}
 			#applicantTable tbody tr td:nth-child(3){width: 10%;}
 			#applicantTable tbody tr td:nth-child(4){width: 10%;}
-			#applicantTable tbody tr td:nth-child(5){}
 			#applicantTable tbody tr td:nth-child(6){width: 8%;}
 		</style>
 	</head>
