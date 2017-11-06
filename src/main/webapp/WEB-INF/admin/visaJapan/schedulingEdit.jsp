@@ -34,7 +34,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>日期：</label> 
-								<input id="outDate" name="outDate" type="text" class="form-control input-sm" value="<fmt:formatDate value="${obj.travelplan.outDate }" pattern="yyyy-MM-dd" />" />
+								<input id="outDate" name="outDate" type="text" onfocus="WdatePicker()" class="form-control input-sm" value="<fmt:formatDate value="${obj.travelplan.outDate }" pattern="yyyy-MM-dd" />" />
 							</div>
 						</div>
 						
@@ -85,6 +85,7 @@
 	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<!-- 经营范围校验 -->
 	<script src="${base}/admin/visaJapan/schedulingEdit.js"></script>
 	<script type="text/javascript">
