@@ -8,9 +8,14 @@
 	<title>签证日本-实收</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<style type="text/css">
+		#datatableId tbody tr td:nth-child(1){width: 12%;}
+		#datatableId tbody tr td:nth-child(2){width: 15%;}
+		#datatableId tbody tr td:nth-child(3){width:25%;}
+		#datatableId tbody tr td:nth-child(4){width: 10%;}
+	</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -72,27 +77,12 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
-	<!-- DataTables -->
-	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			/* $('#datatableId').DataTable({
-				"autoWidth":true,
-				"ordering": false,
-				"searching":false,
-				"bLengthChange": false,
-				"processing": true,
-				"serverSide": true,
-				"stripeClasses": [ 'strip1','strip2' ],
-				"language": {
-					"url": BASE_PATH + "/references/public/plugins/datatables/cn.json"
-				}
-			}); */
 			
 			/*点击表格中的加号标签*/
 			$(".addText").click(function(){

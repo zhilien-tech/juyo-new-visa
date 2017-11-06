@@ -25,6 +25,11 @@
 			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
 			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
 			.deposit,.vehicle,.houseProperty{display:none;}
+			#applicantTable tbody tr td:nth-child(1){width: 10%;}
+			#applicantTable tbody tr td:nth-child(2){width: 10%;}
+			#applicantTable tbody tr td:nth-child(3){width: 10%;}
+			#applicantTable tbody tr td:nth-child(4){width: 10%;}
+			#applicantTable tbody tr td:nth-child(6){width: 8%;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -249,7 +254,7 @@
 					<!-- 申请人 -->
 					<div class="info" id="mySwitch">
 						<p class="info-head">申请人</p>
-						<div class="info-table">
+						<div class="info-table" style="padding-bottom: 1px;">
 							<table id="applicantTable" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
@@ -261,8 +266,8 @@
 										<th><span>操作<span></th>
 									</tr>
 								</thead>
-								<tbody v-for="apply in applyinfo">
-									<tr>
+								<tbody>
+									<tr v-for="apply in applyinfo">
 										<td>{{apply.applyname}}</td>
 										<td>{{apply.telephone}}</td>
 										<td>{{apply.passport}}</td>
@@ -397,16 +402,16 @@
 													<th><span>操作<span></th>
 												</tr>
 											</thead>
-											<tbody v-for="plan in travelplan">
-												<tr>
+											<tbody>
+												<tr v-for="plan in travelplan">
 													<td>第{{plan.day}}天</td>
 													<td>{{plan.outdate}}</td>
 													<td>{{plan.cityname}}</td>
 													<td>{{plan.scenic}}</td>
 													<td>{{plan.hotelname}}</td>
 													<td>
-														<i class="editHui" v-on:click="schedulingEdit(plan.id)">修改</i>
-														<i class="resetHui" v-on:click="resetPlan(plan.id)">重置</i>
+														<i class="editHui" v-on:click="schedulingEdit(plan.id)"></i>
+														<i class="resetHui" v-on:click="resetPlan(plan.id)"></i>
 													</td>
 												</tr>
 											</tbody>

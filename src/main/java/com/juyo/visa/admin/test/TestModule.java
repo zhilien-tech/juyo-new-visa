@@ -27,4 +27,9 @@ public class TestModule {
 		return null;
 	}
 
+	@At("admin/firstTrialJp/list")
+	@Ok("jsp")
+	public Object list() {
+		return null;
+	}
 }

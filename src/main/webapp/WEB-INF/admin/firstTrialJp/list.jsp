@@ -1,0 +1,124 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@include file="/WEB-INF/common/tld.jsp"%>
+<%@include file="/WEB-INF/public/header.jsp"%>
+<%@include file="/WEB-INF/public/aside.jsp"%>
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>初审-日本</title>
+	<link rel="stylesheet" href="${base}/references/public/css/firstTrialJp.css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+		<div class="content-wrapper" style="min-height: 848px;">
+				<ul class="title">
+					<li>初审</li>
+					<li class="arrow"></li>
+					<li>日本</li>
+				</ul>
+				<section class="content">
+					<div class="box-header"><!-- 检索条件 -->
+						<div class="row" style="margin-top:15px;"> 
+							<div class="col-md-2 left-5px right-0px">
+								<select class="input-class input-sm" id="status" name="status">
+									<option value="">状态</option>
+									<c:forEach var="map" items="${data.status}">
+										<option value="${map.key}">${map.value}</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="col-md-2 left-5px right-0px">
+								<input type="text" class="input-sm input-class" id="" name="" placeholder="订单号/护照号/电话/申请人" />
+							</div>
+							<div class="col-md-6 left-5px">
+								<a class="btn btn-primary btn-sm pull-left" href="javascript:;" id="searchbtn">搜索</a>
+							</div>
+						</div>
+					</div><!-- end 检索条件 -->
+					<div class="box-body" id="card"><!-- 卡片列表 -->
+						<a v-bind:href="url"></a>
+						<div class="card-list" v-for="data in orderJpData">
+							<div class="card-head">
+								<div><label>订单号：</label><span>170808-JP0001</span></div>	
+								<div><label>出行时间：</label><span>2017-06-08</span></div>	
+								<div><label>返回时间：</label><span>2017-06-28</span></div>	
+								<div><label>状态：</label><span>不合格</span></div>	
+								<div>
+									<label>操作：</label>
+									<i class="edit"> </i>
+									<i class="express"> </i>
+									<i class="return"> </i>
+								</div>
+							</div>
+							<ul class="card-content">
+								<li class="everybody-info" v-for="data in orderJpData">
+									<div><label>公司简称：</label><span>{{data.shortname}}</span></div>
+									<div><label>客户来源：</label><span>{{data.source}}</span></div>
+									<div><label>联系人：</label><span>{{data.linkman}}</span></div>
+									<div><label>电话：</label><span>{{data.mobile}}</span></div>
+									<div><label>申请人：</label><span>{{data.applicants}}</span></div>
+									<div><!-- <i> </i> --></div>
+								</li>
+							</ul>
+						</div>
+					</div><!-- end 卡片列表 -->
+				</section>
+			</div>
+		</div>
+
+	<!-- jQuery 2.2.3 -->
+	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<script src="${base}/references/common/js/vue/vue.min.js"></script>
+	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
+	<script type="text/javascript">
+		var BASE_PATH = '${base}';
+		//异步加载的URL地址
+	    var url="${base}/admin/orderJp/listData";
+	    //vue表格数据对象
+	    var _self;
+		new Vue({
+			el: '#card',
+			data: {orderJpData:""},
+			created:function(){
+	            _self=this;
+	            $.ajax({ 
+	            	url: url,
+	            	dataType:"json",
+	            	type:'post',
+	            	success: function(data){
+	            		_self.orderJpData = data.orderJp;
+	            		//_self.data=eval("(" + data +")");
+	              	}
+	            });
+	        }
+		});
+		function search(){
+			var status = $('#status').val();
+			var source = $('#source').val();
+			var visaType = $('#visaType').val();
+			var sendSignDate = $('#sendSignDate').val();
+			var signOutDate = $('#signOutDate').val();
+			var searchStr = $('#searchStr').val();
+			$.ajax({ 
+	        	url: url,
+	        	data:{status:status,source:source,visaType:visaType,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr},
+	        	dataType:"json",
+	        	type:'post',
+	        	success: function(data){
+	        		_self.orderJpData = data.orderJp;
+	        		//console.log(JSON.stringify(data));
+	          	}
+	        });
+		}
+		//跳转 签证详情页
+		function order(){
+			window.location.href = '${base}/admin/orderJp/order.html';
+		}
+	</script>
+</body>
+</html>

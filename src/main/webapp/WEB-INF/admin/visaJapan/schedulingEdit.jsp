@@ -11,6 +11,9 @@
 	<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<style type="text/css">
+		
+	</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -91,6 +94,7 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
+			$(".select2-container--default").attr("style","auto");//select2 宽度修改
 		});
 		/* 页面初始化加载完毕 */
 
