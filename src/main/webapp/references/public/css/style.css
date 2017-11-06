@@ -56,8 +56,8 @@ body{min-width:1160px;overflow-x: auto;}
 .visaInput,.afterSales{width: 18px !important;}
 .visaInput{background-image:url(../dist/newvisacss/img/visaInput.png);}
 .afterSales{background-image:url(../dist/newvisacss/img/afterSales.png);}
-
-
+.express{background-image:url(../dist/newvisacss/img/express.png);}
+.return{background-image:url(../dist/newvisacss/img/return.png);}
 
 
 

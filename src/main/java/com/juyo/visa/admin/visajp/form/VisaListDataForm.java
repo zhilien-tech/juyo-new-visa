@@ -68,10 +68,10 @@ public class VisaListDataForm implements SQLParamForm {
 			cnd.and(exp);
 		}
 		if (!Util.isEmpty(sendSignDate)) {
-			cnd.and("tr.sendVisaDate", ">", sendSignDate);
+			cnd.and("tr.sendVisaDate", ">=", sendSignDate);
 		}
 		if (!Util.isEmpty(signOutDate)) {
-			cnd.and("tr.outVisaDate", "<", signOutDate);
+			cnd.and("tr.outVisaDate", "<=", signOutDate);
 		}
 		if (userid.equals(adminId)) {
 			//公司管理员

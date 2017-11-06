@@ -22,9 +22,13 @@
 				<div class="shortMessage"><!-- 短信登录 -->
 						<form action="${base }/admin/messageLogin.html" method="post">
 						<div class="row">
-							<div class="col-sm-12">
+							<div class="col-sm-8">
 								<div class="form-group">
 									<input id="loginMobile" name="loginName" type="text" class="form-control login-txt" placeholder="手机号码" />
+								</div>
+							</div>
+							<div class="col-sm-4" style="padding:0 3px 17px 5px;">
+								<div class="form-group">
 									<button type="button" class="phoneBtn" onclick="getMessageCode(this)">获取验证码</button>
 								</div>
 							</div>
