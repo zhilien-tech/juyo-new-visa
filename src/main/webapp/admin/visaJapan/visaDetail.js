@@ -258,7 +258,7 @@ $("#goDepartureCity").on("select2:select",function(e){
 	}else{
 		thisval += '';
 	}
-　　orderobj.travelinfo.goDepartureCity = thisval;
+　　orderobj.travelinfo.godeparturecity = thisval;
 });
 //去程抵达城市
 $("#goArrivedCity").on("select2:select",function(e){
@@ -268,7 +268,7 @@ $("#goArrivedCity").on("select2:select",function(e){
 	}else{
 		thisval += '';
 	}
-	orderobj.travelinfo.goArrivedCity = thisval;
+	orderobj.travelinfo.goarrivedcity = thisval;
 });
 //回程出发城市
 $("#returnDepartureCity").on("select2:select",function(e){
@@ -278,7 +278,7 @@ $("#returnDepartureCity").on("select2:select",function(e){
 	}else{
 		thisval += '';
 	}
-	orderobj.travelinfo.returnDepartureCity = thisval;
+	orderobj.travelinfo.returndeparturecity = thisval;
 });
 //回程抵达城市
 $("#returnArrivedCity").on("select2:select",function(e){
@@ -288,7 +288,7 @@ $("#returnArrivedCity").on("select2:select",function(e){
 	}else{
 		thisval += '';
 	}
-	orderobj.travelinfo.returnArrivedCity = thisval;
+	orderobj.travelinfo.returnarrivedcity = thisval;
 });
 //出发航班
 $("#goFlightNum").on("select2:select",function(e){
@@ -298,7 +298,7 @@ $("#goFlightNum").on("select2:select",function(e){
 	}else{
 		thisval += '';
 	}
-	orderobj.travelinfo.goFlightNum = thisval;
+	orderobj.travelinfo.goflightnum = thisval;
 });
 //返回航班
 $("#returnFlightNum").on("select2:select",function(e){
@@ -308,12 +308,42 @@ $("#returnFlightNum").on("select2:select",function(e){
 	}else{
 		thisval += '';
 	}
-	orderobj.travelinfo.returnFlightNum = thisval;
+	orderobj.travelinfo.returnflightnum = thisval;
+});
+//去程出发城市
+$("#goDepartureCity").on("select2:unselect",function(e){
+	orderobj.travelinfo.godeparturecity = '';
+});
+//去程抵达城市
+$("#goArrivedCity").on("select2:unselect",function(e){
+	orderobj.travelinfo.goarrivedcity = '';
+});
+//回程出发城市
+$("#returnDepartureCity").on("select2:unselect",function(e){
+	orderobj.travelinfo.returndeparturecity = '';
+});
+//回程抵达城市
+$("#returnArrivedCity").on("select2:unselect",function(e){
+	orderobj.travelinfo.returnarrivedcity = '';
+});
+//出发航班
+$("#goFlightNum").on("select2:unselect",function(e){
+	orderobj.travelinfo.goflightnum = '';
+});
+//返回航班
+$("#returnFlightNum").on("select2:unselect",function(e){
+	orderobj.travelinfo.returnflightnum = '';
 });
 
 //生成行程安排
 $(".schedulingBtn").click(function(){
-	var goArrivedCity = orderobj.travelinfo.goArrivedCity;
+	//var goArrivedCity = orderobj.travelinfo.goarrivedcity;
+	var goArrivedCity = $('#goArrivedCity').val();
+	if (goArrivedCity) {
+		goArrivedCity = goArrivedCity.join(',');
+	}else{
+		goArrivedCity += '';
+	}
 	var goDate = $('#goDate').val();
 	var returnDate = $('#returnDate').val();
 	$.ajax({ 
@@ -322,8 +352,12 @@ $(".schedulingBtn").click(function(){
     	data:{orderid:orderid,goArrivedCity:goArrivedCity,goDate:goDate,returnDate:returnDate},
     	type:'post',
     	success: function(data){
-    		orderobj.travelplan = data;
-    		layer.msg('生成成功');
+    		if(data.status == 'success'){
+    			orderobj.travelplan = data.data;
+    			layer.msg('生成成功');
+    		}else{
+    			layer.msg(data.message);
+    		}
       	}
     });
 });
