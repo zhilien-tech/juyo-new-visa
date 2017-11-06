@@ -1,12 +1,16 @@
 package com.juyo.visa.admin.hotel.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.THotelEntity;
@@ -75,6 +79,28 @@ public class HotelViewService extends BaseService<THotelEntity> {
 		updateForm.setCreateTime(hotel.getCreateTime());
 		this.update(updateForm);
 		return JsonResult.success("修改成功");
+	}
+
+	/**
+	 *  获取酒店下拉
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param hotelname
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getHotelSelect(String hotelname) {
+		List<THotelEntity> hotels = Lists.newArrayList();
+		try {
+			hotels = dbDao.query(THotelEntity.class, Cnd.where("name", "like", "%" + Strings.trim(hotelname) + "%"),
+					null);
+			if (hotels.size() > 5) {
+				hotels = hotels.subList(0, 5);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return hotels;
 	}
 
 }

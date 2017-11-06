@@ -61,7 +61,7 @@
 							</div>
 							<div class="col-md-6 left-5px" >
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
-								<a class="btn btn-primary btn-sm pull-right" id="orderBtn"  v-on:click="order(orderJpData.id)">下单</a>
+								<a class="btn btn-primary btn-sm pull-right" id="orderBtn" onclick="addOrder();" v-on:click="">下单</a>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
@@ -73,7 +73,7 @@
 								<div><label>状态：</label><span>{{data.status}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit" onclick="" v-on:click="order(data.id)">编辑 </i>
+									<i class="edit" onclick="" v-on:click="order(data.orderid)">编辑 </i>
 									<i> </i>
 									<i> </i>
 									<i> </i>
@@ -81,7 +81,7 @@
 								</div>
 							</div>
 							<ul class="card-content">
-								<li class="everybody-info" v-for="data in orderJpData">
+								<li class="everybody-info" >
 									<div><label>公司简称：</label><span>{{data.shortname}}</span></div>
 									<div><label>客户来源：</label><span>{{data.source}}</span></div>
 									<div><label>联系人：</label><span>{{data.linkman}}</span></div>
@@ -150,9 +150,9 @@
 	        });
 		}
 		//跳转添加页
-		/* function order(){
-			window.location.href = '${base}/admin/orderJp/order';
-		} */ 
+		 function addOrder(){
+			window.location.href = '${base}/admin/orderJp/addOrder';
+		}  
 	</script>
 </body>
 </html>

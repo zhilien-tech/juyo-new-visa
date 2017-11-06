@@ -9,7 +9,7 @@ package com.juyo.visa.common.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * TODO 资料类型
+ * TODO 已有签证类型
  * <p>
  * TODO(这里描述这个类补充说明 – 可选)
  *

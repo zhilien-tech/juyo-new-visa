@@ -32,6 +32,7 @@
 }
 </style>
 </head>
+
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper" id="wrapper">
 		<div class="content-wrapper" style="min-height: 848px;">
@@ -44,12 +45,13 @@
 					<p>下单</p>
 				</span> <input type="button" value="取消"
 					class="btn btn-primary btn-sm pull-right" /> <input type="button"
-					value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()"/> <input
-					type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
-				<input type="button" value="初审"
+					value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder"
+					v-on:click="order()" /> <input type="button" value="回邮"
 					class="btn btn-primary btn-sm pull-right" /> <input type="button"
-					value="分享" class="btn btn-primary btn-sm pull-right" /> <input
-					type="button" value="日志" class="btn btn-primary btn-sm pull-right" />
+					value="初审" class="btn btn-primary btn-sm pull-right" /> <input
+					type="button" value="分享" class="btn btn-primary btn-sm pull-right" />
+				<input type="button" value="日志"
+					class="btn btn-primary btn-sm pull-right" />
 			</div>
 			<section class="content">
 				<!-- 客户信息 -->
@@ -61,7 +63,8 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>客户来源：</label> <select id="customerType"
-										name="source" class="form-control input-sm" v-model="customerInfo.source" >
+										name="source" class="form-control input-sm"
+										v-model="customerInfo.source">
 										<option value="">--请选择--</option>
 										<c:forEach var="map" items="${obj.customerTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
@@ -80,9 +83,10 @@
 							</div>
 							<div class="col-sm-9">
 								<div class="form-group">
-									<label><span>*</span>公司全称：</label> <input id="compName" name="compName"
-										type="text" class="form-control input-sm" placeholder=" " v-model="customerInfo.name"/>
-									<i class="bulb"></i>
+									<label><span>*</span>公司全称：</label> <input id="compName"
+										name="compName" type="text" class="form-control input-sm"
+										placeholder=" " v-model="customerInfo.name" /> <i
+										class="bulb"></i>
 								</div>
 							</div>
 						</div>
@@ -91,30 +95,33 @@
 							<!-- 客户来源/联系人/手机号/邮箱 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>公司简称：</label> <input id="comShortName" name="comShortName"
-										type="text" class="form-control input-sm" placeholder=" " v-model="customerInfo.shortname"/>
-									<i class="bulb"></i>
+									<label><span>*</span>公司简称：</label> <input id="comShortName"
+										name="comShortName" type="text" class="form-control input-sm"
+										placeholder=" " v-model="customerInfo.shortname" /> <i
+										class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>联系人：</label> <input id="linkman" name="linkman"
-										type="text" class="form-control input-sm" placeholder=" " v-model="customerInfo.linkman"/>
-									<i class="bulb"></i>
+									<label><span>*</span>联系人：</label> <input id="linkman"
+										name="linkman" type="text" class="form-control input-sm"
+										placeholder=" " v-model="customerInfo.linkman" /> <i
+										class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>手机号：</label> <input id="telephone" name="telephone"
-										type="text" class="form-control input-sm" placeholder=" " v-model="customerInfo.mobile"/>
-									<i class="bulb"></i>
+									<label><span>*</span>手机号：</label> <input id="telephone"
+										name="telephone" type="text" class="form-control input-sm"
+										placeholder=" " v-model="customerInfo.mobile" /> <i
+										class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>邮箱：</label> <input id="email" name="email"
-										type="text" class="form-control input-sm" placeholder=" " v-model="customerInfo.email"/>
-									<i class="bulb"></i>
+										type="text" class="form-control input-sm" placeholder=" "
+										v-model="customerInfo.email" /> <i class="bulb"></i>
 								</div>
 							</div>
 						</div>
@@ -131,18 +138,18 @@
 							<!-- 人数/领区/加急 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>人数：</label> <input id="number" name="number"
-										type="text" class="form-control input-sm" placeholder=" " v-model="orderInfo.number"/>
+									<label><span>*</span>人数：</label> <input id="number"
+										name="number" type="text" class="form-control input-sm"
+										placeholder=" " v-model="orderInfo.number" />
 									<!-- <i class="bulb"></i> 小灯泡-->
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>领区：</label> 
-									<select id="cityId"
-										name="cityId" class="form-control input-sm" v-model="orderInfo.cityId">
+									<label><span>*</span>领区：</label> <select
+										class="form-control input-sm" v-model="orderInfo.cityid">
 										<c:forEach var="map" items="${obj.collarAreaEnum}">
-											<option value="${map.key}" >${map.value}</option>
+											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
 									</select>
 									<!-- <i class="bulb"></i> 小灯泡-->
@@ -150,11 +157,11 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>加急：</label> 
-									<select id="urgentType"
-										name="urgentType" class="form-control input-sm" onchange="selectListData();" v-model="orderInfo.urgentType">
+									<label><span>*</span>加急：</label> <select id="urgentType"
+										name="urgentType" class="form-control input-sm"
+										onchange="selectListData();" v-model="orderInfo.urgenttype">
 										<c:forEach var="map" items="${obj.mainSaleUrgentEnum}">
-											<option value="${map.key}"  ${map.key==1?'selected':''}>${map.value}</option>
+											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
 									</select>
 									<!-- <i class="bulb"></i> 小灯泡-->
@@ -162,9 +169,8 @@
 							</div>
 							<div class="col-sm-3 none" id="urgentDay">
 								<div class="form-group">
-									<label>&nbsp;</label> 
-									<select id="urgentDay"
-										name="urgentDay" class="form-control input-sm" v-model="orderInfo.urgentDay">
+									<label>&nbsp;</label> <select id="urgentDay" name="urgentDay"
+										class="form-control input-sm" v-model="orderInfo.urgentday">
 										<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -178,9 +184,9 @@
 							<!-- 行程/付款方式/金额 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>行程：</label> 
-									<select id="travel"
-										name="travel" class="form-control input-sm" v-model="orderInfo.travel">
+									<label><span>*</span>行程：</label> <select id="travel"
+										name="travel" class="form-control input-sm"
+										v-model="orderInfo.travel">
 										<c:forEach var="map" items="${obj.mainSaleTripTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -189,9 +195,9 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>付款方式：</label> 
-									<select id="payType"
-										name="payType" class="form-control input-sm" v-model="orderInfo.payType">
+									<label><span>*</span>付款方式：</label> <select id="payType"
+										name="payType" class="form-control input-sm"
+										v-model="orderInfo.paytype">
 										<c:forEach var="map" items="${obj.mainSalePayTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -201,7 +207,8 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>金额：</label> <input id="money" name="money"
-										type="text" class="form-control input-sm" placeholder=" " v-model="orderInfo.money"/>
+										type="text" class="form-control input-sm" placeholder=" "
+										v-model="orderInfo.money" />
 								</div>
 							</div>
 						</div>
@@ -210,16 +217,17 @@
 							<!-- 签证类型 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>签证类型：</label> 
-									<select id="visaType"
-										name="visaType" class="form-control input-sm" onchange="selectListData();" v-model="orderInfo.visaType">
+									<label><span>*</span>签证类型：</label> <select id="visaType"
+										name="visaType" class="form-control input-sm"
+										onchange="selectListData();" v-model="orderInfo.visatype">
 										<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-9 none" id="sixCounty" v-model="orderInfo.visaCounty">
+							<div class="col-sm-9 none" id="sixCounty"
+								v-model="orderInfo.visacounty">
 								<div class="form-group viseType-btn">
 									<label style="display: block;">&nbsp;</label> <input
 										type="button" value="冲绳县" class="btn btn-sm btnState">
@@ -237,16 +245,17 @@
 							<!-- 过去三年是否访问过 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>过去三年是否访问过：</label> 
-									<select id="isVisit"
-										name="isVisit" class="form-control input-sm" onchange="selectListData();" v-model="orderInfo.isvisit">
+									<label><span>*</span>过去三年是否访问过：</label> <select id="isVisit"
+										name="isVisit" class="form-control input-sm"
+										onchange="selectListData();" v-model="orderInfo.isvisit">
 										<c:forEach var="map" items="${obj.threeYearsIsVisitedEnum}">
 											<option value="${map.key}" ${map.key==0?'selected':''}>${map.value}</option>
 										</c:forEach>
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-9 none" id="isVisited" v-model="orderInfo.threeCounty">
+							<div class="col-sm-9 none" id="isVisited"
+								v-model="orderInfo.threeCounty">
 								<div class="form-group">
 									<label style="display: block;">&nbsp;</label> <input
 										type="button" value="岩手县"
@@ -263,22 +272,25 @@
 							<!-- 出行时间/停留天数/返回时间 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>出行时间：</label> <input id="goTripDate" name="goTripDate"
-										type="text" class="form-control input-sm" placeholder=" "
-										onClick="WdatePicker()" v-model="orderInfo.goTripDate"/>
+									<label><span>*</span>出行时间：</label> <input id="goTripDate"
+										name="goTripDate" type="text" class="form-control input-sm"
+										placeholder=" " onClick="WdatePicker()"
+										v-model="orderInfo.gotripdate" />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>停留天数：</label> <input id="stayDay" name="stayDay"
-										type="text" class="form-control input-sm" placeholder=" " v-model="orderInfo.stayDay"/>
+									<label><span>*</span>停留天数：</label> <input id="stayDay"
+										name="stayDay" type="text" class="form-control input-sm"
+										placeholder=" " v-model="orderInfo.stayday" />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>返回时间：</label> <input id="backTripDate" name="backTripDate"
-										type="text" class="form-control input-sm" placeholder=" "
-										onClick="WdatePicker()" v-model="orderInfo.backTripDate"/>
+									<label><span>*</span>返回时间：</label> <input id="backTripDate"
+										name="backTripDate" type="text" class="form-control input-sm"
+										placeholder=" " onClick="WdatePicker()"
+										v-model="orderInfo.backtripdate" />
 								</div>
 							</div>
 						</div>
@@ -287,16 +299,18 @@
 							<!-- 送签时间/出签时间 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>送签时间：</label> <input id="sendVisaDate" name="sendVisaDate"
-										type="text" class="form-control input-sm" placeholder=" "
-										onClick="WdatePicker()" v-model="orderInfo.sendVisaDate"/>
+									<label><span>*</span>送签时间：</label> <input id="sendVisaDate"
+										name="sendVisaDate" type="text" class="form-control input-sm"
+										placeholder=" " onClick="WdatePicker()"
+										v-model="orderInfo.sendvisadate" />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>出签时间：</label> <input id="outVisaDate" name="outVisaDate"
-										type="text" class="form-control input-sm" placeholder=" "
-										onClick="WdatePicker()" v-model="orderInfo.outVisaDate"/>
+									<label><span>*</span>出签时间：</label> <input id="outVisaDate"
+										name="outVisaDate" type="text" class="form-control input-sm"
+										placeholder=" " onClick="WdatePicker()"
+										v-model="orderInfo.outvisadate" />
 								</div>
 							</div>
 						</div>
@@ -326,41 +340,77 @@
 				</div>
 				<!-- end 订单信息 -->
 
+				<!-- 主申请人 -->
+				<div class="info" id="mySwitch">
+					<p class="info-head">
+						主申请人 <input type="button" name="" value="添加"
+							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant()">
+					</p>
+					<div class="info-table">
+						<table id="principalApplicantTable" class="table table-hover"
+							style="width: 100%;">
+							<thead>
+								<tr>
+									<th><span>姓名<span></th>
+									<th><span>电话<span></th>
+									<th><span>邮箱<span></th>
+									<th><span>护照号<span></th>
+									<th><span>性别<span></th>
+									<th><span>操作<span></th>
+								</tr>
+							</thead>
+							<tbody v-for="applicant in applicantInfo">
+								<tr>
+									<td>{{applicant.applyname}}</td>
+									<td>{{applicant.telephone}}</td>
+									<td>{{applicant.email}}</td>
+									<td>{{applicant.passport}}</td>
+									<td>{{applicant.sex}}</td>
+									<td><a v-on:click="">基本信息</a>&nbsp;&nbsp;<a
+										v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;<a
+										v-on:click="visa(apply.applyid)">签证</a> <br>
+									<a v-on:click="">回邮</a>&nbsp;&nbsp;<a
+										v-on:click="passport(apply.applyid)">删除</a></br></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- end 主申请人 -->
+
 				<!-- 快递信息 -->
-				<div class="info expressInfo none" id="expressInfo" name="backmailInfo">
+				<div class="info expressInfo none" id="expressInfo"
+					name="backmailInfo">
 					<p class="info-head">快递信息</p>
 					<div class="info-body-from">
 						<div class="row body-from-input">
 							<!-- 资料来源/回邮方式/回邮地址 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>资料来源：</label>
-									<select id="datasour"
-										name="datasour" class="form-control input-sm" >
+									<label><span>*</span>资料来源：</label> <select id="datasour"
+										name="datasour" class="form-control input-sm">
 										<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
-									</select>
-								 <i class="bulb"></i>
+									</select> <i class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>回邮方式：</label> 
-									<select id="expressType"
-										name="expressType" class="form-control input-sm" >
+									<label><span>*</span>回邮方式：</label> <select id="expressType"
+										name="expressType" class="form-control input-sm">
 										<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
-									</select>
-									<i class="bulb"></i>
+									</select> <i class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label><span>*</span>回邮地址：</label> <input id="expressAddress" name="expressAddress"
-										type="text" class="form-control input-sm" placeholder=" " />
-									<i class="bulb"></i>
+									<label><span>*</span>回邮地址：</label> <input id="expressAddress"
+										name="expressAddress" type="text"
+										class="form-control input-sm" placeholder=" " /> <i
+										class="bulb"></i>
 								</div>
 							</div>
 						</div>
@@ -370,30 +420,31 @@
 							<!-- 联系人/电话/发票项目内容/发票抬头 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>联系人：</label> <input id="linkman" name="linkman"
-										type="text" class="form-control input-sm" placeholder=" " />
-									<i class="bulb"></i>
+									<label><span>*</span>联系人：</label> <input id="linkman"
+										name="linkman" type="text" class="form-control input-sm"
+										placeholder=" " /> <i class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>电话：</label> <input id="telephone" name="telephone"
-										type="text" class="form-control input-sm" placeholder=" " />
-									<i class="bulb"></i>
+									<label><span>*</span>电话：</label> <input id="telephone"
+										name="telephone" type="text" class="form-control input-sm"
+										placeholder=" " /> <i class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>发票项目内容：</label> <input id="invoiceContent" name="invoiceContent"
-										type="text" class="form-control input-sm" placeholder=" " />
-									<i class="bulb"></i>
+									<label><span>*</span>发票项目内容：</label> <input id="invoiceContent"
+										name="invoiceContent" type="text"
+										class="form-control input-sm" placeholder=" " /> <i
+										class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>发票抬头：</label> <input id="invoiceHead" name="invoiceHead"
-										type="text" class="form-control input-sm" placeholder=" " />
-									<i class="bulb"></i>
+									<label><span>*</span>发票抬头：</label> <input id="invoiceHead"
+										name="invoiceHead" type="text" class="form-control input-sm"
+										placeholder=" " /> <i class="bulb"></i>
 								</div>
 							</div>
 						</div>
@@ -410,16 +461,16 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>快递号：</label> <input id="expressNum" name="expressNum"
-										type="text" class="form-control input-sm" placeholder=" " />
-									<i class="bulb"></i>
+									<label><span>*</span>快递号：</label> <input id="expressNum"
+										name="expressNum" type="text" class="form-control input-sm"
+										placeholder=" " /> <i class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label><span>*</span>备注：</label> <input id="remark" name="remark"
-										type="text" class="form-control input-sm" placeholder=" " />
-									<i class="bulb"></i>
+									<label><span>*</span>备注：</label> <input id="remark"
+										name="remark" type="text" class="form-control input-sm"
+										placeholder=" " /> <i class="bulb"></i>
 								</div>
 							</div>
 						</div>
@@ -447,8 +498,28 @@
 	<script src="${base}/admin/orderJp/order.js"></script>
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
-		
-		
+		function selectListData() {
+			var isVisited = $("#isVisit").val();
+			var visaType = $("#visaType").val();
+			var mainSaleUrgentEnum = $("#urgentType").val();
+			if (isVisited == 1) {
+				$("#isVisited").removeClass("none");
+			} else {
+				$("#isVisited").addClass("none");
+			}
+
+			if (visaType == 2) {
+				$("#sixCounty").removeClass("none");
+			} else {
+				$("#sixCounty").addClass("none");
+			}
+
+			if (mainSaleUrgentEnum != 1) {
+				$("#urgentDay").removeClass("none");
+			} else {
+				$("#urgentDay").addClass("none");
+			}
+		}
 		var url = "${base}/admin/orderJp/getOrder.html";
 		var orderobj;
 		new Vue({
@@ -457,7 +528,7 @@
 				customerInfo : "",
 				orderInfo : "",
 				applicantInfo : ""
-				//backmailInfo : ""
+			//backmailInfo : ""
 			},
 			created : function() {
 				orderobj = this;
@@ -466,76 +537,80 @@
 					url : url,
 					dataType : 'json',
 					type : 'POST',
-					data:{id : id},
+					data : {
+						id : id
+					},
 					success : function(data) {
 						console.log(JSON.stringify(data));
 						orderobj.customerInfo = data.customerInfo;
 						orderobj.orderInfo = data.orderInfo;
 						orderobj.applicantInfo = data.applicantInfo;
 						//this.backmailInfo = data.backmailInfo;
-						console.log(JSON.stringify(orderobj.customerInfo));
-						console.log(JSON.stringify(orderobj.orderInfo.urgentType));
-						console.log(JSON.stringify(orderobj.applicantInfo));
+						var isVisited = orderobj.orderInfo.isvisit;
+						var visaType = orderobj.orderInfo.visatype;
+						var mainSaleUrgentEnum = orderobj.orderInfo.urgenttype;
+						if (isVisited == 1) {
+							$("#isVisited").removeClass("none");
+						} else {
+							$("#isVisited").addClass("none");
+						}
+
+						if (visaType == 2) {
+							$("#sixCounty").removeClass("none");
+						} else {
+							$("#sixCounty").addClass("none");
+						}
+
+						if (mainSaleUrgentEnum != 1) {
+							$("#urgentDay").removeClass("none");
+						} else {
+							$("#urgentDay").addClass("none");
+						}
+
 					},
-					error:function(){
+					error : function() {
 						alert("error");
 					}
 				});
 			},
-			methods:{
-	        	order:function(){
-	        		var customer = orderobj.customerInfo;
-	        		var order = orderobj.orderInfo;
-	        		var applicant = orderobj.applicantInfo;
-	        		console.log(order);
-	        		var backmail;
-	        		$.ajax({
-	        			type:'POST',
-	        			data : {
-	        				customerInfo:customer,
-	        				orderInfo:order,
-	        				applicantInfo:applicant,
-	        				backmailInfo:backmail
-	        				
-	        			},
-	        			url:'${base}/admin/orderJp/order',
-	        			success:function(data){
-	        				alert(JSON.stringify(data));
-	        				console.log(JSON.stringify(data));
-	        				//window.location.href = '${base}/admin/orderJp/order';
-	        			},
-	        			error:function(){
-	        				alert("error");
-	        			}
-	        		});
-	        		//window.location.href = '${base}/admin/orderJp/order';
-	        		//console.log(message);
-	        		//alert(JSON.stringify(event.target)); 
-	        	}
-	        }
-		});    
-		function selectListData(){
-			var isVisited = $("#isVisit").val();
-			var visaType = $("#visaType").val();
-			var mainSaleUrgentEnum = $("#urgentType").val();
-			if(isVisited == 1){
-				$("#isVisited").removeClass("none");
-			}else{
-				$("#isVisited").addClass("none");
+			methods : {
+				order : function() {
+					var editdata = orderobj.orderInfo;
+					editdata.customerinfo = JSON.stringify(orderobj.customerInfo);
+					//var applicant = orderobj.applicantInfo;
+					console.log("orderinfo:"+JSON.stringify(editdata));
+					var backmail;
+					$.ajax({
+						type : 'POST',
+						data : editdata,
+						url : '${base}/admin/orderJp/order',
+						success : function(data) {
+							layer.closeAll('loading');
+				    		window.location.reload();
+							window.location.href = '${base}/admin/orderJp/list';
+						},
+						error : function() {
+							alert("error");
+						}
+					}); 
+					//window.location.href = '${base}/admin/orderJp/order';
+					//console.log(message);
+					//alert(JSON.stringify(event.target)); 
+				},
+			addApplicant : function(){
+				$.ajax({
+					type : 'get',
+					url : '${base}/admin/orderJp/addApplicant',
+					success : function(data) {
+						
+					},
+					error : function() {
+						alert("error");
+					}
+				}); 
 			}
-			
-			if(visaType == 2){
-				$("#sixCounty").removeClass("none");
-			}else{
-				$("#sixCounty").addClass("none");
 			}
-			
-			if(mainSaleUrgentEnum != 1){
-				$("#urgentDay").removeClass("none");
-			}else{
-				$("#urgentDay").addClass("none");
-			}
-		}
+		});
 	</script>
 </body>
 </html>

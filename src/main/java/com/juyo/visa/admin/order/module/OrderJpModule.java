@@ -18,15 +18,12 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
-import com.juyo.visa.admin.order.form.OrderJpAddForm;
+import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
-import com.juyo.visa.admin.order.form.OrderJpUpdateForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.forms.TApplicantForm;
-import com.juyo.visa.forms.TCustomerForm;
-import com.juyo.visa.forms.TOrderBackmailForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
 
@@ -78,25 +75,51 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 下单
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object addOrder() {
+		return saleViewService.addOrder();
+	}
+
+	/**
 	 * 添加申请人页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
 	public Object addApplicant() {
-		System.out.println("-------------");
-		return saleViewService.test();
+		return null;
 	}
 
 	/**
-	 * 添加
+	 * 保存申请人
 	 */
 	@At
 	@POST
-	public Object order(@Param("customerInfo") TCustomerForm customerInfo,
-			@Param("orderInfo") OrderJpAddForm orderInfo, @Param("applicantInfo") TApplicantForm applicantInfo,
-			@Param("backmailInfo") TOrderBackmailForm backmailInfo, final HttpSession session) {
-		return saleViewService.saveOrder(customerInfo, orderInfo, applicantInfo, backmailInfo, session);
+	public Object saveAddApplicant(@Param("..") TApplicantForm applicantForm, HttpSession session) {
+		return saleViewService.addApplicant(applicantForm, session);
+	}
+
+	/**
+	 * 保存修改
+	 */
+	@At
+	@POST
+	public Object order(@Param("..") OrderEditDataForm orderInfo, @Param("customerinfo") String customerInfo,
+			final HttpSession session) {
+		return saleViewService.saveOrder(orderInfo, customerInfo, session);
+	}
+
+	/**
+	 * 下单保存
+	 */
+	@At
+	@POST
+	public Object saveAddOrderinfo(@Param("..") OrderEditDataForm orderInfo, final HttpSession session) {
+		return saleViewService.saveAddOrderinfo(orderInfo, session);
 	}
 
 	/**
@@ -107,14 +130,4 @@ public class OrderJpModule {
 	public Object getOrder(@Param("id") Integer orderid) {
 		return saleViewService.fetchOrder(orderid);
 	}
-
-	/**
-	 * 执行'修改操作'
-	 */
-	@At
-	@POST
-	public Object updateOrder(@Param("..") OrderJpUpdateForm updateForm) {
-		return saleViewService.updateOrder(updateForm);
-	}
-
 }

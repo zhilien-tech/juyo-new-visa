@@ -6,12 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -20,6 +23,9 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.access.AccessConfig;
 import com.juyo.visa.common.access.sign.MD5;
+import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.base.Uploader;
+import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -48,6 +54,9 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 @IocBean
 public class CompanyViewService extends BaseService<TCompanyEntity> {
 	private static final Log log = Logs.get();
+
+	@Inject
+	private UploadService qiniuUploadService;//文件上传
 
 	//管理员所在的部门
 	private static final String MANAGE_DEPART = "公司管理部";
@@ -224,6 +233,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		String mobile = updateForm.getMobile();
 		String email = updateForm.getEmail();
 		String address = updateForm.getAddress();
+		String license = updateForm.getLicense();
 		TCompanyEntity company = dbDao.fetch(TCompanyEntity.class, Cnd.where("id", "=", compId));
 		if (!Util.isEmpty(company)) {
 			company.setComType(comType);
@@ -233,6 +243,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			company.setMobile(mobile);
 			company.setEmail(email);
 			company.setAddress(address);
+			company.setLicense(license);
 			company.setUpdateTime(nowDate);
 			dbDao.update(company);
 		}
@@ -330,6 +341,24 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		Sql sql = Sqls.create(sqlstr);
 		sql.setParam("comId", comId);
 		return DbSqlUtil.query(dbDao, TFunctionEntity.class, sql);
+	}
+
+	/**
+	 * 
+	 * 七牛云 上传文件
+	 * <p>
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception 
+	 */
+	public Object uploadFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding(CommonConstants.CHARACTER_ENCODING_PROJECT);//字符编码为utf-8
+		response.setCharacterEncoding(CommonConstants.CHARACTER_ENCODING_PROJECT);
+		Uploader uploader = new Uploader(request, qiniuUploadService);
+		uploader.upload();
+		String url = CommonConstants.IMAGES_SERVER_ADDR + uploader.getUrl();
+		return url;
 	}
 
 }

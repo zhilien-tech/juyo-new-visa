@@ -69,7 +69,7 @@ FROM
 	t_order o
 INNER JOIN t_order_jp oj ON oj.orderId = o.id
 WHERE
-	oj.id = @id
+	o.id = @id
 	
 /*orderJp_list_applicantInfo_byOrderId*/
 SELECT
@@ -85,7 +85,5 @@ LEFT JOIN
 t_applicant a ON aoj.applicantId = a.id
 LEFT JOIN
 t_applicant_passport ap ON ap.applicantId = a.id
-LEFT JOIN
-t_applicant_visa_jp avj ON avj.applicantId = aoj.id
 WHERE
 aoj.orderId = @id

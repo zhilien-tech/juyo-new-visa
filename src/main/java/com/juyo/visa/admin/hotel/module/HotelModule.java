@@ -103,4 +103,13 @@ public class HotelModule {
 		hotelViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
 	}
+
+	/**
+	 * 获取酒店下拉
+	 */
+	@At
+	@POST
+	public Object getHotelSelect(@Param("hotelname") String hotelname) {
+		return hotelViewService.getHotelSelect(hotelname);
+	}
 }
