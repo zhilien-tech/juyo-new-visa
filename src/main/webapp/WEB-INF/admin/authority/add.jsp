@@ -95,30 +95,38 @@
 						enable: true
 					}
 				},
-				callback: {
+				/* callback: {
 					beforeCheck: zTreeBeforeCheck
-				}
+				} */
 		};
 		//默认选中的功能     ***************暂时未用到****************
-		function zTreeBeforeCheck(treeId, treeNode) {
+		/* function zTreeBeforeCheck(treeId, treeNode) {
 			if((treeNode.id == 43 || treeNode.id == 44) && treeNode.checked){
 				return false ;
 			}else{
 				return true;
 			}
-		};
+		}; */
 		//遍历得到的对象
 		var zNodes =[
 		             {id:"0", pId:"0", name:"职位权限设置", open:true},
 		             <c:forEach var="p" items="${obj.moduleList}">
-		             <c:choose>
-		             <c:when test="${p.id eq 43 || p.id eq 44}">
-		             { id:"${p.id }", pId:"${p.parentId }", name:"${p.funName }", open:true,checked:true},
-		             </c:when>
-		             <c:otherwise>
-		             { id:"${p.id }", pId:"${p.parentId }", name:"${p.funName }", open:true,checked:"${p.checked}"},
-		             </c:otherwise>
-		             </c:choose>
+			            /*  <c:choose>
+				             <c:when test="${p.id eq 43 || p.id eq 44}">
+				            	 { id:"${p.id }", pId:"${p.parentId }", name:"${p.funName }", open:true,checked:true},
+				             </c:when>
+				             <c:otherwise>
+				          	   { id:"${p.id }", pId:"${p.parentId }", name:"${p.funName }", open:true,checked:"${p.checked}"},
+				             </c:otherwise>
+			             </c:choose> */
+			             <c:choose>
+							<c:when test="${p.id eq 43 || p.id eq 44}">
+							{ id:"${p.id }", pId:"${p.parentId }", name:"${p.funName }", open:true,checked:"${p.checked}"},
+							</c:when>
+							<c:otherwise>
+								{ id:"${p.id }", pId:"${p.parentId }", name:"${p.funName }", open:true,checked:"${p.checked}"},
+							</c:otherwise>
+						</c:choose>
 		             </c:forEach>
 		             ];
 	

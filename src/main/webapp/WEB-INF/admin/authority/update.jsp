@@ -106,9 +106,9 @@
 						enable: true
 					}
 				},
-				callback: {
+				/* callback: {
 					beforeCheck: zTreeBeforeCheck
-				}
+				} */
 			};
 		//默认选中
 		function zTreeBeforeCheck(treeId, treeNode) {
@@ -120,6 +120,8 @@
 		};
 	   var treeIndex = "${obj.list.size()}";
 	   $(function () {
+		    //默认最后一个职位功能打开
+		    $(".job_container .ztree").last().show();
 			//部门职位 编辑职位
 		    $('#addJob').click(function(){
 		       $(".job_container .ztree").hide();
@@ -140,9 +142,17 @@
 			var zNodes =[
 				 {id:"0", pId:"0", name:"职位权限设置", open:true},
 				<c:forEach var="p" items="${obj.zNodes}">
-					<c:choose>
+					/* <c:choose>
 						<c:when test="${p.id eq 43 || p.id eq 44}">
 							{ id:"${p.id }", pId:"${p.parentId }", name:"${p.funName }", open:true,checked:true},
+						</c:when>
+						<c:otherwise>
+							{ id:"${p.id }", pId:"${p.parentId }", name:"${p.funName }", open:true,checked:"${p.checked}"},
+						</c:otherwise>
+					</c:choose> */
+					<c:choose>
+						<c:when test="${p.id eq 43 || p.id eq 44}">
+						{ id:"${p.id }", pId:"${p.parentId }", name:"${p.funName }", open:true,checked:"${p.checked}"},
 						</c:when>
 						<c:otherwise>
 							{ id:"${p.id }", pId:"${p.parentId }", name:"${p.funName }", open:true,checked:"${p.checked}"},
