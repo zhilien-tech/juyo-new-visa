@@ -13,11 +13,11 @@
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper" id="wrapper">
 		<div class="content-wrapper"  style="min-height: 848px;">
-				<ul class="title">
+				<!-- <ul class="title">
 					<li>销售</li>
 					<li class="arrow"></li>
 					<li>日本</li>
-				</ul>
+				</ul> -->
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
@@ -48,6 +48,10 @@
 							<div class="col-md-3 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照/公司简称/联系人/电话/邮箱/申请人" />
 							</div>
+							<div class="col-md-3 left-5px" >
+								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+								<a class="btn btn-primary btn-sm pull-right" id="orderBtn" onclick="addOrder();" v-on:click="">下单</a>
+							</div>
 						</div>
 						<div class="row" style="margin-top:15px;"> 
 							<div class="col-md-2 left-5px right-0px">
@@ -58,10 +62,6 @@
 							</div>
 							<div class="col-md-2 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" />
-							</div>
-							<div class="col-md-6 left-5px" >
-								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
-								<a class="btn btn-primary btn-sm pull-right" id="orderBtn" onclick="addOrder();" v-on:click="">下单</a>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
@@ -97,7 +97,7 @@
 		</div>
 
 	<!-- jQuery 2.2.3 -->
-	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
