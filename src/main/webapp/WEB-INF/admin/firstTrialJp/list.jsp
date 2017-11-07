@@ -13,11 +13,11 @@
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
 		<div class="content-wrapper" style="min-height: 848px;">
-				<ul class="title">
+				<!-- <ul class="title">
 					<li>初审</li>
 					<li class="arrow"></li>
 					<li>日本</li>
-				</ul>
+				</ul> -->
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row" style="margin-top:15px;"> 

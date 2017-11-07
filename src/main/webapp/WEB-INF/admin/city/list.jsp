@@ -15,9 +15,9 @@
 		<div class="wrapper">
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper"  style="min-height: 848px;">
-				<ul class="title">
+				<!-- <ul class="title">
 						<li>城市管理</li>
-				</ul>
+				</ul> -->
 			<section class="content">
 				<div class="box">
 					<div class="box-header">
