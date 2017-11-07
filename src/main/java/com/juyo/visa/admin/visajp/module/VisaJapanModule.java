@@ -195,4 +195,13 @@ public class VisaJapanModule {
 	public Object getJpVisaInputListData(@Param("applyid") Integer applyid) {
 		return visaJapanService.getJpVisaInputListData(applyid);
 	}
+
+	/**
+	 * 护照信息
+	 */
+	@At
+	@Ok("jsp")
+	public Object passportInfo(@Param("applyId") Integer applyId) {
+		return visaJapanService.passportInfo(applyId);
+	}
 }

@@ -17,6 +17,7 @@ import com.juyo.visa.entities.TScenicEntity;
 import com.juyo.visa.forms.TScenicAddForm;
 import com.juyo.visa.forms.TScenicForm;
 import com.juyo.visa.forms.TScenicUpdateForm;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
@@ -84,13 +85,18 @@ public class ScenicViewService extends BaseService<TScenicEntity> {
 	 * TODO(这里描述这个方法详情– 可选)
 	 *
 	 * @param scenicname
+	 * @param cityId 
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object getScenicSelect(String scenicname) {
+	public Object getScenicSelect(String scenicname, Integer cityId) {
 		List<TScenicEntity> scenics = Lists.newArrayList();
 		try {
-			scenics = dbDao.query(TScenicEntity.class, Cnd.where("name", "like", "%" + Strings.trim(scenicname) + "%"),
-					null);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
+			if (!Util.isEmpty(cityId)) {
+				cnd.and("cityId", "=", cityId);
+			}
+			scenics = dbDao.query(TScenicEntity.class, cnd, null);
 			if (scenics.size() > 5) {
 				scenics = scenics.subList(0, 5);
 			}

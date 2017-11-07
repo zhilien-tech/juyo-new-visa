@@ -39,7 +39,7 @@
 					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
 					<span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span>
 					<span class="">状态：<p>{{orderinfo.visastatus}}</p></span>
-					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:history.go(-1)"/>
+					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="自动填报" class="btn btn-primary btn-sm pull-right" />
@@ -133,20 +133,11 @@
 								<c:choose>
 									<c:when test="${obj.jporderinfo.visaType == 2 }">
 										<div class="col-sm-9" id="visacounty">
-											<div class="form-group viseType-btn">
-												<label style="display:block;">&nbsp;</label>
-												<input name="visacounty" type="button" value="冲绳县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="青森县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="岩手县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="宫城县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="秋田县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="山形县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="福鸟县" class="btn btn-sm btnState">
-											</div>
-										</div>
 									</c:when>
 									<c:otherwise>
 										<div class="col-sm-9 none" id="visacounty">
+									</c:otherwise>
+								</c:choose>
 											<div class="form-group viseType-btn">
 												<label style="display:block;">&nbsp;</label>
 												<input name="visacounty" type="button" value="冲绳县" class="btn btn-sm btnState">
@@ -158,39 +149,19 @@
 												<input name="visacounty" type="button" value="福鸟县" class="btn btn-sm btnState">
 											</div>
 										</div>
-									
-									</c:otherwise>
-								</c:choose>
 							</div><!-- end 签证类型 -->
 							<c:choose>
 								<c:when test="${obj.jporderinfo.visaType == 2 }">
 									<div class="row body-from-input" id="threefangwen"><!-- 过去三年是否访问过 -->
-										<div class="col-sm-3">
-											<div class="form-group">
-												<label><span>*</span>过去三年是否访问过：</label>
-												<select class="form-control input-sm" v-model="orderinfo.isvisit">
-													<c:forEach var="map" items="${obj.isyesornoenum}">
-														<option value="${map.key}">${map.value}</option>
-													</c:forEach>
-												</select>
-											</div>
-										</div>
-										<div class="col-sm-9">
-											<div class="form-group viseType-btn">
-												<label style="display:block;">&nbsp;</label>
-												<input name="threecounty" type="button" value="岩手县" class="btn btn-sm btnState">
-												<input name="threecounty" type="button" value="秋田县" class="btn btn-sm btnState">
-												<input name="threecounty" type="button" value="山形县" class="btn btn-sm btnState">
-											</div>
-										</div>
-									</div><!-- end 过去三年是否访问过 -->
 								</c:when>
 								<c:otherwise>
 									<div class="row body-from-input none" id="threefangwen"><!-- 过去三年是否访问过 -->
+								</c:otherwise>
+							</c:choose>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>过去三年是否访问过：</label>
-												<select class="form-control input-sm" v-model="orderinfo.isvisit">
+												<select id="isVisit" class="form-control input-sm" v-model="orderinfo.isvisit">
 													<c:forEach var="map" items="${obj.isyesornoenum}">
 														<option value="${map.key}">${map.value}</option>
 													</c:forEach>
@@ -198,7 +169,14 @@
 											</div>
 										</div>
 										<div class="col-sm-9">
-											<div class="form-group viseType-btn">
+										<c:choose>
+											<c:when test="${obj.jporderinfo.isVisit == 1 }">
+												<div id="threexian" class="form-group viseType-btn">
+											</c:when>
+											<c:otherwise>
+												<div id="threexian" class="form-group viseType-btn none">
+											</c:otherwise>
+										</c:choose>
 												<label style="display:block;">&nbsp;</label>
 												<input name="threecounty" type="button" value="岩手县" class="btn btn-sm btnState">
 												<input name="threecounty" type="button" value="秋田县" class="btn btn-sm btnState">
@@ -206,8 +184,6 @@
 											</div>
 										</div>
 									</div><!-- end 过去三年是否访问过 -->
-								</c:otherwise>
-							</c:choose>
 							<div class="row body-from-input target"><!-- 出行时间/停留天数/返回时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">

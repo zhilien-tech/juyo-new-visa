@@ -54,7 +54,7 @@ $('#scenic').select2({
 				cArrivalcity = cArrivalcity.join(',');
 			}*/
 			return {
-				//exname : cArrivalcity,
+				cityId:cityId,
 				scenicname : params.term, // search term
 				page : params.page
 			};
@@ -80,7 +80,7 @@ $('#scenic').select2({
 	minimumInputLength : 1,
 	maximumInputLength : 20,
 	language : "zh-CN", //设置 提示语言
-	maximumSelectionLength : 1, //设置最多可以选择多少项
+	maximumSelectionLength : 2, //设置最多可以选择多少项
 	tags : false //设置必须存在的选项 才能选中
 });
 
@@ -98,7 +98,7 @@ $('#hotel').select2({
 				cArrivalcity = cArrivalcity.join(',');
 			}*/
 			return {
-				//exname : cArrivalcity,
+				cityId:cityId,
 				hotelname : params.term, // search term
 				page : params.page
 			};

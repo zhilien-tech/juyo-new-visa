@@ -109,7 +109,7 @@ public class HotelModule {
 	 */
 	@At
 	@POST
-	public Object getHotelSelect(@Param("hotelname") String hotelname) {
-		return hotelViewService.getHotelSelect(hotelname);
+	public Object getHotelSelect(@Param("hotelname") String hotelname, @Param("cityId") Integer cityId) {
+		return hotelViewService.getHotelSelect(hotelname, cityId);
 	}
 }

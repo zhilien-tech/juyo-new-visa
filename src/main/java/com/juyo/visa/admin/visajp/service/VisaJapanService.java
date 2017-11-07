@@ -40,6 +40,8 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
+import com.juyo.visa.entities.TApplicantOrderJpEntity;
+import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantVisaJpEntity;
 import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TCityEntity;
@@ -433,7 +435,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		}
 		//需要生成的travelplan
 		List<TOrderTravelplanJpEntity> travelplans = Lists.newArrayList();
-		for (int i = 0; i < daysBetween; i++) {
+		for (int i = 0; i <= daysBetween; i++) {
 			TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
 			travelplan.setCityId(planform.getGoArrivedCity());
 			travelplan.setDay(String.valueOf(i + 1));
@@ -441,11 +443,13 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			travelplan.setOutDate(DateUtil.addDay(planform.getGoDate(), i));
 			travelplan.setCityName(city.getCity());
 			travelplan.setCreateTime(new Date());
-			//酒店
 			Random random = new Random();
-			int hotelindex = random.nextInt(hotels.size());
-			THotelEntity hotel = hotels.get(hotelindex);
-			travelplan.setHotel(hotel.getId());
+			//酒店
+			if (i != daysBetween) {
+				int hotelindex = random.nextInt(hotels.size());
+				THotelEntity hotel = hotels.get(hotelindex);
+				travelplan.setHotel(hotel.getId());
+			}
 			//景区
 			int scenicindex = random.nextInt(scenics.size());
 			TScenicEntity scenic = scenics.get(scenicindex);
@@ -497,8 +501,14 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		TOrderTravelplanJpEntity plan = dbDao.fetch(TOrderTravelplanJpEntity.class, planid.longValue());
 		result.put("travelplan", plan);
-		THotelEntity hotel = dbDao.fetch(THotelEntity.class, plan.getHotel().longValue());
+		THotelEntity hotel = new THotelEntity();
+		if (!Util.isEmpty(plan.getHotel())) {
+			hotel = dbDao.fetch(THotelEntity.class, plan.getHotel().longValue());
+		}
 		result.put("hotel", hotel);
+		String[] Scenicnames = plan.getScenic().split(",");
+		List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class, Cnd.where("name", "in", Scenicnames), null);
+		result.put("scenics", scenics);
 		return result;
 
 	}
@@ -689,5 +699,23 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			}
 		}
 		return map;
+	}
+
+	/**
+	 * 护照详情
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param applyId
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object passportInfo(Integer applyId) {
+		Map<String, Object> result = Maps.newHashMap();
+		TApplicantOrderJpEntity applyjp = dbDao.fetch(TApplicantOrderJpEntity.class, applyId.longValue());
+		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+				Cnd.where("applicantId", "=", applyjp.getApplicantId()));
+		result.put("passport", JsonUtil.toJson(passport));
+		return result;
+
 	}
 }
