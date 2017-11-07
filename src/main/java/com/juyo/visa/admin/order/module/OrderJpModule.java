@@ -70,8 +70,8 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object order(@Param("id") Integer orderid) {
-		return saleViewService.addOrder(orderid);
+	public Object order(@Param("id") Integer orderid, HttpSession session) {
+		return saleViewService.addOrder(orderid, session);
 	}
 
 	/**
@@ -80,8 +80,8 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object addOrder() {
-		return saleViewService.addOrder();
+	public Object addOrder(HttpSession session) {
+		return saleViewService.addOrder(session);
 	}
 
 	/**
@@ -101,6 +101,25 @@ public class OrderJpModule {
 	@POST
 	public Object saveAddApplicant(@Param("..") TApplicantForm applicantForm, HttpSession session) {
 		return saleViewService.addApplicant(applicantForm, session);
+	}
+
+	/**
+	 * 修改申请人基本信息
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object updateApplicant(@Param("id") Integer applicantId) {
+		return saleViewService.updateApplicant(applicantId);
+	}
+
+	/**
+	 * 保存申请人修改信息
+	 */
+	@At
+	@POST
+	public Object saveEditApplicant(@Param("..") TApplicantForm applicantForm, HttpSession session) {
+		return saleViewService.saveEditApplicant(applicantForm, session);
 	}
 
 	/**
@@ -129,5 +148,14 @@ public class OrderJpModule {
 	@POST
 	public Object getOrder(@Param("id") Integer orderid) {
 		return saleViewService.fetchOrder(orderid);
+	}
+
+	/**
+	 * 修改申请人信息后获取新的申请人列表
+	 */
+	@At
+	@POST
+	public Object getEditApplicant(@Param("orderid") Integer orderid) {
+		return saleViewService.getEditApplicant(orderid);
 	}
 }

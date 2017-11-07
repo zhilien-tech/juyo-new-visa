@@ -98,7 +98,7 @@
 								<select id="isDisable" name="isDisable"
 									class="form-control input-sm inpImportant">
 									<c:forEach var="map" items="${obj.isDisableEnum}">
-										<option value="${map.key}" ${map.key==0?'selected':''}>${map.value}</option>
+										<option value="${map.key}" ${map.key==1?'selected':''}>${map.value}</option>
 									</c:forEach>
 								</select>
 							</div>

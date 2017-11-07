@@ -60,10 +60,16 @@
 							</div>
 							<div class="col-sm-9">
 								<div class="form-group">
-									<label><span>*</span>公司全称：</label> <input id="compName"
+									<label><span>*</span>公司全称：</label> 
+									<select id = "compName" name="name"
+										class="form-control select2 cityselect2" multiple="multiple"
+										data-placeholder="">
+								</select>
+									
+									<!-- <input id="compName"
 										name="name" type="text" class="form-control input-sm"
-										placeholder=" " /> <i
-										class="bulb"></i>
+										placeholder=" " />  -->
+										<i class="bulb"></i>
 								</div>
 							</div>
 						</div>
@@ -72,7 +78,13 @@
 							<!-- 客户来源/联系人/手机号/邮箱 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>公司简称：</label> <input id="comShortName"
+									<label><span>*</span>公司简称：</label> 
+									<!-- <select id = "comShortName" name="shortname"
+										class="form-control select2 cityselect2" multiple="multiple"
+										data-placeholder="" onkeyup="shortname();">
+								</select> -->
+									
+									<input id="comShortName"
 										name="shortname" type="text" class="form-control input-sm"
 										placeholder=" "  /> <i
 										class="bulb"></i>
@@ -80,25 +92,43 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>联系人：</label> <input id="linkman"
+									<label><span>*</span>联系人：</label> 
+									<select id = "linkman" name="linkman"
+										class="form-control select2 cityselect2" multiple="multiple"
+										data-placeholder="">
+								</select>
+									
+									<!-- <input id="linkman"
 										name="linkman" type="text" class="form-control input-sm"
-										placeholder=" " /> <i
+										placeholder=" " /> --> <i
 										class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>手机号：</label> <input id="telephone"
+									<label><span>*</span>手机号：</label> 
+									<select id = "telephone" name="mobile"
+										class="form-control select2 cityselect2" multiple="multiple"
+										data-placeholder="">
+								</select>
+									
+									<!-- <input id="telephone"
 										name="mobile" type="text" class="form-control input-sm"
-										placeholder=" " /> <i
+										placeholder=" " /> --> <i
 										class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>邮箱：</label> <input id="email" name="email"
+									<label><span>*</span>邮箱：</label> 
+									<select id = "email" name="email"
+										class="form-control select2 cityselect2" multiple="multiple"
+										data-placeholder="">
+								</select>
+									
+									<!-- <input id="email" name="email"
 										type="text" class="form-control input-sm" placeholder=" "
-										 /> <i class="bulb"></i>
+										 /> --> <i class="bulb"></i>
 								</div>
 							</div>
 						</div>
@@ -335,20 +365,18 @@
 								</tr>
 							</thead>
 							<tbody >
-							<c:forEach var="applicant" items="${applicantinfo}">
 								<tr>
-									<td>${applicant.firstName }</td>
-									<td>${applicant.telephone }</td>
-									<td>${applicant.email }</td>
-									<td>${applicant.passport }</td>
-									<td>${applicant.sex }</td>
+									<td>1</td>
+									<td>2</td>
+									<td>3</td>
+									<td>4</td>
+									<td>5</td>
 									<td><a v-on:click="">基本信息</a>&nbsp;&nbsp;<a
 										v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;<a
 										v-on:click="visa(apply.applyid)">签证</a> <br>
 									<a v-on:click="">回邮</a>&nbsp;&nbsp;<a
 										v-on:click="passport(apply.applyid)">删除</a></br></td>
 								</tr>
-								</c:forEach>
 							</tbody>
 						</table>
 					</div>
@@ -469,6 +497,9 @@
 		<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 		<script src="${base}/admin/orderJp/order.js"></script><!-- 本页面js文件 -->
+		<!-- select2 -->
+		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 		<script src="${base}/admin/orderJp/applicant.js"></script>
 		
 		<script type="text/javascript">
@@ -494,6 +525,18 @@
 				} else {
 					$("#urgentDay").addClass("none");
 				}
+			}
+			
+			function shortname(){
+				var content = $("#comShortName").val();
+				alert(content);
+				var sum = 0;
+				re = /[\u4E00-\u9FA5]/g; //测试中文字符的正则
+				if (content) {
+				if (re.test(content)) //使用正则判断是否存在中文
+				{
+				if (content.match(re).length >= 6) { //返回中文的个数
+				$.dialog.tips("帖子正文不能小于6个汉字！");
 			}
 			
 			function saveAddOrder(){
