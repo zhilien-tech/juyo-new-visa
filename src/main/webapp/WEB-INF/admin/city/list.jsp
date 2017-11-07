@@ -15,9 +15,9 @@
 		<div class="wrapper">
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper"  style="min-height: 848px;">
-				<ul class="title">
+				<!-- <ul class="title">
 						<li>城市管理</li>
-				</ul>
+				</ul> -->
 			<section class="content">
 				<div class="box">
 					<div class="box-header">
@@ -52,8 +52,9 @@
 									placeholder="国家/省/城市" onkeypress="onkeyEnter();"/>
 							</div>
 							<div class="col-md-7 left-5px">
-								<a id="searchBtn" class="btn btn-primary btn-sm pull-left">搜索</a> <a id="addBtn"
-									class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
+								<a id="searchBtn" class="btn btn-primary btn-sm pull-left">搜索</a> 
+								<a id="emptyBtn" class="btn btn-primary btn-sm pull-left">清空</a> 
+								<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 							</div>
 						</div>
 
@@ -90,7 +91,7 @@
 
 	<!-- jQuery 2.2.3 -->
 	<script
-		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<!-- DataTables -->

@@ -15,11 +15,11 @@
 	<div class="wrapper">
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper" style="min-height: 848px;">
-			<ul class="title">
-					<li>酒店管理</li>
-					<!-- <li class="arrow"></li>
-						<li></li> -->
-			</ul>
+			<!-- <ul class="title">
+				<li>酒店管理</li>
+				<li class="arrow"></li>
+				<li></li>
+			</ul> -->
 			<section class="content">
 				<div class="box">
 					<div class="box-header">
@@ -72,7 +72,7 @@
 
 	<!-- jQuery 2.2.3 -->
 	<script
-		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<!-- DataTables -->

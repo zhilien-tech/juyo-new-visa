@@ -10,14 +10,10 @@
 <head>
 <meta charset="UTF-8">
 <title>添加</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 </head>
 <body>
 	<div class="modal-content">
@@ -95,8 +91,7 @@
 		var BASE_PATH = '${base}';
 	</script>
 	<!-- jQuery 2.2.3 -->
-	<script
-		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>

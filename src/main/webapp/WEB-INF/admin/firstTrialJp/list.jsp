@@ -13,11 +13,11 @@
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
 		<div class="content-wrapper" style="min-height: 848px;">
-				<ul class="title">
+				<!-- <ul class="title">
 					<li>初审</li>
 					<li class="arrow"></li>
 					<li>日本</li>
-				</ul>
+				</ul> -->
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row" style="margin-top:15px;"> 
@@ -69,7 +69,7 @@
 		</div>
 
 	<!-- jQuery 2.2.3 -->
-	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
@@ -120,5 +120,6 @@
 			window.location.href = '${base}/admin/orderJp/order.html';
 		}
 	</script>
+	<script src="${base}/references/common/js/base/cardList.js"></script>
 </body>
 </html>

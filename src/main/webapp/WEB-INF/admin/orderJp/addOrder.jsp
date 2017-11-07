@@ -1,7 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<%@include file="/WEB-INF/public/header.jsp"%>
-<%@include file="/WEB-INF/public/aside.jsp"%>
 <c:set var="url" value="${base}/admin/orderJp" />
 <!DOCTYPE html>
 <html lang="en-US">
@@ -9,15 +7,26 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>下单</title>
+		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
+		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
+	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
+		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
 			.form-control{height: 30px;}
 			.add-btn{top: -35px;right: -1.5%;}
 			.remove-btn{top: -35px;right: -1.5%;}
+			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
+			.row.body-from-input {padding-left: 8%;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
-		<div class="wrapper">
+		<div class="wrapper" id="wrapper">
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<div class="qz-head">
 					<span class="">订单号：<p>170202-JP0001</p></span>
@@ -37,45 +46,23 @@
 					<div class="info-body-from">
 						<div class="row body-from-input">
 							<!-- 公司全称 -->
-							<div class="col-sm-3">
+							<div class="col-sm-3 col-sm-offset-1">
 								<div class="form-group">
-									<label><span>*</span>客户来源：</label> <select id="customerType"
-										name="source" class="form-control input-sm"
-										>
+									<label><span>*</span>客户来源：</label> 
+									<select id="customerType" name="source" class="form-control input-sm">
 										<option value="">--请选择--</option>
 										<c:forEach var="map" items="${obj.customerTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
 									</select>
-
-									<!-- <select
-										class="form-control input-sm" id="source" name="source"
-										v-model="source">
-										<option>--请选择--</option>
-										<option v-for="data in orderJpData" v-bind:value="data.customerTypeEnum.key">
-											{{data.customerTypeEnum.value}}</option>
-									</select>  -->
-									<i class="bulb"></i>
 								</div>
 							</div>
-							<div class="col-sm-9">
-								<div class="form-group">
+							<div class="col-sm-3">
+								<div class="form-group" style="padding-right: 3%;">
 									<label><span>*</span>公司全称：</label> 
-									<select id = "compName" name="name"
-										class="form-control select2 cityselect2" multiple="multiple"
-										data-placeholder="">
-								</select>
-									
-									<!-- <input id="compName"
-										name="name" type="text" class="form-control input-sm"
-										placeholder=" " />  -->
-										<i class="bulb"></i>
+									<input id="compName" name="name" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
-						</div>
-						<!-- end 公司全称 -->
-						<div class="row body-from-input">
-							<!-- 客户来源/联系人/手机号/邮箱 -->
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>公司简称：</label> 
@@ -90,7 +77,11 @@
 										class="bulb"></i>
 								</div>
 							</div>
-							<div class="col-sm-3">
+						</div>
+						<!-- end 公司全称 -->
+						<div class="row body-from-input">
+							<!-- 联系人/手机号/邮箱 -->
+							<div class="col-sm-3 col-sm-offset-1">
 								<div class="form-group">
 									<label><span>*</span>联系人：</label> 
 									<select id = "linkman" name="linkman"
@@ -132,17 +123,17 @@
 								</div>
 							</div>
 						</div>
-						<!-- end 客户来源/联系人/手机号/邮箱 -->
+						<!-- end 联系人/手机号/邮箱 -->
 					</div>
 				</div>
 				<!-- end 客户信息 -->
 				<!-- 订单信息 -->
-				<div class="orderInfo" id="orderInfo">
+				<div class="orderInfo info" id="orderInfo">
 					<p class="info-head">订单信息</p>
 					<div class="info-body-from">
 						<div class="row body-from-input">
 							<!-- 人数/领区/加急 -->
-							<div class="col-sm-3">
+							<div class="col-sm-3 col-sm-offset-1">
 								<div class="form-group">
 									<label><span>*</span>人数：</label> <input id="number"
 										name="number" type="text" class="form-control input-sm"
@@ -188,7 +179,7 @@
 
 						<div class="row body-from-input">
 							<!-- 行程/付款方式/金额 -->
-							<div class="col-sm-3">
+							<div class="col-sm-3 col-sm-offset-1">
 								<div class="form-group">
 									<label><span>*</span>行程：</label> <select id="travel"
 										name="travel" class="form-control input-sm"
@@ -221,22 +212,20 @@
 						<!-- end 行程/付款方式/金额 -->
 						<div class="row body-from-input">
 							<!-- 签证类型 -->
-							<div class="col-sm-3">
+							<div class="col-sm-3  col-sm-offset-1">
 								<div class="form-group">
-									<label><span>*</span>签证类型：</label> <select id="visaType"
-										name="visatype" class="form-control input-sm"
-										onchange="selectListData();" >
+									<label><span>*</span>签证类型：</label> 
+									<select id="visaType" name="visatype" class="form-control input-sm" onchange="selectListData();" >
 										<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-9 none" id="sixCounty"
-								v-model="orderInfo.visacounty">
+							<div class="col-sm-8 none" id="sixCounty" v-model="orderInfo.visacounty">
 								<div class="form-group viseType-btn">
-									<label style="display: block;">&nbsp;</label> <input
-										type="button" value="冲绳县" class="btn btn-sm btnState">
+									<label style="display: block;">&nbsp;</label> 
+									<input type="button" value="冲绳县" class="btn btn-sm btnState">
 									<input type="button" value="青森县" class="btn btn-sm btnState">
 									<input type="button" value="岩手县" class="btn btn-sm btnState">
 									<input type="button" value="宫城县" class="btn btn-sm btnState">
@@ -249,34 +238,30 @@
 						<!-- end 签证类型 -->
 						<div class="row body-from-input">
 							<!-- 过去三年是否访问过 -->
-							<div class="col-sm-3">
+							<div class="col-sm-3 col-sm-offset-1">
 								<div class="form-group">
-									<label><span>*</span>过去三年是否访问过：</label> <select id="isVisit"
-										name="isvisit" class="form-control input-sm"
-										onchange="selectListData();" >
+									<label><span>*</span>过去三年是否访问过：</label> 
+									<select id="isVisit" name="isvisit" class="form-control input-sm" onchange="selectListData();" >
 										<c:forEach var="map" items="${obj.threeYearsIsVisitedEnum}">
 											<option value="${map.key}" ${map.key==0?'selected':''}>${map.value}</option>
 										</c:forEach>
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-9 none" id="isVisited"
+							<div class="col-sm-8 none" id="isVisited"
 								v-model="orderInfo.threeCounty">
-								<div class="form-group">
-									<label style="display: block;">&nbsp;</label> <input
-										type="button" value="岩手县"
-										class="btn btn-sm btnState btnState-true"> <input
-										type="button" value="秋田县"
-										class="btn btn-sm btnState btnState-true"> <input
-										type="button" value="山形县"
-										class="btn btn-sm btnState btnState-true">
+								<div class="form-group viseType-btn">
+									<label style="display: block;">&nbsp;</label> 
+									<input type="button" value="岩手县" class="btn btn-sm btnState"> 
+									<input type="button" value="秋田县" class="btn btn-sm btnState"> 
+									<input type="button" value="山形县" class="btn btn-sm btnState">
 								</div>
 							</div>
 						</div>
 						<!-- end 过去三年是否访问过 -->
 						<div class="row body-from-input">
 							<!-- 出行时间/停留天数/返回时间 -->
-							<div class="col-sm-3">
+							<div class="col-sm-3 col-sm-offset-1">
 								<div class="form-group">
 									<label><span>*</span>出行时间：</label> <input id="goTripDate"
 										name="gotripdate" type="text" class="form-control input-sm"
@@ -303,7 +288,7 @@
 						<!-- end 出行时间/停留天数/返回时间 -->
 						<div class="row body-from-input">
 							<!-- 送签时间/出签时间 -->
-							<div class="col-sm-3">
+							<div class="col-sm-3 col-sm-offset-1">
 								<div class="form-group">
 									<label><span>*</span>送签时间：</label> <input id="sendVisaDate"
 										name="sendvisadate" type="text" class="form-control input-sm"
@@ -321,37 +306,23 @@
 							</div>
 						</div>
 						<!-- end 送签时间/出签时间 -->
-						<div class="row body-from-input" id="applicantInfo">
-							<!-- 添加申请人 -->
-							<div class="col-sm-12">
-								<div class="form-group">
-									<button type="button"
-										class="btn btn-primary btn-sm addApplicantBtn">添加申请人</button>
-								</div>
-							</div>
-						</div>
-						<!-- end 添加申请人 -->
-
-						<div class="row body-from-input" id="backmailInfo">
-							<!-- 添加回邮信息 -->
-							<div class="col-sm-12">
-								<div class="form-group">
-									<button type="button"
-										class="btn btn-primary btn-sm addExpressInfoBtn">添加回邮信息</button>
-								</div>
-							</div>
-						</div>
-						<!-- end 添加回邮信息 -->
 					</div>
-				</div>
-				<!-- end 订单信息 -->
-				<!-- 主申请人 -->
-				<div class="info" id="mySwitch">
+				</div><!-- end 订单信息 -->
+				
+				<div class="row body-from-input" id="applicantInfo"><!-- 添加申请人 -->
+					<div class="col-sm-12">
+						<div class="form-group">
+							<button type="button" class="btn btn-primary btn-sm addApplicantBtn">添加申请人</button>
+						</div>
+					</div>
+				</div><!-- end 添加申请人 -->
+
+				<div class="info none" id="mySwitch"><!-- 主申请人 -->
 					<p class="info-head">
-						主申请人 <input type="button" name="" value="添加"
-							class="btn btn-primary btn-sm pull-right">
+						主申请人 
+						<input type="button" name="" value="添加" class="btn btn-primary btn-sm pull-right">
 					</p>
-					<div class="info-table">
+					<div class="info-table" style="padding-bottom: 1px;">
 						<table id="principalApplicantTable" class="table table-hover"
 							style="width: 100%;">
 							<thead>
@@ -366,22 +337,33 @@
 							</thead>
 							<tbody >
 								<tr>
-									<td>1</td>
-									<td>2</td>
-									<td>3</td>
-									<td>4</td>
-									<td>5</td>
-									<td><a v-on:click="">基本信息</a>&nbsp;&nbsp;<a
-										v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;<a
-										v-on:click="visa(apply.applyid)">签证</a> <br>
-									<a v-on:click="">回邮</a>&nbsp;&nbsp;<a
-										v-on:click="passport(apply.applyid)">删除</a></br></td>
+
+									<td>${applicant.firstName }</td>
+									<td>${applicant.telephone }</td>
+									<td>${applicant.email }</td>
+									<td>${applicant.passport }</td>
+									<td>${applicant.sex }</td>
+									<td>
+										<a v-on:click="">基本信息</a>&nbsp;&nbsp;
+										<a v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;
+										<a v-on:click="visa(apply.applyid)">签证</a><br>
+										<a v-on:click="">回邮</a>&nbsp;&nbsp;
+										<a v-on:click="passport(apply.applyid)">删除</a></br>
+									</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-				</div>
-				<!-- end 主申请人 -->
+				</div><!-- end 主申请人 -->
+				
+
+				<div class="row body-from-input" id="backmailInfo"><!-- 添加回邮信息 -->
+					<div class="col-sm-12">
+						<div class="form-group">
+							<button type="button" class="btn btn-primary btn-sm addExpressInfoBtn">添加回邮信息</button>
+						</div>
+					</div>
+				</div><!-- end 添加回邮信息 -->
 
 				<!-- 快递信息 -->
 				<div class="info expressInfo none" id="expressInfo"
@@ -491,7 +473,7 @@
 	
 		</div>
 		
-		<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 		<script src="${base}/references/common/js/layer/layer.js"></script>
 		<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
