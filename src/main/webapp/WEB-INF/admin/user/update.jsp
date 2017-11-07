@@ -9,29 +9,21 @@
 <head>
 <meta charset="UTF-8">
 <title>更新</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet"
-	href="${base}/references/public/plugins/select2/select2.css">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 </head>
 <body>
-
 	<div class="modal-content">
 		<form id="userUpdateForm">
 			<div class="modal-header">
-				<span class="heading">编辑</span> <input id="backBtn" type="button"
-					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
-					data-dismiss="modal" value="取消" /> <input id="updateBtn"
-					type="button" onclick="save()"
-					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<span class="heading">编辑</span> 
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
+				<input id="updateBtn" type="button" onclick="save()" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" style="height: 388px;">
 				<div class="tab-content">
 					<input name="id" type="hidden" value="${obj.user.id}">
 
@@ -73,8 +65,8 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>部门：</label> <select id="departmentId"
-									name="departmentId" class="form-control input-sm inputWidth">
+								<label><span>*</span>部门：</label> 
+								<select id="departmentId" name="departmentId" class="form-control input-sm selectHeight">
 									<c:forEach items="${obj.department}" var="one">
 										<option value='${one.id}'
 											${one.id==obj.user.departmentId?'selected':''}>
@@ -85,8 +77,8 @@
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>职位：</label> <select id="jobId" name="jobId"
-									class="form-control input-sm inputWidth">
+								<label><span>*</span>职位：</label> 
+								<select id="jobId" name="jobId" class="form-control input-sm selectHeight">
 									<c:forEach items="${obj.job}" var="one">
 										<option value='${one.id}'
 											${one.id==obj.user.jobId?'selected':''}>
@@ -100,8 +92,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>禁用：</label> 
-								<select id="isDisable" name="isDisable"
-									class="form-control input-sm inpImportant">
+								<select id="isDisable" name="isDisable" class="form-control input-sm selectHeight">
 									<c:forEach var="map" items="${obj.isDisableEnum}">
 										<option value='${map.key}' ${map.key eq obj.user.isDisable?'selected':''}>${map.value}</option>
 									</c:forEach>
@@ -119,8 +110,7 @@
 		var BASE_PATH = '${base}';
 	</script>
 	<!-- jQuery 2.2.3 -->
-	<script
-		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>

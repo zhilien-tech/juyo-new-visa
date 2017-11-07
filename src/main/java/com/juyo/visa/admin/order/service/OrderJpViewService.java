@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
@@ -33,6 +34,7 @@ import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.common.enums.NoZHIKECustomerTypeEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCustomerEntity;
@@ -87,11 +89,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	}
 
-	public Object addOrder() {
+	public Object addOrder(HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
-		//result.put("orderId", id);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		List<TCustomerEntity> customers = dbDao.query(TCustomerEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()), null);
+		result.put("customer", customers);
 		result.put("collarAreaEnum", EnumUtil.enum2(CollarAreaEnum.class));
-		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
+		result.put("customerTypeEnum", EnumUtil.enum2(NoZHIKECustomerTypeEnum.class));
 		result.put("mainSaleUrgentEnum", EnumUtil.enum2(MainSaleUrgentEnum.class));
 		result.put("mainSaleUrgentTimeEnum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
 		result.put("mainSaleTripTypeEnum", EnumUtil.enum2(MainSaleTripTypeEnum.class));
@@ -103,11 +108,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object addOrder(Integer id) {
+	public Object addOrder(Integer id, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
 		result.put("orderId", id);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		List<TCustomerEntity> customers = dbDao.query(TCustomerEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()), null);
+		result.put("customer", customers);
+		result.put("customer", customers);
 		result.put("collarAreaEnum", EnumUtil.enum2(CollarAreaEnum.class));
-		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
+		result.put("customerTypeEnum", EnumUtil.enum2(NoZHIKECustomerTypeEnum.class));
 		result.put("mainSaleUrgentEnum", EnumUtil.enum2(MainSaleUrgentEnum.class));
 		result.put("mainSaleUrgentTimeEnum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
 		result.put("mainSaleTripTypeEnum", EnumUtil.enum2(MainSaleTripTypeEnum.class));
@@ -123,6 +133,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TApplicantEntity applicant = new TApplicantEntity();
+		applicant.setUserId(loginUser.getId());
+		applicant.setOpId(loginUser.getId());
 		if (!Util.isEmpty(applicantForm.getAddress())) {
 			applicant.setAddress(applicantForm.getAddress());
 		}
@@ -242,16 +254,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			customer.setEmail(String.valueOf(customermap.get("email")));
 		}
 		if (!Util.isEmpty(customermap.get("linkman"))) {
-			customer.setEmail(String.valueOf(customermap.get("linkman")));
+			customer.setLinkman(String.valueOf(customermap.get("linkman")));
 		}
 		if (!Util.isEmpty(customermap.get("mobile"))) {
-			customer.setEmail(String.valueOf(customermap.get("mobile")));
+			customer.setMobile(String.valueOf(customermap.get("mobile")));
 		}
 		if (!Util.isEmpty(customermap.get("name"))) {
-			customer.setEmail(String.valueOf(customermap.get("name")));
+			customer.setName(String.valueOf(customermap.get("name")));
 		}
 		if (!Util.isEmpty(customermap.get("shortname"))) {
-			customer.setEmail(String.valueOf(customermap.get("shortname")));
+			customer.setShortname(String.valueOf(customermap.get("shortname")));
 		}
 		if (!Util.isEmpty(customermap.get("source"))) {
 			customer.setSource(Integer.valueOf(String.valueOf(customermap.get("source"))));
@@ -395,5 +407,78 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		//回邮信息
 		result.put("backmailInfo", null);
 		return result;
+	}
+
+	public Object updateApplicant(Integer id) {
+		Map<String, Object> result = Maps.newHashMap();
+		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
+		result.put("applicant", applicantEntity);
+		return result;
+	}
+
+	public Object saveEditApplicant(TApplicantForm applicantForm, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TApplicantEntity applicant = new TApplicantEntity();
+		applicant.setOpId(loginUser.getId());
+		if (!Util.isEmpty(applicantForm.getId())) {
+			applicant.setId(applicantForm.getId());
+		}
+		if (!Util.isEmpty(applicantForm.getAddress())) {
+			applicant.setAddress(applicantForm.getAddress());
+		}
+		if (!Util.isEmpty(applicantForm.getBirthday())) {
+			applicant.setBirthday(applicantForm.getBirthday());
+		}
+		if (!Util.isEmpty(applicantForm.getCardId())) {
+			applicant.setCardId(applicantForm.getCardId());
+		}
+		if (!Util.isEmpty(applicantForm.getCity())) {
+			applicant.setCity(applicantForm.getCity());
+		}
+		if (!Util.isEmpty(applicantForm.getDetailedAddress())) {
+			applicant.setDetailedAddress(applicantForm.getDetailedAddress());
+		}
+		if (!Util.isEmpty(applicantForm.getEmail())) {
+			applicant.setEmail(applicantForm.getEmail());
+		}
+		if (!Util.isEmpty(applicantForm.getFirstName())) {
+			applicant.setFirstName(applicantForm.getFirstName());
+		}
+		if (!Util.isEmpty(applicantForm.getIssueOrganization())) {
+			applicant.setIssueOrganization(applicantForm.getIssueOrganization());
+		}
+		if (!Util.isEmpty(applicantForm.getLastName())) {
+			applicant.setLastName(applicantForm.getLastName());
+		}
+		if (!Util.isEmpty(applicantForm.getNation())) {
+			applicant.setNation(applicantForm.getNation());
+		}
+		if (!Util.isEmpty(applicantForm.getProvince())) {
+			applicant.setProvince(applicantForm.getProvince());
+		}
+		if (!Util.isEmpty(applicantForm.getSex())) {
+			applicant.setSex(applicantForm.getSex());
+		}
+		if (!Util.isEmpty(applicantForm.getTelephone())) {
+			applicant.setTelephone(applicantForm.getTelephone());
+		}
+		if (!Util.isEmpty(applicantForm.getValidEndDate())) {
+			applicant.setValidEndDate(applicantForm.getValidEndDate());
+		}
+		if (!Util.isEmpty(applicantForm.getValidStartDate())) {
+			applicant.setValidStartDate(applicantForm.getValidStartDate());
+		}
+		applicant.setUpdateTime(new Date());
+		dbDao.update(applicant);
+		return null;
+	}
+
+	public Object getEditApplicant(Integer orderid) {
+		String applicantSqlstr = sqlManager.get("orderJp_list_applicantInfo_byOrderId");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		applicantSql.setParam("id", orderid);
+		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
+		return applicantInfo;
 	}
 }

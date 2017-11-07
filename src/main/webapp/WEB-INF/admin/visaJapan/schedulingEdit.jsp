@@ -86,7 +86,7 @@
 		var BASE_PATH = '${base}';
 		var cityId = '${obj.travelplan.cityId }';
 	</script>
-	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
