@@ -47,7 +47,6 @@
 									<td class="certificates">
 										<c:forEach items="${apply.revenue }" var="revenue">
 											<span>${revenue.realInfo }</span>
-											
 										</c:forEach>
 										<input id="" name="" type="text" class="addInp none">
 										<span class="addText">+</span>
@@ -86,15 +85,6 @@
 			
 			/*点击表格中的加号标签*/
 			$(".addText").click(function(){
-			    /* if($(".addInp").hasClass("none")){//input框隐藏时
-					$(".addInp").removeClass("none");
-				}else{//input框显示时
-					var inputVal = $(".addInp").val();
-					if(inputVal!=null&&inputVal!=""){
-						$(".addInp").before('<span>'+ inputVal +'</span>');//在input前面 添加span标签
-						$(".addInp").val("");
-					}
-				} */ 
 				$(this).siblings(".addInp").removeClass("none");
 				var applicatid = $(this).parent().find('#applicatid').val();
 				var inputVal = $(this).siblings(".addInp").val();
@@ -107,11 +97,20 @@
 		            	dataType:"json",
 		            	type:'post',
 		            	success: function(data){
-		            		
 		              	}
 		            });
 				}
 			});
+			
+			$(".certificates span").click(function(){
+				var spanText = $(this).text();
+				var HZlength = ($(".certificates").has(".passportInp")).length > 0;
+				if(spanText == "护照" && HZlength != true){
+					$(this).after('<input type="text" class="passportInp" value='+ spanText +' />');
+				}
+			});
+			
+			
 		});
 
 		//vue表格数据对象
