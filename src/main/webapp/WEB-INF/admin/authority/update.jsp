@@ -44,7 +44,7 @@
 					<c:forEach var="one" items="${obj.list}" varStatus="stat">
 						<div class="job_container form-group has-success">
 							<ul class="addDepartment marHei">
-								<li><label class="text-right">职位名称：</label></li>
+								<li><label class="text-right"><span>*</span> 职位名称：</label></li>
 								<li class="li-input inpPadd">
 									<input id="jobName" name="jobName[]" onkeyup="jobNameKeyup(this);" type="text" class="form-control input-sm inputText" value='${one.jobName }'> 
 									<input id="jobId" type="hidden" value='${one.jobId }'></li>
@@ -123,9 +123,9 @@
 			//部门职位 编辑职位
 		    $('#addJob').click(function(){
 		       $(".job_container .ztree").hide();
-		       $('.jobName').append('<div class="job_container has-success"><ul class="addDepartment marHei"><li><label class="text-right">职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName[]" onkeyup="jobNameKeyup(this);" type="text" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" style="width:70px;" class="btn btn-primary btn-sm btnPadding" id="deleteBtn1" >删除</button></li></ul>'
-		       +'<div class="ztree"><small class="help-block" data-bv-validator="notEmpty" data-bv-for="jobName[]" data-bv-result="IVVALID" style="display: none;">职位名称不能为空</small><small class="help-block" data-bv-validator="remote" data-bv-for="jobName[]" data-bv-result="INVALID" style="display: none;">职位名称已存在，请重新输入</small><ul id="tree_'+treeIndex+'"></ul></div></div>');
-		       treeIndex++;
+		       $('.jobName').append('<div class="job_container form-group has-success"><ul class="addDepartment marHei"><li><label class="text-right"><span>*</span> 职位名称：</label></li><li class="li-input inpPadd"><input id="jobName" name="jobName[]" type="text"  onkeyup="jobNameKeyup(this);" class="form-control input-sm inputText" placeholder="请输入职位名称"></li><li><button type="button" class="btn btn-primary btn-sm btnPadding" id="settingsPermis">设置权限</button><button type="button" class="btn btn-primary btn-sm btnPadding" id="deleteBtn" >删除</button></li></ul>'
+						+'<div class="ztree"><small class="help-block" data-bv-validator="notEmpty" data-bv-for="jobName[]" data-bv-result="IVVALID" style="display: none;">职位名称不能为空</small><small class="help-block" data-bv-validator="remote" data-bv-for="jobName[]" data-bv-result="INVALID" style="display: none;">职位名称已存在，请重新输入</small><ul id="tree_'+treeIndex+'"></ul></div></div>');
+				treeIndex++;
 		       
 		       var ztree_container = $(".job_container:last").find("div.ztree").find("ul:first");
 		       var treeId = ztree_container.attr("id") ;
