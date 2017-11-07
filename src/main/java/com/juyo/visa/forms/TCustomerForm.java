@@ -80,7 +80,8 @@ public class TCustomerForm extends DataTablesParamForm {
 					.or("linkman", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
-		if (userType == 3) {
+		if (userType == 5) {
+			cnd.and("compId", "=", compId);
 		}
 		if (userType == 1) {
 			cnd.and("userId", "=", userId);

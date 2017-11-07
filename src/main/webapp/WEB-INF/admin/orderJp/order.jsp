@@ -243,7 +243,7 @@
 						<!-- end 签证类型 -->
 						<div class="row body-from-input">
 							<!-- 过去三年是否访问过 -->
-							<div class="col-sm-3">
+							<div class="col-sm-3 none" id="isVisited" >
 								<div class="form-group">
 									<label><span>*</span>过去三年是否访问过：</label> <select id="isVisit"
 										name="isVisit" class="form-control input-sm"
@@ -254,7 +254,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-9 none" id="isVisited"
+							<div class="col-sm-9 none" id="threeCounty"
 								v-model="orderInfo.threeCounty">
 								<div class="form-group">
 									<label style="display: block;">&nbsp;</label> <input
@@ -359,18 +359,19 @@
 									<th><span>操作<span></th>
 								</tr>
 							</thead>
-							<tbody v-for="applicant in applicantInfo">
+							<tbody v-for="applicant in applicantInfo"  >
 								<tr>
 									<td>{{applicant.applyname}}</td>
 									<td>{{applicant.telephone}}</td>
 									<td>{{applicant.email}}</td>
 									<td>{{applicant.passport}}</td>
+									
 									<td>{{applicant.sex}}</td>
-									<td><a v-on:click="">基本信息</a>&nbsp;&nbsp;<a
-										v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;<a
-										v-on:click="visa(apply.applyid)">签证</a> <br>
+									<td><a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;<a
+										v-on:click="passport(applicant.id)">护照</a>&nbsp;&nbsp;<a
+										v-on:click="visa(applicant.id)">签证</a> <br>
 									<a v-on:click="">回邮</a>&nbsp;&nbsp;<a
-										v-on:click="passport(apply.applyid)">删除</a></br></td>
+										v-on:click="passport(applicant.id)">删除</a></br></td>
 								</tr>
 							</tbody>
 						</table>
@@ -487,7 +488,7 @@
 		var BASE_PATH = '${base}';
 	</script>
 	<script
-		src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script>
@@ -499,18 +500,33 @@
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
 		function selectListData() {
-			var isVisited = $("#isVisit").val();
+			var isVisit = $("#isVisit").val();
 			var visaType = $("#visaType").val();
 			var mainSaleUrgentEnum = $("#urgentType").val();
+			if(!$("#isVisited").hasClass("none")){
+				alert(4);
+				if (isVisited == 1) {
+					$("#threeCounty").removeClass("none");
+				} else {
+					$("#threeCounty").addClass("none");
+				}
+			}
+			
+			
 			if (isVisited == 1) {
-				$("#isVisited").removeClass("none");
+				$("#threeCounty").removeClass("none");
 			} else {
-				$("#isVisited").addClass("none");
+				$("#threeCounty").addClass("none");
 			}
 
-			if (visaType == 2) {
+			if (visaType == 2 || visaType == 3) {
 				$("#sixCounty").removeClass("none");
+				$("#isVisited").removeClass("none");
+				
+				
+				
 			} else {
+				$("#isVisited").addClass("none");
 				$("#sixCounty").addClass("none");
 			}
 
@@ -598,19 +614,51 @@
 					//alert(JSON.stringify(event.target)); 
 				},
 			addApplicant : function(){
-				$.ajax({
-					type : 'get',
-					url : '${base}/admin/orderJp/addApplicant',
-					success : function(data) {
-						
-					},
-					error : function() {
-						alert("error");
-					}
-				}); 
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/addApplicant.html'
+				});
+			},
+			updateApplicant : function(id){
+				alert(id);
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/updateApplicant.html?id='+id
+				});
 			}
 			}
 		});
+		var orderid = ${obj.orderId};
+		function successCallBack(status){
+			if(status == 1){
+				layer.msg('修改成功');
+				$.ajax({ 
+			    	url: '${base}/admin/orderJp/getEditApplicant',
+			    	dataType:"json",
+			    	data:{orderid:orderid},
+			    	type:'post',
+			    	success: function(data){
+			    		orderobj.applicantInfo = data;
+			      	}
+			    }); 
+			}
+		}
+		
+		 
 	</script>
 </body>
 </html>

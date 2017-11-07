@@ -176,7 +176,7 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
-	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
@@ -196,11 +196,9 @@
 				url : '${base}/admin/orderJp/saveAddApplicant',
 				success : function(data) {
 					console.log(JSON.stringify(data));
-					var applicantId = data.id;
-					applicantinfo = data;
-					var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					layer.close(index);
-					parent.layer.close(index);
+					
+					//alert( $("#principalApplicantTable td").attr());
+					//parent.location.reload();
 					//parent.datatable.ajax.reload();
 				},
 				error : function() {

@@ -15,7 +15,16 @@ $(function(){
 			console.log(btnInfo);
 		}
 	});
-	
+	$('#visatype').change(function(){
+		var thisval = $(this).val();
+		if(thisval == 2){
+			$('#visacounty').show();
+			$('#threefangwen').show();
+		}else{
+			$('#visacounty').hide();
+			$('#threefangwen').hide();
+		}
+	});
 	//添加申请人 按钮 click
 	$(".addApplicantBtn").click(function(){
 		layer.open({
@@ -29,11 +38,14 @@ $(function(){
 			area: ['900px', '551px'],
 			content:'/admin/orderJp/addApplicant.html'
 		});
+		$("#mySwitch").removeClass("none");//显示申请人信息列表
+		$("#applicantInfo").hide();//添加申请人 按钮 隐藏
 	});
 	
 	//添加回邮信息 按钮  click
 	$(".addExpressInfoBtn").click(function(){
 		$(".expressInfo").removeClass("none");
+		$(this).hide();
 	});
 	
 	//保存

@@ -92,6 +92,7 @@ public class OrderJpForm extends OrderForm {
 		if (!Util.isEmpty(visaType)) {
 			cnd.and("oj.visaType", "=", visaType);
 		}
+		cnd.orderBy("o.createtime", "DESC");
 		cnd.orderBy("o.updatetime", "DESC");
 		return cnd;
 	}

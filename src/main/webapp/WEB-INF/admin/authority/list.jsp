@@ -14,9 +14,9 @@
 		<div class="wrapper">
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper"  style="min-height: 848px;">
-				<ul class="title">
+				<!-- <ul class="title">
 					<li>权限管理</li>
-				</ul>
+				</ul> -->
 				<section class="content">
 					<div class="box">
 						<div class="box-header">
@@ -70,7 +70,7 @@
 		<!-- ./wrapper -->
 	
 		<!-- jQuery 2.2.3 -->
-		<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 		<!-- Bootstrap 3.3.6 -->
 		<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 		<!-- DataTables -->

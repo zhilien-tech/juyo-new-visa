@@ -28,6 +28,9 @@ public class CustomerViewService extends BaseService<TCustomerEntity> {
 
 	public Object listData(TCustomerForm sqlParamForm, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		sqlParamForm.setCompId(loginCompany.getId());
+		sqlParamForm.setUserId(loginUser.getId());
 		sqlParamForm.setUserType(loginUser.getUserType());
 		return listPage4Datatables(sqlParamForm);
 	}
