@@ -144,7 +144,7 @@
 							<div class="form-group">
 								<div class="upload-btn">
 									<input id="license" name="license" value="${obj.company.license}" type="hidden"/>
-									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
+									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file" value="上传营业执照" />
 								</div>
 							</div>
 						</div>
