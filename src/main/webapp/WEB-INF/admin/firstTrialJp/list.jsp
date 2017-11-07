@@ -75,7 +75,6 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
-	
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		//异步加载的URL地址
