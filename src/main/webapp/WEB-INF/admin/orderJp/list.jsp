@@ -48,6 +48,10 @@
 							<div class="col-md-3 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照/公司简称/联系人/电话/邮箱/申请人" />
 							</div>
+							<div class="col-md-3 left-5px" >
+								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+								<a class="btn btn-primary btn-sm pull-right" id="orderBtn" onclick="addOrder();" v-on:click="">下单</a>
+							</div>
 						</div>
 						<div class="row" style="margin-top:15px;"> 
 							<div class="col-md-2 left-5px right-0px">
@@ -58,10 +62,6 @@
 							</div>
 							<div class="col-md-2 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" />
-							</div>
-							<div class="col-md-6 left-5px" >
-								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
-								<a class="btn btn-primary btn-sm pull-right" id="orderBtn" onclick="addOrder();" v-on:click="">下单</a>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->

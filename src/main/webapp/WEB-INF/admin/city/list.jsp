@@ -52,8 +52,9 @@
 									placeholder="国家/省/城市" onkeypress="onkeyEnter();"/>
 							</div>
 							<div class="col-md-7 left-5px">
-								<a id="searchBtn" class="btn btn-primary btn-sm pull-left">搜索</a> <a id="addBtn"
-									class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
+								<a id="searchBtn" class="btn btn-primary btn-sm pull-left">搜索</a> 
+								<a id="emptyBtn" class="btn btn-primary btn-sm pull-left">清空</a> 
+								<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 							</div>
 						</div>
 
