@@ -58,7 +58,7 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>电话：</label> <input id="mobile"
+								<label>电话：</label> <input id="mobile"
 									name="mobile" type="text" class="form-control input-sm"
 									placeholder=" " />
 							</div>
@@ -66,7 +66,7 @@
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>邮箱：</label> <input id="email" name="email"
+								<label>邮箱：</label> <input id="email" name="email"
 									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -75,7 +75,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
-								<label><span>*</span>地址：</label> <input id="address"
+								<label>地址：</label> <input id="address"
 									name="address" type="text" class="form-control input-sm"
 									placeholder=" " />
 							</div>
@@ -229,13 +229,22 @@
 							notEmpty : {
 								message : '公司简称不能为空'
 							}
-						}
+						},
+						stringLength: {
+	                   	    min: 1,
+	                   	    max: 6,
+	                   	    message: '公司简称长度为6'
+	                   	}
 					},
 					adminLoginName : {
 						validators : {
 							notEmpty : {
 								message : '用户名不能为空'
-							}
+							},
+							regexp: {
+		                	 	regexp: /^[^\u4e00-\u9fa5]{0,}$/,
+		                        message: '用户名不能为汉字'
+		                    }
 						}
 					},
 					linkman : {
