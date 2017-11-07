@@ -12,7 +12,7 @@ o.orderNum,
 		orderId = oj.id
 ) peopleNum,
 o.`status`,
-tc.shortName,
+c.shortName,
 c.source,
 c.linkman,
 c.mobile,
@@ -73,7 +73,7 @@ WHERE
 	
 /*orderJp_list_applicantInfo_byOrderId*/
 SELECT
-aoj.id,
+a.id,
 CONCAT(a.firstName, a.lastName) applyname,
 a.email,
 a.telephone,
@@ -82,8 +82,10 @@ ap.passport
 FROM
 t_applicant_order_jp aoj
 LEFT JOIN
+t_order_jp oj ON aoj.orderId = oj.id 
+LEFT JOIN
 t_applicant a ON aoj.applicantId = a.id
 LEFT JOIN
 t_applicant_passport ap ON ap.applicantId = a.id
 WHERE
-aoj.orderId = @id
+oj.orderId = @id

@@ -196,11 +196,9 @@
 				url : '${base}/admin/orderJp/saveAddApplicant',
 				success : function(data) {
 					console.log(JSON.stringify(data));
-					var applicantId = data.id;
-					applicantinfo = data;
-					var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					layer.close(index);
-					parent.layer.close(index);
+					
+					//alert( $("#principalApplicantTable td").attr());
+					//parent.location.reload();
 					//parent.datatable.ajax.reload();
 				},
 				error : function() {
