@@ -44,6 +44,8 @@ body{min-width:1160px;overflow-x: auto;}
 .btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right:1rem;}
 .btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
 .schedulingBtn,.addApplicantBtn,.addExpressInfoBtn{width: 30%;margin: 15px auto;display: block;}
+.more{background-image: url(../dist/newvisacss/img/more.png);width: 18px;height: 18px;display: inline-block;position: relative;top: 3px;float: right;}
+
 /*卡片式 操作图标*/
 .edit{background-image:url(../dist/newvisacss/img/edit.png);}
 .shiShou{background-image:url(../dist/newvisacss/img/shiShou.png);}
