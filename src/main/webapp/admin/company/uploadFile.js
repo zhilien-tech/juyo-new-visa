@@ -9,7 +9,7 @@ function dataURLtoBlob(dataurl) {
 }
 
 $('#uploadFile').change(function(){
-	layer.load(1);
+	var layerIndex =  layer.load(1, {shade: "#000"});
 	$("#addBtn").attr('disabled',true);
 	$("#updateBtn").attr('disabled',true);
 	var file = this.files[0];
@@ -29,16 +29,19 @@ $('#uploadFile').change(function(){
 			//请求数据  
 			data:formData ,
 			success: function (obj) {//请求成功后的函数 
-				layer.closeAll('loading');
+				//关闭加载层
+				layer.close(layerIndex);
 				if('200' === obj.status){
 					$('#license').val(obj.data);
 					$('#sqImg').attr('src',obj.data);
-					$("#addBtn").attr('disabled',false);
-					$("#updateBtn").attr('disabled',false);
 				}
+				$("#addBtn").attr('disabled',false);
+				$("#updateBtn").attr('disabled',false);
 			},  
 			error: function (obj) {
-				layer.closeAll('loading');
+				layer.close(layerIndex);
+				$("#addBtn").attr('disabled',false);
+				$("#updateBtn").attr('disabled',false);
 			}
 		});  // end of ajaxSubmit
 	};
