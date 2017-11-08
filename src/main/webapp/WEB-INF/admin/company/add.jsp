@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/company.css">
-	<link rel="stylesheet" href="${base}/references/public/plugins/uploadify/uploadify.css">
+	<%-- <link rel="stylesheet" href="${base}/references/public/plugins/uploadify/uploadify.css"> --%>
 </head>
 <body>
 	<div class="modal-content">
@@ -150,7 +150,7 @@
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<!-- uploadify -->
-	<script src="${base}/references/public/plugins/uploadify/jquery.uploadify.min.js"></script>
+	<%-- <script src="${base}/references/public/plugins/uploadify/jquery.uploadify.min.js"></script> --%>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- 经营范围校验 -->
 	<script src="${base}/admin/company/validateScope.js"></script>
@@ -159,7 +159,7 @@
 	<script type="text/javascript">
 		$(function() {
 			//文件上传
-			uploadFile();
+			/* uploadFile(); */
 			
 			//校验
 			$('#companyAddForm').bootstrapValidator({

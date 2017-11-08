@@ -1,5 +1,6 @@
 package com.juyo.visa.admin.company.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +25,6 @@ import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.access.AccessConfig;
 import com.juyo.visa.common.access.sign.MD5;
 import com.juyo.visa.common.base.UploadService;
-import com.juyo.visa.common.base.Uploader;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.CompanyTypeEnum;
@@ -352,13 +352,19 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 	 * @return
 	 * @throws Exception 
 	 */
-	public Object uploadFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		request.setCharacterEncoding(CommonConstants.CHARACTER_ENCODING_PROJECT);//字符编码为utf-8
+	public Object uploadFile(File file, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		/*request.setCharacterEncoding(CommonConstants.CHARACTER_ENCODING_PROJECT);//字符编码为utf-8
 		response.setCharacterEncoding(CommonConstants.CHARACTER_ENCODING_PROJECT);
 		Uploader uploader = new Uploader(request, qiniuUploadService);
 		uploader.upload();
 		String url = CommonConstants.IMAGES_SERVER_ADDR + uploader.getUrl();
-		return url;
+		return url;*/
+
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		file.delete();
+		map.put("data", CommonConstants.IMAGES_SERVER_ADDR + map.get("data"));
+		return map;
+
 	}
 
 	/**

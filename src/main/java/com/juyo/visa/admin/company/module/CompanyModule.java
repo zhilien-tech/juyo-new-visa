@@ -1,5 +1,7 @@
 package com.juyo.visa.admin.company.module;
 
+import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -8,11 +10,13 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.upload.UploadAdaptor;
 
 import com.juyo.visa.admin.company.service.CompanyViewService;
 import com.juyo.visa.forms.TCompanyAddForm;
@@ -132,8 +136,10 @@ public class CompanyModule {
 	 */
 	@At
 	@Ok("json")
-	public Object uploadFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		return companyViewService.uploadFile(request, response);
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object uploadFile(@Param("image") File file, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		return companyViewService.uploadFile(file, request, response);
 	}
 
 	/**
