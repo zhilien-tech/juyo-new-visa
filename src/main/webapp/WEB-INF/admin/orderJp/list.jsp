@@ -73,7 +73,7 @@
 								<div><label>状态：</label><span>{{data.status}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit" onclick="" v-on:click="order(data.orderid)"> </i>
+									<i title="编辑" class="edit" v-on:click="order(data.orderid)"> </i>
 									<i> </i>
 									<i> </i>
 									<i> </i>

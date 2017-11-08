@@ -16,6 +16,7 @@ $(function(){
 		}
 	});
 	$('#visatype').change(function(){
+		alert(12121);
 		var thisval = $(this).val();
 		if(thisval == 2){
 			$('#visacounty').show();
