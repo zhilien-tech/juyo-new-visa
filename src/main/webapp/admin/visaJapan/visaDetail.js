@@ -26,6 +26,15 @@ $(function(){
 		}
 	});
 	
+	$('#isVisit').change(function(){
+		var thisval = $(this).val();
+		if(thisval == 1){
+			$('#threexian').show();
+		}else{
+			$('#threexian').hide();
+		}
+	});
+	
 	//主申请人
 	/*$('#applicantTable').DataTable({
 		"autoWidth":true,
@@ -117,6 +126,19 @@ new Vue({
     	//签证录入
     	visa:function(applyid){
     		window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applyid;
+    	},
+    	passport:function(applyId){
+    		layer.open({
+    		    type: 2,
+    		    title: false,
+    		    closeBtn:false,
+    		    fix: false,
+    		    maxmin: false,
+    		    shadeClose: false,
+    		    scrollbar: false,
+    		    area: ['900px', '550px'],
+    		    content: '/admin/visaJapan/passportInfo.html?applyId='+applyId
+    		});
     	}
     }
 });

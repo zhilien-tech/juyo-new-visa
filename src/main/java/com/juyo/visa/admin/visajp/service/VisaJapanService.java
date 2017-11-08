@@ -29,6 +29,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
+import com.juyo.visa.admin.visajp.form.PassportForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
@@ -40,6 +41,9 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
+import com.juyo.visa.common.util.MapUtil;
+import com.juyo.visa.entities.TApplicantOrderJpEntity;
+import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantVisaJpEntity;
 import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TCityEntity;
@@ -110,7 +114,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			for (Record apply : query) {
 				Integer dataType = (Integer) apply.get("dataType");
 				for (VisaDataTypeEnum dataTypeEnum : VisaDataTypeEnum.values()) {
-					if (dataType == dataTypeEnum.intKey()) {
+					if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
 						apply.put("dataType", dataTypeEnum.value());
 					}
 				}
@@ -177,7 +181,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		for (Record record : applyinfo) {
 			Integer type = (Integer) record.get("type");
 			for (VisaDataTypeEnum visadatatype : VisaDataTypeEnum.values()) {
-				if (type.equals(visadatatype.intKey())) {
+				if (!Util.isEmpty(type) && type.equals(visadatatype.intKey())) {
 					record.put("type", visadatatype.value());
 				}
 			}
@@ -433,7 +437,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		}
 		//需要生成的travelplan
 		List<TOrderTravelplanJpEntity> travelplans = Lists.newArrayList();
-		for (int i = 0; i < daysBetween; i++) {
+		for (int i = 0; i <= daysBetween; i++) {
 			TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
 			travelplan.setCityId(planform.getGoArrivedCity());
 			travelplan.setDay(String.valueOf(i + 1));
@@ -441,11 +445,13 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			travelplan.setOutDate(DateUtil.addDay(planform.getGoDate(), i));
 			travelplan.setCityName(city.getCity());
 			travelplan.setCreateTime(new Date());
-			//酒店
 			Random random = new Random();
-			int hotelindex = random.nextInt(hotels.size());
-			THotelEntity hotel = hotels.get(hotelindex);
-			travelplan.setHotel(hotel.getId());
+			//酒店
+			if (i != daysBetween) {
+				int hotelindex = random.nextInt(hotels.size());
+				THotelEntity hotel = hotels.get(hotelindex);
+				travelplan.setHotel(hotel.getId());
+			}
 			//景区
 			int scenicindex = random.nextInt(scenics.size());
 			TScenicEntity scenic = scenics.get(scenicindex);
@@ -497,8 +503,14 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		TOrderTravelplanJpEntity plan = dbDao.fetch(TOrderTravelplanJpEntity.class, planid.longValue());
 		result.put("travelplan", plan);
-		THotelEntity hotel = dbDao.fetch(THotelEntity.class, plan.getHotel().longValue());
+		THotelEntity hotel = new THotelEntity();
+		if (!Util.isEmpty(plan.getHotel())) {
+			hotel = dbDao.fetch(THotelEntity.class, plan.getHotel().longValue());
+		}
 		result.put("hotel", hotel);
+		String[] Scenicnames = plan.getScenic().split(",");
+		List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class, Cnd.where("name", "in", Scenicnames), null);
+		result.put("scenics", scenics);
 		return result;
 
 	}
@@ -546,7 +558,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		for (Record apply : query) {
 			Integer dataType = (Integer) apply.get("dataType");
 			for (VisaDataTypeEnum dataTypeEnum : VisaDataTypeEnum.values()) {
-				if (dataType == dataTypeEnum.intKey()) {
+				if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
 					apply.put("dataType", dataTypeEnum.value());
 				}
 			}
@@ -639,8 +651,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		for (TApplicantVisaJpEntity VisaJpEntity : visainputs) {
 			DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 			Map<String, Object> visainputmap = Maps.newHashMap();
-			visainputmap.put("visadatestr", format.format(VisaJpEntity.getVisaDate()));
-			visainputmap.put("validdatestr", format.format(VisaJpEntity.getValidDate()));
+			if (!Util.isEmpty(VisaJpEntity.getVisaDate())) {
+				visainputmap.put("visadatestr", format.format(VisaJpEntity.getVisaDate()));
+			}
+			if (!Util.isEmpty(VisaJpEntity.getValidDate())) {
+				visainputmap.put("validdatestr", format.format(VisaJpEntity.getValidDate()));
+			}
 			String visatypestr = "";
 			if (!Util.isEmpty(VisaJpEntity.getVisaType())) {
 				for (AlredyVisaTypeEnum typeEnum : AlredyVisaTypeEnum.values()) {
@@ -686,4 +702,109 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		}
 		return map;
 	}
+
+	/**
+	 * 护照详情
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param applyId
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object passportInfo(Integer applyId) {
+		Map<String, Object> result = Maps.newHashMap();
+		TApplicantOrderJpEntity applyjp = dbDao.fetch(TApplicantOrderJpEntity.class, applyId.longValue());
+		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+				Cnd.where("applicantId", "=", applyjp.getApplicantId()));
+		Map<String, String> passportMap = MapUtil.obj2Map(passport);
+		DateFormat dateformat = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		//性别
+		String sexstr = "";
+		if (!Util.isEmpty(passport.getSex())) {
+			sexstr += passport.getSex();
+		}
+		sexstr += "/";
+		if (!Util.isEmpty(passport.getSexEn())) {
+			sexstr += passport.getSexEn();
+		}
+		passportMap.put("sexstr", sexstr);
+		//出生地点
+		String birthaddressstr = "";
+		if (!Util.isEmpty(passport.getBirthAddress())) {
+			birthaddressstr += passport.getBirthAddress();
+		}
+		birthaddressstr += "/";
+		if (!Util.isEmpty(passport.getBirthAddressEn())) {
+			birthaddressstr += passport.getBirthAddressEn();
+		}
+		passportMap.put("birthaddressstr", birthaddressstr);
+		//签发地点
+		String issuedplacestr = "";
+		if (!Util.isEmpty(passport.getIssuedPlace())) {
+			issuedplacestr += passport.getIssuedPlace();
+		}
+		issuedplacestr += "/";
+		if (!Util.isEmpty(passport.getIssuedPlaceEn())) {
+			issuedplacestr += passport.getIssuedPlaceEn();
+		}
+		passportMap.put("issuedplacestr", issuedplacestr);
+		if (!Util.isEmpty(passport.getBirthday())) {
+			passportMap.put("birthday", dateformat.format(passport.getBirthday()));
+		}
+		if (!Util.isEmpty(passport.getIssuedDate())) {
+			passportMap.put("issueddate", dateformat.format(passport.getIssuedDate()));
+		}
+		if (!Util.isEmpty(passport.getValidEndDate())) {
+			passportMap.put("validenddate", dateformat.format(passport.getValidEndDate()));
+		}
+		result.put("passport", passportMap);
+		return result;
+
+	}
+
+	/**
+	 * 保存护照信息
+	 * <p>
+	 * TODO 保存护照信息
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object savePassportInfo(PassportForm form, HttpSession session) {
+
+		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class, form.getId().longValue());
+		passport.setType(form.getType());
+		passport.setPassport(form.getPassport());
+		//性别
+		String[] sexsplit = form.getSexstr().split("/");
+		if (sexsplit.length == 2) {
+			passport.setSex(sexsplit[0]);
+			passport.setSexEn(sexsplit[1]);
+		} else if (sexsplit.length == 1) {
+			passport.setSex(sexsplit[0]);
+		}
+		//出生地点
+		String[] birthaddrsplit = form.getBirthaddressstr().split("/");
+		if (birthaddrsplit.length == 2) {
+			passport.setBirthAddress(birthaddrsplit[0]);
+			passport.setBirthAddressEn(birthaddrsplit[1]);
+		} else if (birthaddrsplit.length == 1) {
+			passport.setBirthAddress(birthaddrsplit[0]);
+		}
+		passport.setBirthday(form.getBirthday());
+		//签发地点
+		String[] issuedsplit = form.getIssuedplacestr().split("/");
+		if (issuedsplit.length == 2) {
+			passport.setIssuedPlace(issuedsplit[0]);
+			passport.setIssuedPlaceEn(issuedsplit[1]);
+		} else if (issuedsplit.length == 1) {
+			passport.setIssuedPlace(issuedsplit[0]);
+		}
+		passport.setIssuedDate(form.getIssueddate());
+		passport.setValidType(form.getValidtype());
+		passport.setValidEndDate(form.getValidenddate());
+		passport.setUpdateTime(new Date());
+		return dbDao.update(passport);
+	}
+
 }

@@ -6,6 +6,8 @@
 
 package com.juyo.visa.admin.visajp.module;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -16,12 +18,16 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.google.common.collect.Maps;
 import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
+import com.juyo.visa.admin.visajp.form.PassportForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.admin.visajp.service.VisaJapanService;
+import com.juyo.visa.common.enums.IssueValidityEnum;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderTravelplanJpEntity;
+import com.uxuexi.core.common.util.EnumUtil;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -194,5 +200,35 @@ public class VisaJapanModule {
 	@POST
 	public Object getJpVisaInputListData(@Param("applyid") Integer applyid) {
 		return visaJapanService.getJpVisaInputListData(applyid);
+	}
+
+	/**
+	 * 跳转到护照信息页面
+	 */
+	@At
+	@Ok("jsp")
+	public Object passportInfo(@Param("applyId") Integer applyId) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("applyId", applyId);
+		result.put("issuevalidityenum", EnumUtil.enum2(IssueValidityEnum.class));
+		return result;
+	}
+
+	/**
+	 * 获取护照页面信息
+	 */
+	@At
+	@POST
+	public Object getPassportData(@Param("applyId") Integer applyId) {
+		return visaJapanService.passportInfo(applyId);
+	}
+
+	/**
+	 * 保存护照信息页面
+	 */
+	@At
+	@POST
+	public Object savePassportInfo(@Param("..") PassportForm form, HttpSession session) {
+		return visaJapanService.savePassportInfo(form, session);
 	}
 }

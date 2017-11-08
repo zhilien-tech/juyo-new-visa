@@ -37,7 +37,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>日期：</label> 
-								<input id="outDate" name="outDate" type="text" onfocus="WdatePicker()" class="form-control input-sm" value="<fmt:formatDate value="${obj.travelplan.outDate }" pattern="yyyy-MM-dd" />" />
+								<input id="outDate" name="outDate" type="text" onfocus="WdatePicker()" disabled="disabled" class="form-control input-sm" value="<fmt:formatDate value="${obj.travelplan.outDate }" pattern="yyyy-MM-dd" />" />
 							</div>
 						</div>
 						
@@ -56,7 +56,10 @@
 							<div class="form-group">
 								<label><span>*</span>景区：</label> 
 								<select id="scenic" name="scenic" class="form-control input-sm" multiple="multiple">
-									<option value="${obj.travelplan.scenic }" selected="selected">${obj.travelplan.scenic }</option>
+									<%-- <option value="${obj.travelplan.scenic }" selected="selected">${obj.travelplan.scenic }</option> --%>
+									<c:forEach items="${obj.scenics }" var="scenic">
+										<option selected="selected" value="${scenic.name }">${scenic.name }</option>
+									</c:forEach>
 								</select>
 							</div>
 						</div>
@@ -67,7 +70,9 @@
 							<div class="form-group">
 								<label><span>*</span>酒店：</label> 
 								<select id="hotel" name="hotel" class="form-control input-sm" multiple="multiple">
-									<option value="${obj.hotel.id }" selected="selected">${obj.hotel.name }</option>
+									<c:if test="${!empty obj.hotel.id }">
+										<option value="${obj.hotel.id }" selected="selected">${obj.hotel.name }</option>
+									</c:if>
 								</select>
 							</div>
 						</div>
@@ -79,6 +84,7 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var cityId = '${obj.travelplan.cityId }';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
