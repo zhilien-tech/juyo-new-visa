@@ -40,6 +40,7 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
+import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantVisaJpEntity;
@@ -112,7 +113,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			for (Record apply : query) {
 				Integer dataType = (Integer) apply.get("dataType");
 				for (VisaDataTypeEnum dataTypeEnum : VisaDataTypeEnum.values()) {
-					if (dataType == dataTypeEnum.intKey()) {
+					if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
 						apply.put("dataType", dataTypeEnum.value());
 					}
 				}
@@ -179,7 +180,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		for (Record record : applyinfo) {
 			Integer type = (Integer) record.get("type");
 			for (VisaDataTypeEnum visadatatype : VisaDataTypeEnum.values()) {
-				if (type.equals(visadatatype.intKey())) {
+				if (!Util.isEmpty(type) && type.equals(visadatatype.intKey())) {
 					record.put("type", visadatatype.value());
 				}
 			}
@@ -714,7 +715,29 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		TApplicantOrderJpEntity applyjp = dbDao.fetch(TApplicantOrderJpEntity.class, applyId.longValue());
 		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
 				Cnd.where("applicantId", "=", applyjp.getApplicantId()));
-		result.put("passport", JsonUtil.toJson(passport));
+		Map<String, String> passportMap = MapUtil.obj2Map(passport);
+		passportMap.put("sexstr", passport.getSex() + " / " + passport.getSexEn());
+		//出生地点
+		String birthaddressstr = "";
+		if (!Util.isEmpty(passport.getBirthAddress())) {
+			birthaddressstr += passport.getBirthAddress();
+		}
+		birthaddressstr += " / ";
+		if (!Util.isEmpty(passport.getBirthAddressEn())) {
+			birthaddressstr += passport.getBirthAddressEn();
+		}
+		passportMap.put("birthaddressstr", birthaddressstr);
+		//签发地点
+		String issuedplacestr = "";
+		if (!Util.isEmpty(passport.getIssuedPlace())) {
+			issuedplacestr += passport.getIssuedPlace();
+		}
+		issuedplacestr += " / ";
+		if (!Util.isEmpty(passport.getIssuedPlaceEn())) {
+			issuedplacestr += passport.getIssuedPlaceEn();
+		}
+		passportMap.put("issuedplacestr", issuedplacestr);
+		result.put("passport", passportMap);
 		return result;
 
 	}

@@ -6,6 +6,8 @@
 
 package com.juyo.visa.admin.visajp.module;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -16,6 +18,7 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.google.common.collect.Maps;
 import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
@@ -197,11 +200,22 @@ public class VisaJapanModule {
 	}
 
 	/**
-	 * 护照信息
+	 * 跳转到护照信息页面
 	 */
 	@At
 	@Ok("jsp")
 	public Object passportInfo(@Param("applyId") Integer applyId) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("applyId", applyId);
+		return result;
+	}
+
+	/**
+	 * 获取护照页面信息
+	 */
+	@At
+	@POST
+	public Object getPassportData(@Param("applyId") Integer applyId) {
 		return visaJapanService.passportInfo(applyId);
 	}
 }

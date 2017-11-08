@@ -21,7 +21,7 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" id="passportvue">
 				<div class="tab-content row">
 					<div class="col-sm-5 padding-right-0">
 						<div class="info-QRcode"><!-- 二维码 -->
@@ -54,14 +54,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.sex"/>
+									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.sexstr"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生地点/拼音：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.birthaddressstr"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -70,14 +70,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生日期：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.birthday" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发地点/拼音：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.issuedplacestr"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -86,7 +86,7 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发日期：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.issueddate"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -102,7 +102,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>有效期至：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.validenddate"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -149,15 +149,25 @@
 		var base = "${base}";
 		var vueobj;
 		new Vue({
-			el: '#wrapper',
+			el: '#passportvue',
 			data: {
-				passport:'${obj.passport}'
+				passport:""
 			},
 			created:function(){
 				vueobj = this;
+				var url = BASE_PATH + '/admin/visaJapan/getPassportData.html';
+		        $.ajax({ 
+		        	url: url,
+		        	dataType:"json",
+		        	data:{applyId:'${obj.applyId}'},
+		        	type:'post',
+		        	success: function(data){
+		        		vueobj.passport = data.passport;
+						console.log(JSON.stringify(data.passport));
+		        	}
+		        });
 			}
 		});
-		console.log(JSON.stringify(vueobj.passport));
 		$(function() {
 			
 		});
