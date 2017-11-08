@@ -152,6 +152,7 @@ function selectListData(){
 function emptySearch(){
 	$("#comType").val("");
 	$("#searchStr").val("");
+	selectListData();
 }
 
 /* layer添加 */
