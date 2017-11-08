@@ -53,7 +53,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>人数：</label>
-										<input id="number" name="number" type="text" class="form-control input-sm" placeholder=" " v-model="orderinfo.number"/>
+										<input id="number" name="number" type="text" class="form-control input-sm mustNumber" placeholder=" " v-model="orderinfo.number"/>
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
@@ -115,7 +115,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>金额：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="orderinfo.money" />
+										<input id="" name="" type="text" class="form-control input-sm mustNumberPoint" placeholder=" " v-model="orderinfo.money" />
 									</div>
 								</div>
 							</div><!-- end 行程/付款方式/金额 -->
@@ -199,7 +199,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>停留天数：</label>
-										<input id="" name="" type="text" class="form-control input-sm" v-model="orderinfo.stayday"/>
+										<input id="" name="" type="text" class="form-control input-sm mustNumber" v-model="orderinfo.stayday"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -265,9 +265,9 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>往返/多程：</label>
-										<select class="form-control input-sm">
-											<option>往返</option>
-											<option>多程</option>
+										<select class="form-control input-sm" v-model="travelinfo.triptype">
+											<option value="1">往返</option>
+											<option value="2">多程</option>
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
@@ -419,6 +419,7 @@
 		<script src="${base}/references/common/js/vue/vue.min.js"></script>
 		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 		<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
+		<script type="text/javascript" src="${base }/admin/common/commonjs.js"></script>
 		<script src="${base}/admin/visaJapan/visaDetail.js"></script><!-- 本页面js文件 -->
 		<script type="text/javascript">
 			var threecounty = '${obj.jporderinfo.visaCounty}';

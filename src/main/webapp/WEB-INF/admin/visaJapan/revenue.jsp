@@ -37,7 +37,7 @@
 								<th><span>真实资料</span></th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody id="applyinfo">
 							<c:forEach items="${obj.applicant }" var="apply">
 								<tr>
 									<td>${apply.applicant }</td>
@@ -106,7 +106,7 @@
 			$(".certificates span").click(function(){
 				var spanText = $(this).text();
 				var HZlength = ($(".certificates").has(".passportInp")).length > 0;
-				if(spanText == "护照" && HZlength != true){
+				if(spanText.indexOf("护照")!== -1 && HZlength != true){
 					$(this).removeClass("titleStyle");
 					$(this).after('<input type="text" class="passportInp" value='+ spanText +' />');
 				}else if(HZlength == true){
@@ -120,7 +120,26 @@
 					$(this).addClass("titleStyle");
 				}
 			});
-			
+			//保存护照信息
+			$(document).on('blur','.passportInp',function(){
+				var thisval = $(this).val();
+				var applicatid = $(this).parent().find('#applicatid').val();
+				$.ajax({ 
+	            	url: '${base}/admin/visaJapan/editPassportCount.html',
+	            	data:{applicatid:applicatid,inputVal:thisval},
+	            	dataType:"json",
+	            	type:'post',
+	            	success: function(data){
+	              	}
+	            });
+				$(this).parent().find("span").each(function(index,value){
+					if($(this).text().indexOf("护照") !== -1){
+						$(this).text(thisval);
+						$(".passportInp").remove();
+						$(this).removeClass("titleStyle");
+					}
+				});
+			});
 		});
 
 		//vue表格数据对象
@@ -145,10 +164,25 @@
 		});
 		//保存
 		function save(){
+			var applicatinfo = [];
+			$('#applyinfo').find('tr').each(function(index,value){
+				var applicatobj = {};
+				var applicatid = $(this).find('#applicatid').val();
+				applicatobj.applicatid = applicatid;
+				var datatext = '';
+				$(this).find('.titleStyle').each(function(index){
+					datatext += $(this).text() + ',';
+				});
+				datatext = datatext.substring(0, datatext.length-1);
+				applicatobj.datatext = datatext;
+				applicatinfo.push(applicatobj);
+			});
 			layer.load(1);
+			var orderinfo = _self.orderinfo;
+			orderinfo.applicatinfo = JSON.stringify(applicatinfo);
 			$.ajax({
             	url: '${base}/admin/visaJapan/saveRealInfoData.html',
-            	data:_self.orderinfo,
+            	data:orderinfo,
             	dataType:"json",
             	type:'post',
             	success: function(data){
