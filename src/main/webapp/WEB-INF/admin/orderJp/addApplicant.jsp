@@ -40,7 +40,7 @@
 							<div class="col-sm-11 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发机关：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="issueOrganization" name="issueOrganization" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -53,6 +53,7 @@
 								<div class="form-group">
 									<label><span>*</span>姓/拼音：</label>
 									<input id="firstName" name="firstName" type="text" class="form-control input-sm" placeholder=" " />
+									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -196,10 +197,9 @@
 				url : '${base}/admin/orderJp/saveAddApplicant',
 				success : function(data) {
 					console.log(JSON.stringify(data));
-					
-					//alert( $("#principalApplicantTable td").attr());
-					//parent.location.reload();
-					//parent.datatable.ajax.reload();
+					layer.closeAll('loading');
+					parent.successCallBack(3);
+					closeWindow();
 				},
 				error : function() {
 					alert("error");

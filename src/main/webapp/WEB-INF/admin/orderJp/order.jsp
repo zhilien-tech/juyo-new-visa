@@ -344,7 +344,7 @@
 				<div class="info" id="mySwitch">
 					<p class="info-head">
 						主申请人 <input type="button" name="" value="添加"
-							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant()">
+							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant(${obj.orderId })">
 					</p>
 					<div class="info-table">
 						<table id="principalApplicantTable" class="table table-hover"
@@ -371,7 +371,7 @@
 										v-on:click="passport(applicant.id)">护照</a>&nbsp;&nbsp;<a
 										v-on:click="visa(applicant.id)">签证</a> <br>
 									<a v-on:click="">回邮</a>&nbsp;&nbsp;<a
-										v-on:click="passport(applicant.id)">删除</a></br></td>
+										v-on:click="deleteApplicant(applicant.id)">删除</a></br></td>
 								</tr>
 							</tbody>
 						</table>
@@ -538,6 +538,7 @@
 		}
 		var url = "${base}/admin/orderJp/getOrder.html";
 		var orderobj;
+		var orderid = ${obj.orderId};
 		new Vue({
 			el : '#wrapper',
 			data : {
@@ -613,7 +614,8 @@
 					//console.log(message);
 					//alert(JSON.stringify(event.target)); 
 				},
-			addApplicant : function(){
+			addApplicant : function(id){
+				alert(id);
 				layer.open({
 					type: 2,
 					title: false,
@@ -623,11 +625,10 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '551px'],
-					content:'/admin/orderJp/addApplicant.html'
+					content:'/admin/orderJp/addApplicant.html?id='+id
 				});
 			},
 			updateApplicant : function(id){
-				alert(id);
 				layer.open({
 					type: 2,
 					title: false,
@@ -639,13 +640,43 @@
 					area: ['900px', '551px'],
 					content:'/admin/orderJp/updateApplicant.html?id='+id
 				});
+			},
+			passport : function(id){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/passportInfo.html?id='+id
+				});
+			},
+			deleteApplicant : function(id){
+				$.ajax({ 
+			    	url: '${base}/admin/orderJp/deleteApplicant',
+			    	dataType:"json",
+			    	data:{applicantId:id},
+			    	type:'post',
+			    	success: function(data){
+			    		successCallBack(2);
+			      	}
+			    }); 
 			}
 			}
 		});
-		var orderid = ${obj.orderId};
 		function successCallBack(status){
 			if(status == 1){
 				layer.msg('修改成功');
+			}
+			if(status == 2){
+				layer.msg('删除成功');
+			}
+			if(status == 3){
+				layer.msg('添加成功');
+			}
 				$.ajax({ 
 			    	url: '${base}/admin/orderJp/getEditApplicant',
 			    	dataType:"json",
@@ -655,7 +686,7 @@
 			    		orderobj.applicantInfo = data;
 			      	}
 			    }); 
-			}
+			
 		}
 		
 		 

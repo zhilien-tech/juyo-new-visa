@@ -126,7 +126,7 @@
 	        },
 	        methods:{
 	        	order:function(id){
-	        			window.location.href = '${base}/admin/orderJp/order.html'+(id > 0?('?id='+id):'');
+	        			window.location.href = '${base}/admin/orderJp/order.html'+(id > 0?('?id='+id):'');//跳转到更新页面
 	        			//window.location.href = '${base}/admin/orderJp/order.html?id='+id;
 	        	}
 	        } 

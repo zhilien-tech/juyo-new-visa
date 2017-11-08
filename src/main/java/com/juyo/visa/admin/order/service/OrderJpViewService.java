@@ -36,12 +36,15 @@ import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.NoZHIKECustomerTypeEnum;
 import com.juyo.visa.entities.TApplicantEntity;
+import com.juyo.visa.entities.TApplicantOrderJpEntity;
+import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCustomerEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;
+import com.juyo.visa.forms.TApplicantPassportForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.MapUtil;
@@ -181,6 +184,33 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setValidStartDate(applicantForm.getValidStartDate());
 		}
 		Map<String, Object> result = MapUtil.map();
+		if (!Util.isEmpty(applicantForm.getOrderid())) {
+			dbDao.insert(applicant);
+			Integer applicantId = applicant.getId();
+			TApplicantOrderJpEntity applicantOrderJp = new TApplicantOrderJpEntity();
+			applicantOrderJp.setOrderId(applicantForm.getOrderid());
+			applicantOrderJp.setApplicantId(applicantId);
+			dbDao.insert(applicantOrderJp);
+			TApplicantPassportEntity passport = new TApplicantPassportEntity();
+			if (!Util.isEmpty(applicantForm.getSex())) {
+				if (applicantForm.getSex() == 1) {
+					passport.setSex("男");
+				} else {
+					passport.setSex("女");
+				}
+			}
+			if (!Util.isEmpty(applicantForm.getFirstName())) {
+				passport.setFirstName(applicantForm.getFirstName());
+			}
+			if (!Util.isEmpty(applicantForm.getLastName())) {
+				passport.setLastName(applicantForm.getLastName());
+			}
+			passport.setApplicantId(applicantId);
+			dbDao.insert(passport);
+
+			//根据orderid拿到订单
+			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(applicantForm.getOrderid()).intValue());
+		}
 		//applicant.setCreateTime(new Date());
 		//applicant.setUserId(loginUser.getId());
 		//dbDao.insert(applicant);
@@ -480,5 +510,110 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicantSql.setParam("id", orderid);
 		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
 		return applicantInfo;
+	}
+
+	public Object getEditPassport(Integer id) {
+		Map<String, Object> result = MapUtil.map();
+		String passportSqlstr = sqlManager.get("orderJp_list_passportInfo_byApplicantId");
+		Sql passportSql = Sqls.create(passportSqlstr);
+		passportSql.setParam("id", id);
+		Record passport = dbDao.fetch(passportSql);
+		result.put("passport", passport);
+		result.put("applicantId", id);
+		return result;
+	}
+
+	public Object saveEditPassport(TApplicantPassportForm passportForm, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TApplicantPassportEntity passport = new TApplicantPassportEntity();
+		passport.setOpId(loginUser.getId());
+
+		if (!Util.isEmpty(passportForm.getApplicantId())) {
+			passport.setApplicantId(passportForm.getApplicantId());
+		}
+		if (!Util.isEmpty(passportForm.getId())) {
+			passport.setId(passportForm.getId());
+		}
+		if (!Util.isEmpty(passportForm.getBirthAddress())) {
+			passport.setBirthAddress(passportForm.getBirthAddress());
+		}
+		if (!Util.isEmpty(passportForm.getBirthAddressEn())) {
+			passport.setBirthAddressEn(passportForm.getBirthAddressEn());
+		}
+		if (!Util.isEmpty(passportForm.getBirthday())) {
+			passport.setBirthday(passportForm.getBirthday());
+		}
+		if (!Util.isEmpty(passportForm.getFirstName())) {
+			passport.setFirstName(passportForm.getFirstName());
+		}
+		if (!Util.isEmpty(passportForm.getFirstNameEn())) {
+			passport.setFirstNameEn(passportForm.getFirstNameEn());
+		}
+		if (!Util.isEmpty(passportForm.getIssuedDate())) {
+			passport.setIssuedDate(passportForm.getIssuedDate());
+		}
+		if (!Util.isEmpty(passportForm.getIssuedOrganization())) {
+			passport.setIssuedOrganization(passportForm.getIssuedOrganization());
+		}
+		if (!Util.isEmpty(passportForm.getIssuedOrganizationEn())) {
+			passport.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
+		}
+		if (!Util.isEmpty(passportForm.getIssuedPlace())) {
+			passport.setIssuedPlace(passportForm.getIssuedPlace());
+		}
+		if (!Util.isEmpty(passportForm.getIssuedPlaceEn())) {
+			passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
+		}
+		if (!Util.isEmpty(passportForm.getLastName())) {
+			passport.setLastName(passportForm.getLastName());
+		}
+		if (!Util.isEmpty(passportForm.getLastNameEn())) {
+			passport.setLastNameEn(passportForm.getLastNameEn());
+		}
+		if (!Util.isEmpty(passportForm.getPassport())) {
+			passport.setPassport(passportForm.getPassport());
+		}
+		if (!Util.isEmpty(passportForm.getSex())) {
+			passport.setSex(passportForm.getSex());
+		}
+		if (!Util.isEmpty(passportForm.getSexEn())) {
+			passport.setSexEn(passportForm.getSexEn());
+		}
+		if (!Util.isEmpty(passportForm.getType())) {
+			passport.setType(passportForm.getType());
+		}
+		if (!Util.isEmpty(passportForm.getValidEndDate())) {
+			passport.setValidEndDate(passportForm.getValidEndDate());
+		}
+		if (!Util.isEmpty(passportForm.getValidStartDate())) {
+			passport.setValidStartDate(passportForm.getValidStartDate());
+		}
+		if (!Util.isEmpty(passportForm.getValidType())) {
+			passport.setValidType(passportForm.getValidType());
+		}
+		passport.setUpdateTime(new Date());
+		dbDao.update(passport);
+		return null;
+	}
+
+	public Object deleteApplicant(Integer id) {
+		List<TApplicantPassportEntity> passports = dbDao.query(TApplicantPassportEntity.class,
+				Cnd.where("applicantId", "=", id), null);
+		if (!Util.isEmpty(passports)) {
+			for (TApplicantPassportEntity tApplicantPassportEntity : passports) {
+				dbDao.delete(TApplicantPassportEntity.class, tApplicantPassportEntity.getId());
+			}
+		}
+		List<TApplicantOrderJpEntity> applicantOrderJp = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", id), null);
+		if (!Util.isEmpty(applicantOrderJp)) {
+			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applicantOrderJp) {
+				dbDao.delete(TApplicantOrderJpEntity.class, tApplicantOrderJpEntity.getId());
+			}
+		}
+		//dbDao.delete(TApplicantPassportEntity.class, id);
+		dbDao.delete(TApplicantEntity.class, id);
+		return null;
 	}
 }
