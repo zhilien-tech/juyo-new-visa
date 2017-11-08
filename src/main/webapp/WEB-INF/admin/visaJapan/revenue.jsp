@@ -50,7 +50,7 @@
 										</c:forEach>
 										<input id="" name="" type="text" class="addInp none">
 										<span class="addText">+</span>
-										<input type="hidden" id="applicatid" name="applicatid" value="${apply.applicatid }">
+										<input type="hidden" id="applicatid" name="applicatid" value="${apply.applicatid}">
 									</td>
 								</tr>
 							</c:forEach>
@@ -102,14 +102,18 @@
 				}
 			});
 			
+			//点击真是资料 护照标签
 			$(".certificates span").click(function(){
 				var spanText = $(this).text();
 				var HZlength = ($(".certificates").has(".passportInp")).length > 0;
 				if(spanText == "护照" && HZlength != true){
+					$(this).removeClass("titleStyle");
 					$(this).after('<input type="text" class="passportInp" value='+ spanText +' />');
+				}else if(HZlength == true){
+					$(".passportInp").remove();
+					$(this).addClass("titleStyle");
 				}
 			});
-			
 			
 		});
 
