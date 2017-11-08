@@ -6,7 +6,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>下单</title>
+		<title>编辑</title>
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
@@ -22,7 +22,6 @@
 			.remove-btn{top: -35px;right: -1.5%;}
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
-			.row.body-from-input {padding-left: 8%;}
 		</style>
 	</head>
 
@@ -43,7 +42,7 @@
 					<div class="info-body-from">
 						<div class="row body-from-input">
 							<!-- 公司全称 -->
-							<div class="col-sm-3 col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>客户来源：</label> 
 									<select id="customerType" name="source" class="form-control input-sm"
@@ -74,7 +73,7 @@
 						</div>
 						<!-- end 公司全称 -->
 						<div class="row body-from-input"><!-- 客户来源/联系人/手机号/邮箱 -->
-							<div class="col-sm-3 col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>联系人：</label> <input id="linkman"
 										name="linkman" type="text" class="form-control input-sm"
@@ -109,7 +108,7 @@
 					<div class="info-body-from">
 						<div class="row body-from-input">
 							<!-- 人数/领区/加急 -->
-							<div class="col-sm-3  col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>人数：</label> <input id="number"
 										name="number" type="text" class="form-control input-sm"
@@ -155,7 +154,7 @@
 
 						<div class="row body-from-input">
 							<!-- 行程/付款方式/金额 -->
-							<div class="col-sm-3  col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>行程：</label> <select id="travel"
 										name="travel" class="form-control input-sm"
@@ -188,7 +187,7 @@
 						<!-- end 行程/付款方式/金额 -->
 						<div class="row body-from-input">
 							<!-- 签证类型 -->
-							<div class="col-sm-3  col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>签证类型：</label> <select id="visaType"
 										name="visaType" class="form-control input-sm"
@@ -215,7 +214,7 @@
 						<!-- end 签证类型 -->
 						<div class="row body-from-input">
 							<!-- 过去三年是否访问过 -->
-							<div class="col-sm-3 none  col-sm-offset-1" id="isVisited" >
+							<div class="col-sm-3 none" id="isVisited" >
 								<div class="form-group">
 									<label><span>*</span>过去三年是否访问过：</label> <select id="isVisit"
 										name="isVisit" class="form-control input-sm"
@@ -238,7 +237,7 @@
 						<!-- end 过去三年是否访问过 -->
 						<div class="row body-from-input">
 							<!-- 出行时间/停留天数/返回时间 -->
-							<div class="col-sm-3  col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>出行时间：</label> <input id="goTripDate"
 										name="goTripDate" type="text" class="form-control input-sm"
@@ -265,7 +264,7 @@
 						<!-- end 出行时间/停留天数/返回时间 -->
 						<div class="row body-from-input">
 							<!-- 送签时间/出签时间 -->
-							<div class="col-sm-3  col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>送签时间：</label> <input id="sendVisaDate"
 										name="sendVisaDate" type="text" class="form-control input-sm"
@@ -301,7 +300,7 @@
 						主申请人 <input type="button" name="" value="添加"
 							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant()">
 					</p>
-					<div class="info-table">
+					<div class="info-table" style="padding-bottom: 1px;">
 						<table id="principalApplicantTable" class="table table-hover"
 							style="width: 100%;">
 							<thead>
@@ -347,7 +346,7 @@
 					name="backmailInfo">
 					<p class="info-head">快递信息</p>
 					<div class="info-body-from">
-						<div class="row body-from-input" style="padding-left:0;">
+						<div class="row body-from-input">
 							<!-- 资料来源/回邮方式/回邮地址 -->
 							<div class="col-sm-3">
 								<div class="form-group">
