@@ -7,6 +7,7 @@ function uploadFile(){
 			'action' : 'uploadimage'
 		},
 		'buttonText' : '上传营业执照',//按钮显示的文字
+		'buttonClass': "", //设置上传按钮的class
 		'fileSizeLimit' : '3000MB',
 		'fileTypeDesc' : '文件',//在浏览窗口底部的文件类型下拉菜单中显示的文本
 		'fileTypeExts' : '*.png; *.jpg; *.bmp; *.gif; *.jpeg;',//上传文件的类型
@@ -14,7 +15,7 @@ function uploadFile(){
 		'multi' : false,//multi设置为true将允许多文件上传
 		'successTimeout' : 1800,
 		'queueSizeLimit' : 100,
-		'uploader' : BASE_PATH + '/admin/company/uploadFile.html;jsessionid=${pageContext.session.id}',
+		'uploader' : BASE_PATH + '/admin/company/uploadFile.html;',
 		'onUploadStart' : function(file) {
 			$("#addBtn").attr('disabled',true);
 			$("#updateBtn").attr('disabled',true);
