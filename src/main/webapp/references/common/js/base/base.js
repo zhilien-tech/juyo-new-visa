@@ -16,8 +16,9 @@
 	    if($(this).hasClass("active")){//当选中一级菜单时
 			$(this).siblings(".menu1").next(".menu-ul").hide();
 			$(this).next('.menu-ul').toggle();
+			$(this).find("i").css("background-color","url(../dist/newvisacss/img/more_unfold.png);");
 		}else{
-			//alert("不含有.active");
+			$(this).find("i").css("background-color","url(../dist/newvisacss/img/more.png);");
 		}
 	});
 	cookieMenu();

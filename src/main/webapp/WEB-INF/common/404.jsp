@@ -2,6 +2,9 @@
 <html>
 <body>
 <h1>404</h1>
-<h2>9527走丢了，大家快来找呀！！！</h2>
+<h2>小辉辉走丢了，大家快来找呀！！！</h2>
+	<center>
+		<img src="/references/common/images/404img.png">
+	</center>
 </body>
 </html>

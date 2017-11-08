@@ -109,7 +109,7 @@ public class ScenicModule {
 	 */
 	@At
 	@POST
-	public Object getScenicSelect(@Param("scenicname") String scenicname) {
-		return scenicViewService.getScenicSelect(scenicname);
+	public Object getScenicSelect(@Param("scenicname") String scenicname, @Param("cityId") Integer cityId) {
+		return scenicViewService.getScenicSelect(scenicname, cityId);
 	}
 }

@@ -113,6 +113,12 @@
 					$(".passportInp").remove();
 					$(this).addClass("titleStyle");
 				}
+				
+				if($(this).hasClass("titleStyle")){
+					$(this).removeClass("titleStyle");
+				}else{
+					$(this).addClass("titleStyle");
+				}
 			});
 			
 		});

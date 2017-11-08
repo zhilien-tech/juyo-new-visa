@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/company.css">
-	<link rel="stylesheet" href="${base}/references/public/plugins/uploadify/uploadify.css">
+	<%-- <link rel="stylesheet" href="${base}/references/public/plugins/uploadify/uploadify.css"> --%>
 </head>
 <body>
 	<div class="modal-content">
@@ -123,7 +123,7 @@
 							<div class="form-group">
 								<div class="upload-btn">
 									<input id="license" name="license" type="hidden"/>
-									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="button" value="上传营业执照" />
+									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file" value="上传营业执照" />
 								</div>
 							</div>
 						</div>
@@ -150,61 +150,16 @@
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<!-- uploadify -->
-	<script src="${base}/references/public/plugins/uploadify/jquery.uploadify.min.js"></script>
+	<%-- <script src="${base}/references/public/plugins/uploadify/jquery.uploadify.min.js"></script> --%>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- 经营范围校验 -->
 	<script src="${base}/admin/company/validateScope.js"></script>
 	<!-- 上传图片 -->
-	<%-- <script src="${base}/admin/company/uploadFile.js"></script> --%>
+	<script src="${base}/admin/company/uploadFile.js"></script>
 	<script type="text/javascript">
 		$(function() {
 			//文件上传
-			$.fileupload = $('#uploadFile').uploadify({
-				'auto' : true,//选择文件后自动上传
-				'formData' : {
-					'fcharset' : 'uft-8',
-					'action' : 'uploadimage'
-				},
-				'buttonText' : '上传营业执照',//按钮显示的文字
-				'fileSizeLimit' : '3000MB',
-				'fileTypeDesc' : '文件',//在浏览窗口底部的文件类型下拉菜单中显示的文本
-				'fileTypeExts' : '*.png; *.jpg; *.bmp; *.gif; *.jpeg;',//上传文件的类型
-				'swf' : BASE_PATH + '/references/public/plugins/uploadify/uploadify.swf',//指定swf文件
-				'multi' : false,//multi设置为true将允许多文件上传
-				'successTimeout' : 1800,
-				'queueSizeLimit' : 100,
-				'uploader' : BASE_PATH + '/admin/company/uploadFile.html;jsessionid=${pageContext.session.id}',
-				'onUploadStart' : function(file) {
-					$("#addBtn").attr('disabled',true);
-				},
-				'onUploadSuccess' : function(file, data, response) {
-					var jsonobj = eval('(' + data + ')');
-					var url  = jsonobj;//地址
-					var fileName = file.name;//文件名称
-					$('#license').val(url);
-					$('#sqImg').attr('src',url);
-					$("#addBtn").attr('disabled',false);
-				},
-				//加上此句会重写onSelectError方法【需要重写的事件】
-				'overrideEvents': ['onSelectError', 'onDialogClose'],
-				//返回一个错误，选择文件的时候触发
-				'onSelectError':function(file, errorCode, errorMsg){
-					switch(errorCode) {
-					case -110:
-						alert("文件 ["+file.name+"] 大小超出系统限制");
-						break;
-					case -120:
-						alert("文件 ["+file.name+"] 大小异常！");
-						break;
-					case -130:
-						alert("文件 ["+file.name+"] 类型不正确！");
-						break;
-					}
-				},
-				onError: function(event, queueID, fileObj) {
-					$("#submit").attr('disabled',false);
-				}
-			});
+			/* uploadFile(); */
 			
 			//校验
 			$('#companyAddForm').bootstrapValidator({
@@ -266,11 +221,11 @@
 							}
 						}
 					},
-					/* mobile : {
+					mobile : {
 						validators : {
-							notEmpty : {
+							/* notEmpty : {
 								message : '电话不能为空'
-							},
+							}, */
 							regexp: {
 		                	 	regexp: /^[1][34578][0-9]{9}$/,
 		                        message: '电话号格式错误'
@@ -279,9 +234,9 @@
 					},
 					email : {
 						validators : {
-							notEmpty : {
+							/* notEmpty : {
 								message : '邮箱不能为空'
-							},
+							}, */
 							regexp: {
 		                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
 		                        message: '邮箱格式错误'
@@ -290,11 +245,11 @@
 					},
 					address : {
 						validators : {
-							notEmpty : {
+							/* notEmpty : {
 								message : '地址不能为空'
-							}
+							} */
 						}
-					}, */
+					}, 
 					comType : {
 						validators : {
 							notEmpty : {

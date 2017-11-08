@@ -22,7 +22,6 @@
 			.remove-btn{top: -35px;right: -1.5%;}
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
-			.row.body-from-input {padding-left: 8%;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -42,81 +41,81 @@
 				<section class="content">
 					<form id="orderInfo">
 					<div class="info" id="customerInfo" ref="customerInfo">
-					<p class="info-head">客户信息</p>
-					<div class="info-body-from">
-						<div class="row body-from-input">
-							<!-- 公司全称 -->
-							<div class="col-sm-3 col-sm-offset-1">
-								<div class="form-group">
-									<label><span>*</span>客户来源：</label> 
-									<select id="customerType" name="source" class="form-control input-sm">
-										<option value="">--请选择--</option>
-										<c:forEach var="map" items="${obj.customerTypeEnum}">
-											<option value="${map.key}">${map.value}</option>
-										</c:forEach>
+						<p class="info-head">客户信息</p>
+						<div class="info-body-from">
+							<div class="row body-from-input">
+								<!-- 公司全称 -->
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>客户来源：</label> 
+										<select id="customerType" name="source" class="form-control input-sm">
+											<option value="">--请选择--</option>
+											<c:forEach var="map" items="${obj.customerTypeEnum}">
+												<option value="${map.key}">${map.value}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group" style="padding-right: 3%;">
+										<label><span>*</span>公司全称：</label> 
+										<input id="compName" name="name" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>公司简称：</label> 
+										<input id="comShortName" name="shortname" type="text" class="form-control input-sm" placeholder=" "  />
+									</div>
+								</div>
+							</div><!-- end 公司全称 -->
+							<div class="row body-from-input">
+								<!-- 联系人/手机号/邮箱 -->
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>联系人：</label> 
+										<select id = "linkman" name="linkman"
+											class="form-control select2 cityselect2" multiple="multiple"
+											data-placeholder="">
 									</select>
+										
+										<!-- <input id="linkman"
+											name="linkman" type="text" class="form-control input-sm"
+											placeholder=" " /> --> <i
+											class="bulb"></i>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>手机号：</label> 
+										<select id = "telephone" name="mobile"
+											class="form-control select2 cityselect2" multiple="multiple"
+											data-placeholder="">
+									</select>
+										
+										<!-- <input id="telephone"
+											name="mobile" type="text" class="form-control input-sm"
+											placeholder=" " /> --> <i
+											class="bulb"></i>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>邮箱：</label> 
+										<select id = "email" name="email"
+											class="form-control select2 cityselect2" multiple="multiple"
+											data-placeholder="">
+									</select>
+										
+										<!-- <input id="email" name="email"
+											type="text" class="form-control input-sm" placeholder=" "
+											 /> --> <i class="bulb"></i>
+									</div>
 								</div>
 							</div>
-							<div class="col-sm-3">
-								<div class="form-group" style="padding-right: 3%;">
-									<label><span>*</span>公司全称：</label> 
-									<input id="compName" name="name" type="text" class="form-control input-sm" placeholder=" " />
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>公司简称：</label> 
-									<input id="comShortName" name="shortname" type="text" class="form-control input-sm" placeholder=" "  />
-								</div>
-							</div>
-						<!-- end 公司全称 -->
-						<div class="row body-from-input">
-							<!-- 联系人/手机号/邮箱 -->
-							<div class="col-sm-3 col-sm-offset-1">
-								<div class="form-group">
-									<label><span>*</span>联系人：</label> 
-									<select id = "linkman" name="linkman"
-										class="form-control select2 cityselect2" multiple="multiple"
-										data-placeholder="">
-								</select>
-									
-									<!-- <input id="linkman"
-										name="linkman" type="text" class="form-control input-sm"
-										placeholder=" " /> --> <i
-										class="bulb"></i>
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>手机号：</label> 
-									<select id = "telephone" name="mobile"
-										class="form-control select2 cityselect2" multiple="multiple"
-										data-placeholder="">
-								</select>
-									
-									<!-- <input id="telephone"
-										name="mobile" type="text" class="form-control input-sm"
-										placeholder=" " /> --> <i
-										class="bulb"></i>
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>邮箱：</label> 
-									<select id = "email" name="email"
-										class="form-control select2 cityselect2" multiple="multiple"
-										data-placeholder="">
-								</select>
-									
-									<!-- <input id="email" name="email"
-										type="text" class="form-control input-sm" placeholder=" "
-										 /> --> <i class="bulb"></i>
-								</div>
-							</div>
+							<!-- end 联系人/手机号/邮箱 -->
 						</div>
-						<!-- end 联系人/手机号/邮箱 -->
 					</div>
-				</div>
 				<!-- end 客户信息 -->
 				<!-- 订单信息 -->
 				<div class="orderInfo info" id="orderInfo">
@@ -124,7 +123,7 @@
 					<div class="info-body-from">
 						<div class="row body-from-input">
 							<!-- 人数/领区/加急 -->
-							<div class="col-sm-3 col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>人数：</label> <input id="number"
 										name="number" type="text" class="form-control input-sm"
@@ -145,9 +144,8 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>加急：</label> <select id="urgentType"
-										name="urgenttype" class="form-control input-sm"
-										onchange="selectListData();" >
+									<label><span>*</span>加急：</label> 
+									<select id="urgentType" name="urgenttype" class="form-control input-sm" onchange="urgent();" >
 										<c:forEach var="map" items="${obj.mainSaleUrgentEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -155,7 +153,7 @@
 									<!-- <i class="bulb"></i> 小灯泡-->
 								</div>
 							</div>
-							<div class="col-sm-3 none" id="urgentDay">
+							<div class="col-sm-3 none" id="urgentDays">
 								<div class="form-group">
 									<label>&nbsp;</label> <select id="urgentDay" name="urgentday"
 										class="form-control input-sm" >
@@ -170,7 +168,7 @@
 
 						<div class="row body-from-input">
 							<!-- 行程/付款方式/金额 -->
-							<div class="col-sm-3 col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>行程：</label> <select id="travel"
 										name="travel" class="form-control input-sm"
@@ -203,7 +201,7 @@
 						<!-- end 行程/付款方式/金额 -->
 						<div class="row body-from-input">
 							<!-- 签证类型 -->
-							<div class="col-sm-3  col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>签证类型：</label> 
 									<select id="visaType" name="visatype" class="form-control input-sm" onchange="selectListData();" >
@@ -229,7 +227,7 @@
 						<!-- end 签证类型 -->
 						<div class="row body-from-input">
 							<!-- 过去三年是否访问过 -->
-							<div class="col-sm-3 col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>过去三年是否访问过：</label> 
 									<select id="isVisit" name="isvisit" class="form-control input-sm" onchange="selectListData();" >
@@ -251,7 +249,7 @@
 						<!-- end 过去三年是否访问过 -->
 						<div class="row body-from-input">
 							<!-- 出行时间/停留天数/返回时间 -->
-							<div class="col-sm-3 col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>出行时间：</label> <input id="goTripDate"
 										name="gotripdate" type="text" class="form-control input-sm"
@@ -278,7 +276,7 @@
 						<!-- end 出行时间/停留天数/返回时间 -->
 						<div class="row body-from-input">
 							<!-- 送签时间/出签时间 -->
-							<div class="col-sm-3 col-sm-offset-1">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>送签时间：</label> <input id="sendVisaDate"
 										name="sendvisadate" type="text" class="form-control input-sm"
@@ -312,8 +310,7 @@
 						<input type="button" name="" value="添加" class="btn btn-primary btn-sm pull-right "  onclick="addApplicant();"/>
 					</p>
 					<div class="info-table" style="padding-bottom: 1px;">
-						<table id="principalApplicantTable" class="table table-hover"
-							style="width: 100%;">
+						<table id="principalApplicantTable" class="table table-hover" style="width: 100%;">
 							<thead>
 								<tr>
 									<th><span>姓名<span></th>
@@ -355,16 +352,15 @@
 				</div><!-- end 添加回邮信息 -->
 
 				<!-- 快递信息 -->
-				<div class="info expressInfo none" id="expressInfo"
-					name="backmailInfo">
+				<div class="info expressInfo none" id="expressInfo" name="backmailInfo">
 					<p class="info-head">快递信息</p>
 					<div class="info-body-from">
 						<div class="row body-from-input">
 							<!-- 资料来源/回邮方式/回邮地址 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>资料来源：</label> <select id="datasour"
-										name="datasour" class="form-control input-sm">
+									<label><span>*</span>资料来源：</label> 
+									<select id="datasour" name="datasour" class="form-control input-sm">
 										<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -509,7 +505,6 @@
 			function selectListData() {
 				var isVisited = $("#isVisit").val();
 				var visaType = $("#visaType").val();
-				var mainSaleUrgentEnum = $("#urgentType").val();
 				if (isVisited == 1) {
 					$("#isVisited").removeClass("none");
 				} else {
@@ -521,13 +516,18 @@
 				} else {
 					$("#sixCounty").addClass("none");
 				}
-
-				if (mainSaleUrgentEnum != 1) {
-					$("#urgentDay").removeClass("none");
+			}
+			//加急 点击事件
+			function urgent(){
+				//
+				var urgentType = $('[name="urgenttype"]').val();
+				if (urgentType != 1) {
+					$("#urgentDays").removeClass("none");
 				} else {
-					$("#urgentDay").addClass("none");
+					$("#urgentDays").addClass("none");
 				}
 			}
+			
 			
 			function shortname(){
 				var content = $("#comShortName").val();

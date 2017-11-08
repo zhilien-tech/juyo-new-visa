@@ -74,10 +74,10 @@
 								<div>
 									<label>操作：</label>
 									<i title="编辑" class="edit" v-on:click="order(data.orderid)"> </i>
-									<i> </i>
-									<i> </i>
-									<i> </i>
-									<i> </i>
+									<i title="分享" class="share"> </i>
+									<i title="初审" class="theTrial"> </i>
+									<i title="回邮" class="return"> </i>
+									<i title="作废" class="toVoid"> </i>
 								</div>
 							</div>
 							<ul class="card-content">
