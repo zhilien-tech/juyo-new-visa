@@ -30,7 +30,7 @@
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<div class="qz-head">
 					<span class="">订单号：<p>170202-JP0001</p></span>
-					<span class="">受付番号：<p>JDY27163</p></span>
+					<!-- <span class="">受付番号：<p>JDY27163</p></span> -->
 					<span class="">状态：<p>下单</p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="saveAddOrder();"/>
@@ -66,18 +66,9 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>公司简称：</label> 
-									<!-- <select id = "comShortName" name="shortname"
-										class="form-control select2 cityselect2" multiple="multiple"
-										data-placeholder="" onkeyup="shortname();">
-								</select> -->
-									
-									<input id="comShortName"
-										name="shortname" type="text" class="form-control input-sm"
-										placeholder=" "  /> <i
-										class="bulb"></i>
+									<input id="comShortName" name="shortname" type="text" class="form-control input-sm" placeholder=" "  />
 								</div>
 							</div>
-						</div>
 						<!-- end 公司全称 -->
 						<div class="row body-from-input">
 							<!-- 联系人/手机号/邮箱 -->
@@ -248,8 +239,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-8 none" id="isVisited"
-								v-model="orderInfo.threeCounty">
+							<div class="col-sm-8 none" id="isVisited" v-model="orderInfo.threeCounty">
 								<div class="form-group viseType-btn">
 									<label style="display: block;">&nbsp;</label> 
 									<input type="button" value="岩手县" class="btn btn-sm btnState"> 
