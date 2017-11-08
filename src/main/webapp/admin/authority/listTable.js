@@ -46,7 +46,17 @@ function initDatatable() {
 		            	if(null==modulename || ""==modulename){
 		            		return "";
 		            	}else{
-		            		return modulename;
+		            		//return modulename;
+		            		if(modulename.indexOf(",")>=0){
+		            			var arr = modulename.split(',');
+		            			var module = "";
+		            			for(var i=0;i<arr.length;i++){
+				            		module += '<span class="limitTwo">'+ arr[i] +',</span>';
+				            	}
+				            	return module;
+		            		}else{
+		            			return modulename;
+		            		}
 		            	}
 		            } 	
 		            },
@@ -55,7 +65,19 @@ function initDatatable() {
 		            	if(null==jobname || ""==jobname){
 		            		return "";
 		            	}else{
-		            		return jobname;
+		            		//return jobname;
+		            		
+		            		if(jobname.indexOf(",")>=0){
+		            			var arr = jobname.split(',');
+		            			var job = "";
+		            			for(var i=0;i<arr.length;i++){
+		            				job += '<span class="limitTwo">'+ arr[i] +',</span>';
+				            	}
+				            	return job;
+		            		}else{
+		            			return jobname;
+		            		}
+		            		
 		            	}
 		            } 	
 		            },
