@@ -456,6 +456,8 @@
 				    		orderobj.travelplan = data;
 				      	}
 				    }); 
+				}else if(status == 2){
+					layer.msg('保存成功');
 				}
 			}
 		</script>

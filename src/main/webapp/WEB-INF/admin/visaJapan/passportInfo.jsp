@@ -70,7 +70,7 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生日期：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.birthday" />
+									<input id="" name="" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="passport.birthday" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -86,23 +86,24 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发日期：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.issueddate"/>
+									<input id="" name="" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="passport.issueddate"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;</label>
-									<select class="form-control input-sm selectHeight">
-										<option>5年</option>
-										<option>10年</option>
+									<select class="form-control input-sm selectHeight" v-model="passport.validtype">
+										<c:forEach items="${obj.issuevalidityenum }" var="issueval">
+											<option value="${issueval.key }">${issueval.value }</option>
+										</c:forEach>
 									</select>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>有效期至：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.validenddate"/>
+									<input id="" name="" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="passport.validenddate"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -134,7 +135,7 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
-	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
@@ -143,6 +144,7 @@
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
+	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	
 	<script type="text/javascript">
@@ -175,6 +177,21 @@
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
+		}
+		
+		function save(){
+			layer.load(1);
+			$.ajax({ 
+		    	url: BASE_PATH + '/admin/visaJapan/savePassportInfo.html',
+		    	dataType:"json",
+		    	data:vueobj.passport,
+		    	type:'post',
+		    	success: function(data){
+		    		layer.closeAll('loading');
+		    		parent.successCallBack(2);
+		    		closeWindow();
+		      	}
+		    }); 
 		}
 	</script>
 

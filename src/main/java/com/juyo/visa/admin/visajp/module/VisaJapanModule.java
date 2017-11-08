@@ -20,11 +20,14 @@ import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
+import com.juyo.visa.admin.visajp.form.PassportForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.admin.visajp.service.VisaJapanService;
+import com.juyo.visa.common.enums.IssueValidityEnum;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderTravelplanJpEntity;
+import com.uxuexi.core.common.util.EnumUtil;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -207,6 +210,7 @@ public class VisaJapanModule {
 	public Object passportInfo(@Param("applyId") Integer applyId) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("applyId", applyId);
+		result.put("issuevalidityenum", EnumUtil.enum2(IssueValidityEnum.class));
 		return result;
 	}
 
@@ -217,5 +221,14 @@ public class VisaJapanModule {
 	@POST
 	public Object getPassportData(@Param("applyId") Integer applyId) {
 		return visaJapanService.passportInfo(applyId);
+	}
+
+	/**
+	 * 保存护照信息页面
+	 */
+	@At
+	@POST
+	public Object savePassportInfo(@Param("..") PassportForm form, HttpSession session) {
+		return visaJapanService.savePassportInfo(form, session);
 	}
 }

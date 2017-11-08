@@ -29,6 +29,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
+import com.juyo.visa.admin.visajp.form.PassportForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
@@ -557,7 +558,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		for (Record apply : query) {
 			Integer dataType = (Integer) apply.get("dataType");
 			for (VisaDataTypeEnum dataTypeEnum : VisaDataTypeEnum.values()) {
-				if (dataType == dataTypeEnum.intKey()) {
+				if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
 					apply.put("dataType", dataTypeEnum.value());
 				}
 			}
@@ -716,13 +717,23 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
 				Cnd.where("applicantId", "=", applyjp.getApplicantId()));
 		Map<String, String> passportMap = MapUtil.obj2Map(passport);
-		passportMap.put("sexstr", passport.getSex() + " / " + passport.getSexEn());
+		DateFormat dateformat = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		//性别
+		String sexstr = "";
+		if (!Util.isEmpty(passport.getSex())) {
+			sexstr += passport.getSex();
+		}
+		sexstr += "/";
+		if (!Util.isEmpty(passport.getSexEn())) {
+			sexstr += passport.getSexEn();
+		}
+		passportMap.put("sexstr", sexstr);
 		//出生地点
 		String birthaddressstr = "";
 		if (!Util.isEmpty(passport.getBirthAddress())) {
 			birthaddressstr += passport.getBirthAddress();
 		}
-		birthaddressstr += " / ";
+		birthaddressstr += "/";
 		if (!Util.isEmpty(passport.getBirthAddressEn())) {
 			birthaddressstr += passport.getBirthAddressEn();
 		}
@@ -732,13 +743,68 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		if (!Util.isEmpty(passport.getIssuedPlace())) {
 			issuedplacestr += passport.getIssuedPlace();
 		}
-		issuedplacestr += " / ";
+		issuedplacestr += "/";
 		if (!Util.isEmpty(passport.getIssuedPlaceEn())) {
 			issuedplacestr += passport.getIssuedPlaceEn();
 		}
 		passportMap.put("issuedplacestr", issuedplacestr);
+		if (!Util.isEmpty(passport.getBirthday())) {
+			passportMap.put("birthday", dateformat.format(passport.getBirthday()));
+		}
+		if (!Util.isEmpty(passport.getIssuedDate())) {
+			passportMap.put("issueddate", dateformat.format(passport.getIssuedDate()));
+		}
+		if (!Util.isEmpty(passport.getValidEndDate())) {
+			passportMap.put("validenddate", dateformat.format(passport.getValidEndDate()));
+		}
 		result.put("passport", passportMap);
 		return result;
 
 	}
+
+	/**
+	 * 保存护照信息
+	 * <p>
+	 * TODO 保存护照信息
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object savePassportInfo(PassportForm form, HttpSession session) {
+
+		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class, form.getId().longValue());
+		passport.setType(form.getType());
+		passport.setPassport(form.getPassport());
+		//性别
+		String[] sexsplit = form.getSexstr().split("/");
+		if (sexsplit.length == 2) {
+			passport.setSex(sexsplit[0]);
+			passport.setSexEn(sexsplit[1]);
+		} else if (sexsplit.length == 1) {
+			passport.setSex(sexsplit[0]);
+		}
+		//出生地点
+		String[] birthaddrsplit = form.getBirthaddressstr().split("/");
+		if (birthaddrsplit.length == 2) {
+			passport.setBirthAddress(birthaddrsplit[0]);
+			passport.setBirthAddressEn(birthaddrsplit[1]);
+		} else if (birthaddrsplit.length == 1) {
+			passport.setBirthAddress(birthaddrsplit[0]);
+		}
+		passport.setBirthday(form.getBirthday());
+		//签发地点
+		String[] issuedsplit = form.getIssuedplacestr().split("/");
+		if (issuedsplit.length == 2) {
+			passport.setIssuedPlace(issuedsplit[0]);
+			passport.setIssuedPlaceEn(issuedsplit[1]);
+		} else if (issuedsplit.length == 1) {
+			passport.setIssuedPlace(issuedsplit[0]);
+		}
+		passport.setIssuedDate(form.getIssueddate());
+		passport.setValidType(form.getValidtype());
+		passport.setValidEndDate(form.getValidenddate());
+		passport.setUpdateTime(new Date());
+		return dbDao.update(passport);
+	}
+
 }
