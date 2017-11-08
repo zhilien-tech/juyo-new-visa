@@ -31,10 +31,8 @@ LEFT JOIN (
 	t_applicant_order_jp aoj ON aoj.applicantId = a.id
 	LEFT JOIN
 	t_order_jp oj ON aoj.orderId = oj.id
-	WHERE
-	aoj.orderId = oj.id 
-	AND
-	aoj.applicantId = a.id
+	GROUP BY
+	aoj.orderId
 ) aj ON aj.orderId = oj.id
 LEFT JOIN t_applicant_passport ap ON ap.applicantId = aj.id
 LEFT JOIN t_company tc ON tc.id = o.comId

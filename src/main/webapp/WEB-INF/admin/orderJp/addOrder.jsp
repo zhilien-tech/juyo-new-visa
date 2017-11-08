@@ -309,8 +309,7 @@
 
 				<div class="info none" id="mySwitch"><!-- 主申请人 -->
 					<p class="info-head">
-						主申请人 
-						<input type="button" name="" value="添加" class="btn btn-primary btn-sm pull-right">
+						<input type="button" name="" value="添加" class="btn btn-primary btn-sm pull-right "  onclick="addApplicant();"/>
 					</p>
 					<div class="info-table" style="padding-bottom: 1px;">
 						<table id="principalApplicantTable" class="table table-hover"
@@ -325,8 +324,8 @@
 									<th><span>操作<span></th>
 								</tr>
 							</thead>
-							<tbody >
-								<tr>
+							<tbody name="applicantsTable" id="applicanatsTable">
+								<%-- <tr>
 
 									<td>${applicant.firstName }</td>
 									<td>${applicant.telephone }</td>
@@ -340,7 +339,7 @@
 										<a v-on:click="">回邮</a>&nbsp;&nbsp;
 										<a v-on:click="passport(apply.applyid)">删除</a></br>
 									</td>
-								</tr>
+								</tr> --%>
 							</tbody>
 						</table>
 					</div>
@@ -475,7 +474,38 @@
 		<script src="${base}/admin/orderJp/applicant.js"></script>
 		
 		<script type="text/javascript">
+		$(function(){
 			var BASE_PATH = '${base}';
+			$(".addApplicantBtn").click(function(){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/addApplicant.html'
+				});
+				
+			});
+		});
+		var applData;
+		function addApplicant(){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/addApplicant.html'
+			});
+		}
+			
 			function selectListData() {
 				var isVisited = $("#isVisit").val();
 				var visaType = $("#visaType").val();
@@ -509,6 +539,76 @@
 				{
 				if (content.match(re).length >= 6) { //返回中文的个数
 				$.dialog.tips("帖子正文不能小于6个汉字！");
+			}}}}
+			
+			
+			
+			function successCallBack(status,data){
+				applData = data;
+				if(status == 1){
+					layer.msg('修改成功');
+				}
+				if(status == 2){
+					layer.msg('删除成功');
+				}
+				if(status == 3){
+					layer.msg('添加成功');
+				}
+				$("#applicanatsTable").each(function(){
+					var applicants = $(this);
+					var result = '';
+					for(var i = 0; i < data.length; i++){
+						result += '<tr>';
+						if((data[i].firstName != undefined) && (data[i].lastName != undefined)){
+							result += '<td>' + data[i].firstName + data[i].lastName + '</td>';
+						}else if((data[i].firstName != undefined) && (data[i].lastName == undefined)){
+							result += '<td>' + data[i].firstName + '</td>';
+						}else if((data[i].firstName == undefined) && (data[i].lastName != undefined)){
+							result += '<td>' + data[i].lastName + '</td>';
+						}
+						else{
+							result += '<td></td>';
+						}
+						
+						if(data[i].telephone != undefined){
+							result += '<td>' + data[i].telephone + '</td>';
+						}else{
+							result += '<td></td>';
+						}
+						
+						if(data[i].email != undefined){
+							result += '<td>' + data[i].email + '</td>';
+						}else{
+							result += '<td></td>';
+						}
+						
+						if(data[i].passport != undefined){
+							result += '<td>' + data[i].passport + '</td>';
+						}else{
+							result += '<td></td>';
+						}
+						
+						if(data[i].sex != undefined){
+							result += '<td>' + data[i].sex + '</td>';
+						}else{
+							result += '<td></td>';
+						}
+						
+						result += '<td>
+						<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
+						<a href="javascript:passportInfo('+data[i].id+');">护照</a>&nbsp;&nbsp;
+						<a href="">签证</a><br>
+						<a href="">回邮</a>&nbsp;&nbsp;
+						<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></br>
+						</td>';
+						
+						result += '</tr>';
+					}
+					applicants.html(result);
+					
+				});
+				$("#mySwitch").removeClass("none");//显示申请人信息列表
+				$("#applicantInfo").hide();//添加申请人 按钮 隐藏
 			}
 			
 			function saveAddOrder(){

@@ -198,7 +198,7 @@
 				success : function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					parent.successCallBack(3);
+					parent.successCallBack(3,data);
 					closeWindow();
 				},
 				error : function() {

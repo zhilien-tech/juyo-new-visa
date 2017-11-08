@@ -66,7 +66,7 @@ public class OrderJpModule {
 	}
 
 	/**
-	 * 跳转到'添加操作'的录入数据页面
+	 * 跳转到'编辑操作'的录入数据页面
 	 */
 	@At
 	@GET

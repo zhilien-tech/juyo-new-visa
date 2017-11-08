@@ -65,7 +65,9 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>公司简称：</label> <input id="comShortName"
+									<label><span>*</span>公司简称：</label>
+									<input type="hidden" id="orderid" name="orderid" value="${obj.orderId }"/>
+									 <input id="comShortName"
 										name="comShortName" type="text" class="form-control input-sm"
 										placeholder=" " v-model="customerInfo.shortname" /> <i
 										class="bulb"></i>
@@ -299,7 +301,7 @@
 				<div class="info none" id="mySwitch">
 					<p class="info-head">
 						<input type="button" name="" value="添加"
-							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant(${obj.orderId })">
+							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant(${obj.orderId })" />
 					</p>
 					<div class="info-table">
 						<table id="principalApplicantTable" class="table table-hover"
@@ -467,7 +469,6 @@
 			var visaType = $("#visaType").val();
 			var mainSaleUrgentEnum = $("#urgentType").val();
 			if(!$("#isVisited").hasClass("none")){
-				alert(4);
 				if (isVisited == 1) {
 					$("#threeCounty").removeClass("none");
 				} else {
@@ -527,7 +528,6 @@
 						var visaType = orderobj.orderInfo.visatype;
 						var mainSaleUrgentEnum = orderobj.orderInfo.urgenttype;
 						if(orderobj.applicantInfo != null || orderobj.applicantInfo != undefined){
-							alert(2);
 							$("#mySwitch").removeClass("none");//显示申请人信息列表
 							$("#applicantInfo").hide();//添加申请人 按钮 隐藏
 						}
@@ -561,7 +561,6 @@
 					var editdata = orderobj.orderInfo;
 					editdata.customerinfo = JSON.stringify(orderobj.customerInfo);
 					//var applicant = orderobj.applicantInfo;
-					console.log("orderinfo:"+JSON.stringify(editdata));
 					var backmail;
 					$.ajax({
 						type : 'POST',
