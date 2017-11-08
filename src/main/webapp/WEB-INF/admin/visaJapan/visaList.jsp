@@ -112,7 +112,7 @@
         methods:{
         	visaDetail:function(orderid){
         		//跳转到签证详情页面
-        		window.location.href = '${base}/admin/visaJapan/visaDetail.html?orderid='+orderid;
+        		window.open('${base}/admin/visaJapan/visaDetail.html?orderid='+orderid);
         		//console.log(message);
         		//alert(JSON.stringify(event.target));
         	},
