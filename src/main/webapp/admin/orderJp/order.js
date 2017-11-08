@@ -27,7 +27,7 @@ $(function(){
 		}
 	});
 	//添加申请人 按钮 click
-	$(".addApplicantBtn").click(function(){
+	/*$(".addApplicantBtn").click(function(){
 		layer.open({
 			type: 2,
 			title: false,
@@ -41,7 +41,7 @@ $(function(){
 		});
 		$("#mySwitch").removeClass("none");//显示申请人信息列表
 		$("#applicantInfo").hide();//添加申请人 按钮 隐藏
-	});
+	});*/
 	
 	//添加回邮信息 按钮  click
 	$(".addExpressInfoBtn").click(function(){

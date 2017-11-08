@@ -298,7 +298,7 @@
 				<!-- 主申请人 -->
 				<div class="info none" id="mySwitch">
 					<p class="info-head">
-						主申请人 <input type="button" name="" value="添加"
+						<input type="button" name="" value="添加"
 							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant(${obj.orderId })">
 					</p>
 					<div class="info-table">
@@ -460,6 +460,8 @@
 	<script src="${base}/admin/orderJp/order.js"></script>
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
+		
+	
 		function selectListData() {
 			var isVisit = $("#isVisit").val();
 			var visaType = $("#visaType").val();
@@ -524,6 +526,12 @@
 						var isVisited = orderobj.orderInfo.isvisit;
 						var visaType = orderobj.orderInfo.visatype;
 						var mainSaleUrgentEnum = orderobj.orderInfo.urgenttype;
+						if(orderobj.applicantInfo != null || orderobj.applicantInfo != undefined){
+							alert(2);
+							$("#mySwitch").removeClass("none");//显示申请人信息列表
+							$("#applicantInfo").hide();//添加申请人 按钮 隐藏
+						}
+						
 						if (isVisited == 1) {
 							$("#isVisited").removeClass("none");
 						} else {
