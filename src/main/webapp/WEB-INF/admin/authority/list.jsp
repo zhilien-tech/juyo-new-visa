@@ -57,17 +57,10 @@
 								</tbody>
 							</table>
 						</div>
-						<!-- /.box-body -->
 					</div>
-					<!-- /.box -->
-				</section><!-- /.content -->
-			</div><!-- /.content-wrapper -->
-	
-			<!-- Main Footer -->
-			<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
-	
+				</section>
+			</div>
 		</div>
-		<!-- ./wrapper -->
 	
 		<!-- jQuery 2.2.3 -->
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
