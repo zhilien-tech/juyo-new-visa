@@ -221,11 +221,11 @@
 							}
 						}
 					},
-					/* mobile : {
+					mobile : {
 						validators : {
-							notEmpty : {
+							/* notEmpty : {
 								message : '电话不能为空'
-							},
+							}, */
 							regexp: {
 		                	 	regexp: /^[1][34578][0-9]{9}$/,
 		                        message: '电话号格式错误'
@@ -234,9 +234,9 @@
 					},
 					email : {
 						validators : {
-							notEmpty : {
+							/* notEmpty : {
 								message : '邮箱不能为空'
-							},
+							}, */
 							regexp: {
 		                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
 		                        message: '邮箱格式错误'
@@ -245,11 +245,11 @@
 					},
 					address : {
 						validators : {
-							notEmpty : {
+							/* notEmpty : {
 								message : '地址不能为空'
-							}
+							} */
 						}
-					}, */
+					}, 
 					comType : {
 						validators : {
 							notEmpty : {
