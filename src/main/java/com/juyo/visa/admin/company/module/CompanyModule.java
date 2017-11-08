@@ -136,4 +136,16 @@ public class CompanyModule {
 		return companyViewService.uploadFile(request, response);
 	}
 
+	/**
+	 * 校验用户名唯一性
+	 *
+	 * @param jobName
+	 * @param jobId
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	@At
+	public Object checkLoginNameExist(@Param("loginName") final String loginName, @Param("adminId") final String adminId) {
+		return companyViewService.checkLoginNameExist(loginName, adminId);
+	}
+
 }

@@ -97,16 +97,6 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
-		            {"data": "createtime", "bSortable": false,render: function(data, type, row, meta) {
-		            	var createtime = row.createtime;
-		            	if(null==createtime || ""==createtime){
-		            		return "";
-		            	}else{
-		            		/*createtime = '<span data-toggle="tooltip" data-placement="right" title="'+createtime+'">'+createtime+'<span>';*/
-		            		return createtime;
-		            	}
-		            } 	
-		            },
 		            {"data": "remark", "bSortable": false,render: function(data, type, row, meta) {
 		            	var remark = row.remark;
 		            	if(null==remark || ""==remark){

@@ -148,6 +148,12 @@ function selectListData(){
 	$("#searchBtn").click();
 }
 
+//置空检索项
+function emptySearch(){
+	$("#comType").val("");
+	$("#searchStr").val("");
+}
+
 /* layer添加 */
 function add(){
       layer.open({
@@ -177,7 +183,7 @@ function edit(id){
     	  });
   }
   
-  //删除提示
+//删除提示
 function deleteById(id) {
 	layer.confirm("您确认要删除吗？", {
 		title:"删除",

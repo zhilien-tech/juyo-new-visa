@@ -73,7 +73,7 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>电话：</label> <input id="mobile"
+								<label>电话：</label> <input id="mobile"
 									name="mobile" value="${obj.company.mobile}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
@@ -81,7 +81,7 @@
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>邮箱：</label> <input id="email" name="email"
+								<label>邮箱：</label> <input id="email" name="email"
 									value="${obj.company.email}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
@@ -91,7 +91,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
-								<label><span>*</span>地址：</label> <input id="address"
+								<label>地址：</label> <input id="address"
 									name="address" value="${obj.company.address}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
@@ -189,11 +189,56 @@
 	<!-- 经营范围校验 -->
 	<script src="${base}/admin/company/validateScope.js"></script>
 	<!-- 上传图片 -->
-	<script src="${base}/admin/company/uploadFile.js"></script>
+	<%-- <script src="${base}/admin/company/uploadFile.js"></script> --%>
 	<script type="text/javascript">
 		$(function() {
-			//加载上传
-			uploadFile();
+			//文件上传
+			$.fileupload = $('#uploadFile').uploadify({
+				'auto' : true,//选择文件后自动上传
+				'formData' : {
+					'fcharset' : 'uft-8',
+					'action' : 'uploadimage'
+				},
+				'buttonText' : '上传营业执照',//按钮显示的文字
+				'fileSizeLimit' : '3000MB',
+				'fileTypeDesc' : '文件',//在浏览窗口底部的文件类型下拉菜单中显示的文本
+				'fileTypeExts' : '*.png; *.jpg; *.bmp; *.gif; *.jpeg;',//上传文件的类型
+				'swf' : BASE_PATH + '/references/public/plugins/uploadify/uploadify.swf',//指定swf文件
+				'multi' : false,//multi设置为true将允许多文件上传
+				'successTimeout' : 1800,
+				'queueSizeLimit' : 100,
+				'uploader' : BASE_PATH + '/admin/company/uploadFile.html;jsessionid=${pageContext.session.id}',
+				'onUploadStart' : function(file) {
+					$("#updateBtn").attr('disabled',true);
+				},
+				'onUploadSuccess' : function(file, data, response) {
+					var jsonobj = eval('(' + data + ')');
+					var url  = jsonobj;//地址
+					var fileName = file.name;//文件名称
+					$('#license').val(url);
+					$('#sqImg').attr('src',url);
+					$("#updateBtn").attr('disabled',false);
+				},
+				//加上此句会重写onSelectError方法【需要重写的事件】
+				'overrideEvents': ['onSelectError', 'onDialogClose'],
+				//返回一个错误，选择文件的时候触发
+				'onSelectError':function(file, errorCode, errorMsg){
+					switch(errorCode) {
+					case -110:
+						alert("文件 ["+file.name+"] 大小超出系统限制");
+						break;
+					case -120:
+						alert("文件 ["+file.name+"] 大小异常！");
+						break;
+					case -130:
+						alert("文件 ["+file.name+"] 类型不正确！");
+						break;
+					}
+				},
+				onError: function(event, queueID, fileObj) {
+					$("#submit").attr('disabled',false);
+				}
+			});
 		});
 		function initvalidate() {
 			//校验
@@ -217,12 +262,34 @@
 							notEmpty : {
 								message : '公司简称不能为空'
 							}
-						}
+						},
+						stringLength: {
+	                   	    min: 1,
+	                   	    max: 6,
+	                   	    message: '公司简称长度为6'
+	                   	}
 					},
 					adminLoginName : {
 						validators : {
 							notEmpty : {
 								message : '用户名不能为空'
+							},
+							regexp: {
+		                	 	regexp: /^[^\u4e00-\u9fa5]{0,}$/,
+		                        message: '用户名不能为汉字'
+		                    },
+		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+								url: '${base}/admin/company/checkLoginNameExist.html',//验证地址
+								message: '用户名已存在，请重新输入',//提示消息
+								delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+								type: 'POST',//请求方式
+								//自定义提交数据，默认值提交当前input value
+								data: function(validator) {
+									return {
+										loginName:$('#adminLoginName').val(),
+										adminId:$('#adminId').val()
+									};
+								}
 							}
 						}
 					},
@@ -233,7 +300,7 @@
 							}
 						}
 					},
-					mobile : {
+					/* mobile : {
 						validators : {
 							notEmpty : {
 								message : '电话不能为空'
@@ -261,7 +328,7 @@
 								message : '地址不能为空'
 							}
 						}
-					},
+					}, */
 					comType : {
 						validators : {
 							notEmpty : {
@@ -309,7 +376,7 @@
 					layer.msg('联系人不能为空');
 					return;
 				}
-				var mobile = $("#mobile").val();
+				/* var mobile = $("#mobile").val();
 				if (mobile == "") {
 					layer.msg('电话不能为空');
 					return;
@@ -323,17 +390,17 @@
 				if (address == "") {
 					layer.msg('地址不能为空');
 					return;
-				}
+				} */
 				var comType = $("#comType").val();
 				if (comType == "") {
 					layer.msg('公司类型不能为空');
 					return;
 				}
-				var license = $("#license").val();
+				/* var license = $("#license").val();
 				if (license == "") {
 					layer.msg('营业执照不能为空');
 					return;
-				}
+				} */
 				var scopes = $("#businessScopes").val();
 				if (scopes == "") {
 					//layer.msg('经营范围不能为空');
