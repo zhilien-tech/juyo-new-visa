@@ -180,8 +180,8 @@ public class VisaJapanModule {
 	 */
 	@At
 	@POST
-	public Object saveRealInfoData(@Param("..") TOrderJpEntity orderjp) {
-		return visaJapanService.saveRealInfoData(orderjp);
+	public Object saveRealInfoData(@Param("..") TOrderJpEntity orderjp, @Param("applicatinfo") String applicatinfo) {
+		return visaJapanService.saveRealInfoData(orderjp, applicatinfo);
 	}
 
 	/**
@@ -230,5 +230,14 @@ public class VisaJapanModule {
 	@POST
 	public Object savePassportInfo(@Param("..") PassportForm form, HttpSession session) {
 		return visaJapanService.savePassportInfo(form, session);
+	}
+
+	/**
+	 * 保存护照本数信息
+	 */
+	@At
+	@POST
+	public Object editPassportCount(@Param("applicatid") Integer applicatid, @Param("inputVal") String inputVal) {
+		return visaJapanService.editPassportCount(applicatid, inputVal);
 	}
 }

@@ -312,6 +312,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//travel = dbDao.fetch(TOrderTripJpEntity.class, (Integer.valueOf(travelmap.get("id"))).longValue());
 		travel.setTripPurpose(String.valueOf(travelmap.get("trippurpose")));
 		String godatestr = String.valueOf(travelmap.get("goDate"));
+		if (!Util.isEmpty(travelmap.get("triptype"))) {
+			travel.setTripType(Integer.valueOf(String.valueOf(travelmap.get("triptype"))));
+		} else {
+			travel.setTripType(null);
+		}
 		if (!Util.isEmpty(travelmap.get("goDate"))) {
 			Date godate = DateUtil.string2Date(godatestr, DateUtil.FORMAT_YYYY_MM_DD);
 			travel.setGoDate(godate);
@@ -612,11 +617,27 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * TODO 保存真实资料数据
 	 *
 	 * @param orderjp
+	 * @param applicatinfo 
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object saveRealInfoData(TOrderJpEntity orderjp) {
-
-		return dbDao.update(orderjp);
+	public Object saveRealInfoData(TOrderJpEntity orderjp, String applicatinfo) {
+		//更新备注信息
+		dbDao.update(orderjp);
+		List<Map> applicatlist = JsonUtil.fromJson(applicatinfo, List.class);
+		List<TApplicantVisaPaperworkJpEntity> paperworks = Lists.newArrayList();
+		for (Map map : applicatlist) {
+			String applicatid = map.get("applicatid").toString();
+			String datatext = String.valueOf(map.get("datatext"));
+			Cnd cnd = Cnd.NEW();
+			cnd.and("applicantId", "=", applicatid);
+			cnd.and("realInfo", "in", datatext.split(","));
+			List<TApplicantVisaPaperworkJpEntity> paperwork = dbDao.query(TApplicantVisaPaperworkJpEntity.class, cnd,
+					null);
+			paperworks.addAll(paperwork);
+		}
+		//删掉灰色的
+		dbDao.delete(paperworks);
+		return null;
 
 	}
 
@@ -805,6 +826,24 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		passport.setValidEndDate(form.getValidenddate());
 		passport.setUpdateTime(new Date());
 		return dbDao.update(passport);
+	}
+
+	/**
+	 * 保存护照信息
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param applicatid
+	 * @param inputVal
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object editPassportCount(Integer applicatid, String inputVal) {
+
+		TApplicantVisaPaperworkJpEntity paperwork = dbDao.fetch(TApplicantVisaPaperworkJpEntity.class,
+				Cnd.where("applicantId", "=", applicatid).and("realInfo", "like", "%护照%"));
+		paperwork.setRealInfo(inputVal);
+		dbDao.update(paperwork);
+		return null;
 	}
 
 }
