@@ -17,6 +17,7 @@ import com.juyo.visa.entities.THotelEntity;
 import com.juyo.visa.forms.THotelAddForm;
 import com.juyo.visa.forms.THotelForm;
 import com.juyo.visa.forms.THotelUpdateForm;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
@@ -87,13 +88,18 @@ public class HotelViewService extends BaseService<THotelEntity> {
 	 * TODO(这里描述这个方法详情– 可选)
 	 *
 	 * @param hotelname
+	 * @param cityId 
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object getHotelSelect(String hotelname) {
+	public Object getHotelSelect(String hotelname, Integer cityId) {
 		List<THotelEntity> hotels = Lists.newArrayList();
 		try {
-			hotels = dbDao.query(THotelEntity.class, Cnd.where("name", "like", "%" + Strings.trim(hotelname) + "%"),
-					null);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("name", "like", "%" + Strings.trim(hotelname) + "%");
+			if (!Util.isEmpty(cityId)) {
+				cnd.and("cityId", "=", cityId);
+			}
+			hotels = dbDao.query(THotelEntity.class, cnd, null);
 			if (hotels.size() > 5) {
 				hotels = hotels.subList(0, 5);
 			}

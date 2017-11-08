@@ -30,3 +30,6 @@
 		</div>
 	</div>
 </div>
+<center>
+	<img src="/references/common/images/500img.jpg">
+</center>
