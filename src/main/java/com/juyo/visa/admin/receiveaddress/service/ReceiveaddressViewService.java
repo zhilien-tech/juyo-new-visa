@@ -22,7 +22,12 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 public class ReceiveaddressViewService extends BaseService<TReceiveaddressEntity> {
 	private static final Log log = Logs.get();
 
-	public Object listData(TReceiveaddressForm queryForm) {
+	public Object listData(TReceiveaddressForm queryForm, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		queryForm.setComId(loginCompany.getId());
+		queryForm.setUserId(loginUser.getId());
+		queryForm.setUserType(loginUser.getUserType());
 		return listPage4Datatables(queryForm);
 	}
 

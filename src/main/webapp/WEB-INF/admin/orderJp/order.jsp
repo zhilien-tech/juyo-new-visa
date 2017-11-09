@@ -29,7 +29,7 @@
 	<div class="wrapper" id="wrapper">
 		<div class="content-wrapper" style="min-height: 848px;">
 			<div class="qz-head">
-				<span class="">订单号：<p>170202-JP0001</p></span> 
+				<span class="">订单号：<p>${obj.orderInfo.orderNum}</p></span> 
 				<!-- <span class="">受付番号：<p>JDY27163</p></span>  -->
 				<span class="">状态：<p>下单</p></span> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
@@ -64,7 +64,9 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>公司简称：</label> <input id="comShortName"
+									<label><span>*</span>公司简称：</label>
+									<input type="hidden" id="orderid" name="orderid" value="${obj.orderId }"/>
+									 <input id="comShortName"
 										name="comShortName" type="text" class="form-control input-sm"
 										placeholder=" " v-model="customerInfo.shortname" /> <i
 										class="bulb"></i>
@@ -198,8 +200,18 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-8 none" id="sixCounty" v-model="orderInfo.visacounty">
-								<div class="form-group viseType-btn">
+							<!-- <div class="col-sm-8 none" id="sixCounty" v-model="orderInfo.visacounty">
+								<div class="form-group viseType-btn"> -->
+								
+								<c:choose>
+									<c:when test="${obj.orderJpinfo.visaType == 2 || obj.orderJpinfo.visaType == 3}">
+										<div class="col-sm-8" id="visacounty">
+									</c:when>
+									<c:otherwise>
+										<div class="col-sm-8 none" id="visacounty">
+									</c:otherwise>
+								</c:choose>
+											<div class="form-group viseType-btn">
 									<label style="display: block;">&nbsp;</label> <input
 										type="button" value="冲绳县" class="btn btn-sm btnState">
 									<input type="button" value="青森县" class="btn btn-sm btnState">
@@ -212,8 +224,17 @@
 							</div>
 						</div>
 						<!-- end 签证类型 -->
-						<div class="row body-from-input">
-							<!-- 过去三年是否访问过 -->
+						<!-- <div class="row body-from-input">
+							过去三年是否访问过 -->
+							
+							<c:choose>
+								<c:when test="${obj.orderJpinfo.visaType == 2 || obj.orderJpinfo.visaType == 3 }">
+									<div class="row body-from-input" id="threefangwen"><!-- 过去三年是否访问过 -->
+								</c:when>
+								<c:otherwise>
+									<div class="row body-from-input none" id="threefangwen"><!-- 过去三年是否访问过 -->
+								</c:otherwise>
+							</c:choose>
 							<div class="col-sm-3 none" id="isVisited" >
 								<div class="form-group">
 									<label><span>*</span>过去三年是否访问过：</label> <select id="isVisit"
@@ -297,8 +318,8 @@
 				<!-- 主申请人 -->
 				<div class="info none" id="mySwitch">
 					<p class="info-head">
-						主申请人 <input type="button" name="" value="添加"
-							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant()">
+						<input type="button" name="" value="添加"
+							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant(${obj.orderId })" />
 					</p>
 					<div class="info-table" style="padding-bottom: 1px;">
 						<table id="principalApplicantTable" class="table table-hover"
@@ -325,7 +346,7 @@
 										v-on:click="passport(applicant.id)">护照</a>&nbsp;&nbsp;<a
 										v-on:click="visa(applicant.id)">签证</a> <br>
 									<a v-on:click="">回邮</a>&nbsp;&nbsp;<a
-										v-on:click="passport(applicant.id)">删除</a></br></td>
+										v-on:click="deleteApplicant(applicant.id)">删除</a></br></td>
 								</tr>
 							</tbody>
 						</table>
@@ -459,12 +480,13 @@
 	<script src="${base}/admin/orderJp/order.js"></script>
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
-		function selectListData() {
+		
+	
+		/* function selectListData() {
 			var isVisit = $("#isVisit").val();
 			var visaType = $("#visaType").val();
 			var mainSaleUrgentEnum = $("#urgentType").val();
 			if(!$("#isVisited").hasClass("none")){
-				alert(4);
 				if (isVisited == 1) {
 					$("#threeCounty").removeClass("none");
 				} else {
@@ -492,9 +514,10 @@
 			} else {
 				$("#urgentDay").addClass("none");
 			}
-		}
+		} */
 		var url = "${base}/admin/orderJp/getOrder.html";
 		var orderobj;
+		var orderid = ${obj.orderId};
 		new Vue({
 			el : '#wrapper',
 			data : {
@@ -522,7 +545,15 @@
 						var isVisited = orderobj.orderInfo.isvisit;
 						var visaType = orderobj.orderInfo.visatype;
 						var mainSaleUrgentEnum = orderobj.orderInfo.urgenttype;
-						if (isVisited == 1) {
+						if(orderobj.applicantInfo != null || orderobj.applicantInfo != undefined){
+							$("#mySwitch").removeClass("none");//显示申请人信息列表
+							$("#applicantInfo").hide();//添加申请人 按钮 隐藏
+						}else{
+							$("#mySwitch").addClass("none");
+							$("#applicantInfo").show();
+						}
+						
+						/* if (isVisited == 1) {
 							$("#isVisited").removeClass("none");
 						} else {
 							$("#isVisited").addClass("none");
@@ -532,13 +563,52 @@
 							$("#sixCounty").removeClass("none");
 						} else {
 							$("#sixCounty").addClass("none");
-						}
+						} */
+						
+						//签证类型  按钮的点击状态
+						$(".viseType-btn input").click(function(){
+							if($(this).hasClass('btnState-true')){
+								$(this).removeClass('btnState-true');
+							}else{
+								$(this).addClass('btnState-true');
+								var btnInfo=$(this).val();//获取按钮的信息
+								console.log(btnInfo);
+							}
+						});
+						$('#visaType').change(function(){
+							var thisval = $(this).val();
+							if(thisval == 2 || thisval == 3){
+								$('#visacounty').show();
+								$('#threefangwen').show();
+							}else{
+								$('#visacounty').hide();
+								$('#threefangwen').hide();
+							}
+						});
+						
+						$('#isVisit').change(function(){
+							var thisval = $(this).val();
+							if(thisval == 1){
+								$('#threexian').show();
+							}else{
+								$('#threexian').hide();
+							}
+						});
+						
+						$('#urgentType').change(function(){
+							var thisval = $(this).val();
+							if(thisval != 1){
+								$("#urgentDay").removeClass("none");
+							}else{
+								$("#urgentDay").addClass("none");
+							}
+						});
 
-						if (mainSaleUrgentEnum != 1) {
+						/* if (mainSaleUrgentEnum != 1) {
 							$("#urgentDay").removeClass("none");
 						} else {
 							$("#urgentDay").addClass("none");
-						}
+						} */
 
 					},
 					error : function() {
@@ -551,7 +621,6 @@
 					var editdata = orderobj.orderInfo;
 					editdata.customerinfo = JSON.stringify(orderobj.customerInfo);
 					//var applicant = orderobj.applicantInfo;
-					console.log("orderinfo:"+JSON.stringify(editdata));
 					var backmail;
 					$.ajax({
 						type : 'POST',
@@ -570,7 +639,7 @@
 					//console.log(message);
 					//alert(JSON.stringify(event.target)); 
 				},
-			addApplicant : function(){
+			addApplicant : function(id){
 				layer.open({
 					type: 2,
 					title: false,
@@ -580,11 +649,10 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '551px'],
-					content:'/admin/orderJp/addApplicant.html'
+					content:'/admin/orderJp/addApplicant.html?id='+id
 				});
 			},
 			updateApplicant : function(id){
-				alert(id);
 				layer.open({
 					type: 2,
 					title: false,
@@ -596,13 +664,43 @@
 					area: ['900px', '551px'],
 					content:'/admin/orderJp/updateApplicant.html?id='+id
 				});
+			},
+			passport : function(id){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/passportInfo.html?id='+id
+				});
+			},
+			deleteApplicant : function(id){
+				$.ajax({ 
+			    	url: '${base}/admin/orderJp/deleteApplicant',
+			    	dataType:"json",
+			    	data:{applicantId:id},
+			    	type:'post',
+			    	success: function(data){
+			    		successCallBack(2);
+			      	}
+			    }); 
 			}
 			}
 		});
-		var orderid = ${obj.orderId};
 		function successCallBack(status){
 			if(status == 1){
 				layer.msg('修改成功');
+			}
+			if(status == 2){
+				layer.msg('删除成功');
+			}
+			if(status == 3){
+				layer.msg('添加成功');
+			}
 				$.ajax({ 
 			    	url: '${base}/admin/orderJp/getEditApplicant',
 			    	dataType:"json",
@@ -612,7 +710,7 @@
 			    		orderobj.applicantInfo = data;
 			      	}
 			    }); 
-			}
+			
 		}
 		
 		 

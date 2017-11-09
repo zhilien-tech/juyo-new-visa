@@ -132,6 +132,16 @@
 		    }); */   
 		      
 		});
+		
+		/*清空*/
+		$("#emptyBtn").click(function(){
+			$("#searchStr").val("");
+			$("#country").val("");
+			$("#province").val("");
+			$("#city").val("");
+			$("#searchBtn").click();
+		});
+		
 		/*加载省下拉选*/  
 	     $("#country").change(function () {
 	    	 $("#searchBtn").click();

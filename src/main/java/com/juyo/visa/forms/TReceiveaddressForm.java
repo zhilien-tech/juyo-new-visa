@@ -26,6 +26,9 @@ public class TReceiveaddressForm extends DataTablesParamForm {
 	/**用户id*/
 	private Integer userId;
 
+	/**用户类型*/
+	private Integer userType;
+
 	/**公司id*/
 	private Integer comId;
 
@@ -70,6 +73,12 @@ public class TReceiveaddressForm extends DataTablesParamForm {
 			expg.and("receiver", "LIKE", "%" + searchStr + "%").or("mobile", "LIKE", "%" + searchStr + "%")
 					.or("address", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
+		}
+		if (userType == 5) {
+			cnd.and("compId", "=", comId);
+		}
+		if (userType == 1) {
+			cnd.and("userId", "=", userId);
 		}
 		cnd.orderBy("createTime", "DESC");
 		return cnd;

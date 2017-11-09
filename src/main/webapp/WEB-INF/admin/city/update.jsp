@@ -13,6 +13,7 @@
 	content="width=device-width, initial-scale=1, minimum-scale=1">
 <link rel="stylesheet"
 	href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet"
@@ -36,9 +37,17 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
-								<label><span>*</span>国家：</label> <input id="country"
+								<label><span>*</span>国家：</label>
+								<select id = "country" name="country" 
+										class="form-control select2 cityselect2" multiple="multiple"
+										data-placeholder="">
+										<c:if test="${ !empty obj.country }">
+										<option value="${obj.country }" selected="selected">${obj.country }</option>
+										</c:if>
+								</select>
+								 <%-- <input id="country"
 									name="country" value="${obj.country}" type="text"
-									class="form-control input-sm" placeholder=" " />
+									class="form-control input-sm" placeholder=" " /> --%>
 							</div>
 						</div>
 					</div>
@@ -77,13 +86,20 @@
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
+	<!-- select2 -->
+		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+		<script src="${base}/admin/city/customerNeeds.js"></script>
+	<script src="${base}/references/common/js/select2/initSelect2.js"></script>
 	<script
 		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 
 	<script type="text/javascript">
 		var base = "${base}";
-
+		$(function(){
+			initCityNeedsSelect2();
+		});
 		function initvalidate() {
 			//校验
 			$('#cityUpdateForm').bootstrapValidator({
