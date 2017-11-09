@@ -110,3 +110,13 @@ INNER JOIN
 t_applicant a ON ap.applicantId = a.id
 WHERE
 	a.id = @id
+
+/*orderJp_ordernum*/	
+SELECT
+ * 
+FROM 
+t_order
+WHERE 
+DATE(createTime) = DATE(NOW())
+$condition
+order by createtime desc

@@ -121,7 +121,6 @@ public class CityModule {
 	}
 
 	/**国家省城市三级联动*/
-
 	@At
 	@POST
 	public List<String> getProvince(@Param("country") String country) {
@@ -132,6 +131,13 @@ public class CityModule {
 	@POST
 	public List<String> getCity(@Param("province") String province) {
 		return cityViewService.queryCity(province);
+	}
+
+	//获取国家下拉
+	@At
+	@POST
+	public Object getCountry(@Param("country") String country) {
+		return cityViewService.queryCountry(country);
 	}
 
 }

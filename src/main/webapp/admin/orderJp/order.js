@@ -6,7 +6,8 @@
 
 $(function(){
 	//签证类型  按钮的点击状态
-	$(".viseType-btn input").click(function(){
+	/*$(".viseType-btn input").click(function(){
+		alert(3);
 		if($(this).hasClass('btnState-true')){
 			$(this).removeClass('btnState-true');
 		}else{
@@ -14,7 +15,7 @@ $(function(){
 			var btnInfo=$(this).val();//获取按钮的信息
 			console.log(btnInfo);
 		}
-	});
+	});*/
 	/*$('#visatype').change(function(){
 		alert(12121);
 		var thisval = $(this).val();

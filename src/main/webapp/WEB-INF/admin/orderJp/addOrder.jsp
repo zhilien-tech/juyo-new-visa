@@ -14,6 +14,7 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+	    <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
@@ -225,9 +226,9 @@
 							</div>
 						</div>
 						<!-- end 签证类型 -->
-						<div class="row body-from-input">
+						<div class="row body-from-input none" id="threefangwen">
 							<!-- 过去三年是否访问过 -->
-							<div class="col-sm-3">
+							<div class="col-sm-3 " >
 								<div class="form-group">
 									<label><span>*</span>过去三年是否访问过：</label> 
 									<select id="isVisit" name="isvisit" class="form-control input-sm" onchange="selectListData();" >
@@ -237,8 +238,8 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-8 none" id="isVisited" v-model="orderInfo.threeCounty">
-								<div class="form-group viseType-btn">
+							<div class="col-sm-8"  v-model="orderInfo.threeCounty">
+								<div class="form-group viseType-btn none" id="threeCounty">
 									<label style="display: block;">&nbsp;</label> 
 									<input type="button" value="岩手县" class="btn btn-sm btnState"> 
 									<input type="button" value="秋田县" class="btn btn-sm btnState"> 
@@ -467,10 +468,44 @@
 		<!-- select2 -->
 		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+		<script src="${base}/admin/city/customerNeeds.js"></script>
 		<script src="${base}/admin/orderJp/applicant.js"></script>
 		
 		<script type="text/javascript">
 		$(function(){
+			initCityNeedsSelect2();
+			//签证类型  按钮的点击状态
+			$(".viseType-btn input").click(function(){
+				if($(this).hasClass('btnState-true')){
+					$(this).removeClass('btnState-true');
+				}else{
+					$(this).addClass('btnState-true');
+					var btnInfo=$(this).val();//获取按钮的信息
+					console.log(btnInfo);
+				}
+			});
+			$('#visaType').change(function(){
+				var thisval = $(this).val();
+				if(thisval == 2 || thisval == 3){
+					$('#sixCounty').removeClass("none");
+					$('#threefangwen').removeClass("none");
+				}else{
+					$('#sixCounty').addClass("none");
+					$('#threefangwen').addClass("none");
+				}
+			});
+			
+			$('#isVisit').change(function(){
+				var thisval = $(this).val();
+				if(thisval == 1){
+					$('#threeCounty').removeClass("none");
+				}else{
+					$('#threeCounty').addClass("none");
+				}
+			});
+			
+			
+			
 			var BASE_PATH = '${base}';
 			$(".addApplicantBtn").click(function(){
 				layer.open({
@@ -501,22 +536,6 @@
 				content:'/admin/orderJp/addApplicant.html'
 			});
 		}
-			
-			function selectListData() {
-				var isVisited = $("#isVisit").val();
-				var visaType = $("#visaType").val();
-				if (isVisited == 1) {
-					$("#isVisited").removeClass("none");
-				} else {
-					$("#isVisited").addClass("none");
-				}
-
-				if (visaType == 2) {
-					$("#sixCounty").removeClass("none");
-				} else {
-					$("#sixCounty").addClass("none");
-				}
-			}
 			//加急 点击事件
 			function urgent(){
 				//
@@ -527,21 +546,6 @@
 					$("#urgentDays").addClass("none");
 				}
 			}
-			
-			
-			function shortname(){
-				var content = $("#comShortName").val();
-				alert(content);
-				var sum = 0;
-				re = /[\u4E00-\u9FA5]/g; //测试中文字符的正则
-				if (content) {
-				if (re.test(content)) //使用正则判断是否存在中文
-				{
-				if (content.match(re).length >= 6) { //返回中文的个数
-				$.dialog.tips("帖子正文不能小于6个汉字！");
-			}}}}
-			
-			
 			
 			function successCallBack(status,data){
 				applData = data;

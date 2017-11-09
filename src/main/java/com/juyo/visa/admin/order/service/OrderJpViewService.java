@@ -6,6 +6,7 @@
 
 package com.juyo.visa.admin.order.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -119,6 +120,22 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		List<TCustomerEntity> customers = dbDao.query(TCustomerEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()), null);
+		TOrderJpEntity orderJpinfo = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", id.longValue()));
+		TOrderEntity orderInfo = dbDao.fetch(TOrderEntity.class, id.longValue());
+		/*List<TApplicantOrderJpEntity> applicants = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderJpinfo.getId()), null);
+		if (!Util.isEmpty(applicants)) {
+			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applicants) {
+				if (!Util.isEmpty(tApplicantOrderJpEntity)) {
+					Integer applicantId = tApplicantOrderJpEntity.getApplicantId();
+					TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantId.longValue());
+					result.put("applicant", applicant);
+				}
+			}
+		}*/
+
+		result.put("orderInfo", orderInfo);
+		result.put("orderJpinfo", orderJpinfo);
 		result.put("customer", customers);
 		result.put("customer", customers);
 		result.put("collarAreaEnum", EnumUtil.enum2(CollarAreaEnum.class));
@@ -330,39 +347,37 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object saveAddOrderinfo(OrderEditDataForm orderInfo, HttpSession session) {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TOrderEntity orderEntity = new TOrderEntity();
+		//判断是否为直客
+		if (!Util.isEmpty(orderInfo.getSource())) {
+			if (orderInfo.getSource() == 4) {
+				orderEntity.setIsDirectCus(IsYesOrNoEnum.YES.intKey()); //1是直客
+			}
+		}
 
 		//客户信息
 		TCustomerEntity customer = new TCustomerEntity();
 		customer.setCompId(loginCompany.getId());
 		customer.setUserId(loginUser.getId());
-		customer.setCreateTime(new Date());
+		//customer.setCreateTime(new Date());
 		if (!Util.isEmpty(orderInfo.getEmail())) {
-			customer.setEmail(orderInfo.getEmail());
+			orderEntity.setEmail(orderInfo.getEmail());
 		}
 		if (!Util.isEmpty(orderInfo.getLinkman())) {
-			customer.setLinkman(orderInfo.getLinkman());
+			orderEntity.setLinkman(orderInfo.getLinkman());
 		}
 		if (!Util.isEmpty(orderInfo.getMobile())) {
-			customer.setMobile(orderInfo.getMobile());
+			orderEntity.setTelephone(orderInfo.getMobile());
 		}
-		if (!Util.isEmpty(orderInfo.getName())) {
-			customer.setName(orderInfo.getName());
-		}
-		if (!Util.isEmpty(orderInfo.getShortname())) {
-			customer.setShortname(orderInfo.getShortname());
-		}
-		if (!Util.isEmpty(orderInfo.getSource())) {
-			customer.setSource(orderInfo.getSource());
-		}
-		dbDao.insert(customer);
-		Integer customerId = customer.getId();
+		//dbDao.insert(customer);
+		//Integer customerId = customer.getId();
 
 		//订单信息
-		TOrderEntity orderEntity = new TOrderEntity();
+
 		orderEntity.setComId(loginCompany.getId());
 		orderEntity.setUserId(loginUser.getId());
 		orderEntity.setCreateTime(new Date());
-		orderEntity.setCustomerId(customerId);
+		//orderEntity.setCustomerId(customerId);
 		if (!Util.isEmpty(orderInfo.getCityid())) {
 			orderEntity.setCityId(orderInfo.getCityid());
 		}
@@ -414,7 +429,35 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(orderInfo.getOutvisadate())) {
 			orderEntity.setOutVisaDate(orderInfo.getOutvisadate());
 		}
-		orderEntity.setOrderNum("2");
+
+		//生成订单号
+		SimpleDateFormat smf = new SimpleDateFormat("yyMMdd");
+		String format = smf.format(new Date());
+		String sqlString = sqlManager.get("orderJp_ordernum");
+		Sql sql = Sqls.create(sqlString);
+		List<Record> query = dbDao.query(sql, null, null);
+		int sum = 1;
+		if (!Util.isEmpty(query) && query.size() > 0) {
+			String string = query.get(0).getString("orderNum");
+			int a = Integer.valueOf(string.substring(9, string.length()));
+			sum += a;
+		}
+		String sum1 = "";
+		if (sum / 10 == 0) {
+			sum1 = "000" + sum;
+		} else if (sum / 100 == 0) {
+			sum1 = "00" + sum;
+
+		} else if (sum / 1000 == 0) {
+			sum1 = "0" + sum;
+		} else {
+			sum1 = "" + sum;
+
+		}
+		String ordernum = format + "-JP" + sum1;
+
+		orderEntity.setOrderNum(ordernum);
+		//orderEntity.setOrderNum("2");
 		dbDao.insert(orderEntity);
 		Integer orderId = orderEntity.getId();
 

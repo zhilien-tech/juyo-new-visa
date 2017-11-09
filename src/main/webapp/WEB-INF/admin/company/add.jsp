@@ -182,13 +182,13 @@
 						validators : {
 							notEmpty : {
 								message : '公司简称不能为空'
-							}
-						},
-						stringLength: {
-	                   	    min: 1,
-	                   	    max: 6,
-	                   	    message: '公司简称长度为6'
-	                   	}
+							},
+							stringLength: {
+		                   	    min: 1,
+		                   	    max: 6,
+		                   	    message: '公司简称长度为6'
+		                   	}
+						}
 					},
 					adminLoginName : {
 						validators : {

@@ -29,7 +29,7 @@
 	<div class="wrapper" id="wrapper">
 		<div class="content-wrapper" style="min-height: 848px;">
 			<div class="qz-head">
-				<span class="">订单号：<p>170202-JP0001</p></span> 
+				<span class="">订单号：<p>${obj.orderInfo.orderNum}</p></span> 
 				<!-- <span class="">受付番号：<p>JDY27163</p></span>  -->
 				<span class="">状态：<p>下单</p></span> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
@@ -200,8 +200,18 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-8 none" id="sixCounty" v-model="orderInfo.visacounty">
-								<div class="form-group viseType-btn">
+							<!-- <div class="col-sm-8 none" id="sixCounty" v-model="orderInfo.visacounty">
+								<div class="form-group viseType-btn"> -->
+								
+								<c:choose>
+									<c:when test="${obj.orderJpinfo.visaType == 2 || obj.orderJpinfo.visaType == 3}">
+										<div class="col-sm-8" id="visacounty">
+									</c:when>
+									<c:otherwise>
+										<div class="col-sm-8 none" id="visacounty">
+									</c:otherwise>
+								</c:choose>
+											<div class="form-group viseType-btn">
 									<label style="display: block;">&nbsp;</label> <input
 										type="button" value="冲绳县" class="btn btn-sm btnState">
 									<input type="button" value="青森县" class="btn btn-sm btnState">
@@ -214,8 +224,17 @@
 							</div>
 						</div>
 						<!-- end 签证类型 -->
-						<div class="row body-from-input">
-							<!-- 过去三年是否访问过 -->
+						<!-- <div class="row body-from-input">
+							过去三年是否访问过 -->
+							
+							<c:choose>
+								<c:when test="${obj.orderJpinfo.visaType == 2 || obj.orderJpinfo.visaType == 3 }">
+									<div class="row body-from-input" id="threefangwen"><!-- 过去三年是否访问过 -->
+								</c:when>
+								<c:otherwise>
+									<div class="row body-from-input none" id="threefangwen"><!-- 过去三年是否访问过 -->
+								</c:otherwise>
+							</c:choose>
 							<div class="col-sm-3 none" id="isVisited" >
 								<div class="form-group">
 									<label><span>*</span>过去三年是否访问过：</label> <select id="isVisit"
@@ -463,7 +482,7 @@
 	<script type="text/javascript">
 		
 	
-		function selectListData() {
+		/* function selectListData() {
 			var isVisit = $("#isVisit").val();
 			var visaType = $("#visaType").val();
 			var mainSaleUrgentEnum = $("#urgentType").val();
@@ -495,7 +514,7 @@
 			} else {
 				$("#urgentDay").addClass("none");
 			}
-		}
+		} */
 		var url = "${base}/admin/orderJp/getOrder.html";
 		var orderobj;
 		var orderid = ${obj.orderId};
@@ -529,9 +548,12 @@
 						if(orderobj.applicantInfo != null || orderobj.applicantInfo != undefined){
 							$("#mySwitch").removeClass("none");//显示申请人信息列表
 							$("#applicantInfo").hide();//添加申请人 按钮 隐藏
+						}else{
+							$("#mySwitch").addClass("none");
+							$("#applicantInfo").show();
 						}
 						
-						if (isVisited == 1) {
+						/* if (isVisited == 1) {
 							$("#isVisited").removeClass("none");
 						} else {
 							$("#isVisited").addClass("none");
@@ -541,13 +563,52 @@
 							$("#sixCounty").removeClass("none");
 						} else {
 							$("#sixCounty").addClass("none");
-						}
+						} */
+						
+						//签证类型  按钮的点击状态
+						$(".viseType-btn input").click(function(){
+							if($(this).hasClass('btnState-true')){
+								$(this).removeClass('btnState-true');
+							}else{
+								$(this).addClass('btnState-true');
+								var btnInfo=$(this).val();//获取按钮的信息
+								console.log(btnInfo);
+							}
+						});
+						$('#visaType').change(function(){
+							var thisval = $(this).val();
+							if(thisval == 2 || thisval == 3){
+								$('#visacounty').show();
+								$('#threefangwen').show();
+							}else{
+								$('#visacounty').hide();
+								$('#threefangwen').hide();
+							}
+						});
+						
+						$('#isVisit').change(function(){
+							var thisval = $(this).val();
+							if(thisval == 1){
+								$('#threexian').show();
+							}else{
+								$('#threexian').hide();
+							}
+						});
+						
+						$('#urgentType').change(function(){
+							var thisval = $(this).val();
+							if(thisval != 1){
+								$("#urgentDay").removeClass("none");
+							}else{
+								$("#urgentDay").addClass("none");
+							}
+						});
 
-						if (mainSaleUrgentEnum != 1) {
+						/* if (mainSaleUrgentEnum != 1) {
 							$("#urgentDay").removeClass("none");
 						} else {
 							$("#urgentDay").addClass("none");
-						}
+						} */
 
 					},
 					error : function() {
@@ -579,7 +640,6 @@
 					//alert(JSON.stringify(event.target)); 
 				},
 			addApplicant : function(id){
-				alert(id);
 				layer.open({
 					type: 2,
 					title: false,
