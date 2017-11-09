@@ -115,7 +115,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>金额：</label>
-										<input id="" name="" type="text" class="form-control input-sm mustNumberPoint" placeholder=" " v-model="orderinfo.money" />
+										<input id="money" name="money" type="text" class="form-control input-sm mustNumberPoint" placeholder=" " v-model="orderinfo.money" />
 									</div>
 								</div>
 							</div><!-- end 行程/付款方式/金额 -->
@@ -199,7 +199,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>停留天数：</label>
-										<input id="" name="" type="text" class="form-control input-sm mustNumber" v-model="orderinfo.stayday"/>
+										<input id="stayday" name="stayday" type="text" class="form-control input-sm mustNumber" v-model="orderinfo.stayday"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
