@@ -32,4 +32,16 @@ public class TestModule {
 	public Object list() {
 		return null;
 	}
+
+	@At("admin/firstTrialJp/edit")
+	@Ok("jsp")
+	public Object edit() {
+		return null;
+	}
+
+	@At("admin/firstTrialJp/basicInfo")
+	@Ok("jsp")
+	public Object basicInfo() {
+		return null;
+	}
 }

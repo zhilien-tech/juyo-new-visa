@@ -38,28 +38,32 @@
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<a v-bind:href="url"></a>
-						<div class="card-list" v-for="data in orderJpData">
+						<div class="card-list" v-for="data in FTdata">
 							<div class="card-head">
-								<div><label>订单号：</label><span>170808-JP0001</span></div>	
-								<div><label>出行时间：</label><span>2017-06-08</span></div>	
-								<div><label>返回时间：</label><span>2017-06-28</span></div>	
-								<div><label>状态：</label><span>不合格</span></div>	
+								<div><label>订单号：</label><span>{{data.orderNumber}}</span></div>	
+								<div><label>出行时间：</label><span>{{data.travelDate}}</span></div>	
+								<div><label>返回时间：</label><span>{{data.returnDate}}</span></div>	
+								<div><label>状态：</label><span>{{data.state}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit"> </i>
-									<i class="express"> </i>
-									<i class="return"> </i>
+									<i title="编辑" class="edit" v-on:click="editClick"> </i>
+									<i title="快递" class="express"> </i>
+									<i title="回邮" class="return"> </i>
 								</div>
 							</div>
 							<ul class="card-content">
-								<li class="everybody-info" v-for="data in orderJpData">
-									<div><label>公司简称：</label><span>{{data.shortname}}</span></div>
-									<div><label>客户来源：</label><span>{{data.source}}</span></div>
-									<div><label>联系人：</label><span>{{data.linkman}}</span></div>
-									<div><label>电话：</label><span>{{data.mobile}}</span></div>
-									<div><label>申请人：</label><span>{{data.applicants}}</span></div>
-									<div><!-- <i> </i> --></div>
+								<li class="everybody-info" v-for="item in data.people">
+									<div><label>申请人：</label><span>{{item.name}}</span></div>
+									<div><label>护照号：</label><span>{{item.passportNo}}</span></div>
+									<div><label>手机号：</label><span>{{item.phone}}</span></div>
+									<div><label>状态：</label><span>{{item.state}}</span></div>
+									<div>
+										<i title="基本信息" class="basicInfo"> </i>
+										<i title="护照信息" class="passportInfo"> </i>
+										<i title="签证信息" class="visaInfo"> </i>
+										<i title="合格" class="qualified"> </i>
+										<i title="不合格" class="unqualified"> </i>
+									</div>
 								</li>
 							</ul>
 						</div>
@@ -78,26 +82,33 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		//异步加载的URL地址
-	    var url="${base}/admin/orderJp/listData";
+	    //var url="${base}/admin/orderJp/listData";
 	    //vue表格数据对象
-	    var _self;
+	    //var _self;
+	    var firstTrial = {
+	    		FTdata:[
+	    		       {orderNumber:"170808-JP0001",
+	    		    	travelDate:"2017-10-22",
+	    		    	returnDate:"2017-12-22",
+	    		    	state:"不合格",
+		    		    people:[
+		    		       {name:"宋仲基",passportNo:"G73635124",phone:"15132636399",state:"初审"},
+		    		       {name:"马斯洛",passportNo:"G73602220",phone:"15132336388",state:"不合格"},
+		    		       {name:"宋仲基",passportNo:"G73635124",phone:"15132636399",state:"初审"}
+		    		    ]
+	    		       },
+	    		],
+	    };
 		new Vue({
 			el: '#card',
-			data: {orderJpData:""},
-			created:function(){
-	            _self=this;
-	            $.ajax({ 
-	            	url: url,
-	            	dataType:"json",
-	            	type:'post',
-	            	success: function(data){
-	            		_self.orderJpData = data.orderJp;
-	            		//_self.data=eval("(" + data +")");
-	              	}
-	            });
-	        }
+			data: firstTrial,
+			methods:{
+				editClick:function(){//编辑图标  页面跳转
+					window.location.href = '${base}/admin/firstTrialJp/edit.html';
+				}
+				}
 		});
-		function search(){
+		/* function search(){
 			var status = $('#status').val();
 			var source = $('#source').val();
 			var visaType = $('#visaType').val();
@@ -114,11 +125,8 @@
 	        		//console.log(JSON.stringify(data));
 	          	}
 	        });
-		}
-		//跳转 签证详情页
-		function order(){
-			window.location.href = '${base}/admin/orderJp/order.html';
-		}
+		} */
+		
 	</script>
 	<script src="${base}/references/common/js/base/cardList.js"></script>
 </body>

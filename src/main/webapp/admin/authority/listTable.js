@@ -83,7 +83,7 @@ function initDatatable() {
 		            },
 		            {"data": " ", "bSortable": false, "width":120,
 		            	render: function(data, type, row, meta) {
-		            		var modify = '<a style="cursor:pointer;" class="edit-icon" onclick="edit('+row.deptid+');"></a>';
+		            		var modify = '<a title="编辑" style="cursor:pointer;" class="edit-icon" onclick="edit('+row.deptid+');"></a>';
 		            		/*var judge = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.deptId+');"></a>';
 		            		return modify+judge;*/
 		            		return modify;

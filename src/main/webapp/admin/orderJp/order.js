@@ -15,17 +15,6 @@ $(function(){
 			console.log(btnInfo);
 		}
 	});
-	/*$('#visatype').change(function(){
-		alert(12121);
-		var thisval = $(this).val();
-		if(thisval == 2){
-			$('#visacounty').show();
-			$('#threefangwen').show();
-		}else{
-			$('#visacounty').hide();
-			$('#threefangwen').hide();
-		}
-	});*/
 	//添加申请人 按钮 click
 	$(".addApplicantBtn").click(function(){
 		layer.open({
