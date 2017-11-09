@@ -63,7 +63,8 @@ body{min-width:1160px;overflow-x: auto;}
 .share{background-image:url(../dist/newvisacss/img/share.png);}
 .theTrial{background-image:url(../dist/newvisacss/img/theTrial.png);}
 .toVoid{background-image:url(../dist/newvisacss/img/toVoid.png);width:16px !important;}
-
-
-
-
+.basicInfo{background-image:url(../dist/newvisacss/img/basicInfo.png);}
+.passportInfo{background-image:url(../dist/newvisacss/img/passportInfo.png);}
+.visaInfo{background-image:url(../dist/newvisacss/img/visaInfo.png);}
+.qualified{background-image:url(../dist/newvisacss/img/qualified.png);width:22px !important;}
+.unqualified{background-image:url(../dist/newvisacss/img/unqualified.png);}
