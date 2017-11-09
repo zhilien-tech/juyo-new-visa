@@ -64,7 +64,7 @@ public class AuthorityViewService extends BaseService<DeptJobForm> {
 			for (Record record : records) {
 				String moduleName = record.getString("modulename");
 				if (!Util.isEmpty(moduleName)) {
-					moduleName = moduleName.replaceAll("公司管理,|销售,|初审,|前台,|签证,|售后,", "");
+					moduleName = moduleName.replaceAll("公司管理,|销售,|初审,|前台,|签证,|售后,|,公司管理", "");
 				}
 				record.put("modulename", moduleName);
 			}
