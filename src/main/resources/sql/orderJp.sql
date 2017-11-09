@@ -31,10 +31,8 @@ LEFT JOIN (
 	t_applicant_order_jp aoj ON aoj.applicantId = a.id
 	LEFT JOIN
 	t_order_jp oj ON aoj.orderId = oj.id
-	WHERE
-	aoj.orderId = oj.id 
-	AND
-	aoj.applicantId = a.id
+	GROUP BY
+	aoj.orderId
 ) aj ON aj.orderId = oj.id
 LEFT JOIN t_applicant_passport ap ON ap.applicantId = aj.id
 LEFT JOIN t_company tc ON tc.id = o.comId
@@ -89,3 +87,36 @@ LEFT JOIN
 t_applicant_passport ap ON ap.applicantId = a.id
 WHERE
 oj.orderId = @id
+
+/*orderJp_list_passportInfo_byApplicantId*/
+SELECT
+	ap.id,
+	ap.`type`,
+	ap.passport,
+	ap.sex,
+	ap.sexEn,
+	ap.birthAddress,
+	ap.birthAddressEn,
+	ap.birthday,
+	ap.issuedPlace,
+	ap.issuedPlaceEn,
+	ap.issuedDate,
+	ap.validEndDate,
+	ap.issuedOrganization,
+	ap.issuedOrganizationEn
+FROM
+	t_applicant_passport ap
+INNER JOIN 
+t_applicant a ON ap.applicantId = a.id
+WHERE
+	a.id = @id
+
+/*orderJp_ordernum*/	
+SELECT
+ * 
+FROM 
+t_order
+WHERE 
+DATE(createTime) = DATE(NOW())
+$condition
+order by createtime desc

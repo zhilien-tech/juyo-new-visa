@@ -24,6 +24,7 @@ import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.forms.TApplicantForm;
+import com.juyo.visa.forms.TApplicantPassportForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
 
@@ -65,7 +66,7 @@ public class OrderJpModule {
 	}
 
 	/**
-	 * 跳转到'添加操作'的录入数据页面
+	 * 跳转到'编辑操作'的录入数据页面
 	 */
 	@At
 	@GET
@@ -90,8 +91,10 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object addApplicant() {
-		return null;
+	public Object addApplicant(@Param("id") Integer orderid) {
+		Map<String, Object> result = MapUtil.map();
+		result.put("orderid", orderid);
+		return result;
 	}
 
 	/**
@@ -120,6 +123,15 @@ public class OrderJpModule {
 	@POST
 	public Object saveEditApplicant(@Param("..") TApplicantForm applicantForm, HttpSession session) {
 		return saleViewService.saveEditApplicant(applicantForm, session);
+	}
+
+	/**
+	 * 删除申请人
+	 */
+	@At
+	@POST
+	public Object deleteApplicant(@Param("applicantId") Integer id) {
+		return saleViewService.deleteApplicant(id);
 	}
 
 	/**
@@ -157,5 +169,24 @@ public class OrderJpModule {
 	@POST
 	public Object getEditApplicant(@Param("orderid") Integer orderid) {
 		return saleViewService.getEditApplicant(orderid);
+	}
+
+	/**
+	 * 护照信息修改
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object passportInfo(@Param("id") Integer id) {
+		return saleViewService.getEditPassport(id);
+	}
+
+	/**
+	 * 修改护照信息后保存
+	 */
+	@At
+	@POST
+	public Object saveEditPassport(@Param("..") TApplicantPassportForm passportForm, HttpSession session) {
+		return saleViewService.saveEditPassport(passportForm, session);
 	}
 }

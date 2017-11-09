@@ -46,7 +46,7 @@
 								</select>
 							</div>
 							<div class="col-md-3 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照/公司简称/联系人/电话/邮箱/申请人" />
+								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照/公司简称/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter();"/>
 							</div>
 							<div class="col-md-3 left-5px" >
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
@@ -126,7 +126,7 @@
 	        },
 	        methods:{
 	        	order:function(id){
-	        			window.location.href = '${base}/admin/orderJp/order.html'+(id > 0?('?id='+id):'');
+	        			window.location.href = '${base}/admin/orderJp/order.html'+(id > 0?('?id='+id):'');//跳转到更新页面
 	        			//window.location.href = '${base}/admin/orderJp/order.html?id='+id;
 	        	}
 	        } 
@@ -153,6 +153,14 @@
 		 function addOrder(){
 			window.location.href = '${base}/admin/orderJp/addOrder';
 		}  
+		
+		//搜索回车事件
+		 function onkeyEnter(){
+			    var e = window.event || arguments.callee.caller.arguments[0];
+			    if(e && e.keyCode == 13){
+					 $("#searchBtn").click();
+				 }
+			}
 	</script>
 </body>
 </html>

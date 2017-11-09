@@ -11,7 +11,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * @Date	 2017年10月20日
  */
 public enum CustomerTypeEnum implements IEnum {
-	XIANSHANG(1, "线上"), OTS(2, "OTS"), ZHIKE(3, "直客"), XIANXIA(4, "线下");
+	XIANSHANG(1, "线上"), OTS(2, "OTS"), ZHIKE(4, "直客"), XIANXIA(3, "线下");
 	private int key;
 	private String value;
 

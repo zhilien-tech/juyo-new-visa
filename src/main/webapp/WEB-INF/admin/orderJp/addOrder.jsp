@@ -14,6 +14,7 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+	    <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
@@ -225,9 +226,9 @@
 							</div>
 						</div>
 						<!-- end 签证类型 -->
-						<div class="row body-from-input">
+						<div class="row body-from-input none" id="threefangwen">
 							<!-- 过去三年是否访问过 -->
-							<div class="col-sm-3">
+							<div class="col-sm-3 " >
 								<div class="form-group">
 									<label><span>*</span>过去三年是否访问过：</label> 
 									<select id="isVisit" name="isvisit" class="form-control input-sm" onchange="selectListData();" >
@@ -237,8 +238,8 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-8 none" id="isVisited" v-model="orderInfo.threeCounty">
-								<div class="form-group viseType-btn">
+							<div class="col-sm-8"  v-model="orderInfo.threeCounty">
+								<div class="form-group viseType-btn none" id="threeCounty">
 									<label style="display: block;">&nbsp;</label> 
 									<input type="button" value="岩手县" class="btn btn-sm btnState"> 
 									<input type="button" value="秋田县" class="btn btn-sm btnState"> 
@@ -307,8 +308,7 @@
 
 				<div class="info none" id="mySwitch"><!-- 主申请人 -->
 					<p class="info-head">
-						主申请人 
-						<input type="button" name="" value="添加" class="btn btn-primary btn-sm pull-right">
+						<input type="button" name="" value="添加" class="btn btn-primary btn-sm pull-right "  onclick="addApplicant();"/>
 					</p>
 					<div class="info-table" style="padding-bottom: 1px;">
 						<table id="principalApplicantTable" class="table table-hover" style="width: 100%;">
@@ -322,8 +322,8 @@
 									<th><span>操作<span></th>
 								</tr>
 							</thead>
-							<tbody >
-								<tr>
+							<tbody name="applicantsTable" id="applicanatsTable">
+								<%-- <tr>
 
 									<td>${applicant.firstName }</td>
 									<td>${applicant.telephone }</td>
@@ -337,7 +337,7 @@
 										<a v-on:click="">回邮</a>&nbsp;&nbsp;
 										<a v-on:click="passport(apply.applyid)">删除</a></br>
 									</td>
-								</tr>
+								</tr> --%>
 							</tbody>
 						</table>
 					</div>
@@ -468,25 +468,74 @@
 		<!-- select2 -->
 		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+		<script src="${base}/admin/city/customerNeeds.js"></script>
 		<script src="${base}/admin/orderJp/applicant.js"></script>
 		
 		<script type="text/javascript">
+		$(function(){
+			initCityNeedsSelect2();
+			//签证类型  按钮的点击状态
+			$(".viseType-btn input").click(function(){
+				if($(this).hasClass('btnState-true')){
+					$(this).removeClass('btnState-true');
+				}else{
+					$(this).addClass('btnState-true');
+					var btnInfo=$(this).val();//获取按钮的信息
+					console.log(btnInfo);
+				}
+			});
+			$('#visaType').change(function(){
+				var thisval = $(this).val();
+				if(thisval == 2 || thisval == 3){
+					$('#sixCounty').removeClass("none");
+					$('#threefangwen').removeClass("none");
+				}else{
+					$('#sixCounty').addClass("none");
+					$('#threefangwen').addClass("none");
+				}
+			});
+			
+			$('#isVisit').change(function(){
+				var thisval = $(this).val();
+				if(thisval == 1){
+					$('#threeCounty').removeClass("none");
+				}else{
+					$('#threeCounty').addClass("none");
+				}
+			});
+			
+			
+			
 			var BASE_PATH = '${base}';
-			function selectListData() {
-				var isVisited = $("#isVisit").val();
-				var visaType = $("#visaType").val();
-				if (isVisited == 1) {
-					$("#isVisited").removeClass("none");
-				} else {
-					$("#isVisited").addClass("none");
-				}
-
-				if (visaType == 2) {
-					$("#sixCounty").removeClass("none");
-				} else {
-					$("#sixCounty").addClass("none");
-				}
-			}
+			$(".addApplicantBtn").click(function(){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/addApplicant.html'
+				});
+				
+			});
+		});
+		var applData;
+		function addApplicant(){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/addApplicant.html'
+			});
+		}
 			//加急 点击事件
 			function urgent(){
 				//
@@ -498,18 +547,73 @@
 				}
 			}
 			
-			
-			function shortname(){
-				var content = $("#comShortName").val();
-				alert(content);
-				var sum = 0;
-				re = /[\u4E00-\u9FA5]/g; //测试中文字符的正则
-				if (content) {
-				if (re.test(content)) //使用正则判断是否存在中文
-				{
-				if (content.match(re).length >= 6) { //返回中文的个数
-				$.dialog.tips("帖子正文不能小于6个汉字！");
-			}}}}
+			function successCallBack(status,data){
+				applData = data;
+				if(status == 1){
+					layer.msg('修改成功');
+				}
+				if(status == 2){
+					layer.msg('删除成功');
+				}
+				if(status == 3){
+					layer.msg('添加成功');
+				}
+				$("#applicanatsTable").each(function(){
+					var applicants = $(this);
+					var result = '';
+					for(var i = 0; i < data.length; i++){
+						result += '<tr>';
+						if((data[i].firstName != undefined) && (data[i].lastName != undefined)){
+							result += '<td>' + data[i].firstName + data[i].lastName + '</td>';
+						}else if((data[i].firstName != undefined) && (data[i].lastName == undefined)){
+							result += '<td>' + data[i].firstName + '</td>';
+						}else if((data[i].firstName == undefined) && (data[i].lastName != undefined)){
+							result += '<td>' + data[i].lastName + '</td>';
+						}
+						else{
+							result += '<td></td>';
+						}
+						
+						if(data[i].telephone != undefined){
+							result += '<td>' + data[i].telephone + '</td>';
+						}else{
+							result += '<td></td>';
+						}
+						
+						if(data[i].email != undefined){
+							result += '<td>' + data[i].email + '</td>';
+						}else{
+							result += '<td></td>';
+						}
+						
+						if(data[i].passport != undefined){
+							result += '<td>' + data[i].passport + '</td>';
+						}else{
+							result += '<td></td>';
+						}
+						
+						if(data[i].sex != undefined){
+							result += '<td>' + data[i].sex + '</td>';
+						}else{
+							result += '<td></td>';
+						}
+						
+						result += '<td>
+						<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
+						<a href="javascript:passportInfo('+data[i].id+');">护照</a>&nbsp;&nbsp;
+						<a href="">签证</a><br>
+						<a href="">回邮</a>&nbsp;&nbsp;
+						<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></br>
+						</td>';
+						
+						result += '</tr>';
+					}
+					applicants.html(result);
+					
+				});
+				$("#mySwitch").removeClass("none");//显示申请人信息列表
+				$("#applicantInfo").hide();//添加申请人 按钮 隐藏
+			}
 			
 			function saveAddOrder(){
 				var orderinfo = $("#orderInfo").serialize();
