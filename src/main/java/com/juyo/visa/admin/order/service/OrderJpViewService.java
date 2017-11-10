@@ -22,6 +22,7 @@ import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
@@ -97,12 +98,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object addOrder(HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		List<TCustomerEntity> customers = dbDao.query(TCustomerEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()), null);
-		result.put("customer", customers);
 		result.put("collarAreaEnum", EnumUtil.enum2(CollarAreaEnum.class));
-		result.put("customerTypeEnum", EnumUtil.enum2(NoZHIKECustomerTypeEnum.class));
+		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
 		result.put("mainSaleUrgentEnum", EnumUtil.enum2(MainSaleUrgentEnum.class));
 		result.put("mainSaleUrgentTimeEnum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
 		result.put("mainSaleTripTypeEnum", EnumUtil.enum2(MainSaleTripTypeEnum.class));
@@ -231,8 +228,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(passport);
 			return applicant;
 		} else {
-			dbDao.insert(applicant);
-			Integer applicantId = applicant.getId();
+			TApplicantEntity applicantDB = dbDao.insert(applicant);
+			Integer applicantId = applicantDB.getId();
 			TApplicantPassportEntity passport = new TApplicantPassportEntity();
 			if (!Util.isEmpty(applicantForm.getSex())) {
 				if (applicantForm.getSex() == 1) {
@@ -250,8 +247,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			passport.setApplicantId(applicantId);
 			dbDao.insert(passport);
 			//List<TApplicantEntity> applicantList = new ArrayList<>();
-			applicantList.add(applicant);
-			return applicantList;
+			//applicantList.add(applicant);
+			return applicantDB;
 		}
 	}
 
@@ -710,5 +707,106 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		return null;
+	}
+
+	public Object getLinkman(String linkman, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		List<TCustomerEntity> customerList = new ArrayList<>();
+		//用户为公司管理员则显示该公司下所有客户
+		if (userType == 5) {
+			customerList = dbDao.query(TCustomerEntity.class,
+					Cnd.where("compId", "=", loginCompany.getId()).and("linkman", "like", Strings.trim(linkman) + "%"),
+					null);
+		} else if (userType == 1) {
+			customerList = dbDao.query(
+					TCustomerEntity.class,
+					Cnd.where("compId", "=", loginCompany.getId()).and("userId", "=", loginUser.getId())
+							.and("linkman", "like", Strings.trim(linkman) + "%"), null);
+		}
+		return customerList;
+	}
+
+	public Object getPhoneNumSelect(String mobile, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		List<TCustomerEntity> customerList = new ArrayList<>();
+		//用户为公司管理员则显示该公司下所有客户
+		if (userType == 5) {
+			customerList = dbDao.query(TCustomerEntity.class,
+					Cnd.where("compId", "=", loginCompany.getId()).and("mobile", "like", Strings.trim(mobile) + "%"),
+					null);
+		} else if (userType == 1) {
+			customerList = dbDao.query(
+					TCustomerEntity.class,
+					Cnd.where("compId", "=", loginCompany.getId()).and("userId", "=", loginUser.getId())
+							.and("mobile", "like", Strings.trim(mobile) + "%"), null);
+		}
+		return customerList;
+	}
+
+	public Object getcompNameSelect(String compName, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		List<TCustomerEntity> customerList = new ArrayList<>();
+		//用户为公司管理员则显示该公司下所有客户
+		if (userType == 5) {
+			customerList = dbDao.query(TCustomerEntity.class,
+					Cnd.where("compId", "=", loginCompany.getId()).and("name", "like", Strings.trim(compName) + "%"),
+					null);
+		} else if (userType == 1) {
+			customerList = dbDao.query(
+					TCustomerEntity.class,
+					Cnd.where("compId", "=", loginCompany.getId()).and("userId", "=", loginUser.getId())
+							.and("name", "like", Strings.trim(compName) + "%"), null);
+		}
+		return customerList;
+	}
+
+	public Object getComShortNameSelect(String comShortName, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		List<TCustomerEntity> customerList = new ArrayList<>();
+		//用户为公司管理员则显示该公司下所有客户
+		if (userType == 5) {
+			customerList = dbDao.query(
+					TCustomerEntity.class,
+					Cnd.where("compId", "=", loginCompany.getId()).and("shortname", "like",
+							Strings.trim(comShortName) + "%"), null);
+		} else if (userType == 1) {
+			customerList = dbDao.query(
+					TCustomerEntity.class,
+					Cnd.where("compId", "=", loginCompany.getId()).and("userId", "=", loginUser.getId())
+							.and("shortname", "like", Strings.trim(comShortName) + "%"), null);
+		}
+		return customerList;
+	}
+
+	public Object getEmailSelect(String email, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		List<TCustomerEntity> customerList = new ArrayList<>();
+		//用户为公司管理员则显示该公司下所有客户
+		if (userType == 5) {
+			customerList = dbDao.query(TCustomerEntity.class,
+					Cnd.where("compId", "=", loginCompany.getId()).and("email", "like", Strings.trim(email) + "%"),
+					null);
+		} else if (userType == 1) {
+			customerList = dbDao.query(
+					TCustomerEntity.class,
+					Cnd.where("compId", "=", loginCompany.getId()).and("userId", "=", loginUser.getId())
+							.and("email", "like", Strings.trim(email) + "%"), null);
+		}
+		return customerList;
+	}
+
+	public Object getCustomerById(Integer id, HttpSession session) {
+		TCustomerEntity customerEntity = dbDao.fetch(TCustomerEntity.class, id.longValue());
+		return customerEntity;
 	}
 }

@@ -30,7 +30,7 @@
 		<div class="content-wrapper" style="min-height: 848px;">
 			<div class="qz-head">
 				<span class="">订单号：<p>${obj.orderInfo.orderNum}</p></span> 
-				<!-- <span class="">受付番号：<p>JDY27163</p></span>  -->
+				<span class="">受付番号：<p></p></span> 
 				<span class="">状态：<p>下单</p></span> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
@@ -545,25 +545,28 @@
 						var isVisited = orderobj.orderInfo.isvisit;
 						var visaType = orderobj.orderInfo.visatype;
 						var mainSaleUrgentEnum = orderobj.orderInfo.urgenttype;
-						if(orderobj.applicantInfo != null || orderobj.applicantInfo != undefined){
-							$("#mySwitch").removeClass("none");//显示申请人信息列表
-							$("#applicantInfo").hide();//添加申请人 按钮 隐藏
-						}else{
+						if(orderobj.applicantInfo == null || orderobj.applicantInfo == undefined || orderobj.applicantInfo.length == 0){
 							$("#mySwitch").addClass("none");
 							$("#applicantInfo").show();
+							$(".addApplicantBtn").click(function(id){
+								alert(id);
+								layer.open({
+									type: 2,
+									title: false,
+									closeBtn:false,
+									fix: false,
+									maxmin: false,
+									shadeClose: false,
+									scrollbar: false,
+									area: ['900px', '551px'],
+									content:'/admin/orderJp/addApplicant.html'
+								});
+								
+							});
+						}else{
+							$("#mySwitch").removeClass("none");//显示申请人信息列表
+							$("#applicantInfo").hide();//添加申请人 按钮 隐藏
 						}
-						
-						/* if (isVisited == 1) {
-							$("#isVisited").removeClass("none");
-						} else {
-							$("#isVisited").addClass("none");
-						}
-
-						if (visaType == 2) {
-							$("#sixCounty").removeClass("none");
-						} else {
-							$("#sixCounty").addClass("none");
-						} */
 						
 						//签证类型  按钮的点击状态
 						$(".viseType-btn input").click(function(){
@@ -691,6 +694,11 @@
 			}
 			}
 		});
+		//添加申请人
+		var id = ${obj.orderId};
+		
+		
+		//刷新申请人表格
 		function successCallBack(status){
 			if(status == 1){
 				layer.msg('修改成功');

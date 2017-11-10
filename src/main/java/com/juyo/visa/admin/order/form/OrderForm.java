@@ -25,10 +25,10 @@ public class OrderForm extends DataTablesParamForm {
 	private String orderNum;
 
 	/**用户id*/
-	private Integer userId;
+	protected Integer userId;
 
 	/**公司id*/
-	private Integer comId;
+	protected Integer comId;
 
 	/**订单状态*/
 	private Integer status;

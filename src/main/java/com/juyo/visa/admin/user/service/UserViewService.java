@@ -60,8 +60,14 @@ public class UserViewService extends BaseService<TUserEntity> {
 	public Object toAddUserPage(HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		List<TDepartmentEntity> departmentList = dbDao.query(TDepartmentEntity.class,
-				Cnd.where("comId", "=", loginCompany.getId()), null);
+		Integer adminId = loginCompany.getAdminId();
+		List<TDepartmentEntity> departmentList = dbDao.query(TDepartmentEntity.class, Cnd.where("opId", "=", adminId),
+				null);
+		for (TDepartmentEntity tDepartmentEntity : departmentList) {
+			if (tDepartmentEntity.getId() == 1) {
+				departmentList.remove(tDepartmentEntity);
+			}
+		}
 		result.put("isDisableEnum", EnumUtil.enum2(YesOrNoEnum.class));
 		result.put("department", departmentList);
 		return result;
@@ -124,8 +130,14 @@ public class UserViewService extends BaseService<TUserEntity> {
 		Map<String, Object> result = MapUtil.map();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity user = dbDao.fetch(TUserEntity.class, id);
-		List<TDepartmentEntity> departmentList = dbDao.query(TDepartmentEntity.class,
-				Cnd.where("comId", "=", loginCompany.getId()), null);
+		Integer adminId = loginCompany.getAdminId();
+		List<TDepartmentEntity> departmentList = dbDao.query(TDepartmentEntity.class, Cnd.where("opId", "=", adminId),
+				null);
+		for (TDepartmentEntity tDepartmentEntity : departmentList) {
+			if (tDepartmentEntity.getId() == 1) {
+				departmentList.remove(tDepartmentEntity);
+			}
+		}
 		List<TJobEntity> jobList = dbDao
 				.query(TJobEntity.class, Cnd.where("deptId", "=", user.getDepartmentId()), null);
 		result.put("isDisableEnum", EnumUtil.enum2(IsYesOrNoEnum.class));
