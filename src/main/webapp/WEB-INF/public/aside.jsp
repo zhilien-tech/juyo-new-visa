@@ -31,7 +31,7 @@
 							<a href="#">
 								<img src="${base}/references/public/dist/newvisacss/img/index.png" />
 								<font>${function.funName }</font>
-								<i class="more"></i>
+								<i class="moreI more"></i>
 							</a>
 						</c:when>
 						<c:otherwise>
