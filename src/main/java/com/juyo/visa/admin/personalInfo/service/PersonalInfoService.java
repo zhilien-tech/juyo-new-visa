@@ -6,6 +6,9 @@
 
 package com.juyo.visa.admin.personalInfo.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
@@ -17,6 +20,8 @@ import org.nutz.dao.sql.Sql;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.personalInfo.form.PersonalInfoSqlForm;
 import com.juyo.visa.admin.personalInfo.form.PersonalInfoUpdateForm;
+import com.juyo.visa.common.access.AccessConfig;
+import com.juyo.visa.common.access.sign.MD5;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.Util;
@@ -73,5 +78,26 @@ public class PersonalInfoService extends BaseService<TUserEntity> {
 			user.setEmail(email);
 		}
 		return this.updateIgnoreNull(user);//更新用户表中的数据;
+	}
+
+	//校验用户密码
+	public Object checkPassword(String password, HttpSession session) {
+
+		//需校验的密码
+		password = MD5.sign(password, AccessConfig.password_secret, AccessConfig.INPUT_CHARSET);//密码加密
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		String userid = loginUser.getId() + "";
+		TUserEntity user = dbDao.fetch(TUserEntity.class, Long.valueOf(userid));
+		String passwordUser = user.getPassword();
+		boolean eq = Util.eq(password, passwordUser);
+		map.put("valid", eq);
+		return map;
+	}
+
+	//更新密码
+	public Object updatePassword() {
+		return null;
 	}
 }
