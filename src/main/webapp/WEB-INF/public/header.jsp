@@ -39,7 +39,7 @@
             <span class="dian"></span>
           </li>
           <li class="dropdown messages-menu">
-            <a href="${base}/admin/personalInfo/personalInfoList.html" class="dropdown-toggle name" data-toggle="dropdown">${loginuser.name}</a>
+            <a href="${base}/admin/personalInfo/list.html" class="dropdown-toggle name" data-toggle="dropdown">${loginuser.name}</a>
           </li>
           <li class="setUp-li">
              <a href="javascript:;">设置<img class="setUp" src="${base}/references/public/dist/newvisacss/img/setUp.jpg"></a>

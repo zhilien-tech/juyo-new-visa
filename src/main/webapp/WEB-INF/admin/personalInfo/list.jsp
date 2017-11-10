@@ -80,7 +80,6 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- 公用js文件 -->
 	<script src="${base}/references/common/js/base/base.js"></script>
-	<script src="${base}/admin/hotel/listTable.js"></script>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
