@@ -14,12 +14,16 @@
 		$(".sidebar-menu > li").removeClass('active');
 	    $(this).addClass("active");//同时 添加记录样式
 	    if($(this).hasClass("active")){//当选中一级菜单时
-			$(this).siblings(".menu1").next(".menu-ul").hide();
-			$(this).next('.menu-ul').toggle();
-			$(this).find("i").css("background-color","url(../dist/newvisacss/img/more_unfold.png);");
-		}else{
-			$(this).find("i").css("background-color","url(../dist/newvisacss/img/more.png);");
-		}
+			//$(this).siblings(".menu1").next(".menu-ul").hide();
+			$(this).next('.menu-ul').toggle();//显示/隐藏子菜单栏
+			
+			var styleVal = $(this).next('.menu-ul').attr("style");
+			if(styleVal == "display: block;"){
+				$(this).find("i").removeClass("more").addClass("more_unfold");//换为 向下的图标
+			}else{
+				$(this).find("i").addClass("more").removeClass("more_unfold");//换为 向右的图标
+			}
+	    }
 	});
 	cookieMenu();
 	function cookieMenu(){
@@ -39,6 +43,7 @@
 					
 					$("#"+liId).addClass("activeTwo");//添加二级选中的 样式
 					$("#" + menu1Id).addClass("activeOne")//添加一级选中的 样式
+					$("#" + menu1Id).find("i").removeClass("more").addClass("more_unfold");
 				}
 			}else{//没有二级菜单时
 				//alert("无二级");
@@ -141,3 +146,39 @@
 		$(this).toggleClass('bulb1');
 	});
 
+	
+	
+	/*---图标提示语---*/
+	
+	/*$(document).on(".edit-icon","mouseover",function(){
+		alert(2);
+	});*/
+	
+	$(".edit-icon").mouseover(function(){
+	   alert(454545);
+	});
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

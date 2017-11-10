@@ -91,7 +91,9 @@
 								<select id = "cityId" name="cityId" 
 										class="form-control select2 cityselect2" multiple="multiple"
 										data-placeholder="">
+										<c:if test="${ !empty obj.city.id }">
 										<option value="${obj.city.id }" selected="selected">${obj.city.city }</option>
+										</c:if>
 								</select>
 							</div>
 						</div>

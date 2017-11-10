@@ -41,7 +41,7 @@ function initDatatable() {
 		            	if(null==namejp || ""==namejp){
 		            		return "";
 		            	}else{
-		            		/*namejp = '<span data-toggle="tooltip" data-placement="right" title="'+namejp+'">'+namejp+'<span>';*/
+		            		namejp = '<span data-toggle="tooltip" data-placement="right" title="'+namejp+'">'+namejp+'<span>';
 		            		return namejp;
 		            	}
 		            } 	
@@ -51,7 +51,7 @@ function initDatatable() {
 		            	if(null==address || ""==address){
 		            		return "";
 		            	}else{
-		            		/*address = '<span data-toggle="tooltip" data-placement="right" title="'+address+'">'+address+'<span>';*/
+		            		address = '<span data-toggle="tooltip" data-placement="right" title="'+address+'">'+address+'<span>';
 		            		return address;
 		            	}
 		            } 	
@@ -61,7 +61,7 @@ function initDatatable() {
 		            	if(null==addressjp || ""==addressjp){
 		            		return "";
 		            	}else{
-		            		/*addressjp = '<span data-toggle="tooltip" data-placement="right" title="'+addressjp+'">'+addressjp+'<span>';*/
+		            		addressjp = '<span data-toggle="tooltip" data-placement="right" title="'+addressjp+'">'+addressjp+'<span>';
 		            		return addressjp;
 		            	}
 		            } 	
@@ -97,8 +97,8 @@ function initDatatable() {
 		            },
 		            {"data": " ", "bSortable": false, "width":120,
 		            	render: function(data, type, row, meta) {
-		            		var modify = '<a style="cursor:pointer;" class="edit-icon" onclick="edit('+row.id+');"></a>';
-		            		var judge = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.id+');"></a>';
+		            		var modify = '<a title="编辑" style="cursor:pointer;" class="edit-icon" onclick="edit('+row.id+');"></a>';
+		            		var judge = '<a title="删除" style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.id+');"></a>';
 		            		return modify+judge;
 		            	}	
 		            } 

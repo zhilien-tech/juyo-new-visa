@@ -46,8 +46,8 @@ public class ReceiveaddressModule {
 		return receiveaddressViewService.listPage(sqlParamForm,pager);
 	}*/
 	@At
-	public Object listData(@Param("..") final TReceiveaddressForm sqlParamForm) {
-		return receiveaddressViewService.listData(sqlParamForm);
+	public Object listData(@Param("..") final TReceiveaddressForm sqlParamForm, final HttpSession session) {
+		return receiveaddressViewService.listData(sqlParamForm, session);
 	}
 
 	/**

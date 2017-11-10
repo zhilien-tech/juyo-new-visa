@@ -6,7 +6,8 @@
 
 $(function(){
 	//签证类型  按钮的点击状态
-	$(".viseType-btn input").click(function(){
+	/*$(".viseType-btn input").click(function(){
+		alert(3);
 		if($(this).hasClass('btnState-true')){
 			$(this).removeClass('btnState-true');
 		}else{
@@ -14,7 +15,7 @@ $(function(){
 			var btnInfo=$(this).val();//获取按钮的信息
 			console.log(btnInfo);
 		}
-	});
+	});*/
 	/*$('#visatype').change(function(){
 		alert(12121);
 		var thisval = $(this).val();
@@ -27,7 +28,7 @@ $(function(){
 		}
 	});*/
 	//添加申请人 按钮 click
-	$(".addApplicantBtn").click(function(){
+	/*$(".addApplicantBtn").click(function(){
 		layer.open({
 			type: 2,
 			title: false,
@@ -41,7 +42,7 @@ $(function(){
 		});
 		$("#mySwitch").removeClass("none");//显示申请人信息列表
 		$("#applicantInfo").hide();//添加申请人 按钮 隐藏
-	});
+	});*/
 	
 	//添加回邮信息 按钮  click
 	$(".addExpressInfoBtn").click(function(){

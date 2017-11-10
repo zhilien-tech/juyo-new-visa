@@ -146,6 +146,13 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		jobEntity.setJobName(MANAGE_POSITION);
 		jobEntity.setOpId(opId);
 		TJobEntity job = dbDao.insert(jobEntity);
+
+		//用户表更新部门职位
+		insertUser.setComId(comId);
+		insertUser.setJobId(job.getId());
+		insertUser.setDepartmentId(department.getId());
+		nutDao.update(insertUser);
+
 		//管理员的公司职位信息
 		TComJobEntity companyJobEntity = new TComJobEntity();
 		companyJobEntity.setComId(company.getId());

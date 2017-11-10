@@ -46,10 +46,11 @@
 								</select>
 							</div>
 							<div class="col-md-3 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照/公司简称/联系人/电话/邮箱/申请人" />
+								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照/公司简称/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter();"/>
 							</div>
 							<div class="col-md-3 left-5px" >
-								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+								<a class="btn btn-primary btn-sm pull-left"  id="searchbtn">搜索</a>
+								<a id="emptyBtn" class="btn btn-primary btn-sm pull-left">清空</a> 
 								<a class="btn btn-primary btn-sm pull-right" id="orderBtn" onclick="addOrder();" v-on:click="">下单</a>
 							</div>
 						</div>
@@ -126,12 +127,23 @@
 	        },
 	        methods:{
 	        	order:function(id){
-	        			window.location.href = '${base}/admin/orderJp/order.html'+(id > 0?('?id='+id):'');
+	        			window.open('${base}/admin/orderJp/order.html'+(id > 0?('?id='+id):''));//跳转到更新页面
 	        			//window.location.href = '${base}/admin/orderJp/order.html?id='+id;
 	        	}
 	        } 
 		});
-		function search(){
+		
+		/*清空*/
+		$("#emptyBtn").click(function(){
+			$("#searchStr").val("");
+			$("#status").val("");
+			$("#source").val("");
+			$("#visaType").val("");
+			$("#sendSignDate").val("");
+			$("#signOutDate").val("");
+			$("#searchbtn").click();
+		});
+		$("#searchbtn").click(function(){
 			var status = $('#status').val();
 			var source = $('#source').val();
 			var visaType = $('#visaType').val();
@@ -148,11 +160,37 @@
 	        		//console.log(JSON.stringify(data));
 	          	}
 	        });
-		}
+		});
+		/* function search(){
+			var status = $('#status').val();
+			var source = $('#source').val();
+			var visaType = $('#visaType').val();
+			var sendSignDate = $('#sendSignDate').val();
+			var signOutDate = $('#signOutDate').val();
+			var searchStr = $('#searchStr').val();
+			$.ajax({ 
+	        	url: url,
+	        	data:{status:status,source:source,visaType:visaType,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr},
+	        	dataType:"json",
+	        	type:'post',
+	        	success: function(data){
+	        		_self.orderJpData = data.orderJp;
+	        		//console.log(JSON.stringify(data));
+	          	}
+	        });
+		} */
 		//跳转添加页
 		 function addOrder(){
 			window.location.href = '${base}/admin/orderJp/addOrder';
 		}  
+		
+		//搜索回车事件
+		 function onkeyEnter(){
+			    var e = window.event || arguments.callee.caller.arguments[0];
+			    if(e && e.keyCode == 13){
+					 $("#searchBtn").click();
+				 }
+			}
 	</script>
 </body>
 </html>

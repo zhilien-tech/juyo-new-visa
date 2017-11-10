@@ -13,6 +13,7 @@ import org.nutz.log.Logs;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.entities.TCityEntity;
+import com.juyo.visa.entities.TCountryEntity;
 import com.juyo.visa.forms.TCityAddForm;
 import com.juyo.visa.forms.TCityForm;
 import com.juyo.visa.forms.TCityUpdateForm;
@@ -176,6 +177,12 @@ public class CityViewService extends BaseService<TCityEntity> {
 			e.printStackTrace();
 		}
 		return citySelect;
+	}
+
+	public Object queryCountry(String country) {
+		List<TCountryEntity> countryList = dbDao.query(TCountryEntity.class,
+				Cnd.where("chinesename", "like", Strings.trim(country) + "%"), null);
+		return countryList;
 	}
 
 }

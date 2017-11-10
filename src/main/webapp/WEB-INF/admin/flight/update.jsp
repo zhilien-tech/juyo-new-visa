@@ -99,7 +99,9 @@
 								<select id = "takeOffCityId" name="takeOffCityId" 
 										class="form-control select2 cityselect2" multiple="multiple"
 										data-placeholder="">
+										<c:if test="${ !empty obj.takeOffCity.id }">
 										<option value="${obj.takeOffCity.id }" selected="selected">${obj.takeOffCity.city}</option>
+										</c:if>
 								</select>
 							</div>
 						</div>
@@ -110,7 +112,9 @@
 								<select id = "landingCityId" name="landingCityId" 
 										class="form-control select2 cityselect2" multiple="multiple"
 										data-placeholder="">
+										<c:if test="${ !empty obj.landingCity.id }">
 										<option value="${obj.landingCity.id }" selected="selected">${obj.landingCity.city}</option>
+										</c:if>
 								</select>
 							</div>
 						</div>

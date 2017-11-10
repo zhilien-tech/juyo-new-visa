@@ -15,7 +15,7 @@
 </head>
 <body>
 	<div class="modal-content">
-		<form id="">
+		<form id="passportInfo">
 			<div class="modal-header">
 				<span class="heading">护照信息</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
@@ -38,14 +38,16 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>类型：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
+									<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
+									<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>护照号：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -54,14 +56,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.sex }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生地点/拼音：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="birthAddress" name="birthAddress" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.birthAddress }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -70,14 +72,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生日期：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.birthday}"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发地点/拼音：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="issuedPlace" name="issuedPlace" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedPlace }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -86,7 +88,7 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发日期：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedDate }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -102,7 +104,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>有效期至：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.validEndDate }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -119,7 +121,7 @@
 						<div class="row none">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -148,6 +150,22 @@
 		$(function() {
 			
 		});
+		//保存
+		function save(){
+			var passportInfo = $("#passportInfo").serialize();
+			$.ajax({
+				type: 'POST',
+				data : passportInfo,
+				url: '${base}/admin/orderJp/saveEditPassport',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+					parent.successCallBack(1);
+					closeWindow();
+				}
+			});
+		}
+		
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

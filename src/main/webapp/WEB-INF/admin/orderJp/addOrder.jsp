@@ -14,6 +14,7 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+	    <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
@@ -28,7 +29,7 @@
 		<div class="wrapper" id="wrapper">
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<div class="qz-head">
-					<span class="">订单号：<p>170202-JP0001</p></span>
+					<!-- <span class="">订单号：<p>170202-JP0001</p></span> -->
 					<!-- <span class="">受付番号：<p>JDY27163</p></span> -->
 					<span class="">状态：<p>下单</p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" />
@@ -59,13 +60,21 @@
 								<div class="col-sm-3">
 									<div class="form-group" style="padding-right: 3%;">
 										<label><span>*</span>公司全称：</label> 
-										<input id="compName" name="name" type="text" class="form-control input-sm" placeholder=" " />
+										<select id = "compName" name="name"
+											class="form-control select2 cityselect2 " multiple="multiple"
+											data-placeholder="">
+									</select>
+										<!-- <input id="compName" name="name" type="text" class="form-control input-sm" placeholder=" " /> -->
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>公司简称：</label> 
-										<input id="comShortName" name="shortname" type="text" class="form-control input-sm" placeholder=" "  />
+										<select id = "comShortName" name="shortname"
+											class="form-control select2 cityselect2 " multiple="multiple"
+											data-placeholder="">
+									</select>
+										<!-- <input id="comShortName" name="shortname" type="text" class="form-control input-sm" placeholder=" "  /> --> 
 									</div>
 								</div>
 							</div><!-- end 公司全称 -->
@@ -75,7 +84,7 @@
 									<div class="form-group">
 										<label><span>*</span>联系人：</label> 
 										<select id = "linkman" name="linkman"
-											class="form-control select2 cityselect2" multiple="multiple"
+											class="form-control select2 cityselect2 " multiple="multiple"
 											data-placeholder="">
 									</select>
 										
@@ -89,13 +98,13 @@
 									<div class="form-group">
 										<label><span>*</span>手机号：</label> 
 										<select id = "telephone" name="mobile"
-											class="form-control select2 cityselect2" multiple="multiple"
+											class="form-control select2 cityselect2 " multiple="multiple"
 											data-placeholder="">
 									</select>
 										
 										<!-- <input id="telephone"
 											name="mobile" type="text" class="form-control input-sm"
-											placeholder=" " /> --> <i
+											placeholder=" " /> -->  <i
 											class="bulb"></i>
 									</div>
 								</div>
@@ -103,13 +112,13 @@
 									<div class="form-group">
 										<label><span>*</span>邮箱：</label> 
 										<select id = "email" name="email"
-											class="form-control select2 cityselect2" multiple="multiple"
+											class="form-control select2 cityselect2 " multiple="multiple"
 											data-placeholder="">
 									</select>
 										
-										<!-- <input id="email" name="email"
+										 <!-- <input id="email" name="email"
 											type="text" class="form-control input-sm" placeholder=" "
-											 /> --> <i class="bulb"></i>
+											 /> -->  <i class="bulb"></i>
 									</div>
 								</div>
 							</div>
@@ -211,23 +220,23 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-8 none" id="sixCounty" v-model="orderInfo.visacounty">
+							<div class="col-sm-8 none" id="sixCounty" >
 								<div class="form-group viseType-btn">
 									<label style="display: block;">&nbsp;</label> 
-									<input type="button" value="冲绳县" class="btn btn-sm btnState">
-									<input type="button" value="青森县" class="btn btn-sm btnState">
-									<input type="button" value="岩手县" class="btn btn-sm btnState">
-									<input type="button" value="宫城县" class="btn btn-sm btnState">
-									<input type="button" value="秋田县" class="btn btn-sm btnState">
-									<input type="button" value="山形县" class="btn btn-sm btnState">
-									<input type="button" value="福鸟县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="冲绳县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="青森县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="岩手县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="宫城县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="秋田县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="山形县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="福鸟县" class="btn btn-sm btnState">
 								</div>
 							</div>
 						</div>
 						<!-- end 签证类型 -->
-						<div class="row body-from-input">
+						<div class="row body-from-input none" id="threefangwen">
 							<!-- 过去三年是否访问过 -->
-							<div class="col-sm-3">
+							<div class="col-sm-3 " >
 								<div class="form-group">
 									<label><span>*</span>过去三年是否访问过：</label> 
 									<select id="isVisit" name="isvisit" class="form-control input-sm" onchange="selectListData();" >
@@ -237,12 +246,12 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-8 none" id="isVisited" v-model="orderInfo.threeCounty">
-								<div class="form-group viseType-btn">
+							<div class="col-sm-8"  v-model="orderInfo.threeCounty">
+								<div class="form-group viseType-btn none" id="threeCounty">
 									<label style="display: block;">&nbsp;</label> 
-									<input type="button" value="岩手县" class="btn btn-sm btnState"> 
-									<input type="button" value="秋田县" class="btn btn-sm btnState"> 
-									<input type="button" value="山形县" class="btn btn-sm btnState">
+									<input type="button" name="threecounty" value="岩手县" class="btn btn-sm btnState"> 
+									<input type="button" name="threecounty" value="秋田县" class="btn btn-sm btnState"> 
+									<input type="button" name="threecounty" value="山形县" class="btn btn-sm btnState">
 								</div>
 							</div>
 						</div>
@@ -307,8 +316,7 @@
 
 				<div class="info none" id="mySwitch"><!-- 主申请人 -->
 					<p class="info-head">
-						主申请人 
-						<input type="button" name="" value="添加" class="btn btn-primary btn-sm pull-right">
+						<input type="button" name="" value="添加" class="btn btn-primary btn-sm pull-right "  onclick="addApplicant();"/>
 					</p>
 					<div class="info-table" style="padding-bottom: 1px;">
 						<table id="principalApplicantTable" class="table table-hover" style="width: 100%;">
@@ -322,8 +330,8 @@
 									<th><span>操作<span></th>
 								</tr>
 							</thead>
-							<tbody >
-								<tr>
+							<tbody name="applicantsTable" id="applicanatsTable">
+								<%-- <tr>
 
 									<td>${applicant.firstName }</td>
 									<td>${applicant.telephone }</td>
@@ -337,7 +345,7 @@
 										<a v-on:click="">回邮</a>&nbsp;&nbsp;
 										<a v-on:click="passport(apply.applyid)">删除</a></br>
 									</td>
-								</tr>
+								</tr> --%>
 							</tbody>
 						</table>
 					</div>
@@ -468,28 +476,58 @@
 		<!-- select2 -->
 		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
-		<script src="${base}/admin/orderJp/applicant.js"></script>
+		<script src="${base}/admin/city/customerNeeds.js"></script>
+		<script src="${base}/admin/orderJp/searchCustomerInfo.js"></script>
 		
 		<script type="text/javascript">
-			var BASE_PATH = '${base}';
-			function selectListData() {
-				var isVisited = $("#isVisit").val();
-				var visaType = $("#visaType").val();
-				if (isVisited == 1) {
-					$("#isVisited").removeClass("none");
-				} else {
-					$("#isVisited").addClass("none");
+		$(function(){
+			//initCityNeedsSelect2();
+			customerTypeSelect2();
+			var customerType = $("#customerType").val();
+			//客户类型判断是不是直客
+			$("#customerType").change(function(){
+				if(customerType != 4){
+					 $("#compName").attr("readOnly",false);
+					 $("#comShortName").attr("readOnly",false);
+					 $("#linkman").attr("readOnly",false);
+					 $("#telephone").attr("readOnly",false);
+					 $("#email").attr("readOnly",false);
+				}else{
+					
 				}
-
-				if (visaType == 2) {
-					$("#sixCounty").removeClass("none");
-				} else {
-					$("#sixCounty").addClass("none");
+			});
+			
+			//签证类型  按钮的点击状态
+			$(".viseType-btn input").click(function(){
+				if($(this).hasClass('btnState-true')){
+					$(this).removeClass('btnState-true');
+				}else{
+					$(this).addClass('btnState-true');
+					var btnInfo=$(this).val();//获取按钮的信息
+					console.log(btnInfo);
 				}
-			}
+			});
+			$('#visaType').change(function(){
+				var thisval = $(this).val();
+				if(thisval == 2 || thisval == 3){
+					$('#sixCounty').removeClass("none");
+					$('#threefangwen').removeClass("none");
+				}else{
+					$('#sixCounty').addClass("none");
+					$('#threefangwen').addClass("none");
+				}
+			});
+			
+			$('#isVisit').change(function(){
+				var thisval = $(this).val();
+				if(thisval == 1){
+					$('#threeCounty').removeClass("none");
+				}else{
+					$('#threeCounty').addClass("none");
+				}
+			});
 			//加急 点击事件
 			function urgent(){
-				//
 				var urgentType = $('[name="urgenttype"]').val();
 				if (urgentType != 1) {
 					$("#urgentDays").removeClass("none");
@@ -499,20 +537,154 @@
 			}
 			
 			
-			function shortname(){
-				var content = $("#comShortName").val();
-				alert(content);
-				var sum = 0;
-				re = /[\u4E00-\u9FA5]/g; //测试中文字符的正则
-				if (content) {
-				if (re.test(content)) //使用正则判断是否存在中文
-				{
-				if (content.match(re).length >= 6) { //返回中文的个数
-				$.dialog.tips("帖子正文不能小于6个汉字！");
-			}}}}
+			//添加申请人(大按钮)
+			var BASE_PATH = '${base}';
+			$(".addApplicantBtn").click(function(){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/addApplicant.html'
+				});
+				
+			});
+		});
+		var applData;
+		//添加申请人(右上角小添加按钮)
+		function addApplicant(){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/addApplicant.html'
+			});
+		}
 			
+			//刷新申请人列表
+			function successCallBack(status,data){
+				applData = data;
+				if(status == 1){
+					layer.msg('修改成功');
+				}
+				if(status == 2){
+					layer.msg('删除成功');
+				}
+				if(status == 3){
+					layer.msg('添加成功');
+				}
+				
+				/* $("#applicanatsTable").each(function(){
+					var applicants = $(this);
+					applicants.append(
+						'<tr>'
+						'<td>' + data.firstName + data.lastName + '</td>'	
+						'<td>' + data.telephone + '</td>'
+						'<td>' + data.email + '</td>'
+						'<td>' + data.passport + '</td>'
+						'<td>' + data.sex + '</td>'
+						'<td>'+
+						'<a href="javascript:updateApplicant('+data.id+');">基本信息</a>&nbsp;&nbsp;'+
+						'<a href="javascript:passportInfo('+data.id+');">护照</a>&nbsp;&nbsp;'+
+						'<a href="">签证</a><br>'+
+						'<a href="">回邮</a>&nbsp;&nbsp;'+
+						'<a href="javascript:deleteApplicant('+data.id+');">删除</a></br>'+
+						'</td>'
+						'</tr>'
+				
+				);
+					applicants.html();
+				}); */
+				$("#applicanatsTable").each(function(){
+					var applicants = $(this);
+					var result = '';
+					for(var i = 0; i < data.length; i++){
+						result += '<tr>';
+						if((data[i].firstName != undefined) && (data[i].lastName != undefined)){
+							result += '<td>' + data[i].firstName + data[i].lastName + '</td>';
+						}else if((data[i].firstName != undefined) && (data[i].lastName == undefined)){
+							result += '<td>' + data[i].firstName + '</td>';
+						}else if((data[i].firstName == undefined) && (data[i].lastName != undefined)){
+							result += '<td>' + data[i].lastName + '</td>';
+						}
+						else{
+							result += '<td></td>';
+						}
+						
+						if(data[i].telephone != undefined){
+							result += '<td>' + data[i].telephone + '</td>';
+						}else{
+							result += '<td></td>';
+						}
+						
+						if(data[i].email != undefined){
+							result += '<td>' + data[i].email + '</td>';
+						}else{
+							result += '<td></td>';
+						}
+						
+						if(data[i].passport != undefined){
+							result += '<td>' + data[i].passport + '</td>';
+						}else{
+							result += '<td></td>';
+						}
+						
+						if(data[i].sex != undefined){
+							result += '<td>' + data[i].sex + '</td>';
+						}else{
+							result += '<td></td>';
+						}
+						
+						result += '<td>
+						<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
+						<a href="javascript:passportInfo('+data[i].id+');">护照</a>&nbsp;&nbsp;
+						<a href="">签证</a><br>
+						<a href="">回邮</a>&nbsp;&nbsp;
+						<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></br>
+						</td>';
+						
+						result += '</tr>';
+					}
+					applicants.html(result);
+					
+				}); 
+				$("#mySwitch").removeClass("none");//显示申请人信息列表
+				$("#applicantInfo").hide();//添加申请人 按钮 隐藏
+			}
+			//下单保存
 			function saveAddOrder(){
 				var orderinfo = $("#orderInfo").serialize();
+				//绑定签证城市
+				var visacounty = "";
+				$('[name=visacounty]').each(function(){
+					if($(this).hasClass('btnState-true')){
+						visacounty += $(this).val() + ',';
+					}
+				});
+				if(visacounty){
+					visacounty = visacounty.substr(0,visacounty.length-1);
+				}
+				orderinfo.visacounty = visacounty;
+				//绑定三年城市
+				var threecounty = "";
+				$('[name=threecounty]').each(function(){
+					if($(this).hasClass('btnState-true')){
+						threecounty += $(this).val() + ',';
+					}
+				});
+				if(threecounty){
+					threecounty = threecounty.substr(0,threecounty.length-1);
+				}
+				orderinfo.threecounty = threecounty;
 				$.ajax({
 					type : 'POST',
 					data : orderinfo ,
