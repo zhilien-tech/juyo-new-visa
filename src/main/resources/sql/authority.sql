@@ -17,6 +17,19 @@ LEFT JOIN t_com_function cf ON cfj.comFunId = cf.id
 LEFT JOIN t_function f ON cf.funId = f.id
 $condition
 
+/*authority_user_dept*/
+SELECT
+	uj.empid,
+	d.id AS did,
+	d.deptName 
+FROM
+	t_department d
+	LEFT JOIN t_job j ON j.deptid = d.id
+	LEFT JOIN t_com_job cj ON cj.jobId = j.id
+	LEFT JOIN t_user_job uj On uj.comJobId = cj.id
+	where uj.empid = @adminId
+
+
 /*authority_com_fun*/
 SELECT
 	tf.id, 
