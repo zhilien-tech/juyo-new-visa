@@ -19,16 +19,15 @@ $condition
 
 /*authority_user_dept*/
 SELECT
-	u.id AS uid,
-	u.NAME AS username,
-	u.comid,
+	uj.empid,
 	d.id AS did,
 	d.deptName 
 FROM
 	t_department d
-	LEFT JOIN t_user u ON u.departmentId = d.id 
-WHERE
-	u.id = @adminId
+	LEFT JOIN t_job j ON j.deptid = d.id
+	LEFT JOIN t_com_job cj ON cj.jobId = j.id
+	LEFT JOIN t_user_job uj On uj.comJobId = cj.id
+	where uj.empid = @adminId
 
 
 /*authority_com_fun*/
