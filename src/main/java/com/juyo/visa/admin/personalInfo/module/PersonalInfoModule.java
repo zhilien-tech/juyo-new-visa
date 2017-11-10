@@ -13,10 +13,8 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
-import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
-import com.juyo.visa.admin.personalInfo.form.PersonalInfoSqlForm;
 import com.juyo.visa.admin.personalInfo.form.PersonalInfoUpdateForm;
 import com.juyo.visa.admin.personalInfo.service.PersonalInfoService;
 
@@ -40,9 +38,9 @@ public class PersonalInfoModule {
 	 * @param filter
 	 */
 	@At
-	@POST
-	private Object personallist(@Param("..") final PersonalInfoSqlForm form, final HttpSession session) {
-		return personalInfoService.personalList(form, session);
+	@Ok("jsp")
+	private Object personalInfoList(final HttpSession session) {
+		return personalInfoService.toUpdatePersonal(session);
 	}
 
 	/**
@@ -51,16 +49,16 @@ public class PersonalInfoModule {
 	 * 编辑个人信息页面回显数据
 	 */
 	@At
+	@GET
 	@Ok("jsp")
-	public Object toUpdatePersonal(@Param("id") final Long userId, final HttpSession session) {
-		return personalInfoService.toUpdatePersonal(userId, session);
+	public Object toUpdatePersonal(final HttpSession session) {
+		return personalInfoService.toUpdatePersonal(session);
 	}
 
 	/**
 	 * 执行'修改操作'
 	 */
 	@At
-	@GET
 	@Ok("jsp")
 	public Object updatePersonal(@Param("..") final PersonalInfoUpdateForm updateForm) {
 		return personalInfoService.updatePersonal(updateForm);
