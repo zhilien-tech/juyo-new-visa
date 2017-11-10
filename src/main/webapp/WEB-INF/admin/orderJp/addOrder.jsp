@@ -57,75 +57,93 @@
 										</select>
 									</div>
 								</div>
-								<div class="col-sm-3">
-									<div class="form-group" style="padding-right: 3%;">
-										<label><span>*</span>公司全称：</label> 
-										<select id = "compName" name="name"
-											class="form-control select2 cityselect2 " multiple="multiple"
-											data-placeholder="">
-									</select>
-										<!-- <input id="compName" name="name" type="text" class="form-control input-sm" placeholder=" " /> -->
+								<div class="on-line"><!-- select2 线上/OTS/线下 -->
+									<div class="col-sm-3">
+										<div class="form-group" style="padding-right: 3%;">
+											<label><span>*</span>公司全称：</label> 
+											<select id ="compName" name="name"
+												class="form-control select2 cityselect2 " multiple="multiple"
+												data-placeholder="">
+											</select>
+										</div>
 									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>公司简称：</label> 
-										<select id = "comShortName" name="shortname"
-											class="form-control select2 cityselect2 " multiple="multiple"
-											data-placeholder="">
-									</select>
-										<!-- <input id="comShortName" name="shortname" type="text" class="form-control input-sm" placeholder=" "  /> --> 
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>公司简称：</label> 
+											<select id = "comShortName" name="shortname"
+												class="form-control select2 cityselect2 " multiple="multiple"
+												data-placeholder="">
+											</select>
+										</div>
 									</div>
-								</div>
-							</div><!-- end 公司全称 -->
-							<div class="row body-from-input">
-								<!-- 联系人/手机号/邮箱 -->
+								</div><!-- end select2 线上/OTS/线下 -->
+								
+								<div class="zhiKe none"><!-- input 直客 -->
+									<div class="col-sm-3">
+										<div class="form-group" style="padding-right: 3%;">
+											<label><span>*</span>公司全称：</label> 
+											<input id="compName" name="name" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>公司简称：</label>
+											<input id="comShortName" name="shortname" type="text" class="form-control input-sm" placeholder=" "  />
+										</div>
+									</div>
+								</div><!-- end input 直客 -->
+							</div>
+							<div class="row body-from-input on-line"><!-- select2 线上/OTS/线下 -->
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>联系人：</label> 
 										<select id = "linkman" name="linkman"
-											class="form-control select2 cityselect2 " multiple="multiple"
-											data-placeholder="">
-									</select>
-										
-										<!-- <input id="linkman"
-											name="linkman" type="text" class="form-control input-sm"
-											placeholder=" " /> --> <i
-											class="bulb"></i>
+												class="form-control select2 cityselect2 " multiple="multiple"
+												data-placeholder="">
+										</select>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>手机号：</label> 
 										<select id = "telephone" name="mobile"
-											class="form-control select2 cityselect2 " multiple="multiple"
-											data-placeholder="">
-									</select>
-										
-										<!-- <input id="telephone"
-											name="mobile" type="text" class="form-control input-sm"
-											placeholder=" " /> -->  <i
-											class="bulb"></i>
+												class="form-control select2 cityselect2 " multiple="multiple"
+												data-placeholder="">
+										</select>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>邮箱：</label> 
-										<select id = "email" name="email"
-											class="form-control select2 cityselect2 " multiple="multiple"
-											data-placeholder="">
-									</select>
-										
-										 <!-- <input id="email" name="email"
-											type="text" class="form-control input-sm" placeholder=" "
-											 /> -->  <i class="bulb"></i>
+										<select id = "email" name="email" class="form-control select2 cityselect2 " multiple="multiple" data-placeholder="">
+										</select>
 									</div>
 								</div>
-							</div>
-							<!-- end 联系人/手机号/邮箱 -->
+							</div><!-- end select2 线上/OTS/线下 -->
+							
+							
+							<div class="row body-from-input zhiKe none"><!-- input 直客 -->
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>联系人：</label> 
+										<input id="linkman" name="linkman" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>手机号：</label> 
+										<input id="telephone" name="mobile" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>邮箱：</label>
+										<input id="email" name="email" type="text" class="form-control input-sm" placeholder=" "/>
+									</div>
+								</div>
+							</div><!-- end input 直客 -->
 						</div>
-					</div>
-				<!-- end 客户信息 -->
+					</div><!-- end 客户信息 -->
 				<!-- 订单信息 -->
 				<div class="orderInfo info" id="orderInfo">
 					<p class="info-head">订单信息</p>
@@ -483,10 +501,10 @@
 		$(function(){
 			//initCityNeedsSelect2();
 			customerTypeSelect2();
-			var customerType = $("#customerType").val();
+			//var customerType = $("#customerType").val();
 			//客户类型判断是不是直客
 			$("#customerType").change(function(){
-				if(customerType != 4){
+				/* if(customerType != 4){
 					 $("#compName").attr("readOnly",false);
 					 $("#comShortName").attr("readOnly",false);
 					 $("#linkman").attr("readOnly",false);
@@ -494,6 +512,14 @@
 					 $("#email").attr("readOnly",false);
 				}else{
 					
+				} */
+				var customerVal = $(this).val();
+				if(customerVal == 4){//直客
+					$(".on-line").hide();//隐藏select2部分字段
+					$(".zhiKe").removeClass("none");
+				}else{
+					$(".on-line").show();//显示select2部分字段
+					$(".zhiKe").addClass("none");
 				}
 			});
 			

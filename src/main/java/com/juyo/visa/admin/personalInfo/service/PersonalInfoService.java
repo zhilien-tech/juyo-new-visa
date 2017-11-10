@@ -52,7 +52,7 @@ public class PersonalInfoService extends BaseService<TUserEntity> {
 	 * @param session
 	 * 个人信息编辑回显数据
 	 */
-	public Object toUpdatePersonal(Long userId, HttpSession session) {
+	public Object toUpdatePersonal(HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userid = loginUser.getId();
 		String sqlString = sqlManager.get("personalInfo_list");
