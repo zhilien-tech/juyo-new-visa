@@ -104,6 +104,10 @@
 							/* notEmpty : {
 								message : '联系QQ不能为空'
 							} */
+							regexp: {
+		                        regexp: /^[0-9]*$/,
+		                        message: 'QQ只能是数字'
+		                    }
 						}
 					},
 					email : {

@@ -25,7 +25,6 @@
 		 <form id="passwordForm" method="post">
 		 	<div class="modal-body" style="height: 388px;">
 				<div class="tab-content">
-					<input name="id" type="hidden" value="${obj.id}">
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
@@ -78,7 +77,56 @@
 					validating : 'glyphicon glyphicon-refresh'
 				},
 				fields : {
-									}
+					password: {
+						validators: {
+							notEmpty: {
+								message: '原密码不能为空'
+							},
+							remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+								url: '${base}/admin/personalInfo/checkPassword.html',//验证地址
+								message: '原密码不正确，请重新输入!',//提示消息
+								delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+								type: 'POST',//请求方式
+								//自定义提交数据，默认值提交当前input value
+								data: function(validator) {
+									return {
+										password:$('#oldPass').val()
+									};
+								}
+							}
+						}
+					},
+					newPass: {
+						validators: {
+							notEmpty: {
+								message: '新密码不能为空'
+							},
+							
+						}
+					},
+					repeatPass: {
+						validators: {
+							notEmpty: {
+								message: '新密码不能为空'
+							},
+							remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+								url: '${base}/admin/personalInfo/samePassword.html',//验证地址
+								message: '两次输入不一致，请重新输入!',//提示消息
+								delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+								type: 'POST',//请求方式
+								//自定义提交数据，默认值提交当前input value
+								data: function(validator) {
+									return {
+										newPass:$('#newPass').val(),
+										repeatPass:$('#repeatPass').val()
+										
+									};
+								}
+							}
+						}
+					}
+					
+				}
 			});
 		}
 
@@ -93,21 +141,36 @@
 			$('#passwordForm').bootstrapValidator('validate');
 			var bootstrapValidator = $("#passwordForm").data('bootstrapValidator');
 			if (bootstrapValidator.isValid()) {
-				$.ajax({
-					type : 'POST',
-					data : $("#passwordForm").serialize(),
-					url : '${base}/admin/personalInfo/updatePassword.html',
-					success : function(data) {
-						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-						layer.close(index);
-						window.parent.layer.msg("修改成功", "", 3000);
-						parent.layer.close(index);
-						parent.datatable.ajax.reload();
-					},
-					error : function(xhr) {
-						layer.msg("修改失败", "", 3000);
-					}
-				});
+				if ($('#newPass').val()!= $('#repeatPass').val()) {
+					layer.msg('新密码两次输入不一致');
+					return;
+				}
+				parent.layer.confirm('您确认修改密码吗？', {
+					   btn: ['是','否'], //按钮
+					   shade: false //不显示遮罩
+					}, function(){
+						$.ajax({
+							type : 'POST',
+							data : $("#passwordForm").serialize(),
+							url : '${base}/admin/personalInfo/updatePassword.html',
+							success : function(data) {
+								if ("200" == data.status) {
+									window.location.href="${base}/admin/logout.html";
+									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							      	parent.layer.close(index);
+							      	window.parent.successCallback('1');
+								} else {
+									parent.layer.msg("操作失败!"); 
+								}
+							},
+							error : function(xhr) {
+								layer.msg("修改失败", "", 3000);
+							}
+						});
+					}, function(){
+						 //取消之后不做任何操作
+					});
+				
 			}
 		}
 

@@ -17,8 +17,10 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.admin.personalInfo.form.PasswordForm;
 import com.juyo.visa.admin.personalInfo.form.PersonalInfoSqlForm;
 import com.juyo.visa.admin.personalInfo.form.PersonalInfoUpdateForm;
 import com.juyo.visa.common.access.AccessConfig;
@@ -28,6 +30,7 @@ import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.Pagination;
 import com.uxuexi.core.web.base.service.BaseService;
+import com.uxuexi.core.web.chain.support.JsonResult;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -98,8 +101,27 @@ public class PersonalInfoService extends BaseService<TUserEntity> {
 		return map;
 	}
 
+	//校验两次输入是否一致
+	public Object samePassword(@Param("newPass") final String newPass, @Param("repeatPass") final String repeatPass) {
+		boolean isSame = false;
+		Map<String, Object> map = new HashMap<String, Object>();
+		if ((!Util.isEmpty(newPass)) && (!Util.isEmpty(repeatPass))) {
+			boolean eq = Util.eq(newPass, repeatPass);
+			if (eq) {
+				isSame = true;
+			}
+		}
+		map.put("valid", isSame);
+		return map;
+	}
+
 	//更新密码
-	public Object updatePassword() {
-		return null;
+	public Object updatePassword(PasswordForm passForm, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		String repeatPass = passForm.getRepeatPass();
+		String password = MD5.sign(repeatPass, AccessConfig.password_secret, AccessConfig.INPUT_CHARSET);//密码加密
+		loginUser.setPassword(password);
+		int update = nutDao.update(loginUser);
+		return update > 0;
 	}
 }
