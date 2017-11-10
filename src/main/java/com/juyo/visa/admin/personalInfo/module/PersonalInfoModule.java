@@ -39,7 +39,7 @@ public class PersonalInfoModule {
 	 */
 	@At
 	@Ok("jsp")
-	private Object personalInfoList(final HttpSession session) {
+	private Object list(final HttpSession session) {
 		return personalInfoService.toUpdatePersonal(session);
 	}
 
