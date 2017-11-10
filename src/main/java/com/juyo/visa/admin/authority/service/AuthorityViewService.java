@@ -57,6 +57,16 @@ public class AuthorityViewService extends BaseService<DeptJobForm> {
 	public Object listData(TAuthoritySqlForm sqlForm, HttpSession session) {
 		TCompanyEntity company = LoginUtil.getLoginCompany(session);
 		int companyId = company.getId();
+		int adminId = company.getAdminId();
+
+		//查询管理员所在部门
+		Sql sql = Sqls.create(sqlManager.get("authority_user_dept"));
+		sql.params().set("adminId", adminId);
+		Record adminDept = dbDao.fetch(sql);
+		String deptId = adminDept.getString("did");
+		if (!Util.isEmpty(deptId)) {
+			sqlForm.setDeptId(Long.valueOf(deptId));
+		}
 		sqlForm.setComId(companyId);
 		Map<String, Object> listPage4Datatables = listPage4Datatables(sqlForm);
 		List<Record> records = (List<Record>) listPage4Datatables.get("data");
