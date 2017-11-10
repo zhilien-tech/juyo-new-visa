@@ -17,6 +17,20 @@ LEFT JOIN t_com_function cf ON cfj.comFunId = cf.id
 LEFT JOIN t_function f ON cf.funId = f.id
 $condition
 
+/*authority_user_dept*/
+SELECT
+	u.id AS uid,
+	u.NAME AS username,
+	u.comid,
+	d.id AS did,
+	d.deptName 
+FROM
+	t_department d
+	LEFT JOIN t_user u ON u.departmentId = d.id 
+WHERE
+	u.id = @adminId
+
+
 /*authority_com_fun*/
 SELECT
 	tf.id, 
