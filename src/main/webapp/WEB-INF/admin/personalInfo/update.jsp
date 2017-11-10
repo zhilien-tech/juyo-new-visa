@@ -25,20 +25,20 @@
 			</div>
 			<div class="modal-body" style="height: 388px;">
 				<div class="tab-content">
-					<input name="id" type="hidden" value="${obj.user.id}">
+					<input name="id" type="hidden" value="${obj.id}">
 
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>员工姓名：</label> 
-									<input id="username" name="username" value="${obj.user.name}" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="username" name="username" value="${obj.name}" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>用户名/手机号：</label> 
-									<input id="mobile" name="mobile" value="${obj.user.mobile}" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="mobile" name="mobile" value="${obj.mobile}" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -47,13 +47,13 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>QQ：</label> 
-									<input id="qq" name="qq" value="${obj.user.qq}" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="qq" name="qq" value="${obj.qq}" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>E-mail：</label> 
-									<input id="email" name="email" value="${obj.user.email}" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="email" name="email" value="${obj.email}" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -61,13 +61,13 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>部门：</label> 
-									<input id="department" name="department" value="" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="department" name="department" value="${obj.deptname}" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>职位：</label> 
-									<input id="job" name="job" value="" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="job" name="job" value="${obj.jobname}" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -101,9 +101,9 @@
 				fields : {
 					qq : {
 						validators : {
-							notEmpty : {
+							/* notEmpty : {
 								message : '联系QQ不能为空'
-							}
+							} */
 						}
 					},
 					email : {
@@ -135,13 +135,13 @@
 				$.ajax({
 					type : 'POST',
 					data : $("#updatePersonalInfoForm").serialize(),
-					url : '${base}/admin/personalInfo/toUpdatePersonal.html',
+					url : '${base}/admin/personalInfo/updatePersonal.html',
 					success : function(data) {
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						layer.close(index);
 						window.parent.layer.msg("编辑成功", "", 3000);
 						parent.layer.close(index);
-						parent.datatable.ajax.reload();
+						window.parent.personalInfo();
 					},
 					error : function(xhr) {
 						layer.msg("编辑失败", "", 3000);
@@ -150,7 +150,43 @@
 			}
 		}
 
-		//返回刷新页面 
+		//刷新个人信息
+		function personalInfo(){
+			$.getJSON("/admin/personalInfo/listInfo.html", function (resp) {
+				var name = resp.name;
+				if(null == name){
+					name = "";
+				}
+				var name = resp.name;
+				if(null == name){
+					name = "";
+				}
+				var qq = resp.qq;
+				if(null == qq){
+					qq = "";
+				}
+				var email = resp.email;
+				if(null == email){
+					email = "";
+				}
+				var deptname = resp.deptname;
+				if(null == deptname){
+					deptname = "";
+				}
+				var jobname = resp.jobname;
+				if(null == jobname){
+					jobname = "";
+				}
+				parent.$("#name").text(name);
+				parent.$("#mobile").text(mobile);
+				parent.$("#qq").text(qq);
+				parent.$("#email").text(email);
+				parent.$("#deptname").text(deptname);
+				parent.$("#jobname").text(jobname);
+			});
+		}
+		
+		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);

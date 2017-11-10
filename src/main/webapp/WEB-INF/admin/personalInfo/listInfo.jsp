@@ -21,8 +21,8 @@
 
 						<div class="row form-right">
 							<div class="col-md-12 left-5px">
-								<a id="" class="btn btn-primary btn-sm pull-right" onclick="">修改密码</a>
-								<a id="" class="btn btn-primary btn-sm pull-right" onclick="">编辑</a>
+								<a id="" class="btn btn-primary btn-sm pull-right" onclick="updatePassword();">修改密码</a>
+								<a id="" class="btn btn-primary btn-sm pull-right" onclick="updateInfo();">编辑</a>
 							</div>
 						</div>
 
@@ -33,31 +33,27 @@
 							<tbody>
 								<tr>
 									<td>用户名称</td>
-									<td>abc</td>
+									<td>${obj.name}</td>
 								</tr>
 								<tr>
 									<td>用户名/手机号码</td>
-									<td>6666</td>
-								</tr>
-								<tr>
-									<td>座机号码</td>
-									<td>010-5236212</td>
+									<td>${obj.mobile}</td>
 								</tr>
 								<tr>
 									<td>联系QQ</td>
-									<td>123456678</td>
+									<td>${obj.qq}</td>
 								</tr>
 								<tr>
 									<td>电子邮箱</td>
-									<td>1313131313@163.com</td>
+									<td>${obj.email}</td>
 								</tr>
 								<tr>
 									<td>所属部门</td>
-									<td>公司管理部</td>
+									<td>${obj.deptname}</td>
 								</tr>
 								<tr>
 									<td>用户职位</td>
-									<td>公司管理员</td>
+									<td>${obj.jobname}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -82,6 +78,70 @@
 	<script src="${base}/references/common/js/base/base.js"></script>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		//刷新个人信息
+		function personalInfo(){
+			$.getJSON("/admin/personalInfo/listInfo.html", function (resp) {
+				var name = resp.name;
+				if(null == name){
+					name = "";
+				}
+				var name = resp.name;
+				if(null == name){
+					name = "";
+				}
+				var qq = resp.qq;
+				if(null == qq){
+					qq = "";
+				}
+				var email = resp.email;
+				if(null == email){
+					email = "";
+				}
+				var deptname = resp.deptname;
+				if(null == deptname){
+					deptname = "";
+				}
+				var jobname = resp.jobname;
+				if(null == jobname){
+					jobname = "";
+				}
+				parent.$("#name").text(name);
+				parent.$("#mobile").text(mobile);
+				parent.$("#qq").text(qq);
+				parent.$("#email").text(email);
+				parent.$("#deptname").text(deptname);
+				parent.$("#jobname").text(jobname);
+			});
+		}
+		
+		function updateInfo(){
+			 layer.open({
+		    	    type: 2,
+		    	    title: false,
+		    	    closeBtn:false,
+		    	    fix: false,
+		    	    maxmin: false,
+		    	    shadeClose: false,
+		    	    scrollbar: false,
+		    	    area: ['900px', '550px'],
+		    	    content: BASE_PATH + '/admin/personalInfo/update.html'
+		    	  });
+		}
+		
+		function updatePassword(){
+			 layer.open({
+		    	    type: 2,
+		    	    title: false,
+		    	    closeBtn:false,
+		    	    fix: false,
+		    	    maxmin: false,
+		    	    shadeClose: false,
+		    	    scrollbar: false,
+		    	    area: ['900px', '550px'],
+		    	    content: BASE_PATH + '/admin/personalInfo/updatePassword.html'
+		    	  });
+		}
+		
 	</script>
 </body>
 </html>

@@ -16,6 +16,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
+import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.personalInfo.form.PersonalInfoSqlForm;
@@ -36,6 +37,7 @@ import com.uxuexi.core.web.base.service.BaseService;
  * @author   彭辉
  * @Date	 2017年11月10日 	 
  */
+@IocBean
 public class PersonalInfoService extends BaseService<TUserEntity> {
 
 	//个人信息列表
@@ -69,7 +71,7 @@ public class PersonalInfoService extends BaseService<TUserEntity> {
 
 	//修改个人信息
 	public Object updatePersonal(PersonalInfoUpdateForm updateForm) {
-		long uid = updateForm.getUserid();
+		long uid = updateForm.getId();
 		String qq = updateForm.getQq();
 		String email = updateForm.getEmail();
 		TUserEntity user = dbDao.fetch(TUserEntity.class, uid);
