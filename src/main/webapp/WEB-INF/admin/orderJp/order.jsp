@@ -37,7 +37,7 @@
 			</div>
 			<section class="content">
 				<!-- 客户信息 -->
-				<div class="info" id="customerInfo" ref="customerInfo">
+				<%-- <div class="info" id="customerInfo" ref="customerInfo">
 					<p class="info-head">客户信息</p>
 					<div class="info-body-from">
 						<div class="row body-from-input">
@@ -101,9 +101,115 @@
 						</div>
 						<!-- end 客户来源/联系人/手机号/邮箱 -->
 					</div>
-				</div>
+				</div> --%>
 				<!-- end 客户信息 -->
 
+				
+				<div class="info" id="customerInfo" ref="customerInfo">
+						<p class="info-head">客户信息</p>
+						<div class="info-body-from">
+							<div class="row body-from-input">
+								<!-- 公司全称 -->
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>客户来源：</label> 
+										<select id="customerType" name="source" class="form-control input-sm">
+											<option value="">--请选择--</option>
+											<c:forEach var="map" items="${obj.customerTypeEnum}">
+												<option value="${map.key}">${map.value}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+								<div class="on-line"><!-- select2 线上/OTS/线下 -->
+									<div class="col-sm-3">
+										<div class="form-group" style="padding-right: 3%;">
+											<label><span>*</span>公司全称：</label> 
+											<select id ="compName" name="name"
+												class="form-control select2 cityselect2 " multiple="multiple"
+												data-placeholder="">
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>公司简称：</label> 
+											<select id = "comShortName" name="shortname"
+												class="form-control select2 cityselect2 " multiple="multiple"
+												data-placeholder="">
+											</select>
+										</div>
+									</div>
+								</div><!-- end select2 线上/OTS/线下 -->
+								
+								<div class="zhiKe none"><!-- input 直客 -->
+									<div class="col-sm-3">
+										<div class="form-group" style="padding-right: 3%;">
+											<label><span>*</span>公司全称：</label> 
+											<input id="compName" name="name" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>公司简称：</label>
+											<input id="comShortName" name="shortname" type="text" class="form-control input-sm" placeholder=" "  />
+										</div>
+									</div>
+								</div><!-- end input 直客 -->
+							</div>
+							<div class="row body-from-input on-line"><!-- select2 线上/OTS/线下 -->
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>联系人：</label> 
+										<select id = "linkman" name="linkman"
+												class="form-control select2 cityselect2 " multiple="multiple"
+												data-placeholder="">
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>手机号：</label> 
+										<select id = "telephone" name="mobile"
+												class="form-control select2 cityselect2 " multiple="multiple"
+												data-placeholder="">
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>邮箱：</label> 
+										<select id = "email" name="email" class="form-control select2 cityselect2 " multiple="multiple" data-placeholder="">
+										</select>
+									</div>
+								</div>
+							</div><!-- end select2 线上/OTS/线下 -->
+							
+							
+							<div class="row body-from-input zhiKe none"><!-- input 直客 -->
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>联系人：</label> 
+										<input id="linkman" name="linkman" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>手机号：</label> 
+										<input id="telephone" name="mobile" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>邮箱：</label>
+										<input id="email" name="email" type="text" class="form-control input-sm" placeholder=" "/>
+									</div>
+								</div>
+							</div><!-- end input 直客 -->
+						</div>
+					</div><!-- end 客户信息 -->
+				
+				
 				<!-- 订单信息 -->
 				<div class="orderInfo info" id="orderInfo">
 					<p class="info-head">订单信息</p>
@@ -480,8 +586,20 @@
 	<script src="${base}/admin/orderJp/order.js"></script>
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
+		$(function(){
+			//客户来源
+			$("#customerType").change(function(){
+				var customerVal = $(this).val();
+				if(customerVal == 4){//直客
+					$(".on-line").hide();//隐藏select2部分字段
+					$(".zhiKe").removeClass("none");
+				}else{
+					$(".on-line").show();//显示select2部分字段
+					$(".zhiKe").addClass("none");
+				}
+			});
+		});
 		
-	
 		/* function selectListData() {
 			var isVisit = $("#isVisit").val();
 			var visaType = $("#visaType").val();
