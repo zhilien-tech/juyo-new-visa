@@ -18,11 +18,14 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;
 import com.juyo.visa.forms.TApplicantPassportForm;
 import com.uxuexi.core.common.util.EnumUtil;
@@ -62,6 +65,11 @@ public class OrderJpModule {
 	@At
 	@POST
 	public Object listData(@Param("..") final OrderJpForm sqlParamForm, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		sqlParamForm.setComId(loginCompany.getId());
+		sqlParamForm.setUserId(loginUser.getId());
+		sqlParamForm.setUserType(loginUser.getUserType());
 		return saleViewService.listData(sqlParamForm, session);
 	}
 
@@ -188,5 +196,59 @@ public class OrderJpModule {
 	@POST
 	public Object saveEditPassport(@Param("..") TApplicantPassportForm passportForm, HttpSession session) {
 		return saleViewService.saveEditPassport(passportForm, session);
+	}
+
+	/**
+	 * 客户信息获取申请人下拉
+	 */
+	@At
+	@POST
+	public Object getLinkNameSelect(@Param("linkman") String linkman, HttpSession session) {
+		return saleViewService.getLinkman(linkman, session);
+	}
+
+	/**
+	 * 客户信息获取电话下拉
+	 */
+	@At
+	@POST
+	public Object getPhoneNumSelect(@Param("mobile") String mobile, HttpSession session) {
+		return saleViewService.getPhoneNumSelect(mobile, session);
+	}
+
+	/**
+	 * 客户信息获取公司全称下拉
+	 */
+	@At
+	@POST
+	public Object getcompNameSelect(@Param("compName") String compName, HttpSession session) {
+		return saleViewService.getcompNameSelect(compName, session);
+	}
+
+	/**
+	 * 客户信息获取公司简称下拉
+	 */
+	@At
+	@POST
+	public Object getComShortNameSelect(@Param("comShortName") String comShortName, HttpSession session) {
+		return saleViewService.getComShortNameSelect(comShortName, session);
+	}
+
+	/**
+	 * 客户信息获取邮箱下拉
+	 */
+	@At
+	@POST
+	public Object getEmailSelect(@Param("email") String email, HttpSession session) {
+		return saleViewService.getEmailSelect(email, session);
+	}
+
+	/**
+	 * 根据customerId获取客户信息
+	 */
+	@At
+	@POST
+	public Object getCustomerById(@Param("id") Integer id, HttpSession session) {
+		return saleViewService.getCustomerById(id, session);
 	}
 }

@@ -50,6 +50,8 @@ public class OrderJpForm extends OrderForm {
 	private Date start_time;
 	private Date end_time;
 
+	private Integer userType;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**
@@ -92,6 +94,14 @@ public class OrderJpForm extends OrderForm {
 		if (!Util.isEmpty(visaType)) {
 			cnd.and("oj.visaType", "=", visaType);
 		}
+
+		if (userType == 5) {
+			cnd.and("o.comId", "=", comId);
+		}
+		if (userType == 1) {
+			cnd.and("o.userId", "=", userId);
+		}
+
 		cnd.orderBy("o.createtime", "DESC");
 		cnd.orderBy("o.updatetime", "DESC");
 		return cnd;
