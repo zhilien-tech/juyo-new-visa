@@ -8,7 +8,6 @@
 	/*------------------------------------------aside JS部分------------------------------------------------*/
 	var _index = sessionStorage.currentPageIndex;//当前下标
 	$(".sidebar-menu > li").click(function(){
-		///_index = $(this).attr("id")-1;
 		_index = $(this).attr("id");
 		sessionStorage.currentPageIndex = _index;
 		$(".sidebar-menu > li").removeClass('active');
@@ -46,7 +45,6 @@
 					$("#" + menu1Id).find("i").removeClass("more").addClass("more_unfold");
 				}
 			}else{//没有二级菜单时
-				//alert("无二级");
 			}
 			
 			var imgUrl = $("#"+_index).find('img').attr('src');//获取当前icon的路径
@@ -112,19 +110,6 @@
 		}
 
 	});
-	
-	
-	/*$(".min-sidebar .sidebar-menu .menu1").mouseover(function(){
-		var $this = $(this).next("ul");
-		if($this.hasClass("menu-ul")){
-			console.log("6666");
-		}else{
-			console.log("8888");
-		}
-	}).mouseout(function(){
-		
-	});*/
-	
 	/*----------------------------------------end aside JS部分---------------------------------------------*/  
 
 
@@ -145,40 +130,3 @@
 	$('.bulb').click(function(){
 		$(this).toggleClass('bulb1');
 	});
-
-	
-	
-	/*---图标提示语---*/
-	
-	/*$(document).on(".edit-icon","mouseover",function(){
-		alert(2);
-	});*/
-	
-	$(".edit-icon").mouseover(function(){
-	   alert(454545);
-	});
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	

@@ -53,15 +53,15 @@
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit" title="编辑" v-on:click="visaDetail(data.id)"> </i>
-									<i class="shiShou" title="实收" v-on:click="revenue(data.id)"> </i>
-									<i class="sendZB" title="发招宝"> </i>
-									<i class="ZBchange" title="招宝变更"> </i>
-									<i class="ZBcancel" title="招宝取消"> </i>
-									<i class="download" title="下载"> </i>
-									<i class="handoverTable" title="交接表"> </i>
-									<i class="visaInput" title="签证录入"> </i>
-									<i class="afterSales" title="售后"> </i>
+									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
+									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
+									<i class="sendZB"> </i>
+									<i class="ZBchange"> </i>
+									<i class="ZBcancel"> </i>
+									<i class="download"> </i>
+									<i class="handoverTable"> </i>
+									<i class="visaInput"> </i>
+									<i class="afterSales"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
@@ -90,6 +90,7 @@
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 	<%-- <script src="${base}/admin/visaJapan/visaList.js"></script> --%>
 	<script src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
+	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
 	//异步加载的URL地址
     var url="${base}/admin/visaJapan/visaListData.html";

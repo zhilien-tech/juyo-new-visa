@@ -46,9 +46,9 @@
 								<div><label>状态：</label><span>{{data.state}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i title="编辑" class="edit" v-on:click="editClick"> </i>
-									<i title="快递" class="express"> </i>
-									<i title="回邮" class="return"> </i>
+									<i class="edit" v-on:click="editClick"> </i>
+									<i class="express"> </i>
+									<i class="return"> </i>
 								</div>
 							</div>
 							<ul class="card-content">
@@ -58,11 +58,11 @@
 									<div><label>手机号：</label><span>{{item.phone}}</span></div>
 									<div><label>状态：</label><span>{{item.state}}</span></div>
 									<div>
-										<i title="基本信息" class="basicInfo"> </i>
-										<i title="护照信息" class="passportInfo"> </i>
-										<i title="签证信息" class="visaInfo"> </i>
-										<i title="合格" class="qualified"> </i>
-										<i title="不合格" class="unqualified"> </i>
+										<i class="basicInfo"> </i>
+										<i class="passportInfo"> </i>
+										<i class="visaInfo"> </i>
+										<i class="qualified"> </i>
+										<i class="unqualified"> </i>
 									</div>
 								</li>
 							</ul>
@@ -79,6 +79,7 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
+	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		//异步加载的URL地址
