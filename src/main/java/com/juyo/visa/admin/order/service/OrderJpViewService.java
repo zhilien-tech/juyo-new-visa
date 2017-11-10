@@ -587,7 +587,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		applicant.setUpdateTime(new Date());
 		dbDao.update(applicant);
-		return null;
+		return applicant;
 	}
 
 	public Object getEditApplicant(Integer orderid) {

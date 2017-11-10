@@ -220,7 +220,6 @@ $("#linkman").on('select2:select', function (evt) {
 			/*邮箱补全*/
 			$("#email").append('<option selected="true" value='+ id +'>'+data.email+'</option>');
 			/*客户来源补全*/
-			console.log(data.source);
 			$("#customerType").val(data.source);
 			/*if(data.isArrearsRed){
 				$('#fontLSqk').css("color","red");
@@ -290,6 +289,16 @@ $("#telephone").on('select2:select', function (evt) {
 		},
 		dataType:'json',
 		success : function(data) {
+			var sourceName;
+			if(data.source == 1){
+				sourceName = "线上"
+			}
+			if(data.source == 2){
+				sourceName = "OTS"
+			}
+			if(data.source == 3){
+				sourceName = "线下"
+			}
 			/* 联系人补全 */
 			$("#linkeman").append('<option selected="true" value='+ id +'>'+data.linkman+'</option>'); 
 			/*公司全称补全*/
@@ -298,11 +307,8 @@ $("#telephone").on('select2:select', function (evt) {
 			$("#comShortName").append('<option selected="true" value='+ id +'>'+data.shortname+'</option>');
 			/*邮箱补全*/
 			$("#email").append('<option selected="true" value='+ id +'>'+data.email+'</option>');
-			
-			if(data.isArrearsRed){
-				$('#fontLSqk').css("color","red");
-				$("#custInfoName").css("color","red");
-			}
+			/*客户来源补全*/
+			$("#customerType").val(data.source);
 		},
 		error : function() {
 		}
@@ -322,6 +328,16 @@ $("#compName").on('select2:select', function (evt) {
 		},
 		dataType:'json',
 		success : function(data) {
+			var sourceName;
+			if(data.source == 1){
+				sourceName = "线上"
+			}
+			if(data.source == 2){
+				sourceName = "OTS"
+			}
+			if(data.source == 3){
+				sourceName = "线下"
+			}
 			/* 联系人补全 */
 			$("#linkman").append('<option selected="true" value='+ id +'>'+data.linkman+'</option>'); 
 			/*电话补全*/
@@ -330,11 +346,8 @@ $("#compName").on('select2:select', function (evt) {
 			$("#comShortName").append('<option selected="true" value='+ id +'>'+data.shortname+'</option>');
 			/*邮箱补全*/
 			$("#email").append('<option selected="true" value='+ id +'>'+data.email+'</option>');
-			
-			if(data.isArrearsRed){
-				$('#fontLSqk').css("color","red");
-				$("#custInfoName").css("color","red");
-			}
+			/*客户来源补全*/
+			$("#customerType").val(data.source);
 		},
 		error : function() {
 		}
@@ -355,6 +368,16 @@ $("#comShortName").on('select2:select', function (evt) {
 		},
 		dataType:'json',
 		success : function(data) {
+			var sourceName;
+			if(data.source == 1){
+				sourceName = "线上"
+			}
+			if(data.source == 2){
+				sourceName = "OTS"
+			}
+			if(data.source == 3){
+				sourceName = "线下"
+			}
 			/* 联系人补全 */
 			$("#linkeman").append('<option selected="true" value='+ id +'>'+data.linkman+'</option>'); 
 			/*公司全称补全*/
@@ -363,11 +386,8 @@ $("#comShortName").on('select2:select', function (evt) {
 			$("#telephone").append('<option selected="true" value='+ id +'>'+data.mobile+'</option>');
 			/*邮箱补全*/
 			$("#email").append('<option selected="true" value='+ id +'>'+data.email+'</option>');
-			
-			if(data.isArrearsRed){
-				$('#fontLSqk').css("color","red");
-				$("#custInfoName").css("color","red");
-			}
+			/*客户来源补全*/
+			$("#customerType").val(data.source);
 		},
 		error : function() {
 		}
@@ -388,6 +408,16 @@ $("#email").on('select2:select', function (evt) {
 		},
 		dataType:'json',
 		success : function(data) {
+			var sourceName;
+			if(data.source == 1){
+				sourceName = "线上"
+			}
+			if(data.source == 2){
+				sourceName = "OTS"
+			}
+			if(data.source == 3){
+				sourceName = "线下"
+			}
 			/* 联系人补全 */
 			$("#linkeman").append('<option selected="true" value='+ id +'>'+data.linkman+'</option>'); 
 			/*公司全称补全*/
@@ -396,11 +426,8 @@ $("#email").on('select2:select', function (evt) {
 			$("#comShortName").append('<option selected="true" value='+ id +'>'+data.shortname+'</option>');
 			/*电话补全*/
 			$("#telephone").append('<option selected="true" value='+ id +'>'+data.mobile+'</option>');
-			
-			if(data.isArrearsRed){
-				$('#fontLSqk').css("color","red");
-				$("#custInfoName").css("color","red");
-			}
+			/*客户来源补全*/
+			$("#customerType").val(data.source);
 		},
 		error : function() {
 		}

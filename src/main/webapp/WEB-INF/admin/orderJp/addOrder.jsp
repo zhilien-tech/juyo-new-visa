@@ -330,7 +330,7 @@
 									<th><span>操作<span></th>
 								</tr>
 							</thead>
-							<tbody name="applicantsTable" id="applicanatsTable">
+							<tbody name="applicantsTable" id="applicantsTable">
 								<%-- <tr>
 
 									<td>${applicant.firstName }</td>
@@ -526,33 +526,35 @@
 					$('#threeCounty').addClass("none");
 				}
 			});
-			//加急 点击事件
-			function urgent(){
-				var urgentType = $('[name="urgenttype"]').val();
-				if (urgentType != 1) {
-					$("#urgentDays").removeClass("none");
-				} else {
-					$("#urgentDays").addClass("none");
-				}
+			
+		});
+		
+		//加急 点击事件
+		function urgent(){
+			var urgentType = $('[name="urgenttype"]').val();
+			if (urgentType != 1) {
+				$("#urgentDays").removeClass("none");
+			} else {
+				$("#urgentDays").addClass("none");
 			}
-			
-			
-			//添加申请人(大按钮)
-			var BASE_PATH = '${base}';
-			$(".addApplicantBtn").click(function(){
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '551px'],
-					content:'/admin/orderJp/addApplicant.html'
-				});
-				
+		}
+		
+		
+		//添加申请人(大按钮)
+		var BASE_PATH = '${base}';
+		$(".addApplicantBtn").click(function(){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/addApplicant.html'
 			});
+			
 		});
 		var applData;
 		//添加申请人(右上角小添加按钮)
@@ -582,84 +584,88 @@
 				if(status == 3){
 					layer.msg('添加成功');
 				}
+				var td1,td2,td3,td4,td5;
+				var tr=$("<tr></tr>");
+				if((data.firstName != undefined) && (data.lastName != undefined)){
+					td1 = $("<td>" + data.firstName + data.lastName + "</td>");
+				}else if((data.firstName != undefined) && (data.lastName == undefined)){
+					td1 = $("<td>" + data.firstName + "</td>");
+				}else if((data[i].firstName == undefined) && (data[i].lastName != undefined)){
+					td1 = $("<td>" + data.lastName + "</td>");
+				}else{
+					td1 = $("<td></td>");
+				}
+				if(data.telephone != undefined){
+					td2 = $("<td>" + data.telephone + "</td>");
+				}else{
+					td2 = $("<td></td>");
+				}
 				
-				/* $("#applicanatsTable").each(function(){
-					var applicants = $(this);
-					applicants.append(
-						'<tr>'
-						'<td>' + data.firstName + data.lastName + '</td>'	
-						'<td>' + data.telephone + '</td>'
-						'<td>' + data.email + '</td>'
-						'<td>' + data.passport + '</td>'
-						'<td>' + data.sex + '</td>'
-						'<td>'+
-						'<a href="javascript:updateApplicant('+data.id+');">基本信息</a>&nbsp;&nbsp;'+
-						'<a href="javascript:passportInfo('+data.id+');">护照</a>&nbsp;&nbsp;'+
-						'<a href="">签证</a><br>'+
-						'<a href="">回邮</a>&nbsp;&nbsp;'+
-						'<a href="javascript:deleteApplicant('+data.id+');">删除</a></br>'+
-						'</td>'
-						'</tr>'
+				if(data.email != undefined){
+					td3 = $("<td>" + data.email + "</td>");
+				}else{
+					td3 = $("<td></td>");
+				}
 				
-				);
-					applicants.html();
-				}); */
-				$("#applicanatsTable").each(function(){
-					var applicants = $(this);
-					var result = '';
-					for(var i = 0; i < data.length; i++){
-						result += '<tr>';
-						if((data[i].firstName != undefined) && (data[i].lastName != undefined)){
-							result += '<td>' + data[i].firstName + data[i].lastName + '</td>';
-						}else if((data[i].firstName != undefined) && (data[i].lastName == undefined)){
-							result += '<td>' + data[i].firstName + '</td>';
-						}else if((data[i].firstName == undefined) && (data[i].lastName != undefined)){
-							result += '<td>' + data[i].lastName + '</td>';
-						}
-						else{
-							result += '<td></td>';
-						}
-						
-						if(data[i].telephone != undefined){
-							result += '<td>' + data[i].telephone + '</td>';
-						}else{
-							result += '<td></td>';
-						}
-						
-						if(data[i].email != undefined){
-							result += '<td>' + data[i].email + '</td>';
-						}else{
-							result += '<td></td>';
-						}
-						
-						if(data[i].passport != undefined){
-							result += '<td>' + data[i].passport + '</td>';
-						}else{
-							result += '<td></td>';
-						}
-						
-						if(data[i].sex != undefined){
-							result += '<td>' + data[i].sex + '</td>';
-						}else{
-							result += '<td></td>';
-						}
-						
-						result += '<td>
-						<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
-						<a href="javascript:passportInfo('+data[i].id+');">护照</a>&nbsp;&nbsp;
-						<a href="">签证</a><br>
-						<a href="">回邮</a>&nbsp;&nbsp;
-						<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></br>
-						</td>';
-						
-						result += '</tr>';
-					}
-					applicants.html(result);
-					
-				}); 
+				if(data.passport != undefined){
+					td4 = $("<td>" + data.passport + "</td>");
+				}else{
+					td4 = $("<td></td>");
+				}
+				
+				if(data.sex != undefined){
+					td5 = $("<td>" + data.sex + "</td>");
+				}else{
+					td5 = $("<td></td>");
+				}
+				var td6 = $("<td><a href='javascript:updateApplicant("+data.id+");'>基本信息</a>&nbsp;&nbsp;<a href='javascript:passportInfo("+data.id+");'>护照</a>&nbsp;&nbsp;<a href=''>签证</a></br><a href=''>回邮</a>&nbsp;&nbsp;<a href='javascript:deleteApplicant("+data.id+");'>删除</a></br></td>");
+				tr.append(td1);
+			    tr.append(td2);
+			    tr.append(td3);
+			    tr.append(td4);
+			    tr.append(td5);
+			    tr.append(td6);
+			    $("#applicantsTable").append(tr);
+				/* $("#applicantsTable").append(
+						'<tr><td>' + data.firstName + data.lastName + '</td><td>' + data.telephone + '</td><td>' + data.email + '</td><td>' + data.passport + '</td><td>' + data.sex + '</td><td><a href="javascript:updateApplicant('+data.id+');">基本信息</a>&nbsp;&nbsp;<a href="javascript:passportInfo('+data.id+');">护照</a>&nbsp;&nbsp;<a href="">签证</a></br><a href="">回邮</a>&nbsp;&nbsp;<a href="javascript:deleteApplicant('+data.id+');">删除</a></br></td></tr>'
+				); */
+				
 				$("#mySwitch").removeClass("none");//显示申请人信息列表
 				$("#applicantInfo").hide();//添加申请人 按钮 隐藏
 			}
+			
+			//修改申请人基本信息
+			function updateApplicant(id){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/updateApplicant.html?id='+id
+				});
+			}
+				
+			//修改申请人护照信息
+			
+			function passport(id){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/passportInfo.html?id='+id
+				});
+			}
+			
+			
 			//下单保存
 			function saveAddOrder(){
 				var orderinfo = $("#orderInfo").serialize();
