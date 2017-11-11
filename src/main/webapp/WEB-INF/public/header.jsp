@@ -51,12 +51,4 @@
       </div>
     </nav>
   </header>
-  <script type="text/javascript">
- 	$(function() {
-  		var userType = ${loginuser.userType};
-  		if(userType==3 || userType==4){
-  			psersonal.val("href", "javascript:;");
-  		}
-  	});
-  </script>
 
