@@ -10,6 +10,7 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.personalInfo.form.PasswordForm;
 import com.juyo.visa.admin.personalInfo.form.PersonalInfoUpdateForm;
 import com.juyo.visa.admin.personalInfo.service.PersonalInfoService;
 import com.uxuexi.core.web.chain.support.JsonResult;
@@ -52,6 +53,15 @@ public class PersonalInfoModule {
 	}
 
 	/**
+	 * 刷新列表
+	 */
+	@At
+	@POST
+	public Object personalInfo(final HttpSession session) {
+		return personalInfoService.toUpdatePersonal(session);
+	}
+
+	/**
 	 * 修改密码页面
 	 */
 	@At
@@ -68,12 +78,26 @@ public class PersonalInfoModule {
 	 */
 	@At
 	@POST
-	public Object updatePassword(@Param("..") final PersonalInfoUpdateForm PassForm, @Param("id") final Long userId) {
+	public Object updatePassword(@Param("..") final PasswordForm passForm, HttpSession session) {
 		try {
-			//personalInfoService.updatePassData(PassForm, userId);
+			personalInfoService.updatePassword(passForm, session);
 		} catch (Exception e) {
 			return JsonResult.error(e.getMessage());
 		}
 		return JsonResult.success("密码修改成功!");
+	}
+
+	//校验用户密码
+	@At
+	@POST
+	public Object checkPassword(@Param("password") final String password, HttpSession session) {
+		return personalInfoService.checkPassword(password, session);
+	}
+
+	//校验两次输入是否一致
+	@At
+	@POST
+	public Object samePassword(@Param("newPass") final String newPass, @Param("repeatPass") final String repeatPass) {
+		return personalInfoService.samePassword(newPass, repeatPass);
 	}
 }
