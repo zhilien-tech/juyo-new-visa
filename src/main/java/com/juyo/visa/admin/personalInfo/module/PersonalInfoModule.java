@@ -53,6 +53,15 @@ public class PersonalInfoModule {
 	}
 
 	/**
+	 * 刷新列表
+	 */
+	@At
+	@POST
+	public Object personalInfo(final HttpSession session) {
+		return personalInfoService.toUpdatePersonal(session);
+	}
+
+	/**
 	 * 修改密码页面
 	 */
 	@At

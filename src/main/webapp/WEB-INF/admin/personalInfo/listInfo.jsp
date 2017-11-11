@@ -33,27 +33,27 @@
 							<tbody>
 								<tr>
 									<td>用户名称</td>
-									<td>${obj.name}</td>
+									<td id="name">${obj.name}</td>
 								</tr>
 								<tr>
 									<td>用户名/手机号码</td>
-									<td>${obj.mobile}</td>
+									<td id="mobile">${obj.mobile}</td>
 								</tr>
 								<tr>
 									<td>联系QQ</td>
-									<td>${obj.qq}</td>
+									<td id="qq">${obj.qq}</td>
 								</tr>
 								<tr>
 									<td>电子邮箱</td>
-									<td>${obj.email}</td>
+									<td id="email">${obj.email}</td>
 								</tr>
 								<tr>
 									<td>所属部门</td>
-									<td>${obj.deptname}</td>
+									<td id="deptname">${obj.deptname}</td>
 								</tr>
 								<tr>
 									<td>用户职位</td>
-									<td>${obj.jobname}</td>
+									<td id="jobname">${obj.jobname}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -80,37 +80,24 @@
 		var BASE_PATH = '${base}';
 		//刷新个人信息
 		function personalInfo(){
-			$.getJSON("/admin/personalInfo/listInfo.html", function (resp) {
-				var name = resp.name;
-				if(null == name){
-					name = "";
+			$.ajax({
+				type : 'POST',
+				url : '${base}/admin/personalInfo/personalInfo.html',
+				success : function(resp) {
+					var qq = resp.qq;
+					if(null == qq){
+						qq = "";
+					}
+					var email = resp.email;
+					if(null == email){
+						email = "";
+					}
+					$("#qq").text(qq);
+					$("#email").text(email);
+				},
+				error : function(xhr) {
+					layer.msg("编辑失败", "", 3000);
 				}
-				var name = resp.name;
-				if(null == name){
-					name = "";
-				}
-				var qq = resp.qq;
-				if(null == qq){
-					qq = "";
-				}
-				var email = resp.email;
-				if(null == email){
-					email = "";
-				}
-				var deptname = resp.deptname;
-				if(null == deptname){
-					deptname = "";
-				}
-				var jobname = resp.jobname;
-				if(null == jobname){
-					jobname = "";
-				}
-				parent.$("#name").text(name);
-				parent.$("#mobile").text(mobile);
-				parent.$("#qq").text(qq);
-				parent.$("#email").text(email);
-				parent.$("#deptname").text(deptname);
-				parent.$("#jobname").text(jobname);
 			});
 		}
 		

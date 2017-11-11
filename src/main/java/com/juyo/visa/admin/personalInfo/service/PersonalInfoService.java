@@ -30,7 +30,6 @@ import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.Pagination;
 import com.uxuexi.core.web.base.service.BaseService;
-import com.uxuexi.core.web.chain.support.JsonResult;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -59,6 +58,7 @@ public class PersonalInfoService extends BaseService<TUserEntity> {
 	 */
 	public Object toUpdatePersonal(HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
 		Integer userid = loginUser.getId();
 		String sqlString = sqlManager.get("personalInfo_list");
 		Sql sql = Sqls.create(sqlString);

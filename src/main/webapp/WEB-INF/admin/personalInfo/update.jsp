@@ -154,42 +154,6 @@
 			}
 		}
 
-		//刷新个人信息
-		function personalInfo(){
-			$.getJSON("/admin/personalInfo/listInfo.html", function (resp) {
-				var name = resp.name;
-				if(null == name){
-					name = "";
-				}
-				var name = resp.name;
-				if(null == name){
-					name = "";
-				}
-				var qq = resp.qq;
-				if(null == qq){
-					qq = "";
-				}
-				var email = resp.email;
-				if(null == email){
-					email = "";
-				}
-				var deptname = resp.deptname;
-				if(null == deptname){
-					deptname = "";
-				}
-				var jobname = resp.jobname;
-				if(null == jobname){
-					jobname = "";
-				}
-				parent.$("#name").text(name);
-				parent.$("#mobile").text(mobile);
-				parent.$("#qq").text(qq);
-				parent.$("#email").text(email);
-				parent.$("#deptname").text(deptname);
-				parent.$("#jobname").text(jobname);
-			});
-		}
-		
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
