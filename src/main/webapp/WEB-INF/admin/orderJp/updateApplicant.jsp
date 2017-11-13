@@ -33,10 +33,10 @@
 			<div class="modal-body">
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
-						<div class="info-QRcode">
-							<!-- 身份证 正面 -->
+						<!-- <div class="info-QRcode">
+							身份证 正面
 
-						</div>
+						</div> -->
 						<!-- end 身份证 正面 -->
 
 						<div class="info-imgUpload front">

@@ -41,6 +41,7 @@ $condition
 
 /*orderJp_list_customerInfo_byOrderId*/
 SELECT
+c.id,
 c.source,
 c.`name`,
 c.shortname,
@@ -120,3 +121,17 @@ WHERE
 DATE(createTime) = DATE(NOW())
 $condition
 order by createtime desc
+
+/*orderJp_applicantTable*/
+SELECT
+a.id,
+CONCAT(a.firstName, a.lastName) applyname,
+a.email,
+a.telephone,
+a.sex,
+ap.passport
+FROM
+t_applicant a
+LEFT JOIN
+t_applicant_passport ap ON ap.applicantId = a.id
+$condition

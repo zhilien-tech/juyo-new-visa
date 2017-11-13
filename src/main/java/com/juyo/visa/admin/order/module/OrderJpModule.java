@@ -134,6 +134,15 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 下单 添加申请人时刷新表格获取申请人信息
+	 */
+	@At
+	@POST
+	public Object getApplicant(@Param("applicantId") String applicantIds, HttpSession session) {
+		return saleViewService.getApplicants(applicantIds, session);
+	}
+
+	/**
 	 * 删除申请人
 	 */
 	@At
