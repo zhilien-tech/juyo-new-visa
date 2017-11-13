@@ -12,6 +12,7 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
@@ -113,7 +114,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>客户来源：</label> 
-										<select id="customerType" name="source" class="form-control input-sm">
+										<select id="customerType" name="source" class="form-control input-sm" v-model="customerInfo.source">
 											<option value="">--请选择--</option>
 											<c:forEach var="map" items="${obj.customerTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
@@ -127,7 +128,10 @@
 											<label><span>*</span>公司全称：</label> 
 											<select id ="compName" name="name"
 												class="form-control select2 cityselect2 " multiple="multiple"
-												data-placeholder="">
+												data-placeholder="" v-model="customerInfo.name">
+												<c:if test="${ !empty obj.customer.id }">
+													<option value="${obj.customer.id }" selected="selected">${obj.customer.name }</option>
+												</c:if>
 											</select>
 										</div>
 									</div>
@@ -136,7 +140,10 @@
 											<label><span>*</span>公司简称：</label> 
 											<select id = "comShortName" name="shortname"
 												class="form-control select2 cityselect2 " multiple="multiple"
-												data-placeholder="">
+												data-placeholder="" v-model="customerInfo.shortname">
+												<c:if test="${ !empty obj.customer.id }">
+													<option value="${obj.customer.id }" selected="selected">${obj.customer.shortname }</option>
+												</c:if>
 											</select>
 										</div>
 									</div>
@@ -163,7 +170,10 @@
 										<label><span>*</span>联系人：</label> 
 										<select id = "linkman" name="linkman"
 												class="form-control select2 cityselect2 " multiple="multiple"
-												data-placeholder="">
+												data-placeholder="" v-model="customerInfo.linkman">
+												<c:if test="${ !empty obj.customer.id }">
+													<option value="${obj.customer.id }" selected="selected">${obj.customer.linkman }</option>
+												</c:if>
 										</select>
 									</div>
 								</div>
@@ -172,14 +182,20 @@
 										<label><span>*</span>手机号：</label> 
 										<select id = "telephone" name="mobile"
 												class="form-control select2 cityselect2 " multiple="multiple"
-												data-placeholder="">
+												data-placeholder="" v-model="customerInfo.mobile">
+												<c:if test="${ !empty obj.customer.id }">
+													<option value="${obj.customer.id }" selected="selected">${obj.customer.mobile }</option>
+												</c:if>
 										</select>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>邮箱：</label> 
-										<select id = "email" name="email" class="form-control select2 cityselect2 " multiple="multiple" data-placeholder="">
+										<select id = "email" name="email" class="form-control select2 cityselect2 " multiple="multiple" data-placeholder="" v-model="customerInfo.email">
+											<c:if test="${ !empty obj.customer.id }">
+													<option value="${obj.customer.id }" selected="selected">${obj.customer.email }</option>
+												</c:if>
 										</select>
 									</div>
 								</div>
@@ -202,7 +218,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>邮箱：</label>
-										<input id="email" name="email" type="text" class="form-control input-sm" placeholder=" "/>
+										<input id="email" name="email" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 							</div><!-- end input 直客 -->
@@ -247,7 +263,7 @@
 									<!-- <i class="bulb"></i> 小灯泡-->
 								</div>
 							</div>
-							<div class="col-sm-3 none" id="urgentDay">
+							<div class="col-sm-3" id="urgentDay">
 								<div class="form-group">
 									<label>&nbsp;</label> <select id="urgentDay" name="urgentDay"
 										class="form-control input-sm" v-model="orderInfo.urgentday">
@@ -317,15 +333,15 @@
 										<div class="col-sm-8 none" id="visacounty">
 									</c:otherwise>
 								</c:choose>
-											<div class="form-group viseType-btn">
-									<label style="display: block;">&nbsp;</label> <input
-										type="button" value="冲绳县" class="btn btn-sm btnState">
-									<input type="button" value="青森县" class="btn btn-sm btnState">
-									<input type="button" value="岩手县" class="btn btn-sm btnState">
-									<input type="button" value="宫城县" class="btn btn-sm btnState">
-									<input type="button" value="秋田县" class="btn btn-sm btnState">
-									<input type="button" value="山形县" class="btn btn-sm btnState">
-									<input type="button" value="福鸟县" class="btn btn-sm btnState">
+									<div class="form-group viseType-btn">
+									<label style="display: block;">&nbsp;</label> 
+									<input type="button" name="visacounty" value="冲绳县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="青森县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="岩手县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="宫城县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="秋田县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="山形县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="福鸟县" class="btn btn-sm btnState">
 								</div>
 							</div>
 						</div>
@@ -341,27 +357,34 @@
 									<div class="row body-from-input none" id="threefangwen"><!-- 过去三年是否访问过 -->
 								</c:otherwise>
 							</c:choose>
-							<div class="col-sm-3 none" id="isVisited" >
+							<div class="col-sm-3 " id="isVisited" >
 								<div class="form-group">
-									<label><span>*</span>过去三年是否访问过：</label> <select id="isVisit"
+									<label><span>*</span>过去三年是否访问过：</label> 
+									<select id="isVisit"
 										name="isVisit" class="form-control input-sm"
 										onchange="selectListData();" v-model="orderInfo.isvisit">
 										<c:forEach var="map" items="${obj.threeYearsIsVisitedEnum}">
-											<option value="${map.key}" ${map.key==0?'selected':''}>${map.value}</option>
+											<option value="${map.key}" >${map.value}</option>
 										</c:forEach>
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-8 none" id="threeCounty" v-model="orderInfo.threeCounty">
-								<div class="form-group viseType-btn">
+							<div class="col-sm-9">
+							<c:choose>
+								<c:when test="${obj.orderJpinfo.isVisit == 1 }">
+									<div id="threexian" class="form-group viseType-btn">
+								</c:when>
+								<c:otherwise>
+									<div id="threexian" class="form-group viseType-btn none">
+								</c:otherwise>
+							</c:choose>
 									<label style="display: block;">&nbsp;</label> 
-									<input type="button" value="岩手县" class="btn btn-sm btnState"> 
-									<input type="button" value="秋田县" class="btn btn-sm btnState"> 
-									<input type="button" value="山形县" class="btn btn-sm btnState">
-								</div>
-							</div>
+									<input type="button" name="threecounty" value="岩手县" class="btn btn-sm btnState"> 
+									<input type="button" name="threecounty" value="秋田县" class="btn btn-sm btnState"> 
+									<input type="button" name="threecounty" value="山形县" class="btn btn-sm btnState">
 						</div>
-						<!-- end 过去三年是否访问过 -->
+						</div>
+						</div><!-- end 过去三年是否访问过 -->
 						<div class="row body-from-input">
 							<!-- 出行时间/停留天数/返回时间 -->
 							<div class="col-sm-3">
@@ -423,6 +446,7 @@
 							
 				<!-- 主申请人 -->
 				<div class="info none" id="mySwitch">
+					<input type="hidden" id="appId" value="" name="appId"/>
 					<p class="info-head">
 						<input type="button" name="" value="添加"
 							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant(${obj.orderId })" />
@@ -581,12 +605,42 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
+	<!-- select2 -->
+	<script
+		src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+	<script src="${base}/admin/orderJp/searchCustomerInfo.js"></script>
 	<!-- 公用js文件 -->
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="${base}/admin/orderJp/order.js"></script>
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
+		//签证六县，访问三县选中状态
+		var threecounty = '${obj.orderJpinfo.visaCounty}';
+		if(threecounty){
+			var threecountys = threecounty.split(",");
+			for (var i = 0; i < threecountys.length; i++) {
+				$('[name=visacounty]').each(function(){
+					if(threecountys[i] == $(this).val()){
+						$(this).addClass('btnState-true');
+					}
+				});
+			}
+		}
+		var threecounty = '${obj.orderJpinfo.threeCounty}';
+		if(threecounty){
+			var threecountys = threecounty.split(",");
+			for (var i = 0; i < threecountys.length; i++) {
+				$('[name=threecounty]').each(function(){
+					if(threecountys[i] == $(this).val()){
+						$(this).addClass('btnState-true');
+					}
+				});
+			}
+		}
+	
 		$(function(){
+			customerTypeSelect2();
 			//客户来源
 			$("#customerType").change(function(){
 				var customerVal = $(this).val();
@@ -600,39 +654,6 @@
 			});
 		});
 		
-		/* function selectListData() {
-			var isVisit = $("#isVisit").val();
-			var visaType = $("#visaType").val();
-			var mainSaleUrgentEnum = $("#urgentType").val();
-			if(!$("#isVisited").hasClass("none")){
-				if (isVisited == 1) {
-					$("#threeCounty").removeClass("none");
-				} else {
-					$("#threeCounty").addClass("none");
-				}
-			}
-			if (isVisited == 1) {
-				$("#threeCounty").removeClass("none");
-			} else {
-				$("#threeCounty").addClass("none");
-			}
-
-			if (visaType == 2) {
-				$("#sixCounty").removeClass("none");
-				$("#isVisited").removeClass("none");	
-				$("#threeCounty").removeClass("none");	
-			} else {
-				$("#isVisited").addClass("none");
-				$("#sixCounty").addClass("none");
-				$("#threeCounty").addClass("none");	
-			}
-
-			if (mainSaleUrgentEnum != 1) {
-				$("#urgentDay").removeClass("none");
-			} else {
-				$("#urgentDay").addClass("none");
-			}
-		} */
 		var url = "${base}/admin/orderJp/getOrder.html";
 		var orderobj;
 		var orderid = ${obj.orderId};
@@ -724,13 +745,6 @@
 								$("#urgentDay").addClass("none");
 							}
 						});
-
-						/* if (mainSaleUrgentEnum != 1) {
-							$("#urgentDay").removeClass("none");
-						} else {
-							$("#urgentDay").addClass("none");
-						} */
-
 					},
 					error : function() {
 						alert("error");
@@ -739,6 +753,28 @@
 			},
 			methods : {
 				order : function() {
+					//绑定签证城市
+					var visacounty = "";
+					$('[name=visacounty]').each(function(){
+						if($(this).hasClass('btnState-true')){
+							visacounty += $(this).val() + ',';
+						}
+					});
+					if(visacounty){
+						visacounty = visacounty.substr(0,visacounty.length-1);
+					}
+					orderobj.orderInfo.visacounty = visacounty;
+					//绑定三年城市
+					var threecounty = "";
+					$('[name=threecounty]').each(function(){
+						if($(this).hasClass('btnState-true')){
+							threecounty += $(this).val() + ',';
+						}
+					});
+					if(threecounty){
+						threecounty = threecounty.substr(0,threecounty.length-1);
+					}
+					orderobj.orderInfo.threecounty = threecounty;
 					var editdata = orderobj.orderInfo;
 					editdata.customerinfo = JSON.stringify(orderobj.customerInfo);
 					//var applicant = orderobj.applicantInfo;

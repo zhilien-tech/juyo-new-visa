@@ -189,7 +189,10 @@ $("#telephone").select2({
 $("#linkman").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
 	$("#linkman").val(customerId);
+	$("#compName").val(customerId);
+	$("#comShortName").val(customerId);
 	$("#telephone").val(customerId);
+	$("#email").val(customerId);
 	var id = parseInt($("#linkman").val());
 	$.ajax({
 		url : 'getCustomerById',
@@ -279,7 +282,11 @@ $("#linkman").on('select2:select', function (evt) {
 /* 选中电话 */
 $("#telephone").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
+	$("#linkman").val(customerId);
+	$("#compName").val(customerId);
+	$("#comShortName").val(customerId);
 	$("#telephone").val(customerId);
+	$("#email").val(customerId);
 	var id = parseInt($("#telephone").val());
 	$.ajax({
 		url : 'getCustomerById',
@@ -318,8 +325,13 @@ $("#telephone").on('select2:select', function (evt) {
 /* 选中公司全称 */
 $("#compName").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
+	$("#linkman").val(customerId);
 	$("#compName").val(customerId);
+	$("#comShortName").val(customerId);
+	$("#telephone").val(customerId);
+	$("#email").val(customerId);
 	var id = parseInt($("#compName").val());
+	alert(id);
 	$.ajax({
 		url : 'getCustomerById',
 		type : 'POST',
@@ -358,7 +370,11 @@ $("#compName").on('select2:select', function (evt) {
 /* 选中公司简称 */
 $("#comShortName").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
+	$("#linkman").val(customerId);
+	$("#compName").val(customerId);
 	$("#comShortName").val(customerId);
+	$("#telephone").val(customerId);
+	$("#email").val(customerId);
 	var id = parseInt($("#comShortName").val());
 	$.ajax({
 		url : 'getCustomerById',
@@ -398,6 +414,11 @@ $("#comShortName").on('select2:select', function (evt) {
 /* 选中邮箱 */
 $("#email").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
+	$("#email").val(customerId);
+	$("#linkman").val(customerId);
+	$("#compName").val(customerId);
+	$("#comShortName").val(customerId);
+	$("#telephone").val(customerId);
 	$("#email").val(customerId);
 	var id = parseInt($("#email").val());
 	$.ajax({

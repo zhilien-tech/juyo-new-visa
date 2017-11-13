@@ -24,12 +24,20 @@
 			<div class="modal-body">
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
-						<div class="info-QRcode"><!-- 身份证 正面 -->
+						<!-- <div class="info-QRcode"> --><!-- 身份证 正面 -->
 							
-						</div><!-- end 身份证 正面 -->
+						<!-- </div> --><!-- end 身份证 正面 -->
+						
 						
 						<div class="info-imgUpload front"><!-- 身份证 正面 -->
-
+							<div class="col-xs-6">
+							<div class="form-group">
+								<div class="sqImgPreview">
+									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+									<img id="sqImg" alt="点击上传身份证" src="" >
+								</div>
+							</div>
+						</div>
 						</div><!-- end 身份证 正面 -->
 						
 						<div class="info-imgUpload back"><!-- 身份证 反面 -->
@@ -185,18 +193,25 @@
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script src="${base}/admin/orderJp/applicant.js"></script>
+	<!-- 上传图片 -->
+	<script src="${base}/admin/company/uploadFile.js"></script>
 	
 	<script type="text/javascript">
 		var base = "${base}";
 		function saveApplicant(){
 			var applicantInfo = $("#applicantInfo").serialize();
+			
 			$.ajax({
 				type : 'POST',
 				data : applicantInfo,
 				url : '${base}/admin/orderJp/saveAddApplicant',
 				success : function(data) {
 					console.log(JSON.stringify(data));
+					var applicantIdParent = window.parent.document.getElementById("appId").value;
+					if(applicantIdParent != null || applicantIdParent != undefined || applicantIdParent != ""){
+						applicantIdParent += data.id +",";
+						window.parent.document.getElementById("appId").value = applicantIdParent;
+					}
 					layer.closeAll('loading');
 					parent.successCallBack(3,data);
 					closeWindow();
