@@ -86,10 +86,12 @@
 			/*点击表格中的加号标签*/
 			$(".addText").click(function(){
 				$(this).siblings(".addInp").removeClass("none");
+				$(".addInp").focus();//add input 添加默认光标
 				var applicatid = $(this).parent().find('#applicatid').val();
 				var inputVal = $(this).siblings(".addInp").val();
 				if(inputVal != null && inputVal != ""){
 					$(this).siblings(".addInp").before('<span>'+ inputVal +'</span>');//在input前面 添加span标签
+					
 					$(this).siblings(".addInp").val("");
 					$.ajax({ 
 		            	url: '${base}/admin/visaJapan/saveApplicatRevenue.html',
@@ -109,6 +111,8 @@
 				if(spanText.indexOf("护照")!== -1 && HZlength != true){
 					$(this).removeClass("titleStyle");
 					$(this).after('<input type="text" class="passportInp" value='+ spanText +' />');
+					var passport = $(".passportInp").val();
+					$(".passportInp").val("").focus().val(passport); //把光标加入到字符串后面
 				}else if(HZlength == true){
 					$(".passportInp").remove();
 					$(this).addClass("titleStyle");
