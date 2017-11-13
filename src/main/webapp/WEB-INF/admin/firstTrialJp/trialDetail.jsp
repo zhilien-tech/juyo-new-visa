@@ -45,17 +45,16 @@
 								<!-- 人数/领区/加急 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>人数：</label> <input id="number"
-											name="number" type="text" class="form-control input-sm"
-											placeholder=" "  />
+										<label><span>*</span>人数：</label> 
+										<input id="number" name="number" v-model="orderinfo.number" type="text" class="form-control input-sm" placeholder=" "  />
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>领区：</label> <select
-											class="form-control input-sm" id="cityid" name="cityid">
-											<c:forEach var="map" items="${obj.collarAreaEnum}">
+										<label><span>*</span>领区：</label> 
+										<select class="form-control input-sm" v-model="orderinfo.cityid">
+											<c:forEach var="map" items="${obj.collarareaenum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
 										</select>
@@ -65,8 +64,8 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>加急：</label> 
-										<select id="urgentType" name="urgenttype" class="form-control input-sm" onchange="urgent();" >
-											<c:forEach var="map" items="${obj.mainSaleUrgentEnum}">
+										<select class="form-control input-sm" v-model="orderinfo.urgenttype">
+											<c:forEach var="map" items="${obj.mainsaleurgentenum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
 										</select>
@@ -75,9 +74,9 @@
 								</div>
 								<div class="col-sm-3 none" id="urgentDays">
 									<div class="form-group">
-										<label>&nbsp;</label> <select id="urgentDay" name="urgentday"
-											class="form-control input-sm" >
-											<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
+										<label>&nbsp;</label> 
+										<select class="form-control input-sm" v-model="orderinfo.urgentday">
+											<c:forEach var="map" items="${obj.mainsaleurgenttimeenum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
 										</select>
@@ -90,10 +89,9 @@
 								<!-- 行程/付款方式/金额 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>行程：</label> <select id="travel"
-											name="travel" class="form-control input-sm"
-											>
-											<c:forEach var="map" items="${obj.mainSaleTripTypeEnum}">
+										<label><span>*</span>行程：</label> 
+										<select class="form-control input-sm" v-model="orderinfo.travel">
+											<c:forEach var="map" items="${obj.mainsaletriptypeenum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
 										</select>
@@ -101,10 +99,9 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>付款方式：</label> <select id="payType"
-											name="paytype" class="form-control input-sm"
-											>
-											<c:forEach var="map" items="${obj.mainSalePayTypeEnum}">
+										<label><span>*</span>付款方式：</label>
+										<select class="form-control input-sm" v-model="orderinfo.paytype">
+											<c:forEach var="map" items="${obj.mainsalepaytypeenum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
 										</select>
@@ -112,9 +109,7 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>金额：</label> <input id="money" name="money"
-											type="text" class="form-control input-sm" placeholder=" "
-											 />
+										<label><span>*</span>金额：</label> <input id="money" name="money" type="text" class="form-control input-sm mustNumberPoint" placeholder=" " v-model="orderinfo.money" />
 									</div>
 								</div>
 							</div>
@@ -124,13 +119,14 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>签证类型：</label> 
-										<select id="visaType" name="visatype" class="form-control input-sm" v-on:change="visaTypeChange" >
-											<option value="1">单次</option>
-											<option value="2">冲绳东北六县三年多次</option>
-											<option value="3">普通三年多次</option>
+										<select id="visatype" class="form-control input-sm" v-model="orderinfo.visatype">
+											<c:forEach var="map" items="${obj.mainsalevisatypeenum}">
+												<option value="${map.key}">${map.value}</option>
+											</c:forEach>
 										</select>
 									</div>
 								</div>
+								
 								<div class="col-sm-8 none" id="sixCounty" v-model="orderInfo.visacounty">
 									<div class="form-group viseType-btn">
 										<label style="display: block;">&nbsp;</label> 
@@ -171,25 +167,20 @@
 								<!-- 出行时间/停留天数/返回时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>出行时间：</label> <input id="goTripDate"
-											name="gotripdate" type="text" class="form-control input-sm"
-											placeholder=" " onClick="WdatePicker()"
-											 />
+										<label><span>*</span>出行时间：</label> 
+										<input id="gotripdate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.gotripdate"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>停留天数：</label> <input id="stayDay"
-											name="stayday" type="text" class="form-control input-sm"
-											placeholder=" "  />
+										<label><span>*</span>停留天数：</label>
+										<input id="stayday" name="stayday" type="text" class="form-control input-sm mustNumber" v-model="orderinfo.stayday"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>返回时间：</label> <input id="backTripDate"
-											name="backtripdate" type="text" class="form-control input-sm"
-											placeholder=" " onClick="WdatePicker()"
-											 />
+										<label><span>*</span>返回时间：</label>
+										<input id="backtripdate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.backtripdate"/>
 									</div>
 								</div>
 							</div>
@@ -198,18 +189,14 @@
 								<!-- 送签时间/出签时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>送签时间：</label> <input id="sendVisaDate"
-											name="sendvisadate" type="text" class="form-control input-sm"
-											placeholder=" " onClick="WdatePicker()"
-											 />
+										<label><span>*</span>送签时间：</label>
+										<input id="sendvisadate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.sendvisadate"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>出签时间：</label> <input id="outVisaDate"
-											name="outvisadate" type="text" class="form-control input-sm"
-											placeholder=" " onClick="WdatePicker()"
-											 />
+										<label><span>*</span>出签时间：</label>
+										<input id="outvisadate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.outvisadate"/>
 									</div>
 								</div>
 							</div>
@@ -218,51 +205,45 @@
 					</div><!-- end 订单信息 -->
 					
 					
-					<div class="info" id="mySwitch"><!-- 申请人 -->
-						<p class="info-head">
-							申请人 
-							<input type="button" name="" value="添加" class="btn btn-primary btn-sm pull-right">
-						</p>
+					<!-- 申请人 -->
+					<div class="info" id="mySwitch">
+						<p class="info-head">申请人</p>
 						<div class="info-table" style="padding-bottom: 1px;">
-							<table id="principalApplicantTable" class="table table-hover" style="width: 100%;">
+							<table id="applicantTable" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
 										<th><span>姓名<span></th>
 										<th><span>电话<span></th>
 										<th><span>护照号<span></th>
 										<th><span>资料类型<span></th>
-										<th><span>真是资料<span></th>
+										<th><span>真实资料<span></th>
 										<th><span>性别<span></th>
-										<th><span>性别<span></th>
+										<th><span>状态<span></th>
 										<th><span>操作<span></th>
 									</tr>
 								</thead>
-								<tbody >
-									<tr>
-										<td>澳康达</td>
-										<td>15132600020</td>
-										<td>GR1002750</td>
-										<td>在职</td>
-										<td class="certificates">
-											<span>护照</span>
-											<span>身份证</span>
-											<span>老年证</span>
-											<span>退休证</span>
-										</td>
-										<td>男</td>
-										<td>初审</td>
+								<tbody>
+									<tr v-for="apply in applyinfo">
+										<td>{{apply.applyname}}</td>
+										<td>{{apply.telephone}}</td>
+										<td>{{apply.passport}}</td>
+										<td></td>
+										<td></td>
+										<td>{{apply.sex}}</td>
+										<td>{{apply.status}}</td>
 										<td>
 											<a v-on:click="basicInfoClick">基本信息</a>&nbsp;&nbsp;
 											<a v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;
-											<a v-on:click="visa(apply.applyid)">签证</a>
-											<a v-on:click="">回邮</a>&nbsp;&nbsp;
-											<a v-on:click="passport(apply.applyid)">删除</a>
+											<a v-on:click="visa(apply.applyid)">签证信息</a><br>
+											<a v-on:click="qualified">合格</a>&nbsp;&nbsp;
+											<a v-on:click="unqualified">不合格</a>
 										</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
-					</div><!-- end 申请人 -->
+					</div>
+					<!-- end 申请人 -->
 					
 	
 					<div class="row body-from-input" id="backmailInfo"><!-- 添加回邮信息 -->
@@ -390,20 +371,34 @@
 		
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
-
-			function shortname(){
-				var content = $("#comShortName").val();
-				alert(content);
-				var sum = 0;
-				re = /[\u4E00-\u9FA5]/g; //测试中文字符的正则
-				if (content) {
-				if (re.test(content)) //使用正则判断是否存在中文
-				{
-				if (content.match(re).length >= 6) { //返回中文的个数
-				$.dialog.tips("帖子正文不能小于6个汉字！");
-			}}}}
 			
-			function saveAddOrder(){
+			/* $(function(){
+				var threecounty = '${obj.jporderinfo.visaCounty}';
+				if(threecounty){
+					var threecountys = threecounty.split(",");
+					for (var i = 0; i < threecountys.length; i++) {
+						$('[name=visacounty]').each(function(){
+							if(threecountys[i] == $(this).val()){
+								$(this).addClass('btnState-true');
+							}
+						});
+					}
+				}
+				var threecounty = '${obj.jporderinfo.threeCounty}';
+				if(threecounty){
+					var threecountys = threecounty.split(",");
+					for (var i = 0; i < threecountys.length; i++) {
+						$('[name=threecounty]').each(function(){
+							if(threecountys[i] == $(this).val()){
+								$(this).addClass('btnState-true');
+							}
+						});
+					}
+				}
+			}); */
+			
+			
+			/* function saveAddOrder(){
 				var orderinfo = $("#orderInfo").serialize();
 				$.ajax({
 					type : 'POST',
@@ -417,9 +412,9 @@
 						alert("error");
 					}
 				}); 
-			}
+			} */
 			
-			new Vue({
+			/* new Vue({
 				el: '#wrapper',
 				methods:{
 					visaTypeChange:function(){//签证类型
@@ -446,7 +441,7 @@
 						});
 					}
 				}
-			});
+			}); */
 		</script>
 	</body>
 </html>
