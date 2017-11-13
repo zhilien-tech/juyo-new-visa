@@ -72,11 +72,11 @@
 .skin-blue .sidebar-menu > li > a {
   border-left: 3px solid transparent;
 }
-.skin-blue .sidebar-menu > li.active > a {
-  /*color: #4588e6 !important;*/
+.skin-blue .sidebar-menu > li.active > ul > li > a {
+  /*color: #4588e6 !important;
   background:#294461;
-  border-left-color: #2f86f0;
-  padding: 14px;
+  border-left-color: #2f86f0;*/
+  padding:0 15px 0 55px;
 }
 .skin-blue .sidebar-menu > li:hover > a{
   background: #294461;
