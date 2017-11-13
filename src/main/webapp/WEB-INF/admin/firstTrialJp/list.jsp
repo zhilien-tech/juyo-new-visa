@@ -38,25 +38,25 @@
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div class="card-list" v-for="data in FTdata">
+						<div class="card-list" v-for="data in trialJapanData">
 							<div class="card-head">
 								<div><label>订单号：</label><span>{{data.orderNumber}}</span></div>	
-								<div><label>出行时间：</label><span>{{data.travelDate}}</span></div>	
-								<div><label>返回时间：</label><span>{{data.returnDate}}</span></div>	
-								<div><label>状态：</label><span>{{data.state}}</span></div>	
+								<div><label>出行时间：</label><span>{{data.goTripTime}}</span></div>	
+								<div><label>返回时间：</label><span>{{data.backTripTime}}</span></div>	
+								<div><label>状态：</label><span>{{data.orderState}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit" v-on:click="editClick"> </i>
+									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="express"> </i>
 									<i class="return"> </i>
 								</div>
 							</div>
 							<ul class="card-content">
-								<li class="everybody-info" v-for="item in data.people">
-									<div><label>申请人：</label><span>{{item.name}}</span></div>
-									<div><label>护照号：</label><span>{{item.passportNo}}</span></div>
-									<div><label>手机号：</label><span>{{item.phone}}</span></div>
-									<div><label>状态：</label><span>{{item.state}}</span></div>
+								<li class="everybody-info" v-for="item in data.everybodyinfo">
+									<div><label>申请人：</label><span>{{item.applicantname}}</span></div>
+									<div><label>护照号：</label><span>{{item.passportnum}}</span></div>
+									<div><label>手机号：</label><span>{{item.telephone}}</span></div>
+									<div><label>状态：</label><span>{{item.applicantstatus}}</span></div>
 									<div>
 										<i class="basicInfo"> </i>
 										<i class="passportInfo"> </i>
@@ -80,13 +80,14 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
+	<script src="${base}/references/common/js/base/cardList.js"></script>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		//异步加载的URL地址
-	    //var url="${base}/admin/orderJp/listData";
+	    var url="${base}/admin/firstTrialJp/trialListData.html";
 	    //vue表格数据对象
-	    //var _self;
-	    var firstTrial = {
+	    var _self;
+	   /*  var firstTrial = {
 	    		FTdata:[
 	    		       {orderNumber:"170808-JP0001",
 	    		    	travelDate:"2017-10-22",
@@ -99,15 +100,33 @@
 		    		    ]
 	    		       },
 	    		],
-	    };
+	    }; */
+	    var firstTrial = {trialJapanData:""};
 		new Vue({
 			el: '#card',
 			data: firstTrial,
+			created:function(){
+	            _self=this;
+	            $.ajax({ 
+	            	url: url,
+	            	dataType:"json",
+	            	type:'post',
+	            	success: function(data){
+	            		_self.trialJapanData = data.trialJapanData;
+	              	}
+	            });
+	        },
 			methods:{
-				editClick:function(){//编辑图标  页面跳转
+				/* editClick:function(){//编辑图标  页面跳转
 					window.location.href = '${base}/admin/firstTrialJp/edit.html';
-				}
-				}
+				} */
+				visaDetail:function(orderid){
+	        		//跳转到签证详情页面
+	        		window.open('${base}/admin/firstTrialJp/trialDetail.html?orderid='+orderid);
+	        		//console.log(message);
+	        		//alert(JSON.stringify(event.target));
+	        	}
+			}
 		});
 		/* function search(){
 			var status = $('#status').val();
@@ -129,6 +148,6 @@
 		} */
 		
 	</script>
-	<script src="${base}/references/common/js/base/cardList.js"></script>
+	
 </body>
 </html>

@@ -39,7 +39,7 @@
             <span class="dian"></span>
           </li>
           <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle name" data-toggle="dropdown">${loginuser.name}</a>
+            <a id="psersonal" href="${base}/admin/personalInfo/listInfo.html" class="dropdown-toggle name" data-toggle="dropdown">${loginuser.name}</a>
           </li>
           <%-- <li class="setUp-li">
              <a href="javascript:;">设置<img class="setUp" src="${base}/references/public/dist/newvisacss/img/setUp.jpg"></a>
@@ -47,7 +47,6 @@
           <li class="signOut-li">
              <a href="${base}/admin/logout.html?logintype=${logintype}">退出<img class="setUp" src="${base}/references/public/dist/newvisacss/img/signOut.jpg"></a>
           </li>
-          
         </ul>
       </div>
     </nav>
