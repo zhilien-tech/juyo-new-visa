@@ -5,7 +5,7 @@ SELECT
 	toj.acceptDesign number,
 	DATE_FORMAT( tr.goTripDate, '%Y-%m-%d' ) goTripTime,
 	DATE_FORMAT( tr.backTripDate, '%Y-%m-%d' ) backTripTime,
-	tr.STATUS orderState,
+	tr.STATUS orderStatus,
 	( SELECT count( * ) FROM t_applicant_order_jp WHERE orderId = toj.id ) peopleCount 
 FROM
 	t_order tr

@@ -22,7 +22,7 @@
 						<div class="row form-right">
 							<div class="col-md-12 left-5px">
 								<a id="" class="btn btn-primary btn-sm pull-right" onclick="updatePassword();">修改密码</a>
-								<a id="" class="btn btn-primary btn-sm pull-right" onclick="updateInfo();">编辑</a>
+								<a id="" class="btn btn-primary btn-sm pull-right" onclick="updateInfo();" style="margin-right: 15px;">编辑</a>
 							</div>
 						</div>
 

@@ -40,10 +40,10 @@
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in trialJapanData">
 							<div class="card-head">
-								<div><label>订单号：</label><span>{{data.orderNumber}}</span></div>	
-								<div><label>出行时间：</label><span>{{data.goTripTime}}</span></div>	
-								<div><label>返回时间：</label><span>{{data.backTripTime}}</span></div>	
-								<div><label>状态：</label><span>{{data.orderState}}</span></div>	
+								<div><label>订单号：</label><span>{{data.ordernumber}}</span></div>	
+								<div><label>出行时间：</label><span>{{data.gotriptime}}</span></div>	
+								<div><label>返回时间：</label><span>{{data.backtriptime}}</span></div>	
+								<div><label>状态：</label><span>{{data.orderstatus}}</span></div>	
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
@@ -129,20 +129,16 @@
 			}
 		});
 		function search(){
-			var status = $('#status').val();
-			var source = $('#source').val();
-			var visaType = $('#visaType').val();
-			var sendSignDate = $('#sendSignDate').val();
-			var signOutDate = $('#signOutDate').val();
+			/* var status = $('#status').val(); */
 			var searchStr = $('#searchStr').val();
 			$.ajax({ 
 	        	url: url,
-	        	data:{status:status,source:source,visaType:visaType,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr},
+	        	/* data:{status:status,searchStr:searchStr}, */
+	        	data:{searchStr:searchStr},
 	        	dataType:"json",
 	        	type:'post',
 	        	success: function(data){
-	        		_self.orderJpData = data.orderJp;
-	        		//console.log(JSON.stringify(data));
+	        		_self.trialJapanData = data.trialJapanData;
 	          	}
 	        });
 		}
