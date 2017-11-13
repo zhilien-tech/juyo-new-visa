@@ -22,10 +22,22 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.enums.CollarAreaEnum;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.MainSalePayTypeEnum;
+import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
+import com.juyo.visa.common.enums.MainSaleUrgentEnum;
+import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
+import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.entities.TOrderEntity;
+import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TOrderTripJpEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -86,6 +98,78 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 		result.put("trialJapanData", list);
 		return result;
+	}
 
+	/**
+	 * 跳转到日本初审详情页面
+	 * <p>
+	 * 为日本初审详情页面准备数据
+	 *
+	 * @param orderid
+	 * @return 
+	 */
+	public Object trialDetail(Integer orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		//日本订单数据
+		TOrderJpEntity jporderinfo = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
+		result.put("jporderinfo", jporderinfo);
+		//订单id
+		result.put("orderid", orderid);
+		//领区
+		result.put("collarareaenum", EnumUtil.enum2(CollarAreaEnum.class));
+		//加急
+		result.put("mainsaleurgentenum", EnumUtil.enum2(MainSaleUrgentEnum.class));
+		//工作日
+		result.put("mainsaleurgenttimeenum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
+		//行程
+		result.put("mainsaletriptypeenum", EnumUtil.enum2(MainSaleTripTypeEnum.class));
+		//付款方式
+		result.put("mainsalepaytypeenum", EnumUtil.enum2(MainSalePayTypeEnum.class));
+		//签证类型
+		result.put("mainsalevisatypeenum", EnumUtil.enum2(MainSaleVisaTypeEnum.class));
+		//是否
+		result.put("isyesornoenum", EnumUtil.enum2(IsYesOrNoEnum.class));
+		//出行信息
+		TOrderTripJpEntity travelinfo = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderId", "=", orderid));
+		if (Util.isEmpty(travelinfo)) {
+			travelinfo = new TOrderTripJpEntity();
+		}
+		//去程出发城市
+		TCityEntity goleavecity = new TCityEntity();
+		if (!Util.isEmpty(travelinfo.getGoDepartureCity())) {
+			goleavecity = dbDao.fetch(TCityEntity.class, travelinfo.getGoDepartureCity().longValue());
+		}
+		result.put("goleavecity", goleavecity);
+		//去程抵达城市
+		TCityEntity goarrivecity = new TCityEntity();
+		if (!Util.isEmpty(travelinfo.getGoArrivedCity())) {
+			goarrivecity = dbDao.fetch(TCityEntity.class, travelinfo.getGoArrivedCity().longValue());
+		}
+		result.put("goarrivecity", goarrivecity);
+		//回程出发城市
+		TCityEntity backleavecity = new TCityEntity();
+		if (!Util.isEmpty(travelinfo.getReturnDepartureCity())) {
+			backleavecity = dbDao.fetch(TCityEntity.class, travelinfo.getReturnDepartureCity().longValue());
+		}
+		result.put("backleavecity", backleavecity);
+		//回程返回城市
+		TCityEntity backarrivecity = new TCityEntity();
+		if (!Util.isEmpty(travelinfo.getReturnArrivedCity())) {
+			backarrivecity = dbDao.fetch(TCityEntity.class, travelinfo.getReturnArrivedCity().longValue());
+		}
+		result.put("backarrivecity", backarrivecity);
+		//去程航班
+		TFlightEntity goflightnum = new TFlightEntity();
+		if (!Util.isEmpty(travelinfo.getGoFlightNum())) {
+			goflightnum = dbDao.fetch(TFlightEntity.class, travelinfo.getGoFlightNum().longValue());
+		}
+		result.put("goflightnum", goflightnum);
+		//回程航班
+		TFlightEntity returnflightnum = new TFlightEntity();
+		if (!Util.isEmpty(travelinfo.getGoFlightNum())) {
+			returnflightnum = dbDao.fetch(TFlightEntity.class, travelinfo.getReturnFlightNum().longValue());
+		}
+		result.put("returnflightnum", returnflightnum);
+		return result;
 	}
 }

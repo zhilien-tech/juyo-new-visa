@@ -25,7 +25,7 @@ $(function(){
 			$('#threefangwen').hide();
 		}
 	});
-	
+
 	$('#isVisit').change(function(){
 		var thisval = $(this).val();
 		if(thisval == 1){
@@ -34,7 +34,7 @@ $(function(){
 			$('#threexian').hide();
 		}
 	});
-	
+
 	//主申请人
 	/*$('#applicantTable').DataTable({
 		"autoWidth":true,
@@ -48,7 +48,7 @@ $(function(){
 			"url": BASE_PATH + "/references/public/plugins/datatables/cn.json"
 		}
 	});*/
-	
+
 	//生成行程安排 click按钮
 	/*$(".schedulingBtn").click(function(){
 		$("#schedulingTable").toggle();
@@ -58,89 +58,89 @@ $(function(){
 
 function schedulingEdit(){
 	layer.open({
-	    type: 2,
-	    title: false,
-	    closeBtn:false,
-	    fix: false,
-	    maxmin: false,
-	    shadeClose: false,
-	    scrollbar: false,
-	    area: ['800px', '400px'],
-	    content: '/admin/visaJapan/schedulingEdit.html'
+		type: 2,
+		title: false,
+		closeBtn:false,
+		fix: false,
+		maxmin: false,
+		shadeClose: false,
+		scrollbar: false,
+		area: ['800px', '400px'],
+		content: '/admin/visaJapan/schedulingEdit.html'
 	});
 }
 
 var orderobj;
 //VUE准备数据
-	//orderinfo订单信息 travelinfo出行信息 visainfo 签证信息 applyinfo申请人信息 travelplan行程安排
+//orderinfo订单信息 travelinfo出行信息 visainfo 签证信息 applyinfo申请人信息 travelplan行程安排
 new Vue({
 	el: '#wrapper',
 	data: {orderinfo:"",
-		   travelinfo:"",
-		   applyinfo:"",
-		   travelplan:""
-		   
+		travelinfo:"",
+		applyinfo:"",
+		travelplan:""
+
 	},
 	created:function(){
-        orderobj=this;
-        var url = BASE_PATH + '/admin/visaJapan/getJpVisaDetailData.html';
-        $.ajax({ 
-        	url: url,
-        	dataType:"json",
-        	data:{orderid:orderid},
-        	type:'post',
-        	success: function(data){
-        		orderobj.orderinfo = data.orderinfo;
-        		orderobj.travelinfo = data.travelinfo;
-        		orderobj.applyinfo = data.applyinfo;
-        		orderobj.travelplan = data.travelplan;
-          	}
-        });
-    },
-    methods:{
-    	schedulingEdit:function(planid){
-    		layer.open({
-    		    type: 2,
-    		    title: false,
-    		    closeBtn:false,
-    		    fix: false,
-    		    maxmin: false,
-    		    shadeClose: false,
-    		    scrollbar: false,
-    		    area: ['800px', '400px'],
-    		    content: '/admin/visaJapan/schedulingEdit.html?planid='+planid
-    		});
-    	},
-    	resetPlan:function(planid){
-    		$.ajax({ 
-            	url: '/admin/visaJapan/resetPlan.html',
-            	dataType:"json",
-            	data:{planid:planid,orderid:orderid},
-            	type:'post',
-            	success: function(data){
-            		orderobj.travelplan = data;
-            		layer.msg('重置成功');
-              	}
-            });
-    	},
-    	//签证录入
-    	visa:function(applyid){
-    		window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applyid;
-    	},
-    	passport:function(applyId){
-    		layer.open({
-    		    type: 2,
-    		    title: false,
-    		    closeBtn:false,
-    		    fix: false,
-    		    maxmin: false,
-    		    shadeClose: false,
-    		    scrollbar: false,
-    		    area: ['900px', '550px'],
-    		    content: '/admin/visaJapan/passportInfo.html?applyId='+applyId
-    		});
-    	}
-    }
+		orderobj=this;
+		var url = BASE_PATH + '/admin/visaJapan/getJpVisaDetailData.html';
+		$.ajax({ 
+			url: url,
+			dataType:"json",
+			data:{orderid:orderid},
+			type:'post',
+			success: function(data){
+				orderobj.orderinfo = data.orderinfo;
+				orderobj.travelinfo = data.travelinfo;
+				orderobj.applyinfo = data.applyinfo;
+				orderobj.travelplan = data.travelplan;
+			}
+		});
+	},
+	methods:{
+		schedulingEdit:function(planid){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['800px', '400px'],
+				content: '/admin/visaJapan/schedulingEdit.html?planid='+planid
+			});
+		},
+		resetPlan:function(planid){
+			$.ajax({ 
+				url: '/admin/visaJapan/resetPlan.html',
+				dataType:"json",
+				data:{planid:planid,orderid:orderid},
+				type:'post',
+				success: function(data){
+					orderobj.travelplan = data;
+					layer.msg('重置成功');
+				}
+			});
+		},
+		//签证录入
+		visa:function(applyid){
+			window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applyid;
+		},
+		passport:function(applyId){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '550px'],
+				content: '/admin/visaJapan/passportInfo.html?applyId='+applyId
+			});
+		}
+	}
 });
 function commitdata(){
 	//绑定日期数据
@@ -175,21 +175,21 @@ function commitdata(){
 		threecounty = threecounty.substr(0,threecounty.length-1);
 	}
 	orderobj.orderinfo.threecounty = threecounty;
-	
+
 	var editdata = orderobj.orderinfo;
 	editdata.travelinfo = JSON.stringify(orderobj.travelinfo);
 	console.log("orderinfo:"+JSON.stringify(editdata));
 	layer.load(1);
 	$.ajax({ 
-    	url: BASE_PATH + '/admin/visaJapan/saveJpVisaDetailInfo.html',
-    	dataType:"json",
-    	data:editdata,
-    	type:'post',
-    	success: function(data){
-    		layer.closeAll('loading');
-    		window.location.reload();
-      	}
-    }); 
+		url: BASE_PATH + '/admin/visaJapan/saveJpVisaDetailInfo.html',
+		dataType:"json",
+		data:editdata,
+		type:'post',
+		success: function(data){
+			layer.closeAll('loading');
+			window.location.reload();
+		}
+	}); 
 }
 
 //加载select2
@@ -283,7 +283,7 @@ $("#goDepartureCity").on("select2:select",function(e){
 	}else{
 		thisval += '';
 	}
-　　orderobj.travelinfo.godeparturecity = thisval;
+	orderobj.travelinfo.godeparturecity = thisval;
 });
 //去程抵达城市
 $("#goArrivedCity").on("select2:select",function(e){
@@ -372,17 +372,17 @@ $(".schedulingBtn").click(function(){
 	var goDate = $('#goDate').val();
 	var returnDate = $('#returnDate').val();
 	$.ajax({ 
-    	url: '/admin/visaJapan/generatePlan.html',
-    	dataType:"json",
-    	data:{orderid:orderid,goArrivedCity:goArrivedCity,goDate:goDate,returnDate:returnDate},
-    	type:'post',
-    	success: function(data){
-    		if(data.status == 'success'){
-    			orderobj.travelplan = data.data;
-    			layer.msg('生成成功');
-    		}else{
-    			layer.msg(data.message);
-    		}
-      	}
-    });
+		url: '/admin/visaJapan/generatePlan.html',
+		dataType:"json",
+		data:{orderid:orderid,goArrivedCity:goArrivedCity,goDate:goDate,returnDate:returnDate},
+		type:'post',
+		success: function(data){
+			if(data.status == 'success'){
+				orderobj.travelplan = data.data;
+				layer.msg('生成成功');
+			}else{
+				layer.msg(data.message);
+			}
+		}
+	});
 });

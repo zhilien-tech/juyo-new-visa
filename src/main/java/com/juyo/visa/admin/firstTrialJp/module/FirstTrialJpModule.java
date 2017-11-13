@@ -58,4 +58,14 @@ public class FirstTrialJpModule {
 	public Object trialListData(@Param("..") FirstTrialJpListDataForm form, HttpSession session) {
 		return firstTrialJpViewService.trialListData(form, session);
 	}
+
+	/**
+	 * 跳转到签证详情页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object trialDetail(@Param("orderid") Integer orderid) {
+		return firstTrialJpViewService.trialDetail(orderid);
+	}
 }
