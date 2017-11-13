@@ -37,6 +37,7 @@ import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
@@ -183,9 +184,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setValidStartDate(applicantForm.getValidStartDate());
 		}
 		Map<String, Object> result = MapUtil.map();
+		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
 		if (!Util.isEmpty(applicantForm.getOrderid())) {
 			applicant.setCreateTime(new Date());
-
 			dbDao.insert(applicant);
 			Integer applicantId = applicant.getId();
 			TApplicantOrderJpEntity applicantOrderJp = new TApplicantOrderJpEntity();
