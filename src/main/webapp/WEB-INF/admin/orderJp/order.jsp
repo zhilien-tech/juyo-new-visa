@@ -35,6 +35,10 @@
 				<span class="">状态：<p>下单</p></span> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
+				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
+				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" />
+				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" />
+				<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" />
 			</div>
 			<section class="content">
 				<!-- 客户信息 -->
