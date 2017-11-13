@@ -14,9 +14,9 @@
 	    $(this).addClass("active");//同时 添加记录样式
 	    if($(this).hasClass("active")){//当选中一级菜单时
 			//$(this).siblings(".menu1").next(".menu-ul").hide();
-			$(this).next('.menu-ul').toggle();//显示/隐藏子菜单栏
+			$(this).find('.menu-ul').toggle();//显示/隐藏子菜单栏
 			
-			var styleVal = $(this).next('.menu-ul').attr("style");
+			var styleVal = $(this).find('.menu-ul').attr("style");
 			if(styleVal == "display: block;"){
 				$(this).find("i").removeClass("more").addClass("more_unfold");//换为 向下的图标
 			}else{
@@ -24,6 +24,8 @@
 			}
 	    }
 	});
+	
+	
 	cookieMenu();
 	function cookieMenu(){
 		//cookie记录已点击的index
@@ -31,7 +33,7 @@
 			$("#"+_index).siblings().removeClass('active');
 			$("#"+_index).addClass("active");//当前下标的元素添加样式
 			
-			var ulVal = $("#"+_index).next("ul").html();
+			var ulVal = $("#"+_index).find("ul").html();
 			if(ulVal != null && ulVal != "" && ulVal != undefined){//有二级菜单时
 				var liId = sessionStorage.menuSecondLevelID;
 				if(liId != null && undefined != liId && liId != ""){
@@ -42,6 +44,7 @@
 					
 					$("#"+liId).addClass("activeTwo");//添加二级选中的 样式
 					$("#" + menu1Id).addClass("activeOne")//添加一级选中的 样式
+					$(".activeTwo").parent().prev("a").css("background-color","rgb(36, 45, 52)");
 					$("#" + menu1Id).find("i").removeClass("more").addClass("more_unfold");
 				}
 			}else{//没有二级菜单时
@@ -95,6 +98,16 @@
 		$('.content-wrapper').addClass('min-content-wrapper');
 	}
 
+	function minSecondLevelMenuShow(){
+		$(".min-sidebar > section > .sidebar-menu > .menu1").each(function(){//循环二级菜单
+			var secondLevelLength = $(this).find("li").length;//二级菜单的长度
+			if(secondLevelLength > 0){//有子菜单时
+				$(this).find("font").hide();//隐藏 一级菜单 提示项
+				$(this).find(".menu-ul").removeClass("none");
+			}
+		});
+	}
+	minSecondLevelMenuShow();
 	//点击汉堡图 左菜单栏收起 
 	$('.hamburgerImg').click(function(){
 		var menuWhetherMini = $('.main-sidebar').hasClass('min-sidebar');//左菜单栏 是否缩进
@@ -102,13 +115,15 @@
 			$('.main-sidebar').addClass('min-sidebar');
 			$('.content-wrapper').addClass('min-content-wrapper');
 			sessionStorage.menuWhetherMini = "isMini"; //false
+			minSecondLevelMenuShow();
 			
 		}else if(menuWhetherMini == true){//展开
 			$('.main-sidebar').removeClass('min-sidebar');
 			$('.content-wrapper').removeClass('min-content-wrapper');
 			sessionStorage.menuWhetherMini = "noMini"; //true
+			$(".menu1").find("font").show();//显示一级文字 菜单项
+			$(".active").siblings().find(".menu-ul").addClass("none");//除选中项展示子菜单 其他子菜单 全部隐藏
 		}
-
 	});
 	/*----------------------------------------end aside JS部分---------------------------------------------*/  
 

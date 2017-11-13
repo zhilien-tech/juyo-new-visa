@@ -91,7 +91,6 @@
 				var inputVal = $(this).siblings(".addInp").val();
 				if(inputVal != null && inputVal != ""){
 					$(this).siblings(".addInp").before('<span>'+ inputVal +'</span>');//在input前面 添加span标签
-					
 					$(this).siblings(".addInp").val("");
 					$.ajax({ 
 		            	url: '${base}/admin/visaJapan/saveApplicatRevenue.html',

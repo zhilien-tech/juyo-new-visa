@@ -41,16 +41,15 @@
 							</a>
 						</c:otherwise>
 					</c:choose>
-					
-				</li>
-				<!-- 二级菜单 -->
+					<!-- 二级菜单 -->
 					<ul class="none menu-ul">
-					<c:forEach items="${auths }" var="twofun" varStatus="twostatus">
-						<c:if test="${twofun.level eq 2 and twofun.parentId eq function.id}">
-							<li id="${twostatus.index+(status.index+1)*100 }"><a href="${twofun.url }?currentPageIndex=${twostatus.index+(status.index+1)*100 }">${twofun.funName }</a></li>
-						</c:if>
-					</c:forEach>
+						<c:forEach items="${auths }" var="twofun" varStatus="twostatus">
+							<c:if test="${twofun.level eq 2 and twofun.parentId eq function.id}">
+								<li id="${twostatus.index+(status.index+1)*100 }"><a href="${twofun.url }?currentPageIndex=${twostatus.index+(status.index+1)*100 }">${twofun.funName }</a></li>
+							</c:if>
+						</c:forEach>
 					</ul>
+				</li>
 				</c:if>
 			</c:forEach>
 			
