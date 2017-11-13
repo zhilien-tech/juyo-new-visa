@@ -6,6 +6,8 @@
 
 package com.juyo.visa.admin.firstTrialJp.from;
 
+import lombok.Data;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
@@ -22,6 +24,7 @@ import com.uxuexi.core.web.form.SQLParamForm;
  * @author   彭辉
  * @Date	 2017年11月9日 	 
  */
+@Data
 public class FirstTrialJpListDataForm implements SQLParamForm {
 
 	//状态
@@ -45,7 +48,7 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 
 	@Override
 	public Sql sql(SqlManager sqlManager) {
-		String sqlString = sqlManager.get("firstTrialJp_list");
+		String sqlString = sqlManager.get("firstTrialJp_list_data");
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
 		return sql;
@@ -56,7 +59,8 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("tr.orderNum", "like", "%" + searchStr + "%").or("taj.passportNum", "like", "%" + searchStr + "%")
-					.or("tc.mobile", "like", "%" + searchStr + "%").or("taj.applyname", "like", "%" + searchStr + "%");
+					.or("tc.mobile", "like", "%" + searchStr + "%")
+					.or("taj.applicantName", "like", "%" + searchStr + "%");
 			cnd.and(exp);
 		}
 		/*if (!Util.isEmpty(goTripDate)) {
