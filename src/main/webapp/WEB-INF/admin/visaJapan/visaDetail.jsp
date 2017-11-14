@@ -30,6 +30,12 @@
 			#applicantTable tbody tr td:nth-child(3){width: 10%;}
 			#applicantTable tbody tr td:nth-child(4){width: 10%;}
 			#applicantTable tbody tr td:nth-child(6){width: 8%;}
+			#schedulingTable thead tr th:nth-child(1){width:8%;}
+			#schedulingTable thead tr th:nth-child(2){width:10%;}
+			#schedulingTable thead tr th:nth-child(3){width:12%;}
+			#schedulingTable thead tr th:nth-child(4){width:24%;}
+			#schedulingTable thead tr th:nth-child(5){width:24%;}
+			#schedulingTable thead tr th:nth-child(6){width:8%;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -419,7 +425,7 @@
 		<script src="${base}/references/common/js/vue/vue.min.js"></script>
 		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 		<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
-		<script type="text/javascript" src="${base }/admin/common/commonjs.js"></script>
+		<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 		<script src="${base}/admin/visaJapan/visaDetail.js"></script><!-- 本页面js文件 -->
 		<script type="text/javascript">
 			var threecounty = '${obj.jporderinfo.visaCounty}';

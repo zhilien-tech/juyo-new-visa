@@ -14,8 +14,6 @@ import com.uxuexi.core.web.form.ModForm;
 @EqualsAndHashCode(callSuper = true)
 public class PersonalInfoUpdateForm extends ModForm {
 
-	//用户id
-	private Integer userid;
 	//公司id
 	private Integer comId;
 	//联系QQ

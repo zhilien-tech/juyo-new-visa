@@ -74,11 +74,11 @@
 								<div><label>状态：</label><span>{{data.status}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i title="编辑" class="edit" v-on:click="order(data.orderid)"> </i>
-									<i title="分享" class="share"> </i>
-									<i title="初审" class="theTrial"> </i>
-									<i title="回邮" class="return"> </i>
-									<i title="作废" class="toVoid"> </i>
+									<i class="edit" v-on:click="order(data.orderid)"> </i>
+									<i class="share"> </i>
+									<i class="theTrial"> </i>
+									<i class="return"> </i>
+									<i class="toVoid"> </i>
 								</div>
 							</div>
 							<ul class="card-content">
@@ -105,6 +105,7 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 	<%-- <script src="${base}/admin/orderJp/listCard.js"></script> --%>
+	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		//异步加载的URL地址

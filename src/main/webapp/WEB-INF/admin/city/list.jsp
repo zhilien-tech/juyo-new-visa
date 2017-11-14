@@ -90,24 +90,20 @@
 	<!-- ./wrapper -->
 
 	<!-- jQuery 2.2.3 -->
-	<script
-		src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<!-- DataTables -->
-	<script
-		src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script
-		src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
-	<script
-		src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- 公用js文件 -->
 	<script src="${base}/references/common/js/base/base.js"></script>
 	<!-- 引入DataTables JS -->
 	<script src="${base}/admin/city/listTable.js"></script>
+	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
-	
 		var BASE_PATH = '${base}';
 		$(function() {
 			initDatatable();
