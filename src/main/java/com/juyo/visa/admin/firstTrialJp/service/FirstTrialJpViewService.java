@@ -25,6 +25,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
@@ -173,12 +174,20 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		applysql.setParam("orderid", orderid);
 		List<Record> applyinfo = dbDao.query(applysql, null, null);
 		for (Record record : applyinfo) {
+			//资料类型
 			Integer type = (Integer) record.get("type");
 			for (VisaDataTypeEnum visadatatype : VisaDataTypeEnum.values()) {
 				if (!Util.isEmpty(type) && type.equals(visadatatype.intKey())) {
 					record.put("type", visadatatype.value());
 				}
 			}
+			Integer sex = (Integer) record.get("sex");
+			if (BoyOrGirlEnum.MAN.intKey() == sex) {
+				record.set("sex", "男");
+			} else {
+				record.set("sex", "女");
+			}
+
 		}
 		result.put("applyinfo", applyinfo);
 

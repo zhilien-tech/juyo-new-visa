@@ -31,18 +31,18 @@ $(function(){
 
 });
 
-var threecounty = '${obj.jporderinfo.visaCounty}';
-if(threecounty){
-	var threecountys = threecounty.split(",");
-	for (var i = 0; i < threecountys.length; i++) {
+//签证县回显
+if(visaCounty){
+	var visaCountys = visaCounty.split(",");
+	for (var i = 0; i < visaCountys.length; i++) {
 		$('[name=visacounty]').each(function(){
-			if(threecountys[i] == $(this).val()){
+			if(visaCountys[i] == $(this).val()){
 				$(this).addClass('btnState-true');
 			}
 		});
 	}
 }
-var threecounty = '${obj.jporderinfo.threeCounty}';
+//三年访问县回显
 if(threecounty){
 	var threecountys = threecounty.split(",");
 	for (var i = 0; i < threecountys.length; i++) {
@@ -53,7 +53,6 @@ if(threecounty){
 		});
 	}
 }
-
 
 var orderobj;
 //VUE准备数据
@@ -77,7 +76,7 @@ new Vue({
 			},
 			success: function(data){
 				orderobj.orderinfo = data.orderinfo;
-				orderobj.applyinfo = data.applyinfo;
+				orderobj.applicantInfo = data.applyinfo;
 			}
 		});
 	},
@@ -123,5 +122,17 @@ new Vue({
 function successCallBack(status){
 	if(status == 1){
 		layer.msg('修改成功');
+		var url = '/admin/firstTrialJp/getJpTrialDetailData.html';
+		$.ajax({ 
+			url: url,
+			type:'post',
+			dataType:"json",
+			data:{
+				orderid:orderid
+			},
+			success: function(data){
+				orderobj.applicantInfo = data.applyinfo;
+			}
+		}); 
 	}
 }

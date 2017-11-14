@@ -38,7 +38,7 @@
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div class="card-list" v-for="data in trialJapanData">
+						<div class="card-list" v-cloak v-for="data in trialJapanData">
 							<div class="card-head">
 								<div><label>订单号：</label><span>{{data.ordernumber}}</span></div>	
 								<div><label>出行时间：</label><span>{{data.gotriptime}}</span></div>	
@@ -72,7 +72,9 @@
 			</div>
 		</div>
 
-	<!-- jQuery 2.2.3 -->
+	<script type="text/javascript">
+		var BASE_PATH = '${base}';
+	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
@@ -81,69 +83,7 @@
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script src="${base}/references/common/js/base/cardList.js"></script>
-	<script type="text/javascript">
-		var BASE_PATH = '${base}';
-		//异步加载的URL地址
-	    var url="${base}/admin/firstTrialJp/trialListData.html";
-	    //vue表格数据对象
-	    var _self;
-	   /*  var firstTrial = {
-	    		FTdata:[
-	    		       {orderNumber:"170808-JP0001",
-	    		    	travelDate:"2017-10-22",
-	    		    	returnDate:"2017-12-22",
-	    		    	state:"不合格",
-		    		    people:[
-		    		       {name:"宋仲基",passportNo:"G73635124",phone:"15132636399",state:"初审"},
-		    		       {name:"马斯洛",passportNo:"G73602220",phone:"15132336388",state:"不合格"},
-		    		       {name:"宋仲基",passportNo:"G73635124",phone:"15132636399",state:"初审"}
-		    		    ]
-	    		       },
-	    		],
-	    }; */
-	    var firstTrial = {trialJapanData:""};
-		new Vue({
-			el: '#card',
-			data: firstTrial,
-			created:function(){
-	            _self=this;
-	            $.ajax({ 
-	            	url: url,
-	            	dataType:"json",
-	            	type:'post',
-	            	success: function(data){
-	            		_self.trialJapanData = data.trialJapanData;
-	              	}
-	            });
-	        },
-			methods:{
-				/* editClick:function(){//编辑图标  页面跳转
-					window.location.href = '${base}/admin/firstTrialJp/edit.html';
-				} */
-				visaDetail:function(orderid){
-	        		//跳转到签证详情页面
-	        		window.open('${base}/admin/firstTrialJp/trialDetail.html?orderid='+orderid);
-	        		//console.log(message);
-	        		//alert(JSON.stringify(event.target));
-	        	}
-			}
-		});
-		function search(){
-			/* var status = $('#status').val(); */
-			var searchStr = $('#searchStr').val();
-			$.ajax({ 
-	        	url: url,
-	        	/* data:{status:status,searchStr:searchStr}, */
-	        	data:{searchStr:searchStr},
-	        	dataType:"json",
-	        	type:'post',
-	        	success: function(data){
-	        		_self.trialJapanData = data.trialJapanData;
-	          	}
-	        });
-		}
-		
-	</script>
+	<script src="${base}/admin/firstTrialJp/trialList.js"></script><!-- 本页面js文件 -->
 	
 </body>
 </html>

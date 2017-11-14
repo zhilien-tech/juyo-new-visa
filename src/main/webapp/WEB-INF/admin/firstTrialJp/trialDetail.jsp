@@ -246,7 +246,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="apply in applyinfo">
+									<tr v-cloak v-for="apply in applicantInfo">
 										<td>{{apply.applyname}}</td>
 										<td>{{apply.telephone}}</td>
 										<td>{{apply.passport}}</td>
@@ -384,6 +384,8 @@
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
 			var orderid = '${obj.orderid}';
+			var visaCounty = '${obj.jporderinfo.visaCounty}';
+			var threecounty = '${obj.jporderinfo.threeCounty}';
 		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
