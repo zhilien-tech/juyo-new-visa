@@ -246,7 +246,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-cloak v-for="apply in applicantInfo">
+									<tr v-cloak v-for="apply in applyinfo">
 										<td>{{apply.applyname}}</td>
 										<td>{{apply.telephone}}</td>
 										<td>{{apply.passport}}</td>

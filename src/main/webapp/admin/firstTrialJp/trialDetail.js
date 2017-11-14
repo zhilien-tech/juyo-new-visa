@@ -76,7 +76,7 @@ new Vue({
 			},
 			success: function(data){
 				orderobj.orderinfo = data.orderinfo;
-				orderobj.applicantInfo = data.applyinfo;
+				orderobj.applyinfo = data.applyinfo;
 			}
 		});
 	},
@@ -131,7 +131,7 @@ function successCallBack(status){
 				orderid:orderid
 			},
 			success: function(data){
-				orderobj.applicantInfo = data.applyinfo;
+				orderobj.applyinfo = data.applyinfo;
 			}
 		}); 
 	}

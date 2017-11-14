@@ -1,5 +1,5 @@
 //异步加载的URL地址
-var url="${base}/admin/firstTrialJp/trialListData.html";
+var url="/admin/firstTrialJp/trialListData.html";
 //vue表格数据对象
 var _self;
 /*  var firstTrial = {
@@ -37,7 +37,7 @@ new Vue({
 				} */
 		visaDetail:function(orderid){
 			//跳转到签证详情页面
-			window.open('${base}/admin/firstTrialJp/trialDetail.html?orderid='+orderid);
+			window.open('/admin/firstTrialJp/trialDetail.html?orderid='+orderid);
 			//console.log(message);
 			//alert(JSON.stringify(event.target));
 		}
