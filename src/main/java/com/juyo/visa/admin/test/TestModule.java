@@ -50,4 +50,10 @@ public class TestModule {
 	public Object express() {
 		return null;
 	}
+
+	@At("admin/firstTrialJp/passport")
+	@Ok("jsp")
+	public Object passport() {
+		return null;
+	}
 }
