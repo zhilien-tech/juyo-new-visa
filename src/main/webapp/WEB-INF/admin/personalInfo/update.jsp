@@ -61,13 +61,13 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>部门：</label> 
-									<input id="department" name="department" value="${obj.deptname}" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="department" name="department" value="${obj.usertype eq 1 ? obj.deptname :""}" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>职位：</label> 
-									<input id="job" name="job" value="${obj.jobname}" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="job" name="job" value="${obj.usertype eq 1 ? obj.jobname :""}" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>

@@ -46,7 +46,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>人数：</label> 
-										<input id="number" name="number" v-model="orderinfo.number" type="text" class="form-control input-sm" placeholder=" "  />
+										<input id="number" name="number" v-model="orderinfo.number" type="text" class="form-control input-sm" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this)" onblur="this.v();" placeholder=" "  />
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
@@ -114,8 +114,9 @@
 								</div>
 							</div>
 							<!-- end 行程/付款方式/金额 -->
+
+							<!-- start 签证类型 -->
 							<div class="row body-from-input">
-								<!-- 签证类型 -->
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>签证类型：</label> 
@@ -126,43 +127,65 @@
 										</select>
 									</div>
 								</div>
-								
-								<div class="col-sm-8 none" id="sixCounty" v-model="orderInfo.visacounty">
-									<div class="form-group viseType-btn">
-										<label style="display: block;">&nbsp;</label> 
-										<input type="button" value="冲绳县" class="btn btn-sm btnState">
-										<input type="button" value="青森县" class="btn btn-sm btnState">
-										<input type="button" value="岩手县" class="btn btn-sm btnState">
-										<input type="button" value="宫城县" class="btn btn-sm btnState">
-										<input type="button" value="秋田县" class="btn btn-sm btnState">
-										<input type="button" value="山形县" class="btn btn-sm btnState">
-										<input type="button" value="福鸟县" class="btn btn-sm btnState">
-									</div>
-								</div>
+								<c:choose>
+									<c:when test="${obj.jporderinfo.visaType == 2 }">
+										<div class="col-sm-8" id="visacounty">
+									</c:when>
+									<c:otherwise>
+										<div class="col-sm-8 none" id="visacounty">
+									</c:otherwise>
+								</c:choose>
+											<div class="form-group viseType-btn">
+												<label style="display: block;">&nbsp;</label> 
+												<input name="visacounty" type="button" value="冲绳县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="青森县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="岩手县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="宫城县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="秋田县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="山形县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="福鸟县" class="btn btn-sm btnState">
+											</div>
+										</div>
 							</div>
 							<!-- end 签证类型 -->
-							<div class="row body-from-input access none">
-								<!-- 过去三年是否访问过 -->
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>过去三年是否访问过：</label> 
-										<select id="isVisit" name="isvisit" class="form-control input-sm" onchange="selectListData();" >
-											<c:forEach var="map" items="${obj.threeYearsIsVisitedEnum}">
-												<option value="${map.key}" ${map.key==0?'selected':''}>${map.value}</option>
-											</c:forEach>
-										</select>
+							
+							<!-- start 过去三年是否访问过 -->
+							<c:choose>
+								<c:when test="${obj.jporderinfo.visaType == 2 }">
+									<div class="row body-from-input" id="threefangwen">
+								</c:when>
+								<c:otherwise>
+									<div class="row body-from-input none" id="threefangwen">
+								</c:otherwise>
+							</c:choose>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>过去三年是否访问过：</label> 
+											<select id="isVisit" class="form-control input-sm" v-model="orderinfo.isvisit">
+												<c:forEach var="map" items="${obj.isyesornoenum}">
+													<option value="${map.key}">${map.value}</option>
+												</c:forEach>
+											</select>
+										</div>
 									</div>
-								</div>
-								<div class="col-sm-8" id="isVisited" v-model="orderInfo.threeCounty">
-									<div class="form-group viseType-btn">
-										<label style="display: block;">&nbsp;</label> 
-										<input type="button" value="岩手县" class="btn btn-sm btnState"> 
-										<input type="button" value="秋田县" class="btn btn-sm btnState"> 
-										<input type="button" value="山形县" class="btn btn-sm btnState">
+										
+									<div class="col-sm-8">
+									<c:choose>
+										<c:when test="${obj.jporderinfo.isVisit == 1 }">
+											<div id="threexian" class="form-group viseType-btn">
+										</c:when>
+										<c:otherwise>
+											<div id="threexian" class="form-group viseType-btn none">
+										</c:otherwise>
+									</c:choose>
+												<label style="display: block;">&nbsp;</label> 
+												<input name="threecounty" type="button" value="岩手县" class="btn btn-sm btnState"> 
+												<input name="threecounty" type="button" value="秋田县" class="btn btn-sm btnState"> 
+												<input name="threecounty" type="button" value="山形县" class="btn btn-sm btnState">
+											</div>
 									</div>
-								</div>
-							</div>
-							<!-- end 过去三年是否访问过 -->
+							</div><!-- end 过去三年是否访问过 -->
+
 							<div class="row body-from-input">
 								<!-- 出行时间/停留天数/返回时间 -->
 								<div class="col-sm-3">
@@ -174,7 +197,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>停留天数：</label>
-										<input id="stayday" name="stayday" type="text" class="form-control input-sm mustNumber" v-model="orderinfo.stayday"/>
+										<input id="stayday" name="stayday" type="text" class="form-control input-sm mustNumber" v-model="orderinfo.stayday" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this)" onblur="this.v();"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -358,90 +381,21 @@
 	
 		</div>
 		
+		<script type="text/javascript">
+			var BASE_PATH = '${base}';
+		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 		<script src="${base}/references/common/js/layer/layer.js"></script>
 		<script src="${base}/references/common/js/vue/vue.min.js"></script>
 		<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
-		<script src="${base}/admin/orderJp/order.js"></script><!-- 本页面js文件 -->
-		<!-- select2 -->
 		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+		<script src="${base}/admin/firstTrialJp/trialDetail.js"></script><!-- 本页面js文件 -->
 		
 		<script type="text/javascript">
-			var BASE_PATH = '${base}';
 			
-			/* $(function(){
-				var threecounty = '${obj.jporderinfo.visaCounty}';
-				if(threecounty){
-					var threecountys = threecounty.split(",");
-					for (var i = 0; i < threecountys.length; i++) {
-						$('[name=visacounty]').each(function(){
-							if(threecountys[i] == $(this).val()){
-								$(this).addClass('btnState-true');
-							}
-						});
-					}
-				}
-				var threecounty = '${obj.jporderinfo.threeCounty}';
-				if(threecounty){
-					var threecountys = threecounty.split(",");
-					for (var i = 0; i < threecountys.length; i++) {
-						$('[name=threecounty]').each(function(){
-							if(threecountys[i] == $(this).val()){
-								$(this).addClass('btnState-true');
-							}
-						});
-					}
-				}
-			}); */
-			
-			
-			/* function saveAddOrder(){
-				var orderinfo = $("#orderInfo").serialize();
-				$.ajax({
-					type : 'POST',
-					data : orderinfo ,
-					url : '${base}/admin/orderJp/saveAddOrderinfo',
-					success : function(data) {
-						console.log(JSON.stringify(data));
-						window.location.href = '${base}/admin/orderJp/list';
-					},
-					error : function() {
-						alert("error");
-					}
-				}); 
-			} */
-			
-			/* new Vue({
-				el: '#wrapper',
-				methods:{
-					visaTypeChange:function(){//签证类型
-						var visaTypeVal = $('[name="visatype"]').val();
-						if(visaTypeVal == 2){
-							$("#sixCounty").removeClass("none");
-							$(".access").removeClass("none");
-						}else{
-							$("#sixCounty").addClass("none");
-							$(".access").addClass("none");
-						}
-					},
-					basicInfoClick:function(){//基本信息 弹层
-						layer.open({
-							type: 2,
-							title: false,
-							closeBtn:false,
-							fix: false,
-							maxmin: false,
-							shadeClose: false,
-							scrollbar: false,
-							area: ['900px', '551px'],
-							content:'/admin/firstTrialJp/basicInfo.html'
-						});
-					}
-				}
-			}); */
 		</script>
 	</body>
 </html>

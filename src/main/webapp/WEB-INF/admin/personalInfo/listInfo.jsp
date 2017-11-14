@@ -49,11 +49,13 @@
 								</tr>
 								<tr>
 									<td>所属部门</td>
-									<td id="deptname">${obj.deptname}</td>
+									<%-- <td id="deptname">${obj.deptname}</td> --%>
+									<td id="deptname">${obj.usertype eq 1 ? obj.deptname :""}</td>
 								</tr>
 								<tr>
 									<td>用户职位</td>
-									<td id="jobname">${obj.jobname}</td>
+									<%-- <td id="jobname">${obj.jobname}</td> --%>
+									<td id="jobname">${obj.usertype eq 1 ? obj.jobname :""}</td>
 								</tr>
 							</tbody>
 						</table>
