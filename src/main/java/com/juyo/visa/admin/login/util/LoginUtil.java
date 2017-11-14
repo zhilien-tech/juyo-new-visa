@@ -30,7 +30,7 @@ public class LoginUtil {
 	 * @param session
 	 * @return TODO获取当前登录用户
 	 */
-	public static TUserEntity getLoginUser(final HttpSession session) {
+	public static synchronized TUserEntity getLoginUser(final HttpSession session) {
 		TUserEntity user = null;
 		Object loginuser = session.getAttribute(LoginService.LOGINUSER);
 		if (loginuser instanceof TUserEntity) {
@@ -47,7 +47,7 @@ public class LoginUtil {
 	 * @param session
 	 * @return TODO获取当前登录用户所在的公司
 	 */
-	public static TCompanyEntity getLoginCompany(final HttpSession session) {
+	public static synchronized TCompanyEntity getLoginCompany(final HttpSession session) {
 		TCompanyEntity company = null;
 		Object logincompany = session.getAttribute(LoginService.USER_COMPANY_KEY);
 		if (logincompany instanceof TCompanyEntity) {

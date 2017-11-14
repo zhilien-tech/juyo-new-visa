@@ -48,4 +48,8 @@ public class TOrderJpEntity implements Serializable {
 	@Comment("备注")
 	private String remark;
 
+	@Column
+	@Comment("归国报告文件地址")
+	private String returnHomeFileUrl;
+
 }
