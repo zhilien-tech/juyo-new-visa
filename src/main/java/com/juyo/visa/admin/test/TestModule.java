@@ -44,4 +44,10 @@ public class TestModule {
 	public Object basicInfo() {
 		return null;
 	}
+
+	@At("admin/firstTrialJp/express")
+	@Ok("jsp")
+	public Object express() {
+		return null;
+	}
 }

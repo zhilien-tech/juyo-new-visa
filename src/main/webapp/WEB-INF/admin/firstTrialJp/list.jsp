@@ -47,7 +47,7 @@
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
-									<i class="express"> </i>
+									<i class="express" @click="expressFun"> </i>
 									<i class="return"> </i>
 								</div>
 							</div>
@@ -125,6 +125,19 @@
 	        		window.open('${base}/admin/firstTrialJp/trialDetail.html?orderid='+orderid);
 	        		//console.log(message);
 	        		//alert(JSON.stringify(event.target));
+	        	},
+	        	expressFun:function(){//跳转快递弹层页面
+	        		layer.open({
+	        		    type: 2,
+	        		    title: false,
+	        		    closeBtn:false,
+	        		    fix: false,
+	        		    maxmin: false,
+	        		    shadeClose: false,
+	        		    scrollbar: false,
+	        		    area: ['900px', '550px'],
+	        		    content: '${base}/admin/firstTrialJp/express.html'
+	        	    });
 	        	}
 			}
 		});
