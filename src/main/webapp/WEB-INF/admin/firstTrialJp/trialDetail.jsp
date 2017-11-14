@@ -250,16 +250,16 @@
 										<td>{{apply.applyname}}</td>
 										<td>{{apply.telephone}}</td>
 										<td>{{apply.passport}}</td>
-										<td></td>
-										<td></td>
+										<td>{{apply.type}}</td>
+										<td>{{apply.realinfo}}</td>
 										<td>{{apply.sex}}</td>
 										<td>{{apply.status}}</td>
 										<td>
-											<a v-on:click="basicInfoClick">基本信息</a>&nbsp;&nbsp;
+											<a v-on:click="basicInfo(apply.applyid)">基本信息</a>&nbsp;&nbsp;
 											<a v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;
-											<a v-on:click="visa(apply.applyid)">签证信息</a><br>
-											<a v-on:click="qualified">合格</a>&nbsp;&nbsp;
-											<a v-on:click="unqualified">不合格</a>
+											<a v-on:click="visaInfo(apply.applyid)">签证信息</a><br>
+											<a v-on:click="qualified(apply.applyid)">合格</a>&nbsp;&nbsp;
+											<a v-on:click="unqualified(apply.applyid)">不合格</a>
 										</td>
 									</tr>
 								</tbody>
@@ -383,6 +383,7 @@
 		
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
+			var orderid = '${obj.orderid}';
 		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
@@ -390,12 +391,9 @@
 		<script src="${base}/references/common/js/vue/vue.min.js"></script>
 		<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+		<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 		<script src="${base}/admin/firstTrialJp/trialDetail.js"></script><!-- 本页面js文件 -->
-		
-		<script type="text/javascript">
-			
-		</script>
 	</body>
 </html>

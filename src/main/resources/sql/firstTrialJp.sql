@@ -69,3 +69,29 @@ FROM
 INNER JOIN t_order_jp toj ON toj.orderId = tr.id
 WHERE
 	toj.id = @orderid
+	
+/*firstTrialJp_orderDetail_applicant_by_orderid*/
+SELECT
+	taoj.id applyid,
+	CONCAT(ta.firstName, ta.lastName) applyname,
+	ta.telephone,
+	tap.passport,
+	tavpj.type,
+	tavpj.realInfo,
+	ta.sex,
+	ta.status applicantstatus
+FROM
+	t_applicant_order_jp taoj
+INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
+LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
+LEFT JOIN (
+	SELECT
+		applicantId,
+		type,
+		GROUP_CONCAT(realInfo SEPARATOR '、') realInfo
+	FROM
+		t_applicant_visa_paperwork_jp
+	GROUP BY
+		applicantId
+) tavpj ON tavpj.applicantId = taoj.id
+where taoj.orderId = @orderid

@@ -68,4 +68,13 @@ public class FirstTrialJpModule {
 	public Object trialDetail(@Param("orderid") Integer orderid) {
 		return firstTrialJpViewService.trialDetail(orderid);
 	}
+
+	/**
+	 * 获取签证详情页数据
+	 */
+	@At
+	@POST
+	public Object getJpTrialDetailData(@Param("orderid") Integer orderid) {
+		return firstTrialJpViewService.getJpTrialDetailData(orderid);
+	}
 }

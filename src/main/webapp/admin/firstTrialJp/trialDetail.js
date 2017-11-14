@@ -53,3 +53,75 @@ if(threecounty){
 		});
 	}
 }
+
+
+var orderobj;
+//VUE准备数据
+//orderinfo订单信息  applyinfo申请人信息  回邮信息
+new Vue({
+	el: '#wrapper',
+	data: {
+		orderinfo:"",
+		applyinfo:""
+
+	},
+	created:function(){
+		orderobj=this;
+		var url = '/admin/firstTrialJp/getJpTrialDetailData.html';
+		$.ajax({ 
+			url: url,
+			type:'post',
+			dataType:"json",
+			data:{
+				orderid:orderid
+			},
+			success: function(data){
+				orderobj.orderinfo = data.orderinfo;
+				orderobj.applyinfo = data.applyinfo;
+			}
+		});
+	},
+	methods:{
+		basicInfo : function(id){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/updateApplicant.html?id='+id
+			});
+		},
+		passport:function(applyId){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '550px'],
+				content: '/admin/visaJapan/passportInfo.html?applyId='+applyId
+			});
+		},
+		visaInfo:function(applyId){
+			return null;
+		},
+		qualified:function(applyId){
+			return null;
+		},
+		unqualified:function(applyId){
+			return null;
+		}
+	}
+});
+
+function successCallBack(status){
+	if(status == 1){
+		layer.msg('修改成功');
+	}
+}

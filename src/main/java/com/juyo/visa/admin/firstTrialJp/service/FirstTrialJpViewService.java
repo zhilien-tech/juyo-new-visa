@@ -6,6 +6,9 @@
 
 package com.juyo.visa.admin.firstTrialJp.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,10 +33,12 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.enums.VisaDataTypeEnum;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
@@ -128,5 +133,56 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("isyesornoenum", EnumUtil.enum2(IsYesOrNoEnum.class));
 
 		return result;
+	}
+
+	/**
+	 * 日本初审详情页数据
+	 * <p>
+	 * @param orderid
+	 * @return 
+	 */
+	public Object getJpTrialDetailData(Integer orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		//订单信息
+		String sqlstr = sqlManager.get("firstTrialJp_order_info_byid");
+		Sql sql = Sqls.create(sqlstr);
+		sql.setParam("orderid", orderid);
+		Record orderinfo = dbDao.fetch(sql);
+		//格式化日期
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		if (!Util.isEmpty(orderinfo.get("gotripdate"))) {
+			Date goTripDate = (Date) orderinfo.get("gotripdate");
+			orderinfo.put("gotripdate", format.format(goTripDate));
+		}
+		if (!Util.isEmpty(orderinfo.get("backtripdate"))) {
+			Date backTripDate = (Date) orderinfo.get("backtripdate");
+			orderinfo.put("backtripdate", format.format(backTripDate));
+		}
+		if (!Util.isEmpty(orderinfo.get("sendvisadate"))) {
+			Date sendVisaDate = (Date) orderinfo.get("sendvisadate");
+			orderinfo.put("sendvisadate", format.format(sendVisaDate));
+		}
+		if (!Util.isEmpty(orderinfo.get("outvisadate"))) {
+			Date outVisaDate = (Date) orderinfo.get("outvisadate");
+			orderinfo.put("outvisadate", format.format(outVisaDate));
+		}
+		result.put("orderinfo", orderinfo);
+		//申请人信息
+		String applysqlstr = sqlManager.get("firstTrialJp_orderDetail_applicant_by_orderid");
+		Sql applysql = Sqls.create(applysqlstr);
+		applysql.setParam("orderid", orderid);
+		List<Record> applyinfo = dbDao.query(applysql, null, null);
+		for (Record record : applyinfo) {
+			Integer type = (Integer) record.get("type");
+			for (VisaDataTypeEnum visadatatype : VisaDataTypeEnum.values()) {
+				if (!Util.isEmpty(type) && type.equals(visadatatype.intKey())) {
+					record.put("type", visadatatype.value());
+				}
+			}
+		}
+		result.put("applyinfo", applyinfo);
+
+		return result;
+
 	}
 }
