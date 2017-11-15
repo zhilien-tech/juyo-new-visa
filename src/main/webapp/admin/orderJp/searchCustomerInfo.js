@@ -331,7 +331,6 @@ $("#compName").on('select2:select', function (evt) {
 	$("#telephone").val(customerId);
 	$("#email").val(customerId);
 	var id = parseInt($("#compName").val());
-	alert(id);
 	$.ajax({
 		url : 'getCustomerById',
 		type : 'POST',

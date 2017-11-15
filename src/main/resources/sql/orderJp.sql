@@ -104,7 +104,8 @@ SELECT
 	ap.issuedDate,
 	ap.validEndDate,
 	ap.issuedOrganization,
-	ap.issuedOrganizationEn
+	ap.issuedOrganizationEn,
+	ap.passportUrl
 FROM
 	t_applicant_passport ap
 INNER JOIN 
