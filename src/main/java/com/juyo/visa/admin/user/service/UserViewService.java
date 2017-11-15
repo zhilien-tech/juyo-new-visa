@@ -238,7 +238,7 @@ public class UserViewService extends BaseService<TUserEntity> {
 	 * @param applyuser
 	 * @return TODO 添加申请人
 	 */
-	public Object addApplicantUser(ApplicantUser applyuser) {
+	public TUserEntity addApplicantUser(ApplicantUser applyuser) {
 		//用户信息
 		TUserEntity user = new TUserEntity();
 		user.setComId(CommonConstants.COMPANY_TOURIST_ID);
@@ -259,6 +259,6 @@ public class UserViewService extends BaseService<TUserEntity> {
 		userjob.setComJobId(CommonConstants.COMPANY_JOB_ID);
 		userjob.setStatus(IsYesOrNoEnum.YES.intKey());
 		dbDao.insert(userjob);
-		return null;
+		return insertuser;
 	}
 }
