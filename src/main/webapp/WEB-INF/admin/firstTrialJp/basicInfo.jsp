@@ -29,25 +29,25 @@
 						</div><!-- end 身份证 正面 -->
 						
 						<div class="info-imgUpload front"><!-- 身份证 正面 -->
-
+							<img id="sqImg" alt="身份证正面" src="${obj.cardFront }">
 						</div><!-- end 身份证 正面 -->
 						
 						<div class="info-imgUpload back"><!-- 身份证 反面 -->
-
+							<img id="sqImg" alt="身份证反面" src="${obj.cardBack }">
 						</div><!-- end 身份证 反面 -->
 						
 						<div class="row"><!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>现居住地址省份：</label>
-									<input id="province" name="province" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="province" name="province" type="text" value="${obj.province }" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>现居住地址城市：</label>
-									<input id="city" name="city" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="city" name="city" type="text" value="${obj.city }" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -59,7 +59,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>姓/拼音：</label>
-									<input id="firstName" name="firstName" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="firstName" name="firstName" type="text" value="${obj.firstName }" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -68,7 +68,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>名/拼音：</label>
-									<input id="lastName" name="lastName" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="lastName" name="lastName" type="text" value="${obj.lastName }" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -77,14 +77,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>手机号：</label>
-									<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="telephone" name="telephone" type="text" value="${obj.telephone }" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>邮箱：</label>
-									<input id="email" name="email" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="email" name="email" type="text"  value="${obj.email }" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -94,22 +94,22 @@
 								<div class="form-group">
 									<label><span>*</span>性别：</label>
 									<select class="form-control input-sm selectHeight" id="sex" name="sex">
-										<option value="1">男</option>
-										<option value="2">女</option>
+										<option value="1" <c:if test="${obj.sex==1 }">selected = "selected"</c:if>>男</option>
+										<option value="2" <c:if test="${obj.sex==2 }">selected = "selected"</c:if>>女</option>
 									</select>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>民族：</label>
-									<input id="nation" name="nation" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="nation" name="nation" type="text" value="${obj.nation }" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生日期：</label>
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="birthday" name="birthday" type="text" value="${obj.birthday }" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -118,7 +118,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>住宅：</label>
-									<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="address" name="address" type="text" value="${obj.address }" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -127,7 +127,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>公民身份证：</label>
-									<input id="cardId" name="cardId" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="cardId" name="cardId" type="text" value="${obj.cardId }" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -136,7 +136,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发机关：</label>
-									<input id="cardId" name="cardId" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="cardId" name="cardId" type="text" value="${obj.issueOrganization }" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -145,14 +145,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>有效期限：</label>
-									<input id="validStartDate" name="validStartDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
+									<input id="validStartDate" name="validStartDate" value="${obj.validStartDate }" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label> &nbsp; &nbsp;</label>
-									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
+									<input id="validEndDate" name="validEndDate" value="${obj.validEndDate }" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -161,7 +161,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label>
-									<input id="detailedAddress" name="detailedAddress" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="detailedAddress" name="detailedAddress" value="${obj.detailedAddress }" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -174,6 +174,7 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var applyid = '${obj.id}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -183,10 +184,8 @@
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script src="${base}/admin/orderJp/applicant.js"></script>
 	
 	<script type="text/javascript">
-		var base = "${base}";
 		function saveApplicant(){
 			var applicantInfo = $("#applicantInfo").serialize();
 			$.ajax({

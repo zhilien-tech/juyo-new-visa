@@ -9,6 +9,9 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>销售-日本</title>
 	<link rel="stylesheet" href="${base}/references/public/css/saleJapan.css">
+	<style type="text/css">
+	 [v-cloak]{display:none;}
+	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper" id="wrapper">
@@ -67,7 +70,7 @@
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div class="card-list" v-for="data in orderJpData">
+						<div class="card-list" v-cloak v-for="data in orderJpData">
 							<div class="card-head">
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>	
 								<div><label>人数：</label><span>{{data.peoplenum}}</span></div>	
