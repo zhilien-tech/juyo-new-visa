@@ -47,7 +47,7 @@
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
-									<i class="express"> </i>
+									<i class="express" @click="expressFun"> </i>
 									<i class="return"> </i>
 								</div>
 							</div>
@@ -59,8 +59,8 @@
 									<div><label>状态：</label><span>{{item.applicantstatus}}</span></div>
 									<div>
 										<i class="basicInfo"> </i>
-										<i class="passportInfo"> </i>
-										<i class="visaInfo"> </i>
+										<i class="passportInfo" @click="passportFun"> </i>
+										<i class="visaInfo" @click="visaInfoFun"> </i>
 										<i class="qualified"> </i>
 										<i class="unqualified"> </i>
 									</div>

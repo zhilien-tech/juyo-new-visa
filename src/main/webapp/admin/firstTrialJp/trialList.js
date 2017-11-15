@@ -40,7 +40,46 @@ new Vue({
 			window.open('/admin/firstTrialJp/trialDetail.html?orderid='+orderid);
 			//console.log(message);
 			//alert(JSON.stringify(event.target));
-		}
+		},
+		expressFun:function(){//跳转快递弹层页面
+    		layer.open({
+    		    type: 2,
+    		    title: false,
+    		    closeBtn:false,
+    		    fix: false,
+    		    maxmin: false,
+    		    shadeClose: false,
+    		    scrollbar: false,
+    		    area: ['900px', '550px'],
+    		    content: '/admin/firstTrialJp/express.html'
+    	    });
+    	},
+    	passportFun:function(){
+    		layer.open({
+    		    type: 2,
+    		    title: false,
+    		    closeBtn:false,
+    		    fix: false,
+    		    maxmin: false,
+    		    shadeClose: false,
+    		    scrollbar: false,
+    		    area: ['900px', '550px'],
+    		    content: '/admin/firstTrialJp/passport.html'
+    	    });
+    	},
+    	visaInfoFun:function(){
+    		layer.open({
+    		    type: 2,
+    		    title: false,
+    		    closeBtn:false,
+    		    fix: false,
+    		    maxmin: false,
+    		    shadeClose: false,
+    		    scrollbar: false,
+    		    area: ['900px', '550px'],
+    		    content: '/admin/firstTrialJp/visaInfo.html'
+    	    });
+    	}
 	}
 });
 function search(){
