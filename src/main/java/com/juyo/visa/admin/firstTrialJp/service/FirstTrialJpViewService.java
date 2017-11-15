@@ -205,6 +205,21 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		return appllicant;
 	}
 
+	//合格申请人
+	public Object qualified(int applyid) {
+		int update = dbDao.update(TApplicantEntity.class,
+				Chain.make("status", TrialApplicantStatusEnum.qualified.intKey()), Cnd.where("id", "=", applyid));
+		if (update > 0) {
+			//清空不合格信息
+			TApplicantUnqualifiedEntity unqualifiedInfo = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+					Cnd.where("applicantId", "=", applyid));
+			if (!Util.isEmpty(unqualifiedInfo)) {
+				dbDao.delete(unqualifiedInfo);
+			}
+		}
+		return update > 0;
+	}
+
 	//获取申请人不合格信息
 	public Object unqualified(int applyid) {
 		Map<String, Object> result = Maps.newHashMap();
@@ -272,7 +287,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//只要有一个不合格, 则申请人状态不合格
 		if (isB == 1 || isV == 1 || isP == 1) {
 			dbDao.update(TApplicantEntity.class, Chain.make("status", TrialApplicantStatusEnum.unqualified.intKey()),
-					Cnd.where("applicantId", "=", applicantId));
+					Cnd.where("id", "=", applicantId));
 		}
 
 		return Json.toJson("success");

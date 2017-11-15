@@ -94,7 +94,27 @@ new Vue({
     	    });
     	},
     	qualifiedFun:function(applyid){
-    		alert("qqq"+applyid);
+    		layer.confirm('您确认合格吗？', {
+				   btn: ['是','否'], //按钮
+				   shade: false //不显示遮罩
+				}, function(index){
+					$.ajax({
+						type : 'POST',
+						data : {
+							applyid:applyid
+						},
+						url : '/admin/firstTrialJp/qualified.html',
+						success : function(data) {
+							layer.close(index);
+							console.log("合格了吗："+data);
+						},
+						error : function(xhr) {
+							layer.msg("修改失败", "", 3000);
+						}
+					});
+				}, function(){
+					 //取消之后不做任何操作
+				});
     	},
     	unqualifiedFun:function(applyid){
     		layer.open({

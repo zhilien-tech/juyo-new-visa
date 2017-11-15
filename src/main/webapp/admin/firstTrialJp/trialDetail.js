@@ -111,7 +111,27 @@ new Vue({
 			return null;
 		},
 		qualified:function(applyId){
-			return null;
+			layer.confirm('您确认合格吗？', {
+				   btn: ['是','否'], //按钮
+				   shade: false //不显示遮罩
+				}, function(index){
+					$.ajax({
+						type : 'POST',
+						data : {
+							applyid:applyId
+						},
+						url : '/admin/firstTrialJp/qualified.html',
+						success : function(data) {
+							layer.close(index);
+							console.log("合格了吗："+data);
+						},
+						error : function(xhr) {
+							layer.msg("修改失败", "", 3000);
+						}
+					});
+				}, function(){
+					 //取消之后不做任何操作
+				});
 		},
 		unqualified:function(applyId){
 			layer.open({
@@ -123,7 +143,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['800px', '402px'],
-    		    content: '/admin/firstTrialJp/unqualified.html'
+    		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyId
     	    });
 		}
 	}
