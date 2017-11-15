@@ -21,6 +21,7 @@ import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
@@ -36,10 +37,12 @@ import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
 import com.juyo.visa.entities.TApplicantEntity;
+import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.juyo.visa.forms.TApplicantUnqualifiedForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
@@ -201,4 +204,70 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		return appllicant;
 	}
 
+	//获取申请人不合格信息
+	public Object unqualified(int applyid) {
+		Map<String, Object> result = Maps.newHashMap();
+		int count = nutDao.count(TApplicantUnqualifiedEntity.class, Cnd.where("applicantId", "=", applyid));
+		TApplicantUnqualifiedEntity unqualifiedInfo = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", applyid));
+		result.put("applyid", applyid);
+		result.put("hasUnqInfo", count > 0);
+		result.put("unqualifiedInfo", unqualifiedInfo);
+		return result;
+	}
+
+	//保存不合格信息
+	public Object saveUnqualified(TApplicantUnqualifiedForm form) {
+		int YES = IsYesOrNoEnum.YES.intKey();
+		int NO = IsYesOrNoEnum.NO.intKey();
+		Integer applicantId = form.getApplicantId();
+		String isBase = form.getIsBase();
+		int isB = 0;
+		if (Util.eq("on", isBase)) {
+			isB = YES;
+		}
+		String baseRemark = form.getBaseRemark();
+		String isPassport = form.getIsPassport();
+		int isP = 0;
+		if (Util.eq("on", isPassport)) {
+			isP = YES;
+		}
+		String passRemark = form.getPassRemark();
+		String isVisa = form.getIsVisa();
+		int isV = 0;
+		if (Util.eq("on", isVisa)) {
+			isV = YES;
+		}
+		String visaRemark = form.getVisaRemark();
+
+		TApplicantUnqualifiedEntity unqualifiedInfo = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", applicantId));
+		if (Util.isEmpty(unqualifiedInfo)) {
+			//添加
+			if (!Util.isEmpty(applicantId)) {
+				TApplicantUnqualifiedEntity unq = new TApplicantUnqualifiedEntity();
+				unq.setApplicantId(applicantId);
+				unq.setIsBase(isB);
+				unq.setBaseRemark(baseRemark);
+				unq.setIsPassport(isP);
+				unq.setPassRemark(passRemark);
+				unq.setIsVisa(isV);
+				unq.setVisaRemark(visaRemark);
+				dbDao.insert(unq);
+			}
+
+		} else {
+			//更新
+			unqualifiedInfo.setApplicantId(applicantId);
+			unqualifiedInfo.setIsBase(isB);
+			unqualifiedInfo.setBaseRemark(baseRemark);
+			unqualifiedInfo.setIsPassport(isP);
+			unqualifiedInfo.setPassRemark(passRemark);
+			unqualifiedInfo.setIsVisa(isV);
+			unqualifiedInfo.setVisaRemark(visaRemark);
+			nutDao.update(unqualifiedInfo);
+		}
+
+		return Json.toJson("success");
+	}
 }

@@ -106,7 +106,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['800px', '402px'],
-    		    content: '/admin/firstTrialJp/unqualified.html'
+    		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyid
     	    });
     	}
 	}

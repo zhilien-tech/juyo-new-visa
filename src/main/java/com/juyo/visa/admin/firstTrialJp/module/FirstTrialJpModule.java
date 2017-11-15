@@ -18,6 +18,7 @@ import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
+import com.juyo.visa.forms.TApplicantUnqualifiedForm;
 
 /**
  * 日本订单初审Module
@@ -86,4 +87,24 @@ public class FirstTrialJpModule {
 	public Object basicInfo(@Param("applyid") int applyid) {
 		return firstTrialJpViewService.basicInfo(applyid);
 	}
+
+	/**
+	 * 申请人 不合格信息
+	 */
+	@At
+	@Ok("jsp")
+	public Object unqualified(@Param("applyid") int applyid) {
+		return firstTrialJpViewService.unqualified(applyid);
+	}
+
+	/**
+	 * 
+	 * 保存不合格信息
+	 */
+	@At
+	@POST
+	public Object saveUnqualified(@Param("..") TApplicantUnqualifiedForm form) {
+		return firstTrialJpViewService.saveUnqualified(form);
+	}
+
 }
