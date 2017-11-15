@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -266,6 +267,12 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			unqualifiedInfo.setIsVisa(isV);
 			unqualifiedInfo.setVisaRemark(visaRemark);
 			nutDao.update(unqualifiedInfo);
+		}
+
+		//只要有一个不合格, 则申请人状态不合格
+		if (isB == 1 || isV == 1 || isP == 1) {
+			dbDao.update(TApplicantEntity.class, Chain.make("status", TrialApplicantStatusEnum.unqualified.intKey()),
+					Cnd.where("applicantId", "=", applicantId));
 		}
 
 		return Json.toJson("success");
