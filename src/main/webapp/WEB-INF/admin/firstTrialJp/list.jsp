@@ -62,7 +62,7 @@
 										<i class="passportInfo" @click="passportFun"> </i>
 										<i class="visaInfo" @click="visaInfoFun"> </i>
 										<i class="qualified"> </i>
-										<i class="unqualified"> </i>
+										<i class="unqualified" @click="unqualifiedFun"> </i>
 									</div>
 								</li>
 							</ul>
@@ -163,6 +163,19 @@
 	        		    scrollbar: false,
 	        		    area: ['900px', '550px'],
 	        		    content: '${base}/admin/firstTrialJp/visaInfo.html'
+	        	    });
+	        	},
+	        	unqualifiedFun:function(){
+	        		layer.open({
+	        		    type: 2,
+	        		    title: false,
+	        		    closeBtn:false,
+	        		    fix: false,
+	        		    maxmin: false,
+	        		    shadeClose: false,
+	        		    scrollbar: false,
+	        		    area: ['800px', '402px'],
+	        		    content: '${base}/admin/firstTrialJp/unqualified.html'
 	        	    });
 	        	}
 			}
