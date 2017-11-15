@@ -19,8 +19,8 @@
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
 			.form-control{height: 30px;}
-			.add-btn{top: -35px;right: -1.5%;}
-			.remove-btn{top: -35px;right: -1.5%;}
+			.add-btn{top:-225px;right:-1%;}
+			.remove-btn{top: -225px;right: -1%;}
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
 		</style>
@@ -42,74 +42,6 @@
 			</div>
 			<section class="content">
 				<!-- 客户信息 -->
-				<%-- <div class="info" id="customerInfo" ref="customerInfo">
-					<p class="info-head">客户信息</p>
-					<div class="info-body-from">
-						<div class="row body-from-input">
-							<!-- 公司全称 -->
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>客户来源：</label> 
-									<select id="customerType" name="source" class="form-control input-sm"
-										v-model="customerInfo.source">
-										<option value="">--请选择--</option>
-										<c:forEach var="map" items="${obj.customerTypeEnum}">
-											<option value="${map.key}">${map.value}</option>
-										</c:forEach>
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>公司全称：</label> <input id="compName"
-										name="compName" type="text" class="form-control input-sm"
-										placeholder=" " v-model="customerInfo.name" /> <i
-										class="bulb"></i>
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>公司简称：</label>
-									<input type="hidden" id="orderid" name="orderid" value="${obj.orderId }"/>
-									 <input id="comShortName"
-										name="comShortName" type="text" class="form-control input-sm"
-										placeholder=" " v-model="customerInfo.shortname" /> <i
-										class="bulb"></i>
-								</div>
-							</div>
-						</div>
-						<!-- end 公司全称 -->
-						<div class="row body-from-input"><!-- 客户来源/联系人/手机号/邮箱 -->
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>联系人：</label> <input id="linkman"
-										name="linkman" type="text" class="form-control input-sm"
-										placeholder=" " v-model="customerInfo.linkman" /> <i
-										class="bulb"></i>
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>手机号：</label> <input id="telephone"
-										name="telephone" type="text" class="form-control input-sm"
-										placeholder=" " v-model="customerInfo.mobile" /> <i
-										class="bulb"></i>
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>邮箱：</label> <input id="email" name="email"
-										type="text" class="form-control input-sm" placeholder=" "
-										v-model="customerInfo.email" /> <i class="bulb"></i>
-								</div>
-							</div>
-						</div>
-						<!-- end 客户来源/联系人/手机号/邮箱 -->
-					</div>
-				</div> --%>
-				<!-- end 客户信息 -->
-
-				
 				<div class="info" id="customerInfo" ref="customerInfo">
 						<p class="info-head">客户信息</p>
 						<div class="info-body-from">
@@ -152,7 +84,6 @@
 										</div>
 									</div>
 								</div><!-- end select2 线上/OTS/线下 -->
-								
 								<div class="zhiKe none"><!-- input 直客 -->
 									<div class="col-sm-3">
 										<div class="form-group" style="padding-right: 3%;">
@@ -497,8 +428,7 @@
 				</div><!-- end 添加回邮信息 -->
 
 				<!-- 快递信息 -->
-				<div class="info expressInfo none" id="expressInfo"
-					name="backmailInfo">
+				<div class="info expressInfo none" id="expressInfo" name="backmailInfo">
 					<p class="info-head">快递信息</p>
 					<div class="info-body-from">
 						<div class="row body-from-input">
@@ -593,6 +523,7 @@
 							</div>
 						</div>
 						<!-- end 团队名称/快递号/备注 -->
+						<i class="add-btn"></i>
 					</div>
 				</div>
 				<!-- end 快递信息 -->
@@ -607,16 +538,16 @@
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script src="${base}/references/common/js/base/base.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<!-- select2 -->
-	<script
-		src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/admin/orderJp/searchCustomerInfo.js"></script>
 	<!-- 公用js文件 -->
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+	<script src="${base}/references/common/js/base/base.js"></script>
 	<script src="${base}/admin/orderJp/order.js"></script>
+	
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
 		//签证六县，访问三县选中状态
@@ -644,6 +575,17 @@
 		}
 	
 		$(function(){
+			//点击 蓝色加号图标 事件
+			$('.add-btn').click(function(){
+		    	var $html=$(this).parent().clone();//克隆标签模块
+		    	$(this).parents('.info').append($html);//添加克隆的内容
+		    	$html.find('.add-btn').remove();
+		    	$html.append('<i class="remove-btn"></i>');
+			});
+			//点击 蓝色叉号图标 事件
+			$(".info").on("click", ".remove-btn", function(){
+				$(this).parent().remove();//删除 对相应的本模块
+			});
 			customerTypeSelect2();
 			//客户来源
 			$("#customerType").change(function(){
