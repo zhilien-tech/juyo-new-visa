@@ -15,6 +15,8 @@ import lombok.Data;
 public class OrderEditDataForm implements Serializable {
 	private Integer id;
 
+	private String appId;
+
 	private String ordernum;
 
 	private Integer userid;
