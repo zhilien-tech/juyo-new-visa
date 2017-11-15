@@ -33,6 +33,7 @@
 							<div class="col-xs-6">
 							<div class="form-group">
 								<div class="sqImgPreview">
+									<input id="cardFront" name="cardFront" type="hidden"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="点击上传身份证" src="" >
 								</div>
@@ -41,6 +42,15 @@
 						</div><!-- end 身份证 正面 -->
 						
 						<div class="info-imgUpload back"><!-- 身份证 反面 -->
+							<div class="col-xs-6">
+							<div class="form-group">
+								<div class="sqImgPreview">
+									<input id="cardBack" name="cardBack" type="hidden"/>
+									<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+									<img id="sqImgBack" alt="点击上传身份证" src="" >
+								</div>
+							</div>
+						</div>
 
 						</div><!-- end 身份证 反面 -->
 						
@@ -145,7 +155,7 @@
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生日期：</label>
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -153,7 +163,7 @@
 						<div class="row"><!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>住宅：</label>
+									<label><span>*</span>住址：</label>
 									<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -193,6 +203,8 @@
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<!-- 公用js文件 -->
+	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	
 	<script type="text/javascript">
 		var base = "${base}";
@@ -204,7 +216,7 @@
 				data : applicantInfo,
 				url : '${base}/admin/orderJp/saveAddApplicant',
 				success : function(data) {
-					console.log(JSON.stringify(data));
+					alert(JSON.stringify(data));
 					var applicantIdParent = window.parent.document.getElementById("appId").value;
 					if(applicantIdParent != null || applicantIdParent != undefined || applicantIdParent != ""){
 						applicantIdParent += data.id +",";
@@ -221,7 +233,7 @@
 		}
 		
 		
-		//上传
+		//正面上传,扫描
 		
 		$('#uploadFile').change(function() {
 			var layerIndex = layer.load(1, {
@@ -238,37 +250,82 @@
 				formData.append("image", blob, file.name);
 				$.ajax({
 					type : "POST",//提交类型  
-					dataType : "json",//返回结果格式  
-					url : BASE_PATH + '/admin/company/uploadFile.html',//请求地址  
+					//dataType : "json",//返回结果格式  
+					url : BASE_PATH + '/admin/orderJp/IDCardRecognition',//请求地址  
 					async : true,
 					processData : false, //当FormData在jquery中使用的时候需要设置此项
 					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
 					//请求数据  
 					data : formData,
 					success : function(obj) {//请求成功后的函数 
-						
-						$.ajax({
-							type : 'POST',
-							data : obj.data,
-							url : '${base}/admin/orderJp/saveAddApplicant',
-							success : function(data) {
-								
-							},
-							error : function() {
-								alert("error");
-							}
-						}); 
-						
 						//关闭加载层
 						layer.close(layerIndex);
-						if ('200' === obj.status) {
-							$('#license').val(obj.data);
-							$('#sqImg').attr('src', obj.data);
+						if (true === obj.success) {
+							$('#cardFront').val(obj.url);
+							$('#sqImg').attr('src', obj.url);
+							$('#address').val(obj.address);
+							$('#nation').val(obj.nationality);
+							$('#cardId').val(obj.num);
+							$('#province').val(obj.province);
+							$('#city').val(obj.city);
+							$('#birthday').val(obj.birth);
 						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
 					},
-					error : function(obj) {
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						alert(XMLHttpRequest.status);
+		                alert(XMLHttpRequest.readyState);
+		                alert(textStatus);
+						layer.close(layerIndex);
+						$("#addBtn").attr('disabled', false);
+						$("#updateBtn").attr('disabled', false);
+					}
+				}); // end of ajaxSubmit
+			};
+			reader.readAsDataURL(file);
+		});
+		
+		//背面上传,扫描
+		$('#uploadFileBack').change(function() {
+			var layerIndex = layer.load(1, {
+				shade : "#000"
+			});
+			$("#addBtn").attr('disabled', true);
+			$("#updateBtn").attr('disabled', true);
+			var file = this.files[0];
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var dataUrl = e.target.result;
+				var blob = dataURLtoBlob(dataUrl);
+				var formData = new FormData();
+				formData.append("image", blob, file.name);
+				$.ajax({
+					type : "POST",//提交类型  
+					//dataType : "json",//返回结果格式  
+					url : BASE_PATH + '/admin/orderJp/IDCardRecognitionBack',//请求地址  
+					async : true,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//关闭加载层
+						layer.close(layerIndex);
+						if (true === obj.success) {
+							$('#cardBack').val(obj.url);
+							$('#sqImgBack').attr('src', obj.url);
+							$('#validStartDate').val(obj.starttime);
+							$('#validEndDate').val(obj.endtime);
+							$('#issueOrganization').val(obj.issue);
+						}
+						$("#addBtn").attr('disabled', false);
+						$("#updateBtn").attr('disabled', false);
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						alert(XMLHttpRequest.status);
+		                alert(XMLHttpRequest.readyState);
+		                alert(textStatus);
 						layer.close(layerIndex);
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);

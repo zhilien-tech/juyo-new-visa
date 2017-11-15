@@ -75,7 +75,7 @@ public class TReceiveaddressForm extends DataTablesParamForm {
 			cnd.and(expg);
 		}
 		if (userType == 5) {
-			cnd.and("compId", "=", comId);
+			cnd.and("comId", "=", comId);
 		}
 		if (userType == 1) {
 			cnd.and("userId", "=", userId);

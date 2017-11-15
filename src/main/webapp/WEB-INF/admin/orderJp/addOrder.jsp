@@ -60,7 +60,7 @@
 				<span class="">状态：
 					<p>下单</p>
 				</span> <input type="button" value="取消"
-					class="btn btn-primary btn-sm pull-right" /> <input type="button"
+					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> <input type="button"
 					value="保存" class="btn btn-primary btn-sm pull-right"
 					onclick="saveAddOrder();" /> <input type="button" value="回邮"
 					class="btn btn-primary btn-sm pull-right" /> <input type="button"
@@ -684,6 +684,9 @@
 				    	data:{applicantId:appId},
 				    	type:'post',
 				    	success: function(data){
+				    		if( data.length > 0){
+								$("#mySwitch").removeClass("none");//显示申请人信息列表
+								$("#applicantInfo").hide();//添加申请人 按钮 隐藏
 							for(var i = 0; i < data.length; i++){
 								result += '<tr>';
 								if(data[i].applyname != undefined){
@@ -728,9 +731,7 @@
 								result += '</tr>';
 							}
 							applicants.html(result);
-							if(data != null || data != undefined || data != ""){
-								$("#mySwitch").removeClass("none");//显示申请人信息列表
-								$("#applicantInfo").hide();//添加申请人 按钮 隐藏
+							
 							}else{
 								$("#mySwitch").addClass("none");//显示申请人信息列表
 								$("#applicantInfo").show();//添加申请人 按钮 隐藏
@@ -810,7 +811,6 @@
 					threecounty = threecounty.substr(0,threecounty.length-1);
 				}
 				var orderinfo = $.param({"visacounty":visacounty, "threecounty":threecounty}) + "&" + $("#orderInfo").serialize();
-				alert(orderinfo);
 				$.ajax({
 					type : 'POST',
 					data : orderinfo ,
@@ -823,6 +823,11 @@
 						alert("error");
 					}
 				}); 
+			}
+			
+			//下单取消
+			function cancelAddOrder(){
+				window.location.href = '${base}/admin/orderJp/list';
 			}
 		</script>
 </body>

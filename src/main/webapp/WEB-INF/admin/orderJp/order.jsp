@@ -33,7 +33,7 @@
 				<span class="">订单号：<p>${obj.orderInfo.orderNum}</p></span> 
 				<span class="">受付番号：<p></p></span> 
 				<span class="">状态：<p>下单</p></span> 
-				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
+				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
 				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
 				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" />
@@ -442,7 +442,7 @@
 				<div class="row body-from-input" id="applicantInfo"><!-- 添加申请人 -->
 					<div class="col-sm-12">
 						<div class="form-group">
-							<button type="button" class="btn btn-primary btn-sm addApplicantBtn">添加申请人</button>
+							<button type="button" class="btn btn-primary btn-sm addApplicantBtn" v-on:click="addApplicantBig(${obj.orderId })">添加申请人</button>
 						</div>
 					</div>
 				</div><!-- end 添加申请人 -->
@@ -688,24 +688,10 @@
 						var isVisited = orderobj.orderInfo.isvisit;
 						var visaType = orderobj.orderInfo.visatype;
 						var mainSaleUrgentEnum = orderobj.orderInfo.urgenttype;
-						if(orderobj.applicantInfo == null || orderobj.applicantInfo == undefined || orderobj.applicantInfo.length == 0){
+						var orderId = data.orderInfo.id;
+						if( orderobj.applicantInfo.length <= 0){
 							$("#mySwitch").addClass("none");
 							$("#applicantInfo").show();
-							$(".addApplicantBtn").click(function(id){
-								alert(id);
-								layer.open({
-									type: 2,
-									title: false,
-									closeBtn:false,
-									fix: false,
-									maxmin: false,
-									shadeClose: false,
-									scrollbar: false,
-									area: ['900px', '551px'],
-									content:'/admin/orderJp/addApplicant.html'
-								});
-								
-							});
 						}else{
 							$("#mySwitch").removeClass("none");//显示申请人信息列表
 							$("#applicantInfo").hide();//添加申请人 按钮 隐藏
@@ -790,7 +776,8 @@
 						success : function(data) {
 							layer.closeAll('loading');
 				    		window.location.reload();
-							window.location.href = '${base}/admin/orderJp/list';
+				    		
+							//window.location.href = '${base}/admin/orderJp/list';
 						},
 						error : function() {
 							alert("error");
@@ -801,6 +788,19 @@
 					//alert(JSON.stringify(event.target)); 
 				},
 			addApplicant : function(id){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/addApplicant.html?id='+id
+				});
+			},
+			addApplicantBig : function(id){
 				layer.open({
 					type: 2,
 					title: false,
@@ -873,7 +873,12 @@
 			    	data:{orderid:orderid},
 			    	type:'post',
 			    	success: function(data){
-			    		orderobj.applicantInfo = data;
+			    		if(data.length <= 0){
+			    			$("#mySwitch").addClass("none");//显示申请人信息列表
+							$("#applicantInfo").show();//添加申请人 按钮 隐藏
+			    		}else{
+			    			orderobj.applicantInfo = data;
+			    		}
 			      	}
 			    }); 
 			
