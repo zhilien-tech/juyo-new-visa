@@ -44,4 +44,22 @@ public class TestModule {
 	public Object basicInfo() {
 		return null;
 	}
+
+	@At("admin/firstTrialJp/express")
+	@Ok("jsp")
+	public Object express() {
+		return null;
+	}
+
+	@At("admin/firstTrialJp/passport")
+	@Ok("jsp")
+	public Object passport() {
+		return null;
+	}
+
+	@At("admin/firstTrialJp/visaInfo")
+	@Ok("jsp")
+	public Object visaInfo() {
+		return null;
+	}
 }

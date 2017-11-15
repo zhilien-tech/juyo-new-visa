@@ -24,19 +24,18 @@ body{min-width:1160px;overflow-x: auto;}
 .info-body{padding-right: 7%;}
 .info-body-from{padding-right: 2.8%;padding-bottom: 10px;}
 .add-btn,.remove-btn{cursor: pointer;display: block;width: 23px;height: 23px;position: relative;top: -60px; right: -6.5%; float: right;}
-.add-btn{background-image:url(../dist/img/add.png);}
-.remove-btn{background-image:url(../dist/img/remove.png);}
+.add-btn{background-image:url(../dist/newvisacss/img/add.png);}
+.remove-btn{background-image:url(../dist/newvisacss/img/remove.png);}
 .clone-module {height: 75px;}
 .clone-module .form-group{margin-bottom: 0;}
-.bulb{background-image:url(../dist/img/bulb.png);height: 23px;width: 16px;display: block;float: right;position: absolute;top: 41px;right: 5px;cursor: pointer;}
-.bulb1{background-image:url(../dist/img/bulb1.png);}
+.bulb{background-image:url(../dist/newvisacss/img/bulb.png);height: 23px;width: 16px;display: block;float: right;position: absolute;top: 41px;right: 5px;cursor: pointer;}
+.bulb1{background-image:url(../dist/newvisacss/img/bulb1.png);}
 .body-from-input div[class*="col-sm-3"]{padding-right: 3.5%;}
 .body-from-input div[class*="col-sm-3"] .form-group .bulb{right: 15.5%;}
 .body-from-input div[class*="col-sm-6"]{padding-right: 3.5%;}
 .body-from-input div[class*="col-sm-6"] .form-group .bulb{right: 7.9%;}
 .info .clone-module:last-child{height: 85px;}
 .info-table{padding: 15px 3% 0px 3%;}
-.switch{width: 41px; display: inline-block;padding-left: 8px;}
 #schedulingTable,#principalApplicantTable{border: 1px solid #f4f4f4;}
 .editHui,.resetHui{display: inline-block;cursor: pointer;width: 16px;height: 16px;margin: 0 5%;}
 .editHui{background-image: url(../dist/newvisacss/img/editHui.png);}
