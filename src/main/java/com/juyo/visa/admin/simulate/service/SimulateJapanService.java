@@ -59,7 +59,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 	public ResultObject fetchJapanOrder() {
 
 		//日本订单信息
-		List<TOrderJpEntity> orderlist = dbDao.query(TOrderJpEntity.class, Cnd.where("visastatus", "=", "5"), null);
+		List<TOrderJpEntity> orderlist = dbDao.query(TOrderJpEntity.class,
+				Cnd.where("visastatus", "=", JapanVisaStatusEnum.ZHAOBAOZHONG.intKey()), null);
 		if (!Util.isEmpty(orderlist) && orderlist.size() > 0) {
 			DateFormat dateFormat = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 			TOrderJpEntity jporder = orderlist.get(0);
