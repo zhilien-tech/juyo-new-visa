@@ -28,7 +28,7 @@ $condition
 
 /*firstTrialJp_list_data_applicant*/
 SELECT
-	taoj.id applicatid,
+	taoj.id applyid,
 	CONCAT( ta.firstName, ta.lastName ) applicantname,
 	ta.STATUS applicantStatus,
 	ta.telephone,

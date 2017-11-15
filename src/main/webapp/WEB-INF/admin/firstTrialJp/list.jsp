@@ -58,11 +58,11 @@
 									<div><label>手机号：</label><span>{{item.telephone}}</span></div>
 									<div><label>状态：</label><span>{{item.applicantstatus}}</span></div>
 									<div>
-										<i class="basicInfo"> </i>
-										<i class="passportInfo" @click="passportFun"> </i>
-										<i class="visaInfo" @click="visaInfoFun"> </i>
-										<i class="qualified"> </i>
-										<i class="unqualified"> </i>
+										<i class="basicInfo" @click="basicInfoFun(item.applyid)"> </i>
+										<i class="passportInfo" @click="passportFun(item.applyid)"> </i>
+										<i class="visaInfo" @click="visaInfoFun(item.applyid)"> </i>
+										<i class="qualified(item.applyid)"> </i>
+										<i class="unqualified(item.applyid)"> </i>
 									</div>
 								</li>
 							</ul>

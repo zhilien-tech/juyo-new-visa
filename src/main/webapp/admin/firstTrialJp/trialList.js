@@ -41,6 +41,19 @@ new Vue({
 			//console.log(message);
 			//alert(JSON.stringify(event.target));
 		},
+		basicInfoFun:function(applyid){
+			layer.open({
+    		    type: 2,
+    		    title: false,
+    		    closeBtn:false,
+    		    fix: false,
+    		    maxmin: false,
+    		    shadeClose: false,
+    		    scrollbar: false,
+    		    area: ['900px', '550px'],
+    		    content: '/admin/orderJp/updateApplicant.html?id='+applyid
+    	    });
+		},
 		expressFun:function(){//跳转快递弹层页面
     		layer.open({
     		    type: 2,
@@ -54,7 +67,7 @@ new Vue({
     		    content: '/admin/firstTrialJp/express.html'
     	    });
     	},
-    	passportFun:function(){
+    	passportFun:function(applyid){
     		layer.open({
     		    type: 2,
     		    title: false,
@@ -64,10 +77,10 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['900px', '550px'],
-    		    content: '/admin/firstTrialJp/passport.html'
+    		    content:'/admin/orderJp/passportInfo.html?id='+applyid
     	    });
     	},
-    	visaInfoFun:function(){
+    	visaInfoFun:function(applyid){
     		layer.open({
     		    type: 2,
     		    title: false,

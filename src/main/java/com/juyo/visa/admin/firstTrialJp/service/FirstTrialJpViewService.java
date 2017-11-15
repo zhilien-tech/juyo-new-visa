@@ -35,6 +35,7 @@ import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
+import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
@@ -192,6 +193,12 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("applyinfo", applyinfo);
 
 		return result;
-
 	}
+
+	//获取申请人信息
+	public Object basicInfo(int applyid) {
+		TApplicantEntity appllicant = dbDao.fetch(TApplicantEntity.class, Cnd.where("id", "=", applyid));
+		return appllicant;
+	}
+
 }

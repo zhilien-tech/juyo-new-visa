@@ -77,4 +77,13 @@ public class FirstTrialJpModule {
 	public Object getJpTrialDetailData(@Param("orderid") Integer orderid) {
 		return firstTrialJpViewService.getJpTrialDetailData(orderid);
 	}
+
+	/**
+	 * 获取申请人信息
+	 */
+	@At
+	@Ok("jsp")
+	public Object basicInfo(@Param("applyid") int applyid) {
+		return firstTrialJpViewService.basicInfo(applyid);
+	}
 }
