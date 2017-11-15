@@ -27,9 +27,9 @@
 		<div class="wrapper" id="wrapper">
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<div class="qz-head">
-					<span class="">订单号：<p>170202-JP0001</p></span>
+					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
 					<!-- <span class="">受付番号：<p>JDY27163</p></span> -->
-					<span class="">状态：<p>下单</p></span>
+					<span class="">状态：<p>{{orderinfo.status}}</p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right"/>
 					<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
