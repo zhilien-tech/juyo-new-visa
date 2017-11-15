@@ -97,7 +97,17 @@ new Vue({
     		alert("qqq"+applyid);
     	},
     	unqualifiedFun:function(applyid){
-    		alert("uuu"+applyid);
+    		layer.open({
+    		    type: 2,
+    		    title: false,
+    		    closeBtn:false,
+    		    fix: false,
+    		    maxmin: false,
+    		    shadeClose: false,
+    		    scrollbar: false,
+    		    area: ['800px', '402px'],
+    		    content: '${base}/admin/firstTrialJp/unqualified.html'
+    	    });
     	}
 	}
 });

@@ -62,4 +62,10 @@ public class TestModule {
 	public Object visaInfo() {
 		return null;
 	}
+
+	@At("admin/firstTrialJp/unqualified")
+	@Ok("jsp")
+	public Object unqualified() {
+		return null;
+	}
 }
