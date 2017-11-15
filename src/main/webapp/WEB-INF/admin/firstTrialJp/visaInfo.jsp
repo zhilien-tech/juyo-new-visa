@@ -11,7 +11,13 @@
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
+	<link rel="stylesheet" href="${base}/references/public/css/style.css">
+	<style type="text/css">
+		body {min-width:auto;}
+		.remove-btn {right: 0;}
+		.modal-body{background-color:#f9f9f9;}
+		.houseProperty,.vehicle,.deposit{display:none;}
+	</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -23,111 +29,49 @@
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
-					<div class="col-sm-5 padding-right-0">
-						<div class="info-QRcode"><!-- 二维码 -->
-							
-						</div><!-- end 二维码 -->
-						
-						<div class="info-imgUpload front"><!-- 护照 -->
-
-						</div><!-- end 护照 -->
-					</div>
-						
-					<div class="col-sm-7 padding-right-0">
-						<div class="row"><!-- 类型/护照号 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>类型：</label>
-									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
-									<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
-									<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>护照号：</label>
-									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div><!-- end 类型/护照号 -->
-						<div class="row"><!-- 性别/ 出生地点 拼音 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>性别：</label>
-									<input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.sex }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>出生地点/拼音：</label>
-									<input id="birthAddress" name="birthAddress" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.birthAddress }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div><!-- end 性别/出生地点 拼音 -->
-						<div class="row"><!-- 出生日期/签发地点 拼音 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>出生日期：</label>
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.birthday}"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>签发地点/拼音：</label>
-									<input id="issuedPlace" name="issuedPlace" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedPlace }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div><!-- end 出生日期/签发地点 拼音 -->
-						<div class="row"><!-- 签发日期/有效期至 -->
-							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>签发日期：</label>
-									<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedDate }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-							<div class="col-sm-2 padding-right-0">
-								<div class="form-group">
-									<label>&nbsp;</label>
-									<select class="form-control input-sm selectHeight">
-										<option>5年</option>
-										<option>10年</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>有效期至：</label>
-									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.validEndDate }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div><!-- end 签发日期/有效期至 -->
-						<div class="row none"><!-- 签发机关 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>签发机关：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
-								</div>
-							</div>
-						</div><!-- end 签发机关 -->
-						
-						<div class="row none">
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
+					<!-- 财产信息 -->
+					<div class="info">
+						<div class="info-head">财产信息 </div>
+						<div class="info-body-from finance-btn">
+							<input id="" value="银行存款" type="button" class="btn btn-sm btnState" />
+							<input id="" value="车产" type="button" class="btn btn-sm btnState" />
+							<input id="" value="房产" type="button" class="btn btn-sm btnState" />
 						</div>
-					</div>	
-						
+						<div class="info-body-from  clone-module cf deposit">
+							<div class="row body-from-input"><!-- 银行存款 -->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label><span>*</span>银行存款：</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+							</div><!-- end 银行存款 -->
+							<i class="remove-btn"></i>
+						</div>
+						<div class="info-body-from clone-module cf vehicle">
+							<div class="row body-from-input"><!-- 车产 -->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label><span>*</span>车产：</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+							</div><!-- end 车产 -->
+							<i class="remove-btn"></i>
+						</div>
+						<div class="info-body-from clone-module cf houseProperty">
+							<div class="row body-from-input"><!-- 房产 -->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label><span>*</span>房产：</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+							</div><!-- end 房产 -->
+							<i class="remove-btn"></i>
+						</div>
+					</div>
+					<!-- end 财产信息 -->
 				</div>
 			</div>
 		</form>
@@ -148,7 +92,23 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			
+			//财务信息 部分按钮效果
+			$(".finance-btn input").click(function(){
+				var financeBtnInfo=$(this).val();
+				if(financeBtnInfo == "银行存款"){
+					$(".deposit").css("display","block");
+					$(this).addClass("btnState-true");
+				}else if(financeBtnInfo == "车产"){
+					$(".vehicle").css("display","block");
+					$(this).addClass("btnState-true");
+				}else if(financeBtnInfo == "房产"){
+					$(".houseProperty").css("display","block");
+					$(this).addClass("btnState-true");
+				}
+			});
+			$(".remove-btn").click(function(){
+				$(this).parent().css("display","none");
+			});
 		});
 		//保存
 		function save(){

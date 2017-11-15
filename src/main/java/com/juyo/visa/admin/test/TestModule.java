@@ -56,4 +56,10 @@ public class TestModule {
 	public Object passport() {
 		return null;
 	}
+
+	@At("admin/firstTrialJp/visaInfo")
+	@Ok("jsp")
+	public Object visaInfo() {
+		return null;
+	}
 }

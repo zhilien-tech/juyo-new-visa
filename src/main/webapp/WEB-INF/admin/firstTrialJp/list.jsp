@@ -60,7 +60,7 @@
 									<div>
 										<i class="basicInfo"> </i>
 										<i class="passportInfo" @click="passportFun"> </i>
-										<i class="visaInfo"> </i>
+										<i class="visaInfo" @click="visaInfoFun"> </i>
 										<i class="qualified"> </i>
 										<i class="unqualified"> </i>
 									</div>
@@ -150,6 +150,19 @@
 	        		    scrollbar: false,
 	        		    area: ['900px', '550px'],
 	        		    content: '${base}/admin/firstTrialJp/passport.html'
+	        	    });
+	        	},
+	        	visaInfoFun:function(){
+	        		layer.open({
+	        		    type: 2,
+	        		    title: false,
+	        		    closeBtn:false,
+	        		    fix: false,
+	        		    maxmin: false,
+	        		    shadeClose: false,
+	        		    scrollbar: false,
+	        		    area: ['900px', '550px'],
+	        		    content: '${base}/admin/firstTrialJp/visaInfo.html'
 	        	    });
 	        	}
 			}
