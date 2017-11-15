@@ -123,7 +123,7 @@ new Vue({
 						url : '/admin/firstTrialJp/qualified.html',
 						success : function(data) {
 							layer.close(index);
-							console.log("合格了吗："+data);
+							parent.successCallBack(1);
 						},
 						error : function(xhr) {
 							layer.msg("修改失败", "", 3000);

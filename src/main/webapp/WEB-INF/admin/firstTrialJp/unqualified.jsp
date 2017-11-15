@@ -81,7 +81,7 @@
 				}
 			});
 			
-			if(${obj.hasUnqInfo}){
+			if('${obj.hasUnqInfo}'){
 				var isBase = '${obj.unqualifiedInfo.isBase}';
 				if(1==isBase){
 					$("#isBase").attr("checked",'true');
@@ -115,6 +115,7 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
+					parent.successCallBack(1);
 					closeWindow();
 				}
 			});

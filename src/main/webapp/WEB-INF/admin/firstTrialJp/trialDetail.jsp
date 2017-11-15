@@ -253,7 +253,7 @@
 										<td>{{apply.type}}</td>
 										<td>{{apply.realinfo}}</td>
 										<td>{{apply.sex}}</td>
-										<td>{{apply.status}}</td>
+										<td>{{apply.applicantstatus}}</td>
 										<td>
 											<a v-on:click="basicInfo(apply.applyid)">基本信息</a>&nbsp;&nbsp;
 											<a v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;

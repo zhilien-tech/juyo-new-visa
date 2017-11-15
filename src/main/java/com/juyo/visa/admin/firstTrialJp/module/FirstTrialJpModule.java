@@ -92,7 +92,7 @@ public class FirstTrialJpModule {
 	 * 申请人 合格信息
 	 */
 	@At
-	@POST
+	@Ok("jsp")
 	public Object qualified(@Param("applyid") int applyid) {
 		return firstTrialJpViewService.qualified(applyid);
 	}

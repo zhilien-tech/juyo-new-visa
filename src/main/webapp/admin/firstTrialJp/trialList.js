@@ -106,7 +106,7 @@ new Vue({
 						url : '/admin/firstTrialJp/qualified.html',
 						success : function(data) {
 							layer.close(index);
-							console.log("合格了吗："+data);
+							successCallBack(1);
 						},
 						error : function(xhr) {
 							layer.msg("修改失败", "", 3000);
@@ -131,6 +131,7 @@ new Vue({
     	}
 	}
 });
+
 function search(){
 	/* var status = $('#status').val(); */
 	var searchStr = $('#searchStr').val();
@@ -144,4 +145,19 @@ function search(){
 			_self.trialJapanData = data.trialJapanData;
 		}
 	});
+}
+
+function successCallBack(status){
+	if(status == 1){
+		layer.msg('修改成功');
+		$.ajax({ 
+			url: url,
+			/* data:{status:status,searchStr:searchStr}, */
+			dataType:"json",
+			type:'post',
+			success: function(data){
+				_self.trialJapanData = data.trialJapanData;
+			}
+		});
+	}
 }
