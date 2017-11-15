@@ -92,6 +92,12 @@ new Vue({
     		    area: ['900px', '550px'],
     		    content: '/admin/firstTrialJp/visaInfo.html'
     	    });
+    	},
+    	qualifiedFun:function(applyid){
+    		alert("qqq"+applyid);
+    	},
+    	unqualifiedFun:function(applyid){
+    		alert("uuu"+applyid);
     	}
 	}
 });
