@@ -1,17 +1,18 @@
 package com.juyo.visa.forms;
 
-import com.uxuexi.core.db.util.EntityUtil;
+import java.util.Date;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
-import com.uxuexi.core.web.form.DataTablesParamForm;
-import java.util.Date;
 
-import java.io.Serializable;
+import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
+import com.uxuexi.core.db.util.EntityUtil;
+import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -19,37 +20,37 @@ public class TApplicantUnqualifiedForm extends DataTablesParamForm {
 	private static final long serialVersionUID = 1L;
 	/**主键*/
 	private Integer id;
-	
+
 	/**申请人id*/
 	private Integer applicantId;
-	
+
 	/**基本信息是否合格*/
-	private Integer isBase;
-	
+	private String isBase;
+
 	/**基本备注*/
 	private String baseRemark;
-	
+
 	/**护照信息是否合格*/
-	private Integer isPassport;
-	
+	private String isPassport;
+
 	/**护照备注*/
 	private String passRemark;
-	
+
 	/**签证信息是否合格*/
-	private Integer isVisa;
-	
+	private String isVisa;
+
 	/**签证备注*/
 	private String visaRemark;
-	
+
 	/**操作人*/
 	private Integer opId;
-	
+
 	/**创建时间*/
 	private Date createTime;
-	
+
 	/**更新时间*/
 	private Date updateTime;
-	
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**

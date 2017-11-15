@@ -18,6 +18,7 @@ import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
+import com.juyo.visa.forms.TApplicantUnqualifiedForm;
 
 /**
  * 日本订单初审Module
@@ -58,4 +59,61 @@ public class FirstTrialJpModule {
 	public Object trialListData(@Param("..") FirstTrialJpListDataForm form, HttpSession session) {
 		return firstTrialJpViewService.trialListData(form, session);
 	}
+
+	/**
+	 * 跳转到签证详情页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object trialDetail(@Param("orderid") Integer orderid) {
+		return firstTrialJpViewService.trialDetail(orderid);
+	}
+
+	/**
+	 * 获取签证详情页数据
+	 */
+	@At
+	@POST
+	public Object getJpTrialDetailData(@Param("orderid") Integer orderid) {
+		return firstTrialJpViewService.getJpTrialDetailData(orderid);
+	}
+
+	/**
+	 * 获取申请人信息
+	 */
+	@At
+	@Ok("jsp")
+	public Object basicInfo(@Param("applyid") int applyid) {
+		return firstTrialJpViewService.basicInfo(applyid);
+	}
+
+	/**
+	 * 申请人 合格信息
+	 */
+	@At
+	@Ok("jsp")
+	public Object qualified(@Param("applyid") int applyid) {
+		return firstTrialJpViewService.qualified(applyid);
+	}
+
+	/**
+	 * 申请人 不合格信息
+	 */
+	@At
+	@Ok("jsp")
+	public Object unqualified(@Param("applyid") int applyid) {
+		return firstTrialJpViewService.unqualified(applyid);
+	}
+
+	/**
+	 * 
+	 * 保存不合格信息
+	 */
+	@At
+	@POST
+	public Object saveUnqualified(@Param("..") TApplicantUnqualifiedForm form) {
+		return firstTrialJpViewService.saveUnqualified(form);
+	}
+
 }
