@@ -216,7 +216,6 @@
 				data : applicantInfo,
 				url : '${base}/admin/orderJp/saveAddApplicant',
 				success : function(data) {
-					alert(JSON.stringify(data));
 					var applicantIdParent = window.parent.document.getElementById("appId").value;
 					if(applicantIdParent != null || applicantIdParent != undefined || applicantIdParent != ""){
 						applicantIdParent += data.id +",";

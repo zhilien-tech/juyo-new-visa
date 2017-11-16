@@ -15,10 +15,8 @@
 	href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 </head>
 <body>
 	<div class="modal-content">
@@ -43,7 +41,7 @@
 							<!-- 身份证 正面 -->
 							<div class="col-xs-6">
 							<div class="form-group">
-								<div class="sqImgPreview">
+								<div class="cardFront-div">
 									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="点击上传身份证" src="${obj.applicant.cardFront }" >

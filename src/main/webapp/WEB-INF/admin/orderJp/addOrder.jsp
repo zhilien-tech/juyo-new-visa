@@ -692,7 +692,7 @@
 								if(data[i].mainid == data[i].id){
 									//为主申请人
 									if(data[i].applyname != undefined){
-										result += '<td>' + "主申请人" + data[i].applyname + '</td>';
+										result += '<td><font color="blue">主   </font> ' + data[i].applyname + '</td>';
 									}
 									else{
 										result += '<td></td>';

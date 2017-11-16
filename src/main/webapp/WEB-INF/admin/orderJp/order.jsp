@@ -402,7 +402,7 @@
 							<tbody v-for="applicant in applicantInfo"  >
 								<tr>
 									<td><div v-if="applicant.id==applicant.mainid">
-										主申请人 {{applicant.applyname}}
+										<font color="blue">主   </font> {{applicant.applyname}}
 									</div>
 									<div v-else>
 									{{applicant.applyname}}</div></td>
@@ -723,7 +723,6 @@
 						success : function(data) {
 							layer.closeAll('loading');
 				    		window.location.reload();
-				    		
 							//window.location.href = '${base}/admin/orderJp/list';
 						},
 						error : function() {
@@ -734,6 +733,7 @@
 					//console.log(message);
 					//alert(JSON.stringify(event.target)); 
 				},
+			//添加申请人(右上角小按钮)
 			addApplicant : function(id){
 				layer.open({
 					type: 2,
@@ -747,6 +747,7 @@
 					content:'/admin/orderJp/addApplicant.html?id='+id
 				});
 			},
+			//添加申请人(大按钮)
 			addApplicantBig : function(id){
 				layer.open({
 					type: 2,
@@ -760,6 +761,7 @@
 					content:'/admin/orderJp/addApplicant.html?id='+id
 				});
 			},
+			//修改申请人信息
 			updateApplicant : function(id){
 				layer.open({
 					type: 2,
@@ -773,6 +775,7 @@
 					content:'/admin/orderJp/updateApplicant.html?id='+id
 				});
 			},
+			//修改护照信息
 			passport : function(id){
 				layer.open({
 					type: 2,
@@ -786,6 +789,7 @@
 					content:'/admin/orderJp/passportInfo.html?id='+id
 				});
 			},
+			//删除申请人
 			deleteApplicant : function(id){
 				$.ajax({ 
 			    	url: '${base}/admin/orderJp/deleteApplicant',
@@ -796,13 +800,26 @@
 			    		successCallBack(2);
 			      	}
 			    }); 
+			},
+			//签证信息
+			visa : function(id){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/visaInfo.html?id='+id
+				});
 			}
 			}
 		});
+		
 		//添加申请人
 		var id = ${obj.orderId};
-		
-		
 		//刷新申请人表格
 		function successCallBack(status){
 			if(status == 1){
