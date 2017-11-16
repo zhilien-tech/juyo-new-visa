@@ -373,7 +373,7 @@
 				<div class="row body-from-input" id="applicantInfo"><!-- 添加申请人 -->
 					<div class="col-sm-12">
 						<div class="form-group">
-							<button type="button" class="btn btn-primary btn-sm addApplicantBtn" v-on:click="addApplicantBig(${obj.orderId })">添加申请人</button>
+							<button type="button" class="btn btn-primary btn-sm addApplicantBtn" v-on:click="addApplicantBig(${obj.orderId})">添加申请人</button>
 						</div>
 					</div>
 				</div><!-- end 添加申请人 -->
@@ -384,7 +384,7 @@
 					<input type="hidden" id="appId" value="" name="appId"/>
 					<p class="info-head">
 						<input type="button" name="" value="添加"
-							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant(${obj.orderId })" />
+							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant(${obj.orderId})" />
 					</p>
 					<div class="info-table" style="padding-bottom: 1px;">
 						<table id="principalApplicantTable" class="table table-hover"
