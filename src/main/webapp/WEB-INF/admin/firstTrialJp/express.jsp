@@ -37,9 +37,9 @@
 						<div class="col-sm-3">
 							<div class="form-group">
 								<select id="express" class="form-control input-sm selectHeight">
-									<option value="1">快递</option>
-									<option value="2">门店送</option>
-									<option value="3">自送</option>
+									<c:forEach var="map" items="${obj.expressType}">
+										<option value="${map.key}">${map.value}</option>
+									</c:forEach>
 								</select>
 							</div>
 						</div>

@@ -8,6 +8,7 @@ package com.juyo.visa.admin.firstTrialJp.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
+import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
 import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
@@ -36,12 +38,15 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
+import com.juyo.visa.common.enums.YesOrNoEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TReceiveaddressEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantUnqualifiedForm;
 import com.uxuexi.core.common.util.DateUtil;
@@ -201,6 +206,49 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		}
 		result.put("applyinfo", applyinfo);
+
+		return result;
+	}
+
+	//快递 发邮件
+	public Object express(int orderid, HttpSession session) {
+
+		Map<String, Object> result = Maps.newHashMap();
+
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		Integer userType = loginUser.getUserType();
+
+		//收件地址
+		List<TReceiveaddressEntity> receiveAddresss = new ArrayList<TReceiveaddressEntity>();
+		if (userType == UserLoginEnum.PERSONNEL.intKey()) {
+			//工作人员
+			receiveAddresss = dbDao.query(TReceiveaddressEntity.class, Cnd.where("userId", "=", userId), null);
+		} else {
+			//其他
+			receiveAddresss = dbDao.query(TReceiveaddressEntity.class, Cnd.where("comId", "=", comId), null);
+		}
+		result.put("receiveAddresss", receiveAddresss);
+		//快递方式
+		result.put("expressType", EnumUtil.enum2(ExpressTypeEnum.class));
+
+		//订单主申请人
+		String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(applysql,
+				Cnd.where("taoj.orderId", "=", orderid).and("taoj.isMainApplicant", "=", YesOrNoEnum.YES.intKey()),
+				null);
+		for (Record applicant : records) {
+			Integer status = (Integer) applicant.get("applicantStatus");
+			for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
+				if (!Util.isEmpty(status) && status.equals(statusEnum.intKey())) {
+					applicant.put("applicantStatus", statusEnum.value());
+				}
+			}
+		}
+		result.put("applicant", records);
 
 		return result;
 	}

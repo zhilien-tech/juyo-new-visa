@@ -80,6 +80,15 @@ public class FirstTrialJpModule {
 	}
 
 	/**
+	 * 快递 发信息
+	 */
+	@At
+	@Ok("jsp")
+	public Object express(@Param("id") int orderid, HttpSession session) {
+		return firstTrialJpViewService.express(orderid, session);
+	}
+
+	/**
 	 * 获取申请人信息
 	 */
 	@At

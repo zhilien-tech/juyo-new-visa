@@ -47,7 +47,7 @@
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
-									<i class="express" @click="expressFun"> </i>
+									<i class="express" @click="expressFun(data.id)"> </i>
 									<i class="return"> </i>
 								</div>
 							</div>
