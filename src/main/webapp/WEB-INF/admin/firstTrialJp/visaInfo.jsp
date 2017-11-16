@@ -14,9 +14,10 @@
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
 		body {min-width:auto;}
+		.tab-content {background-color: #f8f8f8;}
 		.remove-btn {right: 0;}
 		.modal-body{background-color:#f9f9f9;}
-		.houseProperty,.vehicle,.deposit{display:none;}
+		.houseProperty,.vehicle,.deposit,.financial,.vice{display:none;}
 	</style>
 </head>
 <body>
@@ -29,20 +30,134 @@
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
-					<!-- 财产信息 -->
+					<!-- 申请人 -->
 					<div class="info">
+						<div class="info-head">主申请人 </div>
+						<div class="info-body-from cf ">
+							<div class="row"><!-- 申请人/备注 -->
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>申请人：</label>
+										<select id="applicant" class="form-control input-sm selectHeight">
+											<option value="1">主申请人</option>
+											<option value="2">副申请人</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-4 main">
+									<div class="form-group">
+										<label><span>*</span>备注：</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+								
+								<div class="vice">
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label><span>*</span>主申请人：</label>
+											<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label><span>*</span>与主申请人关系：</label>
+											<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+								</div>
+							</div><!-- end 申请人/备注-->
+						</div>
+					</div>
+					<!-- end 申请人 -->
+					
+					<!-- 出行信息 -->
+					<div class="info vice">
+						<div class="info-head">出行信息 </div>
+						<div class="info-body-from cf ">
+							<div class="row"><!-- 是否同主申请人 -->
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>是否同主申请人：</label>
+										<select class="form-control input-sm selectHeight">
+											<option>是</option>
+											<option>否</option>
+										</select>
+									</div>
+								</div>
+							</div><!-- end 是否同主申请人 -->
+						</div>
+					</div>
+					<!-- end 出行信息 -->
+					
+					<!-- 工作信息 -->
+					<div class="info">
+						<div class="info-head">工作信息 </div>
+						<div class="info-body-from cf ">
+							<div class="row main"><!-- 我的职业/单位名称/单位电话 -->
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>我的职业：</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>单位名称：</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>单位电话：</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+							</div><!-- end 我的职业/单位名称/单位电话 -->
+							<div class="row main"><!-- 单位地址 -->
+								<div class="col-sm-8">
+									<div class="form-group">
+										<label><span>*</span>单位地址：</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									</div>
+								</div>
+							</div>
+							<div class="vice row">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>与主申请人关系：</label>
+										<select class="form-control input-sm selectHeight">
+											<option>是</option>
+											<option>否</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<!-- end 单位地址 -->
+						</div>
+					</div>
+					<!-- end 工作信息 -->
+					
+					<!-- 财产信息 -->
+					<div class="info" style="padding-bottom: 15px;">
 						<div class="info-head">财产信息 </div>
-						<div class="info-body-from finance-btn">
+						<div class="info-body-from finance-btn main">
 							<input id="" value="银行存款" type="button" class="btn btn-sm btnState" />
 							<input id="" value="车产" type="button" class="btn btn-sm btnState" />
 							<input id="" value="房产" type="button" class="btn btn-sm btnState" />
+							<input id="" value="理财" type="button" class="btn btn-sm btnState" />
 						</div>
 						<div class="info-body-from  clone-module cf deposit">
 							<div class="row body-from-input"><!-- 银行存款 -->
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>银行存款：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+										<input id="" name="" type="text" class="form-control input-sm" placeholder="银行存款" />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="万" />
 									</div>
 								</div>
 							</div><!-- end 银行存款 -->
@@ -53,7 +168,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>车产：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+										<input id="" name="" type="text" class="form-control input-sm" placeholder="车产" />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" "/>
 									</div>
 								</div>
 							</div><!-- end 车产 -->
@@ -64,11 +185,45 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>房产：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+										<input id="" name="" type="text" class="form-control input-sm" placeholder="房产" />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="平米" />
 									</div>
 								</div>
 							</div><!-- end 房产 -->
 							<i class="remove-btn"></i>
+						</div>
+						<div class="info-body-from clone-module cf financial">
+							<div class="row body-from-input"><!-- 房产 -->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label><span>*</span>理财：</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder="理财" />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="平米" />
+									</div>
+								</div>
+							</div><!-- end 房产 -->
+							<i class="remove-btn"></i>
+						</div>
+						<div class="vice row info-body-from clone-module cf">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>与主申请人关系：</label>
+										<select class="form-control input-sm selectHeight">
+											<option>是</option>
+											<option>否</option>
+										</select>
+									</div>
+								</div>
 						</div>
 					</div>
 					<!-- end 财产信息 -->
@@ -104,10 +259,26 @@
 				}else if(financeBtnInfo == "房产"){
 					$(".houseProperty").css("display","block");
 					$(this).addClass("btnState-true");
+				}else if(financeBtnInfo == "理财"){
+					$(".financial").css("display","block");
+					$(this).addClass("btnState-true");
 				}
 			});
 			$(".remove-btn").click(function(){
 				$(this).parent().css("display","none");
+			});
+			
+			
+			//主申请人 or 副申请人
+			$("#applicant").change(function(){
+				var applicVal = $(this).val();
+				if(applicVal == "1"){//主申请人
+					$(".vice").hide();
+					$(".main").show();
+				}else{//副申请人
+					$(".vice").show();
+					$(".main").hide();
+				}
 			});
 		});
 		//保存

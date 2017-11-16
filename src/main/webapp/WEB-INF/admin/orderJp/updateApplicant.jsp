@@ -6,15 +6,11 @@
 <html lang="en-US" id="addHtml">
 <head>
 <meta charset="UTF-8">
-<title>添加申请人</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<title>基本信息</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 </head>
@@ -22,7 +18,7 @@
 	<div class="modal-content">
 		<form id="applicantInfo">
 			<div class="modal-header">
-				<span class="heading">添加申请人</span> <input id="backBtn" type="button"
+				<span class="heading">基本信息</span> <input id="backBtn" type="button"
 					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
 					data-dismiss="modal" value="取消" /> <input id="addBtn"
 					type="button" class="btn btn-primary pull-right btn-sm btn-right"
@@ -245,17 +241,13 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
-	<script
-		src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script
-		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<!-- DataTables -->
-	<script
-		src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script
-		src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- 公用js文件 -->
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
