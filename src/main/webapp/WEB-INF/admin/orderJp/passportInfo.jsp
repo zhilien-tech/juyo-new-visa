@@ -24,12 +24,20 @@
 			<div class="modal-body">
 				<div class="tab-content row">
 					<div class="col-sm-5 padding-right-0">
-						<div class="info-QRcode"><!-- 二维码 -->
+						<!-- <div class="info-QRcode"> --><!-- 二维码 -->
 							
-						</div><!-- end 二维码 -->
+						<!-- </div> --><!-- end 二维码 -->
 						
 						<div class="info-imgUpload front"><!-- 护照 -->
-
+							<div class="col-xs-6">
+							<div class="form-group">
+								<div class="sqImgPreview">
+									<input id="passportUrl" name="passportUrl" type="hidden"/>
+									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+									<img id="sqImg" alt="点击上传护照" src="${obj.passport.passportUrl }" >
+								</div>
+							</div>
+						</div>
 						</div><!-- end 护照 -->
 					</div>
 						
@@ -113,7 +121,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发机关：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
 								</div>
 							</div>
 						</div><!-- end 签发机关 -->
@@ -121,7 +129,7 @@
 						<div class="row none">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
+									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -163,6 +171,73 @@
 					parent.successCallBack(1);
 					closeWindow();
 				}
+			});
+		}
+		
+		
+		//护照上传,扫描
+		
+		$('#uploadFile').change(function() {
+			var layerIndex = layer.load(1, {
+				shade : "#000"
+			});
+			$("#addBtn").attr('disabled', true);
+			$("#updateBtn").attr('disabled', true);
+			var file = this.files[0];
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var dataUrl = e.target.result;
+				var blob = dataURLtoBlob(dataUrl);
+				var formData = new FormData();
+				formData.append("image", blob, file.name);
+				$.ajax({
+					type : "POST",//提交类型  
+					//dataType : "json",//返回结果格式  
+					url : BASE_PATH + '/admin/orderJp/passportRecognition',//请求地址  
+					async : true,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//关闭加载层
+						layer.close(layerIndex);
+						if (true === obj.success) {
+							$('#passportUrl').val(obj.url);
+							$('#sqImg').attr('src', obj.url);
+							$('#type').val(obj.type);
+							$('#passport').val(obj.num);
+							$('#sex').val(obj.sex);
+							$('#birthAddress').val(obj.birthCountry);
+							$('#birthday').val(obj.birth);
+							$('#issuedPlace').val(obj.visaCountry);
+							$('#validEndDate').val(obj.expiryDay);
+						}
+						$("#addBtn").attr('disabled', false);
+						$("#updateBtn").attr('disabled', false);
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						alert(XMLHttpRequest.status);
+		                alert(XMLHttpRequest.readyState);
+		                alert(textStatus);
+						layer.close(layerIndex);
+						$("#addBtn").attr('disabled', false);
+						$("#updateBtn").attr('disabled', false);
+					}
+				}); // end of ajaxSubmit
+			};
+			reader.readAsDataURL(file);
+		});
+		
+		//把dataUrl类型的数据转为blob
+		function dataURLtoBlob(dataurl) {
+			var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(
+					n);
+			while (n--) {
+				u8arr[n] = bstr.charCodeAt(n);
+			}
+			return new Blob([ u8arr ], {
+				type : mime
 			});
 		}
 		

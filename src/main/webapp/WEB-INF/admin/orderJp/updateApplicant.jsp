@@ -7,16 +7,11 @@
 <head>
 <meta charset="UTF-8">
 <title>基本信息</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 </head>
 <body>
@@ -40,12 +35,30 @@
 
 						<div class="info-imgUpload front">
 							<!-- 身份证 正面 -->
-
+							<div class="col-xs-6">
+							<div class="form-group">
+								<div class="cardFront-div">
+									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
+									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+									<img id="sqImg" alt="点击上传身份证" src="${obj.applicant.cardFront }" >
+								</div>
+							</div>
+						</div>
+	
 						</div>
 						<!-- end 身份证 正面 -->
 
 						<div class="info-imgUpload back">
 							<!-- 身份证 反面 -->
+							<div class="col-xs-6">
+							<div class="form-group">
+								<div class="sqImgPreview">
+									<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
+									<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+									<img id="sqImgBack" alt="点击上传身份证" src="${obj.applicant.cardBack }" >
+								</div>
+							</div>
+						</div>
 
 						</div>
 						<!-- end 身份证 反面 -->
@@ -54,7 +67,7 @@
 							<!-- 签发机关 -->
 							<div class="col-sm-11 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>签发机关：</label> <input id="" name=""
+									<label><span>*</span>签发机关：</label> <input id="issueOrganization" name="issueOrganization"
 										type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -177,7 +190,7 @@
 								<div class="form-group">
 									<label><span>*</span>出生日期：</label> <input id="birthday"
 										name="birthday" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.birthday }" />
+										placeholder=" " value="${obj.birthday }" onClick="WdatePicker()"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -203,7 +216,7 @@
 										name="validStartDate" type="text"
 										class="form-control input-sm" placeholder=" "
 										onClick="WdatePicker()"
-										value="${obj.applicant.validStartDate }" />
+										value="${obj.validStartDate }" onClick="WdatePicker()"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -212,7 +225,7 @@
 									<label> &nbsp; &nbsp;</label> <input id="validEndDate"
 										name="validEndDate" type="text" class="form-control input-sm"
 										placeholder=" " onClick="WdatePicker()"
-										value="${obj.applicant.validEndDate }" />
+										value="${obj.validEndDate }" onClick="WdatePicker()"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -236,8 +249,8 @@
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script src="${base}/admin/orderJp/applicant.js"></script>
-
+	<!-- 公用js文件 -->
+	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script type="text/javascript">
 		//var base = "${base}";
 		function saveApplicant(){
@@ -252,6 +265,120 @@
 					parent.successCallBack(1);
 					closeWindow();
 				}
+			});
+		}
+		
+//正面上传,扫描
+		
+		$('#uploadFile').change(function() {
+			var layerIndex = layer.load(1, {
+				shade : "#000"
+			});
+			$("#addBtn").attr('disabled', true);
+			$("#updateBtn").attr('disabled', true);
+			var file = this.files[0];
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var dataUrl = e.target.result;
+				var blob = dataURLtoBlob(dataUrl);
+				var formData = new FormData();
+				formData.append("image", blob, file.name);
+				$.ajax({
+					type : "POST",//提交类型  
+					//dataType : "json",//返回结果格式  
+					url : BASE_PATH + '/admin/orderJp/IDCardRecognition',//请求地址  
+					async : true,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//关闭加载层
+						layer.close(layerIndex);
+						if (true === obj.success) {
+							$('#cardFront').val(obj.url);
+							$('#sqImg').attr('src', obj.url);
+							$('#address').val(obj.address);
+							$('#nation').val(obj.nationality);
+							$('#cardId').val(obj.num);
+							$('#province').val(obj.province);
+							$('#city').val(obj.city);
+							$('#birthday').val(obj.birth);
+						}
+						$("#addBtn").attr('disabled', false);
+						$("#updateBtn").attr('disabled', false);
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						alert(XMLHttpRequest.status);
+		                alert(XMLHttpRequest.readyState);
+		                alert(textStatus);
+						layer.close(layerIndex);
+						$("#addBtn").attr('disabled', false);
+						$("#updateBtn").attr('disabled', false);
+					}
+				}); // end of ajaxSubmit
+			};
+			reader.readAsDataURL(file);
+		});
+		
+		//背面上传,扫描
+		$('#uploadFileBack').change(function() {
+			var layerIndex = layer.load(1, {
+				shade : "#000"
+			});
+			$("#addBtn").attr('disabled', true);
+			$("#updateBtn").attr('disabled', true);
+			var file = this.files[0];
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var dataUrl = e.target.result;
+				var blob = dataURLtoBlob(dataUrl);
+				var formData = new FormData();
+				formData.append("image", blob, file.name);
+				$.ajax({
+					type : "POST",//提交类型  
+					//dataType : "json",//返回结果格式  
+					url : BASE_PATH + '/admin/orderJp/IDCardRecognitionBack',//请求地址  
+					async : true,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//关闭加载层
+						layer.close(layerIndex);
+						if (true === obj.success) {
+							$('#cardBack').val(obj.url);
+							$('#sqImgBack').attr('src', obj.url);
+							$('#validStartDate').val(obj.starttime);
+							$('#validEndDate').val(obj.endtime);
+							$('#issueOrganization').val(obj.issue);
+						}
+						$("#addBtn").attr('disabled', false);
+						$("#updateBtn").attr('disabled', false);
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						alert(XMLHttpRequest.status);
+		                alert(XMLHttpRequest.readyState);
+		                alert(textStatus);
+						layer.close(layerIndex);
+						$("#addBtn").attr('disabled', false);
+						$("#updateBtn").attr('disabled', false);
+					}
+				}); // end of ajaxSubmit
+			};
+			reader.readAsDataURL(file);
+		});
+		
+		//把dataUrl类型的数据转为blob
+		function dataURLtoBlob(dataurl) {
+			var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(
+					n);
+			while (n--) {
+				u8arr[n] = bstr.charCodeAt(n);
+			}
+			return new Blob([ u8arr ], {
+				type : mime
 			});
 		}
 									

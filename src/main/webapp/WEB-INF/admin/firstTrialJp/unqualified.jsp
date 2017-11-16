@@ -24,33 +24,37 @@
 			</div>
 		<div class="modal-body" style="height: 340px;">
 				<div class="tab-content">
-					<div class="row form-div">
-						<div class="col-sm-12">
-							<div class="form-group info-input">
-								<input type="checkbox" class="infoCheck">
-								<label>护照信息</label> 
-								<input name="remark" type="text" class="form-control input-sm none" />
+					<form id="unqualifiedForm">
+						<div class="row form-div">
+							<div class="col-sm-12">
+								<div class="form-group info-input">
+									<input id="applicantId" name="applicantId" type="hidden" value="${obj.applyid }" >
+									<input id="isPassport" name="isPassport" type="checkbox" class="infoCheck">
+									<label>护照信息</label> 
+									<input id="passRemark" name="passRemark" type="text" class="form-control input-sm none" />
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="row form-div">
-						<div class="col-sm-12">
-							<div class="form-group info-input">
-								<input type="checkbox" class="infoCheck">
-								<label>基本信息</label> 
-								<input id="" name="remark" type="text" class="form-control input-sm none"/>
+						<div class="row form-div">
+							<div class="col-sm-12">
+								<div class="form-group info-input">
+									<input id="isBase" name="isBase" type="checkbox" class="infoCheck">
+									<label>基本信息</label> 
+									<input id="baseRemark" name="baseRemark" type="text" class="form-control input-sm none"/>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="row form-div">
-						<div class="col-sm-12">
-							<div class="form-group info-input">
-								<input type="checkbox" class="infoCheck">
-								<label>签证信息</label> 
-								<input id="" name="remark" type="text" class="form-control input-sm none"/>
+						<div class="row form-div">
+							<div class="col-sm-12">
+								<div class="form-group info-input">
+									<input id="isVisa" name="isVisa" type="checkbox" class="infoCheck">
+									<label>签证信息</label> 
+									<input id="visaRemark" name="visaRemark" type="text" class="form-control input-sm none"/>
+								</div>
 							</div>
 						</div>
-					</div>
+					</form>
+					
 				</div>
 			</div>
 	</div>
@@ -66,7 +70,6 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	
 	<script type="text/javascript">
-		 var base = "${base}";
 		$(function() {
 			$(".infoCheck").click(function(){
 				var checkVal = $(this).is(':checked');
@@ -74,9 +77,50 @@
 					$(this).siblings(".input-sm").show();
 				}else{
 					$(this).siblings(".input-sm").hide();
+					$(this).siblings(".input-sm").val("");
 				}
 			});
+			
+			if('${obj.hasUnqInfo}'){
+				var isBase = '${obj.unqualifiedInfo.isBase}';
+				if(1==isBase){
+					$("#isBase").attr("checked",'true');
+					$("#baseRemark").show();
+					$("#baseRemark").val('${obj.unqualifiedInfo.baseRemark}');
+				}
+				var isPassport = '${obj.unqualifiedInfo.isPassport}';
+				if(1==isPassport){
+					$("#isPassport").attr("checked",'true');
+					$("#passRemark").show();
+					$("#passRemark").val('${obj.unqualifiedInfo.passRemark}');
+				}
+				var isVisa = '${obj.unqualifiedInfo.isVisa}';
+				if(1==isVisa){
+					$("#isVisa").attr("checked",'true');
+					$("#visaRemark").show();
+					$("#visaRemark").val('${obj.unqualifiedInfo.visaRemark}');
+				}
+				
+			}
+			
 		}); 
+		
+		//保存
+		function save(){
+			var passportInfo = $("#unqualifiedForm").serialize();
+			$.ajax({
+				type: 'POST',
+				data : passportInfo,
+				url: '${base}/admin/firstTrialJp/saveUnqualified',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+					parent.successCallBack(1);
+					closeWindow();
+				}
+			});
+		}
+		
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

@@ -33,7 +33,7 @@
 				<span class="">订单号：<p>${obj.orderInfo.orderNum}</p></span> 
 				<span class="">受付番号：<p></p></span> 
 				<span class="">状态：<p>下单</p></span> 
-				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
+				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
 				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
 				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" />
@@ -373,7 +373,7 @@
 				<div class="row body-from-input" id="applicantInfo"><!-- 添加申请人 -->
 					<div class="col-sm-12">
 						<div class="form-group">
-							<button type="button" class="btn btn-primary btn-sm addApplicantBtn">添加申请人</button>
+							<button type="button" class="btn btn-primary btn-sm addApplicantBtn" v-on:click="addApplicantBig(${obj.orderId})">添加申请人</button>
 						</div>
 					</div>
 				</div><!-- end 添加申请人 -->
@@ -384,7 +384,7 @@
 					<input type="hidden" id="appId" value="" name="appId"/>
 					<p class="info-head">
 						<input type="button" name="" value="添加"
-							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant(${obj.orderId })" />
+							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant(${obj.orderId})" />
 					</p>
 					<div class="info-table" style="padding-bottom: 1px;">
 						<table id="principalApplicantTable" class="table table-hover"
@@ -401,7 +401,12 @@
 							</thead>
 							<tbody v-for="applicant in applicantInfo"  >
 								<tr>
-									<td>{{applicant.applyname}}</td>
+									<td><div v-if="applicant.id==applicant.mainid">
+										<font color="blue">主   </font> {{applicant.applyname}}
+									</div>
+									<div v-else>
+									{{applicant.applyname}}</div></td>
+									
 									<td>{{applicant.telephone}}</td>
 									<td>{{applicant.email}}</td>
 									<td>{{applicant.passport}}</td>
@@ -630,24 +635,10 @@
 						var isVisited = orderobj.orderInfo.isvisit;
 						var visaType = orderobj.orderInfo.visatype;
 						var mainSaleUrgentEnum = orderobj.orderInfo.urgenttype;
-						if(orderobj.applicantInfo == null || orderobj.applicantInfo == undefined || orderobj.applicantInfo.length == 0){
+						var orderId = data.orderInfo.id;
+						if( orderobj.applicantInfo.length <= 0){
 							$("#mySwitch").addClass("none");
 							$("#applicantInfo").show();
-							$(".addApplicantBtn").click(function(id){
-								alert(id);
-								layer.open({
-									type: 2,
-									title: false,
-									closeBtn:false,
-									fix: false,
-									maxmin: false,
-									shadeClose: false,
-									scrollbar: false,
-									area: ['900px', '551px'],
-									content:'/admin/orderJp/addApplicant.html'
-								});
-								
-							});
 						}else{
 							$("#mySwitch").removeClass("none");//显示申请人信息列表
 							$("#applicantInfo").hide();//添加申请人 按钮 隐藏
@@ -732,7 +723,7 @@
 						success : function(data) {
 							layer.closeAll('loading');
 				    		window.location.reload();
-							window.location.href = '${base}/admin/orderJp/list';
+							//window.location.href = '${base}/admin/orderJp/list';
 						},
 						error : function() {
 							alert("error");
@@ -742,6 +733,7 @@
 					//console.log(message);
 					//alert(JSON.stringify(event.target)); 
 				},
+			//添加申请人(右上角小按钮)
 			addApplicant : function(id){
 				layer.open({
 					type: 2,
@@ -755,6 +747,21 @@
 					content:'/admin/orderJp/addApplicant.html?id='+id
 				});
 			},
+			//添加申请人(大按钮)
+			addApplicantBig : function(id){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/addApplicant.html?id='+id
+				});
+			},
+			//修改申请人信息
 			updateApplicant : function(id){
 				layer.open({
 					type: 2,
@@ -768,6 +775,7 @@
 					content:'/admin/orderJp/updateApplicant.html?id='+id
 				});
 			},
+			//修改护照信息
 			passport : function(id){
 				layer.open({
 					type: 2,
@@ -781,6 +789,7 @@
 					content:'/admin/orderJp/passportInfo.html?id='+id
 				});
 			},
+			//删除申请人
 			deleteApplicant : function(id){
 				$.ajax({ 
 			    	url: '${base}/admin/orderJp/deleteApplicant',
@@ -817,13 +826,26 @@
 					area: ['700px', '551px'],
 					content:'/admin/orderJp/log.html'
 				});
+			},
+			//签证信息
+			visa : function(id){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/visaInfo.html?id='+id
+				});
 			}
 			}
 		});
+		
 		//添加申请人
 		var id = ${obj.orderId};
-		
-		
 		//刷新申请人表格
 		function successCallBack(status){
 			if(status == 1){
@@ -841,7 +863,12 @@
 			    	data:{orderid:orderid},
 			    	type:'post',
 			    	success: function(data){
-			    		orderobj.applicantInfo = data;
+			    		if(data.length <= 0){
+			    			$("#mySwitch").addClass("none");//显示申请人信息列表
+							$("#applicantInfo").show();//添加申请人 按钮 隐藏
+			    		}else{
+			    			orderobj.applicantInfo = data;
+			    		}
 			      	}
 			    }); 
 			
