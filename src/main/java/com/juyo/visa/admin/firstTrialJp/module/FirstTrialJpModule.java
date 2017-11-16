@@ -153,4 +153,14 @@ public class FirstTrialJpModule {
 		return firstTrialJpViewService.getRAddressById(addressId);
 	}
 
+	/**
+	 * 保存快递信息，并发送邮件
+	 */
+	@At
+	@POST
+	public Object saveExpressInfo(@Param("orderid") Integer orderid, @Param("expresstype") Integer expresstype,
+			@Param("receiveAddressId") Integer receiveAddressId, HttpSession session) {
+		return firstTrialJpViewService.saveExpressInfo(orderid, expresstype, receiveAddressId, session);
+	}
+
 }

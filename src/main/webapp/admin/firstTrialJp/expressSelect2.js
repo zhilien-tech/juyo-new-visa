@@ -131,12 +131,25 @@ function clearText(){
 }
 
 //保存
-function save(){
+function save(orderid){
 	var receiveAddress = $("#receiveAddressId").val();
 	if (receiveAddress == "") {
 		layer.msg('收件人信息不能为空');
 		return;
 	}
+	$.ajax({ 
+		url: BASE_PATH+'/admin/firstTrialJp/saveExpressInfo.html',
+		type:'post',
+		data:{
+			orderid:orderid,
+			expresstype:$("#express").val(),
+			receiveaddressid:$("#receiveAddressId").val();
+		},
+		success: function(data){
+			orderobj.applyinfo = data.applicant;
+			//alert(JSON.stringify(orderobj.applyinfo));
+		}
+	});
 }
 
 //返回 

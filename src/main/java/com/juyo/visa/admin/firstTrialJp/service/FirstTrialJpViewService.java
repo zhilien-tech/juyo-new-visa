@@ -25,6 +25,8 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Strings;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.POST;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
@@ -46,6 +48,7 @@ import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TOrderRecipientEntity;
 import com.juyo.visa.entities.TReceiveaddressEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantUnqualifiedForm;
@@ -231,6 +234,12 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			receiveAddresss = dbDao.query(TReceiveaddressEntity.class, Cnd.where("comId", "=", comId), null);
 		}
 		result.put("receiveAddresss", receiveAddresss);
+
+		//订单收件信息
+		TOrderRecipientEntity orderReceive = dbDao.fetch(TOrderRecipientEntity.class,
+				Cnd.where("orderId", "=", orderid));
+		result.put("orderReceive", orderReceive);
+
 		//快递方式
 		result.put("expressType", EnumUtil.enum2(ExpressTypeEnum.class));
 
@@ -249,8 +258,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			}
 		}
 		result.put("applicant", records);
-
+		//订单id
 		result.put("orderid", orderid);
+
 		return result;
 	}
 
@@ -397,5 +407,40 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	//根据id获取收件信息
 	public Object getRAddressById(String addressId) {
 		return dbDao.fetch(TReceiveaddressEntity.class, Cnd.where("id", "=", addressId));
+	}
+
+	/**
+	 * 保存快递信息，并发送邮件
+	 */
+	@At
+	@POST
+	public Object saveExpressInfo(Integer orderid, Integer expresstype, Integer receiveAddressId, HttpSession session) {
+		//获取当前用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		TOrderRecipientEntity orderReceive = dbDao.fetch(TOrderRecipientEntity.class,
+				Cnd.where("orderId", "=", orderid));
+		if (!Util.isEmpty(orderReceive)) {
+			//更新
+			orderReceive.setOrderId(orderid);
+			orderReceive.setExpressType(expresstype);
+			orderReceive.setReceiveAddressId(receiveAddressId);
+			orderReceive.setOpId(userId);
+			orderReceive.setUpdateTime(DateUtil.nowDate());
+			nutDao.update(orderReceive);
+		} else {
+			//添加
+			TOrderRecipientEntity orderReceiveAdd = new TOrderRecipientEntity();
+			orderReceiveAdd.setOrderId(orderid);
+			orderReceiveAdd.setExpressType(expresstype);
+			orderReceiveAdd.setReceiveAddressId(receiveAddressId);
+			orderReceiveAdd.setOpId(userId);
+			orderReceiveAdd.setUpdateTime(DateUtil.nowDate());
+			orderReceiveAdd.setCreateTime(DateUtil.nowDate());
+			dbDao.insert(orderReceiveAdd);
+		}
+
+		//改变订单状态 由初审到前台 TODO
+		return null;
 	}
 }
