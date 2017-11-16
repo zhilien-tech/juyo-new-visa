@@ -805,7 +805,7 @@
 					content:'/admin/orderJp/share.html'
 				});
 			},
-			log:function(){
+			log:function(){//日志
 				layer.open({
 					type: 2,
 					title: false,

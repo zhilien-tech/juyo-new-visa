@@ -39,11 +39,11 @@ public class TestModule {
 		return null;
 	}
 
-	@At("admin/firstTrialJp/basicInfo")
+	/*@At("admin/firstTrialJp/basicInfo")
 	@Ok("jsp")
 	public Object basicInfo() {
 		return null;
-	}
+	}*/
 
 	@At("admin/firstTrialJp/express")
 	@Ok("jsp")
@@ -78,6 +78,18 @@ public class TestModule {
 	@At("admin/orderJp/log")
 	@Ok("jsp")
 	public Object log() {
+		return null;
+	}
+
+	@At("admin/myData/basicInfo")
+	@Ok("jsp")
+	public Object basicInfo() {
+		return null;
+	}
+
+	@At("admin/myData/passportInfo")
+	@Ok("jsp")
+	public Object passportInfo() {
 		return null;
 	}
 }

@@ -1,62 +1,50 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java"
-	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<c:set var="url" value="${base}/admin/orderJp" />
-<!DOCTYPE HTML>
-<html lang="en-US" id="addHtml">
-<head>
-<meta charset="UTF-8">
-<title>基本信息</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
-</head>
-<body>
-	<div class="modal-content">
-		<form id="applicantInfo">
-			<div class="modal-header">
-				<span class="heading">基本信息</span> <input id="backBtn" type="button"
-					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
-					data-dismiss="modal" value="取消" /> <input id="addBtn"
-					type="button" class="btn btn-primary pull-right btn-sm btn-right"
-					value="保存" onclick="saveApplicant();" />
+<%@include file="/WEB-INF/public/header.jsp"%>
+<%@include file="/WEB-INF/public/aside.jsp"%>
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>我的资料 - 基本信息</title>
+		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
+		<style type="text/css">
+			.form-control{height: 30px;}
+			.tab-content{padding: 15px 30px 10px 0;margin: 0 0px;}
+			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
+			.front, .back {width: 320px;margin: 10px auto;}
+		</style>
+	</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper" id="wrapper">
+		<div class="content-wrapper" style="min-height: 848px;">
+			<div class="qz-head">
+				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
+				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" /> 
+				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right" />
 			</div>
-			<div class="modal-body">
+			<section class="content">
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
-						<!-- <div class="info-QRcode">
-							身份证 正面
+						<div class="info-QRcode"><!-- 身份证 正面 -->
 
-						</div> -->
-						<!-- end 身份证 正面 -->
+						</div><!-- end 身份证 正面 -->
 
-						<div class="info-imgUpload front">
-							<!-- 身份证 正面 -->
+						<div class="info-imgUpload front"><!-- 身份证 正面 -->
 
-						</div>
-						<!-- end 身份证 正面 -->
+						</div><!-- end 身份证 正面 -->
 
-						<div class="info-imgUpload back">
-							<!-- 身份证 反面 -->
+						<div class="info-imgUpload back"><!-- 身份证 反面 -->
 
-						</div>
-						<!-- end 身份证 反面 -->
+						</div><!-- end 身份证 反面 -->
 
-						<div class="row">
-							<!-- 签发机关 -->
-							<div class="col-sm-11 padding-right-0">
+						<div class="row"><!-- 签发机关 -->
+							<div class="col-sm-11 padding-right-0" style="width: 83.5%; margin-left: 7%;">
 								<div class="form-group">
-									<label><span>*</span>签发机关：</label> <input id="" name=""
-										type="text" class="form-control input-sm" placeholder=" " />
-									<!-- <i class="bulb"></i> -->
+									<label><span>*</span>签发机关：</label> 
+									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -159,7 +147,7 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别：</label> <select
-										class="form-control input-sm selectHeight" id="sex" name="sex">
+										class="form-control input-sm" id="sex" name="sex">
 										<option value="1">男</option>
 										<option value="2">女</option>
 									</select>
@@ -221,45 +209,32 @@
 					</div>
 
 				</div>
-			</div>
-		</form>
+			</section>
+		</div>
+		<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
 	</div>
-
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
-	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
-	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
-	<!-- DataTables -->
-	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script src="${base}/admin/orderJp/applicant.js"></script>
-
+	<script src="${base}/references/common/js/vue/vue.min.js"></script>
+	<!-- select2 -->
+	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+	<script src="${base}/admin/orderJp/searchCustomerInfo.js"></script>
+	<!-- 公用js文件 -->
+	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+	<script src="${base}/references/common/js/base/base.js"></script>
+	<script src="${base}/admin/orderJp/order.js"></script>
+	
+	<!-- 本页面js文件 -->
 	<script type="text/javascript">
-		//var base = "${base}";
-		function saveApplicant(){
-			var applicantInfo = $("#applicantInfo").serialize();
-			$.ajax({
-				type: 'POST',
-				data : applicantInfo,
-				url: '${base}/admin/orderJp/saveEditApplicant',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-					parent.successCallBack(1);
-					closeWindow();
-				}
-			});
-		}
-									
-		//返回 
-		function closeWindow() {
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			parent.layer.close(index);
-									}
+		$(function(){
+			
+			
+		});
 	</script>
 </body>
 </html>
