@@ -8,42 +8,77 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>我的签证 - 办理中签证</title>
+	<title>签证-日本</title>
 	<style type="text/css">
-		.card-head div:nth-child(1){width:130px;}
-		.card-head div:nth-child(2){width:200px;}
-		.card-head div:nth-child(4){position:absolute;right:35px;}
-		.everybody-info div:nth-child(1){width:10%;}
-		.everybody-info div:nth-child(2){width:13%;}
-		.everybody-info div:nth-child(3){width:15%;}
-		.everybody-info div:nth-child(4){width:15%;}
-		.everybody-info div:nth-child(5){width:15%;}
+		.card-head div:nth-child(1){width:19%;}
+		.card-head div:nth-child(2){width:14.5%;}
+		.card-head div:nth-child(3){width: 17%;}
+		.card-head div:nth-child(4){width: 17%;}
+		.card-head div:nth-child(5){width: 11.5%;}
+		.card-head div:nth-child(6){width:6%;}
+		.card-head div:nth-child(7){width: 160px;position: relative;float: right;right: -12px;}
+		.everybody-info div:nth-child(1){width:13%;}
+		.everybody-info div:nth-child(2){width:20%;}
+		.everybody-info div:nth-child(3){width:8%;}
+		.everybody-info div:nth-child(4){width:12%;}
+		.everybody-info div:nth-child(5){width:19%;}
+		.everybody-info div:last-child{float:right;width:74px;}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
-		<div class="content-wrapper"  style="min-height:848px;">
+		<div class="content-wrapper"  style="min-height: 848px;">
+				<!-- <ul class="title">
+					<li>签证</li>
+					<li class="arrow"></li>
+					<li>日本</li>
+				</ul> -->
 				<section class="content">
+					<div class="box-header"><!-- 检索条件 -->
+						<div class="row">
+							<div class="col-md-2 left-5px right-0px">
+								<select class="input-class input-sm" id="status" name="status">
+									<option value="">状态</option>
+									<option></option>
+								</select>
+							</div>
+							<div class="col-md-3 left-5px right-0px">
+								<input type="text" class="input-sm input-class" id="" name="sendSignDate" placeholder="2017-10-22 ~ 2017-11-19" onkeypress="onkeyEnter()"/>
+							</div>
+							<div class="col-md-3 left-5px right-0px">
+								<input type="text" class="input-sm input-class" id="" name="searchStr" placeholder="订单号/申请人/护照号/电话/邮箱" onkeypress="onkeyEnter()"/>
+							</div>
+							<div class="col-md-3 left-5px">
+								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+							</div>
+						</div>
+					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in visaJapanData">
-							<div class="card-head">
-								<div><label>申请人：</label><span>张三</span></div>
-								<div><label>订单号：</label><span>{{data.japannumber}}</span></div>
-								<div><label>状态：</label><span>发招宝中</span></div>		
+							<div class="card-head cf">
+								<div><label>订单号：</label><span>{{data.japannumber}}</span></div>	
+								<div><label>受付番号：</label><span>{{data.number}}</span></div>	
+								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
+								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
+								<div><label>状态：</label><span>{{data.japanstate}}</span></div>	
+								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
-									<i class="download" v-on:click="revenue(data.id)"> </i>
+									<i class="edit"> </i>
+									<i class="sendZB"> </i>
+									<i class="download"> </i>
+									<i class="guiGuoUpload"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="item in data.everybodyinfo">
-									<div><label>姓名：</label><span>{{item.applicant}}</span></div>
-									<div><label>订单号：</label><span>{{item.japannumber}}</span></div>
-									<div><label>手机号：</label><span>{{item.passportno}}</span></div>
-									<div><label>送签时间：</label><span>2017-02-22</span></div>
+									<div><label>申请人：</label><span>{{item.applicant}}</span></div>
+									<div><label>申请人英文：</label><span>{{item.passportno}}</span></div>
+									<div><label>性别：</label><span>男</span></div>
+									<div><label>居住地域：</label><span>北京</span></div>
+									<div><label>出生日期：</label><span>1990-11-15</span></div>
 									<div><label>护照号：</label><span>{{item.passportno}}</span></div>
-									<div><label>出签时间：</label><span>2017-02-22</span></div>
+									<div><i class="edit"> </i></div>
 								</li>
 							</ul>
 						</div>
@@ -61,6 +96,7 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
+	<%-- <script src="${base}/admin/visaJapan/visaList.js"></script> --%>
 	<script src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
