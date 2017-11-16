@@ -37,8 +37,8 @@
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
 				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
 				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" />
-				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" />
-				<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" />
+				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" @click="share()" />
+				<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" @click="log()" />
 			</div>
 			<section class="content">
 				<!-- 客户信息 -->
@@ -791,6 +791,32 @@
 			    		successCallBack(2);
 			      	}
 			    }); 
+			},
+			share:function(){//分享
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/share.html'
+				});
+			},
+			log:function(){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['700px', '551px'],
+					content:'/admin/orderJp/log.html'
+				});
 			}
 			}
 		});

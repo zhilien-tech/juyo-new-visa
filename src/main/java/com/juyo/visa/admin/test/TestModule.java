@@ -68,4 +68,16 @@ public class TestModule {
 	public Object unqualified() {
 		return null;
 	}
+
+	@At("admin/orderJp/share")
+	@Ok("jsp")
+	public Object share() {
+		return null;
+	}
+
+	@At("admin/orderJp/log")
+	@Ok("jsp")
+	public Object log() {
+		return null;
+	}
 }
