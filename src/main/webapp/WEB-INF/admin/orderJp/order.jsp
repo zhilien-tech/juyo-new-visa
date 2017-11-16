@@ -401,7 +401,12 @@
 							</thead>
 							<tbody v-for="applicant in applicantInfo"  >
 								<tr>
-									<td>{{applicant.applyname}}</td>
+									<td><div v-if="applicant.id==applicant.mainid">
+										主申请人 {{applicant.applyname}}
+									</div>
+									<div v-else>
+									{{applicant.applyname}}</div></td>
+									
 									<td>{{applicant.telephone}}</td>
 									<td>{{applicant.email}}</td>
 									<td>{{applicant.passport}}</td>

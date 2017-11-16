@@ -689,13 +689,22 @@
 								$("#applicantInfo").hide();//添加申请人 按钮 隐藏
 							for(var i = 0; i < data.length; i++){
 								result += '<tr>';
-								if(data[i].applyname != undefined){
-									result += '<td>' + data[i].applyname + '</td>';
+								if(data[i].mainid == data[i].id){
+									//为主申请人
+									if(data[i].applyname != undefined){
+										result += '<td>' + "主申请人" + data[i].applyname + '</td>';
+									}
+									else{
+										result += '<td></td>';
+									}
+								}else{
+									if(data[i].applyname != undefined){
+										result += '<td>' + data[i].applyname + '</td>';
+									}
+									else{
+										result += '<td></td>';
+									}
 								}
-								else{
-									result += '<td></td>';
-								}
-								
 								if(data[i].telephone != undefined){
 									result += '<td>' + data[i].telephone + '</td>';
 								}else{

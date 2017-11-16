@@ -50,6 +50,8 @@ import com.juyo.visa.admin.order.entity.PassportJsonEntity;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
+import com.juyo.visa.admin.user.form.ApplicantUser;
+import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.CollarAreaEnum;
@@ -96,6 +98,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	@Inject
 	private UploadService qiniuUploadService;//文件上传
+	@Inject
+	private UserViewService userViewService;
 
 	private static final String app_key = "24624389";
 	private static final String app_secret = "3a28e8c97af2d2eadcf2720b279bdc9d";
@@ -226,8 +230,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		Map<String, Object> result = MapUtil.map();
 		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+		applicant.setCreateTime(new Date());
+
+		ApplicantUser applicantUser = new ApplicantUser();
+		applicantUser.setMobile(applicant.getTelephone());
+		applicantUser.setOpid(applicant.getOpId());
+		applicantUser.setPassword("000000");
+		applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
+		userViewService.addApplicantUser(applicantUser);
 		if (!Util.isEmpty(applicantForm.getOrderid())) {
-			applicant.setCreateTime(new Date());
 			dbDao.insert(applicant);
 			Integer applicantId = applicant.getId();
 			TApplicantOrderJpEntity applicantOrderJp = new TApplicantOrderJpEntity();
@@ -257,6 +268,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} else {
 			TApplicantEntity applicantDB = dbDao.insert(applicant);
 			Integer applicantId = applicantDB.getId();
+			TApplicantOrderJpEntity applicantOrderJp = new TApplicantOrderJpEntity();
+			applicantOrderJp.setApplicantId(applicantId);
+			dbDao.insert(applicantOrderJp);
 			TApplicantPassportEntity passport = new TApplicantPassportEntity();
 			if (!Util.isEmpty(applicantForm.getSex())) {
 				if (applicantForm.getSex() == 1) {
@@ -646,7 +660,17 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Sql applicantSql = Sqls.create(applicantSqlstr);
 		applicantSql.setParam("id", orderid);
 		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
-		return applicantInfo;
+		Integer mainId = (Integer) applicantInfo.get(0).get("id");
+		for (int i = 1; i < applicantInfo.size(); i++) {
+			TApplicantEntity fetch = dbDao.fetch(TApplicantEntity.class,
+					new Long((Integer) applicantInfo.get(i).get("id")).intValue());
+			if (fetch.getMainId() == null) {
+				fetch.setMainId(mainId);
+				dbDao.update(fetch);
+			}
+		}
+		List<Record> applicantInfoMainId = dbDao.query(applicantSql, null, null);
+		return applicantInfoMainId;
 	}
 
 	public Object getEditPassport(Integer id) {
@@ -771,10 +795,23 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Cnd appcnd = Cnd.NEW();
 		appcnd.and("a.id", "in", applicants);
 		applicantSql.setCondition(appcnd);
-
-		//applicantSql.setParam("ids", applicants);
 		List<Record> applicantInfo = dbDao.query(applicantSql, appcnd, null);
-		return applicantInfo;
+		Integer mainId = (Integer) applicantInfo.get(0).get("id");
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, new Long(mainId).intValue());
+		if (applicant.getMainId() == null) {
+			applicant.setMainId(mainId);
+			dbDao.update(applicant);
+		}
+		for (int i = 1; i < applicantInfo.size(); i++) {
+			TApplicantEntity fetch = dbDao.fetch(TApplicantEntity.class,
+					new Long((Integer) applicantInfo.get(i).get("id")).intValue());
+			if (fetch.getMainId() == null) {
+				fetch.setMainId(mainId);
+				dbDao.update(fetch);
+			}
+		}
+		List<Record> applicantInfoMainId = dbDao.query(applicantSql, appcnd, null);
+		return applicantInfoMainId;
 	}
 
 	public Object getLinkman(String linkman, HttpSession session) {

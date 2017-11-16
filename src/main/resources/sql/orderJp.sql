@@ -75,6 +75,7 @@ SELECT
 a.id,
 CONCAT(a.firstName, a.lastName) applyname,
 a.email,
+a.mainId,
 a.telephone,
 a.sex,
 ap.passport
@@ -129,6 +130,7 @@ a.id,
 CONCAT(a.firstName, a.lastName) applyname,
 a.email,
 a.telephone,
+a.mainId,
 a.sex,
 ap.passport
 FROM

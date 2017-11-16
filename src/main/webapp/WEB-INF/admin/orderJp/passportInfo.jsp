@@ -34,7 +34,7 @@
 								<div class="sqImgPreview">
 									<input id="passportUrl" name="passportUrl" type="hidden"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" alt="点击上传身份证" src="${obj.passport.passportUrl }" >
+									<img id="sqImg" alt="点击上传护照" src="${obj.passport.passportUrl }" >
 								</div>
 							</div>
 						</div>
