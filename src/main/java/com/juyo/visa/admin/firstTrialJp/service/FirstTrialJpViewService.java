@@ -269,13 +269,6 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					applicant.put("applicantStatus", statusEnum.value());
 				}
 			}
-			//资料类型
-			Integer type = (Integer) applicant.get("datatype");
-			for (VisaDataTypeEnum visadatatype : VisaDataTypeEnum.values()) {
-				if (!Util.isEmpty(type) && type.equals(visadatatype.intKey())) {
-					applicant.put("datatype", visadatatype.value());
-				}
-			}
 		}
 		result.put("applicant", records);
 		return result;

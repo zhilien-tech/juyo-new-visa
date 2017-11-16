@@ -139,13 +139,13 @@
 		});
 		
 		//保存
-		/* function save(){
+		function save(){
 			var receiveAddress = $("#receiveAddressId").val();
 			if (receiveAddress == "") {
 				layer.msg('收件人信息不能为空');
 				return;
 			}
-		} */
+		}
 	</script>
 	
 </body>
