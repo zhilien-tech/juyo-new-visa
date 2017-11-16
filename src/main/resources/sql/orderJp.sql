@@ -75,6 +75,7 @@ SELECT
 a.id,
 CONCAT(a.firstName, a.lastName) applyname,
 a.email,
+a.mainId,
 a.telephone,
 a.sex,
 ap.passport
@@ -129,6 +130,7 @@ a.id,
 CONCAT(a.firstName, a.lastName) applyname,
 a.email,
 a.telephone,
+a.mainId,
 a.sex,
 ap.passport
 FROM
@@ -136,3 +138,27 @@ t_applicant a
 LEFT JOIN
 t_applicant_passport ap ON ap.applicantId = a.id
 $condition
+
+/*visaInfo_byApplicantId*/
+SELECT
+aoj.isMainApplicant,
+a.mainId,
+aoj.mainRelation,
+aoj.relationRemark,
+awj.occupation,
+awj.name,
+awj.telephone,
+awj.address,
+awtj.type,
+awtj.details
+FROM
+t_applicant_order_jp aoj
+LEFT JOIN
+t_applicant a ON aoj.applicantId = a.id
+LEFT JOIN
+t_applicant_work_jp awj ON awj.applicantId = aoj.id
+LEFT JOIN
+t_applicant_wealth_jp awtj ON awtj.applicantId = aoj.id
+WHERE
+aoj.applicantId = @id
+

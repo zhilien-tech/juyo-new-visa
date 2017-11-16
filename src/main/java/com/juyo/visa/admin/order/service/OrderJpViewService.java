@@ -50,6 +50,8 @@ import com.juyo.visa.admin.order.entity.PassportJsonEntity;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
+import com.juyo.visa.admin.user.form.ApplicantUser;
+import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.CollarAreaEnum;
@@ -63,12 +65,15 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.enums.YesOrNoEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
+import com.juyo.visa.entities.TApplicantWealthJpEntity;
+import com.juyo.visa.entities.TApplicantWorkJpEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCustomerEntity;
 import com.juyo.visa.entities.TOrderEntity;
@@ -96,6 +101,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	@Inject
 	private UploadService qiniuUploadService;//文件上传
+	@Inject
+	private UserViewService userViewService;
 
 	private static final String app_key = "24624389";
 	private static final String app_secret = "3a28e8c97af2d2eadcf2720b279bdc9d";
@@ -226,10 +233,18 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		Map<String, Object> result = MapUtil.map();
 		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+		applicant.setCreateTime(new Date());
+
+		ApplicantUser applicantUser = new ApplicantUser();
+		applicantUser.setMobile(applicant.getTelephone());
+		applicantUser.setOpid(applicant.getOpId());
+		applicantUser.setPassword("000000");
+		applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
+		userViewService.addApplicantUser(applicantUser);
 		if (!Util.isEmpty(applicantForm.getOrderid())) {
-			applicant.setCreateTime(new Date());
 			dbDao.insert(applicant);
 			Integer applicantId = applicant.getId();
+			//日本申请人信息
 			TApplicantOrderJpEntity applicantOrderJp = new TApplicantOrderJpEntity();
 			TOrderJpEntity orderJp = dbDao.fetch(TOrderJpEntity.class,
 					Cnd.where("orderId", "=", applicantForm.getOrderid()));
@@ -237,6 +252,18 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicantOrderJp.setOrderId(orderJpId);
 			applicantOrderJp.setApplicantId(applicantId);
 			dbDao.insert(applicantOrderJp);
+			Integer applicantJpId = applicantOrderJp.getId();
+			//日本工作信息
+			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
+			workJp.setApplicantId(applicantJpId);
+			workJp.setCreateTime(new Date());
+			dbDao.insert(workJp);
+			//日本财产信息
+			TApplicantWealthJpEntity wealthJp = new TApplicantWealthJpEntity();
+			wealthJp.setCreateTime(new Date());
+			wealthJp.setApplicantId(applicantJpId);
+			dbDao.insert(wealthJp);
+			//护照信息
 			TApplicantPassportEntity passport = new TApplicantPassportEntity();
 			if (!Util.isEmpty(applicantForm.getSex())) {
 				if (applicantForm.getSex() == 1) {
@@ -257,6 +284,22 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} else {
 			TApplicantEntity applicantDB = dbDao.insert(applicant);
 			Integer applicantId = applicantDB.getId();
+			//日本申请人信息
+			TApplicantOrderJpEntity applicantOrderJp = new TApplicantOrderJpEntity();
+			applicantOrderJp.setApplicantId(applicantId);
+			dbDao.insert(applicantOrderJp);
+			Integer applicantJpId = applicantOrderJp.getId();
+			//日本工作信息
+			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
+			workJp.setApplicantId(applicantJpId);
+			workJp.setCreateTime(new Date());
+			dbDao.insert(workJp);
+			//日本财产信息
+			TApplicantWealthJpEntity wealthJp = new TApplicantWealthJpEntity();
+			wealthJp.setCreateTime(new Date());
+			wealthJp.setApplicantId(applicantJpId);
+			dbDao.insert(wealthJp);
+			//护照信息
 			TApplicantPassportEntity passport = new TApplicantPassportEntity();
 			if (!Util.isEmpty(applicantForm.getSex())) {
 				if (applicantForm.getSex() == 1) {
@@ -646,7 +689,33 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Sql applicantSql = Sqls.create(applicantSqlstr);
 		applicantSql.setParam("id", orderid);
 		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
-		return applicantInfo;
+		Integer mainId = (Integer) applicantInfo.get(0).get("id");
+		for (int i = 1; i < applicantInfo.size(); i++) {
+			TApplicantEntity fetch = dbDao.fetch(TApplicantEntity.class,
+					new Long((Integer) applicantInfo.get(i).get("id")).intValue());
+			if (fetch.getMainId() == null) {
+				fetch.setMainId(mainId);
+				dbDao.update(fetch);
+			}
+		}
+		List<Record> applicantInfoMainId = dbDao.query(applicantSql, null, null);
+		for (int i = 0; i < applicantInfoMainId.size(); i++) {
+			TApplicantOrderJpEntity applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", new Long((Integer) applicantInfoMainId.get(i).get("id")).intValue()));
+			if (applicantInfoMainId.get(i).get("id") == applicantInfoMainId.get(i).get("mainId")) {
+				applicantJp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+				dbDao.update(applicantJp);
+			}
+		}
+		return applicantInfoMainId;
+	}
+
+	public Object getVisaInfo(Integer id) {
+		String visaInfoSqlstr = sqlManager.get("visaInfo_byApplicantId");
+		Sql visaInfoSql = Sqls.create(visaInfoSqlstr);
+		visaInfoSql.setParam("id", id);
+		Record visaInfo = dbDao.fetch(visaInfoSql);
+		return visaInfo;
 	}
 
 	public Object getEditPassport(Integer id) {
@@ -771,10 +840,31 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Cnd appcnd = Cnd.NEW();
 		appcnd.and("a.id", "in", applicants);
 		applicantSql.setCondition(appcnd);
-
-		//applicantSql.setParam("ids", applicants);
 		List<Record> applicantInfo = dbDao.query(applicantSql, appcnd, null);
-		return applicantInfo;
+		Integer mainId = (Integer) applicantInfo.get(0).get("id");
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, new Long(mainId).intValue());
+		if (applicant.getMainId() == null) {
+			applicant.setMainId(mainId);
+			dbDao.update(applicant);
+		}
+		for (int i = 1; i < applicantInfo.size(); i++) {
+			TApplicantEntity fetch = dbDao.fetch(TApplicantEntity.class,
+					new Long((Integer) applicantInfo.get(i).get("id")).intValue());
+			if (fetch.getMainId() == null) {
+				fetch.setMainId(mainId);
+				dbDao.update(fetch);
+			}
+		}
+		List<Record> applicantInfoMainId = dbDao.query(applicantSql, appcnd, null);
+		for (int i = 0; i < applicantInfoMainId.size(); i++) {
+			TApplicantOrderJpEntity applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", new Long((Integer) applicantInfoMainId.get(i).get("id")).intValue()));
+			if (applicantInfoMainId.get(i).get("id") == applicantInfoMainId.get(i).get("mainId")) {
+				applicantJp.setIsMainApplicant(YesOrNoEnum.YES.intKey());
+				dbDao.update(applicantJp);
+			}
+		}
+		return applicantInfoMainId;
 	}
 
 	public Object getLinkman(String linkman, HttpSession session) {

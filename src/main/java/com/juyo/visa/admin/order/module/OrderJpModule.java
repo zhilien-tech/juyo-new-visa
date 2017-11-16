@@ -220,6 +220,16 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 签证信息修改
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object visaInfo(@Param("id") Integer id) {
+		return saleViewService.getVisaInfo(id);
+	}
+
+	/**
 	 * 客户信息获取申请人下拉
 	 */
 	@At
