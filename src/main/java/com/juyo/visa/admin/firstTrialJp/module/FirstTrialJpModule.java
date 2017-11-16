@@ -89,6 +89,15 @@ public class FirstTrialJpModule {
 	}
 
 	/**
+	 * 获取订单主申请人
+	 */
+	@At
+	@POST
+	public Object getmainApplicantByOrderid(@Param("id") int orderid) {
+		return firstTrialJpViewService.getmainApplicantByOrderid(orderid);
+	}
+
+	/**
 	 * 获取申请人信息
 	 */
 	@At
@@ -123,6 +132,25 @@ public class FirstTrialJpModule {
 	@POST
 	public Object saveUnqualified(@Param("..") TApplicantUnqualifiedForm form) {
 		return firstTrialJpViewService.saveUnqualified(form);
+	}
+
+	/**
+	 * 根据电话，获取收件地址信息
+	 */
+	@At
+	@POST
+	public Object getRAddressSelect(@Param("searchStr") String searchStr, @Param("type") String type,
+			HttpSession session) {
+		return firstTrialJpViewService.getRAddressSelect(searchStr, type, session);
+	}
+
+	/**
+	 * 根据id，获取收件地址信息
+	 */
+	@At
+	@POST
+	public Object getRAddressById(@Param("addressId") String addressId) {
+		return firstTrialJpViewService.getRAddressById(addressId);
 	}
 
 }

@@ -2,7 +2,7 @@
  * FirstTrialJpViewService.java
  * com.juyo.visa.admin.firstTrialJp.service
  * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
-*/
+ */
 
 package com.juyo.visa.admin.firstTrialJp.service;
 
@@ -24,6 +24,7 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
+import org.nutz.lang.Strings;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
@@ -40,7 +41,6 @@ import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
-import com.juyo.visa.common.enums.YesOrNoEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -238,7 +238,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
 		Sql applysql = Sqls.create(sqlStr);
 		List<Record> records = dbDao.query(applysql,
-				Cnd.where("taoj.orderId", "=", orderid).and("taoj.isMainApplicant", "=", YesOrNoEnum.YES.intKey()),
+				Cnd.where("taoj.orderId", "=", orderid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
 				null);
 		for (Record applicant : records) {
 			Integer status = (Integer) applicant.get("applicantStatus");
@@ -250,6 +250,34 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 		result.put("applicant", records);
 
+		result.put("orderid", orderid);
+		return result;
+	}
+
+	//获取订单主申请人
+	public Object getmainApplicantByOrderid(int orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(applysql,
+				Cnd.where("taoj.orderId", "=", orderid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
+				null);
+		for (Record applicant : records) {
+			Integer status = (Integer) applicant.get("applicantStatus");
+			for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
+				if (!Util.isEmpty(status) && status.equals(statusEnum.intKey())) {
+					applicant.put("applicantStatus", statusEnum.value());
+				}
+			}
+			//资料类型
+			Integer type = (Integer) applicant.get("datatype");
+			for (VisaDataTypeEnum visadatatype : VisaDataTypeEnum.values()) {
+				if (!Util.isEmpty(type) && type.equals(visadatatype.intKey())) {
+					applicant.put("datatype", visadatatype.value());
+				}
+			}
+		}
+		result.put("applicant", records);
 		return result;
 	}
 
@@ -345,5 +373,36 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 
 		return Json.toJson("success");
+	}
+
+	//根据电话，获取收件地址信息
+	public Object getRAddressSelect(String searchStr, String type, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		Integer userType = loginUser.getUserType();
+		Cnd cnd = Cnd.NEW();
+		if (Util.eq("mobileType", type)) {
+			cnd.and("mobile", "like", Strings.trim(searchStr) + "%");
+		} else if (Util.eq("usernameType", type)) {
+			cnd.and("receiver", "like", Strings.trim(searchStr) + "%");
+		}
+		cnd.limit(0, 5);
+		if (userType == UserLoginEnum.PERSONNEL.intKey()) {
+			//工作人员
+			cnd.and("userId", "=", userId);
+		} else {
+			//其他
+			cnd.and("comId", "=", comId);
+		}
+
+		List<TReceiveaddressEntity> query = dbDao.query(TReceiveaddressEntity.class, cnd, null);
+		return query;
+	}
+
+	//根据id获取收件信息
+	public Object getRAddressById(String addressId) {
+		return dbDao.fetch(TReceiveaddressEntity.class, Cnd.where("id", "=", addressId));
 	}
 }
