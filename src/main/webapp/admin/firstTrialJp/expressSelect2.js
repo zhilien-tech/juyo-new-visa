@@ -130,6 +130,15 @@ function clearText(){
 	$("#address").val("");
 }
 
+//保存
+function save(){
+	var receiveAddress = $("#receiveAddressId").val();
+	if (receiveAddress == "") {
+		layer.msg('收件人信息不能为空');
+		return;
+	}
+}
+
 //返回 
 function closeWindow() {
 	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

@@ -100,7 +100,6 @@
 		var orderid = '${obj.orderid}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
-	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap-switch.min.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
@@ -109,6 +108,7 @@
 	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/admin/firstTrialJp/expressSelect2.js"></script><!-- 本页面js文件 -->
 	
 	<script type="text/javascript">
@@ -116,7 +116,7 @@
 		//VUE准备数据
 		//applyinfo申请人信息
 		new Vue({
-			el: '#el',
+			el: '#tableId',
 			data: {
 				applyinfo:""
 			},
@@ -138,14 +138,22 @@
 			}
 		});
 		
-		//保存
-		function save(){
-			var receiveAddress = $("#receiveAddressId").val();
-			if (receiveAddress == "") {
-				layer.msg('收件人信息不能为空');
-				return;
+		/* var url = '${base}/admin/firstTrialJp/getmainApplicantByOrderid.html';
+		$.ajax({ 
+			url: url,
+			type:'post',
+			dataType:"json",
+			data:{
+				id:orderid
+			},
+			success: function(data){
+				var applicants = data.applicant;
+				if(applicants != null || applicants != "" ){
+					
+				}
 			}
-		}
+		}); */
+		
 	</script>
 	
 </body>
