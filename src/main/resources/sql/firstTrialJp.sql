@@ -30,8 +30,10 @@ $condition
 SELECT
 	taoj.id applyid,
 	CONCAT( ta.firstName, ta.lastName ) applicantname,
+	taoj.isMainApplicant,
 	ta.STATUS applicantStatus,
 	ta.telephone,
+	ta.email,
 	tap.id passportid,
 	tap.passport passportNum,
 	tau.id qualifiedId,
