@@ -70,3 +70,4 @@ body{min-width:1160px;overflow-x: auto;}
 .qualified{background-image:url(../dist/newvisacss/img/qualified.png);width:22px !important;}
 .unqualified{background-image:url(../dist/newvisacss/img/unqualified.png);}
 .guiGuoUpload{background-image:url(../dist/newvisacss/img/visaInput.png);}
+.delete{background-image:url(../dist/newvisacss/img/delete.png);}
