@@ -33,11 +33,11 @@
 							<div class="col-xs-6">
 							<div class="form-group">
 								<div class="cardFront-div">
-									<span>点击上传身份证</span>
+									<span>点击上传身份证正面</span>
 									<input id="cardFront" name="cardFront" type="hidden"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="" src="" >
-									<i class="delete" style="display:none;" onclick="deleteApplicantImg"></i>
+									<i class="delete" style="display:none;" onclick="deleteApplicantFrontImg(${obj.orderid});"></i>
 								</div>
 							</div>
 						</div>
@@ -47,11 +47,11 @@
 							<div class="col-xs-6">
 							<div class="form-group">
 								<div class="cardFront-div">
-									<span>点击上传身份证</span>
+									<span>点击上传身份证背面</span>
 									<input id="cardBack" name="cardBack" type="hidden"/>
 									<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImgBack" alt="" src="" >
-									<i class="delete" style="display:none;"></i>
+									<i class="delete" style="display:none;" onclick="deleteApplicantBackImg(${obj.orderid});"></i>
 								</div>
 							</div>
 						</div>
@@ -267,6 +267,7 @@
 						if (true === obj.success) {
 							$('#cardFront').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
+							$("#uploadFile").siblings("i").css("display","block");
 							$('#address').val(obj.address);
 							$('#nation').val(obj.nationality);
 							$('#cardId').val(obj.num);
@@ -320,6 +321,7 @@
 						if (true === obj.success) {
 							$('#cardBack').val(obj.url);
 							$('#sqImgBack').attr('src', obj.url);
+							$("#uploadFileBack").siblings("i").css("display","block");
 							$('#validStartDate').val(obj.starttime);
 							$('#validEndDate').val(obj.endtime);
 							$('#issueOrganization').val(obj.issue);
@@ -358,14 +360,25 @@
 			parent.layer.close(index);
 		}
 		
-		$(function(){
+		/* $(function(){
 			$("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
 				$(this).siblings("i").css("display","block");
 			});
 			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
 				$(this).siblings("i").css("display","block");
 			});
-		});
+		}); */
+		
+		function deleteApplicantFrontImg(id){
+			$('#cardFront').val("");
+			$('#sqImg').attr('src', "");
+			$("#uploadFile").siblings("i").css("display","none");
+		}
+		function deleteApplicantBackImg(id){
+			$('#cardBack').val("");
+			$('#sqImgBack').attr('src', "");
+			$("#uploadFileBack").siblings("i").css("display","none");
+		}
 		
 	</script>
 

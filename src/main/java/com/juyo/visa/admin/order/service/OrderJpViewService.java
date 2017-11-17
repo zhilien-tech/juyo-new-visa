@@ -267,9 +267,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(wealthJp);
 			//护照信息
 			TApplicantPassportEntity passport = new TApplicantPassportEntity();
-			if (!Util.isEmpty(applicantForm.getSex())) {
+			/*if (!Util.isEmpty(applicantForm.getSex())) {
 				passport.setSex(applicantForm.getSex());
-			}
+			}*/
 			if (!Util.isEmpty(applicantForm.getFirstName())) {
 				passport.setFirstName(applicantForm.getFirstName());
 			}
@@ -299,9 +299,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(wealthJp);
 			//护照信息
 			TApplicantPassportEntity passport = new TApplicantPassportEntity();
-			if (!Util.isEmpty(applicantForm.getSex())) {
+			/*if (!Util.isEmpty(applicantForm.getSex())) {
 				passport.setSex(applicantForm.getSex());
-			}
+			}*/
 			if (!Util.isEmpty(applicantForm.getFirstName())) {
 				passport.setFirstName(applicantForm.getFirstName());
 			}
@@ -358,7 +358,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		order.setUpdateTime(new Date());
 
 		//日本订单信息
-		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, orderInfo.getId().longValue());
+		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderInfo.getId()));
 		if (!Util.isEmpty(orderInfo.getVisatype())) {
 			jporder.setVisaType(orderInfo.getVisatype());
 		}
@@ -826,8 +826,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TApplicantOrderJpEntity applicantOrderJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", id));
 		if (!Util.isEmpty(applicantOrderJp)) {
-			dbDao.delete(TApplicantWorkJpEntity.class, applicantOrderJp.getId());
-			dbDao.delete(TApplicantWealthJpEntity.class, applicantOrderJp.getId());
+			TApplicantWorkJpEntity applicantWorkJpEntity = dbDao.fetch(TApplicantWorkJpEntity.class,
+					Cnd.where("applicantId", "=", applicantOrderJp.getId()));
+			TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(TApplicantWealthJpEntity.class,
+					Cnd.where("applicantId", "=", applicantOrderJp.getId()));
+			dbDao.delete(TApplicantWorkJpEntity.class, applicantWorkJpEntity.getId());
+			dbDao.delete(TApplicantWealthJpEntity.class, applicantWealthJpEntity.getId());
 			dbDao.delete(TApplicantOrderJpEntity.class, applicantOrderJp.getId());
 		}
 		dbDao.delete(TApplicantEntity.class, id);
@@ -835,8 +839,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getLogs(Integer orderid) {
+		Map<String, Object> result = MapUtil.map();
+		String name = "";
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(orderid).intValue());
-		return orderEntity;
+		TUserEntity userEntity = dbDao.fetch(TUserEntity.class, new Long(orderEntity.getUserId()).intValue());
+		if (!Util.isEmpty(userEntity)) {
+			name = userEntity.getName();
+		}
+		result.put("order", orderEntity);
+		result.put("userName", name);
+		return result;
 	}
 
 	public Object getApplicants(String applicantIds, HttpSession session) {

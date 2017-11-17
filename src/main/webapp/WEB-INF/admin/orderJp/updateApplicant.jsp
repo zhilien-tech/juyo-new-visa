@@ -40,11 +40,11 @@
 							<div class="col-xs-6">
 							<div class="form-group">
 								<div class="cardFront-div">
-									<span>点击上传身份证</span>
+									<span>点击上传身份证正面</span>
 									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="" src="${obj.applicant.cardFront }" >
-									<i class="delete"></i>
+									<i class="delete" onclick="deleteApplicantFrontImg(${obj.orderid});"></i>
 								</div>
 							</div>
 						</div>
@@ -57,11 +57,11 @@
 							<div class="col-xs-6">
 								<div class="form-group">
 									<div class="cardFront-div">
-										<span>点击上传身份证</span>
+										<span>点击上传身份证背面</span>
 										<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
 										<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 										<img id="sqImgBack" alt="" src="${obj.applicant.cardBack }" >
-										<i class="delete"></i>
+										<i class="delete" onclick="deleteApplicantBackImg(${obj.orderid});"></i>
 									</div>
 								</div>
 							</div>
@@ -260,6 +260,23 @@
 	<!-- 公用js文件 -->
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script type="text/javascript">
+	
+		$(function(){
+			var front = $("#cardFront").val();
+			var back = $("#cardBack").val();
+			if(front != ""){
+				$("#uploadFile").siblings("i").css("display","block");
+			}else{
+				$("#uploadFile").siblings("i").css("display","none");
+			}
+			
+			if(back != ""){
+				$("#uploadFileBck").siblings("i").css("display","block");
+			}else{
+				$("#uploadFileBack").siblings("i").css("display","none");
+			} 
+		});
+		
 		//var base = "${base}";
 		function saveApplicant(){
 			var applicantInfo = $("#applicantInfo").serialize();
@@ -306,6 +323,7 @@
 						if (true === obj.success) {
 							$('#cardFront').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
+							$("#uploadFile").siblings("i").css("display","block");
 							$('#address').val(obj.address);
 							$('#nation').val(obj.nationality);
 							$('#cardId').val(obj.num);
@@ -359,6 +377,7 @@
 						if (true === obj.success) {
 							$('#cardBack').val(obj.url);
 							$('#sqImgBack').attr('src', obj.url);
+							$("#uploadFileBack").siblings("i").css("display","block");
 							$('#validStartDate').val(obj.starttime);
 							$('#validEndDate').val(obj.endtime);
 							$('#issueOrganization').val(obj.issue);
@@ -395,15 +414,20 @@
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
-									}
-		$(function(){
-			$("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
-				$(this).siblings("i").css("display","block");
-			});
-			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
-				$(this).siblings("i").css("display","block");
-			});
-		});
+		}
+		
+		
+		
+		function deleteApplicantFrontImg(id){
+			$('#cardFront').val("");
+			$('#sqImg').attr('src', "");
+			$("#uploadFile").siblings("i").css("display","none");
+		}
+		function deleteApplicantBackImg(id){
+			$('#cardBack').val("");
+			$('#sqImgBack').attr('src', "");
+			$("#uploadFileBack").siblings("i").css("display","none");
+		}
 	</script>
 </body>
 </html>

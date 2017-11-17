@@ -36,10 +36,10 @@
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传护照</span>
-									<input id="passportUrl" name="passportUrl" type="hidden"/>
+									<input id="passportUrl" name="passportUrl" type="hidden" value="${obj.passport.passportUrl }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="" src="${obj.passport.passportUrl }" >
-									<i class="delete"></i>
+									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 								</div>
 							</div>
 						</div>
@@ -210,6 +210,7 @@
 						if (true === obj.success) {
 							$('#passportUrl').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
+							$("#uploadFile").siblings("i").css("display","block");
 							$('#type').val(obj.type);
 							$('#passport').val(obj.num);
 							$('#sex').val(obj.sex);
@@ -252,13 +253,20 @@
 			parent.layer.close(index);
 		}
 		$(function(){
-			$("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
-				$(this).siblings("i").css("display","block");
-			});
-			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
-				$(this).siblings("i").css("display","block");
-			});
+			var passport = $("#passportUrl").val();
+			if(passport != ""){
+				$("#uploadFile").siblings("i").css("display","block");
+			}else{
+				$("#uploadFile").siblings("i").css("display","none");
+			}
+			
 		});
+		
+		function deleteApplicantFrontImg(){
+			$('#passportUrl').val("");
+			$('#sqImg').attr('src', "");
+			$("#uploadFile").siblings("i").css("display","none");
+		}
 	</script>
 
 
