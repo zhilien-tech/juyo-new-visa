@@ -23,7 +23,6 @@ import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.UserStatusEnum;
-import com.juyo.visa.common.enums.YesOrNoEnum;
 import com.juyo.visa.entities.TComJobEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TDepartmentEntity;
@@ -68,7 +67,7 @@ public class UserViewService extends BaseService<TUserEntity> {
 				departmentList.remove(tDepartmentEntity);
 			}
 		}
-		result.put("isDisableEnum", EnumUtil.enum2(YesOrNoEnum.class));
+		result.put("isDisableEnum", EnumUtil.enum2(IsYesOrNoEnum.class));
 		result.put("department", departmentList);
 		return result;
 	}

@@ -37,7 +37,7 @@
 									<input id="cardFront" name="cardFront" type="hidden"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="" src="" >
-									<i class="delete" style="display:none;"></i>
+									<i class="delete" style="display:none;" onclick="deleteApplicantImg"></i>
 								</div>
 							</div>
 						</div>
@@ -142,11 +142,13 @@
 						<div class="row"><!-- 姓名/民族 -->
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>性别：</label>
-									<select class="form-control input-sm selectHeight" id="sex" name="sex">
-										<option value="1">男</option>
-										<option value="2">女</option>
-									</select>
+									<label><span>*</span>性别：</label>
+									<input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									<%-- <select class="form-control input-sm selectHeight" id="sex" name="sex">
+										<c:forEach var="map" items="${obj.MOrFEnum}">
+												<option value="${map.key}" >${map.value}</option>
+											</c:forEach>
+									</select> --%>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
@@ -271,6 +273,7 @@
 							$('#province').val(obj.province);
 							$('#city').val(obj.city);
 							$('#birthday').val(obj.birth);
+							$('#sex').val(obj.sex);
 						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
@@ -363,6 +366,7 @@
 				$(this).siblings("i").css("display","block");
 			});
 		});
+		
 	</script>
 
 

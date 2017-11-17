@@ -73,7 +73,7 @@
 							<div class="col-sm-11 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发机关：</label> <input id="issueOrganization" name="issueOrganization"
-										type="text" class="form-control input-sm" placeholder=" " />
+										type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -176,11 +176,14 @@
 							<!-- 姓名/民族 -->
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>性别：</label> <select
+									<label><span>*</span>性别：</label> 
+									<input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.sex }"/>
+									<%-- <select
 										class="form-control input-sm selectHeight" id="sex" name="sex">
-										<option value="1">男</option>
-										<option value="2">女</option>
-									</select>
+										<c:forEach var="map" items="${obj.MOrFEnum}">
+												<option value="${map.key}" ${map.key==obj.applicant.sex?'selected':''}>${map.value}</option>
+											</c:forEach>
+									</select> --%>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
@@ -309,6 +312,7 @@
 							$('#province').val(obj.province);
 							$('#city').val(obj.city);
 							$('#birthday').val(obj.birth);
+							$('#sex').val(obj.sex);
 						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
