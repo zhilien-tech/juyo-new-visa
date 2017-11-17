@@ -4,18 +4,16 @@ import com.uxuexi.core.common.enums.IEnum;
 
 /**
  * 
- * 是否
- * <p>
- * 是 or 否
+ * 快递方式
  * @author   彭辉
- * @Date	 2017年10月20日
+ * @Date	 2017年11月16日
  */
-public enum YesOrNoEnum implements IEnum {
-	YES(0, "是"), NO(1, "否");
+public enum ExpressTypeEnum implements IEnum {
+	EXPRESS(1, "快递"), STORESEND(2, "门店送"), SELFSEND(3, "自送");
 	private int key;
 	private String value;
 
-	private YesOrNoEnum(final int key, final String value) {
+	private ExpressTypeEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}

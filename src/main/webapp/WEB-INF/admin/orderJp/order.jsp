@@ -39,7 +39,7 @@
 				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
 				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" />
 				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" @click="share()" />
-				<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" @click="log()" />
+				<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" @click="log(orderInfo.id)" />
 			</div>
 			<section class="content">
 				<!-- 客户信息 -->
@@ -374,7 +374,7 @@
 				<div class="row body-from-input" id="applicantInfo"><!-- 添加申请人 -->
 					<div class="col-sm-12">
 						<div class="form-group">
-							<button type="button" class="btn btn-primary btn-sm addApplicantBtn" v-on:click="addApplicantBig(${obj.orderId})">添加申请人</button>
+							<button type="button" class="btn btn-primary btn-sm addApplicantBtn" onclick="addApplicant(${obj.orderId})">添加申请人</button>
 						</div>
 					</div>
 				</div><!-- end 添加申请人 -->
@@ -385,7 +385,7 @@
 					<input type="hidden" id="appId" value="" name="appId"/>
 					<p class="info-head">
 						<input type="button" name="" value="添加"
-							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant(${obj.orderId})" />
+							class="btn btn-primary btn-sm pull-right" onclick="addApplicant(${obj.orderId})" />
 					</p>
 					<div class="info-table" style="padding-bottom: 1px;">
 						<table id="principalApplicantTable" class="table table-hover"
@@ -448,7 +448,7 @@
 										<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
-									</select> <i class="bulb"></i>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-3">
@@ -458,15 +458,14 @@
 										<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
-									</select> <i class="bulb"></i>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>回邮地址：</label> <input id="expressAddress"
 										name="expressAddress" type="text"
-										class="form-control input-sm" placeholder=" " /> <i
-										class="bulb"></i>
+										class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -478,29 +477,28 @@
 								<div class="form-group">
 									<label><span>*</span>联系人：</label> <input id="linkman"
 										name="linkman" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>电话：</label> <input id="telephone"
 										name="telephone" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>发票项目内容：</label> <input id="invoiceContent"
 										name="invoiceContent" type="text"
-										class="form-control input-sm" placeholder=" " /> <i
-										class="bulb"></i>
+										class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>发票抬头：</label> <input id="invoiceHead"
 										name="invoiceHead" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -512,21 +510,20 @@
 								<div class="form-group">
 									<label><span>*</span>团队名称：</label> <input id="" name=""
 										type="text" class="form-control input-sm" placeholder=" " />
-									<i class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>快递号：</label> <input id="expressNum"
 										name="expressNum" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>备注：</label> <input id="remark"
 										name="remark" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -743,114 +740,87 @@
 					//console.log(message);
 					//alert(JSON.stringify(event.target)); 
 				},
-			//添加申请人(右上角小按钮)
-			addApplicant : function(id){
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '551px'],
-					content:'/admin/orderJp/addApplicant.html?id='+id
-				});
-			},
-			//添加申请人(大按钮)
-			addApplicantBig : function(id){
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '551px'],
-					content:'/admin/orderJp/addApplicant.html?id='+id
-				});
-			},
-			//修改申请人信息
-			updateApplicant : function(id){
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '551px'],
-					content:'/admin/orderJp/updateApplicant.html?id='+id
-				});
-			},
-			//修改护照信息
-			passport : function(id){
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '551px'],
-					content:'/admin/orderJp/passportInfo.html?id='+id
-				});
-			},
-			//删除申请人
-			deleteApplicant : function(id){
-				$.ajax({ 
-			    	url: '${base}/admin/orderJp/deleteApplicant',
-			    	dataType:"json",
-			    	data:{applicantId:id},
-			    	type:'post',
-			    	success: function(data){
-			    		successCallBack(2);
-			      	}
-			    }); 
-			},
-			share:function(){//分享
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '551px'],
-					content:'/admin/orderJp/share.html'
-				});
-			},
-			log:function(){//日志
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['700px', '551px'],
-					content:'/admin/orderJp/log.html'
-				});
-			},
-			//签证信息
-			visa : function(id){
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '551px'],
-					content:'/admin/orderJp/visaInfo.html?id='+id
-				});
-			}
+				
+				//修改申请人信息
+				updateApplicant : function(id){
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/orderJp/updateApplicant.html?id='+id
+					});
+				},
+				//修改护照信息
+				passport : function(id){
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/orderJp/passportInfo.html?id='+id
+					});
+				},
+				//删除申请人
+				deleteApplicant : function(id){
+					$.ajax({ 
+				    	url: '${base}/admin/orderJp/deleteApplicant',
+				    	dataType:"json",
+				    	data:{applicantId:id},
+				    	type:'post',
+				    	success: function(data){
+				    		successCallBack(2);
+				      	}
+				    }); 
+				},
+				share:function(){//分享
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/orderJp/share.html'
+					});
+				},
+				log:function(id){//日志
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['700px', '551px'],
+						content:'/admin/orderJp/log.html?id='+id
+					});
+				},
+				//签证信息
+				visa : function(id){
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/orderJp/visaInfo.html?id='+id
+					});
+				}
 			}
 		});
 		
@@ -884,7 +854,45 @@
 			
 		}
 		
-		 
+		//添加申请人
+		function addApplicant(id){
+			alert(id);
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'${base}/admin/orderJp/addApplicantSale.html?id='+id
+			});
+		}
+		
+		$("#stayDay").keyup(function(){
+			var go = $("#goTripDate").val();
+			var back = $("#backTripDate").val();
+			var day = $("#stayDay").val();
+			if(go != "" && day != ""){
+				var days = getNewDay(go,day);
+				$("#backTripDate").val(days); 
+				orderobj.orderInfo.backtripdate = days;
+			}
+		});
+		
+		function getNewDay(dateTemp, days) {  
+		    var dateTemp = dateTemp.split("-");  
+		    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
+		    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);  
+		    var rDate = new Date(millSeconds);  
+		    var year = rDate.getFullYear();  
+		    var month = rDate.getMonth() + 1;  
+		    if (month < 10) month = "0" + month;  
+		    var date = rDate.getDate();  
+		    if (date < 10) date = "0" + date;  
+		    return (year + "-" + month + "-" + date);  
+		}  
 	</script>
 </body>
 </html>
