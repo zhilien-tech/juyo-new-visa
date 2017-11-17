@@ -851,6 +851,7 @@
 		
 		//添加申请人
 		function addApplicant(id){
+			alert(id);
 			layer.open({
 				type: 2,
 				title: false,

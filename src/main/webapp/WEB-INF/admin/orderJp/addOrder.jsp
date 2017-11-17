@@ -641,7 +641,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/addApplicant.html'
+				content:'/admin/orderJp/addApplicantSale.html'
 			});
 			
 		});
@@ -657,7 +657,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/addApplicant.html'
+				content:'/admin/orderJp/addApplicantSale.html'
 			});
 		}
 			

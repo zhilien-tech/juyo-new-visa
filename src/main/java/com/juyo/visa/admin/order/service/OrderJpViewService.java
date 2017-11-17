@@ -358,7 +358,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		order.setUpdateTime(new Date());
 
 		//日本订单信息
-		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, orderInfo.getId().longValue());
+		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderInfo.getId()));
 		if (!Util.isEmpty(orderInfo.getVisatype())) {
 			jporder.setVisaType(orderInfo.getVisatype());
 		}
