@@ -54,7 +54,7 @@ new Vue({
     		    content: '/admin/orderJp/updateApplicant.html?id='+applyid
     	    });
 		},
-		expressFun:function(){//跳转快递弹层页面
+		expressFun:function(orderid){//跳转快递弹层页面
     		layer.open({
     		    type: 2,
     		    title: false,
@@ -64,7 +64,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['900px', '550px'],
-    		    content: '/admin/firstTrialJp/express.html'
+    		    content: '/admin/firstTrialJp/express.html?id='+orderid
     	    });
     	},
     	passportFun:function(applyid){
