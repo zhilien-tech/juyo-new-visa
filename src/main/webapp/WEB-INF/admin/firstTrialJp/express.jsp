@@ -40,10 +40,10 @@
 							<div class="form-group">
 								<select id="express" class="form-control input-sm selectHeight">
 									<c:forEach var="map" items="${obj.expressType}">
-										<c:if test="${! empty obj.orderReceive.receiveAddressId }">
+										<c:if test="${map.key == obj.orderReceive.expresstype }">
 											<option value="${map.key}" selected="selected">${map.value}</option>
 										</c:if>
-										<c:if test="${empty obj.orderReceive.receiveAddressId }">
+										<c:if test="${map.key != obj.orderReceive.expresstype }">
 											<option value="${map.key}">${map.value}</option>
 										</c:if>
 									</c:forEach>
@@ -54,11 +54,16 @@
 					<div class="row form-div">
 						<div class="col-sm-3">
 							<div class="form-group">
-								<input id="receiveAddressId" type="hidden" >
+								<c:if test="${! empty obj.orderReceive.receiveaddressid }">
+									<input id="receiveAddressId" type="hidden" value="${obj.orderReceive.receiveaddressid }">
+								</c:if>
+								<c:if test="${empty obj.orderReceive.receiveaddressid }">
+									<input id="receiveAddressId" type="hidden" >
+								</c:if>
 								<label>收件人：</label> 
 								<select id="receiver" class="form-control select2 select2City" multiple="multiple">
-									<c:if test="${! empty obj.orderReceive.receiveAddressId }">
-										<option value="${obj.receiveAddresss.id }" selected="selected">${obj.receiveAddresss.receiver }</option>
+									<c:if test="${! empty obj.orderReceive.receiveaddressid }">
+										<option value="${obj.orderReceive.receiveaddressid }" selected="selected">${obj.orderReceive.receiver }</option>
 									</c:if>
 								</select>
 							</div>
@@ -67,8 +72,8 @@
 							<div class="form-group">
 								<label>电话：</label> 
 								<select id="mobile" class="form-control select2 select2City" multiple="multiple">
-									<c:if test="${! empty obj.orderReceive.receiveAddressId }">
-										<option value="${obj.receiveAddresss.id }" selected="selected">${obj.receiveAddresss.mobile }</option>
+									<c:if test="${! empty obj.orderReceive.receiveaddressid }">
+										<option value="${obj.orderReceive.receiveaddressid }" selected="selected">${obj.orderReceive.mobile }</option>
 									</c:if>
 								</select>
 							</div>
@@ -76,10 +81,10 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>邮寄地址：</label>
-								<c:if test="${! empty obj.orderReceive.receiveAddressId }">
-									<input id="address" name="address" value="${obj.receiveAddresss.address}"  readonly="readonly" type="text" class="form-control input-sm"/>
+								<c:if test="${! empty obj.orderReceive.receiveaddressid }">
+									<input id="address" name="address" value="${obj.orderReceive.address}"  readonly="readonly" type="text" class="form-control input-sm"/>
 								</c:if>
-								<c:if test="${ empty obj.orderReceive.receiveAddressId }">
+								<c:if test="${ empty obj.orderReceive.receiveaddressid }">
 									<input id="address" name="address" readonly="readonly" type="text" class="form-control input-sm"/>
 								</c:if>
 								
@@ -149,28 +154,16 @@
 					},
 					success: function(data){
 						orderobj.applyinfo = data.applicant;
-						//alert(JSON.stringify(orderobj.applyinfo));
 					}
 				});
 			}
 		});
 		
-		/* var url = '${base}/admin/firstTrialJp/getmainApplicantByOrderid.html';
-		$.ajax({ 
-			url: url,
-			type:'post',
-			dataType:"json",
-			data:{
-				id:orderid
-			},
-			success: function(data){
-				var applicants = data.applicant;
-				if(applicants != null || applicants != "" ){
-					
-				}
-			}
-		}); */
-		
+		//返回 
+		function closeWindow() {
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
+		}
 	</script>
 	
 </body>
