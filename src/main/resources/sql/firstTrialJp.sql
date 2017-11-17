@@ -28,7 +28,7 @@ $condition
 
 /*firstTrialJp_list_data_applicant*/
 SELECT
-	taoj.id applyid,
+	taoj.applicantId applyid,
 	CONCAT( ta.firstName, ta.lastName ) applicantname,
 	taoj.isMainApplicant,
 	ta.STATUS applicantStatus,
@@ -74,7 +74,7 @@ WHERE
 	
 /*firstTrialJp_orderDetail_applicant_by_orderid*/
 SELECT
-	taoj.id applyid,
+	taoj.applicantId applyid,
 	CONCAT(ta.firstName, ta.lastName) applyname,
 	ta.telephone,
 	tap.passport,
@@ -97,3 +97,16 @@ LEFT JOIN (
 		applicantId
 ) tavpj ON tavpj.applicantId = taoj.id
 where taoj.orderId = @orderid
+
+/*firstTrialJp_receive_address_by_orderid*/
+SELECT
+	tor.orderId,
+	tor.expressType,
+	tor.receiveAddressId,
+	tr.receiver,
+	tr.mobile,
+	tr.address 
+FROM
+	t_order_recipient tor
+	LEFT JOIN t_receiveaddress tr ON tor.receiveAddressId = tr.id
+where tor.orderId = @orderid
