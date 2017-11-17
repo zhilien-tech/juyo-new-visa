@@ -447,7 +447,7 @@
 										<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
-									</select> <i class="bulb"></i>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-3">
@@ -457,15 +457,14 @@
 										<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
-									</select> <i class="bulb"></i>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>回邮地址：</label> <input id="expressAddress"
 										name="expressAddress" type="text"
-										class="form-control input-sm" placeholder=" " /> <i
-										class="bulb"></i>
+										class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -477,29 +476,28 @@
 								<div class="form-group">
 									<label><span>*</span>联系人：</label> <input id="linkman"
 										name="linkman" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>电话：</label> <input id="telephone"
 										name="telephone" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>发票项目内容：</label> <input id="invoiceContent"
 										name="invoiceContent" type="text"
-										class="form-control input-sm" placeholder=" " /> <i
-										class="bulb"></i>
+										class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>发票抬头：</label> <input id="invoiceHead"
 										name="invoiceHead" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -511,21 +509,20 @@
 								<div class="form-group">
 									<label><span>*</span>团队名称：</label> <input id="" name=""
 										type="text" class="form-control input-sm" placeholder=" " />
-									<i class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>快递号：</label> <input id="expressNum"
 										name="expressNum" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>备注：</label> <input id="remark"
 										name="remark" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -851,6 +848,7 @@
 		
 		//添加申请人
 		function addApplicant(id){
+			alert(id);
 			layer.open({
 				type: 2,
 				title: false,
@@ -860,9 +858,33 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'${base}/admin/orderJp/addApplicant.html?id='+id
+				content:'${base}/admin/orderJp/addApplicantSale.html?id='+id
 			});
 		}
+		
+		$("#stayDay").keyup(function(){
+			var go = $("#goTripDate").val();
+			var back = $("#backTripDate").val();
+			var day = $("#stayDay").val();
+			if(go != "" && day != ""){
+				var days = getNewDay(go,day);
+				$("#backTripDate").val(days); 
+				orderobj.orderInfo.backtripdate = days;
+			}
+		});
+		
+		function getNewDay(dateTemp, days) {  
+		    var dateTemp = dateTemp.split("-");  
+		    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
+		    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);  
+		    var rDate = new Date(millSeconds);  
+		    var year = rDate.getFullYear();  
+		    var month = rDate.getMonth() + 1;  
+		    if (month < 10) month = "0" + month;  
+		    var date = rDate.getDate();  
+		    if (date < 10) date = "0" + date;  
+		    return (year + "-" + month + "-" + date);  
+		}  
 	</script>
 </body>
 </html>

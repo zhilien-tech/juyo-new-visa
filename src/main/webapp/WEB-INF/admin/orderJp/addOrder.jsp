@@ -8,20 +8,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>下单</title>
-<link rel="stylesheet"
-	href="${base}/references/common/js/vue/vue-multiselect.min.css">
-<link rel="stylesheet"
-	href="${base}/references/public/plugins/select2/select2.css">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
+<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <style type="text/css">
@@ -461,7 +454,7 @@
 												items="${obj.mainBackMailSourceTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
-										</select> <i class="bulb"></i>
+										</select>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -471,15 +464,14 @@
 											<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
-										</select> <i class="bulb"></i>
+										</select>
 									</div>
 								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>回邮地址：</label> <input id="expressAddress"
 											name="expressAddress" type="text"
-											class="form-control input-sm" placeholder=" " /> <i
-											class="bulb"></i>
+											class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 							</div>
@@ -491,29 +483,28 @@
 									<div class="form-group">
 										<label><span>*</span>联系人：</label> <input id="linkman"
 											name="linkman" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>电话：</label> <input id="telephone"
 											name="telephone" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>发票项目内容：</label> <input
 											id="invoiceContent" name="invoiceContent" type="text"
-											class="form-control input-sm" placeholder=" " /> <i
-											class="bulb"></i>
+											class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>发票抬头：</label> <input id="invoiceHead"
 											name="invoiceHead" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 							</div>
@@ -525,21 +516,21 @@
 									<div class="form-group">
 										<label><span>*</span>团队名称：</label> <input id="" name=""
 											type="text" class="form-control input-sm" placeholder=" " />
-										<i class="bulb"></i>
+										
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>快递号：</label> <input id="expressNum"
 											name="expressNum" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>备注：</label> <input id="remark"
 											name="remark" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 							</div>
@@ -641,7 +632,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/addApplicant.html'
+				content:'/admin/orderJp/addApplicantSale.html'
 			});
 			
 		});
@@ -657,7 +648,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/addApplicant.html'
+				content:'/admin/orderJp/addApplicantSale.html'
 			});
 		}
 			
@@ -838,6 +829,30 @@
 			function cancelAddOrder(){
 				window.location.href = '${base}/admin/orderJp/list';
 			}
+			
+			$("#stayDay").keyup(function(){
+				var go = $("#goTripDate").val();
+				var back = $("#backTripDate").val();
+				var day = $("#stayDay").val();
+				if(go != "" && day != ""){
+					var days = getNewDay(go,day);
+					$("#backTripDate").val(days); 
+					//orderobj.orderInfo.backtripdate = days;
+				}
+			});
+			
+			function getNewDay(dateTemp, days) {  
+			    var dateTemp = dateTemp.split("-");  
+			    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
+			    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);  
+			    var rDate = new Date(millSeconds);  
+			    var year = rDate.getFullYear();  
+			    var month = rDate.getMonth() + 1;  
+			    if (month < 10) month = "0" + month;  
+			    var date = rDate.getDate();  
+			    if (date < 10) date = "0" + date;  
+			    return (year + "-" + month + "-" + date);  
+			}  
 		</script>
 </body>
 </html>
