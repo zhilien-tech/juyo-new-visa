@@ -16,6 +16,7 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
 import com.juyo.visa.forms.TApplicantUnqualifiedForm;
@@ -161,6 +162,15 @@ public class FirstTrialJpModule {
 	public Object saveExpressInfo(@Param("orderid") Integer orderid, @Param("expresstype") Integer expresstype,
 			@Param("receiveAddressId") Integer receiveAddressId, HttpSession session) {
 		return firstTrialJpViewService.saveExpressInfo(orderid, expresstype, receiveAddressId, session);
+	}
+
+	/**
+	 * 保存初审详情数据
+	 */
+	@At
+	@POST
+	public Object saveJpTrialDetailInfo(@Param("..") FirstTrialJpEditDataForm editDataForm, HttpSession session) {
+		return firstTrialJpViewService.saveJpTrialDetailInfo(editDataForm, session);
 	}
 
 }

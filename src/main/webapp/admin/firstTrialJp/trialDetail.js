@@ -166,3 +166,51 @@ function successCallBack(status){
 		}); 
 	}
 }
+
+//保存初审订单
+function saveorder(){
+	//绑定订单信息
+	orderobj.orderinfo.number = $('#number').val();
+	orderobj.orderinfo.money = $('#money').val();
+	orderobj.orderinfo.gotripdate = $('#gotripdate').val();
+	orderobj.orderinfo.stayday = $('#stayday').val();
+	orderobj.orderinfo.backtripdate = $('#backtripdate').val();
+	orderobj.orderinfo.sendvisadate = $('#sendvisadate').val();
+	orderobj.orderinfo.outvisadate = $('#outvisadate').val();
+	//绑定签证城市
+	var visacounty = "";
+	$('[name=visacounty]').each(function(){
+		if($(this).hasClass('btnState-true')){
+			visacounty += $(this).val() + ',';
+		}
+	});
+	if(visacounty){
+		visacounty = visacounty.substr(0,visacounty.length-1);
+	}
+	orderobj.orderinfo.visacounty = visacounty;
+	//绑定三年城市
+	var threecounty = "";
+	$('[name=threecounty]').each(function(){
+		if($(this).hasClass('btnState-true')){
+			threecounty += $(this).val() + ',';
+		}
+	});
+	if(threecounty){
+		threecounty = threecounty.substr(0,threecounty.length-1);
+	}
+	orderobj.orderinfo.threecounty = threecounty;
+	
+	var editdata = orderobj.orderinfo;
+	console.log("=============orderinfo=================:"+JSON.stringify(editdata));
+	layer.load(1);
+	$.ajax({ 
+		url: BASE_PATH + '/admin/firstTrialJp/saveJpTrialDetailInfo.html',
+		dataType:"json",
+		data:editdata,
+		type:'post',
+		success: function(data){
+			layer.closeAll('loading');
+			window.location.reload();
+		}
+	}); 
+}

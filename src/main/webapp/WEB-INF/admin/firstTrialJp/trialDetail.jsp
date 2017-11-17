@@ -30,8 +30,8 @@
 					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
 					<!-- <span class="">受付番号：<p>JDY27163</p></span> -->
 					<span class="">状态：<p>{{orderinfo.status}}</p></span>
-					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right"/>
+					<input type="button" value="取消" onclick="javascript:window.close()" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="保存" onclick="saveorder();" class="btn btn-primary btn-sm pull-right"/>
 					<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="快递" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" />

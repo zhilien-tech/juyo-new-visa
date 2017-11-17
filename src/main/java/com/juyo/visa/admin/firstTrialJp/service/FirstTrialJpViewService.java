@@ -29,9 +29,9 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.POST;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
-import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -194,12 +194,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					record.put("type", visadatatype.value());
 				}
 			}
-			Integer sex = (Integer) record.get("sex");
-			if (BoyOrGirlEnum.MAN.intKey() == sex) {
-				record.set("sex", "男");
-			} else {
-				record.set("sex", "女");
-			}
+			String sex = record.get("sex");
+			record.set("sex", "男");
+			record.set("sex", "女");
 			Integer status = (Integer) record.get("applicantstatus");
 			for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
 				if (!Util.isEmpty(status) && status.equals(statusEnum.intKey())) {
@@ -440,7 +437,48 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			dbDao.insert(orderReceiveAdd);
 		}
 
-		//改变订单状态 由初审到前台 TODO
+		//改变订单状态 由初审到前台、签证 TODO
+
+		//发送短信、邮件 TODO
+
 		return null;
 	}
+
+	/**
+	 * 保存初审编辑页数据
+	 * <p>
+	 * @param editDataForm
+	 * @param session
+	 * @return 
+	 */
+	public Object saveJpTrialDetailInfo(FirstTrialJpEditDataForm editDataForm, HttpSession session) {
+		//获取登录用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		//订单信息
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, editDataForm.getId().longValue());
+		order.setNumber(editDataForm.getNumber());
+		order.setCityId(editDataForm.getCityid());
+		order.setUrgentType(editDataForm.getUrgenttype());
+		order.setUrgentDay(editDataForm.getUrgentday());
+		order.setTravel(editDataForm.getTravel());
+		order.setPayType(editDataForm.getPaytype());
+		order.setMoney(editDataForm.getMoney());
+		order.setGoTripDate(editDataForm.getGotripdate());
+		order.setStayDay(editDataForm.getStayday());
+		order.setBackTripDate(editDataForm.getBacktripdate());
+		order.setSendVisaDate(editDataForm.getSendvisadate());
+		order.setOutVisaDate(editDataForm.getOutvisadate());
+		order.setUpdateTime(new Date());
+
+		dbDao.update(order);
+		//日本订单信息
+		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, editDataForm.getOrderid().longValue());
+		jporder.setVisaType(editDataForm.getVisatype());
+		jporder.setVisaCounty(editDataForm.getVisacounty());
+		jporder.setIsVisit(editDataForm.getIsvisit());
+		jporder.setThreeCounty(editDataForm.getThreecounty());
+		dbDao.update(jporder);
+		return null;
+	}
+
 }

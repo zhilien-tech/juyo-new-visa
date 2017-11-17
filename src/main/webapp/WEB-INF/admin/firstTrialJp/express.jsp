@@ -40,7 +40,12 @@
 							<div class="form-group">
 								<select id="express" class="form-control input-sm selectHeight">
 									<c:forEach var="map" items="${obj.expressType}">
-										<option value="${map.key}">${map.value}</option>
+										<c:if test="${! empty obj.orderReceive.receiveAddressId }">
+											<option value="${map.key}" selected="selected">${map.value}</option>
+										</c:if>
+										<c:if test="${empty obj.orderReceive.receiveAddressId }">
+											<option value="${map.key}">${map.value}</option>
+										</c:if>
 									</c:forEach>
 								</select>
 							</div>
@@ -52,6 +57,9 @@
 								<input id="receiveAddressId" type="hidden" >
 								<label>收件人：</label> 
 								<select id="receiver" class="form-control select2 select2City" multiple="multiple">
+									<c:if test="${! empty obj.orderReceive.receiveAddressId }">
+										<option value="${obj.receiveAddresss.id }" selected="selected">${obj.receiveAddresss.receiver }</option>
+									</c:if>
 								</select>
 							</div>
 						</div>
@@ -59,13 +67,22 @@
 							<div class="form-group">
 								<label>电话：</label> 
 								<select id="mobile" class="form-control select2 select2City" multiple="multiple">
+									<c:if test="${! empty obj.orderReceive.receiveAddressId }">
+										<option value="${obj.receiveAddresss.id }" selected="selected">${obj.receiveAddresss.mobile }</option>
+									</c:if>
 								</select>
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label>邮寄地址：</label> 
-								<input id="address" name="address" readonly="readonly" type="text" class="form-control input-sm"/>
+								<label>邮寄地址：</label>
+								<c:if test="${! empty obj.orderReceive.receiveAddressId }">
+									<input id="address" name="address" value="${obj.receiveAddresss.address}"  readonly="readonly" type="text" class="form-control input-sm"/>
+								</c:if>
+								<c:if test="${ empty obj.orderReceive.receiveAddressId }">
+									<input id="address" name="address" readonly="readonly" type="text" class="form-control input-sm"/>
+								</c:if>
+								
 							</div>
 						</div>
 					</div>

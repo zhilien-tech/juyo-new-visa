@@ -143,7 +143,7 @@ function save(orderid){
 		data:{
 			orderid:orderid,
 			expresstype:$("#express").val(),
-			receiveaddressid:$("#receiveAddressId").val();
+			receiveAddressId:$("#receiveAddressId").val()
 		},
 		success: function(data){
 			orderobj.applyinfo = data.applicant;
