@@ -39,6 +39,7 @@
 									<input id="passportUrl" name="passportUrl" type="hidden"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="" src="${obj.passport.passportUrl }" >
+									<i class="delete"></i>
 								</div>
 							</div>
 						</div>
@@ -250,6 +251,14 @@
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 		}
+		$(function(){
+			$("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
+				$(this).siblings("i").css("display","block");
+			});
+			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
+				$(this).siblings("i").css("display","block");
+			});
+		});
 	</script>
 
 

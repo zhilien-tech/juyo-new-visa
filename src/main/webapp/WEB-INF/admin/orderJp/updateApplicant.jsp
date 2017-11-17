@@ -44,6 +44,7 @@
 									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="" src="${obj.applicant.cardFront }" >
+									<i class="delete"></i>
 								</div>
 							</div>
 						</div>
@@ -59,7 +60,8 @@
 										<span>点击上传身份证</span>
 										<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
 										<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-										<img id="sqImgBack" alt="点击上传身份证" src="${obj.applicant.cardBack }" >
+										<img id="sqImgBack" alt="" src="${obj.applicant.cardBack }" >
+										<i class="delete"></i>
 									</div>
 								</div>
 							</div>
@@ -117,7 +119,7 @@
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>邮箱：</label> <input id="email" name="email"
+									<label>邮箱：</label> <input id="email" name="email"
 										type="text" class="form-control input-sm" placeholder=" "
 										value="${obj.applicant.email }" />
 									<!-- <i class="bulb"></i> -->
@@ -129,7 +131,7 @@
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地址省份：</label> <input id="province"
+									<label>现居住地址省份：</label> <input id="province"
 										name="province" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.province }" />
 									<!-- <i class="bulb"></i> -->
@@ -137,7 +139,7 @@
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地址城市：</label> <input id="city"
+									<label>现居住地址城市：</label> <input id="city"
 										name="city" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.city }" />
 									<!-- <i class="bulb"></i> -->
@@ -149,7 +151,7 @@
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label> <input
+									<label>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label> <input
 										id="detailedAddress" name="detailedAddress" type="text"
 										class="form-control input-sm" placeholder=" "
 										value="${obj.applicant.detailedAddress }" />
@@ -162,7 +164,7 @@
 							<!-- 公民身份证 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>公民身份证：</label> <input id="cardId"
+									<label>公民身份证：</label> <input id="cardId"
 										name="cardId" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.cardId }" />
 									<!-- <i class="bulb"></i> -->
@@ -186,7 +188,7 @@
 							</div>
 							<div class="col-sm-3 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>民族：</label> <input id="nation"
+									<label>民族：</label> <input id="nation"
 										name="nation" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.nation }" />
 									<!-- <i class="bulb"></i> -->
@@ -194,7 +196,7 @@
 							</div>
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>出生日期：</label> <input id="birthday"
+									<label>出生日期：</label> <input id="birthday"
 										name="birthday" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.birthday }" onClick="WdatePicker()"/>
 									<!-- <i class="bulb"></i> -->
@@ -206,7 +208,7 @@
 							<!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>住宅：</label> <input id="address"
+									<label>住宅：</label> <input id="address"
 										name="address" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.address }" />
 									<!-- <i class="bulb"></i> -->
@@ -218,7 +220,7 @@
 							<!-- 有效期限 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>有效期限：</label> <input id="validStartDate"
+									<label>有效期限：</label> <input id="validStartDate"
 										name="validStartDate" type="text"
 										class="form-control input-sm" placeholder=" "
 										onClick="WdatePicker()"
@@ -394,6 +396,14 @@
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 									}
+		$(function(){
+			$("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
+				$(this).siblings("i").css("display","block");
+			});
+			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
+				$(this).siblings("i").css("display","block");
+			});
+		});
 	</script>
 </body>
 </html>

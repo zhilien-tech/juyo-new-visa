@@ -145,3 +145,10 @@
 	$('.bulb').click(function(){
 		$(this).toggleClass('bulb1');
 	});
+	
+	
+	
+
+	
+	
+	
