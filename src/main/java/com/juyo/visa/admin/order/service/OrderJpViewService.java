@@ -268,11 +268,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//护照信息
 			TApplicantPassportEntity passport = new TApplicantPassportEntity();
 			if (!Util.isEmpty(applicantForm.getSex())) {
-				if (applicantForm.getSex() == 1) {
-					passport.setSex("男");
-				} else {
-					passport.setSex("女");
-				}
+				passport.setSex(applicantForm.getSex());
 			}
 			if (!Util.isEmpty(applicantForm.getFirstName())) {
 				passport.setFirstName(applicantForm.getFirstName());
@@ -304,11 +300,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//护照信息
 			TApplicantPassportEntity passport = new TApplicantPassportEntity();
 			if (!Util.isEmpty(applicantForm.getSex())) {
-				if (applicantForm.getSex() == 1) {
-					passport.setSex("男");
-				} else {
-					passport.setSex("女");
-				}
+				passport.setSex(applicantForm.getSex());
 			}
 			if (!Util.isEmpty(applicantForm.getFirstName())) {
 				passport.setFirstName(applicantForm.getFirstName());
@@ -830,15 +822,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				dbDao.delete(TApplicantPassportEntity.class, tApplicantPassportEntity.getId());
 			}
 		}
-		List<TApplicantOrderJpEntity> applicantOrderJp = dbDao.query(TApplicantOrderJpEntity.class,
-				Cnd.where("applicantId", "=", id), null);
-		if (!Util.isEmpty(applicantOrderJp)) {
-			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applicantOrderJp) {
-				dbDao.delete(TApplicantOrderJpEntity.class, tApplicantOrderJpEntity.getId());
-			}
-		}
 
-		//dbDao.delete(TApplicantPassportEntity.class, id);
+		TApplicantOrderJpEntity applicantOrderJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", id));
+		if (!Util.isEmpty(applicantOrderJp)) {
+			dbDao.delete(TApplicantWorkJpEntity.class, applicantOrderJp.getId());
+			dbDao.delete(TApplicantWealthJpEntity.class, applicantOrderJp.getId());
+			dbDao.delete(TApplicantOrderJpEntity.class, applicantOrderJp.getId());
+		}
 		dbDao.delete(TApplicantEntity.class, id);
 		return null;
 	}

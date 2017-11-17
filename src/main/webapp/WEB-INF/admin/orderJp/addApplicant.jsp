@@ -142,10 +142,12 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别：</label>
-									<select class="form-control input-sm selectHeight" id="sex" name="sex">
-										<option value="1">男</option>
-										<option value="2">女</option>
-									</select>
+									<input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									<%-- <select class="form-control input-sm selectHeight" id="sex" name="sex">
+										<c:forEach var="map" items="${obj.MOrFEnum}">
+												<option value="${map.key}" >${map.value}</option>
+											</c:forEach>
+									</select> --%>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
@@ -271,6 +273,7 @@
 							$('#province').val(obj.province);
 							$('#city').val(obj.city);
 							$('#birthday').val(obj.birth);
+							$('#sex').val(obj.sex);
 						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);

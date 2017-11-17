@@ -31,7 +31,7 @@
 						</thead>
 						<tbody >
 							<tr v-for="orderin in orderinfo">
-								<td>{{orderin.createTime }}</td>
+								<td>{{orderin.comId }}</td>
 								<td>{{orderin.status}}</td>
 								<td>{{orderin.userId }}</td>
 							</tr>
