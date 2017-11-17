@@ -37,7 +37,7 @@
 									<input id="cardFront" name="cardFront" type="hidden"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="" src="" >
-									<i class="delete" style="display:none;"></i>
+									<i class="delete" style="display:none;" onclick="deleteApplicantImg"></i>
 								</div>
 							</div>
 						</div>
@@ -366,6 +366,7 @@
 				$(this).siblings("i").css("display","block");
 			});
 		});
+		
 	</script>
 
 
