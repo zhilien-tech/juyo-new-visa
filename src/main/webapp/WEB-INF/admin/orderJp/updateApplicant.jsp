@@ -9,6 +9,7 @@
 <title>基本信息</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 <link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
@@ -193,10 +194,9 @@
 							</div>
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
-									<label>出生日期：</label> <input id="birthday"
-										name="birthday" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.birthday }" onClick="WdatePicker()"/>
-									<!-- <i class="bulb"></i> -->
+									<label>出生日期：</label> 
+									<input id="birthday" name="birthday" type="text" class="form-control input-sm" />
+									
 								</div>
 							</div>
 						</div>
@@ -213,29 +213,39 @@
 							</div>
 						</div>
 						<!-- end 住宅 -->
-						<div class="row">
-							<!-- 有效期限 -->
+						
+						<!-- 有效期限 -->
+						<%-- <div class="row">
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>有效期限：</label> <input id="validStartDate"
-										name="validStartDate" type="text"
-										class="form-control input-sm" placeholder=" "
-										onClick="WdatePicker()"
-										value="${obj.validStartDate }" onClick="WdatePicker()"/>
-									<!-- <i class="bulb"></i> -->
+									<label>有效期限：</label> 
+									<input id="validStartDate" name="validStartDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" value="${obj.validStartDate }" onClick="WdatePicker()"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label> &nbsp; &nbsp;</label> <input id="validEndDate"
-										name="validEndDate" type="text" class="form-control input-sm"
-										placeholder=" " onClick="WdatePicker()"
-										value="${obj.validEndDate }" onClick="WdatePicker()"/>
-									<!-- <i class="bulb"></i> -->
+									<label> &nbsp; &nbsp;</label> 
+									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" value="${obj.validEndDate }" onClick="WdatePicker()"/>
+								</div>
+							</div>
+						</div> --%>
+						<!-- end 有效期限 -->
+						
+						
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>有效期限：</label> 
+									<input id="validStartDate" name=""  value="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label> &nbsp; &nbsp;</label> 
+									<input id="validEndDate" type="text" value="2017-11-15" class="form-control input-sm">
 								</div>
 							</div>
 						</div>
-						<!-- end 有效期限 -->
 					</div>
 
 				</div>
@@ -255,7 +265,8 @@
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- 公用js文件 -->
-	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript">
 		//var base = "${base}";
 		function saveApplicant(){
@@ -398,6 +409,39 @@
 			});
 			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
 				$(this).siblings("i").css("display","block");
+			});
+			$("#birthday").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#validStartDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+		        weekStart: 1,
+		        todayBtn: 1,
+				autoclose: true,
+				todayHighlight: true,//高亮
+				startView: 4,//从年开始选择
+				forceParse: 0,
+		        showMeridian: false,
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#validEndDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+		        weekStart: 1,
+		        todayBtn: 1,
+				autoclose: true,
+				todayHighlight: true,
+				startView: 4,//从年开始选择
+				forceParse: 0,
+		        showMeridian: false,
+				pickerPosition:"top-left",
+				minView: "month"//只显示年月日
 			});
 		});
 	</script>
