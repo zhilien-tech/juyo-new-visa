@@ -146,17 +146,11 @@ function save(orderid){
 			receiveAddressId:$("#receiveAddressId").val()
 		},
 		success: function(data){
-			orderobj.applyinfo = data.applicant;
-			//alert(JSON.stringify(orderobj.applyinfo));
+			closeWindow();
 		}
 	});
 }
 
-//返回 
-function closeWindow() {
-	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-	parent.layer.close(index);
-}
 
 /* $('#multiPass_roundTrip').bootstrapSwitch();//统一联系人
 $('#multiPass_roundTrip').on('switchChange.bootstrapSwitch', function (event,state) { 

@@ -232,8 +232,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("receiveAddresss", receiveAddresss);
 
 		//订单收件信息
-		TOrderRecipientEntity orderReceive = dbDao.fetch(TOrderRecipientEntity.class,
-				Cnd.where("orderId", "=", orderid));
+		String sqlRec = sqlManager.get("firstTrialJp_receive_address_by_orderid");
+		Sql sql = Sqls.create(sqlRec);
+		sql.setParam("orderid", orderid);
+		Record orderReceive = dbDao.fetch(sql);
 		result.put("orderReceive", orderReceive);
 
 		//快递方式

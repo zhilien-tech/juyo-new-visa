@@ -447,7 +447,7 @@
 										<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
-									</select> <i class="bulb"></i>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-3">
@@ -457,15 +457,14 @@
 										<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
-									</select> <i class="bulb"></i>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>回邮地址：</label> <input id="expressAddress"
 										name="expressAddress" type="text"
-										class="form-control input-sm" placeholder=" " /> <i
-										class="bulb"></i>
+										class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -477,29 +476,28 @@
 								<div class="form-group">
 									<label><span>*</span>联系人：</label> <input id="linkman"
 										name="linkman" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>电话：</label> <input id="telephone"
 										name="telephone" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>发票项目内容：</label> <input id="invoiceContent"
 										name="invoiceContent" type="text"
-										class="form-control input-sm" placeholder=" " /> <i
-										class="bulb"></i>
+										class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>发票抬头：</label> <input id="invoiceHead"
 										name="invoiceHead" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -511,21 +509,20 @@
 								<div class="form-group">
 									<label><span>*</span>团队名称：</label> <input id="" name=""
 										type="text" class="form-control input-sm" placeholder=" " />
-									<i class="bulb"></i>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>快递号：</label> <input id="expressNum"
 										name="expressNum" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>备注：</label> <input id="remark"
 										name="remark" type="text" class="form-control input-sm"
-										placeholder=" " /> <i class="bulb"></i>
+										placeholder=" " />
 								</div>
 							</div>
 						</div>
