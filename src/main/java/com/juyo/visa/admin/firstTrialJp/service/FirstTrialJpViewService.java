@@ -194,9 +194,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					record.put("type", visadatatype.value());
 				}
 			}
-			String sex = record.get("sex");
-			record.set("sex", "男");
-			record.set("sex", "女");
+			String sex = (String) record.get("sex");
+			record.set("sex", sex);
 			Integer status = (Integer) record.get("applicantstatus");
 			for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
 				if (!Util.isEmpty(status) && status.equals(statusEnum.intKey())) {
