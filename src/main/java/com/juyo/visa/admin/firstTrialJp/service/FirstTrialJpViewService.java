@@ -2,12 +2,13 @@
  * FirstTrialJpViewService.java
  * com.juyo.visa.admin.firstTrialJp.service
  * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
-*/
+ */
 
 package com.juyo.visa.admin.firstTrialJp.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,12 +24,16 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
+import org.nutz.lang.Strings;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.POST;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
-import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
+import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
 import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
@@ -36,12 +41,15 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TOrderRecipientEntity;
+import com.juyo.visa.entities.TReceiveaddressEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantUnqualifiedForm;
 import com.uxuexi.core.common.util.DateUtil;
@@ -186,12 +194,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					record.put("type", visadatatype.value());
 				}
 			}
-			Integer sex = (Integer) record.get("sex");
-			if (BoyOrGirlEnum.MAN.intKey() == sex) {
-				record.set("sex", "男");
-			} else {
-				record.set("sex", "女");
-			}
+			String sex = (String) record.get("sex");
+			record.set("sex", sex);
 			Integer status = (Integer) record.get("applicantstatus");
 			for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
 				if (!Util.isEmpty(status) && status.equals(statusEnum.intKey())) {
@@ -202,6 +206,77 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 		result.put("applyinfo", applyinfo);
 
+		return result;
+	}
+
+	//快递 发邮件
+	public Object express(int orderid, HttpSession session) {
+
+		Map<String, Object> result = Maps.newHashMap();
+
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		Integer userType = loginUser.getUserType();
+
+		//收件地址
+		List<TReceiveaddressEntity> receiveAddresss = new ArrayList<TReceiveaddressEntity>();
+		if (userType == UserLoginEnum.PERSONNEL.intKey()) {
+			//工作人员
+			receiveAddresss = dbDao.query(TReceiveaddressEntity.class, Cnd.where("userId", "=", userId), null);
+		} else {
+			//其他
+			receiveAddresss = dbDao.query(TReceiveaddressEntity.class, Cnd.where("comId", "=", comId), null);
+		}
+		result.put("receiveAddresss", receiveAddresss);
+
+		//订单收件信息
+		TOrderRecipientEntity orderReceive = dbDao.fetch(TOrderRecipientEntity.class,
+				Cnd.where("orderId", "=", orderid));
+		result.put("orderReceive", orderReceive);
+
+		//快递方式
+		result.put("expressType", EnumUtil.enum2(ExpressTypeEnum.class));
+
+		//订单主申请人
+		String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(applysql,
+				Cnd.where("taoj.orderId", "=", orderid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
+				null);
+		for (Record applicant : records) {
+			Integer status = (Integer) applicant.get("applicantStatus");
+			for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
+				if (!Util.isEmpty(status) && status.equals(statusEnum.intKey())) {
+					applicant.put("applicantStatus", statusEnum.value());
+				}
+			}
+		}
+		result.put("applicant", records);
+		//订单id
+		result.put("orderid", orderid);
+
+		return result;
+	}
+
+	//获取订单主申请人
+	public Object getmainApplicantByOrderid(int orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(applysql,
+				Cnd.where("taoj.orderId", "=", orderid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
+				null);
+		for (Record applicant : records) {
+			Integer status = (Integer) applicant.get("applicantStatus");
+			for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
+				if (!Util.isEmpty(status) && status.equals(statusEnum.intKey())) {
+					applicant.put("applicantStatus", statusEnum.value());
+				}
+			}
+		}
+		result.put("applicant", records);
 		return result;
 	}
 
@@ -298,4 +373,111 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		return Json.toJson("success");
 	}
+
+	//根据电话，获取收件地址信息
+	public Object getRAddressSelect(String searchStr, String type, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		Integer userType = loginUser.getUserType();
+		Cnd cnd = Cnd.NEW();
+		if (Util.eq("mobileType", type)) {
+			cnd.and("mobile", "like", Strings.trim(searchStr) + "%");
+		} else if (Util.eq("usernameType", type)) {
+			cnd.and("receiver", "like", Strings.trim(searchStr) + "%");
+		}
+		cnd.limit(0, 5);
+		if (userType == UserLoginEnum.PERSONNEL.intKey()) {
+			//工作人员
+			cnd.and("userId", "=", userId);
+		} else {
+			//其他
+			cnd.and("comId", "=", comId);
+		}
+
+		List<TReceiveaddressEntity> query = dbDao.query(TReceiveaddressEntity.class, cnd, null);
+		return query;
+	}
+
+	//根据id获取收件信息
+	public Object getRAddressById(String addressId) {
+		return dbDao.fetch(TReceiveaddressEntity.class, Cnd.where("id", "=", addressId));
+	}
+
+	/**
+	 * 保存快递信息，并发送邮件
+	 */
+	@At
+	@POST
+	public Object saveExpressInfo(Integer orderid, Integer expresstype, Integer receiveAddressId, HttpSession session) {
+		//获取当前用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		TOrderRecipientEntity orderReceive = dbDao.fetch(TOrderRecipientEntity.class,
+				Cnd.where("orderId", "=", orderid));
+		if (!Util.isEmpty(orderReceive)) {
+			//更新
+			orderReceive.setOrderId(orderid);
+			orderReceive.setExpressType(expresstype);
+			orderReceive.setReceiveAddressId(receiveAddressId);
+			orderReceive.setOpId(userId);
+			orderReceive.setUpdateTime(DateUtil.nowDate());
+			nutDao.update(orderReceive);
+		} else {
+			//添加
+			TOrderRecipientEntity orderReceiveAdd = new TOrderRecipientEntity();
+			orderReceiveAdd.setOrderId(orderid);
+			orderReceiveAdd.setExpressType(expresstype);
+			orderReceiveAdd.setReceiveAddressId(receiveAddressId);
+			orderReceiveAdd.setOpId(userId);
+			orderReceiveAdd.setUpdateTime(DateUtil.nowDate());
+			orderReceiveAdd.setCreateTime(DateUtil.nowDate());
+			dbDao.insert(orderReceiveAdd);
+		}
+
+		//改变订单状态 由初审到前台、签证 TODO
+
+		//发送短信、邮件 TODO
+
+		return null;
+	}
+
+	/**
+	 * 保存初审编辑页数据
+	 * <p>
+	 * @param editDataForm
+	 * @param session
+	 * @return 
+	 */
+	public Object saveJpTrialDetailInfo(FirstTrialJpEditDataForm editDataForm, HttpSession session) {
+		//获取登录用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		//订单信息
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, editDataForm.getId().longValue());
+		order.setNumber(editDataForm.getNumber());
+		order.setCityId(editDataForm.getCityid());
+		order.setUrgentType(editDataForm.getUrgenttype());
+		order.setUrgentDay(editDataForm.getUrgentday());
+		order.setTravel(editDataForm.getTravel());
+		order.setPayType(editDataForm.getPaytype());
+		order.setMoney(editDataForm.getMoney());
+		order.setGoTripDate(editDataForm.getGotripdate());
+		order.setStayDay(editDataForm.getStayday());
+		order.setBackTripDate(editDataForm.getBacktripdate());
+		order.setSendVisaDate(editDataForm.getSendvisadate());
+		order.setOutVisaDate(editDataForm.getOutvisadate());
+		order.setUpdateTime(new Date());
+
+		dbDao.update(order);
+		//日本订单信息
+		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, editDataForm.getOrderid().longValue());
+		jporder.setVisaType(editDataForm.getVisatype());
+		jporder.setVisaCounty(editDataForm.getVisacounty());
+		jporder.setIsVisit(editDataForm.getIsvisit());
+		jporder.setThreeCounty(editDataForm.getThreecounty());
+		dbDao.update(jporder);
+		return null;
+	}
+
 }

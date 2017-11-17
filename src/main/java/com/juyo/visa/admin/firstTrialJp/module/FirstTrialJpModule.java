@@ -16,6 +16,7 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
 import com.juyo.visa.forms.TApplicantUnqualifiedForm;
@@ -80,6 +81,24 @@ public class FirstTrialJpModule {
 	}
 
 	/**
+	 * 快递 发信息
+	 */
+	@At
+	@Ok("jsp")
+	public Object express(@Param("id") int orderid, HttpSession session) {
+		return firstTrialJpViewService.express(orderid, session);
+	}
+
+	/**
+	 * 获取订单主申请人
+	 */
+	@At
+	@POST
+	public Object getmainApplicantByOrderid(@Param("id") int orderid) {
+		return firstTrialJpViewService.getmainApplicantByOrderid(orderid);
+	}
+
+	/**
 	 * 获取申请人信息
 	 */
 	@At
@@ -114,6 +133,44 @@ public class FirstTrialJpModule {
 	@POST
 	public Object saveUnqualified(@Param("..") TApplicantUnqualifiedForm form) {
 		return firstTrialJpViewService.saveUnqualified(form);
+	}
+
+	/**
+	 * 根据电话，获取收件地址信息
+	 */
+	@At
+	@POST
+	public Object getRAddressSelect(@Param("searchStr") String searchStr, @Param("type") String type,
+			HttpSession session) {
+		return firstTrialJpViewService.getRAddressSelect(searchStr, type, session);
+	}
+
+	/**
+	 * 根据id，获取收件地址信息
+	 */
+	@At
+	@POST
+	public Object getRAddressById(@Param("addressId") String addressId) {
+		return firstTrialJpViewService.getRAddressById(addressId);
+	}
+
+	/**
+	 * 保存快递信息，并发送邮件
+	 */
+	@At
+	@POST
+	public Object saveExpressInfo(@Param("orderid") Integer orderid, @Param("expresstype") Integer expresstype,
+			@Param("receiveAddressId") Integer receiveAddressId, HttpSession session) {
+		return firstTrialJpViewService.saveExpressInfo(orderid, expresstype, receiveAddressId, session);
+	}
+
+	/**
+	 * 保存初审详情数据
+	 */
+	@At
+	@POST
+	public Object saveJpTrialDetailInfo(@Param("..") FirstTrialJpEditDataForm editDataForm, HttpSession session) {
+		return firstTrialJpViewService.saveJpTrialDetailInfo(editDataForm, session);
 	}
 
 }
