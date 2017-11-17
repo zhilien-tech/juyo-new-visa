@@ -15,7 +15,6 @@
 </head>
 <body>
 	<div class="modal-content">
-		<form id="companyAddForm">
 			<div class="modal-header">
 				<span class="heading">分享</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="关闭" /> 
@@ -30,27 +29,16 @@
 								<th><span>操作人</span></th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<td>2017-03-22 14:30</td>
-								<td>下单</td>
-								<td>战士</td>
-							</tr>
-							<tr>
-								<td>2017-03-22 14:30</td>
-								<td>分享</td>
-								<td>六六六</td>
-							</tr>
-							<tr>
-								<td>2017-03-22 14:30</td>
-								<td>进入初审</td>
-								<td>操作人</td>
+						<tbody >
+							<tr v-for="orderin in orderinfo">
+								<td>{{orderin.createTime }}</td>
+								<td>{{orderin.status}}</td>
+								<td>{{orderin.userId }}</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
-		</form>
 	</div>
 
 	<script type="text/javascript">
@@ -65,23 +53,22 @@
 	
 	<script type="text/javascript">
 		var base = "${base}";
-		$(function() {
 
 		//vue表格数据对象
 	    var _self;
 		new Vue({
-			el: '#orderremark',
+			el: '#datatableId',
 			data: {orderinfo:""},
 			created:function(){
 	            _self=this;
 	            var orderid = '${obj.orderid}';
 	            $.ajax({ 
-	            	url: '${base}/admin/visaJapan/visaRevenue.html',
+	            	url: '${base}/admin/orderJp/getLogs.html',
 	            	data:{orderid:orderid},
 	            	dataType:"json",
 	            	type:'post',
 	            	success: function(data){
-	            		_self.orderinfo = data.orderinfo;
+	            		_self.orderinfo = data;
 	            		console.log(JSON.stringify(_self.orderinfo));
 	              	}
 	            });

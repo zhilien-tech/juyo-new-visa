@@ -57,15 +57,17 @@ import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.MainApplicantRelationEnum;
+import com.juyo.visa.common.enums.MainApplicantRemarkEnum;
 import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
 import com.juyo.visa.common.enums.MainBackMailTypeEnum;
+import com.juyo.visa.common.enums.MainOrViceEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
 import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
-import com.juyo.visa.common.enums.YesOrNoEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
@@ -704,18 +706,26 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					Cnd.where("applicantId", "=", new Long((Integer) applicantInfoMainId.get(i).get("id")).intValue()));
 			if (applicantInfoMainId.get(i).get("id") == applicantInfoMainId.get(i).get("mainId")) {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
-				dbDao.update(applicantJp);
+			} else {
+				applicantJp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
 			}
+			dbDao.update(applicantJp);
 		}
 		return applicantInfoMainId;
 	}
 
 	public Object getVisaInfo(Integer id) {
+		Map<String, Object> result = MapUtil.map();
+		result.put("mainOrVice", EnumUtil.enum2(MainOrViceEnum.class));
+		result.put("isOrNo", EnumUtil.enum2(IsYesOrNoEnum.class));
+		result.put("applicantRelation", EnumUtil.enum2(MainApplicantRelationEnum.class));
+		result.put("applicantRemark", EnumUtil.enum2(MainApplicantRemarkEnum.class));
 		String visaInfoSqlstr = sqlManager.get("visaInfo_byApplicantId");
 		Sql visaInfoSql = Sqls.create(visaInfoSqlstr);
 		visaInfoSql.setParam("id", id);
 		Record visaInfo = dbDao.fetch(visaInfoSql);
-		return visaInfo;
+		result.put("visaInfo", visaInfo);
+		return result;
 	}
 
 	public Object getEditPassport(Integer id) {
@@ -833,6 +843,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
+	public Object getLogs(Integer orderid) {
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(orderid).intValue());
+		return orderEntity;
+	}
+
 	public Object getApplicants(String applicantIds, HttpSession session) {
 		String applicants = applicantIds.substring(0, applicantIds.length() - 1);
 		String applicantSqlstr = sqlManager.get("orderJp_applicantTable");
@@ -860,9 +875,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			TApplicantOrderJpEntity applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", new Long((Integer) applicantInfoMainId.get(i).get("id")).intValue()));
 			if (applicantInfoMainId.get(i).get("id") == applicantInfoMainId.get(i).get("mainId")) {
-				applicantJp.setIsMainApplicant(YesOrNoEnum.YES.intKey());
-				dbDao.update(applicantJp);
+				applicantJp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+			} else {
+				applicantJp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
 			}
+			dbDao.update(applicantJp);
 		}
 		return applicantInfoMainId;
 	}
