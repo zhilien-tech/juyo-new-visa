@@ -399,24 +399,26 @@
 									<th><span>操作<span></th>
 								</tr>
 							</thead>
-							<tbody v-for="applicant in applicantInfo"  >
-								<tr>
-									<td><div v-if="applicant.id==applicant.mainid">
-										<font color="blue">主   </font> {{applicant.applyname}}
-									</div>
-									<div v-else>
-									{{applicant.applyname}}</div></td>
+							<tbody>
+								<tr v-for="applicant in applicantInfo" >
+									<td>
+										<div v-if="applicant.id==applicant.mainid">
+											<font color="blue">主</font> {{applicant.applyname}}
+										</div>
+										<div v-else>{{applicant.applyname}}</div>
+									</td>
 									
 									<td>{{applicant.telephone}}</td>
 									<td>{{applicant.email}}</td>
 									<td>{{applicant.passport}}</td>
-									
 									<td>{{applicant.sex}}</td>
-									<td><a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;<a
-										v-on:click="passport(applicant.id)">护照</a>&nbsp;&nbsp;<a
-										v-on:click="visa(applicant.id)">签证</a> <br>
-									<a v-on:click="">回邮</a>&nbsp;&nbsp;<a
-										v-on:click="deleteApplicant(applicant.id)">删除</a></br></td>
+									<td>
+										<a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;
+										<a v-on:click="passport(applicant.id)">护照</a>&nbsp;&nbsp;
+										<a v-on:click="visa(applicant.id)">签证</a> <br>
+										<a v-on:click="">回邮</a>&nbsp;&nbsp;
+										<a v-on:click="deleteApplicant(applicant.id)">删除</a></br>
+									</td>
 								</tr>
 							</tbody>
 						</table>
