@@ -32,10 +32,12 @@
 						<div class="info-imgUpload front"><!-- 身份证 正面 -->
 							<div class="col-xs-6">
 							<div class="form-group">
-								<div class="sqImgPreview">
+								<div class="cardFront-div">
+									<span>点击上传身份证</span>
 									<input id="cardFront" name="cardFront" type="hidden"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" alt="点击上传身份证" src="" >
+									<img id="sqImg" alt="" src="" >
+									
 								</div>
 							</div>
 						</div>
@@ -44,10 +46,11 @@
 						<div class="info-imgUpload back"><!-- 身份证 反面 -->
 							<div class="col-xs-6">
 							<div class="form-group">
-								<div class="sqImgPreview">
+								<div class="cardFront-div">
+									<span>点击上传身份证</span>
 									<input id="cardBack" name="cardBack" type="hidden"/>
 									<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImgBack" alt="点击上传身份证" src="" >
+									<img id="sqImgBack" alt="" src="" >
 								</div>
 							</div>
 						</div>

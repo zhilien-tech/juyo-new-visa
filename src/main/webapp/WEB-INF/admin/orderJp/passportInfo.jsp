@@ -12,6 +12,9 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
+	<style>
+		.info-imgUpload {width: 100%;}
+	</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -31,10 +34,11 @@
 						<div class="info-imgUpload front"><!-- 护照 -->
 							<div class="col-xs-6">
 							<div class="form-group">
-								<div class="sqImgPreview">
+								<div class="cardFront-div">
+									<span>点击上传护照</span>
 									<input id="passportUrl" name="passportUrl" type="hidden"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" alt="点击上传护照" src="${obj.passport.passportUrl }" >
+									<img id="sqImg" alt="" src="${obj.passport.passportUrl }" >
 								</div>
 							</div>
 						</div>
