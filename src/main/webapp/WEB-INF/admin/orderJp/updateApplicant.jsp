@@ -13,6 +13,8 @@
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
+<style type="text/css">
+</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -38,9 +40,10 @@
 							<div class="col-xs-6">
 							<div class="form-group">
 								<div class="cardFront-div">
+									<span>点击上传身份证</span>
 									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" alt="点击上传身份证" src="${obj.applicant.cardFront }" >
+									<img id="sqImg" alt="" src="${obj.applicant.cardFront }" >
 								</div>
 							</div>
 						</div>
@@ -51,15 +54,15 @@
 						<div class="info-imgUpload back">
 							<!-- 身份证 反面 -->
 							<div class="col-xs-6">
-							<div class="form-group">
-								<div class="sqImgPreview">
-									<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
-									<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImgBack" alt="点击上传身份证" src="${obj.applicant.cardBack }" >
+								<div class="form-group">
+									<div class="cardFront-div">
+										<span>点击上传身份证</span>
+										<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
+										<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+										<img id="sqImgBack" alt="点击上传身份证" src="${obj.applicant.cardBack }" >
+									</div>
 								</div>
 							</div>
-						</div>
-
 						</div>
 						<!-- end 身份证 反面 -->
 

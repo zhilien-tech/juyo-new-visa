@@ -92,4 +92,16 @@ public class TestModule {
 	public Object passportInfo() {
 		return null;
 	}
+
+	@At("admin/myVisa/inProcessVisa")
+	@Ok("jsp")
+	public Object inProcessVisa() {
+		return null;
+	}
+
+	@At("admin/JapanDijie/japanList")
+	@Ok("jsp")
+	public Object japanList() {
+		return null;
+	}
 }

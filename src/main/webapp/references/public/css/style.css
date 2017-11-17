@@ -56,7 +56,7 @@ body{min-width:1160px;overflow-x: auto;}
 .ZBcancel{background-image:url(../dist/newvisacss/img/ZBcancel.png);}
 .download{background-image:url(../dist/newvisacss/img/download.png);}
 .handoverTable{background-image:url(../dist/newvisacss/img/handoverTable.png);}
-.visaInput,.afterSales{width: 18px !important;}
+.visaInput,.guiGuoUpload,.afterSales{width: 18px !important;}
 .visaInput{background-image:url(../dist/newvisacss/img/visaInput.png);}
 .afterSales{background-image:url(../dist/newvisacss/img/afterSales.png);}
 .express{background-image:url(../dist/newvisacss/img/express.png);}
@@ -69,3 +69,4 @@ body{min-width:1160px;overflow-x: auto;}
 .visaInfo{background-image:url(../dist/newvisacss/img/visaInfo.png);}
 .qualified{background-image:url(../dist/newvisacss/img/qualified.png);width:22px !important;}
 .unqualified{background-image:url(../dist/newvisacss/img/unqualified.png);}
+.guiGuoUpload{background-image:url(../dist/newvisacss/img/visaInput.png);}

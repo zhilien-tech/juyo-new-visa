@@ -114,10 +114,10 @@
 		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
 	});
 	
-	/*$(document).on("mouseover",".",function(){
-		var t = "";
+	$(document).on("mouseover",".guiGuoUpload",function(){
+		var t = "归国上传";
 		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
-	});*/
+	});
 	
 	/*--------------------end card---------------------*/
 	
