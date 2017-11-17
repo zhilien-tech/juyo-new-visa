@@ -30,10 +30,10 @@
 							</tr>
 						</thead>
 						<tbody >
-							<tr v-for="orderin in orderinfo">
-								<td>{{orderin.comId }}</td>
-								<td>{{orderin.status}}</td>
-								<td>{{orderin.userId }}</td>
+							<tr >
+								<td ><input style="border: 0px;outline:none;" v-model="orderinfo.createTime"/></td>
+								<td ><input style="border: 0px;outline:none;" value="下单"/></td>
+								<td ><input style="border: 0px;outline:none;" v-model="userName"/></td>
 							</tr>
 						</tbody>
 					</table>
@@ -58,7 +58,10 @@
 	    var _self;
 		new Vue({
 			el: '#datatableId',
-			data: {orderinfo:""},
+			data: {
+				orderinfo:"",
+				userName:""
+				},
 			created:function(){
 	            _self=this;
 	            var orderid = '${obj.orderid}';
@@ -68,7 +71,8 @@
 	            	dataType:"json",
 	            	type:'post',
 	            	success: function(data){
-	            		_self.orderinfo = data;
+	            		_self.orderinfo = data.order;
+	            		_self.userName = data.userName;
 	            		console.log(JSON.stringify(_self.orderinfo));
 	              	}
 	            });

@@ -267,9 +267,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(wealthJp);
 			//护照信息
 			TApplicantPassportEntity passport = new TApplicantPassportEntity();
-			if (!Util.isEmpty(applicantForm.getSex())) {
+			/*if (!Util.isEmpty(applicantForm.getSex())) {
 				passport.setSex(applicantForm.getSex());
-			}
+			}*/
 			if (!Util.isEmpty(applicantForm.getFirstName())) {
 				passport.setFirstName(applicantForm.getFirstName());
 			}
@@ -299,9 +299,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(wealthJp);
 			//护照信息
 			TApplicantPassportEntity passport = new TApplicantPassportEntity();
-			if (!Util.isEmpty(applicantForm.getSex())) {
+			/*if (!Util.isEmpty(applicantForm.getSex())) {
 				passport.setSex(applicantForm.getSex());
-			}
+			}*/
 			if (!Util.isEmpty(applicantForm.getFirstName())) {
 				passport.setFirstName(applicantForm.getFirstName());
 			}
@@ -835,8 +835,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getLogs(Integer orderid) {
+		Map<String, Object> result = MapUtil.map();
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(orderid).intValue());
-		return orderEntity;
+		TUserEntity userEntity = dbDao.fetch(TUserEntity.class, new Long(orderEntity.getUserId()).intValue());
+		String name = userEntity.getName();
+		result.put("order", orderEntity);
+		result.put("userName", name);
+		return result;
 	}
 
 	public Object getApplicants(String applicantIds, HttpSession session) {
