@@ -826,8 +826,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TApplicantOrderJpEntity applicantOrderJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", id));
 		if (!Util.isEmpty(applicantOrderJp)) {
-			dbDao.delete(TApplicantWorkJpEntity.class, applicantOrderJp.getId());
-			dbDao.delete(TApplicantWealthJpEntity.class, applicantOrderJp.getId());
+			TApplicantWorkJpEntity applicantWorkJpEntity = dbDao.fetch(TApplicantWorkJpEntity.class,
+					Cnd.where("applicantId", "=", applicantOrderJp.getId()));
+			TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(TApplicantWealthJpEntity.class,
+					Cnd.where("applicantId", "=", applicantOrderJp.getId()));
+			dbDao.delete(TApplicantWorkJpEntity.class, applicantWorkJpEntity.getId());
+			dbDao.delete(TApplicantWealthJpEntity.class, applicantWealthJpEntity.getId());
 			dbDao.delete(TApplicantOrderJpEntity.class, applicantOrderJp.getId());
 		}
 		dbDao.delete(TApplicantEntity.class, id);
@@ -836,9 +840,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object getLogs(Integer orderid) {
 		Map<String, Object> result = MapUtil.map();
+		String name = "";
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(orderid).intValue());
 		TUserEntity userEntity = dbDao.fetch(TUserEntity.class, new Long(orderEntity.getUserId()).intValue());
-		String name = userEntity.getName();
+		if (!Util.isEmpty(userEntity)) {
+			name = userEntity.getName();
+		}
 		result.put("order", orderEntity);
 		result.put("userName", name);
 		return result;
