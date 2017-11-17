@@ -110,13 +110,6 @@ public class OrderJpModule {
 		return result;
 	}
 
-	@At
-	@GET
-	@Ok("jsp")
-	public Object addApplicant() {
-		return null;
-	}
-
 	/**
 	 * 保存申请人
 	 */
@@ -220,6 +213,16 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 签证信息修改
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object visaInfo(@Param("id") Integer id) {
+		return saleViewService.getVisaInfo(id);
+	}
+
+	/**
 	 * 客户信息获取申请人下拉
 	 */
 	@At
@@ -303,5 +306,36 @@ public class OrderJpModule {
 	public Object passportRecognition(@Param("image") File file, HttpServletRequest request,
 			HttpServletResponse response) {
 		return saleViewService.passportRecognitionBack(file, request, response);
+	}
+
+	/**
+	 * 分享
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object share() {
+		return null;
+	}
+
+	/**
+	 * 跳转到日志页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object log(@Param("id") Integer id) {
+		Map<String, Object> result = MapUtil.map();
+		result.put("orderid", id);
+		return result;
+	}
+
+	/**
+	 * 获取日志信息
+	 */
+	@At
+	@POST
+	public Object getLogs(@Param("orderid") Integer orderid) {
+		return saleViewService.getLogs(orderid);
 	}
 }

@@ -37,8 +37,8 @@
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
 				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
 				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" />
-				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" />
-				<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" />
+				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" @click="share()" />
+				<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" @click="log(orderInfo.id)" />
 			</div>
 			<section class="content">
 				<!-- 客户信息 -->
@@ -373,7 +373,7 @@
 				<div class="row body-from-input" id="applicantInfo"><!-- 添加申请人 -->
 					<div class="col-sm-12">
 						<div class="form-group">
-							<button type="button" class="btn btn-primary btn-sm addApplicantBtn" v-on:click="addApplicantBig(${obj.orderId })">添加申请人</button>
+							<button type="button" class="btn btn-primary btn-sm addApplicantBtn" onclick="addApplicant(${obj.orderId})">添加申请人</button>
 						</div>
 					</div>
 				</div><!-- end 添加申请人 -->
@@ -384,7 +384,7 @@
 					<input type="hidden" id="appId" value="" name="appId"/>
 					<p class="info-head">
 						<input type="button" name="" value="添加"
-							class="btn btn-primary btn-sm pull-right" v-on:click="addApplicant(${obj.orderId })" />
+							class="btn btn-primary btn-sm pull-right" onclick="addApplicant(${obj.orderId})" />
 					</p>
 					<div class="info-table" style="padding-bottom: 1px;">
 						<table id="principalApplicantTable" class="table table-hover"
@@ -399,19 +399,26 @@
 									<th><span>操作<span></th>
 								</tr>
 							</thead>
-							<tbody v-for="applicant in applicantInfo"  >
-								<tr>
-									<td>{{applicant.applyname}}</td>
+							<tbody>
+								<tr v-for="applicant in applicantInfo" >
+									<td>
+										<div v-if="applicant.id==applicant.mainid">
+											<font color="blue">主</font> {{applicant.applyname}}
+										</div>
+										<div v-else>{{applicant.applyname}}</div>
+									</td>
+									
 									<td>{{applicant.telephone}}</td>
 									<td>{{applicant.email}}</td>
 									<td>{{applicant.passport}}</td>
-									
 									<td>{{applicant.sex}}</td>
-									<td><a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;<a
-										v-on:click="passport(applicant.id)">护照</a>&nbsp;&nbsp;<a
-										v-on:click="visa(applicant.id)">签证</a> <br>
-									<a v-on:click="">回邮</a>&nbsp;&nbsp;<a
-										v-on:click="deleteApplicant(applicant.id)">删除</a></br></td>
+									<td>
+										<a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;
+										<a v-on:click="passport(applicant.id)">护照</a>&nbsp;&nbsp;
+										<a v-on:click="visa(applicant.id)">签证</a> <br>
+										<a v-on:click="">回邮</a>&nbsp;&nbsp;
+										<a v-on:click="deleteApplicant(applicant.id)">删除</a></br>
+									</td>
 								</tr>
 							</tbody>
 						</table>
@@ -718,7 +725,6 @@
 						success : function(data) {
 							layer.closeAll('loading');
 				    		window.location.reload();
-				    		
 							//window.location.href = '${base}/admin/orderJp/list';
 						},
 						error : function() {
@@ -729,75 +735,92 @@
 					//console.log(message);
 					//alert(JSON.stringify(event.target)); 
 				},
-			addApplicant : function(id){
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '551px'],
-					content:'/admin/orderJp/addApplicant.html?id='+id
-				});
-			},
-			addApplicantBig : function(id){
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '551px'],
-					content:'/admin/orderJp/addApplicant.html?id='+id
-				});
-			},
-			updateApplicant : function(id){
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '551px'],
-					content:'/admin/orderJp/updateApplicant.html?id='+id
-				});
-			},
-			passport : function(id){
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '551px'],
-					content:'/admin/orderJp/passportInfo.html?id='+id
-				});
-			},
-			deleteApplicant : function(id){
-				$.ajax({ 
-			    	url: '${base}/admin/orderJp/deleteApplicant',
-			    	dataType:"json",
-			    	data:{applicantId:id},
-			    	type:'post',
-			    	success: function(data){
-			    		successCallBack(2);
-			      	}
-			    }); 
-			}
+				
+				//修改申请人信息
+				updateApplicant : function(id){
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/orderJp/updateApplicant.html?id='+id
+					});
+				},
+				//修改护照信息
+				passport : function(id){
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/orderJp/passportInfo.html?id='+id
+					});
+				},
+				//删除申请人
+				deleteApplicant : function(id){
+					$.ajax({ 
+				    	url: '${base}/admin/orderJp/deleteApplicant',
+				    	dataType:"json",
+				    	data:{applicantId:id},
+				    	type:'post',
+				    	success: function(data){
+				    		successCallBack(2);
+				      	}
+				    }); 
+				},
+				share:function(){//分享
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/orderJp/share.html'
+					});
+				},
+				log:function(id){//日志
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['700px', '551px'],
+						content:'/admin/orderJp/log.html?id='+id
+					});
+				},
+				//签证信息
+				visa : function(id){
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/orderJp/visaInfo.html?id='+id
+					});
+				}
 			}
 		});
+		
 		//添加申请人
 		var id = ${obj.orderId};
-		
-		
 		//刷新申请人表格
 		function successCallBack(status){
 			if(status == 1){
@@ -826,7 +849,20 @@
 			
 		}
 		
-		 
+		//添加申请人
+		function addApplicant(id){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'${base}/admin/orderJp/addApplicant.html?id='+id
+			});
+		}
 	</script>
 </body>
 </html>

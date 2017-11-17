@@ -12,6 +12,9 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
+	<style>
+		.info-imgUpload {width: 100%;}
+	</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -31,10 +34,12 @@
 						<div class="info-imgUpload front"><!-- 护照 -->
 							<div class="col-xs-6">
 							<div class="form-group">
-								<div class="sqImgPreview">
+								<div class="cardFront-div">
+									<span>点击上传护照</span>
 									<input id="passportUrl" name="passportUrl" type="hidden"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" alt="点击上传身份证" src="${obj.passport.passportUrl }" >
+									<img id="sqImg" alt="" src="${obj.passport.passportUrl }" >
+									<i class="delete"></i>
 								</div>
 							</div>
 						</div>
@@ -246,6 +251,14 @@
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 		}
+		$(function(){
+			$("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
+				$(this).siblings("i").css("display","block");
+			});
+			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
+				$(this).siblings("i").css("display","block");
+			});
+		});
 	</script>
 
 

@@ -32,10 +32,12 @@
 						<div class="info-imgUpload front"><!-- 身份证 正面 -->
 							<div class="col-xs-6">
 							<div class="form-group">
-								<div class="sqImgPreview">
+								<div class="cardFront-div">
+									<span>点击上传身份证</span>
 									<input id="cardFront" name="cardFront" type="hidden"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" alt="点击上传身份证" src="" >
+									<img id="sqImg" alt="" src="" >
+									<i class="delete" style="display:none;" onclick="deleteApplicantImg"></i>
 								</div>
 							</div>
 						</div>
@@ -44,10 +46,12 @@
 						<div class="info-imgUpload back"><!-- 身份证 反面 -->
 							<div class="col-xs-6">
 							<div class="form-group">
-								<div class="sqImgPreview">
+								<div class="cardFront-div">
+									<span>点击上传身份证</span>
 									<input id="cardBack" name="cardBack" type="hidden"/>
 									<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImgBack" alt="点击上传身份证" src="" >
+									<img id="sqImgBack" alt="" src="" >
+									<i class="delete" style="display:none;"></i>
 								</div>
 							</div>
 						</div>
@@ -57,7 +61,7 @@
 						<div class="row"><!-- 签发机关 -->
 							<div class="col-sm-11 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>签发机关：</label>
+									<label>签发机关：</label>
 									<input id="issueOrganization" name="issueOrganization" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -95,7 +99,7 @@
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>邮箱：</label>
+									<label>邮箱：</label>
 									<input id="email" name="email" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -104,14 +108,14 @@
 						<div class="row"><!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地址省份：</label>
+									<label>现居住地址省份：</label>
 									<input id="province" name="province" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地址城市：</label>
+									<label>现居住地址城市：</label>
 									<input id="city" name="city" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -120,7 +124,7 @@
 						<div class="row"><!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label>
+									<label>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label>
 									<input id="detailedAddress" name="detailedAddress" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -129,7 +133,7 @@
 						<div class="row"><!-- 公民身份证 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>公民身份证：</label>
+									<label>公民身份证：</label>
 									<input id="cardId" name="cardId" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -139,22 +143,24 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别：</label>
-									<select class="form-control input-sm selectHeight" id="sex" name="sex">
-										<option value="1">男</option>
-										<option value="2">女</option>
-									</select>
+									<input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									<%-- <select class="form-control input-sm selectHeight" id="sex" name="sex">
+										<c:forEach var="map" items="${obj.MOrFEnum}">
+												<option value="${map.key}" >${map.value}</option>
+											</c:forEach>
+									</select> --%>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>民族：</label>
+									<label>民族：</label>
 									<input id="nation" name="nation" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>出生日期：</label>
+									<label>出生日期：</label>
 									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -163,7 +169,7 @@
 						<div class="row"><!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>住址：</label>
+									<label>住址：</label>
 									<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -172,7 +178,7 @@
 						<div class="row"><!-- 有效期限 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>有效期限：</label>
+									<label>有效期限：</label>
 									<input id="validStartDate" name="validStartDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -216,7 +222,6 @@
 				data : applicantInfo,
 				url : '${base}/admin/orderJp/saveAddApplicant',
 				success : function(data) {
-					alert(JSON.stringify(data));
 					var applicantIdParent = window.parent.document.getElementById("appId").value;
 					if(applicantIdParent != null || applicantIdParent != undefined || applicantIdParent != ""){
 						applicantIdParent += data.id +",";
@@ -234,7 +239,6 @@
 		
 		
 		//正面上传,扫描
-		
 		$('#uploadFile').change(function() {
 			var layerIndex = layer.load(1, {
 				shade : "#000"
@@ -269,6 +273,7 @@
 							$('#province').val(obj.province);
 							$('#city').val(obj.city);
 							$('#birthday').val(obj.birth);
+							$('#sex').val(obj.sex);
 						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
@@ -352,6 +357,16 @@
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 		}
+		
+		$(function(){
+			$("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
+				$(this).siblings("i").css("display","block");
+			});
+			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
+				$(this).siblings("i").css("display","block");
+			});
+		});
+		
 	</script>
 
 

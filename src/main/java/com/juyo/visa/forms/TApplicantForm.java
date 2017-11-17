@@ -49,7 +49,7 @@ public class TApplicantForm extends DataTablesParamForm {
 	private String email;
 
 	/**性别*/
-	private Integer sex;
+	private String sex;
 
 	/**民族*/
 	private String nation;

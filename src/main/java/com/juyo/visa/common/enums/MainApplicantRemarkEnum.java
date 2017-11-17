@@ -10,12 +10,12 @@ import com.uxuexi.core.common.enums.IEnum;
  * @author   彭辉
  * @Date	 2017年10月20日
  */
-public enum YesOrNoEnum implements IEnum {
-	YES(0, "是"), NO(1, "否");
+public enum MainApplicantRemarkEnum implements IEnum {
+	ZHUKA(1, "主卡"), FRIEND(2, "朋友"), TONGSHI(3, "同事"), TONGXUE(4, "同学");
 	private int key;
 	private String value;
 
-	private YesOrNoEnum(final int key, final String value) {
+	private MainApplicantRemarkEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}

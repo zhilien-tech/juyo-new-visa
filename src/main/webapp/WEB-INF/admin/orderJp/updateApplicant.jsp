@@ -6,25 +6,21 @@
 <html lang="en-US" id="addHtml">
 <head>
 <meta charset="UTF-8">
-<title>添加申请人</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
+<title>基本信息</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
+<style type="text/css">
+</style>
 </head>
 <body>
 	<div class="modal-content">
 		<form id="applicantInfo">
 			<div class="modal-header">
-				<span class="heading">添加申请人</span> <input id="backBtn" type="button"
+				<span class="heading">基本信息</span> <input id="backBtn" type="button"
 					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
 					data-dismiss="modal" value="取消" /> <input id="addBtn"
 					type="button" class="btn btn-primary pull-right btn-sm btn-right"
@@ -43,10 +39,12 @@
 							<!-- 身份证 正面 -->
 							<div class="col-xs-6">
 							<div class="form-group">
-								<div class="sqImgPreview">
+								<div class="cardFront-div">
+									<span>点击上传身份证</span>
 									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" alt="点击上传身份证" src="${obj.applicant.cardFront }" >
+									<img id="sqImg" alt="" src="${obj.applicant.cardFront }" >
+									<i class="delete"></i>
 								</div>
 							</div>
 						</div>
@@ -57,15 +55,16 @@
 						<div class="info-imgUpload back">
 							<!-- 身份证 反面 -->
 							<div class="col-xs-6">
-							<div class="form-group">
-								<div class="sqImgPreview">
-									<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
-									<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImgBack" alt="点击上传身份证" src="${obj.applicant.cardBack }" >
+								<div class="form-group">
+									<div class="cardFront-div">
+										<span>点击上传身份证</span>
+										<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
+										<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+										<img id="sqImgBack" alt="" src="${obj.applicant.cardBack }" >
+										<i class="delete"></i>
+									</div>
 								</div>
 							</div>
-						</div>
-
 						</div>
 						<!-- end 身份证 反面 -->
 
@@ -74,7 +73,7 @@
 							<div class="col-sm-11 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发机关：</label> <input id="issueOrganization" name="issueOrganization"
-										type="text" class="form-control input-sm" placeholder=" " />
+										type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -120,7 +119,7 @@
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>邮箱：</label> <input id="email" name="email"
+									<label>邮箱：</label> <input id="email" name="email"
 										type="text" class="form-control input-sm" placeholder=" "
 										value="${obj.applicant.email }" />
 									<!-- <i class="bulb"></i> -->
@@ -132,7 +131,7 @@
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地址省份：</label> <input id="province"
+									<label>现居住地址省份：</label> <input id="province"
 										name="province" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.province }" />
 									<!-- <i class="bulb"></i> -->
@@ -140,7 +139,7 @@
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地址城市：</label> <input id="city"
+									<label>现居住地址城市：</label> <input id="city"
 										name="city" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.city }" />
 									<!-- <i class="bulb"></i> -->
@@ -152,7 +151,7 @@
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label> <input
+									<label>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label> <input
 										id="detailedAddress" name="detailedAddress" type="text"
 										class="form-control input-sm" placeholder=" "
 										value="${obj.applicant.detailedAddress }" />
@@ -165,7 +164,7 @@
 							<!-- 公民身份证 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>公民身份证：</label> <input id="cardId"
+									<label>公民身份证：</label> <input id="cardId"
 										name="cardId" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.cardId }" />
 									<!-- <i class="bulb"></i> -->
@@ -177,16 +176,19 @@
 							<!-- 姓名/民族 -->
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>性别：</label> <select
+									<label><span>*</span>性别：</label> 
+									<input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.sex }"/>
+									<%-- <select
 										class="form-control input-sm selectHeight" id="sex" name="sex">
-										<option value="1">男</option>
-										<option value="2">女</option>
-									</select>
+										<c:forEach var="map" items="${obj.MOrFEnum}">
+												<option value="${map.key}" ${map.key==obj.applicant.sex?'selected':''}>${map.value}</option>
+											</c:forEach>
+									</select> --%>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>民族：</label> <input id="nation"
+									<label>民族：</label> <input id="nation"
 										name="nation" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.nation }" />
 									<!-- <i class="bulb"></i> -->
@@ -194,7 +196,7 @@
 							</div>
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>出生日期：</label> <input id="birthday"
+									<label>出生日期：</label> <input id="birthday"
 										name="birthday" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.birthday }" onClick="WdatePicker()"/>
 									<!-- <i class="bulb"></i> -->
@@ -206,7 +208,7 @@
 							<!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>住宅：</label> <input id="address"
+									<label>住宅：</label> <input id="address"
 										name="address" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.address }" />
 									<!-- <i class="bulb"></i> -->
@@ -218,7 +220,7 @@
 							<!-- 有效期限 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>有效期限：</label> <input id="validStartDate"
+									<label>有效期限：</label> <input id="validStartDate"
 										name="validStartDate" type="text"
 										class="form-control input-sm" placeholder=" "
 										onClick="WdatePicker()"
@@ -247,17 +249,13 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
-	<script
-		src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script
-		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<!-- DataTables -->
-	<script
-		src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script
-		src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- 公用js文件 -->
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
@@ -314,6 +312,7 @@
 							$('#province').val(obj.province);
 							$('#city').val(obj.city);
 							$('#birthday').val(obj.birth);
+							$('#sex').val(obj.sex);
 						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
@@ -397,6 +396,14 @@
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 									}
+		$(function(){
+			$("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
+				$(this).siblings("i").css("display","block");
+			});
+			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
+				$(this).siblings("i").css("display","block");
+			});
+		});
 	</script>
 </body>
 </html>
