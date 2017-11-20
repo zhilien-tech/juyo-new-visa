@@ -17,6 +17,7 @@
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<style type="text/css">
 			.form-control{height: 30px;}
 			.add-btn{top:-225px;right:-1%;}
@@ -351,10 +352,10 @@
 							<!-- 送签时间/出签时间 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>送签时间：</label> <input id="sendVisaDate"
-										name="sendVisaDate" type="text" class="form-control input-sm"
-										placeholder=" " onClick="WdatePicker()"
-										v-model="orderInfo.sendvisadate" />
+									<label><span>*</span>送签时间：</label> 
+									<!-- <input id="sendVisaDate" name="sendVisaDate" type="text" class="form-control input-sm"
+										placeholder=" " onClick="WdatePicker()" v-model="orderInfo.sendvisadate" /> -->
+									<input id="sendVisaDate" name="sendVisaDate" type="text" class="form-control input-sm"  />
 								</div>
 							</div>
 							<div class="col-sm-3">
@@ -541,6 +542,8 @@
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${base}/references/public/bootstrap/js/moment.js"></script>
+	<script src="${base}/references/public/bootstrap/js/daterangepicker.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<!-- select2 -->
@@ -602,6 +605,11 @@
 					$(".zhiKe").addClass("none");
 				}
 			});
+			
+			$('#sendVisaDate').daterangepicker(null, function(start, end, label) {
+                console.log(start.toISOString(), end.toISOString(), label);
+            });
+
 		});
 		
 		var url = "${base}/admin/orderJp/getOrder.html";
