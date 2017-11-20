@@ -15,12 +15,12 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.springframework.stereotype.Component;
+import org.nutz.ioc.loader.annotation.IocBean;
 
 /**
  * 简单邮件（不带附件的邮件）发送器
  */
-@Component
+@IocBean
 public class MailSender {
 	/**
 	 * 以文本格式发送邮件
