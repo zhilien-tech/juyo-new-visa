@@ -119,6 +119,15 @@
 		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
 	});
 	
+	$(document).on("mouseover",".videoShoot",function(){
+		var t = "拍视频";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});
+	
+	$(document).on("mouseover",".visaTransfer",function(){
+		var t = "签证移交";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});
 	/*--------------------end card---------------------*/
 	
 	

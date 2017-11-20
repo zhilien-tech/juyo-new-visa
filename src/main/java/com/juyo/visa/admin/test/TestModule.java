@@ -104,4 +104,10 @@ public class TestModule {
 	public Object japanList() {
 		return null;
 	}
+
+	@At("admin/receptionJP/listJapan")
+	@Ok("jsp")
+	public Object listJapan() {
+		return null;
+	}
 }
