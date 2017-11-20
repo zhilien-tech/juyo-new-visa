@@ -54,18 +54,33 @@ new Vue({
     		    content: '/admin/orderJp/updateApplicant.html?id='+applyid
     	    });
 		},
-		expressFun:function(orderid){//跳转快递弹层页面】
-    		layer.open({
-    		    type: 2,
-    		    title: false,
-    		    closeBtn:false,
-    		    fix: false,
-    		    maxmin: false,
-    		    shadeClose: false,
-    		    scrollbar: false,
-    		    area: ['900px', '550px'],
-    		    content: '/admin/firstTrialJp/express.html?id='+orderid
-    	    });
+		expressFun:function(orderid){//跳转快递弹层页面
+			$.ajax({
+				type : 'POST',
+				data : {
+					orderid:orderid
+				},
+				url : '/admin/firstTrialJp/isQualified.html',
+				success : function(data) {
+					alert(data);
+					if(data){
+						layer.open({
+			    		    type: 2,
+			    		    title: false,
+			    		    closeBtn:false,
+			    		    fix: false,
+			    		    maxmin: false,
+			    		    shadeClose: false,
+			    		    scrollbar: false,
+			    		    area: ['900px', '550px'],
+			    		    content: '/admin/firstTrialJp/express.html?id='+orderid
+			    	    });
+					}else{
+						layer.msg('申请人不合格');
+						return;
+					}
+				}
+			});
     	},
     	passportFun:function(applyid){
     		layer.open({

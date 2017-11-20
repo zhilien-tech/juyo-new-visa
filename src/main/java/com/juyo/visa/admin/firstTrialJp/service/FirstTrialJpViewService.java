@@ -182,6 +182,29 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 		result.put("orderinfo", orderinfo);
 		//申请人信息
+		List<Record> applyinfo = getApplicantByOrderid(orderid);
+		result.put("applyinfo", applyinfo);
+
+		return result;
+	}
+
+	//判断订单下申请人是否合格
+	public Boolean isQualified(Integer orderid) {
+		List<Record> applicants = getApplicantByOrderid(orderid);
+		boolean isQualified = true;
+		if (!Util.isEmpty(applicants)) {
+			for (Record record : applicants) {
+				String status = (String) record.get("applicantstatus");
+				if (Util.eq("不合格", status)) {
+					isQualified = false;
+				}
+			}
+		}
+		return isQualified;
+	}
+
+	//根据订单id 获得申请人
+	public List<Record> getApplicantByOrderid(Integer orderid) {
 		String applysqlstr = sqlManager.get("firstTrialJp_orderDetail_applicant_by_orderid");
 		Sql applysql = Sqls.create(applysqlstr);
 		applysql.setParam("orderid", orderid);
@@ -202,11 +225,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					record.put("applicantstatus", statusEnum.value());
 				}
 			}
-
 		}
-		result.put("applyinfo", applyinfo);
 
-		return result;
+		return applyinfo;
 	}
 
 	//快递 发邮件

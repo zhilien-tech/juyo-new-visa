@@ -173,4 +173,12 @@ public class FirstTrialJpModule {
 		return firstTrialJpViewService.saveJpTrialDetailInfo(editDataForm, session);
 	}
 
+	/**
+	 * 订单申请人是否合格
+	 */
+	@At
+	@POST
+	public Boolean isQualified(@Param("orderid") Integer orderid) {
+		return firstTrialJpViewService.isQualified(orderid);
+	}
 }
