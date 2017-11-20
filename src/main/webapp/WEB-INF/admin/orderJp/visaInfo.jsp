@@ -314,7 +314,7 @@
 			$.ajax({
 				type: 'POST',
 				data : passportInfo,
-				url: '${base}/admin/orderJp/saveEditPassport',
+				url: '${base}/admin/orderJp/saveEditVisa',
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');

@@ -886,7 +886,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		for (int i = 0; i < applicantInfoMainId.size(); i++) {
 			TApplicantOrderJpEntity applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", new Long((Integer) applicantInfoMainId.get(i).get("id")).intValue()));
-			if (applicantInfoMainId.get(i).get("id") == applicantInfoMainId.get(i).get("mainId")) {
+			if (applicantInfoMainId.get(i).get("id").equals(applicantInfoMainId.get(i).get("mainId"))) {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
 			} else {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());

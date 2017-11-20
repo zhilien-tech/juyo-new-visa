@@ -37,7 +37,7 @@
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
 				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
 				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" />
-				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" @click="share()" />
+				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" @click="share(orderInfo.id)" />
 				<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" @click="log(orderInfo.id)" />
 			</div>
 			<section class="content">
@@ -773,7 +773,7 @@
 				      	}
 				    }); 
 				},
-				share:function(){//分享
+				share:function(id){//分享
 					layer.open({
 						type: 2,
 						title: false,
