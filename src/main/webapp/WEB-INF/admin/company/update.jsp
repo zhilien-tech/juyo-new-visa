@@ -16,6 +16,9 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/company.css">
 	<%-- <link rel="stylesheet" href="${base}/references/public/plugins/uploadify/uploadify.css"> --%>
+	<style type="text/css">
+		img#sqImg {top: 0;}
+	</style>
 </head>
 <body>
 
