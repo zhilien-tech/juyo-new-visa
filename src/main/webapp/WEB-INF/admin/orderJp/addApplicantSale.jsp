@@ -223,10 +223,8 @@
 				url : '${base}/admin/orderJp/saveAddApplicant',
 				success : function(data) {
 					var applicantIdParent = window.parent.document.getElementById("appId").value;
-					if(applicantIdParent != null || applicantIdParent != undefined || applicantIdParent != ""){
-						applicantIdParent += data.id +",";
-						window.parent.document.getElementById("appId").value = applicantIdParent;
-					}
+					applicantIdParent += data.id +",";
+					window.parent.document.getElementById("appId").value = applicantIdParent;
 					layer.closeAll('loading');
 					parent.successCallBack(3,data);
 					closeWindow();

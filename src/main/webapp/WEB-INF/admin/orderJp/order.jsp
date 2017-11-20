@@ -835,10 +835,12 @@
 			    	data:{orderid:orderid},
 			    	type:'post',
 			    	success: function(data){
-			    		if(data.length <= 0){
+			    		if(data.length <= 0 || data.length == undefined){
 			    			$("#mySwitch").addClass("none");//显示申请人信息列表
 							$("#applicantInfo").show();//添加申请人 按钮 隐藏
 			    		}else{
+			    			$("#mySwitch").removeClass("none");
+							$("#applicantInfo").hide();
 			    			orderobj.applicantInfo = data;
 			    		}
 			      	}
@@ -848,7 +850,6 @@
 		
 		//添加申请人
 		function addApplicant(id){
-			alert(id);
 			layer.open({
 				type: 2,
 				title: false,

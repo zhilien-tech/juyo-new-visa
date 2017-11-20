@@ -155,11 +155,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object addOrder(Integer id, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
+		TCustomerEntity customer = new TCustomerEntity();
+		;
 		result.put("orderId", id);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderJpEntity orderJpinfo = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", id.longValue()));
 		TOrderEntity orderInfo = dbDao.fetch(TOrderEntity.class, id.longValue());
-		TCustomerEntity customer = dbDao.fetch(TCustomerEntity.class, orderInfo.getCustomerId().longValue());
+		if (!Util.isEmpty(orderInfo.getCustomerId())) {
+			customer = dbDao.fetch(TCustomerEntity.class, orderInfo.getCustomerId().longValue());
+		}
 		result.put("orderInfo", orderInfo);
 		result.put("orderJpinfo", orderJpinfo);
 		result.put("customer", customer);
@@ -557,10 +561,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			appcnd.and("id", "in", applicants);
 			List<TApplicantEntity> applicantInfo = dbDao.query(TApplicantEntity.class, appcnd, null);
 			for (TApplicantEntity tApplicantEntity : applicantInfo) {
-				TApplicantOrderJpEntity applicantOrderJp = new TApplicantOrderJpEntity();
+				TApplicantOrderJpEntity applicantOrderJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+						Cnd.where("applicantId", "=", tApplicantEntity.getId()));
 				applicantOrderJp.setOrderId(orderJpId);
-				applicantOrderJp.setApplicantId(tApplicantEntity.getId());
-				dbDao.insert(applicantOrderJp);
+				dbDao.update(applicantOrderJp);
 			}
 		}
 		return null;
@@ -684,6 +688,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicantSql.setParam("id", orderid);
 		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
 		Integer mainId = (Integer) applicantInfo.get(0).get("id");
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, new Long(mainId).intValue());
+		if (applicant.getMainId() == null) {
+			applicant.setMainId(mainId);
+			dbDao.update(applicant);
+		}
 		for (int i = 1; i < applicantInfo.size(); i++) {
 			TApplicantEntity fetch = dbDao.fetch(TApplicantEntity.class,
 					new Long((Integer) applicantInfo.get(i).get("id")).intValue());
@@ -696,7 +705,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		for (int i = 0; i < applicantInfoMainId.size(); i++) {
 			TApplicantOrderJpEntity applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", new Long((Integer) applicantInfoMainId.get(i).get("id")).intValue()));
-			if (applicantInfoMainId.get(i).get("id") == applicantInfoMainId.get(i).get("mainId")) {
+			if (applicantInfoMainId.get(i).get("id") == applicantInfoMainId.get(i).get("mainid")) {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
 			} else {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
