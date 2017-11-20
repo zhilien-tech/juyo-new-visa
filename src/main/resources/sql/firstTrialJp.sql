@@ -31,6 +31,7 @@ SELECT
 	taoj.applicantId applyid,
 	CONCAT( ta.firstName, ta.lastName ) applicantname,
 	taoj.isMainApplicant,
+	ta.sex,
 	ta.STATUS applicantStatus,
 	ta.telephone,
 	ta.email,

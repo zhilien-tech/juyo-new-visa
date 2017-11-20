@@ -6,6 +6,7 @@
 
 package com.juyo.visa.admin.firstTrialJp.service;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -284,7 +286,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//获取订单主申请人
-	public Object getmainApplicantByOrderid(int orderid) {
+	public Map<String, Object> getmainApplicantByOrderid(int orderid) {
 		Map<String, Object> result = Maps.newHashMap();
 		String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
 		Sql applysql = Sqls.create(sqlStr);
@@ -503,4 +505,39 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		return null;
 	}
 
+	//订单收件人信息
+	public Object getReceiverByOrderid(int orderid) {
+		String sqlRec = sqlManager.get("firstTrialJp_receive_address_by_orderid");
+		Sql sql = Sqls.create(sqlRec);
+		sql.setParam("orderid", orderid);
+		Record orderReceive = dbDao.fetch(sql);
+		return orderReceive;
+	}
+
+	//发送邮件信息
+	public Object sendMail(int orderid) throws IOException {
+		List<String> readLines = IOUtils
+				.readLines(getClass().getClassLoader().getResourceAsStream("express_mail.html"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+
+		//查询订单收件人信息
+		Record orderReceive = (Record) getReceiverByOrderid(orderid);
+		String expressType = orderReceive.getString("expressType");
+		String receiver = orderReceive.getString("receiver");
+		String mobile = orderReceive.getString("mobile");
+		String address = orderReceive.getString("address");
+
+		Map<String, Object> map = getmainApplicantByOrderid(orderid);
+		List<Record> applicants = (List<Record>) map.get("applicant");
+		for (Record record : applicants) {
+			String name = record.getString("applicantname");
+			String sex = record.getString("sex");
+			String data = record.getString("data");
+		}
+
+		return null;
+	}
 }
