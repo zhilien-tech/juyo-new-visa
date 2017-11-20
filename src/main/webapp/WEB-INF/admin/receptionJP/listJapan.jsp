@@ -8,18 +8,23 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>签证-日本</title>
-	<link rel="stylesheet" href="${base}/references/public/css/visaJapan.css">
+	<title>前台 - 日本</title>
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+	<style>
+		.card-head div:nth-child(1){width:20%;}
+		.card-head div:nth-child(2){width:20%;}
+		.card-head div:nth-child(3){width: 135px;float: right;position: relative;right: -15px;}
+		.everybody-info div:nth-child(1){width:11%;}
+		.everybody-info div:nth-child(2){width:14%;}
+		.everybody-info div:nth-child(3){width:14%;}
+		.everybody-info div:nth-child(4){width:10%;}
+		.everybody-info div:nth-child(5){width:10%;}
+		.everybody-info div:last-child{float:right;width:85px;}
+	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
 		<div class="content-wrapper"  style="min-height: 848px;">
-				<!-- <ul class="title">
-					<li>签证</li>
-					<li class="arrow"></li>
-					<li>日本</li>
-				</ul> -->
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
@@ -29,49 +34,36 @@
 									<option></option>
 								</select>
 							</div>
-							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onkeypress="onkeyEnter()"/>
-							</div>
-							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/>
-							</div>
 							<div class="col-md-3 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter()"/>
 							</div>
-							<div class="col-md-3 left-5px">
+							<div class="col-md-7 left-5px">
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+								<a class="btn btn-primary btn-sm pull-right" href="javascript:;" id="">拍视频</a>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in visaJapanData">
-							<div class="card-head">
+							<div class="card-head cf">
 								<div><label>订单号：</label><span>{{data.japannumber}}</span></div>	
-								<div><label>受付番号：</label><span>{{data.number}}</span></div>	
-								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
-								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
-								<div><label>状态：</label><span>{{data.japanstate}}</span></div>	
-								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
+								<div><label>状态：</label><span>{{data.japanstate}}</span></div>		
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<i class="sendZB"> </i>
-									<i class="ZBchange"> </i>
-									<i class="ZBcancel"> </i>
-									<i class="download"> </i>
-									<i class="handoverTable"> </i>
-									<i class="visaInput"> </i>
-									<i class="afterSales"> </i>
+									<i class="visaTransfer"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="item in data.everybodyinfo">
 									<div><label>申请人：</label><span>{{item.applicant}}</span></div>
 									<div><label>护照号：</label><span>{{item.passportno}}</span></div>
+									<div><label>快递号：</label><span>{{item.passportno}}</span></div>
+									<div><label>方式：</label><span>{{item.datatype}}</span></div>
 									<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 									<div><label>资料：</label><span>{{item.data}}</span></div>
-									<div><!-- <i> </i> --></div>
+									<div><i class="videoShoot"> </i></div>
 								</li>
 							</ul>
 						</div>
