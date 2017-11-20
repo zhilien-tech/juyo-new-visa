@@ -24,6 +24,7 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Strings;
@@ -34,6 +35,7 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -69,6 +71,9 @@ import com.uxuexi.core.web.base.service.BaseService;
  */
 @IocBean
 public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
+
+	@Inject
+	private MailService mailService;
 
 	/**
 	 * 初审列表数据
@@ -464,6 +469,11 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//改变订单状态 由初审到前台、签证 TODO
 
 		//发送短信、邮件 TODO
+		try {
+			sendMail(orderid);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		return null;
 	}
@@ -523,6 +533,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			tmp.append(line);
 		}
 
+		//查询订单号
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
+		String orderNum = order.getOrderNum();
+
 		//查询订单收件人信息
 		Record orderReceive = (Record) getReceiverByOrderid(orderid);
 		String expressType = orderReceive.getString("expressType");
@@ -532,12 +546,21 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		Map<String, Object> map = getmainApplicantByOrderid(orderid);
 		List<Record> applicants = (List<Record>) map.get("applicant");
+		String result = "";
 		for (Record record : applicants) {
 			String name = record.getString("applicantname");
 			String sex = record.getString("sex");
 			String data = record.getString("data");
+			String toEmail = record.getString("email");
+
+			String emailText = tmp.toString();
+			emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+					.replace("${data}", data).replace("${receiver}", receiver).replace("${mobile}", mobile)
+					.replace("${address}", address);
+
+			result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
 		}
 
-		return null;
+		return result;
 	}
 }
