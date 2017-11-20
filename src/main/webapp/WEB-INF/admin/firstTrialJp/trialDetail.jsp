@@ -33,7 +33,7 @@
 					<input type="button" value="取消" onclick="javascript:window.close()" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="保存" onclick="saveorder()" class="btn btn-primary btn-sm pull-right"/>
 					<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" value="快递" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="快递" onclick="expressFun()" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" />
 				</div>
 				<section class="content">

@@ -62,7 +62,6 @@ new Vue({
 				},
 				url : '/admin/firstTrialJp/isQualified.html',
 				success : function(data) {
-					alert(data);
 					if(data){
 						layer.open({
 			    		    type: 2,
