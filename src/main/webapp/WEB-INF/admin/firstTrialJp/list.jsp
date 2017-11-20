@@ -20,7 +20,7 @@
 				</ul> -->
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
-						<div class="row" style="margin-top:15px;"> 
+						<div class="row"> 
 							<div class="col-md-2 left-5px right-0px">
 								<select class="input-class input-sm" id="status" name="status">
 									<option value="">状态</option>
