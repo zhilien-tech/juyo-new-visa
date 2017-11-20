@@ -1,23 +1,21 @@
 package com.juyo.visa.admin.mail.service;
 
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.juyo.visa.admin.mail.entities.MailContent;
 import com.juyo.visa.admin.mail.entities.MailSender;
 import com.juyo.visa.entities.TConfMailEntity;
-import com.uxuexi.core.db.dao.IDbDao;
+import com.uxuexi.core.web.base.service.BaseService;
 
 /**
  * 邮箱service
  */
 @IocBean
-public class MailService {
+public class MailService extends BaseService<TConfMailEntity> {
 
-	@Autowired
+	@Inject
 	private MailSender simpleMailSender;
-	@Autowired
-	protected IDbDao dbDao;
 
 	/**
 	 * 发送邮件内容
@@ -28,7 +26,7 @@ public class MailService {
 	 */
 	public String send(String targets, String content, Object... args) {
 		String result = "success";
-		//Mail mail = mailDao.getAvailableOne();
+		//Mail mail = mailDao.getAvailableOne();.where("
 		TConfMailEntity mail = dbDao.fetch(TConfMailEntity.class, 2);
 		if (mail == null) {
 			result = "请联系管理员配置发件邮箱服务器!";
