@@ -13,6 +13,7 @@ import org.nutz.dao.entity.annotation.Table;
 @Table("t_conf_mail")
 public class TConfMailEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
+
 	@Id(auto = true)
 	private Integer iD;
 
