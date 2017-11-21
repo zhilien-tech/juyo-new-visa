@@ -1,6 +1,7 @@
 var datatable;
 function initDatatable() {
     datatable = $('#datatableId').DataTable({
+    	"pageLength":20,
     	"searching":false,
     	"bLengthChange": false,
         "processing": true,

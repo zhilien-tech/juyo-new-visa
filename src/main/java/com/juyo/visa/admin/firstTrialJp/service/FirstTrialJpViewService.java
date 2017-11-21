@@ -6,6 +6,7 @@
 
 package com.juyo.visa.admin.firstTrialJp.service;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -22,6 +24,7 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Strings;
@@ -32,6 +35,7 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -67,6 +71,12 @@ import com.uxuexi.core.web.base.service.BaseService;
  */
 @IocBean
 public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
+
+	@Inject
+	private MailService mailService;
+
+	private final static String MUBAN_DOCX_URL = "http://oyu1xyxxk.bkt.clouddn.com/a40f95f1-c87f-401a-be75-25f0d42f9f72.docx";
+	private final static String FILE_NAME = "初审资料填写模板.docx";
 
 	/**
 	 * 初审列表数据
@@ -182,6 +192,29 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 		result.put("orderinfo", orderinfo);
 		//申请人信息
+		List<Record> applyinfo = getApplicantByOrderid(orderid);
+		result.put("applyinfo", applyinfo);
+
+		return result;
+	}
+
+	//判断订单下申请人是否合格
+	public Boolean isQualified(Integer orderid) {
+		List<Record> applicants = getApplicantByOrderid(orderid);
+		boolean isQualified = true;
+		if (!Util.isEmpty(applicants)) {
+			for (Record record : applicants) {
+				String status = (String) record.get("applicantstatus");
+				if (Util.eq("不合格", status)) {
+					isQualified = false;
+				}
+			}
+		}
+		return isQualified;
+	}
+
+	//根据订单id 获得申请人
+	public List<Record> getApplicantByOrderid(Integer orderid) {
 		String applysqlstr = sqlManager.get("firstTrialJp_orderDetail_applicant_by_orderid");
 		Sql applysql = Sqls.create(applysqlstr);
 		applysql.setParam("orderid", orderid);
@@ -202,15 +235,13 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					record.put("applicantstatus", statusEnum.value());
 				}
 			}
-
 		}
-		result.put("applyinfo", applyinfo);
 
-		return result;
+		return applyinfo;
 	}
 
 	//快递 发邮件
-	public Object express(int orderid, HttpSession session) {
+	public Object express(Integer orderid, HttpSession session) {
 
 		Map<String, Object> result = Maps.newHashMap();
 
@@ -263,7 +294,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//获取订单主申请人
-	public Object getmainApplicantByOrderid(int orderid) {
+	public Map<String, Object> getmainApplicantByOrderid(int orderid) {
 		Map<String, Object> result = Maps.newHashMap();
 		String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
 		Sql applysql = Sqls.create(sqlStr);
@@ -441,8 +472,13 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//改变订单状态 由初审到前台、签证 TODO
 
 		//发送短信、邮件 TODO
+		try {
+			sendMail(orderid);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-		return null;
+		return "EXPRESS SUCCESS";
 	}
 
 	/**
@@ -480,6 +516,55 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		jporder.setThreeCounty(editDataForm.getThreecounty());
 		dbDao.update(jporder);
 		return null;
+	}
+
+	//订单收件人信息
+	public Object getReceiverByOrderid(int orderid) {
+		String sqlRec = sqlManager.get("firstTrialJp_receive_address_by_orderid");
+		Sql sql = Sqls.create(sqlRec);
+		sql.setParam("orderid", orderid);
+		Record orderReceive = dbDao.fetch(sql);
+		return orderReceive;
+	}
+
+	//发送邮件信息
+	public Object sendMail(int orderid) throws IOException {
+		List<String> readLines = IOUtils
+				.readLines(getClass().getClassLoader().getResourceAsStream("express_mail.html"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+
+		//查询订单号
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
+		String orderNum = order.getOrderNum();
+
+		//查询订单收件人信息
+		Record orderReceive = (Record) getReceiverByOrderid(orderid);
+		String expressType = orderReceive.getString("expressType");
+		String receiver = orderReceive.getString("receiver");
+		String mobile = orderReceive.getString("mobile");
+		String address = orderReceive.getString("address");
+
+		Map<String, Object> map = getmainApplicantByOrderid(orderid);
+		List<Record> applicants = (List<Record>) map.get("applicant");
+		String result = "";
+		for (Record record : applicants) {
+			String name = record.getString("applicantname");
+			String sex = record.getString("sex");
+			String data = record.getString("data");
+			String toEmail = record.getString("email");
+
+			String emailText = tmp.toString();
+			emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+					.replace("${data}", data).replace("${receiver}", receiver).replace("${mobile}", mobile)
+					.replace("${address}", address).replace("${URL}", MUBAN_DOCX_URL).replace("${fileName}", FILE_NAME);
+
+			result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
+		}
+
+		return result;
 	}
 
 }
