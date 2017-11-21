@@ -71,11 +71,13 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
+			alert($("#shareType").val());
 			if($("#shareType").val() == 1){
 				$("#datatableId tbody tr").click(function(){
 					var isStyle = $(this).attr("style");
-					if(isStyle != "color: rgb(48, 135, 240);"){//不被选中
+					if(isStyle != "color: rgb(48, 135, 240);"){//选中
 						$(this).css("color","#3087f0");
+					alert("aaaaaa");
 					}
 				});
 			}else{
@@ -89,8 +91,8 @@
 					}
 				
 				});
-			});
-		}
+			}
+		});
 
 		//vue表格数据对象
 	    var _self;
@@ -114,6 +116,7 @@
 		});
 		//保存
 		function save(){
+			var orderId = ${obj.orderId};
 			var name,telephone,email;
 			$("#datatableId tbody tr").each(function(){
 				if($(this).attr("style") == "color: rgb(48, 135, 240);"){

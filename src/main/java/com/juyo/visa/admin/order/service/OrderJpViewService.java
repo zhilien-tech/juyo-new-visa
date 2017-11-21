@@ -615,6 +615,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Sql orderSql = Sqls.create(orderSqlstr);
 		orderSql.setParam("id", id);
 		Record orderInfo = dbDao.fetch(orderSql);
+		//格式化金额
+		DecimalFormat df = new DecimalFormat("#.00");
+		if (!Util.isEmpty(orderInfo.get("money"))) {
+			orderInfo.put("money", df.format(orderInfo.get("money")));
+		}
 		//格式化日期
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		if (!Util.isEmpty(orderInfo.get("gotripdate"))) {
