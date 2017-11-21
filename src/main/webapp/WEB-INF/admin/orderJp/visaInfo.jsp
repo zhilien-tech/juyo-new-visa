@@ -25,6 +25,7 @@
 		<form id="passportInfo">
 			<div class="modal-header">
 				<span class="heading">签证信息</span> 
+				<input type="hidden" value="${obj.visaInfo.applicantId }" name="applicantId"/>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
@@ -38,7 +39,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>申请人：</label>
-										<select id="applicant" class="form-control input-sm selectHeight">
+										<select id="applicant" name="applicant" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.mainOrVice}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.isMainApplicant?'selected':''}>${map.value}</option>
 											</c:forEach>
@@ -49,7 +50,7 @@
 									<div class="form-group">
 										<label><span>*</span>备注：</label>
 										<!-- <input id="" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
-										<select id="relationRemark" class="form-control input-sm selectHeight">
+										<select id="relationRemark" name="relationRemark" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.applicantRemark}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
 											</c:forEach>
@@ -61,14 +62,14 @@
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label><span>*</span>主申请人：</label>
-											<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+											<input id="mainApplicant" name="mainApplicant" type="text" class="form-control input-sm" placeholder=" " />
 										</div>
 									</div>
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label><span>*</span>与主申请人关系：</label>
 											<!-- <input id="" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
-											<select id="mainRelation" class="form-control input-sm selectHeight">
+											<select id="mainRelation" name="mainRelation" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.applicantRelation}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.mainRelation?'selected':''}>${map.value}</option>
 											</c:forEach>
@@ -89,7 +90,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>是否同主申请人：</label>
-										<select id="trip" class="form-control input-sm selectHeight">
+										<select id="trip" name="sameMainTrip" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.isOrNo}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainTrip?'selected':''}>${map.value}</option>
 											</c:forEach>
@@ -109,7 +110,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>我的职业：</label>
-										<input id="occupation" name="occupation" type="text" class="form-control input-sm" placeholder=" " />
+										<input id="occupation"  name="occupation" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -137,7 +138,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>是否同主申请人：</label>
-										<select id="work" class="form-control input-sm selectHeight">
+										<select id="work" name="sameMainWork" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.isOrNo}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWork?'selected':''}>${map.value}</option>
 											</c:forEach>
@@ -164,7 +165,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>银行存款：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder="银行存款" />
+										<input id="" name="details" type="text" class="form-control input-sm" placeholder="银行存款" />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -181,7 +182,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>车产：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder="车产" />
+										<input id="" name="details" type="text" class="form-control input-sm" placeholder="车产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -198,7 +199,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>房产：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder="房产" />
+										<input id="" name="details" type="text" class="form-control input-sm" placeholder="房产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -215,7 +216,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>理财：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder="理财" />
+										<input id="" name="details" type="text" class="form-control input-sm" placeholder="理财" />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -231,7 +232,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>是否同主申请人：</label>
-										<select id="wealth" class="form-control input-sm selectHeight">
+										<select id="wealth" name="sameMainWealth" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.isOrNo}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWealth?'selected':''}>${map.value}</option>
 											</c:forEach>

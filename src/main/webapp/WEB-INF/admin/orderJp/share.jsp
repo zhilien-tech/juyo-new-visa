@@ -21,7 +21,7 @@
 			<div class="modal-header">
 				<span class="heading">分享</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="确定" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
@@ -29,14 +29,15 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>请选择分享方式：</label> 
-								<select class="form-control input-sm selectHeight">
-									<option>统一联系人</option>
-									<option>单独分享</option>
+								<select id="shareType" class="form-control input-sm selectHeight">
+									<c:forEach var="map" items="${obj.shareTypeEnum}">
+										<option value="${map.key}">${map.value}</option>
+									</c:forEach>
 								</select>
 							</div>
 						</div>
 					</div>
-					<table id="datatableId" class="table table-hover" style="width:100%;">
+					<table id="datatableId" class="table table-hover" style="width:100%;" >
 						<thead>
 							<tr>
 								<th><span>姓名</span></th>
@@ -45,20 +46,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>说的不</td>
-								<td>12345678987</td>
-								<td>543513515@163.com</td>
-							</tr>
-							<tr>
-								<td>说的不</td>
-								<td>12345678987</td>
-								<td>543513515@163.com</td>
-							</tr>
-							<tr>
-								<td>说的不</td>
-								<td>12345678987</td>
-								<td>543513515@163.com</td>
+							<tr v-for="data in shareInfo">
+								<td>{{data.applyname}}</td>
+								<td>{{data.telephone}}</td>
+								<td>{{data.email}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -80,68 +71,60 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			
-			$("#datatableId tbody tr").click(function(){
-				var isStyle = $(this).attr("style");
-				if(isStyle == "color: rgb(48, 135, 240);"){//不被选中
-					$(this).css("color","#333333");
-				}else{//选中
-					$(this).css("color","#3087f0");
-				}
+			if($("#shareType").val() == 1){
+				$("#datatableId tbody tr").click(function(){
+					var isStyle = $(this).attr("style");
+					if(isStyle != "color: rgb(48, 135, 240);"){//不被选中
+						$(this).css("color","#3087f0");
+					}
+				});
+			}else{
+				$("#datatableId tbody tr").click(function(){
+					var isStyle = $(this).attr("style");
+					if(isStyle == "color: rgb(48, 135, 240);"){//不被选中
+						$(this).css("color","#333333");
+					}else{//选中
+						$(this).css("color","#3087f0");
+					$(this).children().eq(0).html();
+					}
 				
+				});
 			});
-		});
+		}
 
 		//vue表格数据对象
 	    var _self;
 		new Vue({
-			el: '#orderremark',
-			data: {orderinfo:""},
+			el: '#datatableId',
+			data: {shareInfo:""},
 			created:function(){
 	            _self=this;
-	            var orderid = '${obj.orderid}';
+	            var orderid = '${obj.orderId}';
 	            $.ajax({ 
-	            	url: '${base}/admin/visaJapan/visaRevenue.html',
+	            	url: '${base}/admin/orderJp/getShare.html',
 	            	data:{orderid:orderid},
 	            	dataType:"json",
 	            	type:'post',
 	            	success: function(data){
-	            		_self.orderinfo = data.orderinfo;
-	            		console.log(JSON.stringify(_self.orderinfo));
+	            		_self.shareInfo = data;
+	            		console.log(JSON.stringify(_self.shareInfo));
 	              	}
 	            });
 	        }
 		});
 		//保存
 		function save(){
-			var applicatinfo = [];
-			$('#applyinfo').find('tr').each(function(index,value){
-				var applicatobj = {};
-				var applicatid = $(this).find('#applicatid').val();
-				applicatobj.applicatid = applicatid;
-				var datatext = '';
-				$(this).find('.titleStyle').each(function(index){
-					datatext += $(this).text() + ',';
-				});
-				datatext = datatext.substring(0, datatext.length-1);
-				applicatobj.datatext = datatext;
-				applicatinfo.push(applicatobj);
+			var name,telephone,email;
+			$("#datatableId tbody tr").each(function(){
+				if($(this).attr("style") == "color: rgb(48, 135, 240);"){
+					name = $(this).children().eq(0).html();
+					telephone = $(this).children().eq(1).html();
+					email = $(this).children().eq(2).html();
+					if(email == ""){
+						
+					}
+				}
 			});
-			layer.load(1);
-			var orderinfo = _self.orderinfo;
-			orderinfo.applicatinfo = JSON.stringify(applicatinfo);
-			$.ajax({
-            	url: '${base}/admin/visaJapan/saveRealInfoData.html',
-            	data:orderinfo,
-            	dataType:"json",
-            	type:'post',
-            	success: function(data){
-					layer.closeAll('loading');
-					parent.successCallBack(1);
-					closeWindow();
-
-              	}
-            });
 		}
 
 		//返回 

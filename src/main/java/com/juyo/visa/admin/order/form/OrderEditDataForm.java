@@ -63,13 +63,7 @@ public class OrderEditDataForm implements Serializable {
 
 	private Integer isdirectcus;
 
-	private String comName;
-
-	private String comshortname;
-
 	private String linkman;
-
-	private String telephone;
 
 	private String email;
 

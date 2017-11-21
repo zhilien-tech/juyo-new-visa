@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,6 +52,7 @@ import com.juyo.visa.admin.order.entity.PassportJsonEntity;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
+import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.base.UploadService;
@@ -83,6 +86,7 @@ import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;
 import com.juyo.visa.forms.TApplicantPassportForm;
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.MapUtil;
@@ -124,13 +128,25 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		//XIANSHANG(1, "线上"), OTS(2, "OTS"), ZHIKE(3, "直客"), XIANXIA(4, "线下");
 		List<Record> orderJp = (List<Record>) sql.getResult();
 		for (Record record : orderJp) {
-			if (!Util.isEmpty(record.get("source"))) {
-				int sourceInt = (int) record.get("source");
-				for (CustomerTypeEnum customerTypeEnum : CustomerTypeEnum.values()) {
-					if (sourceInt == customerTypeEnum.intKey()) {
-						record.put("source", customerTypeEnum.value());
+			if (!Util.isEmpty(record.get("isDirectCus"))) {
+				if (Util.eq(record.get("isDirectCus"), 1)) {//是直客，客户信息直接从订单中拿
+					record.put("source", "直客");
+				} else {//不是直客，客户信息从客户信息表中拿
+					Integer customerId = (Integer) record.get("customerId");
+					TCustomerEntity customerEntity = dbDao
+							.fetch(TCustomerEntity.class, new Long(customerId).intValue());
+					record.set("comName", customerEntity.getName());
+					record.set("comShortName", customerEntity.getShortname());
+					record.set("linkman", customerEntity.getLinkman());
+					record.set("telephone", customerEntity.getMobile());
+					int sourceInt = (int) record.get("source");
+					for (CustomerTypeEnum customerTypeEnum : CustomerTypeEnum.values()) {
+						if (sourceInt == customerTypeEnum.intKey()) {
+							record.put("source", customerTypeEnum.value());
+						}
 					}
 				}
+
 			}
 		}
 		result.put("orderJp", orderJp);
@@ -342,22 +358,31 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			order.setPayType(orderInfo.getPaytype());
 		}
 		if (!Util.isEmpty(orderInfo.getMoney())) {
-			order.setMoney(orderInfo.getMoney());
+			DecimalFormat df = new DecimalFormat("#.00");
+			order.setMoney(Double.valueOf(df.format(orderInfo.getMoney())).doubleValue());
 		}
 		if (!Util.isEmpty(orderInfo.getGotripdate())) {
-			order.setGoTripDate(orderInfo.getGotripdate());
+			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getGotripdate()),
+					DateUtil.FORMAT_YYYY_MM_DD);
+			order.setGoTripDate(godate);
 		}
 		if (!Util.isEmpty(orderInfo.getStayday())) {
 			order.setStayDay(orderInfo.getStayday());
 		}
 		if (!Util.isEmpty(orderInfo.getBacktripdate())) {
-			order.setBackTripDate(orderInfo.getBacktripdate());
+			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getBacktripdate()),
+					DateUtil.FORMAT_YYYY_MM_DD);
+			order.setGoTripDate(godate);
 		}
 		if (!Util.isEmpty(orderInfo.getSendvisadate())) {
-			order.setSendVisaDate(orderInfo.getSendvisadate());
+			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getSendvisadate()),
+					DateUtil.FORMAT_YYYY_MM_DD);
+			order.setGoTripDate(godate);
 		}
 		if (!Util.isEmpty(orderInfo.getOutvisadate())) {
-			order.setOutVisaDate(orderInfo.getOutvisadate());
+			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getOutvisadate()),
+					DateUtil.FORMAT_YYYY_MM_DD);
+			order.setGoTripDate(godate);
 		}
 		order.setUpdateTime(new Date());
 
@@ -380,28 +405,37 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		Map<String, Object> customermap = JsonUtil.fromJson(customerInfo, Map.class);
 		if (!Util.isEmpty(customermap.get("source"))) {
-			Integer source = (Integer) customermap.get("source");
 			//如果source=4是直客，保存到订单信息中
-			if (source == 4) {
+			if (Util.eq(customermap.get("source"), 4)) {
 				if (!Util.isEmpty(customermap.get("email"))) {
 					order.setEmail(String.valueOf(customermap.get("email")));
+				} else {
+					order.setEmail(null);
 				}
 				if (!Util.isEmpty(customermap.get("linkman"))) {
 					order.setLinkman(String.valueOf(customermap.get("linkman")));
+				} else {
+					order.setLinkman(null);
 				}
 				if (!Util.isEmpty(customermap.get("mobile"))) {
 					order.setTelephone(String.valueOf(customermap.get("mobile")));
+				} else {
+					order.setTelephone(null);
 				}
 				if (!Util.isEmpty(customermap.get("name"))) {
 					order.setComName(String.valueOf(customermap.get("name")));
+				} else {
+					order.setComName(null);
 				}
 				if (!Util.isEmpty(customermap.get("shortname"))) {
 					order.setComShortName(String.valueOf(customermap.get("shortname")));
+				} else {
+					order.setComShortName(null);
 				}
 				order.setIsDirectCus(IsYesOrNoEnum.YES.intKey()); //1是直客
 			} else {
 				TCustomerEntity customer = dbDao.fetch(TCustomerEntity.class,
-						Long.parseLong(String.valueOf(customermap.get("id"))));
+						new Long(order.getCustomerId()).intValue());
 				order.setCustomerId(customer.getId());
 				order.setIsDirectCus(IsYesOrNoEnum.NO.intKey()); //0不是直客
 			}
@@ -441,11 +475,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				//订单信息
 				orderEntity.setCustomerId(customer.getId());
 				orderEntity.setIsDirectCus(IsYesOrNoEnum.NO.intKey());
-				orderEntity.setEmail(customer.getEmail());
-				orderEntity.setLinkman(customer.getLinkman());
-				orderEntity.setTelephone(customer.getMobile());
-				orderEntity.setComName(customer.getName());
-				orderEntity.setComShortName(customer.getShortname());
 			}
 		}
 
@@ -457,7 +486,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			orderEntity.setCityId(orderInfo.getCityid());
 		}
 		if (!Util.isEmpty(orderInfo.getBacktripdate())) {
-			orderEntity.setBackTripDate(orderInfo.getBacktripdate());
+			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getBacktripdate()),
+					DateUtil.FORMAT_YYYY_MM_DD);
+			orderEntity.setGoTripDate(godate);
 		}
 		if (!Util.isEmpty(orderInfo.getName())) {
 			orderEntity.setComName(orderInfo.getName());
@@ -469,13 +500,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			orderEntity.setEmail(orderInfo.getEmail());
 		}
 		if (!Util.isEmpty(orderInfo.getGotripdate())) {
-			orderEntity.setGoTripDate(orderInfo.getGotripdate());
+			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getGotripdate()),
+					DateUtil.FORMAT_YYYY_MM_DD);
+			orderEntity.setGoTripDate(godate);
 		}
 		if (!Util.isEmpty(orderInfo.getLinkman())) {
 			orderEntity.setLinkman(orderInfo.getLinkman());
 		}
 		if (!Util.isEmpty(orderInfo.getMoney())) {
-			orderEntity.setMoney(orderInfo.getMoney());
+			DecimalFormat df = new DecimalFormat("#.00");
+			orderEntity.setMoney(Double.valueOf(df.format(orderInfo.getMoney())).doubleValue());
 		}
 		if (!Util.isEmpty(orderInfo.getUrgenttype())) {
 			orderEntity.setUrgentType(orderInfo.getUrgenttype());
@@ -493,7 +527,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			orderEntity.setStayDay(orderInfo.getStayday());
 		}
 		if (!Util.isEmpty(orderInfo.getSendvisadate())) {
-			orderEntity.setSendVisaDate(orderInfo.getSendvisadate());
+			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getSendvisadate()),
+					DateUtil.FORMAT_YYYY_MM_DD);
+			orderEntity.setGoTripDate(godate);
 		}
 		if (!Util.isEmpty(orderInfo.getPaytype())) {
 			orderEntity.setPayType(orderInfo.getPaytype());
@@ -502,7 +538,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			orderEntity.setNumber(orderInfo.getNumber());
 		}
 		if (!Util.isEmpty(orderInfo.getOutvisadate())) {
-			orderEntity.setOutVisaDate(orderInfo.getOutvisadate());
+			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getOutvisadate()),
+					DateUtil.FORMAT_YYYY_MM_DD);
+			orderEntity.setGoTripDate(godate);
 		}
 
 		//生成订单号
@@ -572,18 +610,60 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object fetchOrder(Integer id) {
 		Map<String, Object> result = Maps.newHashMap();
-		//客户信息
-		String customerSqlstr = sqlManager.get("orderJp_list_customerInfo_byOrderId");
-		Sql customerSql = Sqls.create(customerSqlstr);
-		customerSql.setParam("id", id);
-		Record customerInfo = dbDao.fetch(customerSql);
-		result.put("customerInfo", customerInfo);
 		//订单信息
 		String orderSqlstr = sqlManager.get("orderJp_list_orderInfo_byOrderId");
 		Sql orderSql = Sqls.create(orderSqlstr);
 		orderSql.setParam("id", id);
 		Record orderInfo = dbDao.fetch(orderSql);
+		//格式化日期
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		if (!Util.isEmpty(orderInfo.get("gotripdate"))) {
+			Date goTripDate = (Date) orderInfo.get("gotripdate");
+			orderInfo.put("gotripdate", format.format(goTripDate));
+		}
+		if (!Util.isEmpty(orderInfo.get("backtripdate"))) {
+			Date backTripDate = (Date) orderInfo.get("backtripdate");
+			orderInfo.put("backtripdate", format.format(backTripDate));
+		}
+		if (!Util.isEmpty(orderInfo.get("sendvisadate"))) {
+			Date sendVisaDate = (Date) orderInfo.get("sendvisadate");
+			orderInfo.put("sendvisadate", format.format(sendVisaDate));
+		}
+		if (!Util.isEmpty(orderInfo.get("outvisadate"))) {
+			Date outVisaDate = (Date) orderInfo.get("outvisadate");
+			orderInfo.put("outvisadate", format.format(outVisaDate));
+		}
+
 		result.put("orderInfo", orderInfo);
+		//客户信息
+		TCustomerEntity customerInfo = new TCustomerEntity();
+		if (!Util.isEmpty(orderInfo.get("isDirectCus"))) {
+			if (Util.eq(orderInfo.get("isDirectCus"), 1)) {//直客时，客户信息从订单中取
+				customerInfo.setSource(4);
+				customerInfo.setLinkman((String) orderInfo.get("linkman"));
+				customerInfo.setMobile((String) orderInfo.get("telephone"));
+				customerInfo.setName((String) orderInfo.get("comName"));
+				customerInfo.setShortname((String) orderInfo.get("comShortName"));
+				customerInfo.setEmail((String) orderInfo.get("email"));
+			} else {//不是直客时，客户信息从客户信息表中取
+				if (!Util.isEmpty(orderInfo.get("customerId"))) {
+					Integer customerId = (Integer) orderInfo.get("customerId");
+					TCustomerEntity customerEntity = dbDao
+							.fetch(TCustomerEntity.class, new Long(customerId).intValue());
+					customerInfo.setEmail(customerEntity.getEmail());
+					customerInfo.setLinkman(customerEntity.getLinkman());
+					customerInfo.setMobile(customerEntity.getMobile());
+					customerInfo.setName(customerEntity.getName());
+					customerInfo.setShortname(customerEntity.getShortname());
+					for (CustomerTypeEnum customerTypeEnum : CustomerTypeEnum.values()) {
+						if (customerEntity.getSource() == customerTypeEnum.intKey()) {
+							customerInfo.setSource(customerTypeEnum.intKey());
+						}
+					}
+				}
+			}
+		}
+		result.put("customerInfo", customerInfo);
 		//申请人信息
 		String applicantSqlstr = sqlManager.get("orderJp_list_applicantInfo_byOrderId");
 		Sql applicantSql = Sqls.create(applicantSqlstr);
@@ -705,7 +785,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		for (int i = 0; i < applicantInfoMainId.size(); i++) {
 			TApplicantOrderJpEntity applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", new Long((Integer) applicantInfoMainId.get(i).get("id")).intValue()));
-			if (applicantInfoMainId.get(i).get("id") == applicantInfoMainId.get(i).get("mainid")) {
+			if (Util.eq(applicantInfoMainId.get(i).get("id"), applicantInfoMainId.get(i).get("mainId"))) {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
 			} else {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
@@ -738,6 +818,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("passport", passport);
 		result.put("applicantId", id);
 		return result;
+	}
+
+	public Object saveEditVisa(VisaEditDataForm visaForm) {
+
+		return null;
+	}
+
+	public Object getShare(Integer id) {
+		String applicantSqlstr = sqlManager.get("orderJp_list_applicantInfo_byOrderId");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		applicantSql.setParam("id", id);
+		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
+		return applicantInfo;
 	}
 
 	public Object saveEditPassport(TApplicantPassportForm passportForm, HttpSession session) {
@@ -886,7 +979,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		for (int i = 0; i < applicantInfoMainId.size(); i++) {
 			TApplicantOrderJpEntity applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", new Long((Integer) applicantInfoMainId.get(i).get("id")).intValue()));
-			if (applicantInfoMainId.get(i).get("id").equals(applicantInfoMainId.get(i).get("mainId"))) {
+			if (Util.eq(applicantInfoMainId.get(i).get("id"), applicantInfoMainId.get(i).get("mainId"))) {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
 			} else {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());

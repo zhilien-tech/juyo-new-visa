@@ -26,9 +26,11 @@ import org.nutz.mvc.upload.UploadAdaptor;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
+import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.common.enums.ShareTypeEnum;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;
@@ -314,8 +316,11 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object share() {
-		return null;
+	public Object share(@Param("id") Integer id) {
+		Map<String, Object> result = MapUtil.map();
+		result.put("shareTypeEnum", EnumUtil.enum2(ShareTypeEnum.class));
+		result.put("orderId", id);
+		return result;
 	}
 
 	/**
@@ -337,5 +342,23 @@ public class OrderJpModule {
 	@POST
 	public Object getLogs(@Param("orderid") Integer orderid) {
 		return saleViewService.getLogs(orderid);
+	}
+
+	/**
+	 * 签证信息修改保存
+	 */
+	@At
+	@POST
+	public Object saveEditVisa(@Param("..") VisaEditDataForm visaForm) {
+		return saleViewService.saveEditVisa(visaForm);
+	}
+
+	/**
+	 * 获取分享申请人
+	 */
+	@At
+	@POST
+	public Object getShare(@Param("orderid") Integer id) {
+		return saleViewService.getShare(id);
 	}
 }
