@@ -76,6 +76,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	private MailService mailService;
 
 	private final static String MUBAN_DOCX_URL = "http://oyu1xyxxk.bkt.clouddn.com/a40f95f1-c87f-401a-be75-25f0d42f9f72.docx";
+	private final static String FILE_NAME = "初审资料填写模板.docx";
 
 	/**
 	 * 初审列表数据
@@ -558,11 +559,12 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			String emailText = tmp.toString();
 			emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
 					.replace("${data}", data).replace("${receiver}", receiver).replace("${mobile}", mobile)
-					.replace("${address}", address).replace("${URL}", MUBAN_DOCX_URL);
+					.replace("${address}", address).replace("${URL}", MUBAN_DOCX_URL).replace("${fileName}", FILE_NAME);
 
 			result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
 		}
 
 		return result;
 	}
+
 }

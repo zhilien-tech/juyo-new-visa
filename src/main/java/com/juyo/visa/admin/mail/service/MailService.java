@@ -1,11 +1,22 @@
 package com.juyo.visa.admin.mail.service;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.juyo.visa.admin.mail.entities.MailContent;
 import com.juyo.visa.admin.mail.entities.MailSender;
 import com.juyo.visa.entities.TConfMailEntity;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
 /**
@@ -54,6 +65,71 @@ public class MailService extends BaseService<TConfMailEntity> {
 			}
 		}
 		return result;
+	}
+
+	//文件下载
+	public Object download(String fileUrl, String fileName, HttpServletRequest request, HttpServletResponse response) {
+		String userAgent = request.getHeader("User-Agent");
+		//针对IE或者以IE为内核的浏览器：
+		if (userAgent.contains("MSIE") || userAgent.contains("Trident")) {
+			try {
+				fileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		} else {
+			//非IE浏览器的处理：
+			try {
+				fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+
+		//下载文件
+		InputStream is = null;
+		OutputStream out = null;
+		if (!Util.isEmpty(fileUrl)) {
+			try {
+				URL url = new URL(fileUrl);
+				URLConnection connection = url.openConnection();
+				is = connection.getInputStream();
+				out = response.getOutputStream();
+				response.reset();
+				response.setContentType("application/octet-stream");
+				response.setCharacterEncoding("utf-8");
+				//response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
+				response.setHeader("Content-Disposition", String.format("attachment;filename=\"%s\"", fileName));
+				byte[] buffer = new byte[4096];
+				int count = 0;
+				while ((count = is.read(buffer)) > 0) {
+					out.write(buffer, 0, count);
+				}
+				out.flush();
+				response.flushBuffer();
+				out.close();
+				is.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (!Util.isEmpty(is)) {
+						is.close();
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				try {
+					if (!Util.isEmpty(out)) {
+						out.close();
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+
+				}
+			}
+		}
+		return "DOWNLOAD SUCCESS";
 	}
 
 	public boolean init() {
