@@ -150,7 +150,7 @@ $("#email").select2({
 
 
 /* 加载电话下拉 */
-$("#telephone").select2({
+$("#mobile").select2({
 	ajax : {
 		url : 'getPhoneNumSelect.html',
 		dataType : 'json',
@@ -188,10 +188,9 @@ $("#telephone").select2({
 /* 选中联系人 */
 $("#linkman").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
-	$("#linkman").val(customerId);
 	$("#compName").val(customerId);
 	$("#comShortName").val(customerId);
-	$("#telephone").val(customerId);
+	$("#mobile").val(customerId);
 	$("#email").val(customerId);
 	var id = parseInt($("#linkman").val());
 	$.ajax({
@@ -215,7 +214,7 @@ $("#linkman").on('select2:select', function (evt) {
 			}
 			var phoneNum = data.mobile;
 			/* 电话补全 */
-			$("#telephone").append('<option selected="true" value='+ id +'>'+phoneNum+'</option>'); 
+			$("#mobile").append('<option selected="true" value='+ id +'>'+phoneNum+'</option>'); 
 			/*公司全称补全*/
 			$("#compName").append('<option selected="true" value='+ id +'>'+data.name+'</option>'); 
 			/*公司简称补全*/
@@ -280,14 +279,13 @@ $("#linkman").on('select2:select', function (evt) {
 });
 
 /* 选中电话 */
-$("#telephone").on('select2:select', function (evt) {
+$("#mobile").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
 	$("#linkman").val(customerId);
 	$("#compName").val(customerId);
 	$("#comShortName").val(customerId);
-	$("#telephone").val(customerId);
 	$("#email").val(customerId);
-	var id = parseInt($("#telephone").val());
+	var id = parseInt($("#mobile").val());
 	$.ajax({
 		url : 'getCustomerById',
 		type : 'POST',
@@ -307,7 +305,7 @@ $("#telephone").on('select2:select', function (evt) {
 				sourceName = "线下"
 			}
 			/* 联系人补全 */
-			$("#linkeman").append('<option selected="true" value='+ id +'>'+data.linkman+'</option>'); 
+			$("#linkman").append('<option selected="true" value='+ id +'>'+data.linkman+'</option>'); 
 			/*公司全称补全*/
 			$("#compName").append('<option selected="true" value='+ id +'>'+data.name+'</option>'); 
 			/*公司简称补全*/
@@ -326,12 +324,10 @@ $("#telephone").on('select2:select', function (evt) {
 $("#compName").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
 	$("#linkman").val(customerId);
-	$("#compName").val(customerId);
 	$("#comShortName").val(customerId);
-	$("#telephone").val(customerId);
+	$("#mobile").val(customerId);
 	$("#email").val(customerId);
 	var id = parseInt($("#compName").val());
-	alert(id);
 	$.ajax({
 		url : 'getCustomerById',
 		type : 'POST',
@@ -353,7 +349,7 @@ $("#compName").on('select2:select', function (evt) {
 			/* 联系人补全 */
 			$("#linkman").append('<option selected="true" value='+ id +'>'+data.linkman+'</option>'); 
 			/*电话补全*/
-			$("#telephone").append('<option selected="true" value='+ id +'>'+data.mobile+'</option>'); 
+			$("#mobile").append('<option selected="true" value='+ id +'>'+data.mobile+'</option>'); 
 			/*公司简称补全*/
 			$("#comShortName").append('<option selected="true" value='+ id +'>'+data.shortname+'</option>');
 			/*邮箱补全*/
@@ -372,8 +368,7 @@ $("#comShortName").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
 	$("#linkman").val(customerId);
 	$("#compName").val(customerId);
-	$("#comShortName").val(customerId);
-	$("#telephone").val(customerId);
+	$("#mobile").val(customerId);
 	$("#email").val(customerId);
 	var id = parseInt($("#comShortName").val());
 	$.ajax({
@@ -395,11 +390,11 @@ $("#comShortName").on('select2:select', function (evt) {
 				sourceName = "线下"
 			}
 			/* 联系人补全 */
-			$("#linkeman").append('<option selected="true" value='+ id +'>'+data.linkman+'</option>'); 
+			$("#linkman").append('<option selected="true" value='+ id +'>'+data.linkman+'</option>'); 
 			/*公司全称补全*/
 			$("#compName").append('<option selected="true" value='+ id +'>'+data.name+'</option>'); 
 			/*电话补全*/
-			$("#telephone").append('<option selected="true" value='+ id +'>'+data.mobile+'</option>');
+			$("#mobile").append('<option selected="true" value='+ id +'>'+data.mobile+'</option>');
 			/*邮箱补全*/
 			$("#email").append('<option selected="true" value='+ id +'>'+data.email+'</option>');
 			/*客户来源补全*/
@@ -414,11 +409,10 @@ $("#comShortName").on('select2:select', function (evt) {
 /* 选中邮箱 */
 $("#email").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
-	$("#email").val(customerId);
 	$("#linkman").val(customerId);
 	$("#compName").val(customerId);
 	$("#comShortName").val(customerId);
-	$("#telephone").val(customerId);
+	$("#mobile").val(customerId);
 	$("#email").val(customerId);
 	var id = parseInt($("#email").val());
 	$.ajax({
@@ -440,13 +434,13 @@ $("#email").on('select2:select', function (evt) {
 				sourceName = "线下"
 			}
 			/* 联系人补全 */
-			$("#linkeman").append('<option selected="true" value='+ id +'>'+data.linkman+'</option>'); 
+			$("#linkman").append('<option selected="true" value='+ id +'>'+data.linkman+'</option>'); 
 			/*公司全称补全*/
 			$("#compName").append('<option selected="true" value='+ id +'>'+data.name+'</option>'); 
 			/*公司简称补全*/
 			$("#comShortName").append('<option selected="true" value='+ id +'>'+data.shortname+'</option>');
 			/*电话补全*/
-			$("#telephone").append('<option selected="true" value='+ id +'>'+data.mobile+'</option>');
+			$("#mobile").append('<option selected="true" value='+ id +'>'+data.mobile+'</option>');
 			/*客户来源补全*/
 			$("#customerType").val(data.source);
 		},
@@ -455,11 +449,27 @@ $("#email").on('select2:select', function (evt) {
 	});
 
 });
+
+/*客户信息 清除回显内容*/
+function clearText(){
+	//客户姓名清空
+	$("#linkman").val(null).trigger("change");
+	//电话清空
+	$("#mobile").val(null).trigger("change");
+	//公司全称
+	$("#compName").val(null).trigger("change");
+	//公司简称
+	$("#comShortName").val(null).trigger("change");
+	//邮箱清空
+	$("#email").val(null).trigger("change");
+	
+}
+
 /* 取消选中时 */
 $("#linkman").on('select2:unselect', function (evt) {
 	clearText();
 }); 
-$("#telephone").on('select2:unselect', function (evt) {
+$("#mobile").on('select2:unselect', function (evt) {
 	clearText();
 });
 $("#compName").on('select2:unselect', function (evt) {
@@ -477,43 +487,6 @@ $("#email").on('select2:unselect', function (evt) {
 $("#clearBtn").click(function(){
 	clearText();
 });
-/*客户信息 清除回显内容*/
-function clearText(){
-	//客户姓名清空
-	$("#linkman").val(null).trigger("change");
-	//电话清空
-	$("#telephone").val(null).trigger("change");
-	//公司全称
-	$("#compName").val(null).trigger("change");
-	//公司简称
-	$("#comShortName").val(null).trigger("change");
-	//邮箱清空
-	$("#email").val(null).trigger("change");
-	//出发城市清空
-	/*$("#city").val(null).trigger("change");*/
-	//文本框清空
-	$("#addressId").val("");
-	$("#shortNameId").val("");
-	$("#responsibleId").val("");
-	$("#siteUrlId").val("");
-	$("#faxId").val("");
-	//付款方式清除
-	$("#payTypeId").html("不限");
-	//信用额度清除
-	$("#creditLineId").html("0.00");
-	//历史欠款清除
-	$("#arrearsId").html("0.00");
-	$('#fontLSqk').css("color","");
-	//预存款
-	$("#preDepositId").html("0.00");
-	//客户名称
-	$("#custInfoName").css("color","");
-	//清空客户信息隐藏域
-	$('#linkManId').val("");
-	$("#phoneId").val("");
-	//出发城市清空
-	$("#outCityName").val("");
-	
-}
+
 
 }

@@ -11,6 +11,7 @@ import org.nutz.log.Logs;
 
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
+import com.juyo.visa.common.enums.NoZHIKECustomerTypeEnum;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCustomerEntity;
 import com.juyo.visa.entities.TUserEntity;
@@ -45,7 +46,7 @@ public class CustomerViewService extends BaseService<TCustomerEntity> {
 	 */
 	public Object toAddCustomerPage() {
 		Map<String, Object> obj = MapUtil.map();
-		obj.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
+		obj.put("customerTypeEnum", EnumUtil.enum2(NoZHIKECustomerTypeEnum.class));
 		return obj;
 	}
 

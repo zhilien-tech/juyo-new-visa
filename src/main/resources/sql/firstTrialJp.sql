@@ -5,7 +5,7 @@ SELECT
 	toj.acceptDesign number,
 	DATE_FORMAT( tr.goTripDate, '%Y-%m-%d' ) goTripTime,
 	DATE_FORMAT( tr.backTripDate, '%Y-%m-%d' ) backTripTime,
-	tr.STATUS orderState,
+	tr.STATUS orderStatus,
 	( SELECT count( * ) FROM t_applicant_order_jp WHERE orderId = toj.id ) peopleCount 
 FROM
 	t_order tr
@@ -28,10 +28,13 @@ $condition
 
 /*firstTrialJp_list_data_applicant*/
 SELECT
-	taoj.id applicatid,
+	taoj.applicantId applyid,
 	CONCAT( ta.firstName, ta.lastName ) applicantname,
+	taoj.isMainApplicant,
+	ta.sex,
 	ta.STATUS applicantStatus,
 	ta.telephone,
+	ta.email,
 	tap.id passportid,
 	tap.passport passportNum,
 	tau.id qualifiedId,
@@ -69,3 +72,42 @@ FROM
 INNER JOIN t_order_jp toj ON toj.orderId = tr.id
 WHERE
 	toj.id = @orderid
+	
+/*firstTrialJp_orderDetail_applicant_by_orderid*/
+SELECT
+	taoj.applicantId applyid,
+	CONCAT(ta.firstName, ta.lastName) applyname,
+	ta.telephone,
+	tap.passport,
+	tavpj.type,
+	tavpj.realInfo,
+	ta.sex,
+	ta.status applicantstatus
+FROM
+	t_applicant_order_jp taoj
+INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
+LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
+LEFT JOIN (
+	SELECT
+		applicantId,
+		type,
+		GROUP_CONCAT(realInfo SEPARATOR '、') realInfo
+	FROM
+		t_applicant_visa_paperwork_jp
+	GROUP BY
+		applicantId
+) tavpj ON tavpj.applicantId = taoj.id
+where taoj.orderId = @orderid
+
+/*firstTrialJp_receive_address_by_orderid*/
+SELECT
+	tor.orderId,
+	tor.expressType,
+	tor.receiveAddressId,
+	tr.receiver,
+	tr.mobile,
+	tr.address 
+FROM
+	t_order_recipient tor
+	LEFT JOIN t_receiveaddress tr ON tor.receiveAddressId = tr.id
+where tor.orderId = @orderid

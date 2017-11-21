@@ -6,24 +6,31 @@
 
 package com.juyo.visa.admin.order.module;
 
+import java.io.File;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.upload.UploadAdaptor;
 
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
+import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.common.enums.ShareTypeEnum;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;
@@ -99,7 +106,7 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object addApplicant(@Param("id") Integer orderid) {
+	public Object addApplicantSale(@Param("id") Integer orderid) {
 		Map<String, Object> result = MapUtil.map();
 		result.put("orderid", orderid);
 		return result;
@@ -208,6 +215,16 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 签证信息修改
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object visaInfo(@Param("id") Integer id) {
+		return saleViewService.getVisaInfo(id);
+	}
+
+	/**
 	 * 客户信息获取申请人下拉
 	 */
 	@At
@@ -259,5 +276,89 @@ public class OrderJpModule {
 	@POST
 	public Object getCustomerById(@Param("id") Integer id, HttpSession session) {
 		return saleViewService.getCustomerById(id, session);
+	}
+
+	/**
+	 * 身份证正面上传、扫描
+	 */
+	@At
+	@Ok("json")
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object IDCardRecognition(@Param("image") File file, HttpServletRequest request, HttpServletResponse response) {
+		return saleViewService.IDCardRecognition(file, request, response);
+	}
+
+	/**
+	 * 身份证背面上传、扫描
+	 */
+	@At
+	@Ok("json")
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object IDCardRecognitionBack(@Param("image") File file, HttpServletRequest request,
+			HttpServletResponse response) {
+		return saleViewService.IDCardRecognitionBack(file, request, response);
+	}
+
+	/**
+	 * 护照上传、扫描
+	 */
+	@At
+	@Ok("json")
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object passportRecognition(@Param("image") File file, HttpServletRequest request,
+			HttpServletResponse response) {
+		return saleViewService.passportRecognitionBack(file, request, response);
+	}
+
+	/**
+	 * 分享
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object share(@Param("id") Integer id) {
+		Map<String, Object> result = MapUtil.map();
+		result.put("shareTypeEnum", EnumUtil.enum2(ShareTypeEnum.class));
+		result.put("orderId", id);
+		return result;
+	}
+
+	/**
+	 * 跳转到日志页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object log(@Param("id") Integer id) {
+		Map<String, Object> result = MapUtil.map();
+		result.put("orderid", id);
+		return result;
+	}
+
+	/**
+	 * 获取日志信息
+	 */
+	@At
+	@POST
+	public Object getLogs(@Param("orderid") Integer orderid) {
+		return saleViewService.getLogs(orderid);
+	}
+
+	/**
+	 * 签证信息修改保存
+	 */
+	@At
+	@POST
+	public Object saveEditVisa(@Param("..") VisaEditDataForm visaForm) {
+		return saleViewService.saveEditVisa(visaForm);
+	}
+
+	/**
+	 * 获取分享申请人
+	 */
+	@At
+	@POST
+	public Object getShare(@Param("orderid") Integer id) {
+		return saleViewService.getShare(id);
 	}
 }

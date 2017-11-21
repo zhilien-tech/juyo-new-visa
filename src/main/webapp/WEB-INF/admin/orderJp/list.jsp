@@ -9,6 +9,9 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>销售-日本</title>
 	<link rel="stylesheet" href="${base}/references/public/css/saleJapan.css">
+	<style type="text/css">
+	 [v-cloak]{display:none;}
+	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper" id="wrapper">
@@ -56,7 +59,7 @@
 						</div>
 						<div class="row" style="margin-top:15px;"> 
 							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="start_time" name="start_time" placeholder="2017-10-10 ~ 2017-11-11" />
+								<input type="text" class="input-sm input-class" id="start_time" name="start_time" placeholder="创建日期" />
 							</div>
 							<div class="col-md-2 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间" />
@@ -67,7 +70,7 @@
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div class="card-list" v-for="data in orderJpData">
+						<div class="card-list" v-cloak v-for="data in orderJpData">
 							<div class="card-head">
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>	
 								<div><label>人数：</label><span>{{data.peoplenum}}</span></div>	
@@ -83,10 +86,10 @@
 							</div>
 							<ul class="card-content">
 								<li class="everybody-info" >
-									<div><label>公司简称：</label><span>{{data.shortname}}</span></div>
+									<div><label>公司简称：</label><span>{{data.comshortname}}</span></div>
 									<div><label>客户来源：</label><span>{{data.source}}</span></div>
 									<div><label>联系人：</label><span>{{data.linkman}}</span></div>
-									<div><label>电话：</label><span>{{data.mobile}}</span></div>
+									<div><label>电话：</label><span>{{data.telephone}}</span></div>
 									<div><label>申请人：</label><span>{{data.applicants}}</span></div>
 									<div><!-- <i> </i> --></div>
 								</li>

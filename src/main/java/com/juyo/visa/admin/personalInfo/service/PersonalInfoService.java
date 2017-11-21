@@ -48,7 +48,8 @@ public class PersonalInfoService extends BaseService<TUserEntity> {
 		Integer userid = loginUser.getId();
 		form.setUserid(userid);
 		Pagination list = this.listPage(form, new Pager());
-		return list.getList().get(0);
+		Object obj = list.getList().get(0);
+		return obj;
 	}
 
 	/**

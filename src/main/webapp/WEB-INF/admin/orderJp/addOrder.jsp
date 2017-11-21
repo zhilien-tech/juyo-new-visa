@@ -8,20 +8,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>下单</title>
-<link rel="stylesheet"
-	href="${base}/references/common/js/vue/vue-multiselect.min.css">
-<link rel="stylesheet"
-	href="${base}/references/public/plugins/select2/select2.css">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
+<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <style type="text/css">
@@ -60,7 +53,7 @@
 				<span class="">状态：
 					<p>下单</p>
 				</span> <input type="button" value="取消"
-					class="btn btn-primary btn-sm pull-right" /> <input type="button"
+					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> <input type="button"
 					value="保存" class="btn btn-primary btn-sm pull-right"
 					onclick="saveAddOrder();" /> <input type="button" value="回邮"
 					class="btn btn-primary btn-sm pull-right" /> <input type="button"
@@ -147,7 +140,7 @@
 									<div class="form-group">
 										<label><span>*</span>手机号：</label>
 										<input type="hidden" id="telephoneSelect2" value=""/>
-										 <select id="telephone"
+										 <select id="mobile"
 											name="mobile" class="form-control select2 cityselect2 "
 											multiple="multiple" data-placeholder="">
 										</select>
@@ -178,7 +171,7 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>手机号：</label> <input id="telephone"
+										<label><span>*</span>手机号：</label> <input id="mobile"
 											name="mobile" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
@@ -461,7 +454,7 @@
 												items="${obj.mainBackMailSourceTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
-										</select> <i class="bulb"></i>
+										</select>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -471,15 +464,14 @@
 											<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
-										</select> <i class="bulb"></i>
+										</select>
 									</div>
 								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>回邮地址：</label> <input id="expressAddress"
 											name="expressAddress" type="text"
-											class="form-control input-sm" placeholder=" " /> <i
-											class="bulb"></i>
+											class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 							</div>
@@ -489,31 +481,30 @@
 								<!-- 联系人/电话/发票项目内容/发票抬头 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>联系人：</label> <input id="linkman"
-											name="linkman" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+										<label><span>*</span>联系人：</label> <input id=""
+											name="" type="text" class="form-control input-sm"
+											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>电话：</label> <input id="telephone"
 											name="telephone" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>发票项目内容：</label> <input
 											id="invoiceContent" name="invoiceContent" type="text"
-											class="form-control input-sm" placeholder=" " /> <i
-											class="bulb"></i>
+											class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>发票抬头：</label> <input id="invoiceHead"
 											name="invoiceHead" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 							</div>
@@ -525,21 +516,21 @@
 									<div class="form-group">
 										<label><span>*</span>团队名称：</label> <input id="" name=""
 											type="text" class="form-control input-sm" placeholder=" " />
-										<i class="bulb"></i>
+										
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>快递号：</label> <input id="expressNum"
 											name="expressNum" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>备注：</label> <input id="remark"
 											name="remark" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 							</div>
@@ -616,17 +607,16 @@
 				}
 			});
 			
+			$('#urgentType').change(function(){
+				var urgentType = $(this).val();
+				if(urgentType != 1){
+					$("#urgentDays").removeClass("none");
+				}else{
+					$("#urgentDays").addClass("none");
+				}
+			});
+			
 		});
-		
-		//加急 点击事件
-		function urgent(){
-			var urgentType = $('[name="urgenttype"]').val();
-			if (urgentType != 1) {
-				$("#urgentDays").removeClass("none");
-			} else {
-				$("#urgentDays").addClass("none");
-			}
-		}
 		
 		
 		//添加申请人(大按钮)
@@ -641,7 +631,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/addApplicant.html'
+				content:'/admin/orderJp/addApplicantSale.html'
 			});
 			
 		});
@@ -657,7 +647,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/addApplicant.html'
+				content:'/admin/orderJp/addApplicantSale.html'
 			});
 		}
 			
@@ -684,15 +674,27 @@
 				    	data:{applicantId:appId},
 				    	type:'post',
 				    	success: function(data){
+				    		if( data.length > 0){
+								$("#mySwitch").removeClass("none");//显示申请人信息列表
+								$("#applicantInfo").hide();//添加申请人 按钮 隐藏
 							for(var i = 0; i < data.length; i++){
 								result += '<tr>';
-								if(data[i].applyname != undefined){
-									result += '<td>' + data[i].applyname + '</td>';
+								if(data[i].mainid == data[i].id){
+									//为主申请人
+									if(data[i].applyname != undefined){
+										result += '<td><font color="blue">主   </font> ' + data[i].applyname + '</td>';
+									}
+									else{
+										result += '<td></td>';
+									}
+								}else{
+									if(data[i].applyname != undefined){
+										result += '<td>' + data[i].applyname + '</td>';
+									}
+									else{
+										result += '<td></td>';
+									}
 								}
-								else{
-									result += '<td></td>';
-								}
-								
 								if(data[i].telephone != undefined){
 									result += '<td>' + data[i].telephone + '</td>';
 								}else{
@@ -728,9 +730,7 @@
 								result += '</tr>';
 							}
 							applicants.html(result);
-							if(data != null || data != undefined || data != ""){
-								$("#mySwitch").removeClass("none");//显示申请人信息列表
-								$("#applicantInfo").hide();//添加申请人 按钮 隐藏
+							
 							}else{
 								$("#mySwitch").addClass("none");//显示申请人信息列表
 								$("#applicantInfo").show();//添加申请人 按钮 隐藏
@@ -787,7 +787,7 @@
 			
 			//下单保存
 			function saveAddOrder(){
-				//var orderinfo = $("#orderInfo").serialize();
+				
 				//绑定签证城市
 				var visacounty = "";
 				$('[name=visacounty]').each(function(){
@@ -799,6 +799,10 @@
 					visacounty = visacounty.substr(0,visacounty.length-1);
 				}
 				
+				if($("#urgentDays").hasClass("none") == true){
+					$('#urgentDay').val("");
+					console.log(JSON.stringify( $("#orderInfo").serialize()));
+				}
 				//绑定三年城市
 				var threecounty = "";
 				$('[name=threecounty]').each(function(){
@@ -810,7 +814,6 @@
 					threecounty = threecounty.substr(0,threecounty.length-1);
 				}
 				var orderinfo = $.param({"visacounty":visacounty, "threecounty":threecounty}) + "&" + $("#orderInfo").serialize();
-				alert(orderinfo);
 				$.ajax({
 					type : 'POST',
 					data : orderinfo ,
@@ -823,6 +826,58 @@
 						alert("error");
 					}
 				}); 
+			}
+			
+			//下单取消
+			function cancelAddOrder(){
+				window.location.href = '${base}/admin/orderJp/list';
+			}
+			
+			$("#stayDay").keyup(function(){
+				var go = $("#goTripDate").val();
+				var back = $("#backTripDate").val();
+				var day = $("#stayDay").val();
+				if(go != "" && day != ""){
+					var days = getNewDay(go,day);
+					$("#backTripDate").val(days); 
+					//orderobj.orderInfo.backtripdate = days;
+				}
+			});
+			//日期转换
+			function getNewDay(dateTemp, days) {  
+			    var dateTemp = dateTemp.split("-");  
+			    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
+			    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);  
+			    var rDate = new Date(millSeconds);  
+			    var year = rDate.getFullYear();  
+			    var month = rDate.getMonth() + 1;  
+			    if (month < 10) month = "0" + month;  
+			    var date = rDate.getDate();  
+			    if (date < 10) date = "0" + date;  
+			    return (year + "-" + month + "-" + date);  
+			}  
+			
+			$("#money").blur(function(){
+				var money = $("#money").val();
+				if(money != "" ){
+					var moneys = returnFloat(money);
+					$("#money").val(moneys); 
+				}
+			});
+			//数字保留两位小数
+			function returnFloat(value){
+				var value=Math.round(parseFloat(value)*100)/100;
+				var xsd=value.toString().split(".");
+				if(xsd.length==1){
+					value=value.toString()+".00";
+				 	return value;
+				}
+				if(xsd.length>1){
+					if(xsd[1].length<2){
+				  		value=value.toString()+"0";
+				 	}
+				 	return value;
+				 }
 			}
 		</script>
 </body>

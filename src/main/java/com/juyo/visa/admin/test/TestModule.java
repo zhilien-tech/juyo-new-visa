@@ -39,11 +39,11 @@ public class TestModule {
 		return null;
 	}
 
-	@At("admin/firstTrialJp/basicInfo")
+	/*@At("admin/firstTrialJp/basicInfo")
 	@Ok("jsp")
 	public Object basicInfo() {
 		return null;
-	}
+	}*/
 
 	@At("admin/firstTrialJp/express")
 	@Ok("jsp")
@@ -60,6 +60,54 @@ public class TestModule {
 	@At("admin/firstTrialJp/visaInfo")
 	@Ok("jsp")
 	public Object visaInfo() {
+		return null;
+	}
+
+	@At("admin/firstTrialJp/unqualified")
+	@Ok("jsp")
+	public Object unqualified() {
+		return null;
+	}
+
+	@At("admin/orderJp/share")
+	@Ok("jsp")
+	public Object share() {
+		return null;
+	}
+
+	@At("admin/orderJp/log")
+	@Ok("jsp")
+	public Object log() {
+		return null;
+	}
+
+	@At("admin/myData/basicInfo")
+	@Ok("jsp")
+	public Object basicInfo() {
+		return null;
+	}
+
+	@At("admin/myData/passportInfo")
+	@Ok("jsp")
+	public Object passportInfo() {
+		return null;
+	}
+
+	@At("admin/myVisa/inProcessVisa")
+	@Ok("jsp")
+	public Object inProcessVisa() {
+		return null;
+	}
+
+	@At("admin/JapanDijie/japanList")
+	@Ok("jsp")
+	public Object japanList() {
+		return null;
+	}
+
+	@At("admin/receptionJP/listJapan")
+	@Ok("jsp")
+	public Object listJapan() {
 		return null;
 	}
 }

@@ -11,7 +11,10 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/company.css">
-	<%-- <link rel="stylesheet" href="${base}/references/public/plugins/uploadify/uploadify.css"> --%>
+	<style type="text/css">
+		img#sqImg {top: 0;}
+		#sgImg{top:1%}
+	</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -58,16 +61,14 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label>电话：</label> <input id="mobile"
-									name="mobile" type="text" class="form-control input-sm"
-									placeholder=" " />
+								<label>电话：</label> 
+								<input id="mobile" name="mobile" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label>邮箱：</label> <input id="email" name="email"
-									type="text" class="form-control input-sm" placeholder=" " />
+								<label>邮箱：</label> <input id="email" name="email" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -75,17 +76,16 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
-								<label>地址：</label> <input id="address"
-									name="address" type="text" class="form-control input-sm"
-									placeholder=" " />
+								<label>地址：</label> 
+								<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>公司类型：</label> <select
-									class="form-control input-sm selectHeight" name="comType">
+								<label><span>*</span>公司类型：</label> 
+								<select class="form-control input-sm selectHeight" name="comType">
 									<option value="">请选择</option>
 									<c:forEach var="map" items="${obj.companyTypeEnum}">
 										<option value="${map.key}">${map.value}</option>

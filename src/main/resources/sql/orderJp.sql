@@ -12,10 +12,13 @@ o.orderNum,
 		orderId = oj.id
 ) peopleNum,
 o.`status`,
-c.shortName,
+o.comName,
 c.source,
-c.linkman,
-c.mobile,
+o.comShortName,
+o.isDirectCus,
+o.linkman,
+o.telephone,
+o.customerId,
 aj.applicants
 FROM
 t_order o
@@ -39,22 +42,6 @@ LEFT JOIN t_company tc ON tc.id = o.comId
 
 $condition
 
-/*orderJp_list_customerInfo_byOrderId*/
-SELECT
-c.id,
-c.source,
-c.`name`,
-c.shortname,
-c.linkman,
-c.email,
-c.mobile
-FROM
-t_order o
-LEFT JOIN
-t_customer c ON o.customerId = c.id
-WHERE
-o.id = @id
-
 /*orderJp_list_orderInfo_byOrderId*/
 SELECT
 	o.*, 
@@ -75,6 +62,7 @@ SELECT
 a.id,
 CONCAT(a.firstName, a.lastName) applyname,
 a.email,
+a.mainId,
 a.telephone,
 a.sex,
 ap.passport
@@ -104,7 +92,8 @@ SELECT
 	ap.issuedDate,
 	ap.validEndDate,
 	ap.issuedOrganization,
-	ap.issuedOrganizationEn
+	ap.issuedOrganizationEn,
+	ap.passportUrl
 FROM
 	t_applicant_passport ap
 INNER JOIN 
@@ -128,6 +117,7 @@ a.id,
 CONCAT(a.firstName, a.lastName) applyname,
 a.email,
 a.telephone,
+a.mainId,
 a.sex,
 ap.passport
 FROM
@@ -135,3 +125,31 @@ t_applicant a
 LEFT JOIN
 t_applicant_passport ap ON ap.applicantId = a.id
 $condition
+
+/*visaInfo_byApplicantId*/
+SELECT
+aoj.isMainApplicant,
+a.mainId,
+aoj.applicantId,
+aoj.mainRelation,
+aoj.relationRemark,
+aoj.sameMainTrip,
+aoj.sameMainWealth,
+aoj.sameMainWork,
+awj.occupation,
+awj.`name`,
+awj.telephone,
+awj.address,
+awtj.type,
+awtj.details
+FROM
+t_applicant_order_jp aoj
+LEFT JOIN
+t_applicant a ON aoj.applicantId = a.id
+LEFT JOIN
+t_applicant_work_jp awj ON awj.applicantId = aoj.id
+LEFT JOIN
+t_applicant_wealth_jp awtj ON awtj.applicantId = aoj.id
+WHERE
+aoj.applicantId = @id
+
