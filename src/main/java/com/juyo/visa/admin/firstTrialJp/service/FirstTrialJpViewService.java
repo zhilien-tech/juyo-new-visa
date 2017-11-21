@@ -478,7 +478,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			e.printStackTrace();
 		}
 
-		return null;
+		return "EXPRESS SUCCESS";
 	}
 
 	/**
