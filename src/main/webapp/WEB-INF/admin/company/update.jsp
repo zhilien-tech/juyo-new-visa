@@ -1,32 +1,25 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java"
-	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-
 <c:set var="url" value="${base}/admin/company" />
-
 <!DOCTYPE HTML>
 <html lang="en-US" id="updateHtml">
 <head>
-<meta charset="UTF-8">
-<title>更新</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, minimum-scale=1">
+	<meta charset="UTF-8">
+	<title>更新</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/company.css">
-	<%-- <link rel="stylesheet" href="${base}/references/public/plugins/uploadify/uploadify.css"> --%>
 </head>
 <body>
 
 	<div class="modal-content">
 		<form id="companyUpdateForm">
 			<div class="modal-header">
-				<span class="heading">编辑</span> <input id="backBtn" type="button"
-					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
-					data-dismiss="modal" value="取消" /> <input id="updateBtn"
-					type="button" onclick="save()"
-					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<span class="heading">编辑</span> 
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
+				<input id="updateBtn" type="button" onclick="save()" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
@@ -35,37 +28,15 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>公司全称：</label> <input id="name" name="name"
-									value="${obj.company.name}" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>公司全称：</label> 
+								<input id="name" name="name" value="${obj.company.name}" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>公司简称：</label> <input id="shortName"
-									name="shortName" value="${obj.company.shortName}" type="text"
-									class="form-control input-sm" placeholder=" " />
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-sm-6">
-							<div class="form-group">
-								<label><span>*</span>用户名：</label> <input id="adminId"
-									name="adminId" value="${obj.company.adminId}" type="hidden" />
-								<input id="adminLoginName" name="adminLoginName"
-									value="${obj.company.adminloginname}" type="text"
-									class="form-control input-sm" placeholder=" " />
-							</div>
-						</div>
-
-						<div class="col-sm-6">
-							<div class="form-group">
-								<label><span>*</span>联系人：</label> <input id="linkman"
-									name="linkman" value="${obj.company.linkman}" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>公司简称：</label> 
+								<input id="shortName" name="shortName" value="${obj.company.shortName}" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -73,17 +44,32 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label>电话：</label> <input id="mobile"
-									name="mobile" value="${obj.company.mobile}" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>用户名：</label> 
+								<input id="adminId" name="adminId" value="${obj.company.adminId}" type="hidden" />
+								<input id="adminLoginName" name="adminLoginName" value="${obj.company.adminloginname}" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label>邮箱：</label> <input id="email" name="email"
-									value="${obj.company.email}" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>联系人：</label> 
+								<input id="linkman" name="linkman" value="${obj.company.linkman}" type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>电话：</label> 
+								<input id="mobile" name="mobile" value="${obj.company.mobile}" type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>邮箱：</label> 
+								<input id="email" name="email" value="${obj.company.email}" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -91,9 +77,8 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
-								<label>地址：</label> <input id="address"
-									name="address" value="${obj.company.address}" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label>地址：</label> 
+								<input id="address" name="address" value="${obj.company.address}" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -102,24 +87,17 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>公司类型：</label>
-								<%-- <input id="comType"
-									name="comType" value="${obj.company.comType}" type="text"
-									class="form-control input-sm" placeholder=" " /> --%>
-								<select class="form-control input-sm inpImportant"
-									name="comType" id="comType">
+								<select class="form-control input-sm inpImportant" name="comType" id="comType">
 									<option value="">请选择</option>
-									<option value="1"
-										<c:if test="${'1' eq obj.company.comType}">selected</c:if>>送签社</option>
-									<option value="2"
-										<c:if test="${'2' eq obj.company.comType}">selected</c:if>>地接社</option>
+									<option value="1" <c:if test="${'1' eq obj.company.comType}">selected</c:if>>送签社</option>
+									<option value="2" <c:if test="${'2' eq obj.company.comType}">selected</c:if>>地接社</option>
 								</select>
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>经营范围：</label> <input id="businessScopes"
-									name="businessScopes" value="${obj.company.scopes}"
-									type="hidden" />
+								<label><span>*</span>经营范围：</label> 
+								<input id="businessScopes" name="businessScopes" value="${obj.company.scopes}" type="hidden" />
 								<div class="multiselectBtn form-control input-sm"></div>
 								<div class="btnVal">
 									<input type="button" value="日本" class="btn btn-sm btn-state1" />

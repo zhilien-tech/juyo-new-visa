@@ -107,6 +107,7 @@
 		
 		//保存
 		function save(){
+			layer.load(1);
 			var passportInfo = $("#unqualifiedForm").serialize();
 			$.ajax({
 				type: 'POST',

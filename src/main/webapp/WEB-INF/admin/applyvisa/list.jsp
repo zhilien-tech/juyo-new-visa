@@ -15,13 +15,9 @@
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper"  style="min-height: 848px;">
 				办理中的签证（待做）
-			</div><!-- /.content-wrapper -->
-	
-			<!-- Main Footer -->
-			<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
+			</div>
 	
 		</div>
-		<!-- ./wrapper -->
 	
 		<!-- jQuery 2.2.3 -->
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>

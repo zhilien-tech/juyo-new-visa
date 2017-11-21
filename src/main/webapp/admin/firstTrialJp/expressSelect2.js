@@ -137,6 +137,7 @@ function save(orderid){
 		layer.msg('收件人信息不能为空');
 		return;
 	}
+	var layerIndex =  layer.load(1, {shade: "#000"});
 	$.ajax({ 
 		url: BASE_PATH+'/admin/firstTrialJp/saveExpressInfo.html',
 		type:'post',
@@ -146,6 +147,9 @@ function save(orderid){
 			receiveAddressId:$("#receiveAddressId").val()
 		},
 		success: function(data){
+			if(data.stauts == 200){
+				layer.close(layerIndex);
+			}
 			closeWindow();
 		}
 	});

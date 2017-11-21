@@ -29,7 +29,7 @@
 	<div class="modal-content">
 		<form id="expressForm" >
 			<div class="modal-header">
-				<span class="heading">快递</span> 
+				<span class="heading">快递</span>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save(${obj.orderid});" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>

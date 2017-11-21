@@ -8,4 +8,5 @@
 .everybody-info div:nth-child(3){width:16%;}
 .everybody-info div:nth-child(4){width:13%;}
 .everybody-info div:nth-child(5){width:30%;}
-.everybody-info div:last-child{float:right;width:152px;}	
+.everybody-info div:last-child{float:right;width:142px;position: relative;right: -7px;}	
+.unqualified{margin-right: 0 !important;}

@@ -84,8 +84,9 @@ public class FirstTrialJpModule {
 	 * 快递 发信息
 	 */
 	@At
+	@GET
 	@Ok("jsp")
-	public Object express(@Param("id") int orderid, HttpSession session) {
+	public Object express(@Param("id") Integer orderid, HttpSession session) {
 		return firstTrialJpViewService.express(orderid, session);
 	}
 
@@ -173,4 +174,12 @@ public class FirstTrialJpModule {
 		return firstTrialJpViewService.saveJpTrialDetailInfo(editDataForm, session);
 	}
 
+	/**
+	 * 订单申请人是否合格
+	 */
+	@At
+	@POST
+	public Boolean isQualified(@Param("orderid") Integer orderid) {
+		return firstTrialJpViewService.isQualified(orderid);
+	}
 }
