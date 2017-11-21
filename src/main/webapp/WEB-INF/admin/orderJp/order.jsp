@@ -38,7 +38,7 @@
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
 				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
 				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" />
-				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" @click="share()" />
+				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" @click="share(orderInfo.id)" />
 				<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" @click="log(orderInfo.id)" />
 			</div>
 			<section class="content">
@@ -89,13 +89,13 @@
 									<div class="col-sm-3">
 										<div class="form-group" style="padding-right: 3%;">
 											<label><span>*</span>公司全称：</label> 
-											<input id="compName" name="name" type="text" class="form-control input-sm" placeholder=" " />
+											<input id="compName2" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.comName }"/>
 										</div>
 									</div>
 									<div class="col-sm-3">
 										<div class="form-group">
 											<label><span>*</span>公司简称：</label>
-											<input id="comShortName" name="shortname" type="text" class="form-control input-sm" placeholder=" "  />
+											<input id="comShortName2" name="shortname" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.comShortName }" />
 										</div>
 									</div>
 								</div><!-- end input 直客 -->
@@ -116,7 +116,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>手机号：</label> 
-										<select id = "telephone" name="mobile"
+										<select id = "mobile" name="mobile"
 												class="form-control select2 cityselect2 " multiple="multiple"
 												data-placeholder="" v-model="customerInfo.mobile">
 												<c:if test="${ !empty obj.customer.id }">
@@ -142,19 +142,19 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>联系人：</label> 
-										<input id="linkman" name="linkman" type="text" class="form-control input-sm" placeholder=" " />
+										<input id="linkman2" name="linkman" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.linkman }"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>手机号：</label> 
-										<input id="telephone" name="mobile" type="text" class="form-control input-sm" placeholder=" " />
+										<input id="mobile2" name="mobile" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.telephone }"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>邮箱：</label>
-										<input id="email" name="email" type="text" class="form-control input-sm" placeholder=" " />
+										<input id="email2" name="email" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.email }"/>
 									</div>
 								</div>
 							</div><!-- end input 直客 -->
@@ -199,16 +199,17 @@
 									<!-- <i class="bulb"></i> 小灯泡-->
 								</div>
 							</div>
-							<div class="col-sm-3" id="urgentDay">
-								<div class="form-group">
-									<label>&nbsp;</label> <select id="urgentDay" name="urgentDay"
-										class="form-control input-sm" v-model="orderInfo.urgentday">
-										<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
-											<option value="${map.key}">${map.value}</option>
-										</c:forEach>
-									</select>
-								</div>
-							</div>
+
+									<div class="col-sm-3 none" id="urgentDays">
+										<div class="form-group">
+											<label>&nbsp;</label> <select id="urgentDay" name="urgentDay" 
+												class="form-control input-sm" v-model="orderInfo.urgentday">
+												<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
+													<option value="${map.key}">${map.value}</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
 						</div>
 						<!-- end 人数/领区/加急 -->
 
@@ -593,9 +594,18 @@
 			$(".info").on("click", ".remove-btn", function(){
 				$(this).parent().remove();//删除 对相应的本模块
 			});
-			customerTypeSelect2();
+			var customerType = $("#customerType").val();
+			if(customerType == 4){
+				$(".on-line").hide();//隐藏select2部分字段
+				$(".zhiKe").removeClass("none");
+			}else{
+				$(".on-line").show();//显示select2部分字段
+				$(".zhiKe").addClass("none");
+				customerTypeSelect2();
+			}
+			
 			//客户来源
-			$("#customerType").change(function(){
+			/* $("#customerType").change(function(){
 				var customerVal = $(this).val();
 				if(customerVal == 4){//直客
 					$(".on-line").hide();//隐藏select2部分字段
@@ -603,8 +613,18 @@
 				}else{
 					$(".on-line").show();//显示select2部分字段
 					$(".zhiKe").addClass("none");
+					customerTypeSelect2();
 				}
 			});
+			 */
+			//加急 
+			var urgentType = $('#urgentType').val();
+			if (urgentType == 1) {
+				$("#urgentDays").addClass("none");
+			} else {
+				$("#urgentDays").removeClass("none");
+			}
+			
 			
 			$('#sendVisaDate').daterangepicker(null, function(start, end, label) {
                 console.log(start.toISOString(), end.toISOString(), label);
@@ -672,6 +692,35 @@
 							}
 						});
 						
+						$("#customerType").change(function(){
+							var thisval = $(this).val();
+							if(thisval == 4){
+								$(".on-line").hide();//隐藏select2部分字段
+								$(".zhiKe").removeClass("none");
+								$("#linkman2").val("");
+								$("#compName2").val("");
+								$("#comShortName2").val("");
+								$("#mobile2").val("");
+								$("#email2").val("");
+							}else{
+								$(".on-line").show();//显示select2部分字段
+								$(".zhiKe").addClass("none");
+								customerTypeSelect2();
+								//客户姓名清空
+								$("#linkman").val(null).trigger("change");
+								//电话清空
+								$("#mobile").val(null).trigger("change");
+								//公司全称
+								$("#compName").val(null).trigger("change");
+								//公司简称
+								$("#comShortName").val(null).trigger("change");
+								//邮箱清空
+								$("#email").val(null).trigger("change");
+							}
+						});
+						
+						
+						
 						$('#isVisit').change(function(){
 							var thisval = $(this).val();
 							if(thisval == 1){
@@ -684,9 +733,9 @@
 						$('#urgentType').change(function(){
 							var thisval = $(this).val();
 							if(thisval != 1){
-								$("#urgentDay").removeClass("none");
+								$("#urgentDays").removeClass("none");
 							}else{
-								$("#urgentDay").addClass("none");
+								$("#urgentDays").addClass("none");
 							}
 						});
 					},
@@ -697,6 +746,16 @@
 			},
 			methods : {
 				order : function() {
+					
+					var customerType = $("#customerType").val();
+					if(customerType == 4){
+						orderobj.customerInfo.linkman = $("#linkman2").val();
+						orderobj.customerInfo.name = $("#compName2").val();
+						orderobj.customerInfo.shortname = $("#comShortName2").val();
+						orderobj.customerInfo.mobile = $("#mobile2").val();
+						orderobj.customerInfo.email = $("#email2").val();
+					}
+					
 					//绑定签证城市
 					var visacounty = "";
 					$('[name=visacounty]').each(function(){
@@ -781,7 +840,7 @@
 				      	}
 				    }); 
 				},
-				share:function(){//分享
+				share:function(id){//分享
 					layer.open({
 						type: 2,
 						title: false,
@@ -791,7 +850,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '551px'],
-						content:'/admin/orderJp/share.html'
+						content:'/admin/orderJp/share.html?id='+id
 					});
 				},
 				log:function(id){//日志
@@ -843,10 +902,12 @@
 			    	data:{orderid:orderid},
 			    	type:'post',
 			    	success: function(data){
-			    		if(data.length <= 0){
+			    		if(data.length <= 0 || data.length == undefined){
 			    			$("#mySwitch").addClass("none");//显示申请人信息列表
 							$("#applicantInfo").show();//添加申请人 按钮 隐藏
 			    		}else{
+			    			$("#mySwitch").removeClass("none");
+							$("#applicantInfo").hide();
 			    			orderobj.applicantInfo = data;
 			    		}
 			      	}
@@ -856,7 +917,6 @@
 		
 		//添加申请人
 		function addApplicant(id){
-			alert(id);
 			layer.open({
 				type: 2,
 				title: false,
@@ -880,7 +940,7 @@
 				orderobj.orderInfo.backtripdate = days;
 			}
 		});
-		
+		//日期转换
 		function getNewDay(dateTemp, days) {  
 		    var dateTemp = dateTemp.split("-");  
 		    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
@@ -893,6 +953,29 @@
 		    if (date < 10) date = "0" + date;  
 		    return (year + "-" + month + "-" + date);  
 		}  
+		
+		$("#money").blur(function(){
+			var money = $("#money").val();
+			if(money != "" ){
+				var moneys = returnFloat(money);
+				$("#money").val(moneys); 
+			}
+		});
+		//数字保留两位小数
+		function returnFloat(value){
+			var value=Math.round(parseFloat(value)*100)/100;
+			var xsd=value.toString().split(".");
+			if(xsd.length==1){
+				value=value.toString()+".00";
+			 	return value;
+			}
+			if(xsd.length>1){
+				if(xsd[1].length<2){
+			  		value=value.toString()+"0";
+			 	}
+			 	return value;
+			 }
+		}
 	</script>
 </body>
 </html>

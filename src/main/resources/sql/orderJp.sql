@@ -12,10 +12,13 @@ o.orderNum,
 		orderId = oj.id
 ) peopleNum,
 o.`status`,
-c.shortName,
+o.comName,
 c.source,
-c.linkman,
-c.mobile,
+o.comShortName,
+o.isDirectCus,
+o.linkman,
+o.telephone,
+o.customerId,
 aj.applicants
 FROM
 t_order o
@@ -38,22 +41,6 @@ LEFT JOIN t_applicant_passport ap ON ap.applicantId = aj.id
 LEFT JOIN t_company tc ON tc.id = o.comId
 
 $condition
-
-/*orderJp_list_customerInfo_byOrderId*/
-SELECT
-c.id,
-c.source,
-c.`name`,
-c.shortname,
-c.linkman,
-c.email,
-c.mobile
-FROM
-t_order o
-LEFT JOIN
-t_customer c ON o.customerId = c.id
-WHERE
-o.id = @id
 
 /*orderJp_list_orderInfo_byOrderId*/
 SELECT
@@ -143,6 +130,7 @@ $condition
 SELECT
 aoj.isMainApplicant,
 a.mainId,
+aoj.applicantId,
 aoj.mainRelation,
 aoj.relationRemark,
 aoj.sameMainTrip,

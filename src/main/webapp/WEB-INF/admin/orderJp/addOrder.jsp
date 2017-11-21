@@ -140,7 +140,7 @@
 									<div class="form-group">
 										<label><span>*</span>手机号：</label>
 										<input type="hidden" id="telephoneSelect2" value=""/>
-										 <select id="telephone"
+										 <select id="mobile"
 											name="mobile" class="form-control select2 cityselect2 "
 											multiple="multiple" data-placeholder="">
 										</select>
@@ -171,7 +171,7 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>手机号：</label> <input id="telephone"
+										<label><span>*</span>手机号：</label> <input id="mobile"
 											name="mobile" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
@@ -481,8 +481,8 @@
 								<!-- 联系人/电话/发票项目内容/发票抬头 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>联系人：</label> <input id="linkman"
-											name="linkman" type="text" class="form-control input-sm"
+										<label><span>*</span>联系人：</label> <input id=""
+											name="" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
@@ -607,17 +607,16 @@
 				}
 			});
 			
+			$('#urgentType').change(function(){
+				var urgentType = $(this).val();
+				if(urgentType != 1){
+					$("#urgentDays").removeClass("none");
+				}else{
+					$("#urgentDays").addClass("none");
+				}
+			});
+			
 		});
-		
-		//加急 点击事件
-		function urgent(){
-			var urgentType = $('[name="urgenttype"]').val();
-			if (urgentType != 1) {
-				$("#urgentDays").removeClass("none");
-			} else {
-				$("#urgentDays").addClass("none");
-			}
-		}
 		
 		
 		//添加申请人(大按钮)
@@ -788,7 +787,7 @@
 			
 			//下单保存
 			function saveAddOrder(){
-				//var orderinfo = $("#orderInfo").serialize();
+				
 				//绑定签证城市
 				var visacounty = "";
 				$('[name=visacounty]').each(function(){
@@ -800,6 +799,10 @@
 					visacounty = visacounty.substr(0,visacounty.length-1);
 				}
 				
+				if($("#urgentDays").hasClass("none") == true){
+					$('#urgentDay').val("");
+					console.log(JSON.stringify( $("#orderInfo").serialize()));
+				}
 				//绑定三年城市
 				var threecounty = "";
 				$('[name=threecounty]').each(function(){
@@ -840,7 +843,7 @@
 					//orderobj.orderInfo.backtripdate = days;
 				}
 			});
-			
+			//日期转换
 			function getNewDay(dateTemp, days) {  
 			    var dateTemp = dateTemp.split("-");  
 			    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
@@ -853,6 +856,29 @@
 			    if (date < 10) date = "0" + date;  
 			    return (year + "-" + month + "-" + date);  
 			}  
+			
+			$("#money").blur(function(){
+				var money = $("#money").val();
+				if(money != "" ){
+					var moneys = returnFloat(money);
+					$("#money").val(moneys); 
+				}
+			});
+			//数字保留两位小数
+			function returnFloat(value){
+				var value=Math.round(parseFloat(value)*100)/100;
+				var xsd=value.toString().split(".");
+				if(xsd.length==1){
+					value=value.toString()+".00";
+				 	return value;
+				}
+				if(xsd.length>1){
+					if(xsd[1].length<2){
+				  		value=value.toString()+"0";
+				 	}
+				 	return value;
+				 }
+			}
 		</script>
 </body>
 </html>
