@@ -57,6 +57,7 @@ new Vue({
 		expressFun:function(orderid){//跳转快递弹层页面
 			$.ajax({
 				type : 'POST',
+				async: false,
 				data : {
 					orderid:orderid
 				},

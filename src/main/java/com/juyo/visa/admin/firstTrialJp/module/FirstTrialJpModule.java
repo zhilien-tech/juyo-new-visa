@@ -84,8 +84,9 @@ public class FirstTrialJpModule {
 	 * 快递 发信息
 	 */
 	@At
+	@GET
 	@Ok("jsp")
-	public Object express(@Param("id") int orderid, HttpSession session) {
+	public Object express(@Param("id") Integer orderid, HttpSession session) {
 		return firstTrialJpViewService.express(orderid, session);
 	}
 

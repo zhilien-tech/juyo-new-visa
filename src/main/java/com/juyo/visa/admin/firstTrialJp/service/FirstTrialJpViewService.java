@@ -75,6 +75,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	@Inject
 	private MailService mailService;
 
+	private final static String MUBAN_DOCX_URL = "http://oyu1xyxxk.bkt.clouddn.com/a40f95f1-c87f-401a-be75-25f0d42f9f72.docx";
+
 	/**
 	 * 初审列表数据
 	 * @param form
@@ -238,7 +240,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//快递 发邮件
-	public Object express(int orderid, HttpSession session) {
+	public Object express(Integer orderid, HttpSession session) {
 
 		Map<String, Object> result = Maps.newHashMap();
 
@@ -556,7 +558,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			String emailText = tmp.toString();
 			emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
 					.replace("${data}", data).replace("${receiver}", receiver).replace("${mobile}", mobile)
-					.replace("${address}", address);
+					.replace("${address}", address).replace("${URL}", MUBAN_DOCX_URL);
 
 			result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
 		}
