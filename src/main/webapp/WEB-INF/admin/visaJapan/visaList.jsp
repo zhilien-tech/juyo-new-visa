@@ -49,18 +49,17 @@
 								<div><label>受付番号：</label><span>{{data.number}}</span></div>	
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
-								<div><label>状态：</label><span>{{data.japanstate}}</span></div>	
+								<div><label>状态：</label><span>{{data.visastatus}}</span></div>	
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<i class="sendZB"> </i>
-									<i class="ZBchange"> </i>
-									<i class="ZBcancel"> </i>
-									<i class="download"> </i>
+									<i class="sendZB" v-on:click="sendInsurance(data.id,2)"> </i>
+									<i class="ZBchange" v-on:click="sendInsurance(data.id,4)"> </i>
+									<i class="ZBcancel" v-on:click="sendInsurance(data.id,6)"> </i>
+									<i class="download" v-on:click="downLoadFile(data.id)"> </i>
 									<i class="handoverTable"> </i>
-									<i class="visaInput"> </i>
 									<i class="afterSales"> </i>
 								</div>
 							</div>
@@ -87,6 +86,7 @@
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
+	<script src="${base}/references/public/plugins/jquery.fileDownload.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 	<%-- <script src="${base}/admin/visaJapan/visaList.js"></script> --%>
 	<script src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
@@ -129,6 +129,35 @@
         		    area: ['900px', '550px'],
         		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
         		  });
+        	},
+        	sendInsurance:function(orderid,visastatus){
+        		 $.ajax({ 
+                 	url: '${base}/admin/visaJapan/sendInsurance',
+                 	data:{orderid:orderid,visastatus:visastatus},
+                 	dataType:"json",
+                 	type:'post',
+                 	success: function(data){
+                 		layer.msg('发招宝成功');
+                 		//更新列表数据
+                 		$.ajax({ 
+                        	url: url,
+                        	dataType:"json",
+                        	type:'post',
+                        	success: function(data){
+                        		_self.visaJapanData = data.visaJapanData;
+                          	}
+                        });
+                   	}
+                 });
+        	},
+        	downLoadFile:function(orderid){
+        		$.fileDownload("${base}/admin/visaJapan/downloadFile.html?orderid=" + orderid, {
+			         successCallback: function (url) {
+			         },
+			         failCallback: function (html, url) {
+			        	layer.msg("下载失败");
+			         }
+			     });
         	}
         }
 	});

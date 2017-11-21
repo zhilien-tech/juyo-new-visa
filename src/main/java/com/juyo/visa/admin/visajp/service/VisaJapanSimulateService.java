@@ -1,0 +1,86 @@
+/**
+ * VisaJapanSimulateService.java
+ * com.juyo.visa.admin.visajp.service
+ * Copyright (c) 2017, 北京科技有限公司版权所有.
+*/
+
+package com.juyo.visa.admin.visajp.service;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
+
+import com.juyo.visa.entities.TOrderEntity;
+import com.juyo.visa.entities.TOrderJpEntity;
+import com.uxuexi.core.web.base.service.BaseService;
+
+/**
+ * TODO(这里用一句话描述这个类的作用)
+ * <p>
+ * TODO(这里描述这个类补充说明 – 可选)
+ *
+ * @author   刘旭利
+ * @Date	 2017年11月15日 	 
+ */
+@IocBean
+public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
+
+	@Inject
+	private DownLoadVisaFileService downLoadVisaFileService;
+
+	/**
+	 * 发招宝、招宝变更、招宝取消状态
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @param visastatus
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object sendInsurance(Integer orderid, Integer visastatus) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
+		orderjp.setVisastatus(visastatus);
+		return dbDao.update(orderjp);
+	}
+
+	/**
+	 * 下载文件
+	 * <p>
+	 * TODO 签证页面文件下载
+	 *
+	 * @param orderid
+	 * @param response
+	 * @return TODO签证页面文件下载
+	 */
+	public Object downloadFile(Long orderid, HttpServletResponse response) {
+		try {
+			//查询日本订单
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+			//获取打包的文件
+			byte[] byteArray = downLoadVisaFileService.generateFile(orderjp).toByteArray();
+			//获取订单信息，准备文件名称
+			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+			String filename = "";
+			filename += orderinfo.getOrderNum();
+			filename += ".zip";
+			//将文件进行编码
+			String fileName = URLEncoder.encode(filename, "UTF-8");
+			//设置下载的响应头
+			response.setContentType("application/zip");
+			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
+			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
+			//将字节流相应到浏览器（下载）
+			IOUtils.write(byteArray, response.getOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		}
+		return null;
+	}
+
+}
