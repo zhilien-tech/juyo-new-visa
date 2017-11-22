@@ -83,6 +83,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 	private final static String MUBAN_DOCX_URL = "http://oyu1xyxxk.bkt.clouddn.com/a40f95f1-c87f-401a-be75-25f0d42f9f72.docx";
 	private final static String FILE_NAME = "初审资料填写模板.docx";
+	private final static String SMS_SIGNATURE = "【优悦签】";
 
 	/**
 	 * 初审列表数据
@@ -624,7 +625,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String result = "发送失败";
 		try {
 			SMSService smsService = new HuaxinSMSServiceImpl(redisDao);
-			smsService.send(mobilenum, content);
+			smsService.send(mobilenum, SMS_SIGNATURE + content);
 			result = "发送成功";
 		} catch (Exception e) {
 			e.printStackTrace();
