@@ -243,3 +243,9 @@ function successCallBack(status){
 		}); 
 	}
 }
+
+//添加回邮信息 按钮  click
+$(".addExpressInfoBtn").click(function(){
+	$(".expressInfo").removeClass("none");
+	$(this).hide();
+});
