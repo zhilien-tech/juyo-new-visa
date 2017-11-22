@@ -59,8 +59,11 @@ import com.juyo.visa.forms.TApplicantUnqualifiedForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
+import com.we.business.sms.SMSService;
+import com.we.business.sms.impl.HuaxinSMSServiceImpl;
 
 /**
  * 日本订单初审Service
@@ -75,8 +78,12 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	@Inject
 	private MailService mailService;
 
+	@Inject
+	private RedisDao redisDao;
+
 	private final static String MUBAN_DOCX_URL = "http://oyu1xyxxk.bkt.clouddn.com/a40f95f1-c87f-401a-be75-25f0d42f9f72.docx";
 	private final static String FILE_NAME = "初审资料填写模板.docx";
+	private final static String SMS_SIGNATURE = "【优悦签】";
 
 	/**
 	 * 初审列表数据
@@ -471,9 +478,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		//改变订单状态 由初审到前台、签证 TODO
 
-		//发送短信、邮件 TODO
+		//发送短信、邮件
 		try {
 			sendMail(orderid);
+			sendMessage(orderid);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -540,7 +548,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
 		String orderNum = order.getOrderNum();
 
-		//查询订单收件人信息
+		//订单收件人信息
 		Record orderReceive = (Record) getReceiverByOrderid(orderid);
 		String expressType = orderReceive.getString("expressType");
 		String receiver = orderReceive.getString("receiver");
@@ -564,6 +572,64 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
 		}
 
+		return result;
+	}
+
+	//发送手机信息
+	public Object sendMessage(int orderid) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("express_sms.txt"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+
+		//查询订单号
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
+		String orderNum = order.getOrderNum();
+
+		//订单收件人信息
+		Record orderReceive = (Record) getReceiverByOrderid(orderid);
+		String expressType = orderReceive.getString("expressType");
+		String receiver = orderReceive.getString("receiver");
+		String mobile = orderReceive.getString("mobile");
+		String address = orderReceive.getString("address");
+
+		Map<String, Object> map = getmainApplicantByOrderid(orderid);
+		List<Record> applicants = (List<Record>) map.get("applicant");
+		String result = "";
+		for (Record record : applicants) {
+			String name = record.getString("applicantname");
+			String sex = record.getString("sex");
+			String data = record.getString("data");
+			String telephone = record.getString("telephone");
+
+			String smsContent = tmp.toString();
+			smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+					.replace("${data}", data).replace("${receiver}", receiver).replace("${mobile}", mobile)
+					.replace("${address}", address);
+
+			result = sendSMS(telephone, smsContent);
+
+		}
+
+		return result;
+	}
+
+	/**
+	 * 发送手机短信
+	 * <p>
+	 * @param mobilenum  手机号
+	 * @param content  短信内容
+	 */
+	public String sendSMS(String mobilenum, String content) {
+		String result = "发送失败";
+		try {
+			SMSService smsService = new HuaxinSMSServiceImpl(redisDao);
+			smsService.send(mobilenum, SMS_SIGNATURE + content);
+			result = "发送成功";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return result;
 	}
 

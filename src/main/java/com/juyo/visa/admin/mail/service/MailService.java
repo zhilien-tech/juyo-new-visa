@@ -3,7 +3,6 @@ package com.juyo.visa.admin.mail.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -69,7 +68,7 @@ public class MailService extends BaseService<TConfMailEntity> {
 
 	//文件下载
 	public Object download(String fileUrl, String fileName, HttpServletRequest request, HttpServletResponse response) {
-		String userAgent = request.getHeader("User-Agent");
+		/*String userAgent = request.getHeader("User-Agent");
 		//针对IE或者以IE为内核的浏览器：
 		if (userAgent.contains("MSIE") || userAgent.contains("Trident")) {
 			try {
@@ -84,7 +83,7 @@ public class MailService extends BaseService<TConfMailEntity> {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 
 		//下载文件
 		InputStream is = null;
@@ -98,7 +97,6 @@ public class MailService extends BaseService<TConfMailEntity> {
 				response.reset();
 				response.setContentType("application/octet-stream");
 				response.setCharacterEncoding("utf-8");
-				//response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
 				response.setHeader("Content-Disposition", String.format("attachment;filename=\"%s\"", fileName));
 				byte[] buffer = new byte[4096];
 				int count = 0;
