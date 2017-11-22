@@ -71,6 +71,9 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
+			var sharetype = $("#shareType").val();
+			/* alert(sharetype);
+			
 			$("#shareType").change(function(){
 				var shareType = $(this).val();
 				if(shareType == 1){
@@ -80,7 +83,7 @@
 							$(this).css("color","#3087f0");
 						}
 					});
-				}else{
+				}else{ */
 					$("#datatableId tbody tr").click(function(){
 						var isStyle = $(this).attr("style");
 						if(isStyle == "color: rgb(48, 135, 240);"){//不被选中
@@ -91,8 +94,8 @@
 						}
 					
 					});
-				}
-			});
+			/* 	}
+			}); */
 			
 		});
 
@@ -121,12 +124,23 @@
 			var orderId = ${obj.orderId};
 			var name,telephone,email;
 			$("#datatableId tbody tr").each(function(){
+				
 				if($(this).attr("style") == "color: rgb(48, 135, 240);"){
 					name = $(this).children().eq(0).html();
 					telephone = $(this).children().eq(1).html();
 					email = $(this).children().eq(2).html();
-					if(email == ""){
-						layer.msg("邮箱不能为空");
+					if(email == "" || telephone == ""){
+						layer.open({
+							type: 2,
+							title: false,
+							closeBtn:false,
+							fix: false,
+							maxmin: false,
+							shadeClose: false,
+							scrollbar: false,
+							area: ['900px', '551px'],
+							content:'${base}/admin/orderJp/getApplicantInfoValid.html?'
+						});
 					}
 				}
 			});

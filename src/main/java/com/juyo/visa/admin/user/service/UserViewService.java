@@ -87,6 +87,14 @@ public class UserViewService extends BaseService<TUserEntity> {
 		return jobList;
 	}
 
+	public Object delete(long id) {
+		TUserEntity userEntity = dbDao.fetch(TUserEntity.class, id);
+		TUserJobEntity userJobEntity = dbDao.fetch(TUserJobEntity.class, Cnd.where("empId", "=", userEntity.getId()));
+		dbDao.delete(TUserJobEntity.class, userJobEntity.getId());
+		dbDao.delete(TUserEntity.class, userEntity.getId());
+		return JsonResult.success("删除成功");
+	}
+
 	/**
 	 * 
 	 * TODO 添加

@@ -324,6 +324,16 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 邮箱、手机必填验证
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object getApplicantInfoValid() {
+		return null;
+	}
+
+	/**
 	 * 跳转到日志页面
 	 */
 	@At
