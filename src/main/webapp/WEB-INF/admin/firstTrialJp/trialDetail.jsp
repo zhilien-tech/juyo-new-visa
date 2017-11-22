@@ -17,8 +17,8 @@
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
 			.form-control{height: 30px;}
-			.add-btn{top: -35px;right: -1.5%;}
-			.remove-btn{top: -35px;right: -1.5%;}
+			.add-btn{top:-225px;right:-1%;}
+			.remove-btn{top: -225px;right: -1%;}
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
 		</style>
@@ -285,12 +285,12 @@
 								<!-- 资料来源/回邮方式/回邮地址 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>资料来源：</label> 
-										<select id="datasour" name="datasour" class="form-control input-sm">
+										<label><span>*</span>资料来源：</label> <select id="datasour"
+											name="datasour" class="form-control input-sm">
 											<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
-										</select> <i class="bulb"></i>
+										</select>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -300,82 +300,81 @@
 											<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
-										</select> <i class="bulb"></i>
+										</select>
 									</div>
 								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>回邮地址：</label> <input id="expressAddress"
 											name="expressAddress" type="text"
-											class="form-control input-sm" placeholder=" " /> <i
-											class="bulb"></i>
+											class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 							</div>
 							<!-- end 资料来源/回邮方式/回邮地址 -->
 	
-							<div class="row body-from-input">
+							<div class="row body-from-input" style="padding-left:0;">
 								<!-- 联系人/电话/发票项目内容/发票抬头 -->
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>联系人：</label> <input id="linkman"
 											name="linkman" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>电话：</label> <input id="telephone"
 											name="telephone" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>发票项目内容：</label> <input id="invoiceContent"
 											name="invoiceContent" type="text"
-											class="form-control input-sm" placeholder=" " /> <i
-											class="bulb"></i>
+											class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>发票抬头：</label> <input id="invoiceHead"
 											name="invoiceHead" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 							</div>
 							<!-- end 联系人/电话/发票项目内容/发票抬头 -->
 	
-							<div class="row body-from-input">
+							<div class="row body-from-input" style="padding-left:0;">
 								<!-- 团队名称/快递号/备注 -->
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>团队名称：</label> <input id="" name=""
 											type="text" class="form-control input-sm" placeholder=" " />
-										<i class="bulb"></i>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>快递号：</label> <input id="expressNum"
 											name="expressNum" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>备注：</label> <input id="remark"
 											name="remark" type="text" class="form-control input-sm"
-											placeholder=" " /> <i class="bulb"></i>
+											placeholder=" " />
 									</div>
 								</div>
 							</div>
 							<!-- end 团队名称/快递号/备注 -->
+							<i class="add-btn"></i>
 						</div>
 					</div>
 					<!-- end 快递信息 -->
+					
 				</section>
 			</div>
 	
@@ -397,5 +396,20 @@
 		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 		<script src="${base}/admin/firstTrialJp/trialDetail.js"></script><!-- 本页面js文件 -->
+		<script type="text/javascript">
+			$(function(){
+				//点击 蓝色加号图标 事件
+				$('.add-btn').click(function(){
+			    	var $html=$(this).parent().clone();//克隆标签模块
+			    	$(this).parents('.info').append($html);//添加克隆的内容
+			    	$html.find('.add-btn').remove();
+			    	$html.append('<i class="remove-btn"></i>');
+				});
+				//点击 蓝色叉号图标 事件
+				$(".info").on("click", ".remove-btn", function(){
+					$(this).parent().remove();//删除 对相应的本模块
+				});
+			});
+		</script>
 	</body>
 </html>

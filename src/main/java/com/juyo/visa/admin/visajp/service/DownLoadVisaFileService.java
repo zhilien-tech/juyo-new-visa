@@ -157,6 +157,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		//滞在予定表
 		ByteArrayOutputStream tripInfo = tripInfo(tempdata);
 		pdffiles.add(tripInfo);
+		//査 証 申 請 人 名 簿
+		ByteArrayOutputStream book = book(tempdata);
+		pdffiles.add(book);
 		ByteArrayOutputStream mergePdf = templateUtil.mergePdf(pdffiles);
 		fileMap.put("照会.pdf", templateUtil.createTempFile(mergePdf));
 		ByteArrayOutputStream bodyElement = bodyElement(tempdata);
@@ -229,6 +232,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	private ByteArrayOutputStream applyinfo(Record record, Map<String, Object> tempdata) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		TOrderTripJpEntity ordertripjp = (TOrderTripJpEntity) tempdata.get("ordertripjp");
+		List<TOrderTravelplanJpEntity> ordertravelplan = (List<TOrderTravelplanJpEntity>) tempdata
+				.get("ordertravelplan");
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("firstName", record.getString("firstname"));
@@ -237,9 +242,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("lastNameEn", record.getString("lastnameen"));
 			//性别
 			if ("男".equals(record.getString("sex"))) {
-				map.put("boy", "╳");
+				map.put("boy", "0");
 			} else if ("女".equals(record.getString("sex"))) {
-				map.put("gril", "╳");
+				map.put("gril", "0");
 			}
 			//出生日期
 			if (!Util.isEmpty(record.get("birthday"))) {
@@ -253,7 +258,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("country", "中国");
 			//身份证号
 			map.put("cardId", record.getString("cardid"));
-			//护照类别
+			//护照类别:普通
+			map.put("common", "0");
 			//护照号
 			map.put("passport", record.getString("passportno"));
 			//签发地点
@@ -286,11 +292,25 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			//入境口岸
 			TCityEntity goarrivecirtentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
 			map.put("goArrivedCity", goarrivecirtentity.getCity());
-			//航空公司
+			//航空公司.0
 			TFlightEntity goflightentity = flightViewService.fetch(ordertripjp.getGoFlightNum());
 			map.put("goFlightNum", goflightentity.getFlightnum());
+			//酒店信息
+			if (!Util.isEmpty(ordertravelplan)) {
+				TOrderTravelplanJpEntity travelplanEntity = ordertravelplan.get(0);
+				if (!Util.isEmpty(travelplanEntity.getHotel())) {
+					THotelEntity hotelinfo = hotelViewService.fetch(travelplanEntity.getHotel());
+					map.put("hotelname", hotelinfo.getName());
+					map.put("hotelphone", hotelinfo.getMobile());
+					map.put("hoteladdress", hotelinfo.getAddress());
+				}
+			}
+
 			//家庭住址
-			map.put("homeaddress", record.getString("address"));
+			map.put("homeaddress",
+					(!Util.isEmpty(record.get("province")) ? record.getString("province") : " ")
+							+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : " ")
+							+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress") : " "));
 			//家庭电话
 			map.put("homephone", record.getString("telephone"));
 			//电子邮箱
@@ -301,17 +321,17 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("workaddress", record.getString("workaddress"));
 			map.put("occupation", record.getString("occupation"));
 			map.put("danbaoname", "参照身元保证书");
-			map.put("text2", "╳");
-			map.put("text3", "╳");
-			map.put("text4", "╳");
-			map.put("text5", "╳");
-			map.put("text6", "╳");
-			map.put("text7", "╳");
+			map.put("text2", "0");
+			map.put("text3", "0");
+			map.put("text4", "0");
+			map.put("text5", "0");
+			map.put("text6", "0");
+			map.put("text7", "0");
 			//申请日期
 			map.put("applydate", dateformat.format(new Date()));
 			map.put("applyname", record.getString("firstname") + record.getString("lastname"));
 			//获取模板文件
-			URL resource = getClass().getClassLoader().getResource("apply.pdf");
+			URL resource = getClass().getClassLoader().getResource("japanfile/apply.pdf");
 			TemplateUtil templateUtil = new TemplateUtil();
 			stream = templateUtil.pdfTemplateStream(resource, map);
 		} catch (Exception e) {
@@ -335,6 +355,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			List<Record> applyinfo = (List<Record>) tempdata.get("applyinfo");
 			//日本订单信息
 			TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
+			//行程安排
+			List<TOrderTravelplanJpEntity> ordertravelplan = (List<TOrderTravelplanJpEntity>) tempdata
+					.get("ordertravelplan");
 
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("comNameBig", company.getName());
@@ -361,6 +384,14 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				strb.append("\n");
 			}
 			map.put("guest", strb.toString().toUpperCase());
+			//酒店信息
+			if (!Util.isEmpty(ordertravelplan)) {
+				TOrderTravelplanJpEntity travelplanEntity = ordertravelplan.get(0);
+				if (!Util.isEmpty(travelplanEntity.getHotel())) {
+					THotelEntity hotelinfo = hotelViewService.fetch(travelplanEntity.getHotel());
+					map.put("hotel", hotelinfo.getName());
+				}
+			}
 			//获取模板文件
 			URL resource = getClass().getClassLoader().getResource("japanfile/hotel.pdf");
 			TemplateUtil templateUtil = new TemplateUtil();
@@ -508,7 +539,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			}
 			font.setSize(10);
 			//日期格式化
-			String pattern = "yyyy年MM月dd日";
+			String pattern = "yy年MM月dd日";
 			//副标题1
 			String godatestr = "";
 			if (!Util.isEmpty(ordertripjp.getGoDate())) {
@@ -539,7 +570,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			}
 			//副标题2
 			{
-				String text = "（旅行参加者 " + applyname + "s 他" + dengsize + "s名、計" + totalsize + "名）";
+				String text = "（旅行参加者 " + applyname + " 他" + dengsize + "名、計" + totalsize + "名）";
 				Paragraph p = new Paragraph(text, font);
 				p.setSpacingAfter(15);
 				p.setIndentationRight(20);
@@ -717,16 +748,176 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				birthdaystr = exceldateformat.format((Date) record.get("birthday"));
 			}
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("name", record.getString("firstname") + record.getString("lastname"));
-			map.put("name_en", record.getString("firstnameen") + record.getString("lastnameen"));
-			map.put("gender", record.getString("sex"));
-			map.put("city", record.getString("city"));
+			//氏名
+			map.put("name",
+					(!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
+							+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : ""));
+			//ピンイン
+			map.put("name_en", (!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : " ")
+					+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : " "));
+			//性别
+			map.put("gender", !Util.isEmpty(record.get("sex")) ? record.getString("sex") : "");
+			//居住地域
+			map.put("city", !Util.isEmpty(record.get("city")) ? record.getString("city") : "");
+			//生年月日
 			map.put("birthday", birthdaystr);
-			map.put("passport", record.getString("passportno"));
-			map.put("remark", record.getString(" "));
+			//旅券番号
+			map.put("passport", !Util.isEmpty(record.get("passportno")) ? record.getString("passportno") : " ");
+			//備考
+			map.put("remark", " ");
 			list.add(map);
 		}
 		stream = templateUtil.createExcel(entity, list);
+		return stream;
+	}
+
+	/**
+	 * 査 証 申 請 人 名 簿
+	 */
+	public ByteArrayOutputStream book(Map<String, Object> tempdata) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			//公司信息
+			TCompanyEntity company = (TCompanyEntity) tempdata.get("company");
+			//出行信息
+			TOrderTripJpEntity ordertripjp = (TOrderTripJpEntity) tempdata.get("ordertripjp");
+			//申请人信息
+			List<Record> applyinfo = (List<Record>) tempdata.get("applyinfo");
+			//日本订单信息
+			TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
+			//行程安排
+			List<TOrderTravelplanJpEntity> ordertravelplans = (List<TOrderTravelplanJpEntity>) tempdata
+					.get("ordertravelplan");
+			//PDF操作开始
+			Document document = new Document(PageSize.A4, 0, 0, 36, 36);
+			PdfWriter.getInstance(document, stream);
+			document.open();
+			TtfClassLoader ttf = new TtfClassLoader();
+			Font font = ttf.getFont();
+			font.setSize(15);
+			{
+				Paragraph p = new Paragraph("査 証 申 請 人 名 簿", font);
+				p.setSpacingBefore(5);
+				p.setSpacingAfter(5);
+				p.setAlignment(Paragraph.ALIGN_CENTER);
+				document.add(p);
+			}
+			font.setSize(10);
+			//日期格式化
+			String pattern = "yy年MM月dd日";
+			SimpleDateFormat tableformat = new SimpleDateFormat("yyyy/MM/dd");
+			//副标题1
+			String godatestr = "";
+			if (!Util.isEmpty(ordertripjp.getGoDate())) {
+				godatestr = format(ordertripjp.getGoDate(), pattern);
+			}
+			String returndatestr = "";
+			if (!Util.isEmpty(ordertripjp.getReturnDate())) {
+				returndatestr = format(ordertripjp.getReturnDate(), pattern);
+			}
+			{
+				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
+				Paragraph p = new Paragraph(subtitle, font);
+				p.setSpacingBefore(5);
+				p.setIndentationRight(20);
+				p.setAlignment(Paragraph.ALIGN_RIGHT);
+				//添加副标题1
+				document.add(p);
+			}
+			String applyname = "";
+			int dengsize = 0;
+			int totalsize = 0;
+			if (!Util.isEmpty(applyinfo)) {
+				Record record = applyinfo.get(0);
+				applyname += record.getString("firstname");
+				applyname += record.getString("lastname");
+				dengsize = applyinfo.size() - 1;
+				totalsize = applyinfo.size();
+			}
+			//副标题2
+			{
+				String text = "（旅行参加者 " + applyname + " 他" + dengsize + "名、計" + totalsize + "名）";
+				Paragraph p = new Paragraph(text, font);
+				p.setSpacingAfter(15);
+				p.setIndentationRight(20);
+				p.setAlignment(Paragraph.ALIGN_RIGHT);
+				document.add(p);
+			}
+			//这里是表格********************************
+			float[] columns = { 1, 3, 3, 1, 2.5f, 3, 2, 3 };
+			PdfPTable table = new PdfPTable(columns);
+			table.setWidthPercentage(95);
+			table.setTotalWidth(PageSize.A4.getWidth());
+
+			//设置表头
+			String titles[] = { "", "氏名（中文）", "（英文）", "性別", "生年月日", "职业", "発行地", "旅券番号", };
+			for (int i = 0; i < titles.length; i++) {
+				String title = titles[i];
+				PdfPCell cell = new PdfPCell(new Paragraph(title, font));
+				cell.setFixedHeight(30);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				table.addCell(cell);
+			}
+			//表格体
+			int count = 0;
+			for (Record record : applyinfo) {
+				count++;
+				String[] data = {
+						String.valueOf(count),
+						//姓名
+						(!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
+								+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : ""),
+						//姓名英文
+						((!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "") + "\n" + (!Util
+								.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""))
+								.toUpperCase(), !Util.isEmpty(record.get("sex")) ? record.getString("sex") : "",
+						!Util.isEmpty(record.get("birthday")) ? tableformat.format((Date) record.get("birthday")) : "",
+						record.getString("occupation"), record.getString("province"), record.getString("passportno") };
+				for (String tablecell : data) {
+					PdfPCell cell = new PdfPCell(new Paragraph(tablecell, font));
+					cell.setFixedHeight(30);
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					table.addCell(cell);
+				}
+			}
+			document.add(table);
+			//底部*********************************************
+			{
+				Paragraph p = new Paragraph("保証会社：株事会金通商事", font);
+				p.setSpacingBefore(5);
+				p.setIndentationRight(100);
+				p.setAlignment(Paragraph.ALIGN_RIGHT);
+				document.add(p);
+			}
+			{
+				Paragraph p = new Paragraph("住  所：東京都千代田区霞が関３-３-３ 全日通霞ヶ関ビル3F", font);
+				p.setSpacingBefore(5);
+				p.setIndentationRight(100);
+				p.setAlignment(Paragraph.ALIGN_RIGHT);
+				document.add(p);
+			}
+			{
+				Paragraph p = new Paragraph("担当者：", font);
+				p.setSpacingBefore(5);
+				p.setIndentationRight(100);
+				p.setAlignment(Paragraph.ALIGN_RIGHT);
+				document.add(p);
+			}
+			{
+				Paragraph p = new Paragraph("電  話：", font);
+				p.setSpacingBefore(5);
+				p.setIndentationRight(100);
+				p.setAlignment(Paragraph.ALIGN_RIGHT);
+				document.add(p);
+			}
+			document.close();
+			IOUtils.closeQuietly(stream);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return stream;
 	}
 }
