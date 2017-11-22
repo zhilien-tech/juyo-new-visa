@@ -8,6 +8,7 @@ package com.juyo.visa.admin.visajp.module;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -24,6 +25,7 @@ import com.juyo.visa.admin.visajp.form.PassportForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.admin.visajp.service.VisaJapanService;
+import com.juyo.visa.admin.visajp.service.VisaJapanSimulateService;
 import com.juyo.visa.common.enums.IssueValidityEnum;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderTravelplanJpEntity;
@@ -43,6 +45,9 @@ public class VisaJapanModule {
 
 	@Inject
 	private VisaJapanService visaJapanService;
+
+	@Inject
+	private VisaJapanSimulateService visaJapanSimulateService;
 
 	/**
 	 * TODO 跳转到签证列表页
@@ -239,5 +244,23 @@ public class VisaJapanModule {
 	@POST
 	public Object editPassportCount(@Param("applicatid") Integer applicatid, @Param("inputVal") String inputVal) {
 		return visaJapanService.editPassportCount(applicatid, inputVal);
+	}
+
+	/**
+	 * 发招宝、招宝变更、招宝取消
+	 */
+	@At
+	@POST
+	public Object sendInsurance(@Param("orderid") Integer orderid, @Param("visastatus") Integer visastatus) {
+		return visaJapanSimulateService.sendInsurance(orderid, visastatus);
+	}
+
+	/**
+	 * 下载文件
+	 */
+	@At
+	@GET
+	public Object downloadFile(@Param("orderid") Long orderid, HttpServletResponse response) {
+		return visaJapanSimulateService.downloadFile(orderid, response);
 	}
 }
