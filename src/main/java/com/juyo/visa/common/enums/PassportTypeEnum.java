@@ -4,9 +4,9 @@ import com.uxuexi.core.common.enums.IEnum;
 
 /**
  * 
- * 是否
+ * 签证年限
  * <p>
- * 是 or 否
+ * 
  * @author   彭辉
  * @Date	 2017年10月20日
  */
