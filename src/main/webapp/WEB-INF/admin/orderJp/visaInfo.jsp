@@ -62,7 +62,12 @@
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label><span>*</span>主申请人：</label>
-											<input id="mainApplicant" name="mainApplicant" type="text" class="form-control input-sm" placeholder=" " />
+											<!-- <input id="mainApplicant" name="mainApplicant" type="text" class="form-control input-sm" placeholder=" " /> -->
+											<select id="mainApplicant" name="mainApplicant" class="form-control input-sm selectHeight">
+											<c:forEach var="map" items="${obj.visaInfo}">
+												<option value="${id}" }>${applyname}</option>
+											</c:forEach>
+										</select>
 										</div>
 									</div>
 									<div class="col-sm-4">

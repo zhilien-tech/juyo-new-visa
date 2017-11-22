@@ -37,7 +37,7 @@
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
 				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
-				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" />
+				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" @click="firtTrialJp(orderInfo.id)"/>
 				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" @click="share(orderInfo.id)" />
 				<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" @click="log(orderInfo.id)" />
 			</div>
@@ -354,9 +354,9 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>送签时间：</label> 
-									<!-- <input id="sendVisaDate" name="sendVisaDate" type="text" class="form-control input-sm"
-										placeholder=" " onClick="WdatePicker()" v-model="orderInfo.sendvisadate" /> -->
-									<input id="sendVisaDate" name="sendVisaDate" type="text" class="form-control input-sm"  />
+									<input id="sendVisaDate" name="sendVisaDate" type="text" class="form-control input-sm"
+										placeholder=" " onClick="WdatePicker()" v-model="orderInfo.sendvisadate" />
+									<!-- <input id="sendVisaDate" name="sendVisaDate" type="text" class="form-control input-sm"  /> -->
 								</div>
 							</div>
 							<div class="col-sm-3">
@@ -417,7 +417,7 @@
 									<td>
 										<a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;
 										<a v-on:click="passport(applicant.id)">护照</a>&nbsp;&nbsp;
-										<a v-on:click="visa(applicant.id)">签证</a> <br>
+										<a v-on:click="visa(applicant.id,orderInfo.id)">签证</a> <br>
 										<a v-on:click="">回邮</a>&nbsp;&nbsp;
 										<a v-on:click="deleteApplicant(applicant.id)">删除</a></br>
 									</td>
@@ -604,31 +604,27 @@
 				customerTypeSelect2();
 			}
 			
-			//客户来源
-			/* $("#customerType").change(function(){
-				var customerVal = $(this).val();
-				if(customerVal == 4){//直客
-					$(".on-line").hide();//隐藏select2部分字段
-					$(".zhiKe").removeClass("none");
-				}else{
-					$(".on-line").show();//显示select2部分字段
-					$(".zhiKe").addClass("none");
-					customerTypeSelect2();
-				}
-			});
-			 */
 			//加急 
-			var urgentType = $('#urgentType').val();
+			/* var urgentType = $('#urgentType').val();
 			if (urgentType == 1) {
 				$("#urgentDays").addClass("none");
 			} else {
 				$("#urgentDays").removeClass("none");
-			}
+			} */
 			
+			$('#urgentType').change(function(){
+				var thisval = $(this).val();
+				if(thisval == 1){
+					$("#urgentDays").addClass("none");
+				}else{
+					$("#urgentDays").removeClass("none");
+				}
+			});
 			
-			$('#sendVisaDate').daterangepicker(null, function(start, end, label) {
+			//新时间插件
+			/* $('#sendVisaDate').daterangepicker(null, function(start, end, label) {
                 console.log(start.toISOString(), end.toISOString(), label);
-            });
+            }); */
 
 		});
 		
@@ -669,6 +665,12 @@
 						}else{
 							$("#mySwitch").removeClass("none");//显示申请人信息列表
 							$("#applicantInfo").hide();//添加申请人 按钮 隐藏
+						}
+						
+						if(orderobj.orderInfo.urgenttype == 1){
+							$("#urgentDays").addClass("none");
+						}else{
+							$("#urgentDays").removeClass("none");
 						}
 						
 						//签证类型  按钮的点击状态
@@ -727,15 +729,6 @@
 								$('#threexian').show();
 							}else{
 								$('#threexian').hide();
-							}
-						});
-						
-						$('#urgentType').change(function(){
-							var thisval = $(this).val();
-							if(thisval != 1){
-								$("#urgentDays").removeClass("none");
-							}else{
-								$("#urgentDays").addClass("none");
 							}
 						});
 					},
@@ -867,7 +860,7 @@
 					});
 				},
 				//签证信息
-				visa : function(id){
+				visa : function(id,orderid){
 					layer.open({
 						type: 2,
 						title: false,
@@ -877,8 +870,20 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '551px'],
-						content:'/admin/orderJp/visaInfo.html?id='+id
+						content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid
 					});
+				},
+				//初审按钮
+				firtTrialJp : function(id){
+					$.ajax({ 
+				    	url: '${base}/admin/orderJp/firtTrialJp',
+				    	dataType:"json",
+				    	data:{orderId:id},
+				    	type:'post',
+				    	success: function(data){
+				    		
+				      	}
+				    }); 
 				}
 			}
 		});

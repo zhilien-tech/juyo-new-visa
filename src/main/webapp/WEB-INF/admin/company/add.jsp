@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/company.css">
 	<style type="text/css">
 		img#sqImg {top: 0;}
+		#sgImg{top:1%}
 	</style>
 </head>
 <body>

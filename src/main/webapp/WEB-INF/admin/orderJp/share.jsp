@@ -71,26 +71,30 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			if($("#shareType").val() == 1){
-				$("#datatableId tbody tr").click(function(){
-					var isStyle = $(this).attr("style");
-					if(isStyle != "color: rgb(48, 135, 240);"){//不被选中
-						$(this).css("color","#3087f0");
-					}
-				});
-			}else{
-				$("#datatableId tbody tr").click(function(){
-					var isStyle = $(this).attr("style");
-					if(isStyle == "color: rgb(48, 135, 240);"){//不被选中
-						$(this).css("color","#333333");
-					}else{//选中
-						$(this).css("color","#3087f0");
-					$(this).children().eq(0).html();
-					}
-				
-				});
+			$("#shareType").change(function(){
+				var shareType = $(this).val();
+				if(shareType == 1){
+					$("#datatableId tbody tr").click(function(){
+						var isStyle = $(this).attr("style");
+						if(isStyle != "color: rgb(48, 135, 240);"){//选中
+							$(this).css("color","#3087f0");
+						}
+					});
+				}else{
+					$("#datatableId tbody tr").click(function(){
+						var isStyle = $(this).attr("style");
+						if(isStyle == "color: rgb(48, 135, 240);"){//不被选中
+							$(this).css("color","#333333");
+						}else{//选中
+							$(this).css("color","#3087f0");
+						$(this).children().eq(0).html();
+						}
+					
+					});
+				}
 			});
-		}
+			
+		});
 
 		//vue表格数据对象
 	    var _self;
@@ -114,6 +118,7 @@
 		});
 		//保存
 		function save(){
+			var orderId = ${obj.orderId};
 			var name,telephone,email;
 			$("#datatableId tbody tr").each(function(){
 				if($(this).attr("style") == "color: rgb(48, 135, 240);"){
@@ -121,7 +126,7 @@
 					telephone = $(this).children().eq(1).html();
 					email = $(this).children().eq(2).html();
 					if(email == ""){
-						
+						layer.msg("邮箱不能为空");
 					}
 				}
 			});

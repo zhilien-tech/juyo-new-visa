@@ -33,7 +33,7 @@
 								</select>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<select class="input-class input-sm" id="source" name="source">
+								<select class="input-class input-sm" id="source" name="source" onchange="countryChange();">
 									<option value="">客户来源</option>
 									<c:forEach var="map" items="${obj.customerTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
@@ -41,7 +41,7 @@
 								</select>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<select class="input-class input-sm" id="visaType" name="visaType">
+								<select class="input-class input-sm" id="visaType" name="visaType" onchange="countryChange();">
 									<option value="">签证类型</option>
 									<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
@@ -188,11 +188,15 @@
 			window.location.href = '${base}/admin/orderJp/addOrder';
 		}  
 		
+		function countryChange(){
+			$("#searchbtn").click();
+		}
+		
 		//搜索回车事件
 		 function onkeyEnter(){
 			    var e = window.event || arguments.callee.caller.arguments[0];
 			    if(e && e.keyCode == 13){
-					 $("#searchBtn").click();
+					 $("#searchbtn").click();
 				 }
 			}
 	</script>
