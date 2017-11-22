@@ -107,11 +107,12 @@
 							</div>
 							<div class="col-sm-2 padding-right-0">
 								<div class="form-group">
-									<label>&nbsp;</label>
-									<select class="form-control input-sm selectHeight">
-										<option>5年</option>
-										<option>10年</option>
-									</select>
+									<label>&nbsp;&nbsp;</label>
+									<select id="validType" name="validType" class="form-control input-sm selectHeight">
+									<c:forEach var="map" items="${obj.passportType}">
+										<option value="${map.key}" ${map.key == obj.passport.validType?'selected':'' }>${map.value}</option>
+									</c:forEach>
+								</select>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">

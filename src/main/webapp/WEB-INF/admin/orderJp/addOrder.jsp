@@ -814,6 +814,7 @@
 					threecounty = threecounty.substr(0,threecounty.length-1);
 				}
 				var orderinfo = $.param({"visacounty":visacounty, "threecounty":threecounty}) + "&" + $("#orderInfo").serialize();
+				alert(JSON.stringify(orderinfo));
 				$.ajax({
 					type : 'POST',
 					data : orderinfo ,

@@ -51,10 +51,21 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>客户来源：</label> 
-										<select id="customerType" name="source" class="form-control input-sm" v-model="customerInfo.source">
+										<select id="customerType" name="source" class="form-control input-sm" >
 											<option value="">--请选择--</option>
 											<c:forEach var="map" items="${obj.customerTypeEnum}">
-												<option value="${map.key}">${map.value}</option>
+												<option value="${map.key}" 
+													<c:choose>
+													   <c:when test="${obj.orderInfo.isDirectCus == 1}">  
+													          ${map.key==4?"selected":"" }
+													   </c:when>
+													   <c:otherwise> 
+													   ${map.key==obj.customer.source?"selected":"" }
+													   </c:otherwise>
+													</c:choose>
+												<%-- <c:if test="${obj.orderInfo.isDirectCus == 1}">${map.key==4?"selected":"" }</c:if><c:if test="${obj.orderInfo.isDirectCus != 1}">${map.key==obj.customerInfo.source?"selected":"" }</c:if>> --%>
+													>${map.value}
+												</option>
 											</c:forEach>
 										</select>
 									</div>
