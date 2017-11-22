@@ -46,6 +46,7 @@ import org.nutz.json.Json;
 import org.nutz.lang.Strings;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.order.entity.ApplicantJsonEntity;
 import com.juyo.visa.admin.order.entity.PassportJsonEntity;
@@ -109,6 +110,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	private UploadService qiniuUploadService;//文件上传
 	@Inject
 	private UserViewService userViewService;
+	@Inject
+	private FirstTrialJpViewService firstTrialJpViewService;
 
 	private static final String app_key = "24624389";
 	private static final String app_secret = "3a28e8c97af2d2eadcf2720b279bdc9d";
@@ -800,7 +803,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return applicantInfoMainId;
 	}
 
-	public Object getVisaInfo(Integer id) {
+	public Object getVisaInfo(Integer id, Integer orderid) {
 		Map<String, Object> result = MapUtil.map();
 		result.put("mainOrVice", EnumUtil.enum2(MainOrViceEnum.class));
 		result.put("isOrNo", EnumUtil.enum2(IsYesOrNoEnum.class));
@@ -810,6 +813,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Sql visaInfoSql = Sqls.create(visaInfoSqlstr);
 		visaInfoSql.setParam("id", id);
 		Record visaInfo = dbDao.fetch(visaInfoSql);
+		//===
+		Map<String, Object> getmainApplicantByOrderid = firstTrialJpViewService.getmainApplicantByOrderid(orderid);
 		result.put("visaInfo", visaInfo);
 		return result;
 	}
@@ -956,6 +961,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("order", orderEntity);
 		result.put("userName", name);
 		return result;
+	}
+
+	public Object firtTrialJp(Integer id) {
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(id).intValue());
+		orderEntity.setStatus(2);
+		return null;
 	}
 
 	public Object getApplicants(String applicantIds, HttpSession session) {

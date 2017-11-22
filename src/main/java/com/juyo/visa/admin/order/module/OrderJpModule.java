@@ -220,8 +220,8 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object visaInfo(@Param("id") Integer id) {
-		return saleViewService.getVisaInfo(id);
+	public Object visaInfo(@Param("id") Integer id, @Param("orderid") Integer orderid) {
+		return saleViewService.getVisaInfo(id, orderid);
 	}
 
 	/**
@@ -360,5 +360,14 @@ public class OrderJpModule {
 	@POST
 	public Object getShare(@Param("orderid") Integer id) {
 		return saleViewService.getShare(id);
+	}
+
+	/**
+	 * 初审按钮
+	 */
+	@At
+	@POST
+	public Object firtTrialJp(@Param("orderId") Integer id) {
+		return saleViewService.firtTrialJp(id);
 	}
 }

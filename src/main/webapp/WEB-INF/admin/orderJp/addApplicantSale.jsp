@@ -74,7 +74,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>姓/拼音：</label>
-									<input id="firstName" name="firstName" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="firstName" name="firstName" type="text" class="form-control input-sm req" placeholder=" " />
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -214,25 +214,92 @@
 	
 	<script type="text/javascript">
 		var base = "${base}";
-		function saveApplicant(){
-			var applicantInfo = $("#applicantInfo").serialize();
-			
-			$.ajax({
-				type : 'POST',
-				data : applicantInfo,
-				url : '${base}/admin/orderJp/saveAddApplicant',
-				success : function(data) {
-					var applicantIdParent = window.parent.document.getElementById("appId").value;
-					applicantIdParent += data.id +",";
-					window.parent.document.getElementById("appId").value = applicantIdParent;
-					layer.closeAll('loading');
-					parent.successCallBack(3,data);
-					closeWindow();
+		$(function(){
+			//校验
+			$('#applicantInfo').bootstrapValidator({
+				message : '验证不通过',
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
 				},
-				error : function() {
-					alert("error");
+				fields : {
+
+					firstName : {
+						validators : {
+							notEmpty : {
+								message : '姓不能为空'
+							}
+						}
+					},
+					lastName : {
+						validators : {
+							notEmpty : {
+								message : '名不能为空'
+							}
+						}
+					},
+					telephone : {
+						validators : {
+							regexp: {
+		                	 	regexp: /^[1][34578][0-9]{9}$/,
+		                        message: '电话号格式错误'
+		                    }
+						}
+					},
+					email : {
+						validators : {
+							regexp: {
+		                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+		                        message: '邮箱格式错误'
+		                    }
+						}
+					}
 				}
-			}); 
+			});
+			$('#applicantInfo').bootstrapValidator('validate');
+			
+		});
+		function saveApplicant(){
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#applicantInfo").data(
+					'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			if (bootstrapValidator.isValid()){
+				//获取必填项信息
+				var firstName = $("#firstName").val();
+				if (firstName == "") {
+					layer.msg('姓不能为空');
+					return;
+				}
+				var lastName = $("#lastName").val();
+				if (lastName == "") {
+					layer.msg('名不能为空');
+					return;
+				}
+				
+				
+				var applicantInfo = $("#applicantInfo").serialize();
+				
+				$.ajax({
+					type : 'POST',
+					data : applicantInfo,
+					url : '${base}/admin/orderJp/saveAddApplicant',
+					success : function(data) {
+						var applicantIdParent = window.parent.document.getElementById("appId").value;
+						applicantIdParent += data.id +",";
+						window.parent.document.getElementById("appId").value = applicantIdParent;
+						layer.closeAll('loading');
+						parent.successCallBack(3,data);
+						closeWindow();
+					},
+					error : function() {
+						alert("error");
+					}
+				}); 
+			}
+			
 		}
 		
 		

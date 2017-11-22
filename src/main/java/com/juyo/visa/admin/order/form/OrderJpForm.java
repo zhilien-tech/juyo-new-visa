@@ -89,7 +89,11 @@ public class OrderJpForm extends OrderForm {
 			cnd.and("o.status", "=", getStatus());
 		}
 		if (!Util.isEmpty(source)) {
-			cnd.and("c.source", "=", source);
+			if (Util.eq(source, 4)) {
+				cnd.and("o.isDirectCus", "=", 1);
+			} else {
+				cnd.and("c.source", "=", source);
+			}
 		}
 		if (!Util.isEmpty(visaType)) {
 			cnd.and("oj.visaType", "=", visaType);
