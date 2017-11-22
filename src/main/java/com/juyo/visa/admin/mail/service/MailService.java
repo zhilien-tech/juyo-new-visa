@@ -3,7 +3,6 @@ package com.juyo.visa.admin.mail.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -85,13 +84,6 @@ public class MailService extends BaseService<TConfMailEntity> {
 				e.printStackTrace();
 			}
 		}*/
-
-		//将文件进行编码
-		try {
-			fileName = java.net.URLEncoder.encode(fileName, "UTF-8");
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
 
 		//下载文件
 		InputStream is = null;
