@@ -132,7 +132,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		List<Record> orderJp = (List<Record>) sql.getResult();
 		for (Record record : orderJp) {
 			if (!Util.isEmpty(record.get("isDirectCus"))) {
-				if (Util.eq(record.get("isDirectCus"), 1)) {//是直客，客户信息直接从订单中拿
+				if (Util.eq(record.get("isDirectCus"), IsYesOrNoEnum.YES.intKey())) {//是直客，客户信息直接从订单中拿
 					record.put("source", "直客");
 				} else {//不是直客，客户信息从客户信息表中拿
 					Integer customerId = (Integer) record.get("customerId");
@@ -409,7 +409,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> customermap = JsonUtil.fromJson(customerInfo, Map.class);
 		if (!Util.isEmpty(customermap.get("source"))) {
 			//如果source=4是直客，保存到订单信息中
-			if (Util.eq(customermap.get("source"), 4)) {
+			if (Util.eq(customermap.get("source"), CustomerTypeEnum.ZHIKE.intKey())) {
 				if (!Util.isEmpty(customermap.get("email"))) {
 					order.setEmail(String.valueOf(customermap.get("email")));
 				} else {
@@ -454,7 +454,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		//判断是否为直客,直客时客户信息保存在订单中
 		if (!Util.isEmpty(orderInfo.getSource())) {
-			if (orderInfo.getSource() == 4) {
+			if (Util.eq(orderInfo.getSource(), CustomerTypeEnum.ZHIKE.intKey())) {
 				orderEntity.setIsDirectCus(IsYesOrNoEnum.YES.intKey()); //1是直客
 				if (!Util.isEmpty(orderInfo.getEmail())) {
 					orderEntity.setEmail(orderInfo.getEmail());
@@ -646,8 +646,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		//客户信息
 		TCustomerEntity customerInfo = new TCustomerEntity();
 		if (!Util.isEmpty(orderInfo.get("isDirectCus"))) {
-			if (Util.eq(orderInfo.get("isDirectCus"), 1)) {//直客时，客户信息从订单中取
-				customerInfo.setSource(4);
+			if (Util.eq(orderInfo.get("isDirectCus"), IsYesOrNoEnum.YES.intKey())) {//直客时，客户信息从订单中取
+				customerInfo.setSource(CustomerTypeEnum.ZHIKE.intKey());
 				customerInfo.setLinkman((String) orderInfo.get("linkman"));
 				customerInfo.setMobile((String) orderInfo.get("telephone"));
 				customerInfo.setName((String) orderInfo.get("comName"));

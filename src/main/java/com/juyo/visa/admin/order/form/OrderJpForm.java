@@ -11,6 +11,8 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.juyo.visa.common.enums.CustomerTypeEnum;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.uxuexi.core.common.util.Util;
 
 @Data
@@ -89,8 +91,8 @@ public class OrderJpForm extends OrderForm {
 			cnd.and("o.status", "=", getStatus());
 		}
 		if (!Util.isEmpty(source)) {
-			if (Util.eq(source, 4)) {
-				cnd.and("o.isDirectCus", "=", 1);
+			if (Util.eq(source, CustomerTypeEnum.ZHIKE.intKey())) {
+				cnd.and("o.isDirectCus", "=", IsYesOrNoEnum.YES.intKey());
 			} else {
 				cnd.and("c.source", "=", source);
 			}
