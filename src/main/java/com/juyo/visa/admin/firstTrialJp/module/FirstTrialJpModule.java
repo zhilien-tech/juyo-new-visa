@@ -112,7 +112,7 @@ public class FirstTrialJpModule {
 	 * 申请人 合格信息
 	 */
 	@At
-	@Ok("jsp")
+	@POST
 	public Object qualified(@Param("applyid") int applyid) {
 		return firstTrialJpViewService.qualified(applyid);
 	}
@@ -122,7 +122,7 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object unqualified(@Param("applyid") int applyid) {
+	public Object unqualified(@Param("applyid") Integer applyid) {
 		return firstTrialJpViewService.unqualified(applyid);
 	}
 
