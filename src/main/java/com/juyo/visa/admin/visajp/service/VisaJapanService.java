@@ -35,6 +35,7 @@ import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JapanVisaStatusEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
 import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
@@ -120,6 +121,13 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				}
 			}
 			record.put("everybodyInfo", query);
+			//签证状态
+			Integer visastatus = record.getInt("visastatus");
+			for (JapanVisaStatusEnum visaenum : JapanVisaStatusEnum.values()) {
+				if (visaenum.intKey() == visastatus) {
+					record.put("visastatus", visaenum.value());
+				}
+			}
 		}
 		result.put("visaJapanData", list);
 		return result;

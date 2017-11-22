@@ -69,7 +69,7 @@ public class MailService extends BaseService<TConfMailEntity> {
 
 	//文件下载
 	public Object download(String fileUrl, String fileName, HttpServletRequest request, HttpServletResponse response) {
-		String userAgent = request.getHeader("User-Agent");
+		/*String userAgent = request.getHeader("User-Agent");
 		//针对IE或者以IE为内核的浏览器：
 		if (userAgent.contains("MSIE") || userAgent.contains("Trident")) {
 			try {
@@ -84,6 +84,13 @@ public class MailService extends BaseService<TConfMailEntity> {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
+		}*/
+
+		//将文件进行编码
+		try {
+			fileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
 		}
 
 		//下载文件
@@ -98,7 +105,6 @@ public class MailService extends BaseService<TConfMailEntity> {
 				response.reset();
 				response.setContentType("application/octet-stream");
 				response.setCharacterEncoding("utf-8");
-				//response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
 				response.setHeader("Content-Disposition", String.format("attachment;filename=\"%s\"", fileName));
 				byte[] buffer = new byte[4096];
 				int count = 0;

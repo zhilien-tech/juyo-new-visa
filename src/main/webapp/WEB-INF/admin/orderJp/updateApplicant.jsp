@@ -245,7 +245,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label> &nbsp; &nbsp;</label> 
-									<input id="validEndDate" type="text" value="2017-11-15" class="form-control input-sm">
+									<input id="validEndDate" type="text" value="" class="form-control input-sm">
 								</div>
 							</div>
 						</div>
@@ -273,6 +273,51 @@
 	<script type="text/javascript">
 	
 		$(function(){
+			
+			//校验
+			$('#applicantInfo').bootstrapValidator({
+				message : '验证不通过',
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields : {
+
+					firstName : {
+						validators : {
+							notEmpty : {
+								message : '姓不能为空'
+							}
+						}
+					},
+					lastName : {
+						validators : {
+							notEmpty : {
+								message : '名不能为空'
+							}
+						}
+					},
+					telephone : {
+						validators : {
+							regexp: {
+		                	 	regexp: /^[1][34578][0-9]{9}$/,
+		                        message: '电话号格式错误'
+		                    }
+						}
+					},
+					email : {
+						validators : {
+							regexp: {
+		                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+		                        message: '邮箱格式错误'
+		                    }
+						}
+					}
+				}
+			});
+			$('#applicantInfo').bootstrapValidator('validate');
+			
 			var front = $("#cardFront").val();
 			var back = $("#cardBack").val();
 			if(front != ""){
@@ -290,6 +335,24 @@
 		
 		//var base = "${base}";
 		function saveApplicant(){
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#applicantInfo").data(
+					'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			if (bootstrapValidator.isValid()){
+				//获取必填项信息
+				var firstName = $("#firstName").val();
+				if (firstName == "") {
+					layer.msg('姓不能为空');
+					return;
+				}
+				var lastName = $("#lastName").val();
+				if (lastName == "") {
+					layer.msg('名不能为空');
+					return;
+				}
+			
 			var applicantInfo = $("#applicantInfo").serialize();
 			$.ajax({
 				type: 'POST',
@@ -302,6 +365,7 @@
 					closeWindow();
 				}
 			});
+			}
 		}
 		
 //正面上传,扫描
