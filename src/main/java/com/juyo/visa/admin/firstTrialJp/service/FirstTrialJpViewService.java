@@ -39,6 +39,8 @@ import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
+import com.juyo.visa.common.enums.MainBackMailTypeEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
 import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
@@ -162,6 +164,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("mainsalevisatypeenum", EnumUtil.enum2(MainSaleVisaTypeEnum.class));
 		//是否
 		result.put("isyesornoenum", EnumUtil.enum2(IsYesOrNoEnum.class));
+		//资料类型
+		result.put("mainBackMailSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
+		//回邮方式
+		result.put("mainBackMailTypeEnum", EnumUtil.enum2(MainBackMailTypeEnum.class));
 
 		return result;
 	}
