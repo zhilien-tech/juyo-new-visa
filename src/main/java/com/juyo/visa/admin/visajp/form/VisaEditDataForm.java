@@ -80,4 +80,6 @@ public class VisaEditDataForm {
 	private Integer isvisit;
 
 	private String threecounty;
+
+	private String remark;
 }

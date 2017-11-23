@@ -309,6 +309,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		jporder.setVisaCounty(editDataForm.getVisacounty());
 		jporder.setIsVisit(editDataForm.getIsvisit());
 		jporder.setThreeCounty(editDataForm.getThreecounty());
+		jporder.setRemark(editDataForm.getRemark());
 		dbDao.update(jporder);
 		//出行信息
 		@SuppressWarnings("unchecked")
@@ -450,6 +451,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		}
 		//需要生成的travelplan
 		List<TOrderTravelplanJpEntity> travelplans = Lists.newArrayList();
+		Random random = new Random();
+		//在一个城市只住一家酒店
+		int hotelindex = random.nextInt(hotels.size());
 		for (int i = 0; i <= daysBetween; i++) {
 			TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
 			travelplan.setCityId(planform.getGoArrivedCity());
@@ -458,10 +462,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			travelplan.setOutDate(DateUtil.addDay(planform.getGoDate(), i));
 			travelplan.setCityName(city.getCity());
 			travelplan.setCreateTime(new Date());
-			Random random = new Random();
 			//酒店
 			if (i != daysBetween) {
-				int hotelindex = random.nextInt(hotels.size());
 				THotelEntity hotel = hotels.get(hotelindex);
 				travelplan.setHotel(hotel.getId());
 			}
@@ -541,12 +543,64 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		TOrderTravelplanJpEntity travel = dbDao.fetch(TOrderTravelplanJpEntity.class, travelform.getId().longValue());
 		//城市信息
 		TCityEntity city = dbDao.fetch(TCityEntity.class, travelform.getCityId().longValue());
+		//自动更改行程的天数
+		if (!Util.isEmpty(travelform.getDay()) && !Util.isEmpty(travel.getDay())) {
+			//数据库中的数据
+			Integer preday = Integer.valueOf(travel.getDay());
+			//页面传过来的数据
+			Integer afterday = Integer.valueOf(travelform.getDay());
+			travel.setOutDate(DateUtil.addDay(travel.getOutDate(), afterday - preday));
+			if (afterday > preday) {
+				//如果第二天改为第四天，则原来的第三天变为第二天，第四天变为第三天
+				List<TOrderTravelplanJpEntity> bigtravel = dbDao.query(TOrderTravelplanJpEntity.class,
+						Cnd.where("day", ">", preday).and("day", "<=", afterday), null);
+				for (TOrderTravelplanJpEntity tOrderTravelplanJpEntity : bigtravel) {
+					String day = tOrderTravelplanJpEntity.getDay();
+					if (!Util.isEmpty(day)) {
+						tOrderTravelplanJpEntity.setDay(String.valueOf(Integer.valueOf(day) - 1));
+						tOrderTravelplanJpEntity.setOutDate(DateUtil.addDay(tOrderTravelplanJpEntity.getOutDate(), -1));
+					}
+				}
+				dbDao.update(bigtravel);
+			} else if (afterday < preday) {
+				//如果第四天改为第二天，则原来的第二天变为第三天，第三天变为第四三天
+				List<TOrderTravelplanJpEntity> bigtravel = dbDao.query(TOrderTravelplanJpEntity.class,
+						Cnd.where("day", "<", preday).and("day", ">=", afterday), null);
+				for (TOrderTravelplanJpEntity tOrderTravelplanJpEntity : bigtravel) {
+					String day = tOrderTravelplanJpEntity.getDay();
+					if (!Util.isEmpty(day)) {
+						tOrderTravelplanJpEntity.setDay(String.valueOf(Integer.valueOf(day) + 1));
+						tOrderTravelplanJpEntity.setOutDate(DateUtil.addDay(tOrderTravelplanJpEntity.getOutDate(), 1));
+					}
+				}
+				dbDao.update(bigtravel);
+			}
+		}
+		//更新城市的酒店和景点
+		List<TOrderTravelplanJpEntity> cityplan = dbDao.query(TOrderTravelplanJpEntity.class,
+				Cnd.where("cityid", "=", travelform.getCityId()), null);
+		//如果城市未修改，则景区修改为页面上的
+		if (!Util.isEmpty(cityplan)) {
+			travel.setHotel(travelform.getHotel());
+			travel.setScenic(travelform.getScenic());
+		} else {
+			//如果城市已经修改了，景区和酒店联动
+			Random random = new Random();
+			//获取城市所有的酒店
+			List<THotelEntity> hotels = dbDao.query(THotelEntity.class,
+					Cnd.where("cityId", "=", travelform.getCityId()), null);
+			//获取城市所有的景区
+			List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class,
+					Cnd.where("cityId", "=", travelform.getCityId()), null);
+			int hotelindex = random.nextInt(hotels.size());
+			int scenicindex = random.nextInt(scenics.size());
+			travel.setHotel(hotels.get(hotelindex).getId());
+			travel.setScenic(scenics.get(scenicindex).getName());
+		}
+		//更新页面信息
 		travel.setCityId(travelform.getCityId());
 		travel.setCityName(city.getCity());
 		travel.setDay(travelform.getDay());
-		travel.setHotel(travelform.getHotel());
-		travel.setOutDate(travelform.getOutDate());
-		travel.setScenic(travelform.getScenic());
 		travel.setUpdateTime(new Date());
 		dbDao.update(travel);
 		return null;
