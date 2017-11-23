@@ -55,7 +55,7 @@ public class MyVisaModule {
 
 	@At
 	@Ok("jsp")
-	public Object flowChart() {
+	public Object flowChart(@Param("orderid") Integer orderid, @Param("applicantid") Integer applicantid) {
 		return null;
 	}
 

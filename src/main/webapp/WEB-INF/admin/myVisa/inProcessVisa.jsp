@@ -25,15 +25,15 @@
 		<div class="content-wrapper"  style="min-height:848px;">
 				<section class="content">
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div class="card-list" v-cloak v-for="data in myVisaData">
+						<div v-on:click="toFlowChart(data.orderid,data.applicantid)" class="card-list" v-cloak v-for="data in myVisaData">
 							<div class="card-head">
 								<div><label>申请人：</label><span>{{data.applicantname}}</span></div>
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>
 								<div><label>状态：</label><span>{{data.orderstatus}}</span></div>		
 								<div>
 									<label>操作：</label>
-									<i class="edit" v-on:click="visaDetail(data.applicatid)"> </i>
-									<i class="download" v-on:click="revenue(data.applicatid)"> </i>
+									<i class="edit" v-on:click="edit(data.applicantid)"> </i>
+									<i class="download" v-on:click="download(data.applicantid)"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
@@ -81,6 +81,27 @@
 	            		_self.myVisaData = data.myVisaData;
 	              	}
 	            });
+	        },
+	        methods:{
+	        	toFlowChart:function(orderid,applicantid){
+	        		console.log(orderid +"--------"+ applicantid);
+	    			//跳转到签证进度页面
+	    			window.location.href = '/admin/myVisa/flowChart.html?orderid='+orderid+'&applicantid='+applicantid;
+	    		},
+	    		edit:function(applyid){
+	    			alert(applyid);
+	        		layer.open({
+	        		    type: 2,
+	        		    title: false,
+	        		    closeBtn:false,
+	        		    fix: false,
+	        		    maxmin: false,
+	        		    shadeClose: false,
+	        		    scrollbar: false,
+	        		    area: ['900px', '550px'],
+	        		    content:'/admin/orderJp/passportInfo.html?id='+applyid
+	        	    });
+	        	},
 	        }
 		});
 	

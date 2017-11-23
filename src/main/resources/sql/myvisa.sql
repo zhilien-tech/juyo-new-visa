@@ -1,6 +1,6 @@
 /*myvisa_inProcessVisa_list*/
 SELECT
-	taoj.id applicatid,
+	taoj.id applicantid,
 	CONCAT( ta.firstName, ta.lastName ) applicantname,
 	ta.telephone,
 	tap.passport,
