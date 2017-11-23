@@ -84,6 +84,7 @@ SELECT
 	ap.passport,
 	ap.sex,
 	ap.sexEn,
+	ap.validType,
 	ap.birthAddress,
 	ap.birthAddressEn,
 	ap.birthday,

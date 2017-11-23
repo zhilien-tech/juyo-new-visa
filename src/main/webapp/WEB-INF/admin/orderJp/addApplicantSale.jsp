@@ -161,7 +161,7 @@
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
 									<label>出生日期：</label>
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()"/>
+									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -179,14 +179,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>有效期限：</label>
-									<input id="validStartDate" name="validStartDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
+									<input id="validStartDate" name="validStartDate" type="text" class="form-control input-sm" placeholder=" "  />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label> &nbsp; &nbsp;</label>
-									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
+									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" "  />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -444,6 +444,40 @@
 			$('#sqImgBack').attr('src', "");
 			$("#uploadFileBack").siblings("i").css("display","none");
 		}
+		
+		$("#birthday").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		$("#validStartDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 4,//从年开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		$("#validEndDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,
+			startView: 4,//从年开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"top-left",
+			minView: "month"//只显示年月日
+		});
 		
 	</script>
 

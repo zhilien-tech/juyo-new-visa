@@ -71,6 +71,7 @@ import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
@@ -365,27 +366,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			order.setMoney(Double.valueOf(df.format(orderInfo.getMoney())).doubleValue());
 		}
 		if (!Util.isEmpty(orderInfo.getGotripdate())) {
-			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getGotripdate()),
-					DateUtil.FORMAT_YYYY_MM_DD);
-			order.setGoTripDate(godate);
+			order.setGoTripDate(orderInfo.getGotripdate());
 		}
 		if (!Util.isEmpty(orderInfo.getStayday())) {
 			order.setStayDay(orderInfo.getStayday());
 		}
 		if (!Util.isEmpty(orderInfo.getBacktripdate())) {
-			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getBacktripdate()),
-					DateUtil.FORMAT_YYYY_MM_DD);
-			order.setGoTripDate(godate);
+			order.setBackTripDate(orderInfo.getBacktripdate());
 		}
 		if (!Util.isEmpty(orderInfo.getSendvisadate())) {
-			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getSendvisadate()),
-					DateUtil.FORMAT_YYYY_MM_DD);
-			order.setGoTripDate(godate);
+			order.setSendVisaDate(orderInfo.getSendvisadate());
 		}
 		if (!Util.isEmpty(orderInfo.getOutvisadate())) {
-			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getOutvisadate()),
-					DateUtil.FORMAT_YYYY_MM_DD);
-			order.setGoTripDate(godate);
+			order.setOutVisaDate(orderInfo.getOutvisadate());
 		}
 		order.setUpdateTime(new Date());
 
@@ -442,8 +435,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				order.setCustomerId(customer.getId());
 				order.setIsDirectCus(IsYesOrNoEnum.NO.intKey()); //0不是直客
 			}
-			dbDao.update(order);
 		}
+		dbDao.update(order);
 		return null;
 	}
 
@@ -489,9 +482,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			orderEntity.setCityId(orderInfo.getCityid());
 		}
 		if (!Util.isEmpty(orderInfo.getBacktripdate())) {
-			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getBacktripdate()),
-					DateUtil.FORMAT_YYYY_MM_DD);
-			orderEntity.setGoTripDate(godate);
+			/*Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getBacktripdate()),
+					DateUtil.FORMAT_YYYY_MM_DD);*/
+			orderEntity.setBackTripDate(orderInfo.getBacktripdate());
 		}
 		if (!Util.isEmpty(orderInfo.getName())) {
 			orderEntity.setComName(orderInfo.getName());
@@ -503,9 +496,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			orderEntity.setEmail(orderInfo.getEmail());
 		}
 		if (!Util.isEmpty(orderInfo.getGotripdate())) {
-			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getGotripdate()),
-					DateUtil.FORMAT_YYYY_MM_DD);
-			orderEntity.setGoTripDate(godate);
+			orderEntity.setGoTripDate(orderInfo.getGotripdate());
 		}
 		if (!Util.isEmpty(orderInfo.getLinkman())) {
 			orderEntity.setLinkman(orderInfo.getLinkman());
@@ -530,9 +521,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			orderEntity.setStayDay(orderInfo.getStayday());
 		}
 		if (!Util.isEmpty(orderInfo.getSendvisadate())) {
-			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getSendvisadate()),
-					DateUtil.FORMAT_YYYY_MM_DD);
-			orderEntity.setGoTripDate(godate);
+			orderEntity.setSendVisaDate(orderInfo.getSendvisadate());
 		}
 		if (!Util.isEmpty(orderInfo.getPaytype())) {
 			orderEntity.setPayType(orderInfo.getPaytype());
@@ -541,9 +530,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			orderEntity.setNumber(orderInfo.getNumber());
 		}
 		if (!Util.isEmpty(orderInfo.getOutvisadate())) {
-			Date godate = DateUtil.string2Date(DateUtil.Date2String(orderInfo.getOutvisadate()),
-					DateUtil.FORMAT_YYYY_MM_DD);
-			orderEntity.setGoTripDate(godate);
+			orderEntity.setOutVisaDate(orderInfo.getOutvisadate());
 		}
 
 		//生成订单号
@@ -826,6 +813,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		passportSql.setParam("id", id);
 		Record passport = dbDao.fetch(passportSql);
 		result.put("passport", passport);
+		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		result.put("applicantId", id);
 		return result;
 	}

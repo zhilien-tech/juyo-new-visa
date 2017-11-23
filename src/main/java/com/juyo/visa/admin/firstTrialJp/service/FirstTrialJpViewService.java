@@ -348,7 +348,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//获取申请人不合格信息
-	public Object unqualified(int applyid) {
+	public Object unqualified(Integer applyid) {
 		Map<String, Object> result = Maps.newHashMap();
 		int count = nutDao.count(TApplicantUnqualifiedEntity.class, Cnd.where("applicantId", "=", applyid));
 		TApplicantUnqualifiedEntity unqualifiedInfo = dbDao.fetch(TApplicantUnqualifiedEntity.class,

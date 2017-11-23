@@ -198,7 +198,7 @@
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
 									<label>出生日期：</label> 
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" />
+									<input id="birthday" name="birthday" type="text" class="form-control input-sm" value="${obj.birthday }"/>
 									
 								</div>
 							</div>
@@ -208,7 +208,7 @@
 							<!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>住宅：</label> <input id="address"
+									<label>住址：</label> <input id="address"
 										name="address" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.address }" />
 									<!-- <i class="bulb"></i> -->
@@ -239,13 +239,13 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>有效期限：</label> 
-									<input id="validStartDate" name=""  value="" type="text" class="form-control input-sm" />
+									<input id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label> &nbsp; &nbsp;</label> 
-									<input id="validEndDate" type="text" value="" class="form-control input-sm">
+									<input id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" value="${obj.validEndDate }">
 								</div>
 							</div>
 						</div>

@@ -97,8 +97,7 @@ public class UserModule {
 	 */
 	@At
 	public Object delete(@Param("id") final long id) {
-		userViewService.deleteById(id);
-		return JsonResult.success("删除成功");
+		return userViewService.delete(id);
 	}
 
 	/**

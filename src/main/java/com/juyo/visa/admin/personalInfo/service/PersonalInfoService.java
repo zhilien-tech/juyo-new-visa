@@ -76,10 +76,12 @@ public class PersonalInfoService extends BaseService<TUserEntity> {
 	//修改个人信息
 	public Object updatePersonal(PersonalInfoUpdateForm updateForm) {
 		long uid = updateForm.getId();
+		String username = updateForm.getUsername();
 		String qq = updateForm.getQq();
 		String email = updateForm.getEmail();
 		TUserEntity user = dbDao.fetch(TUserEntity.class, uid);
 		if (!Util.isEmpty(user)) {
+			user.setName(username);
 			user.setQq(qq);
 			user.setEmail(email);
 		}
