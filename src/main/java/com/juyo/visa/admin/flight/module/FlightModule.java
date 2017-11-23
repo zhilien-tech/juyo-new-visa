@@ -109,8 +109,9 @@ public class FlightModule {
 	 */
 	@At
 	@POST
-	public Object getFlightSelect(@Param("flight") String flight) {
-		return flightViewService.getFlightSelect(flight);
+	public Object getFlightSelect(@Param("flight") String flight, @Param("gocity") String gocity,
+			@Param("arrivecity") String arrivecity) {
+		return flightViewService.getFlightSelect(flight, gocity, arrivecity);
 	}
 
 }
