@@ -204,6 +204,6 @@
 		<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 		<script src="${base}/references/common/js/layer/layer.js"></script>
 		<script src="${base}/admin/base.js"></script><!-- 公用js文件 -->
-		<script src="${base}/admin/myvisa/flowChart.js" type="text/javascript"></script>
+		<script src="${base}/admin/myVisa/flowChart.js" type="text/javascript"></script>
 	</body>
 </html>
