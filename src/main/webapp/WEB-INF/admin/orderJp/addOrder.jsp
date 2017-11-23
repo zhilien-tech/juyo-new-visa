@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 <link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
@@ -196,7 +197,7 @@
 								<!-- 人数/领区/加急 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>人数：</label> <input id="number"
+										<label><span>*</span>人数(此人数只是参考人数)：</label> <input id="number"
 											name="number" type="text" class="form-control input-sm"
 											placeholder=" " />
 										<!-- <i class="bulb"></i> 小灯泡-->
@@ -331,7 +332,7 @@
 									<div class="form-group">
 										<label><span>*</span>出行时间：</label> <input id="goTripDate"
 											name="gotripdate" type="text" class="form-control input-sm"
-											placeholder=" " onClick="WdatePicker()" />
+											placeholder=" "  />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -345,7 +346,7 @@
 									<div class="form-group">
 										<label><span>*</span>返回时间：</label> <input id="backTripDate"
 											name="backtripdate" type="text" class="form-control input-sm"
-											placeholder=" " onClick="WdatePicker()" />
+											placeholder=" "  />
 									</div>
 								</div>
 							</div>
@@ -356,14 +357,14 @@
 									<div class="form-group">
 										<label><span>*</span>送签时间：</label> <input id="sendVisaDate"
 											name="sendvisadate" type="text" class="form-control input-sm"
-											placeholder=" " onClick="WdatePicker()" />
+											placeholder=" "  />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出签时间：</label> <input id="outVisaDate"
 											name="outvisadate" type="text" class="form-control input-sm"
-											placeholder=" " onClick="WdatePicker()" />
+											placeholder=" "  />
 									</div>
 								</div>
 							</div>
@@ -552,8 +553,8 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script>
 	<!-- 公用js文件 -->
-	<script
-		src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script src="${base}/admin/orderJp/order.js"></script>
 	<!-- 本页面js文件 -->
 	<!-- select2 -->
@@ -589,7 +590,7 @@
 			});
 			$('#visaType').change(function(){
 				var thisval = $(this).val();
-				if(thisval == 2 || thisval == 3){
+				if(thisval == 2 || thisval == 3 || thisval == 4){
 					$('#sixCounty').removeClass("none");
 					$('#threefangwen').removeClass("none");
 				}else{
@@ -773,6 +774,11 @@
 			
 			//删除申请人
 			function deleteApplicant(id){
+				layer.confirm("您确认要删除吗？", {
+					title:"删除",
+					btn: ["是","否"], //按钮
+					shade: false //不显示遮罩
+				}, function(){
 				$.ajax({ 
 			    	url: '${base}/admin/orderJp/deleteApplicant',
 			    	dataType:"json",
@@ -782,6 +788,7 @@
 			    		successCallBack(2);
 			      	}
 			    }); 
+			});
 			}
 			
 			
@@ -879,6 +886,59 @@
 				 	return value;
 				 }
 			}
+			
+			$("#goTripDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+		        weekStart: 1,
+		        todayBtn: 1,
+				autoclose: true,
+				todayHighlight: true,//高亮
+				startView: 4,//从年开始选择
+				forceParse: 0,
+		        showMeridian: false,
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#backTripDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+		        weekStart: 1,
+		        todayBtn: 1,
+				autoclose: true,
+				todayHighlight: true,//高亮
+				startView: 4,//从年开始选择
+				forceParse: 0,
+		        showMeridian: false,
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#sendVisaDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+		        weekStart: 1,
+		        todayBtn: 1,
+				autoclose: true,
+				todayHighlight: true,//高亮
+				startView: 4,//从年开始选择
+				forceParse: 0,
+		        showMeridian: false,
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#outVisaDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+		        weekStart: 1,
+		        todayBtn: 1,
+				autoclose: true,
+				todayHighlight: true,//高亮
+				startView: 4,//从年开始选择
+				forceParse: 0,
+		        showMeridian: false,
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
 		</script>
 </body>
 </html>

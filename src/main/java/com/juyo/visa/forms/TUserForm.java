@@ -63,6 +63,8 @@ public class TUserForm extends DataTablesParamForm {
 	/**操作人id*/
 	private Integer opId;
 
+	private Integer userId;
+
 	/**检索条件*/
 	private String searchStr;
 
@@ -87,7 +89,10 @@ public class TUserForm extends DataTablesParamForm {
 					.or("d.deptName", "LIKE", "%" + searchStr + "%").or("j.jobName", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
+
 		cnd.and("u.comId", "=", comId);
+
+		cnd.and("u.userType", "!=", 5);
 		cnd.orderBy("createTime", "DESC");
 		return cnd;
 	}
