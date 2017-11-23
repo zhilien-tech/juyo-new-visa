@@ -15,6 +15,7 @@ import org.nutz.mvc.annotation.Param;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TUserAddForm;
 import com.juyo.visa.forms.TUserForm;
 import com.juyo.visa.forms.TUserUpdateForm;
@@ -50,7 +51,11 @@ public class UserModule {
 	@At
 	public Object listData(@Param("..") final TUserForm sqlParamForm, HttpSession session) {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		sqlParamForm.setComId(loginCompany.getId());
+		sqlParamForm.setUserType(loginUser.getUserType());
+		sqlParamForm.setUserId((loginUser.getId()));
+
 		return userViewService.listData(sqlParamForm);
 	}
 

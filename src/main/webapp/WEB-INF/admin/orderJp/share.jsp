@@ -47,6 +47,7 @@
 						</thead>
 						<tbody>
 							<tr v-for="data in shareInfo">
+								<td style="display: none">{{data.id}}</td>
 								<td>{{data.applyname}}</td>
 								<td>{{data.telephone}}</td>
 								<td>{{data.email}}</td>
@@ -72,30 +73,24 @@
 		var base = "${base}";
 		$(function() {
 			var sharetype = $("#shareType").val();
-			/* alert(sharetype);
-			
-			$("#shareType").change(function(){
-				var shareType = $(this).val();
-				if(shareType == 1){
-					$("#datatableId tbody tr").click(function(){
-						var isStyle = $(this).attr("style");
-						if(isStyle != "color: rgb(48, 135, 240);"){//选中
-							$(this).css("color","#3087f0");
-						}
-					});
-				}else{ */
-					$("#datatableId tbody tr").click(function(){
-						var isStyle = $(this).attr("style");
-						if(isStyle == "color: rgb(48, 135, 240);"){//不被选中
-							$(this).css("color","#333333");
-						}else{//选中
-							$(this).css("color","#3087f0");
-						$(this).children().eq(0).html();
-						}
+			if(sharetype == 1){//为1时单选
+				
+			}else{//多选
+			$("#datatableId tbody tr").click(function(){
+				var isStyle = $(this).attr("style");
+				if(isStyle == "color: rgb(48, 135, 240);"){//不被选中
+					$(this).css("color","#333333");
+					$(this).removeClass('btnState-true');
+				}else{//选中
+					$(this).css("color","#3087f0");
+					$(this).addClass('btnState-true').siblings("tr").addClass('btnState-true');
 					
-					});
-			/* 	}
-			}); */
+				$(this).children().eq(0).html();
+				}
+			
+			});
+			}
+
 			
 		});
 
@@ -119,33 +114,145 @@
 	            });
 	        }
 		});
-		//保存
+		//分享
 		function save(){
+			var sharetype = $("#shareType").val();
 			var orderId = ${obj.orderId};
 			var name,telephone,email;
-			$("#datatableId tbody tr").each(function(){
-				
-				if($(this).attr("style") == "color: rgb(48, 135, 240);"){
-					name = $(this).children().eq(0).html();
-					telephone = $(this).children().eq(1).html();
-					email = $(this).children().eq(2).html();
-					if(email == "" || telephone == ""){
-						layer.open({
-							type: 2,
-							title: false,
-							closeBtn:false,
-							fix: false,
-							maxmin: false,
-							shadeClose: false,
-							scrollbar: false,
-							area: ['900px', '551px'],
-							content:'${base}/admin/orderJp/getApplicantInfoValid.html?'
+			var flag;
+			if(sharetype == 1){
+				if($("#datatableId tbody tr").attr("style") == "color: rgb(48, 135, 240);"){
+					alert(11);
+					applicantId = $(this).children().eq(0).html();
+					name = $(this).children().eq(1).html();
+					telephone = $(this).children().eq(2).html();
+					email = $(this).children().eq(3).html();
+					
+					$.ajax({ 
+						url: BASE_PATH+'/admin/orderJp/getShare',
+						type:'post',
+						data:{
+							orderid:orderId
+						},
+						success: function(data){
+							for(var i = 0; i < data.length; i++){
+								if(data[i].telephone == "" || data[i].email == ""){
+									layer.open({
+										type: 2,
+										title: false,
+										closeBtn:false,
+										fix: false,
+										maxmin: false,
+										shadeClose: false,
+										scrollbar: false,
+										area: ['900px', '551px'],
+										content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+data[i].id+'&telephone='+data[i].telephone+'&email='+data[i].email
+									});
+								}
+							}
+							$.ajax({ 
+								url: BASE_PATH+'/admin/orderJp/sendEmailUnified',
+								type:'post',
+								data:{
+									orderid:orderId,
+									applicantid:applicantId
+								},
+								success: function(data){
+									if(data.status == 200){
+										layer.close(layerIndex);
+									}
+									closeWindow();
+								}
+							});
+						}
+					});
+					
+				}
+				/* $("#datatableId tbody tr").each(function(){
+						applicantId = $(this).children().eq(0).html();
+						name = $(this).children().eq(1).html();
+						telephone = $(this).children().eq(2).html();
+						email = $(this).children().eq(3).html();
+						if(email == "" || telephone == ""){
+							flag = 2;
+							layer.open({
+								type: 2,
+								title: false,
+								closeBtn:false,
+								fix: false,
+								maxmin: false,
+								shadeClose: false,
+								scrollbar: false,
+								area: ['900px', '551px'],
+								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
+							});
+						}else{
+							flag = 1;
+						}
+				}); */
+					/* if(flag == 1){
+						alert(222);
+					if($("#datatableId tbody tr").attr("style") == "color: rgb(48, 135, 240);"){
+						var applicantId = $(this).children().eq(0).html();
+						alert(applicantId);
+						$.ajax({ 
+							url: BASE_PATH+'/admin/orderJp/sendEmailUnified',
+							type:'post',
+							data:{
+								orderid:orderId,
+								applicantid:applicantId
+							},
+							success: function(data){
+								if(data.status == 200){
+									layer.close(layerIndex);
+								}
+								closeWindow();
+							}
 						});
 					}
-				}
+					} */
+			}else{
+				$("#datatableId tbody tr").each(function(){
+					if($(this).attr("style") == "color: rgb(48, 135, 240);"){
+						applicantId = $(this).children().eq(0).html();
+						name = $(this).children().eq(1).html();
+						telephone = $(this).children().eq(2).html();
+						email = $(this).children().eq(3).html();
+						if(email == "" || telephone == ""){
+							layer.open({
+								type: 2,
+								title: false,
+								closeBtn:false,
+								fix: false,
+								maxmin: false,
+								shadeClose: false,
+								scrollbar: false,
+								area: ['900px', '551px'],
+								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
+							});
+						}else{
+							$.ajax({ 
+								url: BASE_PATH+'/admin/orderJp/sendEmail',
+								type:'post',
+								data:{
+									orderid:orderId,
+									applicantid:applicantId
+								},
+								success: function(data){
+									if(data.status == 200){
+										layer.close(layerIndex);
+									}
+									closeWindow();
+								}
+							});
+						}
+					}
 			});
+				
+			}
+			
 		}
-
+		
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

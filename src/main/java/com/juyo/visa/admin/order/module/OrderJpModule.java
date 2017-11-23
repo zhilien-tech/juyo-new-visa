@@ -329,8 +329,13 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object getApplicantInfoValid() {
-		return null;
+	public Object getApplicantInfoValid(@Param("applicantId") Integer id, @Param("telephone") String telephone,
+			@Param("email") String email) {
+		Map<String, Object> result = MapUtil.map();
+		result.put("applicantId", id);
+		result.put("telephone", telephone);
+		result.put("email", email);
+		return result;
 	}
 
 	/**
@@ -370,6 +375,24 @@ public class OrderJpModule {
 	@POST
 	public Object getShare(@Param("orderid") Integer id) {
 		return saleViewService.getShare(id);
+	}
+
+	/**
+	 * 发送邮件、短信(单独分享)
+	 */
+	@At
+	@POST
+	public Object sendEmail(@Param("orderid") int orderid, @Param("applicantid") int applicantid) {
+		return saleViewService.sendEmail(orderid, applicantid);
+	}
+
+	/**
+	 * 发送邮件、短信(统一分享)
+	 */
+	@At
+	@POST
+	public Object sendEmailUnified(@Param("orderid") int orderid, @Param("applicantid") int applicantid) {
+		return saleViewService.sendEmail(orderid, applicantid);
 	}
 
 	/**

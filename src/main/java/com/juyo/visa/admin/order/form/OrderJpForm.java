@@ -49,8 +49,10 @@ public class OrderJpForm extends OrderForm {
 	//每页多少条
 	private Integer pageSize = 10;
 
-	private Date start_time;
+	private Date starttime;
 	private Date end_time;
+	private Date sendSignDate;
+	private Date signOutDate;
 
 	private Integer userType;
 
@@ -77,14 +79,16 @@ public class OrderJpForm extends OrderForm {
 					.or("aj.applicants", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
-		if (!Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
-			SqlExpressionGroup e1 = Cnd.exps("o.createtime", ">=", start_time).and("vncoj.createtime", "<=", end_time);
+		if (!Util.isEmpty(starttime)) {
+			SqlExpressionGroup e1 = Cnd.exps("o.createTime", ">=", starttime).and("vncoj.createtime", "<=", end_time);
 			cnd.and(e1);
-		} else if (Util.isEmpty(start_time) && !Util.isEmpty(end_time)) {
-			SqlExpressionGroup e1 = Cnd.exps("o.createtime", "<=", end_time);
+		}
+		if (!Util.isEmpty(signOutDate)) {
+			SqlExpressionGroup e1 = Cnd.exps("o.outVisaDate", "=", signOutDate);
 			cnd.and(e1);
-		} else if (!Util.isEmpty(start_time) && Util.isEmpty(end_time)) {
-			SqlExpressionGroup e1 = Cnd.exps("o.createtime", ">=", start_time);
+		}
+		if (!Util.isEmpty(sendSignDate)) {
+			SqlExpressionGroup e1 = Cnd.exps("o.sendVisaDate", "=", sendSignDate);
 			cnd.and(e1);
 		}
 		if (!Util.isEmpty(getStatus())) {
