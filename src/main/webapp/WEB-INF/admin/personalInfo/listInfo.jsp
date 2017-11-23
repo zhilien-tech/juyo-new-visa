@@ -86,6 +86,10 @@
 				type : 'POST',
 				url : '${base}/admin/personalInfo/personalInfo.html',
 				success : function(resp) {
+					var name = resp.name;
+					if(null == name){
+						name = "";
+					}
 					var qq = resp.qq;
 					if(null == qq){
 						qq = "";
@@ -94,6 +98,7 @@
 					if(null == email){
 						email = "";
 					}
+					$("#name").text(name);
 					$("#qq").text(qq);
 					$("#email").text(email);
 				},

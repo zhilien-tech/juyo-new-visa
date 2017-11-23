@@ -31,7 +31,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>员工姓名：</label> 
-									<input id="username" name="username" value="${obj.name}" readonly="value" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="username" name="username" value="${obj.name}" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 
