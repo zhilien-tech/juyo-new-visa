@@ -74,12 +74,7 @@ public class TReceiveaddressForm extends DataTablesParamForm {
 					.or("address", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
-		if (userType == 5) {
-			cnd.and("comId", "=", comId);
-		}
-		if (userType == 1) {
-			cnd.and("userId", "=", userId);
-		}
+		cnd.and("comId", "=", comId);
 		cnd.orderBy("createTime", "DESC");
 		return cnd;
 	}

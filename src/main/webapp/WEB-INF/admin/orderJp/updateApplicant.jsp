@@ -402,8 +402,8 @@
 							$('#address').val(obj.address);
 							$('#nation').val(obj.nationality);
 							$('#cardId').val(obj.num);
-							$('#province').val(obj.province);
-							$('#city').val(obj.city);
+							//$('#province').val(obj.province);
+							//$('#city').val(obj.city);
 							$('#birthday').val(obj.birth);
 							$('#sex').val(obj.sex);
 						}
@@ -411,9 +411,6 @@
 						$("#updateBtn").attr('disabled', false);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
-						alert(XMLHttpRequest.status);
-		                alert(XMLHttpRequest.readyState);
-		                alert(textStatus);
 						layer.close(layerIndex);
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
@@ -461,9 +458,6 @@
 						$("#updateBtn").attr('disabled', false);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
-						alert(XMLHttpRequest.status);
-		                alert(XMLHttpRequest.readyState);
-		                alert(textStatus);
 						layer.close(layerIndex);
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);

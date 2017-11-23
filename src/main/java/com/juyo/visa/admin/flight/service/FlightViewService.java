@@ -17,6 +17,7 @@ import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.forms.TFlightAddForm;
 import com.juyo.visa.forms.TFlightForm;
 import com.juyo.visa.forms.TFlightUpdateForm;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
@@ -88,12 +89,19 @@ public class FlightViewService extends BaseService<TFlightEntity> {
 	 * @param flight
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object getFlightSelect(String flight) {
+	public Object getFlightSelect(String flight, String gocity, String arrivecity) {
 
 		List<TFlightEntity> flightlist = Lists.newArrayList();
 		try {
-			flightlist = dbDao.query(TFlightEntity.class, Cnd.where("flightnum", "like", Strings.trim(flight) + "%"),
-					null);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("flightnum", "like", Strings.trim(flight) + "%");
+			if (!Util.isEmpty(gocity)) {
+				cnd.and("takeOffCityId", "=", gocity);
+			}
+			if (!Util.isEmpty(arrivecity)) {
+				cnd.and("landingCityId", "=", arrivecity);
+			}
+			flightlist = dbDao.query(TFlightEntity.class, cnd, null);
 			if (flightlist.size() > 5) {
 				flightlist = flightlist.subList(0, 5);
 			}

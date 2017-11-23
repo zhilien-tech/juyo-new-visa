@@ -125,7 +125,18 @@ new Vue({
 		},
 		//签证录入
 		visa:function(applyid){
-			window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applyid;
+			//window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applyid;
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['1000px', '750px'],
+				content: '/admin/visaJapan/visaInput.html?applyid='+applyid
+			});
 		},
 		passport:function(applyId){
 			layer.open({
@@ -234,7 +245,8 @@ $('.select2City').select2({
 	maximumSelectionLength : 1, //设置最多可以选择多少项
 	tags : false //设置必须存在的选项 才能选中
 });
-$('.flightSelect2').select2({
+//出发航班select2
+$('#goFlightNum').select2({
 	ajax : {
 		url : BASE_PATH + "/admin/flight/getFlightSelect.html",
 		dataType : 'json',
@@ -245,8 +257,82 @@ $('.flightSelect2').select2({
 			if(cArrivalcity){
 				cArrivalcity = cArrivalcity.join(',');
 			}*/
+			//去程出发城市
+			var goDepartureCity = $('#goDepartureCity').val();
+			if (goDepartureCity) {
+				goDepartureCity = goDepartureCity.join(',');
+			}else{
+				goDepartureCity += '';
+			}
+			//去程抵达城市
+			var goArrivedCity = $('#goArrivedCity').val();
+			if (goArrivedCity) {
+				goArrivedCity = goArrivedCity.join(',');
+			}else{
+				goArrivedCity += '';
+			}
 			return {
 				//exname : cArrivalcity,
+				gocity:goDepartureCity,
+				arrivecity:goArrivedCity,
+				flight : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.flightnum; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+//返程航班select2
+$('#returnFlightNum').select2({
+	ajax : {
+		url : BASE_PATH + "/admin/flight/getFlightSelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			//去程出发城市
+			var returnDepartureCity = $('#returnDepartureCity').val();
+			if (returnDepartureCity) {
+				returnDepartureCity = returnDepartureCity.join(',');
+			}else{
+				returnDepartureCity += '';
+			}
+			//去程抵达城市
+			var returnArrivedCity = $('#returnArrivedCity').val();
+			if (returnArrivedCity) {
+				returnArrivedCity = returnArrivedCity.join(',');
+			}else{
+				returnArrivedCity += '';
+			}
+			return {
+				//exname : cArrivalcity,
+				gocity:returnDepartureCity,
+				arrivecity:returnArrivedCity,
 				flight : params.term, // search term
 				page : params.page
 			};
@@ -386,3 +472,13 @@ $(".schedulingBtn").click(function(){
 		}
 	});
 });
+
+function downLoadFile(){
+	$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=" + orderobj.orderinfo.orderid, {
+        successCallback: function (url) {
+        },
+        failCallback: function (html, url) {
+       	layer.msg("下载失败");
+        }
+    });
+}

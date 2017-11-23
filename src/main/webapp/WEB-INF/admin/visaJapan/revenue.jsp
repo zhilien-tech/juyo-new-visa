@@ -111,7 +111,8 @@
 					$(this).removeClass("titleStyle");
 					$(this).after('<input type="text" class="passportInp" value='+ spanText +' />');
 					var passport = $(".passportInp").val();
-					$(".passportInp").val("").focus().val(passport); //把光标加入到字符串后面
+					var passnumber = passport.substring(2);
+					$(".passportInp").val("").focus().val(passnumber); //把光标加入到字符串后面
 				}else if(HZlength == true){
 					$(".passportInp").remove();
 					$(this).addClass("titleStyle");
@@ -129,7 +130,7 @@
 				var applicatid = $(this).parent().find('#applicatid').val();
 				$.ajax({ 
 	            	url: '${base}/admin/visaJapan/editPassportCount.html',
-	            	data:{applicatid:applicatid,inputVal:thisval},
+	            	data:{applicatid:applicatid,inputVal:'护照'+thisval},
 	            	dataType:"json",
 	            	type:'post',
 	            	success: function(data){
@@ -137,11 +138,14 @@
 	            });
 				$(this).parent().find("span").each(function(index,value){
 					if($(this).text().indexOf("护照") !== -1){
-						$(this).text(thisval);
+						$(this).text('护照'+thisval);
 						$(".passportInp").remove();
 						$(this).removeClass("titleStyle");
 					}
 				});
+			});
+			$(document).on('input','.passportInp',function(){
+				$(this).val($(this).val().replace(/[^\d]/g,''));
 			});
 		});
 
