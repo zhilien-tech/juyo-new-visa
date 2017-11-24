@@ -35,7 +35,7 @@
 						<li class="arrow"></li>
 						<li>日本</li>
 						<li class="arrow"></li> -->
-						<li>申请人</li>
+						<a href="/admin/myVisa/inProcessVisa.html"><li>申请人</li></a>
 						<li class="arrow"></li>
 						<li>${obj.applicant.applicantname }</li>
 					</ul>
@@ -217,6 +217,7 @@
 				}
 				
 			});
+			
 		</script>
 	</body>
 </html>
