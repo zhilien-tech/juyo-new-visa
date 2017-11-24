@@ -30,10 +30,10 @@
 								</select>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照号/电话/申请人" />
+								<input id="searchStr" name="searchStr" onkeypress="onkeyEnter();" type="text" class="input-sm input-class"  placeholder="订单号/护照号/电话/申请人" />
 							</div>
 							<div class="col-md-6 left-5px">
-								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+								<a id="searchBtn" class="btn btn-primary btn-sm pull-left">搜索</a>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->

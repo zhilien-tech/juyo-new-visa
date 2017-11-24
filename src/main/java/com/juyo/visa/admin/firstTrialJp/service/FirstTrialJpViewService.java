@@ -52,6 +52,7 @@ import com.juyo.visa.common.enums.VisaDataTypeEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TOrderBackmailEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderRecipientEntity;
@@ -207,6 +208,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//申请人信息
 		List<Record> applyinfo = getApplicantByOrderid(orderid);
 		result.put("applyinfo", applyinfo);
+		//回邮信息
+		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class,
+				Cnd.where("orderId", "=", orderid), null);
+		result.put("backinfo", backinfo);
 
 		return result;
 	}
