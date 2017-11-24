@@ -60,6 +60,7 @@ import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -88,6 +89,7 @@ import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCustomerEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TOrderLogsEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;
 import com.juyo.visa.forms.TApplicantPassportForm;
@@ -576,6 +578,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		orderEntity.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
 		dbDao.insert(orderEntity);
 		Integer orderId = orderEntity.getId();
+		TOrderLogsEntity orderLog = new TOrderLogsEntity();
+		orderLog.setOrderId(orderId);
+		orderLog.setCreateTime(new Date());
+		orderLog.setUpdateTime(new Date());
+		orderLog.setOpId(loginUser.getId());
+		orderLog.setOrderStatus(orderEntity.getStatus());
+		dbDao.insert(orderLog);
 
 		//日本订单信息
 		TOrderJpEntity orderJpEntity = new TOrderJpEntity();
@@ -702,6 +711,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			String validEndDateStr = sdf.format(validEndDate);
 			result.put("validEndDate", validEndDateStr);
 		}
+		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("applicant", applicantEntity);
 		return result;
 	}
@@ -1132,6 +1142,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = MapUtil.map();
 		String name = "";
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(orderid).intValue());
+		TOrderLogsEntity orderLogsEntity = dbDao.fetch(TOrderLogsEntity.class, Cnd.where("orderId", "=", orderid));
 		TUserEntity userEntity = dbDao.fetch(TUserEntity.class, new Long(orderEntity.getUserId()).intValue());
 		if (!Util.isEmpty(userEntity)) {
 			name = userEntity.getName();
@@ -1143,7 +1154,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object firtTrialJp(Integer id) {
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(id).intValue());
-		orderEntity.setStatus(2);
+		orderEntity.setStatus(JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
+		dbDao.update(orderEntity);
 		return null;
 	}
 

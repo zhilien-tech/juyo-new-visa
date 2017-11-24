@@ -28,6 +28,7 @@ import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
+import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.ShareTypeEnum;
@@ -108,6 +109,7 @@ public class OrderJpModule {
 	@Ok("jsp")
 	public Object addApplicantSale(@Param("id") Integer orderid) {
 		Map<String, Object> result = MapUtil.map();
+		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("orderid", orderid);
 		return result;
 	}

@@ -144,12 +144,11 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别：</label>
-									<input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value=""/>
-									<%-- <select class="form-control input-sm selectHeight" id="sex" name="sex">
-										<c:forEach var="map" items="${obj.MOrFEnum}">
-												<option value="${map.key}" >${map.value}</option>
-											</c:forEach>
-									</select> --%>
+									<!-- <input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value=""/> -->
+									<select class="form-control input-sm selectHeight" id="sex" name="sex">
+										<option value="男">男</option>
+										<option value="女">女</option>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
