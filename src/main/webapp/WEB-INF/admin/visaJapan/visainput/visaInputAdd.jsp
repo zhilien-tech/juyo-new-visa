@@ -32,7 +32,24 @@
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
-
+					<!-- <div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<div class="upload-btn">
+									<input id="license" name="license" type="hidden"/>
+									<a href="javascript:;" class="uploadP">
+										上传签证
+										<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file" value="上传签证" />
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<img src="x" width="400px" height="200px">
+						</div>
+					</div> -->
+					<!-- <div class="row">
+					</div> -->
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
@@ -224,11 +241,13 @@
 					data : $("#applicantvisaAddForm").serialize(),
 					url : '${base}/admin/visaJapan/visainput/add.html',
 					success : function(data) {
-						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						layer.close(index);
 						window.parent.layer.msg("添加成功", "", 3000);
 						parent.successCallBack();
-						parent.layer.close(index);
+						parent.layer.close(index); */
+						var applicantId = $('#applicantId').val();
+						window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId;
 					},
 					error : function(xhr) {
 						layer.msg("添加失败", "", 3000);
@@ -239,8 +258,10 @@
 		
 		//返回 
 		function closeWindow() {
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			parent.layer.close(index);
+			/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index); */
+			var applicantId = $('#applicantId').val();
+			window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId;
 		}
 	</script>
 

@@ -47,7 +47,7 @@
 					<span class="">状态：<p>{{orderinfo.visastatus}}</p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
-					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
 					<input type="button" value="自动填报" class="btn btn-primary btn-sm pull-right" />
 				</div>
 				<section class="content">
@@ -259,10 +259,17 @@
 									</tr>
 								</tbody>
 							</table>
+							<!-- end 申请人 -->
+							<div class="row" id="orderremark">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label>备注：</label> 
+										<input id="remark" name="remark" type="text" class="form-control input-sm" v-model="orderinfo.remark"/>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					<!-- end 申请人 -->
-
 					<!-- 出行信息 -->
 					<div class="info">
 						<p class="info-head">出行信息</p>
@@ -423,6 +430,7 @@
 		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 		<script src="${base}/references/common/js/vue/vue.min.js"></script>
+		<script src="${base}/references/public/plugins/jquery.fileDownload.js"></script>
 		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 		<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
 		<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>

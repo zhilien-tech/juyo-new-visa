@@ -180,11 +180,12 @@
 					data : $("#applicantvisaUpdateForm").serialize(),
 					url : '${base}/admin/visaJapan/visainput/update.html',
 					success : function(data) {
-						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						layer.close(index);
 						window.parent.layer.msg("编辑成功", "", 3000);
 						parent.successCallBack();
-						parent.layer.close(index);
+						parent.layer.close(index); */
+						closeWindow();
 					},
 					error : function(xhr) {
 						layer.msg("编辑失败", "", 3000);
@@ -195,8 +196,10 @@
 	
 		//返回刷新页面 
 		function closeWindow() {
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-        	parent.layer.close(index);
+			/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        	parent.layer.close(index); */
+        	var applicantId = '${obj.applicantvisa.applicantId}';
+			window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId;
 		}
 	</script>
 

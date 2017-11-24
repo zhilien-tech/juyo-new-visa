@@ -106,7 +106,7 @@
 		    },
 		    methods:{
 		    	edit:function(visainputid){
-		    	      layer.open({
+		    	      /* layer.open({
 		    	    	    type: 2,
 		    	    	    title: false,
 		    	    	    closeBtn:false,
@@ -116,13 +116,15 @@
 		    	    	    scrollbar: false,
 		    	    	    area: ['900px', '550px'],
 		    	    	    content: '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid
-		    	    	  });
+		    	    	  }); */
+		    	      window.location.href = '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid;
 		    	}
 		    }
 		});
 		//新增签证录入
 		function add(){
-	      layer.open({
+			window.location.href = '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid;
+	      /* layer.open({
 	    	    type: 2,
 	    	    title: false,
 	    	    closeBtn:false,
@@ -132,7 +134,7 @@
 	    	    scrollbar: false,
 	    	    area: ['900px', '550px'],
 	    	    content: '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid
-	    	  });
+	    	  }); */
 		 }
 		
 		function successCallBack(){
