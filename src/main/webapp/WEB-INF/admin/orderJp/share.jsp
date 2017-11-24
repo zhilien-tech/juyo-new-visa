@@ -73,36 +73,25 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			/* var sharetype = $("#shareType").val();
-			if(sharetype == 1){//为1时单选
-				
-			}else{//多选
-			$("#datatableId tbody tr").click(function(){
-				var isStyle = $(this).attr("style");
-				if(isStyle == "color: rgb(48, 135, 240);"){//不被选中
-					$(this).css("color","#333333");
-					$(this).removeClass('btnState-true');
-				}else{//选中
-					$(this).css("color","#3087f0");
-					$(this).addClass('btnState-true').siblings("tr").addClass('btnState-true');
-					
-				$(this).children().eq(0).html();
-				}
-			
-			});
-			} */
-
+			$("#addBtn").attr('disabled', true);
 			$(document).on("click",".tableTr",function(){
 				var sharetype = $("#shareType").val();
-				if(sharetype == 1){//统一联系人
+				if(sharetype == 2){//单独分享
 					if($(this).hasClass("trColor")){
 						$(this).removeClass("trColor");
 					}else{
 						$(this).addClass("trColor");
 					}
-				}else if(sharetype == 2){//单独分享
+				}else if(sharetype == 1){//统一联系人
 					$(this).addClass("trColor").siblings("tr").removeClass("trColor");
 				}
+				
+				if($(this).hasClass("trColor")){
+					$("#addBtn").attr('disabled', false);
+				}else{
+					$("#addBtn").attr('disabled', true);
+				}
+				
 			});
 			
 		});
@@ -131,63 +120,30 @@
 		function save(){
 			var sharetype = $("#shareType").val();
 			var orderId = ${obj.orderId};
-			var name,telephone,email;
-			var flag;
+			var applicantMainId,applicantId,name,telephone,email;
 			if(sharetype == 1){
-				if($("#datatableId tbody tr").attr("style") == "color: rgb(48, 135, 240);"){
-					alert(11);
+				$("#datatableId tbody tr").each(function(){
 					applicantId = $(this).children().eq(0).html();
-					name = $(this).children().eq(1).html();
 					telephone = $(this).children().eq(2).html();
 					email = $(this).children().eq(3).html();
-					
-					$.ajax({ 
-						url: BASE_PATH+'/admin/orderJp/getShare',
-						type:'post',
-						data:{
-							orderid:orderId
-						},
-						success: function(data){
-							for(var i = 0; i < data.length; i++){
-								if(data[i].telephone == "" || data[i].email == ""){
-									layer.open({
-										type: 2,
-										title: false,
-										closeBtn:false,
-										fix: false,
-										maxmin: false,
-										shadeClose: false,
-										scrollbar: false,
-										area: ['900px', '551px'],
-										content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+data[i].id+'&telephone='+data[i].telephone+'&email='+data[i].email
-									});
-								}
-							}
-							$.ajax({ 
-								url: BASE_PATH+'/admin/orderJp/sendEmailUnified',
-								type:'post',
-								data:{
-									orderid:orderId,
-									applicantid:applicantId
-								},
-								success: function(data){
-									if(data.status == 200){
-										layer.close(layerIndex);
-									}
-									closeWindow();
-								}
-							});
-						}
-					});
-					
-				}
-				/* $("#datatableId tbody tr").each(function(){
-						applicantId = $(this).children().eq(0).html();
-						name = $(this).children().eq(1).html();
-						telephone = $(this).children().eq(2).html();
-						email = $(this).children().eq(3).html();
-						if(email == "" || telephone == ""){
-							flag = 2;
+					if(email == "" || telephone == ""){
+						layer.open({
+							type: 2,
+							title: false,
+							closeBtn:false,
+							fix: false,
+							maxmin: false,
+							shadeClose: false,
+							scrollbar: false,
+							area: ['900px', '551px'],
+							content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
+						});
+						/* layer.confirm("手机号、邮箱不能为空，请及时补充", {
+						//title:"",
+						btn: ["马上补充","以后再说"], //按钮
+						shade: false //不显示遮罩
+						}, function(){
+							alert(111);
 							layer.open({
 								type: 2,
 								title: false,
@@ -197,36 +153,49 @@
 								shadeClose: false,
 								scrollbar: false,
 								area: ['900px', '551px'],
-								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
+								content:'${base}/admin/orderJp/updateApplicant.html?id='+applicantId
 							});
-						}else{
-							flag = 1;
-						}
-				}); */
-					/* if(flag == 1){
-						alert(222);
-					if($("#datatableId tbody tr").attr("style") == "color: rgb(48, 135, 240);"){
-						var applicantId = $(this).children().eq(0).html();
-						alert(applicantId);
-						$.ajax({ 
-							url: BASE_PATH+'/admin/orderJp/sendEmailUnified',
-							type:'post',
-							data:{
-								orderid:orderId,
-								applicantid:applicantId
-							},
-							success: function(data){
-								if(data.status == 200){
-									layer.close(layerIndex);
-								}
-								closeWindow();
+						}); */
 							}
 						});
+						
+				$("#datatableId tbody tr").each(function(){
+					if($(this).hasClass("trColor")){
+						applicantMainId = $(this).children().eq(0).html();
 					}
-					} */
+				});
+						
+				$.ajax({ 
+					async:false,
+					url: BASE_PATH+'/admin/orderJp/applicantComplete',
+					type:'post',
+					data:{
+						orderid:orderId
+					},
+					success: function(data){
+						if(data == "yes"){
+							$.ajax({ 
+								url: BASE_PATH+'/admin/orderJp/sendEmailUnified',
+								type:'post',
+								data:{
+									orderid:orderId,
+									applicantid:applicantMainId
+								},
+								success: function(data){
+									layer.msg('分享成功');
+									layer.closeAll('loading');
+									layer.close(layerIndex);
+									closeWindow();
+								}
+							});
+							
+						}
+						
+					}
+				});
 			}else{
 				$("#datatableId tbody tr").each(function(){
-					if($(this).attr("style") == "color: rgb(48, 135, 240);"){
+					if($(this).hasClass("trColor")){
 						applicantId = $(this).children().eq(0).html();
 						name = $(this).children().eq(1).html();
 						telephone = $(this).children().eq(2).html();
@@ -252,6 +221,8 @@
 									applicantid:applicantId
 								},
 								success: function(data){
+									layer.msg('分享成功');
+									layer.closeAll('loading');
 									if(data.status == 200){
 										layer.close(layerIndex);
 									}
@@ -270,6 +241,25 @@
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
+		}
+		
+		function successCallBack(status){
+			if(status == 1){
+				layer.msg('修改成功');
+			}
+			var orderid = '${obj.orderId}';
+			$.ajax({ 
+            	url: '${base}/admin/orderJp/getShare.html',
+            	data:{orderid:orderid},
+            	dataType:"json",
+            	type:'post',
+            	success: function(data){
+            		_self.shareInfo = data;
+            		console.log(JSON.stringify(_self.shareInfo));
+              	}
+            });
+			save();
+			//parent.location.reload();
 		}
 	</script>
 </body>

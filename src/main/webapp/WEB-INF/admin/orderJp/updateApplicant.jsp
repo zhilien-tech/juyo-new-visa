@@ -178,13 +178,15 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别：</label> 
-									<input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.sex }"/>
-									<%-- <select
+									<%-- <input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.sex }"/> --%>
+									<select
 										class="form-control input-sm selectHeight" id="sex" name="sex">
-										<c:forEach var="map" items="${obj.MOrFEnum}">
+										<%-- <c:forEach var="map" items="${obj.boyOrGirlEnum}">
 												<option value="${map.key}" ${map.key==obj.applicant.sex?'selected':''}>${map.value}</option>
-											</c:forEach>
-									</select> --%>
+											</c:forEach> --%>
+											<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
+										<option value="女" ${obj.applicant.sex == "女"?"selected":"" }>女</option>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
@@ -355,6 +357,7 @@
 			
 			var applicantInfo = $("#applicantInfo").serialize();
 			$.ajax({
+				async: false,
 				type: 'POST',
 				data : applicantInfo,
 				url: '${base}/admin/orderJp/saveEditApplicant',

@@ -81,10 +81,10 @@
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="order(data.orderid)"> </i>
-									<i class="share"> </i>
-									<i class="theTrial"> </i>
-									<i class="return"> </i>
-									<i class="toVoid"> </i>
+									<i class="share" v-on:click="share(data.orderid)"> </i>
+									<i class="theTrial" v-on:click="theTrial(data.orderid)"> </i>
+									<i class="return" > </i>
+									<i class="toVoid" > </i>
 								</div>
 							</div>
 							<ul class="card-content">
@@ -141,7 +141,32 @@
 	        	order:function(id){
 	        			window.open('${base}/admin/orderJp/order.html'+(id > 0?('?id='+id):''));//跳转到更新页面
 	        			//window.location.href = '${base}/admin/orderJp/order.html?id='+id;
-	        	}
+	        	},
+	        	share:function(id){//分享
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/orderJp/share.html?id='+id
+					});
+				},
+				theTrial:function(id){
+					$.ajax({ 
+				    	url: '${base}/admin/orderJp/firtTrialJp',
+				    	dataType:"json",
+				    	data:{orderId:id},
+				    	type:'post',
+				    	success: function(data){
+				    		
+				      	}
+				    }); 
+				}
+	        	
 	        } 
 		});
 		
