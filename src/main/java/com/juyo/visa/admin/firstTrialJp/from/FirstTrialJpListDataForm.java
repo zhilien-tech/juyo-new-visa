@@ -59,7 +59,7 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("tr.orderNum", "like", "%" + searchStr + "%").or("taj.passportNum", "like", "%" + searchStr + "%")
-					.or("tc.mobile", "like", "%" + searchStr + "%")
+					.or("taj.phone", "like", "%" + searchStr + "%")
 					.or("taj.applicantName", "like", "%" + searchStr + "%");
 			cnd.and(exp);
 		}

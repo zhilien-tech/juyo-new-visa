@@ -285,8 +285,8 @@
 								<!-- 资料来源/回邮方式/回邮地址 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>资料来源：</label> <select id="datasour"
-											name="datasour" class="form-control input-sm">
+										<label><span>*</span>资料来源：</label> 
+										<select id="datasour" name="datasour" class="form-control input-sm">
 											<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -295,8 +295,8 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>回邮方式：</label> <select id="expressType"
-											name="expressType" class="form-control input-sm">
+										<label><span>*</span>回邮方式：</label> 
+										<select id="expressType" name="expressType" class="form-control input-sm">
 											<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -305,9 +305,8 @@
 								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span>*</span>回邮地址：</label> <input id="expressAddress"
-											name="expressAddress" type="text"
-											class="form-control input-sm" placeholder=" " />
+										<label><span>*</span>回邮地址：</label> 
+										<input id="expressAddress" name="expressAddress" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 							</div>
@@ -317,30 +316,26 @@
 								<!-- 联系人/电话/发票项目内容/发票抬头 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>联系人：</label> <input id="linkman"
-											name="linkman" type="text" class="form-control input-sm"
-											placeholder=" " />
+										<label><span>*</span>联系人：</label> 
+										<input id="linkman" name="linkman" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>电话：</label> <input id="telephone"
-											name="telephone" type="text" class="form-control input-sm"
-											placeholder=" " />
+										<label><span>*</span>电话：</label> 
+										<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>发票项目内容：</label> <input id="invoiceContent"
-											name="invoiceContent" type="text"
-											class="form-control input-sm" placeholder=" " />
+										<label><span>*</span>发票项目内容：</label> 
+										<input id="invoiceContent" name="invoiceContent" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>发票抬头：</label> <input id="invoiceHead"
-											name="invoiceHead" type="text" class="form-control input-sm"
-											placeholder=" " />
+										<label><span>*</span>发票抬头：</label> 
+										<input id="invoiceHead" name="invoiceHead" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 							</div>
@@ -350,22 +345,20 @@
 								<!-- 团队名称/快递号/备注 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>团队名称：</label> <input id="" name=""
-											type="text" class="form-control input-sm" placeholder=" " />
+										<label><span>*</span>团队名称：</label> 
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>快递号：</label> <input id="expressNum"
-											name="expressNum" type="text" class="form-control input-sm"
-											placeholder=" " />
+										<label><span>*</span>快递号：</label> 
+										<input id="expressNum" name="expressNum" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span>*</span>备注：</label> <input id="remark"
-											name="remark" type="text" class="form-control input-sm"
-											placeholder=" " />
+										<label><span>*</span>备注：</label> 
+										<input id="remark" name="remark" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 							</div>

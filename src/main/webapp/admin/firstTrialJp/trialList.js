@@ -147,7 +147,7 @@ new Vue({
 	}
 });
 
-function search(){
+$("#searchBtn").on('click', function () {
 	/* var status = $('#status').val(); */
 	var searchStr = $('#searchStr').val();
 	$.ajax({ 
@@ -160,6 +160,14 @@ function search(){
 			_self.trialJapanData = data.trialJapanData;
 		}
 	});
+});
+
+/*回车事件*/
+function onkeyEnter(){
+	var e = window.event || arguments.callee.caller.arguments[0];
+	if(e && e.keyCode == 13){
+		$("#searchBtn").click();
+	}
 }
 
 function successCallBack(status){
