@@ -58,6 +58,7 @@
 		function cancelBtn(){
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
+			
 		}
 		
 		function successCallBack(status){
@@ -65,7 +66,8 @@
 				layer.msg('修改成功');
 			}
 			$("#cancel").click();
-			parent.location.reload();
+			//parent.successCallBack(1);
+			//parent.location.reload();
 		}
 	
 	</script>

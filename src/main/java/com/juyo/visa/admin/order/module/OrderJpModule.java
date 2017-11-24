@@ -227,6 +227,15 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 签证信息修改保存
+	 */
+	@At
+	@POST
+	public Object saveEditVisa(@Param("..") VisaEditDataForm visaForm) {
+		return saleViewService.saveEditVisa(visaForm);
+	}
+
+	/**
 	 * 客户信息获取申请人下拉
 	 */
 	@At
@@ -341,6 +350,15 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 订单中所有申请人是否都填写了邮箱、手机号
+	 */
+	@At
+	@POST
+	public Object applicantComplete(@Param("orderid") int orderid) {
+		return saleViewService.applicantComplete(orderid);
+	}
+
+	/**
 	 * 跳转到日志页面
 	 */
 	@At
@@ -359,15 +377,6 @@ public class OrderJpModule {
 	@POST
 	public Object getLogs(@Param("orderid") Integer orderid) {
 		return saleViewService.getLogs(orderid);
-	}
-
-	/**
-	 * 签证信息修改保存
-	 */
-	@At
-	@POST
-	public Object saveEditVisa(@Param("..") VisaEditDataForm visaForm) {
-		return saleViewService.saveEditVisa(visaForm);
 	}
 
 	/**
@@ -394,7 +403,7 @@ public class OrderJpModule {
 	@At
 	@POST
 	public Object sendEmailUnified(@Param("orderid") int orderid, @Param("applicantid") int applicantid) {
-		return saleViewService.sendEmail(orderid, applicantid);
+		return saleViewService.sendEmailUnified(orderid, applicantid);
 	}
 
 	/**

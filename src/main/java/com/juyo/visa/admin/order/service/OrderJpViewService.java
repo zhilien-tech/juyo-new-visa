@@ -65,6 +65,7 @@ import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainApplicantRelationEnum;
 import com.juyo.visa.common.enums.MainApplicantRemarkEnum;
 import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
@@ -819,12 +820,23 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("isOrNo", EnumUtil.enum2(IsYesOrNoEnum.class));
 		result.put("applicantRelation", EnumUtil.enum2(MainApplicantRelationEnum.class));
 		result.put("applicantRemark", EnumUtil.enum2(MainApplicantRemarkEnum.class));
+		result.put("jobStatusEnum", EnumUtil.enum2(JobStatusEnum.class));
 		String visaInfoSqlstr = sqlManager.get("visaInfo_byApplicantId");
 		Sql visaInfoSql = Sqls.create(visaInfoSqlstr);
 		visaInfoSql.setParam("id", id);
 		Record visaInfo = dbDao.fetch(visaInfoSql);
-		//===
-		Map<String, Object> getmainApplicantByOrderid = firstTrialJpViewService.getmainApplicantByOrderid(orderid);
+		//获取申请人
+		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
+		TApplicantEntity mainApplicant = dbDao.fetch(TApplicantEntity.class, new Long(applicantEntity.getMainId()));
+		//获取订单主申请人
+		String sqlStr = sqlManager.get("mainApplicant_byOrderId");
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao
+				.query(applysql,
+						Cnd.where("oj.orderId", "=", orderid).and("aoj.isMainApplicant", "=",
+								IsYesOrNoEnum.YES.intKey()), null);
+		result.put("mainApplicant", mainApplicant);
+		result.put("mainApply", records);
 		result.put("visaInfo", visaInfo);
 		return result;
 	}
@@ -866,6 +878,22 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicantSql.setParam("id", id);
 		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
 		return applicantInfo;
+	}
+
+	public Object applicantComplete(int orderid) {
+		String complete = "yes";
+		String applicantSqlstr = sqlManager.get("orderJp_list_applicantInfo_byOrderId");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		applicantSql.setParam("id", orderid);
+		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
+		for (Record record : applicantInfo) {
+			String telephone = record.getString("telephone");
+			String email = record.getString("email");
+			if (Util.isEmpty(telephone) || Util.isEmpty(email)) {
+				complete = "no";
+			}
+		}
+		return complete;
 	}
 
 	public Object sendEmail(int orderid, int applicantid) {

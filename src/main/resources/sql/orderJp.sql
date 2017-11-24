@@ -157,3 +157,22 @@ t_applicant_wealth_jp awtj ON awtj.applicantId = aoj.id
 WHERE
 aoj.applicantId = @id
 
+
+/*mainApplicant_byOrderId*/
+SELECT
+a.id,
+CONCAT(a.firstName, a.lastName) applyname,
+a.email,
+a.mainId,
+a.telephone,
+a.sex,
+ap.passport
+FROM
+t_applicant_order_jp aoj
+LEFT JOIN
+t_order_jp oj ON aoj.orderId = oj.id 
+LEFT JOIN
+t_applicant a ON aoj.applicantId = a.id
+LEFT JOIN
+t_applicant_passport ap ON ap.applicantId = a.id
+$condition

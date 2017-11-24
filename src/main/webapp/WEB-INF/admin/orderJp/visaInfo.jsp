@@ -33,7 +33,7 @@
 				<div class="tab-content row">
 					<!-- 申请人 -->
 					<div class="info">
-						<div class="info-head">主申请人 </div>
+						<div id="mainApply" class="info-head">主申请人 </div>
 						<div class="info-body-from cf ">
 							<div class="row"><!-- 申请人/备注 -->
 								<div class="col-sm-4">
@@ -49,7 +49,7 @@
 								<div class="col-sm-4 main">
 									<div class="form-group">
 										<label><span>*</span>备注：</label>
-										<!-- <input id="" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
+										<!-- <input id="relationRem" name="relationRem" type="text" class="form-control input-sm" placeholder=" " /> -->
 										<select id="relationRemark" name="relationRemark" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.applicantRemark}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
@@ -64,8 +64,8 @@
 											<label><span>*</span>主申请人：</label>
 											<!-- <input id="mainApplicant" name="mainApplicant" type="text" class="form-control input-sm" placeholder=" " /> -->
 											<select id="mainApplicant" name="mainApplicant" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.visaInfo}">
-												<option value="${id}" }>${applyname}</option>
+											<c:forEach var="map" items="${obj.mainApply}">
+												<option value="${map.id}" ${map.id==obj.mainApplicant.id?'selected':'' } >${map.applyname}</option>
 											</c:forEach>
 										</select>
 										</div>
@@ -115,7 +115,12 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>我的职业：</label>
-										<input id="occupation"  name="occupation" type="text" class="form-control input-sm" placeholder=" " />
+										<!-- <input id="occupation"  name="occupation" type="text" class="form-control input-sm" placeholder=" " /> -->
+										<select id="occupation" name="occupation" class="form-control input-sm selectHeight">
+											<c:forEach var="map" items="${obj.jobStatusEnum}">
+												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainTrip?'selected':''}>${map.value}</option>
+											</c:forEach>
+										</select>
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -160,10 +165,10 @@
 					<div class="info" style="padding-bottom: 15px;">
 						<div class="info-head">财产信息 </div>
 						<div class="info-body-from finance-btn main">
-							<input id="" value="银行存款" type="button" class="btn btn-sm btnState" />
-							<input id="" value="车产" type="button" class="btn btn-sm btnState" />
-							<input id="" value="房产" type="button" class="btn btn-sm btnState" />
-							<input id="" value="理财" type="button" class="btn btn-sm btnState" />
+							<input id="" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState" />
+							<input id="" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
+							<input id="" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
+							<input id="" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
 						</div>
 						<div class="info-body-from  clone-module cf deposit">
 							<div class="row body-from-input"><!-- 银行存款 -->
@@ -273,9 +278,11 @@
 			if(applicVal == "1"){//主申请人
 				$(".vice").hide();
 				$(".main").show();
+				$("#mainApply").text("主申请人");
 			}else{//副申请人
 				$(".vice").show();
 				$(".main").hide();
+				$("#mainApply").text("副申请人");
 			}
 			
 			
@@ -307,15 +314,20 @@
 				if(applicVal == "1"){//主申请人
 					$(".vice").hide();
 					$(".main").show();
+					$("#mainApply").text("主申请人");
+					//$("#viceApply").hide();
 				}else{//副申请人
 					$(".vice").show();
 					$(".main").hide();
+					$("#mainApply").text("副申请人");
+					//$("#viceApply").show();
 				}
 			});
 		});
 		
 		//保存
 		function save(){
+			
 			var passportInfo = $("#passportInfo").serialize();
 			$.ajax({
 				type: 'POST',

@@ -357,6 +357,7 @@
 			
 			var applicantInfo = $("#applicantInfo").serialize();
 			$.ajax({
+				async: false,
 				type: 'POST',
 				data : applicantInfo,
 				url: '${base}/admin/orderJp/saveEditApplicant',
