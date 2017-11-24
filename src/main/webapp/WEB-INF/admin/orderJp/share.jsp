@@ -13,6 +13,7 @@
 	<style type="text/css">
 		#datatableId{position: relative;top: 10px;}
 		#datatableId tbody tr{cursor: pointer;}
+		.trColor{color: rgb(48, 135, 240)}
 	</style>
 </head>
 <body>
@@ -46,7 +47,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="data in shareInfo">
+							<tr v-for="data in shareInfo" class="tableTr">
 								<td style="display: none">{{data.id}}</td>
 								<td>{{data.applyname}}</td>
 								<td>{{data.telephone}}</td>
@@ -72,7 +73,7 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			var sharetype = $("#shareType").val();
+			/* var sharetype = $("#shareType").val();
 			if(sharetype == 1){//为1时单选
 				
 			}else{//多选
@@ -89,8 +90,20 @@
 				}
 			
 			});
-			}
+			} */
 
+			$(document).on("click",".tableTr",function(){
+				var sharetype = $("#shareType").val();
+				if(sharetype == 1){//统一联系人
+					if($(this).hasClass("trColor")){
+						$(this).removeClass("trColor");
+					}else{
+						$(this).addClass("trColor");
+					}
+				}else if(sharetype == 2){//单独分享
+					$(this).addClass("trColor").siblings("tr").removeClass("trColor");
+				}
+			});
 			
 		});
 
