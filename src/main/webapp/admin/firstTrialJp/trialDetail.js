@@ -132,6 +132,7 @@ if(threecounty){
 }
 
 var orderobj;
+var backMailInfos;
 //VUE准备数据
 //orderinfo订单信息  applyinfo申请人信息  回邮信息
 new Vue({
@@ -154,6 +155,7 @@ new Vue({
 			success: function(data){
 				orderobj.orderinfo = data.orderinfo;
 				orderobj.applyinfo = data.applyinfo;
+				backMailInfos = data.backinfo;
 			}
 		});
 	},

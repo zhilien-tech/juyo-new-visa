@@ -21,6 +21,9 @@ public class TOrderBackmailAddForm extends AddForm implements Serializable{
 	/**回邮方式*/
 	private Integer expressType;
 		
+	/**团队名称*/
+	private String teamName;
+		
 	/**快递号*/
 	private String expressNum;
 		

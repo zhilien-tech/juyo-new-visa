@@ -8,17 +8,20 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.myVisa.form.MyVisaListDataForm;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.DateUtil;
@@ -73,6 +76,32 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		result.put("myVisaData", records);
+
+		return result;
+	}
+
+	//签证进度页
+	public Object flowChart(@Param("orderid") Integer orderid, @Param("applicantid") Integer applicantid) {
+		Map<String, Object> result = Maps.newHashMap();
+
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, Cnd.where("id", "=", orderid));
+		//资料类型
+		String orderstatus = "下单";
+		Integer ostatus = order.getStatus();
+		for (JPOrderStatusEnum jpos : JPOrderStatusEnum.values()) {
+			if (!Util.isEmpty(ostatus) && ostatus.equals(jpos.intKey())) {
+				orderstatus = jpos.value();
+			}
+		}
+		result.put("order", order);
+
+		String sqlString = sqlManager.get("myvisa_applicant_by_id");
+		Sql sql = Sqls.create(sqlString);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("ta.id", "=", applicantid);
+		sql.setCondition(cnd);
+		Record applicantInfo = dbDao.fetch(sql);
+		result.put("applicant", applicantInfo);
 
 		return result;
 	}
