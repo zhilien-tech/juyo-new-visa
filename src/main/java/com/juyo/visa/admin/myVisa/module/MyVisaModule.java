@@ -53,10 +53,18 @@ public class MyVisaModule {
 		return myVisaService.myVisaListData(form, session);
 	}
 
+	/**
+	 * 
+	 * 进度页
+	 *
+	 * @param orderid
+	 * @param applicantid
+	 * @return 
+	 */
 	@At
 	@Ok("jsp")
 	public Object flowChart(@Param("orderid") Integer orderid, @Param("applicantid") Integer applicantid) {
-		return null;
+		return myVisaService.flowChart(orderid, applicantid);
 	}
 
 }
