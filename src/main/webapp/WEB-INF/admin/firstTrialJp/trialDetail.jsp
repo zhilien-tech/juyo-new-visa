@@ -286,7 +286,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>资料来源：</label> 
-										<select id="datasour" name="datasour" class="form-control input-sm">
+										<select name="datasour" class="form-control input-sm">
 											<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -296,7 +296,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>回邮方式：</label> 
-										<select id="expressType" name="expressType" class="form-control input-sm">
+										<select name="expressType" class="form-control input-sm">
 											<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -306,7 +306,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>回邮地址：</label> 
-										<input id="expressAddress" name="expressAddress" type="text" class="form-control input-sm" placeholder=" " />
+										<input name="expressAddress" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 							</div>
@@ -317,25 +317,25 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>联系人：</label> 
-										<input id="linkman" name="linkman" type="text" class="form-control input-sm" placeholder=" " />
+										<input name="linkman" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>电话：</label> 
-										<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " />
+										<input name="telephone" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>发票项目内容：</label> 
-										<input id="invoiceContent" name="invoiceContent" type="text" class="form-control input-sm" placeholder=" " />
+										<input name="invoiceContent" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>发票抬头：</label> 
-										<input id="invoiceHead" name="invoiceHead" type="text" class="form-control input-sm" placeholder=" " />
+										<input name="invoiceHead" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 							</div>
@@ -346,19 +346,19 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>团队名称：</label> 
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
+										<input name="teamName" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>快递号：</label> 
-										<input id="expressNum" name="expressNum" type="text" class="form-control input-sm" placeholder=" " />
+										<input name="expressNum" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>备注：</label> 
-										<input id="remark" name="remark" type="text" class="form-control input-sm" placeholder=" " />
+										<input name="remark" type="text" class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
 							</div>
@@ -389,20 +389,6 @@
 		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 		<script src="${base}/admin/firstTrialJp/trialDetail.js"></script><!-- 本页面js文件 -->
-		<script type="text/javascript">
-			$(function(){
-				//点击 蓝色加号图标 事件
-				$('.add-btn').click(function(){
-			    	var $html=$(this).parent().clone();//克隆标签模块
-			    	$(this).parents('.info').append($html);//添加克隆的内容
-			    	$html.find('.add-btn').remove();
-			    	$html.append('<i class="remove-btn"></i>');
-				});
-				//点击 蓝色叉号图标 事件
-				$(".info").on("click", ".remove-btn", function(){
-					$(this).parent().remove();//删除 对相应的本模块
-				});
-			});
-		</script>
+		<script src="${base}/admin/firstTrialJp/expressInfo.js"></script>
 	</body>
 </html>
