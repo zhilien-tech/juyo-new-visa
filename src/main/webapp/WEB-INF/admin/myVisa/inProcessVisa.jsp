@@ -25,7 +25,7 @@
 		<div class="content-wrapper"  style="min-height:848px;">
 				<section class="content">
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div v-on:click="toFlowChart(data.orderid,data.applicantid)" class="card-list" v-cloak v-for="data in myVisaData">
+						<div v-on:dblclick="toFlowChart(data.orderid,data.applicantid)" class="card-list" v-cloak v-for="data in myVisaData">
 							<div class="card-head">
 								<div><label>申请人：</label><span>{{data.applicantname}}</span></div>
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>
@@ -84,12 +84,10 @@
 	        },
 	        methods:{
 	        	toFlowChart:function(orderid,applicantid){
-	        		console.log(orderid +"--------"+ applicantid);
 	    			//跳转到签证进度页面
 	    			window.location.href = '/admin/myVisa/flowChart.html?orderid='+orderid+'&applicantid='+applicantid;
 	    		},
 	    		edit:function(applyid){
-	    			alert(applyid);
 	        		layer.open({
 	        		    type: 2,
 	        		    title: false,

@@ -31,13 +31,13 @@
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<ul class="title">
-						<li>办理中签证</li>
+						<!-- <li>办理中签证</li>
 						<li class="arrow"></li>
 						<li>日本</li>
-						<li class="arrow"></li>
+						<li class="arrow"></li> -->
 						<li>申请人</li>
 						<li class="arrow"></li>
-						<li>米斯特</li>
+						<li>${obj.applicant.applicantname }</li>
 					</ul>
 				<section class="content">
 					<div class="box">
@@ -48,7 +48,7 @@
 										<span>170808-JP0045</span> -->
 									<div class="date-info">
 										<label>订单号：</label>
-										<span>170808-JP0045</span>
+										<span>${obj.order.orderNum}</span>
 									</div>
 								</li>
 								<li>
@@ -198,12 +198,25 @@
 			<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
 	
 		</div>
-	
+		<script type="text/javascript">
+			var orderstatus = ${obj.order.status};
+		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 		<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 		<script src="${base}/references/common/js/layer/layer.js"></script>
 		<script src="${base}/admin/base.js"></script><!-- 公用js文件 -->
-		<script src="${base}/admin/myVisa/flowChart.js" type="text/javascript"></script>
+		<script src="${base}/admin/myVisa/flowChart.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				$(".flowChart li:last-child").find(".vertical").remove();
+				
+				if(orderstatus == 1){
+					//下单状态
+					
+				}
+				
+			});
+		</script>
 	</body>
 </html>
