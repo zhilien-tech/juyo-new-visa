@@ -93,6 +93,9 @@ function saveorder(){
 	}
 	orderobj.orderinfo.threecounty = threecounty;
 	
+	var backMails = backMailInfos();
+	console.log(backMails+"111111111111111");
+	
 	var editdata = orderobj.orderinfo;
 	console.log("=============orderinfo=================:"+JSON.stringify(editdata));
 	layer.load(1);

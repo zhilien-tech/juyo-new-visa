@@ -14,6 +14,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
 
@@ -28,7 +29,7 @@ import com.uxuexi.core.web.form.SQLParamForm;
 public class FirstTrialJpListDataForm implements SQLParamForm {
 
 	//状态
-	private Integer status;
+	//private Integer status;
 	//出行时间
 	//private Date goTripDate;
 	//返回时间
@@ -69,11 +70,15 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 		if (!Util.isEmpty(backTripDate)) {
 			cnd.and("tr.goTripDate", "<=", backTripDate);
 		}*/
+		cnd.and("tr.status", "=", JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
 		if (userid.equals(adminId)) {
 			//公司管理员
 		} else {
 			//普通的操作员
 		}
+		cnd.orderBy("tr.createtime", "DESC");
+		cnd.orderBy("tr.updatetime", "DESC");
+
 		return cnd;
 	}
 

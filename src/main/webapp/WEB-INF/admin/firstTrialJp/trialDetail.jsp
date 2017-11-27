@@ -408,8 +408,9 @@
 		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-		<script src="${base}/admin/firstTrialJp/trialDetail.js"></script><!-- 本页面js文件 -->
-		<script src="${base}/admin/firstTrialJp/expressInfo.js"></script>
+		<!-- 本页面js文件 -->
+		<script src="${base}/admin/firstTrialJp/backMailInfo.js"></script>
+		<script src="${base}/admin/firstTrialJp/trialDetail.js"></script>
 		<script src="${base}/admin/firstTrialJp/trialDate.js"></script>
 		
 	</body>
