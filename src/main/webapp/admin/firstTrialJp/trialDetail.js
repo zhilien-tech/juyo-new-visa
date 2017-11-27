@@ -223,7 +223,8 @@ new Vue({
 				orderobj.orderinfo = data.orderinfo;
 				orderobj.applyinfo = data.applyinfo;
 				backMailInfos = data.backinfo;
-				console.log(JSON.stringify(backMailInfos));
+				
+				console.log(JSON.stringify(backMailInfos) +"====="+ JSON.stringify(backMailInfos.length));
 			}
 		});
 	},

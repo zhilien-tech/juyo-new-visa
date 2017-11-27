@@ -280,11 +280,11 @@
 					</div><!-- end 添加回邮信息 -->
 	
 					<!-- 回邮信息 -->
-            		<div class="info expressInfo none" id="expressInfo" name="backmailInfo">
+            		<div class="info expressInfo" id="expressInfo" name="backmailInfo">
 						<p class="info-head">回邮信息</p>
 						<c:choose>
 	               		<c:when test="${fn:length(obj.backinfo)>0}">
-			            	<c:forEach var="backmail" items="${obj.backinfo }" varStatus="status">
+			            	<c:forEach var="backmail" items="${obj.backinfo}" varStatus="status">
 								<div class="info-body-from backmail-div">
 									<div class="row body-from-input">
 										<!-- 资料来源/快递号/团队名称/回邮方式 -->
