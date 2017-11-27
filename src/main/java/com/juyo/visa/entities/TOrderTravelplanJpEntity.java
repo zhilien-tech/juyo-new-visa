@@ -80,11 +80,6 @@ public class TOrderTravelplanJpEntity implements Serializable {
 				return false;
 		} else if (!cityName.equals(other.cityName))
 			return false;
-		if (createTime == null) {
-			if (other.createTime != null)
-				return false;
-		} else if (!createTime.equals(other.createTime))
-			return false;
 		if (day == null) {
 			if (other.day != null)
 				return false;
@@ -115,11 +110,6 @@ public class TOrderTravelplanJpEntity implements Serializable {
 				return false;
 		} else if (!scenic.equals(other.scenic))
 			return false;
-		if (updateTime == null) {
-			if (other.updateTime != null)
-				return false;
-		} else if (!updateTime.equals(other.updateTime))
-			return false;
 		return true;
 	}
 
@@ -133,14 +123,12 @@ public class TOrderTravelplanJpEntity implements Serializable {
 		int result = 1;
 		result = prime * result + ((cityId == null) ? 0 : cityId.hashCode());
 		result = prime * result + ((cityName == null) ? 0 : cityName.hashCode());
-		result = prime * result + ((createTime == null) ? 0 : createTime.hashCode());
 		result = prime * result + ((day == null) ? 0 : day.hashCode());
 		result = prime * result + ((hotel == null) ? 0 : hotel.hashCode());
 		result = prime * result + ((opId == null) ? 0 : opId.hashCode());
 		result = prime * result + ((orderId == null) ? 0 : orderId.hashCode());
 		result = prime * result + ((outDate == null) ? 0 : outDate.hashCode());
 		result = prime * result + ((scenic == null) ? 0 : scenic.hashCode());
-		result = prime * result + ((updateTime == null) ? 0 : updateTime.hashCode());
 		return result;
 	}
 

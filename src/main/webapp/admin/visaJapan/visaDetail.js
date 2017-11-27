@@ -187,8 +187,51 @@ function commitdata(){
 	}
 	orderobj.orderinfo.threecounty = threecounty;
 
+	//多程信息
+	var multiways = [];
+	$('.duochengdiv').each(function(index,name){
+		var multiway = {};
+		//出发日期
+		var departuredate = $(this).find('[name=departuredate]').val();
+		var isnull = departuredate;
+		multiway.departureDate = departuredate;
+		//出发城市
+		var departurecity = $(this).find('[name=departurecity]').val();
+		if (departurecity) {
+			departurecity = departurecity.join(',');
+			isnull += '111';
+		}else{
+			departurecity = '';
+			isnull += '';
+		}
+		multiway.departureCity = departurecity;
+		//抵达城市
+		var arrivedcity = $(this).find('[name=arrivedcity]').val();
+		if (arrivedcity) {
+			arrivedcity = arrivedcity.join(',');
+			isnull += '111';
+		}else{
+			arrivedcity = '';
+			isnull += '';
+		}
+		multiway.arrivedCity = arrivedcity;
+		// 航班号
+		var flightnum = $(this).find('[name=flightnum]').val();
+		if (flightnum) {
+			flightnum = flightnum.join(',');
+			isnull += '111';
+		}else{
+			flightnum = '';
+			isnull += '';
+		}
+		multiway.flightNum = flightnum;
+		if(isnull){
+			multiways.push(multiway);
+		}
+	});
 	var editdata = orderobj.orderinfo;
 	editdata.travelinfo = JSON.stringify(orderobj.travelinfo);
+	editdata.multiways = JSON.stringify(multiways);
 	console.log("orderinfo:"+JSON.stringify(editdata));
 	layer.load(1);
 	$.ajax({ 
@@ -262,14 +305,14 @@ $('#goFlightNum').select2({
 			if (goDepartureCity) {
 				goDepartureCity = goDepartureCity.join(',');
 			}else{
-				goDepartureCity += '';
+				goDepartureCity = '';
 			}
 			//去程抵达城市
 			var goArrivedCity = $('#goArrivedCity').val();
 			if (goArrivedCity) {
 				goArrivedCity = goArrivedCity.join(',');
 			}else{
-				goArrivedCity += '';
+				goArrivedCity = '';
 			}
 			return {
 				//exname : cArrivalcity,
@@ -457,10 +500,53 @@ $(".schedulingBtn").click(function(){
 	}
 	var goDate = $('#goDate').val();
 	var returnDate = $('#returnDate').val();
+	var triptype = $('#triptype').val();
+	//多程信息
+	var multiways = [];
+	$('.duochengdiv').each(function(index,name){
+		var multiway = {};
+		//出发日期
+		var departuredate = $(this).find('[name=departuredate]').val();
+		var isnull = departuredate;
+		multiway.departureDate = departuredate;
+		//出发城市
+		var departurecity = $(this).find('[name=departurecity]').val();
+		if (departurecity) {
+			departurecity = departurecity.join(',');
+			isnull += '111';
+		}else{
+			departurecity = '';
+			isnull += '';
+		}
+		multiway.departureCity = departurecity;
+		//抵达城市
+		var arrivedcity = $(this).find('[name=arrivedcity]').val();
+		if (arrivedcity) {
+			arrivedcity = arrivedcity.join(',');
+			isnull += '111';
+		}else{
+			arrivedcity = '';
+			isnull += '';
+		}
+		multiway.arrivedCity = arrivedcity;
+		// 航班号
+		var flightnum = $(this).find('[name=flightnum]').val();
+		if (flightnum) {
+			flightnum = flightnum.join(',');
+			isnull += '111';
+		}else{
+			flightnum = '';
+			isnull += '';
+		}
+		multiway.flightNum = flightnum;
+		if(isnull){
+			multiways.push(multiway);
+		}
+	});
 	$.ajax({ 
 		url: '/admin/visaJapan/generatePlan.html',
 		dataType:"json",
-		data:{orderid:orderid,goArrivedCity:goArrivedCity,goDate:goDate,returnDate:returnDate},
+		data:{orderid:orderid,goArrivedCity:goArrivedCity,goDate:goDate,returnDate:returnDate,triptype:triptype,multiways:JSON.stringify(multiways)},
 		type:'post',
 		success: function(data){
 			if(data.status == 'success'){
