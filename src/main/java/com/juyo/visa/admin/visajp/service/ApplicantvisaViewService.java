@@ -43,6 +43,7 @@ public class ApplicantvisaViewService extends BaseService<TApplicantVisaJpEntity
 		fetch.setVisaNum(updateForm.getVisaNum());
 		fetch.setVisaType(updateForm.getVisaType());
 		fetch.setVisaYears(updateForm.getVisaYears());
+		fetch.setPicUrl(updateForm.getPicUrl());
 		return dbDao.update(fetch);
 	}
 
