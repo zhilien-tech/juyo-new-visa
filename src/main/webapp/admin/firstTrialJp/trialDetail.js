@@ -42,16 +42,16 @@ function expressFun(){
 		success : function(data) {
 			if(data){
 				layer.open({
-	    		    type: 2,
-	    		    title: false,
-	    		    closeBtn:false,
-	    		    fix: false,
-	    		    maxmin: false,
-	    		    shadeClose: false,
-	    		    scrollbar: false,
-	    		    area: ['900px', '550px'],
-	    		    content: '/admin/firstTrialJp/express.html?id='+orderid
-	    	    });
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '550px'],
+					content: '/admin/firstTrialJp/express.html?id='+orderid
+				});
 			}else{
 				layer.msg('申请人不合格');
 				return;
@@ -59,6 +59,70 @@ function expressFun(){
 		}
 	});
 }
+
+//回邮信息
+function getMailInfos(){
+	var backMails = [];
+	$('.backmail-div').each(function(i){
+		var infoLength = '';
+		var backInfo = {};
+		
+		var datasour = $(this).find('[name=datasour]').val();
+		if(datasour != 1){
+			infoLength += datasour;
+		}
+		backInfo.datasour = datasour;
+		
+		var expressType = $(this).find('[name=expressType]').val();
+		if(expressType != 1){
+			infoLength += expressType;
+		}
+		backInfo.expressType = expressType;
+		
+		var expressAddress = $(this).find('[name=expressAddress]').val();
+		infoLength += expressAddress;
+		backInfo.expressAddress = expressAddress;
+		
+		var linkman = $(this).find('[name=linkman]').val();
+		infoLength += linkman;
+		backInfo.linkman = linkman;
+		
+		var telephone = $(this).find('[name=telephone]').val();
+		infoLength += telephone;
+		backInfo.telephone = telephone;
+		
+		var invoiceContent = $(this).find('[name=invoiceContent]').val();
+		infoLength += invoiceContent;
+		backInfo.invoiceContent = invoiceContent;
+		
+		var invoiceHead = $(this).find('[name=invoiceHead]').val();
+		infoLength += invoiceHead;
+		backInfo.invoiceHead = invoiceHead;
+		
+		var teamName = $(this).find('[name=teamName]').val();
+		infoLength += teamName;
+		backInfo.teamName = teamName;
+		
+		var expressNum = $(this).find('[name=expressNum]').val();
+		infoLength += expressNum;
+		backInfo.expressNum = expressNum;
+		
+		var taxNum = $(this).find('[name=taxNum]').val();
+		infoLength += taxNum;
+		backInfo.taxNum = taxNum;
+		
+		var remark = $(this).find('[name=remark]').val();
+		infoLength += remark;
+		backInfo.remark = remark;
+
+		if(infoLength.length > 0){
+			backMails.push(backInfo);
+		}
+	});
+	
+	return backMails;
+}
+
 
 //保存初审订单
 function saveorder(){
@@ -92,10 +156,10 @@ function saveorder(){
 		threecounty = threecounty.substr(0,threecounty.length-1);
 	}
 	orderobj.orderinfo.threecounty = threecounty;
-	
-	var backMails = backMailInfos();
-	console.log(backMails+"111111111111111");
-	
+
+	var backMails = getMailInfos();
+	orderobj.orderinfo.backMailInfos = JSON.stringify(backMails);;
+
 	var editdata = orderobj.orderinfo;
 	console.log("=============orderinfo=================:"+JSON.stringify(editdata));
 	layer.load(1);
@@ -204,39 +268,39 @@ new Vue({
 		},
 		qualified:function(applyId){
 			layer.confirm('您确认合格吗？', {
-				   btn: ['是','否'], //按钮
-				   shade: false //不显示遮罩
-				}, function(index){
-					$.ajax({
-						type : 'POST',
-						data : {
-							applyid:applyId
-						},
-						url : '/admin/firstTrialJp/qualified.html',
-						success : function(data) {
-							layer.close(index);
-							parent.successCallBack(1);
-						},
-						error : function(xhr) {
-							layer.msg("修改失败", "", 3000);
-						}
-					});
-				}, function(){
-					 //取消之后不做任何操作
+				btn: ['是','否'], //按钮
+				shade: false //不显示遮罩
+			}, function(index){
+				$.ajax({
+					type : 'POST',
+					data : {
+						applyid:applyId
+					},
+					url : '/admin/firstTrialJp/qualified.html',
+					success : function(data) {
+						layer.close(index);
+						parent.successCallBack(1);
+					},
+					error : function(xhr) {
+						layer.msg("修改失败", "", 3000);
+					}
 				});
+			}, function(){
+				//取消之后不做任何操作
+			});
 		},
 		unqualified:function(applyId){
 			layer.open({
-    		    type: 2,
-    		    title: false,
-    		    closeBtn:false,
-    		    fix: false,
-    		    maxmin: false,
-    		    shadeClose: false,
-    		    scrollbar: false,
-    		    area: ['800px', '402px'],
-    		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyId
-    	    });
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['800px', '402px'],
+				content: '/admin/firstTrialJp/unqualified.html?applyid='+applyId
+			});
 		},
 		logs:function(){//日志
 			layer.open({

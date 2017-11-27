@@ -289,13 +289,13 @@
 		            	<c:otherwise>
 		            		<div class="info expressInfo none" id="expressInfo" name="backmailInfo">
 								<p class="info-head">回邮信息</p>
-								<div class="info-body-from">
+								<div class="info-body-from backmail-div">
 									<div class="row body-from-input">
 										<!-- 资料来源/快递号/团队名称/回邮方式 -->
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>资料来源：</label> 
-												<select name="datasour" class="form-control input-sm">
+												<select name="source" class="form-control input-sm">
 													<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
 														<option value="${map.key}">${map.value}</option>
 													</c:forEach>
