@@ -28,8 +28,6 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Strings;
-import org.nutz.mvc.annotation.At;
-import org.nutz.mvc.annotation.POST;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
@@ -39,6 +37,7 @@ import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
 import com.juyo.visa.common.enums.MainBackMailTypeEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
@@ -55,6 +54,7 @@ import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderBackmailEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TOrderLogsEntity;
 import com.juyo.visa.entities.TOrderRecipientEntity;
 import com.juyo.visa.entities.TReceiveaddressEntity;
 import com.juyo.visa.entities.TUserEntity;
@@ -131,6 +131,14 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 				}
 			}
 			record.put("everybodyInfo", records);
+
+			String orderStatus = record.getString("orderstatus");
+			for (JPOrderStatusEnum statusEnum : JPOrderStatusEnum.values()) {
+				if (!Util.isEmpty(orderStatus) && orderStatus.equals(String.valueOf(statusEnum.intKey()))) {
+					record.set("orderstatus", statusEnum.value());
+				}
+			}
+
 		}
 		result.put("trialJapanData", list);
 		return result;
@@ -186,6 +194,12 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		Sql sql = Sqls.create(sqlstr);
 		sql.setParam("orderid", orderid);
 		Record orderinfo = dbDao.fetch(sql);
+		String orderStatus = orderinfo.getString("status");
+		for (JPOrderStatusEnum statusEnum : JPOrderStatusEnum.values()) {
+			if (!Util.isEmpty(orderStatus) && orderStatus.equals(String.valueOf(statusEnum.intKey()))) {
+				orderinfo.set("status", statusEnum.value());
+			}
+		}
 		//格式化日期
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		if (!Util.isEmpty(orderinfo.get("gotripdate"))) {
@@ -459,8 +473,6 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	/**
 	 * 保存快递信息，并发送邮件
 	 */
-	@At
-	@POST
 	public Object saveExpressInfo(Integer orderid, Integer expresstype, Integer receiveAddressId, HttpSession session) {
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -488,6 +500,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 
 		//改变订单状态 由初审到前台、签证 TODO
+		int receptionStatus = JPOrderStatusEnum.RECEPTION_ORDER.intKey();
+		dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus), Cnd.where("id", "=", orderid));
 
 		//发送短信、邮件
 		try {
@@ -497,7 +511,11 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			e.printStackTrace();
 		}
 
-		return "EXPRESS SUCCESS";
+		//添加日志记录  订单初审
+		int firsttrialStatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
+		String logsResult = addLogs(orderid, userId, firsttrialStatus);
+
+		return logsResult;
 	}
 
 	/**
@@ -642,6 +660,24 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	//添加日志
+	public String addLogs(Integer orderId, Integer opId, Integer orderStatus) {
+		TOrderLogsEntity orderLogs = new TOrderLogsEntity();
+		Date nowDate = DateUtil.nowDate();
+		orderLogs.setOpId(opId);
+		orderLogs.setOrderId(orderId);
+		orderLogs.setOrderStatus(orderStatus);
+		orderLogs.setCreateTime(nowDate);
+		orderLogs.setUpdateTime(nowDate);
+		TOrderLogsEntity log = dbDao.insert(orderLogs);
+		if (!Util.isEmpty(log)) {
+			return "LOGS IS SUCCESS";
+		} else {
+			return "LOGS IS FAILED";
+		}
+
 	}
 
 }
