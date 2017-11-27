@@ -6,15 +6,20 @@
 
 package com.juyo.visa.admin.visajp.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
+import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -32,6 +37,8 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 
 	@Inject
 	private DownLoadVisaFileService downLoadVisaFileService;
+	@Inject
+	private QiniuUploadServiceImpl qiniuUploadService;
 
 	/**
 	 * 发招宝、招宝变更、招宝取消状态
@@ -81,6 +88,14 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 
 		}
 		return null;
+	}
+
+	public Object uploadVisaPic(File file, HttpServletRequest request) {
+		Map<String, Object> result = qiniuUploadService.ajaxUploadImage(file);
+		file.delete();
+		result.put("data", CommonConstants.IMAGES_SERVER_ADDR + result.get("data"));
+		return result;
+
 	}
 
 }

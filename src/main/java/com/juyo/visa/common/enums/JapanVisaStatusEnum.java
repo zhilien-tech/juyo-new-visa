@@ -18,8 +18,9 @@ import com.uxuexi.core.common.enums.IEnum;
  */
 public enum JapanVisaStatusEnum implements IEnum {
 
-	VISA(1, "签证"), ZHAOBAOZHONG(2, "发招宝中"), YIFAZHAOBAO(3, "已发招宝"), BIANGENGZHONG(4, "招宝变更中"), YIBIANGENG(5, "招宝已变更"), QUXIAOZHONG(
-			6, "招宝取消中"), YIQUXIAO(7, "招宝已取消");
+	VISA(1, "签证"), ZHAOBAOZHONG(2, "发招宝中"), YIFAZHAOBAO(3, "已发招宝"), ZHAOBAISHIBAI(4, "发招宝失败"), BIANGENGZHONG(5, "招宝变更中"), YIBIANGENG(
+			6, "招宝已变更"), BIANGENGSHIBAI(7, "招宝变更失败"), QUXIAOZHONG(8, "招宝取消中"), YIQUXIAO(9, "招宝已取消"), QUXIAOSHIBAI(10,
+			"招宝取消失败");
 
 	private int key;
 	private String value;

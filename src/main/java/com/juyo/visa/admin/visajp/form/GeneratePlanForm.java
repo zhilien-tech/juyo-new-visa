@@ -28,4 +28,8 @@ public class GeneratePlanForm {
 	private Date returnDate;
 
 	private Integer orderid;
+
+	private Integer triptype;
+
+	private String multiways;
 }

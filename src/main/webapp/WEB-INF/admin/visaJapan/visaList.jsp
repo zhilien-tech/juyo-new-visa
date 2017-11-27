@@ -69,7 +69,7 @@
 									<div><label>申请人：</label><span>{{item.applicant}}</span></div>
 									<div><label>护照号：</label><span>{{item.passportno}}</span></div>
 									<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
-									<div><label>资料：</label><span>{{item.data}}</span></div>
+									<div><label>资料：</label><span v-html="item.data"><!-- {{item.data}} --></span></div>
 									<div><!-- <i> </i> --></div>
 								</li>
 							</ul>
