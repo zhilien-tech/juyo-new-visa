@@ -28,6 +28,7 @@ import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
+import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.ShareTypeEnum;
@@ -108,6 +109,7 @@ public class OrderJpModule {
 	@Ok("jsp")
 	public Object addApplicantSale(@Param("id") Integer orderid) {
 		Map<String, Object> result = MapUtil.map();
+		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("orderid", orderid);
 		return result;
 	}
@@ -225,6 +227,15 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 签证信息修改保存
+	 */
+	@At
+	@POST
+	public Object saveEditVisa(@Param("..") VisaEditDataForm visaForm) {
+		return saleViewService.saveEditVisa(visaForm);
+	}
+
+	/**
 	 * 客户信息获取申请人下拉
 	 */
 	@At
@@ -329,8 +340,22 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object getApplicantInfoValid() {
-		return null;
+	public Object getApplicantInfoValid(@Param("applicantId") Integer id, @Param("telephone") String telephone,
+			@Param("email") String email) {
+		Map<String, Object> result = MapUtil.map();
+		result.put("applicantId", id);
+		result.put("telephone", telephone);
+		result.put("email", email);
+		return result;
+	}
+
+	/**
+	 * 订单中所有申请人是否都填写了邮箱、手机号
+	 */
+	@At
+	@POST
+	public Object applicantComplete(@Param("orderid") int orderid) {
+		return saleViewService.applicantComplete(orderid);
 	}
 
 	/**
@@ -355,21 +380,30 @@ public class OrderJpModule {
 	}
 
 	/**
-	 * 签证信息修改保存
-	 */
-	@At
-	@POST
-	public Object saveEditVisa(@Param("..") VisaEditDataForm visaForm) {
-		return saleViewService.saveEditVisa(visaForm);
-	}
-
-	/**
 	 * 获取分享申请人
 	 */
 	@At
 	@POST
 	public Object getShare(@Param("orderid") Integer id) {
 		return saleViewService.getShare(id);
+	}
+
+	/**
+	 * 发送邮件、短信(单独分享)
+	 */
+	@At
+	@POST
+	public Object sendEmail(@Param("orderid") int orderid, @Param("applicantid") int applicantid) {
+		return saleViewService.sendEmail(orderid, applicantid);
+	}
+
+	/**
+	 * 发送邮件、短信(统一分享)
+	 */
+	@At
+	@POST
+	public Object sendEmailUnified(@Param("orderid") int orderid, @Param("applicantid") int applicantid) {
+		return saleViewService.sendEmailUnified(orderid, applicantid);
 	}
 
 	/**

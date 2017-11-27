@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
@@ -181,7 +182,7 @@
 							<!-- 人数/领区/加急 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>人数：</label> <input id="number"
+									<label><span>*</span>人数(此人数只是参考人数)：</label> <input id="number"
 										name="number" type="text" class="form-control input-sm"
 										placeholder=" " v-model="orderInfo.number" />
 									<!-- <i class="bulb"></i> 小灯泡-->
@@ -274,7 +275,7 @@
 								<div class="form-group viseType-btn"> -->
 								
 								<c:choose>
-									<c:when test="${obj.orderJpinfo.visaType == 2 || obj.orderJpinfo.visaType == 3}">
+									<c:when test="${obj.orderJpinfo.visaType == 2 || obj.orderJpinfo.visaType == 3 || obj.orderJpinfo.visaType == 4}">
 										<div class="col-sm-8" id="visacounty">
 									</c:when>
 									<c:otherwise>
@@ -298,7 +299,7 @@
 							过去三年是否访问过 -->
 							
 							<c:choose>
-								<c:when test="${obj.orderJpinfo.visaType == 2 || obj.orderJpinfo.visaType == 3 }">
+								<c:when test="${obj.orderJpinfo.visaType == 2 || obj.orderJpinfo.visaType == 3 || obj.orderJpinfo.visaType == 4}">
 									<div class="row body-from-input" id="threefangwen"><!-- 过去三年是否访问过 -->
 								</c:when>
 								<c:otherwise>
@@ -338,23 +339,23 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>出行时间：</label> <input id="goTripDate"
-										name="goTripDate" type="text" class="form-control input-sm"
-										placeholder=" " onClick="WdatePicker()"
+										 type="text" class="form-control input-sm"
+										placeholder=" " 
 										v-model="orderInfo.gotripdate" />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>停留天数：</label> <input id="stayDay"
-										name="stayDay" type="text" class="form-control input-sm"
+										name="stayday" type="text" class="form-control input-sm"
 										placeholder=" " v-model="orderInfo.stayday" />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>返回时间：</label> <input id="backTripDate"
-										name="backTripDate" type="text" class="form-control input-sm"
-										placeholder=" " onClick="WdatePicker()"
+										 type="text" class="form-control input-sm"
+										placeholder=" " 
 										v-model="orderInfo.backtripdate" />
 								</div>
 							</div>
@@ -365,16 +366,16 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>送签时间：</label> 
-									<input id="sendVisaDate" name="sendVisaDate" type="text" class="form-control input-sm"
-										placeholder=" " onClick="WdatePicker()" v-model="orderInfo.sendvisadate" />
+									<input id="sendVisaDate"  type="text" class="form-control input-sm"
+										placeholder=" "  v-model="orderInfo.sendvisadate" />
 									<!-- <input id="sendVisaDate" name="sendVisaDate" type="text" class="form-control input-sm"  /> -->
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>出签时间：</label> <input id="outVisaDate"
-										name="outVisaDate" type="text" class="form-control input-sm"
-										placeholder=" " onClick="WdatePicker()"
+										 type="text" class="form-control input-sm"
+										placeholder=" " 
 										v-model="orderInfo.outvisadate" />
 								</div>
 							</div>
@@ -563,7 +564,8 @@
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/admin/orderJp/searchCustomerInfo.js"></script>
 	<!-- 公用js文件 -->
-	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script src="${base}/references/common/js/base/base.js"></script>
 	<script src="${base}/admin/orderJp/order.js"></script>
 	
@@ -696,7 +698,7 @@
 						});
 						$('#visaType').change(function(){
 							var thisval = $(this).val();
-							if(thisval == 2 || thisval == 3){
+							if(thisval == 2 || thisval == 3 || thisval == 4){
 								$('#visacounty').show();
 								$('#threefangwen').show();
 							}else{
@@ -782,6 +784,15 @@
 						threecounty = threecounty.substr(0,threecounty.length-1);
 					}
 					orderobj.orderInfo.threecounty = threecounty;
+					
+					//绑定日期数据
+					orderobj.orderInfo.gotripdate = $('#goTripDate').val();
+					orderobj.orderInfo.backtripdate = $('#backTripDate').val();
+					orderobj.orderInfo.sendvisadate = $('#sendVisaDate').val();
+					orderobj.orderInfo.number = $('#number').val();
+					orderobj.orderInfo.money = $('#money').val();
+					orderobj.orderInfo.stayday = $('#stayDay').val();
+					orderobj.orderInfo.outvisadate = $('#outVisaDate').val();
 					var editdata = orderobj.orderInfo;
 					editdata.customerinfo = JSON.stringify(orderobj.customerInfo);
 					//var applicant = orderobj.applicantInfo;
@@ -834,6 +845,11 @@
 				},
 				//删除申请人
 				deleteApplicant : function(id){
+					layer.confirm("您确认要删除吗？", {
+						title:"删除",
+						btn: ["是","否"], //按钮
+						shade: false //不显示遮罩
+					}, function(){
 					$.ajax({ 
 				    	url: '${base}/admin/orderJp/deleteApplicant',
 				    	dataType:"json",
@@ -843,6 +859,7 @@
 				    		successCallBack(2);
 				      	}
 				    }); 
+					});
 				},
 				share:function(id){//分享
 					layer.open({
@@ -992,6 +1009,59 @@
 			 	return value;
 			 }
 		}
+		
+		$("#goTripDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 4,//从年开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		$("#backTripDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 4,//从年开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		$("#sendVisaDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 4,//从年开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		$("#outVisaDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 4,//从年开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
 	</script>
 </body>
 </html>

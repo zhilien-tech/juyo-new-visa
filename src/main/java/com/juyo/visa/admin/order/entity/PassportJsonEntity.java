@@ -21,7 +21,11 @@ public class PassportJsonEntity implements Serializable {
 
 	private String birthCountry;
 
+	private String issueDate;
+
 	private String sex;
+
+	private String sexEn;
 
 	private String request_id;
 

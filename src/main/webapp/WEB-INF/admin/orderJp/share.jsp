@@ -13,6 +13,7 @@
 	<style type="text/css">
 		#datatableId{position: relative;top: 10px;}
 		#datatableId tbody tr{cursor: pointer;}
+		.trColor{color: rgb(48, 135, 240)}
 	</style>
 </head>
 <body>
@@ -46,7 +47,8 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="data in shareInfo">
+							<tr v-for="data in shareInfo" class="tableTr">
+								<td style="display: none">{{data.id}}</td>
 								<td>{{data.applyname}}</td>
 								<td>{{data.telephone}}</td>
 								<td>{{data.email}}</td>
@@ -71,31 +73,26 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			var sharetype = $("#shareType").val();
-			/* alert(sharetype);
-			
-			$("#shareType").change(function(){
-				var shareType = $(this).val();
-				if(shareType == 1){
-					$("#datatableId tbody tr").click(function(){
-						var isStyle = $(this).attr("style");
-						if(isStyle != "color: rgb(48, 135, 240);"){//选中
-							$(this).css("color","#3087f0");
-						}
-					});
-				}else{ */
-					$("#datatableId tbody tr").click(function(){
-						var isStyle = $(this).attr("style");
-						if(isStyle == "color: rgb(48, 135, 240);"){//不被选中
-							$(this).css("color","#333333");
-						}else{//选中
-							$(this).css("color","#3087f0");
-						$(this).children().eq(0).html();
-						}
-					
-					});
-			/* 	}
-			}); */
+			$("#addBtn").attr('disabled', true);
+			$(document).on("click",".tableTr",function(){
+				var sharetype = $("#shareType").val();
+				if(sharetype == 2){//单独分享
+					if($(this).hasClass("trColor")){
+						$(this).removeClass("trColor");
+					}else{
+						$(this).addClass("trColor");
+					}
+				}else if(sharetype == 1){//统一联系人
+					$(this).addClass("trColor").siblings("tr").removeClass("trColor");
+				}
+				
+				if($(this).hasClass("trColor")){
+					$("#addBtn").attr('disabled', false);
+				}else{
+					$("#addBtn").attr('disabled', true);
+				}
+				
+			});
 			
 		});
 
@@ -119,16 +116,16 @@
 	            });
 	        }
 		});
-		//保存
+		//分享
 		function save(){
+			var sharetype = $("#shareType").val();
 			var orderId = ${obj.orderId};
-			var name,telephone,email;
-			$("#datatableId tbody tr").each(function(){
-				
-				if($(this).attr("style") == "color: rgb(48, 135, 240);"){
-					name = $(this).children().eq(0).html();
-					telephone = $(this).children().eq(1).html();
-					email = $(this).children().eq(2).html();
+			var applicantMainId,applicantId,name,telephone,email;
+			if(sharetype == 1){
+				$("#datatableId tbody tr").each(function(){
+					applicantId = $(this).children().eq(0).html();
+					telephone = $(this).children().eq(2).html();
+					email = $(this).children().eq(3).html();
 					if(email == "" || telephone == ""){
 						layer.open({
 							type: 2,
@@ -139,17 +136,130 @@
 							shadeClose: false,
 							scrollbar: false,
 							area: ['900px', '551px'],
-							content:'${base}/admin/orderJp/getApplicantInfoValid.html?'
+							content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
 						});
+						/* layer.confirm("手机号、邮箱不能为空，请及时补充", {
+						//title:"",
+						btn: ["马上补充","以后再说"], //按钮
+						shade: false //不显示遮罩
+						}, function(){
+							alert(111);
+							layer.open({
+								type: 2,
+								title: false,
+								closeBtn:false,
+								fix: false,
+								maxmin: false,
+								shadeClose: false,
+								scrollbar: false,
+								area: ['900px', '551px'],
+								content:'${base}/admin/orderJp/updateApplicant.html?id='+applicantId
+							});
+						}); */
+							}
+						});
+						
+				$("#datatableId tbody tr").each(function(){
+					if($(this).hasClass("trColor")){
+						applicantMainId = $(this).children().eq(0).html();
 					}
-				}
+				});
+						
+				$.ajax({ 
+					async:false,
+					url: BASE_PATH+'/admin/orderJp/applicantComplete',
+					type:'post',
+					data:{
+						orderid:orderId
+					},
+					success: function(data){
+						if(data == "yes"){
+							$.ajax({ 
+								url: BASE_PATH+'/admin/orderJp/sendEmailUnified',
+								type:'post',
+								data:{
+									orderid:orderId,
+									applicantid:applicantMainId
+								},
+								success: function(data){
+									layer.msg('分享成功');
+									layer.closeAll('loading');
+									layer.close(layerIndex);
+									closeWindow();
+								}
+							});
+							
+						}
+						
+					}
+				});
+			}else{
+				$("#datatableId tbody tr").each(function(){
+					if($(this).hasClass("trColor")){
+						applicantId = $(this).children().eq(0).html();
+						name = $(this).children().eq(1).html();
+						telephone = $(this).children().eq(2).html();
+						email = $(this).children().eq(3).html();
+						if(email == "" || telephone == ""){
+							layer.open({
+								type: 2,
+								title: false,
+								closeBtn:false,
+								fix: false,
+								maxmin: false,
+								shadeClose: false,
+								scrollbar: false,
+								area: ['900px', '551px'],
+								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
+							});
+						}else{
+							$.ajax({ 
+								url: BASE_PATH+'/admin/orderJp/sendEmail',
+								type:'post',
+								data:{
+									orderid:orderId,
+									applicantid:applicantId
+								},
+								success: function(data){
+									layer.msg('分享成功');
+									layer.closeAll('loading');
+									if(data.status == 200){
+										layer.close(layerIndex);
+									}
+									closeWindow();
+								}
+							});
+						}
+					}
 			});
+				
+			}
+			
 		}
-
+		
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
+		}
+		
+		function successCallBack(status){
+			if(status == 1){
+				layer.msg('修改成功');
+			}
+			var orderid = '${obj.orderId}';
+			$.ajax({ 
+            	url: '${base}/admin/orderJp/getShare.html',
+            	data:{orderid:orderid},
+            	dataType:"json",
+            	type:'post',
+            	success: function(data){
+            		_self.shareInfo = data;
+            		console.log(JSON.stringify(_self.shareInfo));
+              	}
+            });
+			save();
+			//parent.location.reload();
 		}
 	</script>
 </body>

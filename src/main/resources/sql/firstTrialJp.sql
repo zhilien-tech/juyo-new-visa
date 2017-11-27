@@ -10,17 +10,19 @@ SELECT
 FROM
 	t_order tr
 	INNER JOIN t_order_jp toj ON toj.orderId = tr.id
-	INNER JOIN t_customer tc ON tr.customerId = tc.id
+	LEFT JOIN t_customer tc ON tr.customerId = tc.id
 	LEFT JOIN (
 		SELECT
 			taoj.orderId,
 			GROUP_CONCAT( ta.status SEPARATOR 'төл' ) applicantStatus,
 			tap.passport passportNum,
+			ta.telephone,
+			GROUP_CONCAT( ta.telephone SEPARATOR 'төл' ) phone,
 			GROUP_CONCAT( CONCAT( ta.firstname, ta.lastname ) SEPARATOR 'төл' ) applicantName 
 		FROM
 			t_applicant ta
 			INNER JOIN t_applicant_order_jp taoj ON taoj.applicantId = ta.id
-			INNER JOIN t_applicant_passport tap ON tap.applicantId=ta.id
+			LEFT JOIN t_applicant_passport tap ON tap.applicantId=ta.id
 		GROUP BY
 			taoj.orderId
 	) taj ON taj.orderId = toj.id

@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -48,6 +49,7 @@ import org.nutz.lang.Strings;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.entity.ApplicantJsonEntity;
 import com.juyo.visa.admin.order.entity.PassportJsonEntity;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
@@ -58,9 +60,12 @@ import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainApplicantRelationEnum;
 import com.juyo.visa.common.enums.MainApplicantRemarkEnum;
 import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
@@ -85,6 +90,7 @@ import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCustomerEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TOrderLogsEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;
 import com.juyo.visa.forms.TApplicantPassportForm;
@@ -113,6 +119,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	private UserViewService userViewService;
 	@Inject
 	private FirstTrialJpViewService firstTrialJpViewService;
+	@Inject
+	private MailService mailService;
 
 	private static final String app_key = "24624389";
 	private static final String app_secret = "3a28e8c97af2d2eadcf2720b279bdc9d";
@@ -151,6 +159,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					}
 				}
 
+			}
+			int status = (int) record.get("status");
+			for (JPOrderStatusEnum orderStatus : JPOrderStatusEnum.values()) {
+				if (status == orderStatus.intKey()) {
+					record.put("status", orderStatus.value());
+				}
 			}
 		}
 		result.put("orderJp", orderJp);
@@ -204,7 +218,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TApplicantEntity applicant = new TApplicantEntity();
-		applicant.setUserId(loginUser.getId());
+		//applicant.setUserId(loginUser.getId());
 		applicant.setOpId(loginUser.getId());
 		if (!Util.isEmpty(applicantForm.getAddress())) {
 			applicant.setAddress(applicantForm.getAddress());
@@ -266,7 +280,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicantUser.setOpid(applicant.getOpId());
 		applicantUser.setPassword("000000");
 		applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
-		userViewService.addApplicantUser(applicantUser);
+		TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
+		applicant.setUserId(tUserEntity.getId());
 		if (!Util.isEmpty(applicantForm.getOrderid())) {
 			dbDao.insert(applicant);
 			Integer applicantId = applicant.getId();
@@ -291,9 +306,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(wealthJp);
 			//护照信息
 			TApplicantPassportEntity passport = new TApplicantPassportEntity();
-			/*if (!Util.isEmpty(applicantForm.getSex())) {
+			if (!Util.isEmpty(applicantForm.getSex())) {
 				passport.setSex(applicantForm.getSex());
-			}*/
+			}
 			if (!Util.isEmpty(applicantForm.getFirstName())) {
 				passport.setFirstName(applicantForm.getFirstName());
 			}
@@ -561,8 +576,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		orderEntity.setOrderNum(ordernum);
 		orderEntity.setCreateTime(new Date());
+		orderEntity.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
 		dbDao.insert(orderEntity);
 		Integer orderId = orderEntity.getId();
+		TOrderLogsEntity orderLog = new TOrderLogsEntity();
+		orderLog.setOrderId(orderId);
+		orderLog.setCreateTime(new Date());
+		orderLog.setUpdateTime(new Date());
+		orderLog.setOpId(loginUser.getId());
+		orderLog.setOrderStatus(orderEntity.getStatus());
+		dbDao.insert(orderLog);
 
 		//日本订单信息
 		TOrderJpEntity orderJpEntity = new TOrderJpEntity();
@@ -689,6 +712,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			String validEndDateStr = sdf.format(validEndDate);
 			result.put("validEndDate", validEndDateStr);
 		}
+		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("applicant", applicantEntity);
 		return result;
 	}
@@ -796,12 +820,23 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("isOrNo", EnumUtil.enum2(IsYesOrNoEnum.class));
 		result.put("applicantRelation", EnumUtil.enum2(MainApplicantRelationEnum.class));
 		result.put("applicantRemark", EnumUtil.enum2(MainApplicantRemarkEnum.class));
+		result.put("jobStatusEnum", EnumUtil.enum2(JobStatusEnum.class));
 		String visaInfoSqlstr = sqlManager.get("visaInfo_byApplicantId");
 		Sql visaInfoSql = Sqls.create(visaInfoSqlstr);
 		visaInfoSql.setParam("id", id);
 		Record visaInfo = dbDao.fetch(visaInfoSql);
-		//===
-		Map<String, Object> getmainApplicantByOrderid = firstTrialJpViewService.getmainApplicantByOrderid(orderid);
+		//获取申请人
+		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
+		TApplicantEntity mainApplicant = dbDao.fetch(TApplicantEntity.class, new Long(applicantEntity.getMainId()));
+		//获取订单主申请人
+		String sqlStr = sqlManager.get("mainApplicant_byOrderId");
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao
+				.query(applysql,
+						Cnd.where("oj.orderId", "=", orderid).and("aoj.isMainApplicant", "=",
+								IsYesOrNoEnum.YES.intKey()), null);
+		result.put("mainApplicant", mainApplicant);
+		result.put("mainApply", records);
 		result.put("visaInfo", visaInfo);
 		return result;
 	}
@@ -812,6 +847,20 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Sql passportSql = Sqls.create(passportSqlstr);
 		passportSql.setParam("id", id);
 		Record passport = dbDao.fetch(passportSql);
+		//格式化日期
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		if (!Util.isEmpty(passport.get("birthday"))) {
+			Date goTripDate = (Date) passport.get("birthday");
+			passport.put("birthday", format.format(goTripDate));
+		}
+		if (!Util.isEmpty(passport.get("validEndDate"))) {
+			Date goTripDate = (Date) passport.get("validEndDate");
+			passport.put("validEndDate", format.format(goTripDate));
+		}
+		if (!Util.isEmpty(passport.get("issuedDate"))) {
+			Date goTripDate = (Date) passport.get("issuedDate");
+			passport.put("issuedDate", format.format(goTripDate));
+		}
 		result.put("passport", passport);
 		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		result.put("applicantId", id);
@@ -829,6 +878,185 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicantSql.setParam("id", id);
 		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
 		return applicantInfo;
+	}
+
+	public Object applicantComplete(int orderid) {
+		String complete = "yes";
+		String applicantSqlstr = sqlManager.get("orderJp_list_applicantInfo_byOrderId");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		applicantSql.setParam("id", orderid);
+		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
+		for (Record record : applicantInfo) {
+			String telephone = record.getString("telephone");
+			String email = record.getString("email");
+			if (Util.isEmpty(telephone) || Util.isEmpty(email)) {
+				complete = "no";
+			}
+		}
+		return complete;
+	}
+
+	public Object sendEmail(int orderid, int applicantid) {
+		//发送短信、邮件
+		try {
+			sendMail(orderid, applicantid);
+			sendMessage(orderid, applicantid);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public Object sendEmailUnified(int orderid, int applicantid) {
+		try {
+			sendMailUnified(orderid, applicantid);
+			sendMessageUnified(orderid, applicantid);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	//发送邮件信息
+	public Object sendMail(int orderid, int applicantid) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("share_mail.html"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+
+		//查询订单号
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
+		String orderNum = order.getOrderNum();
+
+		//申请人信息
+		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, applicantid);
+		StringBuffer sb = new StringBuffer();
+		sb.append(applicantEntity.getFirstName()).append(applicantEntity.getLastName());
+		String name = sb.toString();
+		String sex = applicantEntity.getSex();
+		String telephone = applicantEntity.getTelephone();
+		String email = applicantEntity.getEmail();
+		if (sex == null) {
+			sex = "男/女";
+		}
+		String result = "";
+
+		String emailText = tmp.toString();
+		emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+				.replace("${telephone}", telephone);
+		result = mailService.send(email, emailText, "分享", MailService.Type.HTML);
+		return result;
+	}
+
+	//发送手机信息
+	public Object sendMessage(int orderid, int applicantid) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("share_sms.txt"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+
+		//查询订单号
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
+		String orderNum = order.getOrderNum();
+
+		//申请人信息
+		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, applicantid);
+		StringBuffer sb = new StringBuffer();
+		sb.append(applicantEntity.getFirstName()).append(applicantEntity.getLastName());
+		String name = sb.toString();
+		String sex = applicantEntity.getSex();
+		String telephone = applicantEntity.getTelephone();
+		String email = applicantEntity.getEmail();
+		if (sex == null) {
+			sex = "男/女";
+		}
+		String result = "";
+
+		String smsContent = tmp.toString();
+		smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+				.replace("${telephone}", telephone);
+		result = firstTrialJpViewService.sendSMS(telephone, smsContent);
+		return result;
+	}
+
+	//发送邮件信息
+	public Object sendMailUnified(int orderid, int applicantid) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("share_mail.html"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+
+		//查询订单号
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
+		String orderNum = order.getOrderNum();
+
+		//申请人信息
+		//接收邮件的申请人
+		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, applicantid);
+		String email = applicantEntity.getEmail();
+
+		String applicantSqlstr = sqlManager.get("orderJp_list_applicantInfo_byOrderId");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		applicantSql.setParam("id", orderid);
+		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
+		String result = "";
+
+		for (Record record : applicantInfo) {
+			String name = record.getString("applyname");
+			String sex = record.getString("sex");
+			if (sex == null) {
+				sex = "男/女";
+			}
+			String telephone = record.getString("telephone");
+
+			String emailText = tmp.toString();
+			emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+					.replace("${telephone}", telephone);
+			result = mailService.send(email, emailText, "分享", MailService.Type.HTML);
+		}
+		return result;
+	}
+
+	//发送手机信息
+	public Object sendMessageUnified(int orderid, int applicantid) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("share_sms.txt"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+
+		//查询订单号
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
+		String orderNum = order.getOrderNum();
+
+		//申请人信息
+		//接收邮件的申请人
+		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, applicantid);
+		String telephone = applicantEntity.getTelephone();
+
+		String applicantSqlstr = sqlManager.get("orderJp_list_applicantInfo_byOrderId");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		applicantSql.setParam("id", orderid);
+		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
+		String result = "";
+
+		for (Record record : applicantInfo) {
+			String name = record.getString("applyname");
+			String sex = record.getString("sex");
+			if (sex == null) {
+				sex = "男/女";
+			}
+			String telephoneLoad = record.getString("telephone");
+
+			String smsContent = tmp.toString();
+			smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+					.replace("${telephone}", telephoneLoad);
+			result = mailService.send(telephone, smsContent);
+		}
+		return result;
 	}
 
 	public Object saveEditPassport(TApplicantPassportForm passportForm, HttpSession session) {
@@ -942,6 +1170,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = MapUtil.map();
 		String name = "";
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(orderid).intValue());
+		TOrderLogsEntity orderLogsEntity = dbDao.fetch(TOrderLogsEntity.class, Cnd.where("orderId", "=", orderid));
 		TUserEntity userEntity = dbDao.fetch(TUserEntity.class, new Long(orderEntity.getUserId()).intValue());
 		if (!Util.isEmpty(userEntity)) {
 			name = userEntity.getName();
@@ -953,7 +1182,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object firtTrialJp(Integer id) {
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(id).intValue());
-		orderEntity.setStatus(2);
+		orderEntity.setStatus(JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
+		dbDao.update(orderEntity);
 		return null;
 	}
 
@@ -1223,22 +1453,28 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			jsonEntity.setNum(out.getString("passport_no"));
 			if (out.getString("sex").equals("F")) {
 				jsonEntity.setSex("女");
+				jsonEntity.setSexEn("F");
 			} else {
 				jsonEntity.setSex("男");
+				jsonEntity.setSexEn("M");
 			}
 			jsonEntity.setUrl(url);
-			jsonEntity.setBirthCountry(out.getString("src_country"));
-			jsonEntity.setVisaCountry(out.getString("country"));
+			jsonEntity.setBirthCountry(out.getString("birth_place"));
+			jsonEntity.setVisaCountry(out.getString("issue_place"));
 			Date birthDay;
 			Date expiryDate;
+			Date issueDate;
 			try {
 				birthDay = new SimpleDateFormat("yyMMdd").parse(out.getString("birth_day"));
 				expiryDate = new SimpleDateFormat("yyMMdd").parse(out.getString("expiry_day"));
+				issueDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("issue_date"));
 				String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(birthDay);
 				String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(expiryDate);
+				String issueDateStr = new SimpleDateFormat("yyyy-MM-dd").format(issueDate);
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				jsonEntity.setBirth(sdf.format(sdf.parse(startDateStr)));
 				jsonEntity.setExpiryDay(sdf.format(sdf.parse(endDateStr)));
+				jsonEntity.setIssueDate(sdf.format(sdf.parse(issueDateStr)));
 			} catch (JSONException | ParseException e) {
 
 				// TODO Auto-generated catch block
@@ -1264,14 +1500,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Map<String, String> querys = new HashMap<String, String>();
 		try {
 			/**
-			* 重要提示如下:
-			* HttpUtils请从
-			* https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/src/main/java/com/aliyun/api/gateway/demo/util/HttpUtils.java
-			* 下载
-			*
-			* 相应的依赖请参照
-			* https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
-			*/
+			 * 重要提示如下:
+			 * HttpUtils请从
+			 * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/src/main/java/com/aliyun/api/gateway/demo/util/HttpUtils.java
+			 * 下载
+			 *
+			 * 相应的依赖请参照
+			 * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
+			 */
 			HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, content);
 			//获取response的body
 			//System.out.println(EntityUtils.toString(response.getEntity()));
@@ -1297,14 +1533,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		try {
 			/**
-			* 重要提示如下:
-			* HttpUtils请从
-			* https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/src/main/java/com/aliyun/api/gateway/demo/util/HttpUtils.java
-			* 下载
-			*
-			* 相应的依赖请参照
-			* https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
-			*/
+			 * 重要提示如下:
+			 * HttpUtils请从
+			 * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/src/main/java/com/aliyun/api/gateway/demo/util/HttpUtils.java
+			 * 下载
+			 *
+			 * 相应的依赖请参照
+			 * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
+			 */
 			HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, content);
 			//System.out.println(response.toString());
 			//获取response的body

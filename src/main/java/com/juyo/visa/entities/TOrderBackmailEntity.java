@@ -27,6 +27,10 @@ public class TOrderBackmailEntity implements Serializable {
 	private Integer expressType;
 	
 	@Column
+    @Comment("团队名称")
+	private String teamName;
+	
+	@Column
     @Comment("快递号")
 	private String expressNum;
 	
