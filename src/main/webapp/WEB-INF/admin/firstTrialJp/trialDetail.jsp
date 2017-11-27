@@ -280,15 +280,11 @@
 					</div><!-- end 添加回邮信息 -->
 	
 					<!-- 回邮信息 -->
-					<c:choose>
-	               		<c:when test="${fn:length(backMailInfos)>0}">
-			               <c:forEach var="backmail" items="${backMailInfos }" varStatus="backmail">
-			               		
-			               </c:forEach>
-			            </c:when>
-		            	<c:otherwise>
-		            		<div class="info expressInfo none" id="expressInfo" name="backmailInfo">
-								<p class="info-head">回邮信息</p>
+            		<div class="info expressInfo none" id="expressInfo" name="backmailInfo">
+						<p class="info-head">回邮信息</p>
+						<c:choose>
+	               		<c:when test="${fn:length(obj.backinfo)>0}">
+			            	<c:forEach var="backmail" items="${obj.backinfo }" varStatus="status">
 								<div class="info-body-from backmail-div">
 									<div class="row body-from-input">
 										<!-- 资料来源/快递号/团队名称/回邮方式 -->
@@ -297,7 +293,14 @@
 												<label><span>*</span>资料来源：</label> 
 												<select name="source" class="form-control input-sm">
 													<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
-														<option value="${map.key}">${map.value}</option>
+														<c:choose>
+							                    			<c:when test="${backmail.source eq map.key }">
+																<option value="${map.key}" selected="selected">${map.value}</option>
+							                    			</c:when>
+							                    			<c:otherwise>
+																<option value="${map.key}">${map.value}</option>
+							                    			</c:otherwise>
+							                    		</c:choose>
 													</c:forEach>
 												</select>
 											</div>
@@ -305,13 +308,13 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>快递号：</label> 
-												<input name="expressNum" type="text" class="form-control input-sm" placeholder=" " />
+												<input name="expressNum" type="text" value="${backmail.expressNum } class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>团队名称：</label> 
-												<input name="teamName" type="text" class="form-control input-sm" placeholder=" " />
+												<input name="teamName" type="text" value="${backmail.teamName } class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
@@ -319,7 +322,14 @@
 												<label><span>*</span>回邮方式：</label> 
 												<select name="expressType" class="form-control input-sm">
 													<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
-														<option value="${map.key}">${map.value}</option>
+														<c:choose>
+							                    			<c:when test="${backmail.expressType eq map.key }">
+																<option value="${map.key}" selected="selected">${map.value}</option>
+							                    			</c:when>
+							                    			<c:otherwise>
+																<option value="${map.key}">${map.value}</option>
+							                    			</c:otherwise>
+							                    		</c:choose>
 													</c:forEach>
 												</select>
 											</div>
@@ -332,19 +342,19 @@
 										<div class="col-sm-6">
 											<div class="form-group">
 												<label><span>*</span>回邮地址：</label> 
-												<input name="expressAddress" type="text" class="form-control input-sm" placeholder=" " />
+												<input name="expressAddress" type="text" value="${backmail.expressAddress } class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>联系人：</label> 
-												<input name="linkman" type="text" class="form-control input-sm" placeholder=" " />
+												<input name="linkman" type="text" value="${backmail.linkman } class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>电话：</label> 
-												<input name="telephone" type="text" class="form-control input-sm" placeholder=" " />
+												<input name="telephone" type="text" value="${backmail.telephone }  class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 									</div>
@@ -355,36 +365,131 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>发票项目内容：</label> 
-												<input name="invoiceContent" type="text" class="form-control input-sm" placeholder=" " />
+												<input name="invoiceContent" type="text" value="${backmail.invoiceContent } class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>发票抬头：</label> 
-												<input name="invoiceHead" type="text" class="form-control input-sm" placeholder=" " />
+												<input name="invoiceHead" type="text" value="${backmail.invoiceHead } class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>税号：</label> 
-												<input name="taxNum" type="text" class="form-control input-sm" placeholder=" " />
+												<input name="taxNum" type="text" value="${backmail.taxNum } class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>备注：</label> 
-												<input name="remark" type="text" class="form-control input-sm" placeholder=" " />
+												<input name="remark" type="text" value="${backmail.remark } class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 									</div>
 									<!-- end 发票项目内容/发票抬头/税号/备注 -->
 									<i class="add-btn"></i>
 								</div>
+							</c:forEach>
+			            </c:when>
+			            
+		            	<c:otherwise>
+		            		<div class="info-body-from backmail-div">
+								<div class="row body-from-input">
+									<!-- 资料来源/快递号/团队名称/回邮方式 -->
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>资料来源：</label> 
+											<select name="source" class="form-control input-sm">
+												<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
+													<option value="${map.key}">${map.value}</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>快递号：</label> 
+											<input name="expressNum" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>团队名称：</label> 
+											<input name="teamName" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>回邮方式：</label> 
+											<select name="expressType" class="form-control input-sm">
+												<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
+													<option value="${map.key}">${map.value}</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+								</div>
+								<!-- end 资料来源/快递号/团队名称/回邮方式 -->
+		
+								<div class="row body-from-input" style="padding-left:0;">
+									<!-- 回邮地址/联系人/电话 -->
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label><span>*</span>回邮地址：</label> 
+											<input name="expressAddress" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>联系人：</label> 
+											<input name="linkman" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>电话：</label> 
+											<input name="telephone" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+								</div>
+								<!-- end 回邮地址/联系人/电话/ -->
+		
+								<div class="row body-from-input" style="padding-left:0;">
+									<!-- 发票项目内容/发票抬头/税号/备注 -->
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>发票项目内容：</label> 
+											<input name="invoiceContent" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>发票抬头：</label> 
+											<input name="invoiceHead" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>税号：</label> 
+											<input name="taxNum" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>备注：</label> 
+											<input name="remark" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+								</div>
+								<!-- end 发票项目内容/发票抬头/税号/备注 -->
+								<i class="add-btn"></i>
 							</div>
-							<!-- end 快递信息 -->
 		            	</c:otherwise>
-		            </c:choose>
-					
+            		</c:choose>
+								
+					</div>
+					<!-- end 快递信息 -->
 					
 				</section>
 			</div>

@@ -223,8 +223,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		List<Record> applyinfo = getApplicantByOrderid(orderid);
 		result.put("applyinfo", applyinfo);
 		//回邮信息
+		TOrderJpEntity orderJp = dbDao.fetch(TOrderJpEntity.class, Long.valueOf(orderid));
 		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class,
-				Cnd.where("orderId", "=", orderid), null);
+				Cnd.where("orderId", "=", orderJp.getOrderId()), null);
 		result.put("backinfo", backinfo);
 
 		return result;
