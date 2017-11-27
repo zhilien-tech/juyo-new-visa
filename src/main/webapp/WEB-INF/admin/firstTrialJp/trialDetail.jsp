@@ -10,11 +10,13 @@
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<style type="text/css">
 			.form-control{height: 30px;}
 			.add-btn{top:-225px;right:-1%;}
@@ -191,7 +193,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行时间：</label> 
-										<input id="gotripdate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.gotripdate"/>
+										<input id="gotripdate" type="text" class="form-control input-sm" v-model="orderinfo.gotripdate"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -203,7 +205,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回时间：</label>
-										<input id="backtripdate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.backtripdate"/>
+										<input id="backtripdate" type="text" class="form-control input-sm" v-model="orderinfo.backtripdate"/>
 									</div>
 								</div>
 							</div>
@@ -213,13 +215,13 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>送签时间：</label>
-										<input id="sendvisadate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.sendvisadate"/>
+										<input id="sendvisadate" type="text" class="form-control input-sm" v-model="orderinfo.sendvisadate"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出签时间：</label>
-										<input id="outvisadate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.outvisadate"/>
+										<input id="outvisadate" type="text" class="form-control input-sm" v-model="orderinfo.outvisadate"/>
 									</div>
 								</div>
 							</div>
@@ -404,7 +406,11 @@
 		<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+		<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+		<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 		<script src="${base}/admin/firstTrialJp/trialDetail.js"></script><!-- 本页面js文件 -->
 		<script src="${base}/admin/firstTrialJp/expressInfo.js"></script>
+		<script src="${base}/admin/firstTrialJp/trialDate.js"></script>
+		
 	</body>
 </html>
