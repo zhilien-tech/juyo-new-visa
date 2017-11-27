@@ -187,7 +187,17 @@ new Vue({
 			});
 		},
 		visaInfo:function(applyId){
-			return null;
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid
+			});
 		},
 		qualified:function(applyId){
 			layer.confirm('您确认合格吗？', {
@@ -224,7 +234,21 @@ new Vue({
     		    area: ['800px', '402px'],
     		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyId
     	    });
+		},
+		logs:function(){//日志
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['700px', '551px'],
+				content:'/admin/orderJp/log.html?id='+orderid
+			});
 		}
+
 	}
 });
 
