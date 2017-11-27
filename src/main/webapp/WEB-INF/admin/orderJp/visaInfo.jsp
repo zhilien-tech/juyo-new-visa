@@ -116,9 +116,9 @@
 									<div class="form-group">
 										<label><span>*</span>我的职业：</label>
 										<!-- <input id="occupation"  name="occupation" type="text" class="form-control input-sm" placeholder=" " /> -->
-										<select id="occupation" name="occupation" class="form-control input-sm selectHeight">
+										<select id="careerStatus" name="careerStatus" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.jobStatusEnum}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainTrip?'selected':''}>${map.value}</option>
+												<option value="${map.key}" ${map.key==obj.workJp.careerStatus?'selected':''}>${map.value}</option>
 											</c:forEach>
 										</select>
 									</div>
@@ -126,13 +126,13 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>单位名称：</label>
-										<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " />
+										<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.name }"/>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>单位电话：</label>
-										<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " />
+										<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.telephone }"/>
 									</div>
 								</div>
 							</div><!-- end 我的职业/单位名称/单位电话 -->
@@ -140,7 +140,7 @@
 								<div class="col-sm-8">
 									<div class="form-group">
 										<label><span>*</span>单位地址：</label>
-										<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
+										<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.address }"/>
 									</div>
 								</div>
 							</div>
@@ -175,7 +175,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>银行存款：</label>
-										<input id="" name="details" type="text" class="form-control input-sm" placeholder="银行存款" />
+										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder="银行存款" />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -192,7 +192,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>车产：</label>
-										<input id="" name="details" type="text" class="form-control input-sm" placeholder="车产" />
+										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder="车产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -209,7 +209,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>房产：</label>
-										<input id="" name="details" type="text" class="form-control input-sm" placeholder="房产" />
+										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder="房产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -226,7 +226,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>理财：</label>
-										<input id="" name="details" type="text" class="form-control input-sm" placeholder="理财" />
+										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder="理财" />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -285,22 +285,75 @@
 				$("#mainApply").text("副申请人");
 			}
 			
+			var wealthType = '${obj.wealthJp}';
+			console.log(wealthType);
+			if(wealthType){
+				$('[name=wealthType]').each(function(){
+					var wealth = $(this);
+					$.each(JSON.parse(wealthType), function(i, item){     
+						if(item.type == wealth.val()){
+							if(wealth.val() == "银行存款"){
+								$(".deposit").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#deposit").val(item.details);
+							}
+							if(wealth.val() == "车产"){
+								$(".vehicle").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#vehicle").val(item.details);
+							}
+							if(wealth.val() == "房产"){
+								$(".houseProperty").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#houseProperty").val(item.details);
+							}
+							if(wealth.val() == "理财"){
+								$(".financial").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#financial").val(item.details);
+							}
+						}
+						});
+					});
+				
+			} 
+			
 			
 			//财务信息 部分按钮效果
 			$(".finance-btn input").click(function(){
 				var financeBtnInfo=$(this).val();
 				if(financeBtnInfo == "银行存款"){
-					$(".deposit").css("display","block");
-					$(this).addClass("btnState-true");
+					if($(this).hasClass("btnState-true")){
+						$(".deposit").css("display","none");
+						$(this).removeClass("btnState-true");
+					}else{
+						$(".deposit").css("display","block");
+						$(this).addClass("btnState-true");
+					}
 				}else if(financeBtnInfo == "车产"){
-					$(".vehicle").css("display","block");
-					$(this).addClass("btnState-true");
+					if($(this).hasClass("btnState-true")){
+						$(".vehicle").css("display","none");
+						$(this).removeClass("btnState-true");
+					}else{
+						$(".vehicle").css("display","block");
+						$(this).addClass("btnState-true");
+					}
 				}else if(financeBtnInfo == "房产"){
-					$(".houseProperty").css("display","block");
-					$(this).addClass("btnState-true");
+					if($(this).hasClass("btnState-true")){
+						$(".houseProperty").css("display","none");
+						$(this).removeClass("btnState-true");
+					}else{
+						$(".houseProperty").css("display","block");
+						$(this).addClass("btnState-true");
+					}
 				}else if(financeBtnInfo == "理财"){
-					$(".financial").css("display","block");
-					$(this).addClass("btnState-true");
+					if($(this).hasClass("btnState-true")){
+						$(".financial").css("display","none");
+						$(this).removeClass("btnState-true");
+					}else{
+						$(".financial").css("display","block");
+						$(this).addClass("btnState-true");
+					}
 				}
 			});
 			$(".remove-btn").click(function(){
@@ -315,20 +368,28 @@
 					$(".vice").hide();
 					$(".main").show();
 					$("#mainApply").text("主申请人");
-					//$("#viceApply").hide();
 				}else{//副申请人
 					$(".vice").show();
 					$(".main").hide();
 					$("#mainApply").text("副申请人");
-					//$("#viceApply").show();
 				}
 			});
 		});
 		
 		//保存
 		function save(){
-			
-			var passportInfo = $("#passportInfo").serialize();
+			//绑定财产类型
+			var wealthType = "";
+			$('[name=wealthType]').each(function(){
+				if($(this).hasClass('btnState-true')){
+					wealthType += $(this).val() + ',';
+				}
+			});
+			if(wealthType){
+				wealthType = wealthType.substr(0,wealthType.length-1);
+			}
+			//var passportInfo = $("#passportInfo").serialize();
+			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
 			$.ajax({
 				type: 'POST',
 				data : passportInfo,
