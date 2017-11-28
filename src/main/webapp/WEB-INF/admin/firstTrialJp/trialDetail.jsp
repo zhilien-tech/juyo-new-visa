@@ -280,9 +280,10 @@
 					</div><!-- end 添加回邮信息 -->
 	
 					<!-- 回邮信息 -->
-            		<div class="info expressInfo" id="expressInfo" name="backmailInfo">
+            		
 						<c:choose>
 	               		<c:when test="${fn:length(obj.backinfo)>0}">
+	               			<div class="info expressInfo" id="expressInfo" name="backmailInfo">
 	               			<p class="info-head">回邮信息</p>
 			            	<c:forEach var="backmail" items="${obj.backinfo}" varStatus="status">
 								<div class="info-body-from backmail-div">
@@ -398,9 +399,12 @@
 									
 								</div>
 							</c:forEach>
-			            </c:when>
-		            	<c:otherwise>
-		            		<div class="info-body-from none backmail-div">
+						</div>
+		            </c:when>
+	            	<c:otherwise>
+	            		<div class="info none expressInfo" id="expressInfo" name="backmailInfo">
+	               			<p class="info-head">回邮信息</p>
+		            		<div class="info-body-from backmail-div">
 								<div class="row body-from-input">
 									<!-- 资料来源/快递号/团队名称/回邮方式 -->
 									<div class="col-sm-3">
@@ -492,11 +496,10 @@
 								<!-- end 发票项目内容/发票抬头/税号/备注 -->
 								<i class="add-btn"></i>
 							</div>
-		            	</c:otherwise>
-            		</c:choose>
-								
-					</div>
-					<!-- end 快递信息 -->
+						</div>
+						<!-- end 快递信息 -->
+	            	</c:otherwise>
+           		</c:choose>
 					
 				</section>
 			</div>

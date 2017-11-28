@@ -228,6 +228,11 @@ new Vue({
 				orderobj.applyinfo = data.applyinfo;
 				backMailInfos = data.backinfo;
 				
+				if(backMailInfos.length>0){
+					$(".addExpressInfoBtn").hide();
+				}
+				
+				
 				console.log(JSON.stringify(backMailInfos) +"====="+ JSON.stringify(backMailInfos.length));
 			}
 		});
