@@ -31,7 +31,7 @@
 			#applicantTable tbody tr td:nth-child(2){width: 10%;}
 			#applicantTable tbody tr td:nth-child(3){width: 10%;}
 			#applicantTable tbody tr td:nth-child(4){width: 10%;}
-			#applicantTable tbody tr td:nth-child(6){width: 8%;}
+			#applicantTable tbody tr td:nth-child(6){width: 19%;}
 			#schedulingTable thead tr th:nth-child(1){width:8%;}
 			#schedulingTable thead tr th:nth-child(2){width:10%;}
 			#schedulingTable thead tr th:nth-child(3){width:12%;}
@@ -257,7 +257,11 @@
 										<td>{{apply.passport}}</td>
 										<td>{{apply.type}}</td>
 										<td>{{apply.realinfo}}</td>
-										<td><a v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;<a v-on:click="visa(apply.applyid)">签证</a></td>
+										<td><a v-on:click="updateApplicant(apply.applyid)">基本信息</a>&nbsp;
+											<a v-on:click="passport(apply.applyid)">护照信息</a>&nbsp;
+											<a v-on:click="visa(apply.id)">签证信息</a>&nbsp;
+											<a v-on:click="visainput(apply.applyid)">签证录入</a>
+										</td>
 									</tr>
 								</tbody>
 							</table>

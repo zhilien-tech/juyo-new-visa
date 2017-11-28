@@ -7,6 +7,7 @@
 package com.juyo.visa.admin.visajp.module;
 
 import java.io.File;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -276,5 +277,14 @@ public class VisaJapanModule {
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object uploadVisaPic(@Param("uploadfile") File file, HttpServletRequest request) {
 		return visaJapanSimulateService.uploadVisaPic(file, request);
+	}
+
+	/**
+	 * 自动计算返回日期
+	 */
+	@At
+	@POST
+	public Object autoCalculateBackDate(@Param("gotripdate") Date gotripdate, @Param("stayday") Integer stayday) {
+		return visaJapanService.autoCalculateBackDate(gotripdate, stayday);
 	}
 }
