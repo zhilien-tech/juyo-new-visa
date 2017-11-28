@@ -58,7 +58,7 @@ LEFT JOIN (
 ) tavpj ON tavpj.applicantId = taoj.id
 $condition
 
-/*get_jp_visa_order_info_byid*/
+/*get_jp_receptionOrderInfo_byid*/
 SELECT
 	tr.*, toj.visaCounty,
 	toj.id orderid,
@@ -73,7 +73,7 @@ FROM
 INNER JOIN t_order_jp toj ON toj.orderId = tr.id
 WHERE
 	toj.id = @orderid
-/*get_jporder_detail_applyinfo_byorderid*/
+/*get_applyInfo_byorderid*/
 SELECT
 	taoj.id applyid,
 	CONCAT(ta.firstName, ta.lastName) applyname,
@@ -97,29 +97,3 @@ LEFT JOIN (
 		applicantId
 ) tavpj ON tavpj.applicantId = taoj.id
 where taoj.orderId = @orderid
-
-/*get_travel_plan_by_orderid*/
-SELECT
-	totj.*, th.`name` hotelname
-FROM
-	t_order_travelplan_jp totj
-left JOIN t_hotel th ON totj.hotel = th.id
-where totj.orderId = @orderid
-order by outDate asc
-
-/*get_reset_travel_plan_scenic*/
-SELECT
-	ts.*
-FROM
-	t_scenic ts
-WHERE
-	NAME NOT IN (
-		SELECT
-			scenic
-		FROM
-			t_order_travelplan_jp
-		WHERE
-			orderId = @orderid
-		AND scenic != @scenicname
-	)
-and cityId = @cityid

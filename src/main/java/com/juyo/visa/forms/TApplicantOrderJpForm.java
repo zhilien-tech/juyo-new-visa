@@ -1,16 +1,16 @@
 package com.juyo.visa.forms;
 
-import com.uxuexi.core.db.util.EntityUtil;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import com.juyo.visa.entities.TApplicantOrderJpEntity;
-import com.uxuexi.core.web.form.DataTablesParamForm;
 
-import java.io.Serializable;
+import com.juyo.visa.entities.TApplicantOrderJpEntity;
+import com.uxuexi.core.db.util.EntityUtil;
+import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -18,37 +18,37 @@ public class TApplicantOrderJpForm extends DataTablesParamForm {
 	private static final long serialVersionUID = 1L;
 	/**主键*/
 	private Integer id;
-	
+
 	/**日本订单id*/
 	private Integer orderId;
-	
+
 	/**申请人id*/
 	private Integer applicantId;
-	
+
 	/**是否为统一联系人*/
 	private Integer isSameLinker;
-	
+
 	/**是否是主申请人*/
 	private Integer isMainApplicant;
-	
+
 	/**与主申请人的关系*/
-	private Integer mainRelation;
-	
+	private String mainRelation;
+
 	/**与主申请人关系备注*/
 	private String relationRemark;
-	
+
 	/**出行信息是否同主*/
 	private Integer sameMainTrip;
-	
+
 	/**财富信息是否同主*/
 	private Integer sameMainWealth;
-	
+
 	/**工作信息是否同主*/
 	private Integer sameMainWork;
-	
+
 	/**视频地址*/
 	private String videoUrl;
-	
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**
