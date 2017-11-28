@@ -60,7 +60,7 @@
 									<div>
 										<i class="basicInfo" @click="basicInfoFun(item.applyid)"> </i>
 										<i class="passportInfo" @click="passportFun(item.applyid)"> </i>
-										<i class="visaInfo" @click="visaInfoFun(item.applyid)"> </i>
+										<i class="visaInfo" @click="visaInfoFun(item.applyid,data.id)"> </i>
 										<i class="qualified" @click="qualifiedFun(item.applyid)"> </i>
 										<i class="unqualified" @click="unqualifiedFun(item.applyid)"> </i>
 									</div>
