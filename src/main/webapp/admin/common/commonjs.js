@@ -87,7 +87,7 @@ $(document).on("input",".associatepinyin",function(){
 	var hanzi = temp.split('/')[0];
 	var pinyinchar = getPinYinStr(hanzi);
 	//斜杠的位置
-	var sepindex = onehanzi.length + 1;
+	var sepindex = hanzi.length + 1;
 	//设置值
 	//pos=pos-(temp.length-$(this).val().length);//当前光标位置
 	if(pos < sepindex){
@@ -98,6 +98,7 @@ $(document).on("input",".associatepinyin",function(){
 	}
 	setCaretPosition($(this)[0],pos);//设置光标
 });
+//获取拼音字符串
 function getPinYinStr(hanzi){
 	var onehanzi = hanzi.split('');
 	var pinyinchar = '';
