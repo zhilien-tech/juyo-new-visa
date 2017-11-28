@@ -252,8 +252,8 @@
 										<td>{{apply.applyname}}</td>
 										<td>{{apply.telephone}}</td>
 										<td>{{apply.passport}}</td>
-										<td>{{apply.type}}</td>
-										<td>{{apply.realinfo}}</td>
+										<td>{{apply.datatype}}</td>
+										<td>{{apply.data}}</td>
 										<td>{{apply.sex}}</td>
 										<td>{{apply.applicantstatus}}</td>
 										<td>
