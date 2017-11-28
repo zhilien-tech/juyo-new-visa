@@ -94,6 +94,7 @@ SELECT
 	CONCAT(ta.firstName, ta.lastName) applyname,
 	ta.telephone,
 	ta.email,
+	ta.id,
 	tap.passport,
 	tavpj.type,
 	tavpj.realInfo
@@ -108,6 +109,7 @@ LEFT JOIN (
 		GROUP_CONCAT(realInfo SEPARATOR '、') realInfo
 	FROM
 		t_applicant_visa_paperwork_jp
+	where status = 1
 	GROUP BY
 		applicantId
 ) tavpj ON tavpj.applicantId = taoj.id
