@@ -392,7 +392,6 @@
 								</div>
 							</c:forEach>
 			            </c:when>
-			            
 		            	<c:otherwise>
 		            		<div class="info-body-from backmail-div">
 								<div class="row body-from-input">
