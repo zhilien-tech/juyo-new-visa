@@ -91,6 +91,7 @@ import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCustomerEntity;
+import com.juyo.visa.entities.TOrderBackmailEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderLogsEntity;
@@ -637,7 +638,33 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				dbDao.update(applicantOrderJp);
 			}
 		}
+
+		//回邮信息
+		//List<TOrderBackmailEntity> backMailInfos = orderInfo.getBackMailInfos();
+		//String editBackMailInfos = editBackMailInfos(backMailInfos, orderId);
 		return null;
+	}
+
+	public String editBackMailInfos(List<TOrderBackmailEntity> backMailInfos, Integer orderid) {
+
+		List<TOrderBackmailEntity> beforeBackMails = dbDao.query(TOrderBackmailEntity.class,
+				Cnd.where("orderId", "=", orderid), null);
+
+		List<TOrderBackmailEntity> updateBackMails = new ArrayList<TOrderBackmailEntity>();
+
+		for (TOrderBackmailEntity backMailInfo : backMailInfos) {
+			Date nowDate = DateUtil.nowDate();
+			Integer obmId = backMailInfo.getId();
+			if (Util.isEmpty(obmId)) {
+				backMailInfo.setCreateTime(nowDate);
+			}
+			backMailInfo.setOrderId(orderid);
+			backMailInfo.setUpdateTime(nowDate);
+			updateBackMails.add(backMailInfo);
+		}
+		dbDao.updateRelations(beforeBackMails, updateBackMails);
+
+		return "更新回邮信息";
 	}
 
 	public Object fetchOrder(Integer id) {
