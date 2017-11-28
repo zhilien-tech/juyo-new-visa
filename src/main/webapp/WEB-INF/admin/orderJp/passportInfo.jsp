@@ -67,7 +67,7 @@
 							</div>
 						</div><!-- end 类型/护照号 -->
 						<div class="row"><!-- 性别/ 出生地点 拼音 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0 ">
 								<div class="form-group">
 									<label><span>*</span>性别：</label>
 									<%-- <input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.sex }"/> --%>
@@ -84,7 +84,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生地点/拼音：</label>
-									<input id="birthAddress" name="birthAddress" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.birthAddress }"/>
+									<input id="birthAddress" name="birthAddress" type="text" class="form-control input-sm associatepinyin" placeholder=" " value="${obj.passport.birthAddress }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -100,7 +100,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发地点/拼音：</label>
-									<input id="issuedPlace" name="issuedPlace" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedPlace }"/>
+									<input id="issuedPlace" name="issuedPlace" type="text" class="form-control input-sm associatepinyin" placeholder=" " value="${obj.passport.issuedPlace }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -169,6 +169,9 @@
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
+	
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+	
 	
 	<script type="text/javascript">
 		var base = "${base}";

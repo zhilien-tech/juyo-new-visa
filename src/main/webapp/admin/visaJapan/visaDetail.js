@@ -139,7 +139,21 @@ new Vue({
 			});
 		},
 		//护照信息
-		passport:function(applyId){
+		/*passport:function(applyId){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false, 
+				area: ['900px', '550px'],
+				content: '/admin/visaJapan/passportInfo.html?applyId='+applyId
+			});
+		},*/
+		//修改护照信息
+		passport : function(id){
 			layer.open({
 				type: 2,
 				title: false,
@@ -148,8 +162,8 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '550px'],
-				content: '/admin/visaJapan/passportInfo.html?applyId='+applyId
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/passportInfo.html?id='+id
 			});
 		},
 		//基本信息

@@ -67,6 +67,7 @@ public class VisaListDataForm implements SQLParamForm {
 					.or("taj.applyname", "like", "%" + searchStr + "%");
 			cnd.and(exp);
 		}
+		cnd.and("tr.comId", "=", companyid);
 		if (!Util.isEmpty(sendSignDate)) {
 			cnd.and("tr.sendVisaDate", ">=", sendSignDate);
 		}

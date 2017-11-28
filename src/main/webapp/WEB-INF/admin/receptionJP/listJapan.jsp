@@ -52,7 +52,7 @@
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<i class="visaTransfer"> </i>
+									<i class="visaTransfer" v-on:click="visaTransfer(data.id)"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
@@ -125,6 +125,17 @@
         		    area: ['900px', '550px'],
         		    content: '${base}/admin/receptionJP/revenue.html?orderid='+orderid
         		  });
+        	},
+        	visaTransfer:function(orderid){
+        		 $.ajax({ 
+                 	url: '${base}/admin/receptionJP/visaTransfer',
+                 	dataType:"json",
+                 	data:{orderid:orderid},
+                 	type:'post',
+                 	success: function(data){
+                 		layer.msg("移交签证成功");
+                   	}
+                 });
         	}
         }
 	});

@@ -443,8 +443,8 @@
 					<!-- 快递信息 -->
 					<div class="info expressInfo none" id="expressInfo"
 						name="backmailInfo">
-						<p class="info-head">快递信息</p>
-						<div class="info-body-from">
+						<p class="info-head">回邮信息</p>
+						<div class="info-body-from backmail-div">
 							<div class="row body-from-input">
 								<!-- 资料来源/回邮方式/回邮地址 -->
 								<div class="col-sm-3">
@@ -482,15 +482,15 @@
 								<!-- 联系人/电话/发票项目内容/发票抬头 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>联系人：</label> <input id=""
-											name="" type="text" class="form-control input-sm"
+										<label><span>*</span>联系人：</label> <input id="expressLinkman"
+											name="expressLinkman" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>电话：</label> <input id="telephone"
-											name="telephone" type="text" class="form-control input-sm"
+										<label><span>*</span>电话：</label> <input id="expressTelephone"
+											name="expressTelephone" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
@@ -515,7 +515,7 @@
 								<!-- 团队名称/快递号/备注 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>团队名称：</label> <input id="" name=""
+										<label><span>*</span>团队名称：</label> <input id="teamName" name="teamName"
 											type="text" class="form-control input-sm" placeholder=" " />
 										
 									</div>
@@ -527,6 +527,12 @@
 											placeholder=" " />
 									</div>
 								</div>
+								<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>税号：</label> 
+											<input name="taxNum" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>备注：</label> <input id="remark"
@@ -536,6 +542,7 @@
 								</div>
 							</div>
 							<!-- end 团队名称/快递号/备注 -->
+							<i class="add-btn"></i>
 						</div>
 					</div>
 					<!-- end 快递信息 -->
@@ -619,6 +626,18 @@
 			
 		});
 		
+			//点击 蓝色加号图标 事件
+			$('.add-btn').click(function(){
+		    	var $html=$(this).parent().clone();//克隆标签模块
+		    	$(this).parents('.info').append($html);//添加克隆的内容
+		    	$html.find('.add-btn').remove();
+		    	$html.append('<i class="remove-btn"></i>');
+			});
+			//点击 蓝色叉号图标 事件
+			$(".info").on("click", ".remove-btn", function(){
+				$(this).parent().remove();//删除 对相应的本模块
+			});
+			
 		
 		//添加申请人(大按钮)
 		var BASE_PATH = '${base}';
@@ -820,7 +839,12 @@
 				if(threecounty){
 					threecounty = threecounty.substr(0,threecounty.length-1);
 				}
-				var orderinfo = $.param({"visacounty":visacounty, "threecounty":threecounty}) + "&" + $("#orderInfo").serialize();
+				var backMailInfos = JSON.stringify(getMailInfos());
+				var orderinfo = $.param({"backMailInfos":backMailInfos, "visacounty":visacounty, "threecounty":threecounty}) + "&" + $("#orderInfo").serialize();
+				//alert(JSON.stringify(backMails));
+				//orderinfo.backMailInfos = JSON.stringify(backMails);
+				
+				
 				$.ajax({
 					type : 'POST',
 					data : orderinfo ,
@@ -939,6 +963,72 @@
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
 			});
+			
+			//回邮信息
+			function getMailInfos(){
+				var backMails = [];
+				$('.backmail-div').each(function(i){
+					var infoLength = '';
+					var backInfo = {};
+					/* var obmId = $(this).find('[name=obmId]').val();
+					infoLength += obmId;
+					backInfo.id = obmId; */
+					
+					var datasour = $(this).find('[name=datasour]').val();
+					if(datasour != 1){
+						infoLength += datasour;
+					}
+					backInfo.datasour = datasour;
+					
+					var expressType = $(this).find('[name=expressType]').val();
+					if(expressType != 1){
+						infoLength += expressType;
+					}
+					backInfo.expressType = expressType;
+					
+					var expressAddress = $(this).find('[name=expressAddress]').val();
+					infoLength += expressAddress;
+					backInfo.expressAddress = expressAddress;
+					
+					var linkman = $(this).find('[name=expressLinkman]').val();
+					infoLength += linkman;
+					backInfo.linkman = linkman;
+					
+					var telephone = $(this).find('[name=expressTelephone]').val();
+					infoLength += telephone;
+					backInfo.telephone = telephone;
+					
+					var invoiceContent = $(this).find('[name=invoiceContent]').val();
+					infoLength += invoiceContent;
+					backInfo.invoiceContent = invoiceContent;
+					
+					var invoiceHead = $(this).find('[name=invoiceHead]').val();
+					infoLength += invoiceHead;
+					backInfo.invoiceHead = invoiceHead;
+					
+					var teamName = $(this).find('[name=teamName]').val();
+					infoLength += teamName;
+					backInfo.teamName = teamName;
+					
+					var expressNum = $(this).find('[name=expressNum]').val();
+					infoLength += expressNum;
+					backInfo.expressNum = expressNum;
+					
+					var taxNum = $(this).find('[name=taxNum]').val();
+					infoLength += taxNum;
+					backInfo.taxNum = taxNum;
+					
+					var remark = $(this).find('[name=remark]').val();
+					infoLength += remark;
+					backInfo.remark = remark;
+
+					if(infoLength.length > 0){
+						backMails.push(backInfo);
+					}
+				});
+				
+				return backMails;
+			}
 		</script>
 </body>
 </html>

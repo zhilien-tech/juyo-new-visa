@@ -8,8 +8,11 @@ package com.juyo.visa.admin.order.form;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
+
+import com.juyo.visa.entities.TOrderBackmailEntity;
 
 @Data
 public class OrderEditDataForm implements Serializable {
@@ -69,7 +72,27 @@ public class OrderEditDataForm implements Serializable {
 
 	private Integer orderid;
 
+	private String expressLinkman;
+
+	private String expressTelephone;
+
 	private Integer visatype;
+
+	private String teamName;
+
+	private String expressAddress;
+
+	private String invoiceContent;
+
+	private String invoiceHead;
+
+	private String expressNum;
+
+	private String remark;
+
+	private Integer datasour;
+
+	private Integer expressType;
 
 	private String visacounty;
 
@@ -80,4 +103,7 @@ public class OrderEditDataForm implements Serializable {
 	private Date createtime;
 
 	private Date updatetime;
+
+	//回邮信息
+	private List<TOrderBackmailEntity> backMailInfos;
 }

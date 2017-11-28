@@ -44,11 +44,11 @@
 				<div class="qz-head">
 					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
 					<span class="">受付番号：<p></p></span>
-					<span class="">状态：<p>{{orderinfo.visastatus}}</p></span>
+					<span class="">状态：<p>{{orderinfo.status}}</p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
-					<input type="button" value="签证" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
-					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="签证" class="btn btn-primary btn-sm pull-right" onclick="visaTransfer();"/>
+					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue();"/>
 				</div>
 				<section class="content">
 					<!-- 订单信息 -->
@@ -255,7 +255,7 @@
 										<td>{{apply.passport}}</td>
 										<td>{{apply.type}}</td>
 										<td>{{apply.realinfo}}</td>
-										<td><a v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;<a v-on:click="visa(apply.applyid)">签证</a></td>
+										<!-- <td><a v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;<a v-on:click="visa(apply.applyid)">签证</a></td> -->
 									</tr>
 								</tbody>
 							</table>
@@ -324,6 +324,34 @@
 				}else if(status == 2){
 					layer.msg('保存成功');
 				}
+			}
+			
+			function visaTransfer(){
+				var orderid = ${obj.orderid};
+				$.ajax({ 
+			     	url: BASE_PATH +'/admin/receptionJP/visaTransfer',
+			     	dataType:"json",
+			     	data:{orderid:orderid},
+			     	type:'post',
+			     	success: function(data){
+			     		layer.msg("移交签证成功");
+			       	}
+			     });
+			}
+			
+			function revenue(){
+				var orderid = ${obj.orderid};
+				layer.open({
+        		    type: 2,
+        		    title: false,
+        		    closeBtn:false,
+        		    fix: false,
+        		    maxmin: false,
+        		    shadeClose: false,
+        		    scrollbar: false,
+        		    area: ['900px', '550px'],
+        		    content: '${base}/admin/receptionJP/revenue.html?orderid='+orderid
+        		  });
 			}
 		</script>
 	</body>

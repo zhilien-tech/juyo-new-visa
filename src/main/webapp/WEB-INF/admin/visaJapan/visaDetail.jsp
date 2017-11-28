@@ -257,8 +257,8 @@
 										<td>{{apply.passport}}</td>
 										<td>{{apply.type}}</td>
 										<td>{{apply.realinfo}}</td>
-										<td><a v-on:click="updateApplicant(apply.applyid)">基本信息</a>&nbsp;
-											<a v-on:click="passport(apply.applyid)">护照信息</a>&nbsp;
+										<td><a v-on:click="updateApplicant(apply.id)">基本信息</a>&nbsp;
+											<a v-on:click="passport(apply.id)">护照信息</a>&nbsp;
 											<a v-on:click="visa(apply.id)">签证信息</a>&nbsp;
 											<a v-on:click="visainput(apply.applyid)">签证录入</a>
 										</td>
