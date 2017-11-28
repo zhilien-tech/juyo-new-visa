@@ -67,6 +67,10 @@ function getMailInfos(){
 		var infoLength = '';
 		var backInfo = {};
 		
+		var obmId = $(this).find('[name=obmId]').val();
+		infoLength += obmId;
+		backInfo.id = obmId;
+		
 		var datasour = $(this).find('[name=datasour]').val();
 		if(datasour != 1){
 			infoLength += datasour;

@@ -281,15 +281,14 @@
 	
 					<!-- 回邮信息 -->
             		<div class="info expressInfo" id="expressInfo" name="backmailInfo">
-						<p class="info-head">回邮信息</p>
-						
 						<c:choose>
 	               		<c:when test="${fn:length(obj.backinfo)>0}">
+	               			<p class="info-head">回邮信息</p>
 			            	<c:forEach var="backmail" items="${obj.backinfo}" varStatus="status">
 								<div class="info-body-from backmail-div">
 									<div class="row body-from-input">
 										<!-- 资料来源/快递号/团队名称/回邮方式 -->
-										<input id="id" type="hidden" value="${backmail.id }">
+										<input name="obmId" type="hidden" value="${backmail.id }">
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>资料来源：</label> 
@@ -401,11 +400,12 @@
 							</c:forEach>
 			            </c:when>
 		            	<c:otherwise>
-		            		<div class="info-body-from backmail-div">
+		            		<div class="info-body-from none backmail-div">
 								<div class="row body-from-input">
 									<!-- 资料来源/快递号/团队名称/回邮方式 -->
 									<div class="col-sm-3">
 										<div class="form-group">
+											<input name="obmId" type="hidden" value="">
 											<label><span>*</span>资料来源：</label> 
 											<select name="source" class="form-control input-sm">
 												<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">

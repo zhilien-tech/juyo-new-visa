@@ -582,79 +582,19 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 	//添加回邮信息
 	public String editBackMailInfos(List<TOrderBackmailEntity> backMailInfos, Integer orderid) {
-		List<TOrderBackmailEntity> newBackMails = new ArrayList<TOrderBackmailEntity>();
-		List<TOrderBackmailEntity> beforeBackMails = new ArrayList<TOrderBackmailEntity>();
-		List<TOrderBackmailEntity> updateBackMails = new ArrayList<TOrderBackmailEntity>();
-		for (TOrderBackmailEntity backMailInfo : backMailInfos) {
-			TOrderBackmailEntity obm = new TOrderBackmailEntity();
-			Date nowDate = DateUtil.nowDate();
-			Integer obmId = obm.getId();//回邮信息id
-			if (Util.isEmpty(obmId)) {
-				//新增
-				obm.setOrderId(orderid);
-				obm.setCreateTime(nowDate);
-				obm.setUpdateTime(nowDate);
-				Integer source = backMailInfo.getSource();
-				if (!Util.isEmpty(source)) {
-					obm.setSource(source);
-				}
-				String expressAddress = backMailInfo.getExpressAddress();
-				if (!Util.isEmpty(expressAddress)) {
-					obm.setExpressAddress(expressAddress);
-				}
-				String expressNum = backMailInfo.getExpressNum();
-				if (!Util.isEmpty(expressNum)) {
-					obm.setExpressNum(expressNum);
-				}
-				Integer expressType = backMailInfo.getExpressType();
-				if (!Util.isEmpty(expressType)) {
-					obm.setExpressType(expressType);
-				}
-				String invoiceContent = backMailInfo.getInvoiceContent();
-				if (!Util.isEmpty(invoiceContent)) {
-					obm.setInvoiceContent(invoiceContent);
-				}
-				String invoiceHead = backMailInfo.getInvoiceHead();
-				if (!Util.isEmpty(invoiceHead)) {
-					obm.setInvoiceHead(invoiceHead);
-				}
-				String linkman = backMailInfo.getLinkman();
-				if (!Util.isEmpty(linkman)) {
-					obm.setLinkman(linkman);
-				}
-				String remark = backMailInfo.getRemark();
-				if (!Util.isEmpty(remark)) {
-					obm.setRemark(remark);
-				}
-				String taxNum = backMailInfo.getTaxNum();
-				if (!Util.isEmpty(taxNum)) {
-					obm.setTaxNum(taxNum);
-				}
-				String teamName = backMailInfo.getTeamName();
-				if (!Util.isEmpty(teamName)) {
-					obm.setTeamName(teamName);
-				}
-				String telephone = backMailInfo.getTelephone();
-				if (!Util.isEmpty(telephone)) {
-					obm.setTeamName(telephone);
-				}
-				if (!Util.isEmpty(obm)) {
-					newBackMails.add(obm);
-				}
-			} else {
-				//更新
-				beforeBackMails.add(dbDao.fetch(TOrderBackmailEntity.class, Long.valueOf(obmId)));
-				obm.setUpdateTime(nowDate);
-				updateBackMails.add(obm);
-			}
 
+		List<TOrderBackmailEntity> beforeBackMails = dbDao.query(TOrderBackmailEntity.class,
+				Cnd.where("orderId", "=", orderid), null);
+
+		List<TOrderBackmailEntity> updateBackMails = new ArrayList<TOrderBackmailEntity>();
+
+		for (TOrderBackmailEntity backMailInfo : backMailInfos) {
+			Date nowDate = DateUtil.nowDate();
+			backMailInfo.setOrderId(orderid);
+			backMailInfo.setUpdateTime(nowDate);
+			updateBackMails.add(backMailInfo);
 		}
-		if (!Util.isEmpty(newBackMails)) {
-			dbDao.insert(newBackMails);
-		}
-		if (!Util.isEmpty(updateBackMails)) {
-			dbDao.updateRelations(beforeBackMails, updateBackMails);
-		}
+		dbDao.updateRelations(beforeBackMails, updateBackMails);
 
 		return "更新回邮信息";
 	}
