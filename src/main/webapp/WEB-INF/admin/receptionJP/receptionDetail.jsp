@@ -6,13 +6,11 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>签证详情</title>
+		<title>前台详情</title>
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-		<link rel="stylesheet" href="${base}/references/public/dist/bootstrapcss/css/font-awesome.min.css">
-		<link rel="stylesheet" href="${base}/references/public/dist/bootstrapcss/css/ionicons.min.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
@@ -45,12 +43,12 @@
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<div class="qz-head">
 					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
-					<span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span>
+					<span class="">受付番号：<p></p></span>
 					<span class="">状态：<p>{{orderinfo.visastatus}}</p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
-					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
-					<input type="button" value="自动填报" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="签证" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
+					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" />
 				</div>
 				<section class="content">
 					<!-- 订单信息 -->
@@ -246,7 +244,7 @@
 										<th><span>电话<span></th>
 										<th><span>护照号<span></th>
 										<th><span>资料类型<span></th>
-										<th><span>真实资料<span></th>
+										<th><span>审核确认资料<span></th>
 										<th><span>操作<span></th>
 									</tr>
 								</thead>
@@ -262,267 +260,16 @@
 								</tbody>
 							</table>
 							<!-- end 申请人 -->
-							<div class="row" id="orderremark">
+							<!-- <div class="row" id="orderremark">
 								<div class="col-sm-12">
 									<div class="form-group">
 										<label>备注：</label> 
 										<input id="remark" name="remark" type="text" class="form-control input-sm" v-model="orderinfo.remark"/>
 									</div>
 								</div>
-							</div>
+							</div> -->
 						</div>
 					</div>
-					<!-- 出行信息 -->
-					<div class="info">
-						<p class="info-head">出行信息</p>
-						<div class="info-body-from">
-							<div class="row body-from-input"><!-- 往返/多程 / 出行目的 -->
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>往返/多程：</label>
-										<select id="triptype" class="form-control input-sm" v-model="travelinfo.triptype">
-											<option value="1">往返</option>
-											<option value="2">多程</option>
-										</select>
-										<!-- <i class="bulb"></i> -->
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>出行目的：</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="travelinfo.trippurpose"/>
-										<!-- <i class="bulb"></i> -->
-									</div>
-								</div>
-							</div><!-- end 往返/多程 / 出行目的 -->
-								<div id="wangfan" class="none">
-									<div class="row body-from-input"><!-- 出发日期/出发城市/抵达城市/航班号 -->
-										<div class="col-sm-3">
-											<div class="form-group">
-												<label><span>*</span>出发日期：</label>
-												<input id="goDate" name="" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="travelinfo.goDate"/>
-											</div>
-										</div>
-										<div class="col-sm-3">
-											<div class="form-group">
-												<label><span>*</span>出发城市：</label>
-												<select id="goDepartureCity" class="form-control select2 select2City" multiple="multiple" v-model="travelinfo.goDepartureCity">
-													<c:if test="${!empty obj.goleavecity.id}">
-														<option value="${obj.goleavecity.id}" selected="selected">${obj.goleavecity.city}</option>
-													</c:if>
-												</select>
-											</div>
-										</div>
-										<div class="col-sm-3">
-											<div class="form-group">
-												<label><span>*</span>抵达城市：</label>
-												<select id="goArrivedCity" class="form-control input-sm select2City" multiple="multiple" v-model="travelinfo.goArrivedCity">
-													<c:if test="${!empty obj.goarrivecity.id}">
-														<option value="${obj.goarrivecity.id}" selected="selected">${obj.goarrivecity.city}</option>
-													</c:if>
-												</select>
-												<!-- <i class="bulb"></i> -->
-											</div>
-										</div>
-										<div class="col-sm-3">
-											<div class="form-group">
-												<label><span>*</span>航班号：</label>
-												<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.goFlightNum">
-													<c:if test="${!empty obj.goflightnum.id }">
-														<option value="${obj.goflightnum.id }" selected="selected">${obj.goflightnum.flightnum }</option>
-													</c:if>
-												</select>
-												<!-- <i class="bulb"></i> -->
-											</div>
-										</div>
-									</div><!-- end 出发日期/出发城市/抵达城市/航班号 -->
-									
-									<div class="row body-from-input"><!-- 返回日期/出发城市/返回城市/航班号 -->
-										<div class="col-sm-3">
-											<div class="form-group">
-												<label><span>*</span>返回日期：</label>
-												<input id="returnDate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="travelinfo.returnDate"/>
-											</div>
-										</div>
-										<div class="col-sm-3">
-											<div class="form-group">
-												<label><span>*</span>出发城市：</label>
-												<select id="returnDepartureCity" class="form-control select2 select2City" multiple="multiple" v-model="travelinfo.returnDepartureCity">
-													<c:if test="${!empty obj.backleavecity.id}">
-														<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
-													</c:if>
-												</select>
-											</div>
-										</div>
-										<div class="col-sm-3">
-											<div class="form-group">
-												<label><span>*</span>返回城市：</label>
-												<select id="returnArrivedCity" class="form-control input-sm select2City" multiple="multiple" v-model="travelinfo.returnArrivedCity">
-													<c:if test="${!empty obj.backarrivecity.id}">
-														<option value="${obj.backarrivecity.id}" selected="selected">${obj.backarrivecity.city}</option>
-													</c:if>
-												</select>
-												<!-- <i class="bulb"></i> -->
-											</div>
-										</div>
-										<div class="col-sm-3">
-											<div class="form-group">
-												<label><span>*</span>航班号：</label>
-												<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.returnFlightNum">
-													<c:if test="${!empty obj.returnflightnum.id }">
-														<option value="${obj.returnflightnum.id }" selected="selected">${obj.returnflightnum.flightnum }</option>
-													</c:if>
-												</select>
-												<!-- <i class="bulb"></i> -->
-											</div>
-										</div>
-									</div><!-- end 返回日期/出发城市/返回城市/航班号 -->
-								</div>
-								<!-- 多程 -->
-								<div id="duocheng" class="none">
-									<c:choose>
-										<c:when test="${fn:length(obj.multitrip)>0}">
-											<c:forEach items="${obj.multitrip }" var="mutil" varStatus="status">
-											<div class="row body-from-input duochengdiv"><!-- 返回日期/出发城市/返回城市/航班号 -->
-												<div class="col-sm-3">
-													<div class="form-group">
-														<label><span>*</span>出发日期：</label>
-														<input name="departuredate" type="text" class="form-control input-sm" onfocus="WdatePicker()" value="<fmt:formatDate value="${mutil.departureDate}" pattern="yyyy-MM-dd" />"/>
-													</div>
-												</div>
-												<div class="col-sm-3">
-													<div class="form-group">
-														<label><span>*</span>出发城市：</label>
-														<select name="departurecity" class="form-control select2 duochengselectcity" multiple="multiple" v-model="travelinfo.returnDepartureCity">
-															<%-- <c:if test="${!empty obj.backleavecity.id}">
-																<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
-															</c:if> --%>
-															<c:forEach items="${obj.citys }" var="city">
-																<c:if test="${city.id eq mutil.departureCity }">
-																	<option selected="selected" value="${city.id }">${city.city }</option>
-																</c:if>
-															</c:forEach>
-														</select>
-													</div>
-												</div>
-												<div class="col-sm-3"> 
-													<div class="form-group">
-														<label><span>*</span>抵达城市：</label>
-														<select name="arrivedcity" class="form-control input-sm duochengselectcity" multiple="multiple" v-model="travelinfo.returnArrivedCity">
-															<c:forEach items="${obj.citys }" var="city">
-																<c:if test="${city.id eq mutil.arrivedCity }">
-																	<option selected="selected" value="${city.id }">${city.city }</option>
-																</c:if>
-															</c:forEach>
-														</select>
-														<!-- <i class="bulb"></i> -->
-													</div>
-												</div>
-												<div class="col-sm-3">
-													<div class="form-group">
-														<label><span>*</span>航班号：</label>
-														<select name="flightnum" class="form-control input-sm" multiple="multiple" v-model="travelinfo.returnFlightNum">
-															<c:forEach items="${obj.flights }" var="flight">
-																<c:if test="${flight.id eq  mutil.flightNum}">
-																	<option selected="selected" value="${flight.id }">${flight.flightnum }</option>
-																</c:if>
-															</c:forEach>
-														</select>
-														<!-- <i class="bulb"></i> -->
-													</div>
-												</div>
-												<c:choose>
-													<c:when test="${status.index eq 0 }">
-														<a href="javascript:;" class="glyphicon glyphicon-plus addIcon"></a>
-													</c:when>
-													<c:otherwise>
-														<a href="javascript:;" class="glyphicon glyphicon-minus removeIcon"></a>
-													</c:otherwise>
-												</c:choose>
-											</div>
-											</c:forEach>
-										</c:when>
-										<c:otherwise>
-											<div class="row body-from-input duochengdiv"><!-- 返回日期/出发城市/返回城市/航班号 -->
-												<div class="col-sm-3">
-													<div class="form-group">
-														<label><span>*</span>出发日期：</label>
-														<input name="departuredate" type="text" class="form-control input-sm" onfocus="WdatePicker()"/>
-													</div>
-												</div>
-												<div class="col-sm-3">
-													<div class="form-group">
-														<label><span>*</span>出发城市：</label>
-														<select name="departurecity" class="form-control select2 duochengselectcity" multiple="multiple" v-model="travelinfo.returnDepartureCity">
-															<%-- <c:if test="${!empty obj.backleavecity.id}">
-																<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
-															</c:if> --%>
-														</select>
-													</div>
-												</div>
-												<div class="col-sm-3">
-													<div class="form-group">
-														<label><span>*</span>抵达城市：</label>
-														<select name="arrivedcity" class="form-control input-sm duochengselectcity" multiple="multiple" v-model="travelinfo.returnArrivedCity">
-															<%-- <c:if test="${!empty obj.backarrivecity.id}">
-																<option value="${obj.backarrivecity.id}" selected="selected">${obj.backarrivecity.city}</option>
-															</c:if> --%>
-														</select>
-														<!-- <i class="bulb"></i> -->
-													</div>
-												</div>
-												<div class="col-sm-3">
-													<div class="form-group">
-														<label><span>*</span>航班号：</label>
-														<select name="flightnum" class="form-control input-sm" multiple="multiple" v-model="travelinfo.returnFlightNum">
-															<%-- <c:if test="${!empty obj.returnflightnum.id }">
-																<option value="${obj.returnflightnum.id }" selected="selected">${obj.returnflightnum.flightnum }</option>
-															</c:if> --%>
-														</select>
-														<!-- <i class="bulb"></i> -->
-													</div>
-												</div>
-												<a href="javascript:;" class="glyphicon glyphicon-plus addIcon"></a>
-											</div>
-										</c:otherwise>
-									</c:choose>
-								</div>
-							
-							<div class="row body-from-input"><!-- 生成行程安排 -->
-								<div class="col-sm-12">
-									<div class="form-group">
-										<button type="button" class="btn btn-primary btn-sm schedulingBtn">生成行程安排</button>
-										<table id="schedulingTable" class="table table-hover" style="width:100%;">
-											<thead>
-												<tr>
-													<th><span>天数<span></th>
-													<th><span>日期<span></th>
-													<th><span>城市<span></th>
-													<th><span>景区<span></th>
-													<th><span>酒店<span></th>
-													<th><span>操作<span></th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr v-for="plan in travelplan">
-													<td>第{{plan.day}}天</td>
-													<td>{{plan.outdate}}</td>
-													<td>{{plan.cityname}}</td>
-													<td>{{plan.scenic}}</td>
-													<td>{{plan.hotelname}}</td>
-													<td>
-														<i class="editHui" v-on:click="schedulingEdit(plan.id)"></i>
-														<i class="resetHui" v-on:click="resetPlan(plan.id)"></i>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div><!-- end 生成行程安排 -->
-						</div>
-					</div>
-					<!-- end 出行信息 -->
 				</section>
 			</div>
 			<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
@@ -531,8 +278,6 @@
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
 			var orderid = '${obj.orderid}';
-			var triptype = '${obj.travelinfo.tripType}';
-			var multitripjson = '${obj.multitripjson}';
 		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -548,8 +293,7 @@
 		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 		<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
 		<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
-		<script src="${base}/admin/visaJapan/visaDetail.js"></script><!-- 本页面js文件 -->
-		<script src="${base}/admin/visaJapan/visaDetailSelect2.js"></script><!-- 本页面js文件 -->
+		<script src="${base}/admin/receptionJP/receptionDetail.js"></script><!-- 本页面js文件 -->
 		<script type="text/javascript">
 			var threecounty = '${obj.jporderinfo.visaCounty}';
 			if(threecounty){
@@ -577,15 +321,6 @@
 			function successCallBack(status){
 				if(status == 1){
 					layer.msg('修改成功');
-					$.ajax({ 
-				    	url: BASE_PATH + '/admin/visaJapan/getTrvalPlanData.html',
-				    	dataType:"json",
-				    	data:{orderid:orderid},
-				    	type:'post',
-				    	success: function(data){
-				    		orderobj.travelplan = data;
-				      	}
-				    }); 
 				}else if(status == 2){
 					layer.msg('保存成功');
 				}

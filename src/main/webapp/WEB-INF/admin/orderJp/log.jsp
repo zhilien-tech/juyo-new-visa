@@ -30,10 +30,10 @@
 							</tr>
 						</thead>
 						<tbody >
-							<tr >
-								<td ><input style="border: 0px;outline:none;" v-model="orderinfo.createTime"/></td>
-								<td ><input style="border: 0px;outline:none;" value="下单"/></td>
-								<td ><input style="border: 0px;outline:none;" v-model="userName"/></td>
+							<tr v-for="data in loginfo">
+								<td ><input style="border: 0px;outline:none;align:center;" />{{data.createtime}}</td>
+								<td ><input style="border: 0px;outline:none;align:center;" />{{data.status}}</td>
+								<td ><input style="border: 0px;outline:none;align:center;" />{{data.name}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -59,8 +59,7 @@
 		new Vue({
 			el: '#datatableId',
 			data: {
-				orderinfo:"",
-				userName:""
+				loginfo:""
 				},
 			created:function(){
 	            _self=this;
@@ -71,9 +70,8 @@
 	            	dataType:"json",
 	            	type:'post',
 	            	success: function(data){
-	            		_self.orderinfo = data.order;
-	            		_self.userName = data.userName;
-	            		console.log(JSON.stringify(_self.orderinfo));
+	            		_self.loginfo = data.logs;
+	            		console.log(JSON.stringify(_self.loginfo));
 	              	}
 	            });
 	        }

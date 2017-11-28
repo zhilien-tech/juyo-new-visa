@@ -95,19 +95,19 @@ new Vue({
     		    content:'/admin/orderJp/passportInfo.html?id='+applyid
     	    });
     	},
-    	visaInfoFun:function(applyid){
+    	visaInfoFun:function(applyid,orderid){
     		layer.open({
-    		    type: 2,
-    		    title: false,
-    		    closeBtn:false,
-    		    fix: false,
-    		    maxmin: false,
-    		    shadeClose: false,
-    		    scrollbar: false,
-    		    area: ['900px', '550px'],
-    		    content: '/admin/firstTrialJp/visaInfo.html'
-    	    });
-    	},
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid
+			});
+		},
     	qualifiedFun:function(applyid){
     		layer.confirm('您确认合格吗？', {
 				   btn: ['是','否'], //按钮

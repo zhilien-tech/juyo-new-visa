@@ -102,6 +102,34 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 下单保存
+	 */
+	@At
+	@POST
+	public Object saveAddOrderinfo(@Param("..") OrderEditDataForm orderInfo, final HttpSession session) {
+		return saleViewService.saveAddOrderinfo(orderInfo, session);
+	}
+
+	/**
+	 * 跳转到'修改操作'的录入数据页面,实际就是[按照主键查询单个实体]
+	 */
+	@At
+	@POST
+	public Object getOrder(@Param("id") Integer orderid) {
+		return saleViewService.fetchOrder(orderid);
+	}
+
+	/**
+	 * 保存修改
+	 */
+	@At
+	@POST
+	public Object order(@Param("..") OrderEditDataForm orderInfo, @Param("customerinfo") String customerInfo,
+			final HttpSession session) {
+		return saleViewService.saveOrder(orderInfo, customerInfo, session);
+	}
+
+	/**
 	 * 添加申请人页面
 	 */
 	@At
@@ -161,34 +189,6 @@ public class OrderJpModule {
 	}
 
 	/**
-	 * 保存修改
-	 */
-	@At
-	@POST
-	public Object order(@Param("..") OrderEditDataForm orderInfo, @Param("customerinfo") String customerInfo,
-			final HttpSession session) {
-		return saleViewService.saveOrder(orderInfo, customerInfo, session);
-	}
-
-	/**
-	 * 下单保存
-	 */
-	@At
-	@POST
-	public Object saveAddOrderinfo(@Param("..") OrderEditDataForm orderInfo, final HttpSession session) {
-		return saleViewService.saveAddOrderinfo(orderInfo, session);
-	}
-
-	/**
-	 * 跳转到'修改操作'的录入数据页面,实际就是[按照主键查询单个实体]
-	 */
-	@At
-	@POST
-	public Object getOrder(@Param("id") Integer orderid) {
-		return saleViewService.fetchOrder(orderid);
-	}
-
-	/**
 	 * 修改申请人信息后获取新的申请人列表
 	 */
 	@At
@@ -231,8 +231,8 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object saveEditVisa(@Param("..") VisaEditDataForm visaForm) {
-		return saleViewService.saveEditVisa(visaForm);
+	public Object saveEditVisa(@Param("..") VisaEditDataForm visaForm, HttpSession session) {
+		return saleViewService.saveEditVisa(visaForm, session);
 	}
 
 	/**

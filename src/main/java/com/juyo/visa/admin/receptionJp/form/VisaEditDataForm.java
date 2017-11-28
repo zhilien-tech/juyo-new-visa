@@ -1,20 +1,25 @@
-package com.juyo.visa.admin.firstTrialJp.from;
+/**
+ * VisaEditDataForm.java
+ * com.juyo.visa.admin.visajp.form
+ * Copyright (c) 2017, 北京科技有限公司版权所有.
+*/
+
+package com.juyo.visa.admin.receptionJp.form;
 
 import java.util.Date;
-import java.util.List;
 
 import lombok.Data;
 
-import com.juyo.visa.entities.TOrderBackmailEntity;
-
 /**
- *初审编辑信息保存
+ * TODO(这里用一句话描述这个类的作用)
+ * <p>
+ * TODO(这里描述这个类补充说明 – 可选)
  *
- * @author   彭辉
- * @Date	 2017年11月17日 	 
+ * @author   刘旭利
+ * @Date	 2017年11月1日 	 
  */
 @Data
-public class FirstTrialJpEditDataForm {
+public class VisaEditDataForm {
 
 	private Integer id;
 
@@ -24,7 +29,7 @@ public class FirstTrialJpEditDataForm {
 
 	private Integer comid;
 
-	//private Integer status;
+	private Integer status;
 
 	private Integer number;
 
@@ -76,6 +81,5 @@ public class FirstTrialJpEditDataForm {
 
 	private String threecounty;
 
-	//回邮信息
-	private List<TOrderBackmailEntity> backMailInfos;
+	private String remark;
 }
