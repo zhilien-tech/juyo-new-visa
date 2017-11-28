@@ -288,6 +288,7 @@
 								<div class="info-body-from backmail-div">
 									<div class="row body-from-input">
 										<!-- 资料来源/快递号/团队名称/回邮方式 -->
+										<input id="id" type="hidden" value="${backmail.id }">
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>资料来源：</label> 

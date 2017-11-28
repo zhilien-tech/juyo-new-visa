@@ -474,10 +474,12 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	/**
 	 * 保存快递信息，并发送邮件
 	 */
-	public Object saveExpressInfo(Integer orderid, Integer expresstype, Integer receiveAddressId, HttpSession session) {
+	public Object saveExpressInfo(Integer orderjpid, Integer expresstype, Integer receiveAddressId, HttpSession session) {
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
+		TOrderJpEntity oj = dbDao.fetch(TOrderJpEntity.class, Long.valueOf(orderjpid));
+		Integer orderid = oj.getOrderId();
 		TOrderRecipientEntity orderReceive = dbDao.fetch(TOrderRecipientEntity.class,
 				Cnd.where("orderId", "=", orderid));
 		if (!Util.isEmpty(orderReceive)) {
@@ -529,9 +531,11 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	public Object saveJpTrialDetailInfo(FirstTrialJpEditDataForm editDataForm, HttpSession session) {
 		//获取登录用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer orderid = editDataForm.getOrderid();
+		Integer orderjpid = editDataForm.getOrderid();
 		//订单信息
-		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+		TOrderJpEntity oj = dbDao.fetch(TOrderJpEntity.class, Long.valueOf(orderjpid));
+		Integer orderId = oj.getOrderId();
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, Long.valueOf(orderId));
 		order.setNumber(editDataForm.getNumber());
 		order.setCityId(editDataForm.getCityid());
 		order.setUrgentType(editDataForm.getUrgenttype());
@@ -548,7 +552,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		dbDao.update(order);
 
 		//日本订单信息
-		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
+		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, orderId.longValue());
 		jporder.setVisaType(editDataForm.getVisatype());
 		jporder.setVisaCounty(editDataForm.getVisacounty());
 		jporder.setIsVisit(editDataForm.getIsvisit());
@@ -557,7 +561,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		//回邮信息
 		List<TOrderBackmailEntity> backMailInfos = editDataForm.getBackMailInfos();
-		String editBackMailInfos = editBackMailInfos(backMailInfos, orderid);
+		String editBackMailInfos = editBackMailInfos(backMailInfos, orderId);
 
 		return editBackMailInfos;
 	}
