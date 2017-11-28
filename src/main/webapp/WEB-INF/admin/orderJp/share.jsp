@@ -184,7 +184,6 @@
 								success: function(data){
 									layer.msg('分享成功');
 									layer.closeAll('loading');
-									layer.close(layerIndex);
 									closeWindow();
 								}
 							});
@@ -223,9 +222,6 @@
 								success: function(data){
 									layer.msg('分享成功');
 									layer.closeAll('loading');
-									if(data.status == 200){
-										layer.close(layerIndex);
-									}
 									closeWindow();
 								}
 							});

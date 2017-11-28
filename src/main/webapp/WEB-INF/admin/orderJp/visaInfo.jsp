@@ -49,12 +49,25 @@
 								<div class="col-sm-4 main">
 									<div class="form-group">
 										<label><span>*</span>备注：</label>
+										
+										</br>
+											<input name="relationRemark" id="relationRemark" style="height:35px;width:100px;position:absolute"    value="${obj.visaInfo.relationRemark }">  
+												<span style="margin-left:100px;width:200px;overflow:hidden;" >  
+												  <select name="bh" id="bh" style="height:35px;width:120px;margin-left:-100px"   
+												 onchange="document.getElementById('relationRemark').value=this.options[this.selectedIndex].text">    
+												<c:forEach var="map" items="${obj.applicantRemark}">
+												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
+											</c:forEach>
+												  </select>  
+												  </span> 
+										
+										
 										<!-- <input id="relationRem" name="relationRem" type="text" class="form-control input-sm" placeholder=" " /> -->
-										<select id="relationRemark" name="relationRemark" class="form-control input-sm selectHeight">
+										<%-- <select id="relationRemark" name="relationRemark" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.applicantRemark}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
 											</c:forEach>
-										</select>
+										</select> --%>
 									</div>
 								</div>
 								
@@ -73,12 +86,25 @@
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label><span>*</span>与主申请人关系：</label>
+											
+											</br>
+											<input name="mainRelation" id="mainRelation" style="height:35px;width:100px;position:absolute"    value="${obj.visaInfo.mainRelation }">  
+												<span style="margin-left:100px;width:200px;overflow:hidden;" >  
+												  <select name="bh" id="bh" style="height:35px;width:120px;margin-left:-100px"   
+												 onchange="document.getElementById('mainRelation').value=this.options[this.selectedIndex].text">    
+												 <c:forEach var="map" items="${obj.applicantRelation}">
+												<option value="${map.key}" ${map.key==obj.visaInfo.mainRelation?'selected':''}>${map.value}</option>
+											</c:forEach>
+												  </select>  
+												  </span>  
+											
+											
 											<!-- <input id="" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
-											<select id="mainRelation" name="mainRelation" class="form-control input-sm selectHeight">
+											<%-- <select id="mainRelation" name="mainRelation" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.applicantRelation}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.mainRelation?'selected':''}>${map.value}</option>
 											</c:forEach>
-										</select>
+										</select> --%>
 										</div>
 									</div>
 								</div>
@@ -125,13 +151,13 @@
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
-										<label><span>*</span>单位名称：</label>
+										<label id="schoolName"><span>*</span>单位名称：</label>
 										<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.name }"/>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
-										<label><span>*</span>单位电话：</label>
+										<label id="schoolTelephone"><span>*</span>单位电话：</label>
 										<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.telephone }"/>
 									</div>
 								</div>
@@ -139,7 +165,7 @@
 							<div class="row main"><!-- 单位地址 -->
 								<div class="col-sm-8">
 									<div class="form-group">
-										<label><span>*</span>单位地址：</label>
+										<label id="schoolAddress"><span>*</span>单位地址：</label>
 										<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.address }"/>
 									</div>
 								</div>
@@ -165,10 +191,10 @@
 					<div class="info" style="padding-bottom: 15px;">
 						<div class="info-head">财产信息 </div>
 						<div class="info-body-from finance-btn main">
-							<input id="" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState" />
-							<input id="" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
-							<input id="" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
-							<input id="" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
+							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState" />
+							<input id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
+							<input id="housePropertyType" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
+							<input id="financialType" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
 						</div>
 						<div class="info-body-from  clone-module cf deposit">
 							<div class="row body-from-input"><!-- 银行存款 -->
@@ -232,7 +258,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="平米" />
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="万" />
 									</div>
 								</div>
 							</div><!-- end 房产 -->
@@ -272,6 +298,25 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
+			
+			var career = $("#careerStatus").val();
+			if(career == 4){
+				$("#schoolName").html("<span>*</span>学校名称：");
+				$("#schoolTelephone").html("<span>*</span>学校电话：");
+				$("#schoolAddress").html("<span>*</span>学校地址：");
+			}
+			$("#careerStatus").change(function(){
+				var career = $(this).val();
+				if(career == 4){
+					$("#schoolName").html("<span>*</span>学校名称：");
+					$("#schoolTelephone").html("<span>*</span>学校电话：");
+					$("#schoolAddress").html("<span>*</span>学校地址：");
+				}else{
+					$("#schoolName").html("<span>*</span>单位名称：");
+					$("#schoolTelephone").html("<span>*</span>单位电话：");
+					$("#schoolAddress").html("<span>*</span>单位地址：");
+				}
+			});
 			
 			//主申请人 or 副申请人
 			var applicVal = $("#applicant").val();
@@ -326,38 +371,66 @@
 					if($(this).hasClass("btnState-true")){
 						$(".deposit").css("display","none");
 						$(this).removeClass("btnState-true");
+						$("#deposit").val("");
 					}else{
 						$(".deposit").css("display","block");
 						$(this).addClass("btnState-true");
+						$("#deposit").val("银行存款");
 					}
 				}else if(financeBtnInfo == "车产"){
 					if($(this).hasClass("btnState-true")){
 						$(".vehicle").css("display","none");
 						$(this).removeClass("btnState-true");
+						$("#vehicle").val("");
 					}else{
 						$(".vehicle").css("display","block");
 						$(this).addClass("btnState-true");
+						$("#vehicle").val("车产");
 					}
 				}else if(financeBtnInfo == "房产"){
 					if($(this).hasClass("btnState-true")){
 						$(".houseProperty").css("display","none");
 						$(this).removeClass("btnState-true");
+						$("#houseProperty").val("");
 					}else{
 						$(".houseProperty").css("display","block");
 						$(this).addClass("btnState-true");
+						$("#houseProperty").val("房产");
 					}
 				}else if(financeBtnInfo == "理财"){
 					if($(this).hasClass("btnState-true")){
 						$(".financial").css("display","none");
 						$(this).removeClass("btnState-true");
+						$("#financial").val("");
 					}else{
 						$(".financial").css("display","block");
 						$(this).addClass("btnState-true");
+						$("#financial").val("理财");
 					}
 				}
 			});
 			$(".remove-btn").click(function(){
-				$(this).parent().css("display","none");
+				//$(this).parent().css("display","none");
+				if($(this).parent().is(".deposit")){
+					$(".deposit").css("display","none");
+					$("#depositType").removeClass("btnState-true");
+					$("#deposit").val("");
+				}
+				if($(this).parent().is(".vehicle")){
+					$(".vehicle").css("display","none");
+					$("#vehicleType").removeClass("btnState-true");
+					$("#vehicle").val("");
+				}
+				if($(this).parent().is(".houseProperty")){
+					$(".houseProperty").css("display","none");
+					$("#housePropertyType").removeClass("btnState-true");
+					$("#houseProperty").val("");
+				}
+				if($(this).parent().is(".financial")){
+					$(".financial").css("display","none");
+					$("#financialType").removeClass("btnState-true");
+					$("#financial").val("");
+				}
 			});
 			
 			
@@ -372,6 +445,10 @@
 					$(".vice").show();
 					$(".main").hide();
 					$("#mainApply").text("副申请人");
+					$(".deposit").css("display","none");
+					$(".vehicle").css("display","none");
+					$(".houseProperty").css("display","none");
+					$(".financial").css("display","none");
 				}
 			});
 		});

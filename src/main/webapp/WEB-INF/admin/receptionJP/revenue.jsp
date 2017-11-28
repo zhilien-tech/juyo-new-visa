@@ -158,7 +158,7 @@
 	            _self=this;
 	            var orderid = '${obj.orderid}';
 	            $.ajax({ 
-	            	url: '${base}/admin/receptionJP/visaRevenue.html',
+	            	url: '${base}/admin/receptionJP/receptionRevenue.html',
 	            	data:{orderid:orderid},
 	            	dataType:"json",
 	            	type:'post',

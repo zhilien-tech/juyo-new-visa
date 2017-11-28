@@ -75,17 +75,17 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>姓/拼音：</label>
-									<input id="firstName" name="firstName" type="text" class="form-control input-sm req" placeholder=" " />
+									<input id="firstName" name="firstName" type="text" class="form-control input-sm req associatepinyin" placeholder=" " />
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div><!-- end 姓/拼音 -->
 						<div class="row"><!-- 名/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0 ">
 								<div class="form-group">
 									<label><span>*</span>名/拼音：</label>
-									<input id="lastName" name="lastName" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="lastName" name="lastName" type="text" class="form-control input-sm associatepinyin" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -213,6 +213,8 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	
 	<script type="text/javascript">
 		var base = "${base}";

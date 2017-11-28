@@ -450,8 +450,8 @@
 
 				<!-- 快递信息 -->
 				<div class="info expressInfo none" id="expressInfo" name="backmailInfo">
-					<p class="info-head">快递信息</p>
-					<div class="info-body-from">
+					<p class="info-head">回邮信息</p>
+					<div class="info-body-from backmail-div">
 						<div class="row body-from-input">
 							<!-- 资料来源/回邮方式/回邮地址 -->
 							<div class="col-sm-3">
@@ -488,15 +488,15 @@
 							<!-- 联系人/电话/发票项目内容/发票抬头 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>联系人：</label> <input id="linkman"
-										name="linkman" type="text" class="form-control input-sm"
+									<label><span>*</span>联系人：</label> <input id="expressLinkman"
+										name="expressLinkman" type="text" class="form-control input-sm"
 										placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>电话：</label> <input id="telephone"
-										name="telephone" type="text" class="form-control input-sm"
+									<label><span>*</span>电话：</label> <input id="expressTelephone"
+										name="expressTelephone" type="text" class="form-control input-sm"
 										placeholder=" " />
 								</div>
 							</div>
@@ -521,7 +521,7 @@
 							<!-- 团队名称/快递号/备注 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>团队名称：</label> <input id="" name=""
+									<label><span>*</span>团队名称：</label> <input id="teamName" name="teamName"
 										type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
@@ -532,6 +532,12 @@
 										placeholder=" " />
 								</div>
 							</div>
+							<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>税号：</label> 
+											<input name="taxNum" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>备注：</label> <input id="remark"
