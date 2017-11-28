@@ -11,6 +11,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.DataTablesParamForm;
 
@@ -87,11 +88,16 @@ public class ReceptionJpForm extends DataTablesParamForm {
 		if (!Util.isEmpty(backTripDate)) {
 			cnd.and("tr.goTripDate", "<=", backTripDate);
 		}*/
+		cnd.and("tr.status", ">=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
+		cnd.and("tr.status", "<=", JPOrderStatusEnum.TRANSFER_VISA.intKey());
 		if (userid.equals(adminId)) {
 			//公司管理员
 		} else {
 			//普通的操作员
 		}
+		cnd.and("tr.comId", "=", companyid);
+		cnd.orderBy("tr.createtime", "DESC");
+		cnd.orderBy("tr.updatetime", "DESC");
 		return cnd;
 	}
 }
