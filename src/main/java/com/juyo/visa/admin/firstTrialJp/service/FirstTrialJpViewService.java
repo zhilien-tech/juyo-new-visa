@@ -136,6 +136,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		}
 		result.put("trialJapanData", list);
+
+		//检索下拉
+		Map<String, String> map = EnumUtil.enum2(JPOrderStatusEnum.class);
+
 		return result;
 	}
 
