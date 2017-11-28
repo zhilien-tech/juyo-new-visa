@@ -88,7 +88,7 @@
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
 	//异步加载的URL地址
-    var url="${base}/admin/ReceptionJp/listData.html";
+    var url="${base}/admin/receptionJP/listData.html";
     //vue表格数据对象
     var _self;
 	new Vue({
@@ -108,8 +108,8 @@
         },
         methods:{
         	visaDetail:function(orderid){
-        		//跳转到签证详情页面
-        		window.open('${base}/admin/visaJapan/visaDetail.html?orderid='+orderid);
+        		//跳转到详情页面
+        		window.open('${base}/admin/receptionJP/receptionDetail.html?orderid='+orderid);
         		//console.log(message);
         		//alert(JSON.stringify(event.target));
         	},
@@ -123,15 +123,11 @@
         		    shadeClose: false,
         		    scrollbar: false,
         		    area: ['900px', '550px'],
-        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
+        		    content: '${base}/admin/receptionJP/revenue.html?orderid='+orderid
         		  });
         	}
         }
 	});
-	//跳转 签证详情页
-	function edit(orderid){
-		window.location.href = '${base}/admin/visaJapan/visaDetail.html?orderid='+orderid;
-	}
 	
 	function search(){
 		var status = $('#status').val();

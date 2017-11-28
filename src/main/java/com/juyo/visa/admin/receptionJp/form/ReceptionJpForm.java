@@ -9,7 +9,9 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
+import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
@@ -72,8 +74,24 @@ public class ReceptionJpForm extends DataTablesParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
-		//TODO 添加自定义查询条件（可选）
-		cnd.orderBy("id", "DESC");
+		if (!Util.isEmpty(searchStr)) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.orderNum", "like", "%" + searchStr + "%").or("taj.mail", "like", "%" + searchStr + "%")
+					.or("taj.phone", "like", "%" + searchStr + "%")
+					.or("taj.applicantName", "like", "%" + searchStr + "%");
+			cnd.and(exp);
+		}
+		/*if (!Util.isEmpty(goTripDate)) {
+			cnd.and("tr.goTripDate", ">=", goTripDate);
+		}
+		if (!Util.isEmpty(backTripDate)) {
+			cnd.and("tr.goTripDate", "<=", backTripDate);
+		}*/
+		if (userid.equals(adminId)) {
+			//公司管理员
+		} else {
+			//普通的操作员
+		}
 		return cnd;
 	}
 }
