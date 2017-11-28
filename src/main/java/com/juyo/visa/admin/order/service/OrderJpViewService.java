@@ -78,7 +78,7 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
-import com.juyo.visa.common.enums.PrepareMaterialsEnum;
+import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
@@ -126,23 +126,23 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	@Inject
 	private MailService mailService;
 
-	private static final int PASSPORT = PrepareMaterialsEnum.PASSPORT.intKey();
-	private static final int PHOTO = PrepareMaterialsEnum.PHOTO.intKey();
-	private static final int IDCARD_COPIES = PrepareMaterialsEnum.IDCARD_COPIES.intKey();
-	private static final int MARRIAGE_CERTIFICATE = PrepareMaterialsEnum.MARRIAGE_CERTIFICATE.intKey();
-	private static final int ACCOUNT_BOOK = PrepareMaterialsEnum.ACCOUNT_BOOK.intKey();
-	private static final int EMPLOYMENT_PROOF = PrepareMaterialsEnum.EMPLOYMENT_PROOF.intKey();
-	private static final int BUSINESS_LICENSE = PrepareMaterialsEnum.BUSINESS_LICENSE.intKey();
-	private static final int BANK_FLOW = PrepareMaterialsEnum.BANK_FLOW.intKey();
-	private static final int DEPOSIT_CERTIFICATE = PrepareMaterialsEnum.DEPOSIT_CERTIFICATE.intKey();
-	private static final int HOUSE_PROPERTY = PrepareMaterialsEnum.HOUSE_PROPERTY.intKey();
-	private static final int CAR_PROPERTY = PrepareMaterialsEnum.CAR_PROPERTY.intKey();
-	private static final int BIRTH_CERTIFICATE = PrepareMaterialsEnum.BIRTH_CERTIFICATE.intKey();
-	private static final int SCHOOL_CERTIFICATE = PrepareMaterialsEnum.SCHOOL_CERTIFICATE.intKey();
-	private static final int STUDENT_IDCARD = PrepareMaterialsEnum.STUDENT_IDCARD.intKey();
-	private static final int RETIREMENT_CERTIFICATE = PrepareMaterialsEnum.RETIREMENT_CERTIFICATE.intKey();
-	private static final int RELATIONSHIP_CERTIFICATE = PrepareMaterialsEnum.RELATIONSHIP_CERTIFICATE.intKey();
-	private static final int ENTRUST_CERTIFICATE = PrepareMaterialsEnum.ENTRUST_CERTIFICATE.intKey();
+	private static final int PASSPORT = PrepareMaterialsEnum_JP.PASSPORT.intKey();
+	private static final int PHOTO = PrepareMaterialsEnum_JP.PHOTO.intKey();
+	private static final int IDCARD_COPIES = PrepareMaterialsEnum_JP.IDCARD_COPIES.intKey();
+	private static final int MARRIAGE_CERTIFICATE = PrepareMaterialsEnum_JP.MARRIAGE_CERTIFICATE.intKey();
+	private static final int ACCOUNT_BOOK = PrepareMaterialsEnum_JP.ACCOUNT_BOOK.intKey();
+	private static final int EMPLOYMENT_PROOF = PrepareMaterialsEnum_JP.EMPLOYMENT_PROOF.intKey();
+	private static final int BUSINESS_LICENSE = PrepareMaterialsEnum_JP.BUSINESS_LICENSE.intKey();
+	private static final int BANK_FLOW = PrepareMaterialsEnum_JP.BANK_FLOW.intKey();
+	private static final int DEPOSIT_CERTIFICATE = PrepareMaterialsEnum_JP.DEPOSIT_CERTIFICATE.intKey();
+	private static final int HOUSE_PROPERTY = PrepareMaterialsEnum_JP.HOUSE_PROPERTY.intKey();
+	private static final int CAR_PROPERTY = PrepareMaterialsEnum_JP.CAR_PROPERTY.intKey();
+	private static final int BIRTH_CERTIFICATE = PrepareMaterialsEnum_JP.BIRTH_CERTIFICATE.intKey();
+	private static final int SCHOOL_CERTIFICATE = PrepareMaterialsEnum_JP.SCHOOL_CERTIFICATE.intKey();
+	private static final int STUDENT_IDCARD = PrepareMaterialsEnum_JP.STUDENT_IDCARD.intKey();
+	private static final int RETIREMENT_CERTIFICATE = PrepareMaterialsEnum_JP.RETIREMENT_CERTIFICATE.intKey();
+	private static final int RELATIONSHIP_CERTIFICATE = PrepareMaterialsEnum_JP.RELATIONSHIP_CERTIFICATE.intKey();
+	private static final int ENTRUST_CERTIFICATE = PrepareMaterialsEnum_JP.ENTRUST_CERTIFICATE.intKey();
 
 	public Object listData(OrderJpForm queryForm, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();

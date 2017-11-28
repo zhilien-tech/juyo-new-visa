@@ -36,6 +36,7 @@ import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
+import com.juyo.visa.common.enums.FristTrialSearchStatusEnum_JP;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
@@ -46,7 +47,7 @@ import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
-import com.juyo.visa.common.enums.PrepareMaterialsEnum;
+import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
@@ -89,6 +90,18 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	private final static String MUBAN_DOCX_URL = "http://oyu1xyxxk.bkt.clouddn.com/a40f95f1-c87f-401a-be75-25f0d42f9f72.docx";
 	private final static String FILE_NAME = "初审资料填写模板.docx";
 	private final static String SMS_SIGNATURE = "【优悦签】";
+
+	/**
+	 * 打开初审列表页
+	 */
+	public Object toList() {
+
+		//检索下拉
+		Map<String, Object> result = Maps.newHashMap();
+		Map<String, String> searchStatus = EnumUtil.enum2(FristTrialSearchStatusEnum_JP.class);
+		result.put("searchStatus", searchStatus);
+		return result;
+	}
 
 	/**
 	 * 初审列表数据
@@ -136,9 +149,6 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		}
 		result.put("trialJapanData", list);
-
-		//检索下拉
-		Map<String, String> map = EnumUtil.enum2(JPOrderStatusEnum.class);
 
 		return result;
 	}
@@ -487,8 +497,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			dbDao.insert(orderReceiveAdd);
 		}
 
-		//改变订单状态 由初审到前台、签证 TODO
-		int receptionStatus = JPOrderStatusEnum.RECEPTION_ORDER.intKey();
+		//改变订单状态 由初审到发地址
+		int receptionStatus = JPOrderStatusEnum.SEND_ADDRESS.intKey();
 		dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus), Cnd.where("id", "=", orderid));
 
 		//发送短信、邮件
@@ -720,7 +730,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 				String[] split = prepareMaterials.split(",");
 				for (String s : split) {
 					Integer material = Integer.valueOf(s);
-					for (PrepareMaterialsEnum statusEnum : PrepareMaterialsEnum.values()) {
+					for (PrepareMaterialsEnum_JP statusEnum : PrepareMaterialsEnum_JP.values()) {
 						if (!Util.isEmpty(s) && material.equals(statusEnum.intKey())) {
 							dataMaterial += statusEnum.value() + "、";
 						}
