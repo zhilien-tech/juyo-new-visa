@@ -29,11 +29,7 @@ import com.uxuexi.core.web.form.SQLParamForm;
 public class FirstTrialJpListDataForm implements SQLParamForm {
 
 	//状态
-	//private Integer status;
-	//出行时间
-	//private Date goTripDate;
-	//返回时间
-	//private Date backTripDate;
+	private Integer status;
 	//检索框
 	private String searchStr;
 	//页码
@@ -57,6 +53,9 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
+		if (!Util.isEmpty(status)) {
+			cnd.and("CONCAT( CAST( tr.STATUS AS CHAR ), 'төл', taj.applicantStatus )", "like", "%" + status + "%");
+		}
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("tr.orderNum", "like", "%" + searchStr + "%").or("taj.passportNum", "like", "%" + searchStr + "%")
@@ -70,7 +69,8 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 		if (!Util.isEmpty(backTripDate)) {
 			cnd.and("tr.goTripDate", "<=", backTripDate);
 		}*/
-		cnd.and("tr.status", "=", JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
+		cnd.and("tr.status", ">=", JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
+		cnd.and("tr.status", "<=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
 		if (userid.equals(adminId)) {
 			//公司管理员
 		} else {

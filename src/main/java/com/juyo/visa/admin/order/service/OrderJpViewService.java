@@ -78,18 +78,20 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
-import com.juyo.visa.common.enums.PrepareMaterialsEnum;
+import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
 import com.juyo.visa.entities.TApplicantEntity;
+import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCustomerEntity;
+import com.juyo.visa.entities.TOrderBackmailEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderLogsEntity;
@@ -124,23 +126,23 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	@Inject
 	private MailService mailService;
 
-	private static final int PASSPORT = PrepareMaterialsEnum.PASSPORT.intKey();
-	private static final int PHOTO = PrepareMaterialsEnum.PHOTO.intKey();
-	private static final int IDCARD_COPIES = PrepareMaterialsEnum.IDCARD_COPIES.intKey();
-	private static final int MARRIAGE_CERTIFICATE = PrepareMaterialsEnum.MARRIAGE_CERTIFICATE.intKey();
-	private static final int ACCOUNT_BOOK = PrepareMaterialsEnum.ACCOUNT_BOOK.intKey();
-	private static final int EMPLOYMENT_PROOF = PrepareMaterialsEnum.EMPLOYMENT_PROOF.intKey();
-	private static final int BUSINESS_LICENSE = PrepareMaterialsEnum.BUSINESS_LICENSE.intKey();
-	private static final int BANK_FLOW = PrepareMaterialsEnum.BANK_FLOW.intKey();
-	private static final int DEPOSIT_CERTIFICATE = PrepareMaterialsEnum.DEPOSIT_CERTIFICATE.intKey();
-	private static final int HOUSE_PROPERTY = PrepareMaterialsEnum.HOUSE_PROPERTY.intKey();
-	private static final int CAR_PROPERTY = PrepareMaterialsEnum.CAR_PROPERTY.intKey();
-	private static final int BIRTH_CERTIFICATE = PrepareMaterialsEnum.BIRTH_CERTIFICATE.intKey();
-	private static final int SCHOOL_CERTIFICATE = PrepareMaterialsEnum.SCHOOL_CERTIFICATE.intKey();
-	private static final int STUDENT_IDCARD = PrepareMaterialsEnum.STUDENT_IDCARD.intKey();
-	private static final int RETIREMENT_CERTIFICATE = PrepareMaterialsEnum.RETIREMENT_CERTIFICATE.intKey();
-	private static final int RELATIONSHIP_CERTIFICATE = PrepareMaterialsEnum.RELATIONSHIP_CERTIFICATE.intKey();
-	private static final int ENTRUST_CERTIFICATE = PrepareMaterialsEnum.ENTRUST_CERTIFICATE.intKey();
+	private static final int PASSPORT = PrepareMaterialsEnum_JP.PASSPORT.intKey();
+	private static final int PHOTO = PrepareMaterialsEnum_JP.PHOTO.intKey();
+	private static final int IDCARD_COPIES = PrepareMaterialsEnum_JP.IDCARD_COPIES.intKey();
+	private static final int MARRIAGE_CERTIFICATE = PrepareMaterialsEnum_JP.MARRIAGE_CERTIFICATE.intKey();
+	private static final int ACCOUNT_BOOK = PrepareMaterialsEnum_JP.ACCOUNT_BOOK.intKey();
+	private static final int EMPLOYMENT_PROOF = PrepareMaterialsEnum_JP.EMPLOYMENT_PROOF.intKey();
+	private static final int BUSINESS_LICENSE = PrepareMaterialsEnum_JP.BUSINESS_LICENSE.intKey();
+	private static final int BANK_FLOW = PrepareMaterialsEnum_JP.BANK_FLOW.intKey();
+	private static final int DEPOSIT_CERTIFICATE = PrepareMaterialsEnum_JP.DEPOSIT_CERTIFICATE.intKey();
+	private static final int HOUSE_PROPERTY = PrepareMaterialsEnum_JP.HOUSE_PROPERTY.intKey();
+	private static final int CAR_PROPERTY = PrepareMaterialsEnum_JP.CAR_PROPERTY.intKey();
+	private static final int BIRTH_CERTIFICATE = PrepareMaterialsEnum_JP.BIRTH_CERTIFICATE.intKey();
+	private static final int SCHOOL_CERTIFICATE = PrepareMaterialsEnum_JP.SCHOOL_CERTIFICATE.intKey();
+	private static final int STUDENT_IDCARD = PrepareMaterialsEnum_JP.STUDENT_IDCARD.intKey();
+	private static final int RETIREMENT_CERTIFICATE = PrepareMaterialsEnum_JP.RETIREMENT_CERTIFICATE.intKey();
+	private static final int RELATIONSHIP_CERTIFICATE = PrepareMaterialsEnum_JP.RELATIONSHIP_CERTIFICATE.intKey();
+	private static final int ENTRUST_CERTIFICATE = PrepareMaterialsEnum_JP.ENTRUST_CERTIFICATE.intKey();
 
 	public Object listData(OrderJpForm queryForm, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
@@ -636,7 +638,33 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				dbDao.update(applicantOrderJp);
 			}
 		}
+
+		//回邮信息
+		//List<TOrderBackmailEntity> backMailInfos = orderInfo.getBackMailInfos();
+		//String editBackMailInfos = editBackMailInfos(backMailInfos, orderId);
 		return null;
+	}
+
+	public String editBackMailInfos(List<TOrderBackmailEntity> backMailInfos, Integer orderid) {
+
+		List<TOrderBackmailEntity> beforeBackMails = dbDao.query(TOrderBackmailEntity.class,
+				Cnd.where("orderId", "=", orderid), null);
+
+		List<TOrderBackmailEntity> updateBackMails = new ArrayList<TOrderBackmailEntity>();
+
+		for (TOrderBackmailEntity backMailInfo : backMailInfos) {
+			Date nowDate = DateUtil.nowDate();
+			Integer obmId = backMailInfo.getId();
+			if (Util.isEmpty(obmId)) {
+				backMailInfo.setCreateTime(nowDate);
+			}
+			backMailInfo.setOrderId(orderid);
+			backMailInfo.setUpdateTime(nowDate);
+			updateBackMails.add(backMailInfo);
+		}
+		dbDao.updateRelations(beforeBackMails, updateBackMails);
+
+		return "更新回邮信息";
 	}
 
 	public Object fetchOrder(Integer id) {
@@ -845,7 +873,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Record visaInfo = dbDao.fetch(visaInfoSql);
 		//获取申请人
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
-		TApplicantEntity mainApplicant = dbDao.fetch(TApplicantEntity.class, new Long(applicantEntity.getMainId()));
+		if (!Util.isEmpty(applicantEntity.getMainId())) {
+			TApplicantEntity mainApplicant = dbDao.fetch(TApplicantEntity.class, new Long(applicantEntity.getMainId()));
+			if (!Util.isEmpty(mainApplicant)) {
+				result.put("mainApplicant", mainApplicant);
+			}
+		}
 		//获取订单主申请人
 		String sqlStr = sqlManager.get("mainApplicant_byOrderId");
 		Sql applysql = Sqls.create(sqlStr);
@@ -869,7 +902,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TApplicantWorkJpEntity applicantWorkJpEntity = dbDao.fetch(TApplicantWorkJpEntity.class,
 				Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()));
 		result.put("workJp", applicantWorkJpEntity);
-		result.put("mainApplicant", mainApplicant);
+
 		result.put("mainApply", records);
 		result.put("visaInfo", visaInfo);
 		return result;
@@ -933,9 +966,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				if (!Util.isEmpty(visaForm.getSameMainWork())) {
 					applicantOrderJpEntity.setSameMainWork(visaForm.getSameMainWork());
 				}
-				/*if (!Util.isEmpty(visaForm.getMainRelation())) {
+				if (!Util.isEmpty(visaForm.getMainRelation())) {
 					applicantOrderJpEntity.setMainRelation(visaForm.getMainRelation());
-				}*/
+				}
 				if (!Util.isEmpty(visaForm.getRelationRemark())) {
 					applicantOrderJpEntity.setRelationRemark(visaForm.getRelationRemark());
 				}
@@ -948,38 +981,55 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					applicantWorkJpEntity.setAddress(visaForm.getAddress());
 				}
 				if (!Util.isEmpty(visaForm.getCareerStatus())) {
+					Integer applicantJpId = applicantOrderJpEntity.getId();
+					TApplicantFrontPaperworkJpEntity frontPaperworkJpEntity = new TApplicantFrontPaperworkJpEntity();
 					Integer careerStatus = visaForm.getCareerStatus();
-					if (Util.eq(careerStatus, JobStatusEnum.WORKING_STATUS)) {//在职
+					if (Util.eq(careerStatus, JobStatusEnum.WORKING_STATUS.intKey())) {//在职
 						StringBuilder sb = new StringBuilder();
-						sb.append(PASSPORT).append(PHOTO).append(IDCARD_COPIES).append(MARRIAGE_CERTIFICATE)
-								.append(ACCOUNT_BOOK).append(EMPLOYMENT_PROOF).append(BUSINESS_LICENSE)
+						sb.append(PASSPORT).append(",").append(PHOTO).append(",").append(IDCARD_COPIES).append(",")
+								.append(MARRIAGE_CERTIFICATE).append(",").append(ACCOUNT_BOOK).append(",")
+								.append(EMPLOYMENT_PROOF).append(",").append(BUSINESS_LICENSE).append(",")
 								.append(BANK_FLOW);
 						applicantWorkJpEntity.setPrepareMaterials(sb.toString());
+						frontPaperworkJpEntity.setType(JobStatusEnum.WORKING_STATUS.intKey());
+						dbDao.insert(frontPaperworkJpEntity);
 					}
-					if (Util.eq(careerStatus, JobStatusEnum.RETIREMENT_STATUS)) {//退休
+					if (Util.eq(careerStatus, JobStatusEnum.RETIREMENT_STATUS.intKey())) {//退休
 						StringBuilder sb = new StringBuilder();
-						sb.append(PASSPORT).append(PHOTO).append(IDCARD_COPIES).append(MARRIAGE_CERTIFICATE)
-								.append(ACCOUNT_BOOK).append(BANK_FLOW).append(RETIREMENT_CERTIFICATE);
+						sb.append(PASSPORT).append(",").append(PHOTO).append(",").append(IDCARD_COPIES).append(",")
+								.append(MARRIAGE_CERTIFICATE).append(",").append(ACCOUNT_BOOK).append(",")
+								.append(BANK_FLOW).append(",").append(RETIREMENT_CERTIFICATE);
 						applicantWorkJpEntity.setPrepareMaterials(sb.toString());
+						frontPaperworkJpEntity.setType(JobStatusEnum.RETIREMENT_STATUS.intKey());
+						dbDao.insert(frontPaperworkJpEntity);
 					}
-					if (Util.eq(careerStatus, JobStatusEnum.FREELANCE_STATUS)) {//自由职业
+					if (Util.eq(careerStatus, JobStatusEnum.FREELANCE_STATUS.intKey())) {//自由职业
 						StringBuilder sb = new StringBuilder();
-						sb.append(PASSPORT).append(PHOTO).append(IDCARD_COPIES).append(MARRIAGE_CERTIFICATE)
-								.append(ACCOUNT_BOOK).append(BANK_FLOW);
+						sb.append(PASSPORT).append(",").append(PHOTO).append(",").append(IDCARD_COPIES).append(",")
+								.append(MARRIAGE_CERTIFICATE).append(",").append(ACCOUNT_BOOK).append(",")
+								.append(BANK_FLOW);
 						applicantWorkJpEntity.setPrepareMaterials(sb.toString());
+						frontPaperworkJpEntity.setType(JobStatusEnum.FREELANCE_STATUS.intKey());
+						dbDao.insert(frontPaperworkJpEntity);
 					}
-					if (Util.eq(careerStatus, JobStatusEnum.student_status)) {//学生
+					if (Util.eq(careerStatus, JobStatusEnum.student_status.intKey())) {//学生
 						StringBuilder sb = new StringBuilder();
-						sb.append(PASSPORT).append(PHOTO).append(IDCARD_COPIES).append(ACCOUNT_BOOK)
-								.append(SCHOOL_CERTIFICATE).append(STUDENT_IDCARD).append(RELATIONSHIP_CERTIFICATE)
+						sb.append(PASSPORT).append(",").append(PHOTO).append(",").append(IDCARD_COPIES).append(",")
+								.append(ACCOUNT_BOOK).append(",").append(SCHOOL_CERTIFICATE).append(",")
+								.append(STUDENT_IDCARD).append(",").append(RELATIONSHIP_CERTIFICATE).append(",")
 								.append(ENTRUST_CERTIFICATE);
 						applicantWorkJpEntity.setPrepareMaterials(sb.toString());
+						frontPaperworkJpEntity.setType(JobStatusEnum.student_status.intKey());
+						dbDao.insert(frontPaperworkJpEntity);
 					}
-					if (Util.eq(careerStatus, JobStatusEnum.Preschoolage_status)) {//学龄前
+					if (Util.eq(careerStatus, JobStatusEnum.Preschoolage_status.intKey())) {//学龄前
 						StringBuilder sb = new StringBuilder();
-						sb.append(PASSPORT).append(PHOTO).append(ACCOUNT_BOOK).append(BIRTH_CERTIFICATE)
-								.append(RELATIONSHIP_CERTIFICATE).append(ENTRUST_CERTIFICATE);
+						sb.append(PASSPORT).append(",").append(PHOTO).append(",").append(ACCOUNT_BOOK).append(",")
+								.append(BIRTH_CERTIFICATE).append(",").append(RELATIONSHIP_CERTIFICATE).append(",")
+								.append(ENTRUST_CERTIFICATE);
 						applicantWorkJpEntity.setPrepareMaterials(sb.toString());
+						frontPaperworkJpEntity.setType(JobStatusEnum.Preschoolage_status.intKey());
+						dbDao.insert(frontPaperworkJpEntity);
 					}
 
 					applicantWorkJpEntity.setCareerStatus(visaForm.getCareerStatus());
@@ -1013,6 +1063,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 						wealthJp.setOpId(loginUser.getId());
 						dbDao.insert(wealthJp);
 					}
+				} else {
+					TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(
+							TApplicantWealthJpEntity.class,
+							Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=",
+									ApplicantJpWealthEnum.BANK.value()));
+					if (!Util.isEmpty(applicantWealthJpEntity)) {
+						dbDao.delete(applicantWealthJpEntity);
+					}
 				}
 				//车产
 				if (!Util.isEmpty(visaForm.getVehicle())) {
@@ -1029,6 +1087,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 						wealthJp.setCreateTime(new Date());
 						wealthJp.setOpId(loginUser.getId());
 						dbDao.insert(wealthJp);
+					}
+				} else {
+					TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(
+							TApplicantWealthJpEntity.class,
+							Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=",
+									ApplicantJpWealthEnum.CAR.value()));
+					if (!Util.isEmpty(applicantWealthJpEntity)) {
+						dbDao.delete(applicantWealthJpEntity);
 					}
 				}
 				//房产
@@ -1047,6 +1113,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 						wealthJp.setOpId(loginUser.getId());
 						dbDao.insert(wealthJp);
 					}
+				} else {
+					TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(
+							TApplicantWealthJpEntity.class,
+							Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=",
+									ApplicantJpWealthEnum.HOME.value()));
+					if (!Util.isEmpty(applicantWealthJpEntity)) {
+						dbDao.delete(applicantWealthJpEntity);
+					}
 				}
 				//理财
 				if (!Util.isEmpty(visaForm.getFinancial())) {
@@ -1063,6 +1137,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 						wealthJp.setCreateTime(new Date());
 						wealthJp.setOpId(loginUser.getId());
 						dbDao.insert(wealthJp);
+					}
+				} else {
+					TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(
+							TApplicantWealthJpEntity.class,
+							Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=",
+									ApplicantJpWealthEnum.LICAI.value()));
+					if (!Util.isEmpty(applicantWealthJpEntity)) {
+						dbDao.delete(applicantWealthJpEntity);
 					}
 				}
 			}
@@ -1110,7 +1192,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		try {
 			String sendMailUnified = (String) sendMailUnified(orderid, applicantid);
 			String sendMessageUnified = (String) sendMessageUnified(orderid, applicantid);
-			System.out.println(sendMailUnified + "======");
+			if (Util.eq(sendMailUnified, "success") && Util.eq(sendMessageUnified, "success")) {
+				TOrderLogsEntity orderLogsEntity = dbDao.fetch(TOrderLogsEntity.class,
+						Cnd.where("orderId", "=", orderid));
+				if (!Util.isEmpty(orderLogsEntity)) {
+					orderLogsEntity.setOrderStatus(JPOrderStatusEnum.SHARE.intKey());
+					dbDao.update(orderLogsEntity);
+				}
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1254,7 +1343,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			String smsContent = tmp.toString();
 			smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
 					.replace("${telephone}", telephoneLoad);
-			result = mailService.send(telephone, smsContent);
+			result = firstTrialJpViewService.sendSMS(telephone, smsContent);
 		}
 		return result;
 	}

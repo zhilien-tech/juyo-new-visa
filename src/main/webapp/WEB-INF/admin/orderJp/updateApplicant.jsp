@@ -88,7 +88,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>姓/拼音：</label> <input id="firstName"
-										name="firstName" type="text" class="form-control input-sm"
+										name="firstName" type="text" class="form-control input-sm associatepinyin"
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
 									<!-- <i class="bulb"></i> -->
@@ -101,7 +101,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>名/拼音：</label> <input id="lastName"
-										name="lastName" type="text" class="form-control input-sm"
+										name="lastName" type="text" class="form-control input-sm associatepinyin"
 										placeholder=" " value="${obj.applicant.lastName }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -272,6 +272,7 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript">
 	
 		$(function(){

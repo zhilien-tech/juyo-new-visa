@@ -149,10 +149,16 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 	public Object getJpVisaDetailData(Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
 		//订单信息
-		String sqlstr = sqlManager.get("get_jp_visa_order_info_byid");
+		String sqlstr = sqlManager.get("get_jp_receptionOrderInfo_byid");
 		Sql sql = Sqls.create(sqlstr);
 		sql.setParam("orderid", orderid);
 		Record orderinfo = dbDao.fetch(sql);
+		int status = (int) orderinfo.get("status");
+		for (JPOrderStatusEnum orderStatus : JPOrderStatusEnum.values()) {
+			if (status == orderStatus.intKey()) {
+				orderinfo.put("status", orderStatus.value());
+			}
+		}
 		//格式化日期
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		if (!Util.isEmpty(orderinfo.get("gotripdate"))) {
@@ -173,7 +179,7 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		}
 		result.put("orderinfo", orderinfo);
 		//申请人信息
-		String applysqlstr = sqlManager.get("get_jporder_detail_applyinfo_byorderid");
+		String applysqlstr = sqlManager.get("get_applyInfo_byorderid");
 		Sql applysql = Sqls.create(applysqlstr);
 		applysql.setParam("orderid", orderid);
 		List<Record> applyinfo = dbDao.query(applysql, null, null);
@@ -295,7 +301,7 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		return result;
 	}
 
-	public Object visaRevenue(HttpSession session, Integer orderid) {
+	public Object receptionRevenue(HttpSession session, Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
 		TOrderJpEntity orderinfo = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
 		result.put("orderinfo", orderinfo);
@@ -304,12 +310,21 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 
 	public Object saveApplicatRevenue(Integer applicatid, String realInfo, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TApplicantFrontPaperworkJpEntity frontpaperwork = new TApplicantFrontPaperworkJpEntity();
-		frontpaperwork.setApplicantId(applicatid);
-		frontpaperwork.setCreateTime(new Date());
-		frontpaperwork.setRealInfo(realInfo);
-		frontpaperwork.setOpId(loginUser.getId());
-		return dbDao.insert(frontpaperwork);
+		TApplicantFrontPaperworkJpEntity frontPaperworkJpEntity = dbDao.fetch(TApplicantFrontPaperworkJpEntity.class,
+				Cnd.where("applicantId", "=", applicatid));
+		if (!Util.isEmpty(frontPaperworkJpEntity)) {
+			frontPaperworkJpEntity.setUpdateTime(new Date());
+			frontPaperworkJpEntity.setRealInfo(realInfo);
+			frontPaperworkJpEntity.setOpId(loginUser.getId());
+			return dbDao.update(frontPaperworkJpEntity);
+		} else {
+			TApplicantFrontPaperworkJpEntity frontpaperwork = new TApplicantFrontPaperworkJpEntity();
+			frontpaperwork.setApplicantId(applicatid);
+			frontpaperwork.setCreateTime(new Date());
+			frontpaperwork.setRealInfo(realInfo);
+			frontpaperwork.setOpId(loginUser.getId());
+			return dbDao.insert(frontpaperwork);
+		}
 	}
 
 	public Object passportInfo(Integer applyId) {
@@ -406,6 +421,13 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 				Cnd.where("applicantId", "=", applicatid).and("realInfo", "like", "%护照%"));
 		paperwork.setRealInfo(inputVal);
 		dbDao.update(paperwork);
+		return null;
+	}
+
+	public Object visaTransfer(HttpSession session, Integer orderid) {
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(orderid).intValue());
+		orderEntity.setStatus(JPOrderStatusEnum.VISA_ORDER.intKey());
+		dbDao.update(orderEntity);
 		return null;
 	}
 }

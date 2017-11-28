@@ -109,8 +109,8 @@ public class ReceptionJpModule {
 	 */
 	@At
 	@POST
-	public Object visaRevenue(HttpSession session, @Param("orderid") Integer orderid) {
-		return receptionJpViewService.visaRevenue(session, orderid);
+	public Object receptionRevenue(HttpSession session, @Param("orderid") Integer orderid) {
+		return receptionJpViewService.receptionRevenue(session, orderid);
 	}
 
 	/**
@@ -170,6 +170,15 @@ public class ReceptionJpModule {
 	@POST
 	public Object editPassportCount(@Param("applicatid") Integer applicatid, @Param("inputVal") String inputVal) {
 		return receptionJpViewService.editPassportCount(applicatid, inputVal);
+	}
+
+	/**
+	 * 移交签证
+	 */
+	@At
+	@POST
+	public Object visaTransfer(HttpSession session, @Param("orderid") Integer orderid) {
+		return receptionJpViewService.visaTransfer(session, orderid);
 	}
 
 }
