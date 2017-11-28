@@ -390,7 +390,13 @@
 										</div>
 									</div>
 									<!-- end 发票项目内容/发票抬头/税号/备注 -->
-									<i class="add-btn"></i>
+									<c:if test="${status.index <= 0 }">
+										<i class="add-btn"></i>
+									</c:if>
+									<c:if test="${status.index > 0 }">
+										<i class="remove-btn"></i>
+									</c:if>
+									
 								</div>
 							</c:forEach>
 			            </c:when>
@@ -500,6 +506,7 @@
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
 			var orderid = '${obj.orderid}';
+			var backinfo = '${obj.backinfo}';
 			var visaCounty = '${obj.jporderinfo.visaCounty}';
 			var threecounty = '${obj.jporderinfo.threeCounty}';
 		</script>

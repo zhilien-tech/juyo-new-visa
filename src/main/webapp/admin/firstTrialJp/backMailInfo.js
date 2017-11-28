@@ -11,6 +11,11 @@ $(function(){
 	$(".info").on("click", ".remove-btn", function(){
 		$(this).parent().remove();//删除 对相应的本模块
 	});
+	
+	//如果有数据，隐藏添加回邮信息按钮；同时，设置最有一个为减号按钮
+	if(backinfo.length>0){
+		$(".addExpressInfoBtn").hide();
+	}
 });
 
 //“+”号 回邮寄信息
