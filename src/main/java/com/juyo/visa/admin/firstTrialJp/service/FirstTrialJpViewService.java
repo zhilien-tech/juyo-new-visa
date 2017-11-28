@@ -38,6 +38,7 @@ import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
 import com.juyo.visa.common.enums.MainBackMailTypeEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
@@ -45,6 +46,7 @@ import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.common.enums.PrepareMaterialsEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
@@ -122,14 +124,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
 			Sql applysql = Sqls.create(sqlStr);
 			List<Record> records = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
-			for (Record applicant : records) {
-				Integer status = (Integer) applicant.get("applicantStatus");
-				for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
-					if (!Util.isEmpty(status) && status.equals(statusEnum.intKey())) {
-						applicant.put("applicantStatus", statusEnum.value());
-					}
-				}
-			}
+			records = editApplicantsInfo(records);
 			record.put("everybodyInfo", records);
 
 			String orderStatus = record.getString("orderstatus");
@@ -230,7 +225,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//回邮信息
 		TOrderJpEntity orderJp = dbDao.fetch(TOrderJpEntity.class, Long.valueOf(orderid));
 		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class,
-				Cnd.where("orderId", "=", orderJp.getOrderId()), null);
+				Cnd.where("orderId", "=", orderJp.getOrderId()).orderBy("createTime", "DESC"), null);
 		result.put("backinfo", backinfo);
 
 		return result;
@@ -257,6 +252,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		Sql applysql = Sqls.create(applysqlstr);
 		applysql.setParam("orderid", orderid);
 		List<Record> applyinfo = dbDao.query(applysql, null, null);
+		applyinfo = editApplicantsInfo(applyinfo);
 		for (Record record : applyinfo) {
 			//资料类型
 			Integer type = (Integer) record.get("type");
@@ -267,12 +263,6 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			}
 			String sex = (String) record.get("sex");
 			record.set("sex", sex);
-			Integer status = (Integer) record.get("applicantstatus");
-			for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
-				if (!Util.isEmpty(status) && status.equals(statusEnum.intKey())) {
-					record.put("applicantstatus", statusEnum.value());
-				}
-			}
 		}
 
 		return applyinfo;
@@ -316,14 +306,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		List<Record> records = dbDao.query(applysql,
 				Cnd.where("taoj.orderId", "=", orderid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
 				null);
-		for (Record applicant : records) {
-			Integer status = (Integer) applicant.get("applicantStatus");
-			for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
-				if (!Util.isEmpty(status) && status.equals(statusEnum.intKey())) {
-					applicant.put("applicantStatus", statusEnum.value());
-				}
-			}
-		}
+		records = editApplicantsInfo(records);
 		result.put("applicant", records);
 		//订单id
 		result.put("orderid", orderid);
@@ -339,14 +322,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		List<Record> records = dbDao.query(applysql,
 				Cnd.where("taoj.orderId", "=", orderid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
 				null);
-		for (Record applicant : records) {
-			Integer status = (Integer) applicant.get("applicantStatus");
-			for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
-				if (!Util.isEmpty(status) && status.equals(statusEnum.intKey())) {
-					applicant.put("applicantStatus", statusEnum.value());
-				}
-			}
-		}
+		records = editApplicantsInfo(records);
 		result.put("applicant", records);
 		return result;
 	}
@@ -590,6 +566,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		for (TOrderBackmailEntity backMailInfo : backMailInfos) {
 			Date nowDate = DateUtil.nowDate();
+			Integer obmId = backMailInfo.getId();
+			if (Util.isEmpty(obmId)) {
+				backMailInfo.setCreateTime(nowDate);
+			}
 			backMailInfo.setOrderId(orderid);
 			backMailInfo.setUpdateTime(nowDate);
 			updateBackMails.add(backMailInfo);
@@ -713,6 +693,42 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			return "LOGS IS FAILED";
 		}
 
+	}
+
+	//修改申请人信息
+	public List<Record> editApplicantsInfo(List<Record> records) {
+		for (Record applicant : records) {
+			Integer status = (Integer) applicant.get("applicantStatus");
+			for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
+				if (!Util.isEmpty(status) && status.equals(statusEnum.intKey())) {
+					applicant.put("applicantStatus", statusEnum.value());
+				}
+			}
+			Integer jobType = (Integer) applicant.get("dataType");
+			for (JobStatusEnum statusEnum : JobStatusEnum.values()) {
+				if (!Util.isEmpty(jobType) && jobType.equals(statusEnum.intKey())) {
+					applicant.put("dataType", statusEnum.value());
+				}
+			}
+			String dataMaterial = "";
+			String prepareMaterials = (String) applicant.get("DATA");
+			if (!Util.isEmpty(prepareMaterials)) {
+				String[] split = prepareMaterials.split(",");
+				for (String s : split) {
+					Integer material = Integer.valueOf(s);
+					for (PrepareMaterialsEnum statusEnum : PrepareMaterialsEnum.values()) {
+						if (!Util.isEmpty(s) && material.equals(statusEnum.intKey())) {
+							dataMaterial += statusEnum.value() + "、";
+						}
+					}
+				}
+			}
+			if (!Util.isEmpty(dataMaterial)) {
+				dataMaterial = dataMaterial.substring(0, dataMaterial.length() - 1);
+			}
+			applicant.put("DATA", dataMaterial);
+		}
+		return records;
 	}
 
 }

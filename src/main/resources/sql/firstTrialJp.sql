@@ -82,7 +82,7 @@ SELECT
 	ta.telephone,
 	tap.passport,
 	tavpj.careerStatus datatype,
-	tavpj.realInfo,
+	tavpj.DATA,
 	ta.sex,
 	ta.status applicantstatus
 FROM
@@ -93,7 +93,7 @@ LEFT JOIN (
 		SELECT
 			applicantId,
 			careerStatus,
-			PrepareMaterials realInfo 
+			PrepareMaterials DATA 
 		FROM
 			t_applicant_work_jp 
 		GROUP BY
