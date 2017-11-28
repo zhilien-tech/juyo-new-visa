@@ -22,9 +22,9 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row"> 
 							<div class="col-md-2 left-5px right-0px">
-								<select class="input-class input-sm" id="status" name="status">
+								<select id="status" name="status" onchange="selectListData();" class="input-class input-sm" >
 									<option value="">状态</option>
-									<c:forEach var="map" items="${data.status}">
+									<c:forEach var="map" items="${obj.searchStatus}">
 										<option value="${map.key}">${map.value}</option>
 									</c:forEach>
 								</select>

@@ -128,14 +128,16 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		DateFormat excelnameformat = new SimpleDateFormat("yy.MM.dd");
 		//excel名称
 		String excelname = "";
-		if (!Util.isEmpty(ordertripjp.getGoDate())) {
-			String godatestr = excelnameformat.format(ordertripjp.getGoDate());
-			excelname += godatestr;
-		}
-		excelname += "-";
-		if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-			String returndatestr = excelnameformat.format(ordertripjp.getReturnDate());
-			excelname += returndatestr;
+		if (!Util.isEmpty(ordertripjp)) {
+			if (!Util.isEmpty(ordertripjp.getGoDate())) {
+				String godatestr = excelnameformat.format(ordertripjp.getGoDate());
+				excelname += godatestr;
+			}
+			excelname += "-";
+			if (!Util.isEmpty(ordertripjp.getReturnDate())) {
+				String returndatestr = excelnameformat.format(ordertripjp.getReturnDate());
+				excelname += returndatestr;
+			}
 		}
 		String applyname = "";
 		if (!Util.isEmpty(applyinfo)) {
@@ -204,16 +206,28 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				.append("人访日个人旅游，请协助办理").append(visatypestr).append("往返赴日签证");
 		map.put("content", content.toString());
 		map.put("company", company.getName());
-		map.put("entryDate", dateFormat.format(ordertripjp.getGoDate()));
-		//入境航班
-		TFlightEntity goflight = flightViewService.fetch(ordertripjp.getGoFlightNum().longValue());
-		map.put("entryFlight", goflight.getFlightnum());
-		map.put("departDate", dateFormat.format(ordertripjp.getReturnDate()));
-		//天数
-		map.put("stay", String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate())));
-		//出境航班
-		TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
-		map.put("departFlight", returnflight.getFlightnum());
+		if (!Util.isEmpty(ordertripjp)) {
+			if (!Util.isEmpty(ordertripjp.getGoDate())) {
+				map.put("entryDate", dateFormat.format(ordertripjp.getGoDate()));
+			}
+			//入境航班
+			if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
+				TFlightEntity goflight = flightViewService.fetch(ordertripjp.getGoFlightNum().longValue());
+				map.put("entryFlight", goflight.getFlightnum());
+			}
+			if (!Util.isEmpty(ordertripjp.getReturnDate())) {
+				map.put("departDate", dateFormat.format(ordertripjp.getReturnDate()));
+			}
+			//天数
+			if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
+
+				map.put("stay",
+						String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate())));
+			}
+			//出境航班
+			TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
+			map.put("departFlight", returnflight.getFlightnum());
+		}
 		map.put("linkman", company.getLinkman());
 		map.put("telephone", company.getMobile());
 		map.put("phone", company.getMobile());
@@ -274,27 +288,29 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(record.get("passportenddate"))) {
 				map.put("validEndDate", dateformat.format((Date) record.get("passportenddate")));
 			}
-			//赴日目的
-			map.put("tripPurpose", ordertripjp.getTripPurpose());
-			//出行时间
-			if (!Util.isEmpty(ordertripjp.getGoDate())) {
-				map.put("goDate", dateformat.format(ordertripjp.getGoDate()));
+			if (!Util.isEmpty(ordertripjp)) {
+				//赴日目的
+				map.put("tripPurpose", ordertripjp.getTripPurpose());
+				//出行时间
+				if (!Util.isEmpty(ordertripjp.getGoDate())) {
+					map.put("goDate", dateformat.format(ordertripjp.getGoDate()));
+				}
+				//返回时间
+				if (!Util.isEmpty(ordertripjp.getReturnDate())) {
+					map.put("returnDate", dateformat.format(ordertripjp.getReturnDate()));
+				}
+				//逗留时间
+				if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
+					int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
+					map.put("stayday", String.valueOf(stayday) + "天");
+				}
+				//入境口岸
+				TCityEntity goarrivecirtentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
+				map.put("goArrivedCity", goarrivecirtentity.getCity());
+				//航空公司.0
+				TFlightEntity goflightentity = flightViewService.fetch(ordertripjp.getGoFlightNum());
+				map.put("goFlightNum", goflightentity.getFlightnum());
 			}
-			//返回时间
-			if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-				map.put("returnDate", dateformat.format(ordertripjp.getReturnDate()));
-			}
-			//逗留时间
-			if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
-				int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
-				map.put("stayday", String.valueOf(stayday) + "天");
-			}
-			//入境口岸
-			TCityEntity goarrivecirtentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
-			map.put("goArrivedCity", goarrivecirtentity.getCity());
-			//航空公司.0
-			TFlightEntity goflightentity = flightViewService.fetch(ordertripjp.getGoFlightNum());
-			map.put("goFlightNum", goflightentity.getFlightnum());
 			//酒店信息
 			if (!Util.isEmpty(ordertravelplan)) {
 				TOrderTravelplanJpEntity travelplanEntity = ordertravelplan.get(0);
@@ -365,13 +381,15 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("address", company.getAddress());
 			map.put("telephone", company.getMobile());
 			map.put("linkman", company.getLinkman());
-			TCityEntity cityentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
-			map.put("city", cityentity.getCity());
-			if (!Util.isEmpty(ordertripjp.getGoDate())) {
-				map.put("checkInDate", hoteldateformat.format(ordertripjp.getGoDate()));
-			}
-			if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-				map.put("checkOutDate", hoteldateformat.format(ordertripjp.getReturnDate()));
+			if (!Util.isEmpty(ordertripjp)) {
+				TCityEntity cityentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
+				map.put("city", cityentity.getCity());
+				if (!Util.isEmpty(ordertripjp.getGoDate())) {
+					map.put("checkInDate", hoteldateformat.format(ordertripjp.getGoDate()));
+				}
+				if (!Util.isEmpty(ordertripjp.getReturnDate())) {
+					map.put("checkOutDate", hoteldateformat.format(ordertripjp.getReturnDate()));
+				}
 			}
 			StringBuffer strb = new StringBuffer("");
 			for (Record record : applyinfo) {
@@ -447,11 +465,20 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 					birthdaystr = applydateformat.format((Date) record.get("birthday"));
 				}
 
-				String[] datas = { "1-" + count, record.getString("firstname") + record.getString("lastname"),
-						record.getString("firstnameen") + record.getString("lastnameen"), record.getString("sex"),
-						birthdaystr, record.getString("issuedorganization"), record.getString("occupation"),
-						record.getString("province") + record.getString("city") + record.getString("detailedaddress"),
-						"无", "", "", "", "", "", "推介" };
+				String[] datas = {
+						"1-" + count,
+						(!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
+								+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : ""),
+						(!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "")
+								+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""),
+						(!Util.isEmpty(record.get("sex")) ? record.getString("sex") : ""),
+						birthdaystr,
+						(!Util.isEmpty(record.get("issuedorganization")) ? record.getString("issuedorganization") : ""),
+						(!Util.isEmpty(record.get("occupation")) ? record.getString("occupation") : ""),
+						(!Util.isEmpty(record.get("province")) ? record.getString("province") : "")
+								+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : "")
+								+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress")
+										: ""), "无", "", "", "", "", "", "推介" };
 				for (String data : datas) {
 					PdfPCell cell = new PdfPCell(new Paragraph(data, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -542,11 +569,11 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			String pattern = "yy年MM月dd日";
 			//副标题1
 			String godatestr = "";
-			if (!Util.isEmpty(ordertripjp.getGoDate())) {
+			if (!Util.isEmpty(ordertripjp) && !Util.isEmpty(ordertripjp.getGoDate())) {
 				godatestr = format(ordertripjp.getGoDate(), pattern);
 			}
 			String returndatestr = "";
-			if (!Util.isEmpty(ordertripjp.getReturnDate())) {
+			if (!Util.isEmpty(ordertripjp) && !Util.isEmpty(ordertripjp.getReturnDate())) {
 				returndatestr = format(ordertripjp.getReturnDate(), pattern);
 			}
 			{
@@ -600,7 +627,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				count++;
 				//行程安排
 				String scenic = "";
-				if (count == 1) {
+				/*if (count == 1) {
 					TFlightEntity goflight = flightViewService.fetch(ordertripjp.getGoFlightNum());
 					scenic = goflight.getFlightnum() + "：" + goflight.getTakeOffName() + "->"
 							+ goflight.getLandingName();
@@ -608,9 +635,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 					TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum());
 					scenic = returnflight.getFlightnum() + "：" + returnflight.getTakeOffName() + "->"
 							+ returnflight.getLandingName();
-				} else {
-					scenic = ordertravelplan.getScenic();
-				}
+				} else {*/
+				scenic = ordertravelplan.getScenic();
+				//}
 				//酒店信息
 				String hotel = "";
 				if (!Util.isEmpty(ordertravelplan.getHotel())) {
@@ -698,12 +725,22 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			applyname += record.getString("lastname");
 			dengsize = applyinfo.size() - 1;
 		}
-		String sYear = bodydateformat.format(new DateTime(ordertripjp.getGoDate()).plusYears(12).toDate());
-		int sMonth = DateUtil.getMonth(ordertripjp.getGoDate());
-		int sDay = DateUtil.getDay(ordertripjp.getGoDate());
-		String eYear = bodydateformat.format(new DateTime(ordertripjp.getReturnDate()).plusYears(12).toDate());
-		int eMonth = DateUtil.getMonth(ordertripjp.getReturnDate());
-		int eDay = DateUtil.getDay(ordertripjp.getReturnDate());
+		String sYear = "";
+		Integer sMonth = null;
+		Integer sDay = null;
+		if (!Util.isEmpty(ordertripjp) && !Util.isEmpty(ordertripjp.getGoDate())) {
+			sYear = bodydateformat.format(new DateTime(ordertripjp.getGoDate()).plusYears(12).toDate());
+			sMonth = DateUtil.getMonth(ordertripjp.getGoDate());
+			sDay = DateUtil.getDay(ordertripjp.getGoDate());
+		}
+		String eYear = "";
+		Integer eMonth = null;
+		Integer eDay = null;
+		if (!Util.isEmpty(ordertripjp) && !Util.isEmpty(ordertripjp.getReturnDate())) {
+			eYear = bodydateformat.format(new DateTime(ordertripjp.getReturnDate()).plusYears(12).toDate());
+			eMonth = DateUtil.getMonth(ordertripjp.getReturnDate());
+			eDay = DateUtil.getDay(ordertripjp.getReturnDate());
+		}
 		map.put("year", year);
 		map.put("mouth", month);
 		map.put("day", day);
@@ -809,11 +846,11 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			SimpleDateFormat tableformat = new SimpleDateFormat("yyyy/MM/dd");
 			//副标题1
 			String godatestr = "";
-			if (!Util.isEmpty(ordertripjp.getGoDate())) {
+			if (!Util.isEmpty(ordertripjp) && !Util.isEmpty(ordertripjp.getGoDate())) {
 				godatestr = format(ordertripjp.getGoDate(), pattern);
 			}
 			String returndatestr = "";
-			if (!Util.isEmpty(ordertripjp.getReturnDate())) {
+			if (!Util.isEmpty(ordertripjp) && !Util.isEmpty(ordertripjp.getReturnDate())) {
 				returndatestr = format(ordertripjp.getReturnDate(), pattern);
 			}
 			{

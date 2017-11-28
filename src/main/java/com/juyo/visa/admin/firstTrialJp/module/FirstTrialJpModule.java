@@ -45,7 +45,7 @@ public class FirstTrialJpModule {
 	@GET
 	@Ok("jsp")
 	public Object list() {
-		return null;
+		return firstTrialJpViewService.toList();
 	}
 
 	/**

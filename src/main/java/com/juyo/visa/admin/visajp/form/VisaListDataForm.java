@@ -16,6 +16,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
 
@@ -67,6 +68,8 @@ public class VisaListDataForm implements SQLParamForm {
 					.or("taj.applyname", "like", "%" + searchStr + "%");
 			cnd.and(exp);
 		}
+		cnd.and("tr.comId", "=", companyid);
+		cnd.and("tr.status", "=", JPOrderStatusEnum.VISA_ORDER.intKey());
 		if (!Util.isEmpty(sendSignDate)) {
 			cnd.and("tr.sendVisaDate", ">=", sendSignDate);
 		}
