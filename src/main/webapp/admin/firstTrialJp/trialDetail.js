@@ -162,7 +162,7 @@ function saveorder(){
 	orderobj.orderinfo.threecounty = threecounty;
 
 	var backMails = getMailInfos();
-	orderobj.orderinfo.backMailInfos = JSON.stringify(backMails);;
+	orderobj.orderinfo.backMailInfos = JSON.stringify(backMails);
 
 	var editdata = orderobj.orderinfo;
 	console.log("=============orderinfo=================:"+JSON.stringify(editdata));

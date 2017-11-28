@@ -148,12 +148,15 @@ new Vue({
 });
 
 $("#searchBtn").on('click', function () {
-	/* var status = $('#status').val(); */
+	var status = $('#status').val();
 	var searchStr = $('#searchStr').val();
 	$.ajax({ 
 		url: url,
 		/* data:{status:status,searchStr:searchStr}, */
-		data:{searchStr:searchStr},
+		data:{
+			status:status,
+			searchStr:searchStr
+			},
 		dataType:"json",
 		type:'post',
 		success: function(data){
@@ -168,6 +171,11 @@ function onkeyEnter(){
 	if(e && e.keyCode == 13){
 		$("#searchBtn").click();
 	}
+}
+
+/*状态改变事件*/
+function selectListData(){
+	$("#searchBtn").click();
 }
 
 function successCallBack(status){
