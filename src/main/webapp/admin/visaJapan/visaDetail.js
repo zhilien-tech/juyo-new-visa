@@ -123,7 +123,7 @@ new Vue({
 				}
 			});
 		},
-		//签证录入
+		//签证信息
 		visa:function(applyid){
 			//window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applyid;
 			layer.open({
@@ -134,10 +134,11 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['1000px', '750px'],
-				content: '/admin/visaJapan/visaInput.html?applyid='+applyid
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid
 			});
 		},
+		//护照信息
 		passport:function(applyId){
 			layer.open({
 				type: 2,
@@ -149,6 +150,34 @@ new Vue({
 				scrollbar: false,
 				area: ['900px', '550px'],
 				content: '/admin/visaJapan/passportInfo.html?applyId='+applyId
+			});
+		},
+		//基本信息
+		updateApplicant:function(applyId){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/updateApplicant.html?id='+applyId
+			});
+		},
+		//签证录入
+		visainput:function(applyId){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['1000px', '750px'],
+				content: '/admin/visaJapan/visaInput.html?applyid='+applyId
 			});
 		}
 	}
@@ -568,3 +597,20 @@ function downLoadFile(){
         }
     });
 }
+$(document).on("input","#stayday",function(){
+	var thisval = $(this).val();
+	thisval = thisval.replace(/[^\d]/g,'');
+	$(this).val(thisval);
+	var gotripdate = $('#gotripdate').val();
+	if(gotripdate && thisval){
+		$.ajax({ 
+			url: '/admin/visaJapan/autoCalculateBackDate.html',
+			dataType:"json",
+			data:{gotripdate:gotripdate,stayday:thisval},
+			type:'post',
+			success: function(data){
+				$('#backtripdate').val(data);
+			}
+		});
+	}
+});
