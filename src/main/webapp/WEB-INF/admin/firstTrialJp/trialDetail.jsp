@@ -282,6 +282,7 @@
 					<!-- 回邮信息 -->
             		<div class="info expressInfo" id="expressInfo" name="backmailInfo">
 						<p class="info-head">回邮信息</p>
+						
 						<c:choose>
 	               		<c:when test="${fn:length(obj.backinfo)>0}">
 			            	<c:forEach var="backmail" items="${obj.backinfo}" varStatus="status">
@@ -309,13 +310,13 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>快递号：</label> 
-												<input name="expressNum" type="text" value="${backmail.expressNum } class="form-control input-sm" placeholder=" " />
+												<input name="expressNum" type="text" value="${backmail.expressNum }" class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>团队名称：</label> 
-												<input name="teamName" type="text" value="${backmail.teamName } class="form-control input-sm" placeholder=" " />
+												<input name="teamName" type="text" value="${backmail.teamName }" class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
@@ -343,19 +344,19 @@
 										<div class="col-sm-6">
 											<div class="form-group">
 												<label><span>*</span>回邮地址：</label> 
-												<input name="expressAddress" type="text" value="${backmail.expressAddress } class="form-control input-sm" placeholder=" " />
+												<input name="expressAddress" type="text" value="${backmail.expressAddress }" class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>联系人：</label> 
-												<input name="linkman" type="text" value="${backmail.linkman } class="form-control input-sm" placeholder=" " />
+												<input name="linkman" type="text" value="${backmail.linkman }" class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>电话：</label> 
-												<input name="telephone" type="text" value="${backmail.telephone }  class="form-control input-sm" placeholder=" " />
+												<input name="telephone" type="text" value="${backmail.telephone }"  class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 									</div>
@@ -366,25 +367,25 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>发票项目内容：</label> 
-												<input name="invoiceContent" type="text" value="${backmail.invoiceContent } class="form-control input-sm" placeholder=" " />
+												<input name="invoiceContent" type="text" value="${backmail.invoiceContent }" class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>发票抬头：</label> 
-												<input name="invoiceHead" type="text" value="${backmail.invoiceHead } class="form-control input-sm" placeholder=" " />
+												<input name="invoiceHead" type="text" value="${backmail.invoiceHead }" class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>税号：</label> 
-												<input name="taxNum" type="text" value="${backmail.taxNum } class="form-control input-sm" placeholder=" " />
+												<input name="taxNum" type="text" value="${backmail.taxNum }" class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>备注：</label> 
-												<input name="remark" type="text" value="${backmail.remark } class="form-control input-sm" placeholder=" " />
+												<input name="remark" type="text" value="${backmail.remark }" class="form-control input-sm" placeholder=" " />
 											</div>
 										</div>
 									</div>

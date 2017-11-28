@@ -177,6 +177,11 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("mainBackMailSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
 		//回邮方式
 		result.put("mainBackMailTypeEnum", EnumUtil.enum2(MainBackMailTypeEnum.class));
+		//回邮信息
+		TOrderJpEntity orderJp = dbDao.fetch(TOrderJpEntity.class, Long.valueOf(orderid));
+		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class,
+				Cnd.where("orderId", "=", orderJp.getOrderId()), null);
+		result.put("backinfo", backinfo);
 
 		return result;
 	}
@@ -552,7 +557,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		dbDao.update(order);
 
 		//日本订单信息
-		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, orderId.longValue());
+		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 		jporder.setVisaType(editDataForm.getVisatype());
 		jporder.setVisaCounty(editDataForm.getVisacounty());
 		jporder.setIsVisit(editDataForm.getIsvisit());
