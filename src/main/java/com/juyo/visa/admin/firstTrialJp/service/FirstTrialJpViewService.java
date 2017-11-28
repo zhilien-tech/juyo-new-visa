@@ -46,7 +46,7 @@ import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
-import com.juyo.visa.common.enums.PrepareMaterialsEnum;
+import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
@@ -720,7 +720,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 				String[] split = prepareMaterials.split(",");
 				for (String s : split) {
 					Integer material = Integer.valueOf(s);
-					for (PrepareMaterialsEnum statusEnum : PrepareMaterialsEnum.values()) {
+					for (PrepareMaterialsEnum_JP statusEnum : PrepareMaterialsEnum_JP.values()) {
 						if (!Util.isEmpty(s) && material.equals(statusEnum.intKey())) {
 							dataMaterial += statusEnum.value() + "、";
 						}
