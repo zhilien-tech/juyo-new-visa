@@ -176,3 +176,30 @@ t_applicant a ON aoj.applicantId = a.id
 LEFT JOIN
 t_applicant_passport ap ON ap.applicantId = a.id
 $condition
+
+/*wealth_byApplicantId*/
+SELECT
+tawj.id,
+tawj.applicantId,
+tawj.type,
+tawj.details,
+tawj.opId
+FROM
+t_applicant_wealth_jp tawj
+LEFT JOIN
+t_applicant_order_jp taoj ON tawj.applicantId = taoj.id
+WHERE tawj.applicantId = @id
+
+/*username_logs*/
+SELECT
+o.createTime,
+tu.`name`,
+o.`status`
+FROM
+t_order_logs tol
+LEFT JOIN
+t_user tu ON tol.opId = tu.id
+LEFT JOIN
+t_order o ON tol.orderId = o.id
+WHERE
+o.id = @id
