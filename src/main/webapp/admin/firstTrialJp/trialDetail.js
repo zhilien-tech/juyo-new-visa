@@ -274,7 +274,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid
+				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid
 			});
 		},
 		qualified:function(applyId){

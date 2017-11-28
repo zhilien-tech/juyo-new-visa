@@ -76,6 +76,7 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 		} else {
 			//普通的操作员
 		}
+		cnd.and("tr.comId", "=", companyid);
 		cnd.orderBy("tr.createtime", "DESC");
 		cnd.orderBy("tr.updatetime", "DESC");
 
