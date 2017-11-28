@@ -57,8 +57,8 @@
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
 									<i class="sendZB" v-on:click="sendInsurance(data.id,2)"> </i>
-									<i class="ZBchange" v-on:click="sendInsurance(data.id,4)"> </i>
-									<i class="ZBcancel" v-on:click="sendInsurance(data.id,6)"> </i>
+									<i class="ZBchange" v-on:click="sendInsurance(data.id,5)"> </i>
+									<i class="ZBcancel" v-on:click="sendInsurance(data.id,8)"> </i>
 									<i class="download" v-on:click="downLoadFile(data.id)"> </i>
 									<i class="handoverTable"> </i>
 									<i class="afterSales"> </i>
