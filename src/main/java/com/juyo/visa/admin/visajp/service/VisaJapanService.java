@@ -249,6 +249,43 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			if (travelinfo.getTripType().equals(2)) {
 				multitrip = dbDao.query(TOrderTripMultiJpEntity.class, Cnd.where("tripid", "=", travelinfo.getId()),
 						null);
+			} else if (travelinfo.getTripType().equals(1)) {
+				//去程出发城市
+				TCityEntity goleavecity = new TCityEntity();
+				if (!Util.isEmpty(travelinfo.getGoDepartureCity())) {
+					goleavecity = dbDao.fetch(TCityEntity.class, travelinfo.getGoDepartureCity().longValue());
+				}
+				result.put("goleavecity", goleavecity);
+				//去程抵达城市
+				TCityEntity goarrivecity = new TCityEntity();
+				if (!Util.isEmpty(travelinfo.getGoArrivedCity())) {
+					goarrivecity = dbDao.fetch(TCityEntity.class, travelinfo.getGoArrivedCity().longValue());
+				}
+				result.put("goarrivecity", goarrivecity);
+				//回程出发城市
+				TCityEntity backleavecity = new TCityEntity();
+				if (!Util.isEmpty(travelinfo.getReturnDepartureCity())) {
+					backleavecity = dbDao.fetch(TCityEntity.class, travelinfo.getReturnDepartureCity().longValue());
+				}
+				result.put("backleavecity", backleavecity);
+				//回程返回城市
+				TCityEntity backarrivecity = new TCityEntity();
+				if (!Util.isEmpty(travelinfo.getReturnArrivedCity())) {
+					backarrivecity = dbDao.fetch(TCityEntity.class, travelinfo.getReturnArrivedCity().longValue());
+				}
+				result.put("backarrivecity", backarrivecity);
+				//去程航班
+				TFlightEntity goflightnum = new TFlightEntity();
+				if (!Util.isEmpty(travelinfo.getGoFlightNum())) {
+					goflightnum = dbDao.fetch(TFlightEntity.class, travelinfo.getGoFlightNum().longValue());
+				}
+				result.put("goflightnum", goflightnum);
+				//回程航班
+				TFlightEntity returnflightnum = new TFlightEntity();
+				if (!Util.isEmpty(travelinfo.getGoFlightNum())) {
+					returnflightnum = dbDao.fetch(TFlightEntity.class, travelinfo.getReturnFlightNum().longValue());
+				}
+				result.put("returnflightnum", returnflightnum);
 			}
 		}
 		result.put("travelinfo", travelinfo);
@@ -275,42 +312,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		result.put("flights", flights);
 		result.put("multitrip", multitrip);
 		result.put("multitripjson", JsonUtil.toJson(multitrip));
-		//去程出发城市
-		TCityEntity goleavecity = new TCityEntity();
-		if (!Util.isEmpty(travelinfo.getGoDepartureCity())) {
-			goleavecity = dbDao.fetch(TCityEntity.class, travelinfo.getGoDepartureCity().longValue());
-		}
-		result.put("goleavecity", goleavecity);
-		//去程抵达城市
-		TCityEntity goarrivecity = new TCityEntity();
-		if (!Util.isEmpty(travelinfo.getGoArrivedCity())) {
-			goarrivecity = dbDao.fetch(TCityEntity.class, travelinfo.getGoArrivedCity().longValue());
-		}
-		result.put("goarrivecity", goarrivecity);
-		//回程出发城市
-		TCityEntity backleavecity = new TCityEntity();
-		if (!Util.isEmpty(travelinfo.getReturnDepartureCity())) {
-			backleavecity = dbDao.fetch(TCityEntity.class, travelinfo.getReturnDepartureCity().longValue());
-		}
-		result.put("backleavecity", backleavecity);
-		//回程返回城市
-		TCityEntity backarrivecity = new TCityEntity();
-		if (!Util.isEmpty(travelinfo.getReturnArrivedCity())) {
-			backarrivecity = dbDao.fetch(TCityEntity.class, travelinfo.getReturnArrivedCity().longValue());
-		}
-		result.put("backarrivecity", backarrivecity);
-		//去程航班
-		TFlightEntity goflightnum = new TFlightEntity();
-		if (!Util.isEmpty(travelinfo.getGoFlightNum())) {
-			goflightnum = dbDao.fetch(TFlightEntity.class, travelinfo.getGoFlightNum().longValue());
-		}
-		result.put("goflightnum", goflightnum);
-		//回程航班
-		TFlightEntity returnflightnum = new TFlightEntity();
-		if (!Util.isEmpty(travelinfo.getGoFlightNum())) {
-			returnflightnum = dbDao.fetch(TFlightEntity.class, travelinfo.getReturnFlightNum().longValue());
-		}
-		result.put("returnflightnum", returnflightnum);
+
 		return result;
 	}
 
@@ -933,6 +935,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		TApplicantOrderJpEntity applyjp = dbDao.fetch(TApplicantOrderJpEntity.class, applyId.longValue());
 		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
 				Cnd.where("applicantId", "=", applyjp.getApplicantId()));
+		if (Util.isEmpty(passport)) {
+			passport = new TApplicantPassportEntity();
+		}
 		Map<String, String> passportMap = MapUtil.obj2Map(passport);
 		DateFormat dateformat = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		//性别
@@ -1042,4 +1047,17 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		return null;
 	}
 
+	/**
+	 * 自动计算返回日期
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param gotripdate
+	 * @param stayday
+	 */
+	public Object autoCalculateBackDate(Date gotripdate, Integer stayday) {
+		Date backtripdate = DateUtil.addDay(gotripdate, stayday);
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		return format.format(backtripdate);
+	}
 }

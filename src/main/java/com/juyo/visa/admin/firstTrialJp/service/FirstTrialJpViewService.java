@@ -177,6 +177,11 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("mainBackMailSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
 		//回邮方式
 		result.put("mainBackMailTypeEnum", EnumUtil.enum2(MainBackMailTypeEnum.class));
+		//回邮信息
+		TOrderJpEntity orderJp = dbDao.fetch(TOrderJpEntity.class, Long.valueOf(orderid));
+		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class,
+				Cnd.where("orderId", "=", orderJp.getOrderId()), null);
+		result.put("backinfo", backinfo);
 
 		return result;
 	}
@@ -223,8 +228,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		List<Record> applyinfo = getApplicantByOrderid(orderid);
 		result.put("applyinfo", applyinfo);
 		//回邮信息
+		TOrderJpEntity orderJp = dbDao.fetch(TOrderJpEntity.class, Long.valueOf(orderid));
 		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class,
-				Cnd.where("orderId", "=", orderid), null);
+				Cnd.where("orderId", "=", orderJp.getOrderId()), null);
 		result.put("backinfo", backinfo);
 
 		return result;
@@ -473,10 +479,12 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	/**
 	 * 保存快递信息，并发送邮件
 	 */
-	public Object saveExpressInfo(Integer orderid, Integer expresstype, Integer receiveAddressId, HttpSession session) {
+	public Object saveExpressInfo(Integer orderjpid, Integer expresstype, Integer receiveAddressId, HttpSession session) {
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
+		TOrderJpEntity oj = dbDao.fetch(TOrderJpEntity.class, Long.valueOf(orderjpid));
+		Integer orderid = oj.getOrderId();
 		TOrderRecipientEntity orderReceive = dbDao.fetch(TOrderRecipientEntity.class,
 				Cnd.where("orderId", "=", orderid));
 		if (!Util.isEmpty(orderReceive)) {
@@ -528,8 +536,11 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	public Object saveJpTrialDetailInfo(FirstTrialJpEditDataForm editDataForm, HttpSession session) {
 		//获取登录用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer orderjpid = editDataForm.getOrderid();
 		//订单信息
-		TOrderEntity order = dbDao.fetch(TOrderEntity.class, editDataForm.getId().longValue());
+		TOrderJpEntity oj = dbDao.fetch(TOrderJpEntity.class, Long.valueOf(orderjpid));
+		Integer orderId = oj.getOrderId();
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, Long.valueOf(orderId));
 		order.setNumber(editDataForm.getNumber());
 		order.setCityId(editDataForm.getCityid());
 		order.setUrgentType(editDataForm.getUrgenttype());
@@ -543,16 +554,21 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		order.setSendVisaDate(editDataForm.getSendvisadate());
 		order.setOutVisaDate(editDataForm.getOutvisadate());
 		order.setUpdateTime(new Date());
-
 		dbDao.update(order);
+
 		//日本订单信息
-		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, editDataForm.getOrderid().longValue());
+		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 		jporder.setVisaType(editDataForm.getVisatype());
 		jporder.setVisaCounty(editDataForm.getVisacounty());
 		jporder.setIsVisit(editDataForm.getIsvisit());
 		jporder.setThreeCounty(editDataForm.getThreecounty());
 		dbDao.update(jporder);
-		return null;
+
+		//回邮信息
+		List<TOrderBackmailEntity> backMailInfos = editDataForm.getBackMailInfos();
+		String editBackMailInfos = editBackMailInfos(backMailInfos, orderId);
+
+		return editBackMailInfos;
 	}
 
 	//订单收件人信息
@@ -562,6 +578,25 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		sql.setParam("orderid", orderid);
 		Record orderReceive = dbDao.fetch(sql);
 		return orderReceive;
+	}
+
+	//添加回邮信息
+	public String editBackMailInfos(List<TOrderBackmailEntity> backMailInfos, Integer orderid) {
+
+		List<TOrderBackmailEntity> beforeBackMails = dbDao.query(TOrderBackmailEntity.class,
+				Cnd.where("orderId", "=", orderid), null);
+
+		List<TOrderBackmailEntity> updateBackMails = new ArrayList<TOrderBackmailEntity>();
+
+		for (TOrderBackmailEntity backMailInfo : backMailInfos) {
+			Date nowDate = DateUtil.nowDate();
+			backMailInfo.setOrderId(orderid);
+			backMailInfo.setUpdateTime(nowDate);
+			updateBackMails.add(backMailInfo);
+		}
+		dbDao.updateRelations(beforeBackMails, updateBackMails);
+
+		return "更新回邮信息";
 	}
 
 	//发送邮件信息
