@@ -12,7 +12,7 @@ import com.uxuexi.core.common.enums.IEnum;
 public enum FristTrialSearchStatusEnum_JP implements IEnum {
 
 	FIRSTTRIAL(JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey(), "初审"), UNQUALIFIED(TrialApplicantStatusEnum.unqualified
-			.intKey(), "不合格"), QUALIFIED(TrialApplicantStatusEnum.qualified.intKey(), "合格"), SEND_ADDRESS(
+			.intKey(), "不合格"), QUALIFIED(JPOrderStatusEnum.QUALIFIED_ORDER.intKey(), "合格"), SEND_ADDRESS(
 			JPOrderStatusEnum.SEND_ADDRESS.intKey(), "发地址");
 	private int key;
 	private String value;
