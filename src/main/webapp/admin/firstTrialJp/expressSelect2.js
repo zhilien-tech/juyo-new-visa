@@ -153,6 +153,7 @@ function save(orderid,orderjpid){
 				layer.close(layerIndex);
 			}
 			closeWindow();
+			parent.successCallBack(1);
 		}
 	});
 }
