@@ -357,3 +357,33 @@ $(".addExpressInfoBtn").click(function(){
 	$(this).hide();
 });
 
+//时间插件格式化
+$("#gotripdate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+$("#backtripdate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+$("#sendvisadate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+$("#outvisadate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+
