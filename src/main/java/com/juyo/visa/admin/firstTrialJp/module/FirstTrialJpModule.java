@@ -84,6 +84,7 @@ public class FirstTrialJpModule {
 	 * 快递 发信息
 	 */
 	@At
+	@GET
 	@Ok("jsp")
 	public Object express(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid, HttpSession session) {
 		return firstTrialJpViewService.express(orderid, orderjpid, session);
@@ -102,6 +103,7 @@ public class FirstTrialJpModule {
 	 * 获取申请人信息
 	 */
 	@At
+	@GET
 	@Ok("jsp")
 	public Object basicInfo(@Param("applyid") int applyid) {
 		return firstTrialJpViewService.basicInfo(applyid);
@@ -121,6 +123,7 @@ public class FirstTrialJpModule {
 	 * 申请人 不合格信息
 	 */
 	@At
+	@GET
 	@Ok("jsp")
 	public Object unqualified(@Param("applyid") Integer applyid, @Param("orderid") Integer orderid) {
 		return firstTrialJpViewService.unqualified(applyid, orderid);
