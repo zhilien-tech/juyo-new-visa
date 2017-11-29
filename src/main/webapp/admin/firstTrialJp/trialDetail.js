@@ -33,7 +33,7 @@ $(function(){
 
 //快递
 function expressFun(){
-	alert(orderid +"==="+ orderjpid);
+	//alert(orderid +"==="+ orderjpid);
 	$.ajax({
 		type : 'POST',
 		data : {
@@ -341,7 +341,8 @@ function successCallBack(status){
 			type:'post',
 			dataType:"json",
 			data:{
-				orderid:orderid
+				orderid:orderid,
+				orderjpid:orderjpid
 			},
 			success: function(data){
 				orderobj.applyinfo = data.applyinfo;
