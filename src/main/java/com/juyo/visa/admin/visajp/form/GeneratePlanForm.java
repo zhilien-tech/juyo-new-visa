@@ -32,4 +32,8 @@ public class GeneratePlanForm {
 	private Integer triptype;
 
 	private String multiways;
+
+	private Integer goFlightNum;
+
+	private Integer returnFlightNum;
 }

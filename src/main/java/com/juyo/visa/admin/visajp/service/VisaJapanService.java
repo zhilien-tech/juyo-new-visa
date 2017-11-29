@@ -309,6 +309,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			flightcount++;
 		}
 		List<TFlightEntity> flights = dbDao.query(TFlightEntity.class, Cnd.where("id", "in", mulflightids), null);
+		//补全三个航程
+		if (multitrip.size() < 3) {
+			for (int i = 0; i < 3 - multitrip.size(); i++) {
+				multitrip.add(new TOrderTripMultiJpEntity());
+			}
+		}
 		result.put("flights", flights);
 		result.put("multitrip", multitrip);
 		result.put("multitripjson", JsonUtil.toJson(multitrip));
@@ -458,7 +464,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	public Object resetPlan(Integer orderid, Integer planid) {
 		TOrderTravelplanJpEntity plan = dbDao.fetch(TOrderTravelplanJpEntity.class, planid.longValue());
 		//获取城市所有的酒店
-		List<THotelEntity> hotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", plan.getCityId()), null);
+		//List<THotelEntity> hotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", plan.getCityId()), null);
 		//获取城市所有的景区
 		String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
 		Sql sql = Sqls.create(sqlString);
@@ -468,7 +474,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		List<Record> scenics = dbDao.query(sql, null, null);
 		Random random = new Random();
 		plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-		plan.setHotel(hotels.get(random.nextInt(hotels.size())).getId());
+		//plan.setHotel(hotels.get(random.nextInt(hotels.size())).getId());
 		dbDao.update(plan);
 		//行程安排
 		return getTravelPlanByOrderId(orderid);
@@ -489,6 +495,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//需要生成的travelplan
 		List<TOrderTravelplanJpEntity> travelplans = Lists.newArrayList();
+		//往返
 		if (planform.getTriptype().equals(1)) {
 			if (Util.isEmpty(planform.getGoArrivedCity())) {
 				result.put("message", "请选择抵达城市");
@@ -500,6 +507,14 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			}
 			if (Util.isEmpty(planform.getReturnDate())) {
 				result.put("message", "请选择返回日期");
+				return result;
+			}
+			if (Util.isEmpty(planform.getGoFlightNum())) {
+				result.put("message", "请选择出发航班号");
+				return result;
+			}
+			if (Util.isEmpty(planform.getReturnFlightNum())) {
+				result.put("message", "请选择返回航班号");
 				return result;
 			}
 			int daysBetween = DateUtil.daysBetween(planform.getGoDate(), planform.getReturnDate());
@@ -542,6 +557,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				travelplans.add(travelplan);
 			}
 		} else if (planform.getTriptype().equals(2)) {
+			//多程
 			List<TOrderTripMultiJpEntity> tripMultis = JsonUtil.fromJsonAsList(TOrderTripMultiJpEntity.class,
 					planform.getMultiways());
 			if (!Util.isEmpty(tripMultis)) {
@@ -558,6 +574,14 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 						result.put("message", "请填写抵达城市");
 						return result;
 					}
+				}
+				if (Util.isEmpty(tripMultis.get(0).getFlightNum())) {
+					result.put("message", "请选择去程航班");
+					return result;
+				}
+				if (Util.isEmpty(tripMultis.get(tripMultis.size() - 1).getFlightNum())) {
+					result.put("message", "请选择回程航班");
+					return result;
 				}
 				TOrderTripMultiJpEntity pre = tripMultis.get(0);
 				Date departureDate = pre.getDepartureDate();
@@ -585,7 +609,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 							travelplan.setCityId(pre.getArrivedCity());
 							travelplan.setCityName(city.getCity());
 							travelplan.setDay(String.valueOf(day));
-							travelplan.setHotel(hotels.get(hotelindex).getId());
+							if (i < betweenday - 1 || count < tripMultis.size() - 1) {
+								travelplan.setHotel(hotels.get(hotelindex).getId());
+							}
 							travelplan.setOrderId(planform.getOrderid());
 							travelplan.setOutDate(DateUtil.addDay(departureDate, day - 1));
 
@@ -817,7 +843,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//更新备注信息
 		dbDao.update(orderjp);
 		List<Map> applicatlist = JsonUtil.fromJson(applicatinfo, List.class);
+		//需要更新的真实资料
 		List<TApplicantVisaPaperworkJpEntity> paperworks = Lists.newArrayList();
+		//所有的人
 		for (Map map : applicatlist) {
 			String applicatid = map.get("applicatid").toString();
 			String datatext = String.valueOf(map.get("datatext"));
@@ -826,10 +854,19 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			cnd.and("realInfo", "in", datatext.split(","));
 			List<TApplicantVisaPaperworkJpEntity> paperwork = dbDao.query(TApplicantVisaPaperworkJpEntity.class, cnd,
 					null);
+			Cnd notincnd = Cnd.NEW();
+			notincnd.and("applicantId", "=", applicatid);
+			notincnd.and("realInfo", " not in", datatext.split(","));
+			List<TApplicantVisaPaperworkJpEntity> notinpaperwork = dbDao.query(TApplicantVisaPaperworkJpEntity.class,
+					notincnd, null);
 			for (TApplicantVisaPaperworkJpEntity tApplicantVisaPaperworkJpEntity : paperwork) {
 				tApplicantVisaPaperworkJpEntity.setStatus(0);
 			}
+			for (TApplicantVisaPaperworkJpEntity tApplicantVisaPaperworkJpEntity : notinpaperwork) {
+				tApplicantVisaPaperworkJpEntity.setStatus(1);
+			}
 			paperworks.addAll(paperwork);
+			paperworks.addAll(notinpaperwork);
 		}
 		//删掉灰色的
 		if (!Util.isEmpty(paperworks)) {

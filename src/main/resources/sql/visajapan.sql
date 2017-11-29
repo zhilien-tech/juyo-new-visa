@@ -5,7 +5,7 @@ SELECT
 	toj.acceptDesign number,
 	DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
 	DATE_FORMAT(tr.outVisaDate, '%Y-%m-%d') signingTime,
-	tr. STATUS japanState,
+	tr.STATUS japanState,
 	toj.visastatus visastatus,
 	(
 		SELECT
@@ -55,13 +55,13 @@ LEFT JOIN (
 			(
 				CASE
 				WHEN STATUS = 0 THEN
+						realInfo
+				ELSE
 					CONCAT(
 						'<font color="blue">',
 						realInfo,
 						'</font>'
 					)
-				ELSE
-					realInfo
 				END
 			) SEPARATOR '、'
 		) DATA,
