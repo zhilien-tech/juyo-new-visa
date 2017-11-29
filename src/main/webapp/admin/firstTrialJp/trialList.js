@@ -108,7 +108,7 @@ new Vue({
 				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid
 			});
 		},
-    	qualifiedFun:function(applyid){
+    	qualifiedFun:function(applyid,orderid,orderjpid){
     		layer.confirm('您确认合格吗？', {
 				   btn: ['是','否'], //按钮
 				   shade: false //不显示遮罩
@@ -116,7 +116,9 @@ new Vue({
 					$.ajax({
 						type : 'POST',
 						data : {
-							applyid:applyid
+							applyid:applyid,
+							orderid:orderid,
+							orderjpid:orderjpid
 						},
 						url : '/admin/firstTrialJp/qualified.html',
 						success : function(data) {
@@ -131,7 +133,7 @@ new Vue({
 					 //取消之后不做任何操作
 				});
     	},
-    	unqualifiedFun:function(applyid){
+    	unqualifiedFun:function(applyid,orderid){
     		layer.open({
     		    type: 2,
     		    title: false,
@@ -141,7 +143,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['800px', '402px'],
-    		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyid
+    		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyid+'&orderid='+orderid
     	    });
     	}
 	}

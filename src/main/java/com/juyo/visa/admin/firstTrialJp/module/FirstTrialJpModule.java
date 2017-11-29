@@ -112,8 +112,9 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Object qualified(@Param("applyid") int applyid) {
-		return firstTrialJpViewService.qualified(applyid);
+	public Object qualified(@Param("applyid") Integer applyid, @Param("orderid") Integer orderid,
+			@Param("orderjpid") Integer orderjpid) {
+		return firstTrialJpViewService.qualified(applyid, orderid, orderjpid);
 	}
 
 	/**
@@ -121,8 +122,8 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object unqualified(@Param("applyid") Integer applyid) {
-		return firstTrialJpViewService.unqualified(applyid);
+	public Object unqualified(@Param("applyid") Integer applyid, @Param("orderid") Integer orderid) {
+		return firstTrialJpViewService.unqualified(applyid, orderid);
 	}
 
 	/**

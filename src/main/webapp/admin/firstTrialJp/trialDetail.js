@@ -287,7 +287,9 @@ new Vue({
 				$.ajax({
 					type : 'POST',
 					data : {
-						applyid:applyId
+						applyid:applyid,
+						orderid:orderid,
+						orderjpid:orderjpid
 					},
 					url : '/admin/firstTrialJp/qualified.html',
 					success : function(data) {
@@ -304,16 +306,16 @@ new Vue({
 		},
 		unqualified:function(applyId){
 			layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['800px', '402px'],
-				content: '/admin/firstTrialJp/unqualified.html?applyid='+applyId
-			});
+    		    type: 2,
+    		    title: false,
+    		    closeBtn:false,
+    		    fix: false,
+    		    maxmin: false,
+    		    shadeClose: false,
+    		    scrollbar: false,
+    		    area: ['800px', '402px'],
+    		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyId+'&orderid='+orderid
+    	    });
 		},
 		logs:function(){//日志
 			layer.open({

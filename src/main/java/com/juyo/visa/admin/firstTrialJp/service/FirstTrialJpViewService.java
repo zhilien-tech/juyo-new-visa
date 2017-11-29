@@ -350,7 +350,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//合格申请人
-	public Object qualified(int applyid) {
+	public Object qualified(Integer applyid, Integer orderid, Integer orderjpid) {
 		int update = dbDao.update(TApplicantEntity.class,
 				Chain.make("status", TrialApplicantStatusEnum.qualified.intKey()), Cnd.where("id", "=", applyid));
 		if (update > 0) {
@@ -361,16 +361,27 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 				dbDao.delete(unqualifiedInfo);
 			}
 		}
+		Boolean qualified = isQualified(orderjpid);
+		if (!qualified) {
+			//只要一个不合格，订单状态为初审
+			int firsttrialstatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
+			dbDao.update(TOrderEntity.class, Chain.make("status", firsttrialstatus), Cnd.where("id", "=", orderid));
+		} else {
+			//全合格，订单状态为合格
+			int qualifiedstatus = JPOrderStatusEnum.QUALIFIED_ORDER.intKey();
+			dbDao.update(TOrderEntity.class, Chain.make("status", qualifiedstatus), Cnd.where("id", "=", orderid));
+		}
 		return update > 0;
 	}
 
 	//获取申请人不合格信息
-	public Object unqualified(Integer applyid) {
+	public Object unqualified(Integer applyid, Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
 		int count = nutDao.count(TApplicantUnqualifiedEntity.class, Cnd.where("applicantId", "=", applyid));
 		TApplicantUnqualifiedEntity unqualifiedInfo = dbDao.fetch(TApplicantUnqualifiedEntity.class,
 				Cnd.where("applicantId", "=", applyid));
 		result.put("applyid", applyid);
+		result.put("orderid", orderid);
 		result.put("hasUnqInfo", count > 0);
 		result.put("unqualifiedInfo", unqualifiedInfo);
 		return result;
@@ -381,6 +392,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		int YES = IsYesOrNoEnum.YES.intKey();
 		int NO = IsYesOrNoEnum.NO.intKey();
 		Integer applicantId = form.getApplicantId();
+		Integer orderid = form.getOrderid();
 		String isBase = form.getIsBase();
 		int isB = 0;
 		if (Util.eq("on", isBase)) {
@@ -428,10 +440,14 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			nutDao.update(unqualifiedInfo);
 		}
 
-		//只要有一个不合格, 则申请人状态不合格
+		//只要有一个不合格
 		if (isB == 1 || isV == 1 || isP == 1) {
+			//更改申请人状态为不合格
 			dbDao.update(TApplicantEntity.class, Chain.make("status", TrialApplicantStatusEnum.unqualified.intKey()),
 					Cnd.where("id", "=", applicantId));
+			//更改订单状态为初审
+			int firsttrialstatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
+			dbDao.update(TOrderEntity.class, Chain.make("status", firsttrialstatus), Cnd.where("id", "=", orderid));
 		}
 
 		return Json.toJson("success");
