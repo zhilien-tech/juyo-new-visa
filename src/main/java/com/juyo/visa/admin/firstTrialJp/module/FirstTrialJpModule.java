@@ -84,7 +84,6 @@ public class FirstTrialJpModule {
 	 * 快递 发信息
 	 */
 	@At
-	@GET
 	@Ok("jsp")
 	public Object express(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid, HttpSession session) {
 		return firstTrialJpViewService.express(orderid, orderjpid, session);
@@ -95,8 +94,8 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Object getmainApplicantByOrderid(@Param("id") int orderid) {
-		return firstTrialJpViewService.getmainApplicantByOrderid(orderid);
+	public Object getmainApplicantByOrderid(@Param("orderjpid") int orderjpid) {
+		return firstTrialJpViewService.getmainApplicantByOrderid(orderjpid);
 	}
 
 	/**

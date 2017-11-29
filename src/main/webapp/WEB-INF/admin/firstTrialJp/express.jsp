@@ -120,6 +120,7 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		var orderid = '${obj.orderid}';
+		var orderjpid = '${obj.orderjpid}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -150,7 +151,7 @@
 					type:'post',
 					dataType:"json",
 					data:{
-						id:orderid
+						orderjpid:orderjpid
 					},
 					success: function(data){
 						orderobj.applyinfo = data.applicant;

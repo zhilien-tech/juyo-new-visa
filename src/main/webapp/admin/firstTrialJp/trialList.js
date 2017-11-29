@@ -54,7 +54,7 @@ new Vue({
     		    content: '/admin/orderJp/updateApplicant.html?id='+applyid
     	    });
 		},
-		expressFun:function(orderjpid){//跳转快递弹层页面
+		expressFun:function(orderid,orderjpid){//跳转快递弹层页面
 			$.ajax({
 				type : 'POST',
 				async: false,
