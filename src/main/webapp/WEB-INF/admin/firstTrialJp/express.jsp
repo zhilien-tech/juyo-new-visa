@@ -31,7 +31,7 @@
 			<div class="modal-header">
 				<span class="heading">快递</span>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save(${obj.orderid});" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="addBtn" type="button" onclick="save(${obj.orderid},${obj.orderjpid});" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content" id="el">
@@ -120,6 +120,7 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		var orderid = '${obj.orderid}';
+		var orderjpid = '${obj.orderjpid}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -150,7 +151,7 @@
 					type:'post',
 					dataType:"json",
 					data:{
-						id:orderid
+						orderjpid:orderjpid
 					},
 					success: function(data){
 						orderobj.applyinfo = data.applicant;

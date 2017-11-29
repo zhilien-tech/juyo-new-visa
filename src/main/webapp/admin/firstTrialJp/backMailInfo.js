@@ -19,7 +19,7 @@ $(function(){
 //“+”号 回邮寄信息
 function clearBackMailInfo(newDiv){
 	newDiv.find('[name=obmId]').val("");
-	newDiv.find('[name=datasour]').val(1);
+	newDiv.find('[name=source]').val(1);
 	newDiv.find('[name=expressType]').val(1);
 	newDiv.find('[name=expressAddress]').val("");
 	newDiv.find('[name=linkman]').val("");

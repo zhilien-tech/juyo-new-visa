@@ -131,7 +131,8 @@ function clearText(){
 }
 
 //保存
-function save(orderid){
+function save(orderid,orderjpid){
+	//alert(orderid +"---"+orderjpid);
 	var receiveAddress = $("#receiveAddressId").val();
 	if (receiveAddress == "") {
 		layer.msg('收件人信息不能为空');
@@ -143,6 +144,7 @@ function save(orderid){
 		type:'post',
 		data:{
 			orderid:orderid,
+			orderjpid:orderjpid,
 			expresstype:$("#express").val(),
 			receiveAddressId:$("#receiveAddressId").val()
 		},
@@ -151,6 +153,7 @@ function save(orderid){
 				layer.close(layerIndex);
 			}
 			closeWindow();
+			parent.successCallBack(1);
 		}
 	});
 }

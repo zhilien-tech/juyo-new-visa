@@ -509,6 +509,7 @@
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
 			var orderid = '${obj.orderid}';
+			var orderjpid = '${obj.orderjpid}';
 			var backinfo = '${obj.backinfo}';
 			var visaCounty = '${obj.jporderinfo.visaCounty}';
 			var threecounty = '${obj.jporderinfo.threeCounty}';

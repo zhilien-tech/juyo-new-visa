@@ -33,10 +33,11 @@ $(function(){
 
 //快递
 function expressFun(){
+	//alert(orderid +"==="+ orderjpid);
 	$.ajax({
 		type : 'POST',
 		data : {
-			orderid:orderid
+			orderjpid:orderjpid
 		},
 		url : '/admin/firstTrialJp/isQualified.html',
 		success : function(data) {
@@ -50,7 +51,7 @@ function expressFun(){
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '550px'],
-					content: '/admin/firstTrialJp/express.html?id='+orderid
+					content: '/admin/firstTrialJp/express.html?orderid='+orderid
 				});
 			}else{
 				layer.msg('申请人不合格');
@@ -71,11 +72,11 @@ function getMailInfos(){
 		infoLength += obmId;
 		backInfo.id = obmId;
 		
-		var datasour = $(this).find('[name=datasour]').val();
-		if(datasour != 1){
-			infoLength += datasour;
+		var source = $(this).find('[name=source]').val();
+		if(source != 1){
+			infoLength += source;
 		}
-		backInfo.datasour = datasour;
+		backInfo.source = source;
 		
 		var expressType = $(this).find('[name=expressType]').val();
 		if(expressType != 1){
@@ -221,7 +222,8 @@ new Vue({
 			type:'post',
 			dataType:"json",
 			data:{
-				orderid:orderid
+				orderid:orderid,
+				orderjpid:orderjpid
 			},
 			success: function(data){
 				orderobj.orderinfo = data.orderinfo;
@@ -238,7 +240,7 @@ new Vue({
 		});
 	},
 	methods:{
-		basicInfo : function(id){
+		basicInfo : function(applyId){
 			layer.open({
 				type: 2,
 				title: false,
@@ -248,21 +250,21 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/updateApplicant.html?id='+id
+				content:'/admin/orderJp/updateApplicant.html?id='+applyId
 			});
 		},
 		passport:function(applyId){
 			layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['900px', '550px'],
-				content: '/admin/visaJapan/passportInfo.html?applyId='+applyId
-			});
+    		    type: 2,
+    		    title: false,
+    		    closeBtn:false,
+    		    fix: false,
+    		    maxmin: false,
+    		    shadeClose: false,
+    		    scrollbar: false,
+    		    area: ['900px', '550px'],
+    		    content:'/admin/orderJp/passportInfo.html?id='+applyId
+    	    });
 		},
 		visaInfo:function(applyId){
 			layer.open({
@@ -274,7 +276,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid
+				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid
 			});
 		},
 		qualified:function(applyId){
@@ -285,12 +287,15 @@ new Vue({
 				$.ajax({
 					type : 'POST',
 					data : {
-						applyid:applyId
+						applyid:applyId,
+						orderid:orderid,
+						orderjpid:orderjpid
 					},
 					url : '/admin/firstTrialJp/qualified.html',
 					success : function(data) {
 						layer.close(index);
 						parent.successCallBack(1);
+						successCallBack(1);
 					},
 					error : function(xhr) {
 						layer.msg("修改失败", "", 3000);
@@ -302,16 +307,16 @@ new Vue({
 		},
 		unqualified:function(applyId){
 			layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['800px', '402px'],
-				content: '/admin/firstTrialJp/unqualified.html?applyid='+applyId
-			});
+    		    type: 2,
+    		    title: false,
+    		    closeBtn:false,
+    		    fix: false,
+    		    maxmin: false,
+    		    shadeClose: false,
+    		    scrollbar: false,
+    		    area: ['800px', '402px'],
+    		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyId+'&orderid='+orderid
+    	    });
 		},
 		logs:function(){//日志
 			layer.open({
@@ -339,10 +344,12 @@ function successCallBack(status){
 			type:'post',
 			dataType:"json",
 			data:{
-				orderid:orderid
+				orderid:orderid,
+				orderjpid:orderjpid
 			},
 			success: function(data){
 				orderobj.applyinfo = data.applyinfo;
+				orderobj.orderinfo = data.orderinfo;
 			}
 		}); 
 	}
@@ -352,5 +359,35 @@ function successCallBack(status){
 $(".addExpressInfoBtn").click(function(){
 	$(".expressInfo").removeClass("none");
 	$(this).hide();
+});
+
+//时间插件格式化
+$("#gotripdate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+$("#backtripdate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+$("#sendvisadate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+$("#outvisadate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
 });
 
