@@ -240,7 +240,7 @@ new Vue({
 		});
 	},
 	methods:{
-		basicInfo : function(id){
+		basicInfo : function(applyId){
 			layer.open({
 				type: 2,
 				title: false,
@@ -250,21 +250,21 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/updateApplicant.html?id='+id
+				content:'/admin/orderJp/updateApplicant.html?id='+applyId
 			});
 		},
 		passport:function(applyId){
 			layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['900px', '550px'],
-				content: '/admin/visaJapan/passportInfo.html?applyId='+applyId
-			});
+    		    type: 2,
+    		    title: false,
+    		    closeBtn:false,
+    		    fix: false,
+    		    maxmin: false,
+    		    shadeClose: false,
+    		    scrollbar: false,
+    		    area: ['900px', '550px'],
+    		    content:'/admin/orderJp/passportInfo.html?id='+applyId
+    	    });
 		},
 		visaInfo:function(applyId){
 			layer.open({
@@ -276,7 +276,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid
+				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid
 			});
 		},
 		qualified:function(applyId){
