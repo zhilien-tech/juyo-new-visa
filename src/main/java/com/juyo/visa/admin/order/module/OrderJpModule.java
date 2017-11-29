@@ -30,6 +30,7 @@ import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.ShareTypeEnum;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -64,6 +65,7 @@ public class OrderJpModule {
 		Map<String, Object> result = MapUtil.map();
 		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
 		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(MainSaleVisaTypeEnum.class));
+		result.put("orderStatus", EnumUtil.enum2(JPOrderStatusEnum.class));
 		return result;
 	}
 
@@ -393,8 +395,8 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object sendEmail(@Param("orderid") int orderid, @Param("applicantid") int applicantid) {
-		return saleViewService.sendEmail(orderid, applicantid);
+	public Object sendEmail(@Param("orderid") int orderid, @Param("applicantid") int applicantid, HttpSession session) {
+		return saleViewService.sendEmail(orderid, applicantid, session);
 	}
 
 	/**
@@ -402,8 +404,9 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object sendEmailUnified(@Param("orderid") int orderid, @Param("applicantid") int applicantid) {
-		return saleViewService.sendEmailUnified(orderid, applicantid);
+	public Object sendEmailUnified(@Param("orderid") int orderid, @Param("applicantid") int applicantid,
+			HttpSession session) {
+		return saleViewService.sendEmailUnified(orderid, applicantid, session);
 	}
 
 	/**
@@ -411,7 +414,7 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object firtTrialJp(@Param("orderId") Integer id) {
-		return saleViewService.firtTrialJp(id);
+	public Object firtTrialJp(@Param("orderId") Integer id, HttpSession session) {
+		return saleViewService.firtTrialJp(id, session);
 	}
 }

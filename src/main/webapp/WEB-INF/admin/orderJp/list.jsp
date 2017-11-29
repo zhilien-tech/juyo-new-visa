@@ -28,9 +28,9 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-2 left-5px right-0px">
-								<select class="input-class input-sm" id="status" name="status">
+								<select class="input-class input-sm" id="status" name="status" onchange="countryChange();">
 									<option value="">状态</option>
-									<c:forEach var="map" items="${data.status}">
+									<c:forEach var="map" items="${obj.orderStatus}">
 										<option value="${map.key}">${map.value}</option>
 									</c:forEach>
 								</select>
@@ -235,34 +235,13 @@
 				 }
 			}
 		
-		 $("#sendSignDate").datetimepicker({
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN',
-		        weekStart: 1,
-		        todayBtn: 1,
-				autoclose: true,
-				todayHighlight: true,//高亮
-				startView: 4,//从年开始选择
-				forceParse: 0,
-		        showMeridian: false,
-				pickerPosition:"bottom-left",//显示位置
-				minView: "month"//只显示年月日
-			});
-		 $("#signOutDate").datetimepicker({
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN',
-		        weekStart: 1,
-		        todayBtn: 1,
-				autoclose: true,
-				todayHighlight: true,//高亮
-				startView: 4,//从年开始选择
-				forceParse: 0,
-		        showMeridian: false,
-				pickerPosition:"bottom-left",//显示位置
-				minView: "month"//只显示年月日
-			});
-		 
 		 $("#start_time").daterangepicker(null, function(start, end, label) {
+             console.log(start.toISOString(), end.toISOString(), label);
+         });
+		 $("#sendSignDate").daterangepicker(null, function(start, end, label) {
+             console.log(start.toISOString(), end.toISOString(), label);
+         });
+		 $("#signOutDate").daterangepicker(null, function(start, end, label) {
              console.log(start.toISOString(), end.toISOString(), label);
          });
 	</script>

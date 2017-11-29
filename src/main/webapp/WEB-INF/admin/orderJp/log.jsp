@@ -16,7 +16,7 @@
 <body>
 	<div class="modal-content">
 			<div class="modal-header">
-				<span class="heading">分享</span> 
+				<span class="heading">日志</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="关闭" /> 
 			</div>
 			<div class="modal-body">
@@ -31,9 +31,9 @@
 						</thead>
 						<tbody >
 							<tr v-for="data in loginfo">
-								<td ><input style="border: 0px;outline:none;align:center;" />{{data.createtime}}</td>
-								<td ><input style="border: 0px;outline:none;align:center;" />{{data.status}}</td>
-								<td ><input style="border: 0px;outline:none;align:center;" />{{data.name}}</td>
+								<td >{{data.createtime}}</td>
+								<td >{{data.orderstatus}}</td>
+								<td >{{data.name}}</td>
 							</tr>
 						</tbody>
 					</table>
