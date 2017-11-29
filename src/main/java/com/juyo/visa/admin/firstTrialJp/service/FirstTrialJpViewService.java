@@ -362,14 +362,17 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			}
 		}
 		Boolean qualified = isQualified(orderjpid);
+		Date nowDate = DateUtil.nowDate();
 		if (!qualified) {
 			//只要一个不合格，订单状态为初审
 			int firsttrialstatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
-			dbDao.update(TOrderEntity.class, Chain.make("status", firsttrialstatus), Cnd.where("id", "=", orderid));
+			dbDao.update(TOrderEntity.class, Chain.make("status", firsttrialstatus).make("updateTime", nowDate),
+					Cnd.where("id", "=", orderid));
 		} else {
 			//全合格，订单状态为合格
 			int qualifiedstatus = JPOrderStatusEnum.QUALIFIED_ORDER.intKey();
-			dbDao.update(TOrderEntity.class, Chain.make("status", qualifiedstatus), Cnd.where("id", "=", orderid));
+			dbDao.update(TOrderEntity.class, Chain.make("status", qualifiedstatus).make("updateTime", nowDate),
+					Cnd.where("id", "=", orderid));
 		}
 		return update > 0;
 	}
@@ -447,7 +450,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					Cnd.where("id", "=", applicantId));
 			//更改订单状态为初审
 			int firsttrialstatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
-			dbDao.update(TOrderEntity.class, Chain.make("status", firsttrialstatus), Cnd.where("id", "=", orderid));
+			Date nowDate = DateUtil.nowDate();
+			dbDao.update(TOrderEntity.class, Chain.make("status", firsttrialstatus).make("updateTime", nowDate),
+					Cnd.where("id", "=", orderid));
 		}
 
 		return Json.toJson("success");
@@ -515,8 +520,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 
 		//改变订单状态 由初审到发地址
+		Date nowDate = DateUtil.nowDate();
 		int receptionStatus = JPOrderStatusEnum.SEND_ADDRESS.intKey();
-		dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus), Cnd.where("id", "=", orderid));
+		dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus).make("updateTime", nowDate),
+				Cnd.where("id", "=", orderid));
 
 		//发送短信、邮件
 		try {
