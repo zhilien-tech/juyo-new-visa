@@ -72,11 +72,11 @@ function getMailInfos(){
 		infoLength += obmId;
 		backInfo.id = obmId;
 		
-		var datasour = $(this).find('[name=datasour]').val();
-		if(datasour != 1){
-			infoLength += datasour;
+		var source = $(this).find('[name=source]').val();
+		if(source != 1){
+			infoLength += source;
 		}
-		backInfo.datasour = datasour;
+		backInfo.source = source;
 		
 		var expressType = $(this).find('[name=expressType]').val();
 		if(expressType != 1){
