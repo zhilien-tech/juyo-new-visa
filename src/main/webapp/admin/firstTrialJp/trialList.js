@@ -55,10 +55,9 @@ new Vue({
     	    });
 		},
 		expressFun:function(orderid,orderjpid){//跳转快递弹层页面
-			//alert(orderid +"---"+orderjpid);
+			alert(orderid +"---"+orderjpid);
 			$.ajax({
 				type : 'POST',
-				async: false,
 				data : {
 					orderjpid:orderjpid
 				},

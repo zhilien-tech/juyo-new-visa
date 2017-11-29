@@ -33,10 +33,11 @@ $(function(){
 
 //快递
 function expressFun(){
+	alert(orderid +"==="+ orderjpid);
 	$.ajax({
 		type : 'POST',
 		data : {
-			orderid:orderid
+			orderjpid:orderjpid
 		},
 		url : '/admin/firstTrialJp/isQualified.html',
 		success : function(data) {
@@ -50,7 +51,7 @@ function expressFun(){
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '550px'],
-					content: '/admin/firstTrialJp/express.html?id='+orderid
+					content: '/admin/firstTrialJp/express.html?orderid='+orderid
 				});
 			}else{
 				layer.msg('申请人不合格');
