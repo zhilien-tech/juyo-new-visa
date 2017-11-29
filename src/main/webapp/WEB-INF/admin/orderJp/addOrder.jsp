@@ -132,7 +132,7 @@
 										<label><span>*</span>联系人：</label>
 										<input type="hidden" id="linkmanSelect2" value=""/>
 										 <select id="linkman"
-											name="linkman" class="form-control select2 cityselect2 "
+											name="cusLinkman" class="form-control select2 cityselect2 "
 											multiple="multiple" data-placeholder="">
 										</select>
 									</div>
@@ -151,7 +151,7 @@
 									<div class="form-group">
 										<label><span>*</span>邮箱：</label> 
 										<input type="hidden" id="emailSelect2" value=""/>
-										<select id="email"
+										<select id="cusEmail"
 											name="email" class="form-control select2 cityselect2 "
 											multiple="multiple" data-placeholder="">
 										</select>
@@ -166,7 +166,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>联系人：</label> <input id="linkman2"
-											name="linkman" type="text" class="form-control input-sm"
+											name="cusLinkman" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
@@ -180,7 +180,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>邮箱：</label> <input id="email2"
-											name="email" type="text" class="form-control input-sm"
+											name="cusEmail" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
@@ -483,14 +483,14 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>联系人：</label> <input id="expressLinkman"
-											name="expressLinkman" type="text" class="form-control input-sm"
+											name="linkman" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>电话：</label> <input id="expressTelephone"
-											name="expressTelephone" type="text" class="form-control input-sm"
+											name="telephone" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>

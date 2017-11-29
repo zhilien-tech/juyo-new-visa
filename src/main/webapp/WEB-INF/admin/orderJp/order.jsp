@@ -116,7 +116,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>联系人：</label> 
-										<select id = "linkman" name="linkman"
+										<select id = "linkman" name="cusLinkman"
 												class="form-control select2 cityselect2 " multiple="multiple"
 												data-placeholder="" v-model="customerInfo.linkman">
 												<c:if test="${ !empty obj.customer.id }">
@@ -140,7 +140,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>邮箱：</label> 
-										<select id = "email" name="email" class="form-control select2 cityselect2 " multiple="multiple" data-placeholder="" v-model="customerInfo.email">
+										<select id = "email" name="cusEmail" class="form-control select2 cityselect2 " multiple="multiple" data-placeholder="" v-model="customerInfo.email">
 											<c:if test="${ !empty obj.customer.id }">
 													<option value="${obj.customer.id }" selected="selected">${obj.customer.email }</option>
 												</c:if>
@@ -154,7 +154,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>联系人：</label> 
-										<input id="linkman2" name="linkman" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.linkman }"/>
+										<input id="linkman2" name="cusLinkman" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.linkman }"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -166,7 +166,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>邮箱：</label>
-										<input id="email2" name="email" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.email }"/>
+										<input id="email2" name="cusEmail" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.email }"/>
 									</div>
 								</div>
 							</div><!-- end input 直客 -->
@@ -489,14 +489,14 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>联系人：</label> <input id="expressLinkman"
-										name="expressLinkman" type="text" class="form-control input-sm"
+										name="linkman" type="text" class="form-control input-sm"
 										placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>电话：</label> <input id="expressTelephone"
-										name="expressTelephone" type="text" class="form-control input-sm"
+										name="telephone" type="text" class="form-control input-sm"
 										placeholder=" " />
 								</div>
 							</div>
@@ -909,13 +909,15 @@
 				},
 				//初审按钮
 				firtTrialJp : function(id){
+					layer.load(1);
 					$.ajax({ 
 				    	url: '${base}/admin/orderJp/firtTrialJp',
 				    	dataType:"json",
 				    	data:{orderId:id},
 				    	type:'post',
 				    	success: function(data){
-				    		
+				    		layer.closeAll('loading');
+				    		layer.msg('初审通过');
 				      	}
 				    }); 
 				}

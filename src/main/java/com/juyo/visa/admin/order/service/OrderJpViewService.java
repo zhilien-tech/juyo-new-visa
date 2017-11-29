@@ -491,11 +491,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(orderInfo.getSource())) {
 			if (Util.eq(orderInfo.getSource(), CustomerTypeEnum.ZHIKE.intKey())) {
 				orderEntity.setIsDirectCus(IsYesOrNoEnum.YES.intKey()); //1是直客
-				if (!Util.isEmpty(orderInfo.getEmail())) {
-					orderEntity.setEmail(orderInfo.getEmail());
+				if (!Util.isEmpty(orderInfo.getCusEmail())) {
+					orderEntity.setEmail(orderInfo.getCusEmail());
 				}
-				if (!Util.isEmpty(orderInfo.getLinkman())) {
-					orderEntity.setLinkman(orderInfo.getLinkman());
+				if (!Util.isEmpty(orderInfo.getCusLinkman())) {
+					orderEntity.setLinkman(orderInfo.getCusLinkman());
 				}
 				if (!Util.isEmpty(orderInfo.getMobile())) {
 					orderEntity.setTelephone(orderInfo.getMobile());
@@ -534,14 +534,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(orderInfo.getShortname())) {
 			orderEntity.setComShortName(orderInfo.getShortname());
 		}
-		if (!Util.isEmpty(orderInfo.getEmail())) {
-			orderEntity.setEmail(orderInfo.getEmail());
+		if (!Util.isEmpty(orderInfo.getCusEmail())) {
+			orderEntity.setEmail(orderInfo.getCusEmail());
 		}
 		if (!Util.isEmpty(orderInfo.getGotripdate())) {
 			orderEntity.setGoTripDate(orderInfo.getGotripdate());
 		}
-		if (!Util.isEmpty(orderInfo.getLinkman())) {
-			orderEntity.setLinkman(orderInfo.getLinkman());
+		if (!Util.isEmpty(orderInfo.getCusLinkman())) {
+			orderEntity.setLinkman(orderInfo.getCusLinkman());
 		}
 		if (!Util.isEmpty(orderInfo.getMoney())) {
 			DecimalFormat df = new DecimalFormat("#.00");
@@ -604,6 +604,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		orderEntity.setOrderNum(ordernum);
 		orderEntity.setCreateTime(new Date());
 		orderEntity.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
+		orderEntity.setUpdateTime(new Date());
 		dbDao.insert(orderEntity);
 		Integer orderId = orderEntity.getId();
 		//下单日志保存
