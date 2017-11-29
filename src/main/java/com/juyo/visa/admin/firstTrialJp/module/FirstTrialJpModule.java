@@ -67,8 +67,8 @@ public class FirstTrialJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object trialDetail(@Param("orderid") Integer orderid) {
-		return firstTrialJpViewService.trialDetail(orderid);
+	public Object trialDetail(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid) {
+		return firstTrialJpViewService.trialDetail(orderid, orderjpid);
 	}
 
 	/**
@@ -76,8 +76,8 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Object getJpTrialDetailData(@Param("orderid") Integer orderid) {
-		return firstTrialJpViewService.getJpTrialDetailData(orderid);
+	public Object getJpTrialDetailData(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid) {
+		return firstTrialJpViewService.getJpTrialDetailData(orderid, orderjpid);
 	}
 
 	/**
@@ -86,8 +86,8 @@ public class FirstTrialJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object express(@Param("id") Integer orderid, HttpSession session) {
-		return firstTrialJpViewService.express(orderid, session);
+	public Object express(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid, HttpSession session) {
+		return firstTrialJpViewService.express(orderid, orderjpid, session);
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Boolean isQualified(@Param("orderid") Integer orderid) {
-		return firstTrialJpViewService.isQualified(orderid);
+	public Boolean isQualified(@Param("orderjpid") Integer orderjpid) {
+		return firstTrialJpViewService.isQualified(orderjpid);
 	}
 }

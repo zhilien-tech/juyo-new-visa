@@ -35,9 +35,9 @@ new Vue({
 		/* editClick:function(){//编辑图标  页面跳转
 					window.location.href = '${base}/admin/firstTrialJp/edit.html';
 				} */
-		visaDetail:function(orderid){
+		visaDetail:function(orderid,orderjpid){
 			//跳转到签证详情页面
-			window.open('/admin/firstTrialJp/trialDetail.html?orderid='+orderid);
+			window.open('/admin/firstTrialJp/trialDetail.html?orderid='+orderid+'&orderjpid='+orderjpid);
 			//console.log(message);
 			//alert(JSON.stringify(event.target));
 		},
@@ -54,12 +54,12 @@ new Vue({
     		    content: '/admin/orderJp/updateApplicant.html?id='+applyid
     	    });
 		},
-		expressFun:function(orderid){//跳转快递弹层页面
+		expressFun:function(orderjpid){//跳转快递弹层页面
 			$.ajax({
 				type : 'POST',
 				async: false,
 				data : {
-					orderid:orderid
+					orderjpid:orderjpid
 				},
 				url : '/admin/firstTrialJp/isQualified.html',
 				success : function(data) {
@@ -73,7 +73,7 @@ new Vue({
 			    		    shadeClose: false,
 			    		    scrollbar: false,
 			    		    area: ['900px', '550px'],
-			    		    content: '/admin/firstTrialJp/express.html?id='+orderid
+			    		    content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
 			    	    });
 					}else{
 						layer.msg('申请人不合格');

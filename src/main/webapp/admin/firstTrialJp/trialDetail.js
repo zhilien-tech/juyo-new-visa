@@ -221,7 +221,8 @@ new Vue({
 			type:'post',
 			dataType:"json",
 			data:{
-				orderid:orderid
+				orderid:orderid,
+				orderjpid:orderjpid
 			},
 			success: function(data){
 				orderobj.orderinfo = data.orderinfo;

@@ -133,10 +133,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//主sql数据
 		List<Record> list = (List<Record>) sql.getResult();
 		for (Record record : list) {
-			Integer orderid = (Integer) record.get("id");
+			Integer orderjpId = (Integer) record.get("orderjpId");
 			String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
 			Sql applysql = Sqls.create(sqlStr);
-			List<Record> records = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
+			List<Record> records = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderjpId), null);
 			records = editApplicantsInfo(records);
 			record.put("everybodyInfo", records);
 
@@ -161,13 +161,15 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	 * @param orderid
 	 * @return 
 	 */
-	public Object trialDetail(Integer orderid) {
+	public Object trialDetail(Integer orderid, Integer orderjpid) {
 		Map<String, Object> result = Maps.newHashMap();
 		//日本订单数据
-		TOrderJpEntity jporderinfo = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
+		TOrderJpEntity jporderinfo = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 		result.put("jporderinfo", jporderinfo);
 		//订单id
 		result.put("orderid", orderid);
+		//t_order_jp id
+		result.put("orderjpid", orderjpid);
 		//领区
 		result.put("collarareaenum", EnumUtil.enum2(CollarAreaEnum.class));
 		//加急
@@ -187,9 +189,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//回邮方式
 		result.put("mainBackMailTypeEnum", EnumUtil.enum2(MainBackMailTypeEnum.class));
 		//回邮信息
-		TOrderJpEntity orderJp = dbDao.fetch(TOrderJpEntity.class, Long.valueOf(orderid));
 		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class,
-				Cnd.where("orderId", "=", orderJp.getOrderId()), null);
+				Cnd.where("orderId", "=", orderid), null);
 		result.put("backinfo", backinfo);
 
 		return result;
@@ -201,12 +202,12 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	 * @param orderid
 	 * @return 
 	 */
-	public Object getJpTrialDetailData(Integer orderid) {
+	public Object getJpTrialDetailData(Integer orderid, Integer orderjpid) {
 		Map<String, Object> result = Maps.newHashMap();
 		//订单信息
 		String sqlstr = sqlManager.get("firstTrialJp_order_info_byid");
 		Sql sql = Sqls.create(sqlstr);
-		sql.setParam("orderid", orderid);
+		sql.setParam("orderjpid", orderjpid);
 		Record orderinfo = dbDao.fetch(sql);
 		String orderStatus = orderinfo.getString("status");
 		for (JPOrderStatusEnum statusEnum : JPOrderStatusEnum.values()) {
@@ -234,20 +235,19 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 		result.put("orderinfo", orderinfo);
 		//申请人信息
-		List<Record> applyinfo = getApplicantByOrderid(orderid);
+		List<Record> applyinfo = getApplicantByOrderid(orderjpid);
 		result.put("applyinfo", applyinfo);
 		//回邮信息
-		TOrderJpEntity orderJp = dbDao.fetch(TOrderJpEntity.class, Long.valueOf(orderid));
-		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class,
-				Cnd.where("orderId", "=", orderJp.getOrderId()).orderBy("createTime", "DESC"), null);
+		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class, Cnd
+				.where("orderId", "=", orderid).orderBy("createTime", "DESC"), null);
 		result.put("backinfo", backinfo);
 
 		return result;
 	}
 
 	//判断订单下申请人是否合格
-	public Boolean isQualified(Integer orderid) {
-		List<Record> applicants = getApplicantByOrderid(orderid);
+	public Boolean isQualified(Integer orderjpid) {
+		List<Record> applicants = getApplicantByOrderid(orderjpid);
 		boolean isQualified = true;
 		if (!Util.isEmpty(applicants)) {
 			for (Record record : applicants) {
@@ -261,10 +261,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//根据订单id 获得申请人
-	public List<Record> getApplicantByOrderid(Integer orderid) {
+	public List<Record> getApplicantByOrderid(Integer orderjpid) {
 		String applysqlstr = sqlManager.get("firstTrialJp_orderDetail_applicant_by_orderid");
 		Sql applysql = Sqls.create(applysqlstr);
-		applysql.setParam("orderid", orderid);
+		applysql.setParam("orderjpid", orderjpid);
 		List<Record> applyinfo = dbDao.query(applysql, null, null);
 		applyinfo = editApplicantsInfo(applyinfo);
 		for (Record record : applyinfo) {
@@ -283,7 +283,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//快递 发邮件
-	public Object express(Integer orderid, HttpSession session) {
+	public Object express(Integer orderid, Integer orderjpid, HttpSession session) {
 
 		Map<String, Object> result = Maps.newHashMap();
 
@@ -318,23 +318,25 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
 		Sql applysql = Sqls.create(sqlStr);
 		List<Record> records = dbDao.query(applysql,
-				Cnd.where("taoj.orderId", "=", orderid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
+				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
 				null);
 		records = editApplicantsInfo(records);
 		result.put("applicant", records);
 		//订单id
 		result.put("orderid", orderid);
+		//t_order_jp id
+		result.put("orderjpid", orderjpid);
 
 		return result;
 	}
 
 	//获取订单主申请人
-	public Map<String, Object> getmainApplicantByOrderid(int orderid) {
+	public Map<String, Object> getmainApplicantByOrderid(int orderjpid) {
 		Map<String, Object> result = Maps.newHashMap();
 		String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
 		Sql applysql = Sqls.create(sqlStr);
 		List<Record> records = dbDao.query(applysql,
-				Cnd.where("taoj.orderId", "=", orderid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
+				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
 				null);
 		records = editApplicantsInfo(records);
 		result.put("applicant", records);
@@ -503,8 +505,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		//发送短信、邮件
 		try {
-			sendMail(orderid);
-			sendMessage(orderid);
+			sendMail(orderid, orderjpid);
+			sendMessage(orderid, orderjpid);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -594,7 +596,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//发送邮件信息
-	public Object sendMail(int orderid) throws IOException {
+	public Object sendMail(int orderid, int orderjpid) throws IOException {
 		List<String> readLines = IOUtils
 				.readLines(getClass().getClassLoader().getResourceAsStream("express_mail.html"));
 		StringBuilder tmp = new StringBuilder();
@@ -613,7 +615,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String mobile = orderReceive.getString("mobile");
 		String address = orderReceive.getString("address");
 
-		Map<String, Object> map = getmainApplicantByOrderid(orderid);
+		Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
 		List<Record> applicants = (List<Record>) map.get("applicant");
 		String result = "";
 		for (Record record : applicants) {
@@ -634,7 +636,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//发送手机信息
-	public Object sendMessage(int orderid) throws IOException {
+	public Object sendMessage(int orderid, int orderjpid) throws IOException {
 		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("express_sms.txt"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
@@ -652,7 +654,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String mobile = orderReceive.getString("mobile");
 		String address = orderReceive.getString("address");
 
-		Map<String, Object> map = getmainApplicantByOrderid(orderid);
+		Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
 		List<Record> applicants = (List<Record>) map.get("applicant");
 		String result = "";
 		for (Record record : applicants) {
