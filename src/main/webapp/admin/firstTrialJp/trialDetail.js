@@ -287,7 +287,7 @@ new Vue({
 				$.ajax({
 					type : 'POST',
 					data : {
-						applyid:applyid,
+						applyid:applyId,
 						orderid:orderid,
 						orderjpid:orderjpid
 					},
@@ -295,6 +295,7 @@ new Vue({
 					success : function(data) {
 						layer.close(index);
 						parent.successCallBack(1);
+						successCallBack(1);
 					},
 					error : function(xhr) {
 						layer.msg("修改失败", "", 3000);
@@ -348,6 +349,7 @@ function successCallBack(status){
 			},
 			success: function(data){
 				orderobj.applyinfo = data.applyinfo;
+				orderobj.orderinfo = data.orderinfo;
 			}
 		}); 
 	}
