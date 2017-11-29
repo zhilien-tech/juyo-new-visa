@@ -252,7 +252,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		if (!Util.isEmpty(applicants)) {
 			for (Record record : applicants) {
 				String status = (String) record.get("applicantstatus");
-				if (Util.eq("不合格", status)) {
+				if (!Util.eq("合格", status)) {
 					isQualified = false;
 				}
 			}
