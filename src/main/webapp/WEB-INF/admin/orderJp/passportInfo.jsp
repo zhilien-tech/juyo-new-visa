@@ -297,26 +297,14 @@
 		$("#issuedDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn: 1,
-			autoclose: true,
-			todayHighlight: true,//高亮
-			startView: 4,//从年开始选择
-			forceParse: 0,
-	        showMeridian: false,
+			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
 		$("#validEndDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn: 1,
-			autoclose: true,
-			todayHighlight: true,//高亮
-			startView: 4,//从年开始选择
-			forceParse: 0,
-	        showMeridian: false,
+			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});

@@ -66,7 +66,7 @@
 				layer.msg('修改成功');
 			}
 			$("#cancel").click();
-			//parent.successCallBack(1);
+			parent.successCallBack(1);
 			//parent.location.reload();
 		}
 	

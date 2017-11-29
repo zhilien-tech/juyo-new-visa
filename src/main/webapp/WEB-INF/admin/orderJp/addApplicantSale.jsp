@@ -443,14 +443,21 @@
 			$("#uploadFileBack").siblings("i").css("display","none");
 		}
 		
-		$("#birthday").datetimepicker({
+		$("#validStartDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
 			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
-		$("#validStartDate").datetimepicker({
+		$("#validEndDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		$("#birthday").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
 	        weekStart: 1,
@@ -461,19 +468,6 @@
 			forceParse: 0,
 	        showMeridian: false,
 			pickerPosition:"top-left",//显示位置
-			minView: "month"//只显示年月日
-		});
-		$("#validEndDate").datetimepicker({
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn: 1,
-			autoclose: true,
-			todayHighlight: true,
-			startView: 4,//从年开始选择
-			forceParse: 0,
-	        showMeridian: false,
-			pickerPosition:"top-left",
 			minView: "month"//只显示年月日
 		});
 		

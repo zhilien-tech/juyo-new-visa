@@ -72,27 +72,7 @@ public class OrderEditDataForm implements Serializable {
 
 	private Integer orderid;
 
-	private String expressLinkman;
-
-	private String expressTelephone;
-
 	private Integer visatype;
-
-	private String teamName;
-
-	private String expressAddress;
-
-	private String invoiceContent;
-
-	private String invoiceHead;
-
-	private String expressNum;
-
-	private String remark;
-
-	private Integer datasour;
-
-	private Integer expressType;
 
 	private String visacounty;
 
