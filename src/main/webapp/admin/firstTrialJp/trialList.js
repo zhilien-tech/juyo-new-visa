@@ -35,9 +35,9 @@ new Vue({
 		/* editClick:function(){//编辑图标  页面跳转
 					window.location.href = '${base}/admin/firstTrialJp/edit.html';
 				} */
-		visaDetail:function(orderid){
+		visaDetail:function(orderid,orderjpid){
 			//跳转到签证详情页面
-			window.open('/admin/firstTrialJp/trialDetail.html?orderid='+orderid);
+			window.open('/admin/firstTrialJp/trialDetail.html?orderid='+orderid+'&orderjpid='+orderjpid);
 			//console.log(message);
 			//alert(JSON.stringify(event.target));
 		},
@@ -54,12 +54,12 @@ new Vue({
     		    content: '/admin/orderJp/updateApplicant.html?id='+applyid
     	    });
 		},
-		expressFun:function(orderid){//跳转快递弹层页面
+		expressFun:function(orderid,orderjpid){//跳转快递弹层页面
+			//alert(orderid +"---"+orderjpid);
 			$.ajax({
 				type : 'POST',
-				async: false,
 				data : {
-					orderid:orderid
+					orderjpid:orderjpid
 				},
 				url : '/admin/firstTrialJp/isQualified.html',
 				success : function(data) {
@@ -73,7 +73,7 @@ new Vue({
 			    		    shadeClose: false,
 			    		    scrollbar: false,
 			    		    area: ['900px', '550px'],
-			    		    content: '/admin/firstTrialJp/express.html?id='+orderid
+			    		    content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
 			    	    });
 					}else{
 						layer.msg('申请人不合格');
@@ -108,7 +108,7 @@ new Vue({
 				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid
 			});
 		},
-    	qualifiedFun:function(applyid){
+    	qualifiedFun:function(applyid,orderid,orderjpid){
     		layer.confirm('您确认合格吗？', {
 				   btn: ['是','否'], //按钮
 				   shade: false //不显示遮罩
@@ -116,7 +116,9 @@ new Vue({
 					$.ajax({
 						type : 'POST',
 						data : {
-							applyid:applyid
+							applyid:applyid,
+							orderid:orderid,
+							orderjpid:orderjpid
 						},
 						url : '/admin/firstTrialJp/qualified.html',
 						success : function(data) {
@@ -131,7 +133,7 @@ new Vue({
 					 //取消之后不做任何操作
 				});
     	},
-    	unqualifiedFun:function(applyid){
+    	unqualifiedFun:function(applyid,orderid){
     		layer.open({
     		    type: 2,
     		    title: false,
@@ -141,7 +143,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['800px', '402px'],
-    		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyid
+    		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyid+'&orderid='+orderid
     	    });
     	}
 	}

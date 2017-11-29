@@ -46,8 +46,8 @@
 								<div><label>状态：</label><span>{{data.orderstatus}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
-									<i class="express" @click="expressFun(data.id)"> </i>
+									<i class="edit" v-on:click="visaDetail(data.orderid,data.orderjpid)"> </i>
+									<i class="express" @click="expressFun(data.orderid,data.orderjpid)"> </i>
 									<i class="return"> </i>
 								</div>
 							</div>
@@ -60,9 +60,9 @@
 									<div>
 										<i class="basicInfo" @click="basicInfoFun(item.applyid)"> </i>
 										<i class="passportInfo" @click="passportFun(item.applyid)"> </i>
-										<i class="visaInfo" @click="visaInfoFun(item.applyid,data.id)"> </i>
-										<i class="qualified" @click="qualifiedFun(item.applyid)"> </i>
-										<i class="unqualified" @click="unqualifiedFun(item.applyid)"> </i>
+										<i class="visaInfo" @click="visaInfoFun(item.applyid,data.orderjpid)"> </i>
+										<i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
+										<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i>
 									</div>
 								</li>
 							</ul>

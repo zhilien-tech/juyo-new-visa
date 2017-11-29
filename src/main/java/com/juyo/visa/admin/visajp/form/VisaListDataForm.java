@@ -69,7 +69,14 @@ public class VisaListDataForm implements SQLParamForm {
 			cnd.and(exp);
 		}
 		cnd.and("tr.comId", "=", companyid);
-		cnd.and("tr.status", "=", JPOrderStatusEnum.VISA_ORDER.intKey());
+		SqlExpressionGroup statusexp = new SqlExpressionGroup();
+		statusexp.and("tr.status", "=", JPOrderStatusEnum.VISA_ORDER.intKey())
+				.or("tr.status", "=", JPOrderStatusEnum.SEND_ADDRESS.intKey())
+				.or("tr.status", "=", JPOrderStatusEnum.SEND_DATA.intKey())
+				.or("tr.status", "=", JPOrderStatusEnum.RECEPTION_ORDER.intKey())
+				.or("tr.status", "=", JPOrderStatusEnum.RECEPTION_RECEIVED.intKey())
+				.or("tr.status", "=", JPOrderStatusEnum.TRANSFER_VISA.intKey());
+		cnd.and(statusexp);
 		if (!Util.isEmpty(sendSignDate)) {
 			cnd.and("tr.sendVisaDate", ">=", sendSignDate);
 		}
@@ -81,6 +88,7 @@ public class VisaListDataForm implements SQLParamForm {
 		} else {
 			//普通的操作员
 		}
+		cnd.orderBy("tr.createtime", "desc");
 		return cnd;
 	}
 

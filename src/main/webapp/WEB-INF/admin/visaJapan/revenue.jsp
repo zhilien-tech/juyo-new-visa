@@ -116,7 +116,7 @@
 				var HZlength = ($(".certificates").has(".passportInp")).length > 0;
 				if(spanText.indexOf("护照")!== -1 && HZlength != true){
 					$(this).removeClass("titleStyle");
-					$(this).after('<input type="text" class="passportInp" value='+ spanText +' />');
+					$(this).after('<input type="text" class="passportInp"/>');
 					var passport = $(".passportInp").val();
 					var passnumber = passport.substring(2);
 					$(".passportInp").val("").focus().val(passnumber); //把光标加入到字符串后面
@@ -197,6 +197,8 @@
 				}); */
 				datatext = datatext.substring(0, datatext.length-1);
 				graydata = graydata.substring(0, graydata.length-1);
+				console.log(datatext);
+				console.log(graydata);
 				applicatobj.datatext = datatext;
 				applicatobj.graydata = graydata;
 				applicatinfo.push(applicatobj);
