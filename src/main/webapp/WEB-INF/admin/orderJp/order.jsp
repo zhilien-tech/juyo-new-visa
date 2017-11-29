@@ -6,7 +6,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>编辑</title>
+		<title>销售详情</title>
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
@@ -34,7 +34,7 @@
 			<div class="qz-head">
 				<span class="">订单号：<p>${obj.orderInfo.orderNum}</p></span> 
 				<span class="">受付番号：<p></p></span> 
-				<span class="">状态：<p>下单</p></span> 
+				<span class="">状态：<p>${obj.orderstatus }</p></span> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
 				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
@@ -428,8 +428,8 @@
 									<td>{{applicant.sex}}</td>
 									<td>
 										<a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;
-										<a v-on:click="passport(applicant.id)">护照</a>&nbsp;&nbsp;
-										<a v-on:click="visa(applicant.id,orderInfo.id)">签证</a> <br>
+										<a v-on:click="passport(applicant.id)">护照信息</a>&nbsp;&nbsp;
+										<a v-on:click="visa(applicant.id,orderInfo.id)">签证信息</a> <br>
 										<a v-on:click="">回邮</a>&nbsp;&nbsp;
 										<a v-on:click="deleteApplicant(applicant.id)">删除</a></br>
 									</td>
@@ -1019,52 +1019,28 @@
 		$("#goTripDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn: 1,
-			autoclose: true,
-			todayHighlight: true,//高亮
-			startView: 4,//从年开始选择
-			forceParse: 0,
-	        showMeridian: false,
+			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
 		$("#backTripDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn: 1,
-			autoclose: true,
-			todayHighlight: true,//高亮
-			startView: 4,//从年开始选择
-			forceParse: 0,
-	        showMeridian: false,
+			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
 		$("#sendVisaDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn: 1,
-			autoclose: true,
-			todayHighlight: true,//高亮
-			startView: 4,//从年开始选择
-			forceParse: 0,
-	        showMeridian: false,
+			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
 		$("#outVisaDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn: 1,
-			autoclose: true,
-			todayHighlight: true,//高亮
-			startView: 4,//从年开始选择
-			forceParse: 0,
-	        showMeridian: false,
+			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});

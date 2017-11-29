@@ -192,9 +192,9 @@ WHERE tawj.applicantId = @id
 
 /*username_logs*/
 SELECT
-o.createTime,
+tol.createTime,
 tu.`name`,
-o.`status`
+tol.orderStatus
 FROM
 t_order_logs tol
 LEFT JOIN

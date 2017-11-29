@@ -110,14 +110,14 @@
 									<!-- input 直客 -->
 									<div class="col-sm-3">
 										<div class="form-group" style="padding-right: 3%;">
-											<label><span>*</span>公司全称：</label> <input id="compName"
+											<label><span>*</span>公司全称：</label> <input id="compName2"
 												name="name" type="text" class="form-control input-sm"
 												placeholder=" " />
 										</div>
 									</div>
 									<div class="col-sm-3">
 										<div class="form-group">
-											<label><span>*</span>公司简称：</label> <input id="comShortName"
+											<label><span>*</span>公司简称：</label> <input id="comShortName2"
 												name="shortname" type="text" class="form-control input-sm"
 												placeholder=" " />
 										</div>
@@ -165,21 +165,21 @@
 								<!-- input 直客 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>联系人：</label> <input id="linkman"
+										<label><span>*</span>联系人：</label> <input id="linkman2"
 											name="linkman" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>手机号：</label> <input id="mobile"
+										<label><span>*</span>手机号：</label> <input id="mobile2"
 											name="mobile" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>邮箱：</label> <input id="email"
+										<label><span>*</span>邮箱：</label> <input id="email2"
 											name="email" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
@@ -574,7 +574,7 @@
 		$(function(){
 			customerTypeSelect2();
 			//客户类型判断是不是直客
-			$("#customerType").change(function(){
+			/* $("#customerType").change(function(){
 				var customerVal = $(this).val();
 				if(customerVal == 4){//直客
 					$(".on-line").hide();//隐藏select2部分字段
@@ -583,7 +583,35 @@
 					$(".on-line").show();//显示select2部分字段
 					$(".zhiKe").addClass("none");
 				}
+			}); */
+			
+			$("#customerType").change(function(){
+				var thisval = $(this).val();
+				if(thisval == 4){
+					$(".on-line").hide();//隐藏select2部分字段
+					$(".zhiKe").removeClass("none");
+					$("#linkman2").val("");
+					$("#compName2").val("");
+					$("#comShortName2").val("");
+					$("#mobile2").val("");
+					$("#email2").val("");
+				}else{
+					$(".on-line").show();//显示select2部分字段
+					$(".zhiKe").addClass("none");
+					customerTypeSelect2();
+					//客户姓名清空
+					$("#linkman").val(null).trigger("change");
+					//电话清空
+					$("#mobile").val(null).trigger("change");
+					//公司全称
+					$("#compName").val(null).trigger("change");
+					//公司简称
+					$("#comShortName").val(null).trigger("change");
+					//邮箱清空
+					$("#email").val(null).trigger("change");
+				}
 			});
+			
 			
 			//签证类型  按钮的点击状态
 			$(".viseType-btn input").click(function(){
@@ -741,8 +769,8 @@
 								
 								result += '<td>
 								<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
-								<a href="javascript:passportInfo('+data[i].id+');">护照</a>&nbsp;&nbsp;
-								<a href="">签证</a><br>
+								<a href="javascript:passportInfo('+data[i].id+');">护照信息</a>&nbsp;&nbsp;
+								<a href="">签证信息</a><br>
 								<a href="">回邮</a>&nbsp;&nbsp;
 								<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></br>
 								</td>';
@@ -910,56 +938,31 @@
 				 	return value;
 				 }
 			}
-			
 			$("#goTripDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
-		        weekStart: 1,
-		        todayBtn: 1,
-				autoclose: true,
-				todayHighlight: true,//高亮
-				startView: 4,//从年开始选择
-				forceParse: 0,
-		        showMeridian: false,
+				autoclose: true,//选中日期后 自动关闭
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
 			});
 			$("#backTripDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
-		        weekStart: 1,
-		        todayBtn: 1,
-				autoclose: true,
-				todayHighlight: true,//高亮
-				startView: 4,//从年开始选择
-				forceParse: 0,
-		        showMeridian: false,
+				autoclose: true,//选中日期后 自动关闭
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
 			});
 			$("#sendVisaDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
-		        weekStart: 1,
-		        todayBtn: 1,
-				autoclose: true,
-				todayHighlight: true,//高亮
-				startView: 4,//从年开始选择
-				forceParse: 0,
-		        showMeridian: false,
+				autoclose: true,//选中日期后 自动关闭
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
 			});
 			$("#outVisaDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
-		        weekStart: 1,
-		        todayBtn: 1,
-				autoclose: true,
-				todayHighlight: true,//高亮
-				startView: 4,//从年开始选择
-				forceParse: 0,
-		        showMeridian: false,
+				autoclose: true,//选中日期后 自动关闭
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
 			});

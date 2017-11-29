@@ -455,7 +455,12 @@ $("#goDepartureCity").on("select2:select",function(e){
 	}else{
 		thisval += '';
 	}
+	//设置回程抵达城市
+	var thistext = $(this).text();
+	console.log(thistext);
+	$("#returnArrivedCity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
 	orderobj.travelinfo.godeparturecity = thisval;
+	orderobj.travelinfo.returnarrivedcity = thisval;
 });
 //去程抵达城市
 $("#goArrivedCity").on("select2:select",function(e){
@@ -465,7 +470,12 @@ $("#goArrivedCity").on("select2:select",function(e){
 	}else{
 		thisval += '';
 	}
+	//设置回程出发城市
+	var thistext = $(this).text();
+	console.log(thistext);
+	$("#returnDepartureCity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
 	orderobj.travelinfo.goarrivedcity = thisval;
+	orderobj.travelinfo.returndeparturecity = thisval;
 });
 //回程出发城市
 $("#returnDepartureCity").on("select2:select",function(e){
@@ -510,10 +520,16 @@ $("#returnFlightNum").on("select2:select",function(e){
 //去程出发城市
 $("#goDepartureCity").on("select2:unselect",function(e){
 	orderobj.travelinfo.godeparturecity = '';
+	orderobj.travelinfo.returnarrivedcity = '';
+	$("#returnArrivedCity").empty();
+	$(this).text('');
 });
 //去程抵达城市
 $("#goArrivedCity").on("select2:unselect",function(e){
 	orderobj.travelinfo.goarrivedcity = '';
+	orderobj.travelinfo.returndeparturecity = '';
+	$("#returnDepartureCity").empty();
+	$(this).text('');
 });
 //回程出发城市
 $("#returnDepartureCity").on("select2:unselect",function(e){
@@ -541,6 +557,18 @@ $(".schedulingBtn").click(function(){
 	}else{
 		goArrivedCity += '';
 	}
+	var goFlightNum = $('#goFlightNum').val();
+	if (goFlightNum) {
+		goFlightNum = goFlightNum.join(',');
+	}else{
+		goFlightNum += '';
+	}
+	var returnFlightNum = $('#returnFlightNum').val();
+	if (returnFlightNum) {
+		returnFlightNum = returnFlightNum.join(',');
+	}else{
+		returnFlightNum += '';
+	}
 	var goDate = $('#goDate').val();
 	var returnDate = $('#returnDate').val();
 	var triptype = $('#triptype').val();
@@ -550,48 +578,48 @@ $(".schedulingBtn").click(function(){
 		var multiway = {};
 		//出发日期
 		var departuredate = $(this).find('[name=departuredate]').val();
-		var isnull = departuredate;
 		multiway.departureDate = departuredate;
 		//出发城市
 		var departurecity = $(this).find('[name=departurecity]').val();
 		if (departurecity) {
 			departurecity = departurecity.join(',');
-			isnull += '111';
 		}else{
 			departurecity = '';
-			isnull += '';
 		}
 		multiway.departureCity = departurecity;
 		//抵达城市
 		var arrivedcity = $(this).find('[name=arrivedcity]').val();
 		if (arrivedcity) {
 			arrivedcity = arrivedcity.join(',');
-			isnull += '111';
 		}else{
 			arrivedcity = '';
-			isnull += '';
 		}
 		multiway.arrivedCity = arrivedcity;
 		// 航班号
 		var flightnum = $(this).find('[name=flightnum]').val();
 		if (flightnum) {
 			flightnum = flightnum.join(',');
-			isnull += '111';
 		}else{
 			flightnum = '';
-			isnull += '';
 		}
 		multiway.flightNum = flightnum;
-		if(isnull){
-			multiways.push(multiway);
-		}
+		multiways.push(multiway);
 	});
+	layer.load(1);
 	$.ajax({ 
 		url: '/admin/visaJapan/generatePlan.html',
 		dataType:"json",
-		data:{orderid:orderid,goArrivedCity:goArrivedCity,goDate:goDate,returnDate:returnDate,triptype:triptype,multiways:JSON.stringify(multiways)},
+		data:{orderid:orderid,
+			goArrivedCity:goArrivedCity,
+			goDate:goDate,
+			returnDate:returnDate,
+			triptype:triptype,
+			multiways:JSON.stringify(multiways),
+			returnFlightNum:returnFlightNum,
+			goFlightNum:goFlightNum},
 		type:'post',
 		success: function(data){
+			layer.closeAll('loading');
 			if(data.status == 'success'){
 				orderobj.travelplan = data.data;
 				layer.msg('生成成功');

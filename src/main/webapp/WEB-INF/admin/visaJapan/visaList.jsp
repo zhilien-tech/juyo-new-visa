@@ -52,7 +52,7 @@
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
 								<div><label>状态：</label><span>{{data.visastatus}}</span></div>	
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
-								<div>
+								<div v-if="data.japanstate === 13">
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
@@ -65,14 +65,23 @@
 								</div>
 							</div>
 							<ul class="card-content cf">
-								<li class="everybody-info cf" v-for="item in data.everybodyinfo">
-									<div><label>申请人：</label><span>{{item.applicant}}</span></div>
-									<div><label>护照号：</label><span>{{item.passportno}}</span></div>
-									<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
-									<div><label>资料：</label><span v-html="item.data"><!-- {{item.data}} --></span></div>
-									<div><!-- <i> </i> --></div>
+								<li class="everybody-info cf" v-for="(item,index) in data.everybodyinfo">
+									<span v-if="index === 0">
+										<div><label>申请人：</label><span>{{item.applicant}}</span></div>
+										<div><label>护照号：</label><span>{{item.passportno}}</span></div>
+										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
+										<div><label>资料：</label><span v-html="item.data"><!-- {{item.data}} --></span></div>
+										<div><!-- <i> </i> --></div>
+									</span>
+									<span v-else>
+										<div><label>　　　　</label><span>{{item.applicant}}</span></div>
+										<div><label>　　　　</label><span>{{item.passportno}}</span></div>
+										<div><label>　　　　　</label><span>{{item.datatype}}</span></div>
+										<div><label>　　　</label><span v-html="item.data"><!-- {{item.data}} --></span></div>
+										<div><!-- <i> </i> --></div>
+									</span>
 								</li>
-							</ul>
+							</ul> 
 						</div>
 					</div><!-- end 卡片列表 -->
 				</section>

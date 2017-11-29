@@ -304,7 +304,7 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>出发日期：</label>
-												<input id="goDate" name="" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="travelinfo.goDate"/>
+												<input id="goDate" name="" type="text" class="form-control input-sm" onfocus="WdatePicker()" value="<fmt:formatDate value="${obj.travelinfo.goDate}" pattern="yyyy-MM-dd" />"/>
 											</div>
 										</div>
 										<div class="col-sm-3">
@@ -345,7 +345,7 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>返回日期：</label>
-												<input id="returnDate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="travelinfo.returnDate"/>
+												<input id="returnDate" type="text" class="form-control input-sm" onfocus="WdatePicker()" value="<fmt:formatDate value="${obj.travelinfo.returnDate}" pattern="yyyy-MM-dd" />"/>
 											</div>
 										</div>
 										<div class="col-sm-3">
@@ -439,6 +439,8 @@
 													<c:when test="${status.index eq 0 }">
 														<a href="javascript:;" class="glyphicon glyphicon-plus addIcon"></a>
 													</c:when>
+													<c:when test="${status.index eq 2 or status.index eq 1 }">
+													</c:when>
 													<c:otherwise>
 														<a href="javascript:;" class="glyphicon glyphicon-minus removeIcon"></a>
 													</c:otherwise>
@@ -447,6 +449,7 @@
 											</c:forEach>
 										</c:when>
 										<c:otherwise>
+											<c:forEach begin="0" end="2" varStatus="status">
 											<div class="row body-from-input duochengdiv"><!-- 返回日期/出发城市/返回城市/航班号 -->
 												<div class="col-sm-3">
 													<div class="form-group">
@@ -486,8 +489,11 @@
 														<!-- <i class="bulb"></i> -->
 													</div>
 												</div>
-												<a href="javascript:;" class="glyphicon glyphicon-plus addIcon"></a>
+												<c:if test="${status.index eq 0 }">
+													<a href="javascript:;" class="glyphicon glyphicon-plus addIcon"></a>
+												</c:if>
 											</div>
+											</c:forEach>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -532,6 +538,8 @@
 			<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
 	
 		</div>
+		<!-- 遮罩层 -->
+		<div id="bg" style="display:none;position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 1040;background-color:black;opacity: 0.5">生成行程安排中</div>
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
 			var orderid = '${obj.orderid}';
