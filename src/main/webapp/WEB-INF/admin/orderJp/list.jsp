@@ -156,13 +156,15 @@
 					});
 				},
 				theTrial:function(id){
+					layer.load(1);
 					$.ajax({ 
 				    	url: '${base}/admin/orderJp/firtTrialJp',
 				    	dataType:"json",
 				    	data:{orderId:id},
 				    	type:'post',
 				    	success: function(data){
-				    		
+				    		layer.closeAll("loading");
+				    		layer.msg("初审通过");
 				      	}
 				    }); 
 				}

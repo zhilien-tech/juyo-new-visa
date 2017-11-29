@@ -66,9 +66,9 @@ public class OrderEditDataForm implements Serializable {
 
 	private Integer isdirectcus;
 
-	private String linkman;
+	private String cusLinkman;
 
-	private String email;
+	private String cusEmail;
 
 	private Integer orderid;
 

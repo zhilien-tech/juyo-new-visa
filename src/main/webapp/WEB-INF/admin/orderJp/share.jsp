@@ -157,14 +157,16 @@
 								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
 							});
 						}else{
+							layer.load(1);
 							$.ajax({ 
 								url: BASE_PATH+'/admin/orderJp/sendEmailUnified',
 								type:'post',
 								data:{
 									orderid:orderId,
-									applicantid:applicantMainId
+									applicantid:applicantId
 								},
 								success: function(data){
+									layer.closeAll('loading');
 									layer.msg("分享成功", {
 										time: 1000,
 										end: function () {
