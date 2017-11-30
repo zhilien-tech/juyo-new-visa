@@ -13,6 +13,7 @@
 		<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/bootstrapcss/css/font-awesome.min.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/bootstrapcss/css/ionicons.min.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
@@ -196,7 +197,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行时间：</label>
-										<input id="gotripdate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.gotripdate"/>
+										<input id="gotripdate" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.orderinfo.goTripDate }" pattern="yyyy-MM-dd" />"/>
 										<!-- <date-picker field="myDate" placeholder="选择日期"
 											 :no-today="true"
 											 :value.sync="date3"
@@ -207,13 +208,13 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>停留天数：</label>
-										<input id="stayday" name="stayday" type="text" class="form-control input-sm mustNumber" v-model="orderinfo.stayday"/>
+										<input id="stayday" name="stayday" type="text" class="form-control input-sm mustNumber" value="${obj.orderinfo.stayDay }"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回时间：</label>
-										<input id="backtripdate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.backtripdate"/>
+										<input id="backtripdate" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.orderinfo.backTripDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 							</div><!-- end 出行时间/停留天数/返回时间 -->
@@ -221,13 +222,13 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>送签时间：</label>
-										<input id="sendvisadate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.sendvisadate"/>
+										<input id="sendvisadate" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.orderinfo.sendVisaDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出签时间：</label>
-										<input id="outvisadate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.outvisadate"/>
+										<input id="outvisadate" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.orderinfo.outVisaDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 							</div><!-- end 送签时间/出签时间 -->
@@ -304,7 +305,7 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>出发日期：</label>
-												<input id="goDate" name="" type="text" class="form-control input-sm" onfocus="WdatePicker()" value="<fmt:formatDate value="${obj.travelinfo.goDate}" pattern="yyyy-MM-dd" />"/>
+												<input id="goDate" name="" type="text" class="form-control input-sm datetimepickertoday" value="<fmt:formatDate value="${obj.travelinfo.goDate}" pattern="yyyy-MM-dd" />"/>
 											</div>
 										</div>
 										<div class="col-sm-3">
@@ -345,7 +346,7 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>返回日期：</label>
-												<input id="returnDate" type="text" class="form-control input-sm" onfocus="WdatePicker()" value="<fmt:formatDate value="${obj.travelinfo.returnDate}" pattern="yyyy-MM-dd" />"/>
+												<input id="returnDate" type="text" class="form-control input-sm datetimepickertoday" value="<fmt:formatDate value="${obj.travelinfo.returnDate}" pattern="yyyy-MM-dd" />"/>
 											</div>
 										</div>
 										<div class="col-sm-3">
@@ -391,7 +392,7 @@
 												<div class="col-sm-3">
 													<div class="form-group">
 														<label><span>*</span>出发日期：</label>
-														<input name="departuredate" type="text" class="form-control input-sm" onfocus="WdatePicker()" value="<fmt:formatDate value="${mutil.departureDate}" pattern="yyyy-MM-dd" />"/>
+														<input name="departuredate" type="text" class="form-control input-sm datetimepickertoday" value="<fmt:formatDate value="${mutil.departureDate}" pattern="yyyy-MM-dd" />"/>
 													</div>
 												</div>
 												<div class="col-sm-3">
@@ -454,7 +455,7 @@
 												<div class="col-sm-3">
 													<div class="form-group">
 														<label><span>*</span>出发日期：</label>
-														<input name="departuredate" type="text" class="form-control input-sm" onfocus="WdatePicker()"/>
+														<input name="departuredate" type="text" class="form-control input-sm datetimepickertoday" />
 													</div>
 												</div>
 												<div class="col-sm-3">
@@ -559,6 +560,9 @@
 		<script src="${base}/references/public/plugins/jquery.fileDownload.js"></script>
 		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 		<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
+		<!-- 公用js文件 -->
+		<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 		<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 		<script src="${base}/admin/visaJapan/visaDetail.js"></script><!-- 本页面js文件 -->
 		<script src="${base}/admin/visaJapan/visaDetailSelect2.js"></script><!-- 本页面js文件 -->

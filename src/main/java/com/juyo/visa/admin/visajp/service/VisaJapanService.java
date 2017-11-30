@@ -131,6 +131,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				}
 			}
 		}
+		result.put("pagetotal", pager.getPageCount());
 		result.put("visaJapanData", list);
 		return result;
 
@@ -223,6 +224,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//日本订单数据
 		TOrderJpEntity jporderinfo = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
 		result.put("jporderinfo", jporderinfo);
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, jporderinfo.getOrderId().longValue());
+		result.put("orderinfo", orderinfo);
 		//订单id
 		result.put("orderid", orderid);
 		//领区

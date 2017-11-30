@@ -52,6 +52,7 @@ import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderTravelplanJpEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
+import com.juyo.visa.entities.TOrderTripMultiJpEntity;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -96,6 +97,10 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		//出行信息
 		TOrderTripJpEntity ordertripjp = dbDao.fetch(TOrderTripJpEntity.class,
 				Cnd.where("orderId", "=", orderjp.getId()));
+		List<TOrderTripMultiJpEntity> mutiltrip = new ArrayList<TOrderTripMultiJpEntity>();
+		if (!Util.isEmpty(ordertripjp)) {
+			mutiltrip = dbDao.query(TOrderTripMultiJpEntity.class, Cnd.where("", "=", ordertripjp.getId()), null);
+		}
 		//公司信息
 		TCompanyEntity company = new TCompanyEntity();
 		company = dbDao.fetch(TCompanyEntity.class, orderinfo.getComId().longValue());
@@ -115,6 +120,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		tempdata.put("ordertripjp", ordertripjp);
 		tempdata.put("applyinfo", applyinfo);
 		tempdata.put("ordertravelplan", ordertravelplan);
+		tempdata.put("mutiltrip", mutiltrip);
 		//准备合并的PDF文件
 		List<ByteArrayOutputStream> pdffiles = Lists.newArrayList();
 		//准备封皮信息
@@ -191,6 +197,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		List<Record> applyinfo = (List<Record>) tempdata.get("applyinfo");
 		//日本订单信息
 		TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
+		//多程信息
+		List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
 
 		String visatypestr = "";
 		Integer visaType = orderjp.getVisaType();
@@ -207,26 +215,44 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		map.put("content", content.toString());
 		map.put("company", company.getName());
 		if (!Util.isEmpty(ordertripjp)) {
-			if (!Util.isEmpty(ordertripjp.getGoDate())) {
-				map.put("entryDate", dateFormat.format(ordertripjp.getGoDate()));
-			}
-			//入境航班
-			if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
-				TFlightEntity goflight = flightViewService.fetch(ordertripjp.getGoFlightNum().longValue());
-				map.put("entryFlight", goflight.getFlightnum());
-			}
-			if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-				map.put("departDate", dateFormat.format(ordertripjp.getReturnDate()));
-			}
-			//天数
-			if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
+			if (ordertripjp.getTripType().equals(1)) {
+				if (!Util.isEmpty(ordertripjp.getGoDate())) {
+					map.put("entryDate", dateFormat.format(ordertripjp.getGoDate()));
+				}
+				//入境航班
+				if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
+					TFlightEntity goflight = flightViewService.fetch(ordertripjp.getGoFlightNum().longValue());
+					map.put("entryFlight", goflight.getFlightnum());
+				}
+				if (!Util.isEmpty(ordertripjp.getReturnDate())) {
+					map.put("departDate", dateFormat.format(ordertripjp.getReturnDate()));
+				}
+				//天数
+				if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
 
-				map.put("stay",
-						String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate())));
+					map.put("stay",
+							String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate())));
+				}
+				if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
+					//出境航班
+					TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
+					map.put("departFlight", returnflight.getFlightnum());
+				}
+			} else if (ordertripjp.getTripType().equals(2)) {
+				//多程处理
+				if (!Util.isEmpty(mutiltrip)) {
+					//多程第一程为出发日期
+					TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
+					if (!Util.isEmpty(entrytrip.getDepartureDate())) {
+						map.put("entryDate", dateFormat.format(entrytrip.getDepartureDate()));
+					}
+					//入境航班
+					if (!Util.isEmpty(entrytrip.getFlightNum())) {
+						TFlightEntity goflight = flightViewService.fetch(entrytrip.getFlightNum().longValue());
+						map.put("entryFlight", goflight.getFlightnum());
+					}
+				}
 			}
-			//出境航班
-			TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
-			map.put("departFlight", returnflight.getFlightnum());
 		}
 		map.put("linkman", company.getLinkman());
 		map.put("telephone", company.getMobile());
