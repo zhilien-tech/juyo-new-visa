@@ -115,8 +115,8 @@ public class FirstTrialJpModule {
 	@At
 	@POST
 	public Object qualified(@Param("applyid") Integer applyid, @Param("orderid") Integer orderid,
-			@Param("orderjpid") Integer orderjpid) {
-		return firstTrialJpViewService.qualified(applyid, orderid, orderjpid);
+			@Param("orderjpid") Integer orderjpid, HttpSession session) {
+		return firstTrialJpViewService.qualified(applyid, orderid, orderjpid, session);
 	}
 
 	/**
@@ -135,8 +135,8 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Object saveUnqualified(@Param("..") TApplicantUnqualifiedForm form) {
-		return firstTrialJpViewService.saveUnqualified(form);
+	public Object saveUnqualified(@Param("..") TApplicantUnqualifiedForm form, HttpSession session) {
+		return firstTrialJpViewService.saveUnqualified(form, session);
 	}
 
 	/**

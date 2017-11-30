@@ -34,6 +34,7 @@ import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
+import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.FristTrialSearchStatusEnum_JP;
@@ -83,6 +84,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 	@Inject
 	private MailService mailService;
+
+	@Inject
+	private OrderJpViewService orderJpViewService;
 
 	@Inject
 	private RedisDao redisDao;
@@ -350,7 +354,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//合格申请人
-	public Object qualified(Integer applyid, Integer orderid, Integer orderjpid) {
+	public Object qualified(Integer applyid, Integer orderid, Integer orderjpid, HttpSession session) {
 		int update = dbDao.update(TApplicantEntity.class,
 				Chain.make("status", TrialApplicantStatusEnum.qualified.intKey()), Cnd.where("id", "=", applyid));
 		if (update > 0) {
@@ -366,13 +370,14 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		if (!qualified) {
 			//只要一个不合格，订单状态为初审
 			int firsttrialstatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
-			dbDao.update(TOrderEntity.class, Chain.make("status", firsttrialstatus).make("updateTime", nowDate),
-					Cnd.where("id", "=", orderid));
+			dbDao.update(TOrderEntity.class, Chain.make("status", firsttrialstatus), Cnd.where("id", "=", orderid));
+			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 		} else {
 			//全合格，订单状态为合格
 			int qualifiedstatus = JPOrderStatusEnum.QUALIFIED_ORDER.intKey();
-			dbDao.update(TOrderEntity.class, Chain.make("status", qualifiedstatus).make("updateTime", nowDate),
-					Cnd.where("id", "=", orderid));
+			orderJpViewService.insertLogs(orderid, qualifiedstatus, session);
+			dbDao.update(TOrderEntity.class, Chain.make("status", qualifiedstatus), Cnd.where("id", "=", orderid));
+			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 		}
 		return update > 0;
 	}
@@ -391,7 +396,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//保存不合格信息
-	public Object saveUnqualified(TApplicantUnqualifiedForm form) {
+	public Object saveUnqualified(TApplicantUnqualifiedForm form, HttpSession session) {
 		int YES = IsYesOrNoEnum.YES.intKey();
 		int NO = IsYesOrNoEnum.NO.intKey();
 		Integer applicantId = form.getApplicantId();
@@ -451,8 +456,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			//更改订单状态为初审
 			int firsttrialstatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
 			Date nowDate = DateUtil.nowDate();
-			dbDao.update(TOrderEntity.class, Chain.make("status", firsttrialstatus).make("updateTime", nowDate),
-					Cnd.where("id", "=", orderid));
+			dbDao.update(TOrderEntity.class, Chain.make("status", firsttrialstatus), Cnd.where("id", "=", orderid));
+			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
+			//记录日志
+			orderJpViewService.insertLogs(orderid, firsttrialstatus, session);
 		}
 
 		return Json.toJson("success");
@@ -533,11 +540,11 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			e.printStackTrace();
 		}
 
-		//添加日志记录  订单初审
-		int firsttrialStatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
-		String logsResult = addLogs(orderid, userId, firsttrialStatus);
+		//添加日志记录  订单已发地址
+		int send_address = JPOrderStatusEnum.SEND_ADDRESS.intKey();
+		orderJpViewService.insertLogs(orderid, send_address, session);
 
-		return logsResult;
+		return "SUCCESS";
 	}
 
 	/**
