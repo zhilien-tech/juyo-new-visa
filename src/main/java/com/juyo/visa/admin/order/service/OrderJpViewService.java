@@ -932,6 +932,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		result.put("mainApply", records);
 		result.put("visaInfo", visaInfo);
+		result.put("orderid", orderid);
 		result.put("isOrderUpTime", isOrderUpTime);
 		return result;
 	}
@@ -967,9 +968,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 
 		Date nowDate = DateUtil.nowDate();
-		if (!Util.isEmpty(visaForm.getIsOrderUpTime())) {
+		if (!Util.isEmpty(visaForm.getIsOrderUpTime()) && !Util.isEmpty(visaForm.getOrderid())) {
 			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate),
-					Cnd.where("id", "=", visaForm.getIsOrderUpTime()));
+					Cnd.where("id", "=", visaForm.getOrderid()));
 		}
 
 		//日本申请人
