@@ -499,8 +499,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	/**
 	 * 保存快递信息，并发送邮件
 	 */
-	public Object saveExpressInfo(Integer orderid, Integer orderjpid, Integer expresstype, Integer receiveAddressId,
-			HttpSession session) {
+	public Object saveExpressInfo(Integer orderid, Integer orderjpid, Integer expresstype, String expressAddress,
+			Integer receiveAddressId, HttpSession session) {
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
@@ -510,6 +510,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			//更新
 			orderReceive.setOrderId(orderid);
 			orderReceive.setExpressType(expresstype);
+			orderReceive.setExpressAddress(expressAddress);
 			orderReceive.setReceiveAddressId(receiveAddressId);
 			orderReceive.setOpId(userId);
 			orderReceive.setUpdateTime(DateUtil.nowDate());
@@ -519,6 +520,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			TOrderRecipientEntity orderReceiveAdd = new TOrderRecipientEntity();
 			orderReceiveAdd.setOrderId(orderid);
 			orderReceiveAdd.setExpressType(expresstype);
+			orderReceiveAdd.setExpressAddress(expressAddress);
 			orderReceiveAdd.setReceiveAddressId(receiveAddressId);
 			orderReceiveAdd.setOpId(userId);
 			orderReceiveAdd.setUpdateTime(DateUtil.nowDate());

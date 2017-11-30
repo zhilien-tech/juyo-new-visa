@@ -133,8 +133,8 @@ function clearText(){
 //保存
 function save(orderid,orderjpid){
 	
-	var applicant_tbody = $("#applicant_tbody").val();
-	if (applicant_tbody == "") {
+	var applicant_tbody = $("#applicant_tbody").is(":empty");
+	if (applicant_tbody) {
 		layer.msg('申请人信息不能为空');
 		return;
 	}
@@ -151,6 +151,7 @@ function save(orderid,orderjpid){
 			orderid:orderid,
 			orderjpid:orderjpid,
 			expresstype:$("#express").val(),
+			expressaddress:$("#address").val(),
 			receiveAddressId:$("#receiveAddressId").val()
 		},
 		success: function(data){

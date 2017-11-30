@@ -34,6 +34,8 @@
 				<input id="addBtn" type="button" onclick="save(${obj.orderid},${obj.orderjpid});" class="btn btn-primary pull-right btn-sm btn-right" value="发送" />
 			</div>
 			<div class="modal-body">
+				<input id="orderid" type="hidden" value="${obj.orderid}">
+				<input id="orderjpid" type="hidden" value="${obj.orderjpid}">
 				<div class="tab-content" id="el">
 					<div class="row">
 						<div class="col-sm-3">
@@ -81,12 +83,13 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>邮寄地址：</label>
-								<c:if test="${! empty obj.orderReceive.receiveaddressid }">
+								<%-- <c:if test="${! empty obj.orderReceive.receiveaddressid }">
 									<input id="address" name="address" value="${obj.orderReceive.address}"  readonly="readonly" type="text" class="form-control input-sm"/>
 								</c:if>
 								<c:if test="${ empty obj.orderReceive.receiveaddressid }">
 									<input id="address" name="address" readonly="readonly" type="text" class="form-control input-sm"/>
-								</c:if>
+								</c:if> --%>
+								<input id="address" name="address" value="${obj.orderReceive.expressaddress}" type="text" class="form-control input-sm"/>
 								
 							</div>
 						</div>
