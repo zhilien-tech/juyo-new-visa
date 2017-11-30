@@ -31,7 +31,7 @@
 			<div class="modal-header">
 				<span class="heading">快递</span>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save(${obj.orderid},${obj.orderjpid});" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="addBtn" type="button" onclick="save(${obj.orderid},${obj.orderjpid});" class="btn btn-primary pull-right btn-sm btn-right" value="发送" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content" id="el">
@@ -102,7 +102,7 @@
 								<!-- <th><span>统一联系人</span></th> -->
 							</tr>
 						</thead>
-						<tbody>
+						<tbody id="applicant_tbody">
 							<tr v-cloak v-for="apply in applyinfo">
 								<td>{{apply.applicantname}}</td>
 								<td>{{apply.telephone}}</td>

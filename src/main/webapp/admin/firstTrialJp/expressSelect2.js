@@ -132,7 +132,12 @@ function clearText(){
 
 //保存
 function save(orderid,orderjpid){
-	//alert(orderid +"---"+orderjpid);
+	
+	var applicant_tbody = $("#applicant_tbody").val();
+	if (applicant_tbody == "") {
+		layer.msg('申请人信息不能为空');
+		return;
+	}
 	var receiveAddress = $("#receiveAddressId").val();
 	if (receiveAddress == "") {
 		layer.msg('收件人信息不能为空');
