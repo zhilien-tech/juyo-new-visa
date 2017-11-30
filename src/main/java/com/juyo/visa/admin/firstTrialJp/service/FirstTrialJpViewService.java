@@ -644,7 +644,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String expressType = orderReceive.getString("expressType");
 		String receiver = orderReceive.getString("receiver");
 		String mobile = orderReceive.getString("mobile");
-		String address = orderReceive.getString("address");
+		String address = orderReceive.getString("expressAddress");
 
 		Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
 		List<Record> applicants = (List<Record>) map.get("applicant");
@@ -683,7 +683,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String expressType = orderReceive.getString("expressType");
 		String receiver = orderReceive.getString("receiver");
 		String mobile = orderReceive.getString("mobile");
-		String address = orderReceive.getString("address");
+		String address = orderReceive.getString("expressAddress");
 
 		Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
 		List<Record> applicants = (List<Record>) map.get("applicant");
