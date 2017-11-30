@@ -391,59 +391,29 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//订单信息
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderInfo.getId().longValue());
-		if (!Util.isEmpty(orderInfo.getNumber())) {
-			order.setNumber(orderInfo.getNumber());
-		}
-		if (!Util.isEmpty(orderInfo.getCityid())) {
-			order.setCityId(orderInfo.getCityid());
-		}
-		if (!Util.isEmpty(orderInfo.getUrgenttype())) {
-			order.setUrgentType(orderInfo.getUrgenttype());
-		}
-		if (!Util.isEmpty(orderInfo.getUrgentday())) {
-			order.setUrgentDay(orderInfo.getUrgentday());
-		}
-		if (!Util.isEmpty(orderInfo.getTravel())) {
-			order.setTravel(orderInfo.getTravel());
-		}
-		if (!Util.isEmpty(orderInfo.getPaytype())) {
-			order.setPayType(orderInfo.getPaytype());
-		}
+		order.setNumber(orderInfo.getNumber());
+		order.setCityId(orderInfo.getCityid());
+		order.setUrgentType(orderInfo.getUrgenttype());
+		order.setUrgentDay(orderInfo.getUrgentday());
+		order.setTravel(orderInfo.getTravel());
+		order.setPayType(orderInfo.getPaytype());
 		if (!Util.isEmpty(orderInfo.getMoney())) {
 			DecimalFormat df = new DecimalFormat("#.00");
 			order.setMoney(Double.valueOf(df.format(orderInfo.getMoney())).doubleValue());
 		}
-		if (!Util.isEmpty(orderInfo.getGotripdate())) {
-			order.setGoTripDate(orderInfo.getGotripdate());
-		}
-		if (!Util.isEmpty(orderInfo.getStayday())) {
-			order.setStayDay(orderInfo.getStayday());
-		}
-		if (!Util.isEmpty(orderInfo.getBacktripdate())) {
-			order.setBackTripDate(orderInfo.getBacktripdate());
-		}
-		if (!Util.isEmpty(orderInfo.getSendvisadate())) {
-			order.setSendVisaDate(orderInfo.getSendvisadate());
-		}
-		if (!Util.isEmpty(orderInfo.getOutvisadate())) {
-			order.setOutVisaDate(orderInfo.getOutvisadate());
-		}
+		order.setGoTripDate(orderInfo.getGotripdate());
+		order.setStayDay(orderInfo.getStayday());
+		order.setBackTripDate(orderInfo.getBacktripdate());
+		order.setSendVisaDate(orderInfo.getSendvisadate());
+		order.setOutVisaDate(orderInfo.getOutvisadate());
 		order.setUpdateTime(new Date());
 
 		//日本订单信息
 		TOrderJpEntity jporder = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderInfo.getId()));
-		if (!Util.isEmpty(orderInfo.getVisatype())) {
-			jporder.setVisaType(orderInfo.getVisatype());
-		}
-		if (!Util.isEmpty(orderInfo.getVisacounty())) {
-			jporder.setVisaCounty(orderInfo.getVisacounty());
-		}
-		if (!Util.isEmpty(orderInfo.getIsvisit())) {
-			jporder.setIsVisit(orderInfo.getIsvisit());
-		}
-		if (!Util.isEmpty(orderInfo.getThreecounty())) {
-			jporder.setThreeCounty(orderInfo.getThreecounty());
-		}
+		jporder.setVisaType(orderInfo.getVisatype());
+		jporder.setVisaCounty(orderInfo.getVisacounty());
+		jporder.setIsVisit(orderInfo.getIsvisit());
+		jporder.setThreeCounty(orderInfo.getThreecounty());
 		dbDao.update(jporder);
 		//客户信息
 
@@ -797,51 +767,23 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(applicantForm.getId())) {
 				applicant.setId(applicantForm.getId());
 			}
-			if (!Util.isEmpty(applicantForm.getCardFront())) {
-				applicant.setCardFront(applicantForm.getCardFront());
-			}
-			if (!Util.isEmpty(applicantForm.getCardBack())) {
-				applicant.setCardBack(applicantForm.getCardBack());
-			}
-			if (!Util.isEmpty(applicantForm.getAddress())) {
-				applicant.setAddress(applicantForm.getAddress());
-			}
+			applicant.setCardFront(applicantForm.getCardFront());
+			applicant.setCardBack(applicantForm.getCardBack());
+			applicant.setAddress(applicantForm.getAddress());
 			if (!Util.isEmpty(applicantForm.getBirthday())) {
 				applicant.setBirthday(applicantForm.getBirthday());
 			}
-			if (!Util.isEmpty(applicantForm.getCardId())) {
-				applicant.setCardId(applicantForm.getCardId());
-			}
-			if (!Util.isEmpty(applicantForm.getCity())) {
-				applicant.setCity(applicantForm.getCity());
-			}
-			if (!Util.isEmpty(applicantForm.getDetailedAddress())) {
-				applicant.setDetailedAddress(applicantForm.getDetailedAddress());
-			}
-			if (!Util.isEmpty(applicantForm.getEmail())) {
-				applicant.setEmail(applicantForm.getEmail());
-			}
-			if (!Util.isEmpty(applicantForm.getFirstName())) {
-				applicant.setFirstName(applicantForm.getFirstName());
-			}
-			if (!Util.isEmpty(applicantForm.getIssueOrganization())) {
-				applicant.setIssueOrganization(applicantForm.getIssueOrganization());
-			}
-			if (!Util.isEmpty(applicantForm.getLastName())) {
-				applicant.setLastName(applicantForm.getLastName());
-			}
-			if (!Util.isEmpty(applicantForm.getNation())) {
-				applicant.setNation(applicantForm.getNation());
-			}
-			if (!Util.isEmpty(applicantForm.getProvince())) {
-				applicant.setProvince(applicantForm.getProvince());
-			}
-			if (!Util.isEmpty(applicantForm.getSex())) {
-				applicant.setSex(applicantForm.getSex());
-			}
-			if (!Util.isEmpty(applicantForm.getTelephone())) {
-				applicant.setTelephone(applicantForm.getTelephone());
-			}
+			applicant.setCardId(applicantForm.getCardId());
+			applicant.setCity(applicantForm.getCity());
+			applicant.setDetailedAddress(applicantForm.getDetailedAddress());
+			applicant.setEmail(applicantForm.getEmail());
+			applicant.setFirstName(applicantForm.getFirstName());
+			applicant.setIssueOrganization(applicantForm.getIssueOrganization());
+			applicant.setLastName(applicantForm.getLastName());
+			applicant.setNation(applicantForm.getNation());
+			applicant.setProvince(applicantForm.getProvince());
+			applicant.setSex(applicantForm.getSex());
+			applicant.setTelephone(applicantForm.getTelephone());
 			if (!Util.isEmpty(applicantForm.getValidEndDate())) {
 				applicant.setValidEndDate(applicantForm.getValidEndDate());
 			}
@@ -1253,44 +1195,23 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 									TApplicantWorkJpEntity.class, Cnd.where("applicantId", "=", mainAppyJp.getId()));
 							if (!Util.isEmpty(mainApplicantWorkJpEntity)) {
 								if (!Util.isEmpty(applicantWorkJpEntity)) {//申请人工作信息不为空时，更新
-									if (!Util.isEmpty(mainApplicantWorkJpEntity.getAddress())) {
-										applicantWorkJpEntity.setAddress(mainApplicantWorkJpEntity.getAddress());
-									}
-									if (!Util.isEmpty(mainApplicantWorkJpEntity.getCareerStatus())) {
-										applicantWorkJpEntity.setCareerStatus(mainApplicantWorkJpEntity
-												.getCareerStatus());
-									}
-									if (!Util.isEmpty(mainApplicantWorkJpEntity.getName())) {
-										applicantWorkJpEntity.setName(mainApplicantWorkJpEntity.getName());
-									}
-									if (!Util.isEmpty(mainApplicantWorkJpEntity.getPrepareMaterials())) {
-										applicantWorkJpEntity.setPrepareMaterials(mainApplicantWorkJpEntity
-												.getPrepareMaterials());
-									}
-									if (!Util.isEmpty(mainApplicantWorkJpEntity.getTelephone())) {
-										applicantWorkJpEntity.setTelephone(mainApplicantWorkJpEntity.getTelephone());
-									}
+									applicantWorkJpEntity.setAddress(mainApplicantWorkJpEntity.getAddress());
+									applicantWorkJpEntity.setCareerStatus(mainApplicantWorkJpEntity.getCareerStatus());
+									applicantWorkJpEntity.setName(mainApplicantWorkJpEntity.getName());
+									applicantWorkJpEntity.setPrepareMaterials(mainApplicantWorkJpEntity
+											.getPrepareMaterials());
+									applicantWorkJpEntity.setTelephone(mainApplicantWorkJpEntity.getTelephone());
 									applicantWorkJpEntity.setApplicantId(applicantOrderJpEntity.getId());
 									applicantWorkJpEntity.setOpId(loginUser.getId());
 									applicantWorkJpEntity.setUpdateTime(new Date());
 									dbDao.update(applicantWorkJpEntity);
 								} else {
 									TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
-									if (!Util.isEmpty(mainApplicantWorkJpEntity.getAddress())) {
-										workJp.setAddress(mainApplicantWorkJpEntity.getAddress());
-									}
-									if (!Util.isEmpty(mainApplicantWorkJpEntity.getCareerStatus())) {
-										workJp.setCareerStatus(mainApplicantWorkJpEntity.getCareerStatus());
-									}
-									if (!Util.isEmpty(mainApplicantWorkJpEntity.getName())) {
-										workJp.setName(mainApplicantWorkJpEntity.getName());
-									}
-									if (!Util.isEmpty(mainApplicantWorkJpEntity.getPrepareMaterials())) {
-										workJp.setPrepareMaterials(mainApplicantWorkJpEntity.getPrepareMaterials());
-									}
-									if (!Util.isEmpty(mainApplicantWorkJpEntity.getTelephone())) {
-										workJp.setTelephone(mainApplicantWorkJpEntity.getTelephone());
-									}
+									workJp.setAddress(mainApplicantWorkJpEntity.getAddress());
+									workJp.setCareerStatus(mainApplicantWorkJpEntity.getCareerStatus());
+									workJp.setName(mainApplicantWorkJpEntity.getName());
+									workJp.setPrepareMaterials(mainApplicantWorkJpEntity.getPrepareMaterials());
+									workJp.setTelephone(mainApplicantWorkJpEntity.getTelephone());
 									workJp.setApplicantId(applicantOrderJpEntity.getId());
 									workJp.setOpId(loginUser.getId());
 									workJp.setUpdateTime(new Date());
@@ -1413,13 +1334,18 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		try {
 			String sendMail = (String) sendMail(orderid, applicantid);
 			String sendMessage = (String) sendMessage(orderid, applicantid);
-			if (Util.eq(sendMail, "success") && Util.eq(sendMessage, "发送成功")) {
+			/*if (Util.eq(sendMail, "success") && Util.eq(sendMessage, "发送成功")) {
 				insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
-			}
+			}*/
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+
+	public Object shareComplete(Integer orderid, HttpSession session) {
+		insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
 		return null;
 	}
 
@@ -1502,7 +1428,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	//发送邮件信息
 	public Object sendMailUnified(int orderid, int applicantid) throws IOException {
-		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("share_mail.html"));
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
+				"shareUnified_mail.html"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
@@ -1516,32 +1443,49 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		//接收邮件的申请人
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, applicantid);
 		String email = applicantEntity.getEmail();
-
+		StringBuffer buffer = new StringBuffer();
+		String unifiedName = buffer.append(applicantEntity.getFirstName()).append(applicantEntity.getLastName())
+				.toString();
+		String unifiedSex = applicantEntity.getSex();
+		if (Util.isEmpty(unifiedSex)) {
+			unifiedSex = "男/女";
+		}
 		String applicantSqlstr = sqlManager.get("orderJp_list_applicantInfo_byOrderId");
 		Sql applicantSql = Sqls.create(applicantSqlstr);
 		applicantSql.setParam("id", orderid);
 		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
 		String result = "";
+		String applicantInfoStr = "";
+		String emailText = tmp.toString();
+		emailText = emailText.replace("${unifiedName}", unifiedName).replace("${sex}", unifiedSex)
+				.replace("${ordernum}", orderNum);
+
+		/*String applyInfo = "<div style=''><span style='font-family: Menlo;'>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 姓名："
+				+ name
+				+ "&nbsp; &nbsp; &nbsp;用户名:<span t='7' data='17600206506' isout='1' style='border-bottom: 1px dashed rgb(204, 204, 204); z-index: 1; position: static;'><span t='7' data='17600206506' style='border-bottom: 1px dashed rgb(204, 204, 204); z-index: 1;'><span style='border-bottom: 1px dashed #ccc; z-index: 1' t='7' onclick='return false;' data='17600206506'>"
+				+ telephone + "</span></span></span> </span> </div>";*/
 
 		for (Record record : applicantInfo) {
-			String name = record.getString("applyname");
-			String sex = record.getString("sex");
-			if (sex == null) {
-				sex = "男/女";
-			}
-			String telephone = record.getString("telephone");
 
-			String emailText = tmp.toString();
-			emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-					.replace("${telephone}", telephone);
-			result = mailService.send(email, emailText, "分享", MailService.Type.HTML);
+			String name = record.getString("applyname");
+			String telephone = record.getString("telephone");
+			if (Util.isEmpty(telephone)) {
+				telephone = "";
+			}
+			applicantInfoStr += "<div style=''><span style='font-family: Menlo;'>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 姓名："
+					+ name
+					+ "&nbsp; &nbsp; &nbsp;用户名:<span t='7' data='17600206506' isout='1' style='border-bottom: 1px dashed rgb(204, 204, 204); z-index: 1; position: static;'><span t='7' data='17600206506' style='border-bottom: 1px dashed rgb(204, 204, 204); z-index: 1;'><span style='border-bottom: 1px dashed #ccc; z-index: 1' t='7' onclick='return false;' data='17600206506'>"
+					+ telephone + "</span></span></span> </span> </div>";
 		}
+		emailText = emailText.replace("${applicantInfoS}", applicantInfoStr);
+		result = mailService.send(email, emailText, "分享", MailService.Type.HTML);
 		return result;
 	}
 
 	//发送手机信息
 	public Object sendMessageUnified(int orderid, int applicantid) throws IOException {
-		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("share_sms.txt"));
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
+				"shareUnified_sms.txt"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
@@ -1555,26 +1499,34 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		//接收邮件的申请人
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, applicantid);
 		String telephone = applicantEntity.getTelephone();
+		StringBuffer buffer = new StringBuffer();
+		String unifiedName = buffer.append(applicantEntity.getFirstName()).append(applicantEntity.getLastName())
+				.toString();
+		String unifiedSex = applicantEntity.getSex();
+		if (Util.isEmpty(unifiedSex)) {
+			unifiedSex = "男/女";
+		}
 
 		String applicantSqlstr = sqlManager.get("orderJp_list_applicantInfo_byOrderId");
 		Sql applicantSql = Sqls.create(applicantSqlstr);
 		applicantSql.setParam("id", orderid);
 		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
 		String result = "";
+		String applicantInfoStr = "";
+		String smsContent = tmp.toString();
+		smsContent = smsContent.replace("${unifiedName}", unifiedName).replace("${sex}", unifiedSex)
+				.replace("${ordernum}", orderNum);
 
 		for (Record record : applicantInfo) {
 			String name = record.getString("applyname");
-			String sex = record.getString("sex");
-			if (sex == null) {
-				sex = "男/女";
-			}
 			String telephoneLoad = record.getString("telephone");
-
-			String smsContent = tmp.toString();
-			smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-					.replace("${telephone}", telephoneLoad);
-			result = firstTrialJpViewService.sendSMS(telephone, smsContent);
+			if (Util.isEmpty(telephoneLoad)) {
+				telephoneLoad = "";
+			}
+			applicantInfoStr += ("  姓名:" + name + "  用户名:" + telephoneLoad);
 		}
+		smsContent = smsContent.replace("${applicantInfoS}", applicantInfoStr);
+		result = firstTrialJpViewService.sendSMS(telephone, smsContent);
 		return result;
 	}
 
@@ -1593,69 +1545,33 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(passportForm.getApplicantId())) {
 			passport.setApplicantId(passportForm.getApplicantId());
 		}
-		if (!Util.isEmpty(passportForm.getPassportUrl())) {
-			passport.setPassportUrl(passportForm.getPassportUrl());
-		}
+		passport.setPassportUrl(passportForm.getPassportUrl());
 		if (!Util.isEmpty(passportForm.getId())) {
 			passport.setId(passportForm.getId());
 		}
-		if (!Util.isEmpty(passportForm.getBirthAddress())) {
-			passport.setBirthAddress(passportForm.getBirthAddress());
-		}
-		if (!Util.isEmpty(passportForm.getBirthAddressEn())) {
-			passport.setBirthAddressEn(passportForm.getBirthAddressEn());
-		}
-		if (!Util.isEmpty(passportForm.getBirthday())) {
-			passport.setBirthday(passportForm.getBirthday());
-		}
-		if (!Util.isEmpty(passportForm.getFirstName())) {
-			passport.setFirstName(passportForm.getFirstName());
-		}
-		if (!Util.isEmpty(passportForm.getFirstNameEn())) {
-			passport.setFirstNameEn(passportForm.getFirstNameEn());
-		}
-		if (!Util.isEmpty(passportForm.getIssuedDate())) {
-			passport.setIssuedDate(passportForm.getIssuedDate());
-		}
-		if (!Util.isEmpty(passportForm.getIssuedOrganization())) {
-			passport.setIssuedOrganization(passportForm.getIssuedOrganization());
-		}
-		if (!Util.isEmpty(passportForm.getIssuedOrganizationEn())) {
-			passport.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
-		}
-		if (!Util.isEmpty(passportForm.getIssuedPlace())) {
-			passport.setIssuedPlace(passportForm.getIssuedPlace());
-		}
-		if (!Util.isEmpty(passportForm.getIssuedPlaceEn())) {
-			passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
-		}
-		if (!Util.isEmpty(passportForm.getLastName())) {
-			passport.setLastName(passportForm.getLastName());
-		}
-		if (!Util.isEmpty(passportForm.getLastNameEn())) {
-			passport.setLastNameEn(passportForm.getLastNameEn());
-		}
-		if (!Util.isEmpty(passportForm.getPassport())) {
-			passport.setPassport(passportForm.getPassport());
-		}
-		if (!Util.isEmpty(passportForm.getSex())) {
-			passport.setSex(passportForm.getSex());
-		}
-		if (!Util.isEmpty(passportForm.getSexEn())) {
-			passport.setSexEn(passportForm.getSexEn());
-		}
-		if (!Util.isEmpty(passportForm.getType())) {
-			passport.setType(passportForm.getType());
-		}
+		passport.setBirthAddress(passportForm.getBirthAddress());
+		passport.setBirthAddressEn(passportForm.getBirthAddressEn());
+		passport.setBirthday(passportForm.getBirthday());
+		passport.setFirstName(passportForm.getFirstName());
+		passport.setFirstNameEn(passportForm.getFirstNameEn());
+		passport.setIssuedDate(passportForm.getIssuedDate());
+		passport.setIssuedOrganization(passportForm.getIssuedOrganization());
+		passport.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
+		passport.setIssuedPlace(passportForm.getIssuedPlace());
+		passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
+		passport.setLastName(passportForm.getLastName());
+		passport.setLastNameEn(passportForm.getLastNameEn());
+		passport.setPassport(passportForm.getPassport());
+		passport.setSex(passportForm.getSex());
+		passport.setSexEn(passportForm.getSexEn());
+		passport.setType(passportForm.getType());
 		if (!Util.isEmpty(passportForm.getValidEndDate())) {
 			passport.setValidEndDate(passportForm.getValidEndDate());
 		}
 		if (!Util.isEmpty(passportForm.getValidStartDate())) {
 			passport.setValidStartDate(passportForm.getValidStartDate());
 		}
-		if (!Util.isEmpty(passportForm.getValidType())) {
-			passport.setValidType(passportForm.getValidType());
-		}
+		passport.setValidType(passportForm.getValidType());
 		if (!Util.isEmpty(passportForm.getId())) {
 			//如果护照ID不为空，则说明为修改
 			passport.setUpdateTime(new Date());
@@ -1716,11 +1632,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				}
 			}
 			//格式化日期
-			DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-			if (!Util.isEmpty(record.get("createTime"))) {
+			//DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+			/*if (!Util.isEmpty(record.get("createTime"))) {
 				Date createDate = (Date) record.get("createTime");
 				record.put("createTime", format.format(createDate));
-			}
+			}*/
 		}
 		result.put("logs", logs);
 		return result;

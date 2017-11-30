@@ -411,6 +411,15 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 单独分享完毕
+	 */
+	@At
+	@POST
+	public Object shareComplete(@Param("orderid") Integer orderid, HttpSession session) {
+		return saleViewService.shareComplete(orderid, session);
+	}
+
+	/**
 	 * 初审按钮
 	 */
 	@At
