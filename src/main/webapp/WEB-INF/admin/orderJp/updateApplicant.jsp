@@ -73,7 +73,9 @@
 							<!-- 签发机关 -->
 							<div class="col-sm-11 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>签发机关：</label> <input id="issueOrganization" name="issueOrganization"
+									<label><span>*</span>签发机关：</label> 
+									<input type="hidden" name="orderid" value=""/>
+									<input id="issueOrganization" name="issueOrganization"
 										type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -375,10 +377,6 @@
 			
 			var applicantInfo = $("#applicantInfo").serialize();
 			var applicantId = ${obj.applicantId};
-			var orderid = ${obj.orderid};
-			if(orderid != null || orderid != "" || orderid != undefined){
-				applicantInfo.orderid = orderid;
-			}
 			applicantInfo.id = applicantId;
 			$.ajax({
 				async: false,
