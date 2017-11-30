@@ -135,7 +135,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid
+				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime'
 			});
 		},
 		//护照信息
@@ -153,7 +153,7 @@ new Vue({
 			});
 		},*/
 		//修改护照信息
-		passport : function(id){
+		passport : function(applyid){
 			layer.open({
 				type: 2,
 				title: false,
@@ -163,7 +163,8 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?id='+id
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid
+
 			});
 		},
 		//基本信息
@@ -177,7 +178,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/updateApplicant.html?id='+applyId
+				content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+orderid
 			});
 		},
 		//签证录入
@@ -640,10 +641,11 @@ function downLoadFile(){
     });
 }
 $(document).on("input","#stayday",function(){
+	var gotripdate = $('#gotripdate').val();
+	orderobj.orderinfo.gotripdate = gotripdate;
 	var thisval = $(this).val();
 	thisval = thisval.replace(/[^\d]/g,'');
 	$(this).val(thisval);
-	var gotripdate = $('#gotripdate').val();
 	if(gotripdate && thisval){
 		$.ajax({ 
 			url: '/admin/visaJapan/autoCalculateBackDate.html',
