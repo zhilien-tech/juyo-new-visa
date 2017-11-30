@@ -164,9 +164,10 @@ public class FirstTrialJpModule {
 	@At
 	@POST
 	public Object saveExpressInfo(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid,
-			@Param("expresstype") Integer expresstype, @Param("receiveAddressId") Integer receiveAddressId,
-			HttpSession session) {
-		return firstTrialJpViewService.saveExpressInfo(orderid, orderjpid, expresstype, receiveAddressId, session);
+			@Param("expresstype") Integer expresstype, @Param("expressaddress") String expressaddress,
+			@Param("receiveAddressId") Integer receiveAddressId, HttpSession session) {
+		return firstTrialJpViewService.saveExpressInfo(orderid, orderjpid, expresstype, expressaddress,
+				receiveAddressId, session);
 	}
 
 	/**

@@ -499,8 +499,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	/**
 	 * 保存快递信息，并发送邮件
 	 */
-	public Object saveExpressInfo(Integer orderid, Integer orderjpid, Integer expresstype, Integer receiveAddressId,
-			HttpSession session) {
+	public Object saveExpressInfo(Integer orderid, Integer orderjpid, Integer expresstype, String expressAddress,
+			Integer receiveAddressId, HttpSession session) {
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
@@ -510,6 +510,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			//更新
 			orderReceive.setOrderId(orderid);
 			orderReceive.setExpressType(expresstype);
+			orderReceive.setExpressAddress(expressAddress);
 			orderReceive.setReceiveAddressId(receiveAddressId);
 			orderReceive.setOpId(userId);
 			orderReceive.setUpdateTime(DateUtil.nowDate());
@@ -519,6 +520,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			TOrderRecipientEntity orderReceiveAdd = new TOrderRecipientEntity();
 			orderReceiveAdd.setOrderId(orderid);
 			orderReceiveAdd.setExpressType(expresstype);
+			orderReceiveAdd.setExpressAddress(expressAddress);
 			orderReceiveAdd.setReceiveAddressId(receiveAddressId);
 			orderReceiveAdd.setOpId(userId);
 			orderReceiveAdd.setUpdateTime(DateUtil.nowDate());
@@ -529,8 +531,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//改变订单状态 由初审到发地址
 		Date nowDate = DateUtil.nowDate();
 		int receptionStatus = JPOrderStatusEnum.SEND_ADDRESS.intKey();
-		dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus).make("updateTime", nowDate),
-				Cnd.where("id", "=", orderid));
+		dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus), Cnd.where("id", "=", orderid));
+		dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 
 		//发送短信、邮件
 		try {
@@ -642,7 +644,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String expressType = orderReceive.getString("expressType");
 		String receiver = orderReceive.getString("receiver");
 		String mobile = orderReceive.getString("mobile");
-		String address = orderReceive.getString("address");
+		String address = orderReceive.getString("expressAddress");
 
 		Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
 		List<Record> applicants = (List<Record>) map.get("applicant");
@@ -681,7 +683,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String expressType = orderReceive.getString("expressType");
 		String receiver = orderReceive.getString("receiver");
 		String mobile = orderReceive.getString("mobile");
-		String address = orderReceive.getString("address");
+		String address = orderReceive.getString("expressAddress");
 
 		Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
 		List<Record> applicants = (List<Record>) map.get("applicant");
