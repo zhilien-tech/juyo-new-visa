@@ -46,6 +46,8 @@ $('.addIcon').click(function(){
 	//加载多程select2插件
 	initDuochengSelect(clonediv);
 	duochengdivlast.after(clonediv);
+	//绑定事件
+	initSelectEvent();
 });
 //删除行程
 /*$('.removIcon').click(function(){
@@ -53,6 +55,8 @@ $('.addIcon').click(function(){
 $(document).on('click','.removeIcon',function(){
 	var xingchengdivobj = $(this).parent();
 	xingchengdivobj.remove();
+	//绑定选中事件
+	initSelectEvent();
 });
 
 
@@ -156,4 +160,65 @@ function initDuochengSelect(divobj){
 		maximumSelectionLength : 1, //设置最多可以选择多少项
 		tags : false //设置必须存在的选项 才能选中
 	});
+	
+	//加载日期
+	divobj.find('.datetimepickertoday').datetimepicker({
+		format: 'yyyy-mm-dd',
+		startDate: new Date(),
+		language: 'zh-CN',
+		autoclose: true,//选中日期后 自动关闭
+		pickerPosition:"top-left",//显示位置
+		minView: "month"//只显示年月日
+	});
 }
+//选中事件
+initSelectEvent();
+function initSelectEvent(){
+	$('.duochengdiv').each(function(index,name){
+		//console.log('index:'+index);
+		var divsize = $('.duochengdiv').length;
+		var nextdiv = $(this).next();
+		//绑定抵达城市选中事件
+		$(this).find('[name=arrivedcity]').on("select2:select",function(e){
+			var cityvalue = $(this).val();
+			if (cityvalue) {
+				cityvalue = cityvalue.join(',');
+			}else{
+				cityvalue += '';
+			}
+			var citytext = $(this).text();
+			if(index < divsize - 1){
+				nextdiv.find('[name=departurecity]').html('<option selected="selected" value="'+cityvalue+'">'+citytext+'</option>');
+			}
+		});
+		//清空
+		$(this).find('[name=arrivedcity]').on("select2:unselect",function(e){
+			$(this).text('');
+			if(index < divsize - 1){
+				nextdiv.find('[name=departurecity]').empty();
+			}
+		});
+	});
+}
+
+//加载日期插件
+$('.datetimepickercss').each(function(){
+	$(this).datetimepicker({
+		format: 'yyyy-mm-dd',
+		language: 'zh-CN',
+		autoclose: true,//选中日期后 自动关闭
+		pickerPosition:"top-left",//显示位置
+		minView: "month"//只显示年月日
+	});
+});
+//加载日期插件
+$('.datetimepickertoday').each(function(){
+	$(this).datetimepicker({
+		format: 'yyyy-mm-dd',
+		startDate: new Date(),
+		language: 'zh-CN',
+		autoclose: true,//选中日期后 自动关闭
+		pickerPosition:"top-left",//显示位置
+		minView: "month"//只显示年月日
+	});
+});
