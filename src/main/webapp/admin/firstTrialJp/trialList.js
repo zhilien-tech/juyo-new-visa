@@ -95,7 +95,7 @@ new Vue({
     		    content:'/admin/orderJp/passportInfo.html?id='+applyid+'&orderid='+orderid
     	    });
     	},
-    	visaInfoFun:function(applyid,orderjpid,orderid){
+    	visaInfoFun:function(applyid,orderid){
     		layer.open({
 				type: 2,
 				title: false,
