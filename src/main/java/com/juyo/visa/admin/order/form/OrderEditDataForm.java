@@ -28,7 +28,7 @@ public class OrderEditDataForm implements Serializable {
 
 	private Integer status;
 
-	private Integer source;
+	private Integer cuSource;
 
 	private String name;
 
@@ -66,33 +66,13 @@ public class OrderEditDataForm implements Serializable {
 
 	private Integer isdirectcus;
 
-	private String linkman;
+	private String cusLinkman;
 
-	private String email;
+	private String cusEmail;
 
 	private Integer orderid;
 
-	private String expressLinkman;
-
-	private String expressTelephone;
-
 	private Integer visatype;
-
-	private String teamName;
-
-	private String expressAddress;
-
-	private String invoiceContent;
-
-	private String invoiceHead;
-
-	private String expressNum;
-
-	private String remark;
-
-	private Integer datasour;
-
-	private Integer expressType;
 
 	private String visacounty;
 

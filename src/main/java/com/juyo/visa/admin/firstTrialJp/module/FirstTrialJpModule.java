@@ -84,6 +84,7 @@ public class FirstTrialJpModule {
 	 * 快递 发信息
 	 */
 	@At
+	@GET
 	@Ok("jsp")
 	public Object express(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid, HttpSession session) {
 		return firstTrialJpViewService.express(orderid, orderjpid, session);
@@ -102,6 +103,7 @@ public class FirstTrialJpModule {
 	 * 获取申请人信息
 	 */
 	@At
+	@GET
 	@Ok("jsp")
 	public Object basicInfo(@Param("applyid") int applyid) {
 		return firstTrialJpViewService.basicInfo(applyid);
@@ -113,14 +115,15 @@ public class FirstTrialJpModule {
 	@At
 	@POST
 	public Object qualified(@Param("applyid") Integer applyid, @Param("orderid") Integer orderid,
-			@Param("orderjpid") Integer orderjpid) {
-		return firstTrialJpViewService.qualified(applyid, orderid, orderjpid);
+			@Param("orderjpid") Integer orderjpid, HttpSession session) {
+		return firstTrialJpViewService.qualified(applyid, orderid, orderjpid, session);
 	}
 
 	/**
 	 * 申请人 不合格信息
 	 */
 	@At
+	@GET
 	@Ok("jsp")
 	public Object unqualified(@Param("applyid") Integer applyid, @Param("orderid") Integer orderid) {
 		return firstTrialJpViewService.unqualified(applyid, orderid);
@@ -132,8 +135,8 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Object saveUnqualified(@Param("..") TApplicantUnqualifiedForm form) {
-		return firstTrialJpViewService.saveUnqualified(form);
+	public Object saveUnqualified(@Param("..") TApplicantUnqualifiedForm form, HttpSession session) {
+		return firstTrialJpViewService.saveUnqualified(form, session);
 	}
 
 	/**
@@ -161,9 +164,10 @@ public class FirstTrialJpModule {
 	@At
 	@POST
 	public Object saveExpressInfo(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid,
-			@Param("expresstype") Integer expresstype, @Param("receiveAddressId") Integer receiveAddressId,
-			HttpSession session) {
-		return firstTrialJpViewService.saveExpressInfo(orderid, orderjpid, expresstype, receiveAddressId, session);
+			@Param("expresstype") Integer expresstype, @Param("expressaddress") String expressaddress,
+			@Param("receiveAddressId") Integer receiveAddressId, HttpSession session) {
+		return firstTrialJpViewService.saveExpressInfo(orderid, orderjpid, expresstype, expressaddress,
+				receiveAddressId, session);
 	}
 
 	/**

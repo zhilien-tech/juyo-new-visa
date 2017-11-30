@@ -85,12 +85,21 @@
 					<div class="col-sm-6 padding-right-0">
 						<div class="row">
 							<!-- 姓/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>姓/拼音：</label> <input id="firstName"
-										name="firstName" type="text" class="form-control input-sm associatepinyin"
+									<label><span>*</span>姓：</label> <input id="firstName"
+										name="firstName" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
+										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>拼音：</label> <input id="firstNameEn"
+										name="firstNameEn" type="text" class="form-control input-sm"
+										placeholder=" " value="${obj.applicant.firstNameEn }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -98,11 +107,19 @@
 						<!-- end 姓/拼音 -->
 						<div class="row">
 							<!-- 名/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>名/拼音：</label> <input id="lastName"
-										name="lastName" type="text" class="form-control input-sm associatepinyin"
+									<label><span>*</span>名：</label> <input id="lastName"
+										name="lastName" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.lastName }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>拼音：</label> <input id="lastNameEn"
+										name="lastNameEn" type="text" class="form-control input-sm"
+										placeholder=" " value="${obj.applicant.lastNameEn }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -272,7 +289,7 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+	<%-- <script type="text/javascript" src="${base}/admin/common/commonjs.js"></script> --%>
 	<script type="text/javascript">
 	
 		$(function(){
@@ -357,6 +374,12 @@
 				}
 			
 			var applicantInfo = $("#applicantInfo").serialize();
+			var applicantId = ${obj.applicantId};
+			var orderid = ${obj.orderid};
+			if(orderid != null || orderid != "" || orderid != undefined){
+				applicantInfo.orderid = orderid;
+			}
+			applicantInfo.id = applicantId;
 			$.ajax({
 				async: false,
 				type: 'POST',
@@ -507,14 +530,21 @@
 			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
 				$(this).siblings("i").css("display","block");
 			});
-			$("#birthday").datetimepicker({
+			$("#validStartDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
 				autoclose: true,//选中日期后 自动关闭
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
 			});
-			$("#validStartDate").datetimepicker({
+			$("#validEndDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#birthday").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
 		        weekStart: 1,
@@ -525,19 +555,6 @@
 				forceParse: 0,
 		        showMeridian: false,
 				pickerPosition:"top-left",//显示位置
-				minView: "month"//只显示年月日
-			});
-			$("#validEndDate").datetimepicker({
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN',
-		        weekStart: 1,
-		        todayBtn: 1,
-				autoclose: true,
-				todayHighlight: true,
-				startView: 4,//从年开始选择
-				forceParse: 0,
-		        showMeridian: false,
-				pickerPosition:"top-left",
 				minView: "month"//只显示年月日
 			});
 		});

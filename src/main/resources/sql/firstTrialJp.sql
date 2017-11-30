@@ -109,6 +109,7 @@ SELECT
 	tor.orderId,
 	tor.expressType,
 	tor.receiveAddressId,
+	tor.expressAddress,
 	tr.receiver,
 	tr.mobile,
 	tr.address 

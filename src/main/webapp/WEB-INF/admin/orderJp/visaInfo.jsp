@@ -26,6 +26,8 @@
 			<div class="modal-header">
 				<span class="heading">签证信息</span> 
 				<input type="hidden" value="${obj.visaInfo.applicantId }" name="applicantId"/>
+				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
+				<input type="hidden" value="${obj.orderid }" name="orderid"/>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
@@ -46,7 +48,7 @@
 										</select>
 									</div>
 								</div>
-								<div class="col-sm-4 main">
+								<div class="col-sm-4 applymain">
 									<div class="form-group">
 										<label><span>*</span>备注：</label>
 										
@@ -71,7 +73,7 @@
 									</div>
 								</div>
 								
-								<div class="vice">
+								<div class="applyvice">
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label><span>*</span>主申请人：</label>
@@ -114,18 +116,19 @@
 					<!-- end 申请人 -->
 					
 					<!-- 出行信息 -->
-					<div class="info vice">
+					<div class="info tripvice">
 						<div class="info-head">出行信息 </div>
 						<div class="info-body-from cf ">
 							<div class="row"><!-- 是否同主申请人 -->
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>是否同主申请人：</label>
-										<select id="trip" name="sameMainTrip" class="form-control input-sm selectHeight">
+										<input id="trip" name="sameMainTrip" class="form-control input-sm selectHeight" value="是" disabled="disabled"/>
+										<%-- <select id="trip" name="sameMainTrip" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.isOrNo}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainTrip?'selected':''}>${map.value}</option>
 											</c:forEach>
-										</select>
+										</select> --%>
 									</div>
 								</div>
 							</div><!-- end 是否同主申请人 -->
@@ -137,7 +140,20 @@
 					<div class="info">
 						<div class="info-head">工作信息 </div>
 						<div class="info-body-from cf ">
-							<div class="row main"><!-- 我的职业/单位名称/单位电话 -->
+							<div class="workvice row">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>是否同主申请人：</label>
+										<select id="work" name="sameMainWork" class="form-control input-sm selectHeight">
+											<c:forEach var="map" items="${obj.isOrNo}">
+												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWork?'selected':''}>${map.value}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row workmain"><!-- 我的职业/单位名称/单位电话 -->
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>我的职业：</label>
@@ -162,7 +178,7 @@
 									</div>
 								</div>
 							</div><!-- end 我的职业/单位名称/单位电话 -->
-							<div class="row main"><!-- 单位地址 -->
+							<div class="row workmain"><!-- 单位地址 -->
 								<div class="col-sm-8">
 									<div class="form-group">
 										<label id="schoolAddress"><span>*</span>单位地址：</label>
@@ -170,18 +186,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="vice row">
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label><span>*</span>是否同主申请人：</label>
-										<select id="work" name="sameMainWork" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.isOrNo}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWork?'selected':''}>${map.value}</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-							</div>
+							
 							<!-- end 单位地址 -->
 						</div>
 					</div>
@@ -190,7 +195,19 @@
 					<!-- 财产信息 -->
 					<div class="info" style="padding-bottom: 15px;">
 						<div class="info-head">财产信息 </div>
-						<div class="info-body-from finance-btn main">
+						<div class="wealthvice row info-body-from clone-module cf">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>是否同主申请人：</label>
+										<select id="wealth" name="sameMainWealth" class="form-control input-sm selectHeight">
+											<c:forEach var="map" items="${obj.isOrNo}">
+												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWealth?'selected':''}>${map.value}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+						</div>
+						<div class="info-body-from finance-btn wealthmain">
 							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState" />
 							<input id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
 							<input id="housePropertyType" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
@@ -264,18 +281,7 @@
 							</div><!-- end 房产 -->
 							<i class="remove-btn"></i>
 						</div>
-						<div class="vice row info-body-from clone-module cf">
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label><span>*</span>是否同主申请人：</label>
-										<select id="wealth" name="sameMainWealth" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.isOrNo}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWealth?'selected':''}>${map.value}</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-						</div>
+						
 					</div>
 					<!-- end 财产信息 -->
 				</div>
@@ -321,14 +327,52 @@
 			//主申请人 or 副申请人
 			var applicVal = $("#applicant").val();
 			if(applicVal == "1"){//主申请人
-				$(".vice").hide();
-				$(".main").show();
+				$(".applyvice").hide();
+				$(".tripvice").hide();
+				$(".workvice").hide();
+				$(".wealthvice").hide();
+				$(".applymain").show();
+				$(".workmain").show();
+				$(".wealthmain").show();
 				$("#mainApply").text("主申请人");
 			}else{//副申请人
-				$(".vice").show();
-				$(".main").hide();
+				$(".applyvice").show();
+				$(".tripvice").show();
+				$(".wealthvice").show();
+				$(".workvice").show();
+				$(".applymain").hide();
+				$(".workmain").hide();
+				$(".wealthmain").hide();
 				$("#mainApply").text("副申请人");
 			}
+			
+			//主申请人 or 副申请人
+			$("#applicant").change(function(){
+				var applicVal = $(this).val();
+				if(applicVal == "1"){//主申请人
+					$(".applyvice").hide();
+					$(".tripvice").hide();
+					$(".workvice").hide();
+					$(".wealthvice").hide();
+					$(".applymain").show();
+					$(".workmain").show();
+					$(".wealthmain").show();
+					$("#mainApply").text("主申请人");
+				}else{//副申请人
+					$(".applyvice").show();
+					$(".tripvice").show();
+					$(".wealthvice").show();
+					$(".workvice").show();
+					$(".applymain").hide();
+					$(".workmain").hide();
+					$(".wealthmain").hide();
+					$("#mainApply").text("副申请人");
+					$(".deposit").css("display","none");
+					$(".vehicle").css("display","none");
+					$(".houseProperty").css("display","none");
+					$(".financial").css("display","none");
+				}
+			});
 			
 			var wealthType = '${obj.wealthJp}';
 			console.log(wealthType);
@@ -361,7 +405,53 @@
 						});
 					});
 				
-			} 
+			}
+			
+			var work = $("#work").val();
+			if(work == 0){
+				$(".workmain").show();
+				//$(".address").show();
+			}
+			$("#work").change(function(){
+				if($(this).val() == 1){
+					$(".workmain").hide();
+				}else{
+					$(".workmain").show();
+					/* $("#careerStatus").val(1);
+					$("#name").val("");
+					$("#telephone").val("");
+					$("#address").val(""); */
+				}
+			});
+			
+			var wealth = $("#wealth").val();
+			if(wealth == 0){
+				$(".wealthmain").show();
+				//$(".address").show();
+			}else{
+				if(applicVal == 1){
+					
+				}else{
+					$(".deposit").css("display","none");
+					$(".vehicle").css("display","none");
+					$(".houseProperty").css("display","none");
+					$(".financial").css("display","none");
+				}
+			}
+			$("#wealth").change(function(){
+				if($(this).val() == 1){
+					$(".wealthmain").hide();
+					$(".deposit").css("display","none");
+					$(".vehicle").css("display","none");
+					$(".houseProperty").css("display","none");
+					$(".financial").css("display","none");
+				}else{
+					$(".wealthmain").show();
+					$('[name=wealthType]').each(function(){
+						$(this).removeClass("btnState-true");
+					});
+				}
+			});
 			
 			
 			//财务信息 部分按钮效果
@@ -434,24 +524,10 @@
 			});
 			
 			
-			//主申请人 or 副申请人
-			$("#applicant").change(function(){
-				var applicVal = $(this).val();
-				if(applicVal == "1"){//主申请人
-					$(".vice").hide();
-					$(".main").show();
-					$("#mainApply").text("主申请人");
-				}else{//副申请人
-					$(".vice").show();
-					$(".main").hide();
-					$("#mainApply").text("副申请人");
-					$(".deposit").css("display","none");
-					$(".vehicle").css("display","none");
-					$(".houseProperty").css("display","none");
-					$(".financial").css("display","none");
-				}
-			});
+			
 		});
+		
+		
 		
 		//保存
 		function save(){
@@ -466,6 +542,12 @@
 				wealthType = wealthType.substr(0,wealthType.length-1);
 			}
 			//var passportInfo = $("#passportInfo").serialize();
+			var applicVal = $("#applicant").val();
+			//主申请人时，是否同主申请人设置为空，不然默认为1
+			if(applicVal == 1){
+				$("#work").val(0);
+				$("#wealth").val(0);
+			}
 			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
 			$.ajax({
 				type: 'POST',

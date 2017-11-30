@@ -33,7 +33,6 @@ $(function(){
 
 //快递
 function expressFun(){
-	//alert(orderid +"==="+ orderjpid);
 	$.ajax({
 		type : 'POST',
 		data : {
@@ -43,16 +42,16 @@ function expressFun(){
 		success : function(data) {
 			if(data){
 				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '550px'],
-					content: '/admin/firstTrialJp/express.html?orderid='+orderid
-				});
+	    		    type: 2,
+	    		    title: false,
+	    		    closeBtn:false,
+	    		    fix: false,
+	    		    maxmin: false,
+	    		    shadeClose: false,
+	    		    scrollbar: false,
+	    		    area: ['900px', '550px'],
+	    		    content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
+	    	    });
 			}else{
 				layer.msg('申请人不合格');
 				return;
@@ -250,7 +249,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/updateApplicant.html?id='+applyId
+				content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+orderid
 			});
 		},
 		passport:function(applyId){
@@ -263,7 +262,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['900px', '550px'],
-    		    content:'/admin/orderJp/passportInfo.html?id='+applyId
+    		    content:'/admin/orderJp/passportInfo.html?id='+applyId+'&orderid='+orderid
     	    });
 		},
 		visaInfo:function(applyId){
@@ -276,7 +275,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid
+				content:'/admin/orderJp/visaInfo.html?applicantId='+applyId+'&orderid='+orderid+'&isOrderUpTime=1'
 			});
 		},
 		qualified:function(applyId){

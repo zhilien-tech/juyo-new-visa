@@ -63,7 +63,7 @@
 									<div><label>方式：</label><span>{{item.expresstype}}</span></div>
 									<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 									<div><label>资料：</label><span>{{item.data}}</span></div>
-									<div><i class="videoShoot"> </i></div>
+									<!-- <div><i class="videoShoot"> </i></div> -->
 								</li>
 							</ul>
 						</div>

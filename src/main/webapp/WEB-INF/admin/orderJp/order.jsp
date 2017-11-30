@@ -6,7 +6,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>编辑</title>
+		<title>销售详情</title>
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
@@ -34,7 +34,7 @@
 			<div class="qz-head">
 				<span class="">订单号：<p>${obj.orderInfo.orderNum}</p></span> 
 				<span class="">受付番号：<p></p></span> 
-				<span class="">状态：<p>下单</p></span> 
+				<span class="">状态：<p>${obj.orderstatus }</p></span> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
 				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
@@ -52,7 +52,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>客户来源：</label> 
-										<select id="customerType" name="source" class="form-control input-sm" >
+										<select id="customerType" name="cuSource" class="form-control input-sm" >
 											<option value="">--请选择--</option>
 											<c:forEach var="map" items="${obj.customerTypeEnum}">
 												<option value="${map.key}" 
@@ -116,7 +116,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>联系人：</label> 
-										<select id = "linkman" name="linkman"
+										<select id = "linkman" name="cusLinkman"
 												class="form-control select2 cityselect2 " multiple="multiple"
 												data-placeholder="" v-model="customerInfo.linkman">
 												<c:if test="${ !empty obj.customer.id }">
@@ -140,7 +140,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>邮箱：</label> 
-										<select id = "email" name="email" class="form-control select2 cityselect2 " multiple="multiple" data-placeholder="" v-model="customerInfo.email">
+										<select id = "email" name="cusEmail" class="form-control select2 cityselect2 " multiple="multiple" data-placeholder="" v-model="customerInfo.email">
 											<c:if test="${ !empty obj.customer.id }">
 													<option value="${obj.customer.id }" selected="selected">${obj.customer.email }</option>
 												</c:if>
@@ -154,7 +154,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>联系人：</label> 
-										<input id="linkman2" name="linkman" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.linkman }"/>
+										<input id="linkman2" name="cusLinkman" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.linkman }"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -166,7 +166,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>邮箱：</label>
-										<input id="email2" name="email" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.email }"/>
+										<input id="email2" name="cusEmail" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.email }"/>
 									</div>
 								</div>
 							</div><!-- end input 直客 -->
@@ -428,8 +428,8 @@
 									<td>{{applicant.sex}}</td>
 									<td>
 										<a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;
-										<a v-on:click="passport(applicant.id)">护照</a>&nbsp;&nbsp;
-										<a v-on:click="visa(applicant.id,orderInfo.id)">签证</a> <br>
+										<a v-on:click="passport(applicant.id)">护照信息</a>&nbsp;&nbsp;
+										<a v-on:click="visa(applicant.id,orderInfo.id)">签证信息</a> <br>
 										<a v-on:click="">回邮</a>&nbsp;&nbsp;
 										<a v-on:click="deleteApplicant(applicant.id)">删除</a></br>
 									</td>
@@ -448,109 +448,226 @@
 					</div>
 				</div><!-- end 添加回邮信息 -->
 
-				<!-- 快递信息 -->
-				<div class="info expressInfo none" id="expressInfo" name="backmailInfo">
-					<p class="info-head">回邮信息</p>
-					<div class="info-body-from backmail-div">
-						<div class="row body-from-input">
-							<!-- 资料来源/回邮方式/回邮地址 -->
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>资料来源：</label> <select id="datasour"
-										name="datasour" class="form-control input-sm">
-										<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
-											<option value="${map.key}">${map.value}</option>
-										</c:forEach>
-									</select>
+				<!-- 回邮信息 -->
+			<c:choose>
+	               		<c:when test="${fn:length(obj.backinfo)>0}">
+	               			<div class="info expressInfo" id="expressInfo" name="backmailInfo">
+	               			<p class="info-head">回邮信息</p>
+			            	<c:forEach var="backmail" items="${obj.backinfo}" varStatus="status">
+								<div class="info-body-from backmail-div">
+									<div class="row body-from-input">
+										<!-- 资料来源/快递号/团队名称/回邮方式 -->
+										<input name="obmId" type="hidden" value="${backmail.id }">
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>资料来源：</label> 
+												<select name="source" class="form-control input-sm">
+													<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
+														<c:choose>
+							                    			<c:when test="${backmail.source eq map.key }">
+																<option value="${map.key}" selected="selected">${map.value}</option>
+							                    			</c:when>
+							                    			<c:otherwise>
+																<option value="${map.key}">${map.value}</option>
+							                    			</c:otherwise>
+							                    		</c:choose>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>快递号：</label> 
+												<input name="expressNum" type="text" value="${backmail.expressNum }" class="form-control input-sm" placeholder=" " />
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>团队名称：</label> 
+												<input name="teamName" type="text" value="${backmail.teamName }" class="form-control input-sm" placeholder=" " />
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>回邮方式：</label> 
+												<select name="expressType" class="form-control input-sm">
+													<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
+														<c:choose>
+							                    			<c:when test="${backmail.expressType eq map.key }">
+																<option value="${map.key}" selected="selected">${map.value}</option>
+							                    			</c:when>
+							                    			<c:otherwise>
+																<option value="${map.key}">${map.value}</option>
+							                    			</c:otherwise>
+							                    		</c:choose>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+									</div>
+									<!-- end 资料来源/快递号/团队名称/回邮方式 -->
+			
+									<div class="row body-from-input" style="padding-left:0;">
+										<!-- 回邮地址/联系人/电话 -->
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label><span>*</span>回邮地址：</label> 
+												<input name="expressAddress" type="text" value="${backmail.expressAddress }" class="form-control input-sm" placeholder=" " />
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>联系人：</label> 
+												<input name="linkman" type="text" value="${backmail.linkman }" class="form-control input-sm" placeholder=" " />
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>电话：</label> 
+												<input name="telephone" type="text" value="${backmail.telephone }"  class="form-control input-sm" placeholder=" " />
+											</div>
+										</div>
+									</div>
+									<!-- end 回邮地址/联系人/电话/ -->
+			
+									<div class="row body-from-input" style="padding-left:0;">
+										<!-- 发票项目内容/发票抬头/税号/备注 -->
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>发票项目内容：</label> 
+												<input name="invoiceContent" type="text" value="${backmail.invoiceContent }" class="form-control input-sm" placeholder=" " />
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>发票抬头：</label> 
+												<input name="invoiceHead" type="text" value="${backmail.invoiceHead }" class="form-control input-sm" placeholder=" " />
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>税号：</label> 
+												<input name="taxNum" type="text" value="${backmail.taxNum }" class="form-control input-sm" placeholder=" " />
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>备注：</label> 
+												<input name="remark" type="text" value="${backmail.remark }" class="form-control input-sm" placeholder=" " />
+											</div>
+										</div>
+									</div>
+									<!-- end 发票项目内容/发票抬头/税号/备注 -->
+									<c:if test="${status.index <= 0 }">
+										<i class="add-btn"></i>
+									</c:if>
+									<c:if test="${status.index > 0 }">
+										<i class="remove-btn"></i>
+									</c:if>
+									
 								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>回邮方式：</label> <select id="expressType"
-										name="expressType" class="form-control input-sm">
-										<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
-											<option value="${map.key}">${map.value}</option>
-										</c:forEach>
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label><span>*</span>回邮地址：</label> <input id="expressAddress"
-										name="expressAddress" type="text"
-										class="form-control input-sm" placeholder=" " />
-								</div>
-							</div>
+							</c:forEach>
 						</div>
-						<!-- end 资料来源/回邮方式/回邮地址 -->
-
-						<div class="row body-from-input" style="padding-left:0;">
-							<!-- 联系人/电话/发票项目内容/发票抬头 -->
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>联系人：</label> <input id="expressLinkman"
-										name="expressLinkman" type="text" class="form-control input-sm"
-										placeholder=" " />
+		            </c:when>
+	            	<c:otherwise>
+	            		<div class="info none expressInfo" id="expressInfo" name="backmailInfo">
+	               			<p class="info-head">回邮信息</p>
+		            		<div class="info-body-from backmail-div">
+								<div class="row body-from-input">
+									<!-- 资料来源/快递号/团队名称/回邮方式 -->
+									<div class="col-sm-3">
+										<div class="form-group">
+											<input name="obmId" type="hidden" value="">
+											<label><span>*</span>资料来源：</label> 
+											<select name="source" class="form-control input-sm">
+												<c:forEach var="map" items="${obj.mainBackMailSourceTypeEnum}">
+													<option value="${map.key}">${map.value}</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>快递号：</label> 
+											<input name="expressNum" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>团队名称：</label> 
+											<input name="teamName" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>回邮方式：</label> 
+											<select name="expressType" class="form-control input-sm">
+												<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
+													<option value="${map.key}">${map.value}</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
 								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>电话：</label> <input id="expressTelephone"
-										name="expressTelephone" type="text" class="form-control input-sm"
-										placeholder=" " />
+								<!-- end 资料来源/快递号/团队名称/回邮方式 -->
+		
+								<div class="row body-from-input" style="padding-left:0;">
+									<!-- 回邮地址/联系人/电话 -->
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label><span>*</span>回邮地址：</label> 
+											<input name="expressAddress" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>联系人：</label> 
+											<input name="linkman" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>电话：</label> 
+											<input name="telephone" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
 								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>发票项目内容：</label> <input id="invoiceContent"
-										name="invoiceContent" type="text"
-										class="form-control input-sm" placeholder=" " />
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>发票抬头：</label> <input id="invoiceHead"
-										name="invoiceHead" type="text" class="form-control input-sm"
-										placeholder=" " />
-								</div>
-							</div>
-						</div>
-						<!-- end 联系人/电话/发票项目内容/发票抬头 -->
-
-						<div class="row body-from-input" style="padding-left:0;">
-							<!-- 团队名称/快递号/备注 -->
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>团队名称：</label> <input id="teamName" name="teamName"
-										type="text" class="form-control input-sm" placeholder=" " />
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>快递号：</label> <input id="expressNum"
-										name="expressNum" type="text" class="form-control input-sm"
-										placeholder=" " />
-								</div>
-							</div>
-							<div class="col-sm-3">
+								<!-- end 回邮地址/联系人/电话/ -->
+		
+								<div class="row body-from-input" style="padding-left:0;">
+									<!-- 发票项目内容/发票抬头/税号/备注 -->
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>发票项目内容：</label> 
+											<input name="invoiceContent" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>发票抬头：</label> 
+											<input name="invoiceHead" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
+									<div class="col-sm-3">
 										<div class="form-group">
 											<label><span>*</span>税号：</label> 
 											<input name="taxNum" type="text" class="form-control input-sm" placeholder=" " />
 										</div>
 									</div>
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label><span>*</span>备注：</label> <input id="remark"
-										name="remark" type="text" class="form-control input-sm"
-										placeholder=" " />
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>备注：</label> 
+											<input name="remark" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
+									</div>
 								</div>
+								<!-- end 发票项目内容/发票抬头/税号/备注 -->
+								<i class="add-btn"></i>
 							</div>
 						</div>
-						<!-- end 团队名称/快递号/备注 -->
-						<i class="add-btn"></i>
-					</div>
-				</div>
-				<!-- end 快递信息 -->
+						<!-- end 快递信息 -->
+	            	</c:otherwise>
+           		</c:choose>
 
 			</section>
 		</div>
@@ -602,7 +719,7 @@
 		}
 	
 		$(function(){
-			//点击 蓝色加号图标 事件
+			/* //点击 蓝色加号图标 事件
 			$('.add-btn').click(function(){
 		    	var $html=$(this).parent().clone();//克隆标签模块
 		    	$(this).parents('.info').append($html);//添加克隆的内容
@@ -612,7 +729,7 @@
 			//点击 蓝色叉号图标 事件
 			$(".info").on("click", ".remove-btn", function(){
 				$(this).parent().remove();//删除 对相应的本模块
-			});
+			}); */
 			var customerType = $("#customerType").val();
 			if(customerType == 4){
 				$(".on-line").hide();//隐藏select2部分字段
@@ -622,6 +739,8 @@
 				$(".zhiKe").addClass("none");
 				customerTypeSelect2();
 			}
+			
+			
 			
 			//加急 
 			/* var urgentType = $('#urgentType').val();
@@ -640,15 +759,113 @@
 				}
 			});
 			
+			//点击 蓝色加号图标 事件
+			$('.add-btn').click(function(){
+				var newDiv=$(this).parent().clone();//克隆标签模块
+				$(this).parents('.info').append(newDiv);//添加克隆的内容
+				clearBackMailInfo(newDiv);
+				newDiv.find('.add-btn').remove();
+				newDiv.append('<i class="remove-btn"></i>');
+			});
+			//点击 蓝色叉号图标 事件
+			$(".info").on("click", ".remove-btn", function(){
+				$(this).parent().remove();//删除 对相应的本模块
+			});
+			
+			//如果有数据，隐藏添加回邮信息按钮；同时，设置最有一个为减号按钮
+			
 			//新时间插件
 			/* $('#sendVisaDate').daterangepicker(null, function(start, end, label) {
                 console.log(start.toISOString(), end.toISOString(), label);
             }); */
 
 		});
+
+		//“+”号 回邮寄信息
+		function clearBackMailInfo(newDiv){
+			newDiv.find('[name=obmId]').val("");
+			newDiv.find('[name=source]').val(1);
+			newDiv.find('[name=expressType]').val(1);
+			newDiv.find('[name=expressAddress]').val("");
+			newDiv.find('[name=linkman]').val("");
+			newDiv.find('[name=telephone]').val("");
+			newDiv.find('[name=invoiceContent]').val("");
+			newDiv.find('[name=invoiceHead]').val("");
+			newDiv.find('[name=teamName]').val("");
+			newDiv.find('[name=expressNum]').val("");
+			newDiv.find('[name=taxNum]').val("");
+			newDiv.find('[name=remark]').val("");
+		}
+		//回邮信息
+		function getMailInfos(){
+			var backMails = [];
+			$('.backmail-div').each(function(i){
+				var infoLength = '';
+				var backInfo = {};
+				
+				var obmId = $(this).find('[name=obmId]').val();
+				infoLength += obmId;
+				backInfo.id = obmId;
+				
+				var source = $(this).find('[name=source]').val();
+				if(source != 1){
+					infoLength += source;
+				}
+				backInfo.source = source;
+				
+				var expressType = $(this).find('[name=expressType]').val();
+				if(expressType != 1){
+					infoLength += expressType;
+				}
+				backInfo.expressType = expressType;
+				
+				var expressAddress = $(this).find('[name=expressAddress]').val();
+				infoLength += expressAddress;
+				backInfo.expressAddress = expressAddress;
+				
+				var linkman = $(this).find('[name=linkman]').val();
+				infoLength += linkman;
+				backInfo.linkman = linkman;
+				
+				var telephone = $(this).find('[name=telephone]').val();
+				infoLength += telephone;
+				backInfo.telephone = telephone;
+				
+				var invoiceContent = $(this).find('[name=invoiceContent]').val();
+				infoLength += invoiceContent;
+				backInfo.invoiceContent = invoiceContent;
+				
+				var invoiceHead = $(this).find('[name=invoiceHead]').val();
+				infoLength += invoiceHead;
+				backInfo.invoiceHead = invoiceHead;
+				
+				var teamName = $(this).find('[name=teamName]').val();
+				infoLength += teamName;
+				backInfo.teamName = teamName;
+				
+				var expressNum = $(this).find('[name=expressNum]').val();
+				infoLength += expressNum;
+				backInfo.expressNum = expressNum;
+				
+				var taxNum = $(this).find('[name=taxNum]').val();
+				infoLength += taxNum;
+				backInfo.taxNum = taxNum;
+				
+				var remark = $(this).find('[name=remark]').val();
+				infoLength += remark;
+				backInfo.remark = remark;
+
+				if(infoLength.length > 0){
+					backMails.push(backInfo);
+				}
+			});
+			
+			return backMails;
+		}
 		
 		var url = "${base}/admin/orderJp/getOrder.html";
 		var orderobj;
+		var backMailInfos;
 		var orderid = ${obj.orderId};
 		new Vue({
 			el : '#wrapper',
@@ -674,6 +891,11 @@
 						orderobj.orderInfo = data.orderInfo;
 						orderobj.applicantInfo = data.applicantInfo;
 						//this.backmailInfo = data.backmailInfo;
+						backMailInfos = data.backinfo;
+						
+						if(backMailInfos.length>0){
+							$(".addExpressInfoBtn").hide();
+						}
 						var isVisited = orderobj.orderInfo.isvisit;
 						var visaType = orderobj.orderInfo.visatype;
 						var mainSaleUrgentEnum = orderobj.orderInfo.urgenttype;
@@ -799,8 +1021,10 @@
 					orderobj.orderInfo.money = $('#money').val();
 					orderobj.orderInfo.stayday = $('#stayDay').val();
 					orderobj.orderInfo.outvisadate = $('#outVisaDate').val();
+					var backMails = getMailInfos();
 					var editdata = orderobj.orderInfo;
 					editdata.customerinfo = JSON.stringify(orderobj.customerInfo);
+					editdata.backMailInfos = JSON.stringify(backMails);
 					//var applicant = orderobj.applicantInfo;
 					var backmail;
 					$.ajax({
@@ -832,11 +1056,11 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '551px'],
-						content:'/admin/orderJp/updateApplicant.html?id='+id
+						content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid='
 					});
 				},
 				//修改护照信息
-				passport : function(id){
+				passport : function(applicantId){
 					layer.open({
 						type: 2,
 						title: false,
@@ -846,7 +1070,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '551px'],
-						content:'/admin/orderJp/passportInfo.html?id='+id
+						content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='
 					});
 				},
 				//删除申请人
@@ -904,18 +1128,20 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '551px'],
-						content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid
+						content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime'
 					});
 				},
 				//初审按钮
 				firtTrialJp : function(id){
+					layer.load(1);
 					$.ajax({ 
 				    	url: '${base}/admin/orderJp/firtTrialJp',
 				    	dataType:"json",
 				    	data:{orderId:id},
 				    	type:'post',
 				    	success: function(data){
-				    		
+				    		layer.closeAll('loading');
+				    		layer.msg('初审通过');
 				      	}
 				    }); 
 				}
@@ -1019,55 +1245,34 @@
 		$("#goTripDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn: 1,
-			autoclose: true,
-			todayHighlight: true,//高亮
-			startView: 4,//从年开始选择
-			forceParse: 0,
-	        showMeridian: false,
+			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
 		$("#backTripDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn: 1,
-			autoclose: true,
-			todayHighlight: true,//高亮
-			startView: 4,//从年开始选择
-			forceParse: 0,
-	        showMeridian: false,
+			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
 		$("#sendVisaDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn: 1,
-			autoclose: true,
-			todayHighlight: true,//高亮
-			startView: 4,//从年开始选择
-			forceParse: 0,
-	        showMeridian: false,
+			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
 		$("#outVisaDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn: 1,
-			autoclose: true,
-			todayHighlight: true,//高亮
-			startView: 4,//从年开始选择
-			forceParse: 0,
-	        showMeridian: false,
+			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
+		
+		
+		
 	</script>
 </body>
 </html>

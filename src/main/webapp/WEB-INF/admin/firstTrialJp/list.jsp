@@ -58,9 +58,9 @@
 									<div><label>手机号：</label><span>{{item.telephone}}</span></div>
 									<div><label>状态：</label><span>{{item.applicantstatus}}</span></div>
 									<div>
-										<i class="basicInfo" @click="basicInfoFun(item.applyid)"> </i>
-										<i class="passportInfo" @click="passportFun(item.applyid)"> </i>
-										<i class="visaInfo" @click="visaInfoFun(item.applyid,data.orderjpid)"> </i>
+										<i class="basicInfo" @click="basicInfoFun(item.applyid,data.orderid)"> </i>
+										<i class="passportInfo" @click="passportFun(item.applyid,data.orderid)"> </i>
+										<i class="visaInfo" @click="visaInfoFun(item.applyid,data.orderid)"> </i>
 										<i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
 										<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i>
 									</div>

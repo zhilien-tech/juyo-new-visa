@@ -34,6 +34,7 @@ import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
+import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.FristTrialSearchStatusEnum_JP;
@@ -83,6 +84,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 	@Inject
 	private MailService mailService;
+
+	@Inject
+	private OrderJpViewService orderJpViewService;
 
 	@Inject
 	private RedisDao redisDao;
@@ -350,7 +354,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//合格申请人
-	public Object qualified(Integer applyid, Integer orderid, Integer orderjpid) {
+	public Object qualified(Integer applyid, Integer orderid, Integer orderjpid, HttpSession session) {
 		int update = dbDao.update(TApplicantEntity.class,
 				Chain.make("status", TrialApplicantStatusEnum.qualified.intKey()), Cnd.where("id", "=", applyid));
 		if (update > 0) {
@@ -362,14 +366,18 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			}
 		}
 		Boolean qualified = isQualified(orderjpid);
+		Date nowDate = DateUtil.nowDate();
 		if (!qualified) {
 			//只要一个不合格，订单状态为初审
 			int firsttrialstatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
 			dbDao.update(TOrderEntity.class, Chain.make("status", firsttrialstatus), Cnd.where("id", "=", orderid));
+			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 		} else {
 			//全合格，订单状态为合格
 			int qualifiedstatus = JPOrderStatusEnum.QUALIFIED_ORDER.intKey();
+			orderJpViewService.insertLogs(orderid, qualifiedstatus, session);
 			dbDao.update(TOrderEntity.class, Chain.make("status", qualifiedstatus), Cnd.where("id", "=", orderid));
+			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 		}
 		return update > 0;
 	}
@@ -388,7 +396,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//保存不合格信息
-	public Object saveUnqualified(TApplicantUnqualifiedForm form) {
+	public Object saveUnqualified(TApplicantUnqualifiedForm form, HttpSession session) {
 		int YES = IsYesOrNoEnum.YES.intKey();
 		int NO = IsYesOrNoEnum.NO.intKey();
 		Integer applicantId = form.getApplicantId();
@@ -447,7 +455,11 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					Cnd.where("id", "=", applicantId));
 			//更改订单状态为初审
 			int firsttrialstatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
+			Date nowDate = DateUtil.nowDate();
 			dbDao.update(TOrderEntity.class, Chain.make("status", firsttrialstatus), Cnd.where("id", "=", orderid));
+			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
+			//记录日志
+			orderJpViewService.insertLogs(orderid, firsttrialstatus, session);
 		}
 
 		return Json.toJson("success");
@@ -487,8 +499,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	/**
 	 * 保存快递信息，并发送邮件
 	 */
-	public Object saveExpressInfo(Integer orderid, Integer orderjpid, Integer expresstype, Integer receiveAddressId,
-			HttpSession session) {
+	public Object saveExpressInfo(Integer orderid, Integer orderjpid, Integer expresstype, String expressAddress,
+			Integer receiveAddressId, HttpSession session) {
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
@@ -498,6 +510,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			//更新
 			orderReceive.setOrderId(orderid);
 			orderReceive.setExpressType(expresstype);
+			orderReceive.setExpressAddress(expressAddress);
 			orderReceive.setReceiveAddressId(receiveAddressId);
 			orderReceive.setOpId(userId);
 			orderReceive.setUpdateTime(DateUtil.nowDate());
@@ -507,6 +520,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			TOrderRecipientEntity orderReceiveAdd = new TOrderRecipientEntity();
 			orderReceiveAdd.setOrderId(orderid);
 			orderReceiveAdd.setExpressType(expresstype);
+			orderReceiveAdd.setExpressAddress(expressAddress);
 			orderReceiveAdd.setReceiveAddressId(receiveAddressId);
 			orderReceiveAdd.setOpId(userId);
 			orderReceiveAdd.setUpdateTime(DateUtil.nowDate());
@@ -515,8 +529,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 
 		//改变订单状态 由初审到发地址
+		Date nowDate = DateUtil.nowDate();
 		int receptionStatus = JPOrderStatusEnum.SEND_ADDRESS.intKey();
 		dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus), Cnd.where("id", "=", orderid));
+		dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 
 		//发送短信、邮件
 		try {
@@ -526,11 +542,11 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			e.printStackTrace();
 		}
 
-		//添加日志记录  订单初审
-		int firsttrialStatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
-		String logsResult = addLogs(orderid, userId, firsttrialStatus);
+		//添加日志记录  订单已发地址
+		int send_address = JPOrderStatusEnum.SEND_ADDRESS.intKey();
+		orderJpViewService.insertLogs(orderid, send_address, session);
 
-		return logsResult;
+		return "SUCCESS";
 	}
 
 	/**
@@ -628,7 +644,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String expressType = orderReceive.getString("expressType");
 		String receiver = orderReceive.getString("receiver");
 		String mobile = orderReceive.getString("mobile");
-		String address = orderReceive.getString("address");
+		String address = orderReceive.getString("expressAddress");
 
 		Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
 		List<Record> applicants = (List<Record>) map.get("applicant");
@@ -667,7 +683,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String expressType = orderReceive.getString("expressType");
 		String receiver = orderReceive.getString("receiver");
 		String mobile = orderReceive.getString("mobile");
-		String address = orderReceive.getString("address");
+		String address = orderReceive.getString("expressAddress");
 
 		Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
 		List<Record> applicants = (List<Record>) map.get("applicant");

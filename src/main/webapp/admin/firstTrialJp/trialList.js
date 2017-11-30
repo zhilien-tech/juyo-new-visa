@@ -41,7 +41,7 @@ new Vue({
 			//console.log(message);
 			//alert(JSON.stringify(event.target));
 		},
-		basicInfoFun:function(applyid){
+		basicInfoFun:function(applyid,orderid){
 			layer.open({
     		    type: 2,
     		    title: false,
@@ -51,7 +51,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['900px', '550px'],
-    		    content: '/admin/orderJp/updateApplicant.html?id='+applyid
+    		    content: '/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+orderid
     	    });
 		},
 		expressFun:function(orderid,orderjpid){//跳转快递弹层页面
@@ -82,7 +82,7 @@ new Vue({
 				}
 			});
     	},
-    	passportFun:function(applyid){
+    	passportFun:function(applyid,orderid){
     		layer.open({
     		    type: 2,
     		    title: false,
@@ -92,7 +92,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['900px', '550px'],
-    		    content:'/admin/orderJp/passportInfo.html?id='+applyid
+    		    content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid
     	    });
     	},
     	visaInfoFun:function(applyid,orderid){
@@ -105,7 +105,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid
+				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime=1'
 			});
 		},
     	qualifiedFun:function(applyid,orderid,orderjpid){
