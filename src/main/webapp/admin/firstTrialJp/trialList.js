@@ -92,7 +92,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['900px', '550px'],
-    		    content:'/admin/orderJp/passportInfo.html?id='+applyid+'&orderid='+orderid
+    		    content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid
     	    });
     	},
     	visaInfoFun:function(applyid,orderid){
