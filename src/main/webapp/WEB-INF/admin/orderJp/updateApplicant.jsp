@@ -74,7 +74,6 @@
 							<div class="col-sm-11 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发机关：</label> 
-									<input type="hidden" name="orderid" value=""/>
 									<input id="issueOrganization" name="issueOrganization"
 										type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
 									<!-- <i class="bulb"></i> -->
