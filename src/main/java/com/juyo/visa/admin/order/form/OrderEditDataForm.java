@@ -28,7 +28,7 @@ public class OrderEditDataForm implements Serializable {
 
 	private Integer status;
 
-	private Integer source;
+	private Integer cuSource;
 
 	private String name;
 

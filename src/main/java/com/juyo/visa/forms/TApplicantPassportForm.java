@@ -93,6 +93,8 @@ public class TApplicantPassportForm extends DataTablesParamForm {
 	/**更新时间*/
 	private Date updateTime;
 
+	private Integer orderid;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**

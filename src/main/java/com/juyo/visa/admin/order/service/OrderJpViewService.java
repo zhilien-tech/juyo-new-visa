@@ -35,6 +35,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -223,6 +224,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				result.put("orderstatus", orderStatus.value());
 			}
 		}
+		//回邮信息
+		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class, Cnd.where("orderId", "=", id)
+				.orderBy("createTime", "DESC"), null);
+
+		result.put("backinfo", backinfo);
 		result.put("orderInfo", orderInfo);
 		result.put("orderJpinfo", orderJpinfo);
 		result.put("customer", customer);
@@ -479,6 +485,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		dbDao.update(order);
+		//回邮信息
+		//List<TOrderBackmailEntity> backMailInfos = orderInfo.getBackMailInfos();
+		//String editBackMailInfos = editBackMailInfos(backMailInfos, orderId);
 		return null;
 	}
 
@@ -488,8 +497,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TOrderEntity orderEntity = new TOrderEntity();
 
 		//判断是否为直客,直客时客户信息保存在订单中
-		if (!Util.isEmpty(orderInfo.getSource())) {
-			if (Util.eq(orderInfo.getSource(), CustomerTypeEnum.ZHIKE.intKey())) {
+		if (!Util.isEmpty(orderInfo.getCuSource())) {
+			if (Util.eq(orderInfo.getCuSource(), CustomerTypeEnum.ZHIKE.intKey())) {
 				orderEntity.setIsDirectCus(IsYesOrNoEnum.YES.intKey()); //1是直客
 				if (!Util.isEmpty(orderInfo.getCusEmail())) {
 					orderEntity.setEmail(orderInfo.getCusEmail());
@@ -738,11 +747,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
 		result.put("applicantInfo", applicantInfo);
 		//回邮信息
-		result.put("backmailInfo", null);
+		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class, Cnd.where("orderId", "=", id)
+				.orderBy("createTime", "DESC"), null);
+
+		result.put("backinfo", backinfo);
 		return result;
 	}
 
-	public Object updateApplicant(Integer id) {
+	public Object updateApplicant(Integer id, Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -763,6 +775,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("applicant", applicantEntity);
+		result.put("orderid", orderid);
 		result.put("applicantId", id);
 		return result;
 	}
@@ -770,6 +783,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object saveEditApplicant(TApplicantForm applicantForm, HttpSession session) {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+
+		Date nowDate = DateUtil.nowDate();
+		if (!Util.isEmpty(applicantForm.getOrderid())) {
+			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate),
+					Cnd.where("id", "=", applicantForm.getOrderid()));
+		}
+
 		if (!Util.isEmpty(applicantForm.getId())) {
 			TApplicantEntity applicant = dbDao
 					.fetch(TApplicantEntity.class, new Long(applicantForm.getId()).intValue());
@@ -867,7 +887,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return applicantInfoMainId;
 	}
 
-	public Object getVisaInfo(Integer id, Integer orderid) {
+	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime) {
 		Map<String, Object> result = MapUtil.map();
 		result.put("mainOrVice", EnumUtil.enum2(MainOrViceEnum.class));
 		result.put("isOrNo", EnumUtil.enum2(IsYesOrNoEnum.class));
@@ -912,14 +932,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		result.put("mainApply", records);
 		result.put("visaInfo", visaInfo);
+		result.put("isOrderUpTime", isOrderUpTime);
 		return result;
 	}
 
-	public Object getEditPassport(Integer id) {
+	public Object getEditPassport(Integer applicantId, Integer orderid) {
 		Map<String, Object> result = MapUtil.map();
 		String passportSqlstr = sqlManager.get("orderJp_list_passportInfo_byApplicantId");
 		Sql passportSql = Sqls.create(passportSqlstr);
-		passportSql.setParam("id", id);
+		passportSql.setParam("id", applicantId);
 		Record passport = dbDao.fetch(passportSql);
 		//格式化日期
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
@@ -937,12 +958,20 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		result.put("passport", passport);
 		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
-		result.put("applicantId", id);
+		result.put("applicantId", applicantId);
+		result.put("orderid", orderid);
 		return result;
 	}
 
 	public Object saveEditVisa(VisaEditDataForm visaForm, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+
+		Date nowDate = DateUtil.nowDate();
+		if (!Util.isEmpty(visaForm.getIsOrderUpTime())) {
+			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate),
+					Cnd.where("id", "=", visaForm.getIsOrderUpTime()));
+		}
+
 		//日本申请人
 		if (!Util.isEmpty(visaForm.getApplicantId())) {
 			//日本申请人
@@ -1553,6 +1582,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TApplicantPassportEntity passport = new TApplicantPassportEntity();
 		passport.setOpId(loginUser.getId());
+
+		Date nowDate = DateUtil.nowDate();
+		if (!Util.isEmpty(passportForm.getOrderid())) {
+			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate),
+					Cnd.where("id", "=", passportForm.getOrderid()));
+		}
 
 		if (!Util.isEmpty(passportForm.getApplicantId())) {
 			passport.setApplicantId(passportForm.getApplicantId());

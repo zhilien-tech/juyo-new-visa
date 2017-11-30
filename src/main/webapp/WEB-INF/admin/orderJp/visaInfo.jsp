@@ -26,6 +26,7 @@
 			<div class="modal-header">
 				<span class="heading">签证信息</span> 
 				<input type="hidden" value="${obj.visaInfo.applicantId }" name="applicantId"/>
+				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>

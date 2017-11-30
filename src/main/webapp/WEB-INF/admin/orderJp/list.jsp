@@ -198,7 +198,7 @@
 	        	type:'post',
 	        	success: function(data){
 	        		_self.orderJpData = data.orderJp;
-	        		//console.log(JSON.stringify(data));
+	        		alert(JSON.stringify(data));
 	          	}
 	        });
 		});
