@@ -1070,7 +1070,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '551px'],
-						content:'/admin/orderJp/passportInfo.html?applicantId='+id+'&orderid='
+						content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='
 					});
 				},
 				//删除申请人
