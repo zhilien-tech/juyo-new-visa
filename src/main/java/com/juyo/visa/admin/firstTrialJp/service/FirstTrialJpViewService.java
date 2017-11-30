@@ -531,8 +531,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//改变订单状态 由初审到发地址
 		Date nowDate = DateUtil.nowDate();
 		int receptionStatus = JPOrderStatusEnum.SEND_ADDRESS.intKey();
-		dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus).make("updateTime", nowDate),
-				Cnd.where("id", "=", orderid));
+		dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus), Cnd.where("id", "=", orderid));
+		dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 
 		//发送短信、邮件
 		try {
