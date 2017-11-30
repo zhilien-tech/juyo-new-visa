@@ -198,7 +198,6 @@
 	        	type:'post',
 	        	success: function(data){
 	        		_self.orderJpData = data.orderJp;
-	        		alert(JSON.stringify(data));
 	          	}
 	        });
 		});
