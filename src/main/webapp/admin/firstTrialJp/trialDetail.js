@@ -249,7 +249,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/updateApplicant.html?id='+applyId
+				content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+orderid
 			});
 		},
 		passport:function(applyId){
@@ -262,7 +262,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['900px', '550px'],
-    		    content:'/admin/orderJp/passportInfo.html?id='+applyId
+    		    content:'/admin/orderJp/passportInfo.html?id='+applyId+'&orderid='+orderid
     	    });
 		},
 		visaInfo:function(applyId){
@@ -275,7 +275,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid
+				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid+'&isOrderUpTime=1'
 			});
 		},
 		qualified:function(applyId){
