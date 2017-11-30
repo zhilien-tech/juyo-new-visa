@@ -360,28 +360,39 @@ $(".addExpressInfoBtn").click(function(){
 	$(this).hide();
 });
 
-//时间插件格式化
+//时间插件格式化  出行时间>今天>送签时间 
+var now = new Date();
 $("#gotripdate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
+	startDate:now,
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
 });
+/*$('#gotripdate').datetimepicker().on('changeDate', function(ev){
+	console.log($('#datetimepicker').data("datetimepicker").getDate()  );
+	//$('#datetimepicker').datetimepicker('setStartDate', $('#gotripdate').val());
+});*/
+
 $("#backtripdate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
+	startDate:now,
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
 });
+
 $("#sendvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
+	endDate: now,
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
 });
+
 $("#outvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
