@@ -74,9 +74,10 @@
 			if($("#shareType").val() == 1){
 				$("#datatableId tbody tr").click(function(){
 					var isStyle = $(this).attr("style");
-					if(isStyle != "color: rgb(48, 135, 240);"){//不被选中
+					if(isStyle = "color: rgb(48, 135, 240);"){//不被选中
 						$(this).css("color","#3087f0");
-					}
+						
+					};
 				});
 			}else{
 				$("#datatableId tbody tr").click(function(){
@@ -89,8 +90,8 @@
 					}
 				
 				});
-			});
-		}
+			};
+		});
 
 		//vue表格数据对象
 	    var _self;
