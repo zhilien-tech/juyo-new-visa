@@ -262,7 +262,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['900px', '550px'],
-    		    content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid='+orderid
+    		    content:'/admin/orderJp/passportInfo.html?id='+applyId+'&orderid='+orderid
     	    });
 		},
 		visaInfo:function(applyId){
@@ -275,7 +275,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid+'&isOrderUpTime=1'
+				content:'/admin/orderJp/visaInfo.html?applicantId='+applyId+'&orderid='+orderid+'&isOrderUpTime=1'
 			});
 		},
 		qualified:function(applyId){
@@ -366,13 +366,12 @@ $("#gotripdate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
 	startDate:now,
-	linkField:"gotripdate",
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
 });
 /*$('#gotripdate').datetimepicker().on('changeDate', function(ev){
-	console.log($('#gotripdate').data("datetimepicker").getDate()  );
+	console.log($('#datetimepicker').data("datetimepicker").getDate()  );
 	//$('#datetimepicker').datetimepicker('setStartDate', $('#gotripdate').val());
 });*/
 
@@ -393,6 +392,7 @@ $("#sendvisadate").datetimepicker({
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
 });
+
 $("#outvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
@@ -400,3 +400,4 @@ $("#outvisadate").datetimepicker({
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
 });
+
