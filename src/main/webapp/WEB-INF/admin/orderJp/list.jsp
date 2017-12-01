@@ -9,6 +9,9 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>销售-日本</title>
 	<link rel="stylesheet" href="${base}/references/public/css/saleJapan.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<style type="text/css">
 	 [v-cloak]{display:none;}
 	</style>
@@ -25,15 +28,15 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-2 left-5px right-0px">
-								<select class="input-class input-sm" id="status" name="status">
+								<select class="input-class input-sm" id="status" name="status" onchange="countryChange();">
 									<option value="">状态</option>
-									<c:forEach var="map" items="${data.status}">
+									<c:forEach var="map" items="${obj.orderStatus}">
 										<option value="${map.key}">${map.value}</option>
 									</c:forEach>
 								</select>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<select class="input-class input-sm" id="source" name="source">
+								<select class="input-class input-sm" id="source" name="source" onchange="countryChange();">
 									<option value="">客户来源</option>
 									<c:forEach var="map" items="${obj.customerTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
@@ -41,7 +44,7 @@
 								</select>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<select class="input-class input-sm" id="visaType" name="visaType">
+								<select class="input-class input-sm" id="visaType" name="visaType" onchange="countryChange();">
 									<option value="">签证类型</option>
 									<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
@@ -59,13 +62,13 @@
 						</div>
 						<div class="row" style="margin-top:15px;"> 
 							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="start_time" name="start_time" placeholder="创建日期" />
+								<input type="text" class="input-sm input-class" id="start_time" name="start_time" placeholder="创建日期" onchange="countryChange();"/>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间" />
+								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onchange="countryChange();"/>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" />
+								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onchange="countryChange();"/>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
@@ -78,10 +81,10 @@
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="order(data.orderid)"> </i>
-									<i class="share"> </i>
-									<i class="theTrial"> </i>
-									<i class="return"> </i>
-									<i class="toVoid"> </i>
+									<i class="share" v-on:click="share(data.orderid)"> </i>
+									<i class="theTrial" v-on:click="theTrial(data.orderid)"> </i>
+									<i class="return" > </i>
+									<i class="toVoid" > </i>
 								</div>
 							</div>
 							<ul class="card-content">
@@ -108,6 +111,11 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 	<%-- <script src="${base}/admin/orderJp/listCard.js"></script> --%>
+	<!-- 公用js文件 -->
+		<script src="${base}/references/public/bootstrap/js/moment.js"></script>
+	<script src="${base}/references/public/bootstrap/js/daterangepicker.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
@@ -133,7 +141,34 @@
 	        	order:function(id){
 	        			window.open('${base}/admin/orderJp/order.html'+(id > 0?('?id='+id):''));//跳转到更新页面
 	        			//window.location.href = '${base}/admin/orderJp/order.html?id='+id;
-	        	}
+	        	},
+	        	share:function(id){//分享
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/orderJp/share.html?id='+id
+					});
+				},
+				theTrial:function(id){
+					layer.load(1);
+					$.ajax({ 
+				    	url: '${base}/admin/orderJp/firtTrialJp',
+				    	dataType:"json",
+				    	data:{orderId:id},
+				    	type:'post',
+				    	success: function(data){
+				    		layer.closeAll("loading");
+				    		layer.msg("初审通过");
+				      	}
+				    }); 
+				}
+	        	
 	        } 
 		});
 		
@@ -145,6 +180,7 @@
 			$("#visaType").val("");
 			$("#sendSignDate").val("");
 			$("#signOutDate").val("");
+			$("#start_time").val("");
 			$("#searchbtn").click();
 		});
 		$("#searchbtn").click(function(){
@@ -154,14 +190,14 @@
 			var sendSignDate = $('#sendSignDate').val();
 			var signOutDate = $('#signOutDate').val();
 			var searchStr = $('#searchStr').val();
+			var startTime = $('#start_time').val();
 			$.ajax({ 
 	        	url: url,
-	        	data:{status:status,source:source,visaType:visaType,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr},
+	        	data:{status:status,source:source,starttime:startTime,visaType:visaType,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr},
 	        	dataType:"json",
 	        	type:'post',
 	        	success: function(data){
 	        		_self.orderJpData = data.orderJp;
-	        		//console.log(JSON.stringify(data));
 	          	}
 	        });
 		});
@@ -188,13 +224,27 @@
 			window.location.href = '${base}/admin/orderJp/addOrder';
 		}  
 		
+		function countryChange(){
+			$("#searchbtn").click();
+		}
+		
 		//搜索回车事件
 		 function onkeyEnter(){
 			    var e = window.event || arguments.callee.caller.arguments[0];
 			    if(e && e.keyCode == 13){
-					 $("#searchBtn").click();
+					 $("#searchbtn").click();
 				 }
 			}
+		
+		 $("#start_time").daterangepicker(null, function(start, end, label) {
+             console.log(start.toISOString(), end.toISOString(), label);
+         });
+		 $("#sendSignDate").daterangepicker(null, function(start, end, label) {
+             console.log(start.toISOString(), end.toISOString(), label);
+         });
+		 $("#signOutDate").daterangepicker(null, function(start, end, label) {
+             console.log(start.toISOString(), end.toISOString(), label);
+         });
 	</script>
 </body>
 </html>

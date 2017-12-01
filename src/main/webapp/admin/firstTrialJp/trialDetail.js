@@ -36,7 +36,7 @@ function expressFun(){
 	$.ajax({
 		type : 'POST',
 		data : {
-			orderid:orderid
+			orderjpid:orderjpid
 		},
 		url : '/admin/firstTrialJp/isQualified.html',
 		success : function(data) {
@@ -50,7 +50,7 @@ function expressFun(){
 	    		    shadeClose: false,
 	    		    scrollbar: false,
 	    		    area: ['900px', '550px'],
-	    		    content: '/admin/firstTrialJp/express.html?id='+orderid
+	    		    content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
 	    	    });
 			}else{
 				layer.msg('申请人不合格');
@@ -59,6 +59,74 @@ function expressFun(){
 		}
 	});
 }
+
+//回邮信息
+function getMailInfos(){
+	var backMails = [];
+	$('.backmail-div').each(function(i){
+		var infoLength = '';
+		var backInfo = {};
+		
+		var obmId = $(this).find('[name=obmId]').val();
+		infoLength += obmId;
+		backInfo.id = obmId;
+		
+		var source = $(this).find('[name=source]').val();
+		if(source != 1){
+			infoLength += source;
+		}
+		backInfo.source = source;
+		
+		var expressType = $(this).find('[name=expressType]').val();
+		if(expressType != 1){
+			infoLength += expressType;
+		}
+		backInfo.expressType = expressType;
+		
+		var expressAddress = $(this).find('[name=expressAddress]').val();
+		infoLength += expressAddress;
+		backInfo.expressAddress = expressAddress;
+		
+		var linkman = $(this).find('[name=linkman]').val();
+		infoLength += linkman;
+		backInfo.linkman = linkman;
+		
+		var telephone = $(this).find('[name=telephone]').val();
+		infoLength += telephone;
+		backInfo.telephone = telephone;
+		
+		var invoiceContent = $(this).find('[name=invoiceContent]').val();
+		infoLength += invoiceContent;
+		backInfo.invoiceContent = invoiceContent;
+		
+		var invoiceHead = $(this).find('[name=invoiceHead]').val();
+		infoLength += invoiceHead;
+		backInfo.invoiceHead = invoiceHead;
+		
+		var teamName = $(this).find('[name=teamName]').val();
+		infoLength += teamName;
+		backInfo.teamName = teamName;
+		
+		var expressNum = $(this).find('[name=expressNum]').val();
+		infoLength += expressNum;
+		backInfo.expressNum = expressNum;
+		
+		var taxNum = $(this).find('[name=taxNum]').val();
+		infoLength += taxNum;
+		backInfo.taxNum = taxNum;
+		
+		var remark = $(this).find('[name=remark]').val();
+		infoLength += remark;
+		backInfo.remark = remark;
+
+		if(infoLength.length > 0){
+			backMails.push(backInfo);
+		}
+	});
+	
+	return backMails;
+}
+
 
 //保存初审订单
 function saveorder(){
@@ -92,7 +160,10 @@ function saveorder(){
 		threecounty = threecounty.substr(0,threecounty.length-1);
 	}
 	orderobj.orderinfo.threecounty = threecounty;
-	
+
+	var backMails = getMailInfos();
+	orderobj.orderinfo.backMailInfos = JSON.stringify(backMails);
+
 	var editdata = orderobj.orderinfo;
 	console.log("=============orderinfo=================:"+JSON.stringify(editdata));
 	layer.load(1);
@@ -132,6 +203,7 @@ if(threecounty){
 }
 
 var orderobj;
+var backMailInfos;
 //VUE准备数据
 //orderinfo订单信息  applyinfo申请人信息  回邮信息
 new Vue({
@@ -149,16 +221,25 @@ new Vue({
 			type:'post',
 			dataType:"json",
 			data:{
-				orderid:orderid
+				orderid:orderid,
+				orderjpid:orderjpid
 			},
 			success: function(data){
 				orderobj.orderinfo = data.orderinfo;
 				orderobj.applyinfo = data.applyinfo;
+				backMailInfos = data.backinfo;
+				
+				if(backMailInfos.length>0){
+					$(".addExpressInfoBtn").hide();
+				}
+				
+				
+				console.log(JSON.stringify(backMailInfos) +"====="+ JSON.stringify(backMailInfos.length));
 			}
 		});
 	},
 	methods:{
-		basicInfo : function(id){
+		basicInfo : function(applyId){
 			layer.open({
 				type: 2,
 				title: false,
@@ -168,10 +249,23 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/updateApplicant.html?id='+id
+				content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+orderid
 			});
 		},
 		passport:function(applyId){
+			layer.open({
+    		    type: 2,
+    		    title: false,
+    		    closeBtn:false,
+    		    fix: false,
+    		    maxmin: false,
+    		    shadeClose: false,
+    		    scrollbar: false,
+    		    area: ['900px', '550px'],
+    		    content:'/admin/orderJp/passportInfo.html?id='+applyId+'&orderid='+orderid
+    	    });
+		},
+		visaInfo:function(applyId){
 			layer.open({
 				type: 2,
 				title: false,
@@ -180,35 +274,35 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '550px'],
-				content: '/admin/visaJapan/passportInfo.html?applyId='+applyId
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/visaInfo.html?applicantId='+applyId+'&orderid='+orderid+'&isOrderUpTime=1'
 			});
-		},
-		visaInfo:function(applyId){
-			return null;
 		},
 		qualified:function(applyId){
 			layer.confirm('您确认合格吗？', {
-				   btn: ['是','否'], //按钮
-				   shade: false //不显示遮罩
-				}, function(index){
-					$.ajax({
-						type : 'POST',
-						data : {
-							applyid:applyId
-						},
-						url : '/admin/firstTrialJp/qualified.html',
-						success : function(data) {
-							layer.close(index);
-							parent.successCallBack(1);
-						},
-						error : function(xhr) {
-							layer.msg("修改失败", "", 3000);
-						}
-					});
-				}, function(){
-					 //取消之后不做任何操作
+				btn: ['是','否'], //按钮
+				shade: false //不显示遮罩
+			}, function(index){
+				$.ajax({
+					type : 'POST',
+					data : {
+						applyid:applyId,
+						orderid:orderid,
+						orderjpid:orderjpid
+					},
+					url : '/admin/firstTrialJp/qualified.html',
+					success : function(data) {
+						layer.close(index);
+						parent.successCallBack(1);
+						successCallBack(1);
+					},
+					error : function(xhr) {
+						layer.msg("修改失败", "", 3000);
+					}
 				});
+			}, function(){
+				//取消之后不做任何操作
+			});
 		},
 		unqualified:function(applyId){
 			layer.open({
@@ -220,9 +314,23 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['800px', '402px'],
-    		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyId
+    		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyId+'&orderid='+orderid
     	    });
+		},
+		logs:function(){//日志
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['700px', '551px'],
+				content:'/admin/orderJp/log.html?id='+orderid
+			});
 		}
+
 	}
 });
 
@@ -235,11 +343,59 @@ function successCallBack(status){
 			type:'post',
 			dataType:"json",
 			data:{
-				orderid:orderid
+				orderid:orderid,
+				orderjpid:orderjpid
 			},
 			success: function(data){
 				orderobj.applyinfo = data.applyinfo;
+				orderobj.orderinfo = data.orderinfo;
 			}
 		}); 
 	}
 }
+
+//添加回邮信息 按钮  click
+$(".addExpressInfoBtn").click(function(){
+	$(".expressInfo").removeClass("none");
+	$(this).hide();
+});
+
+//时间插件格式化  出行时间>今天>送签时间 
+var now = new Date();
+$("#gotripdate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	startDate:now,
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+}).on("click",function(){  
+    $("#gotripdate").datetimepicker("setEndDate",$("#backtripdate").val());  
+}); 
+$("#backtripdate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	startDate:now,
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+
+$("#sendvisadate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	endDate: now,//日期小于今天
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+}).on("click",function(){  
+    $("#sendvisadate").datetimepicker("setEndDate",$("#outvisadate").val());  
+}); 
+$("#outvisadate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+

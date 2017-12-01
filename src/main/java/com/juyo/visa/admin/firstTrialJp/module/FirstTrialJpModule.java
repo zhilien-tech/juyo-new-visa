@@ -45,7 +45,7 @@ public class FirstTrialJpModule {
 	@GET
 	@Ok("jsp")
 	public Object list() {
-		return null;
+		return firstTrialJpViewService.toList();
 	}
 
 	/**
@@ -67,8 +67,8 @@ public class FirstTrialJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object trialDetail(@Param("orderid") Integer orderid) {
-		return firstTrialJpViewService.trialDetail(orderid);
+	public Object trialDetail(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid) {
+		return firstTrialJpViewService.trialDetail(orderid, orderjpid);
 	}
 
 	/**
@@ -76,8 +76,8 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Object getJpTrialDetailData(@Param("orderid") Integer orderid) {
-		return firstTrialJpViewService.getJpTrialDetailData(orderid);
+	public Object getJpTrialDetailData(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid) {
+		return firstTrialJpViewService.getJpTrialDetailData(orderid, orderjpid);
 	}
 
 	/**
@@ -86,8 +86,8 @@ public class FirstTrialJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object express(@Param("id") Integer orderid, HttpSession session) {
-		return firstTrialJpViewService.express(orderid, session);
+	public Object express(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid, HttpSession session) {
+		return firstTrialJpViewService.express(orderid, orderjpid, session);
 	}
 
 	/**
@@ -95,14 +95,15 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Object getmainApplicantByOrderid(@Param("id") int orderid) {
-		return firstTrialJpViewService.getmainApplicantByOrderid(orderid);
+	public Object getmainApplicantByOrderid(@Param("orderjpid") int orderjpid) {
+		return firstTrialJpViewService.getmainApplicantByOrderid(orderjpid);
 	}
 
 	/**
 	 * 获取申请人信息
 	 */
 	@At
+	@GET
 	@Ok("jsp")
 	public Object basicInfo(@Param("applyid") int applyid) {
 		return firstTrialJpViewService.basicInfo(applyid);
@@ -112,18 +113,20 @@ public class FirstTrialJpModule {
 	 * 申请人 合格信息
 	 */
 	@At
-	@Ok("jsp")
-	public Object qualified(@Param("applyid") int applyid) {
-		return firstTrialJpViewService.qualified(applyid);
+	@POST
+	public Object qualified(@Param("applyid") Integer applyid, @Param("orderid") Integer orderid,
+			@Param("orderjpid") Integer orderjpid, HttpSession session) {
+		return firstTrialJpViewService.qualified(applyid, orderid, orderjpid, session);
 	}
 
 	/**
 	 * 申请人 不合格信息
 	 */
 	@At
+	@GET
 	@Ok("jsp")
-	public Object unqualified(@Param("applyid") int applyid) {
-		return firstTrialJpViewService.unqualified(applyid);
+	public Object unqualified(@Param("applyid") Integer applyid, @Param("orderid") Integer orderid) {
+		return firstTrialJpViewService.unqualified(applyid, orderid);
 	}
 
 	/**
@@ -132,8 +135,8 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Object saveUnqualified(@Param("..") TApplicantUnqualifiedForm form) {
-		return firstTrialJpViewService.saveUnqualified(form);
+	public Object saveUnqualified(@Param("..") TApplicantUnqualifiedForm form, HttpSession session) {
+		return firstTrialJpViewService.saveUnqualified(form, session);
 	}
 
 	/**
@@ -160,9 +163,11 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Object saveExpressInfo(@Param("orderid") Integer orderid, @Param("expresstype") Integer expresstype,
+	public Object saveExpressInfo(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid,
+			@Param("expresstype") Integer expresstype, @Param("expressaddress") String expressaddress,
 			@Param("receiveAddressId") Integer receiveAddressId, HttpSession session) {
-		return firstTrialJpViewService.saveExpressInfo(orderid, expresstype, receiveAddressId, session);
+		return firstTrialJpViewService.saveExpressInfo(orderid, orderjpid, expresstype, expressaddress,
+				receiveAddressId, session);
 	}
 
 	/**
@@ -179,7 +184,7 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Boolean isQualified(@Param("orderid") Integer orderid) {
-		return firstTrialJpViewService.isQualified(orderid);
+	public Boolean isQualified(@Param("orderjpid") Integer orderjpid) {
+		return firstTrialJpViewService.isQualified(orderjpid);
 	}
 }

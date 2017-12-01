@@ -46,7 +46,14 @@
 									<td>${apply.dataType }</td>
 									<td class="certificates">
 										<c:forEach items="${apply.revenue }" var="revenue">
-											<span>${revenue.realInfo }</span>
+											<c:choose>
+												<c:when test="${revenue.status == 0 }">
+													<span class="titleStyle">${revenue.realInfo }</span>
+												</c:when>
+												<c:otherwise>
+													<span>${revenue.realInfo }</span>
+												</c:otherwise>
+											</c:choose>
 										</c:forEach>
 										<input id="" name="" type="text" class="addInp none">
 										<span class="addText">+</span>
@@ -109,9 +116,10 @@
 				var HZlength = ($(".certificates").has(".passportInp")).length > 0;
 				if(spanText.indexOf("护照")!== -1 && HZlength != true){
 					$(this).removeClass("titleStyle");
-					$(this).after('<input type="text" class="passportInp" value='+ spanText +' />');
+					$(this).after('<input type="text" class="passportInp"/>');
 					var passport = $(".passportInp").val();
-					$(".passportInp").val("").focus().val(passport); //把光标加入到字符串后面
+					var passnumber = passport.substring(2);
+					$(".passportInp").val("").focus().val(passnumber); //把光标加入到字符串后面
 				}else if(HZlength == true){
 					$(".passportInp").remove();
 					$(this).addClass("titleStyle");
@@ -129,7 +137,7 @@
 				var applicatid = $(this).parent().find('#applicatid').val();
 				$.ajax({ 
 	            	url: '${base}/admin/visaJapan/editPassportCount.html',
-	            	data:{applicatid:applicatid,inputVal:thisval},
+	            	data:{applicatid:applicatid,inputVal:'护照'+thisval},
 	            	dataType:"json",
 	            	type:'post',
 	            	success: function(data){
@@ -137,11 +145,14 @@
 	            });
 				$(this).parent().find("span").each(function(index,value){
 					if($(this).text().indexOf("护照") !== -1){
-						$(this).text(thisval);
+						$(this).text('护照'+thisval);
 						$(".passportInp").remove();
 						$(this).removeClass("titleStyle");
 					}
 				});
+			});
+			$(document).on('input','.passportInp',function(){
+				$(this).val($(this).val().replace(/[^\d]/g,''));
 			});
 		});
 
@@ -173,11 +184,23 @@
 				var applicatid = $(this).find('#applicatid').val();
 				applicatobj.applicatid = applicatid;
 				var datatext = '';
-				$(this).find('.titleStyle').each(function(index){
-					datatext += $(this).text() + ',';
+				var graydata = '';
+				$(this).find(".certificates span").each(function(index){
+					if($(this).hasClass('titleStyle')){
+						datatext += $(this).text() + ',';
+					}else{
+						graydata += $(this).text() + ',';
+					}
 				});
+				/* $(this).find('.titleStyle').each(function(index){
+					datatext += $(this).text() + ',';
+				}); */
 				datatext = datatext.substring(0, datatext.length-1);
+				graydata = graydata.substring(0, graydata.length-1);
+				console.log(datatext);
+				console.log(graydata);
 				applicatobj.datatext = datatext;
+				applicatobj.graydata = graydata;
 				applicatinfo.push(applicatobj);
 			});
 			layer.load(1);

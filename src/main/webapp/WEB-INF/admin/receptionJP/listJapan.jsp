@@ -44,26 +44,26 @@
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div class="card-list" v-for="data in visaJapanData">
+						<div class="card-list" v-for="data in receptionJpData">
 							<div class="card-head cf">
-								<div><label>订单号：</label><span>{{data.japannumber}}</span></div>	
-								<div><label>状态：</label><span>{{data.japanstate}}</span></div>		
+								<div><label>订单号：</label><span>{{data.ordernumber}}</span></div>	
+								<div><label>状态：</label><span>{{data.orderstatus}}</span></div>		
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<i class="visaTransfer"> </i>
+									<i class="visaTransfer" v-on:click="visaTransfer(data.id)"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="item in data.everybodyinfo">
 									<div><label>申请人：</label><span>{{item.applicant}}</span></div>
 									<div><label>护照号：</label><span>{{item.passportno}}</span></div>
-									<div><label>快递号：</label><span>{{item.passportno}}</span></div>
-									<div><label>方式：</label><span>{{item.datatype}}</span></div>
+									<div><label>快递号：</label><span>{{item.expressnum}}</span></div>
+									<div><label>方式：</label><span>{{item.expresstype}}</span></div>
 									<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 									<div><label>资料：</label><span>{{item.data}}</span></div>
-									<div><i class="videoShoot"> </i></div>
+									<!-- <div><i class="videoShoot"> </i></div> -->
 								</li>
 							</ul>
 						</div>
@@ -88,12 +88,12 @@
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
 	//异步加载的URL地址
-    var url="${base}/admin/visaJapan/visaListData.html";
+    var url="${base}/admin/receptionJP/listData.html";
     //vue表格数据对象
     var _self;
 	new Vue({
 		el: '#card',
-		data: {visaJapanData:""},
+		data: {receptionJpData:""},
 		created:function(){
             _self=this;
             $.ajax({ 
@@ -101,14 +101,15 @@
             	dataType:"json",
             	type:'post',
             	success: function(data){
-            		_self.visaJapanData = data.visaJapanData;
+            		_self.receptionJpData = data.receptionJpData;
+            		console.log(JSON.stringify(_self.receptionJpData));
               	}
             });
         },
         methods:{
         	visaDetail:function(orderid){
-        		//跳转到签证详情页面
-        		window.open('${base}/admin/visaJapan/visaDetail.html?orderid='+orderid);
+        		//跳转到详情页面
+        		window.open('${base}/admin/receptionJP/receptionDetail.html?orderid='+orderid);
         		//console.log(message);
         		//alert(JSON.stringify(event.target));
         	},
@@ -122,28 +123,33 @@
         		    shadeClose: false,
         		    scrollbar: false,
         		    area: ['900px', '550px'],
-        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
+        		    content: '${base}/admin/receptionJP/revenue.html?orderid='+orderid
         		  });
+        	},
+        	visaTransfer:function(orderid){
+        		 $.ajax({ 
+                 	url: '${base}/admin/receptionJP/visaTransfer',
+                 	dataType:"json",
+                 	data:{orderid:orderid},
+                 	type:'post',
+                 	success: function(data){
+                 		layer.msg("移交签证成功");
+                   	}
+                 });
         	}
         }
 	});
-	//跳转 签证详情页
-	function edit(orderid){
-		window.location.href = '${base}/admin/visaJapan/visaDetail.html?orderid='+orderid;
-	}
 	
 	function search(){
 		var status = $('#status').val();
-		var sendSignDate = $('#sendSignDate').val();
-		var signOutDate = $('#signOutDate').val();
 		var searchStr = $('#searchStr').val();
 		$.ajax({ 
         	url: url,
-        	data:{status:status,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr},
+        	data:{status:status,searchStr:searchStr},
         	dataType:"json",
         	type:'post',
         	success: function(data){
-        		_self.visaJapanData = data.visaJapanData;
+        		_self.receptionJpData = data.receptionJpData;
           	}
         });
 	}
@@ -161,7 +167,7 @@
         	dataType:"json",
         	type:'post',
         	success: function(data){
-        		_self.visaJapanData = data.visaJapanData;
+        		_self.receptionJpData = data.receptionJpData;
           	}
         });
 		if(status){
@@ -169,24 +175,7 @@
 		}
 	}
 	
-	$(function(){
-		//送签时间
-		$("#sendSignDate").datetimepicker({
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN',
-			autoclose: true,//选中日期后 自动关闭
-			pickerPosition:"bottom-left"//显示位置
-			
-		});
-		//出签时间
-		$("#signOutDate").datetimepicker({
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN',
-			autoclose: true,//选中日期后 自动关闭
-			pickerPosition:"bottom-left"//显示位置
-			
-		});
-	});
+	
 	</script>
 </body>
 </html>

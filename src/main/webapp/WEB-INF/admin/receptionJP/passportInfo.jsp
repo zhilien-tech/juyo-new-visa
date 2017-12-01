@@ -1,11 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<c:set var="url" value="${base}/admin/firstTrialJp" />
+<c:set var="url" value="${base}/admin/orderJp" />
 <!DOCTYPE HTML>
 <html lang="en-US" id="addHtml">
 <head>
 	<meta charset="UTF-8">
-	<title>护照</title>
+	<title>护照信息</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
@@ -15,13 +15,13 @@
 </head>
 <body>
 	<div class="modal-content">
-		<form id="passportInfo">
+		<form id="">
 			<div class="modal-header">
-				<span class="heading">护照</span> 
+				<span class="heading">护照信息</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" id="passportvue">
 				<div class="tab-content row">
 					<div class="col-sm-5 padding-right-0">
 						<div class="info-QRcode"><!-- 二维码 -->
@@ -38,16 +38,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>类型：</label>
-									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
-									<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
-									<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
+									<input id="" name="" type="text" class="form-control input-sm" placeholder="" v-model="passport.type"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>护照号：</label>
-									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
+									<input id="" name="" type="text" class="form-control input-sm" placeholder="" v-model="passport.passport"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -56,14 +54,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别：</label>
-									<input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.sex }"/>
+									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.sexstr"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生地点/拼音：</label>
-									<input id="birthAddress" name="birthAddress" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.birthAddress }"/>
+									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.birthaddressstr"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -72,14 +70,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生日期：</label>
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.birthday}"/>
+									<input id="" name="" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="passport.birthday" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发地点/拼音：</label>
-									<input id="issuedPlace" name="issuedPlace" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedPlace }"/>
+									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.issuedplacestr"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -88,23 +86,24 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发日期：</label>
-									<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedDate }"/>
+									<input id="" name="" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="passport.issueddate"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;</label>
-									<select class="form-control input-sm selectHeight">
-										<option>5年</option>
-										<option>10年</option>
+									<select class="form-control input-sm selectHeight" v-model="passport.validtype">
+										<c:forEach items="${obj.issuevalidityenum }" var="issueval">
+											<option value="${issueval.key }">${issueval.value }</option>
+										</c:forEach>
 									</select>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>有效期至：</label>
-									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.validEndDate }"/>
+									<input id="" name="" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="passport.validenddate"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -121,7 +120,7 @@
 						<div class="row none">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
+									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -143,33 +142,56 @@
 	<!-- DataTables -->
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="${base}/references/common/js/vue/vue.min.js"></script>
+	<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
+	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	
 	<script type="text/javascript">
 		var base = "${base}";
+		var vueobj;
+		new Vue({
+			el: '#passportvue',
+			data: {
+				passport:""
+			},
+			created:function(){
+				vueobj = this;
+				var url = BASE_PATH + '/admin/receptionJP/getPassportData.html';
+		        $.ajax({ 
+		        	url: url,
+		        	dataType:"json",
+		        	data:{applyId:'${obj.applyId}'},
+		        	type:'post',
+		        	success: function(data){
+		        		vueobj.passport = data.passport;
+						console.log(JSON.stringify(data.passport));
+		        	}
+		        });
+			}
+		});
 		$(function() {
 			
 		});
-		//保存
-		function save(){
-			var passportInfo = $("#passportInfo").serialize();
-			$.ajax({
-				type: 'POST',
-				data : passportInfo,
-				url: '${base}/admin/orderJp/saveEditPassport',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-					parent.successCallBack(1);
-					closeWindow();
-				}
-			});
-		}
-		
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
+		}
+		
+		function save(){
+			layer.load(1);
+			$.ajax({ 
+		    	url: BASE_PATH + '/admin/receptionJP/savePassportInfo.html',
+		    	dataType:"json",
+		    	data:vueobj.passport,
+		    	type:'post',
+		    	success: function(data){
+		    		layer.closeAll('loading');
+		    		parent.successCallBack(2);
+		    		closeWindow();
+		      	}
+		    }); 
 		}
 	</script>
 

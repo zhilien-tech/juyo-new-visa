@@ -14,6 +14,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
 
@@ -29,16 +30,14 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 
 	//状态
 	private Integer status;
-	//出行时间
-	//private Date goTripDate;
-	//返回时间
-	//private Date backTripDate;
 	//检索框
 	private String searchStr;
 	//页码
 	private Integer pageNumber = 1;
 	//每页多少条
 	private Integer pageSize = 10;
+	//总页数
+	private Integer pageTotal;
 	//公司id
 	private Integer companyid;
 	//用户id
@@ -56,10 +55,13 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
+		if (!Util.isEmpty(status)) {
+			cnd.and("CONCAT( CAST( tr.STATUS AS CHAR ), 'төл', taj.applicantStatus )", "like", "%" + status + "%");
+		}
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("tr.orderNum", "like", "%" + searchStr + "%").or("taj.passportNum", "like", "%" + searchStr + "%")
-					.or("tc.mobile", "like", "%" + searchStr + "%")
+					.or("taj.phone", "like", "%" + searchStr + "%")
 					.or("taj.applicantName", "like", "%" + searchStr + "%");
 			cnd.and(exp);
 		}
@@ -69,11 +71,16 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 		if (!Util.isEmpty(backTripDate)) {
 			cnd.and("tr.goTripDate", "<=", backTripDate);
 		}*/
+		cnd.and("tr.status", ">=", JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
+		cnd.and("tr.status", "<=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
 		if (userid.equals(adminId)) {
 			//公司管理员
 		} else {
 			//普通的操作员
 		}
+		cnd.and("tr.comId", "=", companyid);
+		cnd.orderBy("tr.updatetime", "DESC");
+
 		return cnd;
 	}
 

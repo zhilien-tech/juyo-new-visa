@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 <link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
@@ -77,7 +78,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>客户来源：</label> <select id="customerType"
-											name="source" class="form-control input-sm">
+											name="cuSource" class="form-control input-sm">
 											<option value="">--请选择--</option>
 											<c:forEach var="map" items="${obj.customerTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
@@ -114,14 +115,14 @@
 									<!-- input 直客 -->
 									<div class="col-sm-3">
 										<div class="form-group" style="padding-right: 3%;">
-											<label><span>*</span>公司全称：</label> <input id="compName"
+											<label><span>*</span>公司全称：</label> <input id="compName2"
 												name="name" type="text" class="form-control input-sm"
 												placeholder=" " />
 										</div>
 									</div>
 									<div class="col-sm-3">
 										<div class="form-group">
-											<label><span>*</span>公司简称：</label> <input id="comShortName"
+											<label><span>*</span>公司简称：</label> <input id="comShortName2"
 												name="shortname" type="text" class="form-control input-sm"
 												placeholder=" " />
 										</div>
@@ -136,7 +137,7 @@
 										<label><span>*</span>联系人：</label>
 										<input type="hidden" id="linkmanSelect2" value=""/>
 										 <select id="linkman"
-											name="linkman" class="form-control select2 cityselect2 "
+											name="cusLinkman" class="form-control select2 cityselect2 "
 											multiple="multiple" data-placeholder="">
 										</select>
 									</div>
@@ -156,7 +157,7 @@
 										<label><span>*</span>邮箱：</label> 
 										<input type="hidden" id="emailSelect2" value=""/>
 										<select id="email"
-											name="email" class="form-control select2 cityselect2 "
+											name="cusEmail" class="form-control select2 cityselect2 "
 											multiple="multiple" data-placeholder="">
 										</select>
 									</div>
@@ -169,22 +170,22 @@
 								<!-- input 直客 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>联系人：</label> <input id="linkman"
-											name="linkman" type="text" class="form-control input-sm"
+										<label><span>*</span>联系人：</label> <input id="linkman2"
+											name="cusLinkman" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>手机号：</label> <input id="mobile"
+										<label><span>*</span>手机号：</label> <input id="mobile2"
 											name="mobile" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>邮箱：</label> <input id="email"
-											name="email" type="text" class="form-control input-sm"
+										<label><span>*</span>邮箱：</label> <input id="email2"
+											name="cusEmail" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
@@ -201,7 +202,7 @@
 								<!-- 人数/领区/加急 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>人数：</label> <input id="number"
+										<label><span>*</span>人数(此人数只是参考人数)：</label> <input id="number"
 											name="number" type="text" class="form-control input-sm"
 											placeholder=" " />
 										<!-- <i class="bulb"></i> 小灯泡-->
@@ -336,7 +337,7 @@
 									<div class="form-group">
 										<label><span>*</span>出行时间：</label> <input id="goTripDate"
 											name="gotripdate" type="text" class="form-control input-sm"
-											placeholder=" " onClick="WdatePicker()" />
+											placeholder=" "  />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -350,7 +351,7 @@
 									<div class="form-group">
 										<label><span>*</span>返回时间：</label> <input id="backTripDate"
 											name="backtripdate" type="text" class="form-control input-sm"
-											placeholder=" " onClick="WdatePicker()" />
+											placeholder=" "  />
 									</div>
 								</div>
 							</div>
@@ -361,14 +362,14 @@
 									<div class="form-group">
 										<label><span>*</span>送签时间：</label> <input id="sendVisaDate"
 											name="sendvisadate" type="text" class="form-control input-sm"
-											placeholder=" " onClick="WdatePicker()" />
+											placeholder=" "  />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出签时间：</label> <input id="outVisaDate"
 											name="outvisadate" type="text" class="form-control input-sm"
-											placeholder=" " onClick="WdatePicker()" />
+											placeholder=" "  />
 									</div>
 								</div>
 							</div>
@@ -447,19 +448,33 @@
 					<!-- 快递信息 -->
 					<div class="info expressInfo none" id="expressInfo"
 						name="backmailInfo">
-						<p class="info-head">快递信息</p>
-						<div class="info-body-from">
+						<p class="info-head">回邮信息</p>
+						<div class="info-body-from backmail-div">
 							<div class="row body-from-input">
-								<!-- 资料来源/回邮方式/回邮地址 -->
+								<!-- 资料来源/快递号/团队名称/回邮方式 -->
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>资料来源：</label> <select id="datasour"
-											name="datasour" class="form-control input-sm">
+											name="source" class="form-control input-sm">
 											<c:forEach var="map"
 												items="${obj.mainBackMailSourceTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
 										</select>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>快递号：</label> <input id="expressNum"
+											name="expressNum" type="text" class="form-control input-sm"
+											placeholder=" " />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>团队名称：</label> <input id="teamName" name="teamName"
+											type="text" class="form-control input-sm" placeholder=" " />
+										
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -472,6 +487,13 @@
 										</select>
 									</div>
 								</div>
+								</div>
+								<!-- end 资料来源/快递号/团队名称/回邮方式 -->
+								
+							
+
+							<div class="row body-from-input" style="padding-left:0;">
+								<!-- 回邮地址/联系人/电话 -->
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>回邮地址：</label> <input id="expressAddress"
@@ -479,25 +501,25 @@
 											class="form-control input-sm" placeholder=" " />
 									</div>
 								</div>
-							</div>
-							<!-- end 资料来源/回邮方式/回邮地址 -->
-
-							<div class="row body-from-input">
-								<!-- 联系人/电话/发票项目内容/发票抬头 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>联系人：</label> <input id=""
-											name="" type="text" class="form-control input-sm"
+										<label><span>*</span>联系人：</label> <input id="expressLinkman"
+											name="linkman" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>电话：</label> <input id="telephone"
+										<label><span>*</span>电话：</label> <input id="expressTelephone"
 											name="telephone" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
 								</div>
+								</div>
+								<!-- end 回邮地址/联系人/电话/ -->
+
+							<div class="row body-from-input" style="padding-left:0;">
+								<!-- 发票项目内容/发票抬头/税号/备注 -->
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>发票项目内容：</label> <input
@@ -512,25 +534,13 @@
 											placeholder=" " />
 									</div>
 								</div>
-							</div>
-							<!-- end 联系人/电话/发票项目内容/发票抬头 -->
-
-							<div class="row body-from-input">
-								<!-- 团队名称/快递号/备注 -->
+								
 								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>团队名称：</label> <input id="" name=""
-											type="text" class="form-control input-sm" placeholder=" " />
-										
+										<div class="form-group">
+											<label><span>*</span>税号：</label> 
+											<input name="taxNum" type="text" class="form-control input-sm" placeholder=" " />
+										</div>
 									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>快递号：</label> <input id="expressNum"
-											name="expressNum" type="text" class="form-control input-sm"
-											placeholder=" " />
-									</div>
-								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>备注：</label> <input id="remark"
@@ -539,7 +549,8 @@
 									</div>
 								</div>
 							</div>
-							<!-- end 团队名称/快递号/备注 -->
+							<!-- end 发票项目内容/发票抬头/税号/备注 -->
+							<i class="add-btn"></i>
 						</div>
 					</div>
 					<!-- end 快递信息 -->
@@ -556,7 +567,8 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script>
 	<!-- 公用js文件 -->
-	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script src="${base}/admin/orderJp/order.js"></script>
 	<!-- 本页面js文件 -->
 	<!-- select2 -->
@@ -568,7 +580,7 @@
 		$(function(){
 			customerTypeSelect2();
 			//客户类型判断是不是直客
-			$("#customerType").change(function(){
+			/* $("#customerType").change(function(){
 				var customerVal = $(this).val();
 				if(customerVal == 4){//直客
 					$(".on-line").hide();//隐藏select2部分字段
@@ -577,7 +589,35 @@
 					$(".on-line").show();//显示select2部分字段
 					$(".zhiKe").addClass("none");
 				}
+			}); */
+			
+			$("#customerType").change(function(){
+				var thisval = $(this).val();
+				if(thisval == 4){
+					$(".on-line").hide();//隐藏select2部分字段
+					$(".zhiKe").removeClass("none");
+					$("#linkman2").val("");
+					$("#compName2").val("");
+					$("#comShortName2").val("");
+					$("#mobile2").val("");
+					$("#email2").val("");
+				}else{
+					$(".on-line").show();//显示select2部分字段
+					$(".zhiKe").addClass("none");
+					customerTypeSelect2();
+					//客户姓名清空
+					$("#linkman").val(null).trigger("change");
+					//电话清空
+					$("#mobile").val(null).trigger("change");
+					//公司全称
+					$("#compName").val(null).trigger("change");
+					//公司简称
+					$("#comShortName").val(null).trigger("change");
+					//邮箱清空
+					$("#email").val(null).trigger("change");
+				}
 			});
+			
 			
 			//签证类型  按钮的点击状态
 			$(".viseType-btn input").click(function(){
@@ -591,7 +631,7 @@
 			});
 			$('#visaType').change(function(){
 				var thisval = $(this).val();
-				if(thisval == 2 || thisval == 3){
+				if(thisval == 2 || thisval == 3 || thisval == 4){
 					$('#sixCounty').removeClass("none");
 					$('#threefangwen').removeClass("none");
 				}else{
@@ -620,6 +660,18 @@
 			
 		});
 		
+			/* //点击 蓝色加号图标 事件
+			$('.add-btn').click(function(){
+		    	var $html=$(this).parent().clone();//克隆标签模块
+		    	$(this).parents('.info').append($html);//添加克隆的内容
+		    	$html.find('.add-btn').remove();
+		    	$html.append('<i class="remove-btn"></i>');
+			});
+			//点击 蓝色叉号图标 事件
+			$(".info").on("click", ".remove-btn", function(){
+				$(this).parent().remove();//删除 对相应的本模块
+			}); */
+			
 		
 		//添加申请人(大按钮)
 		var BASE_PATH = '${base}';
@@ -723,8 +775,8 @@
 								
 								result += '<td>
 								<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
-								<a href="javascript:passportInfo('+data[i].id+');">护照</a>&nbsp;&nbsp;
-								<a href="">签证</a><br>
+								<a href="javascript:passportInfo('+data[i].id+');">护照信息</a>&nbsp;&nbsp;
+								<a href="">签证信息</a><br>
 								<a href="">回邮</a>&nbsp;&nbsp;
 								<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></br>
 								</td>';
@@ -775,6 +827,11 @@
 			
 			//删除申请人
 			function deleteApplicant(id){
+				layer.confirm("您确认要删除吗？", {
+					title:"删除",
+					btn: ["是","否"], //按钮
+					shade: false //不显示遮罩
+				}, function(){
 				$.ajax({ 
 			    	url: '${base}/admin/orderJp/deleteApplicant',
 			    	dataType:"json",
@@ -784,6 +841,7 @@
 			    		successCallBack(2);
 			      	}
 			    }); 
+			});
 			}
 			
 			
@@ -815,7 +873,12 @@
 				if(threecounty){
 					threecounty = threecounty.substr(0,threecounty.length-1);
 				}
-				var orderinfo = $.param({"visacounty":visacounty, "threecounty":threecounty}) + "&" + $("#orderInfo").serialize();
+				var backMailInfos = JSON.stringify(getMailInfos());
+				var orderinfo = $.param({"backMailInfos":backMailInfos, "visacounty":visacounty, "threecounty":threecounty}) + "&" + $("#orderInfo").serialize();
+				alert(JSON.stringify(backMailInfos));
+				//orderinfo.backMailInfos = JSON.stringify(backMails);
+				
+				
 				$.ajax({
 					type : 'POST',
 					data : orderinfo ,
@@ -881,6 +944,136 @@
 				 	return value;
 				 }
 			}
+			$("#goTripDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#backTripDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#sendVisaDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#outVisaDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+		
+			
+			
+			$(function(){
+				//点击 蓝色加号图标 事件
+				$('.add-btn').click(function(){
+					var newDiv=$(this).parent().clone();//克隆标签模块
+					$(this).parents('.info').append(newDiv);//添加克隆的内容
+					clearBackMailInfo(newDiv);
+					newDiv.find('.add-btn').remove();
+					newDiv.append('<i class="remove-btn"></i>');
+				});
+				//点击 蓝色叉号图标 事件
+				$(".info").on("click", ".remove-btn", function(){
+					$(this).parent().remove();//删除 对相应的本模块
+				});
+				
+				//如果有数据，隐藏添加回邮信息按钮；同时，设置最有一个为减号按钮
+				
+			});
+
+			//“+”号 回邮寄信息
+			function clearBackMailInfo(newDiv){
+				newDiv.find('[name=obmId]').val("");
+				newDiv.find('[name=source]').val(1);
+				newDiv.find('[name=expressType]').val(1);
+				newDiv.find('[name=expressAddress]').val("");
+				newDiv.find('[name=linkman]').val("");
+				newDiv.find('[name=telephone]').val("");
+				newDiv.find('[name=invoiceContent]').val("");
+				newDiv.find('[name=invoiceHead]').val("");
+				newDiv.find('[name=teamName]').val("");
+				newDiv.find('[name=expressNum]').val("");
+				newDiv.find('[name=taxNum]').val("");
+				newDiv.find('[name=remark]').val("");
+			}
+	//回邮信息
+	function getMailInfos(){
+	var backMails = [];
+	$('.backmail-div').each(function(i){
+		var infoLength = '';
+		var backInfo = {};
+		
+		var obmId = $(this).find('[name=obmId]').val();
+		infoLength += obmId;
+		backInfo.id = obmId;
+		
+		var source = $(this).find('[name=source]').val();
+		if(source != 1){
+			infoLength += source;
+		}
+		backInfo.source = source;
+		
+		var expressType = $(this).find('[name=expressType]').val();
+		if(expressType != 1){
+			infoLength += expressType;
+		}
+		backInfo.expressType = expressType;
+		
+		var expressAddress = $(this).find('[name=expressAddress]').val();
+		infoLength += expressAddress;
+		backInfo.expressAddress = expressAddress;
+		
+		var linkman = $(this).find('[name=linkman]').val();
+		infoLength += linkman;
+		backInfo.linkman = linkman;
+		
+		var telephone = $(this).find('[name=telephone]').val();
+		infoLength += telephone;
+		backInfo.telephone = telephone;
+		
+		var invoiceContent = $(this).find('[name=invoiceContent]').val();
+		infoLength += invoiceContent;
+		backInfo.invoiceContent = invoiceContent;
+		
+		var invoiceHead = $(this).find('[name=invoiceHead]').val();
+		infoLength += invoiceHead;
+		backInfo.invoiceHead = invoiceHead;
+		
+		var teamName = $(this).find('[name=teamName]').val();
+		infoLength += teamName;
+		backInfo.teamName = teamName;
+		
+		var expressNum = $(this).find('[name=expressNum]').val();
+		infoLength += expressNum;
+		backInfo.expressNum = expressNum;
+		
+		var taxNum = $(this).find('[name=taxNum]').val();
+		infoLength += taxNum;
+		backInfo.taxNum = taxNum;
+		
+		var remark = $(this).find('[name=remark]').val();
+		infoLength += remark;
+		backInfo.remark = remark;
+
+		if(infoLength.length > 0){
+			backMails.push(backInfo);
+		}
+	});
+	
+	return backMails;
+}
 		</script>
 </body>
 </html>

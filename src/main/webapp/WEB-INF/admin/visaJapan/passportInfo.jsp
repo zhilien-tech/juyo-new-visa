@@ -61,7 +61,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生地点/拼音：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.birthaddressstr"/>
+									<input id="" name="" type="text" class="form-control input-sm associatepinyin" placeholder=" " v-model="passport.birthaddressstr"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -77,7 +77,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发地点/拼音：</label>
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " v-model="passport.issuedplacestr"/>
+									<input id="" name="" type="text" class="form-control input-sm associatepinyin" placeholder=" " v-model="passport.issuedplacestr"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -146,6 +146,7 @@
 	<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	
 	<script type="text/javascript">
 		var base = "${base}";

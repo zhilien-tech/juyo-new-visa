@@ -8,6 +8,7 @@
 	<title>添加申请人</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
@@ -71,20 +72,34 @@
 						
 					<div class="col-sm-6 padding-right-0">
 						<div class="row"><!-- 姓/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>姓/拼音：</label>
-									<input id="firstName" name="firstName" type="text" class="form-control input-sm" placeholder=" " />
+									<label><span>*</span>姓：</label>
+									<input id="firstName" name="firstName" type="text" class="form-control input-sm req " placeholder=" " />
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>拼音：</label>
+									<input id="firstNameEn" name="firstNameEn" type="text" class="form-control input-sm req " placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div><!-- end 姓/拼音 -->
 						<div class="row"><!-- 名/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0 ">
 								<div class="form-group">
-									<label><span>*</span>名/拼音：</label>
-									<input id="lastName" name="lastName" type="text" class="form-control input-sm" placeholder=" " />
+									<label><span>*</span>名：</label>
+									<input id="lastName" name="lastName" type="text" class="form-control input-sm " placeholder=" " />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0 ">
+								<div class="form-group">
+									<label><span>*</span>拼音：</label>
+									<input id="lastNameEn" name="lastNameEn" type="text" class="form-control input-sm " placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -143,12 +158,11 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别：</label>
-									<input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value=""/>
-									<%-- <select class="form-control input-sm selectHeight" id="sex" name="sex">
-										<c:forEach var="map" items="${obj.MOrFEnum}">
-												<option value="${map.key}" >${map.value}</option>
-											</c:forEach>
-									</select> --%>
+									<!-- <input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value=""/> -->
+									<select class="form-control input-sm selectHeight" id="sex" name="sex">
+										<option value="男">男</option>
+										<option value="女">女</option>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
@@ -161,7 +175,7 @@
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
 									<label>出生日期：</label>
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()"/>
+									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -179,14 +193,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>有效期限：</label>
-									<input id="validStartDate" name="validStartDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
+									<input id="validStartDate" name="validStartDate" type="text" class="form-control input-sm" placeholder=" "  />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label> &nbsp; &nbsp;</label>
-									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" />
+									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" "  />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -203,6 +217,7 @@
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<!-- DataTables -->
@@ -210,29 +225,99 @@
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- 公用js文件 -->
-	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	
+	<%-- <script type="text/javascript" src="${base}/admin/common/commonjs.js"></script> --%>
 	
 	<script type="text/javascript">
 		var base = "${base}";
-		function saveApplicant(){
-			var applicantInfo = $("#applicantInfo").serialize();
-			
-			$.ajax({
-				type : 'POST',
-				data : applicantInfo,
-				url : '${base}/admin/orderJp/saveAddApplicant',
-				success : function(data) {
-					var applicantIdParent = window.parent.document.getElementById("appId").value;
-					applicantIdParent += data.id +",";
-					window.parent.document.getElementById("appId").value = applicantIdParent;
-					layer.closeAll('loading');
-					parent.successCallBack(3,data);
-					closeWindow();
+		$(function(){
+			//校验
+			$('#applicantInfo').bootstrapValidator({
+				message : '验证不通过',
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
 				},
-				error : function() {
-					alert("error");
+				fields : {
+
+					firstName : {
+						validators : {
+							notEmpty : {
+								message : '姓不能为空'
+							}
+						}
+					},
+					lastName : {
+						validators : {
+							notEmpty : {
+								message : '名不能为空'
+							}
+						}
+					},
+					telephone : {
+						validators : {
+							regexp: {
+		                	 	regexp: /^[1][34578][0-9]{9}$/,
+		                        message: '电话号格式错误'
+		                    }
+						}
+					},
+					email : {
+						validators : {
+							regexp: {
+		                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+		                        message: '邮箱格式错误'
+		                    }
+						}
+					}
 				}
-			}); 
+			});
+			$('#applicantInfo').bootstrapValidator('validate');
+			
+		});
+		function saveApplicant(){
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#applicantInfo").data(
+					'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			if (bootstrapValidator.isValid()){
+				//获取必填项信息
+				var firstName = $("#firstName").val();
+				if (firstName == "") {
+					layer.msg('姓不能为空');
+					return;
+				}
+				var lastName = $("#lastName").val();
+				if (lastName == "") {
+					layer.msg('名不能为空');
+					return;
+				}
+				
+				
+				var applicantInfo = $("#applicantInfo").serialize();
+				
+				$.ajax({
+					type : 'POST',
+					data : applicantInfo,
+					url : '${base}/admin/orderJp/saveAddApplicant',
+					success : function(data) {
+						var applicantIdParent = window.parent.document.getElementById("appId").value;
+						applicantIdParent += data.id +",";
+						window.parent.document.getElementById("appId").value = applicantIdParent;
+						layer.closeAll('loading');
+						parent.successCallBack(3,data);
+						closeWindow();
+					},
+					error : function() {
+						alert("error");
+					}
+				}); 
+			}
+			
 		}
 		
 		
@@ -269,8 +354,8 @@
 							$('#address').val(obj.address);
 							$('#nation').val(obj.nationality);
 							$('#cardId').val(obj.num);
-							$('#province').val(obj.province);
-							$('#city').val(obj.city);
+							//$('#province').val(obj.province);
+							//$('#city').val(obj.city);
 							$('#birthday').val(obj.birth);
 							$('#sex').val(obj.sex);
 						}
@@ -278,9 +363,6 @@
 						$("#updateBtn").attr('disabled', false);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
-						alert(XMLHttpRequest.status);
-		                alert(XMLHttpRequest.readyState);
-		                alert(textStatus);
 						layer.close(layerIndex);
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
@@ -328,9 +410,6 @@
 						$("#updateBtn").attr('disabled', false);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
-						alert(XMLHttpRequest.status);
-		                alert(XMLHttpRequest.readyState);
-		                alert(textStatus);
 						layer.close(layerIndex);
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
@@ -377,6 +456,34 @@
 			$('#sqImgBack').attr('src', "");
 			$("#uploadFileBack").siblings("i").css("display","none");
 		}
+		
+		$("#validStartDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		$("#validEndDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		$("#birthday").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 4,//从年开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
 		
 	</script>
 

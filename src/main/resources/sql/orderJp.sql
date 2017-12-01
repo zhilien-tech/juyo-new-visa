@@ -16,6 +16,9 @@ o.comName,
 c.source,
 o.comShortName,
 o.isDirectCus,
+o.createTime,
+o.sendVisaDate,
+o.outVisaDate,
 o.linkman,
 o.telephone,
 o.customerId,
@@ -84,6 +87,7 @@ SELECT
 	ap.passport,
 	ap.sex,
 	ap.sexEn,
+	ap.validType,
 	ap.birthAddress,
 	ap.birthAddressEn,
 	ap.birthday,
@@ -153,3 +157,49 @@ t_applicant_wealth_jp awtj ON awtj.applicantId = aoj.id
 WHERE
 aoj.applicantId = @id
 
+
+/*mainApplicant_byOrderId*/
+SELECT
+a.id,
+CONCAT(a.firstName, a.lastName) applyname,
+a.email,
+a.mainId,
+a.telephone,
+a.sex,
+ap.passport
+FROM
+t_applicant_order_jp aoj
+LEFT JOIN
+t_order_jp oj ON aoj.orderId = oj.id 
+LEFT JOIN
+t_applicant a ON aoj.applicantId = a.id
+LEFT JOIN
+t_applicant_passport ap ON ap.applicantId = a.id
+$condition
+
+/*wealth_byApplicantId*/
+SELECT
+tawj.id,
+tawj.applicantId,
+tawj.type,
+tawj.details,
+tawj.opId
+FROM
+t_applicant_wealth_jp tawj
+LEFT JOIN
+t_applicant_order_jp taoj ON tawj.applicantId = taoj.id
+WHERE tawj.applicantId = @id
+
+/*username_logs*/
+SELECT
+tol.createTime,
+tu.`name`,
+tol.orderStatus
+FROM
+t_order_logs tol
+LEFT JOIN
+t_user tu ON tol.opId = tu.id
+LEFT JOIN
+t_order o ON tol.orderId = o.id
+WHERE
+o.id = @id

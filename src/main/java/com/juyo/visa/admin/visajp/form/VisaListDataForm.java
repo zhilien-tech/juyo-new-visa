@@ -16,6 +16,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
 
@@ -67,6 +68,15 @@ public class VisaListDataForm implements SQLParamForm {
 					.or("taj.applyname", "like", "%" + searchStr + "%");
 			cnd.and(exp);
 		}
+		cnd.and("tr.comId", "=", companyid);
+		SqlExpressionGroup statusexp = new SqlExpressionGroup();
+		statusexp.and("tr.status", "=", JPOrderStatusEnum.VISA_ORDER.intKey())
+				.or("tr.status", "=", JPOrderStatusEnum.SEND_ADDRESS.intKey())
+				.or("tr.status", "=", JPOrderStatusEnum.SEND_DATA.intKey())
+				.or("tr.status", "=", JPOrderStatusEnum.RECEPTION_ORDER.intKey())
+				.or("tr.status", "=", JPOrderStatusEnum.RECEPTION_RECEIVED.intKey())
+				.or("tr.status", "=", JPOrderStatusEnum.TRANSFER_VISA.intKey());
+		cnd.and(statusexp);
 		if (!Util.isEmpty(sendSignDate)) {
 			cnd.and("tr.sendVisaDate", ">=", sendSignDate);
 		}
@@ -78,6 +88,7 @@ public class VisaListDataForm implements SQLParamForm {
 		} else {
 			//普通的操作员
 		}
+		cnd.orderBy("tr.createtime", "desc");
 		return cnd;
 	}
 

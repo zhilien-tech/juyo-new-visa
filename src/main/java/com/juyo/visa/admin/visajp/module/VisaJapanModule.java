@@ -6,18 +6,23 @@
 
 package com.juyo.visa.admin.visajp.module;
 
+import java.io.File;
+import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.upload.UploadAdaptor;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
@@ -103,8 +108,8 @@ public class VisaJapanModule {
 	@At
 	@POST
 	public Object saveJpVisaDetailInfo(@Param("..") VisaEditDataForm editDataForm,
-			@Param("travelinfo") String travelinfo, HttpSession session) {
-		return visaJapanService.saveJpVisaDetailInfo(editDataForm, travelinfo, session);
+			@Param("travelinfo") String travelinfo, @Param("multiways") String multiways, HttpSession session) {
+		return visaJapanService.saveJpVisaDetailInfo(editDataForm, travelinfo, multiways, session);
 	}
 
 	/**
@@ -262,5 +267,24 @@ public class VisaJapanModule {
 	@GET
 	public Object downloadFile(@Param("orderid") Long orderid, HttpServletResponse response) {
 		return visaJapanSimulateService.downloadFile(orderid, response);
+	}
+
+	/**
+	 * 上传签证文件
+	 */
+	@At
+	@POST
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object uploadVisaPic(@Param("uploadfile") File file, HttpServletRequest request) {
+		return visaJapanSimulateService.uploadVisaPic(file, request);
+	}
+
+	/**
+	 * 自动计算返回日期
+	 */
+	@At
+	@POST
+	public Object autoCalculateBackDate(@Param("gotripdate") Date gotripdate, @Param("stayday") Integer stayday) {
+		return visaJapanService.autoCalculateBackDate(gotripdate, stayday);
 	}
 }

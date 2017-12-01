@@ -13,11 +13,21 @@ import lombok.Data;
 @Data
 public class VisaEditDataForm implements Serializable {
 
+	private Integer applicantId;
+
+	private Integer orderid;
+
+	private Integer isOrderUpTime;
+
+	private Integer applicant;
+
 	private String mainRelation;
 
 	private String relationRemark;
 
-	private Integer isManApplicant;
+	private Integer mainApplicant;
+
+	private String wealthType;
 
 	private String occupation;
 
@@ -27,9 +37,17 @@ public class VisaEditDataForm implements Serializable {
 
 	private String address;
 
-	private String careerStatus;
+	private Integer careerStatus;
 
-	private Integer type;
+	private String type;
+
+	private String financial;
+
+	private String houseProperty;
+
+	private String vehicle;
+
+	private String deposit;
 
 	private String details;
 

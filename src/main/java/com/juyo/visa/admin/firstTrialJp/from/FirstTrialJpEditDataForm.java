@@ -1,8 +1,11 @@
 package com.juyo.visa.admin.firstTrialJp.from;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
+
+import com.juyo.visa.entities.TOrderBackmailEntity;
 
 /**
  *初审编辑信息保存
@@ -21,7 +24,7 @@ public class FirstTrialJpEditDataForm {
 
 	private Integer comid;
 
-	private Integer status;
+	//private Integer status;
 
 	private Integer number;
 
@@ -72,4 +75,7 @@ public class FirstTrialJpEditDataForm {
 	private Integer isvisit;
 
 	private String threecounty;
+
+	//回邮信息
+	private List<TOrderBackmailEntity> backMailInfos;
 }

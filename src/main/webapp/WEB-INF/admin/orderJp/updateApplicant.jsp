@@ -73,7 +73,8 @@
 							<!-- 签发机关 -->
 							<div class="col-sm-11 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>签发机关：</label> <input id="issueOrganization" name="issueOrganization"
+									<label><span>*</span>签发机关：</label> 
+									<input id="issueOrganization" name="issueOrganization"
 										type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -85,12 +86,21 @@
 					<div class="col-sm-6 padding-right-0">
 						<div class="row">
 							<!-- 姓/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>姓/拼音：</label> <input id="firstName"
+									<label><span>*</span>姓：</label> <input id="firstName"
 										name="firstName" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
+										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>拼音：</label> <input id="firstNameEn"
+										name="firstNameEn" type="text" class="form-control input-sm"
+										placeholder=" " value="${obj.applicant.firstNameEn }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -98,11 +108,19 @@
 						<!-- end 姓/拼音 -->
 						<div class="row">
 							<!-- 名/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>名/拼音：</label> <input id="lastName"
+									<label><span>*</span>名：</label> <input id="lastName"
 										name="lastName" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.lastName }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>拼音：</label> <input id="lastNameEn"
+										name="lastNameEn" type="text" class="form-control input-sm"
+										placeholder=" " value="${obj.applicant.lastNameEn }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -178,13 +196,15 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别：</label> 
-									<input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.sex }"/>
-									<%-- <select
+									<%-- <input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.sex }"/> --%>
+									<select
 										class="form-control input-sm selectHeight" id="sex" name="sex">
-										<c:forEach var="map" items="${obj.MOrFEnum}">
+										<%-- <c:forEach var="map" items="${obj.boyOrGirlEnum}">
 												<option value="${map.key}" ${map.key==obj.applicant.sex?'selected':''}>${map.value}</option>
-											</c:forEach>
-									</select> --%>
+											</c:forEach> --%>
+											<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
+										<option value="女" ${obj.applicant.sex == "女"?"selected":"" }>女</option>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
@@ -198,7 +218,7 @@
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
 									<label>出生日期：</label> 
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" />
+									<input id="birthday" name="birthday" type="text" class="form-control input-sm" value="${obj.birthday }"/>
 									
 								</div>
 							</div>
@@ -208,7 +228,7 @@
 							<!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>住宅：</label> <input id="address"
+									<label>住址：</label> <input id="address"
 										name="address" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.address }" />
 									<!-- <i class="bulb"></i> -->
@@ -239,13 +259,13 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>有效期限：</label> 
-									<input id="validStartDate" name=""  value="" type="text" class="form-control input-sm" />
+									<input id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label> &nbsp; &nbsp;</label> 
-									<input id="validEndDate" type="text" value="2017-11-15" class="form-control input-sm">
+									<input id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" value="${obj.validEndDate }">
 								</div>
 							</div>
 						</div>
@@ -270,9 +290,55 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<%-- <script type="text/javascript" src="${base}/admin/common/commonjs.js"></script> --%>
 	<script type="text/javascript">
 	
 		$(function(){
+			
+			//校验
+			$('#applicantInfo').bootstrapValidator({
+				message : '验证不通过',
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields : {
+
+					firstName : {
+						validators : {
+							notEmpty : {
+								message : '姓不能为空'
+							}
+						}
+					},
+					lastName : {
+						validators : {
+							notEmpty : {
+								message : '名不能为空'
+							}
+						}
+					},
+					telephone : {
+						validators : {
+							regexp: {
+		                	 	regexp: /^[1][34578][0-9]{9}$/,
+		                        message: '电话号格式错误'
+		                    }
+						}
+					},
+					email : {
+						validators : {
+							regexp: {
+		                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+		                        message: '邮箱格式错误'
+		                    }
+						}
+					}
+				}
+			});
+			$('#applicantInfo').bootstrapValidator('validate');
+			
 			var front = $("#cardFront").val();
 			var back = $("#cardBack").val();
 			if(front != ""){
@@ -290,8 +356,29 @@
 		
 		//var base = "${base}";
 		function saveApplicant(){
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#applicantInfo").data(
+					'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			if (bootstrapValidator.isValid()){
+				//获取必填项信息
+				var firstName = $("#firstName").val();
+				if (firstName == "") {
+					layer.msg('姓不能为空');
+					return;
+				}
+				var lastName = $("#lastName").val();
+				if (lastName == "") {
+					layer.msg('名不能为空');
+					return;
+				}
+			
 			var applicantInfo = $("#applicantInfo").serialize();
+			var applicantId = ${obj.applicantId};
+			applicantInfo.id = applicantId;
 			$.ajax({
+				async: false,
 				type: 'POST',
 				data : applicantInfo,
 				url: '${base}/admin/orderJp/saveEditApplicant',
@@ -302,6 +389,7 @@
 					closeWindow();
 				}
 			});
+			}
 		}
 		
 //正面上传,扫描
@@ -338,8 +426,8 @@
 							$('#address').val(obj.address);
 							$('#nation').val(obj.nationality);
 							$('#cardId').val(obj.num);
-							$('#province').val(obj.province);
-							$('#city').val(obj.city);
+							//$('#province').val(obj.province);
+							//$('#city').val(obj.city);
 							$('#birthday').val(obj.birth);
 							$('#sex').val(obj.sex);
 						}
@@ -347,9 +435,6 @@
 						$("#updateBtn").attr('disabled', false);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
-						alert(XMLHttpRequest.status);
-		                alert(XMLHttpRequest.readyState);
-		                alert(textStatus);
 						layer.close(layerIndex);
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
@@ -397,9 +482,6 @@
 						$("#updateBtn").attr('disabled', false);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
-						alert(XMLHttpRequest.status);
-		                alert(XMLHttpRequest.readyState);
-		                alert(textStatus);
 						layer.close(layerIndex);
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
@@ -445,14 +527,21 @@
 			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
 				$(this).siblings("i").css("display","block");
 			});
-			$("#birthday").datetimepicker({
+			$("#validStartDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
 				autoclose: true,//选中日期后 自动关闭
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
 			});
-			$("#validStartDate").datetimepicker({
+			$("#validEndDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#birthday").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
 		        weekStart: 1,
@@ -463,19 +552,6 @@
 				forceParse: 0,
 		        showMeridian: false,
 				pickerPosition:"top-left",//显示位置
-				minView: "month"//只显示年月日
-			});
-			$("#validEndDate").datetimepicker({
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN',
-		        weekStart: 1,
-		        todayBtn: 1,
-				autoclose: true,
-				todayHighlight: true,
-				startView: 4,//从年开始选择
-				forceParse: 0,
-		        showMeridian: false,
-				pickerPosition:"top-left",
 				minView: "month"//只显示年月日
 			});
 		});

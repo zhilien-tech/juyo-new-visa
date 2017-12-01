@@ -4,7 +4,7 @@ import com.uxuexi.core.common.enums.IEnum;
 
 public enum MainSaleVisaTypeEnum implements IEnum {
 
-	SINGLE(1, "单次"), SIX(2, "冲绳东北六县三年多次"), PUTONG(3, "普通三年多次"), ;
+	SINGLE(1, "单次"), SIX(2, "冲绳东北六县三年多次"), PUTONGTHREE(3, "普通三年多次"), PUTONGFIVE(4, "普通五年多次");
 
 	private int key;
 	private String value;

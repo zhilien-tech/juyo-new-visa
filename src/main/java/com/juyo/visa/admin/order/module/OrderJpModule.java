@@ -28,7 +28,9 @@ import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
+import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.ShareTypeEnum;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -63,6 +65,7 @@ public class OrderJpModule {
 		Map<String, Object> result = MapUtil.map();
 		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
 		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(MainSaleVisaTypeEnum.class));
+		result.put("orderStatus", EnumUtil.enum2(JPOrderStatusEnum.class));
 		return result;
 	}
 
@@ -101,6 +104,34 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 下单保存
+	 */
+	@At
+	@POST
+	public Object saveAddOrderinfo(@Param("..") OrderEditDataForm orderInfo, final HttpSession session) {
+		return saleViewService.saveAddOrderinfo(orderInfo, session);
+	}
+
+	/**
+	 * 跳转到'修改操作'的录入数据页面,实际就是[按照主键查询单个实体]
+	 */
+	@At
+	@POST
+	public Object getOrder(@Param("id") Integer orderid) {
+		return saleViewService.fetchOrder(orderid);
+	}
+
+	/**
+	 * 保存修改
+	 */
+	@At
+	@POST
+	public Object order(@Param("..") OrderEditDataForm orderInfo, @Param("customerinfo") String customerInfo,
+			final HttpSession session) {
+		return saleViewService.saveOrder(orderInfo, customerInfo, session);
+	}
+
+	/**
 	 * 添加申请人页面
 	 */
 	@At
@@ -108,6 +139,7 @@ public class OrderJpModule {
 	@Ok("jsp")
 	public Object addApplicantSale(@Param("id") Integer orderid) {
 		Map<String, Object> result = MapUtil.map();
+		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("orderid", orderid);
 		return result;
 	}
@@ -127,8 +159,8 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object updateApplicant(@Param("id") Integer applicantId) {
-		return saleViewService.updateApplicant(applicantId);
+	public Object updateApplicant(@Param("id") Integer applicantId, @Param("orderid") Integer orderid) {
+		return saleViewService.updateApplicant(applicantId, orderid);
 	}
 
 	/**
@@ -159,34 +191,6 @@ public class OrderJpModule {
 	}
 
 	/**
-	 * 保存修改
-	 */
-	@At
-	@POST
-	public Object order(@Param("..") OrderEditDataForm orderInfo, @Param("customerinfo") String customerInfo,
-			final HttpSession session) {
-		return saleViewService.saveOrder(orderInfo, customerInfo, session);
-	}
-
-	/**
-	 * 下单保存
-	 */
-	@At
-	@POST
-	public Object saveAddOrderinfo(@Param("..") OrderEditDataForm orderInfo, final HttpSession session) {
-		return saleViewService.saveAddOrderinfo(orderInfo, session);
-	}
-
-	/**
-	 * 跳转到'修改操作'的录入数据页面,实际就是[按照主键查询单个实体]
-	 */
-	@At
-	@POST
-	public Object getOrder(@Param("id") Integer orderid) {
-		return saleViewService.fetchOrder(orderid);
-	}
-
-	/**
 	 * 修改申请人信息后获取新的申请人列表
 	 */
 	@At
@@ -201,8 +205,8 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object passportInfo(@Param("id") Integer id) {
-		return saleViewService.getEditPassport(id);
+	public Object passportInfo(@Param("applicantId") Integer id, @Param("orderid") Integer orderid) {
+		return saleViewService.getEditPassport(id, orderid);
 	}
 
 	/**
@@ -220,8 +224,18 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object visaInfo(@Param("id") Integer id) {
-		return saleViewService.getVisaInfo(id);
+	public Object visaInfo(@Param("id") Integer id, @Param("orderid") Integer orderid,
+			@Param("isOrderUpTime") Integer isOrderUpTime) {
+		return saleViewService.getVisaInfo(id, orderid, isOrderUpTime);
+	}
+
+	/**
+	 * 签证信息修改保存
+	 */
+	@At
+	@POST
+	public Object saveEditVisa(@Param("..") VisaEditDataForm visaForm, HttpSession session) {
+		return saleViewService.saveEditVisa(visaForm, session);
 	}
 
 	/**
@@ -324,6 +338,30 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 邮箱、手机必填验证
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object getApplicantInfoValid(@Param("applicantId") Integer id, @Param("telephone") String telephone,
+			@Param("email") String email) {
+		Map<String, Object> result = MapUtil.map();
+		result.put("applicantId", id);
+		result.put("telephone", telephone);
+		result.put("email", email);
+		return result;
+	}
+
+	/**
+	 * 订单中所有申请人是否都填写了邮箱、手机号
+	 */
+	@At
+	@POST
+	public Object applicantComplete(@Param("orderid") int orderid) {
+		return saleViewService.applicantComplete(orderid);
+	}
+
+	/**
 	 * 跳转到日志页面
 	 */
 	@At
@@ -345,20 +383,48 @@ public class OrderJpModule {
 	}
 
 	/**
-	 * 签证信息修改保存
-	 */
-	@At
-	@POST
-	public Object saveEditVisa(@Param("..") VisaEditDataForm visaForm) {
-		return saleViewService.saveEditVisa(visaForm);
-	}
-
-	/**
 	 * 获取分享申请人
 	 */
 	@At
 	@POST
 	public Object getShare(@Param("orderid") Integer id) {
 		return saleViewService.getShare(id);
+	}
+
+	/**
+	 * 发送邮件、短信(单独分享)
+	 */
+	@At
+	@POST
+	public Object sendEmail(@Param("orderid") int orderid, @Param("applicantid") int applicantid, HttpSession session) {
+		return saleViewService.sendEmail(orderid, applicantid, session);
+	}
+
+	/**
+	 * 发送邮件、短信(统一分享)
+	 */
+	@At
+	@POST
+	public Object sendEmailUnified(@Param("orderid") int orderid, @Param("applicantid") int applicantid,
+			HttpSession session) {
+		return saleViewService.sendEmailUnified(orderid, applicantid, session);
+	}
+
+	/**
+	 * 单独分享完毕
+	 */
+	@At
+	@POST
+	public Object shareComplete(@Param("orderid") Integer orderid, HttpSession session) {
+		return saleViewService.shareComplete(orderid, session);
+	}
+
+	/**
+	 * 初审按钮
+	 */
+	@At
+	@POST
+	public Object firtTrialJp(@Param("orderId") Integer id, HttpSession session) {
+		return saleViewService.firtTrialJp(id, session);
 	}
 }

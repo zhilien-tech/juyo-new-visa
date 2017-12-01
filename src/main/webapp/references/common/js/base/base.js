@@ -50,9 +50,9 @@
 			}else{//没有二级菜单时
 			}
 			
-			var imgUrl = $("#"+_index).find('img').attr('src');//获取当前icon的路径
-		    var iconSrc = imgUrl.split(".");//图标 文件前文件路径
-		    iconSrc.pop();//图标文件名之前的图标路径
+			//var imgUrl = $("#"+_index).find('img').attr('src');//获取当前icon的路径
+		    //var iconSrc = imgUrl.split(".");//图标 文件前文件路径
+		    //iconSrc.pop();//图标文件名之前的图标路径
 		    var flieSuffix = imgUrl.substr(-4);//图标 文件后缀名
 		    var newIconUrl = iconSrc + "1" + flieSuffix; //拼接新图标路径
 		    $("#"+_index).find("img").attr("src",newIconUrl);//更改选中菜单状态的图标颜色

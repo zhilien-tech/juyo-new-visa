@@ -76,3 +76,34 @@ function setCaretPosition(ctrl, pos){
         range.select();
     }
 }
+document.write('<script language=javascript src="/references/common/js/pinyin.js"></script>');
+//联想拼音
+$(document).on("blur",".associatepinyin",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var hanzi = temp.split('/')[0];
+	var pinyinchar = getPinYinStr(hanzi);
+	//斜杠的位置
+	var sepindex = hanzi.length + 1;
+	//设置值
+	//pos=pos-(temp.length-$(this).val().length);//当前光标位置
+	if(pos < sepindex){
+		$(this).val(hanzi+'/'+pinyinchar.toUpperCase());
+//		setCaretPosition($(this)[0],pos);//设置光标
+	}else{
+		$(this).val(hanzi+'/'+temp.split('/')[1].toUpperCase());
+	}
+	setCaretPosition($(this)[0],pos);//设置光标
+});
+//获取拼音字符串
+function getPinYinStr(hanzi){
+	var onehanzi = hanzi.split('');
+	var pinyinchar = '';
+	for(var i=0;i<onehanzi.length;i++){
+		pinyinchar += PinYin.getPinYin(onehanzi[i]);
+	}
+	return pinyinchar;
+}

@@ -28,6 +28,8 @@ new Vue({
 			type:'post',
 			success: function(data){
 				_self.trialJapanData = data.trialJapanData;
+				$('#pageTotal').val(data.pageTotal);
+				$('#pageListCount').val(data.pageListCount);
 			}
 		});
 	},
@@ -35,131 +37,196 @@ new Vue({
 		/* editClick:function(){//编辑图标  页面跳转
 					window.location.href = '${base}/admin/firstTrialJp/edit.html';
 				} */
-		visaDetail:function(orderid){
+		visaDetail:function(orderid,orderjpid){
 			//跳转到签证详情页面
-			window.open('/admin/firstTrialJp/trialDetail.html?orderid='+orderid);
+			window.open('/admin/firstTrialJp/trialDetail.html?orderid='+orderid+'&orderjpid='+orderjpid);
 			//console.log(message);
 			//alert(JSON.stringify(event.target));
 		},
-		basicInfoFun:function(applyid){
+		basicInfoFun:function(applyid,orderid){
 			layer.open({
-    		    type: 2,
-    		    title: false,
-    		    closeBtn:false,
-    		    fix: false,
-    		    maxmin: false,
-    		    shadeClose: false,
-    		    scrollbar: false,
-    		    area: ['900px', '550px'],
-    		    content: '/admin/orderJp/updateApplicant.html?id='+applyid
-    	    });
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '550px'],
+				content: '/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+orderid
+			});
 		},
-		expressFun:function(orderid){//跳转快递弹层页面
+		expressFun:function(orderid,orderjpid){//跳转快递弹层页面
+			//alert(orderid +"---"+orderjpid);
 			$.ajax({
 				type : 'POST',
-				async: false,
 				data : {
-					orderid:orderid
+					orderjpid:orderjpid
 				},
 				url : '/admin/firstTrialJp/isQualified.html',
 				success : function(data) {
 					if(data){
 						layer.open({
-			    		    type: 2,
-			    		    title: false,
-			    		    closeBtn:false,
-			    		    fix: false,
-			    		    maxmin: false,
-			    		    shadeClose: false,
-			    		    scrollbar: false,
-			    		    area: ['900px', '550px'],
-			    		    content: '/admin/firstTrialJp/express.html?id='+orderid
-			    	    });
+							type: 2,
+							title: false,
+							closeBtn:false,
+							fix: false,
+							maxmin: false,
+							shadeClose: false,
+							scrollbar: false,
+							area: ['900px', '550px'],
+							content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
+						});
 					}else{
 						layer.msg('申请人不合格');
 						return;
 					}
 				}
 			});
-    	},
-    	passportFun:function(applyid){
-    		layer.open({
-    		    type: 2,
-    		    title: false,
-    		    closeBtn:false,
-    		    fix: false,
-    		    maxmin: false,
-    		    shadeClose: false,
-    		    scrollbar: false,
-    		    area: ['900px', '550px'],
-    		    content:'/admin/orderJp/passportInfo.html?id='+applyid
-    	    });
-    	},
-    	visaInfoFun:function(applyid){
-    		layer.open({
-    		    type: 2,
-    		    title: false,
-    		    closeBtn:false,
-    		    fix: false,
-    		    maxmin: false,
-    		    shadeClose: false,
-    		    scrollbar: false,
-    		    area: ['900px', '550px'],
-    		    content: '/admin/firstTrialJp/visaInfo.html'
-    	    });
-    	},
-    	qualifiedFun:function(applyid){
-    		layer.confirm('您确认合格吗？', {
-				   btn: ['是','否'], //按钮
-				   shade: false //不显示遮罩
-				}, function(index){
-					$.ajax({
-						type : 'POST',
-						data : {
-							applyid:applyid
-						},
-						url : '/admin/firstTrialJp/qualified.html',
-						success : function(data) {
-							layer.close(index);
-							successCallBack(1);
-						},
-						error : function(xhr) {
-							layer.msg("修改失败", "", 3000);
-						}
-					});
-				}, function(){
-					 //取消之后不做任何操作
+		},
+		passportFun:function(applyid,orderid){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '550px'],
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid
+			});
+		},
+		visaInfoFun:function(applyid,orderid){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime=1'
+			});
+		},
+		qualifiedFun:function(applyid,orderid,orderjpid){
+			layer.confirm('您确认合格吗？', {
+				btn: ['是','否'], //按钮
+				shade: false //不显示遮罩
+			}, function(index){
+				$.ajax({
+					type : 'POST',
+					data : {
+						applyid:applyid,
+						orderid:orderid,
+						orderjpid:orderjpid
+					},
+					url : '/admin/firstTrialJp/qualified.html',
+					success : function(data) {
+						layer.close(index);
+						successCallBack(1);
+					},
+					error : function(xhr) {
+						layer.msg("修改失败", "", 3000);
+					}
 				});
-    	},
-    	unqualifiedFun:function(applyid){
-    		layer.open({
-    		    type: 2,
-    		    title: false,
-    		    closeBtn:false,
-    		    fix: false,
-    		    maxmin: false,
-    		    shadeClose: false,
-    		    scrollbar: false,
-    		    area: ['800px', '402px'],
-    		    content: '/admin/firstTrialJp/unqualified.html?applyid='+applyid
-    	    });
-    	}
+			}, function(){
+				//取消之后不做任何操作
+			});
+		},
+		unqualifiedFun:function(applyid,orderid){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['800px', '402px'],
+				content: '/admin/firstTrialJp/unqualified.html?applyid='+applyid+'&orderid='+orderid
+			});
+		}
 	}
 });
 
-function search(){
-	/* var status = $('#status').val(); */
+$("#searchBtn").on('click', function () {
+	var status = $('#status').val();
 	var searchStr = $('#searchStr').val();
 	$.ajax({ 
 		url: url,
 		/* data:{status:status,searchStr:searchStr}, */
-		data:{searchStr:searchStr},
+		data:{
+			status:status,
+			searchStr:searchStr
+		},
 		dataType:"json",
 		type:'post',
 		success: function(data){
 			_self.trialJapanData = data.trialJapanData;
 		}
 	});
+});
+
+//注册scroll事件并监听 
+$(window).scroll(function(){
+	var scrollTop = $(this).scrollTop();
+	var scrollHeight = $(document).height();
+	var windowHeight = $(this).height();
+	var pageTotal = parseInt($('#pageTotal').val());
+	var pageListCount = parseInt($('#pageListCount').val());
+	// 判断是否滚动到底部  
+	if(scrollTop + windowHeight == scrollHeight){
+		//分页条件
+		var pageNumber = $('#pageNumber').val();
+		pageNumber = parseInt(pageNumber) + 1;
+		$('#pageNumber').val(pageNumber);
+		//搜索条件
+		var status = $('#status').val();
+		var searchStr = $('#searchStr').val();
+		//异步加载数据
+		if(pageNumber <= pageTotal){
+			//遮罩
+			layer.load(1);
+			$.ajax({ 
+				url: url,
+				data:{
+					status:status,
+					searchStr:searchStr,
+					pageNumber:pageNumber
+				},
+				dataType:"json",
+				type:'post',
+				success: function(data){
+					//关闭遮罩
+					layer.closeAll('loading');
+					$.each(data.trialJapanData,function(index,item){
+						_self.trialJapanData.push(item);
+					});
+					//没有更多数据
+				}
+			});
+		}else{
+			//没有更多数据，底部提示语
+			if($("#card-bottom-line").length <= 0 && pageListCount>=6){
+				$(".card-list").last().after("<div id='card-bottom-line' class='bottom-line'><span style='margin-left: 38%; color:#999'>-------  没有更多数据可以加载  -------</span></div>");
+			}
+		}
+	}
+});
+
+/*回车事件*/
+function onkeyEnter(){
+	var e = window.event || arguments.callee.caller.arguments[0];
+	if(e && e.keyCode == 13){
+		$("#searchBtn").click();
+	}
+}
+
+/*状态改变事件*/
+function selectListData(){
+	$("#searchBtn").click();
 }
 
 function successCallBack(status){

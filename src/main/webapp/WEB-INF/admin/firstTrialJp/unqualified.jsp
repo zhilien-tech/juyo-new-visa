@@ -28,7 +28,8 @@
 						<div class="row form-div">
 							<div class="col-sm-12">
 								<div class="form-group info-input">
-									<input id="applicantId" name="applicantId" type="hidden" value="${obj.applyid }" >
+									<input id="applicantId" name="applicantId" type="hidden" value="${obj.applyid}" >
+									<input id="orderid" name="orderid" type="hidden" value="${obj.orderid}" >
 									<input id="isPassport" name="isPassport" type="checkbox" class="infoCheck">
 									<label>护照信息</label> 
 									<input id="passRemark" name="passRemark" type="text" class="form-control input-sm none" />
@@ -66,7 +67,6 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
-	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	
 	<script type="text/javascript">

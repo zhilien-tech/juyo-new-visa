@@ -87,6 +87,7 @@ $("#receiver").on('select2:select', function (evt) {
 		success : function(data) {
 			$("#receiveAddressId").val(data.id);
 			$("#address").val(data.address);
+			$("#mobile option").remove(); 
 			$("#mobile").append('<option selected="true" value='+ addressId +'>'+data.mobile+'</option>'); 
 		},
 		error : function() {
@@ -107,6 +108,7 @@ $("#mobile").on('select2:select', function (evt) {
 		success : function(data) {
 			$("#receiveAddressId").val(data.id);
 			$("#address").val(data.address);
+			$("#receiver option").remove(); 
 			$("#receiver").append('<option selected="true" value='+ addressId +'>'+data.receiver+'</option>'); 
 		},
 		error : function() {
@@ -131,7 +133,13 @@ function clearText(){
 }
 
 //保存
-function save(orderid){
+function save(orderid,orderjpid){
+	
+	var applicant_tbody = $("#applicant_tbody").is(":empty");
+	if (applicant_tbody) {
+		layer.msg('申请人信息不能为空');
+		return;
+	}
 	var receiveAddress = $("#receiveAddressId").val();
 	if (receiveAddress == "") {
 		layer.msg('收件人信息不能为空');
@@ -143,7 +151,9 @@ function save(orderid){
 		type:'post',
 		data:{
 			orderid:orderid,
+			orderjpid:orderjpid,
 			expresstype:$("#express").val(),
+			expressaddress:$("#address").val(),
 			receiveAddressId:$("#receiveAddressId").val()
 		},
 		success: function(data){
@@ -151,6 +161,7 @@ function save(orderid){
 				layer.close(layerIndex);
 			}
 			closeWindow();
+			parent.successCallBack(1);
 		}
 	});
 }

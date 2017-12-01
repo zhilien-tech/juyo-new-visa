@@ -31,9 +31,11 @@
 			<div class="modal-header">
 				<span class="heading">快递</span>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save(${obj.orderid});" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="addBtn" type="button" onclick="save(${obj.orderid},${obj.orderjpid});" class="btn btn-primary pull-right btn-sm btn-right" value="发送" />
 			</div>
 			<div class="modal-body">
+				<input id="orderid" type="hidden" value="${obj.orderid}">
+				<input id="orderjpid" type="hidden" value="${obj.orderjpid}">
 				<div class="tab-content" id="el">
 					<div class="row">
 						<div class="col-sm-3">
@@ -81,12 +83,13 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>邮寄地址：</label>
-								<c:if test="${! empty obj.orderReceive.receiveaddressid }">
+								<%-- <c:if test="${! empty obj.orderReceive.receiveaddressid }">
 									<input id="address" name="address" value="${obj.orderReceive.address}"  readonly="readonly" type="text" class="form-control input-sm"/>
 								</c:if>
 								<c:if test="${ empty obj.orderReceive.receiveaddressid }">
 									<input id="address" name="address" readonly="readonly" type="text" class="form-control input-sm"/>
-								</c:if>
+								</c:if> --%>
+								<input id="address" name="address" value="${obj.orderReceive.expressaddress}" type="text" class="form-control input-sm"/>
 								
 							</div>
 						</div>
@@ -102,7 +105,7 @@
 								<!-- <th><span>统一联系人</span></th> -->
 							</tr>
 						</thead>
-						<tbody>
+						<tbody id="applicant_tbody">
 							<tr v-cloak v-for="apply in applyinfo">
 								<td>{{apply.applicantname}}</td>
 								<td>{{apply.telephone}}</td>
@@ -120,6 +123,7 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		var orderid = '${obj.orderid}';
+		var orderjpid = '${obj.orderjpid}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -150,7 +154,7 @@
 					type:'post',
 					dataType:"json",
 					data:{
-						id:orderid
+						orderjpid:orderjpid
 					},
 					success: function(data){
 						orderobj.applyinfo = data.applicant;
