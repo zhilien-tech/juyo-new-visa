@@ -369,12 +369,9 @@ $("#gotripdate").datetimepicker({
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
-});
-/*$('#gotripdate').datetimepicker().on('changeDate', function(ev){
-	console.log($('#datetimepicker').data("datetimepicker").getDate()  );
-	//$('#datetimepicker').datetimepicker('setStartDate', $('#gotripdate').val());
-});*/
-
+}).on("click",function(){  
+    $("#gotripdate").datetimepicker("setEndDate",$("#backtripdate").val());  
+}); 
 $("#backtripdate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
@@ -391,8 +388,9 @@ $("#sendvisadate").datetimepicker({
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
-});
-
+}).on("click",function(){  
+    $("#sendvisadate").datetimepicker("setEndDate",$("#outvisadate").val());  
+}); 
 $("#outvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
