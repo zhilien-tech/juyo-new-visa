@@ -153,6 +153,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		}
 		result.put("trialJapanData", list);
+		result.put("pageTotal", pager.getPageCount());
+		result.put("pageListCount", list.size());
 
 		return result;
 	}

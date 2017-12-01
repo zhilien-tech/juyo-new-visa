@@ -70,6 +70,9 @@
 					</div><!-- end 卡片列表 -->
 				</section>
 			</div>
+			<input type="hidden" id="pageNumber" name="pageNumber" value="1">
+			<input type="hidden" id="pageTotal" name="pageTotal">
+			<input type="hidden" id="pageListCount" name="pageListCount">
 		</div>
 
 	<script type="text/javascript">
