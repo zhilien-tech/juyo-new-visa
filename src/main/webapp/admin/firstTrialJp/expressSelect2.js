@@ -87,6 +87,7 @@ $("#receiver").on('select2:select', function (evt) {
 		success : function(data) {
 			$("#receiveAddressId").val(data.id);
 			$("#address").val(data.address);
+			$("#mobile option").remove(); 
 			$("#mobile").append('<option selected="true" value='+ addressId +'>'+data.mobile+'</option>'); 
 		},
 		error : function() {
@@ -107,6 +108,7 @@ $("#mobile").on('select2:select', function (evt) {
 		success : function(data) {
 			$("#receiveAddressId").val(data.id);
 			$("#address").val(data.address);
+			$("#receiver option").remove(); 
 			$("#receiver").append('<option selected="true" value='+ addressId +'>'+data.receiver+'</option>'); 
 		},
 		error : function() {

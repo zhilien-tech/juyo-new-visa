@@ -36,6 +36,8 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 	private Integer pageNumber = 1;
 	//每页多少条
 	private Integer pageSize = 10;
+	//总页数
+	private Integer pageTotal;
 	//公司id
 	private Integer companyid;
 	//用户id
