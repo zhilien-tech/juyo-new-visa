@@ -35,7 +35,7 @@
 				<span class="">订单号：<p>${obj.orderInfo.orderNum}</p></span> 
 				<span class="">受付番号：<p></p></span> 
 				<span class="">状态：<p>${obj.orderstatus }</p></span> 
-				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/> 
+				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancel();"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
 				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
 				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" @click="firtTrialJp(orderInfo.id)"/>
@@ -738,6 +738,7 @@
 					$("#urgentDays").addClass("none");
 				}else{
 					$("#urgentDays").removeClass("none");
+					orderobj.orderInfo.urgentday = 1;
 				}
 			});
 			
@@ -1263,27 +1264,37 @@
 			 }
 		}
 		
+		//时间插件格式化  出行时间>今天>送签时间 
+		var now = new Date();
 		$("#goTripDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
+			startDate:now,
 			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
-		});
+		}).on("click",function(){  
+		    $("#goTripDate").datetimepicker("setEndDate",$("#backTripDate").val());  
+		}); 
 		$("#backTripDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
+			startDate:now,
 			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
+
 		$("#sendVisaDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
+			endDate: now,//日期小于今天
 			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
-		});
+		}).on("click",function(){  
+		    $("#sendVisaDate").datetimepicker("setEndDate",$("#outVisaDate").val());  
+		}); 
 		$("#outVisaDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
@@ -1292,8 +1303,10 @@
 			minView: "month"//只显示年月日
 		});
 		
-		
-		
+		function cancel(){
+			self.window.close();
+			parent.window.reload();
+		}
 	</script>
 </body>
 </html>

@@ -209,42 +209,6 @@
 								area: ['900px', '551px'],
 								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
 							});
-							//return false;
-							/* var applicant = applicantId;
-							layer.confirm("手机号、邮箱不能为空，请及时补充", {
-								title:"验证",
-								btn: ["马上补充","以后再说"], //按钮
-								shade: false //不显示遮罩
-							}, function(){
-								flag = 1;
-								layer.open({
-									type: 2,
-									title: false,
-									closeBtn:false,
-									fix: false,
-									maxmin: false,
-									shadeClose: false,
-									scrollbar: false,
-									area: ['900px', '551px'],
-									content:'${base}/admin/orderJp/updateApplicant.html?id='+applicant
-								});
-								
-							}); */
-							
-							
-							
-							
-							/* layer.open({
-								type: 2,
-								title: false,
-								closeBtn:false,
-								fix: false,
-								maxmin: false,
-								shadeClose: false,
-								scrollbar: false,
-								area: ['900px', '551px'],
-								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
-							}); */
 						}else{
 							flag++;
 							if(flag == trcount){
@@ -274,61 +238,9 @@
 								});
 							}
 						}
-						
-						/* else{
-							layer.load(1);
-							$.ajax({ 
-								url: BASE_PATH+'/admin/orderJp/sendEmail',
-								async:false,
-								type:'post',
-								data:{
-									orderid:orderId,
-									applicantid:applicantId
-								},
-								success: function(data){
-									layer.closeAll('loading');
-									flag++;
-									if(flag == trcount){//说明选中的都已发送邮件
-										layer.load(1);
-										$.ajax({ 
-											url: BASE_PATH+'/admin/orderJp/shareComplete',
-											async:false,
-											type:'post',
-											data:{
-												orderid:orderId
-											},
-											success: function(data){
-												layer.closeAll('loading');
-												layer.msg("分享成功", {
-													time: 1000,
-													end: function () {
-													var index = parent.layer.getFrameIndex(window.name);
-													parent.layer.close(index);
-													}
-													});
-											}
-										});
-									}
-								}
-							});
-						} */ 
 					}
 			});
-				//alert(1111);
-				/*  $("#datatableId tbody tr").each(function(){
-					 if($(this).hasClass("trColor")){
-						applicantId = $(this).children().eq(0).html();
-						name = $(this).children().eq(1).html();
-						telephone = $(this).children().eq(2).html();
-						email = $(this).children().eq(3).html();
-						alert(applicantId);
-					 }
-				 }); */
-				
-				
 			}
-			//parent.successCallBack(4);
-			
 		}
 		
 		//返回 

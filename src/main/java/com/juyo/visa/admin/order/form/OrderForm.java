@@ -93,6 +93,9 @@ public class OrderForm extends DataTablesParamForm {
 	/**邮箱*/
 	private String email;
 
+	/**是否作废*/
+	private Integer isDisabled;
+
 	/**创建时间*/
 	private Date createTime;
 

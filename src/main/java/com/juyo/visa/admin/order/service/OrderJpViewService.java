@@ -597,6 +597,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		orderEntity.setCreateTime(new Date());
 		orderEntity.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
 		orderEntity.setUpdateTime(new Date());
+		orderEntity.setIsDisabled(IsYesOrNoEnum.NO.intKey());
 		dbDao.insert(orderEntity);
 		Integer orderId = orderEntity.getId();
 		//下单日志保存
@@ -1370,6 +1371,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		if (Util.eq(sendCount, applicantInfo.size())) {
 			insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
+			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
+			orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
+			orderEntity.setUpdateTime(new Date());
+			dbDao.update(orderEntity);
 			result.put("sendResult", "success");
 		}
 		return result;
@@ -1386,6 +1391,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			String sendMessageUnified = (String) sendMessageUnified(orderid, applicantid);
 			if (Util.eq(sendMailUnified, "success") && Util.eq(sendMessageUnified, "发送成功")) {
 				insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
+				TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
+				orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
+				orderEntity.setUpdateTime(new Date());
+				dbDao.update(orderEntity);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -1684,6 +1693,22 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		logsEntity.setOpId(loginUser.getId());
 		logsEntity.setCreateTime(new Date());
 		dbDao.insert(logsEntity);
+		return null;
+	}
+
+	public Object disabled(int orderid) {
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
+		orderEntity.setIsDisabled(IsYesOrNoEnum.YES.intKey());
+		orderEntity.setUpdateTime(new Date());
+		dbDao.update(orderEntity);
+		return null;
+	}
+
+	public Object undisabled(int orderid) {
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
+		orderEntity.setIsDisabled(IsYesOrNoEnum.NO.intKey());
+		orderEntity.setUpdateTime(new Date());
+		dbDao.update(orderEntity);
 		return null;
 	}
 

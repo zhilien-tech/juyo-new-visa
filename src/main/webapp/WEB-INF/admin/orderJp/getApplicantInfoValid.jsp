@@ -8,10 +8,13 @@
 	<title>验证</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
+	<style type="text/css">
+		#datatableId{position: relative;top: 10px;}
+		#datatableId tbody tr{cursor: pointer;}
+		.trColor{color: rgb(48, 135, 240)}
+	</style>
 </head>
 <body>
 	<div>

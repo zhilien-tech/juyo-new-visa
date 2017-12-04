@@ -97,7 +97,11 @@ public class OrderJpForm extends OrderForm {
 			cnd.and(e1);
 		}
 		if (!Util.isEmpty(getStatus())) {
-			cnd.and("o.status", "=", getStatus());
+			if (Util.eq(getStatus(), 21)) {
+				cnd.and("o.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
+			} else {
+				cnd.and("o.status", "=", getStatus());
+			}
 		}
 		if (!Util.isEmpty(source)) {
 			if (Util.eq(source, CustomerTypeEnum.ZHIKE.intKey())) {
@@ -117,8 +121,8 @@ public class OrderJpForm extends OrderForm {
 			cnd.and("o.userId", "=", userId);
 		}
 
-		cnd.orderBy("o.createtime", "DESC");
 		cnd.orderBy("o.updatetime", "DESC");
+		cnd.orderBy("o.createtime", "DESC");
 		return cnd;
 	}
 }
