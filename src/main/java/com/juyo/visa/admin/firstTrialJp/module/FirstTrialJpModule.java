@@ -196,7 +196,16 @@ public class FirstTrialJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object backMailInfo() {
-		return null;
+	public Object backMailInfo(@Param("applicantId") Integer applicantId) {
+		return firstTrialJpViewService.backMailInfo(applicantId);
+	}
+
+	/**
+	 * 获取回邮信息
+	 */
+	@At
+	@POST
+	public Object getBackMailInfo(@Param("applicantId") Integer applicantId) {
+		return firstTrialJpViewService.getBackMailInfo(applicantId);
 	}
 }

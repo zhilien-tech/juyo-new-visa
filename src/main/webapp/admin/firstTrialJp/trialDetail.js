@@ -278,6 +278,19 @@ new Vue({
 				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid+'&isOrderUpTime=1'
 			});
 		},
+		backmailInfo:function(applyId){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/firstTrialJp/backMailInfo.html?applicantId='+applyId
+			});
+		},
 		qualified:function(applyId){
 			layer.confirm('您确认合格吗？', {
 				btn: ['是','否'], //按钮

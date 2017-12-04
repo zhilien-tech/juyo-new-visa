@@ -28,6 +28,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Strings;
+import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
@@ -780,4 +781,26 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		return records;
 	}
 
+	//回邮信息
+	public Object backMailInfo(@Param("applicantId") Integer applicantId) {
+		Map<String, Object> result = Maps.newHashMap();
+		//资料类型
+		result.put("mainSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
+		//回邮方式
+		result.put("mainBackMailTypeEnum", EnumUtil.enum2(MainBackMailTypeEnum.class));
+		//申请人id
+		result.put("applicantId", applicantId);
+		return result;
+	}
+
+	//获取回邮信息
+	public Object getBackMailInfo(@Param("applicantId") Integer applicantId) {
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("backmail_info_by_applicantId");
+		Sql sql = Sqls.create(sqlStr);
+		sql.setParam("applicantId", applicantId);
+		Record backmailinfo = dbDao.fetch(sql);
+		result.put("backmailinfo", backmailinfo);
+		return result;
+	}
 }

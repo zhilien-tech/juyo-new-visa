@@ -41,17 +41,16 @@ new Vue({
 	el: '#backmail_wrapper',
 	data: {
 		backmailinfo:""
-
 	},
 	created:function(){
 		backMailObj=this;
-		var url = '/admin/firstTrialJp/backMailInfo.html';
+		var url = '/admin/firstTrialJp/getBackMailInfo.html';
 		$.ajax({ 
 			url: url,
 			type:'post',
 			dataType:"json",
 			data:{
-				orderid:orderid
+				applicantId:applicantId
 			},
 			success: function(data){
 				backMailObj.backmailinfo = data.backmailinfo
