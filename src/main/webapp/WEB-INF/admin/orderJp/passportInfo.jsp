@@ -49,7 +49,7 @@
 						
 					<div class="col-sm-7 padding-right-0">
 						<div class="row"><!-- 类型/护照号 -->
-							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>类型：</label>
 									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
@@ -59,7 +59,7 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-							<div class="col-sm-7  col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>护照号：</label>
 									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
@@ -82,40 +82,34 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-							<div class="col-sm-3  col-sm-offset-1 padding-right-0">
+							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>出生地点：</label>
-									<input id="birthAddress" name="birthAddress" type="text" class="form-control input-sm associatepinyin" placeholder=" " value="${obj.passport.birthAddress }"/>
-									<!-- <i class="bulb"></i> -->
+									<label>&nbsp;&nbsp;</label>
+									<input id="sexEn" class="form-control input-sm" name="sexEn" type="text" value="${obj.passport.sexEn }"/>
 								</div>
 							</div>
-							<div class="col-sm-4   padding-right-0">
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>拼音：</label>
-									<input id="birthAddressEn" name="birthAddressEn" type="text" class="form-control input-sm associatepinyin" placeholder=" " value="${obj.passport.birthAddressEn }"/>
+									<label><span>*</span>出生地点/拼音：</label>
+									<input id="birthAddress" name="birthAddress" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
+									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:45px;border:0px;left:80px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div><!-- end 性别/出生地点 拼音 -->
 						<div class="row"><!-- 出生日期/签发地点 拼音 -->
-							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生日期：</label>
 									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.birthday}"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-							<div class="col-sm-3  col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>签发地点：</label>
-									<input id="issuedPlace" name="issuedPlace" type="text" class="form-control input-sm associatepinyin" placeholder=" " value="${obj.passport.issuedPlace }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-							<div class="col-sm-4   padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>拼音：</label>
-									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" class="form-control input-sm associatepinyin" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
+									<label><span>*</span>签发地点/拼音：</label>
+									<input id="issuedPlace" name="issuedPlace" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
+									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:45px;border:0px;left:80px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -128,7 +122,7 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-							<div class="col-sm-2 padding-right-0">
+							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
 									<select id="validType" name="validType" class="form-control input-sm selectHeight">
@@ -185,13 +179,17 @@
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	
-	<%-- <script type="text/javascript" src="${base}/admin/common/commonjs.js"></script> --%>
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	
 	
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			
+			if($("#sex").val() == "男"){
+				$("#sexEn").val("M");
+			}else{
+				$("#sexEn").val("F");
+			}
 		});
 		//保存
 		function save(){
@@ -244,9 +242,12 @@
 							$('#type').val(obj.type);
 							$('#passport').val(obj.num);
 							$('#sex').val(obj.sex);
+							$('#sexEn').val(obj.sexEn);
 							$('#birthAddress').val(obj.birthCountry);
+							$('#birthAddressEn').val("/"+getPinYinStr(obj.birthCountry));
 							$('#birthday').val(obj.birth);
 							$('#issuedPlace').val(obj.visaCountry);
+							$('#issuedPlaceEn').val("/"+getPinYinStr(obj.visaCountry));
 							$('#issuedDate').val(obj.issueDate);
 							$('#validEndDate').val(obj.expiryDay);
 						}
@@ -290,6 +291,15 @@
 			
 		});
 		
+		$("#sex").change(function(){
+			var sex = $(this).val();
+			if(sex == "男"){
+				$("#sexEn").val("M");
+			}else{
+				$("#sexEn").val("F");
+			}
+		});
+		
 		function deleteApplicantFrontImg(){
 			$('#passportUrl').val("");
 			$('#sqImg').attr('src', "");
@@ -323,6 +333,14 @@
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
+		function getPinYinStr(hanzi){
+			var onehanzi = hanzi.split('');
+			var pinyinchar = '';
+			for(var i=0;i<onehanzi.length;i++){
+				pinyinchar += PinYin.getPinYin(onehanzi[i]);
+			}
+			return pinyinchar.toUpperCase();
+		}
 	</script>
 
 

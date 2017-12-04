@@ -521,7 +521,10 @@
                 target.closest(this.container).length ||
                 target.closest('.calendar-date').length
                 ) return;
-            this.hide();
+            //this.hide();
+            this.element.removeClass('active');
+            this.container.hide();
+            this.element.trigger('hide.daterangepicker', this);
         },
 
         hide: function (e) {

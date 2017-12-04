@@ -396,7 +396,7 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object sendEmail(@Param("orderid") int orderid, @Param("applicantid") int applicantid, HttpSession session) {
+	public Object sendEmail(@Param("orderid") int orderid, @Param("applicantid") String applicantid, HttpSession session) {
 		return saleViewService.sendEmail(orderid, applicantid, session);
 	}
 
@@ -426,5 +426,23 @@ public class OrderJpModule {
 	@POST
 	public Object firtTrialJp(@Param("orderId") Integer id, HttpSession session) {
 		return saleViewService.firtTrialJp(id, session);
+	}
+
+	/**
+	 * 作废按钮
+	 */
+	@At
+	@POST
+	public Object disabled(@Param("orderId") int orderid) {
+		return saleViewService.disabled(orderid);
+	}
+
+	/**
+	 * 还原按钮
+	 */
+	@At
+	@POST
+	public Object undisabled(@Param("orderId") int orderid) {
+		return saleViewService.undisabled(orderid);
 	}
 }

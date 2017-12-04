@@ -72,34 +72,22 @@
 						
 					<div class="col-sm-6 padding-right-0">
 						<div class="row"><!-- 姓/拼音 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>姓：</label>
-									<input id="firstName" name="firstName" type="text" class="form-control input-sm req " placeholder=" " />
+									<label><span>*</span>姓/拼音：</label>
+									<input id="firstName" style="position:relative;" name="firstName" type="text" class="form-control input-sm req " placeholder=" " />
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>拼音：</label>
-									<input id="firstNameEn" name="firstNameEn" type="text" class="form-control input-sm req " placeholder=" " />
+									<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="firstNameEn" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div><!-- end 姓/拼音 -->
 						<div class="row"><!-- 名/拼音 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0 ">
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0 ">
 								<div class="form-group">
-									<label><span>*</span>名：</label>
-									<input id="lastName" name="lastName" type="text" class="form-control input-sm " placeholder=" " />
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0 ">
-								<div class="form-group">
-									<label><span>*</span>拼音：</label>
-									<input id="lastNameEn" name="lastNameEn" type="text" class="form-control input-sm " placeholder=" " />
+									<label><span>*</span>名/拼音：</label>
+									<input id="lastName" name="lastName" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " />
+									<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -228,7 +216,7 @@
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	
-	<%-- <script type="text/javascript" src="${base}/admin/common/commonjs.js"></script> --%>
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	
 	<script type="text/javascript">
 		var base = "${base}";
@@ -313,7 +301,7 @@
 						closeWindow();
 					},
 					error : function() {
-						alert("error");
+						console.log("error");
 					}
 				}); 
 			}

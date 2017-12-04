@@ -43,6 +43,10 @@
 	position: relative;
 	top: 5px;
 }
+.form-group span,.form-control {
+    width: 297.05px;
+}
+
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -67,7 +71,8 @@
 				<form id="orderInfo">
 					<div class="info" id="customerInfo" ref="customerInfo">
 						<p class="info-head">客户信息</p>
-						<div class="info-body-from">
+						<!-- *** -->
+						<div class="info-body-from"  style="margin-left:12%;">
 							<div class="row body-from-input">
 								<!-- 公司全称 -->
 								<div class="col-sm-3">
@@ -161,7 +166,7 @@
 							<!-- end select2 线上/OTS/线下 -->
 
 
-							<div class="row body-from-input zhiKe none">
+							<div class="row body-from-input">
 								<!-- input 直客 -->
 								<div class="col-sm-3">
 									<div class="form-group">
@@ -192,7 +197,7 @@
 					<!-- 订单信息 -->
 					<div class="orderInfo info" id="orderInfo">
 						<p class="info-head">订单信息</p>
-						<div class="info-body-from">
+						<div class="info-body-from" style="margin-left:12%;">
 							<div class="row body-from-input">
 								<!-- 人数/领区/加急 -->
 								<div class="col-sm-3">
@@ -557,8 +562,7 @@
 
 	</div>
 
-	<script
-		src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script>
@@ -568,8 +572,7 @@
 	<script src="${base}/admin/orderJp/order.js"></script>
 	<!-- 本页面js文件 -->
 	<!-- select2 -->
-	<script
-		src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/admin/orderJp/searchCustomerInfo.js"></script>
 
@@ -589,29 +592,30 @@
 			}); */
 			
 			$("#customerType").change(function(){
+				$("#linkman2").val("");
+				$("#compName2").val("");
+				$("#comShortName2").val("");
+				$("#mobile2").val("");
+				$("#email2").val("");
+				//客户姓名清空
+				$("#linkman").val(null).trigger("change");
+				//电话清空
+				$("#mobile").val(null).trigger("change");
+				//公司全称
+				$("#compName").val(null).trigger("change");
+				//公司简称
+				$("#comShortName").val(null).trigger("change");
+				//邮箱清空
+				$("#email").val(null).trigger("change");
 				var thisval = $(this).val();
 				if(thisval == 4){
 					$(".on-line").hide();//隐藏select2部分字段
 					$(".zhiKe").removeClass("none");
-					$("#linkman2").val("");
-					$("#compName2").val("");
-					$("#comShortName2").val("");
-					$("#mobile2").val("");
-					$("#email2").val("");
+					
 				}else{
 					$(".on-line").show();//显示select2部分字段
 					$(".zhiKe").addClass("none");
-					customerTypeSelect2();
-					//客户姓名清空
-					$("#linkman").val(null).trigger("change");
-					//电话清空
-					$("#mobile").val(null).trigger("change");
-					//公司全称
-					$("#compName").val(null).trigger("change");
-					//公司简称
-					$("#comShortName").val(null).trigger("change");
-					//邮箱清空
-					$("#email").val(null).trigger("change");
+					//customerTypeSelect2();
 				}
 			});
 			
@@ -872,7 +876,6 @@
 				}
 				var backMailInfos = JSON.stringify(getMailInfos());
 				var orderinfo = $.param({"backMailInfos":backMailInfos, "visacounty":visacounty, "threecounty":threecounty}) + "&" + $("#orderInfo").serialize();
-				alert(JSON.stringify(backMailInfos));
 				//orderinfo.backMailInfos = JSON.stringify(backMails);
 				
 				
@@ -885,7 +888,7 @@
 						window.location.href = '${base}/admin/orderJp/list';
 					},
 					error : function() {
-						alert("error");
+						console.log("error");
 					}
 				}); 
 			}
@@ -941,27 +944,38 @@
 				 	return value;
 				 }
 			}
+			
+			//时间插件格式化  出行时间>今天>送签时间 
+			var now = new Date();
 			$("#goTripDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
+				startDate:now,
 				autoclose: true,//选中日期后 自动关闭
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
-			});
+			}).on("click",function(){  
+			    $("#goTripDate").datetimepicker("setEndDate",$("#backTripDate").val());  
+			}); 
 			$("#backTripDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
+				startDate:now,
 				autoclose: true,//选中日期后 自动关闭
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
 			});
+
 			$("#sendVisaDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
+				endDate: now,//日期小于今天
 				autoclose: true,//选中日期后 自动关闭
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
-			});
+			}).on("click",function(){  
+			    $("#sendVisaDate").datetimepicker("setEndDate",$("#outVisaDate").val());  
+			}); 
 			$("#outVisaDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
@@ -969,8 +983,6 @@
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
 			});
-		
-			
 			
 			$(function(){
 				//点击 蓝色加号图标 事件
