@@ -14,7 +14,7 @@
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	
 </head>
-<body>
+<body style="min-width:0 !important;">
 	<div class="modal-content">
 		<form id="backmail_wrapper">
 			<div class="modal-header">
@@ -28,7 +28,7 @@
 						<input id="id" name="id" type="hidden" v-model="backmailinfo.id">
 						<input id="applicantJPId" name="applicantJPId" type="hidden" v-model="backmailinfo.applicantjpid">
 						<div class="row body-from-input">
-							<div class="col-sm-3">
+							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>资料来源：</label> 
 									<select id="source" name="source" v-model="backmailinfo.source" class="form-control input-sm"/>
@@ -38,7 +38,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>快递号：</label> 
 									<input id="expressNum" name="expressNum" v-model="backmailinfo.expressnum" type="text" class="form-control input-sm" placeholder=" " />
@@ -47,13 +47,13 @@
 						</div>
 						
 						<div class="row body-from-input">
-							<div class="col-sm-3">
+							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>团队名称：</label> 
 									<input id="teamName" name="teamName" v-model="backmailinfo.teamname" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>回邮方式：</label> 
 									<select id="expressType" name="expressType" v-model="backmailinfo.expresstype" class="form-control input-sm">
@@ -66,13 +66,13 @@
 						</div>
 
 						<div class="row body-from-input">
-							<div class="col-sm-3">
+							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>联系人：</label> 
 									<input id="linkman" name="linkman" v-model="backmailinfo.linkman" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>电话：</label> 
 									<input id="telephone" name="telephone" v-model="backmailinfo.telephone" type="text" class="form-control input-sm" placeholder=" " />
@@ -80,7 +80,7 @@
 							</div>
 						</div>
 						<div class="row body-from-input" style="padding-left:0;">
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group">
 									<label><span>*</span>回邮地址：</label> 
 									<input id="expressAddress" name="expressAddress" v-model="backmailinfo.expressaddress" type="text" class="form-control input-sm" placeholder=" " />
@@ -89,13 +89,13 @@
 						</div>
 	
 						<div class="row body-from-input">
-							<div class="col-sm-3">
+							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>发票项目内容：</label> 
 									<input id="invoiceContent" name="invoiceContent" v-model="backmailinfo.invoicecontent" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>发票抬头：</label> 
 									<input id="invoiceHead" name="invoiceHead" v-model="backmailinfo.invoicehead" type="text" class="form-control input-sm" placeholder=" " />
@@ -103,13 +103,13 @@
 							</div>
 						</div>
 						<div class="row body-from-input" style="padding-left:0;">
-							<div class="col-sm-3">
+							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>税号：</label> 
 									<input id="taxNum" name="taxNum" v-model="backmailinfo.taxnum" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>备注：</label> 
 									<input id="remark" name="remark" v-model="backmailinfo.remark" type="text" class="form-control input-sm" placeholder=" " />
