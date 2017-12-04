@@ -1,4 +1,7 @@
-$(function(){
+/**
+ * 需求变更，回邮信息去除加减号
+ */
+/*$(function(){
 	//点击 蓝色加号图标 事件
 	$('.add-btn').click(function(){
 		var newDiv=$(this).parent().clone();//克隆标签模块
@@ -30,4 +33,34 @@ function clearBackMailInfo(newDiv){
 	newDiv.find('[name=expressNum]').val("");
 	newDiv.find('[name=taxNum]').val("");
 	newDiv.find('[name=remark]').val("");
-}
+}*/
+
+//VUE准备数据
+var backMailObj;
+new Vue({
+	el: '#backmail_wrapper',
+	data: {
+		backmailinfo:""
+
+	},
+	created:function(){
+		backMailObj=this;
+		var url = '/admin/firstTrialJp/backMailInfo.html';
+		$.ajax({ 
+			url: url,
+			type:'post',
+			dataType:"json",
+			data:{
+				orderid:orderid
+			},
+			success: function(data){
+				backMailObj.backmailinfo = data.backmailinfo
+			}
+		});
+	},
+	methods:{
+		save : function(){
+			console.log("回邮信息，添加成功");
+		}
+	}
+});

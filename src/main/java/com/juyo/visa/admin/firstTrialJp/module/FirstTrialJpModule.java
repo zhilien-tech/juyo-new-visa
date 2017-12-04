@@ -187,4 +187,16 @@ public class FirstTrialJpModule {
 	public Boolean isQualified(@Param("orderjpid") Integer orderjpid) {
 		return firstTrialJpViewService.isQualified(orderjpid);
 	}
+
+	/**
+	 * 跳转到回邮信息页
+	 *
+	 * @return null
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object backMailInfo() {
+		return null;
+	}
 }
