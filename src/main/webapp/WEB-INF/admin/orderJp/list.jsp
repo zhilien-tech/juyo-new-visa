@@ -80,11 +80,11 @@
 								<div><label>状态：</label><span>{{data.status}}</span></div>	
 								<div>
 									<label>操作：</label>
-									<i class="edit" v-on:click="order(data.orderid)"> </i>
+									<i class="edit"  v-if="a" v-on:click="order(data.orderid)" v-else disabled> </i>
 									<i class="share" v-on:click="share(data.orderid)"> </i>
 									<i class="theTrial" v-on:click="theTrial(data.orderid)"> </i>
 									<i class="return" > </i>
-									<i class="toVoid" > </i>
+									<i class="toVoid" v-on:click="disabled(data.orderid)"> </i>
 								</div>
 							</div>
 							<ul class="card-content">
@@ -99,6 +99,7 @@
 							</ul>
 						</div>
 					</div><!-- end 卡片列表 -->
+					<input id="hideOrder" type="button" value="您还没有添加任何数据，快去下单吧" class="orderJp none" onclick="addOrder();"/>
 				</section>
 			</div>
 		</div>
@@ -119,61 +120,113 @@
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var timeStart = "";
+		var timeEnd = "";
+		var sendDateStart = "";
+		var sendDateEnd = "";
+		var outDateStart = "";
+		var outDateEnd = "";
+		
+		
+		
+
 		//异步加载的URL地址
-	    var url="${base}/admin/orderJp/listData";
-	    //vue表格数据对象
-	    var _self;
+		var url = "${base}/admin/orderJp/listData";
+		//vue表格数据对象
+		var _self;
 		new Vue({
-			el: '#wrapper',
-			data: {orderJpData:""},
-			created:function(){
-	            _self=this;
-	            $.ajax({ 
-	            	url: url,
-	            	dataType:"json",
-	            	type:'post',
-	            	success: function(data){
-	            		_self.orderJpData = data.orderJp;
-	              	}
-	            });
-	        },
-	        methods:{
-	        	order:function(id){
-	        			window.open('${base}/admin/orderJp/order.html'+(id > 0?('?id='+id):''));//跳转到更新页面
-	        			//window.location.href = '${base}/admin/orderJp/order.html?id='+id;
-	        	},
-	        	share:function(id){//分享
+			el : '#wrapper',
+			data : {
+				orderJpData : "",
+				a : "1"
+			},
+			created : function() {
+				_self = this;
+				$.ajax({
+					url : url,
+					dataType : "json",
+					type : 'post',
+					success : function(data) {
+						if(data.orderJp == null || data.orderJp == "" || data.orderJp == undefined){
+							$(".orderJp").removeClass("none");
+						}else{
+							_self.orderJpData = data.orderJp;
+						}
+					}
+				});
+			},
+			methods : {
+				order : function(id) {
+					window.open('${base}/admin/orderJp/order.html'
+							+ (id > 0 ? ('?id=' + id) : ''));//跳转到更新页面
+					//window.location.href = '${base}/admin/orderJp/order.html?id='+id;
+				},
+				share : function(id) {//分享
 					layer.open({
-						type: 2,
-						title: false,
-						closeBtn:false,
-						fix: false,
-						maxmin: false,
-						shadeClose: false,
-						scrollbar: false,
-						area: ['900px', '551px'],
-						content:'/admin/orderJp/share.html?id='+id
+						type : 2,
+						title : false,
+						closeBtn : false,
+						fix : false,
+						maxmin : false,
+						shadeClose : false,
+						scrollbar : false,
+						area : [ '900px', '551px' ],
+						content : '/admin/orderJp/share.html?id=' + id
 					});
 				},
-				theTrial:function(id){
+				theTrial : function(id) {
 					layer.load(1);
-					$.ajax({ 
-				    	url: '${base}/admin/orderJp/firtTrialJp',
-				    	dataType:"json",
-				    	data:{orderId:id},
-				    	type:'post',
-				    	success: function(data){
-				    		layer.closeAll("loading");
-				    		layer.msg("初审通过");
-				      	}
-				    }); 
+					$.ajax({
+						url : '${base}/admin/orderJp/firtTrialJp',
+						dataType : "json",
+						data : {
+							orderId : id
+						},
+						type : 'post',
+						success : function(data) {
+							layer.closeAll("loading");
+							layer.msg("初审通过");
+						}
+					});
+				},
+				disabled : function(orderid) {
+					_self.a = "";
 				}
-	        	
-	        } 
+
+			}
 		});
+		var days = new Date();
+		days.setTime(days.getTime());
+		var s = days.getFullYear()+"-" + (days.getMonth()+1) + "-" + days.getDate();
 		
+		$("#start_time").daterangepicker({
+			autoApply: true,
+			timePicker: false,
+			startDate:s,
+			endDate:s,
+			locale: {
+				format: "YYYY-MM-DD", //设置显示格式
+				applyLabel: "确定", //确定按钮文本
+				cancelLabel: '取消', //取消按钮文本
+			},
+		}, function(start, end, label) {
+			timeStart = start.format('YYYY-MM-DD');
+			timeEnd = end.format('YYYY-MM-DD');
+			$("#searchbtn").click();
+		});
+		$("#sendSignDate").daterangepicker(null, function(start, end, label) {
+			sendDateStart = start.format('YYYY-MM-DD');
+			sendDateEnd = end.format('YYYY-MM-DD');
+			$("#searchbtn").click();
+		});
+		$("#signOutDate").daterangepicker(null, function(start, end, label) {
+			outDateStart = start.format('YYYY-MM-DD');
+			outDateEnd = end.format('YYYY-MM-DD');
+			$("#searchbtn").click();
+		});
+
 		/*清空*/
-		$("#emptyBtn").click(function(){
+		$("#emptyBtn").click(function() {
 			$("#searchStr").val("");
 			$("#status").val("");
 			$("#source").val("");
@@ -181,25 +234,46 @@
 			$("#sendSignDate").val("");
 			$("#signOutDate").val("");
 			$("#start_time").val("");
+			timeStart = "";
+			timeEnd = "";
+			sendDateStart = "";
+			sendDateEnd = "";
+			outDateStart = "";
+			outDateEnd = "";
 			$("#searchbtn").click();
 		});
-		$("#searchbtn").click(function(){
+		$("#searchbtn").click(function() {
 			var status = $('#status').val();
 			var source = $('#source').val();
 			var visaType = $('#visaType').val();
-			var sendSignDate = $('#sendSignDate').val();
-			var signOutDate = $('#signOutDate').val();
+			var sendSignDateStart = sendDateStart;
+			var sendSignDateEnd = sendDateEnd;
+			var signOutDateStart = outDateStart;
+			var signOutDateEnd = outDateEnd;
 			var searchStr = $('#searchStr').val();
-			var startTime = $('#start_time').val();
-			$.ajax({ 
-	        	url: url,
-	        	data:{status:status,source:source,starttime:startTime,visaType:visaType,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr},
-	        	dataType:"json",
-	        	type:'post',
-	        	success: function(data){
-	        		_self.orderJpData = data.orderJp;
-	          	}
-	        });
+			var startTimeStart = timeStart;
+			var startTimeEnd = timeEnd;
+			console.log(searchStr);
+			$.ajax({
+				url : url,
+				data : {
+					status : status,
+					source : source,
+					startTimeStart : startTimeStart,
+					startTimeEnd : startTimeEnd,
+					visaType : visaType,
+					sendSignDateStart : sendDateStart,
+					sendSignDateEnd : sendDateEnd,
+					signOutDateStart : outDateStart,
+					signOutDateEnd : outDateEnd,
+					searchStr : searchStr
+				},
+				dataType : "json",
+				type : 'post',
+				success : function(data) {
+					_self.orderJpData = data.orderJp;
+				}
+			});
 		});
 		/* function search(){
 			var status = $('#status').val();
@@ -209,42 +283,34 @@
 			var signOutDate = $('#signOutDate').val();
 			var searchStr = $('#searchStr').val();
 			$.ajax({ 
-	        	url: url,
-	        	data:{status:status,source:source,visaType:visaType,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr},
-	        	dataType:"json",
-	        	type:'post',
-	        	success: function(data){
-	        		_self.orderJpData = data.orderJp;
-	        		//console.log(JSON.stringify(data));
-	          	}
-	        });
+		    	url: url,
+		    	data:{status:status,source:source,visaType:visaType,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr},
+		    	dataType:"json",
+		    	type:'post',
+		    	success: function(data){
+		    		_self.orderJpData = data.orderJp;
+		    		//console.log(JSON.stringify(data));
+		      	}
+		    });
 		} */
 		//跳转添加页
-		 function addOrder(){
+		function addOrder() {
 			window.location.href = '${base}/admin/orderJp/addOrder';
-		}  
-		
-		function countryChange(){
+		}
+
+		function countryChange() {
 			$("#searchbtn").click();
 		}
-		
+
 		//搜索回车事件
-		 function onkeyEnter(){
-			    var e = window.event || arguments.callee.caller.arguments[0];
-			    if(e && e.keyCode == 13){
-					 $("#searchbtn").click();
-				 }
+		function onkeyEnter() {
+			var e = window.event || arguments.callee.caller.arguments[0];
+			if (e && e.keyCode == 13) {
+				$("#searchbtn").click();
 			}
+		}
 		
-		 $("#start_time").daterangepicker(null, function(start, end, label) {
-             console.log(start.toISOString(), end.toISOString(), label);
-         });
-		 $("#sendSignDate").daterangepicker(null, function(start, end, label) {
-             console.log(start.toISOString(), end.toISOString(), label);
-         });
-		 $("#signOutDate").daterangepicker(null, function(start, end, label) {
-             console.log(start.toISOString(), end.toISOString(), label);
-         });
+		
 	</script>
 </body>
 </html>

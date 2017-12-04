@@ -396,7 +396,7 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object sendEmail(@Param("orderid") int orderid, @Param("applicantid") int applicantid, HttpSession session) {
+	public Object sendEmail(@Param("orderid") int orderid, @Param("applicantid") String applicantid, HttpSession session) {
 		return saleViewService.sendEmail(orderid, applicantid, session);
 	}
 

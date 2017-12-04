@@ -53,7 +53,8 @@
 										<label><span>*</span>备注：</label>
 										
 										</br>
-											<input name="relationRemark" id="relationRemark" style="height:35px;width:100px;position:absolute"    value="${obj.visaInfo.relationRemark }">  
+											
+											<%-- <input name="relationRemark" id="relationRemark" style="height:35px;width:100px;position:absolute"    value="${obj.visaInfo.relationRemark }">  
 												<span style="margin-left:100px;width:200px;overflow:hidden;" >  
 												  <select name="bh" id="bh" style="height:35px;width:120px;margin-left:-100px"   
 												 onchange="document.getElementById('relationRemark').value=this.options[this.selectedIndex].text">    
@@ -61,10 +62,24 @@
 												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
 											</c:forEach>
 												  </select>  
-												  </span> 
+												  </span>  --%>
 										
 										
-										<!-- <input id="relationRem" name="relationRem" type="text" class="form-control input-sm" placeholder=" " /> -->
+										
+										
+										
+										
+										<input list="movie" id="relationRemark" name="relationRemark" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.relationRemark}"/>
+										<datalist id="movie">
+										<option>主卡</option>
+										<option>朋友</option>
+										<option>同事</option>
+										<option>同学</option>
+											<%-- <c:forEach var="map" items="${obj.applicantRemark}">
+												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
+											</c:forEach> --%>
+										</datalist>
+
 										<%-- <select id="relationRemark" name="relationRemark" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.applicantRemark}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
@@ -90,7 +105,21 @@
 											<label><span>*</span>与主申请人关系：</label>
 											
 											</br>
-											<input name="mainRelation" id="mainRelation" style="height:35px;width:100px;position:absolute"    value="${obj.visaInfo.mainRelation }">  
+											
+											<input list="movi" id="mainRelation" name="mainRelation" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.mainRelation}"/>
+										<datalist id="movi">
+										<option>之妻</option>
+										<option>之夫</option>
+										<option>之子</option>
+										<option>之女</option>
+										<option>之父</option>
+										<option>之母</option>
+										<option>朋友</option>
+										<option>同事</option>
+										<option>同学</option>
+											</datalist>
+											
+											<%-- <input name="mainRelation" id="mainRelation" style="height:35px;width:100px;position:absolute"    value="${obj.visaInfo.mainRelation }">  
 												<span style="margin-left:100px;width:200px;overflow:hidden;" >  
 												  <select name="bh" id="bh" style="height:35px;width:120px;margin-left:-100px"   
 												 onchange="document.getElementById('mainRelation').value=this.options[this.selectedIndex].text">    
@@ -98,7 +127,7 @@
 												<option value="${map.key}" ${map.key==obj.visaInfo.mainRelation?'selected':''}>${map.value}</option>
 											</c:forEach>
 												  </select>  
-												  </span>  
+												  </span>   --%>
 											
 											
 											<!-- <input id="" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
@@ -305,6 +334,10 @@
 		var base = "${base}";
 		$(function() {
 			
+			$("#relationRem").focus(function(){
+				
+			});
+			
 			var career = $("#careerStatus").val();
 			if(career == 4){
 				$("#schoolName").html("<span>*</span>学校名称：");
@@ -312,6 +345,9 @@
 				$("#schoolAddress").html("<span>*</span>学校地址：");
 			}
 			$("#careerStatus").change(function(){
+				$("#name").val("");
+				$("#telephone").val("");
+				$("#address").val("");
 				var career = $(this).val();
 				if(career == 4){
 					$("#schoolName").html("<span>*</span>学校名称：");

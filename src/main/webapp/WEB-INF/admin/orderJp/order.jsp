@@ -77,7 +77,7 @@
 											<label><span>*</span>公司全称：</label> 
 											<select id ="compName" name="name"
 												class="form-control select2 cityselect2 " multiple="multiple"
-												data-placeholder="" v-model="customerInfo.name">
+												data-placeholder="" >
 												<c:if test="${ !empty obj.customer.id }">
 													<option value="${obj.customer.id }" selected="selected">${obj.customer.name }</option>
 												</c:if>
@@ -89,7 +89,7 @@
 											<label><span>*</span>公司简称：</label> 
 											<select id = "comShortName" name="shortname"
 												class="form-control select2 cityselect2 " multiple="multiple"
-												data-placeholder="" v-model="customerInfo.shortname">
+												data-placeholder="" >
 												<c:if test="${ !empty obj.customer.id }">
 													<option value="${obj.customer.id }" selected="selected">${obj.customer.shortname }</option>
 												</c:if>
@@ -118,7 +118,7 @@
 										<label><span>*</span>联系人：</label> 
 										<select id = "linkman" name="cusLinkman"
 												class="form-control select2 cityselect2 " multiple="multiple"
-												data-placeholder="" v-model="customerInfo.linkman">
+												data-placeholder="" >
 												<c:if test="${ !empty obj.customer.id }">
 													<option value="${obj.customer.id }" selected="selected">${obj.customer.linkman }</option>
 												</c:if>
@@ -130,7 +130,7 @@
 										<label><span>*</span>手机号：</label> 
 										<select id = "mobile" name="mobile"
 												class="form-control select2 cityselect2 " multiple="multiple"
-												data-placeholder="" v-model="customerInfo.mobile">
+												data-placeholder="" >
 												<c:if test="${ !empty obj.customer.id }">
 													<option value="${obj.customer.id }" selected="selected">${obj.customer.mobile }</option>
 												</c:if>
@@ -140,7 +140,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>邮箱：</label> 
-										<select id = "email" name="cusEmail" class="form-control select2 cityselect2 " multiple="multiple" data-placeholder="" v-model="customerInfo.email">
+										<select id = "email" name="cusEmail" class="form-control select2 cityselect2 " multiple="multiple" data-placeholder="" >
 											<c:if test="${ !empty obj.customer.id }">
 													<option value="${obj.customer.id }" selected="selected">${obj.customer.email }</option>
 												</c:if>
@@ -694,6 +694,7 @@
 	
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
+		
 		//签证六县，访问三县选中状态
 		var threecounty = '${obj.orderJpinfo.visaCounty}';
 		if(threecounty){
@@ -719,17 +720,8 @@
 		}
 	
 		$(function(){
-			/* //点击 蓝色加号图标 事件
-			$('.add-btn').click(function(){
-		    	var $html=$(this).parent().clone();//克隆标签模块
-		    	$(this).parents('.info').append($html);//添加克隆的内容
-		    	$html.find('.add-btn').remove();
-		    	$html.append('<i class="remove-btn"></i>');
-			});
-			//点击 蓝色叉号图标 事件
-			$(".info").on("click", ".remove-btn", function(){
-				$(this).parent().remove();//删除 对相应的本模块
-			}); */
+			customerTypeSelect2();
+			
 			var customerType = $("#customerType").val();
 			if(customerType == 4){
 				$(".on-line").hide();//隐藏select2部分字段
@@ -737,18 +729,8 @@
 			}else{
 				$(".on-line").show();//显示select2部分字段
 				$(".zhiKe").addClass("none");
-				customerTypeSelect2();
+				//customerTypeSelect2();
 			}
-			
-			
-			
-			//加急 
-			/* var urgentType = $('#urgentType').val();
-			if (urgentType == 1) {
-				$("#urgentDays").addClass("none");
-			} else {
-				$("#urgentDays").removeClass("none");
-			} */
 			
 			$('#urgentType').change(function(){
 				var thisval = $(this).val();
@@ -772,13 +754,6 @@
 				$(this).parent().remove();//删除 对相应的本模块
 			});
 			
-			//如果有数据，隐藏添加回邮信息按钮；同时，设置最有一个为减号按钮
-			
-			//新时间插件
-			/* $('#sendVisaDate').daterangepicker(null, function(start, end, label) {
-                console.log(start.toISOString(), end.toISOString(), label);
-            }); */
-
 		});
 
 		//“+”号 回邮寄信息
@@ -873,7 +848,6 @@
 				customerInfo : "",
 				orderInfo : "",
 				applicantInfo : ""
-			//backmailInfo : ""
 			},
 			created : function() {
 				orderobj = this;
@@ -936,29 +910,31 @@
 						});
 						
 						$("#customerType").change(function(){
+							$("#linkman2").val("");
+							$("#compName2").val("");
+							$("#comShortName2").val("");
+							$("#mobile2").val("");
+							$("#email2").val("");
+							//客户姓名清空
+							$("#linkman").val(null).trigger("change");
+							//电话清空
+							$("#mobile").val(null).trigger("change");
+							//公司全称
+							$("#compName").val(null).trigger("change");
+							//公司简称
+							$("#comShortName").val(null).trigger("change");
+							//邮箱清空
+							$("#email").val(null).trigger("change");
 							var thisval = $(this).val();
 							if(thisval == 4){
 								$(".on-line").hide();//隐藏select2部分字段
 								$(".zhiKe").removeClass("none");
-								$("#linkman2").val("");
-								$("#compName2").val("");
-								$("#comShortName2").val("");
-								$("#mobile2").val("");
-								$("#email2").val("");
+								
 							}else{
 								$(".on-line").show();//显示select2部分字段
 								$(".zhiKe").addClass("none");
-								customerTypeSelect2();
-								//客户姓名清空
-								$("#linkman").val(null).trigger("change");
-								//电话清空
-								$("#mobile").val(null).trigger("change");
-								//公司全称
-								$("#compName").val(null).trigger("change");
-								//公司简称
-								$("#comShortName").val(null).trigger("change");
-								//邮箱清空
-								$("#email").val(null).trigger("change");
+								//customerTypeSelect2();
+								
 							}
 						});
 						
@@ -974,21 +950,13 @@
 						});
 					},
 					error : function() {
-						alert("error");
+						console.log("error");
 					}
 				});
 			},
 			methods : {
 				order : function() {
 					
-					var customerType = $("#customerType").val();
-					if(customerType == 4){
-						orderobj.customerInfo.linkman = $("#linkman2").val();
-						orderobj.customerInfo.name = $("#compName2").val();
-						orderobj.customerInfo.shortname = $("#comShortName2").val();
-						orderobj.customerInfo.mobile = $("#mobile2").val();
-						orderobj.customerInfo.email = $("#email2").val();
-					}
 					
 					//绑定签证城市
 					var visacounty = "";
@@ -1023,23 +991,76 @@
 					orderobj.orderInfo.outvisadate = $('#outVisaDate').val();
 					var backMails = getMailInfos();
 					var editdata = orderobj.orderInfo;
-					editdata.customerinfo = JSON.stringify(orderobj.customerInfo);
 					editdata.backMailInfos = JSON.stringify(backMails);
-					//var applicant = orderobj.applicantInfo;
 					var backmail;
-					$.ajax({
-						type : 'POST',
-						data : editdata,
-						url : '${base}/admin/orderJp/order',
-						success : function(data) {
-							layer.closeAll('loading');
-				    		window.location.reload();
-							//window.location.href = '${base}/admin/orderJp/list';
-						},
-						error : function() {
-							alert("error");
-						}
-					}); 
+					
+					
+					var customerType = $("#customerType").val();
+					if(customerType == 4){
+						orderobj.customerInfo.linkman = $("#linkman2").val();
+						orderobj.customerInfo.name = $("#compName2").val();
+						orderobj.customerInfo.shortname = $("#comShortName2").val();
+						orderobj.customerInfo.mobile = $("#mobile2").val();
+						orderobj.customerInfo.email = $("#email2").val();
+						orderobj.customerInfo.source = 4;
+						editdata.customerinfo = JSON.stringify(orderobj.customerInfo);
+						$.ajax({
+							type : 'POST',
+							data : editdata,
+							url : '${base}/admin/orderJp/order',
+							success : function(data) {
+								layer.closeAll('loading');
+					    		window.location.reload();
+								//window.location.href = '${base}/admin/orderJp/list';
+							},
+							error : function() {
+								console.log("error");
+							}
+						}); 
+					}else{
+						var cusId = parseInt($("#linkman").val());
+						$.ajax({
+							async:false,
+							url : 'getCustomerById',
+							type : 'POST',
+							data : {
+								'id' : cusId
+							},
+							dataType:'json',
+							success : function(data) {
+								orderobj.customerInfo.id = data.id;
+								orderobj.customerInfo.linkman = data.linkman;
+								orderobj.customerInfo.name = data.name;
+								orderobj.customerInfo.shortname = data.shortname;
+								orderobj.customerInfo.mobile = data.mobile;
+								orderobj.customerInfo.email = data.email;
+								orderobj.customerInfo.source = customerType;
+								editdata.customerinfo = JSON.stringify(orderobj.customerInfo);
+								$.ajax({
+									async:false,
+									type : 'POST',
+									data : editdata,
+									url : '${base}/admin/orderJp/order',
+									success : function(data) {
+										layer.closeAll('loading');
+							    		window.location.reload();
+										//window.location.href = '${base}/admin/orderJp/list';
+									},
+									error : function() {
+										console.log("error");
+									}
+								}); 
+							},
+							error : function() {
+							}
+						});
+					}
+					
+					
+					
+					//var applicant = orderobj.applicantInfo;
+					
+					
 					//window.location.href = '${base}/admin/orderJp/order';
 					//console.log(message);
 					//alert(JSON.stringify(event.target)); 
