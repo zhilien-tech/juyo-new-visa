@@ -49,10 +49,12 @@ public class OrderJpForm extends OrderForm {
 	//每页多少条
 	private Integer pageSize = 10;
 
-	private Date starttime;
-	private Date end_time;
-	private Date sendSignDate;
-	private Date signOutDate;
+	private Date startTimeStart;
+	private Date startTimeEnd;
+	private Date sendSignDateStart;
+	private Date sendSignDateEnd;
+	private Date signOutDateStart;
+	private Date signOutDateEnd;
 
 	private Integer userType;
 
@@ -79,16 +81,19 @@ public class OrderJpForm extends OrderForm {
 					.or("aj.applicants", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
-		if (!Util.isEmpty(starttime)) {
-			SqlExpressionGroup e1 = Cnd.exps("o.createTime", ">=", starttime).and("vncoj.createtime", "<=", end_time);
+		if (!Util.isEmpty(startTimeStart) && !Util.isEmpty(startTimeEnd)) {
+			SqlExpressionGroup e1 = Cnd.exps("o.createTime", ">=", startTimeStart).and("o.createTime", "<=",
+					startTimeEnd);
 			cnd.and(e1);
 		}
-		if (!Util.isEmpty(signOutDate)) {
-			SqlExpressionGroup e1 = Cnd.exps("o.outVisaDate", "=", signOutDate);
+		if (!Util.isEmpty(signOutDateStart) && !Util.isEmpty(signOutDateEnd)) {
+			SqlExpressionGroup e1 = Cnd.exps("o.outVisaDate", ">=", signOutDateStart).and("o.outVisaDate", "<=",
+					signOutDateEnd);
 			cnd.and(e1);
 		}
-		if (!Util.isEmpty(sendSignDate)) {
-			SqlExpressionGroup e1 = Cnd.exps("o.sendVisaDate", "=", sendSignDate);
+		if (!Util.isEmpty(sendSignDateStart) && !Util.isEmpty(sendSignDateEnd)) {
+			SqlExpressionGroup e1 = Cnd.exps("o.sendVisaDate", "=", sendSignDateStart).and("o.sendVisaDate", "<=",
+					sendSignDateEnd);
 			cnd.and(e1);
 		}
 		if (!Util.isEmpty(getStatus())) {

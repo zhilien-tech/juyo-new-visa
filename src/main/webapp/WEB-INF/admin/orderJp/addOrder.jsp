@@ -592,29 +592,30 @@
 			}); */
 			
 			$("#customerType").change(function(){
+				$("#linkman2").val("");
+				$("#compName2").val("");
+				$("#comShortName2").val("");
+				$("#mobile2").val("");
+				$("#email2").val("");
+				//客户姓名清空
+				$("#linkman").val(null).trigger("change");
+				//电话清空
+				$("#mobile").val(null).trigger("change");
+				//公司全称
+				$("#compName").val(null).trigger("change");
+				//公司简称
+				$("#comShortName").val(null).trigger("change");
+				//邮箱清空
+				$("#email").val(null).trigger("change");
 				var thisval = $(this).val();
 				if(thisval == 4){
 					$(".on-line").hide();//隐藏select2部分字段
 					$(".zhiKe").removeClass("none");
-					$("#linkman2").val("");
-					$("#compName2").val("");
-					$("#comShortName2").val("");
-					$("#mobile2").val("");
-					$("#email2").val("");
+					
 				}else{
 					$(".on-line").show();//显示select2部分字段
 					$(".zhiKe").addClass("none");
-					customerTypeSelect2();
-					//客户姓名清空
-					$("#linkman").val(null).trigger("change");
-					//电话清空
-					$("#mobile").val(null).trigger("change");
-					//公司全称
-					$("#compName").val(null).trigger("change");
-					//公司简称
-					$("#comShortName").val(null).trigger("change");
-					//邮箱清空
-					$("#email").val(null).trigger("change");
+					//customerTypeSelect2();
 				}
 			});
 			
@@ -875,7 +876,6 @@
 				}
 				var backMailInfos = JSON.stringify(getMailInfos());
 				var orderinfo = $.param({"backMailInfos":backMailInfos, "visacounty":visacounty, "threecounty":threecounty}) + "&" + $("#orderInfo").serialize();
-				alert(JSON.stringify(backMailInfos));
 				//orderinfo.backMailInfos = JSON.stringify(backMails);
 				
 				
@@ -888,7 +888,7 @@
 						window.location.href = '${base}/admin/orderJp/list';
 					},
 					error : function() {
-						alert("error");
+						console.log("error");
 					}
 				}); 
 			}
