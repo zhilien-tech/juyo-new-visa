@@ -262,7 +262,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['900px', '550px'],
-    		    content:'/admin/orderJp/passportInfo.html?id='+applyId+'&orderid='+orderid
+    		    content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid='+orderid
     	    });
 		},
 		visaInfo:function(applyId){
@@ -275,7 +275,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?applicantId='+applyId+'&orderid='+orderid+'&isOrderUpTime=1'
+				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid+'&isOrderUpTime=1'
 			});
 		},
 		qualified:function(applyId){
@@ -351,6 +351,22 @@ function successCallBack(status){
 				orderobj.orderinfo = data.orderinfo;
 			}
 		}); 
+	}else if(status == 2){
+		layer.msg('发送成功');
+		var url = '/admin/firstTrialJp/getJpTrialDetailData.html';
+		$.ajax({ 
+			url: url,
+			type:'post',
+			dataType:"json",
+			data:{
+				orderid:orderid,
+				orderjpid:orderjpid
+			},
+			success: function(data){
+				orderobj.applyinfo = data.applyinfo;
+				orderobj.orderinfo = data.orderinfo;
+			}
+		}); 
 	}
 }
 
@@ -360,28 +376,37 @@ $(".addExpressInfoBtn").click(function(){
 	$(this).hide();
 });
 
-//时间插件格式化
+//时间插件格式化  出行时间>今天>送签时间 
+var now = new Date();
 $("#gotripdate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
+	startDate:now,
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
-});
+}).on("click",function(){  
+    $("#gotripdate").datetimepicker("setEndDate",$("#backtripdate").val());  
+}); 
 $("#backtripdate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
+	startDate:now,
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
 });
+
 $("#sendvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
+	endDate: now,//日期小于今天
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
-});
+}).on("click",function(){  
+    $("#sendvisadate").datetimepicker("setEndDate",$("#outvisadate").val());  
+}); 
 $("#outvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',

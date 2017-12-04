@@ -43,6 +43,10 @@
 	position: relative;
 	top: 5px;
 }
+.form-group span,.form-control {
+    width: 297.05px;
+}
+
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -67,7 +71,8 @@
 				<form id="orderInfo">
 					<div class="info" id="customerInfo" ref="customerInfo">
 						<p class="info-head">客户信息</p>
-						<div class="info-body-from">
+						<!-- *** -->
+						<div class="info-body-from"  style="margin-left:12%;">
 							<div class="row body-from-input">
 								<!-- 公司全称 -->
 								<div class="col-sm-3">
@@ -161,7 +166,7 @@
 							<!-- end select2 线上/OTS/线下 -->
 
 
-							<div class="row body-from-input zhiKe none">
+							<div class="row body-from-input">
 								<!-- input 直客 -->
 								<div class="col-sm-3">
 									<div class="form-group">
@@ -192,7 +197,7 @@
 					<!-- 订单信息 -->
 					<div class="orderInfo info" id="orderInfo">
 						<p class="info-head">订单信息</p>
-						<div class="info-body-from">
+						<div class="info-body-from" style="margin-left:12%;">
 							<div class="row body-from-input">
 								<!-- 人数/领区/加急 -->
 								<div class="col-sm-3">
@@ -557,8 +562,7 @@
 
 	</div>
 
-	<script
-		src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script>
@@ -568,8 +572,7 @@
 	<script src="${base}/admin/orderJp/order.js"></script>
 	<!-- 本页面js文件 -->
 	<!-- select2 -->
-	<script
-		src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/admin/orderJp/searchCustomerInfo.js"></script>
 

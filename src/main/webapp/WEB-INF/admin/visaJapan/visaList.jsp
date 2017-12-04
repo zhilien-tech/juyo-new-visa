@@ -11,6 +11,7 @@
 	<title>签证-日本</title>
 	<link rel="stylesheet" href="${base}/references/public/css/visaJapan.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -30,7 +31,7 @@
 								</select>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onkeypress="onkeyEnter()"/>
+								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间 - 出签时间" onkeypress="onkeyEnter()"/>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/>
@@ -87,7 +88,8 @@
 				</section>
 			</div>
 		</div>
-
+		<input type="hidden" id="pageNumber" name="pageNumber" value="1">
+		<input type="hidden" id="pagetotal" name="pagetotal">
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
@@ -95,6 +97,8 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/moment.min.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/daterangepicker.js"></script>
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
@@ -119,6 +123,7 @@
             	type:'post',
             	success: function(data){
             		_self.visaJapanData = data.visaJapanData;
+            		$('#pagetotal').val(data.pagetotal);
               	}
             });
         },
@@ -179,6 +184,47 @@
         	}
         }
 	});
+	// 注册scroll事件并监听 
+	$(window).scroll(function(){
+	　　var scrollTop = $(this).scrollTop();
+	　　var scrollHeight = $(document).height();
+	　　var windowHeight = $(this).height();
+		// 判断是否滚动到底部  
+	　　if(scrollTop + windowHeight == scrollHeight){
+	　　　　// alert("滚到底了");
+			//分页条件
+			var pageNumber = $('#pageNumber').val();
+			pageNumber = parseInt(pageNumber) + 1;
+			$('#pageNumber').val(pageNumber);
+			var pagetotal = parseInt($('#pagetotal').val());
+			//搜索条件
+			var status = $('#status').val();
+			var sendSignDate = $('#sendSignDate').val();
+			var signOutDate = $('#signOutDate').val();
+			var searchStr = $('#searchStr').val();
+			//异步加载数据
+			if(pageNumber <= pagetotal){
+				//遮罩
+				layer.load(1);
+				$.ajax({ 
+			    	url: url,
+			    	data:{status:status,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr,pageNumber:pageNumber},
+			    	dataType:"json",
+			    	type:'post',
+			    	success: function(data){
+			    		//关闭遮罩
+			    		layer.closeAll('loading');
+			    		$.each(data.visaJapanData,function(index,item){
+			    			_self.visaJapanData.push(item);
+			    		});
+			    		//没有更多数据
+			      	}
+			    });
+			}
+	　　}
+	});
+	
+
 	//跳转 签证详情页
 	function edit(orderid){
 		window.location.href = '${base}/admin/visaJapan/visaDetail.html?orderid='+orderid;
@@ -223,20 +269,25 @@
 	
 	$(function(){
 		//送签时间
-		$("#sendSignDate").datetimepicker({
+		/* $("#sendSignDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
 			autoclose: true,//选中日期后 自动关闭
-			pickerPosition:"bottom-left"//显示位置
-			
+			pickerPosition:"bottom-left",//显示位置
+			minView: "month"
 		});
 		//出签时间
 		$("#signOutDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
 			autoclose: true,//选中日期后 自动关闭
-			pickerPosition:"bottom-left"//显示位置
+			pickerPosition:"bottom-left",//显示位置
+			minView: "month"
 			
+		}); */
+		
+		$('#sendSignDate').daterangepicker(null, function(start, end, label) {
+		  	console.log(start.toISOString(), end.toISOString(), label);
 		});
 	});
 	</script>
