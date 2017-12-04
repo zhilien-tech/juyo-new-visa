@@ -44,7 +44,7 @@ new Vue({
 	},
 	created:function(){
 		backMailObj=this;
-		var url = '/admin/firstTrialJp/getBackMailInfo.html';
+		var url = '/admin/backMailJp/getBackMailInfo.html';
 		$.ajax({ 
 			url: url,
 			type:'post',
@@ -77,7 +77,7 @@ function save(){
 	backMailObj.backmailinfo.remark = $("#remark").val();
 	var editdata = backMailObj.backmailinfo;
 	$.ajax({
-		url: '/admin/firstTrialJp/saveBackMailInfo.html',
+		url: '/admin/backMailJp/saveBackMailInfo.html',
 		dataType:"json",
 		data:editdata,
 		type:'post',

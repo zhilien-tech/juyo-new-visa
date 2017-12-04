@@ -288,7 +288,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/firstTrialJp/backMailInfo.html?applicantId='+applyId
+				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId
 			});
 		},
 		qualified:function(applyId){
