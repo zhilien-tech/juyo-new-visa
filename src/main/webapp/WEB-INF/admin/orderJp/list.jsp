@@ -69,6 +69,7 @@
 							</div>
 							<div class="col-md-2 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onchange="countryChange();"/>
+								
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
@@ -77,14 +78,28 @@
 							<div class="card-head">
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>	
 								<div><label>人数：</label><span>{{data.peoplenum}}</span></div>	
-								<div><label>状态：</label><span>{{data.status}}</span></div>	
+								<div v-if="data.isdisabled==1">
+								<label>状态：</label><span>作废</span>
+								</div>	
+								<div v-else>
+								<label>状态：</label><span>{{data.status}}</span>
+								</div>
 								<div>
 									<label>操作：</label>
-									<i class="edit"  v-if="a" v-on:click="order(data.orderid)" v-else disabled> </i>
-									<i class="share" v-on:click="share(data.orderid)"> </i>
-									<i class="theTrial" v-on:click="theTrial(data.orderid)"> </i>
-									<i class="return" > </i>
-									<i class="toVoid" v-on:click="disabled(data.orderid)"> </i>
+									<div v-if="data.isdisabled==1">
+										<i class="edit"  v-on:click="" > </i>
+										<i class="share" v-on:click=""> </i>
+										<i class="theTrial" v-on:click=""> </i>
+										<i class="return" > </i>
+										<i class="toVoid" v-on:click="undisabled(data.orderid)"> </i>
+									</div>
+									<div v-else>
+										<i class="edit"  v-on:click="order(data.orderid)"> </i>
+										<i class="share" v-on:click="share(data.orderid)"> </i>
+										<i class="theTrial" v-on:click="theTrial(data.orderid)"> </i>
+										<i class="return" > </i>
+										<i class="toVoid" v-on:click="disabled(data.orderid, data.status)"> </i>
+									</div>
 								</div>
 							</div>
 							<ul class="card-content">
@@ -119,6 +134,7 @@
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
+	
 		var BASE_PATH = '${base}';
 		var timeStart = "";
 		var timeEnd = "";
@@ -126,9 +142,7 @@
 		var sendDateEnd = "";
 		var outDateStart = "";
 		var outDateEnd = "";
-		
-		
-		
+		var ordersta = "";
 
 		//异步加载的URL地址
 		var url = "${base}/admin/orderJp/listData";
@@ -137,8 +151,7 @@
 		new Vue({
 			el : '#wrapper',
 			data : {
-				orderJpData : "",
-				a : "1"
+				orderJpData : ""
 			},
 			created : function() {
 				_self = this;
@@ -151,6 +164,7 @@
 							$(".orderJp").removeClass("none");
 						}else{
 							_self.orderJpData = data.orderJp;
+							console.log(JSON.stringify(data.orderJp));
 						}
 					}
 				});
@@ -189,8 +203,46 @@
 						}
 					});
 				},
-				disabled : function(orderid) {
-					_self.a = "";
+				disabled : function(orderid, status) {
+					layer.load(1);
+					$.ajax({
+						url : '${base}/admin/orderJp/disabled',
+						dataType : "json",
+						data : {
+							orderId : orderid
+						},
+						type : 'post',
+						success : function(data) {
+							layer.closeAll("loading");
+							layer.msg("操作成功", {
+								time: 1000,
+								end: function () {
+									self.location.reload();
+								}
+							});
+						}
+					});
+				},
+				undisabled : function(orderid){
+							layer.load(1);
+							$.ajax({
+								url : '${base}/admin/orderJp/undisabled',
+								dataType : "json",
+								data : {
+									orderId : orderid,
+									status : $("#orderPreStatus").val()
+								},
+								type : 'post',
+								success : function(data) {
+									layer.closeAll("loading");
+									layer.msg("操作成功", {
+										time: 1000,
+										end: function () {
+											self.location.reload();
+										}
+									});
+								}
+							});
 				}
 
 			}
@@ -200,8 +252,8 @@
 		var s = days.getFullYear()+"-" + (days.getMonth()+1) + "-" + days.getDate();
 		
 		$("#start_time").daterangepicker({
-			autoApply: true,
-			timePicker: false,
+			autoapply: true,
+			timepicker: false,
 			startDate:s,
 			endDate:s,
 			locale: {

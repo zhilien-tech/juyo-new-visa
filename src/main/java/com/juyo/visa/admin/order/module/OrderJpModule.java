@@ -427,4 +427,22 @@ public class OrderJpModule {
 	public Object firtTrialJp(@Param("orderId") Integer id, HttpSession session) {
 		return saleViewService.firtTrialJp(id, session);
 	}
+
+	/**
+	 * 作废按钮
+	 */
+	@At
+	@POST
+	public Object disabled(@Param("orderId") int orderid) {
+		return saleViewService.disabled(orderid);
+	}
+
+	/**
+	 * 还原按钮
+	 */
+	@At
+	@POST
+	public Object undisabled(@Param("orderId") int orderid) {
+		return saleViewService.undisabled(orderid);
+	}
 }
