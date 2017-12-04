@@ -31,6 +31,7 @@ import org.nutz.lang.Strings;
 import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.firstTrialJp.entity.BackMailInfoEntity;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
@@ -53,7 +54,9 @@ import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
+import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
+import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderBackmailEntity;
@@ -63,6 +66,7 @@ import com.juyo.visa.entities.TOrderLogsEntity;
 import com.juyo.visa.entities.TOrderRecipientEntity;
 import com.juyo.visa.entities.TReceiveaddressEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.juyo.visa.forms.TApplicantBackmailJpForm;
 import com.juyo.visa.forms.TApplicantUnqualifiedForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
@@ -794,13 +798,65 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//获取回邮信息
-	public Object getBackMailInfo(@Param("applicantId") Integer applicantId) {
+	public Object getBackMailInfo(Integer applicantId, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
+		TApplicantOrderJpEntity taoj = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicantId));
+
 		Map<String, Object> result = Maps.newHashMap();
 		String sqlStr = sqlManager.get("backmail_info_by_applicantId");
 		Sql sql = Sqls.create(sqlStr);
 		sql.setParam("applicantId", applicantId);
 		Record backmailinfo = dbDao.fetch(sql);
-		result.put("backmailinfo", backmailinfo);
+		if (!Util.isEmpty(backmailinfo)) {
+			result.put("backmailinfo", backmailinfo);
+		} else {
+			BackMailInfoEntity backmail = new BackMailInfoEntity();
+			Date nowDate = DateUtil.nowDate();
+			backmail.setSource(MainBackMailSourceTypeEnum.KUAIDI.intKey());
+			backmail.setExpresstype(MainBackMailTypeEnum.KUAIDI.intKey());
+			backmail.setCreatetime(nowDate);
+			backmail.setUpdatetime(nowDate);
+			backmail.setOpid(userid);
+			backmail.setApplicantid(applicantId);
+			backmail.setApplicantjpid(taoj.getId());
+			result.put("backmailinfo", backmail);
+		}
+
 		return result;
+	}
+
+	//保存回邮信息
+	public Object saveBackMailInfo(TApplicantBackmailJpForm form, HttpSession session) {
+		Integer backmailId = form.getId();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
+
+		List<TApplicantBackmailJpEntity> before = dbDao.query(TApplicantBackmailJpEntity.class,
+				Cnd.where("id", "=", backmailId), null);
+		List<TApplicantBackmailJpEntity> after = new ArrayList<TApplicantBackmailJpEntity>();
+
+		TApplicantBackmailJpEntity backmail = new TApplicantBackmailJpEntity();
+		backmail.setId(form.getId());
+		backmail.setExpressType(form.getExpressType());
+		backmail.setExpressNum(form.getExpressNum());
+		backmail.setTeamName(form.getTeamName());
+		backmail.setSource(form.getSource());
+		backmail.setLinkman(form.getLinkman());
+		backmail.setTelephone(form.getTelephone());
+		backmail.setExpressAddress(form.getExpressAddress());
+		backmail.setInvoiceContent(form.getInvoiceContent());
+		backmail.setApplicantId(form.getApplicantJPId());
+		backmail.setInvoiceHead(form.getInvoiceHead());
+		backmail.setTaxNum(form.getTaxNum());
+		backmail.setRemark(form.getRemark());
+		backmail.setUpdateTime(DateUtil.nowDate());
+		backmail.setOpId(userid);
+		after.add(backmail);
+
+		dbDao.updateRelations(before, after);
+
+		return "BackMail Success";
 	}
 }

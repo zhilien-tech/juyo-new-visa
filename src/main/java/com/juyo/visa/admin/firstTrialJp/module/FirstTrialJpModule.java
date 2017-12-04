@@ -19,6 +19,7 @@ import org.nutz.mvc.annotation.Param;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
+import com.juyo.visa.forms.TApplicantBackmailJpForm;
 import com.juyo.visa.forms.TApplicantUnqualifiedForm;
 
 /**
@@ -205,7 +206,16 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Object getBackMailInfo(@Param("applicantId") Integer applicantId) {
-		return firstTrialJpViewService.getBackMailInfo(applicantId);
+	public Object getBackMailInfo(@Param("applicantId") Integer applicantId, HttpSession session) {
+		return firstTrialJpViewService.getBackMailInfo(applicantId, session);
+	}
+
+	/**
+	 * 保存回邮信息
+	 */
+	@At
+	@POST
+	public Object saveBackMailInfo(@Param("..") TApplicantBackmailJpForm form, HttpSession session) {
+		return firstTrialJpViewService.saveBackMailInfo(form, session);
 	}
 }

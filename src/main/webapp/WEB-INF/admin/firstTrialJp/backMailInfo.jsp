@@ -25,12 +25,13 @@
 			<div class="modal-body">
 				<div class="tab-content row">
 					<div class="info-body-from backmail-div">
-					
+						<input id="id" name="id" type="hidden" v-model="backmailinfo.id">
+						<input id="applicantJPId" name="applicantJPId" type="hidden" v-model="backmailinfo.applicantjpid">
 						<div class="row body-from-input">
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>资料来源：</label> 
-									<select name="source" v-model="backmailinfo.source" class="form-control input-sm">
+									<select id="source" name="source" v-model="backmailinfo.source" class="form-control input-sm"/>
 										<c:forEach var="map" items="${obj.mainSourceTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -40,7 +41,7 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>快递号：</label> 
-									<input name="expressNum" v-model="backmailinfo.expressnum" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="expressNum" name="expressNum" v-model="backmailinfo.expressnum" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -49,13 +50,13 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>团队名称：</label> 
-									<input name="teamName" v-model="backmailinfo.teamname" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="teamName" name="teamName" v-model="backmailinfo.teamname" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>回邮方式：</label> 
-									<select name="expressType" v-model="backmailinfo.expresstype" class="form-control input-sm">
+									<select id="expressType" name="expressType" v-model="backmailinfo.expresstype" class="form-control input-sm">
 										<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -68,13 +69,13 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>联系人：</label> 
-									<input name="linkman" v-model="backmailinfo.linkman" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="linkman" name="linkman" v-model="backmailinfo.linkman" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>电话：</label> 
-									<input name="telephone" v-model="backmailinfo.telephone" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="telephone" name="telephone" v-model="backmailinfo.telephone" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -82,7 +83,7 @@
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>回邮地址：</label> 
-									<input name="expressAddress" v-model="backmailinfo.expressaddress" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="expressAddress" name="expressAddress" v-model="backmailinfo.expressaddress" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -91,13 +92,13 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>发票项目内容：</label> 
-									<input name="invoiceContent" v-model="backmailinfo.invoicecontent" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="invoiceContent" name="invoiceContent" v-model="backmailinfo.invoicecontent" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>发票抬头：</label> 
-									<input name="invoiceHead" v-model="backmailinfo.invoiceHead" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="invoiceHead" name="invoiceHead" v-model="backmailinfo.invoicehead" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -105,13 +106,13 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>税号：</label> 
-									<input name="taxNum" v-model="backmailinfo.taxnum" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="taxNum" name="taxNum" v-model="backmailinfo.taxnum" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>备注：</label> 
-									<input name="remark" v-model="backmailinfo.remark" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="remark" name="remark" v-model="backmailinfo.remark" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -133,6 +134,12 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<!-- 本页面js文件 -->
 	<script src="${base}/admin/firstTrialJp/backMailInfo.js"></script>
-	
+	<script>
+		//返回 
+		function closeWindow() {
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
+		}
+	</script>
 </body>
 </html>
