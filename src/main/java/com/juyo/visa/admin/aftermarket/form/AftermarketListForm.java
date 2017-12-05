@@ -58,6 +58,7 @@ public class AftermarketListForm implements SQLParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
+		cnd.and("tr.comId", "=", companyid);
 		cnd.and("tr.status", "=", JPOrderStatusEnum.AFTERMARKET_ORDER.intKey());
 		if (!Util.isEmpty(signDateStr)) {
 			String[] split = signDateStr.split(" - ");
@@ -75,6 +76,7 @@ public class AftermarketListForm implements SQLParamForm {
 			cnd.and(exp);
 
 		}
+		cnd.orderBy("tr.createtime", "desc");
 		return cnd;
 	}
 }

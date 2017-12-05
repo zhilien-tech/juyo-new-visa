@@ -34,7 +34,7 @@
 								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间 - 出签时间" onkeypress="onkeyEnter()"/>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/>
+								<!-- <input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/> -->
 							</div>
 							<div class="col-md-3 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter()"/>
@@ -219,7 +219,7 @@
 			//搜索条件
 			var status = $('#status').val();
 			var sendSignDate = $('#sendSignDate').val();
-			var signOutDate = $('#signOutDate').val();
+			/* var signOutDate = $('#signOutDate').val(); */
 			var searchStr = $('#searchStr').val();
 			//异步加载数据
 			if(pageNumber <= pagetotal){
@@ -227,7 +227,7 @@
 				layer.load(1);
 				$.ajax({ 
 			    	url: url,
-			    	data:{status:status,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr,pageNumber:pageNumber},
+			    	data:{status:status,sendSignDate:sendSignDate,searchStr:searchStr,pageNumber:pageNumber},
 			    	dataType:"json",
 			    	type:'post',
 			    	success: function(data){
@@ -252,11 +252,11 @@
 	function search(){
 		var status = $('#status').val();
 		var sendSignDate = $('#sendSignDate').val();
-		var signOutDate = $('#signOutDate').val();
+		//var signOutDate = $('#signOutDate').val();
 		var searchStr = $('#searchStr').val();
 		$.ajax({ 
         	url: url,
-        	data:{status:status,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr},
+        	data:{status:status,sendSignDate:sendSignDate,searchStr:searchStr},
         	dataType:"json",
         	type:'post',
         	success: function(data){
