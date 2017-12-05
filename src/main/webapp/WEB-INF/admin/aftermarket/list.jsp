@@ -33,9 +33,9 @@
 							<div class="col-md-2 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="signDateStr" name="signDateStr" placeholder="送签时间 - 出签时间" onkeypress="onkeyEnter()"/>
 							</div>
-							<!-- <div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/>
-							</div> -->
+							<div class="col-md-2 left-5px right-0px">
+								<!-- <input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/> -->
+							</div> 
 							<div class="col-md-3 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter()"/>
 							</div>
@@ -117,8 +117,18 @@
             });
         },
         methods:{
-        	backpost:function(applyid){
-        		
+        	backpost:function(applyId){
+        		layer.open({
+    				type: 2,
+    				title: false,
+    				closeBtn:false,
+    				fix: false,
+    				maxmin: false,
+    				shadeClose: false,
+    				scrollbar: false,
+    				area: ['900px', '551px'],
+    				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId
+    			});
         	}
         }
 	});
@@ -152,8 +162,8 @@
 			    	success: function(data){
 			    		//关闭遮罩
 			    		layer.closeAll('loading');
-			    		$.each(data.visaJapanData,function(index,item){
-			    			_self.visaJapanData.push(item);
+			    		$.each(data.aftermarketData,function(index,item){
+			    			_self.aftermarketData.push(item);
 			    		});
 			    		//没有更多数据
 			      	}
@@ -169,7 +179,7 @@
 		var searchStr = $('#searchStr').val();
 		$.ajax({ 
         	url: url,
-        	data:{signDateStr:signDateStr,searchStr:searchStr},
+        	data:{signDateStr:signDateStr,searchstr:searchStr},
         	dataType:"json",
         	type:'post',
         	success: function(data){

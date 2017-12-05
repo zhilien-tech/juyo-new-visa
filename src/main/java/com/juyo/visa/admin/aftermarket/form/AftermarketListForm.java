@@ -63,13 +63,13 @@ public class AftermarketListForm implements SQLParamForm {
 			String[] split = signDateStr.split(" - ");
 			Date sendSignDate = DateUtil.string2Date(split[0], DateUtil.FORMAT_YYYY_MM_DD);
 			Date outSignDate = DateUtil.string2Date(split[1], DateUtil.FORMAT_YYYY_MM_DD);
-			SqlExpressionGroup exp = new SqlExpressionGroup();
-			exp.and("sendVisaDate", ">=", sendSignDate).or("outVisaDate", "<=", outSignDate);
-			cnd.and(exp);
+			//SqlExpressionGroup exp = new SqlExpressionGroup();
+			cnd.and("sendVisaDate", ">=", sendSignDate).and("outVisaDate", "<=", outSignDate);
+			//cnd.and(exp);
 		}
 		if (!Util.isEmpty(searchstr)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
-			exp.and("tr.orderNum", ">=", searchstr).or("tc.linkman", "like", "%" + searchstr + "%")
+			exp.and("tr.orderNum", "like", "%" + searchstr + "%").or("tc.linkman", "like", "%" + searchstr + "%")
 					.or("tc.mobile", "like", "%" + searchstr + "%").or("tc.email", "like", "%" + searchstr + "%")
 					.or("taj.applyname", "like", "%" + searchstr + "%");
 			cnd.and(exp);

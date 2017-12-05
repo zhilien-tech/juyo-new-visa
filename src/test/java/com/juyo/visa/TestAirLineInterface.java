@@ -59,7 +59,7 @@ public class TestAirLineInterface {
 			List<NameValuePair> paramList = new ArrayList<>();
 			paramList.add(new BasicNameValuePair("key", "fc96373fef3e40ffac0821a2ebb25a4d"));
 			//出发城市
-			paramList.add(new BasicNameValuePair("dep", "NAY"));
+			paramList.add(new BasicNameValuePair("dep", "XMN"));
 			//抵达城市
 			paramList.add(new BasicNameValuePair("arr", "TYO"));
 			//航班号
