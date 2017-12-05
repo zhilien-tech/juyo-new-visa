@@ -15,6 +15,7 @@
 		#datatableId tbody tr td:nth-child(2){width: 15%;}
 		#datatableId tbody tr td:nth-child(3){width:25%;}
 		#datatableId tbody tr td:nth-child(4){width: 10%;}
+		.editInp{height: 19px;position: relative;top: -5px;border: solid 1px #b8d3e9;width: 60px;border-radius: 3px;margin-right: 2px;font-size: 12px;line-height: 19px;padding-left: 3px;}
 	</style>
 </head>
 <body>
@@ -49,9 +50,11 @@
 											<c:choose>
 												<c:when test="${revenue.status == 0 }">
 													<span class="titleStyle">${revenue.realInfo }</span>
+													<input type="hidden" id="revenueid" name="revenueid" value="${revenue.id }">
 												</c:when>
 												<c:otherwise>
 													<span>${revenue.realInfo }</span>
+													<input type="hidden" id="revenueid" name="revenueid" value="${revenue.id }">
 												</c:otherwise>
 											</c:choose>
 										</c:forEach>
@@ -97,39 +100,60 @@
 				var applicatid = $(this).parent().find('#applicatid').val();
 				var inputVal = $(this).siblings(".addInp").val();
 				if(inputVal != null && inputVal != ""){
-					$(this).siblings(".addInp").before('<span>'+ inputVal +'</span>');//在input前面 添加span标签
-					$(this).siblings(".addInp").val("");
 					$.ajax({ 
 		            	url: '${base}/admin/visaJapan/saveApplicatRevenue.html',
 		            	data:{applicatid:applicatid,realInfo:inputVal},
 		            	dataType:"json",
 		            	type:'post',
 		            	success: function(data){
+		            		var str = '<span>'+ inputVal +'</span>';
+		            		str += '<input type="hidden" id="revenueid" name="revenueid" value="'+data.id+'">';
+							$(this).siblings(".addInp").before(str);//在input前面 添加span标签
+							$(this).siblings(".addInp").val("");
 		              	}
 		            });
 				}
 			});
 			
 			//点击真是资料 护照标签
-			$(".certificates span").click(function(){
-				var spanText = $(this).text();
-				var HZlength = ($(".certificates").has(".passportInp")).length > 0;
-				if(spanText.indexOf("护照")!== -1 && HZlength != true){
-					$(this).removeClass("titleStyle");
-					$(this).after('<input type="text" class="passportInp"/>');
-					var passport = $(".passportInp").val();
-					var passnumber = passport.substring(2);
-					$(".passportInp").val("").focus().val(passnumber); //把光标加入到字符串后面
-				}else if(HZlength == true){
-					$(".passportInp").remove();
-					$(this).addClass("titleStyle");
-				}
+			//$(".certificates span").click(function(){
+			$(document).on('click','.certificates span',function(){
+				var thisobj = $(this);
+				var paperid = thisobj.next().val();
+				var nextobj = thisobj.next();
+				$.ajax({ 
+	            	url: '${base}/admin/visaJapan/validateIsoriginal.html',
+	            	data:{paperid:paperid},
+	            	dataType:"json",
+	            	type:'post',
+	            	success: function(data){
+	            		if(data){
+							var spanText = thisobj.text();
+							var HZlength = ($(".certificates").has(".passportInp")).length > 0;
+							if(spanText.indexOf("护照")!== -1 && HZlength != true){
+								thisobj.removeClass("titleStyle");
+								thisobj.after('<input type="text" class="passportInp"/>');
+								var passport = $(".passportInp").val();
+								var passnumber = passport.substring(2);
+								$(".passportInp").val("").focus().val(passnumber); //把光标加入到字符串后面
+							}else if(HZlength == true){
+								$(".passportInp").remove();
+								thisobj.addClass("titleStyle");
+							}
+							
+							if(thisobj.hasClass("titleStyle")){
+								thisobj.removeClass("titleStyle");
+							}else{
+								thisobj.addClass("titleStyle");
+							}
+	            		}else{
+	            			var inputstr = '<input id="" name="" type="text" class="editInp" value="'+thisobj.text()+'">';
+	            			thisobj.replaceWith(inputstr);
+	            			//nextobj.prepend(inputstr);
+	            		}
+	            	}
+	            });
 				
-				if($(this).hasClass("titleStyle")){
-					$(this).removeClass("titleStyle");
-				}else{
-					$(this).addClass("titleStyle");
-				}
 			});
 			//保存护照信息
 			$(document).on('blur','.passportInp',function(){
@@ -183,24 +207,56 @@
 				var applicatobj = {};
 				var applicatid = $(this).find('#applicatid').val();
 				applicatobj.applicatid = applicatid;
-				var datatext = '';
-				var graydata = '';
+				//var datatext = '';
+				//var graydata = '';
+				var revenues = [];
 				$(this).find(".certificates span").each(function(index){
-					if($(this).hasClass('titleStyle')){
-						datatext += $(this).text() + ',';
+					var thisobj = $(this);
+					if(thisobj.hasClass('titleStyle')){
+						var revenue = {};
+						revenue.realInfo = thisobj.text();
+						revenue.id = thisobj.next().val();
+						//datatext += $(this).text() + ',';
+						revenue.status = 0;
+						revenues.push(revenue);
 					}else{
-						graydata += $(this).text() + ',';
+						if(thisobj.text() != '+'){
+							//graydata += $(this).text() + ',';
+							var revenue = {};
+							revenue.realInfo = thisobj.text();
+							revenue.id = thisobj.next().val();
+							revenue.status = 1;
+							revenues.push(revenue);
+						}
 					}
 				});
+				$(this).find(".certificates .editInp").each(function(index){
+					var thisobj = $(this);
+					var revenue = {};
+					revenue.realInfo = thisobj.val();
+					revenue.id = thisobj.next().val();
+					//datatext += $(this).text() + ',';
+					revenue.status = 1;
+					revenues.push(revenue);
+				});
+				/* $(this).find('.certificates span').each(function(index){
+					var thisobj = $(this);
+					if(thisobj.hasClass('titleStyle')){
+						console.log('hui'+thisobj.text());
+					}else{
+						if(thisobj.text() != '+'){
+							console.log('lan'+thisobj.text());
+						}
+					}
+				}); */
 				/* $(this).find('.titleStyle').each(function(index){
 					datatext += $(this).text() + ',';
 				}); */
-				datatext = datatext.substring(0, datatext.length-1);
+				/* datatext = datatext.substring(0, datatext.length-1);
 				graydata = graydata.substring(0, graydata.length-1);
-				console.log(datatext);
-				console.log(graydata);
 				applicatobj.datatext = datatext;
-				applicatobj.graydata = graydata;
+				applicatobj.graydata = graydata; */
+				applicatobj.revenue = JSON.stringify(revenues);
 				applicatinfo.push(applicatobj);
 			});
 			layer.load(1);
