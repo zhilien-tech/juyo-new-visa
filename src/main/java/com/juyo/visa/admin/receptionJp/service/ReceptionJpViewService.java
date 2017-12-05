@@ -39,6 +39,7 @@ import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.common.enums.ReceptionSearchStatusEnum_JP;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
 import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
@@ -97,7 +98,7 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 					record.put("orderstatus", orderStatus.value());
 				}
 			}
-			Integer orderid = (Integer) record.get("id");
+			Integer orderid = (Integer) record.get("orderJpId");
 			String sqlStr = sqlManager.get("reception_list_data");
 			Sql applysql = Sqls.create(sqlStr);
 			List<Record> records = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
@@ -122,10 +123,17 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		return result;
 	}
 
+	public Object toList() {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("receptionSearchStatus", EnumUtil.enum2(ReceptionSearchStatusEnum_JP.class));
+		return result;
+	}
+
 	public Object receptionDetail(Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid.longValue());
 		//日本订单数据
-		TOrderJpEntity jporderinfo = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
+		TOrderJpEntity jporderinfo = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
 		result.put("jporderinfo", jporderinfo);
 		//订单id
 		result.put("orderid", orderid);
@@ -148,10 +156,12 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 
 	public Object getJpVisaDetailData(Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+		TOrderJpEntity jpEntity = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
 		//订单信息
 		String sqlstr = sqlManager.get("get_jp_receptionOrderInfo_byid");
 		Sql sql = Sqls.create(sqlstr);
-		sql.setParam("orderid", orderid);
+		sql.setParam("orderid", jpEntity.getId());
 		Record orderinfo = dbDao.fetch(sql);
 		int status = (int) orderinfo.get("status");
 		for (JPOrderStatusEnum orderStatus : JPOrderStatusEnum.values()) {
@@ -181,7 +191,7 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		//申请人信息
 		String applysqlstr = sqlManager.get("get_applyInfo_byorderid");
 		Sql applysql = Sqls.create(applysqlstr);
-		applysql.setParam("orderid", orderid);
+		applysql.setParam("orderid", jpEntity.getId());
 		List<Record> applyinfo = dbDao.query(applysql, null, null);
 		for (Record record : applyinfo) {
 			Integer type = (Integer) record.get("type");
@@ -200,7 +210,9 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		//更新备注信息
 		dbDao.update(orderjp);
 		List<Map> applicatlist = JsonUtil.fromJson(applicatinfo, List.class);
+		//需要更新的真实资料
 		List<TApplicantFrontPaperworkJpEntity> paperworks = Lists.newArrayList();
+		//所有的人
 		for (Map map : applicatlist) {
 			String applicatid = map.get("applicatid").toString();
 			String datatext = String.valueOf(map.get("datatext"));
@@ -209,10 +221,24 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 			cnd.and("realInfo", "in", datatext.split(","));
 			List<TApplicantFrontPaperworkJpEntity> paperwork = dbDao.query(TApplicantFrontPaperworkJpEntity.class, cnd,
 					null);
+			Cnd notincnd = Cnd.NEW();
+			notincnd.and("applicantId", "=", applicatid);
+			notincnd.and("realInfo", " not in", datatext.split(","));
+			List<TApplicantFrontPaperworkJpEntity> notinpaperwork = dbDao.query(TApplicantFrontPaperworkJpEntity.class,
+					notincnd, null);
+			for (TApplicantFrontPaperworkJpEntity tApplicantVisaPaperworkJpEntity : paperwork) {
+				tApplicantVisaPaperworkJpEntity.setStatus(0);
+			}
+			for (TApplicantFrontPaperworkJpEntity tApplicantVisaPaperworkJpEntity : notinpaperwork) {
+				tApplicantVisaPaperworkJpEntity.setStatus(1);
+			}
 			paperworks.addAll(paperwork);
+			paperworks.addAll(notinpaperwork);
 		}
 		//删掉灰色的
-		dbDao.delete(paperworks);
+		if (!Util.isEmpty(paperworks)) {
+			dbDao.update(paperworks);
+		}
 		return null;
 
 	}
@@ -280,11 +306,14 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 
 	public Object revenue(HttpSession session, Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(orderid).intValue());
+		TOrderJpEntity orderJpEntity = dbDao
+				.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
 
 		//申请人列表
 		String sqlStr = sqlManager.get("reception_list_data");
 		Sql applysql = Sqls.create(sqlStr);
-		List<Record> query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
+		List<Record> query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderJpEntity.getId()), null);
 		for (Record apply : query) {
 			Integer dataType = (Integer) apply.get("dataType");
 			for (VisaDataTypeEnum dataTypeEnum : VisaDataTypeEnum.values()) {
@@ -297,14 +326,16 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 			apply.put("revenue", revenue);
 		}
 		result.put("applicant", query);
+		result.put("orderJpinfo", orderJpEntity);
 		result.put("orderid", orderid);
 		return result;
 	}
 
 	public Object receptionRevenue(HttpSession session, Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
-		TOrderJpEntity orderinfo = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
-		result.put("orderinfo", orderinfo);
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderinfo.getId()));
+		result.put("orderinfo", orderJpEntity);
 		return result;
 	}
 

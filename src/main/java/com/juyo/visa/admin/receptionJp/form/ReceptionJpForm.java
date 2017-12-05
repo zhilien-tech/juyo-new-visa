@@ -46,6 +46,8 @@ public class ReceptionJpForm extends DataTablesParamForm {
 	/**创建时间*/
 	private Date createTime;
 
+	private Integer status;
+
 	/**更新时间*/
 	private Date updateTime;
 
@@ -75,6 +77,9 @@ public class ReceptionJpForm extends DataTablesParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
+		if (!Util.isEmpty(status)) {
+			cnd.and("orderStatus", "=", status);
+		}
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("tr.orderNum", "like", "%" + searchStr + "%").or("taj.mail", "like", "%" + searchStr + "%")

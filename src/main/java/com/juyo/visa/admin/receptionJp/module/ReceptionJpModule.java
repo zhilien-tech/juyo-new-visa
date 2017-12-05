@@ -51,7 +51,7 @@ public class ReceptionJpModule {
 	@GET
 	@Ok("jsp")
 	public Object listJapan() {
-		return null;
+		return receptionJpViewService.toList();
 	}
 
 	/**

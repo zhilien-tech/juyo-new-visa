@@ -37,7 +37,7 @@
 				<span class="">状态：<p>${obj.orderstatus }</p></span> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancel();"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
-				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
+				<!-- <input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" /> -->
 				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" @click="firtTrialJp(orderInfo.id)"/>
 				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" @click="share(orderInfo.id)" />
 				<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" @click="log(orderInfo.id)" />
@@ -430,7 +430,7 @@
 										<a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;
 										<a v-on:click="passport(applicant.id)">护照信息</a>&nbsp;&nbsp;
 										<a v-on:click="visa(applicant.id,orderInfo.id)">签证信息</a> <br>
-										<a v-on:click="">回邮</a>&nbsp;&nbsp;
+										<a v-on:click="backmailInfo(applicant.id)">回邮信息</a>&nbsp;&nbsp;
 										<a v-on:click="deleteApplicant(applicant.id)">删除</a></br>
 									</td>
 								</tr>
@@ -440,7 +440,7 @@
 				</div>
 				<!-- end 主申请人 -->
 
-				<div class="row body-from-input" id="backmailInfo"><!-- 添加回邮信息 -->
+				<%-- <div class="row body-from-input" id="backmailInfo"><!-- 添加回邮信息 -->
 					<div class="col-sm-12">
 						<div class="form-group">
 							<button type="button" class="btn btn-primary btn-sm addExpressInfoBtn">添加回邮信息</button>
@@ -667,7 +667,7 @@
 						</div>
 						<!-- end 快递信息 -->
 	            	</c:otherwise>
-           		</c:choose>
+           		</c:choose> --%>
 
 			</section>
 		</div>
@@ -1151,6 +1151,20 @@
 						scrollbar: false,
 						area: ['900px', '551px'],
 						content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime'
+					});
+				},
+				//回邮信息
+				backmailInfo:function(applyId){
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId
 					});
 				},
 				//初审按钮
