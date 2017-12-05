@@ -90,14 +90,14 @@
 										<i class="edit"  v-on:click="" > </i>
 										<i class="share" v-on:click=""> </i>
 										<i class="theTrial" v-on:click=""> </i>
-										<i class="return" > </i>
+										<!-- <i class="return" > </i> -->
 										<i class="toVoid" v-on:click="undisabled(data.orderid)"> </i>
 									</div>
 									<div v-else>
 										<i class="edit"  v-on:click="order(data.orderid)"> </i>
 										<i class="share" v-on:click="share(data.orderid)"> </i>
 										<i class="theTrial" v-on:click="theTrial(data.orderid)"> </i>
-										<i class="return" > </i>
+										<!-- <i class="return" > </i> -->
 										<i class="toVoid" v-on:click="disabled(data.orderid, data.status)"> </i>
 									</div>
 								</div>
@@ -117,6 +117,9 @@
 					<input id="hideOrder" type="button" value="您还没有添加任何数据，快去下单吧" class="orderJp none" onclick="addOrder();"/>
 				</section>
 			</div>
+				<input type="hidden" id="pageNumber" name="pageNumber" value="1">
+				<input type="hidden" id="pageTotal" name="pageTotal">
+				<input type="hidden" id="pageListCount" name="pageListCount">
 		</div>
 
 	<!-- jQuery 2.2.3 -->
@@ -164,6 +167,8 @@
 							$(".orderJp").removeClass("none");
 						}else{
 							_self.orderJpData = data.orderJp;
+							$('#pageTotal').val(data.pageTotal);
+							$('#pageListCount').val(data.pageListCount);
 							console.log(JSON.stringify(data.orderJp));
 						}
 					}
@@ -199,7 +204,12 @@
 						type : 'post',
 						success : function(data) {
 							layer.closeAll("loading");
-							layer.msg("初审通过");
+							layer.msg("操作成功", {
+								time: 1000,
+								end: function () {
+									self.location.reload();
+								}
+							});
 						}
 					});
 				},
@@ -326,6 +336,69 @@
 					_self.orderJpData = data.orderJp;
 				}
 			});
+		});
+		
+		//注册scroll事件并监听 
+		$(window).scroll(function(){
+			var scrollTop = $(this).scrollTop();
+			var scrollHeight = $(document).height();
+			var windowHeight = $(this).height();
+			var pageTotal = parseInt($('#pageTotal').val());
+			var pageListCount = parseInt($('#pageListCount').val());
+			// 判断是否滚动到底部  
+			if(Math.ceil(scrollTop + windowHeight) == scrollHeight){
+				//分页条件
+				var pageNumber = $('#pageNumber').val();
+				pageNumber = parseInt(pageNumber) + 1;
+				$('#pageNumber').val(pageNumber);
+				//搜索条件
+				var searchStr = $('#searchStr').val();
+				var status = $('#status').val();
+				var source = $('#source').val();
+				var visaType = $('#visaType').val();
+				var sendSignDateStart = sendDateStart;
+				var sendSignDateEnd = sendDateEnd;
+				var signOutDateStart = outDateStart;
+				var signOutDateEnd = outDateEnd;
+				var startTimeStart = timeStart;
+				var startTimeEnd = timeEnd;
+				//异步加载数据
+				if(pageNumber <= pageTotal){
+					//遮罩
+					layer.load(1);
+					$.ajax({ 
+						url: url,
+						data:{
+							status : status,
+							source : source,
+							startTimeStart : startTimeStart,
+							startTimeEnd : startTimeEnd,
+							visaType : visaType,
+							sendSignDateStart : sendDateStart,
+							sendSignDateEnd : sendDateEnd,
+							signOutDateStart : outDateStart,
+							signOutDateEnd : outDateEnd,
+							searchStr : searchStr,
+							pageNumber:pageNumber
+						},
+						dataType:"json",
+						type:'post',
+						success: function(data){
+							//关闭遮罩
+							layer.closeAll('loading');
+							$.each(data.orderJp,function(index,item){
+								_self.orderJpData.push(item);
+							});
+							//没有更多数据
+						}
+					});
+				}else{
+					//没有更多数据，底部提示语
+					if($("#card-bottom-line").length <= 0 && pageListCount>=6){
+						$(".card-list").last().after("<div id='card-bottom-line' class='bottom-line'><span style='margin-left: 38%; color:#999'>-------  没有更多数据可以加载  -------</span></div>");
+					}
+				}
+			}
 		});
 		/* function search(){
 			var status = $('#status').val();

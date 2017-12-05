@@ -48,4 +48,8 @@ public class TApplicantFrontPaperworkJpEntity implements Serializable {
 	@Column
 	@Comment("真实资料")
 	private String realInfo;
+
+	@Column
+	@Comment("状态 1：已收 2、未收")
+	private Integer status;
 }

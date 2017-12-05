@@ -32,7 +32,7 @@
 								<div><label>状态：</label><span>{{data.orderstatus}}</span></div>		
 								<div>
 									<label>操作：</label>
-									<i class="edit" v-on:click="edit(data.applicantid)"> </i>
+									<i class="edit" v-on:click="edit(data.applicantid,data.orderid)"> </i>
 									<i class="download" v-on:click="download(data.applicantid)"> </i>
 								</div>
 							</div>
@@ -87,18 +87,18 @@
 	    			//跳转到签证进度页面
 	    			window.location.href = '/admin/myVisa/flowChart.html?orderid='+orderid+'&applicantid='+applicantid;
 	    		},
-	    		edit:function(applyid){
-	        		layer.open({
-	        		    type: 2,
-	        		    title: false,
-	        		    closeBtn:false,
-	        		    fix: false,
-	        		    maxmin: false,
-	        		    shadeClose: false,
-	        		    scrollbar: false,
-	        		    area: ['900px', '550px'],
-	        		    content:'/admin/orderJp/passportInfo.html?id='+applyid
-	        	    });
+	    		edit:function(applyid,orderid){
+	    			layer.open({
+	    				type: 2,
+	    				title: false,
+	    				closeBtn:false,
+	    				fix: false,
+	    				maxmin: false,
+	    				shadeClose: false,
+	    				scrollbar: false,
+	    				area: ['900px', '550px'],
+	    				content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid
+	    			});
 	        	},
 	        }
 		});

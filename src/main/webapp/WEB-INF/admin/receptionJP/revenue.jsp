@@ -178,11 +178,20 @@
 				var applicatid = $(this).find('#applicatid').val();
 				applicatobj.applicatid = applicatid;
 				var datatext = '';
-				$(this).find('.titleStyle').each(function(index){
-					datatext += $(this).text() + ',';
+				var graydata = '';
+				$(this).find(".certificates span").each(function(index){
+					if($(this).hasClass('titleStyle')){
+						datatext += $(this).text() + ',';
+					}else{
+						graydata += $(this).text() + ',';
+					}
 				});
 				datatext = datatext.substring(0, datatext.length-1);
+				graydata = graydata.substring(0, graydata.length-1);
+				console.log(datatext);
+				console.log(graydata);
 				applicatobj.datatext = datatext;
+				applicatobj.graydata = graydata;
 				applicatinfo.push(applicatobj);
 			});
 			layer.load(1);
