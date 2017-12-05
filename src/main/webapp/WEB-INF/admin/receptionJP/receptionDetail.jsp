@@ -12,6 +12,7 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
@@ -39,18 +40,18 @@
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
-		<div class="wrapper" id="wrapper">
+		<div class="wrapper" >
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<div class="qz-head">
-					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
+					<span class="">订单号：<p>${obj.orderinfo.orderNum }</p></span>
 					<span class="">受付番号：<p></p></span>
-					<span class="">状态：<p>{{orderinfo.status}}</p></span>
+					<span class="">状态：<p>${obj.orStatus }</p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="签证" class="btn btn-primary btn-sm pull-right" onclick="visaTransfer();"/>
 					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue();"/>
 				</div>
-				<section class="content">
+				<section class="content" id="wrapper">
 					<!-- 订单信息 -->
 					<div class="info">
 						<p class="info-head">订单信息</p>
@@ -194,7 +195,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行时间：</label>
-										<input id="gotripdate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.gotripdate"/>
+										<input id="gotripdate" type="text" class="form-control input-sm"  v-model="orderinfo.gotripdate"/>
 										<!-- <date-picker field="myDate" placeholder="选择日期"
 											 :no-today="true"
 											 :value.sync="date3"
@@ -211,7 +212,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回时间：</label>
-										<input id="backtripdate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.backtripdate"/>
+										<input id="backtripdate" type="text" class="form-control input-sm"  v-model="orderinfo.backtripdate"/>
 									</div>
 								</div>
 							</div><!-- end 出行时间/停留天数/返回时间 -->
@@ -219,13 +220,13 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>送签时间：</label>
-										<input id="sendvisadate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.sendvisadate"/>
+										<input id="sendvisadate" type="text" class="form-control input-sm"  v-model="orderinfo.sendvisadate"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出签时间：</label>
-										<input id="outvisadate" type="text" class="form-control input-sm" onfocus="WdatePicker()" v-model="orderinfo.outvisadate"/>
+										<input id="outvisadate" type="text" class="form-control input-sm"  v-model="orderinfo.outvisadate"/>
 									</div>
 								</div>
 							</div><!-- end 送签时间/出签时间 -->
@@ -293,6 +294,8 @@
 		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 		<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
 		<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+		<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 		<script src="${base}/admin/receptionJP/receptionDetail.js"></script><!-- 本页面js文件 -->
 		<script type="text/javascript">
 			var threecounty = '${obj.jporderinfo.visaCounty}';
@@ -354,6 +357,45 @@
         		    content: '${base}/admin/receptionJP/revenue.html?orderid='+orderid
         		  });
 			}
+			
+			//时间插件格式化  出行时间>今天>送签时间 
+			var now = new Date();
+			$("#gotripdate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				startDate:now,
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			}).on("click",function(){  
+			    $("#gotripdate").datetimepicker("setEndDate",$("#backtripdate").val());  
+			}); 
+			$("#backtripdate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				startDate:now,
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+
+			$("#sendvisadate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				endDate: now,//日期小于今天
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			}).on("click",function(){  
+			    $("#sendvisadate").datetimepicker("setEndDate",$("#outvisadate").val());  
+			}); 
+			$("#outvisadate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
 		</script>
 	</body>
 </html>

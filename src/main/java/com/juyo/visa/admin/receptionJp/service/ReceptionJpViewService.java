@@ -45,7 +45,6 @@ import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
-import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
@@ -134,6 +133,12 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid.longValue());
 		//日本订单数据
 		TOrderJpEntity jporderinfo = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
+		for (JPOrderStatusEnum orderStatus : JPOrderStatusEnum.values()) {
+			if (orderEntity.getStatus() == orderStatus.intKey()) {
+				result.put("orStatus", orderStatus.value());
+			}
+		}
+		result.put("orderinfo", orderEntity);
 		result.put("jporderinfo", jporderinfo);
 		//订单id
 		result.put("orderid", orderid);
@@ -448,7 +453,7 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 
 	public Object editPassportCount(Integer applicatid, String inputVal) {
 
-		TApplicantVisaPaperworkJpEntity paperwork = dbDao.fetch(TApplicantVisaPaperworkJpEntity.class,
+		TApplicantFrontPaperworkJpEntity paperwork = dbDao.fetch(TApplicantFrontPaperworkJpEntity.class,
 				Cnd.where("applicantId", "=", applicatid).and("realInfo", "like", "%护照%"));
 		paperwork.setRealInfo(inputVal);
 		dbDao.update(paperwork);
