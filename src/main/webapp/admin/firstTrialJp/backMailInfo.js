@@ -1,4 +1,7 @@
-$(function(){
+/**
+ * 需求变更，回邮信息去除加减号
+ */
+/*$(function(){
 	//点击 蓝色加号图标 事件
 	$('.add-btn').click(function(){
 		var newDiv=$(this).parent().clone();//克隆标签模块
@@ -31,3 +34,4 @@ function clearBackMailInfo(newDiv){
 	newDiv.find('[name=taxNum]').val("");
 	newDiv.find('[name=remark]').val("");
 }
+*/
