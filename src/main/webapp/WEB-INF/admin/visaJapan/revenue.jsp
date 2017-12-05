@@ -49,11 +49,11 @@
 										<c:forEach items="${apply.revenue }" var="revenue">
 											<c:choose>
 												<c:when test="${revenue.status == 0 }">
-													<span class="titleStyle">${revenue.realInfo }</span>
+													<span class="titleStyle realinfo">${revenue.realInfo }</span>
 													<input type="hidden" id="revenueid" name="revenueid" value="${revenue.id }">
 												</c:when>
 												<c:otherwise>
-													<span>${revenue.realInfo }</span>
+													<span class="realinfo">${revenue.realInfo }</span>
 													<input type="hidden" id="revenueid" name="revenueid" value="${revenue.id }">
 												</c:otherwise>
 											</c:choose>
@@ -95,6 +95,7 @@
 			
 			/*点击表格中的加号标签*/
 			$(".addText").click(function(){
+				var thisobj = $(this);
 				$(this).siblings(".addInp").removeClass("none");
 				$(".addInp").focus();//add input 添加默认光标
 				var applicatid = $(this).parent().find('#applicatid').val();
@@ -106,10 +107,10 @@
 		            	dataType:"json",
 		            	type:'post',
 		            	success: function(data){
-		            		var str = '<span>'+ inputVal +'</span>';
+		            		var str = '<span class="realinfo">'+ inputVal +'</span>';
 		            		str += '<input type="hidden" id="revenueid" name="revenueid" value="'+data.id+'">';
-							$(this).siblings(".addInp").before(str);//在input前面 添加span标签
-							$(this).siblings(".addInp").val("");
+		            		thisobj.siblings(".addInp").before(str);//在input前面 添加span标签
+		            		thisobj.siblings(".addInp").val("");
 		              	}
 		            });
 				}
@@ -117,7 +118,7 @@
 			
 			//点击真是资料 护照标签
 			//$(".certificates span").click(function(){
-			$(document).on('click','.certificates span',function(){
+			$(document).on('click','.certificates .realinfo',function(){
 				var thisobj = $(this);
 				var paperid = thisobj.next().val();
 				var nextobj = thisobj.next();
