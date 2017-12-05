@@ -116,7 +116,7 @@ function commitdata(){
 	console.log("orderinfo:"+JSON.stringify(editdata));
 	layer.load(1);
 	$.ajax({ 
-		url: BASE_PATH + '/admin/receptionJP/saveJpVisaDetailInfo.html',
+		url: BASE_PATH + '/admin/receptionJP/saveJpVisaDetailInfo',
 		dataType:"json",
 		data:editdata,
 		type:'post',
