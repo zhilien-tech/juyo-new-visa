@@ -340,6 +340,7 @@
 			}
 			
 			function revenue(){
+				//实收
 				var orderid = ${obj.orderid};
 				layer.open({
         		    type: 2,

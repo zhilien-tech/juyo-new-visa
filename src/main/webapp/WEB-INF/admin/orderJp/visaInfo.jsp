@@ -169,7 +169,7 @@
 					<div class="info">
 						<div class="info-head">工作信息 </div>
 						<div class="info-body-from cf ">
-							<div class="workvice row">
+							<%-- <div class="workvice row">
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>是否同主申请人：</label>
@@ -180,9 +180,9 @@
 										</select>
 									</div>
 								</div>
-							</div>
+							</div> --%>
 							
-							<div class="row workmain"><!-- 我的职业/单位名称/单位电话 -->
+							<div class="row "><!-- 我的职业/单位名称/单位电话 -->
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>我的职业：</label>
@@ -207,7 +207,7 @@
 									</div>
 								</div>
 							</div><!-- end 我的职业/单位名称/单位电话 -->
-							<div class="row workmain"><!-- 单位地址 -->
+							<div class="row"><!-- 单位地址 -->
 								<div class="col-sm-8">
 									<div class="form-group">
 										<label id="schoolAddress"><span>*</span>单位地址：</label>
@@ -365,19 +365,19 @@
 			if(applicVal == "1"){//主申请人
 				$(".applyvice").hide();
 				$(".tripvice").hide();
-				$(".workvice").hide();
+				//$(".workvice").hide();
 				$(".wealthvice").hide();
 				$(".applymain").show();
-				$(".workmain").show();
+				//$(".workmain").show();
 				$(".wealthmain").show();
 				$("#mainApply").text("主申请人");
 			}else{//副申请人
 				$(".applyvice").show();
 				$(".tripvice").show();
 				$(".wealthvice").show();
-				$(".workvice").show();
+				//$(".workvice").show();
 				$(".applymain").hide();
-				$(".workmain").hide();
+				//$(".workmain").hide();
 				$(".wealthmain").hide();
 				$("#mainApply").text("副申请人");
 			}
@@ -388,17 +388,17 @@
 				if(applicVal == "1"){//主申请人
 					$(".applyvice").hide();
 					$(".tripvice").hide();
-					$(".workvice").hide();
+					//$(".workvice").hide();
 					$(".wealthvice").hide();
 					$(".applymain").show();
-					$(".workmain").show();
+					//$(".workmain").show();
 					$(".wealthmain").show();
 					$("#mainApply").text("主申请人");
 				}else{//副申请人
 					$(".applyvice").show();
 					$(".tripvice").show();
 					$(".wealthvice").show();
-					$(".workvice").show();
+					//$(".workvice").show();
 					$(".applymain").hide();
 					$(".workmain").hide();
 					$(".wealthmain").hide();
@@ -443,7 +443,7 @@
 				
 			}
 			
-			var work = $("#work").val();
+			/* var work = $("#work").val();
 			if(work == 0){
 				$(".workmain").show();
 				//$(".address").show();
@@ -456,9 +456,9 @@
 					/* $("#careerStatus").val(1);
 					$("#name").val("");
 					$("#telephone").val("");
-					$("#address").val(""); */
+					$("#address").val(""); 
 				}
-			});
+			}); */
 			
 			var wealth = $("#wealth").val();
 			if(wealth == 0){
@@ -581,7 +581,7 @@
 			var applicVal = $("#applicant").val();
 			//主申请人时，是否同主申请人设置为空，不然默认为1
 			if(applicVal == 1){
-				$("#work").val(0);
+				//$("#work").val(0);
 				$("#wealth").val(0);
 			}
 			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
