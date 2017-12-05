@@ -430,7 +430,7 @@
 										<a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;
 										<a v-on:click="passport(applicant.id)">护照信息</a>&nbsp;&nbsp;
 										<a v-on:click="visa(applicant.id,orderInfo.id)">签证信息</a> <br>
-										<a v-on:click="">回邮</a>&nbsp;&nbsp;
+										<a v-on:click="backmailInfo(applicant.id)">回邮信息</a>&nbsp;&nbsp;
 										<a v-on:click="deleteApplicant(applicant.id)">删除</a></br>
 									</td>
 								</tr>
@@ -1151,6 +1151,20 @@
 						scrollbar: false,
 						area: ['900px', '551px'],
 						content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime'
+					});
+				},
+				//回邮信息
+				backmailInfo:function(applyId){
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId
 					});
 				},
 				//初审按钮

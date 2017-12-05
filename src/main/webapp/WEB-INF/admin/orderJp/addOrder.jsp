@@ -60,8 +60,8 @@
 				</span> <input type="button" value="取消"
 					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> <input type="button"
 					value="保存" class="btn btn-primary btn-sm pull-right"
-					onclick="saveAddOrder();" /> <!-- <input type="button" value="回邮"
-					class="btn btn-primary btn-sm pull-right" /> --> <input type="button"
+					onclick="saveAddOrder();" /> <input type="button" value="回邮"
+					class="btn btn-primary btn-sm pull-right" /> <input type="button"
 					value="初审" class="btn btn-primary btn-sm pull-right" /> <input
 					type="button" value="分享" class="btn btn-primary btn-sm pull-right" />
 				<input type="button" value="日志"
@@ -166,7 +166,7 @@
 							<!-- end select2 线上/OTS/线下 -->
 
 
-							<div class="row body-from-input">
+							<div class="row body-from-input zhiKe none">
 								<!-- input 直客 -->
 								<div class="col-sm-3">
 									<div class="form-group">
@@ -552,8 +552,8 @@
 							<!-- end 发票项目内容/发票抬头/税号/备注 -->
 							<i class="add-btn"></i>
 						</div>
-					</div>
-					<!-- end 快递信息 --> --%>
+					</div> --%>
+					<!-- end 快递信息 -->
 
 				</form>
 			</section>
@@ -778,7 +778,7 @@
 								<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
 								<a href="javascript:passportInfo('+data[i].id+');">护照信息</a>&nbsp;&nbsp;
 								<a href="">签证信息</a><br>
-								<a href="javascript:passportInfo('+data[i].id+');">回邮</a>&nbsp;&nbsp;
+								<a href="javascript:backmailInfo('+data[i].id+');">回邮信息</a>&nbsp;&nbsp;
 								<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></br>
 								</td>';
 								
@@ -823,6 +823,21 @@
 					scrollbar: false,
 					area: ['900px', '551px'],
 					content:'/admin/orderJp/passportInfo.html?id='+id
+				});
+			}
+			
+			//回邮信息
+			function backmailInfo(id){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/backMailJp/backMailInfo.html?applicantId='+id
 				});
 			}
 			

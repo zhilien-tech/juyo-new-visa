@@ -58,15 +58,37 @@
 								</div>
 							</div>
 							<ul class="card-content cf">
-								<li class="everybody-info cf" v-for="item in data.everybodyinfo">
+								<!-- <li class="everybody-info cf" v-for="item in data.everybodyinfo">
 									<div><label>申请人：</label><span>{{item.applicant}}</span></div>
 									<div><label>护照号：</label><span>{{item.passportno}}</span></div>
 									<div><label>快递号：</label><span>{{item.expressnum}}</span></div>
 									<div><label>方式：</label><span>{{item.expresstype}}</span></div>
 									<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 									<div><label>资料：</label><span>{{item.data}}</span></div>
-									<!-- <div><i class="videoShoot"> </i></div> -->
+									<div><i class="videoShoot"> </i></div>
+								</li> -->
+								
+								<li class="everybody-info cf" v-for="(item,index) in data.everybodyinfo">
+									<span v-if="index === 0">
+										<div><label>申请人：</label><span>{{item.applicant}}</span></div>
+									<div><label>护照号：</label><span>{{item.passportno}}</span></div>
+									<div><label>快递号：</label><span>{{item.expressnum}}</span></div>
+									<div><label>方式：</label><span>{{item.expresstype}}</span></div>
+									<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
+										<div><label>资料：</label><span v-html="item.data"><!-- {{item.data}} --></span></div>
+										<div><!-- <i> </i> --></div>
+									</span>
+									<span v-else>
+										<div><label>   </label><span>{{item.applicant}}</span></div>
+									<div><label>   </label><span>{{item.passportno}}</span></div>
+									<div><label>   </label><span>{{item.expressnum}}</span></div>
+									<div><label>   </label><span>{{item.expresstype}}</span></div>
+									<div><label>   </label><span>{{item.datatype}}</span></div>
+										<div><label>　　　</label><span v-html="item.data"><!-- {{item.data}} --></span></div>
+										<div><!-- <i> </i> --></div>
+									</span>
 								</li>
+								
 							</ul>
 						</div>
 					</div><!-- end 卡片列表 -->

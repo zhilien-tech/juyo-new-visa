@@ -1,6 +1,7 @@
 /*reception_list*/
 SELECT
 	tr.id,
+	toj.id orderJpId,
 	tr.orderNum orderNumber,
 	toj.acceptDesign number,
 	tr.STATUS orderStatus
@@ -41,7 +42,8 @@ SELECT
 	ta.telephone,
 	ta.email,
 	tavpj.type dataType,
-	tavpj.data data
+	tavpj.data data,
+	tavpj. STATUS STATUS
 FROM
 	t_applicant_order_jp taoj
 INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
@@ -51,7 +53,21 @@ LEFT JOIN (
 	SELECT
 		applicantId,
 		type,
-		GROUP_CONCAT(realInfo SEPARATOR '、') data
+		GROUP_CONCAT(
+			(
+				CASE
+				WHEN STATUS = 0 THEN
+						realInfo
+				ELSE
+					CONCAT(
+						'<font color="blue">',
+						realInfo,
+						'</font>'
+					)
+				END
+			) SEPARATOR '、'
+		) data,
+		STATUS
 	FROM
 		t_applicant_front_paperwork_jp
 	GROUP BY applicantId
