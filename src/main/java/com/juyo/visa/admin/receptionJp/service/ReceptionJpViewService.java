@@ -39,6 +39,7 @@ import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.common.enums.ReceptionSearchStatusEnum_JP;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
 import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
@@ -119,6 +120,12 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 			record.put("everybodyInfo", records);
 		}
 		result.put("receptionJpData", list);
+		return result;
+	}
+
+	public Object toList() {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("receptionSearchStatus", EnumUtil.enum2(ReceptionSearchStatusEnum_JP.class));
 		return result;
 	}
 

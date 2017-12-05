@@ -100,7 +100,9 @@ public class OrderJpForm extends OrderForm {
 			if (Util.eq(getStatus(), 21)) {
 				cnd.and("o.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
 			} else {
-				cnd.and("o.status", "=", getStatus());
+				SqlExpressionGroup e1 = Cnd.exps("o.status", "=", getStatus()).and("o.isDisabled", "=",
+						IsYesOrNoEnum.NO.intKey());
+				cnd.and(e1);
 			}
 		}
 		if (!Util.isEmpty(source)) {

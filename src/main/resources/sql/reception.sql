@@ -1,6 +1,6 @@
 /*reception_list*/
 SELECT
-	toj.id,
+	tr.id,
 	tr.orderNum orderNumber,
 	toj.acceptDesign number,
 	tr.STATUS orderStatus

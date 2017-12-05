@@ -60,8 +60,8 @@
 				</span> <input type="button" value="取消"
 					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> <input type="button"
 					value="保存" class="btn btn-primary btn-sm pull-right"
-					onclick="saveAddOrder();" /> <input type="button" value="回邮"
-					class="btn btn-primary btn-sm pull-right" /> <input type="button"
+					onclick="saveAddOrder();" /> <!-- <input type="button" value="回邮"
+					class="btn btn-primary btn-sm pull-right" /> --> <input type="button"
 					value="初审" class="btn btn-primary btn-sm pull-right" /> <input
 					type="button" value="分享" class="btn btn-primary btn-sm pull-right" />
 				<input type="button" value="日志"
@@ -434,7 +434,7 @@
 					<!-- end 主申请人 -->
 
 
-					<div class="row body-from-input" id="backmailInfo">
+					<%-- <div class="row body-from-input" id="backmailInfo">
 						<!-- 添加回邮信息 -->
 						<div class="col-sm-12">
 							<div class="form-group">
@@ -553,7 +553,7 @@
 							<i class="add-btn"></i>
 						</div>
 					</div>
-					<!-- end 快递信息 -->
+					<!-- end 快递信息 --> --%>
 
 				</form>
 			</section>
@@ -778,7 +778,7 @@
 								<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
 								<a href="javascript:passportInfo('+data[i].id+');">护照信息</a>&nbsp;&nbsp;
 								<a href="">签证信息</a><br>
-								<a href="">回邮</a>&nbsp;&nbsp;
+								<a href="javascript:passportInfo('+data[i].id+');">回邮</a>&nbsp;&nbsp;
 								<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></br>
 								</td>';
 								
