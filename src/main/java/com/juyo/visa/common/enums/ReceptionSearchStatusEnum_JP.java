@@ -5,8 +5,8 @@ import com.uxuexi.core.common.enums.IEnum;
 /**
  * 
  * <p>
- * 日本初审检索状态
- * @author   彭辉
+ * 
+ * @author   
  * @Date	 2017年10月20日
  */
 public enum ReceptionSearchStatusEnum_JP implements IEnum {
