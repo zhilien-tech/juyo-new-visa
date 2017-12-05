@@ -287,4 +287,19 @@ public class VisaJapanModule {
 	public Object autoCalculateBackDate(@Param("gotripdate") Date gotripdate, @Param("stayday") Integer stayday) {
 		return visaJapanService.autoCalculateBackDate(gotripdate, stayday);
 	}
+
+	@At
+	@POST
+	public Object validateIsoriginal(@Param("paperid") Integer paperid) {
+		return visaJapanService.validateIsoriginal(paperid);
+	}
+
+	/**
+	 * 移交售后
+	 */
+	@At
+	@POST
+	public Object afterMarket(@Param("orderid") Long orderid) {
+		return visaJapanService.afterMarket(orderid);
+	}
 }
