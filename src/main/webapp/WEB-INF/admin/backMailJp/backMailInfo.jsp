@@ -133,7 +133,7 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<!-- 本页面js文件 -->
-	<script src="${base}/admin/firstTrialJp/backMailInfo.js"></script>
+	<script src="${base}/admin/backMailJp/backMailInfo.js"></script>
 	<script>
 		//返回 
 		function closeWindow() {
