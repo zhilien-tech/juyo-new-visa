@@ -262,7 +262,7 @@ new Vue({
     		    shadeClose: false,
     		    scrollbar: false,
     		    area: ['900px', '550px'],
-    		    content:'/admin/orderJp/passportInfo.html?id='+applyId+'&orderid='+orderid
+    		    content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid='+orderid
     	    });
 		},
 		visaInfo:function(applyId){
@@ -275,7 +275,20 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?applicantId='+applyId+'&orderid='+orderid+'&isOrderUpTime=1'
+				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid+'&isOrderUpTime=1'
+			});
+		},
+		backmailInfo:function(applyId){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId
 			});
 		},
 		qualified:function(applyId){
@@ -337,6 +350,22 @@ new Vue({
 function successCallBack(status){
 	if(status == 1){
 		layer.msg('修改成功');
+		var url = '/admin/firstTrialJp/getJpTrialDetailData.html';
+		$.ajax({ 
+			url: url,
+			type:'post',
+			dataType:"json",
+			data:{
+				orderid:orderid,
+				orderjpid:orderjpid
+			},
+			success: function(data){
+				orderobj.applyinfo = data.applyinfo;
+				orderobj.orderinfo = data.orderinfo;
+			}
+		}); 
+	}else if(status == 2){
+		layer.msg('发送成功');
 		var url = '/admin/firstTrialJp/getJpTrialDetailData.html';
 		$.ajax({ 
 			url: url,

@@ -182,9 +182,12 @@
 			}else{
 				 var flag = 0;
 				 var trcount = 0;
+				 var applyId = "";
 				 $("#datatableId tbody tr").each(function(){
 					 if($(this).hasClass("trColor")){
+						 applicantId = $(this).children().eq(0).html();
 						 trcount++;
+						 applyId += applicantId + ',';
 					 }
 				 });
 				$("#datatableId tbody tr").each(function(){
@@ -194,31 +197,8 @@
 						telephone = $(this).children().eq(2).html();
 						email = $(this).children().eq(3).html();
 						if(email == "" || telephone == ""){
-							var applicant = applicantId;
-							layer.confirm("手机号、邮箱不能为空，请及时补充", {
-								title:"验证",
-								btn: ["马上补充","以后再说"], //按钮
-								shade: false //不显示遮罩
-							}, function(){
-								flag = 1;
-								layer.open({
-									type: 2,
-									title: false,
-									closeBtn:false,
-									fix: false,
-									maxmin: false,
-									shadeClose: false,
-									scrollbar: false,
-									area: ['900px', '551px'],
-									content:'${base}/admin/orderJp/updateApplicant.html?id='+applicant
-								});
-								
-							});
 							
-							
-							
-							
-							/* layer.open({
+							layer.open({
 								type: 2,
 								title: false,
 								closeBtn:false,
@@ -228,61 +208,39 @@
 								scrollbar: false,
 								area: ['900px', '551px'],
 								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
-							}); */
-						}/* else{
-							layer.load(1);
-							$.ajax({ 
-								url: BASE_PATH+'/admin/orderJp/sendEmail',
-								async:false,
-								type:'post',
-								data:{
-									orderid:orderId,
-									applicantid:applicantId
-								},
-								success: function(data){
-									layer.closeAll('loading');
-									flag++;
-									if(flag == trcount){//说明选中的都已发送邮件
-										layer.load(1);
-										$.ajax({ 
-											url: BASE_PATH+'/admin/orderJp/shareComplete',
-											async:false,
-											type:'post',
-											data:{
-												orderid:orderId
-											},
-											success: function(data){
-												layer.closeAll('loading');
-												layer.msg("分享成功", {
-													time: 1000,
-													end: function () {
+							});
+						}else{
+							flag++;
+							if(flag == trcount){
+								layer.load(1);
+								$.ajax({ 
+									url: BASE_PATH+'/admin/orderJp/sendEmail',
+									//async:false,
+									type:'post',
+									data:{
+										orderid:orderId,
+										applicantid:applyId
+									},
+									success: function(data){
+										//flag++;
+										//判断选中的是否都已发送邮件
+										if(data.sendResult == "success"){
+											layer.closeAll('loading');
+											layer.msg("分享成功", {
+												time: 1000,
+												end: function () {
 													var index = parent.layer.getFrameIndex(window.name);
 													parent.layer.close(index);
-													}
-													});
-											}
-										});
+												}
+											});
+										}
 									}
-								}
-							});
-						} */ 
+								});
+							}
+						}
 					}
 			});
-				
-				/*  $("#datatableId tbody tr").each(function(){
-					 if($(this).hasClass("trColor")){
-						applicantId = $(this).children().eq(0).html();
-						name = $(this).children().eq(1).html();
-						telephone = $(this).children().eq(2).html();
-						email = $(this).children().eq(3).html();
-						alert(applicantId);
-					 }
-				 }); */
-				
-				
 			}
-			//parent.successCallBack(4);
-			
 		}
 		
 		//返回 
@@ -307,6 +265,7 @@
             		console.log(JSON.stringify(_self.shareInfo));
               	}
             });
+			parent.successCallBack(4);
 			//save();
 			//parent.location.reload();
 		}

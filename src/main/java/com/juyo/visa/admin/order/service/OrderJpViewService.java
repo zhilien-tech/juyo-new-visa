@@ -209,13 +209,23 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object addOrder(Integer id, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
 		TCustomerEntity customer = new TCustomerEntity();
-		;
 		result.put("orderId", id);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderJpEntity orderJpinfo = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", id.longValue()));
 		TOrderEntity orderInfo = dbDao.fetch(TOrderEntity.class, id.longValue());
 		if (!Util.isEmpty(orderInfo.getCustomerId())) {
 			customer = dbDao.fetch(TCustomerEntity.class, orderInfo.getCustomerId().longValue());
+		} else {
+			customer.setEmail(orderInfo.getEmail());
+			customer.setLinkman(orderInfo.getLinkman());
+			if (!Util.isEmpty(orderInfo.getIsDirectCus()) && Util.eq(orderInfo.getIsDirectCus(), 1)) {
+				customer.setSource(CustomerTypeEnum.ZHIKE.intKey());
+			} else {
+				customer.setSource(null);
+			}
+			customer.setMobile(orderInfo.getTelephone());
+			customer.setName(orderInfo.getComName());
+			customer.setShortname(orderInfo.getComShortName());
 		}
 		int status = (int) orderInfo.getStatus();
 		//int status = (int) record.get("status");
@@ -272,6 +282,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(applicantForm.getFirstName())) {
 			applicant.setFirstName(applicantForm.getFirstName());
 		}
+		applicant.setFirstNameEn(applicantForm.getFirstNameEn());
+		applicant.setLastNameEn(applicantForm.getLastNameEn());
 		if (!Util.isEmpty(applicantForm.getIssueOrganization())) {
 			applicant.setIssueOrganization(applicantForm.getIssueOrganization());
 		}
@@ -448,10 +460,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				}
 				order.setIsDirectCus(IsYesOrNoEnum.YES.intKey()); //1是直客
 			} else {
-				TCustomerEntity customer = dbDao.fetch(TCustomerEntity.class,
-						new Long(order.getCustomerId()).intValue());
-				order.setCustomerId(customer.getId());
-				order.setIsDirectCus(IsYesOrNoEnum.NO.intKey()); //0不是直客
+				if (!Util.isEmpty(customermap.get("id"))) {
+					int cusId = (int) customermap.get("id");
+					order.setCustomerId(cusId);
+					order.setIsDirectCus(IsYesOrNoEnum.NO.intKey()); //0不是直客
+				}
 			}
 		}
 		dbDao.update(order);
@@ -584,6 +597,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		orderEntity.setCreateTime(new Date());
 		orderEntity.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
 		orderEntity.setUpdateTime(new Date());
+		orderEntity.setIsDisabled(IsYesOrNoEnum.NO.intKey());
 		dbDao.insert(orderEntity);
 		Integer orderId = orderEntity.getId();
 		//下单日志保存
@@ -686,6 +700,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(orderInfo.get("isDirectCus"))) {
 			if (Util.eq(orderInfo.get("isDirectCus"), IsYesOrNoEnum.YES.intKey())) {//直客时，客户信息从订单中取
 				customerInfo.setSource(CustomerTypeEnum.ZHIKE.intKey());
+				customerInfo.setId(null);
 				customerInfo.setLinkman((String) orderInfo.get("linkman"));
 				customerInfo.setMobile((String) orderInfo.get("telephone"));
 				customerInfo.setName((String) orderInfo.get("comName"));
@@ -696,6 +711,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					Integer customerId = (Integer) orderInfo.get("customerId");
 					TCustomerEntity customerEntity = dbDao
 							.fetch(TCustomerEntity.class, new Long(customerId).intValue());
+					customerInfo.setId(customerEntity.getId());
 					customerInfo.setEmail(customerEntity.getEmail());
 					customerInfo.setLinkman(customerEntity.getLinkman());
 					customerInfo.setMobile(customerEntity.getMobile());
@@ -778,8 +794,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setDetailedAddress(applicantForm.getDetailedAddress());
 			applicant.setEmail(applicantForm.getEmail());
 			applicant.setFirstName(applicantForm.getFirstName());
+			applicant.setFirstNameEn(applicantForm.getFirstNameEn());
 			applicant.setIssueOrganization(applicantForm.getIssueOrganization());
 			applicant.setLastName(applicantForm.getLastName());
+			applicant.setLastNameEn(applicantForm.getLastNameEn());
 			applicant.setNation(applicantForm.getNation());
 			applicant.setProvince(applicantForm.getProvince());
 			applicant.setSex(applicantForm.getSex());
@@ -1181,7 +1199,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				if (!Util.isEmpty(visaForm.getSameMainWork())) {
 					applicantOrderJpEntity.setSameMainWork(visaForm.getSameMainWork());
 					//如果申请人工作信息同主申请人工作信息，则把主申请人的工作信息添加到申请人中
-					if (Util.eq(visaForm.getSameMainWealth(), IsYesOrNoEnum.YES.intKey())) {
+					if (Util.eq(visaForm.getSameMainWork(), IsYesOrNoEnum.YES.intKey())) {
 						if (!Util.isEmpty(applicantEntity.getMainId())) {
 							TApplicantEntity mainApplicant = dbDao.fetch(TApplicantEntity.class, new Long(
 									applicantEntity.getMainId()).intValue());
@@ -1282,12 +1300,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 							applicantWorkJpEntity.setCareerStatus(visaForm.getCareerStatus());
 
 						}
-						if (!Util.isEmpty(visaForm.getName())) {
-							applicantWorkJpEntity.setName(visaForm.getName());
-						}
-						if (!Util.isEmpty(visaForm.getTelephone())) {
-							applicantWorkJpEntity.setTelephone(visaForm.getTelephone());
-						}
+						applicantWorkJpEntity.setName(visaForm.getName());
+						applicantWorkJpEntity.setTelephone(visaForm.getTelephone());
 						applicantWorkJpEntity.setUpdateTime(new Date());
 						dbDao.update(applicantWorkJpEntity);
 					}
@@ -1329,19 +1343,41 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return complete;
 	}
 
-	public Object sendEmail(int orderid, int applicantid, HttpSession session) {
+	public Object sendEmail(int orderid, String applicantid, HttpSession session) {
+		Map<String, Object> result = MapUtil.map();
 		//发送短信、邮件
-		try {
-			String sendMail = (String) sendMail(orderid, applicantid);
-			String sendMessage = (String) sendMessage(orderid, applicantid);
-			/*if (Util.eq(sendMail, "success") && Util.eq(sendMessage, "发送成功")) {
-				insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
-			}*/
+		int sendCount = 0;
+		String applicants = applicantid.substring(0, applicantid.length() - 1);
+		String applicantSqlstr = sqlManager.get("orderJp_applicantTable");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		Cnd appcnd = Cnd.NEW();
+		appcnd.and("a.id", "in", applicants);
+		applicantSql.setCondition(appcnd);
+		List<Record> applicantInfo = dbDao.query(applicantSql, appcnd, null);
+		for (Record record : applicantInfo) {
+			if (!Util.isEmpty(record.get("id"))) {
+				int applicantId = (int) record.get("id");
+				try {
+					String sendMail = (String) sendMail(orderid, applicantId);
+					String sendMessage = (String) sendMessage(orderid, applicantId);
+					if (Util.eq(sendMail, "success") && Util.eq(sendMessage, "发送成功")) {
+						sendCount++;
+					}
 
-		} catch (IOException e) {
-			e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		return null;
+		if (Util.eq(sendCount, applicantInfo.size())) {
+			insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
+			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
+			orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
+			orderEntity.setUpdateTime(new Date());
+			dbDao.update(orderEntity);
+			result.put("sendResult", "success");
+		}
+		return result;
 	}
 
 	public Object shareComplete(Integer orderid, HttpSession session) {
@@ -1355,6 +1391,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			String sendMessageUnified = (String) sendMessageUnified(orderid, applicantid);
 			if (Util.eq(sendMailUnified, "success") && Util.eq(sendMessageUnified, "发送成功")) {
 				insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
+				TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
+				orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
+				orderEntity.setUpdateTime(new Date());
+				dbDao.update(orderEntity);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -1656,6 +1696,22 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
+	public Object disabled(int orderid) {
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
+		orderEntity.setIsDisabled(IsYesOrNoEnum.YES.intKey());
+		orderEntity.setUpdateTime(new Date());
+		dbDao.update(orderEntity);
+		return null;
+	}
+
+	public Object undisabled(int orderid) {
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
+		orderEntity.setIsDisabled(IsYesOrNoEnum.NO.intKey());
+		orderEntity.setUpdateTime(new Date());
+		dbDao.update(orderEntity);
+		return null;
+	}
+
 	public Object getApplicants(String applicantIds, HttpSession session) {
 		String applicants = applicantIds.substring(0, applicantIds.length() - 1);
 		String applicantSqlstr = sqlManager.get("orderJp_applicantTable");
@@ -1916,9 +1972,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		JSONArray outputArray = resultObj.getJSONArray("outputs");
 		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
 		JSONObject out = new JSONObject(output);
+		String substring = "";
 		if (out.getBoolean("success")) {
 			String type = out.getString("type");
-			jsonEntity.setType(type);
+			if (!Util.isEmpty(type)) {
+				substring = type.substring(0, 1);
+			}
+			jsonEntity.setType(substring);
 			jsonEntity.setNum(out.getString("passport_no"));
 			if (out.getString("sex").equals("F")) {
 				jsonEntity.setSex("女");

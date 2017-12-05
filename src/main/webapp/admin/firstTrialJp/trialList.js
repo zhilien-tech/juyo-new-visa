@@ -241,5 +241,16 @@ function successCallBack(status){
 				_self.trialJapanData = data.trialJapanData;
 			}
 		});
+	}else if(status == 2){
+		layer.msg('发送成功');
+		$.ajax({ 
+			url: url,
+			/* data:{status:status,searchStr:searchStr}, */
+			dataType:"json",
+			type:'post',
+			success: function(data){
+				_self.trialJapanData = data.trialJapanData;
+			}
+		});
 	}
 }
