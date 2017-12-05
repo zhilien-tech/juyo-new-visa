@@ -70,7 +70,7 @@
 									<div class="date-info">
 										<label>当前状态：</label>
 										<!-- <span>初审合格</span> -->
-										<span><a href="">初审不合格</a><label>(基本信息、签证信息)</label></span>
+										<span><a href="">${obj.orderstatus}</a><label>(基本信息、签证信息)</label></span>
 									</div>
 									
 								</li>

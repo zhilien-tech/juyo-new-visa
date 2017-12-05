@@ -93,7 +93,9 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				orderstatus = jpos.value();
 			}
 		}
+
 		result.put("order", order);
+		result.put("orderstatus", orderstatus);
 
 		String sqlString = sqlManager.get("myvisa_applicant_by_id");
 		Sql sql = Sqls.create(sqlString);
