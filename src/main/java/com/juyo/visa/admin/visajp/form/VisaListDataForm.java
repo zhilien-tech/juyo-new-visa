@@ -17,6 +17,7 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
 
@@ -34,7 +35,7 @@ public class VisaListDataForm implements SQLParamForm {
 	//状态
 	private Integer status;
 	//送签时间
-	private Date sendSignDate;
+	private String sendSignDate;
 	//出签时间
 	private Date signOutDate;
 	//检索框
@@ -78,10 +79,12 @@ public class VisaListDataForm implements SQLParamForm {
 				.or("tr.status", "=", JPOrderStatusEnum.TRANSFER_VISA.intKey());
 		cnd.and(statusexp);
 		if (!Util.isEmpty(sendSignDate)) {
-			cnd.and("tr.sendVisaDate", ">=", sendSignDate);
-		}
-		if (!Util.isEmpty(signOutDate)) {
-			cnd.and("tr.outVisaDate", "<=", signOutDate);
+			//cnd.and("tr.sendVisaDate", ">=", sendSignDate);
+			String[] split = sendSignDate.split(" - ");
+			Date sendSignDate = DateUtil.string2Date(split[0], DateUtil.FORMAT_YYYY_MM_DD); 
+			Date outSignDate = DateUtil.string2Date(split[1], DateUtil.FORMAT_YYYY_MM_DD);
+			//SqlExpressionGroup exp = new SqlExpressionGroup();
+			cnd.and("sendVisaDate", ">=", sendSignDate).and("outVisaDate", "<=", outSignDate);
 		}
 		if (userid.equals(adminId)) {
 			//公司管理员
