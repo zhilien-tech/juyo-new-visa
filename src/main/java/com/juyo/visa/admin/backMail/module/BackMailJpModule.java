@@ -37,7 +37,7 @@ public class BackMailJpModule {
 	/**
 	 * 跳转到回邮信息页
 	 *
-	 * @return null
+	 * @return 
 	 */
 	@At
 	@GET

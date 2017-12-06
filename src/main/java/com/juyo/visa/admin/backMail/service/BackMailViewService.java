@@ -20,6 +20,7 @@ import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
 import com.juyo.visa.common.enums.MainBackMailTypeEnum;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
+import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantBackmailJpForm;
@@ -52,6 +53,9 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 
 	//获取回邮信息
 	public Object getBackMailInfo(Integer applicantId, HttpSession session) {
+
+		Date nowDate = DateUtil.nowDate();
+
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userid = loginUser.getId();
 		TApplicantOrderJpEntity taoj = dbDao.fetch(TApplicantOrderJpEntity.class,
@@ -65,15 +69,25 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 		if (!Util.isEmpty(backmailinfo)) {
 			result.put("backmailinfo", backmailinfo);
 		} else {
+
+			//获取申请人信息
+			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantId.longValue());
+			String name = applicant.getFirstName() + applicant.getLastName();
+			String mobile = applicant.getTelephone();
+
 			BackMailInfoEntity backmail = new BackMailInfoEntity();
-			Date nowDate = DateUtil.nowDate();
+			backmail.setOpid(userid);
+			backmail.setLinkman(name);
+			if (!Util.isEmpty(mobile)) {
+				backmail.setTelephone(mobile);
+			}
 			backmail.setSource(MainBackMailSourceTypeEnum.KUAIDI.intKey());
 			backmail.setExpresstype(MainBackMailTypeEnum.KUAIDI.intKey());
 			backmail.setCreatetime(nowDate);
 			backmail.setUpdatetime(nowDate);
-			backmail.setOpid(userid);
 			backmail.setApplicantid(applicantId);
 			backmail.setApplicantjpid(taoj.getId());
+
 			result.put("backmailinfo", backmail);
 		}
 
