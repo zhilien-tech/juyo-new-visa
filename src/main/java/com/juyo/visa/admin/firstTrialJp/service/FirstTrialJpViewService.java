@@ -325,13 +325,32 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//快递方式
 		result.put("expressType", EnumUtil.enum2(ExpressTypeEnum.class));
 
-		//订单主申请人
+		/*//订单主申请人
 		String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
 		Sql applysql = Sqls.create(sqlStr);
 		List<Record> records = dbDao.query(applysql,
 				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
-				null);
+				null);*/
+
+		//业务需求，更改为 销售分享的申请人 如果为统一联系人只展示一个， 否则展示单独分享的
+		String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
+		int yes = IsYesOrNoEnum.YES.intKey();
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(applysql,
+				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isShareSms", "=", yes), null);
+
+		List<Record> sameRecord = new ArrayList<Record>();
+		for (Record record : records) {
+			String isSameMan = record.getString("isSameLinker");
+			if (Util.eq(isSameMan, yes)) {
+				//统一联系人
+				sameRecord.add(record);
+				records = sameRecord;
+			}
+		}
+
 		records = editApplicantsInfo(records);
+
 		result.put("applicant", records);
 		//订单id
 		result.put("orderid", orderid);
