@@ -1537,13 +1537,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
 		List<TApplicantOrderJpEntity> applyListDB = dbDao.query(TApplicantOrderJpEntity.class,
 				Cnd.where("orderId", "=", orderJpEntity.getId()), null);
-		List<TApplicantOrderJpEntity> applyList = new ArrayList<>();
 		for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyListDB) {
 			tApplicantOrderJpEntity.setIsShareSms(0);
 			tApplicantOrderJpEntity.setIsSameLinker(0);
-			applyList.add(tApplicantOrderJpEntity);
+			dbDao.update(tApplicantOrderJpEntity);
 		}
-		dbDao.updateRelations(applyListDB, applyList);
 		//发送短信、邮件
 		int sendCount = 0;
 		String applicants = applicantid.substring(0, applicantid.length() - 1);
@@ -1571,16 +1569,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (Util.eq(sendCount, applicantInfo.size())) {//分享完毕
 			List<TApplicantOrderJpEntity> listDB = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "in", applicants), null);
-			List<TApplicantOrderJpEntity> list = new ArrayList<>();
 			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : listDB) {
 				tApplicantOrderJpEntity.setIsShareSms(1);
-				list.add(tApplicantOrderJpEntity);
+				dbDao.update(tApplicantOrderJpEntity);
 			}
-			dbDao.updateRelations(listDB, list);
 			insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
-			orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
-			orderEntity.setUpdateTime(new Date());
-			dbDao.update(orderEntity);
+			if (orderEntity.getStatus() <= JPOrderStatusEnum.SHARE.intKey()) {
+				orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
+				orderEntity.setUpdateTime(new Date());
+				dbDao.update(orderEntity);
+			}
 			result.put("sendResult", "success");
 		}
 		return result;
@@ -1597,34 +1595,32 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
 		List<TApplicantOrderJpEntity> applyListDB = dbDao.query(TApplicantOrderJpEntity.class,
 				Cnd.where("orderId", "=", orderJpEntity.getId()), null);
-		List<TApplicantOrderJpEntity> applyList = new ArrayList<>();
 		for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyListDB) {
 			tApplicantOrderJpEntity.setIsShareSms(0);
 			tApplicantOrderJpEntity.setIsSameLinker(0);
-			applyList.add(tApplicantOrderJpEntity);
+			dbDao.update(tApplicantOrderJpEntity);
 		}
-		dbDao.updateRelations(applyListDB, applyList);
 		try {
 			String sendMailUnified = (String) sendMailUnified(orderid, applicantid);
 			String sendMessageUnified = (String) sendMessageUnified(orderid, applicantid);
 			if (Util.eq(sendMailUnified, "success") && Util.eq(sendMessageUnified, "发送成功")) {
 				List<TApplicantOrderJpEntity> listDB = dbDao.query(TApplicantOrderJpEntity.class,
 						Cnd.where("orderId", "=", orderJpEntity.getId()).and("applicantId", "!=", applicantid), null);
-				List<TApplicantOrderJpEntity> list = new ArrayList<>();
 				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : listDB) {
 					tApplicantOrderJpEntity.setIsShareSms(1);
-					list.add(tApplicantOrderJpEntity);
+					dbDao.update(tApplicantOrderJpEntity);
 				}
-				dbDao.updateRelations(listDB, list);
 				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
 						Cnd.where("applicantId", "=", applicantid));
 				mainApply.setIsSameLinker(1);
 				mainApply.setIsShareSms(1);
 				dbDao.update(mainApply);
 				insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
-				orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
-				orderEntity.setUpdateTime(new Date());
-				dbDao.update(orderEntity);
+				if (orderEntity.getStatus() <= JPOrderStatusEnum.SHARE.intKey()) {
+					orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
+					orderEntity.setUpdateTime(new Date());
+					dbDao.update(orderEntity);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

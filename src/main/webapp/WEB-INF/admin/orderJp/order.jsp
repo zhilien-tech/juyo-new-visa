@@ -203,7 +203,7 @@
 								<div class="form-group">
 									<label><span>*</span>加急：</label> <select id="urgentType"
 										name="urgentType" class="form-control input-sm"
-										onchange="selectListData();" v-model="orderInfo.urgenttype">
+										 v-model="orderInfo.urgenttype">
 										<c:forEach var="map" items="${obj.mainSaleUrgentEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -264,7 +264,7 @@
 								<div class="form-group">
 									<label><span>*</span>签证类型：</label> <select id="visaType"
 										name="visaType" class="form-control input-sm"
-										onchange="selectListData();" v-model="orderInfo.visatype">
+										 v-model="orderInfo.visatype">
 										<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -311,7 +311,7 @@
 									<label><span>*</span>过去三年是否访问过：</label> 
 									<select id="isVisit"
 										name="isVisit" class="form-control input-sm"
-										onchange="selectListData();" v-model="orderInfo.isvisit">
+										 v-model="orderInfo.isvisit">
 										<c:forEach var="map" items="${obj.threeYearsIsVisitedEnum}">
 											<option value="${map.key}" >${map.value}</option>
 										</c:forEach>
@@ -732,16 +732,6 @@
 				//customerTypeSelect2();
 			}
 			
-			$('#urgentType').change(function(){
-				var thisval = $(this).val();
-				if(thisval == 1){
-					$("#urgentDays").addClass("none");
-				}else{
-					$("#urgentDays").removeClass("none");
-					orderobj.orderInfo.urgentday = 1;
-				}
-			});
-			
 			//点击 蓝色加号图标 事件
 			$('.add-btn').click(function(){
 				var newDiv=$(this).parent().clone();//克隆标签模块
@@ -888,6 +878,16 @@
 						}else{
 							$("#urgentDays").removeClass("none");
 						}
+						
+						$('#urgentType').change(function(){
+							var thisval = $(this).val();
+							if(thisval == 1){
+								$("#urgentDays").addClass("none");
+							}else{
+								$("#urgentDays").removeClass("none");
+								orderobj.orderInfo.urgentday = 1;
+							}
+						});
 						
 						//签证类型  按钮的点击状态
 						$(".viseType-btn input").click(function(){
@@ -1278,7 +1278,7 @@
 			 }
 		}
 		
-		//时间插件格式化  出行时间>今天>送签时间 
+		//时间插件格式化  出行时间>送签时间 >今天
 		var now = new Date();
 		$("#goTripDate").datetimepicker({
 			format: 'yyyy-mm-dd',
@@ -1302,10 +1302,12 @@
 		$("#sendVisaDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
-			endDate: now,//日期小于今天
+			startDate: now,//日期大于今天
 			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
+		}).on("click",function(){
+			$("#sendVisaDate").datetimepicker("setEndDate",$("#goTripDate").val());
 		}); 
 		$("#outVisaDate").datetimepicker({
 			format: 'yyyy-mm-dd',

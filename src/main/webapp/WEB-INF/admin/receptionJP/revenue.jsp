@@ -46,7 +46,16 @@
 									<td>${apply.dataType }</td>
 									<td class="certificates">
 										<c:forEach items="${apply.revenue }" var="revenue">
-											<span>${revenue.realInfo }</span>
+											<c:choose>
+												<c:when test="${revenue.status == 0 }">
+													<span class="titleStyle realinfo">${revenue.realInfo }</span>
+													<input type="hidden" id="revenueid" name="revenueid" value="${revenue.id }">
+												</c:when>
+												<c:otherwise>
+													<span class="realinfo">${revenue.realInfo }</span>
+													<input type="hidden" id="revenueid" name="revenueid" value="${revenue.id }">
+												</c:otherwise>
+											</c:choose>
 										</c:forEach>
 										<input id="" name="" type="text" class="addInp none">
 										<span class="addText">+</span>

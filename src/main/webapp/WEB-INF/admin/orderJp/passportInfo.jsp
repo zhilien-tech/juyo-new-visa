@@ -190,8 +190,17 @@
 			}else{
 				$("#sexEn").val("F");
 			}
+			
+			$("#issuedDate").change(function(){
+				if($("#issuedDate").val() != ""){
+					if($("#validType").val() == 1){
+						$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
+					}else{
+						$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+					}
+				}
+			});
 		});
-		
 		function initvalidate(){
 			//校验
 			$('#passportInfo').bootstrapValidator({
@@ -228,33 +237,7 @@
 			var end = $('#validEndDate').val();
 			 
 		} */
-		initvalidate();
-		$("#passportInfo").bootstrapValidator("validate");
 		
-		//保存
-		function save(){
-			$("#passportInfo").bootstrapValidator("validate");
-			//得到获取validator对象或实例 
-			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-			// 执行表单验证 
-			initvalidate();
-			bootstrapValidator.validate();
-			if (!bootstrapValidator.isValid()) {
-				return;
-			}
-			var passportInfo = $("#passportInfo").serialize();
-			$.ajax({
-				type: 'POST',
-				data : passportInfo,
-				url: '${base}/admin/orderJp/saveEditPassport',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-					parent.successCallBack(1);
-					closeWindow();
-				}
-			});
-		}
 		
 		
 		//护照上传,扫描
@@ -290,6 +273,14 @@
 							$("#uploadFile").siblings("i").css("display","block");
 							$('#type').val(obj.type);
 							$('#passport').val(obj.num);
+							if($('#passport').val != "" || $('#passport').val != null || $('#passport').val != undefined){
+								$("#passportInfo").bootstrapValidator("validate");
+								//得到获取validator对象或实例 
+								var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+								// 执行表单验证 
+								initvalidate();
+								bootstrapValidator.validate();
+							}
 							$('#sex').val(obj.sex);
 							$('#sexEn').val(obj.sexEn);
 							$('#birthAddress').val(obj.birthCountry);
@@ -332,6 +323,35 @@
 			});
 		}
 		
+		
+		initvalidate();
+		$("#passportInfo").bootstrapValidator("validate");
+		
+		//保存
+		function save(){
+			$("#passportInfo").bootstrapValidator("validate");
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+			// 执行表单验证 
+			initvalidate();
+			bootstrapValidator.validate();
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
+			var passportInfo = $("#passportInfo").serialize();
+			$.ajax({
+				type: 'POST',
+				data : passportInfo,
+				url: '${base}/admin/orderJp/saveEditPassport',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+					parent.successCallBack(1);
+					closeWindow();
+				}
+			});
+		}
+		
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -355,6 +375,46 @@
 				$("#sexEn").val("F");
 			}
 		});
+		
+		$("#validType").change(function(){
+			var type = $(this).val();
+			if(type == 1){
+				$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
+			}else{
+				$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+			}
+			
+		});
+		function getNewDay(dateTemp, days) {  
+		    var dateTemp = dateTemp.split("-");  
+		    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
+		    var millSeconds = Math.abs(nDate) + (days * 365.2 * 24 * 60 * 60 * 1000);  
+		    var rDate = new Date(millSeconds);  
+		    var year = rDate.getFullYear();  
+		    var month = rDate.getMonth() + 1;  
+		    if (month < 10) month = "0" + month;  
+		    var date = rDate.getDate();  
+		    if (date < 10) date = "0" + date;  
+		    return (year + "-" + month + "-" + date);  
+		}
+		
+		function returnYears(year){
+			if(((year%4==0)&&(year%100!=0))||(year%400==0)){
+		    	return 366;
+		 	}else{
+		    	return 365; 
+			}
+		}
+		
+		/* function f1(time, years){
+			var time = $('#issuedDate').val()
+			var year = time.getFullYear()+years;
+			var month = time.getMonth();
+			var day = time.getDate();
+			return year + "-" + (month + 1) + "-" + day ;
+			//document.getElementById('d1').innerHTML = dateStr;
+		} */
+		
 		
 		function deleteApplicantFrontImg(){
 			$('#passportUrl').val("");
