@@ -468,6 +468,16 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			dbDao.update(TOrderEntity.class, Chain.make("status", qualifiedstatus), Cnd.where("id", "=", orderid));
 			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 		}
+
+		try {
+			//发送合格消息
+			sendQualifiedSMS(applyid, orderid);
+			//发送合格邮件
+			sendQualifiedEmail(applyid, orderid);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return update > 0;
 	}
 
@@ -869,9 +879,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					.replace("${data}", data).replace("${receiver}", receiver).replace("${mobile}", mobile)
 					.replace("${address}", address);
 
-			
-			
-			
+
+
+
 			result = sendSMS(telephone, smsContent);
 
 		}*/
@@ -1073,4 +1083,61 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		return "BackMail Success";
 	}
+
+	//发送合格短信
+	public Object sendQualifiedSMS(Integer applyid, Integer orderid) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
+				"applicant_qualified_sms.txt"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applyid.longValue());
+		String name = applicant.getFirstName() + applicant.getLastName();
+		String sex = applicant.getSex();
+		String telephone = applicant.getTelephone();
+		if (Util.eq("男", sex)) {
+			sex = "先生";
+		} else {
+			sex = "女士";
+		}
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+		String orderNum = order.getOrderNum();
+		String smsContent = tmp.toString();
+		smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum);
+		String result = sendSMS(telephone, smsContent);
+		return result;
+
+	}
+
+	//发送合格邮件
+	public Object sendQualifiedEmail(Integer applyid, Integer orderid) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
+				"applicant_qualified_mail.html"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+		String emailText = tmp.toString();
+		String result = "";
+		//查询订单号
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+		String orderNum = order.getOrderNum();
+		//申请人
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applyid.longValue());
+		String name = applicant.getFirstName() + applicant.getLastName();
+		String sex = applicant.getSex();
+		String toEmail = applicant.getEmail();
+		if (Util.eq("男", sex)) {
+			sex = "先生";
+		} else {
+			sex = "女士";
+		}
+
+		emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum);
+		result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
+
+		return result;
+	}
+
 }
