@@ -14,7 +14,13 @@ public enum ReceptionSearchStatusEnum_JP implements IEnum {
 	SEND_ADDRESS(JPOrderStatusEnum.SEND_ADDRESS.intKey(), "已发地址"), SEND_DATA(JPOrderStatusEnum.SEND_DATA.intKey(),
 			"已寄出"), RECEPTION_ORDER(JPOrderStatusEnum.RECEPTION_ORDER.intKey(), "前台"), RECEPTION_RECEIVED(
 			JPOrderStatusEnum.RECEPTION_RECEIVED.intKey(), "前台实收"), TRANSFER_VISA(JPOrderStatusEnum.TRANSFER_VISA
-			.intKey(), "移交签证");
+			.intKey(), "移交签证"), VISA_ORDER(JPOrderStatusEnum.VISA_ORDER.intKey(), "签证"), VISA_RECEIVED(
+			JPOrderStatusEnum.VISA_RECEIVED.intKey(), "签证实收"), AUTO_FILL_FORM_PREPARE(
+			JPOrderStatusEnum.AUTO_FILL_FORM_PREPARE.intKey(), "准备发招宝"), AUTO_FILL_FORM_ING(
+			JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey(), "发招宝中"), AUTO_FILL_FORM_ED(
+			JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey(), "已发招宝"), AUTO_FILL_FORM_FAILED(
+			JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey(), "发招宝失败"), AFTERMARKET_ORDER(
+			JPOrderStatusEnum.AFTERMARKET_ORDER.intKey(), "售后");
 	private int key;
 	private String value;
 

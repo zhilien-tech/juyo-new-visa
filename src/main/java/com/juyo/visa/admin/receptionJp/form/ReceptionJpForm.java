@@ -78,7 +78,7 @@ public class ReceptionJpForm extends DataTablesParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		if (!Util.isEmpty(status)) {
-			cnd.and("orderStatus", "=", status);
+			cnd.and("tr.status", "=", status);
 		}
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
@@ -94,7 +94,7 @@ public class ReceptionJpForm extends DataTablesParamForm {
 			cnd.and("tr.goTripDate", "<=", backTripDate);
 		}*/
 		cnd.and("tr.status", ">=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
-		cnd.and("tr.status", "<=", JPOrderStatusEnum.TRANSFER_VISA.intKey());
+		//cnd.and("tr.status", "<=", JPOrderStatusEnum.TRANSFER_VISA.intKey());
 		if (userid.equals(adminId)) {
 			//公司管理员
 		} else {

@@ -1532,6 +1532,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object sendEmail(int orderid, String applicantid, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
+		TOrderJpEntity orderJpEntity = dbDao
+				.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
+		List<TApplicantOrderJpEntity> applyListDB = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+		for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyListDB) {
+			tApplicantOrderJpEntity.setIsShareSms(0);
+			tApplicantOrderJpEntity.setIsSameLinker(0);
+			dbDao.update(tApplicantOrderJpEntity);
+		}
 		//发送短信、邮件
 		int sendCount = 0;
 		String applicants = applicantid.substring(0, applicantid.length() - 1);
@@ -1556,12 +1566,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				}
 			}
 		}
-		if (Util.eq(sendCount, applicantInfo.size())) {
+		if (Util.eq(sendCount, applicantInfo.size())) {//分享完毕
+			List<TApplicantOrderJpEntity> listDB = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "in", applicants), null);
+			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : listDB) {
+				tApplicantOrderJpEntity.setIsShareSms(1);
+				dbDao.update(tApplicantOrderJpEntity);
+			}
 			insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
-			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
-			orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
-			orderEntity.setUpdateTime(new Date());
-			dbDao.update(orderEntity);
+			if (orderEntity.getStatus() <= JPOrderStatusEnum.SHARE.intKey()) {
+				orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
+				orderEntity.setUpdateTime(new Date());
+				dbDao.update(orderEntity);
+			}
 			result.put("sendResult", "success");
 		}
 		return result;
@@ -1573,15 +1590,37 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object sendEmailUnified(int orderid, int applicantid, HttpSession session) {
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
+		TOrderJpEntity orderJpEntity = dbDao
+				.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
+		List<TApplicantOrderJpEntity> applyListDB = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+		for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyListDB) {
+			tApplicantOrderJpEntity.setIsShareSms(0);
+			tApplicantOrderJpEntity.setIsSameLinker(0);
+			dbDao.update(tApplicantOrderJpEntity);
+		}
 		try {
 			String sendMailUnified = (String) sendMailUnified(orderid, applicantid);
 			String sendMessageUnified = (String) sendMessageUnified(orderid, applicantid);
 			if (Util.eq(sendMailUnified, "success") && Util.eq(sendMessageUnified, "发送成功")) {
+				List<TApplicantOrderJpEntity> listDB = dbDao.query(TApplicantOrderJpEntity.class,
+						Cnd.where("orderId", "=", orderJpEntity.getId()).and("applicantId", "!=", applicantid), null);
+				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : listDB) {
+					tApplicantOrderJpEntity.setIsShareSms(1);
+					dbDao.update(tApplicantOrderJpEntity);
+				}
+				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
+						Cnd.where("applicantId", "=", applicantid));
+				mainApply.setIsSameLinker(1);
+				mainApply.setIsShareSms(1);
+				dbDao.update(mainApply);
 				insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
-				TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
-				orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
-				orderEntity.setUpdateTime(new Date());
-				dbDao.update(orderEntity);
+				if (orderEntity.getStatus() <= JPOrderStatusEnum.SHARE.intKey()) {
+					orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
+					orderEntity.setUpdateTime(new Date());
+					dbDao.update(orderEntity);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -1754,6 +1793,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		smsContent = smsContent.replace("${applicantInfoS}", applicantInfoStr);
 		result = firstTrialJpViewService.sendSMS(telephone, smsContent);
+		return result;
+	}
+
+	public Object checkPassport(String passport, String adminId) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		int count = 0;
+		if (Util.isEmpty(adminId)) {
+			count = nutDao.count(TApplicantPassportEntity.class, Cnd.where("passport", "=", passport));
+		} else {
+			count = nutDao.count(TApplicantPassportEntity.class,
+					Cnd.where("passport", "=", passport).and("id", "!=", adminId));
+		}
+		result.put("valid", count <= 0);
 		return result;
 	}
 
