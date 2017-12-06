@@ -471,9 +471,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		try {
 			//发送合格消息
-			sendQualifiedSMS(applyid, orderid);
+			sendApplicantVerifySMS(applyid, orderid, "applicant_qualified_sms.txt");
 			//发送合格邮件
-			sendQualifiedEmail(applyid, orderid);
+			sendApplicantVerifyEmail(applyid, orderid, "applicant_qualified_mail.html");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -559,6 +559,15 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 			//记录日志
 			orderJpViewService.insertLogs(orderid, firsttrialstatus, session);
+		}
+
+		try {
+			//发送不合格消息
+			sendApplicantVerifySMS(applicantId, orderid, "applicant_unqualified_sms.txt");
+			//发送不合格邮件
+			sendApplicantVerifyEmail(applicantId, orderid, "applicant_unqualified_mail.html");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		return Json.toJson("success");
@@ -1085,9 +1094,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//发送合格短信
-	public Object sendQualifiedSMS(Integer applyid, Integer orderid) throws IOException {
-		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
-				"applicant_qualified_sms.txt"));
+	public Object sendApplicantVerifySMS(Integer applyid, Integer orderid, String smsTemplate) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(smsTemplate));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
@@ -1110,10 +1118,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 	}
 
-	//发送合格邮件
-	public Object sendQualifiedEmail(Integer applyid, Integer orderid) throws IOException {
-		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
-				"applicant_qualified_mail.html"));
+	//合格/不合格 发送审核结果邮件
+	public Object sendApplicantVerifyEmail(Integer applyid, Integer orderid, String mailTemplate) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(mailTemplate));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
