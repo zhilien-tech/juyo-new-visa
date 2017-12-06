@@ -71,8 +71,9 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 		if (!Util.isEmpty(backTripDate)) {
 			cnd.and("tr.goTripDate", "<=", backTripDate);
 		}*/
+		//初审 看到的订单为漏斗形式， 初审状态以后的订单都可以看到
 		cnd.and("tr.status", ">=", JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
-		cnd.and("tr.status", "<=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
+		//cnd.and("tr.status", "<=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
 		if (userid.equals(adminId)) {
 			//公司管理员
 		} else {
