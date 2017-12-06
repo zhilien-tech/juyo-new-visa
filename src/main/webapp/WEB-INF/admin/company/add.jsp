@@ -376,12 +376,12 @@
 					success : function(data) {
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						layer.close(index);
-						window.parent.layer.msg("添加成功", "", 3000);
+						window.parent.layer.msg("添加成功");
 						parent.layer.close(index);
 						parent.datatable.ajax.reload();
 					},
 					error : function(xhr) {
-						layer.msg("添加失败", "", 3000);
+						layer.msg("添加失败");
 					}
 				});
 			}

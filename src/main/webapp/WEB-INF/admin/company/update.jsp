@@ -246,10 +246,10 @@
 							/* notEmpty : {
 								message : '电话不能为空'
 							}, */
-							regexp: {
+							/* regexp: {
 		                	 	regexp: /^[1][34578][0-9]{9}$/,
 		                        message: '电话号格式错误'
-		                    }
+		                    } */
 						}
 					},
 					email : {
@@ -355,12 +355,12 @@
 					success : function(data) {
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						layer.close(index);
-						window.parent.layer.msg("编辑成功", "", 3000);
+						window.parent.layer.msg("编辑成功");
 						parent.layer.close(index);
 						parent.datatable.ajax.reload();
 					},
 					error : function(xhr) {
-						layer.msg("编辑失败", "", 3000);
+						layer.msg("编辑失败");
 					}
 				});
 			}
