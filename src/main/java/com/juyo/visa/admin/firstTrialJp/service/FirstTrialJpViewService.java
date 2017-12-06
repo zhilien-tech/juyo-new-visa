@@ -99,6 +99,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	private final static String MUBAN_DOCX_URL = "http://oyu1xyxxk.bkt.clouddn.com/a40f95f1-c87f-401a-be75-25f0d42f9f72.docx";
 	private final static String FILE_NAME = "初审资料填写模板.docx";
 	private final static String SMS_SIGNATURE = "【优悦签】";
+	private final static String VISA_COUNTRY = "日本签证";
 
 	/**
 	 * 打开初审列表页
@@ -853,7 +854,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String mobile = orderReceive.getString("mobile");
 		String address = orderReceive.getString("expressAddress");
 
-		Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
+		//之前业务，只给主申请人发
+		/*Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
 		List<Record> applicants = (List<Record>) map.get("applicant");
 		String result = "";
 		for (Record record : applicants) {
@@ -867,8 +869,59 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					.replace("${data}", data).replace("${receiver}", receiver).replace("${mobile}", mobile)
 					.replace("${address}", address);
 
+			
+			
+			
 			result = sendSMS(telephone, smsContent);
 
+		}*/
+
+		//统一联系人只发自己， 单独分享发全部
+		String result = "";
+		//统一联系人
+		Map<String, Object> map = getSameApplicantByOrderid(orderjpid);
+		List<Record> sameMans = (List<Record>) map.get("applicant");
+		String smsContent = tmp.toString();
+		String telephone = "";
+		if (sameMans.size() > 0) {
+			//统一联系人
+			for (Record man : sameMans) {
+				String name = man.getString("applicantname");
+				String sex = man.getString("sex");
+				if (Util.eq("男", sex)) {
+					sex = "先生";
+				} else {
+					sex = "女士";
+				}
+				telephone = man.getString("telephone");
+				smsContent = smsContent.replace("${name}", name).replace("${sex}", sex)
+						.replace("${ordernum}", orderNum).replace("${visaCountry}", VISA_COUNTRY)
+						.replace("${receiver}", receiver).replace("${mobile}", mobile).replace("${address}", address);
+
+			}
+			result = sendSMS(telephone, smsContent);
+
+		} else {
+			//单独分享的
+			Map<String, Object> aloneMap = getAloneApplicantByOrderid(orderjpid);
+			List<Record> aloneApplicants = (List<Record>) aloneMap.get("applicant");
+			for (Record record : aloneApplicants) {
+				String name = record.getString("applicantname");
+				String sex = record.getString("sex");
+				if (Util.eq("男", sex)) {
+					sex = "先生";
+				} else {
+					sex = "女士";
+				}
+				String singleTelephone = record.getString("telephone");
+
+				String content = tmp.toString();
+				content = content.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+						.replace("${visaCountry}", VISA_COUNTRY).replace("${receiver}", receiver)
+						.replace("${mobile}", mobile).replace("${address}", address);
+
+				result = sendSMS(singleTelephone, content);
+			}
 		}
 
 		return result;
