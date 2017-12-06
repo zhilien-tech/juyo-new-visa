@@ -15,7 +15,7 @@ import lombok.Data;
  * <p>
  * TODO(这里描述这个类补充说明 – 可选)
  *
- * @author   刘旭利
+ * @author   
  * @Date	 2017年11月1日 	 
  */
 @Data
@@ -29,7 +29,7 @@ public class VisaEditDataForm {
 
 	private Integer comid;
 
-	private Integer status;
+	private String status;
 
 	private Integer number;
 
