@@ -78,7 +78,9 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 			BackMailInfoEntity backmail = new BackMailInfoEntity();
 			backmail.setOpid(userid);
 			backmail.setLinkman(name);
-			backmail.setTelephone(mobile);
+			if (!Util.isEmpty(mobile)) {
+				backmail.setTelephone(mobile);
+			}
 			backmail.setSource(MainBackMailSourceTypeEnum.KUAIDI.intKey());
 			backmail.setExpresstype(MainBackMailTypeEnum.KUAIDI.intKey());
 			backmail.setCreatetime(nowDate);
