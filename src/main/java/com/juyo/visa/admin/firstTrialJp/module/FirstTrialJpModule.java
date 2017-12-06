@@ -101,6 +101,15 @@ public class FirstTrialJpModule {
 	}
 
 	/**
+	 * 获取分享消息的申请人
+	 */
+	@At
+	@POST
+	public Object getShareApplicantByOrderid(@Param("orderjpid") int orderjpid) {
+		return firstTrialJpViewService.getShareApplicantByOrderid(orderjpid);
+	}
+
+	/**
 	 * 获取申请人信息
 	 */
 	@At

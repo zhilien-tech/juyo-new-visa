@@ -373,6 +373,68 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		return result;
 	}
 
+	//获得订单分享消息人列表
+	public Map<String, Object> getShareApplicantByOrderid(int orderjpid) {
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
+		int yes = IsYesOrNoEnum.YES.intKey();
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(applysql,
+				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isShareSms", "=", yes), null);
+
+		List<Record> sameRecord = new ArrayList<Record>();
+		for (Record record : records) {
+			String isSameMan = record.getString("isSameLinker");
+			if (Util.eq(isSameMan, yes)) {
+				//统一联系人
+				sameRecord.add(record);
+				records = sameRecord;
+			}
+		}
+		records = editApplicantsInfo(records);
+		result.put("applicant", records);
+		return result;
+	}
+
+	//获得订单所有的申请人
+	public Map<String, Object> getAllApplicantByOrderid(int orderjpid) {
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderjpid), null);
+		records = editApplicantsInfo(records);
+		result.put("applicant", records);
+		return result;
+	}
+
+	//获取分享消息的统一联系人
+	public Map<String, Object> getSameApplicantByOrderid(int orderjpid) {
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
+		int yes = IsYesOrNoEnum.YES.intKey();
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(
+				applysql,
+				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isShareSms", "=", yes)
+						.and("taoj.isSameLinker", "=", yes), null);
+		records = editApplicantsInfo(records);
+		result.put("applicant", records);
+		return result;
+	}
+
+	//获取单独分享的申请人
+	public Map<String, Object> getAloneApplicantByOrderid(int orderjpid) {
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
+		int yes = IsYesOrNoEnum.YES.intKey();
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(applysql,
+				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isShareSms", "=", yes), null);
+		records = editApplicantsInfo(records);
+		result.put("applicant", records);
+		return result;
+	}
+
 	//获取申请人信息
 	public Object basicInfo(int applyid) {
 		TApplicantEntity appllicant = dbDao.fetch(TApplicantEntity.class, Cnd.where("id", "=", applyid));
@@ -672,7 +734,87 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String mobile = orderReceive.getString("mobile");
 		String address = orderReceive.getString("expressAddress");
 
-		Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
+		//邮件分享
+		String result = "";
+		//统一联系人
+		Map<String, Object> map = getSameApplicantByOrderid(orderjpid);
+		List<Record> sameMans = (List<Record>) map.get("applicant");
+		if (sameMans.size() > 0) {
+			//有统一联系人,统一分享
+			String toEmail = "";
+			String emailText = tmp.toString();
+			for (Record man : sameMans) {
+				String name = man.getString("applicantname");
+				String sex = man.getString("sex");
+				if (Util.eq("男", sex)) {
+					sex = "先生";
+				} else {
+					sex = "女士";
+				}
+				String data = man.getString("data");
+				toEmail = man.getString("email");
+
+				emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+						.replace("${receiver}", receiver).replace("${mobile}", mobile).replace("${address}", address)
+						.replace("${URL}", MUBAN_DOCX_URL).replace("${fileName}", FILE_NAME);
+			}
+			//获取订单下所有的申请人
+			String applicanthtml = "";
+			Map<String, Object> allManMap = getAllApplicantByOrderid(orderjpid);
+			List<Record> allMan = (List<Record>) allManMap.get("applicant");
+			for (Record man : allMan) {
+				String name = man.getString("applicantname");
+				String nameHtml = "<div style=''>&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;	<b>" + name
+						+ "</b>：</div>";
+				String data = man.getString("data");
+				String[] split = data.split("、");
+				if (split.length > 1) {
+					for (int i = 0; i < split.length; i++) {
+						nameHtml += "<div>&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;	&nbsp;&nbsp; "
+								+ (i + 1) + "." + split[i] + "</div>";
+					}
+				}
+				applicanthtml += nameHtml;
+			}
+			emailText = emailText.replace("${applicantInfos}", applicanthtml);
+			result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
+		} else {
+			//单独分享
+			Map<String, Object> aloneMans = getAloneApplicantByOrderid(orderjpid);
+			List<Record> applicants = (List<Record>) aloneMans.get("applicant");
+			for (Record record : applicants) {
+				String name = record.getString("applicantname");
+				String sex = record.getString("sex");
+				if (Util.eq("男", sex)) {
+					sex = "先生";
+				} else {
+					sex = "女士";
+				}
+				String data = record.getString("data");
+				String toEmail = record.getString("email");
+
+				String emailText = tmp.toString();
+				emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+						.replace("${receiver}", receiver).replace("${mobile}", mobile).replace("${address}", address)
+						.replace("${URL}", MUBAN_DOCX_URL).replace("${fileName}", FILE_NAME);
+
+				String dataHtml = "<div style=''>&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;	<b>" + name
+						+ "</b>：</div>";
+				String[] split = data.split("、");
+				if (split.length > 1) {
+					for (int i = 0; i < split.length; i++) {
+						dataHtml += "<div>&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;	&nbsp;&nbsp; "
+								+ (i + 1) + "." + split[i] + "</div>";
+					}
+				}
+
+				emailText = emailText.replace("${applicantInfos}", dataHtml);
+
+				result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
+			}
+		}
+
+		/*Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
 		List<Record> applicants = (List<Record>) map.get("applicant");
 		String result = "";
 		for (Record record : applicants) {
@@ -687,7 +829,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					.replace("${address}", address).replace("${URL}", MUBAN_DOCX_URL).replace("${fileName}", FILE_NAME);
 
 			result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
-		}
+		}*/
 
 		return result;
 	}
