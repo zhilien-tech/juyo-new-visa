@@ -125,7 +125,7 @@
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<select id="validType" name="validType" class="form-control input-sm selectHeight">
+									<select id="validType" name="validType" class="form-control input-sm selectHeight" >
 									<c:forEach var="map" items="${obj.passportType}">
 										<option value="${map.key}" ${map.key == obj.passport.validType?'selected':'' }>${map.value}</option>
 									</c:forEach>
@@ -191,8 +191,57 @@
 				$("#sexEn").val("F");
 			}
 		});
+		
+		function initvalidate(){
+			//校验
+			$('#passportInfo').bootstrapValidator({
+				message : '验证不通过',
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields : {
+					passport : {
+						validators : {
+		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+								url: '${base}/admin/orderJp/checkPassport.html',
+								message: '护照号已存在，请重新输入',//提示消息
+								delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+								type: 'POST',//请求方式
+								//自定义提交数据，默认值提交当前input value
+								data: function(validator) {
+									return {
+										passport:$('#passport').val(),
+										adminId:$('#id').val()
+									};
+								}
+							}
+						}
+					}
+				}
+			});
+		}
+		
+		/* function validTypeSelect(){
+			var start = $('#issuedDate').val();
+			var end = $('#validEndDate').val();
+			 
+		} */
+		initvalidate();
+		$("#passportInfo").bootstrapValidator("validate");
+		
 		//保存
 		function save(){
+			$("#passportInfo").bootstrapValidator("validate");
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+			// 执行表单验证 
+			initvalidate();
+			bootstrapValidator.validate();
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
 			var passportInfo = $("#passportInfo").serialize();
 			$.ajax({
 				type: 'POST',
@@ -250,6 +299,13 @@
 							$('#issuedPlaceEn').val("/"+getPinYinStr(obj.visaCountry));
 							$('#issuedDate').val(obj.issueDate);
 							$('#validEndDate').val(obj.expiryDay);
+							var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
+							if(years == 5){
+								$("#validType").val(1);
+							}else{
+								$("#validType").val(2);
+							}
+							
 						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
@@ -341,6 +397,31 @@
 			}
 			return pinyinchar.toUpperCase();
 		}
+		
+		 function getDateYearSub(startDateStr, endDateStr) {
+		        var day = 24 * 60 * 60 *1000; 
+
+		        var sDate = new Date(Date.parse(startDateStr.replace(/-/g, "/")));
+		        var eDate = new Date(Date.parse(endDateStr.replace(/-/g, "/")));
+
+		        //得到前一天(算头不算尾)
+		        sDate = new Date(sDate.getTime() - day);
+
+		        //获得各自的年、月、日
+		        var sY  = sDate.getFullYear();     
+		        var sM  = sDate.getMonth()+1;
+		        var sD  = sDate.getDate();
+		        var eY  = eDate.getFullYear();
+		        var eM  = eDate.getMonth()+1;
+		        var eD  = eDate.getDate();
+
+		        if(eY > sY && sM == eM && sD == eD) {
+		            return eY - sY;
+		        } else {
+		            //alert("两个日期之间并非整年，请重新选择");
+		            return 0;
+		        }
+		    }
 	</script>
 
 

@@ -219,6 +219,15 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 护照号唯一性验证
+	 */
+	@At
+	@POST
+	public Object checkPassport(@Param("passport") String passport, @Param("adminId") String adminId) {
+		return saleViewService.checkPassport(passport, adminId);
+	}
+
+	/**
 	 * 签证信息修改
 	 */
 	@At

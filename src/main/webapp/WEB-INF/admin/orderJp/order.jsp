@@ -199,7 +199,7 @@
 									<!-- <i class="bulb"></i> 小灯泡-->
 								</div>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-1">
 								<div class="form-group">
 									<label><span>*</span>加急：</label> <select id="urgentType"
 										name="urgentType" class="form-control input-sm"
@@ -212,7 +212,7 @@
 								</div>
 							</div>
 
-									<div class="col-sm-3 none" id="urgentDays">
+									<div class="col-sm-2 none" id="urgentDays">
 										<div class="form-group">
 											<label>&nbsp;</label> <select id="urgentDay" name="urgentDay" 
 												class="form-control input-sm" v-model="orderInfo.urgentday">
@@ -346,7 +346,7 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>停留天数：</label> <input id="stayDay"
+									<label><span>*</span>行程天数：</label> <input id="stayDay"
 										name="stayday" type="text" class="form-control input-sm"
 										placeholder=" " v-model="orderInfo.stayday" />
 								</div>
@@ -1236,7 +1236,7 @@
 			var back = $("#backTripDate").val();
 			var day = $("#stayDay").val();
 			if(go != "" && day != ""){
-				var days = getNewDay(go,day);
+				var days = getNewDay(go,day-1);
 				$("#backTripDate").val(days); 
 				orderobj.orderInfo.backtripdate = days;
 			}
@@ -1306,8 +1306,6 @@
 			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
-		}).on("click",function(){  
-		    $("#sendVisaDate").datetimepicker("setEndDate",$("#outVisaDate").val());  
 		}); 
 		$("#outVisaDate").datetimepicker({
 			format: 'yyyy-mm-dd',

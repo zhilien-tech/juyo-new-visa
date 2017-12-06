@@ -45,6 +45,10 @@ public class TApplicantOrderJpEntity implements Serializable {
 	private Integer sameMainTrip;
 
 	@Column
+	@Comment("是否分享消息")
+	private Integer isShareSms;
+
+	@Column
 	@Comment("财富信息是否同主")
 	private Integer sameMainWealth;
 

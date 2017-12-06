@@ -122,4 +122,13 @@ public class UserModule {
 		return userViewService.queryJobs(departmentId);
 	}
 
+	/**
+	 * 检验手机号唯一性
+	 */
+	@At
+	@POST
+	public Object checkMobile(@Param("mobile") String mobile, @Param("adminId") String adminId) {
+		return userViewService.checkMobile(mobile, adminId);
+	}
+
 }

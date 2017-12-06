@@ -60,7 +60,7 @@
 				</span> <input type="button" value="取消"
 					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> <input type="button"
 					value="保存" class="btn btn-primary btn-sm pull-right"
-					onclick="saveAddOrder();" /> <input type="button" value="回邮"
+					onclick="saveAddOrder(status);" /> <input type="button" value="回邮"
 					class="btn btn-primary btn-sm pull-right" /> <input type="button"
 					value="初审" class="btn btn-primary btn-sm pull-right" /> <input
 					type="button" value="分享" class="btn btn-primary btn-sm pull-right" />
@@ -223,7 +223,7 @@
 									<div class="form-group">
 										<label><span>*</span>加急：</label> <select id="urgentType"
 											name="urgenttype" class="form-control input-sm"
-											onchange="urgent();">
+											>
 											<c:forEach var="map" items="${obj.mainSaleUrgentEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -342,7 +342,7 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>停留天数：</label> <input id="stayDay"
+										<label><span>*</span>行程天数：</label> <input id="stayDay"
 											name="stayday" type="text" class="form-control input-sm"
 											placeholder=" " />
 									</div>
@@ -793,6 +793,7 @@
 				    	}
 					});
 			    }); 
+				saveAddOrder(2);
 			}
 			
 			//修改申请人基本信息
@@ -862,8 +863,8 @@
 			
 			
 			//下单保存
-			function saveAddOrder(){
-				
+			function saveAddOrder(status){
+				if(status == 1){
 				//绑定签证城市
 				var visacounty = "";
 				$('[name=visacounty]').each(function(){
@@ -906,6 +907,51 @@
 						console.log("error");
 					}
 				}); 
+					
+				}else{
+					//绑定签证城市
+					var visacounty = "";
+					$('[name=visacounty]').each(function(){
+						if($(this).hasClass('btnState-true')){
+							visacounty += $(this).val() + ',';
+						}
+					});
+					if(visacounty){
+						visacounty = visacounty.substr(0,visacounty.length-1);
+					}
+					
+					if($("#urgentDays").hasClass("none") == true){
+						$('#urgentDay').val("");
+						console.log(JSON.stringify( $("#orderInfo").serialize()));
+					}
+					//绑定三年城市
+					var threecounty = "";
+					$('[name=threecounty]').each(function(){
+						if($(this).hasClass('btnState-true')){
+							threecounty += $(this).val() + ',';
+						}
+					});
+					if(threecounty){
+						threecounty = threecounty.substr(0,threecounty.length-1);
+					}
+					var backMailInfos = JSON.stringify(getMailInfos());
+					var orderinfo = $.param({"backMailInfos":backMailInfos, "visacounty":visacounty, "threecounty":threecounty}) + "&" + $("#orderInfo").serialize();
+					//orderinfo.backMailInfos = JSON.stringify(backMails);
+					
+					
+					$.ajax({
+						type : 'POST',
+						data : orderinfo ,
+						url : '${base}/admin/orderJp/saveAddOrderinfo',
+						success : function(data) {
+							console.log(JSON.stringify(data));
+						},
+						error : function() {
+							console.log("error");
+						}
+					}); 
+				}
+				
 			}
 			
 			//下单取消
@@ -918,7 +964,7 @@
 				var back = $("#backTripDate").val();
 				var day = $("#stayDay").val();
 				if(go != "" && day != ""){
-					var days = getNewDay(go,day);
+					var days = getNewDay(go,day-1);
 					$("#backTripDate").val(days); 
 					//orderobj.orderInfo.backtripdate = days;
 				}
@@ -988,8 +1034,6 @@
 				autoclose: true,//选中日期后 自动关闭
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
-			}).on("click",function(){  
-			    $("#sendVisaDate").datetimepicker("setEndDate",$("#outVisaDate").val());  
 			}); 
 			$("#outVisaDate").datetimepicker({
 				format: 'yyyy-mm-dd',
