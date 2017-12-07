@@ -148,7 +148,7 @@
 			},
 			created:function(){
 				orderobj=this;
-				var url = '${base}/admin/firstTrialJp/getmainApplicantByOrderid.html';
+				var url = '${base}/admin/firstTrialJp/getShareApplicantByOrderid.html';
 				$.ajax({ 
 					url: url,
 					type:'post',

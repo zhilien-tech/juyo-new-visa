@@ -1,1 +1,1 @@
-尊敬的 ${name} ${sex}士，您好！您的签证申请预订单已经进入初审环节，您的订单号：${ordernum}。现在需要您将以下资料： ${data}  邮寄给我们 收件人：${receiver} 电话：${mobile} 地址：${address}
+尊敬的 ${name} ${sex}。您的${visaCountry}  订单号：${ordernum} 。初审合格。请您登录邮箱将资料邮寄给我们。收件人资料。姓名：${receiver}。电话：${mobile}。地址：${address}
