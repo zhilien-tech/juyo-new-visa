@@ -24,9 +24,12 @@ $condition
 
 /*get_aftermarket_list_applicat_data*/
 SELECT
-	ta.*,
-	taoj.id applicatid
+	ta.*, taoj.id applicatid,
+	tabj.linkman,
+	tabj.telephone backtelephone,
+	tabj.expressAddress
 FROM
 	t_applicant ta
 INNER JOIN t_applicant_order_jp taoj ON taoj.applicantId = ta.id
+LEFT JOIN t_applicant_backmail_jp tabj ON tabj.applicantId = taoj.id
 $condition
