@@ -72,6 +72,7 @@ public class THotelForm extends DataTablesParamForm {
 					.or("h.mobile", "LIKE", "%" + hotelSearch + "%").or("c.city", "LIKE", "%" + hotelSearch + "%");
 			cnd.and(expg);
 		}
+		cnd.orderBy("updateTime", "DESC");
 		cnd.orderBy("createTime", "DESC");
 		return cnd;
 	}

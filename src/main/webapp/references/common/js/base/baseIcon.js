@@ -43,6 +43,10 @@
 		var t = "作废";
 		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
 	});
+	$(document).on("mouseover",".toVoid1",function(){
+		var t = "还原";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});
 	
 	$(document).on("mouseover",".basicInfo",function(){
 		var t = "基本信息";

@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<style type="text/css">
 	 [v-cloak]{display:none;}
+	 #hideOrder:hover { text-decoration: none;cursor:pointer;}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -87,11 +88,11 @@
 								<div>
 									<label>操作：</label>
 									<div v-if="data.isdisabled==1">
-										<i class="edit"  v-on:click="" > </i>
-										<i class="share" v-on:click=""> </i>
-										<i class="theTrial" v-on:click=""> </i>
+										<i class="edit1"  v-on:click="" > </i>
+										<i class="share1" v-on:click=""> </i>
+										<i class="theTrial1" v-on:click=""> </i>
 										<!-- <i class="return" > </i> -->
-										<i class="toVoid" v-on:click="undisabled(data.orderid)"> </i>
+										<i class="toVoid1" v-on:click="undisabled(data.orderid)"> </i>
 									</div>
 									<div v-else>
 										<i class="edit"  v-on:click="order(data.orderid)"> </i>
@@ -114,7 +115,8 @@
 							</ul>
 						</div>
 					</div><!-- end 卡片列表 -->
-					<input id="hideOrder" type="button" value="您还没有添加任何数据，快去下单吧" class="orderJp none" onclick="addOrder();"/>
+					<a id="hideOrder" style="color:red; font-size:30px; position: absolute;top:50%;left:40%;" class="orderJp none" onclick="addOrder();">您还没有添加任何数据，快去下单吧</a>
+					
 				</section>
 			</div>
 				<input type="hidden" id="pageNumber" name="pageNumber" value="1">

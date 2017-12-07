@@ -86,6 +86,7 @@ public class TCustomerForm extends DataTablesParamForm {
 		if (userType == 1) {
 			cnd.and("userId", "=", userId);
 		}
+		cnd.orderBy("updateTime", "DESC");
 		cnd.orderBy("createTime", "DESC");
 		return cnd;
 	}

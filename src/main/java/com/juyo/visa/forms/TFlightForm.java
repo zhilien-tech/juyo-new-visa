@@ -88,6 +88,7 @@ public class TFlightForm extends DataTablesParamForm {
 					.or("f.landingName", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
+		cnd.orderBy("updateTime", "DESC");
 		cnd.orderBy("createTime", "DESC");
 		return cnd;
 	}

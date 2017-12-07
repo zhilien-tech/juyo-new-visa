@@ -68,6 +68,7 @@
 									<th><span>国家</span></th>
 									<th><span>省/州/县</span></th>
 									<th><span>城市</span></th>
+									<th><span>城市代码</span></th>
 									<th><span>操作</span></th>
 								</tr>
 							</thead>
