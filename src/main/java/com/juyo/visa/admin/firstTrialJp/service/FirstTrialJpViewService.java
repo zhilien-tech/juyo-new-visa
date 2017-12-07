@@ -99,6 +99,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	private final static String MUBAN_DOCX_URL = "http://oyu1xyxxk.bkt.clouddn.com/a40f95f1-c87f-401a-be75-25f0d42f9f72.docx";
 	private final static String FILE_NAME = "初审资料填写模板.docx";
 	private final static String SMS_SIGNATURE = "【优悦签】";
+	private final static String VISA_COUNTRY = "日本签证";
 
 	/**
 	 * 打开初审列表页
@@ -325,13 +326,32 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//快递方式
 		result.put("expressType", EnumUtil.enum2(ExpressTypeEnum.class));
 
-		//订单主申请人
+		/*//订单主申请人
 		String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
 		Sql applysql = Sqls.create(sqlStr);
 		List<Record> records = dbDao.query(applysql,
 				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
-				null);
+				null);*/
+
+		//业务需求，更改为 销售分享的申请人 如果为统一联系人只展示一个， 否则展示单独分享的
+		String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
+		int yes = IsYesOrNoEnum.YES.intKey();
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(applysql,
+				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isShareSms", "=", yes), null);
+
+		List<Record> sameRecord = new ArrayList<Record>();
+		for (Record record : records) {
+			String isSameMan = record.getString("isSameLinker");
+			if (Util.eq(isSameMan, yes)) {
+				//统一联系人
+				sameRecord.add(record);
+				records = sameRecord;
+			}
+		}
+
 		records = editApplicantsInfo(records);
+
 		result.put("applicant", records);
 		//订单id
 		result.put("orderid", orderid);
@@ -349,6 +369,68 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		List<Record> records = dbDao.query(applysql,
 				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()),
 				null);
+		records = editApplicantsInfo(records);
+		result.put("applicant", records);
+		return result;
+	}
+
+	//获得订单分享消息人列表
+	public Map<String, Object> getShareApplicantByOrderid(Integer orderjpid) {
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
+		int yes = IsYesOrNoEnum.YES.intKey();
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(applysql,
+				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isShareSms", "=", yes), null);
+
+		List<Record> sameRecord = new ArrayList<Record>();
+		for (Record record : records) {
+			String isSameMan = record.getString("isSameLinker");
+			if (Util.eq(isSameMan, yes)) {
+				//统一联系人
+				sameRecord.add(record);
+				records = sameRecord;
+			}
+		}
+		records = editApplicantsInfo(records);
+		result.put("applicant", records);
+		return result;
+	}
+
+	//获得订单所有的申请人
+	public Map<String, Object> getAllApplicantByOrderid(int orderjpid) {
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderjpid), null);
+		records = editApplicantsInfo(records);
+		result.put("applicant", records);
+		return result;
+	}
+
+	//获取分享消息的统一联系人
+	public Map<String, Object> getSameApplicantByOrderid(int orderjpid) {
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
+		int yes = IsYesOrNoEnum.YES.intKey();
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(
+				applysql,
+				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isShareSms", "=", yes)
+						.and("taoj.isSameLinker", "=", yes), null);
+		records = editApplicantsInfo(records);
+		result.put("applicant", records);
+		return result;
+	}
+
+	//获取单独分享的申请人
+	public Map<String, Object> getAloneApplicantByOrderid(int orderjpid) {
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
+		int yes = IsYesOrNoEnum.YES.intKey();
+		Sql applysql = Sqls.create(sqlStr);
+		List<Record> records = dbDao.query(applysql,
+				Cnd.where("taoj.orderId", "=", orderjpid).and("taoj.isShareSms", "=", yes), null);
 		records = editApplicantsInfo(records);
 		result.put("applicant", records);
 		return result;
@@ -386,6 +468,16 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			dbDao.update(TOrderEntity.class, Chain.make("status", qualifiedstatus), Cnd.where("id", "=", orderid));
 			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 		}
+
+		try {
+			//发送合格消息
+			sendApplicantVerifySMS(applyid, orderid, "applicant_qualified_sms.txt");
+			//发送合格邮件
+			sendApplicantVerifyEmail(applyid, orderid, "applicant_qualified_mail.html");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return update > 0;
 	}
 
@@ -467,6 +559,15 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 			//记录日志
 			orderJpViewService.insertLogs(orderid, firsttrialstatus, session);
+		}
+
+		try {
+			//发送不合格消息
+			sendApplicantVerifySMS(applicantId, orderid, "applicant_unqualified_sms.txt");
+			//发送不合格邮件
+			sendApplicantVerifyEmail(applicantId, orderid, "applicant_unqualified_mail.html");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		return Json.toJson("success");
@@ -653,7 +754,87 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String mobile = orderReceive.getString("mobile");
 		String address = orderReceive.getString("expressAddress");
 
-		Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
+		//邮件分享
+		String result = "";
+		//统一联系人
+		Map<String, Object> map = getSameApplicantByOrderid(orderjpid);
+		List<Record> sameMans = (List<Record>) map.get("applicant");
+		if (sameMans.size() > 0) {
+			//有统一联系人,统一分享
+			String toEmail = "";
+			String emailText = tmp.toString();
+			for (Record man : sameMans) {
+				String name = man.getString("applicantname");
+				String sex = man.getString("sex");
+				if (Util.eq("男", sex)) {
+					sex = "先生";
+				} else {
+					sex = "女士";
+				}
+				String data = man.getString("data");
+				toEmail = man.getString("email");
+
+				emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+						.replace("${receiver}", receiver).replace("${mobile}", mobile).replace("${address}", address)
+						.replace("${URL}", MUBAN_DOCX_URL).replace("${fileName}", FILE_NAME);
+			}
+			//获取订单下所有的申请人
+			String applicanthtml = "";
+			Map<String, Object> allManMap = getAllApplicantByOrderid(orderjpid);
+			List<Record> allMan = (List<Record>) allManMap.get("applicant");
+			for (Record man : allMan) {
+				String name = man.getString("applicantname");
+				String nameHtml = "<div style=''>&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;	<b>" + name
+						+ "</b>：</div>";
+				String data = man.getString("data");
+				String[] split = data.split("、");
+				if (split.length > 1) {
+					for (int i = 0; i < split.length; i++) {
+						nameHtml += "<div>&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;	&nbsp;&nbsp; "
+								+ (i + 1) + "." + split[i] + "</div>";
+					}
+				}
+				applicanthtml += nameHtml;
+			}
+			emailText = emailText.replace("${applicantInfos}", applicanthtml);
+			result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
+		} else {
+			//单独分享
+			Map<String, Object> aloneMans = getAloneApplicantByOrderid(orderjpid);
+			List<Record> applicants = (List<Record>) aloneMans.get("applicant");
+			for (Record record : applicants) {
+				String name = record.getString("applicantname");
+				String sex = record.getString("sex");
+				if (Util.eq("男", sex)) {
+					sex = "先生";
+				} else {
+					sex = "女士";
+				}
+				String data = record.getString("data");
+				String toEmail = record.getString("email");
+
+				String emailText = tmp.toString();
+				emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+						.replace("${receiver}", receiver).replace("${mobile}", mobile).replace("${address}", address)
+						.replace("${URL}", MUBAN_DOCX_URL).replace("${fileName}", FILE_NAME);
+
+				String dataHtml = "<div style=''>&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;	<b>" + name
+						+ "</b>：</div>";
+				String[] split = data.split("、");
+				if (split.length > 1) {
+					for (int i = 0; i < split.length; i++) {
+						dataHtml += "<div>&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;	&nbsp;&nbsp; "
+								+ (i + 1) + "." + split[i] + "</div>";
+					}
+				}
+
+				emailText = emailText.replace("${applicantInfos}", dataHtml);
+
+				result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
+			}
+		}
+
+		/*Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
 		List<Record> applicants = (List<Record>) map.get("applicant");
 		String result = "";
 		for (Record record : applicants) {
@@ -668,7 +849,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					.replace("${address}", address).replace("${URL}", MUBAN_DOCX_URL).replace("${fileName}", FILE_NAME);
 
 			result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
-		}
+		}*/
 
 		return result;
 	}
@@ -692,7 +873,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String mobile = orderReceive.getString("mobile");
 		String address = orderReceive.getString("expressAddress");
 
-		Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
+		//之前业务，只给主申请人发
+		/*Map<String, Object> map = getmainApplicantByOrderid(orderjpid);
 		List<Record> applicants = (List<Record>) map.get("applicant");
 		String result = "";
 		for (Record record : applicants) {
@@ -706,8 +888,59 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					.replace("${data}", data).replace("${receiver}", receiver).replace("${mobile}", mobile)
 					.replace("${address}", address);
 
+
+
+
 			result = sendSMS(telephone, smsContent);
 
+		}*/
+
+		//统一联系人只发自己， 单独分享发全部
+		String result = "";
+		//统一联系人
+		Map<String, Object> map = getSameApplicantByOrderid(orderjpid);
+		List<Record> sameMans = (List<Record>) map.get("applicant");
+		String smsContent = tmp.toString();
+		String telephone = "";
+		if (sameMans.size() > 0) {
+			//统一联系人
+			for (Record man : sameMans) {
+				String name = man.getString("applicantname");
+				String sex = man.getString("sex");
+				if (Util.eq("男", sex)) {
+					sex = "先生";
+				} else {
+					sex = "女士";
+				}
+				telephone = man.getString("telephone");
+				smsContent = smsContent.replace("${name}", name).replace("${sex}", sex)
+						.replace("${ordernum}", orderNum).replace("${visaCountry}", VISA_COUNTRY)
+						.replace("${receiver}", receiver).replace("${mobile}", mobile).replace("${address}", address);
+
+			}
+			result = sendSMS(telephone, smsContent);
+
+		} else {
+			//单独分享的
+			Map<String, Object> aloneMap = getAloneApplicantByOrderid(orderjpid);
+			List<Record> aloneApplicants = (List<Record>) aloneMap.get("applicant");
+			for (Record record : aloneApplicants) {
+				String name = record.getString("applicantname");
+				String sex = record.getString("sex");
+				if (Util.eq("男", sex)) {
+					sex = "先生";
+				} else {
+					sex = "女士";
+				}
+				String singleTelephone = record.getString("telephone");
+
+				String content = tmp.toString();
+				content = content.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+						.replace("${visaCountry}", VISA_COUNTRY).replace("${receiver}", receiver)
+						.replace("${mobile}", mobile).replace("${address}", address);
+
+				result = sendSMS(singleTelephone, content);
+			}
 		}
 
 		return result;
@@ -859,4 +1092,59 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		return "BackMail Success";
 	}
+
+	//发送合格短信
+	public Object sendApplicantVerifySMS(Integer applyid, Integer orderid, String smsTemplate) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(smsTemplate));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applyid.longValue());
+		String name = applicant.getFirstName() + applicant.getLastName();
+		String sex = applicant.getSex();
+		String telephone = applicant.getTelephone();
+		if (Util.eq("男", sex)) {
+			sex = "先生";
+		} else {
+			sex = "女士";
+		}
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+		String orderNum = order.getOrderNum();
+		String smsContent = tmp.toString();
+		smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum);
+		String result = sendSMS(telephone, smsContent);
+		return result;
+
+	}
+
+	//合格/不合格 发送审核结果邮件
+	public Object sendApplicantVerifyEmail(Integer applyid, Integer orderid, String mailTemplate) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(mailTemplate));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+		String emailText = tmp.toString();
+		String result = "";
+		//查询订单号
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+		String orderNum = order.getOrderNum();
+		//申请人
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applyid.longValue());
+		String name = applicant.getFirstName() + applicant.getLastName();
+		String sex = applicant.getSex();
+		String toEmail = applicant.getEmail();
+		if (Util.eq("男", sex)) {
+			sex = "先生";
+		} else {
+			sex = "女士";
+		}
+
+		emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum);
+		result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
+
+		return result;
+	}
+
 }
