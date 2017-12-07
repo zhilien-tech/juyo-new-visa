@@ -102,7 +102,7 @@
 					<!-- 申请人 -->
 					<div class="info">
 						<div id="mainApply" class="info-head">主申请人 </div>
-						<div class="info-body-from cf ">
+						<div class="info-body-from"><!--class=" cf "-->
 							<div class="row"><!-- 申请人/备注 -->
 								<div class="col-sm-4">
 									<div class="form-group">
@@ -131,7 +131,7 @@
 												  </span>  --%>
 
 
-										<%-- <div class="input-box">
+										<div class="input-box">
 											<input type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
 											<ul class="dropdown">
 												<li>主卡</li>
@@ -139,20 +139,20 @@
 												<li>同事</li>
 												<li>同学</li>
 											</ul>
-										</div> --%>
+										</div>
 
 
 
-										<input list="movie" id="relationRemark" name="relationRemark" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.relationRemark}"/>
+										<%-- <input list="movie" id="relationRemark" name="relationRemark" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.relationRemark}"/>
 										<datalist id="movie">
 										<option>主卡</option>
 										<option>朋友</option>
 										<option>同事</option>
 										<option>同学</option>
-											<%-- <c:forEach var="map" items="${obj.applicantRemark}">
+											<c:forEach var="map" items="${obj.applicantRemark}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
-											</c:forEach> --%>
-										</datalist>
+											</c:forEach>
+										</datalist> --%>
 
 										<%-- <select id="relationRemark" name="relationRemark" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.applicantRemark}">
@@ -180,7 +180,7 @@
 											
 											</br>
 											
-											<%-- <div class="input-box">
+											<div class="input-box">
 											<input type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
 											<ul class="dropdown">
 												<li>之妻</li>
@@ -193,10 +193,10 @@
 												<li>同事</li>
 												<li>同学</li>
 											</ul>
-										</div> --%>
+										</div>
 											
 											
-											<input list="movi" id="mainRelation" name="mainRelation" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.mainRelation}"/>
+											<%-- <input list="movi" id="mainRelation" name="mainRelation" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.mainRelation}"/>
 										<datalist id="movi">
 										<option>之妻</option>
 										<option>之夫</option>
@@ -207,7 +207,7 @@
 										<option>朋友</option>
 										<option>同事</option>
 										<option>同学</option>
-											</datalist>
+											</datalist> --%>
 											
 											<%-- <input name="mainRelation" id="mainRelation" style="height:35px;width:100px;position:absolute"    value="${obj.visaInfo.mainRelation }">  
 												<span style="margin-left:100px;width:200px;overflow:hidden;" >  
