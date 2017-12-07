@@ -81,6 +81,20 @@
 							</div>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label><span>*</span>城市代码：</label> 
+								<!-- <select id = "city" name="city"
+										class="form-control select2 cityselect2" multiple="multiple"
+										data-placeholder="">
+								</select> -->
+								
+								<input id="code" name="code"
+									type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</form>
@@ -138,6 +152,13 @@
 							}
 						}
 					},
+					code : {
+						validators : {
+							notEmpty : {
+								message : '城市代码不能为空'
+							}
+						}
+					},
 				}
 			});
 			
@@ -169,6 +190,11 @@
 				var city = $("#city").val();
 				if (city == "") {
 					layer.msg('city不能为空');
+					return;
+				}
+				var code = $("#code").val();
+				if (code == "") {
+					layer.msg('city代码不能为空');
 					return;
 				}
 				$.ajax({

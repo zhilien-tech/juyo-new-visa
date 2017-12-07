@@ -58,6 +58,7 @@ public class HotelViewService extends BaseService<THotelEntity> {
 	 */
 	public Object addHotel(THotelAddForm addForm) {
 		addForm.setCreateTime(new Date());
+		addForm.setUpdateTime(new Date());
 		//dbDao.fetch(TCityEntity.class, Cnd.)
 		TCityEntity city = dbDao.fetch(TCityEntity.class, Long.valueOf(addForm.getCityId()));
 		addForm.setCityId(city.getId());

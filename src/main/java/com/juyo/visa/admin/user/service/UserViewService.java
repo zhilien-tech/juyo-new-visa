@@ -115,6 +115,7 @@ public class UserViewService extends BaseService<TUserEntity> {
 		addForm.setUserType(UserLoginEnum.PERSONNEL.intKey());
 		addForm.setOpId(0);
 		addForm.setCreateTime(new Date());
+		addForm.setUpdateTime(new Date());
 		TUserEntity user = this.add(addForm);
 		TComJobEntity comjob = dbDao.fetch(TComJobEntity.class, Cnd.where("jobid", "=", addForm.getJobId()));
 		TUserJobEntity userjob = new TUserJobEntity();
