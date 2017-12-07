@@ -66,6 +66,7 @@ public class CustomerViewService extends BaseService<TCustomerEntity> {
 		addForm.setCompId(loginCompany.getId());
 		addForm.setUserId(loginUser.getId());
 		addForm.setCreateTime(new Date());
+		addForm.setUpdateTime(new Date());
 		this.add(addForm);
 		return JsonResult.success("添加成功");
 	}

@@ -52,6 +52,7 @@ public class ReceiveaddressViewService extends BaseService<TReceiveaddressEntity
 		addForm.setUserId(loginUser.getId());
 		addForm.setOpId(loginUser.getId());
 		addForm.setCreateTime(new Date());
+		addForm.setUpdateTime(new Date());
 		this.add(addForm);
 		return JsonResult.success("添加成功");
 	}

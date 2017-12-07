@@ -73,8 +73,8 @@ public class TCityForm extends DataTablesParamForm {
 		if (!Util.isEmpty(city)) {
 			cnd.and("city", "=", city);
 		}
-		cnd.orderBy("createTime", "DESC");
 		cnd.orderBy("updateTime", "DESC");
+		cnd.orderBy("createTime", "DESC");
 		return cnd;
 	}
 }

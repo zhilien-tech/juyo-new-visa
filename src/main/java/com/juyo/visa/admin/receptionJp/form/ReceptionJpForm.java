@@ -101,8 +101,8 @@ public class ReceptionJpForm extends DataTablesParamForm {
 			//普通的操作员
 		}
 		cnd.and("tr.comId", "=", companyid);
-		cnd.orderBy("tr.createtime", "DESC");
 		cnd.orderBy("tr.updatetime", "DESC");
+		cnd.orderBy("tr.createtime", "DESC");
 		return cnd;
 	}
 }

@@ -75,6 +75,7 @@ public class TReceiveaddressForm extends DataTablesParamForm {
 			cnd.and(expg);
 		}
 		cnd.and("comId", "=", comId);
+		cnd.orderBy("updateTime", "DESC");
 		cnd.orderBy("createTime", "DESC");
 		return cnd;
 	}

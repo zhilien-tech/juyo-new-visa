@@ -60,6 +60,7 @@ public class FlightViewService extends BaseService<TFlightEntity> {
 	 */
 	public Object addFlight(TFlightAddForm addForm) {
 		addForm.setCreateTime(new Date());
+		addForm.setUpdateTime(new Date());
 		this.add(addForm);
 		return JsonResult.success("添加成功");
 	}
