@@ -113,6 +113,7 @@ public class CityViewService extends BaseService<TCityEntity> {
 	 */
 	public Object addCity(TCityAddForm addForm) {
 		addForm.setCreateTime(new Date());
+		addForm.setUpdateTime(new Date());
 		this.add(addForm);
 		return JsonResult.success("添加成功");
 	}

@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<style type="text/css">
 	 [v-cloak]{display:none;}
+	 #hideOrder:hover { text-decoration: none;cursor:pointer;}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -87,11 +88,11 @@
 								<div>
 									<label>操作：</label>
 									<div v-if="data.isdisabled==1">
-										<i class="edit"  v-on:click="" > </i>
-										<i class="share" v-on:click=""> </i>
-										<i class="theTrial" v-on:click=""> </i>
+										<i class="edit1"  v-on:click="" > </i>
+										<i class="share1" v-on:click=""> </i>
+										<i class="theTrial1" v-on:click=""> </i>
 										<!-- <i class="return" > </i> -->
-										<i class="toVoid" v-on:click="undisabled(data.orderid)"> </i>
+										<i class="toVoid1" v-on:click="undisabled(data.orderid)"> </i>
 									</div>
 									<div v-else>
 										<i class="edit"  v-on:click="order(data.orderid)"> </i>
@@ -114,7 +115,8 @@
 							</ul>
 						</div>
 					</div><!-- end 卡片列表 -->
-					<input id="hideOrder" type="button" value="您还没有添加任何数据，快去下单吧" class="orderJp none" onclick="addOrder();"/>
+					<a id="hideOrder" style="color:red; font-size:30px; position: absolute;top:50%;left:40%;" class="orderJp none" onclick="addOrder();">您还没有添加任何数据，快去下单吧</a>
+					
 				</section>
 			</div>
 				<input type="hidden" id="pageNumber" name="pageNumber" value="1">
@@ -296,6 +298,7 @@
 			$("#sendSignDate").val("");
 			$("#signOutDate").val("");
 			$("#start_time").val("");
+			$('#pageNumber').val(1);
 			timeStart = "";
 			timeEnd = "";
 			sendDateStart = "";
@@ -337,6 +340,19 @@
 				}
 			});
 		});
+		
+		function countryChange() {
+			$("#searchbtn").click();
+			$('#pageNumber').val(1);
+		}
+		
+		//搜索回车事件
+		function onkeyEnter() {
+			var e = window.event || arguments.callee.caller.arguments[0];
+			if (e && e.keyCode == 13) {
+				$("#searchbtn").click();
+			}
+		}
 		
 		//注册scroll事件并监听 
 		$(window).scroll(function(){
@@ -392,12 +408,12 @@
 							//没有更多数据
 						}
 					});
-				}else{
+				}/* else{
 					//没有更多数据，底部提示语
 					if($("#card-bottom-line").length <= 0 && pageListCount>=6){
 						$(".card-list").last().after("<div id='card-bottom-line' class='bottom-line'><span style='margin-left: 38%; color:#999'>-------  没有更多数据可以加载  -------</span></div>");
 					}
-				}
+				} */
 			}
 		});
 		/* function search(){
@@ -423,18 +439,6 @@
 			window.location.href = '${base}/admin/orderJp/addOrder';
 		}
 
-		function countryChange() {
-			$("#searchbtn").click();
-		}
-
-		//搜索回车事件
-		function onkeyEnter() {
-			var e = window.event || arguments.callee.caller.arguments[0];
-			if (e && e.keyCode == 13) {
-				$("#searchbtn").click();
-			}
-		}
-		
 		function successCallBack(status){
 			console.log(111);
 		}

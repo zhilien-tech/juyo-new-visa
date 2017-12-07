@@ -47,6 +47,7 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
+		            
 		            {"data": "city", "bSortable": false,render: function(data, type, row, meta) {
 		            	var city = row.city;
 		            	if(null==city || ""==city){
@@ -57,7 +58,16 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
-		            
+		            {"data": "code", "bSortable": false,render: function(data, type, row, meta) {
+		            	var code = row.code;
+		            	if(null==code || ""==code){
+		            		return "";
+		            	}else{
+		            		/*province = '<span data-toggle="tooltip" data-placement="right" title="'+province+'">'+province+'<span>';*/
+		            		return code;
+		            	}
+		            } 	
+		            },
 		            
 		            {"data": " ", "bSortable": false, "width":120,
 		            	render: function(data, type, row, meta) {

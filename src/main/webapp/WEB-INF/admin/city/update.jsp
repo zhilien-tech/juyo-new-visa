@@ -73,6 +73,15 @@
 							</div>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label><span>*</span>城市代码：</label> <input id="code" name="code"
+									value="${obj.code}" type="text" class="form-control input-sm"
+									placeholder=" " />
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</form>
@@ -128,6 +137,13 @@
 						validators : {
 							notEmpty : {
 								message : '城市不能为空'
+							}
+						}
+					},
+					code : {
+						validators : {
+							notEmpty : {
+								message : '城市代码不能为空'
 							}
 						}
 					},

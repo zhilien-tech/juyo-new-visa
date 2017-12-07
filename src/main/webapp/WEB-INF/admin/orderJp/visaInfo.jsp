@@ -7,11 +7,77 @@
 	<meta charset="UTF-8">
 	<title>签证信息</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+	
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
+	<style type="text/css">
+
+    .input-box {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .input-box input {
+      background-color: transparent;
+      background-image: none;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+      color: #555;
+      display: block;
+      font-size: 14px;
+      line-height: 1.42857;
+      padding: 6px 6px;
+      transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+      width: 200px;
+      display: inline;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .tip-l {
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 10px solid #555;
+      display: inline-block;
+      right: 10px;
+      z-index: 0;
+      position: absolute;
+      top: 12px;
+    }
+    
+    .dropdown {
+      position: absolute;
+      top: 32px;
+      left: 0px;
+      width: 200px;
+      background-color: #FFF;
+      border: 1px solid #23a8ce;
+      border-top: 0;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+      z-index: 999;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .dropdown li {
+      display: block;
+      line-height: 1.42857;
+      padding: 0 6px;
+      min-height: 1.2em;
+      cursor: pointer;
+    }
+    
+    .dropdown li:hover {
+      background-color: #23a8ce;
+      color: #FFF;
+    }
+</style>
 	<style type="text/css">
 		body {min-width:auto;}
 		.tab-content {background-color: #f8f8f8;}
@@ -63,12 +129,20 @@
 											</c:forEach>
 												  </select>  
 												  </span>  --%>
-										
-										
-										
-										
-										
-										
+
+
+										<%-- <div class="input-box">
+											<input type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
+											<ul class="dropdown">
+												<li>主卡</li>
+												<li>朋友</li>
+												<li>同事</li>
+												<li>同学</li>
+											</ul>
+										</div> --%>
+
+
+
 										<input list="movie" id="relationRemark" name="relationRemark" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.relationRemark}"/>
 										<datalist id="movie">
 										<option>主卡</option>
@@ -105,6 +179,22 @@
 											<label><span>*</span>与主申请人关系：</label>
 											
 											</br>
+											
+											<%-- <div class="input-box">
+											<input type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
+											<ul class="dropdown">
+												<li>之妻</li>
+												<li>之夫</li>
+												<li>之子</li>
+												<li>之女</li>
+												<li>之父</li>
+												<li>之母</li>
+												<li>朋友</li>
+												<li>同事</li>
+												<li>同学</li>
+											</ul>
+										</div> --%>
+											
 											
 											<input list="movi" id="mainRelation" name="mainRelation" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.mainRelation}"/>
 										<datalist id="movi">
@@ -329,7 +419,7 @@
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	
+	<script type="text/javascript" src="${base}/admin/orderJp/visaInfo.js"></script>
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
