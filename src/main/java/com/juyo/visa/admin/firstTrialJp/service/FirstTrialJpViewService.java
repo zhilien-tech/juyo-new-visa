@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +40,6 @@ import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
-import com.juyo.visa.common.enums.FristTrialSearchStatusEnum_JP;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
@@ -107,10 +107,22 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	public Object toList() {
 
 		//检索下拉
+		int TRIALORDER = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
+
 		Map<String, Object> result = Maps.newHashMap();
-		Map<String, String> searchStatus = EnumUtil.enum2(FristTrialSearchStatusEnum_JP.class);
+		//Map<String, String> searchStatus = EnumUtil.enum2(FristTrialSearchStatusEnum_JP.class);
 		Map<String, String> orderStatus = EnumUtil.enum2(JPOrderStatusEnum.class);
-		result.put("searchStatus", searchStatus);
+
+		Iterator<Map.Entry<String, String>> status = orderStatus.entrySet().iterator();
+		while (status.hasNext()) {
+			Map.Entry<String, String> entry = status.next();
+			String keyStr = entry.getKey();
+			int key = Integer.valueOf(keyStr);
+			if (key < TRIALORDER)
+				status.remove();
+		}
+
+		result.put("searchStatus", orderStatus);
 		return result;
 	}
 
