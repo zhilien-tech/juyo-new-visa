@@ -51,8 +51,10 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	 */
 	public Object sendInsurance(Integer orderid, Integer visastatus) {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
-		orderjp.setVisastatus(visastatus);
-		return dbDao.update(orderjp);
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		orderinfo.setStatus(visastatus);
+		//orderjp.setVisastatus(visastatus);
+		return dbDao.update(orderinfo);
 	}
 
 	/**

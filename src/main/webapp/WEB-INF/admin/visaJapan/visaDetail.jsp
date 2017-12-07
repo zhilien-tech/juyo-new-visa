@@ -207,7 +207,7 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>停留天数：</label>
+										<label><span>*</span>行程天数：</label>
 										<input id="stayday" name="stayday" type="text" class="form-control input-sm mustNumber" value="${obj.orderinfo.stayDay }"/>
 									</div>
 								</div>
@@ -222,7 +222,14 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>送签时间：</label>
-										<input id="sendvisadate" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.orderinfo.sendVisaDate }" pattern="yyyy-MM-dd" />"/>
+										<c:choose>
+											<c:when test="${empty obj.orderinfo.sendVisaDate }">
+												<input id="sendvisadate" type="text" class="form-control input-sm datetimepickercss" value=""/>
+											</c:when>
+											<c:otherwise>
+												<input id="sendvisadate" type="text" class="form-control input-sm datetimepickercss" disabled="disabled" value="<fmt:formatDate value="${obj.orderinfo.sendVisaDate }" pattern="yyyy-MM-dd" />"/>
+											</c:otherwise>
+										</c:choose>
 									</div>
 								</div>
 								<div class="col-sm-3">

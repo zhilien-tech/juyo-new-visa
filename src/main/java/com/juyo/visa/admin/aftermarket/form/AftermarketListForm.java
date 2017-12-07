@@ -46,6 +46,8 @@ public class AftermarketListForm implements SQLParamForm {
 	private Integer userid;
 	//公司管理员id
 	private Integer adminId;
+	//订单状态
+	private Integer status;
 
 	@Override
 	public Sql sql(SqlManager sqlManager) {
@@ -59,7 +61,7 @@ public class AftermarketListForm implements SQLParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		cnd.and("tr.comId", "=", companyid);
-		cnd.and("tr.status", "=", JPOrderStatusEnum.AFTERMARKET_ORDER.intKey());
+		cnd.and("tr.status", ">=", JPOrderStatusEnum.AFTERMARKET_ORDER.intKey());
 		if (!Util.isEmpty(signDateStr)) {
 			String[] split = signDateStr.split(" - ");
 			Date sendSignDate = DateUtil.string2Date(split[0], DateUtil.FORMAT_YYYY_MM_DD);
@@ -75,6 +77,9 @@ public class AftermarketListForm implements SQLParamForm {
 					.or("taj.applyname", "like", "%" + searchstr + "%");
 			cnd.and(exp);
 
+		}
+		if (!Util.isEmpty(status)) {
+			cnd.and("tr.status", "=", status);
 		}
 		cnd.orderBy("tr.createtime", "desc");
 		return cnd;

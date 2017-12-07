@@ -25,9 +25,11 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-2 left-5px right-0px">
-								<select class="input-class input-sm" id="status" name="status">
+								<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
 									<option value="">状态</option>
-									<option></option>
+									<c:forEach items="${obj.orderstatus }" var="orstatus">
+										<option value="${orstatus.key }">${orstatus.value }</option>
+									</c:forEach>
 								</select>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
@@ -55,17 +57,17 @@
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="(item,index) in data.applicats">
 									<span v-if="index === 0">
-										<div><label>收件人：</label><span>{{item.firstname}}{{item.lastname}}</span></div>
-										<div><label>电话：</label><span>{{item.telephone}}</span></div>
-										<div><label>地址：</label><span>{{item.address}}</span></div>
+										<div><label>收件人：</label><span>{{item.linkman}}</span></div>
+										<div><label>电话：</label><span>{{item.backtelephone}}</span></div>
+										<div><label>地址：</label><span>{{item.expressaddress}}</span></div>
 										<div><label>状态：</label><span></span></div>
 										<div><label></label><span><a href="javascript:;" v-on:click="backpost(item.id)">回邮</a></span></div>
 										<div><!-- <i> </i> --></div>
 									</span>
 									<span v-else>
-										<div><label>　　　　</label><span>{{item.firstname}}{{item.lastname}}</span></div>
-										<div><label>　　　</label><span>{{item.telephone}}</span></div>
-										<div><label>　　　</label><span>{{item.address}}</span></div>
+										<div><label>　　　　</label><span>{{item.linkman}}</span></div>
+										<div><label>　　　</label><span>{{item.backtelephone}}</span></div>
+										<div><label>　　　</label><span>{{item.expressaddress}}</span></div>
 										<div><label>　　　</label><span></span></div>
 										<div><label></label><span><a href="javascript:;" v-on:click="backpost(item.id)">回邮</a></span></div>
 										<div><!-- <i> </i> --></div>
@@ -175,17 +177,21 @@
 
 	
 	function search(){
+		var status = $('#status').val();
 		var signDateStr = $('#signDateStr').val();
 		var searchStr = $('#searchStr').val();
 		$.ajax({ 
         	url: url,
-        	data:{signDateStr:signDateStr,searchstr:searchStr},
+        	data:{signDateStr:signDateStr,searchstr:searchStr,status:status},
         	dataType:"json",
         	type:'post',
         	success: function(data){
         		_self.aftermarketData = data.aftermarketData;
           	}
         });
+	}
+	function changestatus(){
+		search();
 	}
 	//回车事件
 	function onkeyEnter(){
