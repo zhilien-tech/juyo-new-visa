@@ -61,7 +61,8 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 				//申请人不合格
 				cnd.and("taj.applicantStatus", "like", "%" + status + "%");
 			} else {
-				cnd.and("CONCAT( CAST( tr.STATUS AS CHAR ), 'төл', taj.applicantStatus )", "like", "%" + status + "%");
+				//订单+申请人状态cnd.and("CONCAT( CAST( tr.STATUS AS CHAR ), 'төл', taj.applicantStatus )", "like", "%" + status + "%");
+				cnd.and("tr.STATUS", "like", "%" + status + "%");
 			}
 		}
 		if (!Util.isEmpty(searchStr)) {
