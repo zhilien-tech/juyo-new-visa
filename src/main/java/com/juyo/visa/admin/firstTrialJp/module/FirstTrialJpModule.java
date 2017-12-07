@@ -105,7 +105,7 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Object getShareApplicantByOrderid(@Param("orderjpid") int orderjpid) {
+	public Object getShareApplicantByOrderid(@Param("orderjpid") Integer orderjpid) {
 		return firstTrialJpViewService.getShareApplicantByOrderid(orderjpid);
 	}
 

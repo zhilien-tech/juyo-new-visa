@@ -375,7 +375,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//获得订单分享消息人列表
-	public Map<String, Object> getShareApplicantByOrderid(int orderjpid) {
+	public Map<String, Object> getShareApplicantByOrderid(Integer orderjpid) {
 		Map<String, Object> result = Maps.newHashMap();
 		String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
 		int yes = IsYesOrNoEnum.YES.intKey();
