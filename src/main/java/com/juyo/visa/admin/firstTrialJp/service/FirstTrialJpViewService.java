@@ -109,6 +109,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//检索下拉
 		Map<String, Object> result = Maps.newHashMap();
 		Map<String, String> searchStatus = EnumUtil.enum2(FristTrialSearchStatusEnum_JP.class);
+		Map<String, String> orderStatus = EnumUtil.enum2(JPOrderStatusEnum.class);
 		result.put("searchStatus", searchStatus);
 		return result;
 	}
