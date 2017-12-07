@@ -49,7 +49,8 @@ body{min-width:1160px;overflow-x: auto;}
 
 /*卡片式 操作图标*/
 .edit{background-image:url(../dist/newvisacss/img/edit.png);}
-.edit1{background-image:url(../dist/newvisacss/img/edit.png);}
+.edit1{background-image:url(../dist/newvisacss/img/editGray.png);}
+.edit1:hover { cursor：default}
 .shiShou{background-image:url(../dist/newvisacss/img/shiShou.png);}
 .sendZB,.ZBchange,.ZBcancel{width:24px !important;}
 .sendZB{background-image:url(../dist/newvisacss/img/sendZB.png);}
@@ -63,11 +64,12 @@ body{min-width:1160px;overflow-x: auto;}
 .express{background-image:url(../dist/newvisacss/img/express.png);}
 .return{background-image:url(../dist/newvisacss/img/return.png);}
 .share{background-image:url(../dist/newvisacss/img/share.png);}
-.share1{background-image:url(../dist/newvisacss/img/share.png);}
+.share1{background-image:url(../dist/newvisacss/img/shareGray.png);}
 .theTrial{background-image:url(../dist/newvisacss/img/theTrial.png);}
-.theTrial1{background-image:url(../dist/newvisacss/img/theTrial.png);}
+.theTrial1{background-image:url(../dist/newvisacss/img/theTrialGray.png);}
 .toVoid{background-image:url(../dist/newvisacss/img/toVoid.png);width:16px !important;}
 .toVoid1{background-image:url(../dist/newvisacss/img/toVoid.png);width:16px !important;}
+.toVoid1:hover { cursor：default}
 .basicInfo{background-image:url(../dist/newvisacss/img/basicInfo.png);}
 .passportInfo{background-image:url(../dist/newvisacss/img/passportInfo.png);}
 .visaInfo{background-image:url(../dist/newvisacss/img/visaInfo.png);}
