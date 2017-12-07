@@ -93,7 +93,7 @@
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
-										<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.applicant.firstNameEn }"/>
+										<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -106,7 +106,7 @@
 									<label><span>*</span>名/拼音：</label> <input id="lastName"
 										name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.lastName }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.applicant.lastNameEn }"/>
+										<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
