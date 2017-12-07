@@ -40,7 +40,7 @@
 								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter()"/>
 							</div>
 							<div class="col-md-7 left-5px">
-								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+								<a class="btn btn-primary btn-sm pull-left"  id="searchbtn">搜索</a>
 								<a class="btn btn-primary btn-sm pull-right" href="javascript:;" id="">拍视频</a>
 							</div>
 						</div>
@@ -94,6 +94,9 @@
 					</div><!-- end 卡片列表 -->
 				</section>
 			</div>
+			<input type="hidden" id="pageNumber" name="pageNumber" value="1">
+				<input type="hidden" id="pageTotal" name="pageTotal">
+				<input type="hidden" id="pageListCount" name="pageListCount">
 		</div>
 
 	<script type="text/javascript">
@@ -126,6 +129,8 @@
             	type:'post',
             	success: function(data){
             		_self.receptionJpData = data.receptionJpData;
+            		$('#pageTotal').val(data.pageTotal);
+					$('#pageListCount').val(data.pageListCount);
             		console.log(JSON.stringify(_self.receptionJpData));
               	}
             });
@@ -164,7 +169,7 @@
         }
 	});
 	
-	function search(){
+	$("#searchbtn").click(function(){
 		var status = $('#status').val();
 		var searchStr = $('#searchStr').val();
 		$.ajax({ 
@@ -176,7 +181,58 @@
         		_self.receptionJpData = data.receptionJpData;
           	}
         });
-	}
+	}); 
+	
+	$("#status").change(function(){
+		$("#searchbtn").click();
+	});
+	
+	//注册scroll事件并监听 
+	$(window).scroll(function(){
+		var scrollTop = $(this).scrollTop();
+		var scrollHeight = $(document).height();
+		var windowHeight = $(this).height();
+		var pageTotal = parseInt($('#pageTotal').val());
+		var pageListCount = parseInt($('#pageListCount').val());
+		// 判断是否滚动到底部  
+		if(Math.ceil(scrollTop + windowHeight) == scrollHeight){
+			//分页条件
+			var pageNumber = $('#pageNumber').val();
+			pageNumber = parseInt(pageNumber) + 1;
+			$('#pageNumber').val(pageNumber);
+			//搜索条件
+			var searchStr = $('#searchStr').val();
+			var status = $('#status').val();
+			//异步加载数据
+			if(pageNumber <= pageTotal){
+				//遮罩
+				layer.load(1);
+				$.ajax({ 
+					url: url,
+					data:{
+						status : status,
+						searchStr : searchStr
+					},
+					dataType:"json",
+					type:'post',
+					success: function(data){
+						//关闭遮罩
+						layer.closeAll('loading');
+						$.each(data.receptionJpData,function(index,item){
+							_self.receptionJpData.push(item);
+						});
+						//没有更多数据
+					}
+				});
+			}else{
+				//没有更多数据，底部提示语
+				if($("#card-bottom-line").length <= 0 && pageListCount>=6){
+					$(".card-list").last().after("<div id='card-bottom-line' class='bottom-line'><span style='margin-left: 38%; color:#999'>-------  没有更多数据可以加载  -------</span></div>");
+				}
+			}
+		}
+	});
+	
 	//回车事件
 	function onkeyEnter(){
 	    var e = window.event || arguments.callee.caller.arguments[0];

@@ -78,7 +78,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>加急：</label>
-										<select class="form-control input-sm" v-model="orderinfo.urgenttype">
+										<select class="form-control input-sm" v-model="orderinfo.urgenttype" id="urgentType" name="urgenttype">
 											<c:forEach var="map" items="${obj.mainsaleurgentenum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -86,10 +86,10 @@
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-3 none" id="urgentDays">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<select class="form-control input-sm" v-model="orderinfo.urgentday">
+										<select class="form-control input-sm" v-model="orderinfo.urgentday" name="urgentday">
 											<c:forEach var="map" items="${obj.mainsaleurgenttimeenum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -138,7 +138,7 @@
 									</div>
 								</div>
 								<c:choose>
-									<c:when test="${obj.jporderinfo.visaType == 2 }">
+									<c:when test="${obj.jporderinfo.visaType == 2 || obj.jporderinfo.visaType == 3 || obj.jporderinfo.visaType == 4 }">
 										<div class="col-sm-9" id="visacounty">
 									</c:when>
 									<c:otherwise>
@@ -158,7 +158,7 @@
 										</div>
 							</div><!-- end 签证类型 -->
 							<c:choose>
-								<c:when test="${obj.jporderinfo.visaType == 2 }">
+								<c:when test="${obj.jporderinfo.visaType == 2 || obj.jporderinfo.visaType == 3 || obj.jporderinfo.visaType == 4 }">
 									<div class="row body-from-input" id="threefangwen"><!-- 过去三年是否访问过 -->
 								</c:when>
 								<c:otherwise>
@@ -205,7 +205,7 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>停留天数：</label>
+										<label><span>*</span>行程天数：</label>
 										<input id="stayday" name="stayday" type="text" class="form-control input-sm mustNumber" v-model="orderinfo.stayday"/>
 									</div>
 								</div>
@@ -358,6 +358,54 @@
         		  });
 			}
 			
+			$("#stayday").keyup(function(){
+				var go = $("#gotripdate").val();
+				var back = $("#backtripdate").val();
+				var day = $("#stayday").val();
+				if(go != "" && day != ""){
+					var days = getNewDay(go,day-1);
+					$("#backtripdate").val(days); 
+					orderobj.orderInfo.backtripdate = days;
+				}
+			});
+			//日期转换
+			function getNewDay(dateTemp, days) {  
+			    var dateTemp = dateTemp.split("-");  
+			    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
+			    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);  
+			    var rDate = new Date(millSeconds);  
+			    var year = rDate.getFullYear();  
+			    var month = rDate.getMonth() + 1;  
+			    if (month < 10) month = "0" + month;  
+			    var date = rDate.getDate();  
+			    if (date < 10) date = "0" + date;  
+			    return (year + "-" + month + "-" + date);  
+			} 
+			
+			
+			$("#money").blur(function(){
+				var money = $("#money").val();
+				if(money != "" ){
+					var moneys = returnFloat(money);
+					$("#money").val(moneys); 
+				}
+			});
+			//数字保留两位小数
+			function returnFloat(value){
+				var value=Math.round(parseFloat(value)*100)/100;
+				var xsd=value.toString().split(".");
+				if(xsd.length==1){
+					value=value.toString()+".00";
+				 	return value;
+				}
+				if(xsd.length>1){
+					if(xsd[1].length<2){
+				  		value=value.toString()+"0";
+				 	}
+				 	return value;
+				 }
+			}
+			
 			//时间插件格式化  出行时间>今天>送签时间 
 			var now = new Date();
 			$("#gotripdate").datetimepicker({
@@ -382,12 +430,12 @@
 			$("#sendvisadate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
-				endDate: now,//日期小于今天
+				startDate: now,//日期小于今天
 				autoclose: true,//选中日期后 自动关闭
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
 			}).on("click",function(){  
-			    $("#sendvisadate").datetimepicker("setEndDate",$("#outvisadate").val());  
+			    $("#sendvisadate").datetimepicker("setEndDate",$("#gotripdate").val());  
 			}); 
 			$("#outvisadate").datetimepicker({
 				format: 'yyyy-mm-dd',

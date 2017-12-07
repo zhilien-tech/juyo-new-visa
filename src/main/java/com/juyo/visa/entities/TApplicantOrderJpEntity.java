@@ -1,10 +1,13 @@
 package com.juyo.visa.entities;
 
-import org.nutz.dao.entity.annotation.*;
-import lombok.Data;
-
 import java.io.Serializable;
 
+import lombok.Data;
+
+import org.nutz.dao.entity.annotation.Column;
+import org.nutz.dao.entity.annotation.Comment;
+import org.nutz.dao.entity.annotation.Id;
+import org.nutz.dao.entity.annotation.Table;
 
 @Data
 @Table("t_applicant_order_jp")
@@ -12,50 +15,49 @@ public class TApplicantOrderJpEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id(auto = true)
 	private Integer id;
-	
+
 	@Column
-    @Comment("日本订单id")
+	@Comment("日本订单id")
 	private Integer orderId;
-	
+
 	@Column
-    @Comment("申请人id")
+	@Comment("申请人id")
 	private Integer applicantId;
-	
+
 	@Column
-    @Comment("是否为统一联系人")
+	@Comment("是否为统一联系人")
 	private Integer isSameLinker;
-	
+
 	@Column
-    @Comment("是否分享消息")
+	@Comment("是否分享消息")
 	private Integer isShareSms;
-	
+
 	@Column
-    @Comment("是否是主申请人")
+	@Comment("是否是主申请人")
 	private Integer isMainApplicant;
-	
+
 	@Column
-    @Comment("与主申请人的关系")
+	@Comment("与主申请人的关系")
 	private String mainRelation;
-	
+
 	@Column
-    @Comment("与主申请人关系备注")
+	@Comment("与主申请人关系备注")
 	private String relationRemark;
-	
+
 	@Column
-    @Comment("出行信息是否同主")
+	@Comment("出行信息是否同主")
 	private Integer sameMainTrip;
-	
+
 	@Column
-    @Comment("财富信息是否同主")
+	@Comment("财富信息是否同主")
 	private Integer sameMainWealth;
-	
+
 	@Column
-    @Comment("工作信息是否同主")
+	@Comment("工作信息是否同主")
 	private Integer sameMainWork;
-	
+
 	@Column
-    @Comment("视频地址")
+	@Comment("视频地址")
 	private String videoUrl;
-	
 
 }

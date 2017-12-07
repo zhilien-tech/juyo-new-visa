@@ -247,13 +247,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>银行存款：</label>
-										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder="银行存款" />
+										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="万" />
+										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder="万"  />
 									</div>
 								</div>
 							</div><!-- end 银行存款 -->
@@ -264,13 +264,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>车产：</label>
-										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder="车产" />
+										<input id="" name="" type="text" class="form-control input-sm" value="车产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" "/>
+										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder=" "/>
 									</div>
 								</div>
 							</div><!-- end 车产 -->
@@ -281,13 +281,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>房产：</label>
-										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder="房产" />
+										<input id="" name="" type="text" class="form-control input-sm" value="房产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="平米" />
+										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder="平米"  />
 									</div>
 								</div>
 							</div><!-- end 房产 -->
@@ -298,13 +298,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>理财：</label>
-										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder="理财" />
+										<input id="" name="" type="text" class="form-control input-sm" value="理财" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="万" />
+										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder="万"  />
 									</div>
 								</div>
 							</div><!-- end 房产 -->
@@ -501,7 +501,8 @@
 					}else{
 						$(".deposit").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#deposit").val("银行存款");
+						$("#deposit").val("万");
+						//$("#deposit").placeholder("万");
 					}
 				}else if(financeBtnInfo == "车产"){
 					if($(this).hasClass("btnState-true")){
@@ -511,7 +512,7 @@
 					}else{
 						$(".vehicle").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#vehicle").val("车产");
+						$("#vehicle").val("");
 					}
 				}else if(financeBtnInfo == "房产"){
 					if($(this).hasClass("btnState-true")){
@@ -521,7 +522,8 @@
 					}else{
 						$(".houseProperty").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#houseProperty").val("房产");
+						$("#houseProperty").val("平米");
+						//$("#houseProperty").placeholder("平米");
 					}
 				}else if(financeBtnInfo == "理财"){
 					if($(this).hasClass("btnState-true")){
@@ -531,7 +533,8 @@
 					}else{
 						$(".financial").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#financial").val("理财");
+						$("#financial").val("万");
+						//$("#financial").placeholder("万");
 					}
 				}
 			});

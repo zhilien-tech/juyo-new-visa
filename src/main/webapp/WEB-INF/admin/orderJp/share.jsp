@@ -173,7 +173,7 @@
 										var index = parent.layer.getFrameIndex(window.name);
 										parent.layer.close(index);
 										}
-										});
+									});
 								}
 							});
 						}
@@ -197,7 +197,6 @@
 						telephone = $(this).children().eq(2).html();
 						email = $(this).children().eq(3).html();
 						if(email == "" || telephone == ""){
-							
 							layer.open({
 								type: 2,
 								title: false,
