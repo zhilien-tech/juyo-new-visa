@@ -389,7 +389,7 @@ $(".addExpressInfoBtn").click(function(){
 	$(this).hide();
 });
 
-//时间插件格式化  出行时间>今天>送签时间 
+//时间插件格式化  出行时间>送签时间 >今天
 var now = new Date();
 $("#gotripdate").datetimepicker({
 	format: 'yyyy-mm-dd',
@@ -413,12 +413,12 @@ $("#backtripdate").datetimepicker({
 $("#sendvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	endDate: now,//日期小于今天
+	startDate: now,//日期大于今天
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
-}).on("click",function(){  
-    $("#sendvisadate").datetimepicker("setEndDate",$("#outvisadate").val());  
+}).on("click",function(){
+	$("#sendVisaDate").datetimepicker("setEndDate",$("#gotripdate").val());
 }); 
 $("#outvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
@@ -427,4 +427,3 @@ $("#outvisadate").datetimepicker({
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
 });
-
