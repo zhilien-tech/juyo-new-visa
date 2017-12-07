@@ -125,8 +125,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			}
 			record.put("everybodyInfo", query);
 			//签证状态
-			Integer visastatus = record.getInt("visastatus");
-			for (JapanVisaStatusEnum visaenum : JapanVisaStatusEnum.values()) {
+			Integer visastatus = record.getInt("japanState");
+			for (JPOrderStatusEnum visaenum : JPOrderStatusEnum.values()) {
 				if (visaenum.intKey() == visastatus) {
 					record.put("visastatus", visaenum.value());
 				}
@@ -1093,7 +1093,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param stayday
 	 */
 	public Object autoCalculateBackDate(Date gotripdate, Integer stayday) {
-		Date backtripdate = DateUtil.addDay(gotripdate, stayday);
+		Date backtripdate = DateUtil.addDay(gotripdate, stayday - 1);
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		return format.format(backtripdate);
 	}

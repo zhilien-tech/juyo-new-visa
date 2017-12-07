@@ -71,20 +71,18 @@ public class VisaListDataForm implements SQLParamForm {
 		}
 		cnd.and("tr.comId", "=", companyid);
 		SqlExpressionGroup statusexp = new SqlExpressionGroup();
-		statusexp.and("tr.status", "=", JPOrderStatusEnum.VISA_ORDER.intKey())
-				.or("tr.status", "=", JPOrderStatusEnum.SEND_ADDRESS.intKey())
-				.or("tr.status", "=", JPOrderStatusEnum.SEND_DATA.intKey())
-				.or("tr.status", "=", JPOrderStatusEnum.RECEPTION_ORDER.intKey())
-				.or("tr.status", "=", JPOrderStatusEnum.RECEPTION_RECEIVED.intKey())
-				.or("tr.status", "=", JPOrderStatusEnum.TRANSFER_VISA.intKey());
+		statusexp.and("tr.status", ">=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
 		cnd.and(statusexp);
 		if (!Util.isEmpty(sendSignDate)) {
 			//cnd.and("tr.sendVisaDate", ">=", sendSignDate);
 			String[] split = sendSignDate.split(" - ");
-			Date sendSignDate = DateUtil.string2Date(split[0], DateUtil.FORMAT_YYYY_MM_DD); 
+			Date sendSignDate = DateUtil.string2Date(split[0], DateUtil.FORMAT_YYYY_MM_DD);
 			Date outSignDate = DateUtil.string2Date(split[1], DateUtil.FORMAT_YYYY_MM_DD);
 			//SqlExpressionGroup exp = new SqlExpressionGroup();
 			cnd.and("sendVisaDate", ">=", sendSignDate).and("outVisaDate", "<=", outSignDate);
+		}
+		if (!Util.isEmpty(status)) {
+			cnd.and("tr.status", "=", status);
 		}
 		if (userid.equals(adminId)) {
 			//公司管理员
