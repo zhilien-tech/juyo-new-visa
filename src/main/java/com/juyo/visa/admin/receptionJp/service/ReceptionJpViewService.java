@@ -6,6 +6,7 @@
 
 package com.juyo.visa.admin.receptionJp.service;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -17,17 +18,21 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.admin.receptionJp.form.ReceptionJpForm;
 import com.juyo.visa.admin.visajp.form.PassportForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
@@ -44,6 +49,7 @@ import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.ReceptionSearchStatusEnum_JP;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
 import com.juyo.visa.common.util.MapUtil;
+import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
@@ -69,6 +75,12 @@ import com.uxuexi.core.web.base.service.BaseService;
  */
 @IocBean
 public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
+
+	@Inject
+	private OrderJpViewService orderJpViewService;
+	@Inject
+	private FirstTrialJpViewService firstTrialJpViewService;
+
 	public Object listData(ReceptionJpForm form, HttpSession session) {
 		//获取当前公司
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -253,8 +265,56 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		if (!Util.isEmpty(paperworks)) {
 			dbDao.update(paperworks);
 		}
+		//发送短信
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		for (Map map : applicatlist) {
+			int applyid = Integer.valueOf((String) map.get("applicatid"));
+			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, applyid);
+			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyJp.getApplicantId().longValue());
+			try {
+				sendMessage(orderEntity.getId(), apply.getId());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		return null;
 
+	}
+
+	//发送手机信息
+	public Object sendMessage(int orderid, int applicantid) throws IOException {
+		List<String> readLines = IOUtils
+				.readLines(getClass().getClassLoader().getResourceAsStream("reception_sms.txt"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+
+		//查询订单号
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
+		String orderNum = order.getOrderNum();
+
+		//申请人信息
+		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, applicantid);
+		StringBuffer sb = new StringBuffer();
+		sb.append(applicantEntity.getFirstName()).append(applicantEntity.getLastName());
+		String name = sb.toString();
+		String sex = applicantEntity.getSex();
+		String telephone = applicantEntity.getTelephone();
+		if (Util.isEmpty(sex)) {
+			sex = "先生/女士";
+		} else if (Util.eq(sex, "男")) {
+			sex = "先生";
+		} else if (Util.eq(sex, "女")) {
+			sex = "女士";
+		}
+		String result = "";
+
+		String smsContent = tmp.toString();
+		smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum);
+		result = firstTrialJpViewService.sendSMS(telephone, smsContent);
+		return result;
 	}
 
 	private static Map<String, String> obj2Map(Object obj) {

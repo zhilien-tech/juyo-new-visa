@@ -296,6 +296,7 @@
 			$("#sendSignDate").val("");
 			$("#signOutDate").val("");
 			$("#start_time").val("");
+			$('#pageNumber').val(1);
 			timeStart = "";
 			timeEnd = "";
 			sendDateStart = "";
@@ -337,6 +338,19 @@
 				}
 			});
 		});
+		
+		function countryChange() {
+			$("#searchbtn").click();
+			$('#pageNumber').val(1);
+		}
+		
+		//搜索回车事件
+		function onkeyEnter() {
+			var e = window.event || arguments.callee.caller.arguments[0];
+			if (e && e.keyCode == 13) {
+				$("#searchbtn").click();
+			}
+		}
 		
 		//注册scroll事件并监听 
 		$(window).scroll(function(){
@@ -392,12 +406,12 @@
 							//没有更多数据
 						}
 					});
-				}else{
+				}/* else{
 					//没有更多数据，底部提示语
 					if($("#card-bottom-line").length <= 0 && pageListCount>=6){
 						$(".card-list").last().after("<div id='card-bottom-line' class='bottom-line'><span style='margin-left: 38%; color:#999'>-------  没有更多数据可以加载  -------</span></div>");
 					}
-				}
+				} */
 			}
 		});
 		/* function search(){
@@ -423,18 +437,6 @@
 			window.location.href = '${base}/admin/orderJp/addOrder';
 		}
 
-		function countryChange() {
-			$("#searchbtn").click();
-		}
-
-		//搜索回车事件
-		function onkeyEnter() {
-			var e = window.event || arguments.callee.caller.arguments[0];
-			if (e && e.keyCode == 13) {
-				$("#searchbtn").click();
-			}
-		}
-		
 		function successCallBack(status){
 			console.log(111);
 		}
