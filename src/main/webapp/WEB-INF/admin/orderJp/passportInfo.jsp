@@ -125,7 +125,7 @@
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<select id="validType" name="validType" class="form-control input-sm selectHeight">
+									<select id="validType" name="validType" class="form-control input-sm selectHeight" >
 									<c:forEach var="map" items="${obj.passportType}">
 										<option value="${map.key}" ${map.key == obj.passport.validType?'selected':'' }>${map.value}</option>
 									</c:forEach>
@@ -190,22 +190,54 @@
 			}else{
 				$("#sexEn").val("F");
 			}
+			
+			$("#issuedDate").change(function(){
+				if($("#issuedDate").val() != ""){
+					if($("#validType").val() == 1){
+						$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
+					}else{
+						$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+					}
+				}
+			});
 		});
-		//保存
-		function save(){
-			var passportInfo = $("#passportInfo").serialize();
-			$.ajax({
-				type: 'POST',
-				data : passportInfo,
-				url: '${base}/admin/orderJp/saveEditPassport',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-					parent.successCallBack(1);
-					closeWindow();
+		function initvalidate(){
+			//校验
+			$('#passportInfo').bootstrapValidator({
+				message : '验证不通过',
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields : {
+					passport : {
+						validators : {
+		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+								url: '${base}/admin/orderJp/checkPassport.html',
+								message: '护照号已存在，请重新输入',//提示消息
+								delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+								type: 'POST',//请求方式
+								//自定义提交数据，默认值提交当前input value
+								data: function(validator) {
+									return {
+										passport:$('#passport').val(),
+										adminId:$('#id').val()
+									};
+								}
+							}
+						}
+					}
 				}
 			});
 		}
+		
+		/* function validTypeSelect(){
+			var start = $('#issuedDate').val();
+			var end = $('#validEndDate').val();
+			 
+		} */
+		
 		
 		
 		//护照上传,扫描
@@ -241,6 +273,14 @@
 							$("#uploadFile").siblings("i").css("display","block");
 							$('#type').val(obj.type);
 							$('#passport').val(obj.num);
+							if($('#passport').val != "" || $('#passport').val != null || $('#passport').val != undefined){
+								$("#passportInfo").bootstrapValidator("validate");
+								//得到获取validator对象或实例 
+								var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+								// 执行表单验证 
+								initvalidate();
+								bootstrapValidator.validate();
+							}
 							$('#sex').val(obj.sex);
 							$('#sexEn').val(obj.sexEn);
 							$('#birthAddress').val(obj.birthCountry);
@@ -250,6 +290,13 @@
 							$('#issuedPlaceEn').val("/"+getPinYinStr(obj.visaCountry));
 							$('#issuedDate').val(obj.issueDate);
 							$('#validEndDate').val(obj.expiryDay);
+							var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
+							if(years == 5){
+								$("#validType").val(1);
+							}else{
+								$("#validType").val(2);
+							}
+							
 						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
@@ -276,6 +323,35 @@
 			});
 		}
 		
+		
+		initvalidate();
+		$("#passportInfo").bootstrapValidator("validate");
+		
+		//保存
+		function save(){
+			$("#passportInfo").bootstrapValidator("validate");
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+			// 执行表单验证 
+			initvalidate();
+			bootstrapValidator.validate();
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
+			var passportInfo = $("#passportInfo").serialize();
+			$.ajax({
+				type: 'POST',
+				data : passportInfo,
+				url: '${base}/admin/orderJp/saveEditPassport',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+					parent.successCallBack(1);
+					closeWindow();
+				}
+			});
+		}
+		
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -299,6 +375,46 @@
 				$("#sexEn").val("F");
 			}
 		});
+		
+		$("#validType").change(function(){
+			var type = $(this).val();
+			if(type == 1){
+				$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
+			}else{
+				$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+			}
+			
+		});
+		function getNewDay(dateTemp, days) {  
+		    var dateTemp = dateTemp.split("-");  
+		    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
+		    var millSeconds = Math.abs(nDate) + (days * 365.2 * 24 * 60 * 60 * 1000);  
+		    var rDate = new Date(millSeconds);  
+		    var year = rDate.getFullYear();  
+		    var month = rDate.getMonth() + 1;  
+		    if (month < 10) month = "0" + month;  
+		    var date = rDate.getDate();  
+		    if (date < 10) date = "0" + date;  
+		    return (year + "-" + month + "-" + date);  
+		}
+		
+		function returnYears(year){
+			if(((year%4==0)&&(year%100!=0))||(year%400==0)){
+		    	return 366;
+		 	}else{
+		    	return 365; 
+			}
+		}
+		
+		/* function f1(time, years){
+			var time = $('#issuedDate').val()
+			var year = time.getFullYear()+years;
+			var month = time.getMonth();
+			var day = time.getDate();
+			return year + "-" + (month + 1) + "-" + day ;
+			//document.getElementById('d1').innerHTML = dateStr;
+		} */
+		
 		
 		function deleteApplicantFrontImg(){
 			$('#passportUrl').val("");
@@ -341,6 +457,31 @@
 			}
 			return pinyinchar.toUpperCase();
 		}
+		
+		 function getDateYearSub(startDateStr, endDateStr) {
+		        var day = 24 * 60 * 60 *1000; 
+
+		        var sDate = new Date(Date.parse(startDateStr.replace(/-/g, "/")));
+		        var eDate = new Date(Date.parse(endDateStr.replace(/-/g, "/")));
+
+		        //得到前一天(算头不算尾)
+		        sDate = new Date(sDate.getTime() - day);
+
+		        //获得各自的年、月、日
+		        var sY  = sDate.getFullYear();     
+		        var sM  = sDate.getMonth()+1;
+		        var sD  = sDate.getDate();
+		        var eY  = eDate.getFullYear();
+		        var eM  = eDate.getMonth()+1;
+		        var eD  = eDate.getDate();
+
+		        if(eY > sY && sM == eM && sD == eD) {
+		            return eY - sY;
+		        } else {
+		            //alert("两个日期之间并非整年，请重新选择");
+		            return 0;
+		        }
+		    }
 	</script>
 
 

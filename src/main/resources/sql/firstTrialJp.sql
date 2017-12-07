@@ -117,3 +117,27 @@ FROM
 	t_order_recipient tor
 	LEFT JOIN t_receiveaddress tr ON tor.receiveAddressId = tr.id
 where tor.orderId = @orderid
+
+/*firstTrialJp_share_sms_applicant*/
+SELECT
+	taoj.applicantId applyid,
+	CONCAT( ta.firstName, ta.lastName ) applicantname,
+	taoj.isMainApplicant,
+	taoj.isSameLinker,
+	taoj.isShareSms,
+	ta.sex,
+	ta.STATUS applicantStatus,
+	ta.telephone,
+	ta.email,
+	tap.id passportid,
+	tap.passport passportNum,
+	tau.id qualifiedId,
+	tavpj.careerStatus dataType,
+	tavpj.DATA DATA 
+FROM
+	t_applicant_order_jp taoj
+	INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
+	LEFT JOIN t_applicant_unqualified tau ON tau.applicantId = ta.id
+	LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
+	LEFT JOIN ( SELECT applicantId, careerStatus, PrepareMaterials DATA FROM t_applicant_work_jp GROUP BY applicantId ) tavpj ON tavpj.applicantId = taoj.id
+	$condition

@@ -29,6 +29,10 @@ public class TApplicantOrderJpEntity implements Serializable {
 	private Integer isSameLinker;
 
 	@Column
+	@Comment("是否分享消息")
+	private Integer isShareSms;
+
+	@Column
 	@Comment("是否是主申请人")
 	private Integer isMainApplicant;
 

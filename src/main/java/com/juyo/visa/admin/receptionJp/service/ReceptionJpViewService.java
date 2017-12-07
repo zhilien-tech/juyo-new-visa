@@ -8,6 +8,7 @@ package com.juyo.visa.admin.receptionJp.service;
 
 import java.lang.reflect.Field;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
 import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
@@ -103,7 +105,7 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 			List<Record> records = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
 			for (Record applicant : records) {
 				Integer dataType = (Integer) applicant.get("dataType");
-				for (VisaDataTypeEnum dataTypeEnum : VisaDataTypeEnum.values()) {
+				for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
 					if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
 						applicant.put("dataType", dataTypeEnum.value());
 					}
@@ -118,6 +120,8 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 			}
 			record.put("everybodyInfo", records);
 		}
+		result.put("pageTotal", pager.getPageCount());
+		result.put("pageListCount", list.size());
 		result.put("receptionJpData", list);
 		return result;
 	}
@@ -173,6 +177,11 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 			if (status == orderStatus.intKey()) {
 				orderinfo.put("status", orderStatus.value());
 			}
+		}
+		if (!Util.isEmpty(orderinfo.get("money"))) {
+			DecimalFormat df = new DecimalFormat("#.00");
+			orderinfo.put("money", df.format(orderinfo.get("money")));
+			//orderinfo.put("money", Double.valueOf(df.format(orderinfo.get("money"))).doubleValue());
 		}
 		//格式化日期
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
@@ -321,7 +330,7 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		List<Record> query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderJpEntity.getId()), null);
 		for (Record apply : query) {
 			Integer dataType = (Integer) apply.get("dataType");
-			for (VisaDataTypeEnum dataTypeEnum : VisaDataTypeEnum.values()) {
+			for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
 				if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
 					apply.put("dataType", dataTypeEnum.value());
 				}

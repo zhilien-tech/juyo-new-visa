@@ -17,7 +17,7 @@ $(function(){
 	});
 	$('#visatype').change(function(){
 		var thisval = $(this).val();
-		if(thisval == 2){
+		if(thisval == 2 || thisval == 3 || thisval == 4){
 			$('#visacounty').show();
 			$('#threefangwen').show();
 		}else{
@@ -34,7 +34,8 @@ $(function(){
 			$('#threexian').hide();
 		}
 	});
-
+	
+	
 	
 });
 
@@ -60,6 +61,21 @@ new Vue({
 			success: function(data){
 				orderobj.orderinfo = data.orderinfo;
 				orderobj.applyinfo = data.applyinfo;
+				if(orderobj.orderinfo.urgenttype == 1){
+					$("#urgentDays").addClass("none");
+				}else{
+					$("#urgentDays").removeClass("none");
+				}
+				$('#urgentType').change(function(){
+					var thisval = $(this).val();
+					if(thisval == 1){
+						$("#urgentDays").addClass("none");
+					}else{
+						$("#urgentDays").removeClass("none");
+						orderobj.orderinfo.urgentday = 1;
+					}
+				});
+
 			}
 		});
 	},
