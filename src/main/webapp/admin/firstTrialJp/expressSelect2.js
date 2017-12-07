@@ -134,7 +134,7 @@ function clearText(){
 
 //保存
 function save(orderid,orderjpid){
-	
+
 	var applicant_tbody = $("#applicant_tbody").is(":empty");
 	if (applicant_tbody) {
 		layer.msg('申请人信息不能为空');
@@ -197,5 +197,4 @@ $('#multiPass_roundTrip').on('switchChange.bootstrapSwitch', function (event,sta
 	}
 
 }); */
-
 

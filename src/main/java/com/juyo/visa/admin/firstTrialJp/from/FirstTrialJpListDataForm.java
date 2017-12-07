@@ -15,6 +15,7 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
 
@@ -56,7 +57,13 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		if (!Util.isEmpty(status)) {
-			cnd.and("CONCAT( CAST( tr.STATUS AS CHAR ), 'төл', taj.applicantStatus )", "like", "%" + status + "%");
+			if (status == TrialApplicantStatusEnum.unqualified.intKey()) {
+				//申请人不合格
+				cnd.and("taj.applicantStatus", "like", "%" + status + "%");
+			} else {
+				//订单+申请人状态cnd.and("CONCAT( CAST( tr.STATUS AS CHAR ), 'төл', taj.applicantStatus )", "like", "%" + status + "%");
+				cnd.and("tr.STATUS", "like", "%" + status + "%");
+			}
 		}
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
