@@ -282,16 +282,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(applicantForm.getEmail())) {
 			applicant.setEmail(applicantForm.getEmail());
 		}
-		if (!Util.isEmpty(applicantForm.getFirstName())) {
-			applicant.setFirstName(applicantForm.getFirstName());
+		if (!Util.isEmpty(applicantForm.getFirstNameEn())) {
+			applicant.setFirstNameEn(applicantForm.getFirstNameEn().substring(1));
 		}
-		applicant.setFirstNameEn(applicantForm.getFirstNameEn());
-		applicant.setLastNameEn(applicantForm.getLastNameEn());
+		applicant.setFirstName(applicantForm.getFirstName());
+		applicant.setLastName(applicantForm.getLastName());
 		if (!Util.isEmpty(applicantForm.getIssueOrganization())) {
 			applicant.setIssueOrganization(applicantForm.getIssueOrganization());
 		}
-		if (!Util.isEmpty(applicantForm.getLastName())) {
-			applicant.setLastName(applicantForm.getLastName());
+		if (!Util.isEmpty(applicantForm.getLastNameEn())) {
+			applicant.setLastNameEn(applicantForm.getLastNameEn().substring(1));
 		}
 		if (!Util.isEmpty(applicantForm.getNation())) {
 			applicant.setNation(applicantForm.getNation());
@@ -762,6 +762,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			String validEndDateStr = sdf.format(validEndDate);
 			result.put("validEndDate", validEndDateStr);
 		}
+
+		if (!Util.isEmpty(applicantEntity.getFirstNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(applicantEntity.getFirstNameEn());
+			result.put("firstNameEn", sb.toString());
+		}
+
+		if (!Util.isEmpty(applicantEntity.getLastNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(applicantEntity.getLastNameEn());
+			result.put("lastNameEn", sb.toString());
+		}
+
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("applicant", applicantEntity);
 		result.put("orderid", orderid);
@@ -797,10 +810,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setDetailedAddress(applicantForm.getDetailedAddress());
 			applicant.setEmail(applicantForm.getEmail());
 			applicant.setFirstName(applicantForm.getFirstName());
-			applicant.setFirstNameEn(applicantForm.getFirstNameEn());
+			applicant.setFirstNameEn(applicantForm.getFirstNameEn().substring(1));
 			applicant.setIssueOrganization(applicantForm.getIssueOrganization());
 			applicant.setLastName(applicantForm.getLastName());
-			applicant.setLastNameEn(applicantForm.getLastNameEn());
+			applicant.setLastNameEn(applicantForm.getLastNameEn().substring(1));
 			applicant.setNation(applicantForm.getNation());
 			applicant.setProvince(applicantForm.getProvince());
 			applicant.setSex(applicantForm.getSex());
@@ -1648,8 +1661,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String sex = applicantEntity.getSex();
 		String telephone = applicantEntity.getTelephone();
 		String email = applicantEntity.getEmail();
-		if (sex == null) {
-			sex = "男/女";
+		if (Util.isEmpty(sex)) {
+			sex = "先生/女士";
+		} else if (Util.eq(sex, "男")) {
+			sex = "先生";
+		} else if (Util.eq(sex, "女")) {
+			sex = "女士";
 		}
 		String result = "";
 
@@ -1680,8 +1697,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String sex = applicantEntity.getSex();
 		String telephone = applicantEntity.getTelephone();
 		String email = applicantEntity.getEmail();
-		if (sex == null) {
-			sex = "男/女";
+		if (Util.isEmpty(sex)) {
+			sex = "先生/女士";
+		} else if (Util.eq(sex, "男")) {
+			sex = "先生";
+		} else if (Util.eq(sex, "女")) {
+			sex = "女士";
 		}
 		String result = "";
 
@@ -1715,6 +1736,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String unifiedSex = applicantEntity.getSex();
 		if (Util.isEmpty(unifiedSex)) {
 			unifiedSex = "男/女";
+		} else if (Util.eq(unifiedSex, "男")) {
+			unifiedSex = "先生";
+		} else if (Util.eq(unifiedSex, "女")) {
+			unifiedSex = "女士";
 		}
 		String applicantSqlstr = sqlManager.get("orderJp_list_applicantInfo_byOrderId");
 		Sql applicantSql = Sqls.create(applicantSqlstr);
@@ -1726,21 +1751,17 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		emailText = emailText.replace("${unifiedName}", unifiedName).replace("${sex}", unifiedSex)
 				.replace("${ordernum}", orderNum);
 
-		/*String applyInfo = "<div style=''><span style='font-family: Menlo;'>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 姓名："
-				+ name
-				+ "&nbsp; &nbsp; &nbsp;用户名:<span t='7' data='17600206506' isout='1' style='border-bottom: 1px dashed rgb(204, 204, 204); z-index: 1; position: static;'><span t='7' data='17600206506' style='border-bottom: 1px dashed rgb(204, 204, 204); z-index: 1;'><span style='border-bottom: 1px dashed #ccc; z-index: 1' t='7' onclick='return false;' data='17600206506'>"
-				+ telephone + "</span></span></span> </span> </div>";*/
-
 		for (Record record : applicantInfo) {
-
 			String name = record.getString("applyname");
 			String telephone = record.getString("telephone");
 			if (Util.isEmpty(telephone)) {
 				telephone = "";
 			}
-			applicantInfoStr += "<div style=''><span style='font-family: Menlo;'>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 姓名："
+			/*applicantInfoStr += "<div style=''><span style='font-family: Menlo;'>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 姓名："
 					+ name
 					+ "&nbsp; &nbsp; &nbsp;用户名:<span t='7' data='17600206506' isout='1' style='border-bottom: 1px dashed rgb(204, 204, 204); z-index: 1; position: static;'><span t='7' data='17600206506' style='border-bottom: 1px dashed rgb(204, 204, 204); z-index: 1;'><span style='border-bottom: 1px dashed #ccc; z-index: 1' t='7' onclick='return false;' data='17600206506'>"
+					+ telephone + "</span></span></span> </span> </div>";*/
+			applicantInfoStr += "<div style=''><span style='font-family: Menlo;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户名:<span t='7' data='17600206506' isout='1' style='border-bottom: 1px dashed rgb(204, 204, 204); z-index: 1; position: static;'><span t='7' data='17600206506' style='border-bottom: 1px dashed rgb(204, 204, 204); z-index: 1;'><span style='border-bottom: 1px dashed #ccc; z-index: 1' t='7' onclick='return false;' data='17600206506'>"
 					+ telephone + "</span></span></span> </span> </div>";
 		}
 		emailText = emailText.replace("${applicantInfoS}", applicantInfoStr);
@@ -1770,7 +1791,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				.toString();
 		String unifiedSex = applicantEntity.getSex();
 		if (Util.isEmpty(unifiedSex)) {
-			unifiedSex = "男/女";
+			unifiedSex = "先生/女士";
+		} else if (Util.eq(unifiedSex, "男")) {
+			unifiedSex = "先生";
+		} else if (Util.eq(unifiedSex, "女")) {
+			unifiedSex = "女士";
 		}
 
 		String applicantSqlstr = sqlManager.get("orderJp_list_applicantInfo_byOrderId");
@@ -1789,7 +1814,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			if (Util.isEmpty(telephoneLoad)) {
 				telephoneLoad = "";
 			}
-			applicantInfoStr += ("  姓名:" + name + "  用户名:" + telephoneLoad);
+			//applicantInfoStr += ("  姓名:" + name + "  用户名:" + telephoneLoad);
+			applicantInfoStr += "  用户名:" + telephoneLoad;
 		}
 		smsContent = smsContent.replace("${applicantInfoS}", applicantInfoStr);
 		result = firstTrialJpViewService.sendSMS(telephone, smsContent);
