@@ -202,6 +202,7 @@ $('#multiPass_roundTrip').on('switchChange.bootstrapSwitch', function (event,sta
 
 //收件人检索
 $("#receiver").on('input',function(){
+	$("#receiver").nextAll("ul.ui-autocomplete").remove();
 	$.ajax({
 		type : 'POST',
 		async: false,
@@ -211,16 +212,19 @@ $("#receiver").on('input',function(){
 		},
 		url : BASE_PATH+'/admin/firstTrialJp/getRAddressSelect.html',
 		success : function(data) {
-			console.log(data);
-			$("#receiver").autocomplete({
-				source:data
+			var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+			$.each(data,function(index,element) { 
+				liStr += "<li onclick='setReceiveInfo("+JSON.stringify(element.receiver)+","+JSON.stringify(element.mobile)+","+JSON.stringify(element.address)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element.receiver+"</a></li>";
 			});
+			liStr += "</ul>";
+			$("#receiver").after(liStr);
 		}
 	});
 })
 
 //电话检索
 $("#mobile").on('input',function(){
+	$("#mobile").nextAll("ul.ui-autocomplete").remove();
 	$.ajax({
 		type : 'POST',
 		async: false,
@@ -230,11 +234,29 @@ $("#mobile").on('input',function(){
 		},
 		url : BASE_PATH+'/admin/firstTrialJp/getRAddressSelect.html',
 		success : function(data) {
-			console.log(data);
-			$("#mobile").autocomplete({
-				source:data
+			var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+			$.each(data,function(index,element) { 
+				liStr += "<li onclick='setReceiveInfo("+JSON.stringify(element.receiver)+","+JSON.stringify(element.mobile)+","+JSON.stringify(element.address)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element.mobile+"</a></li>";
 			});
+			liStr += "</ul>";
+			$("#mobile").after(liStr);
 		}
 	});
 })
+
+//收件人 检索下拉项
+function setReceiveInfo(receiver,mobile,address){
+	$("#receiver").nextAll("ul.ui-autocomplete").remove();
+	$("#mobile").nextAll("ul.ui-autocomplete").remove();
+	$("#receiver").val(receiver);
+	$("#mobile").val(mobile);
+	$("#address").val(address);
+}
+
+/*$("#receiver").blur(function(){
+	$("#receiver").nextAll("ul.ui-autocomplete").remove();
+});
+$("#mobile").blur(function(){
+	$("#mobile").nextAll("ul.ui-autocomplete").remove();
+});*/
 

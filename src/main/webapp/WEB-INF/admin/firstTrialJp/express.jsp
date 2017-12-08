@@ -36,17 +36,33 @@
 			padding: 0;
 			border: 1px solid #eee;
 			font-size: 14px;
-			padding-left: 4px;
+			padding-left: 8px;
 		}
 		.ui-menu {
-			width: 200px !important;
+			width: 167.5px !important;
 			border: 1px solid #eee;
 			padding: 0;
 			border-top: 0px;
 		}
-		.ui-menu li:hover {
-			background: #CCCCCC;
+		.ui-menu li:nth-child(1) {
+			background: #4887f1;
+		}
+		.ui-menu li:nth-child(1) a {
 			color:#FFF;
+		}
+		.ui-menu li:hover {
+			background: #4887f1;
+		}
+		.ui-menu li:hover a { 
+			color:#FFF;
+		}
+		.ui-menu li a {
+			color:#000;
+		}
+		.ui-menu-item {
+			height:32px;
+			line-height:32px;
+			padding-left:8px;
 		}
 	</style>
 </head>
@@ -155,7 +171,6 @@
 		var orderjpid = '${obj.orderjpid}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
-	<script src="${base}/references/public/plugins/jQueryUI/jQueryUI-1.10.3.js" ></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap-switch.min.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>

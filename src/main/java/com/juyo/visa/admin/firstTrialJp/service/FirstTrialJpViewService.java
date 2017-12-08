@@ -609,19 +609,19 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 
 		List<TReceiveaddressEntity> query = dbDao.query(TReceiveaddressEntity.class, cnd, null);
-		/*return query;*/
+		return query;
 
-		List<String> serarchData = new ArrayList<String>();
-		for (TReceiveaddressEntity r : query) {
-			if (Util.eq("mobileType", type)) {
-				String mobile = r.getMobile();
-				serarchData.add(mobile);
-			} else if (Util.eq("usernameType", type)) {
-				String receiver = r.getReceiver();
-				serarchData.add(receiver);
+		/*	List<String> serarchData = new ArrayList<String>();
+			for (TReceiveaddressEntity r : query) {
+				if (Util.eq("mobileType", type)) {
+					String mobile = r.getMobile();
+					serarchData.add(mobile);
+				} else if (Util.eq("usernameType", type)) {
+					String receiver = r.getReceiver();
+					serarchData.add(receiver);
+				}
 			}
-		}
-		return serarchData;
+			return serarchData;*/
 	}
 
 	//根据id获取收件信息
