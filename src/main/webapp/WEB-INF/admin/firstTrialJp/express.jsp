@@ -96,7 +96,7 @@
 						</div>
 					</div>
 					<div class="row form-div">
-						<div class="col-sm-3">
+						<div id="receiverDiv" class="col-sm-3">
 							<div class="form-group">
 								<%-- <c:if test="${! empty obj.orderReceive.receiveaddressid }">
 									<input id="receiveAddressId" type="hidden" value="${obj.orderReceive.receiveaddressid }">
@@ -114,7 +114,7 @@
 								<input type="text" id="receiver" name="receiver" value="${obj.orderReceive.receiver}" class="form-control input-sm"/>
 							</div>
 						</div>
-						<div class="col-sm-3">
+						<div id="mobileDiv" class="col-sm-3">
 							<div class="form-group">
 								<label>电话：</label> 
 								<%-- <select id="mobile" class="form-control select2 select2City" multiple="multiple">

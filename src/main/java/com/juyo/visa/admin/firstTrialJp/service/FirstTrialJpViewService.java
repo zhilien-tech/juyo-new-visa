@@ -599,7 +599,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		} else if (Util.eq("usernameType", type)) {
 			cnd.and("receiver", "like", Strings.trim(searchStr) + "%");
 		}
-		cnd.limit(0, 5);
+
 		if (userType == UserLoginEnum.PERSONNEL.intKey()) {
 			//工作人员
 			cnd.and("userId", "=", userId);
@@ -607,21 +607,21 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			//其他
 			cnd.and("comId", "=", comId);
 		}
+		cnd.limit(0, 5);
 
 		List<TReceiveaddressEntity> query = dbDao.query(TReceiveaddressEntity.class, cnd, null);
-		return query;
-
-		/*	List<String> serarchData = new ArrayList<String>();
-			for (TReceiveaddressEntity r : query) {
-				if (Util.eq("mobileType", type)) {
-					String mobile = r.getMobile();
-					serarchData.add(mobile);
-				} else if (Util.eq("usernameType", type)) {
-					String receiver = r.getReceiver();
-					serarchData.add(receiver);
+		List<TReceiveaddressEntity> newList = new ArrayList<TReceiveaddressEntity>();
+		if (query.size() > 5) {
+			for (int i = 0; i < query.size(); i++) {
+				if (i < 5) {
+					newList.add(query.get(i));
 				}
 			}
-			return serarchData;*/
+			return newList;
+		} else {
+			return query;
+		}
+
 	}
 
 	//根据id获取收件信息
