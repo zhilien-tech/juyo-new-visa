@@ -22,6 +22,32 @@
 		#tableId{position: relative;top: 15px;}
 		/*左右滑块*/
 		.switch{width:41px; display:inline-block;padding-left: 8px;}
+		
+		/*input检索框*/
+		li {
+			list-style: none;
+		}
+		.ui-helper-hidden-accessible {
+			display: none;
+		}
+		#search {
+			width: 200px;
+			height: 30px;
+			padding: 0;
+			border: 1px solid #eee;
+			font-size: 14px;
+			padding-left: 4px;
+		}
+		.ui-menu {
+			width: 200px !important;
+			border: 1px solid #eee;
+			padding: 0;
+			border-top: 0px;
+		}
+		.ui-menu li:hover {
+			background: #CCCCCC;
+			color:#FFF;
+		}
 	</style>
 </head>
 <body >
@@ -56,7 +82,7 @@
 					<div class="row form-div">
 						<div class="col-sm-3">
 							<div class="form-group">
-								<c:if test="${! empty obj.orderReceive.receiveaddressid }">
+								<%-- <c:if test="${! empty obj.orderReceive.receiveaddressid }">
 									<input id="receiveAddressId" type="hidden" value="${obj.orderReceive.receiveaddressid }">
 								</c:if>
 								<c:if test="${empty obj.orderReceive.receiveaddressid }">
@@ -67,17 +93,20 @@
 									<c:if test="${! empty obj.orderReceive.receiveaddressid }">
 										<option value="${obj.orderReceive.receiveaddressid }" selected="selected">${obj.orderReceive.receiver }</option>
 									</c:if>
-								</select>
+								</select> --%>
+								<label>收件人：</label>
+								<input type="text" id="receiver" name="receiver" value="${obj.orderReceive.receiver} class="form-control input-sm"/>
 							</div>
 						</div>
 						<div class="col-sm-3">
 							<div class="form-group">
 								<label>电话：</label> 
-								<select id="mobile" class="form-control select2 select2City" multiple="multiple">
+								<%-- <select id="mobile" class="form-control select2 select2City" multiple="multiple">
 									<c:if test="${! empty obj.orderReceive.receiveaddressid }">
 										<option value="${obj.orderReceive.receiveaddressid }" selected="selected">${obj.orderReceive.mobile }</option>
 									</c:if>
-								</select>
+								</select> --%>
+								<input type="text" id="mobile" name="mobile" value="${obj.orderReceive.telephone}" class="form-control input-sm"/>
 							</div>
 						</div>
 						<div class="col-sm-6">
@@ -126,6 +155,7 @@
 		var orderjpid = '${obj.orderjpid}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+	<script src="${base}/references/public/plugins/jQueryUI/jQueryUI-1.10.3.js" ></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap-switch.min.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>

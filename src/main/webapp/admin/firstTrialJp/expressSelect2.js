@@ -1,4 +1,4 @@
-$(function() {
+/*$(function() {
 	$("#receiver").select2({
 		ajax : {
 			url : BASE_PATH+'/admin/firstTrialJp/getRAddressSelect.html',
@@ -72,9 +72,9 @@ $(function() {
 		maximumSelectionLength : 1, //设置最多可以选择多少项
 		tags : false //设置必须存在的选项 才能选中
 	});
-});
+});*/
 
-$("#receiver").on('select2:select', function (evt) {
+/*$("#receiver").on('select2:select', function (evt) {
 	var addressId = $(this).select2("val");
 	$("#receiveAddressId").val(addressId);
 	$.ajax({
@@ -117,13 +117,13 @@ $("#mobile").on('select2:select', function (evt) {
 
 });
 
-/* 取消时 */
+ 取消时 
 $("#receiver").on('select2:unselect', function (evt) {
 	clearText();
 }); 
 $("#mobile").on('select2:unselect', function (evt) {
 	clearText();
-}); 
+}); */
 
 function clearText(){
 	$("#receiver").val(null).trigger("change");
@@ -153,8 +153,10 @@ function save(orderid,orderjpid){
 			orderid:orderid,
 			orderjpid:orderjpid,
 			expresstype:$("#express").val(),
+			receiver:$("#receiver").val(),
+			mobile:$("#mobile").val(),
 			expressaddress:$("#address").val(),
-			receiveAddressId:$("#receiveAddressId").val()
+			//receiveAddressId:$("#receiveAddressId").val()
 		},
 		success: function(data){
 			if(data.stauts == 200){
@@ -197,4 +199,23 @@ $('#multiPass_roundTrip').on('switchChange.bootstrapSwitch', function (event,sta
 	}
 
 }); */
+
+//收件人检索
+$("#receiver").on('input',function(){
+	$.ajax({
+		type : 'POST',
+		async: false,
+		data : {
+			searchStr : $("#receiver").val(),
+			type:"usernameType"
+		},
+		url : BASE_PATH+'/admin/firstTrialJp/getRAddressSelect.html',
+		success : function(data) {
+			console.log(data);
+			$("#receiver").autocomplete({
+				source:data
+			});
+		}
+	});
+})
 

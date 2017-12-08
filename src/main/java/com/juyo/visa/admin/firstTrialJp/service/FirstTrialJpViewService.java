@@ -609,7 +609,19 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 
 		List<TReceiveaddressEntity> query = dbDao.query(TReceiveaddressEntity.class, cnd, null);
-		return query;
+		/*return query;*/
+
+		List<String> serarchData = new ArrayList<String>();
+		for (TReceiveaddressEntity r : query) {
+			if (Util.eq("mobileType", type)) {
+				String mobile = r.getMobile();
+				serarchData.add(mobile);
+			} else if (Util.eq("usernameType", type)) {
+				String receiver = r.getReceiver();
+				serarchData.add(receiver);
+			}
+		}
+		return serarchData;
 	}
 
 	//根据id获取收件信息
@@ -620,8 +632,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	/**
 	 * 保存快递信息，并发送邮件
 	 */
-	public Object saveExpressInfo(Integer orderid, Integer orderjpid, Integer expresstype, String expressAddress,
-			Integer receiveAddressId, HttpSession session) {
+	public Object saveExpressInfo(Integer orderid, Integer orderjpid, Integer expresstype, String receiver,
+			String mobile, String expressAddress, HttpSession session) {
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
@@ -631,8 +643,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			//更新
 			orderReceive.setOrderId(orderid);
 			orderReceive.setExpressType(expresstype);
+			orderReceive.setReceiver(receiver);
+			orderReceive.setTelephone(mobile);
 			orderReceive.setExpressAddress(expressAddress);
-			orderReceive.setReceiveAddressId(receiveAddressId);
 			orderReceive.setOpId(userId);
 			orderReceive.setUpdateTime(DateUtil.nowDate());
 			nutDao.update(orderReceive);
@@ -641,8 +654,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			TOrderRecipientEntity orderReceiveAdd = new TOrderRecipientEntity();
 			orderReceiveAdd.setOrderId(orderid);
 			orderReceiveAdd.setExpressType(expresstype);
+			orderReceiveAdd.setReceiver(receiver);
+			orderReceiveAdd.setTelephone(mobile);
 			orderReceiveAdd.setExpressAddress(expressAddress);
-			orderReceiveAdd.setReceiveAddressId(receiveAddressId);
+			//orderReceiveAdd.setReceiveAddressId(receiveAddressId);
 			orderReceiveAdd.setOpId(userId);
 			orderReceiveAdd.setUpdateTime(DateUtil.nowDate());
 			orderReceiveAdd.setCreateTime(DateUtil.nowDate());
