@@ -77,7 +77,7 @@
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div class="card-list" v-cloak v-for="data in orderJpData">
 							<div class="card-head">
-								<div><label>订单号：</label><span v-on:click="order(data.orderid)">{{data.ordernum}}</span></div>	
+								<div><label>订单号：</label><span style="cursor:pointer" v-on:click="order(data.orderid)">{{data.ordernum}}</span></div>	
 								<div><label>人数：</label><span>{{data.peoplenum}}</span></div>	
 								<div v-if="data.isdisabled==1">
 								<label>状态：</label><span>作废</span>
