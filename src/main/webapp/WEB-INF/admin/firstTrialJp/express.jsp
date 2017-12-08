@@ -95,7 +95,7 @@
 									</c:if>
 								</select> --%>
 								<label>收件人：</label>
-								<input type="text" id="receiver" name="receiver" value="${obj.orderReceive.receiver} class="form-control input-sm"/>
+								<input type="text" id="receiver" name="receiver" value="${obj.orderReceive.receiver}" class="form-control input-sm"/>
 							</div>
 						</div>
 						<div class="col-sm-3">
