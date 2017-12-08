@@ -13,29 +13,47 @@
 	<style type="text/css">
 		#datatableId{position: relative;top: 10px;}
 		#datatableId tbody tr{cursor: pointer;}
+		.heading { font-size: 20px;}
+		.closed {width:20px;text-align:center; display:inline-block;color:#000;float:right;}
+		.closed::after { content: ""; clear:both;}
 		.trColor{color: rgb(48, 135, 240)}
+		.selectBtn { width:100px;height:30px;line-height:30px;text-align:center;border-radius:7px;background:#3087f1;border:0; color:#FFF;}
+		.selectMargin { margin-right:5%;}
 	</style>
 </head>
 <body>
-	<div>
-		<c:choose>
-			<c:when test="${empty obj.telephone && empty obj.email}">  
-						手机号、邮箱不能为空							  
-			</c:when>
-			<c:when test="${empty obj.telephone }"> 
-						手机号不能为空
-			</c:when>
-			<c:otherwise > 
-						邮箱不能为空
-			</c:otherwise>
-		</c:choose>
+<div class="modal-content">
+		<form id="companyAddForm">
+			<div class="modal-header">
+				<span class="heading">验证</span> 
+				<a class="closed" onclick="cancelBtn()" style="width: 20px;">X</a>
+			</div>
+			<div class="modal-body">
+		 		<div style="text-align:center; margin-top:15%;">
+		 			<div style="font-size:25px;">
+						<c:choose>
+							<c:when test="${empty obj.telephone && empty obj.email}">  
+										手机号、邮箱不能为空							  
+							</c:when>
+							<c:when test="${empty obj.telephone }"> 
+										手机号不能为空
+							</c:when>
+							<c:otherwise > 
+										邮箱不能为空
+							</c:otherwise>
+						</c:choose>
+						,请及时补充
+	     			</div>
+					<div style="margin-top:10%;">
+						<input type="hidden"   value="${obj.applicantId }"/>
+						<input type="button" class="selectBtn selectMargin"  value="马上补充" onclick="fillIn();"/>  <input  id="cancel" class="selectBtn" type="button" value="以后再说" onclick="cancelBtn();"/>
+					</div>
+		 		</div>
+			</div>
+		</form>
+	</div>
+<!-- ------- -->
 	
-		
-	</div>
-	<div>
-		<input type="hidden" value="${obj.applicantId }"/>
-		<input type="button" value="马上补充" onclick="fillIn();"/>  <input  id="cancel" type="button" value="以后再说" onclick="cancelBtn();"/>
-	</div>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
