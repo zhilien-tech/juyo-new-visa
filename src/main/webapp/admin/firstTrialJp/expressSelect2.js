@@ -219,3 +219,22 @@ $("#receiver").on('input',function(){
 	});
 })
 
+//电话检索
+$("#mobile").on('input',function(){
+	$.ajax({
+		type : 'POST',
+		async: false,
+		data : {
+			searchStr : $("#mobile").val(),
+			type:"mobileType"
+		},
+		url : BASE_PATH+'/admin/firstTrialJp/getRAddressSelect.html',
+		success : function(data) {
+			console.log(data);
+			$("#mobile").autocomplete({
+				source:data
+			});
+		}
+	});
+})
+
