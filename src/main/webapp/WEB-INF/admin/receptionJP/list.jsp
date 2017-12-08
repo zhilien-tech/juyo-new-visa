@@ -48,7 +48,7 @@
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in receptionJpData">
 							<div class="card-head cf">
-								<div><label>订单号：</label><span>{{data.ordernumber}}</span></div>	
+								<div><label>订单号：</label><span style="cursor:pointer" @click="visaDetail(data.id)">{{data.ordernumber}}</span></div>	
 								<div><label>状态：</label><span>{{data.orderstatus}}</span></div>		
 								<div>
 									<label>操作：</label>
