@@ -334,6 +334,16 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 结婚证、离婚证上传
+	 */
+	@At
+	@Ok("json")
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object marryUpload(@Param("image") File file, HttpServletRequest request, HttpServletResponse response) {
+		return saleViewService.marryUpload(file, request, response);
+	}
+
+	/**
 	 * 分享
 	 */
 	@At

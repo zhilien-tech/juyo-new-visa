@@ -78,6 +78,7 @@ import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
@@ -353,14 +354,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(wealthJp);*/
 			//护照信息
 			TApplicantPassportEntity passport = new TApplicantPassportEntity();
-			if (!Util.isEmpty(applicantForm.getSex())) {
-				passport.setSex(applicantForm.getSex());
+			passport.setSex(applicantForm.getSex());
+			passport.setFirstName(applicantForm.getFirstName());
+			passport.setLastName(applicantForm.getLastName());
+			if (!Util.isEmpty(applicantForm.getFirstNameEn())) {
+				passport.setFirstNameEn(applicantForm.getFirstNameEn().substring(1));
 			}
-			if (!Util.isEmpty(applicantForm.getFirstName())) {
-				passport.setFirstName(applicantForm.getFirstName());
-			}
-			if (!Util.isEmpty(applicantForm.getLastName())) {
-				passport.setLastName(applicantForm.getLastName());
+			if (!Util.isEmpty(applicantForm.getLastNameEn())) {
+				passport.setLastNameEn(applicantForm.getLastNameEn().substring(1));
 			}
 			passport.setIssuedOrganization("公安部出入境管理局");
 			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
@@ -391,11 +392,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			/*if (!Util.isEmpty(applicantForm.getSex())) {
 				passport.setSex(applicantForm.getSex());
 			}*/
-			if (!Util.isEmpty(applicantForm.getFirstName())) {
-				passport.setFirstName(applicantForm.getFirstName());
+			passport.setFirstName(applicantForm.getFirstName());
+			passport.setLastName(applicantForm.getLastName());
+			if (!Util.isEmpty(applicantForm.getFirstNameEn())) {
+				passport.setFirstNameEn(applicantForm.getFirstNameEn().substring(1));
 			}
-			if (!Util.isEmpty(applicantForm.getLastName())) {
-				passport.setLastName(applicantForm.getLastName());
+			if (!Util.isEmpty(applicantForm.getLastNameEn())) {
+				passport.setLastNameEn(applicantForm.getLastNameEn().substring(1));
 			}
 			passport.setIssuedOrganization("公安部出入境管理局");
 			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
@@ -799,6 +802,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(applicantForm.getId())) {
 			TApplicantEntity applicant = dbDao
 					.fetch(TApplicantEntity.class, new Long(applicantForm.getId()).intValue());
+			Integer userId = applicant.getUserId();
+			TUserEntity userEntity = dbDao.fetch(TUserEntity.class, userId.longValue());
+			TApplicantPassportEntity passportEntity = dbDao.fetch(TApplicantPassportEntity.class,
+					Cnd.where("applicantId", "=", applicant.getId()));
 			applicant.setOpId(loginUser.getId());
 			if (!Util.isEmpty(applicantForm.getId())) {
 				applicant.setId(applicantForm.getId());
@@ -822,6 +829,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setProvince(applicantForm.getProvince());
 			applicant.setSex(applicantForm.getSex());
 			applicant.setTelephone(applicantForm.getTelephone());
+			userEntity.setMobile(applicantForm.getTelephone());
 			if (!Util.isEmpty(applicantForm.getValidEndDate())) {
 				applicant.setValidEndDate(applicantForm.getValidEndDate());
 			}
@@ -829,7 +837,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				applicant.setValidStartDate(applicantForm.getValidStartDate());
 			}
 			applicant.setUpdateTime(new Date());
+			//修改客户登录手机号
 			dbDao.update(applicant);
+			dbDao.update(userEntity);
+
 		}
 		return null;
 	}
@@ -869,6 +880,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime) {
 		Map<String, Object> result = MapUtil.map();
+		result.put("marryStatus", EnumUtil.enum2(MarryStatusEnum.class));
 		result.put("mainOrVice", EnumUtil.enum2(MainOrViceEnum.class));
 		result.put("isOrNo", EnumUtil.enum2(IsYesOrNoEnum.class));
 		result.put("applicantRelation", EnumUtil.enum2(MainApplicantRelationEnum.class));
@@ -896,6 +908,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		//获取日本申请人信息
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", id));
+		result.put("orderJp", applicantOrderJpEntity);
 		//获取财产信息
 		String wealthsqlStr = sqlManager.get("wealth_byApplicantId");
 		Sql wealthsql = Sqls.create(wealthsqlStr);
@@ -1516,6 +1529,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				if (!Util.isEmpty(visaForm.getRelationRemark())) {
 					applicantOrderJpEntity.setRelationRemark(visaForm.getRelationRemark());
 				}
+				applicantOrderJpEntity.setMarryStatus(visaForm.getMarryStatus());
+				applicantOrderJpEntity.setMarryUrl(visaForm.getMarryUrl());
 				dbDao.update(applicantOrderJpEntity);
 
 			}
@@ -1862,14 +1877,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		passport.setBirthAddressEn(passportForm.getBirthAddressEn());
 		passport.setBirthday(passportForm.getBirthday());
 		passport.setFirstName(passportForm.getFirstName());
-		passport.setFirstNameEn(passportForm.getFirstNameEn());
+		passport.setFirstNameEn(passportForm.getFirstNameEn().substring(1));
 		passport.setIssuedDate(passportForm.getIssuedDate());
 		passport.setIssuedOrganization(passportForm.getIssuedOrganization());
 		passport.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
 		passport.setIssuedPlace(passportForm.getIssuedPlace());
 		passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
 		passport.setLastName(passportForm.getLastName());
-		passport.setLastNameEn(passportForm.getLastNameEn());
+		passport.setLastNameEn(passportForm.getLastNameEn().substring(1));
 		passport.setPassport(passportForm.getPassport());
 		passport.setSex(passportForm.getSex());
 		passport.setSexEn(passportForm.getSexEn());
@@ -2216,6 +2231,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			jsonEntity.setSuccess(out.getBoolean("success"));
 		}
 		return jsonEntity;
+	}
+
+	public Object marryUpload(File file, HttpServletRequest request, HttpServletResponse response) {
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		file.delete();
+		map.put("data", CommonConstants.IMAGES_SERVER_ADDR + map.get("data"));
+		return map;
 	}
 
 	public Object passportRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {

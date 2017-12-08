@@ -507,12 +507,12 @@
 		}
 		
 		$(function(){
-			$("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
+			/* $("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
 				$(this).siblings("i").css("display","block");
 			});
 			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
 				$(this).siblings("i").css("display","block");
-			});
+			}); */
 			$("#validStartDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',

@@ -60,7 +60,7 @@
 				</span> <input type="button" value="取消"
 					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> <input type="button"
 					value="保存" class="btn btn-primary btn-sm pull-right"
-					onclick="saveAddOrder(status);" /> <input type="button" value="回邮"
+					onclick="saveAddOrder(1);" /> <input type="button" value="回邮"
 					class="btn btn-primary btn-sm pull-right" /> <input type="button"
 					value="初审" class="btn btn-primary btn-sm pull-right" /> <input
 					type="button" value="分享" class="btn btn-primary btn-sm pull-right" />
@@ -864,7 +864,6 @@
 			
 			//下单保存
 			function saveAddOrder(status){
-				if(status == 1){
 				//绑定签证城市
 				var visacounty = "";
 				$('[name=visacounty]').each(function(){
@@ -901,56 +900,15 @@
 					url : '${base}/admin/orderJp/saveAddOrderinfo',
 					success : function(data) {
 						console.log(JSON.stringify(data));
-						window.location.href = '${base}/admin/orderJp/list';
+						if(status == 1){
+							window.location.href = '${base}/admin/orderJp/list';
+						}
 					},
 					error : function() {
 						console.log("error");
 					}
 				}); 
 					
-				}else{
-					//绑定签证城市
-					var visacounty = "";
-					$('[name=visacounty]').each(function(){
-						if($(this).hasClass('btnState-true')){
-							visacounty += $(this).val() + ',';
-						}
-					});
-					if(visacounty){
-						visacounty = visacounty.substr(0,visacounty.length-1);
-					}
-					
-					if($("#urgentDays").hasClass("none") == true){
-						$('#urgentDay').val("");
-						console.log(JSON.stringify( $("#orderInfo").serialize()));
-					}
-					//绑定三年城市
-					var threecounty = "";
-					$('[name=threecounty]').each(function(){
-						if($(this).hasClass('btnState-true')){
-							threecounty += $(this).val() + ',';
-						}
-					});
-					if(threecounty){
-						threecounty = threecounty.substr(0,threecounty.length-1);
-					}
-					var backMailInfos = JSON.stringify(getMailInfos());
-					var orderinfo = $.param({"backMailInfos":backMailInfos, "visacounty":visacounty, "threecounty":threecounty}) + "&" + $("#orderInfo").serialize();
-					//orderinfo.backMailInfos = JSON.stringify(backMails);
-					
-					
-					$.ajax({
-						type : 'POST',
-						data : orderinfo ,
-						url : '${base}/admin/orderJp/saveAddOrderinfo',
-						success : function(data) {
-							console.log(JSON.stringify(data));
-						},
-						error : function() {
-							console.log("error");
-						}
-					}); 
-				}
 				
 			}
 			

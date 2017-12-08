@@ -33,6 +33,14 @@ public class TApplicantOrderJpEntity implements Serializable {
 	private Integer isShareSms;
 
 	@Column
+	@Comment("结婚证/离婚证地址")
+	private String marryUrl;
+
+	@Column
+	@Comment("结婚状况")
+	private Integer marryStatus;
+
+	@Column
 	@Comment("是否是主申请人")
 	private Integer isMainApplicant;
 
