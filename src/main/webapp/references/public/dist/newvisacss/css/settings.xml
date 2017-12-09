@@ -231,7 +231,7 @@ under the License.
 		<!-- nexus -->
 		<repository>
           <id>nexus</id>
-          <url>http://123.57.46.249:8081/nexus/content/repositories/public</url>
+          <url>http://114.215.195.220:8081/nexus/content/repositories/public</url>
 		  <snapshots> 
 			<enabled>true</enabled>
 			<updatePolicy>always</updatePolicy>			

@@ -362,6 +362,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(applicantForm.getLastName())) {
 				passport.setLastName(applicantForm.getLastName());
 			}
+			passport.setIssuedOrganization("公安部出入境管理局");
+			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
 			passport.setApplicantId(applicantId);
 			dbDao.insert(passport);
 			return applicant;
@@ -395,6 +397,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(applicantForm.getLastName())) {
 				passport.setLastName(applicantForm.getLastName());
 			}
+			passport.setIssuedOrganization("公安部出入境管理局");
+			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
 			passport.setApplicantId(applicantId);
 			dbDao.insert(passport);
 			return applicantDB;

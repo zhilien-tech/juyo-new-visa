@@ -102,7 +102,7 @@
 					<!-- 申请人 -->
 					<div class="info">
 						<div id="mainApply" class="info-head">主申请人 </div>
-						<div class="info-body-from cf ">
+						<div class="info-body-from"><!--class=" cf "-->
 							<div class="row"><!-- 申请人/备注 -->
 								<div class="col-sm-4">
 									<div class="form-group">
@@ -117,21 +117,8 @@
 								<div class="col-sm-4 applymain">
 									<div class="form-group">
 										<label><span>*</span>备注：</label>
-										
 										</br>
-											
-											<%-- <input name="relationRemark" id="relationRemark" style="height:35px;width:100px;position:absolute"    value="${obj.visaInfo.relationRemark }">  
-												<span style="margin-left:100px;width:200px;overflow:hidden;" >  
-												  <select name="bh" id="bh" style="height:35px;width:120px;margin-left:-100px"   
-												 onchange="document.getElementById('relationRemark').value=this.options[this.selectedIndex].text">    
-												<c:forEach var="map" items="${obj.applicantRemark}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
-											</c:forEach>
-												  </select>  
-												  </span>  --%>
-
-
-										<%-- <div class="input-box">
+										<div class="input-box">
 											<input type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
 											<ul class="dropdown">
 												<li>主卡</li>
@@ -139,26 +126,7 @@
 												<li>同事</li>
 												<li>同学</li>
 											</ul>
-										</div> --%>
-
-
-
-										<input list="movie" id="relationRemark" name="relationRemark" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.relationRemark}"/>
-										<datalist id="movie">
-										<option>主卡</option>
-										<option>朋友</option>
-										<option>同事</option>
-										<option>同学</option>
-											<%-- <c:forEach var="map" items="${obj.applicantRemark}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
-											</c:forEach> --%>
-										</datalist>
-
-										<%-- <select id="relationRemark" name="relationRemark" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.applicantRemark}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
-											</c:forEach>
-										</select> --%>
+										</div>
 									</div>
 								</div>
 								
@@ -177,55 +145,21 @@
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label><span>*</span>与主申请人关系：</label>
-											
 											</br>
-											
-											<%-- <div class="input-box">
+										<div class="input-box">
 											<input type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
-											<ul class="dropdown">
-												<li>之妻</li>
-												<li>之夫</li>
-												<li>之子</li>
-												<li>之女</li>
-												<li>之父</li>
-												<li>之母</li>
-												<li>朋友</li>
-												<li>同事</li>
-												<li>同学</li>
-											</ul>
-										</div> --%>
-											
-											
-											<input list="movi" id="mainRelation" name="mainRelation" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.mainRelation}"/>
-										<datalist id="movi">
-										<option>之妻</option>
-										<option>之夫</option>
-										<option>之子</option>
-										<option>之女</option>
-										<option>之父</option>
-										<option>之母</option>
-										<option>朋友</option>
-										<option>同事</option>
-										<option>同学</option>
-											</datalist>
-											
-											<%-- <input name="mainRelation" id="mainRelation" style="height:35px;width:100px;position:absolute"    value="${obj.visaInfo.mainRelation }">  
-												<span style="margin-left:100px;width:200px;overflow:hidden;" >  
-												  <select name="bh" id="bh" style="height:35px;width:120px;margin-left:-100px"   
-												 onchange="document.getElementById('mainRelation').value=this.options[this.selectedIndex].text">    
-												 <c:forEach var="map" items="${obj.applicantRelation}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.mainRelation?'selected':''}>${map.value}</option>
-											</c:forEach>
-												  </select>  
-												  </span>   --%>
-											
-											
-											<!-- <input id="" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
-											<%-- <select id="mainRelation" name="mainRelation" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.applicantRelation}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.mainRelation?'selected':''}>${map.value}</option>
-											</c:forEach>
-										</select> --%>
+												<ul class="dropdown">
+													<li>之妻</li>
+													<li>之夫</li>
+													<li>之子</li>
+													<li>之女</li>
+													<li>之父</li>
+													<li>之母</li>
+													<li>朋友</li>
+													<li>同事</li>
+													<li>同学</li>
+												</ul>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -259,19 +193,6 @@
 					<div class="info">
 						<div class="info-head">工作信息 </div>
 						<div class="info-body-from cf ">
-							<%-- <div class="workvice row">
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label><span>*</span>是否同主申请人：</label>
-										<select id="work" name="sameMainWork" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.isOrNo}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWork?'selected':''}>${map.value}</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-							</div> --%>
-							
 							<div class="row "><!-- 我的职业/单位名称/单位电话 -->
 								<div class="col-sm-4">
 									<div class="form-group">

@@ -1,4 +1,4 @@
-$(function() {
+/*$(function() {
 	$("#receiver").select2({
 		ajax : {
 			url : BASE_PATH+'/admin/firstTrialJp/getRAddressSelect.html',
@@ -72,9 +72,9 @@ $(function() {
 		maximumSelectionLength : 1, //设置最多可以选择多少项
 		tags : false //设置必须存在的选项 才能选中
 	});
-});
+});*/
 
-$("#receiver").on('select2:select', function (evt) {
+/*$("#receiver").on('select2:select', function (evt) {
 	var addressId = $(this).select2("val");
 	$("#receiveAddressId").val(addressId);
 	$.ajax({
@@ -117,24 +117,25 @@ $("#mobile").on('select2:select', function (evt) {
 
 });
 
-/* 取消时 */
+ 取消时 
 $("#receiver").on('select2:unselect', function (evt) {
 	clearText();
 }); 
 $("#mobile").on('select2:unselect', function (evt) {
 	clearText();
-}); 
+}); */
 
 function clearText(){
 	$("#receiver").val(null).trigger("change");
 	$("#mobile").val(null).trigger("change");
-	$("#receiveAddressId").val("");
+	$("#receiver").val("");
+	$("#mobile").val("");
 	$("#address").val("");
 }
 
 //保存
 function save(orderid,orderjpid){
-	
+
 	var applicant_tbody = $("#applicant_tbody").is(":empty");
 	if (applicant_tbody) {
 		layer.msg('申请人信息不能为空');
@@ -153,8 +154,10 @@ function save(orderid,orderjpid){
 			orderid:orderid,
 			orderjpid:orderjpid,
 			expresstype:$("#express").val(),
+			receiver:$("#receiver").val(),
+			mobile:$("#mobile").val(),
 			expressaddress:$("#address").val(),
-			receiveAddressId:$("#receiveAddressId").val()
+			//receiveAddressId:$("#receiveAddressId").val()
 		},
 		success: function(data){
 			if(data.stauts == 200){
@@ -198,4 +201,73 @@ $('#multiPass_roundTrip').on('switchChange.bootstrapSwitch', function (event,sta
 
 }); */
 
+//收件人检索
+$("#receiver").on('input',function(){
+	$("#receiver").nextAll("ul.ui-autocomplete").remove();
+	$("#mobile").val("");
+	$("#address").val("");
+	$.ajax({
+		type : 'POST',
+		async: false,
+		data : {
+			searchStr : $("#receiver").val(),
+			type:"usernameType"
+		},
+		url : BASE_PATH+'/admin/firstTrialJp/getRAddressSelect.html',
+		success : function(data) {
+			var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+			$.each(data,function(index,element) { 
+				liStr += "<li onclick='setReceiveInfo("+JSON.stringify(element.receiver)+","+JSON.stringify(element.mobile)+","+JSON.stringify(element.address)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element.receiver+"</a></li>";
+			});
+			liStr += "</ul>";
+			$("#receiver").after(liStr);
+		}
+	});
+})
+
+//电话检索
+$("#mobile").on('input',function(){
+	$("#receiver").val("");
+	$("#address").val("");
+	$("#mobile").nextAll("ul.ui-autocomplete").remove();
+	$.ajax({
+		type : 'POST',
+		async: false,
+		data : {
+			searchStr : $("#mobile").val(),
+			type:"mobileType"
+		},
+		url : BASE_PATH+'/admin/firstTrialJp/getRAddressSelect.html',
+		success : function(data) {
+			var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+			$.each(data,function(index,element) { 
+				liStr += "<li onclick='setReceiveInfo("+JSON.stringify(element.receiver)+","+JSON.stringify(element.mobile)+","+JSON.stringify(element.address)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element.mobile+"</a></li>";
+			});
+			liStr += "</ul>";
+			$("#mobile").after(liStr);
+		}
+	});
+})
+
+$("#address").on('input',function(){
+	$("#receiver").val("");
+	$("#mobile").val("");
+})
+
+//收件人 检索下拉项
+function setReceiveInfo(receiver,mobile,address){
+	$("#receiver").nextAll("ul.ui-autocomplete").remove();
+	$("#mobile").nextAll("ul.ui-autocomplete").remove();
+	$("#receiver").val(receiver);
+	$("#mobile").val(mobile);
+	$("#address").val(address);
+}
+
+$("#receiverDiv").mouseleave(function(){
+	$("#receiver").nextAll("ul.ui-autocomplete").remove();
+});
+
+$('#mobileDiv').mouseleave(function(){  
+	$("#mobile").nextAll("ul.ui-autocomplete").remove();
+});  
 

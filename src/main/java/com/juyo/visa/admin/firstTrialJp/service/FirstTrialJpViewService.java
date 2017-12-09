@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +40,6 @@ import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
-import com.juyo.visa.common.enums.FristTrialSearchStatusEnum_JP;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
@@ -107,9 +107,22 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	public Object toList() {
 
 		//检索下拉
+		int TRIALORDER = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
+
 		Map<String, Object> result = Maps.newHashMap();
-		Map<String, String> searchStatus = EnumUtil.enum2(FristTrialSearchStatusEnum_JP.class);
-		result.put("searchStatus", searchStatus);
+		//Map<String, String> searchStatus = EnumUtil.enum2(FristTrialSearchStatusEnum_JP.class);
+		Map<String, String> orderStatus = EnumUtil.enum2(JPOrderStatusEnum.class);
+
+		Iterator<Map.Entry<String, String>> status = orderStatus.entrySet().iterator();
+		while (status.hasNext()) {
+			Map.Entry<String, String> entry = status.next();
+			String keyStr = entry.getKey();
+			int key = Integer.valueOf(keyStr);
+			if (key < TRIALORDER)
+				status.remove();
+		}
+
+		result.put("searchStatus", orderStatus);
 		return result;
 	}
 
@@ -586,7 +599,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		} else if (Util.eq("usernameType", type)) {
 			cnd.and("receiver", "like", Strings.trim(searchStr) + "%");
 		}
-		cnd.limit(0, 5);
+
 		if (userType == UserLoginEnum.PERSONNEL.intKey()) {
 			//工作人员
 			cnd.and("userId", "=", userId);
@@ -594,9 +607,21 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			//其他
 			cnd.and("comId", "=", comId);
 		}
+		cnd.limit(0, 5);
 
 		List<TReceiveaddressEntity> query = dbDao.query(TReceiveaddressEntity.class, cnd, null);
-		return query;
+		List<TReceiveaddressEntity> newList = new ArrayList<TReceiveaddressEntity>();
+		if (query.size() > 5) {
+			for (int i = 0; i < query.size(); i++) {
+				if (i < 5) {
+					newList.add(query.get(i));
+				}
+			}
+			return newList;
+		} else {
+			return query;
+		}
+
 	}
 
 	//根据id获取收件信息
@@ -607,8 +632,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	/**
 	 * 保存快递信息，并发送邮件
 	 */
-	public Object saveExpressInfo(Integer orderid, Integer orderjpid, Integer expresstype, String expressAddress,
-			Integer receiveAddressId, HttpSession session) {
+	public Object saveExpressInfo(Integer orderid, Integer orderjpid, Integer expresstype, String receiver,
+			String mobile, String expressAddress, HttpSession session) {
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
@@ -618,8 +643,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			//更新
 			orderReceive.setOrderId(orderid);
 			orderReceive.setExpressType(expresstype);
+			orderReceive.setReceiver(receiver);
+			orderReceive.setTelephone(mobile);
 			orderReceive.setExpressAddress(expressAddress);
-			orderReceive.setReceiveAddressId(receiveAddressId);
 			orderReceive.setOpId(userId);
 			orderReceive.setUpdateTime(DateUtil.nowDate());
 			nutDao.update(orderReceive);
@@ -628,8 +654,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			TOrderRecipientEntity orderReceiveAdd = new TOrderRecipientEntity();
 			orderReceiveAdd.setOrderId(orderid);
 			orderReceiveAdd.setExpressType(expresstype);
+			orderReceiveAdd.setReceiver(receiver);
+			orderReceiveAdd.setTelephone(mobile);
 			orderReceiveAdd.setExpressAddress(expressAddress);
-			orderReceiveAdd.setReceiveAddressId(receiveAddressId);
+			//orderReceiveAdd.setReceiveAddressId(receiveAddressId);
 			orderReceiveAdd.setOpId(userId);
 			orderReceiveAdd.setUpdateTime(DateUtil.nowDate());
 			orderReceiveAdd.setCreateTime(DateUtil.nowDate());
