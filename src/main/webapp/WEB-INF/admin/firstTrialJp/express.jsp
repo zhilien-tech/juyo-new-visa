@@ -55,8 +55,7 @@
 		}
 	</style>
 </head>
-<body >
-
+<body>
 	<div class="modal-content">
 		<form id="expressForm" >
 			<div class="modal-header">
