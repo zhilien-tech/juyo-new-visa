@@ -44,12 +44,12 @@
 			padding: 0;
 			border-top: 0px;
 		}
-		.ui-menu li:nth-child(1) {
+		/* .ui-menu li:nth-child(1) {
 			background: #4887f1;
-		}
-		.ui-menu li:nth-child(1) a {
+		} */
+		/* .ui-menu li:nth-child(1) a {
 			color:#FFF;
-		}
+		} */
 		.ui-menu li:hover {
 			background: #4887f1;
 		}
