@@ -44,20 +44,9 @@
 			padding: 0;
 			border-top: 0px;
 		}
-		/* .ui-menu li:nth-child(1) {
+		.bg{
 			background: #4887f1;
-		} */
-		/* .ui-menu li:nth-child(1) a {
-			color:#FFF;
-		} */
-		.ui-menu li:hover {
-			background: #4887f1;
-		}
-		.ui-menu li:hover a { 
-			color:#FFF;
-		}
-		.ui-menu li a {
-			color:#000;
+			color:#fff;
 		}
 		.ui-menu-item {
 			height:32px;

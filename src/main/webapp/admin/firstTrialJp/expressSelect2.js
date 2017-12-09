@@ -217,10 +217,15 @@ $("#receiver").on('input',function(){
 		success : function(data) {
 			var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 			$.each(data,function(index,element) { 
-				liStr += "<li onclick='setReceiveInfo("+JSON.stringify(element.receiver)+","+JSON.stringify(element.mobile)+","+JSON.stringify(element.address)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element.receiver+"</a></li>";
+				liStr += "<li onclick='setReceiveInfo("+JSON.stringify(element.receiver)+","+JSON.stringify(element.mobile)+","+JSON.stringify(element.address)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element.receiver+"</span></li>";
 			});
 			liStr += "</ul>";
 			$("#receiver").after(liStr);
+			
+			$('.ui-menu-item').first().addClass('bg');
+			$('.ui-menu-item').hover(function(){
+				$(this).addClass('bg').siblings().removeClass('bg');
+			});
 		}
 	});
 })
@@ -241,10 +246,15 @@ $("#mobile").on('input',function(){
 		success : function(data) {
 			var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 			$.each(data,function(index,element) { 
-				liStr += "<li onclick='setReceiveInfo("+JSON.stringify(element.receiver)+","+JSON.stringify(element.mobile)+","+JSON.stringify(element.address)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element.mobile+"</a></li>";
+				liStr += "<li onclick='setReceiveInfo("+JSON.stringify(element.receiver)+","+JSON.stringify(element.mobile)+","+JSON.stringify(element.address)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element.mobile+"</span></li>";
 			});
 			liStr += "</ul>";
 			$("#mobile").after(liStr);
+			
+			$('.ui-menu-item').first().addClass('bg');
+			$('.ui-menu-item').hover(function(){
+				$(this).addClass('bg').siblings().removeClass('bg');
+			});
 		}
 	});
 })
