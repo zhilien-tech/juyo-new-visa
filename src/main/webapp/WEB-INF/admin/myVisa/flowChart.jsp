@@ -70,7 +70,12 @@
 									<div class="date-info">
 										<label>当前状态：</label>
 										<!-- <span>初审合格</span> -->
-										<span><a href="">${obj.orderstatus}</a><label>(基本信息、签证信息)</label></span>
+										<c:if test="${3 != obj.applicant.applicantstatus }">
+											<span><a href="javascript: void(0);">${obj.orderstatus}</a><label>(基本信息、签证信息)</label></span>
+										</c:if>
+										<c:if test="${3 == obj.applicant.applicantstatus  }">
+											<span><a href="javascript: void(0);">${obj.orderstatus}</a><label>(基本信息、签证信息)</label></span>
+										</c:if>
 									</div>
 									
 								</li>

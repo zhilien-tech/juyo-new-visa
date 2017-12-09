@@ -103,6 +103,13 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		cnd.and("ta.id", "=", applicantid);
 		sql.setCondition(cnd);
 		Record applicantInfo = dbDao.fetch(sql);
+		int appllicantStatus = applicantInfo.getInt("applicantstatus");
+		/*for (JPOrderStatusEnum statusEnum : JPOrderStatusEnum.values()) {
+			if (!Util.isEmpty(orderStatus) && orderStatus.equals(String.valueOf(statusEnum.intKey()))) {
+				record.set("orderstatus", statusEnum.value());
+			}
+		}*/
+
 		result.put("applicant", applicantInfo);
 
 		return result;
