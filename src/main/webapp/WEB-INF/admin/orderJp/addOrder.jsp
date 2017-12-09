@@ -361,14 +361,14 @@
 								<!-- 送签时间/出签时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>送签时间：</label> <input id="sendVisaDate"
+										<label><span>*</span>预计送签时间：</label> <input id="sendVisaDate"
 											name="sendvisadate" type="text" class="form-control input-sm"
 											placeholder=" "  />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>出签时间：</label> <input id="outVisaDate"
+										<label><span>*</span>预计出签时间：</label> <input id="outVisaDate"
 											name="outvisadate" type="text" class="form-control input-sm"
 											placeholder=" "  />
 									</div>
@@ -1022,7 +1022,13 @@
 				minView: "month"//只显示年月日
 			}).on("click",function(){
 				$("#sendVisaDate").datetimepicker("setEndDate",$("#goTripDate").val());
-			}); 
+			}).on("changeDate",function(){
+				//自动计算预计出签时间
+				var stayday = 7;
+				var sendvisadate = $("#sendVisaDate").val();
+				var days = getNewDay(sendvisadate,stayday);
+				$("#outVisaDate").val(days); 
+			});  
 			$("#outVisaDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',

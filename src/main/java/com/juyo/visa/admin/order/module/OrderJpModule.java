@@ -223,8 +223,9 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object checkPassport(@Param("passport") String passport, @Param("adminId") String adminId) {
-		return saleViewService.checkPassport(passport, adminId);
+	public Object checkPassport(@Param("passport") String passport, @Param("adminId") String adminId,
+			@Param("orderid") int orderid) {
+		return saleViewService.checkPassport(passport, adminId, orderid);
 	}
 
 	/**

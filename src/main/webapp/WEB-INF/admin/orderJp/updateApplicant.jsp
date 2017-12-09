@@ -132,39 +132,7 @@
 							</div>
 						</div>
 						<!-- end 手机号/邮箱 -->
-						<div class="row">
-							<!-- 现居住地址省份/现居住地址城市 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>现居住地址省份：</label> <input id="province"
-										name="province" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.province }" />
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>现居住地址城市：</label> <input id="city"
-										name="city" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.city }" />
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
-						<!-- end 现居住地址省份/现居住地址城市 -->
-						<div class="row">
-							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label> <input
-										id="detailedAddress" name="detailedAddress" type="text"
-										class="form-control input-sm" placeholder=" "
-										value="${obj.applicant.detailedAddress }" />
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
-						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
+						
 						<div class="row">
 							<!-- 公民身份证 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
@@ -255,6 +223,39 @@
 								</div>
 							</div>
 						</div>
+						<div class="row">
+							<!-- 现居住地址省份/现居住地址城市 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>现居住地址省份：</label> <input id="province"
+										name="province" type="text" class="form-control input-sm"
+										placeholder=" " value="${obj.applicant.province }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>现居住地址城市：</label> <input id="city"
+										name="city" type="text" class="form-control input-sm"
+										placeholder=" " value="${obj.applicant.city }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
+						<!-- end 现居住地址省份/现居住地址城市 -->
+						<div class="row">
+							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label> <input
+										id="detailedAddress" name="detailedAddress" type="text"
+										class="form-control input-sm" placeholder=" "
+										value="${obj.applicant.detailedAddress }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
+						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
 					</div>
 
 				</div>

@@ -1841,16 +1841,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object checkPassport(String passport, String adminId) {
+	public Object checkPassport(String passport, String adminId, int orderid) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		int count = 0;
-		if (Util.isEmpty(adminId)) {
-			count = nutDao.count(TApplicantPassportEntity.class, Cnd.where("passport", "=", passport));
-		} else {
-			count = nutDao.count(TApplicantPassportEntity.class,
-					Cnd.where("passport", "=", passport).and("id", "!=", adminId));
+		String applicantSqlstr = sqlManager.get("passportInfo_byOrderId");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("toj.orderId", "=", orderid);
+		cnd.and("ap.passport", "=", passport);
+		if (!Util.isEmpty(adminId)) {
+			cnd.and("ap.id", "!=", adminId);
 		}
-		result.put("valid", count <= 0);
+		List<Record> passportInfo = dbDao.query(applicantSql, cnd, null);
+
+		result.put("valid", passportInfo.size() <= 0);
 		return result;
 	}
 

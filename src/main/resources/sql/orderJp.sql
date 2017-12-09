@@ -208,3 +208,16 @@ LEFT JOIN
 t_order o ON tol.orderId = o.id
 WHERE
 o.id = @id
+
+/*passportInfo_byOrderId*/
+SELECT
+	ap.passport
+FROM
+	t_applicant_passport ap
+INNER JOIN 
+t_applicant a ON ap.applicantId = a.id
+LEFT JOIN
+t_applicant_order_jp taoj ON taoj.applicantId = a.id
+LEFT JOIN
+t_order_jp toj ON taoj.orderId = toj.id
+$condition
