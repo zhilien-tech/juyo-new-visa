@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
@@ -24,6 +25,7 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Lists;
@@ -33,6 +35,7 @@ import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
 import com.juyo.visa.admin.visajp.form.PassportForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
+import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -77,6 +80,9 @@ import com.uxuexi.core.web.base.service.BaseService;
  */
 @IocBean
 public class VisaJapanService extends BaseService<TOrderEntity> {
+
+	@Inject
+	private QrCodeService qrCodeService;
 
 	/**
 	 * 签证列表数据
@@ -183,6 +189,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		TOrderTripJpEntity travelinfo = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderId", "=", orderid));
 		if (Util.isEmpty(travelinfo)) {
 			travelinfo = new TOrderTripJpEntity();
+			travelinfo.setTripType(1);
 		}
 		Map<String, String> tralinfoMap = obj2Map(travelinfo);
 		if (!Util.isEmpty(travelinfo.getGoDate())) {
@@ -1124,8 +1131,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param orderid
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object afterMarket(Long orderid) {
-		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderid);
+	public Object afterMarket(Long orderid, HttpServletRequest request) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		orderinfo.setStatus(JPOrderStatusEnum.AFTERMARKET_ORDER.intKey());
 		dbDao.update(orderinfo);
 		return "success";

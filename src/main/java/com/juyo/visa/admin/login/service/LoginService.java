@@ -176,6 +176,8 @@ public class LoginService extends BaseService<TUserEntity> {
 			session.setAttribute(LOGINUSER, user);
 			session.setAttribute(IS_LOGIN_KEY, true);
 			session.setAttribute("currentPageIndex", 0);
+			//设置session过期时间为24小时
+			session.setMaxInactiveInterval(60 * 60 * 10);
 		}
 		return true;
 	}
@@ -275,6 +277,8 @@ public class LoginService extends BaseService<TUserEntity> {
 				session.setAttribute(LOGINUSER, user);
 				session.setAttribute(IS_LOGIN_KEY, true);
 				session.setAttribute("currentPageIndex", 0);
+				//设置session过期时间为24小时
+				session.setMaxInactiveInterval(60 * 60 * 10);
 				//跳转到办理中的签证页面
 				form.setReturnUrl(">>:/admin/applyvisa/list.html");
 			}
