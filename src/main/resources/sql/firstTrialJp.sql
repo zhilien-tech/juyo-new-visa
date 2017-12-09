@@ -110,8 +110,8 @@ SELECT
 	tor.expressType,
 	tor.receiveAddressId,
 	tor.expressAddress,
-	tr.receiver,
-	tr.mobile,
+	tor.receiver,
+	tor.telephone,
 	tr.address 
 FROM
 	t_order_recipient tor
