@@ -45,7 +45,8 @@
 			<section class="content">
 				<!-- 客户信息 -->
 				<div class="info" id="customerInfo" ref="customerInfo">
-						<p class="info-head">客户信息</p>
+						<p class="info-head">客户信息</p><input id="addCustomer"
+					type="button" value="添加" class="btn btn-primary btn-sm pull-right" @click="addCustomer()"/>
 						<div class="info-body-from">
 							<div class="row body-from-input">
 								<!-- 公司全称 -->
@@ -365,7 +366,7 @@
 							<!-- 送签时间/出签时间 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>送签时间：</label> 
+									<label><span>*</span>预计送签时间：</label> 
 									<input id="sendVisaDate"  type="text" class="form-control input-sm"
 										placeholder=" "  v-model="orderInfo.sendvisadate" />
 									<!-- <input id="sendVisaDate" name="sendVisaDate" type="text" class="form-control input-sm"  /> -->
@@ -373,7 +374,7 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>出签时间：</label> <input id="outVisaDate"
+									<label><span>*</span>预计出签时间：</label> <input id="outVisaDate"
 										 type="text" class="form-control input-sm"
 										placeholder=" " 
 										v-model="orderInfo.outvisadate" />
@@ -694,7 +695,7 @@
 	
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
-		
+	
 		//签证六县，访问三县选中状态
 		var threecounty = '${obj.orderJpinfo.visaCounty}';
 		if(threecounty){
@@ -718,6 +719,50 @@
 				});
 			}
 		}
+		
+		$("#addCustomer").click(function(){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['800px', '400px'],
+				content: BASE_PATH + '/admin/customer/add.html?isCustomerAdd=0'
+			});
+	});
+
+	function successAddCustomer(data){
+		$(".on-line").show();//显示select2部分字段
+		$(".zhiKe").addClass("none");
+		$("#linkman2").val("");
+		$("#compName2").val("");
+		$("#comShortName2").val("");
+		$("#mobile2").val("");
+		$("#email2").val("");
+		//客户姓名清空
+		$("#linkman").val(null).trigger("change");
+		//电话清空
+		$("#mobile").val(null).trigger("change");
+		//公司全称
+		$("#compName").val(null).trigger("change");
+		//公司简称
+		$("#comShortName").val(null).trigger("change");
+		//邮箱清空
+		$("#email").val(null).trigger("change");
+		$("#mobile").append('<option selected="true" value='+ data.id +'>'+data.mobile+'</option>'); 
+		/*公司全称补全*/
+		$("#compName").append('<option selected="true" value='+ data.id +'>'+data.name+'</option>'); 
+		/*公司简称补全*/
+		$("#comShortName").append('<option selected="true" value='+ data.id +'>'+data.shortname+'</option>');
+		/*邮箱补全*/
+		$("#email").append('<option selected="true" value='+ data.id +'>'+data.email+'</option>');
+		$("#linkman").append('<option selected="true" value='+ data.id +'>'+data.linkman+'</option>');
+		$("#customerType").val(data.source);
+		$("#payType").val(data.payType);
+	}
 	
 		$(function(){
 			customerTypeSelect2();
@@ -1066,6 +1111,19 @@
 					//console.log(message);
 					//alert(JSON.stringify(event.target)); 
 				},
+				addCustomer : function(){
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['800px', '400px'],
+						content: '/admin/customer/add.html?isCustomerAdd=0'
+					});
+				},
 				
 				//修改申请人信息
 				updateApplicant : function(id){
@@ -1308,7 +1366,13 @@
 			minView: "month"//只显示年月日
 		}).on("click",function(){
 			$("#sendVisaDate").datetimepicker("setEndDate",$("#goTripDate").val());
-		}); 
+		}).on("changeDate",function(){
+			//自动计算预计出签时间
+			var stayday = 7;
+			var sendvisadate = $("#sendVisaDate").val();
+			var days = getNewDay(sendvisadate,stayday);
+			$("#outVisaDate").val(days); 
+		});  
 		$("#outVisaDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',

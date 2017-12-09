@@ -77,6 +77,20 @@
       background-color: #23a8ce;
       color: #FFF;
     }
+    .colSm { 
+    	display:block;
+    	float:left;
+    	width:200px;
+    }
+    .padding-right-0 {
+    	margin-left:10%;
+    	width:323px;
+    	height:200px;
+    	border:1px solid #eee;
+    }
+    .delete {
+    	right:0;
+    }
 </style>
 	<style type="text/css">
 		body {min-width:auto;}
@@ -95,10 +109,40 @@
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存退出" />
+				<input id="addContinueBtn" type="button" onclick="saveContinue();" class="btn btn-primary pull-right btn-sm btn-right" value="保存继续" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
+					<!-- 结婚状况 -->
+					<div class="info">
+						<div class="info-head">结婚状况 </div>
+						<div class="info-body-from cf ">
+							<div class="row colSm">
+								<div class="">
+									<div class="form-group">
+										<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight">
+											<option value="">请选择</option>
+											<c:forEach var="map" items="${obj.marryStatus}">
+												<option value="${map.key}" ${map.key==obj.orderJp.marryStatus?'selected':''}>${map.value}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-sm-4 padding-right-0">
+								<div class="cardFront-div">
+									<span>上传结婚证/离婚证</span>
+									<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.orderJp.marryUrl }"/>
+									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+									<img id="sqImg" alt="" src="${obj.orderJp.marryUrl }" >
+									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+								</div>
+							</div>
+							
+						</div>
+					</div>
 					<!-- 申请人 -->
 					<div class="info">
 						<div id="mainApply" class="info-head">主申请人 </div>
@@ -345,9 +389,12 @@
 		var base = "${base}";
 		$(function() {
 			
-			$("#relationRem").focus(function(){
-				
-			});
+			var marry = $("#marryUrl").val();
+			if(marry != ""){
+				$("#uploadFile").siblings("i").css("display","block");
+			}else{
+				$("#uploadFile").siblings("i").css("display","none");
+			}
 			
 			var career = $("#careerStatus").val();
 			if(career == 4){
@@ -577,10 +624,16 @@
 			
 		});
 		
+		$("#addContinueBtn").click(function(){
+			save(2);
+		});
+		$("#addBtn").click(function(){
+			save(1);
+		});
 		
 		
 		//保存
-		function save(){
+		function save(status){
 			//绑定财产类型
 			var wealthType = "";
 			$('[name=wealthType]').each(function(){
@@ -607,10 +660,73 @@
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
 					parent.successCallBack(1);
-					closeWindow();
+					if(status == 1){
+						closeWindow();
+					}
 				}
 			});
 		}
+		
+		//上传结婚证
+		
+		function dataURLtoBlob(dataurl) { 
+			var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+			bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+			while(n--){
+				u8arr[n] = bstr.charCodeAt(n);
+			}
+			return new Blob([u8arr], {type:mime});
+		}
+		
+		$('#uploadFile').change(function() {
+			var layerIndex = layer.load(1, {
+				shade : "#000"
+			});
+			$("#addBtn").attr('disabled', true);
+			$("#addContinueBtn").attr('disabled', true);
+			var file = this.files[0];
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var dataUrl = e.target.result;
+				var blob = dataURLtoBlob(dataUrl);
+				var formData = new FormData();
+				formData.append("image", blob, file.name);
+				$.ajax({
+					type : "POST",//提交类型  
+					//dataType : "json",//返回结果格式  
+					url : BASE_PATH + '/admin/orderJp/marryUpload',//请求地址  
+					async : true,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//关闭加载层
+						layer.close(layerIndex);
+						if (200 == obj.status) {
+							$('#marryUrl').val(obj.data);
+							$('#sqImg').attr('src', obj.data);
+							$("#uploadFile").siblings("i").css("display","block");
+						}
+						$("#addBtn").attr('disabled', false);
+						$("#addContinueBtn").attr('disabled', false);
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						layer.close(layerIndex);
+						$("#addBtn").attr('disabled', false);
+						$("#addContinueBtn").attr('disabled', false);
+					}
+				}); // end of ajaxSubmit
+			};
+			reader.readAsDataURL(file);
+		});
+		
+		function deleteApplicantFrontImg(){
+			$('#marryUrl').val("");
+			$('#sqImg').attr('src', "");
+			$("#uploadFile").siblings("i").css("display","none");
+		}
+		
 		
 		//返回 
 		function closeWindow() {

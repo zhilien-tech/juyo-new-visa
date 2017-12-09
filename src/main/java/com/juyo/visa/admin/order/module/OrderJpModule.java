@@ -223,8 +223,9 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object checkPassport(@Param("passport") String passport, @Param("adminId") String adminId) {
-		return saleViewService.checkPassport(passport, adminId);
+	public Object checkPassport(@Param("passport") String passport, @Param("adminId") String adminId,
+			@Param("orderid") int orderid) {
+		return saleViewService.checkPassport(passport, adminId, orderid);
 	}
 
 	/**
@@ -331,6 +332,16 @@ public class OrderJpModule {
 	public Object passportRecognition(@Param("image") File file, HttpServletRequest request,
 			HttpServletResponse response) {
 		return saleViewService.passportRecognitionBack(file, request, response);
+	}
+
+	/**
+	 * 结婚证、离婚证上传
+	 */
+	@At
+	@Ok("json")
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object marryUpload(@Param("image") File file, HttpServletRequest request, HttpServletResponse response) {
+		return saleViewService.marryUpload(file, request, response);
 	}
 
 	/**

@@ -222,7 +222,8 @@
 								data: function(validator) {
 									return {
 										passport:$('#passport').val(),
-										adminId:$('#id').val()
+										adminId:$('#id').val(),
+										orderid:${obj.orderid}
 									};
 								}
 							}

@@ -265,9 +265,38 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		if (!Util.isEmpty(paperworks)) {
 			dbDao.update(paperworks);
 		}
-		//发送短信
+		//发送短信(根据分享是统一联系人还是单独分享来发送短信)
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-		for (Map map : applicatlist) {
+		//根据日本订单表查出对应的日本申请人
+		List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjp.getId()), null);
+		//查询是否有统一联系人
+		TApplicantOrderJpEntity sameApply = dbDao.fetch(
+				TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjp.getId()).and("isSameLinker", "=", IsYesOrNoEnum.YES.intKey())
+						.and("isShareSms", "=", IsYesOrNoEnum.YES.intKey()));
+		if (!Util.isEmpty(sameApply)) {//如果有统一联系人，给统一联系人发短信
+			TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, sameApply.getApplicantId()
+					.longValue());
+			try {
+				sendMessage(orderEntity.getId(), applicantEntity.getId());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {//没有统一联系人时，单独发送
+			for (TApplicantOrderJpEntity applyJp : applyJpList) {
+				TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyJp.getApplicantId().longValue());
+				if (Util.eq(applyJp.getIsShareSms(), IsYesOrNoEnum.YES.intKey())) {//单独发短信
+					try {
+						sendMessage(orderEntity.getId(), apply.getId());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+		/*for (Map map : applicatlist) {//给订单下所有联系人发短信
 			int applyid = Integer.valueOf((String) map.get("applicatid"));
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, applyid);
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyJp.getApplicantId().longValue());
@@ -276,7 +305,7 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 
 		return null;
 
