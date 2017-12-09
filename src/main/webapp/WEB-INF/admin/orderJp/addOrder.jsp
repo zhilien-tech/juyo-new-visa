@@ -70,7 +70,8 @@
 			<section class="content">
 				<form id="orderInfo">
 					<div class="info" id="customerInfo" ref="customerInfo">
-						<p class="info-head">客户信息</p>
+						<p class="info-head">客户信息</p><input id="addCustomer"
+					type="button" value="添加" class="btn btn-primary btn-sm pull-right" />
 						<!-- *** -->
 						<div class="info-body-from"  style="margin-left:12%;">
 							<div class="row body-from-input">
@@ -591,6 +592,7 @@
 				}
 			}); */
 			
+			
 			$("#customerType").change(function(){
 				$("#linkman2").val("");
 				$("#compName2").val("");
@@ -673,6 +675,34 @@
 				$(this).parent().remove();//删除 对相应的本模块
 			}); */
 			
+			$("#addCustomer").click(function(){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['800px', '400px'],
+					content: BASE_PATH + '/admin/customer/add.html?isCustomerAdd=0'
+				});
+		});
+		
+		function successAddCustomer(data){
+			$(".on-line").show();//显示select2部分字段
+			$(".zhiKe").addClass("none");
+			$("#mobile").append('<option selected="true" value='+ data.id +'>'+data.mobile+'</option>'); 
+			/*公司全称补全*/
+			$("#compName").append('<option selected="true" value='+ data.id +'>'+data.name+'</option>'); 
+			/*公司简称补全*/
+			$("#comShortName").append('<option selected="true" value='+ data.id +'>'+data.shortname+'</option>');
+			/*邮箱补全*/
+			$("#email").append('<option selected="true" value='+ data.id +'>'+data.email+'</option>');
+			$("#linkman").append('<option selected="true" value='+ data.id +'>'+data.linkman+'</option>');
+			$("#customerType").val(data.source);
+			$("#payType").val(data.payType);
+		}	
 		
 		//添加申请人(大按钮)
 		var BASE_PATH = '${base}';
@@ -908,8 +938,6 @@
 						console.log("error");
 					}
 				}); 
-					
-				
 			}
 			
 			//下单取消

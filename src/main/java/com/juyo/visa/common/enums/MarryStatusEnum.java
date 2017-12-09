@@ -2,14 +2,19 @@ package com.juyo.visa.common.enums;
 
 import com.uxuexi.core.common.enums.IEnum;
 
-public enum MainSalePayTypeEnum implements IEnum {
-
-	YUFUKUAN(1, "预付款"), CHUQIAN(2, "出签付"), YUEFU(3, "月付"), XIANJIN(4, "现金"), WX(5, "微信"), ZFB(6, "支付宝");
-
+/**
+ * 
+ * <p>
+ * 男 or 女
+ * @author   彭辉
+ * @Date	 2017年10月20日
+ */
+public enum MarryStatusEnum implements IEnum {
+	YIHUN(1, "已婚"), LIYI(2, "离异"), SANGOU(3, "丧偶"), DANSHEN(4, "单身"), QITA(5, "其它");
 	private int key;
 	private String value;
 
-	private MainSalePayTypeEnum(final int key, final String value) {
+	private MarryStatusEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}
@@ -27,5 +32,4 @@ public enum MainSalePayTypeEnum implements IEnum {
 	public int intKey() {
 		return key;
 	}
-
 }

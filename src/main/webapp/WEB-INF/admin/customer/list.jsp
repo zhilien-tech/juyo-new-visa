@@ -48,6 +48,7 @@
 									<th><span>公司简称</span></th>
 									<th><span>客户来源</span></th>
 									<th><span>联系人</span></th>
+									<th><span>支付方式</span></th>
 									<th><span>手机</span></th>
 									<th><span>邮箱</span></th>
 									<th><span>操作</span></th>
@@ -93,6 +94,9 @@
 			$(function () {
 			    initDatatable();
 			});
+			function successAddCustomer(){
+				self.datatable.ajax.reload()
+			}
 		</script>
 </body>
 </html>

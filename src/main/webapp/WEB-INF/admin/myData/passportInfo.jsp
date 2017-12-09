@@ -107,7 +107,7 @@
 								<div class="form-group">
 									<label><span>*</span>性别：</label>
 									<%-- <input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.sex }"/> --%>
-									<select class="form-control input-sm selectHeight" id="sex" name="sex">
+									<select class="form-control input-sm" id="sex" name="sex">
 										<%-- <c:forEach var="map" items="${obj.boyOrGirlEnum}">
 												<option value="${map.key}" ${map.key==obj.passport.sex?'selected':''}>${map.value}</option>
 											</c:forEach> --%>
