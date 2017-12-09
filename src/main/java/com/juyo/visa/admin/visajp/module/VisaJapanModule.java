@@ -313,7 +313,7 @@ public class VisaJapanModule {
 	 */
 	@At
 	@POST
-	public Object afterMarket(@Param("orderid") Long orderid) {
-		return visaJapanService.afterMarket(orderid);
+	public Object afterMarket(@Param("orderid") Long orderid, HttpServletRequest request) {
+		return visaJapanService.afterMarket(orderid, request);
 	}
 }
