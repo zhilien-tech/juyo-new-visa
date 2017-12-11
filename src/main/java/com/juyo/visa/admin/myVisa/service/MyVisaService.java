@@ -21,10 +21,15 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.myVisa.form.MyVisaListDataForm;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.enums.YouKeExpressTypeEnum;
+import com.juyo.visa.entities.TApplicantExpressEntity;
+import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -103,8 +108,105 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		cnd.and("ta.id", "=", applicantid);
 		sql.setCondition(cnd);
 		Record applicantInfo = dbDao.fetch(sql);
+		int appllicantStatus = applicantInfo.getInt("applicantstatus");
+		for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
+			if (!Util.isEmpty(appllicantStatus) && Util.eq(appllicantStatus, statusEnum.intKey())) {
+				applicantInfo.set("applicantstatus", statusEnum.value());
+			}
+		}
 		result.put("applicant", applicantInfo);
 
+		//合格不合格信息
+		TApplicantUnqualifiedEntity isQulifiedApplicant = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		result.put("isQulifiedApplicant", isQulifiedApplicant);
+
+		Integer indexOfPage = 1;
+		String unqualifiedInfo = "(";
+		if (!Util.isEmpty(isQulifiedApplicant)) {
+			Integer isBase = isQulifiedApplicant.getIsBase();
+			Integer isPassport = isQulifiedApplicant.getIsPassport();
+			Integer isVisa = isQulifiedApplicant.getIsVisa();
+
+			//打开页面的顺序
+			if (Util.eq(1, isVisa)) {
+				indexOfPage = 3;
+			}
+			if (Util.eq(1, isPassport)) {
+				indexOfPage = 2;
+			}
+			if (Util.eq(1, isBase)) {
+				indexOfPage = 1;
+			}
+
+			//不合格信息展示
+			if (Util.eq(1, isBase)) {
+				unqualifiedInfo += "基本信息、";
+			}
+			if (Util.eq(1, isPassport)) {
+				unqualifiedInfo += "护照信息、";
+			}
+			if (Util.eq(1, isVisa)) {
+				unqualifiedInfo += "签证信息、";
+			}
+		}
+		result.put("indexOfPage", indexOfPage);
+		if (unqualifiedInfo.length() > 1) {
+			unqualifiedInfo = (unqualifiedInfo.subSequence(0, unqualifiedInfo.length() - 1)) + ")";
+		} else {
+			unqualifiedInfo = "";
+		}
+		result.put("unqualifiedInfo", unqualifiedInfo);
+
+		//快递单号
+		TApplicantExpressEntity expressEntity = dbDao.fetch(TApplicantExpressEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		String expressNum = "";
+		if (!Util.isEmpty(expressEntity)) {
+			expressNum = expressEntity.getExpressNum();
+		}
+		result.put("expressNum", expressNum);
 		return result;
+	}
+
+	//填写快递单号页
+	public Object youkeExpressInfo(Integer applicantId) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("applicantId", applicantId);
+		result.put("expressInfo",
+				dbDao.fetch(TApplicantExpressEntity.class, Cnd.where("applicantId", "=", applicantId)));
+		result.put("expressType", EnumUtil.enum2(YouKeExpressTypeEnum.class));
+		return result;
+	}
+
+	//保存快递单号
+	public Object saveExpressInfo(int expressType, String expressNum, Integer applicantId, HttpSession session) {
+
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+
+		Date nowDate = DateUtil.nowDate();
+
+		TApplicantExpressEntity expressEntity = dbDao.fetch(TApplicantExpressEntity.class,
+				Cnd.where("applicantId", "=", applicantId));
+		if (Util.isEmpty(expressEntity)) {
+			//添加
+			TApplicantExpressEntity express = new TApplicantExpressEntity();
+			express.setApplicantId(applicantId);
+			express.setExpressNum(expressNum);
+			express.setExpressType(expressType);
+			express.setOpId(userId);
+			express.setCreateTime(nowDate);
+			express.setUpdateTime(nowDate);
+			dbDao.insert(express);
+		} else {
+			//编辑
+			expressEntity.setExpressNum(expressNum);
+			expressEntity.setExpressType(expressType);
+			expressEntity.setOpId(userId);
+			expressEntity.setUpdateTime(nowDate);
+			dbDao.update(expressEntity);
+		}
+		return "ExpressNum Success";
 	}
 }
