@@ -27,4 +27,6 @@ public class LoginForm {
 	private int isTourist;
 	/**短信登录错误消息*/
 	private String messageErrMsg;
+	/**主页面的URL地址*/
+	private String mainurl;
 }

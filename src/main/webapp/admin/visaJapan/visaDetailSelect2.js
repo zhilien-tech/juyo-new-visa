@@ -252,6 +252,12 @@ $("#sendvisadate").datetimepicker({
 	minView: "month"//只显示年月日
 }).on("click",function(){  
     $("#sendvisadate").datetimepicker("setEndDate",$("#outvisadate").val());  
+}).on("changeDate",function(){
+	//自动计算预计出签时间
+	var stayday = 7;
+	var sendvisadate = $("#sendvisadate").val();
+	var days = getNewDay(sendvisadate,stayday);
+	$("#outvisadate").val(days); 
 }); 
 $("#outvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
