@@ -46,6 +46,58 @@ public class TApplicantEntity implements Serializable {
 	private String lastNameEn;
 
 	@Column
+	@Comment("曾用姓")
+	private String otherFirstName;
+
+	@Column
+	@Comment("曾用名")
+	private String otherLastName;
+
+	@Column
+	@Comment("曾用姓(拼音)")
+	private String otherFirstNameEn;
+
+	@Column
+	@Comment("曾用名(拼音)")
+	private String otherLastNameEn;
+
+	@Column
+	@Comment("紧急联系人姓名")
+	private String emergencyLinkman;
+
+	@Column
+	@Comment("紧急联系人手机")
+	private String emergencyTelephone;
+
+	@Column
+	@Comment("是否另有国籍")
+	private Integer hasOtherNationality;
+
+	@Column
+	@Comment("是否有曾用名")
+	private Integer hasOtherName;
+
+	@Column
+	@Comment("现居住地是否与身份证相同")
+	private Integer addressIsSameWithCard;
+
+	@Column
+	@Comment("结婚证/离婚证地址")
+	private String marryUrl;
+
+	@Column
+	@Comment("结婚状况")
+	private Integer marryStatus;
+
+	@Column
+	@Comment("身份证省份")
+	private Integer cardProvince;
+
+	@Column
+	@Comment("身份证城市")
+	private Integer cardCity;
+
+	@Column
 	@Comment("手机号")
 	private String telephone;
 

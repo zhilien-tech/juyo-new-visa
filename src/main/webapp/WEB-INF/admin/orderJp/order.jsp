@@ -7,11 +7,9 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>销售详情</title>
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
-		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-		<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
@@ -20,7 +18,7 @@
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<style type="text/css">
-			.form-control{height: 30px;}
+			.form-control{height: 30px; }
 			.add-btn{top:-225px;right:-1%;}
 			.remove-btn{top: -225px;right: -1%;}
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
@@ -429,9 +427,10 @@
 									<td>{{applicant.sex}}</td>
 									<td>
 										<a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;
-										<a v-on:click="passport(applicant.id)">护照信息</a>&nbsp;&nbsp;
+										<a v-on:click="passport(applicant.id,orderInfo.id)">护照信息</a>&nbsp;&nbsp;
 										<a v-on:click="visa(applicant.id,orderInfo.id)">签证信息</a> <br>
-										<a v-on:click="backmailInfo(applicant.id)">回邮信息</a>&nbsp;&nbsp;
+										<a v-on:click="visaInput(applicant.applicantjpid)">签证录入</a>&nbsp;&nbsp;
+										<a v-on:click="backmailInfo(applicant.id)">回邮</a>&nbsp;&nbsp;
 										<a v-on:click="deleteApplicant(applicant.id)">删除</a></br>
 									</td>
 								</tr>
@@ -1140,7 +1139,7 @@
 					});
 				},
 				//修改护照信息
-				passport : function(applicantId){
+				passport : function(applicantId,orderid){
 					layer.open({
 						type: 2,
 						title: false,
@@ -1150,7 +1149,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '551px'],
-						content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='
+						content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid
 					});
 				},
 				//删除申请人
@@ -1195,6 +1194,20 @@
 						scrollbar: false,
 						area: ['700px', '551px'],
 						content:'/admin/orderJp/log.html?id='+id
+					});
+				},
+				//签证录入
+				visaInput : function (applicantId){
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['1000px', '750px'],
+						content: '/admin/visaJapan/visaInput.html?applyid='+applicantId
 					});
 				},
 				//签证信息
