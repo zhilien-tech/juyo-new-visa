@@ -34,6 +34,32 @@ public class TApplicantUpdateForm extends ModForm implements Serializable {
 	/**名(拼音)*/
 	private String lastNameEn;
 
+	private String otherFirstName;
+
+	private String otherFirstNameEn;
+
+	private String otherLastName;
+
+	private String otherLastNameEn;
+
+	private String emergencyLinkman;
+
+	private String emergencyTelephone;
+
+	private Integer hasOtherNationality;
+
+	private Integer hasOtherName;
+
+	private Integer addressIsSameWithCard;
+
+	private String cardProvince;
+
+	private String cardCity;
+
+	private String marryUrl;
+
+	private Integer marryStatus;
+
 	/**手机号*/
 	private String telephone;
 
