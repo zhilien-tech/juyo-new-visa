@@ -86,7 +86,7 @@
 									</div>
 									<div class="date-info">
 										<label>快递单号：</label>
-										<span></span>
+										<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写快递单号</a><label>${obj.expressNum }</label></span>
 									</div>
 									
 								</li>
@@ -208,6 +208,20 @@
 					scrollbar: false,
 					area: ['900px', '551px'],
 					content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='
+				});
+			}
+			
+			function expressNum(applyId){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['600px', '300px'],
+					content:'/admin/myVisa/youkeExpressInfo.html?applicantId='+applyId
 				});
 			}
 			

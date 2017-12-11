@@ -22,11 +22,14 @@ import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.myVisa.form.MyVisaListDataForm;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.enums.YouKeExpressTypeEnum;
+import com.juyo.visa.entities.TApplicantExpressEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -155,6 +158,55 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		}
 		result.put("unqualifiedInfo", unqualifiedInfo);
 
+		//快递单号
+		TApplicantExpressEntity expressEntity = dbDao.fetch(TApplicantExpressEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		String expressNum = "";
+		if (!Util.isEmpty(expressEntity)) {
+			expressNum = expressEntity.getExpressNum();
+		}
+		result.put("expressNum", expressNum);
 		return result;
+	}
+
+	//填写快递单号页
+	public Object youkeExpressInfo(Integer applicantId) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("applicantId", applicantId);
+		result.put("expressInfo",
+				dbDao.fetch(TApplicantExpressEntity.class, Cnd.where("applicantId", "=", applicantId)));
+		result.put("expressType", EnumUtil.enum2(YouKeExpressTypeEnum.class));
+		return result;
+	}
+
+	//保存快递单号
+	public Object saveExpressInfo(int expressType, String expressNum, Integer applicantId, HttpSession session) {
+
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+
+		Date nowDate = DateUtil.nowDate();
+
+		TApplicantExpressEntity expressEntity = dbDao.fetch(TApplicantExpressEntity.class,
+				Cnd.where("applicantId", "=", applicantId));
+		if (Util.isEmpty(expressEntity)) {
+			//添加
+			TApplicantExpressEntity express = new TApplicantExpressEntity();
+			express.setApplicantId(applicantId);
+			express.setExpressNum(expressNum);
+			express.setExpressType(expressType);
+			express.setOpId(userId);
+			express.setCreateTime(nowDate);
+			express.setUpdateTime(nowDate);
+			dbDao.insert(express);
+		} else {
+			//编辑
+			expressEntity.setExpressNum(expressNum);
+			expressEntity.setExpressType(expressType);
+			expressEntity.setOpId(userId);
+			expressEntity.setUpdateTime(nowDate);
+			dbDao.update(expressEntity);
+		}
+		return "ExpressNum Success";
 	}
 }
