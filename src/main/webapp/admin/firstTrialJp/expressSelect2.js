@@ -204,8 +204,8 @@ $('#multiPass_roundTrip').on('switchChange.bootstrapSwitch', function (event,sta
 //收件人检索
 $("#receiver").on('input',function(){
 	$("#receiver").nextAll("ul.ui-autocomplete").remove();
-	$("#mobile").val("");
-	$("#address").val("");
+	/*$("#mobile").val("");
+	$("#address").val("");*/
 	$.ajax({
 		type : 'POST',
 		async: false,
@@ -232,8 +232,8 @@ $("#receiver").on('input',function(){
 
 //电话检索
 $("#mobile").on('input',function(){
-	$("#receiver").val("");
-	$("#address").val("");
+	/*$("#receiver").val("");
+	$("#address").val("");*/
 	$("#mobile").nextAll("ul.ui-autocomplete").remove();
 	$.ajax({
 		type : 'POST',
@@ -259,10 +259,10 @@ $("#mobile").on('input',function(){
 	});
 })
 
-$("#address").on('input',function(){
+/*$("#address").on('input',function(){
 	$("#receiver").val("");
 	$("#mobile").val("");
-})
+})*/
 
 //收件人 检索下拉项
 function setReceiveInfo(receiver,mobile,address){

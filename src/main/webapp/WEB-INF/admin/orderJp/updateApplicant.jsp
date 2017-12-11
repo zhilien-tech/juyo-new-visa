@@ -34,11 +34,11 @@
 </head>
 <body>
 	<div class="modal-content">
-	<div style="position:absolute;top:50%;right:5%;z-index:999;">
-					<a href="#">
-					<h1>></h1>
-					</a>
-				</div>
+		<div style="position:absolute;top:40%;right:5%;z-index:999;">
+			<a href="#">
+				<h1>></h1>
+			</a>
+		</div>
 		<form id="applicantInfo">
 			<div class="modal-header">
 				<span class="heading">基本信息</span> <input id="backBtn" type="button"
@@ -95,7 +95,6 @@
 							</div>
 						</div>
 						<!-- end 签发机关 -->
-						
 						<div class="row">
 							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
 							<div class="col-sm-5 padding-right-0 nameBeforeTop">
@@ -115,20 +114,20 @@
 							<div class="nameBeforeHide">
 							    <div class="col-sm-11 padding-right-0">
 									<div class="form-group">
-										<label>姓/拼音：</label> <input id=""
-											name="" style="position:relative;" type="text" class="form-control input-sm "
+										<label>姓/拼音：</label> <input id="otherFirstName"
+											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
 											placeholder=" " value="" />
-											<input type="text" id="" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value=""/>
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
 								
 								<div class="col-sm-11 padding-right-0">
 									<div class="form-group">
-										<label>名/拼音：</label> <input id=""
-											name="lastName" style="position:relative;" type="text" class="form-control input-sm "
+										<label>名/拼音：</label> <input id="otherLastName"
+											name="otherLastName" style="position:relative;" type="text" class="form-control input-sm "
 											placeholder=" " value="" />
-											<input type="text" id="" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value=""/>
+											<input type="text" id="otherLastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="otherLastNameEn" value=""/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -136,19 +135,19 @@
 							<!-- 姓/名 拼音 end -->
 							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
 								<div class="form-group">
-									<label>曾有的或另有的国际(或公民身份)</label> 
+									<label>曾有的或另有的国籍(或公民身份)</label> 
 									<div>
 										<span class="onceIDYes">
-											<input type="radio" name="onceID" class="onceID" value="1" />是
+											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
 										</span>
 										<span>
-											<input type="radio" name="onceID" class="onceID" checked value="2"  />否
+											<input type="radio" name="hasOtherNationality" class="onceID" checked value="2"  />否
 										</span>
 									</div>
 								</div>
 							</div>
 							<!-- 曾用国籍 -->
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0 nationalityHide">
+							<div class="col-sm-5 padding-right-0 nationalityHide">
 								<div class="form-group">
 									<label>国籍</label> 
 									<input id="nationality" name="nationality" type="text" class="form-control input-sm"/>
@@ -281,7 +280,7 @@
 						<div class="row">
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group" id="provinceDiv">
 									<label>现居住地址省份：</label> <input id="province"
 										name="province" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.province }" />
@@ -289,7 +288,7 @@
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group" id="cityDiv">
 									<label>现居住地址城市：</label> <input id="city"
 										name="city" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.city }" />
@@ -311,6 +310,25 @@
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
+						<div class="row">
+							<!-- 紧急联系人姓名/手机 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>紧急联系人姓名</label> <input id="emergencyLinkman"
+										name="emergencyLinkman" type="text" class="form-control input-sm"
+										placeholder=" " value="${obj.applicant.emergencyLinkman }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>紧急联系人手机</label> <input id="emergencyTelephone" name="emergencyTelephone"
+										type="text" class="form-control input-sm" placeholder=" "
+										value="${obj.applicant.emergencyTelephone }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -335,6 +353,16 @@
 	<script type="text/javascript">
 	
 		$(function(){
+			
+			let checked = $("input[name='hasOtherNationality']:checked").val();
+			if(checked == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nationalityHide").show();
+				$(".onceIDTop").css('float','left');
+			}else {
+				
+				$(".nationalityHide").hide();
+			}
 			
 			//校验
 			$('#applicantInfo').bootstrapValidator({
@@ -433,7 +461,86 @@
 			}
 		}
 		
-//正面上传,扫描
+		//是否同身份证相同
+		function isSameWithCard(){
+			var cardId = $("#cardId").val();
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : cardId,
+				url: '${base}/admin/orderJp/getInfoByCard',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+					$("#province").val(data.province);
+					$("#city").val(data.city);
+				}
+			});
+		}
+		
+		//省份检索
+		$("#province").on('input',function(){
+			$("#province").nextAll("ul.ui-autocomplete").remove();
+			$.ajax({
+				type : 'POST',
+				async: false,
+				data : {
+					searchStr : $("#province").val()
+				},
+				url : BASE_PATH+'/admin/orderJp/getProvince.html',
+				success : function(data) {
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#province").after(liStr);
+				}
+			});
+		});
+		
+		//省份 检索下拉项
+		function setProvince(province){
+			$("#province").nextAll("ul.ui-autocomplete").remove();
+			$("#province").val(province);
+		} 
+		$("#provinceDiv").mouseleave(function(){
+			$("#province").nextAll("ul.ui-autocomplete").remove();
+		});
+		
+		//市检索
+		$("#city").on('input',function(){
+			$("#city").nextAll("ul.ui-autocomplete").remove();
+			$.ajax({
+				type : 'POST',
+				async: false,
+				data : {
+					province : $("#province").val(),
+					searchStr : $("#city").val()
+				},
+				url : BASE_PATH+'/admin/orderJp/getCity.html',
+				success : function(data) {
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#city").after(liStr);
+				}
+			});
+		});
+		
+		//市 检索下拉项
+		function setCity(city){
+			$("#city").nextAll("ul.ui-autocomplete").remove();
+			$("#city").val(city);
+		} 
+		$("#cityDiv").mouseleave(function(){
+			$("#city").nextAll("ul.ui-autocomplete").remove();
+		});
+		
+		
+		//正面上传,扫描
 		
 		$('#uploadFile').change(function() {
 			var layerIndex = layer.load(1, {
@@ -611,7 +718,7 @@
 		});
 		//曾用国籍
 		$(".onceID").change(function(){
-			let checked = $("input[name='onceID']:checked").val();
+			let checked = $("input[name='hasOtherNationality']:checked").val();
 			if(checked == 1){
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();

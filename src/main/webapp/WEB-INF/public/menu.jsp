@@ -10,7 +10,7 @@
 	<frame src="${base }/public/header.html" />
 	<frameset cols="187,*" border="0" framespacing="0">
 		<frame src="${base }/public/aside.html" name="aside"  />
-		<frame src="" name="main" />
+		<frame src="${mainurl }" name="main" />
 	</frameset>
 </frameset>
 <body>

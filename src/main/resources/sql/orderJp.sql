@@ -64,6 +64,7 @@ WHERE
 /*orderJp_list_applicantInfo_byOrderId*/
 SELECT
 a.id,
+aoj.id applicantJpId,
 CONCAT(a.firstName, a.lastName) applyname,
 a.email,
 a.mainId,
@@ -123,6 +124,7 @@ order by createtime desc
 /*orderJp_applicantTable*/
 SELECT
 a.id,
+taoj.id applicantJpId,
 CONCAT(a.firstName, a.lastName) applyname,
 a.email,
 a.telephone,
@@ -133,6 +135,8 @@ FROM
 t_applicant a
 LEFT JOIN
 t_applicant_passport ap ON ap.applicantId = a.id
+LEFT JOIN
+t_applicant_order_jp taoj ON taoj.applicantId = a.id
 $condition
 
 /*visaInfo_byApplicantId*/

@@ -64,10 +64,12 @@ public class LoginModule {
 	@Filters
 	@Ok("re")
 	//登录成功返回主页,失败返回登录页
-	public Object login(@Param("..") final LoginForm form, final HttpSession session, final HttpServletRequest req,
+	public Object login(@Param("..") final LoginForm form, final HttpSession session, HttpServletRequest req,
 			ViewModel model) {
 		loginService.login(form, session, req);
 		model.setv("errMsg", form.getErrMsg());
+		model.setv("mainurl", form.getMainurl());
+		session.setAttribute("mainurl", form.getMainurl());
 		session.setAttribute("logintype", LoginTypeEnum.WORK.intKey());
 		return form.getReturnUrl();
 	}
@@ -84,11 +86,13 @@ public class LoginModule {
 	@Filters
 	@Ok("re")
 	//登录成功返回主页,失败返回登录页
-	public Object tlogin(@Param("..") final LoginForm form, final HttpSession session, final HttpServletRequest req,
+	public Object tlogin(@Param("..") final LoginForm form, final HttpSession session, HttpServletRequest req,
 			ViewModel model) {
 		loginService.login(form, session, req);
 		model.setv("errMsg", form.getErrMsg());
 		model.setv("passwordlogin", 1);
+		model.setv("mainurl", form.getMainurl());
+		session.setAttribute("mainurl", form.getMainurl());
 		session.setAttribute("logintype", LoginTypeEnum.TOURST.intKey());
 		return form.getReturnUrl();
 	}
@@ -124,10 +128,13 @@ public class LoginModule {
 	@Filters
 	@POST
 	@Ok("re")
-	public Object messageLogin(@Param("..") final LoginForm form, final HttpSession session, ViewModel model) {
+	public Object messageLogin(@Param("..") final LoginForm form, final HttpSession session,
+			HttpServletRequest request, ViewModel model) {
 		loginService.messageLogin(form, session);
 		model.setv("errMsg", form.getErrMsg());
 		model.setv("messageErrMsg", form.getMessageErrMsg());
+		model.setv("mainurl", form.getMainurl());
+		session.setAttribute("mainurl", form.getMainurl());
 		session.setAttribute("logintype", LoginTypeEnum.TOURST.intKey());
 		return form.getReturnUrl();
 	}

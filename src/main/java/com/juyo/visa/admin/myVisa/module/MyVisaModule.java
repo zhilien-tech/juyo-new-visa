@@ -6,6 +6,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
@@ -67,4 +68,26 @@ public class MyVisaModule {
 		return myVisaService.flowChart(orderid, applicantid);
 	}
 
+	/**
+	 * 填写快递单号页
+	 * 
+	 * @param applicantid
+	 * @return 
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object youkeExpressInfo(@Param("applicantId") Integer applicantid) {
+		return myVisaService.youkeExpressInfo(applicantid);
+	}
+
+	/**
+	 *保存快递单号
+	 */
+	@At
+	@POST
+	public Object saveExpressInfo(@Param("expressType") int expressType, @Param("expressNum") String expressNum,
+			@Param("applicantId") Integer applicantId, HttpSession session) {
+		return myVisaService.saveExpressInfo(expressType, expressNum, applicantId, session);
+	}
 }

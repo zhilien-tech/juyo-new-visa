@@ -83,6 +83,7 @@
 									<div class="col-sm-3">
 										<div class="form-group">
 											<label><span>*</span>公司简称：</label> 
+											<input type="hidden" id="orderid" value=""/>
 											<input type="hidden" id="comShortNameSelect2" value=""/>
 											<select id="comShortName"
 												name="shortname" class="form-control select2 cityselect2 "
@@ -727,83 +728,84 @@
 				}
 				if(status == 3){
 				    layer.msg('添加成功');
+					saveAddOrder(2);
+					var appId = document.getElementById("appId").value;
+					$("#applicantsTable").each(function(){
+						var applicants = $(this);
+						var result = '';
+						$.ajax({ 
+					    	url: '${base}/admin/orderJp/getApplicant',
+					    	dataType:"json",
+					    	data:{applicantId:appId},
+					    	type:'post',
+					    	success: function(data){
+					    		if( data.length > 0){
+									$("#mySwitch").removeClass("none");//显示申请人信息列表
+									$("#applicantInfo").hide();//添加申请人 按钮 隐藏
+								for(var i = 0; i < data.length; i++){
+									result += '<tr>';
+									if(data[i].mainid == data[i].id){
+										//为主申请人
+										if(data[i].applyname != undefined){
+											result += '<td><font color="blue">主   </font> ' + data[i].applyname + '</td>';
+										}
+										else{
+											result += '<td></td>';
+										}
+									}else{
+										if(data[i].applyname != undefined){
+											result += '<td>' + data[i].applyname + '</td>';
+										}
+										else{
+											result += '<td></td>';
+										}
+									}
+									if(data[i].telephone != undefined){
+										result += '<td>' + data[i].telephone + '</td>';
+									}else{
+										result += '<td></td>';
+									}
+									
+									if(data[i].email != undefined){
+										result += '<td>' + data[i].email + '</td>';
+									}else{
+										result += '<td></td>';
+									}
+									
+									if(data[i].passport != undefined){
+										result += '<td>' + data[i].passport + '</td>';
+									}else{
+										result += '<td></td>';
+									}
+									
+									if(data[i].sex != undefined){
+										result += '<td>' + data[i].sex + '</td>';
+									}else{
+										result += '<td></td>';
+									}
+									
+									result += '<td>
+									<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
+									<a href="javascript:passportInfo('+data[i].id+');">护照信息</a>&nbsp;&nbsp;
+									<a href="javascript:visaInfo('+data[i].id+');">签证信息</a><br>
+									<a href="javascript:visaInput('+data[i].applicantjpid+');">签证录入</a>
+									<a href="javascript:backmailInfo('+data[i].id+');">回邮</a>&nbsp;&nbsp;
+									<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></br>
+									</td>';
+									
+									result += '</tr>';
+								}
+								applicants.html(result);
+								
+								}else{
+									$("#mySwitch").addClass("none");//显示申请人信息列表
+									$("#applicantInfo").show();//添加申请人 按钮 隐藏
+								}
+					    	}
+						});
+				    }); 
 				}
 				
-				var appId = document.getElementById("appId").value;
-				$("#applicantsTable").each(function(){
-					var applicants = $(this);
-					var result = '';
-					$.ajax({ 
-				    	url: '${base}/admin/orderJp/getApplicant',
-				    	dataType:"json",
-				    	data:{applicantId:appId},
-				    	type:'post',
-				    	success: function(data){
-				    		if( data.length > 0){
-								$("#mySwitch").removeClass("none");//显示申请人信息列表
-								$("#applicantInfo").hide();//添加申请人 按钮 隐藏
-							for(var i = 0; i < data.length; i++){
-								result += '<tr>';
-								if(data[i].mainid == data[i].id){
-									//为主申请人
-									if(data[i].applyname != undefined){
-										result += '<td><font color="blue">主   </font> ' + data[i].applyname + '</td>';
-									}
-									else{
-										result += '<td></td>';
-									}
-								}else{
-									if(data[i].applyname != undefined){
-										result += '<td>' + data[i].applyname + '</td>';
-									}
-									else{
-										result += '<td></td>';
-									}
-								}
-								if(data[i].telephone != undefined){
-									result += '<td>' + data[i].telephone + '</td>';
-								}else{
-									result += '<td></td>';
-								}
-								
-								if(data[i].email != undefined){
-									result += '<td>' + data[i].email + '</td>';
-								}else{
-									result += '<td></td>';
-								}
-								
-								if(data[i].passport != undefined){
-									result += '<td>' + data[i].passport + '</td>';
-								}else{
-									result += '<td></td>';
-								}
-								
-								if(data[i].sex != undefined){
-									result += '<td>' + data[i].sex + '</td>';
-								}else{
-									result += '<td></td>';
-								}
-								
-								result += '<td> 
-								<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
-								<a href="javascript:passportInfo('+data[i].id+');">护照信息</a>&nbsp;&nbsp;
-								<a href="">签证信息</a><br>
-								<a href="javascript:backmailInfo('+data[i].id+');">回邮信息</a>&nbsp;&nbsp;
-								<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></br>
-								</td>';
-								
-								result += '</tr>';
-							}
-							applicants.html(result);
-							
-							}else{
-								$("#mySwitch").addClass("none");//显示申请人信息列表
-								$("#applicantInfo").show();//添加申请人 按钮 隐藏
-							}
-				    	}
-					});
-			    }); 
-				saveAddOrder(2);
 			}
 			
 			//修改申请人基本信息
@@ -823,7 +825,7 @@
 				
 			//修改申请人护照信息
 			
-			function passportInfo(id){
+			function passportInfo(applicantId){
 				layer.open({
 					type: 2,
 					title: false,
@@ -833,7 +835,37 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '551px'],
-					content:'/admin/orderJp/passportInfo.html?id='+id
+					content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid'
+				});
+			}
+			
+			//签证信息
+			function visaInfo(id){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid'+'&isOrderUpTime'
+				});
+			}
+			
+			//签证录入
+			function visaInput(id){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['1000px', '750px'],
+					content: '/admin/visaJapan/visaInput.html?applyid='+id
 				});
 			}
 			
@@ -912,6 +944,9 @@
 						console.log(JSON.stringify(data));
 						if(status == 1){
 							window.location.href = '${base}/admin/orderJp/list';
+						}else{
+							//var orderid = $("#orderid").val(data.id);
+							window.location.href = '${base}/admin/orderJp/order?id='+data.id;
 						}
 					},
 					error : function() {

@@ -440,6 +440,33 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 根据身份证号获取申请人信息
+	 */
+	@At
+	@POST
+	public Object getInfoByCard(@Param("cardId") String cardId) {
+		return saleViewService.getInfoByCard(cardId);
+	}
+
+	/**
+	 * 获取省份
+	 */
+	@At
+	@POST
+	public Object getProvince(@Param("searchStr") String searchStr) {
+		return saleViewService.getProvince(searchStr);
+	}
+
+	/**
+	 * 获取市
+	 */
+	@At
+	@POST
+	public Object getCity(@Param("province") String province, @Param("searchStr") String searchStr) {
+		return saleViewService.getCity(province, searchStr);
+	}
+
+	/**
 	 * 初审按钮
 	 */
 	@At

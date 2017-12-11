@@ -122,6 +122,24 @@ $(document).on("input","#lastName",function(){
 	}
 	setCaretPosition($(this)[0],pos);//设置光标
 	 */});
+$(document).on("input","#otherFirstName",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	$("#otherFirstNameEn").val("/"+pinyinchar.toUpperCase());
+});
+$(document).on("input","#otherLastName",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	$("#otherLastNameEn").val("/"+pinyinchar.toUpperCase());
+});
 $(document).on("input","#birthAddress",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
