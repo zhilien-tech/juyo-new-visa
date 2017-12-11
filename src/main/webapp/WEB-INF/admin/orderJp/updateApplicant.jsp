@@ -50,12 +50,6 @@
 			<div class="modal-body">
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
-						<!-- <div class="info-QRcode">
-							身份证 正面
-
-						</div> -->
-						<!-- end 身份证 正面 -->
-
 						<div class="info-imgUpload front">
 							<!-- 身份证 正面 -->
 							<div class="col-xs-6">
@@ -269,25 +263,6 @@
 							</div>
 						</div>
 						<!-- end 住宅 -->
-						
-						<!-- 有效期限 -->
-						<%-- <div class="row">
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>有效期限：</label> 
-									<input id="validStartDate" name="validStartDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" value="${obj.validStartDate }" onClick="WdatePicker()"/>
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label> &nbsp; &nbsp;</label> 
-									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " onClick="WdatePicker()" value="${obj.validEndDate }" onClick="WdatePicker()"/>
-								</div>
-							</div>
-						</div> --%>
-						<!-- end 有效期限 -->
-						
-						
 						<div class="row">
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
@@ -355,7 +330,6 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</form>

@@ -9,9 +9,7 @@
 		<title>销售详情</title>
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
-		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-		<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+		
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
@@ -20,7 +18,7 @@
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<style type="text/css">
-			.form-control{height: 30px;}
+			.form-control{height: 30px; }
 			.add-btn{top:-225px;right:-1%;}
 			.remove-btn{top: -225px;right: -1%;}
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}

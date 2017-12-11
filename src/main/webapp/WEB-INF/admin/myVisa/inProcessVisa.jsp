@@ -49,12 +49,14 @@
 			text-align:center;
 		}
 		.main-right a {
+
 			color:#0099FF;
 			font-size:16px;
 			margin-right:15px;
 		}
 		.main-right a:hover {
 			cursor:pointer;
+
 		}
 	</style>
 </head>
@@ -71,6 +73,7 @@
 							<div class="content-main">
 								<div class="content-main-center content-main-left">
 									<dl>
+
 										<dd><label>姓&nbsp;&nbsp;&nbsp;名：</label><span>{{data.applicantname}}</span></dd>
 										<dd><label>手机号：</label><span>{{data.telephone}}</span></dd>
 										<dd><label>护照号：</label><span>{{data.passport}}</span></dd>
@@ -89,6 +92,7 @@
 									<div class="main-right">
 										<a v-on:click="edit(data.applicantid)">资料编辑</a>
 										<a v-on:click="download(data.applicantid)">下载</a>
+
 									</div>
 								</div>
 							</div>
