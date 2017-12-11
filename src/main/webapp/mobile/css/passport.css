@@ -1,0 +1,128 @@
+.top{
+    width:100%;
+    height:4.21rem;
+    position: fixed;
+    top:0;
+    left:0;
+}
+.top.info{
+  position: relative;
+    width: 95%;
+    margin: .2rem auto 0;
+    border: solid 1px #f9f9f9;
+}
+.top>img{
+    display: block;
+    width:100%;
+    height:4.21rem;
+}
+.top>div{
+    width:100%;
+    height:4.21rem;
+    background-color:rgba(0,0,0,0.5);
+    position: absolute;
+    top:0;
+    left:0;
+}
+.top>div>h6{
+    text-align: center;
+    font-size:0.3rem;
+    color: #fff;
+    padding-top:1.5rem;
+    font-weight:normal;
+}
+.top>div>p{
+    text-align: center;
+    font-size:0.3rem;
+    color: #fff;
+}
+.label{
+    margin-top:4.21rem;
+    background-color: #fff;
+    padding-bottom:1.6rem;
+}
+.label-info {
+	background-color: #fff;
+    padding-bottom:1.6rem;
+}
+.label-info>li {
+	border-bottom:1px solid #dedede;
+    height:0.8rem;
+    line-height: 0.8rem;
+    font-size:0.3rem;
+    color:#333;
+    padding:0 0.2rem;
+}
+.label>li{
+    border-bottom:1px solid #dedede;
+    height:0.8rem;
+    line-height: 0.8rem;
+    font-size:0.3rem;
+    color:#333;
+    padding:0 0.2rem;
+}
+.bottom{
+    position: fixed;
+    bottom:0;
+    width:100%;
+    left:0;background-color: #f9f9f9;
+}
+.bottom>p{
+       width: 90%;
+    height: 0.6rem;
+    margin: 0.2rem auto;
+    line-height: 0.6rem;
+    font-size: 0.3rem;
+    color: #fff;
+    text-align: center;
+    background-color: #469ad0;
+    border-radius: 5px;
+    margin-top: 0.2rem;
+}
+.btn {
+	display: block;
+	width: 45%;
+	height: 0.6rem;
+    margin: 0.2rem auto;
+    line-height: 0.6rem;
+    font-size: 0.3rem;
+    color: #fff;
+    text-align: center;
+    background-color: #469ad0;
+    border-radius: 5px;
+    margin-top: 0.2rem;
+}
+.bottom .clear {
+	float: left;
+	margin-left: 0.2rem;
+}
+.bottom .next {
+	float: right;
+	margin-right: 0.2rem;
+}
+.passport-btn {
+	display: block;
+	width: 30%;
+	height: 0.6rem;
+    margin: 0.2rem auto;
+    line-height: 0.6rem;
+    font-size: 0.3rem;
+    color: #fff;
+    text-align: center;
+    background-color: #469ad0;
+    border-radius: 5px;
+    margin-top: 0.2rem;
+}
+.passport-prav {
+	float: left;
+	margin-left: 0.2rem;
+}
+.passport-clear {
+	float: left;
+	margin-left: 0.2rem;
+}
+.passport-next {
+	float: right;
+	margin-right: 0.2rem;
+}
+.txtInput{width: 60%;height: 100%;float: right;border: solid 0px #d6d6d6;text-align: right;outline: none;font-size: .3rem;color: #585858;}

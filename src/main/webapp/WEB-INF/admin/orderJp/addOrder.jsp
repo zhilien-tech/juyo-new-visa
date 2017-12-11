@@ -19,34 +19,15 @@
 <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <style type="text/css">
-.form-control {
-	height: 30px;
-}
-
-.add-btn {
-	top: -35px;
-	right: -1.5%;
-}
-
-.remove-btn {
-	top: -35px;
-	right: -1.5%;
-}
-
-.content-wrapper, .right-side, .main-footer {
-	margin-left: 0;
-}
-
-.multiPass_roundTrip-div {
-	width: 120px;
-	float: right;
-	position: relative;
-	top: 5px;
-}
-.form-group span,.form-control {
-    width: 297.05px;
-}
-
+.form-control { height: 30px;}
+.add-btn { top: -35px; right: -1.5%; }
+.remove-btn { top: -35px; right: -1.5%; }
+.content-wrapper, .right-side, .main-footer { margin-left: 0; }
+.multiPass_roundTrip-div { width: 120px; float: right; position: relative; top: 5px;}
+.sm { width:80px; }
+.none-sm { width:130px; }
+.show-select { width:110px; }
+.none-select { padding-left:0px; }
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -220,11 +201,10 @@
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-3 show-select">
 									<div class="form-group">
 										<label><span>*</span>加急：</label> <select id="urgentType"
-											name="urgenttype" class="form-control input-sm"
-											>
+											name="urgenttype" class="form-control input-sm sm">
 											<c:forEach var="map" items="${obj.mainSaleUrgentEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -232,10 +212,10 @@
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
-								<div class="col-sm-3 none" id="urgentDays">
+								<div class="col-sm-3 none none-select" id="urgentDays">
 									<div class="form-group">
 										<label>&nbsp;</label> <select id="urgentDay" name="urgentday"
-											class="form-control input-sm">
+											class="form-control input-sm none-sm">
 											<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -804,7 +784,7 @@
 									result += '<td></td>';
 								}
 								
-								result += '<td>
+								result += '<td> 
 								<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
 								<a href="javascript:passportInfo('+data[i].id+');">护照信息</a>&nbsp;&nbsp;
 								<a href="">签证信息</a><br>

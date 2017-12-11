@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>基本信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/passport.css">
+    <script src="../js/rem(750).js"></script>
+    <script src="../js/jquery-1.10.2.js"></script>
+    <script src="../js/lrz.bundle.js"></script>
+</head>
+<body>
+<div class="top info">
+    <img src="../img/1.jpg" alt="" class="bacimg">
+    <div id="upload">
+        <h6>点击上传</h6>
+        <p>身份证正面</p>
+        <p>可自动识别</p>
+    </div>
+    <input type="file" id="image" style="display:none;" name="image">
+</div>
+<div class="top info">
+    <img src="../img/1.jpg" alt="" class="bacimg2">
+    <div id="upload2">
+        <h6>点击上传</h6>
+        <p>身份证背面</p>
+        <p>可自动识别</p>
+    </div>
+    <input type="file" id="image2" style="display:none;" name="image">
+</div>
+ <ul class="label-info">
+        <li>姓(中文) <input type="text" class="txtInput" /></li>
+        <li>姓(拼音) <input type="text" class="txtInput" /></li>
+        <li>名(中文) <input type="text" class="txtInput" /></li>
+        <li>名(拼音) <input type="text" class="txtInput" /></li>
+        <li>手机号 <input type="text" class="txtInput" /></li>
+        <li>邮箱 <input type="text" class="txtInput" /></li>
+        <li>性别 <input type="text" class="txtInput" /></li>
+        <li>出生日期 <input type="text" class="txtInput" /></li>
+        <li>身份证号 <input type="text" class="txtInput" /></li>
+        <li>住址(省) <input type="text" class="txtInput" /></li>
+        <li>住址(市) <input type="text" class="txtInput" /></li>
+        <li>住址(街楼) <input type="text" class="txtInput" /></li>
+        <li>签发机关 <input type="text" class="txtInput" /></li>
+        <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" /></li>
+        <li>有效期至<input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" /></li>
+        <li>现在地址是否与身份证一致 <input type="text" class="txtInput" /></li>
+        <li>住址(省) <input type="text" class="txtInput" /></li>
+        <li>住址(市) <input type="text" class="txtInput" /></li>
+        <li>住址(街楼) <input type="text" class="txtInput" /></li>
+    </ul>
+<div class="bottom">
+    <a class="clear btn">清除</a><a class="next btn">下一步</a>
+</div>
+</body>
+<script>
+    $(function () {
+        $('#upload').click(function () {
+            $('#image').click();
+            $('#image').change(function(){
+                lrz(this.files[0])
+                    .then(function (rst) {
+                        $('.bacimg').attr('src',rst.base64);
+                        $('#upload').hide();
+                        // 处理成功会执行
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            });
+        });
+        $('#upload2').click(function () {
+            $('#image2').click();
+            $('#image2').change(function(){
+                lrz(this.files[0])
+                    .then(function (rst) {
+                        $('.bacimg2').attr('src',rst.base64);
+                        $('#upload2').hide();
+                        // 处理成功会执行
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            });
+        });
+    });
+</script>
+</html>
