@@ -87,10 +87,10 @@
 									<div class="date-info">
 										<label>快递单号</label>
 										<c:if test="${null != obj.expressEntity }">
-											<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">编辑快递单号</a><label>${obj.expressNum }</label></span>
+											<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">编辑</a><label>${obj.expressNum }</label></span>
 										</c:if>
 										<c:if test="${null == obj.expressEntity }">
-											<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写快递单号</a><label>${obj.expressNum }</label></span>
+											<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写</a><label>${obj.expressNum }</label></span>
 										</c:if>
 									</div>
 									

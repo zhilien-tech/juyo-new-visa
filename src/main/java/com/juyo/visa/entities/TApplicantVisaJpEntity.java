@@ -1,14 +1,11 @@
 package com.juyo.visa.entities;
 
-import java.io.Serializable;
+import org.nutz.dao.entity.annotation.*;
+import lombok.Data;
 import java.util.Date;
 
-import lombok.Data;
+import java.io.Serializable;
 
-import org.nutz.dao.entity.annotation.Column;
-import org.nutz.dao.entity.annotation.Comment;
-import org.nutz.dao.entity.annotation.Id;
-import org.nutz.dao.entity.annotation.Table;
 
 @Data
 @Table("t_applicant_visa_jp")
@@ -16,57 +13,62 @@ public class TApplicantVisaJpEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id(auto = true)
 	private Integer id;
-
+	
 	@Column
-	@Comment("申请人id")
+    @Comment("申请人id")
 	private Integer applicantId;
-
+	
 	@Column
-	@Comment("签发编号")
+    @Comment("签发编号")
 	private String visaNum;
-
+	
 	@Column
-	@Comment("签发地")
+    @Comment("签发地")
 	private String visaAddress;
-
+	
 	@Column
-	@Comment("签证类型")
+    @Comment("签证类型")
 	private Integer visaType;
-
+	
 	@Column
-	@Comment("年限(年)")
+    @Comment("年限(年)")
 	private Integer visaYears;
-
+	
 	@Column
-	@Comment("签发时间")
+    @Comment("签发时间")
 	private Date visaDate;
-
+	
 	@Column
-	@Comment("有效期至")
+    @Comment("有效期至")
 	private Date validDate;
-
+	
 	@Column
-	@Comment("停留时间(天)")
+    @Comment("停留时间(天)")
 	private Integer stayDays;
-
+	
 	@Column
-	@Comment("操作人")
+    @Comment("操作人")
 	private Integer opId;
-
+	
 	@Column
-	@Comment("创建时间")
+    @Comment("创建时间")
 	private Date createTime;
-
+	
 	@Column
-	@Comment("更新时间")
+    @Comment("更新时间")
 	private Date updateTime;
-
+	
 	@Column
-	@Comment("签证国家")
+    @Comment("签证国家")
 	private String visaCountry;
-
+	
 	@Column
-	@Comment("上传签证图片URL")
+    @Comment("上传签证图片URL")
 	private String picUrl;
+	
+	@Column
+    @Comment("签证录入时间（签证）")
+	private Date visaEntryTime;
+	
 
 }
