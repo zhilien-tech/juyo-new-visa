@@ -254,9 +254,12 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 					notincnd, null);
 			for (TApplicantFrontPaperworkJpEntity tApplicantVisaPaperworkJpEntity : paperwork) {
 				tApplicantVisaPaperworkJpEntity.setStatus(0);
+				tApplicantVisaPaperworkJpEntity.setReceiveDate(new Date());
 			}
 			for (TApplicantFrontPaperworkJpEntity tApplicantVisaPaperworkJpEntity : notinpaperwork) {
 				tApplicantVisaPaperworkJpEntity.setStatus(1);
+				tApplicantVisaPaperworkJpEntity.setReceiveDate(new Date());
+				;
 			}
 			paperworks.addAll(paperwork);
 			paperworks.addAll(notinpaperwork);

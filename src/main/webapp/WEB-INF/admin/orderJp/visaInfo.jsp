@@ -124,7 +124,7 @@
 										<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight">
 											<option value="">请选择</option>
 											<c:forEach var="map" items="${obj.marryStatus}">
-												<option value="${map.key}" ${map.key==obj.orderJp.marryStatus?'selected':''}>${map.value}</option>
+												<option value="${map.key}" ${map.key==obj.applicant.marryStatus?'selected':''}>${map.value}</option>
 											</c:forEach>
 										</select>
 									</div>
@@ -134,9 +134,9 @@
 							<div class="col-sm-4 padding-right-0">
 								<div class="cardFront-div">
 									<span>上传结婚证/离婚证</span>
-									<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.orderJp.marryUrl }"/>
+									<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.applicant.marryUrl }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" alt="" src="${obj.orderJp.marryUrl }" >
+									<img id="sqImg" alt="" src="${obj.applicant.marryUrl }" >
 									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 								</div>
 							</div>

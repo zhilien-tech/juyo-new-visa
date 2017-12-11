@@ -223,7 +223,7 @@
 									return {
 										passport:$('#passport').val(),
 										adminId:$('#id').val(),
-										orderid:${obj.orderid}
+										orderid:$('#orderid').val()
 									};
 								}
 							}
