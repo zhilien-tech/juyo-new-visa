@@ -38,7 +38,7 @@
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div class="card-list" v-cloak v-for="data in trialJapanData">
 							<div class="card-head">
-								<div><label>订单号：</label><span>{{data.ordernumber}}</span></div>	
+								<div><label>订单号：</label><span style="cursor:pointer" v-on:click="visaDetail(data.orderid,data.orderjpid)">{{data.ordernumber}}</span></div>	
 								<div><label>出行时间：</label><span>{{data.gotriptime}}</span></div>	
 								<div><label>返回时间：</label><span>{{data.backtriptime}}</span></div>	
 								<div><label>状态：</label><span>{{data.orderstatus}}</span></div>	
@@ -50,18 +50,35 @@
 								</div>
 							</div>
 							<ul class="card-content">
-								<li class="everybody-info" v-for="item in data.everybodyinfo">
-									<div><label>申请人：</label><span>{{item.applicantname}}</span></div>
-									<div><label>护照号：</label><span>{{item.passportnum}}</span></div>
-									<div><label>手机号：</label><span>{{item.telephone}}</span></div>
-									<div><label>状态：</label><span>{{item.applicantstatus}}</span></div>
-									<div>
-										<i class="basicInfo" @click="basicInfoFun(item.applyid,data.orderid)"> </i>
-										<i class="passportInfo" @click="passportFun(item.applyid,data.orderid)"> </i>
-										<i class="visaInfo" @click="visaInfoFun(item.applyid,data.orderid)"> </i>
-										<i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
-										<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i>
-									</div>
+								<li class="everybody-info" v-for="(item,index) in data.everybodyinfo">
+								
+									<span v-if="index === 0">
+										<div><label>申请人：</label><span>{{item.applicantname}}</span></div>
+										<div><label>护照号：</label><span>{{item.passportnum}}</span></div>
+										<div><label>手机号：</label><span>{{item.telephone}}</span></div>
+										<div><label>状态：</label><span>{{item.applicantstatus}}</span></div>
+										<div>
+											<i class="basicInfo" @click="basicInfoFun(item.applyid,data.orderid)"> </i>
+											<i class="passportInfo" @click="passportFun(item.applyid,data.orderid)"> </i>
+											<i class="visaInfo" @click="visaInfoFun(item.applyid,data.orderid)"> </i>
+											<i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
+											<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i>
+										</div>
+									</span>
+									<span v-else>
+										<div><label>　　　　</label><span>{{item.applicantname}}</span></div>
+										<div><label>　　　　</label><span>{{item.passportnum}}</span></div>
+										<div><label>　　　　</label><span>{{item.telephone}}</span></div>
+										<div><label>　　　</label><span>{{item.applicantstatus}}</span></div>
+										<div>
+											<i class="basicInfo" @click="basicInfoFun(item.applyid,data.orderid)"> </i>
+											<i class="passportInfo" @click="passportFun(item.applyid,data.orderid)"> </i>
+											<i class="visaInfo" @click="visaInfoFun(item.applyid,data.orderid)"> </i>
+											<i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
+											<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i>
+										</div>
+									</span>
+								
 								</li>
 							</ul>
 						</div>

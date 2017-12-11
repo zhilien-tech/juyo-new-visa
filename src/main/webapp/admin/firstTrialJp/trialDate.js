@@ -100,7 +100,7 @@ $("#stayday").keyup(function(){
 	var backtripdate = $("#backtripdate").val();
 	var stayday = $("#stayday").val();
 	if(gotripdate != "" && backtripdate != ""){
-		var days = getNewDay(gotripdate,stayday);
+		var days = getNewDay(gotripdate,stayday-1);
 		$("#backtripdate").val(days); 
 	}
 });

@@ -7,11 +7,91 @@
 	<meta charset="UTF-8">
 	<title>签证信息</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+	
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
+	<style type="text/css">
+
+    .input-box {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .input-box input {
+      background-color: transparent;
+      background-image: none;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+      color: #555;
+      display: block;
+      font-size: 14px;
+      line-height: 1.42857;
+      padding: 6px 6px;
+      transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+      width: 200px;
+      display: inline;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .tip-l {
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 10px solid #555;
+      display: inline-block;
+      right: 10px;
+      z-index: 0;
+      position: absolute;
+      top: 12px;
+    }
+    
+    .dropdown {
+      position: absolute;
+      top: 32px;
+      left: 0px;
+      width: 200px;
+      background-color: #FFF;
+      border: 1px solid #23a8ce;
+      border-top: 0;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+      z-index: 999;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .dropdown li {
+      display: block;
+      line-height: 1.42857;
+      padding: 0 6px;
+      min-height: 1.2em;
+      cursor: pointer;
+    }
+    
+    .dropdown li:hover {
+      background-color: #23a8ce;
+      color: #FFF;
+    }
+    .colSm { 
+    	display:block;
+    	float:left;
+    	width:200px;
+    }
+    .padding-right-0 {
+    	margin-left:10%;
+    	width:323px;
+    	height:200px;
+    	border:1px solid #eee;
+    }
+    .delete {
+    	right:0;
+    }
+</style>
 	<style type="text/css">
 		body {min-width:auto;}
 		.tab-content {background-color: #f8f8f8;}
@@ -29,14 +109,44 @@
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存退出" />
+				<input id="addContinueBtn" type="button" onclick="saveContinue();" class="btn btn-primary pull-right btn-sm btn-right" value="保存继续" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
+					<!-- 结婚状况 -->
+					<div class="info">
+						<div class="info-head">结婚状况 </div>
+						<div class="info-body-from cf ">
+							<div class="row colSm">
+								<div class="">
+									<div class="form-group">
+										<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight">
+											<option value="">请选择</option>
+											<c:forEach var="map" items="${obj.marryStatus}">
+												<option value="${map.key}" ${map.key==obj.orderJp.marryStatus?'selected':''}>${map.value}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-sm-4 padding-right-0">
+								<div class="cardFront-div">
+									<span>上传结婚证/离婚证</span>
+									<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.orderJp.marryUrl }"/>
+									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+									<img id="sqImg" alt="" src="${obj.orderJp.marryUrl }" >
+									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+								</div>
+							</div>
+							
+						</div>
+					</div>
 					<!-- 申请人 -->
 					<div class="info">
 						<div id="mainApply" class="info-head">主申请人 </div>
-						<div class="info-body-from cf ">
+						<div class="info-body-from"><!--class=" cf "-->
 							<div class="row"><!-- 申请人/备注 -->
 								<div class="col-sm-4">
 									<div class="form-group">
@@ -51,40 +161,16 @@
 								<div class="col-sm-4 applymain">
 									<div class="form-group">
 										<label><span>*</span>备注：</label>
-										
 										</br>
-											
-											<%-- <input name="relationRemark" id="relationRemark" style="height:35px;width:100px;position:absolute"    value="${obj.visaInfo.relationRemark }">  
-												<span style="margin-left:100px;width:200px;overflow:hidden;" >  
-												  <select name="bh" id="bh" style="height:35px;width:120px;margin-left:-100px"   
-												 onchange="document.getElementById('relationRemark').value=this.options[this.selectedIndex].text">    
-												<c:forEach var="map" items="${obj.applicantRemark}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
-											</c:forEach>
-												  </select>  
-												  </span>  --%>
-										
-										
-										
-										
-										
-										
-										<input list="movie" id="relationRemark" name="relationRemark" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.relationRemark}"/>
-										<datalist id="movie">
-										<option>主卡</option>
-										<option>朋友</option>
-										<option>同事</option>
-										<option>同学</option>
-											<%-- <c:forEach var="map" items="${obj.applicantRemark}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
-											</c:forEach> --%>
-										</datalist>
-
-										<%-- <select id="relationRemark" name="relationRemark" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.applicantRemark}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.relationRemark?'selected':''}>${map.value}</option>
-											</c:forEach>
-										</select> --%>
+										<div class="input-box">
+											<input type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
+											<ul class="dropdown">
+												<li>主卡</li>
+												<li>朋友</li>
+												<li>同事</li>
+												<li>同学</li>
+											</ul>
+										</div>
 									</div>
 								</div>
 								
@@ -103,39 +189,21 @@
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label><span>*</span>与主申请人关系：</label>
-											
 											</br>
-											
-											<input list="movi" id="mainRelation" name="mainRelation" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.mainRelation}"/>
-										<datalist id="movi">
-										<option>之妻</option>
-										<option>之夫</option>
-										<option>之子</option>
-										<option>之女</option>
-										<option>之父</option>
-										<option>之母</option>
-										<option>朋友</option>
-										<option>同事</option>
-										<option>同学</option>
-											</datalist>
-											
-											<%-- <input name="mainRelation" id="mainRelation" style="height:35px;width:100px;position:absolute"    value="${obj.visaInfo.mainRelation }">  
-												<span style="margin-left:100px;width:200px;overflow:hidden;" >  
-												  <select name="bh" id="bh" style="height:35px;width:120px;margin-left:-100px"   
-												 onchange="document.getElementById('mainRelation').value=this.options[this.selectedIndex].text">    
-												 <c:forEach var="map" items="${obj.applicantRelation}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.mainRelation?'selected':''}>${map.value}</option>
-											</c:forEach>
-												  </select>  
-												  </span>   --%>
-											
-											
-											<!-- <input id="" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
-											<%-- <select id="mainRelation" name="mainRelation" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.applicantRelation}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.mainRelation?'selected':''}>${map.value}</option>
-											</c:forEach>
-										</select> --%>
+										<div class="input-box">
+											<input type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
+												<ul class="dropdown">
+													<li>之妻</li>
+													<li>之夫</li>
+													<li>之子</li>
+													<li>之女</li>
+													<li>之父</li>
+													<li>之母</li>
+													<li>朋友</li>
+													<li>同事</li>
+													<li>同学</li>
+												</ul>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -169,20 +237,7 @@
 					<div class="info">
 						<div class="info-head">工作信息 </div>
 						<div class="info-body-from cf ">
-							<div class="workvice row">
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label><span>*</span>是否同主申请人：</label>
-										<select id="work" name="sameMainWork" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.isOrNo}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWork?'selected':''}>${map.value}</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-							</div>
-							
-							<div class="row workmain"><!-- 我的职业/单位名称/单位电话 -->
+							<div class="row "><!-- 我的职业/单位名称/单位电话 -->
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>我的职业：</label>
@@ -207,7 +262,7 @@
 									</div>
 								</div>
 							</div><!-- end 我的职业/单位名称/单位电话 -->
-							<div class="row workmain"><!-- 单位地址 -->
+							<div class="row"><!-- 单位地址 -->
 								<div class="col-sm-8">
 									<div class="form-group">
 										<label id="schoolAddress"><span>*</span>单位地址：</label>
@@ -247,13 +302,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>银行存款：</label>
-										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder="银行存款" />
+										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="万" />
+										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder="万"  />
 									</div>
 								</div>
 							</div><!-- end 银行存款 -->
@@ -264,13 +319,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>车产：</label>
-										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder="车产" />
+										<input id="" name="" type="text" class="form-control input-sm" value="车产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" "/>
+										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder=" "/>
 									</div>
 								</div>
 							</div><!-- end 车产 -->
@@ -281,13 +336,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>房产：</label>
-										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder="房产" />
+										<input id="" name="" type="text" class="form-control input-sm" value="房产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="平米" />
+										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder="平米"  />
 									</div>
 								</div>
 							</div><!-- end 房产 -->
@@ -298,13 +353,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>理财：</label>
-										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder="理财" />
+										<input id="" name="" type="text" class="form-control input-sm" value="理财" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="万" />
+										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder="万"  />
 									</div>
 								</div>
 							</div><!-- end 房产 -->
@@ -329,14 +384,17 @@
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	
+	<script type="text/javascript" src="${base}/admin/orderJp/visaInfo.js"></script>
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
 			
-			$("#relationRem").focus(function(){
-				
-			});
+			var marry = $("#marryUrl").val();
+			if(marry != ""){
+				$("#uploadFile").siblings("i").css("display","block");
+			}else{
+				$("#uploadFile").siblings("i").css("display","none");
+			}
 			
 			var career = $("#careerStatus").val();
 			if(career == 4){
@@ -365,19 +423,19 @@
 			if(applicVal == "1"){//主申请人
 				$(".applyvice").hide();
 				$(".tripvice").hide();
-				$(".workvice").hide();
+				//$(".workvice").hide();
 				$(".wealthvice").hide();
 				$(".applymain").show();
-				$(".workmain").show();
+				//$(".workmain").show();
 				$(".wealthmain").show();
 				$("#mainApply").text("主申请人");
 			}else{//副申请人
 				$(".applyvice").show();
 				$(".tripvice").show();
 				$(".wealthvice").show();
-				$(".workvice").show();
+				//$(".workvice").show();
 				$(".applymain").hide();
-				$(".workmain").hide();
+				//$(".workmain").hide();
 				$(".wealthmain").hide();
 				$("#mainApply").text("副申请人");
 			}
@@ -388,17 +446,17 @@
 				if(applicVal == "1"){//主申请人
 					$(".applyvice").hide();
 					$(".tripvice").hide();
-					$(".workvice").hide();
+					//$(".workvice").hide();
 					$(".wealthvice").hide();
 					$(".applymain").show();
-					$(".workmain").show();
+					//$(".workmain").show();
 					$(".wealthmain").show();
 					$("#mainApply").text("主申请人");
 				}else{//副申请人
 					$(".applyvice").show();
 					$(".tripvice").show();
 					$(".wealthvice").show();
-					$(".workvice").show();
+					//$(".workvice").show();
 					$(".applymain").hide();
 					$(".workmain").hide();
 					$(".wealthmain").hide();
@@ -443,7 +501,7 @@
 				
 			}
 			
-			var work = $("#work").val();
+			/* var work = $("#work").val();
 			if(work == 0){
 				$(".workmain").show();
 				//$(".address").show();
@@ -456,9 +514,9 @@
 					/* $("#careerStatus").val(1);
 					$("#name").val("");
 					$("#telephone").val("");
-					$("#address").val(""); */
+					$("#address").val(""); 
 				}
-			});
+			}); */
 			
 			var wealth = $("#wealth").val();
 			if(wealth == 0){
@@ -501,7 +559,8 @@
 					}else{
 						$(".deposit").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#deposit").val("银行存款");
+						$("#deposit").val("万");
+						//$("#deposit").placeholder("万");
 					}
 				}else if(financeBtnInfo == "车产"){
 					if($(this).hasClass("btnState-true")){
@@ -511,7 +570,7 @@
 					}else{
 						$(".vehicle").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#vehicle").val("车产");
+						$("#vehicle").val("");
 					}
 				}else if(financeBtnInfo == "房产"){
 					if($(this).hasClass("btnState-true")){
@@ -521,7 +580,8 @@
 					}else{
 						$(".houseProperty").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#houseProperty").val("房产");
+						$("#houseProperty").val("平米");
+						//$("#houseProperty").placeholder("平米");
 					}
 				}else if(financeBtnInfo == "理财"){
 					if($(this).hasClass("btnState-true")){
@@ -531,7 +591,8 @@
 					}else{
 						$(".financial").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#financial").val("理财");
+						$("#financial").val("万");
+						//$("#financial").placeholder("万");
 					}
 				}
 			});
@@ -563,10 +624,16 @@
 			
 		});
 		
+		$("#addContinueBtn").click(function(){
+			save(2);
+		});
+		$("#addBtn").click(function(){
+			save(1);
+		});
 		
 		
 		//保存
-		function save(){
+		function save(status){
 			//绑定财产类型
 			var wealthType = "";
 			$('[name=wealthType]').each(function(){
@@ -581,7 +648,7 @@
 			var applicVal = $("#applicant").val();
 			//主申请人时，是否同主申请人设置为空，不然默认为1
 			if(applicVal == 1){
-				$("#work").val(0);
+				//$("#work").val(0);
 				$("#wealth").val(0);
 			}
 			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
@@ -593,10 +660,73 @@
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
 					parent.successCallBack(1);
-					closeWindow();
+					if(status == 1){
+						closeWindow();
+					}
 				}
 			});
 		}
+		
+		//上传结婚证
+		
+		function dataURLtoBlob(dataurl) { 
+			var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+			bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+			while(n--){
+				u8arr[n] = bstr.charCodeAt(n);
+			}
+			return new Blob([u8arr], {type:mime});
+		}
+		
+		$('#uploadFile').change(function() {
+			var layerIndex = layer.load(1, {
+				shade : "#000"
+			});
+			$("#addBtn").attr('disabled', true);
+			$("#addContinueBtn").attr('disabled', true);
+			var file = this.files[0];
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var dataUrl = e.target.result;
+				var blob = dataURLtoBlob(dataUrl);
+				var formData = new FormData();
+				formData.append("image", blob, file.name);
+				$.ajax({
+					type : "POST",//提交类型  
+					//dataType : "json",//返回结果格式  
+					url : BASE_PATH + '/admin/orderJp/marryUpload',//请求地址  
+					async : true,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//关闭加载层
+						layer.close(layerIndex);
+						if (200 == obj.status) {
+							$('#marryUrl').val(obj.data);
+							$('#sqImg').attr('src', obj.data);
+							$("#uploadFile").siblings("i").css("display","block");
+						}
+						$("#addBtn").attr('disabled', false);
+						$("#addContinueBtn").attr('disabled', false);
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						layer.close(layerIndex);
+						$("#addBtn").attr('disabled', false);
+						$("#addContinueBtn").attr('disabled', false);
+					}
+				}); // end of ajaxSubmit
+			};
+			reader.readAsDataURL(file);
+		});
+		
+		function deleteApplicantFrontImg(){
+			$('#marryUrl').val("");
+			$('#sqImg').attr('src', "");
+			$("#uploadFile").siblings("i").css("display","none");
+		}
+		
 		
 		//返回 
 		function closeWindow() {

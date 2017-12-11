@@ -101,6 +101,15 @@ public class FirstTrialJpModule {
 	}
 
 	/**
+	 * 获取分享消息的申请人
+	 */
+	@At
+	@POST
+	public Object getShareApplicantByOrderid(@Param("orderjpid") Integer orderjpid) {
+		return firstTrialJpViewService.getShareApplicantByOrderid(orderjpid);
+	}
+
+	/**
 	 * 获取申请人信息
 	 */
 	@At
@@ -165,10 +174,10 @@ public class FirstTrialJpModule {
 	@At
 	@POST
 	public Object saveExpressInfo(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid,
-			@Param("expresstype") Integer expresstype, @Param("expressaddress") String expressaddress,
-			@Param("receiveAddressId") Integer receiveAddressId, HttpSession session) {
-		return firstTrialJpViewService.saveExpressInfo(orderid, orderjpid, expresstype, expressaddress,
-				receiveAddressId, session);
+			@Param("expresstype") Integer expresstype, @Param("receiver") String receiver,
+			@Param("mobile") String mobile, @Param("expressaddress") String expressaddress, HttpSession session) {
+		return firstTrialJpViewService.saveExpressInfo(orderid, orderjpid, expresstype, receiver, mobile,
+				expressaddress, session);
 	}
 
 	/**

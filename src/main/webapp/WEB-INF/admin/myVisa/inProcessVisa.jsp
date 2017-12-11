@@ -49,9 +49,14 @@
 			text-align:center;
 		}
 		.main-right a {
-			color:blue;
+
+			color:#0099FF;
 			font-size:16px;
 			margin-right:15px;
+		}
+		.main-right a:hover {
+			cursor:pointer;
+
 		}
 	</style>
 </head>
@@ -68,24 +73,26 @@
 							<div class="content-main">
 								<div class="content-main-center content-main-left">
 									<dl>
-										<dd><label>姓&nbsp;&nbsp;&nbsp;名：</label><span>孙先哲</span></dd>
-										<dd><label>手机号：</label><span>13315679521</span></dd>
-										<dd><label>护照号：</label><span>G343441</span></dd>
+
+										<dd><label>姓&nbsp;&nbsp;&nbsp;名：</label><span>{{data.applicantname}}</span></dd>
+										<dd><label>手机号：</label><span>{{data.telephone}}</span></dd>
+										<dd><label>护照号：</label><span>{{data.passport}}</span></dd>
 									</dl>
 								</div>
 									
 								<div class="content-main-center">
 									<dl>
-										<dd><label>订&nbsp;&nbsp;单&nbsp;号：</label><span>414141-US32131</span></dd>
-										<dd><label>送签时间：</label><span>2017-08-09</span></dd>
-										<dd><label>出签时间：</label><span>2017-08-19</span></dd>
+										<dd><label>订&nbsp;&nbsp;单&nbsp;号：</label><span>{{data.ordernum}}</span></dd>
+										<dd><label>送签时间：</label><span>{{data.sendvisadate}}</span></dd>
+										<dd><label>出签时间：</label><span>{{data.outvisadate}}</span></dd>
 									</dl>
 								</div>
-								<div class="content-main-center center-right">发招宝中</div>
+								<div class="content-main-center center-right">{{data.orderstatus}}</div>
 								<div class="content-main-center">
 									<div class="main-right">
-										<a>资料编辑</a>
-										<a>下载</a>
+										<a v-on:click="edit(data.applicantid)">资料编辑</a>
+										<a v-on:click="download(data.applicantid)">下载</a>
+
 									</div>
 								</div>
 							</div>
@@ -161,7 +168,7 @@
 	        		    shadeClose: false,
 	        		    scrollbar: false,
 	        		    area: ['900px', '550px'],
-	        		    content:'/admin/orderJp/passportInfo.html?id='+applyid
+	        		    content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='
 	        	    });
 	        	},
 	        }

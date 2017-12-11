@@ -35,7 +35,7 @@
 				<span class="">状态：<p>${obj.orderstatus }</p></span> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancel();"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
-				<input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" />
+				<!-- <input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" /> -->
 				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" @click="firtTrialJp(orderInfo.id)"/>
 				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" @click="share(orderInfo.id)" />
 				<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" @click="log(orderInfo.id)" />
@@ -43,7 +43,8 @@
 			<section class="content">
 				<!-- 客户信息 -->
 				<div class="info" id="customerInfo" ref="customerInfo">
-						<p class="info-head">客户信息</p>
+						<p class="info-head">客户信息</p><input id="addCustomer"
+					type="button" value="添加" class="btn btn-primary btn-sm pull-right" @click="addCustomer()"/>
 						<div class="info-body-from">
 							<div class="row body-from-input">
 								<!-- 公司全称 -->
@@ -197,11 +198,11 @@
 									<!-- <i class="bulb"></i> 小灯泡-->
 								</div>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-1">
 								<div class="form-group">
 									<label><span>*</span>加急：</label> <select id="urgentType"
 										name="urgentType" class="form-control input-sm"
-										onchange="selectListData();" v-model="orderInfo.urgenttype">
+										 v-model="orderInfo.urgenttype">
 										<c:forEach var="map" items="${obj.mainSaleUrgentEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -210,7 +211,7 @@
 								</div>
 							</div>
 
-									<div class="col-sm-3 none" id="urgentDays">
+									<div class="col-sm-2 none" id="urgentDays">
 										<div class="form-group">
 											<label>&nbsp;</label> <select id="urgentDay" name="urgentDay" 
 												class="form-control input-sm" v-model="orderInfo.urgentday">
@@ -262,7 +263,7 @@
 								<div class="form-group">
 									<label><span>*</span>签证类型：</label> <select id="visaType"
 										name="visaType" class="form-control input-sm"
-										onchange="selectListData();" v-model="orderInfo.visatype">
+										 v-model="orderInfo.visatype">
 										<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
@@ -309,7 +310,7 @@
 									<label><span>*</span>过去三年是否访问过：</label> 
 									<select id="isVisit"
 										name="isVisit" class="form-control input-sm"
-										onchange="selectListData();" v-model="orderInfo.isvisit">
+										 v-model="orderInfo.isvisit">
 										<c:forEach var="map" items="${obj.threeYearsIsVisitedEnum}">
 											<option value="${map.key}" >${map.value}</option>
 										</c:forEach>
@@ -344,7 +345,7 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>停留天数：</label> <input id="stayDay"
+									<label><span>*</span>行程天数：</label> <input id="stayDay"
 										name="stayday" type="text" class="form-control input-sm"
 										placeholder=" " v-model="orderInfo.stayday" />
 								</div>
@@ -363,7 +364,7 @@
 							<!-- 送签时间/出签时间 -->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>送签时间：</label> 
+									<label><span>*</span>预计送签时间：</label> 
 									<input id="sendVisaDate"  type="text" class="form-control input-sm"
 										placeholder=" "  v-model="orderInfo.sendvisadate" />
 									<!-- <input id="sendVisaDate" name="sendVisaDate" type="text" class="form-control input-sm"  /> -->
@@ -371,7 +372,7 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>出签时间：</label> <input id="outVisaDate"
+									<label><span>*</span>预计出签时间：</label> <input id="outVisaDate"
 										 type="text" class="form-control input-sm"
 										placeholder=" " 
 										v-model="orderInfo.outvisadate" />
@@ -428,7 +429,7 @@
 										<a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;
 										<a v-on:click="passport(applicant.id)">护照信息</a>&nbsp;&nbsp;
 										<a v-on:click="visa(applicant.id,orderInfo.id)">签证信息</a> <br>
-										<a v-on:click="">回邮</a>&nbsp;&nbsp;
+										<a v-on:click="backmailInfo(applicant.id)">回邮信息</a>&nbsp;&nbsp;
 										<a v-on:click="deleteApplicant(applicant.id)">删除</a></br>
 									</td>
 								</tr>
@@ -438,7 +439,7 @@
 				</div>
 				<!-- end 主申请人 -->
 
-				<div class="row body-from-input" id="backmailInfo"><!-- 添加回邮信息 -->
+				<%-- <div class="row body-from-input" id="backmailInfo"><!-- 添加回邮信息 -->
 					<div class="col-sm-12">
 						<div class="form-group">
 							<button type="button" class="btn btn-primary btn-sm addExpressInfoBtn">添加回邮信息</button>
@@ -665,7 +666,7 @@
 						</div>
 						<!-- end 快递信息 -->
 	            	</c:otherwise>
-           		</c:choose>
+           		</c:choose> --%>
 
 			</section>
 		</div>
@@ -692,7 +693,7 @@
 	
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
-		
+	
 		//签证六县，访问三县选中状态
 		var threecounty = '${obj.orderJpinfo.visaCounty}';
 		if(threecounty){
@@ -716,6 +717,50 @@
 				});
 			}
 		}
+		
+		$("#addCustomer").click(function(){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['800px', '400px'],
+				content: BASE_PATH + '/admin/customer/add.html?isCustomerAdd=0'
+			});
+	});
+
+	function successAddCustomer(data){
+		$(".on-line").show();//显示select2部分字段
+		$(".zhiKe").addClass("none");
+		$("#linkman2").val("");
+		$("#compName2").val("");
+		$("#comShortName2").val("");
+		$("#mobile2").val("");
+		$("#email2").val("");
+		//客户姓名清空
+		$("#linkman").val(null).trigger("change");
+		//电话清空
+		$("#mobile").val(null).trigger("change");
+		//公司全称
+		$("#compName").val(null).trigger("change");
+		//公司简称
+		$("#comShortName").val(null).trigger("change");
+		//邮箱清空
+		$("#email").val(null).trigger("change");
+		$("#mobile").append('<option selected="true" value='+ data.id +'>'+data.mobile+'</option>'); 
+		/*公司全称补全*/
+		$("#compName").append('<option selected="true" value='+ data.id +'>'+data.name+'</option>'); 
+		/*公司简称补全*/
+		$("#comShortName").append('<option selected="true" value='+ data.id +'>'+data.shortname+'</option>');
+		/*邮箱补全*/
+		$("#email").append('<option selected="true" value='+ data.id +'>'+data.email+'</option>');
+		$("#linkman").append('<option selected="true" value='+ data.id +'>'+data.linkman+'</option>');
+		$("#customerType").val(data.source);
+		$("#payType").val(data.payType);
+	}
 	
 		$(function(){
 			customerTypeSelect2();
@@ -729,16 +774,6 @@
 				$(".zhiKe").addClass("none");
 				//customerTypeSelect2();
 			}
-			
-			$('#urgentType').change(function(){
-				var thisval = $(this).val();
-				if(thisval == 1){
-					$("#urgentDays").addClass("none");
-				}else{
-					$("#urgentDays").removeClass("none");
-					orderobj.orderInfo.urgentday = 1;
-				}
-			});
 			
 			//点击 蓝色加号图标 事件
 			$('.add-btn').click(function(){
@@ -886,6 +921,16 @@
 						}else{
 							$("#urgentDays").removeClass("none");
 						}
+						
+						$('#urgentType').change(function(){
+							var thisval = $(this).val();
+							if(thisval == 1){
+								$("#urgentDays").addClass("none");
+							}else{
+								$("#urgentDays").removeClass("none");
+								orderobj.orderInfo.urgentday = 1;
+							}
+						});
 						
 						//签证类型  按钮的点击状态
 						$(".viseType-btn input").click(function(){
@@ -1064,6 +1109,19 @@
 					//console.log(message);
 					//alert(JSON.stringify(event.target)); 
 				},
+				addCustomer : function(){
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['800px', '400px'],
+						content: '/admin/customer/add.html?isCustomerAdd=0'
+					});
+				},
 				
 				//修改申请人信息
 				updateApplicant : function(id){
@@ -1151,6 +1209,20 @@
 						content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime'
 					});
 				},
+				//回邮信息
+				backmailInfo:function(applyId){
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId
+					});
+				},
 				//初审按钮
 				firtTrialJp : function(id){
 					layer.load(1);
@@ -1220,7 +1292,7 @@
 			var back = $("#backTripDate").val();
 			var day = $("#stayDay").val();
 			if(go != "" && day != ""){
-				var days = getNewDay(go,day);
+				var days = getNewDay(go,day-1);
 				$("#backTripDate").val(days); 
 				orderobj.orderInfo.backtripdate = days;
 			}
@@ -1262,7 +1334,7 @@
 			 }
 		}
 		
-		//时间插件格式化  出行时间>今天>送签时间 
+		//时间插件格式化  出行时间>送签时间 >今天
 		var now = new Date();
 		$("#goTripDate").datetimepicker({
 			format: 'yyyy-mm-dd',
@@ -1286,13 +1358,19 @@
 		$("#sendVisaDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
-			endDate: now,//日期小于今天
+			startDate: now,//日期大于今天
 			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
-		}).on("click",function(){  
-		    $("#sendVisaDate").datetimepicker("setEndDate",$("#outVisaDate").val());  
-		}); 
+		}).on("click",function(){
+			$("#sendVisaDate").datetimepicker("setEndDate",$("#goTripDate").val());
+		}).on("changeDate",function(){
+			//自动计算预计出签时间
+			var stayday = 7;
+			var sendvisadate = $("#sendVisaDate").val();
+			var days = getNewDay(sendvisadate,stayday);
+			$("#outVisaDate").val(days); 
+		});  
 		$("#outVisaDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',

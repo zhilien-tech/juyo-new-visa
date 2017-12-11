@@ -22,10 +22,40 @@
 		#tableId{position: relative;top: 15px;}
 		/*左右滑块*/
 		.switch{width:41px; display:inline-block;padding-left: 8px;}
+		
+		/*input检索框*/
+		li {
+			list-style: none;
+		}
+		.ui-helper-hidden-accessible {
+			display: none;
+		}
+		#search {
+			width: 200px;
+			height: 30px;
+			padding: 0;
+			border: 1px solid #eee;
+			font-size: 14px;
+			padding-left: 8px;
+		}
+		.ui-menu {
+			width: 167.5px !important;
+			border: 1px solid #eee;
+			padding: 0;
+			border-top: 0px;
+		}
+		.bg{
+			background: #4887f1;
+			color:#fff;
+		}
+		.ui-menu-item {
+			height:32px;
+			line-height:32px;
+			padding-left:8px;
+		}
 	</style>
 </head>
-<body >
-
+<body>
 	<div class="modal-content">
 		<form id="expressForm" >
 			<div class="modal-header">
@@ -54,9 +84,9 @@
 						</div>
 					</div>
 					<div class="row form-div">
-						<div class="col-sm-3">
+						<div id="receiverDiv" class="col-sm-3">
 							<div class="form-group">
-								<c:if test="${! empty obj.orderReceive.receiveaddressid }">
+								<%-- <c:if test="${! empty obj.orderReceive.receiveaddressid }">
 									<input id="receiveAddressId" type="hidden" value="${obj.orderReceive.receiveaddressid }">
 								</c:if>
 								<c:if test="${empty obj.orderReceive.receiveaddressid }">
@@ -67,17 +97,20 @@
 									<c:if test="${! empty obj.orderReceive.receiveaddressid }">
 										<option value="${obj.orderReceive.receiveaddressid }" selected="selected">${obj.orderReceive.receiver }</option>
 									</c:if>
-								</select>
+								</select> --%>
+								<label>收件人：</label>
+								<input type="text" id="receiver" name="receiver" value="${obj.orderReceive.receiver}" class="form-control input-sm"/>
 							</div>
 						</div>
-						<div class="col-sm-3">
+						<div id="mobileDiv" class="col-sm-3">
 							<div class="form-group">
 								<label>电话：</label> 
-								<select id="mobile" class="form-control select2 select2City" multiple="multiple">
+								<%-- <select id="mobile" class="form-control select2 select2City" multiple="multiple">
 									<c:if test="${! empty obj.orderReceive.receiveaddressid }">
 										<option value="${obj.orderReceive.receiveaddressid }" selected="selected">${obj.orderReceive.mobile }</option>
 									</c:if>
-								</select>
+								</select> --%>
+								<input type="text" id="mobile" name="mobile" value="${obj.orderReceive.telephone}" class="form-control input-sm"/>
 							</div>
 						</div>
 						<div class="col-sm-6">
@@ -148,7 +181,7 @@
 			},
 			created:function(){
 				orderobj=this;
-				var url = '${base}/admin/firstTrialJp/getmainApplicantByOrderid.html';
+				var url = '${base}/admin/firstTrialJp/getShareApplicantByOrderid.html';
 				$.ajax({ 
 					url: url,
 					type:'post',

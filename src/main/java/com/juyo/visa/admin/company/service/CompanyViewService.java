@@ -397,4 +397,29 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		return map;
 	}
 
+	/**
+	 * 
+	 * 校验公司全称唯一性
+	 * <p>
+	 *
+	 * @param loginName
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object checkCompanyNameExist(String companyName, String adminId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		int count = 0;
+		if (Util.isEmpty(adminId)) {
+			//add
+			count = nutDao.count(TCompanyEntity.class, Cnd.where("name", "=", companyName));
+		} else {
+			//update
+			count = nutDao.count(TCompanyEntity.class, Cnd.where("name", "=", companyName)
+					.and("adminId", "!=", adminId));
+		}
+
+		map.put("valid", count <= 0);
+		return map;
+	}
+
 }

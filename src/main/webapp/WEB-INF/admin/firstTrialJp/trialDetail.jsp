@@ -189,7 +189,7 @@
 							</div><!-- end 过去三年是否访问过 -->
 
 							<div class="row body-from-input">
-								<!-- 出行时间/停留天数/返回时间 -->
+								<!-- 出行时间/行程天数/返回时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行时间：</label> 
@@ -198,7 +198,7 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>停留天数：</label>
+										<label><span>*</span>行程天数：</label>
 										<input id="stayday" name="stayday" type="text" class="form-control input-sm mustNumber" v-model="orderinfo.stayday" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this)" onblur="this.v();"/>
 									</div>
 								</div>
@@ -214,13 +214,13 @@
 								<!-- 送签时间/出签时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>送签时间：</label>
+										<label><span>*</span>预计送签时间：</label>
 										<input id="sendvisadate" type="text" class="form-control input-sm" v-model="orderinfo.sendvisadate"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>出签时间：</label>
+										<label><span>*</span>预计出签时间：</label>
 										<input id="outvisadate" type="text" class="form-control input-sm" v-model="orderinfo.outvisadate"/>
 									</div>
 								</div>
@@ -241,7 +241,7 @@
 										<th><span>电话<span></th>
 										<th><span>护照号<span></th>
 										<th><span>资料类型<span></th>
-										<th><span>真实资料<span></th>
+										<th><span>所需资料<span></th>
 										<th><span>性别<span></th>
 										<th><span>状态<span></th>
 										<th><span>操作<span></th>

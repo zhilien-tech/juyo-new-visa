@@ -8,6 +8,7 @@ package com.juyo.visa.admin.visajp.module;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.upload.UploadAdaptor;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
 import com.juyo.visa.admin.visajp.form.PassportForm;
@@ -32,6 +34,7 @@ import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.admin.visajp.service.VisaJapanService;
 import com.juyo.visa.admin.visajp.service.VisaJapanSimulateService;
 import com.juyo.visa.common.enums.IssueValidityEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderTravelplanJpEntity;
 import com.uxuexi.core.common.util.EnumUtil;
@@ -65,7 +68,18 @@ public class VisaJapanModule {
 	@GET
 	@Ok("jsp")
 	public Object visaList() {
-		return null;
+		Map<String, Object> result = Maps.newHashMap();
+		List<Map> orderstatus = Lists.newArrayList();
+		for (JPOrderStatusEnum jporderstatus : JPOrderStatusEnum.values()) {
+			if (jporderstatus.intKey() >= JPOrderStatusEnum.VISA_ORDER.intKey()) {
+				Map<String, Object> orderstatu = Maps.newHashMap();
+				orderstatu.put("key", jporderstatus.intKey());
+				orderstatu.put("value", jporderstatus.value());
+				orderstatus.add(orderstatu);
+			}
+		}
+		result.put("orderstatus", orderstatus);
+		return result;
 	}
 
 	/**
@@ -286,5 +300,20 @@ public class VisaJapanModule {
 	@POST
 	public Object autoCalculateBackDate(@Param("gotripdate") Date gotripdate, @Param("stayday") Integer stayday) {
 		return visaJapanService.autoCalculateBackDate(gotripdate, stayday);
+	}
+
+	@At
+	@POST
+	public Object validateIsoriginal(@Param("paperid") Integer paperid) {
+		return visaJapanService.validateIsoriginal(paperid);
+	}
+
+	/**
+	 * 移交售后
+	 */
+	@At
+	@POST
+	public Object afterMarket(@Param("orderid") Long orderid, HttpServletRequest request) {
+		return visaJapanService.afterMarket(orderid, request);
 	}
 }

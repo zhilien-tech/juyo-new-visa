@@ -25,8 +25,15 @@ public class TApplicantOrderJpForm extends DataTablesParamForm {
 	/**申请人id*/
 	private Integer applicantId;
 
+	private Integer marryStatus;
+
+	private String marryUrl;
+
 	/**是否为统一联系人*/
 	private Integer isSameLinker;
+
+	/**是否分享消息*/
+	private Integer isShareSms;
 
 	/**是否是主申请人*/
 	private Integer isMainApplicant;

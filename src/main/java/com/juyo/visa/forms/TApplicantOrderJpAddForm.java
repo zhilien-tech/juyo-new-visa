@@ -21,6 +21,13 @@ public class TApplicantOrderJpAddForm extends AddForm implements Serializable {
 	/**是否为统一联系人*/
 	private Integer isSameLinker;
 
+	private Integer marryStatus;
+
+	private String marryUrl;
+
+	/**是否分享消息*/
+	private Integer isShareSms;
+
 	/**是否是主申请人*/
 	private Integer isMainApplicant;
 

@@ -196,7 +196,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		//fileMap.put("apply.pdf", templateUtil.createTempFile(apply));
 		stream = templateUtil.mergeToZip(fileMap);
 		//申请人信息
-		return stream;
+		//return stream;
+		//新需求修改为只下载pdf文件
+		return mergePdf;
 	}
 
 	/**

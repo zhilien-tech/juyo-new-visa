@@ -58,6 +58,7 @@ public class ScenicViewService extends BaseService<TScenicEntity> {
 	 */
 	public Object addScenic(TScenicAddForm addForm) {
 		addForm.setCreateTime(new Date());
+		addForm.setUpdateTime(new Date());
 		this.add(addForm);
 		return JsonResult.success("添加成功");
 	}

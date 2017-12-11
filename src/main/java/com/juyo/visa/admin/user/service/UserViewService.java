@@ -1,6 +1,7 @@
 package com.juyo.visa.admin.user.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ import com.juyo.visa.forms.TUserForm;
 import com.juyo.visa.forms.TUserUpdateForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.util.DbSqlUtil;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
@@ -113,6 +115,7 @@ public class UserViewService extends BaseService<TUserEntity> {
 		addForm.setUserType(UserLoginEnum.PERSONNEL.intKey());
 		addForm.setOpId(0);
 		addForm.setCreateTime(new Date());
+		addForm.setUpdateTime(new Date());
 		TUserEntity user = this.add(addForm);
 		TComJobEntity comjob = dbDao.fetch(TComJobEntity.class, Cnd.where("jobid", "=", addForm.getJobId()));
 		TUserJobEntity userjob = new TUserJobEntity();
@@ -150,6 +153,7 @@ public class UserViewService extends BaseService<TUserEntity> {
 				.query(TJobEntity.class, Cnd.where("deptId", "=", user.getDepartmentId()), null);
 		result.put("isDisableEnum", EnumUtil.enum2(IsYesOrNoEnum.class));
 		result.put("department", departmentList);
+		result.put("adminId", user.getId());
 		result.put("job", jobList);
 		result.put("user", user);
 		return result;
@@ -268,5 +272,17 @@ public class UserViewService extends BaseService<TUserEntity> {
 		userjob.setStatus(IsYesOrNoEnum.YES.intKey());
 		dbDao.insert(userjob);
 		return insertuser;
+	}
+
+	public Object checkMobile(String mobile, String adminId) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		int count = 0;
+		if (Util.isEmpty(adminId)) {
+			count = nutDao.count(TUserEntity.class, Cnd.where("mobile", "=", mobile));
+		} else {
+			count = nutDao.count(TUserEntity.class, Cnd.where("mobile", "=", mobile).and("id", "!=", adminId));
+		}
+		result.put("valid", count <= 0);
+		return result;
 	}
 }

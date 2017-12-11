@@ -219,6 +219,16 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 护照号唯一性验证
+	 */
+	@At
+	@POST
+	public Object checkPassport(@Param("passport") String passport, @Param("adminId") String adminId,
+			@Param("orderid") int orderid) {
+		return saleViewService.checkPassport(passport, adminId, orderid);
+	}
+
+	/**
 	 * 签证信息修改
 	 */
 	@At
@@ -322,6 +332,16 @@ public class OrderJpModule {
 	public Object passportRecognition(@Param("image") File file, HttpServletRequest request,
 			HttpServletResponse response) {
 		return saleViewService.passportRecognitionBack(file, request, response);
+	}
+
+	/**
+	 * 结婚证、离婚证上传
+	 */
+	@At
+	@Ok("json")
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object marryUpload(@Param("image") File file, HttpServletRequest request, HttpServletResponse response) {
+		return saleViewService.marryUpload(file, request, response);
 	}
 
 	/**

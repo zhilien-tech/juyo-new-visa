@@ -76,7 +76,7 @@ public class ReceiveaddressModule {
 	@GET
 	@Ok("jsp")
 	public Object update(@Param("id") final long id) {
-		return receiveaddressViewService.fetch(id);
+		return receiveaddressViewService.fetchAddress(id);
 	}
 
 	/**
@@ -84,8 +84,17 @@ public class ReceiveaddressModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..") TReceiveaddressUpdateForm updateForm) {
-		return receiveaddressViewService.updateReceiveaddress(updateForm);
+	public Object update(@Param("..") TReceiveaddressUpdateForm updateForm, HttpSession session) {
+		return receiveaddressViewService.updateReceiveaddress(updateForm, session);
+	}
+
+	/**
+	 * 电话唯一性检验
+	 */
+	@At
+	@POST
+	public Object checkMobile(@Param("mobile") String mobile, @Param("adminId") String adminId) {
+		return receiveaddressViewService.checkMobile(mobile, adminId);
 	}
 
 	/**

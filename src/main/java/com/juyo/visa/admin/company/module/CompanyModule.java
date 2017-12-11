@@ -145,13 +145,26 @@ public class CompanyModule {
 	/**
 	 * 校验用户名唯一性
 	 *
-	 * @param jobName
-	 * @param jobId
-	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 * @param loginName
+	 * @param adminId
+	 * @return 
 	 */
 	@At
 	public Object checkLoginNameExist(@Param("loginName") final String loginName, @Param("adminId") final String adminId) {
 		return companyViewService.checkLoginNameExist(loginName, adminId);
+	}
+
+	/**
+	 * 校验公司全称唯一性
+	 *
+	 * @param companyName
+	 * @param adminId
+	 * @return 
+	 */
+	@At
+	public Object checkCompanyNameExist(@Param("companyName") final String companyName,
+			@Param("adminId") final String adminId) {
+		return companyViewService.checkCompanyNameExist(companyName, adminId);
 	}
 
 }

@@ -4,7 +4,7 @@ import com.uxuexi.core.common.enums.IEnum;
 
 public enum MainSalePayTypeEnum implements IEnum {
 
-	XIANJIN(1, "现金"), CHUQIAN(2, "出签付"), WX(3, "微信"), ZFB(4, "支付宝"), YUEFU(4, "月付");
+	YUFUKUAN(1, "预付款"), CHUQIAN(2, "出签付"), YUEFU(3, "月付"), XIANJIN(4, "现金"), WX(5, "微信"), ZFB(6, "支付宝");
 
 	private int key;
 	private String value;

@@ -26,6 +26,8 @@ public class TCityForm extends DataTablesParamForm {
 	/**国家*/
 	private String country;
 
+	private String code;
+
 	/**省/州/县*/
 	private String province;
 
@@ -71,8 +73,8 @@ public class TCityForm extends DataTablesParamForm {
 		if (!Util.isEmpty(city)) {
 			cnd.and("city", "=", city);
 		}
-		cnd.orderBy("createTime", "DESC");
 		cnd.orderBy("updateTime", "DESC");
+		cnd.orderBy("createTime", "DESC");
 		return cnd;
 	}
 }

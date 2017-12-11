@@ -167,7 +167,7 @@
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
-										<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.applicant.firstNameEn }"/>
+										<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -180,7 +180,7 @@
 									<label><span>*</span>名/拼音：</label> <input id="lastName"
 										name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.lastName }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.applicant.lastNameEn }"/>
+										<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -206,6 +206,7 @@
 							</div>
 						</div>
 						<!-- end 手机号/邮箱 -->
+						
 						<div class="row">
 							<!-- 公民身份证 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
@@ -277,14 +278,13 @@
 								</div>
 							</div>
 						</div>
-						<!-- 有效日期 end -->
 						<div class="row">
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>现居住地是否与身份证相同<input type="checkBox" /></label> <input id="province"
+									<label>现居住地址省份：</label> <input id="province"
 										name="province" type="text" class="form-control input-sm"
-										placeholder="省" value="" />
+										placeholder=" " value="${obj.applicant.province }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -292,7 +292,7 @@
 								<div class="form-group">
 									<label>现居住地址城市：</label> <input id="city"
 										name="city" type="text" class="form-control input-sm"
-										placeholder="市" value="" />
+										placeholder=" " value="${obj.applicant.city }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -302,35 +302,15 @@
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>详细地址：</label> <input
+									<label>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label> <input
 										id="detailedAddress" name="detailedAddress" type="text"
-										class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间"
-										value="" />
+										class="form-control input-sm" placeholder=" "
+										value="${obj.applicant.detailedAddress }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
-						<div class="row">
-							<!-- 紧急联系人姓名/手机 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>紧急联系人姓名</label> <input id="emergent-name"
-										name="emergent-name" type="text" class="form-control input-sm"
-										placeholder=" " value="" />
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>紧急联系人手机</label> <input id="emergent-telephone" name="emergent-telephone"
-										type="text" class="form-control input-sm" placeholder=" "
-										value="" />
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
-						
 					</div>
 				</div>
 			</div>
@@ -582,12 +562,12 @@
 		}
 		
 		$(function(){
-			$("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
+			/* $("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
 				$(this).siblings("i").css("display","block");
 			});
 			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
 				$(this).siblings("i").css("display","block");
-			});
+			}); */
 			$("#validStartDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',

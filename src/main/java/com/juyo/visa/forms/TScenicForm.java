@@ -60,6 +60,7 @@ public class TScenicForm extends DataTablesParamForm {
 					.or("c.city", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
+		cnd.orderBy("updateTime", "DESC");
 		cnd.orderBy("createTime", "DESC");
 		return cnd;
 	}

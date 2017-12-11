@@ -43,6 +43,9 @@ public class AuthFilter extends BaseActionFilter {
 		//获取访问路径，去掉参数
 		HttpServletRequest request = actionContext.getRequest();
 		String requestPath = request.getServletPath();
+		if ("/".equals(requestPath)) {
+			return new JspView("admin.login");
+		}
 
 		HttpSession session = Mvcs.getHttpSession();
 		String currentPageIndex = request.getParameter("currentPageIndex");

@@ -44,12 +44,12 @@
 						<div class="box-body">
 							<ul class="flowChart">
 								<li>
-										<!-- <label>订单号：</label>
-										<span>170808-JP0045</span> -->
+									<!-- <label>订单号：</label>
+									<span>170808-JP0045</span>
 									<div class="date-info">
 										<label>订单号：</label>
 										<span>${obj.order.orderNum}</span>
-									</div>
+									</div> -->
 								</li>
 								<li>
 									<div class="circle blue">
@@ -58,7 +58,7 @@
 									</div>
 									<div class="date-info">
 										<label>资料填写：</label>
-										<span><a href="">填写</a><label>(护照信息、基本信息、签证信息)</label></span>
+										<span><a href="javascript: void(0);" onclick="baseInfo(${obj.applicant.applicantid })">填写</a><label>(基本信息、护照信息、签证信息)</label></span>
 									</div>
 									
 								</li>
@@ -70,7 +70,12 @@
 									<div class="date-info">
 										<label>当前状态：</label>
 										<!-- <span>初审合格</span> -->
-										<span><a href="">初审不合格</a><label>(基本信息、签证信息)</label></span>
+										<c:if test="${3 != obj.applicant.applicantstatus }">
+											<span><a href="javascript: void(0);">${obj.orderstatus}</a><label>(基本信息、签证信息)</label></span>
+										</c:if>
+										<c:if test="${3 == obj.applicant.applicantstatus  }">
+											<span><a href="javascript: void(0);">${obj.orderstatus}</a><label>(基本信息、签证信息)</label></span>
+										</c:if>
 									</div>
 									
 								</li>
@@ -113,7 +118,7 @@
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>预计出签时间：</label>
+										<label>预计发招宝时间：</label>
 										<span></span>
 									</div>
 									
@@ -124,7 +129,7 @@
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>录指纹时间：</label>
+										<label>已发招宝：</label>
 										<span></span>
 									</div>
 									
@@ -135,7 +140,7 @@
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>通知录指纹：</label>
+										<label>预计送签时间：</label>
 										<span></span>
 									</div>
 									
@@ -146,7 +151,7 @@
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>签证进度：</label>
+										<label>资料已进入使馆：</label>
 										<span></span>
 									</div>
 								</li>
@@ -156,37 +161,17 @@
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>签约时间：</label>
+										<label>签证已返回，预计邮寄时间：</label>
 										<span></span>
 									</div>
 								</li>
 								<li>
 									<div class="circle">
 										<div class="circle-outside"><i></i></div>
-										<div class="vertical"></div>
+										<!-- <div class="vertical"></div> -->
 									</div>
 									<div class="date-info">
-										<label>通过/拒接原因：</label>
-										<span></span>
-									</div>
-								</li>
-								<li>
-									<div class="circle">
-										<div class="circle-outside"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>签证进度：</label>
-										<span></span>
-									</div>
-								</li>
-								<li>
-									<div class="circle">
-										<div class="circle-outside"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>签证进度：</label>
+										<label>资料已发出，查看物流：</label>
 										<span></span>
 									</div>
 								</li>
@@ -201,22 +186,28 @@
 		<script type="text/javascript">
 			var orderstatus = ${obj.order.status};
 		</script>
-		<script src="${base}/references/public/plugins/jQuery/jquery.min.js"></script>
-		<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
-		<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
+		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+		<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
+		<script src="${base}/references/public/bootstrap/js/bootstrap-switch.min.js"></script>
+		<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
+		<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 		<script src="${base}/references/common/js/layer/layer.js"></script>
 		<script src="${base}/admin/base.js"></script><!-- 公用js文件 -->
 		<script src="${base}/admin/myVisa/flowChart.js"></script>
 		<script type="text/javascript">
-			$(function(){
-				$(".flowChart li:last-child").find(".vertical").remove();
-				
-				if(orderstatus == 1){
-					//下单状态
-					
-				}
-				
-			});
+			function baseInfo(applyId){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='
+				});
+			}
 			
 		</script>
 	</body>

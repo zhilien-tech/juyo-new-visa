@@ -389,7 +389,7 @@ $(".addExpressInfoBtn").click(function(){
 	$(this).hide();
 });
 
-//时间插件格式化  出行时间>今天>送签时间 
+//时间插件格式化  出行时间>送签时间 >今天
 var now = new Date();
 $("#gotripdate").datetimepicker({
 	format: 'yyyy-mm-dd',
@@ -413,12 +413,18 @@ $("#backtripdate").datetimepicker({
 $("#sendvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	endDate: now,//日期小于今天
+	startDate: now,//日期大于今天
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
-}).on("click",function(){  
-    $("#sendvisadate").datetimepicker("setEndDate",$("#outvisadate").val());  
+}).on("click",function(){
+	$("#sendVisaDate").datetimepicker("setEndDate",$("#gotripdate").val());
+}).on("changeDate",function(){
+	//自动计算预计出签时间
+	var stayday = 7;
+	var sendvisadate = $("#sendvisadate").val();
+	var days = getNewDay(sendvisadate,stayday);
+	$("#outvisadate").val(days); 
 }); 
 $("#outvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
@@ -428,3 +434,16 @@ $("#outvisadate").datetimepicker({
 	minView: "month"//只显示年月日
 });
 
+//日期转换
+function getNewDay(dateTemp, days) {  
+    var dateTemp = dateTemp.split("-");  
+    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
+    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);  
+    var rDate = new Date(millSeconds);  
+    var year = rDate.getFullYear();  
+    var month = rDate.getMonth() + 1;  
+    if (month < 10) month = "0" + month;  
+    var date = rDate.getDate();  
+    if (date < 10) date = "0" + date;  
+    return (year + "-" + month + "-" + date);  
+} 

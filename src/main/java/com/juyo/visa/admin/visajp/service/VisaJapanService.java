@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
@@ -24,6 +25,7 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Lists;
@@ -33,9 +35,11 @@ import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
 import com.juyo.visa.admin.visajp.form.PassportForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
+import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JapanVisaStatusEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
 import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
@@ -76,6 +80,9 @@ import com.uxuexi.core.web.base.service.BaseService;
  */
 @IocBean
 public class VisaJapanService extends BaseService<TOrderEntity> {
+
+	@Inject
+	private QrCodeService qrCodeService;
 
 	/**
 	 * 签证列表数据
@@ -124,8 +131,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			}
 			record.put("everybodyInfo", query);
 			//签证状态
-			Integer visastatus = record.getInt("visastatus");
-			for (JapanVisaStatusEnum visaenum : JapanVisaStatusEnum.values()) {
+			Integer visastatus = record.getInt("japanState");
+			for (JPOrderStatusEnum visaenum : JPOrderStatusEnum.values()) {
 				if (visaenum.intKey() == visastatus) {
 					record.put("visastatus", visaenum.value());
 				}
@@ -182,6 +189,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		TOrderTripJpEntity travelinfo = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderId", "=", orderid));
 		if (Util.isEmpty(travelinfo)) {
 			travelinfo = new TOrderTripJpEntity();
+			travelinfo.setTripType(1);
 		}
 		Map<String, String> tralinfoMap = obj2Map(travelinfo);
 		if (!Util.isEmpty(travelinfo.getGoDate())) {
@@ -851,25 +859,21 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//所有的人
 		for (Map map : applicatlist) {
 			String applicatid = map.get("applicatid").toString();
-			String datatext = String.valueOf(map.get("datatext"));
-			Cnd cnd = Cnd.NEW();
-			cnd.and("applicantId", "=", applicatid);
-			cnd.and("realInfo", "in", datatext.split(","));
-			List<TApplicantVisaPaperworkJpEntity> paperwork = dbDao.query(TApplicantVisaPaperworkJpEntity.class, cnd,
-					null);
-			Cnd notincnd = Cnd.NEW();
-			notincnd.and("applicantId", "=", applicatid);
-			notincnd.and("realInfo", " not in", datatext.split(","));
-			List<TApplicantVisaPaperworkJpEntity> notinpaperwork = dbDao.query(TApplicantVisaPaperworkJpEntity.class,
-					notincnd, null);
-			for (TApplicantVisaPaperworkJpEntity tApplicantVisaPaperworkJpEntity : paperwork) {
-				tApplicantVisaPaperworkJpEntity.setStatus(0);
+			//String datatext = String.valueOf(map.get("datatext"));
+			String revenuejson = String.valueOf(map.get("revenue"));
+			List<TApplicantVisaPaperworkJpEntity> paperworkjps = JsonUtil.fromJsonAsList(
+					TApplicantVisaPaperworkJpEntity.class, revenuejson);
+			for (TApplicantVisaPaperworkJpEntity paperworkjp : paperworkjps) {
+				TApplicantVisaPaperworkJpEntity fetch = dbDao.fetch(TApplicantVisaPaperworkJpEntity.class, paperworkjp
+						.getId().longValue());
+				if (!Util.isEmpty(paperworkjp.getRealInfo())) {
+					fetch.setRealInfo(paperworkjp.getRealInfo());
+					fetch.setStatus(paperworkjp.getStatus());
+					paperworks.add(fetch);
+				} else {
+					dbDao.delete(fetch);
+				}
 			}
-			for (TApplicantVisaPaperworkJpEntity tApplicantVisaPaperworkJpEntity : notinpaperwork) {
-				tApplicantVisaPaperworkJpEntity.setStatus(1);
-			}
-			paperworks.addAll(paperwork);
-			paperworks.addAll(notinpaperwork);
 		}
 		//删掉灰色的
 		if (!Util.isEmpty(paperworks)) {
@@ -1096,8 +1100,42 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param stayday
 	 */
 	public Object autoCalculateBackDate(Date gotripdate, Integer stayday) {
-		Date backtripdate = DateUtil.addDay(gotripdate, stayday);
+		Date backtripdate = DateUtil.addDay(gotripdate, stayday - 1);
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		return format.format(backtripdate);
+	}
+
+	/**
+	 * 验证是否为原始的实收材料
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param paperid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object validateIsoriginal(Integer paperid) {
+		boolean result = false;
+		TApplicantVisaPaperworkJpEntity fetch = dbDao.fetch(TApplicantVisaPaperworkJpEntity.class, paperid.longValue());
+		if (!Util.isEmpty(fetch) && !Util.isEmpty(fetch.getType())) {
+			result = true;
+		}
+		return result;
+
+	}
+
+	/**
+	 * 移交售后
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object afterMarket(Long orderid, HttpServletRequest request) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		orderinfo.setStatus(JPOrderStatusEnum.AFTERMARKET_ORDER.intKey());
+		dbDao.update(orderinfo);
+		return "success";
 	}
 }

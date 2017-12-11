@@ -56,7 +56,13 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		if (!Util.isEmpty(status)) {
-			cnd.and("CONCAT( CAST( tr.STATUS AS CHAR ), 'төл', taj.applicantStatus )", "like", "%" + status + "%");
+			if (status == JPOrderStatusEnum.UNQUALIFIED_ORDER.intKey()) {
+				//申请人不合格
+				cnd.and("taj.applicantStatus", "like", "%" + status + "%");
+			} else {
+				//订单+申请人状态cnd.and("CONCAT( CAST( tr.STATUS AS CHAR ), 'төл', taj.applicantStatus )", "like", "%" + status + "%");
+				cnd.and("tr.STATUS", "like", "%" + status + "%");
+			}
 		}
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
@@ -71,8 +77,9 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 		if (!Util.isEmpty(backTripDate)) {
 			cnd.and("tr.goTripDate", "<=", backTripDate);
 		}*/
+		//初审 看到的订单为漏斗形式， 初审状态以后的订单都可以看到
 		cnd.and("tr.status", ">=", JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
-		cnd.and("tr.status", "<=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
+		//cnd.and("tr.status", "<=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
 		if (userid.equals(adminId)) {
 			//公司管理员
 		} else {

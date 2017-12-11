@@ -22,16 +22,18 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-2 left-5px right-0px">
-								<select class="input-class input-sm" id="status" name="status">
+								<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
 									<option value="">状态</option>
-									<option></option>
+									<c:forEach items="${obj.orderstatus }" var="orstatus">
+										<option value="${orstatus.key }">${orstatus.value }</option>
+									</c:forEach>
 								</select>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间 - 出签时间" onkeypress="onkeyEnter()"/>
 							</div>
 							<div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/>
+								<!-- <input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/> -->
 							</div>
 							<div class="col-md-3 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter()"/>
@@ -44,22 +46,22 @@
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in visaJapanData">
 							<div class="card-head">
-								<div><label>订单号：</label><span>{{data.japannumber}}</span></div>	
+								<div><label>订单号：</label><span><a v-on:click="visaDetail(data.id)" href="javascript:;">{{data.japannumber}}</a></span></div>	
 								<div><label>受付番号：</label><span>{{data.number}}</span></div>	
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
 								<div><label>状态：</label><span>{{data.visastatus}}</span></div>	
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
-								<div v-if="data.japanstate === 13">
+								<div v-if="data.japanstate >= 13">
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<i class="sendZB" v-on:click="sendInsurance(data.id,2)"> </i>
-									<i class="ZBchange" v-on:click="sendInsurance(data.id,5)"> </i>
-									<i class="ZBcancel" v-on:click="sendInsurance(data.id,8)"> </i>
+									<i class="sendZB" v-on:click="sendInsurance(data.id,16)"> </i>
+									<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
+									<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
 									<i class="download" v-on:click="downLoadFile(data.id)"> </i>
 									<i class="handoverTable"> </i>
-									<i class="afterSales"> </i>
+									<i class="afterSales" v-on:click="aftermarket(data.id)"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
@@ -169,13 +171,35 @@
                  });
         	},
         	downLoadFile:function(orderid){
+        		layer.load(1);
         		$.fileDownload("${base}/admin/visaJapan/downloadFile.html?orderid=" + orderid, {
 			         successCallback: function (url) {
+			        	 layer.closeAll('loading');
 			         },
 			         failCallback: function (html, url) {
+			        	layer.closeAll('loading');
 			        	layer.msg("下载失败");
 			         }
 			     });
+        	},
+        	aftermarket:function(orderid){
+        		$.ajax({ 
+                 	url: '${base}/admin/visaJapan/afterMarket.html',
+                 	data:{orderid:orderid},
+                 	dataType:"json",
+                 	type:'post',
+                 	success: function(data){
+                 		layer.msg('已移交售后！');
+                 		$.ajax({ 
+                        	url: url,
+                        	dataType:"json",
+                        	type:'post',
+                        	success: function(data){
+                        		_self.visaJapanData = data.visaJapanData;
+                          	}
+                        });
+                   	}
+                 });
         	}
         }
 	});
@@ -195,7 +219,7 @@
 			//搜索条件
 			var status = $('#status').val();
 			var sendSignDate = $('#sendSignDate').val();
-			var signOutDate = $('#signOutDate').val();
+			/* var signOutDate = $('#signOutDate').val(); */
 			var searchStr = $('#searchStr').val();
 			//异步加载数据
 			if(pageNumber <= pagetotal){
@@ -203,7 +227,7 @@
 				layer.load(1);
 				$.ajax({ 
 			    	url: url,
-			    	data:{status:status,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr,pageNumber:pageNumber},
+			    	data:{status:status,sendSignDate:sendSignDate,searchStr:searchStr,pageNumber:pageNumber},
 			    	dataType:"json",
 			    	type:'post',
 			    	success: function(data){
@@ -228,17 +252,20 @@
 	function search(){
 		var status = $('#status').val();
 		var sendSignDate = $('#sendSignDate').val();
-		var signOutDate = $('#signOutDate').val();
+		//var signOutDate = $('#signOutDate').val();
 		var searchStr = $('#searchStr').val();
 		$.ajax({ 
         	url: url,
-        	data:{status:status,sendSignDate:sendSignDate,signOutDate:signOutDate,searchStr:searchStr},
+        	data:{status:status,sendSignDate:sendSignDate,searchStr:searchStr},
         	dataType:"json",
         	type:'post',
         	success: function(data){
         		_self.visaJapanData = data.visaJapanData;
           	}
         });
+	}
+	function changestatus(){
+		search();
 	}
 	//回车事件
 	function onkeyEnter(){

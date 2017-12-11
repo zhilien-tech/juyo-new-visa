@@ -34,7 +34,7 @@
 								<th><span>电话</span></th>
 								<th><span>邮箱</span></th>
 								<th><span>资料类型</span></th>
-								<th><span>真实资料</span></th>
+								<th><span>所需资料</span></th>
 							</tr>
 						</thead>
 						<tbody id="applyinfo">
@@ -46,7 +46,16 @@
 									<td>${apply.dataType }</td>
 									<td class="certificates">
 										<c:forEach items="${apply.revenue }" var="revenue">
-											<span>${revenue.realInfo }</span>
+											<c:choose>
+												<c:when test="${revenue.status == 0 }">
+													<span class="titleStyle realinfo">${revenue.realInfo }</span>
+													<input type="hidden" id="revenueid" name="revenueid" value="${revenue.id }">
+												</c:when>
+												<c:otherwise>
+													<span class="realinfo">${revenue.realInfo }</span>
+													<input type="hidden" id="revenueid" name="revenueid" value="${revenue.id }">
+												</c:otherwise>
+											</c:choose>
 										</c:forEach>
 										<input id="" name="" type="text" class="addInp none">
 										<span class="addText">+</span>
@@ -98,6 +107,7 @@
 		            	dataType:"json",
 		            	type:'post',
 		            	success: function(data){
+		            		
 		              	}
 		            });
 				}
@@ -177,11 +187,20 @@
 				var applicatid = $(this).find('#applicatid').val();
 				applicatobj.applicatid = applicatid;
 				var datatext = '';
-				$(this).find('.titleStyle').each(function(index){
-					datatext += $(this).text() + ',';
+				var graydata = '';
+				$(this).find(".certificates span").each(function(index){
+					if($(this).hasClass('titleStyle')){
+						datatext += $(this).text() + ',';
+					}else{
+						graydata += $(this).text() + ',';
+					}
 				});
 				datatext = datatext.substring(0, datatext.length-1);
+				graydata = graydata.substring(0, graydata.length-1);
+				console.log(datatext);
+				console.log(graydata);
 				applicatobj.datatext = datatext;
+				applicatobj.graydata = graydata;
 				applicatinfo.push(applicatobj);
 			});
 			layer.load(1);

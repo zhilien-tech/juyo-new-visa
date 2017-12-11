@@ -11,6 +11,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.entities.TCustomerEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.db.util.EntityUtil;
@@ -28,6 +29,12 @@ public class TCustomerForm extends DataTablesParamForm {
 
 	/**用户类型*/
 	private Integer userType;
+
+	private Integer payType;
+
+	private String payTypeStr;
+
+	private Integer isCustomerAdd;
 
 	/**公司id*/
 	private Integer compId;
@@ -86,6 +93,8 @@ public class TCustomerForm extends DataTablesParamForm {
 		if (userType == 1) {
 			cnd.and("userId", "=", userId);
 		}
+		cnd.and("isCustomerAdd", "=", IsYesOrNoEnum.YES.intKey());
+		cnd.orderBy("updateTime", "DESC");
 		cnd.orderBy("createTime", "DESC");
 		return cnd;
 	}

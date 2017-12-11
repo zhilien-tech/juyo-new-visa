@@ -81,7 +81,7 @@ public class TestModule {
 		return null;
 	}
 
-	@At("admin/myData/basicInfo")
+	/*@At("admin/myData/basicInfo")
 	@Ok("jsp")
 	public Object basicInfo() {
 		return null;
@@ -91,7 +91,7 @@ public class TestModule {
 	@Ok("jsp")
 	public Object passportInfo() {
 		return null;
-	}
+	}*/
 
 	@At("admin/myVisa/inProcessVisa")
 	@Ok("jsp")
