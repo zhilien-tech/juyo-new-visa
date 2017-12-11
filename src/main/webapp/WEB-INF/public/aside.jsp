@@ -39,7 +39,15 @@
 							<c:if test="${twofun.level eq 2 and twofun.parentId eq function.id}">
 								<li class="" id="${twostatus.index+(status.index+1)*100 }">
 									<cite></cite>
-									<a target="main" href="${twofun.url }?currentPageIndex=${twostatus.index+(status.index+1)*100 }">${twofun.funName }</a>
+									<c:choose>
+										<c:when test="${empty twofun.url }">
+											${twofun.funName }
+										</c:when>
+										<c:otherwise>
+											<a target="main" href="${twofun.url }?currentPageIndex=${twostatus.index+(status.index+1)*100 }">${twofun.funName }</a>
+										</c:otherwise>
+									</c:choose>
+									
 									<i></i>
 								</li>
 							</c:if>
