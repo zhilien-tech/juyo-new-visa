@@ -57,18 +57,18 @@
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>资料填写：</label>
+										<label>资料填写</label>
 										<span><a href="javascript: void(0);" onclick="baseInfo(${obj.applicant.applicantid })">填写</a><label>(基本信息、护照信息、签证信息)</label></span>
 									</div>
 									
 								</li>
 								<li>
 									<div class="circle blue">
-										<div class="circle-outside"><i></i></div>
+										<div class="circle-outside blue"><i></i></div>
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>当前状态：</label>
+										<label>当前状态</label>
 										<!-- <span>初审合格</span> -->
 										<c:if test="${'不合格' != obj.applicant.applicantstatus }">
 											<span><a href="javascript: void(0);">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
@@ -80,98 +80,103 @@
 									
 								</li>
 								<li>
-									<div class="circle">
-										<div class="circle-outside"><i></i></div>
+									<div class="circle blue">
+										<div class="circle-outside blue"><i></i></div>
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>快递单号：</label>
-										<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写快递单号</a><label>${obj.expressNum }</label></span>
+										<label>快递单号</label>
+										<c:if test="${null != obj.expressEntity }">
+											<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">编辑快递单号</a><label>${obj.expressNum }</label></span>
+										</c:if>
+										<c:if test="${null == obj.expressEntity }">
+											<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写快递单号</a><label>${obj.expressNum }</label></span>
+										</c:if>
 									</div>
 									
 								</li>
 								<li>
-									<div class="circle">
-										<div class="circle-outside"><i></i></div>
+									<div class="circle blue">
+										<div class="circle-outside blue"><i></i></div>
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>快递状态：</label>
-										<span></span>
+										<label>快递状态</label>
+										<span><label>已寄出</label></span>
 									</div>
 									
 								</li>
 								<li>
-									<div class="circle">
-										<div class="circle-outside"><i></i></div>
+									<div class="circle blue">
+										<div class="circle-outside blue"><i></i></div>
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>收件状态：</label>
-										<span></span>
+										<label>收件状态</label>
+										<span><label>前台已收件</label></span>
 									</div>
 									
 								</li>
 								<li>
-									<div class="circle">
-										<div class="circle-outside"><i></i></div>
+									<div class="circle blue">
+										<div class="circle-outside blue"><i></i></div>
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>预计发招宝时间：</label>
-										<span></span>
-									</div>
-									
-								</li>
-								<li>
-									<div class="circle">
-										<div class="circle-outside"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>已发招宝：</label>
+										<label>预计发招宝时间</label>
 										<span></span>
 									</div>
 									
 								</li>
 								<li>
-									<div class="circle">
-										<div class="circle-outside"><i></i></div>
+									<div class="circle blue">
+										<div class="circle-outside blue"><i></i></div>
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>预计送签时间：</label>
+										<label>已发招宝</label>
 										<span></span>
 									</div>
 									
 								</li>
 								<li>
-									<div class="circle">
-										<div class="circle-outside"><i></i></div>
+									<div class="circle blue">
+										<div class="circle-outside blue"><i></i></div>
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>资料已进入使馆：</label>
+										<label>预计送签时间</label>
+										<span><label>${obj.sendVisaDate }</label></span>
+									</div>
+									
+								</li>
+								<li>
+									<div class="circle blue">
+										<div class="circle-outside blue"><i></i></div>
+										<div class="vertical"></div>
+									</div>
+									<div class="date-info">
+										<label>资料已进入使馆</label>
 										<span></span>
 									</div>
 								</li>
 								<li>
-									<div class="circle">
-										<div class="circle-outside"><i></i></div>
+									<div class="circle blue">
+										<div class="circle-outside blue"><i></i></div>
 										<div class="vertical"></div>
 									</div>
 									<div class="date-info">
-										<label>签证已返回，预计邮寄时间：</label>
-										<span></span>
+										<label>签证已返回，预计邮寄时间</label>
+										<span><label>1-3个工作日</label></span>
 									</div>
 								</li>
 								<li>
-									<div class="circle">
-										<div class="circle-outside"><i></i></div>
+									<div class="circle blue">
+										<div class="circle-outside blue"><i></i></div>
 										<!-- <div class="vertical"></div> -->
 									</div>
 									<div class="date-info">
-										<label>资料已发出，查看物流：</label>
+										<label>资料已发出，查看物流</label>
 										<span></span>
 									</div>
 								</li>
