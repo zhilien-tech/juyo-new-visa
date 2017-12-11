@@ -166,6 +166,19 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			expressNum = expressEntity.getExpressNum();
 		}
 		result.put("expressNum", expressNum);
+		result.put("expressEntity", expressEntity);
+
+		//预计发招宝时间 TODO
+
+		//预计送签时间
+		Date sendVisaDate = order.getSendVisaDate();
+		String svDate = "";
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		if (!Util.isEmpty(sendVisaDate)) {
+			svDate = format.format(sendVisaDate);
+		}
+		result.put("sendVisaDate", svDate);
+
 		return result;
 	}
 
