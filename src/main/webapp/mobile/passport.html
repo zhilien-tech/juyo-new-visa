@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>护照信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/passport.css">
+    <link rel="stylesheet" type="text/css" href="../css/lCalendar.css"><!-- 日历插件 .css -->
+</head>
+<body>
+    <div class="top">
+        <img src="../img/1.jpg" alt="" class="bacimg">
+        <div id="upload">
+            <h6>点击上传护照</h6>
+            <p>可自动识别</p>
+        </div>
+        <input type="file" id="image" style="display:none;" name="image">
+    </div>
+    <ul class="label">
+        <li>类型 <input type="text" class="txtInput" /></li>
+        <li>护照号 <input type="text" class="txtInput" /></li>
+        <li>姓（中文）<input type="text" class="txtInput" /></li>
+        <li>姓（拼音）<input type="text" class="txtInput" /></li>
+        <li>名（中文）<input type="text" class="txtInput" /></li>
+        <li>名（拼音）<input type="text" class="txtInput" /></li>
+        <li>性别 <input type="text" class="txtInput" /></li>
+        <li>出生日期 <input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" /></li>
+        <li>出生地点 <input type="text" class="txtInput" /></li>
+        <li>出生地点（拼音） <input type="text" class="txtInput" /></li>
+        <li>签发地点 <input type="text" class="txtInput" /></li>
+        <li>签发地点（拼音） <input type="text" class="txtInput" /></li>
+        <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" /></li>
+   		<li>有效期 <input type="text" class="txtInput" /></li>
+    </ul>
+    <div class="bottom">
+    		<a class="passport-prav passport-btn">上一步</a>
+    		<a class="passport-clear passport-btn">清除</a>
+    		<a class="passport-next passport-btn">下一步</a>
+    </div>
+    <script src="../js/rem(750).js"></script>
+    <script src="../js/jquery-1.10.2.js"></script>
+    <script src="../js/lrz.bundle.js"></script>
+    <script type="text/javascript" src="../js/lCalendar.min.js"></script><!-- 日历插件 .js -->
+    <script>
+        $(function () {
+            $('#upload').click(function () {
+                $('#image').click();
+                $('#image').change(function(){
+                    lrz(this.files[0])
+                        .then(function (rst) {
+                            $('.bacimg').attr('src',rst.base64);
+                            $('#upload').hide();
+                            // 处理成功会执行
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        });
+                });
+            });
+        });
+
+        
+        //日历插件
+        var calendar = new lCalendar();//出生日期
+        calendar.init({
+            'trigger': '#birthDate',
+            'type': 'date'
+        });
+
+        var calendardatetime = new lCalendar();//签发日期
+        calendardatetime.init({
+            'trigger': '#issueDate',
+            'type': 'date'
+        });
+    </script>
+</body>
+</html>

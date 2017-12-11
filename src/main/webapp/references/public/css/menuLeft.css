@@ -1,0 +1,144 @@
+@CHARSET "UTF-8";
+* {
+	margin:0;
+	padding:0;
+}
+li {
+	list-style:none;
+}
+a {
+	text-decoration:none;
+}
+/*导航*/
+.leftmenu {
+	width:187px;
+	min-height:100%;
+	overflow:hidden; 
+	background:url(/references/common/images/leftline.gif) repeat-y right;
+}
+.leftmenu dd {
+	background:#252d35;
+	line-height:49px;
+	font-weight:bold;
+	font-size:14px;
+	border-right:solid 1px #b7d5df;
+	color:#71a3e3;
+}
+.leftmenu dd span {
+	float:left;
+	margin:15px 8px 0 12px;
+}
+.leftmenu dd .more {
+	float:right;
+	width:18px;
+	height:18px;
+	background:url(/references/common/images/more.png) no-repeat;
+	margin:15px 6px 0 0;
+	transition: all 1s;
+	-webkit-transition: all 1s;
+	-moz-transition: all 1s;
+	-o-transition: all 1s;
+	-ms-transition: all 1s;
+}
+.leftmenu dd .menuOnly { 
+	display:block; 
+	margin:0px 8px 0 12px; 
+	font-weight:bold; 
+	color:#71a3e3;
+}
+.leftmenu dd .menuOnly .more {
+	margin-right:-4px;
+}
+.leftmenu dd .menuOnly img { 
+	vertical-align:middle;
+}
+.leftmenu dd .menuOnly label {
+	margin-left:8px;
+}
+.leftmenu dd:first-child  {
+	color:#FFF;
+	background:#3c8dbc;
+}
+/* 控制dd 第一个 ul 显示*/
+.leftmenu dd:first-child .menuson {
+	display:block;
+}
+.leftmenu dd:first-child .more {
+	transform:rotate(90deg);
+}
+.menuson { 
+	background:#2c3744;
+	display:none; 
+	line-height:30px; 
+	font-weight:normal; 
+	margin-left:0px;
+	margin-bottom:0px;
+	transtion:height 1.5s;
+	-webkit-transtion:height 1.5s;
+	-moz-transtion:height 1.5s;
+}
+.menuson li {
+	cursor:pointer;
+	position:relative;
+	height:30px;
+}
+<!-- 设置鼠标点击样式 -->
+.menuson li.active {
+	position:absolute; 
+	color:#fff;
+}
+.menuson li cite {
+	display:block; 
+	float:left; 
+	margin-left:32px; 
+	background:url(/references/common/images/list.gif) no-repeat; 
+	width:16px; 
+	height:16px; 
+	margin-top:7px;
+}
+.menuson li.active cite {
+	background:url(/references/common/images/list1.gif) no-repeat;
+}
+.menuson li.active i {
+	display:block; 
+	background:url(/references/common/images/sj.png) no-repeat; 
+	width:6px; 
+	height:11px; 
+	position:absolute; 
+	right:0;
+	z-index:10000; 
+	top:9px; 
+	right:-1px;
+}
+.menuson li a { 
+	font-family: 'microsoft yahei'; 
+	display:block; 
+	*display:inline; 
+	*padding-top:5px; 
+	color:#FFF;
+}
+.menuson li.active a {
+	color:#fff;
+	background:url(/references/common/images/libg.png) repeat-x; 
+	line-height:30px; 
+}
+.title {
+	cursor:pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

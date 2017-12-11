@@ -18,6 +18,41 @@
 		.everybody-info div:nth-child(3){width:15%;}
 		.everybody-info div:nth-child(4){width:15%;}
 		.everybody-info div:nth-child(5){width:15%;}
+		
+		.card-list {
+			height:153px;
+		}
+		.content-title {
+			height:30px;
+			line-height:30px;
+			margin-bottom:10px;
+		}
+		.content-title span {
+			margin-right:30px;
+			font-size:20px;
+		}
+		.content-main-left {
+			margin-left:0px;
+		}
+		.content-main-center {
+			float:left;
+			width:25%;
+			height:93px;
+		}
+		.center-right {
+			font-size:30px;
+			text-align:center;
+			color:green;
+		}
+		.main-right {
+			margin-top:22%;
+			text-align:center;
+		}
+		.main-right a {
+			color:blue;
+			font-size:16px;
+			margin-right:15px;
+		}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -26,7 +61,35 @@
 				<section class="content">
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div v-on:dblclick="toFlowChart(data.orderid,data.applicantid)" class="card-list" v-cloak v-for="data in myVisaData">
-							<div class="card-head">
+							<div class="content-title">
+								<span>{{data.applicantname}}</span>
+								<span>{{data.ordernum}}</span>
+							</div>
+							<div class="content-main">
+								<div class="content-main-center content-main-left">
+									<dl>
+										<dd><label>姓&nbsp;&nbsp;&nbsp;名：</label><span>孙先哲</span></dd>
+										<dd><label>手机号：</label><span>13315679521</span></dd>
+										<dd><label>护照号：</label><span>G343441</span></dd>
+									</dl>
+								</div>
+									
+								<div class="content-main-center">
+									<dl>
+										<dd><label>订&nbsp;&nbsp;单&nbsp;号：</label><span>414141-US32131</span></dd>
+										<dd><label>送签时间：</label><span>2017-08-09</span></dd>
+										<dd><label>出签时间：</label><span>2017-08-19</span></dd>
+									</dl>
+								</div>
+								<div class="content-main-center center-right">发招宝中</div>
+								<div class="content-main-center">
+									<div class="main-right">
+										<a>资料编辑</a>
+										<a>下载</a>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="card-head">
 								<div><label>申请人：</label><span>{{data.applicantname}}</span></div>
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>
 								<div><label>状态：</label><span>{{data.orderstatus}}</span></div>		
@@ -46,6 +109,7 @@
 									<div><label>出签时间：</label><span>{{data.outvisadate}}</span></div>
 								</li>
 							</ul>
+							 -->
 						</div>
 					</div><!-- end 卡片列表 -->
 				</section>

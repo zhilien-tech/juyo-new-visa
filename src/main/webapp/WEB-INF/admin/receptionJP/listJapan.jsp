@@ -1,8 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<%@include file="/WEB-INF/public/header.jsp"%>
-<%@include file="/WEB-INF/public/aside.jsp"%>
-
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -10,6 +7,13 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>前台 - 日本</title>
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+			  <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+  		  <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+          <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
+          <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+          <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
+          <link rel="stylesheet" href="${base}/references/public/css/style.css">
+          <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 	<style>
 		.card-head div:nth-child(1){width:20%;}
 		.card-head div:nth-child(2){width:20%;}
@@ -23,8 +27,6 @@
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper">
-		<div class="content-wrapper"  style="min-height: 848px;">
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
@@ -69,8 +71,6 @@
 						</div>
 					</div><!-- end 卡片列表 -->
 				</section>
-			</div>
-		</div>
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
