@@ -259,10 +259,10 @@ $("#mobile").on('input',function(){
 	});
 })
 
-$("#address").on('input',function(){
+/*$("#address").on('input',function(){
 	$("#receiver").val("");
 	$("#mobile").val("");
-})
+})*/
 
 //收件人 检索下拉项
 function setReceiveInfo(receiver,mobile,address){
