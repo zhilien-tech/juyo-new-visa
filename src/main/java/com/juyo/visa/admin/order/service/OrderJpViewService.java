@@ -840,6 +840,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setProvince(applicantForm.getProvince());
 			applicant.setSex(applicantForm.getSex());
 			applicant.setTelephone(applicantForm.getTelephone());
+			applicant.setEmergencyLinkman(applicantForm.getEmergencyLinkman());
+			applicant.setEmergencyTelephone(applicantForm.getEmergencyTelephone());
 			userEntity.setMobile(applicantForm.getTelephone());
 			if (!Util.isEmpty(applicantForm.getValidEndDate())) {
 				applicant.setValidEndDate(applicantForm.getValidEndDate());

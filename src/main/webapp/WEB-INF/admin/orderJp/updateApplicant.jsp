@@ -143,7 +143,7 @@
 								<div class="form-group">
 									<label>曾有的或另有的国籍(或公民身份)</label> 
 									<div>
-										<span class="onceIDYes"> hasOtherNationality
+										<span class="onceIDYes">
 											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
 										</span>
 										<span>
@@ -339,17 +339,17 @@
 							<!-- 紧急联系人姓名/手机 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>紧急联系人姓名</label> <input id="emergent-name"
-										name="emergent-name" type="text" class="form-control input-sm"
-										placeholder=" " value="" />
+									<label>紧急联系人姓名</label> <input id="emergencyLinkman"
+										name="emergencyLinkman" type="text" class="form-control input-sm"
+										placeholder=" " value="${obj.applicant.emergencyLinkman }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>紧急联系人手机</label> <input id="emergent-telephone" name="emergent-telephone"
+									<label>紧急联系人手机</label> <input id="emergencyTelephone" name="emergencyTelephone"
 										type="text" class="form-control input-sm" placeholder=" "
-										value="" />
+										value="${obj.applicant.emergencyTelephone }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
