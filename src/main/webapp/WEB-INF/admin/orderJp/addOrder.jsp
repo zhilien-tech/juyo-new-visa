@@ -19,34 +19,15 @@
 <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <style type="text/css">
-.form-control {
-	height: 30px;
-}
-
-.add-btn {
-	top: -35px;
-	right: -1.5%;
-}
-
-.remove-btn {
-	top: -35px;
-	right: -1.5%;
-}
-
-.content-wrapper, .right-side, .main-footer {
-	margin-left: 0;
-}
-
-.multiPass_roundTrip-div {
-	width: 120px;
-	float: right;
-	position: relative;
-	top: 5px;
-}
-.form-group span,.form-control {
-    width: 297.05px;
-}
-
+.form-control { height: 30px;}
+.add-btn { top: -35px; right: -1.5%; }
+.remove-btn { top: -35px; right: -1.5%; }
+.content-wrapper, .right-side, .main-footer { margin-left: 0; }
+.multiPass_roundTrip-div { width: 120px; float: right; position: relative; top: 5px;}
+.sm { width:80px; }
+.none-sm { width:130px; }
+.show-select { width:110px; }
+.none-select { padding-left:0px; }
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -60,7 +41,7 @@
 				</span> <input type="button" value="取消"
 					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> <input type="button"
 					value="保存" class="btn btn-primary btn-sm pull-right"
-					onclick="saveAddOrder(status);" /> <input type="button" value="回邮"
+					onclick="saveAddOrder(1);" /> <input type="button" value="回邮"
 					class="btn btn-primary btn-sm pull-right" /> <input type="button"
 					value="初审" class="btn btn-primary btn-sm pull-right" /> <input
 					type="button" value="分享" class="btn btn-primary btn-sm pull-right" />
@@ -70,7 +51,8 @@
 			<section class="content">
 				<form id="orderInfo">
 					<div class="info" id="customerInfo" ref="customerInfo">
-						<p class="info-head">客户信息</p>
+						<p class="info-head">客户信息</p><input id="addCustomer"
+					type="button" value="添加" class="btn btn-primary btn-sm pull-right" />
 						<!-- *** -->
 						<div class="info-body-from"  style="margin-left:12%;">
 							<div class="row body-from-input">
@@ -219,11 +201,10 @@
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-3 show-select">
 									<div class="form-group">
 										<label><span>*</span>加急：</label> <select id="urgentType"
-											name="urgenttype" class="form-control input-sm"
-											>
+											name="urgenttype" class="form-control input-sm sm">
 											<c:forEach var="map" items="${obj.mainSaleUrgentEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -231,10 +212,10 @@
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
-								<div class="col-sm-3 none" id="urgentDays">
+								<div class="col-sm-3 none none-select" id="urgentDays">
 									<div class="form-group">
 										<label>&nbsp;</label> <select id="urgentDay" name="urgentday"
-											class="form-control input-sm">
+											class="form-control input-sm none-sm">
 											<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -360,14 +341,14 @@
 								<!-- 送签时间/出签时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>送签时间：</label> <input id="sendVisaDate"
+										<label><span>*</span>预计送签时间：</label> <input id="sendVisaDate"
 											name="sendvisadate" type="text" class="form-control input-sm"
 											placeholder=" "  />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>出签时间：</label> <input id="outVisaDate"
+										<label><span>*</span>预计出签时间：</label> <input id="outVisaDate"
 											name="outvisadate" type="text" class="form-control input-sm"
 											placeholder=" "  />
 									</div>
@@ -591,6 +572,7 @@
 				}
 			}); */
 			
+			
 			$("#customerType").change(function(){
 				$("#linkman2").val("");
 				$("#compName2").val("");
@@ -673,6 +655,34 @@
 				$(this).parent().remove();//删除 对相应的本模块
 			}); */
 			
+			$("#addCustomer").click(function(){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['800px', '400px'],
+					content: BASE_PATH + '/admin/customer/add.html?isCustomerAdd=0'
+				});
+		});
+		
+		function successAddCustomer(data){
+			$(".on-line").show();//显示select2部分字段
+			$(".zhiKe").addClass("none");
+			$("#mobile").append('<option selected="true" value='+ data.id +'>'+data.mobile+'</option>'); 
+			/*公司全称补全*/
+			$("#compName").append('<option selected="true" value='+ data.id +'>'+data.name+'</option>'); 
+			/*公司简称补全*/
+			$("#comShortName").append('<option selected="true" value='+ data.id +'>'+data.shortname+'</option>');
+			/*邮箱补全*/
+			$("#email").append('<option selected="true" value='+ data.id +'>'+data.email+'</option>');
+			$("#linkman").append('<option selected="true" value='+ data.id +'>'+data.linkman+'</option>');
+			$("#customerType").val(data.source);
+			$("#payType").val(data.payType);
+		}	
 		
 		//添加申请人(大按钮)
 		var BASE_PATH = '${base}';
@@ -774,7 +784,7 @@
 									result += '<td></td>';
 								}
 								
-								result += '<td>
+								result += '<td> 
 								<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
 								<a href="javascript:passportInfo('+data[i].id+');">护照信息</a>&nbsp;&nbsp;
 								<a href="">签证信息</a><br>
@@ -864,7 +874,6 @@
 			
 			//下单保存
 			function saveAddOrder(status){
-				if(status == 1){
 				//绑定签证城市
 				var visacounty = "";
 				$('[name=visacounty]').each(function(){
@@ -901,57 +910,14 @@
 					url : '${base}/admin/orderJp/saveAddOrderinfo',
 					success : function(data) {
 						console.log(JSON.stringify(data));
-						window.location.href = '${base}/admin/orderJp/list';
+						if(status == 1){
+							window.location.href = '${base}/admin/orderJp/list';
+						}
 					},
 					error : function() {
 						console.log("error");
 					}
 				}); 
-					
-				}else{
-					//绑定签证城市
-					var visacounty = "";
-					$('[name=visacounty]').each(function(){
-						if($(this).hasClass('btnState-true')){
-							visacounty += $(this).val() + ',';
-						}
-					});
-					if(visacounty){
-						visacounty = visacounty.substr(0,visacounty.length-1);
-					}
-					
-					if($("#urgentDays").hasClass("none") == true){
-						$('#urgentDay').val("");
-						console.log(JSON.stringify( $("#orderInfo").serialize()));
-					}
-					//绑定三年城市
-					var threecounty = "";
-					$('[name=threecounty]').each(function(){
-						if($(this).hasClass('btnState-true')){
-							threecounty += $(this).val() + ',';
-						}
-					});
-					if(threecounty){
-						threecounty = threecounty.substr(0,threecounty.length-1);
-					}
-					var backMailInfos = JSON.stringify(getMailInfos());
-					var orderinfo = $.param({"backMailInfos":backMailInfos, "visacounty":visacounty, "threecounty":threecounty}) + "&" + $("#orderInfo").serialize();
-					//orderinfo.backMailInfos = JSON.stringify(backMails);
-					
-					
-					$.ajax({
-						type : 'POST',
-						data : orderinfo ,
-						url : '${base}/admin/orderJp/saveAddOrderinfo',
-						success : function(data) {
-							console.log(JSON.stringify(data));
-						},
-						error : function() {
-							console.log("error");
-						}
-					}); 
-				}
-				
 			}
 			
 			//下单取消
@@ -1036,7 +1002,13 @@
 				minView: "month"//只显示年月日
 			}).on("click",function(){
 				$("#sendVisaDate").datetimepicker("setEndDate",$("#goTripDate").val());
-			}); 
+			}).on("changeDate",function(){
+				//自动计算预计出签时间
+				var stayday = 7;
+				var sendvisadate = $("#sendVisaDate").val();
+				var days = getNewDay(sendvisadate,stayday);
+				$("#outVisaDate").val(days); 
+			});  
 			$("#outVisaDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',

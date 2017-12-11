@@ -34,7 +34,7 @@
 								<th><span>电话</span></th>
 								<th><span>邮箱</span></th>
 								<th><span>资料类型</span></th>
-								<th><span>真实资料</span></th>
+								<th><span>所需资料</span></th>
 							</tr>
 						</thead>
 						<tbody id="applyinfo">

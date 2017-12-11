@@ -13,6 +13,7 @@ import org.nutz.dao.util.cri.SqlExpressionGroup;
 
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.uxuexi.core.common.util.Util;
 
 @Data
@@ -97,7 +98,7 @@ public class OrderJpForm extends OrderForm {
 			cnd.and(e1);
 		}
 		if (!Util.isEmpty(getStatus())) {
-			if (Util.eq(getStatus(), 21)) {
+			if (Util.eq(getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {
 				cnd.and("o.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
 			} else {
 				SqlExpressionGroup e1 = Cnd.exps("o.status", "=", getStatus()).and("o.isDisabled", "=",

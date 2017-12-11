@@ -47,9 +47,6 @@
 								</select>
 							</div>
 						</div>
-					</div>
-
-					<div class="row">
 						<div class="col-sm-8">
 							<div class="form-group">
 								<label><span>*</span>公司全称：</label> <input id="name" name="name"
@@ -57,7 +54,9 @@
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
+					</div>
 
+					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>公司简称：</label> <input id="shortname"
@@ -65,9 +64,19 @@
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
-					</div>
-
-					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label><span>*</span>支付方式：</label> 
+								<select id="payType"
+									name="payType" class="form-control input-sm inpImportant"
+									onchange="selectListData();">
+									<option>--请选择--</option>
+									<c:forEach var="map" items="${obj.payType}">
+										<option value="${map.key}" ${map.key==obj.customer.payType?'selected':''}>${map.value}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>联系人：</label> <input id="linkman"
@@ -75,6 +84,10 @@
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
+					</div>
+
+					<div class="row">
+						
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>手机：</label> <input id="mobile"

@@ -1,16 +1,20 @@
 package com.juyo.visa.admin.customer.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.entity.Record;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.MainSalePayTypeEnum;
 import com.juyo.visa.common.enums.NoZHIKECustomerTypeEnum;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCustomerEntity;
@@ -20,6 +24,7 @@ import com.juyo.visa.forms.TCustomerForm;
 import com.juyo.visa.forms.TCustomerUpdateForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
@@ -30,10 +35,24 @@ public class CustomerViewService extends BaseService<TCustomerEntity> {
 	public Object listData(TCustomerForm sqlParamForm, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer payType = sqlParamForm.getPayType();
+
 		sqlParamForm.setCompId(loginCompany.getId());
 		sqlParamForm.setUserId(loginUser.getId());
 		sqlParamForm.setUserType(loginUser.getUserType());
-		return listPage4Datatables(sqlParamForm);
+		Map<String, Object> map = listPage4Datatables(sqlParamForm);
+		List<Record> object = (List<Record>) map.get("data");
+		for (Record record : object) {
+			if (!Util.isEmpty(record.get("payType"))) {
+				int type = (int) record.get("payType");
+				for (MainSalePayTypeEnum payEnum : MainSalePayTypeEnum.values()) {
+					if (type == payEnum.intKey()) {
+						record.set("payTypeStr", payEnum.value());
+					}
+				}
+			}
+		}
+		return map;
 	}
 
 	/**
@@ -44,9 +63,11 @@ public class CustomerViewService extends BaseService<TCustomerEntity> {
 	 *
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object toAddCustomerPage() {
+	public Object toAddCustomerPage(int isCustomerAdd) {
 		Map<String, Object> obj = MapUtil.map();
+		obj.put("isCustomerAdd", isCustomerAdd);
 		obj.put("customerTypeEnum", EnumUtil.enum2(NoZHIKECustomerTypeEnum.class));
+		obj.put("payTypeEnum", EnumUtil.enum2(MainSalePayTypeEnum.class));
 		return obj;
 	}
 
@@ -65,10 +86,15 @@ public class CustomerViewService extends BaseService<TCustomerEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		addForm.setCompId(loginCompany.getId());
 		addForm.setUserId(loginUser.getId());
+		if (Util.eq(addForm.getIsCustomerAdd(), IsYesOrNoEnum.YES.intKey())) {
+			addForm.setIsCustomerAdd(1);
+		} else {
+			addForm.setIsCustomerAdd(0);
+		}
 		addForm.setCreateTime(new Date());
 		addForm.setUpdateTime(new Date());
-		this.add(addForm);
-		return JsonResult.success("添加成功");
+		//return JsonResult.success("添加成功");
+		return this.add(addForm);
 	}
 
 	/**
@@ -87,6 +113,7 @@ public class CustomerViewService extends BaseService<TCustomerEntity> {
 		Map<String, String> customerEnum = EnumUtil.enum2(CustomerTypeEnum.class);
 		result.put("sourceType", customerEnum);
 		result.put("customer", customer);
+		result.put("payType", EnumUtil.enum2(MainSalePayTypeEnum.class));
 		result.put("customerTypeEnum", customerEnum);
 		return result;
 	}
@@ -100,9 +127,14 @@ public class CustomerViewService extends BaseService<TCustomerEntity> {
 	 * @param updateForm
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object updateCustomer(TCustomerUpdateForm updateForm) {
+	public Object updateCustomer(TCustomerUpdateForm updateForm, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		updateForm.setUpdateTime(new Date());
+		updateForm.setCompId(loginCompany.getId());
+		updateForm.setUserId(loginUser.getId());
 		TCustomerEntity customer = this.fetch(updateForm.getId());
+		updateForm.setIsCustomerAdd(1);
 		updateForm.setCreateTime(customer.getCreateTime());
 		this.update(updateForm);
 		return JsonResult.success("修改成功");

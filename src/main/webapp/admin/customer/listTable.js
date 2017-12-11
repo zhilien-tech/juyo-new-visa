@@ -83,6 +83,16 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
+		            {"data": "paytypestr", "bSortable": false,render: function(data, type, row, meta) {
+		            	var paytypestr = row.paytypestr;
+		            	if(null==paytypestr || ""==paytypestr){
+		            		return "";
+		            	}else{
+		            		/*linkman = '<span data-toggle="tooltip" data-placement="right" title="'+linkman+'">'+linkman+'<span>';*/
+		            		return paytypestr;
+		            	}
+		            } 	
+		            },
 		            {"data": "mobile", "bSortable": false,render: function(data, type, row, meta) {
 		            	var mobile = row.mobile;
 		            	if(null==mobile || ""==mobile){
@@ -106,8 +116,9 @@ function initDatatable() {
 		            {"data": " ", "bSortable": false, "width":120,
 		            	render: function(data, type, row, meta) {
 		            		var modify = '<a title="编辑" style="cursor:pointer;" class="edit-icon" onclick="edit('+row.id+');"></a>';
-		            		var judge = '<a title="删除" style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.id+');"></a>';
-		            		return modify+judge;
+		            		//var judge = '<a title="删除" style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.id+');"></a>';
+		            		//return modify+judge;
+		            		return modify;
 		            	}	
 		            } 
 		            ],
@@ -140,7 +151,7 @@ function add(){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['800px', '400px'],
-		content: BASE_PATH + '/admin/customer/add.html'
+		content: BASE_PATH + '/admin/customer/add.html?isCustomerAdd=1'
 	});
 }
 /* layer编辑 */
@@ -158,8 +169,9 @@ function edit(id){
 	});
 }
 
+
 //删除提示
-function deleteById(id) {
+/*function deleteById(id) {
 	layer.confirm("您确认要删除吗？", {
 		title:"删除",
 		btn: ["是","否"], //按钮
@@ -185,4 +197,4 @@ function deleteById(id) {
 	}, function(){
 		// 取消之后不用处理
 	});
-}
+}*/
