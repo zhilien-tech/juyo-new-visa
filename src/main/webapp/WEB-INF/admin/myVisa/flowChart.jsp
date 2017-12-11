@@ -70,11 +70,11 @@
 									<div class="date-info">
 										<label>当前状态：</label>
 										<!-- <span>初审合格</span> -->
-										<c:if test="${3 != obj.applicant.applicantstatus }">
-											<span><a href="javascript: void(0);">${obj.orderstatus}</a><label>(基本信息、签证信息)</label></span>
+										<c:if test="${'不合格' != obj.applicant.applicantstatus }">
+											<span><a href="javascript: void(0);">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
 										</c:if>
-										<c:if test="${3 == obj.applicant.applicantstatus  }">
-											<span><a href="javascript: void(0);">${obj.orderstatus}</a><label>(基本信息、签证信息)</label></span>
+										<c:if test="${'不合格' == obj.applicant.applicantstatus  }">
+											<span><a href="javascript: void(0);" onclick="editUnqualified(${obj.indexOfPage})">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
 										</c:if>
 									</div>
 									
@@ -185,6 +185,8 @@
 		</div>
 		<script type="text/javascript">
 			var orderstatus = ${obj.order.status};
+			var applicantId = ${obj.applicant.applicantid};
+			var orderId = ${obj.order.id};
 		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -207,6 +209,33 @@
 					area: ['900px', '551px'],
 					content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='
 				});
+			}
+			
+			function editUnqualified(indexOfPage){
+				var url = "";
+				if(indexOfPage == 1){
+					//基本信息
+					url = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid='+orderId
+				}else if(indexOfPage == 2){
+					//护照信息
+					url = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderId
+				}else{
+					//签证信息
+					url = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderId+'&isOrderUpTime=0'
+				}
+				
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content: url
+				});
+				
 			}
 			
 		</script>

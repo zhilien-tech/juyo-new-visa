@@ -21,6 +21,8 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.myVisa.form.MyVisaListDataForm;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
@@ -104,13 +106,54 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		sql.setCondition(cnd);
 		Record applicantInfo = dbDao.fetch(sql);
 		int appllicantStatus = applicantInfo.getInt("applicantstatus");
-		/*for (JPOrderStatusEnum statusEnum : JPOrderStatusEnum.values()) {
-			if (!Util.isEmpty(orderStatus) && orderStatus.equals(String.valueOf(statusEnum.intKey()))) {
-				record.set("orderstatus", statusEnum.value());
+		for (TrialApplicantStatusEnum statusEnum : TrialApplicantStatusEnum.values()) {
+			if (!Util.isEmpty(appllicantStatus) && Util.eq(appllicantStatus, statusEnum.intKey())) {
+				applicantInfo.set("applicantstatus", statusEnum.value());
 			}
-		}*/
-
+		}
 		result.put("applicant", applicantInfo);
+
+		//合格不合格信息
+		TApplicantUnqualifiedEntity isQulifiedApplicant = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		result.put("isQulifiedApplicant", isQulifiedApplicant);
+
+		Integer indexOfPage = 1;
+		String unqualifiedInfo = "(";
+		if (!Util.isEmpty(isQulifiedApplicant)) {
+			Integer isBase = isQulifiedApplicant.getIsBase();
+			Integer isPassport = isQulifiedApplicant.getIsPassport();
+			Integer isVisa = isQulifiedApplicant.getIsVisa();
+
+			//打开页面的顺序
+			if (Util.eq(1, isVisa)) {
+				indexOfPage = 3;
+			}
+			if (Util.eq(1, isPassport)) {
+				indexOfPage = 2;
+			}
+			if (Util.eq(1, isBase)) {
+				indexOfPage = 1;
+			}
+
+			//不合格信息展示
+			if (Util.eq(1, isBase)) {
+				unqualifiedInfo += "基本信息、";
+			}
+			if (Util.eq(1, isPassport)) {
+				unqualifiedInfo += "护照信息、";
+			}
+			if (Util.eq(1, isVisa)) {
+				unqualifiedInfo += "签证信息、";
+			}
+		}
+		result.put("indexOfPage", indexOfPage);
+		if (unqualifiedInfo.length() > 1) {
+			unqualifiedInfo = (unqualifiedInfo.subSequence(0, unqualifiedInfo.length() - 1)) + ")";
+		} else {
+			unqualifiedInfo = "";
+		}
+		result.put("unqualifiedInfo", unqualifiedInfo);
 
 		return result;
 	}
