@@ -172,6 +172,8 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>现居住地址省份：</label>
+									<input type="hidden" name="cardProvince" id="cardProvince"/>
+									<input type="hidden" name="cardCity" id="cardCity"/>
 									<input id="province" name="province" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -311,6 +313,67 @@
 			
 		}
 		
+		//省份检索
+		$("#province").on('input',function(){
+			$("#province").nextAll("ul.ui-autocomplete").remove();
+			$.ajax({
+				type : 'POST',
+				async: false,
+				data : {
+					searchStr : $("#province").val()
+				},
+				url : BASE_PATH+'/admin/orderJp/getProvince.html',
+				success : function(data) {
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#province").after(liStr);
+				}
+			});
+		});
+		
+		//省份 检索下拉项
+		function setProvince(province){
+			$("#province").nextAll("ul.ui-autocomplete").remove();
+			$("#province").val(province);
+		} 
+		$("#provinceDiv").mouseleave(function(){
+			$("#province").nextAll("ul.ui-autocomplete").remove();
+		});
+		
+		//市检索
+		$("#city").on('input',function(){
+			$("#city").nextAll("ul.ui-autocomplete").remove();
+			$.ajax({
+				type : 'POST',
+				async: false,
+				data : {
+					province : $("#province").val(),
+					searchStr : $("#city").val()
+				},
+				url : BASE_PATH+'/admin/orderJp/getCity.html',
+				success : function(data) {
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#city").after(liStr);
+				}
+			});
+		});
+		
+		//市 检索下拉项
+		function setCity(city){
+			$("#city").nextAll("ul.ui-autocomplete").remove();
+			$("#city").val(city);
+		} 
+		$("#cityDiv").mouseleave(function(){
+			$("#city").nextAll("ul.ui-autocomplete").remove();
+		});
+		
 		
 		//正面上传,扫描
 		$('#uploadFile').change(function() {
@@ -345,8 +408,8 @@
 							$('#address').val(obj.address);
 							$('#nation').val(obj.nationality);
 							$('#cardId').val(obj.num);
-							//$('#province').val(obj.province);
-							//$('#city').val(obj.city);
+							$('#cardProvince').val(obj.province);
+							$('#cardCity').val(obj.city);
 							$('#birthday').val(obj.birth);
 							$('#sex').val(obj.sex);
 						}
