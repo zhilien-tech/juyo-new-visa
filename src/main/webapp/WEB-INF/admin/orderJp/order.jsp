@@ -9,7 +9,7 @@
 		<title>销售详情</title>
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
-		
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
