@@ -141,3 +141,15 @@ FROM
 	LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
 	LEFT JOIN ( SELECT applicantId, careerStatus, PrepareMaterials DATA FROM t_applicant_work_jp GROUP BY applicantId ) tavpj ON tavpj.applicantId = taoj.id
 	$condition
+
+/*firstTrialJp_careerStatus_by_orderjpid*/	
+SELECT
+	taoj.applicantId,
+	CONCAT( ta.firstname, ta.lastname ) applicantName,
+	taoj.orderId orderJpId,
+	tawj.careerStatus 
+FROM
+	t_applicant_work_jp tawj
+	LEFT JOIN t_applicant_order_jp taoj ON tawj.applicantId = taoj.id
+	LEFT JOIN t_applicant ta ON ta.id = taoj.applicantId
+	$condition
