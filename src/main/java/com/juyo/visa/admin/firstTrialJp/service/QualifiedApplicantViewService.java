@@ -111,8 +111,7 @@ public class QualifiedApplicantViewService extends BaseService<TApplicantEntity>
 	}
 
 	//不合格申请人
-	public Object saveUnqualified(Integer applicantId, Integer orderId, String remakStr, int infoType,
-			HttpSession session) {
+	public Object unQualified(Integer applicantId, Integer orderId, String remakStr, int infoType, HttpSession session) {
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
