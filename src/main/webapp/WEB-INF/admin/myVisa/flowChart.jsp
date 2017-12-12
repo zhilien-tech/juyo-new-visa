@@ -26,9 +26,9 @@
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<ul class="title">
-				<!-- <li>办理中签证</li>
+				<!-- <li style="display:none">办理中签证</li>
 				<li class="arrow"></li>
-				<li>日本</li>
+				<li style="display:none">日本</li>
 				<li class="arrow"></li> -->
 				<a href="/admin/myVisa/inProcessVisa.html"><li>申请人</li></a>
 				<li class="arrow"></li>
@@ -38,15 +38,8 @@
 			<div class="box">
 				<div class="box-body">
 					<ul class="flowChart">
-						<li>
-							<!-- <label>订单号：</label>
-							<span>170808-JP0045</span>
-							<div class="date-info">
-								<label>订单号：</label>
-								<span>${obj.order.orderNum}</span>
-							</div> -->
-						</li>
-						<li>
+						<li style="display:none"></li>
+						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
@@ -57,7 +50,7 @@
 							</div>
 							
 						</li>
-						<li>
+						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
@@ -74,7 +67,7 @@
 							</div>
 							
 						</li>
-						<li>
+						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
@@ -90,7 +83,7 @@
 							</div>
 							
 						</li>
-						<li>
+						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
@@ -101,7 +94,7 @@
 							</div>
 							
 						</li>
-						<li>
+						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
@@ -112,18 +105,18 @@
 							</div>
 							
 						</li>
-						<li>
+						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
 							</div>
 							<div class="date-info">
 								<label>预计发招宝时间</label>
-								<span></span>
+								<span><label>${obj.prepareDate }</label></span>
 							</div>
 							
 						</li>
-						<li>
+						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
@@ -134,7 +127,7 @@
 							</div>
 							
 						</li>
-						<li>
+						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
@@ -145,7 +138,7 @@
 							</div>
 							
 						</li>
-						<li>
+						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
@@ -155,7 +148,7 @@
 								<span></span>
 							</div>
 						</li>
-						<li>
+						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
@@ -165,7 +158,7 @@
 								<span><label>1-3个工作日</label></span>
 							</div>
 						</li>
-						<li>
+						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<!-- <div class="vertical"></div> -->
@@ -180,9 +173,11 @@
 			</div>
 		</section>
 		<script type="text/javascript">
+			var orderId = ${obj.order.id};
 			var orderstatus = ${obj.order.status};
 			var applicantId = ${obj.applicant.applicantid};
-			var orderId = ${obj.order.id};
+			
+			var indexOfBlue = ${obj.indexOfBlue};
 		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -193,6 +188,17 @@
 		<script src="${base}/admin/base.js"></script><!-- 公用js文件 -->
 		<script src="${base}/admin/myVisa/flowChart.js"></script>
 		<script type="text/javascript">
+		
+			$(function(){
+			  $('.flowChart').find('li').each(function() {
+					 var indexLi = $(this).index();
+					 console.log(indexLi);
+					 if(indexLi <= indexOfBlue){
+						 $(this).attr("style", "display:block");
+					 }
+	           })
+			});
+			
 			function baseInfo(applyId){
 				layer.open({
 					type: 2,
@@ -245,7 +251,6 @@
 					area: ['900px', '551px'],
 					content: url
 				});
-				
 			}
 			
 		</script>
