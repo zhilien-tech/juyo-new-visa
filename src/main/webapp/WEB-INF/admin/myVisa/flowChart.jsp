@@ -6,6 +6,12 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>流程图</title>
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
+	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+	    <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
+	    <link rel="stylesheet" href="${base}/references/public/css/style.css">		
 		<style type="text/css">
 			.flowChart li div label{margin: 0;font-size: 14px;text-align: right;width:105px;display: inline-block;}
 			.flowChart li:nth-child(1){height: 85px;padding-left: 10%;padding-top: 10px;}
@@ -22,6 +28,7 @@
 			.blue .circle-outside{background-color:#9fc4f6 !important;}
 			.blue .circle-outside i{background-color: #5e9fef !important;}
 			.blue .vertical{background-color: #9fc4f4 !important;}
+			
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -192,9 +199,13 @@
 			$(function(){
 			  $('.flowChart').find('li').each(function() {
 					 var indexLi = $(this).index();
-					 console.log(indexLi);
+					 
 					 if(indexLi <= indexOfBlue){
 						 $(this).attr("style", "display:block");
+					 }
+					 if(indexLi == indexOfBlue){
+						 $(this).find('.vertical').attr("style", "display:none");
+						 
 					 }
 	           })
 			});
