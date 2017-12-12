@@ -19,10 +19,10 @@
 	<input type="hidden" id="applicantid" name="applicantid" v-model="applicatdata.applicantid">
 <div class="top info">
 	<span v-if="applicatdata.cardfront != ''">
-		<img :src="applicatdata.cardfront" alt="" class="bacimg">
+		<img :src="applicatdata.cardfront" width="340px" height="200px" alt="" class="bacimg">
 	</span>
 	<span v-else>
-	    <img src="images/1.jpg" alt="" class="bacimg">
+	    <img src="images/1.jpg" width="340px" height="200px" alt="" class="bacimg">
 	</span>
     <div id="upload">
         <h6>点击上传</h6>
@@ -33,10 +33,10 @@
 </div>
 <div class="top info">
     <span v-if="applicatdata.cardback != ''">
-		<img :src="applicatdata.cardback" alt="" class="bacimg">
+		<img :src="applicatdata.cardback" width="340px" height="200px" alt="" class="bacimg">
 	</span>
 	<span v-else>
-	    <img src="images/1.jpg" alt="" class="bacimg">
+	    <img src="images/1.jpg" width="340px" height="200px" alt="" class="bacimg">
 	</span>
     <div id="upload2">
         <h6>点击上传</h6>
@@ -55,8 +55,8 @@
         <li>性别 <input type="text" class="txtInput" v-model="applicatdata.sex"/></li>
         <li>出生日期 <input type="text" class="txtInput" v-model="applicatdata.birthday"/></li>
         <li>身份证号 <input type="text" class="txtInput" v-model="applicatdata.cardid"/></li>
-        <li>住址(省) <input type="text" class="txtInput" /></li>
-        <li>住址(市) <input type="text" class="txtInput" /></li>
+        <li>住址(省) <input type="text" class="txtInput" v-model="applicatdata.cardprovince"/></li>
+        <li>住址(市) <input type="text" class="txtInput" v-model="applicatdata.cardcity"/></li>
         <li>住址(街楼) <input type="text" class="txtInput" v-model="applicatdata.address"/></li>
         <li>签发机关 <input type="text" class="txtInput" v-model="applicatdata.issueorganization"/></li>
         <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="applicatdata.validstartdate"/></li>
@@ -67,10 +67,11 @@
         <li>住址(街楼) <input type="text" class="txtInput" v-model="applicatdata.detailedaddress"/></li>
     </ul>
 <div class="bottom">
-    <a class="clear btn">清除</a><a class="next btn">下一步</a>
+    <a class="clear btn">清除</a><a class="next btn" href="javascript:nextStep();">下一步</a>
 </div>
 </form>
 <script src="/references/common/js/vue/vue.min.js"></script>
+<script src="/references/common/js/layer/layer.js"></script>
 </body>
 <script>
 	
@@ -135,6 +136,112 @@
          var r = window.location.search.substr(1).match(reg);
          if(r!=null)return  unescape(r[2]); return null;
     }
+	//保存并跳转到护照页面
+	function nextStep(){
+		$.ajax({ 
+        	url: '/admin/mobile/saveApplicatinfo.html',
+        	data:_self.applicatdata,
+        	dataType:"json",
+        	type:'post',
+        	async:false,
+        	success: function(data){
+        		window.location.href='/mobile/passport.html?comid='+data.comid+'&userid='+data.userid+'&orderid='+data.orderid+'&applicantid='+data.applicantid;
+          	}
+        });
+	}
 	
+	//把dataUrl类型的数据转为blob
+	function dataURLtoBlob(dataurl) {
+		var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(
+				n);
+		while (n--) {
+			u8arr[n] = bstr.charCodeAt(n);
+		}
+		return new Blob([ u8arr ], {
+			type : mime
+		});
+	}
+	
+	//正面上传,扫描
+	$('#image').change(function() {
+		var layerIndex = layer.load(1, {
+			shade : "#000"
+		});
+		var file = this.files[0];
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			var dataUrl = e.target.result;
+			var blob = dataURLtoBlob(dataUrl);
+			var formData = new FormData();
+			formData.append("image", blob, file.name);
+			$.ajax({
+				type : "POST",//提交类型  
+				//dataType : "json",//返回结果格式  
+				url : '/admin/orderJp/IDCardRecognition',//请求地址  
+				async : true,
+				processData : false, //当FormData在jquery中使用的时候需要设置此项
+				contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+				//请求数据  
+				data : formData,
+				success : function(obj) {//请求成功后的函数 
+					//关闭加载层
+					layer.close(layerIndex);
+					if (true === obj.success) {
+						_self.applicatdata.cardfront = obj.url;
+						_self.applicatdata.address = obj.address;
+						_self.applicatdata.nation = obj.nationality;
+						_self.applicatdata.cardid = obj.num;
+						_self.applicatdata.cardprovince = obj.province;
+						_self.applicatdata.cardcity = obj.city;
+						_self.applicatdata.birthday = obj.birth;
+						_self.applicatdata.sex = obj.sex;
+					}
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					layer.close(layerIndex);
+				}
+			}); // end of ajaxSubmit
+		};
+		reader.readAsDataURL(file);
+	});
+	
+	//背面上传,扫描
+	$('#image2').change(function() {
+		var layerIndex = layer.load(1, {
+			shade : "#000"
+		});
+		var file = this.files[0];
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			var dataUrl = e.target.result;
+			var blob = dataURLtoBlob(dataUrl);
+			var formData = new FormData();
+			formData.append("image", blob, file.name);
+			$.ajax({
+				type : "POST",//提交类型  
+				//dataType : "json",//返回结果格式  
+				url : '/admin/orderJp/IDCardRecognitionBack',//请求地址  
+				async : true,
+				processData : false, //当FormData在jquery中使用的时候需要设置此项
+				contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+				//请求数据  
+				data : formData,
+				success : function(obj) {//请求成功后的函数 
+					//关闭加载层
+					layer.close(layerIndex);
+					if (true === obj.success) {
+						_self.applicatdata.cardback = obj.url;
+						_self.applicatdata.validstartdate = obj.starttime;
+						_self.applicatdata.validenddate = obj.endtime;
+						_self.applicatdata.issueorganization = obj.issue;
+					}
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					layer.close(layerIndex);
+				}
+			}); // end of ajaxSubmit
+		};
+		reader.readAsDataURL(file);
+	});
 </script>
 </html>

@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Menu</title>
+<title>优悦签</title>
 </head>
 <frameset rows="58,*" border="0" framespacing="0">
 	<frame src="${base }/public/header.html" />

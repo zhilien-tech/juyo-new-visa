@@ -59,6 +59,7 @@ import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
+import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.ApplicantJpWealthEnum;
@@ -128,6 +129,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	private FirstTrialJpViewService firstTrialJpViewService;
 	@Inject
 	private MailService mailService;
+	@Inject
+	private QrCodeService qrCodeService;
 
 	private static String PASSPORT = PrepareMaterialsEnum_JP.PASSPORT.value();
 	private static String PHOTO = PrepareMaterialsEnum_JP.PHOTO.value();
@@ -768,7 +771,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object updateApplicant(Integer id, Integer orderid) {
+	public Object updateApplicant(Integer id, Integer orderid, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -810,6 +816,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			sb.append("/").append(applicantEntity.getOtherLastNameEn());
 			result.put("otherLastNameEn", sb.toString());
 		}
+
+		//生成二维码
+		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+				+ "/mobile/info.html?applicantid=" + id;
+		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
+		result.put("qrCode", qrCode);
 		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", id));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
