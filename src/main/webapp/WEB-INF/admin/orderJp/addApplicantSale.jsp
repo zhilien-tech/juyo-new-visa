@@ -33,11 +33,16 @@
 </head>
 <body>
 	<div class="modal-content">
+		<div style="position:absolute;top:40%;right:5%;z-index:999;">
+			<a onclick="toPassport();">
+				<h1>></h1>
+			</a>
+		</div>
 		<form id="applicantInfo">
 			<div class="modal-header">
 				<span class="heading">添加申请人</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存" onclick="saveApplicant();"/>
+				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存" onclick="saveApplicant(1);"/>
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
@@ -92,10 +97,10 @@
 									<label>是否有曾用名</label> 
 									<div>
 										<span class="nameBeforeYes">
-											<input type="radio" name="nameBefore" class="nameBefore" value="1" />是
+											<input type="radio" name="hasOtherName" class="nameBefore" value="1" />是
 										</span>
 										<span>
-											<input type="radio" name="nameBefore" class="nameBefore" checked value="2" />否
+											<input type="radio" name="hasOtherName" class="nameBefore" checked value="2" />否
 										</span>
 									</div>
 								</div>
@@ -107,7 +112,7 @@
 										<label>姓/拼音：</label> <input id="otherFirstName"
 											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
 											placeholder=" " value="" />
-											<input type="text" id="otherFirstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:42px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -117,7 +122,7 @@
 										<label>名/拼音：</label> <input id="otherLastName"
 											name="otherLastName" style="position:relative;" type="text" class="form-control input-sm "
 											placeholder=" " value="" />
-											<input type="text" id="otherLastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="otherLastNameEn" value=""/>
+											<input type="text" id="otherLastNameEn" style="position:absolute;top:42px;border:none;left:150px;" name="otherLastNameEn" value=""/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -153,6 +158,7 @@
 									<label><span>*</span>姓/拼音：</label>
 									<input id="firstName" style="position:relative;" name="firstName" type="text" class="form-control input-sm req " placeholder=" " />
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+									<input type="hidden" id="applyId"/>
 									<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="firstNameEn" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -247,7 +253,7 @@
 						<div class="row"><!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>现居住地址省份：</label>
+									<label>现居住地址省份：</label><input type="checkbox" class="nowProvince" name="addressIsSameWithCard" value="1"/>
 									<input type="hidden" name="cardProvince" id="cardProvince"/>
 									<input type="hidden" name="cardCity" id="cardCity"/>
 									<input id="province" name="province" type="text" class="form-control input-sm" placeholder=" " />
@@ -365,7 +371,43 @@
 			$('#applicantInfo').bootstrapValidator('validate');
 			
 		});
-		function saveApplicant(){
+		
+		//居住地与身份证相同
+		$(".nowProvince").change(function(){
+			searchByCard();
+		});
+		
+		$("#cardId").change(function(){
+			searchByCard();
+		});
+		
+		function searchByCard(){
+			var str=""; 
+			//是否同身份证相同
+			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+				str=$(this).val();     
+			});     
+			if(str == 1){//相同
+				var cardId = $("#cardId").val();
+				layer.load(1);
+				$.ajax({
+					type: 'POST',
+					data : {
+						cardId : cardId
+					},
+					dataType : 'json',
+					url: '${base}/admin/orderJp/getInfoByCard',
+					success :function(data) {
+						console.log(JSON.stringify(data));
+						layer.closeAll('loading');
+						$("#province").val(data.province);
+						$("#city").val(data.city);
+					}
+				});
+			}
+		}
+		
+		function saveApplicant(status){
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#applicantInfo").data(
 					'bootstrapValidator');
@@ -383,21 +425,35 @@
 					layer.msg('名不能为空');
 					return;
 				}
+				var str="";     
+			    $("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+			    	str=$(this).val();     
+			    });     
+				if(str != 1){
+					var applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
+				}else{
+					var applicantInfo = $("#applicantInfo").serialize();
+				}
 				
-				
-				var applicantInfo = $("#applicantInfo").serialize();
 				
 				$.ajax({
 					type : 'POST',
 					data : applicantInfo,
+					async : false,
 					url : '${base}/admin/orderJp/saveAddApplicant',
 					success : function(data) {
 						var applicantIdParent = window.parent.document.getElementById("appId").value;
 						applicantIdParent += data.id +",";
 						window.parent.document.getElementById("appId").value = applicantIdParent;
+						$("#applyId").val(data.id);
 						layer.closeAll('loading');
-						parent.successCallBack(3,data);
-						closeWindow();
+						if(status == 1){
+							parent.successCallBack(3,data);
+						}
+						if(status == 2){
+							parent.successCallBack(4,data);
+						}
+						//closeWindow();
 					},
 					error : function() {
 						console.log("error");
@@ -502,6 +558,7 @@
 							$('#address').val(obj.address);
 							$('#nation').val(obj.nationality);
 							$('#cardId').val(obj.num);
+							searchByCard();
 							$('#cardProvince').val(obj.province);
 							$('#cardCity').val(obj.city);
 							$('#birthday').val(obj.birth);
@@ -632,6 +689,55 @@
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
+		
+		//checkbox 曾用名
+		$(".nameBefore").change(function(){
+			let checked = $("input[name='hasOtherName']:checked").val();
+			if(checked == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nameBeforeHide").show();
+				$(".onceIDTop").removeClass('col-sm-offset-1');
+				$(".onceIDTop").css('padding-left','15px');
+			}else {
+				
+				$(".nameBeforeHide").hide();
+			}
+		});
+		//曾用国籍
+		$(".onceID").change(function(){
+			let checked = $("input[name='hasOtherNationality']:checked").val();
+			if(checked == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nationalityHide").show();
+				$(".onceIDTop").css('float','left');
+			}else {
+				
+				$(".nationalityHide").hide();
+			}
+		});
+		
+		function toPassport(){
+			saveApplicant(2);
+			var applyId = $("#applyId").val();
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'
+			});
+		}
+		function successCallBack(status){
+			parent.successCallBack(1);
+			closeWindow();
+		}
+		function cancelCallBack(status){
+			closeWindow();
+		}
 		
 	</script>
 

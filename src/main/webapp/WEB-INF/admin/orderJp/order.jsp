@@ -1235,7 +1235,8 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '551px'],
-						content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId
+						content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=0'
+
 					});
 				},
 				//初审按钮

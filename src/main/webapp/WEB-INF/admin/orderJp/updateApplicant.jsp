@@ -35,7 +35,7 @@
 <body>
 	<div class="modal-content">
 		<div style="position:absolute;top:40%;right:5%;z-index:999;">
-			<a href="#">
+			<a id="toPassport" onclick="passportBtn();">
 				<h1>></h1>
 			</a>
 		</div>
@@ -45,7 +45,7 @@
 					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
 					data-dismiss="modal" value="取消" /> <input id="addBtn"
 					type="button" class="btn btn-primary pull-right btn-sm btn-right"
-					value="保存" onclick="saveApplicant();" />
+					value="保存" onclick="saveApplicant(1);" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
@@ -102,10 +102,12 @@
 									<label>是否有曾用名</label> 
 									<div>
 										<span class="nameBeforeYes">
-											<input type="radio" name="nameBefore" class="nameBefore" value="1" />是
+											<input type="radio" name="hasOtherName" class="nameBefore" value="1"
+											/>是
 										</span>
 										<span>
-											<input type="radio" name="nameBefore" class="nameBefore" checked value="2" />否
+											<input type="radio" name="hasOtherName" class="nameBefore"   value="2"
+											/>否
 										</span>
 									</div>
 								</div>
@@ -116,8 +118,8 @@
 									<div class="form-group">
 										<label>姓/拼音：</label> <input id="otherFirstName"
 											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
-											placeholder=" " value="" />
-											<input type="text" id="otherFirstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
+											placeholder=" " value="${obj.applicant.otherFirstName }" />
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:42px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -126,8 +128,8 @@
 									<div class="form-group">
 										<label>名/拼音：</label> <input id="otherLastName"
 											name="otherLastName" style="position:relative;" type="text" class="form-control input-sm "
-											placeholder=" " value="" />
-											<input type="text" id="otherLastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="otherLastNameEn" value=""/>
+											placeholder=" " value="${obj.applicant.otherLastName }" />
+											<input type="text" id="otherLastNameEn" style="position:absolute;top:42px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -141,7 +143,7 @@
 											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherNationality" class="onceID" checked value="2"  />否
+											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  />否
 										</span>
 									</div>
 								</div>
@@ -150,7 +152,7 @@
 							<div class="col-sm-5 padding-right-0 nationalityHide">
 								<div class="form-group">
 									<label>国籍</label> 
-									<input id="nationality" name="nationality" type="text" class="form-control input-sm"/>
+									<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 								</div>
 							</div>
 						</div>
@@ -281,7 +283,10 @@
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="provinceDiv">
-									<label>现居住地址省份：</label> <input id="province"
+									<label>现居住地址省份：</label>
+									<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
+									<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
+									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> <input id="province"
 										name="province" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.province }" />
 									<!-- <i class="bulb"></i> -->
@@ -353,15 +358,33 @@
 	<script type="text/javascript">
 	
 		$(function(){
-			
-			let checked = $("input[name='hasOtherNationality']:checked").val();
-			if(checked == 1){
+			var nation = ${obj.applicant.hasOtherNationality};
+			var otherName = ${obj.applicant.hasOtherName};
+			var address = ${obj.applicant.addressIsSameWithCard};
+			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
+			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
+			if(nation == 1){
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
 				$(".onceIDTop").css('float','left');
 			}else {
-				
 				$(".nationalityHide").hide();
+			}
+			
+			if(otherName == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nameBeforeHide").show();
+				$(".onceIDTop").removeClass('col-sm-offset-1');
+				$(".onceIDTop").css('padding-left','15px');
+			}else {
+				
+				$(".nameBeforeHide").hide();
+			}
+			
+			if(address == 1){
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
+			}else{
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
 			}
 			
 			//校验
@@ -424,7 +447,7 @@
 		});
 		
 		//var base = "${base}";
-		function saveApplicant(){
+		function saveApplicant(status){
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#applicantInfo").data(
 					'bootstrapValidator');
@@ -442,8 +465,18 @@
 					layer.msg('名不能为空');
 					return;
 				}
+				
+			var str="";
+			var applicantInfo;
+			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+			    str=$(this).val();     
+			});
+			if(str != 1){
+				applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
+			}else{
+				applicantInfo = $("#applicantInfo").serialize();
+			}
 			
-			var applicantInfo = $("#applicantInfo").serialize();
 			var applicantId = ${obj.applicantId};
 			applicantInfo.id = applicantId;
 			$.ajax({
@@ -454,28 +487,15 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					parent.successCallBack(1);
-					closeWindow();
+					var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					layer.close(index);
+					//closeWindow();
+					if(status == 1){
+						parent.successCallBack(1);
+					}
 				}
 			});
 			}
-		}
-		
-		//是否同身份证相同
-		function isSameWithCard(){
-			var cardId = $("#cardId").val();
-			layer.load(1);
-			$.ajax({
-				type: 'POST',
-				data : cardId,
-				url: '${base}/admin/orderJp/getInfoByCard',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-					$("#province").val(data.province);
-					$("#city").val(data.city);
-				}
-			});
 		}
 		
 		//省份检索
@@ -574,8 +594,9 @@
 							$('#address').val(obj.address);
 							$('#nation').val(obj.nationality);
 							$('#cardId').val(obj.num);
-							//$('#province').val(obj.province);
-							//$('#city').val(obj.city);
+							searchByCard();
+							$('#cardProvince').val(obj.province);
+							$('#cardCity').val(obj.city);
 							$('#birthday').val(obj.birth);
 							$('#sex').val(obj.sex);
 						}
@@ -705,7 +726,7 @@
 		});
 		//checkbox 曾用名
 		$(".nameBefore").change(function(){
-			let checked = $("input[name='nameBefore']:checked").val();
+			let checked = $("input[name='hasOtherName']:checked").val();
 			if(checked == 1){
 				$(".nameBeforeTop").css('float','none');
 				$(".nameBeforeHide").show();
@@ -728,6 +749,68 @@
 				$(".nationalityHide").hide();
 			}
 		});
+		
+		//居住地与身份证相同
+		$(".nowProvince").change(function(){
+			searchByCard();
+		});
+		
+		$("#cardId").change(function(){
+			searchByCard();
+		});
+		
+		function searchByCard(){
+			var str="";  
+			//是否同身份证相同
+			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+				str=$(this).val();     
+			});     
+			if(str == 1){//相同
+				var cardId = $("#cardId").val();
+				layer.load(1);
+				$.ajax({
+					type: 'POST',
+					data : {
+						cardId : cardId
+					},
+					url: '${base}/admin/orderJp/getInfoByCard',
+					success :function(data) {
+						console.log(JSON.stringify(data));
+						layer.closeAll('loading');
+						$("#province").val(data.province);
+						$("#city").val(data.city);
+					}
+				});
+			}
+		}
+		
+		function passportBtn(){
+			saveApplicant(2);
+			var applicantId = ${obj.applicant.id};
+			var orderid = ${obj.orderid};
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid
+			});
+		}
+		
+		function successCallBack(status){
+			if(status == 1){
+				parent.successCallBack(1);
+				closeWindow();
+			}
+		}
+		function cancelCallBack(status){
+			closeWindow();
+		}
+			
 	</script>
 </body>
 </html>
