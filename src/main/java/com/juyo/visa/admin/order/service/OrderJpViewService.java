@@ -289,8 +289,26 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(applicantForm.getFirstNameEn())) {
 			applicant.setFirstNameEn(applicantForm.getFirstNameEn().substring(1));
 		}
+		if (!Util.isEmpty(applicantForm.getOtherLastNameEn())) {
+			applicant.setOtherLastNameEn(applicantForm.getOtherLastNameEn().substring(1));
+		}
+		if (!Util.isEmpty(applicantForm.getOtherFirstNameEn())) {
+			applicant.setOtherFirstNameEn(applicantForm.getOtherFirstNameEn().substring(1));
+		}
+		applicant.setNationality(applicantForm.getNationality());
+		applicant.setHasOtherName(applicantForm.getHasOtherName());
+		applicant.setHasOtherNationality(applicantForm.getHasOtherNationality());
 		applicant.setFirstName(applicantForm.getFirstName());
 		applicant.setLastName(applicantForm.getLastName());
+		applicant.setOtherFirstName(applicantForm.getOtherFirstName());
+		applicant.setOtherLastName(applicantForm.getOtherLastName());
+		applicant.setAddressIsSameWithCard(applicantForm.getAddressIsSameWithCard());
+		if (!Util.isEmpty(applicantForm.getCardProvince())) {
+			applicant.setCardProvince(applicantForm.getCardProvince());
+		}
+		if (!Util.isEmpty(applicantForm.getCardCity())) {
+			applicant.setCardCity(applicantForm.getCardCity());
+		}
 		if (!Util.isEmpty(applicantForm.getIssueOrganization())) {
 			applicant.setIssueOrganization(applicantForm.getIssueOrganization());
 		}
@@ -804,9 +822,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				+ "/mobile/info.html?applicantid=" + id;
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
+		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", id));
+		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("applicant", applicantEntity);
-		result.put("orderid", orderid);
+		result.put("orderid", orderJpEntity.getOrderId());
 		result.put("applicantId", id);
 		return result;
 	}
@@ -838,6 +858,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(applicantForm.getBirthday())) {
 				applicant.setBirthday(applicantForm.getBirthday());
 			}
+			if (!Util.isEmpty(applicantForm.getCardProvince())) {
+				applicant.setCardProvince(applicantForm.getCardProvince());
+			}
+			if (!Util.isEmpty(applicantForm.getCardCity())) {
+				applicant.setCardCity(applicantForm.getCardCity());
+			}
 			applicant.setCardId(applicantForm.getCardId());
 			applicant.setCity(applicantForm.getCity());
 			applicant.setDetailedAddress(applicantForm.getDetailedAddress());
@@ -847,10 +873,26 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setIssueOrganization(applicantForm.getIssueOrganization());
 			applicant.setLastName(applicantForm.getLastName());
 			applicant.setLastNameEn(applicantForm.getLastNameEn().substring(1));
+			applicant.setOtherFirstName(applicantForm.getOtherFirstName());
+			if (!Util.isEmpty(applicantForm.getOtherFirstNameEn())) {
+				applicant.setOtherFirstNameEn(applicantForm.getOtherFirstNameEn().substring(1));
+			}
+			applicant.setOtherLastName(applicantForm.getOtherLastName());
+			if (!Util.isEmpty(applicantForm.getOtherLastNameEn())) {
+				applicant.setOtherLastNameEn(applicantForm.getOtherLastNameEn().substring(1));
+			}
 			applicant.setNation(applicantForm.getNation());
+			applicant.setNationality(applicantForm.getNationality());
 			applicant.setProvince(applicantForm.getProvince());
 			applicant.setSex(applicantForm.getSex());
+			Integer hasOtherName = applicantForm.getHasOtherName();
+			applicant.setHasOtherName(hasOtherName);
+			Integer hasOtherNationality = applicantForm.getHasOtherNationality();
+			applicant.setHasOtherNationality(hasOtherNationality);
 			applicant.setTelephone(applicantForm.getTelephone());
+			if (!Util.isEmpty(applicantForm.getAddressIsSameWithCard())) {
+				applicant.setAddressIsSameWithCard(applicantForm.getAddressIsSameWithCard());
+			}
 			applicant.setEmergencyLinkman(applicantForm.getEmergencyLinkman());
 			applicant.setEmergencyTelephone(applicantForm.getEmergencyTelephone());
 			userEntity.setMobile(applicantForm.getTelephone());
@@ -1604,8 +1646,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getInfoByCard(String cardId) {
-		String substring = cardId.substring(0, 5);
-		return dbDao.fetch(TIdcardEntity.class, Cnd.where("code", "=", substring));
+		if (!Util.isEmpty(cardId) && cardId.length() >= 6) {
+			String substring = cardId.substring(0, 6);
+			return dbDao.fetch(TIdcardEntity.class, Cnd.where("code", "=", substring));
+		} else {
+			return null;
+		}
 	}
 
 	public Object getProvince(String searchStr) {
@@ -1618,10 +1664,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		List<String> list = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
-			list.add(provinceList.get(i));
+		if (!Util.isEmpty(provinceList) && provinceList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(provinceList.get(i));
+			}
+			return list;
+		} else {
+			return provinceList;
 		}
-		return list;
 	}
 
 	public Object getCity(String province, String searchStr) {
@@ -1634,10 +1684,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		List<String> list = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
-			list.add(cityList.get(i));
+		if (!Util.isEmpty(cityList) && cityList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(cityList.get(i));
+			}
+			return list;
+		} else {
+			return cityList;
 		}
-		return list;
 	}
 
 	public Object sendEmail(int orderid, String applicantid, HttpSession session) {

@@ -7,9 +7,9 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>销售详情</title>
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
-		
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
@@ -1235,7 +1235,8 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '551px'],
-						content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId
+						content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=0'
+
 					});
 				},
 				//初审按钮

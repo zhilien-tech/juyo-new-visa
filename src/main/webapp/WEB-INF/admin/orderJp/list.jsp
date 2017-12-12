@@ -115,11 +115,9 @@
 					<a id="hideOrder" style="color:red; font-size:30px; position: absolute;top:50%;left:40%;" class="orderJp none" onclick="addOrder();">您还没有添加任何数据，快去下单吧</a>
 					
 				</section>
-			</div>
 				<input type="hidden" id="pageNumber" name="pageNumber" value="1">
 				<input type="hidden" id="pageTotal" name="pageTotal">
 				<input type="hidden" id="pageListCount" name="pageListCount">
-		</div>
 
 	<!-- jQuery 2.2.3 -->
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
@@ -151,7 +149,7 @@
 		//vue表格数据对象
 		var _self;
 		new Vue({
-			el : '#wrapper',
+			el : '.content',
 			data : {
 				orderJpData : ""
 			},

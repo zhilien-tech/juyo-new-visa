@@ -19,11 +19,21 @@
 </head>
 <body>
 	<div class="modal-content">
+	<div style="position:absolute;top:40%;right:5%;z-index:999;">
+			<a id="toVisa" onclick="visaBtn();">
+				<h1>></h1>
+			</a>
+		</div>
+		<div style="position:absolute;top:40%;left:5%;z-index:999;">
+			<a id="toApply" onclick="applyBtn();">
+				<h1><</h1>
+			</a>
+		</div>
 		<form id="passportInfo">
 			<div class="modal-header">
 				<span class="heading">护照信息</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
@@ -329,7 +339,7 @@
 		$("#passportInfo").bootstrapValidator("validate");
 		
 		//保存
-		function save(){
+		function save(status){
 			$("#passportInfo").bootstrapValidator("validate");
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
@@ -342,13 +352,17 @@
 			var passportInfo = $("#passportInfo").serialize();
 			$.ajax({
 				type: 'POST',
+				async : false,
 				data : passportInfo,
 				url: '${base}/admin/orderJp/saveEditPassport',
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					parent.successCallBack(1);
-					closeWindow();
+					var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					layer.close(index);
+					if(status == 1){
+						parent.successCallBack(1);
+					}
 				}
 			});
 		}
@@ -357,6 +371,16 @@
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
+			parent.cancelCallBack(1);
+		}
+		function cancelCallBack(status){
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
+			parent.cancelCallBack(1);
+		}
+		function successCallBack(status){
+				parent.successCallBack(1);
+				closeWindow();
 		}
 		$(function(){
 			var passport = $("#passportUrl").val();
@@ -483,6 +507,42 @@
 		            return 0;
 		        }
 		    }
+		 
+		 function applyBtn(){
+			 save(2);
+			 var id = ${obj.applicantId};
+			 layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid='
+				});
+		 }
+		 function visaBtn(){
+			 save(3);
+			 var id = ${obj.applicantId};
+			 var orderid = ${obj.orderid};
+			 layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime'
+				});
+		 }
+		 function successCallBack(){
+			 parent.successCallBack(1);
+			 closeWindow();
+		 }
 	</script>
 
 

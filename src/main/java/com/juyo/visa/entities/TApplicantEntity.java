@@ -74,6 +74,10 @@ public class TApplicantEntity implements Serializable {
 	private Integer hasOtherNationality;
 
 	@Column
+	@Comment("国籍")
+	private String nationality;
+
+	@Column
 	@Comment("是否有曾用名")
 	private Integer hasOtherName;
 
@@ -91,11 +95,11 @@ public class TApplicantEntity implements Serializable {
 
 	@Column
 	@Comment("身份证省份")
-	private Integer cardProvince;
+	private String cardProvince;
 
 	@Column
 	@Comment("身份证城市")
-	private Integer cardCity;
+	private String cardCity;
 
 	@Column
 	@Comment("手机号")
