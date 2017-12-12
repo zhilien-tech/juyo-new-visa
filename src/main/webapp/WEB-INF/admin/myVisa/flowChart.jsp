@@ -1,7 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<%@include file="/WEB-INF/public/header.jsp"%>
-<%@include file="/WEB-INF/public/aside.jsp"%>
 <!DOCTYPE html>
 <html lang="en-US">
 	<head>
@@ -27,171 +25,159 @@
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
-		<div class="wrapper">
-			<!-- Content Wrapper. Contains page content -->
-			<div class="content-wrapper"  style="min-height: 848px;">
-				<ul class="title">
-						<!-- <li>办理中签证</li>
-						<li class="arrow"></li>
-						<li>日本</li>
-						<li class="arrow"></li> -->
-						<a href="/admin/myVisa/inProcessVisa.html"><li>申请人</li></a>
-						<li class="arrow"></li>
-						<li>${obj.applicant.applicantname }</li>
-					</ul>
-				<section class="content">
-					<div class="box">
-						<div class="box-body">
-							<ul class="flowChart">
-								<li>
-									<!-- <label>订单号：</label>
-									<span>170808-JP0045</span>
-									<div class="date-info">
-										<label>订单号：</label>
-										<span>${obj.order.orderNum}</span>
-									</div> -->
-								</li>
-								<li>
-									<div class="circle blue">
-										<div class="circle-outside blue"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>资料填写</label>
-										<span><a href="javascript: void(0);" onclick="baseInfo(${obj.applicant.applicantid })">填写</a><label>(基本信息、护照信息、签证信息)</label></span>
-									</div>
-									
-								</li>
-								<li>
-									<div class="circle blue">
-										<div class="circle-outside blue"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>当前状态</label>
-										<!-- <span>初审合格</span> -->
-										<c:if test="${'不合格' != obj.applicant.applicantstatus }">
-											<span><a href="javascript: void(0);">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
-										</c:if>
-										<c:if test="${'不合格' == obj.applicant.applicantstatus  }">
-											<span><a href="javascript: void(0);" onclick="editUnqualified(${obj.indexOfPage})">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
-										</c:if>
-									</div>
-									
-								</li>
-								<li>
-									<div class="circle blue">
-										<div class="circle-outside blue"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>快递单号</label>
-										<c:if test="${null != obj.expressEntity }">
-											<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">编辑</a><label>${obj.expressNum }</label></span>
-										</c:if>
-										<c:if test="${null == obj.expressEntity }">
-											<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写</a><label>${obj.expressNum }</label></span>
-										</c:if>
-									</div>
-									
-								</li>
-								<li>
-									<div class="circle blue">
-										<div class="circle-outside blue"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>快递状态</label>
-										<span><label>已寄出</label></span>
-									</div>
-									
-								</li>
-								<li>
-									<div class="circle blue">
-										<div class="circle-outside blue"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>收件状态</label>
-										<span><label>前台已收件</label></span>
-									</div>
-									
-								</li>
-								<li>
-									<div class="circle blue">
-										<div class="circle-outside blue"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>预计发招宝时间</label>
-										<span></span>
-									</div>
-									
-								</li>
-								<li>
-									<div class="circle blue">
-										<div class="circle-outside blue"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>已发招宝</label>
-										<span></span>
-									</div>
-									
-								</li>
-								<li>
-									<div class="circle blue">
-										<div class="circle-outside blue"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>预计送签时间</label>
-										<span><label>${obj.sendVisaDate }</label></span>
-									</div>
-									
-								</li>
-								<li>
-									<div class="circle blue">
-										<div class="circle-outside blue"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>资料已进入使馆</label>
-										<span></span>
-									</div>
-								</li>
-								<li>
-									<div class="circle blue">
-										<div class="circle-outside blue"><i></i></div>
-										<div class="vertical"></div>
-									</div>
-									<div class="date-info">
-										<label>签证已返回，预计邮寄时间</label>
-										<span><label>1-3个工作日</label></span>
-									</div>
-								</li>
-								<li>
-									<div class="circle blue">
-										<div class="circle-outside blue"><i></i></div>
-										<!-- <div class="vertical"></div> -->
-									</div>
-									<div class="date-info">
-										<label>资料已发出，查看物流</label>
-										<span></span>
-									</div>
-								</li>
-							</ul>	
-						</div>
-					</div>
-				</section>
+		<ul class="title">
+				<!-- <li style="display:none">办理中签证</li>
+				<li class="arrow"></li>
+				<li style="display:none">日本</li>
+				<li class="arrow"></li> -->
+				<a href="/admin/myVisa/inProcessVisa.html"><li>申请人</li></a>
+				<li class="arrow"></li>
+				<li>${obj.applicant.applicantname }</li>
+			</ul>
+		<section class="content">
+			<div class="box">
+				<div class="box-body">
+					<ul class="flowChart">
+						<li style="display:none"></li>
+						<li style="display:none">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+								<div class="vertical"></div>
+							</div>
+							<div class="date-info">
+								<label>资料填写</label>
+								<span><a href="javascript: void(0);" onclick="baseInfo(${obj.applicant.applicantid })">填写</a><label>(基本信息、护照信息、签证信息)</label></span>
+							</div>
+							
+						</li>
+						<li style="display:none">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+								<div class="vertical"></div>
+							</div>
+							<div class="date-info">
+								<label>当前状态</label>
+								<!-- <span>初审合格</span> -->
+								<c:if test="${'不合格' != obj.applicant.applicantstatus }">
+									<span><a href="javascript: void(0);">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
+								</c:if>
+								<c:if test="${'不合格' == obj.applicant.applicantstatus  }">
+									<span><a href="javascript: void(0);" onclick="editUnqualified(${obj.indexOfPage})">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
+								</c:if>
+							</div>
+							
+						</li>
+						<li style="display:none">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+								<div class="vertical"></div>
+							</div>
+							<div class="date-info">
+								<label>快递单号</label>
+								<c:if test="${null != obj.expressEntity }">
+									<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">编辑</a><label>${obj.expressNum }</label></span>
+								</c:if>
+								<c:if test="${null == obj.expressEntity }">
+									<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写</a><label>${obj.expressNum }</label></span>
+								</c:if>
+							</div>
+							
+						</li>
+						<li style="display:none">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+								<div class="vertical"></div>
+							</div>
+							<div class="date-info">
+								<label>快递状态</label>
+								<span><label>已寄出</label></span>
+							</div>
+							
+						</li>
+						<li style="display:none">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+								<div class="vertical"></div>
+							</div>
+							<div class="date-info">
+								<label>收件状态</label>
+								<span><label>前台已收件</label></span>
+							</div>
+							
+						</li>
+						<li style="display:none">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+								<div class="vertical"></div>
+							</div>
+							<div class="date-info">
+								<label>预计发招宝时间</label>
+								<span><label>${obj.prepareDate }</label></span>
+							</div>
+							
+						</li>
+						<li style="display:none">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+								<div class="vertical"></div>
+							</div>
+							<div class="date-info">
+								<label>已发招宝</label>
+								<span></span>
+							</div>
+							
+						</li>
+						<li style="display:none">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+								<div class="vertical"></div>
+							</div>
+							<div class="date-info">
+								<label>预计送签时间</label>
+								<span><label>${obj.sendVisaDate }</label></span>
+							</div>
+							
+						</li>
+						<li style="display:none">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+								<div class="vertical"></div>
+							</div>
+							<div class="date-info">
+								<label>资料已进入使馆</label>
+								<span></span>
+							</div>
+						</li>
+						<li style="display:none">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+								<div class="vertical"></div>
+							</div>
+							<div class="date-info">
+								<label>签证已返回，预计邮寄时间</label>
+								<span><label>1-3个工作日</label></span>
+							</div>
+						</li>
+						<li style="display:none">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+								<!-- <div class="vertical"></div> -->
+							</div>
+							<div class="date-info">
+								<label>资料已发出，查看物流</label>
+								<span></span>
+							</div>
+						</li>
+					</ul>	
+				</div>
 			</div>
-			<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
-	
-		</div>
+		</section>
 		<script type="text/javascript">
+			var orderId = ${obj.order.id};
 			var orderstatus = ${obj.order.status};
 			var applicantId = ${obj.applicant.applicantid};
-			var orderId = ${obj.order.id};
+			
+			var indexOfBlue = ${obj.indexOfBlue};
 		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -202,6 +188,17 @@
 		<script src="${base}/admin/base.js"></script><!-- 公用js文件 -->
 		<script src="${base}/admin/myVisa/flowChart.js"></script>
 		<script type="text/javascript">
+		
+			$(function(){
+			  $('.flowChart').find('li').each(function() {
+					 var indexLi = $(this).index();
+					 console.log(indexLi);
+					 if(indexLi <= indexOfBlue){
+						 $(this).attr("style", "display:block");
+					 }
+	           })
+			});
+			
 			function baseInfo(applyId){
 				layer.open({
 					type: 2,
@@ -254,7 +251,6 @@
 					area: ['900px', '551px'],
 					content: url
 				});
-				
 			}
 			
 		</script>
