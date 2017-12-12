@@ -66,6 +66,10 @@ public class TApplicantBackmailJpEntity implements Serializable {
 	private String remark;
 
 	@Column
+	@Comment("回邮资料时间")
+	private Date backSourceTime;
+
+	@Column
 	@Comment("操作人")
 	private Integer opId;
 
