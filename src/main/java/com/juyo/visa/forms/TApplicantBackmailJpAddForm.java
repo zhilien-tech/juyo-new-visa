@@ -48,6 +48,9 @@ public class TApplicantBackmailJpAddForm extends AddForm implements Serializable
 	/**备注*/
 	private String remark;
 		
+	/**回邮资料时间*/
+	private Date backSourceTime;
+		
 	/**操作人*/
 	private Integer opId;
 		

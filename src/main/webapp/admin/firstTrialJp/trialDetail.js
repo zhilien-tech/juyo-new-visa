@@ -232,9 +232,7 @@ new Vue({
 				if(backMailInfos.length>0){
 					$(".addExpressInfoBtn").hide();
 				}
-				
-				
-				console.log(JSON.stringify(backMailInfos) +"====="+ JSON.stringify(backMailInfos.length));
+				//console.log(JSON.stringify(backMailInfos) +"====="+ JSON.stringify(backMailInfos.length));
 			}
 		});
 	},
@@ -288,7 +286,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId
+				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=0'
 			});
 		},
 		qualified:function(applyId){
