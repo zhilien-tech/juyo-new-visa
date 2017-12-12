@@ -102,6 +102,11 @@
 </head>
 <body>
 	<div class="modal-content">
+	<div style="position:absolute;top:40%;left:5%;z-index:999;">
+			<a id="toPassport" onclick="passportBtn();">
+				<h1><</h1>
+			</a>
+		</div>
 		<form id="passportInfo">
 			<div class="modal-header">
 				<span class="heading">签证信息</span> 
@@ -109,8 +114,8 @@
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存退出" />
-				<input id="addContinueBtn" type="button" onclick="saveContinue();" class="btn btn-primary pull-right btn-sm btn-right" value="保存继续" />
+				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存退出" />
+				<input id="addContinueBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存继续" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
@@ -654,14 +659,16 @@
 			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
 			$.ajax({
 				type: 'POST',
+				async: false,
 				data : passportInfo,
 				url: '${base}/admin/orderJp/saveEditVisa',
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					parent.successCallBack(1);
+					var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					layer.close(index);
 					if(status == 1){
-						closeWindow();
+						parent.successCallBack(1);
 					}
 				}
 			});
@@ -732,6 +739,23 @@
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
+			parent.cancelCallBack(1);
+		}
+		function passportBtn(){
+			save(2);
+			var applicantId = ${obj.applicant.id};
+			var orderid = ${obj.orderid};
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid
+			});
 		}
 	</script>
 
