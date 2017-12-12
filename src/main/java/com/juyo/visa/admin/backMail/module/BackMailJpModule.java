@@ -42,8 +42,8 @@ public class BackMailJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object backMailInfo(@Param("applicantId") Integer applicantId) {
-		return backMailViewService.backMailInfo(applicantId);
+	public Object backMailInfo(@Param("applicantId") Integer applicantId, @Param("isAfterMarket") Integer isAfterMarket) {
+		return backMailViewService.backMailInfo(applicantId, isAfterMarket);
 	}
 
 	/**

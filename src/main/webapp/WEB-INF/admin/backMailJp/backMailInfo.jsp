@@ -27,6 +27,7 @@
 					<div class="info-body-from backmail-div">
 						<input id="id" name="id" type="hidden" v-model="backmailinfo.id">
 						<input id="applicantJPId" name="applicantJPId" type="hidden" v-model="backmailinfo.applicantjpid">
+						<input id="isAfterMarket" name="isAfterMarket" value="${obj.isAfterMarket }" type="hidden" >
 						<div class="row body-from-input">
 							<div class="col-sm-6">
 								<div class="form-group">

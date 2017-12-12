@@ -12,11 +12,11 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.firstTrialJp.entity.BackMailInfoEntity;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
 import com.juyo.visa.common.enums.MainBackMailTypeEnum;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
@@ -40,7 +40,7 @@ import com.uxuexi.core.web.base.service.BaseService;
 public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity> {
 
 	//回邮信息
-	public Object backMailInfo(@Param("applicantId") Integer applicantId) {
+	public Object backMailInfo(Integer applicantId, Integer isAfterMarket) {
 		Map<String, Object> result = Maps.newHashMap();
 		//资料类型
 		result.put("mainSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
@@ -48,6 +48,9 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 		result.put("mainBackMailTypeEnum", EnumUtil.enum2(MainBackMailTypeEnum.class));
 		//申请人id
 		result.put("applicantId", applicantId);
+		//是否是售后操作
+		result.put("isAfterMarket", isAfterMarket);
+
 		return result;
 	}
 
@@ -120,6 +123,10 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 		backmail.setRemark(form.getRemark());
 		backmail.setUpdateTime(DateUtil.nowDate());
 		backmail.setOpId(userid);
+		Integer isAfterMarket = form.getIsAfterMarket();
+		if (Util.eq(isAfterMarket, IsYesOrNoEnum.YES.intKey())) {
+			backmail.setBackSourceTime(DateUtil.nowDate());
+		}
 		after.add(backmail);
 
 		dbDao.updateRelations(before, after);

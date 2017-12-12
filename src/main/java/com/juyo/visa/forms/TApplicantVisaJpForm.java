@@ -53,6 +53,15 @@ public class TApplicantVisaJpForm extends DataTablesParamForm {
 	/**更新时间*/
 	private Date updateTime;
 	
+	/**签证国家*/
+	private String visaCountry;
+	
+	/**上传签证图片URL*/
+	private String picUrl;
+	
+	/**签证录入时间（签证）*/
+	private Date visaEntryTime;
+	
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**

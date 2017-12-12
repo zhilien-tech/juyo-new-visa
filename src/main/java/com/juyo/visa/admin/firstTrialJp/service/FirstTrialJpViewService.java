@@ -779,7 +779,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		Record orderReceive = (Record) getReceiverByOrderid(orderid);
 		String expressType = orderReceive.getString("expressType");
 		String receiver = orderReceive.getString("receiver");
-		String mobile = orderReceive.getString("mobile");
+		String mobile = orderReceive.getString("telephone");
 		String address = orderReceive.getString("expressAddress");
 
 		//邮件分享
@@ -898,7 +898,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		Record orderReceive = (Record) getReceiverByOrderid(orderid);
 		String expressType = orderReceive.getString("expressType");
 		String receiver = orderReceive.getString("receiver");
-		String mobile = orderReceive.getString("mobile");
+		String mobile = orderReceive.getString("telephone");
 		String address = orderReceive.getString("expressAddress");
 
 		//之前业务，只给主申请人发
