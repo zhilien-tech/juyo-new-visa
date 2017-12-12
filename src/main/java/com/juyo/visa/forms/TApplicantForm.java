@@ -68,6 +68,8 @@ public class TApplicantForm extends DataTablesParamForm {
 
 	private Integer marryStatus;
 
+	private String nationality;
+
 	/**手机号*/
 	private String telephone;
 

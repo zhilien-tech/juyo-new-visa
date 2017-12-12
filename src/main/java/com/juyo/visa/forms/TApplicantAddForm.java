@@ -60,6 +60,8 @@ public class TApplicantAddForm extends AddForm implements Serializable {
 
 	private Integer marryStatus;
 
+	private String nationality;
+
 	/**手机号*/
 	private String telephone;
 
