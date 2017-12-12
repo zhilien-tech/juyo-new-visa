@@ -97,7 +97,9 @@ SELECT
 	ta.id,
 	tap.passport,
 	tavpj.type,
-	tavpj.realInfo
+	tavpj.realInfo,
+	taoj.mainRelation,
+	taoj.relationRemark
 FROM
 	t_applicant_order_jp taoj
 INNER JOIN t_applicant ta ON taoj.applicantId = ta.id

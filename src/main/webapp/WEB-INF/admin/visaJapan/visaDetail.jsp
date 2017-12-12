@@ -32,7 +32,9 @@
 			#applicantTable tbody tr td:nth-child(2){width: 10%;}
 			#applicantTable tbody tr td:nth-child(3){width: 10%;}
 			#applicantTable tbody tr td:nth-child(4){width: 10%;}
-			#applicantTable tbody tr td:nth-child(6){width: 19%;}
+			#applicantTable tbody tr td:nth-child(5){width: 19%;}
+			#applicantTable tbody tr td:nth-child(6){width: 10%;}
+			#applicantTable tbody tr td:nth-child(7){width: 16%;}
 			#schedulingTable thead tr th:nth-child(1){width:8%;}
 			#schedulingTable thead tr th:nth-child(2){width:10%;}
 			#schedulingTable thead tr th:nth-child(3){width:12%;}
@@ -254,7 +256,8 @@
 										<th><span>电话<span></th>
 										<th><span>护照号<span></th>
 										<th><span>资料类型<span></th>
-										<th><span>真实资料<span></th>
+										<th><span>所需资料<span></th>
+										<th><span>备注<span></th>
 										<th><span>操作<span></th>
 									</tr>
 								</thead>
@@ -265,6 +268,7 @@
 										<td>{{apply.passport}}</td>
 										<td>{{apply.type}}</td>
 										<td>{{apply.realinfo}}</td>
+										<td>{{apply.mainrelation}}</td>
 										<td><a v-on:click="updateApplicant(apply.id)">基本信息</a>&nbsp;
 											<a v-on:click="passport(apply.id)">护照信息</a>&nbsp;
 											<a v-on:click="visa(apply.id)">签证信息</a>&nbsp;

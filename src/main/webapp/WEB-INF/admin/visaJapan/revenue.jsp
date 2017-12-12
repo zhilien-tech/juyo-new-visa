@@ -131,7 +131,7 @@
 	            		if(data){
 							var spanText = thisobj.text();
 							var HZlength = ($(".certificates").has(".passportInp")).length > 0;
-							if(spanText.indexOf("护照")!== -1 && HZlength != true){
+							if(spanText.indexOf("护照原件")!== -1 && HZlength != true){
 								thisobj.removeClass("titleStyle");
 								thisobj.after('<input type="text" class="passportInp"/>');
 								var passport = $(".passportInp").val();
@@ -162,15 +162,15 @@
 				var applicatid = $(this).parent().find('#applicatid').val();
 				$.ajax({ 
 	            	url: '${base}/admin/visaJapan/editPassportCount.html',
-	            	data:{applicatid:applicatid,inputVal:'护照'+thisval},
+	            	data:{applicatid:applicatid,inputVal:'护照原件'+thisval},
 	            	dataType:"json",
 	            	type:'post',
 	            	success: function(data){
 	              	}
 	            });
 				$(this).parent().find("span").each(function(index,value){
-					if($(this).text().indexOf("护照") !== -1){
-						$(this).text('护照'+thisval);
+					if($(this).text().indexOf("护照原件") !== -1){
+						$(this).text('护照原件'+thisval);
 						$(".passportInp").remove();
 						$(this).removeClass("titleStyle");
 					}

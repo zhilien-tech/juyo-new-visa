@@ -33,7 +33,7 @@
 							<div class="form-group">
 								<label><span>*</span>客户来源：</label> <select id="customerType"
 									name="source" class="form-control input-sm inpImportant"
-									onchange="selectListData();">
+									>
 									<option>--请选择--</option>
 									<c:forEach var="map" items="${obj.customerTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
@@ -41,15 +41,17 @@
 								</select>
 							</div>
 						</div>
-					</div>
-
-					<div class="row">
 						<div class="col-sm-8">
 							<div class="form-group">
-								<label><span>*</span>公司全称：</label> <input id="name" name="name"
+								<label><span>*</span>公司全称：</label> 
+								<input name="isCustomerAdd" type="hidden" id="isCustomerAdd" value="${obj.isCustomerAdd}"/>
+								<input id="name" name="name"
 									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
+					</div>
+
+					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>公司简称：</label> <input id="shortname"
@@ -57,8 +59,19 @@
 									placeholder=" " />
 							</div>
 						</div>
-					</div>
-					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label><span>*</span>支付方式：</label> 
+								<select id="payType"
+									name="payType" class="form-control input-sm inpImportant"
+									>
+									<option>--请选择--</option>
+									<c:forEach var="map" items="${obj.payTypeEnum}">
+										<option value="${map.key}">${map.value}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>联系人：</label> <input id="linkman"
@@ -66,6 +79,9 @@
 									placeholder=" " />
 							</div>
 						</div>
+					</div>
+					<div class="row">
+						
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>手机：</label> <input id="mobile"
@@ -249,8 +265,9 @@
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						layer.close(index);
 						window.parent.layer.msg("添加成功", "", 3000);
+						parent.successAddCustomer(data);
 						parent.layer.close(index);
-						parent.datatable.ajax.reload();
+						//parent.datatable.ajax.reload();
 					},
 					error : function(xhr) {
 						layer.msg("添加失败", "", 3000);

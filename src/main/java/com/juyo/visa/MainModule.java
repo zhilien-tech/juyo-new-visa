@@ -45,4 +45,21 @@ public class MainModule {
 	public Object tlogin() {
 		return null;
 	}
+
+	@At("/public/menu")
+	@Ok("jsp:public.menu")
+	public Object menu() {
+		return null;
+	}
+	@At("/public/header")
+	@Ok("jsp:public.header")
+	public Object header() {
+		return null;
+	}
+	@At("/public/aside")
+	@Ok("jsp:public.aside")
+	public Object aside() {
+		return null;
+	}
+
 }

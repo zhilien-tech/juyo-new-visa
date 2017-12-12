@@ -64,6 +64,7 @@ WHERE
 /*orderJp_list_applicantInfo_byOrderId*/
 SELECT
 a.id,
+aoj.id applicantJpId,
 CONCAT(a.firstName, a.lastName) applyname,
 a.email,
 a.mainId,
@@ -87,6 +88,10 @@ SELECT
 	ap.`type`,
 	ap.passport,
 	ap.sex,
+	ap.firstName,
+	ap.lastName,
+	ap.firstNameEn,
+	ap.lastNameEn,
 	ap.sexEn,
 	ap.validType,
 	ap.birthAddress,
@@ -119,6 +124,7 @@ order by createtime desc
 /*orderJp_applicantTable*/
 SELECT
 a.id,
+taoj.id applicantJpId,
 CONCAT(a.firstName, a.lastName) applyname,
 a.email,
 a.telephone,
@@ -129,6 +135,8 @@ FROM
 t_applicant a
 LEFT JOIN
 t_applicant_passport ap ON ap.applicantId = a.id
+LEFT JOIN
+t_applicant_order_jp taoj ON taoj.applicantId = a.id
 $condition
 
 /*visaInfo_byApplicantId*/
@@ -204,3 +212,16 @@ LEFT JOIN
 t_order o ON tol.orderId = o.id
 WHERE
 o.id = @id
+
+/*passportInfo_byOrderId*/
+SELECT
+	ap.passport
+FROM
+	t_applicant_passport ap
+INNER JOIN 
+t_applicant a ON ap.applicantId = a.id
+LEFT JOIN
+t_applicant_order_jp taoj ON taoj.applicantId = a.id
+LEFT JOIN
+t_order_jp toj ON taoj.orderId = toj.id
+$condition

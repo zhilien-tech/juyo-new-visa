@@ -34,6 +34,10 @@ public class TApplicantFrontPaperworkJpEntity implements Serializable {
 	private Integer count;
 
 	@Column
+	@Comment("前台收件时间")
+	private Date receiveDate;
+
+	@Column
 	@Comment("操作人")
 	private Integer opId;
 

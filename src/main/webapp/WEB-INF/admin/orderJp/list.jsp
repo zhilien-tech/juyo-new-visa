@@ -1,30 +1,27 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<%@include file="/WEB-INF/public/header.jsp"%>
-<%@include file="/WEB-INF/public/aside.jsp"%>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>销售-日本</title>
-	<link rel="stylesheet" href="${base}/references/public/css/saleJapan.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
+    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+    <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
+    <link rel="stylesheet" href="${base}/references/public/css/style.css"> 
+	<link rel="stylesheet" href="${base}/references/public/css/saleJapan.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<style type="text/css">
 	 [v-cloak]{display:none;}
 	 #hideOrder:hover { text-decoration: none;cursor:pointer;}
 	</style>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper" id="wrapper">
-		<div class="content-wrapper"  style="min-height: 848px;">
-				<!-- <ul class="title">
-					<li>销售</li>
-					<li class="arrow"></li>
-					<li>日本</li>
-				</ul> -->
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
@@ -118,11 +115,9 @@
 					<a id="hideOrder" style="color:red; font-size:30px; position: absolute;top:50%;left:40%;" class="orderJp none" onclick="addOrder();">您还没有添加任何数据，快去下单吧</a>
 					
 				</section>
-			</div>
 				<input type="hidden" id="pageNumber" name="pageNumber" value="1">
 				<input type="hidden" id="pageTotal" name="pageTotal">
 				<input type="hidden" id="pageListCount" name="pageListCount">
-		</div>
 
 	<!-- jQuery 2.2.3 -->
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
@@ -154,7 +149,7 @@
 		//vue表格数据对象
 		var _self;
 		new Vue({
-			el : '#wrapper',
+			el : '.content',
 			data : {
 				orderJpData : ""
 			},

@@ -56,8 +56,8 @@ public class CustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object add() {
-		return customerViewService.toAddCustomerPage();
+	public Object add(@Param("isCustomerAdd") int isCustomerAdd) {
+		return customerViewService.toAddCustomerPage(isCustomerAdd);
 	}
 
 	/**
@@ -84,8 +84,8 @@ public class CustomerModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..") TCustomerUpdateForm updateForm) {
-		return customerViewService.updateCustomer(updateForm);
+	public Object update(@Param("..") TCustomerUpdateForm updateForm, HttpSession session) {
+		return customerViewService.updateCustomer(updateForm, session);
 	}
 
 	/**

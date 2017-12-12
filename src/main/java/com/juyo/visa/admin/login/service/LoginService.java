@@ -138,16 +138,17 @@ public class LoginService extends BaseService<TUserEntity> {
 				allUserFunction = userViewService.getUserFunctions(user.getId());
 			}
 			//控制页面跳转
+			form.setReturnUrl(">>:/public/menu.html");
 			if (UserLoginEnum.ADMIN.intKey() == userType) {
 				//平台管理员跳转页面
-				form.setReturnUrl(">>:/admin/company/list.html?currentPageIndex=1");
+				form.setMainurl("/admin/company/list.html");
 			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType
 					|| UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType) {
 				//公司管理员条跳转页面(权限管理)
-				form.setReturnUrl(">>:/admin/authority/list.html?currentPageIndex=1");
+				form.setMainurl("/admin/authority/list.html");
 			} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
 				//游客跳转的页面
-				form.setReturnUrl(">>:/admin/myVisa/inProcessVisa.html");
+				form.setMainurl("/admin/myVisa/inProcessVisa.html");
 			} else {
 				//功能列表为空
 				if (Util.isEmpty(allUserFunction)) {
@@ -167,7 +168,7 @@ public class LoginService extends BaseService<TUserEntity> {
 					form.setErrMsg("未设置功能URL");
 					return false;
 				}
-				form.setReturnUrl(">>:" + url + "?currentPageIndex=1");
+				form.setMainurl(url);
 			}
 			//将用户权限保存到session中
 			//session.setAttribute(FUNCTION_MAP_KEY, functionMap); //功能
@@ -176,6 +177,8 @@ public class LoginService extends BaseService<TUserEntity> {
 			session.setAttribute(LOGINUSER, user);
 			session.setAttribute(IS_LOGIN_KEY, true);
 			session.setAttribute("currentPageIndex", 0);
+			//设置session过期时间为24小时
+			session.setMaxInactiveInterval(60 * 60 * 10);
 		}
 		return true;
 	}
@@ -275,8 +278,11 @@ public class LoginService extends BaseService<TUserEntity> {
 				session.setAttribute(LOGINUSER, user);
 				session.setAttribute(IS_LOGIN_KEY, true);
 				session.setAttribute("currentPageIndex", 0);
+				//设置session过期时间为24小时
+				session.setMaxInactiveInterval(60 * 60 * 10);
+				form.setReturnUrl(">>:/public/menu.html");
 				//跳转到办理中的签证页面
-				form.setReturnUrl(">>:/admin/applyvisa/list.html");
+				form.setMainurl("/admin/applyvisa/list.html");
 			}
 		}
 		return true;

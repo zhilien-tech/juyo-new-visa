@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.uxuexi.core.web.form.DataTablesParamForm;
+import java.util.Date;
 
 import java.io.Serializable;
 
@@ -33,6 +34,21 @@ public class TOrderJpForm extends DataTablesParamForm {
 	
 	/**过去三年访问过的县*/
 	private String threeCounty;
+	
+	/**受付番号*/
+	private String acceptDesign;
+	
+	/**签证状态*/
+	private Integer visastatus;
+	
+	/**备注*/
+	private String remark;
+	
+	/**归国报告文件地址*/
+	private String returnHomeFileUrl;
+	
+	/**递送交接单时间*/
+	private Date deliveryDataTime;
 	
 	@Override
 	public Sql sql(SqlManager sqlManager) {

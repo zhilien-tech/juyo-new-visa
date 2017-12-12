@@ -9,19 +9,24 @@ package com.juyo.visa.admin.visajp.service;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.entities.TApplicantEntity;
+import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
 /**
@@ -74,13 +79,29 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			byte[] byteArray = downLoadVisaFileService.generateFile(orderjp).toByteArray();
 			//获取订单信息，准备文件名称
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+			//主申请人姓名
+			String mainapplicantname = "";
+			//查询申请人信息
+			List<TApplicantOrderJpEntity> jpapplicants = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderid), null);
+			for (TApplicantOrderJpEntity applicantjp : jpapplicants) {
+				if (!Util.isEmpty(applicantjp.getIsMainApplicant()) && applicantjp.getIsMainApplicant().equals(1)) {
+					TApplicantEntity applicat = dbDao.fetch(TApplicantEntity.class, applicantjp.getApplicantId()
+							.longValue());
+					mainapplicantname = applicat.getFirstName() + applicat.getLastName();
+				}
+			}
 			String filename = "";
 			filename += orderinfo.getOrderNum();
-			filename += ".zip";
+			//filename += ".zip";
+			//新需求只下载PDF文件
+			filename += mainapplicantname;
+			filename += ".pdf";
 			//将文件进行编码
 			String fileName = URLEncoder.encode(filename, "UTF-8");
 			//设置下载的响应头
-			response.setContentType("application/zip");
+			//			response.setContentType("application/zip");
+			response.setContentType("application/octet-stream");
 			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
 			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
 			//将字节流相应到浏览器（下载）
