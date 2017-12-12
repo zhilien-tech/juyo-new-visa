@@ -21,6 +21,20 @@
 .modal-body {
 	padding:15px 100px 15px 20px;
 }
+.NoInfo {
+	width:100%;
+	height:30px;
+	margin-left:3.5%;
+	transtion:height 1s;
+	-webkit-transtion:height 1s;
+	-moz-transtion:height 1s;
+}
+.ipt-info {
+	display:none;
+}
+.Unqualified, .qualified  {
+	margin-right:10px;
+}
 .nameBeforeYes {
 	margin-right:20px;
 }
@@ -41,13 +55,16 @@
 		</div>
 		<form id="applicantInfo">
 			<div class="modal-header">
-				<span class="heading">基本信息</span> <input id="backBtn" type="button"
-					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
-					data-dismiss="modal" value="取消" /> <input id="addBtn"
-					type="button" class="btn btn-primary pull-right btn-sm btn-right"
-					value="保存" onclick="saveApplicant();" />
+				<span class="heading">基本信息</span> 
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
+				<input id="addBtn" type="button" class="btn btn-primary pull-right btn-sm btn-right" value="保存" onclick="saveApplicant();" />
+				<input type="button" class="btn btn-primary pull-right btn-sm Unqualified" value="不合格"/>
+				<input type="button" class="btn btn-primary pull-right btn-sm qualified" value="合格"/>
 			</div>
 			<div class="modal-body">
+				<div class="ipt-info">
+					<input type="text" class="NoInfo" />
+				</div>
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
 						<div class="info-imgUpload front">
@@ -723,10 +740,19 @@
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
 				$(".onceIDTop").css('float','left');
+				$(".onceIDTop").removeClass('col-sm-offset-1');
+				$(".onceIDTop").css('padding-left','15px');
 			}else {
 				
 				$(".nationalityHide").hide();
 			}
+		});
+		//合格/不合格
+		$(".Unqualified").click(function(){
+			$(".ipt-info").slideDown();
+		});
+		$(".qualified").click(function(){
+			$(".ipt-info").slideUp();
 		});
 	</script>
 </body>
