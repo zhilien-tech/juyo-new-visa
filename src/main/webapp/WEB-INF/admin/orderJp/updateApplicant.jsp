@@ -21,6 +21,20 @@
 .modal-body {
 	padding:15px 100px 15px 20px;
 }
+.NoInfo {
+	width:100%;
+	height:30px;
+	margin-left:3.5%;
+	transtion:height 1s;
+	-webkit-transtion:height 1s;
+	-moz-transtion:height 1s;
+}
+.ipt-info {
+	display:none;
+}
+.Unqualified, .qualified  {
+	margin-right:10px;
+}
 .nameBeforeYes {
 	margin-right:20px;
 }
@@ -46,8 +60,21 @@
 					data-dismiss="modal" value="取消" /> <input id="addBtn"
 					type="button" class="btn btn-primary pull-right btn-sm btn-right"
 					value="保存" onclick="saveApplicant(1);" />
+					<c:choose>
+						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
+					<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
+				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
+						</c:when>
+						<c:otherwise> 
+						<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
+				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
+						</c:otherwise>
+					</c:choose>
 			</div>
 			<div class="modal-body">
+			<div class="ipt-info">
+					<input id="baseRemark" name="baseRemark" type="text" value="${obj.unqualified.baseRemark }" class="NoInfo" />
+				</div>
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
 						<div class="info-imgUpload front">
@@ -168,7 +195,7 @@
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
-										<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
+										<input type="text" id="firstNameEn" style="position:absolute;top:43px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -181,7 +208,7 @@
 									<label><span>*</span>名/拼音：</label> <input id="lastName"
 										name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.lastName }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
+										<input type="text" id="lastNameEn" style="position:absolute;top:43px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -358,6 +385,12 @@
 	<script type="text/javascript">
 	
 		$(function(){
+			var remark = $("#baseRemark").val();
+			if(remark){
+				$(".baseRemark").removeClass("none");
+			}
+			
+			
 			var nation = ${obj.applicant.hasOtherNationality};
 			var otherName = ${obj.applicant.hasOtherName};
 			var address = ${obj.applicant.addressIsSameWithCard};
@@ -810,6 +843,96 @@
 		function cancelCallBack(status){
 			closeWindow();
 		}
+		
+		/* function qualified(){
+			var applicantId = ${obj.applicant.id};
+			var orderid = ${obj.orderid};
+			var orderJpId = ${obj.orderJpId};
+			var infoType = ${obj.infoType};
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : {
+					applyid : applicantId,
+					orderid : orderid,
+					orderjpid : orderJpId,
+					infoType : infoType
+				},
+				url: '${base}/admin/qualifiedApplicant/qualified.html',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+				}
+			});
+		}
+		function unqualified(){
+			var applicantId = ${obj.applicant.id};
+			var orderid = ${obj.orderid};
+			var baseRemark = $("#baseRemark").val();
+			var infoType = ${obj.infoType};
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : {
+					applyid : applicantId,
+					orderid : orderid,
+					remarkStr : baseRemark,
+					infoType : infoType
+				},
+				url: '${base}/admin/qualifiedApplicant/unqualified.html',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+				}
+			});
+		} */
+		
+		//合格/不合格
+		$(".Unqualified").click(function(){
+			$(".ipt-info").slideDown();
+			/* var applicantId = ${obj.applicant.id};
+			var orderid = ${obj.orderid};
+			var baseRemark = $("#baseRemark").val();
+			var infoType = ${obj.infoType};
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : {
+					applyid : applicantId,
+					orderid : orderid,
+					remarkStr : baseRemark,
+					infoType : infoType
+				},
+				url: '${base}/admin/qualifiedApplicant/unqualified.html',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+				}
+			}); */
+		});
+		$(".qualified").click(function(){
+			$(".ipt-info").slideUp();
+			var applicantId = ${obj.applicant.id};
+			var orderid = ${obj.orderid};
+			var orderJpId = ${obj.orderJpId};
+			var infoType = ${obj.infoType};
+			alert(applicantId +"==="+orderid+"---"+orderJpId+"!!!"+infoType);
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : {
+					applicantId : applicantId,
+					orderid : orderid,
+					orderjpid : orderJpId,
+					infoType : infoType
+				},
+				url: '${base}/admin/qualifiedApplicant/qualified.html',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+				}
+			});
+		});
 			
 	</script>
 </body>

@@ -61,6 +61,7 @@ import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.ApplicantJpWealthEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
@@ -89,6 +90,7 @@ import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
+import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
@@ -810,10 +812,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			sb.append("/").append(applicantEntity.getOtherLastNameEn());
 			result.put("otherLastNameEn", sb.toString());
 		}
+		TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", id));
+		if (!Util.isEmpty(unqualifiedEntity)) {
+			result.put("unqualified", unqualifiedEntity);
+		}
 		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", id));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
+		result.put("orderStatus", orderEntity.getStatus());
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("applicant", applicantEntity);
+		result.put("orderJpId", orderJpEntity.getId());
+		result.put("infoType", ApplicantInfoTypeEnum.BASE.intKey());
 		result.put("orderid", orderJpEntity.getOrderId());
 		result.put("applicantId", id);
 		return result;

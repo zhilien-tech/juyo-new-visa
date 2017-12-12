@@ -43,6 +43,8 @@
 				<span class="heading">添加申请人</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存" onclick="saveApplicant(1);"/>
+				<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="不合格" onclick="unqualified();"/>
+				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="合格" onclick="qualified();"/>
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
@@ -737,6 +739,13 @@
 		}
 		function cancelCallBack(status){
 			closeWindow();
+		}
+		
+		function qualified(){
+			
+		}
+		function unqualified{
+			
 		}
 		
 	</script>
