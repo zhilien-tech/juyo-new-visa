@@ -17,6 +17,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
@@ -28,6 +29,7 @@ import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
+import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
@@ -39,6 +41,7 @@ import com.juyo.visa.forms.TApplicantForm;
 import com.juyo.visa.forms.TApplicantPassportForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
+import com.uxuexi.core.common.util.Util;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -54,6 +57,8 @@ public class OrderJpModule {
 
 	@Inject
 	private OrderJpViewService saleViewService;
+	@Inject
+	private QrCodeService qrCodeService;
 
 	/**
 	 * 跳转到list页面
@@ -137,10 +142,20 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object addApplicantSale(@Param("id") Integer orderid) {
+	public Object addApplicantSale(@Param("id") Integer orderid, HttpServletRequest request, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = MapUtil.map();
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("orderid", orderid);
+		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/mobile/info.html";
+		if (Util.isEmpty(orderid)) {
+			qrurl += "?comid=" + loginCompany.getId() + "&userid=" + loginUser.getId();
+		} else {
+			qrurl += "?comid=" + loginCompany.getId() + "&userid=" + loginUser.getId() + "&orderid=" + orderid;
+		}
+		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
+		result.put("qrCode", qrCode);
 		return result;
 	}
 
@@ -159,8 +174,9 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object updateApplicant(@Param("id") Integer applicantId, @Param("orderid") Integer orderid) {
-		return saleViewService.updateApplicant(applicantId, orderid);
+	public Object updateApplicant(@Param("id") Integer applicantId, @Param("orderid") Integer orderid,
+			HttpServletRequest request) {
+		return saleViewService.updateApplicant(applicantId, orderid, request);
 	}
 
 	/**
@@ -307,6 +323,7 @@ public class OrderJpModule {
 	 */
 	@At
 	@Ok("json")
+	@Filters
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object IDCardRecognition(@Param("image") File file, HttpServletRequest request, HttpServletResponse response) {
 		return saleViewService.IDCardRecognition(file, request, response);
@@ -317,6 +334,7 @@ public class OrderJpModule {
 	 */
 	@At
 	@Ok("json")
+	@Filters
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object IDCardRecognitionBack(@Param("image") File file, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -328,6 +346,7 @@ public class OrderJpModule {
 	 */
 	@At
 	@Ok("json")
+	@Filters
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object passportRecognition(@Param("image") File file, HttpServletRequest request,
 			HttpServletResponse response) {

@@ -25,9 +25,9 @@
 			<div class="modal-body">
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
-						<!-- <div class="info-QRcode"> --><!-- 身份证 正面 -->
-							
-						<!-- </div> --><!-- end 身份证 正面 -->
+						<div class="info-QRcode"> <!-- 身份证 正面 -->
+							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
+						</div> <!-- end 身份证 正面 -->
 						
 						
 						<div class="info-imgUpload front"><!-- 身份证 正面 -->
