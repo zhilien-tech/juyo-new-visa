@@ -268,3 +268,6 @@ function successCallBack(status){
 		});
 	}
 }
+function cancelCallBack(status){
+	successCallBack(1);
+}
