@@ -121,7 +121,7 @@ public class QualifiedApplicantViewService extends BaseService<TApplicantEntity>
 
 		TApplicantUnqualifiedEntity fetch = dbDao.fetch(TApplicantUnqualifiedEntity.class,
 				Cnd.where("applicantId", "=", applicantId));
-		if (!Util.isEmpty(fetch)) {
+		if (Util.isEmpty(fetch)) {
 			TApplicantUnqualifiedEntity unq = new TApplicantUnqualifiedEntity();
 			unq.setApplicantId(applicantId);
 			if (Util.eq(infoType, ApplicantInfoTypeEnum.BASE.intKey())) {

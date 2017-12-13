@@ -95,6 +95,8 @@ public class TApplicantPassportForm extends DataTablesParamForm {
 
 	private Integer orderid;
 
+	private String passRemark;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**
