@@ -410,6 +410,17 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		return null;
 	}
 
+	public Object validateIsoriginal(Integer paperid) {
+		boolean result = false;
+		TApplicantFrontPaperworkJpEntity fetch = dbDao.fetch(TApplicantFrontPaperworkJpEntity.class,
+				paperid.longValue());
+		if (!Util.isEmpty(fetch) && !Util.isEmpty(fetch.getType())) {
+			result = true;
+		}
+		return result;
+
+	}
+
 	public Object revenue(HttpSession session, Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(orderid).intValue());

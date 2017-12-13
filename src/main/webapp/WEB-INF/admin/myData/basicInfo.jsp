@@ -373,7 +373,7 @@
 			$(".nameBeforeTop").css('float','none');
 			$(".nameBeforeHide").show();
 			$(".onceIDTop").removeClass('col-sm-offset-1');
-			$(".onceIDTop").css('padding-left','20px');
+			$(".onceIDTop").css('padding-left','15px');
 		}else {
 			
 			$(".nameBeforeHide").hide();
@@ -734,7 +734,7 @@
 			$(".nameBeforeTop").css('float','none');
 			$(".nameBeforeHide").show();
 			$(".onceIDTop").removeClass('col-sm-offset-1');
-			$(".onceIDTop").css('padding-left','20px');
+			$(".onceIDTop").css('padding-left','15px');
 		}else {
 			
 			$(".nameBeforeHide").hide();

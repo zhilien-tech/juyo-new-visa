@@ -725,6 +725,15 @@
 			parent.layer.close(index);
 			parent.cancelCallBack(1);
 		}
+		function successCallBack(status){
+			if(status == 1){
+				parent.successCallBack(1);
+				closeWindow();
+			}
+		}
+		function cancelCallBack(status){
+			closeWindow();
+		}
 		
 		function deleteApplicantFrontImg(id){
 			$('#cardFront').val("");
@@ -845,20 +854,13 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid,
+				success: function(index, layero){
+				    //do something
+				    layer.close(index); //如果设定了yes回调，需进行手工关闭
+				  }
 			});
 		}
-		
-		function successCallBack(status){
-			if(status == 1){
-				parent.successCallBack(1);
-				closeWindow();
-			}
-		}
-		function cancelCallBack(status){
-			closeWindow();
-		}
-		
 		
 		//合格/不合格
 		$(".Unqualified").click(function(){
