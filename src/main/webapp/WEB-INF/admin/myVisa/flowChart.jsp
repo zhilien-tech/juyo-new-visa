@@ -192,7 +192,6 @@
 			$(function(){
 			  $('.flowChart').find('li').each(function() {
 					 var indexLi = $(this).index();
-					 console.log(indexLi);
 					 if(indexLi <= indexOfBlue){
 						 $(this).attr("style", "display:block");
 					 }

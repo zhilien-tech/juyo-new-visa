@@ -7,13 +7,13 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>初审-日本</title>
 	<link rel="stylesheet" href="${base}/references/public/css/firstTrialJp.css">
-			  <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-  		  <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-          <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
-          <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
-          <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
-          <link rel="stylesheet" href="${base}/references/public/css/style.css">
-          <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+  	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
+    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+    <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
+    <link rel="stylesheet" href="${base}/references/public/css/style.css">
+    <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">
@@ -61,8 +61,8 @@
 											<i class="basicInfo" @click="basicInfoFun(item.applyid,data.orderid)"> </i>
 											<i class="passportInfo" @click="passportFun(item.applyid,data.orderid)"> </i>
 											<i class="visaInfo" @click="visaInfoFun(item.applyid,data.orderid)"> </i>
-											<i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
-											<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i>
+											<!-- <i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
+											<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i> -->
 										</div>
 									</span>
 									<span v-else>
@@ -74,8 +74,8 @@
 											<i class="basicInfo" @click="basicInfoFun(item.applyid,data.orderid)"> </i>
 											<i class="passportInfo" @click="passportFun(item.applyid,data.orderid)"> </i>
 											<i class="visaInfo" @click="visaInfoFun(item.applyid,data.orderid)"> </i>
-											<i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
-											<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i>
+											<!-- <i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
+											<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i> -->
 										</div>
 									</span>
 								
