@@ -57,29 +57,43 @@ new Vue({
 			});
 		},
 		expressFun:function(orderid,orderjpid){//跳转快递弹层页面
-			//alert(orderid +"---"+orderjpid);
 			$.ajax({
 				type : 'POST',
 				data : {
 					orderjpid:orderjpid
 				},
-				url : '/admin/firstTrialJp/isQualified.html',
+				url : '/admin/firstTrialJp/getCareerStatus.html',
 				success : function(data) {
-					if(data){
-						layer.open({
-							type: 2,
-							title: false,
-							closeBtn:false,
-							fix: false,
-							maxmin: false,
-							shadeClose: false,
-							scrollbar: false,
-							area: ['900px', '550px'],
-							content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
-						});
-					}else{
-						layer.msg('申请人不合格');
+					var isEmpty = data.isEmpty;
+					if(isEmpty == false){
+						layer.msg('申请人：'+data.names+' 职业未选择');
 						return;
+					}else{
+						$.ajax({
+							type : 'POST',
+							data : {
+								orderjpid:orderjpid
+							},
+							url : '/admin/firstTrialJp/isQualified.html',
+							success : function(data) {
+								if(data){
+									layer.open({
+										type: 2,
+										title: false,
+										closeBtn:false,
+										fix: false,
+										maxmin: false,
+										shadeClose: false,
+										scrollbar: false,
+										area: ['900px', '550px'],
+										content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
+									});
+								}else{
+									layer.msg('申请人不合格');
+									return;
+								}
+							}
+						});
 					}
 				}
 			});

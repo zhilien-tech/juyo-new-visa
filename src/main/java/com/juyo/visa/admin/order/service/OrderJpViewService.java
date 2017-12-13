@@ -49,6 +49,7 @@ import org.nutz.lang.Strings;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
+import com.juyo.visa.admin.firstTrialJp.service.QualifiedApplicantViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.entity.ApplicantJsonEntity;
@@ -59,6 +60,7 @@ import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
+import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
@@ -86,14 +88,18 @@ import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
+import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
+import com.juyo.visa.entities.TApplicantExpressEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
+import com.juyo.visa.entities.TApplicantVisaJpEntity;
 import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
+import com.juyo.visa.entities.TApplicanttTripJpEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCustomerEntity;
 import com.juyo.visa.entities.TOrderBackmailEntity;
@@ -130,6 +136,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	private FirstTrialJpViewService firstTrialJpViewService;
 	@Inject
 	private MailService mailService;
+	@Inject
+	private QrCodeService qrCodeService;
+	@Inject
+	private QualifiedApplicantViewService qualifiedApplicantViewService;
 
 	private static String PASSPORT = PrepareMaterialsEnum_JP.PASSPORT.value();
 	private static String PHOTO = PrepareMaterialsEnum_JP.PHOTO.value();
@@ -770,7 +780,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object updateApplicant(Integer id, Integer orderid) {
+	public Object updateApplicant(Integer id, Integer orderid, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -817,6 +830,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(unqualifiedEntity)) {
 			result.put("unqualified", unqualifiedEntity);
 		}
+
+		//生成二维码
+		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+				+ "/mobile/info.html?applicantid=" + id;
+		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
+		result.put("qrCode", qrCode);
 		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", id));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
@@ -888,6 +907,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setHasOtherName(hasOtherName);
 			Integer hasOtherNationality = applicantForm.getHasOtherNationality();
 			applicant.setHasOtherNationality(hasOtherNationality);
+
 			applicant.setTelephone(applicantForm.getTelephone());
 			if (!Util.isEmpty(applicantForm.getAddressIsSameWithCard())) {
 				applicant.setAddressIsSameWithCard(applicantForm.getAddressIsSameWithCard());
@@ -905,6 +925,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//修改客户登录手机号
 			dbDao.update(applicant);
 			dbDao.update(userEntity);
+			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", applicant.getId()));
+			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
+			String baseRemark = applicantForm.getBaseRemark();
+			if (!Util.isEmpty(baseRemark)) {
+				qualifiedApplicantViewService.unQualified(applicant.getId(), orderJpEntity.getOrderId(), baseRemark,
+						ApplicantInfoTypeEnum.BASE.intKey(), session);
+			}
 
 		}
 		return null;
@@ -973,6 +1001,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				result.put("mainApplicant", mainApplicant);
 			}
 		}
+		TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", id));
+		if (!Util.isEmpty(unqualifiedEntity)) {
+			result.put("unqualified", unqualifiedEntity);
+		}
 		//获取订单主申请人
 		String sqlStr = sqlManager.get("mainApplicant_byOrderId");
 		Sql applysql = Sqls.create(sqlStr);
@@ -981,7 +1014,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				Cnd.where("oj.orderId", "=", orderJpEntity.getOrderId()).and("aoj.isMainApplicant", "=",
 						IsYesOrNoEnum.YES.intKey()), null);
 		//获取日本申请人信息
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
+		result.put("orderStatus", orderEntity.getStatus());
+		result.put("orderJpId", orderJpEntity.getId());
 		result.put("orderJp", applicantOrderJpEntity);
+		result.put("infoType", ApplicantInfoTypeEnum.VISA.intKey());
 		//获取财产信息
 		String wealthsqlStr = sqlManager.get("wealth_byApplicantId");
 		Sql wealthsql = Sqls.create(wealthsqlStr);
@@ -1022,16 +1059,25 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			Date goTripDate = (Date) passport.get("issuedDate");
 			passport.put("issuedDate", format.format(goTripDate));
 		}
+		TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", applicantId));
+		if (!Util.isEmpty(unqualifiedEntity)) {
+			result.put("unqualified", unqualifiedEntity);
+		}
 		result.put("passport", passport);
 		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		result.put("applicantId", applicantId);
+		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicantId));
+		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
+				.longValue());
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
+		result.put("orderStatus", orderEntity.getStatus());
+		result.put("orderJpId", orderJpEntity.getId());
+		result.put("infoType", ApplicantInfoTypeEnum.PASSPORT.intKey());
 		if (!Util.isEmpty(orderid)) {
 			result.put("orderid", orderid);
 		} else {
-			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
-					Cnd.where("applicantId", "=", applicantId));
-			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
-					.longValue());
 			result.put("orderid", orderJpEntity.getOrderId());
 		}
 		return result;
@@ -1617,6 +1663,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 			}
 		}
+		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", visaForm.getApplicantId()));
+		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
+		String visaRemark = visaForm.getVisaRemark();
+		if (!Util.isEmpty(visaRemark)) {
+			qualifiedApplicantViewService.unQualified(visaForm.getApplicantId(), orderJpEntity.getOrderId(),
+					visaRemark, ApplicantInfoTypeEnum.VISA.intKey(), session);
+		}
 		return null;
 	}
 
@@ -1983,8 +2037,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			cnd.and("ap.id", "!=", adminId);
 		}
 		List<Record> passportInfo = dbDao.query(passportSql, cnd, null);
-
 		result.put("valid", passportInfo.size() <= 0);
+		return result;
+	}
+
+	public Object checkMobile(String mobile, String adminId) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		int count = 0;
+		if (Util.isEmpty(adminId)) {
+			count = nutDao.count(TApplicantEntity.class, Cnd.where("telephone", "=", mobile));
+		} else {
+			count = nutDao.count(TApplicantEntity.class, Cnd.where("telephone", "=", mobile).and("id", "!=", adminId));
+		}
+		result.put("valid", count <= 0);
 		return result;
 	}
 
@@ -2038,6 +2103,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			passport.setCreateTime(new Date());
 			dbDao.insert(passport);
 		}
+		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", passportForm.getApplicantId()));
+		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
+		String passRemark = passportForm.getPassRemark();
+		if (!Util.isEmpty(passRemark)) {
+			qualifiedApplicantViewService.unQualified(passportForm.getApplicantId(), orderJpEntity.getOrderId(),
+					passRemark, ApplicantInfoTypeEnum.BASE.intKey(), session);
+		}
+
 		return null;
 	}
 
@@ -2051,19 +2125,78 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
+		//删除快递信息
+		List<TApplicantExpressEntity> express = dbDao.query(TApplicantExpressEntity.class,
+				Cnd.where("applicantId", "=", id), null);
+		if (!Util.isEmpty(express)) {
+			for (TApplicantExpressEntity tApplicantExpressEntity : express) {
+				dbDao.delete(tApplicantExpressEntity);
+			}
+		}
+		//删除不合格信息
+		List<TApplicantUnqualifiedEntity> unqualified = dbDao.query(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", id), null);
+		if (!Util.isEmpty(unqualified)) {
+			for (TApplicantUnqualifiedEntity tApplicantUnqualifiedEntity : unqualified) {
+				dbDao.delete(tApplicantUnqualifiedEntity);
+			}
+		}
+
 		TApplicantOrderJpEntity applicantOrderJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", id));
 		if (!Util.isEmpty(applicantOrderJp)) {
 			//删除工作信息
 			TApplicantWorkJpEntity applicantWorkJpEntity = dbDao.fetch(TApplicantWorkJpEntity.class,
 					Cnd.where("applicantId", "=", applicantOrderJp.getId()));
-			dbDao.delete(TApplicantWorkJpEntity.class, applicantWorkJpEntity.getId());
+			if (!Util.isEmpty(applicantWorkJpEntity)) {
+				dbDao.delete(TApplicantWorkJpEntity.class, applicantWorkJpEntity.getId());
+			}
 			//删除财产信息
 			List<TApplicantWealthJpEntity> wealths = dbDao.query(TApplicantWealthJpEntity.class,
-					Cnd.where("applicantId", "=", applicantWorkJpEntity.getId()), null);
+					Cnd.where("applicantId", "=", applicantOrderJp.getId()), null);
 			if (!Util.isEmpty(wealths)) {
 				for (TApplicantWealthJpEntity tApplicantWealthJpEntity : wealths) {
 					dbDao.delete(TApplicantWealthJpEntity.class, tApplicantWealthJpEntity.getId());
+				}
+			}
+			//删除前台真实资料
+			List<TApplicantFrontPaperworkJpEntity> frontList = dbDao.query(TApplicantFrontPaperworkJpEntity.class,
+					Cnd.where("applicantId", "=", applicantOrderJp.getId()), null);
+			if (!Util.isEmpty(frontList)) {
+				for (TApplicantFrontPaperworkJpEntity tApplicantFrontPaperworkJpEntity : frontList) {
+					dbDao.delete(tApplicantFrontPaperworkJpEntity);
+				}
+			}
+			//删除签证真实资料
+			List<TApplicantVisaPaperworkJpEntity> visaList = dbDao.query(TApplicantVisaPaperworkJpEntity.class,
+					Cnd.where("applicantId", "=", applicantOrderJp.getId()), null);
+			if (!Util.isEmpty(visaList)) {
+				for (TApplicantVisaPaperworkJpEntity tApplicantVisaPaperworkJpEntity : visaList) {
+					dbDao.delete(tApplicantVisaPaperworkJpEntity);
+				}
+			}
+			//删除出行信息
+			List<TApplicanttTripJpEntity> trip = dbDao.query(TApplicanttTripJpEntity.class,
+					Cnd.where("applicantId", "=", applicantOrderJp.getId()), null);
+			if (!Util.isEmpty(trip)) {
+				for (TApplicanttTripJpEntity tApplicanttTripJpEntity : trip) {
+					dbDao.delete(tApplicanttTripJpEntity);
+				}
+			}
+			//删除签证信息
+			List<TApplicantVisaJpEntity> visaJp = dbDao.query(TApplicantVisaJpEntity.class,
+					Cnd.where("applicantId", "=", applicantOrderJp.getId()), null);
+			if (!Util.isEmpty(visaJp)) {
+				for (TApplicantVisaJpEntity tApplicantVisaJpEntity : visaJp) {
+					dbDao.delete(tApplicantVisaJpEntity);
+				}
+			}
+			//删除回邮信息
+			List<TApplicantBackmailJpEntity> backMail = dbDao.query(TApplicantBackmailJpEntity.class,
+					Cnd.where("applicantId", "=", applicantOrderJp.getId()), null);
+			if (!Util.isEmpty(backMail)) {
+				for (TApplicantBackmailJpEntity tApplicantBackmailJpEntity : backMail) {
+					dbDao.delete(tApplicantBackmailJpEntity);
 				}
 			}
 			//删除日本申请人信息

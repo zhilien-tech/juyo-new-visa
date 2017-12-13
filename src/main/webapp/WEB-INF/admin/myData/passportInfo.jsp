@@ -376,6 +376,7 @@
 			return;
 		}
 		var passportInfo = $("#passportInfo").serialize();
+		layer.load(1);
 		$.ajax({
 			type: 'POST',
 			data : passportInfo,
@@ -383,6 +384,7 @@
 			success :function(data) {
 				console.log(JSON.stringify(data));
 				layer.closeAll('loading');
+				layer.msg("修改成功");
 				closeWindow();
 			}
 		});

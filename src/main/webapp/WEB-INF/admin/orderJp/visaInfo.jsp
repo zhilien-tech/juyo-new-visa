@@ -14,6 +14,21 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
+	.info-imgUpload {width: 100%;}
+		.NoInfo {
+	width:100%;
+	height:30px;
+	margin-left:3.5%;
+	transtion:height 1s;
+	-webkit-transtion:height 1s;
+	-moz-transtion:height 1s;
+}
+.ipt-info {
+	display:none;
+}
+.Unqualified, .qualified  {
+	margin-right:10px;
+}
 
     .input-box {
       position: relative;
@@ -116,8 +131,19 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存退出" />
 				<input id="addContinueBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存继续" />
+				<c:choose>
+						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
+					<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
+				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
+						</c:when>
+						<c:otherwise> 
+						</c:otherwise>
+					</c:choose>
 			</div>
 			<div class="modal-body">
+			<div class="ipt-info">
+					<input id="visaRemark" name="visaRemark" type="text" value="${obj.unqualified.visaRemark }" class="NoInfo" />
+				</div>
 				<div class="tab-content row">
 					<!-- 结婚状况 -->
 					<div class="info">
@@ -394,6 +420,11 @@
 		var base = "${base}";
 		$(function() {
 			
+			var remark = $("#visaRemark").val();
+			if(remark != ""){
+				$(".ipt-info").show();
+			}
+			
 			var marry = $("#marryUrl").val();
 			if(marry != ""){
 				$("#uploadFile").siblings("i").css("display","block");
@@ -665,9 +696,10 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					layer.close(index);
+					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					layer.close(index); */
 					if(status == 1){
+						closeWindow();
 						parent.successCallBack(1);
 					}
 				}
@@ -741,6 +773,14 @@
 			parent.layer.close(index);
 			parent.cancelCallBack(1);
 		}
+		function cancelCallBack(status){
+			closeWindow();
+			parent.cancelCallBack(1);
+		}
+		function successCallBack(status){
+			parent.successCallBack(1);
+			closeWindow();
+		}
 		function passportBtn(){
 			save(2);
 			var applicantId = ${obj.applicant.id};
@@ -757,6 +797,34 @@
 				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid
 			});
 		}
+		
+		//合格/不合格
+		$(".Unqualified").click(function(){
+			$(".ipt-info").slideDown();
+		});
+		$(".qualified").click(function(){
+			$(".ipt-info").slideUp();
+			var applicantId = ${obj.applicant.id};
+			var orderid = ${obj.orderid};
+			var orderJpId = ${obj.orderJpId};
+			var infoType = ${obj.infoType};
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : {
+					applicantId : applicantId,
+					orderid : orderid,
+					orderjpid : orderJpId,
+					infoType : infoType
+				},
+				url: '${base}/admin/qualifiedApplicant/qualified.html',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+					$("#baseRemark").val("");
+				}
+			});
+		});
 	</script>
 
 

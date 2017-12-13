@@ -66,8 +66,6 @@
 				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
 						</c:when>
 						<c:otherwise> 
-						<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
-				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
 						</c:otherwise>
 					</c:choose>
 			</div>
@@ -77,6 +75,9 @@
 				</div>
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
+						<div class="info-QRcode"> <!-- 身份证 正面 -->
+							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
+						</div> <!-- end 身份证 正面 -->
 						<div class="info-imgUpload front">
 							<!-- 身份证 正面 -->
 							<div class="col-xs-6">
@@ -386,8 +387,8 @@
 	
 		$(function(){
 			var remark = $("#baseRemark").val();
-			if(remark){
-				$(".baseRemark").removeClass("none");
+			if(remark != ""){
+				$(".ipt-info").show();
 			}
 			
 			
@@ -449,7 +450,20 @@
 							regexp: {
 		                	 	regexp: /^[1][34578][0-9]{9}$/,
 		                        message: '电话号格式错误'
-		                    }
+		                    },
+		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+								url: '${base}/admin/orderJp/checkMobile.html',
+								message: '电话号码已存在，请重新输入',//提示消息
+								delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+								type: 'POST',//请求方式
+								//自定义提交数据，默认值提交当前input value
+								data: function(validator) {
+									return {
+										mobile:$('#telephone').val(),
+										adminId:${obj.applicantId}
+									};
+								}
+							}
 						}
 					},
 					email : {
@@ -520,10 +534,10 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					layer.close(index);
-					//closeWindow();
+					//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					//layer.close(index);
 					if(status == 1){
+						closeWindow();
 						parent.successCallBack(1);
 					}
 				}
@@ -709,6 +723,7 @@
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
+			parent.cancelCallBack(1);
 		}
 		
 		function deleteApplicantFrontImg(id){
@@ -844,71 +859,10 @@
 			closeWindow();
 		}
 		
-		/* function qualified(){
-			var applicantId = ${obj.applicant.id};
-			var orderid = ${obj.orderid};
-			var orderJpId = ${obj.orderJpId};
-			var infoType = ${obj.infoType};
-			layer.load(1);
-			$.ajax({
-				type: 'POST',
-				data : {
-					applyid : applicantId,
-					orderid : orderid,
-					orderjpid : orderJpId,
-					infoType : infoType
-				},
-				url: '${base}/admin/qualifiedApplicant/qualified.html',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-				}
-			});
-		}
-		function unqualified(){
-			var applicantId = ${obj.applicant.id};
-			var orderid = ${obj.orderid};
-			var baseRemark = $("#baseRemark").val();
-			var infoType = ${obj.infoType};
-			layer.load(1);
-			$.ajax({
-				type: 'POST',
-				data : {
-					applyid : applicantId,
-					orderid : orderid,
-					remarkStr : baseRemark,
-					infoType : infoType
-				},
-				url: '${base}/admin/qualifiedApplicant/unqualified.html',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-				}
-			});
-		} */
 		
 		//合格/不合格
 		$(".Unqualified").click(function(){
 			$(".ipt-info").slideDown();
-			/* var applicantId = ${obj.applicant.id};
-			var orderid = ${obj.orderid};
-			var baseRemark = $("#baseRemark").val();
-			var infoType = ${obj.infoType};
-			layer.load(1);
-			$.ajax({
-				type: 'POST',
-				data : {
-					applyid : applicantId,
-					orderid : orderid,
-					remarkStr : baseRemark,
-					infoType : infoType
-				},
-				url: '${base}/admin/qualifiedApplicant/unqualified.html',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-				}
-			}); */
 		});
 		$(".qualified").click(function(){
 			$(".ipt-info").slideUp();
@@ -916,7 +870,6 @@
 			var orderid = ${obj.orderid};
 			var orderJpId = ${obj.orderJpId};
 			var infoType = ${obj.infoType};
-			alert(applicantId +"==="+orderid+"---"+orderJpId+"!!!"+infoType);
 			layer.load(1);
 			$.ajax({
 				type: 'POST',
@@ -930,6 +883,7 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
+					$("#baseRemark").val("");
 				}
 			});
 		});

@@ -15,6 +15,8 @@ import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.mobile.form.MobileApplicantForm;
 import com.juyo.visa.admin.mobile.service.MobileService;
+import com.juyo.visa.entities.TApplicantLowerEntity;
+import com.juyo.visa.entities.TApplicantPassportLowerEntity;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -39,5 +41,33 @@ public class MobileModule {
 	@POST
 	public Object applicatinfo(@Param("..") MobileApplicantForm form) {
 		return mobileService.applicatinfo(form);
+	}
+
+	/**
+	 * 保存基本信息
+	 */
+	@At
+	@POST
+	public Object saveApplicatinfo(@Param("..") MobileApplicantForm form,
+			@Param("..") TApplicantLowerEntity applicantEntity) {
+		return mobileService.saveApplicatinfo(form, applicantEntity);
+	}
+
+	/**
+	 * 护照信息回显数据
+	 */
+	@At
+	@POST
+	public Object passportinfo(@Param("..") MobileApplicantForm form) {
+		return mobileService.passportinfo(form);
+	}
+
+	/**
+	 * 保存护照信息
+	 */
+	@At
+	@POST
+	public Object savePassportInfo(@Param("..") TApplicantPassportLowerEntity passportinfo) {
+		return mobileService.savePassportInfo(passportinfo);
 	}
 }
