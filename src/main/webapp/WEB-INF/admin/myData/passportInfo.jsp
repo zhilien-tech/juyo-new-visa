@@ -29,14 +29,14 @@
 			<div class="qz-head">
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="save();"/> 
-				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right" />
+				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right" onclick="clearAll();"/>
 			</div>
 			<section class="content">
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
-						<div class="info-QRcode"><!-- 身份证 正面 -->
-
-						</div><!-- end 身份证 正面 -->
+						<div class="info-QRcode"> <!-- 身份证 正面 -->
+							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
+						</div> <!-- end 身份证 正面 -->
 
 						<div class="info-imgUpload front"><!-- 护照 -->
 							<div class="col-xs-6">
@@ -510,6 +510,20 @@
 	            return 0;
 	        }
 	    }
+	 function clearAll(){
+		$("#passportUrl").val("");
+		$('#sqImg').attr('src', "");
+		$("#type").val("");
+		$("#passport").val("");
+		$("#birthAddress").val("");
+		$("#birthAddressEn").val("");
+		$("#birthday").val("");
+		$("#issuedPlace").val("");
+		$("#issuedPlaceEn").val("");
+		$("#issuedDate").val("");
+		$("#validEndDate").val("");
+		$("#issuedOrganization").val("");
+	 }
 	</script>
 </body>
 </html>

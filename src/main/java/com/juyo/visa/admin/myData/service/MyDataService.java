@@ -5,15 +5,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
@@ -36,7 +39,10 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class MyDataService extends BaseService<TOrderJpEntity> {
 
-	public Object getBasicInfo(HttpSession session) {
+	@Inject
+	private QrCodeService qrCodeService;
+
+	public Object getBasicInfo(HttpSession session, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
@@ -74,13 +80,19 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			sb.append("/").append(applicantEntity.getLastNameEn());
 			result.put("lastNameEn", sb.toString());
 		}
+
+		//生成二维码
+		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+				+ "/mobile/info.html?applicantid=" + applicantEntity.getId();
+		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
+		result.put("qrCode", qrCode);
 		result.put("applicantId", applicantEntity.getId());
 		result.put("orderid", orderEntity.getId());
 		result.put("applicant", applicantEntity);
 		return result;
 	}
 
-	public Object getPassportInfo(HttpSession session) {
+	public Object getPassportInfo(HttpSession session, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
@@ -119,10 +131,27 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			sb.append("/").append(passport.get("lastNameEn"));
 			result.put("lastNameEn", sb.toString());
 		}
+
+		//生成二维码
+		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+				+ "/mobile/info.html?applicantid=" + applicantEntity.getId();
+		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
+		result.put("qrCode", qrCode);
 		result.put("passport", passport);
 		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		result.put("applicantId", applicantEntity.getId());
 		result.put("orderid", orderEntity.getId());
+		return result;
+	}
+
+	public Object visaInput(HttpSession session) {
+		Map<String, Object> result = MapUtil.map();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()));
+		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicantEntity.getId()));
+		result.put("applyid", applicantOrderJpEntity.getId());
 		return result;
 	}
 }
