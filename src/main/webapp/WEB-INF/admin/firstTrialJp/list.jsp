@@ -61,8 +61,8 @@
 											<i class="basicInfo" @click="basicInfoFun(item.applyid,data.orderid)"> </i>
 											<i class="passportInfo" @click="passportFun(item.applyid,data.orderid)"> </i>
 											<i class="visaInfo" @click="visaInfoFun(item.applyid,data.orderid)"> </i>
-											<i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
-											<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i>
+											<!-- <i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
+											<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i> -->
 										</div>
 									</span>
 									<span v-else>
@@ -74,8 +74,8 @@
 											<i class="basicInfo" @click="basicInfoFun(item.applyid,data.orderid)"> </i>
 											<i class="passportInfo" @click="passportFun(item.applyid,data.orderid)"> </i>
 											<i class="visaInfo" @click="visaInfoFun(item.applyid,data.orderid)"> </i>
-											<i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
-											<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i>
+											<!-- <i class="qualified" @click="qualifiedFun(item.applyid,data.orderid,data.orderjpid)"> </i>
+											<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i> -->
 										</div>
 									</span>
 								
