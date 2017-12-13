@@ -1179,7 +1179,7 @@
 		var id = ${obj.orderId};
 		
 		function cancelCallBack(status){
-			successCallBack(1);
+			successCallBack(6);
 		}
 		//刷新申请人表格
 		function successCallBack(status){

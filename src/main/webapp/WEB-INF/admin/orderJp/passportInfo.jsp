@@ -568,7 +568,11 @@
 										shadeClose: false,
 										scrollbar: false,
 										area: ['900px', '551px'],
-										content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid='
+										content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid=',
+										success: function(index, layero){
+										    //do something
+										    layer.close(index); //如果设定了yes回调，需进行手工关闭
+										  }
 									});
 							}
 						}

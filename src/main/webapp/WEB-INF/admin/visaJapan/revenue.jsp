@@ -272,7 +272,6 @@
 					layer.closeAll('loading');
 					parent.successCallBack(1);
 					closeWindow();
-
               	}
             });
 		}
