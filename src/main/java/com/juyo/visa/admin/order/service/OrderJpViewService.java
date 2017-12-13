@@ -873,9 +873,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setCardFront(applicantForm.getCardFront());
 			applicant.setCardBack(applicantForm.getCardBack());
 			applicant.setAddress(applicantForm.getAddress());
-			if (!Util.isEmpty(applicantForm.getBirthday())) {
-				applicant.setBirthday(applicantForm.getBirthday());
-			}
+			applicant.setBirthday(applicantForm.getBirthday());
 			if (!Util.isEmpty(applicantForm.getCardProvince())) {
 				applicant.setCardProvince(applicantForm.getCardProvince());
 			}
@@ -915,12 +913,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setEmergencyLinkman(applicantForm.getEmergencyLinkman());
 			applicant.setEmergencyTelephone(applicantForm.getEmergencyTelephone());
 			userEntity.setMobile(applicantForm.getTelephone());
-			if (!Util.isEmpty(applicantForm.getValidEndDate())) {
-				applicant.setValidEndDate(applicantForm.getValidEndDate());
-			}
-			if (!Util.isEmpty(applicantForm.getValidStartDate())) {
-				applicant.setValidStartDate(applicantForm.getValidStartDate());
-			}
+			applicant.setValidEndDate(applicantForm.getValidEndDate());
+			applicant.setValidStartDate(applicantForm.getValidStartDate());
 			applicant.setUpdateTime(new Date());
 			//修改客户登录手机号
 			dbDao.update(applicant);
@@ -2088,12 +2082,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		passport.setSex(passportForm.getSex());
 		passport.setSexEn(passportForm.getSexEn());
 		passport.setType(passportForm.getType());
-		if (!Util.isEmpty(passportForm.getValidEndDate())) {
-			passport.setValidEndDate(passportForm.getValidEndDate());
-		}
-		if (!Util.isEmpty(passportForm.getValidStartDate())) {
-			passport.setValidStartDate(passportForm.getValidStartDate());
-		}
+		passport.setValidEndDate(passportForm.getValidEndDate());
+		passport.setValidStartDate(passportForm.getValidStartDate());
 		passport.setValidType(passportForm.getValidType());
 		if (!Util.isEmpty(passportForm.getId())) {
 			//如果护照ID不为空，则说明为修改
