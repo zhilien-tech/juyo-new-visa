@@ -355,7 +355,20 @@
 							regexp: {
 		                	 	regexp: /^[1][34578][0-9]{9}$/,
 		                        message: '电话号格式错误'
-		                    }
+		                    },
+		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+								url: '${base}/admin/orderJp/checkMobile.html',
+								message: '电话号码已存在，请重新输入',//提示消息
+								delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+								type: 'POST',//请求方式
+								//自定义提交数据，默认值提交当前input value
+								data: function(validator) {
+									return {
+										mobile:$('#telephone').val(),
+										adminId:""
+									};
+								}
+							}
 						}
 					},
 					email : {
@@ -448,6 +461,7 @@
 						$("#applyId").val(data.id);
 						layer.closeAll('loading');
 						if(status == 1){
+							closeWindow();
 							parent.successCallBack(3,data);
 						}
 						if(status == 2){
@@ -640,6 +654,7 @@
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
+			parent.cancelCallBack(1);
 		}
 		
 		/* $(function(){
@@ -717,19 +732,38 @@
 		});
 		
 		function toPassport(){
-			saveApplicant(2);
-			var applyId = $("#applyId").val();
-			layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'
-			});
+			var bootstrapValidator = $("#applicantInfo").data(
+			'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			if (bootstrapValidator.isValid()){
+				saveApplicant(2);
+				var applyId = $("#applyId").val();
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '551px'],
+					content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'
+				});
+			}else{
+				//获取必填项信息
+				var firstName = $("#firstName").val();
+				if (firstName == "") {
+					layer.msg('姓不能为空');
+					return;
+				}
+				var lastName = $("#lastName").val();
+				if (lastName == "") {
+					layer.msg('名不能为空');
+					return;
+				}
+			}
+			
 		}
 		function successCallBack(status){
 			parent.successCallBack(1);
@@ -738,6 +772,7 @@
 		function cancelCallBack(status){
 			closeWindow();
 		}
+		
 		
 	</script>
 
