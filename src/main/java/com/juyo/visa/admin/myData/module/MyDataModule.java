@@ -43,4 +43,10 @@ public class MyDataModule {
 		return myDataService.getPassportInfo(session);
 	}
 
+	@At
+	@Ok("jsp")
+	public Object visaInput(HttpSession session) {
+		return myDataService.visaInput(session);
+	}
+
 }

@@ -29,7 +29,7 @@
 			<div class="qz-head">
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="save();"/> 
-				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right" />
+				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right" onclick="clearAll();"/>
 			</div>
 			<section class="content">
 				<div class="tab-content row">
@@ -510,6 +510,20 @@
 	            return 0;
 	        }
 	    }
+	 function clearAll(){
+		$("#passportUrl").val("");
+		$('#sqImg').attr('src', "");
+		$("#type").val("");
+		$("#passport").val("");
+		$("#birthAddress").val("");
+		$("#birthAddressEn").val("");
+		$("#birthday").val("");
+		$("#issuedPlace").val("");
+		$("#issuedPlaceEn").val("");
+		$("#issuedDate").val("");
+		$("#validEndDate").val("");
+		$("#issuedOrganization").val("");
+	 }
 	</script>
 </body>
 </html>

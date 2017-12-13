@@ -29,7 +29,7 @@
 			<div class="qz-head">
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="saveApplicant();"/> 
-				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right" />
+				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right" onclick="clearAll();"/>
 			</div>
 			<section class="content">
 				<div class="tab-content row">
@@ -77,7 +77,10 @@
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5  padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地址省份：</label> <input id="province"
+									<label><span>*</span>现居住地址省份：</label> 
+									<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
+									<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
+									<input id="province"
 										name="province" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.province }" />
 									<!-- <i class="bulb"></i> -->
@@ -402,8 +405,8 @@
 						$('#address').val(obj.address);
 						$('#nation').val(obj.nationality);
 						$('#cardId').val(obj.num);
-						//$('#province').val(obj.province);
-						//$('#city').val(obj.city);
+						$('#cardProvince').val(obj.province);
+						$('#cardCity').val(obj.city);
 						$('#birthday').val(obj.birth);
 						$('#sex').val(obj.sex);
 					}
@@ -531,6 +534,32 @@
 			minView: "month"//只显示年月日
 		});
 	});
+	
+	function clearAll(){
+		$("#cardFront").val("");
+		$('#sqImg').attr('src', "");
+		$("#cardBack").val("");
+		$("#sqImgBack").attr('src', "");
+		$("#uploadFile").siblings("i").css("display","none");
+		$("#uploadFileBack").siblings("i").css("display","none");
+		$("#issueOrganization").val("");
+		$("#province").val("");
+		$("#city").val("");
+		$("#firstName").val("");
+		$("#firstNameEn").val("");
+		$("#lastName").val("");
+		$("#lastNameEn").val("");
+		$("#telephone").val("");
+		$("#email").val("");
+		$("#nation").val("");
+		$("#birthday").val("");
+		$("#address").val("");
+		$("#issueOrganization").val("");
+		$("#cardId").val("");
+		$("#validStartDate").val("");
+		$("#validEndDate").val("");
+		$("#detailedAddress").val("");
+	}
 	</script>
 </body>
 </html>
