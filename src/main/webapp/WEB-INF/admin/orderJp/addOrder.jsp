@@ -242,6 +242,7 @@
 									<div class="form-group">
 										<label><span>*</span>付款方式：</label> <select id="payType"
 											name="paytype" class="form-control input-sm">
+											<option value="">--请选择--</option>
 											<c:forEach var="map" items="${obj.mainSalePayTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
