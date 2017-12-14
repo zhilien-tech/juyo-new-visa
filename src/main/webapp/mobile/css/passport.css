@@ -345,3 +345,88 @@ input[type="checkbox"] + label:after {
 	width: 100%;
 	height: .81rem;
 }
+/*财务信息*/
+.btnGroup {
+	width: 100%;
+	height: .81rem;
+	line-height: .81rem;
+	border-bottom: 1px solid #D6D6D6;
+}
+.btnInfo {
+	width: 20%;
+	text-align: center;
+	line-height: .5rem;
+	height: .5rem;
+	display: block;
+	float: left;
+	border: 1px solid #d0cece;
+	font-size: .3rem;
+	margin-left: 4%;
+	margin-top: 2%;
+	border-radius: 5px;
+}
+.blue {
+	background: blue;
+	color: #FFF;
+}
+.ui-loader {
+	display: none;
+}
+.item-wrap{
+  overflow: hidden;
+ }
+ .item-wrap .item{
+  border-bottom: 1px #dad2d2 solid;
+  width: 120%;
+  height: .81rem;
+  line-height: .81rem;
+  overflow: hidden;
+  position: relative;
+  display: -webkit-box;
+  -webkit-transition: all 0.3s linear;
+ }
+ .item-wrap .item .txt-item{
+  -webkit-box-flex:1;
+ }
+.item-wrap .item .txt-item span {
+  	font-size: .3rem;
+  	margin-left: 4%;
+  }
+.item-wrap .item .txt-item i {
+	font-size: .3rem;
+}  
+.delect-btn{
+  width: 15%;
+  color: #fff;
+  background: red;
+  z-index:999;
+  display: block;
+  text-align: center;
+  height: .81rem;
+  line-height: .81rem;
+}
+.item-wrap .selected{
+  -webkit-transform: translate(-16%);
+  -webkit-transition: all 0.3s linear;
+}
+.ui-input-text {
+	display: inline-block;
+	width: 70%;
+}
+.infoInput {
+	width: 100%;
+	height: .8rem;
+	font-size: .3rem;
+	text-align: right;
+	outline: none;
+	border:0;
+}
+.carDiv .ui-input-text {
+	width: 82%;
+}
+.hourseDiv .ui-input-text {
+	width: 75%;
+}
+.moneyDiv .ui-input-text {
+	width: 78%;
+}
