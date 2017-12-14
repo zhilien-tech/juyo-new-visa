@@ -14,7 +14,7 @@
 	<body>
 		<div class="certificateInfo">
 			<a class="certificateTop">
-				<i><</i>
+				<i onclick="saveAndBack()"><</i>
 				职业与教育
 			</a>
 		</div>
@@ -22,21 +22,24 @@
         		<li>
         			<span class="select-value">我的职业</span>
 			     <span class="select-skip">
-			     	<i>在职</i>
+			     	<i id="workststusstr">在职</i>
 			     	<a class="skip">></a>
 			     </span>
-			     <select class="selector">
-			        <option>在职</option>
+			     <select id="careerStatus" class="selector">
+			        	<!-- <option>在职</option>
 			        	<option>退休</option>
 			        	<option>自由职业</option>
 			        	<option>学生</option>
-			        	<option>学龄前</option>
+			        	<option>学龄前</option> -->
 			     </select>
         		</li>
-        		<li><span>单位名称</span> <input type="text" class="txtInput" placeholder="必填"/></li>
-        		<li><span>单位电话</span> <input type="text" class="txtInput" placeholder="必填"/></li>
-        		<li><span>单位地址</span> <input type="text" class="txtInput" placeholder="必填"/></li>
+        		<li><span>单位名称</span> <input type="text" id="name" class="txtInput" placeholder="必填"/></li>
+        		<li><span>单位电话</span> <input type="text" id="telephone" class="txtInput" placeholder="必填"/></li>
+        		<li><span>单位地址</span> <input type="text" id="address" class="txtInput" placeholder="必填"/></li>
         </ul>
+        <script src="/references/common/js/vue/vue.min.js"></script>
+		<script src="/references/common/js/layer/layer.js"></script>
+		<script type="text/javascript" src="/admin/common/commonjs.js"></script>
 	</body>
 <script>
 	$(function(){
@@ -54,5 +57,69 @@
 			}
 		})
 	})
+	//获取URL地址参数
+    function GetQueryString(name){
+         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+         var r = window.location.search.substr(1).match(reg);
+         if(r!=null)return  unescape(r[2]); return null;
+    }
+	
+	//初始化页面数据
+	initPageData();
+	function initPageData(){
+		var applicantid = GetQueryString('applicantid');
+		$.ajax({ 
+        	url: '/admin/mobile/getJobOrEducationData.html',
+        	data:{applicantid:applicantid},
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		//工作状态下拉
+        		var jobselect = '';
+        		$.each(data.jobselects,function(index,value){
+        			if(data.workinfo.careerstatus == value.key){
+	        			jobselect += '<option selected="selected" value="'+value.key+'">'+value.value+'</option>';
+        			}else{
+	        			jobselect += '<option value="'+value.key+'">'+value.value+'</option>';
+        			}
+        		});
+        		$('#careerStatus').html(jobselect);
+        		$('#workststusstr').html(data.workinfo.workststusstr);
+        		//单位名称
+        		$('#name').val(data.workinfo.name);
+        		//电话
+        		$('#telephone').val(data.workinfo.telephone);
+        		//地址
+        		$('#address').val(data.workinfo.address);
+        		//样式调整
+        		if(data.workinfo.careerstatus == 4){
+        			$('.educationInfo li:nth-child(2) span').text("学校名称");
+    				$('.educationInfo li:nth-child(3) span').text("学校电话");
+    				$('.educationInfo li:nth-child(4) span').text("学校地址");
+        		}else{
+        			$('.educationInfo li:nth-child(2) span').text("单位名称");
+    				$('.educationInfo li:nth-child(3) span').text("单位电话");
+    				$('.educationInfo li:nth-child(4) span').text("单位地址");
+        		}
+          	}
+        });
+	}
+	//保存并后退到签证页面
+	function saveAndBack(){
+		var applicantid = GetQueryString('applicantid');
+		var careerStatus = $('#careerStatus').val();
+		var name = $('#name').val();
+		var telephone = $('#telephone').val();
+		var address = $('#address').val();
+		$.ajax({ 
+        	url: '/admin/mobile/saveJobOrEducationData.html',
+        	data:{applicantid:applicantid,careerStatus:careerStatus,name:name,telephone:telephone,address:address},
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		window.history.go(-1);
+          	}
+        });
+	}
 </script>	
 </html>

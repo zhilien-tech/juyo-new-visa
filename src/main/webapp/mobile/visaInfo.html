@@ -35,7 +35,7 @@
  		<span>职业与教育信息</span>
  		<i>></i>
  	</a>
- 	<a class="visa-data">
+ 	<a class="visa-data" onclick="wealthinfo()">
  		<span>财产信息</span>
  		<i>></i>
  	</a>
@@ -96,10 +96,24 @@
          var r = window.location.search.substr(1).match(reg);
          if(r!=null)return  unescape(r[2]); return null;
     }
-	
+	//申请人信息
 	function applyinfo(){
 		var applicantid = GetQueryString('applicantid');
 		window.location.href='/mobile/proposer.html?applicantid='+ applicantid;
 	}
+	//职业、教育信息
+	function workinfo(){
+		var applicantid = GetQueryString('applicantid');
+		window.location.href='/mobile/education.html?applicantid='+ applicantid;
+	}
+	//财产信息
+	function wealthinfo(){
+		var applicantid = GetQueryString('applicantid');
+		window.location.href='/mobile/property.html?applicantid='+ applicantid;
+	}
+	$('.prev').click(function(){
+		var applicantid = GetQueryString('applicantid');
+		window.location.href='/mobile/passport.html?applicantid='+ applicantid;
+	});
 </script>
 </html>
