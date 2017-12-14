@@ -1,6 +1,5 @@
 package com.juyo.visa.admin.firstTrialJp.service;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -98,14 +97,14 @@ public class QualifiedApplicantViewService extends BaseService<TApplicantEntity>
 			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 		}
 
-		try {
+		/*try {
 			//发送合格消息
 			firstTrialJpViewService.sendApplicantVerifySMS(applicantId, orderid, "applicant_qualified_sms.txt");
 			//发送合格邮件
 			firstTrialJpViewService.sendApplicantVerifyEmail(applicantId, orderid, "applicant_qualified_mail.html");
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 
 		return qualified;
 	}
@@ -181,14 +180,14 @@ public class QualifiedApplicantViewService extends BaseService<TApplicantEntity>
 		//记录日志
 		orderJpViewService.insertLogs(orderId, firsttrialstatus, session);
 
-		try {
+		/*try {
 			//发送不合格消息
 			firstTrialJpViewService.sendApplicantVerifySMS(applicantId, orderId, "applicant_unqualified_sms.txt");
 			//发送不合格邮件
 			firstTrialJpViewService.sendApplicantVerifyEmail(applicantId, orderId, "applicant_unqualified_mail.html");
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 
 		return Json.toJson("success");
 	}

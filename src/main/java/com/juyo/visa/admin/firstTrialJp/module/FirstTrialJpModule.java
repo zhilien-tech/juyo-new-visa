@@ -237,4 +237,13 @@ public class FirstTrialJpModule {
 		return firstTrialJpViewService.getCareerStatus(orderjpid);
 	}
 
+	/**
+	 * 判断申请人是否合格
+	 */
+	@At
+	@POST
+	public Boolean isQualifiedByApplicantId(@Param("applicantId") Integer applicantId) {
+		return firstTrialJpViewService.isQualifiedByApplicantId(applicantId);
+	}
+
 }
