@@ -953,7 +953,8 @@
 					orderobj.orderInfo.money = $('#money').val();
 					orderobj.orderInfo.stayday = $('#stayDay').val();
 					orderobj.orderInfo.outvisadate = $('#outVisaDate').val();
-					var backMails = getMailInfos();
+					orderobj.orderInfo.paytype = $('#payType').val();
+					var backMails;
 					var editdata = orderobj.orderInfo;
 					editdata.backMailInfos = JSON.stringify(backMails);
 					var backmail;
@@ -974,7 +975,12 @@
 							url : '${base}/admin/orderJp/order',
 							success : function(data) {
 								layer.closeAll('loading');
-					    		window.location.reload();
+								layer.msg("保存成功", {
+									time: 500,
+									end: function () {
+										self.location.reload();
+									}
+								});
 								//window.location.href = '${base}/admin/orderJp/list';
 							},
 							error : function() {
@@ -1007,7 +1013,12 @@
 									url : '${base}/admin/orderJp/order',
 									success : function(data) {
 										layer.closeAll('loading');
-							    		window.location.reload();
+										layer.msg("保存成功", {
+											time: 500,
+											end: function () {
+												self.location.reload();
+											}
+										});
 										//window.location.href = '${base}/admin/orderJp/list';
 									},
 									error : function() {
