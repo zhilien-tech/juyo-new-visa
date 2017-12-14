@@ -6,10 +6,14 @@
 
 package com.juyo.visa.admin.mobile.service;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -18,11 +22,18 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.mobile.form.MainApplicantForm;
+import com.juyo.visa.admin.mobile.form.MarryImageForm;
 import com.juyo.visa.admin.mobile.form.MobileApplicantForm;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
+import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -51,6 +62,8 @@ public class MobileService extends BaseService<TApplicantEntity> {
 
 	@Inject
 	private UserViewService userViewService;
+	@Inject
+	private UploadService qiniuupService;
 
 	/**
 	 *手机端申请人页面数据接口
@@ -280,5 +293,135 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	 */
 	public Object savePassportInfo(TApplicantPassportLowerEntity passportinfo) {
 		return dbDao.update(passportinfo);
+	}
+
+	/**
+	 * 获取签证信息页面数据
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getVisaInfoData(MobileApplicantForm form) {
+		Map<String, Object> result = Maps.newHashMap();
+		TApplicantEntity applicantinfo = dbDao.fetch(TApplicantEntity.class, form.getApplicantid().longValue());
+		Map<String, String> applicantmap = MapUtil.obj2Map(applicantinfo);
+
+		//婚姻状况下拉
+		List<Map<String, String>> marryoptions = Lists.newArrayList();
+		for (MarryStatusEnum marrystatus : MarryStatusEnum.values()) {
+			//回显婚姻状况
+			if (!Util.isEmpty(applicantinfo.getMarryStatus())
+					&& applicantinfo.getMarryStatus().equals(marrystatus.intKey())) {
+				applicantmap.put("marrystatusstr", marrystatus.value());
+			}
+			Map<String, String> marryoption = Maps.newHashMap();
+			marryoption.put("key", marrystatus.key());
+			marryoption.put("value", marrystatus.value());
+			marryoptions.add(marryoption);
+		}
+		result.put("applicantdata", applicantmap);
+		result.put("marryoptions", marryoptions);
+		return result;
+	}
+
+	/**
+	 * 上传照片
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param file
+	 * @param request
+	 * @param response
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object uploadPic(File file, HttpServletRequest request, HttpServletResponse response) {
+		Map<String, Object> map = qiniuupService.ajaxUploadImage(file);
+		file.delete();
+		map.put("data", CommonConstants.IMAGES_SERVER_ADDR + map.get("data"));
+		return map;
+
+	}
+
+	/**
+	 * 保存上传的照片信息
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object saveCardInfo(MarryImageForm form) {
+		if (!Util.isEmpty(form.getApplicantid())) {
+			TApplicantEntity fetch = dbDao.fetch(TApplicantEntity.class, form.getApplicantid().longValue());
+			fetch.setMarryUrl(form.getMarryurl());
+			fetch.setMarryurltype(form.getMarryurltype());
+			fetch.setMarryStatus(form.getMarryurltype());
+			dbDao.update(fetch);
+		}
+		return null;
+
+	}
+
+	/**
+	 * 获取申请人数据
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param applicantid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getApplicantData(Integer applicantid) {
+		Map<String, Object> result = Maps.newHashMap();
+		TApplicantEntity applicantinfo = new TApplicantEntity();
+		TApplicantOrderJpEntity applicantjpinfo = new TApplicantOrderJpEntity();
+		//主申请人下拉
+		List<TApplicantEntity> mainapplicantselect = Lists.newArrayList();
+		if (!Util.isEmpty(applicantid)) {
+			applicantinfo = dbDao.fetch(TApplicantEntity.class, applicantid.longValue());
+			applicantjpinfo = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", applicantid));
+			if (!Util.isEmpty(applicantjpinfo)) {
+				List<TApplicantOrderJpEntity> query = dbDao.query(
+						TApplicantOrderJpEntity.class,
+						Cnd.where("orderid", "=", applicantjpinfo.getOrderId()).and("isMainApplicant", "=",
+								IsYesOrNoEnum.YES.intKey()), null);
+				if (query.size() > 0) {
+					Integer[] applicantids = new Integer[query.size()];
+					for (int i = 0; i < query.size(); i++) {
+						applicantids[i] = query.get(i).getApplicantId();
+					}
+					mainapplicantselect = dbDao
+							.query(TApplicantEntity.class, Cnd.where("id", "in", applicantids), null);
+				}
+			}
+		}
+		result.put("applicantinfo", applicantinfo);
+		result.put("applicantjpinfo", applicantjpinfo);
+		//主申请人下拉
+		result.put("mainapplicantselect", mainapplicantselect);
+		return result;
+	}
+
+	/**
+	 * 保存主申请人信息
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object saveMainApplicant(MainApplicantForm form) {
+		if (!Util.isEmpty(form.getApplicantid())) {
+			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, form.getApplicantid().longValue());
+			TApplicantOrderJpEntity applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", form.getApplicantid()));
+			applicant.setMainId(form.getMainId());
+			applicantjp.setIsMainApplicant(form.getIsMainApplicant());
+			applicantjp.setRelationRemark(form.getRelationRemark());
+			dbDao.update(applicant);
+			dbDao.update(applicantjp);
+		}
+		return null;
 	}
 }

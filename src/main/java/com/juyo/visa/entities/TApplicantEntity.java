@@ -173,4 +173,8 @@ public class TApplicantEntity implements Serializable {
 	@Comment("创建时间")
 	private Date createTime;
 
+	@Column
+	@Comment("婚姻状况证件类型")
+	private Integer marryurltype;
+
 }

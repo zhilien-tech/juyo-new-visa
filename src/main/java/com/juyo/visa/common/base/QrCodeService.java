@@ -55,6 +55,7 @@ public class QrCodeService {
 		file.delete();
 		//返回上传后七牛云的路径
 		String fileqiniupath = CommonConstants.IMAGES_SERVER_ADDR + (String) map.get("data");
+		System.out.println(fileqiniupath);
 		return fileqiniupath;
 	}
 }
