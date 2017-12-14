@@ -159,17 +159,17 @@
 	    			window.location.href = '/admin/myVisa/flowChart.html?orderid='+orderid+'&applicantid='+applicantid;
 	    		},
 	    		edit:function(applyid){
-	        		layer.open({
-	        		    type: 2,
-	        		    title: false,
-	        		    closeBtn:false,
-	        		    fix: false,
-	        		    maxmin: false,
-	        		    shadeClose: false,
-	        		    scrollbar: false,
-	        		    area: ['900px', '550px'],
-	        		    content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='
-	        	    });
+	    			layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='
+					});
 	        	},
 	        }
 		});

@@ -1218,4 +1218,22 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		return result;
 	}
 
+	//判断申请人是否合格
+	public Boolean isQualifiedByApplicantId(Integer applicantId) {
+		boolean isQualified = true;
+		int YES = IsYesOrNoEnum.YES.intKey();
+		TApplicantUnqualifiedEntity fetch = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", applicantId));
+		if (!Util.isEmpty(fetch)) {
+			Integer isBase = fetch.getIsBase();
+			Integer isPassport = fetch.getIsPassport();
+			Integer isVisa = fetch.getIsVisa();
+
+			if (Util.eq(isBase, YES) || Util.eq(isPassport, YES) || Util.eq(isVisa, YES)) {
+				isQualified = false;
+			}
+		}
+		return isQualified;
+	}
+
 }
