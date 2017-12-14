@@ -245,6 +245,12 @@ new Vue({
 				orderobj.applyinfo = data.applyinfo;
 				backMailInfos = data.backinfo;
 
+				if(orderobj.orderinfo.urgenttype == 1){
+					$("#urgentDays").addClass("none");
+				}else{
+					$("#urgentDays").removeClass("none");
+				}
+				
 				if(backMailInfos.length>0){
 					$(".addExpressInfoBtn").hide();
 				}
@@ -356,6 +362,14 @@ new Vue({
 				area: ['700px', '551px'],
 				content:'/admin/orderJp/log.html?id='+orderid
 			});
+		},
+		urgentTypeChange:function(){
+			if($('#urgentType').val() == 1){
+				$("#urgentDays").addClass("none");
+			}else{
+				$("#urgentDays").removeClass("none");
+				orderobj.orderinfo.urgentday = 1;
+			}
 		}
 
 	}

@@ -145,15 +145,16 @@
 					<!-- end 上传营业执照 -->
 				</div>
 
-				<%-- <div class="row">
-						<div class="col-sm-6">
-							<div class="form-group">
-								<label><span>*</span>营业执照：</label> <input id="license"
-									name="license" value="${obj.company.license}" type="text"
-									class="form-control input-sm" placeholder=" " />
-							</div>
+				<!-- 指定番号 -->
+				<div id="jpDesignNum_div" class="row none">
+					<p class="info-head">日本</p>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label><span>*</span>指定番号：</label> 
+							<input id="designatedNum" name="designatedNum" value="${obj.company.designatednum}" type="text" class="form-control input-sm" placeholder=" " />
 						</div>
-					</div> --%>
+					</div>
+				</div>
 
 			</div>
 	</div>
@@ -177,10 +178,6 @@
 	<!-- 上传图片 -->
 	<script src="${base}/admin/company/uploadFile.js"></script>
 	<script type="text/javascript">
-		/* $(function() {
-			//文件上传
-			uploadFile();
-		}); */
 		function initvalidate() {
 			//校验
 			$('#companyUpdateForm').bootstrapValidator({
@@ -400,6 +397,7 @@
 								$(this).removeClass("btn-state1");//清除蓝色按钮 样式
 							}
 						});
+						$("#jpDesignNum_div").removeClass("none");
 					} else if (scopesList[i] == 2) {
 						/* $(".multiselectBtn").append( "<span>美国,</span>");
 						$(".btnVal input").each(function(){
@@ -423,8 +421,10 @@
 							$(this).removeClass("btn-state1");//清除蓝色按钮 样式
 							var btnText = $(this).val();
 							//console.log(btnText);
-							$(".multiselectBtn").append(
-									"<span>" + btnText + ",</span>");
+							$(".multiselectBtn").append("<span>" + btnText + ",</span>");
+							if(btnText.indexOf("日本")!=-1){
+								$("#jpDesignNum_div").removeClass("none");
+							}
 						} else if ($(this).hasClass("btn-state2")) {//灰色按钮
 							$(this).addClass("btn-state1");//变蓝
 							$(this).removeClass("btn-state2");//清除灰色按钮 样式
@@ -436,6 +436,9 @@
 								}
 								;
 							});
+							if(btnText.indexOf("日本")!=-1){
+								$("#jpDesignNum_div").addClass("none");
+							}
 						}
 						var busScopes = "";
 						$(".multiselectBtn span").each(function() {

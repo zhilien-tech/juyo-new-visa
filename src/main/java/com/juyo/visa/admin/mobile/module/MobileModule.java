@@ -23,6 +23,8 @@ import org.nutz.mvc.upload.UploadAdaptor;
 import com.juyo.visa.admin.mobile.form.MainApplicantForm;
 import com.juyo.visa.admin.mobile.form.MarryImageForm;
 import com.juyo.visa.admin.mobile.form.MobileApplicantForm;
+import com.juyo.visa.admin.mobile.form.WealthInfoForm;
+import com.juyo.visa.admin.mobile.form.WorkInfoForm;
 import com.juyo.visa.admin.mobile.service.MobileService;
 import com.juyo.visa.entities.TApplicantLowerEntity;
 import com.juyo.visa.entities.TApplicantPassportLowerEntity;
@@ -123,5 +125,41 @@ public class MobileModule {
 	@POST
 	public Object saveMainApplicant(@Param("..") MainApplicantForm form) {
 		return mobileService.saveMainApplicant(form);
+	}
+
+	/**
+	 * 获取申请人的职业或教育信息
+	 */
+	@At
+	@POST
+	public Object getJobOrEducationData(@Param("applicantid") Long applicantid) {
+		return mobileService.getJobOrEducationData(applicantid);
+	}
+
+	/**
+	 * 保存申请人的职业教育信息
+	 */
+	@At
+	@POST
+	public Object saveJobOrEducationData(@Param("..") WorkInfoForm form) {
+		return mobileService.saveJobOrEducationData(form);
+	}
+
+	/**
+	 * 获取财产信息页面数据
+	 */
+	@At
+	@POST
+	public Object getWealthData(@Param("applicantid") Integer applicantid) {
+		return mobileService.getWealthData(applicantid);
+	}
+
+	/**
+	 * 保存财产信息
+	 */
+	@At
+	@POST
+	public Object saveWealthData(@Param("..") WealthInfoForm form) {
+		return mobileService.saveWealthData(form);
 	}
 }
