@@ -22,9 +22,7 @@
 			.nameBeforeYes {
 	margin-right:20px;
 }
-.onceIDYes {
-	margin-right:30px;
-}
+
 .nameBeforeHide , .nationalityHide{
 	display:none;
 }
@@ -36,9 +34,10 @@
 	<div class="wrapper" id="wrapper">
 		<div class="content-wrapper" style="min-height: 848px;">
 			<div class="qz-head">
-				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
-				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="saveApplicant();"/> 
-				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right" onclick="clearAll();"/>
+				<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
+				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant();"/> 
+				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
 			</div>
 			<section class="content">
 				<div class="tab-content row">
@@ -56,7 +55,7 @@
 									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="" src="${obj.applicant.cardFront }" >
-									<i class="delete" onclick="deleteApplicantFrontImg(${obj.orderid});"></i>
+									<i class="delete" id="deleteApplicantFrontImg" ></i>
 								</div>
 							</div>
 						</div>
@@ -73,7 +72,7 @@
 										<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
 										<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 										<img id="sqImgBack" alt="" src="${obj.applicant.cardBack }" >
-										<i class="delete" onclick="deleteApplicantBackImg(${obj.orderid});"></i>
+										<i class="delete" id="deleteApplicantBackImg" ></i>
 									</div>
 								</div>
 							</div>
@@ -93,11 +92,11 @@
 						<!-- end 签发机关 -->
 						<div class="row">
 							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
-							<div class="col-sm-5 padding-right-0 nameBeforeTop">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0 nameBeforeTop">
 								<div class="form-group">
 									<label>是否有曾用名</label> 
 									<div>
-										<span class="nameBeforeYes">
+										<span class="nameBeforeYes ">
 											<input type="radio" name="hasOtherName" class="nameBefore" value="1"
 											/>是
 										</span>
@@ -110,7 +109,7 @@
 							</div>
 							<!-- 姓/名 拼音 -->
 							<div class="nameBeforeHide">
-							    <div class="col-sm-11 padding-right-0">
+							    <div class="col-sm-11 col-sm-offset-1 padding-right-0">
 									<div class="form-group">
 										<label>姓/拼音：</label> <input id="otherFirstName"
 											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
@@ -120,7 +119,7 @@
 									</div>
 								</div>
 								
-								<div class="col-sm-11 padding-right-0">
+								<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 									<div class="form-group">
 										<label>名/拼音：</label> <input id="otherLastName"
 											name="otherLastName" style="position:relative;" type="text" class="form-control input-sm "
@@ -131,11 +130,11 @@
 								</div>
 							</div>
 							<!-- 姓/名 拼音 end -->
-							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0 onceIDTop">
 								<div class="form-group">
 									<label>曾有的或另有的国籍(或公民身份)</label> 
 									<div>
-										<span class="onceIDYes">
+										<span class="onceIDYes ">
 											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
 										</span>
 										<span>
@@ -145,7 +144,7 @@
 								</div>
 							</div>
 							<!-- 曾用国籍 -->
-							<div class="col-sm-5 padding-right-0 nationalityHide">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0 nationalityHide">
 								<div class="form-group">
 									<label>国籍</label> 
 									<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
@@ -356,6 +355,13 @@
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
 	$(function(){
+		var form = document.forms[0]; 
+		for ( var i = 0; i < form.length; i++) { 
+			var element = form.elements[i]; 
+			if(element.id != "editbasic")
+				element.disabled = true; 
+		} 
+		$(".basic").hide();
 		var nation = ${obj.applicant.hasOtherNationality};
 		var otherName = ${obj.applicant.hasOtherName};
 		var address = ${obj.applicant.addressIsSameWithCard};
@@ -372,8 +378,8 @@
 		if(otherName == 1){
 			$(".nameBeforeTop").css('float','none');
 			$(".nameBeforeHide").show();
-			$(".onceIDTop").removeClass('col-sm-offset-1');
-			$(".onceIDTop").css('padding-left','15px');
+			//$(".onceIDTop").removeClass('col-sm-offset-1');
+			//$(".onceIDTop").css('padding-left','15px');
 		}else {
 			
 			$(".nameBeforeHide").hide();
@@ -394,8 +400,8 @@
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
-
 				firstName : {
+					trigger:"change keyup",
 					validators : {
 						notEmpty : {
 							message : '姓不能为空'
@@ -403,6 +409,7 @@
 					}
 				},
 				lastName : {
+					trigger:"change keyup",
 					validators : {
 						notEmpty : {
 							message : '名不能为空'
@@ -464,18 +471,10 @@
 				'bootstrapValidator');
 		// 执行表单验证 
 		bootstrapValidator.validate();
-		if (bootstrapValidator.isValid()){
-			//获取必填项信息
-			var firstName = $("#firstName").val();
-			if (firstName == "") {
-				layer.msg('姓不能为空');
-				return;
-			}
-			var lastName = $("#lastName").val();
-			if (lastName == "") {
-				layer.msg('名不能为空');
-				return;
-			}
+
+		if (!bootstrapValidator.isValid()){
+			return;
+		}
 			
 		var str="";
 		var applicantInfo;
@@ -500,10 +499,48 @@
 				layer.closeAll('loading');
 				//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 				//layer.close(index);
-				layer.msg("修改成功");
+				layer.msg("修改成功", {
+					time: 500,
+					end: function () {
+						self.location.reload();
+					}
+				});
 			}
 		});
-		}
+	}
+	//编辑按钮
+	function editBtn(){
+		$(".basic").show();
+		$(".editbasic").hide();
+		var form = document.forms[0]; 
+		for ( var i = 0; i < form.length; i++) { 
+			var element = form.elements[i]; 
+			element.disabled = false; 
+		} 
+		var bootstrapValidator = $("#applicantInfo").data(
+		'bootstrapValidator');
+		// 执行表单验证 
+		bootstrapValidator.validate();
+		$("#deleteApplicantFrontImg").click(function(){
+			$('#cardFront').val("");
+			$('#sqImg').attr('src', "");
+			$("#uploadFile").siblings("i").css("display","none");
+		});
+		$("#deleteApplicantBackImg").click(function(){
+			$('#cardBack').val("");
+			$('#sqImgBack').attr('src', "");
+			$("#uploadFileBack").siblings("i").css("display","none");
+		});
+	}
+	
+	//取消按钮
+	function cancelBtn(){
+		layer.msg("已取消", {
+			time: 500,
+			end: function () {
+				self.location.reload();
+			}
+		});
 	}
 	
 	//省份检索
@@ -687,7 +724,7 @@
 		parent.cancelCallBack(1);
 	} */
 	
-	function deleteApplicantFrontImg(id){
+	/* function deleteApplicantFrontImg(id){
 		$('#cardFront').val("");
 		$('#sqImg').attr('src', "");
 		$("#uploadFile").siblings("i").css("display","none");
@@ -696,7 +733,7 @@
 		$('#cardBack').val("");
 		$('#sqImgBack').attr('src', "");
 		$("#uploadFileBack").siblings("i").css("display","none");
-	}
+	} */
 	
 	$(function(){
 		$("#validStartDate").datetimepicker({
@@ -733,8 +770,8 @@
 		if(checked == 1){
 			$(".nameBeforeTop").css('float','none');
 			$(".nameBeforeHide").show();
-			$(".onceIDTop").removeClass('col-sm-offset-1');
-			$(".onceIDTop").css('padding-left','15px');
+			//$(".onceIDTop").removeClass('col-sm-offset-1');
+			//$(".onceIDTop").css('padding-left','15px');
 		}else {
 			
 			$(".nameBeforeHide").hide();
@@ -789,6 +826,13 @@
 	
 	
 	function clearAll(){
+		$("input[name='hasOtherName']").eq(0).removeAttr("checked");
+        $("input[name='hasOtherName']").eq(1).attr("checked","checked");
+		$("input[name='hasOtherNationality']").eq(0).removeAttr("checked");
+        $("input[name='hasOtherNationality']").eq(1).attr("checked","checked");
+		$("input:checkbox[name='addressIsSameWithCard']").attr("checked", false);
+		$(".nationalityHide").hide();
+		$(".nameBeforeHide").hide();
 		$("#cardFront").val("");
 		$('#sqImg').attr('src', "");
 		$("#cardBack").val("");
@@ -798,13 +842,18 @@
 		$("#issueOrganization").val("");
 		$("#province").val("");
 		$("#city").val("");
-		$("#firstName").val("");
+		$("#otherFirstName").val("");
+		$("#otherFirstNameEn").val("");
+		$("#otherLastName").val("");
+		$("#otherLastNameEn").val("");
+		$("#firstName").val("").change();
 		$("#firstNameEn").val("");
-		$("#lastName").val("");
+		$("#lastName").val("").change();
 		$("#lastNameEn").val("");
 		$("#telephone").val("");
 		$("#email").val("");
 		$("#nation").val("");
+		$("#nationality").val("");
 		$("#birthday").val("");
 		$("#address").val("");
 		$("#issueOrganization").val("");
