@@ -66,7 +66,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>加急：</label> 
-										<select class="form-control input-sm" v-model="orderinfo.urgenttype">
+										<select id="urgentType" class="form-control input-sm" v-model="orderinfo.urgenttype" @change="urgentTypeChange()">
 											<c:forEach var="map" items="${obj.mainsaleurgentenum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -84,8 +84,18 @@
 										</select>
 									</div>
 								</div>
+								<div class="col-sm-2 none" id="urgentDays">
+									<div class="form-group">
+										<label>&nbsp;</label> <select id="urgentDay" name="urgentDay" 
+											class="form-control input-sm" v-model="orderInfo.urgentday">
+											<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
+												<option value="${map.key}">${map.value}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
 							</div>
-							<!-- end 人数/领区/加急 -->
+							<!-- end 人数/领区/加急/加急天数 -->
 	
 							<div class="row body-from-input">
 								<!-- 行程/付款方式/金额 -->

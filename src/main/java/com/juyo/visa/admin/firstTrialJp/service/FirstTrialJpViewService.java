@@ -199,6 +199,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("collarareaenum", EnumUtil.enum2(CollarAreaEnum.class));
 		//加急
 		result.put("mainsaleurgentenum", EnumUtil.enum2(MainSaleUrgentEnum.class));
+		//加急天数
+		result.put("mainSaleUrgentTimeEnum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
 		//工作日
 		result.put("mainsaleurgenttimeenum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
 		//行程
