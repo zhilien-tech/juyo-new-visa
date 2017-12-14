@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<title>财产信息</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/passport.css">
+    <script src="js/rem(750).js"></script>
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/jqueryMobile.js" ></script>
+    <script src="js/lrz.bundle.js"></script>		
+	</head>
+	<body>
+		<div class="certificateInfo">
+			<a class="certificateTop">
+				<i onclick="saveAndBack()"><</i>
+				财务信息
+			</a>
+		</div>
+		<div class="btnGroup">
+			<a class="bankInfo btnInfo">银行存款</a>
+			<a class="carInfo btnInfo">车产</a>
+			<a class="hourseInfo btnInfo">房产</a>
+			<a class="moneyInfo btnInfo">理财</a>
+		</div>
+        <div class="item-wrap">
+        	<div class="bankItemInfo">
+        		<!--<div class="item clearfix">
+		    		<div class="txt-item">
+		      		<span>银行存款</span>
+		      		<input type="text" class="infoInput" />
+		      		<i>万</i>
+		    		</div>
+		    		<a class="delect-btn">删除</a>
+		    </div>-->
+        	</div>
+		<div class="carItemInfo">
+			<!--<div class="item clearfix">
+		    		<div class="txt-item carDiv">
+		      		<span>车产</span>
+		      		<input type="text" class="infoInput" placeholder="必填" />
+		    		</div>
+		    		<a class="delect-btn">删除</a>
+		    </div>-->
+		</div>	
+		<div class="hourseItemInfo">
+		    <!--<div class="item clearfix">
+		    		<div class="txt-item hourseDiv">
+		      		<span>房产</span>
+		      		<input type="text" class="infoInput" />
+		      		<i>平米</i>
+		    		</div>
+		    		<a class="delect-btn">删除</a>
+		    </div>-->
+		</div>    
+		<div class="moneyItemInfo">
+			<!--<div class="item clearfix">
+		    		<div class="txt-item moneyDiv">
+		      		<span>理财</span>
+		      		<input type="text" class="infoInput" />
+		      		<i>元</i>
+		    		</div>
+		    		<a class="delect-btn">删除</a>
+		    </div>-->
+		</div>
+		</div>
+		<script src="/references/common/js/vue/vue.min.js"></script>
+		<script src="/references/common/js/layer/layer.js"></script>
+		<script type="text/javascript" src="/admin/common/commonjs.js"></script>
+	</body>
+<script>
+	$(function(){
+		//左滑动删除
+		$(document).on('swipeleft',".item", function(index) { 
+			$(this).addClass('selected').siblings('.item').removeClass('selected');
+			$(this).find('.delect-btn').on('click', function(index) {
+
+			    $(this).parent(".item").animate(
+			    		{
+				        height: 0,
+				        width: 0
+			    		},
+			        300, function()
+			        {
+				        $(this).remove();
+				        //判断删除的class 是否一致  是则删除 按钮样式
+				        if($(this).remove().hasClass('itemSelect')){
+				        		$(".bankInfo").removeClass("blue");
+				        }else if($(this).remove().hasClass('carSelect')){
+				        		$(".carInfo").removeClass("blue");
+				        }else if($(this).remove().hasClass('hourseSelect')){
+				        		$(".hourseInfo").removeClass("blue");
+				        }else{
+				        		$(".moneyInfo").removeClass("blue");
+				        }
+			        }
+			    );
+			});
+		});
+		$(document).on('swiperight',".item",function() {
+			$(this).removeClass('selected');
+		});
+		//遍历按钮
+		$(".btnInfo").each(function(index){
+			//index  从0开始
+			$(this).click(function(){
+				//判断这个class 里面是否有 blue
+				if($(this).hasClass('blue')){
+					//移除样式
+					$(this).removeClass("blue");
+					 if(index == '0'){
+					//删除
+						$(".itemSelect").remove();
+					}else if(index == '1'){
+						$(".carSelect").remove();
+					}else if(index == '2'){
+						$(".hourseSelect").remove();
+					}else {
+						$(".moneySelect").remove();
+					}
+				}else {
+					//添加样式
+					 $(this).addClass("blue");
+					 if(index == '0'){
+					//添加
+						$(".bankItemInfo").append('<div class="item itemSelect clearfix"> <div class="txt-item"><span>银行存款</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" /></div><i>万</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
+					}else if(index == '1'){
+						$(".carItemInfo").append('<div class="item carSelect clearfix"> <div class="txt-item carDiv"><span>车产</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" placeholder="必填"/></div></div> <a class="delect-btn ui-link">删除</a> </div>');
+					}else if(index == '2'){
+						$(".hourseItemInfo").append('<div class="item hourseSelect clearfix"> <div class="txt-item hourseDiv"><span>房产</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" /></div><i>平米</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
+					}else {
+						$(".moneyItemInfo").append('<div class="item moneySelect clearfix"> <div class="txt-item moneyDiv"><span>理财</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" /></div><i>元</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
+					}
+				}
+			})
+		})
+	})
+	//获取URL地址参数
+    function GetQueryString(name){
+         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+         var r = window.location.search.substr(1).match(reg);
+         if(r!=null)return  unescape(r[2]); return null;
+    }
+	//初始化页面数据
+	initPageData();
+	function initPageData(){
+		var applicantid = GetQueryString('applicantid');
+		$.ajax({
+        	url: '/admin/mobile/getWealthData.html',
+        	data:{applicantid:applicantid},
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		$.each(data.wealthjp,function(index,value){
+        			if(value.type == '银行存款'){
+        				$('.bankInfo').addClass('blue');
+        				$(".bankItemInfo").append('<div class="item itemSelect clearfix"> <div class="txt-item"><span>银行存款</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'" /></div><i>万</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
+        			}else if(value.type == '车产'){
+        				$('.carInfo').addClass('blue');
+        				$(".carItemInfo").append('<div class="item carSelect clearfix"> <div class="txt-item carDiv"><span>车产</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'" placeholder="必填"/></div></div> <a class="delect-btn ui-link">删除</a> </div>');
+        			}else if(value.type == '房产'){
+        				$('.hourseInfo').addClass('blue');
+        				$(".hourseItemInfo").append('<div class="item hourseSelect clearfix"> <div class="txt-item hourseDiv"><span>房产</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'"/></div><i>平米</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
+        			}else if(value.type == '理财'){
+        				$('.moneyInfo').addClass('blue');
+        				$(".moneyItemInfo").append('<div class="item moneySelect clearfix"> <div class="txt-item moneyDiv"><span>理财</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'"/></div><i>元</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
+        			}
+        		});
+          	}
+        });
+	}
+	
+	function saveAndBack(){
+		var applicantid = GetQueryString('applicantid');
+		var wealthinfo = {};
+		var bankinfo = '';
+		if($('.bankInfo').hasClass('blue')){
+			bankinfo = $('.bankItemInfo div div input').val();
+			if(!bankinfo){
+				bankinfo = '&&&&&&&';
+			}
+		}
+		wealthinfo.bankinfo = bankinfo;
+		var carinfo = '';
+		if($('.carInfo').hasClass('blue')){
+			carinfo = $('.carItemInfo div div input').val();
+			if(!carinfo){
+				carinfo = '&&&&&&&';
+			}
+		}
+		wealthinfo.carinfo = carinfo;
+		var hourseinfo = '';
+		if($('.hourseInfo').hasClass('blue')){
+			hourseinfo = $('.hourseItemInfo div div input').val();
+			if(!hourseinfo){
+				hourseinfo = '&&&&&&&';
+			}
+		}
+		wealthinfo.hourseinfo = hourseinfo;
+		var moneyinfo = '';
+		if($('.moneyInfo').hasClass('blue')){
+			moneyinfo = $('.moneyItemInfo div div input').val();
+			if(!moneyinfo){
+				moneyinfo = '&&&&&&&';
+			}
+		}
+		wealthinfo.moneyinfo = moneyinfo;
+		wealthinfo.applicantid = applicantid;
+		$.ajax({
+        	url: '/admin/mobile/saveWealthData.html',
+        	data:wealthinfo,
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		window.history.go(-1);
+          	}
+        });
+	}
+</script>	
+</html>

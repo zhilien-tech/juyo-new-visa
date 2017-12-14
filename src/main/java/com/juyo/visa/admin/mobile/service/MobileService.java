@@ -27,20 +27,27 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.mobile.form.MainApplicantForm;
 import com.juyo.visa.admin.mobile.form.MarryImageForm;
 import com.juyo.visa.admin.mobile.form.MobileApplicantForm;
+import com.juyo.visa.admin.mobile.form.WealthInfoForm;
+import com.juyo.visa.admin.mobile.form.WorkInfoForm;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
+import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.entities.TApplicantEntity;
+import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantLowerEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantPassportLowerEntity;
+import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
+import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
@@ -64,6 +71,17 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	private UserViewService userViewService;
 	@Inject
 	private UploadService qiniuupService;
+
+	//在职需要的资料
+	private static Integer[] WORKINGDATA = { 1, 2, 3, 4, 5, 6, 7, 8 };
+	//退休需要的资料
+	private static Integer[] RETIREMENTDATA = { 1, 2, 3, 4, 5, 8, 15 };
+	//自由职业所需资料
+	private static Integer[] FREELANCEDATA = { 1, 2, 3, 4, 5, 8 };
+	//学生所需资料
+	private static Integer[] STUDENTDATA = { 1, 2, 3, 5, 13, 14, 16, 17 };
+	//学龄前所需资料
+	private static Integer[] PRESCHOOLAGEDATA = { 1, 2, 5, 12, 16, 17 };
 
 	/**
 	 *手机端申请人页面数据接口
@@ -423,5 +441,207 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			dbDao.update(applicantjp);
 		}
 		return null;
+	}
+
+	/**
+	 * 回显申请人是职业或教育信息
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param applicantid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getJobOrEducationData(Long applicantid) {
+		Map<String, Object> result = Maps.newHashMap();
+		TApplicantOrderJpEntity applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		//工作信息
+		TApplicantWorkJpEntity workinfo = dbDao.fetch(TApplicantWorkJpEntity.class,
+				Cnd.where("applicantId", "=", applicantjp.getId()));
+		Map<String, String> workinfomap = MapUtil.obj2Map(workinfo);
+		List<Map<String, String>> jobselects = Lists.newArrayList();
+		String workststusstr = "";
+		for (JobStatusEnum jobStatusEnum : JobStatusEnum.values()) {
+			if (!Util.isEmpty(workinfo.getCareerStatus()) && workinfo.getCareerStatus().equals(jobStatusEnum.intKey())) {
+				workststusstr = jobStatusEnum.value();
+			}
+			Map<String, String> jobselect = Maps.newHashMap();
+			jobselect.put("key", jobStatusEnum.key());
+			jobselect.put("value", jobStatusEnum.value());
+			jobselects.add(jobselect);
+		}
+		workinfomap.put("workststusstr", workststusstr);
+		result.put("workinfo", workinfomap);
+		//工作状态下拉
+		result.put("jobselects", jobselects);
+		return result;
+	}
+
+	/**
+	 * 保存申请人的职业教育信息
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object saveJobOrEducationData(WorkInfoForm form) {
+		TApplicantOrderJpEntity applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", form.getApplicantid()));
+		//工作信息
+		TApplicantWorkJpEntity workinfo = dbDao.fetch(TApplicantWorkJpEntity.class,
+				Cnd.where("applicantId", "=", applicantjp.getId()));
+		workinfo.setCareerStatus(form.getCareerStatus());
+		workinfo.setName(form.getName());
+		workinfo.setTelephone(form.getTelephone());
+		workinfo.setAddress(form.getAddress());
+		dbDao.update(workinfo);
+		//实收资料表
+		List<TApplicantFrontPaperworkJpEntity> fronts = Lists.newArrayList();
+		List<TApplicantVisaPaperworkJpEntity> visas = Lists.newArrayList();
+		if (form.getCareerStatus().equals(JobStatusEnum.WORKING_STATUS.intKey())) {
+			//在职
+			fronts = getFrontPaperList(WORKINGDATA, applicantjp.getId(), form.getCareerStatus());
+			visas = getVisaPaperList(WORKINGDATA, applicantjp.getId(), form.getCareerStatus());
+		} else if (form.getCareerStatus().equals(JobStatusEnum.RETIREMENT_STATUS.intKey())) {
+			//退休
+			fronts = getFrontPaperList(RETIREMENTDATA, applicantjp.getId(), form.getCareerStatus());
+			visas = getVisaPaperList(RETIREMENTDATA, applicantjp.getId(), form.getCareerStatus());
+		} else if (form.getCareerStatus().equals(JobStatusEnum.FREELANCE_STATUS.intKey())) {
+			//自由职业
+			fronts = getFrontPaperList(FREELANCEDATA, applicantjp.getId(), form.getCareerStatus());
+			visas = getVisaPaperList(FREELANCEDATA, applicantjp.getId(), form.getCareerStatus());
+		} else if (form.getCareerStatus().equals(JobStatusEnum.student_status.intKey())) {
+			//学生
+			fronts = getFrontPaperList(STUDENTDATA, applicantjp.getId(), form.getCareerStatus());
+			visas = getVisaPaperList(STUDENTDATA, applicantjp.getId(), form.getCareerStatus());
+		} else if (form.getCareerStatus().equals(JobStatusEnum.Preschoolage_status.intKey())) {
+			//学龄前
+			fronts = getFrontPaperList(PRESCHOOLAGEDATA, applicantjp.getId(), form.getCareerStatus());
+			visas = getVisaPaperList(PRESCHOOLAGEDATA, applicantjp.getId(), form.getCareerStatus());
+		}
+		List<TApplicantFrontPaperworkJpEntity> prefront = dbDao.query(TApplicantFrontPaperworkJpEntity.class,
+				Cnd.where("applicantId", "=", applicantjp.getId()), null);
+		List<TApplicantVisaPaperworkJpEntity> previsa = dbDao.query(TApplicantVisaPaperworkJpEntity.class,
+				Cnd.where("applicantId", "=", applicantjp.getId()), null);
+		//更新前台真实资料
+		dbDao.updateRelations(prefront, fronts);
+		//更新签证真实资料
+		dbDao.updateRelations(previsa, visas);
+		return null;
+	}
+
+	/**
+	 * 设置前台真实资料信息
+	 */
+	private List<TApplicantFrontPaperworkJpEntity> getFrontPaperList(Integer[] worktypedata, Integer applicantid,
+			Integer careerStatus) {
+		List<TApplicantFrontPaperworkJpEntity> fronts = Lists.newArrayList();
+		for (PrepareMaterialsEnum_JP materialsEnum : PrepareMaterialsEnum_JP.values()) {
+			for (Integer working : WORKINGDATA) {
+				if (working.equals(materialsEnum.intKey())) {
+					TApplicantFrontPaperworkJpEntity front = new TApplicantFrontPaperworkJpEntity();
+					front.setApplicantId(applicantid);
+					front.setRealInfo(materialsEnum.value());
+					front.setStatus(1);
+					front.setType(careerStatus);
+					fronts.add(front);
+				}
+			}
+		}
+		return fronts;
+	}
+
+	/**
+	 * 设置签证真实资料信息
+	 */
+	private List<TApplicantVisaPaperworkJpEntity> getVisaPaperList(Integer[] worktypedata, Integer applicantid,
+			Integer careerStatus) {
+		List<TApplicantVisaPaperworkJpEntity> visas = Lists.newArrayList();
+		for (PrepareMaterialsEnum_JP materialsEnum : PrepareMaterialsEnum_JP.values()) {
+			for (Integer working : WORKINGDATA) {
+				if (working.equals(materialsEnum.intKey())) {
+					TApplicantVisaPaperworkJpEntity visa = new TApplicantVisaPaperworkJpEntity();
+					visa.setApplicantId(applicantid);
+					visa.setRealInfo(materialsEnum.value());
+					visa.setStatus(1);
+					visa.setType(careerStatus);
+					visas.add(visa);
+				}
+			}
+		}
+		return visas;
+	}
+
+	/**
+	 * 获取财产信息页面数据
+	 */
+	public Object getWealthData(Integer applicantid) {
+		Map<String, Object> result = Maps.newHashMap();
+		TApplicantOrderJpEntity applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		List<TApplicantWealthJpEntity> wealthjp = dbDao.query(TApplicantWealthJpEntity.class,
+				Cnd.where("applicantId", "=", applicantjp.getId()), null);
+		result.put("wealthjp", wealthjp);
+		return result;
+	}
+
+	/**
+	 * 保存财产信息
+	 */
+	public Object saveWealthData(WealthInfoForm form) {
+		TApplicantOrderJpEntity applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", form.getApplicantid()));
+		//要保存的财产信息
+		List<TApplicantWealthJpEntity> wealths = Lists.newArrayList();
+		if (!Util.isEmpty(form.getBankinfo())) {
+			TApplicantWealthJpEntity wealthinfo = new TApplicantWealthJpEntity();
+			wealthinfo.setApplicantId(applicantjp.getId());
+			wealthinfo.setType("银行存款");
+			if (!"&&&&&&&".equals(form.getBankinfo())) {
+				wealthinfo.setDetails(form.getBankinfo());
+			} else {
+				wealthinfo.setDetails("");
+			}
+			wealths.add(wealthinfo);
+		}
+		if (!Util.isEmpty(form.getCarinfo())) {
+			TApplicantWealthJpEntity wealthinfo = new TApplicantWealthJpEntity();
+			wealthinfo.setApplicantId(applicantjp.getId());
+			wealthinfo.setType("车产");
+			if (!"&&&&&&&".equals(form.getCarinfo())) {
+				wealthinfo.setDetails(form.getCarinfo());
+			} else {
+				wealthinfo.setDetails("");
+			}
+			wealths.add(wealthinfo);
+		}
+		if (!Util.isEmpty(form.getHourseinfo())) {
+			TApplicantWealthJpEntity wealthinfo = new TApplicantWealthJpEntity();
+			wealthinfo.setApplicantId(applicantjp.getId());
+			wealthinfo.setType("房产");
+			if (!"&&&&&&&".equals(form.getHourseinfo())) {
+				wealthinfo.setDetails(form.getHourseinfo());
+			} else {
+				wealthinfo.setDetails("");
+			}
+			wealths.add(wealthinfo);
+		}
+		if (!Util.isEmpty(form.getMoneyinfo())) {
+			TApplicantWealthJpEntity wealthinfo = new TApplicantWealthJpEntity();
+			wealthinfo.setApplicantId(applicantjp.getId());
+			wealthinfo.setType("理财");
+			if (!"&&&&&&&".equals(form.getMoneyinfo())) {
+				wealthinfo.setDetails(form.getMoneyinfo());
+			} else {
+				wealthinfo.setDetails("");
+			}
+			wealths.add(wealthinfo);
+		}
+		List<TApplicantWealthJpEntity> beforewealth = dbDao.query(TApplicantWealthJpEntity.class,
+				Cnd.where("applicantId", "=", applicantjp.getId()), null);
+		dbDao.updateRelations(beforewealth, wealths);
+		return null;
+
 	}
 }
