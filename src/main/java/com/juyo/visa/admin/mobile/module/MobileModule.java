@@ -6,13 +6,22 @@
 
 package com.juyo.visa.admin.mobile.module;
 
+import java.io.File;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.upload.UploadAdaptor;
 
+import com.juyo.visa.admin.mobile.form.MainApplicantForm;
+import com.juyo.visa.admin.mobile.form.MarryImageForm;
 import com.juyo.visa.admin.mobile.form.MobileApplicantForm;
 import com.juyo.visa.admin.mobile.service.MobileService;
 import com.juyo.visa.entities.TApplicantLowerEntity;
@@ -69,5 +78,50 @@ public class MobileModule {
 	@POST
 	public Object savePassportInfo(@Param("..") TApplicantPassportLowerEntity passportinfo) {
 		return mobileService.savePassportInfo(passportinfo);
+	}
+
+	/**
+	 * 签证信息页面数据
+	 */
+	@At
+	@POST
+	public Object getVisaInfoData(@Param("..") MobileApplicantForm form) {
+		return mobileService.getVisaInfoData(form);
+	}
+
+	/**
+	 * 上传结婚照、离婚照片。。。。
+	 */
+	@At
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object uploadPic(@Param("image") File file, HttpServletRequest request, HttpServletResponse response) {
+		return mobileService.uploadPic(file, request, response);
+	}
+
+	/**
+	 * 保存上传的照片信息
+	 */
+	@At
+	@POST
+	public Object saveCardInfo(@Param("..") MarryImageForm form) {
+		return mobileService.saveCardInfo(form);
+	}
+
+	/**
+	 * 获取申请人信息数据
+	 */
+	@At
+	@POST
+	public Object getApplicantData(@Param("applicantid") Integer applicantid) {
+		return mobileService.getApplicantData(applicantid);
+	}
+
+	/**
+	 * 保存主申请人数据
+	 */
+	@At
+	@POST
+	public Object saveMainApplicant(@Param("..") MainApplicantForm form) {
+		return mobileService.saveMainApplicant(form);
 	}
 }

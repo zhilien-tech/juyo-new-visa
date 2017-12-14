@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<title>教育</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/passport.css">
+    <script src="js/rem(750).js"></script>
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/lrz.bundle.js"></script>
+	</head>
+	<body>
+		<div class="certificateInfo">
+			<a class="certificateTop">
+				<i><</i>
+				职业与教育
+			</a>
+		</div>
+		<ul class="label-info educationInfo">
+        		<li>
+        			<span class="select-value">我的职业</span>
+			     <span class="select-skip">
+			     	<i>在职</i>
+			     	<a class="skip">></a>
+			     </span>
+			     <select class="selector">
+			        <option>在职</option>
+			        	<option>退休</option>
+			        	<option>自由职业</option>
+			        	<option>学生</option>
+			        	<option>学龄前</option>
+			     </select>
+        		</li>
+        		<li><span>单位名称</span> <input type="text" class="txtInput" placeholder="必填"/></li>
+        		<li><span>单位电话</span> <input type="text" class="txtInput" placeholder="必填"/></li>
+        		<li><span>单位地址</span> <input type="text" class="txtInput" placeholder="必填"/></li>
+        </ul>
+	</body>
+<script>
+	$(function(){
+		$('.selector').change(function(){
+			let name = $(".selector").find("option:selected").text();
+			$(".select-skip i").text(name);
+			if(name == '学生'){
+				$('.educationInfo li:nth-child(2) span').text("学校名称");
+				$('.educationInfo li:nth-child(3) span').text("学校电话");
+				$('.educationInfo li:nth-child(4) span').text("学校地址");
+			}else{
+				$('.educationInfo li:nth-child(2) span').text("单位名称");
+				$('.educationInfo li:nth-child(3) span').text("单位电话");
+				$('.educationInfo li:nth-child(4) span').text("单位地址");
+			}
+		})
+	})
+</script>	
+</html>
