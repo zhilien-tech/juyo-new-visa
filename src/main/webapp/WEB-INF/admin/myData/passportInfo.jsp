@@ -163,7 +163,7 @@
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<select id="validType" name="validType" class="form-control input-sm selectHeight" >
+									<select id="validType" name="validType" class="form-control input-sm " >
 									<c:forEach var="map" items="${obj.passportType}">
 										<option value="${map.key}" ${map.key == obj.passport.validType?'selected':'' }>${map.value}</option>
 									</c:forEach>

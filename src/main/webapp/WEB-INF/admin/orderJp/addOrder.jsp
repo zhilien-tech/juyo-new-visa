@@ -728,7 +728,7 @@
 				}
 				if(status == 3){
 				    layer.msg('添加成功');
-					saveAddOrder(2);
+					saveAddOrder(3);
 				}
 				if(status == 4){
 					saveAddOrder(3);

@@ -461,8 +461,9 @@
 						$("#applyId").val(data.id);
 						layer.closeAll('loading');
 						if(status == 1){
-							closeWindow();
 							parent.successCallBack(3,data);
+							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							parent.layer.close(index);
 						}
 						if(status == 2){
 							parent.successCallBack(4,data);
