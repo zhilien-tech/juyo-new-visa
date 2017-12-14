@@ -75,10 +75,22 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			result.put("firstNameEn", sb.toString());
 		}
 
+		if (!Util.isEmpty(applicantEntity.getOtherFirstNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(applicantEntity.getOtherFirstNameEn());
+			result.put("otherFirstNameEn", sb.toString());
+		}
+
 		if (!Util.isEmpty(applicantEntity.getLastNameEn())) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("/").append(applicantEntity.getLastNameEn());
 			result.put("lastNameEn", sb.toString());
+		}
+
+		if (!Util.isEmpty(applicantEntity.getOtherLastNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(applicantEntity.getOtherLastNameEn());
+			result.put("otherLastNameEn", sb.toString());
 		}
 
 		//生成二维码

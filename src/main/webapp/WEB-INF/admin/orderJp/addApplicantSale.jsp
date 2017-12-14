@@ -736,34 +736,22 @@
 			'bootstrapValidator');
 			// 执行表单验证 
 			bootstrapValidator.validate();
-			if (bootstrapValidator.isValid()){
-				saveApplicant(2);
-				var applyId = $("#applyId").val();
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['900px', '551px'],
-					content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'
-				});
-			}else{
-				//获取必填项信息
-				var firstName = $("#firstName").val();
-				if (firstName == "") {
-					layer.msg('姓不能为空');
-					return;
-				}
-				var lastName = $("#lastName").val();
-				if (lastName == "") {
-					layer.msg('名不能为空');
-					return;
-				}
+			if (!bootstrapValidator.isValid()) {
+				return;
 			}
-			
+			saveApplicant(2);
+			var applyId = $("#applyId").val();
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'
+			});
 		}
 		function successCallBack(status){
 			parent.successCallBack(1);

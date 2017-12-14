@@ -1704,7 +1704,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object getProvince(String searchStr) {
 		List<String> provinceList = new ArrayList<>();
 		List<TIdcardEntity> province = dbDao.query(TIdcardEntity.class,
-				Cnd.where("province", "like", Strings.trim(searchStr) + "%"), null);
+				Cnd.where("province", "like", "%" + Strings.trim(searchStr) + "%"), null);
 		for (TIdcardEntity tIdcardEntity : province) {
 			if (!provinceList.contains(tIdcardEntity.getProvince())) {
 				provinceList.add(tIdcardEntity.getProvince());
@@ -1724,7 +1724,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object getCity(String province, String searchStr) {
 		List<String> cityList = new ArrayList<>();
 		List<TIdcardEntity> city = dbDao.query(TIdcardEntity.class,
-				Cnd.where("province", "=", province).and("city", "like", Strings.trim(searchStr) + "%"), null);
+				Cnd.where("province", "=", province).and("city", "like", "%" + Strings.trim(searchStr) + "%"), null);
 		for (TIdcardEntity tIdcardEntity : city) {
 			if (!cityList.contains(tIdcardEntity.getCity())) {
 				cityList.add(tIdcardEntity.getCity());
@@ -2542,8 +2542,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			Date expiryDate;
 			Date issueDate;
 			try {
-				birthDay = new SimpleDateFormat("yyMMdd").parse(out.getString("birth_day"));
-				expiryDate = new SimpleDateFormat("yyMMdd").parse(out.getString("expiry_day"));
+				birthDay = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth_date"));
+				expiryDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("expiry_date"));
 				issueDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("issue_date"));
 				String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(birthDay);
 				String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(expiryDate);

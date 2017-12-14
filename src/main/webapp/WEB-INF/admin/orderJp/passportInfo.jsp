@@ -231,6 +231,7 @@
 				},
 				fields : {
 					passport : {
+						trigger:"change keyup",
 						validators : {
 		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 								url: '${base}/admin/orderJp/checkPassport.html',
@@ -306,7 +307,7 @@
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");
 							$('#type').val(obj.type);
-							$('#passport').val(obj.num);
+							$('#passport').val(obj.num).change();
 							$('#sex').val(obj.sex);
 							$('#sexEn').val(obj.sexEn);
 							$('#birthAddress').val(obj.birthCountry);
@@ -354,47 +355,29 @@
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
-			if (bootstrapValidator.isValid()) {
-				layer.load(1);
-				$.ajax({
-					type: 'POST',
-					async : false,
-					data : {
-						passport:$('#passport').val(),
-						adminId:$('#id').val(),
-						orderid:$('#orderid').val()
-					},
-					url: '${base}/admin/orderJp/checkPassport.html',
-					success :function(data) {
-						console.log(JSON.stringify(data));
-						layer.closeAll('loading');
-						if(data.valid == false){
-							layer.msg("护照号已存在，请重新输入");
-							return;
-						}else{
-							var passportInfo = $("#passportInfo").serialize();
-							$.ajax({
-								type: 'POST',
-								async : false,
-								data : passportInfo,
-								url: '${base}/admin/orderJp/saveEditPassport',
-								success :function(data) {
-									console.log(JSON.stringify(data));
-									layer.closeAll('loading');
-									/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-									layer.close(index); */
-									if(status == 1){
-										closeWindow();
-										parent.successCallBack(1);
-									}
-								}
-							});
-						}
-					}
-				});
+			if (!bootstrapValidator.isValid()) {
+				return;
 			}
 			
+			var passportInfo = $("#passportInfo").serialize();
+			$.ajax({
+				type: 'POST',
+				async : false,
+				data : passportInfo,
+				url: '${base}/admin/orderJp/saveEditPassport',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					layer.close(index); */
+					if(status == 1){
+						closeWindow();
+						parent.successCallBack(1);
+					}
+				}
+			});
 		}
+		
 		
 		//返回 
 		function closeWindow() {
@@ -538,88 +521,49 @@
 		 
 		 function applyBtn(){
 			 var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-				bootstrapValidator.validate();
-				if (bootstrapValidator.isValid()) {
-					layer.load(1);
-					$.ajax({
-						type: 'POST',
-						async : false,
-						data : {
-							passport:$('#passport').val(),
-							adminId:$('#id').val(),
-							orderid:$('#orderid').val()
-						},
-						url: '${base}/admin/orderJp/checkPassport.html',
-						success :function(data) {
-							console.log(JSON.stringify(data));
-							layer.closeAll('loading');
-							if(data.valid == false){
-								layer.msg("护照号已存在，请重新输入");
-								return;
-							}else{
-								 save(2);
-								 var id = ${obj.applicantId};
-								 layer.open({
-										type: 2,
-										title: false,
-										closeBtn:false,
-										fix: false,
-										maxmin: false,
-										shadeClose: false,
-										scrollbar: false,
-										area: ['900px', '551px'],
-										content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid=',
-										success: function(index, layero){
-										    //do something
-										    layer.close(index); //如果设定了yes回调，需进行手工关闭
-										  }
-									});
-							}
-						}
-					});
+			bootstrapValidator.validate();
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
+			save(2);
+			var id = ${obj.applicantId};
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid=',
+				success: function(index, layero){
+						    //do something
+					layer.close(index); //如果设定了yes回调，需进行手工关闭
 				}
-			 
+			});
 		 }
 			
 		 function visaBtn(){
 			 var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-				bootstrapValidator.validate();
-				if (bootstrapValidator.isValid()) {
-					layer.load(1);
-					$.ajax({
-						type: 'POST',
-						async : false,
-						data : {
-							passport:$('#passport').val(),
-							adminId:$('#id').val(),
-							orderid:$('#orderid').val()
-						},
-						url: '${base}/admin/orderJp/checkPassport.html',
-						success :function(data) {
-							console.log(JSON.stringify(data));
-							layer.closeAll('loading');
-							if(data.valid == false){
-								layer.msg("护照号已存在，请重新输入");
-								return;
-							}else{
-								save(3);
-								 var id = ${obj.applicantId};
-								 var orderid = ${obj.orderid};
-								 layer.open({
-										type: 2,
-										title: false,
-										closeBtn:false,
-										fix: false,
-										maxmin: false,
-										shadeClose: false,
-										scrollbar: false,
-										area: ['900px', '551px'],
-										content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime'
-									});
-							}
-						}
-					});
-				}
+			bootstrapValidator.validate();
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
+			save(3);
+			var id = ${obj.applicantId};
+			var orderid = ${obj.orderid};
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime'
+			});
 		 }
 		 
 		//合格/不合格
