@@ -1,5 +1,6 @@
 package com.juyo.visa.admin.visajp.module;
 
+import java.util.Date;
 import java.util.Map;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -72,6 +73,7 @@ public class ApplicantvisaModule {
 	@At
 	@POST
 	public Object add(@Param("..") TApplicantVisaJpAddForm addForm) {
+		addForm.setVisaEntryTime(new Date());
 		return applicantvisaViewService.add(addForm);
 	}
 

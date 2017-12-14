@@ -91,11 +91,11 @@ public class TApplicantLowerEntity implements Serializable {
 
 	@Column
 	@Comment("身份证省份")
-	private Integer cardprovince;
+	private String cardprovince;
 
 	@Column
 	@Comment("身份证城市")
-	private Integer cardcity;
+	private String cardcity;
 
 	@Column
 	@Comment("手机号")
@@ -168,5 +168,9 @@ public class TApplicantLowerEntity implements Serializable {
 	@Column
 	@Comment("创建时间")
 	private Date createtime;
+
+	@Column
+	@Comment("婚姻状况证件类型")
+	private Integer marryurltype;
 
 }

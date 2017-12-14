@@ -16,7 +16,7 @@
     		<img :src="passportdata.passporturl" width="360px" height="200px" alt="" class="bacimg">
     	</span>
     	<span v-else>
-	        <img src="img/1.jpg" alt="" class="bacimg">
+	        <img src="images/1.jpg" alt="" class="bacimg">
     	</span>
         <div id="upload">
             <h6>点击上传护照</h6>
@@ -69,7 +69,7 @@
 		created:function(){
 			var applicantid = GetQueryString('applicantid');
 	        _self=this;
-	        $.ajax({ 
+	        $.ajax({
 	        	url: url,
 	        	data:{applicantid:applicantid},
 	        	dataType:"json",
@@ -135,6 +135,10 @@
         });
         //下一步保存
         $('.passport-next').click(function(){
+        	var comid = GetQueryString('comid');
+			var userid = GetQueryString('userid');
+			var orderid = GetQueryString('orderid');
+			var applicantid = GetQueryString('applicantid');
         	$.ajax({ 
             	url: '/admin/mobile/savePassportInfo.html',
             	data:_self.passportdata,
@@ -142,7 +146,7 @@
             	type:'post',
             	async:false,
             	success: function(data){
-            		//window.location.href='/mobile/passport.html?comid='+data.comid+'&userid='+data.userid+'&orderid='+data.orderid+'&applicantid='+data.applicantid;
+            		window.location.href='/mobile/visaInfo.html?comid='+comid+'&userid='+userid+'&orderid='+orderid+'&applicantid='+applicantid;
               	}
             });
         });

@@ -41,12 +41,12 @@ import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JapanVisaStatusEnum;
+import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
 import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
-import com.juyo.visa.common.enums.VisaDataTypeEnum;
 import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
@@ -123,7 +123,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			List<Record> query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
 			for (Record apply : query) {
 				Integer dataType = (Integer) apply.get("dataType");
-				for (VisaDataTypeEnum dataTypeEnum : VisaDataTypeEnum.values()) {
+				for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
 					if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
 						apply.put("dataType", dataTypeEnum.value());
 					}
@@ -206,7 +206,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		List<Record> applyinfo = dbDao.query(applysql, null, null);
 		for (Record record : applyinfo) {
 			Integer type = (Integer) record.get("type");
-			for (VisaDataTypeEnum visadatatype : VisaDataTypeEnum.values()) {
+			for (JobStatusEnum visadatatype : JobStatusEnum.values()) {
 				if (!Util.isEmpty(type) && type.equals(visadatatype.intKey())) {
 					record.put("type", visadatatype.value());
 				}
@@ -792,7 +792,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		List<Record> query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
 		for (Record apply : query) {
 			Integer dataType = (Integer) apply.get("dataType");
-			for (VisaDataTypeEnum dataTypeEnum : VisaDataTypeEnum.values()) {
+			for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
 				if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
 					apply.put("dataType", dataTypeEnum.value());
 				}

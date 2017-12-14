@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<title>申请人</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/passport.css">
+    <script src="js/rem(750).js"></script>
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/lrz.bundle.js"></script>
+	</head>
+	<body>
+		<form id="applicantform">
+			<input type="hidden" name="applicantid" id="applicantid">
+		<div class="certificateInfo">
+			<a class="certificateTop">
+				<i onclick="saveAndBack()"><</i>
+				申请人
+			</a>
+		</div>
+		<ul class="label-info certificateM">
+			<li>主/副申请人
+				<i>主</i>
+				<span>
+					<input type="checkbox" id="simple_3">
+   					<label for="simple_3" class="green"></label>
+				</span>	
+			</li>
+        		<li>选择主申请人 
+        			<select id="mainselect" placeholder="必填" >
+        				
+        			</select>
+        		</li>
+        		<li>备注 <input type="text" id="relationRemark" class="txtInput" placeholder="必填"/></li>
+        </ul>
+        </form>
+        <script src="/references/common/js/vue/vue.min.js"></script>
+		<script src="/references/common/js/layer/layer.js"></script>
+		<script type="text/javascript" src="/admin/common/commonjs.js"></script>
+	</body>
+<script>
+	//加载页面数据
+	initPageData();
+	function initPageData(){
+		var url="/admin/mobile/getApplicantData.html";
+		var applicantid = GetQueryString('applicantid');
+	    $.ajax({ 
+	    	url: url,
+	    	data:{applicantid:applicantid},
+	    	dataType:"json",
+	    	type:'post',
+	    	success: function(data){
+	    		$('#applicantid').val(data.applicantinfo.id);
+	    		var applicantjpinfo = data.applicantjpinfo;
+	    		//开关回显
+	    		if(applicantjpinfo.isMainApplicant == 0){
+	    			$("li:nth-child(2)").show();
+					$(".certificateM i").text('副');
+					$("#simple_3").attr('checked',true);
+	    		}else{
+	    			$("li:nth-child(2)").hide();
+					$(".certificateM i").text('主');
+					$("#simple_3").attr('checked',false);
+	    		}
+	    		//备注
+	    		$('#relationRemark').val(applicantjpinfo.relationRemark);
+	    		//下拉框内容回显
+	    		var selecthtml = '';
+	    		var mainId = data.applicantinfo.mainId;
+	    		$.each(data.mainapplicantselect,function(index,value){
+	    			if(mainId == value.id){
+		    			selecthtml += '<option value="'+value.id+'">'+value.firstName + value.lastName+'</option>';
+	    			}else{
+		    			selecthtml += '<option value="'+value.id+'" selected="selected">'+value.firstName + value.lastName+'</option>';
+	    			}
+	    		});
+	    		$('#mainselect').html(selecthtml);
+	      	}
+	    });
+	}
+	$(function(){
+		$("#simple_3").click(function(){
+			if($(this).prop("checked")){
+				console.log($(this).prop("checked"));
+				$("li:nth-child(2)").show();
+				$(".certificateM i").text('副');
+			}else {
+				console.log($(this).prop("checked"));
+				$("li:nth-child(2)").hide();
+				$(".certificateM i").text('主');
+			}
+		});
+	})
+	//获取URL地址参数
+    function GetQueryString(name){
+         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+         var r = window.location.search.substr(1).match(reg);
+         if(r!=null)return  unescape(r[2]); return null;
+    }
+	
+	//保存并返回
+	function saveAndBack(){
+		var applicantid = GetQueryString('applicantid');
+		var relationRemark = $('#relationRemark').val();
+		var isMainApplicant = 1;
+		var ischecked = $("#simple_3").prop("checked");
+		if(ischecked){
+			isMainApplicant = 0;
+		}
+		var mainId = $('#mainselect').val();
+		$.ajax({ 
+	    	url: '/admin/mobile/saveMainApplicant.html',
+	    	data:{applicantid:applicantid,relationRemark:relationRemark,isMainApplicant:isMainApplicant,mainId:mainId},
+	    	dataType:"json",
+	    	type:'post',
+	    	success: function(data){
+	    		window.history.go(-1);
+	      	}
+	    });
+	}
+</script>	
+</html>

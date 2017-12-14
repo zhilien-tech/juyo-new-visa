@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>基本信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/passport.css">
+    <script src="js/rem(750).js"></script>
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/lrz.bundle.js"></script>
+</head>
+<body>
+<form id="visainfoform">
+<div class="visaInfo-top">
+	签证信息
+</div>
+<div>
+	<div class="select-area">
+     <span class="select-value">婚姻状况</span>
+     <span class="select-skip">
+     	<i id="marrystatusstr"></i>
+     	<a class="skip">></a>
+     </span>
+     <select class="selector">
+        <option v-for="option in marryoptions" v-bind:value="option.key">{{option.value}}</option>
+     </select>
+ </div>
+ 	<a class="visa-data" onclick="applyinfo()">
+ 		<span>申请人</span>
+ 		<i>></i>
+ 	</a>
+ 	<a class="visa-data" onclick="workinfo()">
+ 		<span>职业与教育信息</span>
+ 		<i>></i>
+ 	</a>
+ 	<a class="visa-data">
+ 		<span>财产信息</span>
+ 		<i>></i>
+ 	</a>
+</div>
+<div class="bottom">
+    <a class="prev btn">上一步</a><a class="save btn">保存</a>
+</div>
+</form>
+	<script src="/references/common/js/vue/vue.min.js"></script>
+	<script src="/references/common/js/layer/layer.js"></script>
+	<script type="text/javascript" src="/admin/common/commonjs.js"></script>
+</body>
+<script>
+
+	var url="/admin/mobile/getVisaInfoData.html";
+	var _self;
+	new Vue({
+		el: '#visainfoform',
+		data: {
+				applicantdata:"",
+				marryoptions:""
+			},
+		created:function(){
+			var applicantid = GetQueryString('applicantid');
+	        _self=this;
+	        $.ajax({ 
+	        	url: url,
+	        	data:{applicantid:applicantid},
+	        	dataType:"json",
+	        	type:'post',
+	        	success: function(data){
+	        		$('#marrystatusstr').html(data.applicantdata.marrystatusstr);
+	        		_self.applicantdata = data.applicantdata;
+	        		_self.marryoptions = data.marryoptions;
+	          	}
+	        });
+	    }
+	});
+	$(function(){
+		$('.selector').change(function(){
+			let name = $(".selector").find("option:selected").text();
+			var selectvalue = $(".selector").find("option:selected").val();
+			$(".select-skip i").text(name);
+			/* if(name == "离婚"){
+				console.log("跳转链接1");
+			} */
+			
+			if(selectvalue == 1 || selectvalue == 2 || selectvalue == 3 || selectvalue == 5){
+				var applicantid = GetQueryString('applicantid');
+				window.location.href='/mobile/certificate.html?applicantid='+ applicantid +'&marryurltype='+selectvalue;
+			}
+			
+		})
+	})
+	//获取URL地址参数
+    function GetQueryString(name){
+         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+         var r = window.location.search.substr(1).match(reg);
+         if(r!=null)return  unescape(r[2]); return null;
+    }
+	
+	function applyinfo(){
+		var applicantid = GetQueryString('applicantid');
+		window.location.href='/mobile/proposer.html?applicantid='+ applicantid;
+	}
+</script>
+</html>
