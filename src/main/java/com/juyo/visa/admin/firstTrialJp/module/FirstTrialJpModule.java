@@ -227,4 +227,14 @@ public class FirstTrialJpModule {
 	public Object saveBackMailInfo(@Param("..") TApplicantBackmailJpForm form, HttpSession session) {
 		return firstTrialJpViewService.saveBackMailInfo(form, session);
 	}
+
+	/**
+	 * 获取申请人职业
+	 */
+	@At
+	@POST
+	public Object getCareerStatus(@Param("orderjpid") Integer orderjpid) {
+		return firstTrialJpViewService.getCareerStatus(orderjpid);
+	}
+
 }

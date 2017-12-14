@@ -1175,4 +1175,32 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		return result;
 	}
 
+	//获取订单下 申请人职业
+	public Object getCareerStatus(Integer orderJpId) {
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("firstTrialJp_careerStatus_by_orderjpid");
+		Sql sql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("taoj.orderId", "=", orderJpId);
+		cnd.and("tawj.careerStatus", "is", null);
+		List<Record> query = dbDao.query(sql, cnd, null);
+		String names = "";
+		for (Record record : query) {
+			String careerStatus = record.getString("careerStatus");
+			if (Util.isEmpty(careerStatus)) {
+				String applicantName = record.getString("applicantName");
+				names += applicantName + ",";
+			}
+		}
+
+		if (!Util.isEmpty(names)) {
+			names = names.substring(0, names.length() - 1);
+		}
+
+		result.put("names", names);
+		result.put("isEmpty", query.size() <= 0);
+
+		return result;
+	}
+
 }

@@ -1,5 +1,6 @@
 package com.juyo.visa.admin.myData.module;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -30,8 +31,8 @@ public class MyDataModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object basicInfo(HttpSession session) {
-		return myDataService.getBasicInfo(session);
+	public Object basicInfo(HttpSession session, HttpServletRequest request) {
+		return myDataService.getBasicInfo(session, request);
 	}
 
 	/**
@@ -39,8 +40,14 @@ public class MyDataModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object passportInfo(HttpSession session) {
-		return myDataService.getPassportInfo(session);
+	public Object passportInfo(HttpSession session, HttpServletRequest request) {
+		return myDataService.getPassportInfo(session, request);
+	}
+
+	@At
+	@Ok("jsp")
+	public Object visaInput(HttpSession session) {
+		return myDataService.visaInput(session);
 	}
 
 }

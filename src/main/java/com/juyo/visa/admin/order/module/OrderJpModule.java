@@ -245,6 +245,15 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 申请人手机号唯一性验证
+	 */
+	@At
+	@POST
+	public Object checkMobile(@Param("mobile") String mobile, @Param("adminId") String adminId) {
+		return saleViewService.checkMobile(mobile, adminId);
+	}
+
+	/**
 	 * 签证信息修改
 	 */
 	@At

@@ -19,6 +19,15 @@
 			.tab-content{padding: 15px 30px 10px 0;margin: 0 0px;}
 			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
 			.front, .back {width: 320px;margin: 10px auto;}
+			.nameBeforeYes {
+	margin-right:20px;
+}
+.onceIDYes {
+	margin-right:30px;
+}
+.nameBeforeHide , .nationalityHide{
+	display:none;
+}
 		</style>
 	</head>
 
@@ -29,16 +38,14 @@
 			<div class="qz-head">
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="saveApplicant();"/> 
-				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right" />
+				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right" onclick="clearAll();"/>
 			</div>
 			<section class="content">
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
-						<!-- <div class="info-QRcode">
-							身份证 正面
-
-						</div> -->
-						<!-- end 身份证 正面 -->
+						<div class="info-QRcode"> <!-- 身份证 正面 -->
+							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
+						</div> <!-- end 身份证 正面 -->
 
 						<div class="info-imgUpload front">
 							<!-- 身份证 正面 -->
@@ -72,29 +79,79 @@
 							</div>
 						</div>
 						<!-- end 身份证 反面 -->
-						
 						<div class="row">
-							<!-- 现居住地址省份/现居住地址城市 -->
-							<div class="col-sm-5  padding-right-0">
+							<!-- 签发机关 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地址省份：</label> <input id="province"
-										name="province" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.province }" />
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-							<div class="col-sm-5   padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>现居住地址城市：</label> <input id="city"
-										name="city" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.city }" />
+									<label><span>*</span>签发机关：</label> 
+									<input id="issueOrganization" name="issueOrganization"
+										type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div>
-						<!-- end 现居住地址省份/现居住地址城市 -->
-
-						
+						<!-- end 签发机关 -->
+						<div class="row">
+							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
+							<div class="col-sm-5 padding-right-0 nameBeforeTop">
+								<div class="form-group">
+									<label>是否有曾用名</label> 
+									<div>
+										<span class="nameBeforeYes">
+											<input type="radio" name="hasOtherName" class="nameBefore" value="1"
+											/>是
+										</span>
+										<span>
+											<input type="radio" name="hasOtherName" class="nameBefore"   value="2"
+											/>否
+										</span>
+									</div>
+								</div>
+							</div>
+							<!-- 姓/名 拼音 -->
+							<div class="nameBeforeHide">
+							    <div class="col-sm-11 padding-right-0">
+									<div class="form-group">
+										<label>姓/拼音：</label> <input id="otherFirstName"
+											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
+											placeholder=" " value="${obj.applicant.otherFirstName }" />
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:42px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
+										<!-- <i class="bulb"></i> -->
+									</div>
+								</div>
+								
+								<div class="col-sm-11 padding-right-0">
+									<div class="form-group">
+										<label>名/拼音：</label> <input id="otherLastName"
+											name="otherLastName" style="position:relative;" type="text" class="form-control input-sm "
+											placeholder=" " value="${obj.applicant.otherLastName }" />
+											<input type="text" id="otherLastNameEn" style="position:absolute;top:42px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+										<!-- <i class="bulb"></i> -->
+									</div>
+								</div>
+							</div>
+							<!-- 姓/名 拼音 end -->
+							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
+								<div class="form-group">
+									<label>曾有的或另有的国籍(或公民身份)</label> 
+									<div>
+										<span class="onceIDYes">
+											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
+										</span>
+										<span>
+											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  />否
+										</span>
+									</div>
+								</div>
+							</div>
+							<!-- 曾用国籍 -->
+							<div class="col-sm-5 padding-right-0 nationalityHide">
+								<div class="form-group">
+									<label>国籍</label> 
+									<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
+								</div>
+							</div>
+						</div>
 					</div>
 
 					<div class="col-sm-6 padding-right-0">
@@ -147,6 +204,18 @@
 						</div>
 						<!-- end 手机号/邮箱 -->
 						<div class="row">
+							<!-- 公民身份证 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>公民身份号码：</label> <input id="cardId"
+										name="cardId" type="text" class="form-control input-sm"
+										placeholder=" " value="${obj.applicant.cardId }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
+						<!-- end 公民身份证 -->
+						<div class="row">
 							<!-- 姓名/民族 -->
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
@@ -189,30 +258,6 @@
 						</div>
 						<!-- end 住宅 -->
 						<div class="row">
-							<!-- 公民身份证 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>公民身份号码：</label> <input id="cardId"
-										name="cardId" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.cardId }" />
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
-						<!-- end 公民身份证 -->
-						<div class="row">
-							<!-- 签发机关 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>签发机关：</label> 
-									<input id="issueOrganization" name="issueOrganization"
-										type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
-						<!-- end 签发机关 -->
-						<div class="row">
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>有效期限：</label> 
@@ -227,6 +272,30 @@
 							</div>
 						</div>
 						<!-- end 有效期限 -->
+						<div class="row">
+							<!-- 现居住地址省份/现居住地址城市 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>现居住地址省份：</label> 
+									<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
+									<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
+									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
+									<input id="province"
+										name="province" type="text" class="form-control input-sm"
+										placeholder=" " value="${obj.applicant.province }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>现居住地址城市：</label> <input id="city"
+										name="city" type="text" class="form-control input-sm"
+										placeholder=" " value="${obj.applicant.city }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
+						<!-- end 现居住地址省份/现居住地址城市 -->
 						
 						<div class="row">
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
@@ -241,7 +310,25 @@
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
-						
+						<div class="row">
+							<!-- 紧急联系人姓名/手机 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>紧急联系人姓名</label> <input id="emergencyLinkman"
+										name="emergencyLinkman" type="text" class="form-control input-sm"
+										placeholder=" " value="${obj.applicant.emergencyLinkman }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>紧急联系人手机</label> <input id="emergencyTelephone" name="emergencyTelephone"
+										type="text" class="form-control input-sm" placeholder=" "
+										value="${obj.applicant.emergencyTelephone }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
 					</div>
 
 				</div>
@@ -269,6 +356,34 @@
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
 	$(function(){
+		var nation = ${obj.applicant.hasOtherNationality};
+		var otherName = ${obj.applicant.hasOtherName};
+		var address = ${obj.applicant.addressIsSameWithCard};
+		$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
+		$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
+		if(nation == 1){
+			$(".nameBeforeTop").css('float','none');
+			$(".nationalityHide").show();
+			$(".onceIDTop").css('float','left');
+		}else {
+			$(".nationalityHide").hide();
+		}
+		
+		if(otherName == 1){
+			$(".nameBeforeTop").css('float','none');
+			$(".nameBeforeHide").show();
+			$(".onceIDTop").removeClass('col-sm-offset-1');
+			$(".onceIDTop").css('padding-left','15px');
+		}else {
+			
+			$(".nameBeforeHide").hide();
+		}
+		
+		if(address == 1){
+			var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
+		}else{
+			var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
+		}
 		
 		//校验
 		$('#applicantInfo').bootstrapValidator({
@@ -299,7 +414,20 @@
 						regexp: {
 	                	 	regexp: /^[1][34578][0-9]{9}$/,
 	                        message: '电话号格式错误'
-	                    }
+	                    },
+	                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+							url: '${base}/admin/orderJp/checkMobile.html',
+							message: '电话号码已存在，请重新输入',//提示消息
+							delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+							type: 'POST',//请求方式
+							//自定义提交数据，默认值提交当前input value
+							data: function(validator) {
+								return {
+									mobile:$('#telephone').val(),
+									adminId:${obj.applicantId}
+								};
+							}
+						}
 					}
 				},
 				email : {
@@ -330,7 +458,7 @@
 	});
 	
 	//var base = "${base}";
-	function saveApplicant(){
+	function saveApplicant(status){
 		//得到获取validator对象或实例 
 		var bootstrapValidator = $("#applicantInfo").data(
 				'bootstrapValidator');
@@ -348,11 +476,20 @@
 				layer.msg('名不能为空');
 				return;
 			}
+			
+		var str="";
+		var applicantInfo;
+		$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+		    str=$(this).val();     
+		});
+		if(str != 1){
+			applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
+		}else{
+			applicantInfo = $("#applicantInfo").serialize();
+		}
 		
-		var applicantInfo = $("#applicantInfo").serialize();
 		var applicantId = ${obj.applicantId};
 		applicantInfo.id = applicantId;
-		layer.load(1);
 		$.ajax({
 			async: false,
 			type: 'POST',
@@ -361,14 +498,77 @@
 			success :function(data) {
 				console.log(JSON.stringify(data));
 				layer.closeAll('loading');
-				layer.msg('保存成功');
-				closeWindow();
+				//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				//layer.close(index);
+				layer.msg("修改成功");
 			}
 		});
 		}
 	}
 	
-//正面上传,扫描
+	//省份检索
+	$("#province").on('input',function(){
+		$("#province").nextAll("ul.ui-autocomplete").remove();
+		$.ajax({
+			type : 'POST',
+			async: false,
+			data : {
+				searchStr : $("#province").val()
+			},
+			url : BASE_PATH+'/admin/orderJp/getProvince.html',
+			success : function(data) {
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				$.each(data,function(index,element) { 
+					liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+				});
+				liStr += "</ul>";
+				$("#province").after(liStr);
+			}
+		});
+	});
+	
+	//省份 检索下拉项
+	function setProvince(province){
+		$("#province").nextAll("ul.ui-autocomplete").remove();
+		$("#province").val(province);
+	} 
+	$("#provinceDiv").mouseleave(function(){
+		$("#province").nextAll("ul.ui-autocomplete").remove();
+	});
+	
+	//市检索
+	$("#city").on('input',function(){
+		$("#city").nextAll("ul.ui-autocomplete").remove();
+		$.ajax({
+			type : 'POST',
+			async: false,
+			data : {
+				province : $("#province").val(),
+				searchStr : $("#city").val()
+			},
+			url : BASE_PATH+'/admin/orderJp/getCity.html',
+			success : function(data) {
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				$.each(data,function(index,element) { 
+					liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+				});
+				liStr += "</ul>";
+				$("#city").after(liStr);
+			}
+		});
+	});
+	
+	//市 检索下拉项
+	function setCity(city){
+		$("#city").nextAll("ul.ui-autocomplete").remove();
+		$("#city").val(city);
+	} 
+	$("#cityDiv").mouseleave(function(){
+		$("#city").nextAll("ul.ui-autocomplete").remove();
+	});
+	
+	
+	//正面上传,扫描
 	
 	$('#uploadFile').change(function() {
 		var layerIndex = layer.load(1, {
@@ -402,8 +602,9 @@
 						$('#address').val(obj.address);
 						$('#nation').val(obj.nationality);
 						$('#cardId').val(obj.num);
-						//$('#province').val(obj.province);
-						//$('#city').val(obj.city);
+						searchByCard();
+						$('#cardProvince').val(obj.province);
+						$('#cardCity').val(obj.city);
 						$('#birthday').val(obj.birth);
 						$('#sex').val(obj.sex);
 					}
@@ -449,11 +650,11 @@
 					if (true === obj.success) {
 						$('#cardBack').val(obj.url);
 						$('#sqImgBack').attr('src', obj.url);
+						$("#uploadFileBack").siblings("i").css("display","block");
 						$('#validStartDate').val(obj.starttime);
 						$('#validEndDate').val(obj.endtime);
 						$('#issueOrganization').val(obj.issue);
 					}
-					$("#uploadFileBack").siblings("i").css("display","block");
 					$("#addBtn").attr('disabled', false);
 					$("#updateBtn").attr('disabled', false);
 				},
@@ -480,10 +681,11 @@
 	}
 								
 	//返回 
-	function closeWindow() {
+	/* function closeWindow() {
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 		parent.layer.close(index);
-	}
+		parent.cancelCallBack(1);
+	} */
 	
 	function deleteApplicantFrontImg(id){
 		$('#cardFront').val("");
@@ -497,12 +699,6 @@
 	}
 	
 	$(function(){
-		/* $("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
-			$(this).siblings("i").css("display","block");
-		});
-		$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
-			$(this).siblings("i").css("display","block");
-		}); */
 		$("#validStartDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
@@ -531,6 +727,92 @@
 			minView: "month"//只显示年月日
 		});
 	});
+	//checkbox 曾用名
+	$(".nameBefore").change(function(){
+		let checked = $("input[name='hasOtherName']:checked").val();
+		if(checked == 1){
+			$(".nameBeforeTop").css('float','none');
+			$(".nameBeforeHide").show();
+			$(".onceIDTop").removeClass('col-sm-offset-1');
+			$(".onceIDTop").css('padding-left','15px');
+		}else {
+			
+			$(".nameBeforeHide").hide();
+		}
+	});
+	//曾用国籍
+	$(".onceID").change(function(){
+		let checked = $("input[name='hasOtherNationality']:checked").val();
+		if(checked == 1){
+			$(".nameBeforeTop").css('float','none');
+			$(".nationalityHide").show();
+			$(".onceIDTop").css('float','left');
+		}else {
+			
+			$(".nationalityHide").hide();
+		}
+	});
+	
+	//居住地与身份证相同
+	$(".nowProvince").change(function(){
+		searchByCard();
+	});
+	
+	$("#cardId").change(function(){
+		searchByCard();
+	});
+	
+	function searchByCard(){
+		var str="";  
+		//是否同身份证相同
+		$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+			str=$(this).val();     
+		});     
+		if(str == 1){//相同
+			var cardId = $("#cardId").val();
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : {
+					cardId : cardId
+				},
+				url: '${base}/admin/orderJp/getInfoByCard',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+					$("#province").val(data.province);
+					$("#city").val(data.city);
+				}
+			});
+		}
+	}
+	
+	
+	function clearAll(){
+		$("#cardFront").val("");
+		$('#sqImg').attr('src', "");
+		$("#cardBack").val("");
+		$("#sqImgBack").attr('src', "");
+		$("#uploadFile").siblings("i").css("display","none");
+		$("#uploadFileBack").siblings("i").css("display","none");
+		$("#issueOrganization").val("");
+		$("#province").val("");
+		$("#city").val("");
+		$("#firstName").val("");
+		$("#firstNameEn").val("");
+		$("#lastName").val("");
+		$("#lastNameEn").val("");
+		$("#telephone").val("");
+		$("#email").val("");
+		$("#nation").val("");
+		$("#birthday").val("");
+		$("#address").val("");
+		$("#issueOrganization").val("");
+		$("#cardId").val("");
+		$("#validStartDate").val("");
+		$("#validEndDate").val("");
+		$("#detailedAddress").val("");
+	}
 	</script>
 </body>
 </html>

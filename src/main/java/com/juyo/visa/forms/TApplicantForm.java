@@ -42,6 +42,8 @@ public class TApplicantForm extends DataTablesParamForm {
 	/**名(拼音)*/
 	private String lastNameEn;
 
+	private String baseRemark;
+
 	private String otherFirstName;
 
 	private String otherFirstNameEn;

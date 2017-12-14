@@ -105,6 +105,15 @@ public class ReceptionJpModule {
 	}
 
 	/**
+	 * 验证是否为原始资料
+	 */
+	@At
+	@POST
+	public Object validateIsoriginal(@Param("paperid") Integer paperid) {
+		return receptionJpViewService.validateIsoriginal(paperid);
+	}
+
+	/**
 	 * 加载实收页面数据
 	 */
 	@At
