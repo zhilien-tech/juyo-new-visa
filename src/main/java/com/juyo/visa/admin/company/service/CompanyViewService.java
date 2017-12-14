@@ -124,9 +124,16 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		//经营范围信息
 		String scopeStr = "";
 		String businessScopes = addForm.getBusinessScopes();
+		String designatedNum = addForm.getDesignatedNum();
 		Map<String, Object> map = getScopeList(businessScopes, comId);
 		if (!Util.isEmpty(map)) {
 			List<TComBusinessscopeEntity> scopeLists = (List<TComBusinessscopeEntity>) map.get("scopeList");
+			for (TComBusinessscopeEntity comBSEntity : scopeLists) {
+				Integer countryId = comBSEntity.getCountryId();
+				if (Util.eq(countryId, BusinessScopesEnum.JAPAN.intKey())) {
+					comBSEntity.setDesignatedNum(designatedNum);
+				}
+			}
 			if (!Util.isEmpty(scopeLists)) {
 				dbDao.insert(scopeLists);
 			}
@@ -192,6 +199,12 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			Record record = list.get(0);
 			List<TComBusinessscopeEntity> comBusiness = dbDao.query(TComBusinessscopeEntity.class,
 					Cnd.where("comId", "=", id), null);
+			for (TComBusinessscopeEntity cbsEntity : comBusiness) {
+				Integer countryId = cbsEntity.getCountryId();
+				if (Util.eq(countryId, BusinessScopesEnum.JAPAN.intKey())) {
+					record.set("designatedNum", cbsEntity.getDesignatedNum());
+				}
+			}
 			record.set("comBusinesss", comBusiness);
 			obj.put("company", record);
 		}
@@ -261,9 +274,16 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		String scopeStr = "";
 		Integer comIdInt = Integer.valueOf(comId + "");
 		String businessScopes = updateForm.getBusinessScopes();
+		String designatedNum = updateForm.getDesignatedNum();
 		Map<String, Object> map = getScopeList(businessScopes, comIdInt);
 		if (!Util.isEmpty(map)) {
 			List<TComBusinessscopeEntity> comScopesAfter = (List<TComBusinessscopeEntity>) map.get("scopeList");
+			for (TComBusinessscopeEntity comBSEntity : comScopesAfter) {
+				Integer countryId = comBSEntity.getCountryId();
+				if (Util.eq(countryId, BusinessScopesEnum.JAPAN.intKey())) {
+					comBSEntity.setDesignatedNum(designatedNum);
+				}
+			}
 			if (!Util.isEmpty(comScopesAfter)) {
 				dbDao.updateRelations(comScopesBefore, comScopesAfter);
 			}
@@ -293,8 +313,8 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 				for (Map.Entry<String, String> scopeEnum : scopeMap.entrySet()) {
 					String value = scopeEnum.getValue();
 					String key = scopeEnum.getKey();
-					if (Util.eq(scope, value)) {
-						scopeStr += key + ",";
+					if (Util.eq(scope, key)) {
+						scopeStr += value + ",";
 						scopeEntity.setComId(comId);
 						scopeEntity.setCountryId(Integer.valueOf(key));
 						scopeList.add(scopeEntity);

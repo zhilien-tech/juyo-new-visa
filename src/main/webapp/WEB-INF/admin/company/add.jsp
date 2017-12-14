@@ -139,6 +139,17 @@
 						</div>
 					</div>
 					<!-- end 上传营业执照 -->
+					
+					<!-- 指定番号 -->
+					<div id="jpDesignNum_div" class="row none">
+						<p class="info-head">日本</p>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>指定番号：</label> 
+								<input id="designatedNum" name="designatedNum" type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
 
 				</div>
 			</div>
@@ -292,6 +303,9 @@
 						var btnText = $(this).val();
 						//console.log(btnText);
 						$(".multiselectBtn").append("<span>" + btnText + ",</span>");
+						if(btnText.indexOf("日本")!=-1){
+							$("#jpDesignNum_div").removeClass("none");
+						}
 					} else if ($(this).hasClass("btn-state2")) {//灰色按钮
 						$(this).addClass("btn-state1");//变蓝
 						$(this).removeClass("btn-state2");//清除灰色按钮 样式
@@ -305,6 +319,9 @@
 							;
 							scopes += spanVal;
 						});
+						if(btnText.indexOf("日本")!=-1){
+							$("#jpDesignNum_div").addClass("none");
+						}
 					}
 					var busScopes = "";
 					$(".multiselectBtn span").each(function() {
