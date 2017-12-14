@@ -274,8 +274,8 @@
 											<a v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;
 											<a v-on:click="visaInfo(apply.applyid)">签证信息</a><br>
 											<a v-on:click="backmailInfo(apply.applyid)">回邮信息</a><br>
-											<a v-on:click="qualified(apply.applyid)">合格</a>&nbsp;&nbsp;
-											<a v-on:click="unqualified(apply.applyid)">不合格</a>
+											<!-- <a v-on:click="qualified(apply.applyid)">合格</a>&nbsp;&nbsp;
+											<a v-on:click="unqualified(apply.applyid)">不合格</a> -->
 										</td>
 									</tr>
 								</tbody>
