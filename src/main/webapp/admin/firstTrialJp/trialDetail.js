@@ -311,7 +311,7 @@ new Vue({
 				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=0'
 			});
 		},
-		qualified:function(applyId){
+		qualified:function(applyid){
 			//判断申请人是否合格
 			$.ajax({
 				type : 'POST',
