@@ -218,6 +218,7 @@ $("#linkman").on('select2:select', function (evt) {
 			/*邮箱补全*/
 			$("#email").append('<option selected="true" value='+ id +'>'+data.email+'</option>');
 			/*客户来源补全*/
+			$("#payType").val(data.payType);
 			$("#customerType").val(data.source);
 			/*if(data.isArrearsRed){
 				$('#fontLSqk').css("color","red");
@@ -306,6 +307,7 @@ $("#mobile").on('select2:select', function (evt) {
 			$("#email").append('<option selected="true" value='+ id +'>'+data.email+'</option>');
 			/*客户来源补全*/
 			$("#customerType").val(data.source);
+			$("#payType").val(data.payType);
 		},
 		error : function() {
 		}
@@ -344,6 +346,7 @@ $("#compName").on('select2:select', function (evt) {
 			$("#email").append('<option selected="true" value='+ id +'>'+data.email+'</option>');
 			/*客户来源补全*/
 			$("#customerType").val(data.source);
+			$("#payType").val(data.payType);
 		},
 		error : function() {
 		}
@@ -383,6 +386,7 @@ $("#comShortName").on('select2:select', function (evt) {
 			$("#email").append('<option selected="true" value='+ id +'>'+data.email+'</option>');
 			/*客户来源补全*/
 			$("#customerType").val(data.source);
+			$("#payType").val(data.payType);
 		},
 		error : function() {
 		}
@@ -422,6 +426,7 @@ $("#email").on('select2:select', function (evt) {
 			$("#mobile").append('<option selected="true" value='+ id +'>'+data.mobile+'</option>');
 			/*客户来源补全*/
 			$("#customerType").val(data.source);
+			$("#payType").val(data.payType);
 		},
 		error : function() {
 		}

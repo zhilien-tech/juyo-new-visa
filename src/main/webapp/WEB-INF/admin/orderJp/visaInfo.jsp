@@ -775,7 +775,6 @@
 		}
 		function cancelCallBack(status){
 			closeWindow();
-			parent.cancelCallBack(1);
 		}
 		function successCallBack(status){
 			parent.successCallBack(1);
