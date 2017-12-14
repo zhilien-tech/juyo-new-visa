@@ -81,18 +81,21 @@ WHERE
 /*firstTrialJp_orderDetail_applicant_by_orderid*/
 SELECT
 	taoj.applicantId applyid,
-	CONCAT(ta.firstName, ta.lastName) applyname,
+	CONCAT( ta.firstName, ta.lastName ) applyname,
 	ta.telephone,
 	tap.passport,
 	tavpj.careerStatus datatype,
 	tavpj.DATA,
 	ta.sex,
-	ta.status applicantstatus
+	ta.STATUS applicantstatus,
+	tae.expressType,
+	tae.expressNum 
 FROM
 	t_applicant_order_jp taoj
-INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
-LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
-LEFT JOIN ( 
+	INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
+	LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
+	LEFT JOIN t_applicant_express tae ON tae.applicantId = ta.id
+	LEFT JOIN ( 
 		SELECT
 			applicantId,
 			careerStatus,

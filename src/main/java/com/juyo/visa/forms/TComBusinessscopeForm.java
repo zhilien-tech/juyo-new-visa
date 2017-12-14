@@ -1,16 +1,16 @@
 package com.juyo.visa.forms;
 
-import com.uxuexi.core.db.util.EntityUtil;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import com.juyo.visa.entities.TComBusinessscopeEntity;
-import com.uxuexi.core.web.form.DataTablesParamForm;
 
-import java.io.Serializable;
+import com.juyo.visa.entities.TComBusinessscopeEntity;
+import com.uxuexi.core.db.util.EntityUtil;
+import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -18,13 +18,16 @@ public class TComBusinessscopeForm extends DataTablesParamForm {
 	private static final long serialVersionUID = 1L;
 	/**主键id*/
 	private Integer id;
-	
+
 	/**经营范围*/
 	private Integer countryId;
-	
+
 	/**公司id*/
 	private Integer comId;
-	
+
+	/**指定番号(日本)*/
+	private String designatedNum;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**

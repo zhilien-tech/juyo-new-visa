@@ -53,7 +53,6 @@ import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
-import com.juyo.visa.common.enums.VisaDataTypeEnum;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
@@ -199,6 +198,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("collarareaenum", EnumUtil.enum2(CollarAreaEnum.class));
 		//加急
 		result.put("mainsaleurgentenum", EnumUtil.enum2(MainSaleUrgentEnum.class));
+		//加急天数
+		result.put("mainSaleUrgentTimeEnum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
 		//工作日
 		result.put("mainsaleurgenttimeenum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
 		//行程
@@ -294,14 +295,28 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		applyinfo = editApplicantsInfo(applyinfo);
 		for (Record record : applyinfo) {
 			//资料类型
-			Integer type = (Integer) record.get("type");
+			/*Integer type = (Integer) record.get("type");
 			for (VisaDataTypeEnum visadatatype : VisaDataTypeEnum.values()) {
 				if (!Util.isEmpty(type) && type.equals(visadatatype.intKey())) {
 					record.put("type", visadatatype.value());
 				}
-			}
+			}*/
+			//性别
 			String sex = (String) record.get("sex");
 			record.set("sex", sex);
+			//递送方式
+			Integer extype = (Integer) record.get("expresstype");
+			String exNum = (String) record.get("expressnum");
+			for (ExpressTypeEnum expresstype : ExpressTypeEnum.values()) {
+				if (!Util.isEmpty(extype) && extype.equals(expresstype.intKey())) {
+					if (extype == ExpressTypeEnum.EXPRESS.intKey()) {
+						//exNum = "<a href='https://www.ickd.cn/' target='view_window'>" + exNum + "</a>";
+						record.put("expressNum", exNum);
+					} else {
+						record.put("expressNum", expresstype.value());
+					}
+				}
+			}
 		}
 
 		return applyinfo;

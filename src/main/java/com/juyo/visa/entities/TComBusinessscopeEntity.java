@@ -24,6 +24,10 @@ public class TComBusinessscopeEntity implements Serializable {
 	@Comment("公司id")
 	private Integer comId;
 
+	@Column
+	@Comment("指定番号(日本)")
+	private String designatedNum;
+
 	/**
 	 * (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -47,6 +51,11 @@ public class TComBusinessscopeEntity implements Serializable {
 				return false;
 		} else if (!countryId.equals(other.countryId))
 			return false;
+		if (designatedNum == null) {
+			if (other.designatedNum != null)
+				return false;
+		} else if (!designatedNum.equals(other.designatedNum))
+			return false;
 		return true;
 	}
 
@@ -60,6 +69,7 @@ public class TComBusinessscopeEntity implements Serializable {
 		int result = 1;
 		result = prime * result + ((comId == null) ? 0 : comId.hashCode());
 		result = prime * result + ((countryId == null) ? 0 : countryId.hashCode());
+		result = prime * result + ((designatedNum == null) ? 0 : designatedNum.hashCode());
 		return result;
 	}
 

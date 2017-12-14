@@ -66,7 +66,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>加急：</label> 
-										<select class="form-control input-sm" v-model="orderinfo.urgenttype">
+										<select id="urgentType" class="form-control input-sm" v-model="orderinfo.urgenttype" @change="urgentTypeChange()">
 											<c:forEach var="map" items="${obj.mainsaleurgentenum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -84,8 +84,18 @@
 										</select>
 									</div>
 								</div>
+								<div class="col-sm-2 none" id="urgentDays">
+									<div class="form-group">
+										<label>&nbsp;</label> <select id="urgentDay" name="urgentDay" 
+											class="form-control input-sm" v-model="orderInfo.urgentday">
+											<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
+												<option value="${map.key}">${map.value}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
 							</div>
-							<!-- end 人数/领区/加急 -->
+							<!-- end 人数/领区/加急/加急天数 -->
 	
 							<div class="row body-from-input">
 								<!-- 行程/付款方式/金额 -->
@@ -244,6 +254,7 @@
 										<th><span>所需资料<span></th>
 										<th><span>性别<span></th>
 										<th><span>状态<span></th>
+										<th><span>递送方式<span></th>
 										<th><span>操作<span></th>
 									</tr>
 								</thead>
@@ -256,6 +267,8 @@
 										<td>{{apply.data}}</td>
 										<td>{{apply.sex}}</td>
 										<td>{{apply.applicantstatus}}</td>
+										<td v-if="(apply.expresstype == 1)"><a href="https://www.ickd.cn/" target="view_window">{{apply.expressnum}}</a></td>
+										<td v-else>{{apply.expressnum}}</td>
 										<td>
 											<a v-on:click="basicInfo(apply.applyid)">基本信息</a>&nbsp;&nbsp;
 											<a v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;
