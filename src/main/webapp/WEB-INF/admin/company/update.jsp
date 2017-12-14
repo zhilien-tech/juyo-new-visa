@@ -438,6 +438,7 @@
 							});
 							if(btnText.indexOf("日本")!=-1){
 								$("#jpDesignNum_div").addClass("none");
+								$("#designatedNum").val("");	
 							}
 						}
 						var busScopes = "";
