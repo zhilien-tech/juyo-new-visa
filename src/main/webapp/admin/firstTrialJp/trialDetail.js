@@ -251,6 +251,12 @@ new Vue({
 					$("#urgentDays").removeClass("none");
 				}
 				
+				var money = orderobj.orderinfo.money;
+				if(money != ""){
+					orderobj.orderinfo.money = returnFloat(money);
+				}
+				
+				
 				if(backMailInfos.length>0){
 					$(".addExpressInfoBtn").hide();
 				}
@@ -485,4 +491,28 @@ function getNewDay(dateTemp, days) {
 	var date = rDate.getDate();  
 	if (date < 10) date = "0" + date;  
 	return (year + "-" + month + "-" + date);  
-} 
+}
+
+//金额保留两位小数
+$("#money").blur(function(){
+	var money = $("#money").val();
+	if(money != "" ){
+		var moneys = returnFloat(money);
+		$("#money").val(moneys); 
+	}
+});
+//数字保留两位小数
+function returnFloat(value){
+	var value=Math.round(parseFloat(value)*100)/100;
+	var xsd=value.toString().split(".");
+	if(xsd.length==1){
+		value=value.toString()+".00";
+	 	return value;
+	}
+	if(xsd.length>1){
+		if(xsd[1].length<2){
+	  		value=value.toString()+"0";
+	 	}
+	 	return value;
+	 }
+}
