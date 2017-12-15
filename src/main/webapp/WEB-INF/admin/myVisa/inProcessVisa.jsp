@@ -173,6 +173,30 @@
 	        	},
 	        }
 		});
+		
+		function successCallBack(status){
+			if(status == 1){
+				layer.msg('修改成功');
+			}else if(status == 2){
+				layer.msg('发送成功');
+			}else if(status == 3){
+				layer.msg('合格成功');
+			}
+			else if(status == 4){
+				layer.msg('不合格成功');
+			}
+			$.ajax({ 
+				url: url,
+				dataType:"json",
+				type:'post',
+				success: function(data){
+					_self.myVisaData = data.myVisaData;
+				}
+			});
+		}
+		function cancelCallBack(status){
+			successCallBack(1);
+		}
 	
 	</script>
 </body>
