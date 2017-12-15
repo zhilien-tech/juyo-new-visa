@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>基本信息</title>
+    <title>签证信息</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="css/common.css">
@@ -23,8 +23,7 @@
      	<i id="marrystatusstr"></i>
      	<a class="skip">></a>
      </span>
-     <select class="selector">
-        <option v-for="option in marryoptions" v-bind:value="option.key">{{option.value}}</option>
+     <select class="selector" id="marryselect">
      </select>
  </div>
  	<a class="visa-data" onclick="applyinfo()">
@@ -41,7 +40,7 @@
  	</a>
 </div>
 <div class="bottom">
-    <a class="prev btn">上一步</a><a class="save btn">保存</a>
+    <a class="prev btn">上一步</a><a class="save btn" onclick="saveVisaInfo()">保存</a>
 </div>
 </form>
 	<script src="/references/common/js/vue/vue.min.js"></script>
@@ -50,30 +49,31 @@
 </body>
 <script>
 
-	var url="/admin/mobile/getVisaInfoData.html";
-	var _self;
-	new Vue({
-		el: '#visainfoform',
-		data: {
-				applicantdata:"",
-				marryoptions:""
-			},
-		created:function(){
-			var applicantid = GetQueryString('applicantid');
-	        _self=this;
-	        $.ajax({ 
-	        	url: url,
-	        	data:{applicantid:applicantid},
-	        	dataType:"json",
-	        	type:'post',
-	        	success: function(data){
-	        		$('#marrystatusstr').html(data.applicantdata.marrystatusstr);
-	        		_self.applicantdata = data.applicantdata;
-	        		_self.marryoptions = data.marryoptions;
-	          	}
-	        });
-	    }
-	});
+	//加载页面数据
+	initPageData();
+	function initPageData(){
+		var url="/admin/mobile/getVisaInfoData.html";
+		var applicantid = GetQueryString('applicantid');
+        $.ajax({ 
+        	url: url,
+        	data:{applicantid:applicantid},
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		$('#marrystatusstr').html(data.applicantdata.marrystatusstr);
+       			var optionstr = '<option value=""></option>';
+        		$.each(data.marryoptions,function(index,value){
+        			if(value.key == data.applicantdata.marrystatus){
+        				optionstr += '<option selected="selected" value="'+value.key+'">'+value.value+'</option>';
+        			}else{
+        				optionstr += '<option value="'+value.key+'">'+value.value+'</option>';
+        			}
+        		});
+        		//document.getElementById("marryselect").innerHTML=optionstr;
+        		$('#marryselect').html(optionstr);
+          	}
+        });
+	}
 	$(function(){
 		$('.selector').change(function(){
 			let name = $(".selector").find("option:selected").text();
@@ -112,8 +112,23 @@
 		window.location.href='/mobile/property.html?applicantid='+ applicantid;
 	}
 	$('.prev').click(function(){
+		saveVisaInfo();
 		var applicantid = GetQueryString('applicantid');
 		window.location.href='/mobile/passport.html?applicantid='+ applicantid;
 	});
+	
+	function saveVisaInfo(){
+		var applicantid = GetQueryString('applicantid');
+		var marrystatus = $('#marryselect').val();
+		$.ajax({ 
+        	url: '/admin/mobile/saveVisaInfo.html',
+        	data:{applicantid:applicantid,marrystatus:marrystatus},
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		layer.msg('保存成功');
+          	}
+        });
+	}
 </script>
 </html>
