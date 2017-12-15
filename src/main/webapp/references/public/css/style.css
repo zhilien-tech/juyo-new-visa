@@ -12,7 +12,7 @@
 .paddiLeAdd{padding-left: inherit;}
 .returnMargi {position: relative;top: 15px;}
 /*new 签证布局*/
-body{min-width:1160px;overflow-x: auto;}
+body{overflow-x: auto;}
 .qz-head{height: 50px;border-bottom: solid 1px #cee1ff;background-color: #fff;padding-left: 30px;padding-right: 15px;}
 .qz-head p{display: inline-block;line-height: 50px;font-size: 15px;color: #2175e5;}
 .qz-head span{margin-right: 60px;}
@@ -23,9 +23,8 @@ body{min-width:1160px;overflow-x: auto;}
 .info-body,.info-body-from{width:100%;padding-left:4.5%;}
 .info-body{padding-right: 7%;}
 .info-body-from{padding-right: 2.8%;padding-bottom: 10px;}
-.add-btn,.remove-btn{cursor: pointer;display: block;width: 23px;height: 23px;position: relative;top: -60px; right: -6.5%; float: right;}
+.add-btn,.remove-btn{cursor: pointer;display: block;width: 18px;height: 20px;position: relative;top: -40px; right: -6.5%; float: right;}
 .add-btn{background-image:url(../dist/newvisacss/img/add.png);}
-.remove-btn{background-image:url(../dist/newvisacss/img/remove.png);}
 .clone-module {height: 75px;}
 .clone-module .form-group{margin-bottom: 0;}
 .bulb{background-image:url(../dist/newvisacss/img/bulb.png);height: 23px;width: 16px;display: block;float: right;position: absolute;top: 41px;right: 5px;cursor: pointer;}
@@ -43,8 +42,8 @@ body{min-width:1160px;overflow-x: auto;}
 .btnState{outline:none !important;box-shadow: 0 0 black !important;color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right:1rem;}
 .btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
 .schedulingBtn,.addApplicantBtn,.addExpressInfoBtn{width: 30%;margin: 15px auto;display: block;}
-.moreI{width: 18px;height: 18px;display: inline-block;position: relative;top: 3px;float: right;}
-.more_unfold{background-image: url(../dist/newvisacss/img/more_unfold.png);}
+.moreI{width: 18px;height: 18px;display: inline-block;position: relative;top: 40%;float: right; margin-right:20px;}
+.more_unfold{background-image: url(../dist/newvisacss/img/more_unfold.png); margin-right:20px;}
 .more{background-image: url(../dist/newvisacss/img/more.png);}
 
 /*卡片式 操作图标*/

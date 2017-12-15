@@ -13,22 +13,15 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
-	<style type="text/css">
-.modal-content {
-	position:relative;
-}
-.modal-body {
-	padding:15px 100px 15px 20px;
-}
-.nameBeforeYes {
-	margin-right:20px;
-}
-.onceIDYes {
-	margin-right:30px;
-}
-.nameBeforeHide , .nationalityHide{
-	display:none;
-}
+<style type="text/css">
+.modal-body { height:588px;}	
+.modal-content { position:relative; }
+.modal-body { padding:15px 100px 15px 20px; }
+.nameBeforeYes { margin-right:20px; }
+.onceIDYes { margin-right:30px; }
+.nameBeforeHide ,.nationalityHide{ display:none; }
+.wordSpell { display:none; }
+.nationalityHide { margin-left:3%;}
 </style>
 </head>
 <body>
@@ -107,17 +100,7 @@
 										<label>姓/拼音：</label> <input id="otherFirstName"
 											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
 											placeholder=" " value="" />
-											<input type="text" id="otherFirstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
-										<!-- <i class="bulb"></i> -->
-									</div>
-								</div>
-								
-								<div class="col-sm-11 padding-right-0">
-									<div class="form-group">
-										<label>名/拼音：</label> <input id="otherLastName"
-											name="otherLastName" style="position:relative;" type="text" class="form-control input-sm "
-											placeholder=" " value="" />
-											<input type="text" id="otherLastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="otherLastNameEn" value=""/>
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:45px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -271,6 +254,15 @@
 								</div>
 							</div>
 						</div><!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
+						<div class="row wordSpell">
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>名/拼音：</label> 
+									<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm" placeholder=" " value="" />
+									<input type="text" id="otherLastNameEn" style="position:absolute;top:45px;border:none;left:150px;" name="otherLastNameEn" value=""/>
+								</div>
+							</div>
+						</div>
 						<div class="row">
 							<!-- 紧急联系人姓名/手机 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
@@ -632,7 +624,47 @@
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
-		
+		//checkbox 曾用名
+		$(".nameBefore").change(function(){
+			let checked = $("input[name='nameBefore']:checked").val();
+			let checked2 = $("input[name='hasOtherNationality']:checked").val();
+			if(checked == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nameBeforeHide").show();
+				$(".wordSpell").show();
+				$(".onceIDTop").removeClass('col-sm-offset-1');
+				$(".onceIDTop").css('padding-left','15px');
+			}else {
+				
+				$(".nameBeforeHide").hide();
+				$(".wordSpell").hide();
+				if(checked2 == 1){
+					
+				}else {
+					$(".nameBeforeTop").css('float','left');
+				}
+			}
+		});
+		//曾用国籍
+		$(".onceID").change(function(){
+			let checked = $("input[name='hasOtherNationality']:checked").val();
+			let checked2 = $("input[name='nameBefore']:checked").val();
+			if(checked == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nationalityHide").show();
+				$(".onceIDTop").css('float','left');
+				$(".onceIDTop").removeClass('col-sm-offset-1');
+				$(".onceIDTop").css('padding-left','15px');
+			}else {
+				
+				$(".nationalityHide").hide();
+				if(checked2 == 1){
+					
+				}else {
+					$(".nameBeforeTop").css('float','left');
+				}
+			}
+		});		
 	</script>
 
 

@@ -15,6 +15,8 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 	<style>
 		.info-imgUpload {width: 100%;}
+		.col-sm-offset-1 { margin-left:3% !important;}
+		.groupWidth { width:215px;}
 	</style>
 </head>
 <body>
@@ -60,7 +62,7 @@
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group groupWidth">
 									<label><span>*</span>护照号：</label>
 									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
 									<!-- <i class="bulb"></i> -->
@@ -89,7 +91,7 @@
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group groupWidth">
 									<label><span>*</span>出生地点/拼音：</label>
 									<input id="birthAddress" name="birthAddress" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
 									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:45px;border:0px;left:80px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
@@ -106,7 +108,7 @@
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group groupWidth">
 									<label><span>*</span>签发地点/拼音：</label>
 									<input id="issuedPlace" name="issuedPlace" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
 									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:45px;border:0px;left:80px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
@@ -133,7 +135,7 @@
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group groupWidth">
 									<label><span>*</span>有效期至：</label>
 									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.validEndDate }"/>
 									<!-- <i class="bulb"></i> -->
