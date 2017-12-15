@@ -15,6 +15,8 @@ import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
 
 /**
@@ -45,6 +47,8 @@ public class MyVisaListDataForm implements SQLParamForm {
 	private String applicantname;
 	//订单id
 	private Integer orderid;
+	//日本订单id
+	private Integer orderjpid;
 	//订单号
 	private String ordernum;
 	//手机号
@@ -58,6 +62,9 @@ public class MyVisaListDataForm implements SQLParamForm {
 	//出签时间
 	private Date outVisaDate;
 
+	//是否是统一联系人
+	private Integer isMainLink;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		String sqlString = sqlManager.get("myvisa_inProcessVisa_list");
@@ -68,7 +75,11 @@ public class MyVisaListDataForm implements SQLParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
-		cnd.and("ta.userId", "=", userid);
+		if (Util.eq(isMainLink, IsYesOrNoEnum.YES.intKey())) {
+			cnd.and("torj.orderjpid", "=", orderjpid);
+		} else {
+			cnd.and("ta.userId", "=", userid);
+		}
 		return cnd;
 	}
 

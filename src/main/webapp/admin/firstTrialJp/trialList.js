@@ -143,10 +143,10 @@ new Vue({
 							},
 							url : '/admin/firstTrialJp/qualified.html',
 							success : function(data) {
-								successCallBack(1);
+								successCallBack(3);
 							},
 							error : function(xhr) {
-								layer.msg("修改失败", "", 3000);
+								layer.msg("合格失败", "", 3000);
 							}
 						});
 					}else{
@@ -154,7 +154,7 @@ new Vue({
 					}
 				},
 				error : function(xhr) {
-					layer.msg("修改失败");
+					layer.msg("操作失败");
 				}
 			});
 		},
@@ -255,27 +255,23 @@ function selectListData(){
 function successCallBack(status){
 	if(status == 1){
 		layer.msg('修改成功');
-		$.ajax({ 
-			url: url,
-			/* data:{status:status,searchStr:searchStr}, */
-			dataType:"json",
-			type:'post',
-			success: function(data){
-				_self.trialJapanData = data.trialJapanData;
-			}
-		});
 	}else if(status == 2){
 		layer.msg('发送成功');
-		$.ajax({ 
-			url: url,
-			/* data:{status:status,searchStr:searchStr}, */
-			dataType:"json",
-			type:'post',
-			success: function(data){
-				_self.trialJapanData = data.trialJapanData;
-			}
-		});
+	}else if(status == 3){
+		layer.msg('合格成功');
 	}
+	else if(status == 4){
+		layer.msg('不合格成功');
+	}
+	$.ajax({ 
+		url: url,
+		/* data:{status:status,searchStr:searchStr}, */
+		dataType:"json",
+		type:'post',
+		success: function(data){
+			_self.trialJapanData = data.trialJapanData;
+		}
+	});
 }
 function cancelCallBack(status){
 	successCallBack(1);
