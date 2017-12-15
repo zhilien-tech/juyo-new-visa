@@ -200,6 +200,7 @@
 					 var indexLi = $(this).index();
 					 if(indexLi <= indexOfBlue){
 						 $(this).attr("style", "display:block");
+						 $(this).find("div .vertical").attr("style", "display:none");
 					 }
 	           })
 			});
