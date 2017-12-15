@@ -1574,7 +1574,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 	}
 
-	public Object sendEmail(int orderid, String applicantid, HttpSession session) {
+	public Object sendEmail(int orderid, String applicantid, HttpSession session, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
 		TOrderJpEntity orderJpEntity = dbDao
@@ -1599,8 +1599,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(record.get("id"))) {
 				int applicantId = (int) record.get("id");
 				try {
-					String sendMail = (String) sendMail(orderid, applicantId);
-					String sendMessage = (String) sendMessage(orderid, applicantId);
+					String sendMail = (String) sendMail(orderid, applicantId, request);
+					String sendMessage = (String) sendMessage(orderid, applicantId, request);
 					if (Util.eq(sendMail, "success") && Util.eq(sendMessage, "发送成功")) {
 						sendCount++;
 					}
@@ -1633,7 +1633,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
-	public Object sendEmailUnified(int orderid, int applicantid, HttpSession session) {
+	public Object sendEmailUnified(int orderid, int applicantid, HttpSession session, HttpServletRequest request) {
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
 		TOrderJpEntity orderJpEntity = dbDao
 				.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
@@ -1645,8 +1645,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			dbDao.update(tApplicantOrderJpEntity);
 		}
 		try {
-			String sendMailUnified = (String) sendMailUnified(orderid, applicantid);
-			String sendMessageUnified = (String) sendMessageUnified(orderid, applicantid);
+			String sendMailUnified = (String) sendMailUnified(orderid, applicantid, request);
+			String sendMessageUnified = (String) sendMessageUnified(orderid, applicantid, request);
 			if (Util.eq(sendMailUnified, "success") && Util.eq(sendMessageUnified, "发送成功")) {
 				List<TApplicantOrderJpEntity> listDB = dbDao.query(TApplicantOrderJpEntity.class,
 						Cnd.where("orderId", "=", orderJpEntity.getId()).and("applicantId", "!=", applicantid), null);
@@ -1673,12 +1673,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	//发送邮件信息
-	public Object sendMail(int orderid, int applicantid) throws IOException {
+	public Object sendMail(int orderid, int applicantid, HttpServletRequest request) throws IOException {
 		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("share_mail.html"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
 		}
+
+		String pcUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
 
 		//查询订单号
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
@@ -1703,19 +1705,22 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		String emailText = tmp.toString();
 		emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-				.replace("${telephone}", telephone);
+				.replace("${telephone}", telephone).replace("${pcUrl}", pcUrl);
+		;
 		result = mailService.send(email, emailText, "分享", MailService.Type.HTML);
 		return result;
 	}
 
 	//发送手机信息
-	public Object sendMessage(int orderid, int applicantid) throws IOException {
+	public Object sendMessage(int orderid, int applicantid, HttpServletRequest request) throws IOException {
 		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("share_sms.txt"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
 		}
 
+		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+				+ "/mobile/info.html?applicantid=" + applicantid;
 		//查询订单号
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
 		String orderNum = order.getOrderNum();
@@ -1739,19 +1744,20 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		String smsContent = tmp.toString();
 		smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-				.replace("${telephone}", telephone);
+				.replace("${telephone}", telephone).replace("${mobileUrl}", mobileUrl);
 		result = firstTrialJpViewService.sendSMS(telephone, smsContent);
 		return result;
 	}
 
 	//发送邮件信息
-	public Object sendMailUnified(int orderid, int applicantid) throws IOException {
+	public Object sendMailUnified(int orderid, int applicantid, HttpServletRequest request) throws IOException {
 		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
 				"shareUnified_mail.html"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
 		}
+		String pcUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
 
 		//查询订单号
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
@@ -1780,7 +1786,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String applicantInfoStr = "";
 		String emailText = tmp.toString();
 		emailText = emailText.replace("${unifiedName}", unifiedName).replace("${sex}", unifiedSex)
-				.replace("${ordernum}", orderNum);
+				.replace("${ordernum}", orderNum).replace("${pcUrl}", pcUrl);
+		;
 
 		for (Record record : applicantInfo) {
 			String name = record.getString("applyname");
@@ -1801,13 +1808,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	//发送手机信息
-	public Object sendMessageUnified(int orderid, int applicantid) throws IOException {
+	public Object sendMessageUnified(int orderid, int applicantid, HttpServletRequest request) throws IOException {
 		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
 				"shareUnified_sms.txt"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
 		}
+		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+				+ "/mobile/info.html?applicantid=" + applicantid;
 
 		//查询订单号
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
@@ -1837,7 +1846,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String applicantInfoStr = "";
 		String smsContent = tmp.toString();
 		smsContent = smsContent.replace("${unifiedName}", unifiedName).replace("${sex}", unifiedSex)
-				.replace("${ordernum}", orderNum);
+				.replace("${ordernum}", orderNum).replace("${mobileUrl}", mobileUrl);
 
 		for (Record record : applicantInfo) {
 			String name = record.getString("applyname");

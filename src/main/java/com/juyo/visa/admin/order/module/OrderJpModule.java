@@ -444,8 +444,9 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object sendEmail(@Param("orderid") int orderid, @Param("applicantid") String applicantid, HttpSession session) {
-		return saleViewService.sendEmail(orderid, applicantid, session);
+	public Object sendEmail(@Param("orderid") int orderid, @Param("applicantid") String applicantid,
+			HttpSession session, HttpServletRequest request) {
+		return saleViewService.sendEmail(orderid, applicantid, session, request);
 	}
 
 	/**
@@ -454,8 +455,8 @@ public class OrderJpModule {
 	@At
 	@POST
 	public Object sendEmailUnified(@Param("orderid") int orderid, @Param("applicantid") int applicantid,
-			HttpSession session) {
-		return saleViewService.sendEmailUnified(orderid, applicantid, session);
+			HttpSession session, HttpServletRequest request) {
+		return saleViewService.sendEmailUnified(orderid, applicantid, session, request);
 	}
 
 	/**

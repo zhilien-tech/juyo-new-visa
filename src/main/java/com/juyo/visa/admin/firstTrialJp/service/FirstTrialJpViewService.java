@@ -590,7 +590,6 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			orderJpViewService.insertLogs(orderid, firsttrialstatus, session);
 		}
 
-		//生成二维码
 		String pcUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
 		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + applicantId;
