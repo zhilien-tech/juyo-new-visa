@@ -162,4 +162,13 @@ public class MobileModule {
 	public Object saveWealthData(@Param("..") WealthInfoForm form) {
 		return mobileService.saveWealthData(form);
 	}
+
+	/**
+	 * 保存签证信息
+	 */
+	@At
+	@POST
+	public Object saveVisaInfo(@Param("applicantid") Integer applicantid, @Param("marrystatus") Integer marrystatus) {
+		return mobileService.saveVisaInfo(applicantid, marrystatus);
+	}
 }
