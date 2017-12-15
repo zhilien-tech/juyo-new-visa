@@ -1679,7 +1679,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		for (String line : readLines) {
 			tmp.append(line);
 		}
-
+		
 		String pcUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
 
 		//查询订单号
