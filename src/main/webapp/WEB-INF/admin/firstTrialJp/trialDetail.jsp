@@ -63,7 +63,7 @@
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-1">
 									<div class="form-group">
 										<label><span>*</span>加急：</label> 
 										<select id="urgentType" class="form-control input-sm" v-model="orderinfo.urgenttype" @change="urgentTypeChange()">
@@ -71,24 +71,13 @@
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
 										</select>
-										<!-- <i class="bulb"></i> 小灯泡-->
-									</div>
-								</div>
-								<div class="col-sm-3 none" id="urgentDays">
-									<div class="form-group">
-										<label>&nbsp;</label> 
-										<select class="form-control input-sm" v-model="orderinfo.urgentday">
-											<c:forEach var="map" items="${obj.mainsaleurgenttimeenum}">
-												<option value="${map.key}">${map.value}</option>
-											</c:forEach>
-										</select>
 									</div>
 								</div>
 								<div class="col-sm-2 none" id="urgentDays">
 									<div class="form-group">
-										<label>&nbsp;</label> <select id="urgentDay" name="urgentDay" 
-											class="form-control input-sm" v-model="orderInfo.urgentday">
-											<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
+										<label>&nbsp;</label> 
+										<select class="form-control input-sm" v-model="orderinfo.urgentday">
+											<c:forEach var="map" items="${obj.mainsaleurgenttimeenum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
 										</select>
