@@ -55,6 +55,6 @@ public class GenerateShortUrlUtil {
 	 * @date:2015年10月19日上午10:02:23
 	 */
 	public static void main(String[] args) {
-		generateShortUrl("http://blog.csdn.net/wh_forever/article/details/49247991");
+		generateShortUrl("http://192.168.1.8:8080/public/menu.html");
 	}
 }
