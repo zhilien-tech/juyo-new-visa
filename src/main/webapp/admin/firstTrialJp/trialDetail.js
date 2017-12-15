@@ -311,30 +311,38 @@ new Vue({
 				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=0'
 			});
 		},
-		qualified:function(applyId){
-			layer.confirm('您确认合格吗？', {
-				btn: ['是','否'], //按钮
-				shade: false //不显示遮罩
-			}, function(index){
-				$.ajax({
-					type : 'POST',
-					data : {
-						applyid:applyId,
-						orderid:orderid,
-						orderjpid:orderjpid
-					},
-					url : '/admin/firstTrialJp/qualified.html',
-					success : function(data) {
-						layer.close(index);
-						parent.successCallBack(1);
-						successCallBack(1);
-					},
-					error : function(xhr) {
-						layer.msg("修改失败", "", 3000);
+		qualified:function(applyid){
+			//判断申请人是否合格
+			$.ajax({
+				type : 'POST',
+				data : {
+					applicantId:applyid
+				},
+				url : '/admin/firstTrialJp/isQualifiedByApplicantId.html',
+				success : function(data) {
+					if(data){
+						$.ajax({
+							type : 'POST',
+							data : {
+								applyid:applyid,
+								orderid:orderid,
+								orderjpid:orderjpid
+							},
+							url : '/admin/firstTrialJp/qualified.html',
+							success : function(data) {
+								successCallBack(1);
+							},
+							error : function(xhr) {
+								layer.msg("修改失败", "", 3000);
+							}
+						});
+					}else{
+						layer.msg("申请人不合格");
 					}
-				});
-			}, function(){
-				//取消之后不做任何操作
+				},
+				error : function(xhr) {
+					layer.msg("修改失败");
+				}
 			});
 		},
 		unqualified:function(applyId){
