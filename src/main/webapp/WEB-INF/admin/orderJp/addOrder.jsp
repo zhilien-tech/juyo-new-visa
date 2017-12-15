@@ -389,6 +389,7 @@
 								style="width: 100%;">
 								<thead>
 									<tr>
+										<th><span>&nbsp;<span></th>
 										<th><span>姓名<span></th>
 										<th><span>电话<span></th>
 										<th><span>邮箱<span></th>
@@ -585,6 +586,7 @@
 				$("#comShortName2").val("");
 				$("#mobile2").val("");
 				$("#email2").val("");
+				$("#payType").val("");
 				//客户姓名清空
 				$("#linkman").val(null).trigger("change");
 				//电话清空
@@ -757,16 +759,20 @@
 									if(data[i].mainid == data[i].id){
 										//为主申请人
 										if(data[i].applyname != undefined){
-											result += '<td><font color="blue">主   </font> ' + data[i].applyname + '</td>';
+											result += '<td><font color="blue">主   </font></td>';
+											result += '<td> ' + data[i].applyname + '</td>';
 										}
 										else{
+											result += '<td></td>';
 											result += '<td></td>';
 										}
 									}else{
 										if(data[i].applyname != undefined){
+											result += '<td></td>';
 											result += '<td>' + data[i].applyname + '</td>';
 										}
 										else{
+											result += '<td></td>';
 											result += '<td></td>';
 										}
 									}

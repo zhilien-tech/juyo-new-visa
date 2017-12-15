@@ -95,6 +95,7 @@
 			
 			/*点击表格中的加号标签*/
 			$(".addText").click(function(){
+				var thisobj = $(this);
 				$(this).siblings(".addInp").removeClass("none");
 				$(".addInp").focus();//add input 添加默认光标
 				var applicatid = $(this).parent().find('#applicatid').val();

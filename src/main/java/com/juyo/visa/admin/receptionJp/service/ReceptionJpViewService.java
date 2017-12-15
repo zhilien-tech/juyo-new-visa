@@ -241,28 +241,20 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		//所有的人
 		for (Map map : applicatlist) {
 			String applicatid = map.get("applicatid").toString();
-			String datatext = String.valueOf(map.get("datatext"));
-			Cnd cnd = Cnd.NEW();
-			cnd.and("applicantId", "=", applicatid);
-			cnd.and("realInfo", "in", datatext.split(","));
-			List<TApplicantFrontPaperworkJpEntity> paperwork = dbDao.query(TApplicantFrontPaperworkJpEntity.class, cnd,
-					null);
-			Cnd notincnd = Cnd.NEW();
-			notincnd.and("applicantId", "=", applicatid);
-			notincnd.and("realInfo", " not in", datatext.split(","));
-			List<TApplicantFrontPaperworkJpEntity> notinpaperwork = dbDao.query(TApplicantFrontPaperworkJpEntity.class,
-					notincnd, null);
-			for (TApplicantFrontPaperworkJpEntity tApplicantVisaPaperworkJpEntity : paperwork) {
-				tApplicantVisaPaperworkJpEntity.setStatus(0);
-				tApplicantVisaPaperworkJpEntity.setReceiveDate(new Date());
+			String revenuejson = String.valueOf(map.get("revenue"));
+			List<TApplicantFrontPaperworkJpEntity> paperworkjps = JsonUtil.fromJsonAsList(
+					TApplicantFrontPaperworkJpEntity.class, revenuejson);
+			for (TApplicantFrontPaperworkJpEntity paperworkjp : paperworkjps) {
+				TApplicantFrontPaperworkJpEntity fetch = dbDao.fetch(TApplicantFrontPaperworkJpEntity.class,
+						paperworkjp.getId().longValue());
+				if (!Util.isEmpty(paperworkjp.getRealInfo())) {
+					fetch.setRealInfo(paperworkjp.getRealInfo());
+					fetch.setStatus(paperworkjp.getStatus());
+					paperworks.add(fetch);
+				} else {
+					dbDao.delete(fetch);
+				}
 			}
-			for (TApplicantFrontPaperworkJpEntity tApplicantVisaPaperworkJpEntity : notinpaperwork) {
-				tApplicantVisaPaperworkJpEntity.setStatus(1);
-				tApplicantVisaPaperworkJpEntity.setReceiveDate(new Date());
-				;
-			}
-			paperworks.addAll(paperwork);
-			paperworks.addAll(notinpaperwork);
 		}
 		//删掉灰色的
 		if (!Util.isEmpty(paperworks)) {
@@ -458,21 +450,21 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 
 	public Object saveApplicatRevenue(Integer applicatid, String realInfo, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TApplicantFrontPaperworkJpEntity frontPaperworkJpEntity = dbDao.fetch(TApplicantFrontPaperworkJpEntity.class,
+		/*TApplicantFrontPaperworkJpEntity frontPaperworkJpEntity = dbDao.fetch(TApplicantFrontPaperworkJpEntity.class,
 				Cnd.where("applicantId", "=", applicatid));
 		if (!Util.isEmpty(frontPaperworkJpEntity)) {
 			frontPaperworkJpEntity.setUpdateTime(new Date());
 			frontPaperworkJpEntity.setRealInfo(realInfo);
 			frontPaperworkJpEntity.setOpId(loginUser.getId());
 			return dbDao.update(frontPaperworkJpEntity);
-		} else {
-			TApplicantFrontPaperworkJpEntity frontpaperwork = new TApplicantFrontPaperworkJpEntity();
-			frontpaperwork.setApplicantId(applicatid);
-			frontpaperwork.setCreateTime(new Date());
-			frontpaperwork.setRealInfo(realInfo);
-			frontpaperwork.setOpId(loginUser.getId());
-			return dbDao.insert(frontpaperwork);
-		}
+		} else {*/
+		TApplicantFrontPaperworkJpEntity frontpaperwork = new TApplicantFrontPaperworkJpEntity();
+		frontpaperwork.setApplicantId(applicatid);
+		frontpaperwork.setCreateTime(new Date());
+		frontpaperwork.setRealInfo(realInfo);
+		frontpaperwork.setOpId(loginUser.getId());
+		return dbDao.insert(frontpaperwork);
+		//}
 	}
 
 	public Object passportInfo(Integer applyId) {

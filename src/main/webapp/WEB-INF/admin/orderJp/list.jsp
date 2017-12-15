@@ -206,7 +206,7 @@
 						type : 'post',
 						success : function(data) {
 							layer.closeAll("loading");
-							layer.msg("操作成功", {
+							layer.msg("进入初审", {
 								time: 1000,
 								end: function () {
 									self.location.reload();

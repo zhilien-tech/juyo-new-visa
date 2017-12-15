@@ -446,7 +446,7 @@ function clearText(){
 	$("#comShortName").val(null).trigger("change");
 	//邮箱清空
 	$("#email").val(null).trigger("change");
-	
+	$("#payType").val("");
 }
 
 /* 取消选中时 */
