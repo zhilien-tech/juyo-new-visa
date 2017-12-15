@@ -8,7 +8,7 @@
 </head>
 <frameset rows="58,*" border="0" framespacing="0">
 	<frame src="${base }/public/header.html" />
-	<frameset cols="187,*" border="0" framespacing="0">
+	<frameset cols="220,*" border="0" framespacing="0">
 		<frame src="${base }/public/aside.html" name="aside"  />
 		<frame src="${mainurl }" name="main" />
 	</frameset>

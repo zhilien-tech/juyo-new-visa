@@ -28,6 +28,7 @@
 			.blue .circle-outside{background-color:#9fc4f6 !important;}
 			.blue .circle-outside i{background-color: #5e9fef !important;}
 			.blue .vertical{background-color: #9fc4f4 !important;}
+			
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -198,9 +199,14 @@
 			$(function(){
 			  $('.flowChart').find('li').each(function() {
 					 var indexLi = $(this).index();
+
 					 if(indexLi <= indexOfBlue){
 						 $(this).attr("style", "display:block");
 						 //$(this).find("div .vertical").attr("style", "display:none");
+					 }
+					 if(indexLi == indexOfBlue){
+						 $(this).find('.vertical').attr("style", "display:none");
+						 
 					 }
 	           })
 			});

@@ -343,7 +343,7 @@
 									</div>
 								</div>
 							</div><!-- end 银行存款 -->
-							<i class="remove-btn"></i>
+							<i class="remove-btn delete-icon"></i>
 						</div>
 						<div class="info-body-from clone-module cf vehicle">
 							<div class="row body-from-input"><!-- 车产 -->
@@ -360,7 +360,7 @@
 									</div>
 								</div>
 							</div><!-- end 车产 -->
-							<i class="remove-btn"></i>
+							<i class="remove-btn delete-icon"></i>
 						</div>
 						<div class="info-body-from clone-module cf houseProperty">
 							<div class="row body-from-input"><!-- 房产 -->
@@ -377,7 +377,7 @@
 									</div>
 								</div>
 							</div><!-- end 房产 -->
-							<i class="remove-btn"></i>
+							<i class="remove-btn delete-icon"></i>
 						</div>
 						<div class="info-body-from clone-module cf financial">
 							<div class="row body-from-input"><!-- 房产 -->
@@ -394,7 +394,7 @@
 									</div>
 								</div>
 							</div><!-- end 房产 -->
-							<i class="remove-btn"></i>
+							<i class="remove-btn delete-icon"></i>
 						</div>
 						
 					</div>

@@ -18,9 +18,12 @@
   <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
   <link rel="stylesheet" href="${base}/references/public/css/style.css">
   <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
+  <style>
+  .main-header .logo { width:220px;}
+  .main-header .navbar { margin-left:220px;}
+  </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
   <!-- Main Header -->
   <header class="main-header">
     <!-- Logo -->
