@@ -1,7 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<%@include file="/WEB-INF/public/header.jsp"%>
-<%@include file="/WEB-INF/public/aside.jsp"%>
 <!DOCTYPE html>
 <html lang="en-US">
 	<head>
@@ -31,8 +29,6 @@
 
 <body class="hold-transition skin-blue sidebar-mini">
 	<form id="applicantInfo">
-	<div class="wrapper" id="wrapper">
-		<div class="content-wrapper" style="min-height: 848px;">
 			<div class="qz-head">
 				<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
@@ -145,7 +141,7 @@
 							</div>
 							<!-- 曾用国籍 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0 nationalityHide">
-								<div class="form-group">
+								<div class="form-group" id="nationalityDiv">
 									<label>国籍</label> 
 									<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 								</div>
@@ -332,9 +328,6 @@
 
 				</div>
 			</section>
-		</div>
-		<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
-	</div>
 	</form>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
@@ -542,6 +535,35 @@
 			}
 		});
 	}
+	
+	//国籍检索
+	$("#nationality").on('input',function(){
+		$("#nationality").nextAll("ul.ui-autocomplete").remove();
+		$.ajax({
+			type : 'POST',
+			async: false,
+			data : {
+				searchStr : $("#nationality").val()
+			},
+			url : BASE_PATH+'/admin/orderJp/getNationality.html',
+			success : function(data) {
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				$.each(data,function(index,element) { 
+					liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+				});
+				liStr += "</ul>";
+				$("#nationality").after(liStr);
+			}
+		});
+	});
+	//国籍检索下拉项
+	function setNationality(nationality){
+		$("#nationality").nextAll("ul.ui-autocomplete").remove();
+		$("#nationality").val(nationality);
+	} 
+	$("#nationalityDiv").mouseleave(function(){
+		$("#nationality").nextAll("ul.ui-autocomplete").remove();
+	});
 	
 	//省份检索
 	$("#province").on('input',function(){
@@ -819,8 +841,13 @@
 					layer.closeAll('loading');
 					$("#province").val(data.province);
 					$("#city").val(data.city);
+					$("#detailedAddress").val($("#address").val());
 				}
 			});
+		}else{
+			$("#province").val("");
+			$("#city").val("");
+			$("#detailedAddress").val("");
 		}
 	}
 	

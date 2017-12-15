@@ -477,6 +477,15 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 获取国籍
+	 */
+	@At
+	@POST
+	public Object getNationality(@Param("searchStr") String searchStr) {
+		return saleViewService.getNationality(searchStr);
+	}
+
+	/**
 	 * 获取省份
 	 */
 	@At
@@ -520,4 +529,5 @@ public class OrderJpModule {
 	public Object undisabled(@Param("orderId") int orderid) {
 		return saleViewService.undisabled(orderid);
 	}
+
 }

@@ -1,7 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<%@include file="/WEB-INF/public/header.jsp"%>
-<%@include file="/WEB-INF/public/aside.jsp"%>
 <!DOCTYPE html>
 <html lang="en-US">
 	<head>
@@ -24,8 +22,6 @@
 
 <body class="hold-transition skin-blue sidebar-mini">
 	<form id="passportInfo">
-	<div class="wrapper" id="wrapper">
-		<div class="content-wrapper" style="min-height: 848px;">
 			<div class="qz-head">
 			<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
@@ -198,9 +194,6 @@
 
 				</div>
 			</section>
-		</div>
-		<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
-	</div>
 	</form>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';

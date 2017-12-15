@@ -143,7 +143,7 @@
 							</div>
 							<!-- 曾用国籍 -->
 							<div class="col-sm-5 padding-right-0 nationalityHide">
-								<div class="form-group">
+								<div class="form-group" id="nationalityDiv">
 									<label>国籍</label> 
 									<input id="nationality" name="nationality" type="text" class="form-control input-sm"/>
 								</div>
@@ -415,8 +415,13 @@
 						layer.closeAll('loading');
 						$("#province").val(data.province);
 						$("#city").val(data.city);
+						$("#detailedAddress").val($("#address").val());
 					}
 				});
+			}else{
+				$("#province").val("");
+				$("#city").val("");
+				$("#detailedAddress").val("");
 			}
 		}
 		
@@ -476,6 +481,35 @@
 			}
 			
 		}
+		
+		//国籍检索
+		$("#nationality").on('input',function(){
+			$("#nationality").nextAll("ul.ui-autocomplete").remove();
+			$.ajax({
+				type : 'POST',
+				async: false,
+				data : {
+					searchStr : $("#nationality").val()
+				},
+				url : BASE_PATH+'/admin/orderJp/getNationality.html',
+				success : function(data) {
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#nationality").after(liStr);
+				}
+			});
+		});
+		//国籍检索下拉项
+		function setNationality(nationality){
+			$("#nationality").nextAll("ul.ui-autocomplete").remove();
+			$("#nationality").val(nationality);
+		} 
+		$("#nationalityDiv").mouseleave(function(){
+			$("#nationality").nextAll("ul.ui-autocomplete").remove();
+		});
 		
 		//省份检索
 		$("#province").on('input',function(){

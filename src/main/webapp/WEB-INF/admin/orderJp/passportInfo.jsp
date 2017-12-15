@@ -579,6 +579,7 @@
 				layer.load(1);
 				$.ajax({
 					type: 'POST',
+					async : false,
 					data : {
 						applicantId : applicantId,
 						orderid : orderid,
@@ -590,6 +591,7 @@
 						console.log(JSON.stringify(data));
 						layer.closeAll('loading');
 						$("#baseRemark").val("");
+						visaBtn();
 					}
 				});
 			});
