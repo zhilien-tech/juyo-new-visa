@@ -125,7 +125,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		String scopeStr = "";
 		String businessScopes = addForm.getBusinessScopes();
 		String designatedNum = addForm.getDesignatedNum();
-		Map<String, Object> map = getScopeList(businessScopes, comId);
+		Map<String, Object> map = getScopeList(businessScopes, comId, "ADD");
 		if (!Util.isEmpty(map)) {
 			List<TComBusinessscopeEntity> scopeLists = (List<TComBusinessscopeEntity>) map.get("scopeList");
 			for (TComBusinessscopeEntity comBSEntity : scopeLists) {
@@ -275,7 +275,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		Integer comIdInt = Integer.valueOf(comId + "");
 		String businessScopes = updateForm.getBusinessScopes();
 		String designatedNum = updateForm.getDesignatedNum();
-		Map<String, Object> map = getScopeList(businessScopes, comIdInt);
+		Map<String, Object> map = getScopeList(businessScopes, comIdInt, "UPDATE");
 		if (!Util.isEmpty(map)) {
 			List<TComBusinessscopeEntity> comScopesAfter = (List<TComBusinessscopeEntity>) map.get("scopeList");
 			for (TComBusinessscopeEntity comBSEntity : comScopesAfter) {
@@ -301,7 +301,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 	}
 
 	//获取经营范围
-	public Map<String, Object> getScopeList(String businessScopes, Integer comId) {
+	public Map<String, Object> getScopeList(String businessScopes, Integer comId, String type) {
 		Map<String, Object> map = Maps.newHashMap();
 		Map<String, String> scopeMap = EnumUtil.enum2(BusinessScopesEnum.class);
 		String[] scopes = businessScopes.split(",");
@@ -313,12 +313,22 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 				for (Map.Entry<String, String> scopeEnum : scopeMap.entrySet()) {
 					String value = scopeEnum.getValue();
 					String key = scopeEnum.getKey();
-					if (Util.eq(scope, key)) {
-						scopeStr += value + ",";
-						scopeEntity.setComId(comId);
-						scopeEntity.setCountryId(Integer.valueOf(key));
-						scopeList.add(scopeEntity);
+					if (Util.eq("ADD", type)) {
+						if (Util.eq(scope, value)) {
+							scopeStr += key + ",";
+							scopeEntity.setComId(comId);
+							scopeEntity.setCountryId(Integer.valueOf(key));
+							scopeList.add(scopeEntity);
+						}
+					} else if (Util.eq("UPDATE", type)) {
+						if (Util.eq(scope, key)) {
+							scopeStr += key + ",";
+							scopeEntity.setComId(comId);
+							scopeEntity.setCountryId(Integer.valueOf(key));
+							scopeList.add(scopeEntity);
+						}
 					}
+
 				}
 			}
 

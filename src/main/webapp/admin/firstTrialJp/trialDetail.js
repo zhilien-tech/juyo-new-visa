@@ -250,7 +250,14 @@ new Vue({
 				}else{
 					$("#urgentDays").removeClass("none");
 				}
-				
+
+				if(orderobj.orderinfo.money != undefined ){
+					var money = orderobj.orderinfo.money;
+					if(money != "" || money != null || money != "NaN"){
+						orderobj.orderinfo.money = returnFloat(money);
+					}
+				}
+
 				if(backMailInfos.length>0){
 					$(".addExpressInfoBtn").hide();
 				}
@@ -311,30 +318,38 @@ new Vue({
 				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=0'
 			});
 		},
-		qualified:function(applyId){
-			layer.confirm('您确认合格吗？', {
-				btn: ['是','否'], //按钮
-				shade: false //不显示遮罩
-			}, function(index){
-				$.ajax({
-					type : 'POST',
-					data : {
-						applyid:applyId,
-						orderid:orderid,
-						orderjpid:orderjpid
-					},
-					url : '/admin/firstTrialJp/qualified.html',
-					success : function(data) {
-						layer.close(index);
-						parent.successCallBack(1);
-						successCallBack(1);
-					},
-					error : function(xhr) {
-						layer.msg("修改失败", "", 3000);
+		qualified:function(applyid){
+			//判断申请人是否合格
+			$.ajax({
+				type : 'POST',
+				data : {
+					applicantId:applyid
+				},
+				url : '/admin/firstTrialJp/isQualifiedByApplicantId.html',
+				success : function(data) {
+					if(data){
+						$.ajax({
+							type : 'POST',
+							data : {
+								applyid:applyid,
+								orderid:orderid,
+								orderjpid:orderjpid
+							},
+							url : '/admin/firstTrialJp/qualified.html',
+							success : function(data) {
+								successCallBack(3);
+							},
+							error : function(xhr) {
+								layer.msg("合格失败", "", 3000);
+							}
+						});
+					}else{
+						layer.msg("申请人不合格");
 					}
-				});
-			}, function(){
-				//取消之后不做任何操作
+				},
+				error : function(xhr) {
+					layer.msg("操作失败");
+				}
 			});
 		},
 		unqualified:function(applyId){
@@ -378,37 +393,28 @@ new Vue({
 function successCallBack(status){
 	if(status == 1){
 		layer.msg('修改成功');
-		var url = '/admin/firstTrialJp/getJpTrialDetailData.html';
-		$.ajax({ 
-			url: url,
-			type:'post',
-			dataType:"json",
-			data:{
-				orderid:orderid,
-				orderjpid:orderjpid
-			},
-			success: function(data){
-				orderobj.applyinfo = data.applyinfo;
-				orderobj.orderinfo = data.orderinfo;
-			}
-		}); 
 	}else if(status == 2){
 		layer.msg('发送成功');
-		var url = '/admin/firstTrialJp/getJpTrialDetailData.html';
-		$.ajax({ 
-			url: url,
-			type:'post',
-			dataType:"json",
-			data:{
-				orderid:orderid,
-				orderjpid:orderjpid
-			},
-			success: function(data){
-				orderobj.applyinfo = data.applyinfo;
-				orderobj.orderinfo = data.orderinfo;
-			}
-		}); 
+	}else if(status == 3){
+		layer.msg('合格成功');
 	}
+	else if(status == 4){
+		layer.msg('不合格成功');
+	}
+	var url = '/admin/firstTrialJp/getJpTrialDetailData.html';
+	$.ajax({ 
+		url: url,
+		type:'post',
+		dataType:"json",
+		data:{
+			orderid:orderid,
+			orderjpid:orderjpid
+		},
+		success: function(data){
+			orderobj.applyinfo = data.applyinfo;
+			orderobj.orderinfo = data.orderinfo;
+		}
+	}); 
 }
 function cancelCallBack(status){
 	successCallBack(1);
@@ -477,4 +483,38 @@ function getNewDay(dateTemp, days) {
 	var date = rDate.getDate();  
 	if (date < 10) date = "0" + date;  
 	return (year + "-" + month + "-" + date);  
-} 
+}
+
+//金额保留两位小数
+$("#money").blur(function(){
+	var money = $("#money").val();
+	if(money != "" ){
+		var moneys = returnFloat(money);
+		if(moneys == "NaN.00"){
+			moneys = "";
+		}
+		$("#money").val(moneys); 
+	}
+});
+ 
+//数字保留两位小数
+function returnFloat(value){
+	var value=Math.round(parseFloat(value)*100)/100;
+	var xsd=value.toString().split(".");
+	if(xsd.length==1){
+		value=value.toString()+".00";
+		if(value == "NaN.00"){
+			value = "";
+		}
+		return value;
+	}
+	if(xsd.length>1){
+		if(xsd[1].length<2){
+			value=value.toString()+"0";
+		}
+		if(value == "NaN.00"){
+			value = "";
+		}
+		return value;
+	}
+}
