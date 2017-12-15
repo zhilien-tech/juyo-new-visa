@@ -323,7 +323,10 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	 */
 	public Object getVisaInfoData(MobileApplicantForm form) {
 		Map<String, Object> result = Maps.newHashMap();
-		TApplicantEntity applicantinfo = dbDao.fetch(TApplicantEntity.class, form.getApplicantid().longValue());
+		TApplicantEntity applicantinfo = new TApplicantEntity();
+		if (!Util.isEmpty(form.getApplicantid())) {
+			applicantinfo = dbDao.fetch(TApplicantEntity.class, form.getApplicantid().longValue());
+		}
 		Map<String, String> applicantmap = MapUtil.obj2Map(applicantinfo);
 
 		//婚姻状况下拉
@@ -643,5 +646,12 @@ public class MobileService extends BaseService<TApplicantEntity> {
 		dbDao.updateRelations(beforewealth, wealths);
 		return null;
 
+	}
+
+	public Object saveVisaInfo(Integer applicantid, Integer marrystatus) {
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantid.longValue());
+		applicant.setMarryStatus(marrystatus);
+		dbDao.update(applicant);
+		return null;
 	}
 }

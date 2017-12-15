@@ -14,6 +14,10 @@
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
     <link rel="stylesheet" href="${base}/references/public/css/style.css">
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
+    <style>
+     .box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
+	 .box-body {  overflow:hidden;margin-top:50px;}
+    </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">

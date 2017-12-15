@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
@@ -23,6 +24,12 @@
 			.remove-btn{top: -225px;right: -1%;}
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
+			.qz-head { position:fixed;top:0;left:0;z-index:99999; width:100%;}
+			.content { margin-top:50px;}
+			.info { position:relative;}
+			#addCustomer { position:absolute; top:5px; right:10px;}
+			.info-body-from { margin-left:12%;}
+			#urgentDays { width:14.2%;}
 		</style>
 	</head>
 

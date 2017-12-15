@@ -16,8 +16,13 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<style type="text/css">
+	 body { font-size:12px;}
 	 [v-cloak]{display:none;}
 	 #hideOrder:hover { text-decoration: none;cursor:pointer;}
+	 /*头导航不随下拉移动*/
+	 .box-header { position:fixed; top:0;left:0; width:100%; height:120px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
+	 .box-body {  overflow:hidden;margin-top:120px;}
+	 .card-head div { font-weight:normal;}
 	</style>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>

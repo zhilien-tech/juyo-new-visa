@@ -36,8 +36,11 @@ public class MapUtil {
 				fields[i].setAccessible(true);
 				// 获取在对象f中属性fields[i]对应的对象中的变量  
 				Object o = fields[i].get(obj);
-				if (o != null)
+				if (o != null) {
 					map.put(varName, o.toString());
+				} else {
+					map.put(varName, "");
+				}
 				// System.out.println("传入的对象中包含一个如下的变量：" + varName + " = " + o);  
 				// 恢复访问控制权限  
 				fields[i].setAccessible(accessFlag);
