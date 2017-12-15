@@ -200,7 +200,7 @@
 					 var indexLi = $(this).index();
 					 if(indexLi <= indexOfBlue){
 						 $(this).attr("style", "display:block");
-						 $(this).find("div .vertical").attr("style", "display:none");
+						 //$(this).find("div .vertical").attr("style", "display:none");
 					 }
 	           })
 			});
@@ -258,7 +258,31 @@
 					content: url
 				});
 			}
-			
+			function successCallBack(status){
+				if(status == 1){
+					layer.msg('填写成功');
+				}else if(status == 2){
+					layer.msg('操作成功');
+				}else if(status == 3){
+					layer.msg('操作失败');
+				}
+				
+				$.ajax({ 
+					url: '/admin/myVisa/flowChart.html',
+					data:{
+						orderid:orderId,
+						applicantid:applicantId
+					},
+					dataType:"json",
+					type:'post',
+					success: function(data){
+						_self.myVisaData = data.myVisaData;
+					}
+				});
+			}
+			function cancelCallBack(status){
+				successCallBack(1);
+			}
 		</script>
 	</body>
 </html>
