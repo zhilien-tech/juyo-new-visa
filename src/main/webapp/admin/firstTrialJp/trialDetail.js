@@ -250,12 +250,14 @@ new Vue({
 				}else{
 					$("#urgentDays").removeClass("none");
 				}
-				
-				var money = orderobj.orderinfo.money;
-				if(money != ""){
-					orderobj.orderinfo.money = returnFloat(money);
+
+				if(orderobj.orderinfo.money != undefined ){
+					var money = orderobj.orderinfo.money;
+					if(money != "" || money != null || money != "NaN"){
+						orderobj.orderinfo.money = returnFloat(money);
+					}
 				}
-				
+
 				if(backMailInfos.length>0){
 					$(".addExpressInfoBtn").hide();
 				}
@@ -488,21 +490,31 @@ $("#money").blur(function(){
 	var money = $("#money").val();
 	if(money != "" ){
 		var moneys = returnFloat(money);
+		if(moneys == "NaN.00"){
+			moneys = "";
+		}
 		$("#money").val(moneys); 
 	}
 });
+ 
 //数字保留两位小数
 function returnFloat(value){
 	var value=Math.round(parseFloat(value)*100)/100;
 	var xsd=value.toString().split(".");
 	if(xsd.length==1){
 		value=value.toString()+".00";
-	 	return value;
+		if(value == "NaN.00"){
+			value = "";
+		}
+		return value;
 	}
 	if(xsd.length>1){
 		if(xsd[1].length<2){
-	  		value=value.toString()+"0";
-	 	}
-	 	return value;
-	 }
+			value=value.toString()+"0";
+		}
+		if(value == "NaN.00"){
+			value = "";
+		}
+		return value;
+	}
 }
