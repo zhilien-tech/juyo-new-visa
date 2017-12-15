@@ -6,6 +6,7 @@
 
 package com.juyo.visa.admin.firstTrialJp.module;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -145,8 +146,9 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Object saveUnqualified(@Param("..") TApplicantUnqualifiedForm form, HttpSession session) {
-		return firstTrialJpViewService.saveUnqualified(form, session);
+	public Object saveUnqualified(@Param("..") TApplicantUnqualifiedForm form, HttpSession session,
+			HttpServletRequest request) {
+		return firstTrialJpViewService.saveUnqualified(form, session, request);
 	}
 
 	/**
@@ -235,6 +237,15 @@ public class FirstTrialJpModule {
 	@POST
 	public Object getCareerStatus(@Param("orderjpid") Integer orderjpid) {
 		return firstTrialJpViewService.getCareerStatus(orderjpid);
+	}
+
+	/**
+	 * 判断申请人是否合格
+	 */
+	@At
+	@POST
+	public Boolean isQualifiedByApplicantId(@Param("applicantId") Integer applicantId) {
+		return firstTrialJpViewService.isQualifiedByApplicantId(applicantId);
 	}
 
 }

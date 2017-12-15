@@ -76,11 +76,11 @@
 							<div class="card-head">
 								<div><label>订单号：</label><span style="cursor:pointer" v-on:click="order(data.orderid)">{{data.ordernum}}</span></div>	
 								<div><label>人数：</label><span>{{data.peoplenum}}</span></div>	
-								<div v-if="data.isdisabled==1">
-								<label>状态：</label><span>作废</span>
+								<div v-if="data.isdisabled==1" style="text-align:right;">
+								<label></label><span  style="font-size:20px">作废</span>
 								</div>	
-								<div v-else>
-								<label>状态：</label><span>{{data.status}}</span>
+								<div v-else style="position:absolute;right:20%;">
+								<label></label><span  style="font-size:20px;">{{data.status}}</span>
 								</div>
 								<div>
 									<label>操作：</label>

@@ -24,8 +24,10 @@ import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.YouKeExpressTypeEnum;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
+import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantExpressEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
+import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TApplicantVisaJpEntity;
 import com.juyo.visa.entities.TOrderEntity;
@@ -50,6 +52,16 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
+
+		//判断当前登陆者，是否是统一联系人
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, Cnd.where("userId", "=", userId));
+		TApplicantOrderJpEntity applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicant.getId()));
+		Integer isMainApplicant = applicantJp.getIsMainApplicant();
+		Integer orderJpId = applicantJp.getOrderId();
+		form.setOrderjpid(orderJpId);
+		form.setIsMainLink(isMainApplicant);
+
 		form.setUserid(userId);
 		Sql sql = form.sql(sqlManager);
 

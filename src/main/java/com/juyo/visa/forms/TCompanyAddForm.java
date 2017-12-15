@@ -49,6 +49,9 @@ public class TCompanyAddForm extends AddForm implements Serializable {
 	/**经营范围*/
 	private String businessScopes;
 
+	/**指定番号*/
+	private String designatedNum;
+
 	/**操作人*/
 	private Integer opId;
 

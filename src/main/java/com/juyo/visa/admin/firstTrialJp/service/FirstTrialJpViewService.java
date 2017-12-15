@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
@@ -53,7 +54,6 @@ import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
-import com.juyo.visa.common.enums.VisaDataTypeEnum;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
@@ -199,6 +199,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("collarareaenum", EnumUtil.enum2(CollarAreaEnum.class));
 		//加急
 		result.put("mainsaleurgentenum", EnumUtil.enum2(MainSaleUrgentEnum.class));
+		//加急天数
+		result.put("mainSaleUrgentTimeEnum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
 		//工作日
 		result.put("mainsaleurgenttimeenum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
 		//行程
@@ -294,14 +296,28 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		applyinfo = editApplicantsInfo(applyinfo);
 		for (Record record : applyinfo) {
 			//资料类型
-			Integer type = (Integer) record.get("type");
+			/*Integer type = (Integer) record.get("type");
 			for (VisaDataTypeEnum visadatatype : VisaDataTypeEnum.values()) {
 				if (!Util.isEmpty(type) && type.equals(visadatatype.intKey())) {
 					record.put("type", visadatatype.value());
 				}
-			}
+			}*/
+			//性别
 			String sex = (String) record.get("sex");
 			record.set("sex", sex);
+			//递送方式
+			Integer extype = (Integer) record.get("expresstype");
+			String exNum = (String) record.get("expressnum");
+			for (ExpressTypeEnum expresstype : ExpressTypeEnum.values()) {
+				if (!Util.isEmpty(extype) && extype.equals(expresstype.intKey())) {
+					if (extype == ExpressTypeEnum.EXPRESS.intKey()) {
+						//exNum = "<a href='https://www.ickd.cn/' target='view_window'>" + exNum + "</a>";
+						record.put("expressNum", exNum);
+					} else {
+						record.put("expressNum", expresstype.value());
+					}
+				}
+			}
 		}
 
 		return applyinfo;
@@ -484,9 +500,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		try {
 			//发送合格消息
-			sendApplicantVerifySMS(applyid, orderid, "applicant_qualified_sms.txt");
+			sendApplicantVerifySMS(applyid, orderid, "", "applicant_qualified_sms.txt");
 			//发送合格邮件
-			sendApplicantVerifyEmail(applyid, orderid, "applicant_qualified_mail.html");
+			sendApplicantVerifyEmail(applyid, orderid, "", "applicant_qualified_mail.html");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -508,7 +524,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//保存不合格信息
-	public Object saveUnqualified(TApplicantUnqualifiedForm form, HttpSession session) {
+	public Object saveUnqualified(TApplicantUnqualifiedForm form, HttpSession session, HttpServletRequest request) {
 		int YES = IsYesOrNoEnum.YES.intKey();
 		int NO = IsYesOrNoEnum.NO.intKey();
 		Integer applicantId = form.getApplicantId();
@@ -574,11 +590,16 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			orderJpViewService.insertLogs(orderid, firsttrialstatus, session);
 		}
 
+		//生成二维码
+		String pcUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
+		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+				+ "/mobile/info.html?applicantid=" + applicantId;
+
 		try {
 			//发送不合格消息
-			sendApplicantVerifySMS(applicantId, orderid, "applicant_unqualified_sms.txt");
+			sendApplicantVerifySMS(applicantId, orderid, mobileUrl, "applicant_unqualified_sms.txt");
 			//发送不合格邮件
-			sendApplicantVerifyEmail(applicantId, orderid, "applicant_unqualified_mail.html");
+			sendApplicantVerifyEmail(applicantId, orderid, pcUrl, "applicant_unqualified_mail.html");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1122,7 +1143,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//发送合格短信
-	public Object sendApplicantVerifySMS(Integer applyid, Integer orderid, String smsTemplate) throws IOException {
+	public Object sendApplicantVerifySMS(Integer applyid, Integer orderid, String mobileUrl, String smsTemplate)
+			throws IOException {
 		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(smsTemplate));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
@@ -1140,14 +1162,16 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid.longValue());
 		String orderNum = order.getOrderNum();
 		String smsContent = tmp.toString();
-		smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum);
+		smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+				.replace("${mobileUrl}", mobileUrl);
 		String result = sendSMS(telephone, smsContent);
 		return result;
 
 	}
 
 	//合格/不合格 发送审核结果邮件
-	public Object sendApplicantVerifyEmail(Integer applyid, Integer orderid, String mailTemplate) throws IOException {
+	public Object sendApplicantVerifyEmail(Integer applyid, Integer orderid, String pcUrl, String mailTemplate)
+			throws IOException {
 		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(mailTemplate));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
@@ -1169,7 +1193,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			sex = "女士";
 		}
 
-		emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum);
+		emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+				.replace("${pcUrl}", pcUrl);
 		result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
 
 		return result;
@@ -1201,6 +1226,24 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("isEmpty", query.size() <= 0);
 
 		return result;
+	}
+
+	//判断申请人是否合格
+	public Boolean isQualifiedByApplicantId(Integer applicantId) {
+		boolean isQualified = true;
+		int YES = IsYesOrNoEnum.YES.intKey();
+		TApplicantUnqualifiedEntity fetch = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", applicantId));
+		if (!Util.isEmpty(fetch)) {
+			Integer isBase = fetch.getIsBase();
+			Integer isPassport = fetch.getIsPassport();
+			Integer isVisa = fetch.getIsVisa();
+
+			if (Util.eq(isBase, YES) || Util.eq(isPassport, YES) || Util.eq(isVisa, YES)) {
+				isQualified = false;
+			}
+		}
+		return isQualified;
 	}
 
 }

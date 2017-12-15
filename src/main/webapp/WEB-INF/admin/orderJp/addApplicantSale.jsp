@@ -468,7 +468,6 @@
 						if(status == 2){
 							parent.successCallBack(4,data);
 						}
-						//closeWindow();
 					},
 					error : function() {
 						console.log("error");
@@ -655,17 +654,7 @@
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
-			parent.cancelCallBack(1);
 		}
-		
-		/* $(function(){
-			$("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
-				$(this).siblings("i").css("display","block");
-			});
-			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
-				$(this).siblings("i").css("display","block");
-			});
-		}); */
 		
 		function deleteApplicantFrontImg(id){
 			$('#cardFront').val("");
@@ -731,7 +720,7 @@
 				$(".nationalityHide").hide();
 			}
 		});
-		
+		//点击右侧箭头，跳转到护照信息
 		function toPassport(){
 			var bootstrapValidator = $("#applicantInfo").data(
 			'bootstrapValidator');
