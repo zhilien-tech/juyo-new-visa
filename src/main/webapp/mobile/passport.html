@@ -5,13 +5,19 @@
     <title>护照信息</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" type="text/css" href="../css/common.css">
-    <link rel="stylesheet" type="text/css" href="../css/passport.css">
-    <link rel="stylesheet" type="text/css" href="../css/lCalendar.css"><!-- 日历插件 .css -->
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/passport.css">
+    <link rel="stylesheet" type="text/css" href="css/lCalendar.css"><!-- 日历插件 .css -->
 </head>
 <body>
+	<form id="passportform">
     <div class="top">
-        <img src="../img/1.jpg" alt="" class="bacimg">
+    	<span v-if="passportdata.passporturl != ''">
+    		<img :src="passportdata.passporturl" width="360px" height="200px" alt="" class="bacimg">
+    	</span>
+    	<span v-else>
+	        <img src="images/1.jpg" alt="" class="bacimg">
+    	</span>
         <div id="upload">
             <h6>点击上传护照</h6>
             <p>可自动识别</p>
@@ -19,31 +25,61 @@
         <input type="file" id="image" style="display:none;" name="image">
     </div>
     <ul class="label">
-        <li>类型 <input type="text" class="txtInput" /></li>
-        <li>护照号 <input type="text" class="txtInput" /></li>
-        <li>姓（中文）<input type="text" class="txtInput" /></li>
-        <li>姓（拼音）<input type="text" class="txtInput" /></li>
-        <li>名（中文）<input type="text" class="txtInput" /></li>
-        <li>名（拼音）<input type="text" class="txtInput" /></li>
-        <li>性别 <input type="text" class="txtInput" /></li>
-        <li>出生日期 <input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" /></li>
-        <li>出生地点 <input type="text" class="txtInput" /></li>
-        <li>出生地点（拼音） <input type="text" class="txtInput" /></li>
-        <li>签发地点 <input type="text" class="txtInput" /></li>
-        <li>签发地点（拼音） <input type="text" class="txtInput" /></li>
-        <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" /></li>
-   		<li>有效期 <input type="text" class="txtInput" /></li>
+        <li>类型 <input type="text" class="txtInput" v-model="passportdata.type"/></li>
+        <li>护照号 <input type="text" class="txtInput" v-model="passportdata.passport"/></li>
+        <li>姓（中文）<input type="text" class="txtInput" v-model="passportdata.firstname"/></li>
+        <li>姓（拼音）<input type="text" class="txtInput" v-model="passportdata.firstnameen"/></li>
+        <li>名（中文）<input type="text" class="txtInput" v-model="passportdata.lastname"/></li>
+        <li>名（拼音）<input type="text" class="txtInput" v-model="passportdata.lastnameen"/></li>
+        <li>性别 <input type="text" class="txtInput" v-model="passportdata.sex"/></li>
+        <li>出生日期 <input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.birthday"/></li>
+        <li>出生地点 <input type="text" class="txtInput" v-model="passportdata.birthaddress"/></li>
+        <li>出生地点（拼音） <input type="text" class="txtInput" v-model="passportdata.birthaddressen"/></li>
+        <li>签发地点 <input type="text" class="txtInput" v-model="passportdata.issuedplace"/></li>
+        <li>签发地点（拼音） <input type="text" class="txtInput" v-model="passportdata.issuedplaceen"/></li>
+        <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.issueddate"/></li>
+   		<li>有效期 <select v-model="passportdata.validtype">
+   					<option value=""></option>
+   					<option value="1">5年</option>
+   					<option value="2">10年</option>
+   				  </select>
+   		</li>
     </ul>
     <div class="bottom">
     		<a class="passport-prav passport-btn">上一步</a>
     		<a class="passport-clear passport-btn">清除</a>
     		<a class="passport-next passport-btn">下一步</a>
     </div>
-    <script src="../js/rem(750).js"></script>
-    <script src="../js/jquery-1.10.2.js"></script>
-    <script src="../js/lrz.bundle.js"></script>
-    <script type="text/javascript" src="../js/lCalendar.min.js"></script><!-- 日历插件 .js -->
+    </form>
+    <script src="js/rem(750).js"></script>
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/lrz.bundle.js"></script>
+    <script type="text/javascript" src="js/lCalendar.min.js"></script><!-- 日历插件 .js -->
+    <script src="/references/common/js/vue/vue.min.js"></script>
+	<script src="/references/common/js/layer/layer.js"></script>
+	<script type="text/javascript" src="/admin/common/commonjs.js"></script>
     <script>
+    
+  //异步加载的URL地址
+	var url="/admin/mobile/passportinfo.html";
+	var _self;
+	new Vue({
+		el: '#passportform',
+		data: {passportdata:""},
+		created:function(){
+			var applicantid = GetQueryString('applicantid');
+	        _self=this;
+	        $.ajax({
+	        	url: url,
+	        	data:{applicantid:applicantid},
+	        	dataType:"json",
+	        	type:'post',
+	        	success: function(data){
+	        		_self.passportdata = data.passportdata;
+	          	}
+	        });
+	    }
+	});
         $(function () {
             $('#upload').click(function () {
                 $('#image').click();
@@ -74,6 +110,144 @@
             'trigger': '#issueDate',
             'type': 'date'
         });
+        //上一步
+        $('.passport-prav').click(function(){
+        	var applicantid = GetQueryString('applicantid');
+        	window.location.href='/mobile/info.html?applicantid='+applicantid;
+        });
+        //清除
+        $('.passport-clear').click(function(){
+        	_self.passportdata.passporturl = '';
+        	_self.passportdata.type = '';
+        	_self.passportdata.passport = '';
+        	_self.passportdata.firstname = '';
+        	_self.passportdata.firstnameen = '';
+        	_self.passportdata.lastname = '';
+        	_self.passportdata.lastnameen = '';
+        	_self.passportdata.sex = '';
+        	_self.passportdata.birthday = '';
+        	_self.passportdata.birthaddress = '';
+        	_self.passportdata.birthaddressen = '';
+        	_self.passportdata.issuedplace = '';
+        	_self.passportdata.issuedplaceen = '';
+        	_self.passportdata.issueddate = '';
+        	_self.passportdata.validtype = '';
+        });
+        //下一步保存
+        $('.passport-next').click(function(){
+        	var comid = GetQueryString('comid');
+			var userid = GetQueryString('userid');
+			var orderid = GetQueryString('orderid');
+			var applicantid = GetQueryString('applicantid');
+        	$.ajax({ 
+            	url: '/admin/mobile/savePassportInfo.html',
+            	data:_self.passportdata,
+            	dataType:"json",
+            	type:'post',
+            	async:false,
+            	success: function(data){
+            		window.location.href='/mobile/visaInfo.html?comid='+comid+'&userid='+userid+'&orderid='+orderid+'&applicantid='+applicantid;
+              	}
+            });
+        });
+        
+      	//获取URL地址参数
+        function GetQueryString(name){
+             var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+             var r = window.location.search.substr(1).match(reg);
+             if(r!=null)return  unescape(r[2]); return null;
+        }
+      	
+      //把dataUrl类型的数据转为blob
+   	function dataURLtoBlob(dataurl) {
+   		var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(
+   				n);
+   		while (n--) {
+   			u8arr[n] = bstr.charCodeAt(n);
+   		}
+   		return new Blob([ u8arr ], {
+   			type : mime
+   		});
+   	}
+  //护照上传,扫描
+	
+	$('#image').change(function() {
+		var layerIndex = layer.load(1, {
+			shade : "#000"
+		});
+		var file = this.files[0];
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			var dataUrl = e.target.result;
+			var blob = dataURLtoBlob(dataUrl);
+			var formData = new FormData();
+			formData.append("image", blob, file.name);
+			$.ajax({
+				type : "POST",//提交类型  
+				//dataType : "json",//返回结果格式  
+				url : '/admin/orderJp/passportRecognition',//请求地址  
+				async : true,
+				processData : false, //当FormData在jquery中使用的时候需要设置此项
+				contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+				//请求数据  
+				data : formData,
+				success : function(obj) {//请求成功后的函数 
+					//关闭加载层
+					layer.close(layerIndex);
+					if (true === obj.success) {
+						_self.passportdata.passporturl = obj.url;
+						_self.passportdata.type = obj.type;
+						_self.passportdata.passport = obj.num;
+						_self.passportdata.sex = obj.sex;
+						_self.passportdata.sexen = obj.sexEn;
+						_self.passportdata.birthaddress = obj.birthCountry;
+						_self.passportdata.birthaddressen = getPinYinStr(obj.birthCountry).toUpperCase();
+						_self.passportdata.birthday = obj.birth;
+						_self.passportdata.issuedplace = obj.visaCountry;
+						_self.passportdata.issuedplaceen = getPinYinStr(obj.visaCountry).toUpperCase();
+						_self.passportdata.issueddate = obj.issueDate;
+						_self.passportdata.validenddate = obj.expiryDay;
+						var years = getDateYearSub(obj.issueDate,obj.expiryDay);
+						if(years == 5){
+							_self.passportdata.validtype = 1;
+						}else{
+							_self.passportdata.validtype = 2;
+						}
+						console.log(JSON.stringify(_self.passportdata));
+					}
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					layer.close(layerIndex);
+				}
+			}); // end of ajaxSubmit
+		};
+		reader.readAsDataURL(file);
+	});
+      
+	function getDateYearSub(startDateStr, endDateStr) {
+        var day = 24 * 60 * 60 *1000; 
+
+        var sDate = new Date(Date.parse(startDateStr.replace(/-/g, "/")));
+        var eDate = new Date(Date.parse(endDateStr.replace(/-/g, "/")));
+
+        //得到前一天(算头不算尾)
+        sDate = new Date(sDate.getTime() - day);
+
+        //获得各自的年、月、日
+        var sY  = sDate.getFullYear();     
+        var sM  = sDate.getMonth()+1;
+        var sD  = sDate.getDate();
+        var eY  = eDate.getFullYear();
+        var eM  = eDate.getMonth()+1;
+        var eD  = eDate.getDate();
+
+        if(eY > sY && sM == eM && sD == eD) {
+            return eY - sY;
+        } else {
+            //alert("两个日期之间并非整年，请重新选择");
+            return 0;
+        }
+    }
     </script>
 </body>
 </html>

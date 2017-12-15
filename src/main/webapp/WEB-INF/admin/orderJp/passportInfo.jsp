@@ -17,17 +17,52 @@
 		.info-imgUpload {width: 100%;}
 		.col-sm-offset-1 { margin-left:3% !important;}
 		.groupWidth { width:215px;}
+		.NoInfo {
+	width:100%;
+	height:30px;
+	margin-left:3.5%;
+	transtion:height 1s;
+	-webkit-transtion:height 1s;
+	-moz-transtion:height 1s;
+}
+.ipt-info {
+	display:none;
+}
+.Unqualified, .qualified  {
+	margin-right:10px;
+}
 	</style>
 </head>
 <body>
 	<div class="modal-content">
+	<div style="position:absolute;top:40%;right:5%;z-index:999;">
+			<a id="toVisa" onclick="visaBtn();">
+				<h1>></h1>
+			</a>
+		</div>
+		<div style="position:absolute;top:40%;left:5%;z-index:999;">
+			<a id="toApply" onclick="applyBtn();">
+				<h1><</h1>
+			</a>
+		</div>
 		<form id="passportInfo">
 			<div class="modal-header">
 				<span class="heading">护照信息</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<c:choose>
+						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
+					<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
+				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
+						</c:when>
+						<c:otherwise> 
+						</c:otherwise>
+					</c:choose>
 			</div>
 			<div class="modal-body">
+			<div class="ipt-info">
+					<input id="passRemark" name="passRemark" type="text" value="${obj.unqualified.passRemark }" class="NoInfo" />
+				</div>
 				<div class="tab-content row">
 					<div class="col-sm-5 padding-right-0">
 						<!-- <div class="info-QRcode"> --><!-- 二维码 -->
@@ -187,23 +222,7 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			if($("#sex").val() == "男"){
-				$("#sexEn").val("M");
-			}else{
-				$("#sexEn").val("F");
-			}
 			
-			$("#issuedDate").change(function(){
-				if($("#issuedDate").val() != ""){
-					if($("#validType").val() == 1){
-						$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
-					}else{
-						$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
-					}
-				}
-			});
-		});
-		function initvalidate(){
 			//校验
 			$('#passportInfo').bootstrapValidator({
 				message : '验证不通过',
@@ -214,6 +233,7 @@
 				},
 				fields : {
 					passport : {
+						trigger:"change keyup",
 						validators : {
 		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 								url: '${base}/admin/orderJp/checkPassport.html',
@@ -233,15 +253,29 @@
 					}
 				}
 			});
-		}
-		
-		/* function validTypeSelect(){
-			var start = $('#issuedDate').val();
-			var end = $('#validEndDate').val();
-			 
-		} */
-		
-		
+			$('#passportInfo').bootstrapValidator('validate');
+			
+			var remark = $("#passRemark").val();
+			if(remark != ""){
+				$(".ipt-info").show();
+			}
+			
+			if($("#sex").val() == "男"){
+				$("#sexEn").val("M");
+			}else{
+				$("#sexEn").val("F");
+			}
+			
+			$("#issuedDate").change(function(){
+				if($("#issuedDate").val() != ""){
+					if($("#validType").val() == 1){
+						$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
+					}else{
+						$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+					}
+				}
+			});
+		});
 		
 		//护照上传,扫描
 		
@@ -275,15 +309,7 @@
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");
 							$('#type').val(obj.type);
-							$('#passport').val(obj.num);
-							if($('#passport').val != "" || $('#passport').val != null || $('#passport').val != undefined){
-								$("#passportInfo").bootstrapValidator("validate");
-								//得到获取validator对象或实例 
-								var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-								// 执行表单验证 
-								initvalidate();
-								bootstrapValidator.validate();
-							}
+							$('#passport').val(obj.num).change();
 							$('#sex').val(obj.sex);
 							$('#sexEn').val(obj.sexEn);
 							$('#birthAddress').val(obj.birthCountry);
@@ -326,39 +352,48 @@
 			});
 		}
 		
-		
-		initvalidate();
-		$("#passportInfo").bootstrapValidator("validate");
-		
 		//保存
-		function save(){
-			$("#passportInfo").bootstrapValidator("validate");
+		function save(status){
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-			// 执行表单验证 
-			initvalidate();
 			bootstrapValidator.validate();
 			if (!bootstrapValidator.isValid()) {
 				return;
 			}
+			
 			var passportInfo = $("#passportInfo").serialize();
 			$.ajax({
 				type: 'POST',
+				async : false,
 				data : passportInfo,
 				url: '${base}/admin/orderJp/saveEditPassport',
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					parent.successCallBack(1);
-					closeWindow();
+					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					layer.close(index); */
+					if(status == 1){
+						closeWindow();
+						parent.successCallBack(1);
+					}
 				}
 			});
 		}
+		
 		
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
+			parent.cancelCallBack(1);
+		}
+		function cancelCallBack(status){
+			closeWindow();
+			parent.cancelCallBack(1);
+		}
+		function successCallBack(status){
+				parent.successCallBack(1);
+				closeWindow();
 		}
 		$(function(){
 			var passport = $("#passportUrl").val();
@@ -485,6 +520,81 @@
 		            return 0;
 		        }
 		    }
+		 
+		 function applyBtn(){
+			 var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+			bootstrapValidator.validate();
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
+			save(2);
+			var id = ${obj.applicantId};
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid=',
+				success: function(index, layero){
+						    //do something
+					layer.close(index); //如果设定了yes回调，需进行手工关闭
+				}
+			});
+		 }
+			
+		 function visaBtn(){
+			 var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+			bootstrapValidator.validate();
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
+			save(3);
+			var id = ${obj.applicantId};
+			var orderid = ${obj.orderid};
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime'
+			});
+		 }
+		 
+		//合格/不合格
+			$(".Unqualified").click(function(){
+				$(".ipt-info").slideDown();
+			});
+			$(".qualified").click(function(){
+				$(".ipt-info").slideUp();
+				var applicantId = ${obj.applicantId};
+				var orderid = ${obj.orderid};
+				var orderJpId = ${obj.orderJpId};
+				var infoType = ${obj.infoType};
+				layer.load(1);
+				$.ajax({
+					type: 'POST',
+					data : {
+						applicantId : applicantId,
+						orderid : orderid,
+						orderjpid : orderJpId,
+						infoType : infoType
+					},
+					url: '${base}/admin/qualifiedApplicant/qualified.html',
+					success :function(data) {
+						console.log(JSON.stringify(data));
+						layer.closeAll('loading');
+						$("#baseRemark").val("");
+					}
+				});
+			});
 	</script>
 
 

@@ -246,6 +246,7 @@
 									<div class="form-group">
 										<label><span>*</span>付款方式：</label> <select id="payType"
 											name="paytype" class="form-control input-sm">
+											<option value="">--请选择--</option>
 											<c:forEach var="map" items="${obj.mainSalePayTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -732,13 +733,18 @@
 				}
 				if(status == 3){
 				    layer.msg('添加成功');
-					saveAddOrder(2);
+					saveAddOrder(3);
+				}
+				if(status == 4){
+					saveAddOrder(3);
+				}
 					var appId = document.getElementById("appId").value;
 					$("#applicantsTable").each(function(){
 						var applicants = $(this);
 						var result = '';
 						$.ajax({ 
 					    	url: '${base}/admin/orderJp/getApplicant',
+					    	async : false,
 					    	dataType:"json",
 					    	data:{applicantId:appId},
 					    	type:'post',
@@ -808,7 +814,6 @@
 					    	}
 						});
 				    }); 
-				}
 				
 			}
 			
@@ -884,7 +889,8 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '551px'],
-					content:'/admin/backMailJp/backMailInfo.html?applicantId='+id
+					content:'/admin/backMailJp/backMailInfo.html?applicantId='+id+'&isAfterMarket=0'
+
 				});
 			}
 			
@@ -948,9 +954,13 @@
 						console.log(JSON.stringify(data));
 						if(status == 1){
 							window.location.href = '${base}/admin/orderJp/list';
-						}else{
+						}
+						if(status == 2){
 							//var orderid = $("#orderid").val(data.id);
 							window.location.href = '${base}/admin/orderJp/order?id='+data.id;
+						}
+						if(status == 3){
+							
 						}
 					},
 					error : function() {

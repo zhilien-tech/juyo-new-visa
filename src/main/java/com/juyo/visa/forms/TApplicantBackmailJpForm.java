@@ -27,6 +27,9 @@ public class TApplicantBackmailJpForm extends DataTablesParamForm {
 	/**日本申请人id*/
 	private Integer applicantJPId;
 
+	/**是否是售后操作*/
+	private Integer isAfterMarket;
+
 	/**资料来源*/
 	private Integer source;
 

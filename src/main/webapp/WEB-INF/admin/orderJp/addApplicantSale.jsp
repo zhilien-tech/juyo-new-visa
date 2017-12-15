@@ -26,18 +26,23 @@
 </head>
 <body>
 	<div class="modal-content">
+		<div style="position:absolute;top:40%;right:5%;z-index:999;">
+			<a onclick="toPassport();">
+				<h1>></h1>
+			</a>
+		</div>
 		<form id="applicantInfo">
 			<div class="modal-header">
 				<span class="heading">添加申请人</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存" onclick="saveApplicant();"/>
+				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存" onclick="saveApplicant(1);"/>
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
-						<!-- <div class="info-QRcode"> --><!-- 身份证 正面 -->
-							
-						<!-- </div> --><!-- end 身份证 正面 -->
+						<div class="info-QRcode"> <!-- 身份证 正面 -->
+							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
+						</div> <!-- end 身份证 正面 -->
 						
 						
 						<div class="info-imgUpload front"><!-- 身份证 正面 -->
@@ -85,10 +90,10 @@
 									<label>是否有曾用名</label> 
 									<div>
 										<span class="nameBeforeYes">
-											<input type="radio" name="nameBefore" class="nameBefore" value="1" />是
+											<input type="radio" name="hasOtherName" class="nameBefore" value="1" />是
 										</span>
 										<span>
-											<input type="radio" name="nameBefore" class="nameBefore" checked value="2" />否
+											<input type="radio" name="hasOtherName" class="nameBefore" checked value="2" />否
 										</span>
 									</div>
 								</div>
@@ -101,6 +106,7 @@
 											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
 											placeholder=" " value="" />
 											<input type="text" id="otherFirstNameEn" style="position:absolute;top:45px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
+
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -136,6 +142,7 @@
 									<label><span>*</span>姓/拼音：</label>
 									<input id="firstName" style="position:relative;" name="firstName" type="text" class="form-control input-sm req " placeholder=" " />
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+									<input type="hidden" id="applyId"/>
 									<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="firstNameEn" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -230,7 +237,7 @@
 						<div class="row"><!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>现居住地址省份：</label>
+									<label>现居住地址省份：</label><input type="checkbox" class="nowProvince" name="addressIsSameWithCard" value="1"/>
 									<input type="hidden" name="cardProvince" id="cardProvince"/>
 									<input type="hidden" name="cardCity" id="cardCity"/>
 									<input id="province" name="province" type="text" class="form-control input-sm" placeholder=" " />
@@ -341,7 +348,20 @@
 							regexp: {
 		                	 	regexp: /^[1][34578][0-9]{9}$/,
 		                        message: '电话号格式错误'
-		                    }
+		                    },
+		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+								url: '${base}/admin/orderJp/checkMobile.html',
+								message: '电话号码已存在，请重新输入',//提示消息
+								delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+								type: 'POST',//请求方式
+								//自定义提交数据，默认值提交当前input value
+								data: function(validator) {
+									return {
+										mobile:$('#telephone').val(),
+										adminId:""
+									};
+								}
+							}
 						}
 					},
 					email : {
@@ -357,7 +377,43 @@
 			$('#applicantInfo').bootstrapValidator('validate');
 			
 		});
-		function saveApplicant(){
+		
+		//居住地与身份证相同
+		$(".nowProvince").change(function(){
+			searchByCard();
+		});
+		
+		$("#cardId").change(function(){
+			searchByCard();
+		});
+		
+		function searchByCard(){
+			var str=""; 
+			//是否同身份证相同
+			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+				str=$(this).val();     
+			});     
+			if(str == 1){//相同
+				var cardId = $("#cardId").val();
+				layer.load(1);
+				$.ajax({
+					type: 'POST',
+					data : {
+						cardId : cardId
+					},
+					dataType : 'json',
+					url: '${base}/admin/orderJp/getInfoByCard',
+					success :function(data) {
+						console.log(JSON.stringify(data));
+						layer.closeAll('loading');
+						$("#province").val(data.province);
+						$("#city").val(data.city);
+					}
+				});
+			}
+		}
+		
+		function saveApplicant(status){
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#applicantInfo").data(
 					'bootstrapValidator');
@@ -375,21 +431,36 @@
 					layer.msg('名不能为空');
 					return;
 				}
+				var str="";     
+			    $("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+			    	str=$(this).val();     
+			    });     
+				if(str != 1){
+					var applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
+				}else{
+					var applicantInfo = $("#applicantInfo").serialize();
+				}
 				
-				
-				var applicantInfo = $("#applicantInfo").serialize();
 				
 				$.ajax({
 					type : 'POST',
 					data : applicantInfo,
+					async : false,
 					url : '${base}/admin/orderJp/saveAddApplicant',
 					success : function(data) {
 						var applicantIdParent = window.parent.document.getElementById("appId").value;
 						applicantIdParent += data.id +",";
 						window.parent.document.getElementById("appId").value = applicantIdParent;
+						$("#applyId").val(data.id);
 						layer.closeAll('loading');
-						parent.successCallBack(3,data);
-						closeWindow();
+						if(status == 1){
+							parent.successCallBack(3,data);
+							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							parent.layer.close(index);
+						}
+						if(status == 2){
+							parent.successCallBack(4,data);
+						}
 					},
 					error : function() {
 						console.log("error");
@@ -494,6 +565,7 @@
 							$('#address').val(obj.address);
 							$('#nation').val(obj.nationality);
 							$('#cardId').val(obj.num);
+							searchByCard();
 							$('#cardProvince').val(obj.province);
 							$('#cardCity').val(obj.city);
 							$('#birthday').val(obj.birth);
@@ -577,15 +649,6 @@
 			parent.layer.close(index);
 		}
 		
-		/* $(function(){
-			$("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
-				$(this).siblings("i").css("display","block");
-			});
-			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
-				$(this).siblings("i").css("display","block");
-			});
-		}); */
-		
 		function deleteApplicantFrontImg(id){
 			$('#cardFront').val("");
 			$('#sqImg').attr('src', "");
@@ -624,6 +687,7 @@
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		});
+		
 		//checkbox 曾用名
 		$(".nameBefore").change(function(){
 			let checked = $("input[name='nameBefore']:checked").val();
@@ -664,7 +728,37 @@
 					$(".nameBeforeTop").css('float','left');
 				}
 			}
-		});		
+		});	
+		//点击右侧箭头，跳转到护照信息
+		function toPassport(){
+			var bootstrapValidator = $("#applicantInfo").data(
+			'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
+			saveApplicant(2);
+			var applyId = $("#applyId").val();
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '551px'],
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'
+			});
+		}
+		function successCallBack(status){
+			parent.successCallBack(1);
+			closeWindow();
+		}
+		function cancelCallBack(status){
+			closeWindow();
+		}
 	</script>
 
 

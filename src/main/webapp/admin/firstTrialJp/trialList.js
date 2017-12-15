@@ -57,29 +57,43 @@ new Vue({
 			});
 		},
 		expressFun:function(orderid,orderjpid){//跳转快递弹层页面
-			//alert(orderid +"---"+orderjpid);
 			$.ajax({
 				type : 'POST',
 				data : {
 					orderjpid:orderjpid
 				},
-				url : '/admin/firstTrialJp/isQualified.html',
+				url : '/admin/firstTrialJp/getCareerStatus.html',
 				success : function(data) {
-					if(data){
-						layer.open({
-							type: 2,
-							title: false,
-							closeBtn:false,
-							fix: false,
-							maxmin: false,
-							shadeClose: false,
-							scrollbar: false,
-							area: ['900px', '550px'],
-							content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
-						});
-					}else{
-						layer.msg('申请人不合格');
+					var isEmpty = data.isEmpty;
+					if(isEmpty == false){
+						layer.msg('申请人：'+data.names+' 职业未选择');
 						return;
+					}else{
+						$.ajax({
+							type : 'POST',
+							data : {
+								orderjpid:orderjpid
+							},
+							url : '/admin/firstTrialJp/isQualified.html',
+							success : function(data) {
+								if(data){
+									layer.open({
+										type: 2,
+										title: false,
+										closeBtn:false,
+										fix: false,
+										maxmin: false,
+										shadeClose: false,
+										scrollbar: false,
+										area: ['900px', '550px'],
+										content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
+									});
+								}else{
+									layer.msg('申请人不合格');
+									return;
+								}
+							}
+						});
 					}
 				}
 			});
@@ -111,28 +125,37 @@ new Vue({
 			});
 		},
 		qualifiedFun:function(applyid,orderid,orderjpid){
-			layer.confirm('您确认合格吗？', {
-				btn: ['是','否'], //按钮
-				shade: false //不显示遮罩
-			}, function(index){
-				$.ajax({
-					type : 'POST',
-					data : {
-						applyid:applyid,
-						orderid:orderid,
-						orderjpid:orderjpid
-					},
-					url : '/admin/firstTrialJp/qualified.html',
-					success : function(data) {
-						layer.close(index);
-						successCallBack(1);
-					},
-					error : function(xhr) {
-						layer.msg("修改失败", "", 3000);
+			//判断申请人是否合格
+			$.ajax({
+				type : 'POST',
+				data : {
+					applicantId:applyid
+				},
+				url : '/admin/firstTrialJp/isQualifiedByApplicantId.html',
+				success : function(data) {
+					if(data){
+						$.ajax({
+							type : 'POST',
+							data : {
+								applyid:applyid,
+								orderid:orderid,
+								orderjpid:orderjpid
+							},
+							url : '/admin/firstTrialJp/qualified.html',
+							success : function(data) {
+								successCallBack(3);
+							},
+							error : function(xhr) {
+								layer.msg("合格失败", "", 3000);
+							}
+						});
+					}else{
+						layer.msg("申请人不合格");
 					}
-				});
-			}, function(){
-				//取消之后不做任何操作
+				},
+				error : function(xhr) {
+					layer.msg("操作失败");
+				}
 			});
 		},
 		unqualifiedFun:function(applyid,orderid){
@@ -232,25 +255,24 @@ function selectListData(){
 function successCallBack(status){
 	if(status == 1){
 		layer.msg('修改成功');
-		$.ajax({ 
-			url: url,
-			/* data:{status:status,searchStr:searchStr}, */
-			dataType:"json",
-			type:'post',
-			success: function(data){
-				_self.trialJapanData = data.trialJapanData;
-			}
-		});
 	}else if(status == 2){
 		layer.msg('发送成功');
-		$.ajax({ 
-			url: url,
-			/* data:{status:status,searchStr:searchStr}, */
-			dataType:"json",
-			type:'post',
-			success: function(data){
-				_self.trialJapanData = data.trialJapanData;
-			}
-		});
+	}else if(status == 3){
+		layer.msg('合格成功');
 	}
+	else if(status == 4){
+		layer.msg('不合格成功');
+	}
+	$.ajax({ 
+		url: url,
+		/* data:{status:status,searchStr:searchStr}, */
+		dataType:"json",
+		type:'post',
+		success: function(data){
+			_self.trialJapanData = data.trialJapanData;
+		}
+	});
+}
+function cancelCallBack(status){
+	successCallBack(1);
 }

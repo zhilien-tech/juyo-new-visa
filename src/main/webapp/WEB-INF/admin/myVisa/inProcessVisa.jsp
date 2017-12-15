@@ -7,11 +7,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>我的签证 - 办理中签证</title>
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
-    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
-    <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
-    <link rel="stylesheet" href="${base}/references/public/css/style.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+	<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
+	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
 		.card-head div:nth-child(1){width:130px;}
 		.card-head div:nth-child(2){width:200px;}
@@ -157,20 +157,44 @@
 	    			window.location.href = '/admin/myVisa/flowChart.html?orderid='+orderid+'&applicantid='+applicantid;
 	    		},
 	    		edit:function(applyid){
-	        		layer.open({
-	        		    type: 2,
-	        		    title: false,
-	        		    closeBtn:false,
-	        		    fix: false,
-	        		    maxmin: false,
-	        		    shadeClose: false,
-	        		    scrollbar: false,
-	        		    area: ['900px', '550px'],
-	        		    content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='
-	        	    });
+	    			layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='
+					});
 	        	},
 	        }
 		});
+		
+		function successCallBack(status){
+			if(status == 1){
+				layer.msg('修改成功');
+			}else if(status == 2){
+				layer.msg('发送成功');
+			}else if(status == 3){
+				layer.msg('合格成功');
+			}
+			else if(status == 4){
+				layer.msg('不合格成功');
+			}
+			$.ajax({ 
+				url: url,
+				dataType:"json",
+				type:'post',
+				success: function(data){
+					_self.myVisaData = data.myVisaData;
+				}
+			});
+		}
+		function cancelCallBack(status){
+			successCallBack(1);
+		}
 	
 	</script>
 </body>

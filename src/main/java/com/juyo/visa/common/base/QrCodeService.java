@@ -52,8 +52,10 @@ public class QrCodeService {
 		File file = new File(fileContextPath);
 		//上传到七牛云
 		Map<String, Object> map = qiniuUpService.ajaxUploadImage(file);
+		file.delete();
 		//返回上传后七牛云的路径
 		String fileqiniupath = CommonConstants.IMAGES_SERVER_ADDR + (String) map.get("data");
+		System.out.println(fileqiniupath);
 		return fileqiniupath;
 	}
 }

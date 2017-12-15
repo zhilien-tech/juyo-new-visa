@@ -27,16 +27,17 @@
 	<div class="wrapper" id="wrapper">
 		<div class="content-wrapper" style="min-height: 848px;">
 			<div class="qz-head">
-				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
-				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="save();"/> 
-				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right" />
+			<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
+				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save();"/> 
+				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
 			</div>
 			<section class="content">
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
-						<div class="info-QRcode"><!-- 身份证 正面 -->
-
-						</div><!-- end 身份证 正面 -->
+						<div class="info-QRcode"> <!-- 身份证 正面 -->
+							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
+						</div> <!-- end 身份证 正面 -->
 
 						<div class="info-imgUpload front"><!-- 护照 -->
 							<div class="col-xs-6">
@@ -46,7 +47,7 @@
 									<input id="passportUrl" name="passportUrl" type="hidden" value="${obj.passport.passportUrl }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="" src="${obj.passport.passportUrl }" >
-									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+									<i class="delete" id="deletePassportImg" ></i>
 								</div>
 							</div>
 						</div>
@@ -162,7 +163,7 @@
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<select id="validType" name="validType" class="form-control input-sm selectHeight" >
+									<select id="validType" name="validType" class="form-control input-sm " >
 									<c:forEach var="map" items="${obj.passportType}">
 										<option value="${map.key}" ${map.key == obj.passport.validType?'selected':'' }>${map.value}</option>
 									</c:forEach>
@@ -222,6 +223,47 @@
 	<script type="text/javascript">
 	var base = "${base}";
 	$(function() {
+		
+		var form = document.forms[0]; 
+		for ( var i = 0; i < form.length; i++) { 
+			var element = form.elements[i]; 
+			if(element.id != "editbasic")
+				element.disabled = true; 
+		} 
+		$(".basic").hide();
+		
+		//校验
+		$('#passportInfo').bootstrapValidator({
+			message : '验证不通过',
+			feedbackIcons : {
+				valid : 'glyphicon glyphicon-ok',
+				invalid : 'glyphicon glyphicon-remove',
+				validating : 'glyphicon glyphicon-refresh'
+			},
+			fields : {
+				passport : {
+					trigger:"change keyup",
+					validators : {
+	                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+							url: '${base}/admin/orderJp/checkPassport.html',
+							message: '护照号已存在，请重新输入',//提示消息
+							delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+							type: 'POST',//请求方式
+							//自定义提交数据，默认值提交当前input value
+							data: function(validator) {
+								return {
+									passport:$('#passport').val(),
+									adminId:$('#id').val(),
+									orderid:$('#orderid').val()
+								};
+							}
+						}
+					}
+				}
+			}
+		});
+		$("#passportInfo").bootstrapValidator("validate");
+		
 		if($("#sex").val() == "男"){
 			$("#sexEn").val("M");
 		}else{
@@ -238,44 +280,6 @@
 			}
 		});
 	});
-	function initvalidate(){
-		//校验
-		$('#passportInfo').bootstrapValidator({
-			message : '验证不通过',
-			feedbackIcons : {
-				valid : 'glyphicon glyphicon-ok',
-				invalid : 'glyphicon glyphicon-remove',
-				validating : 'glyphicon glyphicon-refresh'
-			},
-			fields : {
-				passport : {
-					validators : {
-	                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
-							url: '${base}/admin/orderJp/checkPassport.html',
-							message: '护照号已存在，请重新输入',//提示消息
-							delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
-							type: 'POST',//请求方式
-							//自定义提交数据，默认值提交当前input value
-							data: function(validator) {
-								return {
-									passport:$('#passport').val(),
-									adminId:$('#id').val()
-								};
-							}
-						}
-					}
-				}
-			}
-		});
-	}
-	
-	/* function validTypeSelect(){
-		var start = $('#issuedDate').val();
-		var end = $('#validEndDate').val();
-		 
-	} */
-	
-	
 	
 	//护照上传,扫描
 	
@@ -309,15 +313,7 @@
 						$('#sqImg').attr('src', obj.url);
 						$("#uploadFile").siblings("i").css("display","block");
 						$('#type').val(obj.type);
-						$('#passport').val(obj.num);
-						if($('#passport').val != "" || $('#passport').val != null || $('#passport').val != undefined){
-							$("#passportInfo").bootstrapValidator("validate");
-							//得到获取validator对象或实例 
-							var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-							// 执行表单验证 
-							initvalidate();
-							bootstrapValidator.validate();
-						}
+						$('#passport').val(obj.num).change();
 						$('#sex').val(obj.sex);
 						$('#sexEn').val(obj.sexEn);
 						$('#birthAddress').val(obj.birthCountry);
@@ -361,21 +357,18 @@
 	}
 	
 	
-	initvalidate();
-	$("#passportInfo").bootstrapValidator("validate");
 	
 	//保存
 	function save(){
-		$("#passportInfo").bootstrapValidator("validate");
 		//得到获取validator对象或实例 
 		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 		// 执行表单验证 
-		initvalidate();
 		bootstrapValidator.validate();
 		if (!bootstrapValidator.isValid()) {
 			return;
 		}
 		var passportInfo = $("#passportInfo").serialize();
+		layer.load(1);
 		$.ajax({
 			type: 'POST',
 			data : passportInfo,
@@ -383,16 +376,46 @@
 			success :function(data) {
 				console.log(JSON.stringify(data));
 				layer.closeAll('loading');
-				closeWindow();
+				layer.msg("修改成功", {
+					time: 500,
+					end: function () {
+						self.location.reload();
+					}
+				});
 			}
 		});
 	}
 	
-	//返回 
-	function closeWindow() {
-		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-		parent.layer.close(index);
+	//编辑按钮
+	function editBtn(){
+		$(".basic").show();
+		$(".editbasic").hide();
+		var form = document.forms[0]; 
+		for ( var i = 0; i < form.length; i++) { 
+			var element = form.elements[i]; 
+			element.disabled = false; 
+		} 
+		var bootstrapValidator = $("#passportInfo").data(
+		'bootstrapValidator');
+		// 执行表单验证 
+		bootstrapValidator.validate();
+		$("#deletePassportImg").click(function(){
+			$('#passportUrl').val("");
+			$('#sqImg').attr('src', "");
+			$("#uploadFile").siblings("i").css("display","none");
+		});
 	}
+	
+	//取消按钮
+	function cancelBtn(){
+		layer.msg("已取消", {
+			time: 500,
+			end: function () {
+				self.location.reload();
+			}
+		});
+	}
+	
 	$(function(){
 		var passport = $("#passportUrl").val();
 		if(passport != ""){
@@ -440,12 +463,6 @@
 	 	}else{
 	    	return 365; 
 		}
-	}
-	
-	function deleteApplicantFrontImg(){
-		$('#passportUrl').val("");
-		$('#sqImg').attr('src', "");
-		$("#uploadFile").siblings("i").css("display","none");
 	}
 	
 	$("#birthday").datetimepicker({
@@ -508,6 +525,20 @@
 	            return 0;
 	        }
 	    }
+	 function clearAll(){
+		$("#passportUrl").val("");
+		$('#sqImg').attr('src', "");
+		$("#type").val("");
+		$("#passport").val("").change();
+		$("#birthAddress").val("");
+		$("#birthAddressEn").val("");
+		$("#birthday").val("");
+		$("#issuedPlace").val("");
+		$("#issuedPlaceEn").val("");
+		$("#issuedDate").val("");
+		$("#validEndDate").val("");
+		$("#issuedOrganization").val("");
+	 }
 	</script>
 </body>
 </html>

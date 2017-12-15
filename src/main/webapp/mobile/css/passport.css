@@ -1,10 +1,7 @@
 .top{
     width:100%;
     height:4.21rem;
-    position: fixed;
-    top:0;
-    left:0;
-}
+} 
 .top.info{
   position: relative;
     width: 95%;
@@ -37,21 +34,8 @@
     color: #fff;
 }
 .label{
-    margin-top:4.21rem;
     background-color: #fff;
     padding-bottom:1.6rem;
-}
-.label-info {
-	background-color: #fff;
-    padding-bottom:1.6rem;
-}
-.label-info>li {
-	border-bottom:1px solid #dedede;
-    height:0.8rem;
-    line-height: 0.8rem;
-    font-size:0.3rem;
-    color:#333;
-    padding:0 0.2rem;
 }
 .label>li{
     border-bottom:1px solid #dedede;
@@ -100,6 +84,14 @@
 	float: right;
 	margin-right: 0.2rem;
 }
+.bottom .prav {
+	float: left;
+	margin-left: 0.2rem;
+}
+.bottom .save {
+	float: right;
+	margin-right: 0.2rem;
+}
 .passport-btn {
 	display: block;
 	width: 30%;
@@ -126,3 +118,315 @@
 	margin-right: 0.2rem;
 }
 .txtInput{width: 60%;height: 100%;float: right;border: solid 0px #d6d6d6;text-align: right;outline: none;font-size: .3rem;color: #585858;}
+
+.label-info {
+	background-color: #fff;
+    padding-bottom:1.6rem;
+    margin-top: .81rem;
+}
+.label-info>li {
+	border-bottom:1px solid #dedede;
+    height:0.8rem;
+    line-height: 0.8rem;
+    font-size:0.3rem;
+    color:#333;
+    padding:0 0.2rem;
+}
+.visaInfo-top {
+	width: 100%;
+	text-align: center;
+	font-size: .4rem;
+	line-height: .81rem;
+	height: .81rem;
+	position: fixed;
+	top: 0;
+	left: 0;
+	border-bottom: 2px solid #585858;
+}
+.bottom .prev {
+	float: left;
+	margin-left: .2rem;
+}
+.bottom .save {
+	float: right;
+	margin-right: .2rem;
+}
+.visaData {
+	font-family: "microsoft yahei";
+}
+.visaData i {
+	float: right;
+	color: #585858;
+}
+.visaData::after {
+	content: "";
+	clear: both;
+}
+.select-area{
+    position: relative;
+    overflow: hidden; 
+    height: .8rem;
+    font-size: .3rem;
+    line-height: .8rem; 
+    margin-top: .8rem;
+    border-bottom: 1px solid #000;
+    padding: 0 0.2rem;
+  }
+ .select-area select{
+ 	-webkit-appearance:none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+   width: 100%;
+   height: .81rem;
+ }
+ .select-skip {
+ 	float: right;
+ }
+ .select-skip i {
+ 	margin-right: .2rem;
+ }
+ .skip {
+ 	float: right;
+ }
+.select-area::after {
+	content: "";
+	clear: both;
+}
+.visa-data {
+	height: .8rem;
+	font-size: .3rem;
+	line-height: .8rem;
+	overflow: hidden;
+	border-bottom: 1px solid #000;
+	padding: 0 0.2rem;
+}
+.visa-data::after {
+	content: "";
+	clear: both;
+}
+.visa-data i {
+	float: right;
+}
+/*证书上传样式*/
+.certificateInfo {
+	width: 100%;
+	height: .81rem;
+	line-height: .81rem;
+}
+.certificateTop {
+	width: 100%;
+	text-align: center;
+	font-size: .4rem;
+	line-height: .81rem;
+	height: .81rem;
+	position: fixed;
+	top: 0;
+	left: 0;
+	border-bottom: 2px solid #585858;
+}
+.certificateTop i {
+	float: left;
+	margin-left: .2rem;
+}
+.uploading {
+	display: block;
+	width: 45%;
+	float: left;
+	padding: .2rem 0 0 .2rem;
+}
+.clickUploading {
+	position: relative;
+}
+.clickUploading img {
+	width: 100%;
+	height: 4.5rem;
+}
+.clickUploading span {
+	position: absolute;
+	top: 45%;
+	left: 41%;
+	font-size: .3rem;
+}
+.camera {
+	float: right;
+	width: 45%;
+	display: block;
+	padding: .2rem .2rem 0 0;
+}
+.cameraMain {
+	position: relative;
+	border: 1px solid #000;
+	width: 100%;
+	height: 4.5rem;
+}
+.cameraMain img {
+	position: absolute;
+	top: 45%;
+	right: 40%;
+}
+
+.certificateM {
+	margin-top: 0;
+}
+.certificateM i {
+	margin-left: 4rem;
+}
+.certificateM span {
+	float: right;
+}
+.certificateM li:nth-child(2){
+	clear: both;
+	display: none;
+}
+.certificateM li:nth-child(3){
+	clear: both;
+}
+input[type="checkbox"] {
+    display: none;
+}
+input[type="checkbox"] + label {
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    position: relative;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    box-sizing: border-box;
+}
+input[type="checkbox"] + label:after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 20px;
+    height: 20px;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+#simple_3:checked + label.green {
+    background: #00ff00;
+}
+#simple_3:checked + label.green:after {
+    background: #fff;
+}
+#simple_3:checked + label:after {
+    left: calc(100% - 20px);
+}
+#simple_3 + label {
+    background: #ddd;
+    border-radius: 20px;
+    box-shadow: 1px 1px 3px #aaa;
+    margin-top: .2rem;
+}
+#simple_3 + label:after {
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 1px 1px 3px #aaa;
+}
+
+/*教育*/
+.educationInfo {
+	margin-top: 0;
+}
+.educationInfo li:nth-child(1) {
+	position: relative;
+}
+.educationInfo li:nth-child(1) select {
+	position: absolute;
+	-webkit-appearance: none;
+	left: 0;
+	top: 0;
+	opacity: 0;
+	width: 100%;
+	height: .81rem;
+}
+/*财务信息*/
+.btnGroup {
+	width: 100%;
+	height: .81rem;
+	line-height: .81rem;
+	border-bottom: 1px solid #D6D6D6;
+}
+.btnInfo {
+	width: 20%;
+	text-align: center;
+	line-height: .5rem;
+	height: .5rem;
+	display: block;
+	float: left;
+	border: 1px solid #d0cece;
+	font-size: .3rem;
+	margin-left: 4%;
+	margin-top: 2%;
+	border-radius: 5px;
+}
+.blue {
+	background: blue;
+	color: #FFF;
+}
+.ui-loader {
+	display: none;
+}
+.item-wrap{
+  overflow: hidden;
+ }
+ .item-wrap .item{
+  border-bottom: 1px #dad2d2 solid;
+  width: 120%;
+  height: .81rem;
+  line-height: .81rem;
+  overflow: hidden;
+  position: relative;
+  display: -webkit-box;
+  -webkit-transition: all 0.3s linear;
+ }
+ .item-wrap .item .txt-item{
+  -webkit-box-flex:1;
+ }
+.item-wrap .item .txt-item span {
+  	font-size: .3rem;
+  	margin-left: 4%;
+  }
+.item-wrap .item .txt-item i {
+	font-size: .3rem;
+}  
+.delect-btn{
+  width: 15%;
+  color: #fff;
+  background: red;
+  z-index:999;
+  display: block;
+  text-align: center;
+  height: .81rem;
+  line-height: .81rem;
+}
+.item-wrap .selected{
+  -webkit-transform: translate(-16%);
+  -webkit-transition: all 0.3s linear;
+}
+.ui-input-text {
+	display: inline-block;
+	width: 70%;
+}
+.infoInput {
+	width: 100%;
+	height: .8rem;
+	font-size: .3rem;
+	text-align: right;
+	outline: none;
+	border:0;
+}
+.carDiv .ui-input-text {
+	width: 82%;
+}
+.hourseDiv .ui-input-text {
+	width: 75%;
+}
+.moneyDiv .ui-input-text {
+	width: 78%;
+}

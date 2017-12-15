@@ -15,6 +15,8 @@ public class VisaEditDataForm implements Serializable {
 
 	private Integer applicantId;
 
+	private String visaRemark;
+
 	private Integer orderid;
 
 	private Integer marryStatus;

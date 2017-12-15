@@ -10,7 +10,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * @Date	 2017年10月20日
  */
 public enum MarryStatusEnum implements IEnum {
-	YIHUN(1, "已婚"), LIYI(2, "离异"), SANGOU(3, "丧偶"), DANSHEN(4, "单身"), QITA(5, "其它");
+	DANSHEN(4, "单身"), YIHUN(1, "已婚"), LIYI(2, "离异"), SANGOU(3, "丧偶"), QITA(5, "其它");
 	private int key;
 	private String value;
 

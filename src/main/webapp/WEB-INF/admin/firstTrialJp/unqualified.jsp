@@ -116,7 +116,7 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					parent.successCallBack(1);
+					parent.successCallBack(4);
 					closeWindow();
 				}
 			});
