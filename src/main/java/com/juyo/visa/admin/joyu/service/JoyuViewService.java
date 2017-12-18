@@ -1,0 +1,39 @@
+package com.juyo.visa.admin.joyu.service;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.nutz.dao.Cnd;
+import org.nutz.ioc.loader.annotation.IocBean;
+
+import com.juyo.visa.entities.TEncryptlinkinfoEntity;
+import com.uxuexi.core.web.base.service.BaseService;
+
+/**
+ * 短地址跳转
+ *
+ * @author   彭辉
+ * @Date	 2017年12月18日 	 
+ */
+@IocBean
+public class JoyuViewService extends BaseService<TEncryptlinkinfoEntity> {
+
+	public Object joyu(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		String originallink = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
+
+		//获取请求路径参数部分
+		String encryptUrl = request.getQueryString();
+
+		TEncryptlinkinfoEntity entity = dbDao.fetch(TEncryptlinkinfoEntity.class,
+				Cnd.where("encryptlink", "=", encryptUrl));
+		if (entity != null) {
+			originallink = entity.getOriginallink();
+		}
+
+		response.sendRedirect(originallink);
+		return "Redirect Success";
+	}
+}
