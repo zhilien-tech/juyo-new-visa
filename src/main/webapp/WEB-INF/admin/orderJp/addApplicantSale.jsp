@@ -130,7 +130,7 @@
 							</div>
 							<!-- 曾用国籍 -->
 							<div class="col-sm-5 padding-right-0 nationalityHide">
-								<div class="form-group">
+								<div class="form-group" id="nationalityDiv">
 									<label>国籍</label> 
 									<input id="nationality" name="nationality" type="text" class="form-control input-sm"/>
 								</div>
@@ -351,20 +351,7 @@
 							regexp: {
 		                	 	regexp: /^[1][34578][0-9]{9}$/,
 		                        message: '电话号格式错误'
-		                    },
-		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
-								url: '${base}/admin/orderJp/checkMobile.html',
-								message: '电话号码已存在，请重新输入',//提示消息
-								delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
-								type: 'POST',//请求方式
-								//自定义提交数据，默认值提交当前input value
-								data: function(validator) {
-									return {
-										mobile:$('#telephone').val(),
-										adminId:""
-									};
-								}
-							}
+		                    }
 						}
 					},
 					email : {
@@ -411,8 +398,13 @@
 						layer.closeAll('loading');
 						$("#province").val(data.province);
 						$("#city").val(data.city);
+						$("#detailedAddress").val($("#address").val());
 					}
 				});
+			}else{
+				$("#province").val("");
+				$("#city").val("");
+				$("#detailedAddress").val("");
 			}
 		}
 		
@@ -472,6 +464,35 @@
 			}
 			
 		}
+		
+		//国籍检索
+		$("#nationality").on('input',function(){
+			$("#nationality").nextAll("ul.ui-autocomplete").remove();
+			$.ajax({
+				type : 'POST',
+				async: false,
+				data : {
+					searchStr : $("#nationality").val()
+				},
+				url : BASE_PATH+'/admin/orderJp/getNationality.html',
+				success : function(data) {
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#nationality").after(liStr);
+				}
+			});
+		});
+		//国籍检索下拉项
+		function setNationality(nationality){
+			$("#nationality").nextAll("ul.ui-autocomplete").remove();
+			$("#nationality").val(nationality);
+		} 
+		$("#nationalityDiv").mouseleave(function(){
+			$("#nationality").nextAll("ul.ui-autocomplete").remove();
+		});
 		
 		//省份检索
 		$("#province").on('input',function(){

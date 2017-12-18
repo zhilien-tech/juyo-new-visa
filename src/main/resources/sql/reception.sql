@@ -92,6 +92,8 @@ WHERE
 /*get_applyInfo_byorderid*/
 SELECT
 	taoj.id applyid,
+	ta.id applicantid,
+	ta.mainId,
 	CONCAT(ta.firstName, ta.lastName) applyname,
 	ta.telephone,
 	ta.email,

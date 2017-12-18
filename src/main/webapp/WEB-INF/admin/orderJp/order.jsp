@@ -249,10 +249,10 @@
 								<div class="form-group">
 									<label><span>*</span>付款方式：</label> <select id="payType"
 										name="payType" class="form-control input-sm"
-										v-model="orderInfo.paytype">
+										>
 										<option value="">--请选择--</option>
 										<c:forEach var="map" items="${obj.mainSalePayTypeEnum}">
-											<option value="${map.key}">${map.value}</option>
+											<option value="${map.key}" ${map.key==obj.orderInfo.payType?"selected":"" }>${map.value}</option>
 										</c:forEach>
 									</select>
 								</div>
@@ -413,7 +413,7 @@
 							style="width: 100%;">
 							<thead>
 								<tr>
-									<th><span></span></th>
+									<th><span>&nbsp; <span></th>
 									<th><span>姓名<span></th>
 									<th><span>电话<span></th>
 									<th><span>邮箱<span></th>
@@ -426,11 +426,12 @@
 								<tr v-for="applicant in applicantInfo" >
 									<td>
 										<div v-if="applicant.id==applicant.mainid">
-											<font color="blue">主</font> {{applicant.applyname}}
+											<font color="blue">主</font> 
 										</div>
-										<div v-else>{{applicant.applyname}}</div>
+										<div v-else></div>
 									</td>
 									
+									<td>{{applicant.applyname}}</td>
 									<td>{{applicant.telephone}}</td>
 									<td>{{applicant.email}}</td>
 									<td>{{applicant.passport}}</td>
@@ -899,6 +900,7 @@
 							$("#comShortName").val(null).trigger("change");
 							//邮箱清空
 							$("#email").val(null).trigger("change");
+							$("#payType").val("");
 							var thisval = $(this).val();
 							if(thisval == 4){
 								$(".on-line").hide();//隐藏select2部分字段
@@ -1189,7 +1191,7 @@
 				    	type:'post',
 				    	success: function(data){
 				    		layer.closeAll('loading');
-				    		layer.msg('初审通过');
+				    		layer.msg('进入初审');
 				      	}
 				    }); 
 				}

@@ -240,6 +240,7 @@
 							<table id="applicantTable" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
+										<th><span>&nbsp; <span></th>
 										<th><span>姓名<span></th>
 										<th><span>电话<span></th>
 										<th><span>护照号<span></th>
@@ -253,6 +254,12 @@
 								</thead>
 								<tbody>
 									<tr v-cloak v-for="apply in applyinfo">
+										<td>
+											<div v-if="apply.applyid==apply.mainid">
+												<font color="blue">主</font> 
+											</div>
+											<div v-else></div>
+										</td>
 										<td>{{apply.applyname}}</td>
 										<td>{{apply.telephone}}</td>
 										<td>{{apply.passport}}</td>

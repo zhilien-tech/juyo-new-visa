@@ -81,6 +81,7 @@ WHERE
 /*firstTrialJp_orderDetail_applicant_by_orderid*/
 SELECT
 	taoj.applicantId applyid,
+	ta.mainId,
 	CONCAT( ta.firstName, ta.lastName ) applyname,
 	ta.telephone,
 	tap.passport,

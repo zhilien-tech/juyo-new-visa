@@ -30,7 +30,6 @@
     /*左右导航样式*/
     .leftNav { position:absolute;top:61px;left:0;z-index:999; width:40px;height:489px; cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
-	
 </style>
 	<style type="text/css">
 		body {min-width:auto;}
@@ -52,12 +51,11 @@
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存退出" />
-				<input id="addContinueBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存继续" />
+				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 				<c:choose>
 						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
 					<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
-				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
+				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualifiedBtn" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>
@@ -197,6 +195,7 @@
 										<label><span>*</span>我的职业：</label>
 										<!-- <input id="occupation"  name="occupation" type="text" class="form-control input-sm" placeholder=" " /> -->
 										<select id="careerStatus" name="careerStatus" class="form-control input-sm selectHeight">
+											<option value="">--请选择--</option>
 											<c:forEach var="map" items="${obj.jobStatusEnum}">
 												<option value="${map.key}" ${map.key==obj.workJp.careerStatus?'selected':''}>${map.value}</option>
 											</c:forEach>
@@ -583,9 +582,6 @@
 			
 		});
 		
-		$("#addContinueBtn").click(function(){
-			save(2);
-		});
 		$("#addBtn").click(function(){
 			save(1);
 		});
@@ -645,7 +641,6 @@
 				shade : "#000"
 			});
 			$("#addBtn").attr('disabled', true);
-			$("#addContinueBtn").attr('disabled', true);
 			var file = this.files[0];
 			var reader = new FileReader();
 			reader.onload = function(e) {
@@ -671,12 +666,10 @@
 							$("#uploadFile").siblings("i").css("display","block");
 						}
 						$("#addBtn").attr('disabled', false);
-						$("#addContinueBtn").attr('disabled', false);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
 						layer.close(layerIndex);
 						$("#addBtn").attr('disabled', false);
-						$("#addContinueBtn").attr('disabled', false);
 					}
 				}); // end of ajaxSubmit
 			};
@@ -724,7 +717,7 @@
 		$(".Unqualified").click(function(){
 			$(".ipt-info").slideDown();
 		});
-		$(".qualified").click(function(){
+		$(".qualifiedBtn").click(function(){
 			$(".ipt-info").slideUp();
 			var applicantId = ${obj.applicant.id};
 			var orderid = ${obj.orderid};
@@ -733,6 +726,7 @@
 			layer.load(1);
 			$.ajax({
 				type: 'POST',
+				async : false,
 				data : {
 					applicantId : applicantId,
 					orderid : orderid,
@@ -744,6 +738,7 @@
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
 					$("#baseRemark").val("");
+					save(1);
 				}
 			});
 		});

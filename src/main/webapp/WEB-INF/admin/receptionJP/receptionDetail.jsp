@@ -54,6 +54,7 @@
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="签证" class="btn btn-primary btn-sm pull-right" onclick="visaTransfer();"/>
 					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue();"/>
+					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log(${obj.orderinfo.id});" />
 				</div>
 				<section class="content" id="wrapper">
 					<!-- 订单信息 -->
@@ -245,6 +246,7 @@
 							<table id="applicantTable" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
+										<th><span>&nbsp; <span></th>
 										<th><span>姓名<span></th>
 										<th><span>电话<span></th>
 										<th><span>护照号<span></th>
@@ -255,6 +257,12 @@
 								</thead>
 								<tbody>
 									<tr v-for="apply in applyinfo">
+										<td>
+											<div v-if="apply.applicantid==apply.mainid">
+												<font color="blue">主</font> 
+											</div>
+											<div v-else></div>
+										</td>
 										<td>{{apply.applyname}}</td>
 										<td>{{apply.telephone}}</td>
 										<td>{{apply.passport}}</td>
@@ -331,6 +339,20 @@
 				}else if(status == 2){
 					layer.msg('保存成功');
 				}
+			}
+			
+			function log(orderid){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['700px', '551px'],
+					content:'/admin/orderJp/log.html?id='+orderid
+				});
 			}
 			
 			function visaTransfer(){
