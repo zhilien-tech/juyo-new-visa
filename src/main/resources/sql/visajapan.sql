@@ -95,6 +95,7 @@ SELECT
 	ta.telephone,
 	ta.email,
 	ta.id,
+	ta.mainid,
 	tap.passport,
 	tavpj.type,
 	tavpj.realInfo,

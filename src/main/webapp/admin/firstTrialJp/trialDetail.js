@@ -417,7 +417,7 @@ function successCallBack(status){
 	}); 
 }
 function cancelCallBack(status){
-	successCallBack(1);
+	
 }
 
 //添加回邮信息 按钮  click
