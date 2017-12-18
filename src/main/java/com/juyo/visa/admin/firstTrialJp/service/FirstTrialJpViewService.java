@@ -54,12 +54,13 @@ import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
-import com.juyo.visa.common.util.ShortUrlUtil;
+import com.juyo.visa.common.util.NewShortUrlUtil;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TEncryptlinkinfoEntity;
 import com.juyo.visa.entities.TOrderBackmailEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
@@ -526,6 +527,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 	//保存不合格信息
 	public Object saveUnqualified(TApplicantUnqualifiedForm form, HttpSession session, HttpServletRequest request) {
+
 		int YES = IsYesOrNoEnum.YES.intKey();
 		int NO = IsYesOrNoEnum.NO.intKey();
 		Integer applicantId = form.getApplicantId();
@@ -595,7 +597,11 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + applicantId;
 		//转换长连接为短地址
-		mobileUrl = ShortUrlUtil.generateShortUrl(mobileUrl);
+		//mobileUrl = ShortUrlUtil.generateShortUrl(mobileUrl);
+		//TODO http://192.168.1.8:8080/Joyu/visa 
+		String encryptlink = getEncryptlink(mobileUrl, session);
+		mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/joyu?" + encryptlink;
+
 		try {
 			//发送不合格消息
 			sendApplicantVerifySMS(applicantId, orderid, mobileUrl, "applicant_unqualified_sms.txt");
@@ -1245,6 +1251,28 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			}
 		}
 		return isQualified;
+	}
+
+	//获得加密链接
+	public String getEncryptlink(String originallink, HttpSession session) {
+
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+
+		String[] shortUrl = NewShortUrlUtil.shortUrl(originallink);
+		String encryptUrl = shortUrl[1];
+		int count = nutDao.count(TEncryptlinkinfoEntity.class, Cnd.where("encryptlink", "=", encryptUrl));
+		if (count <= 0) {
+			//添加
+			TEncryptlinkinfoEntity link = new TEncryptlinkinfoEntity();
+			link.setEncryptlink(encryptUrl);
+			link.setOriginallink(originallink);
+			link.setOpId(userId);
+			link.setCreateTime(DateUtil.nowDate());
+			dbDao.insert(link);
+		}
+
+		return encryptUrl;
 	}
 
 }

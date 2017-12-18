@@ -1,19 +1,8 @@
-package com.juyo.visa;
+package com.juyo.visa.common.util;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-public class ShortUrl {
-
-	public static void main(String[] args) {
-		// 长连接
-		String longUrl = "http://114.215.195.220:8080/mobile/info.html?applicantid=1";
-		// 转换成的短链接后6位码
-		String[] shortCodeArray = shortUrl(longUrl);
-
-		for (int i = 0; i < shortCodeArray.length; i++) {
-			System.out.println(shortCodeArray[i]);// 任意一个都可以作为短链接码
-		}
-	}
+public class NewShortUrlUtil {
 
 	public static String[] shortUrl(String url) {
 		// 可以自定义生成 MD5 加密字符传前的混合 KEY
@@ -47,7 +36,6 @@ public class ShortUrl {
 			// 把字符串存入对应索引的输出数组
 			resUrl[i] = outChars;
 		}
-		System.out.println(resUrl[0]);
 		return resUrl;
 	}
 
