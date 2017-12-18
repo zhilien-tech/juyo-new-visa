@@ -52,7 +52,7 @@
 			</div>
 			<div class="modal-body">
 			<div class="ipt-info">
-					<input id="baseRemark" name="baseRemark" type="text" value="${obj.unqualified.baseRemark }" class="NoInfo" />
+					<input id="baseRemark" name="baseRemark" type="text" value="${obj.unqualified.baseRemark }" placeholder="请输入不合格原因"  class="NoInfo" />
 				</div>
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">

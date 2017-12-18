@@ -54,7 +54,6 @@ import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
-import com.juyo.visa.common.util.ShortUrlUtil;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
@@ -595,7 +594,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + applicantId;
 		//转换长连接为短地址
-		mobileUrl = ShortUrlUtil.generateShortUrl(mobileUrl);
+		//mobileUrl = ShortUrlUtil.generateShortUrl(mobileUrl);
 		try {
 			//发送不合格消息
 			sendApplicantVerifySMS(applicantId, orderid, mobileUrl, "applicant_unqualified_sms.txt");
