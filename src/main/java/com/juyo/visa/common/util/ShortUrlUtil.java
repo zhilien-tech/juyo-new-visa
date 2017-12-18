@@ -45,13 +45,4 @@ public class ShortUrlUtil {
 		}
 
 	}
-
-	/**
-	 * 测试生成短连接
-	 */
-	public static void main(String[] args) {
-		String url = generateShortUrl("http://114.215.195.220:8080/admin/login.html");
-		System.out.println(url);
-	}
-
 }
