@@ -209,10 +209,10 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			passport.setFirstName(applicant.getFirstname());
 			passport.setLastName(applicant.getLastname());
 			if (!Util.isEmpty(applicant.getFirstnameen())) {
-				passport.setFirstNameEn(applicant.getFirstnameen().substring(1));
+				passport.setFirstNameEn(applicant.getFirstnameen());
 			}
 			if (!Util.isEmpty(applicant.getLastnameen())) {
-				passport.setLastNameEn(applicant.getLastnameen().substring(1));
+				passport.setLastNameEn(applicant.getLastnameen());
 			}
 			passport.setIssuedOrganization("公安部出入境管理局");
 			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
