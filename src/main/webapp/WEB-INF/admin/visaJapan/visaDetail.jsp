@@ -28,6 +28,10 @@
 			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
 			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
 			.deposit,.vehicle,.houseProperty{display:none;}
+			.qz-head { position:fixed;top:0;left:0;z-index:99999; width:100%;}
+			.content { margin-top:50px;}
+			#urgentday { width:16.5%;}
+			.bodyMargin { margin-left:12%;}
 			#applicantTable tbody tr td:nth-child(1){width: 10%;}
 			#applicantTable tbody tr td:nth-child(2){width: 10%;}
 			#applicantTable tbody tr td:nth-child(3){width: 10%;}
@@ -59,7 +63,7 @@
 					<!-- 订单信息 -->
 					<div class="info">
 						<p class="info-head">订单信息</p>
-						<div class="info-body-from">
+						<div class="info-body-from bodyMargin">
 							<div class="row body-from-input"><!-- 人数/领区/加急 -->
 								<div class="col-sm-3">
 									<div class="form-group">
@@ -79,7 +83,7 @@
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-1">
 									<div class="form-group">
 										<label><span>*</span>加急：</label>
 										<select class="form-control input-sm" v-model="orderinfo.urgenttype">
@@ -90,7 +94,7 @@
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-3" id="urgentday">
 									<div class="form-group">
 										<label>&nbsp;</label>
 										<select class="form-control input-sm" v-model="orderinfo.urgentday">
@@ -252,13 +256,13 @@
 							<table id="applicantTable" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
-										<th><span>姓名<span></th>
-										<th><span>电话<span></th>
-										<th><span>护照号<span></th>
-										<th><span>资料类型<span></th>
-										<th><span>所需资料<span></th>
-										<th><span>备注<span></th>
-										<th><span>操作<span></th>
+										<th><span>姓名</span></th>
+										<th><span>电话</span></th>
+										<th><span>护照号</span></th>
+										<th><span>资料类型</span></th>
+										<th><span>所需资料</span></th>
+										<th><span>备注</span></th>
+										<th width="25%"><span>操作</span></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -517,12 +521,12 @@
 										<table id="schedulingTable" class="table table-hover" style="width:100%;">
 											<thead>
 												<tr>
-													<th><span>天数<span></th>
-													<th><span>日期<span></th>
-													<th><span>城市<span></th>
-													<th><span>景区<span></th>
-													<th><span>酒店<span></th>
-													<th><span>操作<span></th>
+													<th><span>天数</span></th>
+													<th><span>日期</span></th>
+													<th><span>城市</span></th>
+													<th><span>景区</span></th>
+													<th><span>酒店</span></th>
+													<th><span>操作</span></th>
 												</tr>
 											</thead>
 											<tbody>

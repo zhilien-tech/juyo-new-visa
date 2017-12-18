@@ -19,6 +19,7 @@
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<style type="text/css">
+			.modal-body { height:489px;}
 			.form-control{height: 30px; }
 			.add-btn{top:-225px;right:-1%;}
 			.remove-btn{top: -225px;right: -1%;}
@@ -1241,7 +1242,7 @@
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '650px'],
 				content:'${base}/admin/orderJp/addApplicantSale.html?id='+id
 			});
 		}
