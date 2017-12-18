@@ -15,44 +15,25 @@
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 <style type="text/css">
-.modal-content {
-	position:relative;
-}
-.modal-body {
-	padding:15px 100px 15px 20px;
-}
-.NoInfo {
-	width:100%;
-	height:30px;
-	margin-left:3.5%;
-	transtion:height 1s;
-	-webkit-transtion:height 1s;
-	-moz-transtion:height 1s;
-}
-.ipt-info {
-	display:none;
-}
-.Unqualified, .qualified  {
-	margin-right:10px;
-}
-.nameBeforeYes {
-	margin-right:20px;
-}
-.onceIDYes {
-	margin-right:30px;
-}
-.nameBeforeHide , .nationalityHide{
-	display:none;
-}
+.modal-content { position:relative; }
+.modal-body { padding:15px 100px 15px 20px; }
+.NoInfo { width:100%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
+.ipt-info { display:none; }
+.Unqualified, .qualified  { margin-right:10px; }
+.nameBeforeYes { margin-right:20px; }
+.onceIDYes { margin-right:30px; }
+.nameBeforeHide , .nationalityHide{ display:none; }
+.wordSpell { display:none; }
+.rightNav { position:absolute;top:61px;right:2%;z-index:999; width:40px;height:489px; cursor:pointer;}
+.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
+.nationalityHide { margin-left:3%;}
 </style>
 </head>
 <body>
 	<div class="modal-content">
-		<div style="position:absolute;top:40%;right:5%;z-index:999;">
-			<a id="toPassport" onclick="passportBtn();">
-				<h1>></h1>
-			</a>
-		</div>
+		<a id="toPassport" class="rightNav" onclick="passportBtn();">
+			<span></span>
+		</a>
 		<form id="applicantInfo">
 			<div class="modal-header">
 				<span class="heading">基本信息</span> <input id="backBtn" type="button"
@@ -151,16 +132,6 @@
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
-								
-								<div class="col-sm-11 padding-right-0">
-									<div class="form-group">
-										<label>名/拼音：</label> <input id="otherLastName"
-											name="otherLastName" style="position:relative;" type="text" class="form-control input-sm "
-											placeholder=" " value="${obj.applicant.otherLastName }" />
-											<input type="text" id="otherLastNameEn" style="position:absolute;top:42px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
-										<!-- <i class="bulb"></i> -->
-									</div>
-								</div>
 							</div>
 							<!-- 姓/名 拼音 end -->
 							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
@@ -178,7 +149,7 @@
 							</div>
 							<!-- 曾用国籍 -->
 							<div class="col-sm-5 padding-right-0 nationalityHide">
-								<div class="form-group">
+								<div class="form-group" id="nationalityDiv">
 									<label>国籍</label> 
 									<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 								</div>
@@ -210,6 +181,7 @@
 										name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.lastName }" />
 										<input type="text" id="lastNameEn" style="position:absolute;top:43px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
+
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -314,6 +286,7 @@
 									<label>现居住地址省份：</label>
 									<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
 									<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
+									<input type="hidden" id="sameAddress" value=""/>
 									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> <input id="province"
 										name="province" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.province }" />
@@ -343,6 +316,17 @@
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
+						<!-- 名/拼音 -->
+						<div class="row wordSpell">
+							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>名/拼音：</label> 
+									<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " value="${obj.applicant.otherLastName }" />
+									<input type="text" id="otherLastNameEn" style="position:absolute;top:45px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+								</div>
+							</div>
+						</div>
+						
 						<div class="row">
 							<!-- 紧急联系人姓名/手机 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
@@ -450,20 +434,7 @@
 							regexp: {
 		                	 	regexp: /^[1][34578][0-9]{9}$/,
 		                        message: '电话号格式错误'
-		                    },
-		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
-								url: '${base}/admin/orderJp/checkMobile.html',
-								message: '电话号码已存在，请重新输入',//提示消息
-								delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
-								type: 'POST',//请求方式
-								//自定义提交数据，默认值提交当前input value
-								data: function(validator) {
-									return {
-										mobile:$('#telephone').val(),
-										adminId:${obj.applicantId}
-									};
-								}
-							}
+		                    }
 						}
 					},
 					email : {
@@ -544,6 +515,35 @@
 			});
 			}
 		}
+		
+		//国籍检索
+		$("#nationality").on('input',function(){
+			$("#nationality").nextAll("ul.ui-autocomplete").remove();
+			$.ajax({
+				type : 'POST',
+				async: false,
+				data : {
+					searchStr : $("#nationality").val()
+				},
+				url : BASE_PATH+'/admin/orderJp/getNationality.html',
+				success : function(data) {
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#nationality").after(liStr);
+				}
+			});
+		});
+		//国籍检索下拉项
+		function setNationality(nationality){
+			$("#nationality").nextAll("ul.ui-autocomplete").remove();
+			$("#nationality").val(nationality);
+		} 
+		$("#nationalityDiv").mouseleave(function(){
+			$("#nationality").nextAll("ul.ui-autocomplete").remove();
+		});
 		
 		//省份检索
 		$("#province").on('input',function(){
@@ -783,27 +783,44 @@
 		});
 		//checkbox 曾用名
 		$(".nameBefore").change(function(){
-			let checked = $("input[name='hasOtherName']:checked").val();
+
+			let checked = $("input[name='nameBefore']:checked").val();
+			let checked2 = $("input[name='hasOtherNationality']:checked").val();
 			if(checked == 1){
 				$(".nameBeforeTop").css('float','none');
 				$(".nameBeforeHide").show();
+				$(".wordSpell").show();
 				$(".onceIDTop").removeClass('col-sm-offset-1');
 				$(".onceIDTop").css('padding-left','15px');
 			}else {
 				
 				$(".nameBeforeHide").hide();
+				$(".wordSpell").hide();
+				if(checked2 == 1){
+					
+				}else {
+					$(".nameBeforeTop").css('float','left');
+				}
 			}
 		});
 		//曾用国籍
 		$(".onceID").change(function(){
 			let checked = $("input[name='hasOtherNationality']:checked").val();
+			let checked2 = $("input[name='nameBefore']:checked").val();
 			if(checked == 1){
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
 				$(".onceIDTop").css('float','left');
+				$(".onceIDTop").removeClass('col-sm-offset-1');
+				$(".onceIDTop").css('padding-left','15px');
 			}else {
 				
 				$(".nationalityHide").hide();
+				if(checked2 == 1){
+					
+				}else {
+					$(".nameBeforeTop").css('float','left');
+				}
 			}
 		});
 		
@@ -836,8 +853,13 @@
 						layer.closeAll('loading');
 						$("#province").val(data.province);
 						$("#city").val(data.city);
+						$("#detailedAddress").val($("#address").val());
 					}
 				});
+			}else{
+				$("#province").val("");
+				$("#city").val("");
+				$("#detailedAddress").val("");
 			}
 		}
 		
@@ -875,6 +897,7 @@
 			layer.load(1);
 			$.ajax({
 				type: 'POST',
+				async : false,
 				data : {
 					applicantId : applicantId,
 					orderid : orderid,
@@ -886,10 +909,10 @@
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
 					$("#baseRemark").val("");
+					passportBtn();
 				}
 			});
 		});
-			
 	</script>
 </body>
 </html>

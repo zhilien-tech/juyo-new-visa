@@ -69,6 +69,7 @@
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<script src="${base}/admin/orderJp/order.js"></script>
 	
 	<script type="text/javascript">
 		var base = "${base}";
@@ -128,7 +129,7 @@
 	            	type:'post',
 	            	success: function(data){
 	            		_self.shareInfo = data;
-	            		console.log(JSON.stringify(_self.shareInfo));
+	            		//console.log(JSON.stringify(_self.shareInfo));
 	              	}
 	            });
 	        }
@@ -138,6 +139,7 @@
 			var sharetype = $("#shareType").val();
 			var orderId = ${obj.orderId};
 			var applicantMainId,applicantId,name,telephone,email;
+			
 			if(sharetype == 1){//统一联系人
 				$("#datatableId tbody tr").each(function(){
 					if($(this).hasClass("trColor")){
@@ -154,7 +156,12 @@
 								shadeClose: false,
 								scrollbar: false,
 								area: ['900px', '551px'],
-								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
+								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email,
+								success : function(index, layero){
+									//var iframeWin = window[index.find('iframe')[0]['name']]; 
+									// iframeWin.validate();
+									//iframeWin.closeSelf();
+								}
 							});
 						}else{
 							layer.load(1);
@@ -245,6 +252,11 @@
 		//返回 
 		function closeWindow() {
 			parent.successCallBack(4);
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
+		}
+		
+		function closeSelf(){
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 		}

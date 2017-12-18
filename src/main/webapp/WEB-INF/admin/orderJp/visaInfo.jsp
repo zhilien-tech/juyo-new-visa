@@ -26,7 +26,7 @@
 .ipt-info {
 	display:none;
 }
-.Unqualified, .qualified  {
+.Unqualified, .qualifiedBtn  {
 	margin-right:10px;
 }
 
@@ -129,12 +129,11 @@
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存退出" />
-				<input id="addContinueBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存继续" />
+				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 				<c:choose>
 						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
 					<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
-				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
+				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualifiedBtn" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>
@@ -274,6 +273,7 @@
 										<label><span>*</span>我的职业：</label>
 										<!-- <input id="occupation"  name="occupation" type="text" class="form-control input-sm" placeholder=" " /> -->
 										<select id="careerStatus" name="careerStatus" class="form-control input-sm selectHeight">
+											<option value="">--请选择--</option>
 											<c:forEach var="map" items="${obj.jobStatusEnum}">
 												<option value="${map.key}" ${map.key==obj.workJp.careerStatus?'selected':''}>${map.value}</option>
 											</c:forEach>
@@ -343,7 +343,7 @@
 									</div>
 								</div>
 							</div><!-- end 银行存款 -->
-							<i class="remove-btn"></i>
+							<i class="remove-btn delete-icon"></i>
 						</div>
 						<div class="info-body-from clone-module cf vehicle">
 							<div class="row body-from-input"><!-- 车产 -->
@@ -360,7 +360,7 @@
 									</div>
 								</div>
 							</div><!-- end 车产 -->
-							<i class="remove-btn"></i>
+							<i class="remove-btn delete-icon"></i>
 						</div>
 						<div class="info-body-from clone-module cf houseProperty">
 							<div class="row body-from-input"><!-- 房产 -->
@@ -377,7 +377,7 @@
 									</div>
 								</div>
 							</div><!-- end 房产 -->
-							<i class="remove-btn"></i>
+							<i class="remove-btn delete-icon"></i>
 						</div>
 						<div class="info-body-from clone-module cf financial">
 							<div class="row body-from-input"><!-- 房产 -->
@@ -394,7 +394,7 @@
 									</div>
 								</div>
 							</div><!-- end 房产 -->
-							<i class="remove-btn"></i>
+							<i class="remove-btn delete-icon"></i>
 						</div>
 						
 					</div>
@@ -660,9 +660,6 @@
 			
 		});
 		
-		$("#addContinueBtn").click(function(){
-			save(2);
-		});
 		$("#addBtn").click(function(){
 			save(1);
 		});
@@ -722,7 +719,6 @@
 				shade : "#000"
 			});
 			$("#addBtn").attr('disabled', true);
-			$("#addContinueBtn").attr('disabled', true);
 			var file = this.files[0];
 			var reader = new FileReader();
 			reader.onload = function(e) {
@@ -748,12 +744,10 @@
 							$("#uploadFile").siblings("i").css("display","block");
 						}
 						$("#addBtn").attr('disabled', false);
-						$("#addContinueBtn").attr('disabled', false);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
 						layer.close(layerIndex);
 						$("#addBtn").attr('disabled', false);
-						$("#addContinueBtn").attr('disabled', false);
 					}
 				}); // end of ajaxSubmit
 			};
@@ -801,7 +795,7 @@
 		$(".Unqualified").click(function(){
 			$(".ipt-info").slideDown();
 		});
-		$(".qualified").click(function(){
+		$(".qualifiedBtn").click(function(){
 			$(".ipt-info").slideUp();
 			var applicantId = ${obj.applicant.id};
 			var orderid = ${obj.orderid};
@@ -810,6 +804,7 @@
 			layer.load(1);
 			$.ajax({
 				type: 'POST',
+				async : false,
 				data : {
 					applicantId : applicantId,
 					orderid : orderid,
@@ -821,6 +816,7 @@
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
 					$("#baseRemark").val("");
+					save(1);
 				}
 			});
 		});

@@ -23,6 +23,9 @@
 			.remove-btn{top: -225px;right: -1%;}
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
+			.info-body-from { margin-left:12%;}
+			.qz-head { position:fixed;top:0;left:0;z-index:99999; width:100%;}
+			.content { margin-top:50px;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">

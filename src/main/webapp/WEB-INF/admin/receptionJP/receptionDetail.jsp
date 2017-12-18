@@ -50,6 +50,7 @@
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="签证" class="btn btn-primary btn-sm pull-right" onclick="visaTransfer();"/>
 					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue();"/>
+					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log(${obj.orderinfo.id});" />
 				</div>
 				<section class="content" id="wrapper">
 					<!-- 订单信息 -->
@@ -327,6 +328,20 @@
 				}else if(status == 2){
 					layer.msg('保存成功');
 				}
+			}
+			
+			function log(orderid){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['700px', '551px'],
+					content:'/admin/orderJp/log.html?id='+orderid
+				});
 			}
 			
 			function visaTransfer(){
