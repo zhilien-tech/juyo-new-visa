@@ -6,7 +6,7 @@ public class ShortUrl {
 
 	public static void main(String[] args) {
 		// 长连接
-		String longUrl = "http://data.13322.com/basket/team/27_0_1.html";
+		String longUrl = "http://114.215.195.220:8080/mobile/info.html?applicantid=1";
 		// 转换成的短链接后6位码
 		String[] shortCodeArray = shortUrl(longUrl);
 
@@ -17,7 +17,7 @@ public class ShortUrl {
 
 	public static String[] shortUrl(String url) {
 		// 可以自定义生成 MD5 加密字符传前的混合 KEY
-		String key = "";
+		String key = "JOYU_VISA";
 		// 要使用生成 URL 的字符
 		String[] chars = new String[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p",
 				"q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
@@ -47,6 +47,7 @@ public class ShortUrl {
 			// 把字符串存入对应索引的输出数组
 			resUrl[i] = outChars;
 		}
+		System.out.println(resUrl[0]);
 		return resUrl;
 	}
 
