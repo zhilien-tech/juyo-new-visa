@@ -114,6 +114,11 @@
 		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
 	});
 	
+	$(document).on("mouseover",".Refusal",function(){
+		var t = "报告拒签";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});
+	
 	$(document).on("mouseover",".afterSales",function(){
 		var t = "售后";
 		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});

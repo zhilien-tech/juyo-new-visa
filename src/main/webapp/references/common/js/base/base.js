@@ -96,6 +96,7 @@
 	minSecondLevelMenuShow();
 	//点击汉堡图 左菜单栏收起 
 	$('.hamburgerImg').click(function(){
+//		window.parent.document.getElementsByTagName("frameset")[1].cols="50,*"; 
 		var menuWhetherMini = $('.main-sidebar').hasClass('min-sidebar');//左菜单栏 是否缩进
 		if(menuWhetherMini == false){//缩进
 			$('.main-sidebar').addClass('min-sidebar');
@@ -105,7 +106,7 @@
 			minSecondLevelMenuShow();
 			
 		}else if(menuWhetherMini == true){//展开
-			
+//			window.parent.document.getElementsByTagName("frameset")[1].cols="220,*"; 
 			$('.main-sidebar').removeClass('min-sidebar');
 			$('.content-wrapper').removeClass('min-content-wrapper');
 			sessionStorage.menuWhetherMini = "noMini"; //true

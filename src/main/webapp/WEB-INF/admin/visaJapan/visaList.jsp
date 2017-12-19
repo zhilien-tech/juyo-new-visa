@@ -21,6 +21,11 @@
 	.box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
 	.box-body {  overflow:hidden;margin-top:60px;}
 	.card-head span { font-size:12px;}
+	.everybody-info {position:relative; }
+	.cf { overflow:visible !important;}
+	.whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:390px;}
+	.showInfo { cursor:pointer; }
+	.hideInfo { display:none; position:absolute; top:-33px;right:0;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -56,8 +61,9 @@
 								<div><label>受付番号：</label><span>{{data.number}}</span></div>	
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
-								<div><label>状态：</label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
+								<div><label>状态：</label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
+								
 								<div v-if="data.japanstate >= 13">
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
@@ -65,6 +71,7 @@
 									<i class="sendZB" v-on:click="sendInsurance(data.id,16)"> </i>
 									<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
 									<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
+									<i class="Refusal" v-on:click="sendInsurance(data.id,27)"></i>
 									<i class="download" v-on:click="downLoadFile(data.id)"> </i>
 									<i class="handoverTable"> </i>
 									<i class="afterSales" v-on:click="aftermarket(data.id)"> </i>
@@ -76,13 +83,15 @@
 										<div><label>申请人：</label><span>{{item.applicant}}</span></div>
 										<div><label>护照号：</label><span>{{item.passportno}}</span></div>
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
-										<div><label>资料：</label><span v-html="item.data"><!-- {{item.data}} --></span></div>
+										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
+										<span class="hideInfo"></span>
 									</span>
 									<span v-else>
-										<div><label>　　　　</label><span>{{item.applicant}}</span></div>
-										<div><label>　　　　</label><span>{{item.passportno}}</span></div>
-										<div><label>　　　　　</label><span>{{item.datatype}}</span></div>
-										<div><label>　　　</label><span v-html="item.data"></span></div>
+										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
+										<div><label style="width:48px;">　　　　</label><span>{{item.passportno}}</span></div>
+										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
+										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
+										<span class="hideInfo"></span>
 									</span>
 								</li>
 							</ul> 
@@ -316,6 +325,17 @@
 		
 		$('#sendSignDate').daterangepicker(null, function(start, end, label) {
 		  	console.log(start.toISOString(), end.toISOString(), label);
+		});
+		//鼠标移入事件
+		$(document).on('mouseover','.showInfo',function(){
+			
+			let text = $(this).html();
+			$(this).parent().next().show();
+			$(this).parent().next().html(text);
+		});
+		//鼠标移出事件
+		$(document).on('mouseleave','.showInfo',function(){
+			$(".hideInfo").hide();
 		});
 	});
 	</script>
