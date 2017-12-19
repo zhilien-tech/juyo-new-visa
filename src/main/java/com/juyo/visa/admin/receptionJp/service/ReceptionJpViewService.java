@@ -53,6 +53,7 @@ import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
+import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
@@ -250,6 +251,15 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 				if (!Util.isEmpty(paperworkjp.getRealInfo())) {
 					fetch.setRealInfo(paperworkjp.getRealInfo());
 					fetch.setStatus(paperworkjp.getStatus());
+					//级联更新签证资料表的数据
+					if (!Util.isEmpty(fetch.getVisapaperworkid())) {
+						TApplicantVisaPaperworkJpEntity visapaperwork = dbDao.fetch(
+								TApplicantVisaPaperworkJpEntity.class, fetch.getVisapaperworkid().longValue());
+						if (!Util.isEmpty(visapaperwork)) {
+							visapaperwork.setRealInfo(paperworkjp.getRealInfo());
+							dbDao.update(visapaperwork);
+						}
+					}
 					paperworks.add(fetch);
 				} else {
 					dbDao.delete(fetch);
@@ -463,6 +473,14 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		frontpaperwork.setCreateTime(new Date());
 		frontpaperwork.setRealInfo(realInfo);
 		frontpaperwork.setOpId(loginUser.getId());
+		//同步到签证
+		TApplicantVisaPaperworkJpEntity visapaperwork = new TApplicantVisaPaperworkJpEntity();
+		visapaperwork.setApplicantId(applicatid);
+		visapaperwork.setCreateTime(new Date());
+		visapaperwork.setRealInfo(realInfo);
+		visapaperwork.setOpId(loginUser.getId());
+		TApplicantVisaPaperworkJpEntity visapaperworkinfo = dbDao.insert(visapaperwork);
+		frontpaperwork.setVisapaperworkid(visapaperworkinfo.getId());
 		return dbDao.insert(frontpaperwork);
 		//}
 	}

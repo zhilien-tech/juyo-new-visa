@@ -77,14 +77,12 @@
 										<div><label>护照号：</label><span>{{item.passportno}}</span></div>
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 										<div><label>资料：</label><span v-html="item.data"><!-- {{item.data}} --></span></div>
-										<div><!-- <i> </i> --></div>
 									</span>
 									<span v-else>
 										<div><label>　　　　</label><span>{{item.applicant}}</span></div>
 										<div><label>　　　　</label><span>{{item.passportno}}</span></div>
 										<div><label>　　　　　</label><span>{{item.datatype}}</span></div>
-										<div><label>　　　</label><span v-html="item.data"><!-- {{item.data}} --></span></div>
-										<div><!-- <i> </i> --></div>
+										<div><label>　　　</label><span v-html="item.data"></span></div>
 									</span>
 								</li>
 							</ul> 
@@ -151,7 +149,7 @@
         		  });
         	},
         	sendInsurance:function(orderid,visastatus){
-        		 $.ajax({ 
+        		 $.ajax({
                  	url: '${base}/admin/visaJapan/sendInsurance',
                  	data:{orderid:orderid,visastatus:visastatus},
                  	dataType:"json",

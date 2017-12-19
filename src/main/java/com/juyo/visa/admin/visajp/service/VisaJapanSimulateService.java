@@ -14,12 +14,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -44,6 +46,8 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	private DownLoadVisaFileService downLoadVisaFileService;
 	@Inject
 	private QiniuUploadServiceImpl qiniuUploadService;
+	@Inject
+	private OrderJpViewService orderJpViewService;
 
 	/**
 	 * 发招宝、招宝变更、招宝取消状态
@@ -54,11 +58,13 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	 * @param visastatus
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object sendInsurance(Integer orderid, Integer visastatus) {
+	public Object sendInsurance(Integer orderid, Integer visastatus, HttpSession session) {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		orderinfo.setStatus(visastatus);
 		//orderjp.setVisastatus(visastatus);
+		//添加日志
+		orderJpViewService.insertLogs(orderinfo.getId(), visastatus, session);
 		return dbDao.update(orderinfo);
 	}
 

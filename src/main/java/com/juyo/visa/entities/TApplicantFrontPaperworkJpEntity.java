@@ -57,6 +57,10 @@ public class TApplicantFrontPaperworkJpEntity implements Serializable {
 	@Comment("状态 1：已收 2、未收")
 	private Integer status;
 
+	@Column
+	@Comment("签证资料表id（前台添加的东西要同步到签证表）")
+	private Integer visapaperworkid;
+
 	/**
 	 * (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -120,6 +124,11 @@ public class TApplicantFrontPaperworkJpEntity implements Serializable {
 				return false;
 		} else if (!updateTime.equals(other.updateTime))
 			return false;
+		if (visapaperworkid == null) {
+			if (other.visapaperworkid != null)
+				return false;
+		} else if (!visapaperworkid.equals(other.visapaperworkid))
+			return false;
 		return true;
 	}
 
@@ -141,6 +150,7 @@ public class TApplicantFrontPaperworkJpEntity implements Serializable {
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((updateTime == null) ? 0 : updateTime.hashCode());
+		result = prime * result + ((visapaperworkid == null) ? 0 : visapaperworkid.hashCode());
 		return result;
 	}
 

@@ -82,6 +82,10 @@ public class TOrderEntity implements Serializable {
 	private Date outVisaDate;
 
 	@Column
+	@Comment("送签编号")
+	private String sendVisaNum;
+
+	@Column
 	@Comment("实收备注")
 	private String realReceiveRemark;
 

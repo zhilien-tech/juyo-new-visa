@@ -100,19 +100,34 @@ SELECT
 	tavpj.type,
 	tavpj.realInfo,
 	taoj.mainRelation,
-	taoj.relationRemark
+	taoj.relationRemark,
+	tae.expressType,
+	tae.expressNum
 FROM
 	t_applicant_order_jp taoj
 INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
 LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
+LEFT JOIN t_applicant_express tae ON tae.applicantId = ta.id
 LEFT JOIN (
 	SELECT
 		applicantId,
 		type,
-		GROUP_CONCAT(realInfo SEPARATOR '、') realInfo
+		GROUP_CONCAT(
+			(
+				CASE
+				WHEN STATUS = 0 THEN
+						realInfo
+				ELSE
+					CONCAT(
+						'<font color="blue">',
+						realInfo,
+						'</font>'
+					)
+				END
+			) SEPARATOR '、'
+		) realInfo
 	FROM
 		t_applicant_visa_paperwork_jp
-	where status = 1
 	GROUP BY
 		applicantId
 ) tavpj ON tavpj.applicantId = taoj.id

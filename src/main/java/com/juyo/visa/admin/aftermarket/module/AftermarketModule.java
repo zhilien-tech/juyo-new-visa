@@ -67,4 +67,13 @@ public class AftermarketModule {
 	public Object aftermarketListData(@Param("..") AftermarketListForm form, HttpSession session) {
 		return aftermarketService.aftermarketListData(form, session);
 	}
+
+	/**
+	 * 发送邮件和短信
+	 */
+	@At
+	@POST
+	public Object sendMailAndMessage(@Param("applicantid") Integer applicantid) {
+		return aftermarketService.sendMailAndMessage(applicantid);
+	}
 }

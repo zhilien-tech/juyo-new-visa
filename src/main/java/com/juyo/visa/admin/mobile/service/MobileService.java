@@ -193,10 +193,22 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			}
 			//保存日本申请人信息
 			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+			//设置主申请人信息
+			List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("", "=", orderjpid), null);
+			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
+
+			} else {
+				//设置为主申请人
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+				applicatinsert.setMainid(applicatinsert.getId());
+				dbDao.update(applicatinsert);
+			}
 			applicantjp.setOrderId(orderjpid);
 			applicantjp.setApplicantId(applicatinsert.getId());
 			TApplicantOrderJpEntity applicantjpinsert = dbDao.insert(applicantjp);
 			Integer applicantJpId = applicantjpinsert.getId();
+
 			//日本工作信息
 			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
 			workJp.setApplicantId(applicantJpId);
@@ -209,10 +221,10 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			passport.setFirstName(applicant.getFirstname());
 			passport.setLastName(applicant.getLastname());
 			if (!Util.isEmpty(applicant.getFirstnameen())) {
-				passport.setFirstNameEn(applicant.getFirstnameen().substring(1));
+				passport.setFirstNameEn(applicant.getFirstnameen());
 			}
 			if (!Util.isEmpty(applicant.getLastnameen())) {
-				passport.setLastNameEn(applicant.getLastnameen().substring(1));
+				passport.setLastNameEn(applicant.getLastnameen());
 			}
 			passport.setIssuedOrganization("公安部出入境管理局");
 			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
