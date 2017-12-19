@@ -111,6 +111,15 @@ public class FirstTrialJpModule {
 	}
 
 	/**
+	 * 获取订单下所有申请人
+	 */
+	@At
+	@POST
+	public Object getAllApplicantByOrderid(@Param("orderjpid") Integer orderjpid) {
+		return firstTrialJpViewService.getAllApplicantByOrderid(orderjpid);
+	}
+
+	/**
 	 * 获取申请人信息
 	 */
 	@At

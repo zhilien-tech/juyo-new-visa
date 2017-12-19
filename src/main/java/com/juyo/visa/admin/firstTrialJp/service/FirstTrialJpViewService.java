@@ -52,6 +52,7 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
+import com.juyo.visa.common.enums.ShareTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.util.NewShortUrlUtil;
@@ -357,6 +358,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//快递方式
 		result.put("expressType", EnumUtil.enum2(ExpressTypeEnum.class));
 
+		//分享方式
+		result.put("shareType", EnumUtil.enum2(ShareTypeEnum.class));
+
 		/*//订单主申请人
 		String sqlStr = sqlManager.get("firstTrialJp_list_data_applicant");
 		Sql applysql = Sqls.create(sqlStr);
@@ -365,7 +369,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 				null);*/
 
 		//业务需求，更改为 销售分享的申请人 如果为统一联系人只展示一个， 否则展示单独分享的
-		String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
+		/*String sqlStr = sqlManager.get("firstTrialJp_share_sms_applicant");
 		int yes = IsYesOrNoEnum.YES.intKey();
 		Sql applysql = Sqls.create(sqlStr);
 		List<Record> records = dbDao.query(applysql,
@@ -381,9 +385,13 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			}
 		}
 
-		records = editApplicantsInfo(records);
+		records = editApplicantsInfo(records);*/
 
-		result.put("applicant", records);
+		//需求更改三，查看订单下所有申请人，点击选择分享
+		/*Map<String, Object> applicantMap = getAllApplicantByOrderid(orderjpid);
+		List<Record> records = (List<Record>) applicantMap.get("applicant");
+
+		result.put("applicant", records);*/
 		//订单id
 		result.put("orderid", orderid);
 		//t_order_jp id

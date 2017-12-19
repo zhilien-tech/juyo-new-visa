@@ -125,6 +125,30 @@ $("#mobile").on('select2:unselect', function (evt) {
 	clearText();
 }); */
 
+$(function() {
+	$(document).on("click",".tableTr",function(){
+		var sharetype = $("#shareType").val();
+		if(sharetype == 2){//单独分享
+			if($(this).hasClass("trColor")){
+				$(this).removeClass("trColor");
+			}else{
+				$(this).addClass("trColor");
+			}
+		}else if(sharetype == 1){//统一联系人
+			$(this).addClass("trColor").siblings("tr").removeClass("trColor");
+		}
+	});
+
+	$("#shareType").change(function(){
+		$("#tableId tbody tr").each(function(){
+			if($(this).hasClass("trColor")){
+				$(this).removeClass("trColor");
+			}
+		});
+	});
+
+});
+
 function clearText(){
 	$("#receiver").val(null).trigger("change");
 	$("#mobile").val(null).trigger("change");
@@ -221,7 +245,7 @@ $("#receiver").on('input',function(){
 			});
 			liStr += "</ul>";
 			$("#receiver").after(liStr);
-			
+
 			$('.ui-menu-item').first().addClass('bg');
 			$('.ui-menu-item').hover(function(){
 				$(this).addClass('bg').siblings().removeClass('bg');
@@ -250,7 +274,7 @@ $("#mobile").on('input',function(){
 			});
 			liStr += "</ul>";
 			$("#mobile").after(liStr);
-			
+
 			$('.ui-menu-item').first().addClass('bg');
 			$('.ui-menu-item').hover(function(){
 				$(this).addClass('bg').siblings().removeClass('bg');
