@@ -21,6 +21,9 @@ public class TOrderRecipientUpdateForm extends ModForm implements Serializable{
 	/**快递方式*/
 	private Integer expressType;
 		
+	/**快递分享方式*/
+	private Integer shareType;
+		
 	/**收件人*/
 	private String receiver;
 		
@@ -29,6 +32,9 @@ public class TOrderRecipientUpdateForm extends ModForm implements Serializable{
 		
 	/**收件地址*/
 	private String expressAddress;
+		
+	/**分享申请人*/
+	private String shareMans;
 		
 	/**操作人*/
 	private Integer opId;

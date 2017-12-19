@@ -27,6 +27,10 @@ public class TOrderRecipientEntity implements Serializable {
 	private Integer expressType;
 	
 	@Column
+    @Comment("快递分享方式")
+	private Integer shareType;
+	
+	@Column
     @Comment("收件人")
 	private String receiver;
 	
@@ -37,6 +41,10 @@ public class TOrderRecipientEntity implements Serializable {
 	@Column
     @Comment("收件地址")
 	private String expressAddress;
+	
+	@Column
+    @Comment("分享申请人")
+	private String shareMans;
 	
 	@Column
     @Comment("操作人")

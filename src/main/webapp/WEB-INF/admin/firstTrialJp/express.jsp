@@ -13,12 +13,12 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<style type="text/css">
-		#datatableId tbody tr td:nth-child(1){width:10%;}
-		#datatableId tbody tr td:nth-child(2){width:18%;}
-		#datatableId tbody tr td:nth-child(3){width:13%;}
-		#datatableId tbody tr td:nth-child(4){width:12%;}
-		#datatableId tbody tr td:nth-child(5){width:37%;}
-		#datatableId tbody tr td:nth-child(6){width:10%;}
+		#tableId tbody tr td:nth-child(1){width:10%;}
+		#tableId tbody tr td:nth-child(2){width:18%;}
+		#tableId tbody tr td:nth-child(3){width:13%;}
+		#tableId tbody tr td:nth-child(4){width:12%;}
+		#tableId tbody tr td:nth-child(5){width:37%;}
+		#tableId tbody tr td:nth-child(6){width:10%;}
 		#tableId{position: relative;top: 15px;}
 		/*左右滑块*/
 		.switch{width:41px; display:inline-block;padding-left: 8px;}
@@ -53,6 +53,11 @@
 			line-height:32px;
 			padding-left:8px;
 		}
+		
+		#tableId{position: relative;top: 10px;}
+		#tableId tbody tr{cursor: pointer;}
+		.trColor{color: rgb(48, 135, 240)}
+		
 	</style>
 </head>
 <body>
@@ -70,12 +75,28 @@
 					<div class="row">
 						<div class="col-sm-3">
 							<div class="form-group">
+								<label>快递方式：</label>
 								<select id="express" class="form-control input-sm selectHeight">
 									<c:forEach var="map" items="${obj.expressType}">
 										<c:if test="${map.key == obj.orderReceive.expresstype }">
 											<option value="${map.key}" selected="selected">${map.value}</option>
 										</c:if>
 										<c:if test="${map.key != obj.orderReceive.expresstype }">
+											<option value="${map.key}">${map.value}</option>
+										</c:if>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label>请选择分享方式：</label>
+								<select id="shareType" name="shareType" class="form-control input-sm selectHeight">
+									<c:forEach var="map" items="${obj.shareType}">
+										<c:if test="${map.key == obj.orderReceive.sharetype }">
+											<option value="${map.key}" selected="selected">${map.value}</option>
+										</c:if>
+										<c:if test="${map.key != obj.orderReceive.sharetype }">
 											<option value="${map.key}">${map.value}</option>
 										</c:if>
 									</c:forEach>
@@ -139,7 +160,8 @@
 							</tr>
 						</thead>
 						<tbody id="applicant_tbody">
-							<tr v-cloak v-for="apply in applyinfo">
+							<tr v-cloak v-for="apply in applyinfo" class="tableTr">
+								<td class="applyidTd" style="display: none">{{apply.applyid}}</td>
 								<td>{{apply.applicantname}}</td>
 								<td>{{apply.telephone}}</td>
 								<td>{{apply.email}}</td>
@@ -157,6 +179,7 @@
 		var BASE_PATH = '${base}';
 		var orderid = '${obj.orderid}';
 		var orderjpid = '${obj.orderjpid}';
+		var shareIds = '${obj.shareIds}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -181,7 +204,7 @@
 			},
 			created:function(){
 				orderobj=this;
-				var url = '${base}/admin/firstTrialJp/getShareApplicantByOrderid.html';
+				var url = '${base}/admin/firstTrialJp/getAllApplicantByOrderid.html';
 				$.ajax({ 
 					url: url,
 					type:'post',
