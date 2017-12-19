@@ -16,17 +16,21 @@
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 	<style>
 		.card-head div:nth-child(1){width:20%;}
-		.card-head div:nth-child(2){width:20%;}
-		.card-head div:nth-child(3){width: 135px;float: right;position: relative;right: -15px;}
+		.card-head div:nth-child(2){width:10%; text-align:right;}
+		.card-head div:nth-child(3){width: 135px;float: right;position: relative;right: 0;}
 		.everybody-info div:nth-child(1){width:11%;}
 		.everybody-info div:nth-child(2){width:14%;}
 		.everybody-info div:nth-child(3){width:14%;}
 		.everybody-info div:nth-child(4){width:10%;}
-		.everybody-info div:nth-child(5){width:10%;}
-		.everybody-info div:last-child{float:right;width:85px;}
+		.everybody-info div:nth-child(5){width:12%;}
 		/*顶部 不随导航移动*/
 		.box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
 	    .box-body {  overflow:hidden;margin-top:60px;}
+	    .everybody-info {position:relative; }
+	    .cf { overflow:visible !important;}
+	    .whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:390px;}
+	    .showInfo { cursor:pointer; }
+	    .hideInfo { display:none; position:absolute; top:-33px;right:0;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -54,7 +58,7 @@
 						<div class="card-list" v-for="data in receptionJpData">
 							<div class="card-head cf">
 								<div><label>订单号：</label><span style="cursor:pointer;font-size:12px;" @click="visaDetail(data.id)">{{data.ordernumber}}</span></div>	
-								<div style="position:absolute;right:10%;"><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span></div>		
+								<div style="position:absolute;right:25%;"><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span></div>		
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
@@ -76,21 +80,21 @@
 								<li class="everybody-info cf" v-for="(item,index) in data.everybodyinfo">
 									<span v-if="index === 0">
 										<div><label>申请人：</label><span>{{item.applicant}}</span></div>
-									<div><label>护照号：</label><span>{{item.passportno}}</span></div>
-									<div><label>快递号：</label><span>{{item.expressnum}}</span></div>
-									<div><label>方式：</label><span>{{item.expresstype}}</span></div>
-									<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
-										<div><label>资料：</label><span v-html="item.data"><!-- {{item.data}} --></span></div>
-										<div><!-- <i> </i> --></div>
+										<div><label>护照号：</label><span>{{item.passportno}}</span></div>
+										<div><label>快递号：</label><span>{{item.expressnum}}</span></div>
+										<div><label>方式：</label><span>{{item.expresstype}}</span></div>
+										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
+										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"><!-- {{item.data}} --></span></div>
+										<span class="hideInfo"></span>
 									</span>
 									<span v-else>
-										<div><label>   </label><span>{{item.applicant}}</span></div>
-									<div><label>   </label><span>{{item.passportno}}</span></div>
-									<div><label>   </label><span>{{item.expressnum}}</span></div>
-									<div><label>   </label><span>{{item.expresstype}}</span></div>
-									<div><label>   </label><span>{{item.datatype}}</span></div>
-										<div><label>　　　</label><span v-html="item.data"><!-- {{item.data}} --></span></div>
-										<div><!-- <i> </i> --></div>
+										<div><label style="width:48px;">   </label><span>{{item.applicant}}</span></div>
+										<div><label style="width:48px;">   </label><span>{{item.passportno}}</span></div>
+										<div><label style="width:48px;">   </label><span>{{item.expressnum}}</span></div>
+										<div><label style="width:36px;">   </label><span>{{item.expresstype}}</span></div>
+										<div><label style="width:60px;">   </label><span>{{item.datatype}}</span></div>
+										<div class="whiteSpace"><label style="width:36px;">&nbsp;&nbsp;</label><span v-html="item.data" class="showInfo"></span></div>
+										<span class="hideInfo"></span>
 									</span>
 								</li>
 								
@@ -258,8 +262,17 @@
 			layer.msg('保存成功');
 		}
 	}
-	
-	
+		//鼠标移入事件
+		$(document).on('mouseover','.showInfo',function(){
+			
+			let text = $(this).html();
+			$(this).parent().next().show();
+			$(this).parent().next().html(text);
+		});
+		//鼠标移出事件
+		$(document).on('mouseleave','.showInfo',function(){
+			$(".hideInfo").hide();
+		});
 	</script>
 </body>
 </html>

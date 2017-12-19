@@ -1,14 +1,13 @@
 /*--------------------------签证日本---------------------------*/
-.card-head div:nth-child(1){width:15%;}
+.card-head div:nth-child(1){width:14%;}
 .card-head div:nth-child(2){width:12.5%;}
 .card-head div:nth-child(3){width: 13.5%;}
 .card-head div:nth-child(4){width: 13.5%;}
-.card-head div:nth-child(5){width: 11.5%;}
-.card-head div:nth-child(6){width:5%;}
-.card-head div:nth-child(7){width: 29%;position: relative;right: -35px;}
+.card-head div:nth-child(5){width: 5%;}
+.card-head div:nth-child(6){width:11.5%; text-align:right;}
+.card-head div:nth-child(7){width: 30%;position: relative;right: -20px;}
 .everybody-info div:nth-child(1){width:13%;}
 .everybody-info div:nth-child(2){width:16.5%;}
 .everybody-info div:nth-child(3){width:13%;}
 .everybody-info div:nth-child(4){width:55%;}
 .everybody-info div:nth-child(5){width:30%;}
-/*.everybody-info div:last-child{float:right;width:74px;}	 */
