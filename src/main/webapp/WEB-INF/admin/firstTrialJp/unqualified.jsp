@@ -28,20 +28,20 @@
 						<div class="row form-div">
 							<div class="col-sm-12">
 								<div class="form-group info-input">
-									<input id="applicantId" name="applicantId" type="hidden" value="${obj.applyid}" >
-									<input id="orderid" name="orderid" type="hidden" value="${obj.orderid}" >
-									<input id="isPassport" name="isPassport" type="checkbox" class="infoCheck">
-									<label>护照信息</label> 
-									<input id="passRemark" name="passRemark" type="text" class="form-control input-sm none" />
+									<input id="isBase" name="isBase" type="checkbox" class="infoCheck">
+									<label>基本信息</label> 
+									<input id="baseRemark" name="baseRemark" type="text" class="form-control input-sm none"/>
 								</div>
 							</div>
 						</div>
 						<div class="row form-div">
 							<div class="col-sm-12">
 								<div class="form-group info-input">
-									<input id="isBase" name="isBase" type="checkbox" class="infoCheck">
-									<label>基本信息</label> 
-									<input id="baseRemark" name="baseRemark" type="text" class="form-control input-sm none"/>
+									<input id="applicantId" name="applicantId" type="hidden" value="${obj.applyid}" >
+									<input id="orderid" name="orderid" type="hidden" value="${obj.orderid}" >
+									<input id="isPassport" name="isPassport" type="checkbox" class="infoCheck">
+									<label>护照信息</label> 
+									<input id="passRemark" name="passRemark" type="text" class="form-control input-sm none" />
 								</div>
 							</div>
 						</div>

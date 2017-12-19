@@ -1327,8 +1327,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		String[] shortUrl = NewShortUrlUtil.shortUrl(originallink);
 		String encryptUrl = shortUrl[1];
-		int count = nutDao.count(TEncryptlinkinfoEntity.class, Cnd.where("encryptlink", "=", encryptUrl));
-		if (count <= 0) {
+		TEncryptlinkinfoEntity linkEntity = dbDao.fetch(TEncryptlinkinfoEntity.class,
+				Cnd.where("originallink", "=", originallink));
+		if (Util.isEmpty(linkEntity)) {
 			//添加
 			TEncryptlinkinfoEntity link = new TEncryptlinkinfoEntity();
 			link.setEncryptlink(encryptUrl);
@@ -1336,6 +1337,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			link.setOpId(userId);
 			link.setCreateTime(DateUtil.nowDate());
 			dbDao.insert(link);
+		} else {
+			encryptUrl = linkEntity.getEncryptlink();
+			dbDao.update(TEncryptlinkinfoEntity.class, Chain.make("encryptlink", encryptUrl),
+					Cnd.where("originallink", "=", originallink));
 		}
 
 		encryptUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/joyu?" + encryptUrl;
