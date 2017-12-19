@@ -597,10 +597,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + applicantId;
 		//转换长连接为短地址
-		//mobileUrl = ShortUrlUtil.generateShortUrl(mobileUrl);
-		//TODO http://192.168.1.8:8080/Joyu/visa 
-		String encryptlink = getEncryptlink(mobileUrl, session);
-		mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/joyu?" + encryptlink;
+		mobileUrl = getEncryptlink(mobileUrl, session, request);
 
 		try {
 			//发送不合格消息
@@ -1254,7 +1251,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//获得加密链接
-	public String getEncryptlink(String originallink, HttpSession session) {
+	public String getEncryptlink(String originallink, HttpSession session, HttpServletRequest request) {
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
@@ -1271,6 +1268,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			link.setCreateTime(DateUtil.nowDate());
 			dbDao.insert(link);
 		}
+
+		encryptUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/joyu?" + encryptUrl;
 
 		return encryptUrl;
 	}
