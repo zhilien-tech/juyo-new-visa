@@ -161,6 +161,7 @@
 						</thead>
 						<tbody id="applicant_tbody">
 							<tr v-cloak v-for="apply in applyinfo" class="tableTr">
+								<td class="applyidTd" style="display: none">{{apply.applyid}}</td>
 								<td>{{apply.applicantname}}</td>
 								<td>{{apply.telephone}}</td>
 								<td>{{apply.email}}</td>
@@ -178,6 +179,7 @@
 		var BASE_PATH = '${base}';
 		var orderid = '${obj.orderid}';
 		var orderjpid = '${obj.orderjpid}';
+		var shareIds = '${obj.shareIds}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>

@@ -112,6 +112,8 @@ where taoj.orderId = @orderjpid
 SELECT
 	tor.orderId,
 	tor.expressType,
+	tor.shareType,
+	tor.shareMans sharemanids,
 	tor.receiveAddressId,
 	tor.expressAddress,
 	tor.receiver,

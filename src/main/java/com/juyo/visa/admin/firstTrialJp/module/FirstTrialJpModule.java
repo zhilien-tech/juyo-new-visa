@@ -185,10 +185,12 @@ public class FirstTrialJpModule {
 	@At
 	@POST
 	public Object saveExpressInfo(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid,
-			@Param("expresstype") Integer expresstype, @Param("receiver") String receiver,
-			@Param("mobile") String mobile, @Param("expressaddress") String expressaddress, HttpSession session) {
-		return firstTrialJpViewService.saveExpressInfo(orderid, orderjpid, expresstype, receiver, mobile,
-				expressaddress, session);
+			@Param("expresstype") Integer expresstype, @Param("sharetype") Integer sharetype,
+			@Param("receiver") String receiver, @Param("mobile") String mobile,
+			@Param("expressaddress") String expressaddress, @Param("shareManIds") String shareManIds,
+			HttpSession session) {
+		return firstTrialJpViewService.saveExpressInfo(orderid, orderjpid, expresstype, sharetype, receiver, mobile,
+				expressaddress, shareManIds, session);
 	}
 
 	/**

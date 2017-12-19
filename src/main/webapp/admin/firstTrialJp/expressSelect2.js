@@ -126,6 +126,17 @@ $("#mobile").on('select2:unselect', function (evt) {
 }); */
 
 $(function() {
+
+	$("#tableId tbody tr").each(function(){
+		var applicantId = $(this).children().eq(0).html();
+		var ids = shareIds.split(",");
+		$.each(ids, function(i,shareid){        
+			if(applicantId == shareid){
+				$(this).addClass("trColor");
+			} 
+		});   
+	});
+
 	$(document).on("click",".tableTr",function(){
 		var sharetype = $("#shareType").val();
 		if(sharetype == 2){//单独分享
@@ -160,11 +171,25 @@ function clearText(){
 //保存
 function save(orderid,orderjpid){
 
-	var applicant_tbody = $("#applicant_tbody").is(":empty");
+	/*	var applicant_tbody = $("#applicant_tbody").is(":empty");
 	if (applicant_tbody) {
 		layer.msg('申请人信息不能为空');
 		return;
+	}*/
+	var applicant_share = true;
+	var shareManIds = "";
+	$("#tableId tbody tr").each(function(){
+		if($(this).hasClass("trColor")){
+			applicant_share = false;
+			var applicantId = $(this).children().eq(0).html();
+			shareManIds += applicantId + ",";
+		}
+	});
+	if (applicant_share || shareManIds=="") {
+		layer.msg('申请人未选择');
+		return;
 	}
+
 	var receiveAddress = $("#receiveAddressId").val();
 	if (receiveAddress == "") {
 		layer.msg('收件人信息不能为空');
@@ -178,9 +203,11 @@ function save(orderid,orderjpid){
 			orderid:orderid,
 			orderjpid:orderjpid,
 			expresstype:$("#express").val(),
+			sharetype:$("#shareType").val(),
 			receiver:$("#receiver").val(),
 			mobile:$("#mobile").val(),
 			expressaddress:$("#address").val(),
+			shareManIds:shareManIds
 			//receiveAddressId:$("#receiveAddressId").val()
 		},
 		success: function(data){
