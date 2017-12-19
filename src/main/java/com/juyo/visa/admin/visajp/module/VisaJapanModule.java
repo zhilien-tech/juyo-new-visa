@@ -318,4 +318,13 @@ public class VisaJapanModule {
 	public Object afterMarket(@Param("orderid") Long orderid, HttpServletRequest request) {
 		return visaJapanService.afterMarket(orderid, request);
 	}
+
+	/**
+	 * 实收信息通知销售
+	 */
+	@At
+	@POST
+	public Object noticeSale(@Param("applyid") Integer applyid) {
+		return visaJapanService.noticeSale(applyid);
+	}
 }
