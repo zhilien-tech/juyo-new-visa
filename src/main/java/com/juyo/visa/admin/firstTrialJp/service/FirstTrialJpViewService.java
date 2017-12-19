@@ -660,7 +660,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + applicantId;
 		//转换长连接为短地址
-		mobileUrl = getEncryptlink(mobileUrl, session, request);
+		mobileUrl = getEncryptlink(mobileUrl, request);
 
 		try {
 			//发送不合格消息
@@ -1320,8 +1320,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//获得加密链接
-	public String getEncryptlink(String originallink, HttpSession session, HttpServletRequest request) {
-
+	public String getEncryptlink(String originallink, HttpServletRequest request) {
+		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
 

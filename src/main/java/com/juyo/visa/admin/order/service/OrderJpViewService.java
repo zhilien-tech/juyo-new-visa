@@ -1679,7 +1679,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		for (String line : readLines) {
 			tmp.append(line);
 		}
-		
+
 		String pcUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
 
 		//查询订单号
@@ -1721,6 +1721,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + applicantid;
+		//转换长连接为短地址
+		mobileUrl = firstTrialJpViewService.getEncryptlink(mobileUrl, request);
 		//查询订单号
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
 		String orderNum = order.getOrderNum();
@@ -1817,7 +1819,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + applicantid;
-
+		//转换长连接为短地址
+		mobileUrl = firstTrialJpViewService.getEncryptlink(mobileUrl, request);
 		//查询订单号
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
 		String orderNum = order.getOrderNum();
