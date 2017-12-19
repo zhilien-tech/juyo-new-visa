@@ -53,7 +53,7 @@
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
-					<input type="button" value="自动填报" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log()"/>
 				</div>
 				<section class="content">
 					<!-- 订单信息 -->
@@ -224,20 +224,19 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>送签时间：</label>
-										<c:choose>
-											<c:when test="${empty obj.orderinfo.sendVisaDate }">
-												<input id="sendvisadate" type="text" class="form-control input-sm datetimepickercss" value=""/>
-											</c:when>
-											<c:otherwise>
-												<input id="sendvisadate" type="text" class="form-control input-sm datetimepickercss" disabled="disabled" value="<fmt:formatDate value="${obj.orderinfo.sendVisaDate }" pattern="yyyy-MM-dd" />"/>
-											</c:otherwise>
-										</c:choose>
+										<input id="sendvisadate" type="text" class="form-control input-sm datetimepickercss" disabled="disabled" value="<fmt:formatDate value="${obj.orderinfo.sendVisaDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出签时间：</label>
 										<input id="outvisadate" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.orderinfo.outVisaDate }" pattern="yyyy-MM-dd" />"/>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>送签编号：</label>
+										<input id="sendvisanum" type="text" class="form-control input-sm" value="${obj.orderinfo.sendVisaNum }"/>
 									</div>
 								</div>
 							</div><!-- end 送签时间/出签时间 -->
@@ -257,6 +256,7 @@
 										<th><span>护照号<span></th>
 										<th><span>资料类型<span></th>
 										<th><span>所需资料<span></th>
+										<th><span>递送方式<span></th>
 										<th><span>备注<span></th>
 										<th><span>操作<span></th>
 									</tr>
@@ -267,7 +267,8 @@
 										<td>{{apply.telephone}}</td>
 										<td>{{apply.passport}}</td>
 										<td>{{apply.type}}</td>
-										<td>{{apply.realinfo}}</td>
+										<td v-html="apply.realinfo"></td>
+										<td v-if="(apply.expresstype == 1)"><a href="https://www.ickd.cn/" target="view_window">{{apply.expressnum}}</a></td>
 										<td>{{apply.mainrelation}}</td>
 										<td><a v-on:click="updateApplicant(apply.id)">基本信息</a>&nbsp;
 											<a v-on:click="passport(apply.id)">护照信息</a>&nbsp;
@@ -345,7 +346,7 @@
 												<label><span>*</span>航班号：</label>
 												<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.goFlightNum">
 													<c:if test="${!empty obj.goflightnum.id }">
-														<option value="${obj.goflightnum.id }" selected="selected">${obj.goflightnum.flightnum }</option>
+														<option value="${obj.goflightnum.id }" selected="selected">${obj.goflightnum.takeOffName }-${obj.goflightnum.landingName } ${obj.goflightnum.flightnum } ${obj.goflightnum.takeOffTime }/${obj.goflightnum.landingTime }</option>
 													</c:if>
 												</select>
 												<!-- <i class="bulb"></i> -->
@@ -386,7 +387,7 @@
 												<label><span>*</span>航班号：</label>
 												<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.returnFlightNum">
 													<c:if test="${!empty obj.returnflightnum.id }">
-														<option value="${obj.returnflightnum.id }" selected="selected">${obj.returnflightnum.flightnum }</option>
+														<option value="${obj.returnflightnum.id }" selected="selected">${obj.returnflightnum.takeOffName }-${obj.returnflightnum.landingName } ${obj.returnflightnum.flightnum } ${obj.returnflightnum.takeOffTime }/${obj.returnflightnum.landingTime }</option>
 													</c:if>
 												</select>
 												<!-- <i class="bulb"></i> -->
@@ -440,7 +441,8 @@
 														<select name="flightnum" class="form-control input-sm" multiple="multiple" v-model="travelinfo.returnFlightNum">
 															<c:forEach items="${obj.flights }" var="flight">
 																<c:if test="${flight.id eq  mutil.flightNum}">
-																	<option selected="selected" value="${flight.id }">${flight.flightnum }</option>
+																	<%-- <option selected="selected" value="${flight.id }">${flight.flightnum }</option> --%>
+																	<option selected="selected" value="${flight.id }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
 																</c:if>
 															</c:forEach>
 														</select>
@@ -616,6 +618,21 @@
 				}else if(status == 2){
 					layer.msg('保存成功');
 				}
+			}
+			
+			function log(orderid){//日志
+				var orderinfoid = '${obj.orderinfo.id}';
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['700px', '551px'],
+					content:'/admin/orderJp/log.html?id='+orderinfoid
+				});
 			}
 		</script>
 	</body>

@@ -31,6 +31,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
 import com.juyo.visa.admin.visajp.form.PassportForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
@@ -83,6 +84,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 
 	@Inject
 	private QrCodeService qrCodeService;
+	@Inject
+	private OrderJpViewService orderJpViewService;
 
 	/**
 	 * 签证列表数据
@@ -197,6 +200,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		}
 		if (!Util.isEmpty(travelinfo.getReturnDate())) {
 			tralinfoMap.put("returnDate", format.format(travelinfo.getReturnDate()));
+		}
+		if (Util.isEmpty(travelinfo.getTripPurpose())) {
+			tralinfoMap.put("trippurpose", "旅游");
 		}
 		result.put("travelinfo", tralinfoMap);
 		//申请人信息
@@ -362,6 +368,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		order.setBackTripDate(editDataForm.getBacktripdate());
 		order.setSendVisaDate(editDataForm.getSendvisadate());
 		order.setOutVisaDate(editDataForm.getOutvisadate());
+		order.setSendVisaNum(editDataForm.getSendvisanum());
 		order.setUpdateTime(new Date());
 		dbDao.update(order);
 		//日本订单信息
@@ -838,6 +845,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		visapaperwork.setCreateTime(new Date());
 		visapaperwork.setRealInfo(realInfo);
 		visapaperwork.setOpId(loginUser.getId());
+		visapaperwork.setStatus(0);
 		return dbDao.insert(visapaperwork);
 	}
 
@@ -850,7 +858,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param applicatinfo 
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object saveRealInfoData(TOrderJpEntity orderjp, String applicatinfo) {
+	public Object saveRealInfoData(TOrderJpEntity orderjp, String applicatinfo, HttpSession session) {
 		//更新备注信息
 		dbDao.update(orderjp);
 		List<Map> applicatlist = JsonUtil.fromJson(applicatinfo, List.class);
@@ -874,11 +882,14 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 					dbDao.delete(fetch);
 				}
 			}
+
 		}
 		//删掉灰色的
 		if (!Util.isEmpty(paperworks)) {
 			dbDao.update(paperworks);
 		}
+		//添加日志
+		orderJpViewService.insertLogs(orderjp.getOrderId(), JPOrderStatusEnum.VISA_RECEIVED.intKey(), session);
 		return null;
 
 	}
@@ -1132,10 +1143,13 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object afterMarket(Long orderid, HttpServletRequest request) {
+		HttpSession session = request.getSession();
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		orderinfo.setStatus(JPOrderStatusEnum.AFTERMARKET_ORDER.intKey());
 		dbDao.update(orderinfo);
+		//添加日志
+		orderJpViewService.insertLogs(orderinfo.getId(), JPOrderStatusEnum.AFTERMARKET_ORDER.intKey(), session);
 		return "success";
 	}
 }

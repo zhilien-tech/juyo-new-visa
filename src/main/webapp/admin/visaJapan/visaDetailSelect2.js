@@ -140,7 +140,7 @@ function initDuochengSelect(divobj){
 				params.page = params.page || 1;
 				var selectdata = $.map(data, function (obj) {
 					obj.id = obj.id; // replace pk with your identifier
-					obj.text = obj.flightnum; // replace pk with your identifier
+					obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime; // replace pk with your identifier
 					/*obj.text = obj.dictCode;*/
 					return obj;
 				});
@@ -262,6 +262,23 @@ $("#sendvisadate").datetimepicker({
 $("#outvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+
+$("#goDate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	startDate:now,
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+$("#returnDate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	startDate:now,
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日

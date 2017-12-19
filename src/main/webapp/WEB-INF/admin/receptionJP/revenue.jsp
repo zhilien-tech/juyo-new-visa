@@ -107,7 +107,7 @@
 		            	dataType:"json",
 		            	type:'post',
 		            	success: function(data){
-		            		var str = '<span class="realinfo">'+ inputVal +'</span>';
+		            		var str = '<span class="realinfo titleStyle">'+ inputVal +'</span>';
 		            		str += '<input type="hidden" id="revenueid" name="revenueid" value="'+data.id+'">';
 		            		thisobj.siblings(".addInp").before(str);//在input前面 添加span标签
 		            		thisobj.siblings(".addInp").val("");
@@ -170,7 +170,11 @@
 					if($(this).text().indexOf("护照原件") !== -1){
 						$(this).text('护照原件'+thisval);
 						$(".passportInp").remove();
-						$(this).removeClass("titleStyle");
+						if(thisval){
+							$(this).addClass("titleStyle");
+						}else{
+							$(this).removeClass("titleStyle");
+						}
 					}
 				});
 			});

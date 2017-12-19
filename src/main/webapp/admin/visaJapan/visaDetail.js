@@ -206,6 +206,7 @@ function commitdata(){
 	orderobj.orderinfo.money = $('#money').val();
 	orderobj.orderinfo.stayday = $('#stayday').val();
 	orderobj.orderinfo.outvisadate = $('#outvisadate').val();
+	orderobj.orderinfo.sendvisanum = $('#sendvisanum').val();
 	orderobj.travelinfo.goDate = $('#goDate').val();
 	orderobj.travelinfo.returnDate = $('#returnDate').val();
 	//绑定签证城市
@@ -370,7 +371,8 @@ $('#goFlightNum').select2({
 			params.page = params.page || 1;
 			var selectdata = $.map(data, function (obj) {
 				obj.id = obj.id; // replace pk with your identifier
-				obj.text = obj.flightnum; // replace pk with your identifier
+				//obj.text = obj.flightnum; // replace pk with your identifier
+				obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime;
 				/*obj.text = obj.dictCode;*/
 				return obj;
 			});
@@ -428,7 +430,8 @@ $('#returnFlightNum').select2({
 			params.page = params.page || 1;
 			var selectdata = $.map(data, function (obj) {
 				obj.id = obj.id; // replace pk with your identifier
-				obj.text = obj.flightnum; // replace pk with your identifier
+				//obj.text = obj.flightnum; // replace pk with your identifier
+				obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime;
 				/*obj.text = obj.dictCode;*/
 				return obj;
 			});
