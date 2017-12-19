@@ -127,16 +127,16 @@ $("#mobile").on('select2:unselect', function (evt) {
 
 $(function() {
 
-	$("#tableId tbody tr").each(function(){
+	$("#tableId tbody tr").each(function(i,ele_tr){
 		var applicantId = $(this).children().eq(0).html();
 		var ids = shareIds.split(",");
-		$.each(ids, function(i,shareid){        
+		$.each(ids, function(j,shareid){
 			if(applicantId == shareid){
-				$(this).addClass("trColor");
+				$("#tableId tbody tr").eq(i).addClass("trColor");
 			} 
 		});   
 	});
-
+	
 	$(document).on("click",".tableTr",function(){
 		var sharetype = $("#shareType").val();
 		if(sharetype == 2){//单独分享
