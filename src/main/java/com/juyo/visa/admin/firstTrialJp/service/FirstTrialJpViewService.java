@@ -357,6 +357,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("orderReceive", orderReceive);
 		String shareType = orderReceive.getString("sharetype");
 		if (Util.isEmpty(shareType)) {
+			shareType = "";
 			Map<String, Object> map = getSameApplicantByOrderid(orderjpid);
 			List<Record> sameMans = (List<Record>) map.get("applicant");
 			if (sameMans.size() > 0) {
@@ -369,8 +370,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		String shareIds = orderReceive.getString("sharemanids");
 		if (Util.isEmpty(shareIds)) {
+			shareIds = "";
 			List<TApplicantOrderJpEntity> applicants = dbDao.query(TApplicantOrderJpEntity.class,
-					Cnd.where("isShareSms", "=", YES), null);
+					Cnd.where("isShareSms", "=", YES).and("orderId", "=", orderjpid), null);
 			if (!Util.isEmpty(applicants)) {
 				for (TApplicantOrderJpEntity entity : applicants) {
 					Integer isShareSms = entity.getIsShareSms();
