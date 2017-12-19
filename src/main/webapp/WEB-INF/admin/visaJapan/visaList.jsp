@@ -155,12 +155,14 @@
                  	dataType:"json",
                  	type:'post',
                  	success: function(data){
-                 		if(visastatus == 2){
-	                 		layer.msg('发招宝成功');
-                 		}else if(visastatus == 4){
-	                 		layer.msg('招宝变更成功');
-                 		}else if(visastatus == 6){
-	                 		layer.msg('招宝取消成功');
+                 		if(visastatus == 16){
+	                 		layer.msg('发招宝');
+                 		}else if(visastatus == 19){
+	                 		layer.msg('招宝变更');
+                 		}else if(visastatus == 22){
+	                 		layer.msg('招宝取消');
+                 		}else if(visastatus == 27){
+	                 		layer.msg('报告拒签');
                  		}
                  		//更新列表数据
                  		$.ajax({ 

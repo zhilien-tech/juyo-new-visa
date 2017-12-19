@@ -16,6 +16,9 @@
 		#datatableId tbody tr td:nth-child(3){width:25%;}
 		#datatableId tbody tr td:nth-child(4){width: 10%;}
 		.editInp{height: 19px;position: relative;top: -5px;border: solid 1px #b8d3e9;width: 60px;border-radius: 3px;margin-right: 2px;font-size: 12px;line-height: 19px;padding-left: 3px;}
+		.frontcertificates{text-align:left !important;}
+		.frontcertificates span{margin-right: 2px;display: inline-block;width: unset;height: unset; border: solid 1px #cee1ff;color:#287ae7;padding: 0 5px;font-size: 12px;border-radius: 3px;}
+		
 	</style>
 </head>
 <body>
@@ -25,6 +28,7 @@
 				<span class="heading">实收资料</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="addBtn" type="button" onclick="frontRvenue();" class="btn btn-primary pull-right btn-sm btn-right" value="前台实收" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
@@ -33,8 +37,9 @@
 							<tr>
 								<th><span>姓名</span></th>
 								<th><span>电话</span></th>
-								<th><span>邮箱</span></th>
-								<th><span>资料类型</span></th>
+								<th class="visadata"><span>邮箱</span></th>
+								<th class="visadata"><span>资料类型</span></th>
+								<th class="frontdata none"><span>前台资料</span></th>
 								<th><span>真实资料</span></th>
 							</tr>
 						</thead>
@@ -43,8 +48,20 @@
 								<tr>
 									<td>${apply.applicant }</td>
 									<td>${apply.telephone }</td>
-									<td>${apply.email }</td>
-									<td>${apply.dataType }</td>
+									<td class="visadata">${apply.email }</td>
+									<td class="visadata">${apply.dataType }</td>
+									<td class="frontdata frontcertificates none">
+										<c:forEach items="${apply.frontrevenue }" var="frontrevenue">
+											<c:choose>
+												<c:when test="${frontrevenue.status == 0 }">
+													<span class="titleStyle">${frontrevenue.realInfo }</span>
+												</c:when>
+												<c:otherwise>
+													<span>${frontrevenue.realInfo }</span>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</td>
 									<td class="certificates">
 										<c:forEach items="${apply.revenue }" var="revenue">
 											<c:choose>
@@ -285,6 +302,26 @@
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
+		}
+		
+		//前台实收
+		function frontRvenue(){
+			var frontdata = $('.frontdata').first();
+			if(frontdata.hasClass('none')){
+				$('.frontdata').each(function(){
+					$(this).removeClass('none');					
+				});
+				$('.visadata').each(function(){
+					$(this).addClass('none');					
+				});
+			}else{
+				$('.frontdata').each(function(){
+					$(this).addClass('none');					
+				});
+				$('.visadata').each(function(){
+					$(this).removeClass('none');					
+				});
+			}
 		}
 	</script>
 </body>

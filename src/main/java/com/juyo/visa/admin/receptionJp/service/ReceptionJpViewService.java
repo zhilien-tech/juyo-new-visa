@@ -262,6 +262,12 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 					}
 					paperworks.add(fetch);
 				} else {
+					Integer visapaperworkid = fetch.getVisapaperworkid();
+					if (!Util.isEmpty(visapaperworkid)) {
+						TApplicantVisaPaperworkJpEntity visapaperworkinfo = dbDao.fetch(
+								TApplicantVisaPaperworkJpEntity.class, visapaperworkid.longValue());
+						dbDao.delete(visapaperworkinfo);
+					}
 					dbDao.delete(fetch);
 				}
 			}
@@ -479,6 +485,16 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		visapaperwork.setCreateTime(new Date());
 		visapaperwork.setRealInfo(realInfo);
 		visapaperwork.setOpId(loginUser.getId());
+		Integer type = null;
+		List<TApplicantVisaPaperworkJpEntity> query = dbDao.query(TApplicantVisaPaperworkJpEntity.class,
+				Cnd.where("applicantid", "=", applicatid), null);
+		for (TApplicantVisaPaperworkJpEntity tApplicantVisaPaperwork : query) {
+			if (!Util.isEmpty(tApplicantVisaPaperwork.getType())) {
+				type = tApplicantVisaPaperwork.getType();
+				break;
+			}
+		}
+		visapaperwork.setType(type);
 		TApplicantVisaPaperworkJpEntity visapaperworkinfo = dbDao.insert(visapaperwork);
 		frontpaperwork.setVisapaperworkid(visapaperworkinfo.getId());
 		return dbDao.insert(frontpaperwork);
