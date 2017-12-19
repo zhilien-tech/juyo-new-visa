@@ -27,6 +27,7 @@
 .rightNav { position:absolute;top:61px;right:2%;z-index:999; width:40px;height:489px; cursor:pointer;}
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 .nationalityHide { margin-left:3%;}
+.row { margin-top:7px;}
 </style>
 </head>
 <body>
@@ -52,7 +53,7 @@
 			</div>
 			<div class="modal-body">
 			<div class="ipt-info">
-					<input id="baseRemark" name="baseRemark" type="text" value="${obj.unqualified.baseRemark }" class="NoInfo" />
+					<input id="baseRemark" name="baseRemark" type="text" value="${obj.unqualified.baseRemark }" placeholder="请输入不合格原因"  class="NoInfo" />
 				</div>
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
@@ -167,7 +168,7 @@
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
-										<input type="text" id="firstNameEn" style="position:absolute;top:43px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
+										<input type="text" id="firstNameEn" style="position:absolute;top:39px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -180,7 +181,7 @@
 									<label><span>*</span>名/拼音：</label> <input id="lastName"
 										name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.lastName }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:43px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
+										<input type="text" id="lastNameEn" style="position:absolute;top:39px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -321,7 +322,7 @@
 							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>名/拼音：</label> 
-									<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " value="${obj.applicant.otherLastName }" />
+									<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
 									<input type="text" id="otherLastNameEn" style="position:absolute;top:45px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
 								</div>
 							</div>
@@ -392,11 +393,13 @@
 			if(otherName == 1){
 				$(".nameBeforeTop").css('float','none');
 				$(".nameBeforeHide").show();
+				$(".wordSpell").show();
 				$(".onceIDTop").removeClass('col-sm-offset-1');
 				$(".onceIDTop").css('padding-left','15px');
 			}else {
 				
 				$(".nameBeforeHide").hide();
+				$(".wordSpell").hide();
 			}
 			
 			if(address == 1){
@@ -784,7 +787,7 @@
 		//checkbox 曾用名
 		$(".nameBefore").change(function(){
 
-			let checked = $("input[name='nameBefore']:checked").val();
+			let checked = $("input[name='hasOtherName']:checked").val();
 			let checked2 = $("input[name='hasOtherNationality']:checked").val();
 			if(checked == 1){
 				$(".nameBeforeTop").css('float','none');
@@ -806,7 +809,7 @@
 		//曾用国籍
 		$(".onceID").change(function(){
 			let checked = $("input[name='hasOtherNationality']:checked").val();
-			let checked2 = $("input[name='nameBefore']:checked").val();
+			let checked2 = $("input[name='hasOtherName']:checked").val();
 			if(checked == 1){
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();

@@ -26,6 +26,10 @@
 			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
 			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
 			.deposit,.vehicle,.houseProperty{display:none;}
+			#urgentDays { width:16.5%;}
+			.info-body-from { margin-left:12%;}
+			.qz-head { position:fixed;top:0;left:0;z-index:99999; width:100%;}
+			.content { margin-top:50px;}
 			#applicantTable tbody tr td:nth-child(1){width: 10%;}
 			#applicantTable tbody tr td:nth-child(2){width: 10%;}
 			#applicantTable tbody tr td:nth-child(3){width: 10%;}
@@ -76,7 +80,7 @@
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-1">
 									<div class="form-group">
 										<label><span>*</span>加急：</label>
 										<select class="form-control input-sm" v-model="orderinfo.urgenttype" id="urgentType" name="urgenttype">
@@ -242,6 +246,7 @@
 							<table id="applicantTable" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
+										<th><span>&nbsp; <span></th>
 										<th><span>姓名<span></th>
 										<th><span>电话<span></th>
 										<th><span>护照号<span></th>
@@ -252,6 +257,12 @@
 								</thead>
 								<tbody>
 									<tr v-for="apply in applyinfo">
+										<td>
+											<div v-if="apply.applicantid==apply.mainid">
+												<font color="blue">主</font> 
+											</div>
+											<div v-else></div>
+										</td>
 										<td>{{apply.applyname}}</td>
 										<td>{{apply.telephone}}</td>
 										<td>{{apply.passport}}</td>

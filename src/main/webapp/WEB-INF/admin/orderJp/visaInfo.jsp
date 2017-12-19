@@ -15,97 +15,21 @@
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
 	.info-imgUpload {width: 100%;}
-		.NoInfo {
-	width:100%;
-	height:30px;
-	margin-left:3.5%;
-	transtion:height 1s;
-	-webkit-transtion:height 1s;
-	-moz-transtion:height 1s;
-}
-.ipt-info {
-	display:none;
-}
-.Unqualified, .qualifiedBtn  {
-	margin-right:10px;
-}
-
-    .input-box {
-      position: relative;
-      display: inline-block;
-    }
-    
-    .input-box input {
-      background-color: transparent;
-      background-image: none;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-      color: #555;
-      display: block;
-      font-size: 14px;
-      line-height: 1.42857;
-      padding: 6px 6px;
-      transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-      width: 200px;
-      display: inline;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .tip-l {
-      width: 0;
-      height: 0;
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 10px solid #555;
-      display: inline-block;
-      right: 10px;
-      z-index: 0;
-      position: absolute;
-      top: 12px;
-    }
-    
-    .dropdown {
-      position: absolute;
-      top: 32px;
-      left: 0px;
-      width: 200px;
-      background-color: #FFF;
-      border: 1px solid #23a8ce;
-      border-top: 0;
-      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-      z-index: 999;
-      padding: 0;
-      margin: 0;
-    }
-    
-    .dropdown li {
-      display: block;
-      line-height: 1.42857;
-      padding: 0 6px;
-      min-height: 1.2em;
-      cursor: pointer;
-    }
-    
-    .dropdown li:hover {
-      background-color: #23a8ce;
-      color: #FFF;
-    }
-    .colSm { 
-    	display:block;
-    	float:left;
-    	width:200px;
-    }
-    .padding-right-0 {
-    	margin-left:10%;
-    	width:323px;
-    	height:200px;
-    	border:1px solid #eee;
-    }
-    .delete {
-    	right:0;
-    }
+	.NoInfo { width:100%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
+	.ipt-info { display:none; }
+    .Unqualified, .qualified { margin-right:10px; }
+ 	.input-box { position: relative; display: inline-block; }
+    .input-box input { background-color: transparent;  background-image: none; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset; color: #555;  display: block;  font-size: 14px; line-height: 1.42857; padding: 6px 6px; transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;  width: 200px; display: inline; position: relative; z-index: 1;}
+    .tip-l {  width: 0;  height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 10px solid #555; display: inline-block; right: 10px; z-index: 0;  position: absolute;  top: 12px; }
+    .dropdown { position: absolute; top: 32px; left: 0px; width: 200px; background-color: #FFF; border: 1px solid #23a8ce; border-top: 0; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;  z-index: 999; padding: 0;  margin: 0; }
+    .dropdown li { display: block; line-height: 1.42857; padding: 0 6px; min-height: 1.2em; cursor: pointer; }
+    .dropdown li:hover {  background-color: #23a8ce;  color: #FFF; }
+    .colSm {  display:block; float:left; width:200px; }
+    .padding-right-0 { margin-left:10%; width:323px; height:200px; border:1px solid #eee; }
+    .delete { right:0; }
+    /*左右导航样式*/
+    .leftNav { position:absolute;top:61px;left:0;z-index:999; width:40px;height:489px; cursor:pointer;}
+	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 </style>
 	<style type="text/css">
 		body {min-width:auto;}
@@ -117,11 +41,9 @@
 </head>
 <body>
 	<div class="modal-content">
-	<div style="position:absolute;top:40%;left:5%;z-index:999;">
-			<a id="toPassport" onclick="passportBtn();">
-				<h1><</h1>
-			</a>
-		</div>
+		<a id="toPassport" class="leftNav" onclick="passportBtn();">
+			<span></span>
+		</a>
 		<form id="passportInfo">
 			<div class="modal-header">
 				<span class="heading">签证信息</span> 
@@ -141,7 +63,7 @@
 			</div>
 			<div class="modal-body">
 			<div class="ipt-info">
-					<input id="visaRemark" name="visaRemark" type="text" value="${obj.unqualified.visaRemark }" class="NoInfo" />
+					<input id="visaRemark" name="visaRemark" placeholder="请输入不合格原因" type="text" value="${obj.unqualified.visaRemark }" class="NoInfo" />
 				</div>
 				<div class="tab-content row">
 					<!-- 结婚状况 -->

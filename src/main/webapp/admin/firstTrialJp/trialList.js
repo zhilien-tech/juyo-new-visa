@@ -126,37 +126,44 @@ new Vue({
 		},
 		qualifiedFun:function(applyid,orderid,orderjpid){
 			//判断申请人是否合格
-			$.ajax({
-				type : 'POST',
-				data : {
-					applicantId:applyid
-				},
-				url : '/admin/firstTrialJp/isQualifiedByApplicantId.html',
-				success : function(data) {
-					if(data){
-						$.ajax({
-							type : 'POST',
-							data : {
-								applyid:applyid,
-								orderid:orderid,
-								orderjpid:orderjpid
-							},
-							url : '/admin/firstTrialJp/qualified.html',
-							success : function(data) {
-								successCallBack(3);
-							},
-							error : function(xhr) {
-								layer.msg("合格失败", "", 3000);
-							}
-						});
-					}else{
-						layer.msg("申请人不合格");
+			layer.confirm('您是确定要合格吗？', {
+				btn: ['是','否'] //按钮
+			}, function(){
+				$.ajax({
+					type : 'POST',
+					data : {
+						applicantId:applyid
+					},
+					url : '/admin/firstTrialJp/isQualifiedByApplicantId.html',
+					success : function(data) {
+						if(data){
+							$.ajax({
+								type : 'POST',
+								data : {
+									applyid:applyid,
+									orderid:orderid,
+									orderjpid:orderjpid
+								},
+								url : '/admin/firstTrialJp/qualified.html',
+								success : function(data) {
+									successCallBack(3);
+								},
+								error : function(xhr) {
+									layer.msg("合格失败", "", 3000);
+								}
+							});
+						}else{
+							layer.msg("申请人不合格");
+						}
+					},
+					error : function(xhr) {
+						layer.msg("操作失败");
 					}
-				},
-				error : function(xhr) {
-					layer.msg("操作失败");
-				}
+				});
+			}, function(){
+
 			});
+
 		},
 		unqualifiedFun:function(applyid,orderid){
 			layer.open({
@@ -274,5 +281,5 @@ function successCallBack(status){
 	});
 }
 function cancelCallBack(status){
-	successCallBack(1);
+
 }
