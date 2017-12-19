@@ -26,6 +26,7 @@
 			.info-body-from { margin-left:12%;}
 			.qz-head { position:fixed;top:0;left:0;z-index:99999; width:100%;}
 			.content { margin-top:50px;}
+			#urgentDays { width:14.2%;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">

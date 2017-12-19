@@ -22,15 +22,18 @@
 .nameBeforeHide ,.nationalityHide{ display:none; }
 .wordSpell { display:none; }
 .nationalityHide { margin-left:3%;}
+<!--  -->
+.rightNav { position:absolute;top:61px;right:2%;z-index:999; width:40px;height:489px; cursor:pointer;}
+.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
+<!--  -->
+.front, .back { margin-bottom:8px !important;}
 </style>
 </head>
 <body>
 	<div class="modal-content">
-		<div style="position:absolute;top:40%;right:5%;z-index:999;">
-			<a onclick="toPassport();">
-				<h1>></h1>
-			</a>
-		</div>
+		<a id="toPassport" class="rightNav" onclick="toPassport();">
+			<span></span>
+		</a>
 		<form id="applicantInfo">
 			<div class="modal-header">
 				<span class="heading">添加申请人</span> 
@@ -711,7 +714,7 @@
 		
 		//checkbox 曾用名
 		$(".nameBefore").change(function(){
-			let checked = $("input[name='nameBefore']:checked").val();
+			let checked = $("input[name='hasOtherName']:checked").val();
 			let checked2 = $("input[name='hasOtherNationality']:checked").val();
 			if(checked == 1){
 				$(".nameBeforeTop").css('float','none');
@@ -733,7 +736,7 @@
 		//曾用国籍
 		$(".onceID").change(function(){
 			let checked = $("input[name='hasOtherNationality']:checked").val();
-			let checked2 = $("input[name='nameBefore']:checked").val();
+			let checked2 = $("input[name='hasOtherName']:checked").val();
 			if(checked == 1){
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();

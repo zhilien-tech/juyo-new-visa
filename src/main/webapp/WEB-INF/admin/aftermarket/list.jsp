@@ -7,30 +7,20 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>签证-日本</title>
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-  <!-- <link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css"> -->
-  <!-- <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css"> -->
-  <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-  <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
-  <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
-  <!-- <script src="${base}/references/public/dist/newvisacss/js/html5shiv/html5shiv.js"></script>
-  <script src="${base}/references/public/dist/newvisacss/js/respond/respond.min.js"></script> -->
-  <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
-  <link rel="stylesheet" href="${base}/references/public/css/style.css">
-  <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
+    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
+    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+    <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
+    <link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<link rel="stylesheet" href="${base}/references/public/css/aftermarketjp.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
-	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-  <!-- <link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css"> -->
-  <!-- <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css"> -->
-  <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-  <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
-  <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
-  <!-- <script src="${base}/references/public/dist/newvisacss/js/html5shiv/html5shiv.js"></script>
-  <script src="${base}/references/public/dist/newvisacss/js/respond/respond.min.js"></script> -->
-  <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
-  <link rel="stylesheet" href="${base}/references/public/css/style.css">
-  <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
+	<style>
+	.box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
+	.box-body {  overflow:hidden;margin-top:60px;}
+	.card-head span { font-size:12px;}
+	</style>
+    <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<!-- <ul class="title">
@@ -69,7 +59,7 @@
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>	
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
-								<div><label>状态：</label><span>售后</span></div>	
+								<div><label>状态：</label><span style="font-size:16px;font-weight:bold;">售后</span></div>	
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="(item,index) in data.applicats">
