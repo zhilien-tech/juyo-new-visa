@@ -81,3 +81,17 @@ function save(){
 		});
 	}
 }
+
+//发送短信
+function sendMail(){
+	var applicantJPId = $('#applicantJPId').val();
+	$.ajax({
+		url: '/admin/aftermarket/sendMailAndMessage.html',
+		dataType:"json",
+		data:{applicantid:applicantJPId},
+		type:'post',
+		success: function(data){
+			layer.msg('发送成功');
+		}
+	});
+}

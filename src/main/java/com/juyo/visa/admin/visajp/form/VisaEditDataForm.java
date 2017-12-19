@@ -55,6 +55,8 @@ public class VisaEditDataForm {
 
 	private Date outvisadate;
 
+	private String sendvisanum;
+
 	private String realreceiveremark;
 
 	private Integer customerId;

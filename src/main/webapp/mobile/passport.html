@@ -112,6 +112,7 @@
         });
         //上一步
         $('.passport-prav').click(function(){
+        	savePassport();
         	var applicantid = GetQueryString('applicantid');
         	window.location.href='/mobile/info.html?applicantid='+applicantid;
         });
@@ -135,6 +136,9 @@
         });
         //下一步保存
         $('.passport-next').click(function(){
+        	savePassport();
+        });
+        function savePassport(){
         	var comid = GetQueryString('comid');
 			var userid = GetQueryString('userid');
 			var orderid = GetQueryString('orderid');
@@ -149,8 +153,7 @@
             		window.location.href='/mobile/visaInfo.html?comid='+comid+'&userid='+userid+'&orderid='+orderid+'&applicantid='+applicantid;
               	}
             });
-        });
-        
+        }
       	//获取URL地址参数
         function GetQueryString(name){
              var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");

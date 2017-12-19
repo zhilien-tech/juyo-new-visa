@@ -158,7 +158,7 @@
         		  });
         	},
         	sendInsurance:function(orderid,visastatus){
-        		 $.ajax({ 
+        		 $.ajax({
                  	url: '${base}/admin/visaJapan/sendInsurance',
                  	data:{orderid:orderid,visastatus:visastatus},
                  	dataType:"json",

@@ -5,10 +5,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
@@ -16,7 +21,10 @@ import com.juyo.visa.admin.mail.entities.MailContent;
 import com.juyo.visa.admin.mail.entities.MailSender;
 import com.juyo.visa.entities.TConfMailEntity;
 import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
+import com.we.business.sms.SMSService;
+import com.we.business.sms.impl.HuaxinSMSServiceImpl;
 
 /**
  * 邮箱service
@@ -26,6 +34,10 @@ public class MailService extends BaseService<TConfMailEntity> {
 
 	@Inject
 	private MailSender simpleMailSender;
+	@Inject
+	private RedisDao redisDao;
+
+	private final static String SMS_SIGNATURE = "【优悦签】";
 
 	/**
 	 * 发送邮件内容
@@ -146,4 +158,69 @@ public class MailService extends BaseService<TConfMailEntity> {
 		TEXT, HTML
 	}
 
+	/**
+	 * 发送HTML模板的邮件
+	 */
+	public Object sendHtml(String toEmail, Map<String, String> param, String tempurl, String subtitle) {
+		try {
+			List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(tempurl));
+			StringBuilder tmp = new StringBuilder();
+			for (String line : readLines) {
+				tmp.append(line);
+			}
+			String emailText = tmp.toString();
+			//替换文本
+			Set<Entry<String, String>> entrySet = param.entrySet();
+			for (Entry<String, String> entry : entrySet) {
+				emailText = emailText.replace(entry.getKey(), entry.getValue());
+			}
+			//发送邮件
+			send(toEmail, emailText, subtitle, Type.HTML);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 发送短信
+	 */
+	public String sendMessageByMap(String telephone, Map<String, String> param, String tempurl) {
+		try {
+			List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(tempurl));
+			StringBuilder tmp = new StringBuilder();
+			for (String line : readLines) {
+				tmp.append(line);
+			}
+			String messageText = tmp.toString();
+			//替换文本
+			Set<Entry<String, String>> entrySet = param.entrySet();
+			for (Entry<String, String> entry : entrySet) {
+				messageText = messageText.replace(entry.getKey(), entry.getValue());
+			}
+			//发送短信
+			sendSMS(telephone, messageText);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 发送手机短信
+	 * <p>
+	 * @param mobilenum  手机号
+	 * @param content  短信内容
+	 */
+	public String sendSMS(String mobilenum, String content) {
+		String result = "发送失败";
+		try {
+			SMSService smsService = new HuaxinSMSServiceImpl(redisDao);
+			smsService.send(mobilenum, SMS_SIGNATURE + content);
+			result = "发送成功";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

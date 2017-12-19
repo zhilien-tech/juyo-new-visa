@@ -159,6 +159,7 @@
 			//保存护照信息
 			$(document).on('blur','.passportInp',function(){
 				var thisval = $(this).val();
+				var thisobj = $(this);
 				var applicatid = $(this).parent().find('#applicatid').val();
 				$.ajax({ 
 	            	url: '${base}/admin/visaJapan/editPassportCount.html',
@@ -172,7 +173,11 @@
 					if($(this).text().indexOf("护照原件") !== -1){
 						$(this).text('护照原件'+thisval);
 						$(".passportInp").remove();
-						$(this).removeClass("titleStyle");
+						if(thisval){
+							$(this).addClass("titleStyle");
+						}else{
+							$(this).removeClass("titleStyle");
+						}
 					}
 				});
 			});

@@ -204,8 +204,9 @@ public class VisaJapanModule {
 	 */
 	@At
 	@POST
-	public Object saveRealInfoData(@Param("..") TOrderJpEntity orderjp, @Param("applicatinfo") String applicatinfo) {
-		return visaJapanService.saveRealInfoData(orderjp, applicatinfo);
+	public Object saveRealInfoData(@Param("..") TOrderJpEntity orderjp, @Param("applicatinfo") String applicatinfo,
+			HttpSession session) {
+		return visaJapanService.saveRealInfoData(orderjp, applicatinfo, session);
 	}
 
 	/**
@@ -270,8 +271,9 @@ public class VisaJapanModule {
 	 */
 	@At
 	@POST
-	public Object sendInsurance(@Param("orderid") Integer orderid, @Param("visastatus") Integer visastatus) {
-		return visaJapanSimulateService.sendInsurance(orderid, visastatus);
+	public Object sendInsurance(@Param("orderid") Integer orderid, @Param("visastatus") Integer visastatus,
+			HttpSession session) {
+		return visaJapanSimulateService.sendInsurance(orderid, visastatus, session);
 	}
 
 	/**

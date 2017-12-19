@@ -63,7 +63,7 @@
 			</div>
 			<div class="modal-body">
 			<div class="ipt-info">
-					<input id="visaRemark" name="visaRemark" type="text" value="${obj.unqualified.visaRemark }" class="NoInfo" />
+					<input id="visaRemark" name="visaRemark" placeholder="请输入不合格原因" type="text" value="${obj.unqualified.visaRemark }" class="NoInfo" />
 				</div>
 				<div class="tab-content row">
 					<!-- 结婚状况 -->

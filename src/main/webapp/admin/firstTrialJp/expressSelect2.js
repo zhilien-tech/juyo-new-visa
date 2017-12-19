@@ -125,6 +125,41 @@ $("#mobile").on('select2:unselect', function (evt) {
 	clearText();
 }); */
 
+$(function() {
+
+	$("#tableId tbody tr").each(function(i,ele_tr){
+		var applicantId = $(this).children().eq(0).html();
+		var ids = shareIds.split(",");
+		$.each(ids, function(j,shareid){
+			if(applicantId == shareid){
+				$("#tableId tbody tr").eq(i).addClass("trColor");
+			} 
+		});   
+	});
+	
+	$(document).on("click",".tableTr",function(){
+		var sharetype = $("#shareType").val();
+		if(sharetype == 2){//单独分享
+			if($(this).hasClass("trColor")){
+				$(this).removeClass("trColor");
+			}else{
+				$(this).addClass("trColor");
+			}
+		}else if(sharetype == 1){//统一联系人
+			$(this).addClass("trColor").siblings("tr").removeClass("trColor");
+		}
+	});
+
+	$("#shareType").change(function(){
+		$("#tableId tbody tr").each(function(){
+			if($(this).hasClass("trColor")){
+				$(this).removeClass("trColor");
+			}
+		});
+	});
+
+});
+
 function clearText(){
 	$("#receiver").val(null).trigger("change");
 	$("#mobile").val(null).trigger("change");
@@ -136,11 +171,25 @@ function clearText(){
 //保存
 function save(orderid,orderjpid){
 
-	var applicant_tbody = $("#applicant_tbody").is(":empty");
+	/*	var applicant_tbody = $("#applicant_tbody").is(":empty");
 	if (applicant_tbody) {
 		layer.msg('申请人信息不能为空');
 		return;
+	}*/
+	var applicant_share = true;
+	var shareManIds = "";
+	$("#tableId tbody tr").each(function(){
+		if($(this).hasClass("trColor")){
+			applicant_share = false;
+			var applicantId = $(this).children().eq(0).html();
+			shareManIds += applicantId + ",";
+		}
+	});
+	if (applicant_share || shareManIds=="") {
+		layer.msg('申请人未选择');
+		return;
 	}
+
 	var receiveAddress = $("#receiveAddressId").val();
 	if (receiveAddress == "") {
 		layer.msg('收件人信息不能为空');
@@ -154,9 +203,11 @@ function save(orderid,orderjpid){
 			orderid:orderid,
 			orderjpid:orderjpid,
 			expresstype:$("#express").val(),
+			sharetype:$("#shareType").val(),
 			receiver:$("#receiver").val(),
 			mobile:$("#mobile").val(),
 			expressaddress:$("#address").val(),
+			shareManIds:shareManIds
 			//receiveAddressId:$("#receiveAddressId").val()
 		},
 		success: function(data){
@@ -221,7 +272,7 @@ $("#receiver").on('input',function(){
 			});
 			liStr += "</ul>";
 			$("#receiver").after(liStr);
-			
+
 			$('.ui-menu-item').first().addClass('bg');
 			$('.ui-menu-item').hover(function(){
 				$(this).addClass('bg').siblings().removeClass('bg');
@@ -250,7 +301,7 @@ $("#mobile").on('input',function(){
 			});
 			liStr += "</ul>";
 			$("#mobile").after(liStr);
-			
+
 			$('.ui-menu-item').first().addClass('bg');
 			$('.ui-menu-item').hover(function(){
 				$(this).addClass('bg').siblings().removeClass('bg');
