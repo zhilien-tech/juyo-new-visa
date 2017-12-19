@@ -355,9 +355,19 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		sql.setParam("orderid", orderid);
 		Record orderReceive = dbDao.fetch(sql);
 		result.put("orderReceive", orderReceive);
+		String expressType = orderReceive.getString("expresstype");
+		if (Util.isEmpty(expressType)) {
+			Map<String, Object> map = getSameApplicantByOrderid(orderjpid);
+			List<Record> sameMans = (List<Record>) map.get("applicant");
+			if (sameMans.size() > 0) {
+				expressType = ShareTypeEnum.UNIFIED.intKey() + "";
+			} else {
+				expressType = ShareTypeEnum.SINGLE.intKey() + "";
+			}
+		}
+		orderReceive.set("expresstype", expressType);
 
 		String shareIds = orderReceive.getString("sharemanids");
-
 		if (Util.isEmpty(shareIds)) {
 			List<TApplicantOrderJpEntity> applicants = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("isShareSms", "=", YES), null);
