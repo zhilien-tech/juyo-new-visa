@@ -31,6 +31,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
 import com.juyo.visa.admin.visajp.form.PassportForm;
@@ -49,6 +50,8 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.util.MapUtil;
+import com.juyo.visa.entities.TApplicantEntity;
+import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantVisaJpEntity;
@@ -86,6 +89,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	private QrCodeService qrCodeService;
 	@Inject
 	private OrderJpViewService orderJpViewService;
+	@Inject
+	private MailService mailService;
+
+	//签证实收通知销售手机短信模板
+	private static final String VISA_NOTICE_SALE_MESSAGE_TMP = "messagetmp/visa_notice_sale_message_tmp.txt";
 
 	/**
 	 * 签证列表数据
@@ -806,7 +814,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			}
 			List<TApplicantVisaPaperworkJpEntity> revenue = dbDao.query(TApplicantVisaPaperworkJpEntity.class,
 					Cnd.where("applicantId", "=", apply.get("applicatid")), null);
+			List<TApplicantFrontPaperworkJpEntity> frontrevenue = dbDao.query(TApplicantFrontPaperworkJpEntity.class,
+					Cnd.where("applicantId", "=", apply.get("applicatid")), null);
 			apply.put("revenue", revenue);
+			apply.put("frontrevenue", frontrevenue);
 		}
 		result.put("applicant", query);
 		result.put("orderid", orderid);
@@ -1151,5 +1162,55 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//添加日志
 		orderJpViewService.insertLogs(orderinfo.getId(), JPOrderStatusEnum.AFTERMARKET_ORDER.intKey(), session);
 		return "success";
+	}
+
+	/**
+	 * 通知销售
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param applyid
+	 * @return TODO 申请人id
+	 */
+	public Object noticeSale(Integer applyid) {
+		//申请人信息
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applyid.longValue());
+		//日本申请人信息
+		TApplicantOrderJpEntity applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applyid));
+		//日本订单 信息
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, applicantjp.getOrderId().longValue());
+		//订单信息
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		//资料信息
+		List<TApplicantVisaPaperworkJpEntity> materials = dbDao.query(TApplicantVisaPaperworkJpEntity.class,
+				Cnd.where("applicantId", "=", applicantjp.getId()), null);
+		//销售人员信息
+		TUserEntity saleinfo = dbDao.fetch(TUserEntity.class, order.getUserId().longValue());
+		//销售人员手机号
+		String mobile = saleinfo.getMobile();
+		//订单号
+		String ordernum = order.getOrderNum();
+		//姓名
+		String name = applicant.getFirstName() + applicant.getLastName();
+		//手机号
+		String telephone = applicant.getTelephone();
+		//缺少的资料
+		StringBuffer data = new StringBuffer("");
+		for (TApplicantVisaPaperworkJpEntity tApplicantVisaPaperworkJpEntity : materials) {
+			if (tApplicantVisaPaperworkJpEntity.getStatus().equals(1)) {
+				data.append(tApplicantVisaPaperworkJpEntity.getRealInfo());
+				data.append("、");
+			}
+		}
+		String datastr = data.toString();
+		datastr = datastr.substring(0, datastr.length() - 1);
+		Map<String, String> param = Maps.newHashMap();
+		param.put("${name}", name);
+		param.put("${ordernum}", ordernum);
+		param.put("${telephone}", telephone);
+		param.put("${data}", datastr);
+		mailService.sendMessageByMap(mobile, param, VISA_NOTICE_SALE_MESSAGE_TMP);
+		return null;
 	}
 }

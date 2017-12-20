@@ -194,6 +194,20 @@ new Vue({
 				area: ['1000px', '750px'],
 				content: '/admin/visaJapan/visaInput.html?applyid='+applyId
 			});
+		},
+		//通知销售
+		noticeSale:function(applyid){
+			layer.load(1);
+			$.ajax({ 
+				url: '/admin/visaJapan/noticeSale.html',
+				dataType:"json",
+				data:{applyid:applyid},
+				type:'post',
+				success: function(data){
+					layer.closeAll('loading');
+					layer.msg('通知成功');
+				}
+			});
 		}
 	}
 });

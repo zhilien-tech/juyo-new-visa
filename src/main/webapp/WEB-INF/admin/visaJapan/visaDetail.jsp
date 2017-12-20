@@ -32,13 +32,15 @@
 			.content { margin-top:50px;}
 			#urgentday { width:16.5%;}
 			.bodyMargin { margin-left:12%;}
-			#applicantTable tbody tr td:nth-child(1){width: 10%;}
+			#applicantTable tbody tr td:nth-child(1){width: 1%;}
 			#applicantTable tbody tr td:nth-child(2){width: 10%;}
 			#applicantTable tbody tr td:nth-child(3){width: 10%;}
 			#applicantTable tbody tr td:nth-child(4){width: 10%;}
-			#applicantTable tbody tr td:nth-child(5){width: 19%;}
-			#applicantTable tbody tr td:nth-child(6){width: 10%;}
+			#applicantTable tbody tr td:nth-child(5){width: 10%;}
+			#applicantTable tbody tr td:nth-child(6){width: 19%;}
 			#applicantTable tbody tr td:nth-child(7){width: 16%;}
+			#applicantTable tbody tr td:nth-child(8){width: 5%;}
+			#applicantTable tbody tr td:nth-child(9){width: 16%;}
 			#schedulingTable thead tr th:nth-child(1){width:8%;}
 			#schedulingTable thead tr th:nth-child(2){width:10%;}
 			#schedulingTable thead tr th:nth-child(3){width:12%;}
@@ -255,6 +257,7 @@
 							<table id="applicantTable" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
+										<th><span>&nbsp; <span></th>
 										<th><span>姓名<span></th>
 										<th><span>电话<span></th>
 										<th><span>护照号<span></th>
@@ -262,7 +265,7 @@
 										<th><span>所需资料<span></th>
 										<th><span>递送方式<span></th>
 										<th><span>备注<span></th>
-										<th width="25%"><span>操作<span></th>
+										<th><span>操作<span></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -278,11 +281,12 @@
 										<td>{{apply.passport}}</td>
 										<td>{{apply.type}}</td>
 										<td v-html="apply.realinfo"></td>
-										<td v-if="(apply.expresstype == 1)"><a href="https://www.ickd.cn/" target="view_window">{{apply.expressnum}}</a></td>
+										<td> <span v-if="(apply.expresstype == 1)"><a href="https://www.ickd.cn/" target="view_window">{{apply.expressnum}}</a></span></td>
 										<td>{{apply.mainrelation}}</td>
 										<td><a v-on:click="updateApplicant(apply.id)">基本信息</a>&nbsp;
 											<a v-on:click="passport(apply.id)">护照信息</a>&nbsp;
 											<a v-on:click="visa(apply.id)">签证信息</a>&nbsp;
+											<a v-on:click="noticeSale(apply.id)">通知销售</a>&nbsp;
 											<a v-on:click="visainput(apply.applyid)">签证录入</a>
 										</td>
 									</tr>
