@@ -221,7 +221,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '551px'],
-					content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='
+					content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+'&isTrial=0'
 				});
 			}
 			

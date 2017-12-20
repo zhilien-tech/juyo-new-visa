@@ -41,7 +41,7 @@
 					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
 					data-dismiss="modal" value="取消" /> <input id="addBtn"
 					type="button" class="btn btn-primary pull-right btn-sm btn-right"
-					value="保存" onclick="saveApplicant(1);" />
+					value="保存" onclick="saveApplicant(1)" />
 					<c:choose>
 						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
 					<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
@@ -410,6 +410,11 @@
 				$(".ipt-info").show();
 			}
 			
+			//非初审环节，隐藏合格不合格按钮
+			if(!${obj.isTrailOrder}){
+				$("#qualifiedBtn").hide();
+				$("#unqualifiedBtn").hide();
+			}
 			
 			var nation = ${obj.applicant.hasOtherNationality};
 			var otherName = ${obj.applicant.hasOtherName};
@@ -500,58 +505,6 @@
 				$("#uploadFileBack").siblings("i").css("display","none");
 			} 
 		});
-		
-		//var base = "${base}";
-		function saveApplicant(status){
-			//得到获取validator对象或实例 
-			var bootstrapValidator = $("#applicantInfo").data(
-					'bootstrapValidator');
-			// 执行表单验证 
-			bootstrapValidator.validate();
-			if (bootstrapValidator.isValid()){
-				//获取必填项信息
-				var firstName = $("#firstName").val();
-				if (firstName == "") {
-					layer.msg('姓不能为空');
-					return;
-				}
-				var lastName = $("#lastName").val();
-				if (lastName == "") {
-					layer.msg('名不能为空');
-					return;
-				}
-				
-			var str="";
-			var applicantInfo;
-			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
-			    str=$(this).val();     
-			});
-			if(str != 1){
-				applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
-			}else{
-				applicantInfo = $("#applicantInfo").serialize();
-			}
-			
-			var applicantId = ${obj.applicantId};
-			applicantInfo.id = applicantId;
-			$.ajax({
-				async: false,
-				type: 'POST',
-				data : applicantInfo,
-				url: '${base}/admin/orderJp/saveEditApplicant',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-					//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					//layer.close(index);
-					if(status == 1){
-						closeWindow();
-						parent.successCallBack(1);
-					}
-				}
-			});
-			}
-		}
 		
 		//国籍检索
 		$("#nationality").on('input',function(){
@@ -913,7 +866,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid,
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=0',
 				success: function(index, layero){
 				    //do something
 				    layer.close(index); //如果设定了yes回调，需进行手工关闭
@@ -950,6 +903,58 @@
 				}
 			});
 		});
+		
+		function saveApplicant(status){
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#applicantInfo").data(
+					'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			if (bootstrapValidator.isValid()){
+				//获取必填项信息
+				var firstName = $("#firstName").val();
+				if (firstName == "") {
+					layer.msg('姓不能为空');
+					return;
+				}
+				var lastName = $("#lastName").val();
+				if (lastName == "") {
+					layer.msg('名不能为空');
+					return;
+				}
+				
+			var str="";
+			var applicantInfo;
+			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+			    str=$(this).val();     
+			});
+			if(str != 1){
+				applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
+			}else{
+				applicantInfo = $("#applicantInfo").serialize();
+			}
+			
+			var applicantId = ${obj.applicantId};
+			applicantInfo.id = applicantId;
+			$.ajax({
+				async: false,
+				type: 'POST',
+				data : applicantInfo,
+				url: '${base}/admin/orderJp/saveEditApplicant',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+					//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					//layer.close(index);
+					if(status == 1){
+						closeWindow();
+						parent.successCallBack(1);
+					}
+				}
+			});
+			}
+		}
+		
 	</script>
 </body>
 </html>
