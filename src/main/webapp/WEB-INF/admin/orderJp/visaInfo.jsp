@@ -348,7 +348,7 @@
 			}
 			
 			//初审环节，显示合格不合格按钮
-			if(${obj.isTrailOrder}){
+			if(${obj.isTrailOrder} == 1){
 				$("#qualifiedBtn").show();
 				$("#unqualifiedBtn").show();
 			}
@@ -715,7 +715,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=0'
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder}
 			});
 		}
 		

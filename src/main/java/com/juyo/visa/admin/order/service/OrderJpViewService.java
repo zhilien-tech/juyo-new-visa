@@ -776,10 +776,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		Map<String, Object> result = Maps.newHashMap();
 		if (isTrial == 0) {
-			result.put("isTrailOrder", false);
+			result.put("isTrailOrder", IsYesOrNoEnum.NO.intKey());
 		} else {
 			//初审环节操作
-			result.put("isTrailOrder", true);
+			result.put("isTrailOrder", IsYesOrNoEnum.YES.intKey());
 		}
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -979,10 +979,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime, Integer isTrial) {
 		Map<String, Object> result = MapUtil.map();
 		if (isTrial == 0) {
-			result.put("isTrailOrder", false);
+			result.put("isTrailOrder", IsYesOrNoEnum.NO.intKey());
 		} else {
 			//初审环节操作
-			result.put("isTrailOrder", true);
+			result.put("isTrailOrder", IsYesOrNoEnum.YES.intKey());
 		}
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", id));
@@ -1053,10 +1053,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object getEditPassport(Integer applicantId, Integer orderid, HttpServletRequest request, Integer isTrial) {
 		Map<String, Object> result = MapUtil.map();
 		if (isTrial == 0) {
-			result.put("isTrailOrder", false);
+			result.put("isTrailOrder", IsYesOrNoEnum.NO.intKey());
 		} else {
 			//初审环节操作
-			result.put("isTrailOrder", true);
+			result.put("isTrailOrder", IsYesOrNoEnum.YES.intKey());
 		}
 		String passportSqlstr = sqlManager.get("orderJp_list_passportInfo_byApplicantId");
 		Sql passportSql = Sqls.create(passportSqlstr);
