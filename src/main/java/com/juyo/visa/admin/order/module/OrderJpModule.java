@@ -222,8 +222,8 @@ public class OrderJpModule {
 	@GET
 	@Ok("jsp")
 	public Object passportInfo(@Param("applicantId") Integer id, @Param("orderid") Integer orderid,
-			@Param("isTrial") Integer isTrial) {
-		return saleViewService.getEditPassport(id, orderid, isTrial);
+			HttpServletRequest request, @Param("isTrial") Integer isTrial) {
+		return saleViewService.getEditPassport(id, orderid, request, isTrial);
 	}
 
 	/**

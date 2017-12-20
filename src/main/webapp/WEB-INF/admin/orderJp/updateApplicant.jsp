@@ -370,6 +370,40 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript">
 	
+	//连接websocket
+	connectWebSocket();
+	function connectWebSocket(){
+		 if ('WebSocket' in window){  
+            console.log('Websocket supported');  
+            var socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+
+            console.log('Connection attempted');  
+
+            socket.onopen = function(){  
+                 console.log('Connection open!');  
+                 //setConnected(true);  
+             };
+
+            socket.onclose = function(){  
+                console.log('Disconnecting connection');  
+            };
+
+            socket.onmessage = function (evt){   
+                  var received_msg = evt.data;  
+                  var applicantId = '${obj.applicantId}';
+                  var receiveMessage = JSON.parse(received_msg);
+                  if(receiveMessage.messagetype == 1 && receiveMessage.applicantid == applicantId){
+                	  window.location.reload();
+                  }
+                  console.log(received_msg);  
+                  console.log('message received!');  
+                  //showMessage(received_msg);  
+              };  
+
+          } else {  
+            console.log('Websocket not supported');  
+          }  
+	}
 		$(function(){
 			var remark = $("#baseRemark").val();
 			if(remark != ""){

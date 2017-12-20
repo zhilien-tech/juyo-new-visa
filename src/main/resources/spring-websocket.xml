@@ -14,5 +14,5 @@
  <!--<mvc:resources mapping="/res/**" location="/res/" cache-period="0"/>-->
  <!-- 开启默认处理对静态资源文件的访问  方案二 （二选一）-->
  <mvc:default-servlet-handler/>
-
+	<bean id="springContextUtil" class="com.juyo.visa.common.util.SpringContextUtil"></bean>
 </beans>
