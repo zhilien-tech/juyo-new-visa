@@ -837,6 +837,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("applicant", applicantEntity);
 		result.put("orderJpId", orderJpEntity.getId());
+		result.put("orderid", orderEntity.getId());
 		result.put("infoType", ApplicantInfoTypeEnum.BASE.intKey());
 		result.put("applicantId", id);
 		return result;
