@@ -166,7 +166,7 @@ new Vue({
 
 		},
 		unqualifiedFun:function(applyid,orderid){
-			layer.open({
+			/*layer.open({
 				type: 2,
 				title: false,
 				closeBtn:false,
@@ -176,6 +176,20 @@ new Vue({
 				scrollbar: false,
 				area: ['800px', '402px'],
 				content: '/admin/firstTrialJp/unqualified.html?applyid='+applyid+'&orderid='+orderid
+			});*/
+			$.ajax({
+				type : 'POST',
+				data : {
+					applicantId:applyid,
+					orderId:orderid
+				},
+				url : '/admin/firstTrialJp/sendUnqualifiedMsg.html',
+				success : function(data) {
+					unqualifiedCallBack(data);
+				},
+				error : function(xhr) {
+					layer.msg("操作失败");
+				}
 			});
 		}
 	}
@@ -282,7 +296,7 @@ function successCallBack(status){
 }
 
 function unqualifiedCallBack(username){
-	layer.msg('已短信邮件通知'+username);
+	layer.msg('已短信邮件通知 '+username);
 	$.ajax({ 
 		url: url,
 		/* data:{status:status,searchStr:searchStr}, */

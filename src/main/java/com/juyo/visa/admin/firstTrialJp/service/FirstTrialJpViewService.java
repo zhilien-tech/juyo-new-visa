@@ -1522,4 +1522,28 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		return result;
 	}
+
+	//不合格发送短信邮件
+	public String sendUnqualifiedMsg(Integer applicantId, Integer orderid, HttpServletRequest request) {
+
+		String pcUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
+		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+				+ "/mobile/info.html?applicantid=" + applicantId;
+		//转换长连接为短地址
+		mobileUrl = getEncryptlink(mobileUrl, request);
+
+		try {
+			//发送不合格消息
+			sendApplicantVerifySMS(applicantId, orderid, mobileUrl, "applicant_unqualified_sms.txt");
+			//发送不合格邮件
+			sendApplicantVerifyEmail(applicantId, orderid, pcUrl, "applicant_unqualified_mail.html");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantId.longValue());
+		String firstName = applicant.getFirstName();
+		String lastName = applicant.getLastName();
+		String username = firstName + lastName;
+		return username;
+	}
 }
