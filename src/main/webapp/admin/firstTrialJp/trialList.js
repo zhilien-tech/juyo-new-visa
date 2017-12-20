@@ -280,6 +280,20 @@ function successCallBack(status){
 		}
 	});
 }
+
+function unqualifiedCallBack(username){
+	layer.msg('已短信邮件通知'+username);
+	$.ajax({ 
+		url: url,
+		/* data:{status:status,searchStr:searchStr}, */
+		dataType:"json",
+		type:'post',
+		success: function(data){
+			_self.trialJapanData = data.trialJapanData;
+		}
+	});
+}
+
 function cancelCallBack(status){
 
 }

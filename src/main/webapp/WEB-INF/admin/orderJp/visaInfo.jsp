@@ -719,6 +719,7 @@
 		});
 		$(".qualifiedBtn").click(function(){
 			$(".ipt-info").slideUp();
+			$("#visaRemark").val("");
 			var applicantId = ${obj.applicant.id};
 			var orderid = ${obj.orderid};
 			var orderJpId = ${obj.orderJpId};
@@ -737,7 +738,6 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					$("#baseRemark").val("");
 					save(1);
 				}
 			});

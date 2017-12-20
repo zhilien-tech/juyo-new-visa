@@ -376,6 +376,11 @@
 				$(".ipt-info").show();
 			}
 			
+			var orderid = ${obj.orderid};
+			if(orderid == "" || orderid == null || orderid == undefined){
+				$("#qualifiedBtn").hide();
+				$("#unqualifiedBtn").hide();
+			}
 			
 			var nation = ${obj.applicant.hasOtherNationality};
 			var otherName = ${obj.applicant.hasOtherName};
