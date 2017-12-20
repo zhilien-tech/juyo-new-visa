@@ -347,6 +347,12 @@
 				$(".ipt-info").show();
 			}
 			
+			//非初审环节，隐藏合格不合格按钮
+			if(!${obj.isTrailOrder}){
+				$("#qualifiedBtn").hide();
+				$("#unqualifiedBtn").hide();
+			}
+			
 			var marry = $("#marryUrl").val();
 			if(marry != ""){
 				$("#uploadFile").siblings("i").css("display","block");
@@ -709,7 +715,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=0'
 			});
 		}
 		
@@ -719,6 +725,7 @@
 		});
 		$(".qualifiedBtn").click(function(){
 			$(".ipt-info").slideUp();
+			$("#visaRemark").val("");
 			var applicantId = ${obj.applicant.id};
 			var orderid = ${obj.orderid};
 			var orderJpId = ${obj.orderJpId};
@@ -737,7 +744,6 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					$("#baseRemark").val("");
 					save(1);
 				}
 			});

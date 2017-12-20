@@ -259,4 +259,14 @@ public class FirstTrialJpModule {
 		return firstTrialJpViewService.isQualifiedByApplicantId(applicantId);
 	}
 
+	/**
+	 * 不合格发送短信邮件
+	 */
+	@At
+	@POST
+	public String sendUnqualifiedMsg(@Param("applicantId") Integer applicantId, @Param("orderId") Integer orderId,
+			HttpServletRequest request) {
+		return firstTrialJpViewService.sendUnqualifiedMsg(applicantId, orderId, request);
+	}
+
 }

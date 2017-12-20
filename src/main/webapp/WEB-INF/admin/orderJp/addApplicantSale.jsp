@@ -773,7 +773,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'+'&isTrial=0'
 			});
 		}
 		function successCallBack(status){
