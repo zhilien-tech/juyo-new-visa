@@ -1,6 +1,6 @@
 $(function() {
 	
-	$("#tableId tbody tr").each(function(i,ele_tr){
+	$("#applicant_tbody tr").each(function(i,ele_tr){
 		var applicantId = $(this).children().eq(0).html();
 		var ids = shareIds.split(",");
 		$.each(ids, function(j,shareid){
