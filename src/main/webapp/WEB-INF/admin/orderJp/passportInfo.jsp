@@ -43,8 +43,8 @@
 				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 				<c:choose>
 						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
-					<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
-				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
+					<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
+				<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>
@@ -214,10 +214,10 @@
 		var base = "${base}";
 		$(function() {
 			
-			//非初审环节，隐藏合格不合格按钮
-			if(!${obj.isTrailOrder}){
-				$("#qualifiedBtn").hide();
-				$("#unqualifiedBtn").hide();
+			//初审环节，显示合格不合格按钮
+			if(${obj.isTrailOrder}){
+				$("#qualifiedBtn").show();
+				$("#unqualifiedBtn").show();
 			}
 			
 			//校验
