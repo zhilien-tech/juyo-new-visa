@@ -376,8 +376,8 @@
 				$(".ipt-info").show();
 			}
 			
-			var orderid = ${obj.orderid};
-			if(orderid == "" || orderid == null || orderid == undefined){
+			//非初审环节，隐藏合格不合格按钮
+			if(!${obj.isTrailOrder}){
 				$("#qualifiedBtn").hide();
 				$("#unqualifiedBtn").hide();
 			}
@@ -884,7 +884,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid,
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=0',
 				success: function(index, layero){
 				    //do something
 				    layer.close(index); //如果设定了yes回调，需进行手工关闭

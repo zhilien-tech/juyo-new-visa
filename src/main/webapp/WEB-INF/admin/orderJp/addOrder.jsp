@@ -834,7 +834,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '551px'],
-					content:'/admin/orderJp/updateApplicant.html?id='+id
+					content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=0'
 				});
 			}
 				
@@ -850,7 +850,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '551px'],
-					content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid'
+					content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid'+'&isTrial=0'
 				});
 			}
 			
@@ -865,7 +865,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '551px'],
-					content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid'+'&isOrderUpTime'
+					content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid'+'&isOrderUpTime&isTrial=0'
 				});
 			}
 			

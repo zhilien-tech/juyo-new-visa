@@ -767,11 +767,18 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object updateApplicant(Integer id, Integer orderid, HttpServletRequest request) {
+	public Object updateApplicant(Integer id, Integer orderid, Integer isTrial, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+
 		Map<String, Object> result = Maps.newHashMap();
+		if (isTrial == 0) {
+			result.put("isTrailOrder", false);
+		} else {
+			//初审环节操作
+			result.put("isTrailOrder", true);
+		}
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		if (!Util.isEmpty(applicantEntity.getBirthday())) {
@@ -831,9 +838,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("applicant", applicantEntity);
 		result.put("orderJpId", orderJpEntity.getId());
 		result.put("infoType", ApplicantInfoTypeEnum.BASE.intKey());
-		result.put("orderid", orderJpEntity.getOrderId());
 		result.put("applicantId", id);
 		return result;
+	}
+
+	//判断订单是否是进入初审环节
+	public boolean isTrailOrder(Integer orderid) {
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+		Integer status = order.getStatus();
+		boolean istrial = false;
+		if (status >= JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey() && status <= JPOrderStatusEnum.SEND_ADDRESS.intKey()) {
+			istrial = true;
+		}
+		return istrial;
 	}
 
 	public Object saveEditApplicant(TApplicantForm applicantForm, HttpSession session) {
@@ -952,8 +969,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return applicantInfoMainId;
 	}
 
-	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime) {
+	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime, Integer isTrial) {
 		Map<String, Object> result = MapUtil.map();
+		if (isTrial == 0) {
+			result.put("isTrailOrder", false);
+		} else {
+			//初审环节操作
+			result.put("isTrailOrder", true);
+		}
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", id));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
@@ -1020,8 +1043,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object getEditPassport(Integer applicantId, Integer orderid) {
+	public Object getEditPassport(Integer applicantId, Integer orderid, Integer isTrial) {
 		Map<String, Object> result = MapUtil.map();
+		if (isTrial == 0) {
+			result.put("isTrailOrder", false);
+		} else {
+			//初审环节操作
+			result.put("isTrailOrder", true);
+		}
 		String passportSqlstr = sqlManager.get("orderJp_list_passportInfo_byApplicantId");
 		Sql passportSql = Sqls.create(passportSqlstr);
 		passportSql.setParam("id", applicantId);

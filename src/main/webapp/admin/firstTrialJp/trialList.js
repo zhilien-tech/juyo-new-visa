@@ -53,7 +53,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '550px'],
-				content: '/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+orderid
+				content: '/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+orderid+'&isTrial=1'
 			});
 		},
 		expressFun:function(orderid,orderjpid){//跳转快递弹层页面
@@ -108,7 +108,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '550px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid+'&isTrial=1'
 			});
 		},
 		visaInfoFun:function(applyid,orderid){
@@ -121,7 +121,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime=1'
+				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime=1&isTrial=1'
 			});
 		},
 		qualifiedFun:function(applyid,orderid,orderjpid){
