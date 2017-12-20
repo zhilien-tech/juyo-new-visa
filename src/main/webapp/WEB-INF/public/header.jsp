@@ -18,6 +18,15 @@
   <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
   <link rel="stylesheet" href="${base}/references/public/css/style.css">
   <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
+  <script>
+  $(function(){
+	  $(document).on('click',".dropdown-toggle",function(){
+		  $(".menu1").removeClass('active');
+		  $(".menu-ul").hide();
+		  $(".menu-ul li").removeClass("activeTwo");
+	  });
+  })
+  </script>
   <style>
   .main-header .logo { width:220px;}
   .main-header .navbar { margin-left:220px;}
@@ -42,7 +51,7 @@
             <span class="dian"></span>
           </li>
           <li class="dropdown messages-menu">
-            <a id="psersonal" href="${base}/admin/personalInfo/listInfo.html" class="dropdown-toggle name" data-toggle="dropdown">${loginuser.name}</a>
+            <a id="psersonal" href="${base}/admin/personalInfo/listInfo.html" target="main" class="dropdown-toggle name" data-toggle="dropdown">${loginuser.name}</a>
           </li>
           <%-- <li class="setUp-li">
              <a href="javascript:;">设置<img class="setUp" src="${base}/references/public/dist/newvisacss/img/setUp.jpg"></a>
