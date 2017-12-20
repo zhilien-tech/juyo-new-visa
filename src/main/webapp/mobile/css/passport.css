@@ -431,6 +431,7 @@ input[type="checkbox"] + label:after {
 	width: 78%;
 }
 .onOff {
+	clear:both;
 	float: right;
 	height: .8rem;
 }

@@ -21,14 +21,14 @@
 		<!-- 上传证件 -->
 		<div class="uploading">
 			<a class="clickUploading">
-				<img id="marrycardurl" src="images/u5502.png" />
+				<img src="images/u5502.png" />
 				<span>图案</span>
 			</a>
 		</div>
 		<!-- 相机 -->
 		<div class="camera">
 			<a class="cameraMain" id="upload">
-				<img src="images/u5504.png" />
+				<img id="marrycardurl" src="images/u5504.png" />
 			</a>
 			<input type="file" id="image" style="display:none;" name="image">
 		</div>
@@ -92,6 +92,9 @@
 					//关闭加载层
 					layer.close(layerIndex);
 					$('#marrycardurl').attr('src',obj.data);
+					$('#marrycardurl').attr('width','100%');
+        			$('#marrycardurl').attr('height','100%');
+        			$('#marrycardurl').css({'top':'0%','right':'0%'});
 					var applicantid = GetQueryString('applicantid');
 					var marryurltype = GetQueryString('marryurltype');
 					//保存图片信息
@@ -132,6 +135,9 @@
         	success: function(data){
         		if(data.applicatdata.marryurltype == marryurltype){
         			$('#marrycardurl').attr('src',data.applicatdata.marryurl);
+        			$('#marrycardurl').attr('width','100%');
+        			$('#marrycardurl').attr('height','100%');
+        			$('#marrycardurl').css({'top':'0%','right':'0%'});
         		}
           	}
         });
