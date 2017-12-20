@@ -1,140 +1,13 @@
-/*$(function() {
-	$("#receiver").select2({
-		ajax : {
-			url : BASE_PATH+'/admin/firstTrialJp/getRAddressSelect.html',
-			dataType : 'json',
-			delay : 250,
-			type : 'post',
-			data : function(params) {
-				return {
-					searchStr : params.term, // search term
-					type: "usernameType",
-					page : params.page
-				};
-			},
-			processResults : function(data, params) {
-				params.page = params.page || 1;
-				var selectdata = $.map(data, function (obj) {
-					obj.id = obj.id; // replace pk with your identifier
-					obj.text = obj.receiver; // replace pk with your identifier
-					return obj;
-				});
-				return {
-					results : selectdata
-				};
-			},
-			cache : true
-		},
-
-		escapeMarkup : function(markup) {
-			return markup;
-		}, // let our custom formatter work
-		minimumInputLength : 1,
-		maximumInputLength : 20,
-		language : "zh-CN", //设置 提示语言
-		maximumSelectionLength : 1, //设置最多可以选择多少项
-		tags : false //设置必须存在的选项 才能选中
-	});
-
-	$("#mobile").select2({
-		ajax : {
-			url : BASE_PATH+'/admin/firstTrialJp/getRAddressSelect.html',
-			dataType : 'json',
-			delay : 250,
-			type : 'post',
-			data : function(params) {
-				return {
-					searchStr : params.term, // search term
-					type: "mobileType",
-					page : params.page
-				};
-			},
-			processResults : function(data, params) {
-				params.page = params.page || 1;
-				var selectdata = $.map(data, function (obj) {
-					obj.id = obj.id; // replace pk with your identifier
-					obj.text = obj.mobile; // replace pk with your identifier
-					return obj;
-				});
-				return {
-					results : selectdata
-				};
-			},
-			cache : true
-		},
-
-		escapeMarkup : function(markup) {
-			return markup;
-		}, // let our custom formatter work
-		minimumInputLength : 1,
-		maximumInputLength : 20,
-		language : "zh-CN", //设置 提示语言
-		maximumSelectionLength : 1, //设置最多可以选择多少项
-		tags : false //设置必须存在的选项 才能选中
-	});
-});*/
-
-/*$("#receiver").on('select2:select', function (evt) {
-	var addressId = $(this).select2("val");
-	$("#receiveAddressId").val(addressId);
-	$.ajax({
-		type : 'POST',
-		data : {
-			"addressId":$("#receiveAddressId").val()
-		},
-		dataType:'json',
-		url : BASE_PATH+'/admin/firstTrialJp/getRAddressById.html',
-		success : function(data) {
-			$("#receiveAddressId").val(data.id);
-			$("#address").val(data.address);
-			$("#mobile option").remove(); 
-			$("#mobile").append('<option selected="true" value='+ addressId +'>'+data.mobile+'</option>'); 
-		},
-		error : function() {
-		}
-	});
-
-});
-$("#mobile").on('select2:select', function (evt) {
-	var addressId = $(this).select2("val");
-	$("#receiveAddressId").val(addressId);
-	$.ajax({
-		type : 'POST',
-		data : {
-			"addressId":$("#receiveAddressId").val()
-		},
-		dataType:'json',
-		url : BASE_PATH+'/admin/firstTrialJp/getRAddressById.html',
-		success : function(data) {
-			$("#receiveAddressId").val(data.id);
-			$("#address").val(data.address);
-			$("#receiver option").remove(); 
-			$("#receiver").append('<option selected="true" value='+ addressId +'>'+data.receiver+'</option>'); 
-		},
-		error : function() {
-		}
-	});
-
-});
-
- 取消时 
-$("#receiver").on('select2:unselect', function (evt) {
-	clearText();
-}); 
-$("#mobile").on('select2:unselect', function (evt) {
-	clearText();
-}); */
-
 $(function() {
-
-	$("#tableId tbody tr").each(function(i,ele_tr){
+	
+	$("#applicant_tbody tr").each(function(i,ele_tr){
 		var applicantId = $(this).children().eq(0).html();
 		var ids = shareIds.split(",");
 		$.each(ids, function(j,shareid){
 			if(applicantId == shareid){
 				$("#tableId tbody tr").eq(i).addClass("trColor");
 			} 
-		});   
+		});
 	});
 	
 	$(document).on("click",".tableTr",function(){
@@ -332,3 +205,134 @@ $('#mobileDiv').mouseleave(function(){
 	$("#mobile").nextAll("ul.ui-autocomplete").remove();
 });  
 
+
+
+
+
+
+/*$(function() {
+$("#receiver").select2({
+	ajax : {
+		url : BASE_PATH+'/admin/firstTrialJp/getRAddressSelect.html',
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			return {
+				searchStr : params.term, // search term
+				type: "usernameType",
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.receiver; // replace pk with your identifier
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : true
+	},
+
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+
+$("#mobile").select2({
+	ajax : {
+		url : BASE_PATH+'/admin/firstTrialJp/getRAddressSelect.html',
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			return {
+				searchStr : params.term, // search term
+				type: "mobileType",
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.mobile; // replace pk with your identifier
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : true
+	},
+
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+});*/
+
+/*$("#receiver").on('select2:select', function (evt) {
+var addressId = $(this).select2("val");
+$("#receiveAddressId").val(addressId);
+$.ajax({
+	type : 'POST',
+	data : {
+		"addressId":$("#receiveAddressId").val()
+	},
+	dataType:'json',
+	url : BASE_PATH+'/admin/firstTrialJp/getRAddressById.html',
+	success : function(data) {
+		$("#receiveAddressId").val(data.id);
+		$("#address").val(data.address);
+		$("#mobile option").remove(); 
+		$("#mobile").append('<option selected="true" value='+ addressId +'>'+data.mobile+'</option>'); 
+	},
+	error : function() {
+	}
+});
+
+});
+$("#mobile").on('select2:select', function (evt) {
+var addressId = $(this).select2("val");
+$("#receiveAddressId").val(addressId);
+$.ajax({
+	type : 'POST',
+	data : {
+		"addressId":$("#receiveAddressId").val()
+	},
+	dataType:'json',
+	url : BASE_PATH+'/admin/firstTrialJp/getRAddressById.html',
+	success : function(data) {
+		$("#receiveAddressId").val(data.id);
+		$("#address").val(data.address);
+		$("#receiver option").remove(); 
+		$("#receiver").append('<option selected="true" value='+ addressId +'>'+data.receiver+'</option>'); 
+	},
+	error : function() {
+	}
+});
+
+});
+
+取消时 
+$("#receiver").on('select2:unselect', function (evt) {
+clearText();
+}); 
+$("#mobile").on('select2:unselect', function (evt) {
+clearText();
+}); */

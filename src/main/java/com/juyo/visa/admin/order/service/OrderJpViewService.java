@@ -145,6 +145,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	private QrCodeService qrCodeService;
 	@Inject
 	private QualifiedApplicantViewService qualifiedApplicantViewService;
+	//基本信息连接websocket的地址
+	private static final String BASIC_WEBSPCKET_ADDR = "basicinfowebsocket";
 
 	public Object listData(OrderJpForm queryForm, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
@@ -767,11 +769,18 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object updateApplicant(Integer id, Integer orderid, HttpServletRequest request) {
+	public Object updateApplicant(Integer id, Integer orderid, Integer isTrial, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+
 		Map<String, Object> result = Maps.newHashMap();
+		if (isTrial == 0) {
+			result.put("isTrailOrder", false);
+		} else {
+			//初审环节操作
+			result.put("isTrailOrder", true);
+		}
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		if (!Util.isEmpty(applicantEntity.getBirthday())) {
@@ -817,7 +826,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(unqualifiedEntity)) {
 			result.put("unqualified", unqualifiedEntity);
 		}
-
+		String localAddr = request.getLocalAddr();
+		int localPort = request.getLocalPort();
+		result.put("localAddr", localAddr);
+		result.put("localPort", localPort);
+		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
 		//生成二维码
 		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + id;
@@ -830,10 +843,21 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("applicant", applicantEntity);
 		result.put("orderJpId", orderJpEntity.getId());
+		result.put("orderid", orderEntity.getId());
 		result.put("infoType", ApplicantInfoTypeEnum.BASE.intKey());
-		result.put("orderid", orderJpEntity.getOrderId());
 		result.put("applicantId", id);
 		return result;
+	}
+
+	//判断订单是否是进入初审环节
+	public boolean isTrailOrder(Integer orderid) {
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+		Integer status = order.getStatus();
+		boolean istrial = false;
+		if (status >= JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey() && status <= JPOrderStatusEnum.SEND_ADDRESS.intKey()) {
+			istrial = true;
+		}
+		return istrial;
 	}
 
 	public Object saveEditApplicant(TApplicantForm applicantForm, HttpSession session) {
@@ -952,8 +976,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return applicantInfoMainId;
 	}
 
-	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime) {
+	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime, Integer isTrial) {
 		Map<String, Object> result = MapUtil.map();
+		if (isTrial == 0) {
+			result.put("isTrailOrder", false);
+		} else {
+			//初审环节操作
+			result.put("isTrailOrder", true);
+		}
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", id));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
@@ -1020,8 +1050,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object getEditPassport(Integer applicantId, Integer orderid) {
+	public Object getEditPassport(Integer applicantId, Integer orderid, HttpServletRequest request, Integer isTrial) {
 		Map<String, Object> result = MapUtil.map();
+		if (isTrial == 0) {
+			result.put("isTrailOrder", false);
+		} else {
+			//初审环节操作
+			result.put("isTrailOrder", true);
+		}
 		String passportSqlstr = sqlManager.get("orderJp_list_passportInfo_byApplicantId");
 		Sql passportSql = Sqls.create(passportSqlstr);
 		passportSql.setParam("id", applicantId);
@@ -1061,6 +1097,20 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} else {
 			result.put("orderid", orderJpEntity.getOrderId());
 		}
+		//所访问的ip地址
+		String localAddr = request.getLocalAddr();
+		result.put("localAddr", localAddr);
+		//所访问的端口
+		int localPort = request.getLocalPort();
+		result.put("localPort", localPort);
+		//websocket地址
+		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
+		//生成二维码的URL
+		String passporturl = "http://" + localAddr + ":" + localPort + "/mobile/passport.html?applicantid="
+				+ applicantId;
+		//生成二维码
+		String qrCode = qrCodeService.encodeQrCode(request, passporturl);
+		result.put("qrCode", qrCode);
 		return result;
 	}
 
@@ -2072,6 +2122,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(id).intValue());
 		orderEntity.setStatus(JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
+		orderEntity.setUpdateTime(DateUtil.nowDate());
 		dbDao.update(orderEntity);
 		TOrderLogsEntity logsEntity = dbDao.fetch(TOrderLogsEntity.class, Cnd.where("orderId", "=", id));
 		logsEntity.setOrderId(id);

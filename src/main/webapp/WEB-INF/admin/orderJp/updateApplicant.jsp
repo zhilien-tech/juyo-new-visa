@@ -41,11 +41,11 @@
 					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
 					data-dismiss="modal" value="取消" /> <input id="addBtn"
 					type="button" class="btn btn-primary pull-right btn-sm btn-right"
-					value="保存" onclick="saveApplicant(1);" />
+					value="保存" onclick="saveApplicant(1)" />
 					<c:choose>
 						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
-					<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
-				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
+					<input id="unqualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
+				<input id="qualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>
@@ -370,12 +370,51 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript">
 	
+	//连接websocket
+	connectWebSocket();
+	function connectWebSocket(){
+		 if ('WebSocket' in window){  
+            console.log('Websocket supported');  
+            var socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+
+            console.log('Connection attempted');  
+
+            socket.onopen = function(){  
+                 console.log('Connection open!');  
+                 //setConnected(true);  
+             };
+
+            socket.onclose = function(){  
+                console.log('Disconnecting connection');  
+            };
+
+            socket.onmessage = function (evt){   
+                  var received_msg = evt.data;  
+                  var applicantId = '${obj.applicantId}';
+                  var receiveMessage = JSON.parse(received_msg);
+                  if(receiveMessage.messagetype == 1 && receiveMessage.applicantid == applicantId){
+                	  window.location.reload();
+                  }
+                  console.log(received_msg);  
+                  console.log('message received!');  
+                  //showMessage(received_msg);  
+              };  
+
+          } else {  
+            console.log('Websocket not supported');  
+          }  
+	}
 		$(function(){
 			var remark = $("#baseRemark").val();
 			if(remark != ""){
 				$(".ipt-info").show();
 			}
 			
+			//初审环节，显示合格不合格按钮
+			if(${obj.isTrailOrder}){
+				$("#qualifiedBtn").show();
+				$("#unqualifiedBtn").show();
+			}
 			
 			var nation = ${obj.applicant.hasOtherNationality};
 			var otherName = ${obj.applicant.hasOtherName};
@@ -466,58 +505,6 @@
 				$("#uploadFileBack").siblings("i").css("display","none");
 			} 
 		});
-		
-		//var base = "${base}";
-		function saveApplicant(status){
-			//得到获取validator对象或实例 
-			var bootstrapValidator = $("#applicantInfo").data(
-					'bootstrapValidator');
-			// 执行表单验证 
-			bootstrapValidator.validate();
-			if (bootstrapValidator.isValid()){
-				//获取必填项信息
-				var firstName = $("#firstName").val();
-				if (firstName == "") {
-					layer.msg('姓不能为空');
-					return;
-				}
-				var lastName = $("#lastName").val();
-				if (lastName == "") {
-					layer.msg('名不能为空');
-					return;
-				}
-				
-			var str="";
-			var applicantInfo;
-			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
-			    str=$(this).val();     
-			});
-			if(str != 1){
-				applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
-			}else{
-				applicantInfo = $("#applicantInfo").serialize();
-			}
-			
-			var applicantId = ${obj.applicantId};
-			applicantInfo.id = applicantId;
-			$.ajax({
-				async: false,
-				type: 'POST',
-				data : applicantInfo,
-				url: '${base}/admin/orderJp/saveEditApplicant',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-					//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					//layer.close(index);
-					if(status == 1){
-						closeWindow();
-						parent.successCallBack(1);
-					}
-				}
-			});
-			}
-		}
 		
 		//国籍检索
 		$("#nationality").on('input',function(){
@@ -879,7 +866,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid,
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=0',
 				success: function(index, layero){
 				    //do something
 				    layer.close(index); //如果设定了yes回调，需进行手工关闭
@@ -916,6 +903,58 @@
 				}
 			});
 		});
+		
+		function saveApplicant(status){
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#applicantInfo").data(
+					'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			if (bootstrapValidator.isValid()){
+				//获取必填项信息
+				var firstName = $("#firstName").val();
+				if (firstName == "") {
+					layer.msg('姓不能为空');
+					return;
+				}
+				var lastName = $("#lastName").val();
+				if (lastName == "") {
+					layer.msg('名不能为空');
+					return;
+				}
+				
+			var str="";
+			var applicantInfo;
+			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+			    str=$(this).val();     
+			});
+			if(str != 1){
+				applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
+			}else{
+				applicantInfo = $("#applicantInfo").serialize();
+			}
+			
+			var applicantId = ${obj.applicantId};
+			applicantInfo.id = applicantId;
+			$.ajax({
+				async: false,
+				type: 'POST',
+				data : applicantInfo,
+				url: '${base}/admin/orderJp/saveEditApplicant',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+					//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					//layer.close(index);
+					if(status == 1){
+						closeWindow();
+						parent.successCallBack(1);
+					}
+				}
+			});
+			}
+		}
+		
 	</script>
 </body>
 </html>

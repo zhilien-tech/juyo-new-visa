@@ -26,4 +26,6 @@ public class MobileApplicantForm {
 	private Integer orderid;
 
 	private Integer applicantid;
+
+	private Integer messagetype;
 }

@@ -43,8 +43,8 @@
 				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 				<c:choose>
 						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
-					<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
-				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
+					<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
+				<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>
@@ -56,9 +56,9 @@
 				</div>
 				<div class="tab-content row">
 					<div class="col-sm-5 padding-right-0">
-						<!-- <div class="info-QRcode"> --><!-- 二维码 -->
-							
-						<!-- </div> --><!-- end 二维码 -->
+						<div class="info-QRcode"> <!-- 二维码 -->
+							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
+						</div><!-- end 二维码 -->
 						
 						<div class="info-imgUpload front"><!-- 护照 -->
 							<div class="col-xs-6">
@@ -213,6 +213,12 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
+			
+			//初审环节，显示合格不合格按钮
+			if(${obj.isTrailOrder}){
+				$("#qualifiedBtn").show();
+				$("#unqualifiedBtn").show();
+			}
 			
 			//校验
 			$('#passportInfo').bootstrapValidator({
@@ -529,7 +535,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid=',
+				content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=0',
 				success: function(index, layero){
 						    //do something
 					layer.close(index); //如果设定了yes回调，需进行手工关闭
@@ -555,7 +561,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime'
+				content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial=0'
 			});
 		 }
 		 
@@ -588,6 +594,41 @@
 					}
 				});
 			});
+			
+			//连接websocket
+			connectWebSocket();
+			function connectWebSocket(){
+				 if ('WebSocket' in window){  
+		            console.log('Websocket supported');  
+		            var socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+
+		            console.log('Connection attempted');  
+
+		            socket.onopen = function(){  
+		                 console.log('Connection open!');  
+		                 //setConnected(true);  
+		             };
+
+		            socket.onclose = function(){  
+		                console.log('Disconnecting connection');  
+		            };
+
+		            socket.onmessage = function (evt){   
+		                  var received_msg = evt.data;  
+		                  var applicantId = '${obj.applicantId}';
+		                  console.log(received_msg);  
+		                  var receiveMessage = JSON.parse(received_msg);
+		                  if(receiveMessage.messagetype == 2 && receiveMessage.applicantid == applicantId){
+		                	  window.location.reload();
+		                  }
+		                  console.log('message received!');  
+		                  //showMessage(received_msg);  
+		              };  
+
+		          } else {  
+		            console.log('Websocket not supported');  
+		          }  
+			}
 	</script>
 
 

@@ -175,8 +175,8 @@ public class OrderJpModule {
 	@GET
 	@Ok("jsp")
 	public Object updateApplicant(@Param("id") Integer applicantId, @Param("orderid") Integer orderid,
-			HttpServletRequest request) {
-		return saleViewService.updateApplicant(applicantId, orderid, request);
+			@Param("isTrial") Integer isTrial, HttpServletRequest request) {
+		return saleViewService.updateApplicant(applicantId, orderid, isTrial, request);
 	}
 
 	/**
@@ -221,8 +221,9 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object passportInfo(@Param("applicantId") Integer id, @Param("orderid") Integer orderid) {
-		return saleViewService.getEditPassport(id, orderid);
+	public Object passportInfo(@Param("applicantId") Integer id, @Param("orderid") Integer orderid,
+			HttpServletRequest request, @Param("isTrial") Integer isTrial) {
+		return saleViewService.getEditPassport(id, orderid, request, isTrial);
 	}
 
 	/**
@@ -260,8 +261,8 @@ public class OrderJpModule {
 	@GET
 	@Ok("jsp")
 	public Object visaInfo(@Param("id") Integer id, @Param("orderid") Integer orderid,
-			@Param("isOrderUpTime") Integer isOrderUpTime) {
-		return saleViewService.getVisaInfo(id, orderid, isOrderUpTime);
+			@Param("isOrderUpTime") Integer isOrderUpTime, @Param("isTrial") Integer isTrial) {
+		return saleViewService.getVisaInfo(id, orderid, isOrderUpTime, isTrial);
 	}
 
 	/**

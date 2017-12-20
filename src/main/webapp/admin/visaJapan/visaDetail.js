@@ -135,7 +135,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime'
+				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime&isTrial=0'
 			});
 		},
 		//护照信息
@@ -163,7 +163,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid+'&isTrial=0'
 
 			});
 		},
@@ -178,7 +178,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+orderid
+				content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+orderid+'&isTrial=0'
 			});
 		},
 		//签证录入

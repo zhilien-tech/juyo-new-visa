@@ -54,8 +54,8 @@
 				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 				<c:choose>
 						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
-					<input id="unqualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
-				<input id="qualifiedBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualifiedBtn" value="合格" />
+					<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
+				<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualifiedBtn" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>
@@ -345,6 +345,12 @@
 			var remark = $("#visaRemark").val();
 			if(remark != ""){
 				$(".ipt-info").show();
+			}
+			
+			//初审环节，显示合格不合格按钮
+			if(${obj.isTrailOrder}){
+				$("#qualifiedBtn").show();
+				$("#unqualifiedBtn").show();
 			}
 			
 			var marry = $("#marryUrl").val();
@@ -709,7 +715,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=0'
 			});
 		}
 		
@@ -719,6 +725,7 @@
 		});
 		$(".qualifiedBtn").click(function(){
 			$(".ipt-info").slideUp();
+			$("#visaRemark").val("");
 			var applicantId = ${obj.applicant.id};
 			var orderid = ${obj.orderid};
 			var orderJpId = ${obj.orderJpId};
@@ -737,7 +744,6 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					$("#baseRemark").val("");
 					save(1);
 				}
 			});
