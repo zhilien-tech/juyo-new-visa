@@ -430,3 +430,12 @@ input[type="checkbox"] + label:after {
 .moneyDiv .ui-input-text {
 	width: 78%;
 }
+.onOff {
+	clear:both;
+	float: right;
+	height: .8rem;
+}
+.onOff:after {
+	content: "";
+	clear: both;
+}

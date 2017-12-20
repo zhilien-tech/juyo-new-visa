@@ -20,10 +20,10 @@
 	<input type="hidden" id="applicantid" name="applicantid" v-model="applicatdata.applicantid">
 <div class="top info">
 	<span v-if="applicatdata.cardfront != ''">
-		<img :src="applicatdata.cardfront" width="340px" height="200px" alt="" class="bacimg">
+		<img :src="applicatdata.cardfront" style="width:100%;height:100%;"  alt="" class="bacimg">
 	</span>
 	<span v-else>
-	    <img src="images/1.jpg" width="340px" height="200px" alt="" class="bacimg">
+	    <img src="images/1.jpg" style="width:100%; height:100%;" alt="" class="bacimg">
 	</span>
     <div id="upload">
         <h6>点击上传</h6>
@@ -34,10 +34,11 @@
 </div>
 <div class="top info">
     <span v-if="applicatdata.cardback != ''">
-		<img :src="applicatdata.cardback" width="340px" height="200px" alt="" class="bacimg">
+    <!-- width="340px" height="200px" -->
+		<img :src="applicatdata.cardback" style="width:100%;height:100%;"  alt="" class="bacimg">
 	</span>
 	<span v-else>
-	    <img src="images/1.jpg" width="340px" height="200px" alt="" class="bacimg">
+	    <img src="images/1.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
 	</span>
     <div id="upload2">
         <h6>点击上传</h6>
@@ -58,11 +59,11 @@
         <li>身份证号 <input type="text" class="txtInput" v-model="applicatdata.cardid"/></li>
         <li>住址(省) <input type="text" class="txtInput" v-model="applicatdata.cardprovince"/></li>
         <li>住址(市) <input type="text" class="txtInput" v-model="applicatdata.cardcity"/></li>
-        <li>住址(街楼) <input type="text" class="txtInput" v-model="applicatdata.address"/></li>
+        <li>住址(街楼) <input type="text" class="txtInput" style="width:70%;" v-model="applicatdata.address"/></li>
         <li>签发机关 <input type="text" class="txtInput" v-model="applicatdata.issueorganization"/></li>
         <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="applicatdata.validstartdate"/></li>
         <li>有效期至<input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="applicatdata.validenddate"/></li>
-        <li>现在地址是否与身份证一致　　　　　　　　　　<span id="kaiguan">关闭</span></li>
+        <li>现在地址是否与身份证一致<span class="onOff"> <input type="checkbox" id="simple_3"> <label for="simple_3" class="green"></label> </span></li>
         <li class="isclose">住址(省) <input type="text" class="txtInput" v-model="applicatdata.province"/></li>
         <li class="isclose">住址(市) <input type="text" class="txtInput" v-model="applicatdata.city"/></li>
         <li class="isclose">住址(街楼) <input type="text" class="txtInput" v-model="applicatdata.detailedaddress"/></li>
@@ -99,12 +100,12 @@
 	        	success: function(data){
 	        		_self.applicatdata = data.applicatdata;
 	        		if(data.applicatdata.addressissamewithcard == 1){
-	        			$('#kaiguan').html('是');
+	        			$("#simple_3").attr('checked',true);
 		        		$('.isclose').each(function(){
 		    				$(this).hide();
 		    			});
 	        		}else{
-	        			$('#kaiguan').html('否');
+	        			$("#simple_3").attr('checked',false);
 	        			$('.isclose').each(function(){
 		    				$(this).show();
 		    			});
@@ -171,7 +172,19 @@
                     });
             });
         });
-        
+        //开关
+        $("#simple_3").click(function(){
+  			if($(this).prop("checked")){
+  				console.log($(this).prop("checked"));
+  				$('.isclose').each(function(){
+  		    			$(this).hide();
+  		    		});
+  			}else {
+  				$('.isclose').each(function(){
+  		    			$(this).show();
+  		    		});
+  			}
+  		});
       //日历插件
         var calendar = new lCalendar();//出生日期
         calendar.init({
