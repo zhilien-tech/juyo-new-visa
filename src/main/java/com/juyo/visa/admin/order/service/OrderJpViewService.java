@@ -145,6 +145,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	private QrCodeService qrCodeService;
 	@Inject
 	private QualifiedApplicantViewService qualifiedApplicantViewService;
+	//基本信息连接websocket的地址
+	private static final String BASIC_WEBSPCKET_ADDR = "basicinfowebsocket";
 
 	public Object listData(OrderJpForm queryForm, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
@@ -824,7 +826,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(unqualifiedEntity)) {
 			result.put("unqualified", unqualifiedEntity);
 		}
-
+		String localAddr = request.getLocalAddr();
+		int localPort = request.getLocalPort();
+		result.put("localAddr", localAddr);
+		result.put("localPort", localPort);
+		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
 		//生成二维码
 		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + id;
@@ -1044,7 +1050,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object getEditPassport(Integer applicantId, Integer orderid, Integer isTrial) {
+	public Object getEditPassport(Integer applicantId, Integer orderid, HttpServletRequest request, Integer isTrial) {
 		Map<String, Object> result = MapUtil.map();
 		if (isTrial == 0) {
 			result.put("isTrailOrder", false);
@@ -1091,6 +1097,20 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} else {
 			result.put("orderid", orderJpEntity.getOrderId());
 		}
+		//所访问的ip地址
+		String localAddr = request.getLocalAddr();
+		result.put("localAddr", localAddr);
+		//所访问的端口
+		int localPort = request.getLocalPort();
+		result.put("localPort", localPort);
+		//websocket地址
+		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
+		//生成二维码的URL
+		String passporturl = "http://" + localAddr + ":" + localPort + "/mobile/passport.html?applicantid="
+				+ applicantId;
+		//生成二维码
+		String qrCode = qrCodeService.encodeQrCode(request, passporturl);
+		result.put("qrCode", qrCode);
 		return result;
 	}
 

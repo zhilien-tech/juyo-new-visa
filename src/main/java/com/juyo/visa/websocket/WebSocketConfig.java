@@ -27,7 +27,14 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
 		//注册WebSocket Server实现类，第二个参数是访问WebSocket的地址
 		registry.addHandler(myhandler(), "/websocket").addInterceptors(myInterceptors()).setAllowedOrigins("*");
+		registry.addHandler(myBasicInfoHandler(), "/basicinfowebsocket").addInterceptors(myInterceptors())
+				.setAllowedOrigins("*");
 		registry.addHandler(myhandler(), "/sockjs/websocket").addInterceptors(myInterceptors()).withSockJS();
+	}
+
+	@Bean
+	public BasicInfoWSHandler myBasicInfoHandler() {
+		return new BasicInfoWSHandler();
 	}
 
 	@Bean

@@ -27,10 +27,6 @@
     <ul class="label">
         <li>类型 <input type="text" class="txtInput" v-model="passportdata.type"/></li>
         <li>护照号 <input type="text" class="txtInput" v-model="passportdata.passport"/></li>
-        <li>姓（中文）<input type="text" class="txtInput" v-model="passportdata.firstname"/></li>
-        <li>姓（拼音）<input type="text" class="txtInput" v-model="passportdata.firstnameen"/></li>
-        <li>名（中文）<input type="text" class="txtInput" v-model="passportdata.lastname"/></li>
-        <li>名（拼音）<input type="text" class="txtInput" v-model="passportdata.lastnameen"/></li>
         <li>性别 <input type="text" class="txtInput" v-model="passportdata.sex"/></li>
         <li>出生日期 <input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.birthday"/></li>
         <li>出生地点 <input type="text" class="txtInput" v-model="passportdata.birthaddress"/></li>
@@ -38,6 +34,7 @@
         <li>签发地点 <input type="text" class="txtInput" v-model="passportdata.issuedplace"/></li>
         <li>签发地点（拼音） <input type="text" class="txtInput" v-model="passportdata.issuedplaceen"/></li>
         <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.issueddate"/></li>
+        <li>签发日期 <input id="validEndDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.validenddate"/></li>
    		<li>有效期 <select v-model="passportdata.validtype">
    					<option value=""></option>
    					<option value="1">5年</option>
@@ -84,10 +81,24 @@
             $('#upload').click(function () {
                 $('#image').click();
                 $('#image').change(function(){
+                	layer.load(1, {
+            			shade : "#000"
+            		});
+                	var that = this;
                     lrz(this.files[0])
                         .then(function (rst) {
-                            $('.bacimg').attr('src',rst.base64);
-                            $('#upload').hide();
+                           /*  $('.bacimg').attr('src',rst.base64);
+                            $('#upload').hide(); */
+                            sourceSize = (that.files[0].size / 1024).toFixed(2);
+                            resultSize = (rst.fileLen / 1024).toFixed(2);
+                            scale = parseInt(100 - (resultSize / sourceSize * 100));
+                            rst.formData.append('image',rst.file);
+                            /* alert(rst);
+                            alert(JSON.stringify(rst.formData));
+                            alert(rst.file);
+                            alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);  */
+                            alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+                            uploadPassport(rst,rst.formData);  
                             // 处理成功会执行
                         })
                         .catch(function (err) {
@@ -108,6 +119,11 @@
         var calendardatetime = new lCalendar();//签发日期
         calendardatetime.init({
             'trigger': '#issueDate',
+            'type': 'date'
+        });
+        var validenddatedatetime = new lCalendar();//签发日期
+        validenddatedatetime.init({
+            'trigger': '#validEndDate',
             'type': 'date'
         });
         //上一步
@@ -173,8 +189,51 @@
    		});
    	}
   //护照上传,扫描
-	
-	$('#image').change(function() {
+	function uploadPassport(rst, formData){
+		if(!formData){
+			formData = new FormData();
+		}
+        formData.append("image", rst.file); 
+		$.ajax({
+			type : "POST",//提交类型  
+			//dataType : "json",//返回结果格式  
+			url : '/admin/orderJp/passportRecognition',//请求地址  
+			async : true,
+			processData : false, //当FormData在jquery中使用的时候需要设置此项
+			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+			//请求数据  
+			data : formData,
+			success : function(obj) {//请求成功后的函数 
+				//关闭加载层
+				layer.closeAll('loading');
+				if (true === obj.success) {
+					_self.passportdata.passporturl = obj.url;
+					_self.passportdata.type = obj.type;
+					_self.passportdata.passport = obj.num;
+					_self.passportdata.sex = obj.sex;
+					_self.passportdata.sexen = obj.sexEn;
+					_self.passportdata.birthaddress = obj.birthCountry;
+					_self.passportdata.birthaddressen = getPinYinStr(obj.birthCountry).toUpperCase();
+					_self.passportdata.birthday = obj.birth;
+					_self.passportdata.issuedplace = obj.visaCountry;
+					_self.passportdata.issuedplaceen = getPinYinStr(obj.visaCountry).toUpperCase();
+					_self.passportdata.issueddate = obj.issueDate;
+					_self.passportdata.validenddate = obj.expiryDay;
+					var years = getDateYearSub(obj.issueDate,obj.expiryDay);
+					if(years == 5){
+						_self.passportdata.validtype = 1;
+					}else{
+						_self.passportdata.validtype = 2;
+					}
+					console.log(JSON.stringify(_self.passportdata));
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				layer.closeAll('loading');
+			}
+		}); // end of ajaxSubmit
+  	}
+	/* $('#image').change(function() {
 		var layerIndex = layer.load(1, {
 			shade : "#000"
 		});
@@ -225,7 +284,7 @@
 			}); // end of ajaxSubmit
 		};
 		reader.readAsDataURL(file);
-	});
+	}); */
       
 	function getDateYearSub(startDateStr, endDateStr) {
         var day = 24 * 60 * 60 *1000; 
