@@ -56,9 +56,9 @@
 				</div>
 				<div class="tab-content row">
 					<div class="col-sm-5 padding-right-0">
-						<!-- <div class="info-QRcode"> --><!-- 二维码 -->
-							
-						<!-- </div> --><!-- end 二维码 -->
+						<div class="info-QRcode"> <!-- 二维码 -->
+							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
+						</div><!-- end 二维码 -->
 						
 						<div class="info-imgUpload front"><!-- 护照 -->
 							<div class="col-xs-6">
@@ -588,6 +588,41 @@
 					}
 				});
 			});
+			
+			//连接websocket
+			connectWebSocket();
+			function connectWebSocket(){
+				 if ('WebSocket' in window){  
+		            console.log('Websocket supported');  
+		            var socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+
+		            console.log('Connection attempted');  
+
+		            socket.onopen = function(){  
+		                 console.log('Connection open!');  
+		                 //setConnected(true);  
+		             };
+
+		            socket.onclose = function(){  
+		                console.log('Disconnecting connection');  
+		            };
+
+		            socket.onmessage = function (evt){   
+		                  var received_msg = evt.data;  
+		                  var applicantId = '${obj.applicantId}';
+		                  console.log(received_msg);  
+		                  var receiveMessage = JSON.parse(received_msg);
+		                  if(receiveMessage.messagetype == 2 && receiveMessage.applicantid == applicantId){
+		                	  window.location.reload();
+		                  }
+		                  console.log('message received!');  
+		                  //showMessage(received_msg);  
+		              };  
+
+		          } else {  
+		            console.log('Websocket not supported');  
+		          }  
+			}
 	</script>
 
 

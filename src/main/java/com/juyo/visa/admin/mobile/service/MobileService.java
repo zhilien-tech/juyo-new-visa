@@ -7,6 +7,7 @@
 package com.juyo.visa.admin.mobile.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -40,6 +42,7 @@ import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.util.MapUtil;
+import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantLowerEntity;
@@ -52,7 +55,9 @@ import com.juyo.visa.entities.TApplicantWorkJpEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.juyo.visa.websocket.BasicInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -71,6 +76,9 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	private UserViewService userViewService;
 	@Inject
 	private UploadService qiniuupService;
+
+	private BasicInfoWSHandler basicInfoWSHandler = (BasicInfoWSHandler) SpringContextUtil.getBean(
+			"myBasicInfoHandler", BasicInfoWSHandler.class);
 
 	//在职需要的资料
 	private static Integer[] WORKINGDATA = { 1, 2, 3, 4, 5, 6, 7, 8 };
@@ -231,6 +239,13 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			passport.setApplicantId(applicatinsert.getId());
 			dbDao.insert(passport);
 		}
+		try {
+			//刷新电脑端页面
+			form.setMessagetype(1);
+			basicInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson(form)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return form;
 
 	}
@@ -322,7 +337,16 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object savePassportInfo(TApplicantPassportLowerEntity passportinfo) {
-		return dbDao.update(passportinfo);
+		dbDao.update(passportinfo);
+		MobileApplicantForm form = new MobileApplicantForm();
+		form.setApplicantid(passportinfo.getApplicantid());
+		form.setMessagetype(2);
+		try {
+			basicInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson(form)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return form;
 	}
 
 	/**
