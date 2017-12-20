@@ -7,7 +7,7 @@ $(function() {
 			if(applicantId == shareid){
 				$("#tableId tbody tr").eq(i).addClass("trColor");
 			} 
-		});   
+		});
 	});
 	
 	$(document).on("click",".tableTr",function(){
