@@ -355,37 +355,41 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		sql.setParam("orderid", orderid);
 		Record orderReceive = dbDao.fetch(sql);
 		result.put("orderReceive", orderReceive);
-		String shareType = orderReceive.getString("sharetype");
-		if (Util.isEmpty(shareType)) {
-			shareType = "";
-			Map<String, Object> map = getSameApplicantByOrderid(orderjpid);
-			List<Record> sameMans = (List<Record>) map.get("applicant");
-			if (sameMans.size() > 0) {
-				shareType = ShareTypeEnum.UNIFIED.intKey() + "";
-			} else {
-				shareType = ShareTypeEnum.SINGLE.intKey() + "";
-			}
-		}
-		orderReceive.set("sharetype", shareType);
-
-		String shareIds = orderReceive.getString("sharemanids");
-		if (Util.isEmpty(shareIds)) {
-			shareIds = "";
-			List<TApplicantOrderJpEntity> applicants = dbDao.query(TApplicantOrderJpEntity.class,
-					Cnd.where("isShareSms", "=", YES).and("orderId", "=", orderjpid), null);
-			if (!Util.isEmpty(applicants)) {
-				for (TApplicantOrderJpEntity entity : applicants) {
-					Integer isShareSms = entity.getIsShareSms();
-					if (Util.eq(YES, isShareSms)) {
-						Integer id = entity.getId();
-						shareIds += id + ",";
-					}
+		if (!Util.isEmpty(orderReceive)) {
+			String shareType = orderReceive.getString("sharetype");
+			if (Util.isEmpty(shareType)) {
+				shareType = "";
+				Map<String, Object> map = getSameApplicantByOrderid(orderjpid);
+				List<Record> sameMans = (List<Record>) map.get("applicant");
+				if (sameMans.size() > 0) {
+					shareType = ShareTypeEnum.UNIFIED.intKey() + "";
+				} else {
+					shareType = ShareTypeEnum.SINGLE.intKey() + "";
 				}
 			}
-			shareIds = shareIds.substring(0, shareIds.length() - 1);
+			orderReceive.set("sharetype", shareType);
+
+			String shareIds = orderReceive.getString("sharemanids");
+			if (Util.isEmpty(shareIds)) {
+				shareIds = "";
+				List<TApplicantOrderJpEntity> applicants = dbDao.query(TApplicantOrderJpEntity.class,
+						Cnd.where("isShareSms", "=", YES).and("orderId", "=", orderjpid), null);
+				if (!Util.isEmpty(applicants)) {
+					for (TApplicantOrderJpEntity entity : applicants) {
+						Integer isShareSms = entity.getIsShareSms();
+						if (Util.eq(YES, isShareSms)) {
+							Integer id = entity.getId();
+							shareIds += id + ",";
+						}
+					}
+				}
+				shareIds = shareIds.substring(0, shareIds.length() - 1);
+			}
+			//分享人
+			result.put("shareIds", shareIds);
+		} else {
+			result.put("shareIds", "");
 		}
-		//分享人
-		result.put("shareIds", shareIds);
 
 		//快递方式
 		result.put("expressType", EnumUtil.enum2(ExpressTypeEnum.class));
