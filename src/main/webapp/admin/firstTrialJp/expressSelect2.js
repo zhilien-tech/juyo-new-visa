@@ -1,14 +1,4 @@
-$(function() {
-	
-	$("#applicant_tbody tr").each(function(i,ele_tr){
-		var applicantId = $(this).children().eq(0).html();
-		var ids = shareIds.split(",");
-		$.each(ids, function(j,shareid){
-			if(applicantId == shareid){
-				$("#tableId tbody tr").eq(i).addClass("trColor");
-			} 
-		});
-	});
+$(function(){
 	
 	$(document).on("click",".tableTr",function(){
 		var sharetype = $("#shareType").val();
@@ -32,7 +22,6 @@ $(function() {
 	});
 
 });
-
 function clearText(){
 	$("#receiver").val(null).trigger("change");
 	$("#mobile").val(null).trigger("change");

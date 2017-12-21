@@ -101,10 +101,6 @@
                             alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
                             uploadPassport(rst,rst.formData);  
                             // 处理成功会执行
-                            //获取图片的高度 宽度
-                            var imgW = $(".bacimg").width();
-                            var imgH = $(".bacimg").height();
-                            console.log(imgW + "---" + imgH);
                         })
                         .catch(function (err) {
                             console.log(err);

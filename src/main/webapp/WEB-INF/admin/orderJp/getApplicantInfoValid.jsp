@@ -72,7 +72,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'${base}/admin/orderJp/updateApplicant.html?id='+applicantId,
+				content:'${base}/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid&isTrial=0',
 				success : function(index, layero){
 					console.log(index);
 				}
