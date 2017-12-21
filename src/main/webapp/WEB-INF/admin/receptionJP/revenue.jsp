@@ -235,7 +235,7 @@
 					revenue.realInfo = thisobj.val();
 					revenue.id = thisobj.next().val();
 					//datatext += $(this).text() + ',';
-					revenue.status = 1;
+					revenue.status = 0;
 					revenues.push(revenue);
 				});
 				applicatobj.revenue = JSON.stringify(revenues);
