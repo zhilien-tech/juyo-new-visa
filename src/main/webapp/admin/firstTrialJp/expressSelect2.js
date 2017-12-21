@@ -1,3 +1,4 @@
+
 $(function() {
 	
 /*	$("#applicant_tbody tr").each(function(i,ele_tr){
@@ -32,7 +33,6 @@ $(function() {
 	});
 
 });
-
 function clearText(){
 	$("#receiver").val(null).trigger("change");
 	$("#mobile").val(null).trigger("change");

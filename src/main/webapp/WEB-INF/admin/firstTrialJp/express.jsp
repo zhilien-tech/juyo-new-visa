@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-switch.min.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<script src="${base}/references/public/js/jquery-1.10.2.js"></script>
 	<style type="text/css">
 		#tableId tbody tr td:nth-child(1){width:10%;}
 		#tableId tbody tr td:nth-child(2){width:18%;}
@@ -161,6 +162,7 @@
 						</thead>
 						<tbody id="applicant_tbody">
 							<!-- <tr v-cloak v-for="apply in applyinfo" class="tableTr">
+
 								<td class="applyidTd" style="display: none">{{apply.applyid}}</td>
 								<td>{{apply.applicantname}}</td>
 								<td>{{apply.telephone}}</td>
@@ -208,6 +210,7 @@
 		var orderid = '${obj.orderid}';
 		var orderjpid = '${obj.orderjpid}';
 		var shareIds = '${obj.shareIds}';
+		
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -220,7 +223,7 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/admin/firstTrialJp/expressSelect2.js"></script><!-- 本页面js文件 -->
-	
+
 	<script type="text/javascript">
 		/* var orderobj;
 		//VUE准备数据
@@ -244,6 +247,9 @@
 						orderobj.applyinfo = data.applicant;
 					}
 				});
+			},
+			mounted:{
+				
 			}
 		}); */
 		
@@ -251,7 +257,20 @@
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
-		}
+		};
+		/* 
+			$(".applyidTd").each(function(i,ele_tr){
+		var applicantId = $(this).children().eq(0).html();
+		
+		var ids = shareIds.split(",");
+		
+		$.each(ids, function(j,shareid){
+			if(applicantId == shareid){
+				$(".applyidTd").eq(i).addClass("trColor");
+			} 
+			
+		});
+	}); */
 	</script>
 	
 </body>

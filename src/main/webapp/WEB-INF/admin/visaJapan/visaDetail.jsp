@@ -32,6 +32,10 @@
 			.content { margin-top:50px;}
 			#urgentday { width:16.5%;}
 			.bodyMargin { margin-left:12%;}
+			.select2-container--default { width:auto !important;}
+			.select2-container .select2-search--inline { float:none;}
+			.info {  margin-bottom:0px;}
+			.paddingRight { padding-right:0px !important; margin-left:-15px;}
 			#applicantTable tbody tr td:nth-child(1){width: 1%;}
 			#applicantTable tbody tr td:nth-child(2){width: 10%;}
 			#applicantTable tbody tr td:nth-child(3){width: 10%;}
@@ -355,7 +359,7 @@
 												<!-- <i class="bulb"></i> -->
 											</div>
 										</div>
-										<div class="col-sm-3">
+										<div class="col-sm-3 paddingRight">
 											<div class="form-group">
 												<label><span>*</span>航班号：</label>
 												<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.goFlightNum">
@@ -396,7 +400,7 @@
 												<!-- <i class="bulb"></i> -->
 											</div>
 										</div>
-										<div class="col-sm-3">
+										<div class="col-sm-3 paddingRight">
 											<div class="form-group">
 												<label><span>*</span>航班号：</label>
 												<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.returnFlightNum">
@@ -449,7 +453,7 @@
 														<!-- <i class="bulb"></i> -->
 													</div>
 												</div>
-												<div class="col-sm-3">
+												<div class="col-sm-3 paddingRight">
 													<div class="form-group">
 														<label><span>*</span>航班号：</label>
 														<select name="flightnum" class="form-control input-sm" multiple="multiple" v-model="travelinfo.returnFlightNum">
@@ -507,7 +511,7 @@
 														<!-- <i class="bulb"></i> -->
 													</div>
 												</div>
-												<div class="col-sm-3">
+												<div class="col-sm-3 paddingRight">
 													<div class="form-group">
 														<label><span>*</span>航班号：</label>
 														<select name="flightnum" class="form-control input-sm" multiple="multiple" v-model="travelinfo.returnFlightNum">
