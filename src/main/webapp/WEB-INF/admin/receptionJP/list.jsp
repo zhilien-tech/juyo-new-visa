@@ -138,7 +138,6 @@
             		_self.receptionJpData = data.receptionJpData;
             		$('#pageTotal').val(data.pageTotal);
 					$('#pageListCount').val(data.pageListCount);
-            		console.log(JSON.stringify(_self.receptionJpData));
               	}
             });
         },
@@ -169,7 +168,7 @@
                  	data:{orderid:orderid},
                  	type:'post',
                  	success: function(data){
-                 		layer.msg("移交签证成功");
+                 		successCallBack(3)
                    	}
                  });
         	}
@@ -250,6 +249,15 @@
 	}
 	
 	function successCallBack(status){
+		if(status == 1){
+			layer.msg('保存成功');
+		}
+		if(status == 2){
+			layer.msg('修改成功');
+		}
+		if(status == 3){
+			layer.msg('移交签证成功');
+		}
 		$.ajax({ 
         	url: url,
         	dataType:"json",
@@ -258,21 +266,20 @@
         		_self.receptionJpData = data.receptionJpData;
           	}
         });
-		if(status){
-			layer.msg('保存成功');
-		}
+		
 	}
-		//鼠标移入事件
-		$(document).on('mouseover','.showInfo',function(){
-			
-			let text = $(this).html();
-			$(this).parent().next().show();
-			$(this).parent().next().html(text);
-		});
-		//鼠标移出事件
-		$(document).on('mouseleave','.showInfo',function(){
-			$(".hideInfo").hide();
-		});
+
+	//鼠标移入事件
+	$(document).on('mouseover','.showInfo',function(){
+		
+		let text = $(this).html();
+		$(this).parent().next().show();
+		$(this).parent().next().html(text);
+	});
+	//鼠标移出事件
+	$(document).on('mouseleave','.showInfo',function(){
+		$(".hideInfo").hide();
+	});
 	</script>
 </body>
 </html>

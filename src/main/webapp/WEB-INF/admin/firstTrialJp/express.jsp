@@ -161,14 +161,43 @@
 							</tr>
 						</thead>
 						<tbody id="applicant_tbody">
-							<tr v-for="apply in applyinfo" class="tableTr">
+							<!-- <tr v-cloak v-for="apply in applyinfo" class="tableTr">
+
 								<td class="applyidTd" style="display: none">{{apply.applyid}}</td>
 								<td>{{apply.applicantname}}</td>
 								<td>{{apply.telephone}}</td>
 								<td>{{apply.email}}</td>
 								<td>{{apply.datatype}}</td>
 								<td>{{apply.data}}</td>
-							</tr>
+							</tr> -->
+							
+							
+							
+							<c:forEach var="apply" items="${obj.applicant}">
+								<c:choose>
+									<c:when test="${fn:contains(obj.shareIds,apply.applyid)}">
+										<tr class="tableTr trColor">
+											<td class="applyidTd" style="display: none">${apply.applyid }</td>
+											<td>${apply.applicantname }</td>
+											<td>${apply.telephone }</td>
+											<td>${apply.email }</td>
+											<td>${apply.datatype }</td>
+											<td>${apply.data }</td>
+										</tr>
+									 </c:when> 
+									 <c:otherwise>  
+										<tr class="tableTr">
+											<td class="applyidTd" style="display: none">${apply.applyid }</td>
+											<td>${apply.applicantname }</td>
+											<td>${apply.telephone }</td>
+											<td>${apply.email }</td>
+											<td>${apply.datatype }</td>
+											<td>${apply.data }</td>
+										</tr>
+									 </c:otherwise> 
+								</c:choose>
+							</c:forEach>
+							
 						</tbody>
 					</table>
 				</div>
@@ -196,7 +225,7 @@
 	<script src="${base}/admin/firstTrialJp/expressSelect2.js"></script><!-- 本页面js文件 -->
 
 	<script type="text/javascript">
-		var orderobj;
+		/* var orderobj;
 		//VUE准备数据
 		//applyinfo申请人信息
 		new Vue({
@@ -222,7 +251,7 @@
 			mounted:{
 				
 			}
-		});
+		}); */
 		
 		//返回 
 		function closeWindow() {

@@ -42,7 +42,6 @@ import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
-import com.juyo.visa.common.enums.JapanVisaStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
 import com.juyo.visa.common.enums.MainSaleTripTypeEnum;
@@ -188,10 +187,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			Date outVisaDate = (Date) orderinfo.get("outvisadate");
 			orderinfo.put("outvisadate", format.format(outVisaDate));
 		}
-		if (!Util.isEmpty(orderinfo.get("visastatus"))) {
-			for (JapanVisaStatusEnum visaStatusEnum : JapanVisaStatusEnum.values()) {
-				if (orderinfo.get("visastatus").equals(visaStatusEnum.intKey())) {
-					orderinfo.put("visastatus", visaStatusEnum.value());
+		if (!Util.isEmpty(orderinfo.get("status"))) {
+			for (JPOrderStatusEnum orderStatusEnum : JPOrderStatusEnum.values()) {
+				Integer visastatus = orderinfo.getInt("status");
+				if (visastatus.equals(orderStatusEnum.intKey())) {
+					orderinfo.put("visastatus", orderStatusEnum.value());
 				}
 			}
 		}
@@ -336,7 +336,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		List<TFlightEntity> flights = dbDao.query(TFlightEntity.class, Cnd.where("id", "in", mulflightids), null);
 		//补全三个航程
 		if (multitrip.size() < 3) {
-			for (int i = 0; i < 3 - multitrip.size(); i++) {
+			int multitripsize = multitrip.size();
+			for (int i = 0; i < 3 - multitripsize; i++) {
 				multitrip.add(new TOrderTripMultiJpEntity());
 			}
 		}
@@ -489,19 +490,21 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 */
 	public Object resetPlan(Integer orderid, Integer planid) {
 		TOrderTravelplanJpEntity plan = dbDao.fetch(TOrderTravelplanJpEntity.class, planid.longValue());
-		//获取城市所有的酒店
-		//List<THotelEntity> hotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", plan.getCityId()), null);
-		//获取城市所有的景区
-		String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-		Sql sql = Sqls.create(sqlString);
-		sql.setParam("orderid", orderid);
-		sql.setParam("cityid", plan.getCityId());
-		sql.setParam("scenicname", plan.getScenic());
-		List<Record> scenics = dbDao.query(sql, null, null);
-		Random random = new Random();
-		plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-		//plan.setHotel(hotels.get(random.nextInt(hotels.size())).getId());
-		dbDao.update(plan);
+		if (!Util.eq("1", plan.getDay())) {
+			//获取城市所有的酒店
+			//List<THotelEntity> hotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", plan.getCityId()), null);
+			//获取城市所有的景区
+			String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+			Sql sql = Sqls.create(sqlString);
+			sql.setParam("orderid", orderid);
+			sql.setParam("cityid", plan.getCityId());
+			sql.setParam("scenicname", plan.getScenic());
+			List<Record> scenics = dbDao.query(sql, null, null);
+			Random random = new Random();
+			plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
+			//plan.setHotel(hotels.get(random.nextInt(hotels.size())).getId());
+			dbDao.update(plan);
+		}
 		//行程安排
 		return getTravelPlanByOrderId(orderid);
 
@@ -642,10 +645,13 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 							travelplan.setOutDate(DateUtil.addDay(departureDate, day - 1));
 
 							//景区
-							int scenicindex = random.nextInt(scenics.size());
-							TScenicEntity scenic = scenics.get(scenicindex);
-							scenics.remove(scenic);
-							travelplan.setScenic(scenic.getName());
+							//第一天没有景区
+							if (day > 1) {
+								int scenicindex = random.nextInt(scenics.size());
+								TScenicEntity scenic = scenics.get(scenicindex);
+								scenics.remove(scenic);
+								travelplan.setScenic(scenic.getName());
+							}
 							travelplan.setOpId(loginUser.getOpId());
 							travelplan.setCreateTime(new Date());
 							travelplans.add(travelplan);
@@ -706,8 +712,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			hotel = dbDao.fetch(THotelEntity.class, plan.getHotel().longValue());
 		}
 		result.put("hotel", hotel);
-		String[] Scenicnames = plan.getScenic().split(",");
-		List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class, Cnd.where("name", "in", Scenicnames), null);
+		List<TScenicEntity> scenics = Lists.newArrayList();
+		if (!Util.isEmpty(plan.getScenic())) {
+			String[] Scenicnames = plan.getScenic().split(",");
+			scenics = dbDao.query(TScenicEntity.class, Cnd.where("name", "in", Scenicnames), null);
+		}
 		result.put("scenics", scenics);
 		return result;
 

@@ -424,10 +424,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		records = editApplicantsInfo(records);*/
 
 		//需求更改三，查看订单下所有申请人，点击选择分享
-		/*Map<String, Object> applicantMap = getAllApplicantByOrderid(orderjpid);
+		Map<String, Object> applicantMap = getAllApplicantByOrderid(orderjpid);
 		List<Record> records = (List<Record>) applicantMap.get("applicant");
 
-		result.put("applicant", records);*/
+		result.put("applicant", records);
 		//订单id
 		result.put("orderid", orderid);
 		//t_order_jp id

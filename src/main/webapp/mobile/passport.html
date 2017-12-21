@@ -17,7 +17,7 @@
     		<img :src="passportdata.passporturl" style="width:100%;height:100%;"  alt="" class="bacimg">
     	</span>
     	<span v-else>
-	        <img src="images/1.jpg" alt="" class="bacimg">
+	        <img src="images/1.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
     	</span>
         <div id="upload">
             <h6>点击上传护照</h6>
@@ -98,7 +98,7 @@
                             alert(JSON.stringify(rst.formData));
                             alert(rst.file);
                             alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);  */
-                            alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+                            //alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
                             uploadPassport(rst,rst.formData);  
                             // 处理成功会执行
                         })

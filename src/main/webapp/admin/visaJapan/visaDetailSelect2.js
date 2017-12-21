@@ -45,18 +45,25 @@ $('.addIcon').click(function(){
 	addiconobj.removeClass('glyphicon-plus');
 	//加载多程select2插件
 	initDuochengSelect(clonediv);
-	duochengdivlast.after(clonediv);
-	//绑定事件
-	initSelectEvent();
+	duochengdivlast.prev().before(clonediv);
+	//删除上一个div绑定的select2的事件
+	offSelectEvent(clonediv.prev());
+	//绑定上一个div下的select2的事件
+	initSelectEvent(clonediv.prev());
+	//绑定此div下的select2的事件
+	initSelectEvent(clonediv);
 });
 //删除行程
 /*$('.removIcon').click(function(){
 });*/
 $(document).on('click','.removeIcon',function(){
 	var xingchengdivobj = $(this).parent();
+	var prevdiv = xingchengdivobj.prev();
+	//删除绑定的事件
 	xingchengdivobj.remove();
 	//绑定选中事件
-	initSelectEvent();
+	offSelectEvent(prevdiv);
+	initSelectEvent(prevdiv);
 });
 
 
@@ -172,32 +179,38 @@ function initDuochengSelect(divobj){
 	});
 }
 //选中事件
-initSelectEvent();
-function initSelectEvent(){
-	$('.duochengdiv').each(function(index,name){
-		//console.log('index:'+index);
-		var divsize = $('.duochengdiv').length;
-		var nextdiv = $(this).next();
-		//绑定抵达城市选中事件
-		$(this).find('[name=arrivedcity]').on("select2:select",function(e){
-			var cityvalue = $(this).val();
-			if (cityvalue) {
-				cityvalue = cityvalue.join(',');
-			}else{
-				cityvalue += '';
-			}
-			var citytext = $(this).text();
-			if(index < divsize - 1){
-				nextdiv.find('[name=departurecity]').html('<option selected="selected" value="'+cityvalue+'">'+citytext+'</option>');
-			}
-		});
-		//清空
-		$(this).find('[name=arrivedcity]').on("select2:unselect",function(e){
-			$(this).text('');
-			if(index < divsize - 1){
-				nextdiv.find('[name=departurecity]').empty();
-			}
-		});
+//initSelectEvent();
+$('.duochengdiv').each(function(index,name){
+	var divsize = $('.duochengdiv').length;
+	if(index < divsize - 1){
+		initSelectEvent($(this));
+	}
+});
+//接触绑定上一个元素的事件
+function offSelectEvent(duochengdiv){
+	duochengdiv.find('[name=arrivedcity]').off("select2:select");
+	duochengdiv.find('[name=arrivedcity]').off("select2:unselect");
+}
+//初始化绑定事件
+function initSelectEvent(duochengdiv){
+	//console.log('index:'+index);
+	var divsize = $('.duochengdiv').length;
+	var nextdiv = duochengdiv.next();
+	//绑定抵达城市选中事件
+	duochengdiv.find('[name=arrivedcity]').on("select2:select",function(e){
+		var cityvalue = $(this).val();
+		if (cityvalue) {
+			cityvalue = cityvalue.join(',');
+		}else{
+			cityvalue += '';
+		}
+		var citytext = $(this).text();
+		nextdiv.find('[name=departurecity]').html('<option selected="selected" value="'+cityvalue+'">'+citytext+'</option>');
+	});
+	//清空
+	duochengdiv.find('[name=arrivedcity]').on("select2:unselect",function(e){
+		$(this).text('');
+		nextdiv.find('[name=departurecity]').empty();
 	});
 }
 
@@ -256,8 +269,17 @@ $("#sendvisadate").datetimepicker({
 	//自动计算预计出签时间
 	var stayday = 7;
 	var sendvisadate = $("#sendvisadate").val();
-	var days = getNewDay(sendvisadate,stayday);
-	$("#outvisadate").val(days); 
+	$.ajax({ 
+		url: '/admin/visaJapan/autoCalculateBackDate.html',
+		dataType:"json",
+		data:{gotripdate:sendvisadate,stayday:stayday+1},
+		type:'post',
+		success: function(data){
+			$("#outvisadate").val(data); 
+		}
+	});
+	//var days = getNewDay(sendvisadate,stayday);
+	
 }); 
 $("#outvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
@@ -282,4 +304,39 @@ $("#returnDate").datetimepicker({
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
+});
+//出行日期选中事件
+$("#gotripdate").datetimepicker().on('changeDate', function(ev){
+	//alert(ev.date);
+	console.log(ev.target.value);
+	var gotripdate = ev.target.value;
+	var triptype = $('#triptype').val();
+	if(triptype == 1){
+		//往返设置出发日期
+		$('#goDate').val(gotripdate);
+	}else if(triptype == 2){
+		//多程设置第一程为出行日期
+		$('.duochengdiv').each(function(index){
+			if(index == 0){
+				$(this).find('[name=departuredate]').val(gotripdate);
+			}
+		});
+	}
+});
+$("#backtripdate").datetimepicker().on('changeDate', function(ev){
+	//alert(ev.date);
+	console.log(ev.target.value);
+	var backtripdate = ev.target.value;
+	var triptype = $('#triptype').val();
+	if(triptype == 1){
+		//往返设置返回日期
+		$('#returnDate').val(backtripdate);
+	}else if(triptype == 2){
+		//多程设置最后一程为返回日期
+		$('.duochengdiv').each(function(index){
+			if(index == ($('.duochengdiv').length-1)){
+				$(this).find('[name=departuredate]').val(backtripdate);
+			}
+		});
+	}
 });

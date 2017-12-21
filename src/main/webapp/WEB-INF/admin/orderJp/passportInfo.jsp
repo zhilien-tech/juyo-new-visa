@@ -215,7 +215,7 @@
 		$(function() {
 			
 			//初审环节，显示合格不合格按钮
-			if(${obj.isTrailOrder}){
+			if(${obj.isTrailOrder} == 1){
 				$("#qualifiedBtn").show();
 				$("#unqualifiedBtn").show();
 			}
@@ -535,7 +535,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=0',
+				content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial='+${obj.isTrailOrder},
 				success: function(index, layero){
 						    //do something
 					layer.close(index); //如果设定了yes回调，需进行手工关闭
@@ -561,7 +561,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial=0'
+				content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}
 			});
 		 }
 		 
