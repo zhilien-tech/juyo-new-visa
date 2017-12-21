@@ -86,7 +86,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			//获取订单信息，准备文件名称
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 			//主申请人姓名
-			String mainapplicantname = "";
+			String mainapplicantname = "  ";
 			//查询申请人信息
 			List<TApplicantOrderJpEntity> jpapplicants = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("orderId", "=", orderid), null);

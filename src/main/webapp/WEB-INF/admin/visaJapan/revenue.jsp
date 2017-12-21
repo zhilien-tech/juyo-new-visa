@@ -39,8 +39,8 @@
 								<th><span>电话</span></th>
 								<th class="visadata"><span>邮箱</span></th>
 								<th class="visadata"><span>资料类型</span></th>
-								<th class="frontdata none"><span>前台资料</span></th>
-								<th><span>真实资料</span></th>
+								<th class="frontdata none"><span>前台实收</span></th>
+								<th><span>签证实收</span></th>
 							</tr>
 						</thead>
 						<tbody id="applyinfo">
@@ -124,7 +124,7 @@
 		            	dataType:"json",
 		            	type:'post',
 		            	success: function(data){
-		            		var str = '<span class="realinfo">'+ inputVal +'</span>';
+		            		var str = '<span class="realinfo titleStyle">'+ inputVal +'</span>';
 		            		str += '<input type="hidden" id="revenueid" name="revenueid" value="'+data.id+'">';
 		            		thisobj.siblings(".addInp").before(str);//在input前面 添加span标签
 		            		thisobj.siblings(".addInp").val("");
@@ -259,7 +259,7 @@
 					revenue.realInfo = thisobj.val();
 					revenue.id = thisobj.next().val();
 					//datatext += $(this).text() + ',';
-					revenue.status = 1;
+					revenue.status = 0;
 					revenues.push(revenue);
 				});
 				/* $(this).find('.certificates span').each(function(index){

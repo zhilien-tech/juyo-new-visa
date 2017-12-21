@@ -43,8 +43,11 @@ import com.juyo.visa.admin.hotel.service.HotelViewService;
 import com.juyo.visa.admin.scenic.service.ScenicViewService;
 import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.admin.visajp.util.TtfClassLoader;
+import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.entities.TCityEntity;
+import com.juyo.visa.entities.TComBusinessscopeEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.entities.THotelEntity;
@@ -234,6 +237,11 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				.append("人访日个人旅游，请协助办理").append(visatypestr).append("往返赴日签证");
 		map.put("content", content.toString());
 		map.put("company", company.getName());
+		TComBusinessscopeEntity comBusiness = dbDao.fetch(TComBusinessscopeEntity.class,
+				Cnd.where("comId", "=", company.getId()).and("countryId", "=", BusinessScopesEnum.JAPAN.intKey()));
+		if (!Util.isEmpty(comBusiness)) {
+			map.put("id", comBusiness.getDesignatedNum());
+		}
 		if (!Util.isEmpty(ordertripjp)) {
 			if (ordertripjp.getTripType().equals(1)) {
 				if (!Util.isEmpty(ordertripjp.getGoDate())) {
@@ -250,8 +258,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				//天数
 				if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
 
-					map.put("stay",
-							String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate())));
+					map.put("stay", String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(),
+							ordertripjp.getReturnDate()) + 1));
 				}
 				if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
 					//出境航班
@@ -331,7 +339,18 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			//出生地
 			map.put("address", record.getString("address"));
 			//婚姻状况
-
+			if (!Util.isEmpty(record.get("marrystatus"))) {
+				Integer marrystatus = record.getInt("marrystatus");
+				if (marrystatus.equals(MarryStatusEnum.YIHUN.intKey())) {
+					map.put("married", "0");
+				} else if (marrystatus.equals(MarryStatusEnum.DANSHEN.intKey())) {
+					map.put("single", "0");
+				} else if (marrystatus.equals(MarryStatusEnum.LIYI.intKey())) {
+					map.put("divorce", "0");
+				} else if (marrystatus.equals(MarryStatusEnum.SANGOU.intKey())) {
+					map.put("widowed", "0");
+				}
+			}
 			//国籍
 			map.put("country", "中国");
 			//身份证号
@@ -428,7 +447,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 							+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : " ")
 							+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress") : " "));
 			//家庭电话
-			map.put("homephone", record.getString("telephone"));
+			//map.put("homephone", record.getString("telephone"));
+			map.put("homemobile", record.getString("telephone"));
 			//电子邮箱
 			map.put("homeEmail", record.getString("email"));
 			//工作单位

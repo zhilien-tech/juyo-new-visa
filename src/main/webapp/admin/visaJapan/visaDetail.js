@@ -671,6 +671,19 @@ $(document).on("input","#stayday",function(){
 			type:'post',
 			success: function(data){
 				$('#backtripdate').val(data);
+				//设置出行信息返回日期的时间
+				var triptype = $('#triptype').val();
+				if(triptype == 1){
+					//往返设置返回日期
+					$('#returnDate').val(data);
+				}else if(triptype == 2){
+					//多程设置最后一程为返回日期
+					$('.duochengdiv').each(function(index){
+						if(index == ($('.duochengdiv').length-1)){
+							$(this).find('[name=departuredate]').val(data);
+						}
+					});
+				}
 			}
 		});
 	}

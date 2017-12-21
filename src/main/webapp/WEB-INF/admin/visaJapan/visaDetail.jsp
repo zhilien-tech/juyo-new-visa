@@ -230,7 +230,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>送签时间：</label>
-										<input id="sendvisadate" type="text" class="form-control input-sm datetimepickercss" disabled="disabled" value="<fmt:formatDate value="${obj.orderinfo.sendVisaDate }" pattern="yyyy-MM-dd" />"/>
+										<input id="sendvisadate" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.orderinfo.sendVisaDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -467,7 +467,8 @@
 													<c:when test="${status.index eq 0 }">
 														<a href="javascript:;" class="glyphicon glyphicon-plus addIcon"></a>
 													</c:when>
-													<c:when test="${status.index eq 2 or status.index eq 1 }">
+													<%-- <c:when test="${status.index eq 2 or status.index eq 1 }"> --%>
+													<c:when test="${status.index eq (fn:length(obj.multitrip) - 1) or status.index eq (fn:length(obj.multitrip) - 2) }">
 													</c:when>
 													<c:otherwise>
 														<a href="javascript:;" class="glyphicon glyphicon-minus removeIcon"></a>
