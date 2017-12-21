@@ -383,7 +383,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 						}
 					}
 				}
-				shareIds = shareIds.substring(0, shareIds.length() - 1);
+				if (shareIds.length() > 1) {
+					shareIds = shareIds.substring(0, shareIds.length() - 1);
+				}
 			}
 			//分享人
 			result.put("shareIds", shareIds);
