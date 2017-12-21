@@ -26,6 +26,8 @@
 	 .card-list { height:90px;}
 	 .card-list:hover { min-height:90px;}
 	 .box-body { padding:0 15px 0 15px;}
+	 .searchStrWidth { width: 29% !important;}
+	 .BtnWidth { width: 20% !important;}
 	</style>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>
@@ -57,10 +59,10 @@
 									</c:forEach>
 								</select>
 							</div>
-							<div class="col-md-3 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照/公司简称/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter();"/>
+							<div class="col-md-3 left-5px right-0px searchStrWidth">
+								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照/公司简称/联系人/电话/邮箱/申请人/申请人电话" onkeypress="onkeyEnter();"/>
 							</div>
-							<div class="col-md-3 left-5px" >
+							<div class="col-md-3 left-5px BtnWidth" >
 								<a class="btn btn-primary btn-sm pull-left"  id="searchbtn">搜索</a>
 								<a id="emptyBtn" class="btn btn-primary btn-sm pull-left">清空</a> 
 								<a class="btn btn-primary btn-sm pull-right" id="orderBtn" onclick="addOrder();" v-on:click="">下单</a>
