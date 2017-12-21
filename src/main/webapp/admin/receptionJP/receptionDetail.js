@@ -40,7 +40,7 @@ $(function(){
 });
 
 
-
+var url = BASE_PATH + '/admin/receptionJP/getJpVisaDetailData.html';
 
 var orderobj;
 //VUE准备数据
@@ -52,7 +52,6 @@ new Vue({
 	},
 	created:function(){
 		orderobj=this;
-		var url = BASE_PATH + '/admin/receptionJP/getJpVisaDetailData.html';
 		$.ajax({ 
 			url: url,
 			dataType:"json",
@@ -141,6 +140,45 @@ function commitdata(){
 			window.location.reload();
 		}
 	}); 
+}
+
+function successCallBack(status){
+	$.ajax({ 
+		url: BASE_PATH + '/admin/receptionJP/getJpVisaDetailData.html',
+		async: false,
+		dataType:"json",
+		data:{orderid:orderid},
+		type:'post',
+		success: function(data){
+			orderobj.orderinfo = data.orderinfo;
+			orderobj.applyinfo = data.applyinfo;
+			$("#orStatus_p").html(data.orderinfo.status);
+			if(orderobj.orderinfo.urgenttype == 1){
+				$("#urgentDays").addClass("none");
+			}else{
+				$("#urgentDays").removeClass("none");
+			}
+			$('#urgentType').change(function(){
+				var thisval = $(this).val();
+				if(thisval == 1){
+					$("#urgentDays").addClass("none");
+				}else{
+					$("#urgentDays").removeClass("none");
+					orderobj.orderinfo.urgentday = 1;
+				}
+			});
+
+		}
+	});
+	if(status == 1){
+		layer.msg('修改成功');
+	}
+	if(status == 2){
+		layer.msg('保存成功');
+	}
+	if(status == 3){
+		layer.msg('移交签证成功');
+	}
 }
 
 

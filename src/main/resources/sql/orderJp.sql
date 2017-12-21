@@ -43,7 +43,6 @@ LEFT JOIN (
 ) aj ON aj.orderId = oj.id
 LEFT JOIN t_applicant_passport ap ON ap.applicantId = aj.id
 LEFT JOIN t_company tc ON tc.id = o.comId
-
 $condition
 
 /*orderJp_list_orderInfo_byOrderId*/
