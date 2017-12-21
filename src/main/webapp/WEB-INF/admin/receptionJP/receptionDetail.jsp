@@ -49,7 +49,7 @@
 				<div class="qz-head">
 					<span class="">订单号：<p>${obj.orderinfo.orderNum }</p></span>
 					<span class="">受付番号：<p></p></span>
-					<span class="">状态：<p>${obj.orStatus }</p></span>
+					<span class="">状态：<p id="orStatus_p">${obj.orStatus }</p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="签证" class="btn btn-primary btn-sm pull-right" onclick="visaTransfer();"/>
@@ -333,14 +333,6 @@
 				}
 			}
 			
-			function successCallBack(status){
-				if(status == 1){
-					layer.msg('修改成功');
-				}else if(status == 2){
-					layer.msg('保存成功');
-				}
-			}
-			
 			function log(orderid){
 				layer.open({
 					type: 2,
@@ -363,7 +355,7 @@
 			     	data:{orderid:orderid},
 			     	type:'post',
 			     	success: function(data){
-			     		layer.msg("移交签证成功");
+			     		successCallBack(3);
 			       	}
 			     });
 			}
@@ -476,6 +468,9 @@
 				pickerPosition:"top-left",//显示位置
 				minView: "month"//只显示年月日
 			});
+			
+		
+			
 		</script>
 	</body>
 </html>

@@ -102,7 +102,6 @@
             	type:'post',
             	success: function(data){
             		_self.receptionJpData = data.receptionJpData;
-            		console.log(JSON.stringify(_self.receptionJpData));
               	}
             });
         },
@@ -133,7 +132,7 @@
                  	data:{orderid:orderid},
                  	type:'post',
                  	success: function(data){
-                 		layer.msg("移交签证成功");
+                 		successCallBack(3);
                    	}
                  });
         	}
@@ -162,6 +161,15 @@
 	}
 	
 	function successCallBack(status){
+		if(status == 1){
+			layer.msg('保存成功');
+		}
+		if(status == 2){
+			layer.msg('修改成功');
+		}
+		if(status == 3){
+			layer.msg('移交签证成功');
+		}
 		$.ajax({ 
         	url: url,
         	dataType:"json",
@@ -170,9 +178,7 @@
         		_self.receptionJpData = data.receptionJpData;
           	}
         });
-		if(status){
-			layer.msg('保存成功');
-		}
+		
 	}
 	
 	

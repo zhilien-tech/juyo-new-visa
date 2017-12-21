@@ -79,7 +79,8 @@ public class OrderJpForm extends OrderForm {
 			expg.and("o.orderNum", "LIKE", "%" + searchStr + "%").or("ap.passport", "LIKE", "%" + searchStr + "%")
 					.or("tc.shortName", "LIKE", "%" + searchStr + "%").or("c.linkman", "LIKE", "%" + searchStr + "%")
 					.or("c.email", "LIKE", "%" + searchStr + "%").or("c.mobile", "LIKE", "%" + searchStr + "%")
-					.or("aj.applicants", "LIKE", "%" + searchStr + "%");
+					.or("aj.applicants", "LIKE", "%" + searchStr + "%")
+					.or("aj.applyphone", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
 		if (!Util.isEmpty(startTimeStart) && !Util.isEmpty(startTimeEnd)) {
