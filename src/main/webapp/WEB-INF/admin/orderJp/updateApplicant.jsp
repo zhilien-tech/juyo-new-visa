@@ -284,7 +284,7 @@
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="provinceDiv">
-									<label>现居住地址省份：</label>
+									<label>现居住地是否与身份证相同：</label>
 									<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
 									<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
 									<input type="hidden" id="sameAddress" value=""/>

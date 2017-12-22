@@ -240,7 +240,7 @@
 						<div class="row"><!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>现居住地址省份：</label><input type="checkbox" class="nowProvince" name="addressIsSameWithCard" value="1"/>
+									<label>现居住地是否与身份证相同：</label><input type="checkbox" class="nowProvince" name="addressIsSameWithCard" value="1"/>
 									<input type="hidden" name="cardProvince" id="cardProvince"/>
 									<input type="hidden" name="cardCity" id="cardCity"/>
 									<input id="province" name="province" type="text" class="form-control input-sm" placeholder=" " />
@@ -454,6 +454,7 @@
 							parent.layer.close(index);
 						}
 						if(status == 2){
+							//console.log(data);
 							parent.successCallBack(4,data);
 						}
 					},
