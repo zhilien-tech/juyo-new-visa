@@ -454,8 +454,7 @@
 							parent.layer.close(index);
 						}
 						if(status == 2){
-							console.log(data);
-							alert();
+							//console.log(data);
 							parent.successCallBack(4,data);
 						}
 					},
