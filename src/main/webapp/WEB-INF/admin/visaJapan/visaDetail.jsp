@@ -37,14 +37,15 @@
 			.info {  margin-bottom:0px;}
 			.paddingRight { padding-right:0px !important; margin-left:-15px;}
 			#applicantTable tbody tr td:nth-child(1){width: 1%;}
-			#applicantTable tbody tr td:nth-child(2){width: 10%;}
-			#applicantTable tbody tr td:nth-child(3){width: 10%;}
-			#applicantTable tbody tr td:nth-child(4){width: 10%;}
-			#applicantTable tbody tr td:nth-child(5){width: 10%;}
-			#applicantTable tbody tr td:nth-child(6){width: 19%;}
-			#applicantTable tbody tr td:nth-child(7){width: 16%;}
+			#applicantTable tbody tr td:nth-child(2){width: 7%;}
+			#applicantTable tbody tr td:nth-child(3){width: 8%;}
+			#applicantTable tbody tr td:nth-child(4){width: 8%;}
+			#applicantTable tbody tr td:nth-child(5){width: 8%;}
+			#applicantTable tbody tr td:nth-child(6){width: 25%;}
+			#applicantTable tbody tr td:nth-child(7){width: 8%;}
 			#applicantTable tbody tr td:nth-child(8){width: 5%;}
-			#applicantTable tbody tr td:nth-child(9){width: 16%;}
+			#applicantTable tbody tr td:nth-child(9){width: 30%;}
+			
 			#schedulingTable thead tr th:nth-child(1){width:8%;}
 			#schedulingTable thead tr th:nth-child(2){width:10%;}
 			#schedulingTable thead tr th:nth-child(3){width:12%;}
@@ -261,15 +262,15 @@
 							<table id="applicantTable" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
-										<th><span>&nbsp; <span></th>
-										<th><span>姓名<span></th>
-										<th><span>电话<span></th>
-										<th><span>护照号<span></th>
-										<th><span>资料类型<span></th>
-										<th><span>所需资料<span></th>
-										<th><span>递送方式<span></th>
-										<th><span>备注<span></th>
-										<th><span>操作<span></th>
+										<th><span>&nbsp; </span></th>
+										<th><span>姓名</span></th>
+										<th><span>电话</span></th>
+										<th><span>护照号</span></th>
+										<th><span>资料类型</span></th>
+										<th><span>所需资料</span></th>
+										<th><span>递送方式</span></th>
+										<th><span>备注</span></th>
+										<th><span>操作</span></th>
 									</tr>
 								</thead>
 								<tbody>

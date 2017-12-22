@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 	<style>
+		.card-head { overflow:hidden; white-space:nowrap;}
 		.card-head div:nth-child(1){width:20%;}
 		.card-head div:nth-child(2){width:10%; text-align:right;}
 		.card-head div:nth-child(3){width: 135px;float: right;position: relative;right: 0;}
@@ -28,7 +29,7 @@
 	    .box-body {  overflow:hidden;margin-top:60px;}
 	    .everybody-info {position:relative; }
 	    .cf { overflow:visible !important;}
-	    .whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:390px;}
+	    .whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:39%;}
 	    .showInfo { cursor:pointer; }
 	    .hideInfo { display:none; position:absolute; top:-33px;right:0;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
 	</style>
