@@ -2464,7 +2464,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String path = "/rest/160601/ocr/ocr_idcard.json";
 		String method = "POST";
 		String entityStr = "";
-		String appcode = "36c5ae22ed87410290bd90cb198e47a7";
+		String appcode = "19598dc0fd65499b93a9dec6c43489b7";
 		Map<String, String> headers = new HashMap<String, String>();
 		//最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
 		headers.put("Authorization", "APPCODE " + appcode);
@@ -2495,7 +2495,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String host = "http://ocrhz.market.alicloudapi.com";
 		String path = "/rest/160601/ocr/ocr_passport.json";
 		String method = "POST";
-		String appcode = "db7570313ab4478793f42ad8cd48723b";
+		/*String appcode = "db7570313ab4478793f42ad8cd48723b";*/
+		String appcode = "19598dc0fd65499b93a9dec6c43489b7";
 		String entityStr = "";
 		Map<String, String> headers = new HashMap<String, String>();
 		//最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
