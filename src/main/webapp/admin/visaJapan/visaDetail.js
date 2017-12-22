@@ -192,7 +192,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['1000px', '750px'],
-				content: '/admin/visaJapan/visaInput.html?applyid='+applyId
+				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&isvisa=1'
 			});
 		},
 		//通知销售
