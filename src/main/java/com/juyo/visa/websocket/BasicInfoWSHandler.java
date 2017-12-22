@@ -43,7 +43,7 @@ public class BasicInfoWSHandler implements WebSocketHandler {
 		}
 
 		//向关联的页面发送一条信息
-		wss.sendMessage(new TextMessage("Server:connected OK!"));
+		wss.sendMessage(new TextMessage(""));
 	}
 
 	/**

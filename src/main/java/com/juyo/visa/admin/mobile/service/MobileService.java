@@ -688,6 +688,16 @@ public class MobileService extends BaseService<TApplicantEntity> {
 		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantid.longValue());
 		applicant.setMarryStatus(marrystatus);
 		dbDao.update(applicant);
+
+		try {
+			//刷新电脑端页面
+			MobileApplicantForm form = new MobileApplicantForm();
+			form.setApplicantid(applicantid);
+			form.setMessagetype(3);
+			basicInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson(form)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 }

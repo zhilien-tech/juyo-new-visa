@@ -273,6 +273,41 @@
 				}
 			});
 		});
+		//连接websocket
+		connectWebSocket();
+		function connectWebSocket(){
+			 if ('WebSocket' in window){  
+	            console.log('Websocket supported');  
+	            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+
+	            console.log('Connection attempted');  
+
+	            socket.onopen = function(){  
+	                 console.log('Connection open!');  
+	                 //setConnected(true);  
+	             };
+
+	            socket.onclose = function(){  
+	                console.log('Disconnecting connection');  
+	            };
+
+	            socket.onmessage = function (evt){
+	                  var received_msg = evt.data;  
+	                  var applicantId = '${obj.applicantId}';
+	                  if(received_msg){
+		                  var receiveMessage = JSON.parse(received_msg);
+		                  if(receiveMessage.messagetype == 2 && receiveMessage.applicantid == applicantId){
+		                	  window.location.reload();
+		                  }
+	                  }
+	                  console.log('message received!');  
+	                  //showMessage(received_msg);  
+	             };  
+
+	          } else {  
+	            console.log('Websocket not supported');  
+	          }  
+		}
 		
 		//护照上传,扫描
 		
@@ -526,7 +561,10 @@
 			}
 			save(2);
 			var id = ${obj.applicantId};
-			layer.open({
+			//关闭socket连接
+			socket.onclose();
+			window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}';
+			/* layer.open({
 				type: 2,
 				title: false,
 				closeBtn:false,
@@ -540,7 +578,7 @@
 						    //do something
 					layer.close(index); //如果设定了yes回调，需进行手工关闭
 				}
-			});
+			}); */
 		 }
 			
 		 function visaBtn(){
@@ -552,7 +590,10 @@
 			save(3);
 			var id = ${obj.applicantId};
 			var orderid = ${obj.orderid};
-			layer.open({
+			//关闭socket连接
+			socket.onclose();
+			window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder};
+			/* layer.open({
 				type: 2,
 				title: false,
 				closeBtn:false,
@@ -562,7 +603,7 @@
 				scrollbar: false,
 				area: ['900px', '551px'],
 				content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}
-			});
+			}); */
 		 }
 		 
 		//合格/不合格
@@ -594,41 +635,6 @@
 					}
 				});
 			});
-			
-			//连接websocket
-			connectWebSocket();
-			function connectWebSocket(){
-				 if ('WebSocket' in window){  
-		            console.log('Websocket supported');  
-		            var socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
-
-		            console.log('Connection attempted');  
-
-		            socket.onopen = function(){  
-		                 console.log('Connection open!');  
-		                 //setConnected(true);  
-		             };
-
-		            socket.onclose = function(){  
-		                console.log('Disconnecting connection');  
-		            };
-
-		            socket.onmessage = function (evt){   
-		                  var received_msg = evt.data;  
-		                  var applicantId = '${obj.applicantId}';
-		                  console.log(received_msg);  
-		                  var receiveMessage = JSON.parse(received_msg);
-		                  if(receiveMessage.messagetype == 2 && receiveMessage.applicantid == applicantId){
-		                	  window.location.reload();
-		                  }
-		                  console.log('message received!');  
-		                  //showMessage(received_msg);  
-		              };  
-
-		          } else {  
-		            console.log('Websocket not supported');  
-		          }  
-			}
 	</script>
 
 
