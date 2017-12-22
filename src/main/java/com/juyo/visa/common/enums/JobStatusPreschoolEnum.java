@@ -8,7 +8,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * @Date	 
  */
 public enum JobStatusPreschoolEnum implements IEnum {
-	PASSPORT(PrepareMaterialsEnum_JP.PASSPORT.intKey(), "护照"), PHOTO(PrepareMaterialsEnum_JP.PHOTO.intKey(), "2寸白底照片"), BIRTH_CERTIFICATE(
+	PASSPORT(PrepareMaterialsEnum_JP.PASSPORT.intKey(), "护照原件"), PHOTO(PrepareMaterialsEnum_JP.PHOTO.intKey(), "2寸白底照片"), BIRTH_CERTIFICATE(
 			PrepareMaterialsEnum_JP.BIRTH_CERTIFICATE.intKey(), "出生证明"), RELATIONSHIP_CERTIFICATE(
 			PrepareMaterialsEnum_JP.RELATIONSHIP_CERTIFICATE.intKey(), "亲属公证"), ACCOUNT_BOOK(
 			PrepareMaterialsEnum_JP.ACCOUNT_BOOK.intKey(), "户口本"), ENTRUST_CERTIFICATE(

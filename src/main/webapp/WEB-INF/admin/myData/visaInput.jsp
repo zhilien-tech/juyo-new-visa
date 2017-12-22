@@ -117,13 +117,13 @@
 		    	    	    area: ['900px', '550px'],
 		    	    	    content: '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid
 		    	    	  }); */
-		    	      window.location.href = '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid;
+		    	      window.location.href = '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid+'&isvisa=${isvisa}';
 		    	}
 		    }
 		});
 		//新增签证录入
 		function add(){
-			window.location.href = '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid;
+			window.location.href = '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid+'&isvisa=${isvisa}';
 	      /* layer.open({
 	    	    type: 2,
 	    	    title: false,

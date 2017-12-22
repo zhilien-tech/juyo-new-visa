@@ -233,8 +233,10 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		//准备PDF模板数据
 		Map<String, String> map = new HashMap<String, String>();
 		StringBuffer content = new StringBuffer();
-		content.append("　　" + company.getName()).append("根据与津東通商株式会社的合同约定，组织").append(applyinfo.size())
-				.append("人访日个人旅游，请协助办理").append(visatypestr).append("往返赴日签证");
+		//地接社未做
+		String dijie = "";
+		content.append("　　" + company.getName()).append("根据与").append(dijie).append("的合同约定，组织")
+				.append(applyinfo.size()).append("人访日个人旅游，请协助办理").append(visatypestr).append("往返赴日签证");
 		map.put("content", content.toString());
 		map.put("company", company.getName());
 		TComBusinessscopeEntity comBusiness = dbDao.fetch(TComBusinessscopeEntity.class,

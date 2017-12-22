@@ -214,8 +214,8 @@ public class VisaJapanModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object visaInput(HttpSession session, @Param("applyid") Integer applyid) {
-		return visaJapanService.visaInput(session, applyid);
+	public Object visaInput(HttpSession session, @Param("applyid") Integer applyid, @Param("isvisa") Integer isvisa) {
+		return visaJapanService.visaInput(session, applyid, isvisa);
 	}
 
 	/**
