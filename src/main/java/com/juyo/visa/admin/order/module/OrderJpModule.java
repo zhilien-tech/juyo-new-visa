@@ -261,8 +261,8 @@ public class OrderJpModule {
 	@GET
 	@Ok("jsp")
 	public Object visaInfo(@Param("id") Integer id, @Param("orderid") Integer orderid,
-			@Param("isOrderUpTime") Integer isOrderUpTime, @Param("isTrial") Integer isTrial) {
-		return saleViewService.getVisaInfo(id, orderid, isOrderUpTime, isTrial);
+			@Param("isOrderUpTime") Integer isOrderUpTime, @Param("isTrial") Integer isTrial, HttpServletRequest request) {
+		return saleViewService.getVisaInfo(id, orderid, isOrderUpTime, isTrial, request);
 	}
 
 	/**

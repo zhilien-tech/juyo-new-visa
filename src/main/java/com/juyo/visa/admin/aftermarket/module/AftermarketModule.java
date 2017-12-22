@@ -9,6 +9,7 @@ package com.juyo.visa.admin.aftermarket.module;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -73,7 +74,7 @@ public class AftermarketModule {
 	 */
 	@At
 	@POST
-	public Object sendMailAndMessage(@Param("applicantid") Integer applicantid) {
-		return aftermarketService.sendMailAndMessage(applicantid);
+	public Object sendMailAndMessage(@Param("applicantid") Integer applicantid, HttpServletRequest request) {
+		return aftermarketService.sendMailAndMessage(applicantid, request);
 	}
 }

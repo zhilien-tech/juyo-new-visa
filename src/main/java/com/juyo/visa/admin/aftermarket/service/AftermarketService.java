@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
@@ -23,6 +24,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.aftermarket.form.AftermarketListForm;
+import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -49,6 +51,8 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 	private static final String AFTERMARKET_MESSAGE_URL = "messagetmp/aftermarket_message_tmp.txt";
 	@Inject
 	private MailService mailService;
+	@Inject
+	private FirstTrialJpViewService firstTrialJpViewService;
 
 	/**
 	 * 获取售后列表数据
@@ -103,7 +107,7 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 	 * @param applicantid
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object sendMailAndMessage(Integer applicantid) {
+	public Object sendMailAndMessage(Integer applicantid, HttpServletRequest request) {
 		//日本申请人信息
 		TApplicantOrderJpEntity applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class, applicantid.longValue());
 		//申请人信息
@@ -124,6 +128,15 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 			map.put("${sex}", "女士");
 		}
 		map.put("${ordernum}", order.getOrderNum());
+		//手机端页面链接
+		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+				+ "/mobile/info.html?applicantid=" + applicantid;
+		//转换长连接为短地址
+		mobileUrl = firstTrialJpViewService.getEncryptlink(mobileUrl, request);
+		map.put("${mobileUrl}", mobileUrl);
+		//电子邮件链接
+		String emailurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin.html";
+		map.put("${emailurl}", emailurl);
 		//发送邮件
 		mailService.sendHtml(email, map, AFTERMARKET_EMAIL_URL, "售后通知");
 		//发短信

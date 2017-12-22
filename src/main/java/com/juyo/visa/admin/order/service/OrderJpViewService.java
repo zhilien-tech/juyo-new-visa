@@ -976,7 +976,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return applicantInfoMainId;
 	}
 
-	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime, Integer isTrial) {
+	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime, Integer isTrial,
+			HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		if (isTrial == 0) {
 			result.put("isTrailOrder", IsYesOrNoEnum.NO.intKey());
@@ -1047,6 +1048,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("mainApply", records);
 		result.put("visaInfo", visaInfo);
 		result.put("isOrderUpTime", isOrderUpTime);
+		//获取所访问的ip地址
+		String localAddr = request.getLocalAddr();
+		//所访问的端口
+		int localPort = request.getLocalPort();
+		result.put("localAddr", localAddr);
+		result.put("localPort", localPort);
+		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
 		return result;
 	}
 
@@ -2302,6 +2310,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		rd.getInputs().add(input);
 		String content = Json.toJson(rd);
 		String info = (String) appCodeCall(content);//扫描完毕
+		System.out.println("info:" + info);
 		//解析扫描的结果，结构化成标准json格式
 		ApplicantJsonEntity jsonEntity = new ApplicantJsonEntity();
 		JSONObject resultObj = new JSONObject(info);

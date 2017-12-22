@@ -921,11 +921,13 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 *
 	 * @param session
 	 * @param applyid
+	 * @param isvisa 
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object visaInput(HttpSession session, Integer applyid) {
+	public Object visaInput(HttpSession session, Integer applyid, Integer isvisa) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("applyid", applyid);
+		result.put("isvisa", isvisa);
 		return result;
 	}
 

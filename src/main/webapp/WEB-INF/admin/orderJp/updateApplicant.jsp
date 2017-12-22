@@ -375,7 +375,7 @@
 	function connectWebSocket(){
 		 if ('WebSocket' in window){  
             console.log('Websocket supported');  
-            var socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
 
             console.log('Connection attempted');  
 
@@ -391,11 +391,12 @@
             socket.onmessage = function (evt){   
                   var received_msg = evt.data;  
                   var applicantId = '${obj.applicantId}';
-                  var receiveMessage = JSON.parse(received_msg);
-                  if(receiveMessage.messagetype == 1 && receiveMessage.applicantid == applicantId){
-                	  window.location.reload();
+                  if(received_msg){
+	                  var receiveMessage = JSON.parse(received_msg);
+	                  if(receiveMessage.messagetype == 1 && receiveMessage.applicantid == applicantId){
+	                	  window.location.reload();
+	                  }
                   }
-                  console.log(received_msg);  
                   console.log('message received!');  
                   //showMessage(received_msg);  
               };  
@@ -857,7 +858,9 @@
 			saveApplicant(2);
 			var applicantId = ${obj.applicant.id};
 			var orderid = ${obj.orderid};
-			layer.open({
+			socket.onclose();
+			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
+			/* layer.open({
 				type: 2,
 				title: false,
 				closeBtn:false,
@@ -871,7 +874,7 @@
 				    //do something
 				    layer.close(index); //如果设定了yes回调，需进行手工关闭
 				  }
-			});
+			}); */
 		}
 		
 		//合格/不合格
