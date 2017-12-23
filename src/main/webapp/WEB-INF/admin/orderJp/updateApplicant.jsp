@@ -412,14 +412,14 @@
 			}
 			
 			//初审环节，显示合格不合格按钮
-			if(${obj.isTrailOrder}==1){
+			if('${obj.isTrailOrder}'==1){
 				$("#qualifiedBtn").show();
 				$("#unqualifiedBtn").show();
 			}
 			
-			var nation = ${obj.applicant.hasOtherNationality};
-			var otherName = ${obj.applicant.hasOtherName};
-			var address = ${obj.applicant.addressIsSameWithCard};
+			var nation = '${obj.applicant.hasOtherNationality}';
+			var otherName = '${obj.applicant.hasOtherName}';
+			var address = '${obj.applicant.addressIsSameWithCard}';
 			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
 			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
 			if(nation == 1){
@@ -856,10 +856,10 @@
 		
 		function passportBtn(){
 			saveApplicant(2);
-			var applicantId = ${obj.applicant.id};
-			var orderid = ${obj.orderid};
+			var applicantId = '${obj.applicant.id}';
+			var orderid = '${obj.orderid}';
 			socket.onclose();
-			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
+			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
 			/* layer.open({
 				type: 2,
 				title: false,
@@ -883,10 +883,10 @@
 		});
 		$(".qualified").click(function(){
 			$(".ipt-info").slideUp();
-			var applicantId = ${obj.applicant.id};
-			var orderid = ${obj.orderid};
-			var orderJpId = ${obj.orderJpId};
-			var infoType = ${obj.infoType};
+			var applicantId = '${obj.applicant.id}';
+			var orderid = '${obj.orderid}';
+			var orderJpId = '${obj.orderJpId}';
+			var infoType = '${obj.infoType}';
 			layer.load(1);
 			$.ajax({
 				type: 'POST',
@@ -937,7 +937,7 @@
 				applicantInfo = $("#applicantInfo").serialize();
 			}
 			
-			var applicantId = ${obj.applicantId};
+			var applicantId = '${obj.applicantId}';
 			applicantInfo.id = applicantId;
 			$.ajax({
 				async: false,

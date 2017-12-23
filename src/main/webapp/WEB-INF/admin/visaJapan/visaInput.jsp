@@ -37,13 +37,12 @@
 		<div class="wrapper">
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<ul class="title">
-					<li>签证录入</li>
+					<li>签证补录</li>
 				</ul>
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-12">
-								<a class="btn btn-primary btn-sm pull-right" href="javascript:closeWindow();" id="">取消</a>
 								<a class="btn btn-primary btn-sm pull-right" href="javascript:add();" id="">添加已有签证</a>
 							</div>
 						</div>

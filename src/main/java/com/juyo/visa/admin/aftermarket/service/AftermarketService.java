@@ -33,6 +33,7 @@ import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -91,6 +92,15 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 			Cnd applicatcnd = Cnd.NEW();
 			applicatcnd.and("taoj.orderid", "=", record.get("orderjpid"));
 			List<Record> applicats = dbDao.query(applicatsql, applicatcnd, null);
+			for (Record applicantrecord : applicats) {
+				if (Util.isEmpty(applicantrecord.get("linkman"))) {
+					applicantrecord.put("linkman",
+							applicantrecord.getString("firstname") + applicantrecord.getString("lastname"));
+				}
+				if (Util.isEmpty(applicantrecord.get("backtelephone"))) {
+					applicantrecord.put("backtelephone", applicantrecord.getString("telephone"));
+				}
+			}
 			record.put("applicats", applicats);
 		}
 		result.put("pagetotal", pager.getPageCount());
