@@ -25,41 +25,51 @@
 	<div class="section">
 		<div class="listShow">
 			<div class="list listName">
-				<label>公司全称：</label> <span>北京快旅国际旅行社</span>
+				<label>公司全称：</label> <span>${obj.adminComInfo.fullname }</span>
 			</div>
 			<div class="list listNameTag">
-				<label>公司简称：</label> <span>快旅国际</span>
+				<label>公司简称：</label> <span>${obj.adminComInfo.shortname }</span>
 			</div>
 			<div class="list listNum">
-				<label>指定番号：</label> <span>GIP：987543</span>
+				<label>指定番号：</label> <span>${obj.adminComInfo.designatedNum }</span>
 			</div>
 			<div class="list listPer">
-				<label>联系人：</label> <span>刘德华</span>
+				<label>联系人：</label> <span>${obj.adminComInfo.linkman }</span>
 			</div>
 			<div class="list listTel">
-				<label>电话：</label> <span>13315679521</span>
+				<label>电话：</label> <span>${obj.adminComInfo.mobile }</span>
 			</div>
 		</div>
 		<div class="listHover">
 			<div class="list listType">
-				<label>公司类型：</label> <span>送签社</span>
+				<label>公司类型：</label> <span>${obj.adminComInfo.comType }</span>
 			</div>
 			<div class="list listScope">
-				<label>经营范围：</label> <span>日美法</span>
+				<label>经营范围：</label> <span>${obj.adminComInfo.scopes }</span>
 			</div>
 			<div class="list listMail">
-				<label>邮箱：</label> <span>13315679521@163.com</span>
+				<label>邮箱：</label> <span>${obj.adminComInfo.email }</span>
 			</div>
 			<div class="list listsAddress">
-				<label>地址：</label> <span>北京市朝阳区朝阳门天辰大厦10号-908室</span>
+				<label>地址：</label> <span>${obj.adminComInfo.address }</span>
 			</div>
 		</div>
 		<div class="pic">
-			<img id="license" src="/references/common/images/companyInfo.png" />
-			<div class="fontWord">
-				<p>缩略图</p>
-				<p>点击可放大显示</p>
-			</div>
+		
+			<c:choose>
+	            <c:when test='${obj.adminComInfo.license != "" }'>
+	            	<img id="license" src="${obj.adminComInfo.license}" />
+	        	</c:when>
+	            <c:otherwise>
+           			<img id="license" src="/references/common/images/companyInfo.png" />
+					<div class="fontWord">
+						<p>缩略图</p>
+						<p>点击可放大显示</p>
+					</div>
+	        	</c:otherwise>
+	        </c:choose>
+		
+			
 		</div>
 	</div>
 	
@@ -144,6 +154,20 @@
 		    	    area: ['900px', '550px'],
 		    	    content: BASE_PATH + '/admin/personalInfo/updatePassword.html'
 		    	  });
+		}
+		
+		function addCompanyOfSqs(){
+			layer.open({
+	    	    type: 2,
+	    	    title: false,
+	    	    closeBtn:false,
+	    	    fix: false,
+	    	    maxmin: false,
+	    	    shadeClose: false,
+	    	    scrollbar: false,
+	    	    area: ['900px', '550px'],
+	    	    content: BASE_PATH + '/admin/companyInfo/add.html'
+	    	});
 		}
 	</script>
 
