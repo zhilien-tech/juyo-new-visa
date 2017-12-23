@@ -87,7 +87,7 @@
 									<div class="col-sm-3">
 										<div class="form-group">
 											<label><span>*</span>公司简称：</label> 
-											<input type="hidden" id="orderid" value=""/>
+											<input type="hidden" id="orderid" name="id" value=""/>
 											<input type="hidden" id="comShortNameSelect2" value=""/>
 											<select id="comShortName"
 												name="shortname" class="form-control select2 cityselect2 "
@@ -379,7 +379,7 @@
 					<div class="info none" id="mySwitch">
 						<!-- 主申请人 -->
 						<input type="hidden" id="appId" value="" name="appId"/>
-						<p class="info-head">
+						<p class="info-head"><span>申请人</span>
 							<input type="button" name="" value="添加"
 								class="btn btn-primary btn-sm pull-right "
 								onclick="addApplicant();" />
@@ -958,6 +958,7 @@
 					url : '${base}/admin/orderJp/saveAddOrderinfo',
 					success : function(data) {
 						console.log(JSON.stringify(data));
+						$("#orderid").val(data.id);
 						if(status == 1){
 							window.location.href = '${base}/admin/orderJp/list';
 						}
