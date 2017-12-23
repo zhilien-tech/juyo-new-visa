@@ -57,7 +57,7 @@
 							<ul class="card-content">
 								<li class="everybody-info" v-for="(item,index) in data.everybodyinfo">
 								
-									<span v-if="index === 0">
+									<span v-if="index === 0" style="display:block; height:31px;">
 										<div><label>申请人：</label><span>{{item.applicantname}}</span></div>
 										<div><label>护照号：</label><span>{{item.passportnum}}</span></div>
 										<div><label>手机号：</label><span>{{item.telephone}}</span></div>
@@ -70,7 +70,7 @@
 											<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i>
 										</div>
 									</span>
-									<span v-else>
+									<span v-else  style="display:block; height:31px;">
 										<div><label>　　　　</label><span>{{item.applicantname}}</span></div>
 										<div><label>　　　　</label><span>{{item.passportnum}}</span></div>
 										<div><label>　　　　</label><span>{{item.telephone}}</span></div>

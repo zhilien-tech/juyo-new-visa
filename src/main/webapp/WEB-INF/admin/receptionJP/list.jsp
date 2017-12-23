@@ -18,7 +18,7 @@
 		.card-head { overflow:hidden; white-space:nowrap;}
 		.card-head div:nth-child(1){width:20%;}
 		.card-head div:nth-child(2){width:10%; text-align:right;}
-		.card-head div:nth-child(3){width: 135px;float: right;position: relative;right: 0;}
+		.card-head div:nth-child(3){width: 135px;float: right;position: relative;right: 0; height:31px;}
 		.everybody-info div:nth-child(1){width:11%;}
 		.everybody-info div:nth-child(2){width:14%;}
 		.everybody-info div:nth-child(3){width:14%;}
@@ -79,7 +79,7 @@
 								</li> -->
 								
 								<li class="everybody-info cf" v-for="(item,index) in data.everybodyinfo">
-									<span v-if="index === 0">
+									<span v-if="index === 0" style="display:block; height:31px;">
 										<div><label>申请人：</label><span>{{item.applicant}}</span></div>
 										<div><label>护照号：</label><span>{{item.passportno}}</span></div>
 										<div><label>快递号：</label><span>{{item.expressnum}}</span></div>
@@ -88,7 +88,7 @@
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"><!-- {{item.data}} --></span></div>
 										<span class="hideInfo"></span>
 									</span>
-									<span v-else>
+									<span v-else  style="display:block; height:31px;">
 										<div><label style="width:48px;">   </label><span>{{item.applicant}}</span></div>
 										<div><label style="width:48px;">   </label><span>{{item.passportno}}</span></div>
 										<div><label style="width:48px;">   </label><span>{{item.expressnum}}</span></div>
