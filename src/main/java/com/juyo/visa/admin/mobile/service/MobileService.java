@@ -162,6 +162,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 		//编辑申请人信息
 		if (!Util.isEmpty(applicant.getId())) {
 			dbDao.update(applicant);
+			form.setMessagetype(1);
 		} else {
 			//在用户表添加信息
 			ApplicantUser applicantUser = new ApplicantUser();
@@ -177,6 +178,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			TApplicantLowerEntity applicatinsert = dbDao.insert(applicant);
 			//设置申请人id，在编辑护照信息时候使用
 			form.setApplicantid(applicatinsert.getId());
+			form.setMessagetype(4);
 			Integer orderjpid = null;
 			//如果订单存在则保存订单
 			if (!Util.isEmpty(form.getOrderid())) {
@@ -203,7 +205,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
 			//设置主申请人信息
 			List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
-					Cnd.where("", "=", orderjpid), null);
+					Cnd.where("applicantId", "=", orderjpid), null);
 			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
 
 			} else {
@@ -241,7 +243,6 @@ public class MobileService extends BaseService<TApplicantEntity> {
 		}
 		try {
 			//刷新电脑端页面
-			form.setMessagetype(1);
 			basicInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson(form)));
 		} catch (IOException e) {
 			e.printStackTrace();

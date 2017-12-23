@@ -41,7 +41,7 @@
 		<div class="wrapper">
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<ul class="title">
-					<li>签证录入</li>
+					<li>签证补录</li>
 					<li class="liClose">
 						<a onclick="closeWindow()">
 							<div class="closed"></div>
@@ -52,14 +52,6 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-12">
-								<c:choose>
-									<c:when test="${isvisa == 1}">  
-										<a class="btn btn-primary btn-sm pull-right" href="javascript:closeWindow();" id="">取消</a>
-									</c:when>
-									<c:otherwise> 
-													   
-									</c:otherwise>
-								</c:choose>
 								<a class="btn btn-primary btn-sm pull-right" href="javascript:add();" id="">添加已有签证</a>
 							</div>
 						</div>
