@@ -37,7 +37,7 @@
 		<div class="wrapper">
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<ul class="title">
-					<li>签证录入</li>
+					<li> </li>
 				</ul>
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->

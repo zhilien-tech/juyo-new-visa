@@ -78,7 +78,7 @@
 							<!-- 签发机关 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>签发机关：</label> 
+									<label><span>*</span>签发机关</label> 
 									<input id="issueOrganization" name="issueOrganization"
 										type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
 									<!-- <i class="bulb"></i> -->
@@ -107,7 +107,7 @@
 							<div class="nameBeforeHide">
 							    <div class="col-sm-11 col-sm-offset-1 padding-right-0">
 									<div class="form-group">
-										<label>姓/拼音：</label> <input id="otherFirstName"
+										<label>姓/拼音</label> <input id="otherFirstName"
 											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
 											placeholder=" " value="${obj.applicant.otherFirstName }" />
 											<input type="text" id="otherFirstNameEn" style="position:absolute;top:42px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
@@ -117,7 +117,7 @@
 								
 								<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 									<div class="form-group">
-										<label>名/拼音：</label> <input id="otherLastName"
+										<label>名/拼音</label> <input id="otherLastName"
 											name="otherLastName" style="position:relative;" type="text" class="form-control input-sm "
 											placeholder=" " value="${obj.applicant.otherLastName }" />
 											<input type="text" id="otherLastNameEn" style="position:absolute;top:42px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
@@ -154,7 +154,7 @@
 							<!-- 姓/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>姓/拼音：</label> <input id="firstName"
+									<label><span>*</span>姓/拼音</label> <input id="firstName"
 										name="firstName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
@@ -169,7 +169,7 @@
 							<!-- 名/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>名/拼音：</label> <input id="lastName"
+									<label><span>*</span>名/拼音</label> <input id="lastName"
 										name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.lastName }" />
 										<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
@@ -182,7 +182,7 @@
 							<!-- 手机号/邮箱 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>手机号：</label> <input id="telephone"
+									<label><span>*</span>手机号</label> <input id="telephone"
 										name="telephone" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.telephone }" />
 									<!-- <i class="bulb"></i> -->
@@ -190,7 +190,7 @@
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>邮箱：</label> <input id="email" name="email"
+									<label><span>*</span>邮箱</label> <input id="email" name="email"
 										type="text" class="form-control input-sm" placeholder=" "
 										value="${obj.applicant.email }" />
 									<!-- <i class="bulb"></i> -->
@@ -202,7 +202,7 @@
 							<!-- 公民身份证 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>公民身份号码：</label> <input id="cardId"
+									<label><span>*</span>公民身份号码</label> <input id="cardId"
 										name="cardId" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.cardId }" />
 									<!-- <i class="bulb"></i> -->
@@ -214,7 +214,7 @@
 							<!-- 姓名/民族 -->
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>性别：</label> 
+									<label><span>*</span>性别</label> 
 									<select
 										class="form-control input-sm" id="sex" name="sex">
 										<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
@@ -224,7 +224,7 @@
 							</div>
 							<div class="col-sm-3 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>民族：</label> <input id="nation"
+									<label><span>*</span>民族</label> <input id="nation"
 										name="nation" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.nation }" />
 									<!-- <i class="bulb"></i> -->
@@ -232,7 +232,7 @@
 							</div>
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>出生日期：</label> <input id="birthday"
+									<label><span>*</span>出生日期</label> <input id="birthday"
 										name="birthday" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.birthday }" />
 									<!-- <i class="bulb"></i> -->
@@ -244,7 +244,7 @@
 							<!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>住址：</label> <input id="address"
+									<label><span>*</span>住址</label> <input id="address"
 										name="address" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.address }" />
 									<!-- <i class="bulb"></i> -->
@@ -255,7 +255,7 @@
 						<div class="row">
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>有效期限：</label> 
+									<label>有效期限</label> 
 									<input id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
 								</div>
 							</div>
@@ -271,21 +271,21 @@
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地址省份：</label> 
+									<label><span>*</span>现居住地是否与身份证相同</label> 
 									<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
 									<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
 									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
 									<input id="province"
 										name="province" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.province }" />
+										placeholder="省" value="${obj.applicant.province }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地址城市：</label> <input id="city"
+									<label><span>*</span>现居住地址城市</label> <input id="city"
 										name="city" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.city }" />
+										placeholder="市" value="${obj.applicant.city }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -296,9 +296,9 @@
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label> <input
+									<label><span>*</span>详细地址</label> <input
 										id="detailedAddress" name="detailedAddress" type="text"
-										class="form-control input-sm" placeholder=" "
+										class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间"
 										value="${obj.applicant.detailedAddress }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -726,24 +726,6 @@
 		});
 	}
 								
-	//返回 
-	/* function closeWindow() {
-		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-		parent.layer.close(index);
-		parent.cancelCallBack(1);
-	} */
-	
-	/* function deleteApplicantFrontImg(id){
-		$('#cardFront').val("");
-		$('#sqImg').attr('src', "");
-		$("#uploadFile").siblings("i").css("display","none");
-	}
-	function deleteApplicantBackImg(id){
-		$('#cardBack').val("");
-		$('#sqImgBack').attr('src', "");
-		$("#uploadFileBack").siblings("i").css("display","none");
-	} */
-	
 	$(function(){
 		$("#validStartDate").datetimepicker({
 			format: 'yyyy-mm-dd',

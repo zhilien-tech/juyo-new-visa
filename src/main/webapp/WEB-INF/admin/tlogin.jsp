@@ -10,6 +10,8 @@
 	<style type="text/css">
 		html {height: 100%;width:100%;display: table;}
 		body {width:100%;display: table-cell;height: 100%;}
+		.login { position: relative;}
+		.login .login-content { position:absolute !important;right:10%;}
 	</style>
 </head>
 <body>

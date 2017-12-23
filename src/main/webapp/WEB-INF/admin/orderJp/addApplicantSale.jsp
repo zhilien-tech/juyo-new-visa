@@ -80,7 +80,7 @@
 						<div class="row"><!-- 签发机关 -->
 							<div class="col-sm-11 padding-right-0">
 								<div class="form-group">
-									<label>签发机关：</label>
+									<label>签发机关</label>
 									<input id="issueOrganization" name="issueOrganization" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -105,7 +105,7 @@
 							<div class="nameBeforeHide">
 							    <div class="col-sm-11 padding-right-0">
 									<div class="form-group">
-										<label>姓/拼音：</label> <input id="otherFirstName"
+										<label>姓/拼音</label> <input id="otherFirstName"
 											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
 											placeholder=" " value="" />
 											<input type="text" id="otherFirstNameEn" style="position:absolute;top:45px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
@@ -142,7 +142,7 @@
 						<div class="row"><!-- 姓/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>姓/拼音：</label>
+									<label><span>*</span>姓/拼音</label>
 									<input id="firstName" style="position:relative;" name="firstName" type="text" class="form-control input-sm req " placeholder=" " />
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<input type="hidden" id="applyId"/>
@@ -154,7 +154,7 @@
 						<div class="row"><!-- 名/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0 ">
 								<div class="form-group">
-									<label><span>*</span>名/拼音：</label>
+									<label><span>*</span>名/拼音</label>
 									<input id="lastName" name="lastName" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " />
 									<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value=""/>
 									<!-- <i class="bulb"></i> -->
@@ -164,14 +164,14 @@
 						<div class="row"><!-- 手机号/邮箱 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>手机号：</label>
+									<label><span>*</span>手机号</label>
 									<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>邮箱：</label>
+									<label>邮箱</label>
 									<input id="email" name="email" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -180,7 +180,7 @@
 						<div class="row"><!-- 公民身份证 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>公民身份证：</label>
+									<label>公民身份证</label>
 									<input id="cardId" name="cardId" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -189,7 +189,7 @@
 						<div class="row"><!-- 姓名/民族 -->
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>性别：</label>
+									<label><span>*</span>性别</label>
 									<!-- <input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value=""/> -->
 									<select class="form-control input-sm selectHeight" id="sex" name="sex">
 										<option value="男">男</option>
@@ -199,14 +199,14 @@
 							</div>
 							<div class="col-sm-3 padding-right-0">
 								<div class="form-group">
-									<label>民族：</label>
+									<label>民族</label>
 									<input id="nation" name="nation" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
-									<label>出生日期：</label>
+									<label>出生日期</label>
 									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -215,7 +215,7 @@
 						<div class="row"><!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>住址：</label>
+									<label>住址</label>
 									<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -224,7 +224,7 @@
 						<div class="row"><!-- 有效期限 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>有效期限：</label>
+									<label>有效期限</label>
 									<input id="validStartDate" name="validStartDate" type="text" class="form-control input-sm" placeholder=" "  />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -240,17 +240,17 @@
 						<div class="row"><!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>现居住地是否与身份证相同：</label><input type="checkbox" class="nowProvince" name="addressIsSameWithCard" value="1"/>
+									<label>现居住地是否与身份证相同</label><input type="checkbox" class="nowProvince" name="addressIsSameWithCard" value="1"/>
 									<input type="hidden" name="cardProvince" id="cardProvince"/>
 									<input type="hidden" name="cardCity" id="cardCity"/>
-									<input id="province" name="province" type="text" class="form-control input-sm" placeholder=" " />
+									<input id="province" name="province" type="text" class="form-control input-sm" placeholder="省" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>现居住地址城市：</label>
-									<input id="city" name="city" type="text" class="form-control input-sm" placeholder=" " />
+									<label>现居住地址城市</label>
+									<input id="city" name="city" type="text" class="form-control input-sm" placeholder="市" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -258,8 +258,8 @@
 						<div class="row"><!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label>
-									<input id="detailedAddress" name="detailedAddress" type="text" class="form-control input-sm" placeholder=" " />
+									<label>详细地址</label>
+									<input id="detailedAddress" name="detailedAddress" type="text" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -267,7 +267,7 @@
 						<div class="row wordSpell">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>名/拼音：</label> 
+									<label>名/拼音</label> 
 									<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm" placeholder=" " value="" />
 									<input type="text" id="otherLastNameEn" style="position:absolute;top:45px;border:none;left:150px;" name="otherLastNameEn" value=""/>
 								</div>
