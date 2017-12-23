@@ -52,7 +52,7 @@ import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
-public class CompanyViewService extends BaseService<TCompanyEntity> {
+public class CompanyInfoViewService extends BaseService<TCompanyEntity> {
 	private static final Log log = Logs.get();
 
 	@Inject

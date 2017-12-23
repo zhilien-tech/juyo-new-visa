@@ -8,12 +8,17 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>公司信息</title>
 	<link rel="stylesheet"href="${base}/references/public/css/companyInfo.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 </head>
 <body>
 	<!-- 按钮 -->
 	<div class="head">
 		<div class="head-right">
-			<a class="updatePW headBtn">修改密码</a> <a class="addInfo headBtn">添加送签社</a>
+			<a class="updatePW headBtn" onclick="updatePassword();">修改密码</a>
+			&nbsp;&nbsp;&nbsp;
+			<a class="addInfo headBtn" onclick="addCompanyOfSqs();">添加送签社</a>
 		</div>
 	</div>
 	<!-- 列表 -->
@@ -50,7 +55,7 @@
 			</div>
 		</div>
 		<div class="pic">
-			<img src="img/u121.png" />
+			<img id="license" src="/references/common/images/companyInfo.png" />
 			<div class="fontWord">
 				<p>缩略图</p>
 				<p>点击可放大显示</p>
@@ -114,6 +119,33 @@
 			</div>
 		</div>
 	</div>
+	
+	<script type="text/javascript">
+		var BASE_PATH = '${base}';
+	</script>
+	<!-- jQuery 2.2.3 -->
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
+	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
+	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script src="${base}/references/common/js/layer/layer.js"></script>
+
+	<script type="text/javascript">
+		function updatePassword(){
+			 layer.open({
+		    	    type: 2,
+		    	    title: false,
+		    	    closeBtn:false,
+		    	    fix: false,
+		    	    maxmin: false,
+		    	    shadeClose: false,
+		    	    scrollbar: false,
+		    	    area: ['900px', '550px'],
+		    	    content: BASE_PATH + '/admin/personalInfo/updatePassword.html'
+		    	  });
+		}
+	</script>
 
 </body>
 </html>
