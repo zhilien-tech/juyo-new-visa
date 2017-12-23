@@ -21,6 +21,7 @@ import com.juyo.visa.forms.TApplicantVisaJpAddForm;
 import com.juyo.visa.forms.TApplicantVisaJpForm;
 import com.juyo.visa.forms.TApplicantVisaJpUpdateForm;
 import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
@@ -63,8 +64,8 @@ public class ApplicantvisaModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object visaInputAdd(@Param("applicantId") Integer applicantId) {
-		return applicantvisaViewService.visaInputAdd(applicantId);
+	public Object visaInputAdd(@Param("applicantId") Integer applicantId, @Param("isvisa") Integer isvisa) {
+		return applicantvisaViewService.visaInputAdd(applicantId, isvisa);
 	}
 
 	/**
@@ -72,8 +73,10 @@ public class ApplicantvisaModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..") TApplicantVisaJpAddForm addForm) {
-		addForm.setVisaEntryTime(new Date());
+	public Object add(@Param("..") TApplicantVisaJpAddForm addForm, @Param("isvisa") Integer isvisa) {
+		if (!Util.isEmpty(isvisa)) {
+			addForm.setVisaEntryTime(new Date());
+		}
 		return applicantvisaViewService.add(addForm);
 	}
 
@@ -83,10 +86,11 @@ public class ApplicantvisaModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object visaInputUpdate(@Param("id") final long id) {
+	public Object visaInputUpdate(@Param("id") final long id, @Param("isvisa") Integer isvisa) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("visadatatypeenum", EnumUtil.enum2(AlredyVisaTypeEnum.class));
 		result.put("applicantvisa", applicantvisaViewService.fetch(id));
+		result.put("isvisa", isvisa);
 		return result;
 	}
 

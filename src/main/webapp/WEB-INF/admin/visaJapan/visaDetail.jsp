@@ -292,7 +292,7 @@
 											<a v-on:click="passport(apply.id)">护照信息</a>&nbsp;
 											<a v-on:click="visa(apply.id)">签证信息</a>&nbsp;
 											<a v-on:click="noticeSale(apply.id)">通知销售</a>&nbsp;
-											<a v-on:click="visainput(apply.applyid)">签证录入</a>
+											<a v-on:click="visainput(apply.applyid)">签证补录</a>
 										</td>
 									</tr>
 								</tbody>

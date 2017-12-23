@@ -577,11 +577,13 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 					THotelEntity hotel = hotels.get(hotelindex);
 					travelplan.setHotel(hotel.getId());
 				}
-				//景区
-				int scenicindex = random.nextInt(scenics.size());
-				TScenicEntity scenic = scenics.get(scenicindex);
-				scenics.remove(scenic);
-				travelplan.setScenic(scenic.getName());
+				if (i > 0) {
+					//景区
+					int scenicindex = random.nextInt(scenics.size());
+					TScenicEntity scenic = scenics.get(scenicindex);
+					scenics.remove(scenic);
+					travelplan.setScenic(scenic.getName());
+				}
 				travelplan.setOpId(loginUser.getOpId());
 				travelplans.add(travelplan);
 			}

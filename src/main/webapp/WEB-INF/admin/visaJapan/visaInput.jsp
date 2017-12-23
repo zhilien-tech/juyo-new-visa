@@ -43,6 +43,7 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-12">
+								<a class="btn btn-primary btn-sm pull-right" href="javascript:closeWindow();" id="">取消</a>
 								<a class="btn btn-primary btn-sm pull-right" href="javascript:add();" id="">添加已有签证</a>
 							</div>
 						</div>
@@ -117,13 +118,13 @@
 		    	    	    area: ['900px', '550px'],
 		    	    	    content: '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid
 		    	    	  }); */
-		    	      window.location.href = '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid;
+		    	      window.location.href = '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid+'&isvisa=${isvisa}';
 		    	}
 		    }
 		});
 		//新增签证录入
 		function add(){
-			window.location.href = '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid;
+			window.location.href = '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid+'&isvisa=${isvisa}';
 	      /* layer.open({
 	    	    type: 2,
 	    	    title: false,
@@ -148,6 +149,10 @@
 	        		orderobj.visaInputData = data.visaInputData;
 	          	}
 	        });
+		}
+		function closeWindow(){
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
 		}
 		</script>
 		

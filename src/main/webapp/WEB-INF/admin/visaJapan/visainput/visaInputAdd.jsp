@@ -29,6 +29,7 @@
 					onclick="save();"
 					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 					<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }">
+					<input type="hidden" id="isvisa" name="isvisa" value="${obj.isvisa }">
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
