@@ -404,7 +404,7 @@
 				<!-- 主申请人 -->
 				<div class="info none" id="mySwitch">
 					<input type="hidden" id="appId" value="" name="appId"/>
-					<p class="info-head">
+					<p class="info-head"><span>申请人</span>
 						<input type="button" name="" value="添加"
 							class="btn btn-primary btn-sm pull-right" onclick="addApplicant(${obj.orderId})" />
 					</p>

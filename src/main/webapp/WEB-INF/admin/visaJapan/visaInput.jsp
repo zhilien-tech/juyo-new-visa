@@ -43,7 +43,14 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-12">
-								<a class="btn btn-primary btn-sm pull-right" href="javascript:closeWindow();" id="">取消</a>
+								<c:choose>
+									<c:when test="${isvisa == 1}">  
+										<a class="btn btn-primary btn-sm pull-right" href="javascript:closeWindow();" id="">取消</a>
+									</c:when>
+									<c:otherwise> 
+													   
+									</c:otherwise>
+								</c:choose>
 								<a class="btn btn-primary btn-sm pull-right" href="javascript:add();" id="">添加已有签证</a>
 							</div>
 						</div>
