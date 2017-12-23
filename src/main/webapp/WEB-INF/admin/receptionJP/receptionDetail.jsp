@@ -30,11 +30,12 @@
 			.info-body-from { margin-left:12%;}
 			.qz-head { position:fixed;top:0;left:0;z-index:99999; width:100%;}
 			.content { margin-top:50px;}
-			#applicantTable tbody tr td:nth-child(1){width: 10%;}
+			#applicantTable tbody tr td:nth-child(1){width: 1%;}
 			#applicantTable tbody tr td:nth-child(2){width: 10%;}
 			#applicantTable tbody tr td:nth-child(3){width: 10%;}
 			#applicantTable tbody tr td:nth-child(4){width: 10%;}
-			#applicantTable tbody tr td:nth-child(6){width: 8%;}
+			#applicantTable tbody tr td:nth-child(5){width: 10%;}
+			#applicantTable tbody tr td:nth-child(6){width: 30%;}
 			#schedulingTable thead tr th:nth-child(1){width:8%;}
 			#schedulingTable thead tr th:nth-child(2){width:10%;}
 			#schedulingTable thead tr th:nth-child(3){width:12%;}

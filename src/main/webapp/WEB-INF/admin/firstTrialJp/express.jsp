@@ -15,11 +15,10 @@
 	<script src="${base}/references/public/js/jquery-1.10.2.js"></script>
 	<style type="text/css">
 		#tableId tbody tr td:nth-child(1){width:10%;}
-		#tableId tbody tr td:nth-child(2){width:18%;}
-		#tableId tbody tr td:nth-child(3){width:13%;}
+		#tableId tbody tr td:nth-child(2){width:10%;}
+		#tableId tbody tr td:nth-child(3){width:10%;}
 		#tableId tbody tr td:nth-child(4){width:12%;}
-		#tableId tbody tr td:nth-child(5){width:37%;}
-		#tableId tbody tr td:nth-child(6){width:10%;}
+		#tableId tbody tr td:nth-child(5){width:10%;}
 		#tableId{position: relative;top: 15px;}
 		/*左右滑块*/
 		.switch{width:41px; display:inline-block;padding-left: 8px;}
