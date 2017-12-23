@@ -13,6 +13,7 @@ import com.juyo.visa.entities.TApplicantVisaJpEntity;
 import com.juyo.visa.forms.TApplicantVisaJpForm;
 import com.juyo.visa.forms.TApplicantVisaJpUpdateForm;
 import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
 @IocBean
@@ -23,11 +24,12 @@ public class ApplicantvisaViewService extends BaseService<TApplicantVisaJpEntity
 		return listPage4Datatables(queryForm);
 	}
 
-	public Object visaInputAdd(Integer applicantId) {
+	public Object visaInputAdd(Integer applicantId, Integer isvisa) {
 
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("applicantId", applicantId);
 		result.put("visadatatypeenum", EnumUtil.enum2(AlredyVisaTypeEnum.class));
+		result.put("isvisa", isvisa);
 		return result;
 	}
 
@@ -44,7 +46,9 @@ public class ApplicantvisaViewService extends BaseService<TApplicantVisaJpEntity
 		fetch.setVisaType(updateForm.getVisaType());
 		fetch.setVisaYears(updateForm.getVisaYears());
 		fetch.setPicUrl(updateForm.getPicUrl());
-		fetch.setVisaEntryTime(new Date());
+		if (!Util.isEmpty(updateForm.getIsvisa())) {
+			fetch.setVisaEntryTime(new Date());
+		}
 		return dbDao.update(fetch);
 	}
 

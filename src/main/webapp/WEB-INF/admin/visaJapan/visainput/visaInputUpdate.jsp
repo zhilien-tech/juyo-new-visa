@@ -32,6 +32,7 @@
 			<div class="modal-body">
 				<div class="tab-content">
 					<input name="id" type="hidden" value="${obj.applicantvisa.id}">
+					<input name="isvisa" type="hidden" value="${obj.isvisa}">
 					
 					<div class="row">
 						<div class="col-sm-6">
