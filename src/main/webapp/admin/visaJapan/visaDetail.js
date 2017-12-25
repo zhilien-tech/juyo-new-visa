@@ -94,6 +94,10 @@ new Vue({
 				orderobj.travelinfo = data.travelinfo;
 				orderobj.applyinfo = data.applyinfo;
 				orderobj.travelplan = data.travelplan;
+				console.log(JSON.stringify(orderobj.orderinfo));
+				if(orderobj.orderinfo.urgenttype == 1){
+					$('#urgentday').addClass('none');
+				}
 			}
 		});
 	},
@@ -191,7 +195,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['1000px', '750px'],
+				area: ['1000px', '600px'],
 				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&isvisa=1'
 			});
 		},

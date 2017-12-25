@@ -193,7 +193,7 @@
 			});
 		}
 		function cancelCallBack(status){
-			successCallBack(1);
+			successCallBack(5);
 		}
 	
 	</script>

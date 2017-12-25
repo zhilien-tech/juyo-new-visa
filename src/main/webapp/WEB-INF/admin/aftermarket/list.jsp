@@ -63,7 +63,7 @@
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="(item,index) in data.applicats">
-									<span v-if="index === 0">
+									<span v-if="index === 0" style="display:block; height:31px;">
 										<div><label>收件人：</label><span>{{item.linkman}}</span></div>
 										<div><label>电话：</label><span>{{item.backtelephone}}</span></div>
 										<div><label>地址：</label><span>{{item.expressaddress}}</span></div>
@@ -71,7 +71,7 @@
 										<div><label></label><span><a href="javascript:;" v-on:click="backpost(item.id)">回邮</a></span></div>
 										<div><!-- <i> </i> --></div>
 									</span>
-									<span v-else>
+									<span v-else  style="display:block; height:31px;">
 										<div><label>　　　　</label><span>{{item.linkman}}</span></div>
 										<div><label>　　　</label><span>{{item.backtelephone}}</span></div>
 										<div><label>　　　</label><span>{{item.expressaddress}}</span></div>

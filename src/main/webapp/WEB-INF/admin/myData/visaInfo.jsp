@@ -41,25 +41,15 @@
 </head>
 <body>
 	<div class="modal-content">
-		<a id="toPassport" class="leftNav" onclick="passportBtn();">
-			<span></span>
-		</a>
 		<form id="passportInfo">
 			<div class="modal-header">
 				<span class="heading">签证信息</span> 
 				<input type="hidden" value="${obj.visaInfo.applicantId }" name="applicantId"/>
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
-				<c:choose>
-						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
-					<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
-				<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualifiedBtn" value="合格" />
-						</c:when>
-						<c:otherwise> 
-						</c:otherwise>
-					</c:choose>
+				<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
+				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
 			</div>
 			<div class="modal-body">
 			<div class="ipt-info">
@@ -89,7 +79,7 @@
 									<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.applicant.marryUrl }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="" src="${obj.applicant.marryUrl }" >
-									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+									<i class="delete" id="deleteApplicantFrontImg();"></i>
 								</div>
 							</div>
 							
@@ -342,15 +332,19 @@
 		var base = "${base}";
 		$(function() {
 			
+			var form = document.forms[0]; 
+			for ( var i = 0; i < form.length; i++) { 
+				var element = form.elements[i]; 
+				if(element.id != "editbasic")
+					element.disabled = true; 
+			} 
+			document.getElementById("mainRelation").style.backgroundColor = "#eee";
+			document.getElementById("relationRemark").style.backgroundColor = "#eee";
+			$(".basic").hide();
+			
 			var remark = $("#visaRemark").val();
 			if(remark != ""){
 				$(".ipt-info").show();
-			}
-			
-			//初审环节，显示合格不合格按钮
-			if(${obj.isTrailOrder} == 1){
-				$("#qualifiedBtn").show();
-				$("#unqualifiedBtn").show();
 			}
 			
 			var marry = $("#marryUrl").val();
@@ -462,25 +456,7 @@
 						}
 						});
 					});
-				
 			}
-			
-			/* var work = $("#work").val();
-			if(work == 0){
-				$(".workmain").show();
-				//$(".address").show();
-			}
-			$("#work").change(function(){
-				if($(this).val() == 1){
-					$(".workmain").hide();
-				}else{
-					$(".workmain").show();
-					/* $("#careerStatus").val(1);
-					$("#name").val("");
-					$("#telephone").val("");
-					$("#address").val(""); 
-				}
-			}); */
 			
 			var wealth = $("#wealth").val();
 			if(wealth == 0){
@@ -560,29 +536,7 @@
 					}
 				}
 			});
-			$(".remove-btn").click(function(){
-				//$(this).parent().css("display","none");
-				if($(this).parent().is(".deposit")){
-					$(".deposit").css("display","none");
-					$("#depositType").removeClass("btnState-true");
-					$("#deposit").val("");
-				}
-				if($(this).parent().is(".vehicle")){
-					$(".vehicle").css("display","none");
-					$("#vehicleType").removeClass("btnState-true");
-					$("#vehicle").val("");
-				}
-				if($(this).parent().is(".houseProperty")){
-					$(".houseProperty").css("display","none");
-					$("#housePropertyType").removeClass("btnState-true");
-					$("#houseProperty").val("");
-				}
-				if($(this).parent().is(".financial")){
-					$(".financial").css("display","none");
-					$("#financialType").removeClass("btnState-true");
-					$("#financial").val("");
-				}
-			});
+			
 			
 			
 			
@@ -622,13 +576,9 @@
 	            console.log('Websocket not supported');  
 	          }  
 		}
-		$("#addBtn").click(function(){
-			save(1);
-		});
-		
 		
 		//保存
-		function save(status){
+		function save(){
 			//绑定财产类型
 			var wealthType = "";
 			$('[name=wealthType]').each(function(){
@@ -651,16 +601,16 @@
 				type: 'POST',
 				async: false,
 				data : passportInfo,
-				url: '${base}/admin/orderJp/saveEditVisa',
+				url: '${base}/admin/myData/saveEditVisa',
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					layer.close(index); */
-					if(status == 1){
-						closeWindow();
-						parent.successCallBack(1);
-					}
+					layer.msg("修改成功", {
+						time: 500,
+						end: function () {
+							self.location.reload();
+						}
+					});
 				}
 			});
 		}
@@ -716,75 +666,59 @@
 			reader.readAsDataURL(file);
 		});
 		
-		function deleteApplicantFrontImg(){
-			$('#marryUrl').val("");
-			$('#sqImg').attr('src', "");
-			$("#uploadFile").siblings("i").css("display","none");
+		//编辑按钮
+		function editBtn(){
+			$(".basic").show();
+			$(".editbasic").hide();
+			var form = document.forms[0]; 
+			for ( var i = 0; i < form.length; i++) { 
+				var element = form.elements[i]; 
+				element.disabled = false; 
+			} 
+			document.getElementById("mainRelation").style.backgroundColor = "#fff";
+			document.getElementById("relationRemark").style.backgroundColor = "#fff";
+			$("#trip").attr("disabled", true);
+			$("#deleteApplicantFrontImg").click(function(){
+				$('#marryUrl').val("");
+				$('#sqImg').attr('src', "");
+				$("#uploadFile").siblings("i").css("display","none");
+			});
+			
+			$(".remove-btn").click(function(){
+				//$(this).parent().css("display","none");
+				if($(this).parent().is(".deposit")){
+					$(".deposit").css("display","none");
+					$("#depositType").removeClass("btnState-true");
+					$("#deposit").val("");
+				}
+				if($(this).parent().is(".vehicle")){
+					$(".vehicle").css("display","none");
+					$("#vehicleType").removeClass("btnState-true");
+					$("#vehicle").val("");
+				}
+				if($(this).parent().is(".houseProperty")){
+					$(".houseProperty").css("display","none");
+					$("#housePropertyType").removeClass("btnState-true");
+					$("#houseProperty").val("");
+				}
+				if($(this).parent().is(".financial")){
+					$(".financial").css("display","none");
+					$("#financialType").removeClass("btnState-true");
+					$("#financial").val("");
+				}
+			});
 		}
-		
 		
 		//返回 
 		function closeWindow() {
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			parent.layer.close(index);
-			parent.cancelCallBack(1);
-		}
-		function cancelCallBack(status){
-			closeWindow();
-		}
-		function successCallBack(status){
-			parent.successCallBack(1);
-			closeWindow();
-		}
-		function passportBtn(){
-			save(2);
-			var applicantId = ${obj.applicant.id};
-			var orderid = ${obj.orderid};
-			//关闭websocket连接
-			socket.onclose();
-			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
-			/* layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder}
-			}); */
-		}
-		
-		//合格/不合格
-		$(".Unqualified").click(function(){
-			$(".ipt-info").slideDown();
-		});
-		$(".qualifiedBtn").click(function(){
-			$(".ipt-info").slideUp();
-			$("#visaRemark").val("");
-			var applicantId = ${obj.applicant.id};
-			var orderid = ${obj.orderid};
-			var orderJpId = ${obj.orderJpId};
-			var infoType = ${obj.infoType};
-			layer.load(1);
-			$.ajax({
-				type: 'POST',
-				async : false,
-				data : {
-					applicantId : applicantId,
-					orderid : orderid,
-					orderjpid : orderJpId,
-					infoType : infoType
-				},
-				url: '${base}/admin/qualifiedApplicant/qualified.html',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-					save(1);
+			layer.msg("已取消", {
+				time: 500,
+				end: function () {
+					self.location.reload();
+					//window.location.href = '/admin/myData/visaCountry.html';
 				}
 			});
-		});
+		}
 	</script>
 
 

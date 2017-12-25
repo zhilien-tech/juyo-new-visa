@@ -31,19 +31,27 @@
 			.card-list:hover{height: 87px !important;min-height: 87px !important;}
 			.box-header{padding-right: 16px;}
 			.box-body{padding-top:15px;}
+			.liClose { float:right !important;}
+			.liClose a { display:block; width:40px; height:51px;}
+			.closed { position:relative; width:3px; height:30px; margin:10px 0 0 20px; background: #333; -webkit-transform: rotate(45deg);  -moz-transform: rotate(45deg);  -o-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg);  display: inline-block; }
+ 			.closed:after{ content: "";  position: absolute;  top: 0;  left: 0;   width:3px;  height:30px;  background: #333;   -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg);  -o-transform: rotate(270deg); -ms-transform: rotate(270deg);  transform: rotate(270deg); }
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper">
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<ul class="title">
-					<li>签证录入</li>
+					<li>签证补录</li>
+					<li class="liClose">
+						<a onclick="closeWindow()">
+							<div class="closed"></div>
+						</a>
+					</li>
 				</ul>
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-12">
-								<a class="btn btn-primary btn-sm pull-right" href="javascript:closeWindow();" id="">取消</a>
 								<a class="btn btn-primary btn-sm pull-right" href="javascript:add();" id="">添加已有签证</a>
 							</div>
 						</div>

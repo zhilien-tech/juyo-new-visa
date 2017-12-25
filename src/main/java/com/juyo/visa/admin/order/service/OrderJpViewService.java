@@ -504,9 +504,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object saveAddOrderinfo(OrderEditDataForm orderInfo, HttpSession session) {
+		TOrderEntity orderEntity = null;
+		if (Util.isEmpty(orderInfo.getId())) {
+			orderEntity = new TOrderEntity();
+		} else {
+			orderEntity = dbDao.fetch(TOrderEntity.class, orderInfo.getId().longValue());
+		}
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TOrderEntity orderEntity = new TOrderEntity();
 
 		//判断是否为直客,直客时客户信息保存在订单中
 		if (!Util.isEmpty(orderInfo.getCuSource())) {
@@ -627,14 +632,24 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		orderEntity.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
 		orderEntity.setUpdateTime(new Date());
 		orderEntity.setIsDisabled(IsYesOrNoEnum.NO.intKey());
-		dbDao.insert(orderEntity);
-		Integer orderId = orderEntity.getId();
-		//下单日志保存
-		insertLogs(orderId, JPOrderStatusEnum.PLACE_ORDER.intKey(), session);
+		if (Util.isEmpty(orderInfo.getId())) {
+			dbDao.insert(orderEntity);
+			Integer orderId = orderEntity.getId();
+			//下单日志保存
+			insertLogs(orderId, JPOrderStatusEnum.PLACE_ORDER.intKey(), session);
+		} else {
+			dbDao.update(orderEntity);
+		}
 
 		//日本订单信息
-		TOrderJpEntity orderJpEntity = new TOrderJpEntity();
-		orderJpEntity.setOrderId(orderId);
+		TOrderJpEntity orderJpEntity = null;
+		Integer orderId = orderEntity.getId();
+		if (Util.isEmpty(orderInfo.getId())) {
+			orderJpEntity = new TOrderJpEntity();
+		} else {
+			orderJpEntity = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
+		}
+		orderJpEntity.setOrderId(orderEntity.getId());
 		if (!Util.isEmpty(orderInfo.getIsvisit())) {
 			orderJpEntity.setIsVisit(orderInfo.getIsvisit());
 		}
@@ -647,7 +662,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(orderInfo.getVisatype())) {
 			orderJpEntity.setVisaType(orderInfo.getVisatype());
 		}
-		dbDao.insert(orderJpEntity);
+		if (Util.isEmpty(orderInfo.getId())) {
+			dbDao.insert(orderJpEntity);
+		} else {
+			dbDao.update(orderJpEntity);
+		}
 		//申请人信息
 		Integer orderJpId = orderJpEntity.getId();
 		if (!Util.isEmpty(orderInfo.getAppId())) {

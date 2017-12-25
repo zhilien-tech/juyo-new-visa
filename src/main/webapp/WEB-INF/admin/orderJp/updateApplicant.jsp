@@ -97,7 +97,7 @@
 							<!-- 签发机关 -->
 							<div class="col-sm-11 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>签发机关：</label> 
+									<label><span>*</span>签发机关</label> 
 									<input id="issueOrganization" name="issueOrganization"
 										type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
 									<!-- <i class="bulb"></i> -->
@@ -126,7 +126,7 @@
 							<div class="nameBeforeHide">
 							    <div class="col-sm-11 padding-right-0">
 									<div class="form-group">
-										<label>姓/拼音：</label> <input id="otherFirstName"
+										<label>姓/拼音</label> <input id="otherFirstName"
 											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
 											placeholder=" " value="${obj.applicant.otherFirstName }" />
 											<input type="text" id="otherFirstNameEn" style="position:absolute;top:42px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
@@ -163,7 +163,7 @@
 							<!-- 姓/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>姓/拼音：</label> <input id="firstName"
+									<label><span>*</span>姓/拼音</label> <input id="firstName"
 										name="firstName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
@@ -178,7 +178,7 @@
 							<!-- 名/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>名/拼音：</label> <input id="lastName"
+									<label><span>*</span>名/拼音</label> <input id="lastName"
 										name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.lastName }" />
 										<input type="text" id="lastNameEn" style="position:absolute;top:39px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
@@ -192,7 +192,7 @@
 							<!-- 手机号/邮箱 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>手机号：</label> <input id="telephone"
+									<label><span>*</span>手机号</label> <input id="telephone"
 										name="telephone" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.telephone }" />
 									<!-- <i class="bulb"></i> -->
@@ -200,7 +200,7 @@
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>邮箱：</label> <input id="email" name="email"
+									<label>邮箱</label> <input id="email" name="email"
 										type="text" class="form-control input-sm" placeholder=" "
 										value="${obj.applicant.email }" />
 									<!-- <i class="bulb"></i> -->
@@ -213,7 +213,7 @@
 							<!-- 公民身份证 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>公民身份证：</label> <input id="cardId"
+									<label>公民身份证</label> <input id="cardId"
 										name="cardId" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.cardId }" />
 									<!-- <i class="bulb"></i> -->
@@ -225,7 +225,7 @@
 							<!-- 姓名/民族 -->
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>性别：</label> 
+									<label><span>*</span>性别</label> 
 									<%-- <input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.sex }"/> --%>
 									<select
 										class="form-control input-sm selectHeight" id="sex" name="sex">
@@ -239,7 +239,7 @@
 							</div>
 							<div class="col-sm-3 padding-right-0">
 								<div class="form-group">
-									<label>民族：</label> <input id="nation"
+									<label>民族</label> <input id="nation"
 										name="nation" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.nation }" />
 									<!-- <i class="bulb"></i> -->
@@ -247,7 +247,7 @@
 							</div>
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
-									<label>出生日期：</label> 
+									<label>出生日期</label> 
 									<input id="birthday" name="birthday" type="text" class="form-control input-sm" value="${obj.birthday }"/>
 									
 								</div>
@@ -258,7 +258,7 @@
 							<!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>住址：</label> <input id="address"
+									<label>住址</label> <input id="address"
 										name="address" type="text" class="form-control input-sm"
 										placeholder=" " value="${obj.applicant.address }" />
 									<!-- <i class="bulb"></i> -->
@@ -269,7 +269,7 @@
 						<div class="row">
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>有效期限：</label> 
+									<label>有效期限</label> 
 									<input id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
 								</div>
 							</div>
@@ -284,21 +284,21 @@
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="provinceDiv">
-									<label>现居住地是否与身份证相同：</label>
+									<label>现居住地是否与身份证相同</label>
 									<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
 									<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
 									<input type="hidden" id="sameAddress" value=""/>
 									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> <input id="province"
 										name="province" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.province }" />
+										placeholder="省" value="${obj.applicant.province }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
-									<label>现居住地址城市：</label> <input id="city"
+									<label>现居住地址城市</label> <input id="city"
 										name="city" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.city }" />
+										placeholder="市" value="${obj.applicant.city }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -308,9 +308,9 @@
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>详细地址/区(县)/街道/小区(社区)/楼号/单元/房间：</label> <input
+									<label>详细地址</label> <input
 										id="detailedAddress" name="detailedAddress" type="text"
-										class="form-control input-sm" placeholder=" "
+										class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间"
 										value="${obj.applicant.detailedAddress }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -321,7 +321,7 @@
 						<div class="row wordSpell">
 							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<label>名/拼音：</label> 
+									<label>名/拼音</label> 
 									<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
 									<input type="text" id="otherLastNameEn" style="position:absolute;top:45px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
 								</div>
@@ -412,14 +412,14 @@
 			}
 			
 			//初审环节，显示合格不合格按钮
-			if(${obj.isTrailOrder}==1){
+			if('${obj.isTrailOrder}'==1){
 				$("#qualifiedBtn").show();
 				$("#unqualifiedBtn").show();
 			}
 			
-			var nation = ${obj.applicant.hasOtherNationality};
-			var otherName = ${obj.applicant.hasOtherName};
-			var address = ${obj.applicant.addressIsSameWithCard};
+			var nation = '${obj.applicant.hasOtherNationality}';
+			var otherName = '${obj.applicant.hasOtherName}';
+			var address = '${obj.applicant.addressIsSameWithCard}';
 			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
 			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
 			if(nation == 1){
@@ -856,10 +856,10 @@
 		
 		function passportBtn(){
 			saveApplicant(2);
-			var applicantId = ${obj.applicant.id};
-			var orderid = ${obj.orderid};
+			var applicantId = '${obj.applicant.id}';
+			var orderid = '${obj.orderid}';
 			socket.onclose();
-			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
+			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
 			/* layer.open({
 				type: 2,
 				title: false,
@@ -883,10 +883,10 @@
 		});
 		$(".qualified").click(function(){
 			$(".ipt-info").slideUp();
-			var applicantId = ${obj.applicant.id};
-			var orderid = ${obj.orderid};
-			var orderJpId = ${obj.orderJpId};
-			var infoType = ${obj.infoType};
+			var applicantId = '${obj.applicant.id}';
+			var orderid = '${obj.orderid}';
+			var orderJpId = '${obj.orderJpId}';
+			var infoType = '${obj.infoType}';
 			layer.load(1);
 			$.ajax({
 				type: 'POST',
@@ -937,7 +937,7 @@
 				applicantInfo = $("#applicantInfo").serialize();
 			}
 			
-			var applicantId = ${obj.applicantId};
+			var applicantId = '${obj.applicantId}';
 			applicantInfo.id = applicantId;
 			$.ajax({
 				async: false,
