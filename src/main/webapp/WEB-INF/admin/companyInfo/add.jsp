@@ -95,7 +95,7 @@
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-		<!-- 本页面js文件 -->
+	<!-- 本页面js文件 -->
 	<script src="${base}/admin/companyInfo/companyInfo.js"></script>
 	<script type="text/javascript">
 		//返回 

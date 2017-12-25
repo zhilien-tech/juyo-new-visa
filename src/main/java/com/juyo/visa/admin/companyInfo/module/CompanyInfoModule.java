@@ -38,7 +38,6 @@ public class CompanyInfoModule {
 	 * <p>
 	 */
 	@At
-	@POST
 	public Object companyInfoListData(@Param("..") TCompanyOfCustomerForm form, HttpSession session) {
 		return companyInfoViewService.getCompanyInfoList(form, session);
 	}
