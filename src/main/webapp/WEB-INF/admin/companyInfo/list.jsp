@@ -130,6 +130,11 @@
 		</div>
 	</div>
 	
+	<!-- 分页 -->
+	<input type="hidden" id="pageNumber" name="pageNumber" value="1">
+	<input type="hidden" id="pageTotal" name="pageTotal">
+	<input type="hidden" id="pageListCount" name="pageListCount">
+	
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
@@ -166,7 +171,7 @@
 	    	    shadeClose: false,
 	    	    scrollbar: false,
 	    	    area: ['900px', '550px'],
-	    	    content: BASE_PATH + '/admin/companyInfo/add.html'
+	    	    content: BASE_PATH + '/admin/companyInfo/addEdit.html'
 	    	});
 		}
 	</script>
