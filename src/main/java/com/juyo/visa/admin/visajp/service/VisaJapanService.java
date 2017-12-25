@@ -41,6 +41,7 @@ import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
+import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
@@ -1214,7 +1215,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		String mobile = saleinfo.getMobile();
 		boolean mobileLegal = RegExpUtil.isMobileLegal(mobile);
 		if (!mobileLegal) {
-			return JuYouResult.build(500, "手机号格式错误");
+			return JuYouResult.build(500, "销售手机号格式错误");
 		}
 		//订单号
 		String ordernum = order.getOrderNum();
@@ -1239,5 +1240,55 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		param.put("${data}", datastr);
 		mailService.sendMessageByMap(mobile, param, VISA_NOTICE_SALE_MESSAGE_TMP);
 		return JuYouResult.ok();
+	}
+
+	/**
+	 * 发招保弹框
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param request
+	 * @param orderid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object sendZhaoBao(HttpServletRequest request, Long orderid) {
+		HttpSession session = request.getSession();
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("orderid", orderid);
+		//送签社下拉
+		List<TCompanyEntity> songqianlist = dbDao.query(TCompanyEntity.class,
+				Cnd.where("comType", "=", CompanyTypeEnum.SONGQIAN.intKey()), null);
+		result.put("songqianlist", songqianlist);
+		//地接社下拉
+		List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
+				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()), null);
+		result.put("dijielist", dijielist);
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+		result.put("orderjpinfo", orderjp);
+		return result;
+	}
+
+	/**
+	 * 保存招宝信息
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderJpEntity
+	 * @param request
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object saveZhaoBao(TOrderJpEntity orderJpEntity, HttpServletRequest request) {
+		//查询日本订单表信息
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderJpEntity.getOrderId().longValue());
+		//查询订单表信息
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
+		//更新订单状态为发招保中
+		dbDao.update(orderinfo);
+		orderjp.setSendsignid(orderJpEntity.getSendsignid());
+		orderjp.setGroundconnectid(orderJpEntity.getGroundconnectid());
+		orderjp.setZhaobaotime(new Date());
+		dbDao.update(orderjp);
+		return null;
 	}
 }

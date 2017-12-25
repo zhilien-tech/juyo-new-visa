@@ -69,7 +69,7 @@
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<i class="sendZB" v-on:click="sendInsurance(data.id,16)"> </i>
+									<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
 									<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
 									<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
 									<i class="Refusal" v-on:click="sendInsurance(data.id,27)"></i>
@@ -186,6 +186,19 @@
                    	}
                  });
         	},
+        	sendzhaobao:function(orderid){
+        		layer.open({
+        		    type: 2,
+        		    title: false,
+        		    closeBtn:false,
+        		    fix: false,
+        		    maxmin: false,
+        		    shadeClose: false,
+        		    scrollbar: false,
+        		    area: ['400px', '300px'],
+        		    content: '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid
+        		  });
+        	},
         	downLoadFile:function(orderid){
         		layer.load(1);
         		$.fileDownload("${base}/admin/visaJapan/downloadFile.html?orderid=" + orderid, {
@@ -300,7 +313,9 @@
         		_self.visaJapanData = data.visaJapanData;
           	}
         });
-		if(status){
+		if(status == 1){
+			layer.msg('发招宝');
+		}else{
 			layer.msg('保存成功');
 		}
 	}

@@ -224,8 +224,6 @@ function commitdata(){
 	orderobj.orderinfo.gotripdate = $('#gotripdate').val();
 	orderobj.orderinfo.backtripdate = $('#backtripdate').val();
 	orderobj.orderinfo.sendvisadate = $('#sendvisadate').val();
-	orderobj.orderinfo.number = $('#number').val();
-	orderobj.orderinfo.money = $('#money').val();
 	orderobj.orderinfo.stayday = $('#stayday').val();
 	orderobj.orderinfo.outvisadate = $('#outvisadate').val();
 	orderobj.orderinfo.sendvisanum = $('#sendvisanum').val();

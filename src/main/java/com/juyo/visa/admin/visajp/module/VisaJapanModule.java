@@ -327,4 +327,22 @@ public class VisaJapanModule {
 	public Object noticeSale(@Param("applyid") Integer applyid) {
 		return visaJapanService.noticeSale(applyid);
 	}
+
+	/**
+	 * 发招保页面
+	 */
+	@At
+	@Ok("jsp")
+	public Object sendZhaoBao(HttpServletRequest request, @Param("orderid") Long orderid) {
+		return visaJapanService.sendZhaoBao(request, orderid);
+	}
+
+	/**
+	 * 保存招宝信息
+	 */
+	@At
+	@POST
+	public Object saveZhaoBao(@Param("..") TOrderJpEntity orderJpEntity, HttpServletRequest request) {
+		return visaJapanService.saveZhaoBao(orderJpEntity, request);
+	}
 }
