@@ -18,3 +18,4 @@ FROM
 	t_company c
 	LEFT JOIN t_user u ON c.adminId = u.id
 $condition
+
