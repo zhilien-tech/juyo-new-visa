@@ -71,7 +71,7 @@ public class CompanyInfoModule {
 	}
 
 	/**
-	 * 添加
+	 * 编辑
 	 */
 	@At
 	@POST

@@ -54,6 +54,9 @@ public class TCompanyOfCustomerForm extends DataTablesParamForm {
 	/**修改时间*/
 	private Date updateTime;
 
+	//公司信息id
+	private Integer comInfoId;
+
 	//页码
 	private Integer pageNumber = 1;
 	//每页多少条

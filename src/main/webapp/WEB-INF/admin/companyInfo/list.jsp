@@ -125,10 +125,6 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<!-- 本页面js文件 -->
 	<script src="${base}/admin/companyInfo/companyList.js"></script>
-	<script type="text/javascript">
-		
-	</script>
-
 </body>
 </html>
 
