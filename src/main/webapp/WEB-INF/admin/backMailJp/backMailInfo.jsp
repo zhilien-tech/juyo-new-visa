@@ -44,19 +44,13 @@
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label><span>*</span>快递号：</label> 
-									<input id="expressNum" name="expressNum" v-model="backmailinfo.expressnum" type="text" class="form-control input-sm" placeholder=" " />
+									<label><span>*</span>团队名称：</label> 
+									<input id="teamName" name="teamName" v-model="backmailinfo.teamname" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 						</div>
 						
 						<div class="row body-from-input">
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label><span>*</span>团队名称：</label> 
-									<input id="teamName" name="teamName" v-model="backmailinfo.teamname" type="text" class="form-control input-sm" placeholder=" " />
-								</div>
-							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label><span>*</span>回邮方式：</label> 
@@ -65,6 +59,12 @@
 											<option value="${map.key}">${map.value}</option>
 										</c:forEach>
 									</select>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label><span>*</span>快递号：</label> 
+									<input id="expressNum" name="expressNum" v-model="backmailinfo.expressnum" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 						</div>
@@ -95,27 +95,41 @@
 						<div class="row body-from-input">
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label><span>*</span>发票项目内容：</label> 
+									<label>发票项目内容：</label> 
 									<input id="invoiceContent" name="invoiceContent" v-model="backmailinfo.invoicecontent" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label><span>*</span>发票抬头：</label> 
+									<label>发票抬头：</label> 
 									<input id="invoiceHead" name="invoiceHead" v-model="backmailinfo.invoicehead" type="text" class="form-control input-sm" placeholder=" " />
+								</div>
+							</div>
+						</div>
+						<div class="row body-from-input">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label>地址：</label> 
+									<input id="invoiceAddress" name="invoiceAddress" v-model="backmailinfo.invoiceaddress" type="text" class="form-control input-sm" placeholder=" " />
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label>电话：</label> 
+									<input id="invoiceMobile" name="invoiceMobile" v-model="backmailinfo.invoicemobile" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 						</div>
 						<div class="row body-from-input" style="padding-left:0;">
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label><span>*</span>税号：</label> 
+									<label>税号：</label> 
 									<input id="taxNum" name="taxNum" v-model="backmailinfo.taxnum" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label><span>*</span>备注：</label> 
+									<label>备注：</label> 
 									<input id="remark" name="remark" v-model="backmailinfo.remark" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
