@@ -46,7 +46,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>指定番号：</label> 
-								<input id="designatedNum" name="designatedNum" type="text" class="form-control input-sm" placeholder="必须大写字母" />
+								<input id="designatedNum" name="designatedNum" type="text" style="text-transform:uppercase" class="form-control input-sm" placeholder="必须大写字母" />
 							</div>
 						</div>
 

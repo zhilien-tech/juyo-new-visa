@@ -68,44 +68,39 @@
 					</div>
 	        	</c:otherwise>
 	        </c:choose>
-		
-			
 		</div>
 	</div>
-	<div class="box-body" id="cardList"><!-- 卡片列表 -->
-		<div class="card-list" v-cloak v-for="data in companyInfoData">
-			<div class="section">
-				<div class="listShow">
-					<div class="list listName">
-						<label>公司全称：</label> <span>{{data.fullname}}</span>
-					</div>
-					<div class="list listNameTag">
-						<label>公司简称：</label> <span>{{data.shortname}}</span>
-					</div>
-					<div class="list listNum">
-						<label>指定番号：</label> <span>{{data.designatednum}}</span>
-					</div>
-					<div class="list listPer">
-						<label>联系人：</label> <span>{{data.linkman}}</span>
-					</div>
-					<div class="list listTel">
-						<label>电话：</label> <span>{{data.mobile}}</span>
-					</div>
-					<div class="list updateList">
-						<a @click="updateComInfo(data.id)">编辑</a>
-					</div>
+	
+	<!-- 卡片列表 -->
+	<div  id="cardList">
+		<div class="section" v-cloak v-for="data in companyInfoData">
+			<div class="listShow">
+				<div class="list listName">
+					<label>公司全称：</label> <span>{{data.fullname}}</span>
 				</div>
-				<div class="listHover">
-					<div class="list listAddress">
-						<label>地址：</label> <span>{{data.address}}</span>
-					</div>
+				<div class="list listNameTag">
+					<label>公司简称：</label> <span>{{data.shortname}}</span>
+				</div>
+				<div class="list listNum">
+					<label>指定番号：</label> <span>{{data.designatednum}}</span>
+				</div>
+				<div class="list listPer">
+					<label>联系人：</label> <span>{{data.linkman}}</span>
+				</div>
+				<div class="list listTel">
+					<label>电话：</label> <span>{{data.mobile}}</span>
+				</div>
+				<div class="list updateList">
+					<a @click="updateComInfo(data.id)">编辑</a>
 				</div>
 			</div>
-		
+			<div class="listHover">
+				<div class="list listAddress">
+					<label>地址：</label> <span>{{data.address}}</span>
+				</div>
+			</div>
 		</div>
 	</div>
-	
-	
 	
 	<!-- 分页 -->
 	<input type="hidden" id="pageNumber" name="pageNumber" value="1">
