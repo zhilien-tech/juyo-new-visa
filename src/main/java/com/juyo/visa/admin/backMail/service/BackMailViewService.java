@@ -117,6 +117,9 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 		backmail.setTelephone(form.getTelephone());
 		backmail.setExpressAddress(form.getExpressAddress());
 		backmail.setInvoiceContent(form.getInvoiceContent());
+		backmail.setInvoiceHead(form.getInvoiceHead());
+		backmail.setInvoiceMobile(form.getInvoiceMobile());
+		backmail.setInvoiceAddress(form.getInvoiceAddress());
 		backmail.setApplicantId(form.getApplicantJPId());
 		backmail.setInvoiceHead(form.getInvoiceHead());
 		backmail.setTaxNum(form.getTaxNum());
