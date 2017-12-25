@@ -37,6 +37,7 @@ import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
 import com.juyo.visa.admin.visajp.form.PassportForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
+import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
@@ -49,6 +50,7 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.util.MapUtil;
+import com.juyo.visa.common.util.RegExpUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
@@ -896,14 +898,20 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			List<TApplicantVisaPaperworkJpEntity> paperworkjps = JsonUtil.fromJsonAsList(
 					TApplicantVisaPaperworkJpEntity.class, revenuejson);
 			for (TApplicantVisaPaperworkJpEntity paperworkjp : paperworkjps) {
-				TApplicantVisaPaperworkJpEntity fetch = dbDao.fetch(TApplicantVisaPaperworkJpEntity.class, paperworkjp
-						.getId().longValue());
-				if (!Util.isEmpty(paperworkjp.getRealInfo())) {
-					fetch.setRealInfo(paperworkjp.getRealInfo());
-					fetch.setStatus(paperworkjp.getStatus());
-					paperworks.add(fetch);
+				//判断id是否存在
+				if (!Util.isEmpty(paperworkjp.getId())) {
+					TApplicantVisaPaperworkJpEntity fetch = dbDao.fetch(TApplicantVisaPaperworkJpEntity.class,
+							paperworkjp.getId().longValue());
+					if (!Util.isEmpty(paperworkjp.getRealInfo())) {
+						fetch.setRealInfo(paperworkjp.getRealInfo());
+						fetch.setStatus(paperworkjp.getStatus());
+						paperworks.add(fetch);
+					} else {
+						dbDao.delete(fetch);
+					}
 				} else {
-					dbDao.delete(fetch);
+					paperworkjp.setApplicantId(Integer.valueOf(applicatid));
+					dbDao.insert(paperworkjp);
 				}
 			}
 
@@ -1204,6 +1212,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		TUserEntity saleinfo = dbDao.fetch(TUserEntity.class, order.getUserId().longValue());
 		//销售人员手机号
 		String mobile = saleinfo.getMobile();
+		boolean mobileLegal = RegExpUtil.isMobileLegal(mobile);
+		if (!mobileLegal) {
+			return JuYouResult.build(500, "手机号格式错误");
+		}
 		//订单号
 		String ordernum = order.getOrderNum();
 		//姓名
@@ -1226,6 +1238,6 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		param.put("${telephone}", telephone);
 		param.put("${data}", datastr);
 		mailService.sendMessageByMap(mobile, param, VISA_NOTICE_SALE_MESSAGE_TMP);
-		return null;
+		return JuYouResult.ok();
 	}
 }

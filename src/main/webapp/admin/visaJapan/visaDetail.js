@@ -209,7 +209,11 @@ new Vue({
 				type:'post',
 				success: function(data){
 					layer.closeAll('loading');
-					layer.msg('通知成功');
+					if(data.status == 200){
+						layer.msg('通知成功');
+					}else if(data.status == 500){
+						layer.msg(data.msg);
+					}
 				}
 			});
 		}
