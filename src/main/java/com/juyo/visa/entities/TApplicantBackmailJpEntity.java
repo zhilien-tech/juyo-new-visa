@@ -58,6 +58,14 @@ public class TApplicantBackmailJpEntity implements Serializable {
 	private String invoiceHead;
 
 	@Column
+	@Comment("发票电话")
+	private String invoiceMobile;
+
+	@Column
+	@Comment("发票地址")
+	private String invoiceAddress;
+
+	@Column
 	@Comment("税号")
 	private String taxNum;
 
@@ -109,6 +117,16 @@ public class TApplicantBackmailJpEntity implements Serializable {
 				return false;
 		} else if (!expressType.equals(other.expressType))
 			return false;
+		if (invoiceMobile == null) {
+			if (other.invoiceMobile != null)
+				return false;
+		} else if (!invoiceMobile.equals(other.invoiceMobile))
+			return false;
+		if (invoiceAddress == null) {
+			if (other.invoiceAddress != null)
+				return false;
+		} else if (!invoiceAddress.equals(other.invoiceAddress))
+			return false;
 		if (invoiceContent == null) {
 			if (other.invoiceContent != null)
 				return false;
@@ -149,11 +167,6 @@ public class TApplicantBackmailJpEntity implements Serializable {
 				return false;
 		} else if (!telephone.equals(other.telephone))
 			return false;
-		if (updateTime == null) {
-			if (other.updateTime != null)
-				return false;
-		} else if (!updateTime.equals(other.updateTime))
-			return false;
 		return true;
 	}
 
@@ -168,6 +181,8 @@ public class TApplicantBackmailJpEntity implements Serializable {
 		result = prime * result + ((expressAddress == null) ? 0 : expressAddress.hashCode());
 		result = prime * result + ((expressNum == null) ? 0 : expressNum.hashCode());
 		result = prime * result + ((expressType == null) ? 0 : expressType.hashCode());
+		result = prime * result + ((invoiceMobile == null) ? 0 : invoiceMobile.hashCode());
+		result = prime * result + ((invoiceAddress == null) ? 0 : invoiceAddress.hashCode());
 		result = prime * result + ((invoiceContent == null) ? 0 : invoiceContent.hashCode());
 		result = prime * result + ((invoiceHead == null) ? 0 : invoiceHead.hashCode());
 		result = prime * result + ((linkman == null) ? 0 : linkman.hashCode());
@@ -176,7 +191,6 @@ public class TApplicantBackmailJpEntity implements Serializable {
 		result = prime * result + ((taxNum == null) ? 0 : taxNum.hashCode());
 		result = prime * result + ((teamName == null) ? 0 : teamName.hashCode());
 		result = prime * result + ((telephone == null) ? 0 : telephone.hashCode());
-		result = prime * result + ((updateTime == null) ? 0 : updateTime.hashCode());
 		return result;
 	}
 

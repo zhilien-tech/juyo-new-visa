@@ -42,6 +42,12 @@ public class TOrderBackmailUpdateForm extends ModForm implements Serializable{
 	/**发票抬头*/
 	private String invoiceHead;
 		
+	/**发票电话*/
+	private String invioceMobile;
+		
+	/**发票地址*/
+	private String invoiceAddress;
+		
 	/**税号*/
 	private String taxNum;
 		

@@ -32,12 +32,39 @@ $(function(){
 			validating : 'glyphicon glyphicon-refresh'
 		},
 		fields : {
+			teamName : {
+				validators : {
+					notEmpty : {
+						message : '团队名称不能为空'
+					}
+				}
+			},
+			expressNum : {
+				validators : {
+					notEmpty : {
+						message : '快递号不能为空'
+					}
+				}
+			},
+			linkman : {
+				validators : {
+					notEmpty : {
+						message : '联系人不能为空'
+					}
+				}
+			},
 			telephone : {
 				validators : {
-					/*regexp: {
-						regexp: /^[1][34578][0-9]{9}$/,
-						message: '电话号格式错误'
-					}*/
+					notEmpty : {
+						message : '电话不能为空'
+					}
+				}
+			},
+			expressAddress : {
+				validators : {
+					notEmpty : {
+						message : '回邮地址不能为空'
+					}
 				}
 			}
 		}
@@ -65,6 +92,8 @@ function save(){
 		backMailObj.backmailinfo.expressAddress = $("#expressAddress").val();
 		backMailObj.backmailinfo.invoiceContent = $("#invoiceContent").val();
 		backMailObj.backmailinfo.invoiceHead = $("#invoiceHead").val();
+		backMailObj.backmailinfo.invoiceAddress = $("#invoiceAddress").val();
+		backMailObj.backmailinfo.invoiceMobile = $("#invoiceMobile").val();
 		backMailObj.backmailinfo.taxNum = $("#taxNum").val();
 		backMailObj.backmailinfo.remark = $("#remark").val();
 		var editdata = backMailObj.backmailinfo;
