@@ -26,6 +26,7 @@ import com.juyo.visa.admin.login.form.LoginForm;
 import com.juyo.visa.admin.login.service.LoginService;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.entities.TUserEntity;
+import com.uxuexi.core.common.util.Util;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -70,12 +71,16 @@ public class LoginModule {
 			ViewModel model) {
 		loginService.login(form, session, req);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer userType = loginUser.getUserType();
+		if (!Util.isEmpty(loginUser)) {
+			Integer userType = loginUser.getUserType();
+			session.setAttribute("userType", userType);
+		}
+
 		model.setv("errMsg", form.getErrMsg());
 		model.setv("mainurl", form.getMainurl());
 		session.setAttribute("mainurl", form.getMainurl());
 		session.setAttribute("logintype", LoginTypeEnum.WORK.intKey());
-		session.setAttribute("userType", userType);
+
 		return form.getReturnUrl();
 	}
 
