@@ -137,6 +137,7 @@
 	    var url="${base}/admin/myVisa/myVisaListData.html";
 	    //vue表格数据对象
 	    var _self;
+	    var orderJpId = '${obj.orderJpId}';
 		new Vue({
 			el: '#card',
 			data: {myVisaData:""},
@@ -146,6 +147,9 @@
 	            	url: url,
 	            	dataType:"json",
 	            	type:'post',
+	            	data:{
+	            		orderJpId : orderJpId
+	            	},
 	            	success: function(data){
 	            		_self.myVisaData = data.myVisaData;
 	              	}
@@ -187,6 +191,9 @@
 				url: url,
 				dataType:"json",
 				type:'post',
+				data:{
+            		orderJpId : orderJpId
+            	},
 				success: function(data){
 					_self.myVisaData = data.myVisaData;
 				}

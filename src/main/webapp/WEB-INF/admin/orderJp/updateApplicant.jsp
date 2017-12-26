@@ -167,6 +167,7 @@
 										name="firstName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
+										<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 										<input type="text" id="firstNameEn" style="position:absolute;top:39px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
@@ -417,9 +418,9 @@
 				$("#unqualifiedBtn").show();
 			}
 			
-			var nation = ${obj.applicant.hasOtherNationality};
-			var otherName = ${obj.applicant.hasOtherName};
-			var address = ${obj.applicant.addressIsSameWithCard};
+			var nation = '${obj.applicant.hasOtherNationality}';
+			var otherName = '${obj.applicant.hasOtherName}';
+			var address = '${obj.applicant.addressIsSameWithCard}';
 			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
 			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
 			if(nation == 1){
@@ -937,7 +938,7 @@
 				applicantInfo = $("#applicantInfo").serialize();
 			}
 			
-			var applicantId = ${obj.applicantId};
+			var applicantId = '${obj.applicantId}';
 			applicantInfo.id = applicantId;
 			$.ajax({
 				async: false,

@@ -71,6 +71,11 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()));
+		TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", applicantEntity.getId()));
+		if (!Util.isEmpty(unqualifiedEntity)) {
+			result.put("unqualified", unqualifiedEntity);
+		}
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantEntity.getId()));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
@@ -133,6 +138,11 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()));
+		TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", applicantEntity.getId()));
+		if (!Util.isEmpty(unqualifiedEntity)) {
+			result.put("unqualified", unqualifiedEntity);
+		}
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantEntity.getId()));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
@@ -196,6 +206,11 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()));
+		TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+				Cnd.where("applicantId", "=", applicantEntity.getId()));
+		if (!Util.isEmpty(unqualifiedEntity)) {
+			result.put("unqualified", unqualifiedEntity);
+		}
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantEntity.getId()));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
@@ -219,11 +234,6 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(mainApplicant)) {
 				result.put("mainApplicant", mainApplicant);
 			}
-		}
-		TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
-				Cnd.where("applicantId", "=", applicantOrderJpEntity.getApplicantId()));
-		if (!Util.isEmpty(unqualifiedEntity)) {
-			result.put("unqualified", unqualifiedEntity);
 		}
 		//获取订单主申请人
 		String sqlStr = sqlManager.get("mainApplicant_byOrderId");
