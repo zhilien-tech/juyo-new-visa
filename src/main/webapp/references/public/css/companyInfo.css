@@ -5,17 +5,20 @@ body { font-family: "microsoft yahei"; font-size: 14px;}
 .head { width: 90%; height: 40px; line-height: 40px; margin: 1% 5%;}
 .head-right { float: right;}
 .head-right::after { content: ""; clear: both;}
-.headBtn {display: inline-block; cursor: pointer; border-radius: 8px; padding: 0 10px; height: 30px; line-height: 30px; text-align: center; color: #FFF; background: #379cd5;}
+.headBtn {display: inline-block; cursor: pointer; border-radius: 8px; padding: 0 10px; height: 30px; line-height: 30px; text-align: center; color: #FFF; background: #3087f1;}
+.headBtn:hover { color:#FFF;}
 /*列表*/
 .section { border: 1px solid #eee; width: 90%;  margin: 0 5%; margin-bottom: 20px;}
 .section:hover { box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.22);}
+.section:hover span { color:rgb(59,134,231);}
+.section:hover .edit-icon { background-image:url(../dist/newvisacss/img/tableEdit1.png);}
 .section:hover .listHover{ display: block; height: auto; min-height: 30px;}
 .section:hover .pic { display: block; height: auto;}
 .listShow { display: inline-block; width: 100%; height: 40px; line-height: 40px;}
 .listShow .list { display: block; float: left;}
 .listShow .list label { color: #c3bebe;}
 .list::after { content: ""; clear: both;}
-.listName { width: 20%; margin-left: 2%;}
+.listName { width: 28%; margin-left: 2%;}
 .listNameTag { width: 15%;}
 .listNum { width: 20%;}
 .listPer { width: 15%;}
@@ -25,12 +28,15 @@ body { font-family: "microsoft yahei"; font-size: 14px;}
 .listHover { display: none; width: 100%;}
 .listHover .list { display: block; float: left;}
 .listHover .list label { color: #c3bebe;}
-.listType { width: 20%; margin-left: 2%;}
+.listType { width: 28%; margin-left: 2%;}
 .listScope { width: 15%;}
 .listMail { width: 20%;}
+.addressInfo { width:35% !important;}
 .listsAddress { width:40%;}
 .listAddress { width: 40%;margin-left: 2%;}
+.edit-icon { vertical-align:middle;}
 /**/
 .pic { display: none; position: relative;}
-.pic img { margin-left: 2%; cursor: pointer;}
+.pic img { margin-left: 2%; cursor: pointer; max-width:300px;max-height:300px; border:1px solid #eee; transition:all 0.6s;}
+.pic img:hover { transform:scale(1.4); margin-left:30px; margin-top:-17px;}
 .fontWord { position: absolute; top: 40%; left: 0; width: 221px; text-align: center; cursor: pointer;}
