@@ -65,13 +65,14 @@ function addCompanyOfSqs(){
 
 //注册scroll事件并监听 
 $(window).scroll(function(){
+	
 	var scrollTop = $(this).scrollTop();
-	var scrollHeight = $(document).height();
 	var windowHeight = $(this).height();
+	var scrollHeight = $(document).height();
 	var pageTotal = parseInt($('#pageTotal').val());
 	var pageListCount = parseInt($('#pageListCount').val());
 	// 判断是否滚动到底部  
-	if(scrollTop + windowHeight == scrollHeight){
+	if(Math.ceil(scrollTop + windowHeight)  == scrollHeight){
 		//分页条件
 		var pageNumber = $('#pageNumber').val();
 		pageNumber = parseInt(pageNumber) + 1;
@@ -90,16 +91,16 @@ $(window).scroll(function(){
 				success: function(data){
 					//关闭遮罩
 					layer.closeAll('loading');
-					$.each(data.trialJapanData,function(index,item){
-						_self.trialJapanData.push(item);
+					$.each(data.companyInfoData,function(index,item){
+						_self.companyInfoData.push(item);
 					});
 					//没有更多数据
 				}
 			});
 		}else{
 			//没有更多数据，底部提示语
-			if($("#card-bottom-line").length <= 0 && pageListCount>=6){
-				$(".card-list").last().after("<div id='card-bottom-line' class='bottom-line'><span style='margin-left: 38%; color:#999'>-------  没有更多数据可以加载  -------</span></div>");
+			if($("#card-bottom-line").length <= 0 && pageListCount>=10){
+				$(".card_list_line").last().after("<div id='card-bottom-line' class='bottom-line'><span style='margin-left: 38%; color:#999'>-------  没有更多数据可以加载  -------</span></div>");
 			}
 		}
 	}

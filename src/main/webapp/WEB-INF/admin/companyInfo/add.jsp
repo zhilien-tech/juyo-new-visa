@@ -26,6 +26,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
+					<input id="comid" name="comid" type="hidden" value="">
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
