@@ -72,8 +72,8 @@
 	</div>
 	
 	<!-- 卡片列表 -->
-	<div  id="cardList">
-		<div class="section" v-cloak v-for="data in companyInfoData">
+	<div id="cardList">
+		<div class="section card_list_line" v-cloak v-for="data in companyInfoData">
 			<div class="listShow">
 				<div class="list listName">
 					<label>公司全称：</label> <span>{{data.fullname}}</span>
