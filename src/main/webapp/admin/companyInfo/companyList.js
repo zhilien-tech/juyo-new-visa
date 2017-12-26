@@ -67,15 +67,12 @@ function addCompanyOfSqs(){
 $(window).scroll(function(){
 	
 	var scrollTop = $(this).scrollTop();
-	var scrollHeight = $(document).height();
 	var windowHeight = $(this).height();
-	console.log("scrollTop"+scrollTop);
-	console.log("windowHeight"+windowHeight);
-	console.log("scrollHeight"+scrollHeight);
+	var scrollHeight = $(document).height();
 	var pageTotal = parseInt($('#pageTotal').val());
 	var pageListCount = parseInt($('#pageListCount').val());
 	// 判断是否滚动到底部  
-	if(scrollTop + windowHeight == scrollHeight){
+	if(Math.ceil(scrollTop + windowHeight)  == scrollHeight){
 		//分页条件
 		var pageNumber = $('#pageNumber').val();
 		pageNumber = parseInt(pageNumber) + 1;
