@@ -17,6 +17,7 @@
 	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 </head>
 <body>
 
@@ -101,7 +102,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>签发时间：</label> 
-								<input id="visaDate" onfocus="WdatePicker()"
+								<input id="visaDate" 
 									name="visaDate" value="<fmt:formatDate value="${obj.applicantvisa.visaDate}" pattern="yyyy-MM-dd" />" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
@@ -119,7 +120,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>有效期至：</label> 
-								<input id="validDate" onfocus="WdatePicker()"
+								<input id="validDate" 
 									name="validDate" value="<fmt:formatDate value="${obj.applicantvisa.validDate}" pattern="yyyy-MM-dd" />" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
@@ -162,8 +163,9 @@
 	<script
 		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
-
+	<!-- 公用js文件 -->
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript">
 		var base = "${base}";
 
@@ -257,6 +259,23 @@
 		    	});  // end of ajaxSubmit
 			};
 			reader.readAsDataURL(file);
+		});
+		
+		$("#validDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		}).on("click",function(){  
+		    $("#validDate").datetimepicker("setStartDate",$("#visaDate").val());  
+		});
+		$("#visaDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
 		});
 	</script>
 

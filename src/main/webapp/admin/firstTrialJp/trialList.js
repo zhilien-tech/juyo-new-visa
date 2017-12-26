@@ -221,16 +221,16 @@ $(window).scroll(function(){
 	var pageTotal = parseInt($('#pageTotal').val());
 	var pageListCount = parseInt($('#pageListCount').val());
 	// 判断是否滚动到底部  
-	if(scrollTop + windowHeight == scrollHeight){
+	if(scrollHeight - (scrollTop + windowHeight)  <= 1.75){
 		//分页条件
 		var pageNumber = $('#pageNumber').val();
-		pageNumber = parseInt(pageNumber) + 1;
-		$('#pageNumber').val(pageNumber);
 		//搜索条件
 		var status = $('#status').val();
 		var searchStr = $('#searchStr').val();
 		//异步加载数据
 		if(pageNumber <= pageTotal){
+			pageNumber = parseInt(pageNumber) + 1;
+			$('#pageNumber').val(pageNumber);
 			//遮罩
 			layer.load(1);
 			$.ajax({ 

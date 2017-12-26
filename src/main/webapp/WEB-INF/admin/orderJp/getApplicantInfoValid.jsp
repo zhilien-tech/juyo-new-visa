@@ -17,8 +17,10 @@
 		.closed {width:20px;text-align:center; display:inline-block;color:#000;float:right;}
 		.closed::after { content: ""; clear:both;}
 		.trColor{color: rgb(48, 135, 240)}
-		.selectBtn { width:100px;height:30px;line-height:30px;text-align:center;border-radius:7px;background:#3087f1;border:0; color:#FFF;}
+		.selectBtn { width:80px;height:30px;line-height:30px;text-align:center;border-radius:7px;background:#169bd5;border:0; color:#FFF;}
 		.selectMargin { margin-right:5%;}
+		.modal-body { height:220px !important;}
+		.modal-header { padding: 5px 10px !important;}
 	</style>
 </head>
 <body>
@@ -30,7 +32,7 @@
 			</div>
 			<div class="modal-body">
 		 		<div style="text-align:center; margin-top:15%;">
-		 			<div style="font-size:25px;">
+		 			<div style="font-size:16px;">
 						<c:choose>
 							<c:when test="${empty obj.telephone && empty obj.email}">  
 										手机号、邮箱不能为空							  
@@ -61,9 +63,10 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script type="text/javascript">
-		var applicantId = ${obj.applicantId};
+		var applicantId = '${obj.applicantId}';
 		function fillIn(){
-			layer.open({
+			window.location.href = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid&isTrial=0';
+			/* layer.open({
 				type: 2,
 				title: false,
 				closeBtn:false,
@@ -71,27 +74,30 @@
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['400px', '251px'],
 				content:'${base}/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid&isTrial=0',
 				success : function(index, layero){
 					console.log(index);
 				}
-			});
+			}); */
 		}
 		
 		function cancelBtn(){
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			parent.layer.close(index);
-			
+			parent.layer.close(index); 
 		}
 		
 		function successCallBack(status){
 			if(status == 1){
 				layer.msg('修改成功');
 			}
-			$("#cancel").click();
+			//$("#cancel").click();
 			parent.successCallBack(1);
 			//parent.location.reload();
+		}
+		function cancelCallBack(status){
+			//$("#cancel").click();
+			parent.successCallBack(2);
 		}
 	
 	</script>

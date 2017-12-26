@@ -150,7 +150,7 @@ public class LoginService extends BaseService<TUserEntity> {
 				form.setMainurl("/admin/JapanDijie/japanList.html");
 			} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
 				//游客跳转的页面
-				form.setMainurl("/admin/myVisa/inProcessVisa.html");
+				form.setMainurl("/admin/myVisa/visaList.html");
 			} else {
 				//功能列表为空
 				if (Util.isEmpty(allUserFunction)) {

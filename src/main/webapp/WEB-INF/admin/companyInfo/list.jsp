@@ -68,67 +68,44 @@
 					</div>
 	        	</c:otherwise>
 	        </c:choose>
-		
-			
 		</div>
 	</div>
 	
+	<!-- 卡片列表 -->
+	<div id="cardList">
+		<div class="section card_list_line" v-cloak v-for="data in companyInfoData">
+			<div class="listShow">
+				<div class="list listName">
+					<label>公司全称：</label> <span>{{data.fullname}}</span>
+				</div>
+				<div class="list listNameTag">
+					<label>公司简称：</label> <span>{{data.shortname}}</span>
+				</div>
+				<div class="list listNum">
+					<label>指定番号：</label> <span>{{data.designatednum}}</span>
+				</div>
+				<div class="list listPer">
+					<label>联系人：</label> <span>{{data.linkman}}</span>
+				</div>
+				<div class="list listTel">
+					<label>电话：</label> <span>{{data.mobile}}</span>
+				</div>
+				<div class="list updateList">
+					<a @click="updateComInfo(data.id)">编辑</a>
+				</div>
+			</div>
+			<div class="listHover">
+				<div class="list listAddress">
+					<label>地址：</label> <span>{{data.address}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
 	
-	<div class="section">
-		<div class="listShow">
-			<div class="list listName">
-				<label>公司全称：</label> <span>北京快旅国际旅行社</span>
-			</div>
-			<div class="list listNameTag">
-				<label>公司简称：</label> <span>快旅国际</span>
-			</div>
-			<div class="list listNum">
-				<label>指定番号：</label> <span>GIP：987543</span>
-			</div>
-			<div class="list listPer">
-				<label>联系人：</label> <span>刘德华</span>
-			</div>
-			<div class="list listTel">
-				<label>电话：</label> <span>13315679521</span>
-			</div>
-			<div class="list updateList">
-				<a>编辑</a>
-			</div>
-		</div>
-		<div class="listHover">
-			<div class="list listAddress">
-				<label>地址：</label> <span>北京市朝阳区朝阳门天辰大厦10号-908室</span>
-			</div>
-		</div>
-	</div>
-
-	<div class="section">
-		<div class="listShow">
-			<div class="list listName">
-				<label>公司全称：</label> <span>北京快旅国际旅行社</span>
-			</div>
-			<div class="list listNameTag">
-				<label>公司简称：</label> <span>快旅国际</span>
-			</div>
-			<div class="list listNum">
-				<label>指定番号：</label> <span>GIP：987543</span>
-			</div>
-			<div class="list listPer">
-				<label>联系人：</label> <span>刘德华</span>
-			</div>
-			<div class="list listTel">
-				<label>电话：</label> <span>13315679521</span>
-			</div>
-			<div class="list updateList">
-				<a>编辑</a>
-			</div>
-		</div>
-		<div class="listHover">
-			<div class="list listAddress">
-				<label>地址：</label> <span>北京市朝阳区朝阳门天辰大厦10号-908室</span>
-			</div>
-		</div>
-	</div>
+	<!-- 分页 -->
+	<input type="hidden" id="pageNumber" name="pageNumber" value="1">
+	<input type="hidden" id="pageTotal" name="pageTotal">
+	<input type="hidden" id="pageListCount" name="pageListCount">
 	
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
@@ -140,37 +117,9 @@
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-
-	<script type="text/javascript">
-		function updatePassword(){
-			 layer.open({
-		    	    type: 2,
-		    	    title: false,
-		    	    closeBtn:false,
-		    	    fix: false,
-		    	    maxmin: false,
-		    	    shadeClose: false,
-		    	    scrollbar: false,
-		    	    area: ['900px', '550px'],
-		    	    content: BASE_PATH + '/admin/personalInfo/updatePassword.html'
-		    	  });
-		}
-		
-		function addCompanyOfSqs(){
-			layer.open({
-	    	    type: 2,
-	    	    title: false,
-	    	    closeBtn:false,
-	    	    fix: false,
-	    	    maxmin: false,
-	    	    shadeClose: false,
-	    	    scrollbar: false,
-	    	    area: ['900px', '550px'],
-	    	    content: BASE_PATH + '/admin/companyInfo/add.html'
-	    	});
-		}
-	</script>
-
+	<script src="${base}/references/common/js/vue/vue.min.js"></script>
+	<!-- 本页面js文件 -->
+	<script src="${base}/admin/companyInfo/companyList.js"></script>
 </body>
 </html>
 
