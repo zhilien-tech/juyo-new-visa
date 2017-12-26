@@ -163,16 +163,16 @@ public class CompanyInfoViewService extends BaseService<TCompanyOfCustomerEntity
 	}
 
 	//校验公司全称唯一性
-	public Object checkCompanyNameExist(String companyName, String comId) {
+	public Object checkCompanyNameExist(String companyName, String id) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		int count = 0;
-		if (Util.isEmpty(comId)) {
+		if (Util.isEmpty(id)) {
 			//add
 			count = nutDao.count(TCompanyOfCustomerEntity.class, Cnd.where("fullname", "=", companyName));
 		} else {
 			//update
 			count = nutDao.count(TCompanyOfCustomerEntity.class,
-					Cnd.where("fullname", "=", companyName).and("comid", "!=", comId));
+					Cnd.where("fullname", "=", companyName).and("id", "!=", id));
 		}
 
 		map.put("valid", count <= 0);

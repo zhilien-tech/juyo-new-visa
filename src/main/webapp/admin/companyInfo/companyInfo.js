@@ -21,7 +21,7 @@ $(function() {
 						data: function(validator) {
 							return {
 								companyName:$('#fullname').val(),
-								comId:$('#comid').val()
+								id:$('#id').val()
 							};
 						}
 					}

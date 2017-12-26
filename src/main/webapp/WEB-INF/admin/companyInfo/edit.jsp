@@ -27,7 +27,6 @@
 			<div class="modal-body">
 				<div class="tab-content">
 					<input id="id" name="id" type="hidden" value="${obj.id }">
-					<input id="comid" name="comid" type="hidden" value="${obj.comid }">
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
