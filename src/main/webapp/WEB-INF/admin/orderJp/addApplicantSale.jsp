@@ -27,6 +27,7 @@
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 <!--  -->
 .front, .back { margin-bottom:8px !important;}
+.nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
 </style>
 </head>
 <body>
