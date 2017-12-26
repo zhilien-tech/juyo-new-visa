@@ -1215,7 +1215,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		String mobile = saleinfo.getMobile();
 		boolean mobileLegal = RegExpUtil.isMobileLegal(mobile);
 		if (!mobileLegal) {
-			return JuYouResult.build(500, "销售手机号格式错误");
+			return JuYouResult.build(500, "该订单为公司管理员创建的订单，无法发送短信");
 		}
 		//订单号
 		String ordernum = order.getOrderNum();

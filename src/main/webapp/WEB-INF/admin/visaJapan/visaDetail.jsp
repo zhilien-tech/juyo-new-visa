@@ -52,10 +52,13 @@
 			#schedulingTable thead tr th:nth-child(4){width:24%;}
 			#schedulingTable thead tr th:nth-child(5){width:24%;}
 			#schedulingTable thead tr th:nth-child(6){width:8%;}
+			[v-cloak] {
+			  display: none;
+			}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
-		<div class="wrapper" id="wrapper">
+		<div class="wrapper" id="wrapper" v-cloak>
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<div class="qz-head">
 					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>

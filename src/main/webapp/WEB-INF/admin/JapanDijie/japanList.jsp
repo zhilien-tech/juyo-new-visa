@@ -35,6 +35,9 @@
 		.everybody-info div:nth-child(5){width:19%;}
 		.everybody-info div:nth-child(6){width:19%;}
 		/* .everybody-info div:last-child{float:right;width:74px;} */
+		[v-cloak] {
+		  display: none;
+		}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -57,7 +60,7 @@
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
-					<div class="box-body" id="card"><!-- 卡片列表 -->
+					<div class="box-body" id="card" v-cloak><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in visaJapanData">
 							<div class="card-head cf">
 								<div><label>订单号：</label><span>{{data.japannumber}}</span></div>	
@@ -233,7 +236,7 @@
 	}
 	
 	function successCallBack(status){
-		$.ajax({ 
+		$.ajax({
         	url: url,
         	dataType:"json",
         	type:'post',
@@ -245,6 +248,45 @@
 			layer.msg('保存成功');
 		}
 	}
+	
+	// 注册scroll事件并监听 
+	$(window).scroll(function(){
+	　　var scrollTop = $(this).scrollTop();
+	　　var scrollHeight = $(document).height();
+	　　var windowHeight = $(this).height();
+		// 判断是否滚动到底部  
+	　　if(scrollTop + windowHeight == scrollHeight){
+	　　　　// alert("滚到底了");
+			//分页条件
+			var pageNumber = $('#pageNumber').val();
+			pageNumber = parseInt(pageNumber) + 1;
+			$('#pageNumber').val(pageNumber);
+			var pagetotal = parseInt($('#pagetotal').val());
+			//搜索条件
+			var status = $('#status').val();
+			var zhaobaotime = $('#zhaobaotime').val();
+			var searchStr = $('#searchStr').val();
+			//异步加载数据
+			if(pageNumber <= pagetotal){
+				//遮罩
+				layer.load(1);
+				$.ajax({ 
+			    	url: url,
+			    	data:{status:status,zhaobaotime:zhaobaotime,searchStr:searchStr,pageNumber:pageNumber},
+			    	dataType:"json",
+			    	type:'post',
+			    	success: function(data){
+			    		//关闭遮罩
+			    		layer.closeAll('loading');
+			    		$.each(data.visaJapanData,function(index,item){
+			    			_self.visaJapanData.push(item);
+			    		});
+			    		//没有更多数据
+			      	}
+			    });
+			}
+	　　}
+	});
 	</script>
 </body>
 </html>

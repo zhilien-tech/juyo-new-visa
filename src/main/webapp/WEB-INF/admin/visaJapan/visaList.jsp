@@ -27,6 +27,9 @@
 	.whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:390px;}
 	.showInfo { cursor:pointer; }
 	.hideInfo { display:none; position:absolute; top:-33px;right:0;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
+	[v-cloak] {
+	  display: none;
+	}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -55,7 +58,7 @@
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
-					<div class="box-body" id="card"><!-- 卡片列表 -->
+					<div class="box-body" id="card" v-cloak><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in visaJapanData">
 							<div class="card-head">
 								<div><label>订单号：</label><span><a v-on:click="visaDetail(data.id)" href="javascript:;">{{data.japannumber}}</a></span></div>	
