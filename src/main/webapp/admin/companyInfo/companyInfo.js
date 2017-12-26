@@ -20,8 +20,8 @@ $(function() {
 						type: 'POST',
 						data: function(validator) {
 							return {
-								companyName:$('#fullName').val(),
-								comId:""
+								companyName:$('#fullname').val(),
+								id:$('#id').val()
 							};
 						}
 					}

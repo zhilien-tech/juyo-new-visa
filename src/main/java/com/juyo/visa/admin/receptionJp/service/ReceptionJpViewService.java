@@ -246,29 +246,52 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 			List<TApplicantFrontPaperworkJpEntity> paperworkjps = JsonUtil.fromJsonAsList(
 					TApplicantFrontPaperworkJpEntity.class, revenuejson);
 			for (TApplicantFrontPaperworkJpEntity paperworkjp : paperworkjps) {
-				TApplicantFrontPaperworkJpEntity fetch = dbDao.fetch(TApplicantFrontPaperworkJpEntity.class,
-						paperworkjp.getId().longValue());
-				if (!Util.isEmpty(paperworkjp.getRealInfo())) {
-					fetch.setRealInfo(paperworkjp.getRealInfo());
-					fetch.setStatus(paperworkjp.getStatus());
-					//级联更新签证资料表的数据
-					if (!Util.isEmpty(fetch.getVisapaperworkid())) {
-						TApplicantVisaPaperworkJpEntity visapaperwork = dbDao.fetch(
-								TApplicantVisaPaperworkJpEntity.class, fetch.getVisapaperworkid().longValue());
-						if (!Util.isEmpty(visapaperwork)) {
-							visapaperwork.setRealInfo(paperworkjp.getRealInfo());
-							dbDao.update(visapaperwork);
+				if (!Util.isEmpty(paperworkjp.getId())) {
+					TApplicantFrontPaperworkJpEntity fetch = dbDao.fetch(TApplicantFrontPaperworkJpEntity.class,
+							paperworkjp.getId().longValue());
+					if (!Util.isEmpty(paperworkjp.getRealInfo())) {
+						fetch.setRealInfo(paperworkjp.getRealInfo());
+						fetch.setStatus(paperworkjp.getStatus());
+						//级联更新签证资料表的数据
+						if (!Util.isEmpty(fetch.getVisapaperworkid())) {
+							TApplicantVisaPaperworkJpEntity visapaperwork = dbDao.fetch(
+									TApplicantVisaPaperworkJpEntity.class, fetch.getVisapaperworkid().longValue());
+							if (!Util.isEmpty(visapaperwork)) {
+								visapaperwork.setRealInfo(paperworkjp.getRealInfo());
+								dbDao.update(visapaperwork);
+							}
+						}
+						paperworks.add(fetch);
+					} else {
+						Integer visapaperworkid = fetch.getVisapaperworkid();
+						if (!Util.isEmpty(visapaperworkid)) {
+							TApplicantVisaPaperworkJpEntity visapaperworkinfo = dbDao.fetch(
+									TApplicantVisaPaperworkJpEntity.class, visapaperworkid.longValue());
+							dbDao.delete(visapaperworkinfo);
+						}
+						dbDao.delete(fetch);
+					}
+				} else {
+					paperworkjp.setApplicantId(Integer.valueOf(applicatid));
+					//同步到签证实收
+					TApplicantVisaPaperworkJpEntity visapaperwork = new TApplicantVisaPaperworkJpEntity();
+					visapaperwork.setApplicantId(Integer.valueOf(applicatid));
+					visapaperwork.setCreateTime(new Date());
+					visapaperwork.setRealInfo(paperworkjp.getRealInfo());
+					Integer type = null;
+					List<TApplicantVisaPaperworkJpEntity> query = dbDao.query(TApplicantVisaPaperworkJpEntity.class,
+							Cnd.where("applicantid", "=", applicatid), null);
+					for (TApplicantVisaPaperworkJpEntity tApplicantVisaPaperwork : query) {
+						if (!Util.isEmpty(tApplicantVisaPaperwork.getType())) {
+							type = tApplicantVisaPaperwork.getType();
+							break;
 						}
 					}
-					paperworks.add(fetch);
-				} else {
-					Integer visapaperworkid = fetch.getVisapaperworkid();
-					if (!Util.isEmpty(visapaperworkid)) {
-						TApplicantVisaPaperworkJpEntity visapaperworkinfo = dbDao.fetch(
-								TApplicantVisaPaperworkJpEntity.class, visapaperworkid.longValue());
-						dbDao.delete(visapaperworkinfo);
-					}
-					dbDao.delete(fetch);
+					visapaperwork.setType(type);
+					TApplicantVisaPaperworkJpEntity visapaperworkinfo = dbDao.insert(visapaperwork);
+					//保存签证实收信息
+					paperworkjp.setVisapaperworkid(visapaperworkinfo.getId());
+					dbDao.insert(paperworkjp);
 				}
 			}
 		}

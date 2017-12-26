@@ -74,7 +74,7 @@ $(function(){
 });
 
 //保存回邮信息
-function save(){
+function save(paramstatus){
 
 	var bootstrapValidator = $("#backmail_wrapper").data('bootstrapValidator');
 	// 执行表单验证 
@@ -103,9 +103,11 @@ function save(){
 			data:editdata,
 			type:'post',
 			success: function(data){
-				layer.closeAll('loading');
-				closeWindow();
-				parent.successCallBack(1);
+				if(paramstatus == 1){
+					layer.closeAll('loading');
+					closeWindow();
+					parent.successCallBack(1);
+				}
 			}
 		});
 	}
@@ -113,6 +115,7 @@ function save(){
 
 //发送短信
 function sendMail(){
+	save(2);
 	var applicantJPId = $('#applicantJPId').val();
 	$.ajax({
 		url: '/admin/aftermarket/sendMailAndMessage.html',
@@ -120,7 +123,14 @@ function sendMail(){
 		data:{applicantid:applicantJPId},
 		type:'post',
 		success: function(data){
-			layer.msg('发送成功');
+			layer.closeAll('loading');
+			if(data.status == 200){
+				closeWindow();
+				parent.successCallBack(2);
+			}else if(data.status == 500){
+				layer.msg(data.msg);
+			}
+			//layer.msg('发送成功');
 		}
 	});
 }

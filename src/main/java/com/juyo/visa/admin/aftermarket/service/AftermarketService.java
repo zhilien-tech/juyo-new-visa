@@ -27,6 +27,8 @@ import com.juyo.visa.admin.aftermarket.form.AftermarketListForm;
 import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
+import com.juyo.visa.common.base.JuYouResult;
+import com.juyo.visa.common.util.RegExpUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -130,6 +132,10 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		String email = applicant.getEmail();
 		//获取手机号
 		String telephone = applicant.getTelephone();
+		boolean mobileLegal = RegExpUtil.isMobileLegal(telephone);
+		if (!mobileLegal) {
+			return JuYouResult.build(500, "手机号格式错误");
+		}
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("${name}", applicant.getFirstName() + applicant.getLastName());
 		if ("男".equals(applicant.getSex())) {
@@ -151,7 +157,7 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		mailService.sendHtml(email, map, AFTERMARKET_EMAIL_URL, "售后通知");
 		//发短信
 		mailService.sendMessageByMap(telephone, map, AFTERMARKET_MESSAGE_URL);
-		return null;
+		return JuYouResult.ok();
 	}
 
 }

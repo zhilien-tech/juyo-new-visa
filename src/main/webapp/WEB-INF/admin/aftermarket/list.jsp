@@ -215,8 +215,10 @@
         		_self.aftermarketData = data.aftermarketData;
           	}
         });
-		if(status){
+		if(status == 1){
 			layer.msg('保存成功');
+		}else if(status == 2){
+			layer.msg('发送成功');
 		}
 	}
 	

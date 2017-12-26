@@ -50,7 +50,7 @@
 			<div class="list listMail">
 				<label>邮箱：</label> <span>${obj.adminComInfo.email }</span>
 			</div>
-			<div class="list listsAddress">
+			<div class="list listsAddress addressInfo">
 				<label>地址：</label> <span>${obj.adminComInfo.address }</span>
 			</div>
 		</div>
@@ -72,8 +72,8 @@
 	</div>
 	
 	<!-- 卡片列表 -->
-	<div  id="cardList">
-		<div class="section" v-cloak v-for="data in companyInfoData">
+	<div id="cardList">
+		<div class="section card_list_line" v-cloak v-for="data in companyInfoData">
 			<div class="listShow">
 				<div class="list listName">
 					<label>公司全称：</label> <span>{{data.fullname}}</span>
@@ -91,12 +91,12 @@
 					<label>电话：</label> <span>{{data.mobile}}</span>
 				</div>
 				<div class="list updateList">
-					<a @click="updateComInfo(data.id)">编辑</a>
+					<a @click="updateComInfo(data.id)" class="edit-icon"></a>
 				</div>
 			</div>
 			<div class="listHover">
 				<div class="list listAddress">
-					<label>地址：</label> <span>{{data.address}}</span>
+					<label>&nbsp;&nbsp;地&nbsp;&nbsp;&nbsp;&nbsp;址：</label> <span>{{data.address}}</span>
 				</div>
 			</div>
 		</div>
@@ -116,6 +116,7 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script src="${base}/references/common/js/base/baseIcon.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<!-- 本页面js文件 -->

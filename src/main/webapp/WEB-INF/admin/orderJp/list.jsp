@@ -122,7 +122,7 @@
 							</ul>
 						</div>
 					</div><!-- end 卡片列表 -->
-					<a id="hideOrder" style="color:red; font-size:30px; position: absolute;top:50%;left:40%;" class="orderJp none" onclick="addOrder();">您还没有添加任何数据，快去下单吧</a>
+					<a id="hideOrder" style="color:#bbbbbb; font-size:26px; position: absolute;top:50%;left:30%;" class="orderJp none" onclick="addOrder();">您还没有添加任何数据，快去下单吧</a>
 					
 				</section>
 				<input type="hidden" id="pageNumber" name="pageNumber" value="1">

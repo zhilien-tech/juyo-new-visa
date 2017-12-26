@@ -262,6 +262,13 @@
 					revenue.status = 0;
 					revenues.push(revenue);
 				});
+				if(!$(this).find('.addInp').hasClass('none')){
+					var thisobj = $(this).find('.addInp');
+					var revenue = {};
+					revenue.realInfo = thisobj.val();
+					revenue.status = 0;
+					revenues.push(revenue);
+				}
 				/* $(this).find('.certificates span').each(function(index){
 					var thisobj = $(this);
 					if(thisobj.hasClass('titleStyle')){

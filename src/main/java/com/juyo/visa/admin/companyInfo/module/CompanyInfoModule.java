@@ -87,8 +87,7 @@ public class CompanyInfoModule {
 	 * @return 
 	 */
 	@At
-	public Object checkCompanyNameExist(@Param("companyName") final String companyName,
-			@Param("comId") final String comId) {
-		return companyInfoViewService.checkCompanyNameExist(companyName, comId);
+	public Object checkCompanyNameExist(@Param("companyName") final String companyName, @Param("id") final String id) {
+		return companyInfoViewService.checkCompanyNameExist(companyName, id);
 	}
 }

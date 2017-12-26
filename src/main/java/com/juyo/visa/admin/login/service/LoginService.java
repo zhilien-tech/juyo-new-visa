@@ -142,10 +142,12 @@ public class LoginService extends BaseService<TUserEntity> {
 			if (UserLoginEnum.ADMIN.intKey() == userType) {
 				//平台管理员跳转页面
 				form.setMainurl("/admin/company/list.html");
-			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType
-					|| UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType) {
+			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType) {
 				//公司管理员条跳转页面(权限管理)
 				form.setMainurl("/admin/authority/list.html");
+			} else if (UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType) {
+				//地接社公司管理员
+				form.setMainurl("/admin/JapanDijie/japanList.html");
 			} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
 				//游客跳转的页面
 				form.setMainurl("/admin/myVisa/visaList.html");

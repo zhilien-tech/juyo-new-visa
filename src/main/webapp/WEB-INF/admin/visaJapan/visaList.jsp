@@ -27,6 +27,10 @@
 	.whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:390px;}
 	.showInfo { cursor:pointer; }
 	.hideInfo { display:none; position:absolute; top:-33px;right:0;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
+	.card-head i { cursor:pointer;}
+	[v-cloak] {
+	  display: none;
+	}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -55,7 +59,7 @@
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
-					<div class="box-body" id="card"><!-- 卡片列表 -->
+					<div class="box-body" id="card" v-cloak><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in visaJapanData">
 							<div class="card-head">
 								<div><label>订单号：</label><span><a v-on:click="visaDetail(data.id)" href="javascript:;">{{data.japannumber}}</a></span></div>	
@@ -69,7 +73,7 @@
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<i class="sendZB" v-on:click="sendInsurance(data.id,16)"> </i>
+									<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
 									<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
 									<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
 									<i class="Refusal" v-on:click="sendInsurance(data.id,27)"></i>
@@ -186,6 +190,19 @@
                    	}
                  });
         	},
+        	sendzhaobao:function(orderid){
+        		layer.open({
+        		    type: 2,
+        		    title: false,
+        		    closeBtn:false,
+        		    fix: false,
+        		    maxmin: false,
+        		    shadeClose: false,
+        		    scrollbar: false,
+        		    area: ['400px', '300px'],
+        		    content: '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid
+        		  });
+        	},
         	downLoadFile:function(orderid){
         		layer.load(1);
         		$.fileDownload("${base}/admin/visaJapan/downloadFile.html?orderid=" + orderid, {
@@ -300,7 +317,9 @@
         		_self.visaJapanData = data.visaJapanData;
           	}
         });
-		if(status){
+		if(status == 1){
+			layer.msg('发招宝');
+		}else{
 			layer.msg('保存成功');
 		}
 	}
