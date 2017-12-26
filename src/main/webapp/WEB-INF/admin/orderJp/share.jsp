@@ -59,7 +59,6 @@
 			</div>
 		</form>
 	</div>
-
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
@@ -147,6 +146,9 @@
 						telephone = $(this).children().eq(2).html();
 						email = $(this).children().eq(3).html();
 						if(email == "" || telephone == ""){
+							var index = window.parent.parent.parent.layer.getFrameIndex(window.name); //获取窗口索引
+							//$("#backBtn").click();
+							//window.location.href = '/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email;
 							layer.open({
 								type: 2,
 								title: false,
@@ -154,15 +156,14 @@
 								fix: false,
 								maxmin: false,
 								shadeClose: false,
-								scrollbar: false,
-								area: ['900px', '551px'],
+								
+								area: ['450px', '260px'],
 								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email,
 								success : function(index, layero){
-									//var iframeWin = window[index.find('iframe')[0]['name']]; 
-									// iframeWin.validate();
-									//iframeWin.closeSelf();
+									
+									var iframeWin = window[index.find('iframe')[0]['name']]; 
 								}
-							});
+							}); 
 						}else{
 							layer.load(1);
 							$.ajax({ 
@@ -204,6 +205,7 @@
 						telephone = $(this).children().eq(2).html();
 						email = $(this).children().eq(3).html();
 						if(email == "" || telephone == ""){
+							//window.location.href = '/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email;
 							layer.open({
 								type: 2,
 								title: false,
@@ -214,7 +216,7 @@
 								scrollbar: false,
 								area: ['900px', '551px'],
 								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
-							});
+							}); 
 						}else{
 							flag++;
 							if(flag == trcount){

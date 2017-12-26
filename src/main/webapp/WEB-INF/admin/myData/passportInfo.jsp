@@ -13,6 +13,8 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
+			.ipt-info { display:none; }
+			.NoInfo { width:95%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 			.form-control{height: 30px;}
 			.tab-content{padding: 15px 30px 10px 0;margin: 0 0px;}
 			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
@@ -29,6 +31,9 @@
 				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
 			</div>
 			<section class="content">
+			<div class="ipt-info">
+					<input id="passRemark" name="passRemark"  type="text" value="${obj.unqualified.passRemark }" class="NoInfo" />
+				</div>
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
 						<div class="info-QRcode"> <!-- 身份证 正面 -->
@@ -225,6 +230,11 @@
 		} 
 		$(".basic").hide();
 		
+		var remark = $("#passRemark").val();
+		if(remark != ""){
+			$(".ipt-info").show();
+		}
+		
 		//校验
 		$('#passportInfo').bootstrapValidator({
 			message : '验证不通过',
@@ -397,6 +407,7 @@
 			$('#sqImg').attr('src', "");
 			$("#uploadFile").siblings("i").css("display","none");
 		});
+		$("#passRemark").attr("disabled", true);
 	}
 	
 	//取消按钮

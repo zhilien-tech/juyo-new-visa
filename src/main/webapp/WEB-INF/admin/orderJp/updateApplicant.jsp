@@ -167,6 +167,7 @@
 										name="firstName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
+										<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 										<input type="text" id="firstNameEn" style="position:absolute;top:39px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
