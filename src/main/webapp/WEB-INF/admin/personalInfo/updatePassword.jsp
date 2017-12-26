@@ -151,7 +151,6 @@
 					}, function(){
 						$.ajax({
 							type : 'POST',
-							async: false,
 							data : $("#passwordForm").serialize(),
 							url : '${base}/admin/personalInfo/updatePassword.html',
 							success : function(data) {
@@ -159,7 +158,7 @@
 									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 							      	parent.layer.close(index);
 							    	parent.layer.msg('修改成功');
-									window.location.href="${base}/admin/logout.html";
+									window.location.href="${base}/admin/logout.html?logintype";
 								} else {
 									parent.layer.msg("操作失败!"); 
 								}
