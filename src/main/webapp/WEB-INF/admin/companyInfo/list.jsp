@@ -63,8 +63,9 @@
 	            <c:otherwise>
            			<img id="license" src="/references/common/images/companyInfo.png" />
 					<div class="fontWord">
+						<p>无</p>
 						<p>缩略图</p>
-						<p>点击可放大显示</p>
+						<!-- <p>点击可放大显示</p> -->
 					</div>
 	        	</c:otherwise>
 	        </c:choose>
