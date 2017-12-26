@@ -62,4 +62,6 @@ public class VisaEditDataForm implements Serializable {
 	private Integer sameMainWealth;
 
 	private Integer sameMainWork;
+
+	private Integer isTrailOrder;
 }

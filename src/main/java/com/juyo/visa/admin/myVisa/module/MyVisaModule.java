@@ -1,5 +1,7 @@
 package com.juyo.visa.admin.myVisa.module;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -11,8 +13,10 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.google.common.collect.Maps;
 import com.juyo.visa.admin.myVisa.form.MyVisaListDataForm;
 import com.juyo.visa.admin.myVisa.service.MyVisaService;
+import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 
 /**
  * 我的签证Module
@@ -36,9 +40,31 @@ public class MyVisaModule {
 	 * @return 
 	 */
 	@At
+	@GET
 	@Ok("jsp")
-	public Object inProcessVisa() {
+	public Object inProcessVisa(@Param("orderJpId") Integer orderJpId) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("orderJpId", orderJpId);
+		return result;
+	}
+
+	/**
+	 * 申请人 订单列表
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object visaList() {
 		return null;
+	}
+
+	/**
+	 * 申请人 订单列表数据
+	 */
+	@At
+	@POST
+	public Object visaListData(@Param("..") VisaListDataForm form, HttpSession session) {
+		return myVisaService.visaListData(form, session);
 	}
 
 	/**
@@ -50,8 +76,9 @@ public class MyVisaModule {
 	 */
 	@At
 	@POST
-	public Object myVisaListData(@Param("..") MyVisaListDataForm form, HttpSession session) {
-		return myVisaService.myVisaListData(form, session);
+	public Object myVisaListData(@Param("orderJpId") int orderJpId, @Param("..") MyVisaListDataForm form,
+			HttpSession session) {
+		return myVisaService.myVisaListData(orderJpId, form, session);
 	}
 
 	/**

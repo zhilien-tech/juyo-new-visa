@@ -1113,6 +1113,7 @@
 					});
 				},
 				share:function(id){//分享
+					//window.location.href = '/admin/orderJp/share.html?id='+id;
 					layer.open({
 						type: 2,
 						title: false,

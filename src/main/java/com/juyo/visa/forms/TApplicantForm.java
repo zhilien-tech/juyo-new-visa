@@ -128,6 +128,8 @@ public class TApplicantForm extends DataTablesParamForm {
 
 	private Integer orderid;
 
+	private Integer isTrailOrder;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**

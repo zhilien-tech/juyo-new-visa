@@ -13,6 +13,8 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
+			.ipt-info { display:none; }
+			.NoInfo { width:95%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 			.form-control{height: 30px;}
 			.tab-content{padding: 15px 30px 10px 0;margin: 0 0px;}
 			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
@@ -36,6 +38,9 @@
 				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
 			</div>
 			<section class="content">
+			<div class="ipt-info">
+					<input id="baseRemark" name="baseRemark" type="text" value="${obj.unqualified.baseRemark }"  class="NoInfo" />
+				</div>
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
 						<div class="info-QRcode"> <!-- 身份证 正面 -->
@@ -274,7 +279,7 @@
 									<label><span>*</span>现居住地是否与身份证相同</label> 
 									<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
 									<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
-									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
+									&nbsp;<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
 									<input id="province"
 										name="province" type="text" class="form-control input-sm"
 										placeholder="省" value="${obj.applicant.province }" />
@@ -355,9 +360,13 @@
 				element.disabled = true; 
 		} 
 		$(".basic").hide();
-		var nation = ${obj.applicant.hasOtherNationality};
-		var otherName = ${obj.applicant.hasOtherName};
-		var address = ${obj.applicant.addressIsSameWithCard};
+		var remark = $("#baseRemark").val();
+		if(remark != ""){
+			$(".ipt-info").show();
+		}
+		var nation = '${obj.applicant.hasOtherNationality}';
+		var otherName = '${obj.applicant.hasOtherName}';
+		var address = '${obj.applicant.addressIsSameWithCard}';
 		$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
 		$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
 		if(nation == 1){
@@ -511,6 +520,7 @@
 			$('#sqImgBack').attr('src', "");
 			$("#uploadFileBack").siblings("i").css("display","none");
 		});
+		$("#baseRemark").attr("disabled", true);
 	}
 	
 	//取消按钮
