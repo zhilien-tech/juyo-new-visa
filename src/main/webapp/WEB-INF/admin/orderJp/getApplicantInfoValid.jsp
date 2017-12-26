@@ -19,7 +19,7 @@
 		.trColor{color: rgb(48, 135, 240)}
 		.selectBtn { width:80px;height:30px;line-height:30px;text-align:center;border-radius:7px;background:#169bd5;border:0; color:#FFF;}
 		.selectMargin { margin-right:5%;}
-		.modal-body { height:220px !important;}
+		/* .modal-body { height:220px !important;} */
 		.modal-header { padding: 5px 10px !important;}
 	</style>
 </head>
@@ -66,6 +66,7 @@
 		var applicantId = '${obj.applicantId}';
 		function fillIn(){
 			window.location.href = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid&isTrial=0';
+			$("#layui-layer2").css({"width":"900px","height":"551px","top":"0px"});
 			/* layer.open({
 				type: 2,
 				title: false,
