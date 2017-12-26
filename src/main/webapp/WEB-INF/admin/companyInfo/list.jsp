@@ -50,7 +50,7 @@
 			<div class="list listMail">
 				<label>邮箱：</label> <span>${obj.adminComInfo.email }</span>
 			</div>
-			<div class="list listsAddress">
+			<div class="list listsAddress addressInfo">
 				<label>地址：</label> <span>${obj.adminComInfo.address }</span>
 			</div>
 		</div>
