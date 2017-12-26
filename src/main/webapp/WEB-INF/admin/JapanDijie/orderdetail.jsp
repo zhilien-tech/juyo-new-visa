@@ -6,7 +6,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>签证详情</title>
+		<title>地接社订单详情</title>
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
@@ -52,13 +52,10 @@
 			#schedulingTable thead tr th:nth-child(4){width:24%;}
 			#schedulingTable thead tr th:nth-child(5){width:24%;}
 			#schedulingTable thead tr th:nth-child(6){width:8%;}
-			[v-cloak] {
-			  display: none;
-			}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
-		<div class="wrapper" id="wrapper" v-cloak>
+		<div class="wrapper" id="wrapper">
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<div class="qz-head">
 					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
@@ -74,76 +71,6 @@
 					<div class="info">
 						<p class="info-head">订单信息</p>
 						<div class="info-body-from bodyMargin">
-							<div class="row body-from-input"><!-- 人数/领区/加急 -->
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>人数：</label>
-										<input id="number" name="number" type="text" class="form-control input-sm mustNumber" placeholder=" " v-model="orderinfo.number"/>
-										<!-- <i class="bulb"></i> 小灯泡-->
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>领区：</label>
-										<select class="form-control input-sm" v-model="orderinfo.cityid">
-											<c:forEach var="map" items="${obj.collarareaenum}">
-												<option value="${map.key}">${map.value}</option>
-											</c:forEach>
-										</select>
-										<!-- <i class="bulb"></i> 小灯泡-->
-									</div>
-								</div>
-								<div class="col-sm-1">
-									<div class="form-group">
-										<label><span>*</span>加急：</label>
-										<select class="form-control input-sm" id="urgenttype" v-model="orderinfo.urgenttype">
-											<c:forEach var="map" items="${obj.mainsaleurgentenum}">
-												<option value="${map.key}">${map.value}</option>
-											</c:forEach>
-										</select>
-										<!-- <i class="bulb"></i> 小灯泡-->
-									</div>
-								</div>
-								<div class="col-sm-3" id="urgentday">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<select class="form-control input-sm" v-model="orderinfo.urgentday">
-											<c:forEach var="map" items="${obj.mainsaleurgenttimeenum}">
-												<option value="${map.key}">${map.value}</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-							</div><!-- end 人数/领区/加急 -->
-						
-							<div class="row body-from-input"><!-- 行程/付款方式/金额 -->
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>行程：</label>
-										<select class="form-control input-sm" v-model="orderinfo.travel">
-											<c:forEach var="map" items="${obj.mainsaletriptypeenum}">
-												<option value="${map.key}">${map.value}</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>付款方式：</label>
-										<select class="form-control input-sm" v-model="orderinfo.paytype">
-											<c:forEach var="map" items="${obj.mainsalepaytypeenum}">
-												<option value="${map.key}">${map.value}</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>金额：</label>
-										<input id="money" name="money" type="text" class="form-control input-sm mustNumberPoint" placeholder=" " v-model="orderinfo.money" />
-									</div>
-								</div>
-							</div><!-- end 行程/付款方式/金额 -->
 							<div class="row body-from-input"><!-- 签证类型 -->
 								<div class="col-sm-3">
 									<div class="form-group">
@@ -657,14 +584,6 @@
 					content:'/admin/orderJp/log.html?id='+orderinfoid
 				});
 			}
-			$('#urgenttype').change(function(){
-				var urgenttype = $(this).val();
-				if(urgenttype == 1){
-					$('#urgentday').addClass('none');
-				}else{
-					$('#urgentday').removeClass('none');
-				}
-			});
 		</script>
 	</body>
 </html>

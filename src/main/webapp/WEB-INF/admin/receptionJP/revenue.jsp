@@ -239,6 +239,13 @@
 					revenue.status = 0;
 					revenues.push(revenue);
 				});
+				if(!$(this).find('.addInp').hasClass('none')){
+					var thisobj = $(this).find('.addInp');
+					var revenue = {};
+					revenue.realInfo = thisobj.val();
+					revenue.status = 0;
+					revenues.push(revenue);
+				}
 				applicatobj.revenue = JSON.stringify(revenues);
 				applicatinfo.push(applicatobj);
 			});
