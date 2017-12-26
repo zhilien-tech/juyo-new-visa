@@ -413,7 +413,7 @@
 			}
 			
 			//初审环节，显示合格不合格按钮
-			if(${obj.isTrailOrder}==1){
+			if('${obj.isTrailOrder}'==1){
 				$("#qualifiedBtn").show();
 				$("#unqualifiedBtn").show();
 			}
@@ -857,10 +857,10 @@
 		
 		function passportBtn(){
 			saveApplicant(2);
-			var applicantId = ${obj.applicant.id};
-			var orderid = ${obj.orderid};
+			var applicantId = '${obj.applicant.id}';
+			var orderid = '${obj.orderid}';
 			socket.onclose();
-			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
+			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
 			/* layer.open({
 				type: 2,
 				title: false,
@@ -884,10 +884,10 @@
 		});
 		$(".qualified").click(function(){
 			$(".ipt-info").slideUp();
-			var applicantId = ${obj.applicant.id};
-			var orderid = ${obj.orderid};
-			var orderJpId = ${obj.orderJpId};
-			var infoType = ${obj.infoType};
+			var applicantId = '${obj.applicant.id}';
+			var orderid = '${obj.orderid}';
+			var orderJpId = '${obj.orderJpId}';
+			var infoType = '${obj.infoType}';
 			layer.load(1);
 			$.ajax({
 				type: 'POST',

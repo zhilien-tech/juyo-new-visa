@@ -24,6 +24,9 @@ import org.nutz.mvc.annotation.Param;
 import com.juyo.visa.admin.login.enums.LoginTypeEnum;
 import com.juyo.visa.admin.login.form.LoginForm;
 import com.juyo.visa.admin.login.service.LoginService;
+import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.entities.TUserEntity;
+import com.uxuexi.core.common.util.Util;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -67,10 +70,17 @@ public class LoginModule {
 	public Object login(@Param("..") final LoginForm form, final HttpSession session, HttpServletRequest req,
 			ViewModel model) {
 		loginService.login(form, session, req);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		if (!Util.isEmpty(loginUser)) {
+			Integer userType = loginUser.getUserType();
+			session.setAttribute("userType", userType);
+		}
+
 		model.setv("errMsg", form.getErrMsg());
 		model.setv("mainurl", form.getMainurl());
 		session.setAttribute("mainurl", form.getMainurl());
 		session.setAttribute("logintype", LoginTypeEnum.WORK.intKey());
+
 		return form.getReturnUrl();
 	}
 

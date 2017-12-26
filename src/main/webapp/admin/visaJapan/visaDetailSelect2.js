@@ -18,12 +18,32 @@ function loadtravelinfo(){
 
 $('#triptype').change(function(){
 	var thisval = $(this).val();
+	var gotripdate = $('#gotripdate').val();
+	var backtripdate = $('#backtripdate').val();
 	if(thisval == 1){
 		$('#wangfan').removeClass('none');
 		$('#duocheng').addClass('none');
+		//往返设置出发日期
+		var goDate = $('#goDate').val();
+		if(!goDate){
+			$('#goDate').val(gotripdate);
+		}
+		//往返设置返回日期
+		var returnDate = $('#returnDate').val();
+		if(!returnDate){
+			$('#returnDate').val(backtripdate);
+		}
 	}else{
 		$('#wangfan').addClass('none');
 		$('#duocheng').removeClass('none');
+		var firstdiv = $('.duochengdiv').first().find('[name=departuredate]');
+		if(!firstdiv.val()){
+			firstdiv.val(gotripdate);
+		}
+		var lastdiv = $('.duochengdiv').last().find('[name=departuredate]');
+		if(!lastdiv.val()){
+			lastdiv.val(backtripdate);
+		}
 	}
 });
 //添加行程

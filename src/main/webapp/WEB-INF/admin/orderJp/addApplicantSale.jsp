@@ -367,7 +367,41 @@
 			$('#applicantInfo').bootstrapValidator('validate');
 			
 		});
-		
+		//连接websocket
+		connectWebSocket();
+		function connectWebSocket(){
+			 if ('WebSocket' in window){  
+	            console.log('Websocket supported');  
+	            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+
+	            console.log('Connection attempted');  
+
+	            socket.onopen = function(){  
+	                 console.log('Connection open!');  
+	                 //setConnected(true);  
+	             };
+
+	            socket.onclose = function(){  
+	                console.log('Disconnecting connection'); 
+	            };
+
+	            socket.onmessage = function (evt){
+	                  var received_msg = evt.data;  
+	                  if(received_msg){
+		                  var receiveMessage = JSON.parse(received_msg);
+		                  if(receiveMessage.messagetype == 4){
+		                	  window.location.href = '/admin/orderJp/updateApplicant.html?id='+receiveMessage.applicantid+'&orderid&isTrial=0';
+		                	  socket.onclose();
+		                  }
+	                  }
+	                  console.log('message received!');  
+	                  //showMessage(received_msg);  
+	             };  
+
+	          } else {  
+	            console.log('Websocket not supported');  
+	          }  
+		}
 		//居住地与身份证相同
 		$(".nowProvince").change(function(){
 			searchByCard();

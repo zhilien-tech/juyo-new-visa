@@ -59,6 +59,8 @@ public class OrderJpModule {
 	private OrderJpViewService saleViewService;
 	@Inject
 	private QrCodeService qrCodeService;
+	//基本信息连接websocket的地址
+	private static final String BASIC_WEBSPCKET_ADDR = "basicinfowebsocket";
 
 	/**
 	 * 跳转到list页面
@@ -148,7 +150,12 @@ public class OrderJpModule {
 		Map<String, Object> result = MapUtil.map();
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("orderid", orderid);
-		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/mobile/info.html";
+		String localAddr = request.getLocalAddr();
+		int localPort = request.getLocalPort();
+		result.put("localAddr", localAddr);
+		result.put("localPort", localPort);
+		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
+		String qrurl = "http://" + localAddr + ":" + localPort + "/mobile/info.html";
 		if (Util.isEmpty(orderid)) {
 			qrurl += "?comid=" + loginCompany.getId() + "&userid=" + loginUser.getId();
 		} else {

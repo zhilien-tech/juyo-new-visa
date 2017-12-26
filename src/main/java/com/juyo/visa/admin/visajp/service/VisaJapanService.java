@@ -269,6 +269,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		List<TOrderTripMultiJpEntity> multitrip = new ArrayList<TOrderTripMultiJpEntity>();
 		if (Util.isEmpty(travelinfo)) {
 			travelinfo = new TOrderTripJpEntity();
+			travelinfo.setGoDate(orderinfo.getGoTripDate());
+			travelinfo.setReturnDate(orderinfo.getBackTripDate());
 			travelinfo.setTripType(1);
 		} else {
 			if (travelinfo.getTripType().equals(2)) {

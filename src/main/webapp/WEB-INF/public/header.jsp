@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/WEB-INF/common/tld.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -19,13 +19,13 @@
   <link rel="stylesheet" href="${base}/references/public/css/style.css">
   <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
   <script>
-  $(function(){
-	  $(document).on('click',".dropdown-toggle",function(){
-		  $(".menu1").removeClass('active');
-		  $(".menu-ul").hide();
-		  $(".menu-ul li").removeClass("activeTwo");
+	  $(function(){
+		  $(document).on('click',".dropdown-toggle",function(){
+			  $(".menu1").removeClass('active');
+			  $(".menu-ul").hide();
+			  $(".menu-ul li").removeClass("activeTwo");
+		  });
 	  });
-  })
   </script>
   <style>
   .main-header .logo { width:220px;}
@@ -51,7 +51,15 @@
             <span class="dian"></span>
           </li>
           <li class="dropdown messages-menu">
-            <a id="psersonal" href="${base}/admin/personalInfo/listInfo.html" target="main" class="dropdown-toggle name" data-toggle="dropdown">${loginuser.name}</a>
+          	<c:choose>
+	            <c:when test="${userType == 5}">
+	            	<!-- 送签社管理员 -->
+	            	<a id="psersonal" href="${base}/admin/companyInfo/list.html" target="main" class="dropdown-toggle name" data-toggle="dropdown">${loginuser.name}</a>
+	        	</c:when>
+	            <c:otherwise>
+           			<a id="psersonal" href="${base}/admin/personalInfo/listInfo.html" target="main" class="dropdown-toggle name" data-toggle="dropdown">${loginuser.name}</a>
+	        	</c:otherwise>
+	        </c:choose>
           </li>
           <%-- <li class="setUp-li">
              <a href="javascript:;">设置<img class="setUp" src="${base}/references/public/dist/newvisacss/img/setUp.jpg"></a>
