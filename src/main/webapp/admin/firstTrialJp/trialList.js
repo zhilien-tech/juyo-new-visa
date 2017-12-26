@@ -221,7 +221,6 @@ $(window).scroll(function(){
 	var pageTotal = parseInt($('#pageTotal').val());
 	var pageListCount = parseInt($('#pageListCount').val());
 	// 判断是否滚动到底部  
-	console.log((scrollTop + windowHeight)+"="+ scrollHeight);
 	if(scrollHeight - (scrollTop + windowHeight)  <= 1.75){
 		//分页条件
 		var pageNumber = $('#pageNumber').val();
