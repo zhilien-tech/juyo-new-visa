@@ -151,14 +151,15 @@
 					}, function(){
 						$.ajax({
 							type : 'POST',
+							async: false,
 							data : $("#passwordForm").serialize(),
 							url : '${base}/admin/personalInfo/updatePassword.html',
 							success : function(data) {
 								if ("200" == data.status) {
-									window.location.href="${base}/admin/logout.html";
 									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 							      	parent.layer.close(index);
-							      	window.parent.successCallback('1');
+							    	parent.layer.msg('修改成功');
+									window.location.href="${base}/admin/logout.html";
 								} else {
 									parent.layer.msg("操作失败!"); 
 								}
