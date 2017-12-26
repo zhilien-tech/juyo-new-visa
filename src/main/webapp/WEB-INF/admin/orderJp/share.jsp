@@ -156,8 +156,8 @@
 								fix: false,
 								maxmin: false,
 								shadeClose: false,
-								
-								area: ['450px', '260px'],
+								scrollbar: false,
+								area: ['900px', '551px'],
 								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email,
 								success : function(index, layero){
 									
