@@ -30,6 +30,8 @@ public class ValidateImageModule {
 	public void validateImage(final HttpServletResponse response, final HttpSession session) throws IOException {
 		ValidateImageUtil viu = ValidateImageUtil.Instance();
 		session.setAttribute(CommonConstants.CONFIRMCODE, viu.getString());
+		//设置session过期时间为24小时
+		session.setMaxInactiveInterval(60 * 60 * 10);
 
 		InputStream ins = viu.getImage();
 		byte[] buffer = new byte[ins.available()];

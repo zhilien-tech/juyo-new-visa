@@ -1,0 +1,36 @@
+/*--------------------------公司信息---------------------------*/
+* { margin: 0; padding: 0;}
+body { font-family: "microsoft yahei"; font-size: 14px;}
+/*按钮*/
+.head { width: 90%; height: 40px; line-height: 40px; margin: 1% 5%;}
+.head-right { float: right;}
+.head-right::after { content: ""; clear: both;}
+.headBtn {display: inline-block; cursor: pointer; border-radius: 8px; padding: 0 10px; height: 30px; line-height: 30px; text-align: center; color: #FFF; background: #379cd5;}
+/*列表*/
+.section { border: 1px solid #eee; width: 90%;  margin: 0 5%; margin-bottom: 20px;}
+.section:hover { box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.22);}
+.section:hover .listHover{ display: block; height: auto; min-height: 30px;}
+.section:hover .pic { display: block; height: auto;}
+.listShow { display: inline-block; width: 100%; height: 40px; line-height: 40px;}
+.listShow .list { display: block; float: left;}
+.listShow .list label { color: #c3bebe;}
+.list::after { content: ""; clear: both;}
+.listName { width: 20%; margin-left: 2%;}
+.listNameTag { width: 15%;}
+.listNum { width: 20%;}
+.listPer { width: 15%;}
+.listTel { width: 15%;}
+.updateList {width:5%; float: right !important; color: #379CD5; cursor: pointer;}
+/**/
+.listHover { display: none; width: 100%;}
+.listHover .list { display: block; float: left;}
+.listHover .list label { color: #c3bebe;}
+.listType { width: 20%; margin-left: 2%;}
+.listScope { width: 15%;}
+.listMail { width: 20%;}
+.listsAddress { width:40%;}
+.listAddress { width: 40%;margin-left: 2%;}
+/**/
+.pic { display: none; position: relative;}
+.pic img { margin-left: 2%; cursor: pointer;}
+.fontWord { position: absolute; top: 40%; left: 0; width: 221px; text-align: center; cursor: pointer;}

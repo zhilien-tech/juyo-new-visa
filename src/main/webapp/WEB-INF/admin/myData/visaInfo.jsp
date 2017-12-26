@@ -1,0 +1,726 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@include file="/WEB-INF/common/tld.jsp"%>
+<c:set var="url" value="${base}/admin/firstTrialJp" />
+<!DOCTYPE HTML>
+<html lang="en-US" id="addHtml">
+<head>
+	<meta charset="UTF-8">
+	<title>签证信息</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+	
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<link rel="stylesheet" href="${base}/references/public/css/style.css">
+	<style type="text/css">
+	.info-imgUpload {width: 100%;}
+	.NoInfo { width:100%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
+	.ipt-info { display:none; }
+    .Unqualified, .qualified { margin-right:10px; }
+ 	.input-box { position: relative; display: inline-block; }
+    .input-box input { background-color: transparent;  background-image: none; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset; color: #555;  display: block;  font-size: 14px; line-height: 1.42857; padding: 6px 6px; transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;  width: 200px; display: inline; position: relative; z-index: 1;}
+    .tip-l {  width: 0;  height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 10px solid #555; display: inline-block; right: 10px; z-index: 0;  position: absolute;  top: 12px; }
+    .dropdown { position: absolute; top: 32px; left: 0px; width: 200px; background-color: #FFF; border: 1px solid #23a8ce; border-top: 0; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;  z-index: 999; padding: 0;  margin: 0; }
+    .dropdown li { display: block; line-height: 1.42857; padding: 0 6px; min-height: 1.2em; cursor: pointer; }
+    .dropdown li:hover {  background-color: #23a8ce;  color: #FFF; }
+    .colSm {  display:block; float:left; width:200px; }
+    .padding-right-0 { margin-left:10%; width:323px; height:200px; border:1px solid #eee; }
+    .delete { right:0; }
+    /*左右导航样式*/
+    .leftNav { position:absolute;top:61px;left:0;z-index:999; width:40px;height:489px; cursor:pointer;}
+	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
+</style>
+	<style type="text/css">
+		body {min-width:auto;}
+		.tab-content {background-color: #f8f8f8;}
+		.remove-btn {right: 0;}
+		.modal-body{background-color:#f9f9f9;}
+		.houseProperty,.vehicle,.deposit,.financial,.vice{display:none;}
+	</style>
+</head>
+<body>
+	<div class="modal-content">
+		<form id="passportInfo">
+			<div class="modal-header">
+				<span class="heading">签证信息</span> 
+				<input type="hidden" value="${obj.visaInfo.applicantId }" name="applicantId"/>
+				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
+				<input type="hidden" value="${obj.orderid }" name="orderid"/>
+				<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
+				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
+			</div>
+			<div class="modal-body">
+			<div class="ipt-info">
+					<input id="visaRemark" name="visaRemark" placeholder="请输入不合格原因" type="text" value="${obj.unqualified.visaRemark }" class="NoInfo" />
+				</div>
+				<div class="tab-content row">
+					<!-- 结婚状况 -->
+					<div class="info">
+						<div class="info-head">结婚状况 </div>
+						<div class="info-body-from cf ">
+							<div class="row colSm">
+								<div class="">
+									<div class="form-group">
+										<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight">
+											<option value="">请选择</option>
+											<c:forEach var="map" items="${obj.marryStatus}">
+												<option value="${map.key}" ${map.key==obj.applicant.marryStatus?'selected':''}>${map.value}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-sm-4 padding-right-0">
+								<div class="cardFront-div">
+									<span>上传结婚证/离婚证</span>
+									<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.applicant.marryUrl }"/>
+									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+									<img id="sqImg" alt="" src="${obj.applicant.marryUrl }" >
+									<i class="delete" id="deleteApplicantFrontImg();"></i>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					<!-- 申请人 -->
+					<div class="info">
+						<div id="mainApply" class="info-head">主申请人 </div>
+						<div class="info-body-from"><!--class=" cf "-->
+							<div class="row"><!-- 申请人/备注 -->
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>申请人</label>
+										<select id="applicant" name="applicant" class="form-control input-sm selectHeight">
+											<c:forEach var="map" items="${obj.mainOrVice}">
+												<option value="${map.key}" ${map.key==obj.visaInfo.isMainApplicant?'selected':''}>${map.value}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-4 applymain">
+									<div class="form-group">
+										<label><span>*</span>备注</label>
+										</br>
+										<div class="input-box">
+											<input type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
+											<ul class="dropdown">
+												<li>主卡</li>
+												<li>朋友</li>
+												<li>同事</li>
+												<li>同学</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								
+								<div class="applyvice">
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label><span>*</span>主申请人</label>
+											<!-- <input id="mainApplicant" name="mainApplicant" type="text" class="form-control input-sm" placeholder=" " /> -->
+											<select id="mainApplicant" name="mainApplicant" class="form-control input-sm selectHeight">
+											<c:forEach var="map" items="${obj.mainApply}">
+												<option value="${map.id}" ${map.id==obj.mainApplicant.id?'selected':'' } >${map.applyname}</option>
+											</c:forEach>
+										</select>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label><span>*</span>与主申请人关系</label>
+											</br>
+										<div class="input-box">
+											<input type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
+												<ul class="dropdown">
+													<li>之妻</li>
+													<li>之夫</li>
+													<li>之子</li>
+													<li>之女</li>
+													<li>之父</li>
+													<li>之母</li>
+													<li>朋友</li>
+													<li>同事</li>
+													<li>同学</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div><!-- end 申请人/备注-->
+						</div>
+					</div>
+					<!-- end 申请人 -->
+					
+					<!-- 出行信息 -->
+					<div class="info tripvice">
+						<div class="info-head">出行信息 </div>
+						<div class="info-body-from cf ">
+							<div class="row"><!-- 是否同主申请人 -->
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>是否同主申请人</label>
+										<input id="trip" name="sameMainTrip" class="form-control input-sm selectHeight" value="是" disabled="disabled"/>
+										<%-- <select id="trip" name="sameMainTrip" class="form-control input-sm selectHeight">
+											<c:forEach var="map" items="${obj.isOrNo}">
+												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainTrip?'selected':''}>${map.value}</option>
+											</c:forEach>
+										</select> --%>
+									</div>
+								</div>
+							</div><!-- end 是否同主申请人 -->
+						</div>
+					</div>
+					<!-- end 出行信息 -->
+					
+					<!-- 工作信息 -->
+					<div class="info">
+						<div class="info-head">工作信息 </div>
+						<div class="info-body-from cf ">
+							<div class="row "><!-- 我的职业/单位名称/单位电话 -->
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>我的职业</label>
+										<!-- <input id="occupation"  name="occupation" type="text" class="form-control input-sm" placeholder=" " /> -->
+										<select id="careerStatus" name="careerStatus" class="form-control input-sm selectHeight">
+											<option value="">--请选择--</option>
+											<c:forEach var="map" items="${obj.jobStatusEnum}">
+												<option value="${map.key}" ${map.key==obj.workJp.careerStatus?'selected':''}>${map.value}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="schoolName"><span>*</span>单位名称</label>
+										<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.name }"/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="schoolTelephone"><span>*</span>单位电话</label>
+										<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.telephone }"/>
+									</div>
+								</div>
+							</div><!-- end 我的职业/单位名称/单位电话 -->
+							<div class="row"><!-- 单位地址 -->
+								<div class="col-sm-8">
+									<div class="form-group">
+										<label id="schoolAddress"><span>*</span>单位地址</label>
+										<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.address }"/>
+									</div>
+								</div>
+							</div>
+							
+							<!-- end 单位地址 -->
+						</div>
+					</div>
+					<!-- end 工作信息 -->
+					
+					<!-- 财产信息 -->
+					<div class="info" style="padding-bottom: 15px;">
+						<div class="info-head">财产信息 </div>
+						<div class="wealthvice row info-body-from clone-module cf">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>是否同主申请人</label>
+										<select id="wealth" name="sameMainWealth" class="form-control input-sm selectHeight">
+											<c:forEach var="map" items="${obj.isOrNo}">
+												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWealth?'selected':''}>${map.value}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+						</div>
+						<div class="info-body-from finance-btn wealthmain">
+							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState" />
+							<input id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
+							<input id="housePropertyType" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
+							<input id="financialType" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
+						</div>
+						<div class="info-body-from  clone-module cf deposit">
+							<div class="row body-from-input"><!-- 银行存款 -->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label><span>*</span>银行存款</label>
+										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder="万"  />
+									</div>
+								</div>
+							</div><!-- end 银行存款 -->
+							<i class="remove-btn delete-icon"></i>
+						</div>
+						<div class="info-body-from clone-module cf vehicle">
+							<div class="row body-from-input"><!-- 车产 -->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label><span>*</span>车产</label>
+										<input id="" name="" type="text" class="form-control input-sm" value="车产" />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder=" "/>
+									</div>
+								</div>
+							</div><!-- end 车产 -->
+							<i class="remove-btn delete-icon"></i>
+						</div>
+						<div class="info-body-from clone-module cf houseProperty">
+							<div class="row body-from-input"><!-- 房产 -->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label><span>*</span>房产</label>
+										<input id="" name="" type="text" class="form-control input-sm" value="房产" />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder="平米"  />
+									</div>
+								</div>
+							</div><!-- end 房产 -->
+							<i class="remove-btn delete-icon"></i>
+						</div>
+						<div class="info-body-from clone-module cf financial">
+							<div class="row body-from-input"><!-- 房产 -->
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label><span>*</span>理财</label>
+										<input id="" name="" type="text" class="form-control input-sm" value="理财" />
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder="万"  />
+									</div>
+								</div>
+							</div><!-- end 房产 -->
+							<i class="remove-btn delete-icon"></i>
+						</div>
+						
+					</div>
+					<!-- end 财产信息 -->
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<script type="text/javascript">
+		var BASE_PATH = '${base}';
+	</script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
+	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
+	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<!-- DataTables -->
+	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<script type="text/javascript" src="${base}/admin/orderJp/visaInfo.js"></script>
+	<script type="text/javascript">
+		var base = "${base}";
+		$(function() {
+			
+			var form = document.forms[0]; 
+			for ( var i = 0; i < form.length; i++) { 
+				var element = form.elements[i]; 
+				if(element.id != "editbasic")
+					element.disabled = true; 
+			} 
+			document.getElementById("mainRelation").style.backgroundColor = "#eee";
+			document.getElementById("relationRemark").style.backgroundColor = "#eee";
+			$(".basic").hide();
+			
+			var remark = $("#visaRemark").val();
+			if(remark != ""){
+				$(".ipt-info").show();
+			}
+			
+			var marry = $("#marryUrl").val();
+			if(marry != ""){
+				$("#uploadFile").siblings("i").css("display","block");
+			}else{
+				$("#uploadFile").siblings("i").css("display","none");
+			}
+			
+			var career = $("#careerStatus").val();
+			if(career == 4){
+				$("#schoolName").html("<span>*</span>学校名称：");
+				$("#schoolTelephone").html("<span>*</span>学校电话：");
+				$("#schoolAddress").html("<span>*</span>学校地址：");
+			}
+			$("#careerStatus").change(function(){
+				$("#name").val("");
+				$("#telephone").val("");
+				$("#address").val("");
+				var career = $(this).val();
+				if(career == 4){
+					$("#schoolName").html("<span>*</span>学校名称：");
+					$("#schoolTelephone").html("<span>*</span>学校电话：");
+					$("#schoolAddress").html("<span>*</span>学校地址：");
+				}else{
+					$("#schoolName").html("<span>*</span>单位名称：");
+					$("#schoolTelephone").html("<span>*</span>单位电话：");
+					$("#schoolAddress").html("<span>*</span>单位地址：");
+				}
+			});
+			
+			//主申请人 or 副申请人
+			var applicVal = $("#applicant").val();
+			if(applicVal == "1"){//主申请人
+				$(".applyvice").hide();
+				$(".tripvice").hide();
+				//$(".workvice").hide();
+				$(".wealthvice").hide();
+				$(".applymain").show();
+				//$(".workmain").show();
+				$(".wealthmain").show();
+				$("#mainApply").text("主申请人");
+			}else{//副申请人
+				$(".applyvice").show();
+				$(".tripvice").show();
+				$(".wealthvice").show();
+				//$(".workvice").show();
+				$(".applymain").hide();
+				//$(".workmain").hide();
+				$(".wealthmain").hide();
+				$("#mainApply").text("副申请人");
+			}
+			
+			//主申请人 or 副申请人
+			$("#applicant").change(function(){
+				var applicVal = $(this).val();
+				if(applicVal == "1"){//主申请人
+					$(".applyvice").hide();
+					$(".tripvice").hide();
+					//$(".workvice").hide();
+					$(".wealthvice").hide();
+					$(".applymain").show();
+					//$(".workmain").show();
+					$(".wealthmain").show();
+					$("#mainApply").text("主申请人");
+				}else{//副申请人
+					$(".applyvice").show();
+					$(".tripvice").show();
+					$(".wealthvice").show();
+					//$(".workvice").show();
+					$(".applymain").hide();
+					$(".workmain").hide();
+					$(".wealthmain").hide();
+					$("#mainApply").text("副申请人");
+					$(".deposit").css("display","none");
+					$(".vehicle").css("display","none");
+					$(".houseProperty").css("display","none");
+					$(".financial").css("display","none");
+				}
+			});
+			
+			var wealthType = '${obj.wealthJp}';
+			console.log(wealthType);
+			if(wealthType){
+				$('[name=wealthType]').each(function(){
+					var wealth = $(this);
+					$.each(JSON.parse(wealthType), function(i, item){     
+						if(item.type == wealth.val()){
+							if(wealth.val() == "银行存款"){
+								$(".deposit").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#deposit").val(item.details);
+							}
+							if(wealth.val() == "车产"){
+								$(".vehicle").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#vehicle").val(item.details);
+							}
+							if(wealth.val() == "房产"){
+								$(".houseProperty").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#houseProperty").val(item.details);
+							}
+							if(wealth.val() == "理财"){
+								$(".financial").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#financial").val(item.details);
+							}
+						}
+						});
+					});
+			}
+			
+			var wealth = $("#wealth").val();
+			if(wealth == 0){
+				$(".wealthmain").show();
+				//$(".address").show();
+			}else{
+				if(applicVal == 1){
+					
+				}else{
+					$(".deposit").css("display","none");
+					$(".vehicle").css("display","none");
+					$(".houseProperty").css("display","none");
+					$(".financial").css("display","none");
+				}
+			}
+			$("#wealth").change(function(){
+				if($(this).val() == 1){
+					$(".wealthmain").hide();
+					$(".deposit").css("display","none");
+					$(".vehicle").css("display","none");
+					$(".houseProperty").css("display","none");
+					$(".financial").css("display","none");
+				}else{
+					$(".wealthmain").show();
+					$('[name=wealthType]').each(function(){
+						$(this).removeClass("btnState-true");
+					});
+				}
+			});
+			
+			
+			//财务信息 部分按钮效果
+			$(".finance-btn input").click(function(){
+				var financeBtnInfo=$(this).val();
+				if(financeBtnInfo == "银行存款"){
+					if($(this).hasClass("btnState-true")){
+						$(".deposit").css("display","none");
+						$(this).removeClass("btnState-true");
+						$("#deposit").val("");
+					}else{
+						$(".deposit").css("display","block");
+						$(this).addClass("btnState-true");
+						$("#deposit").val("万");
+						//$("#deposit").placeholder("万");
+					}
+				}else if(financeBtnInfo == "车产"){
+					if($(this).hasClass("btnState-true")){
+						$(".vehicle").css("display","none");
+						$(this).removeClass("btnState-true");
+						$("#vehicle").val("");
+					}else{
+						$(".vehicle").css("display","block");
+						$(this).addClass("btnState-true");
+						$("#vehicle").val("");
+					}
+				}else if(financeBtnInfo == "房产"){
+					if($(this).hasClass("btnState-true")){
+						$(".houseProperty").css("display","none");
+						$(this).removeClass("btnState-true");
+						$("#houseProperty").val("");
+					}else{
+						$(".houseProperty").css("display","block");
+						$(this).addClass("btnState-true");
+						$("#houseProperty").val("平米");
+						//$("#houseProperty").placeholder("平米");
+					}
+				}else if(financeBtnInfo == "理财"){
+					if($(this).hasClass("btnState-true")){
+						$(".financial").css("display","none");
+						$(this).removeClass("btnState-true");
+						$("#financial").val("");
+					}else{
+						$(".financial").css("display","block");
+						$(this).addClass("btnState-true");
+						$("#financial").val("万");
+						//$("#financial").placeholder("万");
+					}
+				}
+			});
+			
+			
+			
+			
+		});
+		//连接websocket
+		connectWebSocket();
+		function connectWebSocket(){
+			 if ('WebSocket' in window){  
+	            console.log('Websocket supported');  
+	            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+
+	            console.log('Connection attempted');  
+
+	            socket.onopen = function(){  
+	                 console.log('Connection open!');  
+	                 //setConnected(true);  
+	             };
+
+	            socket.onclose = function(){  
+	                console.log('Disconnecting connection');  
+	            };
+
+	            socket.onmessage = function (evt){
+	                  var received_msg = evt.data;
+	                  var applicantId = '${obj.visaInfo.applicantId}';
+	                  if(received_msg){
+		                  var receiveMessage = JSON.parse(received_msg);
+		                  if(receiveMessage.messagetype == 3 && receiveMessage.applicantid == applicantId){
+		                	  window.location.reload();
+		                  }
+	                  }
+	                  console.log('message received!');  
+	                  //showMessage(received_msg);  
+	             };  
+
+	          } else {  
+	            console.log('Websocket not supported');  
+	          }  
+		}
+		
+		//保存
+		function save(){
+			//绑定财产类型
+			var wealthType = "";
+			$('[name=wealthType]').each(function(){
+				if($(this).hasClass('btnState-true')){
+					wealthType += $(this).val() + ',';
+				}
+			});
+			if(wealthType){
+				wealthType = wealthType.substr(0,wealthType.length-1);
+			}
+			//var passportInfo = $("#passportInfo").serialize();
+			var applicVal = $("#applicant").val();
+			//主申请人时，是否同主申请人设置为空，不然默认为1
+			if(applicVal == 1){
+				//$("#work").val(0);
+				$("#wealth").val(0);
+			}
+			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
+			$.ajax({
+				type: 'POST',
+				async: false,
+				data : passportInfo,
+				url: '${base}/admin/myData/saveEditVisa',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					layer.closeAll('loading');
+					layer.msg("修改成功", {
+						time: 500,
+						end: function () {
+							self.location.reload();
+						}
+					});
+				}
+			});
+		}
+		
+		//上传结婚证
+		
+		function dataURLtoBlob(dataurl) { 
+			var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+			bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+			while(n--){
+				u8arr[n] = bstr.charCodeAt(n);
+			}
+			return new Blob([u8arr], {type:mime});
+		}
+		
+		$('#uploadFile').change(function() {
+			var layerIndex = layer.load(1, {
+				shade : "#000"
+			});
+			$("#addBtn").attr('disabled', true);
+			var file = this.files[0];
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var dataUrl = e.target.result;
+				var blob = dataURLtoBlob(dataUrl);
+				var formData = new FormData();
+				formData.append("image", blob, file.name);
+				$.ajax({
+					type : "POST",//提交类型  
+					//dataType : "json",//返回结果格式  
+					url : BASE_PATH + '/admin/orderJp/marryUpload',//请求地址  
+					async : true,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//关闭加载层
+						layer.close(layerIndex);
+						if (200 == obj.status) {
+							$('#marryUrl').val(obj.data);
+							$('#sqImg').attr('src', obj.data);
+							$("#uploadFile").siblings("i").css("display","block");
+						}
+						$("#addBtn").attr('disabled', false);
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						layer.close(layerIndex);
+						$("#addBtn").attr('disabled', false);
+					}
+				}); // end of ajaxSubmit
+			};
+			reader.readAsDataURL(file);
+		});
+		
+		//编辑按钮
+		function editBtn(){
+			$(".basic").show();
+			$(".editbasic").hide();
+			var form = document.forms[0]; 
+			for ( var i = 0; i < form.length; i++) { 
+				var element = form.elements[i]; 
+				element.disabled = false; 
+			} 
+			document.getElementById("mainRelation").style.backgroundColor = "#fff";
+			document.getElementById("relationRemark").style.backgroundColor = "#fff";
+			$("#trip").attr("disabled", true);
+			$("#deleteApplicantFrontImg").click(function(){
+				$('#marryUrl').val("");
+				$('#sqImg').attr('src', "");
+				$("#uploadFile").siblings("i").css("display","none");
+			});
+			
+			$(".remove-btn").click(function(){
+				//$(this).parent().css("display","none");
+				if($(this).parent().is(".deposit")){
+					$(".deposit").css("display","none");
+					$("#depositType").removeClass("btnState-true");
+					$("#deposit").val("");
+				}
+				if($(this).parent().is(".vehicle")){
+					$(".vehicle").css("display","none");
+					$("#vehicleType").removeClass("btnState-true");
+					$("#vehicle").val("");
+				}
+				if($(this).parent().is(".houseProperty")){
+					$(".houseProperty").css("display","none");
+					$("#housePropertyType").removeClass("btnState-true");
+					$("#houseProperty").val("");
+				}
+				if($(this).parent().is(".financial")){
+					$(".financial").css("display","none");
+					$("#financialType").removeClass("btnState-true");
+					$("#financial").val("");
+				}
+			});
+		}
+		
+		//返回 
+		function closeWindow() {
+			layer.msg("已取消", {
+				time: 500,
+				end: function () {
+					self.location.reload();
+					//window.location.href = '/admin/myData/visaCountry.html';
+				}
+			});
+		}
+	</script>
+
+
+</body>
+</html>

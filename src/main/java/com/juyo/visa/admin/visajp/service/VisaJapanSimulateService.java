@@ -105,6 +105,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			filename += ".pdf";
 			//将文件进行编码
 			String fileName = URLEncoder.encode(filename, "UTF-8");
+			fileName = fileName.replace("+", " ");
 			//设置下载的响应头
 			//			response.setContentType("application/zip");
 			response.setContentType("application/octet-stream");

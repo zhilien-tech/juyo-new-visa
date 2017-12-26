@@ -13,6 +13,8 @@ SELECT
 	tabj.telephone,
 	tabj.invoiceContent,
 	tabj.invoiceHead,
+	tabj.invoiceMobile,
+	tabj.invoiceAddress,
 	tabj.taxNum,
 	tabj.remark 
 FROM

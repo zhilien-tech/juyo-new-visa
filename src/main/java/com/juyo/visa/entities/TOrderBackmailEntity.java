@@ -14,7 +14,6 @@ import org.nutz.dao.entity.annotation.Table;
 @Table("t_order_backmail")
 public class TOrderBackmailEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 	@Id(auto = true)
 	private Integer id;
 
@@ -57,6 +56,14 @@ public class TOrderBackmailEntity implements Serializable {
 	@Column
 	@Comment("发票抬头")
 	private String invoiceHead;
+
+	@Column
+	@Comment("发票电话")
+	private String invioceMobile;
+
+	@Column
+	@Comment("发票地址")
+	private String invoiceAddress;
 
 	@Column
 	@Comment("税号")
@@ -105,6 +112,16 @@ public class TOrderBackmailEntity implements Serializable {
 			if (other.expressType != null)
 				return false;
 		} else if (!expressType.equals(other.expressType))
+			return false;
+		if (invioceMobile == null) {
+			if (other.invioceMobile != null)
+				return false;
+		} else if (!invioceMobile.equals(other.invioceMobile))
+			return false;
+		if (invoiceAddress == null) {
+			if (other.invoiceAddress != null)
+				return false;
+		} else if (!invoiceAddress.equals(other.invoiceAddress))
 			return false;
 		if (invoiceContent == null) {
 			if (other.invoiceContent != null)
@@ -170,6 +187,8 @@ public class TOrderBackmailEntity implements Serializable {
 		result = prime * result + ((expressAddress == null) ? 0 : expressAddress.hashCode());
 		result = prime * result + ((expressNum == null) ? 0 : expressNum.hashCode());
 		result = prime * result + ((expressType == null) ? 0 : expressType.hashCode());
+		result = prime * result + ((invioceMobile == null) ? 0 : invioceMobile.hashCode());
+		result = prime * result + ((invoiceAddress == null) ? 0 : invoiceAddress.hashCode());
 		result = prime * result + ((invoiceContent == null) ? 0 : invoiceContent.hashCode());
 		result = prime * result + ((invoiceHead == null) ? 0 : invoiceHead.hashCode());
 		result = prime * result + ((linkman == null) ? 0 : linkman.hashCode());

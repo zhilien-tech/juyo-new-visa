@@ -102,7 +102,7 @@
 							<div class="row"><!-- 申请人/备注 -->
 								<div class="col-sm-4">
 									<div class="form-group">
-										<label><span>*</span>申请人：</label>
+										<label><span>*</span>申请人</label>
 										<select id="applicant" name="applicant" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.mainOrVice}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.isMainApplicant?'selected':''}>${map.value}</option>
@@ -112,7 +112,7 @@
 								</div>
 								<div class="col-sm-4 applymain">
 									<div class="form-group">
-										<label><span>*</span>备注：</label>
+										<label><span>*</span>备注</label>
 										</br>
 										<div class="input-box">
 											<input type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
@@ -129,7 +129,7 @@
 								<div class="applyvice">
 									<div class="col-sm-4">
 										<div class="form-group">
-											<label><span>*</span>主申请人：</label>
+											<label><span>*</span>主申请人</label>
 											<!-- <input id="mainApplicant" name="mainApplicant" type="text" class="form-control input-sm" placeholder=" " /> -->
 											<select id="mainApplicant" name="mainApplicant" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.mainApply}">
@@ -140,7 +140,7 @@
 									</div>
 									<div class="col-sm-4">
 										<div class="form-group">
-											<label><span>*</span>与主申请人关系：</label>
+											<label><span>*</span>与主申请人关系</label>
 											</br>
 										<div class="input-box">
 											<input type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
@@ -171,7 +171,7 @@
 							<div class="row"><!-- 是否同主申请人 -->
 								<div class="col-sm-4">
 									<div class="form-group">
-										<label><span>*</span>是否同主申请人：</label>
+										<label><span>*</span>是否同主申请人</label>
 										<input id="trip" name="sameMainTrip" class="form-control input-sm selectHeight" value="是" disabled="disabled"/>
 										<%-- <select id="trip" name="sameMainTrip" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.isOrNo}">
@@ -192,7 +192,7 @@
 							<div class="row "><!-- 我的职业/单位名称/单位电话 -->
 								<div class="col-sm-4">
 									<div class="form-group">
-										<label><span>*</span>我的职业：</label>
+										<label><span>*</span>我的职业</label>
 										<!-- <input id="occupation"  name="occupation" type="text" class="form-control input-sm" placeholder=" " /> -->
 										<select id="careerStatus" name="careerStatus" class="form-control input-sm selectHeight">
 											<option value="">--请选择--</option>
@@ -204,13 +204,13 @@
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
-										<label id="schoolName"><span>*</span>单位名称：</label>
+										<label id="schoolName"><span>*</span>单位名称</label>
 										<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.name }"/>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
-										<label id="schoolTelephone"><span>*</span>单位电话：</label>
+										<label id="schoolTelephone"><span>*</span>单位电话</label>
 										<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.telephone }"/>
 									</div>
 								</div>
@@ -218,7 +218,7 @@
 							<div class="row"><!-- 单位地址 -->
 								<div class="col-sm-8">
 									<div class="form-group">
-										<label id="schoolAddress"><span>*</span>单位地址：</label>
+										<label id="schoolAddress"><span>*</span>单位地址</label>
 										<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.address }"/>
 									</div>
 								</div>
@@ -235,7 +235,7 @@
 						<div class="wealthvice row info-body-from clone-module cf">
 								<div class="col-sm-4">
 									<div class="form-group">
-										<label><span>*</span>是否同主申请人：</label>
+										<label><span>*</span>是否同主申请人</label>
 										<select id="wealth" name="sameMainWealth" class="form-control input-sm selectHeight">
 											<c:forEach var="map" items="${obj.isOrNo}">
 												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWealth?'selected':''}>${map.value}</option>
@@ -254,7 +254,7 @@
 							<div class="row body-from-input"><!-- 银行存款 -->
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span>*</span>银行存款：</label>
+										<label><span>*</span>银行存款</label>
 										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" />
 									</div>
 								</div>
@@ -271,7 +271,7 @@
 							<div class="row body-from-input"><!-- 车产 -->
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span>*</span>车产：</label>
+										<label><span>*</span>车产</label>
 										<input id="" name="" type="text" class="form-control input-sm" value="车产" />
 									</div>
 								</div>
@@ -288,7 +288,7 @@
 							<div class="row body-from-input"><!-- 房产 -->
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span>*</span>房产：</label>
+										<label><span>*</span>房产</label>
 										<input id="" name="" type="text" class="form-control input-sm" value="房产" />
 									</div>
 								</div>
@@ -305,7 +305,7 @@
 							<div class="row body-from-input"><!-- 房产 -->
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span>*</span>理财：</label>
+										<label><span>*</span>理财</label>
 										<input id="" name="" type="text" class="form-control input-sm" value="理财" />
 									</div>
 								</div>

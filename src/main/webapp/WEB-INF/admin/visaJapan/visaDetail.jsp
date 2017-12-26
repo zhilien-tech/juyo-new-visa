@@ -93,7 +93,7 @@
 								<div class="col-sm-1">
 									<div class="form-group">
 										<label><span>*</span>加急：</label>
-										<select class="form-control input-sm" v-model="orderinfo.urgenttype">
+										<select class="form-control input-sm" id="urgenttype" v-model="orderinfo.urgenttype">
 											<c:forEach var="map" items="${obj.mainsaleurgentenum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -654,6 +654,14 @@
 					content:'/admin/orderJp/log.html?id='+orderinfoid
 				});
 			}
+			$('#urgenttype').change(function(){
+				var urgenttype = $(this).val();
+				if(urgenttype == 1){
+					$('#urgentday').addClass('none');
+				}else{
+					$('#urgentday').removeClass('none');
+				}
+			});
 		</script>
 	</body>
 </html>
