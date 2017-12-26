@@ -379,6 +379,32 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			marryoption.put("value", marrystatus.value());
 			marryoptions.add(marryoption);
 		}
+		//工作信息
+		TApplicantOrderJpEntity applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicantinfo.getId()));
+		TApplicantWorkJpEntity workinfo = dbDao.fetch(TApplicantWorkJpEntity.class,
+				Cnd.where("applicantId", "=", applicantjp.getId()));
+		String workstr = "";
+		if (!Util.isEmpty(workinfo)) {
+			for (JobStatusEnum jobstatusenum : JobStatusEnum.values()) {
+				if (!Util.isEmpty(workinfo.getCareerStatus())
+						&& workinfo.getCareerStatus().equals(jobstatusenum.intKey())) {
+					workstr = jobstatusenum.value();
+				}
+			}
+		}
+		applicantmap.put("workstr", workstr);
+		//财产信息
+		String wealthstr = "";
+		List<TApplicantWealthJpEntity> applicantwealths = dbDao.query(TApplicantWealthJpEntity.class,
+				Cnd.where("applicantId", "=", applicantjp.getId()), null);
+		for (TApplicantWealthJpEntity applicantwealth : applicantwealths) {
+			wealthstr += applicantwealth.getType() + "、";
+		}
+		if (!Util.isEmpty(wealthstr)) {
+			wealthstr = wealthstr.substring(0, wealthstr.length() - 1);
+		}
+		applicantmap.put("wealthstr", wealthstr);
 		result.put("applicantdata", applicantmap);
 		result.put("marryoptions", marryoptions);
 		return result;

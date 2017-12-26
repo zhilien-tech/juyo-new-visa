@@ -209,7 +209,11 @@ new Vue({
 				type:'post',
 				success: function(data){
 					layer.closeAll('loading');
-					layer.msg('通知成功');
+					if(data.status == 200){
+						layer.msg('通知成功');
+					}else if(data.status == 500){
+						layer.msg(data.msg);
+					}
 				}
 			});
 		}
@@ -220,8 +224,6 @@ function commitdata(){
 	orderobj.orderinfo.gotripdate = $('#gotripdate').val();
 	orderobj.orderinfo.backtripdate = $('#backtripdate').val();
 	orderobj.orderinfo.sendvisadate = $('#sendvisadate').val();
-	orderobj.orderinfo.number = $('#number').val();
-	orderobj.orderinfo.money = $('#money').val();
 	orderobj.orderinfo.stayday = $('#stayday').val();
 	orderobj.orderinfo.outvisadate = $('#outvisadate').val();
 	orderobj.orderinfo.sendvisanum = $('#sendvisanum').val();

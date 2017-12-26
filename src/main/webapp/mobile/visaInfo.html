@@ -28,15 +28,15 @@
  </div>
  	<a class="visa-data" onclick="applyinfo()">
  		<span>申请人</span>
- 		<i>></i>
+ 		<i id="ismainapplication">></i>
  	</a>
  	<a class="visa-data" onclick="workinfo()">
  		<span>职业与教育信息</span>
- 		<i>></i>
+ 		<i id="workinfostr">></i>
  	</a>
  	<a class="visa-data" onclick="wealthinfo()">
  		<span>财产信息</span>
- 		<i>></i>
+ 		<i id="wealthinfostr">></i>
  	</a>
 </div>
 <div class="bottom">
@@ -71,6 +71,19 @@
         		});
         		//document.getElementById("marryselect").innerHTML=optionstr;
         		$('#marryselect').html(optionstr);
+        		//是否是主申请人
+        		var mainstr = '';
+        		if(data.applicantdata.id == data.applicantdata.mainid){
+        			mainstr = '主卡';
+        		}else{
+        			mainstr = '副卡';
+        		}
+        		$('#ismainapplication').html(mainstr+'&nbsp;&nbsp;>');
+        		//职业信息
+        		$('#workinfostr').html(data.applicantdata.workstr+'&nbsp;&nbsp;>');
+        		//财产信息
+        		$('#wealthinfostr').html(data.applicantdata.wealthstr+'&nbsp;&nbsp;>');
+        		
           	}
         });
 	}

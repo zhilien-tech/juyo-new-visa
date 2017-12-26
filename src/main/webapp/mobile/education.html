@@ -75,7 +75,7 @@
         	type:'post',
         	success: function(data){
         		//工作状态下拉
-        		var jobselect = '';
+        		var jobselect = '<option value=""></option>';
         		$.each(data.jobselects,function(index,value){
         			if(data.workinfo.careerstatus == value.key){
 	        			jobselect += '<option selected="selected" value="'+value.key+'">'+value.value+'</option>';

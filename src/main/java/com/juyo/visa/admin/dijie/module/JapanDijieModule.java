@@ -47,7 +47,16 @@ public class JapanDijieModule {
 	 */
 	@At
 	@POST
-	public Object ListData(HttpServletRequest request, @Param("..") DijieOrderListForm form) {
-		return japanDijieService.ListData(request, form);
+	public Object listData(HttpServletRequest request, @Param("..") DijieOrderListForm form) {
+		return japanDijieService.listData(request, form);
+	}
+
+	/**
+	 * 跳转到地接社详情也
+	 */
+	@At
+	@Ok("jsp")
+	public Object orderdetail(@Param("orderid") Integer orderid, HttpServletRequest request) {
+		return japanDijieService.orderdetail(orderid, request);
 	}
 }
