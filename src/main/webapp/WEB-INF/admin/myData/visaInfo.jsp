@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
+	.modal-body { height:100% !important;}
 	.info-imgUpload {width: 100%;}
 	.NoInfo { width:100%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 	.ipt-info { display:none; }
@@ -43,7 +44,6 @@
 	<div class="modal-content">
 		<form id="passportInfo">
 			<div class="modal-header">
-				<span class="heading">签证信息</span> 
 				<input type="hidden" value="${obj.visaInfo.applicantId }" name="applicantId"/>
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
