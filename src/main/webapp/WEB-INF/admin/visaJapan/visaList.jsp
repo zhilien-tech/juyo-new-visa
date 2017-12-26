@@ -27,6 +27,7 @@
 	.whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:390px;}
 	.showInfo { cursor:pointer; }
 	.hideInfo { display:none; position:absolute; top:-33px;right:0;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
+	.card-head i { cursor:pointer;}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
