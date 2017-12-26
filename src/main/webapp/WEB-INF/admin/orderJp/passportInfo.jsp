@@ -82,6 +82,7 @@
 									<label><span>*</span>类型</label>
 									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
 									<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
+									<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
 									<!-- <i class="bulb"></i> -->

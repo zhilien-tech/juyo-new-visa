@@ -75,12 +75,10 @@ public class MyVisaListDataForm implements SQLParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
-		if (Util.eq(isMainLink, IsYesOrNoEnum.YES.intKey())) {
-			cnd.and("torj.orderjpid", "=", orderjpid);
-		} else {
-			cnd.and("ta.userId", "=", userid);
+		cnd.and("torj.orderjpid", "=", orderjpid);
+		if (Util.eq(isMainLink, IsYesOrNoEnum.NO.intKey())) {
+			cnd.and("ta.id", "=", applicatid);
 		}
 		return cnd;
 	}
-
 }

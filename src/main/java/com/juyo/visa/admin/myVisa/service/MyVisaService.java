@@ -2,6 +2,7 @@ package com.juyo.visa.admin.myVisa.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,10 @@ import org.nutz.mvc.annotation.Param;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.myVisa.form.MyVisaListDataForm;
+import com.juyo.visa.admin.visajp.form.VisaListDataForm;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.YouKeExpressTypeEnum;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
@@ -30,6 +34,7 @@ import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TApplicantVisaJpEntity;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
@@ -46,23 +51,30 @@ import com.uxuexi.core.web.base.service.BaseService;
 public class MyVisaService extends BaseService<TOrderJpEntity> {
 
 	//申请人办理中的签证
-	public Object myVisaListData(MyVisaListDataForm form, HttpSession session) {
+	@SuppressWarnings("null")
+	public Object myVisaListData(int orderJpId, MyVisaListDataForm form, HttpSession session) {
 
 		Map<String, Object> result = Maps.newHashMap();
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
-
-		//判断当前登陆者，是否是统一联系人
-		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, Cnd.where("userId", "=", userId));
-		TApplicantOrderJpEntity applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,
-				Cnd.where("applicantId", "=", applicant.getId()));
-		Integer isMainApplicant = applicantJp.getIsMainApplicant();
-		Integer orderJpId = applicantJp.getOrderId();
+		//判断当前登录用户,如果isSameLinker为1则为统一联系人，查询订单下所有申请人，为0时只查自己
+		TApplicantEntity apply = null;
+		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class, Cnd.where("userId", "=", userId), null);
+		for (TApplicantEntity tApplicantEntity : applyList) {
+			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", tApplicantEntity.getId()));
+			Integer orderId = applicantOrderJpEntity.getOrderId();
+			if (Util.eq(orderId, orderJpId)) {
+				apply = tApplicantEntity;
+			}
+		}
+		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", apply.getId()));
+		Integer isSameLinker = applicantOrderJpEntity.getIsSameLinker();
 		form.setOrderjpid(orderJpId);
-		form.setIsMainLink(isMainApplicant);
-
-		form.setUserid(userId);
+		form.setIsMainLink(isSameLinker);
+		form.setApplicatid(apply.getId());
 		Sql sql = form.sql(sqlManager);
 
 		Integer pageNumber = form.getPageNumber();
@@ -79,6 +91,8 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		//格式化日期
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		for (Record record : records) {
+			//判断是否有统一联系人
+			Integer sameLinker = (Integer) record.get("isSameLinker");
 			//资料类型
 			Integer ostatus = (Integer) record.get("orderstatus");
 			for (JPOrderStatusEnum jpos : JPOrderStatusEnum.values()) {
@@ -94,10 +108,66 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				Date outVisaDate = (Date) record.get("outvisadate");
 				record.put("outvisadate", format.format(outVisaDate));
 			}
+			if (Util.eq(sameLinker, IsYesOrNoEnum.YES.intKey())) {
+				result.put("myVisaData", record);
+			}
 		}
 		result.put("myVisaData", records);
 
 		return result;
+	}
+
+	public Object visaListData(VisaListDataForm form, HttpSession session) {
+		//获取当前公司
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		//获取当前用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Map<String, Object> result = Maps.newHashMap();
+		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()), null);
+		List<TOrderJpEntity> orderJpList = new ArrayList<TOrderJpEntity>();
+		List<Record> list = new ArrayList<>();
+		for (TApplicantEntity tApplicantEntity : applyList) {
+			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", tApplicantEntity.getId()));
+			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
+					.longValue());
+			orderJpList.add(orderJpEntity);
+		}
+		for (TOrderJpEntity tOrderJpEntity : orderJpList) {
+			String passportSqlstr = sqlManager.get("myvisa_japan_visa_list_data");
+			Sql passportSql = Sqls.create(passportSqlstr);
+			Cnd orderJpCnd = Cnd.NEW();
+			orderJpCnd.and("toj.id", "=", tOrderJpEntity.getId());
+			passportSql.setCondition(orderJpCnd);
+			Record passport = dbDao.fetch(passportSql);
+			list.add(passport);
+		}
+		for (Record record : list) {
+			Integer orderid = (Integer) record.get("id");
+			String sqlStr = sqlManager.get("myvisa_japan_visa_list_data_apply");
+			Sql applysql = Sqls.create(sqlStr);
+			List<Record> query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
+			for (Record apply : query) {
+				Integer dataType = (Integer) apply.get("dataType");
+				for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
+					if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
+						apply.put("dataType", dataTypeEnum.value());
+					}
+				}
+			}
+			record.put("everybodyInfo", query);
+			//签证状态
+			Integer visastatus = record.getInt("japanState");
+			for (JPOrderStatusEnum visaenum : JPOrderStatusEnum.values()) {
+				if (visaenum.intKey() == visastatus) {
+					record.put("visastatus", visaenum.value());
+				}
+			}
+		}
+		result.put("visaJapanData", list);
+		return result;
+
 	}
 
 	//签证进度页
