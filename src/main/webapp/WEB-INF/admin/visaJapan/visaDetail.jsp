@@ -156,7 +156,7 @@
 									</div>
 								</div>
 								<c:choose>
-									<c:when test="${obj.jporderinfo.visaType == 2 }">
+									<c:when test="${obj.jporderinfo.visaType != 1 }">
 										<div class="col-sm-9" id="visacounty">
 									</c:when>
 									<c:otherwise>
@@ -176,7 +176,7 @@
 										</div>
 							</div><!-- end 签证类型 -->
 							<c:choose>
-								<c:when test="${obj.jporderinfo.visaType == 2 }">
+								<c:when test="${obj.jporderinfo.visaType != 1 }">
 									<div class="row body-from-input" id="threefangwen"><!-- 过去三年是否访问过 -->
 								</c:when>
 								<c:otherwise>
