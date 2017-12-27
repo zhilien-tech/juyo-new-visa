@@ -14,10 +14,11 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
-	.modal-body { height:100% !important;}
+	.modal-body { height:100% !important; background: #FFF !important; padding:0px 70px !important;}
 	.info-imgUpload {width: 100%;}
 	.NoInfo { width:100%; height:30px; margin-top:0px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
-	.ipt-info { display:none; }
+	.ipt-info { display:none; margin-top:15px;}
+	.tab-content { margin-top:15px;}
     .Unqualified, .qualified { margin-right:10px; }
  	.input-box { position: relative; display: inline-block; }
     .input-box input { background-color: transparent;  background-image: none; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset; color: #555;  display: block;  font-size: 14px; line-height: 1.42857; padding: 6px 6px; transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;  width: 200px; display: inline; position: relative; z-index: 1;}

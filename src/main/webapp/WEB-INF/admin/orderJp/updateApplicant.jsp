@@ -423,6 +423,9 @@
 			if('${obj.isTrailOrder}'==1){
 				$("#qualifiedBtn").show();
 				$("#unqualifiedBtn").show();
+				$("#baseRemark").attr("disabled", false);
+			}else{
+				$("#baseRemark").attr("disabled", true);
 			}
 			
 			var nation = '${obj.applicant.hasOtherNationality}';

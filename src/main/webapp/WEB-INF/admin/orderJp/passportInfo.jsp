@@ -219,6 +219,9 @@
 			if(${obj.isTrailOrder} == 1){
 				$("#qualifiedBtn").show();
 				$("#unqualifiedBtn").show();
+				$("#passRemark").attr("disabled", false);
+			}else{
+				$("#passRemark").attr("disabled", true);
 			}
 			
 			//校验

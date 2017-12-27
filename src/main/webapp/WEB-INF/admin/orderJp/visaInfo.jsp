@@ -352,6 +352,9 @@
 			if(${obj.isTrailOrder} == 1){
 				$("#qualifiedBtn").show();
 				$("#unqualifiedBtn").show();
+				$("#visaRemark").attr("disabled", false);
+			}else{
+				$("#visaRemark").attr("disabled", true);
 			}
 			
 			var marry = $("#marryUrl").val();
