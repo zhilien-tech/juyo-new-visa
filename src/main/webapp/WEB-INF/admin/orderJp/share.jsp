@@ -14,6 +14,7 @@
 		#datatableId{position: relative;top: 10px;}
 		#datatableId tbody tr{cursor: pointer;}
 		.trColor{color: rgb(48, 135, 240)}
+		[v-cloak]{display:none;}
 	</style>
 </head>
 <body>
@@ -47,7 +48,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="data in shareInfo" class="tableTr">
+							<tr v-cloak v-for="data in shareInfo" class="tableTr">
 								<td style="display: none">{{data.id}}</td>
 								<td>{{data.applyname}}</td>
 								<td>{{data.telephone}}</td>

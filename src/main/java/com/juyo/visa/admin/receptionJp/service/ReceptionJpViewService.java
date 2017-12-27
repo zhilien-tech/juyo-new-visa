@@ -302,6 +302,23 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		//点击实收之后添加日志
 		orderJpViewService.insertLogs(orderjp.getOrderId(), JPOrderStatusEnum.RECEPTION_RECEIVED.intKey(), session);
 
+		/*for (Map map : applicatlist) {//给订单下所有联系人发短信
+			int applyid = Integer.valueOf((String) map.get("applicatid"));
+			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, applyid);
+			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyJp.getApplicantId().longValue());
+			try {
+				sendMessage(orderEntity.getId(), apply.getId());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}*/
+
+		return null;
+
+	}
+
+	public Object sendSms(int orderid, HttpSession session) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderid));
 		//发送短信(根据分享是统一联系人还是单独分享来发送短信)
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		//根据日本订单表查出对应的日本申请人
@@ -332,20 +349,7 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 				}
 			}
 		}
-
-		/*for (Map map : applicatlist) {//给订单下所有联系人发短信
-			int applyid = Integer.valueOf((String) map.get("applicatid"));
-			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, applyid);
-			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyJp.getApplicantId().longValue());
-			try {
-				sendMessage(orderEntity.getId(), apply.getId());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}*/
-
 		return null;
-
 	}
 
 	//发送手机信息

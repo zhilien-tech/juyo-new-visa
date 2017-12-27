@@ -143,6 +143,15 @@ public class ReceptionJpModule {
 	}
 
 	/**
+	 * 发送短信
+	 */
+	@At
+	@POST
+	public Object sendSms(@Param("orderid") int orderid, HttpSession session) {
+		return receptionJpViewService.sendSms(orderid, session);
+	}
+
+	/**
 	 * 跳转到护照信息页面
 	 */
 	@At

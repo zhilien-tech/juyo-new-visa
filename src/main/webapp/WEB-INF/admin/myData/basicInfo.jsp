@@ -391,10 +391,11 @@
 		if(otherName == 1){
 			$(".nameBeforeTop").css('float','none');
 			$(".nameBeforeHide").show();
+			$(".wordSpell").show();
 			//$(".onceIDTop").removeClass('col-sm-offset-1');
 			//$(".onceIDTop").css('padding-left','15px');
 		}else {
-			
+			$(".wordSpell").hide();
 			$(".nameBeforeHide").hide();
 		}
 		

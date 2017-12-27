@@ -31,11 +31,12 @@
 			#addCustomer { position:absolute; top:5px; right:10px;}
 			.info-body-from { margin-left:12%;}
 			#urgentDays { width:14.2%;}
+			[v-cloak]{display:none;}
 		</style>
 	</head>
 
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper" id="wrapper">
+	<div class="wrapper" id="wrapper" >
 		<div class="content-wrapper" style="min-height: 848px;">
 			<div class="qz-head">
 				<span class="">订单号：<p>${obj.orderInfo.orderNum}</p></span> 
@@ -423,7 +424,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr v-for="applicant in applicantInfo" >
+								<tr v-cloak v-for="applicant in applicantInfo" >
 									<td>
 										<div v-if="applicant.id==applicant.mainid">
 											<font color="blue">主</font> 
