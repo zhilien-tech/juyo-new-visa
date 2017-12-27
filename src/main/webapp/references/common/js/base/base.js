@@ -30,6 +30,7 @@
 	    	
 	    	//判断有没有二级菜单
 	    	var ulVal = $("#"+_index).find("ul").html();
+	    	
 	    	if(ulVal != null && ulVal != "" && ulVal != undefined){
 	    		
 	    		//有

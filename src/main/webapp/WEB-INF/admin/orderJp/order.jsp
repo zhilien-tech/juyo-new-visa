@@ -29,8 +29,12 @@
 			.content { margin-top:50px;}
 			.info { position:relative;}
 			#addCustomer { position:absolute; top:5px; right:10px;}
-			.info-body-from { margin-left:12%;}
+			.info-body-from { margin-left:8%;}
 			#urgentDays { width:14.2%;}
+			.wrapper { background-color:#f9f9f9 !important;}
+			.col-sm-3 { width:28%;}
+			.col-sm-1 { width:11.5% !important;}
+			.select2 { width:100% !important;}
 		</style>
 	</head>
 
@@ -80,7 +84,7 @@
 								</div>
 								<div class="on-line"><!-- select2 线上/OTS/线下 -->
 									<div class="col-sm-3">
-										<div class="form-group" style="padding-right: 3%;">
+										<div class="form-group" >
 											<label><span>*</span>公司全称：</label> 
 											<select id ="compName" name="name"
 												class="form-control select2 cityselect2 " multiple="multiple"
@@ -106,7 +110,7 @@
 								</div><!-- end select2 线上/OTS/线下 -->
 								<div class="zhiKe none"><!-- input 直客 -->
 									<div class="col-sm-3">
-										<div class="form-group" style="padding-right: 3%;">
+										<div class="form-group" >
 											<label><span>*</span>公司全称：</label> 
 											<input id="compName2" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.orderInfo.comName }"/>
 										</div>
@@ -424,25 +428,25 @@
 							</thead>
 							<tbody>
 								<tr v-for="applicant in applicantInfo" >
-									<td>
+									<td width="4%">
 										<div v-if="applicant.id==applicant.mainid">
 											<font color="blue">主</font> 
 										</div>
 										<div v-else></div>
 									</td>
 									
-									<td>{{applicant.applyname}}</td>
-									<td>{{applicant.telephone}}</td>
-									<td>{{applicant.email}}</td>
-									<td>{{applicant.passport}}</td>
-									<td>{{applicant.sex}}</td>
-									<td>
+									<td width="10%">{{applicant.applyname}}</td>
+									<td width="10%">{{applicant.telephone}}</td>
+									<td width="15%">{{applicant.email}}</td>
+									<td width="15%">{{applicant.passport}}</td>
+									<td width="4%">{{applicant.sex}}</td>
+									<td width="42%">
 										<a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;
 										<a v-on:click="passport(applicant.id,orderInfo.id)">护照信息</a>&nbsp;&nbsp;
-										<a v-on:click="visa(applicant.id,orderInfo.id)">签证信息</a> <br>
+										<a v-on:click="visa(applicant.id,orderInfo.id)">签证信息</a>&nbsp;&nbsp;
 										<a v-on:click="visaInput(applicant.applicantjpid)">签证录入</a>&nbsp;&nbsp;
 										<a v-on:click="backmailInfo(applicant.id)">回邮</a>&nbsp;&nbsp;
-										<a v-on:click="deleteApplicant(applicant.id)">删除</a></br>
+										<a v-on:click="deleteApplicant(applicant.id)">删除</a>
 									</td>
 								</tr>
 							</tbody>
