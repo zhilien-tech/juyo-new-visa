@@ -338,6 +338,7 @@
 						//关闭加载层
 						layer.close(layerIndex);
 						if (true === obj.success) {
+							layer.msg("识别成功");
 							$('#passportUrl').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");

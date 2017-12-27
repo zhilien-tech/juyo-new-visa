@@ -130,10 +130,12 @@
 									<label>曾有的或另有的国籍(或公民身份)</label> 
 									<div>
 										<span class="onceIDYes ">
-											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
+											<input type="radio" name="hasOtherNationality" class="onceID" value="1" 
+											/>是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  />否
+											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  
+											/>否
 										</span>
 									</div>
 								</div>

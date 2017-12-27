@@ -282,6 +282,11 @@
 			//save();
 			//parent.location.reload();
 		}
+		
+		function cancelCallBack(status){
+			//$("#cancel").click();
+			successCallBack(1);
+		}
 	</script>
 </body>
 </html>

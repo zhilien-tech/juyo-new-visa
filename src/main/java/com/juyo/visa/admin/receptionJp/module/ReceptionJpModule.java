@@ -137,8 +137,9 @@ public class ReceptionJpModule {
 	 */
 	@At
 	@POST
-	public Object saveRealInfoData(@Param("..") TOrderJpEntity orderjp, @Param("applicatinfo") String applicatinfo) {
-		return receptionJpViewService.saveRealInfoData(orderjp, applicatinfo);
+	public Object saveRealInfoData(@Param("..") TOrderJpEntity orderjp, @Param("applicatinfo") String applicatinfo,
+			HttpSession session) {
+		return receptionJpViewService.saveRealInfoData(orderjp, applicatinfo, session);
 	}
 
 	/**

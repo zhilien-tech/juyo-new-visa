@@ -233,7 +233,7 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 
 	}
 
-	public Object saveRealInfoData(TOrderJpEntity orderjp, String applicatinfo) {
+	public Object saveRealInfoData(TOrderJpEntity orderjp, String applicatinfo, HttpSession session) {
 		//更新备注信息
 		dbDao.update(orderjp);
 		List<Map> applicatlist = JsonUtil.fromJson(applicatinfo, List.class);
@@ -299,6 +299,9 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		if (!Util.isEmpty(paperworks)) {
 			dbDao.update(paperworks);
 		}
+		//点击实收之后添加日志
+		orderJpViewService.insertLogs(orderjp.getOrderId(), JPOrderStatusEnum.RECEPTION_RECEIVED.intKey(), session);
+
 		//发送短信(根据分享是统一联系人还是单独分享来发送短信)
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		//根据日本订单表查出对应的日本申请人
