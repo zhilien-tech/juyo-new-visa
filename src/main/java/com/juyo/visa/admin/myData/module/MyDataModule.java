@@ -85,4 +85,24 @@ public class MyDataModule {
 		return myDataService.saveEditVisa(visaForm, session);
 	}
 
+	/**
+	 * 常用联系人
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object topContacts(HttpSession session, HttpServletRequest request) {
+		return null;
+	}
+
+	/**
+	 * 账户安全
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object safety(HttpSession session, HttpServletRequest request) {
+		return null;
+	}
+
 }

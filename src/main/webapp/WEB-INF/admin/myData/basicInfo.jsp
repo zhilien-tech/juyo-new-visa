@@ -13,10 +13,10 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
-			.ipt-info { display:none; }
+			.ipt-info { display:none; margin-top:15px;}
 			.NoInfo { width:95%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 			.form-control{height: 30px;}
-			.tab-content{padding: 15px 30px 10px 0;margin: 0 0px;}
+			.tab-content{padding: 0px 30px 10px 0;margin: 0 0px;}
 			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
 			.front, .back {width: 320px;margin: 10px auto;}
 			.nameBeforeYes {
@@ -317,7 +317,7 @@
 								<div class="form-group">
 									<label>名/拼音</label> 
 									<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
-									<input type="text" id="otherLastNameEn" style="position:absolute;top:45px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+									<input type="text" id="otherLastNameEn" style="position:absolute;top:42px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
 								</div>
 							</div>
 						</div>
