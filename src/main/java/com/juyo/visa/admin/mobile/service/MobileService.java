@@ -196,6 +196,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 				orderinfo.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
 				orderinfo.setCreateTime(new Date());
 				TOrderEntity orderinsert = dbDao.insert(orderinfo);
+				form.setOrderid(orderinsert.getId());
 				TOrderJpEntity orderjp = new TOrderJpEntity();
 				orderjp.setOrderId(orderinsert.getId());
 				TOrderJpEntity orderjpinsert = dbDao.insert(orderjp);
