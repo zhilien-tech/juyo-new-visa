@@ -40,7 +40,7 @@
 	    		
 	    	}else{
 	    		//没有二级菜单
-	    		$('.active').addClass('activeTwo');
+	    		$(this).addClass("activeTwo").siblings().removeClass("activeTwo");
 	    		$('.active a').css('padding-left','0px');
 	    		//移除二级导航样式
 	    		$(".menu-ul li.activeTwo").removeClass('activeTwo');
