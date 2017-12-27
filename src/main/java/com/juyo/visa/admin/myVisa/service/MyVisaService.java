@@ -130,13 +130,9 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		for (TApplicantEntity tApplicantEntity : applyList) {
 			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", tApplicantEntity.getId()));
-
-			Integer orderId = applicantOrderJpEntity.getOrderId();
-			if (!Util.isEmpty(orderId)) {
-				TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, orderId.longValue());
-				orderJpList.add(orderJpEntity);
-			}
-
+			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
+					.longValue());
+			orderJpList.add(orderJpEntity);
 		}
 		for (TOrderJpEntity tOrderJpEntity : orderJpList) {
 			String passportSqlstr = sqlManager.get("myvisa_japan_visa_list_data");
