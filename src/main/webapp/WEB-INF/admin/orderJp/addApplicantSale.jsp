@@ -391,6 +391,7 @@
 	                  if(received_msg){
 		                  var receiveMessage = JSON.parse(received_msg);
 		                  if(receiveMessage.messagetype == 4){
+		                	  window.parent.document.getElementById('orderid').value = receiveMessage.orderid;
 		                	  window.location.href = '/admin/orderJp/updateApplicant.html?id='+receiveMessage.applicantid+'&orderid&isTrial=0';
 		                	  socket.onclose();
 		                  }

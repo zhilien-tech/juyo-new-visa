@@ -295,10 +295,15 @@
 	            socket.onmessage = function (evt){
 	                  var received_msg = evt.data;  
 	                  var applicantId = '${obj.applicantId}';
+	                  var orderid = '${obj.orderid}';
 	                  if(received_msg){
 		                  var receiveMessage = JSON.parse(received_msg);
-		                  if(receiveMessage.messagetype == 2 && receiveMessage.applicantid == applicantId){
-		                	  window.location.reload();
+		                  if(receiveMessage.applicantid == applicantId){
+		                	  if(receiveMessage.messagetype == 2){
+			                	  window.location.reload();
+		                	  }else if(receiveMessage.messagetype == 3){
+		                		  window.location.href = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderid+'&isOrderUpTime&isTrial=${obj.isTrailOrder}';
+		                	  }
 		                  }
 	                  }
 	                  console.log('message received!');  
