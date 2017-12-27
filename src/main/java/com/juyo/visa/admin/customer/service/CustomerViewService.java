@@ -12,7 +12,6 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 import com.juyo.visa.admin.login.util.LoginUtil;
-import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
 import com.juyo.visa.common.enums.NoZHIKECustomerTypeEnum;
@@ -110,7 +109,7 @@ public class CustomerViewService extends BaseService<TCustomerEntity> {
 		Map<String, Object> result = MapUtil.map();
 		TCustomerEntity customer = dbDao.fetch(TCustomerEntity.class, new Long(id).intValue());
 		String sourceType = String.valueOf(customer.getSource().intValue());
-		Map<String, String> customerEnum = EnumUtil.enum2(CustomerTypeEnum.class);
+		Map<String, String> customerEnum = EnumUtil.enum2(NoZHIKECustomerTypeEnum.class);
 		result.put("sourceType", customerEnum);
 		result.put("customer", customer);
 		result.put("payType", EnumUtil.enum2(MainSalePayTypeEnum.class));

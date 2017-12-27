@@ -106,7 +106,7 @@
         },
         methods:{
         	toInProcess:function(id){
-        		window.location.href = '/admin/myVisa/inProcessVisa?orderJpId=' + id;
+        		window.location.href = '/admin/myVisa/inProcessVisa.html?orderJpId=' + id;
         	}
         }
 	});
