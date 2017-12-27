@@ -90,11 +90,11 @@
 			var userid = GetQueryString('userid');
 			var orderid = GetQueryString('orderid');
 			var applicantid = GetQueryString('applicantid');
-			console.log(comid+"    userid:"+userid+"   orderid:"+orderid+"applicantid:"+applicantid);
+			var sessionid = GetQueryString('sessionid');
 	        _self=this;
 	        $.ajax({ 
 	        	url: url,
-	        	data:{comid:comid,userid:userid,orderid:orderid,applicantid:applicantid},
+	        	data:{comid:comid,userid:userid,orderid:orderid,applicantid:applicantid,sessionid:sessionid},
 	        	dataType:"json",
 	        	type:'post',
 	        	success: function(data){

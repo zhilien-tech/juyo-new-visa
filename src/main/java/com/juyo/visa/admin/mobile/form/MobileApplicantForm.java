@@ -28,4 +28,7 @@ public class MobileApplicantForm {
 	private Integer applicantid;
 
 	private Integer messagetype;
+
+	/**二维码PC端的sessionid*/
+	private String sessionid;
 }

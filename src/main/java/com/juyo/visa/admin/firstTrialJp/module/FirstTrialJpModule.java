@@ -255,7 +255,7 @@ public class FirstTrialJpModule {
 	 */
 	@At
 	@POST
-	public Boolean isQualifiedByApplicantId(@Param("applicantId") Integer applicantId) {
+	public Object isQualifiedByApplicantId(@Param("applicantId") Integer applicantId) {
 		return firstTrialJpViewService.isQualifiedByApplicantId(applicantId);
 	}
 
