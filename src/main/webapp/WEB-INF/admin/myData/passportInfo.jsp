@@ -27,7 +27,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
 	<form id="passportInfo">
 			<div class="qz-head">
-			<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+			<!-- <input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/>  -->
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save();"/> 
 				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
@@ -224,18 +224,18 @@
 	var base = "${base}";
 	$(function() {
 		
-		var form = document.forms[0]; 
+		/* var form = document.forms[0]; 
 		for ( var i = 0; i < form.length; i++) { 
 			var element = form.elements[i]; 
 			if(element.id != "editbasic")
 				element.disabled = true; 
 		} 
-		$(".basic").hide();
-		
+		$(".basic").hide(); */
 		var remark = $("#passRemark").val();
 		if(remark != ""){
 			$(".ipt-info").show();
 		}
+		$("#passRemark").attr("disabled", true);
 		
 		//校验
 		$('#passportInfo').bootstrapValidator({
@@ -391,7 +391,7 @@
 		});
 	}
 	
-	//编辑按钮
+	/* //编辑按钮
 	function editBtn(){
 		$(".basic").show();
 		$(".editbasic").hide();
@@ -410,7 +410,7 @@
 			$("#uploadFile").siblings("i").css("display","none");
 		});
 		$("#passRemark").attr("disabled", true);
-	}
+	} */
 	
 	//取消按钮
 	function cancelBtn(){
