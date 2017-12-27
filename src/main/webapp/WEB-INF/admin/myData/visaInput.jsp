@@ -15,6 +15,7 @@
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
+			[v-cloak]{display : none}
 			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
@@ -31,25 +32,30 @@
 			.card-list:hover{height: 87px !important;min-height: 87px !important;}
 			.box-header{padding-right: 16px;}
 			.box-body{padding-top:15px;}
+			.qz-head { border-bottom:2px solid #deecff; padding:15px 20px; display: table; width: 100%;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper">
 			<div class="content-wrapper"  style="min-height: 848px;">
-				<ul class="title">
+				<!-- <ul class="title">
 					<li> </li>
-				</ul>
+				</ul> -->
+				<div class="qz-head">
+				<!-- <input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/>  -->
+				<a class="btn btn-primary btn-sm pull-right" href="javascript:add();" id="">添加已有签证</a>
+			</div>
 				<section class="content">
-					<div class="box-header"><!-- 检索条件 -->
+					<!-- <div class="box-header">检索条件
 						<div class="row">
 							<div class="col-md-12">
 								<a class="btn btn-primary btn-sm pull-right" href="javascript:add();" id="">添加已有签证</a>
 							</div>
 						</div>
-					</div><!-- end 检索条件 -->
+					</div>end 检索条件 -->
 					
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div class="card-list" v-for="data in visaInputData">
+						<div class="card-list" v-cloak v-for="data in visaInputData">
 							<div class="card-head">
 								<div><label>国家：</label><span>{{data.visacountry}}</span></div>	
 								<div><label>签证号：</label><span>{{data.visanum}}</span></div>	
