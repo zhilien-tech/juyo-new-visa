@@ -40,14 +40,21 @@
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper">
 			<div class="content-wrapper"  style="min-height: 848px;">
-				<ul class="title">
+			<c:choose>
+				<c:when test="${isvisa == 1}">  
+					<ul class="title">
 					<li>签证补录</li>
 					<li class="liClose">
 						<a onclick="closeWindow()">
 							<div class="closed"></div>
 						</a>
 					</li>
-				</ul>
+				</ul>							         
+				</c:when>
+				<c:otherwise> 
+				</c:otherwise>
+				</c:choose>
+				
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">

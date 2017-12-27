@@ -63,6 +63,16 @@ public class OrderJpModule {
 	private static final String BASIC_WEBSPCKET_ADDR = "basicinfowebsocket";
 
 	/**
+	 * 公司管理统计给空页面（暂时）
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object safety() {
+		return null;
+	}
+
+	/**
 	 * 跳转到list页面
 	 */
 	@At
