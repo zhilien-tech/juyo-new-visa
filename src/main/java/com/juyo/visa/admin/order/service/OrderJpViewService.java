@@ -2076,7 +2076,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String passRemark = passportForm.getPassRemark();
 		if (!Util.isEmpty(passRemark)) {
 			qualifiedApplicantViewService.unQualified(passportForm.getApplicantId(), orderJpEntity.getOrderId(),
-					passRemark, ApplicantInfoTypeEnum.BASE.intKey(), session);
+					passRemark, ApplicantInfoTypeEnum.PASSPORT.intKey(), session);
 		}
 
 		return null;

@@ -632,7 +632,7 @@
 					success :function(data) {
 						console.log(JSON.stringify(data));
 						layer.closeAll('loading');
-						$("#baseRemark").val("");
+						$("#passRemark").val("");
 						visaBtn();
 					}
 				});

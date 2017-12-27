@@ -317,7 +317,7 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 
 	}
 
-	public Object sendSms(int orderid, HttpSession session) {
+	public Object toSend(int orderid, HttpSession session) {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderid));
 		//发送短信(根据分享是统一联系人还是单独分享来发送短信)
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
