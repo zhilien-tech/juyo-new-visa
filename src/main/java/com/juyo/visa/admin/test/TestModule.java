@@ -93,11 +93,11 @@ public class TestModule {
 		return null;
 	}*/
 
-	@At("admin/myVisa/inProcessVisa")
+	/*@At("admin/myVisa/inProcessVisa")
 	@Ok("jsp")
 	public Object inProcessVisa() {
 		return null;
-	}
+	}*/
 
 	@At("admin/JapanDijie/japanList")
 	@Ok("jsp")

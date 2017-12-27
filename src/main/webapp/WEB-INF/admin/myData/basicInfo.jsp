@@ -26,6 +26,9 @@
 .nameBeforeHide , .nationalityHide{
 	display:none;
 }
+			.qz-head { border-bottom:2px solid #deecff; padding:15px 20px; display: table; width: 100%;}
+			.basic { margin-left: 10px;}
+			.onceIDTop { padding-left: 15px;}
 		</style>
 	</head>
 
@@ -120,26 +123,19 @@
 									</div>
 								</div>
 								
-								<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-									<div class="form-group">
-										<label>名/拼音</label> <input id="otherLastName"
-											name="otherLastName" style="position:relative;" type="text" class="form-control input-sm "
-											placeholder=" " value="${obj.applicant.otherLastName }" />
-											<input type="text" id="otherLastNameEn" style="position:absolute;top:42px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
-										<!-- <i class="bulb"></i> -->
-									</div>
-								</div>
 							</div>
 							<!-- 姓/名 拼音 end -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0 onceIDTop">
+							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
 								<div class="form-group">
 									<label>曾有的或另有的国籍(或公民身份)</label> 
 									<div>
 										<span class="onceIDYes ">
-											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
+											<input type="radio" name="hasOtherNationality" class="onceID" value="1" 
+											/>是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  />否
+											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  
+											/>否
 										</span>
 									</div>
 								</div>
@@ -310,6 +306,21 @@
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
+						<div class="row wordSpell" style="height:66px;">
+							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
+							
+							</div>
+						</div>	
+						<!-- 名/拼音 -->
+						<div class="row wordSpell">
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>名/拼音</label> 
+									<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
+									<input type="text" id="otherLastNameEn" style="position:absolute;top:45px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+								</div>
+							</div>
+						</div>
 						<div class="row">
 							<!-- 紧急联系人姓名/手机 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
@@ -380,10 +391,11 @@
 		if(otherName == 1){
 			$(".nameBeforeTop").css('float','none');
 			$(".nameBeforeHide").show();
+			$(".wordSpell").show();
 			//$(".onceIDTop").removeClass('col-sm-offset-1');
 			//$(".onceIDTop").css('padding-left','15px');
 		}else {
-			
+			$(".wordSpell").hide();
 			$(".nameBeforeHide").hide();
 		}
 		
@@ -767,29 +779,44 @@
 	});
 	//checkbox 曾用名
 	$(".nameBefore").change(function(){
-		let checked = $("input[name='hasOtherName']:checked").val();
-		if(checked == 1){
-			$(".nameBeforeTop").css('float','none');
-			$(".nameBeforeHide").show();
-			//$(".onceIDTop").removeClass('col-sm-offset-1');
-			//$(".onceIDTop").css('padding-left','15px');
-		}else {
-			
-			$(".nameBeforeHide").hide();
-		}
-	});
-	//曾用国籍
-	$(".onceID").change(function(){
-		let checked = $("input[name='hasOtherNationality']:checked").val();
-		if(checked == 1){
-			$(".nameBeforeTop").css('float','none');
-			$(".nationalityHide").show();
-			$(".onceIDTop").css('float','left');
-		}else {
-			
-			$(".nationalityHide").hide();
-		}
-	});
+
+			let checked = $("input[name='hasOtherName']:checked").val();
+			let checked2 = $("input[name='hasOtherNationality']:checked").val();
+			if(checked == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nameBeforeHide").show();
+				$(".wordSpell").show();
+				$(".onceIDTop").css('padding-left','15px');
+			}else {
+				
+				$(".nameBeforeHide").hide();
+				$(".wordSpell").hide();
+				if(checked2 == 1){
+					
+				}else {
+					$(".nameBeforeTop").css('float','left');
+				}
+			}
+		});
+		//曾用国籍
+		$(".onceID").change(function(){
+			let checked = $("input[name='hasOtherNationality']:checked").val();
+			let checked2 = $("input[name='hasOtherName']:checked").val();
+			if(checked == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nationalityHide").show();
+				$(".onceIDTop").css('float','left');
+				$(".onceIDTop").css('padding-left','15px');
+			}else {
+				
+				$(".nationalityHide").hide();
+				if(checked2 == 1){
+					
+				}else {
+					$(".nameBeforeTop").css('float','left');
+				}
+			}
+		});
 	
 	//居住地与身份证相同
 	$(".nowProvince").change(function(){

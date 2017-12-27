@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 	<style>
+		[v-cloak]{display:none;}
 		.card-head { overflow:hidden; white-space:nowrap;}
 		.card-head div:nth-child(1){width:20%;}
 		.card-head div:nth-child(2){width:10%; text-align:right;}
@@ -56,7 +57,7 @@
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div class="card-list" v-for="data in receptionJpData">
+						<div class="card-list" v-cloak v-for="data in receptionJpData">
 							<div class="card-head cf">
 								<div><label>订单号：</label><span style="cursor:pointer;font-size:12px;" @click="visaDetail(data.id)">{{data.ordernumber}}</span></div>	
 								<div style="position:absolute;right:25%;"><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span></div>		
@@ -65,6 +66,7 @@
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
 									<i class="visaTransfer" v-on:click="visaTransfer(data.id)"> </i>
+									<i class="visaTransfer" v-on:click="sendSms(data.id)"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
@@ -164,12 +166,25 @@
         	},
         	visaTransfer:function(orderid){
         		 $.ajax({ 
-                 	url: '${base}/admin/receptionJP/visaTransfer',
+                 	url: '${base}/admin/receptionJP/visaTransfer.html',
                  	dataType:"json",
                  	data:{orderid:orderid},
                  	type:'post',
                  	success: function(data){
                  		successCallBack(3)
+                   	}
+                 });
+        	},
+        	sendSms:function(orderid){
+        		layer.load(1);
+        		$.ajax({ 
+                 	url: '${base}/admin/receptionJP/sendSms.html',
+                 	dataType:"json",
+                 	data:{orderid:orderid},
+                 	type:'post',
+                 	success: function(data){
+                 		layer.closeAll("loading");
+                 		layer.msg("发送成功");
                    	}
                  });
         	}

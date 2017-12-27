@@ -68,9 +68,8 @@
 							<div class="form-group">
 								<label><span>*</span>支付方式：</label> 
 								<select id="payType"
-									name="payType" class="form-control input-sm inpImportant"
-									onchange="selectListData();">
-									<option>--请选择--</option>
+									name="payType" class="form-control input-sm inpImportant">
+									<option value="">--请选择--</option>
 									<c:forEach var="map" items="${obj.payType}">
 										<option value="${map.key}" ${map.key==obj.customer.payType?'selected':''}>${map.value}</option>
 									</c:forEach>

@@ -620,6 +620,7 @@
 						//关闭加载层
 						layer.close(layerIndex);
 						if (true === obj.success) {
+							layer.msg("识别成功");
 							$('#cardFront').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");
@@ -672,6 +673,7 @@
 						//关闭加载层
 						layer.close(layerIndex);
 						if (true === obj.success) {
+							layer.msg("识别成功");
 							$('#cardBack').val(obj.url);
 							$('#sqImgBack').attr('src', obj.url);
 							$("#uploadFileBack").siblings("i").css("display","block");
@@ -801,7 +803,9 @@
 			}
 			saveApplicant(2);
 			var applyId = $("#applyId").val();
-			layer.open({
+			socket.onclose();
+			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'+'&isTrial=0';
+			/* layer.open({
 				type: 2,
 				title: false,
 				closeBtn:false,
@@ -811,7 +815,7 @@
 				scrollbar: false,
 				area: ['900px', '551px'],
 				content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'+'&isTrial=0'
-			});
+			}); */
 		}
 		function successCallBack(status){
 			parent.successCallBack(1);
