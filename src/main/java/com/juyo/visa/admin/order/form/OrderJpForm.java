@@ -124,9 +124,7 @@ public class OrderJpForm extends OrderForm {
 		if (userType == 1) {
 			cnd.and("o.userId", "=", userId);
 		}
-
 		cnd.orderBy("o.updatetime", "DESC");
-		cnd.orderBy("o.createtime", "DESC");
 		return cnd;
 	}
 }
