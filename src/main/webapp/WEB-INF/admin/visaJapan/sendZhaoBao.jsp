@@ -76,10 +76,18 @@
 	<script type="text/javascript">
 	//发招宝
 	function sendZhaobao(){
-		layer.load(1);
 		var orderid = $('#orderid').val();
 		var sendsignid = $('#sendsignid').val();
+		if(!sendsignid){
+			layer.msg('请选择送签社！');
+			return;
+		}
 		var groundconnectid = $('#groundconnectid').val();
+		if(!groundconnectid){
+			layer.msg('请选择地接社！');
+			return;
+		}
+		layer.load(1);
 		$.ajax({ 
          	url: '${base}/admin/visaJapan/saveZhaoBao.html',
          	data:{orderId:orderid,sendsignid:sendsignid,groundconnectid:groundconnectid},
