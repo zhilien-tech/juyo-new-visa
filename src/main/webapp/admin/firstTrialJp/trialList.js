@@ -273,12 +273,8 @@ function selectListData(){
 	$("#searchBtn").click();
 }
 
-function successCallBack(status){
-	if(status == 1){
-		layer.msg('修改成功');
-	}else if(status == 2){
-		layer.msg('发送成功');
-	}
+//加载列表数据
+function reloadDate(){
 	$.ajax({ 
 		url: url,
 		/* data:{status:status,searchStr:searchStr}, */
@@ -290,18 +286,19 @@ function successCallBack(status){
 	});
 }
 
+function successCallBack(status){
+	if(status == 1){
+		layer.msg('修改成功');
+	}else if(status == 2){
+		layer.msg('发送成功');
+	}
+	reloadDate();
+}
+
 
 function qualifiedCallBack(username){
 	layer.msg('合格 已短信邮件通知 '+username);
-	$.ajax({ 
-		url: url,
-		/* data:{status:status,searchStr:searchStr}, */
-		dataType:"json",
-		type:'post',
-		success: function(data){
-			_self.trialJapanData = data.trialJapanData;
-		}
-	});
+	reloadDate();
 }
 
 function unqualifiedCallBack(username){

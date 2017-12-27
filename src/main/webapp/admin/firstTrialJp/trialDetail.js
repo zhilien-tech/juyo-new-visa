@@ -340,10 +340,10 @@ new Vue({
 								},
 								url : '/admin/firstTrialJp/qualified.html',
 								success : function(data) {
-									successCallBack(3);
+									qualifiedCallBack(data);
 								},
 								error : function(xhr) {
-									layer.msg("合格失败", "", 3000);
+									layer.msg("操作失败");
 								}
 							});
 						}else{
@@ -410,49 +410,43 @@ new Vue({
 	}
 });
 
+function reloadData(){
+	var url = '/admin/firstTrialJp/getJpTrialDetailData.html';
+	$.ajax({ 
+		url: url,
+		type:'post',
+		dataType:"json",
+		data:{
+			orderid:orderid,
+			orderjpid:orderjpid
+		},
+		success: function(data){
+			orderobj.applyinfo = data.applyinfo;
+			orderobj.orderinfo = data.orderinfo;
+		}
+	});
+}
+
 function successCallBack(status){
 	if(status == 1){
 		layer.msg('修改成功');
 	}else if(status == 2){
 		layer.msg('发送成功');
-	}else if(status == 3){
-		layer.msg('合格成功');
 	}
-	else if(status == 4){
-		layer.msg('不合格成功');
-	}
-	var url = '/admin/firstTrialJp/getJpTrialDetailData.html';
-	$.ajax({ 
-		url: url,
-		type:'post',
-		dataType:"json",
-		data:{
-			orderid:orderid,
-			orderjpid:orderjpid
-		},
-		success: function(data){
-			orderobj.applyinfo = data.applyinfo;
-			orderobj.orderinfo = data.orderinfo;
-		}
-	}); 
+	reloadData();
 }
+
+function qualifiedCallBack(username){
+	layer.msg('合格 已短信邮件通知 '+username);
+	reloadData();
+}
+
 function unqualifiedCallBack(username){
-	layer.msg('已短信邮件通知 '+username);
-	var url = '/admin/firstTrialJp/getJpTrialDetailData.html';
-	$.ajax({ 
-		url: url,
-		type:'post',
-		dataType:"json",
-		data:{
-			orderid:orderid,
-			orderjpid:orderjpid
-		},
-		success: function(data){
-			orderobj.applyinfo = data.applyinfo;
-			orderobj.orderinfo = data.orderinfo;
-		}
-	}); 
+	layer.msg('不合格 已短信邮件通知 '+username);
+	reloadData();
 }
+
+
 function cancelCallBack(status){
 
 }
