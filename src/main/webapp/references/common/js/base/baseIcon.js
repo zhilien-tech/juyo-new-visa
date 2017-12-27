@@ -138,6 +138,11 @@
 		var t = "签证移交";
 		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
 	});
+	
+	$(document).on("mouseover",".sendSms",function(){
+		var t = "发短信";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});
 	/*--------------------end card---------------------*/
 	
 	

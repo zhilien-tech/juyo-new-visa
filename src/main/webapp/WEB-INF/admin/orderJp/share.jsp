@@ -147,7 +147,6 @@
 						telephone = $(this).children().eq(2).html();
 						email = $(this).children().eq(3).html();
 						if(email == "" || telephone == ""){
-							var index = window.parent.parent.parent.layer.getFrameIndex(window.name); //获取窗口索引
 							//$("#backBtn").click();
 							//window.location.href = '/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email;
 							layer.open({
