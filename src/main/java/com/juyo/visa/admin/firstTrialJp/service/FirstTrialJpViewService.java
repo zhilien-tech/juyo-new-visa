@@ -355,6 +355,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		sql.setParam("orderid", orderid);
 		Record orderReceive = dbDao.fetch(sql);
 		result.put("orderReceive", orderReceive);
+		String shareIds = "";
 		if (!Util.isEmpty(orderReceive)) {
 			String shareType = orderReceive.getString("sharetype");
 			if (Util.isEmpty(shareType)) {
@@ -369,29 +370,27 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			}
 			orderReceive.set("sharetype", shareType);
 
-			String shareIds = orderReceive.getString("sharemanids");
-			if (Util.isEmpty(shareIds)) {
-				shareIds = "";
-				List<TApplicantOrderJpEntity> applicants = dbDao.query(TApplicantOrderJpEntity.class,
-						Cnd.where("isShareSms", "=", YES).and("orderId", "=", orderjpid), null);
-				if (!Util.isEmpty(applicants)) {
-					for (TApplicantOrderJpEntity entity : applicants) {
-						Integer isShareSms = entity.getIsShareSms();
-						if (Util.eq(YES, isShareSms)) {
-							Integer id = entity.getId();
-							shareIds += id + ",";
-						}
+			shareIds = orderReceive.getString("sharemanids");
+
+		}
+		if (Util.isEmpty(shareIds)) {
+			List<TApplicantOrderJpEntity> applicants = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("isShareSms", "=", YES).and("orderId", "=", orderjpid), null);
+			if (!Util.isEmpty(applicants)) {
+				for (TApplicantOrderJpEntity entity : applicants) {
+					Integer isShareSms = entity.getIsShareSms();
+					if (Util.eq(YES, isShareSms)) {
+						Integer id = entity.getApplicantId();
+						shareIds += id + ",";
 					}
 				}
-				if (shareIds.length() > 1) {
-					shareIds = shareIds.substring(0, shareIds.length() - 1);
-				}
 			}
-			//分享人
-			result.put("shareIds", shareIds);
-		} else {
-			result.put("shareIds", "");
+			if (shareIds.length() > 1) {
+				shareIds = shareIds.substring(0, shareIds.length() - 1);
+			}
 		}
+		//分享人
+		result.put("shareIds", shareIds);
 
 		//快递方式
 		result.put("expressType", EnumUtil.enum2(ExpressTypeEnum.class));
@@ -569,6 +568,13 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 		}
 
+		//获取申请人姓名
+		TApplicantEntity applicant = (TApplicantEntity) basicInfo(applyid);
+		String name = "";
+		if (!Util.isEmpty(applicant)) {
+			name = applicant.getFirstName() + applicant.getLastName();
+		}
+
 		try {
 			//发送合格消息
 			sendApplicantVerifySMS(applyid, orderid, "", "applicant_qualified_sms.txt");
@@ -578,7 +584,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			e.printStackTrace();
 		}
 
-		return update > 0;
+		return name;
 	}
 
 	//获取申请人不合格信息
@@ -1317,7 +1323,6 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			Integer isBase = fetch.getIsBase();
 			Integer isPassport = fetch.getIsPassport();
 			Integer isVisa = fetch.getIsVisa();
-
 			if (Util.eq(isBase, YES) || Util.eq(isPassport, YES) || Util.eq(isVisa, YES)) {
 				isQualified = false;
 			}

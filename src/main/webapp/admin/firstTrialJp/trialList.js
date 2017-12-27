@@ -146,7 +146,7 @@ new Vue({
 								},
 								url : '/admin/firstTrialJp/qualified.html',
 								success : function(data) {
-									successCallBack(3);
+									qualifiedCallBack(data);
 								},
 								error : function(xhr) {
 									layer.msg("合格失败", "", 3000);
@@ -278,11 +278,6 @@ function successCallBack(status){
 		layer.msg('修改成功');
 	}else if(status == 2){
 		layer.msg('发送成功');
-	}else if(status == 3){
-		layer.msg('合格成功');
-	}
-	else if(status == 4){
-		layer.msg('不合格成功');
 	}
 	$.ajax({ 
 		url: url,
@@ -295,8 +290,22 @@ function successCallBack(status){
 	});
 }
 
+
+function qualifiedCallBack(username){
+	layer.msg('合格 已短信邮件通知 '+username);
+	$.ajax({ 
+		url: url,
+		/* data:{status:status,searchStr:searchStr}, */
+		dataType:"json",
+		type:'post',
+		success: function(data){
+			_self.trialJapanData = data.trialJapanData;
+		}
+	});
+}
+
 function unqualifiedCallBack(username){
-	layer.msg('已短信邮件通知 '+username);
+	layer.msg('不合格 已短信邮件通知 '+username);
 	$.ajax({ 
 		url: url,
 		/* data:{status:status,searchStr:searchStr}, */
