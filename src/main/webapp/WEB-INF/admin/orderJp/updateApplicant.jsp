@@ -629,6 +629,7 @@
 						//关闭加载层
 						layer.close(layerIndex);
 						if (true === obj.success) {
+							layer.msg("识别成功");
 							$('#cardFront').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");
@@ -681,6 +682,7 @@
 						//关闭加载层
 						layer.close(layerIndex);
 						if (true === obj.success) {
+							layer.msg("识别成功");
 							$('#cardBack').val(obj.url);
 							$('#sqImgBack').attr('src', obj.url);
 							$("#uploadFileBack").siblings("i").css("display","block");

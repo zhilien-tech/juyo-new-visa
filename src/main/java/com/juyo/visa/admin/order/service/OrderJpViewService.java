@@ -960,8 +960,29 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setValidEndDate(applicantForm.getValidEndDate());
 			applicant.setValidStartDate(applicantForm.getValidStartDate());
 			applicant.setUpdateTime(new Date());
-			//修改客户登录手机号
-			if (!Util.isEmpty(applicantForm.getTelephone())) {
+			//游客登录
+			ApplicantUser applicantUser = new ApplicantUser();
+			applicantUser.setMobile(applicant.getTelephone());
+			applicantUser.setOpid(applicant.getOpId());
+			applicantUser.setPassword("000000");
+			applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
+			if (!Util.isEmpty(applicant.getTelephone())) {
+				TUserEntity userEntity = dbDao.fetch(TUserEntity.class,
+						Cnd.where("mobile", "=", applicant.getTelephone()));
+				if (Util.isEmpty(userEntity)) {
+					TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
+					applicant.setUserId(tUserEntity.getId());
+				} else {
+					userEntity.setName(applicantUser.getUsername());
+					userEntity.setMobile(applicant.getTelephone());
+					userEntity.setPassword(applicantUser.getPassword());
+					userEntity.setOpId(applicantUser.getOpid());
+					userEntity.setUpdateTime(new Date());
+					dbDao.update(userEntity);
+				}
+			}
+
+			/*if (!Util.isEmpty(applicantForm.getTelephone())) {
 				TUserEntity userEntity = dbDao.fetch(TUserEntity.class,
 						Cnd.where("mobile", "=", applicant.getTelephone()));
 				if (!Util.isEmpty(userEntity)) {
@@ -971,7 +992,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					user.setMobile(applicantForm.getTelephone());
 					dbDao.update(user);
 				}
-			}
+			}*/
 			dbDao.update(applicant);
 
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
