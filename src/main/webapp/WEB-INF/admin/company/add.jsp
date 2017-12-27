@@ -85,7 +85,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>公司类型：</label> 
-								<select class="form-control input-sm selectHeight" name="comType">
+								<select id="comType" name="comType" onchange="changeComType()" class="form-control input-sm selectHeight">
 									<option value="">请选择</option>
 									<c:forEach var="map" items="${obj.companyTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
@@ -94,7 +94,7 @@
 							</div>
 						</div>
 						<div class="col-sm-6">
-							<div class="form-group">
+							<div id="scopeDiv" class="form-group" style="display:none;">
 								<label><span>*</span>经营范围：</label>
 								<!-- <input id="businessScope" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
 								<input id="businessScopes" name="businessScopes" type="hidden"/>
@@ -418,6 +418,15 @@
 			}
 		}
 
+		function changeComType(){
+			var type = $("#comType").val();
+			if(type == ""){
+				$("#scopeDiv").hide();
+			}else{
+				$("#scopeDiv").show();
+			}
+		}
+		
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
