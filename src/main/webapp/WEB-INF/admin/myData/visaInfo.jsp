@@ -47,7 +47,7 @@
 				<input type="hidden" value="${obj.visaInfo.applicantId }" name="applicantId"/>
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
-				<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+				<!-- <input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/>  -->
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
 			</div>
@@ -332,7 +332,7 @@
 		var base = "${base}";
 		$(function() {
 			
-			var form = document.forms[0]; 
+			/* var form = document.forms[0]; 
 			for ( var i = 0; i < form.length; i++) { 
 				var element = form.elements[i]; 
 				if(element.id != "editbasic")
@@ -340,12 +340,13 @@
 			} 
 			document.getElementById("mainRelation").style.backgroundColor = "#eee";
 			document.getElementById("relationRemark").style.backgroundColor = "#eee";
-			$(".basic").hide();
+			$(".basic").hide(); */
 			
 			var remark = $("#visaRemark").val();
 			if(remark != ""){
 				$(".ipt-info").show();
 			}
+			$("#visaRemark").attr("disabled", true);
 			
 			var marry = $("#marryUrl").val();
 			if(marry != ""){
@@ -666,7 +667,7 @@
 			reader.readAsDataURL(file);
 		});
 		
-		//编辑按钮
+		/* //编辑按钮
 		function editBtn(){
 			$(".basic").show();
 			$(".editbasic").hide();
@@ -708,7 +709,7 @@
 					$("#financial").val("");
 				}
 			});
-		}
+		} */
 		
 		//返回 
 		function closeWindow() {

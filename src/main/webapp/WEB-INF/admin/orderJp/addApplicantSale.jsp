@@ -382,16 +382,21 @@
 	                 //setConnected(true);  
 	             };
 
-	            socket.onclose = function(){  
+	            socket.onclose = function(){
 	                console.log('Disconnecting connection'); 
 	            };
 
 	            socket.onmessage = function (evt){
-	                  var received_msg = evt.data;  
+	                  var received_msg = evt.data;
+	                  var sessionid = '${obj.sessionid}';
 	                  if(received_msg){
 		                  var receiveMessage = JSON.parse(received_msg);
-		                  if(receiveMessage.messagetype == 4){
+		                  if(receiveMessage.messagetype == 4 && sessionid == receiveMessage.sessionid){
 		                	  window.parent.document.getElementById('orderid').value = receiveMessage.orderid;
+		                	  var appid = window.parent.document.getElementById('appId').value;
+		                	  appid +=  receiveMessage.applicantid+',';
+		                	  window.parent.document.getElementById('appId').value = appid;
+		                	  window.parent.successCallBack(5,receiveMessage);
 		                	  window.location.href = '/admin/orderJp/updateApplicant.html?id='+receiveMessage.applicantid+'&orderid&isTrial=0';
 		                	  socket.onclose();
 		                  }

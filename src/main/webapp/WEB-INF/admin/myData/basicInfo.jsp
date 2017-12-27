@@ -35,7 +35,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
 	<form id="applicantInfo">
 			<div class="qz-head">
-				<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+				<!-- <input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/>  -->
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant();"/> 
 				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
@@ -364,17 +364,18 @@
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
 	$(function(){
-		var form = document.forms[0]; 
+		/* var form = document.forms[0]; 
 		for ( var i = 0; i < form.length; i++) { 
 			var element = form.elements[i]; 
 			if(element.id != "editbasic")
 				element.disabled = true; 
 		} 
-		$(".basic").hide();
+		$(".basic").hide(); */
 		var remark = $("#baseRemark").val();
 		if(remark != ""){
 			$(".ipt-info").show();
 		}
+		$("#baseRemark").attr("disabled", true);
 		var nation = '${obj.applicant.hasOtherNationality}';
 		var otherName = '${obj.applicant.hasOtherName}';
 		var address = '${obj.applicant.addressIsSameWithCard}';
@@ -509,7 +510,7 @@
 			}
 		});
 	}
-	//编辑按钮
+	/* //编辑按钮
 	function editBtn(){
 		$(".basic").show();
 		$(".editbasic").hide();
@@ -533,7 +534,7 @@
 			$("#uploadFileBack").siblings("i").css("display","none");
 		});
 		$("#baseRemark").attr("disabled", true);
-	}
+	} */
 	
 	//取消按钮
 	function cancelBtn(){

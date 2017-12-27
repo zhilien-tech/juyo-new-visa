@@ -17,7 +17,7 @@ $(function(){
 	});
 	$('#visatype').change(function(){
 		var thisval = $(this).val();
-		if(thisval == 2){
+		if(thisval != 1){
 			$('#visacounty').show();
 			$('#threefangwen').show();
 		}else{

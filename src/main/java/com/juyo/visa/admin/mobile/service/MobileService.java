@@ -144,6 +144,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			String updatetime = format.format(applicant.getUpdateTime());
 			applicantmap.put("updatetime", updatetime);
 		}
+		applicantmap.put("sessionid", form.getSessionid());
 		result.put("applicatdata", applicantmap);
 		return result;
 	}
