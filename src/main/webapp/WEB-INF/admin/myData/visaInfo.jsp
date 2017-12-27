@@ -16,7 +16,7 @@
 	<style type="text/css">
 	.modal-body { height:100% !important;}
 	.info-imgUpload {width: 100%;}
-	.NoInfo { width:100%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
+	.NoInfo { width:100%; height:30px; margin-top:0px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 	.ipt-info { display:none; }
     .Unqualified, .qualified { margin-right:10px; }
  	.input-box { position: relative; display: inline-block; }
