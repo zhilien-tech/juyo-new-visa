@@ -284,7 +284,7 @@ public class LoginService extends BaseService<TUserEntity> {
 				session.setMaxInactiveInterval(60 * 60 * 10);
 				form.setReturnUrl(">>:/public/menu.html");
 				//跳转到办理中的签证页面
-				form.setMainurl("/admin/applyvisa/list.html");
+				form.setMainurl("/admin/myVisa/visaList.html");
 			}
 		}
 		return true;
