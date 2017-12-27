@@ -148,7 +148,7 @@ public class ReceptionJpModule {
 	@At
 	@POST
 	public Object sendSms(@Param("orderid") int orderid, HttpSession session) {
-		return receptionJpViewService.sendSms(orderid, session);
+		return receptionJpViewService.toSend(orderid, session);
 	}
 
 	/**
