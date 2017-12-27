@@ -136,7 +136,9 @@ new Vue({
 					},
 					url : '/admin/firstTrialJp/isQualifiedByApplicantId.html',
 					success : function(data) {
-						if(data){
+						var isQualified = data.isQualified;
+						var applicantName = data.name;
+						if(isQualified){
 							$.ajax({
 								type : 'POST',
 								data : {
@@ -149,11 +151,11 @@ new Vue({
 									qualifiedCallBack(data);
 								},
 								error : function(xhr) {
-									layer.msg("合格失败", "", 3000);
+									layer.msg("操作失败");
 								}
 							});
 						}else{
-							layer.msg("申请人不合格");
+							layer.msg(applicantName+" 信息不合格");
 						}
 					},
 					error : function(xhr) {

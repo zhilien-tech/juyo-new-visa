@@ -1314,7 +1314,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//判断申请人是否合格
-	public Boolean isQualifiedByApplicantId(Integer applicantId) {
+	public Object isQualifiedByApplicantId(Integer applicantId) {
+		Map<String, Object> result = Maps.newHashMap();
 		boolean isQualified = true;
 		int YES = IsYesOrNoEnum.YES.intKey();
 		TApplicantUnqualifiedEntity fetch = dbDao.fetch(TApplicantUnqualifiedEntity.class,
@@ -1327,7 +1328,21 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 				isQualified = false;
 			}
 		}
-		return isQualified;
+		//获取申请人姓名
+		TApplicantEntity applicant = (TApplicantEntity) basicInfo(applicantId);
+		String name = "";
+		if (!Util.isEmpty(applicant)) {
+			name = applicant.getFirstName() + applicant.getLastName();
+		}
+		if (!isQualified) {
+			//不合格
+			result.put("name", name);
+		} else {
+			result.put("name", "");
+		}
+
+		result.put("isQualified", isQualified);
+		return result;
 	}
 
 	//获得加密链接

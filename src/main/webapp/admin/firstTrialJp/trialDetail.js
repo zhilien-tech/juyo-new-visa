@@ -330,7 +330,9 @@ new Vue({
 					},
 					url : '/admin/firstTrialJp/isQualifiedByApplicantId.html',
 					success : function(data) {
-						if(data){
+						var isQualified = data.isQualified;
+						var applicantName = data.name;
+						if(isQualified){
 							$.ajax({
 								type : 'POST',
 								data : {
@@ -347,7 +349,7 @@ new Vue({
 								}
 							});
 						}else{
-							layer.msg("申请人不合格");
+							layer.msg(applicantName+" 信息不合格");
 						}
 					},
 					error : function(xhr) {
