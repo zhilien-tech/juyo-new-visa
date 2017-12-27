@@ -9,6 +9,12 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/login.css" />
 		<link rel="stylesheet" href="${base}/public/dist/css/bootstrapValidator.css"/>
+		<style>
+			html {height: 100%;width:100%;display: table;}
+			body {width:100%;display: table-cell;height: 100%;}
+			.login { position: relative;}
+			.login .login-content { position:absolute !important;right:10%;}
+		</style>
 	</head>
 	<body>
 		<div class="login">

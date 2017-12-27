@@ -24,14 +24,17 @@
 .remove-btn { top: -35px; right: -1.5%; }
 .content-wrapper, .right-side, .main-footer { margin-left: 0; }
 .multiPass_roundTrip-div { width: 120px; float: right; position: relative; top: 5px;}
-.sm { width:80px; }
-.none-sm { width:125px; }
+.sm { width:100%; }
+.none-sm { width:100%; }
 .show-select { width:110px; }
-.none-select { padding-left:0px; }
+.none-select { padding-left:0px;}
 .qz-head { position:fixed;top:0;left:0;z-index:99999; width:100%;}
 .content { margin-top:50px;}
 .info { position:relative;}
 #addCustomer { position:absolute; top:5px; right:10px;}
+.col-sm-3 { width:30%;}
+.col-sm-1 { width:11.5%;} 
+.select2 { width:100% !important;}
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -58,7 +61,7 @@
 						<p class="info-head">客户信息</p><input id="addCustomer"
 					type="button" value="添加" class="btn btn-primary btn-sm pull-right" />
 						<!-- *** -->
-						<div class="info-body-from"  style="margin-left:12%;">
+						<div class="info-body-from"  style="margin-left:6%;">
 							<div class="row body-from-input">
 								<!-- 公司全称 -->
 								<div class="col-sm-3">
@@ -75,7 +78,7 @@
 								<div class="on-line">
 									<!-- select2 线上/OTS/线下 -->
 									<div class="col-sm-3">
-										<div class="form-group" style="padding-right: 3%;">
+										<div class="form-group">
 											<label><span>*</span>公司全称：</label> 
 											<input type="hidden" id="compNameSelect2" value=""/>
 											<select id="compName"
@@ -101,7 +104,7 @@
 								<div class="zhiKe none">
 									<!-- input 直客 -->
 									<div class="col-sm-3">
-										<div class="form-group" style="padding-right: 3%;">
+										<div class="form-group">
 											<label><span>*</span>公司全称：</label> <input id="compName2"
 												name="name" type="text" class="form-control input-sm"
 												placeholder=" " />
@@ -129,7 +132,7 @@
 										</select>
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-3 compTel">
 									<div class="form-group">
 										<label><span>*</span>手机号：</label>
 										<input type="hidden" id="telephoneSelect2" value=""/>
@@ -184,7 +187,7 @@
 					<!-- 订单信息 -->
 					<div class="orderInfo info" id="orderInfo">
 						<p class="info-head">订单信息</p>
-						<div class="info-body-from" style="margin-left:12%;">
+						<div class="info-body-from" style="margin-left:6%;">
 							<div class="row body-from-input">
 								<!-- 人数/领区/加急 -->
 								<div class="col-sm-3">
@@ -206,7 +209,7 @@
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
-								<div class="col-sm-3 show-select">
+								<div class="col-sm-1 show-select">
 									<div class="form-group">
 										<label><span>*</span>加急：</label> <select id="urgentType"
 											name="urgenttype" class="form-control input-sm sm">
@@ -217,7 +220,7 @@
 										<!-- <i class="bulb"></i> 小灯泡-->
 									</div>
 								</div>
-								<div class="col-sm-3 none none-select" id="urgentDays">
+								<div class="col-sm-2 none none-select" id="urgentDays">
 									<div class="form-group">
 										<label>&nbsp;</label> <select id="urgentDay" name="urgentday"
 											class="form-control input-sm none-sm">

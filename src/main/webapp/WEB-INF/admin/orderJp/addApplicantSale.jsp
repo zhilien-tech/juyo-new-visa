@@ -147,7 +147,7 @@
 									<input id="firstName" style="position:relative;" name="firstName" type="text" class="form-control input-sm req " placeholder=" " />
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<input type="hidden" id="applyId"/>
-									<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="firstNameEn" value=""/>
+									<input type="text" id="firstNameEn" style="position:absolute;top:38px;border:none;left:150px;" name="firstNameEn" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -157,7 +157,7 @@
 								<div class="form-group">
 									<label><span>*</span>名/拼音</label>
 									<input id="lastName" name="lastName" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " />
-									<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value=""/>
+									<input type="text" id="lastNameEn" style="position:absolute;top:38px;border:none;left:150px;" name="lastNameEn" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
