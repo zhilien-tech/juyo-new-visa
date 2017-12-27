@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
+		[v-cloak]{display:none;}
 		.card-head div:nth-child(1){width:130px;}
 		.card-head div:nth-child(2){width:200px;}
 		.card-head div:nth-child(4){position:absolute;right:35px;}

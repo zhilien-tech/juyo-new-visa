@@ -89,6 +89,7 @@ import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
@@ -347,7 +348,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicantUser.setPassword("000000");
 		applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
 		if (!Util.isEmpty(applicant.getTelephone())) {
-			TUserEntity userEntity = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", applicant.getTelephone()));
+			TUserEntity userEntity = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", applicant.getTelephone())
+					.and("userType", "=", UserLoginEnum.TOURIST_IDENTITY.intKey()));
 			if (Util.isEmpty(userEntity)) {
 				TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
 				applicant.setUserId(tUserEntity.getId());
@@ -357,6 +359,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				userEntity.setPassword(applicantUser.getPassword());
 				userEntity.setOpId(applicantUser.getOpid());
 				userEntity.setUpdateTime(new Date());
+				applicant.setUserId(userEntity.getId());
 				dbDao.update(userEntity);
 			}
 		}
@@ -967,8 +970,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicantUser.setPassword("000000");
 			applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
 			if (!Util.isEmpty(applicant.getTelephone())) {
-				TUserEntity userEntity = dbDao.fetch(TUserEntity.class,
-						Cnd.where("mobile", "=", applicant.getTelephone()));
+				TUserEntity userEntity = dbDao.fetch(
+						TUserEntity.class,
+						Cnd.where("mobile", "=", applicant.getTelephone()).and("userType", "=",
+								UserLoginEnum.TOURIST_IDENTITY.intKey()));
 				if (Util.isEmpty(userEntity)) {
 					TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
 					applicant.setUserId(tUserEntity.getId());
@@ -978,6 +983,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					userEntity.setPassword(applicantUser.getPassword());
 					userEntity.setOpId(applicantUser.getOpid());
 					userEntity.setUpdateTime(new Date());
+					applicant.setUserId(userEntity.getId());
 					dbDao.update(userEntity);
 				}
 			}
@@ -2070,7 +2076,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String passRemark = passportForm.getPassRemark();
 		if (!Util.isEmpty(passRemark)) {
 			qualifiedApplicantViewService.unQualified(passportForm.getApplicantId(), orderJpEntity.getOrderId(),
-					passRemark, ApplicantInfoTypeEnum.BASE.intKey(), session);
+					passRemark, ApplicantInfoTypeEnum.PASSPORT.intKey(), session);
 		}
 
 		return null;
