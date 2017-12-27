@@ -28,6 +28,7 @@
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 .nationalityHide { margin-left:3%;}
 .row { margin-top:7px;}
+.nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
 </style>
 </head>
 <body>
@@ -129,7 +130,7 @@
 										<label>姓/拼音</label> <input id="otherFirstName"
 											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
 											placeholder=" " value="${obj.applicant.otherFirstName }" />
-											<input type="text" id="otherFirstNameEn" style="position:absolute;top:42px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:45px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -392,10 +393,15 @@
             socket.onmessage = function (evt){   
                   var received_msg = evt.data;  
                   var applicantId = '${obj.applicantId}';
+                  var orderid = '${obj.orderid}';
                   if(received_msg){
 	                  var receiveMessage = JSON.parse(received_msg);
-	                  if(receiveMessage.messagetype == 1 && receiveMessage.applicantid == applicantId){
-	                	  window.location.reload();
+	                  if(receiveMessage.applicantid == applicantId){
+	                	  if(receiveMessage.messagetype == 1){
+		                	  window.location.reload();
+	                	  }else if(receiveMessage.messagetype == 2){
+	                		  window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+	                	  }
 	                  }
                   }
                   console.log('message received!');  
@@ -407,6 +413,7 @@
           }  
 	}
 		$(function(){
+			
 			var remark = $("#baseRemark").val();
 			if(remark != ""){
 				$(".ipt-info").show();
@@ -416,6 +423,9 @@
 			if('${obj.isTrailOrder}'==1){
 				$("#qualifiedBtn").show();
 				$("#unqualifiedBtn").show();
+				$("#baseRemark").attr("disabled", false);
+			}else{
+				$("#baseRemark").attr("disabled", true);
 			}
 			
 			var nation = '${obj.applicant.hasOtherNationality}';
@@ -627,6 +637,7 @@
 						//关闭加载层
 						layer.close(layerIndex);
 						if (true === obj.success) {
+							layer.msg("识别成功");
 							$('#cardFront').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");
@@ -679,6 +690,7 @@
 						//关闭加载层
 						layer.close(layerIndex);
 						if (true === obj.success) {
+							layer.msg("识别成功");
 							$('#cardBack').val(obj.url);
 							$('#sqImgBack').attr('src', obj.url);
 							$("#uploadFileBack").siblings("i").css("display","block");

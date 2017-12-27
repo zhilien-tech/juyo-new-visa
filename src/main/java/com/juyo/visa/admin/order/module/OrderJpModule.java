@@ -157,12 +157,15 @@ public class OrderJpModule {
 		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
 		String qrurl = "http://" + localAddr + ":" + localPort + "/mobile/info.html";
 		if (Util.isEmpty(orderid)) {
-			qrurl += "?comid=" + loginCompany.getId() + "&userid=" + loginUser.getId();
+			qrurl += "?comid=" + loginCompany.getId() + "&userid=" + loginUser.getId() + "&sessionid="
+					+ session.getId();
 		} else {
-			qrurl += "?comid=" + loginCompany.getId() + "&userid=" + loginUser.getId() + "&orderid=" + orderid;
+			qrurl += "?comid=" + loginCompany.getId() + "&userid=" + loginUser.getId() + "&orderid=" + orderid
+					+ "&sessionid=" + session.getId();
 		}
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
+		result.put("sessionid", session.getId());
 		return result;
 	}
 

@@ -53,6 +53,7 @@
 					<span class="">状态：<p id="orStatus_p">${obj.orStatus }</p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
+					<input type="button" value="短信" class="btn btn-primary btn-sm pull-right" onclick="sendSms(${obj.orderinfo.id});"/>
 					<input type="button" value="签证" class="btn btn-primary btn-sm pull-right" onclick="visaTransfer();"/>
 					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue();"/>
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log(${obj.orderinfo.id});" />
@@ -334,6 +335,7 @@
 				}
 			}
 			
+			//日志
 			function log(orderid){
 				layer.open({
 					type: 2,
@@ -348,6 +350,7 @@
 				});
 			}
 			
+			//移交签证
 			function visaTransfer(){
 				var orderid = ${obj.orderid};
 				$.ajax({ 
@@ -361,8 +364,8 @@
 			     });
 			}
 			
+			//实收
 			function revenue(){
-				//实收
 				var orderid = ${obj.orderid};
 				layer.open({
         		    type: 2,
@@ -375,6 +378,21 @@
         		    area: ['900px', '550px'],
         		    content: '${base}/admin/receptionJP/revenue.html?orderid='+orderid
         		  });
+			}
+			
+			//发短信
+			function sendSms(orderid){
+				layer.load(1);
+        		$.ajax({ 
+                 	url: '${base}/admin/receptionJP/sendSms.html',
+                 	dataType:"json",
+                 	data:{orderid:orderid},
+                 	type:'post',
+                 	success: function(data){
+                 		layer.closeAll("loading");
+                 		layer.msg("发送成功");
+                   	}
+                 });
 			}
 			
 			$("#stayday").keyup(function(){

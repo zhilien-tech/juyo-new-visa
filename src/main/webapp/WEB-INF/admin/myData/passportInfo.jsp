@@ -13,19 +13,21 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
-			.ipt-info { display:none; }
+			.ipt-info { display:none; margin-top:15px;}
 			.NoInfo { width:95%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 			.form-control{height: 30px;}
-			.tab-content{padding: 15px 30px 10px 0;margin: 0 0px;}
+			.tab-content{padding: 0px 30px 10px 0;margin: 0 0px;}
 			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
 			.front, .back {width: 320px;margin: 10px auto;}
+			.qz-head { border-bottom:2px solid #deecff; padding:15px 20px; display: table; width: 100%;}
+			.basic { margin-left: 10px;}
 		</style>
 	</head>
 
 <body class="hold-transition skin-blue sidebar-mini">
 	<form id="passportInfo">
 			<div class="qz-head">
-			<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+			<!-- <input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/>  -->
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save();"/> 
 				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
@@ -129,7 +131,7 @@
 								<div class="form-group">
 									<label><span>*</span>出生地点/拼音</label>
 									<input id="birthAddress" name="birthAddress" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
-									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:45px;border:0px;left:80px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
+									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:42px;border:0px;left:80px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -147,7 +149,7 @@
 								<div class="form-group">
 									<label><span>*</span>签发地点/拼音</label>
 									<input id="issuedPlace" name="issuedPlace" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
-									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:45px;border:0px;left:80px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
+									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:42px;border:0px;left:80px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -222,18 +224,18 @@
 	var base = "${base}";
 	$(function() {
 		
-		var form = document.forms[0]; 
+		/* var form = document.forms[0]; 
 		for ( var i = 0; i < form.length; i++) { 
 			var element = form.elements[i]; 
 			if(element.id != "editbasic")
 				element.disabled = true; 
 		} 
-		$(".basic").hide();
-		
+		$(".basic").hide(); */
 		var remark = $("#passRemark").val();
 		if(remark != ""){
 			$(".ipt-info").show();
 		}
+		$("#passRemark").attr("disabled", true);
 		
 		//校验
 		$('#passportInfo').bootstrapValidator({
@@ -389,7 +391,7 @@
 		});
 	}
 	
-	//编辑按钮
+	/* //编辑按钮
 	function editBtn(){
 		$(".basic").show();
 		$(".editbasic").hide();
@@ -408,7 +410,7 @@
 			$("#uploadFile").siblings("i").css("display","none");
 		});
 		$("#passRemark").attr("disabled", true);
-	}
+	} */
 	
 	//取消按钮
 	function cancelBtn(){

@@ -52,10 +52,13 @@
 			#schedulingTable thead tr th:nth-child(4){width:24%;}
 			#schedulingTable thead tr th:nth-child(5){width:24%;}
 			#schedulingTable thead tr th:nth-child(6){width:8%;}
+			[v-cloak] {
+			  display: none;
+			}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
-		<div class="wrapper" id="wrapper">
+		<div class="wrapper" id="wrapper" v-cloak>
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<div class="qz-head">
 					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
@@ -83,7 +86,7 @@
 									</div>
 								</div>
 								<c:choose>
-									<c:when test="${obj.jporderinfo.visaType == 2 }">
+									<c:when test="${obj.jporderinfo.visaType != 1 }">
 										<div class="col-sm-9" id="visacounty">
 									</c:when>
 									<c:otherwise>
@@ -103,7 +106,7 @@
 										</div>
 							</div><!-- end 签证类型 -->
 							<c:choose>
-								<c:when test="${obj.jporderinfo.visaType == 2 }">
+								<c:when test="${obj.jporderinfo.visaType != 1 }">
 									<div class="row body-from-input" id="threefangwen"><!-- 过去三年是否访问过 -->
 								</c:when>
 								<c:otherwise>

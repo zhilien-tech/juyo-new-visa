@@ -14,6 +14,7 @@
 		#datatableId{position: relative;top: 10px;}
 		#datatableId tbody tr{cursor: pointer;}
 		.trColor{color: rgb(48, 135, 240)}
+		[v-cloak]{display:none;}
 	</style>
 </head>
 <body>
@@ -47,7 +48,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="data in shareInfo" class="tableTr">
+							<tr v-cloak v-for="data in shareInfo" class="tableTr">
 								<td style="display: none">{{data.id}}</td>
 								<td>{{data.applyname}}</td>
 								<td>{{data.telephone}}</td>
@@ -146,7 +147,6 @@
 						telephone = $(this).children().eq(2).html();
 						email = $(this).children().eq(3).html();
 						if(email == "" || telephone == ""){
-							var index = window.parent.parent.parent.layer.getFrameIndex(window.name); //获取窗口索引
 							//$("#backBtn").click();
 							//window.location.href = '/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email;
 							layer.open({
@@ -156,8 +156,8 @@
 								fix: false,
 								maxmin: false,
 								shadeClose: false,
-								
-								area: ['450px', '260px'],
+								scrollbar: false,
+								area: ['900px', '551px'],
 								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email,
 								success : function(index, layero){
 									
@@ -281,6 +281,11 @@
 			parent.successCallBack(4);
 			//save();
 			//parent.location.reload();
+		}
+		
+		function cancelCallBack(status){
+			//$("#cancel").click();
+			successCallBack(1);
 		}
 	</script>
 </body>

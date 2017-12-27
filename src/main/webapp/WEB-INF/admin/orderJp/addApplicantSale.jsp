@@ -27,6 +27,7 @@
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 <!--  -->
 .front, .back { margin-bottom:8px !important;}
+.nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
 </style>
 </head>
 <body>
@@ -381,15 +382,21 @@
 	                 //setConnected(true);  
 	             };
 
-	            socket.onclose = function(){  
+	            socket.onclose = function(){
 	                console.log('Disconnecting connection'); 
 	            };
 
 	            socket.onmessage = function (evt){
-	                  var received_msg = evt.data;  
+	                  var received_msg = evt.data;
+	                  var sessionid = '${obj.sessionid}';
 	                  if(received_msg){
 		                  var receiveMessage = JSON.parse(received_msg);
-		                  if(receiveMessage.messagetype == 4){
+		                  if(receiveMessage.messagetype == 4 && sessionid == receiveMessage.sessionid){
+		                	  window.parent.document.getElementById('orderid').value = receiveMessage.orderid;
+		                	  var appid = window.parent.document.getElementById('appId').value;
+		                	  appid +=  receiveMessage.applicantid+',';
+		                	  window.parent.document.getElementById('appId').value = appid;
+		                	  window.parent.successCallBack(5,receiveMessage);
 		                	  window.location.href = '/admin/orderJp/updateApplicant.html?id='+receiveMessage.applicantid+'&orderid&isTrial=0';
 		                	  socket.onclose();
 		                  }
@@ -618,6 +625,7 @@
 						//关闭加载层
 						layer.close(layerIndex);
 						if (true === obj.success) {
+							layer.msg("识别成功");
 							$('#cardFront').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");
@@ -670,6 +678,7 @@
 						//关闭加载层
 						layer.close(layerIndex);
 						if (true === obj.success) {
+							layer.msg("识别成功");
 							$('#cardBack').val(obj.url);
 							$('#sqImgBack').attr('src', obj.url);
 							$("#uploadFileBack").siblings("i").css("display","block");
@@ -799,7 +808,9 @@
 			}
 			saveApplicant(2);
 			var applyId = $("#applyId").val();
-			layer.open({
+			socket.onclose();
+			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'+'&isTrial=0';
+			/* layer.open({
 				type: 2,
 				title: false,
 				closeBtn:false,
@@ -809,7 +820,7 @@
 				scrollbar: false,
 				area: ['900px', '551px'],
 				content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'+'&isTrial=0'
-			});
+			}); */
 		}
 		function successCallBack(status){
 			parent.successCallBack(1);

@@ -220,6 +220,9 @@
 			if(${obj.isTrailOrder} == 1){
 				$("#qualifiedBtn").show();
 				$("#unqualifiedBtn").show();
+				$("#passRemark").attr("disabled", false);
+			}else{
+				$("#passRemark").attr("disabled", true);
 			}
 			
 			//校验
@@ -296,10 +299,15 @@
 	            socket.onmessage = function (evt){
 	                  var received_msg = evt.data;  
 	                  var applicantId = '${obj.applicantId}';
+	                  var orderid = '${obj.orderid}';
 	                  if(received_msg){
 		                  var receiveMessage = JSON.parse(received_msg);
-		                  if(receiveMessage.messagetype == 2 && receiveMessage.applicantid == applicantId){
-		                	  window.location.reload();
+		                  if(receiveMessage.applicantid == applicantId){
+		                	  if(receiveMessage.messagetype == 2){
+			                	  window.location.reload();
+		                	  }else if(receiveMessage.messagetype == 3){
+		                		  window.location.href = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderid+'&isOrderUpTime&isTrial=${obj.isTrailOrder}';
+		                	  }
 		                  }
 	                  }
 	                  console.log('message received!');  
@@ -339,6 +347,7 @@
 						//关闭加载层
 						layer.close(layerIndex);
 						if (true === obj.success) {
+							layer.msg("识别成功");
 							$('#passportUrl').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");
@@ -632,7 +641,7 @@
 					success :function(data) {
 						console.log(JSON.stringify(data));
 						layer.closeAll('loading');
-						$("#baseRemark").val("");
+						$("#passRemark").val("");
 						visaBtn();
 					}
 				});

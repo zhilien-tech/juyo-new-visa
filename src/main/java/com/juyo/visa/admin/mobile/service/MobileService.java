@@ -144,6 +144,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			String updatetime = format.format(applicant.getUpdateTime());
 			applicantmap.put("updatetime", updatetime);
 		}
+		applicantmap.put("sessionid", form.getSessionid());
 		result.put("applicatdata", applicantmap);
 		return result;
 	}
@@ -196,6 +197,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 				orderinfo.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
 				orderinfo.setCreateTime(new Date());
 				TOrderEntity orderinsert = dbDao.insert(orderinfo);
+				form.setOrderid(orderinsert.getId());
 				TOrderJpEntity orderjp = new TOrderJpEntity();
 				orderjp.setOrderId(orderinsert.getId());
 				TOrderJpEntity orderjpinsert = dbDao.insert(orderjp);

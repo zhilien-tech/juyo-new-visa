@@ -13,10 +13,10 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
-			.ipt-info { display:none; }
+			.ipt-info { display:none; margin-top:15px;}
 			.NoInfo { width:95%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 			.form-control{height: 30px;}
-			.tab-content{padding: 15px 30px 10px 0;margin: 0 0px;}
+			.tab-content{padding: 0px 30px 10px 0;margin: 0 0px;}
 			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
 			.front, .back {width: 320px;margin: 10px auto;}
 			.nameBeforeYes {
@@ -26,13 +26,16 @@
 .nameBeforeHide , .nationalityHide{
 	display:none;
 }
+			.qz-head { border-bottom:2px solid #deecff; padding:15px 20px; display: table; width: 100%;}
+			.basic { margin-left: 10px;}
+			.onceIDTop { padding-left: 15px;}
 		</style>
 	</head>
 
 <body class="hold-transition skin-blue sidebar-mini">
 	<form id="applicantInfo">
 			<div class="qz-head">
-				<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+				<!-- <input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/>  -->
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant();"/> 
 				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
@@ -120,26 +123,19 @@
 									</div>
 								</div>
 								
-								<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-									<div class="form-group">
-										<label>名/拼音</label> <input id="otherLastName"
-											name="otherLastName" style="position:relative;" type="text" class="form-control input-sm "
-											placeholder=" " value="${obj.applicant.otherLastName }" />
-											<input type="text" id="otherLastNameEn" style="position:absolute;top:42px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
-										<!-- <i class="bulb"></i> -->
-									</div>
-								</div>
 							</div>
 							<!-- 姓/名 拼音 end -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0 onceIDTop">
+							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
 								<div class="form-group">
 									<label>曾有的或另有的国籍(或公民身份)</label> 
 									<div>
 										<span class="onceIDYes ">
-											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
+											<input type="radio" name="hasOtherNationality" class="onceID" value="1" 
+											/>是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  />否
+											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  
+											/>否
 										</span>
 									</div>
 								</div>
@@ -310,6 +306,21 @@
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
+						<div class="row wordSpell" style="height:66px;">
+							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
+							
+							</div>
+						</div>	
+						<!-- 名/拼音 -->
+						<div class="row wordSpell">
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>名/拼音</label> 
+									<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
+									<input type="text" id="otherLastNameEn" style="position:absolute;top:42px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+								</div>
+							</div>
+						</div>
 						<div class="row">
 							<!-- 紧急联系人姓名/手机 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
@@ -353,17 +364,18 @@
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
 	$(function(){
-		var form = document.forms[0]; 
+		/* var form = document.forms[0]; 
 		for ( var i = 0; i < form.length; i++) { 
 			var element = form.elements[i]; 
 			if(element.id != "editbasic")
 				element.disabled = true; 
 		} 
-		$(".basic").hide();
+		$(".basic").hide(); */
 		var remark = $("#baseRemark").val();
 		if(remark != ""){
 			$(".ipt-info").show();
 		}
+		$("#baseRemark").attr("disabled", true);
 		var nation = '${obj.applicant.hasOtherNationality}';
 		var otherName = '${obj.applicant.hasOtherName}';
 		var address = '${obj.applicant.addressIsSameWithCard}';
@@ -380,10 +392,11 @@
 		if(otherName == 1){
 			$(".nameBeforeTop").css('float','none');
 			$(".nameBeforeHide").show();
+			$(".wordSpell").show();
 			//$(".onceIDTop").removeClass('col-sm-offset-1');
 			//$(".onceIDTop").css('padding-left','15px');
 		}else {
-			
+			$(".wordSpell").hide();
 			$(".nameBeforeHide").hide();
 		}
 		
@@ -497,7 +510,7 @@
 			}
 		});
 	}
-	//编辑按钮
+	/* //编辑按钮
 	function editBtn(){
 		$(".basic").show();
 		$(".editbasic").hide();
@@ -521,7 +534,7 @@
 			$("#uploadFileBack").siblings("i").css("display","none");
 		});
 		$("#baseRemark").attr("disabled", true);
-	}
+	} */
 	
 	//取消按钮
 	function cancelBtn(){
@@ -767,29 +780,44 @@
 	});
 	//checkbox 曾用名
 	$(".nameBefore").change(function(){
-		let checked = $("input[name='hasOtherName']:checked").val();
-		if(checked == 1){
-			$(".nameBeforeTop").css('float','none');
-			$(".nameBeforeHide").show();
-			//$(".onceIDTop").removeClass('col-sm-offset-1');
-			//$(".onceIDTop").css('padding-left','15px');
-		}else {
-			
-			$(".nameBeforeHide").hide();
-		}
-	});
-	//曾用国籍
-	$(".onceID").change(function(){
-		let checked = $("input[name='hasOtherNationality']:checked").val();
-		if(checked == 1){
-			$(".nameBeforeTop").css('float','none');
-			$(".nationalityHide").show();
-			$(".onceIDTop").css('float','left');
-		}else {
-			
-			$(".nationalityHide").hide();
-		}
-	});
+
+			let checked = $("input[name='hasOtherName']:checked").val();
+			let checked2 = $("input[name='hasOtherNationality']:checked").val();
+			if(checked == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nameBeforeHide").show();
+				$(".wordSpell").show();
+				$(".onceIDTop").css('padding-left','15px');
+			}else {
+				
+				$(".nameBeforeHide").hide();
+				$(".wordSpell").hide();
+				if(checked2 == 1){
+					
+				}else {
+					$(".nameBeforeTop").css('float','left');
+				}
+			}
+		});
+		//曾用国籍
+		$(".onceID").change(function(){
+			let checked = $("input[name='hasOtherNationality']:checked").val();
+			let checked2 = $("input[name='hasOtherName']:checked").val();
+			if(checked == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nationalityHide").show();
+				$(".onceIDTop").css('float','left');
+				$(".onceIDTop").css('padding-left','15px');
+			}else {
+				
+				$(".nationalityHide").hide();
+				if(checked2 == 1){
+					
+				}else {
+					$(".nameBeforeTop").css('float','left');
+				}
+			}
+		});
 	
 	//居住地与身份证相同
 	$(".nowProvince").change(function(){

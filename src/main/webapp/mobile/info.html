@@ -90,25 +90,25 @@
 			var userid = GetQueryString('userid');
 			var orderid = GetQueryString('orderid');
 			var applicantid = GetQueryString('applicantid');
-			console.log(comid+"    userid:"+userid+"   orderid:"+orderid+"applicantid:"+applicantid);
+			var sessionid = GetQueryString('sessionid');
 	        _self=this;
 	        $.ajax({ 
 	        	url: url,
-	        	data:{comid:comid,userid:userid,orderid:orderid,applicantid:applicantid},
+	        	data:{comid:comid,userid:userid,orderid:orderid,applicantid:applicantid,sessionid:sessionid},
 	        	dataType:"json",
 	        	type:'post',
 	        	success: function(data){
 	        		_self.applicatdata = data.applicatdata;
 	        		if(data.applicatdata.addressissamewithcard == 1){
 	        			$("#simple_3").attr('checked',true);
-		        		$('.isclose').each(function(){
+		        		/* $('.isclose').each(function(){
 		    				$(this).hide();
-		    			});
+		    			}); */
 	        		}else{
 	        			$("#simple_3").attr('checked',false);
-	        			$('.isclose').each(function(){
+	        			/* $('.isclose').each(function(){
 		    				$(this).show();
-		    			});
+		    			}); */
 	        		}
 	        		console.log('sssss:'+JSON.stringify(_self.applicatdata));
 	          	}
@@ -174,15 +174,21 @@
         });
         //开关
         $("#simple_3").click(function(){
-  			if($(this).prop("checked")){
+        	if($(this).prop("checked")){
   				console.log($(this).prop("checked"));
-  				$('.isclose').each(function(){
+  				/* $('.isclose').each(function(){
   		    			$(this).hide();
-  		    		});
+  		    		}); */
+  		    	_self.applicatdata.province = _self.applicatdata.cardprovince;
+  		    	_self.applicatdata.city = _self.applicatdata.cardcity;
+  		    	_self.applicatdata.detailedaddress = _self.applicatdata.address;
   			}else {
-  				$('.isclose').each(function(){
+  		    	_self.applicatdata.province = '';
+  		    	_self.applicatdata.city = '';
+  		    	_self.applicatdata.detailedaddress = '';
+  				/* $('.isclose').each(function(){
   		    			$(this).show();
-  		    		});
+  		    		}); */
   			}
   		});
       //日历插件

@@ -14,9 +14,11 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
+	.modal-body { height:100% !important; background: #FFF !important; padding:0px 70px !important;}
 	.info-imgUpload {width: 100%;}
-	.NoInfo { width:100%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
-	.ipt-info { display:none; }
+	.NoInfo { width:100%; height:30px; margin-top:0px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
+	.ipt-info { display:none; margin-top:15px;}
+	.tab-content { margin-top:15px;}
     .Unqualified, .qualified { margin-right:10px; }
  	.input-box { position: relative; display: inline-block; }
     .input-box input { background-color: transparent;  background-image: none; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset; color: #555;  display: block;  font-size: 14px; line-height: 1.42857; padding: 6px 6px; transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;  width: 200px; display: inline; position: relative; z-index: 1;}
@@ -43,11 +45,10 @@
 	<div class="modal-content">
 		<form id="passportInfo">
 			<div class="modal-header">
-				<span class="heading">签证信息</span> 
 				<input type="hidden" value="${obj.visaInfo.applicantId }" name="applicantId"/>
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
-				<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+				<!-- <input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/>  -->
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
 			</div>
@@ -332,7 +333,7 @@
 		var base = "${base}";
 		$(function() {
 			
-			var form = document.forms[0]; 
+			/* var form = document.forms[0]; 
 			for ( var i = 0; i < form.length; i++) { 
 				var element = form.elements[i]; 
 				if(element.id != "editbasic")
@@ -340,12 +341,13 @@
 			} 
 			document.getElementById("mainRelation").style.backgroundColor = "#eee";
 			document.getElementById("relationRemark").style.backgroundColor = "#eee";
-			$(".basic").hide();
+			$(".basic").hide(); */
 			
 			var remark = $("#visaRemark").val();
 			if(remark != ""){
 				$(".ipt-info").show();
 			}
+			$("#visaRemark").attr("disabled", true);
 			
 			var marry = $("#marryUrl").val();
 			if(marry != ""){
@@ -666,7 +668,7 @@
 			reader.readAsDataURL(file);
 		});
 		
-		//编辑按钮
+		/* //编辑按钮
 		function editBtn(){
 			$(".basic").show();
 			$(".editbasic").hide();
@@ -708,7 +710,7 @@
 					$("#financial").val("");
 				}
 			});
-		}
+		} */
 		
 		//返回 
 		function closeWindow() {

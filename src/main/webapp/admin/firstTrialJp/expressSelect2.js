@@ -44,6 +44,22 @@ function clearText(){
 //保存
 function save(orderid,orderjpid){
 
+	var receiver = $("#receiver").val();
+	if (receiver == "") {
+		layer.msg('收件人不能为空');
+		return;
+	}
+	var mobile = $("#mobile").val();
+	if (mobile == "") {
+		layer.msg('电话不能为空');
+		return;
+	}
+	var address = $("#address").val();
+	if (address == "") {
+		layer.msg('回邮地址不能为空');
+		return;
+	}
+	
 	/*	var applicant_tbody = $("#applicant_tbody").is(":empty");
 	if (applicant_tbody) {
 		layer.msg('申请人信息不能为空');
@@ -63,11 +79,12 @@ function save(orderid,orderjpid){
 		return;
 	}
 
-	var receiveAddress = $("#receiveAddressId").val();
+	/*var receiveAddress = $("#receiveAddressId").val();
 	if (receiveAddress == "") {
 		layer.msg('收件人信息不能为空');
 		return;
-	}
+	}*/
+
 	var layerIndex =  layer.load(1, {shade: "#000"});
 	$.ajax({ 
 		url: BASE_PATH+'/admin/firstTrialJp/saveExpressInfo.html',

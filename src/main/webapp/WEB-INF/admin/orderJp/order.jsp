@@ -35,11 +35,13 @@
 			.col-sm-3 { width:28%;}
 			.col-sm-1 { width:11.5% !important;}
 			.select2 { width:100% !important;}
+			[v-cloak]{display:none;}
+
 		</style>
 	</head>
 
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper" id="wrapper">
+	<div class="wrapper" id="wrapper" >
 		<div class="content-wrapper" style="min-height: 848px;">
 			<div class="qz-head">
 				<span class="">订单号：<p>${obj.orderInfo.orderNum}</p></span> 
@@ -427,7 +429,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr v-for="applicant in applicantInfo" >
+								<tr v-cloak v-for="applicant in applicantInfo" >
 									<td width="4%">
 										<div v-if="applicant.id==applicant.mainid">
 											<font color="blue">主</font> 
