@@ -189,6 +189,7 @@ $("#mobile").select2({
 $("#linkman").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
 	var id = parseInt($("#linkman").val());
+	alert($("#linkman").val());
 	$.ajax({
 		url : 'getCustomerById',
 		type : 'POST',
@@ -397,6 +398,12 @@ $("#comShortName").on('select2:select', function (evt) {
 /* 选中邮箱 */
 $("#email").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
+	/*var result=customerId.toString().split(",");
+	var emailval;
+	for(var i=0;i<result.length;i++){
+	  emailval = result[0];
+	}
+	$("#email").val(emailval);*/
 	var id = parseInt($("#email").val());
 	$.ajax({
 		url : 'getCustomerById',
@@ -438,6 +445,11 @@ $("#email").on('select2:select', function (evt) {
 function clearText(){
 	//客户姓名清空
 	$("#linkman").val(null).trigger("change");
+	$("#linkman").empty();
+	$("#mobile").empty();
+	$("#compName").empty();
+	$("#comShortName").empty();
+	$("#email").empty();
 	//电话清空
 	$("#mobile").val(null).trigger("change");
 	//公司全称

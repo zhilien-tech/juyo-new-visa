@@ -251,7 +251,12 @@
 						parent.successCallBack();
 						parent.layer.close(index); */
 						var applicantId = $('#applicantId').val();
-						window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId;
+						var tourist = '${obj.tourist}';
+						if(tourist != 1){
+							window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId;
+						}else{
+							window.location.href = '/admin/myData/visaInput.html';
+						}
 					},
 					error : function(xhr) {
 						layer.msg("添加失败", "", 3000);

@@ -189,6 +189,8 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				orderstatus = jpos.value();
 			}
 		}
+		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", order.getId()));
+		result.put("orderJpId", orderJpEntity.getId());
 		result.put("order", order);
 		result.put("orderstatus", orderstatus);
 

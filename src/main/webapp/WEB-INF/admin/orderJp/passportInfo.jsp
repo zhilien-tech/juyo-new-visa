@@ -82,6 +82,8 @@
 								<div class="form-group">
 									<label><span>*</span>类型</label>
 									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
+									<input type="hidden" id="OCRline1" name="OCRline1" value="">
+									<input type="hidden" id="OCRline2" name="OCRline2" value="">
 									<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
 									<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
@@ -182,7 +184,7 @@
 						<div class="row none">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
+									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -362,6 +364,8 @@
 							$('#issuedPlaceEn').val("/"+getPinYinStr(obj.visaCountry));
 							$('#issuedDate').val(obj.issueDate);
 							$('#validEndDate').val(obj.expiryDay);
+							$('#OCRline1').val(obj.OCRline1);
+							$('#OCRline2').val(obj.OCRline2);
 							var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
 							if(years == 5){
 								$("#validType").val(1);
