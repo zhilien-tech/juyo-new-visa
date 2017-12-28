@@ -44,6 +44,7 @@ import com.juyo.visa.admin.scenic.service.ScenicViewService;
 import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.admin.visajp.util.TtfClassLoader;
 import com.juyo.visa.common.enums.BusinessScopesEnum;
+import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.entities.TCityEntity;
@@ -235,6 +236,10 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		StringBuffer content = new StringBuffer();
 		//地接社未做
 		String dijie = "";
+		if (!Util.isEmpty(orderjp.getGroundconnectid())) {
+			TCompanyEntity dijiecompany = dbDao.fetch(TCompanyEntity.class, orderjp.getGroundconnectid().longValue());
+			dijie = dijiecompany.getName();
+		}
 		content.append("　　" + company.getName()).append("根据与").append(dijie).append("的合同约定，组织")
 				.append(applyinfo.size()).append("人访日个人旅游，请协助办理").append(visatypestr).append("往返赴日签证");
 		map.put("content", content.toString());
@@ -328,6 +333,16 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("firstNameEn", record.getString("firstnameen"));
 			map.put("lastName", record.getString("lastname"));
 			map.put("lastNameEn", record.getString("lastnameen"));
+			//曾用名
+			String otherfirstnameen = !Util.isEmpty(record.get("otherfirstnameen")) ? record
+					.getString("otherfirstnameen") : "";
+			String otherlastnameen = !Util.isEmpty(record.get("otherlastnameen")) ? record.getString("otherlastnameen")
+					: "";
+			String otherfirstname = !Util.isEmpty(record.get("otherfirstname")) ? record.getString("otherfirstname")
+					: "";
+			String otherlastname = !Util.isEmpty(record.get("otherlastname")) ? record.getString("otherlastname") : "";
+			map.put("othernameen", otherfirstnameen + otherlastnameen);
+			map.put("othername", otherfirstname + otherlastname);
 			//性别
 			if ("男".equals(record.getString("sex"))) {
 				map.put("boy", "0");
@@ -355,6 +370,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			}
 			//国籍
 			map.put("country", "中国");
+			//曾有的或另有的国际
+			map.put("othernationality", record.getString("nationality"));
 			//身份证号
 			map.put("cardId", record.getString("cardid"));
 			//护照类别:普通
@@ -608,7 +625,22 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				if (!Util.isEmpty(record.get("birthday"))) {
 					birthdaystr = applydateformat.format((Date) record.get("birthday"));
 				}
-
+				String careerstatus = "";
+				if (!Util.isEmpty(record.get("careerstatus"))) {
+					for (JobStatusEnum jobstatusenum : JobStatusEnum.values()) {
+						if (record.getInt("careerstatus") == jobstatusenum.intKey()) {
+							careerstatus = jobstatusenum.value();
+						}
+					}
+				}
+				String marryStatus = "";
+				if (!Util.isEmpty(record.get("marrystatus"))) {
+					for (MarryStatusEnum marrystatusenum : MarryStatusEnum.values()) {
+						if (marrystatusenum.intKey() == record.getInt("marrystatus")) {
+							marryStatus = marrystatusenum.value();
+						}
+					}
+				}
 				String[] datas = {
 						"1-" + count,
 						(!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
@@ -618,11 +650,14 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						(!Util.isEmpty(record.get("sex")) ? record.getString("sex") : ""),
 						birthdaystr,
 						(!Util.isEmpty(record.get("issuedorganization")) ? record.getString("issuedorganization") : ""),
-						(!Util.isEmpty(record.get("occupation")) ? record.getString("occupation") : ""),
+						careerstatus,
 						(!Util.isEmpty(record.get("province")) ? record.getString("province") : "")
 								+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : "")
 								+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress")
-										: ""), "无", "", "", "", "", "", "推介" };
+										: ""), "无", marryStatus, "身份证\n户口本",
+						(!Util.isEmpty(record.get("wealthtype")) ? record.getString("wealthtype") : ""),
+						(!Util.isEmpty(record.get("wealthcontent")) ? record.getString("wealthcontent") : ""),
+						(!Util.isEmpty(record.get("relationremark")) ? record.getString("relationremark") : ""), "推荐" };
 				for (String data : datas) {
 					PdfPCell cell = new PdfPCell(new Paragraph(data, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -842,29 +877,46 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				}
 			}
 			document.add(table);
+			//底部
+			//地接社名称
+			String dijie = "";
+			//地接社地址
+			String dijieAddr = "";
+			//地接社联系人
+			String dijielinkman = "";
+			//地接社电话
+			String dijiephone = "";
+			if (!Util.isEmpty(orderjp.getGroundconnectid())) {
+				TCompanyEntity dijiecompany = dbDao.fetch(TCompanyEntity.class, orderjp.getGroundconnectid()
+						.longValue());
+				dijie = dijiecompany.getName();
+				dijieAddr = dijiecompany.getAddress();
+				dijielinkman = dijiecompany.getLinkman();
+				dijiephone = dijiecompany.getMobile();
+			}
 			{
-				Paragraph p = new Paragraph("保証会社：株事会金通商事", font);
+				Paragraph p = new Paragraph("保証会社：" + dijie, font);
 				p.setSpacingBefore(5);
 				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
 			{
-				Paragraph p = new Paragraph("住  所：東京都千代田区霞が関３-３-３ 全日通霞ヶ関ビル3F", font);
+				Paragraph p = new Paragraph("住  所：" + dijieAddr, font);
 				p.setSpacingBefore(5);
 				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
 			{
-				Paragraph p = new Paragraph("担当者：", font);
+				Paragraph p = new Paragraph("担当者：" + dijielinkman, font);
 				p.setSpacingBefore(5);
 				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
 			{
-				Paragraph p = new Paragraph("電  話：", font);
+				Paragraph p = new Paragraph("電  話：" + dijiephone, font);
 				p.setSpacingBefore(5);
 				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
@@ -1131,6 +1183,15 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			//表格体
 			int count = 0;
 			for (Record record : applyinfo) {
+				//职业
+				String careerstatus = "";
+				if (!Util.isEmpty(record.get("careerstatus"))) {
+					for (JobStatusEnum jobstatusenum : JobStatusEnum.values()) {
+						if (record.getInt("careerstatus") == jobstatusenum.intKey()) {
+							careerstatus = jobstatusenum.value();
+						}
+					}
+				}
 				count++;
 				String[] data = {
 						String.valueOf(count),
@@ -1142,7 +1203,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 								.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""))
 								.toUpperCase(), !Util.isEmpty(record.get("sex")) ? record.getString("sex") : "",
 						!Util.isEmpty(record.get("birthday")) ? tableformat.format((Date) record.get("birthday")) : "",
-						record.getString("occupation"), record.getString("province"), record.getString("passportno") };
+						careerstatus, record.getString("province"), record.getString("passportno") };
 				for (String tablecell : data) {
 					PdfPCell cell = new PdfPCell(new Paragraph(tablecell, font));
 					cell.setFixedHeight(30);
@@ -1153,29 +1214,45 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			}
 			document.add(table);
 			//底部*********************************************
+			//地接社名称
+			String dijie = "";
+			//地接社地址
+			String dijieAddr = "";
+			//地接社联系人
+			String dijielinkman = "";
+			//地接社电话
+			String dijiephone = "";
+			if (!Util.isEmpty(orderjp.getGroundconnectid())) {
+				TCompanyEntity dijiecompany = dbDao.fetch(TCompanyEntity.class, orderjp.getGroundconnectid()
+						.longValue());
+				dijie = dijiecompany.getName();
+				dijieAddr = dijiecompany.getAddress();
+				dijielinkman = dijiecompany.getLinkman();
+				dijiephone = dijiecompany.getMobile();
+			}
 			{
-				Paragraph p = new Paragraph("保証会社：株事会金通商事", font);
+				Paragraph p = new Paragraph("保証会社：" + dijie, font);
 				p.setSpacingBefore(5);
 				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
 			{
-				Paragraph p = new Paragraph("住  所：東京都千代田区霞が関３-３-３ 全日通霞ヶ関ビル3F", font);
+				Paragraph p = new Paragraph("住  所：" + dijieAddr, font);
 				p.setSpacingBefore(5);
 				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
 			{
-				Paragraph p = new Paragraph("担当者：", font);
+				Paragraph p = new Paragraph("担当者：" + dijielinkman, font);
 				p.setSpacingBefore(5);
 				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
 			{
-				Paragraph p = new Paragraph("電  話：", font);
+				Paragraph p = new Paragraph("電  話：" + dijiephone, font);
 				p.setSpacingBefore(5);
 				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
