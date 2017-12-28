@@ -345,4 +345,13 @@ public class VisaJapanModule {
 	public Object saveZhaoBao(@Param("..") TOrderJpEntity orderJpEntity, HttpServletRequest request) {
 		return visaJapanService.saveZhaoBao(orderJpEntity, request);
 	}
+
+	/**
+	 * 获取签证列表申请人信息
+	 */
+	@At
+	@POST
+	public Object getVisaDetailApply(@Param("orderid") Integer orderid) {
+		return visaJapanService.getVisaDetailApply(orderid);
+	}
 }

@@ -694,3 +694,15 @@ $(document).on("input","#stayday",function(){
 		});
 	}
 });
+//layer弹层回调
+function successCallBack(status){
+	$.ajax({ 
+		url: '/admin/visaJapan/getVisaDetailApply.html',
+		dataType:"json",
+		data:{orderid:orderid},
+		type:'post',
+		success: function(data){
+			orderobj.applyinfo = data.applyinfo;
+		}
+	});
+}
