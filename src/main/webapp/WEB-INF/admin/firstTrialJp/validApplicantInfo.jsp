@@ -33,18 +33,7 @@
 			<div class="modal-body">
 		 		<div style="text-align:center; margin-top:15%;">
 		 			<div style="font-size:16px;">
-						<c:choose>
-							<c:when test="${empty obj.telephone && empty obj.email}">  
-										手机号、邮箱不能为空							  
-							</c:when>
-							<c:when test="${empty obj.telephone }"> 
-										手机号不能为空
-							</c:when>
-							<c:otherwise > 
-										邮箱不能为空
-							</c:otherwise>
-						</c:choose>
-						,请及时补充
+						我的职业未选择,请及时补充
 	     			</div>
 					<div style="margin-top:10%;">
 						<input type="hidden"   value="${obj.applicantId }"/>
@@ -54,7 +43,6 @@
 			</div>
 		</form>
 	</div>
-<!-- ------- -->
 	
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -63,43 +51,25 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script type="text/javascript">
-		var applicantId = '${obj.applicantId}';
+		var applyid = '${obj.applicantId}';
+		var orderid = '${obj.orderId}';
 		function fillIn(){
-			window.location.href = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid&isTrial=0';
+			window.location.href = '/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime=1&isTrial=1';
 			$("#layui-layer2").css({"width":"900px","height":"551px","top":"0px"});
-			/* layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['400px', '251px'],
-				content:'${base}/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid&isTrial=0',
-				success : function(index, layero){
-					console.log(index);
-				}
-			}); */
 		}
 		
 		function cancelBtn(){
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-
 			parent.layer.close(index); 
-			
 		}
 		
 		function successCallBack(status){
 			if(status == 1){
 				layer.msg('修改成功');
 			}
-			//$("#cancel").click();
 			parent.successCallBack(1);
-			//parent.location.reload();
 		}
 		function cancelCallBack(status){
-			//$("#cancel").click();
 			parent.successCallBack(2);
 		}
 	
