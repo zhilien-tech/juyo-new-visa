@@ -12,8 +12,10 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.companyInfo.form.TCompanyCustomerForm;
 import com.juyo.visa.admin.companyInfo.service.CompanyInfoViewService;
-import com.juyo.visa.forms.TCompanyOfCustomerForm;
+import com.juyo.visa.forms.TCompanyAddForm;
+import com.juyo.visa.forms.TCompanyUpdateForm;
 
 @IocBean
 @At("/admin/companyInfo")
@@ -38,8 +40,11 @@ public class CompanyInfoModule {
 	 * <p>
 	 */
 	@At
-	public Object companyInfoListData(@Param("..") TCompanyOfCustomerForm form, HttpSession session) {
+	/*public Object companyInfoListData(@Param("..") TCompanyOfCustomerForm form, HttpSession session) {
 		return companyInfoViewService.getCompanyInfoList(form, session);
+	}*/
+	public Object companyListData(@Param("..") TCompanyCustomerForm form, HttpSession session) {
+		return companyInfoViewService.getCompanyCustomerList(form, session);
 	}
 
 	/**
@@ -56,8 +61,8 @@ public class CompanyInfoModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..") TCompanyOfCustomerForm addForm, final HttpSession session) {
-		return companyInfoViewService.add(addForm, session);
+	public Object add(@Param("..") TCompanyAddForm addForm, final HttpSession session) {
+		return companyInfoViewService.addCompany(addForm, session);
 	}
 
 	/**
@@ -66,8 +71,8 @@ public class CompanyInfoModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object edit(@Param("id") Integer comInfoId) {
-		return companyInfoViewService.getCompanyInfoById(comInfoId);
+	public Object edit(@Param("id") Integer comId) {
+		return companyInfoViewService.getCompanyById(comId);
 	}
 
 	/**
@@ -75,8 +80,8 @@ public class CompanyInfoModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..") TCompanyOfCustomerForm updateForm, final HttpSession session) {
-		return companyInfoViewService.update(updateForm, session);
+	public Object update(@Param("..") TCompanyUpdateForm updateForm, final HttpSession session) {
+		return companyInfoViewService.updateCompany(updateForm, session);
 	}
 
 	/**
