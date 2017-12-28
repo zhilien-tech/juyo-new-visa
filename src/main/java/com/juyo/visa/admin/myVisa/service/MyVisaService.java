@@ -3,6 +3,7 @@ package com.juyo.visa.admin.myVisa.service;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -147,6 +148,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			Record passport = dbDao.fetch(passportSql);
 			list.add(passport);
 		}
+		Collections.reverse(list);
 		for (Record record : list) {
 			Integer orderid = (Integer) record.get("id");
 			String sqlStr = sqlManager.get("myvisa_japan_visa_list_data_apply");
