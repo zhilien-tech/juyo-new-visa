@@ -14,7 +14,7 @@
 	<body>
 		<div class="certificateInfo">
 			<a class="certificateTop">
-				<i onclick="window.history.go(-1)"><</i>
+				<i onclick="toVisaInfo();"><</i>
 				上传
 			</a>
 		</div>
@@ -208,6 +208,10 @@
         		}
           	}
         });
+  	}
+  	function toVisaInfo(){
+  		var applicantid = GetQueryString('applicantid');
+  		window.location.href='/mobile/visaInfo.html?applicantid='+applicantid;
   	}
 </script>
 </html>
