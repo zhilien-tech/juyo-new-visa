@@ -276,7 +276,7 @@ function selectListData(){
 }
 
 //加载列表数据
-function reloadDate(){
+function reloadData(){
 	$.ajax({ 
 		url: url,
 		/* data:{status:status,searchStr:searchStr}, */
@@ -294,26 +294,18 @@ function successCallBack(status){
 	}else if(status == 2){
 		layer.msg('发送成功');
 	}
-	reloadDate();
+	reloadData();
 }
 
 
 function qualifiedCallBack(username){
 	layer.msg('合格 已短信邮件通知 '+username);
-	reloadDate();
+	reloadData();
 }
 
 function unqualifiedCallBack(username){
 	layer.msg('不合格 已短信邮件通知 '+username);
-	$.ajax({ 
-		url: url,
-		/* data:{status:status,searchStr:searchStr}, */
-		dataType:"json",
-		type:'post',
-		success: function(data){
-			_self.trialJapanData = data.trialJapanData;
-		}
-	});
+	reloadData();
 }
 
 function cancelCallBack(status){
