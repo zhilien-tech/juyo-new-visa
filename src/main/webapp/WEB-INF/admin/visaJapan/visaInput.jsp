@@ -38,9 +38,7 @@
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper">
-			<div class="content-wrapper" >
-			<c:choose>
-				<c:when test="${obj.isvisa == 1}">  
+			<div class="content-wrapper"  style="min-height: 848px;">
 					<ul class="title">
 					<li>签证补录</li>
 					<li class="liClose">
@@ -49,12 +47,7 @@
 						</a>
 					</li>
 				</ul>							         
-				</c:when>
-				<c:otherwise> 
-				</c:otherwise>
-				</c:choose>
-				
-				<section>
+				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-12">

@@ -490,12 +490,21 @@ public class OrderJpModule {
 	}
 
 	/**
-	 * 根据身份证号获取申请人信息
+	 * 根据身份证号获取申请人省市信息
 	 */
 	@At
 	@POST
 	public Object getInfoByCard(@Param("cardId") String cardId) {
 		return saleViewService.getInfoByCard(cardId);
+	}
+
+	/**
+	 * 根据身份证号获取申请人详细信息
+	 */
+	@At
+	@POST
+	public Object getAllInfoByCard(@Param("cardId") String cardId) {
+		return saleViewService.getAllInfoByCard(cardId);
 	}
 
 	/**

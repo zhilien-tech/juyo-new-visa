@@ -64,8 +64,9 @@ public class ApplicantvisaModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object visaInputAdd(@Param("applicantId") Integer applicantId, @Param("isvisa") Integer isvisa) {
-		return applicantvisaViewService.visaInputAdd(applicantId, isvisa);
+	public Object visaInputAdd(@Param("applicantId") Integer applicantId, @Param("isvisa") Integer isvisa,
+			@Param("tourist") Integer tourist) {
+		return applicantvisaViewService.visaInputAdd(applicantId, isvisa, tourist);
 	}
 
 	/**
@@ -86,11 +87,13 @@ public class ApplicantvisaModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object visaInputUpdate(@Param("id") final long id, @Param("isvisa") Integer isvisa) {
+	public Object visaInputUpdate(@Param("id") final long id, @Param("isvisa") Integer isvisa,
+			@Param("tourist") Integer tourist) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("visadatatypeenum", EnumUtil.enum2(AlredyVisaTypeEnum.class));
 		result.put("applicantvisa", applicantvisaViewService.fetch(id));
 		result.put("isvisa", isvisa);
+		result.put("tourist", tourist);
 		return result;
 	}
 

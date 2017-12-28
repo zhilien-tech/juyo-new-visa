@@ -29,6 +29,10 @@ public class PassportJsonEntity implements Serializable {
 
 	private String request_id;
 
+	private String OCRline1;
+
+	private String OCRline2;
+
 	private boolean success;
 
 }

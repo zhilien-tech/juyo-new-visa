@@ -99,6 +99,10 @@ public class TApplicantPassportForm extends DataTablesParamForm {
 
 	private Integer isTrailOrder;
 
+	private String OCRline1;
+
+	private String OCRline2;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**

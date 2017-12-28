@@ -616,10 +616,8 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 						String workStatus = sbWork.toString();
 						applicantWorkJpEntity.setPrepareMaterials(workStatus.substring(0, workStatus.length() - 1));
 					}
-
-					applicantWorkJpEntity.setCareerStatus(visaForm.getCareerStatus());
-
 				}
+				applicantWorkJpEntity.setCareerStatus(visaForm.getCareerStatus());
 				applicantWorkJpEntity.setName(visaForm.getName());
 				applicantWorkJpEntity.setAddress(visaForm.getAddress());
 				applicantWorkJpEntity.setTelephone(visaForm.getTelephone());

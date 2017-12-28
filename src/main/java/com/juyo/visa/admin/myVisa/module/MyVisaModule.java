@@ -42,7 +42,7 @@ public class MyVisaModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object inProcessVisa(@Param("orderJpId") Integer orderJpId) {
+	public Object inProcessVisa(@Param("orderJpId") String orderJpId) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("orderJpId", orderJpId);
 		return result;

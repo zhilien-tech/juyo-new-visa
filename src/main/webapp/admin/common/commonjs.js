@@ -158,6 +158,30 @@ $(document).on("input","#issuedPlace",function(){
 	var pinyinchar = getPinYinStr(temp);
 	$("#issuedPlaceEn").val("/"+pinyinchar.toUpperCase());
 });
+$(document).on("input","#cardId",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var card = $(this).val();
+	if(card.length == 18){
+		layer.load(1);
+		$.ajax({
+			type: 'POST',
+			data : {
+				cardId : card
+			},
+			url: 'getAllInfoByCard',
+			success :function(data) {
+				console.log(JSON.stringify(data));
+				layer.closeAll('loading');
+				$("#sex").val(data.sex);
+				$("#birthday").val(data.birthday);
+				$('#cardProvince').val(data.province.province);
+				$('#cardCity').val(data.province.city);
+			}
+		});
+	}
+});
 //获取拼音字符串
 function getPinYinStr(hanzi){
 	var onehanzi = hanzi.split('');
