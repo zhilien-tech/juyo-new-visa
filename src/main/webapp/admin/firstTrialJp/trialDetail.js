@@ -61,7 +61,7 @@ function expressFun(){
 								maxmin: false,
 								shadeClose: false,
 								scrollbar: false,
-								area: ['900px', '550px'],
+								area: ['900px', '80%'],
 								content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
 							});
 						}else{
@@ -275,7 +275,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+orderid+'&isTrial=1'
 			});
 		},
@@ -288,7 +288,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '550px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid='+orderid+'&isTrial=1'
 			});
 		},
@@ -301,7 +301,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid+'&isOrderUpTime=1&isTrial=1'
 			});
 		},
@@ -314,7 +314,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '80%'],
 				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=0'
 			});
 		},
@@ -396,7 +396,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['700px', '551px'],
+				area: ['700px', '80%'],
 				content:'/admin/orderJp/log.html?id='+orderid
 			});
 		},

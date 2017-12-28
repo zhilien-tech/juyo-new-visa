@@ -18,6 +18,7 @@
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
+			.wrapper { background:#f9f9f9 !important; }
 			.form-control{height: 30px;}
 			.add-btn{top: -35px;right:-1.5%;}
 			.remove-btn{top: -35px;right: -1.5%;}
@@ -30,12 +31,12 @@
 			.info-body-from { margin-left:12%;}
 			.qz-head { position:fixed;top:0;left:0;z-index:99999; width:100%;}
 			.content { margin-top:50px;}
-			#applicantTable tbody tr td:nth-child(1){width: 1%;}
+			#applicantTable tbody tr td:nth-child(1){width: 4%;}
 			#applicantTable tbody tr td:nth-child(2){width: 10%;}
 			#applicantTable tbody tr td:nth-child(3){width: 10%;}
 			#applicantTable tbody tr td:nth-child(4){width: 10%;}
 			#applicantTable tbody tr td:nth-child(5){width: 10%;}
-			#applicantTable tbody tr td:nth-child(6){width: 30%;}
+			#applicantTable tbody tr td:nth-child(6){width: 56%;}
 			#schedulingTable thead tr th:nth-child(1){width:8%;}
 			#schedulingTable thead tr th:nth-child(2){width:10%;}
 			#schedulingTable thead tr th:nth-child(3){width:12%;}
@@ -248,13 +249,12 @@
 							<table id="applicantTable" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
-										<th><span>&nbsp; <span></th>
-										<th><span>姓名<span></th>
-										<th><span>电话<span></th>
-										<th><span>护照号<span></th>
-										<th><span>资料类型<span></th>
-										<th><span>审核确认资料<span></th>
-										<th><span>操作<span></th>
+										<th><span>&nbsp; </span></th>
+										<th><span>姓名</span></th>
+										<th><span>电话</span></th>
+										<th><span>护照号</span></th>
+										<th><span>资料类型</span></th>
+										<th><span>审核确认资料</span></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -345,7 +345,7 @@
 					maxmin: false,
 					shadeClose: false,
 					scrollbar: false,
-					area: ['700px', '551px'],
+					area: ['700px', '80%'],
 					content:'/admin/orderJp/log.html?id='+orderid
 				});
 			}
@@ -375,7 +375,7 @@
         		    maxmin: false,
         		    shadeClose: false,
         		    scrollbar: false,
-        		    area: ['900px', '550px'],
+        		    area: ['900px', '80%'],
         		    content: '${base}/admin/receptionJP/revenue.html?orderid='+orderid
         		  });
 			}

@@ -52,7 +52,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '550px'],
+				area: ['900px', '80%'],
 				content: '/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+orderid+'&isTrial=1'
 			});
 		},
@@ -85,7 +85,7 @@ new Vue({
 										maxmin: false,
 										shadeClose: false,
 										scrollbar: false,
-										area: ['900px', '550px'],
+										area: ['900px', '80%px'],
 										content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
 									});
 								}else{
@@ -107,7 +107,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '550px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid+'&isTrial=1'
 			});
 		},
@@ -120,7 +120,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime=1&isTrial=1'
 			});
 		},
