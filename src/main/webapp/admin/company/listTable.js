@@ -128,11 +128,11 @@ function initDatatable() {
 $("#searchBtn").on('click', function () {
 	var companyName = $("#searchStr").val();
 	var comType = $('#comType').val();
-	    var param = {
-			        "searchStr": companyName,
-			"comType" : comType
-			    };
-	    datatable.settings()[0].ajax.data = param;
+    var param = {
+		"searchStr": companyName,
+		"comType" : comType
+	};
+    datatable.settings()[0].ajax.data = param;
 	datatable.ajax.reload();
 });
 
