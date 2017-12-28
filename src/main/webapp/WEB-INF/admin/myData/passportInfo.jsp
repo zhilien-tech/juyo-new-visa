@@ -27,14 +27,14 @@
 <body class="hold-transition skin-blue sidebar-mini">
 	<form id="passportInfo">
 			<div class="qz-head">
-			<!-- <input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/>  -->
+			<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save();"/> 
 				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
 			</div>
 			<section class="content">
 			<div class="ipt-info">
-					<input id="passRemark" name="passRemark"  type="text" value="${obj.unqualified.passRemark }" class="NoInfo" />
+					<input id="passRemark" name="passRemark"  type="text" value="${obj.unqualified.passRemark }" class="NoInfo form-control input-sm" />
 				</div>
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
@@ -224,13 +224,16 @@
 	var base = "${base}";
 	$(function() {
 		
-		/* var form = document.forms[0]; 
+		var form = document.forms[0]; 
 		for ( var i = 0; i < form.length; i++) { 
 			var element = form.elements[i]; 
 			if(element.id != "editbasic")
 				element.disabled = true; 
 		} 
-		$(".basic").hide(); */
+		$(".basic").hide();
+		document.getElementById("passRemark").style.backgroundColor = "#eee";
+		document.getElementById("birthAddressEn").style.backgroundColor = "#eee";
+		document.getElementById("issuedPlaceEn").style.backgroundColor = "#eee";
 		var remark = $("#passRemark").val();
 		if(remark != ""){
 			$(".ipt-info").show();
@@ -391,7 +394,7 @@
 		});
 	}
 	
-	/* //编辑按钮
+	//编辑按钮
 	function editBtn(){
 		$(".basic").show();
 		$(".editbasic").hide();
@@ -400,6 +403,8 @@
 			var element = form.elements[i]; 
 			element.disabled = false; 
 		} 
+		document.getElementById("birthAddressEn").style.backgroundColor = "#fff";
+		document.getElementById("issuedPlaceEn").style.backgroundColor = "#fff";
 		var bootstrapValidator = $("#passportInfo").data(
 		'bootstrapValidator');
 		// 执行表单验证 
@@ -410,7 +415,7 @@
 			$("#uploadFile").siblings("i").css("display","none");
 		});
 		$("#passRemark").attr("disabled", true);
-	} */
+	}
 	
 	//取消按钮
 	function cancelBtn(){

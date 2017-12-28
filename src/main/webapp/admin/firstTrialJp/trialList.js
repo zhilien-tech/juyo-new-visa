@@ -52,7 +52,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '550px'],
+				area: ['900px', '80%'],
 				content: '/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+orderid+'&isTrial=1'
 			});
 		},
@@ -66,7 +66,25 @@ new Vue({
 				success : function(data) {
 					var isEmpty = data.isEmpty;
 					if(isEmpty == false){
-						layer.msg('申请人：'+data.names+' 职业未选择');
+						/*layer.msg('申请人：'+data.names+' 职业未选择');*/
+						var applyids = data.applyids;
+						$.each(applyids, function(i, applyid) { 
+							layer.open({
+								type: 2,
+								title: false,
+								closeBtn:false,
+								fix: false,
+								maxmin: false,
+								shadeClose: false,
+								scrollbar: false,
+								area: ['900px', '551px'],
+								content:'/admin/firstTrialJp/validApplicantInfo.html?applicantId='+applyid+'&orderid='+orderid,
+								success : function(index, layero){
+									var iframeWin = window[index.find('iframe')[0]['name']]; 
+								}
+							}); 
+						}); 
+						
 						return;
 					}else{
 						$.ajax({
@@ -85,7 +103,7 @@ new Vue({
 										maxmin: false,
 										shadeClose: false,
 										scrollbar: false,
-										area: ['900px', '550px'],
+										area: ['900px', '80%px'],
 										content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
 									});
 								}else{
@@ -107,7 +125,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '550px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid+'&isTrial=1'
 			});
 		},
@@ -120,7 +138,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime=1&isTrial=1'
 			});
 		},
@@ -276,7 +294,7 @@ function selectListData(){
 }
 
 //加载列表数据
-function reloadDate(){
+function reloadData(){
 	$.ajax({ 
 		url: url,
 		/* data:{status:status,searchStr:searchStr}, */
@@ -294,26 +312,18 @@ function successCallBack(status){
 	}else if(status == 2){
 		layer.msg('发送成功');
 	}
-	reloadDate();
+	reloadData();
 }
 
 
 function qualifiedCallBack(username){
 	layer.msg('合格 已短信邮件通知 '+username);
-	reloadDate();
+	reloadData();
 }
 
 function unqualifiedCallBack(username){
 	layer.msg('不合格 已短信邮件通知 '+username);
-	$.ajax({ 
-		url: url,
-		/* data:{status:status,searchStr:searchStr}, */
-		dataType:"json",
-		type:'post',
-		success: function(data){
-			_self.trialJapanData = data.trialJapanData;
-		}
-	});
+	reloadData();
 }
 
 function cancelCallBack(status){

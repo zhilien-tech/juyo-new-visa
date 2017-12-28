@@ -73,6 +73,7 @@ import com.juyo.visa.forms.TApplicantBackmailJpForm;
 import com.juyo.visa.forms.TApplicantUnqualifiedForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.page.OffsetPager;
@@ -1295,10 +1296,13 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		cnd.and("tawj.careerStatus", "is", null);
 		List<Record> query = dbDao.query(sql, cnd, null);
 		String names = "";
+		List<Integer> applyids = new ArrayList<Integer>();
 		for (Record record : query) {
 			String careerStatus = record.getString("careerStatus");
 			if (Util.isEmpty(careerStatus)) {
 				String applicantName = record.getString("applicantName");
+				int applicantId = record.getInt("applicantId");
+				applyids.add(applicantId);
 				names += applicantName + ",";
 			}
 		}
@@ -1308,6 +1312,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		}
 
 		result.put("names", names);
+		result.put("applyids", applyids);
 		result.put("isEmpty", query.size() <= 0);
 
 		return result;
@@ -1567,5 +1572,13 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String lastName = applicant.getLastName();
 		String username = firstName + lastName;
 		return username;
+	}
+
+	//获取待补充信息
+	public Object isValidInfo(Integer applyid, Integer orderid) {
+		Map<String, Object> result = MapUtil.map();
+		result.put("applicantId", applyid);
+		result.put("orderId", orderid);
+		return result;
 	}
 }

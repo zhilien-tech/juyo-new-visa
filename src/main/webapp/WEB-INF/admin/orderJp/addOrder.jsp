@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <style type="text/css">
+#wrapper { background:#FFF !important;}
 .form-control { height: 30px;}
 .add-btn { top: -35px; right: -1.5%; }
 .remove-btn { top: -35px; right: -1.5%; }
@@ -35,6 +36,13 @@
 .col-sm-3 { width:30%;}
 .col-sm-1 { width:11.5%;} 
 .select2 { width:100% !important;}
+#applicantsTable tr td:nth-child(1) { width:4%;}
+#applicantsTable tr td:nth-child(2) { width:10%;}
+#applicantsTable tr td:nth-child(3) { width:10%;}
+#applicantsTable tr td:nth-child(4) { width:15%;}
+#applicantsTable tr td:nth-child(5) { width:15%;}
+#applicantsTable tr td:nth-child(6) { width:4%;}
+#applicantsTable tr td:nth-child(7) { width:42%;}
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -392,13 +400,13 @@
 								style="width: 100%;">
 								<thead>
 									<tr>
-										<th><span>&nbsp;<span></th>
-										<th><span>姓名<span></th>
-										<th><span>电话<span></th>
-										<th><span>邮箱<span></th>
-										<th><span>护照号<span></th>
-										<th><span>性别<span></th>
-										<th><span>操作<span></th>
+										<th><span>&nbsp;</span></th>
+										<th><span>姓名</span></th>
+										<th><span>电话</span></th>
+										<th><span>邮箱</span></th>
+										<th><span>护照号</span></th>
+										<th><span>性别</span></th>
+										<th><span>操作</span></th>
 									</tr>
 								</thead>
 								<tbody name="applicantsTable" id="applicantsTable">
@@ -706,7 +714,7 @@
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '650px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/addApplicantSale.html'
 			});
 			
@@ -722,7 +730,7 @@
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/addApplicantSale.html'
 			});
 		}
@@ -806,10 +814,10 @@
 									result += '<td>
 									<a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;
 									<a href="javascript:passportInfo('+data[i].id+');">护照信息</a>&nbsp;&nbsp;
-									<a href="javascript:visaInfo('+data[i].id+');">签证信息</a><br>
-									<a href="javascript:visaInput('+data[i].applicantjpid+');">签证录入</a>
+									<a href="javascript:visaInfo('+data[i].id+');">签证信息</a>&nbsp;&nbsp;
+									<a href="javascript:visaInput('+data[i].applicantjpid+');">签证录入</a>&nbsp;&nbsp;
 									<a href="javascript:backmailInfo('+data[i].id+');">回邮</a>&nbsp;&nbsp;
-									<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></br>
+									<a href="javascript:deleteApplicant('+data[i].id+');">删除</a>
 									</td>';
 									
 									result += '</tr>';
@@ -836,7 +844,7 @@
 					maxmin: false,
 					shadeClose: false,
 					scrollbar: false,
-					area: ['900px', '551px'],
+					area: ['900px', '80%'],
 					content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=0'
 				});
 			}
@@ -852,7 +860,7 @@
 					maxmin: false,
 					shadeClose: false,
 					scrollbar: false,
-					area: ['900px', '551px'],
+					area: ['900px', '80%'],
 					content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid'+'&isTrial=0'
 				});
 			}
@@ -867,7 +875,7 @@
 					maxmin: false,
 					shadeClose: false,
 					scrollbar: false,
-					area: ['900px', '551px'],
+					area: ['900px', '80%'],
 					content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid'+'&isOrderUpTime&isTrial=0'
 				});
 			}
@@ -882,7 +890,7 @@
 					maxmin: false,
 					shadeClose: false,
 					scrollbar: false,
-					area: ['1000px', '750px'],
+					area: ['900px', '80%'],
 					content: '/admin/visaJapan/visaInput.html?applyid='+id
 				});
 			}
@@ -897,7 +905,7 @@
 					maxmin: false,
 					shadeClose: false,
 					scrollbar: false,
-					area: ['900px', '551px'],
+					area: ['900px', '80%'],
 					content:'/admin/backMailJp/backMailInfo.html?applicantId='+id+'&isAfterMarket=0'
 
 				});

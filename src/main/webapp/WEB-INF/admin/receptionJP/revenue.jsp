@@ -16,6 +16,10 @@
 		#datatableId tbody tr td:nth-child(3){width:25%;}
 		#datatableId tbody tr td:nth-child(4){width: 10%;}
 		.editInp{height: 19px;position: relative;top: -5px;border: solid 1px #b8d3e9;width: 60px;border-radius: 3px;margin-right: 2px;font-size: 12px;line-height: 19px;padding-left: 3px;}
+		.modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+   		.btn-margin { margin-top:10px;}
+   		.modal-body { margin-top:50px; height:100%; }  
+  	
 	</style>
 </head>
 <body>
@@ -23,8 +27,8 @@
 		<form id="companyAddForm">
 			<div class="modal-header">
 				<span class="heading">实收资料</span> 
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
+				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">

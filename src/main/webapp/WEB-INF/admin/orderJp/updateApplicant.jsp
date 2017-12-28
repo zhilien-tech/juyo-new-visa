@@ -16,7 +16,8 @@
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 <style type="text/css">
 .modal-content { position:relative; }
-.modal-body { padding:15px 100px 15px 20px; }
+.modal-body { padding:15px 72px 15px 20px; height:100%; margin-top:50px;overflow-y:hidden;}
+.modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
 .NoInfo { width:100%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 .ipt-info { display:none; }
 .Unqualified, .qualified  { margin-right:10px; }
@@ -24,11 +25,13 @@
 .onceIDYes { margin-right:30px; }
 .nameBeforeHide , .nationalityHide{ display:none; }
 .wordSpell { display:none; }
-.rightNav { position:absolute;top:61px;right:2%;z-index:999; width:40px;height:489px; cursor:pointer;}
+.rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 .nationalityHide { margin-left:3%;}
 .row { margin-top:7px;}
 .nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
+.btn-margin { margin-top:10px;}
+#sqImg ,#sqImgBack { width:335px;}
 </style>
 </head>
 <body>
@@ -39,14 +42,14 @@
 		<form id="applicantInfo">
 			<div class="modal-header">
 				<span class="heading">基本信息</span> <input id="backBtn" type="button"
-					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
+					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin"
 					data-dismiss="modal" value="取消" /> <input id="addBtn"
-					type="button" class="btn btn-primary pull-right btn-sm btn-right"
+					type="button" class="btn btn-primary pull-right btn-sm btn-right btn-margin"
 					value="保存" onclick="saveApplicant(1)" />
 					<c:choose>
 						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
-					<input id="unqualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
-				<input id="qualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
+					<input id="unqualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right Unqualified btn-margin" value="不合格" />
+				<input id="qualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right qualified btn-margin" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>
@@ -126,11 +129,11 @@
 							<!-- 姓/名 拼音 -->
 							<div class="nameBeforeHide">
 							    <div class="col-sm-11 padding-right-0">
-									<div class="form-group">
+									<div class="form-group" style="position:relative;">
 										<label>姓/拼音</label> <input id="otherFirstName"
-											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
+											name="otherFirstName" type="text" class="form-control input-sm "
 											placeholder=" " value="${obj.applicant.otherFirstName }" />
-											<input type="text" id="otherFirstNameEn" style="position:absolute;top:45px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:38px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -162,15 +165,15 @@
 					<div class="col-sm-6 padding-right-0">
 						<div class="row">
 							<!-- 姓/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0 " >
+								<div class="form-group" style="position:relative;">
 									<label><span>*</span>姓/拼音</label> <input id="firstName"
-										name="firstName" style="position:relative;" type="text" class="form-control input-sm "
+										name="firstName" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
 										<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
-										<input type="text" id="firstNameEn" style="position:absolute;top:45px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
+										<input type="text" id="firstNameEn" style="position:absolute;top:37px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -179,11 +182,11 @@
 						<div class="row">
 							<!-- 名/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group" style="position:relative;">
 									<label><span>*</span>名/拼音</label> <input id="lastName"
-										name="lastName" style="position:relative;" type="text" class="form-control input-sm "
+										name="lastName" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.lastName }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:45px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
+										<input type="text" id="lastNameEn" style="position:absolute;top:37px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -321,11 +324,11 @@
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
 						<!-- 名/拼音 -->
 						<div class="row wordSpell">
-							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
-								<div class="form-group">
+							<div class="col-sm-11 padding-right-0 col-sm-offset-1" >
+								<div class="form-group" style="position:relative;">
 									<label>名/拼音</label> 
-									<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
-									<input type="text" id="otherLastNameEn" style="position:absolute;top:45px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+									<input id="otherLastName" name="otherLastName" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
+									<input type="text" id="otherLastNameEn" style="position:absolute;top:37px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
 								</div>
 							</div>
 						</div>

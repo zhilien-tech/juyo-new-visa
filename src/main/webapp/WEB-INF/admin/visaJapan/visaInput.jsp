@@ -20,7 +20,6 @@
 			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
 			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
 			.card-head div:nth-child(1){width:10%;}
-			.card-head div:nth-child(2){width:12.5%;}
 			.card-head div:nth-child(3){ width: 66px;float: right;}
 			.everybody-info div:nth-child(1){width:10%;}
 			.everybody-info div:nth-child(2){width:12%;}
@@ -32,16 +31,16 @@
 			.box-header{padding-right: 16px;}
 			.box-body{padding-top:15px;}
 			.liClose { float:right !important;}
-			.liClose a { display:block; width:40px; height:51px;}
+			.liClose a { display:block; width:40px; height:51px; cursor:pointer;}
 			.closed { position:relative; width:3px; height:30px; margin:10px 0 0 20px; background: #333; -webkit-transform: rotate(45deg);  -moz-transform: rotate(45deg);  -o-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg);  display: inline-block; }
  			.closed:after{ content: "";  position: absolute;  top: 0;  left: 0;   width:3px;  height:30px;  background: #333;   -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg);  -o-transform: rotate(270deg); -ms-transform: rotate(270deg);  transform: rotate(270deg); }
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper">
-			<div class="content-wrapper"  style="min-height: 848px;">
+			<div class="content-wrapper" >
 			<c:choose>
-				<c:when test="${isvisa == 1}">  
+				<c:when test="${obj.isvisa == 1}">  
 					<ul class="title">
 					<li>签证补录</li>
 					<li class="liClose">
@@ -55,7 +54,7 @@
 				</c:otherwise>
 				</c:choose>
 				
-				<section class="content">
+				<section>
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-12">
@@ -133,13 +132,13 @@
 		    	    	    area: ['900px', '550px'],
 		    	    	    content: '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid
 		    	    	  }); */
-		    	      window.location.href = '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid+'&isvisa=${isvisa}';
+		    	      window.location.href = '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid+'&isvisa=${obj.isvisa}';
 		    	}
 		    }
 		});
 		//新增签证录入
 		function add(){
-			window.location.href = '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid+'&isvisa=${isvisa}';
+			window.location.href = '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid+'&isvisa=${obj.isvisa}';
 	      /* layer.open({
 	    	    type: 2,
 	    	    title: false,

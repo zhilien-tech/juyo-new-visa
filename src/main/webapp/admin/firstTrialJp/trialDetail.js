@@ -42,7 +42,25 @@ function expressFun(){
 		success : function(data) {
 			var isEmpty = data.isEmpty;
 			if(isEmpty == false){
-				layer.msg('申请人：'+data.names+' 职业未选择');
+				/*layer.msg('申请人：'+data.names+' 职业未选择');*/
+				var applyids = data.applyids;
+				$.each(applyids, function(i, applyid) { 
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '551px'],
+						content:'/admin/firstTrialJp/validApplicantInfo.html?applicantId='+applyid+'&orderid='+orderid,
+						success : function(index, layero){
+							var iframeWin = window[index.find('iframe')[0]['name']]; 
+						}
+					}); 
+				}); 
+				
 				return;
 			}else{
 				$.ajax({
@@ -61,7 +79,7 @@ function expressFun(){
 								maxmin: false,
 								shadeClose: false,
 								scrollbar: false,
-								area: ['900px', '550px'],
+								area: ['900px', '80%'],
 								content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
 							});
 						}else{
@@ -275,7 +293,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+orderid+'&isTrial=1'
 			});
 		},
@@ -288,7 +306,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '550px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid='+orderid+'&isTrial=1'
 			});
 		},
@@ -301,7 +319,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/visaInfo.html?id='+applyId+'&orderid='+orderid+'&isOrderUpTime=1&isTrial=1'
 			});
 		},
@@ -314,7 +332,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '80%'],
 				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=0'
 			});
 		},
@@ -396,7 +414,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['700px', '551px'],
+				area: ['700px', '80%'],
 				content:'/admin/orderJp/log.html?id='+orderid
 			});
 		},
