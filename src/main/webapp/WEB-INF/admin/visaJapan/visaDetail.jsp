@@ -653,7 +653,7 @@
 					maxmin: false,
 					shadeClose: false,
 					scrollbar: false,
-					area: ['700px', '551px'],
+					area: ['700px', '80%'],
 					content:'/admin/orderJp/log.html?id='+orderinfoid
 				});
 			}

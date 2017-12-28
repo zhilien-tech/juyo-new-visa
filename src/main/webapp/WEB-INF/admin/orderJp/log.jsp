@@ -11,13 +11,16 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<style type="text/css">
+    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+    .btn-margin { margin-top:10px;}
+    .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; } 	
 	</style>
 </head>
 <body>
 	<div class="modal-content">
 			<div class="modal-header">
 				<span class="heading">日志</span> 
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="关闭" /> 
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="关闭" /> 
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">

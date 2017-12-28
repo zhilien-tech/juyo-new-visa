@@ -7,14 +7,12 @@
 	<meta charset="UTF-8">
 	<title>签证信息</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-	
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
-	.modal-body { background-color:#FFF !important; padding:0px 70px !important;}
 	.info-imgUpload {width: 100%;}
 	.NoInfo { width:100%; height:30px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 	.ipt-info { display:none; margin:15px -15px;}
@@ -28,8 +26,13 @@
     .colSm {  display:block; float:left; width:200px; }
     .padding-right-0 { margin-left:10%; width:323px; height:200px; border:1px solid #eee; }
     .delete { right:0; }
+    /*弹框头部固定*/
+    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+    .btn-margin { margin-top:10px;}
+    .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; padding:15px 37px 15px 53px;}  
+    #sqImg { top:-212px;}  
     /*左右导航样式*/
-    .leftNav { position:absolute;top:61px;left:0;z-index:999; width:40px;height:489px; cursor:pointer;}
+    .leftNav { position:fixed;top:15px;left:0;z-index:999; width:40px;height:100%; cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 </style>
 	<style type="text/css">
@@ -52,12 +55,12 @@
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
 				<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
+				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 				<c:choose>
 						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
-					<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
-				<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualifiedBtn" value="合格" />
+					<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified btn-margin" value="不合格" />
+				<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualifiedBtn btn-margin" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>

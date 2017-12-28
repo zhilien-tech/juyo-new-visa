@@ -240,40 +240,40 @@
 							<table id="applicantTable" class="table table-hover" style="width:100%;">
 								<thead>
 									<tr>
-										<th><span>&nbsp; <span></th>
-										<th><span>姓名<span></th>
-										<th><span>电话<span></th>
-										<th><span>护照号<span></th>
-										<th><span>资料类型<span></th>
-										<th><span>所需资料<span></th>
-										<th><span>性别<span></th>
-										<th><span>状态<span></th>
-										<th><span>递送方式<span></th>
-										<th><span>操作<span></th>
+										<th><span>&nbsp; </span></th>
+										<th><span>姓名</span></th>
+										<th><span>电话</span></th>
+										<th><span>护照号</span></th>
+										<th><span>资料类型</span></th>
+										<th><span>所需资料</span></th>
+										<th><span>性别</span></th>
+										<th><span>状态</span></th>
+										<th><span>递送方式</span></th>
+										<th><span>操作</span></th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr v-cloak v-for="apply in applyinfo">
-										<td>
+										<td width="4%">
 											<div v-if="apply.applyid==apply.mainid">
 												<font color="blue">主</font> 
 											</div>
 											<div v-else></div>
 										</td>
-										<td>{{apply.applyname}}</td>
-										<td>{{apply.telephone}}</td>
-										<td>{{apply.passport}}</td>
-										<td>{{apply.datatype}}</td>
-										<td>{{apply.data}}</td>
-										<td>{{apply.sex}}</td>
-										<td>{{apply.applicantstatus}}</td>
-										<td v-if="(apply.expresstype == 1)"><a href="https://www.ickd.cn/" target="view_window">{{apply.expressnum}}</a></td>
-										<td v-else>{{apply.expressnum}}</td>
-										<td>
+										<td width="10%">{{apply.applyname}}</td>
+										<td width="10%">{{apply.telephone}}</td>
+										<td width="10%">{{apply.passport}}</td>
+										<td width="8%">{{apply.datatype}}</td>
+										<td width="24%">{{apply.data}}</td>
+										<td width="4%">{{apply.sex}}</td>
+										<td width="8%">{{apply.applicantstatus}}</td>
+										<td width="8%" v-if="(apply.expresstype == 1)"><a href="https://www.ickd.cn/" target="view_window">{{apply.expressnum}}</a></td>
+										<td width="8%" v-else>{{apply.expressnum}}</td>
+										<td width="22%">
 											<a v-on:click="basicInfo(apply.applyid)">基本信息</a>&nbsp;&nbsp;
 											<a v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;
 											<a v-on:click="visaInfo(apply.applyid)">签证信息</a><br>
-											<a v-on:click="backmailInfo(apply.applyid)">回邮信息</a><br>
+											<a v-on:click="backmailInfo(apply.applyid)">回邮信息</a>&nbsp;&nbsp;
 											<a v-on:click="qualified(apply.applyid)">合格</a>&nbsp;&nbsp;
 											<a v-on:click="unqualified(apply.applyid)">不合格</a>
 										</td>
