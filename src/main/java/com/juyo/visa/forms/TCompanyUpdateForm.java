@@ -49,6 +49,12 @@ public class TCompanyUpdateForm extends ModForm implements Serializable {
 	/**指定番号*/
 	private String designatedNum;
 
+	/**是否是客户"*/
+	private Integer isCustomer;
+
+	/**客户指定番号*/
+	private String cDesignNum;
+
 	/**操作人*/
 	private Integer opId;
 

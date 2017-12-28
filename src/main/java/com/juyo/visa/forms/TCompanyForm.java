@@ -51,6 +51,12 @@ public class TCompanyForm extends DataTablesParamForm {
 	/**营业执照*/
 	private String license;
 
+	/**是否是客户"*/
+	private Integer isCustomer;
+
+	/**客户指定番号*/
+	private String cDesignNum;
+
 	/**经营范围*/
 	private String comScopes;
 
@@ -96,6 +102,7 @@ public class TCompanyForm extends DataTablesParamForm {
 			cnd.and("c.comType", "=", comType);
 		}
 		cnd.and("c.comType", "!=", "-1");
+		cnd.and("c.isCustomer", "=", "0");
 		cnd.orderBy("c.createTime", "DESC");
 		cnd.orderBy("c.updateTime", "DESC");
 		return cnd;
