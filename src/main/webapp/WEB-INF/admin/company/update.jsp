@@ -102,7 +102,7 @@
 							<div id="scopeDiv" class="form-group">
 								<label><span>*</span>经营范围：</label> 
 								<input id="businessScopes" name="businessScopes" value="${obj.company.scopes}" type="hidden" />
-								<div class="multiselectBtn form-control input-sm"></div>
+								<div class="multiselectBtn scopeDivInputValue form-control input-sm"></div>
 								<div class="btnVal">
 									<input type="button" value="日本" class="btn btn-sm btn-state1" />
 									<!-- <input type="button" value="美国" class="btn btn-sm btn-state1" /> -->
@@ -459,6 +459,12 @@
 			}else{
 				$("#scopeDiv").show();
 			}
+			$(".scopeDivInputValue").empty();
+			$(".btnVal input").each(function(){
+				$(this).removeClass("btn-state2");//取消灰色
+			    $(this).addClass("btn-state1");//变蓝
+			});
+			$("#businessScopes").val("");
 		}
 	</script>
 

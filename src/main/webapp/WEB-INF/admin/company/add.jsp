@@ -98,7 +98,7 @@
 								<label><span>*</span>经营范围：</label>
 								<!-- <input id="businessScope" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
 								<input id="businessScopes" name="businessScopes" type="hidden"/>
-								<div id="scopeDiv" name="scopeDiv" class="multiselectBtn form-control input-sm"></div>
+								<div id="scopeDiv" name="scopeDiv" class="multiselectBtn scopeDivInputValue form-control input-sm"></div>
 								<div class="btnVal">
 									<input type="button" value="日本" class="btn btn-sm btn-state1" />
 									<!-- <input type="button" value="美国" class="btn btn-sm btn-state1" />
@@ -425,7 +425,14 @@
 			}else{
 				$("#scopeDiv").show();
 			}
+			$(".scopeDivInputValue").empty();
+			$(".btnVal input").each(function(){
+				$(this).removeClass("btn-state2");//取消灰色
+			    $(this).addClass("btn-state1");//变蓝
+			});
+			$("#businessScopes").val("");
 		}
+		
 		
 		//返回 
 		function closeWindow() {
