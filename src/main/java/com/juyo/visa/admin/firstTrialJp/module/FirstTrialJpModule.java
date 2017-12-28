@@ -269,4 +269,14 @@ public class FirstTrialJpModule {
 		return firstTrialJpViewService.sendUnqualifiedMsg(applicantId, orderId, request);
 	}
 
+	/**
+	 * 补充必填项---我的职业
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object validApplicantInfo(@Param("applicantId") Integer applyid, @Param("orderId") Integer orderid) {
+		return firstTrialJpViewService.isValidInfo(applyid, orderid);
+	}
+
 }

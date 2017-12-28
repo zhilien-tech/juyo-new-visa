@@ -66,7 +66,25 @@ new Vue({
 				success : function(data) {
 					var isEmpty = data.isEmpty;
 					if(isEmpty == false){
-						layer.msg('申请人：'+data.names+' 职业未选择');
+						/*layer.msg('申请人：'+data.names+' 职业未选择');*/
+						var applyids = data.applyids;
+						$.each(applyids, function(i, applyid) { 
+							layer.open({
+								type: 2,
+								title: false,
+								closeBtn:false,
+								fix: false,
+								maxmin: false,
+								shadeClose: false,
+								scrollbar: false,
+								area: ['900px', '551px'],
+								content:'/admin/firstTrialJp/validApplicantInfo.html?applicantId='+applyid+'&orderid='+orderid,
+								success : function(index, layero){
+									var iframeWin = window[index.find('iframe')[0]['name']]; 
+								}
+							}); 
+						}); 
+						
 						return;
 					}else{
 						$.ajax({
