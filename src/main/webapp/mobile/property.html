@@ -125,13 +125,13 @@
 					 $(this).addClass("blue");
 					 if(index == '0'){
 					//添加
-						$(".bankItemInfo").append('<div class="item itemSelect clearfix"> <div class="txt-item"><span>银行存款</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" /></div><i>万</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
+						$(".bankItemInfo").append('<div class="item itemSelect clearfix"> <div class="txt-item"><span>银行存款</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" /></div> </div> <a class="delect-btn ui-link">删除</a> </div>');
 					}else if(index == '1'){
 						$(".carItemInfo").append('<div class="item carSelect clearfix"> <div class="txt-item carDiv"><span>车产</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" placeholder="必填"/></div></div> <a class="delect-btn ui-link">删除</a> </div>');
 					}else if(index == '2'){
-						$(".hourseItemInfo").append('<div class="item hourseSelect clearfix"> <div class="txt-item hourseDiv"><span>房产</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" /></div><i>平米</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
+						$(".hourseItemInfo").append('<div class="item hourseSelect clearfix"> <div class="txt-item hourseDiv"><span>房产</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" /></div> </div> <a class="delect-btn ui-link">删除</a> </div>');
 					}else {
-						$(".moneyItemInfo").append('<div class="item moneySelect clearfix"> <div class="txt-item moneyDiv"><span>理财</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" /></div><i>元</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
+						$(".moneyItemInfo").append('<div class="item moneySelect clearfix"> <div class="txt-item moneyDiv"><span>理财</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" /></div> </div> <a class="delect-btn ui-link">删除</a> </div>');
 					}
 				}
 			})
@@ -156,16 +156,16 @@
         		$.each(data.wealthjp,function(index,value){
         			if(value.type == '银行存款'){
         				$('.bankInfo').addClass('blue');
-        				$(".bankItemInfo").append('<div class="item itemSelect clearfix"> <div class="txt-item"><span>银行存款</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'" /></div><i>万</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
+        				$(".bankItemInfo").append('<div class="item itemSelect clearfix"> <div class="txt-item"><span>银行存款</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'" /></div> </div> <a class="delect-btn ui-link">删除</a> </div>');
         			}else if(value.type == '车产'){
         				$('.carInfo').addClass('blue');
         				$(".carItemInfo").append('<div class="item carSelect clearfix"> <div class="txt-item carDiv"><span>车产</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'" placeholder="必填"/></div></div> <a class="delect-btn ui-link">删除</a> </div>');
         			}else if(value.type == '房产'){
         				$('.hourseInfo').addClass('blue');
-        				$(".hourseItemInfo").append('<div class="item hourseSelect clearfix"> <div class="txt-item hourseDiv"><span>房产</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'"/></div><i>平米</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
+        				$(".hourseItemInfo").append('<div class="item hourseSelect clearfix"> <div class="txt-item hourseDiv"><span>房产</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'"/></div> </div> <a class="delect-btn ui-link">删除</a> </div>');
         			}else if(value.type == '理财'){
         				$('.moneyInfo').addClass('blue');
-        				$(".moneyItemInfo").append('<div class="item moneySelect clearfix"> <div class="txt-item moneyDiv"><span>理财</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'"/></div><i>元</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
+        				$(".moneyItemInfo").append('<div class="item moneySelect clearfix"> <div class="txt-item moneyDiv"><span>理财</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'"/></div></div> <a class="delect-btn ui-link">删除</a> </div>');
         			}
         		});
           	}

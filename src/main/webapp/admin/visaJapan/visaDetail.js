@@ -138,7 +138,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime&isTrial=0'
 			});
 		},
@@ -166,7 +166,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid+'&isTrial=0'
 
 			});
@@ -181,7 +181,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '551px'],
+				area: ['900px', '80%'],
 				content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+orderid+'&isTrial=0'
 			});
 		},
@@ -195,7 +195,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['1000px', '600px'],
+				area: ['900px', '80%'],
 				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&isvisa=1'
 			});
 		},
@@ -694,3 +694,15 @@ $(document).on("input","#stayday",function(){
 		});
 	}
 });
+//layer弹层回调
+function successCallBack(status){
+	$.ajax({ 
+		url: '/admin/visaJapan/getVisaDetailApply.html',
+		dataType:"json",
+		data:{orderid:orderid},
+		type:'post',
+		success: function(data){
+			orderobj.applyinfo = data.applyinfo;
+		}
+	});
+}

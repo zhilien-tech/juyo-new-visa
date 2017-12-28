@@ -89,7 +89,7 @@ new Vue({
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '550px'],
+				area: ['900px', '80%'],
 				content: '/admin/receptionJP/passportInfo.html?applyId='+applyId
 			});
 		}
