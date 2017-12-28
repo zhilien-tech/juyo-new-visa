@@ -10,8 +10,6 @@ import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 
-import com.juyo.visa.entities.TCompanyEntity;
-import com.uxuexi.core.db.util.EntityUtil;
 import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
@@ -88,7 +86,8 @@ public class TCompanyCustomerForm extends DataTablesParamForm {
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
-		String sqlString = EntityUtil.entityCndSql(TCompanyEntity.class);
+		/*String sqlString = EntityUtil.entityCndSql(TCompanyEntity.class);*/
+		String sqlString = sqlManager.get("companyInfo_list_company");
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
 		return sql;

@@ -56,6 +56,7 @@ public class TCompanyEntity implements Serializable {
 	@Column
 	@Comment("是否是客户")
 	private Integer isCustomer;
+
 	@Column
 	@Comment("客户指定番号")
 	private String cDesignNum;

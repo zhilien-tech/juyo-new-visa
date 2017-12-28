@@ -43,7 +43,7 @@ public class CompanyInfoModule {
 	/*public Object companyInfoListData(@Param("..") TCompanyOfCustomerForm form, HttpSession session) {
 		return companyInfoViewService.getCompanyInfoList(form, session);
 	}*/
-	public Object companyListData(@Param("..") TCompanyCustomerForm form, HttpSession session) {
+	public Object companyInfoListData(@Param("..") TCompanyCustomerForm form, HttpSession session) {
 		return companyInfoViewService.getCompanyCustomerList(form, session);
 	}
 

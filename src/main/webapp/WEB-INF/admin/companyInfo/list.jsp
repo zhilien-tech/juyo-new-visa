@@ -77,13 +77,13 @@
 		<div class="section card_list_line" v-cloak v-for="data in companyInfoData">
 			<div class="listShow">
 				<div class="list listName">
-					<label>公司全称：</label> <span>{{data.fullname}}</span>
+					<label>公司全称：</label> <span>{{data.name}}</span>
 				</div>
 				<div class="list listNameTag">
 					<label>公司简称：</label> <span>{{data.shortname}}</span>
 				</div>
 				<div class="list listNum">
-					<label>指定番号：</label> <span>{{data.designatednum}}</span>
+					<label>指定番号：</label> <span>{{data.cdesignnum}}</span>
 				</div>
 				<div class="list listPer">
 					<label>联系人：</label> <span>{{data.linkman}}</span>
