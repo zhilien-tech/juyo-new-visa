@@ -1291,4 +1291,26 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		dbDao.update(orderjp);
 		return null;
 	}
+
+	/**
+	 * 获取申请人列表信息
+	 */
+	public Object getVisaDetailApply(Integer orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		//申请人信息
+		String applysqlstr = sqlManager.get("get_jporder_detail_applyinfo_byorderid");
+		Sql applysql = Sqls.create(applysqlstr);
+		applysql.setParam("orderid", orderid);
+		List<Record> applyinfo = dbDao.query(applysql, null, null);
+		for (Record record : applyinfo) {
+			Integer type = (Integer) record.get("type");
+			for (JobStatusEnum visadatatype : JobStatusEnum.values()) {
+				if (!Util.isEmpty(type) && type.equals(visadatatype.intKey())) {
+					record.put("type", visadatatype.value());
+				}
+			}
+		}
+		result.put("applyinfo", applyinfo);
+		return result;
+	}
 }

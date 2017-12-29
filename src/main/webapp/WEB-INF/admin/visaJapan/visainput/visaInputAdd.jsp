@@ -19,16 +19,21 @@
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+<style>
+    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+    .btn-margin { margin-top:10px;}
+    .modal-body { background-color:#FFF !important; margin-top:50px; height:100%;}  
+</style>
 </head>
 <body>
 	<div class="modal-content">
 		<form id="applicantvisaAddForm">
 			<div class="modal-header">
 				<span class="heading">添加</span> <input id="backBtn" type="button"
-					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
+					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin"
 					data-dismiss="modal" value="取消" /> <input id="addBtn" type="button"
 					onclick="save();"
-					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+					class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 					<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }">
 					<input type="hidden" id="isvisa" name="isvisa" value="${obj.isvisa }">
 			</div>
@@ -47,7 +52,7 @@
 							</div>
 						</div>
 						<div class="col-sm-6">
-							<img id="visapic" src=" " width="400px" height="200px">
+							<img id="visapic" src=" " width="350px" height="200px">
 						</div>
 						<input type="hidden" name="picUrl" id="picUrl">
 					</div>
@@ -251,7 +256,12 @@
 						parent.successCallBack();
 						parent.layer.close(index); */
 						var applicantId = $('#applicantId').val();
-						window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId;
+						var tourist = '${obj.tourist}';
+						if(tourist != 1){
+							window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId;
+						}else{
+							window.location.href = '/admin/myData/visaInput.html';
+						}
 					},
 					error : function(xhr) {
 						layer.msg("添加失败", "", 3000);

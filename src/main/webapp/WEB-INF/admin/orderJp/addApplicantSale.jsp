@@ -14,7 +14,10 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 <style type="text/css">
-.modal-body { height:588px;}	
+.modal-body { height:100%; margin-top:50px;}
+.modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+.btn-margin { margin-top:10px; }
+	
 .modal-content { position:relative; }
 .modal-body { padding:15px 100px 15px 20px; }
 .nameBeforeYes { margin-right:20px; }
@@ -22,8 +25,8 @@
 .nameBeforeHide ,.nationalityHide{ display:none; }
 .wordSpell { display:none; }
 .nationalityHide { margin-left:3%;}
-<!--  -->
-.rightNav { position:absolute;top:61px;right:2%;z-index:999; width:40px;height:489px; cursor:pointer;}
+/*右导航*/
+.rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 <!--  -->
 .front, .back { margin-bottom:8px !important;}
@@ -38,8 +41,8 @@
 		<form id="applicantInfo">
 			<div class="modal-header">
 				<span class="heading">添加申请人</span> 
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right" value="保存" onclick="saveApplicant(1);"/>
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
+				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" onclick="saveApplicant(1);"/>
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">

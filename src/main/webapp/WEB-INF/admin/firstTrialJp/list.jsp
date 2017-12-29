@@ -46,7 +46,7 @@
 								<div><label>订单号：</label><span style="cursor:pointer" v-on:click="visaDetail(data.orderid,data.orderjpid)">{{data.ordernumber}}</span></div>	
 								<div><label>出行时间：</label><span>{{data.gotriptime}}</span></div>	
 								<div><label>返回时间：</label><span>{{data.backtriptime}}</span></div>	
-								<div style="position:absolute;right:25%;"><label>状态：</label><span class="bold">{{data.orderstatus}}</span></div>	
+								<div style="position:absolute;right:25%;"><label></label><span class="bold">{{data.orderstatus}}</span></div>	
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.orderid,data.orderjpid)"> </i>

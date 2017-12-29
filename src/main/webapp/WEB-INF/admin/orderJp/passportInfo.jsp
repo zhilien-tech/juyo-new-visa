@@ -21,10 +21,15 @@
 	.NoInfo { width:101.5%; height:30px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 	.ipt-info { display:none; }
     .Unqualified, .qualified  { margin-right:10px; }
+    /*弹框头部固定*/
+    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+    .btn-margin { margin-top:10px;}
+    .modal-body { margin-top:50px; height:100%; padding:15px 37px 15px 40px;}
+    #sqImg { width:332px;}
     /*左右导航样式*/
-    .rightNav { position:absolute;top:61px;right:0;z-index:999; width:40px;height:489px; cursor:pointer;}
+    .rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
 	.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
-    .leftNav { position:absolute;top:61px;left:0;z-index:999; width:40px;height:489px; cursor:pointer;}
+    .leftNav { position:fixed;top:15px;left:0;z-index:999; width:40px;height:100%; cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 	.info-QRcode { width:153px;}
 	</style>
@@ -40,12 +45,12 @@
 		<form id="passportInfo">
 			<div class="modal-header">
 				<span class="heading">护照信息</span> 
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
+				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 				<c:choose>
 						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
-					<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified" value="不合格" />
-				<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified" value="合格" />
+					<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified btn-margin" value="不合格" />
+				<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified btn-margin" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>
@@ -82,6 +87,8 @@
 								<div class="form-group">
 									<label><span>*</span>类型</label>
 									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
+									<input type="hidden" id="OCRline1" name="OCRline1" value="">
+									<input type="hidden" id="OCRline2" name="OCRline2" value="">
 									<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
 									<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
@@ -182,7 +189,7 @@
 						<div class="row none">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
+									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -362,6 +369,8 @@
 							$('#issuedPlaceEn').val("/"+getPinYinStr(obj.visaCountry));
 							$('#issuedDate').val(obj.issueDate);
 							$('#validEndDate').val(obj.expiryDay);
+							$('#OCRline1').val(obj.OCRline1);
+							$('#OCRline2').val(obj.OCRline2);
 							var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
 							if(years == 5){
 								$("#validType").val(1);

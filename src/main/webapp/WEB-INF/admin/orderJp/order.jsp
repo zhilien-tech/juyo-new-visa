@@ -1082,7 +1082,7 @@
 						maxmin: false,
 						shadeClose: false,
 						scrollbar: false,
-						area: ['900px', '551px'],
+						area: ['900px', '80%'],
 						content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid&isTrial=0'
 					});
 				},
@@ -1096,7 +1096,7 @@
 						maxmin: false,
 						shadeClose: false,
 						scrollbar: false,
-						area: ['900px', '551px'],
+						area: ['900px', '80%'],
 						content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=0'
 					});
 				},
@@ -1155,7 +1155,7 @@
 						maxmin: false,
 						shadeClose: false,
 						scrollbar: false,
-						area: ['1000px', '750px'],
+						area: ['1000px', '80%'],
 						content: '/admin/visaJapan/visaInput.html?applyid='+applicantId
 					});
 				},
@@ -1169,7 +1169,7 @@
 						maxmin: false,
 						shadeClose: false,
 						scrollbar: false,
-						area: ['900px', '551px'],
+						area: ['900px', '80%'],
 						content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial=0'
 					});
 				},
@@ -1183,7 +1183,7 @@
 						maxmin: false,
 						shadeClose: false,
 						scrollbar: false,
-						area: ['900px', '551px'],
+						area: ['900px', '80%'],
 						content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=0'
 
 					});
@@ -1251,7 +1251,7 @@
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['900px', '650px'],
+				area: ['900px', '80%'],
 				content:'${base}/admin/orderJp/addApplicantSale.html?id='+id
 			});
 		}

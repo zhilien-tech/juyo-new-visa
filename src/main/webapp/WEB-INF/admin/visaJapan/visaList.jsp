@@ -67,7 +67,7 @@
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
-								<div><label>状态：</label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
+								<div><label></label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
 								
 								<div v-if="data.japanstate >= 13">
 									<label>操作：</label>

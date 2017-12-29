@@ -37,7 +37,9 @@
 				<li class="arrow"></li>
 				<li style="display:none">日本</li>
 				<li class="arrow"></li> -->
-				<a href="/admin/myVisa/inProcessVisa.html"><li>申请人</li></a>
+				<a href="/admin/myVisa/visaList.html"><li>订单</li></a>
+				<li class="arrow"></li>
+				<a href="/admin/myVisa/inProcessVisa.html?orderJpId=${obj.orderJpId }"><li>申请人</li></a>
 				<li class="arrow"></li>
 				<li>${obj.applicant.applicantname }</li>
 			</ul>

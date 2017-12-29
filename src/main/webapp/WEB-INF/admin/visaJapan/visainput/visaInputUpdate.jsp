@@ -48,7 +48,14 @@
 							</div>
 						</div>
 						<div class="col-sm-6">
-							<img id="visapic" src="${obj.applicantvisa.picUrl}" width="400px" height="200px">
+						<c:choose>
+							<c:when test="${empty obj.applicantvisa.picUrl }">
+								<img id="visapic" src=" " width="400px" height="200px">
+							</c:when>
+							<c:otherwise>
+								<img id="visapic" src="${obj.applicantvisa.picUrl}" width="400px" height="200px">
+							</c:otherwise>
+						</c:choose>
 						</div>
 						<input type="hidden" name="picUrl" id="picUrl" value="${obj.applicantvisa.picUrl}">
 					</div>
@@ -219,7 +226,12 @@
 			/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
         	parent.layer.close(index); */
         	var applicantId = '${obj.applicantvisa.applicantId}';
-			window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId;
+        	var tourist = '${obj.tourist}';
+        	if(tourist == 1){
+				window.location.href = '/admin/myData/visaInput.html';
+        	}else{
+				window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId;
+        	}
 		}
 		function dataURLtoBlob(dataurl) { 
 		    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
