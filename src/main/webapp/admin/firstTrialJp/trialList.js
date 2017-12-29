@@ -156,8 +156,6 @@ new Vue({
 					},
 					url : '/admin/firstTrialJp/isQualifiedByApplicantId.html',
 					success : function(data) {
-						//关闭遮罩
-						layer.closeAll('loading');
 						var isQualified = data.isQualified;
 						var applicantName = data.name;
 						if(isQualified){
@@ -170,13 +168,16 @@ new Vue({
 								},
 								url : '/admin/firstTrialJp/qualified.html',
 								success : function(data) {
+									layer.closeAll('loading');
 									qualifiedCallBack(data);
 								},
 								error : function(xhr) {
+									layer.closeAll('loading');
 									layer.msg("操作失败");
 								}
 							});
 						}else{
+							layer.closeAll('loading');
 							layer.msg(applicantName+" 信息不合格");
 						}
 					},
