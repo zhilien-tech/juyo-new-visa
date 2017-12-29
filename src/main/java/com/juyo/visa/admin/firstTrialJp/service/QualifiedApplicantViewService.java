@@ -99,9 +99,9 @@ public class QualifiedApplicantViewService extends BaseService<TApplicantEntity>
 
 		/*try {
 			//发送合格消息
-			firstTrialJpViewService.sendApplicantVerifySMS(applicantId, orderid, "applicant_qualified_sms.txt");
+			firstTrialJpViewService.sendApplicantVerifySMS(applicantId, orderid, "trialtemp/applicant_qualified_sms.txt");
 			//发送合格邮件
-			firstTrialJpViewService.sendApplicantVerifyEmail(applicantId, orderid, "applicant_qualified_mail.html");
+			firstTrialJpViewService.sendApplicantVerifyEmail(applicantId, orderid, "trialtemp/applicant_qualified_mail.html");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}*/
@@ -182,9 +182,9 @@ public class QualifiedApplicantViewService extends BaseService<TApplicantEntity>
 
 		/*try {
 			//发送不合格消息
-			firstTrialJpViewService.sendApplicantVerifySMS(applicantId, orderId, "applicant_unqualified_sms.txt");
+			firstTrialJpViewService.sendApplicantVerifySMS(applicantId, orderId, "trialtemp/applicant_unqualified_sms.txt");
 			//发送不合格邮件
-			firstTrialJpViewService.sendApplicantVerifyEmail(applicantId, orderId, "applicant_unqualified_mail.html");
+			firstTrialJpViewService.sendApplicantVerifyEmail(applicantId, orderId, "trialtemp/applicant_unqualified_mail.html");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}*/

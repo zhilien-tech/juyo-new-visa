@@ -19,3 +19,9 @@ FROM
 	LEFT JOIN t_user u ON c.adminId = u.id
 $condition
 
+/*companyInfo_list_company*/
+SELECT
+	*
+FROM
+	t_company c
+$condition

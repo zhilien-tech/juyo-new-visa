@@ -348,6 +348,8 @@ new Vue({
 					},
 					url : '/admin/firstTrialJp/isQualifiedByApplicantId.html',
 					success : function(data) {
+						//遮罩
+						layer.load(1);
 						var isQualified = data.isQualified;
 						var applicantName = data.name;
 						if(isQualified){
@@ -360,13 +362,17 @@ new Vue({
 								},
 								url : '/admin/firstTrialJp/qualified.html',
 								success : function(data) {
+									layer.closeAll('loading');
 									qualifiedCallBack(data);
 								},
 								error : function(xhr) {
+									layer.closeAll('loading');
 									layer.msg("操作失败");
 								}
 							});
 						}else{
+							//关闭遮罩
+							layer.closeAll('loading');
 							layer.msg(applicantName+" 信息不合格");
 						}
 					},
@@ -379,6 +385,7 @@ new Vue({
 			});
 		},
 		unqualified:function(applyId){
+			layer.load(1);
 			/*layer.open({
 				type: 2,
 				title: false,
@@ -398,9 +405,11 @@ new Vue({
 				},
 				url : '/admin/firstTrialJp/sendUnqualifiedMsg.html',
 				success : function(data) {
+					layer.closeAll('loading');
 					unqualifiedCallBack(data);
 				},
 				error : function(xhr) {
+					layer.closeAll('loading');
 					layer.msg("操作失败");
 				}
 			});

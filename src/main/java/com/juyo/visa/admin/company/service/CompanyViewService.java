@@ -114,6 +114,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			Integer userId = insertUser.getId();
 			addForm.setAdminId(userId);
 		}
+		addForm.setIsCustomer(IsYesOrNoEnum.NO.intKey());
 		addForm.setOpId(opId);
 		addForm.setCreateTime(nowDate);
 		addForm.setUpdateTime(nowDate);
@@ -264,6 +265,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			company.setEmail(email);
 			company.setAddress(address);
 			company.setLicense(license);
+			company.setIsCustomer(IsYesOrNoEnum.NO.intKey());
 			company.setUpdateTime(nowDate);
 			dbDao.update(company);
 		}
@@ -441,11 +443,15 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		int count = 0;
 		if (Util.isEmpty(adminId)) {
 			//add
-			count = nutDao.count(TCompanyEntity.class, Cnd.where("name", "=", companyName));
+			count = nutDao.count(TCompanyEntity.class,
+					Cnd.where("name", "=", companyName).and("isCustomer", "=", IsYesOrNoEnum.NO.intKey()));
 		} else {
 			//update
-			count = nutDao.count(TCompanyEntity.class, Cnd.where("name", "=", companyName)
-					.and("adminId", "!=", adminId));
+			Cnd cnd = Cnd.NEW();
+			cnd.and("name", "=", companyName);
+			cnd.and("adminId", "!=", adminId);
+			cnd.and("isCustomer", "=", IsYesOrNoEnum.NO.intKey());
+			count = nutDao.count(TCompanyEntity.class, cnd);
 		}
 
 		map.put("valid", count <= 0);

@@ -578,9 +578,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		try {
 			//发送合格消息
-			sendApplicantVerifySMS(applyid, orderid, "", "applicant_qualified_sms.txt");
+			sendApplicantVerifySMS(applyid, orderid, "", "trialtemp/applicant_qualified_sms.txt");
 			//发送合格邮件
-			sendApplicantVerifyEmail(applyid, orderid, "", "applicant_qualified_mail.html");
+			sendApplicantVerifyEmail(applyid, orderid, "", "trialtemp/applicant_qualified_mail.html");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -677,9 +677,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		try {
 			//发送不合格消息
-			sendApplicantVerifySMS(applicantId, orderid, mobileUrl, "applicant_unqualified_sms.txt");
+			sendApplicantVerifySMS(applicantId, orderid, mobileUrl, "trialtemp/applicant_unqualified_sms.txt");
 			//发送不合格邮件
-			sendApplicantVerifyEmail(applicantId, orderid, pcUrl, "applicant_unqualified_mail.html");
+			sendApplicantVerifyEmail(applicantId, orderid, pcUrl, "trialtemp/applicant_unqualified_mail.html");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -871,8 +871,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 	//发送邮件信息
 	public Object sendMail(int orderid, int orderjpid) throws IOException {
-		List<String> readLines = IOUtils
-				.readLines(getClass().getClassLoader().getResourceAsStream("express_mail.html"));
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
+				"trialtemp/express_mail.html"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
@@ -991,7 +991,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 	//发送手机信息
 	public Object sendMessage(int orderid, int orderjpid) throws IOException {
-		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("express_sms.txt"));
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
+				"trialtemp/express_sms.txt"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
@@ -1381,8 +1382,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 	//快递 点击选择申请人，并发送邮件信息
 	public Object sendMail(int orderid, int orderjpid, int shareType, String shareManIds) throws IOException {
-		List<String> readLines = IOUtils
-				.readLines(getClass().getClassLoader().getResourceAsStream("express_mail.html"));
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
+				"trialtemp/express_mail.html"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
@@ -1483,7 +1484,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 	//快递 点击选择申请人，并发送短信
 	public Object sendMessage(int orderid, int orderjpid, int shareType, String shareManIds) throws IOException {
-		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("express_sms.txt"));
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
+				"trialtemp/express_sms.txt"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
@@ -1561,9 +1563,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		try {
 			//发送不合格消息
-			sendApplicantVerifySMS(applicantId, orderid, mobileUrl, "applicant_unqualified_sms.txt");
+			sendApplicantVerifySMS(applicantId, orderid, mobileUrl, "trialtemp/applicant_unqualified_sms.txt");
 			//发送不合格邮件
-			sendApplicantVerifyEmail(applicantId, orderid, pcUrl, "applicant_unqualified_mail.html");
+			sendApplicantVerifyEmail(applicantId, orderid, pcUrl, "trialtemp/applicant_unqualified_mail.html");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

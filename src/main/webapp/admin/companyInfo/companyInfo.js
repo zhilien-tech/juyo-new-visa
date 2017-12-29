@@ -8,7 +8,7 @@ $(function() {
 			validating : 'glyphicon glyphicon-refresh'
 		},
 		fields : {
-			fullname : {
+			name : {
 				validators : {
 					notEmpty : {
 						message : '公司名称不能为空'
@@ -27,7 +27,7 @@ $(function() {
 					}
 				}
 			},
-			shortname : {
+			shortName : {
 				validators : {
 					notEmpty : {
 						message : '公司简称不能为空'
@@ -39,7 +39,7 @@ $(function() {
 					}
 				}
 			},
-			designatedNum : {
+			cdesignNum : {
 				validators : {
 					notEmpty : {
 						message : '指定番号不能为空'
