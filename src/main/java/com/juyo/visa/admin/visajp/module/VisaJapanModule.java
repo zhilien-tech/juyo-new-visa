@@ -354,4 +354,13 @@ public class VisaJapanModule {
 	public Object getVisaDetailApply(@Param("orderid") Integer orderid) {
 		return visaJapanService.getVisaDetailApply(orderid);
 	}
+
+	/**
+	 * 验证信息是否完整
+	 */
+	@At
+	@POST
+	public Object validateInfoIsFull(@Param("orderjpid") Integer orderjpid) {
+		return visaJapanService.validateInfoIsFull(orderjpid);
+	}
 }
