@@ -46,6 +46,7 @@
 							</div>
 						</div>
 						<input id="applicantId" name="applicantId" value="${obj.applicantId }" type="hidden">
+						<input id="orderId" name="orderId" value="${obj.orderId }" type="hidden">
 					</div>
 				</div>
 			</div>
@@ -77,10 +78,12 @@
 					expressType : $("#expressType").val(),
 					expressNum : $("#expressNum").val(),
 					applicantId : $("#applicantId").val(),
+					orderId : $("#orderId").val()
 				},
 				success: function(data){
 					if(data.stauts == 200){
 						layer.close(layerIndex);
+						parent.successCallBack(2);
 					}
 					closeWindow();
 				}
