@@ -36,7 +36,7 @@
         <li>签发地点（拼音） <input type="text" class="txtInput" v-model="passportdata.issuedplaceen"/></li>
         <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.issueddate"/></li>
         <li>签发日期 <input id="validEndDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.validenddate"/></li>
-   		<li class="validity">有效期 <select class="validitySelect" v-model="passportdata.validtype">
+   		<li class="validity">有效期 <span class="dateVal"></span><select class="validitySelect" v-model="passportdata.validtype">
    					<option value=""></option>
    					<option value="1">5年</option>
    					<option value="2">10年</option>
@@ -109,7 +109,11 @@
             });
         });
 
-        
+        //
+        $(".validitySelect").change(function(){
+        	 var selecters = $(".validitySelect").find("option:selected").text();
+             $(".dateVal").text(selecters);
+        });
         //日历插件
         var calendar = new lCalendar();//出生日期
         calendar.init({
@@ -223,8 +227,10 @@
 					var years = getDateYearSub(obj.issueDate,obj.expiryDay);
 					if(years == 5){
 						_self.passportdata.validtype = 1;
+						$(".dateVal").text("5");
 					}else{
 						_self.passportdata.validtype = 2;
+						$(".dateVal").text("10");
 					}
 					console.log(JSON.stringify(_self.passportdata));
 				}

@@ -21,11 +21,11 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<style type="text/css">
-		.card-head div:nth-child(1){width:15%;}
-		.card-head div:nth-child(2){width:14.5%;}
-		.card-head div:nth-child(3){width: 17%;}
-		.card-head div:nth-child(4){width: 13%;}
-		.card-head div:nth-child(5){width: 9.5%;}
+		.card-head div:nth-child(1){width:17%;}
+		.card-head div:nth-child(2){width:15%;}
+		.card-head div:nth-child(3){width: 23%;}
+		.card-head div:nth-child(4){width: 10%;}
+		.card-head div:nth-child(5){width: 8%; text-align:right;}
 		.card-head div:nth-child(6){width:27%;}
 		.everybody-info div:nth-child(1){width:13%;}
 		.everybody-info div:nth-child(2){width:20%;}
@@ -35,6 +35,7 @@
 		.everybody-info div:nth-child(5){width:19%;}
 		.everybody-info div:nth-child(6){width:19%;}
 		/* .everybody-info div:last-child{float:right;width:74px;} */
+		.cf span { font-size:12px;}
 		[v-cloak] {
 		  display: none;
 		}
@@ -67,7 +68,7 @@
 								<div><label>受付番号：</label><span>{{data.number}}</span></div>	
 								<div><label>送签社：</label><span>{{data.comname}}</span></div>
 								<div><label>操作人：</label><span>{{data.username}}</span></div>
-								<div><label>状态：</label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
+								<div><label></label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>

@@ -77,7 +77,7 @@ new Vue({
 								maxmin: false,
 								shadeClose: false,
 								scrollbar: false,
-								area: ['900px', '551px'],
+								area: ['900px', '80%'],
 								content:'/admin/firstTrialJp/validApplicantInfo.html?applicantId='+applyid+'&orderid='+orderid,
 								success : function(index, layero){
 									var iframeWin = window[index.find('iframe')[0]['name']]; 
@@ -103,7 +103,7 @@ new Vue({
 										maxmin: false,
 										shadeClose: false,
 										scrollbar: false,
-										area: ['900px', '80%px'],
+										area: ['900px', '80%'],
 										content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
 									});
 								}else{
