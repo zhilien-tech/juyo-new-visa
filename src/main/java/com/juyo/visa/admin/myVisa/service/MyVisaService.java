@@ -378,6 +378,9 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				//已寄出
 				indexOfBlue = 4;
 			}
+		} else if (status == JPOrderStatusEnum.SEND_DATA.intKey()) {
+			//已发地址，游客填快递单号
+			indexOfBlue = 4;
 		} else if (status == JPOrderStatusEnum.RECEPTION_RECEIVED.intKey()) {
 			//前台已收件
 			indexOfBlue = 5;
