@@ -252,9 +252,17 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		TApplicantExpressEntity expressEntity = dbDao.fetch(TApplicantExpressEntity.class,
 				Cnd.where("applicantId", "=", applicantid));
 		String expressNum = "";
+		String expressType = "";
 		if (!Util.isEmpty(expressEntity)) {
 			expressNum = expressEntity.getExpressNum();
+			Integer type = expressEntity.getExpressType();
+			for (YouKeExpressTypeEnum statusEnum : YouKeExpressTypeEnum.values()) {
+				if (!Util.isEmpty(expressNum) && type == statusEnum.intKey()) {
+					expressType = statusEnum.value();
+				}
+			}
 		}
+		result.put("expressType", expressType);
 		result.put("expressNum", expressNum);
 		result.put("expressEntity", expressEntity);
 
@@ -286,13 +294,15 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		int indexOfBlue = getIndexOfBlue(order, applicantid);
 		result.put("indexOfBlue", indexOfBlue);
 
+		result.put("orderid", orderid);
 		return result;
 	}
 
 	//填写快递单号页
-	public Object youkeExpressInfo(Integer applicantId) {
+	public Object youkeExpressInfo(Integer applicantId, Integer orderId) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("applicantId", applicantId);
+		result.put("orderId", orderId);
 		result.put("expressInfo",
 				dbDao.fetch(TApplicantExpressEntity.class, Cnd.where("applicantId", "=", applicantId)));
 		result.put("expressType", EnumUtil.enum2(YouKeExpressTypeEnum.class));
@@ -300,7 +310,8 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	//保存快递单号
-	public Object saveExpressInfo(int expressType, String expressNum, Integer applicantId, HttpSession session) {
+	public Object saveExpressInfo(int expressType, String expressNum, Integer applicantId, Integer orderId,
+			HttpSession session) {
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
@@ -327,6 +338,21 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			expressEntity.setUpdateTime(nowDate);
 			dbDao.update(expressEntity);
 		}
+
+		if (!Util.isEmpty(orderId)) {
+			TOrderEntity order = dbDao.fetch(TOrderEntity.class, Cnd.where("id", "=", orderId));
+			if (!Util.isEmpty(order)) {
+				Integer orderStatus = order.getStatus();
+				int send_address = JPOrderStatusEnum.SEND_ADDRESS.intKey();
+				int send_data = JPOrderStatusEnum.SEND_DATA.intKey();
+				if (!Util.isEmpty(orderStatus) && orderStatus == send_address) {
+					order.setStatus(send_data);
+					order.setUpdateTime(nowDate);
+					dbDao.update(order);
+				}
+			}
+		}
+
 		return "ExpressNum Success";
 	}
 

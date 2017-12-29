@@ -84,10 +84,10 @@
 							<div class="date-info">
 								<label>快递单号</label>
 								<c:if test="${null != obj.expressEntity }">
-									<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">编辑</a><label>${obj.expressNum }</label></span>
+									<span><label>${obj.expressType }</label>&nbsp;<label>${obj.expressNum }</label><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">修改</a></span>
 								</c:if>
 								<c:if test="${null == obj.expressEntity }">
-									<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写</a><label>${obj.expressNum }</label></span>
+									<span><label>${obj.expressType }</label>&nbsp;<label>${obj.expressNum }</label><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写</a></span>
 								</c:if>
 							</div>
 							
@@ -185,7 +185,6 @@
 			var orderId = ${obj.order.id};
 			var orderstatus = ${obj.order.status};
 			var applicantId = ${obj.applicant.applicantid};
-			
 			var indexOfBlue = ${obj.indexOfBlue};
 		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
@@ -237,7 +236,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['600px', '300px'],
-					content:'/admin/myVisa/youkeExpressInfo.html?applicantId='+applyId
+					content:'/admin/myVisa/youkeExpressInfo.html?applicantId='+applyId+'&orderId='+orderId
 				});
 			}
 			
