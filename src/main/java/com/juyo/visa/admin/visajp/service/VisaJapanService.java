@@ -1313,4 +1313,59 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		result.put("applyinfo", applyinfo);
 		return result;
 	}
+
+	/**
+	 * 验证发招保信息是否完整
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object validateInfoIsFull(Integer orderjpid) {
+		StringBuffer resultstr = new StringBuffer("");
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
+		//订单信息
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		//出行信息
+		TOrderTripJpEntity ordertripjp = dbDao.fetch(TOrderTripJpEntity.class,
+				Cnd.where("orderId", "=", orderjp.getId()));
+		List<TOrderTripMultiJpEntity> mutiltrip = new ArrayList<TOrderTripMultiJpEntity>();
+		if (!Util.isEmpty(ordertripjp)) {
+			mutiltrip = dbDao.query(TOrderTripMultiJpEntity.class, Cnd.where("tripid", "=", ordertripjp.getId()), null);
+		}
+		//申请人信息
+		String applysqlstr = sqlManager.get("get_applyinfo_from_filedown_by_orderid_jp");
+		Sql applysql = Sqls.create(applysqlstr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("taoj.orderId", "=", orderjp.getId());
+		List<Record> applyinfo = dbDao.query(applysql, cnd, null);
+		//行程安排
+		List<TOrderTravelplanJpEntity> ordertravelplan = dbDao.query(TOrderTravelplanJpEntity.class,
+				Cnd.where("orderId", "=", orderjp.getId()), null);
+		//公司信息
+		TCompanyEntity company = new TCompanyEntity();
+		company = dbDao.fetch(TCompanyEntity.class, orderinfo.getComId().longValue());
+		//判断签证类型
+		if (Util.isEmpty(orderjp.getVisaType())) {
+			resultstr.append("签证类型、");
+		}
+		if (Util.isEmpty(orderinfo.getGoTripDate())) {
+			resultstr.append("出发日期、");
+		}
+		if (Util.isEmpty(orderinfo.getBackTripDate())) {
+			resultstr.append("返回日期、");
+		}
+		int count = 1;
+		for (Record record : applyinfo) {
+			if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
+				resultstr.append("申请人" + count + "的姓名、");
+			}
+			if (Util.isEmpty(record.get("firstnameen")) && Util.isEmpty(record.get("lastnameen"))) {
+				resultstr.append("申请人" + count + "的姓名英文、");
+			}
+			count++;
+		}
+		return null;
+	}
 }
