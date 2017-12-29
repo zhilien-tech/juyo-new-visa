@@ -290,7 +290,14 @@
 										<td>{{apply.type}}</td>
 										<td v-html="apply.realinfo"></td>
 										<td> <span v-if="(apply.expresstype == 1)"><a href="https://www.ickd.cn/" target="view_window">{{apply.expressnum}}</a></span></td>
-										<td>{{apply.mainrelation}}</td>
+										<td>
+											<span v-if="apply.applyid == apply.mainid">
+												{{apply.mainrelation}}
+											</span>
+											<span v-else>
+												{{apply.relationremark}}
+											</span>
+										</td>
 										<td><a v-on:click="updateApplicant(apply.id)">基本信息</a>&nbsp;
 											<a v-on:click="passport(apply.id)">护照信息</a>&nbsp;
 											<a v-on:click="visa(apply.id)">签证信息</a>&nbsp;

@@ -380,6 +380,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				indexOfBlue = 10;
 			}
 		} else if (status >= JPOrderStatusEnum.AFTERMARKET_ORDER.intKey()) {
+			indexOfBlue = 10;
 			//售后，回邮资料
 			TApplicantBackmailJpEntity backmailJpEntity = dbDao.fetch(TApplicantBackmailJpEntity.class,
 					Cnd.where("applicantId", "=", applicantid));
