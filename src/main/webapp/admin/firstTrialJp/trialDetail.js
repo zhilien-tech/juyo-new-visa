@@ -341,6 +341,8 @@ new Vue({
 			layer.confirm('您是确定要合格吗？', {
 				btn: ['是','否'] //按钮
 			}, function(){
+				//遮罩
+				layer.load(1);
 				$.ajax({
 					type : 'POST',
 					data : {
@@ -348,6 +350,8 @@ new Vue({
 					},
 					url : '/admin/firstTrialJp/isQualifiedByApplicantId.html',
 					success : function(data) {
+						//关闭遮罩
+						layer.closeAll('loading');
 						var isQualified = data.isQualified;
 						var applicantName = data.name;
 						if(isQualified){
@@ -371,6 +375,8 @@ new Vue({
 						}
 					},
 					error : function(xhr) {
+						//关闭遮罩
+						layer.closeAll('loading');
 						layer.msg("操作失败");
 					}
 				});
