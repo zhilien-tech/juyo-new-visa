@@ -27,7 +27,7 @@ $(function() {
 					}
 				}
 			},
-			shortname : {
+			shortName : {
 				validators : {
 					notEmpty : {
 						message : '公司简称不能为空'
@@ -39,7 +39,7 @@ $(function() {
 					}
 				}
 			},
-			cdesignatednum : {
+			cdesignNum : {
 				validators : {
 					notEmpty : {
 						message : '指定番号不能为空'

@@ -59,7 +59,7 @@ public class TCompanyEntity implements Serializable {
 
 	@Column
 	@Comment("客户指定番号")
-	private String cDesignNum;
+	private String cdesignNum;
 
 	@Column
 	@Comment("操作人")

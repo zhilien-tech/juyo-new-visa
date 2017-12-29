@@ -56,7 +56,7 @@ public class TCompanyAddForm extends AddForm implements Serializable {
 	private Integer isCustomer;
 
 	/**客户指定番号*/
-	private String cDesignNum;
+	private String cdesignNum;
 
 	/**操作人*/
 	private Integer opId;

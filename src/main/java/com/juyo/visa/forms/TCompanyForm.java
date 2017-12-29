@@ -55,7 +55,7 @@ public class TCompanyForm extends DataTablesParamForm {
 	private Integer isCustomer;
 
 	/**客户指定番号*/
-	private String cDesignNum;
+	private String cdesignNum;
 
 	/**经营范围*/
 	private String comScopes;

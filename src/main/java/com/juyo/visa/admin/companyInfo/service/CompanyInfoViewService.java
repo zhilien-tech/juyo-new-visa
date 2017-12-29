@@ -24,10 +24,8 @@ import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.entities.TCompanyEntity;
-import com.juyo.visa.entities.TCompanyOfCustomerEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TCompanyAddForm;
-import com.juyo.visa.forms.TCompanyOfCustomerForm;
 import com.juyo.visa.forms.TCompanyUpdateForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
@@ -35,7 +33,7 @@ import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
 
 @IocBean
-public class CompanyInfoViewService extends BaseService<TCompanyOfCustomerEntity> {
+public class CompanyInfoViewService extends BaseService<TCompanyEntity> {
 	private static final Log log = Logs.get();
 
 	//公司管理中的 公司信息列表 
@@ -63,7 +61,7 @@ public class CompanyInfoViewService extends BaseService<TCompanyOfCustomerEntity
 	}
 
 	//公司信息列表
-	public Object getCompanyInfoList(TCompanyOfCustomerForm form, HttpSession session) {
+	/*public Object getCompanyInfoList(TCompanyOfCustomerForm form, HttpSession session) {
 		//获取当前公司
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		form.setComid(loginCompany.getId());
@@ -84,7 +82,7 @@ public class CompanyInfoViewService extends BaseService<TCompanyOfCustomerEntity
 		result.put("pageListCount", list.size());
 
 		return result;
-	}
+	}*/
 
 	//获取管理员公司信息
 	public Object getAdminCompany(HttpSession session) {
@@ -139,7 +137,7 @@ public class CompanyInfoViewService extends BaseService<TCompanyOfCustomerEntity
 		company.setAdminId(userid);
 		company.setName(addForm.getName());
 		company.setShortName(addForm.getShortName());
-		company.setCDesignNum(addForm.getCDesignNum());
+		company.setCdesignNum(addForm.getCdesignNum());
 		company.setLinkman(addForm.getLinkman());
 		company.setMobile(addForm.getMobile());
 		company.setEmail(addForm.getEmail());
@@ -175,7 +173,7 @@ public class CompanyInfoViewService extends BaseService<TCompanyOfCustomerEntity
 		if (!Util.isEmpty(company)) {
 			company.setName(updateForm.getName());
 			company.setShortName(updateForm.getShortName());
-			company.setCDesignNum(updateForm.getCDesignNum());
+			company.setCdesignNum(updateForm.getCdesignNum());
 			company.setLinkman(updateForm.getLinkman());
 			company.setMobile(updateForm.getMobile());
 			company.setEmail(updateForm.getEmail());
