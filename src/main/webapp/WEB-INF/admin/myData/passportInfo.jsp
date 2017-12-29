@@ -42,7 +42,7 @@
 							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
 						</div> <!-- end 身份证 正面 -->
 
-						<div class="info-imgUpload front"><!-- 护照 -->
+						<div class="info-imgUpload front has-error"><!-- 护照 -->
 							<div class="col-xs-6">
 							<div class="form-group">
 								<div class="cardFront-div">
@@ -55,8 +55,11 @@
 							</div>
 						</div>
 						</div><!-- end 护照 -->
-
+						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;">
+							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">护照必须上传</small>
+						</div>
 					</div>
+					
 
 					<div class="col-sm-6 padding-right-0">
 						<div class="row"><!-- 类型/护照号 -->
@@ -130,10 +133,10 @@
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group" style="position:relative;">
 									<label><span>*</span>出生地点/拼音</label>
-									<input id="birthAddress" name="birthAddress" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
-									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:42px;border:0px;left:80px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
+									<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
+									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:36px; width:120px;border:0px;left:80px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -148,10 +151,10 @@
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group" style="position:relative;">
 									<label><span>*</span>签发地点/拼音</label>
-									<input id="issuedPlace" name="issuedPlace" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
-									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:42px;border:0px;left:80px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
+									<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
+									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:36px; width:120px;border:0px;left:80px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -225,7 +228,19 @@
 	<script type="text/javascript">
 	var base = "${base}";
 	$(function() {
+		//护照图片验证
+		var passportUrl = $("#passportUrl").val();
+		if(passportUrl == ""){
+			$(".front").attr("class", "info-imgUpload front has-error");  
+	        $(".help-blockFront").attr("data-bv-result","INVALID");  
+	        $(".help-blockFront").attr("style","display: block;");  
+		}else{
+			$(".front").attr("class", "info-imgUpload front has-success");  
+	        $(".help-blockFront").attr("data-bv-result","IVALID");  
+	        $(".help-blockFront").attr("style","display: none;");  
+		}
 		
+		//将页面所有元素设置为disabled
 		var form = document.forms[0]; 
 		for ( var i = 0; i < form.length; i++) { 
 			var element = form.elements[i]; 
@@ -254,6 +269,9 @@
 				passport : {
 					trigger:"change keyup",
 					validators : {
+						notEmpty : {
+							message : '护照号不能为空'
+						},
 	                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 							url: '${base}/admin/orderJp/checkPassport.html',
 							message: '护照号已存在，请重新输入',//提示消息
@@ -269,10 +287,58 @@
 							}
 						}
 					}
+				},
+				type : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '类型不能为空'
+						}
+					}
+				},
+				birthAddress : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '出生地点不能为空'
+						}
+					}
+				},
+				birthday : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '出生日期不能为空'
+						}
+					}
+				},
+				issuedPlace : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '签发地点不能为空'
+						}
+					}
+				},
+				issuedDate : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '签发日期不能为空'
+						}
+					}
+				},
+				validEndDate : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '有效日期不能为空'
+						}
+					}
 				}
 			}
 		});
-		$("#passportInfo").bootstrapValidator("validate");
+	$('#passportInfo').bootstrapValidator('validate');
 		
 		if($("#sex").val() == "男"){
 			$("#sexEn").val("M");
@@ -323,17 +389,20 @@
 						$('#passportUrl').val(obj.url);
 						$('#sqImg').attr('src', obj.url);
 						$("#uploadFile").siblings("i").css("display","block");
-						$('#type').val(obj.type);
+						$(".front").attr("class", "info-imgUpload front has-success");  
+				        $(".help-block").attr("data-bv-result","IVALID");  
+				        $(".help-block").attr("style","display: none;");
+						$('#type').val(obj.type).change();
 						$('#passport').val(obj.num).change();
 						$('#sex').val(obj.sex);
 						$('#sexEn').val(obj.sexEn);
-						$('#birthAddress').val(obj.birthCountry);
+						$('#birthAddress').val(obj.birthCountry).change();
 						$('#birthAddressEn').val("/"+getPinYinStr(obj.birthCountry));
-						$('#birthday').val(obj.birth);
-						$('#issuedPlace').val(obj.visaCountry);
+						$('#birthday').val(obj.birth).change();
+						$('#issuedPlace').val(obj.visaCountry).change();
 						$('#issuedPlaceEn').val("/"+getPinYinStr(obj.visaCountry));
-						$('#issuedDate').val(obj.issueDate);
-						$('#validEndDate').val(obj.expiryDay);
+						$('#issuedDate').val(obj.issueDate).change();
+						$('#validEndDate').val(obj.expiryDay).change();
 						$('#OCRline1').val(obj.OCRline1);
 						$('#OCRline2').val(obj.OCRline2);
 						var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
@@ -380,6 +449,9 @@
 		if (!bootstrapValidator.isValid()) {
 			return;
 		}
+		if($(".front").hasClass("has-error")){
+			return;
+		}
 		var passportInfo = $("#passportInfo").serialize();
 		layer.load(1);
 		$.ajax({
@@ -418,6 +490,9 @@
 			$('#passportUrl').val("");
 			$('#sqImg').attr('src', "");
 			$("#uploadFile").siblings("i").css("display","none");
+			$(".front").attr("class", "info-imgUpload front has-error");  
+	        $(".help-blockFront").attr("data-bv-result","INVALID");  
+	        $(".help-blockFront").attr("style","display: block;");
 		});
 		$("#passRemark").attr("disabled", true);
 	}
@@ -543,16 +618,19 @@
 	    }
 	 function clearAll(){
 		$("#passportUrl").val("");
+		$(".front").attr("class", "info-imgUpload front has-error");  
+        $(".help-blockFront").attr("data-bv-result","INVALID");  
+        $(".help-blockFront").attr("style","display: block;"); 
 		$('#sqImg').attr('src', "");
-		$("#type").val("");
+		$("#type").val("").change();
 		$("#passport").val("").change();
-		$("#birthAddress").val("");
-		$("#birthAddressEn").val("");
-		$("#birthday").val("");
-		$("#issuedPlace").val("");
-		$("#issuedPlaceEn").val("");
-		$("#issuedDate").val("");
-		$("#validEndDate").val("");
+		$("#birthAddress").val("").change();
+		$("#birthAddressEn").val("").change();
+		$("#birthday").val("").change();
+		$("#issuedPlace").val("").change();
+		$("#issuedPlaceEn").val("").change();
+		$("#issuedDate").val("").change();
+		$("#validEndDate").val("").change();
 	 }
 	</script>
 </body>

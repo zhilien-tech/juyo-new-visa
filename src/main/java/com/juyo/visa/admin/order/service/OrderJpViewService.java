@@ -808,20 +808,21 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Map<String, Object> result = Maps.newHashMap();
 
+		Integer userType = loginUser.getUserType();
+		result.put("userType", userType);
 		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", id));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
 
-		Map<String, Object> result = Maps.newHashMap();
 		if (isTrial == 0) {
 			result.put("isTrailOrder", IsYesOrNoEnum.NO.intKey());
 		} else {
 			//初审环节操作
 			result.put("isTrailOrder", IsYesOrNoEnum.YES.intKey());
 		}
-		Integer userType = loginUser.getUserType();
-		result.put("userType", userType);
+
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		if (!Util.isEmpty(applicantEntity.getBirthday())) {
@@ -1052,6 +1053,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime, Integer isTrial,
 			HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+
+		Integer userType = loginUser.getUserType();
+		result.put("userType", userType);
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", id));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
@@ -1133,6 +1140,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object getEditPassport(Integer applicantId, Integer orderid, HttpServletRequest request, Integer isTrial) {
 		Map<String, Object> result = MapUtil.map();
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+
+		Integer userType = loginUser.getUserType();
+		result.put("userType", userType);
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantId));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
