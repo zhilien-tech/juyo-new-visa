@@ -694,3 +694,4 @@ $(document).on("input","#stayday",function(){
 		});
 	}
 });
+

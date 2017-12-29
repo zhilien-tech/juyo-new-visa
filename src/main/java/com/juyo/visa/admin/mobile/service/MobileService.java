@@ -159,21 +159,39 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveApplicatinfo(MobileApplicantForm form, TApplicantLowerEntity applicant) {
-
+		TUserEntity mobileuser = null;
+		if (!Util.isEmpty(applicant.getTelephone())) {
+			mobileuser = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", applicant.getTelephone()));
+		}
 		//编辑申请人信息
 		if (!Util.isEmpty(applicant.getId())) {
+			if (!Util.isEmpty(mobileuser)) {
+				applicant.setUserid(mobileuser.getId());
+			} else {
+				ApplicantUser applicantUser = new ApplicantUser();
+				applicantUser.setMobile(applicant.getTelephone());
+				applicantUser.setOpid(form.getUserid());
+				applicantUser.setPassword("000000");
+				applicantUser.setUsername(applicant.getFirstname() + applicant.getLastname());
+				TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
+				applicant.setUserid(tUserEntity.getId());
+			}
 			dbDao.update(applicant);
 			form.setMessagetype(1);
 		} else {
 			//在用户表添加信息
-			ApplicantUser applicantUser = new ApplicantUser();
-			applicantUser.setMobile(applicant.getTelephone());
-			applicantUser.setOpid(form.getUserid());
-			applicantUser.setPassword("000000");
-			applicantUser.setUsername(applicant.getFirstname() + applicant.getLastname());
-			TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
+			if (!Util.isEmpty(mobileuser)) {
+				applicant.setUserid(mobileuser.getId());
+			} else {
+				ApplicantUser applicantUser = new ApplicantUser();
+				applicantUser.setMobile(applicant.getTelephone());
+				applicantUser.setOpid(form.getUserid());
+				applicantUser.setPassword("000000");
+				applicantUser.setUsername(applicant.getFirstname() + applicant.getLastname());
+				TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
+				applicant.setUserid(tUserEntity.getId());
+			}
 
-			applicant.setUserid(tUserEntity.getId());
 			applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
 			applicant.setCreatetime(new Date());
 			TApplicantLowerEntity applicatinsert = dbDao.insert(applicant);

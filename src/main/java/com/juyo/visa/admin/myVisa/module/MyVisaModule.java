@@ -42,7 +42,7 @@ public class MyVisaModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object inProcessVisa(@Param("orderJpId") Integer orderJpId) {
+	public Object inProcessVisa(@Param("orderJpId") String orderJpId) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("orderJpId", orderJpId);
 		return result;
@@ -104,8 +104,8 @@ public class MyVisaModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object youkeExpressInfo(@Param("applicantId") Integer applicantid) {
-		return myVisaService.youkeExpressInfo(applicantid);
+	public Object youkeExpressInfo(@Param("applicantId") Integer applicantid, @Param("orderId") Integer orderId) {
+		return myVisaService.youkeExpressInfo(applicantid, orderId);
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class MyVisaModule {
 	@At
 	@POST
 	public Object saveExpressInfo(@Param("expressType") int expressType, @Param("expressNum") String expressNum,
-			@Param("applicantId") Integer applicantId, HttpSession session) {
-		return myVisaService.saveExpressInfo(expressType, expressNum, applicantId, session);
+			@Param("applicantId") Integer applicantId, @Param("orderId") Integer orderId, HttpSession session) {
+		return myVisaService.saveExpressInfo(expressType, expressNum, applicantId, orderId, session);
 	}
 }

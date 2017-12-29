@@ -290,7 +290,14 @@
 										<td>{{apply.type}}</td>
 										<td v-html="apply.realinfo"></td>
 										<td> <span v-if="(apply.expresstype == 1)"><a href="https://www.ickd.cn/" target="view_window">{{apply.expressnum}}</a></span></td>
-										<td>{{apply.mainrelation}}</td>
+										<td>
+											<span v-if="apply.id == apply.mainid">
+												{{apply.relationremark}}
+											</span>
+											<span v-else>
+												{{apply.mainrelation}}
+											</span>
+										</td>
 										<td><a v-on:click="updateApplicant(apply.id)">基本信息</a>&nbsp;
 											<a v-on:click="passport(apply.id)">护照信息</a>&nbsp;
 											<a v-on:click="visa(apply.id)">签证信息</a>&nbsp;
@@ -641,8 +648,18 @@
 				}else if(status == 2){
 					layer.msg('保存成功');
 				}
+				$.ajax({ 
+					url: '/admin/visaJapan/getVisaDetailApply.html',
+					dataType:"json",
+					data:{orderid:orderid},
+					type:'post',
+					success: function(data){
+						orderobj.applyinfo = data.applyinfo;
+					}
+				});
 			}
-			
+			function cancelCallBack(status){
+			}
 			function log(orderid){//日志
 				var orderinfoid = '${obj.orderinfo.id}';
 				layer.open({

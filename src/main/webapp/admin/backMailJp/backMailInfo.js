@@ -69,13 +69,12 @@ $(function(){
 			}
 		}
 	});
-	$('#backmail_wrapper').bootstrapValidator('validate');
 
 });
 
 //保存回邮信息
 function save(paramstatus){
-
+	$('#backmail_wrapper').bootstrapValidator('validate');
 	var bootstrapValidator = $("#backmail_wrapper").data('bootstrapValidator');
 	// 执行表单验证 
 	bootstrapValidator.validate();

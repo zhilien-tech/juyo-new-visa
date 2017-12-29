@@ -820,6 +820,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//初审环节操作
 			result.put("isTrailOrder", IsYesOrNoEnum.YES.intKey());
 		}
+		Integer userType = loginUser.getUserType();
+		result.put("userType", userType);
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		if (!Util.isEmpty(applicantEntity.getBirthday())) {
@@ -1556,6 +1558,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 							sbWork.append(jobWorking.intKey()).append(",");
 						}
 						String workStatus = sbWork.toString();
+						int length = workStatus.length();
 						applicantWorkJpEntity.setPrepareMaterials(workStatus.substring(0, workStatus.length() - 1));
 					}
 					if (Util.eq(careerStatus, JobStatusEnum.student_status.intKey())) {//学生
@@ -1579,9 +1582,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 						applicantWorkJpEntity.setPrepareMaterials(workStatus.substring(0, workStatus.length() - 1));
 					}
 
-					applicantWorkJpEntity.setCareerStatus(visaForm.getCareerStatus());
-
 				}
+				applicantWorkJpEntity.setCareerStatus(visaForm.getCareerStatus());
 				applicantWorkJpEntity.setName(visaForm.getName());
 				applicantWorkJpEntity.setAddress(visaForm.getAddress());
 				applicantWorkJpEntity.setTelephone(visaForm.getTelephone());
@@ -1643,6 +1645,28 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} else {
 			return null;
 		}
+	}
+
+	public Object getAllInfoByCard(String cardId) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("province", dbDao.fetch(TIdcardEntity.class, Cnd.where("code", "=", cardId.substring(0, 6))));
+		Date birthday;
+		try {
+			birthday = new SimpleDateFormat("yyyyMMdd").parse(cardId.substring(6, 14));
+			String birthdayDateStr = new SimpleDateFormat("yyyy-MM-dd").format(birthday);
+			result.put("birthday", birthdayDateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+
+		}
+		String sexStr = cardId.substring(16, 17);
+		int sexInt = Integer.parseInt(sexStr);
+		if (sexInt % 2 == 0) {//偶数是女性
+			result.put("sex", "女");
+		} else {
+			result.put("sex", "男");
+		}
+		return result;
 	}
 
 	public Object getNationality(String searchStr) {
@@ -2043,6 +2067,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(passportForm.getId())) {
 			passport.setId(passportForm.getId());
 		}
+		passport.setOCRline1(passportForm.getOCRline1());
+		passport.setOCRline2(passportForm.getOCRline2());
 		passport.setBirthAddress(passportForm.getBirthAddress());
 		passport.setBirthAddressEn(passportForm.getBirthAddressEn());
 		passport.setBirthday(passportForm.getBirthday());
@@ -2515,6 +2541,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				jsonEntity.setSexEn("M");
 			}
 			jsonEntity.setUrl(url);
+			jsonEntity.setOCRline1(out.getString("line0"));
+			jsonEntity.setOCRline2(out.getString("line1"));
 			jsonEntity.setBirthCountry(out.getString("birth_place"));
 			jsonEntity.setVisaCountry(out.getString("issue_place"));
 			Date birthDay;

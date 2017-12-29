@@ -462,49 +462,208 @@
 				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
 			}
 			
-			//校验
-			$('#applicantInfo').bootstrapValidator({
-				message : '验证不通过',
-				feedbackIcons : {
-					valid : 'glyphicon glyphicon-ok',
-					invalid : 'glyphicon glyphicon-remove',
-					validating : 'glyphicon glyphicon-refresh'
-				},
-				fields : {
-
-					firstName : {
-						validators : {
-							notEmpty : {
-								message : '姓不能为空'
+			var userType = '${obj.userType}';
+			if(userType != 2){
+				//校验
+				$('#applicantInfo').bootstrapValidator({
+					message : '验证不通过',
+					feedbackIcons : {
+						valid : 'glyphicon glyphicon-ok',
+						invalid : 'glyphicon glyphicon-remove',
+						validating : 'glyphicon glyphicon-refresh'
+					},
+					fields : {
+	
+						firstName : {
+							validators : {
+								notEmpty : {
+									message : '姓不能为空'
+								}
 							}
-						}
-					},
-					lastName : {
-						validators : {
-							notEmpty : {
-								message : '名不能为空'
+						},
+						lastName : {
+							validators : {
+								notEmpty : {
+									message : '名不能为空'
+								}
 							}
-						}
-					},
-					telephone : {
-						validators : {
-							regexp: {
-		                	 	regexp: /^[1][34578][0-9]{9}$/,
-		                        message: '电话号格式错误'
-		                    }
-						}
-					},
-					email : {
-						validators : {
-							regexp: {
-		                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-		                        message: '邮箱格式错误'
-		                    }
+						},
+						telephone : {
+							validators : {
+								regexp: {
+			                	 	regexp: /^[1][34578][0-9]{9}$/,
+			                        message: '手机号格式错误'
+			                    }
+							}
+						},
+						email : {
+							validators : {
+								regexp: {
+			                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+			                        message: '邮箱格式错误'
+			                    }
+							}
 						}
 					}
-				}
-			});
+				});
+			}/* else{
+				$('#applicantInfo').bootstrapValidator({
+					message : '验证不通过',
+					feedbackIcons : {
+						valid : 'glyphicon glyphicon-ok',
+						invalid : 'glyphicon glyphicon-remove',
+						validating : 'glyphicon glyphicon-refresh'
+					},
+					fields : {
+	
+						firstName : {
+							validators : {
+								notEmpty : {
+									message : '姓不能为空'
+								}
+							}
+						},
+						lastName : {
+							validators : {
+								notEmpty : {
+									message : '名不能为空'
+								}
+							}
+						},
+						telephone : {
+							validators : {
+								notEmpty : {
+									message : '手机号不能为空'
+								},
+								regexp: {
+			                	 	regexp: /^[1][34578][0-9]{9}$/,
+			                        message: '手机号格式错误'
+			                    }
+							}
+						},
+						email : {
+							validators : {
+								notEmpty : {
+									message : '邮箱不能为空'
+								},
+								regexp: {
+			                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+			                        message: '邮箱格式错误'
+			                    }
+							}
+						},
+						cardId : {
+							validators : {
+								notEmpty : {
+									message : '公民身份证不能为空'
+								}
+							}
+						},
+						nation : {
+							validators : {
+								notEmpty : {
+									message : '民族不能为空'
+								}
+							}
+						},
+						issueOrganization : {
+							validators : {
+								notEmpty : {
+									message : '签发机关不能为空'
+								}
+							}
+						},
+						otherFirstName : {
+							validators : {
+								notEmpty : {
+									message : '曾用姓不能为空'
+								}
+							}
+						},
+						otherLastName : {
+							validators : {
+								notEmpty : {
+									message : '曾用名不能为空'
+								}
+							}
+						},
+						nationality : {
+							validators : {
+								notEmpty : {
+									message : '国籍不能为空'
+								}
+							}
+						},
+						birthday : {
+							validators : {
+								notEmpty : {
+									message : '出生日期不能为空'
+								}
+							}
+						},
+						address : {
+							validators : {
+								notEmpty : {
+									message : '住址不能为空'
+								}
+							}
+						},
+						validStartDate : {
+							trigger:"change keyup",
+							validators : {
+								notEmpty : {
+									message : '有效期限不能为空'
+								}
+							}
+						},
+						validEndDate : {
+							trigger:"change keyup",
+							validators : {
+								notEmpty : {
+									message : '有效期限不能为空'
+								}
+							}
+						},
+						province : {
+							validators : {
+								notEmpty : {
+									message : '现居住地省份不能为空'
+								}
+							}
+						},
+						city : {
+							validators : {
+								notEmpty : {
+									message : '现居住地城市不能为空'
+								}
+							}
+						},
+						detailedAddress : {
+							validators : {
+								notEmpty : {
+									message : '详细地址不能为空'
+								}
+							}
+						},
+						emergencyLinkman : {
+							validators : {
+								notEmpty : {
+									message : '紧急联系人姓名不能为空'
+								}
+							}
+						},
+						emergencyTelephone : {
+							validators : {
+								notEmpty : {
+									message : '紧急联系人手机不能为空'
+								}
+							}
+						},
+					}
+				});
+			} */
 			$('#applicantInfo').bootstrapValidator('validate');
+			
 			
 			var front = $("#cardFront").val();
 			var back = $("#cardBack").val();

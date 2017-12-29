@@ -98,6 +98,14 @@ public class TApplicantPassportEntity implements Serializable {
 	private String issuedOrganizationEn;
 
 	@Column
+	@Comment("OCR识别码第一行")
+	private String OCRline1;
+
+	@Column
+	@Comment("OCR识别码第二行")
+	private String OCRline2;
+
+	@Column
 	@Comment("操作人")
 	private Integer opId;
 

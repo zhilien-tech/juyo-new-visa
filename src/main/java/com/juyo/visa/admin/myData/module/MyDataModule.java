@@ -14,6 +14,7 @@ import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.myData.service.MyDataService;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
+import com.juyo.visa.admin.order.service.OrderJpViewService;
 
 /**
  * 我的资料Module
@@ -29,6 +30,9 @@ public class MyDataModule {
 
 	@Inject
 	private MyDataService myDataService;
+
+	@Inject
+	private OrderJpViewService saleViewService;
 
 	/**
 	 * 获取申请人基本信息
@@ -103,6 +107,15 @@ public class MyDataModule {
 	@Ok("jsp")
 	public Object safety(HttpSession session, HttpServletRequest request) {
 		return null;
+	}
+
+	/**
+	 * 根据身份证号获取申请人详细信息
+	 */
+	@At
+	@POST
+	public Object getAllInfoByCard(@Param("cardId") String cardId) {
+		return saleViewService.getAllInfoByCard(cardId);
 	}
 
 }

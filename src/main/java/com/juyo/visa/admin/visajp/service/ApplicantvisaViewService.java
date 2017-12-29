@@ -24,12 +24,13 @@ public class ApplicantvisaViewService extends BaseService<TApplicantVisaJpEntity
 		return listPage4Datatables(queryForm);
 	}
 
-	public Object visaInputAdd(Integer applicantId, Integer isvisa) {
+	public Object visaInputAdd(Integer applicantId, Integer isvisa, Integer tourist) {
 
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("applicantId", applicantId);
 		result.put("visadatatypeenum", EnumUtil.enum2(AlredyVisaTypeEnum.class));
 		result.put("isvisa", isvisa);
+		result.put("tourist", tourist);
 		return result;
 	}
 
