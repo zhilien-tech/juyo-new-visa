@@ -441,3 +441,6 @@ input[type="checkbox"] + label:after {
 	content: "";
 	clear: both;
 }
+.dateVal {
+	float:right;
+}
