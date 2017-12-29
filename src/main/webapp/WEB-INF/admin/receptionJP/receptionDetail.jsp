@@ -54,8 +54,8 @@
 					<span class="">状态：<p id="orStatus_p">${obj.orStatus }</p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
-					<input type="button" value="短信" class="btn btn-primary btn-sm pull-right" onclick="sendSms(${obj.orderinfo.id});"/>
 					<input type="button" value="签证" class="btn btn-primary btn-sm pull-right" onclick="visaTransfer();"/>
+					<input type="button" value="短信" class="btn btn-primary btn-sm pull-right" onclick="sendSms(${obj.orderinfo.id});"/>
 					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue();"/>
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log(${obj.orderinfo.id});" />
 				</div>
@@ -275,14 +275,14 @@
 								</tbody>
 							</table>
 							<!-- end 申请人 -->
-							<!-- <div class="row" id="orderremark">
+							<div class="row" id="orderremark">
 								<div class="col-sm-12">
 									<div class="form-group">
 										<label>备注：</label> 
 										<input id="remark" name="remark" type="text" class="form-control input-sm" v-model="orderinfo.remark"/>
 									</div>
 								</div>
-							</div> -->
+							</div>
 						</div>
 					</div>
 				</section>

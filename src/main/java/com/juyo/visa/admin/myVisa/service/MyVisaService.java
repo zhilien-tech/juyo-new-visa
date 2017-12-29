@@ -383,6 +383,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			//售后，回邮资料
 			TApplicantBackmailJpEntity backmailJpEntity = dbDao.fetch(TApplicantBackmailJpEntity.class,
 					Cnd.where("applicantId", "=", applicantid));
+			indexOfBlue = 10;
 			if (!Util.isEmpty(backmailJpEntity)) {
 				Date backSourceTime = backmailJpEntity.getBackSourceTime();
 				if (!Util.isEmpty(backSourceTime)) {

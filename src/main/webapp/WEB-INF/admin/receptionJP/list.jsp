@@ -65,8 +65,8 @@
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<i class="visaTransfer" v-on:click="visaTransfer(data.id)"> </i>
 									<i class="sendSms" v-on:click="sendSms(data.id)"> </i>
+									<i class="visaTransfer" v-on:click="visaTransfer(data.id)"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">

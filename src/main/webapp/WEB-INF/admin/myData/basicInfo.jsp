@@ -50,7 +50,7 @@
 							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
 						</div> <!-- end 身份证 正面 -->
 
-						<div class="info-imgUpload front">
+						<div class="info-imgUpload front has-error">
 							<!-- 身份证 正面 -->
 							<div class="col-xs-6">
 							<div class="form-group">
@@ -63,11 +63,14 @@
 								</div>
 							</div>
 						</div>
-	
 						</div>
+						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;">
+							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none; ">身份证正面必须上传</small>
+						</div>
+					
 						<!-- end 身份证 正面 -->
 
-						<div class="info-imgUpload back">
+						<div class="info-imgUpload back has-error">
 							<!-- 身份证 反面 -->
 							<div class="col-xs-6">
 								<div class="form-group">
@@ -80,6 +83,9 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;">
+							<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
 						</div>
 						<!-- end 身份证 反面 -->
 						<div class="row">
@@ -364,6 +370,31 @@
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
 	$(function(){
+		
+		//身份证图片验证
+		var cardFront = $("#cardFront").val();
+		if(cardFront == ""){
+			$(".front").attr("class", "info-imgUpload front has-error");  
+	        $(".help-blockFront").attr("data-bv-result","INVALID");  
+	        $(".help-blockFront").attr("style","display: block;");  
+		}else{
+			$(".front").attr("class", "info-imgUpload front has-success");  
+	        $(".help-blockFront").attr("data-bv-result","IVALID");  
+	        $(".help-blockFront").attr("style","display: none;");  
+		}
+		
+		var cardBack = $("#cardBack").val();
+		if(cardBack == ""){
+			$(".back").attr("class", "info-imgUpload back has-error");  
+	        $(".help-blockBack").attr("data-bv-result","INVALID");  
+	        $(".help-blockBack").attr("style","display: block;");  
+		}else{
+			$(".back").attr("class", "info-imgUpload back has-success");  
+	        $(".help-blockBack").attr("data-bv-result","IVALID");  
+	        $(".help-blockBack").attr("style","display: none;");  
+		}
+		
+		//页面所有元素设置为disabled
 		var form = document.forms[0]; 
 		for ( var i = 0; i < form.length; i++) { 
 			var element = form.elements[i]; 
@@ -422,6 +453,7 @@
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
+
 				firstName : {
 					trigger:"change keyup",
 					validators : {
@@ -439,24 +471,152 @@
 					}
 				},
 				telephone : {
+					trigger:"change keyup",
 					validators : {
+						notEmpty : {
+							message : '手机号不能为空'
+						},
 						regexp: {
 	                	 	regexp: /^[1][34578][0-9]{9}$/,
-	                        message: '电话号格式错误'
+	                        message: '手机号格式错误'
 	                    }
 					}
 				},
 				email : {
+					trigger:"change keyup",
 					validators : {
+						notEmpty : {
+							message : '邮箱不能为空'
+						},
 						regexp: {
 	                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
 	                        message: '邮箱格式错误'
 	                    }
 					}
-				}
+				},
+				cardId : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '公民身份证不能为空'
+						}
+					}
+				},
+				nation : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '民族不能为空'
+						}
+					}
+				},
+				issueOrganization : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '签发机关不能为空'
+						}
+					}
+				},
+				otherFirstName : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '曾用姓不能为空'
+						}
+					}
+				},
+				otherLastName : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '曾用名不能为空'
+						}
+					}
+				},
+				nationality : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '国籍不能为空'
+						}
+					}
+				},
+				birthday : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '出生日期不能为空'
+						}
+					}
+				},
+				address : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '住址不能为空'
+						}
+					}
+				},
+				validStartDate : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '有效期限不能为空'
+						}
+					}
+				},
+				validEndDate : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '有效期限不能为空'
+						}
+					}
+				},
+				province : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '现居住地省份不能为空'
+						}
+					}
+				},
+				city : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '现居住地城市不能为空'
+						}
+					}
+				},
+				detailedAddress : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '详细地址不能为空'
+						}
+					}
+				},
+				emergencyLinkman : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '紧急联系人姓名不能为空'
+						}
+					}
+				},
+				emergencyTelephone : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '紧急联系人手机不能为空'
+						}
+					}
+				},
 			}
 		});
-		$('#applicantInfo').bootstrapValidator('validate');
+	$('#applicantInfo').bootstrapValidator('validate');
 		
 		var front = $("#cardFront").val();
 		var back = $("#cardBack").val();
@@ -482,6 +642,13 @@
 		bootstrapValidator.validate();
 
 		if (!bootstrapValidator.isValid()){
+			return;
+		}
+		
+		if($(".back").hasClass("has-error")){
+			return;
+		}
+		if($(".front").hasClass("has-error")){
 			return;
 		}
 			
@@ -538,11 +705,17 @@
 			$('#cardFront').val("");
 			$('#sqImg').attr('src', "");
 			$("#uploadFile").siblings("i").css("display","none");
+			$(".front").attr("class", "info-imgUpload front has-error");  
+	        $(".help-blockFront").attr("data-bv-result","INVALID");  
+	        $(".help-blockFront").attr("style","display: block;");
 		});
 		$("#deleteApplicantBackImg").click(function(){
 			$('#cardBack').val("");
 			$('#sqImgBack').attr('src', "");
 			$("#uploadFileBack").siblings("i").css("display","none");
+			$(".back").attr("class", "info-imgUpload back has-error");  
+	        $(".help-blockBack").attr("data-bv-result","INVALID");  
+	        $(".help-blockBack").attr("style","display: block;");
 		});
 		$("#baseRemark").attr("disabled", true);
 	} 
@@ -680,13 +853,16 @@
 						$('#cardFront').val(obj.url);
 						$('#sqImg').attr('src', obj.url);
 						$("#uploadFile").siblings("i").css("display","block");
-						$('#address').val(obj.address);
-						$('#nation').val(obj.nationality);
-						$('#cardId').val(obj.num);
+						$(".front").attr("class", "info-imgUpload front has-success");  
+				        $(".help-blockFront").attr("data-bv-result","IVALID");  
+				        $(".help-blockFront").attr("style","display: none;");
+						$('#address').val(obj.address).change();
+						$('#nation').val(obj.nationality).change();
+						$('#cardId').val(obj.num).change();
 						searchByCard();
-						$('#cardProvince').val(obj.province);
-						$('#cardCity').val(obj.city);
-						$('#birthday').val(obj.birth);
+						$('#cardProvince').val(obj.province).change();
+						$('#cardCity').val(obj.city).change();
+						$('#birthday').val(obj.birth).change();
 						$('#sex').val(obj.sex);
 					}
 					$("#addBtn").attr('disabled', false);
@@ -733,9 +909,12 @@
 						$('#cardBack').val(obj.url);
 						$('#sqImgBack').attr('src', obj.url);
 						$("#uploadFileBack").siblings("i").css("display","block");
-						$('#validStartDate').val(obj.starttime);
-						$('#validEndDate').val(obj.endtime);
-						$('#issueOrganization').val(obj.issue);
+						$(".back").attr("class", "info-imgUpload back has-success");  
+				        $(".help-blockBack").attr("data-bv-result","IVALID");  
+				        $(".help-blockBack").attr("style","display: none;");
+						$('#validStartDate').val(obj.starttime).change();
+						$('#validEndDate').val(obj.endtime).change();
+						$('#issueOrganization').val(obj.issue).change();
 					}
 					$("#addBtn").attr('disabled', false);
 					$("#updateBtn").attr('disabled', false);
@@ -859,9 +1038,9 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					$("#province").val(data.province);
-					$("#city").val(data.city);
-					$("#detailedAddress").val($("#address").val());
+					$("#province").val(data.province).change();
+					$("#city").val(data.city).change();
+					$("#detailedAddress").val($("#address").val()).change();
 				}
 			});
 		}else{
@@ -873,6 +1052,12 @@
 	
 	
 	function clearAll(){
+		$(".front").attr("class", "info-imgUpload front has-error");  
+        $(".help-blockFront").attr("data-bv-result","INVALID");  
+        $(".help-blockFront").attr("style","display: block;");
+        $(".back").attr("class", "info-imgUpload back has-error");  
+        $(".help-blockBack").attr("data-bv-result","INVALID");  
+        $(".help-blockBack").attr("style","display: block;"); 
 		$("input[name='hasOtherName']").eq(0).removeAttr("checked");
         $("input[name='hasOtherName']").eq(1).attr("checked","checked");
 		$("input[name='hasOtherNationality']").eq(0).removeAttr("checked");
@@ -886,28 +1071,28 @@
 		$("#sqImgBack").attr('src', "");
 		$("#uploadFile").siblings("i").css("display","none");
 		$("#uploadFileBack").siblings("i").css("display","none");
-		$("#issueOrganization").val("");
-		$("#province").val("");
-		$("#city").val("");
-		$("#otherFirstName").val("");
+		$("#issueOrganization").val("").change();
+		$("#province").val("").change();
+		$("#city").val("").change();
+		$("#otherFirstName").val("").change();
 		$("#otherFirstNameEn").val("");
-		$("#otherLastName").val("");
+		$("#otherLastName").val("").change();
 		$("#otherLastNameEn").val("");
 		$("#firstName").val("").change();
 		$("#firstNameEn").val("");
 		$("#lastName").val("").change();
 		$("#lastNameEn").val("");
-		$("#telephone").val("");
-		$("#email").val("");
-		$("#nation").val("");
-		$("#nationality").val("");
-		$("#birthday").val("");
-		$("#address").val("");
-		$("#issueOrganization").val("");
-		$("#cardId").val("");
-		$("#validStartDate").val("");
-		$("#validEndDate").val("");
-		$("#detailedAddress").val("");
+		$("#telephone").val("").change();
+		$("#email").val("").change();
+		$("#nation").val("").change();
+		$("#nationality").val("").change();
+		$("#birthday").val("").change();
+		$("#address").val("").change();
+		$("#issueOrganization").val("").change();
+		$("#cardId").val("").change();
+		$("#validStartDate").val("").change();
+		$("#validEndDate").val("").change();
+		$("#detailedAddress").val("").change();
 	}
 	</script>
 </body>
