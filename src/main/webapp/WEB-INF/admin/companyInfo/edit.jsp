@@ -31,14 +31,14 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>公司全称：</label> 
-								<input id="fullname" name="fullname" value="${obj.fullname }" type="text" class="form-control input-sm" placeholder=" " />
+								<input id="name" name="name" value="${obj.name }" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>公司简称：</label> 
-								<input id="shortname" name="shortname" value="${obj.shortname }" type="text" class="form-control input-sm" placeholder=" " />
+								<input id="shortName" name="shortName" value="${obj.shortName }" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -47,7 +47,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>指定番号：</label> 
-								<input id="designatedNum" name="designatedNum" value="${obj.designatedNum }" type="text" style="text-transform:uppercase" class="form-control input-sm" placeholder="必须大写字母" />
+								<input id="cdesignNum" name="cdesignNum" value="${obj.cdesignNum }" type="text" style="text-transform:uppercase" class="form-control input-sm" placeholder="必须大写字母" />
 							</div>
 						</div>
 

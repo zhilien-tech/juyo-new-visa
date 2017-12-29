@@ -46,6 +46,7 @@
 							</div>
 						</div>
 						<input id="applicantId" name="applicantId" value="${obj.applicantId }" type="hidden">
+						<input id="orderId" name="orderId" value="${obj.orderId }" type="hidden">
 					</div>
 				</div>
 			</div>
@@ -69,6 +70,8 @@
 	<script type="text/javascript">
 		//保存快递单号
 		function save(){
+			var orderid = $("#orderId").val();
+			var applyid = $("#applicantId").val();
 			var layerIndex =  layer.load(1, {shade: "#000"});
 			$.ajax({ 
 				url: BASE_PATH+'/admin/myVisa/saveExpressInfo.html',
@@ -76,11 +79,14 @@
 				data:{
 					expressType : $("#expressType").val(),
 					expressNum : $("#expressNum").val(),
-					applicantId : $("#applicantId").val(),
+					applicantId : applyid,
+					orderId : orderid
 				},
 				success: function(data){
+					window.parent.location.reload();
 					if(data.stauts == 200){
 						layer.close(layerIndex);
+						parent.successCallBack(2);
 					}
 					closeWindow();
 				}

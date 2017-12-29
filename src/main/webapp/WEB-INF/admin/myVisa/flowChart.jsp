@@ -13,14 +13,14 @@
 		  <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		  <link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
-			.flowChart li div label{margin: 0;font-size: 14px;text-align: right;width:105px;display: inline-block;}
+			.flowChart li div label{margin: 0;font-size: 14px;text-align: right; display: inline-block; margin:0 10px;}
 			.flowChart li:nth-child(1){height: 85px;padding-left: 10%;padding-top: 10px;}
 			.flowChart li div span{position: relative;left: 20px;}
 			.flowChart li {height: 82px;}
 			.circle{width: 8%;height: 80px;float: left;margin-left: 2%;}
 			.date-info{display: inline-block;width: 85%;position: relative;top: 7px;}
 			.date-info span{width:100%;}
-			.date-info span label{width: 75% !important;text-align: left !important;position: relative;left: 20px;color: #8e8e8e;font-size: 12px !important;}
+			
 			.date-info span a{color: #2a7be5;}
 			.circle .circle-outside{height: 40px;width: 40px;background-color: #e4e4e4;margin: 0 auto;border-radius: 50%;padding: 4px;}
 			.circle .circle-outside i{display: block;width: 100%;height: 100%;background-color: #d2d2d2;border-radius: 50%;}
@@ -28,7 +28,7 @@
 			.blue .circle-outside{background-color:#9fc4f6 !important;}
 			.blue .circle-outside i{background-color: #5e9fef !important;}
 			.blue .vertical{background-color: #9fc4f4 !important;}
-			
+			.NoClcik { cursor:default; color:#656565 !important;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -84,10 +84,10 @@
 							<div class="date-info">
 								<label>快递单号</label>
 								<c:if test="${null != obj.expressEntity }">
-									<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">编辑</a><label>${obj.expressNum }</label></span>
+									<span><a class="NoClcik">${obj.expressType }</a>&nbsp;<label>${obj.expressNum }</label><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">修改</a></span>
 								</c:if>
 								<c:if test="${null == obj.expressEntity }">
-									<span><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写</a><label>${obj.expressNum }</label></span>
+									<span><label>${obj.expressType }</label>&nbsp;<label>${obj.expressNum }</label><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写</a></span>
 								</c:if>
 							</div>
 							
@@ -99,7 +99,7 @@
 							</div>
 							<div class="date-info">
 								<label>快递状态</label>
-								<span><label>已寄出</label></span>
+								<span><a class="NoClcik">已寄出</a></span>
 							</div>
 							
 						</li>
@@ -185,7 +185,6 @@
 			var orderId = ${obj.order.id};
 			var orderstatus = ${obj.order.status};
 			var applicantId = ${obj.applicant.applicantid};
-			
 			var indexOfBlue = ${obj.indexOfBlue};
 		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
@@ -237,7 +236,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['600px', '300px'],
-					content:'/admin/myVisa/youkeExpressInfo.html?applicantId='+applyId
+					content:'/admin/myVisa/youkeExpressInfo.html?applicantId='+applyId+'&orderId='+orderId
 				});
 			}
 			

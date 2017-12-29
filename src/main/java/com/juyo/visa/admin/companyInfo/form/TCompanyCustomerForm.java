@@ -1,4 +1,4 @@
-package com.juyo.visa.forms;
+package com.juyo.visa.admin.companyInfo.form;
 
 import java.util.Date;
 
@@ -9,14 +9,12 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
-import org.nutz.dao.util.cri.SqlExpressionGroup;
 
-import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class TCompanyForm extends DataTablesParamForm {
+public class TCompanyCustomerForm extends DataTablesParamForm {
 	private static final long serialVersionUID = 1L;
 	/**主键*/
 	private Integer id;
@@ -55,7 +53,7 @@ public class TCompanyForm extends DataTablesParamForm {
 	private Integer isCustomer;
 
 	/**客户指定番号*/
-	private String cdesignNum;
+	private String cDesignNum;
 
 	/**经营范围*/
 	private String comScopes;
@@ -75,6 +73,13 @@ public class TCompanyForm extends DataTablesParamForm {
 	/**检索字段*/
 	private String searchStr;
 
+	//页码
+	private Integer pageNumber = 1;
+	//每页多少条
+	private Integer pageSize = 10;
+	//总页数
+	private Integer pageTotal;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**
@@ -82,7 +87,7 @@ public class TCompanyForm extends DataTablesParamForm {
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
 		/*String sqlString = EntityUtil.entityCndSql(TCompanyEntity.class);*/
-		String sqlString = sqlManager.get("platformCompany_list");
+		String sqlString = sqlManager.get("companyInfo_list_company");
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
 		return sql;
@@ -91,19 +96,9 @@ public class TCompanyForm extends DataTablesParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		//TODO 添加自定义查询条件（可选）
-		if (!Util.isEmpty(searchStr)) {
-			SqlExpressionGroup expg = new SqlExpressionGroup();
-			expg.and("c.name", "LIKE", "%" + searchStr + "%").or("u.mobile", "LIKE", "%" + searchStr + "%")
-					.or("c.linkman", "LIKE", "%" + searchStr + "%").or("c.mobile", "LIKE", "%" + searchStr + "%")
-					.or("c.email", "LIKE", "%" + searchStr + "%");
-			cnd.and(expg);
-		}
-		if (!Util.isEmpty(comType)) {
-			cnd.and("c.comType", "=", comType);
-		}
-		cnd.and("c.comType", "!=", "-1");
-		cnd.and("c.isCustomer", "=", "0");
-		cnd.orderBy("c.createTime", "DESC");
+		cnd.and("adminId", "=", adminId);
+		cnd.and("c.comType", "=", "1"); //表示：送签社
+		cnd.and("c.isCustomer", "=", "1"); //表示：客户信息
 		cnd.orderBy("c.updateTime", "DESC");
 		return cnd;
 	}

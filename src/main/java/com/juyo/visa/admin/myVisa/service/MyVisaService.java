@@ -124,53 +124,58 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
+
+		List<Record> list = new ArrayList<>();
 		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()), null);
-		List<TOrderJpEntity> orderJpList = new ArrayList<TOrderJpEntity>();
-		List<Record> list = new ArrayList<>();
-		for (TApplicantEntity tApplicantEntity : applyList) {
-			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
-					Cnd.where("applicantId", "=", tApplicantEntity.getId()));
-			if (!Util.isEmpty(applicantOrderJpEntity)) {
-				Integer orderId = applicantOrderJpEntity.getOrderId();
-				if (!Util.isEmpty(orderId)) {
-					TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, orderId.longValue());
-					orderJpList.add(orderJpEntity);
-				}
-			}
-		}
-		for (TOrderJpEntity tOrderJpEntity : orderJpList) {
-			String passportSqlstr = sqlManager.get("myvisa_japan_visa_list_data");
-			Sql passportSql = Sqls.create(passportSqlstr);
-			Cnd orderJpCnd = Cnd.NEW();
-			orderJpCnd.and("toj.id", "=", tOrderJpEntity.getId());
-			passportSql.setCondition(orderJpCnd);
-			Record passport = dbDao.fetch(passportSql);
-			list.add(passport);
-		}
-		Collections.reverse(list);
-		for (Record record : list) {
-			Integer orderid = (Integer) record.get("id");
-			String sqlStr = sqlManager.get("myvisa_japan_visa_list_data_apply");
-			Sql applysql = Sqls.create(sqlStr);
-			List<Record> query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
-			for (Record apply : query) {
-				Integer dataType = (Integer) apply.get("dataType");
-				for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
-					if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
-						apply.put("dataType", dataTypeEnum.value());
+		if (!Util.isEmpty(applyList)) {
+			List<TOrderJpEntity> orderJpList = new ArrayList<TOrderJpEntity>();
+
+			for (TApplicantEntity tApplicantEntity : applyList) {
+				TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
+						Cnd.where("applicantId", "=", tApplicantEntity.getId()));
+				if (!Util.isEmpty(applicantOrderJpEntity)) {
+					Integer orderId = applicantOrderJpEntity.getOrderId();
+					if (!Util.isEmpty(orderId)) {
+						TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, orderId.longValue());
+						orderJpList.add(orderJpEntity);
 					}
 				}
 			}
-			record.put("everybodyInfo", query);
-			//签证状态
-			Integer visastatus = record.getInt("japanState");
-			for (JPOrderStatusEnum visaenum : JPOrderStatusEnum.values()) {
-				if (visaenum.intKey() == visastatus) {
-					record.put("visastatus", visaenum.value());
+			for (TOrderJpEntity tOrderJpEntity : orderJpList) {
+				String passportSqlstr = sqlManager.get("myvisa_japan_visa_list_data");
+				Sql passportSql = Sqls.create(passportSqlstr);
+				Cnd orderJpCnd = Cnd.NEW();
+				orderJpCnd.and("toj.id", "=", tOrderJpEntity.getId());
+				passportSql.setCondition(orderJpCnd);
+				Record passport = dbDao.fetch(passportSql);
+				list.add(passport);
+			}
+			Collections.reverse(list);
+			for (Record record : list) {
+				Integer orderid = (Integer) record.get("id");
+				String sqlStr = sqlManager.get("myvisa_japan_visa_list_data_apply");
+				Sql applysql = Sqls.create(sqlStr);
+				List<Record> query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
+				for (Record apply : query) {
+					Integer dataType = (Integer) apply.get("dataType");
+					for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
+						if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
+							apply.put("dataType", dataTypeEnum.value());
+						}
+					}
+				}
+				record.put("everybodyInfo", query);
+				//签证状态
+				Integer visastatus = record.getInt("japanState");
+				for (JPOrderStatusEnum visaenum : JPOrderStatusEnum.values()) {
+					if (visaenum.intKey() == visastatus) {
+						record.put("visastatus", visaenum.value());
+					}
 				}
 			}
 		}
+
 		result.put("visaJapanData", list);
 		return result;
 
@@ -252,9 +257,17 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		TApplicantExpressEntity expressEntity = dbDao.fetch(TApplicantExpressEntity.class,
 				Cnd.where("applicantId", "=", applicantid));
 		String expressNum = "";
+		String expressType = "";
 		if (!Util.isEmpty(expressEntity)) {
 			expressNum = expressEntity.getExpressNum();
+			Integer type = expressEntity.getExpressType();
+			for (YouKeExpressTypeEnum statusEnum : YouKeExpressTypeEnum.values()) {
+				if (!Util.isEmpty(expressNum) && type == statusEnum.intKey()) {
+					expressType = statusEnum.value();
+				}
+			}
 		}
+		result.put("expressType", expressType);
 		result.put("expressNum", expressNum);
 		result.put("expressEntity", expressEntity);
 
@@ -286,13 +299,15 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		int indexOfBlue = getIndexOfBlue(order, applicantid);
 		result.put("indexOfBlue", indexOfBlue);
 
+		result.put("orderid", orderid);
 		return result;
 	}
 
 	//填写快递单号页
-	public Object youkeExpressInfo(Integer applicantId) {
+	public Object youkeExpressInfo(Integer applicantId, Integer orderId) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("applicantId", applicantId);
+		result.put("orderId", orderId);
 		result.put("expressInfo",
 				dbDao.fetch(TApplicantExpressEntity.class, Cnd.where("applicantId", "=", applicantId)));
 		result.put("expressType", EnumUtil.enum2(YouKeExpressTypeEnum.class));
@@ -300,7 +315,8 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	//保存快递单号
-	public Object saveExpressInfo(int expressType, String expressNum, Integer applicantId, HttpSession session) {
+	public Object saveExpressInfo(int expressType, String expressNum, Integer applicantId, Integer orderId,
+			HttpSession session) {
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
@@ -327,6 +343,21 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			expressEntity.setUpdateTime(nowDate);
 			dbDao.update(expressEntity);
 		}
+
+		if (!Util.isEmpty(orderId)) {
+			TOrderEntity order = dbDao.fetch(TOrderEntity.class, Cnd.where("id", "=", orderId));
+			if (!Util.isEmpty(order)) {
+				Integer orderStatus = order.getStatus();
+				int send_address = JPOrderStatusEnum.SEND_ADDRESS.intKey();
+				int send_data = JPOrderStatusEnum.SEND_DATA.intKey();
+				if (!Util.isEmpty(orderStatus) && orderStatus == send_address) {
+					order.setStatus(send_data);
+					order.setUpdateTime(nowDate);
+					dbDao.update(order);
+				}
+			}
+		}
+
 		return "ExpressNum Success";
 	}
 
@@ -352,6 +383,9 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				//已寄出
 				indexOfBlue = 4;
 			}
+		} else if (status == JPOrderStatusEnum.SEND_DATA.intKey()) {
+			//已发地址，游客填快递单号
+			indexOfBlue = 4;
 		} else if (status == JPOrderStatusEnum.RECEPTION_RECEIVED.intKey()) {
 			//前台已收件
 			indexOfBlue = 5;
@@ -380,6 +414,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				indexOfBlue = 10;
 			}
 		} else if (status >= JPOrderStatusEnum.AFTERMARKET_ORDER.intKey()) {
+			indexOfBlue = 10;
 			//售后，回邮资料
 			TApplicantBackmailJpEntity backmailJpEntity = dbDao.fetch(TApplicantBackmailJpEntity.class,
 					Cnd.where("applicantId", "=", applicantid));
