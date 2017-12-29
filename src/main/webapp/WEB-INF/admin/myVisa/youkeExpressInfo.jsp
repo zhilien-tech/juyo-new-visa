@@ -70,8 +70,6 @@
 	<script type="text/javascript">
 		//保存快递单号
 		function save(){
-			var orderid = $("#orderId").val();
-			var applyid = $("#applicantId").val();
 			var layerIndex =  layer.load(1, {shade: "#000"});
 			$.ajax({ 
 				url: BASE_PATH+'/admin/myVisa/saveExpressInfo.html',
@@ -79,11 +77,10 @@
 				data:{
 					expressType : $("#expressType").val(),
 					expressNum : $("#expressNum").val(),
-					applicantId : applyid,
-					orderId : orderid
+					applicantId : $("#applicantId").val(),
+					orderId : $("#orderId").val()
 				},
 				success: function(data){
-					window.parent.location.reload();
 					if(data.stauts == 200){
 						layer.close(layerIndex);
 						parent.successCallBack(2);
