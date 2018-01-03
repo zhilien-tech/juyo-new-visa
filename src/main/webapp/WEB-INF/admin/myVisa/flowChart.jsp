@@ -288,7 +288,7 @@
 				});
 			}
 			function cancelCallBack(status){
-				successCallBack(1);
+				successCallBack(4);
 			}
 		</script>
 	</body>

@@ -64,7 +64,7 @@
 						<div class="info-QRcode"> <!-- 身份证 正面 -->
 							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
 						</div> <!-- end 身份证 正面 -->
-						<div class="info-imgUpload front has-error">
+						<div class="info-imgUpload front has-error" id="borderColorFront">
 							<!-- 身份证 正面 -->
 							<div class="col-xs-6">
 							<div class="form-group">
@@ -83,7 +83,7 @@
 						</div>
 						<!-- end 身份证 正面 -->
 
-						<div class="info-imgUpload back has-error">
+						<div class="info-imgUpload back has-error" id="borderColorBack">
 							<!-- 身份证 反面 -->
 							<div class="col-xs-6">
 								<div class="form-group">
@@ -423,7 +423,6 @@
 	}
 		$(function(){
 			
-			
 			//身份证图片验证
 			if(userType == 2){
 				var cardFront = $("#cardFront").val();
@@ -431,10 +430,12 @@
 					$(".front").attr("class", "info-imgUpload front has-error");  
 			        $(".help-blockFront").attr("data-bv-result","INVALID");  
 			        $(".help-blockFront").attr("style","display: block;");  
+			        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
 				}else{
 					$(".front").attr("class", "info-imgUpload front has-success");  
 			        $(".help-blockFront").attr("data-bv-result","IVALID");  
 			        $(".help-blockFront").attr("style","display: none;");  
+			        $("#borderColorFront").attr("style", null);
 				}
 				
 				var cardBack = $("#cardBack").val();
@@ -442,10 +443,12 @@
 					$(".back").attr("class", "info-imgUpload back has-error");  
 			        $(".help-blockBack").attr("data-bv-result","INVALID");  
 			        $(".help-blockBack").attr("style","display: block;");  
+			        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
 				}else{
 					$(".back").attr("class", "info-imgUpload back has-success");  
 			        $(".help-blockBack").attr("data-bv-result","IVALID");  
-			        $(".help-blockBack").attr("style","display: none;");  
+			        $(".help-blockBack").attr("style","display: none;"); 
+			        $("#borderColorBack").attr("style", null);
 				}
 			}
 			
@@ -849,10 +852,18 @@
 							$(".front").attr("class", "info-imgUpload front has-success");  
 					        $(".help-blockFront").attr("data-bv-result","IVALID");  
 					        $(".help-blockFront").attr("style","display: none;");
+					        $("#borderColorFront").attr("style", null);
 							$('#address').val(obj.address).change();
 							$('#nation').val(obj.nationality).change();
 							$('#cardId').val(obj.num).change();
-							searchByCard();
+							var str="";  
+							//是否同身份证相同
+							$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+								str=$(this).val();     
+							});     
+							if(str == 1){//相同
+								searchByCard();
+							}
 							$('#cardProvince').val(obj.province).change();
 							$('#cardCity').val(obj.city).change();
 							$('#birthday').val(obj.birth).change();
@@ -905,6 +916,7 @@
 							$(".back").attr("class", "info-imgUpload back has-success");  
 					        $(".help-blockBack").attr("data-bv-result","IVALID");  
 					        $(".help-blockBack").attr("style","display: none;"); 
+					        $("#borderColorBack").attr("style", null);
 							$('#validStartDate').val(obj.starttime).change();
 							$('#validEndDate').val(obj.endtime).change();
 							$('#issueOrganization').val(obj.issue).change();
@@ -958,7 +970,8 @@
 			if(userType == 2){
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;"); 
+		        $(".help-blockFront").attr("style","display: block;");
+		        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
 			}
 			
 		}
@@ -970,6 +983,7 @@
 				$(".back").attr("class", "info-imgUpload back has-error");  
 		        $(".help-blockBack").attr("data-bv-result","INVALID");  
 		        $(".help-blockBack").attr("style","display: block;");
+		        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
 			}
 		}
 		
@@ -1053,20 +1067,26 @@
 		
 		//居住地与身份证相同
 		$(".nowProvince").change(function(){
-			searchByCard();
-		});
-		
-		$("#cardId").change(function(){
-			searchByCard();
-		});
-		
-		function searchByCard(){
 			var str="";  
 			//是否同身份证相同
 			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
 				str=$(this).val();     
 			});     
 			if(str == 1){//相同
+				searchByCard();
+			}else{
+				$("#province").val("").change();
+				$("#city").val("").change();
+				$("#detailedAddress").val("").change();
+			}
+		});
+		
+		/* $("#cardId").change(function(){
+			searchByCard();
+		}); */
+		
+		function searchByCard(){
+			
 				var cardId = $("#cardId").val();
 				layer.load(1);
 				$.ajax({
@@ -1078,16 +1098,14 @@
 					success :function(data) {
 						console.log(JSON.stringify(data));
 						layer.closeAll('loading');
-						$("#province").val(data.province).change();
-						$("#city").val(data.city).change();
 						$("#detailedAddress").val($("#address").val()).change();
+						if(data != null){
+							$("#province").val(data.province).change();
+							$("#city").val(data.city).change();
+						}
 					}
 				});
-			}else{
-				$("#province").val("");
-				$("#city").val("");
-				$("#detailedAddress").val("");
-			}
+			
 		}
 		
 		function passportBtn(){
@@ -1110,10 +1128,8 @@
 				if($(".back").hasClass("has-error")){
 					return;
 				}
-				window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
-			}else{
-				window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
 			}
+			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
 			/* layer.open({
 				type: 2,
 				title: false,
