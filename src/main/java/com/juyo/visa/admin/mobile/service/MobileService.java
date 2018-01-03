@@ -524,6 +524,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			applicant.setMainId(form.getMainId());
 			applicantjp.setIsMainApplicant(form.getIsMainApplicant());
 			applicantjp.setRelationRemark(form.getRelationRemark());
+			applicantjp.setMainRelation(form.getMainRelation());
 			dbDao.update(applicant);
 			dbDao.update(applicantjp);
 		}

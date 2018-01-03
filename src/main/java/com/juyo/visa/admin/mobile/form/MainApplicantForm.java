@@ -26,4 +26,6 @@ public class MainApplicantForm {
 	private Integer isMainApplicant;
 
 	private Integer mainId;
+
+	private String mainRelation;
 }
