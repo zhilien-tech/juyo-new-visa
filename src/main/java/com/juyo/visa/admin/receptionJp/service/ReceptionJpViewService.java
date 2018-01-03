@@ -108,12 +108,12 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		for (Record record : list) {
 			int orderstatus = (int) record.get("orderstatus");
 			for (JPOrderStatusEnum orderStatus : JPOrderStatusEnum.values()) {
-				if (orderstatus == orderStatus.SEND_ADDRESS.intKey()) {
+				/*if (orderstatus == orderStatus.SEND_ADDRESS.intKey()) {
 					record.put("orderstatus", "已寄出");
 				} else {
-					if (orderstatus == orderStatus.intKey()) {
-						record.put("orderstatus", orderStatus.value());
-					}
+				}*/
+				if (orderstatus == orderStatus.intKey()) {
+					record.put("orderstatus", orderStatus.value());
 				}
 			}
 			Integer orderid = (Integer) record.get("orderJpId");

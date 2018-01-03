@@ -138,6 +138,13 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 					Integer orderId = applicantOrderJpEntity.getOrderId();
 					if (!Util.isEmpty(orderId)) {
 						TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, orderId.longValue());
+						TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId()
+								.longValue());
+						Integer orderStatus = orderEntity.getStatus();
+						if (orderStatus < JPOrderStatusEnum.FILLED_INFORMATION.intKey()) {
+							orderEntity.setStatus(JPOrderStatusEnum.FILLING_INFORMATION.intKey());
+							dbDao.update(orderEntity);
+						}
 						orderJpList.add(orderJpEntity);
 					}
 				}
@@ -406,12 +413,17 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			}
 		} else if (status >= JPOrderStatusEnum.VISA_ORDER.intKey()
 				&& status < JPOrderStatusEnum.AFTERMARKET_ORDER.intKey()) {
+			indexOfBlue = 9;
 			//签证已返回
-			TApplicantVisaJpEntity applicantVisaJpEntity = dbDao.fetch(TApplicantVisaJpEntity.class,
+			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", applicantid));
-			Date visaEntryTime = applicantVisaJpEntity.getVisaEntryTime();
-			if (!Util.isEmpty(visaEntryTime)) {
-				indexOfBlue = 10;
+			TApplicantVisaJpEntity applicantVisaJpEntity = dbDao.fetch(TApplicantVisaJpEntity.class,
+					Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()));
+			if (!Util.isEmpty(applicantVisaJpEntity)) {
+				Date visaEntryTime = applicantVisaJpEntity.getVisaEntryTime();
+				if (!Util.isEmpty(visaEntryTime)) {
+					indexOfBlue = 10;
+				}
 			}
 		} else if (status >= JPOrderStatusEnum.AFTERMARKET_ORDER.intKey()) {
 			indexOfBlue = 10;

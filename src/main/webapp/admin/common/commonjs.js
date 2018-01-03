@@ -164,6 +164,7 @@ $(document).on("input","#cardId",function(){
 	}
 	var card = $(this).val();
 	if(card.length == 18){
+		
 		layer.load(1);
 		$.ajax({
 			type: 'POST',
@@ -180,6 +181,14 @@ $(document).on("input","#cardId",function(){
 				$('#cardCity').val(data.province.city);
 			}
 		});
+		var str="";  
+		//是否同身份证相同
+		$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+			str=$(this).val();     
+		});     
+		if(str == 1){//相同
+			searchByCard();
+		}
 	}
 });
 //获取拼音字符串

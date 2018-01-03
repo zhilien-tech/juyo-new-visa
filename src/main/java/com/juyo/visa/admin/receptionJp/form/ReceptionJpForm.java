@@ -102,7 +102,7 @@ public class ReceptionJpForm extends DataTablesParamForm {
 		}
 		cnd.and("tr.comId", "=", companyid);
 		cnd.orderBy("tr.updatetime", "DESC");
-		cnd.orderBy("tr.createtime", "DESC");
+		//cnd.orderBy("tr.createtime", "DESC");
 		return cnd;
 	}
 }
