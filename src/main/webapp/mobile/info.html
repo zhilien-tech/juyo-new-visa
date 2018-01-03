@@ -63,10 +63,21 @@
         <li>签发机关 <input type="text" class="txtInput" v-model="applicatdata.issueorganization"/></li>
         <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="applicatdata.validstartdate"/></li>
         <li>有效期至<input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="applicatdata.validenddate"/></li>
-        <li>现在地址是否与身份证一致<span class="onOff"> <input type="checkbox" id="simple_3"> <label for="simple_3" class="green"></label> </span></li>
+        <li>现在地址是否与身份证一致<span class="onOff"> <input type="checkbox" id="consistent" class="consistent checkBox"> <label for="consistent" class="green"></label> </span></li>
         <li class="isclose">住址(省) <input type="text" class="txtInput" v-model="applicatdata.province"/></li>
         <li class="isclose">住址(市) <input type="text" class="txtInput" v-model="applicatdata.city"/></li>
         <li class="isclose">住址(街楼) <input type="text" class="txtInput" v-model="applicatdata.detailedaddress"/></li>
+   		<li>紧急联系人姓名 <input type="text" class="txtInput" id="" /></li>
+   		<li>紧急联系人手机号 <input type="text" class="txtInput" id="" /></li>
+   		<!--  -->
+   		<li>是否有曾用名<span class="onOff"> <input type="checkbox" id="afterName" class="afterName checkBox"> <label for="afterName" class="green"></label> </span></li>
+   		<li>姓(中文) <input type="text" class="txtInput" id="" /></li>
+   		<li>姓(拼音) <input type="text" class="txtInput" id="" /></li>
+   		<li>名(中文) <input type="text" class="txtInput" id="" /></li>
+   		<li>名(拼音) <input type="text" class="txtInput" id="" /></li>
+   		<!--  -->
+   		<li>曾有的或另有的国籍(或公民身份)<span class="onOff"> <input type="checkbox" id="afterNatAndID" class="afterNatAndID checkBox"> <label for="afterNatAndID" class="green"></label> </span></li>
+   		<li>国籍 <input type="text" class="txtInput" id="" /></li>
     </ul>
 <div class="bottom">
     <a class="clear btn">清除</a><a class="next btn" href="javascript:nextStep();">下一步</a>
@@ -100,12 +111,12 @@
 	        	success: function(data){
 	        		_self.applicatdata = data.applicatdata;
 	        		if(data.applicatdata.addressissamewithcard == 1){
-	        			$("#simple_3").attr('checked',true);
+	        			$("#consistent").attr('checked',true);
 		        		/* $('.isclose').each(function(){
 		    				$(this).hide();
 		    			}); */
 	        		}else{
-	        			$("#simple_3").attr('checked',false);
+	        			$("#consistent").attr('checked',false);
 	        			/* $('.isclose').each(function(){
 		    				$(this).show();
 		    			}); */
@@ -173,7 +184,7 @@
             });
         });
         //开关
-        $("#simple_3").click(function(){
+        $(".checkBox").click(function(){
         	if($(this).prop("checked")){
   				console.log($(this).prop("checked"));
   				/* $('.isclose').each(function(){
