@@ -65,9 +65,9 @@
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-				<section class="content">
-					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div v-on:dblclick="toFlowChart(data.orderid,data.applicantid)" class="card-list" v-cloak v-for="data in myVisaData">
+				<section class="content" id="card">
+					<div class="box-body"  v-cloak v-for="data in myVisaData" style="cursor:pointer;position: relative;z-index:999;"><!-- 卡片列表 -->
+						<div  v-on:click="toFlowChart(data.orderid,data.applicantid)" class="card-list" >
 							<div class="content-title">
 								<span>{{data.applicantname}}</span>
 								<span>{{data.ordernum}}</span>
@@ -90,13 +90,7 @@
 									</dl>
 								</div>
 								<div class="content-main-center center-right">{{data.orderstatus}}</div>
-								<div class="content-main-center">
-									<div class="main-right">
-										<a v-on:click="edit(data.applicantid)">资料编辑</a>
-										<a v-on:click="download(data.applicantid)">下载</a>
-
-									</div>
-								</div>
+								
 							</div>
 							<!-- <div class="card-head">
 								<div><label>申请人：</label><span>{{data.applicantname}}</span></div>
@@ -120,6 +114,15 @@
 							</ul>
 							 -->
 						</div>
+						<div style="position: absolute;top:111px;right:0; width:20%;height:auto;z-index:9999;" class="" >
+						<div class="content-main-center" style="width:100%; height:20px;">
+									<div class="">
+										<a v-on:click="edit(data.applicantid)" style="cursor:pointer;">资料编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
+										<a v-on:click="download(data.applicantid)" style="cursor:pointer;">下载</a>
+
+									</div>
+								</div>
+								</div>
 					</div><!-- end 卡片列表 -->
 				</section>
 	<script type="text/javascript">

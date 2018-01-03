@@ -34,7 +34,59 @@
       $(this).click( function () {
         isBox = false;
         let text = $(this).text();
-        $(this).parent().siblings(".input").val(text);
+        $(this).parent().siblings(".input").val(text).change();
         $(".dropdown").hide();
       })
-    })
+    });
+    $(document).on("input","#deposit",function(){
+    	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+    		return;
+    	}
+    	var deposit = $(this).val();
+    	if(deposit == ""){
+    		$(".deposits").attr("class", "col-xs-6 deposits has-error");  
+	        $(".deposits").attr("data-bv-result","INVALID");  
+	        $(".deposits").css({"display":"block"});
+    	}else{
+    		$(".deposits").css({"display":"none"});
+    	}
+    });
+    $(document).on("input","#vehicle",function(){
+    	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+    		return;
+    	}
+    	var deposit = $(this).val();
+    	if(deposit == ""){
+    		$(".vehicles").attr("class", "col-xs-6 vehicles has-error");  
+	        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
+	        $(".vehicles").css({"display":"block"});
+    	}else{
+    		$(".vehicles").css({"display":"none"});
+    	}
+    });
+    $(document).on("input","#houseProperty",function(){
+    	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+    		return;
+    	}
+    	var deposit = $(this).val();
+    	if(deposit == ""){
+    		$(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");  
+	        $(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
+	        $(".housePropertys").css({"display":"block"});
+    	}else{
+ 	        $(".housePropertys").css({"display":"none"});
+    	}
+    });
+    $(document).on("input","#financial",function(){
+    	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+    		return;
+    	}
+    	var deposit = $(this).val();
+    	if(deposit == ""){
+    		$(".financials").attr("class", "col-xs-6 financials has-error");  
+	        $(".help-blockfinancial").attr("data-bv-result","INVALID");  
+	        $(".financials").css({"display":"block"});
+    	}else{
+    		$(".financials").css({"display":"none"});
+    	}
+    });

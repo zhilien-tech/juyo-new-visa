@@ -216,6 +216,7 @@
 	width: 100%;
 	height: .81rem;
 	line-height: .81rem;
+	border-bottom: 2px solid #585858;
 }
 .certificateTop {
 	width: 100%;
@@ -223,10 +224,10 @@
 	font-size: .4rem;
 	line-height: .81rem;
 	height: .81rem;
-	position: fixed;
+	/* position: fixed;
 	top: 0;
-	left: 0;
-	border-bottom: 2px solid #585858;
+	left: 0; */
+	
 }
 .certificateTop i {
 	float: left;
@@ -278,7 +279,7 @@
 .certificateM span {
 	float: right;
 }
-.certificateM li:nth-child(2){
+.certificateM .hostSelect{
 	clear: both;
 	display: none;
 }
@@ -310,22 +311,22 @@ input[type="checkbox"] + label:after {
     cursor: pointer;
 }
 
-#simple_3:checked + label.green {
+.checkBox:checked + label.green {
     background: #00ff00;
 }
-#simple_3:checked + label.green:after {
+.checkBox:checked + label.green:after {
     background: #fff;
 }
-#simple_3:checked + label:after {
+.checkBox:checked + label:after {
     left: calc(100% - 20px);
 }
-#simple_3 + label {
+.checkBox + label {
     background: #ddd;
     border-radius: 20px;
     box-shadow: 1px 1px 3px #aaa;
     margin-top: .2rem;
 }
-#simple_3 + label:after {
+.checkBox + label:after {
     background: #fff;
     border-radius: 50%;
     box-shadow: 1px 1px 3px #aaa;
@@ -440,4 +441,25 @@ input[type="checkbox"] + label:after {
 .onOff:after {
 	content: "";
 	clear: both;
+}
+.dateVal {
+	float:right;
+}
+/**/
+.host ,.remarkInput{ position:relative;}
+.hostUL ,.remarks{
+	width:100%;
+	position:absolute;
+	top:0.81rem;
+	left:0;
+	display:none; 
+	z-index:999;
+	background:#fff;
+}
+.hostUL li ,.remarks li {
+	text-align:center;
+	display:block !important;
+}
+.hostUL li:hover ,.remarks li:hover {
+	background:#eee;
 }

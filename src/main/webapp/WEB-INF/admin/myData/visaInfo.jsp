@@ -56,7 +56,7 @@
 			<div class="ipt-info">
 					<input id="visaRemark" name="visaRemark"  type="text" value="${obj.unqualified.visaRemark }" class="NoInfo form-control input-sm" />
 				</div>
-				<div class="tab-content row">
+				<div class="tab-content row total">
 					<!-- 结婚状况 -->
 					<div class="info">
 						<div class="info-head">结婚状况 </div>
@@ -73,15 +73,19 @@
 									</div>
 								</div>
 							</div>
-							
+							<div class="info-imgUpload front " style="width:40% !important; float: left; margin-left:10%; ">
 							<div class="col-sm-4 padding-right-0">
 								<div class="cardFront-div">
 									<span>上传结婚证/离婚证</span>
 									<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.applicant.marryUrl }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									<img id="sqImg" alt="" src="${obj.applicant.marryUrl }" >
-									<i class="delete" id="deleteApplicantFrontImg();"></i>
+									<i class="delete" id="deleteApplicantFrontImg"></i>
 								</div>
+							</div>
+							<div class="col-xs-6 front " style="clear:both;width:320px; height:30px; border:0 !important; color:red; margin-left:10%;">
+								<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="marryUrl" data-bv-result="IVVALID" style="display: none;">结婚证/离婚证必须上传</small>
+							</div>
 							</div>
 							
 						</div>
@@ -258,6 +262,11 @@
 							</div><!-- end 银行存款 -->
 							<i class="remove-btn delete-icon"></i>
 						</div>
+						<!-- 提示 -->
+						<div class="col-xs-6 deposits " data-bv-result="IVVALID" style=" display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blockdeposit" data-bv-validator="notEmpty" data-bv-for="financial" >银行存款不能为空</small>
+						</div>
+						<!-- 提示End -->
 						<div class="info-body-from clone-module cf vehicle">
 							<div class="row body-from-input"><!-- 车产 -->
 								<div class="col-sm-6">
@@ -275,6 +284,11 @@
 							</div><!-- end 车产 -->
 							<i class="remove-btn delete-icon"></i>
 						</div>
+						<!-- 提示 -->
+						<div class="col-xs-6 vehicles " style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blockvehicle" data-bv-validator="notEmpty" data-bv-for="vehicle" data-bv-result="IVVALID" >车产不能为空</small>
+						</div>
+						<!-- 提示End -->
 						<div class="info-body-from clone-module cf houseProperty">
 							<div class="row body-from-input"><!-- 房产 -->
 								<div class="col-sm-6">
@@ -292,6 +306,11 @@
 							</div><!-- end 房产 -->
 							<i class="remove-btn delete-icon"></i>
 						</div>
+						<!-- 提示 -->
+						<div class="col-xs-6 housePropertys " style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blockhouseProperty" data-bv-validator="notEmpty" data-bv-for="houseProperty" data-bv-result="IVVALID" >房产不能为空</small>
+						</div>
+						<!-- 提示End -->
 						<div class="info-body-from clone-module cf financial">
 							<div class="row body-from-input"><!-- 房产 -->
 								<div class="col-sm-6">
@@ -309,7 +328,11 @@
 							</div><!-- end 房产 -->
 							<i class="remove-btn delete-icon"></i>
 						</div>
-						
+						<!-- 提示 -->
+						<div class="col-xs-6 financials " style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blockfinancial" data-bv-validator="notEmpty" data-bv-for="financial" data-bv-result="IVVALID" >理财不能为空</small>
+						</div>
+						<!-- 提示End -->
 					</div>
 					<!-- end 财产信息 -->
 				</div>
@@ -332,6 +355,118 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
+			//结婚证图片验证
+			var marryUrl = $("#marryUrl").val();
+			if(marryUrl == ""){
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+		        $(".help-blockFront").attr("style","display: block;");  
+			}else{
+				$(".front").attr("class", "info-imgUpload front has-success");  
+		        $(".help-blockFront").attr("data-bv-result","IVALID");  
+		        $(".help-blockFront").attr("style","display: none;");  
+			}
+			
+			//校验
+			$('#passportInfo').bootstrapValidator({
+				message : '验证不通过',
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields : {
+					relationRemark : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '备注不能为空'
+							}
+						}
+					},
+					careerStatus : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '职业不能为空'
+							}
+						}
+					},
+					marryStatus : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '结婚状况不能为空'
+							}
+						}
+					},
+					mainRelation : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '与主申请人关系不能为空'
+							}
+						}
+					},
+					name : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '单位名称不能为空'
+							}
+						}
+					},
+					telephone : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '单位电话不能为空'
+							}
+						}
+					},
+					address : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '单位地址不能为空'
+							}
+						}
+					},
+					/* deposit : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '银行存款不能为空'
+							}
+						}
+					},
+					vehicle : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '车产不能为空'
+							}
+						}
+					},
+					houseProperty : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '房产不能为空'
+							}
+						}
+					},
+					financial : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '理财不能为空'
+							}
+						}
+					}, */
+				}
+			});
+		$('#passportInfo').bootstrapValidator('validate');
 			
 			var form = document.forms[0]; 
 			for ( var i = 0; i < form.length; i++) { 
@@ -364,9 +499,9 @@
 				$("#schoolAddress").html("<span>*</span>学校地址：");
 			}
 			$("#careerStatus").change(function(){
-				$("#name").val("");
-				$("#telephone").val("");
-				$("#address").val("");
+				$("#name").val("").change();
+				$("#telephone").val("").change();
+				$("#address").val("").change();
 				var career = $(this).val();
 				if(career == 4){
 					$("#schoolName").html("<span>*</span>学校名称：");
@@ -499,6 +634,7 @@
 						$(".deposit").css("display","none");
 						$(this).removeClass("btnState-true");
 						$("#deposit").val("");
+						$(".deposits").css({"display":"none"});
 					}else{
 						$(".deposit").css("display","block");
 						$(this).addClass("btnState-true");
@@ -510,16 +646,21 @@
 						$(".vehicle").css("display","none");
 						$(this).removeClass("btnState-true");
 						$("#vehicle").val("");
+						$(".vehicles").css({"display":"none"});
 					}else{
 						$(".vehicle").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#vehicle").val("");
+						$(".vehicles").attr("class", "col-xs-6 vehicles has-error");  
+				        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
+				        $(".vehicles").css({"display":"block"});
 					}
 				}else if(financeBtnInfo == "房产"){
 					if($(this).hasClass("btnState-true")){
 						$(".houseProperty").css("display","none");
 						$(this).removeClass("btnState-true");
 						$("#houseProperty").val("");
+						$(".housePropertys").css({"display":"none"});
 					}else{
 						$(".houseProperty").css("display","block");
 						$(this).addClass("btnState-true");
@@ -531,6 +672,7 @@
 						$(".financial").css("display","none");
 						$(this).removeClass("btnState-true");
 						$("#financial").val("");
+						$(".financials").css({"display":"none"});
 					}else{
 						$(".financial").css("display","block");
 						$(this).addClass("btnState-true");
@@ -580,8 +722,50 @@
 	          }  
 		}
 		
+		function getAllClassName(){
+		    var result=[];
+		    var body=document.body;
+		    getClassName(body);
+		    function getClassName(ele){
+		        var s=ele.className||"";
+		        if(s!=""){
+		            var arr=s.split(" ");
+		            for(var i=0;i<arr.length;i++){
+		                var name=arr[i];
+		                if(name!=""&&result.indexOf(name)==-1){
+		                    //console.log(name);
+		                    result.push(name);
+		                }
+		            }
+		        }
+		        var childs=ele.childNodes;
+		        for(var i=0;i<childs.length;i++){
+		            getClassName(childs[i]);
+		        }
+		    }
+		    return result;
+		}
+		
 		//保存
 		function save(){
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+			bootstrapValidator.validate();
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
+			if($(".front").hasClass("has-error")){
+				return;
+			}
+			
+			var classNames=getAllClassName();
+			console.log(classNames);
+			for(var i=0;i<classNames.length;i++){
+			    var ele=classNames[i];
+			    if(ele == "has-error"){
+			    }
+			}
+			
 			//绑定财产类型
 			var wealthType = "";
 			$('[name=wealthType]').each(function(){
@@ -657,6 +841,9 @@
 							$('#marryUrl').val(obj.data);
 							$('#sqImg').attr('src', obj.data);
 							$("#uploadFile").siblings("i").css("display","block");
+							$(".front").attr("class", "info-imgUpload front has-success");  
+					        $(".help-blockFront").attr("data-bv-result","IVALID");  
+					        $(".help-blockFront").attr("style","display: none;");
 						}
 						$("#addBtn").attr('disabled', false);
 					},
@@ -686,6 +873,9 @@
 				$('#marryUrl').val("");
 				$('#sqImg').attr('src', "");
 				$("#uploadFile").siblings("i").css("display","none");
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+		        $(".help-blockFront").attr("style","display: block;");
 			});
 			
 			$(".remove-btn").click(function(){
@@ -694,21 +884,25 @@
 					$(".deposit").css("display","none");
 					$("#depositType").removeClass("btnState-true");
 					$("#deposit").val("");
+					$(".deposits").css({"display":"none"});
 				}
 				if($(this).parent().is(".vehicle")){
 					$(".vehicle").css("display","none");
 					$("#vehicleType").removeClass("btnState-true");
 					$("#vehicle").val("");
+					$(".vehicles").css({"display":"none"});
 				}
 				if($(this).parent().is(".houseProperty")){
 					$(".houseProperty").css("display","none");
 					$("#housePropertyType").removeClass("btnState-true");
 					$("#houseProperty").val("");
+					$(".housePropertys").css({"display":"none"});
 				}
 				if($(this).parent().is(".financial")){
 					$(".financial").css("display","none");
 					$("#financialType").removeClass("btnState-true");
 					$("#financial").val("");
+					$(".financials").css({"display":"none"});
 				}
 			});
 		}
