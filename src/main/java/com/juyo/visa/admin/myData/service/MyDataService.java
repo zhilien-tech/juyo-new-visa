@@ -790,11 +790,14 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		return visaList;
 	}
 
-	public Object changeStatus(int orderid, int applicantid, HttpSession session) {
+	public Object changeStatus(int orderid, int applicantid, String completeType, HttpSession session) {
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
-		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
-		//apply.setIsCompleted(IsYesOrNoEnum.YES.intKey());
-		dbDao.update(apply);
+		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		applyJp.setBaseIsCompleted(IsYesOrNoEnum.YES.intKey());
+		applyJp.setPassIsCompleted(IsYesOrNoEnum.YES.intKey());
+		applyJp.setVisaIsCompleted(IsYesOrNoEnum.YES.intKey());
+		dbDao.update(applyJp);
 		int count = 0;
 		if (!Util.isEmpty(orderEntity)) {
 			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class,
@@ -802,12 +805,11 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
 			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
-				TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity
-						.getApplicantId().longValue());
-				/*Integer isCompleted = applicantEntity.getIsCompleted();
-				if (Util.eq(isCompleted, IsYesOrNoEnum.YES.intKey())) {
+				if (Util.eq(tApplicantOrderJpEntity.getBaseIsCompleted(), IsYesOrNoEnum.YES.intKey())
+						&& Util.eq(tApplicantOrderJpEntity.getPassIsCompleted(), IsYesOrNoEnum.YES.intKey())
+						&& Util.eq(tApplicantOrderJpEntity.getVisaIsCompleted(), IsYesOrNoEnum.YES.intKey())) {
 					count++;
-				}*/
+				}
 			}
 			if (Util.eq(count, applyJpList.size())) {
 				Integer orderStatus = orderEntity.getStatus();

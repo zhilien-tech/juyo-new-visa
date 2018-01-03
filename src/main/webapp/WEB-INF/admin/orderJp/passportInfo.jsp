@@ -539,6 +539,23 @@
 					layer.closeAll('loading');
 					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					layer.close(index); */
+					if(userType == 2){
+						layer.load(1);
+						$.ajax({
+							type: 'POST',
+							async : false,
+							data : {
+								orderid : orderid,
+								applicantid : applicantId,
+								completeType : 'visa'
+							},
+							url: '${base}/admin/myData/changeStatus.html',
+							success :function(data) {
+								console.log(JSON.stringify(data));
+								layer.closeAll('loading');
+							}
+						});
+					}
 					if(status == 1){
 						closeWindow();
 						parent.successCallBack(1);

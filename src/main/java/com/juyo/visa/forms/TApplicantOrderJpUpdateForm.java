@@ -23,6 +23,12 @@ public class TApplicantOrderJpUpdateForm extends ModForm implements Serializable
 
 	private Integer marryStatus;
 
+	private Integer baseIsCompleted;
+
+	private Integer passIsCompleted;
+
+	private Integer visaIsCompleted;
+
 	private String marryUrl;
 
 	/**是否分享消息*/

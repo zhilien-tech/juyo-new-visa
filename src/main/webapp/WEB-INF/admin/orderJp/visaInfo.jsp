@@ -875,7 +875,8 @@
 							async : false,
 							data : {
 								orderid : orderid,
-								applicantid : applicantid
+								applicantid : applicantid,
+								completeType : 'visa'
 							},
 							url: '${base}/admin/myData/changeStatus.html',
 							success :function(data) {
@@ -1007,7 +1008,8 @@
 					async : false,
 					data : {
 						orderid : orderid,
-						applicantid : applicantId
+						applicantid : applicantId,
+						completeType : 'visa'
 					},
 					url: '${base}/admin/myData/changeStatus.html',
 					success :function(data) {
