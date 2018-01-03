@@ -794,9 +794,15 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
 		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantid));
-		applyJp.setBaseIsCompleted(IsYesOrNoEnum.YES.intKey());
-		applyJp.setPassIsCompleted(IsYesOrNoEnum.YES.intKey());
-		applyJp.setVisaIsCompleted(IsYesOrNoEnum.YES.intKey());
+		if (Util.eq(completeType, "base")) {
+			applyJp.setBaseIsCompleted(IsYesOrNoEnum.YES.intKey());
+		}
+		if (Util.eq(completeType, "pass")) {
+			applyJp.setPassIsCompleted(IsYesOrNoEnum.YES.intKey());
+		}
+		if (Util.eq(completeType, "visa")) {
+			applyJp.setVisaIsCompleted(IsYesOrNoEnum.YES.intKey());
+		}
 		dbDao.update(applyJp);
 		int count = 0;
 		if (!Util.isEmpty(orderEntity)) {

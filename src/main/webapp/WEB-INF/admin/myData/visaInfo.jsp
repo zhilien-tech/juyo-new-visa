@@ -766,6 +766,8 @@
 				//$("#work").val(0);
 				$("#wealth").val(0);
 			}
+			var orderid = '${obj.orderid}';
+			var applicantId = '${obj.visaInfo.applicantId}';
 			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
 			$.ajax({
 				type: 'POST',
@@ -775,6 +777,21 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
+					layer.load(1);
+					$.ajax({
+						type: 'POST',
+						async : false,
+						data : {
+							orderid : orderid,
+							applicantid : applicantId,
+							completeType : 'visa'
+						},
+						url: '${base}/admin/myData/changeStatus.html',
+						success :function(data) {
+							console.log(JSON.stringify(data));
+							layer.closeAll('loading');
+						}
+					});
 					layer.msg("修改成功", {
 						time: 500,
 						end: function () {

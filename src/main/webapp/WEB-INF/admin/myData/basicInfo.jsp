@@ -640,7 +640,8 @@
 			applicantInfo = $("#applicantInfo").serialize();
 		}
 		
-		var applicantId = ${obj.applicantId};
+		var applicantId = '${obj.applicantId}';
+		var orderid = '${obj.orderid}';
 		applicantInfo.id = applicantId;
 		$.ajax({
 			async: false,
@@ -652,6 +653,21 @@
 				layer.closeAll('loading');
 				//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 				//layer.close(index);
+				layer.load(1);
+				$.ajax({
+					type: 'POST',
+					async : false,
+					data : {
+						orderid : orderid,
+						applicantid : applicantId,
+						completeType : 'base'
+					},
+					url: '${base}/admin/myData/changeStatus.html',
+					success :function(data) {
+						console.log(JSON.stringify(data));
+						layer.closeAll('loading');
+					}
+				});
 				layer.msg("修改成功", {
 					time: 500,
 					end: function () {
