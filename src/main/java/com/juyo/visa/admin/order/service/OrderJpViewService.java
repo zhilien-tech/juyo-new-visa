@@ -374,6 +374,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			Integer orderJpId = orderJp.getId();
 			applicantOrderJp.setOrderId(orderJpId);
 			applicantOrderJp.setApplicantId(applicantId);
+			applicantOrderJp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantOrderJp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantOrderJp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
 			dbDao.insert(applicantOrderJp);
 			Integer applicantJpId = applicantOrderJp.getId();
 			//日本工作信息
@@ -409,6 +412,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//日本申请人信息
 			TApplicantOrderJpEntity applicantOrderJp = new TApplicantOrderJpEntity();
 			applicantOrderJp.setApplicantId(applicantId);
+			applicantOrderJp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantOrderJp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantOrderJp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
 			dbDao.insert(applicantOrderJp);
 			Integer applicantJpId = applicantOrderJp.getId();
 			//日本工作信息

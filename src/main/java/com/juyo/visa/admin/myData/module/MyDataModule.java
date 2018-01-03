@@ -123,8 +123,9 @@ public class MyDataModule {
 	 */
 	@At
 	@POST
-	public Object changeStatus(@Param("orderid") int orderid, @Param("applicantid") int applicantid, HttpSession session) {
-		return myDataService.changeStatus(orderid, applicantid, session);
+	public Object changeStatus(@Param("orderid") int orderid, @Param("applicantid") int applicantid,
+			@Param("completeType") String completeType, HttpSession session) {
+		return myDataService.changeStatus(orderid, applicantid, completeType, session);
 	}
 
 }

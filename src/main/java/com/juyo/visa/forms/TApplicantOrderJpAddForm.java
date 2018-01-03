@@ -49,4 +49,10 @@ public class TApplicantOrderJpAddForm extends AddForm implements Serializable {
 	/**视频地址*/
 	private String videoUrl;
 
+	private Integer baseIsCompleted;
+
+	private Integer passIsCompleted;
+
+	private Integer visaIsCompleted;
+
 }
