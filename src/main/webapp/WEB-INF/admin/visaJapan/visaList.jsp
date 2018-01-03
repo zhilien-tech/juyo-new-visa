@@ -191,17 +191,32 @@
                  });
         	},
         	sendzhaobao:function(orderid){
-        		layer.open({
-        		    type: 2,
-        		    title: false,
-        		    closeBtn:false,
-        		    fix: false,
-        		    maxmin: false,
-        		    shadeClose: false,
-        		    scrollbar: false,
-        		    area: ['400px', '300px'],
-        		    content: '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid
-        		  });
+        		$.ajax({
+                 	url: '${base}/admin/visaJapan/validateInfoIsFull.html',
+                 	data:{orderjpid:orderid},
+                 	dataType:"json",
+                 	type:'post',
+                 	async:false,
+                 	success: function(data){
+                 		console.log(data.data);
+                 		var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
+                 		if(data.data){
+                 			layer.msg(data.data);
+                 			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data;
+                 		}
+		        		layer.open({
+		        		    type: 2,
+		        		    title: false,
+		        		    closeBtn:false,
+		        		    fix: false,
+		        		    maxmin: false,
+		        		    shadeClose: false,
+		        		    scrollbar: false,
+		        		    area: ['400px', '300px'],
+		        		    content: url
+		        		  });
+                   	}
+                 });
         	},
         	downLoadFile:function(orderid){
         		layer.load(1);
