@@ -42,7 +42,7 @@
 							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
 						</div> <!-- end 身份证 正面 -->
 
-						<div class="info-imgUpload front has-error"><!-- 护照 -->
+						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
 							<div class="col-xs-6">
 							<div class="form-group">
 								<div class="cardFront-div">
@@ -228,17 +228,6 @@
 	<script type="text/javascript">
 	var base = "${base}";
 	$(function() {
-		//护照图片验证
-		var passportUrl = $("#passportUrl").val();
-		if(passportUrl == ""){
-			$(".front").attr("class", "info-imgUpload front has-error");  
-	        $(".help-blockFront").attr("data-bv-result","INVALID");  
-	        $(".help-blockFront").attr("style","display: block;");  
-		}else{
-			$(".front").attr("class", "info-imgUpload front has-success");  
-	        $(".help-blockFront").attr("data-bv-result","IVALID");  
-	        $(".help-blockFront").attr("style","display: none;");  
-		}
 		
 		//将页面所有元素设置为disabled
 		var form = document.forms[0]; 
@@ -389,9 +378,10 @@
 						$('#passportUrl').val(obj.url);
 						$('#sqImg').attr('src', obj.url);
 						$("#uploadFile").siblings("i").css("display","block");
+						$("#borderColor").attr("style", null);
 						$(".front").attr("class", "info-imgUpload front has-success");  
-				        $(".help-block").attr("data-bv-result","IVALID");  
-				        $(".help-block").attr("style","display: none;");
+				        $(".help-blockFront").attr("data-bv-result","IVALID");  
+				        $(".help-blockFront").attr("style","display: none;");
 						$('#type').val(obj.type).change();
 						$('#passport').val(obj.num).change();
 						$('#sex').val(obj.sex);
@@ -482,6 +472,19 @@
 		} 
 		document.getElementById("birthAddressEn").style.backgroundColor = "#fff";
 		document.getElementById("issuedPlaceEn").style.backgroundColor = "#fff";
+		//护照图片验证
+		var passportUrl = $("#passportUrl").val();
+		if(passportUrl == ""){
+			$("#borderColor").attr("style", "border-color:#ff1a1a");  
+			$(".front").attr("class", "info-imgUpload front has-error");  
+	        $(".help-blockFront").attr("data-bv-result","INVALID");  
+	        $(".help-blockFront").attr("style","display: block;");  
+		}else{
+			$("#borderColor").attr("style", null);
+			$(".front").attr("class", "info-imgUpload front has-success");  
+	        $(".help-blockFront").attr("data-bv-result","IVALID");  
+	        $(".help-blockFront").attr("style","display: none;");  
+		}
 		var bootstrapValidator = $("#passportInfo").data(
 		'bootstrapValidator');
 		// 执行表单验证 
@@ -493,6 +496,7 @@
 			$(".front").attr("class", "info-imgUpload front has-error");  
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
 	        $(".help-blockFront").attr("style","display: block;");
+	        $("#borderColor").attr("style", "border-color:#ff1a1a");
 		});
 		$("#passRemark").attr("disabled", true);
 	}
@@ -621,6 +625,7 @@
 		$(".front").attr("class", "info-imgUpload front has-error");  
         $(".help-blockFront").attr("data-bv-result","INVALID");  
         $(".help-blockFront").attr("style","display: block;"); 
+        $("#borderColor").attr("style", "border-color:#ff1a1a");
 		$('#sqImg').attr('src', "");
 		$("#type").val("").change();
 		$("#passport").val("").change();

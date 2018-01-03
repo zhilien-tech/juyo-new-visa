@@ -89,7 +89,7 @@
 							</div>
 							
 							<div class="info-imgUpload front has-error" style="width:40% !important; float: left; margin-left:10%; ">
-								<div class="col-sm-4 padding-right-0">
+								<div class="col-sm-4 padding-right-0" id="borderColor">
 									<div class="cardFront-div">
 										<span>上传结婚证/离婚证</span>
 										<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.applicant.marryUrl }"/>
@@ -278,7 +278,7 @@
 							<i class="remove-btn delete-icon"></i>
 						</div>
 						<!-- 提示 -->
-						<div class="col-xs-6 deposits has-error" style="display: none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+						<div class="col-xs-6 deposits" style="display: none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
 							<small class="help-blockdeposit" data-bv-validator="notEmpty" data-bv-for="deposit" data-bv-result="IVVALID" >银行存款不能为空</small>
 						</div>
 						<!-- 提示End -->
@@ -300,7 +300,7 @@
 							<i class="remove-btn delete-icon"></i>
 						</div>
 						<!-- 提示 -->
-						<div class="col-xs-6 vehicles has-error" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+						<div class="col-xs-6 vehicles" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
 							<small class="help-blockvehicle" data-bv-validator="notEmpty" data-bv-for="vehicle" data-bv-result="IVVALID" >车产不能为空</small>
 						</div>
 						<!-- 提示End -->
@@ -322,7 +322,7 @@
 							<i class="remove-btn delete-icon"></i>
 						</div>
 						<!-- 提示 -->
-						<div class="col-xs-6 housePropertys has-error" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+						<div class="col-xs-6 housePropertys" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
 							<small class="help-blockhouseProperty" data-bv-validator="notEmpty" data-bv-for="houseProperty" data-bv-result="IVVALID" >房产不能为空</small>
 						</div>
 						<!-- 提示End -->
@@ -344,7 +344,7 @@
 							<i class="remove-btn delete-icon"></i>
 						</div>
 						<!-- 提示 -->
-						<div class="col-xs-6 financials has-error" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+						<div class="col-xs-6 financials" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
 							<small class="help-blockfinancial" data-bv-validator="notEmpty" data-bv-for="financial" data-bv-result="IVVALID" >理财不能为空</small>
 						</div>
 						<!-- 提示End -->
@@ -378,11 +378,13 @@
 				if(marryUrl == ""){
 					$(".front").attr("class", "info-imgUpload front has-error");  
 			        $(".help-blockFront").attr("data-bv-result","INVALID");  
-			        $(".help-blockFront").attr("style","display: block;");  
+			        $(".help-blockFront").attr("style","display: block;"); 
+			        $("#borderColor").attr("style","border-color:#ff1a1a");
 				}else{
 					$(".front").attr("class", "info-imgUpload front has-success");  
 			        $(".help-blockFront").attr("data-bv-result","IVALID");  
-			        $(".help-blockFront").attr("style","display: none;");  
+			        $(".help-blockFront").attr("style","display: none;");
+			        $("#borderColor").attr("style",null);
 				}
 			}
 			
@@ -432,7 +434,7 @@
 							trigger:"change keyup",
 							validators : {
 								notEmpty : {
-									message : '单位名称不能为空'
+									message : '名称不能为空'
 								}
 							}
 						},
@@ -440,7 +442,7 @@
 							trigger:"change keyup",
 							validators : {
 								notEmpty : {
-									message : '单位电话不能为空'
+									message : '电话不能为空'
 								}
 							}
 						},
@@ -448,7 +450,7 @@
 							trigger:"change keyup",
 							validators : {
 								notEmpty : {
-									message : '单位地址不能为空'
+									message : '地址不能为空'
 								}
 							}
 						}/* ,
@@ -671,10 +673,13 @@
 						$(this).removeClass("btnState-true");
 						$("#deposit").val("");
 						$(".deposits").css({"display":"none"});
+						$(".deposits").attr("class", "col-xs-6 deposits has-success");
+						$("#deposit").attr("style", null);
 					}else{
 						$(".deposit").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#deposit").val("万");
+						 $("#deposit").attr("style", null);
 						//$("#deposit").placeholder("万");
 					}
 				}else if(financeBtnInfo == "车产"){
@@ -683,13 +688,16 @@
 						$(this).removeClass("btnState-true");
 						$("#vehicle").val("");
 						$(".vehicles").css({"display":"none"});
+						$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
+						$("#vehicle").attr("style", null);
 					}else{
 						$(".vehicle").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#vehicle").val("");
-						$(".vehicles").attr("class", "col-xs-6 vehicles has-error");  
 				        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
 				        $(".vehicles").css({"display":"block"});
+				        $(".vehicles").attr("class", "col-xs-6 vehicles has-error");
+				        $("#vehicle").attr("style", "border-color:#ff1a1a");
 					}
 				}else if(financeBtnInfo == "房产"){
 					if($(this).hasClass("btnState-true")){
@@ -697,10 +705,13 @@
 						$(this).removeClass("btnState-true");
 						$("#houseProperty").val("");
 						$(".housePropertys").css({"display":"none"});
+						$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
+						$("#houseProperty").attr("style", null);
 					}else{
 						$(".houseProperty").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#houseProperty").val("平米");
+						$("#houseProperty").attr("style", null);
 						//$("#houseProperty").placeholder("平米");
 					}
 				}else if(financeBtnInfo == "理财"){
@@ -709,14 +720,18 @@
 						$(this).removeClass("btnState-true");
 						$("#financial").val("");
 						$(".financials").css({"display":"none"});
+						$(".financials").attr("class", "col-xs-6 financials has-success");
+						$("#financial").attr("style", null);
 					}else{
 						$(".financial").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#financial").val("万");
+						$("#financial").attr("style", null);
 						//$("#financial").placeholder("万");
 					}
 				}
 			});
+			
 			$(".remove-btn").click(function(){
 				//$(this).parent().css("display","none");
 				if($(this).parent().is(".deposit")){
@@ -724,24 +739,32 @@
 					$("#depositType").removeClass("btnState-true");
 					$("#deposit").val("");
 					$(".deposits").css({"display":"none"});
+					$(".deposits").attr("class", "col-xs-6 deposits has-success");
+					$("#deposite").attr("style", null);
 				}
 				if($(this).parent().is(".vehicle")){
 					$(".vehicle").css("display","none");
 					$("#vehicleType").removeClass("btnState-true");
 					$("#vehicle").val("");
 					$(".vehicles").css({"display":"none"});
+					$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
+					$("#vehicle").attr("style", null);
 				}
 				if($(this).parent().is(".houseProperty")){
 					$(".houseProperty").css("display","none");
 					$("#housePropertyType").removeClass("btnState-true");
 					$("#houseProperty").val("");
 					$(".housePropertys").css({"display":"none"});
+					$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
+					$("#houseProperty").attr("style", null);
 				}
 				if($(this).parent().is(".financial")){
 					$(".financial").css("display","none");
 					$("#financialType").removeClass("btnState-true");
 					$("#financial").val("");
 					$(".financials").css({"display":"none"});
+					$(".financials").attr("class", "col-xs-6 financials has-success");
+					$("#financial").attr("style", null);
 				}
 			});
 			
@@ -797,13 +820,19 @@
 				return;
 			}
 			if(userType == 2){
-				var form = document.forms[0]; 
-				for ( var i = 0; i < form.length; i++) { 
-					var element = form.elements[i]; 
-					if(element.hasClass("has-error"))
-						return;
-				} 
 				if($(".front").hasClass("has-error")){
+					return;
+				}
+				if($(".deposits").hasClass("has-error")){
+					return;
+				}
+				if($(".vehicles").hasClass("has-error")){
+					return;
+				}
+				if($(".housePropertys").hasClass("has-error")){
+					return;
+				}
+				if($(".financials").hasClass("has-error")){
 					return;
 				}
 			}
@@ -836,10 +865,30 @@
 					layer.closeAll('loading');
 					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					layer.close(index); */
+					if(userType == 2){
+						//保存成功之后说明游客所有信息填写完毕
+						var orderid = '${obj.orderid}';
+						var applicantid = '${obj.applicant.id}';
+						layer.load(1);
+						$.ajax({
+							type: 'POST',
+							async : false,
+							data : {
+								orderid : orderid,
+								applicantid : applicantid
+							},
+							url: '${base}/admin/myData/changeStatus.html',
+							success :function(data) {
+								console.log(JSON.stringify(data));
+								layer.closeAll('loading');
+							}
+						});
+					}
 					if(status == 1){
 						closeWindow();
 						parent.successCallBack(1);
 					}
+					
 				}
 			});
 		}
@@ -886,6 +935,7 @@
 							$(".front").attr("class", "info-imgUpload front has-success");  
 					        $(".help-blockFront").attr("data-bv-result","IVALID");  
 					        $(".help-blockFront").attr("style","display: none;");
+					        $("#borderColor").attr("style",null);
 						}
 						$("#addBtn").attr('disabled', false);
 					},
@@ -906,6 +956,7 @@
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
 		        $(".help-blockFront").attr("style","display: block;");
+		        $("#borderColor").attr("style","border-color:#ff1a1a");
 			}
 		}
 		
@@ -925,8 +976,8 @@
 		}
 		function passportBtn(){
 			save(2);
-			var applicantId = ${obj.applicant.id};
-			var orderid = ${obj.orderid};
+			var applicantId = '${obj.applicant.id}';
+			var orderid = '${obj.orderid}';
 			//关闭websocket连接
 			socket.onclose();
 			if(userType == 2){
@@ -938,10 +989,34 @@
 				if($(".front").hasClass("has-error")){
 					return;
 				}
-				window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
-			}else{
-				window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
+				if($(".deposits").hasClass("has-error")){
+					return;
+				}
+				if($(".vehicles").hasClass("has-error")){
+					return;
+				}
+				if($(".housePropertys").hasClass("has-error")){
+					return;
+				}
+				if($(".financials").hasClass("has-error")){
+					return;
+				}
+				layer.load(1);
+				$.ajax({
+					type: 'POST',
+					async : false,
+					data : {
+						orderid : orderid,
+						applicantid : applicantId
+					},
+					url: '${base}/admin/myData/changeStatus.html',
+					success :function(data) {
+						console.log(JSON.stringify(data));
+						layer.closeAll('loading');
+					}
+				});
 			}
+			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
 			/* layer.open({
 				type: 2,
 				title: false,
