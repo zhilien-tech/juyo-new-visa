@@ -67,6 +67,11 @@
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
+					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/>
+					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(22)"/>
+					<input type="button" value="招宝变更" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(19)"/>
+					<input type="button" value="发招宝" class="btn btn-primary btn-sm pull-right" onclick="sendzhaobao()"/>
+					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue()"/>
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log()"/>
 				</div>
 				<section class="content">
@@ -682,6 +687,69 @@
 					$('#urgentday').removeClass('none');
 				}
 			});
+			
+			//实收弹框
+			function revenue(){
+				layer.open({
+        		    type: 2,
+        		    title: false,
+        		    closeBtn:false,
+        		    fix: false,
+        		    maxmin: false,
+        		    shadeClose: false,
+        		    scrollbar: false,
+        		    area: ['900px', '550px'],
+        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
+        		  });
+			}
+			//发招宝
+			function sendzhaobao(){
+				$.ajax({
+                 	url: '${base}/admin/visaJapan/validateInfoIsFull.html',
+                 	data:{orderjpid:orderid},
+                 	dataType:"json",
+                 	type:'post',
+                 	async:false,
+                 	success: function(data){
+                 		console.log(data.data);
+                 		var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
+                 		if(data.data){
+                 			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data;
+                 		}
+		        		layer.open({
+		        		    type: 2,
+		        		    title: false,
+		        		    closeBtn:false,
+		        		    fix: false,
+		        		    maxmin: false,
+		        		    shadeClose: false,
+		        		    scrollbar: false,
+		        		    area: ['400px', '300px'],
+		        		    content: url
+		        		  });
+                   	}
+                 });
+			}
+			//招宝变更、招宝取消、拒签
+			function sendInsurance(visastatus){
+				$.ajax({
+                 	url: '${base}/admin/visaJapan/sendInsurance',
+                 	data:{orderid:orderid,visastatus:visastatus},
+                 	dataType:"json",
+                 	type:'post',
+                 	success: function(data){
+                 		if(visastatus == 16){
+	                 		layer.msg('发招宝');
+                 		}else if(visastatus == 19){
+	                 		layer.msg('招宝变更');
+                 		}else if(visastatus == 22){
+	                 		layer.msg('招宝取消');
+                 		}else if(visastatus == 27){
+	                 		layer.msg('报告拒签');
+                 		}
+                   	}
+                 });
+			}
 		</script>
 	</body>
 </html>

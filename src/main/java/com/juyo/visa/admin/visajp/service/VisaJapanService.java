@@ -1323,7 +1323,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object validateInfoIsFull(Integer orderjpid) {
-		StringBuffer resultstr = new StringBuffer("");
+		StringBuffer resultstrbuf = new StringBuffer("");
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 		//订单信息
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
@@ -1348,24 +1348,31 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		company = dbDao.fetch(TCompanyEntity.class, orderinfo.getComId().longValue());
 		//判断签证类型
 		if (Util.isEmpty(orderjp.getVisaType())) {
-			resultstr.append("签证类型、");
+			resultstrbuf.append("签证类型、");
 		}
 		if (Util.isEmpty(orderinfo.getGoTripDate())) {
-			resultstr.append("出发日期、");
+			resultstrbuf.append("出发日期、");
 		}
 		if (Util.isEmpty(orderinfo.getBackTripDate())) {
-			resultstr.append("返回日期、");
+			resultstrbuf.append("返回日期、");
 		}
 		int count = 1;
 		for (Record record : applyinfo) {
 			if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
-				resultstr.append("申请人" + count + "的姓名、");
+				resultstrbuf.append("申请人" + count + "的姓名、");
 			}
 			if (Util.isEmpty(record.get("firstnameen")) && Util.isEmpty(record.get("lastnameen"))) {
-				resultstr.append("申请人" + count + "的姓名英文、");
+				resultstrbuf.append("申请人" + count + "的姓名英文、");
 			}
 			count++;
 		}
-		return null;
+		String resultstr = resultstrbuf.toString();
+		if (!Util.isEmpty(resultstr)) {
+			resultstr = resultstr.substring(0, resultstr.length() - 1);
+			resultstr += "不能为空";
+			return JuYouResult.ok(resultstr);
+		} else {
+			return JuYouResult.ok();
+		}
 	}
 }
