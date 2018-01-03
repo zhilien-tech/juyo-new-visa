@@ -64,7 +64,7 @@
 						<div class="info-QRcode"> <!-- 身份证 正面 -->
 							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
 						</div> <!-- end 身份证 正面 -->
-						<div class="info-imgUpload front">
+						<div class="info-imgUpload front has-error">
 							<!-- 身份证 正面 -->
 							<div class="col-xs-6">
 							<div class="form-group">
@@ -72,16 +72,18 @@
 									<span>点击上传身份证正面</span>
 									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" alt="" src="${obj.applicant.cardFront }" >
+									<img id="sqImg" name="sqImg" alt="" src="${obj.applicant.cardFront }" >
 									<i class="delete" onclick="deleteApplicantFrontImg(${obj.orderid});"></i>
 								</div>
 							</div>
 						</div>
-	
+						</div>
+						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 -20px 32px !important">
+							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">身份证正面必须上传</small>
 						</div>
 						<!-- end 身份证 正面 -->
 
-						<div class="info-imgUpload back">
+						<div class="info-imgUpload back has-error">
 							<!-- 身份证 反面 -->
 							<div class="col-xs-6">
 								<div class="form-group">
@@ -94,6 +96,9 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 0 32px !important">
+							<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
 						</div>
 						<!-- end 身份证 反面 -->
 
@@ -374,6 +379,7 @@
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript">
+	var userType = '${obj.userType}';
 	
 	//连接websocket
 	connectWebSocket();
@@ -416,6 +422,32 @@
           }  
 	}
 		$(function(){
+			
+			
+			//身份证图片验证
+			if(userType == 2){
+				var cardFront = $("#cardFront").val();
+				if(cardFront == ""){
+					$(".front").attr("class", "info-imgUpload front has-error");  
+			        $(".help-blockFront").attr("data-bv-result","INVALID");  
+			        $(".help-blockFront").attr("style","display: block;");  
+				}else{
+					$(".front").attr("class", "info-imgUpload front has-success");  
+			        $(".help-blockFront").attr("data-bv-result","IVALID");  
+			        $(".help-blockFront").attr("style","display: none;");  
+				}
+				
+				var cardBack = $("#cardBack").val();
+				if(cardBack == ""){
+					$(".back").attr("class", "info-imgUpload back has-error");  
+			        $(".help-blockBack").attr("data-bv-result","INVALID");  
+			        $(".help-blockBack").attr("style","display: block;");  
+				}else{
+					$(".back").attr("class", "info-imgUpload back has-success");  
+			        $(".help-blockBack").attr("data-bv-result","IVALID");  
+			        $(".help-blockBack").attr("style","display: none;");  
+				}
+			}
 			
 			var remark = $("#baseRemark").val();
 			if(remark != ""){
@@ -462,7 +494,7 @@
 				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
 			}
 			
-			var userType = '${obj.userType}';
+			
 			if(userType != 2){
 				//校验
 				$('#applicantInfo').bootstrapValidator({
@@ -506,7 +538,7 @@
 						}
 					}
 				});
-			}/* else{
+			}else{
 				$('#applicantInfo').bootstrapValidator({
 					message : '验证不通过',
 					feedbackIcons : {
@@ -515,7 +547,7 @@
 						validating : 'glyphicon glyphicon-refresh'
 					},
 					fields : {
-	
+						
 						firstName : {
 							validators : {
 								notEmpty : {
@@ -552,14 +584,16 @@
 			                    }
 							}
 						},
-						cardId : {
+						cardFront : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
-									message : '公民身份证不能为空'
+									message : '身份证不能为空'
 								}
 							}
 						},
 						nation : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '民族不能为空'
@@ -567,6 +601,7 @@
 							}
 						},
 						issueOrganization : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '签发机关不能为空'
@@ -574,6 +609,7 @@
 							}
 						},
 						otherFirstName : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '曾用姓不能为空'
@@ -581,6 +617,7 @@
 							}
 						},
 						otherLastName : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '曾用名不能为空'
@@ -588,6 +625,7 @@
 							}
 						},
 						nationality : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '国籍不能为空'
@@ -595,6 +633,7 @@
 							}
 						},
 						birthday : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '出生日期不能为空'
@@ -602,6 +641,7 @@
 							}
 						},
 						address : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '住址不能为空'
@@ -625,6 +665,7 @@
 							}
 						},
 						province : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '现居住地省份不能为空'
@@ -632,6 +673,7 @@
 							}
 						},
 						city : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '现居住地城市不能为空'
@@ -639,6 +681,7 @@
 							}
 						},
 						detailedAddress : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '详细地址不能为空'
@@ -661,7 +704,7 @@
 						},
 					}
 				});
-			} */
+			} 
 			$('#applicantInfo').bootstrapValidator('validate');
 			
 			
@@ -803,13 +846,16 @@
 							$('#cardFront').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");
-							$('#address').val(obj.address);
-							$('#nation').val(obj.nationality);
-							$('#cardId').val(obj.num);
+							$(".front").attr("class", "info-imgUpload front has-success");  
+					        $(".help-blockFront").attr("data-bv-result","IVALID");  
+					        $(".help-blockFront").attr("style","display: none;");
+							$('#address').val(obj.address).change();
+							$('#nation').val(obj.nationality).change();
+							$('#cardId').val(obj.num).change();
 							searchByCard();
-							$('#cardProvince').val(obj.province);
-							$('#cardCity').val(obj.city);
-							$('#birthday').val(obj.birth);
+							$('#cardProvince').val(obj.province).change();
+							$('#cardCity').val(obj.city).change();
+							$('#birthday').val(obj.birth).change();
 							$('#sex').val(obj.sex);
 						}
 						$("#addBtn").attr('disabled', false);
@@ -856,9 +902,12 @@
 							$('#cardBack').val(obj.url);
 							$('#sqImgBack').attr('src', obj.url);
 							$("#uploadFileBack").siblings("i").css("display","block");
-							$('#validStartDate').val(obj.starttime);
-							$('#validEndDate').val(obj.endtime);
-							$('#issueOrganization').val(obj.issue);
+							$(".back").attr("class", "info-imgUpload back has-success");  
+					        $(".help-blockBack").attr("data-bv-result","IVALID");  
+					        $(".help-blockBack").attr("style","display: none;"); 
+							$('#validStartDate').val(obj.starttime).change();
+							$('#validEndDate').val(obj.endtime).change();
+							$('#issueOrganization').val(obj.issue).change();
 						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
@@ -901,15 +950,27 @@
 			closeWindow();
 		}
 		
+		//点击身份证图片上的删除按钮
 		function deleteApplicantFrontImg(id){
 			$('#cardFront').val("");
 			$('#sqImg').attr('src', "");
 			$("#uploadFile").siblings("i").css("display","none");
+			if(userType == 2){
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+		        $(".help-blockFront").attr("style","display: block;"); 
+			}
+			
 		}
 		function deleteApplicantBackImg(id){
 			$('#cardBack').val("");
 			$('#sqImgBack').attr('src', "");
 			$("#uploadFileBack").siblings("i").css("display","none");
+			if(userType == 2){
+				$(".back").attr("class", "info-imgUpload back has-error");  
+		        $(".help-blockBack").attr("data-bv-result","INVALID");  
+		        $(".help-blockBack").attr("style","display: block;");
+			}
 		}
 		
 		$(function(){
@@ -1017,9 +1078,9 @@
 					success :function(data) {
 						console.log(JSON.stringify(data));
 						layer.closeAll('loading');
-						$("#province").val(data.province);
-						$("#city").val(data.city);
-						$("#detailedAddress").val($("#address").val());
+						$("#province").val(data.province).change();
+						$("#city").val(data.city).change();
+						$("#detailedAddress").val($("#address").val()).change();
 					}
 				});
 			}else{
@@ -1034,7 +1095,25 @@
 			var applicantId = '${obj.applicant.id}';
 			var orderid = '${obj.orderid}';
 			socket.onclose();
-			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+			if(userType == 2){
+				var bootstrapValidator = $("#applicantInfo").data(
+				'bootstrapValidator');
+				// 执行表单验证 
+				bootstrapValidator.validate();
+				if (!bootstrapValidator.isValid()) {
+					return;
+				}
+				
+				if($(".front").hasClass("has-error")){
+					return;
+				}
+				if($(".back").hasClass("has-error")){
+					return;
+				}
+				window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+			}else{
+				window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+			}
 			/* layer.open({
 				type: 2,
 				title: false,
@@ -1099,6 +1178,15 @@
 				if (lastName == "") {
 					layer.msg('名不能为空');
 					return;
+				}
+				
+				if(userType == 2){
+					if($(".back").hasClass("has-error")){
+						return;
+					}
+					if($(".front").hasClass("has-error")){
+						return;
+					}
 				}
 				
 			var str="";

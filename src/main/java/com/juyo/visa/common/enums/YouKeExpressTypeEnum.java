@@ -10,7 +10,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * @Date	 2017年12月10日
  */
 public enum YouKeExpressTypeEnum implements IEnum {
-	EXPRESS_SEND(1, "快递"), STORE_SEND(2, "门店送"), SELF_SEND(2, "自送");
+	EXP_SEND(1, "快递"), STORE_SEND(2, "门店送"), SELF_SEND(3, "自送");
 	private int key;
 	private String value;
 
