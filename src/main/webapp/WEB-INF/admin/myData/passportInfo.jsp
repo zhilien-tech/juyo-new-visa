@@ -443,6 +443,8 @@
 			return;
 		}
 		var passportInfo = $("#passportInfo").serialize();
+		var orderid = '${obj.orderid}';
+		var applicantId = '${obj.applicantId}';
 		layer.load(1);
 		$.ajax({
 			type: 'POST',
@@ -451,6 +453,21 @@
 			success :function(data) {
 				console.log(JSON.stringify(data));
 				layer.closeAll('loading');
+				layer.load(1);
+				$.ajax({
+					type: 'POST',
+					async : false,
+					data : {
+						orderid : orderid,
+						applicantid : applicantId,
+						completeType : 'pass'
+					},
+					url: '${base}/admin/myData/changeStatus.html',
+					success :function(data) {
+						console.log(JSON.stringify(data));
+						layer.closeAll('loading');
+					}
+				});
 				layer.msg("修改成功", {
 					time: 500,
 					end: function () {

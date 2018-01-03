@@ -1109,10 +1109,8 @@
 		}
 		
 		function passportBtn(){
-			saveApplicant(2);
 			var applicantId = '${obj.applicant.id}';
 			var orderid = '${obj.orderid}';
-			socket.onclose();
 			if(userType == 2){
 				var bootstrapValidator = $("#applicantInfo").data(
 				'bootstrapValidator');
@@ -1129,22 +1127,9 @@
 					return;
 				}
 			}
+			saveApplicant(2);
+			socket.onclose();
 			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
-			/* layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder},
-				success: function(index, layero){
-				    //do something
-				    layer.close(index); //如果设定了yes回调，需进行手工关闭
-				  }
-			}); */
 		}
 		
 		//合格/不合格
@@ -1215,7 +1200,7 @@
 			}else{
 				applicantInfo = $("#applicantInfo").serialize();
 			}
-			
+			var orderid = '${obj.orderid}';
 			var applicantId = '${obj.applicantId}';
 			applicantInfo.id = applicantId;
 			$.ajax({
@@ -1228,6 +1213,23 @@
 					layer.closeAll('loading');
 					//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					//layer.close(index);
+					if(userType == 2){
+						layer.load(1);
+						$.ajax({
+							type: 'POST',
+							async : false,
+							data : {
+								orderid : orderid,
+								applicantid : applicantId,
+								completeType : 'base'
+							},
+							url: '${base}/admin/myData/changeStatus.html',
+							success :function(data) {
+								console.log(JSON.stringify(data));
+								layer.closeAll('loading');
+							}
+						});
+					}
 					if(status == 1){
 						closeWindow();
 						parent.successCallBack(1);

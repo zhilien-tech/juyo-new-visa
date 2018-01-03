@@ -976,11 +976,8 @@
 			closeWindow();
 		}
 		function passportBtn(){
-			save(2);
 			var applicantId = '${obj.applicant.id}';
 			var orderid = '${obj.orderid}';
-			//关闭websocket连接
-			socket.onclose();
 			if(userType == 2){
 				var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 				bootstrapValidator.validate();
@@ -1002,22 +999,10 @@
 				if($(".financials").hasClass("has-error")){
 					return;
 				}
-				layer.load(1);
-				$.ajax({
-					type: 'POST',
-					async : false,
-					data : {
-						orderid : orderid,
-						applicantid : applicantId,
-						completeType : 'visa'
-					},
-					url: '${base}/admin/myData/changeStatus.html',
-					success :function(data) {
-						console.log(JSON.stringify(data));
-						layer.closeAll('loading');
-					}
-				});
 			}
+			save(2);
+			//关闭websocket连接
+			socket.onclose();
 			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
 			/* layer.open({
 				type: 2,
