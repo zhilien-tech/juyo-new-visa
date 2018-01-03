@@ -67,8 +67,8 @@
         <li class="isclose">住址(省) <input type="text" class="txtInput" v-model="applicatdata.province"/></li>
         <li class="isclose">住址(市) <input type="text" class="txtInput" v-model="applicatdata.city"/></li>
         <li class="isclose">住址(街楼) <input type="text" class="txtInput" v-model="applicatdata.detailedaddress"/></li>
-   		<li>紧急联系人姓名 <input type="text" class="txtInput" id="" /></li>
-   		<li>紧急联系人手机号 <input type="text" class="txtInput" id="" /></li>
+   		<li>紧急联系人姓名 <input type="text" class="txtInput" id="" v-model="applicatdata.emergencylinkman"/></li>
+   		<li>紧急联系人手机号 <input type="text" class="txtInput" id="" v-model="applicatdata.emergencytelephone"/></li>
    		<!--  -->
    		<li>是否有曾用名<span class="onOff"> <input type="checkbox" id="afterName" class="afterName checkBox"> <label for="afterName" class="green"></label> </span></li>
    		<li class="afterNameinput">姓(中文) <input type="text" class="txtInput" id="" v-model="applicatdata.otherfirstname"/></li>

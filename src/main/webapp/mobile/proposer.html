@@ -33,12 +33,12 @@
         				
         		</select>
         	</li>
-        	<li>备注 <input type="text" id="relationRemark" class="txtInput" placeholder="必填"/></li>
+        	<!-- <li>备注 <input type="text" id="relationRemark" class="txtInput" placeholder="必填"/></li> -->
         	<!-- 备注 -->
         	<!-- remark公共JS validitySelect公共样式  -->
-        	<li class="validity">
+        	<li class="validity mainrelationremark">
         		备注
-        		<input type="text" class="txtInput remarkInput" />
+        		<input type="text" id="relationRemark" class="txtInput remarkInput" />
         		<ul class="remarks">
         			<li>主卡</li>
         			<li>朋友</li>
@@ -56,9 +56,9 @@
    			</li>
    			<!-- 与主申请人关系  -->
    			<!-- remark公共JS validitySelect公共样式  -->
-   			<li class="validity">
+   			<li class="validity furelationremark">
         		与主申请人关系
-        		<input type="text" class="txtInput host" /> 
+        		<input type="text" id="mainRelation" class="txtInput host" /> 
         		<ul class="hostUL">
         			<li>之妻</li>
         			<li>之夫</li>
@@ -91,18 +91,24 @@
 	    	success: function(data){
 	    		$('#applicantid').val(data.applicantinfo.id);
 	    		var applicantjpinfo = data.applicantjpinfo;
+	    		console.log(applicantjpinfo);
 	    		//开关回显
 	    		if(applicantjpinfo.isMainApplicant == 0){
 	    			$("li:nth-child(2)").show();
 					$(".certificateM i").text('副');
 					$("#petitioner").attr('checked',true);
+					$(".mainrelationremark").hide();
+					$(".furelationremark").show();
 	    		}else{
 	    			$("li:nth-child(2)").hide();
 					$(".certificateM i").text('主');
 					$("#petitioner").attr('checked',false);
+					$(".mainrelationremark").show();
+					$(".furelationremark").hide();
 	    		}
 	    		//备注
 	    		$('#relationRemark').val(applicantjpinfo.relationRemark);
+	    		$('#mainRelation').val(applicantjpinfo.mainRelation);
 	    		//下拉框内容回显
 	    		var selecthtml = '';
 	    		var mainId = data.applicantinfo.mainId;
@@ -123,10 +129,14 @@
 				console.log($(this).prop("checked"));
 				$("li:nth-child(2)").show();
 				$(".certificateM i").text('副');
+				$(".mainrelationremark").hide();
+				$(".furelationremark").show();
 			}else {
 				console.log($(this).prop("checked"));
 				$("li:nth-child(2)").hide();
 				$(".certificateM i").text('主');
+				$(".mainrelationremark").show();
+				$(".furelationremark").hide();
 			}
 		});
 		//select
@@ -186,15 +196,16 @@
 	function saveAndBack(){
 		var applicantid = GetQueryString('applicantid');
 		var relationRemark = $('#relationRemark').val();
+		var mainRelation = $('#mainRelation').val();
 		var isMainApplicant = 1;
-		var ischecked = $("#simple_3").prop("checked");
+		var ischecked = $("#petitioner").prop("checked");
 		if(ischecked){
 			isMainApplicant = 0;
 		}
 		var mainId = $('#mainselect').val();
 		$.ajax({ 
 	    	url: '/admin/mobile/saveMainApplicant.html',
-	    	data:{applicantid:applicantid,relationRemark:relationRemark,isMainApplicant:isMainApplicant,mainId:mainId},
+	    	data:{applicantid:applicantid,relationRemark:relationRemark,isMainApplicant:isMainApplicant,mainId:mainId,mainRelation:mainRelation},
 	    	dataType:"json",
 	    	type:'post',
 	    	success: function(data){
