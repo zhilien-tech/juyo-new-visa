@@ -13,12 +13,14 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
+			.row { margin-top: 5px;}
+			.wordSpell { margin-top:3px !important;}
 			.ipt-info { display:none; margin-top:15px;}
 			.NoInfo { width:95%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 			.form-control{height: 30px;}
 			.tab-content{padding: 0px 30px 10px 0;margin: 0 0px;}
 			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
-			.front, .back {width: 320px;margin: 10px auto;}
+			.front, .back {width: 320px;margin: 0px auto;}
 			.nameBeforeYes {
 	margin-right:20px;
 }
@@ -107,11 +109,11 @@
 									<label>是否有曾用名</label> 
 									<div>
 										<span class="nameBeforeYes ">
-											<input type="radio" name="hasOtherName" class="nameBefore" value="1"
+											<input type="radio" name="hasOtherName" class="nameBefore"  value="1"
 											/>是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherName" class="nameBefore"   value="2"
+											<input type="radio" name="hasOtherName" class="nameBefore"  value="2"
 											/>否
 										</span>
 									</div>
@@ -1031,6 +1033,7 @@
 				$(".nationalityHide").show();
 				$(".onceIDTop").css('float','left');
 				$(".onceIDTop").css('padding-left','15px');
+				$("#nationality").val("").change();
 			}else {
 				
 				$(".nationalityHide").hide();
@@ -1039,6 +1042,17 @@
 				}else {
 					$(".nameBeforeTop").css('float','left');
 				}
+			}
+		});
+		//曾用名
+		$(".nameBeforeTop").change(function(){
+			let checked2 = $("input[name='hasOtherName']:checked").val();
+			if(checked2 == 1){
+				$("#otherFirstName").val("").change();
+				$("#otherFirstNameEn").val("");
+				$("#otherLastName").val("").change();
+				$("#otherLastNameEn").val("");
+			}else {
 			}
 		});
 	
@@ -1091,10 +1105,8 @@
         $(".help-blockBack").attr("style","display: block;"); 
         $("#borderColorFront").attr("style", "border-color:#ff1a1a");
         $("#borderColorBack").attr("style", "border-color:#ff1a1a");
-		$("input[name='hasOtherName']").eq(0).removeAttr("checked");
-        $("input[name='hasOtherName']").eq(1).attr("checked","checked");
-		$("input[name='hasOtherNationality']").eq(0).removeAttr("checked");
-        $("input[name='hasOtherNationality']").eq(1).attr("checked","checked");
+		$("input[name='hasOtherName'][value='2']").prop("checked","checked");
+        $("input[name='hasOtherNationality'][value='2']").prop("checked","checked");
 		$("input:checkbox[name='addressIsSameWithCard']").attr("checked", false);
 		$(".nationalityHide").hide();
 		$(".nameBeforeHide").hide();
@@ -1126,6 +1138,9 @@
 		$("#validStartDate").val("").change();
 		$("#validEndDate").val("").change();
 		$("#detailedAddress").val("").change();
+		$("#emergencyLinkman").val("").change();
+		$("#emergencyTelephone").val("").change();
+		$(".wordSpell").hide();
 	}
 	</script>
 </body>

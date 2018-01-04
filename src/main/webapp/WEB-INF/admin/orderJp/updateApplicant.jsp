@@ -24,11 +24,11 @@
 .nameBeforeYes { margin-right:20px; }
 .onceIDYes { margin-right:30px; }
 .nameBeforeHide , .nationalityHide{ display:none; }
-.wordSpell { display:none; }
+.wordSpell { display:none; margin-top:3px !important;}
 .rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 .nationalityHide { margin-left:3%;}
-.row { margin-top:7px;}
+.row { margin-top:3px;}
 .nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
 .btn-margin { margin-top:10px;}
 #sqImg ,#sqImgBack { width:335px;}
@@ -327,6 +327,11 @@
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
+						<div class="row wordSpell" style="height:66px;">
+							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
+							
+							</div>
+						</div>	
 						<!-- 名/拼音 -->
 						<div class="row wordSpell">
 							<div class="col-sm-11 padding-right-0 col-sm-offset-1" >
@@ -1033,12 +1038,16 @@
 				$(".wordSpell").show();
 				$(".onceIDTop").removeClass('col-sm-offset-1');
 				$(".onceIDTop").css('padding-left','15px');
+				$("#otherFirstName").val("").change();
+				$("#otherFirstNameEn").val("");
+				$("#otherLastName").val("").change();
+				$("#otherLastNameEn").val("");
 			}else {
 				
 				$(".nameBeforeHide").hide();
 				$(".wordSpell").hide();
 				if(checked2 == 1){
-					
+					$("#nationality").val("").change();
 				}else {
 					$(".nameBeforeTop").css('float','left');
 				}
@@ -1054,11 +1063,15 @@
 				$(".onceIDTop").css('float','left');
 				$(".onceIDTop").removeClass('col-sm-offset-1');
 				$(".onceIDTop").css('padding-left','15px');
+				$("#nationality").val("").change();
 			}else {
 				
 				$(".nationalityHide").hide();
 				if(checked2 == 1){
-					
+					$("#otherFirstName").val("").change();
+					$("#otherFirstNameEn").val("");
+					$("#otherLastName").val("").change();
+					$("#otherLastNameEn").val("");
 				}else {
 					$(".nameBeforeTop").css('float','left');
 				}

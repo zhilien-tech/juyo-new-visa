@@ -108,7 +108,20 @@ LEFT JOIN (
 	SELECT
 		applicantId,
 		type,
-		GROUP_CONCAT(realInfo SEPARATOR '、') realInfo
+		GROUP_CONCAT(
+			(
+				CASE
+				WHEN STATUS = 0 THEN
+						realInfo
+				ELSE
+					CONCAT(
+						'<font color="blue">',
+						realInfo,
+						'</font>'
+					)
+				END
+			) SEPARATOR '、'
+		) realInfo
 	FROM
 		t_applicant_front_paperwork_jp
 	GROUP BY
