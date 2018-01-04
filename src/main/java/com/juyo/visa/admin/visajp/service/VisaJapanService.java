@@ -40,6 +40,7 @@ import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
+import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -59,6 +60,7 @@ import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantVisaJpEntity;
 import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TCityEntity;
+import com.juyo.visa.entities.TComBusinessscopeEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.entities.THotelEntity;
@@ -1253,18 +1255,25 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 */
 	public Object sendZhaoBao(HttpServletRequest request, Long orderid) {
 		HttpSession session = request.getSession();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("orderid", orderid);
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+		result.put("orderjpinfo", orderjp);
+		List<TCompanyEntity> songqianlist = Lists.newArrayList();
 		//送签社下拉
-		List<TCompanyEntity> songqianlist = dbDao.query(TCompanyEntity.class,
-				Cnd.where("comType", "=", CompanyTypeEnum.SONGQIAN.intKey()), null);
+		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
+			songqianlist = dbDao.query(TCompanyEntity.class, Cnd.where("adminId", "=", loginUser.getId()), null);
+		} else {
+			TCompanyEntity songqian = dbDao.fetch(TCompanyEntity.class, orderjp.getSendsignid().longValue());
+			songqianlist.add(songqian);
+		}
 		result.put("songqianlist", songqianlist);
 		//地接社下拉
 		List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
 				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()), null);
 		result.put("dijielist", dijielist);
-		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
-		result.put("orderjpinfo", orderjp);
 		return result;
 	}
 
@@ -1278,6 +1287,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveZhaoBao(TOrderJpEntity orderJpEntity, HttpServletRequest request) {
+		HttpSession session = request.getSession();
 		//查询日本订单表信息
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderJpEntity.getOrderId().longValue());
 		//查询订单表信息
@@ -1289,6 +1299,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		orderjp.setGroundconnectid(orderJpEntity.getGroundconnectid());
 		orderjp.setZhaobaotime(new Date());
 		dbDao.update(orderjp);
+		orderJpViewService.insertLogs(orderinfo.getId(), JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey(), session);
 		return null;
 	}
 
@@ -1373,6 +1384,34 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			return JuYouResult.ok(resultstr);
 		} else {
 			return JuYouResult.ok();
+		}
+	}
+
+	/**
+	 * 验证送签社的指定番号是否存在
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param sendsignid
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object validateDesignNum(Integer sendsignid, HttpSession session) {
+		TCompanyEntity company = dbDao.fetch(TCompanyEntity.class, sendsignid.longValue());
+		String designNum = "";
+		if (company.getIsCustomer().equals(IsYesOrNoEnum.YES.intKey())) {
+			designNum = company.getCdesignNum();
+		} else {
+			TComBusinessscopeEntity comBusiness = dbDao.fetch(TComBusinessscopeEntity.class,
+					Cnd.where("comId", "=", company.getId()).and("countryId", "=", BusinessScopesEnum.JAPAN.intKey()));
+			if (!Util.isEmpty(comBusiness)) {
+				designNum = comBusiness.getDesignatedNum();
+			}
+		}
+		if (!Util.isEmpty(designNum)) {
+			return JuYouResult.ok();
+		} else {
+			return new JuYouResult(500, company.getName() + "的指定番号不能为空", null);
 		}
 	}
 }

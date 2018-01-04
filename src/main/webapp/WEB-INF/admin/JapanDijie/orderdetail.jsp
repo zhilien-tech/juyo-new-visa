@@ -67,6 +67,9 @@
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
+					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(22)"/>
+					<input type="button" value="招宝变更" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(19)"/>
+					<input type="button" value="发招宝" class="btn btn-primary btn-sm pull-right" onclick="sendzhaobao()"/>
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log()"/>
 				</div>
 				<section class="content">
@@ -587,6 +590,40 @@
 					content:'/admin/orderJp/log.html?id='+orderinfoid
 				});
 			}
+			//招宝变更、招宝取消
+        	function sendInsurance(visastatus){
+	       		 $.ajax({
+                	url: '${base}/admin/visaJapan/sendInsurance',
+                	data:{orderid:orderid,visastatus:visastatus},
+                	dataType:"json",
+                	type:'post',
+                	success: function(data){
+                		if(visastatus == 16){
+	                 		layer.msg('发招宝');
+                		}else if(visastatus == 19){
+	                 		layer.msg('招宝变更');
+                		}else if(visastatus == 22){
+	                 		layer.msg('招宝取消');
+                		}else if(visastatus == 27){
+	                 		layer.msg('报告拒签');
+                		}
+                  	}
+                });
+	       	}
+	       	//发招宝
+	       	function sendzhaobao(){
+        		layer.open({
+        		    type: 2,
+        		    title: false,
+        		    closeBtn:false,
+        		    fix: false,
+        		    maxmin: false,
+        		    shadeClose: false,
+        		    scrollbar: false,
+        		    area: ['400px', '300px'],
+        		    content: '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid
+        		  });
+        	}
 		</script>
 	</body>
 </html>
