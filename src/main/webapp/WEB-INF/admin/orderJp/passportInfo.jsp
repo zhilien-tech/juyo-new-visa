@@ -539,6 +539,8 @@
 					layer.closeAll('loading');
 					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					layer.close(index); */
+					var id = ${obj.applicantId};
+					var orderid = ${obj.orderid};
 					if(userType == 2){
 						layer.load(1);
 						$.ajax({
@@ -546,8 +548,8 @@
 							async : false,
 							data : {
 								orderid : orderid,
-								applicantid : applicantId,
-								completeType : 'visa'
+								applicantid : id,
+								completeType : 'pass'
 							},
 							url: '${base}/admin/myData/changeStatus.html',
 							success :function(data) {
@@ -717,15 +719,17 @@
 			if (!bootstrapValidator.isValid()) {
 				return;
 			}
-			save(2);
-			var id = ${obj.applicantId};
-			//关闭socket连接
-			socket.onclose();
+			var id = '${obj.applicantId}';
+			var orderid = '${obj.orderid}';
+			
 			if(userType == 2){
 				if($(".front").hasClass("has-error")){
 					return;
 				}
 			}
+			save(2);
+			//关闭socket连接
+			socket.onclose();
 			window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}';
 			/* layer.open({
 				type: 2,
@@ -751,16 +755,16 @@
 				return;
 			}
 			
-			save(3);
-			var id = ${obj.applicantId};
-			var orderid = ${obj.orderid};
-			//关闭socket连接
-			socket.onclose();
+			var id = '${obj.applicantId}';
+			var orderid = '${obj.orderid}';
 			if(userType == 2){
 				if($(".front").hasClass("has-error")){
 					return;
 				}
 			}
+			save(3);
+			//关闭socket连接
+			socket.onclose();
 			window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder};
 			/* layer.open({
 				type: 2,

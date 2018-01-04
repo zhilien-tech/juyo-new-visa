@@ -173,7 +173,7 @@
 						maxmin: false,
 						shadeClose: false,
 						scrollbar: false,
-						area: ['900px', '551px'],
+						area: ['900px', '80%'],
 						content:'/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+'&isTrial=0'
 					});
 	        	},

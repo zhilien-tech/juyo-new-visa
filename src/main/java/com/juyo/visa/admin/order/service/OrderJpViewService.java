@@ -1815,6 +1815,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
 		List<TApplicantOrderJpEntity> applyListDB = dbDao.query(TApplicantOrderJpEntity.class,
 				Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+		//发送邮箱、短信之前设置申请人发送状态为未发送0，不是同一联系人0
 		for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyListDB) {
 			tApplicantOrderJpEntity.setIsShareSms(0);
 			tApplicantOrderJpEntity.setIsSameLinker(0);
@@ -1827,20 +1828,38 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				List<TApplicantOrderJpEntity> listDB = dbDao.query(TApplicantOrderJpEntity.class,
 						Cnd.where("orderId", "=", orderJpEntity.getId()).and("applicantId", "!=", applicantid), null);
 				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : listDB) {
+					//发送成功后将除发送者以外的申请人的状态更新为已发送状态1
 					tApplicantOrderJpEntity.setIsShareSms(1);
 					dbDao.update(tApplicantOrderJpEntity);
 				}
+				//将统一发送者的状态更新为统一联系人1，已发送状态1
 				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
 						Cnd.where("applicantId", "=", applicantid));
 				mainApply.setIsSameLinker(1);
 				mainApply.setIsShareSms(1);
 				dbDao.update(mainApply);
+				//添加分享日志
 				insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
+				//改变订单状态
 				if (orderEntity.getStatus() <= JPOrderStatusEnum.SHARE.intKey()) {
 					orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
 					orderEntity.setUpdateTime(new Date());
 					dbDao.update(orderEntity);
 				}
+				/*//给游客基本信息和护照信息赋值
+				TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, applicantid);
+				dbDao.fetch(TApplicantUnqualifiedEntity.class, Cnd.where("applicantId", "=", applicantid))
+				TTouristBaseinfoEntity touristBaseDB = dbDao.fetch(TTouristBaseinfoEntity.class, Cnd.where("userId", "=", applicantEntity.getUserId()));
+				TTouristPassportEntity touristPassDB = dbDao.fetch(TTouristPassportEntity.class, Cnd.where("userId", "=", applicantEntity.getUserId()));
+				TTouristBaseinfoEntity touristBase = new TTouristBaseinfoEntity();
+				TTouristPassportEntity touristPass = new TTouristPassportEntity();
+				//如果游客基本信息为空，则把申请人基本信息赋值给游客
+				if(Util.isEmpty(touristBaseDB)){
+					copyBaseTo(touristBaseDB, touristBase);
+				}
+				if(Util.isEmpty(touristPassDB)){
+					copyPassTo(tourist)
+				}*/
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
