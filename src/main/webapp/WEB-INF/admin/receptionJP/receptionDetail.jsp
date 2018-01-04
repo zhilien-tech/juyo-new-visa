@@ -269,7 +269,7 @@
 										<td>{{apply.telephone}}</td>
 										<td>{{apply.passport}}</td>
 										<td>{{apply.type}}</td>
-										<td>{{apply.realinfo}}</td>
+										<td v-html="apply.realinfo"></td>
 										<!-- <td><a v-on:click="passport(apply.applyid)">护照</a>&nbsp;&nbsp;<a v-on:click="visa(apply.applyid)">签证</a></td> -->
 									</tr>
 								</tbody>
