@@ -198,10 +198,8 @@
                  	type:'post',
                  	async:false,
                  	success: function(data){
-                 		console.log(data.data);
                  		var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
                  		if(data.data){
-                 			layer.msg(data.data);
                  			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data;
                  		}
 		        		layer.open({

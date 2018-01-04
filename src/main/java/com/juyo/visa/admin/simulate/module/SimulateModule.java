@@ -41,7 +41,6 @@ public class SimulateModule {
 	 * 查看是否有可执行的订单
 	 */
 	@At
-	@GET
 	public Object fetchJapanOrder() {
 		return simulateJapanService.fetchJapanOrder();
 	}
@@ -50,7 +49,6 @@ public class SimulateModule {
 	 * 更新发招宝状态为已发招宝
 	 */
 	@At
-	@GET
 	public Object ds160Japan(@Param("cid") Integer cid) {
 		return simulateJapanService.ds160Japan(cid);
 	}

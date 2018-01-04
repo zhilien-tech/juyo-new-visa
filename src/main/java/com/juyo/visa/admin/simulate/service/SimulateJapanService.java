@@ -25,6 +25,7 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
 import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JapanVisaStatusEnum;
 import com.juyo.visa.common.util.ResultObject;
 import com.juyo.visa.entities.TOrderEntity;
@@ -60,7 +61,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 
 		//日本订单信息
 		List<TOrderJpEntity> orderlist = dbDao.query(TOrderJpEntity.class,
-				Cnd.where("visastatus", "=", JapanVisaStatusEnum.ZHAOBAOZHONG.intKey()), null);
+				Cnd.where("visastatus", "=", JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey()), null);
 		if (!Util.isEmpty(orderlist) && orderlist.size() > 0) {
 			DateFormat dateFormat = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 			TOrderJpEntity jporder = orderlist.get(0);
