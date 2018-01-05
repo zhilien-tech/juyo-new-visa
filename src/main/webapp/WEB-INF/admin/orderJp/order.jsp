@@ -332,7 +332,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-9">
+							<div class="col-sm-5">
 							<c:choose>
 								<c:when test="${obj.orderJpinfo.isVisit == 1 }">
 									<div id="threexian" class="form-group viseType-btn">
