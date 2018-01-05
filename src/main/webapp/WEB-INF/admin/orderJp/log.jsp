@@ -14,6 +14,7 @@
     .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
     .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; } 	
+    .modal-content { box-shadow:0 2px 3px rgba(255, 255, 255, 0.125); -webkit-box-shadow:0 2px 3px rgba(255, 255, 255, 0.125);-moz-box-shadow:0 2px 3px rgba(255, 255, 255, 0.125);}
 	</style>
 </head>
 <body>
