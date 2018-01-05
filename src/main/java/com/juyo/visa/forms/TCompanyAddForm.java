@@ -58,6 +58,15 @@ public class TCompanyAddForm extends AddForm implements Serializable {
 	/**客户指定番号*/
 	private String cdesignNum;
 
+	/**账户余额*/
+	private Double accountBalance;
+
+	/**奖励金额*/
+	private Double awardMoney;
+
+	/**广告url*/
+	private String adUrl;
+
 	/**操作人*/
 	private Integer opId;
 
