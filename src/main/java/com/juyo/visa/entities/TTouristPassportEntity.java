@@ -99,6 +99,10 @@ public class TTouristPassportEntity implements Serializable {
 	private String issuedOrganizationEn;
 	
 	@Column
+    @Comment("护照信息是否填写完毕")
+	private Integer passIsCompleted;
+	
+	@Column
     @Comment("操作人")
 	private Integer opId;
 	

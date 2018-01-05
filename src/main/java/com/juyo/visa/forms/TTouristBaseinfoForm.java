@@ -134,6 +134,9 @@ public class TTouristBaseinfoForm extends DataTablesParamForm {
 	/**创建时间*/
 	private Date createTime;
 	
+	/**基本信息是否填写完毕*/
+	private Integer baseIsCompleted;
+	
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**

@@ -83,6 +83,9 @@ public class TTouristPassportForm extends DataTablesParamForm {
 	/**签发机关(拼音)*/
 	private String issuedOrganizationEn;
 	
+	/**护照信息是否填写完毕*/
+	private Integer passIsCompleted;
+	
 	/**操作人*/
 	private Integer opId;
 	

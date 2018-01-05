@@ -15,6 +15,8 @@ import org.nutz.mvc.annotation.Param;
 import com.juyo.visa.admin.myData.service.MyDataService;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
+import com.juyo.visa.forms.TTouristBaseinfoForm;
+import com.juyo.visa.forms.TTouristPassportForm;
 
 /**
  * 我的资料Module
@@ -44,12 +46,30 @@ public class MyDataModule {
 	}
 
 	/**
+	 * 基本信息修改后保存
+	 */
+	@At
+	@POST
+	public Object saveEditApplicant(TTouristBaseinfoForm applicantForm, HttpSession session) {
+		return myDataService.saveEditApplicant(applicantForm, session);
+	}
+
+	/**
 	 * 获取申请人护照信息
 	 */
 	@At
 	@Ok("jsp")
 	public Object passportInfo(HttpSession session, HttpServletRequest request) {
 		return myDataService.getPassportInfo(session, request);
+	}
+
+	/**
+	 * 修改护照信息后保存
+	 */
+	@At
+	@POST
+	public Object saveEditPassport(@Param("..") TTouristPassportForm passportForm, HttpSession session) {
+		return myDataService.saveEditPassport(passportForm, session);
 	}
 
 	/**

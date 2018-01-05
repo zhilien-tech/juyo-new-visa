@@ -1,6 +1,5 @@
 package com.juyo.visa.admin.myData.service;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +10,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -44,10 +42,15 @@ import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TTouristBaseinfoEntity;
+import com.juyo.visa.entities.TTouristPassportEntity;
+import com.juyo.visa.entities.TTouristVisaEntity;
 import com.juyo.visa.entities.TUserEntity;
-import com.uxuexi.core.common.util.DateUtil;
+import com.juyo.visa.forms.TTouristBaseinfoForm;
+import com.juyo.visa.forms.TTouristPassportForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.common.util.Util;
@@ -71,59 +74,68 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 	public Object getBasicInfo(HttpSession session, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TTouristBaseinfoEntity touristBaseinfoEntity = dbDao.fetch(TTouristBaseinfoEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()));
+
 		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()), null);
 		Collections.reverse(applyList);
+		//获取最新订单的申请人为当前申请人
 		TApplicantEntity applicantEntity = applyList.get(0);
-		TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
+		/*TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
 				Cnd.where("applicantId", "=", applicantEntity.getId()));
 		if (!Util.isEmpty(unqualifiedEntity)) {
 			result.put("unqualified", unqualifiedEntity);
-		}
+		}*/
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantEntity.getId()));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
 				.longValue());
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-		if (!Util.isEmpty(applicantEntity.getBirthday())) {
-			Date birthday = applicantEntity.getBirthday();
-			String birthdayStr = sdf.format(birthday);
-			result.put("birthday", birthdayStr);
-		}
-		if (!Util.isEmpty(applicantEntity.getValidStartDate())) {
-			Date validStartDate = applicantEntity.getValidStartDate();
-			String validStartDateStr = sdf.format(validStartDate);
-			result.put("validStartDate", validStartDateStr);
-		}
-		if (!Util.isEmpty(applicantEntity.getValidEndDate())) {
-			Date validEndDate = applicantEntity.getValidEndDate();
-			String validEndDateStr = sdf.format(validEndDate);
-			result.put("validEndDate", validEndDateStr);
-		}
+		if (!Util.isEmpty(touristBaseinfoEntity)) {
+			if (!Util.isEmpty(touristBaseinfoEntity.getBirthday())) {
+				Date birthday = touristBaseinfoEntity.getBirthday();
+				String birthdayStr = sdf.format(birthday);
+				result.put("birthday", birthdayStr);
+			}
+			if (!Util.isEmpty(touristBaseinfoEntity.getValidStartDate())) {
+				Date validStartDate = touristBaseinfoEntity.getValidStartDate();
+				String validStartDateStr = sdf.format(validStartDate);
+				result.put("validStartDate", validStartDateStr);
+			}
+			if (!Util.isEmpty(touristBaseinfoEntity.getValidEndDate())) {
+				Date validEndDate = touristBaseinfoEntity.getValidEndDate();
+				String validEndDateStr = sdf.format(validEndDate);
+				result.put("validEndDate", validEndDateStr);
+			}
 
-		if (!Util.isEmpty(applicantEntity.getFirstNameEn())) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("/").append(applicantEntity.getFirstNameEn());
-			result.put("firstNameEn", sb.toString());
-		}
+			if (!Util.isEmpty(touristBaseinfoEntity.getFirstNameEn())) {
+				StringBuffer sb = new StringBuffer();
+				sb.append("/").append(touristBaseinfoEntity.getFirstNameEn());
+				result.put("firstNameEn", sb.toString());
+			}
 
-		if (!Util.isEmpty(applicantEntity.getOtherFirstNameEn())) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("/").append(applicantEntity.getOtherFirstNameEn());
-			result.put("otherFirstNameEn", sb.toString());
-		}
+			if (!Util.isEmpty(touristBaseinfoEntity.getOtherFirstNameEn())) {
+				StringBuffer sb = new StringBuffer();
+				sb.append("/").append(touristBaseinfoEntity.getOtherFirstNameEn());
+				result.put("otherFirstNameEn", sb.toString());
+			}
 
-		if (!Util.isEmpty(applicantEntity.getLastNameEn())) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("/").append(applicantEntity.getLastNameEn());
-			result.put("lastNameEn", sb.toString());
-		}
+			if (!Util.isEmpty(touristBaseinfoEntity.getLastNameEn())) {
+				StringBuffer sb = new StringBuffer();
+				sb.append("/").append(touristBaseinfoEntity.getLastNameEn());
+				result.put("lastNameEn", sb.toString());
+			}
 
-		if (!Util.isEmpty(applicantEntity.getOtherLastNameEn())) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("/").append(applicantEntity.getOtherLastNameEn());
-			result.put("otherLastNameEn", sb.toString());
+			if (!Util.isEmpty(touristBaseinfoEntity.getOtherLastNameEn())) {
+				StringBuffer sb = new StringBuffer();
+				sb.append("/").append(touristBaseinfoEntity.getOtherLastNameEn());
+				result.put("otherLastNameEn", sb.toString());
+			}
+			result.put("applicant", touristBaseinfoEntity);
+		} else {
+			result.put("applicant", "");
 		}
 
 		//生成二维码
@@ -133,22 +145,104 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		result.put("qrCode", qrCode);
 		result.put("applicantId", applicantEntity.getId());
 		result.put("orderid", orderEntity.getId());
-		result.put("applicant", applicantEntity);
+
 		return result;
+	}
+
+	public Object saveEditApplicant(TTouristBaseinfoForm applicantForm, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		TTouristBaseinfoEntity baseinfoEntity = dbDao.fetch(TTouristBaseinfoEntity.class,
+				Cnd.where("userId", "=", userId));
+		if (!Util.isEmpty(baseinfoEntity)) {
+			baseinfoEntity.setAddress(applicantForm.getAddress());
+			baseinfoEntity.setAddressIsSameWithCard(applicantForm.getAddressIsSameWithCard());
+			baseinfoEntity.setBirthday(applicantForm.getBirthday());
+			baseinfoEntity.setCardBack(applicantForm.getCardBack());
+			baseinfoEntity.setCardFront(applicantForm.getCardFront());
+			baseinfoEntity.setCardId(applicantForm.getCardId());
+			baseinfoEntity.setCity(applicantForm.getCity());
+			baseinfoEntity.setUpdateTime(new Date());
+			baseinfoEntity.setDetailedAddress(applicantForm.getDetailedAddress());
+			baseinfoEntity.setEmail(applicantForm.getEmail());
+			baseinfoEntity.setEmergencyLinkman(applicantForm.getEmergencyLinkman());
+			baseinfoEntity.setEmergencyTelephone(applicantForm.getEmergencyTelephone());
+			baseinfoEntity.setFirstName(applicantForm.getFirstName());
+			baseinfoEntity.setFirstNameEn(applicantForm.getFirstNameEn());
+			baseinfoEntity.setHasOtherName(applicantForm.getHasOtherName());
+			baseinfoEntity.setHasOtherNationality(applicantForm.getHasOtherNationality());
+			baseinfoEntity.setIssueOrganization(applicantForm.getIssueOrganization());
+			baseinfoEntity.setLastName(applicantForm.getLastName());
+			baseinfoEntity.setLastNameEn(applicantForm.getLastNameEn());
+			baseinfoEntity.setNation(applicantForm.getNation());
+			baseinfoEntity.setNationality(applicantForm.getNationality());
+			baseinfoEntity.setOtherFirstName(applicantForm.getOtherFirstName());
+			baseinfoEntity.setOtherFirstNameEn(applicantForm.getOtherFirstNameEn());
+			baseinfoEntity.setOtherLastName(applicantForm.getOtherLastName());
+			baseinfoEntity.setOtherLastNameEn(applicantForm.getOtherLastNameEn());
+			baseinfoEntity.setProvince(applicantForm.getProvince());
+			baseinfoEntity.setSex(applicantForm.getSex());
+			baseinfoEntity.setTelephone(applicantForm.getTelephone());
+			baseinfoEntity.setValidEndDate(applicantForm.getValidEndDate());
+			baseinfoEntity.setValidStartDate(applicantForm.getValidStartDate());
+			int update = dbDao.update(baseinfoEntity);
+			if (update > 0) {
+				baseinfoEntity.setBaseIsCompleted(IsYesOrNoEnum.YES.intKey());
+				dbDao.update(baseinfoEntity);
+			}
+		} else {
+			TTouristBaseinfoEntity baseinfo = new TTouristBaseinfoEntity();
+			baseinfo.setUserId(userId);
+			baseinfo.setAddress(applicantForm.getAddress());
+			baseinfo.setAddressIsSameWithCard(applicantForm.getAddressIsSameWithCard());
+			baseinfo.setBirthday(applicantForm.getBirthday());
+			baseinfo.setCardBack(applicantForm.getCardBack());
+			baseinfo.setCardFront(applicantForm.getCardFront());
+			baseinfo.setCardId(applicantForm.getCardId());
+			baseinfo.setCity(applicantForm.getCity());
+			baseinfo.setUpdateTime(new Date());
+			baseinfo.setCreateTime(new Date());
+			baseinfo.setDetailedAddress(applicantForm.getDetailedAddress());
+			baseinfo.setEmail(applicantForm.getEmail());
+			baseinfo.setEmergencyLinkman(applicantForm.getEmergencyLinkman());
+			baseinfo.setEmergencyTelephone(applicantForm.getEmergencyTelephone());
+			baseinfo.setFirstName(applicantForm.getFirstName());
+			baseinfo.setFirstNameEn(applicantForm.getFirstNameEn());
+			baseinfo.setHasOtherName(applicantForm.getHasOtherName());
+			baseinfo.setHasOtherNationality(applicantForm.getHasOtherNationality());
+			baseinfo.setIssueOrganization(applicantForm.getIssueOrganization());
+			baseinfo.setLastName(applicantForm.getLastName());
+			baseinfo.setLastNameEn(applicantForm.getLastNameEn());
+			baseinfo.setNation(applicantForm.getNation());
+			baseinfo.setNationality(applicantForm.getNationality());
+			baseinfo.setOtherFirstName(applicantForm.getOtherFirstName());
+			baseinfo.setOtherFirstNameEn(applicantForm.getOtherFirstNameEn());
+			baseinfo.setOtherLastName(applicantForm.getOtherLastName());
+			baseinfo.setOtherLastNameEn(applicantForm.getOtherLastNameEn());
+			baseinfo.setProvince(applicantForm.getProvince());
+			baseinfo.setSex(applicantForm.getSex());
+			baseinfo.setTelephone(applicantForm.getTelephone());
+			baseinfo.setValidEndDate(applicantForm.getValidEndDate());
+			baseinfo.setValidStartDate(applicantForm.getValidStartDate());
+			TTouristBaseinfoEntity insert = dbDao.insert(baseinfo);
+			if (!Util.isEmpty(insert)) {
+				insert.setBaseIsCompleted(IsYesOrNoEnum.YES.intKey());
+				dbDao.update(insert);
+			}
+		}
+		return null;
 	}
 
 	public Object getPassportInfo(HttpSession session, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
 		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()), null);
 		Collections.reverse(applyList);
+		//最新订单的申请人为当前申请人
 		TApplicantEntity applicantEntity = applyList.get(0);
-		TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
-				Cnd.where("applicantId", "=", applicantEntity.getId()));
-		if (!Util.isEmpty(unqualifiedEntity)) {
-			result.put("unqualified", unqualifiedEntity);
-		}
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantEntity.getId()));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
@@ -159,29 +253,25 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		passportSql.setParam("id", applicantEntity.getId());
 		Record passport = dbDao.fetch(passportSql);
 		//格式化日期
-		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-		if (!Util.isEmpty(passport.get("birthday"))) {
-			Date goTripDate = (Date) passport.get("birthday");
-			passport.put("birthday", format.format(goTripDate));
-		}
-		if (!Util.isEmpty(passport.get("validEndDate"))) {
-			Date goTripDate = (Date) passport.get("validEndDate");
-			passport.put("validEndDate", format.format(goTripDate));
-		}
-		if (!Util.isEmpty(passport.get("issuedDate"))) {
-			Date goTripDate = (Date) passport.get("issuedDate");
-			passport.put("issuedDate", format.format(goTripDate));
-		}
-		if (!Util.isEmpty(passport.get("firstNameEn"))) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("/").append(passport.get("firstNameEn"));
-			result.put("firstNameEn", sb.toString());
-		}
-
-		if (!Util.isEmpty(passport.get("lastNameEn"))) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("/").append(passport.get("lastNameEn"));
-			result.put("lastNameEn", sb.toString());
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		TTouristPassportEntity touristPassportEntity = dbDao.fetch(TTouristPassportEntity.class,
+				Cnd.where("userId", "=", userId));
+		if (!Util.isEmpty(touristPassportEntity)) {
+			if (!Util.isEmpty(touristPassportEntity.getBirthday())) {
+				Date goTripDate = touristPassportEntity.getBirthday();
+				result.put("birthday", sdf.format(goTripDate));
+			}
+			if (!Util.isEmpty(touristPassportEntity.getValidEndDate())) {
+				Date goTripDate = touristPassportEntity.getValidEndDate();
+				result.put("validEndDate", sdf.format(goTripDate));
+			}
+			if (!Util.isEmpty(touristPassportEntity.getIssuedDate())) {
+				Date goTripDate = touristPassportEntity.getIssuedDate();
+				result.put("issuedDate", sdf.format(goTripDate));
+			}
+			result.put("passport", touristPassportEntity);
+		} else {
+			result.put("passport", "");
 		}
 
 		//生成二维码
@@ -189,11 +279,81 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 				+ "/mobile/info.html?applicantid=" + applicantEntity.getId();
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
-		result.put("passport", passport);
 		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		result.put("applicantId", applicantEntity.getId());
 		result.put("orderid", orderEntity.getId());
 		return result;
+	}
+
+	public Object saveEditPassport(TTouristPassportForm passportForm, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		TTouristPassportEntity touristPassportEntity = dbDao.fetch(TTouristPassportEntity.class,
+				Cnd.where("userId", "=", userId));
+		if (!Util.isEmpty(touristPassportEntity)) {//游客护照信息不为空，则更新
+			touristPassportEntity.setBirthAddress(passportForm.getBirthAddress());
+			touristPassportEntity.setBirthAddressEn(passportForm.getBirthAddressEn());
+			touristPassportEntity.setBirthday(passportForm.getBirthday());
+			touristPassportEntity.setFirstName(passportForm.getFirstName());
+			touristPassportEntity.setFirstNameEn(passportForm.getFirstNameEn());
+			touristPassportEntity.setIssuedDate(passportForm.getIssuedDate());
+			touristPassportEntity.setIssuedOrganization(passportForm.getIssuedOrganization());
+			touristPassportEntity.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
+			touristPassportEntity.setIssuedPlace(passportForm.getIssuedPlace());
+			touristPassportEntity.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
+			touristPassportEntity.setLastName(passportForm.getLastName());
+			touristPassportEntity.setLastNameEn(passportForm.getLastNameEn());
+			touristPassportEntity.setOCRline1(passportForm.getOCRline1());
+			touristPassportEntity.setOCRline2(passportForm.getOCRline2());
+			touristPassportEntity.setPassport(passportForm.getPassport());
+			touristPassportEntity.setPassportUrl(passportForm.getPassportUrl());
+			touristPassportEntity.setSex(passportForm.getSex());
+			touristPassportEntity.setSexEn(passportForm.getSexEn());
+			touristPassportEntity.setType(passportForm.getType());
+			touristPassportEntity.setUpdateTime(new Date());
+			touristPassportEntity.setValidEndDate(passportForm.getValidEndDate());
+			touristPassportEntity.setValidStartDate(passportForm.getValidStartDate());
+			touristPassportEntity.setValidType(passportForm.getValidType());
+			int update = dbDao.update(touristPassportEntity);
+			if (update > 0) {
+				touristPassportEntity.setPassIsCompleted(IsYesOrNoEnum.YES.intKey());
+				dbDao.update(touristPassportEntity);
+			}
+		} else {
+			TTouristPassportEntity touristPass = new TTouristPassportEntity();
+			touristPass.setBirthAddress(passportForm.getBirthAddress());
+			touristPass.setBirthAddressEn(passportForm.getBirthAddressEn());
+			touristPass.setBirthday(passportForm.getBirthday());
+			touristPass.setFirstName(passportForm.getFirstName());
+			touristPass.setFirstNameEn(passportForm.getFirstNameEn());
+			touristPass.setIssuedDate(passportForm.getIssuedDate());
+			touristPass.setIssuedOrganization(passportForm.getIssuedOrganization());
+			touristPass.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
+			touristPass.setIssuedPlace(passportForm.getIssuedPlace());
+			touristPass.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
+			touristPass.setLastName(passportForm.getLastName());
+			touristPass.setLastNameEn(passportForm.getLastNameEn());
+			touristPass.setOCRline1(passportForm.getOCRline1());
+			touristPass.setOCRline2(passportForm.getOCRline2());
+			touristPass.setPassport(passportForm.getPassport());
+			touristPass.setPassportUrl(passportForm.getPassportUrl());
+			touristPass.setSex(passportForm.getSex());
+			touristPass.setSexEn(passportForm.getSexEn());
+			touristPass.setType(passportForm.getType());
+			touristPass.setCreateTime(new Date());
+			touristPass.setUpdateTime(new Date());
+			touristPass.setValidEndDate(passportForm.getValidEndDate());
+			touristPass.setValidStartDate(passportForm.getValidStartDate());
+			touristPass.setValidType(passportForm.getValidType());
+			touristPass.setUserId(userId);
+			TTouristPassportEntity passportEntity = dbDao.insert(touristPass);
+			if (!Util.isEmpty(passportEntity)) {
+				passportEntity.setPassIsCompleted(IsYesOrNoEnum.YES.intKey());
+				dbDao.update(passportEntity);
+			}
+		}
+		return null;
 	}
 
 	public Object visaInput(HttpSession session) {
@@ -287,11 +447,61 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 
 	public Object saveEditVisa(VisaEditDataForm visaForm, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		TTouristVisaEntity visaEntity = dbDao.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", userId));
+		if (Util.isEmpty(visaEntity)) {//游客签证信息为空，则添加
+			TTouristVisaEntity visa = new TTouristVisaEntity();
+			visa.setAddress(visaForm.getAddress());
+			visa.setCareerStatus(visaForm.getCareerStatus());
+			visa.setCreateTime(new Date());
+			visa.setUpdateTime(new Date());
+			visa.setDetails(visaForm.getDetails());
+			visa.setIsMainApplicant(visaForm.getApplicant());
+			visa.setMainId(visaForm.getMainApplicant());
+			visa.setMainRelation(visaForm.getMainRelation());
+			visa.setMarryStatus(visaForm.getMarryStatus());
+			visa.setMarryUrl(visaForm.getMarryUrl());
+			visa.setName(visaForm.getName());
+			visa.setOccupation(visaForm.getOccupation());
+			visa.setRelationRemark(visaForm.getRelationRemark());
+			visa.setSameMainWealth(visaForm.getSameMainWealth());
+			visa.setSameMainWork(visaForm.getSameMainWork());
+			visa.setTelephone(visaForm.getTelephone());
+			visa.setType(visaForm.getType());
+			visa.setUserId(userId);
+			visa.setVisaIsCompleted(IsYesOrNoEnum.YES.intKey());
+			dbDao.insert(visa);
+		} else {
+			visaEntity.setAddress(visaForm.getAddress());
+			visaEntity.setCareerStatus(visaForm.getCareerStatus());
+			visaEntity.setUpdateTime(new Date());
+			visaEntity.setDetails(visaForm.getDetails());
+			visaEntity.setIsMainApplicant(visaForm.getApplicant());
+			visaEntity.setMainId(visaForm.getMainApplicant());
+			visaEntity.setMainRelation(visaForm.getMainRelation());
+			visaEntity.setMarryStatus(visaForm.getMarryStatus());
+			visaEntity.setMarryUrl(visaForm.getMarryUrl());
+			visaEntity.setName(visaForm.getName());
+			visaEntity.setOccupation(visaForm.getOccupation());
+			visaEntity.setRelationRemark(visaForm.getRelationRemark());
+			visaEntity.setSameMainWealth(visaForm.getSameMainWealth());
+			visaEntity.setSameMainWork(visaForm.getSameMainWork());
+			visaEntity.setTelephone(visaForm.getTelephone());
+			visaEntity.setType(visaForm.getType());
+			int update = dbDao.update(visaEntity);
+			if (update > 0) {
+				visaEntity.setVisaIsCompleted(IsYesOrNoEnum.YES.intKey());
+				dbDao.update(visaEntity);
+			}
+		}
 
-		Date nowDate = DateUtil.nowDate();
-		if (!Util.isEmpty(visaForm.getIsOrderUpTime()) && !Util.isEmpty(visaForm.getOrderid())) {
-			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate),
-					Cnd.where("id", "=", visaForm.getOrderid()));
+		if (!Util.isEmpty(visaForm.getSameMainWealth())) {
+			//如果游客跟主申请人的财产信息一样，把主申请人的财产信息保存到游客财产信息中
+			if (Util.eq(visaForm.getSameMainWealth(), IsYesOrNoEnum.YES.intKey())) {
+				//主申请人
+				TApplicantEntity mainApply = dbDao.fetch(TApplicantEntity.class, visaForm.getMainApplicant()
+						.longValue());
+			}
 		}
 
 		//日本申请人
@@ -324,10 +534,6 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 					}
 				}
 
-				//更新日本申请人信息
-				if (!Util.isEmpty(visaForm.getSameMainTrip())) {
-					applicantOrderJpEntity.setSameMainTrip(visaForm.getSameMainTrip());
-				}
 				if (!Util.isEmpty(visaForm.getSameMainWealth())) {
 					applicantOrderJpEntity.setSameMainWealth(visaForm.getSameMainWealth());
 					//如果申请人跟主申请人的财产信息一样，把主申请人的财产信息保存到申请人财产信息中

@@ -58,9 +58,19 @@
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传身份证正面</span>
-									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="cardFront" name="cardFront" type="hidden" />
+											<img id="sqImg" alt="" src="" >
+										</c:when>
+										<c:otherwise>
+											<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
+											<img id="sqImg" alt="" src="${obj.applicant.cardFront }" >
+										</c:otherwise>
+									</c:choose>
+									
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" alt="" src="${obj.applicant.cardFront }" >
+									
 									<i class="delete" id="deleteApplicantFrontImg" ></i>
 								</div>
 							</div>
@@ -78,9 +88,17 @@
 								<div class="form-group">
 									<div class="cardFront-div">
 										<span>点击上传身份证背面</span>
-										<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
+										<c:choose>
+											<c:when test="${empty obj.applicant}">
+												<input id="cardBack" name="cardBack" type="hidden" />
+												<img id="sqImgBack" alt="" src="" >
+											</c:when>
+											<c:otherwise>
+												<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
+												<img id="sqImgBack" alt="" src="${obj.applicant.cardBack }" >
+											</c:otherwise>
+										</c:choose>
 										<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-										<img id="sqImgBack" alt="" src="${obj.applicant.cardBack }" >
 										<i class="delete" id="deleteApplicantBackImg" ></i>
 									</div>
 								</div>
@@ -95,8 +113,16 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发机关</label> 
-									<input id="issueOrganization" name="issueOrganization"
-										type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="issueOrganization" name="issueOrganization"
+												type="text" class="form-control input-sm" placeholder=" " />
+										</c:when>
+										<c:otherwise>
+											<input id="issueOrganization" name="issueOrganization"
+												type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -123,10 +149,21 @@
 							<div class="nameBeforeHide">
 							    <div class="col-sm-11 col-sm-offset-1 padding-right-0">
 									<div class="form-group">
-										<label>姓/拼音</label> <input id="otherFirstName"
-											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
-											placeholder=" " value="${obj.applicant.otherFirstName }" />
-											<input type="text" id="otherFirstNameEn" style="position:absolute;top:36px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
+										<label>姓/拼音</label> 
+										<c:choose>
+											<c:when test="${empty obj.applicant}">
+												<input id="otherFirstName"
+													name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
+													placeholder=" "  />
+													<input type="text" id="otherFirstNameEn" style="position:absolute;top:36px;border:none;left:150px;"  name="otherFirstNameEn" />
+											</c:when>
+											<c:otherwise>
+												<input id="otherFirstName"
+													name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
+													placeholder=" " value="${obj.applicant.otherFirstName }" />
+													<input type="text" id="otherFirstNameEn" style="position:absolute;top:36px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
+											</c:otherwise>
+										</c:choose>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -136,7 +173,7 @@
 							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
 								<div class="form-group">
 									<label>曾有的或另有的国籍(或公民身份)</label> 
-									<div>
+									<!-- <div>
 										<span class="onceIDYes ">
 											<input type="radio" name="hasOtherNationality" class="onceID" value="1" 
 											/>是
@@ -145,14 +182,21 @@
 											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  
 											/>否
 										</span>
-									</div>
+									</div> -->
 								</div>
 							</div>
 							<!-- 曾用国籍 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0 nationalityHide">
 								<div class="form-group" id="nationalityDiv">
 									<label>国籍</label> 
-									<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="nationality" name="nationality"  type="text" class="form-control input-sm"/>
+										</c:when>
+										<c:otherwise>
+											<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 						</div>
@@ -163,12 +207,24 @@
 							<!-- 姓/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>姓/拼音</label> <input id="firstName"
-										name="firstName" style="position:relative;" type="text" class="form-control input-sm "
-										placeholder=" " value="${obj.applicant.firstName }" />
-										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
+									<label><span>*</span>姓/拼音</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<img width="100%" height="100%" alt="" src="">
+											<input id="firstName"
+												name="firstName" style="position:relative;" type="text" class="form-control input-sm "
+												placeholder=" "  />
+											<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" />
+										</c:when>
+										<c:otherwise>
+											<input id="firstName"
+												name="firstName" style="position:relative;" type="text" class="form-control input-sm "
+												placeholder=" " value="${obj.applicant.firstName }" />
+											<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
+										</c:otherwise>
+									</c:choose>
+										<input type="hidden" id="id" name="id" value="${obj.applicantId}"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
-										<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -178,10 +234,21 @@
 							<!-- 名/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>名/拼音</label> <input id="lastName"
-										name="lastName" style="position:relative;" type="text" class="form-control input-sm "
-										placeholder=" " value="${obj.applicant.lastName }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
+									<label><span>*</span>名/拼音</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="lastName"
+												name="lastName" style="position:relative;" type="text" class="form-control input-sm "
+												placeholder=" " />
+												<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" />
+										</c:when>
+										<c:otherwise>
+											<input id="lastName"
+												name="lastName" style="position:relative;" type="text" class="form-control input-sm "
+												placeholder=" " value="${obj.applicant.lastName }" />
+												<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -191,17 +258,37 @@
 							<!-- 手机号/邮箱 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>手机号</label> <input id="telephone"
-										name="telephone" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.telephone }" />
+									<label><span>*</span>手机号</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="telephone"
+												name="telephone" type="text" class="form-control input-sm"
+												placeholder=" "  />
+										</c:when>
+										<c:otherwise>
+											<input id="telephone"
+												name="telephone" type="text" class="form-control input-sm"
+												placeholder=" " value="${obj.applicant.telephone }" />
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>邮箱</label> <input id="email" name="email"
-										type="text" class="form-control input-sm" placeholder=" "
-										value="${obj.applicant.email }" />
+									<label><span>*</span>邮箱</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="email" name="email"
+												type="text" class="form-control input-sm" placeholder=" "
+												/>
+										</c:when>
+										<c:otherwise>
+											<input id="email" name="email"
+												type="text" class="form-control input-sm" placeholder=" "
+												value="${obj.applicant.email }" />
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -211,9 +298,19 @@
 							<!-- 公民身份证 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>公民身份号码</label> <input id="cardId"
-										name="cardId" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.cardId }" />
+									<label><span>*</span>公民身份号码</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="cardId"
+												name="cardId" type="text" class="form-control input-sm"
+												placeholder=" "  />
+										</c:when>
+										<c:otherwise>
+											<input id="cardId"
+												name="cardId" type="text" class="form-control input-sm"
+												placeholder=" " value="${obj.applicant.cardId }" />
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -224,26 +321,57 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别</label> 
-									<select
-										class="form-control input-sm" id="sex" name="sex">
-										<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
-										<option value="女" ${obj.applicant.sex == "女"?"selected":"" }>女</option>
-									</select>
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<select
+												class="form-control input-sm" id="sex" name="sex">
+												<option value="男" >男</option>
+												<option value="女" >女</option>
+											</select>
+										</c:when>
+										<c:otherwise>
+											<select
+												class="form-control input-sm" id="sex" name="sex">
+												<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
+												<option value="女" ${obj.applicant.sex == "女"?"selected":"" }>女</option>
+											</select>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>民族</label> <input id="nation"
-										name="nation" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.nation }" />
+									<label><span>*</span>民族</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="nation"
+												name="nation" type="text" class="form-control input-sm"
+												placeholder=" "  />
+										</c:when>
+										<c:otherwise>
+											<input id="nation"
+												name="nation" type="text" class="form-control input-sm"
+												placeholder=" " value="${obj.applicant.nation }" />
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>出生日期</label> <input id="birthday"
-										name="birthday" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.birthday }" />
+									<label><span>*</span>出生日期</label>
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											 <input id="birthday"
+												name="birthday" type="text" class="form-control input-sm"
+												placeholder=" "  />
+										</c:when>
+										<c:otherwise>
+											 <input id="birthday"
+												name="birthday" type="text" class="form-control input-sm"
+												placeholder=" " value="${obj.birthday }" />
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -253,9 +381,19 @@
 							<!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>住址</label> <input id="address"
-										name="address" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.address }" />
+									<label><span>*</span>住址</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="address"
+												name="address" type="text" class="form-control input-sm"
+												placeholder=" "  />
+										</c:when>
+										<c:otherwise>
+											<input id="address"
+												name="address" type="text" class="form-control input-sm"
+												placeholder=" " value="${obj.applicant.address }" />
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -265,13 +403,27 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>有效期限</label> 
-									<input id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" />
+										</c:when>
+										<c:otherwise>
+											<input id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label> &nbsp; &nbsp;</label> 
-									<input id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" value="${obj.validEndDate }">
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" >
+										</c:when>
+										<c:otherwise>
+											<input id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" value="${obj.validEndDate }">
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 						</div>
@@ -281,20 +433,39 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>现居住地是否与身份证相同</label> 
-									<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
-									<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
 									&nbsp;<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
-									<input id="province"
-										name="province" type="text" class="form-control input-sm"
-										placeholder="省" value="${obj.applicant.province }" />
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="province"
+												name="province" type="text" class="form-control input-sm"
+												placeholder="省" />
+										</c:when>
+										<c:otherwise>
+											<input id="province"
+												name="province" type="text" class="form-control input-sm"
+												placeholder="省" value="${obj.applicant.province }" />
+											<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
+											<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地址城市</label> <input id="city"
-										name="city" type="text" class="form-control input-sm"
-										placeholder="市" value="${obj.applicant.city }" />
+									<label><span>*</span>现居住地址城市</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="city"
+												name="city" type="text" class="form-control input-sm"
+												placeholder="市"  />
+										</c:when>
+										<c:otherwise>
+											<input id="city"
+												name="city" type="text" class="form-control input-sm"
+												placeholder="市" value="${obj.applicant.city }" />
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -305,10 +476,21 @@
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>详细地址</label> <input
-										id="detailedAddress" name="detailedAddress" type="text"
-										class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间"
-										value="${obj.applicant.detailedAddress }" />
+									<label><span>*</span>详细地址</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input
+												id="detailedAddress" name="detailedAddress" type="text"
+												class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间"
+												/>
+										</c:when>
+										<c:otherwise>
+											<input
+												id="detailedAddress" name="detailedAddress" type="text"
+												class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间"
+												value="${obj.applicant.detailedAddress }" />
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -324,8 +506,16 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>名/拼音</label> 
-									<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
-									<input type="text" id="otherLastNameEn" style="position:absolute;top:36px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" "  />
+											<input type="text" id="otherLastNameEn" style="position:absolute;top:36px;border:none;left:150px;" name="otherLastNameEn" />
+										</c:when>
+										<c:otherwise>
+											<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
+											<input type="text" id="otherLastNameEn" style="position:absolute;top:36px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 						</div>
@@ -333,17 +523,37 @@
 							<!-- 紧急联系人姓名/手机 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>紧急联系人姓名</label> <input id="emergencyLinkman"
-										name="emergencyLinkman" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.emergencyLinkman }" />
+									<label>紧急联系人姓名</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="emergencyLinkman"
+												name="emergencyLinkman" type="text" class="form-control input-sm"
+												placeholder=" " />
+										</c:when>
+										<c:otherwise>
+											<input id="emergencyLinkman"
+												name="emergencyLinkman" type="text" class="form-control input-sm"
+												placeholder=" " value="${obj.applicant.emergencyLinkman }" />
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>紧急联系人手机</label> <input id="emergencyTelephone" name="emergencyTelephone"
-										type="text" class="form-control input-sm" placeholder=" "
-										value="${obj.applicant.emergencyTelephone }" />
+									<label>紧急联系人手机</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input id="emergencyTelephone" name="emergencyTelephone"
+												type="text" class="form-control input-sm" placeholder=" "
+												/>
+										</c:when>
+										<c:otherwise>
+											<input id="emergencyTelephone" name="emergencyTelephone"
+												type="text" class="form-control input-sm" placeholder=" "
+												value="${obj.applicant.emergencyTelephone }" />
+										</c:otherwise>
+									</c:choose>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -381,45 +591,54 @@
 				element.disabled = true; 
 		} 
 		$(".basic").hide();
-		var remark = $("#baseRemark").val();
+		/* var remark = $("#baseRemark").val();
 		if(remark != ""){
 			$(".ipt-info").show();
-		}
+		} */
 		document.getElementById("baseRemark").style.backgroundColor = "#eee";
 		document.getElementById("firstNameEn").style.backgroundColor = "#eee";
 		document.getElementById("lastNameEn").style.backgroundColor = "#eee";
 		document.getElementById("otherFirstNameEn").style.backgroundColor = "#eee";
 		document.getElementById("otherLastNameEn").style.backgroundColor = "#eee";
 		//$("#baseRemark").attr("disabled", true);
-		var nation = '${obj.applicant.hasOtherNationality}';
-		var otherName = '${obj.applicant.hasOtherName}';
-		var address = '${obj.applicant.addressIsSameWithCard}';
-		$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
-		$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
-		if(nation == 1){
-			$(".nameBeforeTop").css('float','none');
-			$(".nationalityHide").show();
-			$(".onceIDTop").css('float','left');
-		}else {
-			$(".nationalityHide").hide();
-		}
-		
-		if(otherName == 1){
-			$(".nameBeforeTop").css('float','none');
-			$(".nameBeforeHide").show();
-			$(".wordSpell").show();
-			//$(".onceIDTop").removeClass('col-sm-offset-1');
-			//$(".onceIDTop").css('padding-left','15px');
-		}else {
-			$(".wordSpell").hide();
-			$(".nameBeforeHide").hide();
-		}
-		
-		if(address == 1){
-			var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
+		var objApply = '${obj.applicant}';
+		alert(bojApply);
+		/* if(objApply == "" || objApply == null){
+			
 		}else{
-			var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
-		}
+			var nation = '${obj.applicant.hasOtherNationality}';
+			var otherName = '${obj.applicant.hasOtherName}';
+			var address = '${obj.applicant.addressIsSameWithCard}';
+			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
+			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
+			if(nation == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nationalityHide").show();
+				$(".onceIDTop").css('float','left');
+			}else {
+				$(".nationalityHide").hide();
+				$("input[name='hasOtherNationality'][value='2']").attr("checked",'checked');
+			}
+			
+			if(otherName == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nameBeforeHide").show();
+				$(".wordSpell").show();
+				//$(".onceIDTop").removeClass('col-sm-offset-1');
+				//$(".onceIDTop").css('padding-left','15px');
+			}else {
+				$(".wordSpell").hide();
+				$(".nameBeforeHide").hide();
+				$("input[name='hasOtherName'][value='2']").attr("checked",'checked');
+			}
+			
+			if(address == 1){
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
+			}else{
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
+			}
+			
+		} */
 		
 		
 		
@@ -645,11 +864,12 @@
 		var applicantId = '${obj.applicantId}';
 		var orderid = '${obj.orderid}';
 		applicantInfo.id = applicantId;
+		alert(JSON.stringify(applicantInfo));
 		$.ajax({
 			async: false,
 			type: 'POST',
 			data : applicantInfo,
-			url: '${base}/admin/orderJp/saveEditApplicant',
+			url: '${base}/admin/myData/saveEditApplicant',
 			success :function(data) {
 				console.log(JSON.stringify(data));
 				layer.closeAll('loading');
@@ -1003,7 +1223,7 @@
 			minView: "month"//只显示年月日
 		});
 	});
-	//checkbox 曾用名
+	/* //checkbox 曾用名
 	$(".nameBefore").change(function(){
 
 			let checked = $("input[name='hasOtherName']:checked").val();
@@ -1055,7 +1275,7 @@
 			}else {
 			}
 		});
-	
+	 */
 	//居住地与身份证相同
 	$(".nowProvince").change(function(){
 		var str="";  
@@ -1106,7 +1326,7 @@
         $("#borderColorFront").attr("style", "border-color:#ff1a1a");
         $("#borderColorBack").attr("style", "border-color:#ff1a1a");
 		$("input[name='hasOtherName'][value='2']").prop("checked","checked");
-        $("input[name='hasOtherNationality'][value='2']").prop("checked","checked");
+       // $("input[name='hasOtherNationality'][value='2']").prop("checked","checked");
 		$("input:checkbox[name='addressIsSameWithCard']").attr("checked", false);
 		$(".nationalityHide").hide();
 		$(".nameBeforeHide").hide();

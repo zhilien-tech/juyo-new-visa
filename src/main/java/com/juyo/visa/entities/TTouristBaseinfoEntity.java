@@ -166,5 +166,9 @@ public class TTouristBaseinfoEntity implements Serializable {
     @Comment("创建时间")
 	private Date createTime;
 	
+	@Column
+    @Comment("基本信息是否填写完毕")
+	private Integer baseIsCompleted;
+	
 
 }
