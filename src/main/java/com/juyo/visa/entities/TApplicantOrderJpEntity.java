@@ -68,4 +68,16 @@ public class TApplicantOrderJpEntity implements Serializable {
 	@Comment("视频地址")
 	private String videoUrl;
 
+	@Column
+	@Comment("基本信息是否填写完毕")
+	private Integer baseIsCompleted;
+
+	@Column
+	@Comment("护照信息是否填写完毕")
+	private Integer passIsCompleted;
+
+	@Column
+	@Comment("签证信息是否填写完毕")
+	private Integer visaIsCompleted;
+
 }

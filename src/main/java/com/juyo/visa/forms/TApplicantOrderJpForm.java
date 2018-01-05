@@ -27,6 +27,12 @@ public class TApplicantOrderJpForm extends DataTablesParamForm {
 
 	private Integer marryStatus;
 
+	private Integer baseIsCompleted;
+
+	private Integer passIsCompleted;
+
+	private Integer visaIsCompleted;
+
 	private String marryUrl;
 
 	/**是否为统一联系人*/

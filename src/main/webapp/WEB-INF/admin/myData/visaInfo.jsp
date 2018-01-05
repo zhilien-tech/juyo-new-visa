@@ -74,7 +74,7 @@
 								</div>
 							</div>
 							<div class="info-imgUpload front " style="width:40% !important; float: left; margin-left:10%; ">
-							<div class="col-sm-4 padding-right-0">
+							<div class="col-sm-4 padding-right-0" id="borderColor">
 								<div class="cardFront-div">
 									<span>上传结婚证/离婚证</span>
 									<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.applicant.marryUrl }"/>
@@ -355,16 +355,29 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			//结婚证图片验证
-			var marryUrl = $("#marryUrl").val();
-			if(marryUrl == ""){
-				$(".front").attr("class", "info-imgUpload front has-error");  
-		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");  
+			
+			var form = document.forms[0]; 
+			for ( var i = 0; i < form.length; i++) { 
+				var element = form.elements[i]; 
+				if(element.id != "editbasic")
+					element.disabled = true; 
+			} 
+			document.getElementById("visaRemark").style.backgroundColor = "#eee";
+			document.getElementById("mainRelation").style.backgroundColor = "#eee";
+			document.getElementById("relationRemark").style.backgroundColor = "#eee";
+			$(".basic").hide();
+			
+			var remark = $("#visaRemark").val();
+			if(remark != ""){
+				$(".ipt-info").show();
+			}
+			$("#visaRemark").attr("disabled", true);
+			
+			var marry = $("#marryUrl").val();
+			if(marry != ""){
+				$("#uploadFile").siblings("i").css("display","block");
 			}else{
-				$(".front").attr("class", "info-imgUpload front has-success");  
-		        $(".help-blockFront").attr("data-bv-result","IVALID");  
-		        $(".help-blockFront").attr("style","display: none;");  
+				$("#uploadFile").siblings("i").css("display","none");
 			}
 			
 			//校验
@@ -412,7 +425,7 @@
 						trigger:"change keyup",
 						validators : {
 							notEmpty : {
-								message : '单位名称不能为空'
+								message : '名称不能为空'
 							}
 						}
 					},
@@ -420,7 +433,7 @@
 						trigger:"change keyup",
 						validators : {
 							notEmpty : {
-								message : '单位电话不能为空'
+								message : '电话不能为空'
 							}
 						}
 					},
@@ -428,7 +441,7 @@
 						trigger:"change keyup",
 						validators : {
 							notEmpty : {
-								message : '单位地址不能为空'
+								message : '地址不能为空'
 							}
 						}
 					},
@@ -467,30 +480,6 @@
 				}
 			});
 		$('#passportInfo').bootstrapValidator('validate');
-			
-			var form = document.forms[0]; 
-			for ( var i = 0; i < form.length; i++) { 
-				var element = form.elements[i]; 
-				if(element.id != "editbasic")
-					element.disabled = true; 
-			} 
-			document.getElementById("visaRemark").style.backgroundColor = "#eee";
-			document.getElementById("mainRelation").style.backgroundColor = "#eee";
-			document.getElementById("relationRemark").style.backgroundColor = "#eee";
-			$(".basic").hide();
-			
-			var remark = $("#visaRemark").val();
-			if(remark != ""){
-				$(".ipt-info").show();
-			}
-			$("#visaRemark").attr("disabled", true);
-			
-			var marry = $("#marryUrl").val();
-			if(marry != ""){
-				$("#uploadFile").siblings("i").css("display","block");
-			}else{
-				$("#uploadFile").siblings("i").css("display","none");
-			}
 			
 			var career = $("#careerStatus").val();
 			if(career == 4){
@@ -635,10 +624,13 @@
 						$(this).removeClass("btnState-true");
 						$("#deposit").val("");
 						$(".deposits").css({"display":"none"});
+						$(".deposits").attr("class", "col-xs-6 deposits has-success");
+						$("#deposit").attr("style", null);
 					}else{
 						$(".deposit").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#deposit").val("万");
+						 $("#deposit").attr("style", null);
 						//$("#deposit").placeholder("万");
 					}
 				}else if(financeBtnInfo == "车产"){
@@ -647,13 +639,16 @@
 						$(this).removeClass("btnState-true");
 						$("#vehicle").val("");
 						$(".vehicles").css({"display":"none"});
+						$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
+						$("#vehicle").attr("style", null);
 					}else{
 						$(".vehicle").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#vehicle").val("");
-						$(".vehicles").attr("class", "col-xs-6 vehicles has-error");  
 				        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
 				        $(".vehicles").css({"display":"block"});
+				        $(".vehicles").attr("class", "col-xs-6 vehicles has-error");
+				        $("#vehicle").attr("style", "border-color:#ff1a1a");
 					}
 				}else if(financeBtnInfo == "房产"){
 					if($(this).hasClass("btnState-true")){
@@ -661,10 +656,13 @@
 						$(this).removeClass("btnState-true");
 						$("#houseProperty").val("");
 						$(".housePropertys").css({"display":"none"});
+						$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
+						$("#houseProperty").attr("style", null);
 					}else{
 						$(".houseProperty").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#houseProperty").val("平米");
+						$("#houseProperty").attr("style", null);
 						//$("#houseProperty").placeholder("平米");
 					}
 				}else if(financeBtnInfo == "理财"){
@@ -673,10 +671,13 @@
 						$(this).removeClass("btnState-true");
 						$("#financial").val("");
 						$(".financials").css({"display":"none"});
+						$(".financials").attr("class", "col-xs-6 financials has-success");
+						$("#financial").attr("style", null);
 					}else{
 						$(".financial").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#financial").val("万");
+						$("#financial").attr("style", null);
 						//$("#financial").placeholder("万");
 					}
 				}
@@ -722,29 +723,6 @@
 	          }  
 		}
 		
-		function getAllClassName(){
-		    var result=[];
-		    var body=document.body;
-		    getClassName(body);
-		    function getClassName(ele){
-		        var s=ele.className||"";
-		        if(s!=""){
-		            var arr=s.split(" ");
-		            for(var i=0;i<arr.length;i++){
-		                var name=arr[i];
-		                if(name!=""&&result.indexOf(name)==-1){
-		                    //console.log(name);
-		                    result.push(name);
-		                }
-		            }
-		        }
-		        var childs=ele.childNodes;
-		        for(var i=0;i<childs.length;i++){
-		            getClassName(childs[i]);
-		        }
-		    }
-		    return result;
-		}
 		
 		//保存
 		function save(){
@@ -757,14 +735,19 @@
 			if($(".front").hasClass("has-error")){
 				return;
 			}
-			
-			var classNames=getAllClassName();
-			console.log(classNames);
-			for(var i=0;i<classNames.length;i++){
-			    var ele=classNames[i];
-			    if(ele == "has-error"){
-			    }
+			if($(".deposits").hasClass("has-error")){
+				return;
 			}
+			if($(".vehicles").hasClass("has-error")){
+				return;
+			}
+			if($(".housePropertys").hasClass("has-error")){
+				return;
+			}
+			if($(".financials").hasClass("has-error")){
+				return;
+			}
+			
 			
 			//绑定财产类型
 			var wealthType = "";
@@ -783,6 +766,8 @@
 				//$("#work").val(0);
 				$("#wealth").val(0);
 			}
+			var orderid = '${obj.orderid}';
+			var applicantId = '${obj.visaInfo.applicantId}';
 			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
 			$.ajax({
 				type: 'POST',
@@ -792,6 +777,21 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
+					layer.load(1);
+					$.ajax({
+						type: 'POST',
+						async : false,
+						data : {
+							orderid : orderid,
+							applicantid : applicantId,
+							completeType : 'visa'
+						},
+						url: '${base}/admin/myData/changeStatus.html',
+						success :function(data) {
+							console.log(JSON.stringify(data));
+							layer.closeAll('loading');
+						}
+					});
 					layer.msg("修改成功", {
 						time: 500,
 						end: function () {
@@ -844,6 +844,7 @@
 							$(".front").attr("class", "info-imgUpload front has-success");  
 					        $(".help-blockFront").attr("data-bv-result","IVALID");  
 					        $(".help-blockFront").attr("style","display: none;");
+					        $("#borderColor").attr("style",null);
 						}
 						$("#addBtn").attr('disabled', false);
 					},
@@ -869,6 +870,23 @@
 			document.getElementById("relationRemark").style.backgroundColor = "#fff";
 			$("#trip").attr("disabled", true);
 			$("#visaRemark").attr("disabled", true);
+			//结婚证图片验证
+			var marryUrl = $("#marryUrl").val();
+			if(marryUrl == ""){
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+		        $(".help-blockFront").attr("style","display: block;");  
+		        $("#borderColor").attr("style","border-color:#ff1a1a");
+			}else{
+				$(".front").attr("class", "info-imgUpload front has-success");  
+		        $(".help-blockFront").attr("data-bv-result","IVALID");  
+		        $(".help-blockFront").attr("style","display: none;");
+		        $("#borderColor").attr("style",null);
+			}
+			var bootstrapValidator = $("#passportInfo").data(
+			'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
 			$("#deleteApplicantFrontImg").click(function(){
 				$('#marryUrl').val("");
 				$('#sqImg').attr('src', "");
@@ -876,6 +894,7 @@
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
 		        $(".help-blockFront").attr("style","display: block;");
+		        $("#borderColor").attr("style","border-color:#ff1a1a");
 			});
 			
 			$(".remove-btn").click(function(){
@@ -885,24 +904,32 @@
 					$("#depositType").removeClass("btnState-true");
 					$("#deposit").val("");
 					$(".deposits").css({"display":"none"});
+					$(".deposits").attr("class", "col-xs-6 deposits has-success");
+					$("#deposite").attr("style", null);
 				}
 				if($(this).parent().is(".vehicle")){
 					$(".vehicle").css("display","none");
 					$("#vehicleType").removeClass("btnState-true");
 					$("#vehicle").val("");
 					$(".vehicles").css({"display":"none"});
+					$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
+					$("#vehicle").attr("style", null);
 				}
 				if($(this).parent().is(".houseProperty")){
 					$(".houseProperty").css("display","none");
 					$("#housePropertyType").removeClass("btnState-true");
 					$("#houseProperty").val("");
 					$(".housePropertys").css({"display":"none"});
+					$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
+					$("#houseProperty").attr("style", null);
 				}
 				if($(this).parent().is(".financial")){
 					$(".financial").css("display","none");
 					$("#financialType").removeClass("btnState-true");
 					$("#financial").val("");
 					$(".financials").css({"display":"none"});
+					$(".financials").attr("class", "col-xs-6 financials has-success");
+					$("#financial").attr("style", null);
 				}
 			});
 		}

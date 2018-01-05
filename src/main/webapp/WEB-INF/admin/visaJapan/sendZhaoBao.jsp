@@ -88,17 +88,33 @@
 			return;
 		}
 		layer.load(1);
+		//验证指定番号是否填写
 		$.ajax({ 
-         	url: '${base}/admin/visaJapan/saveZhaoBao.html',
-         	data:{orderId:orderid,sendsignid:sendsignid,groundconnectid:groundconnectid},
+         	url: '${base}/admin/visaJapan/validateDesignNum.html',
+         	data:{sendsignid:sendsignid},
          	dataType:"json",
          	type:'post',
          	success: function(data){
-           		layer.closeAll('loading');
-           		window.parent.successCallBack(1);
-           		closeWindow();
+         		//受付番号未填写
+           		if(data.status == 500){
+           			layer.msg(data.msg);
+           			layer.closeAll('loading');
+           		}else{
+           			$.ajax({ 
+           	         	url: '${base}/admin/visaJapan/saveZhaoBao.html',
+           	         	data:{orderId:orderid,sendsignid:sendsignid,groundconnectid:groundconnectid},
+           	         	dataType:"json",
+           	         	type:'post',
+           	         	success: function(data){
+           	           		layer.closeAll('loading');
+           	           		window.parent.successCallBack(1);
+           	           		closeWindow();
+           	           	}
+           	         });
+           		}
            	}
          });
+		
 	}
 	//返回 
 	function closeWindow() {

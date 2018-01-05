@@ -3,6 +3,7 @@ package com.juyo.visa.admin.myData.service;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.ApplicantJpWealthEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.JobStatusFreeEnum;
 import com.juyo.visa.common.enums.JobStatusPreschoolEnum;
@@ -69,8 +71,10 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 	public Object getBasicInfo(HttpSession session, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()));
+		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()), null);
+		Collections.reverse(applyList);
+		TApplicantEntity applicantEntity = applyList.get(0);
 		TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
 				Cnd.where("applicantId", "=", applicantEntity.getId()));
 		if (!Util.isEmpty(unqualifiedEntity)) {
@@ -136,8 +140,10 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 	public Object getPassportInfo(HttpSession session, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()));
+		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()), null);
+		Collections.reverse(applyList);
+		TApplicantEntity applicantEntity = applyList.get(0);
 		TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
 				Cnd.where("applicantId", "=", applicantEntity.getId()));
 		if (!Util.isEmpty(unqualifiedEntity)) {
@@ -193,8 +199,10 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 	public Object visaInput(HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()));
+		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()), null);
+		Collections.reverse(applyList);
+		TApplicantEntity applicantEntity = applyList.get(0);
 		if (!Util.isEmpty(applicantEntity)) {
 			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", applicantEntity.getId()));
@@ -206,8 +214,10 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 	public Object getVisaInfo(HttpSession session, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()));
+		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()), null);
+		Collections.reverse(applyList);
+		TApplicantEntity applicantEntity = applyList.get(0);
 		TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
 				Cnd.where("applicantId", "=", applicantEntity.getId()));
 		if (!Util.isEmpty(unqualifiedEntity)) {
@@ -778,5 +788,43 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		return visaList;
+	}
+
+	public Object changeStatus(int orderid, int applicantid, String completeType, HttpSession session) {
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderid);
+		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		if (Util.eq(completeType, "base")) {
+			applyJp.setBaseIsCompleted(IsYesOrNoEnum.YES.intKey());
+		}
+		if (Util.eq(completeType, "pass")) {
+			applyJp.setPassIsCompleted(IsYesOrNoEnum.YES.intKey());
+		}
+		if (Util.eq(completeType, "visa")) {
+			applyJp.setVisaIsCompleted(IsYesOrNoEnum.YES.intKey());
+		}
+		dbDao.update(applyJp);
+		int count = 0;
+		if (!Util.isEmpty(orderEntity)) {
+			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderEntity.getId()));
+			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
+				if (Util.eq(tApplicantOrderJpEntity.getBaseIsCompleted(), IsYesOrNoEnum.YES.intKey())
+						&& Util.eq(tApplicantOrderJpEntity.getPassIsCompleted(), IsYesOrNoEnum.YES.intKey())
+						&& Util.eq(tApplicantOrderJpEntity.getVisaIsCompleted(), IsYesOrNoEnum.YES.intKey())) {
+					count++;
+				}
+			}
+			if (Util.eq(count, applyJpList.size())) {
+				Integer orderStatus = orderEntity.getStatus();
+				if (orderStatus < JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey()) {
+					orderEntity.setStatus(JPOrderStatusEnum.FILLED_INFORMATION.intKey());
+					dbDao.update(orderEntity);
+				}
+			}
+		}
+		return null;
 	}
 }

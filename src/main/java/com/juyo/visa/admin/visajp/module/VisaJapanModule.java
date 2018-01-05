@@ -363,4 +363,25 @@ public class VisaJapanModule {
 	public Object validateInfoIsFull(@Param("orderjpid") Integer orderjpid) {
 		return visaJapanService.validateInfoIsFull(orderjpid);
 	}
+
+	/**
+	 * 跳转到发招宝信息页面
+	 */
+	@At
+	@Ok("jsp")
+	public Object sendZhaoBaoError(@Param("data") String data, @Param("orderid") Integer orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("orderid", orderid);
+		result.put("data", data);
+		return result;
+	}
+
+	/**
+	 * 验证发招宝指定番号是否填写
+	 */
+	@At
+	@POST
+	public Object validateDesignNum(@Param("sendsignid") Integer sendsignid, HttpSession session) {
+		return visaJapanService.validateDesignNum(sendsignid, session);
+	}
 }

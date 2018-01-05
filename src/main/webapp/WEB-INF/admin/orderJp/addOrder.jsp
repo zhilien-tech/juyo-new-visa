@@ -56,12 +56,12 @@
 				</span> <input type="button" value="取消"
 					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> <input type="button"
 					value="保存" class="btn btn-primary btn-sm pull-right"
-					onclick="saveAddOrder(1);" /> <input type="button" value="回邮"
+					onclick="saveAddOrder(1);" /> <!-- <input type="button" value="回邮"
 					class="btn btn-primary btn-sm pull-right" /> <input type="button"
 					value="初审" class="btn btn-primary btn-sm pull-right" /> <input
 					type="button" value="分享" class="btn btn-primary btn-sm pull-right" />
 				<input type="button" value="日志"
-					class="btn btn-primary btn-sm pull-right" />
+					class="btn btn-primary btn-sm pull-right" /> -->
 			</div>
 			<section class="content">
 				<form id="orderInfo">

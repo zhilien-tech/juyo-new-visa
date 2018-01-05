@@ -74,6 +74,10 @@ public class TApplicantLowerEntity implements Serializable {
 	private Integer hasothernationality;
 
 	@Column
+	@Comment("国籍")
+	private String nationality;
+
+	@Column
 	@Comment("是否有曾用名")
 	private Integer hasothername;
 

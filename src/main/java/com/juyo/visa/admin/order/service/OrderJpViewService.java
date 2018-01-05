@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -93,6 +94,7 @@ import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
+import com.juyo.visa.common.util.ImageDeal;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantExpressEntity;
@@ -374,6 +376,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			Integer orderJpId = orderJp.getId();
 			applicantOrderJp.setOrderId(orderJpId);
 			applicantOrderJp.setApplicantId(applicantId);
+			applicantOrderJp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantOrderJp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantOrderJp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
 			dbDao.insert(applicantOrderJp);
 			Integer applicantJpId = applicantOrderJp.getId();
 			//日本工作信息
@@ -409,6 +414,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//日本申请人信息
 			TApplicantOrderJpEntity applicantOrderJp = new TApplicantOrderJpEntity();
 			applicantOrderJp.setApplicantId(applicantId);
+			applicantOrderJp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantOrderJp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantOrderJp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
 			dbDao.insert(applicantOrderJp);
 			Integer applicantJpId = applicantOrderJp.getId();
 			//日本工作信息
@@ -1807,6 +1815,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
 		List<TApplicantOrderJpEntity> applyListDB = dbDao.query(TApplicantOrderJpEntity.class,
 				Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+		//发送邮箱、短信之前设置申请人发送状态为未发送0，不是同一联系人0
 		for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyListDB) {
 			tApplicantOrderJpEntity.setIsShareSms(0);
 			tApplicantOrderJpEntity.setIsSameLinker(0);
@@ -1819,20 +1828,38 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				List<TApplicantOrderJpEntity> listDB = dbDao.query(TApplicantOrderJpEntity.class,
 						Cnd.where("orderId", "=", orderJpEntity.getId()).and("applicantId", "!=", applicantid), null);
 				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : listDB) {
+					//发送成功后将除发送者以外的申请人的状态更新为已发送状态1
 					tApplicantOrderJpEntity.setIsShareSms(1);
 					dbDao.update(tApplicantOrderJpEntity);
 				}
+				//将统一发送者的状态更新为统一联系人1，已发送状态1
 				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
 						Cnd.where("applicantId", "=", applicantid));
 				mainApply.setIsSameLinker(1);
 				mainApply.setIsShareSms(1);
 				dbDao.update(mainApply);
+				//添加分享日志
 				insertLogs(orderid, JPOrderStatusEnum.SHARE.intKey(), session);
+				//改变订单状态
 				if (orderEntity.getStatus() <= JPOrderStatusEnum.SHARE.intKey()) {
 					orderEntity.setStatus(JPOrderStatusEnum.SHARE.intKey());
 					orderEntity.setUpdateTime(new Date());
 					dbDao.update(orderEntity);
 				}
+				/*//给游客基本信息和护照信息赋值
+				TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, applicantid);
+				dbDao.fetch(TApplicantUnqualifiedEntity.class, Cnd.where("applicantId", "=", applicantid))
+				TTouristBaseinfoEntity touristBaseDB = dbDao.fetch(TTouristBaseinfoEntity.class, Cnd.where("userId", "=", applicantEntity.getUserId()));
+				TTouristPassportEntity touristPassDB = dbDao.fetch(TTouristPassportEntity.class, Cnd.where("userId", "=", applicantEntity.getUserId()));
+				TTouristBaseinfoEntity touristBase = new TTouristBaseinfoEntity();
+				TTouristPassportEntity touristPass = new TTouristPassportEntity();
+				//如果游客基本信息为空，则把申请人基本信息赋值给游客
+				if(Util.isEmpty(touristBaseDB)){
+					copyBaseTo(touristBaseDB, touristBase);
+				}
+				if(Util.isEmpty(touristPassDB)){
+					copyPassTo(tourist)
+				}*/
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -2411,9 +2438,21 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object IDCardRecognition(File file, HttpServletRequest request, HttpServletResponse response) {
+		//将图片进行旋转处理
+		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
+				"jpeg");
+		File spin = null;
+		try {
+			spin = imageDeal.spin(-90);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
 		file.delete();
+		if (!Util.isEmpty(spin)) {
+			spin.delete();
+		}
 		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);
@@ -2465,9 +2504,21 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object IDCardRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
+		//将图片进行旋转处理
+		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
+				"jpeg");
+		File spin = null;
+		try {
+			spin = imageDeal.spin(-90);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
 		file.delete();
+		if (!Util.isEmpty(spin)) {
+			spin.delete();
+		}
 		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);
@@ -2516,9 +2567,21 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object passportRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
+		//将图片进行旋转处理
+		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
+				"jpeg");
+		File spin = null;
+		try {
+			spin = imageDeal.spin(-90);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
 		file.delete();
+		if (!Util.isEmpty(spin)) {
+			spin.delete();
+		}
 		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);

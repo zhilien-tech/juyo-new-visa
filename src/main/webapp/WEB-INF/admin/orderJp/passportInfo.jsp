@@ -66,7 +66,7 @@
 							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
 						</div><!-- end 二维码 -->
 						
-						<div class="info-imgUpload front has-error"><!-- 护照 -->
+						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
 							<div class="col-xs-6">
 							<div class="form-group">
 								<div class="cardFront-div">
@@ -235,10 +235,12 @@
 					$(".front").attr("class", "info-imgUpload front has-error");  
 			        $(".help-blockFront").attr("data-bv-result","INVALID");  
 			        $(".help-blockFront").attr("style","display: block;");  
+			        $("#borderColor").attr("style", "border-color:#ff1a1a");
 				}else{
 					$(".front").attr("class", "info-imgUpload front has-success");  
 			        $(".help-blockFront").attr("data-bv-result","IVALID");  
-			        $(".help-blockFront").attr("style","display: none;");  
+			        $(".help-blockFront").attr("style","display: none;");
+			        $("#borderColor").attr("style", null);
 				}
 			}
 			
@@ -478,6 +480,7 @@
 							$('#validEndDate').val(obj.expiryDay).change();
 							$('#OCRline1').val(obj.OCRline1);
 							$('#OCRline2').val(obj.OCRline2);
+							$("#borderColor").attr("style", null);
 							var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
 							if(years == 5){
 								$("#validType").val(1);
@@ -536,6 +539,25 @@
 					layer.closeAll('loading');
 					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					layer.close(index); */
+					var id = ${obj.applicantId};
+					var orderid = ${obj.orderid};
+					if(userType == 2){
+						layer.load(1);
+						$.ajax({
+							type: 'POST',
+							async : false,
+							data : {
+								orderid : orderid,
+								applicantid : id,
+								completeType : 'pass'
+							},
+							url: '${base}/admin/myData/changeStatus.html',
+							success :function(data) {
+								console.log(JSON.stringify(data));
+								layer.closeAll('loading');
+							}
+						});
+					}
 					if(status == 1){
 						closeWindow();
 						parent.successCallBack(1);
@@ -626,6 +648,7 @@
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
 		        $(".help-blockFront").attr("style","display: block;");
+		        $("#borderColor").attr("style", "border-color:#ff1a1a");
 			}
 		}
 		
@@ -696,18 +719,18 @@
 			if (!bootstrapValidator.isValid()) {
 				return;
 			}
-			save(2);
-			var id = ${obj.applicantId};
-			//关闭socket连接
-			socket.onclose();
+			var id = '${obj.applicantId}';
+			var orderid = '${obj.orderid}';
+			
 			if(userType == 2){
 				if($(".front").hasClass("has-error")){
 					return;
 				}
-				window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}';
-			}else{
-				window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}';
 			}
+			save(2);
+			//关闭socket连接
+			socket.onclose();
+			window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}';
 			/* layer.open({
 				type: 2,
 				title: false,
@@ -732,19 +755,17 @@
 				return;
 			}
 			
-			save(3);
-			var id = ${obj.applicantId};
-			var orderid = ${obj.orderid};
-			//关闭socket连接
-			socket.onclose();
+			var id = '${obj.applicantId}';
+			var orderid = '${obj.orderid}';
 			if(userType == 2){
 				if($(".front").hasClass("has-error")){
 					return;
 				}
-				window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder};
-			}else{
-				window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder};
 			}
+			save(3);
+			//关闭socket连接
+			socket.onclose();
+			window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder};
 			/* layer.open({
 				type: 2,
 				title: false,

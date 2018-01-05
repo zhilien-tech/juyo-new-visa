@@ -118,4 +118,14 @@ public class MyDataModule {
 		return saleViewService.getAllInfoByCard(cardId);
 	}
 
+	/**
+	 * 游客资料填写完毕改变订单状态
+	 */
+	@At
+	@POST
+	public Object changeStatus(@Param("orderid") int orderid, @Param("applicantid") int applicantid,
+			@Param("completeType") String completeType, HttpSession session) {
+		return myDataService.changeStatus(orderid, applicantid, completeType, session);
+	}
+
 }

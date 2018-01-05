@@ -47,8 +47,11 @@
     		$(".deposits").attr("class", "col-xs-6 deposits has-error");  
 	        $(".deposits").attr("data-bv-result","INVALID");  
 	        $(".deposits").css({"display":"block"});
+	        $("#deposit").attr("style", "border-color:#ff1a1a");
     	}else{
+    		$(".deposits").attr("class", "col-xs-6 deposits has-success");
     		$(".deposits").css({"display":"none"});
+    		 $("#deposit").attr("style", null);
     	}
     });
     $(document).on("input","#vehicle",function(){
@@ -60,8 +63,11 @@
     		$(".vehicles").attr("class", "col-xs-6 vehicles has-error");  
 	        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
 	        $(".vehicles").css({"display":"block"});
+	        $("#vehicle").attr("style", "border-color:#ff1a1a");
     	}else{
+    		$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
     		$(".vehicles").css({"display":"none"});
+    		$("#vehicle").attr("style", "border-color:none;");
     	}
     });
     $(document).on("input","#houseProperty",function(){
@@ -73,8 +79,11 @@
     		$(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");  
 	        $(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
 	        $(".housePropertys").css({"display":"block"});
+	        $("#houseProperty").attr("style", "border-color:#ff1a1a");
     	}else{
+    		$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");  
  	        $(".housePropertys").css({"display":"none"});
+ 	       $("#houseProperty").attr("style", null);
     	}
     });
     $(document).on("input","#financial",function(){
@@ -86,7 +95,10 @@
     		$(".financials").attr("class", "col-xs-6 financials has-error");  
 	        $(".help-blockfinancial").attr("data-bv-result","INVALID");  
 	        $(".financials").css({"display":"block"});
+	        $("#financial").attr("style", "border-color:#ff1a1a");
     	}else{
+    		$(".financials").attr("class", "col-xs-6 financials has-success");
     		$(".financials").css({"display":"none"});
+    		 $("#financial").attr("style", null);
     	}
     });

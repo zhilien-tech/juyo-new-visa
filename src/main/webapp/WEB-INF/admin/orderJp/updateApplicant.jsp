@@ -24,11 +24,11 @@
 .nameBeforeYes { margin-right:20px; }
 .onceIDYes { margin-right:30px; }
 .nameBeforeHide , .nationalityHide{ display:none; }
-.wordSpell { display:none; }
+.wordSpell { display:none; margin-top:3px !important;}
 .rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 .nationalityHide { margin-left:3%;}
-.row { margin-top:7px;}
+.row { margin-top:3px;}
 .nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
 .btn-margin { margin-top:10px;}
 #sqImg ,#sqImgBack { width:335px;}
@@ -64,7 +64,7 @@
 						<div class="info-QRcode"> <!-- 身份证 正面 -->
 							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
 						</div> <!-- end 身份证 正面 -->
-						<div class="info-imgUpload front has-error">
+						<div class="info-imgUpload front has-error" id="borderColorFront">
 							<!-- 身份证 正面 -->
 							<div class="col-xs-6">
 							<div class="form-group">
@@ -83,7 +83,7 @@
 						</div>
 						<!-- end 身份证 正面 -->
 
-						<div class="info-imgUpload back has-error">
+						<div class="info-imgUpload back has-error" id="borderColorBack">
 							<!-- 身份证 反面 -->
 							<div class="col-xs-6">
 								<div class="form-group">
@@ -327,6 +327,11 @@
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
+						<div class="row wordSpell" style="height:66px;">
+							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
+							
+							</div>
+						</div>	
 						<!-- 名/拼音 -->
 						<div class="row wordSpell">
 							<div class="col-sm-11 padding-right-0 col-sm-offset-1" >
@@ -423,7 +428,6 @@
 	}
 		$(function(){
 			
-			
 			//身份证图片验证
 			if(userType == 2){
 				var cardFront = $("#cardFront").val();
@@ -431,10 +435,12 @@
 					$(".front").attr("class", "info-imgUpload front has-error");  
 			        $(".help-blockFront").attr("data-bv-result","INVALID");  
 			        $(".help-blockFront").attr("style","display: block;");  
+			        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
 				}else{
 					$(".front").attr("class", "info-imgUpload front has-success");  
 			        $(".help-blockFront").attr("data-bv-result","IVALID");  
 			        $(".help-blockFront").attr("style","display: none;");  
+			        $("#borderColorFront").attr("style", null);
 				}
 				
 				var cardBack = $("#cardBack").val();
@@ -442,10 +448,12 @@
 					$(".back").attr("class", "info-imgUpload back has-error");  
 			        $(".help-blockBack").attr("data-bv-result","INVALID");  
 			        $(".help-blockBack").attr("style","display: block;");  
+			        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
 				}else{
 					$(".back").attr("class", "info-imgUpload back has-success");  
 			        $(".help-blockBack").attr("data-bv-result","IVALID");  
-			        $(".help-blockBack").attr("style","display: none;");  
+			        $(".help-blockBack").attr("style","display: none;"); 
+			        $("#borderColorBack").attr("style", null);
 				}
 			}
 			
@@ -849,10 +857,18 @@
 							$(".front").attr("class", "info-imgUpload front has-success");  
 					        $(".help-blockFront").attr("data-bv-result","IVALID");  
 					        $(".help-blockFront").attr("style","display: none;");
+					        $("#borderColorFront").attr("style", null);
 							$('#address').val(obj.address).change();
 							$('#nation').val(obj.nationality).change();
 							$('#cardId').val(obj.num).change();
-							searchByCard();
+							var str="";  
+							//是否同身份证相同
+							$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+								str=$(this).val();     
+							});     
+							if(str == 1){//相同
+								searchByCard();
+							}
 							$('#cardProvince').val(obj.province).change();
 							$('#cardCity').val(obj.city).change();
 							$('#birthday').val(obj.birth).change();
@@ -905,6 +921,7 @@
 							$(".back").attr("class", "info-imgUpload back has-success");  
 					        $(".help-blockBack").attr("data-bv-result","IVALID");  
 					        $(".help-blockBack").attr("style","display: none;"); 
+					        $("#borderColorBack").attr("style", null);
 							$('#validStartDate').val(obj.starttime).change();
 							$('#validEndDate').val(obj.endtime).change();
 							$('#issueOrganization').val(obj.issue).change();
@@ -958,7 +975,8 @@
 			if(userType == 2){
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;"); 
+		        $(".help-blockFront").attr("style","display: block;");
+		        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
 			}
 			
 		}
@@ -970,6 +988,7 @@
 				$(".back").attr("class", "info-imgUpload back has-error");  
 		        $(".help-blockBack").attr("data-bv-result","INVALID");  
 		        $(".help-blockBack").attr("style","display: block;");
+		        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
 			}
 		}
 		
@@ -1019,12 +1038,16 @@
 				$(".wordSpell").show();
 				$(".onceIDTop").removeClass('col-sm-offset-1');
 				$(".onceIDTop").css('padding-left','15px');
+				$("#otherFirstName").val("").change();
+				$("#otherFirstNameEn").val("");
+				$("#otherLastName").val("").change();
+				$("#otherLastNameEn").val("");
 			}else {
 				
 				$(".nameBeforeHide").hide();
 				$(".wordSpell").hide();
 				if(checked2 == 1){
-					
+					$("#nationality").val("").change();
 				}else {
 					$(".nameBeforeTop").css('float','left');
 				}
@@ -1040,11 +1063,15 @@
 				$(".onceIDTop").css('float','left');
 				$(".onceIDTop").removeClass('col-sm-offset-1');
 				$(".onceIDTop").css('padding-left','15px');
+				$("#nationality").val("").change();
 			}else {
 				
 				$(".nationalityHide").hide();
 				if(checked2 == 1){
-					
+					$("#otherFirstName").val("").change();
+					$("#otherFirstNameEn").val("");
+					$("#otherLastName").val("").change();
+					$("#otherLastNameEn").val("");
 				}else {
 					$(".nameBeforeTop").css('float','left');
 				}
@@ -1053,20 +1080,26 @@
 		
 		//居住地与身份证相同
 		$(".nowProvince").change(function(){
-			searchByCard();
-		});
-		
-		$("#cardId").change(function(){
-			searchByCard();
-		});
-		
-		function searchByCard(){
 			var str="";  
 			//是否同身份证相同
 			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
 				str=$(this).val();     
 			});     
 			if(str == 1){//相同
+				searchByCard();
+			}else{
+				$("#province").val("").change();
+				$("#city").val("").change();
+				$("#detailedAddress").val("").change();
+			}
+		});
+		
+		/* $("#cardId").change(function(){
+			searchByCard();
+		}); */
+		
+		function searchByCard(){
+			
 				var cardId = $("#cardId").val();
 				layer.load(1);
 				$.ajax({
@@ -1078,23 +1111,19 @@
 					success :function(data) {
 						console.log(JSON.stringify(data));
 						layer.closeAll('loading');
-						$("#province").val(data.province).change();
-						$("#city").val(data.city).change();
 						$("#detailedAddress").val($("#address").val()).change();
+						if(data != null){
+							$("#province").val(data.province).change();
+							$("#city").val(data.city).change();
+						}
 					}
 				});
-			}else{
-				$("#province").val("");
-				$("#city").val("");
-				$("#detailedAddress").val("");
-			}
+			
 		}
 		
 		function passportBtn(){
-			saveApplicant(2);
 			var applicantId = '${obj.applicant.id}';
 			var orderid = '${obj.orderid}';
-			socket.onclose();
 			if(userType == 2){
 				var bootstrapValidator = $("#applicantInfo").data(
 				'bootstrapValidator');
@@ -1110,25 +1139,10 @@
 				if($(".back").hasClass("has-error")){
 					return;
 				}
-				window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
-			}else{
-				window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
 			}
-			/* layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder},
-				success: function(index, layero){
-				    //do something
-				    layer.close(index); //如果设定了yes回调，需进行手工关闭
-				  }
-			}); */
+			saveApplicant(2);
+			socket.onclose();
+			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
 		}
 		
 		//合格/不合格
@@ -1199,7 +1213,7 @@
 			}else{
 				applicantInfo = $("#applicantInfo").serialize();
 			}
-			
+			var orderid = '${obj.orderid}';
 			var applicantId = '${obj.applicantId}';
 			applicantInfo.id = applicantId;
 			$.ajax({
@@ -1212,6 +1226,23 @@
 					layer.closeAll('loading');
 					//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					//layer.close(index);
+					if(userType == 2){
+						layer.load(1);
+						$.ajax({
+							type: 'POST',
+							async : false,
+							data : {
+								orderid : orderid,
+								applicantid : applicantId,
+								completeType : 'base'
+							},
+							url: '${base}/admin/myData/changeStatus.html',
+							success :function(data) {
+								console.log(JSON.stringify(data));
+								layer.closeAll('loading');
+							}
+						});
+					}
 					if(status == 1){
 						closeWindow();
 						parent.successCallBack(1);
