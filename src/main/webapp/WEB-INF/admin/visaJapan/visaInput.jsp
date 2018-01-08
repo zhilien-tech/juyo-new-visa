@@ -30,6 +30,8 @@
 			.card-list:hover{height: 87px !important;min-height: 87px !important;}
 			.box-header{padding-right: 16px;}
 			.box-body{padding-top:15px;}
+			.title { position:fixed; top:0; left:0; background:#FFF; width:100%; height:51px; z-index:100000;}
+			.content { margin-top:51px; padding-left:0px;padding-right:0px; min-height:auto;}
 			.liClose { float:right !important;}
 			.liClose a { display:block; width:40px; height:51px; cursor:pointer;}
 			.closed { position:relative; width:3px; height:30px; margin:10px 0 0 20px; background: #333; -webkit-transform: rotate(45deg);  -moz-transform: rotate(45deg);  -o-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg);  display: inline-block; }
@@ -38,8 +40,8 @@
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper">
-			<div class="content-wrapper"  style="min-height: 848px;">
-					<ul class="title">
+			<div class="content-wrapper" >
+				<ul class="title">
 					<li>签证补录</li>
 					<li class="liClose">
 						<a onclick="closeWindow()">

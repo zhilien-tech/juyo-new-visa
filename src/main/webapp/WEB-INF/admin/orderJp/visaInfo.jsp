@@ -32,7 +32,7 @@
     .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; padding:15px 37px 15px 53px;}  
     #sqImg { top:-212px;}  
     /*左右导航样式*/
-    .leftNav { position:fixed;top:15px;left:0;z-index:999; width:40px;height:100%; cursor:pointer;}
+    .leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 </style>
 	<style type="text/css">
