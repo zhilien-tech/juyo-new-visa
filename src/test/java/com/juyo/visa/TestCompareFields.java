@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.nutz.dao.entity.Record;
+
 import com.uxuexi.core.common.util.DateUtil;
 
 /**
@@ -28,12 +30,25 @@ import com.uxuexi.core.common.util.DateUtil;
  */
 public class TestCompareFields {
 	public static void main(String[] args) {
+
 		Date b1 = DateUtil.string2Date("2018-01-12");
 		Date b2 = DateUtil.string2Date("2018-01-14");
-		Student s1 = new Student("123", "张三", 22, "深圳", "1565123123", b1);
-		Student s2 = new Student("abc", "李四", 23, "深圳", "", b2);
+
+		Record record = new Record();
+		record.set("id", 3);
+		record.set("name", "XHH");
+		record.set("age", 16);
+		record.set("city", "BEIJING");
+		record.set("phonenum", "1671283131");
+		record.set("birthday", b1);
+
+		//record.toEntity();
+
+		Student s = record.toPojo(Student.class);
+		Student s1 = new Student(1, "张三", 22, "深圳", "1565123123", b1);
+		Student s2 = new Student(2, "李四", 23, "深圳", "", b2);
 		// 比较s1和s2不同的属性值，其中id忽略比较  
-		Map<String, List<Object>> compareResult = compareFields(s1, s2, new String[] { "id", "phonenum" });
+		Map<String, List<Object>> compareResult = compareFields(s, s2, new String[] { "id", "phonenum" });
 		System.out.println("s1和s2共有" + compareResult.size() + "个属性值不同（不包括id）");
 		System.out.println("其中：");
 		Set<String> keySet = compareResult.keySet();
@@ -110,14 +125,14 @@ public class TestCompareFields {
  * @author xhh
  */
 class Student {
-	private String id;
+	private int id;
 	private String name;
 	private int age;
 	private String city;
 	private String phonenum;
 	private Date birthday;
 
-	public Student(String id, String name, int age, String city, String phonenum, Date birthday) {
+	public Student(int id, String name, int age, String city, String phonenum, Date birthday) {
 		this.id = id;
 		this.name = name;
 		this.age = age;
@@ -126,11 +141,11 @@ class Student {
 		this.birthday = birthday;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
