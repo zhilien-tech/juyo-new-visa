@@ -13,6 +13,8 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
+			.rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
+.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 			.row { margin-top: 5px;}
 			.wordSpell { margin-top:3px !important;}
 			.ipt-info { display:none; margin-top:15px;}
@@ -35,16 +37,31 @@
 	</head>
 
 <body class="hold-transition skin-blue sidebar-mini">
+	<c:choose>
+		<c:when test="${empty obj.contact }">
+			<a id="toPassport" class="rightNav" onclick="passportBtn();">
+					<span></span>
+			</a>
+		</c:when>
+		<c:otherwise>
+		</c:otherwise>
+	</c:choose>
 	<form id="applicantInfo">
 			<div class="qz-head">
-				<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+				<c:choose>
+					<c:when test="${empty obj.contact }">
+						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+						<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
+					</c:when>
+					<c:otherwise>
+					</c:otherwise>
+				</c:choose>
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant();"/> 
-				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
 			</div>
 			<section class="content">
 			<div class="ipt-info">
-					<input id="baseRemark" name="baseRemark" type="text" value="${obj.unqualified.baseRemark }"  class="NoInfo form-control input-sm" />
+					<input id="baseRemark" name="baseRemark" type="text"   class="NoInfo form-control input-sm" />
 				</div>
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
@@ -61,15 +78,16 @@
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
 											<input id="cardFront" name="cardFront" type="hidden" />
+											<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 											<img id="sqImg" alt="" src="" >
 										</c:when>
 										<c:otherwise>
 											<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
+											<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 											<img id="sqImg" alt="" src="${obj.applicant.cardFront }" >
 										</c:otherwise>
 									</c:choose>
 									
-									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 									
 									<i class="delete" id="deleteApplicantFrontImg" ></i>
 								</div>
@@ -91,14 +109,15 @@
 										<c:choose>
 											<c:when test="${empty obj.applicant}">
 												<input id="cardBack" name="cardBack" type="hidden" />
+												<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 												<img id="sqImgBack" alt="" src="" >
 											</c:when>
 											<c:otherwise>
 												<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
+												<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 												<img id="sqImgBack" alt="" src="${obj.applicant.cardBack }" >
 											</c:otherwise>
 										</c:choose>
-										<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 										<i class="delete" id="deleteApplicantBackImg" ></i>
 									</div>
 								</div>
@@ -152,16 +171,12 @@
 										<label>姓/拼音</label> 
 										<c:choose>
 											<c:when test="${empty obj.applicant}">
-												<input id="otherFirstName"
-													name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
-													placeholder=" "  />
-													<input type="text" id="otherFirstNameEn" style="position:absolute;top:36px;border:none;left:150px;"  name="otherFirstNameEn" />
+												<input id="otherFirstName" name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm " placeholder=" "  />
+												<input type="text" id="otherFirstNameEn" style="position:absolute;top:36px;border:none;left:150px;"  name="otherFirstNameEn" />
 											</c:when>
 											<c:otherwise>
-												<input id="otherFirstName"
-													name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
-													placeholder=" " value="${obj.applicant.otherFirstName }" />
-													<input type="text" id="otherFirstNameEn" style="position:absolute;top:36px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
+												<input id="otherFirstName"	name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.otherFirstName }" />
+												<input type="text" id="otherFirstNameEn" style="position:absolute;top:36px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
 											</c:otherwise>
 										</c:choose>
 										<!-- <i class="bulb"></i> -->
@@ -173,16 +188,14 @@
 							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
 								<div class="form-group">
 									<label>曾有的或另有的国籍(或公民身份)</label> 
-									<!-- <div>
+									<div>
 										<span class="onceIDYes ">
-											<input type="radio" name="hasOtherNationality" class="onceID" value="1" 
-											/>是
+											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  
-											/>否
+											<input type="radio" name="hasOtherNationality" class="onceID"  value="2" />否
 										</span>
-									</div> -->
+									</div>
 								</div>
 							</div>
 							<!-- 曾用国籍 -->
@@ -211,19 +224,17 @@
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
 											<img width="100%" height="100%" alt="" src="">
-											<input id="firstName"
-												name="firstName" style="position:relative;" type="text" class="form-control input-sm "
-												placeholder=" "  />
+											<input id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" "  />
 											<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" />
 										</c:when>
 										<c:otherwise>
-											<input id="firstName"
-												name="firstName" style="position:relative;" type="text" class="form-control input-sm "
-												placeholder=" " value="${obj.applicant.firstName }" />
+											<input id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.firstName }" />
 											<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 										</c:otherwise>
 									</c:choose>
-										<input type="hidden" id="id" name="id" value="${obj.applicantId}"/>
+										<input type="hidden" name="applyId" value="${obj.applyId }"/>
+										<input type="hidden" name="contact" value="${obj.contact }"/>
+										<input type="hidden" id="id" name="applicantid" value="${obj.applicantId}"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -321,22 +332,18 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别</label> 
-									<c:choose>
-										<c:when test="${empty obj.applicant}">
-											<select
-												class="form-control input-sm" id="sex" name="sex">
-												<option value="男" >男</option>
-												<option value="女" >女</option>
-											</select>
-										</c:when>
-										<c:otherwise>
-											<select
-												class="form-control input-sm" id="sex" name="sex">
-												<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
-												<option value="女" ${obj.applicant.sex == "女"?"selected":"" }>女</option>
-											</select>
-										</c:otherwise>
-									</c:choose>
+										<select	 class="form-control input-sm" id="sex" name="sex">
+											<c:choose>
+												<c:when test="${empty obj.applicant}">
+													<option value="男" >男</option>
+													<option value="女" >女</option>
+												</c:when>
+												<c:otherwise>
+													<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
+													<option value="女" ${obj.applicant.sex == "女"?"selected":"" }>女</option>
+												</c:otherwise>
+											</c:choose>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-3 padding-right-0">
@@ -565,6 +572,7 @@
 	</form>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var contact = '${obj.contact}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -582,65 +590,6 @@
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
 	$(function(){
-		
-		//页面所有元素设置为disabled
-		var form = document.forms[0]; 
-		for ( var i = 0; i < form.length; i++) { 
-			var element = form.elements[i]; 
-			if(element.id != "editbasic")
-				element.disabled = true; 
-		} 
-		$(".basic").hide();
-		/* var remark = $("#baseRemark").val();
-		if(remark != ""){
-			$(".ipt-info").show();
-		} */
-		document.getElementById("baseRemark").style.backgroundColor = "#eee";
-		document.getElementById("firstNameEn").style.backgroundColor = "#eee";
-		document.getElementById("lastNameEn").style.backgroundColor = "#eee";
-		document.getElementById("otherFirstNameEn").style.backgroundColor = "#eee";
-		document.getElementById("otherLastNameEn").style.backgroundColor = "#eee";
-		//$("#baseRemark").attr("disabled", true);
-		var objApply = '${obj.applicant}';
-		alert(bojApply);
-		/* if(objApply == "" || objApply == null){
-			
-		}else{
-			var nation = '${obj.applicant.hasOtherNationality}';
-			var otherName = '${obj.applicant.hasOtherName}';
-			var address = '${obj.applicant.addressIsSameWithCard}';
-			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
-			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
-			if(nation == 1){
-				$(".nameBeforeTop").css('float','none');
-				$(".nationalityHide").show();
-				$(".onceIDTop").css('float','left');
-			}else {
-				$(".nationalityHide").hide();
-				$("input[name='hasOtherNationality'][value='2']").attr("checked",'checked');
-			}
-			
-			if(otherName == 1){
-				$(".nameBeforeTop").css('float','none');
-				$(".nameBeforeHide").show();
-				$(".wordSpell").show();
-				//$(".onceIDTop").removeClass('col-sm-offset-1');
-				//$(".onceIDTop").css('padding-left','15px');
-			}else {
-				$(".wordSpell").hide();
-				$(".nameBeforeHide").hide();
-				$("input[name='hasOtherName'][value='2']").attr("checked",'checked');
-			}
-			
-			if(address == 1){
-				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
-			}else{
-				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
-			}
-			
-		} */
-		
-		
 		
 		//校验
 		$('#applicantInfo').bootstrapValidator({
@@ -816,6 +765,115 @@
 		});
 	$('#applicantInfo').bootstrapValidator('validate');
 		
+	
+		if(!contact){
+			//页面所有元素设置为disabled
+			var form = document.forms[0]; 
+			for ( var i = 0; i < form.length; i++) { 
+				var element = form.elements[i]; 
+				if(element.id != "editbasic")
+					element.disabled = true; 
+			} 
+			$(".basic").hide();
+			/* var remark = $("#baseRemark").val();
+			if(remark != ""){
+				$(".ipt-info").show();
+			} */
+			document.getElementById("baseRemark").style.backgroundColor = "#eee";
+			document.getElementById("firstNameEn").style.backgroundColor = "#eee";
+			document.getElementById("lastNameEn").style.backgroundColor = "#eee";
+			document.getElementById("otherFirstNameEn").style.backgroundColor = "#eee";
+			document.getElementById("otherLastNameEn").style.backgroundColor = "#eee";
+			//$("#baseRemark").attr("disabled", true);
+			
+		}else{
+			//身份证图片验证
+			var cardFront = $("#cardFront").val();
+			if(cardFront == ""){
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+		        $(".help-blockFront").attr("style","display: block;");  
+		        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
+			}else{
+				$(".front").attr("class", "info-imgUpload front has-success");  
+		        $(".help-blockFront").attr("data-bv-result","IVALID");  
+		        $(".help-blockFront").attr("style","display: none;");  
+		        $("#borderColorFront").attr("style", null);
+			}
+			
+			var cardBack = $("#cardBack").val();
+			if(cardBack == ""){
+				$(".back").attr("class", "info-imgUpload back has-error");  
+		        $(".help-blockBack").attr("data-bv-result","INVALID");  
+		        $(".help-blockBack").attr("style","display: block;");
+		        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
+			}else{
+				$(".back").attr("class", "info-imgUpload back has-success");  
+		        $(".help-blockBack").attr("data-bv-result","IVALID");  
+		        $(".help-blockBack").attr("style","display: none;");
+		        $("#borderColorBack").attr("style", null);
+			}
+			
+			var bootstrapValidator = $("#applicantInfo").data(
+			'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			$("#deleteApplicantFrontImg").click(function(){
+				$('#cardFront').val("");
+				$('#sqImg').attr('src', "");
+				$("#uploadFile").siblings("i").css("display","none");
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+		        $(".help-blockFront").attr("style","display: block;");
+		        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
+			});
+			$("#deleteApplicantBackImg").click(function(){
+				$('#cardBack').val("");
+				$('#sqImgBack').attr('src', "");
+				$("#uploadFileBack").siblings("i").css("display","none");
+				$(".back").attr("class", "info-imgUpload back has-error");  
+		        $(".help-blockBack").attr("data-bv-result","INVALID");  
+		        $(".help-blockBack").attr("style","display: block;");
+		        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
+			});
+		}
+		
+			var nation = '${obj.applicant.hasOtherNationality}';
+			var otherName = '${obj.applicant.hasOtherName}';
+			var address = '${obj.applicant.addressIsSameWithCard}';
+			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
+			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
+			if(nation == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nationalityHide").show();
+				$(".onceIDTop").css('float','left');
+			}else {
+				$(".nationalityHide").hide();
+				$("input[name='hasOtherNationality'][value='2']").attr("checked",'checked');
+			}
+			
+			if(otherName == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nameBeforeHide").show();
+				$(".wordSpell").show();
+				//$(".onceIDTop").removeClass('col-sm-offset-1');
+				//$(".onceIDTop").css('padding-left','15px');
+			}else {
+				$(".wordSpell").hide();
+				$(".nameBeforeHide").hide();
+				$("input[name='hasOtherName'][value='2']").attr("checked",'checked');
+			}
+			
+			if(address == 1){
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
+			}else{
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
+			}
+			
+		
+		
+		
+		
 		var front = $("#cardFront").val();
 		var back = $("#cardBack").val();
 		if(front != ""){
@@ -863,8 +921,8 @@
 		
 		var applicantId = '${obj.applicantId}';
 		var orderid = '${obj.orderid}';
-		applicantInfo.id = applicantId;
-		alert(JSON.stringify(applicantInfo));
+		//applicantInfo.id = applicantId;
+		console.log(JSON.stringify(applicantInfo));
 		$.ajax({
 			async: false,
 			type: 'POST',
@@ -875,7 +933,7 @@
 				layer.closeAll('loading');
 				//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 				//layer.close(index);
-				layer.load(1);
+				/* layer.load(1);
 				$.ajax({
 					type: 'POST',
 					async : false,
@@ -889,7 +947,7 @@
 						console.log(JSON.stringify(data));
 						layer.closeAll('loading');
 					}
-				});
+				}); */
 				layer.msg("修改成功", {
 					time: 500,
 					end: function () {
@@ -966,12 +1024,17 @@
 	
 	//取消按钮
 	function cancelBtn(){
-		layer.msg("已取消", {
-			time: 500,
-			end: function () {
-				self.location.reload();
-			}
-		});
+		if(!contact){
+			layer.msg("已取消", {
+				time: 500,
+				end: function () {
+					self.location.reload();
+				}
+			});
+		}else{
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
+		}
 	}
 	
 	//国籍检索
@@ -997,7 +1060,7 @@
 	//国籍检索下拉项
 	function setNationality(nationality){
 		$("#nationality").nextAll("ul.ui-autocomplete").remove();
-		$("#nationality").val(nationality);
+		$("#nationality").val(nationality).change();
 	} 
 	$("#nationalityDiv").mouseleave(function(){
 		$("#nationality").nextAll("ul.ui-autocomplete").remove();
@@ -1027,7 +1090,7 @@
 	//省份 检索下拉项
 	function setProvince(province){
 		$("#province").nextAll("ul.ui-autocomplete").remove();
-		$("#province").val(province);
+		$("#province").val(province).change();
 	} 
 	$("#provinceDiv").mouseleave(function(){
 		$("#province").nextAll("ul.ui-autocomplete").remove();
@@ -1058,7 +1121,7 @@
 	//市 检索下拉项
 	function setCity(city){
 		$("#city").nextAll("ul.ui-autocomplete").remove();
-		$("#city").val(city);
+		$("#city").val(city).change();
 	} 
 	$("#cityDiv").mouseleave(function(){
 		$("#city").nextAll("ul.ui-autocomplete").remove();
@@ -1223,7 +1286,7 @@
 			minView: "month"//只显示年月日
 		});
 	});
-	/* //checkbox 曾用名
+	//checkbox 曾用名
 	$(".nameBefore").change(function(){
 
 			let checked = $("input[name='hasOtherName']:checked").val();
@@ -1275,7 +1338,7 @@
 			}else {
 			}
 		});
-	 */
+		
 	//居住地与身份证相同
 	$(".nowProvince").change(function(){
 		var str="";  
@@ -1326,7 +1389,7 @@
         $("#borderColorFront").attr("style", "border-color:#ff1a1a");
         $("#borderColorBack").attr("style", "border-color:#ff1a1a");
 		$("input[name='hasOtherName'][value='2']").prop("checked","checked");
-       // $("input[name='hasOtherNationality'][value='2']").prop("checked","checked");
+        $("input[name='hasOtherNationality'][value='2']").prop("checked","checked");
 		$("input:checkbox[name='addressIsSameWithCard']").attr("checked", false);
 		$(".nationalityHide").hide();
 		$(".nameBeforeHide").hide();

@@ -40,6 +40,8 @@ public class TTouristVisaUpdateForm extends ModForm implements Serializable {
 	/**工作信息是否同主*/
 	private Integer sameMainWork;
 
+	private Integer applicantId;
+
 	/**财产类型*/
 	private String type;
 

@@ -26,6 +26,10 @@ public class TTouristVisaEntity implements Serializable {
 	private String occupation;
 
 	@Column
+	@Comment("申请人ID")
+	private Integer applicantId;
+
+	@Column
 	@Comment("单位名称")
 	private String name;
 

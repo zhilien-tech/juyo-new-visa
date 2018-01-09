@@ -176,6 +176,7 @@
 										name="firstName" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
+										<input type="hidden" name="userType" value="${obj.userType }"/>
 										<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 										<input type="text" id="firstNameEn" style="position:absolute;top:37px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
@@ -754,7 +755,7 @@
 		//国籍检索下拉项
 		function setNationality(nationality){
 			$("#nationality").nextAll("ul.ui-autocomplete").remove();
-			$("#nationality").val(nationality);
+			$("#nationality").val(nationality).change();
 		} 
 		$("#nationalityDiv").mouseleave(function(){
 			$("#nationality").nextAll("ul.ui-autocomplete").remove();
@@ -784,7 +785,7 @@
 		//省份 检索下拉项
 		function setProvince(province){
 			$("#province").nextAll("ul.ui-autocomplete").remove();
-			$("#province").val(province);
+			$("#province").val(province).change();
 		} 
 		$("#provinceDiv").mouseleave(function(){
 			$("#province").nextAll("ul.ui-autocomplete").remove();
@@ -815,7 +816,7 @@
 		//市 检索下拉项
 		function setCity(city){
 			$("#city").nextAll("ul.ui-autocomplete").remove();
-			$("#city").val(city);
+			$("#city").val(city).change();
 		} 
 		$("#cityDiv").mouseleave(function(){
 			$("#city").nextAll("ul.ui-autocomplete").remove();
@@ -1094,9 +1095,112 @@
 			}
 		});
 		
-		/* $("#cardId").change(function(){
-			searchByCard();
-		}); */
+		//根据身份证号搜索是否有游客信息
+		$("#cardId").change(function(){
+			$.ajax({
+				type : "post",
+				data : {
+					cardId : $("#cardId").val()
+				},
+				url : '${base}/admin/myData/getTouristInfoByCard',
+				success :function(data) {
+					if(data){
+						layer.confirm("您的信息已存在，是否使用？", {
+							title:"提示",
+							btn: ["是","否"], //按钮
+							shade: false //不显示遮罩
+						}, function(index){
+							toSet(data);
+							$("#telephone").val(data.base.telephone); 
+							layer.close(index);
+						});
+					}
+				}
+			});
+		});
+		
+		//根据电话搜索是否有游客信息
+		$("#telephone").change(function(){
+			$.ajax({
+				type : "post",
+				async : false,
+				data : {
+					telephone : $("#telephone").val()
+				},
+				url : '${base}/admin/myData/getTouristInfoByTelephone',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					if(data.base){
+						layer.confirm("您的信息已存在，是否使用？", {
+							title:"提示",
+							btn: ["是","否"], //按钮
+							shade: false //不显示遮罩
+						}, function(index){
+							toSet(data);
+							$("#cardId").val(data.base.cardId); 
+							layer.close(index);
+						});
+					}
+				}
+			});
+		});
+		
+		function toSet(data){
+			$("#firstName").val(data.base.firstName);
+			$("#firstNameEn").val("/"+data.base.firstNameEn);
+			$("#lastName").val(data.base.lastName);
+			$("#lastNameEn").val("/"+data.base.lastNameEn); 
+			$('#sqImgBack').attr('src', data.base.cardBack);
+			$('#sqImg').attr('src', data.base.cardFront);
+			$("#cardFront").val(data.base.cardFront); 
+			$("#cardBack").val(data.base.cardBack); 
+			$("#issueOrganization").val(data.base.issueOrganization); 
+			$("#otherFirstName").val(data.base.otherFirstName); 
+			$("#otherFirstNameEn").val("/"+data.base.otherFirstNameEn); 
+			$("#otherLastNameEn").val("/"+data.base.otherLastNameEn); 
+			$("#otherLastName").val(data.base.otherLastName); 
+			$("#nationality").val(data.base.nationality); 
+			$("#email").val(data.base.email); 
+			$("#sex").val(data.base.sex); 
+			$("#nation").val(data.base.nation); 
+			$("#birthday").val(data.birthday); 
+			$("#address").val(data.base.address); 
+			$("#validStartDate").val(data.validStartDate); 
+			$("#validEndDate").val(data.validEndDate); 
+			$("#province").val(data.base.province); 
+			$("#city").val(data.base.city); 
+			$("#detailedAddress").val(data.base.detailedAddress); 
+			$("#emergencyLinkman").val(data.base.emergencyLinkman); 
+			$("#emergencyTelephone").val(data.base.emergencyTelephone); 
+			$("input[name='hasOtherNationality'][value='"+data.base.hasOtherNationality+"']").attr("checked",'checked');
+			$("input[name='hasOtherName'][value='"+data.base.hasOtherName+"']").attr("checked",'checked');
+			if(data.base.addressIsSameWithCard == 1){
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
+			}else{
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
+			}
+			var nation = data.base.hasOtherNationality;
+			var otherName = data.base.hasOtherName;
+			if(nation == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nationalityHide").show();
+				$(".onceIDTop").css('float','left');
+			}else {
+				$(".nationalityHide").hide();
+			}
+			
+			if(otherName == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nameBeforeHide").show();
+				$(".wordSpell").show();
+				$(".onceIDTop").removeClass('col-sm-offset-1');
+				$(".onceIDTop").css('padding-left','15px');
+			}else {
+				
+				$(".nameBeforeHide").hide();
+				$(".wordSpell").hide();
+			}
+		}
 		
 		function searchByCard(){
 			

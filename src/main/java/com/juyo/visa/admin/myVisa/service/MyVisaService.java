@@ -38,6 +38,9 @@ import com.juyo.visa.entities.TApplicantVisaJpEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TTouristBaseinfoEntity;
+import com.juyo.visa.entities.TTouristPassportEntity;
+import com.juyo.visa.entities.TTouristVisaEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
@@ -126,6 +129,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 
 		List<Record> list = new ArrayList<>();
+		List<Record> query = new ArrayList<>();
 		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()), null);
 		if (!Util.isEmpty(applyList)) {
@@ -160,10 +164,26 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			}
 			Collections.reverse(list);
 			for (Record record : list) {
+				Integer sameLinker = (Integer) record.get("isSameLinker");
 				Integer orderid = (Integer) record.get("id");
 				String sqlStr = sqlManager.get("myvisa_japan_visa_list_data_apply");
 				Sql applysql = Sqls.create(sqlStr);
-				List<Record> query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
+				List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+						Cnd.where("orderId", "=", record.get("id")), null);
+				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
+					TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity
+							.getApplicantId().longValue());
+					if (applyList.contains(apply)) {
+						TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+								Cnd.where("applicantId", "=", apply.getId()));
+						if (Util.eq(applyJp.getIsSameLinker(), IsYesOrNoEnum.YES.intKey())) {
+							query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
+						} else {
+							query = dbDao.query(applysql,
+									Cnd.where("taoj.orderId", "=", orderid).and("ta.id", "=", apply.getId()), null);
+						}
+					}
+				}
 				for (Record apply : query) {
 					Integer dataType = (Integer) apply.get("dataType");
 					for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
@@ -172,6 +192,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 						}
 					}
 				}
+
 				record.put("everybodyInfo", query);
 				//签证状态
 				Integer visastatus = record.getInt("japanState");
@@ -439,5 +460,90 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		return indexOfBlue;
+	}
+
+	public Object isChanged(int applyid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		List<TApplicantEntity> list = dbDao.query(TApplicantEntity.class, Cnd.where("userId", "=", userId), null);
+		Collections.reverse(list);
+		//获取同userId下的最新的申请人，即当前申请人
+		TApplicantEntity nowApply = list.get(0);
+		TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class, Cnd.where("userId", "=", userId));
+		TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class, Cnd.where("userId", "=", userId));
+		TTouristVisaEntity visa = dbDao.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", userId));
+		if (Util.eq(nowApply.getId(), applyid)) {//为当前申请人
+			if (Util.eq(nowApply.getIsPrompted(), IsYesOrNoEnum.NO.intKey())) {//没有提示过
+				if (Util.eq(base.getBaseIsCompleted(), IsYesOrNoEnum.YES.intKey())
+						|| Util.eq(pass.getPassIsCompleted(), IsYesOrNoEnum.YES.intKey())
+						|| Util.eq(visa.getVisaIsCompleted(), IsYesOrNoEnum.YES.intKey())) {
+					return 1;
+				} else {
+					return 0;
+				}
+			} else {//提示过
+				if (Util.eq(nowApply.getIsSameInfo(), IsYesOrNoEnum.YES.intKey())
+						&& (Util.eq(base.getBaseIsCompleted(), IsYesOrNoEnum.YES.intKey())
+								|| Util.eq(pass.getPassIsCompleted(), IsYesOrNoEnum.YES.intKey()) || Util.eq(
+								visa.getVisaIsCompleted(), IsYesOrNoEnum.YES.intKey()))) {
+					copyInfoToPersonnel(applyid, session);
+				}
+				return 0;
+			}
+		} else {
+			return 0;
+		}
+	}
+
+	public Object copyInfoToPersonnel(int applyid, HttpSession session) {
+		copyBaseToPersonnel(applyid, session);
+		copyPassToPersonnel(applyid, session);
+		return null;
+	}
+
+	public Object copyBaseToPersonnel(int applyid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		String applicantSqlstr = sqlManager.get("copyBaseToPersonnel");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		applicantSql.setParam("userId", userId);
+		applicantSql.setParam("applyId", applyid);
+		Sql sql = nutDao.execute(applicantSql);
+		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, applyid);
+		applicantEntity.setUpdateTime(new Date());
+		applicantEntity.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+		applicantEntity.setIsPrompted(IsYesOrNoEnum.YES.intKey());
+		dbDao.update(applicantEntity);
+		TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class, Cnd.where("userId", "=", userId));
+		base.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+		dbDao.update(base);
+		return null;
+	}
+
+	public Object copyPassToPersonnel(int applyid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		String applicantSqlstr = sqlManager.get("copyBaseToPersonnel");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		applicantSql.setParam("userId", userId);
+		applicantSql.setParam("applyId", applyid);
+		Sql sql = nutDao.execute(applicantSql);
+		TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class, Cnd.where("userId", "=", userId));
+		pass.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+		dbDao.update(pass);
+		return null;
+	}
+
+	public Object toSetUnsame(int applyid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, applyid);
+		applicantEntity.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+		applicantEntity.setIsPrompted(IsYesOrNoEnum.YES.intKey());
+		dbDao.update(applicantEntity);
+		TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class, Cnd.where("userId", "=", userId));
+		base.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+		dbDao.update(base);
+		return null;
 	}
 }

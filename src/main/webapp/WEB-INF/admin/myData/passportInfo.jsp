@@ -27,14 +27,20 @@
 <body class="hold-transition skin-blue sidebar-mini">
 	<form id="passportInfo">
 			<div class="qz-head">
-			<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+				<c:choose>
+					<c:when test="${empty obj.contact }">
+						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+						<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
+					</c:when>
+					<c:otherwise>
+					</c:otherwise>
+				</c:choose>
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
 				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save();"/> 
-				<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
 			</div>
 			<section class="content">
 			<div class="ipt-info">
-					<input id="passRemark" name="passRemark"  type="text" value="${obj.unqualified.passRemark }" class="NoInfo form-control input-sm" />
+					<input id="passRemark" name="passRemark"  type="text"  class="NoInfo form-control input-sm" />
 				</div>
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
@@ -48,7 +54,7 @@
 								<div class="cardFront-div">
 									<span>点击上传护照</span>
 									<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<input id="passportUrl" name="passportUrl" type="hidden" value=""/>
 											<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 											<img id="sqImg" alt="" src="" >
@@ -76,7 +82,7 @@
 								<div class="form-group">
 									<label><span>*</span>类型</label>
 									<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<input type="hidden" id="id" name="id" />
 											<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
@@ -85,6 +91,8 @@
 											<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
 										</c:otherwise>
 									</c:choose>
+									<input type="hidden"  name="contact" value="${obj.contact }">
+									<input type="hidden"  name="applyId" value="${obj.applyId }">
 									<input type="hidden" id="OCRline1" name="OCRline1" value="">
 									<input type="hidden" id="OCRline2" name="OCRline2" value="">
 									<input type="hidden" id="tourist" name="tourist" value="1"/>
@@ -97,7 +105,7 @@
 								<div class="form-group">
 									<label><span>*</span>护照号</label>
 									<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
@@ -142,7 +150,7 @@
 									<label><span>*</span>性别</label>
 									<select class="form-control input-sm" id="sex" name="sex">
 									<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<option value="男" >男</option>
 											<option value="女" >女</option>
 										</c:when>
@@ -159,7 +167,7 @@
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
 									<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<input id="sexEn" class="form-control input-sm" name="sexEn" type="text"/>
 										</c:when>
 										<c:otherwise>
@@ -172,7 +180,7 @@
 								<div class="form-group" style="position:relative;">
 									<label><span>*</span>出生地点/拼音</label>
 									<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " />
 											<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:36px; width:120px;border:0px;left:80px;" type="text"  placeholder=" " />
 										</c:when>
@@ -191,11 +199,11 @@
 								<div class="form-group">
 									<label><span>*</span>出生日期</label>
 									<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.birthday}"/>
+											<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value="${obj.birthday}"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -205,7 +213,7 @@
 								<div class="form-group" style="position:relative;">
 									<label><span>*</span>签发地点/拼音</label>
 									<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " />
 											<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:36px; width:120px;border:0px;left:80px;" placeholder=" " />
 										</c:when>
@@ -224,11 +232,11 @@
 								<div class="form-group">
 									<label><span>*</span>签发日期</label>
 									<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedDate }"/>
+											<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.issuedDate }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -239,7 +247,7 @@
 									<label>&nbsp;&nbsp;</label>
 									<select id="validType" name="validType" class="form-control input-sm " >
 									<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<c:forEach var="map" items="${obj.passportType}">
 												<option value="${map.key}" >${map.value}</option>
 											</c:forEach>
@@ -257,11 +265,11 @@
 								<div class="form-group">
 									<label><span>*</span>有效期至</label>
 									<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.validEndDate }"/>
+											<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.validEndDate }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -273,7 +281,7 @@
 								<div class="form-group">
 									<label><span>*</span>签发机关</label>
 									<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
@@ -287,7 +295,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 								<c:choose>
-										<c:when test="${empty obj.applicant}">
+										<c:when test="${empty obj.passport}">
 											<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
@@ -323,24 +331,8 @@
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
 	var base = "${base}";
+	var contact = '${obj.contact}';
 	$(function() {
-		
-		//将页面所有元素设置为disabled
-		var form = document.forms[0]; 
-		for ( var i = 0; i < form.length; i++) { 
-			var element = form.elements[i]; 
-			if(element.id != "editbasic")
-				element.disabled = true; 
-		} 
-		$(".basic").hide();
-		document.getElementById("passRemark").style.backgroundColor = "#eee";
-		document.getElementById("birthAddressEn").style.backgroundColor = "#eee";
-		document.getElementById("issuedPlaceEn").style.backgroundColor = "#eee";
-		var remark = $("#passRemark").val();
-		if(remark != ""){
-			$(".ipt-info").show();
-		}
-		$("#passRemark").attr("disabled", true);
 		
 		//校验
 		$('#passportInfo').bootstrapValidator({
@@ -357,7 +349,7 @@
 						notEmpty : {
 							message : '护照号不能为空'
 						},
-	                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+	                   /*  remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 							url: '${base}/admin/orderJp/checkPassport.html',
 							message: '护照号已存在，请重新输入',//提示消息
 							delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
@@ -370,7 +362,7 @@
 									orderid:$('#orderid').val()
 								};
 							}
-						}
+						} */
 					}
 				},
 				type : {
@@ -424,6 +416,56 @@
 			}
 		});
 	$('#passportInfo').bootstrapValidator('validate');
+		
+		if(!contact){
+			//将页面所有元素设置为disabled
+			var form = document.forms[0]; 
+			for ( var i = 0; i < form.length; i++) { 
+				var element = form.elements[i]; 
+				if(element.id != "editbasic")
+					element.disabled = true; 
+			} 
+			$(".basic").hide();
+			document.getElementById("passRemark").style.backgroundColor = "#eee";
+			document.getElementById("birthAddressEn").style.backgroundColor = "#eee";
+			document.getElementById("issuedPlaceEn").style.backgroundColor = "#eee";
+			var remark = $("#passRemark").val();
+			if(remark != ""){
+				$(".ipt-info").show();
+			}
+			$("#passRemark").attr("disabled", true);
+		}else{
+			//护照图片验证
+			var passportUrl = $("#passportUrl").val();
+			if(passportUrl == ""){
+				$("#borderColor").attr("style", "border-color:#ff1a1a");  
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+		        $(".help-blockFront").attr("style","display: block;");  
+			}else{
+				$("#borderColor").attr("style", null);
+				$(".front").attr("class", "info-imgUpload front has-success");  
+		        $(".help-blockFront").attr("data-bv-result","IVALID");  
+		        $(".help-blockFront").attr("style","display: none;");  
+			}
+			var bootstrapValidator = $("#passportInfo").data(
+			'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			$("#deletePassportImg").click(function(){
+				$('#passportUrl').val("");
+				$('#sqImg').attr('src', "");
+				$("#uploadFile").siblings("i").css("display","none");
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+		        $(".help-blockFront").attr("style","display: block;");
+		        $("#borderColor").attr("style", "border-color:#ff1a1a");
+			});
+			$("#passRemark").attr("disabled", true);
+		}
+		
+		
+		
 		
 		if($("#sex").val() == "男"){
 			$("#sexEn").val("M");
@@ -541,11 +583,12 @@
 		var passportInfo = $("#passportInfo").serialize();
 		var orderid = '${obj.orderid}';
 		var applicantId = '${obj.applicantId}';
+		console.log(passportInfo);
 		layer.load(1);
 		$.ajax({
 			type: 'POST',
 			data : passportInfo,
-			url: '${base}/admin/myDate/saveEditPassport',
+			url: '${base}/admin/myData/saveEditPassport',
 			success :function(data) {
 				console.log(JSON.stringify(data));
 				layer.closeAll('loading');

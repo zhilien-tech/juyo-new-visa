@@ -50,7 +50,8 @@
 		</a>
 		<form id="passportInfo">
 			<div class="modal-header">
-				<span class="heading">签证信息</span> 
+				<span class="heading">签证信息</span>
+				<input type="hidden" name="userType" value="${obj.userType }"/> 
 				<input type="hidden" value="${obj.visaInfo.applicantId }" name="applicantId"/>
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
@@ -80,8 +81,8 @@
 									<div class="form-group">
 										<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight">
 											<option value="">请选择</option>
-											<c:forEach var="map" items="${obj.marryStatus}">
-												<option value="${map.key}" ${map.key==obj.applicant.marryStatus?'selected':''}>${map.value}</option>
+											<c:forEach var="map" items="${obj.marryStatusEnum}">
+												<option value="${map.key}" ${map.key==obj.marryStatus?'selected':''}>${map.value}</option>
 											</c:forEach>
 										</select>
 									</div>
@@ -92,9 +93,9 @@
 								<div class="col-sm-4 padding-right-0" id="borderColor">
 									<div class="cardFront-div">
 										<span>上传结婚证/离婚证</span>
-										<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.applicant.marryUrl }"/>
+										<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.marryUrl }"/>
 										<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-										<img id="sqImg" alt="" src="${obj.applicant.marryUrl }" >
+										<img id="sqImg" alt="" src="${obj.marryUrl }" >
 										<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 									</div>
 								</div>
@@ -573,6 +574,7 @@
 					$(".tripvice").show();
 					$(".wealthvice").show();
 					//$(".workvice").show();
+					$("#wealth").val(1);
 					$(".applymain").hide();
 					$(".workmain").hide();
 					$(".wealthmain").hide();
@@ -865,7 +867,7 @@
 					layer.closeAll('loading');
 					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					layer.close(index); */
-					if(userType == 2){
+					/* if(userType == 2){
 						//保存成功之后说明游客所有信息填写完毕
 						var orderid = '${obj.orderid}';
 						var applicantid = '${obj.applicant.id}';
@@ -884,7 +886,7 @@
 								layer.closeAll('loading');
 							}
 						});
-					}
+					} */
 					if(status == 1){
 						closeWindow();
 						parent.successCallBack(1);

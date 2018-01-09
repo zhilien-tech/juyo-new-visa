@@ -13,10 +13,10 @@ import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.myData.service.MyDataService;
-import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.forms.TTouristBaseinfoForm;
 import com.juyo.visa.forms.TTouristPassportForm;
+import com.juyo.visa.forms.TTouristVisaForm;
 
 /**
  * 我的资料Module
@@ -46,11 +46,21 @@ public class MyDataModule {
 	}
 
 	/**
+	 * 获取申请人基本信息（常用联系人）
+	 */
+	@At
+	@Ok("jsp:/admin/myData/basicInfo")
+	public Object basic(@Param("contact") int contact, @Param("applyId") int applyId, HttpSession session,
+			HttpServletRequest request) {
+		return myDataService.getBasicInfo(contact, applyId, session, request);
+	}
+
+	/**
 	 * 基本信息修改后保存
 	 */
 	@At
 	@POST
-	public Object saveEditApplicant(TTouristBaseinfoForm applicantForm, HttpSession session) {
+	public Object saveEditApplicant(@Param("..") TTouristBaseinfoForm applicantForm, HttpSession session) {
 		return myDataService.saveEditApplicant(applicantForm, session);
 	}
 
@@ -61,6 +71,16 @@ public class MyDataModule {
 	@Ok("jsp")
 	public Object passportInfo(HttpSession session, HttpServletRequest request) {
 		return myDataService.getPassportInfo(session, request);
+	}
+
+	/**
+	 * 获取申请人护照信息(常用联系人)
+	 */
+	@At
+	@Ok("jsp:passportInfo")
+	public Object passport(@Param("contact") int contact, @Param("applyId") int applyId, HttpSession session,
+			HttpServletRequest request) {
+		return myDataService.getPassportInfo(contact, applyId, session, request);
 	}
 
 	/**
@@ -101,11 +121,22 @@ public class MyDataModule {
 	}
 
 	/**
+	 * 签证信息（常用联系人）
+	 */
+	@At
+	@GET
+	@Ok("jsp:visaInfo")
+	public Object visa(@Param("contact") int contact, @Param("applyId") int applyId, HttpSession session,
+			HttpServletRequest request) {
+		return myDataService.getVisaInfo(contact, applyId, session, request);
+	}
+
+	/**
 	 * 签证信息修改保存
 	 */
 	@At
 	@POST
-	public Object saveEditVisa(@Param("..") VisaEditDataForm visaForm, HttpSession session) {
+	public Object saveEditVisa(@Param("..") TTouristVisaForm visaForm, HttpSession session) {
 		return myDataService.saveEditVisa(visaForm, session);
 	}
 
@@ -117,6 +148,15 @@ public class MyDataModule {
 	@Ok("jsp")
 	public Object topContacts(HttpSession session, HttpServletRequest request) {
 		return null;
+	}
+
+	/**
+	 * 常用联系人列表
+	 */
+	@At
+	@POST
+	public Object topContactsList(HttpSession session) {
+		return myDataService.topContactsList(session);
 	}
 
 	/**
@@ -146,6 +186,33 @@ public class MyDataModule {
 	public Object changeStatus(@Param("orderid") int orderid, @Param("applicantid") int applicantid,
 			@Param("completeType") String completeType, HttpSession session) {
 		return myDataService.changeStatus(orderid, applicantid, completeType, session);
+	}
+
+	/**
+	 * 根据手机号查询游客表
+	 */
+	@At
+	@POST
+	public Object getTouristInfoByTelephone(@Param("telephone") String telephone, HttpSession session) {
+		return myDataService.getTouristInfoByTelephone(telephone, session);
+	}
+
+	/**
+	 * 根据身份证号查询游客表
+	 */
+	@At
+	@POST
+	public Object getTouristInfoByCard(@Param("cardId") String cardId, HttpSession session) {
+		return myDataService.getTouristInfoByCard(cardId, session);
+	}
+
+	/**
+	 * 根据护照号查询游客表
+	 */
+	@At
+	@POST
+	public Object getTouristInfoByPass(@Param("passport") String pass, HttpSession session) {
+		return myDataService.getTouristInfoByPass(pass, session);
 	}
 
 }

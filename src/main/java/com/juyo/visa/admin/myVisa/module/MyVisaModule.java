@@ -117,4 +117,49 @@ public class MyVisaModule {
 			@Param("applicantId") Integer applicantId, @Param("orderId") Integer orderId, HttpSession session) {
 		return myVisaService.saveExpressInfo(expressType, expressNum, applicantId, orderId, session);
 	}
+
+	/**
+	 * 判断游客信息是否改变
+	 */
+	@At
+	@POST
+	public Object isChanged(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.isChanged(applyid, session);
+	}
+
+	/**
+	 * 将游客信息赋值给员工
+	 */
+	@At
+	@POST
+	public Object copyInfoToPersonnel(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.copyInfoToPersonnel(applyid, session);
+	}
+
+	/**
+	 * 将游客基本信息赋值给员工基本信息
+	 */
+	@At
+	@POST
+	public Object copyBaseToPersonnel(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.copyBaseToPersonnel(applyid, session);
+	}
+
+	/**
+	 * 将游客护照信息赋值给员工基本信息
+	 */
+	@At
+	@POST
+	public Object copyPassToPersonnel(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.copyPassToPersonnel(applyid, session);
+	}
+
+	/**
+	 * 设置为不再提示，即将申请人表的isSameInfo字段设置为0
+	 */
+	@At
+	@POST
+	public Object toSetUnsame(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.toSetUnsame(applyid, session);
+	}
 }

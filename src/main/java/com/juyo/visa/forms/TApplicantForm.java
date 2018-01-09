@@ -52,6 +52,8 @@ public class TApplicantForm extends DataTablesParamForm {
 
 	private String otherLastName;
 
+	private Integer isPrompted;
+
 	private String otherLastNameEn;
 
 	private String emergencyLinkman;
@@ -133,6 +135,8 @@ public class TApplicantForm extends DataTablesParamForm {
 	private Integer orderid;
 
 	private Integer isTrailOrder;
+
+	private Integer userType;
 
 	@Override
 	public Sql sql(SqlManager sqlManager) {

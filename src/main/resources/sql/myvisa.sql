@@ -5,6 +5,7 @@ SELECT
 	CONCAT( ta.firstName, ta.lastName ) applicantname,
 	ta.telephone,
 	tap.passport,
+	ta.userId,
 	taoj.orderId orderJpId,
 	torj.id orderId,
 	torj.ordernum,
@@ -22,6 +23,7 @@ FROM
 SELECT
 	toj.id,
 	tr.orderNum japanNumber,
+	taoj.isSameLinker,
 	toj.acceptDesign number,
 	DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
 	DATE_FORMAT(tr.outVisaDate, '%Y-%m-%d') signingTime,
@@ -38,6 +40,7 @@ SELECT
 FROM
 	t_order tr
 INNER JOIN t_order_jp toj ON toj.orderId = tr.id
+LEFT JOIN t_applicant_order_jp  taoj ON taoj.orderId = toj.id 
 LEFT JOIN t_customer tc ON tr.customerId = tc.id
 LEFT JOIN (
 	SELECT
@@ -58,6 +61,7 @@ SELECT
 	CONCAT(ta.firstName, ta.lastName) applicant,
 	tap.passport passportNo,
 	taoj.id applicatid,
+	ta.id applyId,
 	ta.telephone,
 	ta.email,
 	tavpj.type dataType,
@@ -112,3 +116,32 @@ FROM
 	LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
 	LEFT JOIN t_order tor ON tor.id = taoj.orderid 
 	$condition
+	
+/*copyBaseToPersonnel*/
+UPDATE 
+	t_applicant ta
+LEFT JOIN 
+	t_tourist_baseinfo tb ON ta.userId = tb.userId
+SET 
+	ta.firstName = tb.firstName,ta.firstNameEn=tb.firstNameEn,ta.lastName=tb.lastName,ta.lastNameEn=tb.lastNameEn,ta.telephone=tb.telephone,ta.email=tb.email,ta.sex=tb.sex,
+	ta.nation=tb.nation,ta.birthday=tb.birthday,ta.address=tb.address,ta.cardId=tb.cardId,ta.cardFront=tb.cardFront,ta.cardBack=tb.cardBack,
+	ta.issueOrganization=tb.issueOrganization,ta.validEndDate=tb.validEndDate,ta.validStartDate=tb.validStartDate,ta.province=tb.province,
+	ta.city=tb.city,ta.detailedAddress=tb.detailedAddress,ta.otherFirstName=tb.otherFirstName,ta.otherFirstNameEn=tb.otherFirstNameEn,
+	ta.otherLastName=tb.otherLastName,ta.otherLastNameEn=tb.otherLastNameEn,ta.emergencyLinkman=tb.emergencyLinkman,ta.emergencyTelephone=tb.emergencyTelephone,
+	ta.cardProvince=tb.cardProvince,ta.cardCity=tb.cardCity,ta.hasOtherName=tb.hasOtherName,ta.hasOtherNationality=tb.hasOtherNationality,
+	ta.addressIsSameWithCard=tb.addressIsSameWithCard,ta.nationality=tb.nationality
+WHERE
+	ta.userId = @userId AND ta.id = @applyId
+
+/*copyPassToPersonnel*/
+UPDATE 
+	t_applicant_passport ta
+LEFT JOIN
+	t_applicant tat ON ta.applicantId=tat.id
+LEFT JOIN 
+	t_tourist_passport tp ON tp.userId = tat.userId
+SET 
+	ta.type=tp.type,ta.passport=tp.passport,ta.sex=tp.sex,ta.sexEn=tp.sexEn,ta.birthAddress=tp.birthAddress,ta.issuedDate=tp.issuedDate,ta.validType=tp.validType,ta.passportUrl=tp.passportUrl,
+	ta.birthAddressEn=tp.birthAddressEn,ta.birthday=tp.birthday,ta.issuedPlace=tp.issuedPlace,ta.issuedPlaceEn=tp.issuedPlaceEn,ta.validEndDate=tp.validEndDate,ta.validStartDate=tp.validStartDate
+WHERE
+	tat.userId = @userId AND tat.id = @applyId

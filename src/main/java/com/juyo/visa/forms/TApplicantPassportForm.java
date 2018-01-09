@@ -95,6 +95,8 @@ public class TApplicantPassportForm extends DataTablesParamForm {
 
 	private Integer orderid;
 
+	private Integer userType;
+
 	private String passRemark;
 
 	private Integer isTrailOrder;

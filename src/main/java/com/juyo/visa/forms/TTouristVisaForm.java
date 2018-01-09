@@ -86,11 +86,21 @@ public class TTouristVisaForm extends DataTablesParamForm {
 
 	private String financial;
 
+	private Integer applyId;
+
+	private Integer contact;
+
 	private String houseProperty;
 
 	private String deposit;
 
 	private String vehicle;
+	//是主申请人还是副申请人
+	private Integer applicant;
+	//申请人ID
+	private Integer applicantId;
+	//主申请人ID
+	private Integer mainApplicant;
 
 	@Override
 	public Sql sql(SqlManager sqlManager) {

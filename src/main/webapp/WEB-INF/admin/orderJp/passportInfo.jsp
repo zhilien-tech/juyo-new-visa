@@ -93,6 +93,7 @@
 									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
 									<input type="hidden" id="OCRline1" name="OCRline1" value="">
 									<input type="hidden" id="OCRline2" name="OCRline2" value="">
+									<input type="hidden" name="userType" value="${obj.userType }"/>
 									<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
 									<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
@@ -514,6 +515,48 @@
 			});
 		}
 		
+		//根据护照号查询游客信息
+		$("#passport").change(function(){
+			$.ajax({
+				type : "post",
+				async : false,
+				data : {
+					passport : $("#passport").val()
+				},
+				url : '${base}/admin/myData/getTouristInfoByPass',
+				success :function(data) {
+					console.log(JSON.stringify(data));
+					if(data.pass){
+						layer.confirm("您的信息已存在，是否使用？", {
+							title:"提示",
+							btn: ["是","否"], //按钮
+							shade: false //不显示遮罩
+						}, function(index){
+							toSet(data);
+							layer.close(index);
+						});
+					}
+				}
+			});
+		});
+		
+		function toSet(data){
+			$("#passportUrl").val(data.pass.passportUrl);
+			$("#type").val(data.pass.type);
+			$("#passport").val(data.pass.passport);
+			$("#sex").val(data.pass.sex);
+			$("#sexEn").val(data.pass.sexEn);
+			$("#birthAddress").val(data.pass.birthAddress);
+			$("#birthAddressEn").val(data.pass.birthAddressEn);
+			$("#birthday").val(data.birthday);
+			$("#issuedPlace").val(data.pass.issuedPlace);
+			$("#issuedPlaceEn").val(data.pass.issuedPlaceEn);
+			$("#issuedDate").val(data.issuedDate);
+			$("#validType").val(data.pass.validType);
+			$("#validEndDate").val(data.validEndDate);
+			$('#sqImg').attr('src', data.pass.passportUrl);
+		}
+		
 		//保存
 		function save(status){
 			//得到获取validator对象或实例 
@@ -541,7 +584,7 @@
 					layer.close(index); */
 					var id = ${obj.applicantId};
 					var orderid = ${obj.orderid};
-					if(userType == 2){
+					/* if(userType == 2){
 						layer.load(1);
 						$.ajax({
 							type: 'POST',
@@ -557,7 +600,7 @@
 								layer.closeAll('loading');
 							}
 						});
-					}
+					} */
 					if(status == 1){
 						closeWindow();
 						parent.successCallBack(1);
