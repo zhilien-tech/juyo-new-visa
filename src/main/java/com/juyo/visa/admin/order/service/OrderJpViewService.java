@@ -169,18 +169,24 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				if (Util.eq(record.get("isDirectCus"), IsYesOrNoEnum.YES.intKey())) {//是直客，客户信息直接从订单中拿
 					record.put("source", "直客");
 				} else {//不是直客，客户信息从客户信息表中拿
+					TCustomerEntity customerEntity = new TCustomerEntity();
 					Integer customerId = (Integer) record.get("customerId");
-					TCustomerEntity customerEntity = dbDao
-							.fetch(TCustomerEntity.class, new Long(customerId).intValue());
+					if (!Util.isEmpty(customerId)) {
+						customerEntity = dbDao.fetch(TCustomerEntity.class, new Long(customerId).intValue());
+					}
 					record.set("comName", customerEntity.getName());
 					record.set("comShortName", customerEntity.getShortname());
 					record.set("linkman", customerEntity.getLinkman());
 					record.set("telephone", customerEntity.getMobile());
-					int sourceInt = (int) record.get("source");
-					for (CustomerTypeEnum customerTypeEnum : CustomerTypeEnum.values()) {
-						if (sourceInt == customerTypeEnum.intKey()) {
-							record.put("source", customerTypeEnum.value());
+					if (!Util.isEmpty(record.get("source"))) {
+						int sourceInt = (int) record.get("source");
+						for (CustomerTypeEnum customerTypeEnum : CustomerTypeEnum.values()) {
+							if (sourceInt == customerTypeEnum.intKey()) {
+								record.put("source", customerTypeEnum.value());
+							}
 						}
+					} else {
+						record.put("source", "");
 					}
 				}
 
