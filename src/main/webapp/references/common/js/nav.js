@@ -11,10 +11,19 @@ $(function(){
                 $('.nav-item').children('ul').hide();
                 $(this).next('ul').show();
                 $(this).parent('li').addClass('nav-show').siblings('li').removeClass('nav-show');
+                var subnav = $(this).next('ul').html();
+                if(subnav == "" || subnav == null || subnav == undefined){
+                	$('.navLi').removeClass('navLi');
+                }
             }else{
                 //收缩已展开
                 $(this).next('ul').hide();
                 $('.nav-item.nav-show').removeClass('nav-show');
+            }
+        }else{
+        	var subnav = $(this).next('ul').html();
+            if(subnav == "" || subnav == null || subnav == undefined){
+            	$('.navLi').removeClass('navLi');
             }
         }
     });
