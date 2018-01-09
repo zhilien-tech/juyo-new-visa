@@ -71,10 +71,10 @@
    		<li>紧急联系人手机号 <input type="text" class="txtInput" id="" v-model="applicatdata.emergencytelephone"/></li>
    		<!--  -->
    		<li>是否有曾用名<span class="onOff"> <input type="checkbox" id="afterName" class="afterName checkBox"> <label for="afterName" class="green"></label> </span></li>
-   		<li class="afterNameinput">姓(中文) <input type="text" class="txtInput" id="" v-model="applicatdata.otherfirstname"/></li>
-   		<li class="afterNameinput">姓(拼音) <input type="text" class="txtInput" id="" v-model="applicatdata.otherfirstnameen"/></li>
-   		<li class="afterNameinput">名(中文) <input type="text" class="txtInput" id="" v-model="applicatdata.otherlastname"/></li>
-   		<li class="afterNameinput">名(拼音) <input type="text" class="txtInput" id="" v-model="applicatdata.otherlastnameen"/></li>
+   		<li class="afterNameinput">姓(中文) <input type="text" class="txtInput" id="otherfirstname" v-model="applicatdata.otherfirstname"/></li>
+   		<li class="afterNameinput">姓(拼音) <input type="text" class="txtInput" id="otherfirstnameen" v-model="applicatdata.otherfirstnameen"/></li>
+   		<li class="afterNameinput">名(中文) <input type="text" class="txtInput" id="otherlastname" v-model="applicatdata.otherlastname"/></li>
+   		<li class="afterNameinput">名(拼音) <input type="text" class="txtInput" id="otherlastnameen" v-model="applicatdata.otherlastnameen"/></li>
    		<!--  -->
    		<li>曾有的或另有的国籍(或公民身份)<span class="onOff"> <input type="checkbox" id="afterNatAndID" class="afterNatAndID checkBox"> <label for="afterNatAndID" class="green"></label> </span></li>
    		<li class="afterNatAndIDinput">国籍 <input type="text" class="txtInput" id="" v-model="applicatdata.nationality"/></li>
@@ -297,6 +297,14 @@
     	$('#lastname').on('input propertychange',function(){
     		_self.applicatdata.lastnameen = getPinYinStr($(this).val()).toUpperCase();
     	});
+    	//曾用名
+    	$('#otherfirstname').on('input propertychange',function(){
+    		var otherfirstname = getPinYinStr($(this).val()).toUpperCase();
+    		_self.applicatdata.otherfirstnameen = otherfirstname;
+    	});
+    	$('#otherlastname').on('input propertychange',function(){
+    		_self.applicatdata.otherlastnameen = getPinYinStr($(this).val()).toUpperCase();
+    	});
     });
 	//获取URL地址参数
     function GetQueryString(name){
@@ -306,7 +314,7 @@
     }
 	//保存并跳转到护照页面
 	function nextStep(){
-		$.ajax({ 
+		$.ajax({
         	url: '/admin/mobile/saveApplicatinfo.html',
         	data:_self.applicatdata,
         	dataType:"json",

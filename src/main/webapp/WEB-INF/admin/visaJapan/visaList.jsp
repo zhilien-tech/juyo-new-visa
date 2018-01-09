@@ -246,7 +246,21 @@
                         });
                    	}
                  });
-        	}
+        	},
+        	//签证录入
+    		visainput:function(applyId){
+    			layer.open({
+    				type: 2,
+    				title: false,
+    				closeBtn:false,
+    				fix: false,
+    				maxmin: false,
+    				shadeClose: false,
+    				scrollbar: false,
+    				area: ['900px', '80%'],
+    				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&isvisa=1'
+    			});
+    		}
         }
 	});
 	// 注册scroll事件并监听 

@@ -232,7 +232,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				visatypestr = visatypeEnum.value();
 			}
 		}
-		//准备PDF模板数据
+		//准备PDF模板数据 
 		Map<String, String> map = new HashMap<String, String>();
 		StringBuffer content = new StringBuffer();
 		//地接社未做
