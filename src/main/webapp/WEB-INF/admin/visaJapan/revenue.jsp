@@ -299,7 +299,7 @@
             	type:'post',
             	success: function(data){
 					layer.closeAll('loading');
-					parent.successCallBack(1);
+					parent.successCallBack(2);
 					closeWindow();
               	}
             });
