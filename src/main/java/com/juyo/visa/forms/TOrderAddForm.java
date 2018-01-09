@@ -94,4 +94,19 @@ public class TOrderAddForm extends AddForm implements Serializable {
 	/**更新时间*/
 	private Date updateTime;
 
+	/**销售操作人id*/
+	private Integer salesOpid;
+
+	/**初审操作人id*/
+	private Integer trialOpid;
+
+	/**前台操作人id*/
+	private Integer receptionOpid;
+
+	/**签证操作人id*/
+	private Integer visaOpid;
+
+	/**售后操作人id*/
+	private Integer aftermarketOpid;
+
 }
