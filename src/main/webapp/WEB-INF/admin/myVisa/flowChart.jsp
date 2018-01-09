@@ -244,13 +244,13 @@
 				var url = "";
 				if(indexOfPage == 1){
 					//基本信息
-					url = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid='+orderId
+					url = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid='+orderId+'&isTrial=0'
 				}else if(indexOfPage == 2){
 					//护照信息
-					url = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderId
+					url = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderId+'&isTrial=0'
 				}else{
 					//签证信息
-					url = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderId+'&isOrderUpTime=0'
+					url = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderId+'&isOrderUpTime=0&isTrial=0'
 				}
 				
 				layer.open({
