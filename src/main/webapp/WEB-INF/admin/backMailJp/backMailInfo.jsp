@@ -26,7 +26,7 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 				<c:if test="${obj.isAfterMarket eq 1}">
-					<input id="addBtn" type="button" onclick="sendMail();" class="btn btn-primary pull-right btn-sm btn-right" value="发送" />
+					<input id="addBtn" type="button" onclick="sendMail();" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="发送" />
 				</c:if>
 			</div>
 			<div class="modal-body">
