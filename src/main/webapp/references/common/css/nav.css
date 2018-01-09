@@ -1,0 +1,63 @@
+@charset "utf-8";
+/* 以下实际使用若已初始化可删除 .nav height父级需逐级设置为100%*/
+body,html{height: 100%;background: #FFF;}
+body,ul{margin:0;padding:0}
+body{font:14px "微软雅黑","宋体","Arial Narrow",HELVETICA;-webkit-text-size-adjust:100%;} 
+li{list-style:none} 
+a{text-decoration:none;}
+/* 以上实际使用若已初始化可删除 */
+
+/* nav */
+.left { float:left; height:auto;}
+.nav-top { height:50px;line-height:50px;text-align:center;}
+#mini { background:#294461;}
+.nav-top img { vertical-align:middle;}
+.nav{width: 170px;height: 100%;background: #263238;}
+.nav a{display: block;overflow: hidden;padding-left: 20px;line-height: 50px;max-height: 50px;color: #ABB1B7;}
+.navLi a span { color:#FFF !important;}
+.nav a span{margin-left: 30px; font-size:15px; color:#75a9eb;}
+.nav-item{position: relative;}
+.nav-item.nav-show{border-bottom: none;}
+.nav-item ul{display: none;background: rgba(0,0,0,.1);}
+.nav-item.nav-show ul{display: block;}
+.nav-item.nav-show  a { color:#FFF;}
+.nav-item.nav-show  span { color:#FFF;}
+/* .nav-item>a:before{content: "";position: absolute;left: 0px;width: 4px;height: 70px;background: #34A0CE;opacity:0;} */
+.navUl li a:hover { background:#294461;}
+.navUl li a:hover span { color:#FFF;}
+.navUl li a:before{content: "";position: absolute;left: 0px;width: 4px;height: 50px;background: #3086f1;opacity:0;}
+.navUl li a:hover:before{opacity:1;}
+
+.navLi a { background:#294461;}
+.navLi>a:before{content: "";position: absolute;left: 0px;width: 4px;height: 50px;background: #3086f1;opacity:0;}
+.nav .nav-icon{font-size: 20px;position: absolute;margin-left:-1px;}
+/* 此处修改导航图标 可自定义iconfont 替换*/
+.icon_1::after{content: "\e62b";}
+.icon_2::after{content: "\e669";}
+.icon_3::after{content: "\e61d";}
+/*---------------------*/
+.nav-more{float:right;margin-right: 20px;font-size: 12px;}
+/* 此处为导航右侧箭头 如果自定义iconfont 也需要替换*/
+.nav-more::after{content: "\e621";}
+/*---------------------*/
+.nav-show .nav-more{transform:rotate(90deg);}
+.nav-show,.nav-item>a:hover {color: #FFF;}
+.nav-item>a:hover span { color:#FFF;}
+.navLi>a:before {opacity:1 !important;} 
+.nav-item li:hover a{color: #FFF;}
+.moreHide { visibility:hidden}
+/* nav-mini */
+.nav-mini.nav{width: 60px;}
+.nav-mini.nav .nav-icon{/* margin-left:-2px; */}
+.nav-mini.nav .nav-item>a span{display: none;}
+.nav-mini.nav .nav-more{margin-right: -20px;}
+.nav-mini.nav .nav-item ul{position: absolute;top:0px;left:60px;width: 180px;z-index: 99;background:#3C474C;overflow: hidden;}
+.nav-mini.nav .nav-item:hover{background:rgba(255,255,255,.1);}
+.nav-mini.nav .nav-item:hover .nav-item a{color:#FFF;}
+.nav-mini.nav .nav-item:hover a:before{}
+.nav-mini.nav .nav-item:hover ul{display: block;}
+
+
+
+
+
