@@ -62,6 +62,17 @@ public class TCompanyEntity implements Serializable {
 	private String cdesignNum;
 
 	@Column
+	@Comment("账户余额")
+	private Double accountBalance;
+
+	@Column
+	@Comment("奖励金额")
+	private Double awardMoney;
+	@Column
+	@Comment("广告url")
+	private String adUrl;
+
+	@Column
 	@Comment("操作人")
 	private Integer opId;
 
