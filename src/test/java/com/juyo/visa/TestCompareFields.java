@@ -34,6 +34,9 @@ public class TestCompareFields {
 		Date b1 = DateUtil.string2Date("2018-01-12");
 		Date b2 = DateUtil.string2Date("2018-01-14");
 
+		Student s1 = new Student(1, "张三", 22, "深圳", "1565123123", b1);
+		Student s2 = new Student(2, "李四", 23, "深圳", "", b2);
+
 		Record record = new Record();
 		record.set("id", 3);
 		record.set("name", "XHH");
@@ -45,8 +48,7 @@ public class TestCompareFields {
 		//record.toEntity();
 
 		Student s = record.toPojo(Student.class);
-		Student s1 = new Student(1, "张三", 22, "深圳", "1565123123", b1);
-		Student s2 = new Student(2, "李四", 23, "深圳", "", b2);
+
 		// 比较s1和s2不同的属性值，其中id忽略比较  
 		Map<String, List<Object>> compareResult = compareFields(s, s2, new String[] { "id", "phonenum" });
 		System.out.println("s1和s2共有" + compareResult.size() + "个属性值不同（不包括id）");
