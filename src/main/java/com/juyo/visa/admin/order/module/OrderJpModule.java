@@ -436,10 +436,8 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object log(@Param("id") Integer id) {
-		Map<String, Object> result = MapUtil.map();
-		result.put("orderid", id);
-		return result;
+	public Object log(@Param("id") Integer orderid, HttpSession session) {
+		return saleViewService.toLogPage(orderid, session);
 	}
 
 	/**

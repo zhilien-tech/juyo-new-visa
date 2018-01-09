@@ -2240,6 +2240,20 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
+	//跳转到日志页
+	public Object toLogPage(Integer orderid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();//当前登录用户类型
+
+		//查询拥有某个权限模块的工作人员
+
+		Map<String, Object> result = MapUtil.map();
+		result.put("orderid", orderid);
+		result.put("userType", userType);
+		return result;
+	}
+
+	//加载日志列表
 	public Object getLogs(Integer orderid) {
 		Map<String, Object> result = MapUtil.map();
 		String logSqlstr = sqlManager.get("username_logs");

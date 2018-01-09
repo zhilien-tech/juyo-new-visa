@@ -20,8 +20,22 @@
 <body>
 	<div class="modal-content">
 			<div class="modal-header">
-				<span class="heading">日志</span> 
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="关闭" /> 
+				<span class="heading">日志</span>
+				<c:if test="${obj.userType == 1 }">
+					<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="关闭" /> 
+				</c:if>
+				<c:if test="${obj.userType != 1 }">
+					<select id="" name="" class="input-sm" style="margin-left:55%;" >
+						<option value="">负责人</option>
+						<%-- <c:forEach var="map" items="${obj.searchStatus}">
+							<option value="${map.key}">${map.value}</option>
+						</c:forEach> --%>
+					</select>
+					<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
+					
+					<input id="saveBtn" type="button" onclick="changePrincipal()" style="margin:10px 10px 0 10px;" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="保存" /> 
+				</c:if>
+				
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
