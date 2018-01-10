@@ -676,7 +676,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['700px', '80%'],
-					content:'/admin/orderJp/log.html?id='+orderinfoid
+					content:'/admin/orderJp/log.html?id='+orderinfoid+'&orderProcessType=4'
 				});
 			}
 			$('#urgenttype').change(function(){

@@ -424,7 +424,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['700px', '80%'],
-				content:'/admin/orderJp/log.html?id='+orderid
+				content:'/admin/orderJp/log.html?id='+orderid+'&orderProcessType=2'
 			});
 		},
 		urgentTypeChange:function(){

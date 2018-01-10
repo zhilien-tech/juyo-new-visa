@@ -436,8 +436,9 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object log(@Param("id") Integer orderid, HttpSession session) {
-		return saleViewService.toLogPage(orderid, session);
+	public Object log(@Param("id") Integer orderid, @Param("orderProcessType") Integer orderProcessType,
+			HttpSession session) {
+		return saleViewService.toLogPage(orderid, orderProcessType, session);
 	}
 
 	/**

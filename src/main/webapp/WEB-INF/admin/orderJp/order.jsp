@@ -1142,7 +1142,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['700px', '80%'],
-						content:'/admin/orderJp/log.html?id='+id
+						content:'/admin/orderJp/log.html?id='+id+'&orderProcessType=1'
 					});
 				},
 				//签证录入

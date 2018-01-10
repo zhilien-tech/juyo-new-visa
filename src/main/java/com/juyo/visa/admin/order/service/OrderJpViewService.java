@@ -70,6 +70,7 @@ import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.JobStatusFreeEnum;
@@ -2241,15 +2242,31 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	//跳转到日志页
-	public Object toLogPage(Integer orderid, HttpSession session) {
+	public Object toLogPage(Integer orderid, Integer orderProcessType, HttpSession session) {
+		Map<String, Object> result = MapUtil.map();
+
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comid = loginCompany.getId();
+		Integer adminId = loginCompany.getAdminId();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userType = loginUser.getUserType();//当前登录用户类型
 
 		//查询拥有某个权限模块的工作人员
+		String sqlstr = sqlManager.get("logs_user_select_list");
+		Sql sql = Sqls.create(sqlstr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tcf.comid", "=", comid);
+		cnd.and("tu.id", "!=", adminId);
+		for (JPOrderProcessTypeEnum typeEnum : JPOrderProcessTypeEnum.values()) {
+			if (!Util.isEmpty(orderProcessType) && orderProcessType == typeEnum.intKey()) {
+				cnd.and(" tf.funName", "=", typeEnum.value());
+			}
+		}
+		List<Record> employees = dbDao.query(sql, cnd, null);
 
-		Map<String, Object> result = MapUtil.map();
 		result.put("orderid", orderid);
 		result.put("userType", userType);
+		result.put("employees", employees);
 		return result;
 	}
 

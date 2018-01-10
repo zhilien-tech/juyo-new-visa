@@ -27,9 +27,9 @@
 				<c:if test="${obj.userType != 1 }">
 					<select id="" name="" class="input-sm" style="margin-left:55%;" >
 						<option value="">负责人</option>
-						<%-- <c:forEach var="map" items="${obj.searchStatus}">
-							<option value="${map.key}">${map.value}</option>
-						</c:forEach> --%>
+						<c:forEach var="user" items="${obj.employees}">
+							<option value="${user.userid}">${user.username}</option>
+						</c:forEach>
 					</select>
 					<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 					
