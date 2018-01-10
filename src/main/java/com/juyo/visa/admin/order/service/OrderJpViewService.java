@@ -2319,7 +2319,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	 * @param orderProcessType 订单流程之一
 	 * @return 
 	 */
-	public Object changePrincipal(Integer orderid, Integer principalId, Integer orderProcessType) {
+	public Object changePrincipal(Integer orderid, Integer principalId, Integer orderProcessType, HttpSession session) {
 		Date nowDate = DateUtil.nowDate();
 		//Order 要检索的字段
 		String fieldStr = getprincipalField(orderProcessType);
@@ -2336,6 +2336,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					int PRINCIPAL_ORDER = JPOrderStatusEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey();
 					dbDao.update(TOrderEntity.class, Chain.make("status", PRINCIPAL_ORDER).add("updateTime", nowDate),
 							Cnd.where("id", "=", orderid));
+					//日志记录
+					insertLogs(orderid, PRINCIPAL_ORDER, session);
 				}
 				return updatenum;
 			}

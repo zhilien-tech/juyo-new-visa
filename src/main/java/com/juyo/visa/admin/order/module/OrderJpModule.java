@@ -456,8 +456,8 @@ public class OrderJpModule {
 	@At
 	@POST
 	public Object changePrincipal(@Param("orderid") Integer orderid, @Param("principal") Integer principal,
-			@Param("orderProcessType") Integer orderProcessType) {
-		return saleViewService.changePrincipal(orderid, principal, orderProcessType);
+			@Param("orderProcessType") Integer orderProcessType, HttpSession session) {
+		return saleViewService.changePrincipal(orderid, principal, orderProcessType, session);
 	}
 
 	/**
