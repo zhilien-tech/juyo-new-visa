@@ -152,6 +152,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	//基本信息连接websocket的地址
 	private static final String BASIC_WEBSPCKET_ADDR = "basicinfowebsocket";
 
+	//订单主流程
+	private static final Integer SALES_PROCESS = JPOrderProcessTypeEnum.SALES_PROCESS.intKey();
+	private static final Integer FIRSTTRIAL_PROCESS = JPOrderProcessTypeEnum.FIRSTTRIAL_PROCESS.intKey();
+	private static final Integer RECEPTION_PROCESS = JPOrderProcessTypeEnum.RECEPTION_PROCESS.intKey();
+	private static final Integer VISA_PROCESS = JPOrderProcessTypeEnum.VISA_PROCESS.intKey();
+	private static final Integer AFTERMARKET_PROCESS = JPOrderProcessTypeEnum.AFTERMARKET_PROCESS.intKey();
+
 	public Object listData(OrderJpForm queryForm, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
 		Sql sql = queryForm.sql(sqlManager);
@@ -2267,6 +2274,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("orderid", orderid);
 		result.put("userType", userType);
 		result.put("employees", employees);
+		result.put("orderProcessType", orderProcessType);
 		return result;
 	}
 
@@ -2276,7 +2284,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String logSqlstr = sqlManager.get("username_logs");
 		Sql logSql = Sqls.create(logSqlstr);
 		logSql.setParam("id", orderid);
-		List<Record> logs = dbDao.query(logSql, null, null);
+		List<Record> logs = dbDao.query(logSql, null, null); //日志列表
 		for (Record record : logs) {
 			if (!Util.isEmpty(record.get("orderStatus"))) {
 				Integer status = (Integer) record.get("orderStatus");
@@ -2286,15 +2294,65 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					}
 				}
 			}
-			//格式化日期
-			//DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-			/*if (!Util.isEmpty(record.get("createTime"))) {
-				Date createDate = (Date) record.get("createTime");
-				record.put("createTime", format.format(createDate));
-			}*/
 		}
 		result.put("logs", logs);
 		return result;
+	}
+
+	/**
+	 * 
+	 * 变更订单负责人
+	 * 更新订单状态为 “负责人变更”
+	 *
+	 * @param orderid 订单id
+	 * @param principalId 负责人id
+	 * @param orderProcessType 订单流程之一
+	 * @return 
+	 */
+	public Object changePrincipal(Integer orderid, Integer principalId, Integer orderProcessType) {
+		Date nowDate = DateUtil.nowDate();
+		//Order 要检索的字段
+		String fieldStr = getprincipalField(orderProcessType);
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class,
+				Cnd.where("id", "=", orderid).and(fieldStr, "=", principalId));
+		if (Util.isEmpty(order)) {
+			TOrderEntity updateOrder = dbDao.fetch(TOrderEntity.class, Cnd.where("id", "=", orderid));
+			if (!Util.isEmpty(updateOrder)) {
+				//更新订单对应 负责人字段
+				int updatenum = dbDao.update(TOrderEntity.class, Chain.make(fieldStr, principalId),
+						Cnd.where("id", "=", orderid));
+				if (updatenum > 0) {
+					//更新订单状态为 “负责人变更”状态
+					int PRINCIPAL_ORDER = JPOrderStatusEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey();
+					dbDao.update(TOrderEntity.class, Chain.make("status", PRINCIPAL_ORDER).add("updateTime", nowDate),
+							Cnd.where("id", "=", orderid));
+				}
+				return updatenum;
+			}
+		}
+		return order;
+	}
+
+	//获取负责人日志检索 字段
+	public String getprincipalField(Integer orderProcessType) {
+		String principalField = "";
+		if (orderProcessType == SALES_PROCESS) {
+			//销售
+			principalField = "salesOpid";
+		} else if (orderProcessType == FIRSTTRIAL_PROCESS) {
+			//初审
+			principalField = "trialOpid";
+		} else if (orderProcessType == RECEPTION_PROCESS) {
+			//前台
+			principalField = "receptionOpid";
+		} else if (orderProcessType == VISA_PROCESS) {
+			// 签证 
+			principalField = "visaOpid";
+		} else if (orderProcessType == AFTERMARKET_PROCESS) {
+			//售后
+			principalField = "aftermarketOpid";
+		}
+		return principalField;
 	}
 
 	public Object firtTrialJp(Integer id, HttpSession session) {

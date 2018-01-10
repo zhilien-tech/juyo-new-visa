@@ -25,17 +25,16 @@
 					<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="关闭" /> 
 				</c:if>
 				<c:if test="${obj.userType != 1 }">
-					<select id="" name="" class="input-sm" style="margin-left:55%;" >
+					<select id="principal" name="principal" class="input-sm" style="margin-left:55%;" >
 						<option value="">负责人</option>
 						<c:forEach var="user" items="${obj.employees}">
 							<option value="${user.userid}">${user.username}</option>
 						</c:forEach>
 					</select>
 					<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
-					
-					<input id="saveBtn" type="button" onclick="changePrincipal()" style="margin:10px 10px 0 10px;" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="保存" /> 
+					<input id="saveBtn" type="button" onclick="savePrincipal()" style="margin:10px 10px 0 10px;" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="保存" /> 
 				</c:if>
-				
+				<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
@@ -61,6 +60,7 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var orderid = '${obj.orderid}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -68,7 +68,8 @@
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	
+	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<script src="${base}/admin/orderJp/log.js"></script><!-- 日志 js -->
 	<script type="text/javascript">
 		var base = "${base}";
 

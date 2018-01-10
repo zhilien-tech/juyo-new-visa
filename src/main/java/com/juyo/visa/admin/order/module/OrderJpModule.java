@@ -451,6 +451,16 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 变更负责人 changePrincipal
+	 */
+	@At
+	@POST
+	public Object changePrincipal(@Param("orderid") Integer orderid, @Param("principal") Integer principal,
+			@Param("orderProcessType") Integer orderProcessType) {
+		return saleViewService.changePrincipal(orderid, principal, orderProcessType);
+	}
+
+	/**
 	 * 获取分享申请人
 	 */
 	@At
