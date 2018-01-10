@@ -558,6 +558,7 @@
 					fields : {
 						
 						firstName : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '姓不能为空'
@@ -565,6 +566,7 @@
 							}
 						},
 						lastName : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '名不能为空'
@@ -572,6 +574,7 @@
 							}
 						},
 						telephone : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '手机号不能为空'
@@ -583,6 +586,7 @@
 							}
 						},
 						email : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '邮箱不能为空'
@@ -698,6 +702,7 @@
 							}
 						},
 						emergencyLinkman : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '紧急联系人姓名不能为空'
@@ -705,6 +710,7 @@
 							}
 						},
 						emergencyTelephone : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '紧急联系人手机不能为空'
@@ -1097,81 +1103,97 @@
 		
 		//根据身份证号搜索是否有游客信息
 		$("#cardId").change(function(){
-			$.ajax({
-				type : "post",
-				data : {
-					cardId : $("#cardId").val()
-				},
-				url : '${base}/admin/myData/getTouristInfoByCard',
-				success :function(data) {
-					if(data){
-						layer.confirm("您的信息已存在，是否使用？", {
-							title:"提示",
-							btn: ["是","否"], //按钮
-							shade: false //不显示遮罩
-						}, function(index){
-							toSet(data);
-							$("#telephone").val(data.base.telephone); 
-							layer.close(index);
-						});
+			if(userType == 2){
+				$.ajax({
+					type : "post",
+					data : {
+						cardId : $("#cardId").val(),
+						applicantId : '${obj.applicant.id}'
+					},
+					url : '${base}/admin/myData/getTouristInfoByCard',
+					success :function(data) {
+						if(data){
+							layer.confirm("您的信息已存在，是否使用？", {
+								title:"提示",
+								btn: ["是","否"], //按钮
+								shade: false //不显示遮罩
+							}, function(index){
+								toSet(data);
+								$("#telephone").val(data.base.telephone).change(); 
+								layer.close(index);
+							});
+						}
 					}
-				}
-			});
+				});
+			}
 		});
 		
 		//根据电话搜索是否有游客信息
 		$("#telephone").change(function(){
-			$.ajax({
-				type : "post",
-				async : false,
-				data : {
-					telephone : $("#telephone").val()
-				},
-				url : '${base}/admin/myData/getTouristInfoByTelephone',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					if(data.base){
-						layer.confirm("您的信息已存在，是否使用？", {
-							title:"提示",
-							btn: ["是","否"], //按钮
-							shade: false //不显示遮罩
-						}, function(index){
-							toSet(data);
-							$("#cardId").val(data.base.cardId); 
-							layer.close(index);
-						});
+			if(userType == 2){
+				$.ajax({
+					type : "post",
+					async : false,
+					data : {
+						telephone : $("#telephone").val(),
+						applicantId : '${obj.applicant.id}'
+					},
+					url : '${base}/admin/myData/getTouristInfoByTelephone',
+					success :function(data) {
+						console.log(JSON.stringify(data));
+						if(data.base){
+							layer.confirm("您的信息已存在，是否使用？", {
+								title:"提示",
+								btn: ["是","否"], //按钮
+								shade: false //不显示遮罩
+							}, function(index){
+								toSet(data);
+								$("#cardId").val(data.base.cardId).change(); 
+								layer.close(index);
+							});
+						}
 					}
-				}
-			});
+				});
+			}
 		});
 		
 		function toSet(data){
-			$("#firstName").val(data.base.firstName);
-			$("#firstNameEn").val("/"+data.base.firstNameEn);
-			$("#lastName").val(data.base.lastName);
-			$("#lastNameEn").val("/"+data.base.lastNameEn); 
-			$('#sqImgBack').attr('src', data.base.cardBack);
-			$('#sqImg').attr('src', data.base.cardFront);
-			$("#cardFront").val(data.base.cardFront); 
-			$("#cardBack").val(data.base.cardBack); 
-			$("#issueOrganization").val(data.base.issueOrganization); 
-			$("#otherFirstName").val(data.base.otherFirstName); 
-			$("#otherFirstNameEn").val("/"+data.base.otherFirstNameEn); 
-			$("#otherLastNameEn").val("/"+data.base.otherLastNameEn); 
-			$("#otherLastName").val(data.base.otherLastName); 
-			$("#nationality").val(data.base.nationality); 
-			$("#email").val(data.base.email); 
-			$("#sex").val(data.base.sex); 
-			$("#nation").val(data.base.nation); 
-			$("#birthday").val(data.birthday); 
-			$("#address").val(data.base.address); 
-			$("#validStartDate").val(data.validStartDate); 
-			$("#validEndDate").val(data.validEndDate); 
-			$("#province").val(data.base.province); 
-			$("#city").val(data.base.city); 
-			$("#detailedAddress").val(data.base.detailedAddress); 
-			$("#emergencyLinkman").val(data.base.emergencyLinkman); 
-			$("#emergencyTelephone").val(data.base.emergencyTelephone); 
+			$("#firstName").val(data.base.firstName).change();
+			$("#firstNameEn").val("/"+data.base.firstNameEn).change();
+			$("#lastName").val(data.base.lastName).change();
+			$("#lastNameEn").val("/"+data.base.lastNameEn).change(); 
+			$('#sqImgBack').attr('src', data.base.cardBack).change();
+			$('#sqImg').attr('src', data.base.cardFront).change();
+			$("#cardFront").val(data.base.cardFront).change(); 
+			$("#uploadFile").siblings("i").css("display","block");
+			$(".front").attr("class", "info-imgUpload front has-success");  
+	        $(".help-blockFront").attr("data-bv-result","IVALID");  
+	        $(".help-blockFront").attr("style","display: none;");
+	        $("#borderColorFront").attr("style", null);
+			$("#cardBack").val(data.base.cardBack).change(); 
+			$("#uploadFileBack").siblings("i").css("display","block");
+			$(".back").attr("class", "info-imgUpload back has-success");  
+	        $(".help-blockBack").attr("data-bv-result","IVALID");  
+	        $(".help-blockBack").attr("style","display: none;"); 
+	        $("#borderColorBack").attr("style", null);
+			$("#issueOrganization").val(data.base.issueOrganization).change(); 
+			$("#otherFirstName").val(data.base.otherFirstName).change(); 
+			$("#otherFirstNameEn").val("/"+data.base.otherFirstNameEn).change(); 
+			$("#otherLastNameEn").val("/"+data.base.otherLastNameEn).change(); 
+			$("#otherLastName").val(data.base.otherLastName).change(); 
+			$("#nationality").val(data.base.nationality).change(); 
+			$("#email").val(data.base.email).change(); 
+			$("#sex").val(data.base.sex).change(); 
+			$("#nation").val(data.base.nation).change(); 
+			$("#birthday").val(data.birthday).change(); 
+			$("#address").val(data.base.address).change(); 
+			$("#validStartDate").val(data.validStartDate).change(); 
+			$("#validEndDate").val(data.validEndDate).change(); 
+			$("#province").val(data.base.province).change(); 
+			$("#city").val(data.base.city).change(); 
+			$("#detailedAddress").val(data.base.detailedAddress).change(); 
+			$("#emergencyLinkman").val(data.base.emergencyLinkman).change(); 
+			$("#emergencyTelephone").val(data.base.emergencyTelephone).change(); 
 			$("input[name='hasOtherNationality'][value='"+data.base.hasOtherNationality+"']").attr("checked",'checked');
 			$("input[name='hasOtherName'][value='"+data.base.hasOtherName+"']").attr("checked",'checked');
 			if(data.base.addressIsSameWithCard == 1){
@@ -1336,11 +1358,9 @@
 							type: 'POST',
 							async : false,
 							data : {
-								orderid : orderid,
-								applicantid : applicantId,
-								completeType : 'base'
+								applicantid : applicantId
 							},
-							url: '${base}/admin/myData/changeStatus.html',
+							url: '${base}/admin/myData/baseIsChanged.html',
 							success :function(data) {
 								console.log(JSON.stringify(data));
 								layer.closeAll('loading');

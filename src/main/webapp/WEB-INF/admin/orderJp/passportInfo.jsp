@@ -36,7 +36,7 @@
 </head>
 <body>
 	<div class="modal-content">
-		<a id="toPassport" class="rightNav" onclick="visaBtn();">
+		<a id="toVisa" class="rightNav" onclick="visaBtn();">
 			<span></span>
 		</a>
 		<a id="toApply" class="leftNav" onclick="applyBtn();">
@@ -517,27 +517,30 @@
 		
 		//根据护照号查询游客信息
 		$("#passport").change(function(){
-			$.ajax({
-				type : "post",
-				async : false,
-				data : {
-					passport : $("#passport").val()
-				},
-				url : '${base}/admin/myData/getTouristInfoByPass',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					if(data.pass){
-						layer.confirm("您的信息已存在，是否使用？", {
-							title:"提示",
-							btn: ["是","否"], //按钮
-							shade: false //不显示遮罩
-						}, function(index){
-							toSet(data);
-							layer.close(index);
-						});
+			if(userType == 2){
+				$.ajax({
+					type : "post",
+					async : false,
+					data : {
+						passport : $("#passport").val(),
+						id : '${obj.applicantId}'
+					},
+					url : '${base}/admin/myData/getTouristInfoByPass',
+					success :function(data) {
+						console.log(JSON.stringify(data));
+						if(data.pass){
+							layer.confirm("您的信息已存在，是否使用？", {
+								title:"提示",
+								btn: ["是","否"], //按钮
+								shade: false //不显示遮罩
+							}, function(index){
+								toSet(data);
+								layer.close(index);
+							});
+						}
 					}
-				}
-			});
+				});
+			}
 		});
 		
 		function toSet(data){
@@ -555,6 +558,11 @@
 			$("#validType").val(data.pass.validType);
 			$("#validEndDate").val(data.validEndDate);
 			$('#sqImg').attr('src', data.pass.passportUrl);
+			$("#uploadFile").siblings("i").css("display","block");
+			$("#borderColor").attr("style", null);
+			$(".front").attr("class", "info-imgUpload front has-success");  
+	        $(".help-blockFront").attr("data-bv-result","IVALID");  
+	        $(".help-blockFront").attr("style","display: none;");
 		}
 		
 		//保存

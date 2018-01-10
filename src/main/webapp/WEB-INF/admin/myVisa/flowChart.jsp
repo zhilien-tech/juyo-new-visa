@@ -252,7 +252,6 @@
 					//签证信息
 					url = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderId+'&isOrderUpTime=0'
 				}
-				
 				layer.open({
 					type: 2,
 					title: false,

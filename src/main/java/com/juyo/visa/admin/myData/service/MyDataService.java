@@ -1,6 +1,5 @@
 package com.juyo.visa.admin.myData.service;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +51,6 @@ import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TTouristBaseinfoForm;
 import com.juyo.visa.forms.TTouristPassportForm;
 import com.juyo.visa.forms.TTouristVisaForm;
-import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.common.util.Util;
@@ -129,10 +127,100 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 				}
 				result.put("applicant", touristBaseinfoEntity);
 			} else {
-				result.put("applicant", baseinfo);
+				TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+						Cnd.where("applicantId", "=", applyId));
+				if (!Util.isEmpty(base)) {
+					if (!Util.isEmpty(base.getBirthday())) {
+						Date birthday = base.getBirthday();
+						String birthdayStr = sdf.format(birthday);
+						result.put("birthday", birthdayStr);
+					}
+					if (!Util.isEmpty(base.getValidStartDate())) {
+						Date validStartDate = base.getValidStartDate();
+						String validStartDateStr = sdf.format(validStartDate);
+						result.put("validStartDate", validStartDateStr);
+					}
+					if (!Util.isEmpty(base.getValidEndDate())) {
+						Date validEndDate = base.getValidEndDate();
+						String validEndDateStr = sdf.format(validEndDate);
+						result.put("validEndDate", validEndDateStr);
+					}
+
+					if (!Util.isEmpty(base.getFirstNameEn())) {
+						StringBuffer sb = new StringBuffer();
+						sb.append("/").append(base.getFirstNameEn());
+						result.put("firstNameEn", sb.toString());
+					}
+
+					if (!Util.isEmpty(base.getOtherFirstNameEn())) {
+						StringBuffer sb = new StringBuffer();
+						sb.append("/").append(base.getOtherFirstNameEn());
+						result.put("otherFirstNameEn", sb.toString());
+					}
+
+					if (!Util.isEmpty(base.getLastNameEn())) {
+						StringBuffer sb = new StringBuffer();
+						sb.append("/").append(base.getLastNameEn());
+						result.put("lastNameEn", sb.toString());
+					}
+
+					if (!Util.isEmpty(base.getOtherLastNameEn())) {
+						StringBuffer sb = new StringBuffer();
+						sb.append("/").append(base.getOtherLastNameEn());
+						result.put("otherLastNameEn", sb.toString());
+					}
+					result.put("applicant", base);
+				} else {
+					result.put("applicant", baseinfo);
+				}
 			}
 		} else {
-			result.put("applicant", baseinfo);
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("applicantId", "=", applyId));
+			if (!Util.isEmpty(base)) {
+				if (!Util.isEmpty(base.getBirthday())) {
+					Date birthday = base.getBirthday();
+					String birthdayStr = sdf.format(birthday);
+					result.put("birthday", birthdayStr);
+				}
+				if (!Util.isEmpty(base.getValidStartDate())) {
+					Date validStartDate = base.getValidStartDate();
+					String validStartDateStr = sdf.format(validStartDate);
+					result.put("validStartDate", validStartDateStr);
+				}
+				if (!Util.isEmpty(base.getValidEndDate())) {
+					Date validEndDate = base.getValidEndDate();
+					String validEndDateStr = sdf.format(validEndDate);
+					result.put("validEndDate", validEndDateStr);
+				}
+
+				if (!Util.isEmpty(base.getFirstNameEn())) {
+					StringBuffer sb = new StringBuffer();
+					sb.append("/").append(base.getFirstNameEn());
+					result.put("firstNameEn", sb.toString());
+				}
+
+				if (!Util.isEmpty(base.getOtherFirstNameEn())) {
+					StringBuffer sb = new StringBuffer();
+					sb.append("/").append(base.getOtherFirstNameEn());
+					result.put("otherFirstNameEn", sb.toString());
+				}
+
+				if (!Util.isEmpty(base.getLastNameEn())) {
+					StringBuffer sb = new StringBuffer();
+					sb.append("/").append(base.getLastNameEn());
+					result.put("lastNameEn", sb.toString());
+				}
+
+				if (!Util.isEmpty(base.getOtherLastNameEn())) {
+					StringBuffer sb = new StringBuffer();
+					sb.append("/").append(base.getOtherLastNameEn());
+					result.put("otherLastNameEn", sb.toString());
+				}
+				result.put("applicant", base);
+			} else {
+				result.put("applicant", baseinfo);
+			}
 		}
 		result.put("contact", contact);
 		result.put("applyId", applyId);
@@ -175,7 +263,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			} else {
 				TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 						Cnd.where("applicantId", "=", apply.getId()));
-				insertOrUpdateBase(base, applicantForm, apply.getUserId());
+				insertOrUpdateBase(base, applicantForm, 0);
 			}
 		} else {
 			TTouristBaseinfoEntity baseinfoEntity = dbDao.fetch(TTouristBaseinfoEntity.class,
@@ -223,10 +311,50 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 				}
 				result.put("passport", touristPassportEntity);
 			} else {
-				result.put("passport", passinfo);
+				TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
+						Cnd.where("applicantId", "=", applyId));
+				if (!Util.isEmpty(pass)) {
+					//格式化日期
+					SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+					if (!Util.isEmpty(pass.getBirthday())) {
+						Date goTripDate = pass.getBirthday();
+						result.put("birthday", sdf.format(goTripDate));
+					}
+					if (!Util.isEmpty(pass.getValidEndDate())) {
+						Date goTripDate = pass.getValidEndDate();
+						result.put("validEndDate", sdf.format(goTripDate));
+					}
+					if (!Util.isEmpty(pass.getIssuedDate())) {
+						Date goTripDate = pass.getIssuedDate();
+						result.put("issuedDate", sdf.format(goTripDate));
+					}
+					result.put("passport", pass);
+				} else {
+					result.put("passport", passinfo);
+				}
 			}
 		} else {
-			result.put("passport", passinfo);
+			TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
+					Cnd.where("applicantId", "=", applyId));
+			if (!Util.isEmpty(pass)) {
+				//格式化日期
+				SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+				if (!Util.isEmpty(pass.getBirthday())) {
+					Date goTripDate = pass.getBirthday();
+					result.put("birthday", sdf.format(goTripDate));
+				}
+				if (!Util.isEmpty(pass.getValidEndDate())) {
+					Date goTripDate = pass.getValidEndDate();
+					result.put("validEndDate", sdf.format(goTripDate));
+				}
+				if (!Util.isEmpty(pass.getIssuedDate())) {
+					Date goTripDate = pass.getIssuedDate();
+					result.put("issuedDate", sdf.format(goTripDate));
+				}
+				result.put("passport", pass);
+			} else {
+				result.put("passport", passinfo);
+			}
 		}
 		result.put("contact", contact);
 		result.put("applyId", applyId);
@@ -262,7 +390,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			} else {
 				TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
 						Cnd.where("applicantId", "=", apply.getId()));
-				insertOrUpdatePass(pass, passportForm, apply.getUserId());
+				insertOrUpdatePass(pass, passportForm, 0);
 			}
 		} else {
 			TTouristPassportEntity touristPassportEntity = dbDao.fetch(TTouristPassportEntity.class,
@@ -309,17 +437,29 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyId);
 		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", apply.getId()));
-		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getId().longValue());
+		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
 		if (!Util.isEmpty(apply.getUserId())) {
 			TTouristVisaEntity visa = dbDao
 					.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", apply.getUserId()));
 			if (!Util.isEmpty(visa)) {
 				result.put("visaInfo", visa);
 			} else {
-				result.put("visaInfo", visainfo);
+				TTouristVisaEntity visaEntity = dbDao.fetch(TTouristVisaEntity.class,
+						Cnd.where("applicantId", "=", applyId));
+				if (!Util.isEmpty(visaEntity)) {
+					result.put("visaInfo", visaEntity);
+				} else {
+					result.put("visaInfo", visainfo);
+				}
 			}
 		} else {
-			result.put("visaInfo", visainfo);
+			TTouristVisaEntity visaEntity = dbDao.fetch(TTouristVisaEntity.class,
+					Cnd.where("applicantId", "=", applyId));
+			if (!Util.isEmpty(visaEntity)) {
+				result.put("visaInfo", visaEntity);
+			} else {
+				result.put("visaInfo", visainfo);
+			}
 		}
 		//获取订单主申请人
 		String sqlStr = sqlManager.get("mainApplicant_byOrderId");
@@ -362,7 +502,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			} else {
 				TTouristVisaEntity visa = dbDao.fetch(TTouristVisaEntity.class,
 						Cnd.where("applicantId", "=", apply.getId()));
-				insertOrUpdateVisa(visa, visaForm, apply.getUserId());
+				insertOrUpdateVisa(visa, visaForm, 0);
 			}
 		} else {
 			TTouristVisaEntity visaEntity = dbDao.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", userId));
@@ -585,87 +725,162 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
-	public Object getTouristInfoByTelephone(String telephone, HttpSession session) {
+	public Object getTouristInfoByTelephone(String telephone, int applicantId, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = MapUtil.map();
 		Integer userId = loginUser.getId();
-		TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class, Cnd.where("telephone", "=", telephone)
-				.and("userId", "=", userId));
-		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-		if (!Util.isEmpty(base)) {
-			if (!Util.isEmpty(base.getBirthday())) {
-				Date birthday = base.getBirthday();
-				String birthdayStr = sdf.format(birthday);
-				result.put("birthday", birthdayStr);
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantId);
+		if (Util.eq(apply.getUserId(), userId)) {//说明为当前登录用户
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("telephone", "=", telephone).and("userId", "=", userId));
+			SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+			if (!Util.isEmpty(base)) {
+				if (!Util.isEmpty(base.getBirthday())) {
+					Date birthday = base.getBirthday();
+					String birthdayStr = sdf.format(birthday);
+					result.put("birthday", birthdayStr);
+				}
+				if (!Util.isEmpty(base.getValidStartDate())) {
+					Date validStartDate = base.getValidStartDate();
+					String validStartDateStr = sdf.format(validStartDate);
+					result.put("validStartDate", validStartDateStr);
+				}
+				if (!Util.isEmpty(base.getValidEndDate())) {
+					Date validEndDate = base.getValidEndDate();
+					String validEndDateStr = sdf.format(validEndDate);
+					result.put("validEndDate", validEndDateStr);
+				}
 			}
-			if (!Util.isEmpty(base.getValidStartDate())) {
-				Date validStartDate = base.getValidStartDate();
-				String validStartDateStr = sdf.format(validStartDate);
-				result.put("validStartDate", validStartDateStr);
+			result.put("base", base);
+		} else {
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("applicantId", "=", applicantId).and("telephone", "=", telephone));
+			SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+			if (!Util.isEmpty(base)) {
+				if (!Util.isEmpty(base.getBirthday())) {
+					Date birthday = base.getBirthday();
+					String birthdayStr = sdf.format(birthday);
+					result.put("birthday", birthdayStr);
+				}
+				if (!Util.isEmpty(base.getValidStartDate())) {
+					Date validStartDate = base.getValidStartDate();
+					String validStartDateStr = sdf.format(validStartDate);
+					result.put("validStartDate", validStartDateStr);
+				}
+				if (!Util.isEmpty(base.getValidEndDate())) {
+					Date validEndDate = base.getValidEndDate();
+					String validEndDateStr = sdf.format(validEndDate);
+					result.put("validEndDate", validEndDateStr);
+				}
 			}
-			if (!Util.isEmpty(base.getValidEndDate())) {
-				Date validEndDate = base.getValidEndDate();
-				String validEndDateStr = sdf.format(validEndDate);
-				result.put("validEndDate", validEndDateStr);
-			}
+			result.put("base", base);
 		}
-		result.put("base", base);
 		return result;
 	}
 
-	public Object getTouristInfoByCard(String cardId, HttpSession session) {
+	public Object getTouristInfoByCard(String cardId, int applicantId, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = MapUtil.map();
 		Integer userId = loginUser.getId();
-		TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
-				Cnd.where("cardId", "=", cardId).and("userId", "=", userId));
-		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-		if (!Util.isEmpty(base)) {
-			if (!Util.isEmpty(base.getBirthday())) {
-				Date birthday = base.getBirthday();
-				String birthdayStr = sdf.format(birthday);
-				result.put("birthday", birthdayStr);
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantId);
+		if (Util.eq(apply.getUserId(), userId)) {
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class, Cnd.where("cardId", "=", cardId)
+					.and("userId", "=", userId));
+			SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+			if (!Util.isEmpty(base)) {
+				if (!Util.isEmpty(base.getBirthday())) {
+					Date birthday = base.getBirthday();
+					String birthdayStr = sdf.format(birthday);
+					result.put("birthday", birthdayStr);
+				}
+				if (!Util.isEmpty(base.getValidStartDate())) {
+					Date validStartDate = base.getValidStartDate();
+					String validStartDateStr = sdf.format(validStartDate);
+					result.put("validStartDate", validStartDateStr);
+				}
+				if (!Util.isEmpty(base.getValidEndDate())) {
+					Date validEndDate = base.getValidEndDate();
+					String validEndDateStr = sdf.format(validEndDate);
+					result.put("validEndDate", validEndDateStr);
+				}
 			}
-			if (!Util.isEmpty(base.getValidStartDate())) {
-				Date validStartDate = base.getValidStartDate();
-				String validStartDateStr = sdf.format(validStartDate);
-				result.put("validStartDate", validStartDateStr);
+			result.put("base", base);
+		} else {
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("applicantId", "=", applicantId).and("cardId", "=", cardId));
+			SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+			if (!Util.isEmpty(base)) {
+				if (!Util.isEmpty(base.getBirthday())) {
+					Date birthday = base.getBirthday();
+					String birthdayStr = sdf.format(birthday);
+					result.put("birthday", birthdayStr);
+				}
+				if (!Util.isEmpty(base.getValidStartDate())) {
+					Date validStartDate = base.getValidStartDate();
+					String validStartDateStr = sdf.format(validStartDate);
+					result.put("validStartDate", validStartDateStr);
+				}
+				if (!Util.isEmpty(base.getValidEndDate())) {
+					Date validEndDate = base.getValidEndDate();
+					String validEndDateStr = sdf.format(validEndDate);
+					result.put("validEndDate", validEndDateStr);
+				}
 			}
-			if (!Util.isEmpty(base.getValidEndDate())) {
-				Date validEndDate = base.getValidEndDate();
-				String validEndDateStr = sdf.format(validEndDate);
-				result.put("validEndDate", validEndDateStr);
-			}
+			result.put("base", base);
 		}
-		result.put("base", base);
 		return result;
 	}
 
-	public Object getTouristInfoByPass(String pass, HttpSession session) {
+	public Object getTouristInfoByPass(int applyId, String pass, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = MapUtil.map();
 		Integer userId = loginUser.getId();
-		TTouristPassportEntity passport = dbDao.fetch(TTouristPassportEntity.class, Cnd.where("userId", "=", userId)
-				.and("passport", "=", pass));
-		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-		if (!Util.isEmpty(passport)) {
-			if (!Util.isEmpty(passport.getBirthday())) {
-				Date birthday = passport.getBirthday();
-				String birthdayStr = sdf.format(birthday);
-				result.put("birthday", birthdayStr);
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyId);
+		if (Util.eq(apply.getUserId(), userId)) {
+			TTouristPassportEntity passport = dbDao.fetch(TTouristPassportEntity.class, Cnd
+					.where("userId", "=", userId).and("passport", "=", pass));
+			SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+			if (!Util.isEmpty(passport)) {
+				if (!Util.isEmpty(passport.getBirthday())) {
+					Date birthday = passport.getBirthday();
+					String birthdayStr = sdf.format(birthday);
+					result.put("birthday", birthdayStr);
+				}
+				if (!Util.isEmpty(passport.getIssuedDate())) {
+					Date validStartDate = passport.getIssuedDate();
+					String validStartDateStr = sdf.format(validStartDate);
+					result.put("issuedDate", validStartDateStr);
+				}
+				if (!Util.isEmpty(passport.getValidEndDate())) {
+					Date validEndDate = passport.getValidEndDate();
+					String validEndDateStr = sdf.format(validEndDate);
+					result.put("validEndDate", validEndDateStr);
+				}
 			}
-			if (!Util.isEmpty(passport.getIssuedDate())) {
-				Date validStartDate = passport.getIssuedDate();
-				String validStartDateStr = sdf.format(validStartDate);
-				result.put("issuedDate", validStartDateStr);
+			result.put("pass", passport);
+		} else {
+			TTouristPassportEntity passport = dbDao.fetch(TTouristPassportEntity.class,
+					Cnd.where("applicantId", "=", applyId).and("passport", "=", pass));
+			SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+			if (!Util.isEmpty(passport)) {
+				if (!Util.isEmpty(passport.getBirthday())) {
+					Date birthday = passport.getBirthday();
+					String birthdayStr = sdf.format(birthday);
+					result.put("birthday", birthdayStr);
+				}
+				if (!Util.isEmpty(passport.getIssuedDate())) {
+					Date validStartDate = passport.getIssuedDate();
+					String validStartDateStr = sdf.format(validStartDate);
+					result.put("issuedDate", validStartDateStr);
+				}
+				if (!Util.isEmpty(passport.getValidEndDate())) {
+					Date validEndDate = passport.getValidEndDate();
+					String validEndDateStr = sdf.format(validEndDate);
+					result.put("validEndDate", validEndDateStr);
+				}
 			}
-			if (!Util.isEmpty(passport.getValidEndDate())) {
-				Date validEndDate = passport.getValidEndDate();
-				String validEndDateStr = sdf.format(validEndDate);
-				result.put("validEndDate", validEndDateStr);
-			}
+			result.put("pass", passport);
 		}
-		result.put("pass", passport);
 		return result;
 	}
 
@@ -740,16 +955,20 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 
 			if (!Util.isEmpty(str)) {
 				String applicants = str.substring(0, str.length() - 1);
-				String applicantSqlstr = sqlManager.get("myvisa_inProcessVisa_list");
+				String applicantSqlstr = sqlManager.get("mydata_inProcessVisa_list");
 				Sql applicantSql = Sqls.create(applicantSqlstr);
 				Cnd appcnd = Cnd.NEW();
 				appcnd.and("ta.id", "in", applicants);
 				applicantSql.setCondition(appcnd);
 				List<Record> records = dbDao.query(applicantSql, appcnd, null);
+				List<Record> lastRecords = new ArrayList<>();
 				//格式化日期
-				DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+				//DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 				for (Record record : records) {
-					//判断是否有统一联系人
+					if (!Util.isEmpty(record.get("applicantId"))) {
+						lastRecords.add(record);
+					}
+					/*//判断是否有统一联系人
 					Integer sameLinker = (Integer) record.get("isSameLinker");
 					//资料类型
 					Integer ostatus = (Integer) record.get("orderstatus");
@@ -765,9 +984,9 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 					if (!Util.isEmpty(record.get("outvisadate"))) {
 						Date outVisaDate = (Date) record.get("outvisadate");
 						record.put("outvisadate", format.format(outVisaDate));
-					}
+					}*/
 				}
-				result.put("visaJapanData", records);
+				result.put("visaJapanData", lastRecords);
 			}
 
 		}
@@ -1005,7 +1224,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			dbDao.update(baseinfoEntity);
 		} else {
 			TTouristBaseinfoEntity baseinfo = new TTouristBaseinfoEntity();
-			if (!Util.isEmpty(userId)) {
+			if (!Util.eq(userId, 0)) {
 				baseinfo.setUserId(userId);
 			}
 			if (!Util.isEmpty(applicantForm.getApplyId())) {
@@ -1087,7 +1306,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(passportForm.getApplyId())) {
 				touristPass.setApplicantId(passportForm.getApplyId());
 			}
-			if (!Util.isEmpty(userId)) {
+			if (!Util.eq(userId, 0)) {
 				touristPass.setUserId(userId);
 			}
 			touristPass.setBirthAddress(passportForm.getBirthAddress());
@@ -1196,7 +1415,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			visa.setSameMainWealth(visaForm.getSameMainWealth());
 			visa.setSameMainWork(visaForm.getSameMainWork());
 			visa.setTelephone(visaForm.getTelephone());
-			if (!Util.isEmpty(userId)) {
+			if (!Util.eq(userId, 0)) {
 				visa.setUserId(userId);
 			}
 			if (!Util.isEmpty(visaForm.getApplyId())) {

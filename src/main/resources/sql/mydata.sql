@@ -15,6 +15,18 @@ FROM
 	LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
 	LEFT JOIN t_order tor ON tor.id = taoj.orderid
 	$condition
+
+/*mydata_inProcessVisa_list*/
+SELECT
+	ttb.applicantId,
+	CONCAT( ttb.firstName, ttb.lastName ) applicantname,
+	ttb.telephone,
+	ttp.passport
+FROM
+	t_applicant ta 
+	LEFT JOIN t_tourist_baseinfo ttb ON ta.id = ttb.applicantId
+	LEFT JOIN t_tourist_passport ttp ON ta.id = ttp.applicantId
+	$condition	
 	
 /*myvisa_applicant_by_id*/
 SELECT

@@ -31,7 +31,7 @@
     .delete { right:0; }
     /*左右导航样式*/
     .leftNav { position:absolute;top:61px;left:0;z-index:999; width:40px;height:489px; cursor:pointer;}
-	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
+	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  }
 </style>
 	<style type="text/css">
 		body {min-width:auto;}
@@ -43,6 +43,15 @@
 </head>
 <body>
 	<div class="modal-content">
+	<c:choose>
+		<c:when test="${!empty obj.contact }">
+			<a id="toPassport" class="leftNav" onclick="passportBtn();">
+				<span></span>
+			</a>
+		</c:when>
+		<c:otherwise>
+		</c:otherwise>
+	</c:choose>
 		<form id="passportInfo">
 			<div class="modal-header">
 				<input type="hidden" value="${obj.applyId }" name="applyId"/>
@@ -52,12 +61,14 @@
 				<c:choose>
 					<c:when test="${empty obj.contact }">
 						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+						<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
+						<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
 					</c:when>
 					<c:otherwise>
+						<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
+						<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
 					</c:otherwise>
 				</c:choose>
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
 			</div>
 			<div class="modal-body">
 			<div class="ipt-info">
@@ -821,7 +832,7 @@
 			
 			
 		});
-		//连接websocket
+		/* //连接websocket
 		connectWebSocket();
 		function connectWebSocket(){
 			 if ('WebSocket' in window){  
@@ -856,10 +867,10 @@
 	            console.log('Websocket not supported');  
 	          }  
 		}
-		
+		 */
 		
 		//保存
-		function save(){
+		function save(status){
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
@@ -912,7 +923,7 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					layer.load(1);
+					/* layer.load(1);
 					$.ajax({
 						type: 'POST',
 						async : false,
@@ -926,13 +937,19 @@
 							console.log(JSON.stringify(data));
 							layer.closeAll('loading');
 						}
-					});
-					layer.msg("修改成功", {
-						time: 500,
-						end: function () {
-							self.location.reload();
-						}
-					});
+					}); */
+					if(status == 1){
+						$("#backBtn").click();
+					}else if(status == 2){
+						
+					}else{
+						layer.msg("修改成功", {
+							time: 500,
+							end: function () {
+								self.location.reload();
+							}
+						});
+					}
 				}
 			});
 		}
@@ -991,6 +1008,27 @@
 			};
 			reader.readAsDataURL(file);
 		});
+		
+		function passportBtn(){
+			var applicantId = '${obj.applyId}';
+				var bootstrapValidator = $("#passportInfo").data(
+				'bootstrapValidator');
+				// 执行表单验证 
+				bootstrapValidator.validate();
+				if (!bootstrapValidator.isValid()) {
+					return;
+				}
+				
+				if($(".front").hasClass("has-error")){
+					return;
+				}
+				if($(".back").hasClass("has-error")){
+					return;
+				}
+			save(2);
+			//socket.onclose();
+			window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
+		}
 		
 		//编辑按钮
 		function editBtn(){
@@ -1071,13 +1109,17 @@
 		
 		//返回 
 		function closeWindow() {
-			layer.msg("已取消", {
-				time: 500,
-				end: function () {
-					self.location.reload();
-					//window.location.href = '/admin/myData/visaCountry.html';
-				}
-			});
+			if(!contact){
+				layer.msg("已取消", {
+					time: 500,
+					end: function () {
+						self.location.reload();
+					}
+				});
+			}else{
+				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				parent.layer.close(index);
+			}
 		}
 	</script>
 

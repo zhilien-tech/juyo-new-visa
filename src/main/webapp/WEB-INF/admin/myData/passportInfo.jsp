@@ -13,6 +13,10 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
+			.rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
+			.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999; }
+			.leftNav { position:fixed;top:15px;left:0;z-index:999; width:40px;height:100%; cursor:pointer;}
+			.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;}
 			.ipt-info { display:none; margin-top:15px;}
 			.NoInfo { width:95%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 			.form-control{height: 30px;}
@@ -25,18 +29,32 @@
 	</head>
 
 <body class="hold-transition skin-blue sidebar-mini">
+	<c:choose>
+		<c:when test="${!empty obj.contact }">
+			<a id="toVisa" class="rightNav" onclick="visaBtn();">
+				<span></span>
+			</a>
+			<a id="toApply" class="leftNav" onclick="applyBtn();">
+				<span></span>
+			</a>
+		</c:when>
+		<c:otherwise>
+		</c:otherwise>
+	</c:choose>
 	<form id="passportInfo">
 			<div class="qz-head">
 				<c:choose>
 					<c:when test="${empty obj.contact }">
 						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
+						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save();"/> 
 						<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
 					</c:when>
 					<c:otherwise>
+						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
+						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save(1);"/> 
 					</c:otherwise>
 				</c:choose>
-				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
-				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save();"/> 
 			</div>
 			<section class="content">
 			<div class="ipt-info">
@@ -569,7 +587,7 @@
 	
 	
 	//保存
-	function save(){
+	function save(status){
 		//得到获取validator对象或实例 
 		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 		// 执行表单验证 
@@ -592,7 +610,7 @@
 			success :function(data) {
 				console.log(JSON.stringify(data));
 				layer.closeAll('loading');
-				layer.load(1);
+				/* layer.load(1);
 				$.ajax({
 					type: 'POST',
 					async : false,
@@ -606,13 +624,19 @@
 						console.log(JSON.stringify(data));
 						layer.closeAll('loading');
 					}
-				});
-				layer.msg("修改成功", {
-					time: 500,
-					end: function () {
-						self.location.reload();
-					}
-				});
+				}); */
+				if(status == 1){
+					cancelBtn();
+				}else if(status == 2){
+					
+				}else{
+					layer.msg("修改成功", {
+						time: 500,
+						end: function () {
+							self.location.reload();
+						}
+					});
+				}
 			}
 		});
 	}
@@ -657,14 +681,78 @@
 		$("#passRemark").attr("disabled", true);
 	}
 	
+	 function applyBtn(){
+		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+		bootstrapValidator.validate();
+		if (!bootstrapValidator.isValid()) {
+			return;
+		}
+		if($(".front").hasClass("has-error")){
+			return;
+		}
+		save(2);
+		//关闭socket连接
+		//socket.onclose();
+		var id = '${obj.applyId}';
+		window.location.href = '/admin/myData/basic.html?contact=1&applyId='+id;
+		/* layer.open({
+			type: 2,
+			title: false,
+			closeBtn:false,
+			fix: false,
+			maxmin: false,
+			shadeClose: false,
+			scrollbar: false,
+			area: ['900px', '551px'],
+			content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial='+${obj.isTrailOrder},
+			success: function(index, layero){
+					    //do something
+				layer.close(index); //如果设定了yes回调，需进行手工关闭
+			}
+		}); */
+	 }
+		
+	 function visaBtn(){
+		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+		bootstrapValidator.validate();
+		if (!bootstrapValidator.isValid()) {
+			return;
+		}
+		
+		if($(".front").hasClass("has-error")){
+			return;
+		}
+		save(2);
+		//关闭socket连接
+		//socket.onclose();
+		var id = '${obj.applyId}';
+		window.location.href = '/admin/myData/visa.html?contact=1&applyId='+id;
+		/* layer.open({
+			type: 2,
+			title: false,
+			closeBtn:false,
+			fix: false,
+			maxmin: false,
+			shadeClose: false,
+			scrollbar: false,
+			area: ['900px', '551px'],
+			content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}
+		}); */
+	 }
+	
 	//取消按钮
 	function cancelBtn(){
-		layer.msg("已取消", {
-			time: 500,
-			end: function () {
-				self.location.reload();
-			}
-		});
+		if(!contact){
+			layer.msg("已取消", {
+				time: 500,
+				end: function () {
+					self.location.reload();
+				}
+			});
+		}else{
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
+		}
 	}
 	
 	$(function(){

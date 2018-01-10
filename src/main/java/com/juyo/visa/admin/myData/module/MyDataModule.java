@@ -49,7 +49,7 @@ public class MyDataModule {
 	 * 获取申请人基本信息（常用联系人）
 	 */
 	@At
-	@Ok("jsp:/admin/myData/basicInfo")
+	@Ok("jsp:admin/myData/basicInfo")
 	public Object basic(@Param("contact") int contact, @Param("applyId") int applyId, HttpSession session,
 			HttpServletRequest request) {
 		return myDataService.getBasicInfo(contact, applyId, session, request);
@@ -77,7 +77,7 @@ public class MyDataModule {
 	 * 获取申请人护照信息(常用联系人)
 	 */
 	@At
-	@Ok("jsp:passportInfo")
+	@Ok("jsp:admin/myData/passportInfo")
 	public Object passport(@Param("contact") int contact, @Param("applyId") int applyId, HttpSession session,
 			HttpServletRequest request) {
 		return myDataService.getPassportInfo(contact, applyId, session, request);
@@ -125,7 +125,7 @@ public class MyDataModule {
 	 */
 	@At
 	@GET
-	@Ok("jsp:visaInfo")
+	@Ok("jsp:admin/myData/visaInfo")
 	public Object visa(@Param("contact") int contact, @Param("applyId") int applyId, HttpSession session,
 			HttpServletRequest request) {
 		return myDataService.getVisaInfo(contact, applyId, session, request);
@@ -193,8 +193,9 @@ public class MyDataModule {
 	 */
 	@At
 	@POST
-	public Object getTouristInfoByTelephone(@Param("telephone") String telephone, HttpSession session) {
-		return myDataService.getTouristInfoByTelephone(telephone, session);
+	public Object getTouristInfoByTelephone(@Param("telephone") String telephone,
+			@Param("applicantId") int applicantId, HttpSession session) {
+		return myDataService.getTouristInfoByTelephone(telephone, applicantId, session);
 	}
 
 	/**
@@ -202,8 +203,9 @@ public class MyDataModule {
 	 */
 	@At
 	@POST
-	public Object getTouristInfoByCard(@Param("cardId") String cardId, HttpSession session) {
-		return myDataService.getTouristInfoByCard(cardId, session);
+	public Object getTouristInfoByCard(@Param("cardId") String cardId, @Param("applicantId") int applicantId,
+			HttpSession session) {
+		return myDataService.getTouristInfoByCard(cardId, applicantId, session);
 	}
 
 	/**
@@ -211,8 +213,8 @@ public class MyDataModule {
 	 */
 	@At
 	@POST
-	public Object getTouristInfoByPass(@Param("passport") String pass, HttpSession session) {
-		return myDataService.getTouristInfoByPass(pass, session);
+	public Object getTouristInfoByPass(@Param("id") int applyId, @Param("passport") String pass, HttpSession session) {
+		return myDataService.getTouristInfoByPass(applyId, pass, session);
 	}
 
 }

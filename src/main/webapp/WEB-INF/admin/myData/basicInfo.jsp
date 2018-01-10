@@ -14,7 +14,7 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
 			.rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
-.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
+			.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;}
 			.row { margin-top: 5px;}
 			.wordSpell { margin-top:3px !important;}
 			.ipt-info { display:none; margin-top:15px;}
@@ -38,7 +38,7 @@
 
 <body class="hold-transition skin-blue sidebar-mini">
 	<c:choose>
-		<c:when test="${empty obj.contact }">
+		<c:when test="${!empty obj.contact }">
 			<a id="toPassport" class="rightNav" onclick="passportBtn();">
 					<span></span>
 			</a>
@@ -51,13 +51,15 @@
 				<c:choose>
 					<c:when test="${empty obj.contact }">
 						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
+						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant();"/> 
 						<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
 					</c:when>
 					<c:otherwise>
+						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
+						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant(1);"/> 
 					</c:otherwise>
 				</c:choose>
-				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
-				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant();"/> 
 			</div>
 			<section class="content">
 			<div class="ipt-info">
@@ -948,12 +950,18 @@
 						layer.closeAll('loading');
 					}
 				}); */
-				layer.msg("修改成功", {
-					time: 500,
-					end: function () {
-						self.location.reload();
-					}
-				});
+				if(status == 1){
+					cancelBtn();
+				}else if(status == 2){
+					
+				}else{
+					layer.msg("修改成功", {
+						time: 500,
+						end: function () {
+							self.location.reload();
+						}
+					});
+				}
 			}
 		});
 	}
@@ -1255,6 +1263,27 @@
 		return new Blob([ u8arr ], {
 			type : mime
 		});
+	}
+	
+	function passportBtn(){
+		var applicantId = '${obj.applyId}';
+			var bootstrapValidator = $("#applicantInfo").data(
+			'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
+			
+			if($(".front").hasClass("has-error")){
+				return;
+			}
+			if($(".back").hasClass("has-error")){
+				return;
+			}
+		saveApplicant(2);
+		//socket.onclose();
+		window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
 	}
 								
 	$(function(){
