@@ -6,6 +6,10 @@
 
 package com.juyo.visa.admin.visajp.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,8 +41,11 @@ import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
 import com.juyo.visa.admin.visajp.form.PassportForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
+import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.QrCodeService;
+import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
 import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
@@ -95,6 +102,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	private OrderJpViewService orderJpViewService;
 	@Inject
 	private MailService mailService;
+	@Inject
+	private DownLoadVisaFileService downLoadVisaFileService;
+	@Inject
+	private UploadService qiniuUpService;
 
 	//签证实收通知销售手机短信模板
 	private static final String VISA_NOTICE_SALE_MESSAGE_TMP = "messagetmp/visa_notice_sale_message_tmp.txt";
@@ -1288,16 +1299,48 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 */
 	public Object saveZhaoBao(TOrderJpEntity orderJpEntity, HttpServletRequest request) {
 		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//查询日本订单表信息
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderJpEntity.getOrderId().longValue());
 		//查询订单表信息
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-		orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
-		//更新订单状态为发招保中
+		//送签社
+		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
+			orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
+		} else {
+			//地接社为准备提交大使馆
+			orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
+		}
+		//更新订单状态为发招保中或准备提交大使馆
 		dbDao.update(orderinfo);
+		//生成excel
+		//申请人信息
+		Map<String, Object> tempdata = new HashMap<String, Object>();
+		String applysqlstr = sqlManager.get("get_applyinfo_from_filedown_by_orderid_jp");
+		Sql applysql = Sqls.create(applysqlstr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("taoj.orderId", "=", orderjp.getId());
+		List<Record> applyinfo = dbDao.query(applysql, cnd, null);
+		tempdata.put("applyinfo", applyinfo);
+		//excel导出
+		ByteArrayOutputStream excelExport = downLoadVisaFileService.excelExport(tempdata);
+		//生成excel临时文件
+		TemplateUtil templateUtil = new TemplateUtil();
+		File excelfile = templateUtil.createTempFile(excelExport);
+		FileInputStream fileInputStream = null;
+		try {
+			fileInputStream = new FileInputStream(excelfile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		String qiniuurl = qiniuUpService.uploadImage(fileInputStream, "xlsx", null);
+		//返回上传后七牛云的路径
+		String fileqiniupath = CommonConstants.IMAGES_SERVER_ADDR + qiniuurl;
 		orderjp.setSendsignid(orderJpEntity.getSendsignid());
 		orderjp.setGroundconnectid(orderJpEntity.getGroundconnectid());
 		orderjp.setZhaobaotime(new Date());
+		//保存生成的七牛excel路径
+		orderjp.setExcelurl(fileqiniupath);
 		dbDao.update(orderjp);
 		orderJpViewService.insertLogs(orderinfo.getId(), JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey(), session);
 		return null;

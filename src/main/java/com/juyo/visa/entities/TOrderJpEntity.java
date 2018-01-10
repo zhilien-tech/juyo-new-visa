@@ -69,4 +69,16 @@ public class TOrderJpEntity implements Serializable {
 	@Comment("发招宝时间")
 	private Date zhaobaotime;
 
+	@Column
+	@Comment("错误代码")
+	private Integer errorcode;
+
+	@Column
+	@Comment("错误消息")
+	private String errormsg;
+
+	@Column
+	@Comment("上传名簿的URL")
+	private String excelurl;
+
 }

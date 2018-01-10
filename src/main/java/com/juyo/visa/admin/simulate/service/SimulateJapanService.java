@@ -8,29 +8,46 @@ package com.juyo.visa.admin.simulate.service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.nutz.dao.Chain;
+import javax.servlet.http.HttpServletResponse;
+
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Files;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.simulate.enums.ErrorCodeEnum;
+import com.juyo.visa.admin.simulate.form.JapanSimulateErrorForm;
 import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
 import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.BusinessScopesEnum;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
-import com.juyo.visa.common.enums.JapanVisaStatusEnum;
 import com.juyo.visa.common.util.ResultObject;
+import com.juyo.visa.entities.TComBusinessscopeEntity;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
+import com.juyo.visa.entities.TOrderTripMultiJpEntity;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -58,26 +75,21 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ResultObject fetchJapanOrder() {
-
-		//日本订单信息
-		List<TOrderJpEntity> orderlist = dbDao.query(TOrderJpEntity.class,
-				Cnd.where("visastatus", "=", JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey()), null);
-		if (!Util.isEmpty(orderlist) && orderlist.size() > 0) {
+		//查询是否有需要自动填表的订单
+		String sqlstring = sqlManager.get("select_simulate_jp_order");
+		Sql sql = Sqls.create(sqlstring);
+		List<Record> orderjplist = dbDao.query(sql,
+				Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);
+		if (!Util.isEmpty(orderjplist) && orderjplist.size() > 0) {
 			DateFormat dateFormat = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-			TOrderJpEntity jporder = orderlist.get(0);
-			//日本订单id
-			Integer orderjpid = jporder.getId();
-			Integer orderId = jporder.getOrderId();
+			//获取第一条
+			Record record = orderjplist.get(0);
 			//用来存放信息
 			Map<String, Object> map = Maps.newTreeMap();
-			//订单信息
-			TOrderEntity orderinfo = null;
-			if (!Util.isEmpty(orderId)) {
-				orderinfo = dbDao.fetch(TOrderEntity.class, orderId.longValue());
-				//日本出行信息
-				TOrderTripJpEntity ordertripjp = dbDao.fetch(TOrderTripJpEntity.class,
-						Cnd.where("orderId", "=", orderjpid));
-				if (!Util.isEmpty(ordertripjp)) {
+			TOrderTripJpEntity ordertripjp = dbDao.fetch(TOrderTripJpEntity.class,
+					Cnd.where("orderId", "=", record.get("orderjpid")));
+			if (!Util.isEmpty(ordertripjp)) {
+				if (ordertripjp.getTripType().equals(1)) {
 					Date goDate = ordertripjp.getGoDate();
 					if (!Util.isEmpty(goDate)) {
 						map.put("entryDate", dateFormat.format(goDate));
@@ -86,27 +98,81 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					if (!Util.isEmpty(returnDate)) {
 						map.put("leaveDate", dateFormat.format(returnDate));
 					}
+				} else {
+					//多程
+					List<TOrderTripMultiJpEntity> multitripjp = dbDao.query(TOrderTripMultiJpEntity.class,
+							Cnd.where("tripid", "=", ordertripjp.getId()), null);
+					if (!Util.isEmpty(multitripjp)) {
+						//第一程为出发日期
+						Date departureDate = multitripjp.get(0).getDepartureDate();
+						if (!Util.isEmpty(departureDate)) {
+							map.put("entryDate", dateFormat.format(departureDate));
+						}
+						//最后一程为返回日期
+						Date leavedate = multitripjp.get(multitripjp.size() - 1).getDepartureDate();
+						if (!Util.isEmpty(leavedate)) {
+							map.put("leaveDate", dateFormat.format(leavedate));
+						}
+					}
 				}
 			}
+			//登录的用户名密码
 			map.put("visaAccount", "1507-001");
 			map.put("visaPasswd", "kintsu0821");
 			//指定番号
-			map.put("agentNo", "");
-			if (!Util.isEmpty(jporder)) {
-				map.put("visaType1", jporder.getVisaType() + "");
-				map.put("VISA_STAY_PREF_2", false);
-				map.put("VISA_STAY_PREF_3", false);
-				map.put("VISA_STAY_PREF_4", false);
-				map.put("VISA_STAY_PREF_5", false);
-				map.put("VISA_STAY_PREF_6", false);
-				map.put("VISA_STAY_PREF_7", false);
-				map.put("VISA_STAY_PREF_47", false);
-				//东六县未做
+			String agentNo = "";
+			TCompanyEntity company = dbDao.fetch(TCompanyEntity.class, Integer.valueOf(record.getString("sendsignid"))
+					.longValue());
+			if (company.getIsCustomer().equals(IsYesOrNoEnum.YES.intKey())) {
+				agentNo = company.getCdesignNum();
+			} else {
+				TComBusinessscopeEntity comBusiness = dbDao.fetch(
+						TComBusinessscopeEntity.class,
+						Cnd.where("comId", "=", company.getId()).and("countryId", "=",
+								BusinessScopesEnum.JAPAN.intKey()));
+				if (!Util.isEmpty(comBusiness)) {
+					agentNo = comBusiness.getDesignatedNum();
+				}
 			}
+			map.put("agentNo", agentNo);
+			map.put("visaType1", record.get("visatype"));
+			map.put("VISA_STAY_PREF_2", false);
+			map.put("VISA_STAY_PREF_3", false);
+			map.put("VISA_STAY_PREF_4", false);
+			map.put("VISA_STAY_PREF_5", false);
+			map.put("VISA_STAY_PREF_6", false);
+			map.put("VISA_STAY_PREF_7", false);
+			map.put("VISA_STAY_PREF_47", false);
+
+			String applysqlstr = sqlManager.get("get_applicantinfo_simulate_from_order");
+			Sql applysql = Sqls.create(applysqlstr);
+			applysql.setParam("orderid", record.get("orderjpid"));
+			List<Record> applicants = dbDao.query(applysql, null, null);
+			if (!Util.isEmpty(applicants)) {
+				Record applicantrecord = applicants.get(0);
+				String fullname = "";
+				String fullnameen = "";
+				if (!Util.isEmpty(applicantrecord.get("firstname"))) {
+					fullname += applicantrecord.getString("firstname");
+				}
+				if (!Util.isEmpty(applicantrecord.get("lastname"))) {
+					fullname += applicantrecord.getString("lastname");
+				}
+				if (!Util.isEmpty(applicantrecord.get("firstnameen"))) {
+					fullnameen += applicantrecord.getString("firstnameen");
+				}
+				if (!Util.isEmpty(applicantrecord.get("lastnameen"))) {
+					fullnameen += applicantrecord.getString("lastnameen");
+				}
+				map.put("proposerNameCN", fullname);
+				map.put("proposerNameEN", fullnameen);
+				map.put("applicantCnt", (applicants.size() - 1) + "");//除申请人之外的人数
+			}
+			map.put("excelUrl", record.get("excelurl"));//excel地址
 			//放置Map
 			if (!Util.isEmpty(map)) {
 				ResultObject result = ResultObject.success(map);
-				result.addAttribute("oid", orderjpid);
+				result.addAttribute("oid", record.get("orderjpid"));
 				return result;
 			}
 		}
@@ -127,17 +193,18 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			return ResultObject.fail("任务id不能为空！");
 		}
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, cid.longValue());
-		if (!Util.isEmpty(orderjp)) {
+		if (Util.isEmpty(orderjp)) {
 			return ResultObject.fail("任务不存在！");
 		}
-
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		try {
-			Integer visastatus = orderjp.getVisastatus();
-			if (!Util.isEmpty(visastatus) || JapanVisaStatusEnum.ZHAOBAOZHONG.intKey() != visastatus) {
+			Integer status = orderinfo.getStatus();
+			if (Util.isEmpty(status) || JPOrderStatusEnum.READYCOMMING.intKey() != status) {
 				return ResultObject.fail("准备提交大使馆的任务方可提交");
 			}
-			dbDao.update(TOrderJpEntity.class, Chain.make("visastatus", JapanVisaStatusEnum.YIFAZHAOBAO.intKey()),
-					Cnd.where("id", "=", cid));
+			//将订单设置为提交中
+			orderinfo.setStatus(JPOrderStatusEnum.COMMITING.intKey());
+			dbDao.update(orderinfo);
 		} catch (Exception e) {
 			return ResultObject.fail("提交失败，请稍后重试");
 		}
@@ -167,7 +234,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		//保存受付番号
 		order.setAcceptDesign(form.getAcceptanceNumber());
 		dbDao.update(order);
-
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, order.getOrderId().longValue());
 		String visaFile = null;
 		try {
 			InputStream inputStream = new FileInputStream(file);
@@ -176,16 +243,17 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			if (Util.isEmpty(suffix) || suffix.length() < 2) {
 				return ResultObject.fail("文件名错误");
 			}
-			Integer status = order.getVisastatus();
+			Integer status = orderinfo.getStatus();
 			//验证提交状态
-			if (Util.isEmpty(status) || JapanVisaStatusEnum.ZHAOBAOZHONG.intKey() != status) {
+			if (Util.isEmpty(status) || JPOrderStatusEnum.COMMITING.intKey() != status) {
 				return ResultObject.fail("已提交的任务方可进行文件上传！");
 			}
 			suffix = suffix.substring(1);
 			visaFile = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, suffix, null);
 
 			//为客户设置文件地址，签证状态改为'已提交'
-			order.setVisastatus(JapanVisaStatusEnum.YIFAZHAOBAO.intKey());
+			orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
+			dbDao.update(orderinfo);
 			order.setReturnHomeFileUrl(visaFile);
 			dbDao.update(order);
 		} catch (Exception e) {
@@ -193,6 +261,94 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		}
 		return ResultObject.success(visaFile);
 
+	}
+
+	public Object japanErrorHandle(JapanSimulateErrorForm form, Long cid) {
+		if (!Util.isEmpty(cid) && cid > 0) {
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, cid);
+			int errorCode = form.getErrorCode();
+			String errorMsg = form.getErrorMsg();
+			orderjp.setErrorcode(errorCode);
+			orderjp.setErrormsg(errorMsg);
+			dbDao.update(orderjp);
+			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+			//提交失败
+			if (errorCode == ErrorCodeEnum.completedNumberFail.intKey()) {
+				orderinfo.setStatus(JPOrderStatusEnum.COMMINGFAIL.intKey());
+			} else if (errorCode == ErrorCodeEnum.persionNameList.intKey()) {
+				//个人名簿生成失败
+				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+			} else if (errorCode == ErrorCodeEnum.comeReport.intKey()) {
+				//归国报告上传失败
+				orderinfo.setStatus(JPOrderStatusEnum.JAPANREPORTFAIL.intKey());
+			} else {
+				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+			}
+			orderinfo.setUpdateTime(new Date());
+			//更新订单状态为发招保失败
+			dbDao.update(orderinfo);
+		}
+		return null;
+	}
+
+	public Object agentDownload(String excelurl, HttpServletResponse response) {
+		InputStream is = null;
+		OutputStream out = null;
+		try {
+			URL url = new URL(excelurl);
+			URLConnection conn = url.openConnection();
+			is = conn.getInputStream();
+
+			String filename = excelurl.substring(excelurl.lastIndexOf('/') + 1);
+			if (Util.isEmpty(filename)) {//如果获取不到文件名称 
+				for (int i = 0;; i++) {
+					String mine = conn.getHeaderField(i);
+					if (mine == null)
+						break;
+					if ("content-disposition".equals(conn.getHeaderFieldKey(i).toLowerCase())) {
+						Matcher m = Pattern.compile(".*filename=(.*)").matcher(mine.toLowerCase());
+						if (m.find()) {
+							filename = m.group(1);
+						}
+					}
+				}
+			}
+			if (Util.isEmpty(filename)) {
+				filename = UUID.randomUUID() + ".tmp";//默认取一个文件名	
+			}
+			out = response.getOutputStream();
+			response.reset();
+			response.setContentType("application/octet-stream");
+			response.setCharacterEncoding("utf-8");
+			response.setHeader("Content-Disposition", String.format("attachment;filename=\"%s\"", filename));
+			byte[] buffer = new byte[2048];
+			int count = 0;
+			while ((count = is.read(buffer)) > 0) {
+				out.write(buffer, 0, count);
+			}
+			out.flush();
+			response.flushBuffer();
+			out.close();
+			is.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (!Util.isEmpty(is)) {
+					is.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (!Util.isEmpty(out)) {
+					out.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}//end of outter try
+		return null;
 	}
 
 }

@@ -1,0 +1,65 @@
+.top {
+	width:100%;
+	height:60px;
+	background:#64a4f3;
+}
+.logo {
+	float:left;
+	width:170px;
+	height:60px;
+	line-height:60px;
+	text-align:center;
+	background:#3d8df0;
+	color:#FFF;
+	font-size:25px;
+}
+.loginInfo {
+	float:right;
+	height:60px;
+	line-height:60px;
+	
+}
+.headPortrait-img {
+	vertical-align:middle;
+}
+.dian {
+	display:inline-block;
+	width:8px;
+	height:8px;
+	border-radius:50%;
+	background:#fbd02d;
+	margin-left:20px;
+	margin-right:10px;
+}
+.dropdown-toggle {
+	display:inline-block;
+	height:60px;
+	line-height:60px;
+	text-align:center;
+	font-size:17px;
+	color:#FFF;
+	curcor:pointer;
+	padding:0px 15px;
+}
+.dropdown-toggle:hover {
+	background:rgba(0,0,0,.1);
+}
+.closeWindow {
+	display:inline-block;
+	height:60px;
+	line-height:60px;
+	text-align:center;
+	padding-left:15px;
+	font-size:15px;
+	color:#FFF;
+	curcor:pointer;
+}
+.closeWindow:hover {
+	background:rgba(0,0,0,.1);
+}
+.closeWindow img {
+	vertical-align:middle;
+	margin-top:-4px;
+	padding-left:6px;
+	margin-right:5px;
+}
