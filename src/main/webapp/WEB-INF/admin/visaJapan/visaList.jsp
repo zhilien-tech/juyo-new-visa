@@ -198,10 +198,8 @@
                  	type:'post',
                  	async:false,
                  	success: function(data){
-                 		console.log(data.data);
                  		var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
                  		if(data.data){
-                 			layer.msg(data.data);
                  			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data;
                  		}
 		        		layer.open({
@@ -248,7 +246,21 @@
                         });
                    	}
                  });
-        	}
+        	},
+        	//签证录入
+    		visainput:function(applyId){
+    			layer.open({
+    				type: 2,
+    				title: false,
+    				closeBtn:false,
+    				fix: false,
+    				maxmin: false,
+    				shadeClose: false,
+    				scrollbar: false,
+    				area: ['900px', '80%'],
+    				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&isvisa=1'
+    			});
+    		}
         }
 	});
 	// 注册scroll事件并监听 

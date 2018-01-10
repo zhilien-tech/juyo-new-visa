@@ -129,4 +129,24 @@ public class TOrderEntity implements Serializable {
 	@Comment("更新时间")
 	private Date updateTime;
 
+	@Column
+	@Comment("销售操作人id")
+	private Integer salesOpid;
+
+	@Column
+	@Comment("初审操作人id")
+	private Integer trialOpid;
+
+	@Column
+	@Comment("前台操作人id")
+	private Integer receptionOpid;
+
+	@Column
+	@Comment("签证操作人id")
+	private Integer visaOpid;
+
+	@Column
+	@Comment("售后操作人id")
+	private Integer aftermarketOpid;
+
 }

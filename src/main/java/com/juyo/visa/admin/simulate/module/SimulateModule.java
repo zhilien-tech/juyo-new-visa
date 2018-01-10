@@ -8,16 +8,18 @@ package com.juyo.visa.admin.simulate.module;
 
 import java.io.File;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
-import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.upload.UploadAdaptor;
 
+import com.juyo.visa.admin.simulate.form.JapanSimulateErrorForm;
 import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
 import com.juyo.visa.admin.simulate.service.SimulateJapanService;
 
@@ -41,7 +43,6 @@ public class SimulateModule {
 	 * 查看是否有可执行的订单
 	 */
 	@At
-	@GET
 	public Object fetchJapanOrder() {
 		return simulateJapanService.fetchJapanOrder();
 	}
@@ -50,7 +51,6 @@ public class SimulateModule {
 	 * 更新发招宝状态为已发招宝
 	 */
 	@At
-	@GET
 	public Object ds160Japan(@Param("cid") Integer cid) {
 		return simulateJapanService.ds160Japan(cid);
 	}
@@ -63,6 +63,23 @@ public class SimulateModule {
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object UploadJapan(@Param("cid") Integer cid, @Param("..") JapanSimulatorForm form, @Param("file") File file) {
 		return simulateJapanService.uploadJapan(cid, form, file);
+	}
+
+	/**
+	 * 错误处理
+	 */
+	@At
+	@POST
+	public Object japanErrorHandle(@Param("..") JapanSimulateErrorForm form, @Param("cid") Long cid) {
+		return simulateJapanService.japanErrorHandle(form, cid);
+	}
+
+	/**
+	 * 代理下载excel
+	 */
+	@At
+	public Object agentDownload(@Param("excelurl") String excelurl, HttpServletResponse response) {
+		return simulateJapanService.agentDownload(excelurl, response);
 	}
 
 }

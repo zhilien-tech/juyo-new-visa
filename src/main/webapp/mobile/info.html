@@ -71,16 +71,32 @@
    		<li>紧急联系人手机号 <input type="text" class="txtInput" id="" v-model="applicatdata.emergencytelephone"/></li>
    		<!--  -->
    		<li>是否有曾用名<span class="onOff"> <input type="checkbox" id="afterName" class="afterName checkBox"> <label for="afterName" class="green"></label> </span></li>
-   		<li class="afterNameinput">姓(中文) <input type="text" class="txtInput" id="" v-model="applicatdata.otherfirstname"/></li>
-   		<li class="afterNameinput">姓(拼音) <input type="text" class="txtInput" id="" v-model="applicatdata.otherfirstnameen"/></li>
-   		<li class="afterNameinput">名(中文) <input type="text" class="txtInput" id="" v-model="applicatdata.otherlastname"/></li>
-   		<li class="afterNameinput">名(拼音) <input type="text" class="txtInput" id="" v-model="applicatdata.otherlastnameen"/></li>
+   		<li class="afterNameinput">姓(中文) <input type="text" class="txtInput" id="otherfirstname" v-model="applicatdata.otherfirstname"/></li>
+   		<li class="afterNameinput">姓(拼音) <input type="text" class="txtInput" id="otherfirstnameen" v-model="applicatdata.otherfirstnameen"/></li>
+   		<li class="afterNameinput">名(中文) <input type="text" class="txtInput" id="otherlastname" v-model="applicatdata.otherlastname"/></li>
+   		<li class="afterNameinput">名(拼音) <input type="text" class="txtInput" id="otherlastnameen" v-model="applicatdata.otherlastnameen"/></li>
    		<!--  -->
    		<li>曾有的或另有的国籍(或公民身份)<span class="onOff"> <input type="checkbox" id="afterNatAndID" class="afterNatAndID checkBox"> <label for="afterNatAndID" class="green"></label> </span></li>
    		<li class="afterNatAndIDinput">国籍 <input type="text" class="txtInput" id="" v-model="applicatdata.nationality"/></li>
     </ul>
 <div class="bottom">
     <a class="clear btn">清除</a><a class="next btn" href="javascript:nextStep();">下一步</a>
+</div>
+<!-- 弹出层 1-->
+<div class="backgroundGray">
+	<div class="dialog">
+		<div class="dialogTitle" >*请按照此规格使用相机照相以保持图片上传正确</div>
+		<div class="dialogImg" ></div>
+		<a class="closed" >确认</a>
+	</div>
+</div>
+<!-- 弹出层 2-->
+<div class="backgroundGray2">
+	<div class="dialog">
+		<div class="dialogTitle" >*请按照此规格使用相机照相以保持图片上传正确</div>
+		<div class="dialogImg2" ></div>
+		<a class="closed2" >确认</a>
+	</div>
 </div>
 </form>
 <script type="text/javascript" src="js/lCalendar.min.js"></script><!-- 日历插件 .js -->
@@ -152,7 +168,11 @@
 	});
     $(function () {
         $('#upload').click(function () {
-            $('#image').click();
+        	$(".backgroundGray").show();
+        });
+        $(".closed").click(function(){
+        	$(".backgroundGray").hide();
+        	$('#image').click();
             $('#image').change(function(){
             	layer.load(1, {
         			shade : "#000"
@@ -180,32 +200,36 @@
             });
         });
         $('#upload2').click(function () {
-            $('#image2').click();
-            $('#image2').change(function(){
-            	layer.load(1, {
-        			shade : "#000"
-        		});
-            	var that = this;
-                lrz(this.files[0])
-                    .then(function (rst) {
-                        /* $('.bacimg2').attr('src',rst.base64);
-                        $('#upload2').hide(); */
-                        // 处理成功会执行
-                        sourceSize = (that.files[0].size / 1024).toFixed(2);
-                        resultSize = (rst.fileLen / 1024).toFixed(2);
-                        scale = parseInt(100 - (resultSize / sourceSize * 100));
-                        rst.formData.append('image',rst.file);
-                        /* alert(rst);
-                        alert(JSON.stringify(rst.formData));
-                        alert(rst.file);
-                        alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);  */
-                        //alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-                        uploadBack(rst,rst.formData); 
-                    })
-                    .catch(function (err) {
-                        console.log(err);
-                    });
-            });
+        	$(".backgroundGray2").show();
+        });
+        $(".closed2").click(function(){
+        	$(".backgroundGray2").hide();
+        	 $('#image2').click();
+             $('#image2').change(function(){
+             	layer.load(1, {
+         			shade : "#000"
+         		});
+             	var that = this;
+                 lrz(this.files[0])
+                     .then(function (rst) {
+                         /* $('.bacimg2').attr('src',rst.base64);
+                         $('#upload2').hide(); */
+                         // 处理成功会执行
+                         sourceSize = (that.files[0].size / 1024).toFixed(2);
+                         resultSize = (rst.fileLen / 1024).toFixed(2);
+                         scale = parseInt(100 - (resultSize / sourceSize * 100));
+                         rst.formData.append('image',rst.file);
+                         /* alert(rst);
+                         alert(JSON.stringify(rst.formData));
+                         alert(rst.file);
+                         alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);  */
+                         //alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+                         uploadBack(rst,rst.formData); 
+                     })
+                     .catch(function (err) {
+                         console.log(err);
+                     });
+             });
         });
         //开关
         $(".consistent").click(function(){
@@ -273,6 +297,14 @@
     	$('#lastname').on('input propertychange',function(){
     		_self.applicatdata.lastnameen = getPinYinStr($(this).val()).toUpperCase();
     	});
+    	//曾用名
+    	$('#otherfirstname').on('input propertychange',function(){
+    		var otherfirstname = getPinYinStr($(this).val()).toUpperCase();
+    		_self.applicatdata.otherfirstnameen = otherfirstname;
+    	});
+    	$('#otherlastname').on('input propertychange',function(){
+    		_self.applicatdata.otherlastnameen = getPinYinStr($(this).val()).toUpperCase();
+    	});
     });
 	//获取URL地址参数
     function GetQueryString(name){
@@ -282,7 +314,7 @@
     }
 	//保存并跳转到护照页面
 	function nextStep(){
-		$.ajax({ 
+		$.ajax({
         	url: '/admin/mobile/saveApplicatinfo.html',
         	data:_self.applicatdata,
         	dataType:"json",
@@ -331,8 +363,9 @@
 			formData = new FormData();
 		}
         formData.append("image", rst.file); 
-        /* console.log('------------------------------');
-        console.log(formData); */
+        console.log('------------------------------');
+        console.log(formData); 
+        console.log(rst.file);
         /* var layerIndex = layer.load(1, {
 			shade : "#000"
 		}); */
@@ -372,8 +405,9 @@
 			formData = new FormData();
 		}
         formData.append("image", rst.file); 
-        /* console.log('------------------------------');
-        console.log(formData); */
+        console.log('------------------------------');
+        console.log(formData);
+        console.log(rst.file);
         /* var layerIndex = layer.load(1, {
 			shade : "#000"
 		}); */

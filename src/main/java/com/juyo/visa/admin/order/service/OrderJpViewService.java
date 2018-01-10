@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -93,6 +94,7 @@ import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
+import com.juyo.visa.common.util.ImageDeal;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantExpressEntity;
@@ -169,18 +171,24 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				if (Util.eq(record.get("isDirectCus"), IsYesOrNoEnum.YES.intKey())) {//是直客，客户信息直接从订单中拿
 					record.put("source", "直客");
 				} else {//不是直客，客户信息从客户信息表中拿
+					TCustomerEntity customerEntity = new TCustomerEntity();
 					Integer customerId = (Integer) record.get("customerId");
-					TCustomerEntity customerEntity = dbDao
-							.fetch(TCustomerEntity.class, new Long(customerId).intValue());
+					if (!Util.isEmpty(customerId)) {
+						customerEntity = dbDao.fetch(TCustomerEntity.class, new Long(customerId).intValue());
+					}
 					record.set("comName", customerEntity.getName());
 					record.set("comShortName", customerEntity.getShortname());
 					record.set("linkman", customerEntity.getLinkman());
 					record.set("telephone", customerEntity.getMobile());
-					int sourceInt = (int) record.get("source");
-					for (CustomerTypeEnum customerTypeEnum : CustomerTypeEnum.values()) {
-						if (sourceInt == customerTypeEnum.intKey()) {
-							record.put("source", customerTypeEnum.value());
+					if (!Util.isEmpty(record.get("source"))) {
+						int sourceInt = (int) record.get("source");
+						for (CustomerTypeEnum customerTypeEnum : CustomerTypeEnum.values()) {
+							if (sourceInt == customerTypeEnum.intKey()) {
+								record.put("source", customerTypeEnum.value());
+							}
 						}
+					} else {
+						record.put("source", "");
 					}
 				}
 
@@ -2667,9 +2675,21 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object IDCardRecognition(File file, HttpServletRequest request, HttpServletResponse response) {
+		//将图片进行旋转处理
+		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
+				"jpeg");
+		File spin = null;
+		try {
+			spin = imageDeal.spin(-90);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
 		file.delete();
+		if (!Util.isEmpty(spin)) {
+			spin.delete();
+		}
 		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);
@@ -2721,9 +2741,21 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object IDCardRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
+		//将图片进行旋转处理
+		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
+				"jpeg");
+		File spin = null;
+		try {
+			spin = imageDeal.spin(-90);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
 		file.delete();
+		if (!Util.isEmpty(spin)) {
+			spin.delete();
+		}
 		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);
@@ -2772,9 +2804,21 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object passportRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
+		//将图片进行旋转处理
+		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
+				"jpeg");
+		File spin = null;
+		try {
+			spin = imageDeal.spin(-90);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
 		file.delete();
+		if (!Util.isEmpty(spin)) {
+			spin.delete();
+		}
 		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);

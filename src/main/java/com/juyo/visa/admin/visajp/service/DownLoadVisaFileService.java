@@ -44,6 +44,7 @@ import com.juyo.visa.admin.scenic.service.ScenicViewService;
 import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.admin.visajp.util.TtfClassLoader;
 import com.juyo.visa.common.enums.BusinessScopesEnum;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
@@ -107,7 +108,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		}
 		//公司信息
 		TCompanyEntity company = new TCompanyEntity();
-		company = dbDao.fetch(TCompanyEntity.class, orderinfo.getComId().longValue());
+		company = dbDao.fetch(TCompanyEntity.class, orderjp.getSendsignid().longValue());
 		//申请人信息
 		String applysqlstr = sqlManager.get("get_applyinfo_from_filedown_by_orderid_jp");
 		Sql applysql = Sqls.create(applysqlstr);
@@ -231,7 +232,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				visatypestr = visatypeEnum.value();
 			}
 		}
-		//准备PDF模板数据
+		//准备PDF模板数据 
 		Map<String, String> map = new HashMap<String, String>();
 		StringBuffer content = new StringBuffer();
 		//地接社未做
@@ -244,10 +245,15 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				.append(applyinfo.size()).append("人访日个人旅游，请协助办理").append(visatypestr).append("往返赴日签证");
 		map.put("content", content.toString());
 		map.put("company", company.getName());
-		TComBusinessscopeEntity comBusiness = dbDao.fetch(TComBusinessscopeEntity.class,
-				Cnd.where("comId", "=", company.getId()).and("countryId", "=", BusinessScopesEnum.JAPAN.intKey()));
-		if (!Util.isEmpty(comBusiness)) {
-			map.put("id", comBusiness.getDesignatedNum());
+		//如果是制定的送签社
+		if (company.getIsCustomer().equals(IsYesOrNoEnum.YES.intKey())) {
+			map.put("id", company.getCdesignNum());
+		} else {
+			TComBusinessscopeEntity comBusiness = dbDao.fetch(TComBusinessscopeEntity.class,
+					Cnd.where("comId", "=", company.getId()).and("countryId", "=", BusinessScopesEnum.JAPAN.intKey()));
+			if (!Util.isEmpty(comBusiness)) {
+				map.put("id", comBusiness.getDesignatedNum());
+			}
 		}
 		if (!Util.isEmpty(ordertripjp)) {
 			if (ordertripjp.getTripType().equals(1)) {

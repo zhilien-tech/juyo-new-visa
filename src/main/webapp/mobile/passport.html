@@ -48,6 +48,14 @@
     		<a class="passport-clear passport-btn">清除</a>
     		<a class="passport-next passport-btn">下一步</a>
     </div>
+    <!-- 弹出层 -->
+	<div class="backgroundGray">
+		<div class="dialog">
+			<div class="dialogTitle" >*请按照此规格使用相机照相以保持图片上传正确</div>
+			<div class="dialogImg3" ></div>
+			<a class="closed" >确认</a>
+		</div>
+	</div>
     </form>
     <script src="js/rem(750).js"></script>
     <script src="js/jquery-1.10.2.js"></script>
@@ -74,39 +82,49 @@
 	        	type:'post',
 	        	success: function(data){
 	        		_self.passportdata = data.passportdata;
+	        		if(_self.passportdata.validtype == 1){
+						$(".dateVal").text("5年");
+	        		}else if(_self.passportdata.validtype == 2){
+						$(".dateVal").text("10年");
+	        		}
 	          	}
 	        });
 	    }
 	});
         $(function () {
             $('#upload').click(function () {
-                $('#image').click();
-                $('#image').change(function(){
-                	layer.load(1, {
-            			shade : "#000"
-            		});
-                	var that = this;
-                    lrz(this.files[0])
-                        .then(function (rst) {
-                           /*  $('.bacimg').attr('src',rst.base64);
-                            $('#upload').hide(); */
-                            sourceSize = (that.files[0].size / 1024).toFixed(2);
-                            resultSize = (rst.fileLen / 1024).toFixed(2);
-                            scale = parseInt(100 - (resultSize / sourceSize * 100));
-                            rst.formData.append('image',rst.file);
-                            /* alert(rst);
-                            alert(JSON.stringify(rst.formData));
-                            alert(rst.file);
-                            alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);  */
-                            //alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-                            uploadPassport(rst,rst.formData);  
-                            // 处理成功会执行
-                        })
-                        .catch(function (err) {
-                            console.log(err);
-                        });
-                });
+            	$(".backgroundGray").show();
+               
             });
+            $(".closed").click(function(){
+            	$(".backgroundGray").hide();
+            	 $('#image').click();
+                 $('#image').change(function(){
+                 	layer.load(1, {
+             			shade : "#000"
+             		});
+                 	var that = this;
+                     lrz(this.files[0])
+                         .then(function (rst) {
+                            /*  $('.bacimg').attr('src',rst.base64);
+                             $('#upload').hide(); */
+                             sourceSize = (that.files[0].size / 1024).toFixed(2);
+                             resultSize = (rst.fileLen / 1024).toFixed(2);
+                             scale = parseInt(100 - (resultSize / sourceSize * 100));
+                             rst.formData.append('image',rst.file);
+                             /* alert(rst);
+                             alert(JSON.stringify(rst.formData));
+                             alert(rst.file);
+                             alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);  */
+                             //alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+                             uploadPassport(rst,rst.formData);  
+                             // 处理成功会执行
+                         })
+                         .catch(function (err) {
+                             console.log(err);
+                         });
+                 });
+            })
         });
 
         //
@@ -227,10 +245,10 @@
 					var years = getDateYearSub(obj.issueDate,obj.expiryDay);
 					if(years == 5){
 						_self.passportdata.validtype = 1;
-						$(".dateVal").text("5");
+						$(".dateVal").text("5年");
 					}else{
 						_self.passportdata.validtype = 2;
-						$(".dateVal").text("10");
+						$(".dateVal").text("10年");
 					}
 					console.log(JSON.stringify(_self.passportdata));
 				}

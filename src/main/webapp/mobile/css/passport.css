@@ -463,3 +463,66 @@ input[type="checkbox"] + label:after {
 .hostUL li:hover ,.remarks li:hover {
 	background:#eee;
 }
+/* 弹出框样式 */
+.backgroundGray ,.backgroundGray2 {
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		background: rgba(0,0,0,.8);
+		display: none;
+	}
+.dialog {
+	position: absolute;
+	top: 25%;
+	left: -15%;
+	width: 130%;
+	height: 50%;
+	background: #FFF;
+	border-radius: 10px;
+	transform:rotate(90deg);
+}
+.dialogTitle {
+	text-align: center;
+	font-size: 0.3rem;
+	margin-top:2%;
+	color:red;
+	font-weight:bold;
+}
+.dialogImg {
+	margin: 2% 0 2% 5%;
+	background-image: url(../images/iphoneIDY.png); 
+	background-repeat: no-repeat; 
+	background-size: 100% 100%; 
+	width: 90%; 
+	height: 70%;
+}
+.dialogImg2 {
+	margin: 2% 0 2% 5%;
+	background-image: url(../images/iphoneIDN.png); 
+	background-repeat: no-repeat; 
+	background-size: 100% 100%; 
+	width: 90%; 
+	height: 70%;
+}
+.dialogImg3 {
+	margin: 2% 0 2% 5%;
+	background-image: url(../images/iphoneHZ.png); 
+	background-repeat: no-repeat; 
+	background-size: 100% 100%; 
+	width: 90%; 
+	height: 70%;
+}
+.closed,.closed2 {
+	margin:0 auto;
+	display:block;
+	width: 60px; 
+	height: 30px; 
+	line-height: 32px; 
+	background: #0081ff;
+	color: #FFFFFF;
+	text-align: center;
+	border-radius: 8px; 
+	font-size: 0.3rem;
+}

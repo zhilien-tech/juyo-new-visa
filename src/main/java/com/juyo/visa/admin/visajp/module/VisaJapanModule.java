@@ -375,4 +375,13 @@ public class VisaJapanModule {
 		result.put("data", data);
 		return result;
 	}
+
+	/**
+	 * 验证发招宝指定番号是否填写
+	 */
+	@At
+	@POST
+	public Object validateDesignNum(@Param("sendsignid") Integer sendsignid, HttpSession session) {
+		return visaJapanService.validateDesignNum(sendsignid, session);
+	}
 }
