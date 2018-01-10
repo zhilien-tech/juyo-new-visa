@@ -84,19 +84,21 @@
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="(item,index) in data.everybodyinfo">
-									<span v-if="index === 0" style="display:block; height:31px;">
+									<span v-if="index === 0" class="visaListSpan">
 										<div><label>申请人：</label><span>{{item.applicant}}</span></div>
 										<div><label>护照号：</label><span>{{item.passportno}}</span></div>
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
+										<div class="visaBtn"><a v-on:click="visainput(item.applyid)">签证补录</a></div>
 									</span>
-									<span v-else  style="display:block; height:31px;">
+									<span v-else class="visaListSpan">
 										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
 										<div><label style="width:48px;">　　　　</label><span>{{item.passportno}}</span></div>
 										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
+										<div class="visaBtn"><a v-on:click="visainput(item.applyid)">签证补录</a></div>
 									</span>
 								</li>
 							</ul> 
