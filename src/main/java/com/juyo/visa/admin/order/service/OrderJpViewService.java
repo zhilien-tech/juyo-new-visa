@@ -2271,10 +2271,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		List<Record> employees = dbDao.query(sql, cnd, null);
 
+		//获取对应的负责人字段 logs_order_info
+		String principalField = getprincipalField(orderProcessType);
+		String sqlStr = sqlManager.get("logs_order_info");
+		Sql sqlOrder = Sqls.create(sqlStr);
+		sqlOrder.setParam("orderid", orderid);
+		Record order = dbDao.fetch(sqlOrder);
+		int princiapalId = order.getInt(principalField);
+
 		result.put("orderid", orderid);
 		result.put("userType", userType);
 		result.put("employees", employees);
 		result.put("orderProcessType", orderProcessType);
+		result.put("princiapalId", princiapalId);
 		return result;
 	}
 
@@ -2295,17 +2304,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				}
 			}
 		}
+
 		result.put("logs", logs);
-
-		//获取对应的负责人字段 logs_order_info
-		String principalField = getprincipalField(orderProcessType);
-		String sqlStr = sqlManager.get("logs_order_info");
-		Sql sql = Sqls.create(logSqlstr);
-		sql.setParam("orderid", orderid);
-		Record order = dbDao.fetch(sql);
-		int princiapalId = order.getInt(principalField);
-		result.put("princiapalId", princiapalId);
-
 		return result;
 	}
 

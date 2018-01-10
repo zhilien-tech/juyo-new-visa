@@ -28,7 +28,13 @@
 					<select id="principal" name="principal" class="input-sm" style="margin-left:55%;" >
 						<option value="">负责人</option>
 						<c:forEach var="user" items="${obj.employees}">
-							<option value="${user.userid}">${user.username}</option>
+							<c:if test="${obj.princiapalId ==  user.userid}">
+								<option value="${user.userid}" selected="selected">${user.username}</option>
+							</c:if>
+							<c:if test="${obj.princiapalId !=  user.userid}">
+								<option value="${user.userid}">${user.username}</option>
+							</c:if>
+							
 						</c:forEach>
 					</select>
 					<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
@@ -92,9 +98,6 @@
 	            	dataType:"json",
 	            	type:'post',
 	            	success: function(data){
-	            		//选中负责人
-	            		var princiapalId = data.princiapalId;
-	            		$("#principal").val(princiapalId);
 	            		//加载日志列表
 	            		_self.loginfo = data.logs;
 	            		console.log(JSON.stringify(_self.loginfo));

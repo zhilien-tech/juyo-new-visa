@@ -27,4 +27,4 @@ SELECT
 FROM
 	t_order o
 WHERE
-	o.id = @orderid
+	o.id=@orderid
