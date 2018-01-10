@@ -60,7 +60,6 @@ public class AftermarketListForm implements SQLParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
-		cnd.and("tr.comId", "=", companyid);
 		cnd.and("tr.status", ">=", JPOrderStatusEnum.AFTERMARKET_ORDER.intKey());
 		if (!Util.isEmpty(signDateStr)) {
 			String[] split = signDateStr.split(" - ");
@@ -80,6 +79,13 @@ public class AftermarketListForm implements SQLParamForm {
 		}
 		if (!Util.isEmpty(status)) {
 			cnd.and("tr.status", "=", status);
+		}
+		if (userid.equals(adminId)) {
+			//公司管理员
+			cnd.and("tr.comId", "=", companyid);
+		} else {
+			//普通的操作员
+			cnd.and("tr.userId", "=", userid);
 		}
 		cnd.orderBy("tr.createtime", "desc");
 		return cnd;

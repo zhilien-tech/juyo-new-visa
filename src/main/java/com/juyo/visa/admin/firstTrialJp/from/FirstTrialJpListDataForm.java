@@ -44,6 +44,8 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 	private Integer userid;
 	//公司管理员id
 	private Integer adminId;
+	//用户类型
+	private Integer userType;
 
 	@Override
 	public Sql sql(SqlManager sqlManager) {
@@ -82,10 +84,12 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 		//cnd.and("tr.status", "<=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
 		if (userid.equals(adminId)) {
 			//公司管理员
+			cnd.and("tr.comId", "=", companyid);
 		} else {
 			//普通的操作员
+			cnd.and("tr.userId", "=", userid);
 		}
-		cnd.and("tr.comId", "=", companyid);
+
 		cnd.orderBy("tr.updatetime", "DESC");
 
 		return cnd;

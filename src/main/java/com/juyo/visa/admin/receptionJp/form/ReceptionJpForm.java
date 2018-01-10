@@ -97,10 +97,12 @@ public class ReceptionJpForm extends DataTablesParamForm {
 		//cnd.and("tr.status", "<=", JPOrderStatusEnum.TRANSFER_VISA.intKey());
 		if (userid.equals(adminId)) {
 			//公司管理员
+			cnd.and("tr.comId", "=", companyid);
 		} else {
 			//普通的操作员
+			cnd.and("tr.userId", "=", userid);
 		}
-		cnd.and("tr.comId", "=", companyid);
+
 		cnd.orderBy("tr.updatetime", "DESC");
 		//cnd.orderBy("tr.createtime", "DESC");
 		return cnd;

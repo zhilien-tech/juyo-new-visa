@@ -69,7 +69,7 @@ public class VisaListDataForm implements SQLParamForm {
 					.or("taj.applyname", "like", "%" + searchStr + "%");
 			cnd.and(exp);
 		}
-		cnd.and("tr.comId", "=", companyid);
+
 		SqlExpressionGroup statusexp = new SqlExpressionGroup();
 		statusexp.and("tr.status", ">=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
 		cnd.and(statusexp);
@@ -86,8 +86,10 @@ public class VisaListDataForm implements SQLParamForm {
 		}
 		if (userid.equals(adminId)) {
 			//公司管理员
+			cnd.and("tr.comId", "=", companyid);
 		} else {
 			//普通的操作员
+			cnd.and("tr.userId", "=", userid);
 		}
 		cnd.orderBy("tr.createtime", "desc");
 		return cnd;
