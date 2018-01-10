@@ -40,8 +40,8 @@
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
-					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div class="card-list" v-cloak v-for="data in trialJapanData">
+					<div class="box-body" id="card" v-cloak><!-- 卡片列表 -->
+						<div class="card-list" v-for="data in trialJapanData">
 							<div class="card-head">
 								<div><label>订单号：</label><span style="cursor:pointer" v-on:click="visaDetail(data.orderid,data.orderjpid)">{{data.ordernumber}}</span></div>	
 								<div><label>出行时间：</label><span>{{data.gotriptime}}</span></div>	
