@@ -109,27 +109,32 @@ function save(paramstatus){
 				}
 			}
 		});
+		return true;
+	}else{
+		return false;
 	}
 }
 
 //发送短信
 function sendMail(){
-	save(2);
-	var applicantJPId = $('#applicantJPId').val();
-	$.ajax({
-		url: '/admin/aftermarket/sendMailAndMessage.html',
-		dataType:"json",
-		data:{applicantid:applicantJPId},
-		type:'post',
-		success: function(data){
-			layer.closeAll('loading');
-			if(data.status == 200){
-				closeWindow();
-				parent.successCallBack(2);
-			}else if(data.status == 500){
-				layer.msg(data.msg);
+	var status = save(2);
+	if(status){
+		var applicantJPId = $('#applicantJPId').val();
+		$.ajax({
+			url: '/admin/aftermarket/sendMailAndMessage.html',
+			dataType:"json",
+			data:{applicantid:applicantJPId},
+			type:'post',
+			success: function(data){
+				layer.closeAll('loading');
+				if(data.status == 200){
+					closeWindow();
+					parent.successCallBack(2);
+				}else if(data.status == 500){
+					layer.msg(data.msg);
+				}
+				//layer.msg('发送成功');
 			}
-			//layer.msg('发送成功');
-		}
-	});
+		});
+	}
 }
