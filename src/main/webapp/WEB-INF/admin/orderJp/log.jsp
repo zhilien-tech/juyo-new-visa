@@ -85,10 +85,17 @@
 	            var orderid = '${obj.orderid}';
 	            $.ajax({ 
 	            	url: '${base}/admin/orderJp/getLogs.html',
-	            	data:{orderid:orderid},
+	            	data:{
+	            		orderid:orderid,
+	            		orderProcessType:$("#orderProcessType").val()
+	            	},
 	            	dataType:"json",
 	            	type:'post',
 	            	success: function(data){
+	            		//选中负责人
+	            		var princiapalId = data.princiapalId;
+	            		$("#principal").val(princiapalId);
+	            		//加载日志列表
 	            		_self.loginfo = data.logs;
 	            		console.log(JSON.stringify(_self.loginfo));
 	              	}

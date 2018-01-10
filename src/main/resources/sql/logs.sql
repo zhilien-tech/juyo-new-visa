@@ -13,3 +13,18 @@ FROM
 	INNER JOIN t_com_function tcf ON tcf.id = tcfj.comFunId
 	INNER JOIN t_function tf ON tf.id = tcf.funId 
 $condition
+
+/*logs_order_info*/
+SELECT
+	o.id,
+	o.orderNum,
+	o.salesOpid,
+	o.trialOpid,
+	o.receptionOpid,
+	o.visaOpid,
+	o.aftermarketOpid,
+	o.updateTime
+FROM
+	t_order o
+WHERE
+	o.id = @orderid

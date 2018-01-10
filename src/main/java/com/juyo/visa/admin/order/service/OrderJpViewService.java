@@ -2279,7 +2279,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	//加载日志列表
-	public Object getLogs(Integer orderid) {
+	public Object getLogs(Integer orderid, Integer orderProcessType) {
 		Map<String, Object> result = MapUtil.map();
 		String logSqlstr = sqlManager.get("username_logs");
 		Sql logSql = Sqls.create(logSqlstr);
@@ -2296,6 +2296,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		result.put("logs", logs);
+
+		//获取对应的负责人字段 logs_order_info
+		String principalField = getprincipalField(orderProcessType);
+		String sqlStr = sqlManager.get("logs_order_info");
+		Sql sql = Sqls.create(logSqlstr);
+		sql.setParam("orderid", orderid);
+		Record order = dbDao.fetch(sql);
+		int princiapalId = order.getInt(principalField);
+		result.put("princiapalId", princiapalId);
+
 		return result;
 	}
 

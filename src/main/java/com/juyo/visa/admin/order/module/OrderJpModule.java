@@ -446,8 +446,8 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object getLogs(@Param("orderid") Integer orderid) {
-		return saleViewService.getLogs(orderid);
+	public Object getLogs(@Param("orderid") Integer orderid, @Param("orderProcessType") Integer orderProcessType) {
+		return saleViewService.getLogs(orderid, orderProcessType);
 	}
 
 	/**
