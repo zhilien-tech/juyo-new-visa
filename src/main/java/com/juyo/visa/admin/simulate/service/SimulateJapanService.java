@@ -79,7 +79,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		String sqlstring = sqlManager.get("select_simulate_jp_order");
 		Sql sql = Sqls.create(sqlstring);
 		List<Record> orderjplist = dbDao.query(sql,
-				Cnd.where("tr.status", "=", JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey()), null);
+				Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);
 		if (!Util.isEmpty(orderjplist) && orderjplist.size() > 0) {
 			DateFormat dateFormat = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 			//获取第一条
@@ -199,11 +199,11 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		try {
 			Integer status = orderinfo.getStatus();
-			if (Util.isEmpty(status) || JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey() != status) {
+			if (Util.isEmpty(status) || JPOrderStatusEnum.READYCOMMING.intKey() != status) {
 				return ResultObject.fail("准备提交大使馆的任务方可提交");
 			}
-			//将订单设置为已发招宝
-			orderinfo.setStatus(JPOrderStatusEnum.COMMING.intKey());
+			//将订单设置为提交中
+			orderinfo.setStatus(JPOrderStatusEnum.COMMITING.intKey());
 			dbDao.update(orderinfo);
 		} catch (Exception e) {
 			return ResultObject.fail("提交失败，请稍后重试");
@@ -245,7 +245,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			}
 			Integer status = orderinfo.getStatus();
 			//验证提交状态
-			if (Util.isEmpty(status) || JPOrderStatusEnum.COMMING.intKey() != status) {
+			if (Util.isEmpty(status) || JPOrderStatusEnum.COMMITING.intKey() != status) {
 				return ResultObject.fail("已提交的任务方可进行文件上传！");
 			}
 			suffix = suffix.substring(1);

@@ -1299,12 +1299,19 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 */
 	public Object saveZhaoBao(TOrderJpEntity orderJpEntity, HttpServletRequest request) {
 		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//查询日本订单表信息
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderJpEntity.getOrderId().longValue());
 		//查询订单表信息
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-		orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
-		//更新订单状态为发招保中
+		//送签社
+		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
+			orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
+		} else {
+			//地接社为准备提交大使馆
+			orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
+		}
+		//更新订单状态为发招保中或准备提交大使馆
 		dbDao.update(orderinfo);
 		//生成excel
 		//申请人信息
