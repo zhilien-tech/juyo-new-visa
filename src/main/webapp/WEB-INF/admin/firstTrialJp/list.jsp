@@ -13,18 +13,11 @@
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
     <link rel="stylesheet" href="${base}/references/public/css/style.css">
+    <link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
     <style>
      [v-cloak]{display:none;}
 	 .bold { font-weight:bold;font-size:16px;}
-	
-	 .box-header { position:fixed; top:0;left:0; width:100%; height:105px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	 .box-body {  overflow:hidden;margin-top:96px;}
-	 .btnGroups { margin-bottom:5px; margin-left:-10px; cursor:pointer;}
-	 .btnList { border:1px solid #eee; color:#000; margin-right:10px; display:inline-block;width: 54px;height:30px; line-height: 30px; text-align: center;}
-   	 .bgColor { background: #3087f1; color:#FFF;}
-   	 .btnList:hover { color:#000;}
-   	 .bgColor:hover { color:#FFF !important;}
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -119,12 +112,6 @@
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script src="${base}/references/common/js/base/cardList.js"></script>
 	<script src="${base}/admin/firstTrialJp/trialList.js"></script><!-- 本页面js文件 -->
-	<script type="text/javascript">
-		$(function(){
-			$(".btnList").click(function(){
-				$(this).addClass('bgColor').siblings().removeClass('bgColor');
-			})
-		})
-	</script>
+	<script src="${base}/references/common/js/switchCardOfOrder.js"></script><!-- 订单切换卡 js -->
 </body>
 </html>
