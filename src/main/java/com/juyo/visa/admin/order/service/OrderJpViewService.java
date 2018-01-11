@@ -49,6 +49,7 @@ import org.nutz.json.Json;
 import org.nutz.lang.Strings;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
 import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
 import com.juyo.visa.admin.firstTrialJp.service.QualifiedApplicantViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
@@ -149,15 +150,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	private QrCodeService qrCodeService;
 	@Inject
 	private QualifiedApplicantViewService qualifiedApplicantViewService;
+
+	@Inject
+	private ChangePrincipalViewService changePrincipalViewService;
+
 	//基本信息连接websocket的地址
 	private static final String BASIC_WEBSPCKET_ADDR = "basicinfowebsocket";
-
-	//订单主流程
-	private static final Integer SALES_PROCESS = JPOrderProcessTypeEnum.SALES_PROCESS.intKey();
-	private static final Integer FIRSTTRIAL_PROCESS = JPOrderProcessTypeEnum.FIRSTTRIAL_PROCESS.intKey();
-	private static final Integer RECEPTION_PROCESS = JPOrderProcessTypeEnum.RECEPTION_PROCESS.intKey();
-	private static final Integer VISA_PROCESS = JPOrderProcessTypeEnum.VISA_PROCESS.intKey();
-	private static final Integer AFTERMARKET_PROCESS = JPOrderProcessTypeEnum.AFTERMARKET_PROCESS.intKey();
 
 	public Object listData(OrderJpForm queryForm, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
@@ -2278,7 +2276,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		List<Record> employees = dbDao.query(sql, cnd, null);
 
 		//获取对应的负责人字段 logs_order_info
-		String principalField = getprincipalField(orderProcessType);
+		String principalField = changePrincipalViewService.getprincipalField(orderProcessType);
 		String sqlStr = sqlManager.get("logs_order_info");
 		Sql sqlOrder = Sqls.create(sqlStr);
 		sqlOrder.setParam("orderid", orderid);
@@ -2329,7 +2327,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		int updatenum = 0;
 		Date nowDate = DateUtil.nowDate();
 		//Order 要检索的字段
-		String fieldStr = getprincipalField(orderProcessType);
+		String fieldStr = changePrincipalViewService.getprincipalField(orderProcessType);
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class,
 				Cnd.where("id", "=", orderid).and(fieldStr, "=", principalId));
 		if (Util.isEmpty(order)) {
@@ -2349,28 +2347,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		return updatenum;
-	}
-
-	//获取负责人日志检索 字段
-	public String getprincipalField(Integer orderProcessType) {
-		String principalField = "";
-		if (orderProcessType == SALES_PROCESS) {
-			//销售
-			principalField = "salesOpid";
-		} else if (orderProcessType == FIRSTTRIAL_PROCESS) {
-			//初审
-			principalField = "trialOpid";
-		} else if (orderProcessType == RECEPTION_PROCESS) {
-			//前台
-			principalField = "receptionOpid";
-		} else if (orderProcessType == VISA_PROCESS) {
-			// 签证 
-			principalField = "visaOpid";
-		} else if (orderProcessType == AFTERMARKET_PROCESS) {
-			//售后
-			principalField = "aftermarketOpid";
-		}
-		return principalField;
 	}
 
 	public Object firtTrialJp(Integer id, HttpSession session) {
