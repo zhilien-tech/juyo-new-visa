@@ -36,10 +36,10 @@
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<!-- 切换卡按钮 start -->
-						<div class="btnGroups">
+						<!-- <div class="btnGroups">
 							<a class="btnList bgColor">全部</a>
 							<a class="btnList">我的</a>
-						</div>
+						</div> -->
 						<!-- 切换卡按钮 end -->
 						<div class="row">
 							<div class="col-md-2 left-5px right-0px">

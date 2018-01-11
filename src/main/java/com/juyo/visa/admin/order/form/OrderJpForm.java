@@ -121,7 +121,9 @@ public class OrderJpForm extends OrderForm {
 
 		if (userType == UserLoginEnum.PERSONNEL.intKey()) {
 			//普通员工
-			cnd.and("o.userId", "=", userId);
+			SqlExpressionGroup expgPersonal = new SqlExpressionGroup();
+			expgPersonal.and("o.userId", "=", userId).or("o.salesOpid", "=", userId);
+			cnd.and(expgPersonal);
 		} else {
 			//管理员
 			cnd.and("o.comId", "=", comId);

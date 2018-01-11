@@ -24,8 +24,8 @@
 					<div class="box-header">
 						<!-- 切换卡按钮 start -->
 						<div class="btnGroups">
-							<a class="btnList bgColor">全部</a>
-							<a class="btnList">我的</a>
+							<a onclick="searchAllOrder()" class="btnList bgColor">全部</a>
+							<a onclick="searchMyOrder(2)" class="btnList">我的</a>
 						</div>
 						<!-- 切换卡按钮 end -->
 						<!-- 检索条件 start -->
@@ -116,5 +116,10 @@
 	<script src="${base}/references/common/js/base/cardList.js"></script>
 	<script src="${base}/admin/firstTrialJp/trialList.js"></script><!-- 本页面js文件 -->
 	<script src="${base}/references/common/js/switchCardOfOrder.js"></script><!-- 订单切换卡 js -->
+	<script type="text/javascript">
+		function searchMyOrder(orderProcessType){
+			
+		}
+	</script>
 </body>
 </html>
