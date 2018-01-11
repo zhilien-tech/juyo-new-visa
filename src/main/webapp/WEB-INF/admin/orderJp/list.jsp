@@ -15,13 +15,14 @@
 	<link rel="stylesheet" href="${base}/references/public/css/saleJapan.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
+	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
 	<style type="text/css">
 	 body { font-size:12px;}
 	 [v-cloak]{display:none;}
 	 #hideOrder:hover { text-decoration: none;cursor:pointer;}
 	 /*头导航不随下拉移动*/
-	 .box-header { position:fixed; top:0;left:0; width:100%; height:120px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	 .box-body {  overflow:hidden;margin-top:120px;}
+	 /* .box-header { position:fixed; top:0;left:0; width:100%; height:120px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
+	 .box-body {  overflow:hidden;margin-top:120px;} */
 	 .card-head div { font-weight:normal;}
 	 .card-list { height:90px;}
 	 .card-list:hover { min-height:90px;}
@@ -34,6 +35,12 @@
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
+						<!-- 切换卡按钮 start -->
+						<div class="btnGroups">
+							<a class="btnList bgColor">全部</a>
+							<a class="btnList">我的</a>
+						</div>
+						<!-- 切换卡按钮 end -->
 						<div class="row">
 							<div class="col-md-2 left-5px right-0px">
 								<select class="input-class input-sm" id="status" name="status" onchange="countryChange();">
@@ -143,6 +150,7 @@
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
+	<script src="${base}/references/common/js/switchCardOfOrder.js"></script><!-- 订单切换卡 js -->
 	<script type="text/javascript">
 	
 		var BASE_PATH = '${base}';

@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
     <link rel="stylesheet" href="${base}/references/public/css/style.css">
     <link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
-    <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
     <style>
      [v-cloak]{display:none;}
 	 .bold { font-weight:bold;font-size:16px;}
@@ -22,12 +21,14 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">
-					<div class="box-header"><!-- 检索条件 -->
-						<!-- 按钮 -->
+					<div class="box-header">
+						<!-- 切换卡按钮 start -->
 						<div class="btnGroups">
 							<a class="btnList bgColor">全部</a>
 							<a class="btnList">我的</a>
 						</div>
+						<!-- 切换卡按钮 end -->
+						<!-- 检索条件 start -->
 						<div class="row"> 
 							<div class="col-md-2 left-5px right-0px">
 								<select id="status" name="status" onchange="selectListData();" class="input-class input-sm" >
@@ -44,7 +45,8 @@
 								<a id="searchBtn" class="btn btn-primary btn-sm pull-left">搜索</a>
 							</div>
 						</div>
-					</div><!-- end 检索条件 -->
+						<!-- end 检索条件 -->
+					</div>
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div class="card-list" v-cloak v-for="data in trialJapanData">
 							<div class="card-head">
@@ -103,6 +105,7 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>

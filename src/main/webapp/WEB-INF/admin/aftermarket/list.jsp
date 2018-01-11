@@ -15,7 +15,9 @@
 	<link rel="stylesheet" href="${base}/references/public/css/aftermarketjp.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
+	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
 	<style>
+	 [v-cloak]{display:none;}
 	.box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
 	.box-body {  overflow:hidden;margin-top:60px;}
 	.card-head span { font-size:12px;}
@@ -30,6 +32,11 @@
 				</ul> -->
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
+						<!-- 切换卡按钮 start -->
+						<div class="btnGroups">
+							<a class="btnList bgColor">全部</a>
+							<a class="btnList">我的</a>
+						</div>
 						<div class="row">
 							<div class="col-md-2 left-5px right-0px">
 								<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
@@ -54,7 +61,7 @@
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div class="card-list" v-for="data in aftermarketData">
+						<div class="card-list" v-cloak v-for="data in aftermarketData">
 							<div class="card-head">
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>	
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
@@ -103,6 +110,7 @@
 	<%-- <script src="${base}/admin/visaJapan/visaList.js"></script> --%>
 	<script src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
+	<script src="${base}/references/common/js/switchCardOfOrder.js"></script><!-- 订单切换卡 js -->
 	<script type="text/javascript">
 	//异步加载的URL地址
     var url="${base}/admin/aftermarket/aftermarketListData.html";
