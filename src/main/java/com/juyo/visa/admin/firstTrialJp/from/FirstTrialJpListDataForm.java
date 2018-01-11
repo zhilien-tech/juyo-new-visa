@@ -95,6 +95,9 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 		}*/
 
 		//订单权限
+		if (Util.isEmpty(orderAuthority)) {
+			orderAuthority = "allOrder";
+		}
 		if (orderAuthority.equals("allOrder")) {
 			//全部
 			cnd.and("tr.trialOpid", "IS", null);
