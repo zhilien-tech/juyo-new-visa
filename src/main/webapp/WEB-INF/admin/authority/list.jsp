@@ -13,6 +13,14 @@
           <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
           <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
           <link rel="stylesheet" href="${base}/references/public/css/style.css">
+          <style>
+          tr th:nth-child(1) { width:15%;}
+          tr th:nth-child(2) { width:55%;}
+          tr th:nth-child(3) { width:15%;}
+          tr th:nth-child(4) { width:15%;}
+          /* td { border-right:1px dotted #eee;} */
+          td span { display:inline-block; width:auto; margin:0 5px;}
+          </style>
           <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">

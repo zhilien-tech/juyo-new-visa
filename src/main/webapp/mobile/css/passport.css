@@ -424,11 +424,14 @@ input[type="checkbox"] + label:after {
 	outline: none;
 	border:0;
 }
+.binkDiv .ui-input-text {
+	width: 74%;
+}
 .carDiv .ui-input-text {
 	width: 83%;
 }
 .hourseDiv .ui-input-text {
-	width: 83%;
+	width: 77%;
 }
 .moneyDiv .ui-input-text {
 	width: 83%;

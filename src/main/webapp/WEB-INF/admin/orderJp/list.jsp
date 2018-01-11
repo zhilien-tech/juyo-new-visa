@@ -92,7 +92,7 @@
 								<div v-else style="position:absolute;right:25%;">
 								<label></label><span  style="font-size:16px;font-weight:bold;">{{data.status}}</span>
 								</div>
-								<div>
+								<div class="btnGroup">
 									<label>操作：</label>
 									<div v-if="data.isdisabled==1">
 										<i class="edit1"  v-on:click="" > </i>
