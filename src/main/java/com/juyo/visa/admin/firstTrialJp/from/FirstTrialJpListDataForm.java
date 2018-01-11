@@ -32,6 +32,9 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 	private Integer status;
 	//检索框
 	private String searchStr;
+	//订单权限
+	private String orderAuthority;
+
 	//页码
 	private Integer pageNumber = 1;
 	//每页多少条
@@ -82,13 +85,25 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 		//初审 看到的订单为漏斗形式， 初审状态以后的订单都可以看到
 		cnd.and("tr.status", ">=", JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
 		//cnd.and("tr.status", "<=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
-		if (userid.equals(adminId)) {
+
+		/*if (userid.equals(adminId)) {
 			//公司管理员
 			cnd.and("tr.comId", "=", companyid);
 		} else {
 			//普通的操作员
 			cnd.and("tr.userId", "=", userid);
+		}*/
+
+		//订单权限
+		if (orderAuthority.equals("allOrder")) {
+			//全部
+			cnd.and("tr.trialOpid", "IS", null);
+		} else {
+			//我的
+			cnd.and("tr.trialOpid", "=", userid);
 		}
+
+		cnd.and("tr.comId", "=", companyid);
 
 		cnd.orderBy("tr.updatetime", "DESC");
 
