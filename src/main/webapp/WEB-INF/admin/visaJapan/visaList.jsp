@@ -172,13 +172,17 @@
                  	type:'post',
                  	success: function(data){
                  		if(visastatus == 16){
-	                 		layer.msg('发招宝');
+                 			parent.successCallBack(4);
+	                 		//layer.msg('发招宝');
                  		}else if(visastatus == 19){
-	                 		layer.msg('招宝变更');
+                 			parent.successCallBack(5);
+	                 		//layer.msg('招宝变更');
                  		}else if(visastatus == 22){
-	                 		layer.msg('招宝取消');
+                 			parent.successCallBack(6);
+	                 		//layer.msg('招宝取消');
                  		}else if(visastatus == 27){
-	                 		layer.msg('报告拒签');
+                 			parent.successCallBack(7);
+	                 		//layer.msg('报告拒签');
                  		}
                  		//更新列表数据
                  		$.ajax({ 
@@ -237,7 +241,8 @@
                  	dataType:"json",
                  	type:'post',
                  	success: function(data){
-                 		layer.msg('已移交售后！');
+                 		parent.successCallBack(9);
+                 		//layer.msg('已移交售后！');
                  		$.ajax({ 
                         	url: url,
                         	dataType:"json",
@@ -347,9 +352,11 @@
           	}
         });
 		if(status == 1){
-			layer.msg('发招宝');
+			//layer.msg('发招宝');
+			parent.successCallBack(4);
 		}else{
-			layer.msg('保存成功');
+			//layer.msg('保存成功');
+			parent.successCallBack(2);
 		}
 	}
 	
