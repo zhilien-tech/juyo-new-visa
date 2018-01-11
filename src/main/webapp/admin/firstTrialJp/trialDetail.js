@@ -338,21 +338,21 @@ new Vue({
 		},
 		qualified:function(applyid){
 			//判断申请人是否合格
-			layer.confirm('您是确定要合格吗？', {
-				btn: ['是','否'] //按钮
-			}, function(){
-				$.ajax({
-					type : 'POST',
-					data : {
-						applicantId:applyid
-					},
-					url : '/admin/firstTrialJp/isQualifiedByApplicantId.html',
-					success : function(data) {
-						//遮罩
-						layer.load(1);
-						var isQualified = data.isQualified;
-						var applicantName = data.name;
-						if(isQualified){
+			$.ajax({
+				type : 'POST',
+				data : {
+					applicantId:applyid
+				},
+				url : '/admin/firstTrialJp/isQualifiedByApplicantId.html',
+				success : function(data) {
+					//遮罩
+					layer.load(1);
+					var isQualified = data.isQualified;
+					var applicantName = data.name;
+					if(isQualified){
+						layer.confirm('您是确定要合格吗？', {
+							btn: ['是','否'] //按钮
+						}, function(){
 							$.ajax({
 								type : 'POST',
 								data : {
@@ -370,18 +370,19 @@ new Vue({
 									layer.msg("操作失败");
 								}
 							});
-						}else{
-							//关闭遮罩
+						}, function(){
+							//否 取消
 							layer.closeAll('loading');
-							layer.msg(applicantName+" 信息不合格");
-						}
-					},
-					error : function(xhr) {
-						layer.msg("操作失败");
+						});
+						
+					}else{
+						layer.closeAll('loading');
+						layer.msg(applicantName+" 信息不合格");
 					}
-				});
-			}, function(){
-
+				},
+				error : function(xhr) {
+					layer.msg("操作失败");
+				}
 			});
 		},
 		unqualified:function(applyId){

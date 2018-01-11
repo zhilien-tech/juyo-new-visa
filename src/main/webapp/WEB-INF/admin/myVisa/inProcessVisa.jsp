@@ -173,10 +173,84 @@
 						maxmin: false,
 						shadeClose: false,
 						scrollbar: false,
-						area: ['900px', '80%'],
+						area: ['900px', '551px'],
 						content:'/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+'&isTrial=0'
 					});
-	        	},
+	    			/* $.ajax({ 
+	    				url: "/admin/myVisa/isChanged.html",
+	    				dataType:"json",
+	    				async:false,
+	    				type:'post',
+	    				data:{
+	                		applyid : applyid
+	                	},
+	    				success: function(data){
+	    					if(data == 1){//如果返回1则说明游客信息改变，提示是否更新
+	    						layer.confirm("信息已改变，您是否要更新？", {
+	    							title:"提示",
+	    							btn: ["是","否"], //按钮
+	    							shade: false //不显示遮罩
+	    						}, function(){
+	    						$.ajax({ 
+	    					    	url: '${base}/admin/myVisa/copyInfoToPersonnel',
+	    					    	dataType:"json",
+	    					    	async:false,
+	    					    	data:{applyid:applyid},
+	    					    	type:'post',
+	    					    	success: function(data){
+						    			layer.open({
+											type: 2,
+											title: false,
+											closeBtn:false,
+											fix: false,
+											maxmin: false,
+											shadeClose: false,
+											scrollbar: false,
+											area: ['900px', '80%'],
+											content:'/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+'&isTrial=0'
+										});
+	    					      	}
+	    					    }); 
+	    						},
+	    						function(){
+	    							$.ajax({ 
+		    					    	url: '${base}/admin/myVisa/toSetUnsame',
+		    					    	dataType:"json",
+		    					    	async:false,
+		    					    	data:{applyid:applyid},
+		    					    	type:'post',
+		    					    	success: function(data){
+							    			layer.open({
+												type: 2,
+												title: false,
+												closeBtn:false,
+												fix: false,
+												maxmin: false,
+												shadeClose: false,
+												scrollbar: false,
+												area: ['900px', '80%'],
+												content:'/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+'&isTrial=0'
+											});
+		    					      	}
+		    					    }); 
+	    							
+	    						});
+	    					}else{
+	    						layer.open({
+									type: 2,
+									title: false,
+									closeBtn:false,
+									fix: false,
+									maxmin: false,
+									shadeClose: false,
+									scrollbar: false,
+									area: ['900px', '80%'],
+									content:'/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+'&isTrial=0'
+								});
+	    					}
+	    				}
+	    			});*/
+	        	} ,
 	        }
 		});
 		

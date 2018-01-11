@@ -34,6 +34,8 @@ public class TApplicantAddForm extends AddForm implements Serializable {
 	/**名(拼音)*/
 	private String lastNameEn;
 
+	private Integer isSameInfo;
+
 	private String otherFirstName;
 
 	private String otherFirstNameEn;
@@ -57,6 +59,8 @@ public class TApplicantAddForm extends AddForm implements Serializable {
 	private String cardCity;
 
 	private String marryUrl;
+
+	private Integer isPrompted;
 
 	private Integer marryStatus;
 

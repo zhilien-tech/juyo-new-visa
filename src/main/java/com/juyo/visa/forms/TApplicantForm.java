@@ -44,11 +44,15 @@ public class TApplicantForm extends DataTablesParamForm {
 
 	private String baseRemark;
 
+	private Integer tourist;
+
 	private String otherFirstName;
 
 	private String otherFirstNameEn;
 
 	private String otherLastName;
+
+	private Integer isPrompted;
 
 	private String otherLastNameEn;
 
@@ -71,6 +75,8 @@ public class TApplicantForm extends DataTablesParamForm {
 	private Integer marryStatus;
 
 	private String nationality;
+
+	private Integer isSameInfo;
 
 	/**手机号*/
 	private String telephone;
@@ -129,6 +135,8 @@ public class TApplicantForm extends DataTablesParamForm {
 	private Integer orderid;
 
 	private Integer isTrailOrder;
+
+	private Integer userType;
 
 	@Override
 	public Sql sql(SqlManager sqlManager) {

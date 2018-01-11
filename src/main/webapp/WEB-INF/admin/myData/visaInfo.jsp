@@ -29,8 +29,13 @@
     .colSm {  display:block; float:left; width:200px; }
     .padding-right-0 { margin-left:10%; width:323px; height:200px; border:1px solid #eee; }
     .delete { right:0; }
+    /*弹框头部固定*/
+    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+    .btn-margin { margin-top:10px;}
+    .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; padding:15px 37px 15px 53px;}  
+    
     /*左右导航样式*/
-    .leftNav { position:absolute;top:61px;left:0;z-index:999; width:40px;height:489px; cursor:pointer;}
+    .leftNav { position:fixed;top:50px;left:4px;z-index:999; width:40px;height:calc(100% - 50px); cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 </style>
 	<style type="text/css">
@@ -43,14 +48,32 @@
 </head>
 <body>
 	<div class="modal-content">
+	<c:choose>
+		<c:when test="${!empty obj.contact }">
+			<a id="toPassport" class="leftNav" onclick="passportBtn();">
+				<span></span>
+			</a>
+		</c:when>
+		<c:otherwise>
+		</c:otherwise>
+	</c:choose>
 		<form id="passportInfo">
 			<div class="modal-header">
-				<input type="hidden" value="${obj.visaInfo.applicantId }" name="applicantId"/>
-				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
+				<input type="hidden" value="${obj.applyId }" name="applyId"/>
+				<input type="hidden" value="${obj.contact }" name="contact"/>
+				<input type="hidden" value="${obj.applicantid }" name="applicantId"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
-				<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
+				<c:choose>
+					<c:when test="${empty obj.contact }">
+						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+						<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
+						<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
+					</c:when>
+					<c:otherwise>
+						<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin" data-dismiss="modal" value="取消" /> 
+						<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic" value="保存" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<div class="modal-body">
 			<div class="ipt-info">
@@ -67,7 +90,14 @@
 										<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight">
 											<option value="">请选择</option>
 											<c:forEach var="map" items="${obj.marryStatus}">
-												<option value="${map.key}" ${map.key==obj.applicant.marryStatus?'selected':''}>${map.value}</option>
+											<c:choose>
+												<c:when test="${empty obj.visaInfo}">
+													<option value="${map.key}" >${map.value}</option>
+												</c:when>
+												<c:otherwise>
+													<option value="${map.key}" ${map.key==obj.visaInfo.marryStatus?'selected':''}>${map.value}</option>
+												</c:otherwise>
+											</c:choose>
 											</c:forEach>
 										</select>
 									</div>
@@ -77,9 +107,18 @@
 							<div class="col-sm-4 padding-right-0" id="borderColor">
 								<div class="cardFront-div">
 									<span>上传结婚证/离婚证</span>
-									<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.applicant.marryUrl }"/>
-									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" alt="" src="${obj.applicant.marryUrl }" >
+										<c:choose>
+											<c:when test="${empty obj.visaInfo}">
+												<input id="marryUrl" name="marryUrl" type="hidden" />
+												<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+												<img id="sqImg" alt="" src="" >
+											</c:when>
+											<c:otherwise>
+												<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.visaInfo.marryUrl }"/>
+												<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+												<img id="sqImg" alt="" src="${obj.visaInfo.marryUrl }" >
+											</c:otherwise>
+										</c:choose>
 									<i class="delete" id="deleteApplicantFrontImg"></i>
 								</div>
 							</div>
@@ -99,9 +138,18 @@
 									<div class="form-group">
 										<label><span>*</span>申请人</label>
 										<select id="applicant" name="applicant" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.mainOrVice}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.isMainApplicant?'selected':''}>${map.value}</option>
-											</c:forEach>
+											<c:choose>
+												<c:when test="${empty obj.visaInfo}">
+													<c:forEach var="map" items="${obj.mainOrVice}">
+														<option value="${map.key}" >${map.value}</option>
+													</c:forEach>
+												</c:when>
+												<c:otherwise>
+													<c:forEach var="map" items="${obj.mainOrVice}">
+														<option value="${map.key}" ${map.key==obj.visaInfo.isMainApplicant?'selected':''}>${map.value}</option>
+													</c:forEach>
+												</c:otherwise>
+											</c:choose>
 										</select>
 									</div>
 								</div>
@@ -110,7 +158,14 @@
 										<label><span>*</span>备注</label>
 										</br>
 										<div class="input-box">
-											<input type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
+											<c:choose>
+												<c:when test="${empty obj.visaInfo}">
+													<input type="text" id="relationRemark" name="relationRemark" class="input" >
+												</c:when>
+												<c:otherwise>
+													<input type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
+												</c:otherwise>
+											</c:choose>
 											<ul class="dropdown">
 												<li>主卡</li>
 												<li>朋友</li>
@@ -125,11 +180,19 @@
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label><span>*</span>主申请人</label>
-											<!-- <input id="mainApplicant" name="mainApplicant" type="text" class="form-control input-sm" placeholder=" " /> -->
 											<select id="mainApplicant" name="mainApplicant" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.mainApply}">
-												<option value="${map.id}" ${map.id==obj.mainApplicant.id?'selected':'' } >${map.applyname}</option>
-											</c:forEach>
+											<c:choose>
+												<c:when test="${empty obj.visaInfo}">
+													<c:forEach var="map" items="${obj.mainApply}">
+														<option value="${map.id}"  >${map.applyname}</option>
+													</c:forEach>
+												</c:when>
+												<c:otherwise>
+													<c:forEach var="map" items="${obj.mainApply}">
+														<option value="${map.id}" ${map.id==obj.visaInfo.mainId?'selected':'' } >${map.applyname}</option>
+													</c:forEach>
+												</c:otherwise>
+											</c:choose>
 										</select>
 										</div>
 									</div>
@@ -138,7 +201,14 @@
 											<label><span>*</span>与主申请人关系</label>
 											</br>
 										<div class="input-box">
-											<input type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
+											<c:choose>
+												<c:when test="${empty obj.visaInfo}">
+													<input type="text" id="mainRelation" name="mainRelation" class="input" >
+												</c:when>
+												<c:otherwise>
+													<input type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
+												</c:otherwise>
+											</c:choose>
 												<ul class="dropdown">
 													<li>之妻</li>
 													<li>之夫</li>
@@ -168,11 +238,6 @@
 									<div class="form-group">
 										<label><span>*</span>是否同主申请人</label>
 										<input id="trip" name="sameMainTrip" class="form-control input-sm selectHeight" value="是" disabled="disabled"/>
-										<%-- <select id="trip" name="sameMainTrip" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.isOrNo}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainTrip?'selected':''}>${map.value}</option>
-											</c:forEach>
-										</select> --%>
 									</div>
 								</div>
 							</div><!-- end 是否同主申请人 -->
@@ -188,25 +253,47 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>我的职业</label>
-										<!-- <input id="occupation"  name="occupation" type="text" class="form-control input-sm" placeholder=" " /> -->
 										<select id="careerStatus" name="careerStatus" class="form-control input-sm selectHeight">
 											<option value="">--请选择--</option>
-											<c:forEach var="map" items="${obj.jobStatusEnum}">
-												<option value="${map.key}" ${map.key==obj.workJp.careerStatus?'selected':''}>${map.value}</option>
-											</c:forEach>
+											<c:choose>
+												<c:when test="${empty obj.visaInfo}">
+													<c:forEach var="map" items="${obj.jobStatusEnum}">
+														<option value="${map.key}" >${map.value}</option>
+													</c:forEach>
+												</c:when>
+												<c:otherwise>
+													<c:forEach var="map" items="${obj.jobStatusEnum}">
+														<option value="${map.key}" ${map.key==obj.visaInfo.careerStatus?'selected':''}>${map.value}</option>
+													</c:forEach>
+												</c:otherwise>
+											</c:choose>
 										</select>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="schoolName"><span>*</span>单位名称</label>
-										<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.name }"/>
+											<c:choose>
+												<c:when test="${empty obj.visaInfo}">
+													<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " />
+												</c:when>
+												<c:otherwise>
+													<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.name }"/>
+												</c:otherwise>
+											</c:choose>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="schoolTelephone"><span>*</span>单位电话</label>
-										<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.telephone }"/>
+											<c:choose>
+												<c:when test="${empty obj.visaInfo}">
+													<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " />
+												</c:when>
+												<c:otherwise>
+													<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.telephone }"/>
+												</c:otherwise>
+											</c:choose>
 									</div>
 								</div>
 							</div><!-- end 我的职业/单位名称/单位电话 -->
@@ -214,7 +301,14 @@
 								<div class="col-sm-8">
 									<div class="form-group">
 										<label id="schoolAddress"><span>*</span>单位地址</label>
-										<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.address }"/>
+											<c:choose>
+												<c:when test="${empty obj.visaInfo}">
+													<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
+												</c:when>
+												<c:otherwise>
+													<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.address }"/>
+												</c:otherwise>
+											</c:choose>
 									</div>
 								</div>
 							</div>
@@ -232,9 +326,18 @@
 									<div class="form-group">
 										<label><span>*</span>是否同主申请人</label>
 										<select id="wealth" name="sameMainWealth" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.isOrNo}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWealth?'selected':''}>${map.value}</option>
-											</c:forEach>
+											<c:choose>
+												<c:when test="${empty obj.visaInfo}">
+													<c:forEach var="map" items="${obj.isOrNo}">
+														<option value="${map.key}" >${map.value}</option>
+													</c:forEach>
+												</c:when>
+												<c:otherwise>
+													<c:forEach var="map" items="${obj.isOrNo}">
+														<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWealth?'selected':''}>${map.value}</option>
+													</c:forEach>
+												</c:otherwise>
+											</c:choose>
 										</select>
 									</div>
 								</div>
@@ -354,31 +457,8 @@
 	<script type="text/javascript" src="${base}/admin/orderJp/visaInfo.js"></script>
 	<script type="text/javascript">
 		var base = "${base}";
+		var contact = '${obj.contact}';
 		$(function() {
-			
-			var form = document.forms[0]; 
-			for ( var i = 0; i < form.length; i++) { 
-				var element = form.elements[i]; 
-				if(element.id != "editbasic")
-					element.disabled = true; 
-			} 
-			document.getElementById("visaRemark").style.backgroundColor = "#eee";
-			document.getElementById("mainRelation").style.backgroundColor = "#eee";
-			document.getElementById("relationRemark").style.backgroundColor = "#eee";
-			$(".basic").hide();
-			
-			var remark = $("#visaRemark").val();
-			if(remark != ""){
-				$(".ipt-info").show();
-			}
-			$("#visaRemark").attr("disabled", true);
-			
-			var marry = $("#marryUrl").val();
-			if(marry != ""){
-				$("#uploadFile").siblings("i").css("display","block");
-			}else{
-				$("#uploadFile").siblings("i").css("display","none");
-			}
 			
 			//校验
 			$('#passportInfo').bootstrapValidator({
@@ -445,41 +525,101 @@
 							}
 						}
 					},
-					/* deposit : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '银行存款不能为空'
-							}
-						}
-					},
-					vehicle : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '车产不能为空'
-							}
-						}
-					},
-					houseProperty : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '房产不能为空'
-							}
-						}
-					},
-					financial : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '理财不能为空'
-							}
-						}
-					}, */
 				}
 			});
 		$('#passportInfo').bootstrapValidator('validate');
+			
+			if(!contact){
+				var form = document.forms[0]; 
+				for ( var i = 0; i < form.length; i++) { 
+					var element = form.elements[i]; 
+					if(element.id != "editbasic")
+						element.disabled = true; 
+				} 
+				document.getElementById("visaRemark").style.backgroundColor = "#eee";
+				document.getElementById("mainRelation").style.backgroundColor = "#eee";
+				document.getElementById("relationRemark").style.backgroundColor = "#eee";
+				$(".basic").hide();
+			}else{
+				//结婚证图片验证
+				var marryUrl = $("#marryUrl").val();
+				if(marryUrl == ""){
+					$(".front").attr("class", "info-imgUpload front has-error");  
+			        $(".help-blockFront").attr("data-bv-result","INVALID");  
+			        $(".help-blockFront").attr("style","display: block;");  
+			        $("#borderColor").attr("style","border-color:#ff1a1a");
+				}else{
+					$(".front").attr("class", "info-imgUpload front has-success");  
+			        $(".help-blockFront").attr("data-bv-result","IVALID");  
+			        $(".help-blockFront").attr("style","display: none;");
+			        $("#borderColor").attr("style",null);
+				}
+				var bootstrapValidator = $("#passportInfo").data(
+				'bootstrapValidator');
+				// 执行表单验证 
+				bootstrapValidator.validate();
+				$("#deleteApplicantFrontImg").click(function(){
+					$('#marryUrl').val("");
+					$('#sqImg').attr('src', "");
+					$("#uploadFile").siblings("i").css("display","none");
+					$(".front").attr("class", "info-imgUpload front has-error");  
+			        $(".help-blockFront").attr("data-bv-result","INVALID");  
+			        $(".help-blockFront").attr("style","display: block;");
+			        $("#borderColor").attr("style","border-color:#ff1a1a");
+				});
+				
+				$(".remove-btn").click(function(){
+					//$(this).parent().css("display","none");
+					if($(this).parent().is(".deposit")){
+						$(".deposit").css("display","none");
+						$("#depositType").removeClass("btnState-true");
+						$("#deposit").val("");
+						$(".deposits").css({"display":"none"});
+						$(".deposits").attr("class", "col-xs-6 deposits has-success");
+						$("#deposite").attr("style", null);
+					}
+					if($(this).parent().is(".vehicle")){
+						$(".vehicle").css("display","none");
+						$("#vehicleType").removeClass("btnState-true");
+						$("#vehicle").val("");
+						$(".vehicles").css({"display":"none"});
+						$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
+						$("#vehicle").attr("style", null);
+					}
+					if($(this).parent().is(".houseProperty")){
+						$(".houseProperty").css("display","none");
+						$("#housePropertyType").removeClass("btnState-true");
+						$("#houseProperty").val("");
+						$(".housePropertys").css({"display":"none"});
+						$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
+						$("#houseProperty").attr("style", null);
+					}
+					if($(this).parent().is(".financial")){
+						$(".financial").css("display","none");
+						$("#financialType").removeClass("btnState-true");
+						$("#financial").val("");
+						$(".financials").css({"display":"none"});
+						$(".financials").attr("class", "col-xs-6 financials has-success");
+						$("#financial").attr("style", null);
+					}
+				});
+			}
+			
+			
+			var remark = $("#visaRemark").val();
+			if(remark != ""){
+				$(".ipt-info").show();
+			}
+			$("#visaRemark").attr("disabled", true);
+			
+			var marry = $("#marryUrl").val();
+			if(marry != ""){
+				$("#uploadFile").siblings("i").css("display","block");
+			}else{
+				$("#uploadFile").siblings("i").css("display","none");
+			}
+			
+			
 			
 			var career = $("#careerStatus").val();
 			if(career == 4){
@@ -542,6 +682,7 @@
 					$(".tripvice").show();
 					$(".wealthvice").show();
 					//$(".workvice").show();
+					$("#wealth").val(1);
 					$(".applymain").hide();
 					$(".workmain").hide();
 					$(".wealthmain").hide();
@@ -553,36 +694,25 @@
 				}
 			});
 			
-			var wealthType = '${obj.wealthJp}';
-			console.log(wealthType);
-			if(wealthType){
-				$('[name=wealthType]').each(function(){
-					var wealth = $(this);
-					$.each(JSON.parse(wealthType), function(i, item){     
-						if(item.type == wealth.val()){
-							if(wealth.val() == "银行存款"){
-								$(".deposit").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#deposit").val(item.details);
-							}
-							if(wealth.val() == "车产"){
-								$(".vehicle").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#vehicle").val(item.details);
-							}
-							if(wealth.val() == "房产"){
-								$(".houseProperty").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#houseProperty").val(item.details);
-							}
-							if(wealth.val() == "理财"){
-								$(".financial").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#financial").val(item.details);
-							}
-						}
-						});
-					});
+			if('${obj.visaInfo.deposit}' != ""){//银行存款
+				$(".deposit").css("display","block");
+				$("#depositType").addClass("btnState-true");
+				$("#deposit").val('${obj.visaInfo.deposit}');
+			}
+			if('${obj.visaInfo.vehicle}' != ""){//车产
+				$(".vehicle").css("display","block");
+				$("#vehicleType").addClass("btnState-true");
+				$("#vehicle").val('${obj.visaInfo.vehicle}');
+			}
+			if('${obj.visaInfo.houseProperty}' != ""){//房产
+				$(".houseProperty").css("display","block");
+				$("#housePropertyType").addClass("btnState-true");
+				$("#houseProperty").val('${obj.visaInfo.houseProperty}');
+			}
+			if('${obj.visaInfo.financial}' != ""){//理财
+				$(".financial").css("display","block");
+				$("#financialType").addClass("btnState-true");
+				$("#financial").val('${obj.visaInfo.financial}');
 			}
 			
 			var wealth = $("#wealth").val();
@@ -607,10 +737,30 @@
 					$(".houseProperty").css("display","none");
 					$(".financial").css("display","none");
 				}else{
+					if('${obj.visaInfo.deposit}' != ""){//银行存款
+						$(".deposit").css("display","block");
+						$("#depositType").addClass("btnState-true");
+						$("#deposit").val('${obj.visaInfo.deposit}');
+					}
+					if('${obj.visaInfo.vehicle}' != ""){//车产
+						$(".vehicle").css("display","block");
+						$("#vehicleType").addClass("btnState-true");
+						$("#vehicle").val('${obj.visaInfo.vehicle}');
+					}
+					if('${obj.visaInfo.houseProperty}' != ""){//房产
+						$(".houseProperty").css("display","block");
+						$("#housePropertyType").addClass("btnState-true");
+						$("#houseProperty").val('${obj.visaInfo.houseProperty}');
+					}
+					if('${obj.visaInfo.financial}' != ""){//理财
+						$(".financial").css("display","block");
+						$("#financialType").addClass("btnState-true");
+						$("#financial").val('${obj.visaInfo.financial}');
+					}
 					$(".wealthmain").show();
-					$('[name=wealthType]').each(function(){
+					/* $('[name=wealthType]').each(function(){
 						$(this).removeClass("btnState-true");
-					});
+					}); */
 				}
 			});
 			
@@ -687,7 +837,7 @@
 			
 			
 		});
-		//连接websocket
+		/* //连接websocket
 		connectWebSocket();
 		function connectWebSocket(){
 			 if ('WebSocket' in window){  
@@ -707,7 +857,7 @@
 
 	            socket.onmessage = function (evt){
 	                  var received_msg = evt.data;
-	                  var applicantId = '${obj.visaInfo.applicantId}';
+	                  var applicantId = '${obj.applicantid}';
 	                  if(received_msg){
 		                  var receiveMessage = JSON.parse(received_msg);
 		                  if(receiveMessage.messagetype == 3 && receiveMessage.applicantid == applicantId){
@@ -722,10 +872,10 @@
 	            console.log('Websocket not supported');  
 	          }  
 		}
-		
+		 */
 		
 		//保存
-		function save(){
+		function save(status){
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
@@ -767,8 +917,9 @@
 				$("#wealth").val(0);
 			}
 			var orderid = '${obj.orderid}';
-			var applicantId = '${obj.visaInfo.applicantId}';
-			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
+			var applicantId = '${obj.applicantid}';
+			//var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
+			var passportInfo = $("#passportInfo").serialize();
 			$.ajax({
 				type: 'POST',
 				async: false,
@@ -777,7 +928,7 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					layer.load(1);
+					/* layer.load(1);
 					$.ajax({
 						type: 'POST',
 						async : false,
@@ -791,13 +942,19 @@
 							console.log(JSON.stringify(data));
 							layer.closeAll('loading');
 						}
-					});
-					layer.msg("修改成功", {
-						time: 500,
-						end: function () {
-							self.location.reload();
-						}
-					});
+					}); */
+					if(status == 1){
+						$("#backBtn").click();
+					}else if(status == 2){
+						
+					}else{
+						layer.msg("修改成功", {
+							time: 500,
+							end: function () {
+								self.location.reload();
+							}
+						});
+					}
 				}
 			});
 		}
@@ -856,6 +1013,27 @@
 			};
 			reader.readAsDataURL(file);
 		});
+		
+		function passportBtn(){
+			var applicantId = '${obj.applyId}';
+				var bootstrapValidator = $("#passportInfo").data(
+				'bootstrapValidator');
+				// 执行表单验证 
+				bootstrapValidator.validate();
+				if (!bootstrapValidator.isValid()) {
+					return;
+				}
+				
+				if($(".front").hasClass("has-error")){
+					return;
+				}
+				if($(".back").hasClass("has-error")){
+					return;
+				}
+			save(2);
+			//socket.onclose();
+			window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
+		}
 		
 		//编辑按钮
 		function editBtn(){
@@ -936,13 +1114,17 @@
 		
 		//返回 
 		function closeWindow() {
-			layer.msg("已取消", {
-				time: 500,
-				end: function () {
-					self.location.reload();
-					//window.location.href = '/admin/myData/visaCountry.html';
-				}
-			});
+			if(!contact){
+				layer.msg("已取消", {
+					time: 500,
+					end: function () {
+						self.location.reload();
+					}
+				});
+			}else{
+				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				parent.layer.close(index);
+			}
 		}
 	</script>
 

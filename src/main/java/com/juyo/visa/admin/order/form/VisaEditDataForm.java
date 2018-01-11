@@ -13,7 +13,10 @@ import lombok.Data;
 @Data
 public class VisaEditDataForm implements Serializable {
 
+	//本身申请人ID
 	private Integer applicantId;
+
+	private Integer userType;
 
 	private String visaRemark;
 
@@ -25,13 +28,17 @@ public class VisaEditDataForm implements Serializable {
 
 	private Integer isOrderUpTime;
 
+	//是主申请人还是副申请人
 	private Integer applicant;
 
 	private String mainRelation;
 
 	private String relationRemark;
 
+	//主申请人ID
 	private Integer mainApplicant;
+
+	private Integer tourist;
 
 	private String wealthType;
 

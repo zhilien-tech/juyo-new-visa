@@ -51,7 +51,7 @@ function initDatatable() {
 		            			var arr = modulename.split(',');
 		            			var module = "";
 		            			for(var i=0;i<arr.length;i++){
-				            		module += '<span class="limitTwo">'+ arr[i] +',</span>';
+				            		module += '<span>'+ arr[i] +'</span>';
 				            	}
 				            	return module;
 		            		}else{
@@ -71,7 +71,7 @@ function initDatatable() {
 		            			var arr = jobname.split(',');
 		            			var job = "";
 		            			for(var i=0;i<arr.length;i++){
-		            				job += '<span class="limitTwo">'+ arr[i] +',</span>';
+		            				job += '<span>'+ arr[i] +'</span>';
 				            	}
 				            	return job;
 		            		}else{
