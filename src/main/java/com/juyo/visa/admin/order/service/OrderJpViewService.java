@@ -2326,6 +2326,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	 * @return 
 	 */
 	public Object changePrincipal(Integer orderid, Integer principalId, Integer orderProcessType, HttpSession session) {
+		int updatenum = 0;
 		Date nowDate = DateUtil.nowDate();
 		//Order 要检索的字段
 		String fieldStr = getprincipalField(orderProcessType);
@@ -2335,7 +2336,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			TOrderEntity updateOrder = dbDao.fetch(TOrderEntity.class, Cnd.where("id", "=", orderid));
 			if (!Util.isEmpty(updateOrder)) {
 				//更新订单对应 负责人字段
-				int updatenum = dbDao.update(TOrderEntity.class, Chain.make(fieldStr, principalId),
+				updatenum = dbDao.update(TOrderEntity.class, Chain.make(fieldStr, principalId),
 						Cnd.where("id", "=", orderid));
 				if (updatenum > 0) {
 					//更新订单状态为 “负责人变更”状态
@@ -2345,10 +2346,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					//日志记录
 					insertLogs(orderid, PRINCIPAL_ORDER, session);
 				}
-				return updatenum;
 			}
 		}
-		return order;
+		return updatenum;
 	}
 
 	//获取负责人日志检索 字段

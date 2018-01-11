@@ -126,9 +126,9 @@
 		     	dataType:"json",
 		     	type:'post',
 		     	success: function(data){
-		     		if(data.stauts == 200){
+		     		if(data>0){
 						layer.close(layerIndex);
-						parent.successCallBack(88);
+		     			parent.successCallBack(88);
 					}
 					closeWindow();
 		       	}
