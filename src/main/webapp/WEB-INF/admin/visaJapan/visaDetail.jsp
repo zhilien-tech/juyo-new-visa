@@ -652,6 +652,8 @@
 				    }); 
 				}else if(status == 2){
 					layer.msg('保存成功');
+				}else if(status == 88){
+					layer.msg('负责人变更成功');
 				}
 				$.ajax({ 
 					url: '/admin/visaJapan/getVisaDetailApply.html',
