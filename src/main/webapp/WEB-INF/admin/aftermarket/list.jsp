@@ -19,6 +19,9 @@
 	.box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
 	.box-body {  overflow:hidden;margin-top:60px;}
 	.card-head span { font-size:12px;}
+	[v-cloak] {
+	  display: none;
+	}
 	</style>
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>
@@ -53,7 +56,7 @@
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
-					<div class="box-body" id="card"><!-- 卡片列表 -->
+					<div class="box-body" id="card" v-cloak><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in aftermarketData">
 							<div class="card-head">
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>	

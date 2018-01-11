@@ -84,19 +84,21 @@
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="(item,index) in data.everybodyinfo">
-									<span v-if="index === 0" style="display:block; height:31px;">
+									<span v-if="index === 0" class="visaListSpan">
 										<div><label>申请人：</label><span>{{item.applicant}}</span></div>
 										<div><label>护照号：</label><span>{{item.passportno}}</span></div>
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
+										<div class="visaBtn"><a v-on:click="visainput(item.applicatid)">签证补录</a></div>
 									</span>
-									<span v-else  style="display:block; height:31px;">
+									<span v-else class="visaListSpan">
 										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
 										<div><label style="width:48px;">　　　　</label><span>{{item.passportno}}</span></div>
 										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
+										<div class="visaBtn"><a v-on:click="visainput(item.applicatid)">签证补录</a></div>
 									</span>
 								</li>
 							</ul> 
@@ -170,13 +172,17 @@
                  	type:'post',
                  	success: function(data){
                  		if(visastatus == 16){
-	                 		layer.msg('发招宝');
+                 			parent.successCallBack(4);
+	                 		//layer.msg('发招宝');
                  		}else if(visastatus == 19){
-	                 		layer.msg('招宝变更');
+                 			parent.successCallBack(5);
+	                 		//layer.msg('招宝变更');
                  		}else if(visastatus == 22){
-	                 		layer.msg('招宝取消');
+                 			parent.successCallBack(6);
+	                 		//layer.msg('招宝取消');
                  		}else if(visastatus == 27){
-	                 		layer.msg('报告拒签');
+                 			parent.successCallBack(7);
+	                 		//layer.msg('报告拒签');
                  		}
                  		//更新列表数据
                  		$.ajax({ 
@@ -235,7 +241,8 @@
                  	dataType:"json",
                  	type:'post',
                  	success: function(data){
-                 		layer.msg('已移交售后！');
+                 		parent.successCallBack(9);
+                 		//layer.msg('已移交售后！');
                  		$.ajax({ 
                         	url: url,
                         	dataType:"json",
@@ -345,9 +352,11 @@
           	}
         });
 		if(status == 1){
-			layer.msg('发招宝');
+			//layer.msg('发招宝');
+			parent.successCallBack(4);
 		}else{
-			layer.msg('保存成功');
+			//layer.msg('保存成功');
+			parent.successCallBack(2);
 		}
 	}
 	

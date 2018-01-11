@@ -78,5 +78,29 @@ $(function(){
 <div class="main">
 <iframe name="mainIframe" width="100%" height="100%" allowtransparency="yes" frameborder="no" border="0" marginwidth="0" marginheight="0" src="${mainurl }"></iframe>
 </div>
+<script src="${base}/references/common/js/layer/layer.js"></script>
+<script type="text/javascript">
+	function successCallBack(status){
+		if(status == 1){
+			layer.msg('添加成功');
+		}else if(status == 2){
+			layer.msg('保存成功');
+		}else if(status == 3){
+			layer.msg('编辑成功');
+		}else if(status == 4){
+			layer.msg('发招宝');
+		}else if(status == 5){
+			layer.msg('招宝变更');
+		}else if(status == 6){
+			layer.msg('招宝取消');
+		}else if(status == 7){
+			layer.msg('报告拒签');
+		}else if(status == 8){
+			layer.msg('删除成功');
+		}else if(status == 9){
+			layer.msg('已移交售后');
+		}
+	}
+</script>
 </body>
 </html>
