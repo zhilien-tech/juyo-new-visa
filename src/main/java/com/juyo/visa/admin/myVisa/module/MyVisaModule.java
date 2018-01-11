@@ -117,4 +117,58 @@ public class MyVisaModule {
 			@Param("applicantId") Integer applicantId, @Param("orderId") Integer orderId, HttpSession session) {
 		return myVisaService.saveExpressInfo(expressType, expressNum, applicantId, orderId, session);
 	}
+
+	/**
+	 * 判断游客信息是否改变
+	 */
+	@At
+	@POST
+	public Object isChanged(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.isChanged(applyid, session);
+	}
+
+	/**
+	 * 将员工基本信息赋值给游客
+	 */
+	@At
+	@POST
+	public Object copyBaseToTourist(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.copyBaseToTourist(applyid, session);
+	}
+
+	/**
+	 * 将员工护照信息赋值给游客
+	 */
+	@At
+	@POST
+	public Object copyPassToTourist(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.copyPassToTourist(applyid, session);
+	}
+
+	/**
+	 * 设置为不再提示，即将申请人表的isSameInfo字段设置为0
+	 */
+	@At
+	@POST
+	public Object toSetUnsame(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.toSetUnsame(applyid, session);
+	}
+
+	/**
+	 * 记录信息改变时选择了是还是否
+	 */
+	@At
+	@POST
+	public Object updateOrNot(@Param("applyid") int applyid) {
+		return myVisaService.updateOrNot(applyid);
+	}
+
+	/**
+	 * 查询是否改变
+	 */
+	@At
+	@POST
+	public Object isUpdate(@Param("applyid") int applyid) {
+		return myVisaService.isUpdate(applyid);
+	}
 }

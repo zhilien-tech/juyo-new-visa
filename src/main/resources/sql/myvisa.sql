@@ -5,6 +5,7 @@ SELECT
 	CONCAT( ta.firstName, ta.lastName ) applicantname,
 	ta.telephone,
 	tap.passport,
+	ta.userId,
 	taoj.orderId orderJpId,
 	torj.id orderId,
 	torj.ordernum,
@@ -22,6 +23,7 @@ FROM
 SELECT
 	toj.id,
 	tr.orderNum japanNumber,
+	taoj.isSameLinker,
 	toj.acceptDesign number,
 	DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
 	DATE_FORMAT(tr.outVisaDate, '%Y-%m-%d') signingTime,
@@ -38,6 +40,7 @@ SELECT
 FROM
 	t_order tr
 INNER JOIN t_order_jp toj ON toj.orderId = tr.id
+LEFT JOIN t_applicant_order_jp  taoj ON taoj.orderId = toj.id 
 LEFT JOIN t_customer tc ON tr.customerId = tc.id
 LEFT JOIN (
 	SELECT
@@ -58,7 +61,9 @@ SELECT
 	CONCAT(ta.firstName, ta.lastName) applicant,
 	tap.passport passportNo,
 	taoj.id applicatid,
+	ta.id applyId,
 	ta.telephone,
+	ta.userId,
 	ta.email,
 	tavpj.type dataType,
 	tavpj. DATA DATA,
@@ -111,4 +116,25 @@ FROM
 	INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
 	LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
 	LEFT JOIN t_order tor ON tor.id = taoj.orderid 
+	$condition
+	
+/*copyBaseToTourist*/
+UPDATE 
+	t_tourist_baseinfo tb,t_applicant ta
+SET 
+	tb.firstName = ta.firstName,tb.firstNameEn=ta.firstNameEn,tb.lastName=ta.lastName,tb.lastNameEn=ta.lastNameEn,tb.telephone=ta.telephone,tb.email=ta.email,tb.sex=ta.sex,
+	tb.nation=ta.nation,tb.birthday=ta.birthday,tb.address=ta.address,tb.cardId=ta.cardId,tb.cardFront=ta.cardFront,tb.cardBack=ta.cardBack,
+	tb.issueOrganization=ta.issueOrganization,tb.validEndDate=ta.validEndDate,tb.validStartDate=ta.validStartDate,tb.province=ta.province,
+	tb.city=ta.city,tb.detailedAddress=ta.detailedAddress,tb.otherFirstName=ta.otherFirstName,tb.otherFirstNameEn=ta.otherFirstNameEn,
+	tb.otherLastName=ta.otherLastName,tb.otherLastNameEn=ta.otherLastNameEn,tb.emergencyLinkman=ta.emergencyLinkman,tb.emergencyTelephone=ta.emergencyTelephone,
+	tb.cardProvince=ta.cardProvince,tb.cardCity=ta.cardCity,tb.hasOtherName=ta.hasOtherName,tb.hasOtherNationality=ta.hasOtherNationality,
+	tb.addressIsSameWithCard=ta.addressIsSameWithCard,tb.nationality=ta.nationality
+	$condition
+
+/*copyPassToTourist*/
+UPDATE 
+	t_tourist_passport tp,t_applicant_passport ta
+SET 
+	tp.type=ta.type,tp.passport=ta.passport,tp.sex=ta.sex,tp.sexEn=ta.sexEn,tp.birthAddress=ta.birthAddress,tp.issuedDate=ta.issuedDate,tp.validType=ta.validType,tp.passportUrl=ta.passportUrl,
+	tp.birthAddressEn=ta.birthAddressEn,tp.birthday=ta.birthday,tp.issuedPlace=ta.issuedPlace,tp.issuedPlaceEn=ta.issuedPlaceEn,tp.validEndDate=ta.validEndDate,tp.validStartDate=ta.validStartDate
 	$condition

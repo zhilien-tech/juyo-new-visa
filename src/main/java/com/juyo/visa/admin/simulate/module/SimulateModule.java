@@ -48,7 +48,7 @@ public class SimulateModule {
 	}
 
 	/**
-	 * 更新发招宝状态为已发招宝
+	 * 更新发招宝状态为提交中
 	 */
 	@At
 	public Object ds160Japan(@Param("cid") Integer cid) {

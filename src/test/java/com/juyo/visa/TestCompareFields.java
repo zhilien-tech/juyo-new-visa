@@ -47,10 +47,10 @@ public class TestCompareFields {
 
 		//record.toEntity();
 
-		Student s = record.toPojo(Student.class);
+		//Student s = record.toPojo(Student.class);
 
 		// 比较s1和s2不同的属性值，其中id忽略比较  
-		Map<String, List<Object>> compareResult = compareFields(s, s2, new String[] { "id", "phonenum" });
+		Map<String, List<Object>> compareResult = compareFields(s1, s2, new String[] { "id", "phonenum" });
 		System.out.println("s1和s2共有" + compareResult.size() + "个属性值不同（不包括id）");
 		System.out.println("其中：");
 		Set<String> keySet = compareResult.keySet();

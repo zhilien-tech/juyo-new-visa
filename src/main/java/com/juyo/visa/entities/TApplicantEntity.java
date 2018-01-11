@@ -177,4 +177,12 @@ public class TApplicantEntity implements Serializable {
 	@Comment("婚姻状况证件类型")
 	private Integer marryurltype;
 
+	@Column
+	@Comment("信息是否一致")
+	private Integer isSameInfo;
+
+	@Column
+	@Comment("是否已提示")
+	private Integer isPrompted;
+
 }
