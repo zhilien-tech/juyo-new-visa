@@ -3167,4 +3167,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		return null;
 	}
+
+	public Object getOrderStatus(int orderid) {
+		Map<String, Object> result = MapUtil.map();
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
+		for (JPOrderStatusEnum orderStatus : JPOrderStatusEnum.values()) {
+			if (order.getStatus() == orderStatus.intKey()) {
+				result.put("status", orderStatus.value());
+			}
+		}
+		return result;
+	}
 }

@@ -1629,6 +1629,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 
 	public Object baseIsChanged(TApplicantForm applicantForm, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Map<String, Object> result = MapUtil.map();
 		Integer userId = loginUser.getId();
 		//通过申请人ID获取当前申请人信息
 		Integer applyId = applicantForm.getId();
@@ -1637,23 +1638,29 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("applicantId", "=", applyId));
 			if (Util.isEmpty(base)) {
-				return 1;
+				result.put("isChanged", 1);
 			} else {
-				return isEqBase(applicantForm, base);
+				result.put("isChanged", isEqBase(applicantForm, base));
 			}
 		} else {//userId不为空时，根据userId来查询
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
 			if (Util.isEmpty(base)) {//因为没有base，说明游客表并没有建立，肯定改变了
-				return 1;
+				result.put("isChanged", 1);
 			} else {
-				return isEqBase(applicantForm, base);
+				result.put("isChanged", isEqBase(applicantForm, base));
 			}
 		}
+		//查询是否提示过
+		result.put("isPrompted", apply.getIsPrompted());
+		//查询是否更新
+		result.put("isUpdated", apply.getIsSameInfo());
+		return result;
 	}
 
 	public Object passIsChanged(TApplicantPassportForm passportForm, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Map<String, Object> result = MapUtil.map();
 		Integer userId = loginUser.getId();
 		//通过申请人ID获取当前申请人信息
 		Integer applyId = passportForm.getApplicantId();
@@ -1662,19 +1669,25 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
 					Cnd.where("applicantId", "=", applyId));
 			if (Util.isEmpty(pass)) {
-				return 1;
+				result.put("isChanged", 1);
 			} else {
-				return isEqPass(passportForm, pass);
+				result.put("isChanged", isEqPass(passportForm, pass));
 			}
 		} else {//userId不为空时，根据userId来查询
 			TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
 			if (Util.isEmpty(pass)) {//因为没有base，说明游客表并没有建立，肯定改变了
-				return 1;
+				result.put("isChanged", 1);
 			} else {
-				return isEqPass(passportForm, pass);
+				result.put("isChanged", isEqPass(passportForm, pass));
 			}
 		}
+
+		//查询是否提示过
+		result.put("isPrompted", apply.getIsPrompted());
+		//查询是否更新
+		result.put("isUpdated", apply.getIsSameInfo());
+		return result;
 	}
 
 	public Object isEqBase(TApplicantForm applicantForm, TTouristBaseinfoEntity base) {

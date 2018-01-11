@@ -561,4 +561,13 @@ public class OrderJpModule {
 		return saleViewService.undisabled(orderid);
 	}
 
+	/**
+	 * 获取订单状态
+	 */
+	@At
+	@POST
+	public Object getOrderStatus(@Param("orderid") int orderid) {
+		return saleViewService.getOrderStatus(orderid);
+	}
+
 }

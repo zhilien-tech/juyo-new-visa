@@ -954,6 +954,7 @@
 				}); */
 				if(status == 1){
 					cancelBtn();
+					parent.successCallBack();
 				}else if(status == 2){
 					
 				}else{
@@ -1409,6 +1410,11 @@
 			});
 	}
 	
+	function successCallBack(){
+		if(contact){
+			parent.successCallBack();
+		}
+	}
 	
 	function clearAll(){
 		$(".front").attr("class", "info-imgUpload front has-error");  

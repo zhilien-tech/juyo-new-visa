@@ -629,6 +629,7 @@
 				}); */
 				if(status == 1){
 					cancelBtn();
+					parent.successCallBack();
 				}else if(status == 2){
 					
 				}else{

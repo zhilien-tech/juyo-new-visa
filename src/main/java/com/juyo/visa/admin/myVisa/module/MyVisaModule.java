@@ -159,8 +159,8 @@ public class MyVisaModule {
 	 */
 	@At
 	@POST
-	public Object updateOrNot(@Param("applyid") int applyid) {
-		return myVisaService.updateOrNot(applyid);
+	public Object updateOrNot(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.updateOrNot(applyid, session);
 	}
 
 	/**

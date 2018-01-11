@@ -590,7 +590,7 @@
 					data : passportInfo,
 					url: '${base}/admin/myData/passIsChanged',
 					success :function(data) {
-						if(data == 1){//如果返回1则说明游客信息改变，提示是否更新
+						if(data.isChanged == 1){//如果返回1则说明游客信息改变，提示是否更新
     						layer.confirm("信息已改变，您是否要更新？", {
     							title:"提示",
     							btn: ["是","否"], //按钮
