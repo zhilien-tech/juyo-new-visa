@@ -29,9 +29,14 @@
     .colSm {  display:block; float:left; width:200px; }
     .padding-right-0 { margin-left:10%; width:323px; height:200px; border:1px solid #eee; }
     .delete { right:0; }
+    /*弹框头部固定*/
+    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+    .btn-margin { margin-top:10px;}
+    .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; padding:15px 37px 15px 53px;}  
+    
     /*左右导航样式*/
-    .leftNav { position:absolute;top:61px;left:0;z-index:999; width:40px;height:489px; cursor:pointer;}
-	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  }
+    .leftNav { position:fixed;top:50px;left:4px;z-index:999; width:40px;height:calc(100% - 50px); cursor:pointer;}
+	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 </style>
 	<style type="text/css">
 		body {min-width:auto;}
@@ -65,8 +70,8 @@
 						<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
 					</c:when>
 					<c:otherwise>
-						<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
-						<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
+						<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin" data-dismiss="modal" value="取消" /> 
+						<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic" value="保存" />
 					</c:otherwise>
 				</c:choose>
 			</div>

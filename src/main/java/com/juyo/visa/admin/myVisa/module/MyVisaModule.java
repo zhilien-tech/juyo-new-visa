@@ -128,30 +128,21 @@ public class MyVisaModule {
 	}
 
 	/**
-	 * 将游客信息赋值给员工
+	 * 将员工基本信息赋值给游客
 	 */
 	@At
 	@POST
-	public Object copyInfoToPersonnel(@Param("applyid") int applyid, HttpSession session) {
-		return myVisaService.copyInfoToPersonnel(applyid, session);
+	public Object copyBaseToTourist(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.copyBaseToTourist(applyid, session);
 	}
 
 	/**
-	 * 将游客基本信息赋值给员工基本信息
+	 * 将员工护照信息赋值给游客
 	 */
 	@At
 	@POST
-	public Object copyBaseToPersonnel(@Param("applyid") int applyid, HttpSession session) {
-		return myVisaService.copyBaseToPersonnel(applyid, session);
-	}
-
-	/**
-	 * 将游客护照信息赋值给员工基本信息
-	 */
-	@At
-	@POST
-	public Object copyPassToPersonnel(@Param("applyid") int applyid, HttpSession session) {
-		return myVisaService.copyPassToPersonnel(applyid, session);
+	public Object copyPassToTourist(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.copyPassToTourist(applyid, session);
 	}
 
 	/**
@@ -161,5 +152,23 @@ public class MyVisaModule {
 	@POST
 	public Object toSetUnsame(@Param("applyid") int applyid, HttpSession session) {
 		return myVisaService.toSetUnsame(applyid, session);
+	}
+
+	/**
+	 * 记录信息改变时选择了是还是否
+	 */
+	@At
+	@POST
+	public Object updateOrNot(@Param("applyid") int applyid) {
+		return myVisaService.updateOrNot(applyid);
+	}
+
+	/**
+	 * 查询是否改变
+	 */
+	@At
+	@POST
+	public Object isUpdate(@Param("applyid") int applyid) {
+		return myVisaService.isUpdate(applyid);
 	}
 }

@@ -151,7 +151,7 @@
 						maxmin: false,
 						shadeClose: false,
 						scrollbar: false,
-						area: ['900px', '551px'],
+						area: ['900px', '80%'],
 						content:'/admin/myData/basic.html?contact=1&applyId='+applyId
 					});
 	        	} ,

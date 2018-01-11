@@ -63,6 +63,7 @@ SELECT
 	taoj.id applicatid,
 	ta.id applyId,
 	ta.telephone,
+	ta.userId,
 	ta.email,
 	tavpj.type dataType,
 	tavpj. DATA DATA,
@@ -117,31 +118,23 @@ FROM
 	LEFT JOIN t_order tor ON tor.id = taoj.orderid 
 	$condition
 	
-/*copyBaseToPersonnel*/
+/*copyBaseToTourist*/
 UPDATE 
-	t_applicant ta
-LEFT JOIN 
-	t_tourist_baseinfo tb ON ta.userId = tb.userId
+	t_tourist_baseinfo tb,t_applicant ta
 SET 
-	ta.firstName = tb.firstName,ta.firstNameEn=tb.firstNameEn,ta.lastName=tb.lastName,ta.lastNameEn=tb.lastNameEn,ta.telephone=tb.telephone,ta.email=tb.email,ta.sex=tb.sex,
-	ta.nation=tb.nation,ta.birthday=tb.birthday,ta.address=tb.address,ta.cardId=tb.cardId,ta.cardFront=tb.cardFront,ta.cardBack=tb.cardBack,
-	ta.issueOrganization=tb.issueOrganization,ta.validEndDate=tb.validEndDate,ta.validStartDate=tb.validStartDate,ta.province=tb.province,
-	ta.city=tb.city,ta.detailedAddress=tb.detailedAddress,ta.otherFirstName=tb.otherFirstName,ta.otherFirstNameEn=tb.otherFirstNameEn,
-	ta.otherLastName=tb.otherLastName,ta.otherLastNameEn=tb.otherLastNameEn,ta.emergencyLinkman=tb.emergencyLinkman,ta.emergencyTelephone=tb.emergencyTelephone,
-	ta.cardProvince=tb.cardProvince,ta.cardCity=tb.cardCity,ta.hasOtherName=tb.hasOtherName,ta.hasOtherNationality=tb.hasOtherNationality,
-	ta.addressIsSameWithCard=tb.addressIsSameWithCard,ta.nationality=tb.nationality
-WHERE
-	ta.userId = @userId AND ta.id = @applyId
+	tb.firstName = ta.firstName,tb.firstNameEn=ta.firstNameEn,tb.lastName=ta.lastName,tb.lastNameEn=ta.lastNameEn,tb.telephone=ta.telephone,tb.email=ta.email,tb.sex=ta.sex,
+	tb.nation=ta.nation,tb.birthday=ta.birthday,tb.address=ta.address,tb.cardId=ta.cardId,tb.cardFront=ta.cardFront,tb.cardBack=ta.cardBack,
+	tb.issueOrganization=ta.issueOrganization,tb.validEndDate=ta.validEndDate,tb.validStartDate=ta.validStartDate,tb.province=ta.province,
+	tb.city=ta.city,tb.detailedAddress=ta.detailedAddress,tb.otherFirstName=ta.otherFirstName,tb.otherFirstNameEn=ta.otherFirstNameEn,
+	tb.otherLastName=ta.otherLastName,tb.otherLastNameEn=ta.otherLastNameEn,tb.emergencyLinkman=ta.emergencyLinkman,tb.emergencyTelephone=ta.emergencyTelephone,
+	tb.cardProvince=ta.cardProvince,tb.cardCity=ta.cardCity,tb.hasOtherName=ta.hasOtherName,tb.hasOtherNationality=ta.hasOtherNationality,
+	tb.addressIsSameWithCard=ta.addressIsSameWithCard,tb.nationality=ta.nationality
+	$condition
 
-/*copyPassToPersonnel*/
+/*copyPassToTourist*/
 UPDATE 
-	t_applicant_passport ta
-LEFT JOIN
-	t_applicant tat ON ta.applicantId=tat.id
-LEFT JOIN 
-	t_tourist_passport tp ON tp.userId = tat.userId
+	t_tourist_passport tp,t_applicant_passport ta
 SET 
-	ta.type=tp.type,ta.passport=tp.passport,ta.sex=tp.sex,ta.sexEn=tp.sexEn,ta.birthAddress=tp.birthAddress,ta.issuedDate=tp.issuedDate,ta.validType=tp.validType,ta.passportUrl=tp.passportUrl,
-	ta.birthAddressEn=tp.birthAddressEn,ta.birthday=tp.birthday,ta.issuedPlace=tp.issuedPlace,ta.issuedPlaceEn=tp.issuedPlaceEn,ta.validEndDate=tp.validEndDate,ta.validStartDate=tp.validStartDate
-WHERE
-	tat.userId = @userId AND tat.id = @applyId
+	tp.type=ta.type,tp.passport=ta.passport,tp.sex=ta.sex,tp.sexEn=ta.sexEn,tp.birthAddress=ta.birthAddress,tp.issuedDate=ta.issuedDate,tp.validType=ta.validType,tp.passportUrl=ta.passportUrl,
+	tp.birthAddressEn=ta.birthAddressEn,tp.birthday=ta.birthday,tp.issuedPlace=ta.issuedPlace,tp.issuedPlaceEn=ta.issuedPlaceEn,tp.validEndDate=ta.validEndDate,tp.validStartDate=ta.validStartDate
+	$condition

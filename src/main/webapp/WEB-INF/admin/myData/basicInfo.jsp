@@ -13,14 +13,16 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
-			.rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
-			.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;}
+			.qz-head { position: fixed; top:0;left:0;width:100%;height:50px;line-height:50px;background:#FFF;z-index:9999;padding:0px 15px; }
+			.content { padding: 15px 62px 15px 20px; height:100%; margin-top: 50px; overflow-y:hidden; }
+			.rightNav { position:fixed;top:50px;right:0;z-index:999; width:40px;height:calc(100% - 50px); cursor:pointer;}
+			.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999; border-bottom: 4px solid #999;transform:translate(0,-50%) rotate(-135deg);-webkit-transform:translate(0,-50%) rotate(-135deg);}
 			.row { margin-top: 5px;}
 			.wordSpell { margin-top:3px !important;}
 			.ipt-info { display:none; margin-top:15px;}
 			.NoInfo { width:95%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 			.form-control{height: 30px;}
-			.tab-content{padding: 0px 30px 10px 0;margin: 0 0px;}
+			.tab-content{margin: 0 0px;}
 			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
 			.front, .back {width: 320px;margin: 0px auto;}
 			.nameBeforeYes {

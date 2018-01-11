@@ -158,7 +158,7 @@ $(document).on("input","#issuedPlace",function(){
 	var pinyinchar = getPinYinStr(temp);
 	$("#issuedPlaceEn").val("/"+pinyinchar.toUpperCase());
 });
-$(document).on("input","#cardId",function(){
+/*$(document).on("input","#cardId",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
 	}
@@ -190,7 +190,7 @@ $(document).on("input","#cardId",function(){
 			searchByCard();
 		}
 	}
-});
+});*/
 //获取拼音字符串
 function getPinYinStr(hanzi){
 	var onehanzi = hanzi.split('');

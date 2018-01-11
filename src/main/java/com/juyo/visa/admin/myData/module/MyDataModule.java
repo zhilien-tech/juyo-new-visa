@@ -14,6 +14,8 @@ import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.myData.service.MyDataService;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
+import com.juyo.visa.forms.TApplicantForm;
+import com.juyo.visa.forms.TApplicantPassportForm;
 import com.juyo.visa.forms.TTouristBaseinfoForm;
 import com.juyo.visa.forms.TTouristPassportForm;
 import com.juyo.visa.forms.TTouristVisaForm;
@@ -215,6 +217,24 @@ public class MyDataModule {
 	@POST
 	public Object getTouristInfoByPass(@Param("id") int applyId, @Param("passport") String pass, HttpSession session) {
 		return myDataService.getTouristInfoByPass(applyId, pass, session);
+	}
+
+	/**
+	 * 比较基本信息是否改变
+	 */
+	@At
+	@POST
+	public Object baseIsChanged(@Param("..") TApplicantForm applicantForm, HttpSession session) {
+		return myDataService.baseIsChanged(applicantForm, session);
+	}
+
+	/**
+	 * 比较护照信息是否改变
+	 */
+	@At
+	@POST
+	public Object passIsChanged(@Param("..") TApplicantPassportForm passportForm, HttpSession session) {
+		return myDataService.passIsChanged(passportForm, session);
 	}
 
 }

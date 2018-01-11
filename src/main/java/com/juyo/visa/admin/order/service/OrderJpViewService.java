@@ -933,39 +933,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(applicantForm.getId())) {
 			TApplicantEntity applicant = dbDao
 					.fetch(TApplicantEntity.class, new Long(applicantForm.getId()).intValue());
+
 			TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
 					Cnd.where("applicantId", "=", applicantForm.getId()));
-			String address = applicant.getAddress();
-			Integer addressIsSameWithCard = applicant.getAddressIsSameWithCard();
-			Date birthday = applicant.getBirthday();
-			String cardBack = applicant.getCardBack();
-			String cardCity = applicant.getCardCity();
-			String cardFront = applicant.getCardFront();
-			String cardId = applicant.getCardId();
-			String cardProvince = applicant.getCardProvince();
-			String city = applicant.getCity();
-			String detailedAddress = applicant.getDetailedAddress();
-			String email = applicant.getEmail();
-			String emergencyLinkman = applicant.getEmergencyLinkman();
-			String emergencyTelephone = applicant.getEmergencyTelephone();
-			String firstName = applicant.getFirstName();
-			String firstNameEn = applicant.getFirstNameEn();
-			Integer hasOtherName = applicant.getHasOtherName();
-			Integer hasOtherNationality = applicant.getHasOtherNationality();
-			String issueOrganization = applicant.getIssueOrganization();
-			String lastName = applicant.getLastName();
-			String lastNameEn = applicant.getLastNameEn();
-			String nation = applicant.getNation();
-			String nationality = applicant.getNationality();
-			String otherFirstName = applicant.getOtherFirstName();
-			String otherFirstNameEn = applicant.getOtherFirstNameEn();
-			String otherLastName = applicant.getOtherLastName();
-			String otherLastNameEn = applicant.getOtherLastNameEn();
-			String province = applicant.getProvince();
-			String sex = applicant.getSex();
-			String telephone = applicant.getTelephone();
-			Date validEndDate = applicant.getValidEndDate();
-			Date validStartDate = applicant.getValidStartDate();
 			applicant.setOpId(loginUser.getId());
 			applicant.setId(applicantForm.getId());
 			applicant.setCardFront(applicantForm.getCardFront());
@@ -1037,56 +1007,27 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 
 			int update = dbDao.update(applicant);
+			if (Util.eq(applicantForm.getUserType(), 2)) {//为游客时
+				if (update > 0) {//说明保存成功，这时候必有userId
+					TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+							Cnd.where("applicantId", "=", applicant.getId()));
+					if (!Util.isEmpty(base)) {//不为空，说明有游客信息
+						if (!Util.isEmpty(base.getUserId())) {//如果userId为空，把申请人的userId给游客,同时更新游客申请人ID，对应为最新的申请人
+
+						} else {//如果为空，需要判断userId有没有被占用
+							TTouristBaseinfoEntity uidBase = dbDao.fetch(TTouristBaseinfoEntity.class,
+									Cnd.where("userId", "=", applicant.getUserId()));
+							if (Util.isEmpty(uidBase)) {
+								base.setUserId(applicant.getUserId());
+								dbDao.update(base);
+							}
+						}
+					}
+				}
+			}
 
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", applicant.getId()));
-			if (Util.eq(applicantForm.getUserType(), 2)) {
-				if (update > 0) {
-					isBaseEq(address, applicantForm.getAddress(), applyJp);
-					isBaseEq(addressIsSameWithCard, applicantForm.getAddressIsSameWithCard(), applyJp);
-					isBaseEq(birthday, applicantForm.getBirthday(), applyJp);
-					isBaseEq(cardBack, applicantForm.getCardBack(), applyJp);
-					if (!Util.isEmpty(cardCity)) {
-						isBaseEq(cardCity, applicantForm.getCardCity(), applyJp);
-					}
-					if (!Util.isEmpty(cardProvince)) {
-						isBaseEq(cardProvince, applicantForm.getCardProvince(), applyJp);
-					}
-					isBaseEq(cardFront, applicantForm.getCardFront(), applyJp);
-					isBaseEq(cardId, applicantForm.getCardId(), applyJp);
-					isBaseEq(city, applicantForm.getCity(), applyJp);
-					isBaseEq(detailedAddress, applicantForm.getDetailedAddress(), applyJp);
-					isBaseEq(email, applicantForm.getEmail(), applyJp);
-					isBaseEq(emergencyLinkman, applicantForm.getEmergencyLinkman(), applyJp);
-					isBaseEq(emergencyTelephone, applicantForm.getEmergencyTelephone(), applyJp);
-					isBaseEq(firstName, applicantForm.getFirstName(), applyJp);
-					if (!Util.isEmpty(firstNameEn)) {
-						isBaseEq(firstNameEn, applicantForm.getFirstNameEn().substring(1), applyJp);
-					}
-					if (!Util.isEmpty(lastNameEn)) {
-						isBaseEq(lastNameEn, applicantForm.getLastNameEn().substring(1), applyJp);
-					}
-					if (!Util.isEmpty(otherFirstNameEn)) {
-						isBaseEq(otherFirstNameEn, applicantForm.getOtherFirstNameEn().substring(1), applyJp);
-					}
-					if (!Util.isEmpty(otherLastNameEn)) {
-						isBaseEq(otherLastNameEn, applicantForm.getOtherLastNameEn().substring(1), applyJp);
-					}
-					isBaseEq(hasOtherName, applicantForm.getHasOtherName(), applyJp);
-					isBaseEq(hasOtherNationality, applicantForm.getHasOtherNationality(), applyJp);
-					isBaseEq(issueOrganization, applicantForm.getIssueOrganization(), applyJp);
-					isBaseEq(lastName, applicantForm.getLastName(), applyJp);
-					isBaseEq(nation, applicantForm.getNation(), applyJp);
-					isBaseEq(nationality, applicantForm.getNationality(), applyJp);
-					isBaseEq(otherFirstName, applicantForm.getOtherFirstName(), applyJp);
-					isBaseEq(otherLastName, applicantForm.getOtherLastName(), applyJp);
-					isBaseEq(province, applicantForm.getProvince(), applyJp);
-					isBaseEq(sex, applicantForm.getSex(), applyJp);
-					isBaseEq(telephone, applicantForm.getTelephone(), applyJp);
-					isBaseEq(validEndDate, applicantForm.getValidEndDate(), applyJp);
-					isBaseEq(validStartDate, applicantForm.getValidStartDate(), applyJp);
-				}
-			}
 			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
 			String baseRemark = applicantForm.getBaseRemark();
 			if (!Util.isEmpty(baseRemark)) {
@@ -2314,20 +2255,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
 					Cnd.where("applicantId", "=", passportForm.getApplicantId()));
 			passport.setOpId(loginUser.getId());
-			String birthAddress = passport.getBirthAddress();
-			String birthAddressEn = passport.getBirthAddressEn();
-			Date birthday = passport.getBirthday();
-			Date issuedDate = passport.getIssuedDate();
-			String issuedPlace = passport.getIssuedPlace();
-			String issuedPlaceEn = passport.getIssuedPlaceEn();
-			String pass = passport.getPassport();
-			String passportUrl = passport.getPassportUrl();
-			String sex = passport.getSex();
-			String sexEn = passport.getSexEn();
-			String type = passport.getType();
-			Date validEndDate = passport.getValidEndDate();
-			Date validStartDate = passport.getValidStartDate();
-			Integer validType = passport.getValidType();
 
 			passport.setPassportUrl(passportForm.getPassportUrl());
 			passport.setOCRline1(passportForm.getOCRline1());
@@ -2355,22 +2282,24 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			int update = dbDao.update(passport);
 			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", passport.getApplicantId()));
+
+			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, passportForm.getApplicantId().longValue());
 			if (Util.eq(passportForm.getUserType(), 2)) {
-				if (update > 0) {
-					isPassEq(birthAddress, passportForm.getBirthAddress(), applicantOrderJpEntity);
-					isPassEq(birthAddressEn, passportForm.getBirthAddressEn(), applicantOrderJpEntity);
-					isPassEq(birthday, passportForm.getBirthday(), applicantOrderJpEntity);
-					isPassEq(issuedDate, passportForm.getIssuedDate(), applicantOrderJpEntity);
-					isPassEq(issuedPlace, passportForm.getIssuedPlace(), applicantOrderJpEntity);
-					isPassEq(issuedPlaceEn, passportForm.getIssuedPlaceEn(), applicantOrderJpEntity);
-					isPassEq(pass, passportForm.getPassport(), applicantOrderJpEntity);
-					isPassEq(passportUrl, passportForm.getPassportUrl(), applicantOrderJpEntity);
-					isPassEq(sex, passportForm.getSex(), applicantOrderJpEntity);
-					isPassEq(sexEn, passportForm.getSexEn(), applicantOrderJpEntity);
-					isPassEq(type, passportForm.getType(), applicantOrderJpEntity);
-					isPassEq(validEndDate, passportForm.getValidEndDate(), applicantOrderJpEntity);
-					isPassEq(validStartDate, passportForm.getValidStartDate(), applicantOrderJpEntity);
-					isPassEq(validType, passportForm.getValidType(), applicantOrderJpEntity);
+				if (update > 0) {//基本信息保存成功，这时候必有userId
+					TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
+							Cnd.where("applicantId", "=", apply.getId()));
+					if (!Util.isEmpty(pass)) {
+						if (!Util.isEmpty(pass.getUserId())) {
+
+						} else {
+							TTouristPassportEntity uidPass = dbDao.fetch(TTouristPassportEntity.class,
+									Cnd.where("userId", "=", apply.getUserId()));
+							if (Util.isEmpty(uidPass)) {
+								pass.setUserId(apply.getUserId());
+								dbDao.update(pass);
+							}
+						}
+					}
 				}
 			}
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
