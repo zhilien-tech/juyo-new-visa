@@ -1,5 +1,5 @@
 .main{
 	float:right;
 	width:calc(100% - 170px);
-	height:700px;
+	height:calc(100% - 60px);
 }
