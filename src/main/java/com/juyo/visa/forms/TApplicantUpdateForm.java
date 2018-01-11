@@ -34,6 +34,8 @@ public class TApplicantUpdateForm extends ModForm implements Serializable {
 	/**名(拼音)*/
 	private String lastNameEn;
 
+	private Integer isSameInfo;
+
 	private String otherFirstName;
 
 	private String otherFirstNameEn;
@@ -41,6 +43,8 @@ public class TApplicantUpdateForm extends ModForm implements Serializable {
 	private String otherLastName;
 
 	private String otherLastNameEn;
+
+	private Integer isPrompted;
 
 	private String emergencyLinkman;
 

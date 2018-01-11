@@ -176,6 +176,7 @@
 										name="firstName" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
+										<input type="hidden" name="userType" value="${obj.userType }"/>
 										<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 										<input type="text" id="firstNameEn" style="position:absolute;top:37px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
@@ -557,6 +558,7 @@
 					fields : {
 						
 						firstName : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '姓不能为空'
@@ -564,6 +566,7 @@
 							}
 						},
 						lastName : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '名不能为空'
@@ -571,6 +574,7 @@
 							}
 						},
 						telephone : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '手机号不能为空'
@@ -582,6 +586,7 @@
 							}
 						},
 						email : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '邮箱不能为空'
@@ -592,7 +597,7 @@
 			                    }
 							}
 						},
-						cardFront : {
+						cardId : {
 							trigger:"change keyup",
 							validators : {
 								notEmpty : {
@@ -697,6 +702,7 @@
 							}
 						},
 						emergencyLinkman : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '紧急联系人姓名不能为空'
@@ -704,6 +710,7 @@
 							}
 						},
 						emergencyTelephone : {
+							trigger:"change keyup",
 							validators : {
 								notEmpty : {
 									message : '紧急联系人手机不能为空'
@@ -754,7 +761,7 @@
 		//国籍检索下拉项
 		function setNationality(nationality){
 			$("#nationality").nextAll("ul.ui-autocomplete").remove();
-			$("#nationality").val(nationality);
+			$("#nationality").val(nationality).change();
 		} 
 		$("#nationalityDiv").mouseleave(function(){
 			$("#nationality").nextAll("ul.ui-autocomplete").remove();
@@ -784,7 +791,7 @@
 		//省份 检索下拉项
 		function setProvince(province){
 			$("#province").nextAll("ul.ui-autocomplete").remove();
-			$("#province").val(province);
+			$("#province").val(province).change();
 		} 
 		$("#provinceDiv").mouseleave(function(){
 			$("#province").nextAll("ul.ui-autocomplete").remove();
@@ -815,7 +822,7 @@
 		//市 检索下拉项
 		function setCity(city){
 			$("#city").nextAll("ul.ui-autocomplete").remove();
-			$("#city").val(city);
+			$("#city").val(city).change();
 		} 
 		$("#cityDiv").mouseleave(function(){
 			$("#city").nextAll("ul.ui-autocomplete").remove();
@@ -1094,9 +1101,140 @@
 			}
 		});
 		
-		/* $("#cardId").change(function(){
-			searchByCard();
-		}); */
+		//根据身份证号搜索是否有游客信息
+		$("#cardId").change(function(){
+			if(userType == 2){
+				$.ajax({
+					type : "post",
+					data : {
+						cardId : $("#cardId").val(),
+						applicantId : '${obj.applicant.id}'
+					},
+					url : '${base}/admin/myData/getTouristInfoByCard',
+					success :function(data) {
+						if(data.base){
+							layer.confirm("您的信息已存在，是否使用？", {
+								title:"提示",
+								btn: ["是","否"], //按钮
+								shade: false //不显示遮罩
+							}, function(index){
+								toSet(data);
+								//$("#telephone").unbind("change");
+								$("#telephone").val(data.base.telephone); 
+								$("#telephone").next().next().css('display','none');
+								$("#telephone").next().next().attr('data-bv-result','VALID');
+								$("#telephone").next().attr('class','form-control-feedback glyphicon glyphicon-ok');
+								$("#telephone").parent().attr('class','form-group has-feedback has-success');
+								//var btn1Obj = document.getElementById("telephone");
+								//btn1Obj.addEventListener("change",false);
+								layer.close(index);
+							});
+						}
+					}
+				});
+			}
+		});
+		
+		//根据电话搜索是否有游客信息
+		$("#telephone").change(function(){
+			if(userType == 2){
+				$.ajax({
+					type : "post",
+					async : false,
+					data : {
+						telephone : $("#telephone").val(),
+						applicantId : '${obj.applicant.id}'
+					},
+					url : '${base}/admin/myData/getTouristInfoByTelephone',
+					success :function(data) {
+						console.log(JSON.stringify(data));
+						if(data.base){
+							layer.confirm("您的信息已存在，是否使用？", {
+								title:"提示",
+								btn: ["是","否"], //按钮
+								shade: false //不显示遮罩
+							}, function(index){
+								toSet(data);
+								//$("#cardId").unbind("change");
+								$("#cardId").val(data.base.cardId); 
+								$("#cardId").next().next().css('display','none');
+								$("#cardId").next().next().attr('data-bv-result','VALID');
+								$("#cardId").next().attr('class','form-control-feedback glyphicon glyphicon-ok');
+								$("#cardId").parent().attr('class','form-group has-feedback has-success');
+								layer.close(index);
+							});
+						}
+					}
+				});
+			}
+		});
+		
+		function toSet(data){
+			$("#firstName").val(data.base.firstName).change();
+			$("#firstNameEn").val("/"+data.base.firstNameEn).change();
+			$("#lastName").val(data.base.lastName).change();
+			$("#lastNameEn").val("/"+data.base.lastNameEn).change(); 
+			$('#sqImgBack').attr('src', data.base.cardBack).change();
+			$('#sqImg').attr('src', data.base.cardFront).change();
+			$("#cardFront").val(data.base.cardFront).change(); 
+			$("#uploadFile").siblings("i").css("display","block");
+			$(".front").attr("class", "info-imgUpload front has-success");  
+	        $(".help-blockFront").attr("data-bv-result","IVALID");  
+	        $(".help-blockFront").attr("style","display: none;");
+	        $("#borderColorFront").attr("style", null);
+			$("#cardBack").val(data.base.cardBack).change(); 
+			$("#uploadFileBack").siblings("i").css("display","block");
+			$(".back").attr("class", "info-imgUpload back has-success");  
+	        $(".help-blockBack").attr("data-bv-result","IVALID");  
+	        $(".help-blockBack").attr("style","display: none;"); 
+	        $("#borderColorBack").attr("style", null);
+			$("#issueOrganization").val(data.base.issueOrganization).change(); 
+			$("#otherFirstName").val(data.base.otherFirstName).change(); 
+			$("#otherFirstNameEn").val("/"+data.base.otherFirstNameEn).change(); 
+			$("#otherLastNameEn").val("/"+data.base.otherLastNameEn).change(); 
+			$("#otherLastName").val(data.base.otherLastName).change(); 
+			$("#nationality").val(data.base.nationality).change(); 
+			$("#email").val(data.base.email).change(); 
+			$("#sex").val(data.base.sex).change(); 
+			$("#nation").val(data.base.nation).change(); 
+			$("#birthday").val(data.birthday).change(); 
+			$("#address").val(data.base.address).change(); 
+			$("#validStartDate").val(data.validStartDate).change(); 
+			$("#validEndDate").val(data.validEndDate).change(); 
+			$("#province").val(data.base.province).change(); 
+			$("#city").val(data.base.city).change(); 
+			$("#detailedAddress").val(data.base.detailedAddress).change(); 
+			$("#emergencyLinkman").val(data.base.emergencyLinkman).change(); 
+			$("#emergencyTelephone").val(data.base.emergencyTelephone).change(); 
+			$("input[name='hasOtherNationality'][value='"+data.base.hasOtherNationality+"']").attr("checked",'checked');
+			$("input[name='hasOtherName'][value='"+data.base.hasOtherName+"']").attr("checked",'checked');
+			if(data.base.addressIsSameWithCard == 1){
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
+			}else{
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
+			}
+			var nation = data.base.hasOtherNationality;
+			var otherName = data.base.hasOtherName;
+			if(nation == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nationalityHide").show();
+				$(".onceIDTop").css('float','left');
+			}else {
+				$(".nationalityHide").hide();
+			}
+			
+			if(otherName == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nameBeforeHide").show();
+				$(".wordSpell").show();
+				$(".onceIDTop").removeClass('col-sm-offset-1');
+				$(".onceIDTop").css('padding-left','15px');
+			}else {
+				
+				$(".nameBeforeHide").hide();
+				$(".wordSpell").hide();
+			}
+		}
 		
 		function searchByCard(){
 			
@@ -1141,8 +1279,8 @@
 				}
 			}
 			saveApplicant(2);
-			socket.onclose();
-			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+			//socket.onclose();
+			//window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
 		}
 		
 		//合格/不合格
@@ -1216,39 +1354,125 @@
 			var orderid = '${obj.orderid}';
 			var applicantId = '${obj.applicantId}';
 			applicantInfo.id = applicantId;
-			$.ajax({
-				async: false,
-				type: 'POST',
-				data : applicantInfo,
-				url: '${base}/admin/orderJp/saveEditApplicant',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-					//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					//layer.close(index);
-					if(userType == 2){
-						layer.load(1);
-						$.ajax({
-							type: 'POST',
-							async : false,
-							data : {
-								orderid : orderid,
-								applicantid : applicantId,
-								completeType : 'base'
-							},
-							url: '${base}/admin/myData/changeStatus.html',
-							success :function(data) {
-								console.log(JSON.stringify(data));
-								layer.closeAll('loading');
-							}
-						});
+			if(userType == 2){
+				$.ajax({
+					async: false,
+					type: 'POST',
+					data : applicantInfo,
+					url: '${base}/admin/myData/baseIsChanged',
+					success :function(data) {
+						if(data == 1){//如果返回1则说明游客信息改变，提示是否更新
+    						layer.confirm("信息已改变，您是否要更新？", {
+    							title:"提示",
+    							btn: ["是","否"], //按钮
+    							shade: false //不显示遮罩
+    						}, function(){
+    							$.ajax({
+    								async: false,
+    								type: 'POST',
+    								data : {
+    									applyid:applicantId
+    								},
+    								url: '${base}/admin/myVisa/updateOrNot',
+    								success :function(data) {
+    									$.ajax({
+	    									async: false,
+	    									type: 'POST',
+	    									data : applicantInfo,
+	    									url: '${base}/admin/orderJp/saveEditApplicant',
+	    									success :function(data) {
+	    										console.log(JSON.stringify(data));
+	    										layer.closeAll('loading');
+	    										if(status == 2){
+	    											socket.onclose();
+	    											window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+	    										}
+	    										$.ajax({ 
+	    			    					    	url: '${base}/admin/myVisa/isUpdate',
+	    			    					    	dataType:"json",
+	    			    					    	async:false,
+	    			    					    	data:{applyid:applicantId},
+	    			    					    	type:'post',
+	    			    					    	success: function(data){
+	    			    					    		if(data == 1){//更新
+				    										$.ajax({ 
+				    			    					    	url: '${base}/admin/myVisa/copyBaseToTourist',
+				    			    					    	dataType:"json",
+				    			    					    	data:{applyid:applicantId},
+				    			    					    	type:'post',
+				    			    					    	success: function(data){
+				    			    					    		
+				    			    					      	}
+				    			    					    }); 
+	    			    					    		}
+	    			    					      	}
+	    			    					    }); 
+	    										//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	    										//layer.close(index);
+	    										if(status == 1){
+	    											closeWindow();
+	    											parent.successCallBack(1);
+	    										}
+	    									}
+	    								});
+    								}
+    							});
+    						},function(){
+    							if(status == 1){
+									closeWindow();
+									parent.successCallBack(1);
+								}
+    							if(status == 2){
+									socket.onclose();
+									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+								}
+    						});
+						}else{
+							$.ajax({
+								async: false,
+								type: 'POST',
+								data : applicantInfo,
+								url: '${base}/admin/orderJp/saveEditApplicant',
+								success :function(data) {
+									console.log(JSON.stringify(data));
+									layer.closeAll('loading');
+									//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+									//layer.close(index);
+									if(status == 2){
+										socket.onclose();
+										window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+									}
+									if(status == 1){
+										closeWindow();
+										parent.successCallBack(1);
+									}
+								}
+							});
+						}
 					}
-					if(status == 1){
-						closeWindow();
-						parent.successCallBack(1);
+				});
+			}else{
+				$.ajax({
+					async: false,
+					type: 'POST',
+					data : applicantInfo,
+					url: '${base}/admin/orderJp/saveEditApplicant',
+					success :function(data) {
+						console.log(JSON.stringify(data));
+						layer.closeAll('loading');
+						//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						//layer.close(index);
+						if(status == 2){
+							socket.onclose();
+							window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+						}
+						if(status == 1){
+							closeWindow();
+							parent.successCallBack(1);
+						}
 					}
-				}
-			});
+				});
+			}
 			}
 		}
 		
