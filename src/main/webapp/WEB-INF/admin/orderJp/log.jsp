@@ -128,9 +128,9 @@
 		     	success: function(data){
 		     		if(data.stauts == 200){
 						layer.close(layerIndex);
+						parent.successCallBack(88);
 					}
 					closeWindow();
-					parent.layer.msg("负责人变更成功");
 		       	}
 		     });
 		}

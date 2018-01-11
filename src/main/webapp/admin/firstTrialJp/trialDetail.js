@@ -461,6 +461,8 @@ function successCallBack(status){
 		layer.msg('修改成功');
 	}else if(status == 2){
 		layer.msg('发送成功');
+	}else if(status == 88){
+		layer.msg('负责人变更成功');
 	}
 	reloadData();
 }
