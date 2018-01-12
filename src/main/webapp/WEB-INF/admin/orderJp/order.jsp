@@ -1142,7 +1142,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['700px', '80%'],
-						content:'/admin/orderJp/log.html?id='+id
+						content:'/admin/orderJp/log.html?id='+id+'&orderProcessType=1'
 					});
 				},
 				//签证录入
@@ -1223,22 +1223,25 @@
 			if(status == 3){
 				layer.msg('添加成功');
 			}
-				$.ajax({ 
-			    	url: '${base}/admin/orderJp/getEditApplicant',
-			    	dataType:"json",
-			    	data:{orderid:orderid},
-			    	type:'post',
-			    	success: function(data){
-			    		if(data.length <= 0 || data.length == undefined){
-			    			$("#mySwitch").addClass("none");//显示申请人信息列表
-							$("#applicantInfo").show();//添加申请人 按钮 隐藏
-			    		}else{
-			    			$("#mySwitch").removeClass("none");
-							$("#applicantInfo").hide();
-			    			orderobj.applicantInfo = data;
-			    		}
-			      	}
-			    }); 
+			if(status == 88){
+				layer.msg('负责人变更成功');
+			}
+			$.ajax({ 
+		    	url: '${base}/admin/orderJp/getEditApplicant',
+		    	dataType:"json",
+		    	data:{orderid:orderid},
+		    	type:'post',
+		    	success: function(data){
+		    		if(data.length <= 0 || data.length == undefined){
+		    			$("#mySwitch").addClass("none");//显示申请人信息列表
+						$("#applicantInfo").show();//添加申请人 按钮 隐藏
+		    		}else{
+		    			$("#mySwitch").removeClass("none");
+						$("#applicantInfo").hide();
+		    			orderobj.applicantInfo = data;
+		    		}
+		      	}
+		    }); 
 			
 		}
 		
