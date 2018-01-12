@@ -327,7 +327,7 @@
 	
 	function searchOrder(orderProcessType){
 		clearSearchEle();
-		$("#searchbtn").click();
+		search();
 	}
 	
 	function clearSearchEle(){
