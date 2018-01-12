@@ -14,6 +14,7 @@ import org.nutz.dao.util.cri.SqlExpressionGroup;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.uxuexi.core.common.util.Util;
 
 @Data
@@ -118,11 +119,14 @@ public class OrderJpForm extends OrderForm {
 			cnd.and("oj.visaType", "=", visaType);
 		}
 
-		if (userType == 5) {
+		if (userType == UserLoginEnum.PERSONNEL.intKey()) {
+			//普通员工
+			SqlExpressionGroup expgPersonal = new SqlExpressionGroup();
+			expgPersonal.and("o.userId", "=", userId).or("o.salesOpid", "=", userId);
+			cnd.and(expgPersonal);
+		} else {
+			//管理员
 			cnd.and("o.comId", "=", comId);
-		}
-		if (userType == 1) {
-			cnd.and("o.userId", "=", userId);
 		}
 		cnd.orderBy("o.updatetime", "DESC");
 		return cnd;

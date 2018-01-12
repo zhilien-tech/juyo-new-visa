@@ -179,6 +179,9 @@ function successCallBack(status){
 	if(status == 3){
 		layer.msg('移交签证成功');
 	}
+	if(status == 88){
+		layer.msg('负责人变更成功');
+	}
 }
 
 

@@ -652,6 +652,8 @@
 				    }); 
 				}else if(status == 2){
 					layer.msg('保存成功');
+				}else if(status == 88){
+					layer.msg('负责人变更成功');
 				}
 				$.ajax({ 
 					url: '/admin/visaJapan/getVisaDetailApply.html',
@@ -676,7 +678,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['700px', '80%'],
-					content:'/admin/orderJp/log.html?id='+orderinfoid
+					content:'/admin/orderJp/log.html?id='+orderinfoid+'&orderProcessType=4'
 				});
 			}
 			$('#urgenttype').change(function(){

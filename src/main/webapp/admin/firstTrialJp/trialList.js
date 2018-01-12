@@ -232,12 +232,20 @@ new Vue({
 $("#searchBtn").on('click', function () {
 	var status = $('#status').val();
 	var searchStr = $('#searchStr').val();
+	
+	var orderAuthority = "allOrder";
+	$(".searchOrderBtn").each(function(){
+		if($(this).hasClass("bgColor")){
+			orderAuthority = $(this).attr("name");
+		}
+	});
+	
 	$.ajax({ 
 		url: url,
-		/* data:{status:status,searchStr:searchStr}, */
 		data:{
 			status:status,
-			searchStr:searchStr
+			searchStr:searchStr,
+			orderAuthority:orderAuthority
 		},
 		dataType:"json",
 		type:'post',

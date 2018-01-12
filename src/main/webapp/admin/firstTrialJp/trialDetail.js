@@ -425,7 +425,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['700px', '80%'],
-				content:'/admin/orderJp/log.html?id='+orderid
+				content:'/admin/orderJp/log.html?id='+orderid+'&orderProcessType=2'
 			});
 		},
 		urgentTypeChange:function(){
@@ -462,6 +462,8 @@ function successCallBack(status){
 		layer.msg('修改成功');
 	}else if(status == 2){
 		layer.msg('发送成功');
+	}else if(status == 88){
+		layer.msg('负责人变更成功');
 	}
 	reloadData();
 }
