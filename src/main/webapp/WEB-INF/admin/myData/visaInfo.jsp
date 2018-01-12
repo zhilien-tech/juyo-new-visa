@@ -619,27 +619,62 @@
 				$("#uploadFile").siblings("i").css("display","none");
 			}
 			
+			//婚姻状况为单身和丧偶时没有上传图片接口
+			var marryStatus = $("#marryStatus").val();
+			if(marryStatus == 3 || marryStatus == 4){
+				$(".info-imgUpload").hide();
+			}
+			$("#marryStatus").change(function(){
+				var status = $(this).val();
+				if(status == 3 || status == 4){
+					$(".info-imgUpload").hide();
+					$('#marryUrl').val("");
+					$('#sqImg').attr('src', "");
+					$("#uploadFile").siblings("i").css("display","none");
+					$(".front").attr("class", "info-imgUpload front has-success");  
+				    $(".help-blockFront").attr("data-bv-result","IVALID");  
+				    $(".help-blockFront").attr("style","display: none;");
+				    $("#borderColor").attr("style",null);
+				}else{
+					if($("#sqImg").attr("src") == ""){
+						$(".front").attr("class", "info-imgUpload front has-error");  
+					    $(".help-blockFront").attr("data-bv-result","INVALID");  
+					    $(".help-blockFront").attr("style","display: block;");
+					    $("#borderColor").attr("style","border-color:#ff1a1a");
+					}
+					$(".info-imgUpload").show();
+				}
+			});
+			
 			
 			
 			var career = $("#careerStatus").val();
 			if(career == 4){
-				$("#schoolName").html("<span>*</span>学校名称：");
-				$("#schoolTelephone").html("<span>*</span>学校电话：");
-				$("#schoolAddress").html("<span>*</span>学校地址：");
+				$("#schoolName").html("<span>*</span>学校名称");
+				$("#schoolTelephone").html("<span>*</span>学校电话");
+				$("#schoolAddress").html("<span>*</span>学校地址");
+			}
+			if(career == 5){
+				$(".preSchool").hide();
+				$("#name").val("").change();
+				$("#telephone").val("").change();
+				$("#address").val("").change();
 			}
 			$("#careerStatus").change(function(){
 				$("#name").val("").change();
 				$("#telephone").val("").change();
 				$("#address").val("").change();
 				var career = $(this).val();
-				if(career == 4){
-					$("#schoolName").html("<span>*</span>学校名称：");
-					$("#schoolTelephone").html("<span>*</span>学校电话：");
-					$("#schoolAddress").html("<span>*</span>学校地址：");
+				if(career == 5){
+					$(".preSchool").hide();
+				}else if(career == 4){
+					$("#schoolName").html("<span>*</span>学校名称");
+					$("#schoolTelephone").html("<span>*</span>学校电话");
+					$("#schoolAddress").html("<span>*</span>学校地址");
 				}else{
-					$("#schoolName").html("<span>*</span>单位名称：");
-					$("#schoolTelephone").html("<span>*</span>单位电话：");
-					$("#schoolAddress").html("<span>*</span>单位地址：");
+					$("#schoolName").html("<span>*</span>单位名称");
+					$("#schoolTelephone").html("<span>*</span>单位电话");
+					$("#schoolAddress").html("<span>*</span>单位地址");
 				}
 			});
 			

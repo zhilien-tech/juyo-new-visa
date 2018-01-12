@@ -552,12 +552,15 @@
 			
 			var career = $("#careerStatus").val();
 			if(career == 4){
-				$("#schoolName").html("<span>*</span>学校名称：");
-				$("#schoolTelephone").html("<span>*</span>学校电话：");
-				$("#schoolAddress").html("<span>*</span>学校地址：");
+				$("#schoolName").html("<span>*</span>学校名称");
+				$("#schoolTelephone").html("<span>*</span>学校电话");
+				$("#schoolAddress").html("<span>*</span>学校地址");
 			}
 			if(career == 5){
 				$(".preSchool").hide();
+				$("#name").val("").change();
+				$("#telephone").val("").change();
+				$("#address").val("").change();
 			}
 			$("#careerStatus").change(function(){
 				$("#name").val("").change();
@@ -568,14 +571,14 @@
 					$(".preSchool").hide();
 				}else if(career == 4){
 					$(".preSchool").show();
-					$("#schoolName").html("<span>*</span>学校名称：");
-					$("#schoolTelephone").html("<span>*</span>学校电话：");
-					$("#schoolAddress").html("<span>*</span>学校地址：");
+					$("#schoolName").html("<span>*</span>学校名称");
+					$("#schoolTelephone").html("<span>*</span>学校电话");
+					$("#schoolAddress").html("<span>*</span>学校地址");
 				}else{
 					$(".preSchool").show();
-					$("#schoolName").html("<span>*</span>单位名称：");
-					$("#schoolTelephone").html("<span>*</span>单位电话：");
-					$("#schoolAddress").html("<span>*</span>单位地址：");
+					$("#schoolName").html("<span>*</span>单位名称");
+					$("#schoolTelephone").html("<span>*</span>单位电话");
+					$("#schoolAddress").html("<span>*</span>单位地址");
 				}
 			});
 			
