@@ -33,6 +33,7 @@
 				<div class="tab-content row">
 					<div class="info-body-from backmail-div">
 						<input id="id" name="id" type="hidden" v-model="backmailinfo.id">
+						<input id="orderId" name="orderId" type="hidden" value="${obj.orderId }">
 						<input id="applicantJPId" name="applicantJPId" type="hidden" v-model="backmailinfo.applicantjpid">
 						<input id="isAfterMarket" name="isAfterMarket" value="${obj.isAfterMarket }" type="hidden" >
 						<div class="row body-from-input">
@@ -147,6 +148,7 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		var applicantId = '${obj.applicantId}';
+		var orderId = '${obj.orderId}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>

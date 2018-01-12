@@ -24,10 +24,12 @@ import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.aftermarket.form.AftermarketListForm;
+import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
 import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.common.base.JuYouResult;
+import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.util.RegExpUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
@@ -52,10 +54,14 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 
 	private static final String AFTERMARKET_EMAIL_URL = "mailtemp/aftermarket_mail_temp.html";
 	private static final String AFTERMARKET_MESSAGE_URL = "messagetmp/aftermarket_message_tmp.txt";
+	private static final Integer AFTERMARKET_PROCESS = JPOrderProcessTypeEnum.AFTERMARKET_PROCESS.intKey();
 	@Inject
 	private MailService mailService;
 	@Inject
 	private FirstTrialJpViewService firstTrialJpViewService;
+
+	@Inject
+	private ChangePrincipalViewService changePrincipalViewService;
 
 	/**
 	 * 获取售后列表数据
@@ -72,6 +78,8 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
+		form.setUserid(userid);
 		form.setCompanyid(loginCompany.getId());
 		Map<String, Object> result = Maps.newHashMap();
 		Sql sql = form.sql(sqlManager);
@@ -120,6 +128,9 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object sendMailAndMessage(Integer applicantid, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
 		//日本申请人信息
 		TApplicantOrderJpEntity applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class, applicantid.longValue());
 		//申请人信息
@@ -128,6 +139,7 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, applicantjp.getOrderId().longValue());
 		//订单信息
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		Integer orderId = order.getId();
 		//获取邮件
 		String email = applicant.getEmail();
 		//获取手机号
@@ -157,7 +169,7 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		mailService.sendHtml(email, map, AFTERMARKET_EMAIL_URL, "售后通知");
 		//发短信
 		mailService.sendMessageByMap(telephone, map, AFTERMARKET_MESSAGE_URL);
+		changePrincipalViewService.ChangePrincipal(orderId, AFTERMARKET_PROCESS, userId);
 		return JuYouResult.ok();
 	}
-
 }

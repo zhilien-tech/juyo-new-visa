@@ -238,6 +238,7 @@ $("#searchBtn").on('click', function () {
 			orderAuthority = $(this).attr("name");
 		}
 	});
+	console.log("orderAuthority------》"+orderAuthority);
 	
 	$.ajax({ 
 		url: url,
