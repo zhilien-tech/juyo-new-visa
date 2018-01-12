@@ -1142,7 +1142,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['700px', '80%'],
-						content:'/admin/orderJp/log.html?id='+id
+						content:'/admin/orderJp/log.html?id='+id+'&orderProcessType=1'
 					});
 				},
 				//签证录入
@@ -1237,7 +1237,6 @@
 		    	}
 		    }); 
 			
-			
 				$.ajax({ 
 			    	url: '${base}/admin/orderJp/getEditApplicant',
 			    	dataType:"json",
@@ -1254,7 +1253,6 @@
 			    		}
 			      	}
 			    }); 
-			
 		}
 		
 		//添加申请人

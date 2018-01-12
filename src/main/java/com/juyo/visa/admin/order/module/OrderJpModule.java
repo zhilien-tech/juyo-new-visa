@@ -436,10 +436,9 @@ public class OrderJpModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object log(@Param("id") Integer id) {
-		Map<String, Object> result = MapUtil.map();
-		result.put("orderid", id);
-		return result;
+	public Object log(@Param("id") Integer orderid, @Param("orderProcessType") Integer orderProcessType,
+			HttpSession session) {
+		return saleViewService.toLogPage(orderid, orderProcessType, session);
 	}
 
 	/**
@@ -447,8 +446,18 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object getLogs(@Param("orderid") Integer orderid) {
-		return saleViewService.getLogs(orderid);
+	public Object getLogs(@Param("orderid") Integer orderid, @Param("orderProcessType") Integer orderProcessType) {
+		return saleViewService.getLogs(orderid, orderProcessType);
+	}
+
+	/**
+	 * 变更负责人 changePrincipal
+	 */
+	@At
+	@POST
+	public Object changePrincipal(@Param("orderid") Integer orderid, @Param("principal") Integer principal,
+			@Param("orderProcessType") Integer orderProcessType, HttpSession session) {
+		return saleViewService.changePrincipal(orderid, principal, orderProcessType, session);
 	}
 
 	/**

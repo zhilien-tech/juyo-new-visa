@@ -272,8 +272,11 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder="万"  />
+										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
+								</div>
+								<div style="float:left; margin:45px 0 0 -23px;">
+								万
 								</div>
 							</div><!-- end 银行存款 -->
 							<i class="remove-btn delete-icon"></i>
@@ -316,8 +319,11 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder="平米"  />
+										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
+								</div>
+								<div style="float:left;  margin:45px 0 0 -23px;">
+								平米
 								</div>
 							</div><!-- end 房产 -->
 							<i class="remove-btn delete-icon"></i>
@@ -338,7 +344,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder="万"  />
+										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
 							</div><!-- end 房产 -->
@@ -718,7 +724,6 @@
 					}else{
 						$(".deposit").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#deposit").val("万");
 						 $("#deposit").attr("style", null);
 						//$("#deposit").placeholder("万");
 					}
@@ -750,7 +755,6 @@
 					}else{
 						$(".houseProperty").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#houseProperty").val("平米");
 						$("#houseProperty").attr("style", null);
 						//$("#houseProperty").placeholder("平米");
 					}
@@ -765,7 +769,6 @@
 					}else{
 						$(".financial").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#financial").val("万");
 						$("#financial").attr("style", null);
 						//$("#financial").placeholder("万");
 					}

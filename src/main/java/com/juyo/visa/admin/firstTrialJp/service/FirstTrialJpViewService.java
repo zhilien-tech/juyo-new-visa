@@ -33,6 +33,7 @@ import org.nutz.lang.Strings;
 import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
 import com.juyo.visa.admin.firstTrialJp.entity.BackMailInfoEntity;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpEditDataForm;
 import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
@@ -42,6 +43,7 @@ import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
@@ -100,11 +102,17 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	@Inject
 	private RedisDao redisDao;
 
+	@Inject
+	private ChangePrincipalViewService changePrincipalViewService;
+
 	private final static String MUBAN_DOCX_URL = "http://oyu1xyxxk.bkt.clouddn.com/a40f95f1-c87f-401a-be75-25f0d42f9f72.docx";
 	private final static int YES = IsYesOrNoEnum.YES.intKey();
 	private final static String FILE_NAME = "初审资料填写模板.docx";
 	private final static String SMS_SIGNATURE = "【优悦签】";
 	private final static String VISA_COUNTRY = "日本签证";
+
+	//初审流程
+	private final static Integer FIRSTTRIAL_PROCESS = JPOrderProcessTypeEnum.FIRSTTRIAL_PROCESS.intKey();
 
 	/**
 	 * 打开初审列表页
@@ -435,6 +443,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//t_order_jp id
 		result.put("orderjpid", orderjpid);
 
+		//变更订单操作人
+		changePrincipalViewService.ChangePrincipal(orderid, FIRSTTRIAL_PROCESS, userId);
+
 		return result;
 	}
 
@@ -544,6 +555,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 	//合格申请人
 	public Object qualified(Integer applyid, Integer orderid, Integer orderjpid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
 		int update = dbDao.update(TApplicantEntity.class,
 				Chain.make("status", TrialApplicantStatusEnum.qualified.intKey()), Cnd.where("id", "=", applyid));
 		if (update > 0) {
@@ -585,6 +598,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			e.printStackTrace();
 		}
 
+		//变更订单操作人
+		changePrincipalViewService.ChangePrincipal(orderid, FIRSTTRIAL_PROCESS, userId);
+
 		return name;
 	}
 
@@ -603,6 +619,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 	//保存不合格信息
 	public Object saveUnqualified(TApplicantUnqualifiedForm form, HttpSession session, HttpServletRequest request) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
 
 		int YES = IsYesOrNoEnum.YES.intKey();
 		int NO = IsYesOrNoEnum.NO.intKey();
@@ -683,6 +701,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		//变更订单操作人
+		changePrincipalViewService.ChangePrincipal(orderid, FIRSTTRIAL_PROCESS, userId);
 
 		return Json.toJson("success");
 	}
@@ -789,6 +810,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		int send_address = JPOrderStatusEnum.SEND_ADDRESS.intKey();
 		orderJpViewService.insertLogs(orderid, send_address, session);
 
+		//变更订单操作人
+		changePrincipalViewService.ChangePrincipal(orderid, FIRSTTRIAL_PROCESS, userId);
+
 		return "SUCCESS";
 	}
 
@@ -802,6 +826,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	public Object saveJpTrialDetailInfo(FirstTrialJpEditDataForm editDataForm, HttpSession session) {
 		//获取登录用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
 		Integer orderjpid = editDataForm.getOrderid();
 		//订单信息
 		TOrderJpEntity oj = dbDao.fetch(TOrderJpEntity.class, Long.valueOf(orderjpid));
@@ -832,7 +857,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		//回邮信息
 		List<TOrderBackmailEntity> backMailInfos = editDataForm.getBackMailInfos();
-		String editBackMailInfos = editBackMailInfos(backMailInfos, orderId);
+		String editBackMailInfos = editBackMailInfos(backMailInfos, orderId, session);
+
+		//变更订单操作人
+		changePrincipalViewService.ChangePrincipal(orderId, FIRSTTRIAL_PROCESS, userId);
 
 		return editBackMailInfos;
 	}
@@ -847,7 +875,10 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	}
 
 	//添加回邮信息
-	public String editBackMailInfos(List<TOrderBackmailEntity> backMailInfos, Integer orderid) {
+	public String editBackMailInfos(List<TOrderBackmailEntity> backMailInfos, Integer orderid, HttpSession session) {
+		//获取登录用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
 
 		List<TOrderBackmailEntity> beforeBackMails = dbDao.query(TOrderBackmailEntity.class,
 				Cnd.where("orderId", "=", orderid), null);
@@ -865,6 +896,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			updateBackMails.add(backMailInfo);
 		}
 		dbDao.updateRelations(beforeBackMails, updateBackMails);
+
+		//变更订单操作人
+		changePrincipalViewService.ChangePrincipal(orderid, FIRSTTRIAL_PROCESS, userId);
 
 		return "更新回邮信息";
 	}
@@ -1151,6 +1185,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			}
 			applicant.put("DATA", dataMaterial);
 		}
+
 		return records;
 	}
 
