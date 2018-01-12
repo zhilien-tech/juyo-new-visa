@@ -1,6 +1,6 @@
 @charset "utf-8";
 /* 以下实际使用若已初始化可删除 .nav height父级需逐级设置为100%*/
-body,html{height: 100%;background: #FFF;}
+body,html{height: 100%;background: #FFF; overflow-y:hidden;}
 body,ul{margin:0;padding:0}
 body{font:14px "微软雅黑","宋体","Arial Narrow",HELVETICA;-webkit-text-size-adjust:100%;} 
 li{list-style:none} 

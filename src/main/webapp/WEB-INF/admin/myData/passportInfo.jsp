@@ -14,7 +14,7 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
 			.qz-head { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
-			.content { margin-top:50px; height:100%; padding:15px 44px 0px 0px;}
+			.content { margin-top:50px; height:100%; padding:15px 37px 15px 40px;}
 			.rightNav { position:fixed;top:60px;right:0;z-index:999; width:40px;height:calc(100% - 50px); cursor:pointer;}
 			.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 		    .leftNav { position:fixed;top:60px;left:4px;z-index:999; width:40px;height:calc(100% - 50px); cursor:pointer;}
@@ -63,7 +63,7 @@
 					<input id="passRemark" name="passRemark"  type="text"  class="NoInfo form-control input-sm" />
 				</div>
 				<div class="tab-content row">
-					<div class="col-sm-6 padding-right-0">
+					<div class="col-sm-5 padding-right-0">
 						<div class="info-QRcode"> <!-- 身份证 正面 -->
 							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
 						</div> <!-- end 身份证 正面 -->
@@ -96,7 +96,7 @@
 					</div>
 					
 
-					<div class="col-sm-6 padding-right-0">
+					<div class="col-sm-7 padding-right-0">
 						<div class="row"><!-- 类型/护照号 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
@@ -202,11 +202,11 @@
 									<c:choose>
 										<c:when test="${empty obj.passport}">
 											<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " />
-											<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:36px; width:114px;border:0px;left:48px;" type="text"  placeholder=" " />
+											<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:36px; width:110px;border:0px;left:66px;" type="text"  placeholder=" " />
 										</c:when>
 										<c:otherwise>
 											<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
-											<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:36px; width:114px;border:0px;left:48px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
+											<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:36px; width:110px;border:0px;left:66px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -235,11 +235,11 @@
 									<c:choose>
 										<c:when test="${empty obj.passport}">
 											<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " />
-											<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:36px; width:114px;border:0px;left:48px;" placeholder=" " />
+											<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:36px; width:110px;border:0px;left:66px;" placeholder=" " />
 										</c:when>
 										<c:otherwise>
 											<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
-											<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:36px; width:114px;border:0px;left:48px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
+											<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:36px; width:110px;border:0px;left:66px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
