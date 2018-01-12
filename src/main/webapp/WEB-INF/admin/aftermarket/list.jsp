@@ -5,7 +5,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>签证-日本</title>
+	<title>售后-日本</title>
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
@@ -18,12 +18,9 @@
 	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
 	<style>
 	 [v-cloak]{display:none;}
-	.box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	.box-body {  overflow:hidden;margin-top:60px;}
+	.box-header { position:fixed; top:0;left:0; width:100%; height:105px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
+	.box-body {  overflow:hidden;margin-top:96px;}
 	.card-head span { font-size:12px;}
-	[v-cloak] {
-	  display: none;
-	}
 	</style>
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>
@@ -37,8 +34,8 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<!-- 切换卡按钮 start -->
 						<div class="btnGroups">
-							<a name="allOrder" onclick="searchOrder(5)" class="searchOrderBtn btnList bgColor">全部</a>
-							<a name="myOrder" onclick="searchOrder(5)" class="searchOrderBtn btnList">我的</a>
+							<a name="allOrder" class="searchOrderBtn btnList bgColor">全部</a>
+							<a name="myOrder" class="searchOrderBtn btnList">我的</a>
 						</div>
 						<!-- 切换卡按钮 end -->
 						<div class="row">
@@ -191,10 +188,14 @@
 	　　} */
 	});
 	
-	function searchOrder(orderProcessType){
-		clearSearchEle();
-		search();
-	}
+	$(function(){
+		$(".btnList").click(function(){
+			$(this).addClass('bgColor').siblings().removeClass('bgColor');
+			clearSearchEle();
+			search();
+		})
+		
+	});
 	
 	function clearSearchEle(){
 		//检索框

@@ -228,12 +228,11 @@ new Vue({
 		}
 	}
 });
-
 $("#searchBtn").on('click', function () {
 	var status = $('#status').val();
 	var searchStr = $('#searchStr').val();
 	
-	var orderAuthority = "allOrder";
+	var orderAuthority = "";
 	$(".searchOrderBtn").each(function(){
 		if($(this).hasClass("bgColor")){
 			orderAuthority = $(this).attr("name");
