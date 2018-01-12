@@ -72,6 +72,8 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
+		form.setUserid(userid);
 		form.setCompanyid(loginCompany.getId());
 		Map<String, Object> result = Maps.newHashMap();
 		Sql sql = form.sql(sqlManager);
