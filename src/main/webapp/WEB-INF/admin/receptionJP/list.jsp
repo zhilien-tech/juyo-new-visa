@@ -41,8 +41,8 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<!-- 切换卡按钮 start -->
 						<div class="btnGroups">
-							<a class="btnList bgColor">全部</a>
-							<a class="btnList">我的</a>
+							<a name="allOrder" onclick="searchOrder(3)" class="searchOrderBtn btnList bgColor">全部</a>
+							<a name="myOrder" onclick="searchOrder(3)" class="searchOrderBtn btnList">我的</a>
 						</div>
 						<!-- 切换卡按钮 end -->
 						<div class="row">
@@ -199,12 +199,38 @@
         }
 	});
 	
+	function searchOrder(orderProcessType){
+		clearSearchEle();
+		$("#searchbtn").click();
+	}
+	
+	function clearSearchEle(){
+		//检索框
+		$("#status").val("");
+		$("#searchStr").val("");
+		//分页项
+		$("#pageNumber").val(1);
+		$("#pageTotal").val("");
+		$("#pageListCount").val("");
+	}
+	
 	$("#searchbtn").click(function(){
 		var status = $('#status').val();
 		var searchStr = $('#searchStr').val();
+		var orderAuthority = "allOrder";
+		$(".searchOrderBtn").each(function(){
+			if($(this).hasClass("bgColor")){
+				orderAuthority = $(this).attr("name");
+			}
+		});
+		
 		$.ajax({ 
         	url: url,
-        	data:{status:status,searchStr:searchStr},
+        	data:{
+        		status:status,
+        		searchStr:searchStr,
+        		orderAuthority:orderAuthority
+        	},
         	dataType:"json",
         	type:'post',
         	success: function(data){
@@ -281,6 +307,9 @@
 		}
 		if(status == 3){
 			layer.msg('移交签证成功');
+		}
+		if(status == 88){
+			layer.msg('负责人变更成功');
 		}
 		$.ajax({ 
         	url: url,
