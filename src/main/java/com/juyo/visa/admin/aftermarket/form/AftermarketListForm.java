@@ -96,10 +96,10 @@ public class AftermarketListForm implements SQLParamForm {
 		}
 		if (orderAuthority.equals("allOrder")) {
 			//全部
-			cnd.and("tr.receptionOpid", "IS", null);
+			cnd.and("tr.aftermarketOpid", "IS", null);
 		} else {
 			//我的
-			cnd.and("tr.receptionOpid", "=", userid);
+			cnd.and("tr.aftermarketOpid", "=", userid);
 		}
 
 		cnd.and("tr.comId", "=", companyid);

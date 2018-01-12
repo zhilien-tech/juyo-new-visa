@@ -80,6 +80,7 @@ function save(paramstatus){
 	bootstrapValidator.validate();
 	if (bootstrapValidator.isValid()){
 		backMailObj.backmailinfo.id = $("#id").val();
+		backMailObj.backmailinfo.orderId = $("#orderId").val();
 		backMailObj.backmailinfo.applicantJPId = $("#applicantJPId").val();
 		backMailObj.backmailinfo.applicantId = applicantId;
 		backMailObj.backmailinfo.source = $("#source").val();

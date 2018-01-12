@@ -76,7 +76,7 @@
 										<div><label>电话：</label><span>{{item.backtelephone}}</span></div>
 										<div><label>地址：</label><span>{{item.expressaddress}}</span></div>
 										<div><label>状态：</label><span></span></div>
-										<div><label></label><span><a href="javascript:;" v-on:click="backpost(item.id)">回邮</a></span></div>
+										<div><label></label><span><a href="javascript:;" v-on:click="backpost(item.id,item.orderid)">回邮</a></span></div>
 										<div><!-- <i> </i> --></div>
 									</span>
 									<span v-else  style="display:block; height:31px;">
@@ -84,7 +84,7 @@
 										<div><label>　　　</label><span>{{item.backtelephone}}</span></div>
 										<div><label>　　　</label><span>{{item.expressaddress}}</span></div>
 										<div><label>　　　</label><span></span></div>
-										<div><label></label><span><a href="javascript:;" v-on:click="backpost(item.id)">回邮</a></span></div>
+										<div><label></label><span><a href="javascript:;" v-on:click="backpost(item.id,item.orderid)">回邮</a></span></div>
 										<div><!-- <i> </i> --></div>
 									</span>
 								</li>
@@ -133,7 +133,7 @@
             });
         },
         methods:{
-        	backpost:function(applyId){
+        	backpost:function(applyId,orderid){
         		layer.open({
     				type: 2,
     				title: false,
@@ -143,7 +143,7 @@
     				shadeClose: false,
     				scrollbar: false,
     				area: ['900px', '551px'],
-    				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=1'
+    				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&orderId='+orderid+'&isAfterMarket=1'
     			});
         	}
         }

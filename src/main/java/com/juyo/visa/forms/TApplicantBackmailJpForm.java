@@ -21,6 +21,9 @@ public class TApplicantBackmailJpForm extends DataTablesParamForm {
 	/**主键*/
 	private Integer id;
 
+	/**订单id*/
+	private Integer orderId;
+
 	/**申请人id*/
 	private Integer applicantId;
 
