@@ -19,7 +19,6 @@ $(function(){
            $('.nav-item.nav-show').removeClass('nav-show');
            $(".navUl li").removeClass('navLi');
 	});
-	/**/
 });
 </script>
 </head>
@@ -50,7 +49,7 @@ $(function(){
         <div class="nav-top">
             <div id="mini" style="border-bottom:1px solid rgba(255,255,255,.1)"><img src="${base}/references/public/dist/newvisacss/img/02.png" ></div>
         </div>
-        <ul>
+        <ul class="ul">
         <c:forEach items="${auths }" var="function" varStatus="status">	
         	<c:if test="${function.level eq 1}">
             <li id="${status.index+1 }" class="nav-item">
