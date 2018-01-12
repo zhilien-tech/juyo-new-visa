@@ -37,9 +37,10 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<!-- 切换卡按钮 start -->
 						<div class="btnGroups">
-							<a class="btnList bgColor">全部</a>
-							<a class="btnList">我的</a>
+							<a name="allOrder" onclick="searchOrder(5)" class="searchOrderBtn btnList bgColor">全部</a>
+							<a name="myOrder" onclick="searchOrder(5)" class="searchOrderBtn btnList">我的</a>
 						</div>
+						<!-- 切换卡按钮 end -->
 						<div class="row">
 							<div class="col-md-2 left-5px right-0px">
 								<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
@@ -190,15 +191,42 @@
 	　　} */
 	});
 	
-
+	function searchOrder(orderProcessType){
+		clearSearchEle();
+		$("#searchBtn").click();
+	}
+	
+	function clearSearchEle(){
+		//检索框
+		$('#status').val("");
+		$('#signDateStr').val("");
+		$('#searchStr').val("");
+		//分页项
+		$("#pageNumber").val(1);
+		$("#pageTotal").val("");
+		$("#pageListCount").val("");
+	}
+	
 	
 	function search(){
 		var status = $('#status').val();
 		var signDateStr = $('#signDateStr').val();
 		var searchStr = $('#searchStr').val();
+		var orderAuthority = "allOrder";
+		$(".searchOrderBtn").each(function(){
+			if($(this).hasClass("bgColor")){
+				orderAuthority = $(this).attr("name");
+			}
+		});
+		
 		$.ajax({ 
         	url: url,
-        	data:{signDateStr:signDateStr,searchstr:searchStr,status:status},
+        	data:{
+        		signDateStr:signDateStr,
+        		searchstr:searchStr,
+        		status:status,
+        		orderAuthority:orderAuthority
+        	},
         	dataType:"json",
         	type:'post',
         	success: function(data){

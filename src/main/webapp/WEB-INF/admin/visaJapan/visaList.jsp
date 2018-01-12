@@ -39,8 +39,8 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<!-- 切换卡按钮 start -->
 						<div class="btnGroups">
-							<a class="btnList bgColor">全部</a>
-							<a class="btnList">我的</a>
+							<a name="allOrder" onclick="searchOrder(4)" class="searchOrderBtn btnList bgColor">全部</a>
+							<a name="myOrder" onclick="searchOrder(4)" class="searchOrderBtn btnList">我的</a>
 						</div>
 						<!-- 切换卡按钮 end -->
 						<div class="row">
@@ -324,14 +324,43 @@
 		window.location.href = '${base}/admin/visaJapan/visaDetail.html?orderid='+orderid;
 	}
 	
+	
+	function searchOrder(orderProcessType){
+		clearSearchEle();
+		$("#searchbtn").click();
+	}
+	
+	function clearSearchEle(){
+		//检索框
+		$("#status").val("");
+		$("#sendSignDate").val("");
+		$("#searchStr").val("");
+		//分页项
+		$("#pageNumber").val(1);
+		$("#pageTotal").val("");
+		$("#pageListCount").val("");
+	}
+	
 	function search(){
 		var status = $('#status').val();
 		var sendSignDate = $('#sendSignDate').val();
 		//var signOutDate = $('#signOutDate').val();
 		var searchStr = $('#searchStr').val();
+		var orderAuthority = "allOrder";
+		$(".searchOrderBtn").each(function(){
+			if($(this).hasClass("bgColor")){
+				orderAuthority = $(this).attr("name");
+			}
+		});
+		
 		$.ajax({ 
         	url: url,
-        	data:{status:status,sendSignDate:sendSignDate,searchStr:searchStr},
+        	data:{
+        		status:status,
+        		sendSignDate:sendSignDate,
+        		searchStr:searchStr,
+        		orderAuthority:orderAuthority
+        	},
         	dataType:"json",
         	type:'post',
         	success: function(data){
