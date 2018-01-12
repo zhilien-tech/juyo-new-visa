@@ -213,13 +213,13 @@
 										</select>
 									</div>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-4 preSchool">
 									<div class="form-group">
 										<label id="schoolName"><span>*</span>单位名称</label>
 										<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.name }"/>
 									</div>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-4 preSchool">
 									<div class="form-group">
 										<label id="schoolTelephone"><span>*</span>单位电话</label>
 										<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.telephone }"/>
@@ -227,7 +227,7 @@
 								</div>
 							</div><!-- end 我的职业/单位名称/单位电话 -->
 							<div class="row"><!-- 单位地址 -->
-								<div class="col-sm-8">
+								<div class="col-sm-8 preSchool">
 									<div class="form-group">
 										<label id="schoolAddress"><span>*</span>单位地址</label>
 										<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.address }"/>
@@ -513,22 +513,60 @@
 				$("#uploadFile").siblings("i").css("display","none");
 			}
 			
+			//婚姻状况为单身和丧偶时没有上传图片接口
+			var marryStatus = $("#marryStatus").val();
+			if(marryStatus == 3 || marryStatus == 4){
+				$(".info-imgUpload").hide();
+			}
+			$("#marryStatus").change(function(){
+				var status = $(this).val();
+				if(status == 3 || status == 4){
+					$(".info-imgUpload").hide();
+					$('#marryUrl').val("");
+					$('#sqImg').attr('src', "");
+					$("#uploadFile").siblings("i").css("display","none");
+					if(userType == 2){
+						$(".front").attr("class", "info-imgUpload front has-success");  
+				        $(".help-blockFront").attr("data-bv-result","IVALID");  
+				        $(".help-blockFront").attr("style","display: none;");
+				        $("#borderColor").attr("style",null);
+					}
+				}else{
+					if(userType == 2){
+						if($("#sqImg").attr("src") == ""){
+							$(".front").attr("class", "info-imgUpload front has-error");  
+					        $(".help-blockFront").attr("data-bv-result","INVALID");  
+					        $(".help-blockFront").attr("style","display: block;");
+					        $("#borderColor").attr("style","border-color:#ff1a1a");
+						}
+					}
+					$(".info-imgUpload").show();
+				}
+			});
+			
 			var career = $("#careerStatus").val();
 			if(career == 4){
 				$("#schoolName").html("<span>*</span>学校名称：");
 				$("#schoolTelephone").html("<span>*</span>学校电话：");
 				$("#schoolAddress").html("<span>*</span>学校地址：");
 			}
+			if(career == 5){
+				$(".preSchool").hide();
+			}
 			$("#careerStatus").change(function(){
 				$("#name").val("").change();
 				$("#telephone").val("").change();
 				$("#address").val("").change();
 				var career = $(this).val();
-				if(career == 4){
+				if(career == 5){
+					$(".preSchool").hide();
+				}else if(career == 4){
+					$(".preSchool").show();
 					$("#schoolName").html("<span>*</span>学校名称：");
 					$("#schoolTelephone").html("<span>*</span>学校电话：");
 					$("#schoolAddress").html("<span>*</span>学校地址：");
 				}else{
+					$(".preSchool").show();
 					$("#schoolName").html("<span>*</span>单位名称：");
 					$("#schoolTelephone").html("<span>*</span>单位电话：");
 					$("#schoolAddress").html("<span>*</span>单位地址：");

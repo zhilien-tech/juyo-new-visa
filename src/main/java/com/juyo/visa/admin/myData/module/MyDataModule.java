@@ -237,4 +237,13 @@ public class MyDataModule {
 		return myDataService.passIsChanged(passportForm, session);
 	}
 
+	/**
+	 * 查询是否提示过
+	 */
+	@At
+	@POST
+	public Object isPrompted(@Param("applyId") int applyid) {
+		return myDataService.isPrompted(applyid);
+	}
+
 }

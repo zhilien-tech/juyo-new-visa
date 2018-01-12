@@ -522,41 +522,100 @@
 					type : "post",
 					async : false,
 					data : {
-						passport : $("#passport").val(),
-						id : '${obj.applicantId}'
+						applyId : '${obj.applicantId}'
 					},
-					url : '${base}/admin/myData/getTouristInfoByPass',
-					success :function(data) {
-						console.log(JSON.stringify(data));
-						if(data.pass){
-							layer.confirm("您的信息已存在，是否使用？", {
-								title:"提示",
-								btn: ["是","否"], //按钮
-								shade: false //不显示遮罩
-							}, function(index){
-								toSet(data);
-								layer.close(index);
+					url : '${base}/admin/myData/isPrompted.html',
+					success :function(apply) {
+						if(apply.isPrompted == 0){//没有提示过
+							$.ajax({
+								type : "post",
+								async : false,
+								data : {
+									passport : $("#passport").val(),
+									id : '${obj.applicantId}'
+								},
+								url : '${base}/admin/myData/getTouristInfoByPass',
+								success :function(data) {
+									console.log(JSON.stringify(data));
+									if(data.pass){
+										layer.confirm("您的信息已存在，是否使用？", {
+											title:"提示",
+											btn: ["是","否"], //按钮
+											shade: false //不显示遮罩
+										}, function(index){
+											toSet(data);
+											layer.close(index);
+											$.ajax({
+												type : "post",
+												async : false,
+												data : {
+													applyid : '${obj.applicantId}',
+													updateOrNot : "YES"
+												},
+												url : '${base}/admin/myVisa/updateOrNot.html',
+												success :function(data) {
+													
+												}
+											});
+										},function(index){
+											layer.close(index);
+											$.ajax({
+												type : "post",
+												async : false,
+												data : {
+													applyid : '${obj.applicantId}',
+													updateOrNot : "NO"
+												},
+												url : '${base}/admin/myVisa/updateOrNot.html',
+												success :function(data) {
+													
+												}
+											});
+										});
+									}
+								}
 							});
+						}else{//提示过
+							if(apply.isSameInfo == 1){//更新
+								$.ajax({
+									type : "post",
+									async : false,
+									data : {
+										passport : $("#passport").val(),
+										id : '${obj.applicantId}'
+									},
+									url : '${base}/admin/myData/getTouristInfoByPass',
+									success :function(data) {
+										toSet(data);
+									}
+								});
+							}
 						}
 					}
 				});
+				
+				
+				
+				
+				
+				
+				
 			}
 		});
 		
 		function toSet(data){
 			$("#passportUrl").val(data.pass.passportUrl);
-			$("#type").val(data.pass.type);
-			$("#passport").val(data.pass.passport);
-			$("#sex").val(data.pass.sex);
-			$("#sexEn").val(data.pass.sexEn);
-			$("#birthAddress").val(data.pass.birthAddress);
-			$("#birthAddressEn").val(data.pass.birthAddressEn);
-			$("#birthday").val(data.birthday);
-			$("#issuedPlace").val(data.pass.issuedPlace);
-			$("#issuedPlaceEn").val(data.pass.issuedPlaceEn);
-			$("#issuedDate").val(data.issuedDate);
-			$("#validType").val(data.pass.validType);
-			$("#validEndDate").val(data.validEndDate);
+			$("#type").val(data.pass.type).change();
+			$("#sex").val(data.pass.sex).change();
+			$("#sexEn").val(data.pass.sexEn).change();
+			$("#birthAddress").val(data.pass.birthAddress).change();
+			$("#birthAddressEn").val(data.pass.birthAddressEn).change();
+			$("#birthday").val(data.birthday).change();
+			$("#issuedPlace").val(data.pass.issuedPlace).change();
+			$("#issuedPlaceEn").val(data.pass.issuedPlaceEn).change();
+			$("#issuedDate").val(data.issuedDate).change();
+			$("#validType").val(data.pass.validType).change();
+			$("#validEndDate").val(data.validEndDate).change();
 			$('#sqImg').attr('src', data.pass.passportUrl);
 			$("#uploadFile").siblings("i").css("display","block");
 			$("#borderColor").attr("style", null);

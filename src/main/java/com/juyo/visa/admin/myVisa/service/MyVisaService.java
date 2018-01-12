@@ -681,38 +681,18 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
-	public Object updateOrNot(int applyid, HttpSession session) {
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()), null);
-		List<TApplicantEntity> lastApplyList = new ArrayList<>();
-		List<TOrderEntity> orderList = new ArrayList<>();
-		for (TApplicantEntity tApplicantEntity : applyList) {
-			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
-					Cnd.where("applicantId", "=", tApplicantEntity.getId()));
-			TOrderJpEntity orderJp = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
-			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJp.getOrderId().longValue());
-			orderList.add(orderEntity);
-		}
-		//遍历每一个order，查询到所有的申请人
-		for (TOrderEntity tOrderEntity : orderList) {
-			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class,
-					Cnd.where("orderId", "=", tOrderEntity.getId()));
-			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
-					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
-			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
-				TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity
-						.getApplicantId().longValue());
-				lastApplyList.add(applicantEntity);
-			}
-		}
-		for (TApplicantEntity apply : lastApplyList) {
-			apply.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
-		}
-
+	public Object updateOrNot(int applyid, String updateOrNot, HttpSession session) {
 		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyid);
-		apply.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
-		dbDao.update(apply);
+		List<TApplicantEntity> allApply = getAllApply(session);
+		for (TApplicantEntity tApplicantEntity : allApply) {
+			if (Util.eq(updateOrNot, "YES")) {
+				tApplicantEntity.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			} else {
+				tApplicantEntity.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+			}
+			tApplicantEntity.setIsPrompted(IsYesOrNoEnum.YES.intKey());
+			dbDao.update(tApplicantEntity);
+		}
 		return null;
 	}
 
@@ -723,5 +703,32 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		} else {
 			return 0;
 		}
+	}
+
+	public List<TApplicantEntity> getAllApply(HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()), null);
+		List<TApplicantEntity> lastApplyList = new ArrayList<>();
+		List<TOrderEntity> orderList = new ArrayList<>();
+		for (TApplicantEntity tApplicantEntity : applyList) {
+			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", tApplicantEntity.getId()));
+			TOrderJpEntity orderJp = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
+			TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderJp.getOrderId().longValue());
+			orderList.add(order);
+		}
+		for (TOrderEntity tOrderEntity : orderList) {
+			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class,
+					Cnd.where("orderId", "=", tOrderEntity.getId()));
+			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
+				TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity.getApplicantId()
+						.longValue());
+				lastApplyList.add(apply);
+			}
+		}
+		return lastApplyList;
 	}
 }

@@ -1819,4 +1819,8 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		return 0;
 	}
 
+	public Object isPrompted(int applyid) {
+		return dbDao.fetch(TApplicantEntity.class, applyid);
+	}
+
 }

@@ -1223,6 +1223,10 @@
 			if(status == 3){
 				layer.msg('添加成功');
 			}
+			if(status == 88){
+				layer.msg('负责人变更成功');
+			}
+			
 			$.ajax({ 
 		    	url: '${base}/admin/orderJp/getOrderStatus',
 		    	dataType:"json",
