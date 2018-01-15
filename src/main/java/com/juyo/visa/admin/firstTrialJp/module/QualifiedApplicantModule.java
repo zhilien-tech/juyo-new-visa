@@ -50,4 +50,18 @@ public class QualifiedApplicantModule {
 			@Param("remarkStr") String remarkStr, @Param("infoType") int infoType, HttpSession session) {
 		return qualifiedApplicantViewService.unQualified(applicantId, orderId, remarkStr, infoType, session);
 	}
+
+	/**
+	 * 
+	 * /**
+	 * 判断申请人电话和邮箱是否填写
+	 *
+	 * @param applicantId 申请人id
+	 * @return true表示：电话或者邮箱有未填写的  
+	 */
+	@At
+	@POST
+	public boolean isFieldContactInfoById(@Param("applicantId") Integer applicantId) {
+		return qualifiedApplicantViewService.isFieldContactInfoById(applicantId);
+	}
 }

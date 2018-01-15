@@ -73,7 +73,7 @@ $("#searchBtn").on('click',function(){
 		"searchStr": searchStr,
 	};
 	datatable.settings()[0].ajax.data = param;
-	datatable.ajax.reload();
+	datatable.ajax.reload(null,false);
 });
 
 function onkeyEnter(){
@@ -129,7 +129,7 @@ function deleteById(id) {
 			url : url,
 			success : function(data) {
 				layer.msg("删除成功",{time:2000});
-				datatable.ajax.reload();
+				datatable.ajax.reload(null,false);
 			},
 			error : function(xhr) {
 				layer.msg("删除失败",{time:2000});

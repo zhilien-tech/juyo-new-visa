@@ -1,7 +1,7 @@
 /**
  * OrderEditDataForm.java
  * com.juyo.visa.admin.order.form
- * Copyright (c) 2017, 北京科技有限公司版权所有.
+ * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
 */
 
 package com.juyo.visa.admin.order.form;
@@ -71,4 +71,7 @@ public class VisaEditDataForm implements Serializable {
 	private Integer sameMainWork;
 
 	private Integer isTrailOrder;
+
+	//订单流程枚举值
+	private Integer orderProcessType;
 }

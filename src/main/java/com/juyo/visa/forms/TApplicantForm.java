@@ -138,6 +138,9 @@ public class TApplicantForm extends DataTablesParamForm {
 
 	private Integer userType;
 
+	/**订单操作枚举*/
+	private Integer orderProcessType;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**

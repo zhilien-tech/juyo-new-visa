@@ -57,4 +57,7 @@ public class TApplicantVisaJpUpdateForm extends ModForm implements Serializable 
 
 	private Integer isvisa;
 
+	/**订单id*/
+	private Integer orderid;
+
 }

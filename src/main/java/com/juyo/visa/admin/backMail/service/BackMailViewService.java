@@ -11,12 +11,15 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
 import com.juyo.visa.admin.firstTrialJp.entity.BackMailInfoEntity;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
 import com.juyo.visa.common.enums.MainBackMailTypeEnum;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
@@ -39,8 +42,11 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity> {
 
+	@Inject
+	private ChangePrincipalViewService changePrincipalViewService;
+
 	//回邮信息
-	public Object backMailInfo(Integer applicantId, Integer isAfterMarket) {
+	public Object backMailInfo(Integer applicantId, Integer orderId, Integer isAfterMarket, Integer orderProcessType) {
 		Map<String, Object> result = Maps.newHashMap();
 		//资料类型
 		result.put("mainSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
@@ -50,6 +56,10 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 		result.put("applicantId", applicantId);
 		//是否是售后操作
 		result.put("isAfterMarket", isAfterMarket);
+		//订单id
+		result.put("orderId", orderId);
+		//订单流程枚举值
+		result.put("orderProcessType", orderProcessType);
 
 		return result;
 	}
@@ -75,7 +85,13 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 
 			//获取申请人信息
 			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantId.longValue());
-			String name = applicant.getFirstName() + applicant.getLastName();
+			String name = "";
+			if (!Util.isEmpty(applicant.getFirstName())) {
+				name += applicant.getFirstName();
+			}
+			if (!Util.isEmpty(applicant.getLastName())) {
+				name += applicant.getLastName();
+			}
 			String mobile = applicant.getTelephone();
 
 			BackMailInfoEntity backmail = new BackMailInfoEntity();
@@ -100,6 +116,7 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 	//保存回邮信息
 	public Object saveBackMailInfo(TApplicantBackmailJpForm form, HttpSession session) {
 		Integer backmailId = form.getId();
+		Integer orderId = form.getOrderId();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userid = loginUser.getId();
 
@@ -133,6 +150,10 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 		after.add(backmail);
 
 		dbDao.updateRelations(before, after);
+
+		//订单负责人变更
+		Integer orderProcessType = form.getOrderProcessType();
+		changePrincipalViewService.ChangePrincipal(orderId, orderProcessType, userid);
 
 		return "BackMail Success";
 	}

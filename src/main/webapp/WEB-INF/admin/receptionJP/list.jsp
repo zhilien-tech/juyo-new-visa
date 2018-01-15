@@ -41,8 +41,8 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<!-- 切换卡按钮 start -->
 						<div class="btnGroups">
-							<a name="allOrder" onclick="searchOrder(3)" class="searchOrderBtn btnList bgColor">全部</a>
-							<a name="myOrder" onclick="searchOrder(3)" class="searchOrderBtn btnList">我的</a>
+							<a name="allOrder" class="searchOrderBtn btnList bgColor">全部</a>
+							<a name="myOrder" class="searchOrderBtn btnList">我的</a>
 						</div>
 						<!-- 切换卡按钮 end -->
 						<div class="row">
@@ -132,6 +132,7 @@
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script src="${base}/references/common/js/switchCardOfOrder.js"></script><!-- 订单切换卡 js -->
 	<script type="text/javascript">
+	
 	//异步加载的URL地址
     var url="${base}/admin/receptionJP/listData.html";
     //vue表格数据对象
@@ -199,10 +200,14 @@
         }
 	});
 	
-	function searchOrder(orderProcessType){
-		clearSearchEle();
-		$("#searchbtn").click();
-	}
+	$(function(){
+		$(".btnList").click(function(){
+			$(this).addClass('bgColor').siblings().removeClass('bgColor');
+			clearSearchEle();
+			$("#searchbtn").trigger("click");
+		})
+		
+	});
 	
 	function clearSearchEle(){
 		//检索框

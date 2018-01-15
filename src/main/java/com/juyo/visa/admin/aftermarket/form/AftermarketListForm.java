@@ -1,7 +1,7 @@
 /**
  * AftermarketListForm.java
  * com.juyo.visa.admin.aftermarket.form
- * Copyright (c) 2017, 北京科技有限公司版权所有.
+ * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
 */
 
 package com.juyo.visa.admin.aftermarket.form;
@@ -96,10 +96,10 @@ public class AftermarketListForm implements SQLParamForm {
 		}
 		if (orderAuthority.equals("allOrder")) {
 			//全部
-			cnd.and("tr.receptionOpid", "IS", null);
+			cnd.and("tr.aftermarketOpid", "IS", null);
 		} else {
 			//我的
-			cnd.and("tr.receptionOpid", "=", userid);
+			cnd.and("tr.aftermarketOpid", "=", userid);
 		}
 
 		cnd.and("tr.comId", "=", companyid);

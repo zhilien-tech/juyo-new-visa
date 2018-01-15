@@ -1,7 +1,7 @@
 /**
  * VisaJapanSimulateService.java
  * com.juyo.visa.admin.visajp.service
- * Copyright (c) 2017, 北京科技有限公司版权所有.
+ * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
 */
 
 package com.juyo.visa.admin.visajp.service;
@@ -21,13 +21,17 @@ import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
+import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -48,6 +52,10 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	private QiniuUploadServiceImpl qiniuUploadService;
 	@Inject
 	private OrderJpViewService orderJpViewService;
+	@Inject
+	private ChangePrincipalViewService changePrincipalViewService;
+
+	private static final Integer VISA_PROCESS = JPOrderProcessTypeEnum.VISA_PROCESS.intKey();
 
 	/**
 	 * 发招宝、招宝变更、招宝取消状态
@@ -65,6 +73,10 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 		//orderjp.setVisastatus(visastatus);
 		//添加日志
 		orderJpViewService.insertLogs(orderinfo.getId(), visastatus, session);
+		//订单负责人变更
+		TUserEntity loginuser = LoginUtil.getLoginUser(session);
+		Integer userId = loginuser.getId();
+		changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
 		return dbDao.update(orderinfo);
 	}
 
@@ -77,7 +89,9 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	 * @param response
 	 * @return TODO签证页面文件下载
 	 */
-	public Object downloadFile(Long orderid, HttpServletResponse response) {
+	public Object downloadFile(Long orderid, HttpServletResponse response, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
 		try {
 			//查询日本订单
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
@@ -117,6 +131,9 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			e.printStackTrace();
 
 		}
+
+		//变更订单负责人
+		changePrincipalViewService.ChangePrincipal(orderid.intValue(), VISA_PROCESS, userId);
 		return null;
 	}
 

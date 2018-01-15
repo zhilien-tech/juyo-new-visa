@@ -24,8 +24,8 @@
 					<div class="box-header">
 						<!-- 切换卡按钮 start -->
 						<div class="btnGroups">
-							<a name="allOrder" onclick="searchOrder(2)" class="searchOrderBtn btnList bgColor">全部</a>
-							<a name="myOrder" onclick="searchOrder(2)" class="searchOrderBtn btnList">我的</a>
+							<a name="allOrder"  class="searchOrderBtn btnList bgColor">全部</a>
+							<a name="myOrder"  class="searchOrderBtn btnList">我的</a>
 						</div>
 						<!-- 切换卡按钮 end -->
 						<!-- 检索条件 start -->
@@ -114,13 +114,17 @@
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script src="${base}/references/common/js/base/cardList.js"></script>
-	<script src="${base}/references/common/js/switchCardOfOrder.js"></script><!-- 订单切换卡 js -->
 	<script src="${base}/admin/firstTrialJp/trialList.js"></script><!-- 本页面js文件 -->
 	<script type="text/javascript">
-		function searchOrder(orderProcessType){
+	$(function(){
+		$(".btnList").click(function(){
+			$(this).addClass('bgColor').siblings().removeClass('bgColor');
 			clearSearchEle();
-			$("#searchBtn").click();
-		}
+			$("#searchBtn").trigger("click");
+		})
+		
+	});
+		
 		
 		function clearSearchEle(){
 			//检索框

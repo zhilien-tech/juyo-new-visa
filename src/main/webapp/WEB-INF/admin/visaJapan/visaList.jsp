@@ -39,8 +39,8 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<!-- 切换卡按钮 start -->
 						<div class="btnGroups">
-							<a name="allOrder" onclick="searchOrder(4)" class="searchOrderBtn btnList bgColor">全部</a>
-							<a name="myOrder" onclick="searchOrder(4)" class="searchOrderBtn btnList">我的</a>
+							<a name="allOrder" class="searchOrderBtn btnList bgColor">全部</a>
+							<a name="myOrder" class="searchOrderBtn btnList">我的</a>
 						</div>
 						<!-- 切换卡按钮 end -->
 						<div class="row">
@@ -273,7 +273,7 @@
     				shadeClose: false,
     				scrollbar: false,
     				area: ['900px', '80%'],
-    				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&isvisa=1'
+    				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&orderid='+orderid+'&isvisa=1'
     			});
     		}
         }
@@ -325,10 +325,14 @@
 	}
 	
 	
-	function searchOrder(orderProcessType){
-		clearSearchEle();
-		search();
-	}
+	$(function(){
+		$(".btnList").click(function(){
+			$(this).addClass('bgColor').siblings().removeClass('bgColor');
+			clearSearchEle();
+			search();
+		})
+		
+	});
 	
 	function clearSearchEle(){
 		//检索框

@@ -1,7 +1,7 @@
 /**
  * VisaJapanService.java
  * com.juyo.visa.admin.visajp.service
- * Copyright (c) 2017, 北京科技有限公司版权所有.
+ * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
 */
 
 package com.juyo.visa.admin.visajp.service;
@@ -34,6 +34,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
@@ -51,6 +52,7 @@ import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
@@ -85,14 +87,6 @@ import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
 
-/**
- * TODO(这里用一句话描述这个类的作用)
- * <p>
- * TODO(这里描述这个类补充说明 – 可选)
- *
- * @author   刘旭利
- * @Date	 2017年10月30日 	 
- */
 @IocBean
 public class VisaJapanService extends BaseService<TOrderEntity> {
 
@@ -107,8 +101,13 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	@Inject
 	private UploadService qiniuUpService;
 
+	@Inject
+	private ChangePrincipalViewService changePrincipalViewService;
+
 	//签证实收通知销售手机短信模板
 	private static final String VISA_NOTICE_SALE_MESSAGE_TMP = "messagetmp/visa_notice_sale_message_tmp.txt";
+
+	private static final Integer VISA_PROCESS = JPOrderProcessTypeEnum.VISA_PROCESS.intKey();
 
 	/**
 	 * 签证列表数据
@@ -494,6 +493,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 					Cnd.where("tripid", "=", tripid), null);
 			dbDao.updateRelations(before, ordertriplist);
 		}
+
+		//变更订单负责人
+		Integer userId = loginUser.getId();
+		Integer orderid = order.getId();
+		changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+
 		return null;
 	}
 
@@ -506,7 +511,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param planid
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object resetPlan(Integer orderid, Integer planid) {
+	public Object resetPlan(Integer orderid, Integer planid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
 		TOrderTravelplanJpEntity plan = dbDao.fetch(TOrderTravelplanJpEntity.class, planid.longValue());
 		if (!Util.eq("1", plan.getDay())) {
 			//获取城市所有的酒店
@@ -522,6 +529,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
 			//plan.setHotel(hotels.get(random.nextInt(hotels.size())).getId());
 			dbDao.update(plan);
+
+			//订单负责人变更
+			changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+
 		}
 		//行程安排
 		return getTravelPlanByOrderId(orderid);
@@ -540,6 +551,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("status", "error");
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
 		//需要生成的travelplan
 		List<TOrderTravelplanJpEntity> travelplans = Lists.newArrayList();
 		//往返
@@ -691,6 +703,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		dbDao.updateRelations(before, travelplans);
 		result.put("data", getTravelPlanByOrderId(planform.getOrderid()));
 		result.put("status", "success");
+
+		//订单负责人变更
+		Integer orderid = planform.getOrderid();
+		changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+
 		return result;
 	}
 
@@ -752,6 +769,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveEditPlanData(TOrderTravelplanJpEntity travelform, HttpSession session) {
+
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+
 		TOrderTravelplanJpEntity travel = dbDao.fetch(TOrderTravelplanJpEntity.class, travelform.getId().longValue());
 		//城市信息
 		TCityEntity city = dbDao.fetch(TCityEntity.class, travelform.getCityId().longValue());
@@ -815,6 +836,13 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		travel.setDay(travelform.getDay());
 		travel.setUpdateTime(new Date());
 		dbDao.update(travel);
+
+		//订单负责人变更
+		Integer orderid = travelform.getOrderId();
+		if (!Util.isEmpty(orderid)) {
+			changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+		}
+
 		return null;
 	}
 
@@ -899,6 +927,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveRealInfoData(TOrderJpEntity orderjp, String applicatinfo, HttpSession session) {
+
+		TUserEntity loginuser = LoginUtil.getLoginUser(session);
+		Integer userId = loginuser.getId();
+
 		//更新备注信息
 		dbDao.update(orderjp);
 		List<Map> applicatlist = JsonUtil.fromJson(applicatinfo, List.class);
@@ -936,6 +968,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		}
 		//添加日志
 		orderJpViewService.insertLogs(orderjp.getOrderId(), JPOrderStatusEnum.VISA_RECEIVED.intKey(), session);
+
+		//订单负责人变更
+		Integer orderId = orderjp.getOrderId();
+		changePrincipalViewService.ChangePrincipal(orderId, VISA_PROCESS, userId);
+
 		return null;
 
 	}
@@ -950,10 +987,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param isvisa 
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object visaInput(HttpSession session, Integer applyid, Integer isvisa) {
+	public Object visaInput(HttpSession session, Integer applyid, Integer orderid, Integer isvisa) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("applyid", applyid);
 		result.put("isvisa", isvisa);
+		result.put("orderid", orderid);
 		return result;
 	}
 
@@ -1198,6 +1236,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		dbDao.update(orderinfo);
 		//添加日志
 		orderJpViewService.insertLogs(orderinfo.getId(), JPOrderStatusEnum.AFTERMARKET_ORDER.intKey(), session);
+
+		//变更订单负责人
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		changePrincipalViewService.ChangePrincipal(orderid.intValue(), VISA_PROCESS, userId);
 		return "success";
 	}
 
@@ -1209,7 +1252,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param applyid
 	 * @return TODO 申请人id
 	 */
-	public Object noticeSale(Integer applyid) {
+	public Object noticeSale(Integer applyid, Integer orderid, HttpSession session) {
 		//申请人信息
 		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applyid.longValue());
 		//日本申请人信息
@@ -1252,6 +1295,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		param.put("${telephone}", telephone);
 		param.put("${data}", datastr);
 		mailService.sendMessageByMap(mobile, param, VISA_NOTICE_SALE_MESSAGE_TMP);
+
+		//订单负责人变更
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+
 		return JuYouResult.ok();
 	}
 
@@ -1289,6 +1338,27 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	}
 
 	/**
+	 * 
+	 * 发招宝失败
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param data
+	 * @param orderid
+	 * @return
+	 */
+	public Object sendZhaoBaoError(String data, Integer orderid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("orderid", orderid);
+		result.put("data", data);
+		//变更订单负责人
+		changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+		return result;
+	}
+
+	/**
 	 * 保存招宝信息
 	 * <p>
 	 * TODO(这里描述这个方法详情– 可选)
@@ -1299,6 +1369,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 */
 	public Object saveZhaoBao(TOrderJpEntity orderJpEntity, HttpServletRequest request) {
 		HttpSession session = request.getSession();
+		TUserEntity loginuser = LoginUtil.getLoginUser(session);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//查询日本订单表信息
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderJpEntity.getOrderId().longValue());
@@ -1343,6 +1414,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		orderjp.setExcelurl(fileqiniupath);
 		dbDao.update(orderjp);
 		orderJpViewService.insertLogs(orderinfo.getId(), JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey(), session);
+
+		//订单负责人变更
+		Integer userId = loginuser.getId();
+		Integer orderId = orderJpEntity.getOrderId();
+		changePrincipalViewService.ChangePrincipal(orderId, VISA_PROCESS, userId);
 		return null;
 	}
 

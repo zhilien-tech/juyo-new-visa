@@ -1,7 +1,7 @@
 /**
  * TestAirLineInterface.java
  * com.juyo.visa
- * Copyright (c) 2017, 北京科技有限公司版权所有.
+ * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
 */
 
 package com.juyo.visa;
@@ -53,19 +53,20 @@ public class TestAirLineInterface {
 			//查询城市
 			//			HttpPost httpPost = new HttpPost("http://apis.haoservice.com/plan/queryCity");
 			//查询航线 
-			HttpPost httpPost = new HttpPost("http://apis.haoservice.com/plan/InternationalFlightQueryByCity");
+			//			HttpPost httpPost = new HttpPost("http://apis.haoservice.com/plan/InternationalFlightQueryByCity");
+			HttpPost httpPost = new HttpPost("http://apis.haoservice.com/efficient/flight/sk");
 			//查询航班
 			//			HttpPost httpPost = new HttpPost("http://apis.haoservice.com/plan/FlightQueryByFlightNoV2");
 			List<NameValuePair> paramList = new ArrayList<>();
-			paramList.add(new BasicNameValuePair("key", "fc96373fef3e40ffac0821a2ebb25a4d"));
+			paramList.add(new BasicNameValuePair("key", "99915bf5907d45a38ee2cfc6f19031a4"));
 			//出发城市
-			paramList.add(new BasicNameValuePair("dep", "XMN"));
+			paramList.add(new BasicNameValuePair("orgCity", "SHA"));
 			//抵达城市
-			paramList.add(new BasicNameValuePair("arr", "TYO"));
+			paramList.add(new BasicNameValuePair("dstCity", "TYO"));
 			//航班号
 			//			paramList.add(new BasicNameValuePair("flightNo", "CA181"));
 			//出发时间
-			paramList.add(new BasicNameValuePair("date", "20171206"));
+			paramList.add(new BasicNameValuePair("flightDate", "20180513"));
 			// 模拟表单
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList);
 			httpPost.setEntity(entity);

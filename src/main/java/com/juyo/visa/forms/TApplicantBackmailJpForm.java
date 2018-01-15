@@ -21,6 +21,9 @@ public class TApplicantBackmailJpForm extends DataTablesParamForm {
 	/**主键*/
 	private Integer id;
 
+	/**订单id*/
+	private Integer orderId;
+
 	/**申请人id*/
 	private Integer applicantId;
 
@@ -80,6 +83,9 @@ public class TApplicantBackmailJpForm extends DataTablesParamForm {
 
 	/**更新时间*/
 	private Date updateTime;
+
+	/**订单流程枚举值*/
+	private Integer orderProcessType;
 
 	@Override
 	public Sql sql(SqlManager sqlManager) {

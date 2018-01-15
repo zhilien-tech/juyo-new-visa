@@ -120,7 +120,11 @@
 				if(inputVal != null && inputVal != ""){
 					$.ajax({ 
 		            	url: '${base}/admin/visaJapan/saveApplicatRevenue.html',
-		            	data:{applicatid:applicatid,realInfo:inputVal},
+		            	data:{
+		            		applicatid:applicatid,
+		            		realInfo:inputVal
+		            	}
+		            	},
 		            	dataType:"json",
 		            	type:'post',
 		            	success: function(data){
@@ -203,6 +207,8 @@
 			});
 		});
 
+		var orderid = '${obj.orderid}';
+			
 		//vue表格数据对象
 	    var _self;
 		new Vue({
@@ -210,7 +216,6 @@
 			data: {orderinfo:""},
 			created:function(){
 	            _self=this;
-	            var orderid = '${obj.orderid}';
 	            $.ajax({ 
 	            	url: '${base}/admin/visaJapan/visaRevenue.html',
 	            	data:{orderid:orderid},
