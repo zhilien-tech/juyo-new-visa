@@ -49,6 +49,7 @@
 			<span></span>
 		</a>
 		<form id="passportInfo">
+			<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
 			<div class="modal-header">
 				<span class="heading">签证信息</span>
 				<input type="hidden" name="userType" value="${obj.userType }"/> 

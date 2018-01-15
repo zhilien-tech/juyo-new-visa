@@ -13,17 +13,22 @@
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
     <link rel="stylesheet" href="${base}/references/public/css/style.css">
-    <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
+    <link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
     <style>
      [v-cloak]{display:none;}
-     .box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	 .box-body {  overflow:hidden;margin-top:60px;}
 	 .bold { font-weight:bold;font-size:16px;}
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">
-					<div class="box-header"><!-- 检索条件 -->
+					<div class="box-header">
+						<!-- 切换卡按钮 start -->
+						<div class="btnGroups">
+							<a name="allOrder"  class="searchOrderBtn btnList bgColor">全部</a>
+							<a name="myOrder"  class="searchOrderBtn btnList">我的</a>
+						</div>
+						<!-- 切换卡按钮 end -->
+						<!-- 检索条件 start -->
 						<div class="row"> 
 							<div class="col-md-2 left-5px right-0px">
 								<select id="status" name="status" onchange="selectListData();" class="input-class input-sm" >
@@ -40,7 +45,8 @@
 								<a id="searchBtn" class="btn btn-primary btn-sm pull-left">搜索</a>
 							</div>
 						</div>
-					</div><!-- end 检索条件 -->
+						<!-- end 检索条件 -->
+					</div>
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div class="card-list" v-cloak v-for="data in trialJapanData">
 							<div class="card-head">
@@ -99,6 +105,7 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
@@ -108,5 +115,26 @@
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script src="${base}/references/common/js/base/cardList.js"></script>
 	<script src="${base}/admin/firstTrialJp/trialList.js"></script><!-- 本页面js文件 -->
+	<script type="text/javascript">
+	$(function(){
+		$(".btnList").click(function(){
+			$(this).addClass('bgColor').siblings().removeClass('bgColor');
+			clearSearchEle();
+			$("#searchBtn").trigger("click");
+		})
+		
+	});
+		
+		
+		function clearSearchEle(){
+			//检索框
+			$("#status").val("");
+			$("#searchStr").val("");
+			//分页项
+			$("#pageNumber").val(1);
+			$("#pageTotal").val("");
+			$("#pageListCount").val("");
+		}
+	</script>
 </body>
 </html>

@@ -36,6 +36,8 @@ public class AftermarketListForm implements SQLParamForm {
 	private String signDateStr;
 	//检索框内容
 	private String searchstr;
+	//订单权限
+	private String orderAuthority;
 	//页码
 	private Integer pageNumber = 1;
 	//每页多少条
@@ -60,7 +62,6 @@ public class AftermarketListForm implements SQLParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
-		cnd.and("tr.comId", "=", companyid);
 		cnd.and("tr.status", ">=", JPOrderStatusEnum.AFTERMARKET_ORDER.intKey());
 		if (!Util.isEmpty(signDateStr)) {
 			String[] split = signDateStr.split(" - ");
@@ -81,6 +82,28 @@ public class AftermarketListForm implements SQLParamForm {
 		if (!Util.isEmpty(status)) {
 			cnd.and("tr.status", "=", status);
 		}
+		/*if (userid.equals(adminId)) {
+			//公司管理员
+			cnd.and("tr.comId", "=", companyid);
+		} else {
+			//普通的操作员
+			cnd.and("tr.userId", "=", userid);
+		}*/
+
+		//订单权限
+		if (Util.isEmpty(orderAuthority)) {
+			orderAuthority = "allOrder";
+		}
+		if (orderAuthority.equals("allOrder")) {
+			//全部
+			cnd.and("tr.aftermarketOpid", "IS", null);
+		} else {
+			//我的
+			cnd.and("tr.aftermarketOpid", "=", userid);
+		}
+
+		cnd.and("tr.comId", "=", companyid);
+
 		cnd.orderBy("tr.createtime", "desc");
 		return cnd;
 	}

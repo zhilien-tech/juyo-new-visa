@@ -175,7 +175,7 @@
 										<label>姓/拼音</label> 
 										<c:choose>
 											<c:when test="${empty obj.applicant}">
-												<input id="otherFirstName" name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm " placeholder=" "  />
+												<input id="otherFirstName" name="otherFirstName" type="text" class="form-control input-sm " placeholder=" "  />
 												<input type="text" id="otherFirstNameEn" style="position:absolute;top:36px;border:none;left:150px;"  name="otherFirstNameEn" />
 											</c:when>
 											<c:otherwise>
@@ -223,7 +223,7 @@
 						<div class="row">
 							<!-- 姓/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group" style="position:relative;">
 									<label><span>*</span>姓/拼音</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
@@ -248,7 +248,7 @@
 						<div class="row">
 							<!-- 名/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group" style="position:relative;">
 									<label><span>*</span>名/拼音</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
@@ -443,8 +443,8 @@
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地是否与身份证相同</label> 
-									&nbsp;<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
+									<label>现居住地是否与身份证相同</label> 
+									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
 											<input id="province"
@@ -464,7 +464,7 @@
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>现居住地址城市</label> 
+									<label>现居住地址城市</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
 											<input id="city"
@@ -487,7 +487,7 @@
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>详细地址</label> 
+									<label>详细地址</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
 											<input

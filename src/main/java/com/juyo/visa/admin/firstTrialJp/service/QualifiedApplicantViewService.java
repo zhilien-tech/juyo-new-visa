@@ -224,4 +224,20 @@ public class QualifiedApplicantViewService extends BaseService<TApplicantEntity>
 		}
 		return isQualified;
 	}
+
+	//判断申请人电话和邮箱是否填写
+	public boolean isFieldContactInfoById(Integer applicantId) {
+		boolean isField = false;
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, Cnd.where("id", "=", applicantId));
+		if (!Util.isEmpty(applicant)) {
+			String email = applicant.getEmail();
+			String telephone = applicant.getTelephone();
+
+			if (Util.isEmpty(telephone) || Util.isEmpty(email)) {
+				//只要有一个为空，提示是否补充
+				isField = true;
+			}
+		}
+		return isField;
+	}
 }

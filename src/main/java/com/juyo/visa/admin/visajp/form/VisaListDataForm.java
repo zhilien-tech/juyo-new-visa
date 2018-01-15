@@ -40,6 +40,9 @@ public class VisaListDataForm implements SQLParamForm {
 	private Date signOutDate;
 	//检索框
 	private String searchStr;
+	//订单权限
+	private String orderAuthority;
+
 	//页码
 	private Integer pageNumber = 1;
 	//每页多少条
@@ -69,7 +72,7 @@ public class VisaListDataForm implements SQLParamForm {
 					.or("taj.applyname", "like", "%" + searchStr + "%");
 			cnd.and(exp);
 		}
-		cnd.and("tr.comId", "=", companyid);
+
 		SqlExpressionGroup statusexp = new SqlExpressionGroup();
 		statusexp.and("tr.status", ">=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
 		cnd.and(statusexp);
@@ -84,11 +87,29 @@ public class VisaListDataForm implements SQLParamForm {
 		if (!Util.isEmpty(status)) {
 			cnd.and("tr.status", "=", status);
 		}
-		if (userid.equals(adminId)) {
+
+		/*if (userid.equals(adminId)) {
 			//公司管理员
+			cnd.and("tr.comId", "=", companyid);
 		} else {
 			//普通的操作员
+			cnd.and("tr.userId", "=", userid);
+		}*/
+
+		//订单权限
+		if (Util.isEmpty(orderAuthority)) {
+			orderAuthority = "allOrder";
 		}
+		if (orderAuthority.equals("allOrder")) {
+			//全部
+			cnd.and("tr.visaOpid", "IS", null);
+		} else {
+			//我的
+			cnd.and("tr.visaOpid", "=", userid);
+		}
+
+		cnd.and("tr.comId", "=", companyid);
+
 		cnd.orderBy("tr.createtime", "desc");
 		return cnd;
 	}

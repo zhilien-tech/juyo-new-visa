@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
     <link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 	<style>
 		[v-cloak]{display:none;}
@@ -26,8 +27,8 @@
 		.everybody-info div:nth-child(4){width:10%;}
 		.everybody-info div:nth-child(5){width:12%;}
 		/*顶部 不随导航移动*/
-		.box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	    .box-body {  overflow:hidden;margin-top:60px;}
+		/* .box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
+	    .box-body {  overflow:hidden;margin-top:60px;} */
 	    .everybody-info {position:relative; }
 	    .cf { overflow:visible !important;}
 	    .whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:39%;}
@@ -38,6 +39,12 @@
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
+						<!-- 切换卡按钮 start -->
+						<div class="btnGroups">
+							<a name="allOrder" class="searchOrderBtn btnList bgColor">全部</a>
+							<a name="myOrder" class="searchOrderBtn btnList">我的</a>
+						</div>
+						<!-- 切换卡按钮 end -->
 						<div class="row">
 							<div class="col-md-2 left-5px right-0px">
 								<select class="input-class input-sm" id="status" name="status">
@@ -123,7 +130,9 @@
 	<%-- <script src="${base}/admin/visaJapan/visaList.js"></script> --%>
 	<script src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
+	<script src="${base}/references/common/js/switchCardOfOrder.js"></script><!-- 订单切换卡 js -->
 	<script type="text/javascript">
+	
 	//异步加载的URL地址
     var url="${base}/admin/receptionJP/listData.html";
     //vue表格数据对象
@@ -191,12 +200,42 @@
         }
 	});
 	
+	$(function(){
+		$(".btnList").click(function(){
+			$(this).addClass('bgColor').siblings().removeClass('bgColor');
+			clearSearchEle();
+			$("#searchbtn").trigger("click");
+		})
+		
+	});
+	
+	function clearSearchEle(){
+		//检索框
+		$("#status").val("");
+		$("#searchStr").val("");
+		//分页项
+		$("#pageNumber").val(1);
+		$("#pageTotal").val("");
+		$("#pageListCount").val("");
+	}
+	
 	$("#searchbtn").click(function(){
 		var status = $('#status').val();
 		var searchStr = $('#searchStr').val();
+		var orderAuthority = "allOrder";
+		$(".searchOrderBtn").each(function(){
+			if($(this).hasClass("bgColor")){
+				orderAuthority = $(this).attr("name");
+			}
+		});
+		
 		$.ajax({ 
         	url: url,
-        	data:{status:status,searchStr:searchStr},
+        	data:{
+        		status:status,
+        		searchStr:searchStr,
+        		orderAuthority:orderAuthority
+        	},
         	dataType:"json",
         	type:'post',
         	success: function(data){
@@ -273,6 +312,9 @@
 		}
 		if(status == 3){
 			layer.msg('移交签证成功');
+		}
+		if(status == 88){
+			layer.msg('负责人变更成功');
 		}
 		$.ajax({ 
         	url: url,

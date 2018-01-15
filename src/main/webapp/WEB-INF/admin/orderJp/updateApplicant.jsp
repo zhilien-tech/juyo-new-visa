@@ -415,7 +415,7 @@
 	                	  if(receiveMessage.messagetype == 1){
 		                	  window.location.reload();
 	                	  }else if(receiveMessage.messagetype == 2){
-	                		  window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+	                		  window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
 	                	  }
 	                  }
                   }
@@ -1280,7 +1280,7 @@
 			}
 			saveApplicant(2);
 			//socket.onclose();
-			//window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+			//window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
 		}
 		
 		//合格/不合格
@@ -1353,7 +1353,10 @@
 			}
 			var orderid = '${obj.orderid}';
 			var applicantId = '${obj.applicantId}';
+			alert('${obj.orderProcessType}');
 			applicantInfo.id = applicantId;
+			applicantInfo.orderProcessType = orderProcessType;
+			
 			if(userType == 2){
 				$.ajax({
 					async: false,
@@ -1385,7 +1388,7 @@
 	    										layer.closeAll('loading');
 	    										if(status == 2){
 	    											socket.onclose();
-	    											window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+	    											window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}'
 	    										}
 	    										$.ajax({ 
 	    			    					    	url: '${base}/admin/myVisa/isUpdate',
@@ -1424,7 +1427,7 @@
 								}
     							if(status == 2){
 									socket.onclose();
-									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
 								}
     						});
 						}else{
@@ -1440,7 +1443,7 @@
 									//layer.close(index);
 									if(status == 2){
 										socket.onclose();
-										window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+										window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
 									}
 									if(status == 1){
 										closeWindow();
@@ -1464,7 +1467,7 @@
 						//layer.close(index);
 						if(status == 2){
 							socket.onclose();
-							window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+							window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
 						}
 						if(status == 1){
 							closeWindow();

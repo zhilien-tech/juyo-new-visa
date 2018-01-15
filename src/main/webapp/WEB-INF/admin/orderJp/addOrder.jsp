@@ -906,7 +906,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '80%'],
-					content:'/admin/backMailJp/backMailInfo.html?applicantId='+id+'&isAfterMarket=0'
+					content:'/admin/backMailJp/backMailInfo.html?applicantId='+id+'&isAfterMarket=0&orderProcessType=1'
 
 				});
 			}

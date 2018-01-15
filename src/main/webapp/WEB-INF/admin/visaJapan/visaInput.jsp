@@ -96,6 +96,7 @@
 		<script type="text/javascript">
 		var orderobj;
 		var applyid = '${obj.applyid}';
+		var orderid = '${obj.orderid}';
 		new Vue({
 			el: '#card',
 			data: {
@@ -127,13 +128,13 @@
 		    	    	    area: ['900px', '550px'],
 		    	    	    content: '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid
 		    	    	  }); */
-		    	      window.location.href = '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid+'&isvisa=${obj.isvisa}';
+		    	      window.location.href = '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid+'&orderid='+orderid+'&isvisa=${obj.isvisa}';
 		    	}
 		    }
 		});
 		//新增签证录入
 		function add(){
-			window.location.href = '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid+'&isvisa=${obj.isvisa}';
+			window.location.href = '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid+'&orderid='+orderid+'&isvisa=${obj.isvisa}';
 	      /* layer.open({
 	    	    type: 2,
 	    	    title: false,

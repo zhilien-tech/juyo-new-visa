@@ -49,6 +49,7 @@ import org.nutz.json.Json;
 import org.nutz.lang.Strings;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
 import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
 import com.juyo.visa.admin.firstTrialJp.service.QualifiedApplicantViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
@@ -70,6 +71,7 @@ import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.JobStatusFreeEnum;
@@ -150,6 +152,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	private QrCodeService qrCodeService;
 	@Inject
 	private QualifiedApplicantViewService qualifiedApplicantViewService;
+
+	@Inject
+	private ChangePrincipalViewService changePrincipalViewService;
+
 	//基本信息连接websocket的地址
 	private static final String BASIC_WEBSPCKET_ADDR = "basicinfowebsocket";
 
@@ -822,7 +828,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object updateApplicant(Integer id, Integer orderid, Integer isTrial, HttpServletRequest request) {
+	public Object updateApplicant(Integer id, Integer orderid, Integer isTrial, Integer orderProcessType,
+			HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -840,6 +847,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//初审环节操作
 			result.put("isTrailOrder", IsYesOrNoEnum.YES.intKey());
 		}
+		//订单操作流程枚举
+		result.put("orderProcessType", orderProcessType);
 
 		TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, new Long(id).intValue());
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -1036,6 +1045,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
+		Integer orderProcessType = applicantForm.getOrderProcessType();
+		Integer orderid = applicantForm.getOrderid();
+		if (!Util.isEmpty(orderid)) {
+			//订单操作人变更
+			changePrincipalViewService.ChangePrincipal(orderid, orderProcessType, userId);
+		}
 		return null;
 	}
 
@@ -1073,7 +1088,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime, Integer isTrial,
-			HttpServletRequest request) {
+			Integer orderProcessType, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -1096,6 +1111,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//初审环节操作
 			result.put("isTrailOrder", IsYesOrNoEnum.YES.intKey());
 		}
+
+		//订单流程枚举值
+		result.put("orderProcessType", orderProcessType);
 
 		if (!Util.isEmpty(orderid)) {
 			result.put("orderid", orderid);
@@ -1164,7 +1182,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object getEditPassport(Integer applicantId, Integer orderid, HttpServletRequest request, Integer isTrial) {
+	public Object getEditPassport(Integer applicantId, Integer orderid, HttpServletRequest request, Integer isTrial,
+			Integer orderProcessType) {
 		Map<String, Object> result = MapUtil.map();
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -1183,6 +1202,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//初审环节操作
 			result.put("isTrailOrder", IsYesOrNoEnum.YES.intKey());
 		}
+
+		//订单流程枚举
+		result.put("orderProcessType", orderProcessType);
+
 		String passportSqlstr = sqlManager.get("orderJp_list_passportInfo_byApplicantId");
 		Sql passportSql = Sqls.create(passportSqlstr);
 		passportSql.setParam("id", applicantId);
@@ -1237,7 +1260,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object saveEditVisa(VisaEditDataForm visaForm, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-
+		Integer userId = loginUser.getId();
 		Date nowDate = DateUtil.nowDate();
 		if (!Util.isEmpty(visaForm.getIsOrderUpTime()) && !Util.isEmpty(visaForm.getOrderid())
 				&& Util.eq(visaForm.getIsTrailOrder(), IsYesOrNoEnum.YES.intKey())) {
@@ -1717,6 +1740,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			qualifiedApplicantViewService.unQualified(visaForm.getApplicantId(), orderJpEntity.getOrderId(),
 					visaRemark, ApplicantInfoTypeEnum.VISA.intKey(), session);
 		}
+
+		//订单负责人变更
+		Integer orderProcessType = visaForm.getOrderProcessType();
+		Integer orderId = visaForm.getOrderid();
+		changePrincipalViewService.ChangePrincipal(orderId, orderProcessType, userId);
 		return null;
 	}
 
@@ -2315,6 +2343,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 						passRemark, ApplicantInfoTypeEnum.PASSPORT.intKey(), session);
 			}
 		}
+
+		//变更订单负责人
+		Integer orderProcessType = passportForm.getOrderProcessType();
+		Integer orderid = passportForm.getOrderid();
+		if (!Util.isEmpty(orderid)) {
+			changePrincipalViewService.ChangePrincipal(orderid, orderProcessType, userId);
+		}
 		return null;
 	}
 
@@ -2410,12 +2445,52 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
-	public Object getLogs(Integer orderid) {
+	//跳转到日志页
+	public Object toLogPage(Integer orderid, Integer orderProcessType, HttpSession session) {
+		Map<String, Object> result = MapUtil.map();
+
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comid = loginCompany.getId();
+		Integer adminId = loginCompany.getAdminId();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();//当前登录用户类型
+
+		//查询拥有某个权限模块的工作人员
+		String sqlstr = sqlManager.get("logs_user_select_list");
+		Sql sql = Sqls.create(sqlstr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tcf.comid", "=", comid);
+		cnd.and("tu.id", "!=", adminId);
+		for (JPOrderProcessTypeEnum typeEnum : JPOrderProcessTypeEnum.values()) {
+			if (!Util.isEmpty(orderProcessType) && orderProcessType == typeEnum.intKey()) {
+				cnd.and(" tf.funName", "=", typeEnum.value());
+			}
+		}
+		List<Record> employees = dbDao.query(sql, cnd, null);
+
+		//获取对应的负责人字段 logs_order_info
+		String principalField = changePrincipalViewService.getprincipalField(orderProcessType);
+		String sqlStr = sqlManager.get("logs_order_info");
+		Sql sqlOrder = Sqls.create(sqlStr);
+		sqlOrder.setParam("orderid", orderid);
+		Record order = dbDao.fetch(sqlOrder);
+		int princiapalId = order.getInt(principalField);
+
+		result.put("orderid", orderid);
+		result.put("userType", userType);
+		result.put("employees", employees);
+		result.put("orderProcessType", orderProcessType);
+		result.put("princiapalId", princiapalId);
+		return result;
+	}
+
+	//加载日志列表
+	public Object getLogs(Integer orderid, Integer orderProcessType) {
 		Map<String, Object> result = MapUtil.map();
 		String logSqlstr = sqlManager.get("username_logs");
 		Sql logSql = Sqls.create(logSqlstr);
 		logSql.setParam("id", orderid);
-		List<Record> logs = dbDao.query(logSql, null, null);
+		List<Record> logs = dbDao.query(logSql, null, null); //日志列表
 		for (Record record : logs) {
 			if (!Util.isEmpty(record.get("orderStatus"))) {
 				Integer status = (Integer) record.get("orderStatus");
@@ -2425,15 +2500,46 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					}
 				}
 			}
-			//格式化日期
-			//DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-			/*if (!Util.isEmpty(record.get("createTime"))) {
-				Date createDate = (Date) record.get("createTime");
-				record.put("createTime", format.format(createDate));
-			}*/
 		}
+
 		result.put("logs", logs);
 		return result;
+	}
+
+	/**
+	 * 
+	 * 变更订单负责人
+	 * 更新订单状态为 “负责人变更”
+	 *
+	 * @param orderid 订单id
+	 * @param principalId 负责人id
+	 * @param orderProcessType 订单流程之一
+	 * @return 
+	 */
+	public Object changePrincipal(Integer orderid, Integer principalId, Integer orderProcessType, HttpSession session) {
+		int updatenum = 0;
+		Date nowDate = DateUtil.nowDate();
+		//Order 要检索的字段
+		String fieldStr = changePrincipalViewService.getprincipalField(orderProcessType);
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class,
+				Cnd.where("id", "=", orderid).and(fieldStr, "=", principalId));
+		if (Util.isEmpty(order)) {
+			TOrderEntity updateOrder = dbDao.fetch(TOrderEntity.class, Cnd.where("id", "=", orderid));
+			if (!Util.isEmpty(updateOrder)) {
+				//更新订单对应 负责人字段
+				updatenum = dbDao.update(TOrderEntity.class, Chain.make(fieldStr, principalId),
+						Cnd.where("id", "=", orderid));
+				if (updatenum > 0) {
+					//更新订单状态为 “负责人变更”状态
+					int PRINCIPAL_ORDER = JPOrderStatusEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey();
+					dbDao.update(TOrderEntity.class, Chain.make("status", PRINCIPAL_ORDER).add("updateTime", nowDate),
+							Cnd.where("id", "=", orderid));
+					//日志记录
+					insertLogs(orderid, PRINCIPAL_ORDER, session);
+				}
+			}
+		}
+		return updatenum;
 	}
 
 	public Object firtTrialJp(Integer id, HttpSession session) {
