@@ -511,7 +511,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param planid
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object resetPlan(Integer orderid, Integer planid) {
+	public Object resetPlan(Integer orderid, Integer planid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
 		TOrderTravelplanJpEntity plan = dbDao.fetch(TOrderTravelplanJpEntity.class, planid.longValue());
 		if (!Util.eq("1", plan.getDay())) {
 			//获取城市所有的酒店
@@ -527,6 +529,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
 			//plan.setHotel(hotels.get(random.nextInt(hotels.size())).getId());
 			dbDao.update(plan);
+
+			//订单负责人变更
+			changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+
 		}
 		//行程安排
 		return getTravelPlanByOrderId(orderid);
@@ -545,6 +551,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("status", "error");
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
 		//需要生成的travelplan
 		List<TOrderTravelplanJpEntity> travelplans = Lists.newArrayList();
 		//往返
@@ -696,6 +703,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		dbDao.updateRelations(before, travelplans);
 		result.put("data", getTravelPlanByOrderId(planform.getOrderid()));
 		result.put("status", "success");
+
+		//订单负责人变更
+		Integer orderid = planform.getOrderid();
+		changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+
 		return result;
 	}
 
@@ -757,6 +769,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveEditPlanData(TOrderTravelplanJpEntity travelform, HttpSession session) {
+
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+
 		TOrderTravelplanJpEntity travel = dbDao.fetch(TOrderTravelplanJpEntity.class, travelform.getId().longValue());
 		//城市信息
 		TCityEntity city = dbDao.fetch(TCityEntity.class, travelform.getCityId().longValue());
@@ -820,6 +836,13 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		travel.setDay(travelform.getDay());
 		travel.setUpdateTime(new Date());
 		dbDao.update(travel);
+
+		//订单负责人变更
+		Integer orderid = travelform.getOrderId();
+		if (!Util.isEmpty(orderid)) {
+			changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+		}
+
 		return null;
 	}
 

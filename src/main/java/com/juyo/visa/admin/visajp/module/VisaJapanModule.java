@@ -131,8 +131,8 @@ public class VisaJapanModule {
 	 */
 	@At
 	@POST
-	public Object resetPlan(@Param("orderid") Integer orderid, @Param("planid") Integer planid) {
-		return visaJapanService.resetPlan(orderid, planid);
+	public Object resetPlan(@Param("orderid") Integer orderid, @Param("planid") Integer planid, HttpSession session) {
+		return visaJapanService.resetPlan(orderid, planid, session);
 	}
 
 	/**

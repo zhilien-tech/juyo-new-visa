@@ -120,7 +120,11 @@
 				if(inputVal != null && inputVal != ""){
 					$.ajax({ 
 		            	url: '${base}/admin/visaJapan/saveApplicatRevenue.html',
-		            	data:{applicatid:applicatid,realInfo:inputVal},
+		            	data:{
+		            		applicatid:applicatid,
+		            		realInfo:inputVal
+		            	}
+		            	},
 		            	dataType:"json",
 		            	type:'post',
 		            	success: function(data){
