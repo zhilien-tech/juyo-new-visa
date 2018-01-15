@@ -34,6 +34,7 @@
 					<div class="info-body-from backmail-div">
 						<input id="id" name="id" type="hidden" v-model="backmailinfo.id">
 						<input id="orderId" name="orderId" type="hidden" value="${obj.orderId }">
+						<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
 						<input id="applicantJPId" name="applicantJPId" type="hidden" v-model="backmailinfo.applicantjpid">
 						<input id="isAfterMarket" name="isAfterMarket" value="${obj.isAfterMarket }" type="hidden" >
 						<div class="row body-from-input">

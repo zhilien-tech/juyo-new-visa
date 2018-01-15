@@ -196,7 +196,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&isvisa=1'
+				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&orderid='+orderid+'&isvisa=1'
 			});
 		},
 		//通知销售
@@ -205,7 +205,10 @@ new Vue({
 			$.ajax({ 
 				url: '/admin/visaJapan/noticeSale.html',
 				dataType:"json",
-				data:{applyid:applyid},
+				data:{
+					applyid:applyid,
+					orderid:orderid
+				},
 				type:'post',
 				success: function(data){
 					layer.closeAll('loading');

@@ -34,6 +34,7 @@
 				<div class="tab-content">
 					<input name="id" type="hidden" value="${obj.applicantvisa.id}">
 					<input name="isvisa" type="hidden" value="${obj.isvisa}">
+					<input name="orderid" type="hidden" value="${obj.orderid}">
 					
 					<div class="row">
 						<div class="col-sm-6">
