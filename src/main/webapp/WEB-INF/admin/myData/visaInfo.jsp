@@ -67,7 +67,7 @@
 					<c:when test="${empty obj.contact }">
 						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
 						<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
-						<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
+						<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
 					</c:when>
 					<c:otherwise>
 						<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin" data-dismiss="modal" value="取消" /> 
@@ -270,7 +270,7 @@
 										</select>
 									</div>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-4 preSchool">
 									<div class="form-group">
 										<label id="schoolName"><span>*</span>单位名称</label>
 											<c:choose>
@@ -283,7 +283,7 @@
 											</c:choose>
 									</div>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-4 preSchool">
 									<div class="form-group">
 										<label id="schoolTelephone"><span>*</span>单位电话</label>
 											<c:choose>
@@ -298,7 +298,7 @@
 								</div>
 							</div><!-- end 我的职业/单位名称/单位电话 -->
 							<div class="row"><!-- 单位地址 -->
-								<div class="col-sm-8">
+								<div class="col-sm-8 preSchool">
 									<div class="form-group">
 										<label id="schoolAddress"><span>*</span>单位地址</label>
 											<c:choose>
@@ -359,8 +359,11 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder="万"  />
+										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder=" "  />
 									</div>
+								</div>
+								<div style="float:left;  margin:45px 0 0 -23px;">
+								万
 								</div>
 							</div><!-- end 银行存款 -->
 							<i class="remove-btn delete-icon"></i>
@@ -403,8 +406,11 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder="平米"  />
+										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder=" "  />
 									</div>
+								</div>
+								<div style="float:left;  margin:45px 0 0 -23px;">
+								平米
 								</div>
 							</div><!-- end 房产 -->
 							<i class="remove-btn delete-icon"></i>
@@ -425,8 +431,11 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder="万"  />
+										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder=" "  />
 									</div>
+								</div>
+								<div style="float:left;  margin:45px 0 0 -23px;">
+								万
 								</div>
 							</div><!-- end 房产 -->
 							<i class="remove-btn delete-icon"></i>
@@ -543,11 +552,19 @@
 			}else{
 				//结婚证图片验证
 				var marryUrl = $("#marryUrl").val();
+				var marrystatus = $("#marryStatus").val();
 				if(marryUrl == ""){
-					$(".front").attr("class", "info-imgUpload front has-error");  
-			        $(".help-blockFront").attr("data-bv-result","INVALID");  
-			        $(".help-blockFront").attr("style","display: block;");  
-			        $("#borderColor").attr("style","border-color:#ff1a1a");
+					if(marrystatus == 3 || marrystatus == 4){
+						$(".front").attr("class", "info-imgUpload front has-success");  
+				        $(".help-blockFront").attr("data-bv-result","IVALID");  
+				        $(".help-blockFront").attr("style","display: none;");
+				        $("#borderColor").attr("style",null);
+					}else{
+						$(".front").attr("class", "info-imgUpload front has-error");  
+				        $(".help-blockFront").attr("data-bv-result","INVALID");  
+				        $(".help-blockFront").attr("style","display: block;");  
+				        $("#borderColor").attr("style","border-color:#ff1a1a");
+					}
 				}else{
 					$(".front").attr("class", "info-imgUpload front has-success");  
 			        $(".help-blockFront").attr("data-bv-result","IVALID");  
@@ -668,10 +685,12 @@
 				if(career == 5){
 					$(".preSchool").hide();
 				}else if(career == 4){
+					$(".preSchool").show();
 					$("#schoolName").html("<span>*</span>学校名称");
 					$("#schoolTelephone").html("<span>*</span>学校电话");
 					$("#schoolAddress").html("<span>*</span>学校地址");
 				}else{
+					$(".preSchool").show();
 					$("#schoolName").html("<span>*</span>单位名称");
 					$("#schoolTelephone").html("<span>*</span>单位电话");
 					$("#schoolAddress").html("<span>*</span>单位地址");
@@ -814,8 +833,11 @@
 					}else{
 						$(".deposit").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#deposit").val("万");
-						 $("#deposit").attr("style", null);
+						$("#deposit").val("");
+						$(".help-blockdeposit").attr("data-bv-result","INVALID");  
+					    $(".deposits").css({"display":"block"});
+					    $(".deposits").attr("class", "col-xs-6 deposits has-error");
+					    $("#deposit").attr("style", "border-color:#ff1a1a");
 						//$("#deposit").placeholder("万");
 					}
 				}else if(financeBtnInfo == "车产"){
@@ -846,8 +868,11 @@
 					}else{
 						$(".houseProperty").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#houseProperty").val("平米");
-						$("#houseProperty").attr("style", null);
+						$("#houseProperty").val("");
+						$(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
+					    $(".housePropertys").css({"display":"block"});
+					    $(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");
+					    $("#houseProperty").attr("style", "border-color:#ff1a1a");
 						//$("#houseProperty").placeholder("平米");
 					}
 				}else if(financeBtnInfo == "理财"){
@@ -861,8 +886,11 @@
 					}else{
 						$(".financial").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#financial").val("万");
-						$("#financial").attr("style", null);
+						$("#financial").val("");
+						$(".help-blockfinancial").attr("data-bv-result","INVALID");  
+					    $(".financials").css({"display":"block"});
+					    $(".financials").attr("class", "col-xs-6 financials has-error");
+					    $("#financial").attr("style", "border-color:#ff1a1a");
 						//$("#financial").placeholder("万");
 					}
 				}
@@ -914,25 +942,26 @@
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
-			if (!bootstrapValidator.isValid()) {
-				return;
+			if(status == 1){
+				if (!bootstrapValidator.isValid()) {
+					return;
+				}
+				if($(".front").hasClass("has-error")){
+					return;
+				}
+				if($(".deposits").hasClass("has-error")){
+					return;
+				}
+				if($(".vehicles").hasClass("has-error")){
+					return;
+				}
+				if($(".housePropertys").hasClass("has-error")){
+					return;
+				}
+				if($(".financials").hasClass("has-error")){
+					return;
+				}
 			}
-			if($(".front").hasClass("has-error")){
-				return;
-			}
-			if($(".deposits").hasClass("has-error")){
-				return;
-			}
-			if($(".vehicles").hasClass("has-error")){
-				return;
-			}
-			if($(".housePropertys").hasClass("has-error")){
-				return;
-			}
-			if($(".financials").hasClass("has-error")){
-				return;
-			}
-			
 			
 			//绑定财产类型
 			var wealthType = "";
@@ -963,21 +992,6 @@
 				success :function(data) {
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
-					/* layer.load(1);
-					$.ajax({
-						type: 'POST',
-						async : false,
-						data : {
-							orderid : orderid,
-							applicantid : applicantId,
-							completeType : 'visa'
-						},
-						url: '${base}/admin/myData/changeStatus.html',
-						success :function(data) {
-							console.log(JSON.stringify(data));
-							layer.closeAll('loading');
-						}
-					}); */
 					if(status == 1){
 						$("#backBtn").click();
 					}else if(status == 2){
@@ -1051,20 +1065,20 @@
 		
 		function passportBtn(){
 			var applicantId = '${obj.applyId}';
-				var bootstrapValidator = $("#passportInfo").data(
+			var bootstrapValidator = $("#passportInfo").data(
 				'bootstrapValidator');
-				// 执行表单验证 
-				bootstrapValidator.validate();
-				if (!bootstrapValidator.isValid()) {
-					return;
-				}
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			/* if (!bootstrapValidator.isValid()) {
+				return;
+			}
 				
-				if($(".front").hasClass("has-error")){
-					return;
-				}
-				if($(".back").hasClass("has-error")){
-					return;
-				}
+			if($(".front").hasClass("has-error")){
+				return;
+			}
+			if($(".back").hasClass("has-error")){
+				return;
+			} */
 			save(2);
 			//socket.onclose();
 			window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;

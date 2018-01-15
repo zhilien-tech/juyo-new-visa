@@ -1112,14 +1112,14 @@
 					},
 					url : '${base}/admin/myData/isPrompted.html',
 					success :function(apply) {
-						if(apply.isPrompted == 0){//没有提示过
+						if(apply.updateIsPrompted == 0){//没有提示过
 							$.ajax({
 								type : "post",
 								data : {
 									cardId : $("#cardId").val(),
 									applicantId : '${obj.applicant.id}'
 								},
-								url : '${base}/admin/myData/getTouristInfoByCard',
+								url : '${base}/admin/myData/getTouristInfoByCard.html',
 								success :function(data) {
 									if(data.base){
 										layer.confirm("您的信息已存在，是否使用？", {
@@ -1149,6 +1149,19 @@
 													
 												}
 											});
+											
+											
+											$.ajax({
+												type : "post",
+												async : false,
+												data : {
+													applyid : '${obj.applicant.id}'
+												},
+												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+												success :function(data) {
+													
+												}
+											});
 										},
 										function(index){
 											layer.close(index);
@@ -1169,7 +1182,7 @@
 								}
 							});
 						}else{//提示过
-							if(apply.isSameInfo == 1){//更新
+							if(apply.updateIsOrNot == 1){//更新
 								$.ajax({
 									type : "post",
 									async : false,
@@ -1177,7 +1190,7 @@
 										cardId : $("#cardId").val(),
 										applicantId : '${obj.applicant.id}'
 									},
-									url : '${base}/admin/myData/getTouristInfoByCard',
+									url : '${base}/admin/myData/getTouristInfoByCard.html',
 									success :function(data) {
 										toSet(data);
 										//$("#telephone").unbind("change");
@@ -1186,6 +1199,18 @@
 										$("#telephone").next().next().attr('data-bv-result','VALID');
 										$("#telephone").next().attr('class','form-control-feedback glyphicon glyphicon-ok');
 										$("#telephone").parent().attr('class','form-group has-feedback has-success');
+									}
+								});
+							
+								$.ajax({
+									type : "post",
+									async : false,
+									data : {
+										applyid : '${obj.applicant.id}'
+									},
+									url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+									success :function(data) {
+										
 									}
 								});
 							}
@@ -1211,7 +1236,7 @@
 					},
 					url : '${base}/admin/myData/isPrompted.html',
 					success :function(apply) {
-						if(apply.isPrompted == 0){//没有提示过
+						if(apply.updateIsPrompted == 0){//没有提示过
 							$.ajax({
 								type : "post",
 								async : false,
@@ -1219,7 +1244,7 @@
 									telephone : $("#telephone").val(),
 									applicantId : '${obj.applicant.id}'
 								},
-								url : '${base}/admin/myData/getTouristInfoByTelephone',
+								url : '${base}/admin/myData/getTouristInfoByTelephone.html',
 								success :function(data) {
 									console.log(JSON.stringify(data));
 									if(data.base){
@@ -1248,6 +1273,17 @@
 													
 												}
 											});
+											$.ajax({
+												type : "post",
+												async : false,
+												data : {
+													applyid : '${obj.applicant.id}'
+												},
+												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+												success :function(data) {
+													
+												}
+											});
 										},function(index){
 											layer.close(index);
 											$.ajax({
@@ -1267,7 +1303,7 @@
 								}
 							});
 						}else{//提示过,查询是否更新
-							if(apply.isSameInfo == 1){//更新
+							if(apply.updateIsOrNot == 1){//更新
 								$.ajax({
 									type : "post",
 									async : false,
@@ -1275,7 +1311,7 @@
 										telephone : $("#telephone").val(),
 										applicantId : '${obj.applicant.id}'
 									},
-									url : '${base}/admin/myData/getTouristInfoByTelephone',
+									url : '${base}/admin/myData/getTouristInfoByTelephone.html',
 									success :function(data) {
 										toSet(data);
 										//$("#cardId").unbind("change");
@@ -1284,6 +1320,17 @@
 										$("#cardId").next().next().attr('data-bv-result','VALID');
 										$("#cardId").next().attr('class','form-control-feedback glyphicon glyphicon-ok');
 										$("#cardId").parent().attr('class','form-group has-feedback has-success');
+									}
+								});
+								$.ajax({
+									type : "post",
+									async : false,
+									data : {
+										applyid : '${obj.applicant.id}'
+									},
+									url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+									success :function(data) {
+										
 									}
 								});
 							}
@@ -1483,75 +1530,140 @@
 					async: false,
 					type: 'POST',
 					data : applicantInfo,
-					url: '${base}/admin/myData/baseIsChanged',
+					url: '${base}/admin/myData/baseIsChanged.html',
 					success :function(data) {
-						if(data.isChanged == 1){//如果返回1则说明游客信息改变，提示是否更新
-    						layer.confirm("信息已改变，您是否要更新？", {
-    							title:"提示",
-    							btn: ["是","否"], //按钮
-    							shade: false //不显示遮罩
-    						}, 
-    						function(){
-    							$.ajax({
-	    							async: false,
-	    							type: 'POST',
-	    							data : applicantInfo,
-	    							url: '${base}/admin/orderJp/saveEditApplicant',
-	    							success :function(data) {
-	    								console.log(JSON.stringify(data));
-	    								layer.closeAll('loading');
-	    								if(status == 2){
-	    									socket.onclose();
-	    									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
-	    								}
-				    					$.ajax({ 
-				    			    		url: '${base}/admin/myVisa/copyBaseToTourist',
-				    			    		dataType:"json",
-				    			    		data:{applyid:applicantId},
-				    			    		type:'post',
-				    			    		success: function(data){
-				    			    					    		
-				    			    		}
-				    			    	}); 
-	    										//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-	    										//layer.close(index);
-	    								if(status == 1){
-	    									closeWindow();
-	    									parent.successCallBack(1);
-	    								}
-	    							}
+						if(data.isPrompted == 0){//没有提示过
+							if(data.isChanged == 1){//如果返回1则说明游客信息改变，提示是否更新
+	    						layer.confirm("信息已改变，您是否要更新？", {
+	    							title:"提示",
+	    							btn: ["是","否"], //按钮
+	    							shade: false //不显示遮罩
+	    						}, 
+	    						function(){
+	    							$.ajax({
+		    							async: false,
+		    							type: 'POST',
+		    							data : applicantInfo,
+		    							url: '${base}/admin/orderJp/saveEditApplicant.html',
+		    							success :function(data) {
+		    								console.log(JSON.stringify(data));
+		    								if(status == 2){
+		    									socket.onclose();
+		    									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+		    								}
+		    								if(status == 1){
+		    									closeWindow();
+		    									parent.successCallBack(1);
+		    								}
+		    							}
+		    						});
+					    					$.ajax({ 
+					    			    		url: '${base}/admin/myVisa/copyBaseToTourist.html',
+					    			    		dataType:"json",
+					    			    		data:{applyid:applicantId},
+					    			    		type:'post',
+					    			    		success: function(data){
+					    			    					    		
+					    			    		}
+					    			    	}); 
+					    					
+					    					$.ajax({ 
+					    			    		url: '${base}/admin/myVisa/saveIsOrNot.html',
+					    			    		dataType:"json",
+					    			    		data:{
+					    			    			applyid:applicantId,
+					    			    			updateOrNot : "YES"
+					    			    		},
+					    			    		type:'post',
+					    			    		success: function(data){
+					    			    					    		
+					    			    		}
+					    			    	}); 
+	    						},function(){
+	    							$.ajax({
+		    							async: false,
+		    							type: 'POST',
+		    							data : applicantInfo,
+		    							url: '${base}/admin/orderJp/saveEditApplicant.html',
+		    							success :function(data) {
+			    							if(status == 1){
+												closeWindow();
+												parent.successCallBack(1);
+											}
+			    							if(status == 2){
+												socket.onclose();
+												window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+											}
+		    							}
+		    						});
+	    							
+	    							
+	    							$.ajax({ 
+			    			    		url: '${base}/admin/myVisa/saveIsOrNot.html',
+			    			    		dataType:"json",
+			    			    		data:{
+			    			    			applyid:applicantId,
+			    			    			updateOrNot : "NO"
+			    			    		},
+			    			    		type:'post',
+			    			    		success: function(data){
+			    			    					    		
+			    			    		}
+			    			    	}); 
 	    						});
-    						},function(){
-    							if(status == 1){
-									closeWindow();
-									parent.successCallBack(1);
-								}
-    							if(status == 2){
-									socket.onclose();
-									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
-								}
-    						});
-						}else{
-							$.ajax({
-								async: false,
-								type: 'POST',
-								data : applicantInfo,
-								url: '${base}/admin/orderJp/saveEditApplicant',
-								success :function(data) {
-									console.log(JSON.stringify(data));
-									layer.closeAll('loading');
-									//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-									//layer.close(index);
-									if(status == 2){
-										socket.onclose();
-										window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+							}else{
+								$.ajax({
+									async: false,
+									type: 'POST',
+									data : applicantInfo,
+									url: '${base}/admin/orderJp/saveEditApplicant.html',
+									success :function(data) {
+										console.log(JSON.stringify(data));
+										//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+										//layer.close(index);
+										if(status == 2){
+											socket.onclose();
+											window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+										}
+										if(status == 1){
+											closeWindow();
+											parent.successCallBack(1);
+										}
 									}
+								});
+							}
+							
+						}else{//提示过
+							$.ajax({
+    							async: false,
+    							type: 'POST',
+    							data : applicantInfo,
+    							url: '${base}/admin/orderJp/saveEditApplicant.html',
+    							success :function(data) {
 									if(status == 1){
 										closeWindow();
 										parent.successCallBack(1);
 									}
+									if(status == 2){
+										socket.onclose();
+										window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+									}
+    							}
+    						});
+							
+							if(data.isChanged == 1){
+								if(data.isUpdated == 1){//更新
+									$.ajax({ 
+			    			    		url: '${base}/admin/myVisa/copyBaseToTourist.html',
+			    			    		dataType:"json",
+			    			    		data:{applyid:applicantId},
+			    			    		type:'post',
+			    			    		success: function(data){
+			    			    					    		
+			    			    		}
+			    			    	});
 								}
-							});
+							}
 						}
 					}
 				});
@@ -1560,10 +1672,9 @@
 					async: false,
 					type: 'POST',
 					data : applicantInfo,
-					url: '${base}/admin/orderJp/saveEditApplicant',
+					url: '${base}/admin/orderJp/saveEditApplicant.html',
 					success :function(data) {
 						console.log(JSON.stringify(data));
-						layer.closeAll('loading');
 						//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						//layer.close(index);
 						if(status == 2){

@@ -54,7 +54,7 @@
 					<c:when test="${empty obj.contact }">
 						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
 						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
-						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant();"/> 
+						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant(1);"/> 
 						<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
 					</c:when>
 					<c:otherwise>
