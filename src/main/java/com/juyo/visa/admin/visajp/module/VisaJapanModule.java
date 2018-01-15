@@ -214,8 +214,9 @@ public class VisaJapanModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object visaInput(HttpSession session, @Param("applyid") Integer applyid, @Param("isvisa") Integer isvisa) {
-		return visaJapanService.visaInput(session, applyid, isvisa);
+	public Object visaInput(HttpSession session, @Param("applyid") Integer applyid, @Param("orderid") Integer orderid,
+			@Param("isvisa") Integer isvisa) {
+		return visaJapanService.visaInput(session, applyid, orderid, isvisa);
 	}
 
 	/**
@@ -281,8 +282,8 @@ public class VisaJapanModule {
 	 */
 	@At
 	@GET
-	public Object downloadFile(@Param("orderid") Long orderid, HttpServletResponse response) {
-		return visaJapanSimulateService.downloadFile(orderid, response);
+	public Object downloadFile(@Param("orderid") Long orderid, HttpServletResponse response, HttpSession session) {
+		return visaJapanSimulateService.downloadFile(orderid, response, session);
 	}
 
 	/**
@@ -324,8 +325,8 @@ public class VisaJapanModule {
 	 */
 	@At
 	@POST
-	public Object noticeSale(@Param("applyid") Integer applyid) {
-		return visaJapanService.noticeSale(applyid);
+	public Object noticeSale(@Param("applyid") Integer applyid, @Param("orderid") Integer orderid, HttpSession session) {
+		return visaJapanService.noticeSale(applyid, orderid, session);
 	}
 
 	/**
@@ -369,11 +370,8 @@ public class VisaJapanModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object sendZhaoBaoError(@Param("data") String data, @Param("orderid") Integer orderid) {
-		Map<String, Object> result = Maps.newHashMap();
-		result.put("orderid", orderid);
-		result.put("data", data);
-		return result;
+	public Object sendZhaoBaoError(@Param("data") String data, @Param("orderid") Integer orderid, HttpSession session) {
+		return visaJapanService.sendZhaoBaoError(data, orderid, session);
 	}
 
 	/**

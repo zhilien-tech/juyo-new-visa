@@ -273,7 +273,7 @@
     				shadeClose: false,
     				scrollbar: false,
     				area: ['900px', '80%'],
-    				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&isvisa=1'
+    				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&orderid='+orderid+'&isvisa=1'
     			});
     		}
         }

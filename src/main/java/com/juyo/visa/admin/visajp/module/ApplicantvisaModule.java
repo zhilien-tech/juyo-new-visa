@@ -3,6 +3,8 @@ package com.juyo.visa.admin.visajp.module;
 import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
@@ -15,8 +17,12 @@ import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
+import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.visajp.service.ApplicantvisaViewService;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
+import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
+import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantVisaJpAddForm;
 import com.juyo.visa.forms.TApplicantVisaJpForm;
 import com.juyo.visa.forms.TApplicantVisaJpUpdateForm;
@@ -32,8 +38,13 @@ public class ApplicantvisaModule {
 
 	private static final Log log = Logs.get();
 
+	private static final Integer VISA_PROCESS = JPOrderProcessTypeEnum.VISA_PROCESS.intKey();
+
 	@Inject
 	private ApplicantvisaViewService applicantvisaViewService;
+
+	@Inject
+	private ChangePrincipalViewService changePrincipalViewService;
 
 	/**
 	 * 跳转到list页面
@@ -74,10 +85,16 @@ public class ApplicantvisaModule {
 	 */
 	@At
 	@POST
-	public Object add(@Param("..") TApplicantVisaJpAddForm addForm, @Param("isvisa") Integer isvisa) {
+	public Object add(@Param("..") TApplicantVisaJpAddForm addForm, @Param("isvisa") Integer isvisa, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		Integer orderid = addForm.getOrderid();
+
 		if (!Util.isEmpty(isvisa)) {
 			addForm.setVisaEntryTime(new Date());
 		}
+		//变更订单负责人
+		changePrincipalViewService.ChangePrincipal(orderid.intValue(), VISA_PROCESS, userId);
 		return applicantvisaViewService.add(addForm);
 	}
 
@@ -102,8 +119,8 @@ public class ApplicantvisaModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..") TApplicantVisaJpUpdateForm updateForm) {
-		return applicantvisaViewService.updatedata(updateForm);
+	public Object update(@Param("..") TApplicantVisaJpUpdateForm updateForm, HttpSession session) {
+		return applicantvisaViewService.updatedata(updateForm, session);
 	}
 
 	/**
