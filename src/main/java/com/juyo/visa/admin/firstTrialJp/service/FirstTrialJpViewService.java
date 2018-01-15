@@ -1596,6 +1596,11 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//转换长连接为短地址
 		mobileUrl = getEncryptlink(mobileUrl, request);
 
+		HttpSession session = request.getSession();
+		//获取当前用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+
 		try {
 			//发送不合格消息
 			sendApplicantVerifySMS(applicantId, orderid, mobileUrl, "trialtemp/applicant_unqualified_sms.txt");
@@ -1608,6 +1613,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String firstName = applicant.getFirstName();
 		String lastName = applicant.getLastName();
 		String username = firstName + lastName;
+
+		//变更订单负责人
+		changePrincipalViewService.ChangePrincipal(orderid, FIRSTTRIAL_PROCESS, userId);
 		return username;
 	}
 
