@@ -85,7 +85,13 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 
 			//获取申请人信息
 			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantId.longValue());
-			String name = applicant.getFirstName() + applicant.getLastName();
+			String name = "";
+			if (!Util.isEmpty(applicant.getFirstName())) {
+				name += applicant.getFirstName();
+			}
+			if (!Util.isEmpty(applicant.getLastName())) {
+				name += applicant.getLastName();
+			}
 			String mobile = applicant.getTelephone();
 
 			BackMailInfoEntity backmail = new BackMailInfoEntity();

@@ -1,7 +1,7 @@
 /**
  * SaleViewService.java
  * com.juyo.visa.admin.sale.service
- * Copyright (c) 2017, 北京科技有限公司版权所有.
+ * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
  */
 
 package com.juyo.visa.admin.order.service;
@@ -1098,8 +1098,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("userType", userType);
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", id));
-		result.put("marryStatus", applicantOrderJpEntity.getMarryStatus());
-		result.put("marryUrl", applicantOrderJpEntity.getMarryUrl());
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, id.longValue());
+		result.put("marryStatus", apply.getMarryStatus());
+		result.put("marryUrl", apply.getMarryUrl());
+
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
 				.longValue());
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
@@ -1277,11 +1279,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			String mainRelation = applicantOrderJpEntity.getMainRelation();
 			String relationRemark = applicantOrderJpEntity.getRelationRemark();
 			Integer sameMainWealth = applicantOrderJpEntity.getSameMainWealth();
-			applicantOrderJpEntity.setMarryStatus(visaForm.getMarryStatus());
-			applicantOrderJpEntity.setMarryUrl(visaForm.getMarryUrl());
+
 			//申请人
 			TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
 					new Long(applicantOrderJpEntity.getApplicantId()).intValue());
+			applicantEntity.setMarryStatus(visaForm.getMarryStatus());
+			applicantEntity.setMarryUrl(visaForm.getMarryUrl());
+			applicantEntity.setMarryurltype(visaForm.getMarryStatus());
 			//主申请人
 			if (!Util.isEmpty(applicantEntity.getMainId())) {
 				TApplicantEntity mainApplicant = dbDao.fetch(TApplicantEntity.class,
