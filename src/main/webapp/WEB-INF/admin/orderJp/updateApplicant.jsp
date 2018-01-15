@@ -1354,6 +1354,7 @@
 			var orderid = '${obj.orderid}';
 			var applicantId = '${obj.applicantId}';
 			applicantInfo.id = applicantId;
+			applicantInfo.orderProcessType = '${obj.orderProcessType}';
 			if(userType == 2){
 				$.ajax({
 					async: false,
@@ -1385,7 +1386,7 @@
 	    										layer.closeAll('loading');
 	    										if(status == 2){
 	    											socket.onclose();
-	    											window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}';
+	    											window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder};
 	    										}
 	    										$.ajax({ 
 	    			    					    	url: '${base}/admin/myVisa/isUpdate',

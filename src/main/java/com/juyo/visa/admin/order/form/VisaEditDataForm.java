@@ -71,4 +71,7 @@ public class VisaEditDataForm implements Serializable {
 	private Integer sameMainWork;
 
 	private Integer isTrailOrder;
+
+	//订单流程枚举值
+	private Integer orderProcessType;
 }
