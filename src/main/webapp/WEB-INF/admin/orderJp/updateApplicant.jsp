@@ -1353,8 +1353,10 @@
 			}
 			var orderid = '${obj.orderid}';
 			var applicantId = '${obj.applicantId}';
+			alert('${obj.orderProcessType}');
 			applicantInfo.id = applicantId;
-			applicantInfo.orderProcessType = '${obj.orderProcessType}';
+			applicantInfo.orderProcessType = orderProcessType;
+			
 			if(userType == 2){
 				$.ajax({
 					async: false,
