@@ -1,7 +1,7 @@
 /**
  * TripAirlineService.java
  * com.juyo.visa.admin.visajp.service
- * Copyright (c) 2018, 北京科技有限公司版权所有.
+ * Copyright (c) 2018, 北京直立人科技有限公司版权所有.
 */
 
 package com.juyo.visa.admin.visajp.service;
@@ -16,7 +16,6 @@ import java.util.Map;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.juyo.visa.admin.visajp.form.FlightSelectParam;
-import com.juyo.visa.common.haoservice.AirLineInFo;
 import com.juyo.visa.common.haoservice.AirLineParam;
 import com.juyo.visa.common.haoservice.AirLineResult;
 import com.juyo.visa.common.haoservice.AirlineData;
@@ -38,7 +37,7 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class TripAirlineService extends BaseService<TFlightEntity> {
 
-	public AirLineResult getTripAirlineSelect(FlightSelectParam param) {
+	public List<TFlightEntity> getTripAirlineSelect(FlightSelectParam param) {
 
 		String dep = "";
 		if (!Util.isEmpty(param.getGocity())) {
@@ -72,7 +71,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 		List<LinkedHashMap<String, String>> fromJsonAsList = (List) map.get("result");
 		DateFormat dateFormat = new SimpleDateFormat("HHmm");
 		for (LinkedHashMap<String, String> airmap : fromJsonAsList) {
-			AirLineInFo airLineInFo = new AirLineInFo();
+			/*AirLineInFo airLineInFo = new AirLineInFo();
 			airLineInFo.setName(airmap.get("name"));
 			airLineInFo.setDate(airmap.get("date"));
 			airLineInFo.setAirmode(airmap.get("airmode"));
@@ -92,58 +91,35 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 			airLineInFo.setDep_temperature(airmap.get("dep_temperature"));
 			airLineInFo.setArr_temperature(airmap.get("arr_temperature"));
 			airLineInFo.setEtd(airmap.get("etd"));
-			airLineInFo.setEta(airmap.get("eta"));
-			TFlightEntity flightEntity = new TFlightEntity();
-			airLineResult.getAiliLineInFos().add(airLineInFo);
-		}
-		return airLineResult;
-	}
-
-	public static void main(String[] args) {
-		//设置参数
-		AirLineParam airLineParam = new AirLineParam();
-		airLineParam.setDep("SHA");
-		airLineParam.setArr("TYO");
-		airLineParam.setDate("20180215");
-		//执行查询
-		String airLinejson = AirlineData.getAirLineInfo(airLineParam);
-		AirLineResult airLineResult = new AirLineResult();
-		Map<String, Object> map = JsonUtil.fromJson(airLinejson, Map.class);
-		//返回代码
-		airLineResult.setError_code(map.get("error_code").toString());
-		//返回错误信息
-		airLineResult.setReason((String) map.get("reason"));
-		List<LinkedHashMap<String, String>> fromJsonAsList = (List) map.get("result");
-		DateFormat dateFormat = new SimpleDateFormat("HHmm");
-		for (LinkedHashMap<String, String> airmap : fromJsonAsList) {
-			AirLineInFo airLineInFo = new AirLineInFo();
-			airLineInFo.setName(airmap.get("name"));
-			airLineInFo.setDate(airmap.get("date"));
-			airLineInFo.setAirmode(airmap.get("airmode"));
-			airLineInFo.setDep(airmap.get("dep"));
-			airLineInFo.setArr(airmap.get("arr"));
-			airLineInFo.setCompany(airmap.get("company"));
-			airLineInFo.setStatus(airmap.get("status"));
-			//出发时间
-			Date deptimedate = DateUtil.string2Date(airmap.get("dep_time"), DateUtil.FORMAT_FULL_PATTERN);
-			airLineInFo.setDep_time(dateFormat.format(deptimedate));
-			//抵达时间
-			Date arrtimedate = DateUtil.string2Date(airmap.get("arr_time"), DateUtil.FORMAT_FULL_PATTERN);
-			airLineInFo.setArr_time(dateFormat.format(arrtimedate));
-			airLineInFo.setFly_time(airmap.get("fly_time"));
-			airLineInFo.setDistance(airmap.get("distance"));
-			airLineInFo.setPunctuality(airmap.get("punctuality"));
-			airLineInFo.setDep_temperature(airmap.get("dep_temperature"));
-			airLineInFo.setArr_temperature(airmap.get("arr_temperature"));
-			airLineInFo.setEtd(airmap.get("etd"));
-			airLineInFo.setEta(airmap.get("eta"));
-			airLineResult.getAiliLineInFos().add(airLineInFo);
+			airLineInFo.setEta(airmap.get("eta"));*/
 			TFlightEntity flightEntity = new TFlightEntity();
 			flightEntity.setAirlinecomp(airmap.get("airmode"));
 			flightEntity.setFlightnum(airmap.get("name"));
+			//机场
+			String depair = airmap.get("dep");
+			//起飞机场
+			flightEntity.setTakeOffName(depair.substring(0, depair.indexOf("机场") + 2));
+			flightEntity.setTakeOffCode(airLineParam.getDep());
+			flightEntity.setLandingName(airmap.get("arr"));
+			flightEntity.setLandingCode(airLineParam.getArr());
+			flightEntity.setTakeOffCityId(param.getGocity().intValue());
+			flightEntity.setLandingCityId(param.getArrivecity().intValue());
+			Date deptimedate = DateUtil.string2Date(airmap.get("dep_time"), DateUtil.FORMAT_FULL_PATTERN);
+			flightEntity.setTakeOffTime(dateFormat.format(deptimedate));
+			Date arrtimedate = DateUtil.string2Date(airmap.get("arr_time"), DateUtil.FORMAT_FULL_PATTERN);
+			flightEntity.setLandingTime(dateFormat.format(arrtimedate));
+			flightEntity.setTakeOffTerminal(depair.substring(depair.indexOf("机场") + 2, depair.length()));
+			//airLineResult.getAiliLineInFos().add(airLineInFo);
+			airLineResult.getAiliLineInFos().add(flightEntity);
 		}
-		for (AirLineInFo airLineInFo : airLineResult.getAiliLineInFos()) {
-			System.out.println(airLineInFo.toString());
-		}
+		return airLineResult.getAiliLineInFos();
+	}
+
+	public static void main(String[] args) {
+		String jichang = "上海浦东机场T1";
+		String substring = jichang.substring(0, jichang.indexOf("机场") + 2);
+		String subSequence = jichang.substring(jichang.indexOf("机场") + 2, jichang.length());
+		System.out.println(substring);
+		System.out.println(subSequence);
 	}
 }

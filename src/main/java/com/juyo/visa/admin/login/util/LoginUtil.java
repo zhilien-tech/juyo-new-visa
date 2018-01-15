@@ -1,7 +1,7 @@
 /**
  * LoginUtil.java
  * com.juyo.visa.admin.login
- * Copyright (c) 2017, 北京科技有限公司版权所有.
+ * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
 */
 
 package com.juyo.visa.admin.login.util;

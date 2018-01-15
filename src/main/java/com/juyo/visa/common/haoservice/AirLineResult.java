@@ -1,7 +1,7 @@
 /**
  * AirLineResult.java
  * com.juyo.visa.common.haoservice
- * Copyright (c) 2018, 北京科技有限公司版权所有.
+ * Copyright (c) 2018, 北京直立人科技有限公司版权所有.
 */
 
 package com.juyo.visa.common.haoservice;
@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
+
+import com.juyo.visa.entities.TFlightEntity;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -29,5 +31,5 @@ public class AirLineResult {
 	private String reason;
 
 	//返回结果
-	private List<AirLineInFo> ailiLineInFos = new ArrayList<AirLineInFo>();
+	private List<TFlightEntity> ailiLineInFos = new ArrayList<TFlightEntity>();
 }
