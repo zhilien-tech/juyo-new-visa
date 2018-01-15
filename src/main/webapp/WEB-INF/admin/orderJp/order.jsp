@@ -1083,7 +1083,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '80%'],
-						content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid&isTrial=0'
+						content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid&isTrial=0&orderProcessType=1'
 					});
 				},
 				//修改护照信息
@@ -1097,7 +1097,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '80%'],
-						content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=0'
+						content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=0&orderProcessType=1'
 					});
 				},
 				//删除申请人
@@ -1170,7 +1170,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '80%'],
-						content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial=0'
+						content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial=0&orderProcessType=1'
 					});
 				},
 				//回邮信息

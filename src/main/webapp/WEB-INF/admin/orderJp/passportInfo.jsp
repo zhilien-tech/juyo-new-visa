@@ -203,6 +203,8 @@
 						
 				</div>
 			</div>
+			<!-- 订单流程枚举 -->
+			<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
 		</form>
 	</div>
 
