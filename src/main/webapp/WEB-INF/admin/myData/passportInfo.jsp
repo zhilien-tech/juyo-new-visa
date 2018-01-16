@@ -605,14 +605,12 @@
 		var passportInfo = $("#passportInfo").serialize();
 		var orderid = '${obj.orderid}';
 		var applicantId = '${obj.applicantId}';
-		console.log(passportInfo);
 		layer.load(1);
 		$.ajax({
 			type: 'POST',
 			data : passportInfo,
 			url: '${base}/admin/myData/saveEditPassport',
 			success :function(data) {
-				console.log(JSON.stringify(data));
 				layer.closeAll('loading');
 				if(status == 1){
 					cancelBtn(2);

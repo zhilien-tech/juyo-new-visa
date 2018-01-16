@@ -594,6 +594,18 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		copyBaseToPersonnel(applyid, session);
 		copyPassToPersonnel(applyid, session);
 		copyVisaToPersonnel(applyid, session);
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyid);
+		if (!Util.isEmpty(apply.getUserId())) {
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("userId", "=", apply.getUserId()));
+			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			dbDao.update(base);
+		} else {
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("applicantId", "=", applyid));
+			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			dbDao.update(base);
+		}
 		return null;
 	}
 

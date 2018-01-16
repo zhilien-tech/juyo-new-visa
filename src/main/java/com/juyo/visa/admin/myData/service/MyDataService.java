@@ -954,8 +954,6 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object topContactsList(HttpSession session) {
-		//获取当前公司
-		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
@@ -963,7 +961,6 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		List<Record> list = new ArrayList<>();
 		List<Record> query = new ArrayList<>();
 		List<Record> lastRecords = new ArrayList<>();
-		List<TApplicantEntity> lastApplyList = new ArrayList<>();
 		String str = "";
 		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()), null);
@@ -998,7 +995,6 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 				list.add(passport);
 			}
 			for (Record record : list) {
-				Integer sameLinker = (Integer) record.get("isSameLinker");
 				Integer orderid = (Integer) record.get("id");
 				String sqlStr = sqlManager.get("myvisa_japan_visa_list_data_apply");
 				Sql applysql = Sqls.create(sqlStr);
@@ -1445,8 +1441,6 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			int eqBase = isEqBase(applicantForm, base);
 			if (Util.eq(eqBase, 1)) {
 				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
-			} else {
-				base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 			}
 			dbDao.update(base);
 		}
