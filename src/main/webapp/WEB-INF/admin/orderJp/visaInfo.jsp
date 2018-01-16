@@ -740,10 +740,12 @@
 						$(".deposit").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#deposit").val("");
-						$(".help-blockdeposit").attr("data-bv-result","INVALID");  
-					    $(".deposits").css({"display":"block"});
-					    $(".deposits").attr("class", "col-xs-6 deposits has-error");
-					    $("#deposit").attr("style", "border-color:#ff1a1a");
+						if(userType == 2){
+							$(".help-blockdeposit").attr("data-bv-result","INVALID");  
+						    $(".deposits").css({"display":"block"});
+						    $(".deposits").attr("class", "col-xs-6 deposits has-error");
+						    $("#deposit").attr("style", "border-color:#ff1a1a");
+						}
 						//$("#deposit").placeholder("万");
 					}
 				}else if(financeBtnInfo == "车产"){
@@ -758,10 +760,12 @@
 						$(".vehicle").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#vehicle").val("");
-				        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
-				        $(".vehicles").css({"display":"block"});
-				        $(".vehicles").attr("class", "col-xs-6 vehicles has-error");
-				        $("#vehicle").attr("style", "border-color:#ff1a1a");
+						if(userType == 2){
+					        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
+					        $(".vehicles").css({"display":"block"});
+					        $(".vehicles").attr("class", "col-xs-6 vehicles has-error");
+					        $("#vehicle").attr("style", "border-color:#ff1a1a");
+						}
 					}
 				}else if(financeBtnInfo == "房产"){
 					if($(this).hasClass("btnState-true")){
@@ -775,10 +779,12 @@
 						$(".houseProperty").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#houseProperty").val("");
-						$(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
-					    $(".housePropertys").css({"display":"block"});
-					    $(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");
-					    $("#houseProperty").attr("style", "border-color:#ff1a1a");
+						if(userType == 2){
+							$(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
+						    $(".housePropertys").css({"display":"block"});
+						    $(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");
+						    $("#houseProperty").attr("style", "border-color:#ff1a1a");
+						}
 						//$("#houseProperty").placeholder("平米");
 					}
 				}else if(financeBtnInfo == "理财"){
@@ -793,10 +799,12 @@
 						$(".financial").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#financial").val("");
-						$(".help-blockfinancial").attr("data-bv-result","INVALID");  
-					    $(".financials").css({"display":"block"});
-					    $(".financials").attr("class", "col-xs-6 financials has-error");
-					    $("#financial").attr("style", "border-color:#ff1a1a");
+						if(userType == 2){
+							$(".help-blockfinancial").attr("data-bv-result","INVALID");  
+						    $(".financials").css({"display":"block"});
+						    $(".financials").attr("class", "col-xs-6 financials has-error");
+						    $("#financial").attr("style", "border-color:#ff1a1a");
+						}
 						//$("#financial").placeholder("万");
 					}
 				}
