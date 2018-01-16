@@ -99,7 +99,7 @@
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid)">签证补录</a></div>
+										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证补录</a></div>
 									</span>
 									<span v-else class="visaListSpan">
 										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
@@ -107,7 +107,7 @@
 										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid)">签证补录</a></div>
+										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证补录</a></div>
 									</span>
 								</li>
 							</ul> 
@@ -265,7 +265,7 @@
                  });
         	},
         	//签证录入
-    		visainput:function(applyId){
+    		visainput:function(applyId,orderid){
     			layer.open({
     				type: 2,
     				title: false,

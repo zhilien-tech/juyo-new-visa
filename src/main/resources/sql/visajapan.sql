@@ -7,6 +7,7 @@ SELECT
 	DATE_FORMAT(tr.outVisaDate, '%Y-%m-%d') signingTime,
 	tr.STATUS japanState,
 	toj.visastatus visastatus,
+	tr.id orderid,
 	(
 		SELECT
 			count(*)
