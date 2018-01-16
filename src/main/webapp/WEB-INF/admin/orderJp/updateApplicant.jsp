@@ -178,6 +178,7 @@
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
 										<input type="hidden" name="userType" value="${obj.userType }"/>
 										<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
+										<input type="hidden" name="orderProcessType" value="${obj.orderProcessType }"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 										<input type="text" id="firstNameEn" style="position:absolute;top:37px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
