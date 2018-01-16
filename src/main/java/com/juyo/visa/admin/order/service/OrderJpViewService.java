@@ -464,6 +464,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
 			passport.setApplicantId(applicantId);
 			dbDao.insert(passport);
+			if (!Util.isEmpty(applicantForm.getOrderid())) {
+				changePrincipalViewService.ChangePrincipal(applicantForm.getOrderid(),
+						JPOrderProcessTypeEnum.SALES_PROCESS.intKey(), loginUser.getId());
+			}
 			return applicantDB;
 		}
 	}
@@ -724,6 +728,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
+		changePrincipalViewService.ChangePrincipal(orderEntity.getId(), JPOrderProcessTypeEnum.SALES_PROCESS.intKey(),
+				loginUser.getId());
 		//回邮信息
 		List<TOrderBackmailEntity> backMailInfos = orderInfo.getBackMailInfos();
 		String editBackMailInfos = editBackMailInfos(backMailInfos, orderId);

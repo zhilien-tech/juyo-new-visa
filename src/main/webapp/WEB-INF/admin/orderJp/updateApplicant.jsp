@@ -1641,7 +1641,7 @@
     							url: '${base}/admin/orderJp/saveEditApplicant.html',
     							success :function(data) {
 									socket.onclose();
-									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
+									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType';
     							}
 							});
 						}else{
@@ -1745,7 +1745,6 @@
 												}
 											});
 										}
-										
 									}else{//提示过
 										$.ajax({
 			    							async: false,
