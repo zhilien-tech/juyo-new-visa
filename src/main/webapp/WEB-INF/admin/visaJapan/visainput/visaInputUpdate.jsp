@@ -231,7 +231,7 @@
         	if(tourist == 1){
 				window.location.href = '/admin/myData/visaInput.html';
         	}else{
-				window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId;
+				window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId+'&orderid=${obj.orderid}';
         	}
 		}
 		function dataURLtoBlob(dataurl) { 
