@@ -970,7 +970,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
 			applyWealth.setType("银行存款");
 			applyWealth.setDetails(visa.getDeposit());
-			applyWealth.setApplicantId(applyJp.getApplicantId());
+			applyWealth.setApplicantId(applyJp.getId());
 			applyWealth.setOpId(loginUser.getId());
 			applyWealth.setCreateTime(new Date());
 			applyWealth.setUpdateTime(new Date());
@@ -980,7 +980,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
 			applyWealth.setType("车产");
 			applyWealth.setDetails(visa.getVehicle());
-			applyWealth.setApplicantId(applyJp.getApplicantId());
+			applyWealth.setApplicantId(applyJp.getId());
 			applyWealth.setOpId(loginUser.getId());
 			applyWealth.setCreateTime(new Date());
 			applyWealth.setUpdateTime(new Date());
@@ -990,7 +990,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
 			applyWealth.setType("房产");
 			applyWealth.setDetails(visa.getHouseProperty());
-			applyWealth.setApplicantId(applyJp.getApplicantId());
+			applyWealth.setApplicantId(applyJp.getId());
 			applyWealth.setOpId(loginUser.getId());
 			applyWealth.setCreateTime(new Date());
 			applyWealth.setUpdateTime(new Date());
@@ -1000,7 +1000,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
 			applyWealth.setType("理财");
 			applyWealth.setDetails(visa.getFinancial());
-			applyWealth.setApplicantId(applyJp.getApplicantId());
+			applyWealth.setApplicantId(applyJp.getId());
 			applyWealth.setOpId(loginUser.getId());
 			applyWealth.setCreateTime(new Date());
 			applyWealth.setUpdateTime(new Date());
