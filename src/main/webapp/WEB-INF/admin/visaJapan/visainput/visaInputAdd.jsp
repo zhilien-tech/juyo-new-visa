@@ -259,7 +259,7 @@
 						var applicantId = $('#applicantId').val();
 						var tourist = '${obj.tourist}';
 						if(tourist != 1){
-							window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId;
+							window.location.href = '/admin/visaJapan/visaInput.html?applyid='+applicantId+'&orderid=${obj.orderid}';
 						}else{
 							window.location.href = '/admin/myData/visaInput.html';
 						}
