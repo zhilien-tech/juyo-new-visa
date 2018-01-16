@@ -545,31 +545,34 @@
 											btn: ["是","否"], //按钮
 											shade: false //不显示遮罩
 										}, function(index){
-											toSet(data);
-											layer.close(index);
-											$.ajax({
-												type : "post",
-												async : false,
-												data : {
-													applyid : '${obj.applicantId}',
-													updateOrNot : "YES"
-												},
-												url : '${base}/admin/myVisa/updateOrNot.html',
-												success :function(data) {
-													
-												}
-											});
-											$.ajax({
-												type : "post",
-												async : false,
-												data : {
-													applyid : '${obj.applicantId}'
-												},
-												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
-												success :function(data) {
-													
-												}
-											});
+											if(data.pass != null){
+												toSet(data);
+												layer.close(index);
+												$.ajax({
+													type : "post",
+													async : false,
+													data : {
+														applyid : '${obj.applicantId}',
+														updateOrNot : "YES"
+													},
+													url : '${base}/admin/myVisa/updateOrNot.html',
+													success :function(data) {
+														
+													}
+												});
+												$.ajax({
+													type : "post",
+													async : false,
+													data : {
+														applyid : '${obj.applicantId}'
+													},
+													url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+													success :function(data) {
+														
+													}
+												});
+												
+											}
 										},function(index){
 											layer.close(index);
 											$.ajax({
@@ -599,18 +602,21 @@
 									},
 									url : '${base}/admin/myData/getTouristInfoByPass.html',
 									success :function(data) {
-										toSet(data);
-									}
-								});
-								$.ajax({
-									type : "post",
-									async : false,
-									data : {
-										applyid : '${obj.applicantId}'
-									},
-									url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
-									success :function(data) {
-										
+										if(data.pass != null){
+											toSet(data);
+											$.ajax({
+												type : "post",
+												async : false,
+												data : {
+													applyid : '${obj.applicantId}'
+												},
+												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+												success :function(data) {
+													
+												}
+											});
+											
+										}
 									}
 								});
 							}
