@@ -529,9 +529,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
 			//plan.setHotel(hotels.get(random.nextInt(hotels.size())).getId());
 			dbDao.update(plan);
-
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
 			//订单负责人变更
-			changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+			changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 
 		}
 		//行程安排
@@ -706,7 +706,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 
 		//订单负责人变更
 		Integer orderid = planform.getOrderid();
-		changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
+		changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 
 		return result;
 	}
@@ -840,7 +841,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//订单负责人变更
 		Integer orderid = travelform.getOrderId();
 		if (!Util.isEmpty(orderid)) {
-			changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
+			changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 		}
 
 		return null;
@@ -914,6 +916,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		visapaperwork.setRealInfo(realInfo);
 		visapaperwork.setOpId(loginUser.getId());
 		visapaperwork.setStatus(0);
+		TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class, applicatid.longValue());
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, applicantorder.getOrderId().longValue());
+		changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, loginUser.getId());
 		return dbDao.insert(visapaperwork);
 	}
 
@@ -1240,7 +1245,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//变更订单负责人
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
-		changePrincipalViewService.ChangePrincipal(orderid.intValue(), VISA_PROCESS, userId);
+		changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 		return "success";
 	}
 
@@ -1299,7 +1304,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//订单负责人变更
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
-		changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+		changePrincipalViewService.ChangePrincipal(order.getId(), VISA_PROCESS, userId);
 
 		return JuYouResult.ok();
 	}
@@ -1354,7 +1359,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		result.put("orderid", orderid);
 		result.put("data", data);
 		//变更订单负责人
-		changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
+		changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 		return result;
 	}
 
@@ -1418,7 +1424,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//订单负责人变更
 		Integer userId = loginuser.getId();
 		Integer orderId = orderJpEntity.getOrderId();
-		changePrincipalViewService.ChangePrincipal(orderId, VISA_PROCESS, userId);
+		changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 		return null;
 	}
 

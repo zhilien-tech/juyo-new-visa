@@ -66,7 +66,7 @@ public class TestAirLineInterface {
 			//航班号
 			//			paramList.add(new BasicNameValuePair("flightNo", "CA181"));
 			//出发时间
-			paramList.add(new BasicNameValuePair("flightDate", "20180513"));
+			paramList.add(new BasicNameValuePair("flightDate", "20180120"));
 			// 模拟表单
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList);
 			httpPost.setEntity(entity);
