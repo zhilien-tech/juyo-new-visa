@@ -53,12 +53,12 @@
 				<c:choose>
 					<c:when test="${empty obj.contact }">
 						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
-						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
+						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
 						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant(1);"/> 
 						<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
 					</c:when>
 					<c:otherwise>
-						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
+						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
 						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant(1);"/> 
 					</c:otherwise>
 				</c:choose>
@@ -953,7 +953,7 @@
 					}
 				}); */
 				if(status == 1){
-					cancelBtn();
+					cancelBtn(2);
 					parent.successCallBack();
 				}else if(status == 2){
 					
@@ -1034,14 +1034,23 @@
 	} 
 	
 	//取消按钮
-	function cancelBtn(){
+	function cancelBtn(status){
 		if(!contact){
-			layer.msg("已取消", {
-				time: 500,
-				end: function () {
-					self.location.reload();
-				}
-			});
+			if(status == 1){
+				layer.msg("已取消", {
+					time: 500,
+					end: function () {
+						self.location.reload();
+					}
+				});
+			}else{
+				layer.msg("保存成功", {
+					time: 500,
+					end: function () {
+						self.location.reload();
+					}
+				});
+			}
 		}else{
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
