@@ -236,6 +236,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 					newBase.setLastName(apply.getLastName());
 					newBase.setLastNameEn(apply.getLastNameEn());
 					newBase.setApplicantId(applyId);
+					newBase.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 					if (!Util.isEmpty(userId)) {
 						newBase.setUserId(userId);
 					}
@@ -285,6 +286,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			base.setUserId(loginUser.getId());
 			base.setUpdateIsPrompted(IsYesOrNoEnum.NO.intKey());
 			base.setSaveIsPrompted(IsYesOrNoEnum.NO.intKey());
+			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 			base.setCreateTime(new Date());
 			base.setUpdateTime(new Date());
 			base.setApplicantId(loginApplyList.get(0).getId());
@@ -568,42 +570,22 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		return indexOfBlue;
 	}
 
-	public Object isChanged(int applyid, HttpSession session) {
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer userId = loginUser.getId();
-		List<TApplicantEntity> list = dbDao.query(TApplicantEntity.class, Cnd.where("userId", "=", userId), null);
-		Collections.reverse(list);
-		//获取同userId下的最新的申请人，即当前申请人
-		TApplicantEntity nowApply = list.get(0);
-		TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class, Cnd.where("userId", "=", userId));
-		TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class, Cnd.where("userId", "=", userId));
-		TTouristVisaEntity visa = dbDao.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", userId));
-		if (Util.eq(nowApply.getId(), applyid)) {//为当前申请人
-			if (Util.eq(nowApply.getIsPrompted(), IsYesOrNoEnum.NO.intKey())) {//没有提示过
-				if (Util.eq(base.getBaseIsCompleted(), IsYesOrNoEnum.YES.intKey())
-						|| Util.eq(pass.getPassIsCompleted(), IsYesOrNoEnum.YES.intKey())
-						|| Util.eq(visa.getVisaIsCompleted(), IsYesOrNoEnum.YES.intKey())) {
-					return 1;
-				} else {
-					return 0;
-				}
-			} else {//提示过
-				if (Util.eq(nowApply.getIsSameInfo(), IsYesOrNoEnum.YES.intKey())
-						&& (Util.eq(base.getBaseIsCompleted(), IsYesOrNoEnum.YES.intKey())
-								|| Util.eq(pass.getPassIsCompleted(), IsYesOrNoEnum.YES.intKey()) || Util.eq(
-								visa.getVisaIsCompleted(), IsYesOrNoEnum.YES.intKey()))) {
-					copyInfoToPersonnel(applyid, session);
-				}
-				return 0;
-			}
-		} else {
-			return 0;
-		}
-	}
-
-	public Object copyInfoToPersonnel(int applyid, HttpSession session) {
+	public Object copyAllInfoToTuorist(int applyid, HttpSession session) {
 		copyBaseToTourist(applyid, session);
 		copyPassToTourist(applyid, session);
+		copyVisaToTourist(applyid, session);
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyid);
+		if (!Util.isEmpty(apply.getUserId())) {
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("userId", "=", apply.getUserId()));
+			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			dbDao.update(base);
+		} else {
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("applicantId", "=", applyid));
+			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			dbDao.update(base);
+		}
 		return null;
 	}
 

@@ -248,6 +248,15 @@ public class MyDataModule {
 	}
 
 	/**
+	 * 查询三个信息是否有改变
+	 */
+	@At
+	@POST
+	public Object infoIsChanged(@Param("applyid") int applyid, HttpSession session) {
+		return myDataService.infoIsChanged(applyid, session);
+	}
+
+	/**
 	 * 查询是否提示过
 	 */
 	@At

@@ -119,15 +119,6 @@ public class MyVisaModule {
 	}
 
 	/**
-	 * 判断游客信息是否改变
-	 */
-	@At
-	@POST
-	public Object isChanged(@Param("applyid") int applyid, HttpSession session) {
-		return myVisaService.isChanged(applyid, session);
-	}
-
-	/**
 	 * 将基本信息赋值给员工
 	 */
 	@At
@@ -208,5 +199,14 @@ public class MyVisaModule {
 	@POST
 	public Object copyAllInfoToPersonnel(@Param("applyid") int applyid, HttpSession session) {
 		return myVisaService.copyAllInfoToPersonnel(applyid, session);
+	}
+
+	/**
+	 * 把所有信息赋值给游客
+	 */
+	@At
+	@POST
+	public Object copyAllInfoToTourist(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.copyAllInfoToTuorist(applyid, session);
 	}
 }

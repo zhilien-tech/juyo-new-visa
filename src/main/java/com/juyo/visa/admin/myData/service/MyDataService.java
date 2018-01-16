@@ -1428,98 +1428,102 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object baseIsChanged(TApplicantForm applicantForm, HttpSession session) {
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TTouristBaseinfoEntity loginBase = dbDao.fetch(TTouristBaseinfoEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()));
-		Map<String, Object> result = MapUtil.map();
-		Integer userId = loginUser.getId();
 		//通过申请人ID获取当前申请人信息
 		Integer applyId = applicantForm.getId();
 		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyId.longValue());
 		if (Util.isEmpty(apply.getUserId())) {//userId为空说明没有填写手机号,需要根据申请人ID来查询游客信息
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("applicantId", "=", applyId));
-			if (Util.isEmpty(base)) {
-				result.put("isChanged", 1);
-			} else {
-				result.put("isChanged", isEqBase(applicantForm, base));
+			int eqBase = isEqBase(applicantForm, base);
+			if (Util.eq(eqBase, 1)) {
+				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
 			}
+			dbDao.update(base);
 		} else {//userId不为空时，根据userId来查询
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
-			if (Util.isEmpty(base)) {//因为没有base，说明游客表并没有建立，肯定改变了
-				result.put("isChanged", 1);
+			int eqBase = isEqBase(applicantForm, base);
+			if (Util.eq(eqBase, 1)) {
+				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
 			} else {
-				result.put("isChanged", isEqBase(applicantForm, base));
+				base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 			}
+			dbDao.update(base);
 		}
-		//查询是否提示过
-		result.put("isPrompted", loginBase.getSaveIsPrompted());
-		//查询是否更新
-		result.put("isUpdated", loginBase.getSaveIsOrNot());
-		return result;
+		return null;
 	}
 
 	public Object passIsChanged(TApplicantPassportForm passportForm, HttpSession session) {
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TTouristBaseinfoEntity loginBase = dbDao.fetch(TTouristBaseinfoEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()));
-		Map<String, Object> result = MapUtil.map();
-		Integer userId = loginUser.getId();
 		//通过申请人ID获取当前申请人信息
 		Integer applyId = passportForm.getApplicantId();
 		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyId.longValue());
 		if (Util.isEmpty(apply.getUserId())) {//userId为空说明没有填写手机号,需要根据申请人ID来查询游客信息
 			TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
 					Cnd.where("applicantId", "=", applyId));
-			if (Util.isEmpty(pass)) {
-				result.put("isChanged", 1);
-			} else {
-				result.put("isChanged", isEqPass(passportForm, pass));
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("applicantId", "=", applyId));
+			int eqPass = isEqPass(passportForm, pass);
+			if (Util.eq(eqPass, 1)) {
+				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
 			}
+			dbDao.update(base);
 		} else {//userId不为空时，根据userId来查询
 			TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
-			if (Util.isEmpty(pass)) {//因为没有base，说明游客表并没有建立，肯定改变了
-				result.put("isChanged", 1);
-			} else {
-				result.put("isChanged", isEqPass(passportForm, pass));
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("userId", "=", apply.getUserId()));
+			int eqPass = isEqPass(passportForm, pass);
+			if (Util.eq(eqPass, 1)) {
+				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
 			}
+			dbDao.update(base);
 		}
-
-		//查询是否提示过
-		result.put("isPrompted", loginBase.getSaveIsPrompted());
-		//查询是否更新
-		result.put("isUpdated", loginBase.getSaveIsOrNot());
-		return result;
+		return null;
 	}
 
 	public Object visaIsChanged(VisaEditDataForm visaForm, HttpSession session) {
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TTouristBaseinfoEntity loginBase = dbDao.fetch(TTouristBaseinfoEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()));
-		Map<String, Object> result = MapUtil.map();
-		Integer userId = loginUser.getId();
 		//通过申请人ID获取当前申请人信息
 		Integer applyId = visaForm.getApplicantId();
 		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyId.longValue());
 		if (Util.isEmpty(apply.getUserId())) {//userId为空说明没有填写手机号,需要根据申请人ID来查询游客信息
 			TTouristVisaEntity visa = dbDao.fetch(TTouristVisaEntity.class, Cnd.where("applicantId", "=", applyId));
-			if (Util.isEmpty(visa)) {
-				result.put("isChanged", 1);
-			} else {
-				result.put("isChanged", isEqVisa(visaForm, visa));
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("applicantId", "=", applyId));
+			int eqVisa = isEqVisa(visaForm, visa);
+			if (Util.eq(eqVisa, 1)) {
+				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
 			}
+			dbDao.update(base);
 		} else {//userId不为空时，根据userId来查询
 			TTouristVisaEntity visa = dbDao
 					.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", apply.getUserId()));
-			if (Util.isEmpty(visa)) {//因为没有base，说明游客表并没有建立，肯定改变了
-				result.put("isChanged", 1);
-			} else {
-				result.put("isChanged", isEqVisa(visaForm, visa));
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("userId", "=", apply.getUserId()));
+			int eqVisa = isEqVisa(visaForm, visa);
+			if (Util.eq(eqVisa, 1)) {
+				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
 			}
+			dbDao.update(base);
 		}
+		return null;
+	}
 
+	public Object infoIsChanged(int applyid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TTouristBaseinfoEntity loginBase = dbDao.fetch(TTouristBaseinfoEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()));
+		Map<String, Object> result = MapUtil.map();
+		Integer userId = loginUser.getId();
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyid);
+		if (!Util.isEmpty(apply.getUserId())) {
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("userId", "=", apply.getUserId()));
+			result.put("base", base);
+		} else {
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("applicantId", "=", applyid));
+			result.put("base", base);
+		}
 		//查询是否提示过
 		result.put("isPrompted", loginBase.getSaveIsPrompted());
 		//查询是否更新
@@ -1527,7 +1531,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object isEqBase(TApplicantForm applicantForm, TTouristBaseinfoEntity base) {
+	public int isEqBase(TApplicantForm applicantForm, TTouristBaseinfoEntity base) {
 		if (!Util.eq(applicantForm.getAddress(), base.getAddress())) {
 			return 1;
 		}
@@ -1616,7 +1620,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		return 0;
 	}
 
-	public Object isEqPass(TApplicantPassportForm passportForm, TTouristPassportEntity pass) {
+	public int isEqPass(TApplicantPassportForm passportForm, TTouristPassportEntity pass) {
 		if (!Util.eq(passportForm.getBirthAddress(), pass.getBirthAddress())) {
 			return 1;
 		}
@@ -1656,7 +1660,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		return 0;
 	}
 
-	public Object isEqVisa(VisaEditDataForm visaForm, TTouristVisaEntity visa) {
+	public int isEqVisa(VisaEditDataForm visaForm, TTouristVisaEntity visa) {
 		if (!Util.eq(visaForm.getAddress(), visa.getAddress())) {
 			return 1;
 		}
@@ -1699,9 +1703,17 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			if (!Util.eq(visaForm.getDeposit(), visa.getDeposit())) {
 				return 1;
 			}
+		} else {
+			if (!Util.eq(visaForm.getDeposit(), visa.getDeposit())) {
+				return 1;
+			}
 		}
 		if (Util.isEmpty(visaForm.getFinancial())) {
 			visaForm.setFinancial(null);
+			if (!Util.eq(visaForm.getFinancial(), visa.getFinancial())) {
+				return 1;
+			}
+		} else {
 			if (!Util.eq(visaForm.getFinancial(), visa.getFinancial())) {
 				return 1;
 			}
@@ -1711,9 +1723,17 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			if (!Util.eq(visaForm.getHouseProperty(), visa.getHouseProperty())) {
 				return 1;
 			}
+		} else {
+			if (!Util.eq(visaForm.getHouseProperty(), visa.getHouseProperty())) {
+				return 1;
+			}
 		}
 		if (Util.isEmpty(visaForm.getVehicle())) {
 			visaForm.setVehicle(null);
+			if (!Util.eq(visaForm.getVehicle(), visa.getVehicle())) {
+				return 1;
+			}
+		} else {
 			if (!Util.eq(visaForm.getVehicle(), visa.getVehicle())) {
 				return 1;
 			}
