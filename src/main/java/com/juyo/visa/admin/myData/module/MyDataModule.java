@@ -13,6 +13,7 @@ import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.myData.service.MyDataService;
+import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.forms.TApplicantForm;
 import com.juyo.visa.forms.TApplicantPassportForm;
@@ -235,6 +236,33 @@ public class MyDataModule {
 	@POST
 	public Object passIsChanged(@Param("..") TApplicantPassportForm passportForm, HttpSession session) {
 		return myDataService.passIsChanged(passportForm, session);
+	}
+
+	/**
+	 * 比较签证信息是否改变
+	 */
+	@At
+	@POST
+	public Object visaIsChanged(@Param("..") VisaEditDataForm visaForm, HttpSession session) {
+		return myDataService.visaIsChanged(visaForm, session);
+	}
+
+	/**
+	 * 查询三个信息是否有改变
+	 */
+	@At
+	@POST
+	public Object infoIsChanged(@Param("applyid") int applyid, HttpSession session) {
+		return myDataService.infoIsChanged(applyid, session);
+	}
+
+	/**
+	 * 查询是否提示过
+	 */
+	@At
+	@POST
+	public Object isPrompted(@Param("applyId") int applyid, HttpSession session) {
+		return myDataService.isPrompted(applyid, session);
 	}
 
 }

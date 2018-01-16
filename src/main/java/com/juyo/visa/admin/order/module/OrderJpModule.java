@@ -1,7 +1,7 @@
 /**
  * SaleModule.java
  * com.juyo.visa.admin.sale.module
- * Copyright (c) 2017, 北京科技有限公司版权所有.
+ * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
 */
 
 package com.juyo.visa.admin.order.module;
@@ -571,6 +571,15 @@ public class OrderJpModule {
 	@POST
 	public Object undisabled(@Param("orderId") int orderid) {
 		return saleViewService.undisabled(orderid);
+	}
+
+	/**
+	 * 获取订单状态
+	 */
+	@At
+	@POST
+	public Object getOrderStatus(@Param("orderid") int orderid) {
+		return saleViewService.getOrderStatus(orderid);
 	}
 
 }

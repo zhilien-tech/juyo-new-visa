@@ -119,16 +119,16 @@ public class MyVisaModule {
 	}
 
 	/**
-	 * 判断游客信息是否改变
+	 * 将基本信息赋值给员工
 	 */
 	@At
 	@POST
-	public Object isChanged(@Param("applyid") int applyid, HttpSession session) {
-		return myVisaService.isChanged(applyid, session);
+	public Object copyBaseToPersonnel(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.copyBaseToPersonnel(applyid, session);
 	}
 
 	/**
-	 * 将员工基本信息赋值给游客
+	 * 将基本信息赋值给游客
 	 */
 	@At
 	@POST
@@ -137,12 +137,21 @@ public class MyVisaModule {
 	}
 
 	/**
-	 * 将员工护照信息赋值给游客
+	 * 将护照信息赋值给游客
 	 */
 	@At
 	@POST
 	public Object copyPassToTourist(@Param("applyid") int applyid, HttpSession session) {
 		return myVisaService.copyPassToTourist(applyid, session);
+	}
+
+	/**
+	 * 将签证信息赋值给游客
+	 */
+	@At
+	@POST
+	public Object copyVisaToTourist(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.copyVisaToTourist(applyid, session);
 	}
 
 	/**
@@ -155,12 +164,23 @@ public class MyVisaModule {
 	}
 
 	/**
-	 * 记录信息改变时选择了是还是否
+	 * 记录通过身份证、手机号、护照号更新信息时选择了是还是否
 	 */
 	@At
 	@POST
-	public Object updateOrNot(@Param("applyid") int applyid) {
-		return myVisaService.updateOrNot(applyid);
+	public Object updateOrNot(@Param("applyid") int applyid, @Param("updateOrNot") String updateOrNot,
+			HttpSession session) {
+		return myVisaService.updateOrNot(applyid, updateOrNot, session);
+	}
+
+	/**
+	 * 记录保存时信息改变选择了是还是否
+	 */
+	@At
+	@POST
+	public Object saveIsOrNot(@Param("applyid") int applyid, @Param("updateOrNot") String updateOrNot,
+			HttpSession session) {
+		return myVisaService.saveIsOrNot(applyid, updateOrNot, session);
 	}
 
 	/**
@@ -170,5 +190,23 @@ public class MyVisaModule {
 	@POST
 	public Object isUpdate(@Param("applyid") int applyid) {
 		return myVisaService.isUpdate(applyid);
+	}
+
+	/**
+	 * 把游客所有信息赋值给员工
+	 */
+	@At
+	@POST
+	public Object copyAllInfoToPersonnel(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.copyAllInfoToPersonnel(applyid, session);
+	}
+
+	/**
+	 * 把所有信息赋值给游客
+	 */
+	@At
+	@POST
+	public Object copyAllInfoToTourist(@Param("applyid") int applyid, HttpSession session) {
+		return myVisaService.copyAllInfoToTuorist(applyid, session);
 	}
 }

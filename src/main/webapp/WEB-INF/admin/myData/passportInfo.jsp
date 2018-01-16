@@ -49,7 +49,7 @@
 					<c:when test="${empty obj.contact }">
 						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
 						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn();"/> 
-						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save();"/> 
+						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save(1);"/> 
 						<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
 					</c:when>
 					<c:otherwise>
@@ -594,11 +594,13 @@
 		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 		// 执行表单验证 
 		bootstrapValidator.validate();
-		if (!bootstrapValidator.isValid()) {
-			return;
-		}
-		if($(".front").hasClass("has-error")){
-			return;
+		if(status != 2){
+			if (!bootstrapValidator.isValid()) {
+				return;
+			}
+			if($(".front").hasClass("has-error")){
+				return;
+			}
 		}
 		var passportInfo = $("#passportInfo").serialize();
 		var orderid = '${obj.orderid}';
@@ -612,24 +614,10 @@
 			success :function(data) {
 				console.log(JSON.stringify(data));
 				layer.closeAll('loading');
-				/* layer.load(1);
-				$.ajax({
-					type: 'POST',
-					async : false,
-					data : {
-						orderid : orderid,
-						applicantid : applicantId,
-						completeType : 'pass'
-					},
-					url: '${base}/admin/myData/changeStatus.html',
-					success :function(data) {
-						console.log(JSON.stringify(data));
-						layer.closeAll('loading');
-					}
-				}); */
 				if(status == 1){
 					cancelBtn();
-				}else if(status == 2){
+					parent.successCallBack();
+				}else if(status == 2 || status == 3){
 					
 				}else{
 					layer.msg("修改成功", {
@@ -684,34 +672,19 @@
 	}
 	
 	 function applyBtn(){
-		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+		/* var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 		bootstrapValidator.validate();
 		if (!bootstrapValidator.isValid()) {
 			return;
 		}
 		if($(".front").hasClass("has-error")){
 			return;
-		}
+		} */
 		save(2);
 		//关闭socket连接
 		//socket.onclose();
 		var id = '${obj.applyId}';
 		window.location.href = '/admin/myData/basic.html?contact=1&applyId='+id;
-		/* layer.open({
-			type: 2,
-			title: false,
-			closeBtn:false,
-			fix: false,
-			maxmin: false,
-			shadeClose: false,
-			scrollbar: false,
-			area: ['900px', '551px'],
-			content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial='+${obj.isTrailOrder},
-			success: function(index, layero){
-					    //do something
-				layer.close(index); //如果设定了yes回调，需进行手工关闭
-			}
-		}); */
 	 }
 		
 	 function visaBtn(){
@@ -724,22 +697,11 @@
 		if($(".front").hasClass("has-error")){
 			return;
 		}
-		save(2);
+		save(3);
 		//关闭socket连接
 		//socket.onclose();
 		var id = '${obj.applyId}';
 		window.location.href = '/admin/myData/visa.html?contact=1&applyId='+id;
-		/* layer.open({
-			type: 2,
-			title: false,
-			closeBtn:false,
-			fix: false,
-			maxmin: false,
-			shadeClose: false,
-			scrollbar: false,
-			area: ['900px', '551px'],
-			content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}
-		}); */
 	 }
 	
 	//取消按钮

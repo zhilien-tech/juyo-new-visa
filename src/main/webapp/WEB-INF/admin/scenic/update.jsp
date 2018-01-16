@@ -166,7 +166,7 @@
 						layer.close(index);
 						window.parent.layer.msg("编辑成功", "", 3000);
 						parent.layer.close(index);
-						parent.datatable.ajax.reload();
+						parent.datatable.ajax.reload(null,false);
 					},
 					error : function(xhr) {
 						layer.msg("编辑失败", "", 3000);

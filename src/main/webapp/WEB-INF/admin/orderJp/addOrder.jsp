@@ -1002,6 +1002,17 @@
 					//orderobj.orderInfo.backtripdate = days;
 				}
 			});
+			
+			//根据送签时间自动加7天计算出签时间
+			$("#sendVisaDate").keyup(function(){
+				var stayday = 7;
+				var sendvisadate = $("#sendVisaDate").val();
+				if(sendvisadate.length == 10){
+					var days = getNewDay(sendvisadate,stayday);
+					$("#outVisaDate").val(days); 
+					orderobj.orderInfo.outvisadate = days;
+				}
+			});
 			//日期转换
 			function getNewDay(dateTemp, days) {  
 			    var dateTemp = dateTemp.split("-");  
