@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<style type="text/css">
+	[v-cloak]{display:none;}
     .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
     .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; } 	
@@ -53,7 +54,7 @@
 							</tr>
 						</thead>
 						<tbody >
-							<tr v-for="data in loginfo">
+							<tr v-cloak v-for="data in loginfo">
 								<td >{{data.createtime}}</td>
 								<td >{{data.orderstatus}}</td>
 								<td >{{data.name}}</td>
