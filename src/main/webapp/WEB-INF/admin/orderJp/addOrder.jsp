@@ -47,7 +47,7 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper" id="wrapper">
-		<div class="content-wrapper" style="min-height: 848px;">
+		<div class="content-wrapper">
 			<div class="qz-head">
 				<!-- <span class="">订单号：<p>170202-JP0001</p></span> -->
 				<!-- <span class="">受付番号：<p>JDY27163</p></span> -->

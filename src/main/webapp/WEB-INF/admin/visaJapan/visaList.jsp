@@ -29,6 +29,8 @@
 	.showInfo { cursor:pointer; }
 	.hideInfo { display:none; position:absolute; top:-33px;right:0;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
 	.card-head i { cursor:pointer;}
+	.marginLR { margin:0px 20px;}
+	.btnSearch { margin-left:20px;}
 	[v-cloak] {
 	  display: none;
 	}
@@ -52,16 +54,16 @@
 									</c:forEach>
 								</select>
 							</div>
-							<div class="col-md-2 left-5px right-0px">
+							<div class="col-md-2 left-5px right-0px marginLR">
 								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间 - 出签时间" onkeypress="onkeyEnter()"/>
 							</div>
-							<div class="col-md-2 left-5px right-0px">
-								<!-- <input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/> -->
-							</div>
+							<!-- <div class="col-md-2 left-5px right-0px">
+								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/>
+							</div> -->
 							<div class="col-md-3 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter()"/>
 							</div>
-							<div class="col-md-3 left-5px">
+							<div class="col-md-1 left-5px btnSearch">
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
 							</div>
 						</div>

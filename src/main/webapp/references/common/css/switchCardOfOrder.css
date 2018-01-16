@@ -18,11 +18,12 @@
 	margin-bottom: 5px;
 	margin-left: -10px;
 	cursor: pointer;
+	border-bottom:1px solid #d8dcdd;
+	height:30px;
 }
 
 .btnList {
-	border: 1px solid #eee;
-	color: #000;
+	color: #828388;
 	margin-right: 10px;
 	display: inline-block;
 	width: 54px;
@@ -32,14 +33,17 @@
 }
 
 .bgColor {
-	background: #3087f1;
-	color: #FFF;
+	background: #FFF;
+	color: #689eda;
+	border: 1px solid #d7dbdc;
+	border-bottom:0;
+	border-radius:6px 6px 0px 0px;
 }
 
 .btnList:hover {
-	color: #000;
+	color: #828388;
 }
 
 .bgColor:hover {
-	color: #FFF !important;
+	color: #689eda !important;
 }

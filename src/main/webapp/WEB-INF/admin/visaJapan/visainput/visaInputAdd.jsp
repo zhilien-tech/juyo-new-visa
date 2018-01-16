@@ -52,7 +52,7 @@
 							</div>
 						</div>
 						<div class="col-sm-6">
-							<img id="visapic" src=" " width="350px" height="200px">
+							<img id="visapic" src=" " width="400px" height="200px">
 						</div>
 						<input type="hidden" name="picUrl" id="picUrl">
 					</div>
