@@ -1297,21 +1297,21 @@
 											$("#telephone").next().attr('class','form-control-feedback glyphicon glyphicon-ok');
 											$("#telephone").parent().attr('class','form-group has-feedback has-success');
 											$("#applicantInfo").data("bootstrapValidator").updateStatus("telephone",  "NOT_VALIDATED",  null );
+											$.ajax({
+												type : "post",
+												async : false,
+												data : {
+													applyid : '${obj.applicant.id}'
+												},
+												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+												success :function(data) {
+													
+												}
+											});
 										}
 									}
 								});
 							
-								$.ajax({
-									type : "post",
-									async : false,
-									data : {
-										applyid : '${obj.applicant.id}'
-									},
-									url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
-									success :function(data) {
-										
-									}
-								});
 							}
 						}
 					}
@@ -1424,18 +1424,18 @@
 											$("#cardId").next().attr('class','form-control-feedback glyphicon glyphicon-ok');
 											$("#cardId").parent().attr('class','form-group has-feedback has-success');
 											$("#applicantInfo").data("bootstrapValidator").updateStatus("cardId",  "NOT_VALIDATED",  null );
+											$.ajax({
+												type : "post",
+												async : false,
+												data : {
+													applyid : '${obj.applicant.id}'
+												},
+												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+												success :function(data) {
+													
+												}
+											});
 										}
-									}
-								});
-								$.ajax({
-									type : "post",
-									async : false,
-									data : {
-										applyid : '${obj.applicant.id}'
-									},
-									url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
-									success :function(data) {
-										
 									}
 								});
 							}
