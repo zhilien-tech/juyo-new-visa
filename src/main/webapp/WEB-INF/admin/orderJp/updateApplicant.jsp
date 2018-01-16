@@ -47,9 +47,9 @@
 					type="button" class="btn btn-primary pull-right btn-sm btn-right btn-margin"
 					value="保存" onclick="saveApplicant(1)" />
 					<c:choose>
-						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
-					<input id="unqualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right Unqualified btn-margin" value="不合格" />
-				<input id="qualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right qualified btn-margin" value="合格" />
+						<c:when test="${(obj.orderStatus > 4 && obj.orderStatus < 9 )|| (obj.orderStatus ==88 && obj.isTrailOrder==1)}">  
+							<input id="unqualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right Unqualified btn-margin" value="不合格" />
+							<input id="qualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right qualified btn-margin" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>
@@ -372,6 +372,8 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var userType = '${obj.userType}';
+		var isTrailOrder = '${obj.isTrailOrder}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -386,8 +388,6 @@
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript">
-	var userType = '${obj.userType}';
-	
 	//连接websocket
 	connectWebSocket();
 	function connectWebSocket(){
@@ -465,7 +465,7 @@
 			}
 			
 			//初审环节，显示合格不合格按钮
-			if('${obj.isTrailOrder}'==1){
+			if(isTrailOrder==1){
 				$("#qualifiedBtn").show();
 				$("#unqualifiedBtn").show();
 				$("#baseRemark").attr("disabled", false);
