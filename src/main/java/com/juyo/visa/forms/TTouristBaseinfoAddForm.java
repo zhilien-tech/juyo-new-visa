@@ -28,6 +28,14 @@ public class TTouristBaseinfoAddForm extends AddForm implements Serializable {
 
 	private String cardCity;
 
+	private Integer updateIsPrompted;
+
+	private Integer saveIsPrompted;
+
+	private Integer updateIsOrNot;
+
+	private Integer saveIsOrNot;
+
 	/**名*/
 	private String lastName;
 

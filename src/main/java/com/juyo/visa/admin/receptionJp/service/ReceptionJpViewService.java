@@ -30,6 +30,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
 import com.juyo.visa.admin.firstTrialJp.service.FirstTrialJpViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
@@ -39,6 +40,7 @@ import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.ExpressTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainSalePayTypeEnum;
@@ -81,6 +83,8 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 	private OrderJpViewService orderJpViewService;
 	@Inject
 	private FirstTrialJpViewService firstTrialJpViewService;
+	@Inject
+	private ChangePrincipalViewService changePrincipalViewService;
 
 	public Object listData(ReceptionJpForm form, HttpSession session) {
 		//获取当前公司
@@ -238,6 +242,7 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 	}
 
 	public Object saveRealInfoData(TOrderJpEntity orderjp, String applicatinfo, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//更新备注信息
 		dbDao.update(orderjp);
 		List<Map> applicatlist = JsonUtil.fromJson(applicatinfo, List.class);
@@ -317,11 +322,15 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 			}
 		}*/
 
+		changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(),
+				JPOrderProcessTypeEnum.RECEPTION_PROCESS.intKey(), loginUser.getId());
+
 		return null;
 
 	}
 
 	public Object toSend(int orderid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderid));
 		//发送短信(根据分享是统一联系人还是单独分享来发送短信)
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
@@ -353,6 +362,8 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 				}
 			}
 		}
+		changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.RECEPTION_PROCESS.intKey(),
+				loginUser.getId());
 		return null;
 	}
 
@@ -449,6 +460,8 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		jporder.setRemark(editDataForm.getRemark());
 		dbDao.update(jporder);
 
+		changePrincipalViewService.ChangePrincipal(order.getId(), JPOrderProcessTypeEnum.RECEPTION_PROCESS.intKey(),
+				loginUser.getId());
 		return null;
 	}
 
@@ -633,9 +646,12 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 	}
 
 	public Object visaTransfer(HttpSession session, Integer orderid) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(orderid).intValue());
 		orderEntity.setStatus(JPOrderStatusEnum.VISA_ORDER.intKey());
 		dbDao.update(orderEntity);
+		changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.RECEPTION_PROCESS.intKey(),
+				loginUser.getId());
 		return null;
 	}
 }
