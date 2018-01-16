@@ -159,7 +159,7 @@
 		});
 		
 		function successCallBack(status){
-			
+			self.location.reload();
 		}
 		function cancelCallBack(status){
 			

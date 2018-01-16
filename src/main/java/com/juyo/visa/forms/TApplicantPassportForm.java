@@ -93,6 +93,9 @@ public class TApplicantPassportForm extends DataTablesParamForm {
 	/**更新时间*/
 	private Date updateTime;
 
+	/**订单流程枚举*/
+	private Integer orderProcessType;
+
 	private Integer orderid;
 
 	private Integer userType;

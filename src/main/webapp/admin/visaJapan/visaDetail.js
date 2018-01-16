@@ -139,7 +139,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime&isTrial=0'
+				content:'/admin/orderJp/visaInfo.html?id='+applyid+'&orderid='+orderid+'&isOrderUpTime&isTrial=0&orderProcessType=4'
 			});
 		},
 		//护照信息
@@ -167,7 +167,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid+'&isTrial=0'
+				content:'/admin/orderJp/passportInfo.html?applicantId='+applyid+'&orderid='+orderid+'&isTrial=0&orderProcessType=4'
 
 			});
 		},
@@ -182,7 +182,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+orderid+'&isTrial=0'
+				content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+orderid+'&isTrial=0&orderProcessType=4'
 			});
 		},
 		//签证录入
@@ -196,7 +196,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&isvisa=1'
+				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&orderid='+orderid+'&isvisa=1'
 			});
 		},
 		//通知销售
@@ -205,7 +205,10 @@ new Vue({
 			$.ajax({ 
 				url: '/admin/visaJapan/noticeSale.html',
 				dataType:"json",
-				data:{applyid:applyid},
+				data:{
+					applyid:applyid,
+					orderid:orderid
+				},
 				type:'post',
 				success: function(data){
 					layer.closeAll('loading');

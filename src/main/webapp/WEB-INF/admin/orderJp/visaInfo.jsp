@@ -51,6 +51,7 @@
 			<span></span>
 		</a>
 		<form id="passportInfo">
+			<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
 			<div class="modal-header">
 				<span class="heading">签证信息</span>
 				<input type="hidden" name="userType" value="${obj.userType }"/> 
@@ -61,9 +62,9 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 				<c:choose>
-						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
-					<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified btn-margin" value="不合格" />
-				<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualifiedBtn btn-margin" value="合格" />
+						<c:when test="${(obj.orderStatus > 4 && obj.orderStatus < 9 )|| (obj.orderStatus ==88 && obj.isTrailOrder==1)}"> 
+							<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified btn-margin" value="不合格" />
+							<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualifiedBtn btn-margin" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>
@@ -217,13 +218,13 @@
 										</select>
 									</div>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-4 preSchool">
 									<div class="form-group">
 										<label id="schoolName"><span>*</span>单位名称</label>
 										<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.name }"/>
 									</div>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-4 preSchool">
 									<div class="form-group">
 										<label id="schoolTelephone"><span>*</span>单位电话</label>
 										<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.telephone }"/>
@@ -231,7 +232,7 @@
 								</div>
 							</div><!-- end 我的职业/单位名称/单位电话 -->
 							<div class="row"><!-- 单位地址 -->
-								<div class="col-sm-8">
+								<div class="col-sm-8 preSchool">
 									<div class="form-group">
 										<label id="schoolAddress"><span>*</span>单位地址</label>
 										<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.address }"/>
@@ -351,6 +352,9 @@
 										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
+								<div style="float:left;  margin:45px 0 0 -23px;">
+								万
+								</div>
 							</div><!-- end 房产 -->
 							<i class="remove-btn delete-icon"></i>
 						</div>
@@ -386,11 +390,19 @@
 			//护照图片验证
 			if(userType == 2){
 				var marryUrl = $("#marryUrl").val();
+				var marrystatus = $("#marryStatus").val();
 				if(marryUrl == ""){
-					$(".front").attr("class", "info-imgUpload front has-error");  
-			        $(".help-blockFront").attr("data-bv-result","INVALID");  
-			        $(".help-blockFront").attr("style","display: block;"); 
-			        $("#borderColor").attr("style","border-color:#ff1a1a");
+					if(marrystatus == 3 || marrystatus == 4){
+						$(".front").attr("class", "info-imgUpload front has-success");  
+				        $(".help-blockFront").attr("data-bv-result","IVALID");  
+				        $(".help-blockFront").attr("style","display: none;");
+				        $("#borderColor").attr("style",null);
+					}else{
+						$(".front").attr("class", "info-imgUpload front has-error");  
+				        $(".help-blockFront").attr("data-bv-result","INVALID");  
+				        $(".help-blockFront").attr("style","display: block;"); 
+				        $("#borderColor").attr("style","border-color:#ff1a1a");
+					}
 				}else{
 					$(".front").attr("class", "info-imgUpload front has-success");  
 			        $(".help-blockFront").attr("data-bv-result","IVALID");  
@@ -523,25 +535,66 @@
 				$("#uploadFile").siblings("i").css("display","none");
 			}
 			
+			//婚姻状况为单身和丧偶时没有上传图片接口
+			var marryStatus = $("#marryStatus").val();
+			if(marryStatus == 3 || marryStatus == 4){
+				$(".info-imgUpload").hide();
+			}
+			$("#marryStatus").change(function(){
+				var status = $(this).val();
+				if(status == 3 || status == 4){
+					$(".info-imgUpload").hide();
+					$('#marryUrl').val("");
+					$('#sqImg').attr('src', "");
+					$("#uploadFile").siblings("i").css("display","none");
+					if(userType == 2){
+						$(".front").attr("class", "info-imgUpload front has-success");  
+				        $(".help-blockFront").attr("data-bv-result","IVALID");  
+				        $(".help-blockFront").attr("style","display: none;");
+				        $("#borderColor").attr("style",null);
+					}
+				}else{
+					if(userType == 2){
+						if($("#sqImg").attr("src") == ""){
+							$(".front").attr("class", "info-imgUpload front has-error");  
+					        $(".help-blockFront").attr("data-bv-result","INVALID");  
+					        $(".help-blockFront").attr("style","display: block;");
+					        $("#borderColor").attr("style","border-color:#ff1a1a");
+						}
+					}
+					$(".info-imgUpload").show();
+				}
+			});
+			
 			var career = $("#careerStatus").val();
 			if(career == 4){
-				$("#schoolName").html("<span>*</span>学校名称：");
-				$("#schoolTelephone").html("<span>*</span>学校电话：");
-				$("#schoolAddress").html("<span>*</span>学校地址：");
+				$("#schoolName").html("<span>*</span>学校名称");
+				$("#schoolTelephone").html("<span>*</span>学校电话");
+				$("#schoolAddress").html("<span>*</span>学校地址");
+			}
+			if(career == 5){
+				$(".preSchool").hide();
+				$("#name").val("").change();
+				$("#telephone").val("").change();
+				$("#address").val("").change();
 			}
 			$("#careerStatus").change(function(){
 				$("#name").val("").change();
 				$("#telephone").val("").change();
 				$("#address").val("").change();
 				var career = $(this).val();
-				if(career == 4){
-					$("#schoolName").html("<span>*</span>学校名称：");
-					$("#schoolTelephone").html("<span>*</span>学校电话：");
-					$("#schoolAddress").html("<span>*</span>学校地址：");
+				if(career == 5){
+					$(".preSchool").hide();
+				}else if(career == 4){
+					$(".preSchool").show();
+					$("#schoolName").html("<span>*</span>学校名称");
+					$("#schoolTelephone").html("<span>*</span>学校电话");
+					$("#schoolAddress").html("<span>*</span>学校地址");
 				}else{
-					$("#schoolName").html("<span>*</span>单位名称：");
-					$("#schoolTelephone").html("<span>*</span>单位电话：");
-					$("#schoolAddress").html("<span>*</span>单位地址：");
+					$(".preSchool").show();
+					$("#schoolName").html("<span>*</span>单位名称");
+					$("#schoolTelephone").html("<span>*</span>单位电话");
+					$("#schoolAddress").html("<span>*</span>单位地址");
 				}
 			});
 			
@@ -690,7 +743,13 @@
 					}else{
 						$(".deposit").css("display","block");
 						$(this).addClass("btnState-true");
-						 $("#deposit").attr("style", null);
+						$("#deposit").val("");
+						if(userType == 2){
+							$(".help-blockdeposit").attr("data-bv-result","INVALID");  
+						    $(".deposits").css({"display":"block"});
+						    $(".deposits").attr("class", "col-xs-6 deposits has-error");
+						    $("#deposit").attr("style", "border-color:#ff1a1a");
+						}
 						//$("#deposit").placeholder("万");
 					}
 				}else if(financeBtnInfo == "车产"){
@@ -705,10 +764,12 @@
 						$(".vehicle").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#vehicle").val("");
-				        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
-				        $(".vehicles").css({"display":"block"});
-				        $(".vehicles").attr("class", "col-xs-6 vehicles has-error");
-				        $("#vehicle").attr("style", "border-color:#ff1a1a");
+						if(userType == 2){
+					        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
+					        $(".vehicles").css({"display":"block"});
+					        $(".vehicles").attr("class", "col-xs-6 vehicles has-error");
+					        $("#vehicle").attr("style", "border-color:#ff1a1a");
+						}
 					}
 				}else if(financeBtnInfo == "房产"){
 					if($(this).hasClass("btnState-true")){
@@ -721,7 +782,13 @@
 					}else{
 						$(".houseProperty").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#houseProperty").attr("style", null);
+						$("#houseProperty").val("");
+						if(userType == 2){
+							$(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
+						    $(".housePropertys").css({"display":"block"});
+						    $(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");
+						    $("#houseProperty").attr("style", "border-color:#ff1a1a");
+						}
 						//$("#houseProperty").placeholder("平米");
 					}
 				}else if(financeBtnInfo == "理财"){
@@ -735,7 +802,13 @@
 					}else{
 						$(".financial").css("display","block");
 						$(this).addClass("btnState-true");
-						$("#financial").attr("style", null);
+						$("#financial").val("");
+						if(userType == 2){
+							$(".help-blockfinancial").attr("data-bv-result","INVALID");  
+						    $(".financials").css({"display":"block"});
+						    $(".financials").attr("class", "col-xs-6 financials has-error");
+						    $("#financial").attr("style", "border-color:#ff1a1a");
+						}
 						//$("#financial").placeholder("万");
 					}
 				}
@@ -822,13 +895,17 @@
 		
 		//保存
 		function save(status){
+			var applicantId = '${obj.applicant.id}';
+			var orderid = '${obj.orderid}';
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
-			if (!bootstrapValidator.isValid()) {
-				return;
+			if(status == 1){
+				if (!bootstrapValidator.isValid()) {
+					return;
+				}
 			}
-			if(userType == 2){
+			if(userType == 2 && status == 1){
 				if($(".front").hasClass("has-error")){
 					return;
 				}
@@ -856,51 +933,189 @@
 			if(wealthType){
 				wealthType = wealthType.substr(0,wealthType.length-1);
 			}
-			//var passportInfo = $("#passportInfo").serialize();
 			var applicVal = $("#applicant").val();
 			//主申请人时，是否同主申请人设置为空，不然默认为1
 			if(applicVal == 1){
-				//$("#work").val(0);
 				$("#wealth").val(0);
 			}
 			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
-			$.ajax({
-				type: 'POST',
-				async: false,
-				data : passportInfo,
-				url: '${base}/admin/orderJp/saveEditVisa',
-				success :function(data) {
-					console.log(JSON.stringify(data));
-					layer.closeAll('loading');
-					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					layer.close(index); */
-					/* if(userType == 2){
-						//保存成功之后说明游客所有信息填写完毕
-						var orderid = '${obj.orderid}';
-						var applicantid = '${obj.applicant.id}';
-						layer.load(1);
-						$.ajax({
-							type: 'POST',
-							async : false,
-							data : {
-								orderid : orderid,
-								applicantid : applicantid,
-								completeType : 'visa'
-							},
-							url: '${base}/admin/myData/changeStatus.html',
-							success :function(data) {
-								console.log(JSON.stringify(data));
-								layer.closeAll('loading');
-							}
-						});
-					} */
-					if(status == 1){
-						closeWindow();
-						parent.successCallBack(1);
+			if(userType == 2){
+				$.ajax({
+					type: 'POST',
+					async: false,
+					data : passportInfo,
+					url: '${base}/admin/myData/visaIsChanged.html',
+					success :function(data) {
+						if(status == 2){
+							$.ajax({
+								type: 'POST',
+								async: false,
+								data : passportInfo,
+								url: '${base}/admin/orderJp/saveEditVisa',
+								success :function(data) {
+									console.log(JSON.stringify(data));
+									socket.onclose();
+									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType';
+								}
+							});
+						}else{
+							$.ajax({
+								type: 'POST',
+								async: false,
+								data : {applyid:applicantId},
+								url: '${base}/admin/myData/infoIsChanged.html',
+								success :function(data) {
+									if(data.isPrompted == 0){//没有提示过
+										if(data.base.isSameInfo == 0){//改变了
+											layer.confirm("信息已改变，您是否要更新？", {
+				    							title:"提示",
+				    							btn: ["是","否"], //按钮
+				    							shade: false //不显示遮罩
+				    						}, 
+				    						function(){
+				    							$.ajax({
+				    								type: 'POST',
+				    								async: false,
+				    								data : passportInfo,
+				    								url: '${base}/admin/orderJp/saveEditVisa',
+				    								success :function(data) {
+				    									console.log(JSON.stringify(data));
+				    									if(status == 1){
+				    										var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				    										parent.layer.close(index);
+				    										//closeWindow();
+				    										//parent.successCallBack(1);
+				    									}
+				    								}
+				    							});
+				    							
+				    							$.ajax({ 
+						    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
+						    			    		dataType:"json",
+						    			    		data:{applyid:applicantId},
+						    			    		type:'post',
+						    			    		success: function(data){
+						    			    					    		
+						    			    		}
+						    			    	}); 
+				    							$.ajax({ 
+						    			    		url: '${base}/admin/myVisa/saveIsOrNot.html',
+						    			    		dataType:"json",
+						    			    		data:{
+						    			    			applyid:applicantId,
+						    			    			updateOrNot : "YES"
+						    			    		},
+						    			    		type:'post',
+						    			    		success: function(data){
+						    			    					    		
+						    			    		}
+						    			    	}); 
+				    						},
+				    						function(){
+				    							$.ajax({
+				    								type: 'POST',
+				    								async: false,
+				    								data : passportInfo,
+				    								url: '${base}/admin/orderJp/saveEditVisa',
+				    								success :function(data) {
+				    									console.log(JSON.stringify(data));
+				    									socket.onclose();
+				    									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
+				    									if(status == 1){
+				    										var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				    										parent.layer.close(index);
+				    										//closeWindow();
+				    										//parent.successCallBack(1);
+				    									}
+				    								}
+				    							});
+				    							$.ajax({ 
+						    			    		url: '${base}/admin/myVisa/saveIsOrNot.html',
+						    			    		dataType:"json",
+						    			    		data:{
+						    			    			applyid:applicantId,
+						    			    			updateOrNot : "NO"
+						    			    		},
+						    			    		type:'post',
+						    			    		success: function(data){
+						    			    					    		
+						    			    		}
+						    			    	}); 
+				    						});
+										}else{//没变
+											$.ajax({
+												type: 'POST',
+												async: false,
+												data : passportInfo,
+												url: '${base}/admin/orderJp/saveEditVisa',
+												success :function(data) {
+													console.log(JSON.stringify(data));
+													if(status == 1){
+														var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+														parent.layer.close(index);
+														//closeWindow();
+														//parent.successCallBack(1);
+													}
+												}
+											});
+										}
+										
+									}else{//提示过
+										$.ajax({
+											type: 'POST',
+											async: false,
+											data : passportInfo,
+											url: '${base}/admin/orderJp/saveEditVisa',
+											success :function(data) {
+												console.log(JSON.stringify(data));
+												if(status == 1){
+													var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+													parent.layer.close(index);
+													//closeWindow();
+													//parent.successCallBack(1);
+												}
+											}
+										});
+									
+										if(data.base.isSameInfo == 0){
+											if(data.isUpdated == 1){//更新
+												$.ajax({ 
+						    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
+						    			    		dataType:"json",
+						    			    		data:{applyid:applicantId},
+						    			    		type:'post',
+						    			    		success: function(data){
+						    			    					    		
+						    			    		}
+						    			    	});
+											}
+										}
+									}
+								}
+							});
+						}
 					}
-					
-				}
-			});
+				});
+				
+			}else{
+				$.ajax({
+					type: 'POST',
+					async: false,
+					data : passportInfo,
+					url: '${base}/admin/orderJp/saveEditVisa',
+					success :function(data) {
+						console.log(JSON.stringify(data));
+						if(status == 1){
+							closeWindow();
+							parent.successCallBack(1);
+						}
+						if(status == 2){
+							socket.onclose();
+							window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder}+'&orderProcessType='+'${obj.orderProcessType}';
+						}
+					}
+				});
+			}
 		}
 		
 		//上传结婚证
@@ -973,9 +1188,95 @@
 		
 		//返回 
 		function closeWindow() {
-			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-			parent.layer.close(index);
-			parent.cancelCallBack(1);
+			var applicantId = '${obj.applicant.id}';
+			if(userType == 2){
+				$.ajax({
+					async: false,
+					type: 'POST',
+					data : {applyid:applicantId},
+					url: '${base}/admin/myData/infoIsChanged.html',
+					success :function(data) {
+						if(data.isPrompted == 0){//没有提示过
+							if(data.base.isSameInfo == 0){//如果返回0则说明游客信息改变，提示是否更新
+								layer.confirm("信息已改变，您是否要更新？", {
+	    							title:"提示",
+	    							btn: ["是","否"], //按钮
+	    							shade: false //不显示遮罩
+	    						}, 
+	    						function(){
+	    							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	    							parent.layer.close(index);
+	    							//parent.cancelCallBack(1);
+	    							$.ajax({ 
+			    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
+			    			    		dataType:"json",
+			    			    		data:{applyid:applicantId},
+			    			    		type:'post',
+			    			    		success: function(data){
+			    			    					    		
+			    			    		}
+			    			    	}); 
+			    					
+			    					$.ajax({ 
+			    			    		url: '${base}/admin/myVisa/saveIsOrNot.html',
+			    			    		dataType:"json",
+			    			    		data:{
+			    			    			applyid:applicantId,
+			    			    			updateOrNot : "YES"
+			    			    		},
+			    			    		type:'post',
+			    			    		success: function(data){
+			    			    					    		
+			    			    		}
+			    			    	}); 
+	    						},
+	    						function(){
+	    							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	    							parent.layer.close(index);
+	    							//parent.cancelCallBack(1);
+	    							$.ajax({ 
+			    			    		url: '${base}/admin/myVisa/saveIsOrNot.html',
+			    			    		dataType:"json",
+			    			    		data:{
+			    			    			applyid:applicantId,
+			    			    			updateOrNot : "NO"
+			    			    		},
+			    			    		type:'post',
+			    			    		success: function(data){
+			    			    					    		
+			    			    		}
+			    			    	}); 
+	    						});
+							}else{//信息没变
+								var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+								parent.layer.close(index);
+								//parent.cancelCallBack(1);
+							}
+						}else{//提示过
+							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							parent.layer.close(index);
+							//parent.cancelCallBack(1);
+							if(data.base.isSameInfo == 0){
+								if(data.isUpdated == 1){//更新
+									$.ajax({ 
+			    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
+			    			    		dataType:"json",
+			    			    		data:{applyid:applicantId},
+			    			    		type:'post',
+			    			    		success: function(data){
+			    			    					    		
+			    			    		}
+			    			    	});
+								}
+							}
+						}
+					}
+				});
+			}else{
+				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				parent.layer.close(index);
+				parent.cancelCallBack(1);
+			}
 		}
 		function cancelCallBack(status){
 			closeWindow();
@@ -987,7 +1288,7 @@
 		function passportBtn(){
 			var applicantId = '${obj.applicant.id}';
 			var orderid = '${obj.orderid}';
-			if(userType == 2){
+			/* if(userType == 2){
 				var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 				bootstrapValidator.validate();
 				if (!bootstrapValidator.isValid()) {
@@ -1008,22 +1309,11 @@
 				if($(".financials").hasClass("has-error")){
 					return;
 				}
-			}
+			} */
 			save(2);
 			//关闭websocket连接
-			socket.onclose();
-			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
-			/* layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder}
-			}); */
+			//socket.onclose();
+			//window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
 		}
 		
 		//合格/不合格

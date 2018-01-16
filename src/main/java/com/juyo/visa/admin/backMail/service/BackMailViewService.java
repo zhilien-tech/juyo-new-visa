@@ -42,13 +42,11 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity> {
 
-	private static final Integer AFTERMARKET_PROCESS = JPOrderProcessTypeEnum.AFTERMARKET_PROCESS.intKey();
-
 	@Inject
 	private ChangePrincipalViewService changePrincipalViewService;
 
 	//回邮信息
-	public Object backMailInfo(Integer applicantId, Integer orderId, Integer isAfterMarket) {
+	public Object backMailInfo(Integer applicantId, Integer orderId, Integer isAfterMarket, Integer orderProcessType) {
 		Map<String, Object> result = Maps.newHashMap();
 		//资料类型
 		result.put("mainSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
@@ -60,6 +58,8 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 		result.put("isAfterMarket", isAfterMarket);
 		//订单id
 		result.put("orderId", orderId);
+		//订单流程枚举值
+		result.put("orderProcessType", orderProcessType);
 
 		return result;
 	}
@@ -85,7 +85,13 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 
 			//获取申请人信息
 			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantId.longValue());
-			String name = applicant.getFirstName() + applicant.getLastName();
+			String name = "";
+			if (!Util.isEmpty(applicant.getFirstName())) {
+				name += applicant.getFirstName();
+			}
+			if (!Util.isEmpty(applicant.getLastName())) {
+				name += applicant.getLastName();
+			}
 			String mobile = applicant.getTelephone();
 
 			BackMailInfoEntity backmail = new BackMailInfoEntity();
@@ -145,7 +151,9 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 
 		dbDao.updateRelations(before, after);
 
-		changePrincipalViewService.ChangePrincipal(orderId, AFTERMARKET_PROCESS, userid);
+		//订单负责人变更
+		Integer orderProcessType = form.getOrderProcessType();
+		changePrincipalViewService.ChangePrincipal(orderId, orderProcessType, userid);
 
 		return "BackMail Success";
 	}

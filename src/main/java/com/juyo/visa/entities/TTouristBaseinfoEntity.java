@@ -185,4 +185,20 @@ public class TTouristBaseinfoEntity implements Serializable {
 	@Comment("基本信息是否填写完毕")
 	private Integer baseIsCompleted;
 
+	@Column
+	@Comment("更新是否提示过")
+	private Integer updateIsPrompted;
+
+	@Column
+	@Comment("保存是否提示过")
+	private Integer saveIsPrompted;
+
+	@Column
+	@Comment("更新选择的是还是否")
+	private Integer updateIsOrNot;
+
+	@Column
+	@Comment("保存选择的是还是否")
+	private Integer saveIsOrNot;
+
 }

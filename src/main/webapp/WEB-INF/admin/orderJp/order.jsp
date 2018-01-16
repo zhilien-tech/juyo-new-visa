@@ -1083,7 +1083,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '80%'],
-						content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid&isTrial=0'
+						content:'/admin/orderJp/updateApplicant.html?id='+id+'&orderid&isTrial=0&orderProcessType=1'
 					});
 				},
 				//修改护照信息
@@ -1097,7 +1097,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '80%'],
-						content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=0'
+						content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=0&orderProcessType=1'
 					});
 				},
 				//删除申请人
@@ -1170,7 +1170,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '80%'],
-						content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial=0'
+						content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial=0&orderProcessType=1'
 					});
 				},
 				//回邮信息
@@ -1184,7 +1184,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '80%'],
-						content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=0'
+						content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=0&orderProcessType=1'
 
 					});
 				},
@@ -1199,7 +1199,7 @@
 				    	success: function(data){
 				    		layer.closeAll('loading');
 				    		layer.msg('进入初审');
-				    		$("#spanStatus").text("初审");
+				    		successCallBack(7);
 				      	}
 				    }); 
 				}
@@ -1226,23 +1226,33 @@
 			if(status == 88){
 				layer.msg('负责人变更成功');
 			}
+			
 			$.ajax({ 
-		    	url: '${base}/admin/orderJp/getEditApplicant',
+		    	url: '${base}/admin/orderJp/getOrderStatus',
 		    	dataType:"json",
 		    	data:{orderid:orderid},
 		    	type:'post',
 		    	success: function(data){
-		    		if(data.length <= 0 || data.length == undefined){
-		    			$("#mySwitch").addClass("none");//显示申请人信息列表
-						$("#applicantInfo").show();//添加申请人 按钮 隐藏
-		    		}else{
-		    			$("#mySwitch").removeClass("none");
-						$("#applicantInfo").hide();
-		    			orderobj.applicantInfo = data;
-		    		}
-		      	}
+		    		$("#spanStatus").text(data.status);
+		    	}
 		    }); 
 			
+				$.ajax({ 
+			    	url: '${base}/admin/orderJp/getEditApplicant',
+			    	dataType:"json",
+			    	data:{orderid:orderid},
+			    	type:'post',
+			    	success: function(data){
+			    		if(data.length <= 0 || data.length == undefined){
+			    			$("#mySwitch").addClass("none");//显示申请人信息列表
+							$("#applicantInfo").show();//添加申请人 按钮 隐藏
+			    		}else{
+			    			$("#mySwitch").removeClass("none");
+							$("#applicantInfo").hide();
+			    			orderobj.applicantInfo = data;
+			    		}
+			      	}
+			    }); 
 		}
 		
 		//添加申请人
@@ -1259,7 +1269,7 @@
 				content:'${base}/admin/orderJp/addApplicantSale.html?id='+id
 			});
 		}
-		
+		//根据形成天数自动计算返回时间
 		$("#stayDay").keyup(function(){
 			var go = $("#goTripDate").val();
 			var back = $("#backTripDate").val();
@@ -1268,6 +1278,16 @@
 				var days = getNewDay(go,day-1);
 				$("#backTripDate").val(days); 
 				orderobj.orderInfo.backtripdate = days;
+			}
+		});
+		//根据送签时间自动加7天计算出签时间
+		$("#sendVisaDate").keyup(function(){
+			var stayday = 7;
+			var sendvisadate = $("#sendVisaDate").val();
+			if(sendvisadate.length == 10){
+				var days = getNewDay(sendvisadate,stayday);
+				$("#outVisaDate").val(days); 
+				orderobj.orderInfo.outvisadate = days;
 			}
 		});
 		//日期转换

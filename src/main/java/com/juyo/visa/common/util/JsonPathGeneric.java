@@ -1,7 +1,7 @@
 /**
  * JsonPathGeneric.java
  * com.linyun.airline.common.util
- * Copyright (c) 2016, 北京科技有限公司版权所有.
+ * Copyright (c) 2016, 北京直立人科技有限公司版权所有.
 */
 
 package com.juyo.visa.common.util;
