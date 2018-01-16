@@ -38,6 +38,7 @@ import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TApplicantVisaJpEntity;
+import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -928,7 +929,22 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//更新工作信息
-		orderJpViewService.toUpdateWorkJp(visa.getCareerStatus(), workJp, applyJp, session);
+		if (!Util.isEmpty(visa.getCareerStatus())) {
+			orderJpViewService.toUpdateWorkJp(visa.getCareerStatus(), workJp, applyJp, session);
+		} else {
+			Integer applicantJpId = applyJp.getId();
+			List<TApplicantFrontPaperworkJpEntity> frontListDB = dbDao.query(TApplicantFrontPaperworkJpEntity.class,
+					Cnd.where("applicantId", "=", applicantJpId), null);
+			List<TApplicantVisaPaperworkJpEntity> visaListDB = dbDao.query(TApplicantVisaPaperworkJpEntity.class,
+					Cnd.where("applicantId", "=", applicantJpId), null);
+			if (!Util.isEmpty(frontListDB)) {//如果库中有数据，则删掉
+				dbDao.delete(frontListDB);
+			}
+			if (!Util.isEmpty(visaListDB)) {
+				dbDao.delete(visaListDB);
+			}
+			workJp.setPrepareMaterials(null);
+		}
 		workJp.setAddress(visa.getAddress());
 		workJp.setCareerStatus(visa.getCareerStatus());
 		workJp.setName(visa.getName());

@@ -1540,7 +1540,22 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			TApplicantWorkJpEntity applicantWorkJpEntity = dbDao.fetch(TApplicantWorkJpEntity.class,
 					Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()));
 			Integer careerStatus = visaForm.getCareerStatus();
-			toUpdateWorkJp(careerStatus, applicantWorkJpEntity, applicantOrderJpEntity, session);
+			if (!Util.isEmpty(careerStatus)) {
+				toUpdateWorkJp(careerStatus, applicantWorkJpEntity, applicantOrderJpEntity, session);
+			} else {
+				Integer applicantJpId = applicantOrderJpEntity.getId();
+				List<TApplicantFrontPaperworkJpEntity> frontListDB = dbDao.query(
+						TApplicantFrontPaperworkJpEntity.class, Cnd.where("applicantId", "=", applicantJpId), null);
+				List<TApplicantVisaPaperworkJpEntity> visaListDB = dbDao.query(TApplicantVisaPaperworkJpEntity.class,
+						Cnd.where("applicantId", "=", applicantJpId), null);
+				if (!Util.isEmpty(frontListDB)) {//如果库中有数据，则删掉
+					dbDao.delete(frontListDB);
+				}
+				if (!Util.isEmpty(visaListDB)) {
+					dbDao.delete(visaListDB);
+				}
+				applicantWorkJpEntity.setPrepareMaterials(null);
+			}
 			applicantWorkJpEntity.setCareerStatus(visaForm.getCareerStatus());
 			applicantWorkJpEntity.setName(visaForm.getName());
 			applicantWorkJpEntity.setAddress(visaForm.getAddress());
@@ -3131,7 +3146,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			String workStatus = sbWork.toString();
 			applicantWorkJpEntity.setPrepareMaterials(workStatus.substring(0, workStatus.length() - 1));
 		}
-
 		return null;
 	}
 }
