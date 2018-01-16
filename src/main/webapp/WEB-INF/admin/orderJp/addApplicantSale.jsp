@@ -23,8 +23,11 @@
 .nameBeforeYes { margin-right:20px; }
 .onceIDYes { margin-right:30px; }
 .nameBeforeHide ,.nationalityHide{ display:none; }
+.nationalityHide { width:35%;}
 .wordSpell { display:none; }
 .nationalityHide { margin-left:3%;}
+.marginL { margin-left:30px;}
+.nameBeforeTop { margin-left:30px;}
 /*右导航*/
 .rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
@@ -81,8 +84,8 @@
 
 						</div><!-- end 身份证 反面 -->
 						
-						<div class="row"><!-- 签发机关 -->
-							<div class="col-sm-11 padding-right-0">
+						<div class="row" style="margin-top:27px;"><!-- 签发机关 -->
+							<div class="col-sm-10 padding-right-0 marginL">
 								<div class="form-group">
 									<label>签发机关</label>
 									<input id="issueOrganization" name="issueOrganization" type="text" class="form-control input-sm" placeholder=" " />
@@ -107,7 +110,7 @@
 							</div>
 							<!-- 姓/名 拼音 -->
 							<div class="nameBeforeHide">
-							    <div class="col-sm-11 padding-right-0">
+							    <div class="col-sm-10 padding-right-0 marginL">
 									<div class="form-group">
 										<label>姓/拼音</label> <input id="otherFirstName"
 											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
@@ -268,6 +271,11 @@
 								</div>
 							</div>
 						</div><!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
+						<div class="row wordSpell" style="height:66px;">
+							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
+							
+							</div>
+						</div>	
 						<div class="row wordSpell">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
@@ -768,7 +776,7 @@
 				$(".nameBeforeHide").show();
 				$(".wordSpell").show();
 				$(".onceIDTop").removeClass('col-sm-offset-1');
-				$(".onceIDTop").css('padding-left','15px');
+				$(".onceIDTop").css('margin-left','45px');
 			}else {
 				
 				$(".nameBeforeHide").hide();
@@ -777,6 +785,7 @@
 					
 				}else {
 					$(".nameBeforeTop").css('float','left');
+					$(".onceIDTop").css('margin-left','0px');
 				}
 			}
 		});
@@ -789,7 +798,7 @@
 				$(".nationalityHide").show();
 				$(".onceIDTop").css('float','left');
 				$(".onceIDTop").removeClass('col-sm-offset-1');
-				$(".onceIDTop").css('padding-left','15px');
+				$(".onceIDTop").css('margin-left','45px');
 			}else {
 				
 				$(".nationalityHide").hide();
@@ -797,6 +806,7 @@
 					
 				}else {
 					$(".nameBeforeTop").css('float','left');
+					$(".onceIDTop").css('margin-left','0px');
 				}
 			}
 		});	

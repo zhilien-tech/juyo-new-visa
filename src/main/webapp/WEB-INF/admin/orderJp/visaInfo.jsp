@@ -24,13 +24,15 @@
     .dropdown li { display: block; line-height: 1.42857; padding: 0 6px; min-height: 1.2em; cursor: pointer; }
     .dropdown li:hover {  background-color: #23a8ce;  color: #FFF; }
     .colSm {  display:block; float:left; width:200px; }
-    .padding-right-0 { margin-left:10%; width:323px; height:200px; border:1px solid #eee; }
-    .delete { right:0; }
+    .padding-right-0 { margin-left:10%; width:323px; border:1px solid #eee; }
+    .delete { right:0; display:none;}
+    .cardFront-div { height:176px;}
+    .cardFront-div #uploadFile { top:0;width:100%;height:200px;left:0;position:absolute;}
     /*弹框头部固定*/
     .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
     .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; padding:15px 37px 15px 53px;}  
-    #sqImg { top:-212px;}  
+    #sqImg { top:0px; margin-top:-176px; height:auto;}  
     /*左右导航样式*/
     .leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
@@ -96,9 +98,11 @@
 										<span>上传结婚证/离婚证</span>
 										<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.marryUrl }"/>
 										<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-										<img id="sqImg" alt="" src="${obj.marryUrl }" >
-										<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+										
+										
 									</div>
+									<img id="sqImg" alt="" src="${obj.marryUrl }" >
+									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 								</div>
 								<div class="col-xs-6 front has-error" style="clear:both;width:320px; height:30px; border:0 !important; color:red; margin-left:10%;">
 									<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="marryUrl" data-bv-result="IVVALID" style="display: none;">结婚证/离婚证必须上传</small>
@@ -1152,7 +1156,7 @@
 						if (200 == obj.status) {
 							$('#marryUrl').val(obj.data);
 							$('#sqImg').attr('src', obj.data);
-							$("#uploadFile").siblings("i").css("display","block");
+							$(".delete").css("display","block");
 							$(".front").attr("class", "info-imgUpload front has-success");  
 					        $(".help-blockFront").attr("data-bv-result","IVALID");  
 					        $(".help-blockFront").attr("style","display: none;");
@@ -1172,7 +1176,7 @@
 		function deleteApplicantFrontImg(){
 			$('#marryUrl').val("");
 			$('#sqImg').attr('src', "");
-			$("#uploadFile").siblings("i").css("display","none");
+			$(".delete").css("display","none");
 			if(userType == 2){
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  

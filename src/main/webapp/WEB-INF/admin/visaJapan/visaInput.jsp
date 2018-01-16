@@ -19,23 +19,25 @@
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
 			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
-			.card-head div:nth-child(1){width:10%;}
+			.card-head div:nth-child(1){width:15%;}
 			.card-head div:nth-child(3){ width: 66px;float: right;}
-			.everybody-info div:nth-child(1){width:10%;}
-			.everybody-info div:nth-child(2){width:12%;}
-			.everybody-info div:nth-child(3){width:12%;}
-			.everybody-info div:nth-child(4){width:14%;}
-			.everybody-info div:nth-child(5){width:11%;}
+			.everybody-info div:nth-child(1){width:15%;}
+			.everybody-info div:nth-child(2){width:18%;}
+			.everybody-info div:nth-child(3){width:18%;}
+			.everybody-info div:nth-child(4){width:18%;}
+			.everybody-info div:nth-child(5){width:15%;}
+			.everybody-info div:nth-child(6){width:16%;}
 			.card-list{height: 87px;}
 			.card-list:hover{height: 87px !important;min-height: 87px !important;}
 			.box-header{padding-right: 16px;}
 			.box-body{padding-top:15px;}
+			.card-content { width:100%;}
 			.title { position:fixed; top:0; left:0; background:#FFF; width:100%; height:51px; z-index:100000;}
 			.content { margin-top:51px; padding-left:0px;padding-right:0px; min-height:auto;}
 			.liClose { float:right !important;}
 			.liClose a { display:block; width:40px; height:51px; cursor:pointer;}
-			.closed { position:relative; width:3px; height:30px; margin:10px 0 0 20px; background: #333; -webkit-transform: rotate(45deg);  -moz-transform: rotate(45deg);  -o-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg);  display: inline-block; }
- 			.closed:after{ content: "";  position: absolute;  top: 0;  left: 0;   width:3px;  height:30px;  background: #333;   -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg);  -o-transform: rotate(270deg); -ms-transform: rotate(270deg);  transform: rotate(270deg); }
+			.closed { position:relative; width:3px; height:20px; margin:15px 0 0 20px; background: #333; -webkit-transform: rotate(45deg);  -moz-transform: rotate(45deg);  -o-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg);  display: inline-block; }
+ 			.closed:after{ content: "";  position: absolute;  top: 0;  left: 0;   width:3px;  height:20px;  background: #333;   -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg);  -o-transform: rotate(270deg); -ms-transform: rotate(270deg);  transform: rotate(270deg); }
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
