@@ -926,14 +926,12 @@
 		var applicantId = '${obj.applicantId}';
 		var orderid = '${obj.orderid}';
 		//applicantInfo.id = applicantId;
-		console.log(JSON.stringify(applicantInfo));
 		$.ajax({
 			async: false,
 			type: 'POST',
 			data : applicantInfo,
 			url: '${base}/admin/myData/saveEditApplicant',
 			success :function(data) {
-				console.log(JSON.stringify(data));
 				layer.closeAll('loading');
 				//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 				//layer.close(index);
