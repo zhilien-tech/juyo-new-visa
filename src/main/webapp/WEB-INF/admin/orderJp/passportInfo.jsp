@@ -675,7 +675,7 @@
 								url: '${base}/admin/orderJp/saveEditPassport.html',
 								success :function(data) {
 									socket.onclose();
-									window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
+									window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType';
 								}
 							});
 						}else if(status == 3){
@@ -686,7 +686,7 @@
 								url: '${base}/admin/orderJp/saveEditPassport.html',
 								success :function(data) {
 									socket.onclose();
-									window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder};
+									window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType';
 								}
 							});
 						}else{
@@ -836,7 +836,7 @@
 						layer.close(index); */
 						if(status == 2){
 							socket.onclose();
-							window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}';
+							window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
 						}
 						if(status == 1){
 							closeWindow();
@@ -844,7 +844,7 @@
 						}
 						if(status == 3){
 							socket.onclose();
-							window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder};
+							window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType=${obj.orderProcessType}';
 						}
 					}
 				});

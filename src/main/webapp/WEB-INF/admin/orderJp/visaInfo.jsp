@@ -951,7 +951,7 @@
 								success :function(data) {
 									console.log(JSON.stringify(data));
 									socket.onclose();
-									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
+									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType';
 								}
 							});
 						}else{
@@ -1107,7 +1107,7 @@
 						}
 						if(status == 2){
 							socket.onclose();
-							window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
+							window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder}+'&orderProcessType='+'${obj.orderProcessType}';
 						}
 					}
 				});
