@@ -30,6 +30,14 @@ public class TTouristBaseinfoForm extends DataTablesParamForm {
 
 	private Integer orderid;
 
+	private Integer updateIsPrompted;
+
+	private Integer saveIsPrompted;
+
+	private Integer updateIsOrNot;
+
+	private Integer saveIsOrNot;
+
 	/**用户id（登录用户id）*/
 	private Integer userId;
 

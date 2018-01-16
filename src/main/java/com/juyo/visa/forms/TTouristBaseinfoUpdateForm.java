@@ -29,6 +29,14 @@ public class TTouristBaseinfoUpdateForm extends ModForm implements Serializable 
 
 	private String cardProvince;
 
+	private Integer updateIsPrompted;
+
+	private Integer saveIsPrompted;
+
+	private Integer updateIsOrNot;
+
+	private Integer saveIsOrNot;
+
 	private String cardCity;
 
 	/**名(拼音)*/

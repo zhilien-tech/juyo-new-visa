@@ -170,6 +170,18 @@ function successCallBack(status){
 
 		}
 	});
+	
+	$.ajax({ 
+    	url: BASE_PATH + '/admin/orderJp/getOrderStatus',
+    	dataType:"json",
+    	data:{orderid:orderid},
+    	type:'post',
+    	success: function(data){
+    		$("#orStatus_p").text(data.status);
+    	}
+    });
+	
+	
 	if(status == 1){
 		layer.msg('修改成功');
 	}

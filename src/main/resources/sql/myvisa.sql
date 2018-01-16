@@ -138,3 +138,24 @@ SET
 	tp.type=ta.type,tp.passport=ta.passport,tp.sex=ta.sex,tp.sexEn=ta.sexEn,tp.birthAddress=ta.birthAddress,tp.issuedDate=ta.issuedDate,tp.validType=ta.validType,tp.passportUrl=ta.passportUrl,
 	tp.birthAddressEn=ta.birthAddressEn,tp.birthday=ta.birthday,tp.issuedPlace=ta.issuedPlace,tp.issuedPlaceEn=ta.issuedPlaceEn,tp.validEndDate=ta.validEndDate,tp.validStartDate=ta.validStartDate
 	$condition
+	
+/*copyBaseToPersonnel*/
+UPDATE 
+	t_applicant ta,t_tourist_baseinfo tb
+SET 
+	ta.firstName = tb.firstName,ta.firstNameEn=tb.firstNameEn,ta.lastName=tb.lastName,ta.lastNameEn=tb.lastNameEn,ta.telephone=tb.telephone,ta.email=tb.email,ta.sex=tb.sex,
+	ta.nation=tb.nation,ta.birthday=tb.birthday,ta.address=tb.address,ta.cardId=tb.cardId,ta.cardFront=tb.cardFront,ta.cardBack=tb.cardBack,
+	ta.issueOrganization=tb.issueOrganization,ta.validEndDate=tb.validEndDate,ta.validStartDate=tb.validStartDate,ta.province=tb.province,
+	ta.city=tb.city,ta.detailedAddress=tb.detailedAddress,ta.otherFirstName=tb.otherFirstName,ta.otherFirstNameEn=tb.otherFirstNameEn,
+	ta.otherLastName=tb.otherLastName,ta.otherLastNameEn=tb.otherLastNameEn,ta.emergencyLinkman=tb.emergencyLinkman,ta.emergencyTelephone=tb.emergencyTelephone,
+	ta.cardProvince=tb.cardProvince,ta.cardCity=tb.cardCity,ta.hasOtherName=tb.hasOtherName,ta.hasOtherNationality=tb.hasOtherNationality,
+	ta.addressIsSameWithCard=tb.addressIsSameWithCard,ta.nationality=tb.nationality
+	$condition
+	
+/*copyPassToPersonnel*/
+UPDATE 
+	t_applicant_passport ta,t_tourist_passport tp
+SET 
+	ta.type=tp.type,ta.passport=tp.passport,ta.sex=tp.sex,ta.sexEn=tp.sexEn,ta.birthAddress=tp.birthAddress,ta.issuedDate=tp.issuedDate,ta.validType=tp.validType,ta.passportUrl=tp.passportUrl,
+	ta.birthAddressEn=tp.birthAddressEn,ta.birthday=tp.birthday,ta.issuedPlace=tp.issuedPlace,ta.issuedPlaceEn=tp.issuedPlaceEn,ta.validEndDate=tp.validEndDate,ta.validStartDate=tp.validStartDate
+	$condition
