@@ -20,17 +20,16 @@
 <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 </head>
 <body>
-
 	<div class="modal-content">
 		<form id="applicantvisaUpdateForm">
-			<div class="modal-header">
+			<div class="modal-header" style="position:fixed;top:0;left:0;width:100%;height:50px;line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;">
 				<span class="heading">编辑</span> <input id="backBtn" type="button"
 					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
-					data-dismiss="modal" value="取消" /> <input id="updateBtn"
+					data-dismiss="modal" value="取消" style="margin-top:10px;" /> <input id="updateBtn"
 					type="button" onclick="save()"
-					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+					class="btn btn-primary pull-right btn-sm btn-right" style="margin-top:10px;" value="保存" />
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" style="height:100%; margin-top:50px;">
 				<div class="tab-content">
 					<input name="id" type="hidden" value="${obj.applicantvisa.id}">
 					<input name="isvisa" type="hidden" value="${obj.isvisa}">

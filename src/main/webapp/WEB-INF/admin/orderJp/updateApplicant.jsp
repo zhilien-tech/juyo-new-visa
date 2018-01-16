@@ -21,9 +21,11 @@
 .NoInfo { width:100%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 .ipt-info { display:none; }
 .Unqualified, .qualified  { margin-right:10px; }
+.info-imgUpload { margin-top:35px;}
 .nameBeforeYes { margin-right:20px; }
 .onceIDYes { margin-right:30px; }
 .nameBeforeHide , .nationalityHide{ display:none; }
+.nationalityHide { width:35%;}
 .wordSpell { display:none; margin-top:3px !important;}
 .rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
@@ -32,6 +34,8 @@
 .nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
 .btn-margin { margin-top:10px;}
 #sqImg ,#sqImgBack { width:335px;}
+.marginL { margin-left:30px;}
+.nameBeforeTop { margin-left:30px;}
 </style>
 </head>
 <body>
@@ -47,9 +51,9 @@
 					type="button" class="btn btn-primary pull-right btn-sm btn-right btn-margin"
 					value="保存" onclick="saveApplicant(1)" />
 					<c:choose>
-						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
-					<input id="unqualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right Unqualified btn-margin" value="不合格" />
-				<input id="qualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right qualified btn-margin" value="合格" />
+						<c:when test="${(obj.orderStatus > 4 && obj.orderStatus < 9 )|| (obj.orderStatus ==88 && obj.isTrailOrder==1)}">  
+							<input id="unqualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right Unqualified btn-margin" value="不合格" />
+							<input id="qualifiedBtn" type="button" style="display:none" class="btn btn-primary pull-right btn-sm btn-right qualified btn-margin" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>
@@ -104,7 +108,7 @@
 
 						<div class="row">
 							<!-- 签发机关 -->
-							<div class="col-sm-11 padding-right-0">
+							<div class="col-sm-10 padding-right-0 marginL">
 								<div class="form-group">
 									<label><span>*</span>签发机关</label> 
 									<input id="issueOrganization" name="issueOrganization"
@@ -133,7 +137,7 @@
 							</div>
 							<!-- 姓/名 拼音 -->
 							<div class="nameBeforeHide">
-							    <div class="col-sm-11 padding-right-0">
+							    <div class="col-sm-10 padding-right-0 marginL">
 									<div class="form-group" style="position:relative;">
 										<label>姓/拼音</label> <input id="otherFirstName"
 											name="otherFirstName" type="text" class="form-control input-sm "
@@ -329,7 +333,7 @@
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
-						<div class="row wordSpell" style="height:66px;">
+						<div class="row wordSpell" style="height:62px;">
 							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
 							
 							</div>
@@ -372,6 +376,8 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var userType = '${obj.userType}';
+		var isTrailOrder = '${obj.isTrailOrder}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -386,8 +392,6 @@
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript">
-	var userType = '${obj.userType}';
-	
 	//连接websocket
 	connectWebSocket();
 	function connectWebSocket(){
@@ -465,7 +469,7 @@
 			}
 			
 			//初审环节，显示合格不合格按钮
-			if('${obj.isTrailOrder}'==1){
+			if(isTrailOrder==1){
 				$("#qualifiedBtn").show();
 				$("#unqualifiedBtn").show();
 				$("#baseRemark").attr("disabled", false);
@@ -481,7 +485,7 @@
 			if(nation == 1){
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
-				$(".onceIDTop").css('float','left');
+				$(".onceIDTop").css({'float':'left','margin-left':'0px','padding':'0px'});
 			}else {
 				$(".nationalityHide").hide();
 			}
@@ -491,7 +495,7 @@
 				$(".nameBeforeHide").show();
 				$(".wordSpell").show();
 				$(".onceIDTop").removeClass('col-sm-offset-1');
-				$(".onceIDTop").css('padding-left','15px');
+				$(".onceIDTop").css({"margin-left":"45px"});
 			}else {
 				
 				$(".nameBeforeHide").hide();
@@ -1131,7 +1135,7 @@
 				$(".nameBeforeHide").show();
 				$(".wordSpell").show();
 				$(".onceIDTop").removeClass('col-sm-offset-1');
-				$(".onceIDTop").css('padding-left','15px');
+				$(".onceIDTop").css('margin-left','45px');
 				$("#otherFirstName").val("").change();
 				$("#otherFirstNameEn").val("");
 				$("#otherLastName").val("").change();
@@ -1144,6 +1148,7 @@
 					$("#nationality").val("").change();
 				}else {
 					$(".nameBeforeTop").css('float','left');
+					$(".onceIDTop").css('margin-left','0px');
 				}
 			}
 		});
@@ -1156,7 +1161,7 @@
 				$(".nationalityHide").show();
 				$(".onceIDTop").css('float','left');
 				$(".onceIDTop").removeClass('col-sm-offset-1');
-				$(".onceIDTop").css('padding-left','15px');
+				$(".onceIDTop").css('margin-left','45px');
 				$("#nationality").val("").change();
 			}else {
 				
@@ -1168,6 +1173,7 @@
 					$("#otherLastNameEn").val("");
 				}else {
 					$(".nameBeforeTop").css('float','left');
+					$(".onceIDTop").css('margin-left','0px');
 				}
 			}
 		});
@@ -1291,21 +1297,21 @@
 											$("#telephone").next().attr('class','form-control-feedback glyphicon glyphicon-ok');
 											$("#telephone").parent().attr('class','form-group has-feedback has-success');
 											$("#applicantInfo").data("bootstrapValidator").updateStatus("telephone",  "NOT_VALIDATED",  null );
+											$.ajax({
+												type : "post",
+												async : false,
+												data : {
+													applyid : '${obj.applicant.id}'
+												},
+												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+												success :function(data) {
+													
+												}
+											});
 										}
 									}
 								});
 							
-								$.ajax({
-									type : "post",
-									async : false,
-									data : {
-										applyid : '${obj.applicant.id}'
-									},
-									url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
-									success :function(data) {
-										
-									}
-								});
 							}
 						}
 					}
@@ -1418,18 +1424,18 @@
 											$("#cardId").next().attr('class','form-control-feedback glyphicon glyphicon-ok');
 											$("#cardId").parent().attr('class','form-group has-feedback has-success');
 											$("#applicantInfo").data("bootstrapValidator").updateStatus("cardId",  "NOT_VALIDATED",  null );
+											$.ajax({
+												type : "post",
+												async : false,
+												data : {
+													applyid : '${obj.applicant.id}'
+												},
+												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+												success :function(data) {
+													
+												}
+											});
 										}
-									}
-								});
-								$.ajax({
-									type : "post",
-									async : false,
-									data : {
-										applyid : '${obj.applicant.id}'
-									},
-									url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
-									success :function(data) {
-										
 									}
 								});
 							}
@@ -1641,7 +1647,7 @@
     							url: '${base}/admin/orderJp/saveEditApplicant.html',
     							success :function(data) {
 									socket.onclose();
-									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
+									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType';
     							}
 							});
 						}else{
@@ -1745,7 +1751,6 @@
 												}
 											});
 										}
-										
 									}else{//提示过
 										$.ajax({
 			    							async: false,

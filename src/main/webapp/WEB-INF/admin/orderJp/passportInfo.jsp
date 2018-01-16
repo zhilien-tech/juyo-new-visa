@@ -48,9 +48,9 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 				<c:choose>
-						<c:when test="${obj.orderStatus > 4 && obj.orderStatus < 9}">  
-					<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified btn-margin" value="不合格" />
-				<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified btn-margin" value="合格" />
+						<c:when test="${(obj.orderStatus > 4 && obj.orderStatus < 9 )|| (obj.orderStatus ==88 && obj.isTrailOrder==1)}"> 
+							<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified btn-margin" value="不合格" />
+							<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified btn-margin" value="合格" />
 						</c:when>
 						<c:otherwise> 
 						</c:otherwise>
@@ -545,31 +545,34 @@
 											btn: ["是","否"], //按钮
 											shade: false //不显示遮罩
 										}, function(index){
-											toSet(data);
-											layer.close(index);
-											$.ajax({
-												type : "post",
-												async : false,
-												data : {
-													applyid : '${obj.applicantId}',
-													updateOrNot : "YES"
-												},
-												url : '${base}/admin/myVisa/updateOrNot.html',
-												success :function(data) {
-													
-												}
-											});
-											$.ajax({
-												type : "post",
-												async : false,
-												data : {
-													applyid : '${obj.applicantId}'
-												},
-												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
-												success :function(data) {
-													
-												}
-											});
+											if(data.pass != null){
+												toSet(data);
+												layer.close(index);
+												$.ajax({
+													type : "post",
+													async : false,
+													data : {
+														applyid : '${obj.applicantId}',
+														updateOrNot : "YES"
+													},
+													url : '${base}/admin/myVisa/updateOrNot.html',
+													success :function(data) {
+														
+													}
+												});
+												$.ajax({
+													type : "post",
+													async : false,
+													data : {
+														applyid : '${obj.applicantId}'
+													},
+													url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+													success :function(data) {
+														
+													}
+												});
+												
+											}
 										},function(index){
 											layer.close(index);
 											$.ajax({
@@ -599,18 +602,21 @@
 									},
 									url : '${base}/admin/myData/getTouristInfoByPass.html',
 									success :function(data) {
-										toSet(data);
-									}
-								});
-								$.ajax({
-									type : "post",
-									async : false,
-									data : {
-										applyid : '${obj.applicantId}'
-									},
-									url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
-									success :function(data) {
-										
+										if(data.pass != null){
+											toSet(data);
+											$.ajax({
+												type : "post",
+												async : false,
+												data : {
+													applyid : '${obj.applicantId}'
+												},
+												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+												success :function(data) {
+													
+												}
+											});
+											
+										}
 									}
 								});
 							}
@@ -675,7 +681,7 @@
 								url: '${base}/admin/orderJp/saveEditPassport.html',
 								success :function(data) {
 									socket.onclose();
-									window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
+									window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType';
 								}
 							});
 						}else if(status == 3){
@@ -686,7 +692,7 @@
 								url: '${base}/admin/orderJp/saveEditPassport.html',
 								success :function(data) {
 									socket.onclose();
-									window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder};
+									window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType';
 								}
 							});
 						}else{
@@ -836,7 +842,7 @@
 						layer.close(index); */
 						if(status == 2){
 							socket.onclose();
-							window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}';
+							window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
 						}
 						if(status == 1){
 							closeWindow();
@@ -844,7 +850,7 @@
 						}
 						if(status == 3){
 							socket.onclose();
-							window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder};
+							window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType=${obj.orderProcessType}';
 						}
 					}
 				});

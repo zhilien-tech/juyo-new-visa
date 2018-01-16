@@ -42,7 +42,7 @@
 
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper" id="wrapper" >
-		<div class="content-wrapper" style="min-height: 848px;">
+		<div class="content-wrapper">
 			<div class="qz-head">
 				<span class="">订单号：<p>${obj.orderInfo.orderNum}</p></span> 
 				<span class="">受付番号：<p></p></span> 

@@ -66,11 +66,11 @@
 				<c:choose>
 					<c:when test="${empty obj.contact }">
 						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
-						<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
+						<input id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
 						<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
 					</c:when>
 					<c:otherwise>
-						<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin" data-dismiss="modal" value="取消" /> 
+						<input id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin" data-dismiss="modal" value="取消" /> 
 						<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic" value="保存" />
 					</c:otherwise>
 				</c:choose>
@@ -993,7 +993,7 @@
 					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
 					if(status == 1){
-						$("#backBtn").click();
+						closeWindow(2);
 					}else if(status == 2){
 						
 					}else{
@@ -1162,14 +1162,23 @@
 		}
 		
 		//返回 
-		function closeWindow() {
+		function closeWindow(status) {
 			if(!contact){
-				layer.msg("已取消", {
-					time: 500,
-					end: function () {
-						self.location.reload();
-					}
-				});
+				if(status == 1){
+					layer.msg("已取消", {
+						time: 500,
+						end: function () {
+							self.location.reload();
+						}
+					});
+				}else{
+					layer.msg("保存成功", {
+						time: 500,
+						end: function () {
+							self.location.reload();
+						}
+					});
+				}
 			}else{
 				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 				parent.layer.close(index);

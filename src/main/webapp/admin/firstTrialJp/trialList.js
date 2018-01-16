@@ -317,9 +317,22 @@ function selectListData(){
 
 //加载列表数据
 function reloadData(){
+	var orderAuthority = "";
+	$(".searchOrderBtn").each(function(){
+		if($(this).hasClass("bgColor")){
+			orderAuthority = $(this).attr("name");
+		}
+	});
+	var status = $('#status').val();
+	var searchStr = $('#searchStr').val();
+	
 	$.ajax({ 
 		url: url,
-		/* data:{status:status,searchStr:searchStr}, */
+		data:{
+			status:status,
+			searchStr:searchStr,
+			orderAuthority:orderAuthority
+		},
 		dataType:"json",
 		type:'post',
 		success: function(data){
