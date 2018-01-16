@@ -21,14 +21,16 @@
 	 [v-cloak]{display:none;}
 	 #hideOrder:hover { text-decoration: none;cursor:pointer;}
 	 /*头导航不随下拉移动*/
-	 /* .box-header { position:fixed; top:0;left:0; width:100%; height:120px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	 .box-body {  overflow:hidden;margin-top:120px;} */
+	 .box-header { position:fixed; top:0;left:0; width:100%; height:120px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
+	 .box-body {  overflow:hidden;margin-top:120px;}
+	 .everybody-info { height:31px; line-height:31px;}
 	 .card-head div { font-weight:normal;}
 	 .card-list { height:90px;}
 	 .card-list:hover { min-height:90px;}
 	 .box-body { padding:0 15px 0 15px;}
-	 .searchStrWidth { width: 29% !important;}
-	 .BtnWidth { width: 20% !important;}
+	 .allDiv { width:15%;}
+	 .searchStrWidth { width: 31% !important;}
+	 .BtnWidth { width: 24% !important;}
 	</style>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>
@@ -42,7 +44,7 @@
 						</div> -->
 						<!-- 切换卡按钮 end -->
 						<div class="row">
-							<div class="col-md-2 left-5px right-0px">
+							<div class="col-md-2 left-5px right-0px allDiv">
 								<select class="input-class input-sm" id="status" name="status" onchange="countryChange();">
 									<option value="">状态</option>
 									<c:forEach var="map" items="${obj.orderStatus}">
@@ -50,7 +52,7 @@
 									</c:forEach>
 								</select>
 							</div>
-							<div class="col-md-2 left-5px right-0px">
+							<div class="col-md-2 left-5px right-0px allDiv">
 								<select class="input-class input-sm" id="source" name="source" onchange="countryChange();">
 									<option value="">客户来源</option>
 									<c:forEach var="map" items="${obj.customerTypeEnum}">
@@ -58,7 +60,7 @@
 									</c:forEach>
 								</select>
 							</div>
-							<div class="col-md-2 left-5px right-0px">
+							<div class="col-md-2 left-5px right-0px allDiv">
 								<select class="input-class input-sm" id="visaType" name="visaType" onchange="countryChange();">
 									<option value="">签证类型</option>
 									<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
@@ -66,23 +68,23 @@
 									</c:forEach>
 								</select>
 							</div>
-							<div class="col-md-3 left-5px right-0px searchStrWidth">
+							<div class="col-md-3 left-5px right-0px searchStrWidth searchAll">
 								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照/公司简称/联系人/电话/邮箱/申请人/申请人电话" onkeypress="onkeyEnter();"/>
 							</div>
-							<div class="col-md-3 left-5px BtnWidth" >
+							<div class="col-md-3 left-5px BtnWidth searchBtn" >
 								<a class="btn btn-primary btn-sm pull-left"  id="searchbtn">搜索</a>
 								<a id="emptyBtn" class="btn btn-primary btn-sm pull-left">清空</a> 
 								<a class="btn btn-primary btn-sm pull-right" id="orderBtn" onclick="addOrder();" v-on:click="">下单</a>
 							</div>
 						</div>
 						<div class="row" style="margin-top:15px;"> 
-							<div class="col-md-2 left-5px right-0px">
+							<div class="col-md-2 left-5px right-0px allDiv">
 								<input type="text" class="input-sm input-class" id="start_time" name="start_time" placeholder="创建日期" onchange="countryChange();"/>
 							</div>
-							<div class="col-md-2 left-5px right-0px">
+							<div class="col-md-2 left-5px right-0px allDiv">
 								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onchange="countryChange();"/>
 							</div>
-							<div class="col-md-2 left-5px right-0px">
+							<div class="col-md-2 left-5px right-0px allDiv">
 								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onchange="countryChange();"/>
 								
 							</div>
