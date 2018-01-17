@@ -21,6 +21,7 @@
 		.selectMargin { margin-right:5%;}
 		/* .modal-body { height:220px !important;} */
 		.modal-header { padding: 5px 10px !important;}
+		.modal-body { height:260px;}
 	</style>
 </head>
 <body>
