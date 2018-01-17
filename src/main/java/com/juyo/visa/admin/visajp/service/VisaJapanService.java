@@ -100,6 +100,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	private DownLoadVisaFileService downLoadVisaFileService;
 	@Inject
 	private UploadService qiniuUpService;
+	@Inject
+	private TripAirlineService tripAirlineService;
 
 	@Inject
 	private ChangePrincipalViewService changePrincipalViewService;
@@ -319,13 +321,15 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				//去程航班
 				TFlightEntity goflightnum = new TFlightEntity();
 				if (!Util.isEmpty(travelinfo.getGoFlightNum())) {
-					goflightnum = dbDao.fetch(TFlightEntity.class, travelinfo.getGoFlightNum().longValue());
+					goflightnum = dbDao.fetch(TFlightEntity.class,
+							Cnd.where("flightnum", "=", travelinfo.getGoFlightNum()));
 				}
 				result.put("goflightnum", goflightnum);
 				//回程航班
 				TFlightEntity returnflightnum = new TFlightEntity();
 				if (!Util.isEmpty(travelinfo.getGoFlightNum())) {
-					returnflightnum = dbDao.fetch(TFlightEntity.class, travelinfo.getReturnFlightNum().longValue());
+					returnflightnum = dbDao.fetch(TFlightEntity.class,
+							Cnd.where("flightnum", "=", travelinfo.getReturnFlightNum()));
 				}
 				result.put("returnflightnum", returnflightnum);
 			}
@@ -344,13 +348,14 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		List<TCityEntity> citys = dbDao.query(TCityEntity.class, Cnd.where("id", "in", mulcityids), null);
 		result.put("citys", citys);
 		//多程航班号
-		Integer[] mulflightids = new Integer[multitrip.size()];
+		String[] mulflightids = new String[multitrip.size()];
 		int flightcount = 0;
 		for (TOrderTripMultiJpEntity tripMultiJp : multitrip) {
-			mulflightids[flightcount] = !Util.isEmpty(tripMultiJp.getFlightNum()) ? tripMultiJp.getFlightNum() : null;
+			mulflightids[flightcount] = !Util.isEmpty(tripMultiJp.getFlightNum()) ? tripMultiJp.getFlightNum() : "";
 			flightcount++;
 		}
-		List<TFlightEntity> flights = dbDao.query(TFlightEntity.class, Cnd.where("id", "in", mulflightids), null);
+		List<TFlightEntity> flights = dbDao
+				.query(TFlightEntity.class, Cnd.where("flightnum", "in", mulflightids), null);
 		//补全三个航程
 		if (multitrip.size() < 3) {
 			int multitripsize = multitrip.size();
@@ -434,39 +439,58 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				} else {
 					travel.setReturnDate(null);
 				}
+				//去程出发城市
+				Integer godeparturecity = null;
 				if (!Util.isEmpty(travelmap.get("godeparturecity"))) {
-					travel.setGoDepartureCity(Integer.valueOf(String.valueOf(travelmap.get("godeparturecity"))));
+					godeparturecity = Integer.valueOf(String.valueOf(travelmap.get("godeparturecity")));
+					travel.setGoDepartureCity(godeparturecity);
 				} else {
 					travel.setGoDepartureCity(null);
 				}
+				//去程抵达城市
+				Integer goarrivedcity = null;
 				if (!Util.isEmpty(travelmap.get("goarrivedcity"))) {
-					travel.setGoArrivedCity(Integer.valueOf(String.valueOf(travelmap.get("goarrivedcity"))));
+					goarrivedcity = Integer.valueOf(String.valueOf(travelmap.get("goarrivedcity")));
+					travel.setGoArrivedCity(goarrivedcity);
 				} else {
 					travel.setGoArrivedCity(null);
 				}
 				if (!Util.isEmpty(travelmap.get("goflightnum"))) {
-					travel.setGoFlightNum(Integer.valueOf(String.valueOf(travelmap.get("goflightnum"))));
+					travel.setGoFlightNum(String.valueOf(travelmap.get("goflightnum")));
 				} else {
 					travel.setGoFlightNum(null);
 				}
+				//回程出发城市
+				Integer returndeparturecity = null;
 				if (!Util.isEmpty(travelmap.get("returndeparturecity"))) {
-					travel.setReturnDepartureCity(Integer.valueOf(String.valueOf(travelmap.get("returndeparturecity"))));
+					returndeparturecity = Integer.valueOf(String.valueOf(travelmap.get("returndeparturecity")));
+					travel.setReturnDepartureCity(returndeparturecity);
 				} else {
 					travel.setReturnDepartureCity(null);
 				}
+				Integer returnarrivedcity = null;
 				if (!Util.isEmpty(travelmap.get("returnarrivedcity"))) {
-					travel.setReturnArrivedCity(Integer.valueOf(String.valueOf(travelmap.get("returnarrivedcity"))));
+					returnarrivedcity = Integer.valueOf(String.valueOf(travelmap.get("returnarrivedcity")));
+					travel.setReturnArrivedCity(returnarrivedcity);
 				} else {
 					travel.setReturnArrivedCity(null);
 				}
 				if (!Util.isEmpty(travelmap.get("returnflightnum"))) {
-					travel.setReturnFlightNum(Integer.valueOf(String.valueOf(travelmap.get("returnflightnum"))));
+					travel.setReturnFlightNum(String.valueOf(travelmap.get("returnflightnum")));
 				} else {
 					travel.setReturnFlightNum(null);
 				}
+				//更新缓存数据
+				tripAirlineService.updateFlightByCache(godeparturecity, goarrivedcity);
+				tripAirlineService.updateFlightByCache(returndeparturecity, returnarrivedcity);
 			} else if (triptype.equals(2) && !Util.isEmpty(multiways)) {
 				//多程信息
 				ordertriplist = JsonUtil.fromJsonAsList(TOrderTripMultiJpEntity.class, multiways);
+				for (TOrderTripMultiJpEntity tOrderTripMultiJpEntity : ordertriplist) {
+					//多程更新数据库数据
+					tripAirlineService.updateFlightByCache(tOrderTripMultiJpEntity.getDepartureCity(),
+							tOrderTripMultiJpEntity.getArrivedCity());
+				}
 			}
 		} else {
 			travel.setTripType(null);

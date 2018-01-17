@@ -592,6 +592,7 @@
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
 			var orderid = '${obj.orderid}';
+			var orderinfoid = '${obj.orderinfo.id}';
 			var triptype = '${obj.travelinfo.tripType}';
 			var multitripjson = '${obj.multitripjson}';
 		</script>

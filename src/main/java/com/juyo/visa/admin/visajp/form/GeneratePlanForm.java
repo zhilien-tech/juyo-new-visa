@@ -33,7 +33,7 @@ public class GeneratePlanForm {
 
 	private String multiways;
 
-	private Integer goFlightNum;
+	private String goFlightNum;
 
-	private Integer returnFlightNum;
+	private String returnFlightNum;
 }

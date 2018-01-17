@@ -132,7 +132,7 @@ function initDuochengSelect(divobj){
 	});
 	divobj.find('[name=flightnum]').select2({
 		ajax : {
-			url : BASE_PATH + "/admin/flight/getFlightSelect.html",
+			url : BASE_PATH + "/admin/tripairline/getTripAirlineSelect.html",
 			dataType : 'json',
 			delay : 250,
 			type : 'post',
@@ -166,7 +166,7 @@ function initDuochengSelect(divobj){
 			processResults : function(data, params) {
 				params.page = params.page || 1;
 				var selectdata = $.map(data, function (obj) {
-					obj.id = obj.id; // replace pk with your identifier
+					obj.id = obj.flightnum; // replace pk with your identifier
 					obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime; // replace pk with your identifier
 					/*obj.text = obj.dictCode;*/
 					return obj;
