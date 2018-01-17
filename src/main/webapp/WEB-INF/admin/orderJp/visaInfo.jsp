@@ -981,10 +981,14 @@
 				    								success :function(data) {
 				    									console.log(JSON.stringify(data));
 				    									if(status == 1){
-				    										var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-				    										parent.layer.close(index);
-				    										//closeWindow();
-				    										//parent.successCallBack(1);
+				    										layer.msg("修改成功", {
+				    											time: 500,
+				    											end: function () {
+				    												var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				    												parent.layer.close(index);
+				    												parent.successCallBack();
+				    											}
+				    										});
 				    									}
 				    								}
 				    							});
@@ -1022,10 +1026,14 @@
 				    									socket.onclose();
 				    									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder};
 				    									if(status == 1){
-				    										var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-				    										parent.layer.close(index);
-				    										//closeWindow();
-				    										//parent.successCallBack(1);
+				    										layer.msg("修改成功", {
+				    											time: 500,
+				    											end: function () {
+				    												var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				    												parent.layer.close(index);
+				    												parent.successCallBack();
+				    											}
+				    										});
 				    									}
 				    								}
 				    							});
@@ -1051,10 +1059,13 @@
 												success :function(data) {
 													console.log(JSON.stringify(data));
 													if(status == 1){
-														var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-														parent.layer.close(index);
-														//closeWindow();
-														//parent.successCallBack(1);
+														layer.msg("修改成功", {
+															time: 500,
+															end: function () {
+																var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+																parent.layer.close(index);
+															}
+														});
 													}
 												}
 											});
@@ -1069,15 +1080,20 @@
 											success :function(data) {
 												console.log(JSON.stringify(data));
 												if(status == 1){
-													var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-													parent.layer.close(index);
-													//closeWindow();
-													//parent.successCallBack(1);
+													layer.msg("修改成功", {
+														time: 500,
+														end: function () {
+															var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+															parent.layer.close(index);
+															parent.successCallBack();
+														}
+													});
 												}
 											}
 										});
 									
 										if(data.base.isSameInfo == 0){
+											layer.msg('修改成功');
 											if(data.isUpdated == 1){//更新
 												$.ajax({ 
 						    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
@@ -1098,6 +1114,7 @@
 				});
 				
 			}else{
+				var addApply = '${obj.addApply}';
 				$.ajax({
 					type: 'POST',
 					async: false,
@@ -1107,11 +1124,15 @@
 						console.log(JSON.stringify(data));
 						if(status == 1){
 							closeWindow();
-							parent.successCallBack(1);
+							if(addApply == 1){
+								parent.successCallBack(3);
+							}else{
+								parent.successCallBack(1);
+							}
 						}
 						if(status == 2){
 							socket.onclose();
-							window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder}+'&orderProcessType='+'${obj.orderProcessType}';
+							window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder}+'&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
 						}
 					}
 				});
@@ -1272,6 +1293,7 @@
 						}
 					}
 				});
+				parent.successCallBack();
 			}else{
 				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 				parent.layer.close(index);

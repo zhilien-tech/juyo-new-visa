@@ -77,7 +77,6 @@
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/moment.min.js"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/daterangepicker.js"></script>
-	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/public/plugins/jquery.fileDownload.js"></script>
@@ -100,7 +99,6 @@
             	dataType:"json",
             	type:'post',
             	success: function(data){
-            		console.log(data);
             		_self.visaJapanData = data.visaJapanData;
             		$('#pagetotal').val(data.pagetotal);
               	}
@@ -112,6 +110,19 @@
         	}
         }
 	});
+	
+	function successCallBack(){
+		$.ajax({ 
+        	url: url,
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		_self.visaJapanData = data.visaJapanData;
+        		$('#pagetotal').val(data.pagetotal);
+          	}
+        });
+	}
+	
 	// 注册scroll事件并监听 
 	$(window).scroll(function(){
 	　　var scrollTop = $(this).scrollTop();
