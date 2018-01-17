@@ -100,7 +100,7 @@ function save(orderid,orderjpid){
 						maxmin: false,
 						shadeClose: false,
 						scrollbar: false,
-						area: ['900px', '80%'],
+						area: ['400px', '300px'],
 						content:'/admin/firstTrialJp/validExpressManInfo.html?applicantId='+applyid+'&orderId='+orderid,
 						success : function(index, layero){
 							var iframeWin = window[index.find('iframe')[0]['name']]; 
