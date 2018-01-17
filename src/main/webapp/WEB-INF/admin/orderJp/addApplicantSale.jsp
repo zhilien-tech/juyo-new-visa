@@ -508,6 +508,9 @@
 						if(status == 2){
 							//console.log(data);
 							parent.successCallBack(4,data);
+							var applyId = $("#applyId").val();
+							socket.onclose();
+							window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'+'&isTrial=0&orderProcessType=${obj.orderProcessType}&addApply=1';
 						}
 					},
 					error : function() {
@@ -820,23 +823,14 @@
 				return;
 			}
 			saveApplicant(2);
-			var applyId = $("#applyId").val();
-			socket.onclose();
-			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'+'&isTrial=0';
-			/* layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['900px', '551px'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'+'&isTrial=0'
-			}); */
+			//var applyId = $("#applyId").val();
+			//socket.onclose();
+			//window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'+'&isTrial=0&orderProcessType=${obj.orderProcessType}&addApply=1';
 		}
 		function successCallBack(status){
-			parent.successCallBack(1);
+			if(status == 1){
+				parent.successCallBack(3);
+			}
 			closeWindow();
 		}
 		function cancelCallBack(status){
