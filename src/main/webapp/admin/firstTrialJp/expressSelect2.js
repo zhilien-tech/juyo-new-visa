@@ -101,7 +101,7 @@ function save(orderid,orderjpid){
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '80%'],
-						content:'/admin/firstTrialJp/validExpressManInfo.html?applicantId='+applyid+'&orderid='+orderid,
+						content:'/admin/firstTrialJp/validExpressManInfo.html?applicantId='+applyid+'&orderId='+orderid,
 						success : function(index, layero){
 							var iframeWin = window[index.find('iframe')[0]['name']]; 
 						}

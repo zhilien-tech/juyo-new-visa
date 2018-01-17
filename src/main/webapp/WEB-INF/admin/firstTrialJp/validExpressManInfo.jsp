@@ -36,14 +36,19 @@
 						我的电话或邮箱未填写,请及时补充
 	     			</div>
 					<div style="margin-top:10%;">
-						<input type="hidden"   value="${obj.applicantId }"/>
-						<input type="button" class="selectBtn selectMargin"  value="马上补充" onclick="fillIn();"/>  <input  id="cancel" class="selectBtn" type="button" value="以后再说" onclick="cancelBtn();"/>
+						<input name="applicantId" type="hidden"   value="${obj.applicantId }"/>
+						<input id="fillNow" type="button" class="selectBtn selectMargin" value="马上补充" onclick="fillNow()"/>
+						<input id="cancel" type="button" class="selectBtn" value="以后再说" onclick="cancelBtn()"/>
 					</div>
 		 		</div>
 			</div>
 		</form>
 	</div>
 	
+	<script type="text/javascript">
+		var applyid = '${obj.applicantId}';
+		var orderid = '${obj.orderId}';
+	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
@@ -51,10 +56,10 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script type="text/javascript">
-		var applyid = '${obj.applicantId}';
-		var orderid = '${obj.orderId}';
-		function fillIn(){
-			window.location.href = '/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+orderid+'&isTrial=1&orderProcessType=2'
+		
+		function fillNow(){
+			alert();
+			window.location.href = '/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+orderid+'&isTrial=1&orderProcessType=2';
 			$("#layui-layer2").css({"width":"900px","height":"551px","top":"0px"});
 		}
 		
@@ -69,9 +74,7 @@
 			}
 			parent.successCallBack(1);
 		}
-		function cancelCallBack(status){
-			parent.successCallBack(2);
-		}
+		
 	
 	</script>
 
