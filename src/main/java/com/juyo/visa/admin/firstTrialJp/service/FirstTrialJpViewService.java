@@ -751,6 +751,35 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		return dbDao.fetch(TReceiveaddressEntity.class, Cnd.where("id", "=", addressId));
 	}
 
+	//验证申请人 电话、邮箱 TODO
+	public Object checkExpressManInfo(String shareManIds) {
+
+		boolean isEmpty = true;
+		Map<String, Object> result = Maps.newHashMap();
+		List<Integer> applyids = new ArrayList<Integer>();
+
+		if (shareManIds.length() > 1) {
+			shareManIds = shareManIds.substring(0, shareManIds.length() - 1);
+		}
+
+		List<TApplicantEntity> applicants = dbDao.query(TApplicantEntity.class, Cnd.where("id", "IN", shareManIds),
+				null);
+		for (TApplicantEntity applicant : applicants) {
+			Integer applyId = applicant.getId();
+			String telephone = applicant.getTelephone();
+			String email = applicant.getEmail();
+			if (Util.isEmpty(telephone) || Util.isEmpty(email)) {
+				applyids.add(applyId);
+				isEmpty = false;
+			}
+
+		}
+		result.put("applyids", applyids);
+		result.put("isEmpty", isEmpty);
+
+		return result;
+	}
+
 	/**
 	 * 保存快递信息，并发送邮件
 	 */
@@ -761,8 +790,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		Integer userId = loginUser.getId();
 		TOrderRecipientEntity orderReceive = dbDao.fetch(TOrderRecipientEntity.class,
 				Cnd.where("orderId", "=", orderid));
-
-		shareManIds = shareManIds.substring(0, shareManIds.length() - 1);
+		if (shareManIds.length() > 1) {
+			shareManIds = shareManIds.substring(0, shareManIds.length() - 1);
+		}
 		if (!Util.isEmpty(orderReceive)) {
 			//更新
 			orderReceive.setOrderId(orderid);
@@ -1626,4 +1656,5 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("orderId", orderid);
 		return result;
 	}
+
 }
