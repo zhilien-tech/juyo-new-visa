@@ -33,7 +33,7 @@
 			<div class="modal-body">
 		 		<div style="text-align:center; margin-top:15%;">
 		 			<div style="font-size:16px;">
-						我的电话或邮箱未填写,请及时补充
+						电话或邮箱未填写,请及时补充
 	     			</div>
 					<div style="margin-top:10%;">
 						<input name="applicantId" type="hidden" value="${obj.applicantId }"/>
