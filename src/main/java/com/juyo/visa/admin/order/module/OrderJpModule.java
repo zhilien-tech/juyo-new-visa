@@ -196,8 +196,8 @@ public class OrderJpModule {
 	@Ok("jsp")
 	public Object updateApplicant(@Param("id") Integer applicantId, @Param("orderid") Integer orderid,
 			@Param("isTrial") Integer isTrial, @Param("orderProcessType") Integer orderProcessType,
-			HttpServletRequest request) {
-		return saleViewService.updateApplicant(applicantId, orderid, isTrial, orderProcessType, request);
+			@Param("addApply") int addApply, HttpServletRequest request) {
+		return saleViewService.updateApplicant(applicantId, orderid, isTrial, orderProcessType, addApply, request);
 	}
 
 	/**
@@ -243,9 +243,9 @@ public class OrderJpModule {
 	@GET
 	@Ok("jsp")
 	public Object passportInfo(@Param("applicantId") Integer id, @Param("orderid") Integer orderid,
-			HttpServletRequest request, @Param("isTrial") Integer isTrial,
-			@Param("orderProcessType") Integer orderProcessType) {
-		return saleViewService.getEditPassport(id, orderid, request, isTrial, orderProcessType);
+			@Param("isTrial") Integer isTrial, @Param("orderProcessType") Integer orderProcessType,
+			@Param("addApply") int addApply, HttpServletRequest request) {
+		return saleViewService.getEditPassport(id, orderid, isTrial, orderProcessType, addApply, request);
 	}
 
 	/**
@@ -284,8 +284,9 @@ public class OrderJpModule {
 	@Ok("jsp")
 	public Object visaInfo(@Param("id") Integer id, @Param("orderid") Integer orderid,
 			@Param("isOrderUpTime") Integer isOrderUpTime, @Param("isTrial") Integer isTrial,
-			@Param("orderProcessType") Integer orderProcessType, HttpServletRequest request) {
-		return saleViewService.getVisaInfo(id, orderid, isOrderUpTime, isTrial, orderProcessType, request);
+			@Param("orderProcessType") Integer orderProcessType, @Param("addApply") int addApply,
+			HttpServletRequest request) {
+		return saleViewService.getVisaInfo(id, orderid, isOrderUpTime, isTrial, orderProcessType, addApply, request);
 	}
 
 	/**

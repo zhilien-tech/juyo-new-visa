@@ -123,7 +123,8 @@ a.email,
 a.telephone,
 a.mainId,
 a.sex,
-ap.passport
+ap.passport,
+taoj.orderId
 FROM
 t_applicant a
 LEFT JOIN

@@ -398,6 +398,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", applicantEntity.getId()));
 			result.put("applyid", applicantOrderJpEntity.getId());
+			result.put("orderJpId", applicantOrderJpEntity.getOrderId());
 		}
 		return result;
 	}

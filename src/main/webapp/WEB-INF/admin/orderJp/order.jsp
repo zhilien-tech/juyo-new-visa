@@ -812,7 +812,8 @@
 		var url = "${base}/admin/orderJp/getOrder.html";
 		var orderobj;
 		var backMailInfos;
-		var orderid = ${obj.orderId};
+		var orderid = '${obj.orderId}';
+		var orderJpId = '${obj.orderJpId}';
 		new Vue({
 			el : '#wrapper',
 			data : {
@@ -1156,7 +1157,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['1000px', '80%'],
-						content: '/admin/visaJapan/visaInput.html?applyid='+applicantId
+						content: '/admin/visaJapan/visaInput.html?applyid='+applicantId+'&orderid='+orderJpId
 					});
 				},
 				//签证信息
