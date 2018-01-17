@@ -251,6 +251,15 @@ public class FirstTrialJpModule {
 	}
 
 	/**
+	 * 获取快递申请人 电话、邮箱是否有空
+	 */
+	@At
+	@POST
+	public Object checkExpressManInfo(@Param("shareManIds") String shareManIds) {
+		return firstTrialJpViewService.checkExpressManInfo(shareManIds);
+	}
+
+	/**
 	 * 判断申请人是否合格
 	 */
 	@At
@@ -276,6 +285,16 @@ public class FirstTrialJpModule {
 	@GET
 	@Ok("jsp")
 	public Object validApplicantInfo(@Param("applicantId") Integer applyid, @Param("orderId") Integer orderid) {
+		return firstTrialJpViewService.isValidInfo(applyid, orderid);
+	}
+
+	/**
+	 * 补充必填项---我的电话或邮箱
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object validExpressManInfo(@Param("applicantId") Integer applyid, @Param("orderId") Integer orderid) {
 		return firstTrialJpViewService.isValidInfo(applyid, orderid);
 	}
 
