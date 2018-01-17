@@ -59,7 +59,7 @@
 							</div>
 							<div class="col-md-7 left-5px">
 								<a class="btn btn-primary btn-sm pull-left"  id="searchbtn">搜索</a>
-								<a class="btn btn-primary btn-sm pull-right" href="javascript:;" id="">拍视频</a>
+								<!-- <a class="btn btn-primary btn-sm pull-right" href="javascript:;" id="">拍视频</a> -->
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
@@ -299,7 +299,7 @@
 	function onkeyEnter(){
 	    var e = window.event || arguments.callee.caller.arguments[0];
 	    if(e && e.keyCode == 13){
-	    	search();
+	    	$("#searchbtn").click();
 		 }
 	}
 	
@@ -316,15 +316,8 @@
 		if(status == 88){
 			layer.msg('负责人变更成功');
 		}
-		$.ajax({ 
-        	url: url,
-        	dataType:"json",
-        	type:'post',
-        	success: function(data){
-        		_self.receptionJpData = data.receptionJpData;
-          	}
-        });
 		
+		$("#searchbtn").click();
 	}
 
 	//鼠标移入事件

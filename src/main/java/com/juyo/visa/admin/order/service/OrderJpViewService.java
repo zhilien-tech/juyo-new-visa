@@ -235,6 +235,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("orderId", id);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderJpEntity orderJpinfo = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", id.longValue()));
+		result.put("orderJpId", orderJpinfo.getId());
 		TOrderEntity orderInfo = dbDao.fetch(TOrderEntity.class, id.longValue());
 		if (!Util.isEmpty(orderInfo.getCustomerId())) {
 			customer = dbDao.fetch(TCustomerEntity.class, orderInfo.getCustomerId().longValue());
@@ -835,7 +836,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object updateApplicant(Integer id, Integer orderid, Integer isTrial, Integer orderProcessType,
+	public Object updateApplicant(Integer id, Integer orderid, Integer isTrial, Integer orderProcessType, int addApply,
 			HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -844,6 +845,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
+		result.put("addApply", addApply);
 		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", id));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
@@ -1095,7 +1097,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime, Integer isTrial,
-			Integer orderProcessType, HttpServletRequest request) {
+			Integer orderProcessType, int addApply, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -1103,6 +1105,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
+		result.put("addApply", addApply);
 		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, id.longValue());
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", id));
@@ -1188,8 +1191,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object getEditPassport(Integer applicantId, Integer orderid, HttpServletRequest request, Integer isTrial,
-			Integer orderProcessType) {
+	public Object getEditPassport(Integer applicantId, Integer orderid, Integer isTrial, Integer orderProcessType,
+			int addApply, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -1197,6 +1200,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
+		result.put("addApply", addApply);
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantId));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
