@@ -195,8 +195,15 @@
 	                 		//layer.msg('报告拒签');
                  		}
                  		//更新列表数据
+                 		var orderAuthority = "allOrder";
+						$(".searchOrderBtn").each(function(){
+							if($(this).hasClass("bgColor")){
+								orderAuthority = $(this).attr("name");
+							}
+						});
                  		$.ajax({ 
                         	url: url,
+                        	data:{orderAuthority:orderAuthority},
                         	dataType:"json",
                         	type:'post',
                         	success: function(data){
@@ -253,8 +260,15 @@
                  	success: function(data){
                  		parent.successCallBack(9);
                  		//layer.msg('已移交售后！');
+                 		var orderAuthority = "allOrder";
+						$(".searchOrderBtn").each(function(){
+							if($(this).hasClass("bgColor")){
+								orderAuthority = $(this).attr("name");
+							}
+						});
                  		$.ajax({ 
                         	url: url,
+                        	data:{orderAuthority:orderAuthority},
                         	dataType:"json",
                         	type:'post',
                         	success: function(data){
@@ -302,9 +316,15 @@
 			if(pageNumber <= pagetotal){
 				//遮罩
 				layer.load(1);
+				var orderAuthority = "allOrder";
+				$(".searchOrderBtn").each(function(){
+					if($(this).hasClass("bgColor")){
+						orderAuthority = $(this).attr("name");
+					}
+				});
 				$.ajax({ 
 			    	url: url,
-			    	data:{status:status,sendSignDate:sendSignDate,searchStr:searchStr,pageNumber:pageNumber},
+			    	data:{status:status,sendSignDate:sendSignDate,searchStr:searchStr,pageNumber:pageNumber,orderAuthority:orderAuthority},
 			    	dataType:"json",
 			    	type:'post',
 			    	success: function(data){
@@ -386,8 +406,15 @@
 	}
 	
 	function successCallBack(status){
+		var orderAuthority = "allOrder";
+		$(".searchOrderBtn").each(function(){
+			if($(this).hasClass("bgColor")){
+				orderAuthority = $(this).attr("name");
+			}
+		});
 		$.ajax({ 
         	url: url,
+        	data:{orderAuthority:orderAuthority},
         	dataType:"json",
         	type:'post',
         	success: function(data){

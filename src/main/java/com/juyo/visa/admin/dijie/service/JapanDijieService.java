@@ -159,13 +159,15 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 				//去程航班
 				TFlightEntity goflightnum = new TFlightEntity();
 				if (!Util.isEmpty(travelinfo.getGoFlightNum())) {
-					goflightnum = dbDao.fetch(TFlightEntity.class, travelinfo.getGoFlightNum().longValue());
+					goflightnum = dbDao.fetch(TFlightEntity.class,
+							Cnd.where("flightnum", "=", travelinfo.getGoFlightNum()));
 				}
 				result.put("goflightnum", goflightnum);
 				//回程航班
 				TFlightEntity returnflightnum = new TFlightEntity();
 				if (!Util.isEmpty(travelinfo.getGoFlightNum())) {
-					returnflightnum = dbDao.fetch(TFlightEntity.class, travelinfo.getReturnFlightNum().longValue());
+					returnflightnum = dbDao.fetch(TFlightEntity.class,
+							Cnd.where("flightnum", "=", travelinfo.getReturnFlightNum()));
 				}
 				result.put("returnflightnum", returnflightnum);
 			}
@@ -184,13 +186,14 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 		List<TCityEntity> citys = dbDao.query(TCityEntity.class, Cnd.where("id", "in", mulcityids), null);
 		result.put("citys", citys);
 		//多程航班号
-		Integer[] mulflightids = new Integer[multitrip.size()];
+		String[] mulflightids = new String[multitrip.size()];
 		int flightcount = 0;
 		for (TOrderTripMultiJpEntity tripMultiJp : multitrip) {
-			mulflightids[flightcount] = !Util.isEmpty(tripMultiJp.getFlightNum()) ? tripMultiJp.getFlightNum() : null;
+			mulflightids[flightcount] = !Util.isEmpty(tripMultiJp.getFlightNum()) ? tripMultiJp.getFlightNum() : "";
 			flightcount++;
 		}
-		List<TFlightEntity> flights = dbDao.query(TFlightEntity.class, Cnd.where("id", "in", mulflightids), null);
+		List<TFlightEntity> flights = dbDao
+				.query(TFlightEntity.class, Cnd.where("flightnum", "in", mulflightids), null);
 		//补全三个航程
 		if (multitrip.size() < 3) {
 			int multitripsize = multitrip.size();
