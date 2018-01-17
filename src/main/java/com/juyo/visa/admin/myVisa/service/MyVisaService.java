@@ -294,7 +294,9 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 			base.setCreateTime(new Date());
 			base.setUpdateTime(new Date());
-			base.setApplicantId(loginApplyList.get(0).getId());
+			if (!Util.isEmpty(loginApplyList)) {
+				base.setApplicantId(loginApplyList.get(0).getId());
+			}
 			dbDao.insert(base);
 		}
 		TTouristPassportEntity loginPass = dbDao.fetch(TTouristPassportEntity.class,
@@ -304,7 +306,9 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			pass.setUserId(loginUser.getId());
 			pass.setCreateTime(new Date());
 			pass.setUpdateTime(new Date());
-			pass.setApplicantId(loginApplyList.get(0).getId());
+			if (!Util.isEmpty(loginApplyList)) {
+				pass.setApplicantId(loginApplyList.get(0).getId());
+			}
 			dbDao.insert(pass);
 		}
 		TTouristVisaEntity loginVisa = dbDao.fetch(TTouristVisaEntity.class,
@@ -314,7 +318,9 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			visa.setUserId(loginUser.getId());
 			visa.setCreateTime(new Date());
 			visa.setUpdateTime(new Date());
-			visa.setApplicantId(loginApplyList.get(0).getId());
+			if (!Util.isEmpty(loginApplyList)) {
+				visa.setApplicantId(loginApplyList.get(0).getId());
+			}
 			dbDao.insert(visa);
 		}
 		result.put("visaJapanData", list);
