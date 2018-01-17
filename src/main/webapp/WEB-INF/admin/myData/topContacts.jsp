@@ -159,7 +159,14 @@
 		});
 		
 		function successCallBack(status){
-			self.location.reload();
+			$.ajax({ 
+		    	url: '${base}/admin/myData/topContactsList.html',
+		    	dataType:"json",
+		    	type:'post',
+		    	success: function(data){
+		    		_self.myVisaData = data.visaJapanData;
+		    	}
+			});
 		}
 		function cancelCallBack(status){
 			

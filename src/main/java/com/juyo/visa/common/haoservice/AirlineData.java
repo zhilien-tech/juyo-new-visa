@@ -29,8 +29,10 @@ import org.apache.http.util.EntityUtils;
  */
 public class AirlineData {
 
-	private static String AIRLINEKEY = "8de79e2868fc4c06bf31741aa1da8222";
-	private static String AIRLINEURL = "http://apis.haoservice.com/plan/InternationalFlightQueryByCity";
+	private static String AIRLINEKEY = "99915bf5907d45a38ee2cfc6f19031a4";
+	private static String AIRLINEURL = " http://apis.haoservice.com/efficient/flight/sk";
+
+	//	private static String AIRLINEURL = "http://apis.haoservice.com/plan/InternationalFlightQueryByCity";
 
 	public static String getAirLineInfo(AirLineParam airLineParam) {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -48,13 +50,13 @@ public class AirlineData {
 			List<NameValuePair> paramList = new ArrayList<>();
 			paramList.add(new BasicNameValuePair("key", AIRLINEKEY));
 			//出发城市
-			paramList.add(new BasicNameValuePair("dep", airLineParam.getDep()));
+			paramList.add(new BasicNameValuePair("orgCity", airLineParam.getDep()));
 			//抵达城市
-			paramList.add(new BasicNameValuePair("arr", airLineParam.getArr()));
+			paramList.add(new BasicNameValuePair("dstCity", airLineParam.getArr()));
 			//航班号
 			//			paramList.add(new BasicNameValuePair("flightNo", "CA181"));
 			//出发时间
-			paramList.add(new BasicNameValuePair("date", airLineParam.getDate()));
+			paramList.add(new BasicNameValuePair("flightDate", airLineParam.getDate()));
 			// 模拟表单
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList);
 			httpPost.setEntity(entity);

@@ -990,7 +990,6 @@
 				data : passportInfo,
 				url: '${base}/admin/myData/saveEditVisa',
 				success :function(data) {
-					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
 					if(status == 1){
 						closeWindow(2);
