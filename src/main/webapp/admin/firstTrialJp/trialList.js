@@ -22,8 +22,22 @@ new Vue({
 	data: firstTrial,
 	created:function(){
 		_self=this;
+		var status = $('#status').val();
+		var searchStr = $('#searchStr').val();
+
+		var orderAuthority = "";
+		$(".searchOrderBtn").each(function(){
+			if($(this).hasClass("bgColor")){
+				orderAuthority = $(this).attr("name");
+			}
+		});
 		$.ajax({ 
 			url: url,
+			data:{
+				status:status,
+				searchStr:searchStr,
+				orderAuthority:orderAuthority
+			},
 			dataType:"json",
 			type:'post',
 			success: function(data){
