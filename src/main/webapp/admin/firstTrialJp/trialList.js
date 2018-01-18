@@ -22,8 +22,22 @@ new Vue({
 	data: firstTrial,
 	created:function(){
 		_self=this;
+		var status = $('#status').val();
+		var searchStr = $('#searchStr').val();
+
+		var orderAuthority = "";
+		$(".searchOrderBtn").each(function(){
+			if($(this).hasClass("bgColor")){
+				orderAuthority = $(this).attr("name");
+			}
+		});
 		$.ajax({ 
 			url: url,
+			data:{
+				status:status,
+				searchStr:searchStr,
+				orderAuthority:orderAuthority
+			},
 			dataType:"json",
 			type:'post',
 			success: function(data){
@@ -342,9 +356,9 @@ function reloadData(){
 
 function successCallBack(status){
 	if(status == 1){
-		layer.msg('修改成功');
+		layer.msg('修改成功<br>订单进入"我的"标签页');
 	}else if(status == 2){
-		layer.msg('发送成功');
+		layer.msg('发送成功<br>订单进入"我的"标签页');
 	}
 	reloadData();
 }
