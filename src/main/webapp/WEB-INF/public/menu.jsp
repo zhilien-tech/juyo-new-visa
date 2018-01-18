@@ -68,6 +68,7 @@ $(function(){
                    			</c:if>
 					</c:forEach>		
                 </ul>
+                <div class="miniName">${function.funName }</div>
             </li>
             </c:if>
         </c:forEach>    
