@@ -1307,17 +1307,21 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String name = applicant.getFirstName() + applicant.getLastName();
 		String sex = applicant.getSex();
 		String telephone = applicant.getTelephone();
-		if (Util.eq("男", sex)) {
-			sex = "先生";
-		} else {
-			sex = "女士";
+		String result = "";
+		if (!Util.isEmpty(telephone)) {
+			if (Util.eq("男", sex)) {
+				sex = "先生";
+			} else {
+				sex = "女士";
+			}
+			TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+			String orderNum = order.getOrderNum();
+			String smsContent = tmp.toString();
+			smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+					.replace("${mobileUrl}", mobileUrl);
+			result = sendSMS(telephone, smsContent);
 		}
-		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid.longValue());
-		String orderNum = order.getOrderNum();
-		String smsContent = tmp.toString();
-		smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-				.replace("${mobileUrl}", mobileUrl);
-		String result = sendSMS(telephone, smsContent);
+
 		return result;
 
 	}
@@ -1340,15 +1344,17 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String name = applicant.getFirstName() + applicant.getLastName();
 		String sex = applicant.getSex();
 		String toEmail = applicant.getEmail();
-		if (Util.eq("男", sex)) {
-			sex = "先生";
-		} else {
-			sex = "女士";
-		}
+		if (!Util.isEmpty(toEmail)) {
+			if (Util.eq("男", sex)) {
+				sex = "先生";
+			} else {
+				sex = "女士";
+			}
 
-		emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-				.replace("${pcUrl}", pcUrl);
-		result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
+			emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+					.replace("${pcUrl}", pcUrl);
+			result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
+		}
 
 		return result;
 	}
