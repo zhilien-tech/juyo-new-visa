@@ -459,9 +459,9 @@ function reloadData(){
 
 function successCallBack(status){
 	if(status == 1){
-		layer.msg('修改成功');
+		layer.msg('修改成功<br>订单进入"我的"标签页');
 	}else if(status == 2){
-		layer.msg('发送成功');
+		layer.msg('发送成功<br>订单进入"我的"标签页');
 	}else if(status == 88){
 		layer.msg('负责人变更成功');
 	}
@@ -518,7 +518,9 @@ $("#sendvisadate").datetimepicker({
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
 }).on("click",function(){
-	$("#sendVisaDate").datetimepicker("setEndDate",$("#gotripdate").val());
+	var gotripday = $("#gotripdate").val();
+	gotripday = getBeforeDay(gotripday,8);
+	$("#sendvisadate").datetimepicker("setEndDate",gotripday);
 }).on("changeDate",function(){
 	//自动计算预计出签时间
 	var stayday = 7;
@@ -539,6 +541,20 @@ function getNewDay(dateTemp, days) {
 	var dateTemp = dateTemp.split("-");  
 	var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
 	var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);  
+	var rDate = new Date(millSeconds);  
+	var year = rDate.getFullYear();  
+	var month = rDate.getMonth() + 1;  
+	if (month < 10) month = "0" + month;  
+	var date = rDate.getDate();  
+	if (date < 10) date = "0" + date;  
+	return (year + "-" + month + "-" + date);  
+}
+
+//获取之前天数
+function getBeforeDay(dateTemp, days) {  
+	var dateTemp = dateTemp.split("-");  
+	var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
+	var millSeconds = Math.abs(nDate) - (days * 24 * 60 * 60 * 1000);  
 	var rDate = new Date(millSeconds);  
 	var year = rDate.getFullYear();  
 	var month = rDate.getMonth() + 1;  
