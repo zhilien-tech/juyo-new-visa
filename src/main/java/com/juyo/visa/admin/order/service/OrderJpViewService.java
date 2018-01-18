@@ -73,6 +73,7 @@ import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.JapanPrincipalChangeEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.JobStatusFreeEnum;
 import com.juyo.visa.common.enums.JobStatusPreschoolEnum;
@@ -2370,6 +2371,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				for (JPOrderStatusEnum statusEnum : JPOrderStatusEnum.values()) {
 					if (status == statusEnum.intKey()) {
 						record.put("orderStatus", statusEnum.value());
+					} else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+						record.put("orderStatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
 					}
 				}
 			}
@@ -2403,10 +2406,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				updatenum = dbDao.update(TOrderEntity.class, Chain.make(fieldStr, principalId),
 						Cnd.where("id", "=", orderid));
 				if (updatenum > 0) {
-					//更新订单状态为 “负责人变更”状态
-					int PRINCIPAL_ORDER = JPOrderStatusEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey();
-					dbDao.update(TOrderEntity.class, Chain.make("status", PRINCIPAL_ORDER).add("updateTime", nowDate),
-							Cnd.where("id", "=", orderid));
+					// 日志记录 “负责人变更”行为
+					int PRINCIPAL_ORDER = JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey();
+					/*dbDao.update(TOrderEntity.class, Chain.make("status", PRINCIPAL_ORDER).add("updateTime", nowDate),
+							Cnd.where("id", "=", orderid));*/
 					//日志记录
 					insertLogs(orderid, PRINCIPAL_ORDER, session);
 				}
