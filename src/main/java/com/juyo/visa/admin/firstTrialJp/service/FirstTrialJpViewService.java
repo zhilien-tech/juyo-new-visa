@@ -388,7 +388,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			if (!Util.isEmpty(applicants)) {
 				for (TApplicantOrderJpEntity entity : applicants) {
 					Integer isShareSms = entity.getIsShareSms();
-					if (Util.eq(YES, isShareSms)) {
+					Integer isSameLinker = entity.getIsSameLinker();
+					if (Util.eq(YES, isShareSms) && Util.eq(YES, isSameLinker)) {
 						Integer id = entity.getApplicantId();
 						shareIds += id + ",";
 					}
