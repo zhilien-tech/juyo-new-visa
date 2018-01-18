@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>回邮</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	    <meta name="format-detection" content="telephone=no">
+	    <link rel="stylesheet" type="text/css" href="css/common.css">
+	    <link rel="stylesheet" type="text/css" href="css/passport.css">
+	</head>
+	<body>
+	<!--信息-->
+	 <ul class="label-info labelMargin">
+	 	<li class="dataSource">
+	 		资料来源 
+	 		<span class="sourceInfo">
+	 			<span></span>
+	 			<i></i>
+	 		</span>
+	 		<select class="backEmailSelect dataSourceSelect">
+	 			<option></option>
+	 			<option>快递</option>
+	 			<option>前台</option>
+	 			<option>其他</option>
+	 		</select>
+	 	</li>
+	 	<li>团队名称 <input type="text" class="txtInput" id="" /></li>
+	 	<li class="backEmailWay">
+	 		回邮方式 
+	 		<span class="wayInfo">
+	 			<span></span>
+	 			<i></i>
+	 		</span>
+	 		<select class="backEmailSelect backEmailWaySelect">
+	 			<option></option>
+	 			<option>快递</option>
+	 			<option>自取</option>
+	 			<option>使馆邮寄</option>
+	 			<option>内部交接</option>
+	 		</select>
+	 	</li>
+	 	<li>快递号 <input type="text" class="txtInput" id="" /></li>
+	 	<li>联系人 <input type="text" class="txtInput" id="" /></li>
+	 	<li>电话 <input type="text" class="txtInput" id="" maxlength="11" /></li>
+	 	<li>回邮地址 <input type="text" class="txtInput backMailAddress" id="" /></li>
+	 	<li>发票项目内容 <input type="text" class="txtInput invoiceContent" id="" /></li>
+	 	<li>发票抬头 <input type="text" class="txtInput" id="" /></li>
+	 	<li>地址 <input type="text" class="txtInput backAddress" id="" /></li>
+	 	<li>电话 <input type="text" class="txtInput" id="" maxlength="11" /></li>
+	 	<li>税号 <input type="text" class="txtInput" id="" /></li>
+	 	<li>备注 <input type="text" class="txtInput backRemark" id="" /></li>
+	 </ul>
+	<!--底部-->	
+	<div class="bottom">
+    		<a class="cancel btn" href="#">取消</a>
+    		<a class="save btn">保存</a>
+	</div>
+	</body>
+	<script src="js/rem(750).js"></script>
+	<script src="js/jquery-1.10.2.js"></script>
+	<script>
+		$(function(){
+//			资料来源
+			$(".dataSourceSelect").change(function(){
+				let selectInfo = $(".dataSourceSelect").find("option:selected").text();
+				$(".sourceInfo span").text(selectInfo);
+			});
+//			回邮方式
+			$(".backEmailWaySelect").change(function(){
+				let selectInfo = $(".backEmailWaySelect").find("option:selected").text();
+				$(".wayInfo span").text(selectInfo);
+			});	
+		})
+	</script>
+</html>
