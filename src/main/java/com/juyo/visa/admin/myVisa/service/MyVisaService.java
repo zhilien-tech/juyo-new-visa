@@ -134,7 +134,6 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 
 		List<Record> list = new ArrayList<>();
 		List<Record> query = new ArrayList<>();
-		List<Record> lastQuery = new ArrayList<>();
 		//同一个userId下所有申请人
 		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()), null);
@@ -189,13 +188,6 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 						//如果为统一联系人，查询整个订单
 						if (Util.eq(applyJp.getIsSameLinker(), IsYesOrNoEnum.YES.intKey())) {
 							query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
-							//找出所有除自己之外的联系人，创建游客表
-							TApplicantEntity nowApply = dbDao.fetch(TApplicantEntity.class, apply.getId().longValue());
-							for (Record app : query) {
-								if (!Util.eq((Integer) app.get("userId"), nowApply.getUserId())) {
-									lastQuery.add(app);
-								}
-							}
 						} else {//不是统一联系人，则只查自己
 							query = dbDao.query(applysql,
 									Cnd.where("taoj.orderId", "=", orderid).and("ta.id", "=", apply.getId()), null);
@@ -222,110 +214,8 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 		}
-
-		//lastQuery为除去登录申请人，所有的常用联系人
-		for (Record record : lastQuery) {
-			Integer userId = (Integer) record.get("userId");
-			Integer applyId = (Integer) record.get("applyId");
-			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyId.longValue());
-			TApplicantPassportEntity applypass = dbDao.fetch(TApplicantPassportEntity.class,
-					Cnd.where("applicantId", "=", applyId));
-			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class, Cnd.where("userId", "=", userId));
-			if (Util.isEmpty(base)) {
-				TTouristBaseinfoEntity applyBase = dbDao.fetch(TTouristBaseinfoEntity.class,
-						Cnd.where("applicantId", "=", applyId));
-				if (Util.isEmpty(applyBase)) {
-					TTouristBaseinfoEntity newBase = new TTouristBaseinfoEntity();
-					newBase.setFirstName(apply.getFirstName());
-					newBase.setFirstNameEn(apply.getFirstNameEn());
-					newBase.setLastName(apply.getLastName());
-					newBase.setLastNameEn(apply.getLastNameEn());
-					newBase.setApplicantId(applyId);
-					newBase.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
-					if (!Util.isEmpty(userId)) {
-						newBase.setUserId(userId);
-					}
-					newBase.setCreateTime(new Date());
-					newBase.setUpdateTime(new Date());
-					dbDao.insert(newBase);
-				}
-			}
-			TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class, Cnd.where("userId", "=", userId));
-			if (Util.isEmpty(pass)) {
-				TTouristPassportEntity applyPass = dbDao.fetch(TTouristPassportEntity.class,
-						Cnd.where("applicantId", "=", applyId));
-				if (Util.isEmpty(applyPass)) {
-					TTouristPassportEntity newPass = new TTouristPassportEntity();
-					newPass.setApplicantId(applyId);
-					if (!Util.isEmpty(userId)) {
-						newPass.setUserId(userId);
-					}
-					newPass.setPassport(applypass.getPassport());
-					newPass.setCreateTime(new Date());
-					newPass.setUpdateTime(new Date());
-					dbDao.insert(newPass);
-				}
-			}
-			TTouristVisaEntity visa = dbDao.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", userId));
-			if (Util.isEmpty(visa)) {
-				TTouristVisaEntity applyVisa = dbDao.fetch(TTouristVisaEntity.class,
-						Cnd.where("applicantId", "=", applyId));
-				if (Util.isEmpty(applyVisa)) {
-					TTouristVisaEntity newVisa = new TTouristVisaEntity();
-					newVisa.setApplicantId(applyId);
-					if (!Util.isEmpty(userId)) {
-						newVisa.setUserId(userId);
-					}
-					newVisa.setCreateTime(new Date());
-					newVisa.setUpdateTime(new Date());
-					dbDao.insert(newVisa);
-				}
-			}
-		}
-		TTouristBaseinfoEntity loginBase = dbDao.fetch(TTouristBaseinfoEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()));
-		List<TApplicantEntity> loginApplyList = dbDao.query(TApplicantEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()), null);
-		if (Util.isEmpty(loginBase)) {
-			TTouristBaseinfoEntity base = new TTouristBaseinfoEntity();
-			base.setUserId(loginUser.getId());
-			base.setUpdateIsPrompted(IsYesOrNoEnum.NO.intKey());
-			base.setSaveIsPrompted(IsYesOrNoEnum.NO.intKey());
-			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
-			base.setCreateTime(new Date());
-			base.setUpdateTime(new Date());
-			if (!Util.isEmpty(loginApplyList)) {
-				base.setApplicantId(loginApplyList.get(0).getId());
-			}
-			dbDao.insert(base);
-		}
-		TTouristPassportEntity loginPass = dbDao.fetch(TTouristPassportEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()));
-		if (Util.isEmpty(loginPass)) {
-			TTouristPassportEntity pass = new TTouristPassportEntity();
-			pass.setUserId(loginUser.getId());
-			pass.setCreateTime(new Date());
-			pass.setUpdateTime(new Date());
-			if (!Util.isEmpty(loginApplyList)) {
-				pass.setApplicantId(loginApplyList.get(0).getId());
-			}
-			dbDao.insert(pass);
-		}
-		TTouristVisaEntity loginVisa = dbDao.fetch(TTouristVisaEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()));
-		if (Util.isEmpty(loginVisa)) {
-			TTouristVisaEntity visa = new TTouristVisaEntity();
-			visa.setUserId(loginUser.getId());
-			visa.setCreateTime(new Date());
-			visa.setUpdateTime(new Date());
-			if (!Util.isEmpty(loginApplyList)) {
-				visa.setApplicantId(loginApplyList.get(0).getId());
-			}
-			dbDao.insert(visa);
-		}
 		result.put("visaJapanData", list);
 		return result;
-
 	}
 
 	//签证进度页

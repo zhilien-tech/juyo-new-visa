@@ -547,7 +547,26 @@
 										}, function(index){
 											if(data.pass != null){
 												toSet(data);
-												layer.close(index);
+												//同步信息
+												layer.load(1);
+												$.ajax({
+													type : "post",
+													async : false,
+													data : {
+														applyid : '${obj.applicantId}'
+													},
+													url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+													success :function(data) {
+														layer.closeAll("loading");
+														layer.msg("已同步", {
+		    												time: 1000,
+		    												end: function () {
+															layer.close(index);
+		    												}
+		    											});
+													}
+												});
+												//记录选择的是同步
 												$.ajax({
 													type : "post",
 													async : false,
@@ -560,18 +579,6 @@
 														
 													}
 												});
-												$.ajax({
-													type : "post",
-													async : false,
-													data : {
-														applyid : '${obj.applicantId}'
-													},
-													url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
-													success :function(data) {
-														
-													}
-												});
-												
 											}
 										},function(index){
 											layer.close(index);
@@ -604,6 +611,7 @@
 									success :function(data) {
 										if(data.pass != null){
 											toSet(data);
+											layer.load(1);
 											$.ajax({
 												type : "post",
 												async : false,
@@ -612,7 +620,13 @@
 												},
 												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
 												success :function(data) {
-													
+													layer.closeAll("loading");
+													layer.msg("已同步", {
+	    												time: 1000,
+	    												end: function () {
+	    													
+	    												}
+	    											});
 												}
 											});
 											
@@ -674,34 +688,50 @@
 					url: '${base}/admin/myData/passIsChanged.html',
 					success :function(data) {
 						if(status == 2){
-							$.ajax({
-								async: false,
-								type: 'POST',
-								data : passportInfo,
-								url: '${base}/admin/orderJp/saveEditPassport.html',
-								success :function(data) {
-									socket.onclose();
-									window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType';
-								}
-							});
+							if(data == 1){
+								layer.load(1);
+								$.ajax({
+									async: false,
+									type: 'POST',
+									data : passportInfo,
+									url: '${base}/admin/orderJp/saveEditPassport.html',
+									success :function(data) {
+										layer.closeAll("loading");
+										socket.onclose();
+										window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType';
+									}
+								});
+							}else{
+								socket.onclose();
+								window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType';
+							}
 						}else if(status == 3){
-							$.ajax({
-								async: false,
-								type: 'POST',
-								data : passportInfo,
-								url: '${base}/admin/orderJp/saveEditPassport.html',
-								success :function(data) {
-									socket.onclose();
-									window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType';
-								}
-							});
+							if(data == 1){
+								layer.load(1);
+								$.ajax({
+									async: false,
+									type: 'POST',
+									data : passportInfo,
+									url: '${base}/admin/orderJp/saveEditPassport.html',
+									success :function(data) {
+										layer.closeAll("loading");
+										socket.onclose();
+										window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType';
+									}
+								});
+							}else{
+								socket.onclose();
+								window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType';
+							}
 						}else{
+							layer.load(1);
 							$.ajax({
 								async: false,
 								type: 'POST',
 								data : {applyid:id},
 								url: '${base}/admin/myData/infoIsChanged.html',
 								success :function(data) {
+									layer.closeAll("loading");
 									if(data.isPrompted == 0){//没有提示过
 										if(data.base.isSameInfo == 0){//如果返回0则说明游客信息改变，提示是否更新
 				    						layer.confirm("信息已改变，您是否要更新？", {
@@ -709,16 +739,18 @@
 				    							btn: ["是","否"], //按钮
 				    							shade: false //不显示遮罩
 				    						}, function(){
+				    							layer.load(1);
 				    									$.ajax({
 					    									async: false,
 					    									type: 'POST',
 					    									data : passportInfo,
 					    									url: '${base}/admin/orderJp/saveEditPassport.html',
 					    									success :function(data) {
+					    										layer.closeAll("loading");
 					    										console.log(JSON.stringify(data));
 					    										if(status == 1){
-					    											layer.msg("修改成功", {
-					    												time: 500,
+					    											layer.msg("已同步", {
+					    												time: 1000,
 					    												end: function () {
 					    													var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					    													parent.layer.close(index);
@@ -753,15 +785,17 @@
 					    										
 					    									
 				    						},function(){
+				    							layer.load(1);
 				    							$.ajax({
 													async: false,
 													type: 'POST',
 													data : passportInfo,
 													url: '${base}/admin/orderJp/saveEditPassport.html',
 													success :function(data) {
+														layer.closeAll("loading");
 						    							if(status == 1){
 						    								layer.msg("修改成功", {
-						    									time: 500,
+						    									time: 1000,
 						    									end: function () {
 						    										var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						    										parent.layer.close(index);
@@ -785,16 +819,18 @@
 						    			    	});
 				    						});
 										}else{
+											layer.load(1);
 											$.ajax({
 												async: false,
 												type: 'POST',
 												data : passportInfo,
 												url: '${base}/admin/orderJp/saveEditPassport.html',
 												success :function(data) {
+													layer.closeAll("loading");
 													console.log(JSON.stringify(data));
 													if(status == 1){
 														layer.msg("修改成功", {
-															time: 500,
+															time: 1000,
 															end: function () {
 																var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 																parent.layer.close(index);
@@ -806,27 +842,29 @@
 										}
 										
 									}else{//提示过
-										$.ajax({
-											async: false,
-											type: 'POST',
-											data : passportInfo,
-											url: '${base}/admin/orderJp/saveEditPassport.html',
-											success :function(data) {
-												console.log(JSON.stringify(data));
-												if(status == 1){
-													layer.msg("修改成功", {
-														time: 500,
-														end: function () {
-															var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-															parent.layer.close(index);
-															parent.successCallBack();
-														}
-													});
-												}
-											}
-										});
 										if(data.base.isSameInfo == 0){
 											if(data.isUpdated == 1){//更新
+												layer.load(1);
+												$.ajax({
+													async: false,
+													type: 'POST',
+													data : passportInfo,
+													url: '${base}/admin/orderJp/saveEditPassport.html',
+													success :function(data) {
+														console.log(JSON.stringify(data));
+														layer.closeAll("loading");
+														if(status == 1){
+															layer.msg("已同步", {
+																time: 1000,
+																end: function () {
+																	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+																	parent.layer.close(index);
+																	parent.successCallBack();
+																}
+															});
+														}
+													}
+												});
 												$.ajax({ 
 						    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
 						    			    		dataType:"json",
@@ -836,6 +874,29 @@
 						    			    					    		
 						    			    		}
 						    			    	});
+											}else{
+												layer.load(1);
+												$.ajax({
+													async: false,
+													type: 'POST',
+													data : passportInfo,
+													url: '${base}/admin/orderJp/saveEditPassport.html',
+													success :function(data) {
+														console.log(JSON.stringify(data));
+														layer.closeAll("loading");
+														if(status == 1){
+															layer.msg("修改成功", {
+																time: 1000,
+																end: function () {
+																	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+																	parent.layer.close(index);
+																	parent.successCallBack();
+																}
+															});
+														}
+													}
+												});
+												
 											}
 										}
 									}
@@ -849,12 +910,14 @@
 			
 			}else{
 				var addApply = '${obj.addApply}';
+				layer.load(1);
 				$.ajax({
 					type: 'POST',
 					async : false,
 					data : passportInfo,
 					url: '${base}/admin/orderJp/saveEditPassport',
 					success :function(data) {
+						layer.closeAll("loading");
 						console.log(JSON.stringify(data));
 						/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						layer.close(index); */
@@ -898,9 +961,13 @@
 	    							shade: false //不显示遮罩
 	    						}, 
 	    						function(){
-	    							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-	    							parent.layer.close(index);
-	    							//parent.cancelCallBack(1);
+	    							layer.msg("已同步", {
+	    								time: 1000,
+	    								end: function () {
+	    									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	    									parent.layer.close(index);
+	    								}
+	    							});
 	    							$.ajax({ 
 			    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
 			    			    		dataType:"json",
@@ -947,11 +1014,16 @@
 								//parent.cancelCallBack(1);
 							}
 						}else{//提示过
-							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-							parent.layer.close(index);
 							//parent.cancelCallBack(1);
 							if(data.base.isSameInfo == 0){
 								if(data.isUpdated == 1){//更新
+									layer.msg("已同步", {
+	    								time: 1000,
+	    								end: function () {
+	    									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	    									parent.layer.close(index);
+	    								}
+	    							});
 									$.ajax({ 
 			    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
 			    			    		dataType:"json",
@@ -961,7 +1033,14 @@
 			    			    					    		
 			    			    		}
 			    			    	});
+								}else{
+									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+									parent.layer.close(index);
 								}
+							}else{
+								var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+								parent.layer.close(index);
+								
 							}
 						}
 					}
@@ -1029,16 +1108,6 @@
 		    	return 365; 
 			}
 		}
-		
-		/* function f1(time, years){
-			var time = $('#issuedDate').val()
-			var year = time.getFullYear()+years;
-			var month = time.getMonth();
-			var day = time.getDate();
-			return year + "-" + (month + 1) + "-" + day ;
-			//document.getElementById('d1').innerHTML = dateStr;
-		} */
-		
 		
 		function deleteApplicantFrontImg(){
 			$('#passportUrl').val("");
@@ -1151,17 +1220,6 @@
 			//关闭socket连接
 			//socket.onclose();
 			//window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder};
-			/* layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['900px', '551px'],
-				content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}
-			}); */
 		 }
 		 
 		//合格/不合格

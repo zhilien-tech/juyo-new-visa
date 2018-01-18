@@ -1,0 +1,1 @@
+尊敬的${unifiedName} ${sex}。您的日本签证已成功下单。订单号：${ordernum}。用户名:${telephone}    点击这里${mobileUrl} 填写个人资料，以便尽快进入审核环节
