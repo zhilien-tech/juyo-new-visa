@@ -9,6 +9,8 @@ package com.juyo.visa.admin.visajp.module;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.POST;
+import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.visajp.form.FlightSelectParam;
 import com.juyo.visa.admin.visajp.service.TripAirlineService;
@@ -28,7 +30,9 @@ public class TripAirlineModule {
 	@Inject
 	private TripAirlineService tripAirlineService;
 
-	public Object getTripAirlineSelect(FlightSelectParam param) {
+	@At
+	@POST
+	public Object getTripAirlineSelect(@Param("..") FlightSelectParam param) {
 		return tripAirlineService.getTripAirlineSelect(param);
 	}
 }

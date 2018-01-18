@@ -1,7 +1,7 @@
 
 $(function() {
-	
-/*	$("#applicant_tbody tr").each(function(i,ele_tr){
+
+	/*	$("#applicant_tbody tr").each(function(i,ele_tr){
 		var applicantId = $(this).children().eq(0).html();
 		var ids = shareIds.split(",");
 		$.each(ids, function(j,shareid){
@@ -10,7 +10,7 @@ $(function() {
 			} 
 		});
 	});*/
-	
+
 	$(document).on("click",".tableTr",function(){
 		var sharetype = $("#shareType").val();
 		if(sharetype == 2){//单独分享
@@ -59,7 +59,7 @@ function save(orderid,orderjpid){
 		layer.msg('回邮地址不能为空');
 		return;
 	}
-	
+
 	/*	var applicant_tbody = $("#applicant_tbody").is(":empty");
 	if (applicant_tbody) {
 		layer.msg('申请人信息不能为空');
@@ -79,35 +79,63 @@ function save(orderid,orderjpid){
 		return;
 	}
 
-	/*var receiveAddress = $("#receiveAddressId").val();
-	if (receiveAddress == "") {
-		layer.msg('收件人信息不能为空');
-		return;
-	}*/
-
 	var layerIndex =  layer.load(1, {shade: "#000"});
-	$.ajax({ 
-		url: BASE_PATH+'/admin/firstTrialJp/saveExpressInfo.html',
-		type:'post',
-		data:{
-			orderid:orderid,
-			orderjpid:orderjpid,
-			expresstype:$("#express").val(),
-			sharetype:$("#shareType").val(),
-			receiver:$("#receiver").val(),
-			mobile:$("#mobile").val(),
-			expressaddress:$("#address").val(),
+
+	$.ajax({
+		type : 'POST',
+		data : {
 			shareManIds:shareManIds
-			//receiveAddressId:$("#receiveAddressId").val()
 		},
-		success: function(data){
-			if(data.stauts == 200){
+		url : '/admin/firstTrialJp/checkExpressManInfo.html',
+		success : function(data) {
+			var isEmpty = data.isEmpty;
+			if(isEmpty == false){
+				var applyids = data.applyids;
+				$.each(applyids, function(i, applyid) { 
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['400px', '300px'],
+						content:'/admin/firstTrialJp/validExpressManInfo.html?applicantId='+applyid+'&orderId='+orderid,
+						success : function(index, layero){
+							var iframeWin = window[index.find('iframe')[0]['name']]; 
+						}
+					}); 
+				}); 
 				layer.close(layerIndex);
+				return;
+			}else{
+				$.ajax({ 
+					url: BASE_PATH+'/admin/firstTrialJp/saveExpressInfo.html',
+					type:'post',
+					data:{
+						orderid:orderid,
+						orderjpid:orderjpid,
+						expresstype:$("#express").val(),
+						sharetype:$("#shareType").val(),
+						receiver:$("#receiver").val(),
+						mobile:$("#mobile").val(),
+						expressaddress:$("#address").val(),
+						shareManIds:shareManIds
+						//receiveAddressId:$("#receiveAddressId").val()
+					},
+					success: function(data){
+						if(data.stauts == 200){
+							layer.close(layerIndex);
+						}
+						closeWindow();
+						parent.successCallBack(2);
+					}
+				});
 			}
-			closeWindow();
-			parent.successCallBack(2);
 		}
 	});
+
 }
 
 

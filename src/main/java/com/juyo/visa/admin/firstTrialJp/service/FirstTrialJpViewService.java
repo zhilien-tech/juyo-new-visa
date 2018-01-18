@@ -388,7 +388,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			if (!Util.isEmpty(applicants)) {
 				for (TApplicantOrderJpEntity entity : applicants) {
 					Integer isShareSms = entity.getIsShareSms();
-					if (Util.eq(YES, isShareSms)) {
+					Integer isSameLinker = entity.getIsSameLinker();
+					if (Util.eq(YES, isShareSms) && Util.eq(YES, isSameLinker)) {
 						Integer id = entity.getApplicantId();
 						shareIds += id + ",";
 					}
@@ -558,7 +559,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
 		int update = dbDao.update(TApplicantEntity.class,
-				Chain.make("status", TrialApplicantStatusEnum.qualified.intKey()), Cnd.where("id", "=", applyid));
+				Chain.make("status", TrialApplicantStatusEnum.QUALIFIED.intKey()), Cnd.where("id", "=", applyid));
 		if (update > 0) {
 			//清空不合格信息
 			TApplicantUnqualifiedEntity unqualifiedInfo = dbDao.fetch(TApplicantUnqualifiedEntity.class,
@@ -676,7 +677,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//只要有一个不合格
 		if (isB == 1 || isV == 1 || isP == 1) {
 			//更改申请人状态为不合格
-			dbDao.update(TApplicantEntity.class, Chain.make("status", TrialApplicantStatusEnum.unqualified.intKey()),
+			dbDao.update(TApplicantEntity.class, Chain.make("status", TrialApplicantStatusEnum.UNQUALIFIED.intKey()),
 					Cnd.where("id", "=", applicantId));
 			//更改订单状态为初审
 			int firsttrialstatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();
@@ -751,6 +752,35 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		return dbDao.fetch(TReceiveaddressEntity.class, Cnd.where("id", "=", addressId));
 	}
 
+	//验证申请人 电话、邮箱 TODO
+	public Object checkExpressManInfo(String shareManIds) {
+
+		boolean isEmpty = true;
+		Map<String, Object> result = Maps.newHashMap();
+		List<Integer> applyids = new ArrayList<Integer>();
+
+		if (shareManIds.length() > 1) {
+			shareManIds = shareManIds.substring(0, shareManIds.length() - 1);
+		}
+
+		List<TApplicantEntity> applicants = dbDao.query(TApplicantEntity.class, Cnd.where("id", "IN", shareManIds),
+				null);
+		for (TApplicantEntity applicant : applicants) {
+			Integer applyId = applicant.getId();
+			String telephone = applicant.getTelephone();
+			String email = applicant.getEmail();
+			if (Util.isEmpty(telephone) || Util.isEmpty(email)) {
+				applyids.add(applyId);
+				isEmpty = false;
+			}
+
+		}
+		result.put("applyids", applyids);
+		result.put("isEmpty", isEmpty);
+
+		return result;
+	}
+
 	/**
 	 * 保存快递信息，并发送邮件
 	 */
@@ -761,8 +791,9 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		Integer userId = loginUser.getId();
 		TOrderRecipientEntity orderReceive = dbDao.fetch(TOrderRecipientEntity.class,
 				Cnd.where("orderId", "=", orderid));
-
-		shareManIds = shareManIds.substring(0, shareManIds.length() - 1);
+		if (shareManIds.length() > 1) {
+			shareManIds = shareManIds.substring(0, shareManIds.length() - 1);
+		}
 		if (!Util.isEmpty(orderReceive)) {
 			//更新
 			orderReceive.setOrderId(orderid);
@@ -1276,17 +1307,21 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String name = applicant.getFirstName() + applicant.getLastName();
 		String sex = applicant.getSex();
 		String telephone = applicant.getTelephone();
-		if (Util.eq("男", sex)) {
-			sex = "先生";
-		} else {
-			sex = "女士";
+		String result = "";
+		if (!Util.isEmpty(telephone)) {
+			if (Util.eq("男", sex)) {
+				sex = "先生";
+			} else {
+				sex = "女士";
+			}
+			TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+			String orderNum = order.getOrderNum();
+			String smsContent = tmp.toString();
+			smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+					.replace("${mobileUrl}", mobileUrl);
+			result = sendSMS(telephone, smsContent);
 		}
-		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid.longValue());
-		String orderNum = order.getOrderNum();
-		String smsContent = tmp.toString();
-		smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-				.replace("${mobileUrl}", mobileUrl);
-		String result = sendSMS(telephone, smsContent);
+
 		return result;
 
 	}
@@ -1309,15 +1344,17 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		String name = applicant.getFirstName() + applicant.getLastName();
 		String sex = applicant.getSex();
 		String toEmail = applicant.getEmail();
-		if (Util.eq("男", sex)) {
-			sex = "先生";
-		} else {
-			sex = "女士";
-		}
+		if (!Util.isEmpty(toEmail)) {
+			if (Util.eq("男", sex)) {
+				sex = "先生";
+			} else {
+				sex = "女士";
+			}
 
-		emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-				.replace("${pcUrl}", pcUrl);
-		result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
+			emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+					.replace("${pcUrl}", pcUrl);
+			result = mailService.send(toEmail, emailText, "邮寄初审资料", MailService.Type.HTML);
+		}
 
 		return result;
 	}
@@ -1626,4 +1663,5 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		result.put("orderId", orderid);
 		return result;
 	}
+
 }

@@ -99,7 +99,7 @@
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid)">签证补录</a></div>
+										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证补录</a></div>
 									</span>
 									<span v-else class="visaListSpan">
 										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
@@ -107,7 +107,7 @@
 										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid)">签证补录</a></div>
+										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证补录</a></div>
 									</span>
 								</li>
 							</ul> 
@@ -195,8 +195,15 @@
 	                 		//layer.msg('报告拒签');
                  		}
                  		//更新列表数据
+                 		var orderAuthority = "allOrder";
+						$(".searchOrderBtn").each(function(){
+							if($(this).hasClass("bgColor")){
+								orderAuthority = $(this).attr("name");
+							}
+						});
                  		$.ajax({ 
                         	url: url,
+                        	data:{orderAuthority:orderAuthority},
                         	dataType:"json",
                         	type:'post',
                         	success: function(data){
@@ -253,8 +260,15 @@
                  	success: function(data){
                  		parent.successCallBack(9);
                  		//layer.msg('已移交售后！');
+                 		var orderAuthority = "allOrder";
+						$(".searchOrderBtn").each(function(){
+							if($(this).hasClass("bgColor")){
+								orderAuthority = $(this).attr("name");
+							}
+						});
                  		$.ajax({ 
                         	url: url,
+                        	data:{orderAuthority:orderAuthority},
                         	dataType:"json",
                         	type:'post',
                         	success: function(data){
@@ -265,7 +279,7 @@
                  });
         	},
         	//签证录入
-    		visainput:function(applyId){
+    		visainput:function(applyId,orderid){
     			layer.open({
     				type: 2,
     				title: false,
@@ -302,9 +316,15 @@
 			if(pageNumber <= pagetotal){
 				//遮罩
 				layer.load(1);
+				var orderAuthority = "allOrder";
+				$(".searchOrderBtn").each(function(){
+					if($(this).hasClass("bgColor")){
+						orderAuthority = $(this).attr("name");
+					}
+				});
 				$.ajax({ 
 			    	url: url,
-			    	data:{status:status,sendSignDate:sendSignDate,searchStr:searchStr,pageNumber:pageNumber},
+			    	data:{status:status,sendSignDate:sendSignDate,searchStr:searchStr,pageNumber:pageNumber,orderAuthority:orderAuthority},
 			    	dataType:"json",
 			    	type:'post',
 			    	success: function(data){
@@ -386,8 +406,15 @@
 	}
 	
 	function successCallBack(status){
+		var orderAuthority = "allOrder";
+		$(".searchOrderBtn").each(function(){
+			if($(this).hasClass("bgColor")){
+				orderAuthority = $(this).attr("name");
+			}
+		});
 		$.ajax({ 
         	url: url,
+        	data:{orderAuthority:orderAuthority},
         	dataType:"json",
         	type:'post',
         	success: function(data){

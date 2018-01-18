@@ -73,6 +73,7 @@ import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.JapanPrincipalChangeEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.JobStatusFreeEnum;
 import com.juyo.visa.common.enums.JobStatusPreschoolEnum;
@@ -235,6 +236,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("orderId", id);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderJpEntity orderJpinfo = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", id.longValue()));
+		result.put("orderJpId", orderJpinfo.getId());
 		TOrderEntity orderInfo = dbDao.fetch(TOrderEntity.class, id.longValue());
 		if (!Util.isEmpty(orderInfo.getCustomerId())) {
 			customer = dbDao.fetch(TCustomerEntity.class, orderInfo.getCustomerId().longValue());
@@ -835,7 +837,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object updateApplicant(Integer id, Integer orderid, Integer isTrial, Integer orderProcessType,
+	public Object updateApplicant(Integer id, Integer orderid, Integer isTrial, Integer orderProcessType, int addApply,
 			HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -844,6 +846,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
+		result.put("addApply", addApply);
 		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", id));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
@@ -1095,7 +1098,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime, Integer isTrial,
-			Integer orderProcessType, HttpServletRequest request) {
+			Integer orderProcessType, int addApply, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -1103,6 +1106,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
+		result.put("addApply", addApply);
 		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, id.longValue());
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", id));
@@ -1188,8 +1192,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object getEditPassport(Integer applicantId, Integer orderid, HttpServletRequest request, Integer isTrial,
-			Integer orderProcessType) {
+	public Object getEditPassport(Integer applicantId, Integer orderid, Integer isTrial, Integer orderProcessType,
+			int addApply, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -1197,6 +1201,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
+		result.put("addApply", addApply);
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantId));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
@@ -2366,6 +2371,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				for (JPOrderStatusEnum statusEnum : JPOrderStatusEnum.values()) {
 					if (status == statusEnum.intKey()) {
 						record.put("orderStatus", statusEnum.value());
+					} else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+						record.put("orderStatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
 					}
 				}
 			}
@@ -2399,10 +2406,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				updatenum = dbDao.update(TOrderEntity.class, Chain.make(fieldStr, principalId),
 						Cnd.where("id", "=", orderid));
 				if (updatenum > 0) {
-					//更新订单状态为 “负责人变更”状态
-					int PRINCIPAL_ORDER = JPOrderStatusEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey();
-					dbDao.update(TOrderEntity.class, Chain.make("status", PRINCIPAL_ORDER).add("updateTime", nowDate),
-							Cnd.where("id", "=", orderid));
+					// 日志记录 “负责人变更”行为
+					int PRINCIPAL_ORDER = JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey();
+					/*dbDao.update(TOrderEntity.class, Chain.make("status", PRINCIPAL_ORDER).add("updateTime", nowDate),
+							Cnd.where("id", "=", orderid));*/
 					//日志记录
 					insertLogs(orderid, PRINCIPAL_ORDER, session);
 				}

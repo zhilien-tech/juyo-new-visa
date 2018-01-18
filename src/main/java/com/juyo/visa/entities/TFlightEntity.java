@@ -111,11 +111,6 @@ public class TFlightEntity implements Serializable {
 				return false;
 		} else if (!landingName.equals(other.landingName))
 			return false;
-		if (landingTerminal == null) {
-			if (other.landingTerminal != null)
-				return false;
-		} else if (!landingTerminal.equals(other.landingTerminal))
-			return false;
 		if (landingTime == null) {
 			if (other.landingTime != null)
 				return false;
@@ -135,11 +130,6 @@ public class TFlightEntity implements Serializable {
 			if (other.takeOffName != null)
 				return false;
 		} else if (!takeOffName.equals(other.takeOffName))
-			return false;
-		if (takeOffTerminal == null) {
-			if (other.takeOffTerminal != null)
-				return false;
-		} else if (!takeOffTerminal.equals(other.takeOffTerminal))
 			return false;
 		if (takeOffTime == null) {
 			if (other.takeOffTime != null)
@@ -162,12 +152,10 @@ public class TFlightEntity implements Serializable {
 		result = prime * result + ((landingCityId == null) ? 0 : landingCityId.hashCode());
 		result = prime * result + ((landingCode == null) ? 0 : landingCode.hashCode());
 		result = prime * result + ((landingName == null) ? 0 : landingName.hashCode());
-		result = prime * result + ((landingTerminal == null) ? 0 : landingTerminal.hashCode());
 		result = prime * result + ((landingTime == null) ? 0 : landingTime.hashCode());
 		result = prime * result + ((takeOffCityId == null) ? 0 : takeOffCityId.hashCode());
 		result = prime * result + ((takeOffCode == null) ? 0 : takeOffCode.hashCode());
 		result = prime * result + ((takeOffName == null) ? 0 : takeOffName.hashCode());
-		result = prime * result + ((takeOffTerminal == null) ? 0 : takeOffTerminal.hashCode());
 		result = prime * result + ((takeOffTime == null) ? 0 : takeOffTime.hashCode());
 		return result;
 	}

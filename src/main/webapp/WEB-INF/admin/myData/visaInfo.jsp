@@ -71,7 +71,7 @@
 					</c:when>
 					<c:otherwise>
 						<input id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin" data-dismiss="modal" value="取消" /> 
-						<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic" value="保存" />
+						<input id="addBtn" type="button" onclick="save(3);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic" value="保存" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -990,7 +990,6 @@
 				data : passportInfo,
 				url: '${base}/admin/myData/saveEditVisa',
 				success :function(data) {
-					console.log(JSON.stringify(data));
 					layer.closeAll('loading');
 					if(status == 1){
 						closeWindow(2);
@@ -1000,7 +999,9 @@
 						layer.msg("修改成功", {
 							time: 500,
 							end: function () {
-								self.location.reload();
+								var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+								parent.layer.close(index);
+								parent.successCallBack();
 							}
 						});
 					}
@@ -1172,7 +1173,7 @@
 						}
 					});
 				}else{
-					layer.msg("保存成功", {
+					layer.msg("修改成功", {
 						time: 500,
 						end: function () {
 							self.location.reload();

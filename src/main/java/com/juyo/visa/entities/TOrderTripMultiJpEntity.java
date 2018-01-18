@@ -31,7 +31,7 @@ public class TOrderTripMultiJpEntity implements Serializable {
 
 	@Column
 	@Comment("航班号")
-	private Integer flightNum;
+	private String flightNum;
 
 	@Column
 	@Comment("出行信息id")

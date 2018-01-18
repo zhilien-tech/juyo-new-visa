@@ -545,31 +545,34 @@
 											btn: ["是","否"], //按钮
 											shade: false //不显示遮罩
 										}, function(index){
-											toSet(data);
-											layer.close(index);
-											$.ajax({
-												type : "post",
-												async : false,
-												data : {
-													applyid : '${obj.applicantId}',
-													updateOrNot : "YES"
-												},
-												url : '${base}/admin/myVisa/updateOrNot.html',
-												success :function(data) {
-													
-												}
-											});
-											$.ajax({
-												type : "post",
-												async : false,
-												data : {
-													applyid : '${obj.applicantId}'
-												},
-												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
-												success :function(data) {
-													
-												}
-											});
+											if(data.pass != null){
+												toSet(data);
+												layer.close(index);
+												$.ajax({
+													type : "post",
+													async : false,
+													data : {
+														applyid : '${obj.applicantId}',
+														updateOrNot : "YES"
+													},
+													url : '${base}/admin/myVisa/updateOrNot.html',
+													success :function(data) {
+														
+													}
+												});
+												$.ajax({
+													type : "post",
+													async : false,
+													data : {
+														applyid : '${obj.applicantId}'
+													},
+													url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+													success :function(data) {
+														
+													}
+												});
+												
+											}
 										},function(index){
 											layer.close(index);
 											$.ajax({
@@ -599,18 +602,21 @@
 									},
 									url : '${base}/admin/myData/getTouristInfoByPass.html',
 									success :function(data) {
-										toSet(data);
-									}
-								});
-								$.ajax({
-									type : "post",
-									async : false,
-									data : {
-										applyid : '${obj.applicantId}'
-									},
-									url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
-									success :function(data) {
-										
+										if(data.pass != null){
+											toSet(data);
+											$.ajax({
+												type : "post",
+												async : false,
+												data : {
+													applyid : '${obj.applicantId}'
+												},
+												url : '${base}/admin/myVisa/copyAllInfoToPersonnel.html',
+												success :function(data) {
+													
+												}
+											});
+											
+										}
 									}
 								});
 							}
@@ -711,8 +717,14 @@
 					    									success :function(data) {
 					    										console.log(JSON.stringify(data));
 					    										if(status == 1){
-					    											var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					    											parent.layer.close(index);
+					    											layer.msg("修改成功", {
+					    												time: 500,
+					    												end: function () {
+					    													var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					    													parent.layer.close(index);
+					    													parent.successCallBack();
+					    												}
+					    											});
 					    										}
 					    									}
 					    								});
@@ -748,10 +760,14 @@
 													url: '${base}/admin/orderJp/saveEditPassport.html',
 													success :function(data) {
 						    							if(status == 1){
-						    								var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-						    								parent.layer.close(index);
-						    								//closeWindow();
-						    								//parent.successCallBack(1);
+						    								layer.msg("修改成功", {
+						    									time: 500,
+						    									end: function () {
+						    										var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						    										parent.layer.close(index);
+						    										parent.successCallBack();
+						    									}
+						    								});
 						    							}
 													}
 												});
@@ -777,10 +793,13 @@
 												success :function(data) {
 													console.log(JSON.stringify(data));
 													if(status == 1){
-														var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-														parent.layer.close(index);
-														//closeWindow();
-														//parent.successCallBack(1);
+														layer.msg("修改成功", {
+															time: 500,
+															end: function () {
+																var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+																parent.layer.close(index);
+															}
+														});
 													}
 												}
 											});
@@ -795,10 +814,14 @@
 											success :function(data) {
 												console.log(JSON.stringify(data));
 												if(status == 1){
-													var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-													parent.layer.close(index);
-													//closeWindow();
-													//parent.successCallBack(1);
+													layer.msg("修改成功", {
+														time: 500,
+														end: function () {
+															var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+															parent.layer.close(index);
+															parent.successCallBack();
+														}
+													});
 												}
 											}
 										});
@@ -825,6 +848,7 @@
 				});
 			
 			}else{
+				var addApply = '${obj.addApply}';
 				$.ajax({
 					type: 'POST',
 					async : false,
@@ -836,15 +860,19 @@
 						layer.close(index); */
 						if(status == 2){
 							socket.onclose();
-							window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
+							window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
 						}
 						if(status == 1){
 							closeWindow();
-							parent.successCallBack(1);
+							if(addApply == 1){
+								parent.successCallBack(3);
+							}else{
+								parent.successCallBack(1);
+							}
 						}
 						if(status == 3){
 							socket.onclose();
-							window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType=${obj.orderProcessType}';
+							window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
 						}
 					}
 				});
@@ -938,6 +966,7 @@
 						}
 					}
 				});
+				parent.successCallBack();
 			}else{
 				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 				parent.layer.close(index);

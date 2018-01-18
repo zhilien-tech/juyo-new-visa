@@ -177,7 +177,7 @@
 							<c:forEach var="apply" items="${obj.applicant}">
 								<c:choose>
 									<c:when test="${fn:contains(obj.shareIds,apply.applyid)}">
-										<tr class="tableTr trColor">
+										<tr id="apply_${apply.applyid }" class="tableTr trColor">
 											<td class="applyidTd" style="display: none">${apply.applyid }</td>
 											<td>${apply.applicantname }</td>
 											<td>${apply.telephone }</td>
@@ -187,7 +187,7 @@
 										</tr>
 									 </c:when> 
 									 <c:otherwise>  
-										<tr class="tableTr">
+										<tr id="apply_${apply.applyid }" class="tableTr">
 											<td class="applyidTd" style="display: none">${apply.applyid }</td>
 											<td>${apply.applicantname }</td>
 											<td>${apply.telephone }</td>
@@ -253,6 +253,37 @@
 				
 			}
 		}); */
+		
+		function successCallBack(status){
+			if(status == 1){
+				layer.msg('修改成功');
+			}
+			var url = '${base}/admin/firstTrialJp/getAllApplicantByOrderid.html';
+			$.ajax({ 
+				url: url,
+				type:'post',
+				dataType:"json",
+				data:{
+					orderjpid:orderjpid
+				},
+				success: function(data){
+					$.each(data.applicant,function(index,apply){
+						var applyid = apply.applyid;
+						var telephone = apply.telephone;
+						var email = apply.email;
+						
+						$("#apply_"+applyid).find('td').eq(2).text(telephone);
+						$("#apply_"+applyid).find('td').eq(3).text(email);
+					});
+					
+				}
+			});
+			
+		}
+		
+		function cancelCallBack(status){
+			
+		}
 		
 		//返回 
 		function closeWindow() {

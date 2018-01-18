@@ -41,7 +41,6 @@ import com.juyo.visa.entities.TApplicantVisaJpEntity;
 import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
-import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TTouristBaseinfoEntity;
@@ -130,21 +129,20 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object visaListData(VisaListDataForm form, HttpSession session) {
-		//获取当前公司
-		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
 
 		List<Record> list = new ArrayList<>();
 		List<Record> query = new ArrayList<>();
 		List<Record> lastQuery = new ArrayList<>();
+		//同一个userId下所有申请人
 		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()), null);
 		if (!Util.isEmpty(applyList)) {
 			List<TOrderJpEntity> orderJpList = new ArrayList<TOrderJpEntity>();
 
 			for (TApplicantEntity tApplicantEntity : applyList) {
+				//查询每个申请人所在订单状态，如果实在填写完毕之前，改变订单状态为填写资料中
 				TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 						Cnd.where("applicantId", "=", tApplicantEntity.getId()));
 				if (!Util.isEmpty(applicantOrderJpEntity)) {
@@ -158,11 +156,13 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 							orderEntity.setStatus(JPOrderStatusEnum.FILLING_INFORMATION.intKey());
 							dbDao.update(orderEntity);
 						}
+						//将所有订单放入list中
 						orderJpList.add(orderJpEntity);
 					}
 				}
 			}
 			for (TOrderJpEntity tOrderJpEntity : orderJpList) {
+				//获取列表页每个订单所需要的部分数据
 				String passportSqlstr = sqlManager.get("myvisa_japan_visa_list_data");
 				Sql passportSql = Sqls.create(passportSqlstr);
 				Cnd orderJpCnd = Cnd.NEW();
@@ -171,9 +171,10 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				Record passport = dbDao.fetch(passportSql);
 				list.add(passport);
 			}
+			//list前后倒置，这样第一个对象为最新的订单
 			Collections.reverse(list);
 			for (Record record : list) {
-				Integer sameLinker = (Integer) record.get("isSameLinker");
+				//获取列表页每个订单所需要的剩余部分数据
 				Integer orderid = (Integer) record.get("id");
 				String sqlStr = sqlManager.get("myvisa_japan_visa_list_data_apply");
 				Sql applysql = Sqls.create(sqlStr);
@@ -185,6 +186,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 					if (applyList.contains(apply)) {
 						TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 								Cnd.where("applicantId", "=", apply.getId()));
+						//如果为统一联系人，查询整个订单
 						if (Util.eq(applyJp.getIsSameLinker(), IsYesOrNoEnum.YES.intKey())) {
 							query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
 							//找出所有除自己之外的联系人，创建游客表
@@ -194,13 +196,14 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 									lastQuery.add(app);
 								}
 							}
-						} else {
+						} else {//不是统一联系人，则只查自己
 							query = dbDao.query(applysql,
 									Cnd.where("taoj.orderId", "=", orderid).and("ta.id", "=", apply.getId()), null);
 						}
 					}
 				}
 				for (Record apply : query) {
+					//查询资料类型（同职业）
 					Integer dataType = (Integer) apply.get("dataType");
 					for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
 						if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
@@ -210,7 +213,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				}
 
 				record.put("everybodyInfo", query);
-				//签证状态
+				//订单状态
 				Integer visastatus = record.getInt("japanState");
 				for (JPOrderStatusEnum visaenum : JPOrderStatusEnum.values()) {
 					if (visaenum.intKey() == visastatus) {
@@ -219,7 +222,8 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 		}
-		//lastQuery为除去申请人，所有的常用联系人
+
+		//lastQuery为除去登录申请人，所有的常用联系人
 		for (Record record : lastQuery) {
 			Integer userId = (Integer) record.get("userId");
 			Integer applyId = (Integer) record.get("applyId");
@@ -290,7 +294,9 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 			base.setCreateTime(new Date());
 			base.setUpdateTime(new Date());
-			base.setApplicantId(loginApplyList.get(0).getId());
+			if (!Util.isEmpty(loginApplyList)) {
+				base.setApplicantId(loginApplyList.get(0).getId());
+			}
 			dbDao.insert(base);
 		}
 		TTouristPassportEntity loginPass = dbDao.fetch(TTouristPassportEntity.class,
@@ -300,7 +306,9 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			pass.setUserId(loginUser.getId());
 			pass.setCreateTime(new Date());
 			pass.setUpdateTime(new Date());
-			pass.setApplicantId(loginApplyList.get(0).getId());
+			if (!Util.isEmpty(loginApplyList)) {
+				pass.setApplicantId(loginApplyList.get(0).getId());
+			}
 			dbDao.insert(pass);
 		}
 		TTouristVisaEntity loginVisa = dbDao.fetch(TTouristVisaEntity.class,
@@ -310,7 +318,9 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			visa.setUserId(loginUser.getId());
 			visa.setCreateTime(new Date());
 			visa.setUpdateTime(new Date());
-			visa.setApplicantId(loginApplyList.get(0).getId());
+			if (!Util.isEmpty(loginApplyList)) {
+				visa.setApplicantId(loginApplyList.get(0).getId());
+			}
 			dbDao.insert(visa);
 		}
 		result.put("visaJapanData", list);
@@ -594,6 +604,18 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		copyBaseToPersonnel(applyid, session);
 		copyPassToPersonnel(applyid, session);
 		copyVisaToPersonnel(applyid, session);
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyid);
+		if (!Util.isEmpty(apply.getUserId())) {
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("userId", "=", apply.getUserId()));
+			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			dbDao.update(base);
+		} else {
+			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("applicantId", "=", applyid));
+			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			dbDao.update(base);
+		}
 		return null;
 	}
 
@@ -970,7 +992,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
 			applyWealth.setType("银行存款");
 			applyWealth.setDetails(visa.getDeposit());
-			applyWealth.setApplicantId(applyJp.getApplicantId());
+			applyWealth.setApplicantId(applyJp.getId());
 			applyWealth.setOpId(loginUser.getId());
 			applyWealth.setCreateTime(new Date());
 			applyWealth.setUpdateTime(new Date());
@@ -980,7 +1002,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
 			applyWealth.setType("车产");
 			applyWealth.setDetails(visa.getVehicle());
-			applyWealth.setApplicantId(applyJp.getApplicantId());
+			applyWealth.setApplicantId(applyJp.getId());
 			applyWealth.setOpId(loginUser.getId());
 			applyWealth.setCreateTime(new Date());
 			applyWealth.setUpdateTime(new Date());
@@ -990,7 +1012,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
 			applyWealth.setType("房产");
 			applyWealth.setDetails(visa.getHouseProperty());
-			applyWealth.setApplicantId(applyJp.getApplicantId());
+			applyWealth.setApplicantId(applyJp.getId());
 			applyWealth.setOpId(loginUser.getId());
 			applyWealth.setCreateTime(new Date());
 			applyWealth.setUpdateTime(new Date());
@@ -1000,7 +1022,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
 			applyWealth.setType("理财");
 			applyWealth.setDetails(visa.getFinancial());
-			applyWealth.setApplicantId(applyJp.getApplicantId());
+			applyWealth.setApplicantId(applyJp.getId());
 			applyWealth.setOpId(loginUser.getId());
 			applyWealth.setCreateTime(new Date());
 			applyWealth.setUpdateTime(new Date());

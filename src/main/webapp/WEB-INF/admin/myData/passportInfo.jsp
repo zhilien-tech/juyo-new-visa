@@ -54,7 +54,7 @@
 					</c:when>
 					<c:otherwise>
 						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
-						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save(1);"/> 
+						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save(4);"/> 
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -605,14 +605,12 @@
 		var passportInfo = $("#passportInfo").serialize();
 		var orderid = '${obj.orderid}';
 		var applicantId = '${obj.applicantId}';
-		console.log(passportInfo);
 		layer.load(1);
 		$.ajax({
 			type: 'POST',
 			data : passportInfo,
 			url: '${base}/admin/myData/saveEditPassport',
 			success :function(data) {
-				console.log(JSON.stringify(data));
 				layer.closeAll('loading');
 				if(status == 1){
 					cancelBtn(2);
@@ -623,7 +621,9 @@
 					layer.msg("修改成功", {
 						time: 500,
 						end: function () {
-							self.location.reload();
+							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							parent.layer.close(index);
+							parent.successCallBack();
 						}
 					});
 				}
@@ -715,7 +715,7 @@
 					}
 				});
 			}else{
-				layer.msg("保存成功", {
+				layer.msg("修改成功", {
 					time: 500,
 					end: function () {
 						self.location.reload();

@@ -12,18 +12,26 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import org.nutz.dao.Cnd;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.google.common.collect.Lists;
 import com.juyo.visa.admin.visajp.form.FlightSelectParam;
+import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.haoservice.AirLineParam;
 import com.juyo.visa.common.haoservice.AirLineResult;
 import com.juyo.visa.common.haoservice.AirlineData;
+import com.juyo.visa.entities.TAirportInfoEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TFlightEntity;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
+import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
 
 /**
@@ -37,89 +45,136 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class TripAirlineService extends BaseService<TFlightEntity> {
 
-	public List<TFlightEntity> getTripAirlineSelect(FlightSelectParam param) {
+	@Inject
+	private RedisDao redisDao;
 
+	public List<TFlightEntity> getTripAirlineSelect(FlightSelectParam param) {
+		List<TFlightEntity> result = Lists.newArrayList();
 		String dep = "";
 		if (!Util.isEmpty(param.getGocity())) {
 			TCityEntity gocity = dbDao.fetch(TCityEntity.class, param.getGocity());
 			dep = gocity.getCode();
+		} else {
+			return result;
 		}
 		String arr = "";
 		if (!Util.isEmpty(param.getArrivecity())) {
 			TCityEntity arrivecity = dbDao.fetch(TCityEntity.class, param.getArrivecity());
 			arr = arrivecity.getCode();
+		} else {
+			return result;
 		}
 		String date = "";
 		if (!Util.isEmpty(param.getDate())) {
 			Date string2Date = DateUtil.string2Date(param.getDate(), DateUtil.FORMAT_YYYY_MM_DD);
 			DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYYMMDD);
 			date = format.format(string2Date);
+		} else {
+			return result;
+		}
+		AirLineResult airLineResult = new AirLineResult();
+		//查询缓存
+		String flightinfo = redisDao.hget(CommonConstants.AIRLINE_INFO_KEY, dep + arr);
+		if (!Util.isEmpty(flightinfo)) {
+			List<TFlightEntity> flightlists = JsonUtil.fromJsonAsList(TFlightEntity.class, flightinfo);
+			airLineResult.setAiliLineInFos(flightlists);
+		} else {
+			//查询接口
+			AirLineParam airLineParam = new AirLineParam();
+			airLineParam.setDep(dep);
+			airLineParam.setArr(arr);
+			airLineParam.setDate(date);
+			//执行查询
+			String airLinejson = AirlineData.getAirLineInfo(airLineParam);
+			Map<String, Object> map = JsonUtil.fromJson(airLinejson, Map.class);
+			//返回代码
+			airLineResult.setError_code(map.get("error_code").toString());
+			//返回错误信息
+			airLineResult.setReason((String) map.get("reason"));
+			List<LinkedHashMap<String, String>> fromJsonAsList = (List) map.get("result");
+			DateFormat dateFormat = new SimpleDateFormat("HHmm");
+			for (LinkedHashMap<String, String> airmap : fromJsonAsList) {
+				TFlightEntity flightEntity = new TFlightEntity();
+				//flightEntity.setAirlinecomp(airmap.get("airmode"));
+				flightEntity.setFlightnum(airmap.get("flightNo"));
+				//起飞机场三字代码
+				String OrgCity = airmap.get("OrgCity");
+				flightEntity.setTakeOffName(getAirportName(OrgCity));
+				flightEntity.setTakeOffCode(OrgCity);
+				//降落机场三字代码
+				String Dstcity = airmap.get("Dstcity");
+				flightEntity.setLandingName(getAirportName(Dstcity));
+				flightEntity.setLandingCode(Dstcity);
+				//起飞城市
+				flightEntity.setTakeOffCityId(param.getGocity().intValue());
+				//降落城市
+				flightEntity.setLandingCityId(param.getArrivecity().intValue());
+				flightEntity.setTakeOffTime(airmap.get("DepTime"));
+				flightEntity.setLandingTime(airmap.get("ArrTime")
+						+ (Util.isEmpty(airmap.get("arrTimeModify")) ? "" : airmap.get("arrTimeModify")));
+				airLineResult.getAiliLineInFos().add(flightEntity);
+			}
+			//放入缓存
+			redisDao.hset(CommonConstants.AIRLINE_INFO_KEY, dep + arr,
+					JsonUtil.toJson(airLineResult.getAiliLineInFos()));
 		}
 		//设置参数
-		AirLineParam airLineParam = new AirLineParam();
-		airLineParam.setDep(dep);
-		airLineParam.setArr(arr);
-		airLineParam.setDate(date);
-		//执行查询
-		String airLinejson = AirlineData.getAirLineInfo(airLineParam);
-		AirLineResult airLineResult = new AirLineResult();
-		Map<String, Object> map = JsonUtil.fromJson(airLinejson, Map.class);
-		//返回代码
-		airLineResult.setError_code(map.get("error_code").toString());
-		//返回错误信息
-		airLineResult.setReason((String) map.get("reason"));
-		List<LinkedHashMap<String, String>> fromJsonAsList = (List) map.get("result");
-		DateFormat dateFormat = new SimpleDateFormat("HHmm");
-		for (LinkedHashMap<String, String> airmap : fromJsonAsList) {
-			/*AirLineInFo airLineInFo = new AirLineInFo();
-			airLineInFo.setName(airmap.get("name"));
-			airLineInFo.setDate(airmap.get("date"));
-			airLineInFo.setAirmode(airmap.get("airmode"));
-			airLineInFo.setDep(airmap.get("dep"));
-			airLineInFo.setArr(airmap.get("arr"));
-			airLineInFo.setCompany(airmap.get("company"));
-			airLineInFo.setStatus(airmap.get("status"));
-			//出发时间
-			Date deptimedate = DateUtil.string2Date(airmap.get("dep_time"), DateUtil.FORMAT_FULL_PATTERN);
-			airLineInFo.setDep_time(dateFormat.format(deptimedate));
-			//抵达时间
-			Date arrtimedate = DateUtil.string2Date(airmap.get("arr_time"), DateUtil.FORMAT_FULL_PATTERN);
-			airLineInFo.setArr_time(dateFormat.format(arrtimedate));
-			airLineInFo.setFly_time(airmap.get("fly_time"));
-			airLineInFo.setDistance(airmap.get("distance"));
-			airLineInFo.setPunctuality(airmap.get("punctuality"));
-			airLineInFo.setDep_temperature(airmap.get("dep_temperature"));
-			airLineInFo.setArr_temperature(airmap.get("arr_temperature"));
-			airLineInFo.setEtd(airmap.get("etd"));
-			airLineInFo.setEta(airmap.get("eta"));*/
-			TFlightEntity flightEntity = new TFlightEntity();
-			flightEntity.setAirlinecomp(airmap.get("airmode"));
-			flightEntity.setFlightnum(airmap.get("name"));
-			//机场
-			String depair = airmap.get("dep");
-			//起飞机场
-			flightEntity.setTakeOffName(depair.substring(0, depair.indexOf("机场") + 2));
-			flightEntity.setTakeOffCode(airLineParam.getDep());
-			flightEntity.setLandingName(airmap.get("arr"));
-			flightEntity.setLandingCode(airLineParam.getArr());
-			flightEntity.setTakeOffCityId(param.getGocity().intValue());
-			flightEntity.setLandingCityId(param.getArrivecity().intValue());
-			Date deptimedate = DateUtil.string2Date(airmap.get("dep_time"), DateUtil.FORMAT_FULL_PATTERN);
-			flightEntity.setTakeOffTime(dateFormat.format(deptimedate));
-			Date arrtimedate = DateUtil.string2Date(airmap.get("arr_time"), DateUtil.FORMAT_FULL_PATTERN);
-			flightEntity.setLandingTime(dateFormat.format(arrtimedate));
-			flightEntity.setTakeOffTerminal(depair.substring(depair.indexOf("机场") + 2, depair.length()));
-			//airLineResult.getAiliLineInFos().add(airLineInFo);
-			airLineResult.getAiliLineInFos().add(flightEntity);
-		}
 		return airLineResult.getAiliLineInFos();
 	}
 
-	public static void main(String[] args) {
-		String jichang = "上海浦东机场T1";
-		String substring = jichang.substring(0, jichang.indexOf("机场") + 2);
-		String subSequence = jichang.substring(jichang.indexOf("机场") + 2, jichang.length());
-		System.out.println(substring);
-		System.out.println(subSequence);
+	private String getAirportName(String aircode) {
+		String result = "";
+		if (!Util.isEmpty(aircode)) {
+			//从缓存中取数据
+			String airname = redisDao.hget(CommonConstants.AIRPORT_CODE_NAME, aircode);
+			if (Util.isEmpty(airname)) {
+				//从数据库查出来放到缓存
+				TAirportInfoEntity airportinfo = dbDao.fetch(TAirportInfoEntity.class, Cnd.where("code", "=", aircode));
+				if (!Util.isEmpty(airportinfo)) {
+					result = airportinfo.getName();
+					redisDao.hset(CommonConstants.AIRPORT_CODE_NAME, aircode, airportinfo.getName());
+				}
+			} else {
+				result = airname;
+			}
+		}
+		return result;
+	}
+
+	public void deleteAielineCache() {
+		Map<String, String> hgetAll = redisDao.hgetAll(CommonConstants.AIRLINE_INFO_KEY);
+		Set<Entry<String, String>> entrySet = hgetAll.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			redisDao.hdel(CommonConstants.AIRLINE_INFO_KEY, entry.getKey());
+		}
+	}
+
+	/**
+	 * 将缓存中的数据写入到数据库
+	 */
+	public void updateFlightByCache(Integer depid, Integer arrid) {
+		String dep = "";
+		if (!Util.isEmpty(depid)) {
+			TCityEntity depcity = dbDao.fetch(TCityEntity.class, depid.longValue());
+			dep = depcity.getCode();
+		}
+		String arr = "";
+		if (!Util.isEmpty(arrid)) {
+			TCityEntity arrcity = dbDao.fetch(TCityEntity.class, arrid.longValue());
+			arr = arrcity.getCode();
+		}
+		List<TFlightEntity> before = dbDao.query(TFlightEntity.class,
+				Cnd.where("takeOffCityId", "=", depid).and("landingCityId", "=", arrid), null);
+		if (!Util.isEmpty(dep) && !Util.isEmpty(arr)) {
+			//从缓存中取数据
+			String interfaceairinfo = redisDao.hget(CommonConstants.AIRLINE_INFO_KEY, dep + arr);
+			//如果缓存中数据存在
+			if (!Util.isEmpty(interfaceairinfo)) {
+				List<TFlightEntity> flightlist = JsonUtil.fromJsonAsList(TFlightEntity.class, interfaceairinfo);
+				if (!Util.isEmpty(flightlist) && flightlist.size() > 0) {
+					dbDao.updateRelations(before, flightlist);
+				}
+			}
+		}
 	}
 }

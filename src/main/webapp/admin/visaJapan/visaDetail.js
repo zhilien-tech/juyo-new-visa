@@ -196,7 +196,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&orderid='+orderid+'&isvisa=1'
+				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&orderid='+orderinfoid+'&isvisa=1'
 			});
 		},
 		//通知销售
@@ -359,7 +359,7 @@ $('.select2City').select2({
 //出发航班select2
 $('#goFlightNum').select2({
 	ajax : {
-		url : BASE_PATH + "/admin/flight/getFlightSelect.html",
+		url : BASE_PATH + "/admin/tripairline/getTripAirlineSelect.html",
 		dataType : 'json',
 		delay : 250,
 		type : 'post',
@@ -382,7 +382,9 @@ $('#goFlightNum').select2({
 			}else{
 				goArrivedCity = '';
 			}
+			var date = $('#goDate').val();
 			return {
+				date:date,
 				//exname : cArrivalcity,
 				gocity:goDepartureCity,
 				arrivecity:goArrivedCity,
@@ -393,8 +395,8 @@ $('#goFlightNum').select2({
 		processResults : function(data, params) {
 			params.page = params.page || 1;
 			var selectdata = $.map(data, function (obj) {
-				obj.id = obj.id; // replace pk with your identifier
-				//obj.text = obj.flightnum; // replace pk with your identifier
+				//obj.id = obj.id; // replace pk with your identifier
+				obj.id = obj.flightnum; // replace pk with your identifier
 				obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime;
 				/*obj.text = obj.dictCode;*/
 				return obj;
@@ -418,7 +420,7 @@ $('#goFlightNum').select2({
 //返程航班select2
 $('#returnFlightNum').select2({
 	ajax : {
-		url : BASE_PATH + "/admin/flight/getFlightSelect.html",
+		url : BASE_PATH + "/admin/tripairline/getTripAirlineSelect.html",
 		dataType : 'json',
 		delay : 250,
 		type : 'post',
@@ -441,8 +443,10 @@ $('#returnFlightNum').select2({
 			}else{
 				returnArrivedCity += '';
 			}
+			var date = $('#returnDate').val();
 			return {
 				//exname : cArrivalcity,
+				date:date,
 				gocity:returnDepartureCity,
 				arrivecity:returnArrivedCity,
 				flight : params.term, // search term
@@ -452,8 +456,8 @@ $('#returnFlightNum').select2({
 		processResults : function(data, params) {
 			params.page = params.page || 1;
 			var selectdata = $.map(data, function (obj) {
-				obj.id = obj.id; // replace pk with your identifier
-				//obj.text = obj.flightnum; // replace pk with your identifier
+				//obj.id = obj.id; // replace pk with your identifier
+				obj.id = obj.flightnum; // replace pk with your identifier
 				obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime;
 				/*obj.text = obj.dictCode;*/
 				return obj;

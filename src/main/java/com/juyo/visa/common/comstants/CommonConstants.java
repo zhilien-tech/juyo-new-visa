@@ -70,4 +70,8 @@ public class CommonConstants {
 
 	/**操作台id，不可随意更改，必须与数据库保持一致*/
 	public static final int DESKTOP_ID = 44;
+	//机场缓存key
+	public static final String AIRPORT_CODE_NAME = "juyo_TripAirlineService_airport_code_name:";
+	//接口数据缓存key
+	public static final String AIRLINE_INFO_KEY = "juyo_TripAirlineService_airlineinfo_code_key";
 }
