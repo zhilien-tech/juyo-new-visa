@@ -19,7 +19,7 @@ a{text-decoration:none;}
 .nav-item{position: relative;}
 .nav-item.nav-show{border-bottom: none;}
 .nav-item ul{display: none;background: rgba(0,0,0,.1);}
-.nav-item.nav-show ul{display: block;}
+.nav .nav-item.nav-show ul{display: block;}
 .nav-item.nav-show  a { color:#FFF;}
 .nav-item.nav-show  span { color:#FFF;}
 /* .nav-item>a:before{content: "";position: absolute;left: 0px;width: 4px;height: 70px;background: #34A0CE;opacity:0;} */
@@ -56,7 +56,11 @@ a{text-decoration:none;}
 .nav-mini.nav .nav-item:hover .nav-item a{color:#FFF;}
 .nav-mini.nav .nav-item:hover a:before{}
 .nav-mini.nav .nav-item:hover ul{display: block;}
-
+/*导航缩进 鼠标经过显示名字*/
+.nav-mini .nav-item.nav-show ul{display: none;}
+.nav-mini.nav .nav-item:hover .miniName { display: block;} 
+.nav-item .miniName { display:none; position:absolute;top:-30px;left:4px; width:50px;height:30px;line-height:30px;text-align:center;background:#FFF;color:#000;font-size:12px; border-radius:5px;}
+.nav-item .miniName::after { content:"";position: absolute; top: 25px; left: 20px; width: 10px; height: 10px; background:#FFF; border-left:1px solid #FFF; border-bottom:1px solid #FFF; transform: rotate(-45deg);-moz-transform: rotate(-45deg);-webkit-transform: rotate(-45deg);}
 
 
 

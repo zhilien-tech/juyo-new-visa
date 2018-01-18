@@ -45,7 +45,7 @@
 							<a name="myOrder" class="searchOrderBtn btnList">我的</a>
 						</div>
 						<!-- 切换卡按钮 end -->
-						<div class="row">
+						<div class="row searchMar">
 							<div class="col-md-2 left-5px right-0px">
 								<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
 									<option value="">状态</option>
