@@ -558,7 +558,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
 		int update = dbDao.update(TApplicantEntity.class,
-				Chain.make("status", TrialApplicantStatusEnum.qualified.intKey()), Cnd.where("id", "=", applyid));
+				Chain.make("status", TrialApplicantStatusEnum.QUALIFIED.intKey()), Cnd.where("id", "=", applyid));
 		if (update > 0) {
 			//清空不合格信息
 			TApplicantUnqualifiedEntity unqualifiedInfo = dbDao.fetch(TApplicantUnqualifiedEntity.class,
@@ -676,7 +676,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		//只要有一个不合格
 		if (isB == 1 || isV == 1 || isP == 1) {
 			//更改申请人状态为不合格
-			dbDao.update(TApplicantEntity.class, Chain.make("status", TrialApplicantStatusEnum.unqualified.intKey()),
+			dbDao.update(TApplicantEntity.class, Chain.make("status", TrialApplicantStatusEnum.UNQUALIFIED.intKey()),
 					Cnd.where("id", "=", applicantId));
 			//更改订单状态为初审
 			int firsttrialstatus = JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey();

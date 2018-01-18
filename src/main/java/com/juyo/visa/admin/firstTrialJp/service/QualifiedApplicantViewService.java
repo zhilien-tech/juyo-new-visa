@@ -70,7 +70,7 @@ public class QualifiedApplicantViewService extends BaseService<TApplicantEntity>
 		Boolean isQualified = isQualifiedByApplicantId(applicantId);
 		if (isQualified) {
 			int update = dbDao.update(TApplicantEntity.class,
-					Chain.make("status", TrialApplicantStatusEnum.qualified.intKey()),
+					Chain.make("status", TrialApplicantStatusEnum.QUALIFIED.intKey()),
 					Cnd.where("id", "=", applicantId));
 			if (update > 0) {
 				//清空不合格信息
@@ -168,7 +168,7 @@ public class QualifiedApplicantViewService extends BaseService<TApplicantEntity>
 		Boolean isQualified = isQualifiedByApplicantId(applicantId);
 		if (!isQualified) {
 			//更改申请人状态为不合格
-			dbDao.update(TApplicantEntity.class, Chain.make("status", TrialApplicantStatusEnum.unqualified.intKey()),
+			dbDao.update(TApplicantEntity.class, Chain.make("status", TrialApplicantStatusEnum.UNQUALIFIED.intKey()),
 					Cnd.where("id", "=", applicantId));
 		}
 
