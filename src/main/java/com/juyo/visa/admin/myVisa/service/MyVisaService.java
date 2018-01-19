@@ -28,6 +28,8 @@ import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
+import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
+import com.juyo.visa.common.enums.MainBackMailTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.YouKeExpressTypeEnum;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
@@ -337,6 +339,22 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				Cnd.where("applicantId", "=", applicantid));
 		TApplicantBackmailJpEntity backmailJpEntity = dbDao.fetch(TApplicantBackmailJpEntity.class,
 				Cnd.where("applicantId", "=", applyJp.getId()));
+		String exprTypeStr = "";
+		String sourceStr = "";
+		Integer exprType = backmailJpEntity.getExpressType();
+		Integer source = backmailJpEntity.getSource();
+		for (MainBackMailTypeEnum statusEnum : MainBackMailTypeEnum.values()) {
+			if (!Util.isEmpty(expressNum) && exprType == statusEnum.intKey()) {
+				exprTypeStr = statusEnum.value();
+			}
+		}
+		for (MainBackMailSourceTypeEnum statusEnum : MainBackMailSourceTypeEnum.values()) {
+			if (!Util.isEmpty(expressNum) && source == statusEnum.intKey()) {
+				sourceStr = statusEnum.value();
+			}
+		}
+		result.put("exprType", exprTypeStr);
+		result.put("source", sourceStr);
 		result.put("backmail", backmailJpEntity);
 
 		//进度隐藏页

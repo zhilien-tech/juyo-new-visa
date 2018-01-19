@@ -159,13 +159,13 @@
 										<tbody name="applicantsTable" id="applicantsTable">
 											<tr>
 												<td>资料来源</td>
-												<td>${obj.backmail.source }</td>
+												<td>${obj.source }</td>
 												<td>团队名称</td>
 												<td>${obj.backmail.teamName }</td>
 											</tr>
 											<tr>
 												<td>回邮方式</td>
-												<td>${obj.backmail.expressType }</td>
+												<td>${obj.exprType }</td>
 											</tr>
 											<tr>
 												<td>联系人</td>
