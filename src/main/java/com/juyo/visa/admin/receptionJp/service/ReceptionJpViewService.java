@@ -374,8 +374,8 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 
 	//发送手机信息
 	public Object sendMessage(int orderid, int applicantid) throws IOException {
-		List<String> readLines = IOUtils
-				.readLines(getClass().getClassLoader().getResourceAsStream("reception_sms.txt"));
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
+				"receptiontemp/reception_sms.txt"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
