@@ -807,8 +807,9 @@ public class MobileService extends BaseService<TApplicantEntity> {
 
 	//保存回邮信息
 	public Object saveBackMailInfo(TApplicantBackmailJpForm form) {
-		Integer backmailId = form.getId();
+		Map<String, Object> result = Maps.newHashMap();
 
+		Integer backmailId = form.getId();
 		List<TApplicantBackmailJpEntity> before = dbDao.query(TApplicantBackmailJpEntity.class,
 				Cnd.where("id", "=", backmailId), null);
 		List<TApplicantBackmailJpEntity> after = new ArrayList<TApplicantBackmailJpEntity>();
@@ -838,7 +839,8 @@ public class MobileService extends BaseService<TApplicantEntity> {
 		after.add(backmail);
 
 		dbDao.updateRelations(before, after);
+		result.put("applicantId", form.getApplicantId());
 
-		return "BackMail Success";
+		return result;
 	}
 }

@@ -102,6 +102,11 @@ public class TApplicantBackmailJpEntity implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		TApplicantBackmailJpEntity other = (TApplicantBackmailJpEntity) obj;
+		if (applicantId == null) {
+			if (other.applicantId != null)
+				return false;
+		} else if (!applicantId.equals(other.applicantId))
+			return false;
 		if (expressAddress == null) {
 			if (other.expressAddress != null)
 				return false;
@@ -117,11 +122,6 @@ public class TApplicantBackmailJpEntity implements Serializable {
 				return false;
 		} else if (!expressType.equals(other.expressType))
 			return false;
-		if (invoiceMobile == null) {
-			if (other.invoiceMobile != null)
-				return false;
-		} else if (!invoiceMobile.equals(other.invoiceMobile))
-			return false;
 		if (invoiceAddress == null) {
 			if (other.invoiceAddress != null)
 				return false;
@@ -136,6 +136,11 @@ public class TApplicantBackmailJpEntity implements Serializable {
 			if (other.invoiceHead != null)
 				return false;
 		} else if (!invoiceHead.equals(other.invoiceHead))
+			return false;
+		if (invoiceMobile == null) {
+			if (other.invoiceMobile != null)
+				return false;
+		} else if (!invoiceMobile.equals(other.invoiceMobile))
 			return false;
 		if (linkman == null) {
 			if (other.linkman != null)
@@ -178,13 +183,14 @@ public class TApplicantBackmailJpEntity implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((applicantId == null) ? 0 : applicantId.hashCode());
 		result = prime * result + ((expressAddress == null) ? 0 : expressAddress.hashCode());
 		result = prime * result + ((expressNum == null) ? 0 : expressNum.hashCode());
 		result = prime * result + ((expressType == null) ? 0 : expressType.hashCode());
-		result = prime * result + ((invoiceMobile == null) ? 0 : invoiceMobile.hashCode());
 		result = prime * result + ((invoiceAddress == null) ? 0 : invoiceAddress.hashCode());
 		result = prime * result + ((invoiceContent == null) ? 0 : invoiceContent.hashCode());
 		result = prime * result + ((invoiceHead == null) ? 0 : invoiceHead.hashCode());
+		result = prime * result + ((invoiceMobile == null) ? 0 : invoiceMobile.hashCode());
 		result = prime * result + ((linkman == null) ? 0 : linkman.hashCode());
 		result = prime * result + ((remark == null) ? 0 : remark.hashCode());
 		result = prime * result + ((source == null) ? 0 : source.hashCode());

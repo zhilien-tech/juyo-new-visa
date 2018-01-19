@@ -12,8 +12,9 @@
 		<form id="backmail_wrapper">
 			<!--信息-->
 			<input id="id" name="id" type="hidden" v-model="backmailinfo.id">
-			<input id="orderProcessType" name="orderProcessType" type="hidden" v-model="backmailinfo.orderProcessType">
+			<input id="applicantId" name="applicantId" type="hidden" v-model="backmailinfo.applicantid">
 			<input id="applicantJPId" name="applicantJPId" type="hidden" v-model="backmailinfo.applicantjpid">
+			<input id="orderProcessType" name="orderProcessType" type="hidden" v-model="backmailinfo.orderProcessType">
 			<ul class="label-info labelMargin">
 			 	<li class="dataSource">
 			 		资料来源 
@@ -34,7 +35,7 @@
 			 			<span></span>
 			 			<i></i>
 			 		</span>
-			 		<select id="expressType" name="expressType" v-model="backmailinfo.expresstype"  class="backEmailSelect backEmailWaySelect">
+			 		<select id="expressType" name="expressType" v-model="backmailinfo.expresstype" class="backEmailSelect backEmailWaySelect">
 				 		<option value=1>快递</option>
 			 			<option value=2>自取</option>
 			 			<option value=3>使馆邮寄</option>
@@ -136,13 +137,32 @@
 			}
 		});
 		
+		//加载列表数据
+		function reloadData(applyid){
+			var url = '/admin/mobile/getBackMailInfo.html';
+			$.ajax({ 
+				url: url,
+				type:'post',
+				dataType:"json",
+				data:{
+					applicantId:applyid
+				},
+				success: function(data){
+					backMailObj.backmailinfo = data.backmailinfo;
+					backMailObj.mainBackMailTypes = data.mainBackMailTypeEnum;
+					backMailObj.mainSourceTypes = data.mainSourceTypeEnum;
+				}
+			});
+		}
+		
 		//保存回邮信息
 		function save(){
+			layer.load(1); //加载层
+			
 			backMailObj.backmailinfo.id = $("#id").val();
 			backMailObj.backmailinfo.orderProcessType = $("#orderProcessType").val();
-			backMailObj.backmailinfo.orderId = $("#orderId").val();
 			backMailObj.backmailinfo.applicantJPId = $("#applicantJPId").val();
-			backMailObj.backmailinfo.applicantId = applicantId;
+			backMailObj.backmailinfo.applicantId = $("#applicantId").val();;
 			backMailObj.backmailinfo.source = $("#source").val();
 			backMailObj.backmailinfo.expressNum = $("#expressNum").val();
 			backMailObj.backmailinfo.teamName = $("#teamName").val();
@@ -158,11 +178,18 @@
 			backMailObj.backmailinfo.remark = $("#remark").val();
 			var editdata = backMailObj.backmailinfo;
 			$.ajax({
-				url: '/admin/backMailJp/saveBackMailInfo.html',
+				url: '/admin/mobile/saveBackMailInfo.html',
 				dataType:"json",
 				data:editdata,
 				type:'post',
 				success: function(data){
+					if(data.applicantId>0){
+						reloadData(data.applicantId);
+						layer.msg("修改成功");
+					}else{
+						layer.msg("修改失败");
+					}
+					
 					layer.closeAll('loading');
 				}
 			});
