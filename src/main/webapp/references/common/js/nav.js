@@ -10,10 +10,11 @@ $(function(){
                 //展开未展开
                 $('.nav-item').children('ul').hide();
                 $(this).next('ul').show();
-                $(this).parent('li').addClass('nav-show').siblings('li').removeClass('nav-show');
+               
                 var subnav = $(this).next('ul').html();
                 if(subnav == "" || subnav == null || subnav == undefined){
                 	$('.navLi').removeClass('navLi');
+                	 $(this).parent('li').addClass('nav-show').siblings('li').removeClass('nav-show');
                 }
             }else{
                 //收缩已展开
@@ -35,6 +36,8 @@ $(function(){
     $(".navUl li").on('click',function(){
     	$('.navLi').removeClass('navLi');
     	$(this).addClass('navLi').siblings().removeClass('navLi');
+    	
+    	$(this).parent().parent().addClass("nav-show").siblings('li').removeClass('nav-show');
     });
     //nav-mini切换
     $('#mini').on('click',function(){

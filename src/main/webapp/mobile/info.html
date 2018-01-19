@@ -88,16 +88,17 @@
 		<div class="dialogTitle" >*请按照此规格使用相机照相以保持图片上传正确</div>
 		<div class="dialogImg" ></div>
 		<a class="closed" >确认</a>
+		<div class="hint">提示:此提示只显示一次</div>
 	</div>
 </div>
 <!-- 弹出层 2-->
-<div class="backgroundGray2">
+<!-- <div class="backgroundGray2">
 	<div class="dialog">
 		<div class="dialogTitle" >*请按照此规格使用相机照相以保持图片上传正确</div>
 		<div class="dialogImg2" ></div>
 		<a class="closed2" >确认</a>
 	</div>
-</div>
+</div> -->
 </form>
 <script type="text/javascript" src="js/lCalendar.min.js"></script><!-- 日历插件 .js -->
 <script src="/references/common/js/vue/vue.min.js"></script>
@@ -180,8 +181,8 @@
             	var that = this;
                 lrz(this.files[0])
                     .then(function (rst) {
-                        /* $('.bacimg').attr('src',rst.base64);
-                        $('#upload').hide(); */
+                        /* $('.bacimg').attr('src',rst.base64);*/
+                        $('#upload').hide(); 
                          sourceSize = (that.files[0].size / 1024).toFixed(2);
                         resultSize = (rst.fileLen / 1024).toFixed(2);
                         scale = parseInt(100 - (resultSize / sourceSize * 100));
@@ -200,36 +201,32 @@
             });
         });
         $('#upload2').click(function () {
-        	$(".backgroundGray2").show();
-        });
-        $(".closed2").click(function(){
-        	$(".backgroundGray2").hide();
-        	 $('#image2').click();
-             $('#image2').change(function(){
-             	layer.load(1, {
-         			shade : "#000"
-         		});
-             	var that = this;
-                 lrz(this.files[0])
-                     .then(function (rst) {
-                         /* $('.bacimg2').attr('src',rst.base64);
-                         $('#upload2').hide(); */
-                         // 处理成功会执行
-                         sourceSize = (that.files[0].size / 1024).toFixed(2);
-                         resultSize = (rst.fileLen / 1024).toFixed(2);
-                         scale = parseInt(100 - (resultSize / sourceSize * 100));
-                         rst.formData.append('image',rst.file);
-                         /* alert(rst);
-                         alert(JSON.stringify(rst.formData));
-                         alert(rst.file);
-                         alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);  */
-                         //alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-                         uploadBack(rst,rst.formData); 
-                     })
-                     .catch(function (err) {
-                         console.log(err);
-                     });
-             });
+       	 	$('#image2').click();
+            $('#image2').change(function(){
+            	layer.load(1, {
+        			shade : "#000"
+        		});
+            	var that = this;
+                lrz(this.files[0])
+                    .then(function (rst) {
+                        /* $('.bacimg2').attr('src',rst.base64);*/
+                        $('#upload2').hide(); 
+                        // 处理成功会执行
+                        sourceSize = (that.files[0].size / 1024).toFixed(2);
+                        resultSize = (rst.fileLen / 1024).toFixed(2);
+                        scale = parseInt(100 - (resultSize / sourceSize * 100));
+                        rst.formData.append('image',rst.file);
+                        /* alert(rst);
+                        alert(JSON.stringify(rst.formData));
+                        alert(rst.file);
+                        alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);  */
+                        //alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+                        uploadBack(rst,rst.formData); 
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            });
         });
         //开关
         $(".consistent").click(function(){
