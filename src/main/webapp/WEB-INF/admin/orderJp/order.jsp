@@ -36,7 +36,6 @@
 			.col-sm-1 { width:11.5% !important;}
 			.select2 { width:100% !important;}
 			[v-cloak]{display:none;}
-
 		</style>
 	</head>
 
