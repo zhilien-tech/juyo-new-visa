@@ -659,6 +659,63 @@ $(".schedulingBtn").click(function(){
 			}
 		}
 	});
+	//保存出行信息
+	orderobj.travelinfo.goDate = $('#goDate').val();
+	orderobj.travelinfo.returnDate = $('#returnDate').val();
+	//多程信息
+	var multiways = [];
+	$('.duochengdiv').each(function(index,name){
+		var multiway = {};
+		//出发日期
+		var departuredate = $(this).find('[name=departuredate]').val();
+		var isnull = departuredate;
+		multiway.departureDate = departuredate;
+		//出发城市
+		var departurecity = $(this).find('[name=departurecity]').val();
+		if (departurecity) {
+			departurecity = departurecity.join(',');
+			isnull += '111';
+		}else{
+			departurecity = '';
+			isnull += '';
+		}
+		multiway.departureCity = departurecity;
+		//抵达城市
+		var arrivedcity = $(this).find('[name=arrivedcity]').val();
+		if (arrivedcity) {
+			arrivedcity = arrivedcity.join(',');
+			isnull += '111';
+		}else{
+			arrivedcity = '';
+			isnull += '';
+		}
+		multiway.arrivedCity = arrivedcity;
+		// 航班号
+		var flightnum = $(this).find('[name=flightnum]').val();
+		if (flightnum) {
+			flightnum = flightnum.join(',');
+			isnull += '111';
+		}else{
+			flightnum = '';
+			isnull += '';
+		}
+		multiway.flightNum = flightnum;
+		if(isnull){
+			multiways.push(multiway);
+		}
+	});
+	var editdata = {};
+	editdata.travelinfo = JSON.stringify(orderobj.travelinfo);
+	editdata.multiways = JSON.stringify(multiways);
+	editdata.orderid = orderid;
+	$.ajax({ 
+		url: BASE_PATH + '/admin/visaJapan/saveJpVisaTravelInfo.html',
+		dataType:"json",
+		data:editdata,
+		type:'post',
+		success: function(data){
+		}
+	}); 
 });
 
 function downLoadFile(){
