@@ -64,14 +64,14 @@
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
 							</div>
-							<div class="date-info">
+							<div class="">
 								<label>当前状态</label>
 								<!-- <span>初审合格</span> -->
 								<c:if test="${'不合格' != obj.applicant.applicantstatus }">
-									<span><a href="javascript: void(0);">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
+									<span><a href="javascript: void(0);" style="color:#656565;">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
 								</c:if>
 								<c:if test="${'不合格' == obj.applicant.applicantstatus  }">
-									<span><a href="javascript: void(0);" onclick="editUnqualified(${obj.indexOfPage})">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
+									<span><a href="javascript: void(0);" style="color:#2a7be5;" onclick="editUnqualified(${obj.indexOfPage})">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
 								</c:if>
 							</div>
 							
@@ -120,28 +120,6 @@
 								<div class="vertical"></div>
 							</div>
 							<div class="date-info">
-								<label>预计发招宝时间</label>
-								<span><label>${obj.prepareDate }</label></span>
-							</div>
-							
-						</li>
-						<li style="display:none">
-							<div class="circle blue">
-								<div class="circle-outside blue"><i></i></div>
-								<div class="vertical"></div>
-							</div>
-							<div class="date-info">
-								<label>已发招宝</label>
-								<span></span>
-							</div>
-							
-						</li>
-						<li style="display:none">
-							<div class="circle blue">
-								<div class="circle-outside blue"><i></i></div>
-								<div class="vertical"></div>
-							</div>
-							<div class="date-info">
 								<label>预计送签时间</label>
 								<span><label>${obj.sendVisaDate }</label></span>
 							</div>
@@ -163,8 +141,68 @@
 								<div class="vertical"></div>
 							</div>
 							<div class="date-info">
-								<label>签证已返回，预计邮寄时间</label>
-								<span><label>1-3个工作日</label></span>
+								<label>签证已返回</label>
+								<span></span>
+							</div>
+						</li>
+						<li style="display:none">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+								<div class="vertical"></div>
+							</div>
+							<div class="date-info">
+								<label>回邮地址</label>
+								<c:if test="${null != obj.backmail }">
+									<span>
+									
+									<table id="principalApplicantTable" class="">
+										<tbody name="applicantsTable" id="applicantsTable">
+											<tr>
+												<td>资料来源</td>
+												<td>${obj.backmail.source }</td>
+												<td>团队名称</td>
+												<td>${obj.backmail.teamName }</td>
+											</tr>
+											<tr>
+												<td>回邮方式</td>
+												<td>${obj.backmail.expressType }</td>
+											</tr>
+											<tr>
+												<td>联系人</td>
+												<td>${obj.backmail.linkman }</td>
+												<td>电话</td>
+												<td>${obj.backmail.telephone }</td>
+											</tr>
+											<tr>
+												<td>回邮地址</td>
+												<td>${obj.backmail.expressAddress }</td>
+											</tr>
+											<tr>
+												<td>发票项目内容</td>
+												<td>${obj.backmail.invoiceContent }</td>
+												<td>发票抬头</td>
+												<td>${obj.backmail.invoiceHead }</td>
+											</tr>
+											<tr>
+												<td>地址</td>
+												<td>${obj.backmail.invoiceAddress }</td>
+												<td>电话</td>
+												<td>${obj.backmail.invoiceMobile }</td>
+											</tr>
+											<tr>
+												<td>税号</td>
+												<td>${obj.backmail.taxNum }</td>
+												<td>备注</td>
+												<td>${obj.backmail.remark }</td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<a href="javascript: void(0);" onclick="backmail(${obj.applicant.applicantid })">修改</a></span>
+								</c:if>
+								<c:if test="${null == obj.backmail}">
+									<span><a href="javascript: void(0);" onclick="backmail(${obj.applicant.applicantid })">填写</a></span>
+								</c:if>
 							</div>
 						</li>
 						<li style="display:none">
@@ -173,7 +211,7 @@
 								<!-- <div class="vertical"></div> -->
 							</div>
 							<div class="date-info">
-								<label>资料已发出，查看物流</label>
+								<label>资料已寄出</label>
 								<span></span>
 							</div>
 						</li>
@@ -222,7 +260,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '551px'],
-					content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+'&isTrial=0'
+					content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+'&isTrial=0&flowChart=1'
 				});
 			}
 			
@@ -239,18 +277,33 @@
 					content:'/admin/myVisa/youkeExpressInfo.html?applicantId='+applyId+'&orderId='+orderId
 				});
 			}
+			//回邮信息
+			function backmail(applyId){
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['900px', '80%'],
+					content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&orderId=${obj.orderid}&isAfterMarket=0&orderProcessType=1&flowChart=1'
+
+				});
+			}
 			
 			function editUnqualified(indexOfPage){
 				var url = "";
 				if(indexOfPage == 1){
 					//基本信息
-					url = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid='+orderId+'&isTrial=0'
+					url = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid='+orderId+'&isTrial=0&addApply=2'
 				}else if(indexOfPage == 2){
 					//护照信息
-					url = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderId+'&isTrial=0'
+					url = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderId+'&isTrial=0&addApply=2'
 				}else{
 					//签证信息
-					url = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderId+'&isOrderUpTime=0&isTrial=0'
+					url = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderId+'&isOrderUpTime=0&isTrial=0&addApply=2'
 				}
 				layer.open({
 					type: 2,
@@ -272,8 +325,8 @@
 				}else if(status == 3){
 					layer.msg('操作失败');
 				}
-				
-				$.ajax({ 
+				window.location.reload();
+				/* $.ajax({ 
 					url: '/admin/myVisa/flowChart.html',
 					data:{
 						orderid:orderId,
@@ -284,7 +337,7 @@
 					success: function(data){
 						_self.myVisaData = data.myVisaData;
 					}
-				});
+				}); */
 			}
 			function cancelCallBack(status){
 				successCallBack(4);

@@ -95,6 +95,7 @@
 									<input type="hidden" id="OCRline2" name="OCRline2" value="">
 									<input type="hidden" name="userType" value="${obj.userType }"/>
 									<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
+									<input type="hidden"  name="addApply" value="${obj.addApply }"/>
 									<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
@@ -898,6 +899,15 @@
 												});
 												
 											}
+										}else{
+											layer.msg("修改成功", {
+												time: 1000,
+												end: function () {
+													var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+													parent.layer.close(index);
+													parent.successCallBack();
+												}
+											});
 										}
 									}
 								}

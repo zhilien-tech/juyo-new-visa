@@ -105,8 +105,8 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			//判断是否有统一联系人
 			Integer sameLinker = (Integer) record.get("isSameLinker");
 			//资料类型
-			Integer ostatus = (Integer) record.get("orderstatus");
-			for (JPOrderStatusEnum jpos : JPOrderStatusEnum.values()) {
+			Integer ostatus = (Integer) record.get("applystatus");
+			for (TrialApplicantStatusEnum jpos : TrialApplicantStatusEnum.values()) {
 				if (!Util.isEmpty(ostatus) && ostatus.equals(jpos.intKey())) {
 					record.put("orderstatus", jpos.value());
 				}
@@ -332,6 +332,13 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		}
 		result.put("sendVisaDate", svDate);
 
+		//回邮信息
+		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		TApplicantBackmailJpEntity backmailJpEntity = dbDao.fetch(TApplicantBackmailJpEntity.class,
+				Cnd.where("applicantId", "=", applyJp.getId()));
+		result.put("backmail", backmailJpEntity);
+
 		//进度隐藏页
 		int indexOfBlue = getIndexOfBlue(order, applicantid);
 		result.put("indexOfBlue", indexOfBlue);
@@ -426,24 +433,21 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		} else if (status == JPOrderStatusEnum.RECEPTION_RECEIVED.intKey()) {
 			//前台已收件
 			indexOfBlue = 5;
-			//预计发招宝时间
-			indexOfBlue = 6;
-		} else if (status == JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey()) {
-			//已发招宝
-			indexOfBlue = 7;
-			//预计送签时间
-			if (!Util.isEmpty(sendVisaDate)) {
-				indexOfBlue = 8;
-			}
-			//资料已进入使馆
-			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderid));
-			Date deliveryDate = orderJpEntity.getDeliveryDataTime();
-			if (!Util.isEmpty(deliveryDate)) {
-				indexOfBlue = 9;
-			}
 		} else if (status >= JPOrderStatusEnum.VISA_ORDER.intKey()
 				&& status < JPOrderStatusEnum.AFTERMARKET_ORDER.intKey()) {
-			indexOfBlue = 9;
+			indexOfBlue = 5;
+			if (status == JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey()) {
+				//预计送签时间
+				if (!Util.isEmpty(sendVisaDate)) {
+					indexOfBlue = 6;
+				}
+				//资料已进入使馆
+				TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderid));
+				Date deliveryDate = orderJpEntity.getDeliveryDataTime();
+				if (!Util.isEmpty(deliveryDate)) {
+					indexOfBlue = 7;
+				}
+			}
 			//签证已返回
 			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", applicantid));
@@ -452,19 +456,30 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(applicantVisaJpEntity)) {
 				Date visaEntryTime = applicantVisaJpEntity.getVisaEntryTime();
 				if (!Util.isEmpty(visaEntryTime)) {
-					indexOfBlue = 10;
+					indexOfBlue = 8;
 				}
 			}
 		} else if (status >= JPOrderStatusEnum.AFTERMARKET_ORDER.intKey()) {
-			indexOfBlue = 10;
-			//售后，回邮资料
+			//到售后就有回邮信息
+			indexOfBlue = 9;
+			/*//售后，回邮资料
 			TApplicantBackmailJpEntity backmailJpEntity = dbDao.fetch(TApplicantBackmailJpEntity.class,
 					Cnd.where("applicantId", "=", applicantid));
-			indexOfBlue = 10;
 			if (!Util.isEmpty(backmailJpEntity)) {
 				Date backSourceTime = backmailJpEntity.getBackSourceTime();
 				if (!Util.isEmpty(backSourceTime)) {
-					indexOfBlue = 11;
+					indexOfBlue = 9;
+				}
+			}*/
+			//如果工作人员点了回邮发送，则进入资料已寄出状态
+			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", applicantid));
+			TApplicantBackmailJpEntity backmailJpEntity = dbDao.fetch(TApplicantBackmailJpEntity.class,
+					Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()));
+			if (!Util.isEmpty(backmailJpEntity)) {
+				Date backSourceTime = backmailJpEntity.getBackSourceTime();
+				if (!Util.isEmpty(backSourceTime)) {
+					indexOfBlue = 10;
 				}
 			}
 		}

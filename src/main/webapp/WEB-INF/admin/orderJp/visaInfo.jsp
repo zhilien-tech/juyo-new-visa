@@ -58,6 +58,7 @@
 				<input type="hidden" value="${obj.visaInfo.applicantId }" name="applicantId"/>
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
+				<input type="hidden" value="${obj.addApply }" name="addApply"/>
 				<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
@@ -476,39 +477,7 @@
 									message : '地址不能为空'
 								}
 							}
-						}/* ,
-						deposit : {
-							trigger:"change keyup",
-							validators : {
-								notEmpty : {
-									message : '银行存款不能为空'
-								}
-							}
-						},
-						vehicle : {
-							trigger:"change keyup",
-							validators : {
-								notEmpty : {
-									message : '车产不能为空'
-								}
-							}
-						},
-						houseProperty : {
-							trigger:"change keyup",
-							validators : {
-								notEmpty : {
-									message : '房产不能为空'
-								}
-							}
-						},
-						financial : {
-							trigger:"change keyup",
-							validators : {
-								notEmpty : {
-									message : '理财不能为空'
-								}
-							}
-						}, */
+						}
 					}
 				});
 			}
@@ -530,9 +499,9 @@
 			
 			var marry = $("#marryUrl").val();
 			if(marry != ""){
-				$("#uploadFile").siblings("i").css("display","block");
+				$(".delete").css("display","block");
 			}else{
-				$("#uploadFile").siblings("i").css("display","none");
+				$(".delete").css("display","none");
 			}
 			
 			//婚姻状况为单身和丧偶时没有上传图片接口
@@ -1142,6 +1111,15 @@
 												});
 												
 											}
+										}else{
+											layer.msg("修改成功", {
+												time: 1000,
+												end: function () {
+													var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+													parent.layer.close(index);
+													parent.successCallBack();
+												}
+											});
 										}
 									}
 								}

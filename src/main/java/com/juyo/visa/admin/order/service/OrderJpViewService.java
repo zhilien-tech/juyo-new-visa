@@ -1079,6 +1079,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				qualifiedApplicantViewService.unQualified(applicant.getId(), orderJpEntity.getOrderId(), baseRemark,
 						ApplicantInfoTypeEnum.BASE.intKey(), session);
 			}
+
+			//由游客不合格入口进入保存,变更游客状态为修改完成
+			if (!Util.isEmpty(applicantForm.getAddApply())) {
+				if (Util.eq(applicantForm.getAddApply(), 2)) {
+					applicant.setStatus(TrialApplicantStatusEnum.FillCompleted.intKey());
+					dbDao.update(applicant);
+				}
+			}
 		}
 
 		Integer orderProcessType = applicantForm.getOrderProcessType();
@@ -1316,6 +1324,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicantEntity.setMarryStatus(visaForm.getMarryStatus());
 			applicantEntity.setMarryUrl(visaForm.getMarryUrl());
 			applicantEntity.setMarryurltype(visaForm.getMarryStatus());
+			if (!Util.isEmpty(visaForm.getAddApply())) {
+				if (Util.eq(visaForm.getAddApply(), 2)) {
+					applicantEntity.setStatus(TrialApplicantStatusEnum.FillCompleted.intKey());
+				}
+			}
 			//主申请人
 			if (!Util.isEmpty(applicantEntity.getMainId())) {
 				TApplicantEntity mainApplicant = dbDao.fetch(TApplicantEntity.class,
@@ -2205,6 +2218,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", passportForm.getApplicantId()));
 			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
+			//游客不合格入口进入，改变申请人状态为修改完毕
+			if (!Util.isEmpty(passportForm.getAddApply())) {
+				if (Util.eq(passportForm.getAddApply(), 2)) {
+					apply.setStatus(TrialApplicantStatusEnum.FillCompleted.intKey());
+					dbDao.update(apply);
+				}
+			}
 			String passRemark = passportForm.getPassRemark();
 			if (!Util.isEmpty(passRemark)) {
 				qualifiedApplicantViewService.unQualified(passportForm.getApplicantId(), orderJpEntity.getOrderId(),

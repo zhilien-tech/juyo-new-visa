@@ -181,6 +181,7 @@
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
 										<input type="hidden" name="userType" value="${obj.userType }"/>
+										<input type="hidden" name="addApply" value="${obj.addApply }"/>
 										<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 										<input type="hidden" name="orderProcessType" value="${obj.orderProcessType }"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
@@ -1741,7 +1742,7 @@
 							    								end: function () {
 							    									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 							    									parent.layer.close(index);
-							    									parent.successCallBack();
+							    									parent.successCallBack(8);
 							    								}
 							    							});
 					    								}
@@ -1784,7 +1785,7 @@
 						    									end: function () {
 						    										var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						    										parent.layer.close(index);
-						    										parent.successCallBack();
+						    										parent.successCallBack(8);
 						    									}
 						    								});
 														}
@@ -1845,7 +1846,7 @@
 																end: function () {
 																	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 																	parent.layer.close(index);
-																	parent.successCallBack();
+																	parent.successCallBack(8);
 																}
 															});
 														}
@@ -1875,7 +1876,7 @@
 																end: function () {
 																	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 																	parent.layer.close(index);
-																	parent.successCallBack();
+																	parent.successCallBack(8);
 																}
 															});
 														}
@@ -1884,7 +1885,14 @@
 												
 											}
 										}else{//没改变不需要保存
-											
+											layer.msg("修改成功", {
+												time: 1000,
+												end: function () {
+													var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+													parent.layer.close(index);
+													parent.successCallBack(8);
+												}
+											});
 										}
 									}
 									
