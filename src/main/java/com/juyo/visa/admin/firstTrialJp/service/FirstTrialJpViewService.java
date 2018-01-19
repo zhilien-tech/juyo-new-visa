@@ -830,12 +830,12 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 
 		//发送短信、邮件
-		try {
+		/*try {
 			sendMail(orderid, orderjpid, shareType, shareManIds);
 			sendMessage(orderid, orderjpid, shareType, shareManIds);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 
 		//添加日志记录  订单已发地址
 		int send_address = JPOrderStatusEnum.SEND_ADDRESS.intKey();
@@ -845,6 +845,21 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		changePrincipalViewService.ChangePrincipal(orderid, FIRSTTRIAL_PROCESS, userId);
 
 		return "SUCCESS";
+	}
+
+	/**
+	 * 初审 快递发送短信邮件
+	 */
+	public Object sendExpressMsg(Integer orderid, Integer orderjpid, Integer shareType, String shareManIds) {
+		//发送短信、邮件
+		try {
+			sendMail(orderid, orderjpid, shareType, shareManIds);
+			sendMessage(orderid, orderjpid, shareType, shareManIds);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	/**
@@ -1467,7 +1482,6 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		//订单收件人信息
 		Record orderReceive = (Record) getReceiverByOrderid(orderid);
-		String expressType = orderReceive.getString("expressType");
 		String receiver = orderReceive.getString("receiver");
 		String mobile = orderReceive.getString("telephone");
 		String address = orderReceive.getString("expressAddress");

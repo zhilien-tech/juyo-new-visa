@@ -194,6 +194,16 @@ public class FirstTrialJpModule {
 	}
 
 	/**
+	 * 初审 快递发送短信邮件
+	 */
+	@At
+	@POST
+	public Object sendExpressMsg(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid,
+			@Param("sharetype") Integer sharetype, @Param("shareManIds") String shareManIds) {
+		return firstTrialJpViewService.sendExpressMsg(orderid, orderjpid, sharetype, shareManIds);
+	}
+
+	/**
 	 * 保存初审详情数据
 	 */
 	@At
