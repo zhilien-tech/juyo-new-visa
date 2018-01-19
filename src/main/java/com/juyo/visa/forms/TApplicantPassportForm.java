@@ -110,6 +110,8 @@ public class TApplicantPassportForm extends DataTablesParamForm {
 
 	private String OCRline2;
 
+	private Integer addApply;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**

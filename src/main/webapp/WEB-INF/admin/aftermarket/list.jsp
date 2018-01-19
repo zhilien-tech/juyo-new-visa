@@ -67,7 +67,7 @@
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>	
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
-								<div><label></label><span style="font-size:16px;font-weight:bold;">售后</span></div>	
+								<div><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span></div>	
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="(item,index) in data.applicats">

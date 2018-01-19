@@ -43,8 +43,9 @@ public class BackMailJpModule {
 	@GET
 	@Ok("jsp")
 	public Object backMailInfo(@Param("applicantId") Integer applicantId, @Param("orderId") Integer orderId,
-			@Param("isAfterMarket") Integer isAfterMarket, @Param("orderProcessType") Integer orderProcessType) {
-		return backMailViewService.backMailInfo(applicantId, orderId, isAfterMarket, orderProcessType);
+			@Param("isAfterMarket") Integer isAfterMarket, @Param("orderProcessType") Integer orderProcessType,
+			@Param("flowChart") Integer flowChart) {
+		return backMailViewService.backMailInfo(applicantId, orderId, isAfterMarket, orderProcessType, flowChart);
 	}
 
 	/**
@@ -61,7 +62,8 @@ public class BackMailJpModule {
 	 */
 	@At
 	@POST
-	public Object saveBackMailInfo(@Param("..") TApplicantBackmailJpForm form, HttpSession session) {
-		return backMailViewService.saveBackMailInfo(form, session);
+	public Object saveBackMailInfo(@Param("..") TApplicantBackmailJpForm form, @Param("flowChart") int flowChart,
+			HttpSession session) {
+		return backMailViewService.saveBackMailInfo(form, flowChart, session);
 	}
 }
