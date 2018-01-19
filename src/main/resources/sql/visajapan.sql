@@ -42,7 +42,8 @@ SELECT
 	ta.telephone,
 	ta.email,
 	tavpj.type dataType,
-	tavpj. DATA DATA,
+	tavpj.blue blue,
+	tavpj.black black,
 	tavpj. STATUS STATUS
 FROM
 	t_applicant_order_jp taoj
@@ -55,9 +56,7 @@ LEFT JOIN (
 		GROUP_CONCAT(
 			(
 				CASE
-				WHEN STATUS = 0 THEN
-						realInfo
-				ELSE
+				WHEN STATUS = 1 THEN
 					CONCAT(
 						'<font color="blue">',
 						realInfo,
@@ -65,7 +64,16 @@ LEFT JOIN (
 					)
 				END
 			) SEPARATOR '、'
-		) DATA,
+		) blue,
+		GROUP_CONCAT(
+			(
+				CASE
+				WHEN STATUS = 0 THEN
+						realInfo
+				END
+			) SEPARATOR '、'
+		)
+		black,
 		STATUS
 	FROM
 		t_applicant_visa_paperwork_jp
@@ -99,7 +107,8 @@ SELECT
 	ta.mainid,
 	tap.passport,
 	tavpj.type,
-	tavpj.realInfo,
+	tavpj.blue,
+	tavpj.black,
 	taoj.mainRelation,
 	taoj.relationRemark,
 	tae.expressType,
@@ -116,9 +125,7 @@ LEFT JOIN (
 		GROUP_CONCAT(
 			(
 				CASE
-				WHEN STATUS = 0 THEN
-						realInfo
-				ELSE
+				WHEN STATUS = 1 THEN
 					CONCAT(
 						'<font color="blue">',
 						realInfo,
@@ -126,7 +133,16 @@ LEFT JOIN (
 					)
 				END
 			) SEPARATOR '、'
-		) realInfo
+		) blue,
+		GROUP_CONCAT(
+			(
+				CASE
+				WHEN STATUS = 0 THEN
+						realInfo
+				END
+			) SEPARATOR '、'
+		)
+		black
 	FROM
 		t_applicant_visa_paperwork_jp
 	GROUP BY

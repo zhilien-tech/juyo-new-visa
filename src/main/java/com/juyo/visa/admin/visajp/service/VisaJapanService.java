@@ -40,6 +40,7 @@ import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
 import com.juyo.visa.admin.visajp.form.PassportForm;
+import com.juyo.visa.admin.visajp.form.SaveTravelForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.admin.visajp.util.TemplateUtil;
@@ -155,6 +156,25 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 						apply.put("dataType", dataTypeEnum.value());
 					}
 				}
+				String data = "";
+				String blue = "";
+				if (!Util.isEmpty(apply.get("blue"))) {
+					blue = (String) apply.get("blue");
+				}
+				String black = "";
+				if (!Util.isEmpty(apply.get("black"))) {
+					black = (String) apply.get("black");
+				}
+				if (Util.isEmpty(blue)) {
+					data = black;
+				} else {
+					data = blue;
+					if (!Util.isEmpty(black)) {
+						data += "、";
+						data += black;
+					}
+				}
+				apply.put("data", data);
 			}
 			record.put("everybodyInfo", query);
 			//签证状态
@@ -242,6 +262,25 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 					record.put("type", visadatatype.value());
 				}
 			}
+			String data = "";
+			String blue = "";
+			if (!Util.isEmpty(record.get("blue"))) {
+				blue = (String) record.get("blue");
+			}
+			String black = "";
+			if (!Util.isEmpty(record.get("black"))) {
+				black = (String) record.get("black");
+			}
+			if (Util.isEmpty(blue)) {
+				data = black;
+			} else {
+				data = blue;
+				if (!Util.isEmpty(black)) {
+					data += "、";
+					data += black;
+				}
+			}
+			record.put("realinfo", data);
 		}
 		result.put("applyinfo", applyinfo);
 		//行程安排
@@ -481,16 +520,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 					travel.setReturnFlightNum(null);
 				}
 				//更新缓存数据
-				tripAirlineService.updateFlightByCache(godeparturecity, goarrivedcity);
-				tripAirlineService.updateFlightByCache(returndeparturecity, returnarrivedcity);
 			} else if (triptype.equals(2) && !Util.isEmpty(multiways)) {
 				//多程信息
 				ordertriplist = JsonUtil.fromJsonAsList(TOrderTripMultiJpEntity.class, multiways);
-				for (TOrderTripMultiJpEntity tOrderTripMultiJpEntity : ordertriplist) {
-					//多程更新数据库数据
-					tripAirlineService.updateFlightByCache(tOrderTripMultiJpEntity.getDepartureCity(),
-							tOrderTripMultiJpEntity.getArrivedCity());
-				}
 			}
 		} else {
 			travel.setTripType(null);
@@ -1353,7 +1385,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		List<TCompanyEntity> songqianlist = Lists.newArrayList();
 		//送签社下拉
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
-			songqianlist = dbDao.query(TCompanyEntity.class, Cnd.where("adminId", "=", loginUser.getId()), null);
+			songqianlist = dbDao
+					.query(TCompanyEntity.class, Cnd.where("adminId", "=", loginCompany.getAdminId()), null);
 		} else {
 			TCompanyEntity songqian = dbDao.fetch(TCompanyEntity.class, orderjp.getSendsignid().longValue());
 			songqianlist.add(songqian);
@@ -1469,6 +1502,25 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 					record.put("type", visadatatype.value());
 				}
 			}
+			String data = "";
+			String blue = "";
+			if (!Util.isEmpty(record.get("blue"))) {
+				blue = (String) record.get("blue");
+			}
+			String black = "";
+			if (!Util.isEmpty(record.get("black"))) {
+				black = (String) record.get("black");
+			}
+			if (Util.isEmpty(blue)) {
+				data = black;
+			} else {
+				data = blue;
+				if (!Util.isEmpty(black)) {
+					data += "、";
+					data += black;
+				}
+			}
+			record.put("realinfo", data);
 		}
 		result.put("applyinfo", applyinfo);
 		return result;
@@ -1562,5 +1614,119 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		} else {
 			return new JuYouResult(500, company.getName() + "的指定番号不能为空", null);
 		}
+	}
+
+	/**
+	 * 保存出行信息
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param travelinfo
+	 * @param multiways
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object saveJpVisaTravelInfo(SaveTravelForm form, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		//出行信息
+		@SuppressWarnings("unchecked")
+		Map<String, Object> travelmap = JsonUtil.fromJson(form.getTravelinfo(), Map.class);
+		//Integer id = Integer.valueOf((String) travelmap.get("id"));
+		//出行信息是否存在
+		TOrderTripJpEntity travel = !Util.isEmpty(travelmap.get("id")) ? dbDao.fetch(TOrderTripJpEntity.class,
+				Long.valueOf((String) travelmap.get("id"))) : new TOrderTripJpEntity();
+		//travel = dbDao.fetch(TOrderTripJpEntity.class, (Integer.valueOf(travelmap.get("id"))).longValue());
+		travel.setTripPurpose(String.valueOf(travelmap.get("trippurpose")));
+		String godatestr = String.valueOf(travelmap.get("goDate"));
+		List<TOrderTripMultiJpEntity> ordertriplist = new ArrayList<TOrderTripMultiJpEntity>();
+		Integer triptype = null;
+		if (!Util.isEmpty(travelmap.get("triptype"))) {
+			triptype = Integer.valueOf(String.valueOf(travelmap.get("triptype")));
+			travel.setTripType(triptype);
+			if (triptype.equals(1)) {
+				if (!Util.isEmpty(travelmap.get("goDate"))) {
+					Date godate = DateUtil.string2Date(godatestr, DateUtil.FORMAT_YYYY_MM_DD);
+					travel.setGoDate(godate);
+				} else {
+					travel.setGoDate(null);
+				}
+				String returndatestr = String.valueOf(travelmap.get("returnDate"));
+				if (!Util.isEmpty(travelmap.get("returnDate"))) {
+					Date returndate = DateUtil.string2Date(returndatestr, DateUtil.FORMAT_YYYY_MM_DD);
+					travel.setReturnDate(returndate);
+				} else {
+					travel.setReturnDate(null);
+				}
+				//去程出发城市
+				Integer godeparturecity = null;
+				if (!Util.isEmpty(travelmap.get("godeparturecity"))) {
+					godeparturecity = Integer.valueOf(String.valueOf(travelmap.get("godeparturecity")));
+					travel.setGoDepartureCity(godeparturecity);
+				} else {
+					travel.setGoDepartureCity(null);
+				}
+				//去程抵达城市
+				Integer goarrivedcity = null;
+				if (!Util.isEmpty(travelmap.get("goarrivedcity"))) {
+					goarrivedcity = Integer.valueOf(String.valueOf(travelmap.get("goarrivedcity")));
+					travel.setGoArrivedCity(goarrivedcity);
+				} else {
+					travel.setGoArrivedCity(null);
+				}
+				if (!Util.isEmpty(travelmap.get("goflightnum"))) {
+					travel.setGoFlightNum(String.valueOf(travelmap.get("goflightnum")));
+				} else {
+					travel.setGoFlightNum(null);
+				}
+				//回程出发城市
+				Integer returndeparturecity = null;
+				if (!Util.isEmpty(travelmap.get("returndeparturecity"))) {
+					returndeparturecity = Integer.valueOf(String.valueOf(travelmap.get("returndeparturecity")));
+					travel.setReturnDepartureCity(returndeparturecity);
+				} else {
+					travel.setReturnDepartureCity(null);
+				}
+				Integer returnarrivedcity = null;
+				if (!Util.isEmpty(travelmap.get("returnarrivedcity"))) {
+					returnarrivedcity = Integer.valueOf(String.valueOf(travelmap.get("returnarrivedcity")));
+					travel.setReturnArrivedCity(returnarrivedcity);
+				} else {
+					travel.setReturnArrivedCity(null);
+				}
+				if (!Util.isEmpty(travelmap.get("returnflightnum"))) {
+					travel.setReturnFlightNum(String.valueOf(travelmap.get("returnflightnum")));
+				} else {
+					travel.setReturnFlightNum(null);
+				}
+				//更新缓存数据
+			} else if (triptype.equals(2) && !Util.isEmpty(form.getMultiways())) {
+				//多程信息
+				ordertriplist = JsonUtil.fromJsonAsList(TOrderTripMultiJpEntity.class, form.getMultiways());
+			}
+		} else {
+			travel.setTripType(null);
+		}
+		Integer tripid = null;
+		//保存出行信息
+		if (Util.isEmpty(travelmap.get("id"))) {
+			travel.setOpId(loginUser.getId());
+			travel.setCreateTime(new Date());
+			travel.setOrderId(form.getOrderid());
+			TOrderTripJpEntity insert = dbDao.insert(travel);
+			tripid = insert.getId();
+		} else {
+			travel.setUpdateTime(new Date());
+			dbDao.update(travel);
+			tripid = Integer.valueOf((String) travelmap.get("id"));
+		}
+		for (TOrderTripMultiJpEntity tripMultiJp : ordertriplist) {
+			tripMultiJp.setTripid(tripid);
+		}
+		//保存多程信息
+		if (!Util.isEmpty(triptype) && triptype.equals(2)) {
+			List<TOrderTripMultiJpEntity> before = dbDao.query(TOrderTripMultiJpEntity.class,
+					Cnd.where("tripid", "=", tripid), null);
+			dbDao.updateRelations(before, ordertriplist);
+		}
+		return null;
 	}
 }

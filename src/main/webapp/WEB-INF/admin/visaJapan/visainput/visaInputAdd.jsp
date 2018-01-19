@@ -14,6 +14,7 @@
 	content="width=device-width, initial-scale=1, minimum-scale=1">
 <link rel="stylesheet"
 	href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet"
@@ -62,9 +63,11 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>签证国家：</label> <input id="visaCountry"
+								<label><span>*</span>签证国家：</label> <!-- <input id="visaCountry"
 						name="visaCountry" type="text" class="form-control input-sm"
-						placeholder=" " />
+						placeholder=" " /> -->
+								<select id="visaCountry" name="visaCountry" class="form-control input-sm select2" multiple="multiple">
+								</select>
 							</div>
 						</div>
 						<div class="col-sm-6">
@@ -103,13 +106,13 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>签发时间：</label> 
-								<input id="visaDate" name="visaDate"  type="text" class="form-control input-sm" placeholder=" " />
+								<input id="visaDate" name="visaDate"  type="text" class="form-control input-sm autoCalcToDate" placeholder=" " />
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>年限(年)：</label> 
-								<input id="visaYears" name="visaYears" type="text" class="form-control input-sm" placeholder=" " />
+								<input id="visaYears" name="visaYears" type="text" class="form-control input-sm autoCalcToDate" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -156,6 +159,9 @@
 	<!-- Bootstrap 3.3.6 -->
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
+	<!-- select2 -->
+	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script
 		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
@@ -246,11 +252,13 @@
 			// 执行表单验证 
 			bootstrapValidator.validate();
 			if (bootstrapValidator.isValid()) {
+				layer.load(1);
 				$.ajax({
 					type : 'POST',
 					data : $("#applicantvisaAddForm").serialize(),
 					url : '${base}/admin/visaJapan/visainput/add.html',
 					success : function(data) {
+						layer.closeAll('loading');
 						/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						layer.close(index);
 						window.parent.layer.msg("添加成功", "", 3000);
@@ -289,6 +297,7 @@
 		}
 		
 		$('#uploadFile').change(function(){
+			layer.load(1);
 			var file = this.files[0];
 			var reader = new FileReader();
 			reader.onload = function(e) {
@@ -306,6 +315,7 @@
 		          	//请求数据  
 		            data:formData ,
 		            success: function (obj) {//请求成功后的函数  
+		            	layer.closeAll('loading');
 		            	if('200' === obj.status){
 		            		$('#picUrl').val(obj.data);
 		            		$('#visapic').attr('src',obj.data);
@@ -313,6 +323,7 @@
 		            	}
 		            },  
 		            error: function (obj) {
+		            	layer.closeAll('loading');
 		            }
 		    	});  // end of ajaxSubmit
 			};
@@ -334,6 +345,73 @@
 			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
+		});
+		
+		
+		//国家下拉
+		$('#visaCountry').select2({
+			ajax : {
+				url : "/admin/visaJapan/visainput/getNationalSelect.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					return {
+						searchstr : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function (obj) {
+						//obj.id = obj.id; // replace pk with your identifier
+						obj.id = obj.chinesename; // replace pk with your identifier
+						obj.text = obj.chinesename;
+						/*obj.text = obj.dictCode;*/
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false //设置必须存在的选项 才能选中
+		});
+		
+		$('.autoCalcToDate').on('input',function(){
+			var visaDate = $('#visaDate').val();
+			if(!visaDate){
+				return;
+			}
+			var visaYears = $('#visaYears').val();
+			if(!visaYears){
+				return;
+			}
+			$.ajax({
+	            type: "POST",//提交类型  
+	            dataType: "json",//返回结果格式  
+	            url: '${base}/admin/visaJapan/visainput/autoCalcToDate.html',//请求地址  
+	            async: true,
+	          	//请求数据  
+	            data:{
+	            	visaDate:visaDate,
+	            	visaYears:visaYears
+	            },
+	            success: function (data) {//请求成功后的函数  
+	            	$('#validDate').val(data);
+	            },  
+	            error: function (obj) {
+	            }
+	    	});  // end of ajaxSubmit
 		});
 	</script>
 

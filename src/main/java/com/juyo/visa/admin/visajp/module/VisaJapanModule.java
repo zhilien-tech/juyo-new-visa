@@ -29,6 +29,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
 import com.juyo.visa.admin.visajp.form.PassportForm;
+import com.juyo.visa.admin.visajp.form.SaveTravelForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
 import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.admin.visajp.service.VisaJapanService;
@@ -381,5 +382,14 @@ public class VisaJapanModule {
 	@POST
 	public Object validateDesignNum(@Param("sendsignid") Integer sendsignid, HttpSession session) {
 		return visaJapanService.validateDesignNum(sendsignid, session);
+	}
+
+	/**
+	 * 保存出行信息
+	 */
+	@At
+	@POST
+	public Object saveJpVisaTravelInfo(@Param("..") SaveTravelForm form, HttpSession session) {
+		return visaJapanService.saveJpVisaTravelInfo(form, session);
 	}
 }
