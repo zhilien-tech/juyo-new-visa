@@ -98,7 +98,7 @@ public class VisaListDataForm implements SQLParamForm {
 
 		//订单权限
 		if (Util.isEmpty(orderAuthority)) {
-			orderAuthority = "allOrder";
+			orderAuthority = "myOrder";
 		}
 		if (orderAuthority.equals("allOrder")) {
 			//全部
