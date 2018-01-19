@@ -2,6 +2,7 @@ package com.juyo.visa.admin.firstTrialJp.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 import lombok.Data;
 
@@ -57,5 +58,8 @@ public class BackMailInfoEntity implements Serializable {
 
 	/**更新时间*/
 	private Date updatetime;
+
+	private Map<String, String> mainSourceTypeEnum;
+	private Map<String, String> mainBackMailTypeEnum;
 
 }
