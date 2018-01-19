@@ -54,6 +54,7 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
+import com.juyo.visa.common.enums.SaveOrUpdateEnum;
 import com.juyo.visa.common.enums.ShareTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
@@ -785,7 +786,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	 * 保存快递信息，并发送邮件
 	 */
 	public Object saveExpressInfo(Integer orderid, Integer orderjpid, Integer expresstype, Integer shareType,
-			String receiver, String mobile, String expressAddress, String shareManIds, HttpSession session) {
+			String receiver, String mobile, String expressAddress, String shareManIds, Integer opType,
+			HttpSession session) {
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
@@ -823,23 +825,26 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			dbDao.insert(orderReceiveAdd);
 		}
 
-		//改变订单状态 由初审到发地址
-		Date nowDate = DateUtil.nowDate();
-		int receptionStatus = JPOrderStatusEnum.SEND_ADDRESS.intKey();
-		dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus), Cnd.where("id", "=", orderid));
-		dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
+		if (opType == SaveOrUpdateEnum.SAVE.intKey()) {
+			//保存
+			//改变订单状态 由初审到发地址
+			Date nowDate = DateUtil.nowDate();
+			int receptionStatus = JPOrderStatusEnum.SEND_ADDRESS.intKey();
+			dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus), Cnd.where("id", "=", orderid));
+			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 
-		//发送短信、邮件
-		/*try {
-			sendMail(orderid, orderjpid, shareType, shareManIds);
-			sendMessage(orderid, orderjpid, shareType, shareManIds);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
-
-		//添加日志记录  订单已发地址
-		int send_address = JPOrderStatusEnum.SEND_ADDRESS.intKey();
-		orderJpViewService.insertLogs(orderid, send_address, session);
+			//添加日志记录  订单已发地址
+			int send_address = JPOrderStatusEnum.SEND_ADDRESS.intKey();
+			orderJpViewService.insertLogs(orderid, send_address, session);
+		} else {
+			//发送短信、邮件
+			try {
+				sendMail(orderid, orderjpid, shareType, shareManIds);
+				sendMessage(orderid, orderjpid, shareType, shareManIds);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 
 		//变更订单操作人
 		changePrincipalViewService.ChangePrincipal(orderid, FIRSTTRIAL_PROCESS, userId);

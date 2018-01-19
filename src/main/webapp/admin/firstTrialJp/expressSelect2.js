@@ -42,7 +42,7 @@ function clearText(){
 }
 
 //保存
-function save(orderid,orderjpid){
+function save(orderid,orderjpid, opType){
 
 	var receiver = $("#receiver").val();
 	if (receiver == "") {
@@ -121,7 +121,8 @@ function save(orderid,orderjpid){
 						receiver:$("#receiver").val(),
 						mobile:$("#mobile").val(),
 						expressaddress:$("#address").val(),
-						shareManIds:shareManIds
+						shareManIds:shareManIds,
+						opType:opType
 						//receiveAddressId:$("#receiveAddressId").val()
 					},
 					success: function(data){
@@ -137,96 +138,6 @@ function save(orderid,orderjpid){
 	});
 
 }
-
-//初审快递发送消息
-function sendMsg(orderid,orderjpid){
-
-	var receiver = $("#receiver").val();
-	if (receiver == "") {
-		layer.msg('收件人不能为空');
-		return;
-	}
-	var mobile = $("#mobile").val();
-	if (mobile == "") {
-		layer.msg('电话不能为空');
-		return;
-	}
-	var address = $("#address").val();
-	if (address == "") {
-		layer.msg('回邮地址不能为空');
-		return;
-	}
-	
-
-	var applicant_share = true;
-	var shareManIds = "";
-	$("#tableId tbody tr").each(function(){
-		if($(this).hasClass("trColor")){
-			applicant_share = false;
-			var applicantId = $(this).children().eq(0).html();
-			shareManIds += applicantId + ",";
-		}
-	});
-	if (applicant_share || shareManIds=="") {
-		layer.msg('申请人未选择');
-		return;
-	}
-
-	var layerIndex =  layer.load(1, {shade: "#000"});
-
-	$.ajax({
-		type : 'POST',
-		data : {
-			shareManIds:shareManIds
-		},
-		url : '/admin/firstTrialJp/checkExpressManInfo.html',
-		success : function(data) {
-			var isEmpty = data.isEmpty;
-			if(isEmpty == false){
-				var applyids = data.applyids;
-				$.each(applyids, function(i, applyid) { 
-					layer.open({
-						type: 2,
-						title: false,
-						closeBtn:false,
-						fix: false,
-						maxmin: false,
-						shadeClose: false,
-						scrollbar: false,
-						area: ['400px', '300px'],
-						content:'/admin/firstTrialJp/validExpressManInfo.html?applicantId='+applyid+'&orderId='+orderid,
-						success : function(index, layero){
-							var iframeWin = window[index.find('iframe')[0]['name']]; 
-						}
-					}); 
-				}); 
-				layer.close(layerIndex);
-				return;
-			}else{
-				//发送消息
-				$.ajax({ 
-					url: BASE_PATH+'/admin/firstTrialJp/sendExpressMsg.html',
-					type:'post',
-					data:{
-						orderid:orderid,
-						orderjpid:orderjpid,
-						sharetype:$("#shareType").val(),
-						shareManIds:shareManIds
-					},
-					success: function(data){
-						if(data.stauts == 200){
-							layer.close(layerIndex);
-						}
-						closeWindow();
-						parent.successCallBack(2);
-					}
-				});
-			}
-		}
-	});
-
-}
-
 
 /* $('#multiPass_roundTrip').bootstrapSwitch();//统一联系人
 $('#multiPass_roundTrip').on('switchChange.bootstrapSwitch', function (event,state) { 
