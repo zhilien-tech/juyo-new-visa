@@ -3,21 +3,22 @@
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 105px;
+	height: 120px;
 	background: #FFF;
 	z-index: 99999;
-	padding: 20px 30px 20px 40px;
+	padding: 20px 30px 15px 40px;
 }
-
+.box-header .searchMar {
+	margin-top:20px;
+}
 .box-body {
 	overflow: hidden;
-	margin-top: 96px;
+	margin-top: 110px;
 }
 
 .btnGroups {
 	margin-bottom: 5px;
 	margin-left: -10px;
-	cursor: pointer;
 	border-bottom:1px solid #d8dcdd;
 	height:30px;
 }
@@ -30,6 +31,7 @@
 	height: 30px;
 	line-height: 30px;
 	text-align: center;
+	cursor: pointer;
 }
 
 .bgColor {

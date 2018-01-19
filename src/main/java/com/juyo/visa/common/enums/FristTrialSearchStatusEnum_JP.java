@@ -11,7 +11,7 @@ import com.uxuexi.core.common.enums.IEnum;
  */
 public enum FristTrialSearchStatusEnum_JP implements IEnum {
 
-	FIRSTTRIAL(JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey(), "初审"), UNQUALIFIED(TrialApplicantStatusEnum.unqualified
+	FIRSTTRIAL(JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey(), "初审"), UNQUALIFIED(TrialApplicantStatusEnum.UNQUALIFIED
 			.intKey(), "不合格"), QUALIFIED(JPOrderStatusEnum.QUALIFIED_ORDER.intKey(), "合格"), SEND_ADDRESS(
 			JPOrderStatusEnum.SEND_ADDRESS.intKey(), "已发地址"), SEND_DATA(JPOrderStatusEnum.SEND_DATA.intKey(), "已寄出"), RECEPTION_ORDER(
 			JPOrderStatusEnum.RECEPTION_ORDER.intKey(), "前台"), RECEPTION_RECEIVED(JPOrderStatusEnum.RECEPTION_RECEIVED

@@ -24,12 +24,12 @@
 					<div class="box-header">
 						<!-- 切换卡按钮 start -->
 						<div class="btnGroups">
-							<a name="allOrder"  class="searchOrderBtn btnList bgColor">全部</a>
-							<a name="myOrder"  class="searchOrderBtn btnList">我的</a>
+							<a name="myOrder"  class="searchOrderBtn btnList bgColor">我的</a>
+							<a name="allOrder"  class="searchOrderBtn btnList">全部</a>
 						</div>
 						<!-- 切换卡按钮 end -->
 						<!-- 检索条件 start -->
-						<div class="row"> 
+						<div class="row searchMar"> 
 							<div class="col-md-2 left-5px right-0px">
 								<select id="status" name="status" onchange="selectListData();" class="input-class input-sm" >
 									<option value="">状态</option>

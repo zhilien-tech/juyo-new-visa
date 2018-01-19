@@ -3,7 +3,8 @@ SELECT
 	tr.*,
 	DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
 	DATE_FORMAT(tr.outVisaDate, '%Y-%m-%d') signingTime,
-	toj.id orderjpid
+	toj.id orderjpid,
+	tr.status orderstatus
 FROM
 	t_order tr
 INNER JOIN t_order_jp toj ON toj.orderId = tr.id

@@ -10,10 +10,11 @@ $(function(){
                 //展开未展开
                 $('.nav-item').children('ul').hide();
                 $(this).next('ul').show();
-                $(this).parent('li').addClass('nav-show').siblings('li').removeClass('nav-show');
+               
                 var subnav = $(this).next('ul').html();
                 if(subnav == "" || subnav == null || subnav == undefined){
                 	$('.navLi').removeClass('navLi');
+                	 $(this).parent('li').addClass('nav-show').siblings('li').removeClass('nav-show');
                 }
             }else{
                 //收缩已展开
@@ -25,12 +26,18 @@ $(function(){
             if(subnav == "" || subnav == null || subnav == undefined){
             	$('.navLi').removeClass('navLi');
             }
+//        	//判断li 里面是否存在navLi
+//        	var miniShow = $(this).next().next('li').hasClass('navLi');
+//        	console.log(miniShow);
+        	$(this).parent('li').addClass('nav-show').siblings('li').removeClass('nav-show');
         }
     });
 //    二级导航点击事件
     $(".navUl li").on('click',function(){
     	$('.navLi').removeClass('navLi');
     	$(this).addClass('navLi').siblings().removeClass('navLi');
+    	
+    	$(this).parent().parent().addClass("nav-show").siblings('li').removeClass('nav-show');
     });
     //nav-mini切换
     $('#mini').on('click',function(){
@@ -39,7 +46,7 @@ $(function(){
         	$(".main").css('width','calc(100% - 60px)');
 //        	点击缩进修改a标签样式
         	//$(".nav a").css('padding-left','20px');
-            $('.nav-item.nav-show').removeClass('nav-show');
+           // $('.nav-item.nav-show').removeClass('nav-show');
             $('.nav-item').children('ul').removeAttr('style');
             $('.nav').addClass('nav-mini');
         }else{
@@ -47,5 +54,5 @@ $(function(){
             $(".main").css('width','calc(100% - 170px)');
            // $(".nav a").css('padding-left','50px');
         }
-    });
+    }); 
 });

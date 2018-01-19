@@ -30,13 +30,16 @@ import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.util.RegExpUtil;
+import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -97,6 +100,12 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		//主sql数据
 		List<Record> list = (List<Record>) sql.getResult();
 		for (Record record : list) {
+			int orderstatus = (int) record.get("orderstatus");
+			for (JPOrderStatusEnum orderStatus : JPOrderStatusEnum.values()) {
+				if (orderstatus == orderStatus.intKey()) {
+					record.put("orderstatus", orderStatus.value());
+				}
+			}
 			String sqlstring = sqlManager.get("get_aftermarket_list_applicat_data");
 			Sql applicatsql = Sqls.create(sqlstring);
 			Cnd applicatcnd = Cnd.NEW();
@@ -158,7 +167,7 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		map.put("${ordernum}", order.getOrderNum());
 		//手机端页面链接
 		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
-				+ "/mobile/info.html?applicantid=" + applicantid;
+				+ "/mobile/backEmailInfo.html?applicantId=" + applicant.getId();
 		//转换长连接为短地址
 		mobileUrl = firstTrialJpViewService.getEncryptlink(mobileUrl, request);
 		map.put("${mobileUrl}", mobileUrl);
@@ -169,6 +178,11 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		mailService.sendHtml(email, map, AFTERMARKET_EMAIL_URL, "售后通知");
 		//发短信
 		mailService.sendMessageByMap(telephone, map, AFTERMARKET_MESSAGE_URL);
+		//发送后游客进度为资料已寄出
+		TApplicantBackmailJpEntity backmail = dbDao.fetch(TApplicantBackmailJpEntity.class,
+				Cnd.where("applicantId", "=", applicantjp.getId()));
+		backmail.setBackSourceTime(DateUtil.nowDate());
+		dbDao.update(backmail);
 		changePrincipalViewService.ChangePrincipal(orderId, AFTERMARKET_PROCESS, userId);
 		return JuYouResult.ok();
 	}

@@ -92,6 +92,10 @@
 	float: right;
 	margin-right: 0.2rem;
 }
+.bottom .cancel {
+	float:left;
+	margin-left: 0.2rem;
+}
 .passport-btn {
 	display: block;
 	width: 30%;
@@ -528,4 +532,79 @@ input[type="checkbox"] + label:after {
 	text-align: center;
 	border-radius: 8px; 
 	font-size: 0.3rem;
+}
+.hint {
+	width:100%;
+	text-align:center;
+	color:#c3bebe;
+	margin-top:1%;
+}
+/****************回邮****************/
+.labelMargin {
+	margin-top:0;
+}
+.dataSource {
+	position: relative;
+}
+.dataSource .sourceInfo {
+	float: right;
+	width: 20%;
+	text-align:  right;
+}
+.dataSource .sourceInfo span {
+	
+}
+.dataSource .sourceInfo i {
+	width: 10px;
+	display: inline-block;
+	height: 10px;
+	border-right: 1px solid #000;
+	border-bottom: 1px solid #000;
+	transform:  rotate(-45deg);
+}
+.dataSource .sourceInfo::after {
+	content: "";
+	clear: both;
+}
+/*select选择框*/
+.backEmailSelect {
+	position: absolute;
+	-webkit-appearance: none;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: .81rem;
+	opacity: 0;
+}
+.backEmailWay {
+	position: relative;
+}
+.backEmailWay .wayInfo {
+	float: right;
+	width: 30%;
+	text-align: right;
+}
+.backEmailWay .wayInfo i {
+	width: 10px;
+	display: inline-block;
+	height: 10px;
+	border-right: 1px solid #000;
+	border-bottom: 1px solid #000;
+	transform:  rotate(-45deg);
+}
+.backEmailWay .wayInfo::after {
+	content: "";
+	clear: both;
+}
+.backMailAddress {
+	width: 80%;
+}
+.invoiceContent {
+	width: 70%;
+}
+.backAddress {
+	width: 80%;
+}
+.backRemark {
+	width: 80%;
 }

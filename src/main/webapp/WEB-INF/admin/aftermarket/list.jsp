@@ -34,11 +34,11 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<!-- 切换卡按钮 start -->
 						<div class="btnGroups">
-							<a name="allOrder" class="searchOrderBtn btnList bgColor">全部</a>
-							<a name="myOrder" class="searchOrderBtn btnList">我的</a>
+							<a name="myOrder" class="searchOrderBtn btnList  bgColor">我的</a>
+							<a name="allOrder" class="searchOrderBtn btnList">全部</a>
 						</div>
 						<!-- 切换卡按钮 end -->
-						<div class="row">
+						<div class="row searchMar">
 							<div class="col-md-2 left-5px right-0px">
 								<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
 									<option value="">状态</option>
@@ -67,7 +67,7 @@
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>	
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
-								<div><label></label><span style="font-size:16px;font-weight:bold;">售后</span></div>	
+								<div><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span></div>	
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="(item,index) in data.applicats">

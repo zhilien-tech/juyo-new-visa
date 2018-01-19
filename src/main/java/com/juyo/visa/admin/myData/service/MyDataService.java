@@ -975,13 +975,13 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 					Integer orderId = applicantOrderJpEntity.getOrderId();
 					if (!Util.isEmpty(orderId)) {
 						TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, orderId.longValue());
-						TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId()
+						/*TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId()
 								.longValue());
 						Integer orderStatus = orderEntity.getStatus();
 						if (orderStatus < JPOrderStatusEnum.FILLED_INFORMATION.intKey()) {
 							orderEntity.setStatus(JPOrderStatusEnum.FILLING_INFORMATION.intKey());
 							dbDao.update(orderEntity);
-						}
+						}*/
 						orderJpList.add(orderJpEntity);
 					}
 				}
@@ -1046,39 +1046,6 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 						lastRecords.add(record2);
 					}
 				}
-
-				//String applicantSqlstr = sqlManager.get("mydata_inProcessVisa_list");
-				//Sql applicantSql = Sqls.create(applicantSqlstr);
-				//Cnd appcnd = Cnd.NEW();
-				//appcnd.and("ta.id", "in", applicants);
-				//applicantSql.setCondition(appcnd);
-				//List<Record> records = dbDao.query(applicantSql, appcnd, null);
-
-				//格式化日期
-				/*DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-				for (Record record : records) {
-					if (!Util.isEmpty(record.get("applicantId"))) {
-						lastRecords.add(record);
-					}
-					//判断是否有统一联系人
-					Integer sameLinker = (Integer) record.get("isSameLinker");
-					//资料类型
-					Integer ostatus = (Integer) record.get("orderstatus");
-					for (JPOrderStatusEnum jpos : JPOrderStatusEnum.values()) {
-						if (!Util.isEmpty(ostatus) && ostatus.equals(jpos.intKey())) {
-							record.put("orderstatus", jpos.value());
-						}
-					}
-					if (!Util.isEmpty(record.get("sendvisadate"))) {
-						Date sendVisaDate = (Date) record.get("sendvisadate");
-						record.put("sendvisadate", format.format(sendVisaDate));
-					}
-					if (!Util.isEmpty(record.get("outvisadate"))) {
-						Date outVisaDate = (Date) record.get("outvisadate");
-						record.put("outvisadate", format.format(outVisaDate));
-					}
-				}*/
-				//result.put("visaJapanData", records);
 				result.put("visaJapanData", lastRecords);
 			}
 
@@ -1434,18 +1401,23 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			int eqBase = isEqBase(applicantForm, base);
 			if (Util.eq(eqBase, 1)) {
 				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+				dbDao.update(base);
+				return 1;
+			} else {
+				return 0;
 			}
-			dbDao.update(base);
 		} else {//userId不为空时，根据userId来查询
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
 			int eqBase = isEqBase(applicantForm, base);
 			if (Util.eq(eqBase, 1)) {
 				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+				dbDao.update(base);
+				return 1;
+			} else {
+				return 0;
 			}
-			dbDao.update(base);
 		}
-		return null;
 	}
 
 	public Object passIsChanged(TApplicantPassportForm passportForm, HttpSession session) {
@@ -1460,8 +1432,11 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			int eqPass = isEqPass(passportForm, pass);
 			if (Util.eq(eqPass, 1)) {
 				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+				dbDao.update(base);
+				return 1;
+			} else {
+				return 0;
 			}
-			dbDao.update(base);
 		} else {//userId不为空时，根据userId来查询
 			TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
@@ -1470,10 +1445,12 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			int eqPass = isEqPass(passportForm, pass);
 			if (Util.eq(eqPass, 1)) {
 				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+				dbDao.update(base);
+				return 1;
+			} else {
+				return 0;
 			}
-			dbDao.update(base);
 		}
-		return null;
 	}
 
 	public Object visaIsChanged(VisaEditDataForm visaForm, HttpSession session) {
@@ -1487,8 +1464,11 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			int eqVisa = isEqVisa(visaForm, visa);
 			if (Util.eq(eqVisa, 1)) {
 				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+				dbDao.update(base);
+				return 1;
+			} else {
+				return 0;
 			}
-			dbDao.update(base);
 		} else {//userId不为空时，根据userId来查询
 			TTouristVisaEntity visa = dbDao
 					.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", apply.getUserId()));
@@ -1497,10 +1477,12 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			int eqVisa = isEqVisa(visaForm, visa);
 			if (Util.eq(eqVisa, 1)) {
 				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+				dbDao.update(base);
+				return 1;
+			} else {
+				return 0;
 			}
-			dbDao.update(base);
 		}
-		return null;
 	}
 
 	public Object infoIsChanged(int applyid, HttpSession session) {

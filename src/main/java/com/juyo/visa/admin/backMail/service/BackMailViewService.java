@@ -19,12 +19,13 @@ import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
 import com.juyo.visa.admin.firstTrialJp.entity.BackMailInfoEntity;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
-import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
 import com.juyo.visa.common.enums.MainBackMailTypeEnum;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
+import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantBackmailJpForm;
 import com.uxuexi.core.common.util.DateUtil;
@@ -46,7 +47,8 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 	private ChangePrincipalViewService changePrincipalViewService;
 
 	//回邮信息
-	public Object backMailInfo(Integer applicantId, Integer orderId, Integer isAfterMarket, Integer orderProcessType) {
+	public Object backMailInfo(Integer applicantId, Integer orderId, Integer isAfterMarket, Integer orderProcessType,
+			Integer flowChart) {
 		Map<String, Object> result = Maps.newHashMap();
 		//资料类型
 		result.put("mainSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
@@ -60,6 +62,8 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 		result.put("orderId", orderId);
 		//订单流程枚举值
 		result.put("orderProcessType", orderProcessType);
+		//由游客进度图过来的
+		result.put("flowChart", flowChart);
 
 		return result;
 	}
@@ -114,7 +118,7 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 	}
 
 	//保存回邮信息
-	public Object saveBackMailInfo(TApplicantBackmailJpForm form, HttpSession session) {
+	public Object saveBackMailInfo(TApplicantBackmailJpForm form, int flowChart, HttpSession session) {
 		Integer backmailId = form.getId();
 		Integer orderId = form.getOrderId();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -144,8 +148,15 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 		backmail.setUpdateTime(DateUtil.nowDate());
 		backmail.setOpId(userid);
 		Integer isAfterMarket = form.getIsAfterMarket();
-		if (Util.eq(isAfterMarket, IsYesOrNoEnum.YES.intKey())) {
+		/*if (Util.eq(isAfterMarket, IsYesOrNoEnum.YES.intKey())) {
 			backmail.setBackSourceTime(DateUtil.nowDate());
+		}*/
+		if (Util.eq(flowChart, IsYesOrNoEnum.YES.intKey())) {
+			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderId.longValue());
+			if (Util.eq(orderEntity.getStatus(), JPOrderStatusEnum.AFTERMARKET_ORDER.intKey())) {
+				orderEntity.setStatus(JPOrderStatusEnum.CAN_BACKMAIL.intKey());
+				dbDao.update(orderEntity);
+			}
 		}
 		after.add(backmail);
 

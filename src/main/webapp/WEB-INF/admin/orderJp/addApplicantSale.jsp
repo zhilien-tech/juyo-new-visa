@@ -14,10 +14,12 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 <style type="text/css">
+img[src=""],img:not([src]) { opacity:0;}
+input[type="file"] { z-index:999999;}
+.delete { z-index:999999999;}
 .modal-body { height:100%; margin-top:50px;}
 .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
 .btn-margin { margin-top:10px; }
-	
 .modal-content { position:relative; }
 .modal-body { padding:15px 100px 15px 20px; }
 .nameBeforeYes { margin-right:20px; }

@@ -36,7 +36,6 @@
 			.col-sm-1 { width:11.5% !important;}
 			.select2 { width:100% !important;}
 			[v-cloak]{display:none;}
-
 		</style>
 	</head>
 
@@ -1291,11 +1290,24 @@
 				orderobj.orderInfo.outvisadate = days;
 			}
 		});
-		//日期转换
+		//日期转换 加上指定天数
 		function getNewDay(dateTemp, days) {  
 		    var dateTemp = dateTemp.split("-");  
 		    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
 		    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);  
+		    var rDate = new Date(millSeconds);  
+		    var year = rDate.getFullYear();  
+		    var month = rDate.getMonth() + 1;  
+		    if (month < 10) month = "0" + month;  
+		    var date = rDate.getDate();  
+		    if (date < 10) date = "0" + date;  
+		    return (year + "-" + month + "-" + date);  
+		}  
+		//减去指定天数
+		function getNewDaySub(dateTemp, days) {  
+		    var dateTemp = dateTemp.split("-");  
+		    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式    
+		    var millSeconds = Math.abs(nDate) - (days * 24 * 60 * 60 * 1000);  
 		    var rDate = new Date(millSeconds);  
 		    var year = rDate.getFullYear();  
 		    var month = rDate.getMonth() + 1;  
@@ -1357,7 +1369,7 @@
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
 		}).on("click",function(){
-			$("#sendVisaDate").datetimepicker("setEndDate",$("#goTripDate").val());
+			$("#sendVisaDate").datetimepicker("setEndDate",getNewDaySub($("#goTripDate").val(),8));
 		}).on("changeDate",function(){
 			//自动计算预计出签时间
 			var stayday = 7;

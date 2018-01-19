@@ -14,6 +14,8 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
+	img[src=""],img:not([src]) { opacity:0;}
+	input[type="file"] { z-index:999999;}
 	.modal-body { height:100% !important; background: #FFF !important; padding:0px 70px !important;}
 	.info-imgUpload {width: 100%;}
 	.NoInfo { width:100%; height:30px; margin-top:0px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
@@ -27,13 +29,17 @@
     .dropdown li { display: block; line-height: 1.42857; padding: 0 6px; min-height: 1.2em; cursor: pointer; }
     .dropdown li:hover {  background-color: #23a8ce;  color: #FFF; }
     .colSm {  display:block; float:left; width:200px; }
-    .padding-right-0 { margin-left:10%; width:323px; height:200px; border:1px solid #eee; }
+    .padding-right-0 { margin-left:10%; width:323px; border:1px solid #eee; }
+    .cardFront-div { height:176px;}
     .delete { right:0; }
+    #sqImg {top:0px; margin-top:-176px; height:auto}
+    #editbasic ,#backBtn ,#addBtn { margin-top:10px;}
+    .delete { z-index:999999999;}
     /*弹框头部固定*/
     .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
     .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; padding:15px 37px 15px 53px;}  
-    
+    .cardFront-div #uploadFile { top:0;width:100%;height:200px;left:0;position:absolute;}
     /*左右导航样式*/
     .leftNav { position:fixed;top:50px;left:4px;z-index:999; width:40px;height:calc(100% - 50px); cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
@@ -111,16 +117,17 @@
 											<c:when test="${empty obj.visaInfo}">
 												<input id="marryUrl" name="marryUrl" type="hidden" />
 												<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-												<img id="sqImg" alt="" src="" >
+												
 											</c:when>
 											<c:otherwise>
 												<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.visaInfo.marryUrl }"/>
 												<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-												<img id="sqImg" alt="" src="${obj.visaInfo.marryUrl }" >
+												
 											</c:otherwise>
 										</c:choose>
-									<i class="delete" id="deleteApplicantFrontImg"></i>
 								</div>
+								<img id="sqImg" alt="" src="${obj.visaInfo.marryUrl }" >
+								<i class="delete" id="deleteApplicantFrontImg"></i>
 							</div>
 							<div class="col-xs-6 front " style="clear:both;width:320px; height:30px; border:0 !important; color:red; margin-left:10%;">
 								<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="marryUrl" data-bv-result="IVVALID" style="display: none;">结婚证/离婚证必须上传</small>

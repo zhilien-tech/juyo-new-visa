@@ -3,17 +3,19 @@ package com.juyo.visa.common.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 申请人状态
+ * 
  * <p>
+ * 负责人变更
  * @author   彭辉
- * @Date	 2017年11月13日 	 
+ * @Date	 2018年01月18日
  */
-public enum TrialApplicantStatusEnum implements IEnum {
-	FIRSTTRIAL(1, "初审"), QUALIFIED(2, "合格"), UNQUALIFIED(3, "不合格"), FillCompleted(4, "修改完成");
+public enum JapanPrincipalChangeEnum implements IEnum {
+	CHANGE_PRINCIPAL_OF_ORDER(88, "负责人变更");
+
 	private int key;
 	private String value;
 
-	private TrialApplicantStatusEnum(final int key, final String value) {
+	private JapanPrincipalChangeEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}
@@ -31,5 +33,4 @@ public enum TrialApplicantStatusEnum implements IEnum {
 	public int intKey() {
 		return key;
 	}
-
 }

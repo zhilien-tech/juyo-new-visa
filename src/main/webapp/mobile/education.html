@@ -33,9 +33,9 @@
 			        	<option>学龄前</option> -->
 			     </select>
         		</li>
-        		<li><span>单位名称</span> <input type="text" id="name" class="txtInput" placeholder="必填"/></li>
-        		<li><span>单位电话</span> <input type="text" id="telephone" class="txtInput" placeholder="必填"/></li>
-        		<li><span>单位地址</span> <input type="text" id="address" class="txtInput" placeholder="必填"/></li>
+        		<li class="preschool"><span>单位名称</span> <input type="text" id="name" class="txtInput" placeholder="必填"/></li>
+        		<li class="preschool"><span>单位电话</span> <input type="text" id="telephone" class="txtInput" placeholder="必填"/></li>
+        		<li class="preschool"><span>单位地址</span> <input type="text" id="address" class="txtInput" placeholder="必填"/></li>
         </ul>
         <script src="/references/common/js/vue/vue.min.js"></script>
 		<script src="/references/common/js/layer/layer.js"></script>
@@ -47,10 +47,14 @@
 			let name = $(".selector").find("option:selected").text();
 			$(".select-skip i").text(name);
 			if(name == '学生'){
+				$('.preschool').show();
 				$('.educationInfo li:nth-child(2) span').text("学校名称");
 				$('.educationInfo li:nth-child(3) span').text("学校电话");
 				$('.educationInfo li:nth-child(4) span').text("学校地址");
+			}else if(name == '学龄前'){
+				$('.preschool').hide();
 			}else{
+				$('.preschool').show();
 				$('.educationInfo li:nth-child(2) span').text("单位名称");
 				$('.educationInfo li:nth-child(3) span').text("单位电话");
 				$('.educationInfo li:nth-child(4) span').text("单位地址");

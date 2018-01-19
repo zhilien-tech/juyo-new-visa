@@ -24,51 +24,86 @@ new Vue({
 
 $(function(){
 	//校验
-	$('#backmail_wrapper').bootstrapValidator({
-		message : '验证不通过',
-		feedbackIcons : {
-			valid : 'glyphicon glyphicon-ok',
-			invalid : 'glyphicon glyphicon-remove',
-			validating : 'glyphicon glyphicon-refresh'
-		},
-		fields : {
-			teamName : {
-				validators : {
-					notEmpty : {
-						message : '团队名称不能为空'
-					}
-				}
+	if(flowChart == 1){
+		$('#backmail_wrapper').bootstrapValidator({
+			message : '验证不通过',
+			feedbackIcons : {
+				valid : 'glyphicon glyphicon-ok',
+				invalid : 'glyphicon glyphicon-remove',
+				validating : 'glyphicon glyphicon-refresh'
 			},
-			expressNum : {
-				validators : {
-					notEmpty : {
-						message : '快递号不能为空'
+			fields : {
+				linkman : {
+					validators : {
+						notEmpty : {
+							message : '联系人不能为空'
+						}
 					}
-				}
-			},
-			linkman : {
-				validators : {
-					notEmpty : {
-						message : '联系人不能为空'
+				},
+				telephone : {
+					validators : {
+						notEmpty : {
+							message : '电话不能为空'
+						}
 					}
-				}
-			},
-			telephone : {
-				validators : {
-					notEmpty : {
-						message : '电话不能为空'
-					}
-				}
-			},
-			expressAddress : {
-				validators : {
-					notEmpty : {
-						message : '回邮地址不能为空'
+				},
+				expressAddress : {
+					validators : {
+						notEmpty : {
+							message : '回邮地址不能为空'
+						}
 					}
 				}
 			}
-		}
-	});
+		});
+	}else{
+		$('#backmail_wrapper').bootstrapValidator({
+			message : '验证不通过',
+			feedbackIcons : {
+				valid : 'glyphicon glyphicon-ok',
+				invalid : 'glyphicon glyphicon-remove',
+				validating : 'glyphicon glyphicon-refresh'
+			},
+			fields : {
+				teamName : {
+					validators : {
+						notEmpty : {
+							message : '团队名称不能为空'
+						}
+					}
+				},
+				expressNum : {
+					validators : {
+						notEmpty : {
+							message : '快递号不能为空'
+						}
+					}
+				},
+				linkman : {
+					validators : {
+						notEmpty : {
+							message : '联系人不能为空'
+						}
+					}
+				},
+				telephone : {
+					validators : {
+						notEmpty : {
+							message : '电话不能为空'
+						}
+					}
+				},
+				expressAddress : {
+					validators : {
+						notEmpty : {
+							message : '回邮地址不能为空'
+						}
+					}
+				}
+			}
+		});
+		
+	}
 
 });
 
@@ -98,6 +133,7 @@ function save(paramstatus){
 		backMailObj.backmailinfo.taxNum = $("#taxNum").val();
 		backMailObj.backmailinfo.remark = $("#remark").val();
 		var editdata = backMailObj.backmailinfo;
+		editdata.flowChart=$("#flowChart").val();
 		$.ajax({
 			url: '/admin/backMailJp/saveBackMailInfo.html',
 			dataType:"json",

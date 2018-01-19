@@ -9,6 +9,7 @@ package com.juyo.visa.admin.mobile.service;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.firstTrialJp.entity.BackMailInfoEntity;
 import com.juyo.visa.admin.mobile.form.MainApplicantForm;
 import com.juyo.visa.admin.mobile.form.MarryImageForm;
 import com.juyo.visa.admin.mobile.form.MobileApplicantForm;
@@ -38,11 +40,14 @@ import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
+import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
+import com.juyo.visa.common.enums.MainBackMailTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
+import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantLowerEntity;
@@ -55,8 +60,10 @@ import com.juyo.visa.entities.TApplicantWorkJpEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.juyo.visa.forms.TApplicantBackmailJpForm;
 import com.juyo.visa.websocket.BasicInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -748,5 +755,92 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	//获取回邮信息
+	public Object getBackMailInfo(Integer applicantId) {
+		Date nowDate = DateUtil.nowDate();
+		TApplicantOrderJpEntity taoj = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicantId));
+
+		Map<String, Object> result = Maps.newHashMap();
+		String sqlStr = sqlManager.get("backmail_info_by_applicantId");
+		Sql sql = Sqls.create(sqlStr);
+		sql.setParam("applicantId", applicantId);
+		Record backmailinfo = dbDao.fetch(sql);
+		if (!Util.isEmpty(backmailinfo)) {
+			result.put("backmailinfo", backmailinfo);
+		} else {
+			//获取申请人信息
+			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantId.longValue());
+			String name = "";
+			if (!Util.isEmpty(applicant.getFirstName())) {
+				name += applicant.getFirstName();
+			}
+			if (!Util.isEmpty(applicant.getLastName())) {
+				name += applicant.getLastName();
+			}
+			String mobile = applicant.getTelephone();
+
+			BackMailInfoEntity backmail = new BackMailInfoEntity();
+			backmail.setLinkman(name);
+			if (!Util.isEmpty(mobile)) {
+				backmail.setTelephone(mobile);
+			}
+			backmail.setSource(MainBackMailSourceTypeEnum.KUAIDI.intKey());
+			backmail.setExpresstype(MainBackMailTypeEnum.KUAIDI.intKey());
+			backmail.setCreatetime(nowDate);
+			backmail.setUpdatetime(nowDate);
+			backmail.setApplicantid(applicantId);
+			backmail.setApplicantjpid(taoj.getId());
+
+			result.put("backmailinfo", backmail);
+		}
+
+		//回邮方式
+		result.put("mainBackMailTypeEnum", EnumUtil.enum2(MainBackMailTypeEnum.class));
+		//资料类型
+		result.put("mainSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
+
+		return result;
+	}
+
+	//保存回邮信息
+	public Object saveBackMailInfo(TApplicantBackmailJpForm form) {
+		Map<String, Object> result = Maps.newHashMap();
+
+		Integer backmailId = form.getId();
+		List<TApplicantBackmailJpEntity> before = dbDao.query(TApplicantBackmailJpEntity.class,
+				Cnd.where("id", "=", backmailId), null);
+		List<TApplicantBackmailJpEntity> after = new ArrayList<TApplicantBackmailJpEntity>();
+
+		TApplicantBackmailJpEntity backmail = new TApplicantBackmailJpEntity();
+		backmail.setId(form.getId());
+		backmail.setExpressType(form.getExpressType());
+		backmail.setExpressNum(form.getExpressNum());
+		backmail.setTeamName(form.getTeamName());
+		backmail.setSource(form.getSource());
+		backmail.setLinkman(form.getLinkman());
+		backmail.setTelephone(form.getTelephone());
+		backmail.setExpressAddress(form.getExpressAddress());
+		backmail.setInvoiceContent(form.getInvoiceContent());
+		backmail.setInvoiceHead(form.getInvoiceHead());
+		backmail.setInvoiceMobile(form.getInvoiceMobile());
+		backmail.setInvoiceAddress(form.getInvoiceAddress());
+		backmail.setApplicantId(form.getApplicantJPId());
+		backmail.setInvoiceHead(form.getInvoiceHead());
+		backmail.setTaxNum(form.getTaxNum());
+		backmail.setRemark(form.getRemark());
+		backmail.setUpdateTime(DateUtil.nowDate());
+		Integer isAfterMarket = form.getIsAfterMarket();
+		if (Util.eq(isAfterMarket, IsYesOrNoEnum.YES.intKey())) {
+			backmail.setBackSourceTime(DateUtil.nowDate());
+		}
+		after.add(backmail);
+
+		dbDao.updateRelations(before, after);
+		result.put("applicantId", form.getApplicantId());
+
+		return result;
 	}
 }
