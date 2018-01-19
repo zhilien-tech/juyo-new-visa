@@ -16,7 +16,8 @@ SELECT
 	tabj.invoiceMobile,
 	tabj.invoiceAddress,
 	tabj.taxNum,
-	tabj.remark 
+	tabj.remark,
+	tabj.opid
 FROM
 	t_applicant_backmail_jp tabj
 	INNER JOIN t_applicant_order_jp taoj ON tabj.applicantId = taoj.id 

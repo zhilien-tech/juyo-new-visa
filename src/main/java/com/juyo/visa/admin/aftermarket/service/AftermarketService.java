@@ -158,7 +158,7 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		map.put("${ordernum}", order.getOrderNum());
 		//手机端页面链接
 		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
-				+ "/mobile/info.html?applicantid=" + applicantid;
+				+ "/mobile/backEmailInfo.html?applicantId=" + applicant.getId();
 		//转换长连接为短地址
 		mobileUrl = firstTrialJpViewService.getEncryptlink(mobileUrl, request);
 		map.put("${mobileUrl}", mobileUrl);

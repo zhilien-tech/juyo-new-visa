@@ -28,6 +28,7 @@ import com.juyo.visa.admin.mobile.form.WorkInfoForm;
 import com.juyo.visa.admin.mobile.service.MobileService;
 import com.juyo.visa.entities.TApplicantLowerEntity;
 import com.juyo.visa.entities.TApplicantPassportLowerEntity;
+import com.juyo.visa.forms.TApplicantBackmailJpForm;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -170,5 +171,23 @@ public class MobileModule {
 	@POST
 	public Object saveVisaInfo(@Param("applicantid") Integer applicantid, @Param("marrystatus") Integer marrystatus) {
 		return mobileService.saveVisaInfo(applicantid, marrystatus);
+	}
+
+	/**
+	 * 获取回邮信息
+	 */
+	@At
+	@POST
+	public Object getBackMailInfo(@Param("applicantId") Integer applicantId) {
+		return mobileService.getBackMailInfo(applicantId);
+	}
+
+	/**
+	 * 保存回邮信息
+	 */
+	@At
+	@POST
+	public Object saveBackMailInfo(@Param("..") TApplicantBackmailJpForm form) {
+		return mobileService.saveBackMailInfo(form);
 	}
 }
