@@ -109,7 +109,7 @@ public class ReceptionJpForm extends DataTablesParamForm {
 
 		//订单权限
 		if (Util.isEmpty(orderAuthority)) {
-			orderAuthority = "allOrder";
+			orderAuthority = "myOrder";
 		}
 		if (orderAuthority.equals("allOrder")) {
 			//全部

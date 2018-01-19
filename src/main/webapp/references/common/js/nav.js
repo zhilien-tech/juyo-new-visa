@@ -25,6 +25,10 @@ $(function(){
             if(subnav == "" || subnav == null || subnav == undefined){
             	$('.navLi').removeClass('navLi');
             }
+//        	//判断li 里面是否存在navLi
+//        	var miniShow = $(this).next().next('li').hasClass('navLi');
+//        	console.log(miniShow);
+        	$(this).parent('li').addClass('nav-show').siblings('li').removeClass('nav-show');
         }
     });
 //    二级导航点击事件
@@ -39,7 +43,7 @@ $(function(){
         	$(".main").css('width','calc(100% - 60px)');
 //        	点击缩进修改a标签样式
         	//$(".nav a").css('padding-left','20px');
-            $('.nav-item.nav-show').removeClass('nav-show');
+           // $('.nav-item.nav-show').removeClass('nav-show');
             $('.nav-item').children('ul').removeAttr('style');
             $('.nav').addClass('nav-mini');
         }else{
@@ -47,5 +51,5 @@ $(function(){
             $(".main").css('width','calc(100% - 170px)');
            // $(".nav a").css('padding-left','50px');
         }
-    });
+    }); 
 });
