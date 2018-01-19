@@ -2,74 +2,179 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>回邮</title>
+		<title>填写资料</title>
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	    <meta name="format-detection" content="telephone=no">
 	    <link rel="stylesheet" type="text/css" href="css/common.css">
 	    <link rel="stylesheet" type="text/css" href="css/passport.css">
 	</head>
 	<body>
-	<!--信息-->
-	 <ul class="label-info labelMargin">
-	 	<li class="dataSource">
-	 		资料来源 
-	 		<span class="sourceInfo">
-	 			<span></span>
-	 			<i></i>
-	 		</span>
-	 		<select class="backEmailSelect dataSourceSelect">
-	 			<option></option>
-	 			<option>快递</option>
-	 			<option>前台</option>
-	 			<option>其他</option>
-	 		</select>
-	 	</li>
-	 	<li>团队名称 <input type="text" class="txtInput" id="" /></li>
-	 	<li class="backEmailWay">
-	 		回邮方式 
-	 		<span class="wayInfo">
-	 			<span></span>
-	 			<i></i>
-	 		</span>
-	 		<select class="backEmailSelect backEmailWaySelect">
-	 			<option></option>
-	 			<option>快递</option>
-	 			<option>自取</option>
-	 			<option>使馆邮寄</option>
-	 			<option>内部交接</option>
-	 		</select>
-	 	</li>
-	 	<li>快递号 <input type="text" class="txtInput" id="" /></li>
-	 	<li>联系人 <input type="text" class="txtInput" id="" /></li>
-	 	<li>电话 <input type="text" class="txtInput" id="" maxlength="11" /></li>
-	 	<li>回邮地址 <input type="text" class="txtInput backMailAddress" id="" /></li>
-	 	<li>发票项目内容 <input type="text" class="txtInput invoiceContent" id="" /></li>
-	 	<li>发票抬头 <input type="text" class="txtInput" id="" /></li>
-	 	<li>地址 <input type="text" class="txtInput backAddress" id="" /></li>
-	 	<li>电话 <input type="text" class="txtInput" id="" maxlength="11" /></li>
-	 	<li>税号 <input type="text" class="txtInput" id="" /></li>
-	 	<li>备注 <input type="text" class="txtInput backRemark" id="" /></li>
-	 </ul>
-	<!--底部-->	
-	<div class="bottom">
-    		<a class="cancel btn" href="#">取消</a>
-    		<a class="save btn">保存</a>
-	</div>
+		<form id="backmail_wrapper">
+			<!--信息-->
+			<input id="id" name="id" type="hidden" v-model="backmailinfo.id">
+			<input id="orderProcessType" name="orderProcessType" type="hidden" v-model="backmailinfo.orderProcessType">
+			<input id="applicantJPId" name="applicantJPId" type="hidden" v-model="backmailinfo.applicantjpid">
+			<ul class="label-info labelMargin">
+			 	<li class="dataSource">
+			 		资料来源 
+			 		<span class="sourceInfo">
+			 			<span></span>
+			 			<i></i>
+			 		</span>
+			 		<select id="source" name="source" v-model="backmailinfo.source" class="backEmailSelect dataSourceSelect">
+			 			<option value=1>快递</option>
+			 			<option value=2>前台</option>
+			 			<option value=3>其他</option>
+			 		</select>
+			 	</li>
+			 	<li>团队名称 <input id="teamName" name="teamName" v-model="backmailinfo.teamname" type="text" class="txtInput"/></li>
+			 	<li class="backEmailWay">
+			 		回邮方式 
+			 		<span class="wayInfo">
+			 			<span></span>
+			 			<i></i>
+			 		</span>
+			 		<select id="expressType" name="expressType" v-model="backmailinfo.expresstype"  class="backEmailSelect backEmailWaySelect">
+				 		<option value=1>快递</option>
+			 			<option value=2>自取</option>
+			 			<option value=3>使馆邮寄</option>
+			 			<option value=4>内部交接</option>
+			 		</select>
+			 	</li>
+			 	<li>
+			 		快递号 
+			 		<input id="expressNum" name="expressNum" v-model="backmailinfo.expressnum" type="text" class="txtInput" />
+			 	</li>
+			 	<li>
+			 		联系人 
+			 		<input id="linkman" name="linkman" v-model="backmailinfo.linkman" type="text" class="txtInput"/>
+			 	</li>
+			 	<li>
+			 		电话  
+			 		<input id="telephone" name="telephone" v-model="backmailinfo.telephone" type="text" class="txtInput" maxlength="11" />
+			 	</li>
+			 	<li>
+			 		回邮地址 
+			 		<input id="expressAddress" name="expressAddress" v-model="backmailinfo.expressaddress" type="text" class="txtInput backMailAddress" />
+			 	</li>
+			 	<li>
+			 		发票项目内容
+			 		<input id="invoiceContent" name="invoiceContent" v-model="backmailinfo.invoicecontent" type="text" class="txtInput invoiceContent"/>
+			 	</li>
+			 	<li>
+			 		发票抬头
+			 		<input id="invoiceHead" name="invoiceHead" v-model="backmailinfo.invoicehead" type="text" class="txtInput" />
+			 	</li>
+			 	<li>
+			 		地址 
+			 		<input id="invoiceAddress" name="invoiceAddress" v-model="backmailinfo.invoiceaddress" type="text" class="txtInput backAddress" />
+			 	</li>
+			 	<li>
+			 		电话 
+			 		<input id="invoiceMobile" name="invoiceMobile" v-model="backmailinfo.invoicemobile" type="text" class="txtInput" maxlength="11" />
+			 	</li>
+			 	<li>
+			 		税号 
+			 		<input id="taxNum" name="taxNum" v-model="backmailinfo.taxnum" type="text" class="txtInput"/>
+			 	</li>
+			 	<li>
+			 		备注 
+			 		<input id="remark" name="remark" v-model="backmailinfo.remark" type="text" class="txtInput backRemark"/>
+			 	</li>
+			 </ul>
+			<!--底部-->	
+			<div class="bottom">
+	    		<a class="cancel btn" href="#">取消</a>
+	    		<a class="save btn" href="javascript:save();">保存</a>
+			</div>
+		</form>
 	</body>
 	<script src="js/rem(750).js"></script>
 	<script src="js/jquery-1.10.2.js"></script>
+	<script src="/references/common/js/vue/vue.min.js"></script>
+	<script src="/references/common/js/layer/layer.js"></script>
 	<script>
 		$(function(){
-//			资料来源
+			//资料来源
 			$(".dataSourceSelect").change(function(){
 				let selectInfo = $(".dataSourceSelect").find("option:selected").text();
 				$(".sourceInfo span").text(selectInfo);
 			});
-//			回邮方式
+			//回邮方式
 			$(".backEmailWaySelect").change(function(){
 				let selectInfo = $(".backEmailWaySelect").find("option:selected").text();
 				$(".wayInfo span").text(selectInfo);
 			});	
-		})
+		});
+		
+		//VUE准备数据
+		var backMailObj;
+		new Vue({
+			el: '#backmail_wrapper',
+			data: {
+				backmailinfo:"",
+				mainBackMailTypes:"",
+				mainSourceTypes:""
+			},
+			created:function(){
+				backMailObj=this;
+				var applicantId = GetQueryString('applicantId');
+				var url = '/admin/mobile/getBackMailInfo.html';
+				$.ajax({ 
+					url: url,
+					type:'post',
+					dataType:"json",
+					data:{
+						applicantId:applicantId
+					},
+					success: function(data){
+						backMailObj.backmailinfo = data.backmailinfo;
+						backMailObj.mainBackMailTypes = data.mainBackMailTypeEnum;
+						backMailObj.mainSourceTypes = data.mainSourceTypeEnum;
+					}
+				});
+			}
+		});
+		
+		//保存回邮信息
+		function save(){
+			backMailObj.backmailinfo.id = $("#id").val();
+			backMailObj.backmailinfo.orderProcessType = $("#orderProcessType").val();
+			backMailObj.backmailinfo.orderId = $("#orderId").val();
+			backMailObj.backmailinfo.applicantJPId = $("#applicantJPId").val();
+			backMailObj.backmailinfo.applicantId = applicantId;
+			backMailObj.backmailinfo.source = $("#source").val();
+			backMailObj.backmailinfo.expressNum = $("#expressNum").val();
+			backMailObj.backmailinfo.teamName = $("#teamName").val();
+			backMailObj.backmailinfo.expressType = $("#expressType").val();
+			backMailObj.backmailinfo.linkman = $("#linkman").val();
+			backMailObj.backmailinfo.telephone = $("#telephone").val();
+			backMailObj.backmailinfo.expressAddress = $("#expressAddress").val();
+			backMailObj.backmailinfo.invoiceContent = $("#invoiceContent").val();
+			backMailObj.backmailinfo.invoiceHead = $("#invoiceHead").val();
+			backMailObj.backmailinfo.invoiceAddress = $("#invoiceAddress").val();
+			backMailObj.backmailinfo.invoiceMobile = $("#invoiceMobile").val();
+			backMailObj.backmailinfo.taxNum = $("#taxNum").val();
+			backMailObj.backmailinfo.remark = $("#remark").val();
+			var editdata = backMailObj.backmailinfo;
+			$.ajax({
+				url: '/admin/backMailJp/saveBackMailInfo.html',
+				dataType:"json",
+				data:editdata,
+				type:'post',
+				success: function(data){
+					layer.closeAll('loading');
+				}
+			});
+			return true;
+		}
+		
+		
+		//获取URL地址参数
+	    function GetQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null)return  unescape(r[2]); return null;
+	    }
 	</script>
 </html>

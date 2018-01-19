@@ -63,6 +63,7 @@ import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantBackmailJpForm;
 import com.juyo.visa.websocket.BasicInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -758,9 +759,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 
 	//获取回邮信息
 	public Object getBackMailInfo(Integer applicantId) {
-
 		Date nowDate = DateUtil.nowDate();
-
 		TApplicantOrderJpEntity taoj = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantId));
 
@@ -772,7 +771,6 @@ public class MobileService extends BaseService<TApplicantEntity> {
 		if (!Util.isEmpty(backmailinfo)) {
 			result.put("backmailinfo", backmailinfo);
 		} else {
-
 			//获取申请人信息
 			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantId.longValue());
 			String name = "";
@@ -799,13 +797,17 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			result.put("backmailinfo", backmail);
 		}
 
+		//回邮方式
+		result.put("mainBackMailTypeEnum", EnumUtil.enum2(MainBackMailTypeEnum.class));
+		//资料类型
+		result.put("mainSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
+
 		return result;
 	}
 
 	//保存回邮信息
 	public Object saveBackMailInfo(TApplicantBackmailJpForm form) {
 		Integer backmailId = form.getId();
-		Integer orderId = form.getOrderId();
 
 		List<TApplicantBackmailJpEntity> before = dbDao.query(TApplicantBackmailJpEntity.class,
 				Cnd.where("id", "=", backmailId), null);
