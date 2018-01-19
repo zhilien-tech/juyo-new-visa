@@ -35,4 +35,13 @@ public class TripAirlineModule {
 	public Object getTripAirlineSelect(@Param("..") FlightSelectParam param) {
 		return tripAirlineService.getTripAirlineSelect(param);
 	}
+
+	/**
+	 * 查询接口数据到缓存
+	 */
+	@At
+	@POST
+	public Object getAirLineByInterfate(@Param("..") FlightSelectParam param) {
+		return tripAirlineService.getAirLineByInterfate(param);
+	}
 }

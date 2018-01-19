@@ -13,22 +13,26 @@
 		  <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		  <link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
-			.flowChart li div label{margin: 0;font-size: 14px;text-align: right; display: inline-block; margin:0 10px;}
+			.flowChart li div label{margin: 0; float:left;font-size: 14px;text-align: right; display: inline-block; margin:0 10px;}
 			.flowChart li:nth-child(1){height: 85px;padding-left: 10%;padding-top: 10px;}
-			.flowChart li div span{position: relative;left: 20px;}
+			.flowChart li div span{position: relative;left: 10%; display:inline-block; float:left;}
 			.flowChart li {height: 82px;}
 			.circle{width: 8%;height: 80px;float: left;margin-left: 2%;}
 			.date-info{display: inline-block;width: 85%;position: relative;top: 7px;}
-			.date-info span{width:100%;}
-			
+			.date-info span{width:40%;}
+			.principalApplicantTable { width:100%;}
 			.date-info span a{color: #2a7be5;}
-			.circle .circle-outside{height: 40px;width: 40px;background-color: #e4e4e4;margin: 0 auto;border-radius: 50%;padding: 4px;}
+			.circle .circle-outside{height: 25px;width: 25px;background-color: #e4e4e4;margin: 0 auto;border-radius: 50%;padding: 4px;}
 			.circle .circle-outside i{display: block;width: 100%;height: 100%;background-color: #d2d2d2;border-radius: 50%;}
-			.circle .vertical{width: 3px;height:35px;background-color:#e4e4e4;margin: 3px auto;}
+			.circle .vertical{width: 3px;height:50px;background-color:#e4e4e4;margin: 3px auto;}
 			.blue .circle-outside{background-color:#9fc4f6 !important;}
 			.blue .circle-outside i{background-color: #5e9fef !important;}
 			.blue .vertical{background-color: #9fc4f4 !important;}
 			.NoClcik { cursor:default; color:#656565 !important;}
+			table { width:100%; }
+			td,th { height:30px; text-align:center;}
+			.tdL { text-align:left; padding-left:25px;}
+			.tableUpdate { float:left; margin-left:12%;margin-top:10%;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -155,7 +159,7 @@
 								<c:if test="${null != obj.backmail }">
 									<span>
 									
-									<table id="principalApplicantTable" class="">
+									<table id="principalApplicantTable" border="1">
 										<tbody name="applicantsTable" id="applicantsTable">
 											<tr>
 												<td>资料来源</td>
@@ -164,8 +168,8 @@
 												<td>${obj.backmail.teamName }</td>
 											</tr>
 											<tr>
-												<td>回邮方式</td>
-												<td>${obj.exprType }</td>
+												<td class="tdL" colspan="2">回邮方式</td>
+												<td class="tdL" colspan="2">${obj.exprType }</td>
 											</tr>
 											<tr>
 												<td>联系人</td>
@@ -174,8 +178,8 @@
 												<td>${obj.backmail.telephone }</td>
 											</tr>
 											<tr>
-												<td>回邮地址</td>
-												<td>${obj.backmail.expressAddress }</td>
+												<td class="tdL" colspan="2">回邮地址</td>
+												<td class="tdL" colspan="2">${obj.backmail.expressAddress }</td>
 											</tr>
 											<tr>
 												<td>发票项目内容</td>
@@ -197,8 +201,8 @@
 											</tr>
 										</tbody>
 									</table>
-									
-									<a href="javascript: void(0);" onclick="backmail(${obj.applicant.applicantid })">修改</a></span>
+									</span>
+									<a class="tableUpdate" href="javascript: void(0);" onclick="backmail(${obj.applicant.applicantid })">修改</a>
 								</c:if>
 								<c:if test="${null == obj.backmail}">
 									<span><a href="javascript: void(0);" onclick="backmail(${obj.applicant.applicantid })">填写</a></span>

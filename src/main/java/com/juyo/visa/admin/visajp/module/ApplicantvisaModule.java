@@ -142,4 +142,21 @@ public class ApplicantvisaModule {
 		return JsonResult.success("删除成功");
 	}
 
+	/**
+	 * 获取国家下拉
+	 */
+	@At
+	@POST
+	public Object getNationalSelect(@Param("searchstr") String searchstr) {
+		return applicantvisaViewService.getNationalSelect(searchstr);
+	}
+
+	/**
+	 * 自动计算有效期
+	 */
+	@At
+	@POST
+	public Object autoCalcToDate(@Param("visaDate") String visaDate, @Param("visaYears") Integer visaYears) {
+		return applicantvisaViewService.autoCalcToDate(visaDate, visaYears);
+	}
 }

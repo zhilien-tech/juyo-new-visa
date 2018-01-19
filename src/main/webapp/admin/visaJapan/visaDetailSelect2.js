@@ -360,3 +360,57 @@ $("#backtripdate").datetimepicker().on('changeDate', function(ev){
 		});
 	}
 });
+$(document).on('change','.departurecity',function(){
+	var departurecity = $(this).val();
+	if (departurecity) {
+		departurecity = departurecity.join(',');
+	}else{
+		departurecity += '';
+	}
+	var parentobj = $(this).parent().parent().parent();
+	var arrivedcity = parentobj.find('.arrivedcity').val();
+	if (arrivedcity) {
+		arrivedcity = arrivedcity.join(',');
+	}else{
+		arrivedcity += '';
+	}
+	var departuredate = parentobj.find('.departuredate').val();
+	var triptype = $('#triptype').val();
+	initFlightByInterface(departuredate,departurecity,arrivedcity);
+	if(triptype == '1'){
+		initFlightByInterface(departuredate,arrivedcity,departurecity);
+	}
+});
+$(document).on('change','.arrivedcity',function(){
+	var arrivedcity = $(this).val();
+	if (arrivedcity) {
+		arrivedcity = arrivedcity.join(',');
+	}else{
+		arrivedcity += '';
+	}
+	var parentobj = $(this).parent().parent().parent();
+	var departurecity = parentobj.find('.departurecity').val();
+	if (departurecity) {
+		departurecity = departurecity.join(',');
+	}else{
+		departurecity += '';
+	}
+	var departuredate = parentobj.find('.departuredate').val();
+	initFlightByInterface(departuredate,departurecity,arrivedcity);
+	//往返加载去程和返程
+	var triptype = $('#triptype').val();
+	if(triptype == '1'){
+		initFlightByInterface(departuredate,arrivedcity,departurecity);
+	}
+});
+//加载航班号到缓存并同步到数据库
+function initFlightByInterface(departuredate,departurecity,arrivedcity){
+	$.ajax({ 
+		url: '/admin/tripairline/getAirLineByInterfate.html',
+		dataType:"json",
+		data:{date:departuredate,gocity:departurecity,arrivecity:arrivedcity},
+		type:'post',
+		success: function(data){
+		}
+	});
+}
