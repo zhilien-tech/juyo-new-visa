@@ -99,7 +99,10 @@
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证补录</a></div>
+										<div class="visaBtn">
+											<a v-on:click="noticeSale(item.applyid,data.id)">通知销售</a>&nbsp;
+											<a v-on:click="visainput(item.applicatid,data.orderid)">签证补录</a>
+										</div>
 									</span>
 									<span v-else class="visaListSpan">
 										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
@@ -107,7 +110,10 @@
 										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证补录</a></div>
+										<div class="visaBtn">
+											<a v-on:click="noticeSale(item.applyid,data.id)">通知销售</a>&nbsp;
+											<a v-on:click="visainput(item.applicatid,data.orderid)">签证补录</a>
+										</div>
 									</span>
 								</li>
 							</ul> 
@@ -290,6 +296,27 @@
     				scrollbar: false,
     				area: ['900px', '80%'],
     				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&orderid='+orderid+'&isvisa=1'
+    			});
+    		},
+    		//通知销售
+    		noticeSale:function(applicantid,orderjpid){
+    			layer.load(1);
+    			$.ajax({ 
+    				url: '/admin/visaJapan/noticeSale.html',
+    				dataType:"json",
+    				data:{
+    					applyid:applicantid,
+    					orderid:orderjpid
+    				},
+    				type:'post',
+    				success: function(data){
+    					layer.closeAll('loading');
+    					if(data.status == 200){
+    						layer.msg('通知成功');
+    					}else if(data.status == 500){
+    						layer.msg(data.msg);
+    					}
+    				}
     			});
     		}
         }

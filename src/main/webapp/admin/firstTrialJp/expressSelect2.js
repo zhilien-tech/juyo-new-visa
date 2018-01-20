@@ -42,7 +42,7 @@ function clearText(){
 }
 
 //保存
-function save(orderid,orderjpid){
+function save(orderid,orderjpid, opType){
 
 	var receiver = $("#receiver").val();
 	if (receiver == "") {
@@ -121,7 +121,8 @@ function save(orderid,orderjpid){
 						receiver:$("#receiver").val(),
 						mobile:$("#mobile").val(),
 						expressaddress:$("#address").val(),
-						shareManIds:shareManIds
+						shareManIds:shareManIds,
+						opType:opType
 						//receiveAddressId:$("#receiveAddressId").val()
 					},
 					success: function(data){
@@ -137,7 +138,6 @@ function save(orderid,orderjpid){
 	});
 
 }
-
 
 /* $('#multiPass_roundTrip').bootstrapSwitch();//统一联系人
 $('#multiPass_roundTrip').on('switchChange.bootstrapSwitch', function (event,state) { 
