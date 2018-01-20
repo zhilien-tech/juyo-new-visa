@@ -76,7 +76,12 @@
 										<div><label>电话：</label><span>{{item.backtelephone}}</span></div>
 										<div><label>地址：</label><span>{{item.expressaddress}}</span></div>
 										<div><label>状态：</label><span></span></div>
-										<div><label></label><span><a href="javascript:;" v-on:click="backpost(item.id,item.orderid)">回邮</a></span></div>
+										<div><label></label>
+											<span>
+												<a href="javascript:;" v-on:click="sendMail(item.applicatid);">回邮通知</a>&nbsp;
+												<a href="javascript:;" v-on:click="backpost(item.id,item.orderid)">回邮</a>
+											</span>
+										</div>
 										<div><!-- <i> </i> --></div>
 									</span>
 									<span v-else  style="display:block; height:31px;">
@@ -84,7 +89,13 @@
 										<div><label>　　　</label><span>{{item.backtelephone}}</span></div>
 										<div><label>　　　</label><span>{{item.expressaddress}}</span></div>
 										<div><label>　　　</label><span></span></div>
-										<div><label></label><span><a href="javascript:;" v-on:click="backpost(item.id,item.orderid)">回邮</a></span></div>
+										<div>
+											<label></label>
+											<span>
+												<a href="javascript:;" v-on:click="sendMail(item.applicatid);">回邮通知</a>&nbsp;
+												<a href="javascript:;" v-on:click="backpost(item.id,item.orderid)">回邮</a>
+											</span>
+										</div>
 										<div><!-- <i> </i> --></div>
 									</span>
 								</li>
@@ -133,6 +144,24 @@
             });
         },
         methods:{
+        	sendMail:function(applicantJPId){
+        		layer.load(1);
+        		$.ajax({
+        			url: '/admin/aftermarket/sendMailAndMessage.html',
+        			dataType:"json",
+        			data:{applicantid:applicantJPId},
+        			type:'post',
+        			success: function(data){
+        				layer.closeAll('loading');
+        				if(data.status == 200){
+        					successCallBack(2);
+        				}else if(data.status == 500){
+        					layer.msg(data.msg);
+        				}
+        				//layer.msg('发送成功');
+        			}
+        		});
+        	},
         	backpost:function(applyId,orderid){
         		layer.open({
     				type: 2,
