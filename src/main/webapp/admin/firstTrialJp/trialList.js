@@ -51,6 +51,9 @@ new Vue({
 		/* editClick:function(){//编辑图标  页面跳转
 					window.location.href = '${base}/admin/firstTrialJp/edit.html';
 				} */
+		sendMsg:function(orderid,orderjpid){
+			
+		},
 		visaDetail:function(orderid,orderjpid){
 			//跳转到签证详情页面
 			window.open('/admin/firstTrialJp/trialDetail.html?orderid='+orderid+'&orderjpid='+orderjpid);

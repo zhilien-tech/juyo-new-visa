@@ -78,6 +78,11 @@
 		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
 	});
 	
+	$(document).on("mouseover",".addressNotice",function(){
+		var t = "地址通知";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});
+	
 	$(document).on("mouseover",".shiShou",function(){
 		var t = "实收";
 		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
