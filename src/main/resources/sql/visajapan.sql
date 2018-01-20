@@ -39,6 +39,7 @@ SELECT
 	CONCAT(ta.firstName, ta.lastName) applicant,
 	tap.passport passportNo,
 	taoj.id applicatid,
+	taoj.applicantId applyid,
 	ta.telephone,
 	ta.email,
 	tavpj.type dataType,

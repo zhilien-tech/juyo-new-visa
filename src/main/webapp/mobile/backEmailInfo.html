@@ -132,6 +132,13 @@
 						backMailObj.backmailinfo = data.backmailinfo;
 						backMailObj.mainBackMailTypes = data.mainBackMailTypeEnum;
 						backMailObj.mainSourceTypes = data.mainSourceTypeEnum;
+						/* 资料来源 */
+						var sourceStr = $("#source option[value='"+ data.backmailinfo.source +"']").text();
+						$(".sourceInfo span").text(sourceStr);
+						
+						/*回邮方式 */
+						var expresstypeStr = $("#expressType option[value='"+ data.backmailinfo.expresstype +"']").text();
+						$(".wayInfo span").text(expresstypeStr);
 					}
 				});
 			}
@@ -151,6 +158,14 @@
 					backMailObj.backmailinfo = data.backmailinfo;
 					backMailObj.mainBackMailTypes = data.mainBackMailTypeEnum;
 					backMailObj.mainSourceTypes = data.mainSourceTypeEnum;
+					
+					/* 资料来源 */
+					var sourceStr = $("#source").find("option:selected").text();
+					$(".sourceInfo span").text(sourceStr);
+					
+					/*回邮方式 */
+					var expresstypeStr = $("#expressType").find("option:selected").text();
+					$(".wayInfo span").text(expresstypeStr);
 				}
 			});
 		}
