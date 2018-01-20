@@ -15,7 +15,7 @@
 	<style type="text/css">
 	img[src=""],img:not([src]) { opacity:0;}
 	input[type="file"] { z-index:999999;}
-	.delete { z-index:999999999;}
+	.delete { z-index:1000000;}
 	.info-imgUpload {width: 100%;}
 	.NoInfo { width:100%; height:30px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 	.ipt-info { display:none; margin:15px -15px;}

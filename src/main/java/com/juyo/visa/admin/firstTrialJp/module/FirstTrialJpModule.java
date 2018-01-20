@@ -188,9 +188,19 @@ public class FirstTrialJpModule {
 			@Param("expresstype") Integer expresstype, @Param("sharetype") Integer sharetype,
 			@Param("receiver") String receiver, @Param("mobile") String mobile,
 			@Param("expressaddress") String expressaddress, @Param("shareManIds") String shareManIds,
-			HttpSession session) {
+			@Param("opType") Integer opType, HttpSession session) {
 		return firstTrialJpViewService.saveExpressInfo(orderid, orderjpid, expresstype, sharetype, receiver, mobile,
-				expressaddress, shareManIds, session);
+				expressaddress, shareManIds, opType, session);
+	}
+
+	/**
+	 * 初审 快递发送短信邮件
+	 */
+	@At
+	@POST
+	public Object sendExpressMsg(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid,
+			@Param("sharetype") Integer sharetype, @Param("shareManIds") String shareManIds) {
+		return firstTrialJpViewService.sendExpressMsg(orderid, orderjpid, sharetype, shareManIds);
 	}
 
 	/**

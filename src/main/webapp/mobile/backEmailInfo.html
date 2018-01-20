@@ -19,7 +19,7 @@
 			 	<li class="dataSource">
 			 		资料来源 
 			 		<span class="sourceInfo">
-			 			<span></span>
+			 			<span class="sourceValue"></span>
 			 			<i></i>
 			 		</span>
 			 		<select id="source" name="source" v-model="backmailinfo.source" class="backEmailSelect dataSourceSelect">
@@ -97,12 +97,13 @@
 	<script>
 		$(function(){
 			//资料来源
-			$(".dataSourceSelect").change(function(){
+			$("#source").change(function(){
 				let selectInfo = $(".dataSourceSelect").find("option:selected").text();
-				$(".sourceInfo span").text(selectInfo);
+				alert(selectInfo);
+				$(".sourceValue").text(selectInfo);
 			});
 			//回邮方式
-			$(".backEmailWaySelect").change(function(){
+			$("#expressType").change(function(){
 				let selectInfo = $(".backEmailWaySelect").find("option:selected").text();
 				$(".wayInfo span").text(selectInfo);
 			});	
@@ -132,6 +133,13 @@
 						backMailObj.backmailinfo = data.backmailinfo;
 						backMailObj.mainBackMailTypes = data.mainBackMailTypeEnum;
 						backMailObj.mainSourceTypes = data.mainSourceTypeEnum;
+						/* 资料来源 */
+						var sourceStr = $("#source option[value='"+ data.backmailinfo.source +"']").text();
+						$(".sourceInfo span").text(sourceStr);
+						
+						/*回邮方式 */
+						var expresstypeStr = $("#expressType option[value='"+ data.backmailinfo.expresstype +"']").text();
+						$(".wayInfo span").text(expresstypeStr);
 					}
 				});
 			}
@@ -151,6 +159,14 @@
 					backMailObj.backmailinfo = data.backmailinfo;
 					backMailObj.mainBackMailTypes = data.mainBackMailTypeEnum;
 					backMailObj.mainSourceTypes = data.mainSourceTypeEnum;
+					
+					/* 资料来源 */
+					var sourceStr = $("#source").find("option:selected").text();
+					$(".sourceInfo span").text(sourceStr);
+					
+					/*回邮方式 */
+					var expresstypeStr = $("#expressType").find("option:selected").text();
+					$(".wayInfo span").text(expresstypeStr);
 				}
 			});
 		}

@@ -23,7 +23,7 @@
 	.NoInfo { width:101.5%; height:30px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 	.ipt-info { display:none; }
     .Unqualified, .qualified  { margin-right:10px; }
-    .delete { z-index:999999999;}
+    .delete { z-index:1000000;}
     /*弹框头部固定*/
     .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
     .btn-margin { margin-top:10px;}

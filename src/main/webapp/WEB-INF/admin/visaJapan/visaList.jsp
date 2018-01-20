@@ -18,9 +18,6 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
 	<style>
-	/*顶部 不随导航移动*/
-	/* .box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	.box-body {  overflow:hidden;margin-top:60px;} */
 	.card-head { overflow:hidden; white-space:nowrap;}
 	.card-head span { font-size:12px;}
 	.everybody-info {position:relative; }
@@ -31,6 +28,7 @@
 	.card-head i { cursor:pointer;}
 	.marginLR { margin:0px 20px;}
 	.btnSearch { margin-left:20px;}
+	.salesBtn , .viseBtn { width:20px; height:20px; display:inline-block; margin-right:10px; position:relative;top:5px;}
 	[v-cloak] {
 	  display: none;
 	}
@@ -99,7 +97,10 @@
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证补录</a></div>
+										<div class="visaBtn">
+											<a class="salesBtn" v-on:click="noticeSale(item.applyid,data.id)"></a>&nbsp;
+											<a class="viseBtn" v-on:click="visainput(item.applicatid,data.orderid)"></a>
+										</div>
 									</span>
 									<span v-else class="visaListSpan">
 										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
@@ -107,7 +108,10 @@
 										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证补录</a></div>
+										<div class="visaBtn">
+											<a class="salesBtn" v-on:click="noticeSale(item.applyid,data.id)"></a>&nbsp;
+											<a class="viseBtn" v-on:click="visainput(item.applicatid,data.orderid)"></a>
+										</div>
 									</span>
 								</li>
 							</ul> 
@@ -290,6 +294,27 @@
     				scrollbar: false,
     				area: ['900px', '80%'],
     				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&orderid='+orderid+'&isvisa=1'
+    			});
+    		},
+    		//通知销售
+    		noticeSale:function(applicantid,orderjpid){
+    			layer.load(1);
+    			$.ajax({ 
+    				url: '/admin/visaJapan/noticeSale.html',
+    				dataType:"json",
+    				data:{
+    					applyid:applicantid,
+    					orderid:orderjpid
+    				},
+    				type:'post',
+    				success: function(data){
+    					layer.closeAll('loading');
+    					if(data.status == 200){
+    						layer.msg('通知成功');
+    					}else if(data.status == 500){
+    						layer.msg(data.msg);
+    					}
+    				}
     			});
     		}
         }

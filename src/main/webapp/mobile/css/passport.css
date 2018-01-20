@@ -552,7 +552,7 @@ input[type="checkbox"] + label:after {
 	text-align:  right;
 }
 .dataSource .sourceInfo span {
-	
+	z-index:1000000;
 }
 .dataSource .sourceInfo i {
 	width: 10px;

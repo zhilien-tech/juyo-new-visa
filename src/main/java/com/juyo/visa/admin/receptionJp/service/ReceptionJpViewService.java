@@ -49,6 +49,7 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.ReceptionSearchStatusEnum_JP;
+import com.juyo.visa.common.enums.ShareTypeEnum;
 import com.juyo.visa.common.enums.VisaDataTypeEnum;
 import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -336,41 +337,52 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 
 	}
 
+	/**
+	 * 
+	 * 前台 发短信
+	 *
+	 * @param orderid 订单id
+	 * @param session
+	 * @return null
+	 */
 	public Object toSend(int orderid, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderid));
-		//发送短信(根据分享是统一联系人还是单独分享来发送短信)
-		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-		//根据日本订单表查出对应的日本申请人
-		List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
-				Cnd.where("orderId", "=", orderjp.getId()), null);
-		//查询是否有统一联系人
-		TApplicantOrderJpEntity sameApply = dbDao.fetch(
-				TApplicantOrderJpEntity.class,
-				Cnd.where("orderId", "=", orderjp.getId()).and("isSameLinker", "=", IsYesOrNoEnum.YES.intKey())
-						.and("isShareSms", "=", IsYesOrNoEnum.YES.intKey()));
-		if (!Util.isEmpty(sameApply)) {//如果有统一联系人，给统一联系人发短信
-			TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, sameApply.getApplicantId()
-					.longValue());
-			try {
-				sendMessage(orderEntity.getId(), applicantEntity.getId());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {//没有统一联系人时，单独发送
-			for (TApplicantOrderJpEntity applyJp : applyJpList) {
-				TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyJp.getApplicantId().longValue());
-				if (Util.eq(applyJp.getIsShareSms(), IsYesOrNoEnum.YES.intKey())) {//单独发短信
+		Integer userId = loginUser.getId();
+
+		TOrderRecipientEntity orderReceive = dbDao.fetch(TOrderRecipientEntity.class,
+				Cnd.where("orderId", "=", orderid));
+		if (!Util.isEmpty(orderReceive)) {
+			Integer shareType = orderReceive.getShareType();
+			String shareManId = orderReceive.getShareMans();
+			if (ShareTypeEnum.UNIFIED.intKey() == shareType) {
+				//统一联系人
+				if (!Util.isEmpty(shareManId)) {
 					try {
-						sendMessage(orderEntity.getId(), apply.getId());
+						sendMessage(orderid, Integer.valueOf(shareManId)); //发短信
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			} else {
+				//单独分享
+				String[] shareIds = shareManId.split(",");
+				for (String applyid : shareIds) {
+					try {
+						sendMessage(orderid, Integer.valueOf(applyid));//发短信
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
 			}
 		}
-		changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.RECEPTION_PROCESS.intKey(),
-				loginUser.getId());
+
+		//变更订单负责人
+		changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.RECEPTION_PROCESS.intKey(), userId);
+
 		return null;
 	}
 

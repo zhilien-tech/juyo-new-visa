@@ -16,10 +16,8 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<style>
-	/*顶部 不随导航移动*/
 	[v-cloak]{display:none}
-	.box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	.box-body {  overflow:hidden;margin-top:60px;}
+	.box-body {  overflow:hidden;}
 	.card-head { overflow:hidden; white-space:nowrap;}
 	.card-head span { font-size:12px;}
 	.everybody-info {position:relative; }
