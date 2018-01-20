@@ -54,6 +54,8 @@ public class TApplicantForm extends DataTablesParamForm {
 
 	private Integer isPrompted;
 
+	private Integer addApply;
+
 	private String otherLastNameEn;
 
 	private String emergencyLinkman;

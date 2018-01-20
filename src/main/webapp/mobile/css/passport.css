@@ -533,6 +533,12 @@ input[type="checkbox"] + label:after {
 	border-radius: 8px; 
 	font-size: 0.3rem;
 }
+.hint {
+	width:100%;
+	text-align:center;
+	color:#c3bebe;
+	margin-top:1%;
+}
 /****************回邮****************/
 .labelMargin {
 	margin-top:0;

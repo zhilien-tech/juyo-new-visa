@@ -33,6 +33,9 @@ public class TApplicantBackmailJpForm extends DataTablesParamForm {
 	/**是否是售后操作*/
 	private Integer isAfterMarket;
 
+	/**是否是游客进度页操作*/
+	private Integer flowChart;
+
 	/**资料来源*/
 	private Integer source;
 

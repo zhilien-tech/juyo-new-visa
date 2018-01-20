@@ -9,6 +9,7 @@ SELECT
 	taoj.orderId orderJpId,
 	torj.id orderId,
 	torj.ordernum,
+	ta.status applystatus,
 	torj.STATUS orderstatus,
 	torj.sendVisaDate,
 	torj.outVisaDate 

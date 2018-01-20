@@ -83,11 +83,9 @@
 					orderId : orderid
 				},
 				success: function(data){
-					window.parent.location.reload();
-					if(data.stauts == 200){
-						layer.close(layerIndex);
-						parent.successCallBack(2);
-					}
+					//window.parent.location.reload();
+					//layer.close(layerIndex);
+					parent.successCallBack(2);
 					closeWindow();
 				}
 			});

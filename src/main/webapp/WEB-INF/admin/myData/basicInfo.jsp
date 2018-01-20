@@ -12,37 +12,15 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
-		<style type="text/css">
-			.qz-head { position: fixed; top:0;left:0;width:100%;height:50px;line-height:50px;background:#FFF;z-index:9999;padding:0px 15px; }
-			.content { padding: 15px 62px 15px 20px; height:100%; margin-top: 50px; overflow-y:hidden; }
-			.rightNav { position:fixed;top:50px;right:0;z-index:999; width:40px;height:calc(100% - 50px); cursor:pointer;}
-			.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999; border-bottom: 4px solid #999;transform:translate(0,-50%) rotate(-135deg);-webkit-transform:translate(0,-50%) rotate(-135deg);}
-			.row { margin-top: 5px;}
-			.wordSpell { margin-top:3px !important;}
-			.ipt-info { display:none; margin-top:15px;}
-			.NoInfo { width:95%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
-			.form-control{height: 30px;}
-			.tab-content{margin: 0 0px;}
-			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
-			.front, .back {width: 320px;margin: 0px auto;}
-			.nameBeforeYes {
-	margin-right:20px;
-}
-
-.nameBeforeHide , .nationalityHide{
-	display:none;
-}
-			.qz-head { border-bottom:2px solid #deecff; padding:15px 20px; display: table; width: 100%;}
-			.basic { margin-left: 10px;}
-			.onceIDTop { padding-left: 15px;}
-		</style>
+		<!-- 基本信息样式 -->
+		<link rel="stylesheet" href="${base}/references/common/css/basicInfo.css">
 	</head>
 
 <body class="hold-transition skin-blue sidebar-mini">
 	<c:choose>
 		<c:when test="${!empty obj.contact }">
 			<a id="toPassport" class="rightNav" onclick="passportBtn();">
-					<span></span>
+				<span></span>
 			</a>
 		</c:when>
 		<c:otherwise>
@@ -133,7 +111,7 @@
 						<!-- end 身份证 反面 -->
 						<div class="row">
 							<!-- 签发机关 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-10 col-sm-offset-1 padding-right-0 marginL">
 								<div class="form-group">
 									<label><span>*</span>签发机关</label> 
 									<c:choose>
@@ -170,7 +148,7 @@
 							</div>
 							<!-- 姓/名 拼音 -->
 							<div class="nameBeforeHide">
-							    <div class="col-sm-11 col-sm-offset-1 padding-right-0">
+							    <div class="col-sm-10 col-sm-offset-1 padding-right-0 marginL">
 									<div class="form-group">
 										<label>姓/拼音</label> 
 										<c:choose>
@@ -203,7 +181,7 @@
 								</div>
 							</div>
 							<!-- 曾用国籍 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0 nationalityHide">
+							<div class="col-sm-5 padding-right-0 nationalityHide">
 								<div class="form-group" id="nationalityDiv">
 									<label>国籍</label> 
 									<c:choose>
@@ -762,7 +740,11 @@
 					validators : {
 						notEmpty : {
 							message : '紧急联系人手机不能为空'
-						}
+						},
+						regexp: {
+	                	 	regexp: /^[1][34578][0-9]{9}$/,
+	                        message: '手机号格式错误'
+	                    }
 					}
 				},
 			}
@@ -1319,7 +1301,7 @@
 				$(".nameBeforeTop").css('float','none');
 				$(".nameBeforeHide").show();
 				$(".wordSpell").show();
-				$(".onceIDTop").css('padding-left','15px');
+				$(".onceIDTop").css('margin-left','45px');
 			}else {
 				
 				$(".nameBeforeHide").hide();
@@ -1328,6 +1310,7 @@
 					
 				}else {
 					$(".nameBeforeTop").css('float','left');
+					$(".onceIDTop").css('margin-left','0px');
 				}
 			}
 		});
@@ -1339,7 +1322,7 @@
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
 				$(".onceIDTop").css('float','left');
-				$(".onceIDTop").css('padding-left','15px');
+				$(".onceIDTop").css('margin-left','45px');
 				$("#nationality").val("").change();
 			}else {
 				
@@ -1348,6 +1331,7 @@
 					
 				}else {
 					$(".nameBeforeTop").css('float','left');
+					$(".onceIDTop").css('margin-left','0px');
 				}
 			}
 		});

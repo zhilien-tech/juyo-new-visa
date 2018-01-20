@@ -28,6 +28,8 @@ public class VisaEditDataForm implements Serializable {
 
 	private Integer isOrderUpTime;
 
+	private Integer addApply;
+
 	//是主申请人还是副申请人
 	private Integer applicant;
 

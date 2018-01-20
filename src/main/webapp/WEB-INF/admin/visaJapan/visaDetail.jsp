@@ -351,13 +351,13 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>出发日期：</label>
-												<input id="goDate" name="" type="text" class="form-control input-sm datetimepickertoday" value="<fmt:formatDate value="${obj.travelinfo.goDate}" pattern="yyyy-MM-dd" />"/>
+												<input id="goDate" name="" type="text" class="form-control input-sm datetimepickertoday departuredate" value="<fmt:formatDate value="${obj.travelinfo.goDate}" pattern="yyyy-MM-dd" />"/>
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>出发城市：</label>
-												<select id="goDepartureCity" class="form-control select2 select2City" multiple="multiple" v-model="travelinfo.goDepartureCity">
+												<select id="goDepartureCity" class="form-control select2 select2City departurecity" multiple="multiple" v-model="travelinfo.goDepartureCity">
 													<c:if test="${!empty obj.goleavecity.id}">
 														<option value="${obj.goleavecity.id}" selected="selected">${obj.goleavecity.city}</option>
 													</c:if>
@@ -367,7 +367,7 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>抵达城市：</label>
-												<select id="goArrivedCity" class="form-control input-sm select2City" multiple="multiple" v-model="travelinfo.goArrivedCity">
+												<select id="goArrivedCity" class="form-control input-sm select2City arrivedcity" multiple="multiple" v-model="travelinfo.goArrivedCity">
 													<c:if test="${!empty obj.goarrivecity.id}">
 														<option value="${obj.goarrivecity.id}" selected="selected">${obj.goarrivecity.city}</option>
 													</c:if>
@@ -392,13 +392,13 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>返回日期：</label>
-												<input id="returnDate" type="text" class="form-control input-sm datetimepickertoday" value="<fmt:formatDate value="${obj.travelinfo.returnDate}" pattern="yyyy-MM-dd" />"/>
+												<input id="returnDate" type="text" class="form-control input-sm datetimepickertoday departuredate" value="<fmt:formatDate value="${obj.travelinfo.returnDate}" pattern="yyyy-MM-dd" />"/>
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>出发城市：</label>
-												<select id="returnDepartureCity" class="form-control select2 select2City" multiple="multiple" v-model="travelinfo.returnDepartureCity">
+												<select id="returnDepartureCity" class="form-control select2 select2City departurecity" multiple="multiple" v-model="travelinfo.returnDepartureCity">
 													<c:if test="${!empty obj.backleavecity.id}">
 														<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
 													</c:if>
@@ -408,7 +408,7 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>返回城市：</label>
-												<select id="returnArrivedCity" class="form-control input-sm select2City" multiple="multiple" v-model="travelinfo.returnArrivedCity">
+												<select id="returnArrivedCity" class="form-control input-sm select2City arrivedcity" multiple="multiple" v-model="travelinfo.returnArrivedCity">
 													<c:if test="${!empty obj.backarrivecity.id}">
 														<option value="${obj.backarrivecity.id}" selected="selected">${obj.backarrivecity.city}</option>
 													</c:if>
@@ -438,13 +438,13 @@
 												<div class="col-sm-3">
 													<div class="form-group">
 														<label><span>*</span>出发日期：</label>
-														<input name="departuredate" type="text" class="form-control input-sm datetimepickertoday" value="<fmt:formatDate value="${mutil.departureDate}" pattern="yyyy-MM-dd" />"/>
+														<input name="departuredate" type="text" class="form-control input-sm datetimepickertoday departuredate" value="<fmt:formatDate value="${mutil.departureDate}" pattern="yyyy-MM-dd" />"/>
 													</div>
 												</div>
 												<div class="col-sm-3">
 													<div class="form-group">
 														<label><span>*</span>出发城市：</label>
-														<select name="departurecity" class="form-control select2 duochengselectcity" multiple="multiple" v-model="travelinfo.returnDepartureCity">
+														<select name="departurecity" class="form-control select2 duochengselectcity departurecity" multiple="multiple" v-model="travelinfo.returnDepartureCity">
 															<%-- <c:if test="${!empty obj.backleavecity.id}">
 																<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
 															</c:if> --%>
@@ -459,7 +459,7 @@
 												<div class="col-sm-3"> 
 													<div class="form-group">
 														<label><span>*</span>抵达城市：</label>
-														<select name="arrivedcity" class="form-control input-sm duochengselectcity" multiple="multiple" v-model="travelinfo.returnArrivedCity">
+														<select name="arrivedcity" class="form-control input-sm duochengselectcity arrivedcity" multiple="multiple" v-model="travelinfo.returnArrivedCity">
 															<c:forEach items="${obj.citys }" var="city">
 																<c:if test="${city.id eq mutil.arrivedCity }">
 																	<option selected="selected" value="${city.id }">${city.city }</option>
@@ -503,13 +503,13 @@
 												<div class="col-sm-3">
 													<div class="form-group">
 														<label><span>*</span>出发日期：</label>
-														<input name="departuredate" type="text" class="form-control input-sm datetimepickertoday" />
+														<input name="departuredate" type="text" class="form-control input-sm datetimepickertoday departuredate" />
 													</div>
 												</div>
 												<div class="col-sm-3">
 													<div class="form-group">
 														<label><span>*</span>出发城市：</label>
-														<select name="departurecity" class="form-control select2 duochengselectcity" multiple="multiple" v-model="travelinfo.returnDepartureCity">
+														<select name="departurecity" class="form-control select2 duochengselectcity departurecity" multiple="multiple" v-model="travelinfo.returnDepartureCity">
 															<%-- <c:if test="${!empty obj.backleavecity.id}">
 																<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
 															</c:if> --%>
@@ -519,7 +519,7 @@
 												<div class="col-sm-3">
 													<div class="form-group">
 														<label><span>*</span>抵达城市：</label>
-														<select name="arrivedcity" class="form-control input-sm duochengselectcity" multiple="multiple" v-model="travelinfo.returnArrivedCity">
+														<select name="arrivedcity" class="form-control input-sm duochengselectcity arrivedcity" multiple="multiple" v-model="travelinfo.returnArrivedCity">
 															<%-- <c:if test="${!empty obj.backarrivecity.id}">
 																<option value="${obj.backarrivecity.id}" selected="selected">${obj.backarrivecity.city}</option>
 															</c:if> --%>

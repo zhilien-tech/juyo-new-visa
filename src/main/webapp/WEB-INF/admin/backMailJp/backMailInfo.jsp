@@ -37,6 +37,7 @@
 						<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
 						<input id="applicantJPId" name="applicantJPId" type="hidden" v-model="backmailinfo.applicantjpid">
 						<input id="isAfterMarket" name="isAfterMarket" value="${obj.isAfterMarket }" type="hidden" >
+						<input id="flowChart" name="flowChart" value="${obj.flowChart }" type="hidden" >
 						<div class="row body-from-input">
 							<div class="col-sm-6">
 								<div class="form-group">
@@ -150,6 +151,7 @@
 		var BASE_PATH = '${base}';
 		var applicantId = '${obj.applicantId}';
 		var orderId = '${obj.orderId}';
+		var flowChart = '${obj.flowChart}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>

@@ -311,7 +311,12 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		}
 		//点击实收之后添加日志
 		orderJpViewService.insertLogs(orderjp.getOrderId(), JPOrderStatusEnum.RECEPTION_RECEIVED.intKey(), session);
-
+		//改变订单状态
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		if (!Util.isEmpty(order)) {
+			order.setStatus(JPOrderStatusEnum.RECEPTION_RECEIVED.intKey());
+			dbDao.update(order);
+		}
 		/*for (Map map : applicatlist) {//给订单下所有联系人发短信
 			int applyid = Integer.valueOf((String) map.get("applicatid"));
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, applyid);
@@ -381,8 +386,8 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 
 	//发送手机信息
 	public Object sendMessage(int orderid, int applicantid) throws IOException {
-		List<String> readLines = IOUtils
-				.readLines(getClass().getClassLoader().getResourceAsStream("reception_sms.txt"));
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
+				"receptiontemp/reception_sms.txt"));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
 			tmp.append(line);
