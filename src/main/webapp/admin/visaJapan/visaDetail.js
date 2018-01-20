@@ -201,6 +201,7 @@ new Vue({
 		},
 		//通知销售
 		noticeSale:function(applyid){
+			alert(applyid);
 			layer.load(1);
 			$.ajax({ 
 				url: '/admin/visaJapan/noticeSale.html',
