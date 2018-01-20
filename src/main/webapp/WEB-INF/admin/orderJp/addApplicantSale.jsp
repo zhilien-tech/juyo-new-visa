@@ -16,7 +16,7 @@
 <style type="text/css">
 img[src=""],img:not([src]) { opacity:0;}
 input[type="file"] { z-index:999999;}
-.delete { z-index:999999999;}
+.delete { z-index:1000000;}
 .modal-body { height:100%; margin-top:50px;}
 .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
 .btn-margin { margin-top:10px; }
@@ -113,11 +113,11 @@ input[type="file"] { z-index:999999;}
 							<!-- 姓/名 拼音 -->
 							<div class="nameBeforeHide">
 							    <div class="col-sm-10 padding-right-0 marginL">
-									<div class="form-group">
+									<div class="form-group" style="position:relative;">
 										<label>姓/拼音</label> <input id="otherFirstName"
-											name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "
+											name="otherFirstName"  type="text" class="form-control input-sm "
 											placeholder=" " value="" />
-											<input type="text" id="otherFirstNameEn" style="position:absolute;top:45px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:38px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
 
 										<!-- <i class="bulb"></i> -->
 									</div>
@@ -150,9 +150,9 @@ input[type="file"] { z-index:999999;}
 					<div class="col-sm-6 padding-right-0">
 						<div class="row"><!-- 姓/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group" style="position:relative;">
 									<label><span>*</span>姓/拼音</label>
-									<input id="firstName" style="position:relative;" name="firstName" type="text" class="form-control input-sm req " placeholder=" " />
+									<input id="firstName" name="firstName" type="text" class="form-control input-sm req " placeholder=" " />
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<input type="hidden" id="applyId"/>
 									<input type="text" id="firstNameEn" style="position:absolute;top:38px;border:none;left:150px;" name="firstNameEn" value=""/>
@@ -162,9 +162,9 @@ input[type="file"] { z-index:999999;}
 						</div><!-- end 姓/拼音 -->
 						<div class="row"><!-- 名/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0 ">
-								<div class="form-group">
+								<div class="form-group" style="position:relative;">
 									<label><span>*</span>名/拼音</label>
-									<input id="lastName" name="lastName" style="position:relative;" type="text" class="form-control input-sm " placeholder=" " />
+									<input id="lastName" name="lastName" type="text" class="form-control input-sm " placeholder=" " />
 									<input type="text" id="lastNameEn" style="position:absolute;top:38px;border:none;left:150px;" name="lastNameEn" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -280,10 +280,10 @@ input[type="file"] { z-index:999999;}
 						</div>	
 						<div class="row wordSpell">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								<div class="form-group" style="position:relative;" >
 									<label>名/拼音</label> 
-									<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm" placeholder=" " value="" />
-									<input type="text" id="otherLastNameEn" style="position:absolute;top:45px;border:none;left:150px;" name="otherLastNameEn" value=""/>
+									<input id="otherLastName" name="otherLastName" type="text" class="form-control input-sm" placeholder=" " value="" />
+									<input type="text" id="otherLastNameEn" style="position:absolute;top:38px;border:none;left:150px;" name="otherLastNameEn" value=""/>
 								</div>
 							</div>
 						</div>
@@ -335,7 +335,7 @@ input[type="file"] { z-index:999999;}
 	
 	<script type="text/javascript">
 		var base = "${base}";
-		$(function(){
+		function applyValidate(){
 			//校验
 			$('#applicantInfo').bootstrapValidator({
 				message : '验证不通过',
@@ -380,7 +380,7 @@ input[type="file"] { z-index:999999;}
 			});
 			$('#applicantInfo').bootstrapValidator('validate');
 			
-		});
+		};
 		//连接websocket
 		connectWebSocket();
 		function connectWebSocket(){
@@ -463,6 +463,7 @@ input[type="file"] { z-index:999999;}
 		}
 		
 		function saveApplicant(status){
+			applyValidate();
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#applicantInfo").data(
 					'bootstrapValidator');

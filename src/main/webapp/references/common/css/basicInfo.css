@@ -6,7 +6,7 @@ input[type="file"] {
 	z-index: 999999;
 }
 .delete { 
-	z-index:999999999;
+	z-index:1000000;
 }
 .qz-head {
 	position: fixed;
