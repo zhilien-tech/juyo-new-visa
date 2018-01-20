@@ -438,35 +438,6 @@ input[type="file"] { z-index:999999;}
 	}
 		$(function(){
 			
-			//身份证图片验证
-			if(userType == 2){
-				var cardFront = $("#cardFront").val();
-				if(cardFront == ""){
-					$(".front").attr("class", "info-imgUpload front has-error");  
-			        $(".help-blockFront").attr("data-bv-result","INVALID");  
-			        $(".help-blockFront").attr("style","display: block;");  
-			        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
-				}else{
-					$(".front").attr("class", "info-imgUpload front has-success");  
-			        $(".help-blockFront").attr("data-bv-result","IVALID");  
-			        $(".help-blockFront").attr("style","display: none;");  
-			        $("#borderColorFront").attr("style", null);
-				}
-				
-				var cardBack = $("#cardBack").val();
-				if(cardBack == ""){
-					$(".back").attr("class", "info-imgUpload back has-error");  
-			        $(".help-blockBack").attr("data-bv-result","INVALID");  
-			        $(".help-blockBack").attr("style","display: block;");  
-			        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
-				}else{
-					$(".back").attr("class", "info-imgUpload back has-success");  
-			        $(".help-blockBack").attr("data-bv-result","IVALID");  
-			        $(".help-blockBack").attr("style","display: none;"); 
-			        $("#borderColorBack").attr("style", null);
-				}
-			}
-			
 			var remark = $("#baseRemark").val();
 			if(remark != ""){
 				$(".ipt-info").show();
@@ -512,6 +483,55 @@ input[type="file"] { z-index:999999;}
 				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
 			}
 			
+			
+			
+			
+			
+			var front = $("#cardFront").val();
+			var back = $("#cardBack").val();
+			if(front != ""){
+				$("#uploadFile").siblings("i").css("display","block");
+			}else{
+				$("#uploadFile").siblings("i").css("display","none");
+			}
+			
+			if(back != ""){
+				$("#uploadFileBck").siblings("i").css("display","block");
+			}else{
+				$("#uploadFileBack").siblings("i").css("display","none");
+			} 
+		});
+		
+		
+		function applyValidate(){
+			//身份证图片验证
+			if(userType == 2){
+				var cardFront = $("#cardFront").val();
+				if(cardFront == ""){
+					$(".front").attr("class", "info-imgUpload front has-error");  
+			        $(".help-blockFront").attr("data-bv-result","INVALID");  
+			        $(".help-blockFront").attr("style","display: block;");  
+			        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
+				}else{
+					$(".front").attr("class", "info-imgUpload front has-success");  
+			        $(".help-blockFront").attr("data-bv-result","IVALID");  
+			        $(".help-blockFront").attr("style","display: none;");  
+			        $("#borderColorFront").attr("style", null);
+				}
+				
+				var cardBack = $("#cardBack").val();
+				if(cardBack == ""){
+					$(".back").attr("class", "info-imgUpload back has-error");  
+			        $(".help-blockBack").attr("data-bv-result","INVALID");  
+			        $(".help-blockBack").attr("style","display: block;");  
+			        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
+				}else{
+					$(".back").attr("class", "info-imgUpload back has-success");  
+			        $(".help-blockBack").attr("data-bv-result","IVALID");  
+			        $(".help-blockBack").attr("style","display: none;"); 
+			        $("#borderColorBack").attr("style", null);
+				}
+			}
 			
 			if(userType != 2){
 				//校验
@@ -742,22 +762,7 @@ input[type="file"] { z-index:999999;}
 				});
 			} 
 			$('#applicantInfo').bootstrapValidator('validate');
-			
-			
-			var front = $("#cardFront").val();
-			var back = $("#cardBack").val();
-			if(front != ""){
-				$("#uploadFile").siblings("i").css("display","block");
-			}else{
-				$("#uploadFile").siblings("i").css("display","none");
-			}
-			
-			if(back != ""){
-				$("#uploadFileBck").siblings("i").css("display","block");
-			}else{
-				$("#uploadFileBack").siblings("i").css("display","none");
-			} 
-		});
+		}
 		
 		//国籍检索
 		$("#nationality").on('input',function(){
@@ -990,7 +995,7 @@ input[type="file"] { z-index:999999;}
 					url: '${base}/admin/myData/infoIsChanged.html',
 					success :function(data) {
 						if(data.isPrompted == 0){//没有提示过
-							if(data.base.isSameInfo == 0){//如果返回0则说明游客信息改变，提示是否更新
+							if(data.base == 0){//如果返回0则说明游客信息改变，提示是否更新
 								layer.confirm("信息已改变，您是否要更新？", {
 	    							title:"提示",
 	    							btn: ["是","否"], //按钮
@@ -1050,9 +1055,9 @@ input[type="file"] { z-index:999999;}
 								parent.layer.close(index);
 								//parent.cancelCallBack(1);
 							}
-						}else{//提示过
+						}else if(data.isPrompted == 1){//提示过
 							//parent.cancelCallBack(1);
-							if(data.base.isSameInfo == 0){//内容改变
+							if(data.base == 0){//内容改变
 								if(data.isUpdated == 1){//更新
 									layer.msg("已同步", {
 	    								time: 1000,
@@ -1078,6 +1083,9 @@ input[type="file"] { z-index:999999;}
 								var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 								parent.layer.close(index);
 							}
+						}else{
+							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							parent.layer.close(index);
 						}
 					}
 				});
@@ -1106,8 +1114,8 @@ input[type="file"] { z-index:999999;}
 			if(userType == 2){
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");
-		        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
+		        //$(".help-blockFront").attr("style","display: block;");
+		        //$("#borderColorFront").attr("style", "border-color:#ff1a1a");
 			}
 			
 		}
@@ -1118,8 +1126,8 @@ input[type="file"] { z-index:999999;}
 			if(userType == 2){
 				$(".back").attr("class", "info-imgUpload back has-error");  
 		        $(".help-blockBack").attr("data-bv-result","INVALID");  
-		        $(".help-blockBack").attr("style","display: block;");
-		        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
+		        //$(".help-blockBack").attr("style","display: block;");
+		        //$("#borderColorBack").attr("style", "border-color:#ff1a1a");
 			}
 		}
 		
@@ -1238,7 +1246,7 @@ input[type="file"] { z-index:999999;}
 					},
 					url : '${base}/admin/myData/isPrompted.html',
 					success :function(apply) {
-						if(apply.updateIsPrompted == 0){//没有提示过
+						if(apply.base== 0){//没有提示过
 							$.ajax({
 								type : "post",
 								data : {
@@ -1315,7 +1323,7 @@ input[type="file"] { z-index:999999;}
 									}
 								}
 							});
-						}else{//提示过
+						}else if(apply.base == 1){//提示过
 							if(apply.updateIsOrNot == 1){//更新
 								$.ajax({
 									type : "post",
@@ -1360,11 +1368,6 @@ input[type="file"] { z-index:999999;}
 						}
 					}
 				});
-				
-				
-				
-				
-				
 			}
 		});
 		
@@ -1379,7 +1382,7 @@ input[type="file"] { z-index:999999;}
 					},
 					url : '${base}/admin/myData/isPrompted.html',
 					success :function(apply) {
-						if(apply.updateIsPrompted == 0){//没有提示过
+						if(apply.base == 0){//没有提示过
 							$.ajax({
 								type : "post",
 								async : false,
@@ -1454,7 +1457,7 @@ input[type="file"] { z-index:999999;}
 									}
 								}
 							});
-						}else{//提示过,查询是否更新
+						}else if(apply.base == 1){//提示过,查询是否更新
 							if(apply.updateIsOrNot == 1){//更新
 								$.ajax({
 									type : "post",
@@ -1594,7 +1597,7 @@ input[type="file"] { z-index:999999;}
 		function passportBtn(){
 			var applicantId = '${obj.applicant.id}';
 			var orderid = '${obj.orderid}';
-			if(userType == 2){
+			/* if(userType == 2){
 				var bootstrapValidator = $("#applicantInfo").data(
 				'bootstrapValidator');
 				// 执行表单验证 
@@ -1609,7 +1612,7 @@ input[type="file"] { z-index:999999;}
 				if($(".back").hasClass("has-error")){
 					return;
 				}
-			}
+			} */
 			saveApplicant(2);
 			//socket.onclose();
 			//window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
@@ -1646,6 +1649,7 @@ input[type="file"] { z-index:999999;}
 		});
 		
 		function saveApplicant(status){
+			applyValidate();
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#applicantInfo").data(
 					'bootstrapValidator');
@@ -1696,7 +1700,7 @@ input[type="file"] { z-index:999999;}
 					url: '${base}/admin/myData/baseIsChanged.html',
 					success :function(data) {
 						if(status == 2){
-							if(data == 1){//改变了保存，没改变不保存
+							if(data == 1 || data == 2){//改变了保存，没改变不保存
 								layer.load(1);
 								$.ajax({
 	    							async: false,
@@ -1714,193 +1718,224 @@ input[type="file"] { z-index:999999;}
 								window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType';
 							}
 						}else{
-							layer.load(1);
-							$.ajax({
-								async: false,
-								type: 'POST',
-								data : {applyid:applicantId},
-								url: '${base}/admin/myData/infoIsChanged.html',
-								success :function(data) {
-									layer.closeAll("loading");
-									if(data.isPrompted == 0){//没有提示过
-										if(data.base.isSameInfo == 0){//如果返回0则说明游客信息改变，提示是否更新
-				    						layer.confirm("信息已改变，您是否要更新？", {
-				    							title:"提示",
-				    							btn: ["是","否"], //按钮
-				    							shade: false //不显示遮罩
-				    						}, 
-				    						function(){
-				    							layer.load(1);
-				    							$.ajax({
-					    							async: false,
-					    							type: 'POST',
-					    							data : applicantInfo,
-					    							url: '${base}/admin/orderJp/saveEditApplicant.html',
-					    							success :function(data) {
-					    								layer.closeAll("loading");
-					    								console.log(JSON.stringify(data));
-					    								if(status == 1){
-							    							layer.msg("已同步", {
-							    								time: 1000,
-							    								end: function () {
-							    									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-							    									parent.layer.close(index);
-							    									parent.successCallBack(8);
-							    								}
-							    							});
-					    								}
-					    							}
-					    						});
-								    					$.ajax({ 
-								    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
-								    			    		dataType:"json",
-								    			    		data:{applyid:applicantId},
-								    			    		type:'post',
-								    			    		success: function(data){
-								    			    					    		
-								    			    		}
-								    			    	}); 
-								    					
-								    					$.ajax({ 
-								    			    		url: '${base}/admin/myVisa/saveIsOrNot.html',
-								    			    		dataType:"json",
-								    			    		data:{
-								    			    			applyid:applicantId,
-								    			    			updateOrNot : "YES"
-								    			    		},
-								    			    		type:'post',
-								    			    		success: function(data){
-								    			    					    		
-								    			    		}
-								    			    	}); 
-				    						},function(){
-				    							layer.load(1);
-				    							$.ajax({
-					    							async: false,
-					    							type: 'POST',
-					    							data : applicantInfo,
-					    							url: '${base}/admin/orderJp/saveEditApplicant.html',
-					    							success :function(data) {
-					    								layer.closeAll("loading");
-						    							if(status == 1){
-						    								layer.msg("修改成功", {
-						    									time: 1000,
-						    									end: function () {
-						    										var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-						    										parent.layer.close(index);
-						    										parent.successCallBack(8);
-						    									}
-						    								});
-														}
-					    							}
-					    						});
-				    							
-				    							
-				    							$.ajax({ 
-						    			    		url: '${base}/admin/myVisa/saveIsOrNot.html',
-						    			    		dataType:"json",
-						    			    		data:{
-						    			    			applyid:applicantId,
-						    			    			updateOrNot : "NO"
-						    			    		},
-						    			    		type:'post',
-						    			    		success: function(data){
-						    			    					    		
-						    			    		}
-						    			    	}); 
-				    						});
-										}else{
-											layer.load(1);
-											$.ajax({
-												async: false,
-												type: 'POST',
-												data : applicantInfo,
-												url: '${base}/admin/orderJp/saveEditApplicant.html',
-												success :function(data) {
-													layer.closeAll("loading");
-													console.log(JSON.stringify(data));
-													if(status == 1){
-														layer.msg("修改成功", {
-															time: 1000,
-															end: function () {
-																var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-																parent.layer.close(index);
+							if(data == 2){
+								layer.load(1);
+								$.ajax({
+	    							async: false,
+	    							type: 'POST',
+	    							data : applicantInfo,
+	    							url: '${base}/admin/orderJp/saveEditApplicant.html',
+	    							success :function(data) {
+	    								layer.closeAll("loading");
+	    								layer.msg("已修改", {
+		    								time: 1000,
+		    								end: function () {
+		    									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		    									parent.layer.close(index);
+		    									parent.successCallBack(8);
+		    								}
+		    							});
+	    							}
+								});
+								$.ajax({ 
+		    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
+		    			    		dataType:"json",
+		    			    		data:{applyid:applicantId},
+		    			    		type:'post',
+		    			    		success: function(data){
+		    			    					    		
+		    			    		}
+		    			    	}); 
+							}else{
+								layer.load(1);
+								$.ajax({
+									async: false,
+									type: 'POST',
+									data : {applyid:applicantId},
+									url: '${base}/admin/myData/infoIsChanged.html',
+									success :function(data) {
+										layer.closeAll("loading");
+										if(data.isPrompted == 0){//没有提示过
+											if(data.base == 0){//如果返回0则说明游客信息改变，提示是否更新
+					    						layer.confirm("信息已改变，您是否要更新？", {
+					    							title:"提示",
+					    							btn: ["是","否"], //按钮
+					    							shade: false //不显示遮罩
+					    						}, 
+					    						function(){
+					    							layer.load(1);
+					    							$.ajax({
+						    							async: false,
+						    							type: 'POST',
+						    							data : applicantInfo,
+						    							url: '${base}/admin/orderJp/saveEditApplicant.html',
+						    							success :function(data) {
+						    								layer.closeAll("loading");
+						    								console.log(JSON.stringify(data));
+						    								if(status == 1){
+								    							layer.msg("已同步", {
+								    								time: 1000,
+								    								end: function () {
+								    									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+								    									parent.layer.close(index);
+								    									parent.successCallBack(8);
+								    								}
+								    							});
+						    								}
+						    							}
+						    						});
+									    					$.ajax({ 
+									    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
+									    			    		dataType:"json",
+									    			    		data:{applyid:applicantId},
+									    			    		type:'post',
+									    			    		success: function(data){
+									    			    					    		
+									    			    		}
+									    			    	}); 
+									    					
+									    					$.ajax({ 
+									    			    		url: '${base}/admin/myVisa/saveIsOrNot.html',
+									    			    		dataType:"json",
+									    			    		data:{
+									    			    			applyid:applicantId,
+									    			    			updateOrNot : "YES"
+									    			    		},
+									    			    		type:'post',
+									    			    		success: function(data){
+									    			    					    		
+									    			    		}
+									    			    	}); 
+					    						},function(){
+					    							layer.load(1);
+					    							$.ajax({
+						    							async: false,
+						    							type: 'POST',
+						    							data : applicantInfo,
+						    							url: '${base}/admin/orderJp/saveEditApplicant.html',
+						    							success :function(data) {
+						    								layer.closeAll("loading");
+							    							if(status == 1){
+							    								layer.msg("修改成功", {
+							    									time: 1000,
+							    									end: function () {
+							    										var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							    										parent.layer.close(index);
+							    										parent.successCallBack(8);
+							    									}
+							    								});
 															}
-														});
-													}
-												}
-											});
-										}
-									}else{//提示过
-										
-										if(data.base.isSameInfo == 0){//改变了需要保存
-											if(data.isUpdated == 1){//更新
-												layer.load(1);
-												$.ajax({
-					    							async: false,
-					    							type: 'POST',
-					    							data : applicantInfo,
-					    							url: '${base}/admin/orderJp/saveEditApplicant.html',
-					    							success :function(data) {
-					    								layer.closeAll("loading");
-														if(status == 1){
-															layer.msg("已同步", {
-																time: 1000,
-																end: function () {
-																	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-																	parent.layer.close(index);
-																	parent.successCallBack(8);
-																}
-															});
-														}
-					    							}
+						    							}
+						    						});
+					    							
+					    							
+					    							$.ajax({ 
+							    			    		url: '${base}/admin/myVisa/saveIsOrNot.html',
+							    			    		dataType:"json",
+							    			    		data:{
+							    			    			applyid:applicantId,
+							    			    			updateOrNot : "NO"
+							    			    		},
+							    			    		type:'post',
+							    			    		success: function(data){
+							    			    					    		
+							    			    		}
+							    			    	}); 
 					    						});
-												$.ajax({ 
-						    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
-						    			    		dataType:"json",
-						    			    		data:{applyid:applicantId},
-						    			    		type:'post',
-						    			    		success: function(data){
-						    			    					    		
-						    			    		}
-						    			    	});
-											}else{//不更新，只保存
+											}else{
 												layer.load(1);
 												$.ajax({
-					    							async: false,
-					    							type: 'POST',
-					    							data : applicantInfo,
-					    							url: '${base}/admin/orderJp/saveEditApplicant.html',
-					    							success :function(data) {
-					    								layer.closeAll("loading");
+													async: false,
+													type: 'POST',
+													data : applicantInfo,
+													url: '${base}/admin/orderJp/saveEditApplicant.html',
+													success :function(data) {
+														layer.closeAll("loading");
+														console.log(JSON.stringify(data));
 														if(status == 1){
 															layer.msg("修改成功", {
 																time: 1000,
 																end: function () {
 																	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 																	parent.layer.close(index);
-																	parent.successCallBack(8);
 																}
 															});
 														}
-					    							}
-					    						});
-												
+													}
+												});
 											}
-										}else{//没改变不需要保存
-											layer.msg("修改成功", {
-												time: 1000,
-												end: function () {
-													var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-													parent.layer.close(index);
-													parent.successCallBack(8);
+										}else{//提示过
+											
+											if(data.base.isSameInfo == 0){//改变了需要保存
+												if(data.isUpdated == 1){//更新
+													layer.load(1);
+													$.ajax({
+						    							async: false,
+						    							type: 'POST',
+						    							data : applicantInfo,
+						    							url: '${base}/admin/orderJp/saveEditApplicant.html',
+						    							success :function(data) {
+						    								layer.closeAll("loading");
+															if(status == 1){
+																layer.msg("已同步", {
+																	time: 1000,
+																	end: function () {
+																		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+																		parent.layer.close(index);
+																		parent.successCallBack(8);
+																	}
+																});
+															}
+						    							}
+						    						});
+													$.ajax({ 
+							    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
+							    			    		dataType:"json",
+							    			    		data:{applyid:applicantId},
+							    			    		type:'post',
+							    			    		success: function(data){
+							    			    					    		
+							    			    		}
+							    			    	});
+												}else{//不更新，只保存
+													layer.load(1);
+													$.ajax({
+						    							async: false,
+						    							type: 'POST',
+						    							data : applicantInfo,
+						    							url: '${base}/admin/orderJp/saveEditApplicant.html',
+						    							success :function(data) {
+						    								layer.closeAll("loading");
+															if(status == 1){
+																layer.msg("修改成功", {
+																	time: 1000,
+																	end: function () {
+																		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+																		parent.layer.close(index);
+																		parent.successCallBack(8);
+																	}
+																});
+															}
+						    							}
+						    						});
+													
 												}
-											});
+											}else{//没改变不需要保存
+												layer.msg("修改成功", {
+													time: 1000,
+													end: function () {
+														var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+														parent.layer.close(index);
+														parent.successCallBack(8);
+													}
+												});
+											}
 										}
+										
 									}
-									
-								}
-							});
+								});
+								
+							}
 						}
 					}
 				});

@@ -1808,7 +1808,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				dbDao.update(orderEntity);
 			}
 			result.put("sendResult", "success");
-			toInsertTouristInfo(applyListDB);
+			//toInsertTouristInfo(applyListDB);
 
 			/*//创建游客基本信息、护照信息、签证信息
 			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyListDB) {
@@ -1886,7 +1886,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					orderEntity.setUpdateTime(new Date());
 					dbDao.update(orderEntity);
 				}
-				toInsertTouristInfo(applyListDB);
+				TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
+				toInsertSamelinkerTouristInfo(apply);
 				/*//给游客基本信息和护照信息赋值
 				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyListDB) {
 					TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity
@@ -3172,6 +3173,93 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 			String workStatus = sbWork.toString();
 			applicantWorkJpEntity.setPrepareMaterials(workStatus.substring(0, workStatus.length() - 1));
+		}
+		return null;
+	}
+
+	public Object toInsertSamelinkerTouristInfo(TApplicantEntity apply) {
+		Integer userId = apply.getUserId();
+		Integer applyId = apply.getId();
+		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+				Cnd.where("applicantId", "=", applyId));
+		if (!Util.isEmpty(userId)) {
+			List<TApplicantEntity> loginApplyList = dbDao.query(TApplicantEntity.class,
+					Cnd.where("userId", "=", userId), null);
+			TTouristBaseinfoEntity useridBase = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("userId", "=", userId));
+			if (Util.isEmpty(useridBase)) {
+				TTouristBaseinfoEntity base = new TTouristBaseinfoEntity();
+				base.setUserId(userId);
+				base.setUpdateIsPrompted(IsYesOrNoEnum.NO.intKey());
+				base.setSaveIsPrompted(IsYesOrNoEnum.NO.intKey());
+				base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+				base.setCreateTime(new Date());
+				base.setUpdateTime(new Date());
+				if (!Util.isEmpty(loginApplyList)) {
+					base.setApplicantId(loginApplyList.get(0).getId());
+				}
+				dbDao.insert(base);
+			}
+			TTouristPassportEntity useridPass = dbDao.fetch(TTouristPassportEntity.class,
+					Cnd.where("userId", "=", userId));
+			if (Util.isEmpty(useridPass)) {
+				TTouristPassportEntity pass = new TTouristPassportEntity();
+				pass.setUserId(userId);
+				pass.setPassport(passport.getPassport());
+				pass.setCreateTime(new Date());
+				pass.setUpdateTime(new Date());
+				if (!Util.isEmpty(loginApplyList)) {
+					pass.setApplicantId(loginApplyList.get(0).getId());
+				}
+				dbDao.insert(pass);
+			}
+			TTouristVisaEntity useridVisa = dbDao.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", userId));
+			if (Util.isEmpty(useridVisa)) {
+				TTouristVisaEntity visa = new TTouristVisaEntity();
+				visa.setUserId(userId);
+				visa.setCreateTime(new Date());
+				visa.setUpdateTime(new Date());
+				if (!Util.isEmpty(loginApplyList)) {
+					visa.setApplicantId(loginApplyList.get(0).getId());
+				}
+				dbDao.insert(visa);
+			}
+		} else {
+			TTouristBaseinfoEntity applyidBase = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("applicantId", "=", applyId));
+			if (Util.isEmpty(applyidBase)) {
+				TTouristBaseinfoEntity newBase = new TTouristBaseinfoEntity();
+				newBase.setFirstName(apply.getFirstName());
+				newBase.setFirstNameEn(apply.getFirstNameEn());
+				newBase.setLastName(apply.getLastName());
+				newBase.setLastNameEn(apply.getLastNameEn());
+				newBase.setApplicantId(applyId);
+				newBase.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+				newBase.setSaveIsPrompted(IsYesOrNoEnum.NO.intKey());
+				newBase.setUpdateIsPrompted(IsYesOrNoEnum.NO.intKey());
+				newBase.setCreateTime(new Date());
+				newBase.setUpdateTime(new Date());
+				dbDao.insert(newBase);
+			}
+			TTouristPassportEntity applyidPass = dbDao.fetch(TTouristPassportEntity.class,
+					Cnd.where("applicantId", "=", applyId));
+			if (Util.isEmpty(applyidPass)) {
+				TTouristPassportEntity newPass = new TTouristPassportEntity();
+				newPass.setApplicantId(applyId);
+				newPass.setPassport(passport.getPassport());
+				newPass.setCreateTime(new Date());
+				newPass.setUpdateTime(new Date());
+				dbDao.insert(newPass);
+			}
+			TTouristVisaEntity applyidVisa = dbDao.fetch(TTouristVisaEntity.class,
+					Cnd.where("applicantId", "=", applyId));
+			if (Util.isEmpty(applyidVisa)) {
+				TTouristVisaEntity newVisa = new TTouristVisaEntity();
+				newVisa.setApplicantId(applyId);
+				newVisa.setCreateTime(new Date());
+				newVisa.setUpdateTime(new Date());
+				dbDao.insert(newVisa);
+			}
 		}
 		return null;
 	}

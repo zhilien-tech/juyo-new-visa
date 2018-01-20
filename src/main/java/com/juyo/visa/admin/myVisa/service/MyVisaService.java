@@ -28,8 +28,6 @@ import com.juyo.visa.admin.visajp.form.VisaListDataForm;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
-import com.juyo.visa.common.enums.MainBackMailSourceTypeEnum;
-import com.juyo.visa.common.enums.MainBackMailTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.YouKeExpressTypeEnum;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
@@ -339,22 +337,6 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				Cnd.where("applicantId", "=", applicantid));
 		TApplicantBackmailJpEntity backmailJpEntity = dbDao.fetch(TApplicantBackmailJpEntity.class,
 				Cnd.where("applicantId", "=", applyJp.getId()));
-		String exprTypeStr = "";
-		String sourceStr = "";
-		Integer exprType = backmailJpEntity.getExpressType();
-		Integer source = backmailJpEntity.getSource();
-		for (MainBackMailTypeEnum statusEnum : MainBackMailTypeEnum.values()) {
-			if (!Util.isEmpty(expressNum) && exprType == statusEnum.intKey()) {
-				exprTypeStr = statusEnum.value();
-			}
-		}
-		for (MainBackMailSourceTypeEnum statusEnum : MainBackMailSourceTypeEnum.values()) {
-			if (!Util.isEmpty(expressNum) && source == statusEnum.intKey()) {
-				sourceStr = statusEnum.value();
-			}
-		}
-		result.put("exprType", exprTypeStr);
-		result.put("source", sourceStr);
 		result.put("backmail", backmailJpEntity);
 
 		//进度隐藏页
@@ -513,11 +495,15 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
 			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			base.setSaveIsPrompted(IsYesOrNoEnum.NO.intKey());
+			base.setUpdateIsPrompted(IsYesOrNoEnum.NO.intKey());
 			dbDao.update(base);
 		} else {
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("applicantId", "=", applyid));
 			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			base.setSaveIsPrompted(IsYesOrNoEnum.NO.intKey());
+			base.setUpdateIsPrompted(IsYesOrNoEnum.NO.intKey());
 			dbDao.update(base);
 		}
 		return null;
@@ -766,13 +752,12 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(apply.getUserId())) {//有userId时根据userId查询
 			TTouristVisaEntity visa = dbDao
 					.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", apply.getUserId()));
-			//更新
+			//更新或添加
 			toUpdateVisa(applyJp, workJp, wealthList, visa, apply);
-
 		} else {//根据申请人id查询
 			TTouristVisaEntity visa = dbDao.fetch(TTouristVisaEntity.class,
 					Cnd.where("applicantId", "=", apply.getId()));
-			//更新
+			//更新或添加
 			toUpdateVisa(applyJp, workJp, wealthList, visa, apply);
 
 		}
@@ -956,6 +941,13 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 
 	public Object toUpdateVisa(TApplicantOrderJpEntity applyJp, TApplicantWorkJpEntity workJp,
 			List<TApplicantWealthJpEntity> wealthList, TTouristVisaEntity visa, TApplicantEntity apply) {
+		if (Util.isEmpty(visa)) {
+			visa = new TTouristVisaEntity();
+			visa.setApplicantId(apply.getId());
+			if (!Util.isEmpty(apply.getUserId())) {
+				visa.setUserId(apply.getUserId());
+			}
+		}
 		visa.setAddress(workJp.getAddress());
 		visa.setCareerStatus(workJp.getCareerStatus());
 		visa.setIsMainApplicant(applyJp.getIsMainApplicant());
@@ -1001,7 +993,11 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		if (Util.eq(financialCount, 0)) {
 			visa.setFinancial(null);
 		}
-		dbDao.update(visa);
+		if (Util.isEmpty(visa.getId())) {
+			dbDao.insert(visa);
+		} else {
+			dbDao.update(visa);
+		}
 		return null;
 	}
 

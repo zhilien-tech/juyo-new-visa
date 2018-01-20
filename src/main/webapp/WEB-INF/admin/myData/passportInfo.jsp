@@ -357,6 +357,75 @@
 	var contact = '${obj.contact}';
 	$(function() {
 		
+		if(!contact){
+			//将页面所有元素设置为disabled
+			var form = document.forms[0]; 
+			for ( var i = 0; i < form.length; i++) { 
+				var element = form.elements[i]; 
+				if(element.id != "editbasic")
+					element.disabled = true; 
+			} 
+			$(".basic").hide();
+			document.getElementById("passRemark").style.backgroundColor = "#eee";
+			document.getElementById("birthAddressEn").style.backgroundColor = "#eee";
+			document.getElementById("issuedPlaceEn").style.backgroundColor = "#eee";
+			var remark = $("#passRemark").val();
+			if(remark != ""){
+				$(".ipt-info").show();
+			}
+			$("#passRemark").attr("disabled", true);
+		}else{
+			
+			/* var bootstrapValidator = $("#passportInfo").data(
+			'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate(); */
+			$("#deletePassportImg").click(function(){
+				$('#passportUrl').val("");
+				$('#sqImg').attr('src', "");
+				$("#uploadFile").siblings("i").css("display","none");
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+		        //$(".help-blockFront").attr("style","display: block;");
+		        //$("#borderColor").attr("style", "border-color:#ff1a1a");
+			});
+			$("#passRemark").attr("disabled", true);
+		}
+		
+		
+		
+		
+		if($("#sex").val() == "男"){
+			$("#sexEn").val("M");
+		}else{
+			$("#sexEn").val("F");
+		}
+		
+		$("#issuedDate").change(function(){
+			if($("#issuedDate").val() != ""){
+				if($("#validType").val() == 1){
+					$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
+				}else{
+					$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+				}
+			}
+		});
+	});
+	
+	function passValidate(){
+		//护照图片验证
+		var passportUrl = $("#passportUrl").val();
+		if(passportUrl == ""){
+			$("#borderColor").attr("style", "border-color:#ff1a1a");  
+			$(".front").attr("class", "info-imgUpload front has-error");  
+	        $(".help-blockFront").attr("data-bv-result","INVALID");  
+	        $(".help-blockFront").attr("style","display: block;");  
+		}else{
+			$("#borderColor").attr("style", null);
+			$(".front").attr("class", "info-imgUpload front has-success");  
+	        $(".help-blockFront").attr("data-bv-result","IVALID");  
+	        $(".help-blockFront").attr("style","display: none;");  
+		}
 		//校验
 		$('#passportInfo').bootstrapValidator({
 			message : '验证不通过',
@@ -439,73 +508,7 @@
 			}
 		});
 	$('#passportInfo').bootstrapValidator('validate');
-		
-		if(!contact){
-			//将页面所有元素设置为disabled
-			var form = document.forms[0]; 
-			for ( var i = 0; i < form.length; i++) { 
-				var element = form.elements[i]; 
-				if(element.id != "editbasic")
-					element.disabled = true; 
-			} 
-			$(".basic").hide();
-			document.getElementById("passRemark").style.backgroundColor = "#eee";
-			document.getElementById("birthAddressEn").style.backgroundColor = "#eee";
-			document.getElementById("issuedPlaceEn").style.backgroundColor = "#eee";
-			var remark = $("#passRemark").val();
-			if(remark != ""){
-				$(".ipt-info").show();
-			}
-			$("#passRemark").attr("disabled", true);
-		}else{
-			//护照图片验证
-			var passportUrl = $("#passportUrl").val();
-			if(passportUrl == ""){
-				$("#borderColor").attr("style", "border-color:#ff1a1a");  
-				$(".front").attr("class", "info-imgUpload front has-error");  
-		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");  
-			}else{
-				$("#borderColor").attr("style", null);
-				$(".front").attr("class", "info-imgUpload front has-success");  
-		        $(".help-blockFront").attr("data-bv-result","IVALID");  
-		        $(".help-blockFront").attr("style","display: none;");  
-			}
-			var bootstrapValidator = $("#passportInfo").data(
-			'bootstrapValidator');
-			// 执行表单验证 
-			bootstrapValidator.validate();
-			$("#deletePassportImg").click(function(){
-				$('#passportUrl').val("");
-				$('#sqImg').attr('src', "");
-				$("#uploadFile").siblings("i").css("display","none");
-				$(".front").attr("class", "info-imgUpload front has-error");  
-		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");
-		        $("#borderColor").attr("style", "border-color:#ff1a1a");
-			});
-			$("#passRemark").attr("disabled", true);
-		}
-		
-		
-		
-		
-		if($("#sex").val() == "男"){
-			$("#sexEn").val("M");
-		}else{
-			$("#sexEn").val("F");
-		}
-		
-		$("#issuedDate").change(function(){
-			if($("#issuedDate").val() != ""){
-				if($("#validType").val() == 1){
-					$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
-				}else{
-					$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
-				}
-			}
-		});
-	});
+	}
 	
 	//护照上传,扫描
 	
@@ -593,21 +596,23 @@
 	
 	//保存
 	function save(status){
-		//得到获取validator对象或实例 
-		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-		// 执行表单验证 
-		bootstrapValidator.validate();
 		if(status != 2){
-			if (!bootstrapValidator.isValid()) {
-				return;
-			}
-			if($(".front").hasClass("has-error")){
-				return;
-			}
+			passValidate();
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+				if (!bootstrapValidator.isValid()) {
+					return;
+				}
+				if($(".front").hasClass("has-error")){
+					return;
+				}
 		}
 		var passportInfo = $("#passportInfo").serialize();
 		var orderid = '${obj.orderid}';
 		var applicantId = '${obj.applicantId}';
+		var id = '${obj.applyId}';
 		layer.load(1);
 		$.ajax({
 			type: 'POST',
@@ -618,8 +623,10 @@
 				if(status == 1){
 					cancelBtn(2);
 					parent.successCallBack();
-				}else if(status == 2 || status == 3){
-					
+				}else if(status == 2){
+					window.location.href = '/admin/myData/basic.html?contact=1&applyId='+id;
+				}else if(status == 3){
+					window.location.href = '/admin/myData/visa.html?contact=1&applyId='+id;
 				}else{
 					layer.msg("修改成功", {
 						time: 500,
@@ -648,20 +655,20 @@
 		//护照图片验证
 		var passportUrl = $("#passportUrl").val();
 		if(passportUrl == ""){
-			$("#borderColor").attr("style", "border-color:#ff1a1a");  
+			//$("#borderColor").attr("style", "border-color:#ff1a1a");  
 			$(".front").attr("class", "info-imgUpload front has-error");  
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
-	        $(".help-blockFront").attr("style","display: block;");  
+	        //$(".help-blockFront").attr("style","display: block;");  
 		}else{
 			$("#borderColor").attr("style", null);
 			$(".front").attr("class", "info-imgUpload front has-success");  
 	        $(".help-blockFront").attr("data-bv-result","IVALID");  
 	        $(".help-blockFront").attr("style","display: none;");  
 		}
-		var bootstrapValidator = $("#passportInfo").data(
+		/* var bootstrapValidator = $("#passportInfo").data(
 		'bootstrapValidator');
 		// 执行表单验证 
-		bootstrapValidator.validate();
+		bootstrapValidator.validate(); */
 		$("#deletePassportImg").click(function(){
 			$('#passportUrl').val("");
 			$('#sqImg').attr('src', "");
@@ -686,12 +693,12 @@
 		save(2);
 		//关闭socket连接
 		//socket.onclose();
-		var id = '${obj.applyId}';
-		window.location.href = '/admin/myData/basic.html?contact=1&applyId='+id;
+		//var id = '${obj.applyId}';
+		//window.location.href = '/admin/myData/basic.html?contact=1&applyId='+id;
 	 }
 		
 	 function visaBtn(){
-		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+		/* var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 		bootstrapValidator.validate();
 		if (!bootstrapValidator.isValid()) {
 			return;
@@ -699,12 +706,12 @@
 		
 		if($(".front").hasClass("has-error")){
 			return;
-		}
+		} */
 		save(3);
 		//关闭socket连接
 		//socket.onclose();
-		var id = '${obj.applyId}';
-		window.location.href = '/admin/myData/visa.html?contact=1&applyId='+id;
+		//var id = '${obj.applyId}';
+		//window.location.href = '/admin/myData/visa.html?contact=1&applyId='+id;
 	 }
 	
 	//取消按钮
