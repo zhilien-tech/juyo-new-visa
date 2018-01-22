@@ -105,6 +105,7 @@ new Vue({
 										url : '/admin/firstTrialJp/getOrderRecipient.html',
 										success : function(data) {
 											var isEmpty = data.isEmpty;
+											var orderId = data.orderid;
 											if(isEmpty == true){
 												//收件信息为空，需打开编辑页
 												layer.closeAll('loading');
@@ -117,7 +118,7 @@ new Vue({
 													shadeClose: false,
 													scrollbar: false,
 													area: ['900px', '80%'],
-													content: '/admin/firstTrialJp/express.html?orderid='+orderid+'&orderjpid='+orderjpid
+													content: '/admin/firstTrialJp/express.html?orderid='+orderId+'&orderjpid='+orderjpid
 												});
 											}else{
 												//直接发短信
