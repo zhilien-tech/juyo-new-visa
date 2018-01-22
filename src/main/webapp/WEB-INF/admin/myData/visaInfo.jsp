@@ -549,9 +549,9 @@
 			
 			var marry = $("#marryUrl").val();
 			if(marry != ""){
-				$("#uploadFile").siblings("i").css("display","block");
+				$(".delete").siblings("i").css("display","block");
 			}else{
-				$("#uploadFile").siblings("i").css("display","none");
+				$(".delete").siblings("i").css("display","none");
 			}
 			
 			//婚姻状况为单身和丧偶时没有上传图片接口

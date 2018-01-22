@@ -357,6 +357,20 @@
 	var contact = '${obj.contact}';
 	$(function() {
 		
+		//护照图片验证
+		var passportUrl = $("#passportUrl").val();
+		if(passportUrl == ""){
+			$(".front").attr("class", "info-imgUpload front has-error");  
+	        $(".help-blockFront").attr("data-bv-result","INVALID");  
+	        //$(".help-blockFront").attr("style","display: block;");  
+	        //$("#borderColor").attr("style", "border-color:#ff1a1a");
+		}else{
+			$(".front").attr("class", "info-imgUpload front has-success");  
+	        $(".help-blockFront").attr("data-bv-result","IVALID");  
+	        $(".help-blockFront").attr("style","display: none;");
+	        $("#borderColor").attr("style", null);
+		}
+		
 		if(!contact){
 			//将页面所有元素设置为disabled
 			var form = document.forms[0]; 
@@ -412,7 +426,7 @@
 		});
 	});
 	
-	function passValidate(){
+	function passportValidate(){
 		//护照图片验证
 		var passportUrl = $("#passportUrl").val();
 		if(passportUrl == ""){
@@ -441,7 +455,7 @@
 						notEmpty : {
 							message : '护照号不能为空'
 						},
-	                   /*  remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+	                     remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 							url: '${base}/admin/orderJp/checkPassport.html',
 							message: '护照号已存在，请重新输入',//提示消息
 							delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
@@ -454,7 +468,7 @@
 									orderid:$('#orderid').val()
 								};
 							}
-						} */
+						} 
 					}
 				},
 				type : {
@@ -596,19 +610,22 @@
 	
 	//保存
 	function save(status){
-		if(status != 2){
-			passValidate();
-			//得到获取validator对象或实例 
-			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-			// 执行表单验证 
-			bootstrapValidator.validate();
+		/* if(status != 2){
+			if($(".front").hasClass("has-error")){
+				return;
+			}
+		} */
+		passportValidate();
+		//得到获取validator对象或实例 
+		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+		// 执行表单验证 
+		bootstrapValidator.validate();
+		setTimeout(function(){
+			 if(bootstrapValidator.isValid()){
 				if (!bootstrapValidator.isValid()) {
-					return;
+						return;
 				}
-				if($(".front").hasClass("has-error")){
-					return;
-				}
-		}
+		
 		var passportInfo = $("#passportInfo").serialize();
 		var orderid = '${obj.orderid}';
 		var applicantId = '${obj.applicantId}';
@@ -639,6 +656,8 @@
 				}
 			}
 		});
+			 }
+		},100);
 	}
 	
 	//编辑按钮
@@ -675,8 +694,8 @@
 			$("#uploadFile").siblings("i").css("display","none");
 			$(".front").attr("class", "info-imgUpload front has-error");  
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
-	        $(".help-blockFront").attr("style","display: block;");
-	        $("#borderColor").attr("style", "border-color:#ff1a1a");
+	        //$(".help-blockFront").attr("style","display: block;");
+	        //$("#borderColor").attr("style", "border-color:#ff1a1a");
 		});
 		$("#passRemark").attr("disabled", true);
 	}
@@ -851,8 +870,8 @@
 		$("#passportUrl").val("");
 		$(".front").attr("class", "info-imgUpload front has-error");  
         $(".help-blockFront").attr("data-bv-result","INVALID");  
-        $(".help-blockFront").attr("style","display: block;"); 
-        $("#borderColor").attr("style", "border-color:#ff1a1a");
+        //$(".help-blockFront").attr("style","display: block;"); 
+        //$("#borderColor").attr("style", "border-color:#ff1a1a");
 		$('#sqImg').attr('src', "");
 		$("#type").val("").change();
 		$("#passport").val("").change();

@@ -1887,7 +1887,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					dbDao.update(orderEntity);
 				}
 				TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
-				toInsertSamelinkerTouristInfo(apply);
+				//toInsertSamelinkerTouristInfo(apply);
 				/*//给游客基本信息和护照信息赋值
 				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyListDB) {
 					TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity

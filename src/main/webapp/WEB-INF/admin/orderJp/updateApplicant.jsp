@@ -438,6 +438,96 @@ input[type="file"] { z-index:999999;}
 	}
 		$(function(){
 			
+			if(userType != 2){
+				//校验
+				$('#applicantInfo').bootstrapValidator({
+					message : '验证不通过',
+					feedbackIcons : {
+						valid : 'glyphicon glyphicon-ok',
+						invalid : 'glyphicon glyphicon-remove',
+						validating : 'glyphicon glyphicon-refresh'
+					},
+					fields : {
+	
+						firstName : {
+							validators : {
+								notEmpty : {
+									message : '姓不能为空'
+								}
+							}
+						},
+						lastName : {
+							validators : {
+								notEmpty : {
+									message : '名不能为空'
+								}
+							}
+						},
+						telephone : {
+							validators : {
+								regexp: {
+			                	 	regexp: /^[1][34578][0-9]{9}$/,
+			                        message: '手机号格式错误'
+			                    }
+							}
+						},
+						emergencyTelephone : {
+							validators : {
+								regexp: {
+			                	 	regexp: /^[1][34578][0-9]{9}$/,
+			                        message: '手机号格式错误'
+			                    }
+							}
+						},
+						email : {
+							validators : {
+								regexp: {
+			                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+			                        message: '邮箱格式错误'
+			                    }
+							}
+						}
+					}
+				});
+			}else{
+				$('#applicantInfo').bootstrapValidator({
+					message : '验证不通过',
+					feedbackIcons : {
+						valid : 'glyphicon glyphicon-ok',
+						invalid : 'glyphicon glyphicon-remove',
+						validating : 'glyphicon glyphicon-refresh'
+					},
+					fields : {
+	
+						telephone : {
+							validators : {
+								regexp: {
+			                	 	regexp: /^[1][34578][0-9]{9}$/,
+			                        message: '手机号格式错误'
+			                    }
+							}
+						},
+						emergencyTelephone : {
+							validators : {
+								regexp: {
+			                	 	regexp: /^[1][34578][0-9]{9}$/,
+			                        message: '手机号格式错误'
+			                    }
+							}
+						},
+						email : {
+							validators : {
+								regexp: {
+			                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+			                        message: '邮箱格式错误'
+			                    }
+							}
+						}
+					}
+				});
+			}
+			$('#applicantInfo').bootstrapValidator('validate');
+			
 			var remark = $("#baseRemark").val();
 			if(remark != ""){
 				$(".ipt-info").show();
@@ -1649,6 +1739,8 @@ input[type="file"] { z-index:999999;}
 		});
 		
 		function saveApplicant(status){
+			$("#applicantInfo").data('bootstrapValidator').destroy();
+			$("#applicantInfo").data('bootstrapValidator', null);
 			applyValidate();
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#applicantInfo").data(
@@ -1656,18 +1748,6 @@ input[type="file"] { z-index:999999;}
 			// 执行表单验证 
 			bootstrapValidator.validate();
 			if (bootstrapValidator.isValid()){
-				//获取必填项信息
-				var firstName = $("#firstName").val();
-				if (firstName == "") {
-					layer.msg('姓不能为空');
-					return;
-				}
-				var lastName = $("#lastName").val();
-				if (lastName == "") {
-					layer.msg('名不能为空');
-					return;
-				}
-				
 				if(userType == 2){
 					if($(".back").hasClass("has-error")){
 						return;
