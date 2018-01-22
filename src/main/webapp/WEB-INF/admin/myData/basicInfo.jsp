@@ -573,6 +573,163 @@
 	<script type="text/javascript">
 	$(function(){
 		
+		$('#applicantInfo').bootstrapValidator({
+			message : '验证不通过',
+			feedbackIcons : {
+				valid : 'glyphicon glyphicon-ok',
+				invalid : 'glyphicon glyphicon-remove',
+				validating : 'glyphicon glyphicon-refresh'
+			},
+			fields : {
+
+				telephone : {
+					validators : {
+						regexp: {
+	                	 	regexp: /^[1][34578][0-9]{9}$/,
+	                        message: '手机号格式错误'
+	                    }
+					}
+				},
+				emergencyTelephone : {
+					validators : {
+						regexp: {
+	                	 	regexp: /^[1][34578][0-9]{9}$/,
+	                        message: '手机号格式错误'
+	                    }
+					}
+				},
+				email : {
+					validators : {
+						regexp: {
+	                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+	                        message: '邮箱格式错误'
+	                    }
+					}
+				}
+			}
+		});
+		$('#applicantInfo').bootstrapValidator('validate');
+		
+		if(!contact){
+			//页面所有元素设置为disabled
+			var form = document.forms[0]; 
+			for ( var i = 0; i < form.length; i++) { 
+				var element = form.elements[i]; 
+				if(element.id != "editbasic")
+					element.disabled = true; 
+			} 
+			$(".basic").hide();
+			/* var remark = $("#baseRemark").val();
+			if(remark != ""){
+				$(".ipt-info").show();
+			} */
+			document.getElementById("baseRemark").style.backgroundColor = "#eee";
+			document.getElementById("firstNameEn").style.backgroundColor = "#eee";
+			document.getElementById("lastNameEn").style.backgroundColor = "#eee";
+			document.getElementById("otherFirstNameEn").style.backgroundColor = "#eee";
+			document.getElementById("otherLastNameEn").style.backgroundColor = "#eee";
+			//$("#baseRemark").attr("disabled", true);
+		}else{
+			$("#deleteApplicantFrontImg").click(function(){
+				$('#cardFront').val("");
+				$('#sqImg').attr('src', "");
+				$("#uploadFile").siblings("i").css("display","none");
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+		        //$(".help-blockFront").attr("style","display: block;");
+		        //$("#borderColorFront").attr("style", "border-color:#ff1a1a");
+			});
+			$("#deleteApplicantBackImg").click(function(){
+				$('#cardBack').val("");
+				$('#sqImgBack').attr('src', "");
+				$("#uploadFileBack").siblings("i").css("display","none");
+				$(".back").attr("class", "info-imgUpload back has-error");  
+		        $(".help-blockBack").attr("data-bv-result","INVALID");  
+		        //$(".help-blockBack").attr("style","display: block;");
+		        //$("#borderColorBack").attr("style", "border-color:#ff1a1a");
+			});
+		}
+		
+			var nation = '${obj.applicant.hasOtherNationality}';
+			var otherName = '${obj.applicant.hasOtherName}';
+			var address = '${obj.applicant.addressIsSameWithCard}';
+			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
+			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
+			if(nation == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nationalityHide").show();
+				$(".onceIDTop").css('float','left');
+			}else {
+				$(".nationalityHide").hide();
+				$("input[name='hasOtherNationality'][value='2']").attr("checked",'checked');
+			}
+			
+			if(otherName == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nameBeforeHide").show();
+				$(".wordSpell").show();
+				//$(".onceIDTop").removeClass('col-sm-offset-1');
+				//$(".onceIDTop").css('padding-left','15px');
+			}else {
+				$(".wordSpell").hide();
+				$(".nameBeforeHide").hide();
+				$("input[name='hasOtherName'][value='2']").attr("checked",'checked');
+			}
+			
+			if(address == 1){
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
+			}else{
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
+			}
+			
+		
+		
+		
+		
+		var front = $("#cardFront").val();
+		var back = $("#cardBack").val();
+		if(front != ""){
+			$("#uploadFile").siblings("i").css("display","block");
+		}else{
+			$("#uploadFile").siblings("i").css("display","none");
+		}
+		
+		if(back != ""){
+			$("#uploadFileBck").siblings("i").css("display","block");
+		}else{
+			$("#uploadFileBack").siblings("i").css("display","none");
+		} 
+	});
+	
+	function applicantValidate(){
+		
+		//身份证图片验证
+		var cardFront = $("#cardFront").val();
+		if(cardFront == ""){
+			$(".front").attr("class", "info-imgUpload front has-error");  
+	        $(".help-blockFront").attr("data-bv-result","INVALID");  
+	        $(".help-blockFront").attr("style","display: block;");  
+	        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
+		}else{
+			$(".front").attr("class", "info-imgUpload front has-success");  
+	        $(".help-blockFront").attr("data-bv-result","IVALID");  
+	        $(".help-blockFront").attr("style","display: none;");  
+	        $("#borderColorFront").attr("style", null);
+		}
+		
+		var cardBack = $("#cardBack").val();
+		if(cardBack == ""){
+			$(".back").attr("class", "info-imgUpload back has-error");  
+	        $(".help-blockBack").attr("data-bv-result","INVALID");  
+	        $(".help-blockBack").attr("style","display: block;");
+	        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
+		}else{
+			$(".back").attr("class", "info-imgUpload back has-success");  
+	        $(".help-blockBack").attr("data-bv-result","IVALID");  
+	        $(".help-blockBack").attr("style","display: none;");
+	        $("#borderColorBack").attr("style", null);
+		}
+		
 		//校验
 		$('#applicantInfo').bootstrapValidator({
 			message : '验证不通过',
@@ -750,133 +907,15 @@
 			}
 		});
 	$('#applicantInfo').bootstrapValidator('validate');
-		
 	
-		if(!contact){
-			//页面所有元素设置为disabled
-			var form = document.forms[0]; 
-			for ( var i = 0; i < form.length; i++) { 
-				var element = form.elements[i]; 
-				if(element.id != "editbasic")
-					element.disabled = true; 
-			} 
-			$(".basic").hide();
-			/* var remark = $("#baseRemark").val();
-			if(remark != ""){
-				$(".ipt-info").show();
-			} */
-			document.getElementById("baseRemark").style.backgroundColor = "#eee";
-			document.getElementById("firstNameEn").style.backgroundColor = "#eee";
-			document.getElementById("lastNameEn").style.backgroundColor = "#eee";
-			document.getElementById("otherFirstNameEn").style.backgroundColor = "#eee";
-			document.getElementById("otherLastNameEn").style.backgroundColor = "#eee";
-			//$("#baseRemark").attr("disabled", true);
-			
-		}else{
-			//身份证图片验证
-			var cardFront = $("#cardFront").val();
-			if(cardFront == ""){
-				$(".front").attr("class", "info-imgUpload front has-error");  
-		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");  
-		        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
-			}else{
-				$(".front").attr("class", "info-imgUpload front has-success");  
-		        $(".help-blockFront").attr("data-bv-result","IVALID");  
-		        $(".help-blockFront").attr("style","display: none;");  
-		        $("#borderColorFront").attr("style", null);
-			}
-			
-			var cardBack = $("#cardBack").val();
-			if(cardBack == ""){
-				$(".back").attr("class", "info-imgUpload back has-error");  
-		        $(".help-blockBack").attr("data-bv-result","INVALID");  
-		        $(".help-blockBack").attr("style","display: block;");
-		        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
-			}else{
-				$(".back").attr("class", "info-imgUpload back has-success");  
-		        $(".help-blockBack").attr("data-bv-result","IVALID");  
-		        $(".help-blockBack").attr("style","display: none;");
-		        $("#borderColorBack").attr("style", null);
-			}
-			
-			var bootstrapValidator = $("#applicantInfo").data(
-			'bootstrapValidator');
-			// 执行表单验证 
-			bootstrapValidator.validate();
-			$("#deleteApplicantFrontImg").click(function(){
-				$('#cardFront').val("");
-				$('#sqImg').attr('src', "");
-				$("#uploadFile").siblings("i").css("display","none");
-				$(".front").attr("class", "info-imgUpload front has-error");  
-		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");
-		        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
-			});
-			$("#deleteApplicantBackImg").click(function(){
-				$('#cardBack').val("");
-				$('#sqImgBack').attr('src', "");
-				$("#uploadFileBack").siblings("i").css("display","none");
-				$(".back").attr("class", "info-imgUpload back has-error");  
-		        $(".help-blockBack").attr("data-bv-result","INVALID");  
-		        $(".help-blockBack").attr("style","display: block;");
-		        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
-			});
-		}
-		
-			var nation = '${obj.applicant.hasOtherNationality}';
-			var otherName = '${obj.applicant.hasOtherName}';
-			var address = '${obj.applicant.addressIsSameWithCard}';
-			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
-			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
-			if(nation == 1){
-				$(".nameBeforeTop").css('float','none');
-				$(".nationalityHide").show();
-				$(".onceIDTop").css('float','left');
-			}else {
-				$(".nationalityHide").hide();
-				$("input[name='hasOtherNationality'][value='2']").attr("checked",'checked');
-			}
-			
-			if(otherName == 1){
-				$(".nameBeforeTop").css('float','none');
-				$(".nameBeforeHide").show();
-				$(".wordSpell").show();
-				//$(".onceIDTop").removeClass('col-sm-offset-1');
-				//$(".onceIDTop").css('padding-left','15px');
-			}else {
-				$(".wordSpell").hide();
-				$(".nameBeforeHide").hide();
-				$("input[name='hasOtherName'][value='2']").attr("checked",'checked');
-			}
-			
-			if(address == 1){
-				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
-			}else{
-				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
-			}
-			
-		
-		
-		
-		
-		var front = $("#cardFront").val();
-		var back = $("#cardBack").val();
-		if(front != ""){
-			$("#uploadFile").siblings("i").css("display","block");
-		}else{
-			$("#uploadFile").siblings("i").css("display","none");
-		}
-		
-		if(back != ""){
-			$("#uploadFileBck").siblings("i").css("display","block");
-		}else{
-			$("#uploadFileBack").siblings("i").css("display","none");
-		} 
-	});
+	
+	}
 	
 	//var base = "${base}";
 	function saveApplicant(status){
+		$("#applicantInfo").data('bootstrapValidator').destroy();
+		$("#applicantInfo").data('bootstrapValidator', null);
+		applicantValidate();
 		//得到获取validator对象或实例 
 		var bootstrapValidator = $("#applicantInfo").data(
 				'bootstrapValidator');
@@ -919,7 +958,7 @@
 					cancelBtn(2);
 					parent.successCallBack();
 				}else if(status == 2){
-					
+					window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
 				}else{
 					layer.msg("修改成功", {
 						time: 500,
@@ -951,8 +990,8 @@
 		if(cardFront == ""){
 			$(".front").attr("class", "info-imgUpload front has-error");  
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
-	        $(".help-blockFront").attr("style","display: block;");  
-	        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
+	        //$(".help-blockFront").attr("style","display: block;");  
+	        //$("#borderColorFront").attr("style", "border-color:#ff1a1a");
 		}else{
 			$(".front").attr("class", "info-imgUpload front has-success");  
 	        $(".help-blockFront").attr("data-bv-result","IVALID");  
@@ -964,8 +1003,8 @@
 		if(cardBack == ""){
 			$(".back").attr("class", "info-imgUpload back has-error");  
 	        $(".help-blockBack").attr("data-bv-result","INVALID");  
-	        $(".help-blockBack").attr("style","display: block;");
-	        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
+	        //$(".help-blockBack").attr("style","display: block;");
+	        //$("#borderColorBack").attr("style", "border-color:#ff1a1a");
 		}else{
 			$(".back").attr("class", "info-imgUpload back has-success");  
 	        $(".help-blockBack").attr("data-bv-result","IVALID");  
@@ -973,18 +1012,54 @@
 	        $("#borderColorBack").attr("style", null);
 		}
 		
-		var bootstrapValidator = $("#applicantInfo").data(
+		//校验
+		/* $('#applicantInfo').bootstrapValidator({
+			message : '验证不通过',
+			feedbackIcons : {
+				valid : 'glyphicon glyphicon-ok',
+				invalid : 'glyphicon glyphicon-remove',
+				validating : 'glyphicon glyphicon-refresh'
+			},
+			fields : {
+				telephone : {
+					validators : {
+						regexp: {
+	                	 	regexp: /^[1][34578][0-9]{9}$/,
+	                        message: '手机号格式错误'
+	                    }
+					}
+				},
+				emergencyTelephone : {
+					validators : {
+						regexp: {
+	                	 	regexp: /^[1][34578][0-9]{9}$/,
+	                        message: '手机号格式错误'
+	                    }
+					}
+				},
+				email : {
+					validators : {
+						regexp: {
+	                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+	                        message: '邮箱格式错误'
+	                    }
+					}
+				}
+			}
+		}); */
+		
+		/* var bootstrapValidator = $("#applicantInfo").data(
 		'bootstrapValidator');
 		// 执行表单验证 
-		bootstrapValidator.validate();
+		bootstrapValidator.validate(); */
 		$("#deleteApplicantFrontImg").click(function(){
 			$('#cardFront').val("");
 			$('#sqImg').attr('src', "");
 			$("#uploadFile").siblings("i").css("display","none");
 			$(".front").attr("class", "info-imgUpload front has-error");  
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
-	        $(".help-blockFront").attr("style","display: block;");
-	        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
+	        //$(".help-blockFront").attr("style","display: block;");
+	        //$("#borderColorFront").attr("style", "border-color:#ff1a1a");
 		});
 		$("#deleteApplicantBackImg").click(function(){
 			$('#cardBack').val("");
@@ -992,8 +1067,8 @@
 			$("#uploadFileBack").siblings("i").css("display","none");
 			$(".back").attr("class", "info-imgUpload back has-error");  
 	        $(".help-blockBack").attr("data-bv-result","INVALID");  
-	        $(".help-blockBack").attr("style","display: block;");
-	        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
+	        //$(".help-blockBack").attr("style","display: block;");
+	        //$("#borderColorBack").attr("style", "border-color:#ff1a1a");
 		});
 		$("#baseRemark").attr("disabled", true);
 	} 
@@ -1243,7 +1318,7 @@
 	}
 	
 	function passportBtn(){
-		var applicantId = '${obj.applyId}';
+		/* var applicantId = '${obj.applyId}';
 			var bootstrapValidator = $("#applicantInfo").data(
 			'bootstrapValidator');
 			// 执行表单验证 
@@ -1257,10 +1332,10 @@
 			}
 			if($(".back").hasClass("has-error")){
 				return;
-			}
+			} */
 		saveApplicant(2);
 		//socket.onclose();
-		window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
+		//window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
 	}
 								
 	$(function(){
@@ -1395,12 +1470,12 @@
 	function clearAll(){
 		$(".front").attr("class", "info-imgUpload front has-error");  
         $(".help-blockFront").attr("data-bv-result","INVALID");  
-        $(".help-blockFront").attr("style","display: block;");
+        //$(".help-blockFront").attr("style","display: block;");
         $(".back").attr("class", "info-imgUpload back has-error");  
         $(".help-blockBack").attr("data-bv-result","INVALID");  
-        $(".help-blockBack").attr("style","display: block;"); 
-        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
-        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
+        //$(".help-blockBack").attr("style","display: block;"); 
+       // $("#borderColorFront").attr("style", "border-color:#ff1a1a");
+        //$("#borderColorBack").attr("style", "border-color:#ff1a1a");
 		$("input[name='hasOtherName'][value='2']").prop("checked","checked");
         $("input[name='hasOtherNationality'][value='2']").prop("checked","checked");
 		$("input:checkbox[name='addressIsSameWithCard']").attr("checked", false);
