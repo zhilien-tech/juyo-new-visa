@@ -97,9 +97,8 @@
 	<script>
 		$(function(){
 			//资料来源
-			$("#source").change(function(){
+			$('#source').change(function(){
 				let selectInfo = $(".dataSourceSelect").find("option:selected").text();
-				alert(selectInfo);
 				$(".sourceValue").text(selectInfo);
 			});
 			//回邮方式
