@@ -454,7 +454,7 @@
 					validators : {
 						notEmpty : {
 							message : '护照号不能为空'
-						},
+						}/* ,
 	                     remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 							url: '${base}/admin/orderJp/checkPassport.html',
 							message: '护照号已存在，请重新输入',//提示消息
@@ -468,7 +468,7 @@
 									orderid:$('#orderid').val()
 								};
 							}
-						} 
+						} */ 
 					}
 				},
 				type : {
@@ -694,7 +694,7 @@
 			$("#uploadFile").siblings("i").css("display","none");
 			$(".front").attr("class", "info-imgUpload front has-error");  
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
-	        //$(".help-blockFront").attr("style","display: block;");
+	        $(".help-blockFront").attr("style","display: block;");
 	        //$("#borderColor").attr("style", "border-color:#ff1a1a");
 		});
 		$("#passRemark").attr("disabled", true);

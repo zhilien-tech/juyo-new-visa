@@ -1359,7 +1359,8 @@ input[type="file"] { z-index:999999;}
 												$("#telephone").next().next().attr('data-bv-result','VALID');
 												$("#telephone").next().attr('class','form-control-feedback glyphicon glyphicon-ok');
 												$("#telephone").parent().attr('class','form-group has-feedback has-success');
-												$("#applicantInfo").data("bootstrapValidator").updateStatus("cardId",  "NOT_VALIDATED",  null );
+												//$("#applicantInfo").data("bootstrapValidator").updateStatus("cardId",  "NOT_VALIDATED",  null );
+												$('#applicantInfo').data('bootstrapValidator').enableFieldValidators('telephone', true);
 												//var btn1Obj = document.getElementById("telephone");
 												//btn1Obj.addEventListener("change",false);
 												$.ajax({
@@ -1432,7 +1433,8 @@ input[type="file"] { z-index:999999;}
 											$("#telephone").next().next().attr('data-bv-result','VALID');
 											$("#telephone").next().attr('class','form-control-feedback glyphicon glyphicon-ok');
 											$("#telephone").parent().attr('class','form-group has-feedback has-success');
-											$("#applicantInfo").data("bootstrapValidator").updateStatus("telephone",  "NOT_VALIDATED",  null );
+											//$("#applicantInfo").data("bootstrapValidator").updateStatus("telephone",  "NOT_VALIDATED",  null );
+											$('#applicantInfo').data('bootstrapValidator').enableFieldValidators('telephone', true);
 											layer.load(1);
 											$.ajax({
 												type : "post",
@@ -1497,7 +1499,8 @@ input[type="file"] { z-index:999999;}
 												$("#cardId").next().next().attr('data-bv-result','VALID');
 												$("#cardId").next().attr('class','form-control-feedback glyphicon glyphicon-ok');
 												$("#cardId").parent().attr('class','form-group has-feedback has-success');
-												$("#applicantInfo").data("bootstrapValidator").updateStatus("cardId",  "NOT_VALIDATED",  null );
+												$('#applicantInfo').data('bootstrapValidator').enableFieldValidators('cardId', true);
+												//$("#applicantInfo").data("bootstrapValidator").updateStatus("cardId",  "NOT_VALIDATED",  null );
 												$.ajax({
 													type : "post",
 													async : false,
@@ -1566,7 +1569,7 @@ input[type="file"] { z-index:999999;}
 											$("#cardId").next().next().attr('data-bv-result','VALID');
 											$("#cardId").next().attr('class','form-control-feedback glyphicon glyphicon-ok');
 											$("#cardId").parent().attr('class','form-group has-feedback has-success');
-											$("#applicantInfo").data("bootstrapValidator").updateStatus("cardId",  "NOT_VALIDATED",  null );
+											$('#applicantInfo').data('bootstrapValidator').enableFieldValidators('cardId', true);
 											layer.load(1);
 											$.ajax({
 												type : "post",
@@ -1780,7 +1783,7 @@ input[type="file"] { z-index:999999;}
 					url: '${base}/admin/myData/baseIsChanged.html',
 					success :function(data) {
 						if(status == 2){
-							if(data == 1 || data == 2){//改变了保存，没改变不保存
+							if(data == 1){//改变了保存，没改变不保存
 								layer.load(1);
 								$.ajax({
 	    							async: false,
@@ -1946,7 +1949,7 @@ input[type="file"] { z-index:999999;}
 											}
 										}else{//提示过
 											
-											if(data.base.isSameInfo == 0){//改变了需要保存
+											if(data.base == 0){//改变了需要保存
 												if(data.isUpdated == 1){//更新
 													layer.load(1);
 													$.ajax({

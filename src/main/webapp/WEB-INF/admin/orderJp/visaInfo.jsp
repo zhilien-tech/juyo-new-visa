@@ -1150,7 +1150,7 @@
 											
 										}else{//提示过
 										
-											if(data.base.isSameInfo == 0){
+											if(data.base == 0){
 												if(data.isUpdated == 1){//更新
 													layer.load(1);
 													$.ajax({

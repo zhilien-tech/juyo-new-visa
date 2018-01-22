@@ -1074,10 +1074,33 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", applicant.getId()));
 			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
+			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
+			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
 			String baseRemark = applicantForm.getBaseRemark();
 			if (!Util.isEmpty(baseRemark)) {
 				qualifiedApplicantViewService.unQualified(applicant.getId(), orderJpEntity.getOrderId(), baseRemark,
 						ApplicantInfoTypeEnum.BASE.intKey(), session);
+			}
+			//游客进入，变更申请人为基本信息填写完毕
+			if (Util.eq(applicantForm.getUserType(), 2)) {
+				changeOrderStatusToFiled(applyJpList, "base", applyJp, orderEntity);
+				/*int count = 0;
+				applyJp.setBaseIsCompleted(IsYesOrNoEnum.YES.intKey());
+				dbDao.update(applyJp);
+				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
+					if (Util.eq(tApplicantOrderJpEntity.getBaseIsCompleted(), IsYesOrNoEnum.YES.intKey())
+							&& Util.eq(tApplicantOrderJpEntity.getPassIsCompleted(), IsYesOrNoEnum.YES.intKey())
+							&& Util.eq(tApplicantOrderJpEntity.getVisaIsCompleted(), IsYesOrNoEnum.YES.intKey())) {
+						count++;
+					}
+				}
+				if (Util.eq(count, applyJpList.size())) {
+					if (orderEntity.getStatus() < JPOrderStatusEnum.FILLED_INFORMATION.intKey()) {
+						orderEntity.setStatus(JPOrderStatusEnum.FILLED_INFORMATION.intKey());
+						dbDao.update(orderEntity);
+					}
+				}*/
 			}
 
 			//由游客不合格入口进入保存,变更游客状态为修改完成
@@ -1321,6 +1344,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//申请人
 			TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
 					new Long(applicantOrderJpEntity.getApplicantId()).intValue());
+			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
+					.longValue());
+			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
+			if (Util.eq(visaForm.getUserType(), 2)) {
+				changeOrderStatusToFiled(applyJpList, "visa", applicantOrderJpEntity, orderEntity);
+			}
 			applicantEntity.setMarryStatus(visaForm.getMarryStatus());
 			applicantEntity.setMarryUrl(visaForm.getMarryUrl());
 			applicantEntity.setMarryurltype(visaForm.getMarryStatus());
@@ -2219,6 +2250,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", passportForm.getApplicantId()));
 			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
+			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
+			if (Util.eq(passportForm.getUserType(), 2)) {
+				changeOrderStatusToFiled(applyJpList, "pass", applyJp, orderEntity);
+			}
+
 			//游客不合格入口进入，改变申请人状态为修改完毕
 			if (!Util.isEmpty(passportForm.getAddApply())) {
 				if (Util.eq(passportForm.getAddApply(), 2)) {
@@ -3353,6 +3391,35 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					newVisa.setUpdateTime(new Date());
 					dbDao.insert(newVisa);
 				}
+			}
+		}
+		return null;
+	}
+
+	public Object changeOrderStatusToFiled(List<TApplicantOrderJpEntity> applyJpList, String infoType,
+			TApplicantOrderJpEntity applyJp, TOrderEntity orderEntity) {
+		int count = 0;
+		if (Util.eq(infoType, "base")) {
+			applyJp.setBaseIsCompleted(IsYesOrNoEnum.YES.intKey());
+		}
+		if (Util.eq(infoType, "pass")) {
+			applyJp.setPassIsCompleted(IsYesOrNoEnum.YES.intKey());
+		}
+		if (Util.eq(infoType, "visa")) {
+			applyJp.setVisaIsCompleted(IsYesOrNoEnum.YES.intKey());
+		}
+		dbDao.update(applyJp);
+		for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
+			if (Util.eq(tApplicantOrderJpEntity.getBaseIsCompleted(), IsYesOrNoEnum.YES.intKey())
+					&& Util.eq(tApplicantOrderJpEntity.getPassIsCompleted(), IsYesOrNoEnum.YES.intKey())
+					&& Util.eq(tApplicantOrderJpEntity.getVisaIsCompleted(), IsYesOrNoEnum.YES.intKey())) {
+				count++;
+			}
+		}
+		if (Util.eq(count, applyJpList.size())) {
+			if (orderEntity.getStatus() < JPOrderStatusEnum.FILLED_INFORMATION.intKey()) {
+				orderEntity.setStatus(JPOrderStatusEnum.FILLED_INFORMATION.intKey());
+				dbDao.update(orderEntity);
 			}
 		}
 		return null;

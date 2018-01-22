@@ -269,7 +269,6 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 				insertOrUpdateBase(baseinfoEntity, applicantForm, userId);
 			}
 		}
-
 		return null;
 	}
 
