@@ -9,7 +9,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * @Date	 2017年11月13日 	 
  */
 public enum TrialApplicantStatusEnum implements IEnum {
-	FIRSTTRIAL(1, "填写资料"), QUALIFIED(2, "合格"), UNQUALIFIED(3, "不合格"), FillCompleted(4, "修改完成");
+	FIRSTTRIAL(1, "初审"), QUALIFIED(2, "合格"), UNQUALIFIED(3, "不合格"), FillCompleted(4, "修改完成"), Filling(5, "填写资料");
 	private int key;
 	private String value;
 

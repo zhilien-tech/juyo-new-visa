@@ -360,7 +360,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setCardBack(applicantForm.getCardBack());
 		}
 		Map<String, Object> result = MapUtil.map();
-		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+		applicant.setStatus(TrialApplicantStatusEnum.Filling.intKey());
 		applicant.setCreateTime(new Date());
 		//游客登录
 		ApplicantUser applicantUser = new ApplicantUser();
@@ -2477,6 +2477,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		orderEntity.setStatus(JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
 		orderEntity.setUpdateTime(DateUtil.nowDate());
 		dbDao.update(orderEntity);
+		TOrderJpEntity orderJpEntity = dbDao
+				.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
+		List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+		for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
+			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity.getApplicantId()
+					.longValue());
+			apply.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+			dbDao.update(apply);
+		}
 		TOrderLogsEntity logsEntity = dbDao.fetch(TOrderLogsEntity.class, Cnd.where("orderId", "=", id));
 		logsEntity.setOrderId(id);
 		logsEntity.setOrderStatus(JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
