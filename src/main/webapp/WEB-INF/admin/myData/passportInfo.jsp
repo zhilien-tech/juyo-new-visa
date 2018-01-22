@@ -16,7 +16,7 @@
 			img[src=""],img:not([src]) { opacity:0;}
 			input[type="file"] { z-index:999999;}
 			.delete { z-index:1000000;}
-			.qz-head { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+			.qz-head { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
 			.content { margin-top:50px; height:100%; padding:15px 37px 15px 40px;}
 			.rightNav { position:fixed;top:60px;right:0;z-index:999; width:40px;height:calc(100% - 50px); cursor:pointer;}
 			.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
