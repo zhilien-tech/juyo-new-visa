@@ -15,9 +15,15 @@
 	});
 	/*------------------end table--------------------*/
 	
+	$(document).on("mouseover",".salesBtn",function(){
+		var t = "通知销售";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});	
 	
-	
-	
+	$(document).on("mouseover",".viseBtn",function(){
+		var t = "签证补录";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});	
 	/*---------------------card-----------------------*/
 	$(document).on("mouseover",".edit",function(){
 		var t = "编辑";

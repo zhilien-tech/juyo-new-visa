@@ -34,7 +34,7 @@
 .nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
 .btn-margin { margin-top:10px;}
 #sqImg ,#sqImgBack { width:335px;}
-.delete { z-index:999999999;}
+.delete { z-index:1000000;}
 .marginL { margin-left:30px;}
 .nameBeforeTop { margin-left:30px;}
 img[src=""],img:not([src]) { opacity:0;}
