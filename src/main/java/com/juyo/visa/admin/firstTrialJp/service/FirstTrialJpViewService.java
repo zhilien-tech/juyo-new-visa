@@ -1683,4 +1683,43 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		return result;
 	}
 
+	/**
+	 * 
+	 *判断订单收件信息是否填写
+	 *
+	 * @param orderid 订单id
+	 * @return 
+	 */
+	public Object getOrderRecipient(Integer orderid) {
+		Map<String, Object> result = MapUtil.map();
+		TOrderRecipientEntity orderRecipient = dbDao.fetch(TOrderRecipientEntity.class,
+				Cnd.where("orderId", "=", orderid));
+		boolean isEmpty = Util.isEmpty(orderRecipient);
+
+		result.put("orderRecipient", orderRecipient);
+		result.put("isEmpty", isEmpty);
+
+		return result;
+	}
+
+	//地址通知 发送消息
+	public Object sendAddressMsg(Integer orderid, Integer orderjpid, Integer shareType, String shareManIds,
+			HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+
+		boolean isMsg = true;
+		try {
+			sendMail(orderid, orderjpid, shareType, shareManIds);
+			sendMessage(orderid, orderjpid, shareType, shareManIds);
+		} catch (IOException e) {
+			isMsg = false;
+			e.printStackTrace();
+		}
+
+		//变更订单负责人
+		changePrincipalViewService.ChangePrincipal(orderid, FIRSTTRIAL_PROCESS, userId);
+
+		return isMsg;
+	}
 }

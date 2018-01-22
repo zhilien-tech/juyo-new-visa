@@ -308,4 +308,23 @@ public class FirstTrialJpModule {
 		return firstTrialJpViewService.isValidInfo(applyid, orderid);
 	}
 
+	/**
+	 * 判断订单收件信息是否填写
+	 */
+	@At
+	@POST
+	public Object getOrderRecipient(@Param("orderid") Integer orderid) {
+		return firstTrialJpViewService.getOrderRecipient(orderid);
+	}
+
+	/**
+	 * 地址通知，发送消息
+	 */
+	@At
+	@POST
+	public Object sendAddressMsg(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid,
+			@Param("shareType") Integer shareType, @Param("shareManIds") String shareManIds, HttpSession session) {
+		return firstTrialJpViewService.sendAddressMsg(orderid, orderjpid, shareType, shareManIds, session);
+	}
+
 }
