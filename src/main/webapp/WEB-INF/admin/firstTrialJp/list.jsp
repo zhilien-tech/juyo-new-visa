@@ -58,6 +58,7 @@
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.orderid,data.orderjpid)"> </i>
 									<i class="express" @click="expressFun(data.orderid,data.orderjpid)"> </i>
+									<i class="addressNotice" @click="sendMsg(data.orderid,data.orderjpid)"> </i>
 									<!-- <i class="return"> </i> -->
 								</div>
 							</div>
