@@ -1,15 +1,53 @@
 
 $(function() {
 
-	/*	$("#applicant_tbody tr").each(function(i,ele_tr){
-		var applicantId = $(this).children().eq(0).html();
-		var ids = shareIds.split(",");
-		$.each(ids, function(j,shareid){
-			if(applicantId == shareid){
-				$("#tableId tbody tr").eq(i).addClass("trColor");
-			} 
-		});
-	});*/
+	//校验
+	$('#expressForm').bootstrapValidator({
+		message : '验证不通过',
+		feedbackIcons : {
+			valid : 'glyphicon glyphicon-ok',
+			invalid : 'glyphicon glyphicon-remove',
+			validating : 'glyphicon glyphicon-refresh'
+		},
+		fields : {
+			receiver : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '收件人不能为空'
+					}
+				}
+			},
+			mobile : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '电话不能为空'
+					},
+					/*regexp: {
+                	 	regexp: /^[1][34578][0-9]{9}$/,
+                        message: '电话号格式错误'
+                    }*/
+				}
+			},
+			address : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '邮寄地址不能为空'
+					}
+				}
+			}
+
+		}
+	});
+	
+	//初始化验证插件
+	$('#expressForm').bootstrapValidator('validate');
+	//得到获取validator对象或实例 
+	var bootstrapValidator = $("#expressForm").data('bootstrapValidator');
+	// 执行表单验证 
+	bootstrapValidator.validate();
 
 	$(document).on("click",".tableTr",function(){
 		var sharetype = $("#shareType").val();
@@ -44,98 +82,109 @@ function clearText(){
 //保存
 function save(orderid,orderjpid, opType){
 
-	var receiver = $("#receiver").val();
-	if (receiver == "") {
-		layer.msg('收件人不能为空');
-		return;
-	}
-	var mobile = $("#mobile").val();
-	if (mobile == "") {
-		layer.msg('电话不能为空');
-		return;
-	}
-	var address = $("#address").val();
-	if (address == "") {
-		layer.msg('回邮地址不能为空');
-		return;
-	}
-
-	/*	var applicant_tbody = $("#applicant_tbody").is(":empty");
-	if (applicant_tbody) {
-		layer.msg('申请人信息不能为空');
-		return;
-	}*/
-	var applicant_share = true;
-	var shareManIds = "";
-	$("#tableId tbody tr").each(function(){
-		if($(this).hasClass("trColor")){
-			applicant_share = false;
-			var applicantId = $(this).children().eq(0).html();
-			shareManIds += applicantId + ",";
+	//初始化验证插件
+	$('#expressForm').bootstrapValidator('validate');
+	//得到获取validator对象或实例 
+	var bootstrapValidator = $("#expressForm").data('bootstrapValidator');
+	// 执行表单验证 
+	bootstrapValidator.validate();
+	if (bootstrapValidator.isValid()) {
+		
+		var receiver = $("#receiver").val();
+		if (receiver == "") {
+			layer.msg('收件人不能为空');
+			return;
 		}
-	});
-	if (applicant_share || shareManIds=="") {
-		layer.msg('申请人未选择');
-		return;
-	}
+		var mobile = $("#mobile").val();
+		if (mobile == "") {
+			layer.msg('电话不能为空');
+			return;
+		}
+		var address = $("#address").val();
+		if (address == "") {
+			layer.msg('回邮地址不能为空');
+			return;
+		}
 
-	var layerIndex =  layer.load(1, {shade: "#000"});
-
-	$.ajax({
-		type : 'POST',
-		data : {
-			shareManIds:shareManIds
-		},
-		url : '/admin/firstTrialJp/checkExpressManInfo.html',
-		success : function(data) {
-			var isEmpty = data.isEmpty;
-			if(isEmpty == false){
-				var applyids = data.applyids;
-				$.each(applyids, function(i, applyid) { 
-					layer.open({
-						type: 2,
-						title: false,
-						closeBtn:false,
-						fix: false,
-						maxmin: false,
-						shadeClose: false,
-						scrollbar: false,
-						area: ['400px', '300px'],
-						content:'/admin/firstTrialJp/validExpressManInfo.html?applicantId='+applyid+'&orderId='+orderid,
-						success : function(index, layero){
-							var iframeWin = window[index.find('iframe')[0]['name']]; 
-						}
-					}); 
-				}); 
-				layer.close(layerIndex);
-				return;
-			}else{
-				$.ajax({ 
-					url: BASE_PATH+'/admin/firstTrialJp/saveExpressInfo.html',
-					type:'post',
-					data:{
-						orderid:orderid,
-						orderjpid:orderjpid,
-						expresstype:$("#express").val(),
-						sharetype:$("#shareType").val(),
-						receiver:$("#receiver").val(),
-						mobile:$("#mobile").val(),
-						expressaddress:$("#address").val(),
-						shareManIds:shareManIds,
-						opType:opType
-						//receiveAddressId:$("#receiveAddressId").val()
-					},
-					success: function(data){
-						if(data.stauts == 200){
-							layer.close(layerIndex);
-						}
-						closeWindow();
-						parent.successCallBack(2);
-					}
-				});
+		/*	var applicant_tbody = $("#applicant_tbody").is(":empty");
+		if (applicant_tbody) {
+			layer.msg('申请人信息不能为空');
+			return;
+		}*/
+		var applicant_share = true;
+		var shareManIds = "";
+		$("#tableId tbody tr").each(function(){
+			if($(this).hasClass("trColor")){
+				applicant_share = false;
+				var applicantId = $(this).children().eq(0).html();
+				shareManIds += applicantId + ",";
 			}
+		});
+		if (applicant_share || shareManIds=="") {
+			layer.msg('申请人未选择');
+			return;
 		}
-	});
+
+		var layerIndex =  layer.load(1, {shade: "#000"});
+
+		$.ajax({
+			type : 'POST',
+			data : {
+				shareManIds:shareManIds
+			},
+			url : '/admin/firstTrialJp/checkExpressManInfo.html',
+			success : function(data) {
+				var isEmpty = data.isEmpty;
+				if(isEmpty == false){
+					var applyids = data.applyids;
+					$.each(applyids, function(i, applyid) { 
+						layer.open({
+							type: 2,
+							title: false,
+							closeBtn:false,
+							fix: false,
+							maxmin: false,
+							shadeClose: false,
+							scrollbar: false,
+							area: ['400px', '300px'],
+							content:'/admin/firstTrialJp/validExpressManInfo.html?applicantId='+applyid+'&orderId='+orderid,
+							success : function(index, layero){
+								var iframeWin = window[index.find('iframe')[0]['name']]; 
+							}
+						}); 
+					}); 
+					layer.close(layerIndex);
+					return;
+				}else{
+					$.ajax({ 
+						url: BASE_PATH+'/admin/firstTrialJp/saveExpressInfo.html',
+						type:'post',
+						data:{
+							orderid:orderid,
+							orderjpid:orderjpid,
+							expresstype:$("#express").val(),
+							sharetype:$("#shareType").val(),
+							receiver:$("#receiver").val(),
+							mobile:$("#mobile").val(),
+							expressaddress:$("#address").val(),
+							shareManIds:shareManIds,
+							opType:opType
+							//receiveAddressId:$("#receiveAddressId").val()
+						},
+						success: function(data){
+							if(data.stauts == 200){
+								layer.close(layerIndex);
+							}
+							closeWindow();
+							parent.successCallBack(2);
+						}
+					});
+				}
+			}
+		});
+	}
+
+
 
 }
 
@@ -233,13 +282,18 @@ $("#mobile").on('input',function(){
 	$("#mobile").val("");
 })*/
 
-//收件人 检索下拉项
+//收件人、电话 检索下拉项
 function setReceiveInfo(receiver,mobile,address){
 	$("#receiver").nextAll("ul.ui-autocomplete").remove();
 	$("#mobile").nextAll("ul.ui-autocomplete").remove();
 	$("#receiver").val(receiver);
 	$("#mobile").val(mobile);
 	$("#address").val(address);
+	
+	//清楚验证信息
+	clearValidMsg($("#receiver"));
+	clearValidMsg($("#mobile"));
+	clearValidMsg($("#address"));
 }
 
 $("#receiverDiv").mouseleave(function(){
@@ -251,7 +305,14 @@ $('#mobileDiv').mouseleave(function(){
 });  
 
 
-
+function clearValidMsg(obj){
+	var divEle = $(obj).parent();
+	var smallEle = $(obj).next().next();
+	
+	divEle.attr("class", "form-group has-feedback has-success");
+	smallEle.attr("data-bv-result","VALID");
+	smallEle.attr("style","display: none;");
+}
 
 
 
