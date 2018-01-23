@@ -98,12 +98,12 @@
 		$(function(){
 			//资料来源
 			$('#source').change(function(){
-				let selectInfo = $(".dataSourceSelect").find("option:selected").text();
+				var selectInfo = $(this).find("option:selected").text();
 				$(".sourceValue").text(selectInfo);
 			});
 			//回邮方式
 			$("#expressType").change(function(){
-				let selectInfo = $(".backEmailWaySelect").find("option:selected").text();
+				var selectInfo = $(".backEmailWaySelect").find("option:selected").text();
 				$(".wayInfo span").text(selectInfo);
 			});	
 		});
