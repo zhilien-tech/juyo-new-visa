@@ -259,12 +259,16 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 						Cnd.where("userId", "=", apply.getUserId()));
 				insertOrUpdateBase(base, applicantForm, apply.getUserId());
 			}
-		} else {
+		} else {//登录人
 			TTouristBaseinfoEntity baseinfoEntity = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("userId", "=", userId));
-			insertOrUpdateBase(baseinfoEntity, applicantForm, userId);
+			if (Util.isEmpty(baseinfoEntity)) {
+				TTouristBaseinfoEntity tTouristBaseinfoEntity = new TTouristBaseinfoEntity();
+				insertToBase(tTouristBaseinfoEntity, applicantForm, userId);
+			} else {
+				insertOrUpdateBase(baseinfoEntity, applicantForm, userId);
+			}
 		}
-
 		return null;
 	}
 
@@ -381,7 +385,12 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		} else {
 			TTouristPassportEntity touristPassportEntity = dbDao.fetch(TTouristPassportEntity.class,
 					Cnd.where("userId", "=", userId));
-			insertOrUpdatePass(touristPassportEntity, passportForm, userId);
+			if (Util.isEmpty(touristPassportEntity)) {
+				TTouristPassportEntity tTouristPassportEntity = new TTouristPassportEntity();
+				insertToPass(tTouristPassportEntity, passportForm, userId);
+			} else {
+				insertOrUpdatePass(touristPassportEntity, passportForm, userId);
+			}
 		}
 
 		return null;
@@ -484,7 +493,12 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			}
 		} else {
 			TTouristVisaEntity visaEntity = dbDao.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", userId));
-			insertOrUpdateVisa(visaEntity, visaForm, userId);
+			if (Util.isEmpty(visaEntity)) {
+				TTouristVisaEntity tTouristVisaEntity = new TTouristVisaEntity();
+				insertToVisa(tTouristVisaEntity, visaForm, userId);
+			} else {
+				insertOrUpdateVisa(visaEntity, visaForm, userId);
+			}
 		}
 
 		return null;
@@ -1240,6 +1254,161 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
+	public Object insertToBase(TTouristBaseinfoEntity baseinfoEntity, TTouristBaseinfoForm applicantForm, int userId) {
+		baseinfoEntity.setAddress(applicantForm.getAddress());
+		baseinfoEntity.setAddressIsSameWithCard(applicantForm.getAddressIsSameWithCard());
+		baseinfoEntity.setBirthday(applicantForm.getBirthday());
+		baseinfoEntity.setCardBack(applicantForm.getCardBack());
+		baseinfoEntity.setCardFront(applicantForm.getCardFront());
+		baseinfoEntity.setCardId(applicantForm.getCardId());
+		baseinfoEntity.setCity(applicantForm.getCity());
+		baseinfoEntity.setUpdateTime(new Date());
+		baseinfoEntity.setDetailedAddress(applicantForm.getDetailedAddress());
+		baseinfoEntity.setEmail(applicantForm.getEmail());
+		baseinfoEntity.setEmergencyLinkman(applicantForm.getEmergencyLinkman());
+		baseinfoEntity.setEmergencyTelephone(applicantForm.getEmergencyTelephone());
+		baseinfoEntity.setFirstName(applicantForm.getFirstName());
+		if (!Util.isEmpty(applicantForm.getFirstNameEn())) {
+			baseinfoEntity.setFirstNameEn(applicantForm.getFirstNameEn().substring(1));
+		}
+		baseinfoEntity.setHasOtherName(applicantForm.getHasOtherName());
+		baseinfoEntity.setHasOtherNationality(applicantForm.getHasOtherNationality());
+		baseinfoEntity.setIssueOrganization(applicantForm.getIssueOrganization());
+		baseinfoEntity.setLastName(applicantForm.getLastName());
+		if (!Util.isEmpty(applicantForm.getLastNameEn())) {
+			baseinfoEntity.setLastNameEn(applicantForm.getLastNameEn().substring(1));
+		}
+		baseinfoEntity.setNation(applicantForm.getNation());
+		baseinfoEntity.setNationality(applicantForm.getNationality());
+		baseinfoEntity.setOtherFirstName(applicantForm.getOtherFirstName());
+		if (!Util.isEmpty(applicantForm.getOtherFirstNameEn())) {
+			baseinfoEntity.setOtherFirstNameEn(applicantForm.getOtherFirstNameEn().substring(1));
+		}
+		baseinfoEntity.setOtherLastName(applicantForm.getOtherLastName());
+		if (!Util.isEmpty(applicantForm.getOtherLastNameEn())) {
+			baseinfoEntity.setOtherLastNameEn(applicantForm.getOtherLastNameEn().substring(1));
+		}
+		baseinfoEntity.setProvince(applicantForm.getProvince());
+		baseinfoEntity.setSex(applicantForm.getSex());
+		baseinfoEntity.setTelephone(applicantForm.getTelephone());
+		baseinfoEntity.setValidEndDate(applicantForm.getValidEndDate());
+		baseinfoEntity.setValidStartDate(applicantForm.getValidStartDate());
+		baseinfoEntity.setUserId(userId);
+		baseinfoEntity.setSaveIsPrompted(IsYesOrNoEnum.NO.intKey());
+		baseinfoEntity.setUpdateIsPrompted(IsYesOrNoEnum.NO.intKey());
+		dbDao.insert(baseinfoEntity);
+		return null;
+	}
+
+	public Object insertToPass(TTouristPassportEntity touristPassportEntity, TTouristPassportForm passportForm,
+			int userId) {
+		touristPassportEntity.setBirthAddress(passportForm.getBirthAddress());
+		touristPassportEntity.setBirthAddressEn(passportForm.getBirthAddressEn());
+		touristPassportEntity.setBirthday(passportForm.getBirthday());
+		touristPassportEntity.setFirstName(passportForm.getFirstName());
+		touristPassportEntity.setFirstNameEn(passportForm.getFirstNameEn());
+		touristPassportEntity.setIssuedDate(passportForm.getIssuedDate());
+		touristPassportEntity.setIssuedOrganization(passportForm.getIssuedOrganization());
+		touristPassportEntity.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
+		touristPassportEntity.setIssuedPlace(passportForm.getIssuedPlace());
+		touristPassportEntity.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
+		touristPassportEntity.setLastName(passportForm.getLastName());
+		touristPassportEntity.setLastNameEn(passportForm.getLastNameEn());
+		touristPassportEntity.setOCRline1(passportForm.getOCRline1());
+		touristPassportEntity.setOCRline2(passportForm.getOCRline2());
+		touristPassportEntity.setPassport(passportForm.getPassport());
+		touristPassportEntity.setPassportUrl(passportForm.getPassportUrl());
+		touristPassportEntity.setSex(passportForm.getSex());
+		touristPassportEntity.setSexEn(passportForm.getSexEn());
+		touristPassportEntity.setType(passportForm.getType());
+		touristPassportEntity.setUpdateTime(new Date());
+		touristPassportEntity.setValidEndDate(passportForm.getValidEndDate());
+		touristPassportEntity.setValidStartDate(passportForm.getValidStartDate());
+		touristPassportEntity.setValidType(passportForm.getValidType());
+		touristPassportEntity.setUserId(userId);
+		dbDao.insert(touristPassportEntity);
+		return null;
+	}
+
+	public Object insertToVisa(TTouristVisaEntity visaEntity, TTouristVisaForm visaForm, int userId) {
+		visaEntity.setAddress(visaForm.getAddress());
+		visaEntity.setCareerStatus(visaForm.getCareerStatus());
+		visaEntity.setUpdateTime(new Date());
+		if (!Util.isEmpty(visaForm.getSameMainWealth())) {
+			//如果游客跟主申请人的财产信息一样，把主申请人的财产信息保存到游客财产信息中
+			if (Util.eq(visaForm.getSameMainWealth(), IsYesOrNoEnum.YES.intKey())) {
+				//主申请人
+				TApplicantEntity mainApply = dbDao.fetch(TApplicantEntity.class, visaForm.getMainApplicant()
+						.longValue());
+				TApplicantOrderJpEntity mainApplyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+						Cnd.where("applicantId", "=", mainApply.getId()));
+				//获取主申请人的财产信息
+				//银行存款
+				TApplicantWealthJpEntity mainApplyWealthJp = dbDao.fetch(
+						TApplicantWealthJpEntity.class,
+						Cnd.where("applicantId", "=", mainApplyJp.getId()).and("type", "=",
+								ApplicantJpWealthEnum.BANK.value()));
+				if (!Util.isEmpty(mainApplyWealthJp)) {
+					visaEntity.setDeposit(mainApplyWealthJp.getDetails());
+				} else {
+					visaEntity.setDeposit(null);
+				}
+				//车产
+				TApplicantWealthJpEntity mainApplyWealthJpCar = dbDao.fetch(
+						TApplicantWealthJpEntity.class,
+						Cnd.where("applicantId", "=", mainApplyJp.getId()).and("type", "=",
+								ApplicantJpWealthEnum.CAR.value()));
+				if (!Util.isEmpty(mainApplyWealthJpCar)) {
+					visaEntity.setVehicle(mainApplyWealthJpCar.getDetails());
+				} else {
+					visaEntity.setVehicle(null);
+				}
+
+				//房产
+				TApplicantWealthJpEntity mainApplyWealthJpHome = dbDao.fetch(
+						TApplicantWealthJpEntity.class,
+						Cnd.where("applicantId", "=", mainApplyJp.getId()).and("type", "=",
+								ApplicantJpWealthEnum.HOME.value()));
+				if (!Util.isEmpty(mainApplyWealthJpHome)) {
+					visaEntity.setHouseProperty(mainApplyWealthJpHome.getDetails());
+				} else {
+					visaEntity.setHouseProperty(null);
+				}
+
+				//理财
+				TApplicantWealthJpEntity mainApplyWealthJpLi = dbDao.fetch(
+						TApplicantWealthJpEntity.class,
+						Cnd.where("applicantId", "=", mainApplyJp.getId()).and("type", "=",
+								ApplicantJpWealthEnum.LICAI.value()));
+				if (!Util.isEmpty(mainApplyWealthJpLi)) {
+					visaEntity.setFinancial(mainApplyWealthJpLi.getDetails());
+				} else {
+					visaEntity.setFinancial(null);
+				}
+
+			} else {
+				visaEntity.setDeposit(visaForm.getDeposit());
+				visaEntity.setHouseProperty(visaForm.getHouseProperty());
+				visaEntity.setFinancial(visaForm.getFinancial());
+				visaEntity.setVehicle(visaForm.getVehicle());
+			}
+		}
+		visaEntity.setIsMainApplicant(visaForm.getApplicant());
+		visaEntity.setMainId(visaForm.getMainApplicant());
+		visaEntity.setMainRelation(visaForm.getMainRelation());
+		visaEntity.setMarryStatus(visaForm.getMarryStatus());
+		visaEntity.setMarryUrl(visaForm.getMarryUrl());
+		visaEntity.setName(visaForm.getName());
+		visaEntity.setOccupation(visaForm.getOccupation());
+		visaEntity.setRelationRemark(visaForm.getRelationRemark());
+		visaEntity.setSameMainWealth(visaForm.getSameMainWealth());
+		visaEntity.setSameMainWork(visaForm.getSameMainWork());
+		visaEntity.setTelephone(visaForm.getTelephone());
+		visaEntity.setUserId(userId);
+		dbDao.insert(visaEntity);
+		return null;
+	}
+
 	public Object insertOrUpdateBase(TTouristBaseinfoEntity baseinfoEntity, TTouristBaseinfoForm applicantForm,
 			int userId) {
 		baseinfoEntity.setAddress(applicantForm.getAddress());
@@ -1398,24 +1567,32 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		if (Util.isEmpty(apply.getUserId())) {//userId为空说明没有填写手机号,需要根据申请人ID来查询游客信息
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("applicantId", "=", applyId));
-			int eqBase = isEqBase(applicantForm, base);
-			if (Util.eq(eqBase, 1)) {
-				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
-				dbDao.update(base);
-				return 1;
+			if (Util.isEmpty(base)) {
+				return 2;
 			} else {
-				return 0;
+				int eqBase = isEqBase(applicantForm, base);
+				if (Util.eq(eqBase, 1)) {
+					base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+					dbDao.update(base);
+					return 1;
+				} else {
+					return 0;
+				}
 			}
 		} else {//userId不为空时，根据userId来查询
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
-			int eqBase = isEqBase(applicantForm, base);
-			if (Util.eq(eqBase, 1)) {
-				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
-				dbDao.update(base);
-				return 1;
+			if (Util.isEmpty(base)) {
+				return 2;
 			} else {
-				return 0;
+				int eqBase = isEqBase(applicantForm, base);
+				if (Util.eq(eqBase, 1)) {
+					base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+					dbDao.update(base);
+					return 1;
+				} else {
+					return 0;
+				}
 			}
 		}
 	}
@@ -1429,26 +1606,34 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 					Cnd.where("applicantId", "=", applyId));
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("applicantId", "=", applyId));
-			int eqPass = isEqPass(passportForm, pass);
-			if (Util.eq(eqPass, 1)) {
-				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
-				dbDao.update(base);
-				return 1;
+			if (Util.isEmpty(pass)) {
+				return 2;
 			} else {
-				return 0;
+				int eqPass = isEqPass(passportForm, pass);
+				if (Util.eq(eqPass, 1)) {
+					base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+					dbDao.update(base);
+					return 1;
+				} else {
+					return 0;
+				}
 			}
 		} else {//userId不为空时，根据userId来查询
 			TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
-			int eqPass = isEqPass(passportForm, pass);
-			if (Util.eq(eqPass, 1)) {
-				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
-				dbDao.update(base);
-				return 1;
+			if (Util.isEmpty(pass)) {
+				return 2;
 			} else {
-				return 0;
+				int eqPass = isEqPass(passportForm, pass);
+				if (Util.eq(eqPass, 1)) {
+					base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+					dbDao.update(base);
+					return 1;
+				} else {
+					return 0;
+				}
 			}
 		}
 	}
@@ -1461,26 +1646,34 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			TTouristVisaEntity visa = dbDao.fetch(TTouristVisaEntity.class, Cnd.where("applicantId", "=", applyId));
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("applicantId", "=", applyId));
-			int eqVisa = isEqVisa(visaForm, visa);
-			if (Util.eq(eqVisa, 1)) {
-				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
-				dbDao.update(base);
-				return 1;
+			if (Util.isEmpty(visa)) {
+				return 2;
 			} else {
-				return 0;
+				int eqVisa = isEqVisa(visaForm, visa);
+				if (Util.eq(eqVisa, 1)) {
+					base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+					dbDao.update(base);
+					return 1;
+				} else {
+					return 0;
+				}
 			}
 		} else {//userId不为空时，根据userId来查询
 			TTouristVisaEntity visa = dbDao
 					.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", apply.getUserId()));
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
-			int eqVisa = isEqVisa(visaForm, visa);
-			if (Util.eq(eqVisa, 1)) {
-				base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
-				dbDao.update(base);
-				return 1;
+			if (Util.isEmpty(visa)) {
+				return 2;
 			} else {
-				return 0;
+				int eqVisa = isEqVisa(visaForm, visa);
+				if (Util.eq(eqVisa, 1)) {
+					base.setIsSameInfo(IsYesOrNoEnum.NO.intKey());
+					dbDao.update(base);
+					return 1;
+				} else {
+					return 0;
+				}
 			}
 		}
 	}
@@ -1495,16 +1688,29 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(apply.getUserId())) {
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
-			result.put("base", base);
+			if (Util.isEmpty(base)) {
+				result.put("base", 2);
+			} else {
+				result.put("base", base.getIsSameInfo());
+			}
 		} else {
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("applicantId", "=", applyid));
-			result.put("base", base);
+			if (Util.isEmpty(base)) {
+				result.put("base", 2);
+			} else {
+				result.put("base", base.getIsSameInfo());
+			}
 		}
-		//查询是否提示过
-		result.put("isPrompted", loginBase.getSaveIsPrompted());
-		//查询是否更新
-		result.put("isUpdated", loginBase.getSaveIsOrNot());
+		if (Util.isEmpty(loginBase)) {
+			result.put("isPrompted", 2);
+			result.put("isUpdated", 2);
+		} else {
+			//查询是否提示过
+			result.put("isPrompted", loginBase.getSaveIsPrompted());
+			//查询是否更新
+			result.put("isUpdated", loginBase.getSaveIsOrNot());
+		}
 		return result;
 	}
 
@@ -1521,21 +1727,11 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		if (!Util.eq(applicantForm.getCardBack(), base.getCardBack())) {
 			return 1;
 		}
-		if (!Util.isEmpty(applicantForm.getCardCity())) {
-			if (!Util.eq(applicantForm.getCardCity(), base.getCardCity())) {
-				return 1;
-			}
-		}
 		if (!Util.eq(applicantForm.getCardFront(), base.getCardFront())) {
 			return 1;
 		}
 		if (!Util.eq(applicantForm.getCardId(), base.getCardId())) {
 			return 1;
-		}
-		if (!Util.isEmpty(applicantForm.getCardProvince())) {
-			if (!Util.eq(applicantForm.getCardProvince(), base.getCardProvince())) {
-				return 1;
-			}
 		}
 		if (!Util.eq(applicantForm.getCity(), base.getCity())) {
 			return 1;
@@ -1719,8 +1915,13 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object isPrompted(int applyid, HttpSession session) {
+		Map<String, Object> result = MapUtil.map();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		return dbDao.fetch(TTouristBaseinfoEntity.class, Cnd.where("userId", "=", loginUser.getId()));
+		TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()));
+		result.put("base", base.getUpdateIsPrompted());
+		result.put("updateIsOrNot", base.getUpdateIsOrNot());
+		return result;
 	}
 
 }

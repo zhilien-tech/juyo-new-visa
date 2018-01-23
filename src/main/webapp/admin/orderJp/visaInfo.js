@@ -38,7 +38,7 @@
         $(".dropdown").hide();
       })
     });
-    $(document).on("input","#deposit",function(){
+    /*$(document).on("input","#deposit",function(){
     	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
     		return;
     	}
@@ -101,4 +101,4 @@
     		$(".financials").css({"display":"none"});
     		 $("#financial").attr("style", null);
     	}
-    });
+    });*/

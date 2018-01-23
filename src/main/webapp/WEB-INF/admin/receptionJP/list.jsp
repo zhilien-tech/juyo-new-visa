@@ -148,6 +148,7 @@
             	type:'post',
             	success: function(data){
             		_self.receptionJpData = data.receptionJpData;
+            		console.log(_self.receptionJpData);
             		$('#pageTotal').val(data.pageTotal);
 					$('#pageListCount').val(data.pageListCount);
               	}
