@@ -89,7 +89,7 @@
 	}
 	$(function(){
 		$('.selector').change(function(){
-			let name = $(".selector").find("option:selected").text();
+			var name = $(".selector").find("option:selected").text();
 			var selectvalue = $(".selector").find("option:selected").val();
 			$(".select-skip i").text(name);
 			/* if(name == "离婚"){
