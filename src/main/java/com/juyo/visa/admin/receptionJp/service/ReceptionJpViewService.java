@@ -314,8 +314,10 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		//改变订单状态
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		if (!Util.isEmpty(order)) {
-			order.setStatus(JPOrderStatusEnum.RECEPTION_RECEIVED.intKey());
-			dbDao.update(order);
+			if (order.getStatus() <= JPOrderStatusEnum.RECEPTION_RECEIVED.intKey()) {
+				order.setStatus(JPOrderStatusEnum.RECEPTION_RECEIVED.intKey());
+				dbDao.update(order);
+			}
 		}
 		/*for (Map map : applicatlist) {//给订单下所有联系人发短信
 			int applyid = Integer.valueOf((String) map.get("applicatid"));

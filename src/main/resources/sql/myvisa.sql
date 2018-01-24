@@ -103,6 +103,7 @@ $condition
 SELECT
 	ta.userid,
 	taoj.applicantId,
+	taoj.id applyJpId,
 	CONCAT( ta.firstName, ta.lastName ) applicantname,
 	ta.telephone,
 	ta.status applicantstatus,

@@ -36,7 +36,7 @@
     #editbasic ,#backBtn ,#addBtn { margin-top:10px;}
     .delete { z-index:1000000;}
     /*弹框头部固定*/
-    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
     .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; padding:15px 37px 15px 53px;}  
     .cardFront-div #uploadFile { top:0;width:100%;height:200px;left:0;position:absolute;}
@@ -77,7 +77,7 @@
 					</c:when>
 					<c:otherwise>
 						<input id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin" data-dismiss="modal" value="取消" /> 
-						<input id="addBtn" type="button" onclick="save(3);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic" value="保存" />
+						<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic" value="保存" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -476,75 +476,6 @@
 		var contact = '${obj.contact}';
 		$(function() {
 			
-			//校验
-			$('#passportInfo').bootstrapValidator({
-				message : '验证不通过',
-				feedbackIcons : {
-					valid : 'glyphicon glyphicon-ok',
-					invalid : 'glyphicon glyphicon-remove',
-					validating : 'glyphicon glyphicon-refresh'
-				},
-				fields : {
-					relationRemark : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '备注不能为空'
-							}
-						}
-					},
-					careerStatus : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '职业不能为空'
-							}
-						}
-					},
-					marryStatus : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '结婚状况不能为空'
-							}
-						}
-					},
-					mainRelation : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '与主申请人关系不能为空'
-							}
-						}
-					},
-					name : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '名称不能为空'
-							}
-						}
-					},
-					telephone : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '电话不能为空'
-							}
-						}
-					},
-					address : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '地址不能为空'
-							}
-						}
-					},
-				}
-			});
-		$('#passportInfo').bootstrapValidator('validate');
-			
 			if(!contact){
 				var form = document.forms[0]; 
 				for ( var i = 0; i < form.length; i++) { 
@@ -557,39 +488,19 @@
 				document.getElementById("relationRemark").style.backgroundColor = "#eee";
 				$(".basic").hide();
 			}else{
-				//结婚证图片验证
-				var marryUrl = $("#marryUrl").val();
-				var marrystatus = $("#marryStatus").val();
-				if(marryUrl == ""){
-					if(marrystatus == 3 || marrystatus == 4){
-						$(".front").attr("class", "info-imgUpload front has-success");  
-				        $(".help-blockFront").attr("data-bv-result","IVALID");  
-				        $(".help-blockFront").attr("style","display: none;");
-				        $("#borderColor").attr("style",null);
-					}else{
-						$(".front").attr("class", "info-imgUpload front has-error");  
-				        $(".help-blockFront").attr("data-bv-result","INVALID");  
-				        $(".help-blockFront").attr("style","display: block;");  
-				        $("#borderColor").attr("style","border-color:#ff1a1a");
-					}
-				}else{
-					$(".front").attr("class", "info-imgUpload front has-success");  
-			        $(".help-blockFront").attr("data-bv-result","IVALID");  
-			        $(".help-blockFront").attr("style","display: none;");
-			        $("#borderColor").attr("style",null);
-				}
-				var bootstrapValidator = $("#passportInfo").data(
+				
+				/* var bootstrapValidator = $("#passportInfo").data(
 				'bootstrapValidator');
 				// 执行表单验证 
-				bootstrapValidator.validate();
+				bootstrapValidator.validate(); */
 				$("#deleteApplicantFrontImg").click(function(){
 					$('#marryUrl').val("");
 					$('#sqImg').attr('src', "");
 					$("#uploadFile").siblings("i").css("display","none");
 					$(".front").attr("class", "info-imgUpload front has-error");  
 			        $(".help-blockFront").attr("data-bv-result","INVALID");  
-			        $(".help-blockFront").attr("style","display: block;");
-			        $("#borderColor").attr("style","border-color:#ff1a1a");
+			        //$(".help-blockFront").attr("style","display: block;");
+			        //$("#borderColor").attr("style","border-color:#ff1a1a");
 				});
 				
 				$(".remove-btn").click(function(){
@@ -638,9 +549,9 @@
 			
 			var marry = $("#marryUrl").val();
 			if(marry != ""){
-				$("#uploadFile").siblings("i").css("display","block");
+				$(".delete").siblings("i").css("display","block");
 			}else{
-				$("#uploadFile").siblings("i").css("display","none");
+				$(".delete").siblings("i").css("display","none");
 			}
 			
 			//婚姻状况为单身和丧偶时没有上传图片接口
@@ -842,9 +753,9 @@
 						$(this).addClass("btnState-true");
 						$("#deposit").val("");
 						$(".help-blockdeposit").attr("data-bv-result","INVALID");  
-					    $(".deposits").css({"display":"block"});
+					    //$(".deposits").css({"display":"block"});
 					    $(".deposits").attr("class", "col-xs-6 deposits has-error");
-					    $("#deposit").attr("style", "border-color:#ff1a1a");
+					    //$("#deposit").attr("style", "border-color:#ff1a1a");
 						//$("#deposit").placeholder("万");
 					}
 				}else if(financeBtnInfo == "车产"){
@@ -860,9 +771,9 @@
 						$(this).addClass("btnState-true");
 						$("#vehicle").val("");
 				        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
-				        $(".vehicles").css({"display":"block"});
+				        //$(".vehicles").css({"display":"block"});
 				        $(".vehicles").attr("class", "col-xs-6 vehicles has-error");
-				        $("#vehicle").attr("style", "border-color:#ff1a1a");
+				        //$("#vehicle").attr("style", "border-color:#ff1a1a");
 					}
 				}else if(financeBtnInfo == "房产"){
 					if($(this).hasClass("btnState-true")){
@@ -877,9 +788,9 @@
 						$(this).addClass("btnState-true");
 						$("#houseProperty").val("");
 						$(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
-					    $(".housePropertys").css({"display":"block"});
+					    //$(".housePropertys").css({"display":"block"});
 					    $(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");
-					    $("#houseProperty").attr("style", "border-color:#ff1a1a");
+					    //$("#houseProperty").attr("style", "border-color:#ff1a1a");
 						//$("#houseProperty").placeholder("平米");
 					}
 				}else if(financeBtnInfo == "理财"){
@@ -895,9 +806,9 @@
 						$(this).addClass("btnState-true");
 						$("#financial").val("");
 						$(".help-blockfinancial").attr("data-bv-result","INVALID");  
-					    $(".financials").css({"display":"block"});
+					    //$(".financials").css({"display":"block"});
 					    $(".financials").attr("class", "col-xs-6 financials has-error");
-					    $("#financial").attr("style", "border-color:#ff1a1a");
+					    //$("#financial").attr("style", "border-color:#ff1a1a");
 						//$("#financial").placeholder("万");
 					}
 				}
@@ -907,6 +818,153 @@
 			
 			
 		});
+		
+		function visaValidate(){
+			
+			//结婚证图片验证
+			var marryUrl = $("#marryUrl").val();
+			var marrystatus = $("#marryStatus").val();
+			if(marryUrl == ""){
+				if(marrystatus == 3 || marrystatus == 4){
+					$(".front").attr("class", "info-imgUpload front has-success");  
+			        $(".help-blockFront").attr("data-bv-result","IVALID");  
+			        $(".help-blockFront").attr("style","display: none;");
+			        $("#borderColor").attr("style",null);
+				}else{
+					$(".front").attr("class", "info-imgUpload front has-error");  
+			        $(".help-blockFront").attr("data-bv-result","INVALID");  
+			        $(".help-blockFront").attr("style","display: block;");  
+			        $("#borderColor").attr("style","border-color:#ff1a1a");
+				}
+			}else{
+				$(".front").attr("class", "info-imgUpload front has-success");  
+		        $(".help-blockFront").attr("data-bv-result","IVALID");  
+		        $(".help-blockFront").attr("style","display: none;");
+		        $("#borderColor").attr("style",null);
+			}
+			//财产信息验证
+			var deposit = $("#deposit").val();
+			var vehicle = $("#vehicle").val();
+			var houseProperty = $("#houseProperty").val();
+			var financial = $("#financial").val();
+			if($(".deposit").css("display") != "none"){
+				if(deposit == ""){
+		    		$(".deposits").attr("class", "col-xs-6 deposits has-error");  
+			        $(".help-blockdeposit").attr("data-bv-result","INVALID");  
+			        $(".deposits").css({"display":"block"});
+			        $("#deposit").attr("style", "border-color:#ff1a1a");
+		    	}else{
+		    		$(".deposits").attr("class", "col-xs-6 deposits has-success");
+		    		$(".deposits").css({"display":"none"});
+		    		 $("#deposit").attr("style", null);
+		    	}
+			}
+			if($(".vehicle").css("display") != "none"){
+				if(vehicle == ""){
+		    		$(".vehicles").attr("class", "col-xs-6 vehicles has-error");  
+			        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
+			        $(".vehicles").css({"display":"block"});
+			        $("#vehicle").attr("style", "border-color:#ff1a1a");
+		    	}else{
+		    		$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
+		    		$(".vehicles").css({"display":"none"});
+		    		 $("#vehicle").attr("style", null);
+		    	}
+			}
+			if($(".houseProperty").css("display") != "none"){
+				if(houseProperty == ""){
+		    		$(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");  
+			        $(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
+			        $(".housePropertys").css({"display":"block"});
+			        $("#houseProperty").attr("style", "border-color:#ff1a1a");
+		    	}else{
+		    		$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
+		    		$(".housePropertys").css({"display":"none"});
+		    		 $("#houseProperty").attr("style", null);
+		    	}
+			}
+			if($(".financial").css("display") != "none"){
+				if(financial == ""){
+		    		$(".financials").attr("class", "col-xs-6 financials has-error");  
+			        $(".help-blockfinancial").attr("data-bv-result","INVALID");  
+			        $(".financials").css({"display":"block"});
+			        $("#financial").attr("style", "border-color:#ff1a1a");
+		    	}else{
+		    		$(".financials").attr("class", "col-xs-6 financials has-success");
+		    		$(".financials").css({"display":"none"});
+		    		 $("#financial").attr("style", null);
+		    	}
+			}
+			
+			//校验
+			$('#passportInfo').bootstrapValidator({
+				message : '验证不通过',
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields : {
+					relationRemark : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '备注不能为空'
+							}
+						}
+					},
+					careerStatus : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '职业不能为空'
+							}
+						}
+					},
+					marryStatus : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '结婚状况不能为空'
+							}
+						}
+					},
+					mainRelation : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '与主申请人关系不能为空'
+							}
+						}
+					},
+					name : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '名称不能为空'
+							}
+						}
+					},
+					telephone : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '电话不能为空'
+							}
+						}
+					},
+					address : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '地址不能为空'
+							}
+						}
+					},
+				}
+			});
+		$('#passportInfo').bootstrapValidator('validate');
+		}
 		/* //连接websocket
 		connectWebSocket();
 		function connectWebSocket(){
@@ -946,29 +1004,30 @@
 		
 		//保存
 		function save(status){
-			//得到获取validator对象或实例 
-			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-			bootstrapValidator.validate();
-			if(status == 1){
-				if (!bootstrapValidator.isValid()) {
-					return;
-				}
-				if($(".front").hasClass("has-error")){
-					return;
-				}
-				if($(".deposits").hasClass("has-error")){
-					return;
-				}
-				if($(".vehicles").hasClass("has-error")){
-					return;
-				}
-				if($(".housePropertys").hasClass("has-error")){
-					return;
-				}
-				if($(".financials").hasClass("has-error")){
-					return;
-				}
-			}
+			 if(status != 2){
+				 visaValidate();
+				//得到获取validator对象或实例 
+				var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+				bootstrapValidator.validate();
+					if (!bootstrapValidator.isValid()) {
+						return;
+					}
+					if($(".front").hasClass("has-error")){
+						return;
+					}
+					if($(".deposits").hasClass("has-error")){
+						return;
+					}
+					if($(".vehicles").hasClass("has-error")){
+						return;
+					}
+					if($(".housePropertys").hasClass("has-error")){
+						return;
+					}
+					if($(".financials").hasClass("has-error")){
+						return;
+					}
+			 }
 			
 			//绑定财产类型
 			var wealthType = "";
@@ -988,7 +1047,7 @@
 				$("#wealth").val(0);
 			}
 			var orderid = '${obj.orderid}';
-			var applicantId = '${obj.applicantid}';
+			var applicantId = '${obj.applyId}';
 			//var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
 			var passportInfo = $("#passportInfo").serialize();
 			$.ajax({
@@ -1001,7 +1060,7 @@
 					if(status == 1){
 						closeWindow(2);
 					}else if(status == 2){
-						
+						window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
 					}else{
 						layer.msg("修改成功", {
 							time: 500,
@@ -1073,10 +1132,10 @@
 		
 		function passportBtn(){
 			var applicantId = '${obj.applyId}';
-			var bootstrapValidator = $("#passportInfo").data(
+			/* var bootstrapValidator = $("#passportInfo").data(
 				'bootstrapValidator');
 			// 执行表单验证 
-			bootstrapValidator.validate();
+			bootstrapValidator.validate(); */
 			/* if (!bootstrapValidator.isValid()) {
 				return;
 			}
@@ -1089,7 +1148,7 @@
 			} */
 			save(2);
 			//socket.onclose();
-			window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
+			//window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
 		}
 		
 		//编辑按钮
@@ -1110,18 +1169,18 @@
 			if(marryUrl == ""){
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");  
-		        $("#borderColor").attr("style","border-color:#ff1a1a");
+		        //$(".help-blockFront").attr("style","display: block;");  
+		        //$("#borderColor").attr("style","border-color:#ff1a1a");
 			}else{
 				$(".front").attr("class", "info-imgUpload front has-success");  
 		        $(".help-blockFront").attr("data-bv-result","IVALID");  
 		        $(".help-blockFront").attr("style","display: none;");
 		        $("#borderColor").attr("style",null);
 			}
-			var bootstrapValidator = $("#passportInfo").data(
+			/* var bootstrapValidator = $("#passportInfo").data(
 			'bootstrapValidator');
 			// 执行表单验证 
-			bootstrapValidator.validate();
+			bootstrapValidator.validate(); */
 			$("#deleteApplicantFrontImg").click(function(){
 				$('#marryUrl').val("");
 				$('#sqImg').attr('src', "");

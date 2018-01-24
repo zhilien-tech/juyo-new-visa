@@ -141,26 +141,28 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			List<TOrderJpEntity> orderJpList = new ArrayList<TOrderJpEntity>();
 
 			for (TApplicantEntity tApplicantEntity : applyList) {
-				//查询每个申请人所在订单状态，如果实在填写完毕之前，改变订单状态为填写资料中
+				//日本申请人
 				TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 						Cnd.where("applicantId", "=", tApplicantEntity.getId()));
 				if (!Util.isEmpty(applicantOrderJpEntity)) {
 					Integer orderId = applicantOrderJpEntity.getOrderId();
 					if (!Util.isEmpty(orderId)) {
+						//日本订单信息
 						TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, orderId.longValue());
-						TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId()
-								.longValue());
-						Integer orderStatus = orderEntity.getStatus();
-						if (orderStatus < JPOrderStatusEnum.FILLED_INFORMATION.intKey()) {
-							orderEntity.setStatus(JPOrderStatusEnum.FILLING_INFORMATION.intKey());
-							dbDao.update(orderEntity);
-						}
-						//将所有订单放入list中
+						//将所有的日本订单放入list中
 						orderJpList.add(orderJpEntity);
 					}
 				}
 			}
 			for (TOrderJpEntity tOrderJpEntity : orderJpList) {
+				//订单信息
+				TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, tOrderJpEntity.getOrderId().longValue());
+				Integer orderStatus = orderEntity.getStatus();
+				//查询每个订单状态，如果是在填写完毕之前，改变订单状态为填写资料中
+				if (orderStatus < JPOrderStatusEnum.FILLED_INFORMATION.intKey()) {
+					orderEntity.setStatus(JPOrderStatusEnum.FILLING_INFORMATION.intKey());
+					dbDao.update(orderEntity);
+				}
 				//获取列表页每个订单所需要的部分数据
 				String passportSqlstr = sqlManager.get("myvisa_japan_visa_list_data");
 				Sql passportSql = Sqls.create(passportSqlstr);
@@ -495,11 +497,15 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("userId", "=", apply.getUserId()));
 			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			base.setSaveIsPrompted(IsYesOrNoEnum.NO.intKey());
+			base.setUpdateIsPrompted(IsYesOrNoEnum.NO.intKey());
 			dbDao.update(base);
 		} else {
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
 					Cnd.where("applicantId", "=", applyid));
 			base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			base.setSaveIsPrompted(IsYesOrNoEnum.NO.intKey());
+			base.setUpdateIsPrompted(IsYesOrNoEnum.NO.intKey());
 			dbDao.update(base);
 		}
 		return null;
@@ -509,6 +515,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		copyBaseToPersonnel(applyid, session);
 		copyPassToPersonnel(applyid, session);
 		copyVisaToPersonnel(applyid, session);
+
 		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyid);
 		if (!Util.isEmpty(apply.getUserId())) {
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
@@ -537,6 +544,8 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				applyCnd.and("ta.id", "=", applyid);
 				applicantSql.setCondition(applyCnd);
 				nutDao.execute(applicantSql);
+
+				changeOrderstatus(applyid, "base");
 			}
 		} else {
 			TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
@@ -549,6 +558,8 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				applyCnd.and("ta.id", "=", applyid);
 				applicantSql.setCondition(applyCnd);
 				nutDao.execute(applicantSql);
+
+				changeOrderstatus(applyid, "base");
 			}
 		}
 		return null;
@@ -567,6 +578,8 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				applyCnd.and("ta.applicantId", "=", applyid);
 				applicantSql.setCondition(applyCnd);
 				nutDao.execute(applicantSql);
+
+				changeOrderstatus(applyid, "pass");
 			}
 		} else {
 			TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
@@ -579,6 +592,8 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				applyCnd.and("ta.applicantId", "=", applyid);
 				applicantSql.setCondition(applyCnd);
 				nutDao.execute(applicantSql);
+
+				changeOrderstatus(applyid, "pass");
 			}
 		}
 		return null;
@@ -601,12 +616,15 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			//更新
 			UpdateVisaToPersonnel(applyJp, workJp, wealthList, visa, apply, session);
 
+			changeOrderstatus(applyid, "visa");
+
 		} else {//根据申请人id查询
 			TTouristVisaEntity visa = dbDao.fetch(TTouristVisaEntity.class,
 					Cnd.where("applicantId", "=", apply.getId()));
 			//更新
 			UpdateVisaToPersonnel(applyJp, workJp, wealthList, visa, apply, session);
 
+			changeOrderstatus(applyid, "visa");
 		}
 		return null;
 	}
@@ -748,13 +766,12 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(apply.getUserId())) {//有userId时根据userId查询
 			TTouristVisaEntity visa = dbDao
 					.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", apply.getUserId()));
-			//更新
+			//更新或添加
 			toUpdateVisa(applyJp, workJp, wealthList, visa, apply);
-
 		} else {//根据申请人id查询
 			TTouristVisaEntity visa = dbDao.fetch(TTouristVisaEntity.class,
 					Cnd.where("applicantId", "=", apply.getId()));
-			//更新
+			//更新或添加
 			toUpdateVisa(applyJp, workJp, wealthList, visa, apply);
 
 		}
@@ -938,6 +955,13 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 
 	public Object toUpdateVisa(TApplicantOrderJpEntity applyJp, TApplicantWorkJpEntity workJp,
 			List<TApplicantWealthJpEntity> wealthList, TTouristVisaEntity visa, TApplicantEntity apply) {
+		if (Util.isEmpty(visa)) {
+			visa = new TTouristVisaEntity();
+			visa.setApplicantId(apply.getId());
+			if (!Util.isEmpty(apply.getUserId())) {
+				visa.setUserId(apply.getUserId());
+			}
+		}
 		visa.setAddress(workJp.getAddress());
 		visa.setCareerStatus(workJp.getCareerStatus());
 		visa.setIsMainApplicant(applyJp.getIsMainApplicant());
@@ -983,7 +1007,23 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		if (Util.eq(financialCount, 0)) {
 			visa.setFinancial(null);
 		}
-		dbDao.update(visa);
+		if (Util.isEmpty(visa.getId())) {
+			dbDao.insert(visa);
+		} else {
+			dbDao.update(visa);
+		}
+		return null;
+	}
+
+	public Object changeOrderstatus(int applyid, String infoType) {
+		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applyid));
+		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
+				.longValue());
+		List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
+		orderJpViewService.changeOrderStatusToFiled(applyJpList, infoType, applicantOrderJpEntity, orderEntity);
 		return null;
 	}
 
