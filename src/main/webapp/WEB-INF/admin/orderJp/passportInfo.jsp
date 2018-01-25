@@ -762,7 +762,7 @@
 											window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType';
 										}
 									}else if(status == 3){
-										//if(data == 1 || data == 2){
+										if(data == 1){
 											layer.load(1);
 											$.ajax({
 												async: false,
@@ -775,10 +775,10 @@
 													window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType';
 												}
 											});
-										/* }else{
+										}else{
 											socket.onclose();
 											window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType';
-										} */
+										}
 									}else{
 										if(data == 2){//游客表为空
 											layer.load(1);
@@ -804,7 +804,10 @@
 											$.ajax({ 
 			    			    				url: '${base}/admin/myVisa/copyAllInfoToTourist',
 			    			    				dataType:"json",
-			    			    				data:{applyid:id},
+			    			    				data:{
+			    			    					applyid:id,
+			    			    					emptyInfo:"YES"
+			    			    					},
 			    			    				type:'post',
 			    			    				success: function(data){
 			    			    					    		
@@ -1039,7 +1042,7 @@
 							});
 						}
 					 }
-					}, 100);
+					}, 500);
 		}
 		
 		

@@ -230,7 +230,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object addOrder(Integer id, HttpSession session) {
+	public Object editOrder(Integer id, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
 		TCustomerEntity customer = new TCustomerEntity();
 		result.put("orderId", id);
@@ -360,7 +360,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setCardBack(applicantForm.getCardBack());
 		}
 		Map<String, Object> result = MapUtil.map();
-		applicant.setStatus(TrialApplicantStatusEnum.Filling.intKey());
 		applicant.setCreateTime(new Date());
 		//游客登录
 		ApplicantUser applicantUser = new ApplicantUser();

@@ -83,13 +83,13 @@
 									</dl>
 								</div>
 									
-								<div class="content-main-center">
+								<!-- <div class="content-main-center">
 									<dl>
 										<dd><label>&nbsp;</label><span></span></dd>
 										<dd><label>送签时间：</label><span>{{data.sendvisadate}}</span></dd>
 										<dd><label>出签时间：</label><span>{{data.outvisadate}}</span></dd>
 									</dl>
-								</div>
+								</div> -->
 								<div class="content-main-center center-right"><!-- {{data.orderstatus}} --></div>
 								
 							</div>
@@ -110,7 +110,6 @@
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
-	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->

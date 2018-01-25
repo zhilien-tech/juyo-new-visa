@@ -969,19 +969,17 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object topContactsList(HttpSession session) {
+		long startTime = System.currentTimeMillis();//获取当前时间
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
 
-		List<Record> list = new ArrayList<>();
 		List<Record> query = new ArrayList<>();
 		List<Record> lastRecords = new ArrayList<>();
 		String str = "";
 		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()), null);
 		if (!Util.isEmpty(applyList)) {
-			List<TOrderJpEntity> orderJpList = new ArrayList<TOrderJpEntity>();
-
 			for (TApplicantEntity tApplicantEntity : applyList) {
 				TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 						Cnd.where("applicantId", "=", tApplicantEntity.getId()));
@@ -989,49 +987,17 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 					Integer orderId = applicantOrderJpEntity.getOrderId();
 					if (!Util.isEmpty(orderId)) {
 						TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, orderId.longValue());
-						/*TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId()
-								.longValue());
-						Integer orderStatus = orderEntity.getStatus();
-						if (orderStatus < JPOrderStatusEnum.FILLED_INFORMATION.intKey()) {
-							orderEntity.setStatus(JPOrderStatusEnum.FILLING_INFORMATION.intKey());
-							dbDao.update(orderEntity);
-						}*/
-						orderJpList.add(orderJpEntity);
-					}
-				}
-			}
-			for (TOrderJpEntity tOrderJpEntity : orderJpList) {
-				String passportSqlstr = sqlManager.get("myvisa_japan_visa_list_data");
-				Sql passportSql = Sqls.create(passportSqlstr);
-				Cnd orderJpCnd = Cnd.NEW();
-				orderJpCnd.and("toj.id", "=", tOrderJpEntity.getId());
-				passportSql.setCondition(orderJpCnd);
-				Record passport = dbDao.fetch(passportSql);
-				list.add(passport);
-			}
-			for (Record record : list) {
-				Integer orderid = (Integer) record.get("id");
-				String sqlStr = sqlManager.get("myvisa_japan_visa_list_data_apply");
-				Sql applysql = Sqls.create(sqlStr);
-				List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
-						Cnd.where("orderId", "=", record.get("id")), null);
-				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
-					TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity
-							.getApplicantId().longValue());
-					if (applyList.contains(apply)) {
-						TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
-								Cnd.where("applicantId", "=", apply.getId()));
-						if (Util.eq(applyJp.getIsSameLinker(), IsYesOrNoEnum.YES.intKey())) {
-							query = dbDao.query(applysql,
-									Cnd.where("taoj.orderId", "=", orderid).and("ta.id", "!=", apply.getId()), null);
+						List<TApplicantOrderJpEntity> applyJps = dbDao.query(TApplicantOrderJpEntity.class,
+								Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+						for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJps) {
+							TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity
+									.getApplicantId().longValue());
+							if (!applyList.contains(apply)) {
+								str += apply.getId() + ",";
+							}
 						}
 					}
 				}
-				for (Record apply : query) {
-					Integer applyId = (Integer) apply.get("applyId");
-					str += applyId + ",";
-				}
-
 			}
 
 			if (!Util.isEmpty(str)) {
@@ -1064,6 +1030,8 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			}
 
 		}
+		long endTime = System.currentTimeMillis();
+		System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
 		return result;
 	}
 

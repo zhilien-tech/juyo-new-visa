@@ -27,6 +27,20 @@ FROM
 	INNER JOIN t_tourist_baseinfo ttb ON ta.id = ttb.applicantId
 	LEFT JOIN t_tourist_passport ttp ON ta.id = ttp.applicantId
 	$condition	
+
+/*mydata_japan_visa_list_data_apply*/
+SELECT
+	CONCAT(ta.firstName, ta.lastName) applicant,
+	tap.passport passportNo,
+	taoj.id applicatid,
+	ta.id applyId,
+	ta.telephone,
+	ta.userId
+FROM
+	t_applicant_order_jp taoj
+INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
+LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
+$condition	
 	
 /*myvisa_applicant_by_id*/
 SELECT
@@ -50,9 +64,9 @@ FROM
 	
 /*insertBaseToTourist*/
 INSERT INTO
-	t_tourist_baseinfo(applicantId,userId,firstName,firstNameEn,lastName,lastNameEn,telephone,email,sex,nation,birthday,address,cardId,cardFront,cardBack,issueOrganization,validStartDate,validEndDate,province,city,detailedAddress,otherFirstName,otherFirstNameEn,otherLastName,otherLastNameEn,emergencyLinkman,emergencyTelephone,hasOtherNationality,hasOtherName,nationality,addressIsSameWithCard)
+	t_tourist_baseinfo(applicantId,userId,firstName,firstNameEn,lastName,lastNameEn,telephone,email,sex,nation,birthday,address,cardId,cardFront,cardBack,issueOrganization,validStartDate,validEndDate,province,city,detailedAddress,otherFirstName,otherFirstNameEn,otherLastName,otherLastNameEn,emergencyLinkman,emergencyTelephone,hasOtherNationality,hasOtherName,nationality,addressIsSameWithCard,saveIsPrompted,updateIsPrompted)
 SELECT
-	id,userId,firstName,firstNameEn,lastName,lastNameEn,telephone,email,sex,nation,birthday,address,cardId,cardFront,cardBack,issueOrganization,validStartDate,validEndDate,province,city,detailedAddress,otherFirstName,otherFirstNameEn,otherLastName,otherLastNameEn,emergencyLinkman,emergencyTelephone,hasOtherNationality,hasOtherName,nationality,addressIsSameWithCard
+	id,userId,firstName,firstNameEn,lastName,lastNameEn,telephone,email,sex,nation,birthday,address,cardId,cardFront,cardBack,issueOrganization,validStartDate,validEndDate,province,city,detailedAddress,otherFirstName,otherFirstNameEn,otherLastName,otherLastNameEn,emergencyLinkman,emergencyTelephone,hasOtherNationality,hasOtherName,nationality,addressIsSameWithCard,0,0
 FROM
 	t_applicant ta 
 	$condition

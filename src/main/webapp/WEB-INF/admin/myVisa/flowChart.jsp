@@ -40,7 +40,7 @@
 								<label>资料填写</label>
 							</div>
 							<div class="mainInfo">
-								<label>(基本信息、护照信息、签证信息)</label>
+								<label>基本信息、护照信息、签证信息</label>&nbsp;&nbsp;&nbsp;&nbsp;
 								<a href="javascript: void(0);" onclick="baseInfo(${obj.applicant.applicantid })">填写</a>
 							</div>
 						</li>
@@ -73,8 +73,8 @@
 							</div>
 							<div class="mainInfo">
 								<c:if test="${null != obj.expressEntity }">
-									<label>${obj.expressType }</label>
-									<label>${obj.expressNum }</label>
+									<label>${obj.expressType }</label>&nbsp;&nbsp;
+									<label>${obj.expressNum }</label>&nbsp;&nbsp;
 									<a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">修改</a>
 								</c:if>
 								<c:if test="${null == obj.expressEntity }">
@@ -164,14 +164,26 @@
 						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
-								<!-- <div class="vertical"></div> -->
+								<div class="vertical"></div>
 							</div>
 							<div class="writeData">
 								<label>资料已寄出</label>
+							<div class="mainInfo">
+								<label></label>
+							</div>
+							
+						</li>
+						<li style="display:none" class="orderOver">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+							</div>
+							<div class="writeData">
+								<label>订单结束</label>
 							</div>
 							<div class="mainInfo">
 								<label></label>
 							</div>
+							
 						</li>
 					</ul>	
 				</div>
@@ -196,14 +208,16 @@
 			$(function(){
 			  $('.flowChart').find('li').each(function() {
 					 var indexLi = $(this).index();
-
 					 if(indexLi <= indexOfBlue){
 						 $(this).attr("style", "display:block");
 						 //$(this).find("div .vertical").attr("style", "display:none");
 					 }
-					 if(indexLi == indexOfBlue){
+					 if(indexLi == indexOfBlue && indexOfBlue != 9){
 						 $(this).find('.vertical').attr("style", "display:none");
 						 
+					 }
+					 if(indexOfBlue == 9){
+						 $('.orderOver').attr("style", "display:block");
 					 }
 	           })
 			});
