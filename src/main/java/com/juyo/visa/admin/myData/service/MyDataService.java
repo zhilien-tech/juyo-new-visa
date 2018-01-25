@@ -988,7 +988,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		for (Record record : orderRecord) {
 			Object orderJpStr = record.get("id");
 			if (!Util.isEmpty(orderJpStr)) {
-				str += (Integer) orderJpStr;
+				str += (Integer) orderJpStr + ",";
 			}
 		}
 
@@ -1015,13 +1015,14 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 
 		if (!Util.isEmpty(str)) {
 			String applicants = str.substring(0, str.length() - 1);
-			String applicantSqlstr = sqlManager.get("orderJp_applicantTable");
+			String applicantSqlstr = sqlManager.get("mydata_applys");
 			Sql applicantSql = Sqls.create(applicantSqlstr);
 			Cnd appcnd = Cnd.NEW();
-			appcnd.and("a.id", "in", applicants);
+			appcnd.and("toj.orderId", "in", applicants);
+			appcnd.and("ttb.userId", "!=", loginUser.getId());
 			applicantSql.setCondition(appcnd);
 			List<Record> applicantInfo = dbDao.query(applicantSql, appcnd, null);
-			for (Record record : applicantInfo) {
+			/*for (Record record : applicantInfo) {
 				Integer applyId = (Integer) record.get("id");
 				TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyId.longValue());
 				String applicantSqlStr = sqlManager.get("mydata_inProcessVisa_list");
@@ -1038,8 +1039,8 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 				for (Record record2 : query2) {
 					lastRecords.add(record2);
 				}
-			}
-			result.put("visaJapanData", lastRecords);
+			}*/
+			result.put("visaJapanData", applicantInfo);
 		}
 
 		long endTime = System.currentTimeMillis();

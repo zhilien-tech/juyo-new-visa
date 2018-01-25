@@ -288,6 +288,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicant.setOpId(loginUser.getId());
 		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 		applicant.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
 		if (!Util.isEmpty(applicantForm.getAddress())) {
 			applicant.setAddress(applicantForm.getAddress());
 		}

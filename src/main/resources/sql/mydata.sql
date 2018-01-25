@@ -18,11 +18,9 @@ FROM
 
 /*mydata_orderJpIds*/
 SELECT
-toj.id
+	tr.id
 FROM
 t_applicant ta
-LEFT JOIN
-t_applicant_passport tap ON tap.applicantId = ta.id
 LEFT JOIN
 t_applicant_order_jp taoj ON taoj.applicantId = ta.id
 LEFT JOIN
@@ -30,7 +28,27 @@ t_order_jp toj ON taoj.orderId = toj.id
 LEFT JOIN
 t_order tr ON toj.orderId = tr.id
 $condition
-	
+
+/*mydata_applys*/
+SELECT
+	ttb.applicantId,
+	CONCAT( ttb.firstName, ttb.lastName ) applicantname,
+	ttb.telephone,
+	ttp.passport
+FROM
+t_applicant ta
+LEFT JOIN
+t_applicant_order_jp taoj ON taoj.applicantId = ta.id
+LEFT JOIN
+t_order_jp toj ON taoj.orderId = toj.id
+LEFT JOIN
+t_order tr ON toj.orderId = tr.id
+LEFT JOIN
+t_tourist_baseinfo ttb ON ttb.applicantId = ta.id
+LEFT JOIN
+t_tourist_passport ttp ON ttp.applicantId = ta.id
+$condition
+
 /*mydata_inProcessVisa_list*/
 SELECT
 	ttb.applicantId,
