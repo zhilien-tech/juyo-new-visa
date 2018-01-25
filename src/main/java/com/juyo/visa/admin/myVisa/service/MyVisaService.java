@@ -132,10 +132,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		long startTime = System.currentTimeMillis();//获取当前时间
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		List<Record> query = new ArrayList<>();
 		List<Record> list = new ArrayList<>();
-		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()), null);
 		Map<String, Object> result = Maps.newHashMap();
 		String orderSqlstr = sqlManager.get("myvisa_visaList_data");
 		Sql orderSql = Sqls.create(orderSqlstr);
@@ -143,11 +140,23 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		orderJpCnd.and("ta.userId", "=", loginUser.getId());
 		orderSql.setCondition(orderJpCnd);
 		List<Record> orderRecord = dbDao.query(orderSql, orderJpCnd, null);
+
 		for (Record record : orderRecord) {
-			Integer orderid = (Integer) record.get("id");
+			Integer isSameLinker = (Integer) record.get("isSameLinker");
+
+			Integer orderJpId = (Integer) record.get("id");
 			String sqlStr = sqlManager.get("myvisa_japan_visa_list_data_apply");
 			Sql applysql = Sqls.create(sqlStr);
-			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+			Cnd recordCnd = Cnd.NEW();
+			if (Util.eq(isSameLinker, IsYesOrNoEnum.YES.intKey())) {
+				recordCnd.and("taoj.orderId", "=", orderJpId);
+			} else {
+				recordCnd.and("taoj.orderId", "=", orderJpId);
+				recordCnd.and("ta.userId", "=", loginUser.getId());
+			}
+			applysql.setCondition(recordCnd);
+			List<Record> query = dbDao.query(applysql, recordCnd, null);
+			/*List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("orderId", "=", record.get("id")), null);
 			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
 				TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity.getApplicantId()
@@ -163,7 +172,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 								Cnd.where("taoj.orderId", "=", orderid).and("ta.id", "=", apply.getId()), null);
 					}
 				}
-			}
+			}*/
 			for (Record apply : query) {
 				//查询资料类型（同职业）
 				Integer dataType = (Integer) apply.get("dataType");

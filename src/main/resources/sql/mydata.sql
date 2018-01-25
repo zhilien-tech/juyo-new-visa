@@ -16,6 +16,21 @@ FROM
 	LEFT JOIN t_order tor ON tor.id = taoj.orderid
 	$condition
 
+/*mydata_orderJpIds*/
+SELECT
+toj.id
+FROM
+t_applicant ta
+LEFT JOIN
+t_applicant_passport tap ON tap.applicantId = ta.id
+LEFT JOIN
+t_applicant_order_jp taoj ON taoj.applicantId = ta.id
+LEFT JOIN
+t_order_jp toj ON taoj.orderId = toj.id
+LEFT JOIN
+t_order tr ON toj.orderId = tr.id
+$condition
+	
 /*mydata_inProcessVisa_list*/
 SELECT
 	ttb.applicantId,
