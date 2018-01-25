@@ -143,7 +143,6 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 
 		for (Record record : orderRecord) {
 			Integer isSameLinker = (Integer) record.get("isSameLinker");
-
 			Integer orderJpId = (Integer) record.get("id");
 			String sqlStr = sqlManager.get("myvisa_japan_visa_list_data_apply");
 			Sql applysql = Sqls.create(sqlStr);
@@ -156,23 +155,6 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			}
 			applysql.setCondition(recordCnd);
 			List<Record> query = dbDao.query(applysql, recordCnd, null);
-			/*List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
-					Cnd.where("orderId", "=", record.get("id")), null);
-			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
-				TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity.getApplicantId()
-						.longValue());
-				if (applyList.contains(apply)) {
-					TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
-							Cnd.where("applicantId", "=", apply.getId()));
-					//如果为统一联系人，查询整个订单
-					if (Util.eq(applyJp.getIsSameLinker(), IsYesOrNoEnum.YES.intKey())) {
-						query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
-					} else {//不是统一联系人，则只查自己
-						query = dbDao.query(applysql,
-								Cnd.where("taoj.orderId", "=", orderid).and("ta.id", "=", apply.getId()), null);
-					}
-				}
-			}*/
 			for (Record apply : query) {
 				//查询资料类型（同职业）
 				Integer dataType = (Integer) apply.get("dataType");
@@ -182,7 +164,6 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 					}
 				}
 			}
-
 			record.put("everybodyInfo", query);
 			//订单状态
 			Integer visastatus = record.getInt("japanState");
@@ -193,80 +174,6 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 			}
 			list.add(record);
 		}
-
-		/*//同一个userId下所有申请人
-		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()), null);
-		if (!Util.isEmpty(applyList)) {
-			for (TApplicantEntity tApplicantEntity : applyList) {
-				//日本申请人
-				TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
-						Cnd.where("applicantId", "=", tApplicantEntity.getId()));
-				if (!Util.isEmpty(applicantOrderJpEntity)) {
-					Integer orderId = applicantOrderJpEntity.getOrderId();
-					if (!Util.isEmpty(orderId)) {
-						//日本订单信息
-						TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, orderId.longValue());
-						//订单信息
-						TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId()
-								.longValue());
-						Integer orderStatus = orderEntity.getStatus();
-						//查询每个订单状态，如果是在填写完毕之前，改变订单状态为填写资料中
-						if (orderStatus < JPOrderStatusEnum.FILLED_INFORMATION.intKey()) {
-							orderEntity.setStatus(JPOrderStatusEnum.FILLING_INFORMATION.intKey());
-							dbDao.update(orderEntity);
-						}
-						//获取列表页每个订单所需要的部分数据
-						String passportSqlstr = sqlManager.get("myvisa_japan_visa_list_data");
-						Sql passportSql = Sqls.create(passportSqlstr);
-						Cnd orderJpCnd = Cnd.NEW();
-						orderJpCnd.and("toj.id", "=", orderJpEntity.getId());
-						passportSql.setCondition(orderJpCnd);
-						Record record = dbDao.fetch(passportSql);
-						//获取列表页每个订单所需要的剩余部分数据
-						Integer orderid = (Integer) record.get("id");
-						String sqlStr = sqlManager.get("myvisa_japan_visa_list_data_apply");
-						Sql applysql = Sqls.create(sqlStr);
-						List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
-								Cnd.where("orderId", "=", record.get("id")), null);
-						for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
-							TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity
-									.getApplicantId().longValue());
-							if (applyList.contains(apply)) {
-								TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
-										Cnd.where("applicantId", "=", apply.getId()));
-								//如果为统一联系人，查询整个订单
-								if (Util.eq(applyJp.getIsSameLinker(), IsYesOrNoEnum.YES.intKey())) {
-									query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
-								} else {//不是统一联系人，则只查自己
-									query = dbDao.query(applysql,
-											Cnd.where("taoj.orderId", "=", orderid).and("ta.id", "=", apply.getId()),
-											null);
-								}
-							}
-						}
-						for (Record apply : query) {
-							//查询资料类型（同职业）
-							Integer dataType = (Integer) apply.get("dataType");
-							for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
-								if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
-									apply.put("dataType", dataTypeEnum.value());
-								}
-							}
-						}
-
-						record.put("everybodyInfo", query);
-						//订单状态
-						Integer visastatus = record.getInt("japanState");
-						for (JPOrderStatusEnum visaenum : JPOrderStatusEnum.values()) {
-							if (visaenum.intKey() == visastatus) {
-								record.put("visastatus", visaenum.value());
-							}
-						}
-						list.add(record);
-					}
-				}
-			}*/
 		//list前后倒置，这样第一个对象为最新的订单
 		Collections.reverse(list);
 		result.put("visaJapanData", list);

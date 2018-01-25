@@ -2989,6 +2989,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return inputStream;
 	}
 
+	//添加日志
 	public void insertLogs(Integer orderid, Integer status, HttpSession session) {
 		TOrderLogsEntity logs = new TOrderLogsEntity();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
