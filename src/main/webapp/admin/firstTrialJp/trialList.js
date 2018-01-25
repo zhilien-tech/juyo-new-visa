@@ -470,12 +470,12 @@ function successCallBack(status){
 
 
 function qualifiedCallBack(username){
-	layer.msg('合格 已短信邮件通知 '+username);
+	layer.msg('合格 已短信邮件通知 '+username+'<br>订单进入"我的"标签页');
 	reloadData();
 }
 
 function unqualifiedCallBack(username){
-	layer.msg('不合格 已短信邮件通知 '+username);
+	layer.msg('不合格 已短信邮件通知 '+username+'<br>订单进入"我的"标签页');
 	reloadData();
 }
 

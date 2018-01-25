@@ -176,7 +176,7 @@ function save(orderid,orderjpid, opType){
 								layer.close(layerIndex);
 							}
 							closeWindow();
-							parent.successCallBack(2);
+							parent.successCallBack(1);
 						}
 					});
 				}
