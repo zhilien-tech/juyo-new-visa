@@ -78,7 +78,7 @@
 			$(document).on("click",".tableTr",function(){
 				var sharetype = $("#shareType").val();
 				if(sharetype == 2){//单独分享
-					if($(this).hasClass("trColor")){
+					/* if($(this).hasClass("trColor")){
 						$(this).removeClass("trColor");
 						if($("#datatableId tbody tr").hasClass("trColor")){
 							$("#addBtn").attr('disabled', false);
@@ -92,7 +92,7 @@
 								$("#addBtn").attr('disabled', false);
 							}
 						});
-					}
+					} */
 				}else if(sharetype == 1){//统一联系人
 					$(this).addClass("trColor").siblings("tr").removeClass("trColor");
 				if($(this).hasClass("trColor")){
@@ -104,12 +104,22 @@
 			});
 			
 			$("#shareType").change(function(){
-				$("#datatableId tbody tr").each(function(){
-					if($(this).hasClass("trColor")){
-						$(this).removeClass("trColor");
-						$("#addBtn").attr('disabled', true);
-					}
-				});
+				var shareType = $(this).val();
+				if(shareType == 1){//统一分享
+					$("#datatableId tbody tr").each(function(){
+						if($(this).hasClass("trColor")){
+							$(this).removeClass("trColor");
+							$("#addBtn").attr('disabled', true);
+						}
+					});
+				}else{
+					$("#datatableId tbody tr").each(function(){
+						if(!$(this).hasClass("trColor")){
+							$(this).addClass("trColor");
+							$("#addBtn").attr('disabled', false);
+						}
+					});
+				}
 			});
 			
 		});

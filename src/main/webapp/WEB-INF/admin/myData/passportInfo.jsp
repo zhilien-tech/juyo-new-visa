@@ -50,20 +50,20 @@
 			<div class="qz-head">
 				<c:choose>
 					<c:when test="${empty obj.contact }">
-						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
-						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
-						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save(1);"/> 
-						<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
+						<input  type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+						<input  type="button" value="取消" class="btn btn-primary btn-sm pull-right basic none" onclick="cancelBtn(1);"/> 
+						<input  type="button" value="保存" class="btn btn-primary btn-sm pull-right basic none" onclick="save(1);"/> 
+						<input  type="button" value="清除" class="btn btn-primary btn-sm pull-right basic none" onclick="clearAll();"/>
 					</c:when>
 					<c:otherwise>
-						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
-						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save(4);"/> 
+						<input  type="button" value="取消" class="btn btn-primary btn-sm pull-right basic none" onclick="cancelBtn(1);"/> 
+						<input  type="button" value="保存" class="btn btn-primary btn-sm pull-right basic none" onclick="save(4);"/> 
 					</c:otherwise>
 				</c:choose>
 			</div>
 			<section class="content">
 			<div class="ipt-info">
-					<input id="passRemark" name="passRemark"  type="text"  class="NoInfo form-control input-sm" />
+					<input disabled id="passRemark" name="passRemark"  type="text"  class="NoInfo form-control input-sm" />
 				</div>
 				<div class="tab-content row">
 					<div class="col-sm-5 padding-right-0">
@@ -78,13 +78,13 @@
 									<span>点击上传护照</span>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="passportUrl" name="passportUrl" type="hidden" value=""/>
-											<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+											<input disabled id="passportUrl" name="passportUrl" type="hidden" value=""/>
+											<input disabled id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 											<img id="sqImg" alt="" src="" >
 										</c:when>
 										<c:otherwise>
-											<input id="passportUrl" name="passportUrl" type="hidden" value="${obj.passport.passportUrl }"/>
-											<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+											<input disabled id="passportUrl" name="passportUrl" type="hidden" value="${obj.passport.passportUrl }"/>
+											<input disabled id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 											<img id="sqImg" alt="" src="${obj.passport.passportUrl }" >
 										</c:otherwise>
 									</c:choose>
@@ -106,21 +106,21 @@
 									<label><span>*</span>类型</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input type="hidden" id="id" name="id" />
-											<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " />
+											<input disabled type="hidden" id="id" name="id" />
+											<input disabled id="type" name="type" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
-											<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
+											<input disabled type="hidden" id="id" name="id" value="${obj.passport.id }"/>
+											<input disabled id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
 										</c:otherwise>
 									</c:choose>
-									<input type="hidden"  name="contact" value="${obj.contact }">
-									<input type="hidden"  name="applyId" value="${obj.applyId }">
-									<input type="hidden" id="OCRline1" name="OCRline1" value="">
-									<input type="hidden" id="OCRline2" name="OCRline2" value="">
-									<input type="hidden" id="tourist" name="tourist" value="1"/>
-									<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
-									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+									<input disabled type="hidden"  name="contact" value="${obj.contact }">
+									<input disabled type="hidden"  name="applyId" value="${obj.applyId }">
+									<input disabled type="hidden" id="OCRline1" name="OCRline1" value="">
+									<input disabled type="hidden" id="OCRline2" name="OCRline2" value="">
+									<input disabled type="hidden" id="tourist" name="tourist" value="1"/>
+									<input disabled type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
+									<input disabled type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -129,10 +129,10 @@
 									<label><span>*</span>护照号</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " />
+											<input disabled id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
+											<input disabled id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -144,10 +144,10 @@
 							<!-- 姓/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>姓/拼音：</label> <input id="firstName"
+									<label><span>*</span>姓/拼音：</label> <input disabled id="firstName"
 										name="firstName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.passport.firstName }" />
-										<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
+										<input disabled type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -157,10 +157,10 @@
 							<!-- 名/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>名/拼音：</label> <input id="lastName"
+									<label><span>*</span>名/拼音：</label> <input disabled id="lastName"
 										name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.passport.lastName }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
+										<input disabled type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -171,7 +171,7 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0 ">
 								<div class="form-group">
 									<label><span>*</span>性别</label>
-									<select class="form-control input-sm" id="sex" name="sex">
+									<select class="form-control input-sm" id="sex" name="sex" disabled>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
 											<option value="男" >男</option>
@@ -191,10 +191,10 @@
 									<label>&nbsp;&nbsp;</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="sexEn" class="form-control input-sm" name="sexEn" type="text"/>
+											<input disabled id="sexEn" class="form-control input-sm" name="sexEn" type="text"/>
 										</c:when>
 										<c:otherwise>
-											<input id="sexEn" class="form-control input-sm" name="sexEn" type="text" value="${obj.passport.sexEn }"/>
+											<input disabled id="sexEn" class="form-control input-sm" name="sexEn" type="text" value="${obj.passport.sexEn }"/>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -204,12 +204,12 @@
 									<label><span>*</span>出生地点/拼音</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " />
-											<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:36px; width:110px;border:0px;left:66px;" type="text"  placeholder=" " />
+											<input disabled id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " />
+											<input disabled id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:36px; width:110px;border:0px;left:66px;background-color:#eee;" type="text"  placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
-											<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:36px; width:110px;border:0px;left:66px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
+											<input disabled id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
+											<input disabled id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:36px; width:110px;border:0px;left:66px;background-color:#eee;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -223,10 +223,10 @@
 									<label><span>*</span>出生日期</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " />
+											<input disabled id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value="${obj.birthday}"/>
+											<input disabled id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value="${obj.birthday}"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -237,12 +237,12 @@
 									<label><span>*</span>签发地点/拼音</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " />
-											<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:36px; width:110px;border:0px;left:66px;" placeholder=" " />
+											<input disabled id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " />
+											<input disabled id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:36px; width:110px;border:0px;left:66px;background-color:#eee;" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
-											<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:36px; width:110px;border:0px;left:66px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
+											<input disabled id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
+											<input disabled id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:36px; width:110px;border:0px;left:66px;background-color:#eee;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -256,10 +256,10 @@
 									<label><span>*</span>签发日期</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " />
+											<input disabled id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.issuedDate }"/>
+											<input disabled id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.issuedDate }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -268,7 +268,7 @@
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<select id="validType" name="validType" class="form-control input-sm " >
+									<select id="validType" name="validType" class="form-control input-sm " disabled>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
 											<c:forEach var="map" items="${obj.passportType}">
@@ -289,10 +289,10 @@
 									<label><span>*</span>有效期至</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " />
+											<input disabled id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.validEndDate }"/>
+											<input disabled id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.validEndDate }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -305,10 +305,10 @@
 									<label><span>*</span>签发机关</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " />
+											<input disabled id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
+											<input disabled id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -319,10 +319,10 @@
 								<div class="form-group">
 								<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " />
+											<input disabled id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
+											<input disabled id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -373,7 +373,7 @@
 		
 		if(!contact){
 			//将页面所有元素设置为disabled
-			var form = document.forms[0]; 
+			/* var form = document.forms[0]; 
 			for ( var i = 0; i < form.length; i++) { 
 				var element = form.elements[i]; 
 				if(element.id != "editbasic")
@@ -382,7 +382,7 @@
 			$(".basic").hide();
 			document.getElementById("passRemark").style.backgroundColor = "#eee";
 			document.getElementById("birthAddressEn").style.backgroundColor = "#eee";
-			document.getElementById("issuedPlaceEn").style.backgroundColor = "#eee";
+			document.getElementById("issuedPlaceEn").style.backgroundColor = "#eee"; */
 			var remark = $("#passRemark").val();
 			if(remark != ""){
 				$(".ipt-info").show();
@@ -657,7 +657,7 @@
 			}
 		});
 			 }
-		},100);
+		},500);
 	}
 	
 	//编辑按钮
