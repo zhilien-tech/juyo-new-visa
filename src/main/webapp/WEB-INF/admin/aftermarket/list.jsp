@@ -285,9 +285,9 @@
           	}
         });
 		if(status == 1){
-			layer.msg('保存成功');
+			layer.msg('保存成功<br>订单进入"我的"标签页'');
 		}else if(status == 2){
-			layer.msg('发送成功');
+			layer.msg('发送成功<br>订单进入"我的"标签页'');
 		}
 		if(status == 88){
 			layer.msg('负责人变更成功');
