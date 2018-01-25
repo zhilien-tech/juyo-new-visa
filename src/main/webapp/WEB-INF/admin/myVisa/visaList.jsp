@@ -23,7 +23,7 @@
 	.whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:390px;}
 	.showInfo { cursor:pointer; }
 	.card-list { cursor: pointer;}
-	.hideInfo { display:none; position:absolute; top:-33px;right:0;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
+	.hideInfo { display:none; position:absolute; top:-33px; left:45%;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">

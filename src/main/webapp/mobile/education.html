@@ -44,7 +44,7 @@
 <script>
 	$(function(){
 		$('.selector').change(function(){
-			let name = $(".selector").find("option:selected").text();
+			var name = $(".selector").find("option:selected").text();
 			$(".select-skip i").text(name);
 			if(name == '学生'){
 				$('.preschool').show();
