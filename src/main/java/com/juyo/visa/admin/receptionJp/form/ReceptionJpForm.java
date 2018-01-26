@@ -99,13 +99,6 @@ public class ReceptionJpForm extends DataTablesParamForm {
 		}*/
 		cnd.and("tr.status", ">=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
 		//cnd.and("tr.status", "<=", JPOrderStatusEnum.TRANSFER_VISA.intKey());
-		/*if (userid.equals(adminId)) {
-			//公司管理员
-			cnd.and("tr.comId", "=", companyid);
-		} else {
-			//普通的操作员
-			cnd.and("tr.userId", "=", userid);
-		}*/
 
 		//订单权限
 		if (Util.isEmpty(orderAuthority)) {
@@ -113,13 +106,20 @@ public class ReceptionJpForm extends DataTablesParamForm {
 		}
 		if (orderAuthority.equals("allOrder")) {
 			//全部
-			cnd.and("tr.receptionOpid", "IS", null);
+			if (userid.equals(adminId)) {
+				//公司管理员
+				cnd.and("tr.comId", "=", companyid);
+			} else {
+				//普通的操作员
+				cnd.and("tr.receptionOpid", "IS", null);
+			}
+
 		} else {
 			//我的
 			cnd.and("tr.receptionOpid", "=", userid);
 		}
 
-		cnd.and("tr.comId", "=", companyid);
+		/*cnd.and("tr.comId", "=", companyid);*/
 
 		cnd.orderBy("tr.updatetime", "DESC");
 		//cnd.orderBy("tr.createtime", "DESC");

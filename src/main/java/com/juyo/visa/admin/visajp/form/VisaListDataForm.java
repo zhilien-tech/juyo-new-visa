@@ -88,27 +88,25 @@ public class VisaListDataForm implements SQLParamForm {
 			cnd.and("tr.status", "=", status);
 		}
 
-		/*if (userid.equals(adminId)) {
-			//公司管理员
-			cnd.and("tr.comId", "=", companyid);
-		} else {
-			//普通的操作员
-			cnd.and("tr.userId", "=", userid);
-		}*/
-
 		//订单权限
 		if (Util.isEmpty(orderAuthority)) {
 			orderAuthority = "myOrder";
 		}
 		if (orderAuthority.equals("allOrder")) {
 			//全部
-			cnd.and("tr.visaOpid", "IS", null);
+			if (userid.equals(adminId)) {
+				//公司管理员
+				cnd.and("tr.comId", "=", companyid);
+			} else {
+				//普通的操作员
+				cnd.and("tr.visaOpid", "IS", null);
+			}
 		} else {
 			//我的
 			cnd.and("tr.visaOpid", "=", userid);
 		}
 
-		cnd.and("tr.comId", "=", companyid);
+		/*cnd.and("tr.comId", "=", companyid);*/
 
 		cnd.orderBy("tr.createtime", "desc");
 		return cnd;
