@@ -111,7 +111,7 @@
 						<!-- end 身份证 反面 -->
 						<div class="row">
 							<!-- 签发机关 -->
-							<div class="col-sm-10 col-sm-offset-1 padding-right-0 marginL">
+							<div class="col-sm-10 col-sm-offset-1 padding-right-0 marginL" style="margin-top:6px;">
 								<div class="form-group">
 									<label><span>*</span>签发机关</label> 
 									<c:choose>
@@ -149,7 +149,7 @@
 							<!-- 姓/名 拼音 -->
 							<div class="nameBeforeHide">
 							    <div class="col-sm-10 col-sm-offset-1 padding-right-0 marginL">
-									<div class="form-group">
+									<div class="form-group" style="position:relative;">
 										<label>姓/拼音</label> 
 										<c:choose>
 											<c:when test="${empty obj.applicant}">
@@ -493,7 +493,7 @@
 						<!-- 名/拼音 -->
 						<div class="row wordSpell">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0 col-sm-offset-1">
-								<div class="form-group">
+								<div class="form-group" style="position:relative;">
 									<label>名/拼音</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
@@ -1108,7 +1108,7 @@
 			},
 			url : BASE_PATH+'/admin/orderJp/getNationality.html',
 			success : function(data) {
-				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 				$.each(data,function(index,element) { 
 					liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
 				});
@@ -1137,7 +1137,7 @@
 			},
 			url : BASE_PATH+'/admin/orderJp/getProvince.html',
 			success : function(data) {
-				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 				$.each(data,function(index,element) { 
 					liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
 				});
@@ -1168,7 +1168,7 @@
 			},
 			url : BASE_PATH+'/admin/orderJp/getCity.html',
 			success : function(data) {
-				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 				$.each(data,function(index,element) { 
 					liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
 				});

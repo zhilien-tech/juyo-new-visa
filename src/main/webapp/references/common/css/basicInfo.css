@@ -111,6 +111,7 @@ input[type="file"] {
 
 .basic {
 	margin-left: 10px;
+	display:none;
 }
 
 .onceIDTop {
@@ -129,4 +130,24 @@ input[type="file"] {
 .nameBeforeTop {
 	/* margin-top:30px; */
 	
+}
+.IdInfo {
+	border: 1px solid #7a9cd3;
+}
+
+.IdInfo li {
+	padding-left: 2%;
+}
+
+.IdInfo li:hover {
+	background: #1e90ff;
+	cursor: pointer;
+}
+
+.IdInfo li:hover a {
+	color: #FFF;
+}
+
+.IdInfo li a {
+	color: #000;
 }
