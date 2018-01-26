@@ -1759,7 +1759,7 @@ input[type="file"] { z-index:999999;}
 					url: '${base}/admin/myData/baseIsChanged.html',
 					success :function(data) {
 						if(status == 2){
-							if(data == 1){//改变了保存，没改变不保存
+							if(data == 1 || data == 2){//改变了保存，没改变不保存
 								layer.load(1);
 								$.ajax({
 	    							async: false,
