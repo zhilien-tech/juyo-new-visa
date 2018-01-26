@@ -1227,12 +1227,6 @@ input[type="file"] { z-index:999999;}
 		}
 		
 		$(function(){
-			/* $("#uploadFile").click(function(){//上传身份证正面  add 删除按钮
-				$(this).siblings("i").css("display","block");
-			});
-			$("#uploadFileBack").click(function(){//上传身份证反面  add 删除按钮
-				$(this).siblings("i").css("display","block");
-			}); */
 			$("#validStartDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
@@ -1693,24 +1687,6 @@ input[type="file"] { z-index:999999;}
 		}
 		
 		function passportBtn(){
-			var applicantId = '${obj.applicant.id}';
-			var orderid = '${obj.orderid}';
-			/* if(userType == 2){
-				var bootstrapValidator = $("#applicantInfo").data(
-				'bootstrapValidator');
-				// 执行表单验证 
-				bootstrapValidator.validate();
-				if (!bootstrapValidator.isValid()) {
-					return;
-				}
-				
-				if($(".front").hasClass("has-error")){
-					return;
-				}
-				if($(".back").hasClass("has-error")){
-					return;
-				}
-			} */
 			saveApplicant(2);
 			//socket.onclose();
 			//window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}';
@@ -1828,7 +1804,10 @@ input[type="file"] { z-index:999999;}
 								$.ajax({ 
 		    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
 		    			    		dataType:"json",
-		    			    		data:{applyid:applicantId},
+		    			    		data:{
+		    			    			applyid:applicantId,
+		    			    			emptyInfo:"YES"
+		    			    			},
 		    			    		type:'post',
 		    			    		success: function(data){
 		    			    					    		

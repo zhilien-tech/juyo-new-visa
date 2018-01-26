@@ -667,8 +667,13 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 	public Object visaTransfer(HttpSession session, Integer orderid) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(orderid).intValue());
-		orderEntity.setStatus(JPOrderStatusEnum.VISA_ORDER.intKey());
-		dbDao.update(orderEntity);
+		if (!Util.isEmpty(orderEntity)) {
+			if (orderEntity.getStatus() < JPOrderStatusEnum.VISA_ORDER.intKey()) {
+				orderEntity.setStatus(JPOrderStatusEnum.VISA_ORDER.intKey());
+				dbDao.update(orderEntity);
+			}
+		}
+		orderJpViewService.insertLogs(orderid, JPOrderStatusEnum.TRANSFER_VISA.intKey(), session);
 		changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.RECEPTION_PROCESS.intKey(),
 				loginUser.getId());
 		return null;

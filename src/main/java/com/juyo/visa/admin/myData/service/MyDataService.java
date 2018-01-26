@@ -969,101 +969,37 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object topContactsList(HttpSession session) {
+		long startTime = System.currentTimeMillis();//获取当前时间
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
-
-		List<Record> list = new ArrayList<>();
-		List<Record> query = new ArrayList<>();
-		List<Record> lastRecords = new ArrayList<>();
 		String str = "";
-		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()), null);
-		if (!Util.isEmpty(applyList)) {
-			List<TOrderJpEntity> orderJpList = new ArrayList<TOrderJpEntity>();
-
-			for (TApplicantEntity tApplicantEntity : applyList) {
-				TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
-						Cnd.where("applicantId", "=", tApplicantEntity.getId()));
-				if (!Util.isEmpty(applicantOrderJpEntity)) {
-					Integer orderId = applicantOrderJpEntity.getOrderId();
-					if (!Util.isEmpty(orderId)) {
-						TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, orderId.longValue());
-						/*TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId()
-								.longValue());
-						Integer orderStatus = orderEntity.getStatus();
-						if (orderStatus < JPOrderStatusEnum.FILLED_INFORMATION.intKey()) {
-							orderEntity.setStatus(JPOrderStatusEnum.FILLING_INFORMATION.intKey());
-							dbDao.update(orderEntity);
-						}*/
-						orderJpList.add(orderJpEntity);
-					}
-				}
+		String orderSqlstr = sqlManager.get("mydata_orderJpIds");
+		Sql orderSql = Sqls.create(orderSqlstr);
+		Cnd orderJpCnd = Cnd.NEW();
+		orderJpCnd.and("ta.userId", "=", loginUser.getId());
+		orderSql.setCondition(orderJpCnd);
+		List<Record> orderRecord = dbDao.query(orderSql, orderJpCnd, null);
+		for (Record record : orderRecord) {
+			Object orderJpStr = record.get("id");
+			if (!Util.isEmpty(orderJpStr)) {
+				str += (Integer) orderJpStr + ",";
 			}
-			for (TOrderJpEntity tOrderJpEntity : orderJpList) {
-				String passportSqlstr = sqlManager.get("myvisa_japan_visa_list_data");
-				Sql passportSql = Sqls.create(passportSqlstr);
-				Cnd orderJpCnd = Cnd.NEW();
-				orderJpCnd.and("toj.id", "=", tOrderJpEntity.getId());
-				passportSql.setCondition(orderJpCnd);
-				Record passport = dbDao.fetch(passportSql);
-				list.add(passport);
-			}
-			for (Record record : list) {
-				Integer orderid = (Integer) record.get("id");
-				String sqlStr = sqlManager.get("myvisa_japan_visa_list_data_apply");
-				Sql applysql = Sqls.create(sqlStr);
-				List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
-						Cnd.where("orderId", "=", record.get("id")), null);
-				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
-					TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity
-							.getApplicantId().longValue());
-					if (applyList.contains(apply)) {
-						TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
-								Cnd.where("applicantId", "=", apply.getId()));
-						if (Util.eq(applyJp.getIsSameLinker(), IsYesOrNoEnum.YES.intKey())) {
-							query = dbDao.query(applysql,
-									Cnd.where("taoj.orderId", "=", orderid).and("ta.id", "!=", apply.getId()), null);
-						}
-					}
-				}
-				for (Record apply : query) {
-					Integer applyId = (Integer) apply.get("applyId");
-					str += applyId + ",";
-				}
-
-			}
-
-			if (!Util.isEmpty(str)) {
-				String applicants = str.substring(0, str.length() - 1);
-				String applicantSqlstr = sqlManager.get("orderJp_applicantTable");
-				Sql applicantSql = Sqls.create(applicantSqlstr);
-				Cnd appcnd = Cnd.NEW();
-				appcnd.and("a.id", "in", applicants);
-				applicantSql.setCondition(appcnd);
-				List<Record> applicantInfo = dbDao.query(applicantSql, appcnd, null);
-				for (Record record : applicantInfo) {
-					Integer applyId = (Integer) record.get("id");
-					TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyId.longValue());
-					String applicantSqlStr = sqlManager.get("mydata_inProcessVisa_list");
-					Sql applicantsql = Sqls.create(applicantSqlStr);
-					Cnd appCnd = Cnd.NEW();
-					//appcnd.and("ta.id", "=", applyId);
-					if (!Util.isEmpty(apply.getUserId())) {
-						appCnd.and("ta.userId", "=", apply.getUserId());
-					} else {
-						appCnd.and("ta.id", "=", applyId);
-					}
-					applicantsql.setCondition(appCnd);
-					List<Record> query2 = dbDao.query(applicantsql, appCnd, null);
-					for (Record record2 : query2) {
-						lastRecords.add(record2);
-					}
-				}
-				result.put("visaJapanData", lastRecords);
-			}
-
 		}
+		if (!Util.isEmpty(str)) {
+			String applicants = str.substring(0, str.length() - 1);
+			String applicantSqlstr = sqlManager.get("mydata_applys");
+			Sql applicantSql = Sqls.create(applicantSqlstr);
+			Cnd appcnd = Cnd.NEW();
+			appcnd.and("toj.orderId", "in", applicants);
+			appcnd.and("ttb.userId", "!=", loginUser.getId());
+			applicantSql.setCondition(appcnd);
+			List<Record> applicantInfo = dbDao.query(applicantSql, appcnd, null);
+			result.put("visaJapanData", applicantInfo);
+		}
+
+		long endTime = System.currentTimeMillis();
+		System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
 		return result;
 	}
 

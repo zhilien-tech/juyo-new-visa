@@ -176,7 +176,7 @@ function save(orderid,orderjpid, opType){
 								layer.close(layerIndex);
 							}
 							closeWindow();
-							parent.successCallBack(2);
+							parent.successCallBack(1);
 						}
 					});
 				}
@@ -294,6 +294,10 @@ function setReceiveInfo(receiver,mobile,address){
 	clearValidMsg($("#receiver"));
 	clearValidMsg($("#mobile"));
 	clearValidMsg($("#address"));
+	
+	$('#expressForm').data('bootstrapValidator').enableFieldValidators('receiver', true);
+	$('#expressForm').data('bootstrapValidator').enableFieldValidators('mobile', true);
+	$('#expressForm').data('bootstrapValidator').enableFieldValidators('address', true);
 }
 
 $("#receiverDiv").mouseleave(function(){
@@ -307,10 +311,12 @@ $('#mobileDiv').mouseleave(function(){
 
 function clearValidMsg(obj){
 	var divEle = $(obj).parent();
+	var iEle = $(obj).next();
 	var smallEle = $(obj).next().next();
 	
 	divEle.attr("class", "form-group has-feedback has-success");
 	smallEle.attr("data-bv-result","VALID");
+	iEle.attr("class","form-control-feedback glyphicon glyphicon-ok");
 	smallEle.attr("style","display: none;");
 }
 

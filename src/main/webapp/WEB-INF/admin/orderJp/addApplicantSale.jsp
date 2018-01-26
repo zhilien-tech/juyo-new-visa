@@ -818,13 +818,13 @@ input[type="file"] { z-index:999999;}
 		});	
 		//点击右侧箭头，跳转到护照信息
 		function toPassport(){
-			var bootstrapValidator = $("#applicantInfo").data(
+			/* var bootstrapValidator = $("#applicantInfo").data(
 			'bootstrapValidator');
 			// 执行表单验证 
 			bootstrapValidator.validate();
 			if (!bootstrapValidator.isValid()) {
 				return;
-			}
+			} */
 			saveApplicant(2);
 			//var applyId = $("#applyId").val();
 			//socket.onclose();

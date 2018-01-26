@@ -66,25 +66,25 @@
 	</c:choose>
 		<form id="passportInfo">
 			<div class="modal-header">
-				<input type="hidden" value="${obj.applyId }" name="applyId"/>
-				<input type="hidden" value="${obj.contact }" name="contact"/>
-				<input type="hidden" value="${obj.applicantid }" name="applicantId"/>
-				<input type="hidden" value="${obj.orderid }" name="orderid"/>
+				<input disabled type="hidden" value="${obj.applyId }" name="applyId"/>
+				<input disabled type="hidden" value="${obj.contact }" name="contact"/>
+				<input disabled type="hidden" value="${obj.applicantid }" name="applicantId"/>
+				<input disabled type="hidden" value="${obj.orderid }" name="orderid"/>
 				<c:choose>
 					<c:when test="${empty obj.contact }">
-						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
-						<input id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
-						<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
+						<input  type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+						<input  id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic none" data-dismiss="modal" value="取消" /> 
+						<input  id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right basic none" value="保存" />
 					</c:when>
 					<c:otherwise>
-						<input id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin" data-dismiss="modal" value="取消" /> 
-						<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic" value="保存" />
+						<input  id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin none" data-dismiss="modal" value="取消" /> 
+						<input  id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic none" value="保存" />
 					</c:otherwise>
 				</c:choose>
 			</div>
 			<div class="modal-body">
 			<div class="ipt-info">
-					<input id="visaRemark" name="visaRemark"  type="text" value="${obj.unqualified.visaRemark }" class="NoInfo form-control input-sm" />
+					<input disabled id="visaRemark" name="visaRemark"  type="text" value="${obj.unqualified.visaRemark }" class="NoInfo form-control input-sm" />
 				</div>
 				<div class="tab-content row total">
 					<!-- 结婚状况 -->
@@ -94,7 +94,7 @@
 							<div class="row colSm">
 								<div class="">
 									<div class="form-group">
-										<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight">
+										<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight" disabled>
 											<option value="">请选择</option>
 											<c:forEach var="map" items="${obj.marryStatus}">
 											<c:choose>
@@ -116,13 +116,13 @@
 									<span>上传结婚证/离婚证</span>
 										<c:choose>
 											<c:when test="${empty obj.visaInfo}">
-												<input id="marryUrl" name="marryUrl" type="hidden" />
-												<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+												<input disabled id="marryUrl" name="marryUrl" type="hidden" />
+												<input disabled id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 												
 											</c:when>
 											<c:otherwise>
-												<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.visaInfo.marryUrl }"/>
-												<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+												<input disabled id="marryUrl" name="marryUrl" type="hidden" value="${obj.visaInfo.marryUrl }"/>
+												<input disabled id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 												
 											</c:otherwise>
 										</c:choose>
@@ -168,10 +168,10 @@
 										<div class="input-box">
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
-													<input type="text" id="relationRemark" name="relationRemark" class="input" >
+													<input disabled type="text" id="relationRemark" name="relationRemark" class="input" >
 												</c:when>
 												<c:otherwise>
-													<input type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
+													<input disabled type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
 												</c:otherwise>
 											</c:choose>
 											<ul class="dropdown">
@@ -211,10 +211,10 @@
 										<div class="input-box">
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
-													<input type="text" id="mainRelation" name="mainRelation" class="input" >
+													<input disabled type="text" id="mainRelation" name="mainRelation" class="input" >
 												</c:when>
 												<c:otherwise>
-													<input type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
+													<input disabled type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
 												</c:otherwise>
 											</c:choose>
 												<ul class="dropdown">
@@ -245,7 +245,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>是否同主申请人</label>
-										<input id="trip" name="sameMainTrip" class="form-control input-sm selectHeight" value="是" disabled="disabled"/>
+										<input disabled id="trip" name="sameMainTrip" class="form-control input-sm selectHeight" value="是" disabled="disabled"/>
 									</div>
 								</div>
 							</div><!-- end 是否同主申请人 -->
@@ -261,7 +261,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>我的职业</label>
-										<select id="careerStatus" name="careerStatus" class="form-control input-sm selectHeight">
+										<select id="careerStatus" name="careerStatus" class="form-control input-sm selectHeight" disabled>
 											<option value="">--请选择--</option>
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
@@ -283,10 +283,10 @@
 										<label id="schoolName"><span>*</span>单位名称</label>
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
-													<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " />
+													<input disabled id="name" name="name" type="text" class="form-control input-sm" placeholder=" " />
 												</c:when>
 												<c:otherwise>
-													<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.name }"/>
+													<input disabled id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.name }"/>
 												</c:otherwise>
 											</c:choose>
 									</div>
@@ -296,10 +296,10 @@
 										<label id="schoolTelephone"><span>*</span>单位电话</label>
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
-													<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " />
+													<input disabled id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " />
 												</c:when>
 												<c:otherwise>
-													<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.telephone }"/>
+													<input disabled id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.telephone }"/>
 												</c:otherwise>
 											</c:choose>
 									</div>
@@ -311,10 +311,10 @@
 										<label id="schoolAddress"><span>*</span>单位地址</label>
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
-													<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
+													<input disabled id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
 												</c:when>
 												<c:otherwise>
-													<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.address }"/>
+													<input disabled id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.address }"/>
 												</c:otherwise>
 											</c:choose>
 									</div>
@@ -351,23 +351,23 @@
 								</div>
 						</div>
 						<div class="info-body-from finance-btn wealthmain">
-							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState" />
-							<input id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
-							<input id="housePropertyType" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
-							<input id="financialType" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
+							<input disabled id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState" />
+							<input disabled id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
+							<input disabled id="housePropertyType" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
+							<input disabled id="financialType" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
 						</div>
 						<div class="info-body-from  clone-module cf deposit">
 							<div class="row body-from-input"><!-- 银行存款 -->
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>银行存款</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" />
+										<input disabled id="" name="" type="text" class="form-control input-sm" value="银行存款" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder=" "  />
+										<input disabled id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder=" "  />
 									</div>
 								</div>
 								<div style="float:left;  margin:45px 0 0 -23px;">
@@ -386,13 +386,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>车产</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="车产" />
+										<input disabled id="" name="" type="text" class="form-control input-sm" value="车产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder=" "/>
+										<input disabled id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder=" "/>
 									</div>
 								</div>
 							</div><!-- end 车产 -->
@@ -408,13 +408,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>房产</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="房产" />
+										<input disabled id="" name="" type="text" class="form-control input-sm" value="房产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder=" "  />
+										<input disabled id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder=" "  />
 									</div>
 								</div>
 								<div style="float:left;  margin:45px 0 0 -23px;">
@@ -433,13 +433,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>理财</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="理财" />
+										<input disabled id="" name="" type="text" class="form-control input-sm" value="理财" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder=" "  />
+										<input disabled id="financial" name="financial" type="text" class="form-control input-sm" placeholder=" "  />
 									</div>
 								</div>
 								<div style="float:left;  margin:45px 0 0 -23px;">

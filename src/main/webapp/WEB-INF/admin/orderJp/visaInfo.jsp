@@ -988,7 +988,6 @@
 									url: '${base}/admin/orderJp/saveEditVisa',
 									success :function(data) {
 										layer.closeAll("loading");
-										console.log(JSON.stringify(data));
 										socket.onclose();
 										window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=${obj.isTrailOrder}&orderProcessType';
 									}
@@ -1007,7 +1006,6 @@
 									url: '${base}/admin/orderJp/saveEditVisa',
 									success :function(data) {
 										layer.closeAll("loading");
-										console.log(JSON.stringify(data));
 										if(status == 1){
 											layer.msg("已修改", {
 												time: 1000,
@@ -1023,7 +1021,10 @@
 								$.ajax({ 
 		    			    		url: '${base}/admin/myVisa/copyAllInfoToTourist.html',
 		    			    		dataType:"json",
-		    			    		data:{applyid:applicantId},
+		    			    		data:{
+		    			    			applyid:applicantId,
+		    			    			emptyInfo:"YES"
+		    			    			},
 		    			    		type:'post',
 		    			    		success: function(data){
 		    			    					    		
@@ -1235,7 +1236,6 @@
 					url: '${base}/admin/orderJp/saveEditVisa',
 					success :function(data) {
 						layer.closeAll("loading");
-						console.log(JSON.stringify(data));
 						if(status == 1){
 							closeWindow();
 							if(addApply == 1){

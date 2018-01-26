@@ -41,7 +41,16 @@
 						<div class="row body-from-input">
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label><span>*</span>资料来源：</label> 
+									<label>
+									<c:choose>
+										<c:when test="${obj.flowChart == 1 }">
+										</c:when>
+										<c:otherwise>
+											<span>*</span>
+										</c:otherwise>
+									</c:choose>
+									
+									资料来源：</label> 
 									<select id="source" name="source" v-model="backmailinfo.source" class="form-control input-sm"/>
 										<c:forEach var="map" items="${obj.mainSourceTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
@@ -51,7 +60,15 @@
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label><span>*</span>团队名称：</label> 
+									<label>
+									<c:choose>
+										<c:when test="${obj.flowChart == 1 }">
+										</c:when>
+										<c:otherwise>
+											<span>*</span>
+										</c:otherwise>
+									</c:choose>
+									团队名称：</label> 
 									<input id="teamName" name="teamName" v-model="backmailinfo.teamname" type="text" class="form-control input-sm" placeholder=" " />
 								</div>
 							</div>
@@ -60,7 +77,15 @@
 						<div class="row body-from-input">
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label><span>*</span>回邮方式：</label> 
+									<label>
+									<c:choose>
+										<c:when test="${obj.flowChart == 1 }">
+										</c:when>
+										<c:otherwise>
+											<span>*</span>
+										</c:otherwise>
+									</c:choose>
+									回邮方式：</label> 
 									<select id="expressType" name="expressType" v-model="backmailinfo.expresstype" class="form-control input-sm">
 										<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
 											<option value="${map.key}">${map.value}</option>
@@ -68,12 +93,19 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label><span>*</span>快递号：</label> 
-									<input id="expressNum" name="expressNum" v-model="backmailinfo.expressnum" type="text" class="form-control input-sm" placeholder=" " />
-								</div>
-							</div>
+							<c:choose>
+										<c:when test="${obj.flowChart == 1 }">
+										</c:when>
+										<c:otherwise>
+											<div class="col-sm-6">
+												<div class="form-group">
+													<label><span>*</span>快递号：</label> 
+													<input id="expressNum" name="expressNum" v-model="backmailinfo.expressnum" type="text" class="form-control input-sm" placeholder=" " />
+												</div>
+											</div>
+										</c:otherwise>
+									</c:choose>
+							
 						</div>
 
 						<div class="row body-from-input">

@@ -230,7 +230,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object addOrder(Integer id, HttpSession session) {
+	public Object editOrder(Integer id, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
 		TCustomerEntity customer = new TCustomerEntity();
 		result.put("orderId", id);
@@ -288,6 +288,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicant.setOpId(loginUser.getId());
 		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 		applicant.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
 		if (!Util.isEmpty(applicantForm.getAddress())) {
 			applicant.setAddress(applicantForm.getAddress());
 		}
@@ -360,7 +361,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setCardBack(applicantForm.getCardBack());
 		}
 		Map<String, Object> result = MapUtil.map();
-		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
 		applicant.setCreateTime(new Date());
 		//游客登录
 		ApplicantUser applicantUser = new ApplicantUser();
@@ -2477,6 +2477,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		orderEntity.setStatus(JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
 		orderEntity.setUpdateTime(DateUtil.nowDate());
 		dbDao.update(orderEntity);
+		TOrderJpEntity orderJpEntity = dbDao
+				.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
+		List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+		for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
+			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity.getApplicantId()
+					.longValue());
+			apply.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+			dbDao.update(apply);
+		}
 		TOrderLogsEntity logsEntity = dbDao.fetch(TOrderLogsEntity.class, Cnd.where("orderId", "=", id));
 		logsEntity.setOrderId(id);
 		logsEntity.setOrderStatus(JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
@@ -2979,6 +2989,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return inputStream;
 	}
 
+	//添加日志
 	public void insertLogs(Integer orderid, Integer status, HttpSession session) {
 		TOrderLogsEntity logs = new TOrderLogsEntity();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
