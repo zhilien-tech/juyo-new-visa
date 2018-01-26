@@ -170,7 +170,7 @@
         		    maxmin: false,
         		    shadeClose: false,
         		    scrollbar: false,
-        		    area: ['900px', '550px'],
+        		    area: ['900px', '60%'],
         		    content: '${base}/admin/receptionJP/revenue.html?orderid='+orderid
         		  });
         	},
