@@ -55,7 +55,7 @@ $(function(){
             <li id="${status.index+1 }" class="nav-item">
             	<c:choose>
 				<c:when test="${empty function.url }">
-                    <a href="#"><i class="my-icon nav-icon icon_1"></i><span>${function.funName }</span><i class="my-icon nav-more"></i></a>
+                    <a><i class="my-icon nav-icon icon_1"></i><span>${function.funName }</span><i class="my-icon nav-more"></i></a>
                	</c:when>
                	<c:otherwise>
 					<a href="${function.url }?currentPageIndex=${status.index+1 }" class="subnavTwo" target="mainIframe"><i class="my-icon nav-icon icon_1"></i><span>${function.funName }</span><i class="my-icon nav-more moreHide"></i></a>

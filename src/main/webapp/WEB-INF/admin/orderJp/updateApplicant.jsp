@@ -39,6 +39,11 @@
 .nameBeforeTop { margin-left:30px;}
 img[src=""],img:not([src]) { opacity:0;}
 input[type="file"] { z-index:999999;}
+.IdInfo { border:1px solid #7a9cd3;}
+.IdInfo li { padding-left:2%;}
+.IdInfo li:hover { background:#1e90ff; cursor:pointer;}
+.IdInfo li:hover a { color:#FFF;}
+.IdInfo li a { color:#000;}
 </style>
 </head>
 <body>
@@ -865,7 +870,7 @@ input[type="file"] { z-index:999999;}
 				},
 				url : BASE_PATH+'/admin/orderJp/getNationality.html',
 				success : function(data) {
-					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 					$.each(data,function(index,element) { 
 						liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
 					});
@@ -894,7 +899,7 @@ input[type="file"] { z-index:999999;}
 				},
 				url : BASE_PATH+'/admin/orderJp/getProvince.html',
 				success : function(data) {
-					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 					$.each(data,function(index,element) { 
 						liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
 					});
@@ -925,7 +930,7 @@ input[type="file"] { z-index:999999;}
 				},
 				url : BASE_PATH+'/admin/orderJp/getCity.html',
 				success : function(data) {
-					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 					$.each(data,function(index,element) { 
 						liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
 					});

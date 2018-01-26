@@ -25,16 +25,17 @@
  	.input-box { position: relative; display: inline-block; }
     .input-box input { background-color: transparent;  background-image: none; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset; color: #555;  display: block;  font-size: 14px; line-height: 1.42857; padding: 6px 6px; transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;  width: 200px; display: inline; position: relative; z-index: 1;}
     .tip-l {  width: 0;  height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 10px solid #555; display: inline-block; right: 10px; z-index: 0;  position: absolute;  top: 12px; }
-    .dropdown { position: absolute; top: 32px; left: 0px; width: 200px; background-color: #FFF; border: 1px solid #23a8ce; border-top: 0; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;  z-index: 999; padding: 0;  margin: 0; }
+    .dropdown { position: absolute; top: 32px; left: 0px; width: 200px; background-color: #FFF; display:none; border: 1px solid #23a8ce; border-top: 0; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;  z-index: 999; padding: 0;  margin: 0; }
     .dropdown li { display: block; line-height: 1.42857; padding: 0 6px; min-height: 1.2em; cursor: pointer; }
     .dropdown li:hover {  background-color: #23a8ce;  color: #FFF; }
     .colSm {  display:block; float:left; width:200px; }
     .padding-right-0 { margin-left:10%; width:323px; border:1px solid #eee; }
     .cardFront-div { height:176px;}
-    .delete { right:0; }
+    .delete { right:0; display:none;}
     #sqImg {top:0px; margin-top:-176px; height:auto}
     #editbasic ,#backBtn ,#addBtn { margin-top:10px;}
     .delete { z-index:1000000;}
+    .basic , .hideVisaInfo { display:none;}
     /*弹框头部固定*/
     .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
@@ -183,7 +184,7 @@
 									</div>
 								</div>
 								
-								<div class="applyvice">
+								<div class="applyvice hideVisaInfo">
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label><span>*</span>主申请人</label>
@@ -204,7 +205,7 @@
 										</div>
 									</div>
 									<div class="col-sm-4">
-										<div class="form-group">
+										<div class="form-group hideVisaInfo">
 											<label><span>*</span>与主申请人关系</label>
 											</br>
 										<div class="input-box">
@@ -549,9 +550,9 @@
 			
 			var marry = $("#marryUrl").val();
 			if(marry != ""){
-				$(".delete").siblings("i").css("display","block");
+				$(".delete").css("display","block");
 			}else{
-				$(".delete").siblings("i").css("display","none");
+				$(".delete").css("display","none");
 			}
 			
 			//婚姻状况为单身和丧偶时没有上传图片接口
@@ -1113,7 +1114,7 @@
 						if (200 == obj.status) {
 							$('#marryUrl').val(obj.data);
 							$('#sqImg').attr('src', obj.data);
-							$("#uploadFile").siblings("i").css("display","block");
+							$(".delete").show();
 							$(".front").attr("class", "info-imgUpload front has-success");  
 					        $(".help-blockFront").attr("data-bv-result","IVALID");  
 					        $(".help-blockFront").attr("style","display: none;");
@@ -1184,7 +1185,7 @@
 			$("#deleteApplicantFrontImg").click(function(){
 				$('#marryUrl').val("");
 				$('#sqImg').attr('src', "");
-				$("#uploadFile").siblings("i").css("display","none");
+				$(".delete").css("display","none");
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
 		        $(".help-blockFront").attr("style","display: block;");
