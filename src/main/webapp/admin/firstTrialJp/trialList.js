@@ -138,6 +138,7 @@ new Vue({
 													success : function(data) {
 														if(data){
 															layer.msg('发送成功<br>订单进入"我的"标签页');
+															reloadData();
 														}
 														layer.closeAll('loading');
 													}
