@@ -59,7 +59,7 @@ LEFT JOIN (
 				CASE
 				WHEN STATUS = 1 THEN
 					CONCAT(
-						'<font color="blue">',
+						'<font color="#64a4f3">',
 						realInfo,
 						'</font>'
 					)
@@ -128,7 +128,7 @@ LEFT JOIN (
 				CASE
 				WHEN STATUS = 1 THEN
 					CONCAT(
-						'<font color="blue">',
+						'<font color="#64a4f3">',
 						realInfo,
 						'</font>'
 					)

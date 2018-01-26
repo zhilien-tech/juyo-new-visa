@@ -60,7 +60,7 @@ LEFT JOIN (
 						realInfo
 				ELSE
 					CONCAT(
-						'<font color="blue">',
+						'<font color="#64a4f3">',
 						realInfo,
 						'</font>'
 					)
@@ -115,7 +115,7 @@ LEFT JOIN (
 						realInfo
 				ELSE
 					CONCAT(
-						'<font color="blue">',
+						'<font color="#64a4f3">',
 						realInfo,
 						'</font>'
 					)
