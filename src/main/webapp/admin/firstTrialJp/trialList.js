@@ -137,8 +137,7 @@ new Vue({
 													url : '/admin/firstTrialJp/sendAddressMsg.html',
 													success : function(data) {
 														if(data){
-															layer.msg('发送成功<br>订单进入"我的"标签页');
-															reloadData();
+															successCallBack(2);
 														}
 														layer.closeAll('loading');
 													}
