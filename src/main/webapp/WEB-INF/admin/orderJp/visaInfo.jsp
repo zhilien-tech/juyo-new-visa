@@ -979,7 +979,7 @@
 					url: '${base}/admin/myData/visaIsChanged.html',
 					success :function(data) {
 						if(status == 2){
-							if(data == 1){
+							if(data == 1 || data == 2){
 								layer.load(1);
 								$.ajax({
 									type: 'POST',
