@@ -19,7 +19,7 @@
 		.modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
    		.btn-margin { margin-top:10px;}
    		.modal-body { margin-top:50px; height:100%; }  
-  	
+  		.modal-content { height:100%; overflow:hidden;}
 	</style>
 </head>
 <body>

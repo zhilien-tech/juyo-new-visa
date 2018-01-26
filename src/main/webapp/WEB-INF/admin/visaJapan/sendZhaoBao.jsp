@@ -12,14 +12,14 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 </head>
 <body>
-	<div class="modal-content">
+	<div class="modal-content" style="height:300px;overflow:hidden;">
 		<div class="modal-header">
 			<span class="heading">添加</span> 
 			<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 			<input id="addBtn" type="button" onclick="sendZhaobao();" class="btn btn-primary pull-right btn-sm btn-right" value="发招宝" />
 			<input id="orderid" name="orderid" type="hidden" value="${obj.orderid }">
 		</div>
-		<div class="modal-body">
+		<div class="modal-body" style="height:100%;">
 			<div class="tab-content">
 				<div class="row">
 					<div class="col-sm-6">

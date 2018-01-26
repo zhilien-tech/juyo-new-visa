@@ -29,7 +29,7 @@
 			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
 			.front, .back {width: 320px;margin: 10px auto;}
 			.qz-head { border-bottom:2px solid #deecff; padding:15px 20px; display: table; width: 100%;}
-			.basic { margin-left: 10px;}
+			.basic { margin-left: 10px; display:none;}
 		</style>
 	</head>
 
