@@ -86,27 +86,25 @@ public class FirstTrialJpListDataForm implements SQLParamForm {
 		cnd.and("tr.status", ">=", JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
 		//cnd.and("tr.status", "<=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
 
-		/*if (userid.equals(adminId)) {
-			//公司管理员
-			cnd.and("tr.comId", "=", companyid);
-		} else {
-			//普通的操作员
-			cnd.and("tr.userId", "=", userid);
-		}*/
-
 		//订单权限
 		if (Util.isEmpty(orderAuthority)) {
 			orderAuthority = "myOrder";
 		}
 		if (orderAuthority.equals("allOrder")) {
 			//全部
-			cnd.and("tr.trialOpid", "IS", null);
+			if (userid.equals(adminId)) {
+				//公司管理员
+				cnd.and("tr.comId", "=", companyid);
+			} else {
+				//普通的操作员
+				cnd.and("tr.trialOpid", "IS", null);
+			}
 		} else {
 			//我的
 			cnd.and("tr.trialOpid", "=", userid);
 		}
 
-		cnd.and("tr.comId", "=", companyid);
+		/*cnd.and("tr.comId", "=", companyid);*/
 
 		cnd.orderBy("tr.updatetime", "DESC");
 

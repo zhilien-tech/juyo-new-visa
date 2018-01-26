@@ -724,13 +724,17 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			cnd.and("receiver", "like", Strings.trim(searchStr) + "%");
 		}
 
-		if (userType == UserLoginEnum.PERSONNEL.intKey()) {
+		/*if (userType == UserLoginEnum.PERSONNEL.intKey()) {
 			//工作人员
 			cnd.and("userId", "=", userId);
 		} else {
 			//其他
 			cnd.and("comId", "=", comId);
-		}
+		}*/
+
+		//可以查看本公司所有的
+		cnd.and("comId", "=", comId);
+
 		cnd.limit(0, 5);
 
 		List<TReceiveaddressEntity> query = dbDao.query(TReceiveaddressEntity.class, cnd, null);
