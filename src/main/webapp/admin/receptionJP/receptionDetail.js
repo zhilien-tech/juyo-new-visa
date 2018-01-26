@@ -183,10 +183,10 @@ function successCallBack(status){
 	
 	
 	if(status == 1){
-		layer.msg('修改成功');
+		layer.msg('修改成功<br>订单进入"我的"标签页');
 	}
 	if(status == 2){
-		layer.msg('保存成功');
+		layer.msg('保存成功<br>订单进入"我的"标签页');
 	}
 	if(status == 3){
 		layer.msg('移交签证成功<br>订单进入"我的"标签页');

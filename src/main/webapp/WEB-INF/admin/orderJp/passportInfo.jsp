@@ -744,7 +744,7 @@
 								url: '${base}/admin/myData/passIsChanged.html',
 								success :function(data) {
 									if(status == 2){
-										if(data == 1){//1是变了
+										if(data == 1 || data == 2){//1是变了
 											layer.load(1);
 											$.ajax({
 												async: false,
@@ -762,7 +762,7 @@
 											window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType';
 										}
 									}else if(status == 3){
-										if(data == 1){
+										if(data == 1 || data == 2){
 											layer.load(1);
 											$.ajax({
 												async: false,
