@@ -95,8 +95,8 @@
 							<div class="card-head">
 								<div><label>订单号：</label><span style="cursor:pointer" v-on:click="order(data.orderid)">{{data.ordernum}}</span></div>	
 								<div><label>人数：</label><span>{{data.peoplenum}}</span></div>	
-								<div v-if="data.isdisabled==1" style="text-align:right;">
-								<label></label><span  style="font-size:20px">作废</span>
+								<div v-if="data.isdisabled==1" style="position:absolute;right:25%;">
+								<label></label><span  style="font-size:16px;font-weight:bold;">作废</span>
 								</div>	
 								<div v-else style="position:absolute;right:25%;">
 								<label></label><span  style="font-size:16px;font-weight:bold;">{{data.status}}</span>
@@ -244,7 +244,7 @@
 							layer.msg("操作成功", {
 								time: 1000,
 								end: function () {
-									self.location.reload();
+									successCallBack();
 								}
 							});
 						}
@@ -265,7 +265,7 @@
 									layer.msg("操作成功", {
 										time: 1000,
 										end: function () {
-											self.location.reload();
+											successCallBack();
 										}
 									});
 								}
@@ -455,6 +455,7 @@
 		}
 
 		function successCallBack(status){
+			$("#searchbtn").click();
 			console.log(111);
 		}
 		
