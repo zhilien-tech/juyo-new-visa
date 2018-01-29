@@ -35,7 +35,7 @@
     #sqImg {top:0px; margin-top:-176px; height:auto}
     #editbasic ,#backBtn ,#addBtn { margin-top:10px;}
     .delete { z-index:1000000;}
-    .basic , .hideVisaInfo { display:none;}
+    .hideVisaInfo { display:none;}
     /*弹框头部固定*/
     .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
@@ -109,8 +109,8 @@
 						<input  id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right basic none" value="保存" />
 					</c:when>
 					<c:otherwise>
-						<input  id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin none" data-dismiss="modal" value="取消" /> 
-						<input  id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic none" value="保存" />
+						<input  id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin" data-dismiss="modal" value="取消" /> 
+						<input  id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic" value="保存" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -863,8 +863,9 @@
 					if($("#sqImg").attr("src") == ""){
 						$(".front").attr("class", "info-imgUpload front has-error");  
 					    $(".help-blockFront").attr("data-bv-result","INVALID");  
-					    $(".help-blockFront").attr("style","display: block;");
-					    $("#borderColor").attr("style","border-color:#ff1a1a");
+					    $(".delete").css("display","none");
+					    //$(".help-blockFront").attr("style","display: block;");
+					    //$("#borderColor").attr("style","border-color:#ff1a1a");
 					}
 					$(".info-imgUpload").show();
 				}
@@ -1339,6 +1340,7 @@
 			var applicantId = '${obj.applyId}';
 			//var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
 			var passportInfo = $("#passportInfo").serialize();
+			layer.load(1);
 			$.ajax({
 				type: 'POST',
 				async: false,
@@ -1476,8 +1478,8 @@
 				$(".delete").css("display","none");
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");
-		        $("#borderColor").attr("style","border-color:#ff1a1a");
+		        //$(".help-blockFront").attr("style","display: block;");
+		        //$("#borderColor").attr("style","border-color:#ff1a1a");
 			});
 			
 			$(".remove-btn").click(function(){
