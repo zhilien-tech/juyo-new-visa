@@ -1573,6 +1573,7 @@
 	
 	//var base = "${base}";
 	function saveApplicant(status){
+		layer.load(1);
 		$("#applicantInfo").data('bootstrapValidator').destroy();
 		$("#applicantInfo").data('bootstrapValidator', null);
 		applicantValidate();

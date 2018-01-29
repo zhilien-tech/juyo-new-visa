@@ -715,6 +715,7 @@
 		
 		//保存
 		function save(status){
+			layer.load(1);
 			$("#passportInfo").data('bootstrapValidator').destroy();
 			$("#passportInfo").data('bootstrapValidator', null);
 			passValidate();
@@ -743,6 +744,7 @@
 								data : passportInfo,
 								url: '${base}/admin/myData/passIsChanged.html',
 								success :function(data) {
+									layer.closeAll("loading");
 									if(status == 2){
 										if(data == 1 || data == 2){//1是变了
 											layer.load(1);

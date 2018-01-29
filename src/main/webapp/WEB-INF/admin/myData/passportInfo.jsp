@@ -29,7 +29,7 @@
 			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
 			.front, .back {width: 320px;margin: 10px auto;}
 			.qz-head { border-bottom:2px solid #deecff; padding:15px 20px; display: table; width: 100%;}
-			.basic { margin-left: 10px; display:none;}
+			.basic { margin-left: 10px;}
 		</style>
 	</head>
 
@@ -56,8 +56,8 @@
 						<input  type="button" value="清除" class="btn btn-primary btn-sm pull-right basic none" onclick="clearAll();"/>
 					</c:when>
 					<c:otherwise>
-						<input  type="button" value="取消" class="btn btn-primary btn-sm pull-right basic none" onclick="cancelBtn(1);"/> 
-						<input  type="button" value="保存" class="btn btn-primary btn-sm pull-right basic none" onclick="save(4);"/> 
+						<input  type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
+						<input  type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save(4);"/> 
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -1002,6 +1002,7 @@
 	
 	//保存
 	function save(status){
+		layer.load(1);
 		/* if(status != 2){
 			if($(".front").hasClass("has-error")){
 				return;
@@ -1022,7 +1023,6 @@
 		var orderid = '${obj.orderid}';
 		var applicantId = '${obj.applicantId}';
 		var id = '${obj.applyId}';
-		layer.load(1);
 		$.ajax({
 			type: 'POST',
 			data : passportInfo,
