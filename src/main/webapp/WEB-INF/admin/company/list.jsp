@@ -100,6 +100,7 @@
 		<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
+			var comTypeEnums = '${obj.companyTypeEnum}';
 			$(function () {
 			    initDatatable();
 			});
