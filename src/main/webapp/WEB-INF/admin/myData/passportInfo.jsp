@@ -29,7 +29,7 @@
 			.info-QRcode{width: 150px;height: 150px;margin: 15px auto;border: #edefef solid 1px;}
 			.front, .back {width: 320px;margin: 10px auto;}
 			.qz-head { border-bottom:2px solid #deecff; padding:15px 20px; display: table; width: 100%;}
-			.basic { margin-left: 10px; display:none;}
+			.basic { margin-left: 10px;}
 		</style>
 	</head>
 
@@ -56,8 +56,8 @@
 						<input  type="button" value="清除" class="btn btn-primary btn-sm pull-right basic none" onclick="clearAll();"/>
 					</c:when>
 					<c:otherwise>
-						<input  type="button" value="取消" class="btn btn-primary btn-sm pull-right basic none" onclick="cancelBtn(1);"/> 
-						<input  type="button" value="保存" class="btn btn-primary btn-sm pull-right basic none" onclick="save(4);"/> 
+						<input  type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
+						<input  type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save(4);"/> 
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -1002,26 +1002,24 @@
 	
 	//保存
 	function save(status){
-		/* if(status != 2){
-			if($(".front").hasClass("has-error")){
-				return;
-			}
-		} */
-		passportValidate();
-		//得到获取validator对象或实例 
-		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-		// 执行表单验证 
-		bootstrapValidator.validate();
-		setTimeout(function(){
-			 if(bootstrapValidator.isValid()){
-				if (!bootstrapValidator.isValid()) {
-						return;
-				}
-		
 		var passportInfo = $("#passportInfo").serialize();
 		var orderid = '${obj.orderid}';
 		var applicantId = '${obj.applicantId}';
 		var id = '${obj.applyId}';
+		if(status != 2){
+			passportValidate();
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			if($(".front").hasClass("has-error")){
+				return;
+			}
+				if (!bootstrapValidator.isValid()) {
+					return;
+				}
+		setTimeout(function(){
+			if(bootstrapValidator.isValid()){
 		layer.load(1);
 		$.ajax({
 			type: 'POST',
@@ -1032,8 +1030,6 @@
 				if(status == 1){
 					cancelBtn(2);
 					parent.successCallBack();
-				}else if(status == 2){
-					window.location.href = '/admin/myData/basic.html?contact=1&applyId='+id;
 				}else if(status == 3){
 					window.location.href = '/admin/myData/visa.html?contact=1&applyId='+id;
 				}else{
@@ -1050,6 +1046,18 @@
 		});
 			 }
 		},500);
+		}else{
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : passportInfo,
+				url: '${base}/admin/myData/saveEditPassport',
+				success :function(data) {
+					layer.closeAll('loading');
+					window.location.href = '/admin/myData/basic.html?contact=1&applyId='+id;
+				}
+			});
+		}
 	}
 	
 	//编辑按钮
@@ -1071,10 +1079,10 @@
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
 	        //$(".help-blockFront").attr("style","display: block;");  
 		}else{
-			$("#borderColor").attr("style", null);
 			$(".front").attr("class", "info-imgUpload front has-success");  
 	        $(".help-blockFront").attr("data-bv-result","IVALID");  
 	        $(".help-blockFront").attr("style","display: none;");  
+			$("#borderColor").attr("style", null);
 		}
 		/* var bootstrapValidator = $("#passportInfo").data(
 		'bootstrapValidator');
@@ -1086,7 +1094,7 @@
 			$("#uploadFile").siblings("i").css("display","none");
 			$(".front").attr("class", "info-imgUpload front has-error");  
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
-	        $(".help-blockFront").attr("style","display: block;");
+	        //$(".help-blockFront").attr("style","display: block;");
 	        //$("#borderColor").attr("style", "border-color:#ff1a1a");
 		});
 		$("#passRemark").attr("disabled", true);

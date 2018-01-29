@@ -1592,6 +1592,7 @@
 		if($(".front").hasClass("has-error")){
 			return;
 		}
+		layer.load(1);
 			
 		var str="";
 		var applicantInfo;

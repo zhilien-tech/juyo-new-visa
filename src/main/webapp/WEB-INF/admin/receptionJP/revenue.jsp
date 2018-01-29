@@ -105,7 +105,6 @@
 				var applicatid = $(this).parent().find('#applicatid').val();
 				var inputVal = $(this).siblings(".addInp").val();
 				if(inputVal != null && inputVal != ""){
-					alert(inputVal);
 					$.ajax({ 
 		            	url: '${base}/admin/receptionJP/saveApplicatRevenue.html',
 		            	data:{applicatid:applicatid,realInfo:inputVal},
