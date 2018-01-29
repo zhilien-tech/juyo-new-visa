@@ -1294,7 +1294,6 @@
 		
 		//保存
 		function save(status){
-			 layer.load(1);
 			 if(status != 2){
 				 visaValidate();
 				//得到获取validator对象或实例 
@@ -1341,6 +1340,7 @@
 			var applicantId = '${obj.applyId}';
 			//var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
 			var passportInfo = $("#passportInfo").serialize();
+			layer.load(1);
 			$.ajax({
 				type: 'POST',
 				async: false,
@@ -1478,8 +1478,8 @@
 				$(".delete").css("display","none");
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");
-		        $("#borderColor").attr("style","border-color:#ff1a1a");
+		        //$(".help-blockFront").attr("style","display: block;");
+		        //$("#borderColor").attr("style","border-color:#ff1a1a");
 			});
 			
 			$(".remove-btn").click(function(){
