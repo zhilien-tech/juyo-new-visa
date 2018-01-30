@@ -1013,34 +1013,49 @@
 						
 						}else{
 							var addApply = '${obj.addApply}';
-							layer.load(1);
-							$.ajax({
-								type: 'POST',
-								data : passportInfo,
-								url: '${base}/admin/orderJp/saveEditPassport',
-								success :function(data) {
-									layer.closeAll("loading");
-									console.log(JSON.stringify(data));
-									/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-									layer.close(index); */
-									if(status == 2){
-										socket.onclose();
-										window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
+							if(status == 2){
+								socket.onclose();
+								window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
+								$.ajax({
+									type: 'POST',
+									data : passportInfo,
+									url: '${base}/admin/orderJp/saveEditPassport',
+									success :function(data) {
 									}
-									if(status == 1){
-										closeWindow();
-										if(addApply == 1){
-											parent.successCallBack(3);
-										}else{
-											parent.successCallBack(1);
-										}
+								});
+							}
+							if(status == 3){
+								socket.onclose();
+								window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
+								$.ajax({
+									type: 'POST',
+									data : passportInfo,
+									url: '${base}/admin/orderJp/saveEditPassport',
+									success :function(data) {
 									}
-									if(status == 3){
-										socket.onclose();
-										window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
+								});
+							}
+							if(status == 1){
+								layer.load(1);
+								$.ajax({
+									type: 'POST',
+									data : passportInfo,
+									url: '${base}/admin/orderJp/saveEditPassport',
+									success :function(data) {
+										layer.closeAll("loading");
+										console.log(JSON.stringify(data));
+										/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+										layer.close(index); */
+											closeWindow();
+											if(addApply == 1){
+												parent.successCallBack(3);
+											}else{
+												parent.successCallBack(1);
+											}
 									}
-								}
-							});
+								});
+								
+							}
 						}
 					 }
 					}, 500);
