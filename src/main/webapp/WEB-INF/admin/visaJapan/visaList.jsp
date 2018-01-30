@@ -17,22 +17,6 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
-	<style>
-	.card-head { overflow:hidden; white-space:nowrap;}
-	.card-head span { font-size:12px;}
-	.everybody-info {position:relative; }
-	.cf { overflow:visible !important;}
-	.whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:390px;}
-	.showInfo { cursor:pointer; }
-	.hideInfo { display:none; position:absolute; top:-33px;right:10%;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
-	.card-head i { cursor:pointer;}
-	.marginLR { margin:0px 20px;}
-	.btnSearch { margin-left:20px;}
-	.salesBtn , .viseBtn { width:20px; height:20px; display:inline-block; margin-right:10px; position:relative;top:5px;}
-	[v-cloak] {
-	  display: none;
-	}
-	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">

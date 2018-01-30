@@ -21,6 +21,7 @@
 	.box-header { position:fixed; top:0;left:0; width:100%; height:105px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
 	.box-body {  overflow:hidden;margin-top:96px;}
 	.card-head span { font-size:12px;}
+	 label { margin-bottom:0;}
 	</style>
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>
