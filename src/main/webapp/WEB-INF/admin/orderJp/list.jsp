@@ -224,7 +224,7 @@
 							layer.msg("进入初审", {
 								time: 1000,
 								end: function () {
-									self.location.reload();
+									successCallBack();
 								}
 							});
 						}
