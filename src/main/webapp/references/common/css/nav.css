@@ -16,7 +16,7 @@ a{text-decoration:none;}
 .nav a{display: block;overflow: hidden;padding-left: 20px;line-height: 50px;max-height: 50px;color: #ABB1B7;}
 .navLi a span { color:#FFF !important;}
 .nav a span{margin-left: 30px; font-size:15px; color:#75a9eb;}
-.nav-item{position: relative;}
+.nav-item{position: relative; cursor:pointer;}
 .nav-item.nav-show{border-bottom: none;}
 .nav-item ul{display: none;background: rgba(0,0,0,.1);}
 .nav .nav-item.nav-show ul{display: block;}
