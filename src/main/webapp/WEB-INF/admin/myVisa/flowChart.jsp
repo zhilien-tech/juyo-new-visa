@@ -55,7 +55,7 @@
 							<div class="mainInfo">
 								<c:if test="${'不合格' != obj.applicant.applicantstatus }">
 									<label>${obj.unqualifiedInfo}</label>
-									<a href="javascript: void(0);" style="color:#656565;">${obj.applicant.applicantstatus}</a>
+									<a  style="color:#656565;">${obj.applicant.applicantstatus}</a>
 								</c:if>
 								<c:if test="${'不合格' == obj.applicant.applicantstatus  }">
 									<label>${obj.unqualifiedInfo}</label>
@@ -202,7 +202,7 @@
 		<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 		<script src="${base}/references/common/js/layer/layer.js"></script>
 		<script src="${base}/admin/base.js"></script><!-- 公用js文件 -->
-		<script src="${base}/admin/myVisa/flowChart.js"></script>
+		<%-- <script src="${base}/admin/myVisa/flowChart.js"></script> --%>
 		<script type="text/javascript">
 		
 			$(function(){

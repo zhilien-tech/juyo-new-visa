@@ -50,7 +50,6 @@ import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.ReceptionSearchStatusEnum_JP;
 import com.juyo.visa.common.enums.ShareTypeEnum;
-import com.juyo.visa.common.enums.VisaDataTypeEnum;
 import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
@@ -139,6 +138,26 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 						applicant.put("expressType", expressTypeEnum.value());
 					}
 				}
+
+				String data = "";
+				String blue = "";
+				if (!Util.isEmpty(applicant.get("blue"))) {
+					blue = (String) applicant.get("blue");
+				}
+				String black = "";
+				if (!Util.isEmpty(applicant.get("black"))) {
+					black = (String) applicant.get("black");
+				}
+				if (Util.isEmpty(blue)) {
+					data = black;
+				} else {
+					data = blue;
+					if (!Util.isEmpty(black)) {
+						data += "、";
+						data += black;
+					}
+				}
+				applicant.put("data", data);
 			}
 			record.put("everybodyInfo", records);
 		}
@@ -231,11 +250,30 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		List<Record> applyinfo = dbDao.query(applysql, null, null);
 		for (Record record : applyinfo) {
 			Integer type = (Integer) record.get("type");
-			for (VisaDataTypeEnum visadatatype : VisaDataTypeEnum.values()) {
+			for (JobStatusEnum visadatatype : JobStatusEnum.values()) {
 				if (!Util.isEmpty(type) && type.equals(visadatatype.intKey())) {
 					record.put("type", visadatatype.value());
 				}
 			}
+			String data = "";
+			String blue = "";
+			if (!Util.isEmpty(record.get("blue"))) {
+				blue = (String) record.get("blue");
+			}
+			String black = "";
+			if (!Util.isEmpty(record.get("black"))) {
+				black = (String) record.get("black");
+			}
+			if (Util.isEmpty(blue)) {
+				data = black;
+			} else {
+				data = blue;
+				if (!Util.isEmpty(black)) {
+					data += "、";
+					data += black;
+				}
+			}
+			record.put("realinfo", data);
 		}
 		result.put("applyinfo", applyinfo);
 		return result;
