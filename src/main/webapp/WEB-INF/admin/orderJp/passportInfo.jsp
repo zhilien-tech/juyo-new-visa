@@ -715,7 +715,6 @@
 		
 		//保存
 		function save(status){
-			layer.load(1);
 			$("#passportInfo").data('bootstrapValidator').destroy();
 			$("#passportInfo").data('bootstrapValidator', null);
 			passValidate();
@@ -738,6 +737,7 @@
 						var id = '${obj.applicantId}';
 						var orderid = '${obj.orderid}';
 						if(userType == 2){
+							layer.load(1);
 							$.ajax({
 								async: false,
 								type: 'POST',
@@ -1016,7 +1016,6 @@
 							layer.load(1);
 							$.ajax({
 								type: 'POST',
-								async : false,
 								data : passportInfo,
 								url: '${base}/admin/orderJp/saveEditPassport',
 								success :function(data) {

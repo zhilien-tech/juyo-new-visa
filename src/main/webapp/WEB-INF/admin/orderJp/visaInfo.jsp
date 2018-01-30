@@ -1235,7 +1235,6 @@
 				//layer.load(1);
 				$.ajax({
 					type: 'POST',
-					async: false,
 					data : passportInfo,
 					url: '${base}/admin/orderJp/saveEditVisa',
 					success :function(data) {
