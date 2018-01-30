@@ -23,14 +23,12 @@
 	 /*头导航不随下拉移动*/
 	 .box-header { position:fixed; top:0;left:0; width:100%; height:120px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
 	 .box-body {  overflow:hidden;margin-top:120px;}
-	 .everybody-info { height:31px; line-height:31px;}
 	 .card-head div { font-weight:normal;}
-	 .card-list { height:90px;}
-	 .card-list:hover { min-height:90px;}
 	 .box-body { padding:0 15px 0 15px;}
 	 .allDiv { width:15%;}
 	 .searchStrWidth { width: 31% !important;}
 	 .BtnWidth { width: 24% !important;}
+	 label { margin-bottom:0;}
 	</style>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>

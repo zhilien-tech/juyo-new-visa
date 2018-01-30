@@ -15,8 +15,10 @@
     <link rel="stylesheet" href="${base}/references/public/css/style.css">
     <link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
     <style>
+     body { font-size:12px;}
      [v-cloak]{display:none;}
 	 .bold { font-weight:bold;font-size:16px;}
+	 label { margin-bottom:0;}
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -65,7 +67,7 @@
 							<ul class="card-content">
 								<li class="everybody-info" v-for="(item,index) in data.everybodyinfo">
 								
-									<span v-if="index === 0" style="display:block; height:31px;">
+									<span v-if="index === 0">
 										<div><label>申请人：</label><span>{{item.applicantname}}</span></div>
 										<div><label>护照号：</label><span>{{item.passportnum}}</span></div>
 										<div><label>手机号：</label><span>{{item.telephone}}</span></div>
@@ -78,7 +80,7 @@
 											<i class="unqualified" @click="unqualifiedFun(item.applyid,data.orderid)"> </i>
 										</div>
 									</span>
-									<span v-else  style="display:block; height:31px;">
+									<span v-else >
 										<div><label>　　　　</label><span>{{item.applicantname}}</span></div>
 										<div><label>　　　　</label><span>{{item.passportnum}}</span></div>
 										<div><label>　　　　</label><span>{{item.telephone}}</span></div>
