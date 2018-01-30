@@ -31,8 +31,9 @@
 			.card-list{height: 87px;}
 			.card-list:hover{height: 87px !important;min-height: 87px !important;}
 			.box-header{padding-right: 16px;}
-			.box-body{padding-top:15px;}
+			.box-body{padding-top:0;}
 			.qz-head { border-bottom:2px solid #deecff; padding:15px 20px; display: table; width: 100%;}
+			.btn-sm { width:110px !important;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">

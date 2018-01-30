@@ -926,7 +926,7 @@
 		
 		//保存
 		function save(status){
-			layer.load(1);
+			
 			if(status != 2){
 				visaValidate();
 				//得到获取validator对象或实例 
@@ -973,6 +973,7 @@
 				$("#wealth").val(0);
 			}
 			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
+			layer.load(1);
 			if(userType == 2){
 				$.ajax({
 					type: 'POST',
@@ -1234,7 +1235,6 @@
 				//layer.load(1);
 				$.ajax({
 					type: 'POST',
-					async: false,
 					data : passportInfo,
 					url: '${base}/admin/orderJp/saveEditVisa',
 					success :function(data) {
