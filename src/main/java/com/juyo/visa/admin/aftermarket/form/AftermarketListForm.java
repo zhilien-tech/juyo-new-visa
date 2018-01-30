@@ -82,13 +82,6 @@ public class AftermarketListForm implements SQLParamForm {
 		if (!Util.isEmpty(status)) {
 			cnd.and("tr.status", "=", status);
 		}
-		/*if (userid.equals(adminId)) {
-			//公司管理员
-			cnd.and("tr.comId", "=", companyid);
-		} else {
-			//普通的操作员
-			cnd.and("tr.userId", "=", userid);
-		}*/
 
 		//订单权限
 		if (Util.isEmpty(orderAuthority)) {
@@ -96,13 +89,19 @@ public class AftermarketListForm implements SQLParamForm {
 		}
 		if (orderAuthority.equals("allOrder")) {
 			//全部
-			cnd.and("tr.aftermarketOpid", "IS", null);
+			if (userid.equals(adminId)) {
+				//公司管理员
+				cnd.and("tr.comId", "=", companyid);
+			} else {
+				//普通的操作员
+				cnd.and("tr.aftermarketOpid", "IS", null);
+			}
 		} else {
 			//我的
 			cnd.and("tr.aftermarketOpid", "=", userid);
 		}
 
-		cnd.and("tr.comId", "=", companyid);
+		/*cnd.and("tr.comId", "=", companyid);*/
 
 		cnd.orderBy("tr.createtime", "desc");
 		return cnd;

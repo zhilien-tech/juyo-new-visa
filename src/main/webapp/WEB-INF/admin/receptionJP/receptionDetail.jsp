@@ -18,6 +18,7 @@
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
+			[v-cloak]{display:none;}
 			.wrapper { background:#f9f9f9 !important; }
 			.form-control{height: 30px;}
 			.add-btn{top: -35px;right:-1.5%;}
@@ -258,7 +259,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="apply in applyinfo">
+									<tr v-cloak v-for="apply in applyinfo">
 										<td>
 											<div v-if="apply.applicantid==apply.mainid">
 												<font color="blue">主</font> 

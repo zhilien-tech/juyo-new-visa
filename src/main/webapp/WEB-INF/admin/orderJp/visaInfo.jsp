@@ -431,12 +431,13 @@
 				        $("#borderColor").attr("style",null);
 					}
 				}else{
+					$(".delete").css("display","none");
 					if(userType == 2){
 						if($("#sqImg").attr("src") == ""){
 							$(".front").attr("class", "info-imgUpload front has-error");  
-					        $(".help-blockFront").attr("data-bv-result","INVALID");  
-					        $(".help-blockFront").attr("style","display: block;");
-					        $("#borderColor").attr("style","border-color:#ff1a1a");
+					        $(".help-blockFront").attr("data-bv-result","INVALID");
+					        //$(".help-blockFront").attr("style","display: block;");
+					        //$("#borderColor").attr("style","border-color:#ff1a1a");
 						}
 					}
 					$(".info-imgUpload").show();
@@ -925,6 +926,7 @@
 		
 		//保存
 		function save(status){
+			
 			if(status != 2){
 				visaValidate();
 				//得到获取validator对象或实例 
@@ -971,6 +973,7 @@
 				$("#wealth").val(0);
 			}
 			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
+			layer.load(1);
 			if(userType == 2){
 				$.ajax({
 					type: 'POST',
@@ -978,6 +981,7 @@
 					data : passportInfo,
 					url: '${base}/admin/myData/visaIsChanged.html',
 					success :function(data) {
+						layer.closeAll("loading");
 						if(status == 2){
 							if(data == 1 || data == 2){
 								layer.load(1);
@@ -1228,10 +1232,9 @@
 				
 			}else{
 				var addApply = '${obj.addApply}';
-				layer.load(1);
+				//layer.load(1);
 				$.ajax({
 					type: 'POST',
-					async: false,
 					data : passportInfo,
 					url: '${base}/admin/orderJp/saveEditVisa',
 					success :function(data) {

@@ -737,12 +737,14 @@
 						var id = '${obj.applicantId}';
 						var orderid = '${obj.orderid}';
 						if(userType == 2){
+							layer.load(1);
 							$.ajax({
 								async: false,
 								type: 'POST',
 								data : passportInfo,
 								url: '${base}/admin/myData/passIsChanged.html',
 								success :function(data) {
+									layer.closeAll("loading");
 									if(status == 2){
 										if(data == 1 || data == 2){//1是变了
 											layer.load(1);
@@ -1014,7 +1016,6 @@
 							layer.load(1);
 							$.ajax({
 								type: 'POST',
-								async : false,
 								data : passportInfo,
 								url: '${base}/admin/orderJp/saveEditPassport',
 								success :function(data) {

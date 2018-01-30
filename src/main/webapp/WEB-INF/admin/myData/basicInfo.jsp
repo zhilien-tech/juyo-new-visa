@@ -36,8 +36,8 @@
 						<input  type="button" value="清除" class="btn btn-primary btn-sm pull-right basic none" onclick="clearAll();"/>
 					</c:when>
 					<c:otherwise>
-						<input  type="button" value="取消" class="btn btn-primary btn-sm pull-right basic none" onclick="cancelBtn(1);"/> 
-						<input  type="button" value="保存" class="btn btn-primary btn-sm pull-right basic none" onclick="saveApplicant(3);"/> 
+						<input  type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
+						<input  type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant(3);"/> 
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -59,13 +59,49 @@
 									<span>点击上传身份证正面</span>
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="cardFront" name="cardFront" type="hidden" />
-											<input disabled id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="cardFront" name="cardFront" type="hidden" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 											<img id="sqImg" alt="" src="" >
 										</c:when>
 										<c:otherwise>
-											<input disabled id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
-											<input disabled id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 											<img id="sqImg" alt="" src="${obj.applicant.cardFront }" >
 										</c:otherwise>
 									</c:choose>
@@ -90,13 +126,49 @@
 										<span>点击上传身份证背面</span>
 										<c:choose>
 											<c:when test="${empty obj.applicant}">
-												<input disabled id="cardBack" name="cardBack" type="hidden" />
-												<input disabled id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 id="cardBack" name="cardBack" type="hidden" />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 												<img id="sqImgBack" alt="" src="" >
 											</c:when>
 											<c:otherwise>
-												<input disabled id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
-												<input disabled id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 												<img id="sqImgBack" alt="" src="${obj.applicant.cardBack }" >
 											</c:otherwise>
 										</c:choose>
@@ -116,11 +188,29 @@
 									<label><span>*</span>签发机关</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="issueOrganization" name="issueOrganization"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issueOrganization" name="issueOrganization"
 												type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input disabled id="issueOrganization" name="issueOrganization"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issueOrganization" name="issueOrganization"
 												type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
 										</c:otherwise>
 									</c:choose>
@@ -136,11 +226,29 @@
 									<label>是否有曾用名</label> 
 									<div>
 										<span class="nameBeforeYes ">
-											<input disabled type="radio" name="hasOtherName" class="nameBefore"  value="1"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="radio" name="hasOtherName" class="nameBefore"  value="1"
 											/>是
 										</span>
 										<span>
-											<input disabled type="radio" name="hasOtherName" class="nameBefore"  value="2"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="radio" name="hasOtherName" class="nameBefore"  value="2"
 											/>否
 										</span>
 									</div>
@@ -153,12 +261,72 @@
 										<label>姓/拼音</label> 
 										<c:choose>
 											<c:when test="${empty obj.applicant}">
-												<input disabled id="otherFirstName" name="otherFirstName" type="text" class="form-control input-sm " placeholder=" "  />
-												<input disabled type="text" id="otherFirstNameEn" style="position:absolute;top:36px;border:none;left:150px;background-color:#eee;"  name="otherFirstNameEn" />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												
+												id="otherFirstName" name="otherFirstName" type="text" class="form-control input-sm " placeholder=" "  />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 type="text" id="otherFirstNameEn" 
+												 <c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:36px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:36px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+												 
+												   name="otherFirstNameEn" />
 											</c:when>
 											<c:otherwise>
-												<input disabled id="otherFirstName"	name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.otherFirstName }" />
-												<input disabled type="text" id="otherFirstNameEn" style="position:absolute;top:36px;border:none;left:150px;background-color:#eee;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 id="otherFirstName"	name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.otherFirstName }" />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 type="text" id="otherFirstNameEn" 
+												 <c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:36px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:36px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+												 
+												 
+												   name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
 											</c:otherwise>
 										</c:choose>
 										<!-- <i class="bulb"></i> -->
@@ -172,10 +340,28 @@
 									<label>曾有的或另有的国籍(或公民身份)</label> 
 									<div>
 										<span class="onceIDYes ">
-											<input disabled type="radio" name="hasOtherNationality" class="onceID" value="1" />是
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="radio" name="hasOtherNationality" class="onceID" value="1" />是
 										</span>
 										<span>
-											<input disabled type="radio" name="hasOtherNationality" class="onceID"  value="2" />否
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="radio" name="hasOtherNationality" class="onceID"  value="2" />否
 										</span>
 									</div>
 								</div>
@@ -186,10 +372,28 @@
 									<label>国籍</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="nationality" name="nationality"  type="text" class="form-control input-sm"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="nationality" name="nationality"  type="text" class="form-control input-sm"/>
 										</c:when>
 										<c:otherwise>
-											<input disabled id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -206,18 +410,111 @@
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
 											<img width="100%" height="100%" alt="" src="">
-											<input disabled id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" "  />
-											<input disabled type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;background-color:#eee;"  name="firstNameEn" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											
+											 id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" "  />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="text" id="firstNameEn" 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:35px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:35px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+											   name="firstNameEn" />
 										</c:when>
 										<c:otherwise>
-											<input disabled id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.firstName }" />
-											<input disabled type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;background-color:#eee;"  name="firstNameEn" value="${obj.firstNameEn }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.firstName }" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="text" id="firstNameEn" 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:35px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:35px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+											   name="firstNameEn" value="${obj.firstNameEn }"/>
 										</c:otherwise>
 									</c:choose>
-										<input disabled type="hidden" name="applyId" value="${obj.applyId }"/>
-										<input disabled type="hidden" name="contact" value="${obj.contact }"/>
-										<input disabled type="hidden" id="id" name="applicantid" value="${obj.applicantId}"/>
-										<input disabled type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+										<input 
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 type="hidden" name="applyId" value="${obj.applyId }"/>
+										<input 
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 type="hidden" name="contact" value="${obj.contact }"/>
+										<input 
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 type="hidden" id="id" name="applicantid" value="${obj.applicantId}"/>
+										<input 
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -230,16 +527,73 @@
 									<label><span>*</span>名/拼音</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="lastName"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="lastName"
 												name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 												placeholder=" " />
-												<input disabled type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;background-color:#eee;" name="lastNameEn" />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 type="text" id="lastNameEn" 
+												 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:35px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:35px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+												 
+												  name="lastNameEn" />
 										</c:when>
 										<c:otherwise>
-											<input disabled id="lastName"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="lastName"
 												name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 												placeholder=" " value="${obj.applicant.lastName }" />
-												<input disabled type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;background-color:#eee;" name="lastNameEn" value="${obj.lastNameEn }"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 type="text" id="lastNameEn" 
+												 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:35px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:35px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+												  name="lastNameEn" value="${obj.lastNameEn }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -254,12 +608,31 @@
 									<label><span>*</span>手机号</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="telephone"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="telephone"
 												name="telephone" type="text" class="form-control input-sm"
 												placeholder=" "  />
 										</c:when>
 										<c:otherwise>
-											<input disabled id="telephone"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											
+											 id="telephone"
 												name="telephone" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.applicant.telephone }" />
 										</c:otherwise>
@@ -272,12 +645,30 @@
 									<label><span>*</span>邮箱</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="email" name="email"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="email" name="email"
 												type="text" class="form-control input-sm" placeholder=" "
 												/>
 										</c:when>
 										<c:otherwise>
-											<input disabled id="email" name="email"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="email" name="email"
 												type="text" class="form-control input-sm" placeholder=" "
 												value="${obj.applicant.email }" />
 										</c:otherwise>
@@ -294,12 +685,30 @@
 									<label><span>*</span>公民身份号码</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="cardId"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="cardId"
 												name="cardId" type="text" class="form-control input-sm"
 												placeholder=" "  />
 										</c:when>
 										<c:otherwise>
-											<input disabled id="cardId"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="cardId"
 												name="cardId" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.applicant.cardId }" />
 										</c:otherwise>
@@ -314,7 +723,16 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别</label> 
-										<select	 class="form-control input-sm" id="sex" name="sex" disabled>
+										<select	
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 class="form-control input-sm" id="sex" name="sex" >
 											<c:choose>
 												<c:when test="${empty obj.applicant}">
 													<option value="男" >男</option>
@@ -333,12 +751,30 @@
 									<label><span>*</span>民族</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="nation"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="nation"
 												name="nation" type="text" class="form-control input-sm"
 												placeholder=" "  />
 										</c:when>
 										<c:otherwise>
-											<input disabled id="nation"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="nation"
 												name="nation" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.applicant.nation }" />
 										</c:otherwise>
@@ -351,12 +787,30 @@
 									<label><span>*</span>出生日期</label>
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											 <input disabled id="birthday"
+											 <input 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											  id="birthday"
 												name="birthday" type="text" class="form-control input-sm"
 												placeholder=" "  />
 										</c:when>
 										<c:otherwise>
-											 <input disabled id="birthday"
+											 <input 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											  id="birthday"
 												name="birthday" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.birthday }" />
 										</c:otherwise>
@@ -373,12 +827,30 @@
 									<label><span>*</span>住址</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="address"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="address"
 												name="address" type="text" class="form-control input-sm"
 												placeholder=" "  />
 										</c:when>
 										<c:otherwise>
-											<input disabled id="address"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="address"
 												name="address" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.applicant.address }" />
 										</c:otherwise>
@@ -394,10 +866,28 @@
 									<label>有效期限</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" />
 										</c:when>
 										<c:otherwise>
-											<input disabled id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -407,10 +897,28 @@
 									<label> &nbsp; &nbsp;</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" >
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" >
 										</c:when>
 										<c:otherwise>
-											<input disabled id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" value="${obj.validEndDate }">
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" value="${obj.validEndDate }">
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -422,19 +930,64 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>现居住地是否与身份证相同</label> 
-									<input disabled class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
+									<input 
+										<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+									 class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="province"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="province"
 												name="province" type="text" class="form-control input-sm"
 												placeholder="省" />
 										</c:when>
 										<c:otherwise>
-											<input disabled id="province"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="province"
 												name="province" type="text" class="form-control input-sm"
 												placeholder="省" value="${obj.applicant.province }" />
-											<input disabled type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
-											<input disabled type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -445,12 +998,30 @@
 									<label>现居住地址城市</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="city"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											id="city"
 												name="city" type="text" class="form-control input-sm"
 												placeholder="市"  />
 										</c:when>
 										<c:otherwise>
-											<input disabled id="city"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="city"
 												name="city" type="text" class="form-control input-sm"
 												placeholder="市" value="${obj.applicant.city }" />
 										</c:otherwise>
@@ -468,13 +1039,30 @@
 									<label>详细地址</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											
 												id="detailedAddress" name="detailedAddress" type="text"
 												class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间"
 												/>
 										</c:when>
 										<c:otherwise>
-											<input disabled
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
 												id="detailedAddress" name="detailedAddress" type="text"
 												class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间"
 												value="${obj.applicant.detailedAddress }" />
@@ -497,12 +1085,48 @@
 									<label>名/拼音</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" "  />
-											<input disabled type="text" id="otherLastNameEn" style="position:absolute;top:36px;border:none;left:150px;" name="otherLastNameEn" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" "  />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="text" id="otherLastNameEn" style="position:absolute;top:36px;border:none;left:150px;" name="otherLastNameEn" />
 										</c:when>
 										<c:otherwise>
-											<input disabled id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
-											<input disabled type="text" id="otherLastNameEn" style="position:absolute;top:36px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="text" id="otherLastNameEn" style="position:absolute;top:36px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -515,12 +1139,30 @@
 									<label>紧急联系人姓名</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="emergencyLinkman"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="emergencyLinkman"
 												name="emergencyLinkman" type="text" class="form-control input-sm"
 												placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input disabled id="emergencyLinkman"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="emergencyLinkman"
 												name="emergencyLinkman" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.applicant.emergencyLinkman }" />
 										</c:otherwise>
@@ -533,12 +1175,30 @@
 									<label>紧急联系人手机</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input disabled id="emergencyTelephone" name="emergencyTelephone"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="emergencyTelephone" name="emergencyTelephone"
 												type="text" class="form-control input-sm" placeholder=" "
 												/>
 										</c:when>
 										<c:otherwise>
-											<input disabled id="emergencyTelephone" name="emergencyTelephone"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="emergencyTelephone" name="emergencyTelephone"
 												type="text" class="form-control input-sm" placeholder=" "
 												value="${obj.applicant.emergencyTelephone }" />
 										</c:otherwise>
@@ -932,6 +1592,7 @@
 		if($(".front").hasClass("has-error")){
 			return;
 		}
+		layer.load(1);
 			
 		var str="";
 		var applicantInfo;

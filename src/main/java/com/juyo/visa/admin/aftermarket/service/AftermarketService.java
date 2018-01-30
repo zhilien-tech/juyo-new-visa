@@ -84,6 +84,7 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		Integer userid = loginUser.getId();
 		form.setUserid(userid);
 		form.setCompanyid(loginCompany.getId());
+		form.setAdminId(loginCompany.getAdminId());
 		Map<String, Object> result = Maps.newHashMap();
 		Sql sql = form.sql(sqlManager);
 

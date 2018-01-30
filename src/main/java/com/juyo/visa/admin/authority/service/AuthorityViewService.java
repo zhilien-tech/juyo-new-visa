@@ -63,9 +63,11 @@ public class AuthorityViewService extends BaseService<DeptJobForm> {
 		Sql sql = Sqls.create(sqlManager.get("authority_user_dept"));
 		sql.params().set("adminId", adminId);
 		Record adminDept = dbDao.fetch(sql);
-		String deptId = adminDept.getString("did");
-		if (!Util.isEmpty(deptId)) {
-			sqlForm.setDeptId(Long.valueOf(deptId));
+		if (!Util.isEmpty(adminDept)) {
+			String deptId = adminDept.getString("did");
+			if (!Util.isEmpty(deptId)) {
+				sqlForm.setDeptId(Long.valueOf(deptId));
+			}
 		}
 		sqlForm.setComId(companyId);
 		Map<String, Object> listPage4Datatables = listPage4Datatables(sqlForm);

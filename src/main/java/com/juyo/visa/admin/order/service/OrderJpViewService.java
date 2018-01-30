@@ -1751,22 +1751,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object getProvince(String searchStr) {
 		List<String> provinceList = new ArrayList<>();
-		List<TIdcardEntity> province = dbDao.query(TIdcardEntity.class,
-				Cnd.where("province", "like", "%" + Strings.trim(searchStr) + "%"), null);
+		List<TIdcardEntity> province = dbDao.query(
+				TIdcardEntity.class,
+				Cnd.where("province", "like", "%" + Strings.trim(searchStr) + "%").and("citycode", "=", "00")
+						.and("countycode", "=", "00"), null);
 		for (TIdcardEntity tIdcardEntity : province) {
 			if (!provinceList.contains(tIdcardEntity.getProvince())) {
 				provinceList.add(tIdcardEntity.getProvince());
 			}
-		}
-		List<String> list = new ArrayList<>();
-		if (!Util.isEmpty(provinceList) && provinceList.size() >= 5) {
-			for (int i = 0; i < 5; i++) {
-				list.add(provinceList.get(i));
+			if (Util.eq(provinceList.size(), 5)) {
+				break;
 			}
-			return list;
-		} else {
-			return provinceList;
 		}
+		return provinceList;
 	}
 
 	public Object getCity(String province, String searchStr) {
@@ -1779,8 +1776,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		List<String> list = new ArrayList<>();
-		if (!Util.isEmpty(cityList) && cityList.size() >= 5) {
-			for (int i = 0; i < 5; i++) {
+		if (!Util.isEmpty(cityList) && cityList.size() >= 6) {
+			for (int i = 1; i < 6; i++) {
 				list.add(cityList.get(i));
 			}
 			return list;
