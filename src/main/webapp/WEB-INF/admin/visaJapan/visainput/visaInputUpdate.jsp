@@ -55,10 +55,10 @@
 						<div class="col-sm-5 imgR">
 						<c:choose>
 							<c:when test="${empty obj.applicantvisa.picUrl }">
-								<img id="visapic" src=" " width="400px">
+								<img id="visapic" src=" " width="100%">
 							</c:when>
 							<c:otherwise>
-								<img id="visapic" src="${obj.applicantvisa.picUrl}" width="400px">
+								<img id="visapic" src="${obj.applicantvisa.picUrl}" width="100%">
 							</c:otherwise>
 						</c:choose>
 						</div>

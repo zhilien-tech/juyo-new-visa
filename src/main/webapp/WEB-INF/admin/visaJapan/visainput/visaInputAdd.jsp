@@ -56,7 +56,7 @@
 							</div>
 						</div>
 						<div class="col-sm-5 imgR">
-							<img id="visapic" src=" " width="400px">
+							<img id="visapic" src=" " width="100%">
 						</div>
 						<input type="hidden" name="picUrl" id="picUrl">
 					</div>
