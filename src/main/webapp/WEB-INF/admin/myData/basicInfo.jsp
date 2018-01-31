@@ -284,10 +284,10 @@
 												 type="text" id="otherFirstNameEn" 
 												 <c:choose>
 														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:36px;border:none;left:150px;background-color:#eee;" 
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
 														</c:when>
 														<c:otherwise>
-														style="position:absolute;top:36px;border:none;left:150px;"
+														style="position:absolute;top:30px;border:none;left:150px;"
 														</c:otherwise>
 													
 													</c:choose >
@@ -317,10 +317,10 @@
 												 type="text" id="otherFirstNameEn" 
 												 <c:choose>
 														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:36px;border:none;left:150px;background-color:#eee;" 
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
 														</c:when>
 														<c:otherwise>
-														style="position:absolute;top:36px;border:none;left:150px;"
+														style="position:absolute;top:30px;border:none;left:150px;"
 														</c:otherwise>
 													
 													</c:choose >
@@ -433,10 +433,10 @@
 											 type="text" id="firstNameEn" 
 											 	<c:choose>
 														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:35px;border:none;left:150px;background-color:#eee;" 
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
 														</c:when>
 														<c:otherwise>
-														style="position:absolute;top:35px;border:none;left:150px;"
+														style="position:absolute;top:30px;border:none;left:150px;"
 														</c:otherwise>
 													
 													</c:choose >
@@ -465,10 +465,10 @@
 											 type="text" id="firstNameEn" 
 											 	<c:choose>
 														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:35px;border:none;left:150px;background-color:#eee;" 
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
 														</c:when>
 														<c:otherwise>
-														style="position:absolute;top:35px;border:none;left:150px;"
+														style="position:absolute;top:30px;border:none;left:150px;"
 														</c:otherwise>
 													
 													</c:choose >
@@ -551,10 +551,10 @@
 												 type="text" id="lastNameEn" 
 												 	<c:choose>
 														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:35px;border:none;left:150px;background-color:#eee;" 
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
 														</c:when>
 														<c:otherwise>
-														style="position:absolute;top:35px;border:none;left:150px;"
+														style="position:absolute;top:30px;border:none;left:150px;"
 														</c:otherwise>
 													
 													</c:choose >
@@ -586,10 +586,10 @@
 												 type="text" id="lastNameEn" 
 												 	<c:choose>
 														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:35px;border:none;left:150px;background-color:#eee;" 
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
 														</c:when>
 														<c:otherwise>
-														style="position:absolute;top:35px;border:none;left:150px;"
+														style="position:absolute;top:30px;border:none;left:150px;"
 														</c:otherwise>
 													
 													</c:choose >
@@ -1104,7 +1104,7 @@
 														</c:otherwise>
 													
 													</c:choose >
-											 type="text" id="otherLastNameEn" style="position:absolute;top:36px;border:none;left:150px;" name="otherLastNameEn" />
+											 type="text" id="otherLastNameEn" style="position:absolute;top:30px;border:none;left:150px;" name="otherLastNameEn" />
 										</c:when>
 										<c:otherwise>
 											<input 
@@ -1126,7 +1126,7 @@
 														</c:otherwise>
 													
 													</c:choose >
-											 type="text" id="otherLastNameEn" style="position:absolute;top:36px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+											 type="text" id="otherLastNameEn" style="position:absolute;top:30px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
 										</c:otherwise>
 									</c:choose>
 								</div>

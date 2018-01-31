@@ -406,10 +406,10 @@
 											 id="birthAddressEn" name="birthAddressEn" 
 											 	<c:choose>
 														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:36px; width:110px;border:0px;left:66px;background-color:#eee;" 
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;background-color:#eee;" 
 														</c:when>
 														<c:otherwise>
-														style="position:absolute;top:36px; width:110px;border:0px;left:66px;"
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;"
 														</c:otherwise>
 													
 													</c:choose >
@@ -439,10 +439,10 @@
 											 id="birthAddressEn" name="birthAddressEn" 
 											 <c:choose>
 														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:36px; width:110px;border:0px;left:66px;background-color:#eee;" 
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;background-color:#eee;" 
 														</c:when>
 														<c:otherwise>
-														style="position:absolute;top:36px; width:110px;border:0px;left:66px;"
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;"
 														</c:otherwise>
 													
 													</c:choose >
@@ -514,10 +514,10 @@
 											 id="issuedPlaceEn" name="issuedPlaceEn" type="text" 
 											 	<c:choose>
 														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:36px; width:110px;border:0px;left:66px;background-color:#eee;" 
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;background-color:#eee;" 
 														</c:when>
 														<c:otherwise>
-														style="position:absolute;top:36px; width:110px;border:0px;left:66px;"
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;"
 														</c:otherwise>
 													
 													</c:choose >
@@ -546,10 +546,10 @@
 											 id="issuedPlaceEn" name="issuedPlaceEn" type="text" 
 											 	<c:choose>
 														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:36px; width:110px;border:0px;left:66px;background-color:#eee;" 
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;background-color:#eee;" 
 														</c:when>
 														<c:otherwise>
-														style="position:absolute;top:36px; width:110px;border:0px;left:66px;"
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;"
 														</c:otherwise>
 													
 													</c:choose >
