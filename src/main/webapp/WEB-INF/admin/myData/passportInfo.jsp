@@ -609,7 +609,7 @@
 														</c:otherwise>
 													
 													</c:choose >
-									id="validType" name="validType" class="form-control input-sm " >
+									id="validType" name="validType" class="form-control input-sm " style="padding: 5px;">
 									<c:choose>
 										<c:when test="${empty obj.passport}">
 											<c:forEach var="map" items="${obj.passportType}">
