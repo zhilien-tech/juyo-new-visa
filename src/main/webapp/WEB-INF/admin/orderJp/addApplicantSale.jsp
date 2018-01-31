@@ -123,7 +123,7 @@ input[type="file"] { z-index:999999;}
 										<label>姓/拼音</label> <input id="otherFirstName"
 											name="otherFirstName"  type="text" class="form-control input-sm "
 											placeholder=" " value="" />
-											<input type="text" id="otherFirstNameEn" style="position:absolute;top:38px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
 
 										<!-- <i class="bulb"></i> -->
 									</div>
@@ -161,7 +161,7 @@ input[type="file"] { z-index:999999;}
 									<input id="firstName" name="firstName" type="text" class="form-control input-sm req " placeholder=" " />
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<input type="hidden" id="applyId"/>
-									<input type="text" id="firstNameEn" style="position:absolute;top:38px;border:none;left:150px;" name="firstNameEn" value=""/>
+									<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="firstNameEn" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -171,7 +171,7 @@ input[type="file"] { z-index:999999;}
 								<div class="form-group" style="position:relative;">
 									<label><span>*</span>名/拼音</label>
 									<input id="lastName" name="lastName" type="text" class="form-control input-sm " placeholder=" " />
-									<input type="text" id="lastNameEn" style="position:absolute;top:38px;border:none;left:150px;" name="lastNameEn" value=""/>
+									<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastNameEn" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -289,7 +289,7 @@ input[type="file"] { z-index:999999;}
 								<div class="form-group" style="position:relative;" >
 									<label>名/拼音</label> 
 									<input id="otherLastName" name="otherLastName" type="text" class="form-control input-sm" placeholder=" " value="" />
-									<input type="text" id="otherLastNameEn" style="position:absolute;top:38px;border:none;left:150px;" name="otherLastNameEn" value=""/>
+									<input type="text" id="otherLastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="otherLastNameEn" value=""/>
 								</div>
 							</div>
 						</div>
