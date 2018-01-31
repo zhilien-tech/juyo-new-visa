@@ -53,7 +53,7 @@
 
 						<div class="info-imgUpload front has-error" id="borderColorFront">
 							<!-- 身份证 正面 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 mainWidth">
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传身份证正面</span>
@@ -120,7 +120,7 @@
 
 						<div class="info-imgUpload back has-error" id="borderColorBack">
 							<!-- 身份证 反面 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 mainWidth">
 								<div class="form-group">
 									<div class="cardFront-div">
 										<span>点击上传身份证背面</span>

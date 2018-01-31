@@ -15,7 +15,9 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 <style type="text/css">
 img[src=""],img:not([src]) { opacity:0;}
-input[type="file"] { z-index:999999;}
+input[type="file"] { z-index:99999;}
+#sqImg { z-index:999999;}
+#sqImgBack { z-index:999999;}
 .delete { z-index:1000000;}
 .modal-body { height:100%; margin-top:50px;}
 .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
@@ -30,6 +32,9 @@ input[type="file"] { z-index:999999;}
 .nationalityHide { margin-left:3%;}
 .marginL { margin-left:30px;}
 .nameBeforeTop { margin-left:30px;}
+.mainWidth { width:100% !important;}
+#uploadFile,#uploadFileBack { width:100% !important }
+.row { margin-top:6.2px;}
 /*右导航*/
 .rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
@@ -64,7 +69,7 @@ input[type="file"] { z-index:999999;}
 						
 						
 						<div class="info-imgUpload front"><!-- 身份证 正面 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 mainWidth">
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传身份证正面</span>
@@ -78,7 +83,7 @@ input[type="file"] { z-index:999999;}
 						</div><!-- end 身份证 正面 -->
 						
 						<div class="info-imgUpload back"><!-- 身份证 反面 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 mainWidth">
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传身份证背面</span>
@@ -279,7 +284,7 @@ input[type="file"] { z-index:999999;}
 								</div>
 							</div>
 						</div><!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
-						<div class="row wordSpell" style="height:66px;">
+						<div class="row wordSpell" style="height:54px;">
 							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
 							
 							</div>

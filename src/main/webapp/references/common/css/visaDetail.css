@@ -139,3 +139,9 @@
 [v-cloak] {
 	display: none;
 }
+.schedulingBtn {
+	width: 30% !important;
+}
+.btn-Big {
+	width: 70px !important;
+}

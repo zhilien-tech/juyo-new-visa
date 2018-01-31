@@ -18,7 +18,7 @@
 		.editInp{height: 19px;position: relative;top: -5px;border: solid 1px #b8d3e9;width: 60px;border-radius: 3px;margin-right: 2px;font-size: 12px;line-height: 19px;padding-left: 3px;}
 		.frontcertificates{text-align:left !important;}
 		.frontcertificates span{margin-right: 2px;display: inline-block;width: unset;height: unset; border: solid 1px #cee1ff;color:#287ae7;padding: 0 5px;font-size: 12px;border-radius: 3px;}
-		
+		.btn-Big { width:70px !important;}
 	</style>
 </head>
 <body>
@@ -28,7 +28,7 @@
 				<span class="heading">实收资料</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save()" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
-				<input id="addBtn" type="button" onclick="frontRvenue()" class="btn btn-primary pull-right btn-sm btn-right" value="前台实收" />
+				<input id="addBtn" type="button" onclick="frontRvenue()" class="btn btn-primary pull-right btn-sm btn-right btn-Big" value="前台实收" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">

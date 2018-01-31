@@ -13,8 +13,11 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
+			.mainWidth { width:100% !important;}
 			img[src=""],img:not([src]) { opacity:0;}
-			input[type="file"] { z-index:999999;}
+			input[type="file"] { z-index:99999;}
+			#sqImg { z-index:999999;}
+			#uploadFile { width:100% !important;}
 			.delete { z-index:1000000;}
 			.qz-head { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
 			.content { margin-top:50px; height:100%; padding:15px 37px 15px 40px;}
@@ -72,7 +75,7 @@
 						</div> <!-- end 身份证 正面 -->
 
 						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 mainWidth">
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传护照</span>

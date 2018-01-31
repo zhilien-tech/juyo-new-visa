@@ -36,6 +36,7 @@
 			.col-sm-3 { width:28%;}
 			.col-sm-1 { width:11.5% !important;}
 			.select2 { width:100% !important;}
+			.addApplicantBtn { width:30% !important;}
 			[v-cloak]{display:none;}
 		</style>
 	</head>

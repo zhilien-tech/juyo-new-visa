@@ -15,7 +15,9 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 	<style>
 	img[src=""],img:not([src]) { opacity:0;}
-	input[type="file"] { z-index:999999;}
+	input[type="file"] { z-index:99999;}
+	#sqImg { z-index:999999;}
+	#sqImgBack { z-index:999999;}
 	.modal-content { position:relative;}
 	.info-imgUpload {width: 98%;}
 	.col-sm-offset-1 { margin-left:3% !important;}
@@ -35,6 +37,7 @@
     .leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 	.info-QRcode { width:153px;}
+	.mainWidth,#uploadFile { width:100% !important;}
 	</style>
 </head>
 <body>
@@ -70,7 +73,7 @@
 						</div><!-- end 二维码 -->
 						
 						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 mainWidth">
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传护照</span>

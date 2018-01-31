@@ -14,7 +14,8 @@
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
 	img[src=""],img:not([src]) { opacity:0;}
-	input[type="file"] { z-index:999999;}
+	input[type="file"] { z-index:99999;}
+	#sqImg { z-index:999999;}
 	.delete { z-index:1000000;}
 	.info-imgUpload {width: 100%;}
 	.NoInfo { width:100%; height:30px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
@@ -30,7 +31,8 @@
     .padding-right-0 { margin-left:10%; width:323px; border:1px solid #eee; }
     .delete { right:0; display:none;}
     .cardFront-div { height:176px;}
-    .cardFront-div #uploadFile { top:0;width:100%;height:200px;left:0;position:absolute;}
+    .cardFront-div #uploadFile { top:0;width:100% !important;height:200px;left:0;position:absolute;}
+    .btnBank { width:70px !important;}
     /*弹框头部固定*/
     .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
@@ -265,7 +267,7 @@
 								</div>
 						</div>
 						<div class="info-body-from finance-btn wealthmain">
-							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState" />
+							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState btnBank" />
 							<input id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
 							<input id="housePropertyType" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
 							<input id="financialType" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
@@ -284,7 +286,7 @@
 										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
-								<div style="float:left; margin:45px 0 0 -23px;">
+								<div style="float:left; margin:40px 0 0 -23px;">
 								万
 								</div>
 							</div><!-- end 银行存款 -->
@@ -331,7 +333,7 @@
 										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
-								<div style="float:left;  margin:45px 0 0 -23px;">
+								<div style="float:left;  margin:40px 0 0 -23px;">
 								平米
 								</div>
 							</div><!-- end 房产 -->
@@ -356,7 +358,7 @@
 										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
-								<div style="float:left;  margin:45px 0 0 -23px;">
+								<div style="float:left;  margin:40px 0 0 -23px;">
 								万
 								</div>
 							</div><!-- end 房产 -->
