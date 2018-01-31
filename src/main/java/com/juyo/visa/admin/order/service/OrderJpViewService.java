@@ -1085,22 +1085,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//游客进入，变更申请人为基本信息填写完毕
 			if (Util.eq(applicantForm.getUserType(), 2)) {
 				changeOrderStatusToFiled(applyJpList, "base", applyJp, orderEntity);
-				/*int count = 0;
-				applyJp.setBaseIsCompleted(IsYesOrNoEnum.YES.intKey());
-				dbDao.update(applyJp);
-				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
-					if (Util.eq(tApplicantOrderJpEntity.getBaseIsCompleted(), IsYesOrNoEnum.YES.intKey())
-							&& Util.eq(tApplicantOrderJpEntity.getPassIsCompleted(), IsYesOrNoEnum.YES.intKey())
-							&& Util.eq(tApplicantOrderJpEntity.getVisaIsCompleted(), IsYesOrNoEnum.YES.intKey())) {
-						count++;
-					}
-				}
-				if (Util.eq(count, applyJpList.size())) {
-					if (orderEntity.getStatus() < JPOrderStatusEnum.FILLED_INFORMATION.intKey()) {
-						orderEntity.setStatus(JPOrderStatusEnum.FILLED_INFORMATION.intKey());
-						dbDao.update(orderEntity);
-					}
-				}*/
 			}
 
 			//由游客不合格入口进入保存,变更游客状态为修改完成
@@ -2200,7 +2184,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object saveEditPassport(TApplicantPassportForm passportForm, HttpSession session) {
-		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
 		Date nowDate = DateUtil.nowDate();
@@ -2210,8 +2193,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					Cnd.where("id", "=", passportForm.getOrderid()));
 		}
 		if (!Util.isEmpty(passportForm.getApplicantId())) {
-			TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
-					Cnd.where("applicantId", "=", passportForm.getApplicantId().longValue()));
 			TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
 					Cnd.where("applicantId", "=", passportForm.getApplicantId()));
 			passport.setOpId(loginUser.getId());
@@ -2222,15 +2203,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			passport.setBirthAddress(passportForm.getBirthAddress());
 			passport.setBirthAddressEn(passportForm.getBirthAddressEn());
 			passport.setBirthday(passportForm.getBirthday());
-			passport.setFirstName(passportForm.getFirstName());
-			//passport.setFirstNameEn(passportForm.getFirstNameEn().substring(1));
 			passport.setIssuedDate(passportForm.getIssuedDate());
 			passport.setIssuedOrganization(passportForm.getIssuedOrganization());
 			passport.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
 			passport.setIssuedPlace(passportForm.getIssuedPlace());
 			passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
-			passport.setLastName(passportForm.getLastName());
-			//passport.setLastNameEn(passportForm.getLastNameEn().substring(1));
 			passport.setPassport(passportForm.getPassport());
 			passport.setSex(passportForm.getSex());
 			passport.setSexEn(passportForm.getSexEn());
@@ -2239,9 +2216,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			passport.setValidStartDate(passportForm.getValidStartDate());
 			passport.setValidType(passportForm.getValidType());
 			passport.setUpdateTime(new Date());
-			int update = dbDao.update(passport);
-			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
-					Cnd.where("applicantId", "=", passport.getApplicantId()));
+			dbDao.update(passport);
 
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, passportForm.getApplicantId().longValue());
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
