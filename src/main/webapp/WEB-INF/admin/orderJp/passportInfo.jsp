@@ -138,7 +138,7 @@
 							 	<div class="form-group groupWidth" style="position:relative;">
 									<label><span>*</span>出生地点/拼音</label>
 									<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
-									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:38px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
+									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:32px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -155,7 +155,7 @@
 								<div class="form-group groupWidth" style="position:relative;">
 									<label><span>*</span>签发地点/拼音</label>
 									<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
-									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:38px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
+									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:32px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -1013,34 +1013,49 @@
 						
 						}else{
 							var addApply = '${obj.addApply}';
-							layer.load(1);
-							$.ajax({
-								type: 'POST',
-								data : passportInfo,
-								url: '${base}/admin/orderJp/saveEditPassport',
-								success :function(data) {
-									layer.closeAll("loading");
-									console.log(JSON.stringify(data));
-									/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-									layer.close(index); */
-									if(status == 2){
-										socket.onclose();
-										window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
+							if(status == 2){
+								socket.onclose();
+								window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
+								$.ajax({
+									type: 'POST',
+									data : passportInfo,
+									url: '${base}/admin/orderJp/saveEditPassport',
+									success :function(data) {
 									}
-									if(status == 1){
-										closeWindow();
-										if(addApply == 1){
-											parent.successCallBack(3);
-										}else{
-											parent.successCallBack(1);
-										}
+								});
+							}
+							if(status == 3){
+								socket.onclose();
+								window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
+								$.ajax({
+									type: 'POST',
+									data : passportInfo,
+									url: '${base}/admin/orderJp/saveEditPassport',
+									success :function(data) {
 									}
-									if(status == 3){
-										socket.onclose();
-										window.location.href = '/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial='+${obj.isTrailOrder}+'&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
+								});
+							}
+							if(status == 1){
+								layer.load(1);
+								$.ajax({
+									type: 'POST',
+									data : passportInfo,
+									url: '${base}/admin/orderJp/saveEditPassport',
+									success :function(data) {
+										layer.closeAll("loading");
+										console.log(JSON.stringify(data));
+										/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+										layer.close(index); */
+											closeWindow();
+											if(addApply == 1){
+												parent.successCallBack(3);
+											}else{
+												parent.successCallBack(1);
+											}
 									}
-								}
-							});
+								});
+								
+							}
 						}
 					 }
 					}, 500);

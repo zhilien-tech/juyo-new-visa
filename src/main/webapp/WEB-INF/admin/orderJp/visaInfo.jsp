@@ -973,8 +973,8 @@
 				$("#wealth").val(0);
 			}
 			var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
-			layer.load(1);
 			if(userType == 2){
+				layer.load(1);
 				$.ajax({
 					type: 'POST',
 					async: false,
@@ -1232,27 +1232,33 @@
 				
 			}else{
 				var addApply = '${obj.addApply}';
-				//layer.load(1);
-				$.ajax({
-					type: 'POST',
-					data : passportInfo,
-					url: '${base}/admin/orderJp/saveEditVisa',
-					success :function(data) {
-						layer.closeAll("loading");
-						if(status == 1){
-							closeWindow();
-							if(addApply == 1){
-								parent.successCallBack(3);
-							}else{
-								parent.successCallBack(1);
-							}
+				if(status == 2){
+					socket.onclose();
+					window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder}+'&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
+					$.ajax({
+						type: 'POST',
+						data : passportInfo,
+						url: '${base}/admin/orderJp/saveEditVisa',
+						success :function(data) {
 						}
-						if(status == 2){
-							socket.onclose();
-							window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+${obj.isTrailOrder}+'&orderProcessType=${obj.orderProcessType}&addApply=${obj.addApply}';
+					});
+				}else{
+					layer.load(1);
+					$.ajax({
+						type: 'POST',
+						data : passportInfo,
+						url: '${base}/admin/orderJp/saveEditVisa',
+						success :function(data) {
+							layer.closeAll("loading");
+								closeWindow();
+								if(addApply == 1){
+									parent.successCallBack(3);
+								}else{
+									parent.successCallBack(1);
+								}
 						}
-					}
-				});
+					});
+				}
 			}
 		}
 		

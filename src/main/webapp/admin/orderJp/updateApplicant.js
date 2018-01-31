@@ -1379,30 +1379,36 @@ function saveApplicant(status){
 			}
 		});
 	}else{
-		layer.load(1);
-		$.ajax({
-			type: 'POST',
-			data : applicantInfo,
-			url: BASE_PATH + '/admin/orderJp/saveEditApplicant.html',
-			success :function(data) {
-				layer.closeAll("loading");
-				console.log(JSON.stringify(data));
-				//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-				//layer.close(index);
-				if(status == 2){
-					socket.onclose();
-					window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType='+orderProcessType+'&addApply='+addApply;
+		if(status == 2){
+			socket.onclose();
+			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType='+orderProcessType+'&addApply='+addApply;
+			$.ajax({
+				type: 'POST',
+				data : applicantInfo,
+				url: BASE_PATH + '/admin/orderJp/saveEditApplicant.html',
+				success :function(data) {
 				}
-				if(status == 1){
-					closeWindow();
-					if(addApply == 1){
-						parent.successCallBack(3);
-					}else{
-						parent.successCallBack(1);
-					}
+			});
+		}else{
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : applicantInfo,
+				url: BASE_PATH + '/admin/orderJp/saveEditApplicant.html',
+				success :function(data) {
+					layer.closeAll("loading");
+					console.log(JSON.stringify(data));
+					//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+					//layer.close(index);
+						closeWindow();
+						if(addApply == 1){
+							parent.successCallBack(3);
+						}else{
+							parent.successCallBack(1);
+						}
 				}
-			}
-		});
+			});
+		}
 	}
 	}
 }
