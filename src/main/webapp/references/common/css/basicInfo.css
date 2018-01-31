@@ -3,8 +3,16 @@ img[src=""], img:not ([src] ) {
 }
 
 input[type="file"] {
+	z-index: 99999;
+}
+#sqImg {
 	z-index: 999999;
 }
+
+#sqImgBack {
+	z-index: 999999;
+}
+
 .delete { 
 	z-index:1000000;
 }
@@ -149,4 +157,11 @@ input[type="file"] {
 
 .IdInfo li a {
 	color: #000;
+}
+.mainWidth {
+	width: 100% !important;
+}
+
+#uploadFile, #uploadFileBack {
+	width: 100% !important;
 }

@@ -15,7 +15,8 @@
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
 	img[src=""],img:not([src]) { opacity:0;}
-	input[type="file"] { z-index:999999;}
+	input[type="file"] { z-index:99999;}
+	#sqImg { z-index:999999;}
 	.modal-body { height:100% !important; background: #FFF !important; padding:0px 70px !important;}
 	.info-imgUpload {width: 100%;}
 	.NoInfo { width:100%; height:30px; margin-top:0px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
@@ -36,11 +37,12 @@
     #editbasic ,#backBtn ,#addBtn { margin-top:10px;}
     .delete { z-index:1000000;}
     .hideVisaInfo { display:none;}
+    .btn-Bank { width:70px !important;}
     /*弹框头部固定*/
     .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
     .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; padding:15px 37px 15px 53px;}  
-    .cardFront-div #uploadFile { top:0;width:100%;height:200px;left:0;position:absolute;}
+    .cardFront-div #uploadFile { top:0;width:100% !important;height:200px;left:0;position:absolute;}
     /*左右导航样式*/
     .leftNav { position:fixed;top:50px;left:4px;z-index:999; width:40px;height:calc(100% - 50px); cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
@@ -551,7 +553,7 @@
 									<c:otherwise>
 									</c:otherwise>
 								</c:choose >
-							 id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState" />
+							 id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState btn-Bank" />
 							<input 
 								<c:choose>
 									<c:when test="${empty obj.contact}">
@@ -610,7 +612,7 @@
 										 id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder=" "  />
 									</div>
 								</div>
-								<div style="float:left;  margin:45px 0 0 -23px;">
+								<div style="float:left;  margin:40px 0 0 -23px;">
 								万
 								</div>
 							</div><!-- end 银行存款 -->
@@ -689,7 +691,7 @@
 										 id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder=" "  />
 									</div>
 								</div>
-								<div style="float:left;  margin:45px 0 0 -23px;">
+								<div style="float:left;  margin:40px 0 0 -23px;">
 								平米
 								</div>
 							</div><!-- end 房产 -->
@@ -730,7 +732,7 @@
 										 id="financial" name="financial" type="text" class="form-control input-sm" placeholder=" "  />
 									</div>
 								</div>
-								<div style="float:left;  margin:45px 0 0 -23px;">
+								<div style="float:left;  margin:40px 0 0 -23px;">
 								万
 								</div>
 							</div><!-- end 房产 -->

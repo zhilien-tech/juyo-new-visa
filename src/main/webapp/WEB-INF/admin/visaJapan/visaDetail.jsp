@@ -33,8 +33,8 @@
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
 					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/>
-					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(22)"/>
-					<input type="button" value="招宝变更" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(19)"/>
+					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(22)"/>
+					<input type="button" value="招宝变更" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(19)"/>
 					<input type="button" value="发招宝" class="btn btn-primary btn-sm pull-right" onclick="sendzhaobao()"/>
 					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue()"/>
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log()"/>

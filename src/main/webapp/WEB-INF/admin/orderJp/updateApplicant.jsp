@@ -30,7 +30,7 @@
 .rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 .nationalityHide { margin-left:3%;}
-.row { margin-top:3px;}
+.row { margin-top:8.3px;}
 .nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
 .btn-margin { margin-top:10px;}
 #sqImg ,#sqImgBack { width:335px;}
@@ -38,12 +38,16 @@
 .marginL { margin-left:30px;}
 .nameBeforeTop { margin-left:30px;}
 img[src=""],img:not([src]) { opacity:0;}
-input[type="file"] { z-index:999999;}
+input[type="file"] { z-index:99999;}
+#sqImg { z-index:999999;}
+#sqImgBack { z-index:999999;}
 .IdInfo { border:1px solid #7a9cd3;}
 .IdInfo li { padding-left:2%;}
 .IdInfo li:hover { background:#1e90ff; cursor:pointer;}
 .IdInfo li:hover a { color:#FFF;}
 .IdInfo li a { color:#000;}
+.mainWidth { width:100% !important;}
+#uploadFile,#uploadFileBack { width:100% !important;}
 </style>
 </head>
 <body>
@@ -78,7 +82,7 @@ input[type="file"] { z-index:999999;}
 						</div> <!-- end 身份证 正面 -->
 						<div class="info-imgUpload front has-error" id="borderColorFront">
 							<!-- 身份证 正面 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 mainWidth">
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传身份证正面</span>
@@ -97,7 +101,7 @@ input[type="file"] { z-index:999999;}
 
 						<div class="info-imgUpload back has-error" id="borderColorBack">
 							<!-- 身份证 反面 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 mainWidth">
 								<div class="form-group">
 									<div class="cardFront-div">
 										<span>点击上传身份证背面</span>
@@ -109,7 +113,7 @@ input[type="file"] { z-index:999999;}
 								</div>
 							</div>
 						</div>
-						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 0 32px !important">
+						<div class="col-xs-6 front has-error" style="width:320px; height:20px; border:0 !important; color:red;margin:-20px 0 0 32px !important">
 							<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
 						</div>
 						<!-- end 身份证 反面 -->
@@ -422,7 +426,7 @@ input[type="file"] { z-index:999999;}
 			if(nation == 1){
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
-				$(".onceIDTop").css({'float':'left','margin-left':'0px','padding':'0px'});
+				$(".onceIDTop").css({'float':'left','margin-left':'45px','padding':'0px'});
 			}else {
 				$(".nationalityHide").hide();
 			}
