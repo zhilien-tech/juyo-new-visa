@@ -1094,7 +1094,7 @@ $(".qualified").click(function(){
 		}
 	});
 });
-
+//保存申请人基本信息
 function saveApplicant(status){
 	$("#applicantInfo").data('bootstrapValidator').destroy();
 	$("#applicantInfo").data('bootstrapValidator', null);

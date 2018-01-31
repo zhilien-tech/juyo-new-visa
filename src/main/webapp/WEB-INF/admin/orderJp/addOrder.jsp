@@ -432,129 +432,6 @@
 						</div>
 					</div>
 					<!-- end 主申请人 -->
-
-
-					<%-- <div class="row body-from-input" id="backmailInfo">
-						<!-- 添加回邮信息 -->
-						<div class="col-sm-12">
-							<div class="form-group">
-								<button type="button"
-									class="btn btn-primary btn-sm addExpressInfoBtn">添加回邮信息</button>
-							</div>
-						</div>
-					</div>
-					<!-- end 添加回邮信息 -->
-
-					<!-- 快递信息 -->
-					<div class="info expressInfo none" id="expressInfo"
-						name="backmailInfo">
-						<p class="info-head">回邮信息</p>
-						<div class="info-body-from backmail-div">
-							<div class="row body-from-input">
-								<!-- 资料来源/快递号/团队名称/回邮方式 -->
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>资料来源：</label> <select id="datasour"
-											name="source" class="form-control input-sm">
-											<c:forEach var="map"
-												items="${obj.mainBackMailSourceTypeEnum}">
-												<option value="${map.key}">${map.value}</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>快递号：</label> <input id="expressNum"
-											name="expressNum" type="text" class="form-control input-sm"
-											placeholder=" " />
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>团队名称：</label> <input id="teamName" name="teamName"
-											type="text" class="form-control input-sm" placeholder=" " />
-										
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>回邮方式：</label> <select id="expressType"
-											name="expressType" class="form-control input-sm">
-											<c:forEach var="map" items="${obj.mainBackMailTypeEnum}">
-												<option value="${map.key}">${map.value}</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-								</div>
-								<!-- end 资料来源/快递号/团队名称/回邮方式 -->
-								
-							
-
-							<div class="row body-from-input" style="padding-left:0;">
-								<!-- 回邮地址/联系人/电话 -->
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>回邮地址：</label> <input id="expressAddress"
-											name="expressAddress" type="text"
-											class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>联系人：</label> <input id="expressLinkman"
-											name="linkman" type="text" class="form-control input-sm"
-											placeholder=" " />
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>电话：</label> <input id="expressTelephone"
-											name="telephone" type="text" class="form-control input-sm"
-											placeholder=" " />
-									</div>
-								</div>
-								</div>
-								<!-- end 回邮地址/联系人/电话/ -->
-
-							<div class="row body-from-input" style="padding-left:0;">
-								<!-- 发票项目内容/发票抬头/税号/备注 -->
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>发票项目内容：</label> <input
-											id="invoiceContent" name="invoiceContent" type="text"
-											class="form-control input-sm" placeholder=" " />
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label><span>*</span>发票抬头：</label> <input id="invoiceHead"
-											name="invoiceHead" type="text" class="form-control input-sm"
-											placeholder=" " />
-									</div>
-								</div>
-								
-								<div class="col-sm-3">
-										<div class="form-group">
-											<label><span>*</span>税号：</label> 
-											<input name="taxNum" type="text" class="form-control input-sm" placeholder=" " />
-										</div>
-									</div>
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>备注：</label> <input id="remark"
-											name="remark" type="text" class="form-control input-sm"
-											placeholder=" " />
-									</div>
-								</div>
-							</div>
-							<!-- end 发票项目内容/发票抬头/税号/备注 -->
-							<i class="add-btn"></i>
-						</div>
-					</div> --%>
-					<!-- end 快递信息 -->
-
 				</form>
 			</section>
 		</div>
@@ -579,19 +456,6 @@
 	<script type="text/javascript">
 		$(function(){
 			customerTypeSelect2();
-			//客户类型判断是不是直客
-			/* $("#customerType").change(function(){
-				var customerVal = $(this).val();
-				if(customerVal == 4){//直客
-					$(".on-line").hide();//隐藏select2部分字段
-					$(".zhiKe").removeClass("none");
-				}else{
-					$(".on-line").show();//显示select2部分字段
-					$(".zhiKe").addClass("none");
-				}
-			}); */
-			
-			
 			$("#customerType").change(function(){
 				$("#linkman2").val("");
 				$("#compName2").val("");
@@ -617,7 +481,6 @@
 				}else{
 					$(".on-line").show();//显示select2部分字段
 					$(".zhiKe").addClass("none");
-					//customerTypeSelect2();
 				}
 			});
 			
@@ -663,30 +526,18 @@
 			
 		});
 		
-			/* //点击 蓝色加号图标 事件
-			$('.add-btn').click(function(){
-		    	var $html=$(this).parent().clone();//克隆标签模块
-		    	$(this).parents('.info').append($html);//添加克隆的内容
-		    	$html.find('.add-btn').remove();
-		    	$html.append('<i class="remove-btn"></i>');
+		$("#addCustomer").click(function(){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['800px', '400px'],
+				content: BASE_PATH + '/admin/customer/add.html?isCustomerAdd=0'
 			});
-			//点击 蓝色叉号图标 事件
-			$(".info").on("click", ".remove-btn", function(){
-				$(this).parent().remove();//删除 对相应的本模块
-			}); */
-			
-			$("#addCustomer").click(function(){
-				layer.open({
-					type: 2,
-					title: false,
-					closeBtn:false,
-					fix: false,
-					maxmin: false,
-					shadeClose: false,
-					scrollbar: false,
-					area: ['800px', '400px'],
-					content: BASE_PATH + '/admin/customer/add.html?isCustomerAdd=0'
-				});
 		});
 		
 		function successAddCustomer(data){
