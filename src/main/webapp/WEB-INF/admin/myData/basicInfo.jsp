@@ -1769,12 +1769,14 @@
 			},
 			url : BASE_PATH+'/admin/orderJp/getNationality.html',
 			success : function(data) {
-				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
-				$.each(data,function(index,element) { 
-					liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
-				});
-				liStr += "</ul>";
-				$("#nationality").after(liStr);
+				if(data != ""){
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#nationality").after(liStr);
+				}
 			}
 		});
 	});
@@ -1798,12 +1800,14 @@
 			},
 			url : BASE_PATH+'/admin/orderJp/getProvince.html',
 			success : function(data) {
-				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
-				$.each(data,function(index,element) { 
-					liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
-				});
-				liStr += "</ul>";
-				$("#province").after(liStr);
+				if(data != ""){
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#province").after(liStr);
+				}
 			}
 		});
 	});
@@ -1829,12 +1833,14 @@
 			},
 			url : BASE_PATH+'/admin/orderJp/getCity.html',
 			success : function(data) {
-				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
-				$.each(data,function(index,element) { 
-					liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
-				});
-				liStr += "</ul>";
-				$("#city").after(liStr);
+				if(data != ""){
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#city").after(liStr);
+				}
 			}
 		});
 	});

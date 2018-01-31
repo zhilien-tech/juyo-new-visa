@@ -235,7 +235,6 @@
 		var userType = '${obj.userType}';
 		$(function() {
 			
-			if(userType != 2){
 				//校验
 				$('#passportInfo').bootstrapValidator({
 					message : '验证不通过',
@@ -267,7 +266,6 @@
 						}
 					}
 				});
-			}
 			$('#passportInfo').bootstrapValidator('validate');
 			//护照图片验证
 			var passportUrl = $("#passportUrl").val();
@@ -315,39 +313,7 @@
 		});
 		
 		function passValidate(){
-			if(userType != 2){
-				//校验
-				$('#passportInfo').bootstrapValidator({
-					message : '验证不通过',
-					feedbackIcons : {
-						valid : 'glyphicon glyphicon-ok',
-						invalid : 'glyphicon glyphicon-remove',
-						validating : 'glyphicon glyphicon-refresh'
-					},
-					fields : {
-						passport : {
-							trigger:"change keyup",
-							validators : {
-			                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
-									url: '${base}/admin/orderJp/checkPassport.html',
-									async:false,
-									message: '护照号已存在，请重新输入',//提示消息
-									delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
-									type: 'POST',//请求方式
-									//自定义提交数据，默认值提交当前input value
-									data: function(validator) {
-										return {
-											passport:$('#passport').val(),
-											adminId:$('#id').val(),
-											orderid:$('#orderid').val()
-										};
-									}
-								}
-							}
-						}
-					}
-				});
-			}else{
+			if(userType == 2){
 				//护照图片验证
 				var passportUrl = $("#passportUrl").val();
 				if(passportUrl == ""){
@@ -715,12 +681,15 @@
 		
 		//保存
 		function save(status){
-			$("#passportInfo").data('bootstrapValidator').destroy();
-			$("#passportInfo").data('bootstrapValidator', null);
-			passValidate();
+			if(userType == 2){
+				$("#passportInfo").data('bootstrapValidator').destroy();
+				$("#passportInfo").data('bootstrapValidator', null);
+				passValidate();
+			}
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-			bootstrapValidator.validate();
+			//alert(bootstrapValidator.isValid());
+			//bootstrapValidator.validate();
 			if(userType == 2 && status != 2){
 				if($(".front").hasClass("has-error")){
 					$(".help-blockFront").attr("style","display: block;");  
