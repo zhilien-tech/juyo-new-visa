@@ -60,6 +60,7 @@
     	.modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
     	.btn-margin { margin-top:10px;}
   	  .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; } 		
+  	  .btn-Address { width:70px !important;}
 	</style>
 </head>
 <body>
@@ -69,7 +70,7 @@
 				<span class="heading">快递</span>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save(${obj.orderid},${obj.orderjpid}, 1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
-				<input id="sendBtn" type="button" onclick="save(${obj.orderid},${obj.orderjpid}, 2);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="地址通知" />
+				<input id="sendBtn" type="button" onclick="save(${obj.orderid},${obj.orderjpid}, 2);" class="btn btn-primary pull-right btn-sm btn-right btn-margin btn-Address" value="地址通知" />
 			</div>
 			<div class="modal-body">
 				<input id="orderid" type="hidden" value="${obj.orderid}">

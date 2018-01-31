@@ -39,6 +39,7 @@
 			.liClose a { display:block; width:40px; height:51px; cursor:pointer;}
 			.closed { position:relative; width:3px; height:20px; margin:15px 0 0 20px; background: #333; -webkit-transform: rotate(45deg);  -moz-transform: rotate(45deg);  -o-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg);  display: inline-block; }
  			.closed:after{ content: "";  position: absolute;  top: 0;  left: 0;   width:3px;  height:20px;  background: #333;   -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg);  -o-transform: rotate(270deg); -ms-transform: rotate(270deg);  transform: rotate(270deg); }
+			.btn-Add { width:100px !important;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -56,7 +57,7 @@
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-12">
-								<a class="btn btn-primary btn-sm pull-right" href="javascript:add();" id="">添加已有签证</a>
+								<a class="btn btn-primary btn-sm pull-right btn-Add" href="javascript:add();" id="">添加已有签证</a>
 							</div>
 						</div>
 					</div><!-- end 检索条件 -->
