@@ -2037,7 +2037,7 @@
 				$(".nameBeforeTop").css('float','none');
 				$(".nameBeforeHide").show();
 				$(".wordSpell").show();
-				$(".onceIDTop").css('margin-left','45px');
+				$(".onceIDTop").css('margin-left','30px');
 			}else {
 				
 				$(".nameBeforeHide").hide();
@@ -2058,7 +2058,7 @@
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
 				$(".onceIDTop").css('float','left');
-				$(".onceIDTop").css('margin-left','45px');
+				$(".onceIDTop").css('margin-left','30px');
 				$("#nationality").val("").change();
 			}else {
 				
