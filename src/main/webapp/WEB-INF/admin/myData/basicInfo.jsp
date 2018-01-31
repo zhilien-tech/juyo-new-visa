@@ -367,7 +367,17 @@
 								</div>
 							</div>
 							<!-- 曾用国籍 -->
-							<div class="col-sm-5 padding-right-0 nationalityHide">
+							<c:choose>
+								<c:when test="${empty obj.contact}">
+									<div class="col-sm-5 padding-right-0 nationalityHide" style="margin-left:13%;">
+								</c:when>
+								<c:otherwise>
+									<div class="col-sm-5 padding-right-0 nationalityHide" style="margin-left:2%;">
+								</c:otherwise>
+													
+							</c:choose >
+							
+							
 								<div class="form-group" id="nationalityDiv">
 									<label>国籍</label> 
 									<c:choose>
