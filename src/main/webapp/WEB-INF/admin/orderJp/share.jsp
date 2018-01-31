@@ -167,7 +167,7 @@
 								maxmin: false,
 								shadeClose: false,
 								scrollbar: false,
-								area: ['900px', '551px'],
+								area: ['900px', '100%'],
 								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email,
 								success : function(index, layero){
 									
@@ -224,7 +224,7 @@
 								maxmin: false,
 								shadeClose: false,
 								scrollbar: false,
-								area: ['900px', '551px'],
+								area: ['900px', '100%'],
 								content:'${base}/admin/orderJp/getApplicantInfoValid.html?applicantId='+applicantId+'&telephone='+telephone+'&email='+email
 							}); 
 						}else{

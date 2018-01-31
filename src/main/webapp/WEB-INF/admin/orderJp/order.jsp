@@ -900,7 +900,7 @@
 						maxmin: false,
 						shadeClose: false,
 						scrollbar: false,
-						area: ['900px', '551px'],
+						area: ['900px', '80%'],
 						content:'/admin/orderJp/share.html?id='+id
 					});
 				},
