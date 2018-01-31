@@ -1104,7 +1104,17 @@
 														</c:otherwise>
 													
 													</c:choose >
-											 type="text" id="otherLastNameEn" style="position:absolute;top:30px;border:none;left:150px;" name="otherLastNameEn" />
+											 type="text" id="otherLastNameEn" 
+											 <c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+												</c:choose >
+											 			 name="otherLastNameEn" />
 										</c:when>
 										<c:otherwise>
 											<input 
@@ -1126,7 +1136,17 @@
 														</c:otherwise>
 													
 													</c:choose >
-											 type="text" id="otherLastNameEn" style="position:absolute;top:30px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+											 type="text" id="otherLastNameEn" 
+											 <c:choose>
+												<c:when test="${empty obj.contact}">
+													style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+												</c:when>
+												<c:otherwise>
+													style="position:absolute;top:30px;border:none;left:150px;"
+												</c:otherwise>
+													
+											</c:choose >
+											  name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
 										</c:otherwise>
 									</c:choose>
 								</div>
