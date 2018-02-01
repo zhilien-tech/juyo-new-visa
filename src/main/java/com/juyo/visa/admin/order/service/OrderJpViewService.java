@@ -732,32 +732,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		changePrincipalViewService.ChangePrincipal(orderEntity.getId(), JPOrderProcessTypeEnum.SALES_PROCESS.intKey(),
 				loginUser.getId());
-		//回邮信息
-		List<TOrderBackmailEntity> backMailInfos = orderInfo.getBackMailInfos();
-		String editBackMailInfos = editBackMailInfos(backMailInfos, orderId);
 		return orderEntity;
-	}
-
-	public String editBackMailInfos(List<TOrderBackmailEntity> backMailInfos, Integer orderid) {
-
-		List<TOrderBackmailEntity> beforeBackMails = dbDao.query(TOrderBackmailEntity.class,
-				Cnd.where("orderId", "=", orderid), null);
-
-		List<TOrderBackmailEntity> updateBackMails = new ArrayList<TOrderBackmailEntity>();
-
-		for (TOrderBackmailEntity backMailInfo : backMailInfos) {
-			Date nowDate = DateUtil.nowDate();
-			Integer obmId = backMailInfo.getId();
-			if (Util.isEmpty(obmId)) {
-				backMailInfo.setCreateTime(nowDate);
-			}
-			backMailInfo.setOrderId(orderid);
-			backMailInfo.setUpdateTime(nowDate);
-			updateBackMails.add(backMailInfo);
-		}
-		dbDao.updateRelations(beforeBackMails, updateBackMails);
-
-		return "更新回邮信息";
 	}
 
 	public Object fetchOrder(Integer id) {
@@ -828,6 +803,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Sql applicantSql = Sqls.create(applicantSqlstr);
 		applicantSql.setParam("id", id);
 		List<Record> applicantInfo = dbDao.query(applicantSql, null, null);
+		for (int i = 0; i < applicantInfo.size(); i++) {
+			if (Util.eq(applicantInfo.get(i).get("id"), applicantInfo.get(i).get("mainId"))) {
+				applicantInfo.add(0, applicantInfo.get(i));
+				applicantInfo.remove(i + 1);
+			}
+		}
 		result.put("applicantInfo", applicantInfo);
 		//回邮信息
 		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class, Cnd.where("orderId", "=", id)
@@ -1130,6 +1111,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					Cnd.where("applicantId", "=", new Long((Integer) applicantInfoMainId.get(i).get("id")).intValue()));
 			if (Util.eq(applicantInfoMainId.get(i).get("id"), applicantInfoMainId.get(i).get("mainId"))) {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+				applicantInfoMainId.add(0, applicantInfoMainId.get(i));
+				applicantInfoMainId.remove(i + 1);
 			} else {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
 			}
@@ -2512,6 +2495,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					Cnd.where("applicantId", "=", new Long((Integer) applicantInfoMainId.get(i).get("id")).intValue()));
 			if (Util.eq(applicantInfoMainId.get(i).get("id"), applicantInfoMainId.get(i).get("mainId"))) {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+				applicantInfoMainId.add(0, applicantInfoMainId.get(i));
+				applicantInfoMainId.remove(i + 1);
 			} else {
 				applicantJp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
 			}

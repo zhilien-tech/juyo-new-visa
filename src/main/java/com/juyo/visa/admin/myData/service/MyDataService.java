@@ -978,6 +978,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		Sql orderSql = Sqls.create(orderSqlstr);
 		Cnd orderJpCnd = Cnd.NEW();
 		orderJpCnd.and("ta.userId", "=", loginUser.getId());
+		orderJpCnd.and("taoj.isSameLinker", "=", IsYesOrNoEnum.YES.intKey());
 		orderSql.setCondition(orderJpCnd);
 		List<Record> orderRecord = dbDao.query(orderSql, orderJpCnd, null);
 		for (Record record : orderRecord) {
