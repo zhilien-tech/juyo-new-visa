@@ -32,6 +32,8 @@ $condition
 /*mydata_applys*/
 SELECT
 	ttb.applicantId,
+	taoj.id applyJpId,
+	toj.id orderJpId,
 	CONCAT( ttb.firstName, ttb.lastName ) applicantname,
 	ttb.telephone,
 	ttp.passport
@@ -43,7 +45,7 @@ LEFT JOIN
 t_order_jp toj ON taoj.orderId = toj.id
 LEFT JOIN
 t_order tr ON toj.orderId = tr.id
-LEFT JOIN
+INNER JOIN
 t_tourist_baseinfo ttb ON ttb.applicantId = ta.id
 LEFT JOIN
 t_tourist_passport ttp ON ttp.applicantId = ta.id

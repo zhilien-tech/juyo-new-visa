@@ -993,7 +993,6 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 			Sql applicantSql = Sqls.create(applicantSqlstr);
 			Cnd appcnd = Cnd.NEW();
 			appcnd.and("toj.orderId", "in", applicants);
-			appcnd.and("ttb.userId", "!=", loginUser.getId());
 			applicantSql.setCondition(appcnd);
 			List<Record> applicantInfo = dbDao.query(applicantSql, appcnd, null);
 			result.put("visaJapanData", applicantInfo);

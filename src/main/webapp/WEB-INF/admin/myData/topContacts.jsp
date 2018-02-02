@@ -25,7 +25,7 @@
 		.everybody-info div:nth-child(5){width:15%;}
 		
 		.card-list {
-			height:153px;
+			height:72px;
 		}
 		.content-title {
 			height:30px;
@@ -41,7 +41,7 @@
 		}
 		.content-main-center {
 			float:left;
-			width:25%;
+			width:100%;
 			height:93px;
 		}
 		.center-right {
@@ -67,42 +67,27 @@
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<section class="content" id="card">
-					<div class="box-body"  v-cloak v-for="data in myVisaData" style="cursor:pointer;position: relative;z-index:999;"><!-- 卡片列表 -->
+					<div class="box-body"  v-cloak v-for="data in myVisaData" style="cursor:default;position: relative;z-index:999;"><!-- 卡片列表 -->
 						<div   class="card-list" >
-							<div class="content-title">
-								<span>{{data.applicantname}}</span>
-								<span></span>
-							</div>
 							<div class="content-main">
-								<div class="content-main-center content-main-left">
+								<!-- <div class="content-main-center content-main-left"> -->
 									<dl>
 
-										<dd><label>姓&nbsp;&nbsp;&nbsp;名：</label><span>{{data.applicantname}}</span></dd>
-										<dd><label>手机号：</label><span>{{data.telephone}}</span></dd>
-										<dd><label>护照号：</label><span>{{data.passport}}</span></dd>
+										<dd ><label></label><span >{{data.applicantname}}</span>&nbsp;&nbsp;&nbsp;
+											<label></label><span >{{data.passport}}</span>&nbsp;&nbsp;&nbsp;
+											<label></label><span >{{data.telephone}}</span>&nbsp;&nbsp;&nbsp;
+											<label></label><span style="cursor:pointer;"><a v-on:click="updateApplicant(data.applicantid);">基本信息</a></span>&nbsp;&nbsp;&nbsp;
+											<label></label><span style="cursor:pointer;"><a v-on:click="passport(data.applicantid)">护照信息</a></span>&nbsp;&nbsp;&nbsp;
+											<label></label><span style="cursor:pointer;"><a v-on:click="visa(data.applicantid)">签证信息</a></span>&nbsp;&nbsp;&nbsp;
+											<label></label><span style="cursor:pointer;"><a v-on:click="visaInput(data.applyjpid,data.orderjpid)">签证录入</a></span>
+										</dd>
 									</dl>
-								</div>
+								<!-- </div> -->
 									
-								<!-- <div class="content-main-center">
-									<dl>
-										<dd><label>&nbsp;</label><span></span></dd>
-										<dd><label>送签时间：</label><span>{{data.sendvisadate}}</span></dd>
-										<dd><label>出签时间：</label><span>{{data.outvisadate}}</span></dd>
-									</dl>
-								</div> -->
-								<div class="content-main-center center-right"><!-- {{data.orderstatus}} --></div>
+								<!-- <div class="content-main-center center-right">{{data.orderstatus}}</div> -->
 								
 							</div>
 						</div>
-						<div style="position: absolute;top:111px;right:0; width:20%;height:auto;z-index:9999;" class="" >
-						<div class="content-main-center" style="width:100%; height:20px;">
-									<div class="">
-										<a v-on:click="edit(data.applicantid)" style="cursor:pointer;">资料编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
-										<!-- <a v-on:click="download(data.applicantid)" style="cursor:pointer;">下载</a> -->
-
-									</div>
-								</div>
-								</div>
 					</div><!-- end 卡片列表 -->
 				</section>
 	<script type="text/javascript">
@@ -141,8 +126,8 @@
 	    			//跳转到签证进度页面
 	    			window.location.href = '/admin/myVisa/flowChart.html?orderid='+orderid+'&applicantid='+applicantid;
 	    		},
-	    		edit:function(applyId){
-	    			layer.open({
+	        	updateApplicant:function(applyId){
+	        		layer.open({
 						type: 2,
 						title: false,
 						closeBtn:false,
@@ -153,7 +138,46 @@
 						area: ['900px', '80%'],
 						content:'/admin/myData/basic.html?contact=1&applyId='+applyId
 					});
-	        	} ,
+	        	},
+	        	passport:function(applyId){
+	        		layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '80%'],
+						content:'/admin/myData/passport.html?contact=1&applyId='+applyId
+					});
+	        	},
+	        	visa:function(applyId){
+	        		layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '80%'],
+						content:'/admin/myData/visa.html?contact=1&applyId='+applyId
+					});
+	        	},
+	        	visaInput:function(applyId,orderJpId){
+	        		layer.open({
+	    				type: 2,
+	    				title: false,
+	    				closeBtn:false,
+	    				fix: false,
+	    				maxmin: false,
+	    				shadeClose: false,
+	    				scrollbar: false,
+	    				area: ['1000px', '80%'],
+	    				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&orderid='+orderJpId
+	    			});
+	        	}
 	        }
 		});
 		
