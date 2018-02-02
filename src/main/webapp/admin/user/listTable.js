@@ -108,7 +108,7 @@ function add(){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '450px'],
+		area: ['900px', '60%'],
 		content: BASE_PATH + '/admin/user/add.html'
 	});
 }
@@ -122,7 +122,7 @@ function edit(id){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '450px'],
+		area: ['900px', '60%'],
 		content: BASE_PATH + '/admin/user/update.html?id='+id
 	});
 }

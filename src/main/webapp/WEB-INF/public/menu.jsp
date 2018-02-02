@@ -55,10 +55,96 @@ $(function(){
             <li id="${status.index+1 }" class="nav-item">
             	<c:choose>
 				<c:when test="${empty function.url }">
-                    <a><i class="my-icon nav-icon icon_1"></i><span>${function.funName }</span><i class="my-icon nav-more"></i></a>
+                    <a>
+                    <c:if test="${function.funName == '公司管理'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '客户管理'}">
+                    	<i class="iconfont icon-zhucetianjiahaoyou"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '销售'}">
+                    	<i class="iconfont icon-huobi"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '初审'}">
+                    	<i class="iconfont icon-SQLshenhe"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '前台'}">
+                    	<i class="iconfont icon-computer"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '签证'}">
+                    	<i class="iconfont icon-wxbzhanghu"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '我的签证'}">
+                    	<i class="iconfont icon-wxbzhanghu"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '申请人资料'}">
+                    	<i class="iconfont icon-wxbzhanghu"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '售后'}">
+                    	<i class="iconfont icon-iconfontfuwushichang"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '城市管理'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '航班管理'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '酒店管理'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '景点管理'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '统计'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                    <span>${function.funName }</span><i class="iconfont icon-arrowright btnMore"></i></a>
                	</c:when>
                	<c:otherwise>
-					<a href="${function.url }?currentPageIndex=${status.index+1 }" class="subnavTwo" target="mainIframe"><i class="my-icon nav-icon icon_1"></i><span>${function.funName }</span><i class="my-icon nav-more moreHide"></i></a>
+					<a href="${function.url }?currentPageIndex=${status.index+1 }" class="subnavTwo" target="mainIframe">
+					 <c:if test="${function.funName == '公司管理'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '客户管理'}">
+                    	<i class="iconfont icon-zhucetianjiahaoyou"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '销售'}">
+                    	<i class="iconfont icon-huobi"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '初审'}">
+                    	<i class="iconfont icon-SQLshenhe"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '前台'}">
+                    	<i class="iconfont icon-computer"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '我的签证'}">
+                    	<i class="iconfont icon-wxbzhanghu"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '申请人资料'}">
+                    	<i class="iconfont icon-wxbzhanghu"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '签证'}">
+                    	<i class="iconfont icon-wxbzhanghu"></i>
+                    </c:if>
+                    <c:if test="${function.funName == '售后'}">
+                    	<i class="iconfont icon-iconfontfuwushichang"></i>
+                    </c:if>
+                      <c:if test="${function.funName == '城市管理'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '航班管理'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '酒店管理'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '景点管理'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '统计'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+					<span>${function.funName }</span><i class="iconfont"></i></a>
 				</c:otherwise>
                	</c:choose>
                 <ul class="navUl">

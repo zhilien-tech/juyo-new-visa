@@ -14,7 +14,6 @@
           <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
           <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
           <link rel="stylesheet" href="${base}/references/public/css/style.css">
-          <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 			<section class="content">
@@ -73,8 +72,10 @@
 	<!-- 公用js文件 -->
 	<script src="${base}/references/common/js/base/base.js"></script>
 	<!-- 引入DataTables JS -->
+	<!-- 图标提示语 -->
+	<script src="${base}/references/common/js/base/baseIcon.js"></script>
+	<!-- 本页js -->
 	<script src="${base}/admin/user/listTable.js"></script>
-	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
 			var BASE_PATH = '${base}';
 			$(function () {
