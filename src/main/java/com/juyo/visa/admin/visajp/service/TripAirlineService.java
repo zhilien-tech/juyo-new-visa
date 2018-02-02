@@ -129,9 +129,11 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 	//清除缓存的航班
 	public void deleteAielineCache() {
 		Map<String, String> hgetAll = redisDao.hgetAll(CommonConstants.AIRLINE_INFO_KEY);
-		Set<Entry<String, String>> entrySet = hgetAll.entrySet();
-		for (Entry<String, String> entry : entrySet) {
-			redisDao.hdel(CommonConstants.AIRLINE_INFO_KEY, entry.getKey());
+		if (!Util.isEmpty(hgetAll)) {
+			Set<Entry<String, String>> entrySet = hgetAll.entrySet();
+			for (Entry<String, String> entry : entrySet) {
+				redisDao.hdel(CommonConstants.AIRLINE_INFO_KEY, entry.getKey());
+			}
 		}
 	}
 

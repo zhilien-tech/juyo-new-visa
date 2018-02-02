@@ -47,4 +47,5 @@ public class TCustomerAddForm extends AddForm implements Serializable {
 	/**更新时间*/
 	private Date updateTime;
 
+	private String visatype;
 }

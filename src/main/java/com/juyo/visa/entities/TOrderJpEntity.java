@@ -81,4 +81,8 @@ public class TOrderJpEntity implements Serializable {
 	@Comment("上传名簿的URL")
 	private String excelurl;
 
+	@Column
+	@Comment("金额")
+	private String amount;
+
 }

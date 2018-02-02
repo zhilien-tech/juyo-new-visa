@@ -32,6 +32,7 @@
 		<servlet-name>SpringWebsocket</servlet-name>
 		<url-pattern>/websocket/*</url-pattern>
 		<url-pattern>/basicinfowebsocket/*</url-pattern>
+		<url-pattern>/simpleinfowebsocket/*</url-pattern>
 		<url-pattern>/sockjs/websocket/*</url-pattern>
 	</servlet-mapping>
 
