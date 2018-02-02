@@ -188,9 +188,19 @@ public class FirstTrialJpModule {
 			@Param("expresstype") Integer expresstype, @Param("sharetype") Integer sharetype,
 			@Param("receiver") String receiver, @Param("mobile") String mobile,
 			@Param("expressaddress") String expressaddress, @Param("shareManIds") String shareManIds,
-			HttpSession session) {
+			@Param("opType") Integer opType, HttpSession session) {
 		return firstTrialJpViewService.saveExpressInfo(orderid, orderjpid, expresstype, sharetype, receiver, mobile,
-				expressaddress, shareManIds, session);
+				expressaddress, shareManIds, opType, session);
+	}
+
+	/**
+	 * 初审 快递发送短信邮件
+	 */
+	@At
+	@POST
+	public Object sendExpressMsg(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid,
+			@Param("sharetype") Integer sharetype, @Param("shareManIds") String shareManIds) {
+		return firstTrialJpViewService.sendExpressMsg(orderid, orderjpid, sharetype, shareManIds);
 	}
 
 	/**
@@ -296,6 +306,25 @@ public class FirstTrialJpModule {
 	@Ok("jsp")
 	public Object validExpressManInfo(@Param("applicantId") Integer applyid, @Param("orderId") Integer orderid) {
 		return firstTrialJpViewService.isValidInfo(applyid, orderid);
+	}
+
+	/**
+	 * 判断订单收件信息是否填写
+	 */
+	@At
+	@POST
+	public Object getOrderRecipient(@Param("orderid") Integer orderid) {
+		return firstTrialJpViewService.getOrderRecipient(orderid);
+	}
+
+	/**
+	 * 地址通知，发送消息
+	 */
+	@At
+	@POST
+	public Object sendAddressMsg(@Param("orderid") Integer orderid, @Param("orderjpid") Integer orderjpid,
+			@Param("shareType") Integer shareType, @Param("shareManIds") String shareManIds, HttpSession session) {
+		return firstTrialJpViewService.sendAddressMsg(orderid, orderjpid, shareType, shareManIds, session);
 	}
 
 }

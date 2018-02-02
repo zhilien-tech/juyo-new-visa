@@ -20,6 +20,34 @@ FROM
 	LEFT JOIN ( SELECT toj.id orderjpid, tor.* FROM t_order_jp toj LEFT JOIN t_order tor ON tor.id = toj.orderid ) torj ON torj.orderjpid = taoj.orderId
 	$condition
 
+/*myvisa_visaList_data*/	
+SELECT
+	toj.id,
+	tr.orderNum japanNumber,
+	taoj.isSameLinker,
+	toj.acceptDesign number,
+	DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
+	DATE_FORMAT(tr.outVisaDate, '%Y-%m-%d') signingTime,
+	tr.STATUS japanState,
+	toj.visastatus visastatus,
+	(
+		SELECT
+			count(*)
+		FROM
+			t_applicant_order_jp
+		WHERE
+			orderId = toj.id
+	) peopleNumber
+FROM
+t_applicant ta
+LEFT JOIN
+t_applicant_order_jp taoj ON taoj.applicantId = ta.id
+LEFT JOIN
+t_order_jp toj ON taoj.orderId = toj.id
+LEFT JOIN
+t_order tr ON toj.orderId = tr.id
+$condition
+	
 /*myvisa_japan_visa_list_data*/
 SELECT
 	toj.id,
@@ -79,16 +107,7 @@ LEFT JOIN (
 		type,
 		GROUP_CONCAT(
 			(
-				CASE
-				WHEN STATUS = 0 THEN
-						realInfo
-				ELSE
-					CONCAT(
-						'<font color="blue">',
-						realInfo,
-						'</font>'
-					)
-				END
+				realInfo
 			) SEPARATOR '、'
 		) DATA,
 		STATUS
@@ -103,6 +122,7 @@ $condition
 SELECT
 	ta.userid,
 	taoj.applicantId,
+	taoj.id applyJpId,
 	CONCAT( ta.firstName, ta.lastName ) applicantname,
 	ta.telephone,
 	ta.status applicantstatus,

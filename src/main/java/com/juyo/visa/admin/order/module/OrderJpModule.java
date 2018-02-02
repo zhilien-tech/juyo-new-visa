@@ -107,7 +107,7 @@ public class OrderJpModule {
 	@GET
 	@Ok("jsp")
 	public Object order(@Param("id") Integer orderid, HttpSession session) {
-		return saleViewService.addOrder(orderid, session);
+		return saleViewService.editOrder(orderid, session);
 	}
 
 	/**

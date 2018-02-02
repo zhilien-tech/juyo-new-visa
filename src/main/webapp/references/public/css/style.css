@@ -62,6 +62,7 @@ body{overflow-x: auto;}
 .visaInput{background-image:url(../dist/newvisacss/img/visaInput.png);}
 .afterSales{background-image:url(../dist/newvisacss/img/afterSales.png);}
 .express{background-image:url(../dist/newvisacss/img/express.png);}
+.addressNotice{background-image:url(../dist/newvisacss/img/express.png);}
 .return{background-image:url(../dist/newvisacss/img/return.png);}
 .share{background-image:url(../dist/newvisacss/img/share.png);}
 .share1{background-image:url(../dist/newvisacss/img/shareGray.png);}
@@ -80,3 +81,5 @@ body{overflow-x: auto;}
 .videoShoot{background-image:url(../dist/newvisacss/img/videoShoot.png);}
 .visaTransfer{background-image:url(../dist/newvisacss/img/visaTransfer.png);}
 .sendSms{background-image:url(../dist/newvisacss/img/express.png);}
+.salesBtn { background-image:url(../dist/newvisacss/img/passportInfo.png);}
+.viseBtn { background-image:url(../dist/newvisacss/img/visaTransfer.png);}

@@ -20,7 +20,7 @@
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
 			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
-			.card-head div:nth-child(1){width:10%;}
+			.card-head div:nth-child(1){width:20.8%;}
 			.card-head div:nth-child(2){width:12.5%;}
 			.card-head div:nth-child(3){ width: 66px;float: right;}
 			.everybody-info div:nth-child(1){width:10%;}
@@ -28,11 +28,12 @@
 			.everybody-info div:nth-child(3){width:12%;}
 			.everybody-info div:nth-child(4){width:14%;}
 			.everybody-info div:nth-child(5){width:11%;}
-			.card-list{height: 87px;}
+			.card-list{height: 87px; margin-top: 10px;}
 			.card-list:hover{height: 87px !important;min-height: 87px !important;}
 			.box-header{padding-right: 16px;}
-			.box-body{padding-top:15px;}
+			.box-body{padding-top:0;}
 			.qz-head { border-bottom:2px solid #deecff; padding:15px 20px; display: table; width: 100%;}
+			.btn-sm { width:110px !important;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">

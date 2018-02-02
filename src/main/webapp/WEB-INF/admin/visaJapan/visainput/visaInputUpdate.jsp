@@ -19,6 +19,10 @@
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+<style type="text/css">
+#uploadFile { padding: 0; width: 125px !important; height: 30px;cursor:pointer;left:0 !important;}
+.imgR { border:1px solid #d1d5dd; padding: 0 !important; width: 46%; margin-left: 2%; min-height: 200px }
+</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -48,13 +52,13 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-sm-6">
+						<div class="col-sm-5 imgR">
 						<c:choose>
 							<c:when test="${empty obj.applicantvisa.picUrl }">
-								<img id="visapic" src=" " width="400px" height="200px">
+								<img id="visapic" src=" " width="100%">
 							</c:when>
 							<c:otherwise>
-								<img id="visapic" src="${obj.applicantvisa.picUrl}" width="400px" height="200px">
+								<img id="visapic" src="${obj.applicantvisa.picUrl}" width="100%">
 							</c:otherwise>
 						</c:choose>
 						</div>

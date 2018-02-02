@@ -13,10 +13,10 @@ a{text-decoration:none;}
 #mini { background:#294461;}
 .nav-top img { vertical-align:middle;}
 .nav{width: 170px;height: 100%;background: #263238;}
-.nav a{display: block;overflow: hidden;padding-left: 20px;line-height: 50px;max-height: 50px;color: #ABB1B7;}
+.nav a{display: block;overflow: hidden;padding-left: 20px; height:50px;line-height: 50px;max-height: 50px;color: #ABB1B7;}
 .navLi a span { color:#FFF !important;}
 .nav a span{margin-left: 30px; font-size:15px; color:#75a9eb;}
-.nav-item{position: relative;}
+.nav-item{position: relative; cursor:pointer;}
 .nav-item.nav-show{border-bottom: none;}
 .nav-item ul{display: none;background: rgba(0,0,0,.1);}
 .nav .nav-item.nav-show ul{display: block;}
@@ -31,16 +31,12 @@ a{text-decoration:none;}
 .navLi a { background:#294461;}
 .navLi>a:before{content: "";position: absolute;left: 0px;width: 4px;height: 50px;background: #3086f1;opacity:0;}
 .nav .nav-icon{font-size: 20px;position: absolute;margin-left:-1px;}
-/* 此处修改导航图标 可自定义iconfont 替换*/
-.icon_1::after{content: "\e62b";}
-.icon_2::after{content: "\e669";}
-.icon_3::after{content: "\e61d";}
 /*---------------------*/
 .nav-more{float:right;margin-right: 20px;font-size: 12px;}
 /* 此处为导航右侧箭头 如果自定义iconfont 也需要替换*/
-.nav-more::after{content: "\e621";}
+
 /*---------------------*/
-.nav-show .nav-more{transform:rotate(90deg);}
+.nav-show .icon-arrowright{transform:rotate(90deg);}
 .nav-show,.nav-item>a:hover {color: #FFF;}
 .nav-item>a:hover span { color:#FFF;}
 .navLi>a:before {opacity:1 !important;} 
@@ -50,7 +46,7 @@ a{text-decoration:none;}
 .nav-mini.nav{width: 60px;}
 .nav-mini.nav .nav-icon{/* margin-left:-2px; */}
 .nav-mini.nav .nav-item>a span{display: none;}
-.nav-mini.nav .nav-more{margin-right: -20px;}
+.nav-mini.nav .btnMore{margin-right: -20px; display:none;}
 .nav-mini.nav .nav-item ul{position: absolute;top:0px;left:60px;width: 180px;z-index: 99;background:#3C474C;overflow: hidden;}
 .nav-mini.nav .nav-item:hover{background:rgba(255,255,255,.1);}
 .nav-mini.nav .nav-item:hover .nav-item a{color:#FFF;}
@@ -62,6 +58,7 @@ a{text-decoration:none;}
 .nav-item .miniName { display:none; position:absolute;top:-30px;left:4px; width:50px;height:30px;line-height:30px;text-align:center;background:#FFF;color:#000;font-size:12px; border-radius:5px;}
 .nav-item .miniName::after { content:"";position: absolute; top: 25px; left: 20px; width: 10px; height: 10px; background:#FFF; border-left:1px solid #FFF; border-bottom:1px solid #FFF; transform: rotate(-45deg);-moz-transform: rotate(-45deg);-webkit-transform: rotate(-45deg);}
 
-
-
-
+.iconfont {font-size:20px !important; position:absolute;}
+.nav .btnMore { font-size:14px  !important; position:absolute; right:10px;top:0;}
+.icon-huobi,.icon-homepage, .icon-zhucetianjiahaoyou, .icon-computer { font-size:23px !important;}
+icon-iconfontfuwushichang { font-size:17px !important;}

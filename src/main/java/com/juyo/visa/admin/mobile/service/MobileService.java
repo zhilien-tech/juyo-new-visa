@@ -759,48 +759,50 @@ public class MobileService extends BaseService<TApplicantEntity> {
 
 	//获取回邮信息
 	public Object getBackMailInfo(Integer applicantId) {
-		Date nowDate = DateUtil.nowDate();
-		TApplicantOrderJpEntity taoj = dbDao.fetch(TApplicantOrderJpEntity.class,
-				Cnd.where("applicantId", "=", applicantId));
-
 		Map<String, Object> result = Maps.newHashMap();
-		String sqlStr = sqlManager.get("backmail_info_by_applicantId");
-		Sql sql = Sqls.create(sqlStr);
-		sql.setParam("applicantId", applicantId);
-		Record backmailinfo = dbDao.fetch(sql);
-		if (!Util.isEmpty(backmailinfo)) {
-			result.put("backmailinfo", backmailinfo);
-		} else {
-			//获取申请人信息
-			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantId.longValue());
-			String name = "";
-			if (!Util.isEmpty(applicant.getFirstName())) {
-				name += applicant.getFirstName();
-			}
-			if (!Util.isEmpty(applicant.getLastName())) {
-				name += applicant.getLastName();
-			}
-			String mobile = applicant.getTelephone();
+		if (!Util.isEmpty(applicantId)) {
+			Date nowDate = DateUtil.nowDate();
+			TApplicantOrderJpEntity taoj = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", applicantId));
 
-			BackMailInfoEntity backmail = new BackMailInfoEntity();
-			backmail.setLinkman(name);
-			if (!Util.isEmpty(mobile)) {
-				backmail.setTelephone(mobile);
-			}
-			backmail.setSource(MainBackMailSourceTypeEnum.KUAIDI.intKey());
-			backmail.setExpresstype(MainBackMailTypeEnum.KUAIDI.intKey());
-			backmail.setCreatetime(nowDate);
-			backmail.setUpdatetime(nowDate);
-			backmail.setApplicantid(applicantId);
-			backmail.setApplicantjpid(taoj.getId());
+			String sqlStr = sqlManager.get("backmail_info_by_applicantId");
+			Sql sql = Sqls.create(sqlStr);
+			sql.setParam("applicantId", applicantId);
+			Record backmailinfo = dbDao.fetch(sql);
+			if (!Util.isEmpty(backmailinfo)) {
+				result.put("backmailinfo", backmailinfo);
+			} else {
+				//获取申请人信息
+				TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantId.longValue());
+				String name = "";
+				if (!Util.isEmpty(applicant.getFirstName())) {
+					name += applicant.getFirstName();
+				}
+				if (!Util.isEmpty(applicant.getLastName())) {
+					name += applicant.getLastName();
+				}
+				String mobile = applicant.getTelephone();
 
-			result.put("backmailinfo", backmail);
+				BackMailInfoEntity backmail = new BackMailInfoEntity();
+				backmail.setLinkman(name);
+				if (!Util.isEmpty(mobile)) {
+					backmail.setTelephone(mobile);
+				}
+				backmail.setSource(MainBackMailSourceTypeEnum.KUAIDI.intKey());
+				backmail.setExpresstype(MainBackMailTypeEnum.KUAIDI.intKey());
+				backmail.setCreatetime(nowDate);
+				backmail.setUpdatetime(nowDate);
+				backmail.setApplicantid(applicantId);
+				backmail.setApplicantjpid(taoj.getId());
+
+				result.put("backmailinfo", backmail);
+			}
+
+			//回邮方式
+			result.put("mainBackMailTypeEnum", EnumUtil.enum2(MainBackMailTypeEnum.class));
+			//资料类型
+			result.put("mainSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
 		}
-
-		//回邮方式
-		result.put("mainBackMailTypeEnum", EnumUtil.enum2(MainBackMailTypeEnum.class));
-		//资料类型
-		result.put("mainSourceTypeEnum", EnumUtil.enum2(MainBackMailSourceTypeEnum.class));
 
 		return result;
 	}

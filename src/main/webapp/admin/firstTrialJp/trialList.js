@@ -51,6 +51,111 @@ new Vue({
 		/* editClick:function(){//编辑图标  页面跳转
 					window.location.href = '${base}/admin/firstTrialJp/edit.html';
 				} */
+		sendMsg:function(orderid,orderjpid){
+			//遮罩
+			layer.load(1);
+			$.ajax({
+				type : 'POST',
+				data : {
+					orderjpid:orderjpid
+				},
+				url : '/admin/firstTrialJp/getCareerStatus.html',
+				success : function(data) {
+					layer.closeAll('loading');
+					var isEmpty = data.isEmpty;
+					if(isEmpty == false){
+						/*layer.msg('申请人：'+data.names+' 职业未选择');*/
+						var applyids = data.applyids;
+						$.each(applyids, function(i, applyid) { 
+							layer.open({
+								type: 2,
+								title: false,
+								closeBtn:false,
+								fix: false,
+								maxmin: false,
+								shadeClose: false,
+								scrollbar: false,
+								area: ['900px', '80%'],
+								content:'/admin/firstTrialJp/validApplicantInfo.html?applicantId='+applyid+'&orderid='+orderid,
+								success : function(index, layero){
+									var iframeWin = window[index.find('iframe')[0]['name']]; 
+								}
+							}); 
+						}); 
+						
+						return;
+					}else{
+						layer.load(1);
+						$.ajax({
+							type : 'POST',
+							data : {
+								orderjpid:orderjpid
+							},
+							url : '/admin/firstTrialJp/isQualified.html',
+							success : function(data) {
+								layer.closeAll('loading');
+								if(data){
+									//快递收件信息存在，只发短信；反之，打开快递页面并标红
+									layer.load(1);
+									$.ajax({
+										type : 'POST',
+										data : {
+											orderid:orderid
+										},
+										url : '/admin/firstTrialJp/getOrderRecipient.html',
+										success : function(data) {
+											var isEmpty = data.isEmpty;
+											var orderId = data.orderid;
+											if(isEmpty == true){
+												//收件信息为空，需打开编辑页
+												layer.closeAll('loading');
+												layer.open({
+													type: 2,
+													title: false,
+													closeBtn:false,
+													fix: false,
+													maxmin: false,
+													shadeClose: false,
+													scrollbar: false,
+													area: ['900px', '80%'],
+													content: '/admin/firstTrialJp/express.html?orderid='+orderId+'&orderjpid='+orderjpid
+												});
+											}else{
+												//直接发短信
+												var orderRecipient = data.orderRecipient;
+												var orderid = orderRecipient.orderId;
+												var shareType = orderRecipient.shareType;
+												var shareManIds = orderRecipient.shareMans;
+												$.ajax({
+													type : 'POST',
+													data : {
+														orderid:orderid,
+														orderjpid:orderjpid,
+														shareType:shareType,
+														shareManIds:shareManIds
+													},
+													url : '/admin/firstTrialJp/sendAddressMsg.html',
+													success : function(data) {
+														if(data){
+															successCallBack(2);
+														}
+														layer.closeAll('loading');
+													}
+												});
+											}
+										}
+									});
+									
+								}else{
+									layer.msg('申请人不合格');
+									return;
+								}
+							}
+						});
+					}
+				}
+			});
+		},
 		visaDetail:function(orderid,orderjpid){
 			//跳转到签证详情页面
 			window.open('/admin/firstTrialJp/trialDetail.html?orderid='+orderid+'&orderjpid='+orderjpid);
@@ -365,12 +470,12 @@ function successCallBack(status){
 
 
 function qualifiedCallBack(username){
-	layer.msg('合格 已短信邮件通知 '+username);
+	layer.msg('合格 已短信邮件通知 '+username+'<br>订单进入"我的"标签页');
 	reloadData();
 }
 
 function unqualifiedCallBack(username){
-	layer.msg('不合格 已短信邮件通知 '+username);
+	layer.msg('不合格 已短信邮件通知 '+username+'<br>订单进入"我的"标签页');
 	reloadData();
 }
 

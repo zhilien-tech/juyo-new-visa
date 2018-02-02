@@ -15,7 +15,8 @@
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
 	img[src=""],img:not([src]) { opacity:0;}
-	input[type="file"] { z-index:999999;}
+	input[type="file"] { z-index:99999;}
+	#sqImg { z-index:999999;}
 	.modal-body { height:100% !important; background: #FFF !important; padding:0px 70px !important;}
 	.info-imgUpload {width: 100%;}
 	.NoInfo { width:100%; height:30px; margin-top:0px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
@@ -25,21 +26,23 @@
  	.input-box { position: relative; display: inline-block; }
     .input-box input { background-color: transparent;  background-image: none; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset; color: #555;  display: block;  font-size: 14px; line-height: 1.42857; padding: 6px 6px; transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;  width: 200px; display: inline; position: relative; z-index: 1;}
     .tip-l {  width: 0;  height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 10px solid #555; display: inline-block; right: 10px; z-index: 0;  position: absolute;  top: 12px; }
-    .dropdown { position: absolute; top: 32px; left: 0px; width: 200px; background-color: #FFF; border: 1px solid #23a8ce; border-top: 0; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;  z-index: 999; padding: 0;  margin: 0; }
+    .dropdown { position: absolute; top: 32px; left: 0px; width: 200px; background-color: #FFF; display:none; border: 1px solid #23a8ce; border-top: 0; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;  z-index: 999; padding: 0;  margin: 0; }
     .dropdown li { display: block; line-height: 1.42857; padding: 0 6px; min-height: 1.2em; cursor: pointer; }
     .dropdown li:hover {  background-color: #23a8ce;  color: #FFF; }
     .colSm {  display:block; float:left; width:200px; }
     .padding-right-0 { margin-left:10%; width:323px; border:1px solid #eee; }
     .cardFront-div { height:176px;}
-    .delete { right:0; }
+    .delete { right:0; display:none;}
     #sqImg {top:0px; margin-top:-176px; height:auto}
     #editbasic ,#backBtn ,#addBtn { margin-top:10px;}
-    .delete { z-index:999999999;}
+    .delete { z-index:1000000;}
+    .hideVisaInfo { display:none;}
+    .btn-Bank { width:70px !important;}
     /*弹框头部固定*/
-    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
     .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; padding:15px 37px 15px 53px;}  
-    .cardFront-div #uploadFile { top:0;width:100%;height:200px;left:0;position:absolute;}
+    .cardFront-div #uploadFile { top:0;width:100% !important;height:200px;left:0;position:absolute;}
     /*左右导航样式*/
     .leftNav { position:fixed;top:50px;left:4px;z-index:999; width:40px;height:calc(100% - 50px); cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
@@ -65,25 +68,57 @@
 	</c:choose>
 		<form id="passportInfo">
 			<div class="modal-header">
-				<input type="hidden" value="${obj.applyId }" name="applyId"/>
-				<input type="hidden" value="${obj.contact }" name="contact"/>
-				<input type="hidden" value="${obj.applicantid }" name="applicantId"/>
-				<input type="hidden" value="${obj.orderid }" name="orderid"/>
+				<input 
+					<c:choose>
+						<c:when test="${empty obj.contact}">
+							disabled 
+						</c:when>
+						<c:otherwise>
+						</c:otherwise>
+					</c:choose >
+				 type="hidden" value="${obj.applyId }" name="applyId"/>
+				<input 
+					<c:choose>
+						<c:when test="${empty obj.contact}">
+							disabled 
+						</c:when>
+						<c:otherwise>
+						</c:otherwise>
+					</c:choose >
+				 type="hidden" value="${obj.contact }" name="contact"/>
+				<input 
+					<c:choose>
+						<c:when test="${empty obj.contact}">
+							disabled 
+						</c:when>
+						<c:otherwise>
+						</c:otherwise>
+					</c:choose >
+				 type="hidden" value="${obj.applicantid }" name="applicantId"/>
+				<input 
+					<c:choose>
+						<c:when test="${empty obj.contact}">
+							disabled 
+						</c:when>
+						<c:otherwise>
+						</c:otherwise>
+					</c:choose >
+				 type="hidden" value="${obj.orderid }" name="orderid"/>
 				<c:choose>
 					<c:when test="${empty obj.contact }">
-						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
-						<input id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic" data-dismiss="modal" value="取消" /> 
-						<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right basic" value="保存" />
+						<input  type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+						<input  id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic none" data-dismiss="modal" value="取消" /> 
+						<input  id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right basic none" value="保存" />
 					</c:when>
 					<c:otherwise>
-						<input id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin" data-dismiss="modal" value="取消" /> 
-						<input id="addBtn" type="button" onclick="save(3);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic" value="保存" />
+						<input  id="backBtn" type="button" onclick="closeWindow(1)" class="btn btn-primary pull-right btn-sm basic btn-right btn-margin" data-dismiss="modal" value="取消" /> 
+						<input  id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin basic" value="保存" />
 					</c:otherwise>
 				</c:choose>
 			</div>
 			<div class="modal-body">
 			<div class="ipt-info">
-					<input id="visaRemark" name="visaRemark"  type="text" value="${obj.unqualified.visaRemark }" class="NoInfo form-control input-sm" />
+					<input disabled id="visaRemark" name="visaRemark"  type="text" value="${obj.unqualified.visaRemark }" class="NoInfo form-control input-sm" />
 				</div>
 				<div class="tab-content row total">
 					<!-- 结婚状况 -->
@@ -93,7 +128,15 @@
 							<div class="row colSm">
 								<div class="">
 									<div class="form-group">
-										<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight">
+										<select 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight" >
 											<option value="">请选择</option>
 											<c:forEach var="map" items="${obj.marryStatus}">
 											<c:choose>
@@ -115,13 +158,45 @@
 									<span>上传结婚证/离婚证</span>
 										<c:choose>
 											<c:when test="${empty obj.visaInfo}">
-												<input id="marryUrl" name="marryUrl" type="hidden" />
-												<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+															disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													</c:choose >
+												 id="marryUrl" name="marryUrl" type="hidden" />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+															disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													</c:choose >
+												 id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 												
 											</c:when>
 											<c:otherwise>
-												<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.visaInfo.marryUrl }"/>
-												<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+															disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													</c:choose >
+												 id="marryUrl" name="marryUrl" type="hidden" value="${obj.visaInfo.marryUrl }"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+															disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													</c:choose >
+												 id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 												
 											</c:otherwise>
 										</c:choose>
@@ -144,7 +219,15 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>申请人</label>
-										<select id="applicant" name="applicant" class="form-control input-sm selectHeight">
+										<select 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										id="applicant" name="applicant" class="form-control input-sm selectHeight">
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
 													<c:forEach var="map" items="${obj.mainOrVice}">
@@ -167,10 +250,26 @@
 										<div class="input-box">
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
-													<input type="text" id="relationRemark" name="relationRemark" class="input" >
+													<input 
+														<c:choose>
+															<c:when test="${empty obj.contact}">
+																disabled 
+															</c:when>
+															<c:otherwise>
+															</c:otherwise>
+														</c:choose >
+													 type="text" id="relationRemark" name="relationRemark" class="input" >
 												</c:when>
 												<c:otherwise>
-													<input type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
+													<input 
+														<c:choose>
+															<c:when test="${empty obj.contact}">
+																disabled 
+															</c:when>
+															<c:otherwise>
+															</c:otherwise>
+														</c:choose >
+													 type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
 												</c:otherwise>
 											</c:choose>
 											<ul class="dropdown">
@@ -183,11 +282,19 @@
 									</div>
 								</div>
 								
-								<div class="applyvice">
+								<div class="applyvice hideVisaInfo">
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label><span>*</span>主申请人</label>
-											<select id="mainApplicant" name="mainApplicant" class="form-control input-sm selectHeight">
+											<select 
+												<c:choose>
+													<c:when test="${empty obj.contact}">
+														disabled 
+													</c:when>
+													<c:otherwise>
+													</c:otherwise>
+												</c:choose >
+											id="mainApplicant" name="mainApplicant" class="form-control input-sm selectHeight">
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
 													<c:forEach var="map" items="${obj.mainApply}">
@@ -210,10 +317,26 @@
 										<div class="input-box">
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
-													<input type="text" id="mainRelation" name="mainRelation" class="input" >
+													<input 
+														<c:choose>
+															<c:when test="${empty obj.contact}">
+																disabled 
+															</c:when>
+															<c:otherwise>
+															</c:otherwise>
+														</c:choose >
+													 type="text" id="mainRelation" name="mainRelation" class="input" >
 												</c:when>
 												<c:otherwise>
-													<input type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
+													<input 
+														<c:choose>
+															<c:when test="${empty obj.contact}">
+																disabled 
+															</c:when>
+															<c:otherwise>
+															</c:otherwise>
+														</c:choose >
+													 type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
 												</c:otherwise>
 											</c:choose>
 												<ul class="dropdown">
@@ -244,7 +367,15 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>是否同主申请人</label>
-										<input id="trip" name="sameMainTrip" class="form-control input-sm selectHeight" value="是" disabled="disabled"/>
+										<input 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										 id="trip" name="sameMainTrip" class="form-control input-sm selectHeight" value="是" disabled="disabled"/>
 									</div>
 								</div>
 							</div><!-- end 是否同主申请人 -->
@@ -260,7 +391,15 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>我的职业</label>
-										<select id="careerStatus" name="careerStatus" class="form-control input-sm selectHeight">
+										<select 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										id="careerStatus" name="careerStatus" class="form-control input-sm selectHeight" >
 											<option value="">--请选择--</option>
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
@@ -282,10 +421,26 @@
 										<label id="schoolName"><span>*</span>单位名称</label>
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
-													<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " />
+													<input 
+														<c:choose>
+															<c:when test="${empty obj.contact}">
+																disabled 
+															</c:when>
+															<c:otherwise>
+															</c:otherwise>
+														</c:choose >
+													 id="name" name="name" type="text" class="form-control input-sm" placeholder=" " />
 												</c:when>
 												<c:otherwise>
-													<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.name }"/>
+													<input 
+														<c:choose>
+															<c:when test="${empty obj.contact}">
+																disabled 
+															</c:when>
+															<c:otherwise>
+															</c:otherwise>
+														</c:choose >
+													 id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.name }"/>
 												</c:otherwise>
 											</c:choose>
 									</div>
@@ -295,10 +450,26 @@
 										<label id="schoolTelephone"><span>*</span>单位电话</label>
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
-													<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " />
+													<input 
+														<c:choose>
+															<c:when test="${empty obj.contact}">
+																disabled 
+															</c:when>
+															<c:otherwise>
+															</c:otherwise>
+														</c:choose >
+													 id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " />
 												</c:when>
 												<c:otherwise>
-													<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.telephone }"/>
+													<input 
+														<c:choose>
+															<c:when test="${empty obj.contact}">
+																disabled 
+															</c:when>
+															<c:otherwise>
+															</c:otherwise>
+														</c:choose >
+													 id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.telephone }"/>
 												</c:otherwise>
 											</c:choose>
 									</div>
@@ -310,10 +481,26 @@
 										<label id="schoolAddress"><span>*</span>单位地址</label>
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
-													<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
+													<input 
+														<c:choose>
+															<c:when test="${empty obj.contact}">
+																disabled 
+															</c:when>
+															<c:otherwise>
+															</c:otherwise>
+														</c:choose >
+													 id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
 												</c:when>
 												<c:otherwise>
-													<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.address }"/>
+													<input 
+														<c:choose>
+															<c:when test="${empty obj.contact}">
+																disabled 
+															</c:when>
+															<c:otherwise>
+															</c:otherwise>
+														</c:choose >
+													 id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaInfo.address }"/>
 												</c:otherwise>
 											</c:choose>
 									</div>
@@ -332,7 +519,15 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>是否同主申请人</label>
-										<select id="wealth" name="sameMainWealth" class="form-control input-sm selectHeight">
+										<select 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										id="wealth" name="sameMainWealth" class="form-control input-sm selectHeight">
 											<c:choose>
 												<c:when test="${empty obj.visaInfo}">
 													<c:forEach var="map" items="${obj.isOrNo}">
@@ -350,26 +545,74 @@
 								</div>
 						</div>
 						<div class="info-body-from finance-btn wealthmain">
-							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState" />
-							<input id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
-							<input id="housePropertyType" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
-							<input id="financialType" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
+							<input 
+								<c:choose>
+									<c:when test="${empty obj.contact}">
+										disabled 
+									</c:when>
+									<c:otherwise>
+									</c:otherwise>
+								</c:choose >
+							 id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState btn-Bank" />
+							<input 
+								<c:choose>
+									<c:when test="${empty obj.contact}">
+										disabled 
+									</c:when>
+									<c:otherwise>
+									</c:otherwise>
+								</c:choose >
+							 id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
+							<input 
+								<c:choose>
+									<c:when test="${empty obj.contact}">
+										disabled 
+									</c:when>
+									<c:otherwise>
+									</c:otherwise>
+								</c:choose >
+							 id="housePropertyType" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
+							<input 
+								<c:choose>
+									<c:when test="${empty obj.contact}">
+										disabled 
+									</c:when>
+									<c:otherwise>
+									</c:otherwise>
+								</c:choose >
+							 id="financialType" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
 						</div>
 						<div class="info-body-from  clone-module cf deposit">
 							<div class="row body-from-input"><!-- 银行存款 -->
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>银行存款</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" />
+										<input 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										 id="" name="" type="text" class="form-control input-sm" value="银行存款" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder=" "  />
+										<input 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										 id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder=" "  />
 									</div>
 								</div>
-								<div style="float:left;  margin:45px 0 0 -23px;">
+								<div style="float:left;  margin:40px 0 0 -23px;">
 								万
 								</div>
 							</div><!-- end 银行存款 -->
@@ -385,13 +628,29 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>车产</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="车产" />
+										<input 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										 id="" name="" type="text" class="form-control input-sm" value="车产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder=" "/>
+										<input 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										 id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder=" "/>
 									</div>
 								</div>
 							</div><!-- end 车产 -->
@@ -407,16 +666,32 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>房产</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="房产" />
+										<input 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										 id="" name="" type="text" class="form-control input-sm" value="房产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder=" "  />
+										<input 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										 id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder=" "  />
 									</div>
 								</div>
-								<div style="float:left;  margin:45px 0 0 -23px;">
+								<div style="float:left;  margin:40px 0 0 -23px;">
 								平米
 								</div>
 							</div><!-- end 房产 -->
@@ -432,16 +707,32 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>理财</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="理财" />
+										<input 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										 id="" name="" type="text" class="form-control input-sm" value="理财" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder=" "  />
+										<input 
+											<c:choose>
+												<c:when test="${empty obj.contact}">
+													disabled 
+												</c:when>
+												<c:otherwise>
+												</c:otherwise>
+											</c:choose >
+										 id="financial" name="financial" type="text" class="form-control input-sm" placeholder=" "  />
 									</div>
 								</div>
-								<div style="float:left;  margin:45px 0 0 -23px;">
+								<div style="float:left;  margin:40px 0 0 -23px;">
 								万
 								</div>
 							</div><!-- end 房产 -->
@@ -476,120 +767,31 @@
 		var contact = '${obj.contact}';
 		$(function() {
 			
-			//校验
-			$('#passportInfo').bootstrapValidator({
-				message : '验证不通过',
-				feedbackIcons : {
-					valid : 'glyphicon glyphicon-ok',
-					invalid : 'glyphicon glyphicon-remove',
-					validating : 'glyphicon glyphicon-refresh'
-				},
-				fields : {
-					relationRemark : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '备注不能为空'
-							}
-						}
-					},
-					careerStatus : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '职业不能为空'
-							}
-						}
-					},
-					marryStatus : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '结婚状况不能为空'
-							}
-						}
-					},
-					mainRelation : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '与主申请人关系不能为空'
-							}
-						}
-					},
-					name : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '名称不能为空'
-							}
-						}
-					},
-					telephone : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '电话不能为空'
-							}
-						}
-					},
-					address : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '地址不能为空'
-							}
-						}
-					},
-				}
-			});
-		$('#passportInfo').bootstrapValidator('validate');
-			
 			if(!contact){
-				var form = document.forms[0]; 
+				/* var form = document.forms[0]; 
 				for ( var i = 0; i < form.length; i++) { 
 					var element = form.elements[i]; 
 					if(element.id != "editbasic")
 						element.disabled = true; 
-				} 
+				}  */
 				document.getElementById("visaRemark").style.backgroundColor = "#eee";
 				document.getElementById("mainRelation").style.backgroundColor = "#eee";
 				document.getElementById("relationRemark").style.backgroundColor = "#eee";
 				$(".basic").hide();
 			}else{
-				//结婚证图片验证
-				var marryUrl = $("#marryUrl").val();
-				var marrystatus = $("#marryStatus").val();
-				if(marryUrl == ""){
-					if(marrystatus == 3 || marrystatus == 4){
-						$(".front").attr("class", "info-imgUpload front has-success");  
-				        $(".help-blockFront").attr("data-bv-result","IVALID");  
-				        $(".help-blockFront").attr("style","display: none;");
-				        $("#borderColor").attr("style",null);
-					}else{
-						$(".front").attr("class", "info-imgUpload front has-error");  
-				        $(".help-blockFront").attr("data-bv-result","INVALID");  
-				        $(".help-blockFront").attr("style","display: block;");  
-				        $("#borderColor").attr("style","border-color:#ff1a1a");
-					}
-				}else{
-					$(".front").attr("class", "info-imgUpload front has-success");  
-			        $(".help-blockFront").attr("data-bv-result","IVALID");  
-			        $(".help-blockFront").attr("style","display: none;");
-			        $("#borderColor").attr("style",null);
-				}
-				var bootstrapValidator = $("#passportInfo").data(
+				
+				/* var bootstrapValidator = $("#passportInfo").data(
 				'bootstrapValidator');
 				// 执行表单验证 
-				bootstrapValidator.validate();
+				bootstrapValidator.validate(); */
 				$("#deleteApplicantFrontImg").click(function(){
 					$('#marryUrl').val("");
 					$('#sqImg').attr('src', "");
 					$("#uploadFile").siblings("i").css("display","none");
 					$(".front").attr("class", "info-imgUpload front has-error");  
 			        $(".help-blockFront").attr("data-bv-result","INVALID");  
-			        $(".help-blockFront").attr("style","display: block;");
-			        $("#borderColor").attr("style","border-color:#ff1a1a");
+			        //$(".help-blockFront").attr("style","display: block;");
+			        //$("#borderColor").attr("style","border-color:#ff1a1a");
 				});
 				
 				$(".remove-btn").click(function(){
@@ -638,9 +840,9 @@
 			
 			var marry = $("#marryUrl").val();
 			if(marry != ""){
-				$("#uploadFile").siblings("i").css("display","block");
+				$(".delete").css("display","block");
 			}else{
-				$("#uploadFile").siblings("i").css("display","none");
+				$(".delete").css("display","none");
 			}
 			
 			//婚姻状况为单身和丧偶时没有上传图片接口
@@ -663,8 +865,9 @@
 					if($("#sqImg").attr("src") == ""){
 						$(".front").attr("class", "info-imgUpload front has-error");  
 					    $(".help-blockFront").attr("data-bv-result","INVALID");  
-					    $(".help-blockFront").attr("style","display: block;");
-					    $("#borderColor").attr("style","border-color:#ff1a1a");
+					    $(".delete").css("display","none");
+					    //$(".help-blockFront").attr("style","display: block;");
+					    //$("#borderColor").attr("style","border-color:#ff1a1a");
 					}
 					$(".info-imgUpload").show();
 				}
@@ -842,9 +1045,9 @@
 						$(this).addClass("btnState-true");
 						$("#deposit").val("");
 						$(".help-blockdeposit").attr("data-bv-result","INVALID");  
-					    $(".deposits").css({"display":"block"});
+					    //$(".deposits").css({"display":"block"});
 					    $(".deposits").attr("class", "col-xs-6 deposits has-error");
-					    $("#deposit").attr("style", "border-color:#ff1a1a");
+					    //$("#deposit").attr("style", "border-color:#ff1a1a");
 						//$("#deposit").placeholder("万");
 					}
 				}else if(financeBtnInfo == "车产"){
@@ -860,9 +1063,9 @@
 						$(this).addClass("btnState-true");
 						$("#vehicle").val("");
 				        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
-				        $(".vehicles").css({"display":"block"});
+				        //$(".vehicles").css({"display":"block"});
 				        $(".vehicles").attr("class", "col-xs-6 vehicles has-error");
-				        $("#vehicle").attr("style", "border-color:#ff1a1a");
+				        //$("#vehicle").attr("style", "border-color:#ff1a1a");
 					}
 				}else if(financeBtnInfo == "房产"){
 					if($(this).hasClass("btnState-true")){
@@ -877,9 +1080,9 @@
 						$(this).addClass("btnState-true");
 						$("#houseProperty").val("");
 						$(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
-					    $(".housePropertys").css({"display":"block"});
+					    //$(".housePropertys").css({"display":"block"});
 					    $(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");
-					    $("#houseProperty").attr("style", "border-color:#ff1a1a");
+					    //$("#houseProperty").attr("style", "border-color:#ff1a1a");
 						//$("#houseProperty").placeholder("平米");
 					}
 				}else if(financeBtnInfo == "理财"){
@@ -895,9 +1098,9 @@
 						$(this).addClass("btnState-true");
 						$("#financial").val("");
 						$(".help-blockfinancial").attr("data-bv-result","INVALID");  
-					    $(".financials").css({"display":"block"});
+					    //$(".financials").css({"display":"block"});
 					    $(".financials").attr("class", "col-xs-6 financials has-error");
-					    $("#financial").attr("style", "border-color:#ff1a1a");
+					    //$("#financial").attr("style", "border-color:#ff1a1a");
 						//$("#financial").placeholder("万");
 					}
 				}
@@ -907,6 +1110,153 @@
 			
 			
 		});
+		
+		function visaValidate(){
+			
+			//结婚证图片验证
+			var marryUrl = $("#marryUrl").val();
+			var marrystatus = $("#marryStatus").val();
+			if(marryUrl == ""){
+				if(marrystatus == 3 || marrystatus == 4){
+					$(".front").attr("class", "info-imgUpload front has-success");  
+			        $(".help-blockFront").attr("data-bv-result","IVALID");  
+			        $(".help-blockFront").attr("style","display: none;");
+			        $("#borderColor").attr("style",null);
+				}else{
+					$(".front").attr("class", "info-imgUpload front has-error");  
+			        $(".help-blockFront").attr("data-bv-result","INVALID");  
+			        $(".help-blockFront").attr("style","display: block;");  
+			        $("#borderColor").attr("style","border-color:#ff1a1a");
+				}
+			}else{
+				$(".front").attr("class", "info-imgUpload front has-success");  
+		        $(".help-blockFront").attr("data-bv-result","IVALID");  
+		        $(".help-blockFront").attr("style","display: none;");
+		        $("#borderColor").attr("style",null);
+			}
+			//财产信息验证
+			var deposit = $("#deposit").val();
+			var vehicle = $("#vehicle").val();
+			var houseProperty = $("#houseProperty").val();
+			var financial = $("#financial").val();
+			if($(".deposit").css("display") != "none"){
+				if(deposit == ""){
+		    		$(".deposits").attr("class", "col-xs-6 deposits has-error");  
+			        $(".help-blockdeposit").attr("data-bv-result","INVALID");  
+			        $(".deposits").css({"display":"block"});
+			        $("#deposit").attr("style", "border-color:#ff1a1a");
+		    	}else{
+		    		$(".deposits").attr("class", "col-xs-6 deposits has-success");
+		    		$(".deposits").css({"display":"none"});
+		    		 $("#deposit").attr("style", null);
+		    	}
+			}
+			if($(".vehicle").css("display") != "none"){
+				if(vehicle == ""){
+		    		$(".vehicles").attr("class", "col-xs-6 vehicles has-error");  
+			        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
+			        $(".vehicles").css({"display":"block"});
+			        $("#vehicle").attr("style", "border-color:#ff1a1a");
+		    	}else{
+		    		$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
+		    		$(".vehicles").css({"display":"none"});
+		    		 $("#vehicle").attr("style", null);
+		    	}
+			}
+			if($(".houseProperty").css("display") != "none"){
+				if(houseProperty == ""){
+		    		$(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");  
+			        $(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
+			        $(".housePropertys").css({"display":"block"});
+			        $("#houseProperty").attr("style", "border-color:#ff1a1a");
+		    	}else{
+		    		$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
+		    		$(".housePropertys").css({"display":"none"});
+		    		 $("#houseProperty").attr("style", null);
+		    	}
+			}
+			if($(".financial").css("display") != "none"){
+				if(financial == ""){
+		    		$(".financials").attr("class", "col-xs-6 financials has-error");  
+			        $(".help-blockfinancial").attr("data-bv-result","INVALID");  
+			        $(".financials").css({"display":"block"});
+			        $("#financial").attr("style", "border-color:#ff1a1a");
+		    	}else{
+		    		$(".financials").attr("class", "col-xs-6 financials has-success");
+		    		$(".financials").css({"display":"none"});
+		    		 $("#financial").attr("style", null);
+		    	}
+			}
+			
+			//校验
+			$('#passportInfo').bootstrapValidator({
+				message : '验证不通过',
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields : {
+					relationRemark : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '备注不能为空'
+							}
+						}
+					},
+					careerStatus : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '职业不能为空'
+							}
+						}
+					},
+					marryStatus : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '结婚状况不能为空'
+							}
+						}
+					},
+					mainRelation : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '与主申请人关系不能为空'
+							}
+						}
+					},
+					name : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '名称不能为空'
+							}
+						}
+					},
+					telephone : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '电话不能为空'
+							}
+						}
+					},
+					address : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '地址不能为空'
+							}
+						}
+					},
+				}
+			});
+		$('#passportInfo').bootstrapValidator('validate');
+		}
 		/* //连接websocket
 		connectWebSocket();
 		function connectWebSocket(){
@@ -946,29 +1296,30 @@
 		
 		//保存
 		function save(status){
-			//得到获取validator对象或实例 
-			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-			bootstrapValidator.validate();
-			if(status == 1){
-				if (!bootstrapValidator.isValid()) {
-					return;
-				}
-				if($(".front").hasClass("has-error")){
-					return;
-				}
-				if($(".deposits").hasClass("has-error")){
-					return;
-				}
-				if($(".vehicles").hasClass("has-error")){
-					return;
-				}
-				if($(".housePropertys").hasClass("has-error")){
-					return;
-				}
-				if($(".financials").hasClass("has-error")){
-					return;
-				}
-			}
+			 if(status != 2){
+				 visaValidate();
+				//得到获取validator对象或实例 
+				var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+				bootstrapValidator.validate();
+					if (!bootstrapValidator.isValid()) {
+						return;
+					}
+					if($(".front").hasClass("has-error")){
+						return;
+					}
+					if($(".deposits").hasClass("has-error")){
+						return;
+					}
+					if($(".vehicles").hasClass("has-error")){
+						return;
+					}
+					if($(".housePropertys").hasClass("has-error")){
+						return;
+					}
+					if($(".financials").hasClass("has-error")){
+						return;
+					}
+			 }
 			
 			//绑定财产类型
 			var wealthType = "";
@@ -988,9 +1339,10 @@
 				$("#wealth").val(0);
 			}
 			var orderid = '${obj.orderid}';
-			var applicantId = '${obj.applicantid}';
+			var applicantId = '${obj.applyId}';
 			//var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
 			var passportInfo = $("#passportInfo").serialize();
+			layer.load(1);
 			$.ajax({
 				type: 'POST',
 				async: false,
@@ -1001,7 +1353,7 @@
 					if(status == 1){
 						closeWindow(2);
 					}else if(status == 2){
-						
+						window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
 					}else{
 						layer.msg("修改成功", {
 							time: 500,
@@ -1054,7 +1406,7 @@
 						if (200 == obj.status) {
 							$('#marryUrl').val(obj.data);
 							$('#sqImg').attr('src', obj.data);
-							$("#uploadFile").siblings("i").css("display","block");
+							$(".delete").show();
 							$(".front").attr("class", "info-imgUpload front has-success");  
 					        $(".help-blockFront").attr("data-bv-result","IVALID");  
 					        $(".help-blockFront").attr("style","display: none;");
@@ -1073,10 +1425,10 @@
 		
 		function passportBtn(){
 			var applicantId = '${obj.applyId}';
-			var bootstrapValidator = $("#passportInfo").data(
+			/* var bootstrapValidator = $("#passportInfo").data(
 				'bootstrapValidator');
 			// 执行表单验证 
-			bootstrapValidator.validate();
+			bootstrapValidator.validate(); */
 			/* if (!bootstrapValidator.isValid()) {
 				return;
 			}
@@ -1089,7 +1441,7 @@
 			} */
 			save(2);
 			//socket.onclose();
-			window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
+			//window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
 		}
 		
 		//编辑按钮
@@ -1110,26 +1462,26 @@
 			if(marryUrl == ""){
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");  
-		        $("#borderColor").attr("style","border-color:#ff1a1a");
+		        //$(".help-blockFront").attr("style","display: block;");  
+		        //$("#borderColor").attr("style","border-color:#ff1a1a");
 			}else{
 				$(".front").attr("class", "info-imgUpload front has-success");  
 		        $(".help-blockFront").attr("data-bv-result","IVALID");  
 		        $(".help-blockFront").attr("style","display: none;");
 		        $("#borderColor").attr("style",null);
 			}
-			var bootstrapValidator = $("#passportInfo").data(
+			/* var bootstrapValidator = $("#passportInfo").data(
 			'bootstrapValidator');
 			// 执行表单验证 
-			bootstrapValidator.validate();
+			bootstrapValidator.validate(); */
 			$("#deleteApplicantFrontImg").click(function(){
 				$('#marryUrl').val("");
 				$('#sqImg').attr('src', "");
-				$("#uploadFile").siblings("i").css("display","none");
+				$(".delete").css("display","none");
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");
-		        $("#borderColor").attr("style","border-color:#ff1a1a");
+		        //$(".help-blockFront").attr("style","display: block;");
+		        //$("#borderColor").attr("style","border-color:#ff1a1a");
 			});
 			
 			$(".remove-btn").click(function(){

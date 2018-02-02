@@ -11,16 +11,15 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<style type="text/css">
+		.modal-header { width:100%; height:40px; line-height:40px; padding:0 !important;}
 		#datatableId{position: relative;top: 10px;}
 		#datatableId tbody tr{cursor: pointer;}
-		.heading { font-size: 20px;}
-		.closed {width:20px;text-align:center; display:inline-block;color:#000;float:right;}
+		.heading { font-size: 20px; margin-left:10px;}
+		.closed {width:40px;text-align:center; display:inline-block;color:#000;float:right; cursor:pointer;}
 		.closed::after { content: ""; clear:both;}
 		.trColor{color: rgb(48, 135, 240)}
 		.selectBtn { width:80px;height:30px;line-height:30px;text-align:center;border-radius:7px;background:#169bd5;border:0; color:#FFF;}
 		.selectMargin { margin-right:5%;}
-		/* .modal-body { height:220px !important;} */
-		.modal-header { padding: 5px 10px !important;}
 	</style>
 </head>
 <body>
@@ -28,11 +27,11 @@
 		<form id="companyAddForm">
 			<div class="modal-header">
 				<span class="heading">验证</span> 
-				<a class="closed" onclick="cancelBtn()" style="width: 20px;">X</a>
+				<a class="closed" onclick="cancelBtn()">X</a>
 			</div>
 			<div class="modal-body">
 		 		<div style="text-align:center; margin-top:15%;">
-		 			<div style="font-size:16px;">
+		 			<div style="font-size:20px;">
 						我的职业未选择,请及时补充
 	     			</div>
 					<div style="margin-top:10%;">
@@ -65,7 +64,7 @@
 		
 		function successCallBack(status){
 			if(status == 1){
-				layer.msg('修改成功');
+				layer.msg('修改成功<br>订单进入"我的"标签页');
 			}
 			parent.successCallBack(1);
 		}

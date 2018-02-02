@@ -206,7 +206,8 @@ public class MyVisaModule {
 	 */
 	@At
 	@POST
-	public Object copyAllInfoToTourist(@Param("applyid") int applyid, HttpSession session) {
-		return myVisaService.copyAllInfoToTuorist(applyid, session);
+	public Object copyAllInfoToTourist(@Param("applyid") int applyid, @Param("emptyInfo") String emptyInfo,
+			HttpSession session) {
+		return myVisaService.copyAllInfoToTuorist(applyid, emptyInfo, session);
 	}
 }

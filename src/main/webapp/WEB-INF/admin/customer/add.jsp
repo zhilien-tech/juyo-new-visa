@@ -34,7 +34,7 @@
 								<label><span>*</span>客户来源：</label> <select id="customerType"
 									name="source" class="form-control input-sm inpImportant"
 									>
-									<option>--请选择--</option>
+									<option value="">--请选择--</option>
 									<c:forEach var="map" items="${obj.customerTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
 									</c:forEach>
@@ -65,7 +65,7 @@
 								<select id="payType"
 									name="payType" class="form-control input-sm inpImportant"
 									>
-									<option>--请选择--</option>
+									<option value="">--请选择--</option>
 									<c:forEach var="map" items="${obj.payTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
 									</c:forEach>
@@ -159,7 +159,7 @@
 											stringLength: {
 						                   	    min: 1,
 						                   	    max: 6,
-						                   	    message: '公司简称长度为6'
+						                   	    message: '公司简称长度不能超过6'
 						                   	}
 										}
 										
@@ -168,6 +168,13 @@
 										validators : {
 											notEmpty : {
 												message : '客户来源不能为空'
+											}
+										}
+									},
+									payType : {
+										validators : {
+											notEmpty : {
+												message : '支付方式不能为空'
 											}
 										}
 									},

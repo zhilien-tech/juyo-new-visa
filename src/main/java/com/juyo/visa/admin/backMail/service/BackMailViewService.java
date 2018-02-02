@@ -129,6 +129,11 @@ public class BackMailViewService extends BaseService<TApplicantBackmailJpEntity>
 		List<TApplicantBackmailJpEntity> after = new ArrayList<TApplicantBackmailJpEntity>();
 
 		TApplicantBackmailJpEntity backmail = new TApplicantBackmailJpEntity();
+		if (!Util.isEmpty(before)) {
+			if (!Util.isEmpty(before.get(0).getBackSourceTime())) {
+				backmail.setBackSourceTime(new Date());
+			}
+		}
 		backmail.setId(form.getId());
 		backmail.setExpressType(form.getExpressType());
 		backmail.setExpressNum(form.getExpressNum());

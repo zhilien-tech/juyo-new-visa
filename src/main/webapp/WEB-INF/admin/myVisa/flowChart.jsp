@@ -12,28 +12,8 @@
 		  <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 		  <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		  <link rel="stylesheet" href="${base}/references/public/css/style.css">
-		<style type="text/css">
-			.flowChart li div label{margin: 0; float:left;font-size: 14px;text-align: right; display: inline-block; margin:0 10px;}
-			.flowChart li:nth-child(1){height: 85px;padding-left: 10%;padding-top: 10px;}
-			.flowChart li div span{position: relative;left: 10%; display:inline-block; float:left;}
-			.flowChart li {height: 82px;}
-			.circle{width: 8%;height: 80px;float: left;margin-left: 2%;}
-			.date-info{display: inline-block;width: 85%;position: relative;top: 7px;}
-			.date-info span{width:40%;}
-			.principalApplicantTable { width:100%;}
-			.date-info span a{color: #2a7be5;}
-			.circle .circle-outside{height: 25px;width: 25px;background-color: #e4e4e4;margin: 0 auto;border-radius: 50%;padding: 4px;}
-			.circle .circle-outside i{display: block;width: 100%;height: 100%;background-color: #d2d2d2;border-radius: 50%;}
-			.circle .vertical{width: 3px;height:50px;background-color:#e4e4e4;margin: 3px auto;}
-			.blue .circle-outside{background-color:#9fc4f6 !important;}
-			.blue .circle-outside i{background-color: #5e9fef !important;}
-			.blue .vertical{background-color: #9fc4f4 !important;}
-			.NoClcik { cursor:default; color:#656565 !important;}
-			table { width:100%; }
-			td,th { height:30px; text-align:center;}
-			.tdL { text-align:left; padding-left:25px;}
-			.tableUpdate { float:left; margin-left:12%;margin-top:10%;}
-		</style>
+		  <!-- 流程图 -->
+		  <link rel="stylesheet" href="${base}/references/common/css/flowChart.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<ul class="title">
@@ -51,92 +31,105 @@
 			<div class="box">
 				<div class="box-body">
 					<ul class="flowChart">
-						<li style="display:none"></li>
 						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
 							</div>
-							<div class="date-info">
+							<div class="writeData">
 								<label>资料填写</label>
-								<span><a href="javascript: void(0);" onclick="baseInfo(${obj.applicant.applicantid })">填写</a><label>(基本信息、护照信息、签证信息)</label></span>
 							</div>
-							
+							<div class="mainInfo">
+								<label>基本信息、护照信息、签证信息</label>&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="javascript: void(0);" onclick="baseInfo(${obj.applicant.applicantid })">填写</a>
+							</div>
 						</li>
 						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
 							</div>
-							<div class="">
+							<div class="writeData">
 								<label>当前状态</label>
-								<!-- <span>初审合格</span> -->
+							</div>
+							<div class="mainInfo">
 								<c:if test="${'不合格' != obj.applicant.applicantstatus }">
-									<span><a href="javascript: void(0);" style="color:#656565;">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
+									<label>${obj.unqualifiedInfo}</label>
+									<a  style="color:#656565;">${obj.applicant.applicantstatus}</a>
 								</c:if>
 								<c:if test="${'不合格' == obj.applicant.applicantstatus  }">
-									<span><a href="javascript: void(0);" style="color:#2a7be5;" onclick="editUnqualified(${obj.indexOfPage})">${obj.applicant.applicantstatus}</a><label>${obj.unqualifiedInfo}</label></span>
+									<label>${obj.unqualifiedInfo}</label>
+									<a href="javascript: void(0);" style="color:#2a7be5;" onclick="editUnqualified(${obj.indexOfPage})">${obj.applicant.applicantstatus}</a>
 								</c:if>
 							</div>
-							
 						</li>
 						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
 							</div>
-							<div class="date-info">
+							<div class="writeData">
 								<label>快递单号</label>
+							</div>
+							<div class="mainInfo">
 								<c:if test="${null != obj.expressEntity }">
-									<span><a class="NoClcik">${obj.expressType }</a>&nbsp;<label>${obj.expressNum }</label><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">修改</a></span>
+									<label>${obj.expressType }</label>&nbsp;&nbsp;
+									<label>${obj.expressNum }</label>&nbsp;&nbsp;
+									<a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">修改</a>
 								</c:if>
 								<c:if test="${null == obj.expressEntity }">
-									<span><label>${obj.expressType }</label>&nbsp;<label>${obj.expressNum }</label><a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写</a></span>
+									<label>${obj.expressType }</label>
+									<label>${obj.expressNum }</label>
+									<a href="javascript: void(0);" onclick="expressNum(${obj.applicant.applicantid })">填写</a>
 								</c:if>
 							</div>
-							
 						</li>
 						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
 							</div>
-							<div class="date-info">
+							<div class="writeData">
 								<label>快递状态</label>
-								<span><a class="NoClcik">已寄出</a></span>
 							</div>
-							
+							<div class="mainInfo">
+								<label>已寄出</label>
+							</div>
 						</li>
 						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
 							</div>
-							<div class="date-info">
+							<div class="writeData">
 								<label>收件状态</label>
-								<span><label>前台已收件</label></span>
 							</div>
-							
+							<div class="mainInfo">
+								<label>前台已收件</label>
+							</div>
 						</li>
 						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
 							</div>
-							<div class="date-info">
+							<div class="writeData">
 								<label>预计送签时间</label>
-								<span><label>${obj.sendVisaDate }</label></span>
 							</div>
-							
+							<div class="mainInfo">
+								<label>${obj.sendVisaDate }</label>
+							</div>
 						</li>
 						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
 							</div>
-							<div class="date-info">
+							<div class="writeData">
 								<label>资料已进入使馆</label>
-								<span></span>
+							</div>
+							<div class="mainInfo">
+								<label></label>
 							</div>
 						</li>
 						<li style="display:none">
@@ -144,9 +137,11 @@
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
 							</div>
-							<div class="date-info">
+							<div class="writeData">
 								<label>签证已返回</label>
-								<span></span>
+							</div>
+							<div class="mainInfo">
+								<label></label>
 							</div>
 						</li>
 						<li style="display:none">
@@ -154,70 +149,41 @@
 								<div class="circle-outside blue"><i></i></div>
 								<div class="vertical"></div>
 							</div>
-							<div class="date-info">
+							<div class="writeData">
 								<label>回邮地址</label>
+							</div>
+							<div class="mainInfo">
 								<c:if test="${null != obj.backmail }">
-									<span>
-									
-									<table id="principalApplicantTable" border="1">
-										<tbody name="applicantsTable" id="applicantsTable">
-											<tr>
-												<td>资料来源</td>
-												<td>${obj.backmail.source }</td>
-												<td>团队名称</td>
-												<td>${obj.backmail.teamName }</td>
-											</tr>
-											<tr>
-												<td class="tdL" colspan="2">回邮方式</td>
-												<td class="tdL" colspan="2">${obj.backmail.expressType }</td>
-											</tr>
-											<tr>
-												<td>联系人</td>
-												<td>${obj.backmail.linkman }</td>
-												<td>电话</td>
-												<td>${obj.backmail.telephone }</td>
-											</tr>
-											<tr>
-												<td class="tdL" colspan="2">回邮地址</td>
-												<td class="tdL" colspan="2">${obj.backmail.expressAddress }</td>
-											</tr>
-											<tr>
-												<td>发票项目内容</td>
-												<td>${obj.backmail.invoiceContent }</td>
-												<td>发票抬头</td>
-												<td>${obj.backmail.invoiceHead }</td>
-											</tr>
-											<tr>
-												<td>地址</td>
-												<td>${obj.backmail.invoiceAddress }</td>
-												<td>电话</td>
-												<td>${obj.backmail.invoiceMobile }</td>
-											</tr>
-											<tr>
-												<td>税号</td>
-												<td>${obj.backmail.taxNum }</td>
-												<td>备注</td>
-												<td>${obj.backmail.remark }</td>
-											</tr>
-										</tbody>
-									</table>
-									</span>
-									<a class="tableUpdate" href="javascript: void(0);" onclick="backmail(${obj.applicant.applicantid })">修改</a>
+									<a href="javascript: void(0);" onclick="backmail(${obj.applicant.applicantid })">修改</a>
 								</c:if>
 								<c:if test="${null == obj.backmail}">
-									<span><a href="javascript: void(0);" onclick="backmail(${obj.applicant.applicantid })">填写</a></span>
+									<a href="javascript: void(0);" onclick="backmail(${obj.applicant.applicantid })">填写</a>
 								</c:if>
 							</div>
 						</li>
 						<li style="display:none">
 							<div class="circle blue">
 								<div class="circle-outside blue"><i></i></div>
-								<!-- <div class="vertical"></div> -->
+								<div class="vertical"></div>
 							</div>
-							<div class="date-info">
+							<div class="writeData">
 								<label>资料已寄出</label>
-								<span></span>
+							<div class="mainInfo">
+								<label></label>
 							</div>
+							
+						</li>
+						<li style="display:none" class="orderOver">
+							<div class="circle blue">
+								<div class="circle-outside blue"><i></i></div>
+							</div>
+							<div class="writeData">
+								<label>订单结束</label>
+							</div>
+							<div class="mainInfo">
+								<label></label>
+							</div>
+							
 						</li>
 					</ul>	
 				</div>
@@ -236,20 +202,22 @@
 		<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 		<script src="${base}/references/common/js/layer/layer.js"></script>
 		<script src="${base}/admin/base.js"></script><!-- 公用js文件 -->
-		<script src="${base}/admin/myVisa/flowChart.js"></script>
+		<%-- <script src="${base}/admin/myVisa/flowChart.js"></script> --%>
 		<script type="text/javascript">
 		
 			$(function(){
 			  $('.flowChart').find('li').each(function() {
 					 var indexLi = $(this).index();
-
 					 if(indexLi <= indexOfBlue){
 						 $(this).attr("style", "display:block");
 						 //$(this).find("div .vertical").attr("style", "display:none");
 					 }
-					 if(indexLi == indexOfBlue){
+					 if(indexLi == indexOfBlue && indexOfBlue != 9){
 						 $(this).find('.vertical').attr("style", "display:none");
 						 
+					 }
+					 if(indexOfBlue == 9){
+						 $('.orderOver').attr("style", "display:block");
 					 }
 	           })
 			});

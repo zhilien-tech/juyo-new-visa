@@ -3,10 +3,18 @@ img[src=""], img:not ([src] ) {
 }
 
 input[type="file"] {
+	z-index: 99999;
+}
+#sqImg {
 	z-index: 999999;
 }
+
+#sqImgBack {
+	z-index: 999999;
+}
+
 .delete { 
-	z-index:999999999;
+	z-index:1000000;
 }
 .qz-head {
 	position: fixed;
@@ -16,7 +24,7 @@ input[type="file"] {
 	height: 50px;
 	line-height: 50px;
 	background: #FFF;
-	z-index: 9999;
+	z-index: 10000000;
 	padding: 0px 15px;
 }
 
@@ -49,7 +57,7 @@ input[type="file"] {
 }
 
 .row {
-	margin-top: 5px;
+	margin-top: 11px;
 }
 
 .wordSpell {
@@ -114,7 +122,7 @@ input[type="file"] {
 }
 
 .onceIDTop {
-	/* padding-left: 15px; */
+	padding-left: 15px;
 	
 }
 
@@ -129,4 +137,31 @@ input[type="file"] {
 .nameBeforeTop {
 	/* margin-top:30px; */
 	
+}
+.IdInfo {
+	border: 1px solid #7a9cd3;
+}
+
+.IdInfo li {
+	padding-left: 2%;
+}
+
+.IdInfo li:hover {
+	background: #1e90ff;
+	cursor: pointer;
+}
+
+.IdInfo li:hover a {
+	color: #FFF;
+}
+
+.IdInfo li a {
+	color: #000;
+}
+.mainWidth {
+	width: 100% !important;
+}
+
+#uploadFile, #uploadFileBack {
+	width: 100% !important;
 }

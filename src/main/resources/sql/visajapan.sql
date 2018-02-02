@@ -39,6 +39,7 @@ SELECT
 	CONCAT(ta.firstName, ta.lastName) applicant,
 	tap.passport passportNo,
 	taoj.id applicatid,
+	taoj.applicantId applyid,
 	ta.telephone,
 	ta.email,
 	tavpj.type dataType,
@@ -58,7 +59,7 @@ LEFT JOIN (
 				CASE
 				WHEN STATUS = 1 THEN
 					CONCAT(
-						'<font color="blue">',
+						'<font color="#64a4f3">',
 						realInfo,
 						'</font>'
 					)
@@ -127,7 +128,7 @@ LEFT JOIN (
 				CASE
 				WHEN STATUS = 1 THEN
 					CONCAT(
-						'<font color="blue">',
+						'<font color="#64a4f3">',
 						realInfo,
 						'</font>'
 					)

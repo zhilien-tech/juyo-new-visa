@@ -25,8 +25,8 @@
 		.card-head div:nth-child(2){width:15%;}
 		.card-head div:nth-child(3){width: 23%;}
 		.card-head div:nth-child(4){width: 10%;}
-		.card-head div:nth-child(5){width: 8%; text-align:right;}
-		.card-head div:nth-child(6){width:27%;}
+		.card-head div:nth-child(5){width: 10%; text-align:right;}
+		.card-head div:nth-child(6){width:24%;}
 		.everybody-info div:nth-child(1){width:13%;}
 		.everybody-info div:nth-child(2){width:20%;}
 		.everybody-info div:nth-child(3){width:8%;}

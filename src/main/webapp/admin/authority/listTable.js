@@ -17,14 +17,6 @@ function initDatatable() {
             } */
 		},
 		/* 列表序号 */
-		/*"fnDrawCallback"    : function(){
-			var api = this.api();
-			var startIndex= api.context[0]._iDisplayStart;
-			api.column(0).nodes().each(function(cell, i) {
-				cell.innerHTML = startIndex + i + 1;
-			});
-		},*/
-
 		"columns": [
 		            /*{"data": "", "bSortable": false,render: function(data, type, row, meta) {
 
@@ -104,7 +96,7 @@ function add(){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
+		area: ['900px', '80%'],
 		content: BASE_PATH + '/admin/authority/add.html'
 	});
 }
@@ -118,7 +110,7 @@ function edit(id){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
+		area: ['900px', '80%'],
 		content: BASE_PATH + '/admin/authority/update.html?id='+id
 	});
 }

@@ -19,43 +19,8 @@
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
-		<style type="text/css">
-			.form-control{height: 30px;}
-			.add-btn{top: -35px;right:-1.5%;}
-			.remove-btn{top: -35px;right: -1.5%;}
-			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
-			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
-			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
-			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
-			.deposit,.vehicle,.houseProperty{display:none;}
-			.qz-head { position:fixed;top:0;left:0;z-index:99999; width:100%;}
-			.content { margin-top:50px;}
-			#urgentday { width:16.5%;}
-			.bodyMargin { margin-left:12%;}
-			.select2-container--default { width:auto !important;}
-			.select2-container .select2-search--inline { float:none;}
-			.info {  margin-bottom:0px;}
-			.paddingRight { padding-right:0px !important; margin-left:-15px;}
-			#applicantTable tbody tr td:nth-child(1){width: 1%;}
-			#applicantTable tbody tr td:nth-child(2){width: 7%;}
-			#applicantTable tbody tr td:nth-child(3){width: 8%;}
-			#applicantTable tbody tr td:nth-child(4){width: 8%;}
-			#applicantTable tbody tr td:nth-child(5){width: 8%;}
-			#applicantTable tbody tr td:nth-child(6){width: 25%;}
-			#applicantTable tbody tr td:nth-child(7){width: 8%;}
-			#applicantTable tbody tr td:nth-child(8){width: 5%;}
-			#applicantTable tbody tr td:nth-child(9){width: 30%;}
-			
-			#schedulingTable thead tr th:nth-child(1){width:8%;}
-			#schedulingTable thead tr th:nth-child(2){width:10%;}
-			#schedulingTable thead tr th:nth-child(3){width:12%;}
-			#schedulingTable thead tr th:nth-child(4){width:24%;}
-			#schedulingTable thead tr th:nth-child(5){width:24%;}
-			#schedulingTable thead tr th:nth-child(6){width:8%;}
-			[v-cloak] {
-			  display: none;
-			}
-		</style>
+		<!-- 签证详情样式 -->
+		<link rel="stylesheet" href="${base}/references/common/css/visaDetail.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper" id="wrapper" v-cloak>
@@ -68,8 +33,8 @@
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
 					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/>
-					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(22)"/>
-					<input type="button" value="招宝变更" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(19)"/>
+					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(22)"/>
+					<input type="button" value="招宝变更" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(19)"/>
 					<input type="button" value="发招宝" class="btn btn-primary btn-sm pull-right" onclick="sendzhaobao()"/>
 					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue()"/>
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log()"/>
@@ -469,6 +434,7 @@
 														<!-- <i class="bulb"></i> -->
 													</div>
 												</div>
+												
 												<div class="col-sm-3 paddingRight">
 													<div class="form-group">
 														<label><span>*</span>航班号：</label>
@@ -641,7 +607,7 @@
 			
 			function successCallBack(status){
 				if(status == 1){
-					layer.msg('修改成功');
+					layer.msg('修改成功<br>订单进入"我的"标签页');
 					$.ajax({ 
 				    	url: BASE_PATH + '/admin/visaJapan/getTrvalPlanData.html',
 				    	dataType:"json",
@@ -652,7 +618,7 @@
 				      	}
 				    }); 
 				}else if(status == 2){
-					layer.msg('保存成功');
+					layer.msg('保存成功<br>订单进入"我的"标签页');
 				}else if(status == 88){
 					layer.msg('负责人变更成功');
 				}

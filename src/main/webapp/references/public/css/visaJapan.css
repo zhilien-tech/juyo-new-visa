@@ -1,15 +1,130 @@
 /*--------------------------签证日本---------------------------*/
-.visaListSpan { display:block; height:31px; line-height:31px;}
-.card-head div:nth-child(1){width:14%;}
-.card-head div:nth-child(2){width:12.5%;}
-.card-head div:nth-child(3){width: 12%;}
-.card-head div:nth-child(4){width: 12%;}
-.card-head div:nth-child(5){width: 5%;}
-.card-head div:nth-child(6){width:11.5%; text-align:right;}
-.card-head div:nth-child(7){width: 33%;position: relative;right: -8px; text-align:right;}
-.everybody-info div:nth-child(1){width:13%;}
-.everybody-info div:nth-child(2){width:16.5%;}
-.everybody-info div:nth-child(3){width:13%;}
-.everybody-info div:nth-child(4){width:50%;}
-.everybody-info div:nth-child(5){width:6%;}
-.visaBtn { float:right; cursor:pointer;}
+.visaListSpan {
+	display: block;
+}
+
+.card-head div:nth-child(1) {
+	width: 14%;
+}
+
+.card-head div:nth-child(2) {
+	width: 14%;
+}
+
+.card-head div:nth-child(3) {
+	width: 13%;
+}
+
+.card-head div:nth-child(4) {
+	width: 13%;
+}
+
+.card-head div:nth-child(5) {
+	width: 5%;
+}
+
+.card-head div:nth-child(6) {
+	width: 9%;
+	text-align: right;
+}
+
+.card-head div:nth-child(7) {
+	width: 32%;
+	position: relative;
+	right: -8px;
+	text-align: right;
+}
+
+.everybody-info div:nth-child(1) {
+	width: 13%;
+}
+
+.everybody-info div:nth-child(2) {
+	width: 16.5%;
+}
+
+.everybody-info div:nth-child(3) {
+	width: 13%;
+}
+
+.everybody-info div:nth-child(4) {
+	width: 50%;
+}
+
+.everybody-info div:nth-child(5) {
+	width: 6%;
+}
+
+.visaBtn {
+	float: right;
+	cursor: pointer;
+}
+
+.card-head {
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.card-head span {
+	font-size: 12px;
+}
+
+.everybody-info {
+	position: relative;
+}
+
+.cf {
+	overflow: visible !important;
+}
+
+.whiteSpace {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 390px;
+}
+
+.showInfo {
+	cursor: pointer;
+}
+
+.hideInfo {
+	display: none;
+	position: absolute;
+	top: -33px;
+	right: 10%;
+	background: #eee;
+	height: 30px;
+	line-height: 30px;
+	font-size: 12px;
+	padding: 0 10px;
+	border-radius: 10px;
+}
+
+.card-head i {
+	cursor: pointer;
+}
+
+.marginLR {
+	margin: 0px 20px;
+}
+
+.btnSearch {
+	margin-left: 20px;
+}
+
+.salesBtn, .viseBtn {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	margin-right: 10px;
+	position: relative;
+	top: 5px;
+}
+
+[v-cloak] {
+	display: none;
+}
+label {
+	margin-bottom: 0;
+}

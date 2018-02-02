@@ -123,7 +123,7 @@ new Vue({
 				type:'post',
 				success: function(data){
 					orderobj.travelplan = data;
-					layer.msg('重置成功');
+					layer.msg('重置成功<br>订单进入"我的"标签页');
 				}
 			});
 		},
@@ -213,7 +213,7 @@ new Vue({
 				success: function(data){
 					layer.closeAll('loading');
 					if(data.status == 200){
-						layer.msg('通知成功');
+						layer.msg('通知成功<br>订单进入"我的"标签页');
 					}else if(data.status == 500){
 						layer.msg(data.msg);
 					}
@@ -653,7 +653,7 @@ $(".schedulingBtn").click(function(){
 			layer.closeAll('loading');
 			if(data.status == 'success'){
 				orderobj.travelplan = data.data;
-				layer.msg('生成成功');
+				layer.msg('生成成功<br>订单进入"我的"标签页');
 			}else{
 				layer.msg(data.message);
 			}
@@ -723,7 +723,7 @@ function downLoadFile(){
         successCallback: function (url) {
         },
         failCallback: function (html, url) {
-       	layer.msg("下载失败");
+       	layer.msg('下载失败<br>订单进入"我的"标签页');
         }
     });
 }

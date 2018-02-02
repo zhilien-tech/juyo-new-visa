@@ -49,7 +49,7 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.ReceptionSearchStatusEnum_JP;
-import com.juyo.visa.common.enums.VisaDataTypeEnum;
+import com.juyo.visa.common.enums.ShareTypeEnum;
 import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
@@ -138,6 +138,26 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 						applicant.put("expressType", expressTypeEnum.value());
 					}
 				}
+
+				String data = "";
+				String blue = "";
+				if (!Util.isEmpty(applicant.get("blue"))) {
+					blue = (String) applicant.get("blue");
+				}
+				String black = "";
+				if (!Util.isEmpty(applicant.get("black"))) {
+					black = (String) applicant.get("black");
+				}
+				if (Util.isEmpty(blue)) {
+					data = black;
+				} else {
+					data = blue;
+					if (!Util.isEmpty(black)) {
+						data += "、";
+						data += black;
+					}
+				}
+				applicant.put("data", data);
 			}
 			record.put("everybodyInfo", records);
 		}
@@ -230,11 +250,30 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		List<Record> applyinfo = dbDao.query(applysql, null, null);
 		for (Record record : applyinfo) {
 			Integer type = (Integer) record.get("type");
-			for (VisaDataTypeEnum visadatatype : VisaDataTypeEnum.values()) {
+			for (JobStatusEnum visadatatype : JobStatusEnum.values()) {
 				if (!Util.isEmpty(type) && type.equals(visadatatype.intKey())) {
 					record.put("type", visadatatype.value());
 				}
 			}
+			String data = "";
+			String blue = "";
+			if (!Util.isEmpty(record.get("blue"))) {
+				blue = (String) record.get("blue");
+			}
+			String black = "";
+			if (!Util.isEmpty(record.get("black"))) {
+				black = (String) record.get("black");
+			}
+			if (Util.isEmpty(blue)) {
+				data = black;
+			} else {
+				data = blue;
+				if (!Util.isEmpty(black)) {
+					data += "、";
+					data += black;
+				}
+			}
+			record.put("realinfo", data);
 		}
 		result.put("applyinfo", applyinfo);
 		return result;
@@ -313,8 +352,10 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 		//改变订单状态
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		if (!Util.isEmpty(order)) {
-			order.setStatus(JPOrderStatusEnum.RECEPTION_RECEIVED.intKey());
-			dbDao.update(order);
+			if (order.getStatus() <= JPOrderStatusEnum.RECEPTION_RECEIVED.intKey()) {
+				order.setStatus(JPOrderStatusEnum.RECEPTION_RECEIVED.intKey());
+				dbDao.update(order);
+			}
 		}
 		/*for (Map map : applicatlist) {//给订单下所有联系人发短信
 			int applyid = Integer.valueOf((String) map.get("applicatid"));
@@ -334,41 +375,52 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 
 	}
 
+	/**
+	 * 
+	 * 前台 发短信
+	 *
+	 * @param orderid 订单id
+	 * @param session
+	 * @return null
+	 */
 	public Object toSend(int orderid, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderid));
-		//发送短信(根据分享是统一联系人还是单独分享来发送短信)
-		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-		//根据日本订单表查出对应的日本申请人
-		List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
-				Cnd.where("orderId", "=", orderjp.getId()), null);
-		//查询是否有统一联系人
-		TApplicantOrderJpEntity sameApply = dbDao.fetch(
-				TApplicantOrderJpEntity.class,
-				Cnd.where("orderId", "=", orderjp.getId()).and("isSameLinker", "=", IsYesOrNoEnum.YES.intKey())
-						.and("isShareSms", "=", IsYesOrNoEnum.YES.intKey()));
-		if (!Util.isEmpty(sameApply)) {//如果有统一联系人，给统一联系人发短信
-			TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, sameApply.getApplicantId()
-					.longValue());
-			try {
-				sendMessage(orderEntity.getId(), applicantEntity.getId());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {//没有统一联系人时，单独发送
-			for (TApplicantOrderJpEntity applyJp : applyJpList) {
-				TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyJp.getApplicantId().longValue());
-				if (Util.eq(applyJp.getIsShareSms(), IsYesOrNoEnum.YES.intKey())) {//单独发短信
+		Integer userId = loginUser.getId();
+
+		TOrderRecipientEntity orderReceive = dbDao.fetch(TOrderRecipientEntity.class,
+				Cnd.where("orderId", "=", orderid));
+		if (!Util.isEmpty(orderReceive)) {
+			Integer shareType = orderReceive.getShareType();
+			String shareManId = orderReceive.getShareMans();
+			if (ShareTypeEnum.UNIFIED.intKey() == shareType) {
+				//统一联系人
+				if (!Util.isEmpty(shareManId)) {
 					try {
-						sendMessage(orderEntity.getId(), apply.getId());
+						sendMessage(orderid, Integer.valueOf(shareManId)); //发短信
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			} else {
+				//单独分享
+				String[] shareIds = shareManId.split(",");
+				for (String applyid : shareIds) {
+					try {
+						sendMessage(orderid, Integer.valueOf(applyid));//发短信
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
 			}
 		}
-		changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.RECEPTION_PROCESS.intKey(),
-				loginUser.getId());
+
+		//变更订单负责人
+		changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.RECEPTION_PROCESS.intKey(), userId);
+
 		return null;
 	}
 
@@ -653,8 +705,13 @@ public class ReceptionJpViewService extends BaseService<TOrderRecipientEntity> {
 	public Object visaTransfer(HttpSession session, Integer orderid) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, new Long(orderid).intValue());
-		orderEntity.setStatus(JPOrderStatusEnum.VISA_ORDER.intKey());
-		dbDao.update(orderEntity);
+		if (!Util.isEmpty(orderEntity)) {
+			if (orderEntity.getStatus() < JPOrderStatusEnum.VISA_ORDER.intKey()) {
+				orderEntity.setStatus(JPOrderStatusEnum.VISA_ORDER.intKey());
+				dbDao.update(orderEntity);
+			}
+		}
+		orderJpViewService.insertLogs(orderid, JPOrderStatusEnum.TRANSFER_VISA.intKey(), session);
 		changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.RECEPTION_PROCESS.intKey(),
 				loginUser.getId());
 		return null;

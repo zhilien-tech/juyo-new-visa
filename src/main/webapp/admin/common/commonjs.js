@@ -88,7 +88,11 @@ $(document).on("input","#firstName",function(){
 	var pinyinchar = getPinYinStr(temp);
 	var dex = temp.length;
 	//$("#firstNameEn").css('left',200);
-	$("#firstNameEn").val("/"+pinyinchar.toUpperCase());
+	if($(this).val().length == 0){
+		$("#firstNameEn").val("");
+	}else{
+		$("#firstNameEn").val("/"+pinyinchar.toUpperCase());
+	}
 	//斜杠的位置
 	//var sepindex = hanzi.length + 1;
 	//设置值
@@ -109,7 +113,11 @@ $(document).on("input","#lastName",function(){
 	var temp = $(this).val();
 	//var hanzi = temp.split('/')[0];
 	var pinyinchar = getPinYinStr(temp);
-	$("#lastNameEn").val("/"+pinyinchar.toUpperCase());
+	if($(this).val().length == 0){
+		$("#lastNameEn").val("");
+	}else{
+		$("#lastNameEn").val("/"+pinyinchar.toUpperCase());
+	}
 	//斜杠的位置
 	//var sepindex = hanzi.length + 1;
 	//设置值
@@ -129,7 +137,11 @@ $(document).on("input","#otherFirstName",function(){
 	var pos=$(this).getCurPos();//保存原始光标位置
 	var temp = $(this).val();
 	var pinyinchar = getPinYinStr(temp);
-	$("#otherFirstNameEn").val("/"+pinyinchar.toUpperCase());
+	if($(this).val().length == 0){
+		$("#otherFirstNameEn").val("");
+	}else{
+		$("#otherFirstNameEn").val("/"+pinyinchar.toUpperCase());
+	}
 });
 $(document).on("input","#otherLastName",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
@@ -138,7 +150,11 @@ $(document).on("input","#otherLastName",function(){
 	var pos=$(this).getCurPos();//保存原始光标位置
 	var temp = $(this).val();
 	var pinyinchar = getPinYinStr(temp);
-	$("#otherLastNameEn").val("/"+pinyinchar.toUpperCase());
+	if($(this).val().length == 0){
+		$("#otherLastNameEn").val("");
+	}else{
+		$("#otherLastNameEn").val("/"+pinyinchar.toUpperCase());
+	}
 });
 $(document).on("input","#birthAddress",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
@@ -147,7 +163,11 @@ $(document).on("input","#birthAddress",function(){
 	var pos=$(this).getCurPos();//保存原始光标位置
 	var temp = $(this).val();
 	var pinyinchar = getPinYinStr(temp);
-	$("#birthAddressEn").val("/"+pinyinchar.toUpperCase());
+	if($(this).val().length == 0){
+		$("#birthAddressEn").val("");
+	}else{
+		$("#birthAddressEn").val("/"+pinyinchar.toUpperCase());
+	}
 });
 $(document).on("input","#issuedPlace",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
@@ -156,7 +176,11 @@ $(document).on("input","#issuedPlace",function(){
 	var pos=$(this).getCurPos();//保存原始光标位置
 	var temp = $(this).val();
 	var pinyinchar = getPinYinStr(temp);
-	$("#issuedPlaceEn").val("/"+pinyinchar.toUpperCase());
+	if($(this).val().length == 0){
+		$("#issuedPlaceEn").val("");
+	}else{
+		$("#issuedPlaceEn").val("/"+pinyinchar.toUpperCase());
+	}
 });
 /*$(document).on("input","#cardId",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){

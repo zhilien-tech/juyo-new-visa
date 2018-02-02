@@ -230,7 +230,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object addOrder(Integer id, HttpSession session) {
+	public Object editOrder(Integer id, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
 		TCustomerEntity customer = new TCustomerEntity();
 		result.put("orderId", id);
@@ -288,6 +288,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicant.setOpId(loginUser.getId());
 		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 		applicant.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
 		if (!Util.isEmpty(applicantForm.getAddress())) {
 			applicant.setAddress(applicantForm.getAddress());
 		}
@@ -360,7 +361,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setCardBack(applicantForm.getCardBack());
 		}
 		Map<String, Object> result = MapUtil.map();
-		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
 		applicant.setCreateTime(new Date());
 		//游客登录
 		ApplicantUser applicantUser = new ApplicantUser();
@@ -1074,10 +1074,17 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", applicant.getId()));
 			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
+			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
+			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
 			String baseRemark = applicantForm.getBaseRemark();
 			if (!Util.isEmpty(baseRemark)) {
 				qualifiedApplicantViewService.unQualified(applicant.getId(), orderJpEntity.getOrderId(), baseRemark,
 						ApplicantInfoTypeEnum.BASE.intKey(), session);
+			}
+			//游客进入，变更申请人为基本信息填写完毕
+			if (Util.eq(applicantForm.getUserType(), 2)) {
+				changeOrderStatusToFiled(applyJpList, "base", applyJp, orderEntity);
 			}
 
 			//由游客不合格入口进入保存,变更游客状态为修改完成
@@ -1321,6 +1328,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//申请人
 			TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
 					new Long(applicantOrderJpEntity.getApplicantId()).intValue());
+			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
+					.longValue());
+			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
+			if (Util.eq(visaForm.getUserType(), 2)) {
+				changeOrderStatusToFiled(applyJpList, "visa", applicantOrderJpEntity, orderEntity);
+			}
 			applicantEntity.setMarryStatus(visaForm.getMarryStatus());
 			applicantEntity.setMarryUrl(visaForm.getMarryUrl());
 			applicantEntity.setMarryurltype(visaForm.getMarryStatus());
@@ -1720,22 +1735,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object getProvince(String searchStr) {
 		List<String> provinceList = new ArrayList<>();
-		List<TIdcardEntity> province = dbDao.query(TIdcardEntity.class,
-				Cnd.where("province", "like", "%" + Strings.trim(searchStr) + "%"), null);
+		List<TIdcardEntity> province = dbDao.query(
+				TIdcardEntity.class,
+				Cnd.where("province", "like", "%" + Strings.trim(searchStr) + "%").and("citycode", "=", "00")
+						.and("countycode", "=", "00"), null);
 		for (TIdcardEntity tIdcardEntity : province) {
 			if (!provinceList.contains(tIdcardEntity.getProvince())) {
 				provinceList.add(tIdcardEntity.getProvince());
 			}
-		}
-		List<String> list = new ArrayList<>();
-		if (!Util.isEmpty(provinceList) && provinceList.size() >= 5) {
-			for (int i = 0; i < 5; i++) {
-				list.add(provinceList.get(i));
+			if (Util.eq(provinceList.size(), 5)) {
+				break;
 			}
-			return list;
-		} else {
-			return provinceList;
 		}
+		return provinceList;
 	}
 
 	public Object getCity(String province, String searchStr) {
@@ -1748,8 +1760,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		List<String> list = new ArrayList<>();
-		if (!Util.isEmpty(cityList) && cityList.size() >= 5) {
-			for (int i = 0; i < 5; i++) {
+		if (!Util.isEmpty(cityList) && cityList.size() >= 6) {
+			for (int i = 1; i < 6; i++) {
 				list.add(cityList.get(i));
 			}
 			return list;
@@ -1808,7 +1820,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				dbDao.update(orderEntity);
 			}
 			result.put("sendResult", "success");
-			toInsertTouristInfo(applyListDB);
+			//toInsertTouristInfo(applyListDB);
 
 			/*//创建游客基本信息、护照信息、签证信息
 			for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyListDB) {
@@ -1886,7 +1898,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					orderEntity.setUpdateTime(new Date());
 					dbDao.update(orderEntity);
 				}
-				toInsertTouristInfo(applyListDB);
+				TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
+				//toInsertSamelinkerTouristInfo(apply);
 				/*//给游客基本信息和护照信息赋值
 				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyListDB) {
 					TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity
@@ -2171,7 +2184,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object saveEditPassport(TApplicantPassportForm passportForm, HttpSession session) {
-		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
 		Date nowDate = DateUtil.nowDate();
@@ -2181,8 +2193,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					Cnd.where("id", "=", passportForm.getOrderid()));
 		}
 		if (!Util.isEmpty(passportForm.getApplicantId())) {
-			TApplicantUnqualifiedEntity unqualifiedEntity = dbDao.fetch(TApplicantUnqualifiedEntity.class,
-					Cnd.where("applicantId", "=", passportForm.getApplicantId().longValue()));
 			TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
 					Cnd.where("applicantId", "=", passportForm.getApplicantId()));
 			passport.setOpId(loginUser.getId());
@@ -2193,15 +2203,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			passport.setBirthAddress(passportForm.getBirthAddress());
 			passport.setBirthAddressEn(passportForm.getBirthAddressEn());
 			passport.setBirthday(passportForm.getBirthday());
-			passport.setFirstName(passportForm.getFirstName());
-			//passport.setFirstNameEn(passportForm.getFirstNameEn().substring(1));
 			passport.setIssuedDate(passportForm.getIssuedDate());
 			passport.setIssuedOrganization(passportForm.getIssuedOrganization());
 			passport.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
 			passport.setIssuedPlace(passportForm.getIssuedPlace());
 			passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
-			passport.setLastName(passportForm.getLastName());
-			//passport.setLastNameEn(passportForm.getLastNameEn().substring(1));
 			passport.setPassport(passportForm.getPassport());
 			passport.setSex(passportForm.getSex());
 			passport.setSexEn(passportForm.getSexEn());
@@ -2210,14 +2216,19 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			passport.setValidStartDate(passportForm.getValidStartDate());
 			passport.setValidType(passportForm.getValidType());
 			passport.setUpdateTime(new Date());
-			int update = dbDao.update(passport);
-			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
-					Cnd.where("applicantId", "=", passport.getApplicantId()));
+			dbDao.update(passport);
 
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, passportForm.getApplicantId().longValue());
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", passportForm.getApplicantId()));
 			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
+			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
+			if (Util.eq(passportForm.getUserType(), 2)) {
+				changeOrderStatusToFiled(applyJpList, "pass", applyJp, orderEntity);
+			}
+
 			//游客不合格入口进入，改变申请人状态为修改完毕
 			if (!Util.isEmpty(passportForm.getAddApply())) {
 				if (Util.eq(passportForm.getAddApply(), 2)) {
@@ -2438,6 +2449,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		orderEntity.setStatus(JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
 		orderEntity.setUpdateTime(DateUtil.nowDate());
 		dbDao.update(orderEntity);
+		TOrderJpEntity orderJpEntity = dbDao
+				.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderEntity.getId()));
+		List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderJpEntity.getId()), null);
+		for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
+			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, tApplicantOrderJpEntity.getApplicantId()
+					.longValue());
+			apply.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+			dbDao.update(apply);
+		}
 		TOrderLogsEntity logsEntity = dbDao.fetch(TOrderLogsEntity.class, Cnd.where("orderId", "=", id));
 		logsEntity.setOrderId(id);
 		logsEntity.setOrderStatus(JPOrderStatusEnum.FIRSTTRIAL_ORDER.intKey());
@@ -2940,6 +2961,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return inputStream;
 	}
 
+	//添加日志
 	public void insertLogs(Integer orderid, Integer status, HttpSession session) {
 		TOrderLogsEntity logs = new TOrderLogsEntity();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -3176,6 +3198,93 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
+	public Object toInsertSamelinkerTouristInfo(TApplicantEntity apply) {
+		Integer userId = apply.getUserId();
+		Integer applyId = apply.getId();
+		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+				Cnd.where("applicantId", "=", applyId));
+		if (!Util.isEmpty(userId)) {
+			List<TApplicantEntity> loginApplyList = dbDao.query(TApplicantEntity.class,
+					Cnd.where("userId", "=", userId), null);
+			TTouristBaseinfoEntity useridBase = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("userId", "=", userId));
+			if (Util.isEmpty(useridBase)) {
+				TTouristBaseinfoEntity base = new TTouristBaseinfoEntity();
+				base.setUserId(userId);
+				base.setUpdateIsPrompted(IsYesOrNoEnum.NO.intKey());
+				base.setSaveIsPrompted(IsYesOrNoEnum.NO.intKey());
+				base.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+				base.setCreateTime(new Date());
+				base.setUpdateTime(new Date());
+				if (!Util.isEmpty(loginApplyList)) {
+					base.setApplicantId(loginApplyList.get(0).getId());
+				}
+				dbDao.insert(base);
+			}
+			TTouristPassportEntity useridPass = dbDao.fetch(TTouristPassportEntity.class,
+					Cnd.where("userId", "=", userId));
+			if (Util.isEmpty(useridPass)) {
+				TTouristPassportEntity pass = new TTouristPassportEntity();
+				pass.setUserId(userId);
+				pass.setPassport(passport.getPassport());
+				pass.setCreateTime(new Date());
+				pass.setUpdateTime(new Date());
+				if (!Util.isEmpty(loginApplyList)) {
+					pass.setApplicantId(loginApplyList.get(0).getId());
+				}
+				dbDao.insert(pass);
+			}
+			TTouristVisaEntity useridVisa = dbDao.fetch(TTouristVisaEntity.class, Cnd.where("userId", "=", userId));
+			if (Util.isEmpty(useridVisa)) {
+				TTouristVisaEntity visa = new TTouristVisaEntity();
+				visa.setUserId(userId);
+				visa.setCreateTime(new Date());
+				visa.setUpdateTime(new Date());
+				if (!Util.isEmpty(loginApplyList)) {
+					visa.setApplicantId(loginApplyList.get(0).getId());
+				}
+				dbDao.insert(visa);
+			}
+		} else {
+			TTouristBaseinfoEntity applyidBase = dbDao.fetch(TTouristBaseinfoEntity.class,
+					Cnd.where("applicantId", "=", applyId));
+			if (Util.isEmpty(applyidBase)) {
+				TTouristBaseinfoEntity newBase = new TTouristBaseinfoEntity();
+				newBase.setFirstName(apply.getFirstName());
+				newBase.setFirstNameEn(apply.getFirstNameEn());
+				newBase.setLastName(apply.getLastName());
+				newBase.setLastNameEn(apply.getLastNameEn());
+				newBase.setApplicantId(applyId);
+				newBase.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+				newBase.setSaveIsPrompted(IsYesOrNoEnum.NO.intKey());
+				newBase.setUpdateIsPrompted(IsYesOrNoEnum.NO.intKey());
+				newBase.setCreateTime(new Date());
+				newBase.setUpdateTime(new Date());
+				dbDao.insert(newBase);
+			}
+			TTouristPassportEntity applyidPass = dbDao.fetch(TTouristPassportEntity.class,
+					Cnd.where("applicantId", "=", applyId));
+			if (Util.isEmpty(applyidPass)) {
+				TTouristPassportEntity newPass = new TTouristPassportEntity();
+				newPass.setApplicantId(applyId);
+				newPass.setPassport(passport.getPassport());
+				newPass.setCreateTime(new Date());
+				newPass.setUpdateTime(new Date());
+				dbDao.insert(newPass);
+			}
+			TTouristVisaEntity applyidVisa = dbDao.fetch(TTouristVisaEntity.class,
+					Cnd.where("applicantId", "=", applyId));
+			if (Util.isEmpty(applyidVisa)) {
+				TTouristVisaEntity newVisa = new TTouristVisaEntity();
+				newVisa.setApplicantId(applyId);
+				newVisa.setCreateTime(new Date());
+				newVisa.setUpdateTime(new Date());
+				dbDao.insert(newVisa);
+			}
+		}
+		return null;
+	}
+
 	public Object toInsertTouristInfo(List<TApplicantOrderJpEntity> applyJpList) {
 		for (TApplicantOrderJpEntity applyJp : applyJpList) {
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyJp.getApplicantId().longValue());
@@ -3265,6 +3374,35 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					newVisa.setUpdateTime(new Date());
 					dbDao.insert(newVisa);
 				}
+			}
+		}
+		return null;
+	}
+
+	public Object changeOrderStatusToFiled(List<TApplicantOrderJpEntity> applyJpList, String infoType,
+			TApplicantOrderJpEntity applyJp, TOrderEntity orderEntity) {
+		int count = 0;
+		if (Util.eq(infoType, "base")) {
+			applyJp.setBaseIsCompleted(IsYesOrNoEnum.YES.intKey());
+		}
+		if (Util.eq(infoType, "pass")) {
+			applyJp.setPassIsCompleted(IsYesOrNoEnum.YES.intKey());
+		}
+		if (Util.eq(infoType, "visa")) {
+			applyJp.setVisaIsCompleted(IsYesOrNoEnum.YES.intKey());
+		}
+		dbDao.update(applyJp);
+		for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applyJpList) {
+			if (Util.eq(tApplicantOrderJpEntity.getBaseIsCompleted(), IsYesOrNoEnum.YES.intKey())
+					&& Util.eq(tApplicantOrderJpEntity.getPassIsCompleted(), IsYesOrNoEnum.YES.intKey())
+					&& Util.eq(tApplicantOrderJpEntity.getVisaIsCompleted(), IsYesOrNoEnum.YES.intKey())) {
+				count++;
+			}
+		}
+		if (Util.eq(count, applyJpList.size())) {
+			if (orderEntity.getStatus() < JPOrderStatusEnum.FILLED_INFORMATION.intKey()) {
+				orderEntity.setStatus(JPOrderStatusEnum.FILLED_INFORMATION.intKey());
+				dbDao.update(orderEntity);
 			}
 		}
 		return null;

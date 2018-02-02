@@ -21,17 +21,16 @@
 		.card-head div:nth-child(1){width:20%;}
 		.card-head div:nth-child(2){width:10%; text-align:right;}
 		.card-head div:nth-child(3){width: 135px;float: right;position: relative;right: 0; height:31px;}
-		.everybody-info div:nth-child(1){width:11%;}
-		.everybody-info div:nth-child(2){width:14%;}
+		.everybody-info div:nth-child(1){width:10%;}
+		.everybody-info div:nth-child(2){width:12%;}
 		.everybody-info div:nth-child(3){width:14%;}
 		.everybody-info div:nth-child(4){width:10%;}
-		.everybody-info div:nth-child(5){width:12%;}
-		/*顶部 不随导航移动*/
-		/* .box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	    .box-body {  overflow:hidden;margin-top:60px;} */
+		.everybody-info div:nth-child(5){width:11%;}
+		.everybody-info div:nth-child(6){width:40%;}
 	    .everybody-info {position:relative; }
+	    label { margin-bottom:0;}
 	    .cf { overflow:visible !important;}
-	    .whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:39%;}
+	    .whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; float:right; position:absolute;}
 	    .showInfo { cursor:pointer; }
 	    .hideInfo { display:none; position:absolute; top:-33px;right:0;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
 	</style>
@@ -88,7 +87,7 @@
 								</li> -->
 								
 								<li class="everybody-info cf" v-for="(item,index) in data.everybodyinfo">
-									<span v-if="index === 0" style="display:block; height:31px;">
+									<span v-if="index === 0">
 										<div><label>申请人：</label><span>{{item.applicant}}</span></div>
 										<div><label>护照号：</label><span>{{item.passportno}}</span></div>
 										<div><label>快递号：</label><span>{{item.expressnum}}</span></div>
@@ -97,7 +96,7 @@
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"><!-- {{item.data}} --></span></div>
 										<span class="hideInfo"></span>
 									</span>
-									<span v-else  style="display:block; height:31px;">
+									<span v-else >
 										<div><label style="width:48px;">   </label><span>{{item.applicant}}</span></div>
 										<div><label style="width:48px;">   </label><span>{{item.passportno}}</span></div>
 										<div><label style="width:48px;">   </label><span>{{item.expressnum}}</span></div>
@@ -148,6 +147,7 @@
             	type:'post',
             	success: function(data){
             		_self.receptionJpData = data.receptionJpData;
+            		console.log(_self.receptionJpData);
             		$('#pageTotal').val(data.pageTotal);
 					$('#pageListCount').val(data.pageListCount);
               	}
@@ -169,7 +169,7 @@
         		    maxmin: false,
         		    shadeClose: false,
         		    scrollbar: false,
-        		    area: ['900px', '550px'],
+        		    area: ['900px', '60%'],
         		    content: '${base}/admin/receptionJP/revenue.html?orderid='+orderid
         		  });
         	},
@@ -305,13 +305,13 @@
 	
 	function successCallBack(status){
 		if(status == 1){
-			layer.msg('保存成功');
+			layer.msg('保存成功<br>订单进入"我的"标签页');
 		}
 		if(status == 2){
-			layer.msg('修改成功');
+			layer.msg('修改成功<br>订单进入"我的"标签页');
 		}
 		if(status == 3){
-			layer.msg('移交签证成功');
+			layer.msg('移交签证成功<br>订单进入"我的"标签页');
 		}
 		if(status == 88){
 			layer.msg('负责人变更成功');

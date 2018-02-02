@@ -23,7 +23,9 @@
 <style>
     .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
+    #uploadFile { padding: 0; width: 125px !important; height: 30px;cursor:pointer;left:0 !important;}
     .modal-body { background-color:#FFF !important; margin-top:50px; height:100%;}  
+    .imgR { border:1px solid #d1d5dd; padding: 0 !important; width: 46%; margin-left: 2%; min-height: 200px }
 </style>
 </head>
 <body>
@@ -53,8 +55,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-sm-6">
-							<img id="visapic" src=" " width="400px" height="200px">
+						<div class="col-sm-5 imgR">
+							<img id="visapic" src=" " width="100%">
 						</div>
 						<input type="hidden" name="picUrl" id="picUrl">
 					</div>

@@ -13,13 +13,9 @@
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
     <link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<link rel="stylesheet" href="${base}/references/public/css/visaJapan.css">
-	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<style>
-	/*顶部 不随导航移动*/
 	[v-cloak]{display:none}
-	.box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	.box-body {  overflow:hidden;margin-top:60px;}
+	.box-body {  overflow:hidden;}
 	.card-head { overflow:hidden; white-space:nowrap;}
 	.card-head span { font-size:12px;}
 	.everybody-info {position:relative; }
@@ -27,7 +23,7 @@
 	.whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:390px;}
 	.showInfo { cursor:pointer; }
 	.card-list { cursor: pointer;}
-	.hideInfo { display:none; position:absolute; top:-33px;right:0;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
+	.hideInfo { display:none; position:absolute; top:-33px; right:10%;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -41,7 +37,7 @@
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
-								<div><label>状态：</label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
+								<div style="text-align: center;"><label></label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
 								
 							</div>
 							<ul class="card-content cf">
@@ -70,19 +66,12 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
-	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
-	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-	<script type="text/javascript" src="${base}/references/public/bootstrap/js/moment.min.js"></script>
-	<script type="text/javascript" src="${base}/references/public/bootstrap/js/daterangepicker.js"></script>
-	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script src="${base}/references/common/js/vue/vue.min.js"></script>
-	<script src="${base}/references/public/plugins/jquery.fileDownload.js"></script>
-	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
-	<%-- <script src="${base}/admin/visaJapan/visaList.js"></script> --%>
-	<script src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
-	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
+	<script type="text/javascript" src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${base}/references/common/js/vue/vue.min.js"></script>
+	<script type="text/javascript" src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
+	<script type="text/javascript" src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
+	<script type="text/javascript" src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
 	//异步加载的URL地址
     var url="${base}/admin/myVisa/visaListData.html";
@@ -93,13 +82,17 @@
 		data: {visaJapanData:""},
 		created:function(){
             _self=this;
+            var start = new Date().getTime();//起始时间
             $.ajax({ 
             	url: url,
             	dataType:"json",
             	type:'post',
             	success: function(data){
+            		 var end = new Date().getTime();//接受时间
             		_self.visaJapanData = data.visaJapanData;
             		$('#pagetotal').val(data.pagetotal);
+                     
+                     //alert((end - start)+"ms");//返回函数执行需要时间
               	}
             });
         },
@@ -178,9 +171,6 @@
 	}
 	
 	$(function(){
-		$('#sendSignDate').daterangepicker(null, function(start, end, label) {
-		  	console.log(start.toISOString(), end.toISOString(), label);
-		});
 		//鼠标移入事件
 		$(document).on('mouseover','.showInfo',function(){
 			

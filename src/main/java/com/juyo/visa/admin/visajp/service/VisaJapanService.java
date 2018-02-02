@@ -1441,6 +1441,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//送签社
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
 			orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
+			//订单负责人变更
+			Integer userId = loginuser.getId();
+			changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 		} else {
 			//地接社为准备提交大使馆
 			orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
@@ -1478,10 +1481,6 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		dbDao.update(orderjp);
 		orderJpViewService.insertLogs(orderinfo.getId(), JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey(), session);
 
-		//订单负责人变更
-		Integer userId = loginuser.getId();
-		Integer orderId = orderJpEntity.getOrderId();
-		changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 		return null;
 	}
 

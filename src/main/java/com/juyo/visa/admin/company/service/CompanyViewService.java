@@ -66,7 +66,17 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 	private static final String MANAGE_PASSWORD = "000000";
 
 	public Object listData(TCompanyForm queryForm) {
-		return listPage4Datatables(queryForm);
+		Map<String, Object> map = listPage4Datatables(queryForm);
+		List<Record> records = (List<Record>) map.get("data");
+		for (Record record : records) {
+			int comtype = record.getInt("comtype");
+			for (CompanyTypeEnum typeEnum : CompanyTypeEnum.values()) {
+				if (comtype == typeEnum.intKey()) {
+					record.set("comtype", typeEnum.value());
+				}
+			}
+		}
+		return map;
 	}
 
 	//调整到列表页

@@ -13,10 +13,13 @@
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 		<style type="text/css">
+			.mainWidth { width:100% !important;}
 			img[src=""],img:not([src]) { opacity:0;}
-			input[type="file"] { z-index:999999;}
-			.delete { z-index:999999999;}
-			.qz-head { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+			input[type="file"] { z-index:99999;}
+			#sqImg { z-index:999999;}
+			#uploadFile { width:100% !important;}
+			.delete { z-index:1000000;}
+			.qz-head { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
 			.content { margin-top:50px; height:100%; padding:15px 37px 15px 40px;}
 			.rightNav { position:fixed;top:60px;right:0;z-index:999; width:40px;height:calc(100% - 50px); cursor:pointer;}
 			.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
@@ -50,20 +53,20 @@
 			<div class="qz-head">
 				<c:choose>
 					<c:when test="${empty obj.contact }">
-						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
-						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
-						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save(1);"/> 
-						<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
+						<input  type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+						<input  type="button" value="取消" class="btn btn-primary btn-sm pull-right basic none" onclick="cancelBtn(1);"/> 
+						<input  type="button" value="保存" class="btn btn-primary btn-sm pull-right basic none" onclick="save(1);"/> 
+						<input  type="button" value="清除" class="btn btn-primary btn-sm pull-right basic none" onclick="clearAll();"/>
 					</c:when>
 					<c:otherwise>
-						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
-						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save(4);"/> 
+						<input  type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
+						<input  type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="save(4);"/> 
 					</c:otherwise>
 				</c:choose>
 			</div>
 			<section class="content">
 			<div class="ipt-info">
-					<input id="passRemark" name="passRemark"  type="text"  class="NoInfo form-control input-sm" />
+					<input disabled id="passRemark" name="passRemark"  type="text"  class="NoInfo form-control input-sm" />
 				</div>
 				<div class="tab-content row">
 					<div class="col-sm-5 padding-right-0">
@@ -72,19 +75,55 @@
 						</div> <!-- end 身份证 正面 -->
 
 						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 mainWidth">
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传护照</span>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="passportUrl" name="passportUrl" type="hidden" value=""/>
-											<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="passportUrl" name="passportUrl" type="hidden" value=""/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 											<img id="sqImg" alt="" src="" >
 										</c:when>
 										<c:otherwise>
-											<input id="passportUrl" name="passportUrl" type="hidden" value="${obj.passport.passportUrl }"/>
-											<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="passportUrl" name="passportUrl" type="hidden" value="${obj.passport.passportUrl }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 											<img id="sqImg" alt="" src="${obj.passport.passportUrl }" >
 										</c:otherwise>
 									</c:choose>
@@ -106,21 +145,120 @@
 									<label><span>*</span>类型</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input type="hidden" id="id" name="id" />
-											<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="hidden" id="id" name="id" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="type" name="type" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
-											<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="hidden" id="id" name="id" value="${obj.passport.id }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
 										</c:otherwise>
 									</c:choose>
-									<input type="hidden"  name="contact" value="${obj.contact }">
-									<input type="hidden"  name="applyId" value="${obj.applyId }">
-									<input type="hidden" id="OCRline1" name="OCRline1" value="">
-									<input type="hidden" id="OCRline2" name="OCRline2" value="">
-									<input type="hidden" id="tourist" name="tourist" value="1"/>
-									<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
-									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+									<input 
+										<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+									 type="hidden"  name="contact" value="${obj.contact }">
+									<input 
+										<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+									 type="hidden"  name="applyId" value="${obj.applyId }">
+									<input 
+										<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+									 type="hidden" id="OCRline1" name="OCRline1" value="">
+									<input 
+										<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+									 type="hidden" id="OCRline2" name="OCRline2" value="">
+									<input 
+										<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+									 type="hidden" id="tourist" name="tourist" value="1"/>
+									<input 
+										<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+									 type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
+									<input 
+										<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+									 type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -129,10 +267,28 @@
 									<label><span>*</span>护照号</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -144,10 +300,10 @@
 							<!-- 姓/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>姓/拼音：</label> <input id="firstName"
+									<label><span>*</span>姓/拼音：</label> <input disabled id="firstName"
 										name="firstName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.passport.firstName }" />
-										<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
+										<input disabled type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -157,10 +313,10 @@
 							<!-- 名/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>名/拼音：</label> <input id="lastName"
+									<label><span>*</span>名/拼音：</label> <input disabled id="lastName"
 										name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.passport.lastName }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
+										<input disabled type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -171,7 +327,16 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0 ">
 								<div class="form-group">
 									<label><span>*</span>性别</label>
-									<select class="form-control input-sm" id="sex" name="sex">
+									<select 
+										<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+									 class="form-control input-sm" id="sex" name="sex" >
 									<c:choose>
 										<c:when test="${empty obj.passport}">
 											<option value="男" >男</option>
@@ -191,10 +356,28 @@
 									<label>&nbsp;&nbsp;</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="sexEn" class="form-control input-sm" name="sexEn" type="text"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="sexEn" class="form-control input-sm" name="sexEn" type="text"/>
 										</c:when>
 										<c:otherwise>
-											<input id="sexEn" class="form-control input-sm" name="sexEn" type="text" value="${obj.passport.sexEn }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="sexEn" class="form-control input-sm" name="sexEn" type="text" value="${obj.passport.sexEn }"/>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -204,12 +387,69 @@
 									<label><span>*</span>出生地点/拼音</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " />
-											<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:36px; width:110px;border:0px;left:66px;" type="text"  placeholder=" " />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="birthAddressEn" name="birthAddressEn" 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;"
+														</c:otherwise>
+													
+													</c:choose >
+											 
+											  type="text"  placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
-											<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:36px; width:110px;border:0px;left:66px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="birthAddressEn" name="birthAddressEn" 
+											 <c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;"
+														</c:otherwise>
+													
+													</c:choose >
+											  type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -223,10 +463,28 @@
 									<label><span>*</span>出生日期</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value="${obj.birthday}"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value="${obj.birthday}"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -237,12 +495,68 @@
 									<label><span>*</span>签发地点/拼音</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " />
-											<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:36px; width:110px;border:0px;left:66px;" placeholder=" " />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issuedPlaceEn" name="issuedPlaceEn" type="text" 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;"
+														</c:otherwise>
+													
+													</c:choose >
+											  placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
-											<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:36px; width:110px;border:0px;left:66px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issuedPlaceEn" name="issuedPlaceEn" type="text" 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px; width:110px;border:0px;left:66px;"
+														</c:otherwise>
+													
+													</c:choose >
+											  placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -256,10 +570,28 @@
 									<label><span>*</span>签发日期</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.issuedDate }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.issuedDate }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -268,7 +600,16 @@
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<select id="validType" name="validType" class="form-control input-sm " >
+									<select 
+										<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+									id="validType" name="validType" class="form-control input-sm " style="padding: 5px;">
 									<c:choose>
 										<c:when test="${empty obj.passport}">
 											<c:forEach var="map" items="${obj.passportType}">
@@ -289,10 +630,28 @@
 									<label><span>*</span>有效期至</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.validEndDate }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.validEndDate }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -305,10 +664,28 @@
 									<label><span>*</span>签发机关</label>
 									<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -319,10 +696,28 @@
 								<div class="form-group">
 								<c:choose>
 										<c:when test="${empty obj.passport}">
-											<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -357,6 +752,89 @@
 	var contact = '${obj.contact}';
 	$(function() {
 		
+		//护照图片验证
+		var passportUrl = $("#passportUrl").val();
+		if(passportUrl == ""){
+			$(".front").attr("class", "info-imgUpload front has-error");  
+	        $(".help-blockFront").attr("data-bv-result","INVALID");  
+	        //$(".help-blockFront").attr("style","display: block;");  
+	        //$("#borderColor").attr("style", "border-color:#ff1a1a");
+		}else{
+			$(".front").attr("class", "info-imgUpload front has-success");  
+	        $(".help-blockFront").attr("data-bv-result","IVALID");  
+	        $(".help-blockFront").attr("style","display: none;");
+	        $("#borderColor").attr("style", null);
+		}
+		
+		if(!contact){
+			//将页面所有元素设置为disabled
+			/* var form = document.forms[0]; 
+			for ( var i = 0; i < form.length; i++) { 
+				var element = form.elements[i]; 
+				if(element.id != "editbasic")
+					element.disabled = true; 
+			} 
+			$(".basic").hide();
+			document.getElementById("passRemark").style.backgroundColor = "#eee";
+			document.getElementById("birthAddressEn").style.backgroundColor = "#eee";
+			document.getElementById("issuedPlaceEn").style.backgroundColor = "#eee"; */
+			var remark = $("#passRemark").val();
+			if(remark != ""){
+				$(".ipt-info").show();
+			}
+			$("#passRemark").attr("disabled", true);
+		}else{
+			
+			/* var bootstrapValidator = $("#passportInfo").data(
+			'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate(); */
+			$("#deletePassportImg").click(function(){
+				$('#passportUrl').val("");
+				$('#sqImg').attr('src', "");
+				$("#uploadFile").siblings("i").css("display","none");
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+		        //$(".help-blockFront").attr("style","display: block;");
+		        //$("#borderColor").attr("style", "border-color:#ff1a1a");
+			});
+			$("#passRemark").attr("disabled", true);
+		}
+		
+		
+		
+		
+		if($("#sex").val() == "男"){
+			$("#sexEn").val("M");
+		}else{
+			$("#sexEn").val("F");
+		}
+		
+		$("#issuedDate").change(function(){
+			if($("#issuedDate").val() != ""){
+				if($("#validType").val() == 1){
+					$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
+				}else{
+					$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+				}
+			}
+		});
+	});
+	
+	function passportValidate(){
+		//护照图片验证
+		var passportUrl = $("#passportUrl").val();
+		if(passportUrl == ""){
+			$("#borderColor").attr("style", "border-color:#ff1a1a");  
+			$(".front").attr("class", "info-imgUpload front has-error");  
+	        $(".help-blockFront").attr("data-bv-result","INVALID");  
+	        $(".help-blockFront").attr("style","display: block;");  
+		}else{
+			$("#borderColor").attr("style", null);
+			$(".front").attr("class", "info-imgUpload front has-success");  
+	        $(".help-blockFront").attr("data-bv-result","IVALID");  
+	        $(".help-blockFront").attr("style","display: none;");  
+		}
 		//校验
 		$('#passportInfo').bootstrapValidator({
 			message : '验证不通过',
@@ -371,8 +849,8 @@
 					validators : {
 						notEmpty : {
 							message : '护照号不能为空'
-						},
-	                   /*  remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+						}/* ,
+	                     remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 							url: '${base}/admin/orderJp/checkPassport.html',
 							message: '护照号已存在，请重新输入',//提示消息
 							delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
@@ -385,7 +863,7 @@
 									orderid:$('#orderid').val()
 								};
 							}
-						} */
+						} */ 
 					}
 				},
 				type : {
@@ -439,73 +917,7 @@
 			}
 		});
 	$('#passportInfo').bootstrapValidator('validate');
-		
-		if(!contact){
-			//将页面所有元素设置为disabled
-			var form = document.forms[0]; 
-			for ( var i = 0; i < form.length; i++) { 
-				var element = form.elements[i]; 
-				if(element.id != "editbasic")
-					element.disabled = true; 
-			} 
-			$(".basic").hide();
-			document.getElementById("passRemark").style.backgroundColor = "#eee";
-			document.getElementById("birthAddressEn").style.backgroundColor = "#eee";
-			document.getElementById("issuedPlaceEn").style.backgroundColor = "#eee";
-			var remark = $("#passRemark").val();
-			if(remark != ""){
-				$(".ipt-info").show();
-			}
-			$("#passRemark").attr("disabled", true);
-		}else{
-			//护照图片验证
-			var passportUrl = $("#passportUrl").val();
-			if(passportUrl == ""){
-				$("#borderColor").attr("style", "border-color:#ff1a1a");  
-				$(".front").attr("class", "info-imgUpload front has-error");  
-		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");  
-			}else{
-				$("#borderColor").attr("style", null);
-				$(".front").attr("class", "info-imgUpload front has-success");  
-		        $(".help-blockFront").attr("data-bv-result","IVALID");  
-		        $(".help-blockFront").attr("style","display: none;");  
-			}
-			var bootstrapValidator = $("#passportInfo").data(
-			'bootstrapValidator');
-			// 执行表单验证 
-			bootstrapValidator.validate();
-			$("#deletePassportImg").click(function(){
-				$('#passportUrl').val("");
-				$('#sqImg').attr('src', "");
-				$("#uploadFile").siblings("i").css("display","none");
-				$(".front").attr("class", "info-imgUpload front has-error");  
-		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");
-		        $("#borderColor").attr("style", "border-color:#ff1a1a");
-			});
-			$("#passRemark").attr("disabled", true);
-		}
-		
-		
-		
-		
-		if($("#sex").val() == "男"){
-			$("#sexEn").val("M");
-		}else{
-			$("#sexEn").val("F");
-		}
-		
-		$("#issuedDate").change(function(){
-			if($("#issuedDate").val() != ""){
-				if($("#validType").val() == 1){
-					$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
-				}else{
-					$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
-				}
-			}
-		});
-	});
+	}
 	
 	//护照上传,扫描
 	
@@ -593,21 +1005,24 @@
 	
 	//保存
 	function save(status){
-		//得到获取validator对象或实例 
-		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-		// 执行表单验证 
-		bootstrapValidator.validate();
-		if(status != 2){
-			if (!bootstrapValidator.isValid()) {
-				return;
-			}
-			if($(".front").hasClass("has-error")){
-				return;
-			}
-		}
 		var passportInfo = $("#passportInfo").serialize();
 		var orderid = '${obj.orderid}';
 		var applicantId = '${obj.applicantId}';
+		var id = '${obj.applyId}';
+		if(status != 2){
+			passportValidate();
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
+			if($(".front").hasClass("has-error")){
+				return;
+			}
+				if (!bootstrapValidator.isValid()) {
+					return;
+				}
+		setTimeout(function(){
+			if(bootstrapValidator.isValid()){
 		layer.load(1);
 		$.ajax({
 			type: 'POST',
@@ -618,8 +1033,8 @@
 				if(status == 1){
 					cancelBtn(2);
 					parent.successCallBack();
-				}else if(status == 2 || status == 3){
-					
+				}else if(status == 3){
+					window.location.href = '/admin/myData/visa.html?contact=1&applyId='+id;
 				}else{
 					layer.msg("修改成功", {
 						time: 500,
@@ -632,6 +1047,20 @@
 				}
 			}
 		});
+			 }
+		},500);
+		}else{
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : passportInfo,
+				url: '${base}/admin/myData/saveEditPassport',
+				success :function(data) {
+					layer.closeAll('loading');
+					window.location.href = '/admin/myData/basic.html?contact=1&applyId='+id;
+				}
+			});
+		}
 	}
 	
 	//编辑按钮
@@ -648,28 +1077,28 @@
 		//护照图片验证
 		var passportUrl = $("#passportUrl").val();
 		if(passportUrl == ""){
-			$("#borderColor").attr("style", "border-color:#ff1a1a");  
+			//$("#borderColor").attr("style", "border-color:#ff1a1a");  
 			$(".front").attr("class", "info-imgUpload front has-error");  
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
-	        $(".help-blockFront").attr("style","display: block;");  
+	        //$(".help-blockFront").attr("style","display: block;");  
 		}else{
-			$("#borderColor").attr("style", null);
 			$(".front").attr("class", "info-imgUpload front has-success");  
 	        $(".help-blockFront").attr("data-bv-result","IVALID");  
 	        $(".help-blockFront").attr("style","display: none;");  
+			$("#borderColor").attr("style", null);
 		}
-		var bootstrapValidator = $("#passportInfo").data(
+		/* var bootstrapValidator = $("#passportInfo").data(
 		'bootstrapValidator');
 		// 执行表单验证 
-		bootstrapValidator.validate();
+		bootstrapValidator.validate(); */
 		$("#deletePassportImg").click(function(){
 			$('#passportUrl').val("");
 			$('#sqImg').attr('src', "");
 			$("#uploadFile").siblings("i").css("display","none");
 			$(".front").attr("class", "info-imgUpload front has-error");  
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
-	        $(".help-blockFront").attr("style","display: block;");
-	        $("#borderColor").attr("style", "border-color:#ff1a1a");
+	        //$(".help-blockFront").attr("style","display: block;");
+	        //$("#borderColor").attr("style", "border-color:#ff1a1a");
 		});
 		$("#passRemark").attr("disabled", true);
 	}
@@ -686,12 +1115,12 @@
 		save(2);
 		//关闭socket连接
 		//socket.onclose();
-		var id = '${obj.applyId}';
-		window.location.href = '/admin/myData/basic.html?contact=1&applyId='+id;
+		//var id = '${obj.applyId}';
+		//window.location.href = '/admin/myData/basic.html?contact=1&applyId='+id;
 	 }
 		
 	 function visaBtn(){
-		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+		/* var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 		bootstrapValidator.validate();
 		if (!bootstrapValidator.isValid()) {
 			return;
@@ -699,12 +1128,12 @@
 		
 		if($(".front").hasClass("has-error")){
 			return;
-		}
+		} */
 		save(3);
 		//关闭socket连接
 		//socket.onclose();
-		var id = '${obj.applyId}';
-		window.location.href = '/admin/myData/visa.html?contact=1&applyId='+id;
+		//var id = '${obj.applyId}';
+		//window.location.href = '/admin/myData/visa.html?contact=1&applyId='+id;
 	 }
 	
 	//取消按钮
@@ -844,8 +1273,8 @@
 		$("#passportUrl").val("");
 		$(".front").attr("class", "info-imgUpload front has-error");  
         $(".help-blockFront").attr("data-bv-result","INVALID");  
-        $(".help-blockFront").attr("style","display: block;"); 
-        $("#borderColor").attr("style", "border-color:#ff1a1a");
+        //$(".help-blockFront").attr("style","display: block;"); 
+        //$("#borderColor").attr("style", "border-color:#ff1a1a");
 		$('#sqImg').attr('src', "");
 		$("#type").val("").change();
 		$("#passport").val("").change();

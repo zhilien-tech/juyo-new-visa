@@ -30,20 +30,20 @@
 			<div class="qz-head">
 				<c:choose>
 					<c:when test="${empty obj.contact }">
-						<input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
-						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
-						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant(1);"/> 
-						<input type="button" value="清除" class="btn btn-primary btn-sm pull-right basic" onclick="clearAll();"/>
+						<input  type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/> 
+						<input  type="button" value="取消" class="btn btn-primary btn-sm pull-right basic none" onclick="cancelBtn(1);"/> 
+						<input  type="button" value="保存" class="btn btn-primary btn-sm pull-right basic none" onclick="saveApplicant(1);"/> 
+						<input  type="button" value="清除" class="btn btn-primary btn-sm pull-right basic none" onclick="clearAll();"/>
 					</c:when>
 					<c:otherwise>
-						<input type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
-						<input type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant(3);"/> 
+						<input  type="button" value="取消" class="btn btn-primary btn-sm pull-right basic" onclick="cancelBtn(1);"/> 
+						<input  type="button" value="保存" class="btn btn-primary btn-sm pull-right basic" onclick="saveApplicant(3);"/> 
 					</c:otherwise>
 				</c:choose>
 			</div>
 			<section class="content">
 			<div class="ipt-info">
-					<input id="baseRemark" name="baseRemark" type="text"   class="NoInfo form-control input-sm" />
+					<input disabled id="baseRemark" name="baseRemark" type="text"   class="NoInfo form-control input-sm" />
 				</div>
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
@@ -53,19 +53,55 @@
 
 						<div class="info-imgUpload front has-error" id="borderColorFront">
 							<!-- 身份证 正面 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 mainWidth">
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传身份证正面</span>
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="cardFront" name="cardFront" type="hidden" />
-											<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="cardFront" name="cardFront" type="hidden" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 											<img id="sqImg" alt="" src="" >
 										</c:when>
 										<c:otherwise>
-											<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
-											<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 											<img id="sqImg" alt="" src="${obj.applicant.cardFront }" >
 										</c:otherwise>
 									</c:choose>
@@ -84,19 +120,55 @@
 
 						<div class="info-imgUpload back has-error" id="borderColorBack">
 							<!-- 身份证 反面 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 mainWidth">
 								<div class="form-group">
 									<div class="cardFront-div">
 										<span>点击上传身份证背面</span>
 										<c:choose>
 											<c:when test="${empty obj.applicant}">
-												<input id="cardBack" name="cardBack" type="hidden" />
-												<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 id="cardBack" name="cardBack" type="hidden" />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 												<img id="sqImgBack" alt="" src="" >
 											</c:when>
 											<c:otherwise>
-												<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
-												<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
 												<img id="sqImgBack" alt="" src="${obj.applicant.cardBack }" >
 											</c:otherwise>
 										</c:choose>
@@ -111,16 +183,34 @@
 						<!-- end 身份证 反面 -->
 						<div class="row">
 							<!-- 签发机关 -->
-							<div class="col-sm-10 col-sm-offset-1 padding-right-0 marginL">
+							<div class="col-sm-10 col-sm-offset-1 padding-right-0 marginL" style="margin-top:6px;">
 								<div class="form-group">
 									<label><span>*</span>签发机关</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="issueOrganization" name="issueOrganization"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issueOrganization" name="issueOrganization"
 												type="text" class="form-control input-sm" placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="issueOrganization" name="issueOrganization"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="issueOrganization" name="issueOrganization"
 												type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
 										</c:otherwise>
 									</c:choose>
@@ -136,11 +226,29 @@
 									<label>是否有曾用名</label> 
 									<div>
 										<span class="nameBeforeYes ">
-											<input type="radio" name="hasOtherName" class="nameBefore"  value="1"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="radio" name="hasOtherName" class="nameBefore"  value="1"
 											/>是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherName" class="nameBefore"  value="2"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="radio" name="hasOtherName" class="nameBefore"  value="2"
 											/>否
 										</span>
 									</div>
@@ -149,16 +257,76 @@
 							<!-- 姓/名 拼音 -->
 							<div class="nameBeforeHide">
 							    <div class="col-sm-10 col-sm-offset-1 padding-right-0 marginL">
-									<div class="form-group">
+									<div class="form-group" style="position:relative;">
 										<label>姓/拼音</label> 
 										<c:choose>
 											<c:when test="${empty obj.applicant}">
-												<input id="otherFirstName" name="otherFirstName" type="text" class="form-control input-sm " placeholder=" "  />
-												<input type="text" id="otherFirstNameEn" style="position:absolute;top:36px;border:none;left:150px;"  name="otherFirstNameEn" />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												
+												id="otherFirstName" name="otherFirstName" type="text" class="form-control input-sm " placeholder=" "  />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 type="text" id="otherFirstNameEn" 
+												 <c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+												 
+												   name="otherFirstNameEn" />
 											</c:when>
 											<c:otherwise>
-												<input id="otherFirstName"	name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.otherFirstName }" />
-												<input type="text" id="otherFirstNameEn" style="position:absolute;top:36px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 id="otherFirstName"	name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.otherFirstName }" />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 type="text" id="otherFirstNameEn" 
+												 <c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+												 
+												 
+												   name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
 											</c:otherwise>
 										</c:choose>
 										<!-- <i class="bulb"></i> -->
@@ -172,24 +340,70 @@
 									<label>曾有的或另有的国籍(或公民身份)</label> 
 									<div>
 										<span class="onceIDYes ">
-											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="radio" name="hasOtherNationality" class="onceID" value="1" />是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherNationality" class="onceID"  value="2" />否
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="radio" name="hasOtherNationality" class="onceID"  value="2" />否
 										</span>
 									</div>
 								</div>
 							</div>
 							<!-- 曾用国籍 -->
-							<div class="col-sm-5 padding-right-0 nationalityHide">
+							<c:choose>
+								<c:when test="${empty obj.contact}">
+									<div class="col-sm-5 padding-right-0 nationalityHide" style="margin-left:13%;">
+								</c:when>
+								<c:otherwise>
+									<div class="col-sm-5 padding-right-0 nationalityHide" style="margin-left:2%;">
+								</c:otherwise>
+													
+							</c:choose >
+							
+							
 								<div class="form-group" id="nationalityDiv">
 									<label>国籍</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="nationality" name="nationality"  type="text" class="form-control input-sm"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="nationality" name="nationality"  type="text" class="form-control input-sm"/>
 										</c:when>
 										<c:otherwise>
-											<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -206,18 +420,111 @@
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
 											<img width="100%" height="100%" alt="" src="">
-											<input id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" "  />
-											<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											
+											 id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" "  />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="text" id="firstNameEn" 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+											   name="firstNameEn" />
 										</c:when>
 										<c:otherwise>
-											<input id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.firstName }" />
-											<input type="text" id="firstNameEn" style="position:absolute;top:35px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.firstName }" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="text" id="firstNameEn" 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+											   name="firstNameEn" value="${obj.firstNameEn }"/>
 										</c:otherwise>
 									</c:choose>
-										<input type="hidden" name="applyId" value="${obj.applyId }"/>
-										<input type="hidden" name="contact" value="${obj.contact }"/>
-										<input type="hidden" id="id" name="applicantid" value="${obj.applicantId}"/>
-										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+										<input 
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 type="hidden" name="applyId" value="${obj.applyId }"/>
+										<input 
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 type="hidden" name="contact" value="${obj.contact }"/>
+										<input 
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 type="hidden" id="id" name="applicantid" value="${obj.applicantId}"/>
+										<input 
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -230,16 +537,73 @@
 									<label><span>*</span>名/拼音</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="lastName"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="lastName"
 												name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 												placeholder=" " />
-												<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 type="text" id="lastNameEn" 
+												 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+												 
+												  name="lastNameEn" />
 										</c:when>
 										<c:otherwise>
-											<input id="lastName"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="lastName"
 												name="lastName" style="position:relative;" type="text" class="form-control input-sm "
 												placeholder=" " value="${obj.applicant.lastName }" />
-												<input type="text" id="lastNameEn" style="position:absolute;top:35px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 type="text" id="lastNameEn" 
+												 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+												  name="lastNameEn" value="${obj.lastNameEn }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -254,12 +618,31 @@
 									<label><span>*</span>手机号</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="telephone"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="telephone"
 												name="telephone" type="text" class="form-control input-sm"
 												placeholder=" "  />
 										</c:when>
 										<c:otherwise>
-											<input id="telephone"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											
+											 id="telephone"
 												name="telephone" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.applicant.telephone }" />
 										</c:otherwise>
@@ -272,12 +655,30 @@
 									<label><span>*</span>邮箱</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="email" name="email"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="email" name="email"
 												type="text" class="form-control input-sm" placeholder=" "
 												/>
 										</c:when>
 										<c:otherwise>
-											<input id="email" name="email"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="email" name="email"
 												type="text" class="form-control input-sm" placeholder=" "
 												value="${obj.applicant.email }" />
 										</c:otherwise>
@@ -294,12 +695,30 @@
 									<label><span>*</span>公民身份号码</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="cardId"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="cardId"
 												name="cardId" type="text" class="form-control input-sm"
 												placeholder=" "  />
 										</c:when>
 										<c:otherwise>
-											<input id="cardId"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="cardId"
 												name="cardId" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.applicant.cardId }" />
 										</c:otherwise>
@@ -314,7 +733,16 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>性别</label> 
-										<select	 class="form-control input-sm" id="sex" name="sex">
+										<select	
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 class="form-control input-sm" id="sex" name="sex" >
 											<c:choose>
 												<c:when test="${empty obj.applicant}">
 													<option value="男" >男</option>
@@ -333,12 +761,30 @@
 									<label><span>*</span>民族</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="nation"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="nation"
 												name="nation" type="text" class="form-control input-sm"
 												placeholder=" "  />
 										</c:when>
 										<c:otherwise>
-											<input id="nation"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="nation"
 												name="nation" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.applicant.nation }" />
 										</c:otherwise>
@@ -351,12 +797,30 @@
 									<label><span>*</span>出生日期</label>
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											 <input id="birthday"
+											 <input 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											  id="birthday"
 												name="birthday" type="text" class="form-control input-sm"
 												placeholder=" "  />
 										</c:when>
 										<c:otherwise>
-											 <input id="birthday"
+											 <input 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											  id="birthday"
 												name="birthday" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.birthday }" />
 										</c:otherwise>
@@ -373,12 +837,30 @@
 									<label><span>*</span>住址</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="address"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="address"
 												name="address" type="text" class="form-control input-sm"
 												placeholder=" "  />
 										</c:when>
 										<c:otherwise>
-											<input id="address"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="address"
 												name="address" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.applicant.address }" />
 										</c:otherwise>
@@ -394,10 +876,28 @@
 									<label>有效期限</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" />
 										</c:when>
 										<c:otherwise>
-											<input id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -407,10 +907,28 @@
 									<label> &nbsp; &nbsp;</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" >
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" >
 										</c:when>
 										<c:otherwise>
-											<input id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" value="${obj.validEndDate }">
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" value="${obj.validEndDate }">
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -422,19 +940,64 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>现居住地是否与身份证相同</label> 
-									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
+									<input 
+										<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+									 class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="province"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="province"
 												name="province" type="text" class="form-control input-sm"
 												placeholder="省" />
 										</c:when>
 										<c:otherwise>
-											<input id="province"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="province"
 												name="province" type="text" class="form-control input-sm"
 												placeholder="省" value="${obj.applicant.province }" />
-											<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
-											<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
 										</c:otherwise>
 									</c:choose>
 									<!-- <i class="bulb"></i> -->
@@ -445,12 +1008,30 @@
 									<label>现居住地址城市</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="city"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											id="city"
 												name="city" type="text" class="form-control input-sm"
 												placeholder="市"  />
 										</c:when>
 										<c:otherwise>
-											<input id="city"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="city"
 												name="city" type="text" class="form-control input-sm"
 												placeholder="市" value="${obj.applicant.city }" />
 										</c:otherwise>
@@ -468,13 +1049,30 @@
 									<label>详细地址</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											
 												id="detailedAddress" name="detailedAddress" type="text"
 												class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间"
 												/>
 										</c:when>
 										<c:otherwise>
-											<input
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
 												id="detailedAddress" name="detailedAddress" type="text"
 												class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间"
 												value="${obj.applicant.detailedAddress }" />
@@ -493,16 +1091,72 @@
 						<!-- 名/拼音 -->
 						<div class="row wordSpell">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0 col-sm-offset-1">
-								<div class="form-group">
+								<div class="form-group" style="position:relative;">
 									<label>名/拼音</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" "  />
-											<input type="text" id="otherLastNameEn" style="position:absolute;top:36px;border:none;left:150px;" name="otherLastNameEn" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" "  />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="text" id="otherLastNameEn" 
+											 <c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+												</c:choose >
+											 			 name="otherLastNameEn" />
 										</c:when>
 										<c:otherwise>
-											<input id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
-											<input type="text" id="otherLastNameEn" style="position:absolute;top:36px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="otherLastName" name="otherLastName" style="position:relative;" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="text" id="otherLastNameEn" 
+											 <c:choose>
+												<c:when test="${empty obj.contact}">
+													style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+												</c:when>
+												<c:otherwise>
+													style="position:absolute;top:30px;border:none;left:150px;"
+												</c:otherwise>
+													
+											</c:choose >
+											  name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -515,12 +1169,30 @@
 									<label>紧急联系人姓名</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="emergencyLinkman"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="emergencyLinkman"
 												name="emergencyLinkman" type="text" class="form-control input-sm"
 												placeholder=" " />
 										</c:when>
 										<c:otherwise>
-											<input id="emergencyLinkman"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="emergencyLinkman"
 												name="emergencyLinkman" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.applicant.emergencyLinkman }" />
 										</c:otherwise>
@@ -533,12 +1205,30 @@
 									<label>紧急联系人手机</label> 
 									<c:choose>
 										<c:when test="${empty obj.applicant}">
-											<input id="emergencyTelephone" name="emergencyTelephone"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="emergencyTelephone" name="emergencyTelephone"
 												type="text" class="form-control input-sm" placeholder=" "
 												/>
 										</c:when>
 										<c:otherwise>
-											<input id="emergencyTelephone" name="emergencyTelephone"
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="emergencyTelephone" name="emergencyTelephone"
 												type="text" class="form-control input-sm" placeholder=" "
 												value="${obj.applicant.emergencyTelephone }" />
 										</c:otherwise>
@@ -572,6 +1262,163 @@
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
 	$(function(){
+		
+		$('#applicantInfo').bootstrapValidator({
+			message : '验证不通过',
+			feedbackIcons : {
+				valid : 'glyphicon glyphicon-ok',
+				invalid : 'glyphicon glyphicon-remove',
+				validating : 'glyphicon glyphicon-refresh'
+			},
+			fields : {
+
+				telephone : {
+					validators : {
+						regexp: {
+	                	 	regexp: /^[1][34578][0-9]{9}$/,
+	                        message: '手机号格式错误'
+	                    }
+					}
+				},
+				emergencyTelephone : {
+					validators : {
+						regexp: {
+	                	 	regexp: /^[1][34578][0-9]{9}$/,
+	                        message: '手机号格式错误'
+	                    }
+					}
+				},
+				email : {
+					validators : {
+						regexp: {
+	                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+	                        message: '邮箱格式错误'
+	                    }
+					}
+				}
+			}
+		});
+		$('#applicantInfo').bootstrapValidator('validate');
+		
+		if(!contact){
+			//页面所有元素设置为disabled
+			/* var form = document.forms[0]; 
+			for ( var i = 0; i < form.length; i++) { 
+				var element = form.elements[i]; 
+				if(element.id != "editbasic")
+					element.readOnly = true; 
+			}  */
+			//$(".editbasic").removeClass("none");
+			/* var remark = $("#baseRemark").val();
+			if(remark != ""){
+				$(".ipt-info").show();
+			} */
+			/* document.getElementById("baseRemark").style.backgroundColor = "#eee";
+			document.getElementById("firstNameEn").style.backgroundColor = "#eee";
+			document.getElementById("lastNameEn").style.backgroundColor = "#eee";
+			document.getElementById("otherFirstNameEn").style.backgroundColor = "#eee";
+			document.getElementById("otherLastNameEn").style.backgroundColor = "#eee"; */
+			//$("#baseRemark").attr("disabled", true);
+		}else{
+			$("#deleteApplicantFrontImg").click(function(){
+				$('#cardFront').val("");
+				$('#sqImg').attr('src', "");
+				$("#uploadFile").siblings("i").css("display","none");
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+		        //$(".help-blockFront").attr("style","display: block;");
+		        //$("#borderColorFront").attr("style", "border-color:#ff1a1a");
+			});
+			$("#deleteApplicantBackImg").click(function(){
+				$('#cardBack').val("");
+				$('#sqImgBack').attr('src', "");
+				$("#uploadFileBack").siblings("i").css("display","none");
+				$(".back").attr("class", "info-imgUpload back has-error");  
+		        $(".help-blockBack").attr("data-bv-result","INVALID");  
+		        //$(".help-blockBack").attr("style","display: block;");
+		        //$("#borderColorBack").attr("style", "border-color:#ff1a1a");
+			});
+		}
+		
+			var nation = '${obj.applicant.hasOtherNationality}';
+			var otherName = '${obj.applicant.hasOtherName}';
+			var address = '${obj.applicant.addressIsSameWithCard}';
+			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
+			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
+			if(nation == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nationalityHide").show();
+				$(".onceIDTop").css('float','left');
+			}else {
+				$(".nationalityHide").hide();
+				$("input[name='hasOtherNationality'][value='2']").attr("checked",'checked');
+			}
+			
+			if(otherName == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nameBeforeHide").show();
+				$(".wordSpell").show();
+				//$(".onceIDTop").removeClass('col-sm-offset-1');
+				//$(".onceIDTop").css('padding-left','15px');
+			}else {
+				$(".wordSpell").hide();
+				$(".nameBeforeHide").hide();
+				$("input[name='hasOtherName'][value='2']").attr("checked",'checked');
+			}
+			
+			if(address == 1){
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
+			}else{
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
+			}
+			
+		
+		
+		
+		
+		var front = $("#cardFront").val();
+		var back = $("#cardBack").val();
+		if(front != ""){
+			$("#uploadFile").siblings("i").css("display","block");
+		}else{
+			$("#uploadFile").siblings("i").css("display","none");
+		}
+		
+		if(back != ""){
+			$("#uploadFileBck").siblings("i").css("display","block");
+		}else{
+			$("#uploadFileBack").siblings("i").css("display","none");
+		} 
+	});
+	
+	function applicantValidate(){
+		
+		//身份证图片验证
+		var cardFront = $("#cardFront").val();
+		if(cardFront == ""){
+			$(".front").attr("class", "info-imgUpload front has-error");  
+	        $(".help-blockFront").attr("data-bv-result","INVALID");  
+	        $(".help-blockFront").attr("style","display: block;");  
+	        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
+		}else{
+			$(".front").attr("class", "info-imgUpload front has-success");  
+	        $(".help-blockFront").attr("data-bv-result","IVALID");  
+	        $(".help-blockFront").attr("style","display: none;");  
+	        $("#borderColorFront").attr("style", null);
+		}
+		
+		var cardBack = $("#cardBack").val();
+		if(cardBack == ""){
+			$(".back").attr("class", "info-imgUpload back has-error");  
+	        $(".help-blockBack").attr("data-bv-result","INVALID");  
+	        $(".help-blockBack").attr("style","display: block;");
+	        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
+		}else{
+			$(".back").attr("class", "info-imgUpload back has-success");  
+	        $(".help-blockBack").attr("data-bv-result","IVALID");  
+	        $(".help-blockBack").attr("style","display: none;");
+	        $("#borderColorBack").attr("style", null);
+		}
 		
 		//校验
 		$('#applicantInfo').bootstrapValidator({
@@ -750,133 +1597,15 @@
 			}
 		});
 	$('#applicantInfo').bootstrapValidator('validate');
-		
 	
-		if(!contact){
-			//页面所有元素设置为disabled
-			var form = document.forms[0]; 
-			for ( var i = 0; i < form.length; i++) { 
-				var element = form.elements[i]; 
-				if(element.id != "editbasic")
-					element.disabled = true; 
-			} 
-			$(".basic").hide();
-			/* var remark = $("#baseRemark").val();
-			if(remark != ""){
-				$(".ipt-info").show();
-			} */
-			document.getElementById("baseRemark").style.backgroundColor = "#eee";
-			document.getElementById("firstNameEn").style.backgroundColor = "#eee";
-			document.getElementById("lastNameEn").style.backgroundColor = "#eee";
-			document.getElementById("otherFirstNameEn").style.backgroundColor = "#eee";
-			document.getElementById("otherLastNameEn").style.backgroundColor = "#eee";
-			//$("#baseRemark").attr("disabled", true);
-			
-		}else{
-			//身份证图片验证
-			var cardFront = $("#cardFront").val();
-			if(cardFront == ""){
-				$(".front").attr("class", "info-imgUpload front has-error");  
-		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");  
-		        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
-			}else{
-				$(".front").attr("class", "info-imgUpload front has-success");  
-		        $(".help-blockFront").attr("data-bv-result","IVALID");  
-		        $(".help-blockFront").attr("style","display: none;");  
-		        $("#borderColorFront").attr("style", null);
-			}
-			
-			var cardBack = $("#cardBack").val();
-			if(cardBack == ""){
-				$(".back").attr("class", "info-imgUpload back has-error");  
-		        $(".help-blockBack").attr("data-bv-result","INVALID");  
-		        $(".help-blockBack").attr("style","display: block;");
-		        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
-			}else{
-				$(".back").attr("class", "info-imgUpload back has-success");  
-		        $(".help-blockBack").attr("data-bv-result","IVALID");  
-		        $(".help-blockBack").attr("style","display: none;");
-		        $("#borderColorBack").attr("style", null);
-			}
-			
-			var bootstrapValidator = $("#applicantInfo").data(
-			'bootstrapValidator');
-			// 执行表单验证 
-			bootstrapValidator.validate();
-			$("#deleteApplicantFrontImg").click(function(){
-				$('#cardFront').val("");
-				$('#sqImg').attr('src', "");
-				$("#uploadFile").siblings("i").css("display","none");
-				$(".front").attr("class", "info-imgUpload front has-error");  
-		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-		        $(".help-blockFront").attr("style","display: block;");
-		        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
-			});
-			$("#deleteApplicantBackImg").click(function(){
-				$('#cardBack').val("");
-				$('#sqImgBack').attr('src', "");
-				$("#uploadFileBack").siblings("i").css("display","none");
-				$(".back").attr("class", "info-imgUpload back has-error");  
-		        $(".help-blockBack").attr("data-bv-result","INVALID");  
-		        $(".help-blockBack").attr("style","display: block;");
-		        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
-			});
-		}
-		
-			var nation = '${obj.applicant.hasOtherNationality}';
-			var otherName = '${obj.applicant.hasOtherName}';
-			var address = '${obj.applicant.addressIsSameWithCard}';
-			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
-			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
-			if(nation == 1){
-				$(".nameBeforeTop").css('float','none');
-				$(".nationalityHide").show();
-				$(".onceIDTop").css('float','left');
-			}else {
-				$(".nationalityHide").hide();
-				$("input[name='hasOtherNationality'][value='2']").attr("checked",'checked');
-			}
-			
-			if(otherName == 1){
-				$(".nameBeforeTop").css('float','none');
-				$(".nameBeforeHide").show();
-				$(".wordSpell").show();
-				//$(".onceIDTop").removeClass('col-sm-offset-1');
-				//$(".onceIDTop").css('padding-left','15px');
-			}else {
-				$(".wordSpell").hide();
-				$(".nameBeforeHide").hide();
-				$("input[name='hasOtherName'][value='2']").attr("checked",'checked');
-			}
-			
-			if(address == 1){
-				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
-			}else{
-				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
-			}
-			
-		
-		
-		
-		
-		var front = $("#cardFront").val();
-		var back = $("#cardBack").val();
-		if(front != ""){
-			$("#uploadFile").siblings("i").css("display","block");
-		}else{
-			$("#uploadFile").siblings("i").css("display","none");
-		}
-		
-		if(back != ""){
-			$("#uploadFileBck").siblings("i").css("display","block");
-		}else{
-			$("#uploadFileBack").siblings("i").css("display","none");
-		} 
-	});
+	
+	}
 	
 	//var base = "${base}";
 	function saveApplicant(status){
+		$("#applicantInfo").data('bootstrapValidator').destroy();
+		$("#applicantInfo").data('bootstrapValidator', null);
+		applicantValidate();
 		//得到获取validator对象或实例 
 		var bootstrapValidator = $("#applicantInfo").data(
 				'bootstrapValidator');
@@ -893,6 +1622,7 @@
 		if($(".front").hasClass("has-error")){
 			return;
 		}
+		layer.load(1);
 			
 		var str="";
 		var applicantInfo;
@@ -919,7 +1649,7 @@
 					cancelBtn(2);
 					parent.successCallBack();
 				}else if(status == 2){
-					
+					window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
 				}else{
 					layer.msg("修改成功", {
 						time: 500,
@@ -951,8 +1681,8 @@
 		if(cardFront == ""){
 			$(".front").attr("class", "info-imgUpload front has-error");  
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
-	        $(".help-blockFront").attr("style","display: block;");  
-	        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
+	        //$(".help-blockFront").attr("style","display: block;");  
+	        //$("#borderColorFront").attr("style", "border-color:#ff1a1a");
 		}else{
 			$(".front").attr("class", "info-imgUpload front has-success");  
 	        $(".help-blockFront").attr("data-bv-result","IVALID");  
@@ -964,8 +1694,8 @@
 		if(cardBack == ""){
 			$(".back").attr("class", "info-imgUpload back has-error");  
 	        $(".help-blockBack").attr("data-bv-result","INVALID");  
-	        $(".help-blockBack").attr("style","display: block;");
-	        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
+	        //$(".help-blockBack").attr("style","display: block;");
+	        //$("#borderColorBack").attr("style", "border-color:#ff1a1a");
 		}else{
 			$(".back").attr("class", "info-imgUpload back has-success");  
 	        $(".help-blockBack").attr("data-bv-result","IVALID");  
@@ -973,18 +1703,54 @@
 	        $("#borderColorBack").attr("style", null);
 		}
 		
-		var bootstrapValidator = $("#applicantInfo").data(
+		//校验
+		/* $('#applicantInfo').bootstrapValidator({
+			message : '验证不通过',
+			feedbackIcons : {
+				valid : 'glyphicon glyphicon-ok',
+				invalid : 'glyphicon glyphicon-remove',
+				validating : 'glyphicon glyphicon-refresh'
+			},
+			fields : {
+				telephone : {
+					validators : {
+						regexp: {
+	                	 	regexp: /^[1][34578][0-9]{9}$/,
+	                        message: '手机号格式错误'
+	                    }
+					}
+				},
+				emergencyTelephone : {
+					validators : {
+						regexp: {
+	                	 	regexp: /^[1][34578][0-9]{9}$/,
+	                        message: '手机号格式错误'
+	                    }
+					}
+				},
+				email : {
+					validators : {
+						regexp: {
+	                        regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+	                        message: '邮箱格式错误'
+	                    }
+					}
+				}
+			}
+		}); */
+		
+		/* var bootstrapValidator = $("#applicantInfo").data(
 		'bootstrapValidator');
 		// 执行表单验证 
-		bootstrapValidator.validate();
+		bootstrapValidator.validate(); */
 		$("#deleteApplicantFrontImg").click(function(){
 			$('#cardFront').val("");
 			$('#sqImg').attr('src', "");
 			$("#uploadFile").siblings("i").css("display","none");
 			$(".front").attr("class", "info-imgUpload front has-error");  
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
-	        $(".help-blockFront").attr("style","display: block;");
-	        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
+	        //$(".help-blockFront").attr("style","display: block;");
+	        //$("#borderColorFront").attr("style", "border-color:#ff1a1a");
 		});
 		$("#deleteApplicantBackImg").click(function(){
 			$('#cardBack').val("");
@@ -992,8 +1758,8 @@
 			$("#uploadFileBack").siblings("i").css("display","none");
 			$(".back").attr("class", "info-imgUpload back has-error");  
 	        $(".help-blockBack").attr("data-bv-result","INVALID");  
-	        $(".help-blockBack").attr("style","display: block;");
-	        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
+	        //$(".help-blockBack").attr("style","display: block;");
+	        //$("#borderColorBack").attr("style", "border-color:#ff1a1a");
 		});
 		$("#baseRemark").attr("disabled", true);
 	} 
@@ -1033,12 +1799,14 @@
 			},
 			url : BASE_PATH+'/admin/orderJp/getNationality.html',
 			success : function(data) {
-				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
-				$.each(data,function(index,element) { 
-					liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
-				});
-				liStr += "</ul>";
-				$("#nationality").after(liStr);
+				if(data != ""){
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#nationality").after(liStr);
+				}
 			}
 		});
 	});
@@ -1062,12 +1830,14 @@
 			},
 			url : BASE_PATH+'/admin/orderJp/getProvince.html',
 			success : function(data) {
-				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
-				$.each(data,function(index,element) { 
-					liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
-				});
-				liStr += "</ul>";
-				$("#province").after(liStr);
+				if(data != ""){
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#province").after(liStr);
+				}
 			}
 		});
 	});
@@ -1093,12 +1863,14 @@
 			},
 			url : BASE_PATH+'/admin/orderJp/getCity.html',
 			success : function(data) {
-				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
-				$.each(data,function(index,element) { 
-					liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
-				});
-				liStr += "</ul>";
-				$("#city").after(liStr);
+				if(data != ""){
+					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+					$.each(data,function(index,element) { 
+						liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					});
+					liStr += "</ul>";
+					$("#city").after(liStr);
+				}
 			}
 		});
 	});
@@ -1243,7 +2015,7 @@
 	}
 	
 	function passportBtn(){
-		var applicantId = '${obj.applyId}';
+		/* var applicantId = '${obj.applyId}';
 			var bootstrapValidator = $("#applicantInfo").data(
 			'bootstrapValidator');
 			// 执行表单验证 
@@ -1257,10 +2029,10 @@
 			}
 			if($(".back").hasClass("has-error")){
 				return;
-			}
+			} */
 		saveApplicant(2);
 		//socket.onclose();
-		window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
+		//window.location.href = '/admin/myData/passport.html?contact=1&applyId='+applicantId;
 	}
 								
 	$(function(){
@@ -1301,7 +2073,7 @@
 				$(".nameBeforeTop").css('float','none');
 				$(".nameBeforeHide").show();
 				$(".wordSpell").show();
-				$(".onceIDTop").css('margin-left','45px');
+				$(".onceIDTop").css('margin-left','30px');
 			}else {
 				
 				$(".nameBeforeHide").hide();
@@ -1322,7 +2094,7 @@
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
 				$(".onceIDTop").css('float','left');
-				$(".onceIDTop").css('margin-left','45px');
+				$(".onceIDTop").css('margin-left','30px');
 				$("#nationality").val("").change();
 			}else {
 				
@@ -1395,12 +2167,12 @@
 	function clearAll(){
 		$(".front").attr("class", "info-imgUpload front has-error");  
         $(".help-blockFront").attr("data-bv-result","INVALID");  
-        $(".help-blockFront").attr("style","display: block;");
+        //$(".help-blockFront").attr("style","display: block;");
         $(".back").attr("class", "info-imgUpload back has-error");  
         $(".help-blockBack").attr("data-bv-result","INVALID");  
-        $(".help-blockBack").attr("style","display: block;"); 
-        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
-        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
+        //$(".help-blockBack").attr("style","display: block;"); 
+       // $("#borderColorFront").attr("style", "border-color:#ff1a1a");
+        //$("#borderColorBack").attr("style", "border-color:#ff1a1a");
 		$("input[name='hasOtherName'][value='2']").prop("checked","checked");
         $("input[name='hasOtherNationality'][value='2']").prop("checked","checked");
 		$("input:checkbox[name='addressIsSameWithCard']").attr("checked", false);

@@ -54,6 +54,7 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
+import com.juyo.visa.common.enums.SaveOrUpdateEnum;
 import com.juyo.visa.common.enums.ShareTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
@@ -723,13 +724,17 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			cnd.and("receiver", "like", Strings.trim(searchStr) + "%");
 		}
 
-		if (userType == UserLoginEnum.PERSONNEL.intKey()) {
+		/*if (userType == UserLoginEnum.PERSONNEL.intKey()) {
 			//工作人员
 			cnd.and("userId", "=", userId);
 		} else {
 			//其他
 			cnd.and("comId", "=", comId);
-		}
+		}*/
+
+		//可以查看本公司所有的
+		cnd.and("comId", "=", comId);
+
 		cnd.limit(0, 5);
 
 		List<TReceiveaddressEntity> query = dbDao.query(TReceiveaddressEntity.class, cnd, null);
@@ -785,7 +790,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	 * 保存快递信息，并发送邮件
 	 */
 	public Object saveExpressInfo(Integer orderid, Integer orderjpid, Integer expresstype, Integer shareType,
-			String receiver, String mobile, String expressAddress, String shareManIds, HttpSession session) {
+			String receiver, String mobile, String expressAddress, String shareManIds, Integer opType,
+			HttpSession session) {
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
@@ -823,12 +829,37 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			dbDao.insert(orderReceiveAdd);
 		}
 
-		//改变订单状态 由初审到发地址
-		Date nowDate = DateUtil.nowDate();
-		int receptionStatus = JPOrderStatusEnum.SEND_ADDRESS.intKey();
-		dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus), Cnd.where("id", "=", orderid));
-		dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
+		if (opType == SaveOrUpdateEnum.SAVE.intKey()) {
+			//保存
+			//改变订单状态 由初审到发地址
+			Date nowDate = DateUtil.nowDate();
+			int receptionStatus = JPOrderStatusEnum.SEND_ADDRESS.intKey();
+			dbDao.update(TOrderEntity.class, Chain.make("status", receptionStatus), Cnd.where("id", "=", orderid));
+			dbDao.update(TOrderEntity.class, Chain.make("updateTime", nowDate), Cnd.where("id", "=", orderid));
 
+			//添加日志记录  订单已发地址
+			int send_address = JPOrderStatusEnum.SEND_ADDRESS.intKey();
+			orderJpViewService.insertLogs(orderid, send_address, session);
+		} else {
+			//发送短信、邮件
+			try {
+				sendMail(orderid, orderjpid, shareType, shareManIds);
+				sendMessage(orderid, orderjpid, shareType, shareManIds);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		//变更订单操作人
+		changePrincipalViewService.ChangePrincipal(orderid, FIRSTTRIAL_PROCESS, userId);
+
+		return "SUCCESS";
+	}
+
+	/**
+	 * 初审 快递发送短信邮件
+	 */
+	public Object sendExpressMsg(Integer orderid, Integer orderjpid, Integer shareType, String shareManIds) {
 		//发送短信、邮件
 		try {
 			sendMail(orderid, orderjpid, shareType, shareManIds);
@@ -837,14 +868,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			e.printStackTrace();
 		}
 
-		//添加日志记录  订单已发地址
-		int send_address = JPOrderStatusEnum.SEND_ADDRESS.intKey();
-		orderJpViewService.insertLogs(orderid, send_address, session);
-
-		//变更订单操作人
-		changePrincipalViewService.ChangePrincipal(orderid, FIRSTTRIAL_PROCESS, userId);
-
-		return "SUCCESS";
+		return null;
 	}
 
 	/**
@@ -1467,7 +1491,6 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 
 		//订单收件人信息
 		Record orderReceive = (Record) getReceiverByOrderid(orderid);
-		String expressType = orderReceive.getString("expressType");
 		String receiver = orderReceive.getString("receiver");
 		String mobile = orderReceive.getString("telephone");
 		String address = orderReceive.getString("expressAddress");
@@ -1664,4 +1687,44 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 		return result;
 	}
 
+	/**
+	 * 
+	 *判断订单收件信息是否填写
+	 *
+	 * @param orderid 订单id
+	 * @return 
+	 */
+	public Object getOrderRecipient(Integer orderid) {
+		Map<String, Object> result = MapUtil.map();
+		TOrderRecipientEntity orderRecipient = dbDao.fetch(TOrderRecipientEntity.class,
+				Cnd.where("orderId", "=", orderid));
+		boolean isEmpty = Util.isEmpty(orderRecipient);
+
+		result.put("orderRecipient", orderRecipient);
+		result.put("isEmpty", isEmpty);
+		result.put("orderid", orderid);
+
+		return result;
+	}
+
+	//地址通知 发送消息
+	public Object sendAddressMsg(Integer orderid, Integer orderjpid, Integer shareType, String shareManIds,
+			HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+
+		boolean isMsg = true;
+		try {
+			sendMail(orderid, orderjpid, shareType, shareManIds);
+			sendMessage(orderid, orderjpid, shareType, shareManIds);
+		} catch (IOException e) {
+			isMsg = false;
+			e.printStackTrace();
+		}
+
+		//变更订单负责人
+		changePrincipalViewService.ChangePrincipal(orderid, FIRSTTRIAL_PROCESS, userId);
+
+		return isMsg;
+	}
 }
