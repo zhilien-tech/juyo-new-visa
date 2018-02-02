@@ -103,5 +103,7 @@ ul.ztree.zTreeDragUL {margin:0; padding:0; position:absolute; width:auto; height
 	padding:0;
 	margin: 5px;
 }
-
-
+#addJob { width:70px !important;}
+#settingsPermis { width:70px !important;}
+.modal-header { position:fixed;top:0;left:0;background:#FFF; width:100%;height:62px; z-index:100;}
+.modal-body { margin-top:62px; height: 100%; overflow-y: auto;}
