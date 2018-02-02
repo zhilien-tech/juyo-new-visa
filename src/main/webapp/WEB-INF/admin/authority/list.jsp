@@ -32,21 +32,7 @@
 						<div class="box-header">
 						
 							<div class="row form-right">
-								<!-- <div class="col-md-2 left-5px right-0px">
-									<select class="input-class input-sm">
-										<option>状态</option>
-									</select>
-								</div>
-								<div class="col-md-2 left-5px right-0px">
-									<input id="" name="" type="text" class="input-sm input-class" placeholder="搜索条件" />
-								</div>
-								<div class="col-md-3 left-5px right-0px">
-									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
-									<span class="picker-span">至</span>
-									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
-								</div> -->
 								<div class="col-md-12 left-5px">
-									<!-- <a id="" class="btn btn-primary btn-sm pull-left" onclick="" >搜索</a> -->
 									<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 								</div>
 							</div>
@@ -82,8 +68,9 @@
 		<!-- 公用js文件 -->
 		<script src="${base}/references/common/js/base/base.js"></script>
 		<!-- 引入DataTables JS -->
-		<script src="${base}/admin/authority/listTable.js"></script>
 		<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
+		<!-- 本页js -->
+		<script src="${base}/admin/authority/listTable.js"></script>
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
 			$(function () {

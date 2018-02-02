@@ -597,3 +597,12 @@ function returnFloat(value){
 		return value;
 	}
 }
+//遮罩层
+function TDDialog(){
+	$('.trailDetailDialog').show();
+	$('.trailDetailMain').show();
+}
+function TDClosedAll() {
+	$('.trailDetailDialog').hide();
+	$('.trailDetailMain').hide();
+}

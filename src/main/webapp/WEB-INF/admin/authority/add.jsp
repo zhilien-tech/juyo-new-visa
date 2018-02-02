@@ -23,7 +23,7 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="submit" type="button" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
-			<div class="modal-body" style="height: 488px; overflow-y: auto;">
+			<div class="modal-body">
 				<div class="departmentName form-group">
 					<!--部门权限 设置-->
 					<ul class="addDepartment">

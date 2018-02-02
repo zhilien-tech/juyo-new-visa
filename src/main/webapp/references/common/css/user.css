@@ -1,0 +1,4 @@
+/* 员工管理样式添加修改 */
+.modal-header { position:fixed;top:0;left:0;width:100%;height:62px;background:#FFF;z-index:100;}
+.modal-body { height:100%;margin-top:62px;}
+.modal-content { min-height:auto !important;}
