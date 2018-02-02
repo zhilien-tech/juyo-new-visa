@@ -233,7 +233,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
 			//设置主申请人信息
 			List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
-					Cnd.where("applicantId", "=", orderjpid), null);
+					Cnd.where("orderId", "=", orderjpid), null);
 			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
 
 			} else {
@@ -279,7 +279,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 
 	}
 
-	private String generrateOrdernum() {
+	public String generrateOrdernum() {
 		//生成订单号
 		SimpleDateFormat smf = new SimpleDateFormat("yyMMdd");
 		String format = smf.format(new Date());

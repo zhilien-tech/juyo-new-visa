@@ -2545,7 +2545,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Integer userType = loginUser.getUserType();
 		List<TCustomerEntity> customerList = new ArrayList<>();
 		//用户为公司管理员则显示该公司下所有客户
-		if (userType == 5) {
+		if (userType == 5 || userType == 7) {
 			customerList = dbDao.query(
 					TCustomerEntity.class,
 					Cnd.where("compId", "=", loginCompany.getId()).and("name", "like",
@@ -2565,7 +2565,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Integer userType = loginUser.getUserType();
 		List<TCustomerEntity> customerList = new ArrayList<>();
 		//用户为公司管理员则显示该公司下所有客户
-		if (userType == 5) {
+		if (userType == 5 || userType == 7) {
 			customerList = dbDao.query(
 					TCustomerEntity.class,
 					Cnd.where("compId", "=", loginCompany.getId()).and("shortname", "like",
