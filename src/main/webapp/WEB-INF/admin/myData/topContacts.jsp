@@ -13,79 +13,26 @@
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
-		<style type="text/css">
-		[v-cloak]{display:none;}
-		.card-head div:nth-child(1){width:130px;}
-		.card-head div:nth-child(2){width:200px;}
-		.card-head div:nth-child(4){position:absolute;right:35px;}
-		.everybody-info div:nth-child(1){width:10%;}
-		.everybody-info div:nth-child(2){width:13%;}
-		.everybody-info div:nth-child(3){width:15%;}
-		.everybody-info div:nth-child(4){width:15%;}
-		.everybody-info div:nth-child(5){width:15%;}
-		
-		.card-list {
-			height:72px;
-		}
-		.content-title {
-			height:30px;
-			line-height:30px;
-			margin-bottom:10px;
-		}
-		.content-title span {
-			margin-right:30px;
-			font-size:20px;
-		}
-		.content-main-left {
-			margin-left:0px;
-		}
-		.content-main-center {
-			float:left;
-			width:100%;
-			height:93px;
-		}
-		.center-right {
-			font-size:30px;
-			text-align:center;
-			color:green;
-		}
-		.main-right {
-			margin-top:22%;
-			text-align:center;
-		}
-		.main-right a {
-
-			color:#0099FF;
-			font-size:16px;
-			margin-right:15px;
-		}
-		.main-right a:hover {
-			cursor:pointer;
-
-		}
-		</style>
+		<!-- 本页css -->
+		<link rel="stylesheet" href="${base}/references/common/css/topContacts.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<section class="content" id="card">
 					<div class="box-body"  v-cloak v-for="data in myVisaData" style="cursor:default;position: relative;z-index:999;"><!-- 卡片列表 -->
-						<div   class="card-list" >
+						<div class="card-list" >
 							<div class="content-main">
-								<!-- <div class="content-main-center content-main-left"> -->
-									<dl>
-
-										<dd ><label></label><span >{{data.applicantname}}</span>&nbsp;&nbsp;&nbsp;
-											<label></label><span >{{data.passport}}</span>&nbsp;&nbsp;&nbsp;
-											<label></label><span >{{data.telephone}}</span>&nbsp;&nbsp;&nbsp;
-											<label></label><span style="cursor:pointer;"><a v-on:click="updateApplicant(data.applicantid);">基本信息</a></span>&nbsp;&nbsp;&nbsp;
-											<label></label><span style="cursor:pointer;"><a v-on:click="passport(data.applicantid)">护照信息</a></span>&nbsp;&nbsp;&nbsp;
-											<label></label><span style="cursor:pointer;"><a v-on:click="visa(data.applicantid)">签证信息</a></span>&nbsp;&nbsp;&nbsp;
-											<label></label><span style="cursor:pointer;"><a v-on:click="visaInput(data.applyjpid,data.orderjpid)">签证录入</a></span>
-										</dd>
-									</dl>
-								<!-- </div> -->
-									
-								<!-- <div class="content-main-center center-right">{{data.orderstatus}}</div> -->
-								
+								<div class="contactL">
+									<span>{{data.applicantname}}</span>
+									<span>{{data.passport}}</span>
+									<span>{{data.telephone}}</span>
+										
+								</div>
+								<div class="contactR">
+									<span style="cursor:pointer;"><a v-on:click="updateApplicant(data.applicantid);">基本信息</a></span>
+									<span style="cursor:pointer;"><a v-on:click="passport(data.applicantid)">护照信息</a></span>
+									<span style="cursor:pointer;"><a v-on:click="visa(data.applicantid)">签证信息</a></span>
+									<span style="cursor:pointer;"><a v-on:click="visaInput(data.applyjpid,data.orderjpid)">签证录入</a></span>
+								</div>
 							</div>
 						</div>
 					</div><!-- end 卡片列表 -->

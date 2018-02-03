@@ -1,0 +1,130 @@
+[v-cloak] {
+	display: none;
+}
+
+.card-head div:nth-child(1) {
+	width: 130px;
+}
+
+.card-head div:nth-child(2) {
+	width: 200px;
+}
+
+.card-head div:nth-child(4) {
+	position: absolute;
+	right: 35px;
+}
+
+.everybody-info div:nth-child(1) {
+	width: 10%;
+}
+
+.everybody-info div:nth-child(2) {
+	width: 13%;
+}
+
+.everybody-info div:nth-child(3) {
+	width: 15%;
+}
+
+.everybody-info div:nth-child(4) {
+	width: 15%;
+}
+
+.everybody-info div:nth-child(5) {
+	width: 15%;
+}
+
+.card-list {
+	height: 72px;
+	line-height:72px;
+	margin-bottom:0px;
+	padding:0;
+}
+
+.content-title {
+	height: 30px;
+	line-height: 30px;
+	margin-bottom: 10px;
+}
+
+.content-title span {
+	margin-right: 30px;
+	font-size: 20px;
+}
+
+.content-main-left {
+	margin-left: 0px;
+}
+
+.content-main-center {
+	float: left;
+	width: 100%;
+	height: 93px;
+}
+
+.center-right {
+	font-size: 30px;
+	text-align: center;
+	color: green;
+}
+
+.main-right {
+	margin-top: 22%;
+	text-align: center;
+}
+
+.main-right a {
+	color: #0099FF;
+	font-size: 14px;
+	margin-right: 15px;
+}
+
+.main-right a:hover {
+	cursor: pointer;
+}
+.contactL {
+	font-size:20px;
+	float:left;
+	width:60%;
+}
+.contactL span:nth-child(1) {
+	width:20%;
+	display:inline-block;
+}
+.contactL span:nth-child(2) {
+	width:30%;
+	display:inline-block;
+}
+.contactL span:nth-child(3) {
+	width:30%;
+	display:inline-block;
+}
+.contactL span:nth-child(1){
+	margin-left:10%;
+}
+.contactR {
+	font-size:14px;
+	float:right;
+	width:40%;
+	text-align:right;
+}
+
+.contactR span:nth-child(1) {
+	margin-left:10%;
+	width:15%;
+	display:inline-block;
+}
+.contactR span:nth-child(2) {
+	width:15%;
+	display:inline-block;
+}
+.contactR span:nth-child(3) {
+	width:15%;
+	display:inline-block;
+}
+.contactR span:nth-child(4) {
+	margin-right:10%;
+	width:15%;
+	display:inline-block;
+}
