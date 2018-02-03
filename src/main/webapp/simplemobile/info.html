@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>基本信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/lCalendar.css"><!-- 日历插件 .css -->
+    <link rel="stylesheet" type="text/css" href="css/passport.css">
+    <script src="js/rem(750).js"></script>
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/lrz.bundle.js"></script>
+</head>
+<body>
+<form id="applicatform">
+	<input type="hidden" id="orderid" name="orderid" v-model="applicatdata.orderid">
+	<input type="hidden" id="comid" name="comid" v-model="applicatdata.comid">
+	<input type="hidden" id="userid" name="userid" v-model="applicatdata.userid">
+	<input type="hidden" id="applicantid" name="applicantid" v-model="applicatdata.applicantid">
+<div class="top info">
+	<span v-if="applicatdata.cardfront != ''">
+		<img :src="applicatdata.cardfront" style="width:100%;height:100%;"  alt="" class="bacimg">
+	</span>
+	<span v-else>
+	    <img src="images/1.jpg" style="width:100%; height:100%;" alt="" class="bacimg">
+	</span>
+    <div id="upload">
+        <h6>点击上传</h6>
+        <p>身份证正面</p>
+        <p>可自动识别</p>
+    </div>
+    <input type="file" id="image" style="display:none;" name="image">
+</div>
+<div class="top info">
+    <span v-if="applicatdata.cardback != ''">
+    <!-- width="340px" height="200px" -->
+		<img :src="applicatdata.cardback" style="width:100%;height:100%;"  alt="" class="bacimg">
+	</span>
+	<span v-else>
+	    <img src="images/1.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
+	</span>
+    <div id="upload2">
+        <h6>点击上传</h6>
+        <p>身份证背面</p>
+        <p>可自动识别</p>
+    </div>
+    <input type="file" id="image2" style="display:none;" name="image">
+</div>
+ <ul class="label-info">
+        <li>姓(中文) <input type="text" class="txtInput" id="firstname" v-model="applicatdata.firstname"/></li>
+        <li>姓(拼音) <input type="text" class="txtInput" v-model="applicatdata.firstnameen"/></li>
+        <li>名(中文) <input type="text" class="txtInput" id="lastname" v-model="applicatdata.lastname"/></li>
+        <li>名(拼音) <input type="text" class="txtInput" v-model="applicatdata.lastnameen"/></li>
+        <li>手机号 <input type="text" class="txtInput" v-model="applicatdata.telephone"/></li>
+        <li>邮箱 <input type="text" class="txtInput" v-model="applicatdata.email"/></li>
+        <li>性别 <input type="text" class="txtInput" v-model="applicatdata.sex"/></li>
+        <li>出生日期 <input type="text" class="txtInput" id="birthDate" readonly="" v-model="applicatdata.birthday"/></li>
+        <li>身份证号 <input type="text" class="txtInput" v-model="applicatdata.cardid"/></li>
+        <li>住址(省) <input type="text" class="txtInput" v-model="applicatdata.cardprovince"/></li>
+        <li>住址(市) <input type="text" class="txtInput" v-model="applicatdata.cardcity"/></li>
+        <li>住址(街楼) <input type="text" class="txtInput" style="width:70%;" v-model="applicatdata.address"/></li>
+        <li>签发机关 <input type="text" class="txtInput" v-model="applicatdata.issueorganization"/></li>
+        <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="applicatdata.validstartdate"/></li>
+        <li>有效期至<input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="applicatdata.validenddate"/></li>
+        <li>现在地址是否与身份证一致<span class="onOff"> <input type="checkbox" id="consistent" class="consistent checkBox"> <label for="consistent" class="green"></label> </span></li>
+        <li class="isclose">住址(省) <input type="text" class="txtInput" v-model="applicatdata.province"/></li>
+        <li class="isclose">住址(市) <input type="text" class="txtInput" v-model="applicatdata.city"/></li>
+        <li class="isclose">住址(街楼) <input type="text" class="txtInput" style="width:70%;" v-model="applicatdata.detailedaddress"/></li>
+   		<!--  -->
+   		<li>是否有曾用名<span class="onOff"> <input type="checkbox" id="afterName" class="afterName checkBox"> <label for="afterName" class="green"></label> </span></li>
+   		<li class="afterNameinput">姓(中文) <input type="text" class="txtInput" id="otherfirstname" v-model="applicatdata.otherfirstname"/></li>
+   		<li class="afterNameinput">姓(拼音) <input type="text" class="txtInput" id="otherfirstnameen" v-model="applicatdata.otherfirstnameen"/></li>
+   		<li class="afterNameinput">名(中文) <input type="text" class="txtInput" id="otherlastname" v-model="applicatdata.otherlastname"/></li>
+   		<li class="afterNameinput">名(拼音) <input type="text" class="txtInput" id="otherlastnameen" v-model="applicatdata.otherlastnameen"/></li>
+   		<!--  -->
+   		<li>曾有的或另有的国籍(或公民身份)<span class="onOff"> <input type="checkbox" id="afterNatAndID" class="afterNatAndID checkBox"> <label for="afterNatAndID" class="green"></label> </span></li>
+   		<li class="afterNatAndIDinput">国籍 <input type="text" class="txtInput" id="" v-model="applicatdata.nationality"/></li>
+   		<li>紧急联系人姓名 <input type="text" class="txtInput" id="" v-model="applicatdata.emergencylinkman"/></li>
+   		<li>紧急联系人手机号 <input type="text" class="txtInput" id="" v-model="applicatdata.emergencytelephone"/></li>
+    </ul>
+<div class="bottom">
+    <!-- <a class="pre btn" href="javascript:preStep();">上一步</a>
+    <a class="clear btn">清除</a>
+    <a class="next btn" href="javascript:nextStep();">下一步</a> -->
+    <a class="passport-prav passport-btn" href="javascript:preStep();">上一步</a>
+	<a class="passport-clear passport-btn">清除</a>
+	<a class="passport-next passport-btn" href="javascript:nextStep();">下一步</a>
+</div>
+<!-- 弹出层 1-->
+<div class="backgroundGray">
+	<div class="dialog">
+		<div class="dialogTitle" >*请按照此规格使用相机照相以保持图片上传正确</div>
+		<div class="dialogImg" ></div>
+		<a class="closed" >确认</a>
+		<div class="hint">提示:此提示只显示一次</div>
+	</div>
+</div>
+<!-- 弹出层 2-->
+<!-- <div class="backgroundGray2">
+	<div class="dialog">
+		<div class="dialogTitle" >*请按照此规格使用相机照相以保持图片上传正确</div>
+		<div class="dialogImg2" ></div>
+		<a class="closed2" >确认</a>
+	</div>
+</div> -->
+</form>
+<script type="text/javascript" src="js/lCalendar.min.js"></script><!-- 日历插件 .js -->
+<script src="/references/common/js/vue/vue.min.js"></script>
+<script src="/references/common/js/layer/layer.js"></script>
+<script type="text/javascript" src="/admin/common/commonjs.js"></script>
+</body>
+<script>
+	
+	//异步加载的URL地址
+	var url="/admin/mobile/applicatinfo.html";
+	var _self;
+	new Vue({
+		el: '#applicatform',
+		data: {applicatdata:""},
+		created:function(){
+			var comid = GetQueryString('comid');
+			var userid = GetQueryString('userid');
+			var orderid = GetQueryString('orderid');
+			var applicantid = GetQueryString('applicantid');
+			var sessionid = GetQueryString('sessionid');
+	        _self=this;
+	        $.ajax({ 
+	        	url: url,
+	        	data:{comid:comid,userid:userid,orderid:orderid,applicantid:applicantid,sessionid:sessionid},
+	        	dataType:"json",
+	        	type:'post',
+	        	success: function(data){
+	        		_self.applicatdata = data.applicatdata;
+	        		if(data.applicatdata.addressissamewithcard == 1){
+	        			$("#consistent").attr('checked',true);
+		        		/* $('.isclose').each(function(){
+		    				$(this).hide();
+		    			}); */
+	        		}else{
+	        			$("#consistent").attr('checked',false);
+	        			/* $('.isclose').each(function(){
+		    				$(this).show();
+		    			}); */
+	        		}
+	        		//回显申请人曾用名
+	        		if(data.applicatdata.hasothername == 1){
+	        			$('#afterName').attr('checked',true);
+	        			$('.afterNameinput').each(function(){
+		    				$(this).show();
+		    			});
+	        		}else{
+	        			$("#afterName").attr('checked',false);
+	        			$('.afterNameinput').each(function(){
+		    				$(this).hide();
+		    			});
+	        		}
+	        		//回显其他国籍
+	        		if(data.applicatdata.hasothernationality == 1){
+	        			$('#afterNatAndID').attr('checked',true);
+	        			$('.afterNatAndIDinput').each(function(){
+		    				$(this).show();
+		    			});
+	        		}else{
+	        			$("#afterNatAndID").attr('checked',false);
+	        			$('.afterNatAndIDinput').each(function(){
+		    				$(this).hide();
+		    			});
+	        		}
+	        		console.log('sssss:'+JSON.stringify(_self.applicatdata));
+	          	}
+	        });
+	    }
+	});
+    $(function () {
+        $('#upload').click(function () {
+        	$(".backgroundGray").show();
+        });
+        $(".closed").click(function(){
+        	$(".backgroundGray").hide();
+        	$('#image').click();
+            $('#image').change(function(){
+            	layer.load(1, {
+        			shade : "#000"
+        		});
+            	var that = this;
+                lrz(this.files[0])
+                    .then(function (rst) {
+                        /* $('.bacimg').attr('src',rst.base64);*/
+                        $('#upload').hide(); 
+                         sourceSize = (that.files[0].size / 1024).toFixed(2);
+                        resultSize = (rst.fileLen / 1024).toFixed(2);
+                        scale = parseInt(100 - (resultSize / sourceSize * 100));
+                        rst.formData.append('image',rst.file);
+                        /* alert(rst);
+                        alert(JSON.stringify(rst.formData));
+                        alert(rst.file);
+                        alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);  */
+                        //alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+                        uploadPositive(rst,rst.formData);  
+                        // 处理成功会执行
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            });
+        });
+        $('#upload2').click(function () {
+       	 	$('#image2').click();
+            $('#image2').change(function(){
+            	layer.load(1, {
+        			shade : "#000"
+        		});
+            	var that = this;
+                lrz(this.files[0])
+                    .then(function (rst) {
+                        /* $('.bacimg2').attr('src',rst.base64);*/
+                        $('#upload2').hide(); 
+                        // 处理成功会执行
+                        sourceSize = (that.files[0].size / 1024).toFixed(2);
+                        resultSize = (rst.fileLen / 1024).toFixed(2);
+                        scale = parseInt(100 - (resultSize / sourceSize * 100));
+                        rst.formData.append('image',rst.file);
+                        /* alert(rst);
+                        alert(JSON.stringify(rst.formData));
+                        alert(rst.file);
+                        alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);  */
+                        //alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+                        uploadBack(rst,rst.formData); 
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            });
+        });
+        //开关
+        $(".consistent").click(function(){
+        	if($(this).prop("checked")){
+  				console.log($(this).prop("checked"));
+  				/* $('.isclose').each(function(){
+  		    			$(this).hide();
+  		    		}); */
+ 		    	_self.applicatdata.addressissamewithcard = 1;
+  		    	_self.applicatdata.province = _self.applicatdata.cardprovince;
+  		    	_self.applicatdata.city = _self.applicatdata.cardcity;
+  		    	_self.applicatdata.detailedaddress = _self.applicatdata.address;
+  			}else {
+  				_self.applicatdata.addressissamewithcard = 0;
+  		    	_self.applicatdata.province = '';
+  		    	_self.applicatdata.city = '';
+  		    	_self.applicatdata.detailedaddress = '';
+  				/* $('.isclose').each(function(){
+  		    			$(this).show();
+  		    		}); */
+  			}
+  		});
+        //是否有曾用名开关
+        $(".afterName").click(function(){
+        	if($(this).prop("checked")){
+  				console.log($(this).prop("checked"));
+  				_self.applicatdata.hasothername = 1;
+  				 $('.afterNameinput').each(function(){
+ 		    		$(this).show();
+ 		    	});
+  			}else {
+  				_self.applicatdata.hasothername = 2;
+  				$('.afterNameinput').each(function(){
+ 		    		$(this).hide();
+ 		    	});
+  			}
+  		});
+        //是否有其他国籍开关
+        $(".afterNatAndID").click(function(){
+        	if($(this).prop("checked")){
+  				console.log($(this).prop("checked"));
+  				_self.applicatdata.hasothernationality = 1;
+  				 $('.afterNatAndIDinput').each(function(){
+ 		    		$(this).show();
+ 		    	});
+  			}else {
+  				_self.applicatdata.hasothernationality = 2;
+  				$('.afterNatAndIDinput').each(function(){
+ 		    		$(this).hide();
+ 		    	});
+  			}
+  		});
+      //日历插件
+        var calendar = new lCalendar();//出生日期
+        calendar.init({
+            'trigger': '#birthDate',
+            'type': 'date'
+        });
+      //拼音
+    	$('#firstname').on('input propertychange',function(){
+    		var firstnameen = getPinYinStr($(this).val()).toUpperCase();
+    		console.log(firstnameen);
+    		_self.applicatdata.firstnameen = firstnameen;
+    	});
+    	$('#lastname').on('input propertychange',function(){
+    		_self.applicatdata.lastnameen = getPinYinStr($(this).val()).toUpperCase();
+    	});
+    	//曾用名
+    	$('#otherfirstname').on('input propertychange',function(){
+    		var otherfirstname = getPinYinStr($(this).val()).toUpperCase();
+    		_self.applicatdata.otherfirstnameen = otherfirstname;
+    	});
+    	$('#otherlastname').on('input propertychange',function(){
+    		_self.applicatdata.otherlastnameen = getPinYinStr($(this).val()).toUpperCase();
+    	});
+    });
+	//获取URL地址参数
+    function GetQueryString(name){
+         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+         var r = window.location.search.substr(1).match(reg);
+         if(r!=null)return  unescape(r[2]); return null;
+    }
+	//保存并跳转到护照页面
+	function nextStep(){
+		$.ajax({
+        	url: '/admin/simplemobile/saveApplicatinfo.html',
+        	data:_self.applicatdata,
+        	dataType:"json",
+        	type:'post',
+        	async:false,
+        	success: function(data){
+        		window.location.href='/simplemobile/visaInfo.html?comid='+data.comid+'&userid='+data.userid+'&orderid='+data.orderid+'&applicantid='+data.applicantid;
+          	}
+        });
+	}
+	function preStep(){
+		$.ajax({
+        	url: '/admin/simplemobile/saveApplicatinfo.html',
+        	data:_self.applicatdata,
+        	dataType:"json",
+        	type:'post',
+        	async:false,
+        	success: function(data){
+        		window.location.href='/simplemobile/passport.html?comid='+data.comid+'&userid='+data.userid+'&orderid='+data.orderid+'&applicantid='+data.applicantid;
+          	}
+        });
+	}
+	//把dataUrl类型的数据转为blob
+	function dataURLtoBlob(dataurl) {
+		var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(
+				n);
+		while (n--) {
+			u8arr[n] = bstr.charCodeAt(n);
+		}
+		return new Blob([ u8arr ], {
+			type : mime
+		});
+	}
+	
+	//现住址是否与身份证住址相同开关
+	$('#kaiguan').click(function(){
+		var thishtml = $(this).html();
+		var newhtml = '';
+		if(thishtml == '否'){
+			_self.applicatdata.addressissamewithcard = 1;
+			newhtml = '是';
+			$('.isclose').each(function(){
+				$(this).hide();
+			});
+		}else{
+			_self.applicatdata.addressissamewithcard = 0;
+			newhtml = '否';
+			$('.isclose').each(function(){
+				$(this).show();
+			});
+		}
+		$(this).html(newhtml);
+	});
+	//上传正面
+	function uploadPositive(rst, formData){
+		if(!formData){
+			formData = new FormData();
+		}
+        formData.append("image", rst.file); 
+        console.log('------------------------------');
+        console.log(formData); 
+        console.log(rst.file);
+        /* var layerIndex = layer.load(1, {
+			shade : "#000"
+		}); */
+        $.ajax({
+			type : "POST",//提交类型  
+			//dataType : "json",//返回结果格式  
+			url : '/admin/orderJp/IDCardRecognition.html',//请求地址  
+			async : true,
+			processData : false, //当FormData在jquery中使用的时候需要设置此项
+			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+			//请求数据  
+			data : formData,
+			success : function(obj) {//请求成功后的函数 
+				//console.log('=====成功========');
+				//关闭加载层
+				layer.closeAll('loading');
+				//layer.close(layerIndex);
+				if (true === obj.success) {
+					_self.applicatdata.cardfront = obj.url;
+					_self.applicatdata.address = obj.address;
+					_self.applicatdata.nation = obj.nationality;
+					_self.applicatdata.cardid = obj.num;
+					_self.applicatdata.cardprovince = obj.province;
+					_self.applicatdata.cardcity = obj.city;
+					_self.applicatdata.birthday = obj.birth;
+					_self.applicatdata.sex = obj.sex;
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				//console.log('-----------------失败-------------');
+				layer.closeAll('loading');
+			}
+		}); // end of ajaxSubmit
+	}
+	function uploadBack(rst, formData){
+		if(!formData){
+			formData = new FormData();
+		}
+        formData.append("image", rst.file); 
+        console.log('------------------------------');
+        console.log(formData);
+        console.log(rst.file);
+        /* var layerIndex = layer.load(1, {
+			shade : "#000"
+		}); */
+		$.ajax({
+			type : "POST",//提交类型  
+			//dataType : "json",//返回结果格式  
+			url : '/admin/orderJp/IDCardRecognitionBack.html',//请求地址  
+			async : true,
+			processData : false, //当FormData在jquery中使用的时候需要设置此项
+			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+			//请求数据  
+			data : formData,
+			success : function(obj) {//请求成功后的函数 
+				//关闭加载层
+				layer.closeAll('loading');
+				if (true === obj.success) {
+					_self.applicatdata.cardback = obj.url;
+					_self.applicatdata.validstartdate = obj.starttime;
+					_self.applicatdata.validenddate = obj.endtime;
+					_self.applicatdata.issueorganization = obj.issue;
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				layer.closeAll('loading');
+			}
+		}); // end of ajaxSubmit
+	}
+	/* //正面上传,扫描
+	$('#image').change(function() {
+		var layerIndex = layer.load(1, {
+			shade : "#000"
+		});
+		var file = this.files[0];
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			var dataUrl = e.target.result;
+			var blob = dataURLtoBlob(dataUrl);
+			var formData = new FormData();
+			formData.append("image", blob, file.name);
+			$.ajax({
+				type : "POST",//提交类型  
+				//dataType : "json",//返回结果格式  
+				url : '/admin/orderJp/IDCardRecognition',//请求地址  
+				async : true,
+				processData : false, //当FormData在jquery中使用的时候需要设置此项
+				contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+				//请求数据  
+				data : formData,
+				success : function(obj) {//请求成功后的函数 
+					//关闭加载层
+					layer.close(layerIndex);
+					if (true === obj.success) {
+						_self.applicatdata.cardfront = obj.url;
+						_self.applicatdata.address = obj.address;
+						_self.applicatdata.nation = obj.nationality;
+						_self.applicatdata.cardid = obj.num;
+						_self.applicatdata.cardprovince = obj.province;
+						_self.applicatdata.cardcity = obj.city;
+						_self.applicatdata.birthday = obj.birth;
+						_self.applicatdata.sex = obj.sex;
+					}
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					layer.close(layerIndex);
+				}
+			}); // end of ajaxSubmit
+		};
+		reader.readAsDataURL(file);
+	}); */
+	
+	//背面上传,扫描
+	/* $('#image2').change(function() {
+		var layerIndex = layer.load(1, {
+			shade : "#000"
+		});
+		var file = this.files[0];
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			var dataUrl = e.target.result;
+			var blob = dataURLtoBlob(dataUrl);
+			var formData = new FormData();
+			formData.append("image", blob, file.name);
+			$.ajax({
+				type : "POST",//提交类型  
+				//dataType : "json",//返回结果格式  
+				url : '/admin/orderJp/IDCardRecognitionBack',//请求地址  
+				async : true,
+				processData : false, //当FormData在jquery中使用的时候需要设置此项
+				contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+				//请求数据  
+				data : formData,
+				success : function(obj) {//请求成功后的函数 
+					//关闭加载层
+					layer.close(layerIndex);
+					if (true === obj.success) {
+						_self.applicatdata.cardback = obj.url;
+						_self.applicatdata.validstartdate = obj.starttime;
+						_self.applicatdata.validenddate = obj.endtime;
+						_self.applicatdata.issueorganization = obj.issue;
+					}
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					layer.close(layerIndex);
+				}
+			}); // end of ajaxSubmit
+		};
+		reader.readAsDataURL(file);
+	}); */
+</script>
+</html>

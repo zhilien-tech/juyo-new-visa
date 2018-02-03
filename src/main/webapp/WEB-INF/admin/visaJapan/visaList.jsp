@@ -60,7 +60,7 @@
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
 								<div><label></label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
 								
-								<div v-if="data.japanstate >= 13">
+								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>

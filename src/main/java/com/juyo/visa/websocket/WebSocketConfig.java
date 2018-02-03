@@ -29,7 +29,14 @@ public class WebSocketConfig implements WebSocketConfigurer {
 		registry.addHandler(myhandler(), "/websocket").addInterceptors(myInterceptors()).setAllowedOrigins("*");
 		registry.addHandler(myBasicInfoHandler(), "/basicinfowebsocket").addInterceptors(myInterceptors())
 				.setAllowedOrigins("*");
+		registry.addHandler(mySimpleInfoHander(), "/simpleinfowebsocket").addInterceptors(myInterceptors())
+				.setAllowedOrigins("*");
 		registry.addHandler(myhandler(), "/sockjs/websocket").addInterceptors(myInterceptors()).withSockJS();
+	}
+
+	@Bean
+	public SimpleInfoWSHandler mySimpleInfoHander() {
+		return new SimpleInfoWSHandler();
 	}
 
 	@Bean

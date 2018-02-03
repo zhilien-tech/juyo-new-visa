@@ -51,7 +51,7 @@ public class SimulateModule {
 	 * 更新发招宝状态为提交中
 	 */
 	@At
-	public Object ds160Japan(@Param("cid") Integer cid) {
+	public Object ds160Japan(@Param("oid") Integer cid) {
 		return simulateJapanService.ds160Japan(cid);
 	}
 
@@ -61,7 +61,7 @@ public class SimulateModule {
 	@At
 	@POST
 	@AdaptBy(type = UploadAdaptor.class)
-	public Object UploadJapan(@Param("cid") Integer cid, @Param("..") JapanSimulatorForm form, @Param("file") File file) {
+	public Object UploadJapan(@Param("oid") Integer cid, @Param("..") JapanSimulatorForm form, @Param("file") File file) {
 		return simulateJapanService.uploadJapan(cid, form, file);
 	}
 

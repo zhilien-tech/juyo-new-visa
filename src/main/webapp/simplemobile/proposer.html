@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<title>申请人</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/passport.css">
+    <script src="js/rem(750).js"></script>
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/lrz.bundle.js"></script>
+	</head>
+	<body>
+		<form id="applicantform">
+			<input type="hidden" name="applicantid" id="applicantid">
+		<div class="certificateInfo">
+			<a class="certificateTop">
+				<i onclick="saveAndBack()"><</i>
+				申请人
+			</a>
+		</div>
+		<ul class="label-info certificateM">
+			<li>主/副申请人
+				<i>主</i>
+				<span>
+					<input type="checkbox" id="petitioner" class="petitioner checkBox">
+   					<label for="petitioner" class="green"></label>
+				</span>	
+			</li>
+        	<li class="hostSelect">选择主申请人 
+        		<select id="mainselect" placeholder="必填" >
+        				
+        		</select>
+        	</li>
+        	<!-- <li>备注 <input type="text" id="relationRemark" class="txtInput" placeholder="必填"/></li> -->
+        	<!-- 备注 -->
+        	<!-- remark公共JS validitySelect公共样式  -->
+        	<li class="validity mainrelationremark">
+        		备注
+        		<input type="text" id="relationRemark" class="txtInput remarkInput" />
+        		<ul class="remarks">
+        			<li>主卡</li>
+        			<li>朋友</li>
+        			<li>同事</li>
+        			<li>同学</li>
+        		</ul> 
+				<!-- <span class="dateVal remarkSpan"></span>
+				<select class="remark validitySelect remarks" >
+					<option value=""></option>
+   					<option value="0">主卡</option>
+   					<option value="1">朋友</option>
+   					<option value="2">同事</option>
+   					<option value="3">同学</option>
+   				</select> -->
+   			</li>
+   			<!-- 与主申请人关系  -->
+   			<!-- remark公共JS validitySelect公共样式  -->
+   			<li class="validity furelationremark">
+        		与主申请人关系
+        		<input type="text" id="mainRelation" class="txtInput host" /> 
+        		<ul class="hostUL">
+        			<li>之妻</li>
+        			<li>之夫</li>
+        			<li>之子</li>
+        			<li>之父</li>
+        			<li>之母</li>
+        			<li>朋友</li>
+        			<li>同事</li>
+        			<li>同学</li>
+        		</ul>
+   			</li>
+        </ul>
+        </form>
+        <script src="/references/common/js/vue/vue.min.js"></script>
+		<script src="/references/common/js/layer/layer.js"></script>
+		<script type="text/javascript" src="/admin/common/commonjs.js"></script>
+		<script src="js/textFocus.js"></script>
+	</body>
+<script>
+	//加载页面数据
+	initPageData();
+	function initPageData(){
+		var url="/admin/mobile/getApplicantData.html";
+		var applicantid = GetQueryString('applicantid');
+	    $.ajax({ 
+	    	url: url,
+	    	data:{applicantid:applicantid},
+	    	dataType:"json",
+	    	type:'post',
+	    	success: function(data){
+	    		$('#applicantid').val(data.applicantinfo.id);
+	    		var applicantjpinfo = data.applicantjpinfo;
+	    		console.log(applicantjpinfo);
+	    		//开关回显
+	    		if(applicantjpinfo.isMainApplicant == 0){
+	    			$("li:nth-child(2)").show();
+					$(".certificateM i").text('副');
+					$("#petitioner").attr('checked',true);
+					$(".mainrelationremark").hide();
+					$(".furelationremark").show();
+	    		}else{
+	    			$("li:nth-child(2)").hide();
+					$(".certificateM i").text('主');
+					$("#petitioner").attr('checked',false);
+					$(".mainrelationremark").show();
+					$(".furelationremark").hide();
+	    		}
+	    		//备注
+	    		$('#relationRemark').val(applicantjpinfo.relationRemark);
+	    		$('#mainRelation').val(applicantjpinfo.mainRelation);
+	    		//下拉框内容回显
+	    		var selecthtml = '';
+	    		var mainId = data.applicantinfo.mainId;
+	    		$.each(data.mainapplicantselect,function(index,value){
+	    			if(mainId == value.id){
+		    			selecthtml += '<option value="'+value.id+'">'+value.firstName + value.lastName+'</option>';
+	    			}else{
+		    			selecthtml += '<option value="'+value.id+'" selected="selected">'+value.firstName + value.lastName+'</option>';
+	    			}
+	    		});
+	    		$('#mainselect').html(selecthtml);
+	      	}
+	    });
+	}
+	$(function(){
+		$("#petitioner").click(function(){
+			if($(this).prop("checked")){
+				console.log($(this).prop("checked"));
+				$("li:nth-child(2)").show();
+				$(".certificateM i").text('副');
+				$(".mainrelationremark").hide();
+				$(".furelationremark").show();
+			}else {
+				console.log($(this).prop("checked"));
+				$("li:nth-child(2)").hide();
+				$(".certificateM i").text('主');
+				$(".mainrelationremark").show();
+				$(".furelationremark").hide();
+			}
+		});
+		//select
+		 $(".remark").change(function(){
+        	 var selecters = $(".remark").find("option:selected").text();
+             $(".remarkSpan").text(selecters);
+        });
+		//
+		 $(".relationship").change(function(){
+        	 var selecters = $(".relationship").find("option:selected").text();
+             $(".relationshipSpan").text(selecters);
+        });
+		//手写下拉框
+		let isBox = false;
+		$(".hostUL").hide();
+		$(".host").focus(function(){
+			$(this).siblings(".hostUL").show();
+			$(this).textFocus();
+			isBox = true;
+		});
+		$(".host").mousemove(function(){
+			isBox = true;
+		});
+		$(".host").mouseout(function(){
+			isBox = true;
+		});
+		$(".host").blur(function () { 
+		      if (isBox == true) return false;
+		      $(this).siblings(".hostUL").hide();
+		});
+		 $(".host").keyup(function(){
+		    let $val = $('.host').val();
+				if( $val == null || $val == ''){
+				    $(".hostUL").show();
+				}else{
+				    $(".hostUL").hide();
+				}
+				isBox = false;
+		  });
+		 $(".hostUL").find('li').each(function () { 
+		      $(this).click( function () {
+		        isBox = false;
+		        let text = $(this).text();
+		        $(this).parent().siblings(".host").val(text);
+		        $(".hostUL").hide();
+		      });
+		  });
+	})
+	//获取URL地址参数
+    function GetQueryString(name){
+         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+         var r = window.location.search.substr(1).match(reg);
+         if(r!=null)return  unescape(r[2]); return null;
+    }
+	
+	//保存并返回
+	function saveAndBack(){
+		var applicantid = GetQueryString('applicantid');
+		var relationRemark = $('#relationRemark').val();
+		var mainRelation = $('#mainRelation').val();
+		var isMainApplicant = 1;
+		var ischecked = $("#petitioner").prop("checked");
+		if(ischecked){
+			isMainApplicant = 0;
+		}
+		var mainId = $('#mainselect').val();
+		$.ajax({ 
+	    	url: '/admin/mobile/saveMainApplicant.html',
+	    	data:{applicantid:applicantid,relationRemark:relationRemark,isMainApplicant:isMainApplicant,mainId:mainId,mainRelation:mainRelation},
+	    	dataType:"json",
+	    	type:'post',
+	    	success: function(data){
+	    		window.location.href='/simplemobile/visaInfo.html?applicantid='+applicantid;
+	      	}
+	    });
+	}
+	
+	$(function(){
+		let isBox = false;
+		$(".remarks").hide();
+		$(".remarkInput").focus(function(){
+			$(this).siblings(".remarks").show();
+			$(this).textFocus();
+			isBox = true;
+		});
+		$(".remarkInput").mousemove(function(){
+			isBox = true;
+		});
+		$(".remarkInput").mouseout(function(){
+			isBox = true;
+		});
+		$(".remarkInput").blur(function () { 
+		      if (isBox == true) return false;
+		      $(this).siblings(".remarks").hide();
+		});
+		 $(".remarkInput").keyup(function(){
+		    let $val = $('.remarkInput').val();
+				if( $val == null || $val == ''){
+				    $(".remarks").show();
+				}else{
+				    $(".remarks").hide();
+				}
+				isBox = false;
+		  });
+		 $(".remarks").find('li').each(function () { 
+		      $(this).click( function () {
+		        isBox = false;
+		        let text = $(this).text();
+		        $(this).parent().siblings(".remarkInput").val(text);
+		        $(".remarks").hide();
+		      });
+		  });
+	})
+</script>	
+</html>

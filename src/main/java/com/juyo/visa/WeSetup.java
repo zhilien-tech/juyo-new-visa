@@ -182,7 +182,7 @@ public class WeSetup implements Setup {
 				public void run() {
 					logger.info("清除redis缓存航班数据----------");
 					try {
-						//tripAirlineService.deleteAielineCache();
+						tripAirlineService.deleteAielineCache();
 					} catch (Exception e) {
 						e.printStackTrace();
 

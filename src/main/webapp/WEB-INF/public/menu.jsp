@@ -98,6 +98,21 @@ $(function(){
                      <c:if test="${function.funName == '统计'}">
                     	<i class="iconfont icon-homepage"></i>
                     </c:if>
+                     <c:if test="${function.funName == '地接社'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '送签社发招宝'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '送签社下载'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '统计'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '精简版'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
                     <span>${function.funName }</span><i class="iconfont icon-arrowright btnMore"></i></a>
                	</c:when>
                	<c:otherwise>
@@ -142,6 +157,21 @@ $(function(){
                     	<i class="iconfont icon-homepage"></i>
                     </c:if>
                      <c:if test="${function.funName == '统计'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '地接社'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '送签社发招宝'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '送签社下载'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '统计'}">
+                    	<i class="iconfont icon-homepage"></i>
+                    </c:if>
+                     <c:if test="${function.funName == '精简版'}">
                     	<i class="iconfont icon-homepage"></i>
                     </c:if>
 					<span>${function.funName }</span><i class="iconfont"></i></a>

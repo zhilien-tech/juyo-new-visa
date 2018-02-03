@@ -92,9 +92,19 @@
 							<div class="form-group">
 								<label><span>*</span>公司类型：</label>
 								<select id="comType" name="comType" onchange="changeComType()" class="form-control input-sm inpImportant">
-									<option value="">请选择</option>
-									<option value="1" <c:if test="${'1' eq obj.company.comType}">selected</c:if>>送签社</option>
-									<option value="2" <c:if test="${'2' eq obj.company.comType}">selected</c:if>>地接社</option>
+									<c:forEach items="${obj.companyTypeEnum }" var="map">
+										<c:choose>
+											<c:when test="${obj.company.comType eq map.key }">
+												<option value="${map.key }" selected="selected">${map.value }</option>
+											</c:when>
+											<c:otherwise>
+												<option value="${map.key }">${map.value }</option>
+											</c:otherwise>
+										</c:choose>
+									
+									</c:forEach>
+									<%-- <option value="1" <c:if test="${'1' eq obj.company.comType}">selected</c:if>>送签社</option>
+									<option value="2" <c:if test="${'2' eq obj.company.comType}">selected</c:if>>地接社</option> --%>
 								</select>
 							</div>
 						</div>
