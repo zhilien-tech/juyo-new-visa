@@ -974,6 +974,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
+		List<Record> applicantInfo = new ArrayList<>();
 		String str = "";
 		String orderSqlstr = sqlManager.get("mydata_orderJpIds");
 		Sql orderSql = Sqls.create(orderSqlstr);
@@ -988,16 +989,29 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 				str += (Integer) orderJpStr + ",";
 			}
 		}
+		String applySqlstr = sqlManager.get("mydata_inProcessVisa_list");
+		Sql applySql = Sqls.create(applySqlstr);
+		Cnd applycnd = Cnd.NEW();
+		applycnd.and("ttb.userId", "=", loginUser.getId());
+		applySql.setCondition(applycnd);
+		Record loginApply = dbDao.fetch(applySql);
+
+		String applicantSqlstr = sqlManager.get("mydata_applys");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		Cnd appcnd = Cnd.NEW();
 		if (!Util.isEmpty(str)) {
 			String applicants = str.substring(0, str.length() - 1);
-			String applicantSqlstr = sqlManager.get("mydata_applys");
-			Sql applicantSql = Sqls.create(applicantSqlstr);
-			Cnd appcnd = Cnd.NEW();
 			appcnd.and("toj.orderId", "in", applicants);
+			appcnd.and("ttb.userId", "!=", loginUser.getId());
 			applicantSql.setCondition(appcnd);
-			List<Record> applicantInfo = dbDao.query(applicantSql, appcnd, null);
-			result.put("visaJapanData", applicantInfo);
+			applicantInfo = dbDao.query(applicantSql, appcnd, null);
+			applicantInfo.add(loginApply);
+		} else {
+			appcnd.and("ttb.userId", "=", loginUser.getId());
+			applicantSql.setCondition(appcnd);
+			applicantInfo = dbDao.query(applicantSql, appcnd, null);
 		}
+		result.put("visaJapanData", applicantInfo);
 
 		long endTime = System.currentTimeMillis();
 		System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
