@@ -401,13 +401,14 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
 				Cnd.where("userId", "=", loginUser.getId()), null);
-		Collections.reverse(applyList);
-		TApplicantEntity applicantEntity = applyList.get(0);
-		if (!Util.isEmpty(applicantEntity)) {
-			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
-					Cnd.where("applicantId", "=", applicantEntity.getId()));
-			result.put("applyid", applicantOrderJpEntity.getId());
-			result.put("orderJpId", applicantOrderJpEntity.getOrderId());
+		if (!Util.isEmpty(applyList)) {
+			TApplicantEntity applicantEntity = applyList.get(0);
+			if (!Util.isEmpty(applicantEntity)) {
+				TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
+						Cnd.where("applicantId", "=", applicantEntity.getId()));
+				result.put("applyid", applicantOrderJpEntity.getId());
+				result.put("orderJpId", applicantOrderJpEntity.getOrderId());
+			}
 		}
 		return result;
 	}

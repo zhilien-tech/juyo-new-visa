@@ -1389,6 +1389,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 								applyWealth.setCreateTime(new Date());
 								dbDao.insert(applyWealth);
 							}
+						} else {
+							if (!Util.isEmpty(applyWealthJp)) {
+								dbDao.delete(applyWealthJp);
+							}
 						}
 						//车产
 						TApplicantWealthJpEntity applicantWealthJpCar = dbDao.fetch(
@@ -1416,6 +1420,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 								applyWealth.setOpId(loginUser.getId());
 								applyWealth.setCreateTime(new Date());
 								dbDao.insert(applyWealth);
+							}
+						} else {
+							if (!Util.isEmpty(applicantWealthJpCar)) {
+								dbDao.delete(applicantWealthJpCar);
 							}
 						}
 
@@ -1446,6 +1454,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 								applyWealth.setCreateTime(new Date());
 								dbDao.insert(applyWealth);
 							}
+						} else {
+							if (!Util.isEmpty(applicantWealthJpHome)) {
+								dbDao.delete(applicantWealthJpHome);
+							}
 						}
 
 						//理财
@@ -1474,6 +1486,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 								applyWealth.setOpId(loginUser.getId());
 								applyWealth.setCreateTime(new Date());
 								dbDao.insert(applyWealth);
+							}
+						} else {
+							if (!Util.isEmpty(applicantWealthJpLi)) {
+								dbDao.delete(applicantWealthJpLi);
 							}
 						}
 
