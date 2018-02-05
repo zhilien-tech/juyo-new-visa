@@ -22,14 +22,14 @@
 
 	<div class="modal-content">
 		<form id="customerUpdateForm">
-			<div class="modal-header">
+			<div class="modal-header" style="width:100%;position:fixed;top:0;left:0;height:62px;background:#FFF; z-index:1000;">
 				<span class="heading">编辑</span> <input id="backBtn" type="button"
 					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
 					data-dismiss="modal" value="取消" /> <input id="updateBtn"
 					type="button" onclick="save()"
 					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
-			<div class="modal-body"  style="height:339px;">
+			<div class="modal-body"  style="height:100%;margin-top:62px;">
 				<div class="tab-content">
 					<input name="id" type="hidden" value="${obj.customer.id}">
 

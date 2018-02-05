@@ -132,7 +132,7 @@ function add(){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
+		area: ['900px', '80%'],
 		content: BASE_PATH + '/admin/hotel/add.html'
 	});
 }
@@ -146,7 +146,7 @@ function edit(id){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
+		area: ['900px', '80%'],
 		content: BASE_PATH + '/admin/hotel/update.html?id='+id
 	});
 }

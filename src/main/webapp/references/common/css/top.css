@@ -53,6 +53,7 @@
 	font-size:15px;
 	color:#FFF;
 	curcor:pointer;
+	margin-right:15px;
 }
 .closeWindow:hover {
 	background:rgba(0,0,0,.1);

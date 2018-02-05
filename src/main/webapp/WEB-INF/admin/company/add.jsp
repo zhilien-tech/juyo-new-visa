@@ -14,17 +14,19 @@
 	<style type="text/css">
 		img#sqImg {top: 0;}
 		#sgImg{top:1%}
+		.uploadP { position:relative; cursor:pointer;}
+		#uploadFile { position:absolute !important;top:0 !important;left:0 !important; width:100% !important; cursor:pointer;}
 	</style>
 </head>
 <body>
 	<div class="modal-content">
 		<form id="companyAddForm">
-			<div class="modal-header">
+			<div class="modal-header" style="width:100%;z-index:10000;position:fixed;top:0;left:0;height:62px; background:#FFF;">
 				<span class="heading">添加</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" style="height:100%;margin-top:62px;">
 				<div class="tab-content">
 					<div class="row">
 						<div class="col-sm-6">
