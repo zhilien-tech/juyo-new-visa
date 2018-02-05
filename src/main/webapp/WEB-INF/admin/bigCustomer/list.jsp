@@ -15,17 +15,9 @@
 	    <link rel="stylesheet" href="${base}/references/public/css/style.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
-		<div class="wrapper">
-			<!-- Content Wrapper. Contains page content -->
-			<div class="content-wrapper"  style="min-height: 848px;">
+
 				<!-- Main content -->
 				<section class="content">
-				
-					<ul class="title">
-						<li>大客户后台</li>
-						<!-- <li class="arrow"></li>
-						<li></li> -->
-					</ul>
 				
 					<div class="box">
 						<div class="box-header">
@@ -59,10 +51,7 @@
 								<thead>
 									<tr>
 										<th><span>序号</span></th>
-										<th><span>姓</span></th>
-										<th><span>姓(拼音)</span></th>
-										<th><span>名</span></th>
-										<th><span>名(拼音)</span></th>
+										<th><span>姓名</span></th>
 										<th><span>手机号</span></th>
 										<th><span>邮箱</span></th>
 										<th><span>部门</span></th>
@@ -78,12 +67,6 @@
 					</div>
 					<!-- /.box -->
 				</section><!-- /.content -->
-			</div><!-- /.content-wrapper -->
-	
-			<!-- Main Footer -->
-			<%-- <%@include file="/WEB-INF/public/footer.jsp"%> --%>
-	
-		</div>
 		<!-- ./wrapper -->
 	
 		<!-- jQuery 2.2.3 -->
