@@ -399,16 +399,13 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 	public Object visaInput(HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class,
-				Cnd.where("userId", "=", loginUser.getId()), null);
-		if (!Util.isEmpty(applyList)) {
-			TApplicantEntity applicantEntity = applyList.get(0);
-			if (!Util.isEmpty(applicantEntity)) {
-				TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
-						Cnd.where("applicantId", "=", applicantEntity.getId()));
-				result.put("applyid", applicantOrderJpEntity.getId());
-				result.put("orderJpId", applicantOrderJpEntity.getOrderId());
-			}
+		TTouristBaseinfoEntity base = dbDao.fetch(TTouristBaseinfoEntity.class,
+				Cnd.where("userId", "=", loginUser.getId()));
+		if (!Util.isEmpty(base)) {
+			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", base.getApplicantId()));
+			result.put("applyid", applicantOrderJpEntity.getId());
+			result.put("orderJpId", applicantOrderJpEntity.getOrderId());
 		}
 		return result;
 	}
@@ -989,12 +986,6 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 				str += (Integer) orderJpStr + ",";
 			}
 		}
-		String applySqlstr = sqlManager.get("mydata_inProcessVisa_list");
-		Sql applySql = Sqls.create(applySqlstr);
-		Cnd applycnd = Cnd.NEW();
-		applycnd.and("ttb.userId", "=", loginUser.getId());
-		applySql.setCondition(applycnd);
-		Record loginApply = dbDao.fetch(applySql);
 
 		String applicantSqlstr = sqlManager.get("mydata_applys");
 		Sql applicantSql = Sqls.create(applicantSqlstr);
@@ -1002,10 +993,8 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(str)) {
 			String applicants = str.substring(0, str.length() - 1);
 			appcnd.and("toj.orderId", "in", applicants);
-			appcnd.and("ttb.userId", "!=", loginUser.getId());
 			applicantSql.setCondition(appcnd);
 			applicantInfo = dbDao.query(applicantSql, appcnd, null);
-			applicantInfo.add(loginApply);
 		} else {
 			appcnd.and("ttb.userId", "=", loginUser.getId());
 			applicantSql.setCondition(appcnd);

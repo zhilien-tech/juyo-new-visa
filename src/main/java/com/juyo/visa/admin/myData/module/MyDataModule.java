@@ -149,7 +149,7 @@ public class MyDataModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object topContacts(HttpSession session, HttpServletRequest request) {
+	public Object topContacts(HttpSession session) {
 		return null;
 	}
 
