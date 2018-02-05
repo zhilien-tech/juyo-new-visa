@@ -88,6 +88,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			Map<String, Object> map = Maps.newTreeMap();
 			TOrderTripJpEntity ordertripjp = dbDao.fetch(TOrderTripJpEntity.class,
 					Cnd.where("orderId", "=", record.get("orderjpid")));
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("id", "=", record.get("orderjpid")));
 			if (!Util.isEmpty(ordertripjp)) {
 				if (ordertripjp.getTripType().equals(1)) {
 					Date goDate = ordertripjp.getGoDate();
@@ -115,6 +116,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 						}
 					}
 				}
+				TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+				map.put("ordernum", orderinfo.getOrderNum());
 			}
 			//登录的用户名密码
 			map.put("visaAccount", "1507-001");
@@ -134,15 +137,56 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					agentNo = comBusiness.getDesignatedNum();
 				}
 			}
+			if (!Util.isEmpty(orderjp)) {
+				String visaCounty = orderjp.getVisaCounty();
+				if (!Util.isEmpty(visaCounty)) {
+					if (visaCounty.indexOf("冲绳") != -1) {
+						map.put("VISA_STAY_PREF_47", true);
+					} else {
+						map.put("VISA_STAY_PREF_47", false);
+					}
+					if (visaCounty.indexOf("青森") != -1) {
+						map.put("VISA_STAY_PREF_2", true);
+					} else {
+						map.put("VISA_STAY_PREF_2", false);
+					}
+					if (visaCounty.indexOf("岩手") != -1) {
+						map.put("VISA_STAY_PREF_3", true);
+					} else {
+						map.put("VISA_STAY_PREF_3", false);
+					}
+					if (visaCounty.indexOf("宫城") != -1) {
+						map.put("VISA_STAY_PREF_4", true);
+					} else {
+						map.put("VISA_STAY_PREF_4", false);
+					}
+					if (visaCounty.indexOf("秋田") != -1) {
+						map.put("VISA_STAY_PREF_5", true);
+					} else {
+						map.put("VISA_STAY_PREF_5", false);
+					}
+					if (visaCounty.indexOf("山形") != -1) {
+						map.put("VISA_STAY_PREF_6", true);
+					} else {
+						map.put("VISA_STAY_PREF_6", false);
+					}
+					if (visaCounty.indexOf("福岛") != -1) {
+						map.put("VISA_STAY_PREF_7", true);
+					} else {
+						map.put("VISA_STAY_PREF_7", false);
+					}
+				} else {
+					map.put("VISA_STAY_PREF_2", false);
+					map.put("VISA_STAY_PREF_3", false);
+					map.put("VISA_STAY_PREF_4", false);
+					map.put("VISA_STAY_PREF_5", false);
+					map.put("VISA_STAY_PREF_6", false);
+					map.put("VISA_STAY_PREF_7", false);
+					map.put("VISA_STAY_PREF_47", false);
+				}
+			}
 			map.put("agentNo", agentNo);
 			map.put("visaType1", record.get("visatype"));
-			map.put("VISA_STAY_PREF_2", false);
-			map.put("VISA_STAY_PREF_3", false);
-			map.put("VISA_STAY_PREF_4", false);
-			map.put("VISA_STAY_PREF_5", false);
-			map.put("VISA_STAY_PREF_6", false);
-			map.put("VISA_STAY_PREF_7", false);
-			map.put("VISA_STAY_PREF_47", false);
 
 			String applysqlstr = sqlManager.get("get_applicantinfo_simulate_from_order");
 			Sql applysql = Sqls.create(applysqlstr);
