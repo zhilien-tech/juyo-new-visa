@@ -23,7 +23,7 @@
 				<input id="updateBtn" type="button" onclick="save()" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 		 <form id="passwordForm" method="post">
-		 	<div class="modal-body" style="height: 388px;">
+		 	<div class="modal-body" style="height: 100%;">
 				<div class="tab-content">
 					<div class="row">
 						<div class="col-sm-12">

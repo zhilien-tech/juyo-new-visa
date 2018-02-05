@@ -159,7 +159,7 @@ function add(){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
+		area: ['900px', '80%'],
 		content: BASE_PATH + '/admin/company/add.html'
 	});
 }
@@ -173,7 +173,7 @@ function edit(id){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
+		area: ['900px', '80%'],
 		content: BASE_PATH + '/admin/company/update.html?id='+id
 	});
 }

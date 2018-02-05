@@ -231,7 +231,7 @@
 					maxmin: false,
 					shadeClose: false,
 					scrollbar: false,
-					area: ['800px', '500px'],
+					area: ['800px', '80%'],
 					content: BASE_PATH + '/admin/simple/customer/add.html?isCustomerAdd=1'
 				});
 			}
@@ -245,7 +245,7 @@
 					maxmin: false,
 					shadeClose: false,
 					scrollbar: false,
-					area: ['800px', '500px'],
+					area: ['800px', '80%'],
 					content: BASE_PATH + '/admin/simple/customer/update.html?id='+id
 				});
 			}
