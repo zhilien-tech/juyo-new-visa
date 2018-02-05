@@ -17,21 +17,12 @@
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
-		<style type="text/css">
-			.form-control{height: 30px;}
-			.add-btn{top:-225px;right:-1%;}
-			.remove-btn{top: -225px;right: -1%;}
-			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
-			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
-			.info-body-from { margin-left:12%;}
-			.qz-head { position:fixed;top:0;left:0;z-index:99999; width:100%;}
-			.content { margin-top:50px;}
-			#urgentDays { width:14.2%;}
-		</style>
+		<!-- 本页面样式 -->
+		<link rel="stylesheet" href="${base}/references/common/css/trailDetail.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper" id="wrapper">
-			<div class="content-wrapper"  style="min-height: 848px;">
+			<div class="content-wrapper">
 				<div class="qz-head">
 					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
 					<!-- <span class="">受付番号：<p>JDY27163</p></span> -->
@@ -520,7 +511,6 @@
 			</div>
 	
 		</div>
-		
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
 			var orderid = '${obj.orderid}';
@@ -541,8 +531,8 @@
 		<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 		<!-- 本页面js文件 -->
-		<%-- <script src="${base}/admin/firstTrialJp/backMailInfo.js"></script> --%>
 		<script src="${base}/admin/firstTrialJp/trialDetail.js"></script>
+		<!-- 时间js -->
 		<script src="${base}/admin/firstTrialJp/trialDate.js"></script>
 		
 	</body>

@@ -15,6 +15,8 @@
 <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<!-- 本页css -->
+<link rel="stylesheet" href="${base}/references/common/css/user.css">
 </head>
 <body>
 	<div class="modal-content">
@@ -24,7 +26,7 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
-			<div class="modal-body" style="height: 388px;">
+			<div class="modal-body">
 				<div class="tab-content">
 
 					<div class="row">

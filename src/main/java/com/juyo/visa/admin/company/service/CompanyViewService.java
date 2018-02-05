@@ -116,6 +116,8 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			user.setUserType(UserLoginEnum.SQ_COMPANY_ADMIN.intKey());//送签社公司管理员
 		} else if (CompanyTypeEnum.DIJI.intKey() == comType) {
 			user.setUserType(UserLoginEnum.DJ_COMPANY_ADMIN.intKey());//地接社公司管理员
+		} else if (CompanyTypeEnum.SONGQIANSIMPLE.intKey() == comType) {
+			user.setUserType(UserLoginEnum.JJ_COMPANY_ADMIN.intKey());//地接社公司管理员
 		}
 		TUserEntity insertUser = dbDao.insert(user);
 
@@ -251,6 +253,8 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 				user.setUserType(UserLoginEnum.SQ_COMPANY_ADMIN.intKey());//送签社公司管理员
 			} else if (CompanyTypeEnum.DIJI.intKey() == comType) {
 				user.setUserType(UserLoginEnum.DJ_COMPANY_ADMIN.intKey());//地接社公司管理员
+			} else if (CompanyTypeEnum.SONGQIANSIMPLE.intKey() == comType) {
+				user.setUserType(UserLoginEnum.JJ_COMPANY_ADMIN.intKey());//地接社公司管理员
 			}
 			user.setUpdateTime(nowDate);
 			dbDao.update(user);

@@ -93,6 +93,7 @@ public class TUserForm extends DataTablesParamForm {
 		cnd.and("u.comId", "=", comId);
 
 		cnd.and("u.userType", "!=", 5);
+		cnd.and("u.userType", "!=", 7);
 		cnd.orderBy("updateTime", "DESC");
 		cnd.orderBy("createTime", "DESC");
 		return cnd;

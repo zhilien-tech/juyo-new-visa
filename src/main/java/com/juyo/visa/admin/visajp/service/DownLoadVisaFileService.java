@@ -229,9 +229,11 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 
 		String visatypestr = "";
 		Integer visaType = orderjp.getVisaType();
-		for (MainSaleVisaTypeEnum visatypeEnum : MainSaleVisaTypeEnum.values()) {
-			if (visatypeEnum.intKey() == visaType) {
-				visatypestr = visatypeEnum.value();
+		if (!Util.isEmpty(visaType)) {
+			for (MainSaleVisaTypeEnum visatypeEnum : MainSaleVisaTypeEnum.values()) {
+				if (visatypeEnum.intKey() == visaType) {
+					visatypestr = visatypeEnum.value();
+				}
 			}
 		}
 		//准备PDF模板数据 

@@ -1384,7 +1384,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		result.put("orderjpinfo", orderjp);
 		List<TCompanyEntity> songqianlist = Lists.newArrayList();
 		//送签社下拉
-		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
+		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
+				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
 			songqianlist = dbDao
 					.query(TCompanyEntity.class, Cnd.where("adminId", "=", loginCompany.getAdminId()), null);
 		} else {
@@ -1444,6 +1445,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			//订单负责人变更
 			Integer userId = loginuser.getId();
 			changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
+		} else if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+			orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
 		} else {
 			//地接社为准备提交大使馆
 			orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());

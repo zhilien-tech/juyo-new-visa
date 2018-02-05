@@ -172,7 +172,7 @@
     				maxmin: false,
     				shadeClose: false,
     				scrollbar: false,
-    				area: ['900px', '551px'],
+    				area: ['900px', '80%'],
     				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&orderId='+orderid+'&isAfterMarket=1&orderProcessType=5'
     			});
         	}

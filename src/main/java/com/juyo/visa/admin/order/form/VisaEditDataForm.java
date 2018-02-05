@@ -76,4 +76,13 @@ public class VisaEditDataForm implements Serializable {
 
 	//订单流程枚举值
 	private Integer orderProcessType;
+
+	private String visacounty;
+
+	private String threecounty;
+
+	private Integer visatype;
+
+	private Integer isVisit;
+
 }

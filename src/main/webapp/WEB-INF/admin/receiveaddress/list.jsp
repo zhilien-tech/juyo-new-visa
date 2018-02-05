@@ -68,8 +68,10 @@
 	<!-- 公用js文件 -->
 	<script src="${base}/references/common/js/base/base.js"></script>
 	<!-- 引入DataTables JS -->
+	<!-- 图标提示语 -->
+	<script src="${base}/references/common/js/base/baseIcon.js"></script>
+	<!-- 本页js -->
 	<script src="${base}/admin/receiveaddress/listTable.js"></script>
-	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
 			var BASE_PATH = '${base}';
 			$(function () {
