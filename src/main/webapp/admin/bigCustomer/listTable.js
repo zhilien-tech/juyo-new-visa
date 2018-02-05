@@ -100,15 +100,16 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
-		            {"data": "job", "bSortable": false,render: function(data, type, row, meta) {
-		            	var job = row.job;
-		            	if(null==job || ""==job){
-		            		return "";
-		            	}else{
-		            		/*job = '<span data-toggle="tooltip" data-placement="right" title="'+job+'">'+job+'<span>';*/
-		            		return job;
-		            	}
-		            } 	
+		            {"data": "job", "bSortable": false,
+		            	render: function(data, type, row, meta) {
+			            	var job = row.job;
+			            	if(null==job || ""==job){
+			            		return "";
+			            	}else{
+			            		/*job = '<span data-toggle="tooltip" data-placement="right" title="'+job+'">'+job+'<span>';*/
+			            		return job;
+			            	}
+			            } 	
 		            },
 		            {"data": " ", "bSortable": false, "width":120,
 		            	render: function(data, type, row, meta) {
@@ -133,7 +134,7 @@ function add(){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '550px'],
-		content: BASE_PATH + '/admin/bigcustomer/add.html'
+		content: BASE_PATH + '/admin/bigCustomer/add.html'
 	});
 }
 /* layer编辑 */
@@ -147,7 +148,7 @@ function edit(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '550px'],
-		content: BASE_PATH + '/admin/bigcustomer/update.html?id='+id
+		content: BASE_PATH + '/admin/bigCustomer/update.html?id='+id
 	});
 }
 
@@ -159,7 +160,7 @@ function deleteById(id) {
 		shade: false //不显示遮罩
 	}, function(){
 		// 点击确定之后
-		var url = BASE_PATH + '/admin/bigcustomer/delete.html';
+		var url = BASE_PATH + '/admin/bigCustomer/delete.html';
 		$.ajax({
 			type : 'POST',
 			data : {

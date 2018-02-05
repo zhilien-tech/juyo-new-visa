@@ -1,15 +1,21 @@
 package com.juyo.visa.admin.bigcustomer.module;
 
+import java.io.File;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.upload.UploadAdaptor;
 
 import com.juyo.visa.admin.bigcustomer.service.BigCustomerViewService;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
@@ -105,6 +111,22 @@ public class BigCustomerModule {
 	public Object batchDelete(@Param("ids") final Long[] ids) {
 		bigCustomerViewService.batchDelete(ids);
 		return JsonResult.success("删除成功");
+	}
+
+	/**
+	 * 
+	 * 人员管理Excel信息导入
+	 */
+	@At
+	@Ok("json")
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object importExcel(@Param("file") File file, HttpServletRequest request) {
+		try {
+			bigCustomerViewService.importExcel(file, request);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

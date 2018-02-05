@@ -138,7 +138,7 @@ public class ExcelReader {
 	public static void main(String[] args) {
 		try {
 			// 对读取Excel表格标题测试
-			File excelFile = new File("d:\\kaifa\\导入Excel.xlsx");
+			File excelFile = new File("c:\\Users\\ThinkPad.H\\Desktop\\人员管理之模块.xlsx");
 			InputStream is = new FileInputStream(excelFile);
 			ExcelReader excelReader = new ExcelReader();
 			String[] title = excelReader.readExcelTitle(is);
