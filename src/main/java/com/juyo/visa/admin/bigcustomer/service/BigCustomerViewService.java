@@ -9,7 +9,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 @IocBean
-public class BigcustomerViewService extends BaseService<TAppStaffBasicinfoEntity> {
+public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	private static final Log log = Logs.get();
 	
 	public Object listData(TAppStaffBasicinfoForm queryForm) {
