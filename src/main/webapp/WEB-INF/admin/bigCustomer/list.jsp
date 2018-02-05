@@ -1,7 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<%@include file="/WEB-INF/public/header.jsp"%>
-<%@include file="/WEB-INF/public/aside.jsp"%>
 <c:set var="url" value="${base}/admin/bigCustomer" />
 <!DOCTYPE html>
 <html lang="en-US">
@@ -9,6 +7,12 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>大客户后台</title>
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
+	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+	    <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
+	    <link rel="stylesheet" href="${base}/references/public/css/style.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper">
@@ -27,22 +31,24 @@
 						<div class="box-header">
 						
 							<div class="row form-right">
-								<div class="col-md-2 left-5px right-0px">
+								<!-- <div class="col-md-2 left-5px right-0px">
 									<select class="input-class input-sm">
 										<option>状态</option>
 									</select>
-								</div>
+								</div> -->
 								<div class="col-md-2 left-5px right-0px">
-									<input id="" name="" type="text" class="input-sm input-class" placeholder="搜索条件" />
+									<input id="searchStr" name="searchStr" type="text" class="input-sm input-class" placeholder="姓名/电话/部门/职位" />
 								</div>
-								<div class="col-md-3 left-5px right-0px">
+								<!-- <div class="col-md-3 left-5px right-0px">
 									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
 									<span class="picker-span">至</span>
 									<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
-								</div>
+								</div> -->
 								<div class="col-md-5 left-5px">
 									<a id="" class="btn btn-primary btn-sm pull-left" onclick="" >搜索</a>
-									<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
+									<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>&nbsp;&nbsp;
+									<a id="uploadBtn" class="btn btn-primary btn-sm pull-right" >上传</a>&nbsp;&nbsp;
+									<a id="downloadBtn" class="btn btn-primary btn-sm pull-right" >模板下载</a>
 								</div>
 							</div>
 							
@@ -53,46 +59,14 @@
 								<thead>
 									<tr>
 										<th><span>序号</span></th>
-										<th><span>公司id</span></th>
-										<th><span>用户id（登录用户id）</span></th>
 										<th><span>姓</span></th>
 										<th><span>姓(拼音)</span></th>
 										<th><span>名</span></th>
 										<th><span>名(拼音)</span></th>
-										<th><span>状态</span></th>
 										<th><span>手机号</span></th>
 										<th><span>邮箱</span></th>
-										<th><span>性别</span></th>
 										<th><span>部门</span></th>
 										<th><span>职位</span></th>
-										<th><span>民族</span></th>
-										<th><span>出生日期</span></th>
-										<th><span>住址</span></th>
-										<th><span>身份证号</span></th>
-										<th><span>身份证正面</span></th>
-										<th><span>身份证反面</span></th>
-										<th><span>签发机关</span></th>
-										<th><span>有效期始</span></th>
-										<th><span>有效期至</span></th>
-										<th><span>现居住地址省份</span></th>
-										<th><span>现居住地址城市</span></th>
-										<th><span>详细地址</span></th>
-										<th><span>曾用姓</span></th>
-										<th><span>曾用姓(拼音)</span></th>
-										<th><span>曾用名</span></th>
-										<th><span>曾用名(拼音)</span></th>
-										<th><span>紧急联系人姓名</span></th>
-										<th><span>紧急联系人手机</span></th>
-										<th><span>'是否另有国籍</span></th>
-										<th><span>是否有曾用名</span></th>
-										<th><span>结婚证/离婚证地址</span></th>
-										<th><span>结婚状况</span></th>
-										<th><span>婚姻状况证件类型</span></th>
-										<th><span>国籍</span></th>
-										<th><span>现居住地是否与身份证相同</span></th>
-										<th><span>操作人</span></th>
-										<th><span>更新时间</span></th>
-										<th><span>创建时间</span></th>
 										<th><span>操作</span></th>
 									</tr>
 								</thead>
