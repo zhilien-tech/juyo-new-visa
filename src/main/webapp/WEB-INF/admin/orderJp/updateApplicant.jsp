@@ -14,41 +14,8 @@
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
-<style type="text/css">
-.modal-content { position:relative; }
-.modal-body { padding:15px 72px 15px 20px; height:100%; margin-top:50px;overflow-y:hidden;}
-.modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
-.NoInfo { width:100%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
-.ipt-info { display:none; }
-.Unqualified, .qualified  { margin-right:10px; }
-.info-imgUpload { margin-top:35px;}
-.nameBeforeYes { margin-right:20px; }
-.onceIDYes { margin-right:30px; }
-.nameBeforeHide , .nationalityHide{ display:none; }
-.nationalityHide { width:35%;}
-.wordSpell { display:none; margin-top:3px !important;}
-.rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
-.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
-.nationalityHide { margin-left:3%;}
-.row { margin-top:8.3px;}
-.nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
-.btn-margin { margin-top:10px;}
-#sqImg ,#sqImgBack { width:335px;}
-.delete { z-index:1000000;}
-.marginL { margin-left:30px;}
-.nameBeforeTop { margin-left:30px;}
-img[src=""],img:not([src]) { opacity:0;}
-input[type="file"] { z-index:99999;}
-#sqImg { z-index:999999;}
-#sqImgBack { z-index:999999;}
-.IdInfo { border:1px solid #7a9cd3;}
-.IdInfo li { padding-left:2%;}
-.IdInfo li:hover { background:#1e90ff; cursor:pointer;}
-.IdInfo li:hover a { color:#FFF;}
-.IdInfo li a { color:#000;}
-.mainWidth { width:100% !important;}
-#uploadFile,#uploadFileBack { width:100% !important;}
-</style>
+<!-- 本页css -->
+<link rel="stylesheet" href="${base}/references/common/css/updateApplicant.css">
 </head>
 <body>
 	<div class="modal-content">
@@ -123,7 +90,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-10 padding-right-0 marginL">
 								<div class="form-group">
 									<label><span>*</span>签发机关</label> 
-									<input id="issueOrganization" name="issueOrganization"
+									<input id="issueOrganization" name="issueOrganization" tabIndex="1"
 										type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -152,7 +119,7 @@ input[type="file"] { z-index:99999;}
 							    <div class="col-sm-10 padding-right-0 marginL">
 									<div class="form-group" style="position:relative;">
 										<label>姓/拼音</label> <input id="otherFirstName"
-											name="otherFirstName" type="text" class="form-control input-sm "
+											name="otherFirstName" type="text" class="form-control input-sm "  tabIndex="15"
 											placeholder=" " value="${obj.applicant.otherFirstName }" />
 											<input type="text" id="otherFirstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
 										<!-- <i class="bulb"></i> -->
@@ -177,7 +144,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-5 padding-right-0 nationalityHide">
 								<div class="form-group" id="nationalityDiv">
 									<label>国籍</label> 
-									<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
+									<input id="nationality" name="nationality"  tabIndex="17" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 								</div>
 							</div>
 						</div>
@@ -189,7 +156,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0 " >
 								<div class="form-group" style="position:relative;">
 									<label><span>*</span>姓/拼音</label> <input id="firstName"
-										name="firstName" type="text" class="form-control input-sm "
+										name="firstName" type="text" class="form-control input-sm "  tabIndex="2"
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
 										<input type="hidden" name="userType" value="${obj.userType }"/>
@@ -208,7 +175,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group" style="position:relative;">
 									<label><span>*</span>名/拼音</label> <input id="lastName"
-										name="lastName" type="text" class="form-control input-sm "
+										name="lastName" type="text" class="form-control input-sm "  tabIndex="3"
 										placeholder=" " value="${obj.applicant.lastName }" />
 										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 
@@ -222,7 +189,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>手机号</label> <input id="telephone"
-										name="telephone" type="text" class="form-control input-sm"
+										name="telephone" type="text" class="form-control input-sm"  tabIndex="4"
 										placeholder=" " value="${obj.applicant.telephone }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -230,7 +197,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>邮箱</label> <input id="email" name="email"
-										type="text" class="form-control input-sm" placeholder=" "
+										type="text" class="form-control input-sm" placeholder=" "  tabIndex="5"
 										value="${obj.applicant.email }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -243,7 +210,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>公民身份证</label> <input id="cardId"
-										name="cardId" type="text" class="form-control input-sm"
+										name="cardId" type="text" class="form-control input-sm"  tabIndex="6"
 										placeholder=" " value="${obj.applicant.cardId }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -269,7 +236,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-3 padding-right-0">
 								<div class="form-group">
 									<label>民族</label> <input id="nation"
-										name="nation" type="text" class="form-control input-sm"
+										name="nation" type="text" class="form-control input-sm"  tabIndex="7"
 										placeholder=" " value="${obj.applicant.nation }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -277,7 +244,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
 									<label>出生日期</label> 
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" value="${obj.birthday }"/>
+									<input id="birthday" name="birthday" type="text"  tabIndex="8" class="form-control input-sm" value="${obj.birthday }"/>
 									
 								</div>
 							</div>
@@ -288,7 +255,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>住址</label> <input id="address"
-										name="address" type="text" class="form-control input-sm"
+										name="address" type="text" class="form-control input-sm"  tabIndex="9"
 										placeholder=" " value="${obj.applicant.address }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -299,13 +266,13 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>有效期限</label> 
-									<input id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
+									<input id="validStartDate" name="validStartDate"  tabIndex="10" type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label> &nbsp; &nbsp;</label> 
-									<input id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" value="${obj.validEndDate }">
+									<input id="validEndDate" type="text" name="validEndDate"  tabIndex="11"  class="form-control input-sm" value="${obj.validEndDate }">
 								</div>
 							</div>
 						</div>
@@ -318,7 +285,7 @@ input[type="file"] { z-index:99999;}
 									<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
 									<input type="hidden" id="sameAddress" value=""/>
 									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> <input id="province"
-										name="province" type="text" class="form-control input-sm"
+										name="province" type="text" class="form-control input-sm"  tabIndex="12"
 										placeholder="省" value="${obj.applicant.province }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -326,7 +293,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
 									<label>现居住地址城市</label> <input id="city"
-										name="city" type="text" class="form-control input-sm"
+										name="city" type="text" class="form-control input-sm" tabIndex="13"
 										placeholder="市" value="${obj.applicant.city }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -338,7 +305,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>详细地址</label> <input
-										id="detailedAddress" name="detailedAddress" type="text"
+										id="detailedAddress" name="detailedAddress" type="text"  tabIndex="14"
 										class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间"
 										value="${obj.applicant.detailedAddress }" />
 									<!-- <i class="bulb"></i> -->
@@ -356,7 +323,7 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-11 padding-right-0 col-sm-offset-1" >
 								<div class="form-group" style="position:relative;">
 									<label>名/拼音</label> 
-									<input id="otherLastName" name="otherLastName" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
+									<input id="otherLastName" name="otherLastName"  tabIndex="16" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
 									<input type="text" id="otherLastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
 								</div>
 							</div>
@@ -367,14 +334,14 @@ input[type="file"] { z-index:99999;}
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>紧急联系人姓名</label> <input id="emergencyLinkman"
-										name="emergencyLinkman" type="text" class="form-control input-sm"
+										name="emergencyLinkman" type="text" class="form-control input-sm"  tabIndex="18"
 										placeholder=" " value="${obj.applicant.emergencyLinkman }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>紧急联系人手机</label> <input id="emergencyTelephone" name="emergencyTelephone"
+									<label>紧急联系人手机</label> <input id="emergencyTelephone" name="emergencyTelephone"  tabIndex="19"
 										type="text" class="form-control input-sm" placeholder=" "
 										value="${obj.applicant.emergencyTelephone }" />
 									<!-- <i class="bulb"></i> -->
