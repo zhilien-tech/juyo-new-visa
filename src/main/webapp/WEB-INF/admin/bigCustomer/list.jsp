@@ -28,7 +28,7 @@
 							</select>
 						</div> -->
 						<div class="col-md-2 left-5px right-0px">
-							<input id="searchStr" name="searchStr" type="text" class="input-sm input-class" placeholder="姓名/电话/部门/职位" />
+							<input id="searchStr" name="searchStr" onkeypress="onkeyEnter();"  type="text" class="input-sm input-class" placeholder="姓名/电话/部门/职位" />
 						</div>
 						<!-- <div class="col-md-3 left-5px right-0px">
 							<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
@@ -36,7 +36,7 @@
 							<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
 						</div> -->
 						<div class="col-md-5 left-5px">
-							<a id="" class="btn btn-primary btn-sm pull-left" onclick="" >搜索</a>
+							<a id="searchBtn" class="btn btn-primary btn-sm pull-left" onclick="">搜索</a>
 							<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 							<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file" value="上传" />
 							<a id="downloadBtn" href="${obj.downloadurl }" class="btn btn-primary btn-sm pull-right" >模板下载</a>

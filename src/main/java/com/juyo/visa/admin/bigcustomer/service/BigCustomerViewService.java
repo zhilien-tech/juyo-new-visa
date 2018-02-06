@@ -78,6 +78,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 */
 	public Object importExcel(File file, HttpServletRequest request) throws Exception {
 
+		Map<String, Object> result = Maps.newHashMap();
 		HttpSession session = request.getSession();
 		//当前登录公司
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -124,8 +125,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			}
 			dbDao.insert(baseInfos);
 		}
-
-		return null;
+		result.put("status", 200);
+		return result;
 
 	}
 

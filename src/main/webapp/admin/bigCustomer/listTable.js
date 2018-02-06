@@ -149,3 +149,35 @@ function deleteById(id) {
 		// 取消之后不用处理
 	});
 }
+
+$("#searchBtn").on('click', function () {
+	var searchStr = $("#searchStr").val();
+    var param = {
+		"searchStr": searchStr
+	};
+    datatable.settings()[0].ajax.data = param;
+	datatable.ajax.reload();
+});
+
+function successCallback(status){
+	if(status==1){
+		layer.msg("添加成功");
+	}else if(status==2){
+		layer.msg("编辑成功");
+	}else if(status==3){
+		layer.msg("上传成功");
+	}
+	 var param = {
+		"searchStr": ""
+	};
+    datatable.settings()[0].ajax.data = param;
+	datatable.ajax.reload();
+}
+
+/*回车事件*/
+function onkeyEnter(){
+	var e = window.event || arguments.callee.caller.arguments[0];
+	if(e && e.keyCode == 13){
+		$("#searchBtn").click();
+	}
+}

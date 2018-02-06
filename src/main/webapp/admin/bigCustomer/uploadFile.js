@@ -27,11 +27,9 @@ $('#uploadFile').change(function(){
 			//请求数据  
 			data:formData ,
 			success: function (obj) {//请求成功后的函数 
-				//关闭加载层
+				alert(obj);
 				layer.close(layerIndex);
-				if('200' === obj.status){
-					alert("上传成功");
-				}
+				successCallback(3);
 			},  
 			error: function (obj) {
 				layer.close(layerIndex);
