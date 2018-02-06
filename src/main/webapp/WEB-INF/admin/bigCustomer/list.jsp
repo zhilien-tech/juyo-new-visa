@@ -39,7 +39,7 @@
 							<a id="" class="btn btn-primary btn-sm pull-left" onclick="" >搜索</a>
 							<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
 							<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file" value="上传" />
-							<a id="downloadBtn" class="btn btn-primary btn-sm pull-right" >模板下载</a>
+							<a id="downloadBtn" href="${obj.downloadurl }" class="btn btn-primary btn-sm pull-right" >模板下载</a>
 						</div>
 					</div>
 					

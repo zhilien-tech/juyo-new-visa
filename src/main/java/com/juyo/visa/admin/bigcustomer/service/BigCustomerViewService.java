@@ -1,8 +1,12 @@
 package com.juyo.visa.admin.bigcustomer.service;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -17,8 +22,10 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.util.ExcelReader;
+import com.juyo.visa.common.util.IpUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
@@ -30,6 +37,17 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	private static final Log log = Logs.get();
+
+	private final static String TEMPLATE_EXCEL_URL = "download";
+	private final static String TEMPLATE_EXCEL_NAME = "人员管理之模块.xlsx";
+
+	public Object toList(HttpServletRequest request) {
+		Map<String, Object> result = Maps.newHashMap();
+		String ipAddress = IpUtil.getIpAddr(request);
+		String downloadUrl = "http://" + ipAddress + ":8080/admin/bigCustomer/download.html";
+		result.put("downloadurl", downloadUrl);
+		return result;
+	}
 
 	/**
 	 * 
@@ -107,6 +125,48 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			dbDao.insert(baseInfos);
 		}
 
+		return null;
+
+	}
+
+	/**
+	 * 
+	 * 下载Excel导入模板
+	 *
+	 * @param request
+	 * @param response
+	 * @return 下载Excel导入模板
+	 * @throws Exception 
+	 */
+	public Object downloadTemplate(HttpServletRequest request, HttpServletResponse response) {
+		OutputStream os = null;
+		try {
+			String filepath = request.getServletContext().getRealPath(TEMPLATE_EXCEL_URL);
+			String path = filepath + File.separator + TEMPLATE_EXCEL_NAME;
+			File file = new File(path);// path是根据日志路径和文件名拼接出来的
+			String filename = file.getName();// 获取日志文件名称
+			InputStream fis = new BufferedInputStream(new FileInputStream(path));
+			byte[] buffer = new byte[fis.available()];
+			fis.read(buffer);
+			fis.close();
+			response.reset();
+			// 先去掉文件名称中的空格,然后转换编码格式为utf-8,保证不出现乱码,这个文件名称用于浏览器的下载框中自动显示的文件名
+			response.addHeader("Content-Disposition", "attachment;filename="
+					+ new String(filename.replaceAll(" ", "").getBytes("utf-8"), "iso8859-1"));
+			response.addHeader("Content-Length", "" + file.length());
+			response.setContentType("application/octet-stream");
+			os = new BufferedOutputStream(response.getOutputStream());
+			os.write(buffer);// 输出文件
+			os.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				os.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		return null;
 
 	}

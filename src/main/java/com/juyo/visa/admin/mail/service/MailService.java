@@ -1,5 +1,9 @@
 package com.juyo.visa.admin.mail.service;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -36,6 +40,9 @@ public class MailService extends BaseService<TConfMailEntity> {
 	private MailSender simpleMailSender;
 	@Inject
 	private RedisDao redisDao;
+
+	private final static String TEMPLATE_WORD_URL = "download";
+	private final static String TEMPLATE_WORD_NAME = "游客填写资料模板.docx";
 
 	private final static String SMS_SIGNATURE = "【优悦签】";
 
@@ -76,6 +83,48 @@ public class MailService extends BaseService<TConfMailEntity> {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * 
+	 * 下载游客填写资料模板
+	 *
+	 * @param request
+	 * @param response
+	 * @return null
+	 * @throws Exception 
+	 */
+	public Object downloadTemplate(HttpServletRequest request, HttpServletResponse response) {
+		OutputStream os = null;
+		try {
+			String filepath = request.getServletContext().getRealPath(TEMPLATE_WORD_URL);
+			String path = filepath + File.separator + TEMPLATE_WORD_NAME;
+			File file = new File(path);// path是根据日志路径和文件名拼接出来的
+			String filename = file.getName();// 获取日志文件名称
+			InputStream fis = new BufferedInputStream(new FileInputStream(path));
+			byte[] buffer = new byte[fis.available()];
+			fis.read(buffer);
+			fis.close();
+			response.reset();
+			// 先去掉文件名称中的空格,然后转换编码格式为utf-8,保证不出现乱码,这个文件名称用于浏览器的下载框中自动显示的文件名
+			response.addHeader("Content-Disposition", "attachment;filename="
+					+ new String(filename.replaceAll(" ", "").getBytes("utf-8"), "iso8859-1"));
+			response.addHeader("Content-Length", "" + file.length());
+			response.setContentType("application/octet-stream");
+			os = new BufferedOutputStream(response.getOutputStream());
+			os.write(buffer);// 输出文件
+			os.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				os.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+
 	}
 
 	//文件下载

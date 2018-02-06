@@ -3,6 +3,7 @@ package com.juyo.visa.admin.bigcustomer.module;
 import java.io.File;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -38,8 +39,8 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object list() {
-		return null;
+	public Object list(HttpServletRequest request) {
+		return bigCustomerViewService.toList(request);
 	}
 
 	/**
@@ -125,6 +126,14 @@ public class BigCustomerModule {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * 文件下载
+	 */
+	@At
+	public Object download(HttpServletRequest request, HttpServletResponse response) {
+		return bigCustomerViewService.downloadTemplate(request, response);
 	}
 
 }
