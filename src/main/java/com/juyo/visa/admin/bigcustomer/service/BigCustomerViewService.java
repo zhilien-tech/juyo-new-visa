@@ -41,6 +41,13 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	private final static String TEMPLATE_EXCEL_URL = "download";
 	private final static String TEMPLATE_EXCEL_NAME = "人员管理之模块.xlsx";
 
+	/**
+	 * 
+	 * 跳转到 列表页
+	 *
+	 * @param request
+	 * @return 
+	 */
 	public Object toList(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
 		String ipAddress = IpUtil.getIpAddr(request);
