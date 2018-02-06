@@ -76,6 +76,23 @@ public class BigCustomerModule {
 	}
 
 	/**
+	 * 人员管理添加
+	 */
+	@At
+	@POST
+	public Object addStaff(@Param("..") TAppStaffBasicinfoAddForm addForm, HttpSession session) {
+		return bigCustomerViewService.addStaff(addForm, session);
+	}
+
+	/**
+	 * 根据id获取人员信息
+	 */
+	@At
+	public Object getStaffInfo(@Param("staffId") Integer staffId) {
+		return bigCustomerViewService.getStaffInfo(staffId);
+	}
+
+	/**
 	 * 跳转到'修改操作'的录入数据页面,实际就是[按照主键查询单个实体]
 	 */
 	@At

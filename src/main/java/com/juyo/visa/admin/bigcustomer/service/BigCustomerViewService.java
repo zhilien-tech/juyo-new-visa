@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -29,6 +30,7 @@ import com.juyo.visa.common.util.IpUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
@@ -72,6 +74,47 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		Map<String, Object> map = listPage4Datatables(queryForm);
 		return map;
+	}
+
+	/**
+	 * 
+	 * 人员管理 添加
+	 * <p>
+	 *
+	 * @param TAppStaffBasicinfoForm addForm
+	 * @param session
+	 * @return 
+	 */
+	public Object addStaff(TAppStaffBasicinfoAddForm addForm, HttpSession session) {
+
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+
+		Date nowDate = DateUtil.nowDate();
+
+		addForm.setComId(comId);
+		addForm.setUserId(userId);
+		addForm.setOpId(userId);
+		addForm.setCreateTime(nowDate);
+		addForm.setUpdateTime(nowDate);
+		add(addForm);
+
+		return null;
+	}
+
+	/**
+	 * 
+	 * 根据人员Id获取人员信息
+	 * <p>
+	 *
+	 * @param staffId
+	 * @return 
+	 */
+	public Object getStaffInfo(Integer staffId) {
+		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
+		return staffInfo;
 	}
 
 	/**
