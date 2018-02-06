@@ -29,11 +29,33 @@ import com.uxuexi.core.web.base.service.BaseService;
 public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	private static final Log log = Logs.get();
 
-	public Object listData(TAppStaffBasicinfoForm queryForm) {
-		return listPage4Datatables(queryForm);
+	/**
+	 * 
+	 * 大客户 人员管理列表页
+	 *
+	 * @param queryForm
+	 * @param session
+	 * @return
+	 */
+	public Object listData(TAppStaffBasicinfoForm queryForm, HttpSession session) {
+
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();//当前登录公司id
+		queryForm.setComId(comId);
+
+		Map<String, Object> map = listPage4Datatables(queryForm);
+		return map;
 	}
 
-	//人员管理Excel信息导入
+	/**
+	 * 
+	 * 人员管理Excel信息导入
+	 *
+	 * @param file
+	 * @param request
+	 * @return
+	 * @throws 
+	 */
 	public Object importExcel(File file, HttpServletRequest request) throws Exception {
 
 		HttpSession session = request.getSession();

@@ -50,10 +50,7 @@
 						<thead>
 							<tr>
 								<th><span>序号</span></th>
-								<th><span>姓</span></th>
-								<th><span>姓(拼音)</span></th>
-								<th><span>名</span></th>
-								<th><span>名(拼音)</span></th>
+								<th><span>姓名</span></th>
 								<th><span>手机号</span></th>
 								<th><span>邮箱</span></th>
 								<th><span>部门</span></th>

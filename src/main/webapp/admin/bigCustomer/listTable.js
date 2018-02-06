@@ -30,43 +30,12 @@ function initDatatable() {
 		            	return "";
 		            } 	
 		            },
-		            {"data": "firstName", "bSortable": false,render: function(data, type, row, meta) {
-		            	var firstName = row.firstName;
-		            	if(null==firstName || ""==firstName){
+		            {"data": "name", "bSortable": false,render: function(data, type, row, meta) {
+		            	var name = row.name;
+		            	if(null==name || ""==name){
 		            		return "";
 		            	}else{
-		            		/*firstName = '<span data-toggle="tooltip" data-placement="right" title="'+firstName+'">'+firstName+'<span>';*/
-		            		return firstName;
-		            	}
-		            } 	
-		            },
-		            {"data": "firstNameEn", "bSortable": false,render: function(data, type, row, meta) {
-		            	var firstNameEn = row.firstNameEn;
-		            	if(null==firstNameEn || ""==firstNameEn){
-		            		return "";
-		            	}else{
-		            		/*firstNameEn = '<span data-toggle="tooltip" data-placement="right" title="'+firstNameEn+'">'+firstNameEn+'<span>';*/
-		            		return firstNameEn;
-		            	}
-		            } 	
-		            },
-		            {"data": "lastName", "bSortable": false,render: function(data, type, row, meta) {
-		            	var lastName = row.lastName;
-		            	if(null==lastName || ""==lastName){
-		            		return "";
-		            	}else{
-		            		/*lastName = '<span data-toggle="tooltip" data-placement="right" title="'+lastName+'">'+lastName+'<span>';*/
-		            		return lastName;
-		            	}
-		            } 	
-		            },
-		            {"data": "lastNameEn", "bSortable": false,render: function(data, type, row, meta) {
-		            	var lastNameEn = row.lastNameEn;
-		            	if(null==lastNameEn || ""==lastNameEn){
-		            		return "";
-		            	}else{
-		            		/*lastNameEn = '<span data-toggle="tooltip" data-placement="right" title="'+lastNameEn+'">'+lastNameEn+'<span>';*/
-		            		return lastNameEn;
+		            		return name;
 		            	}
 		            } 	
 		            },
