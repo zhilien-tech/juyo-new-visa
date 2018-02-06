@@ -3,6 +3,7 @@ package com.juyo.visa.admin.bigcustomer.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
 @IocBean
@@ -87,7 +89,10 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				baseInfo.setFirstNameEn(row[2]);
 				baseInfo.setLastName(row[3]);
 				baseInfo.setLastNameEn(row[4]);
-				baseInfo.setTelephone(row[5]);
+				if (!Util.isEmpty(row[5])) {
+					BigDecimal db = new BigDecimal(row[5]);
+					baseInfo.setTelephone(db.toPlainString());
+				}
 				baseInfo.setEmail(row[6]);
 				baseInfo.setDepartment(row[7]);
 				baseInfo.setJob(row[8]);

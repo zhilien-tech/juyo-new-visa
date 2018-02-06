@@ -171,7 +171,7 @@ public class TAppStaffBasicinfoForm extends DataTablesParamForm {
 			cnd.and(expg);
 		}
 		cnd.and("tasb.comId", "=", comId);
-		cnd.orderBy("c.updateTime", "DESC");
+		cnd.orderBy("tasb.updateTime", "DESC");
 		return cnd;
 	}
 }

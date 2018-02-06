@@ -1,8 +1,9 @@
-/**bigCustomer_staff_list*/
+/*bigCustomer_staff_list*/
 SELECT
 	tasb.id staffid,
 	CONCAT( tasb.firstname, tasb.lastname ) NAME,
 	tasb.telephone,
+	tasb.email,
 	tasb.department,
 	tasb.job,
 	tasp.passport 
