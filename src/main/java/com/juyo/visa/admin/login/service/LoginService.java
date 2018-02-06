@@ -144,7 +144,8 @@ public class LoginService extends BaseService<TUserEntity> {
 			if (UserLoginEnum.ADMIN.intKey() == userType) {
 				//平台管理员跳转页面
 				form.setMainurl("/admin/company/list.html");
-			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType) {
+			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType
+					|| UserLoginEnum.JJ_COMPANY_ADMIN.intKey() == userType) {
 				//公司管理员条跳转页面(权限管理)
 				form.setMainurl("/admin/authority/list.html");
 			} else if (UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType) {

@@ -36,6 +36,7 @@
 .col-sm-3 { width:30%;}
 .col-sm-1 { width:11.5%;} 
 .select2 { width:100% !important;}
+.schedulingBtn ,.addApplicantBtn { width:30% !important;}
 #applicantsTable tr td:nth-child(1) { width:4%;}
 #applicantsTable tr td:nth-child(2) { width:9%;}
 #applicantsTable tr td:nth-child(3) { width:9%;}

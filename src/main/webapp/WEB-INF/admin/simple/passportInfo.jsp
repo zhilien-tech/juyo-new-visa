@@ -15,7 +15,7 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 	<style>
 	img[src=""],img:not([src]) { opacity:0;}
-	input[type="file"] { z-index:999999;}
+	input[type="file"] { z-index:999;}
 	.modal-content { position:relative;}
 	.info-imgUpload {width: 98%;}
 	.col-sm-offset-1 { margin-left:3% !important;}
@@ -23,9 +23,9 @@
 	.NoInfo { width:101.5%; height:30px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 	.ipt-info { display:none; }
     .Unqualified, .qualified  { margin-right:10px; }
-    .delete { z-index:999999999;}
+    .delete { z-index:10000;}
     /*弹框头部固定*/
-    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10099; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
     .modal-body { margin-top:50px; height:100%; padding:15px 37px 15px 40px;}
     #sqImg { width:332px;}
@@ -35,6 +35,9 @@
     .leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 	.info-QRcode { width:153px;}
+	.widthBig { width:100%;}
+	#uploadFile { width:100% !important;}
+	#sqImg { z-index:1099;}
 	</style>
 </head>
 <body>
@@ -58,7 +61,7 @@
 						</div><!-- end 二维码 -->
 						
 						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 widthBig">
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传护照</span>
@@ -123,7 +126,7 @@
 							 	<div class="form-group groupWidth" style="position:relative;">
 									<label><span>*</span>出生地点/拼音</label>
 									<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
-									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:38px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
+									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:30px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -140,7 +143,7 @@
 								<div class="form-group groupWidth" style="position:relative;">
 									<label><span>*</span>签发地点/拼音</label>
 									<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
-									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:38px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
+									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:30px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>

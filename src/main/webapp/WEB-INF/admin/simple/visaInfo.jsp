@@ -14,9 +14,10 @@
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<style type="text/css">
 	img[src=""],img:not([src]) { opacity:0;}
-	input[type="file"] { z-index:999999;}
-	.delete { z-index:999999999;}
+	input[type="file"] { z-index:999;}
+	.delete { z-index:9999;}
 	.info-imgUpload {width: 100%;}
+	#sqImg { z-index:1099;}
 	.NoInfo { width:100%; height:30px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
 	.ipt-info { display:none; margin:15px -15px;}
     .Unqualified, .qualified { margin-right:10px; }
@@ -30,9 +31,10 @@
     .padding-right-0 { margin-left:10%; width:323px; border:1px solid #eee; }
     .delete { right:0; display:none;}
     .cardFront-div { height:176px;}
-    .cardFront-div #uploadFile { top:0;width:100%;height:200px;left:0;position:absolute;}
+    .cardFront-div #uploadFile { top:0;width:100% !important;height:200px;left:0;position:absolute;}
+    .btnBank { width:70px !important;}
     /*弹框头部固定*/
-    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
+    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000; padding:0px 15px;}
     .btn-margin { margin-top:10px;}
     .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; padding:15px 37px 15px 53px;}  
     #sqImg { top:0px; margin-top:-176px; height:auto;}  
@@ -90,8 +92,6 @@
 										<span>上传结婚证/离婚证</span>
 										<input id="marryUrl" name="marryUrl" type="hidden" value="${obj.marryUrl }"/>
 										<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-										
-										
 									</div>
 									<img id="sqImg" alt="" src="${obj.marryUrl }" >
 									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
@@ -169,7 +169,7 @@
 								</div>
 							</div><!-- end 申请人/备注-->
 							<div class="row body-from-input applymain"><!-- 签证类型 -->
-								<div class="col-sm-3">
+								<div class="col-sm-3" style="padding-right:0px !important;">
 									<div class="form-group">
 										<label><span>*</span>签证类型：</label>
 										<select id="visatype" class="form-control input-sm">
@@ -214,7 +214,7 @@
 									<div class="row body-from-input none" id="threefangwen"><!-- 过去三年是否访问过 -->
 								</c:otherwise>
 							</c:choose>
-										<div class="col-sm-3">
+										<div class="col-sm-3" style="padding-right:0px !important;">
 											<div class="form-group">
 												<label><span>*</span>过去三年是否访问过：</label>
 												<select id="isVisit" class="form-control input-sm">
@@ -332,7 +332,7 @@
 								</div>
 						</div>
 						<div class="info-body-from finance-btn wealthmain">
-							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState" />
+							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState btnBank" />
 							<input id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
 							<input id="housePropertyType" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
 							<input id="financialType" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
@@ -351,7 +351,7 @@
 										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
-								<div style="float:left; margin:45px 0 0 -23px;">
+								<div style="float:left; margin:40px 0 0 -23px;">
 								万
 								</div>
 							</div><!-- end 银行存款 -->
@@ -398,7 +398,7 @@
 										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
-								<div style="float:left;  margin:45px 0 0 -23px;">
+								<div style="float:left;  margin:40px 0 0 -23px;">
 								平米
 								</div>
 							</div><!-- end 房产 -->
@@ -423,7 +423,7 @@
 										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
-								<div style="float:left;  margin:45px 0 0 -23px;">
+								<div style="float:left;  margin:40px 0 0 -23px;">
 								万
 								</div>
 							</div><!-- end 房产 -->
