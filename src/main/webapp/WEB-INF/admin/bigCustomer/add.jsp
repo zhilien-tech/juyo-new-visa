@@ -1,21 +1,19 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java"
-	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<c:set var="url" value="${base}/admin/orderJp" />
+<c:set var="url" value="${base}/admin/bigCustomer" />
 <!DOCTYPE HTML>
 <html lang="en-US" id="addHtml">
 <head>
-<meta charset="UTF-8">
-<title>添加申请人</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appAddStaff.css">
-
+	<meta charset="UTF-8">
+	<title>添加申请人</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appAddStaff.css">
 </head>
 <body>
 	<div class="modal-content">
@@ -31,10 +29,6 @@
 			<div class="modal-body">
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
-						<div class="info-QRcode">
-							<!-- 身份证 正面 -->
-							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
-						</div>
 						<!-- start 身份证 正面 -->
 						<div class="info-imgUpload front">
 							<div class="col-xs-6 mainWidth">
@@ -133,8 +127,6 @@
 								<div class="form-group" style="position: relative;">
 									<label><span>*</span>姓/拼音</label> 
 									<input id="firstName" name="firstName" type="text" class="form-control input-sm req " placeholder=" " /> 
-									<input id="orderid" name="orderid" type="hidden" value="${obj.orderid }" /> 
-									<input id="applyId" type="hidden" />
 									<input id="firstNameEn" name="firstNameEn" type="text" style="position: absolute; top: 32px; border: none; left: 150px;" value="" />
 								</div>
 							</div>
