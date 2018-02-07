@@ -58,7 +58,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	public Object toList(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
 		String ipAddress = IpUtil.getIpAddr(request);
-		String downloadUrl = "http://" + ipAddress + ":8080/admin/bigCustomer/download.html";
+		String downloadUrl = "http://114.215.195.220:8080/admin/bigCustomer/download.html";
 		result.put("downloadurl", downloadUrl);
 		return result;
 	}
