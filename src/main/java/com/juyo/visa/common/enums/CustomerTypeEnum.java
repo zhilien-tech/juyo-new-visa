@@ -4,9 +4,8 @@ import com.uxuexi.core.common.enums.IEnum;
 
 /**
  * 
- * 公司类型
+ * 客户管理类型
  * <p>
- * 送签社 or 地接社
  * @author   彭辉
  * @Date	 2017年10月20日
  */

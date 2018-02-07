@@ -131,7 +131,8 @@ public class LoginService extends BaseService<TUserEntity> {
 				allUserFunction = dbDao.query(TFunctionEntity.class, Cnd.NEW().orderBy("sort", "asc"), null);
 			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType
 					|| UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType
-					|| UserLoginEnum.JJ_COMPANY_ADMIN.intKey() == userType) {
+					|| UserLoginEnum.JJ_COMPANY_ADMIN.intKey() == userType
+					|| UserLoginEnum.BIG_COMPANY_ADMIN.intKey() == userType) {
 				//公司管理员
 				allUserFunction = companyViewService.getCompanyFunctions(company.getId());
 			} else {
@@ -150,6 +151,12 @@ public class LoginService extends BaseService<TUserEntity> {
 			} else if (UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType) {
 				//地接社公司管理员
 				form.setMainurl("/admin/JapanDijie/japanList.html");
+			} else if (UserLoginEnum.JJ_COMPANY_ADMIN.intKey() == userType) {
+				//送签社精简公司管理员
+				form.setMainurl("/admin/simple/list.html");
+			} else if (UserLoginEnum.BIG_COMPANY_ADMIN.intKey() == userType) {
+				//大客户公司管理员
+				form.setMainurl("/admin/bigCustomer/list.html");
 			} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
 				//游客跳转的页面
 				form.setMainurl("/admin/myVisa/visaList.html");

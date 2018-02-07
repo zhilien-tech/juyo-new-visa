@@ -11,7 +11,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * @Date	 2017年10月20日
  */
 public enum CompanyTypeEnum implements IEnum {
-	SONGQIAN(1, "送签社"), DIJI(2, "地接社"), SONGQIANSIMPLE(3, "送签社精简");
+	SONGQIAN(1, "送签社"), DIJI(2, "地接社"), SONGQIANSIMPLE(3, "送签社精简"), BIGCUSTOMER(4, "大客户");
 	private int key;
 	private String value;
 
