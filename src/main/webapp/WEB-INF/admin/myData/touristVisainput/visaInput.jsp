@@ -16,45 +16,52 @@
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<style type="text/css">
 			[v-cloak]{display : none}
+			.content { padding:0 !important;min-height:auto !important;}
+			.box-header { padding:0 !important;}
 			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
 			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
-			.card-head div:nth-child(1){width:20.8%;}
-			.card-head div:nth-child(2){width:12.5%;}
-			.card-head div:nth-child(3){ width: 66px;float: right;}
-			.everybody-info div:nth-child(1){width:10%;}
-			.everybody-info div:nth-child(2){width:12%;}
-			.everybody-info div:nth-child(3){width:12%;}
-			.everybody-info div:nth-child(4){width:14%;}
+			.card-head div:nth-child(1){width:20%; float: left;}
+			.card-head div:nth-child(2){width:20%;}
+			.card-head div:nth-child(3){ float: right; height: 31px;margin-top:-6px;}
+			.everybody-info div:nth-child(1){width:20%;}
+			.everybody-info div:nth-child(2){width:22%;}
+			.everybody-info div:nth-child(3){width:14%;}
+			.everybody-info div:nth-child(4){width:15%;}
 			.everybody-info div:nth-child(5){width:11%;}
+			.liClose { float:right !important;}
+			.liClose a { display:block; width:40px; height:51px; cursor:pointer;}
 			.card-list{height: 87px; margin-top: 10px;}
 			.card-list:hover{height: 87px !important;min-height: 87px !important;}
 			.box-header{padding-right: 16px;}
 			.box-body{padding-top:0;}
 			.qz-head { border-bottom:2px solid #deecff; padding:15px 20px; display: table; width: 100%;}
 			.btn-sm { width:110px !important;}
+			.btn-Add { margin: 10px 15px 0 0;}
+			.cf { clear:both;}
+			.delete { height: 25px !important;background-position:0 !important; top:8px !important;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper">
-			<div class="content-wrapper"  style="min-height: 848px;">
-				<!-- <ul class="title">
-					<li> </li>
-				</ul> -->
-				<div class="qz-head">
-				<!-- <input type="button" value="编辑" id="editbasic" class="btn btn-primary btn-sm pull-right editbasic" onclick="editBtn();"/>  -->
-				<a class="btn btn-primary btn-sm pull-right" href="javascript:add();" id="">添加已有签证</a>
-			</div>
+			<div class="content-wrapper">
+				<ul class="title">
+					<li>签证录入</li>
+					<li class="liClose">
+						<a onclick="closeWindow()">
+							<div class="closed">X</div>
+						</a>
+					</li>
+				</ul>
 				<section class="content">
-					<!-- <div class="box-header">检索条件
+					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
 							<div class="col-md-12">
-								<a class="btn btn-primary btn-sm pull-right" href="javascript:add();" id="">添加已有签证</a>
+								<a class="btn btn-primary btn-sm pull-right btn-Add" href="javascript:add();" id="">添加已有签证</a>
 							</div>
 						</div>
-					</div>end 检索条件 -->
-					
+					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 						<div class="card-list" v-cloak v-for="data in visaInputData">
 							<div class="card-head">
@@ -63,6 +70,7 @@
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="edit(data.id)"> </i>
+									<i class="delete" v-on:click="deleteVisainput(data.id)"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
@@ -100,7 +108,7 @@
 			},
 			created:function(){
 		        orderobj=this;
-		        var url = '${base}/admin/touristVisa/getTouristVisaInput.html';
+		        var url = '${base}/admin/myData/touristVisainput/getTouristVisaInput.html';
 		        $.ajax({ 
 		        	url: url,
 		        	dataType:"json",
@@ -113,48 +121,48 @@
 		    },
 		    methods:{
 		    	edit:function(visainputid){
-		    	      /* layer.open({
-		    	    	    type: 2,
-		    	    	    title: false,
-		    	    	    closeBtn:false,
-		    	    	    fix: false,
-		    	    	    maxmin: false,
-		    	    	    shadeClose: false,
-		    	    	    scrollbar: false,
-		    	    	    area: ['900px', '550px'],
-		    	    	    content: '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid
-		    	    	  }); */
-		    	      window.location.href = '${base}/admin/visaJapan/visainput/visaInputUpdate.html?id='+visainputid+'&orderid='+orderJpId+'&isvisa=${isvisa}&tourist=1';
+		    	      window.location.href = '${base}/admin/myData/touristVisainput/visaInputUpdate.html?id='+visainputid;
+		    	},
+		    	deleteVisainput:function(visainputid){
+		    		layer.confirm("您确认要删除吗？", {
+						title:"删除",
+						btn: ["是","否"], //按钮
+						shade: false //不显示遮罩
+					}, function(index){
+					$.ajax({ 
+				    	url: '/admin/myData/touristVisainput/deleteVisainput',
+				    	dataType:"json",
+				    	data:{id:visainputid},
+				    	type:'post',
+				    	success: function(data){
+				    		layer.close(index);
+				    		successCallBack(2);
+				      	}
+				    }); 
+					});
 		    	}
 		    }
 		});
 		//新增签证录入
 		function add(){
-			window.location.href = '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid+'&orderid='+orderJpId+'&isvisa=${isvisa}&tourist=1';
-	      /* layer.open({
-	    	    type: 2,
-	    	    title: false,
-	    	    closeBtn:false,
-	    	    fix: false,
-	    	    maxmin: false,
-	    	    shadeClose: false,
-	    	    scrollbar: false,
-	    	    area: ['900px', '550px'],
-	    	    content: '${base}/admin/visaJapan/visainput/visaInputAdd.html?applicantId='+applyid
-	    	  }); */
+			window.location.href = '${base}/admin/myData/touristVisainput/visaInputAdd.html?userId='+userid;
 		 }
 		
 		function successCallBack(){
-			 var url = '${base}/admin/visaJapan/getJpVisaInputListData.html';
+			 var url = '${base}/admin/myData/touristVisainput/getTouristVisaInput.html';
 	        $.ajax({ 
 	        	url: url,
 	        	dataType:"json",
-	        	data:{applyid:applyid},
+	        	data:{userId:userid},
 	        	type:'post',
 	        	success: function(data){
 	        		orderobj.visaInputData = data.visaInputData;
 	          	}
 	        });
+		}
+		function closeWindow(){
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
 		}
 		</script>
 		

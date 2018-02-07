@@ -31,7 +31,8 @@
 									<span style="cursor:pointer;"><a v-on:click="updateApplicant(data.applicantid);">基本信息</a></span>
 									<span style="cursor:pointer;"><a v-on:click="passport(data.applicantid)">护照信息</a></span>
 									<span style="cursor:pointer;"><a v-on:click="visa(data.applicantid)">签证信息</a></span>
-									<span style="cursor:pointer;"><a v-on:click="visaInput(data.applyjpid,data.orderjpid)">签证录入</a></span>
+									<span style="cursor:pointer;"><a v-on:click="visaInput(data.userid)">签证录入</a></span>
+									<span style="cursor:pointer;"><a v-on:click="deleteApply(data.userid)">删除</a></span>
 								</div>
 							</div>
 						</div>
@@ -112,7 +113,7 @@
 						content:'/admin/myData/visa.html?contact=1&applyId='+applyId
 					});
 	        	},
-	        	visaInput:function(applyId,orderJpId){
+	        	visaInput:function(userId){
 	        		layer.open({
 	    				type: 2,
 	    				title: false,
@@ -122,7 +123,25 @@
 	    				shadeClose: false,
 	    				scrollbar: false,
 	    				area: ['1000px', '80%'],
-	    				content: '/admin/visaJapan/visaInput.html?applyid='+applyId+'&orderid='+orderJpId
+	    				content: '/admin/myData/touristVisainput/visaInput.html?userId='+userId
+	    			});
+	        	},
+	        	deleteApply(userId){
+	        		layer.confirm("您确认要删除吗？", {
+	    				title:"删除",
+	    				btn: ["是","否"], //按钮
+	    				shade: false //不显示遮罩
+	    			}, function(index){
+	    			$.ajax({ 
+	    		    	url: '/admin/myData/deleteApplicant',
+	    		    	dataType:"json",
+	    		    	data:{userId:userId},
+	    		    	type:'post',
+	    		    	success: function(data){
+	    		    		layer.close(index);
+	    		    		successCallBack(2);
+	    		      	}
+	    		    }); 
 	    			});
 	        	}
 	        }

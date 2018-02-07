@@ -265,4 +265,12 @@ public class MyDataModule {
 		return myDataService.isPrompted(applyid, session);
 	}
 
+	/**
+	 * 删除申请人
+	 */
+	@At
+	@POST
+	public Object deleteApplicant(@Param("userId") Integer userId) {
+		return myDataService.deleteApplicant(userId);
+	}
 }
