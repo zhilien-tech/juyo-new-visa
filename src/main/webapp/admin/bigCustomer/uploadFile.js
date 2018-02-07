@@ -9,6 +9,15 @@ function dataURLtoBlob(dataurl) {
 }
 
 $('#uploadFile').change(function(){
+	var filepath = $("#uploadFile").val();
+	console.log(filepath);
+	var extStart = filepath.lastIndexOf(".");
+	var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+	if (ext != ".XLS" && ext != ".XLSX") {
+		layer.msg("请选择正确的Excel文件");
+		return;
+	}
+		
 	var layerIndex =  layer.load(1, {shade: "#000"});
 	var file = this.files[0];
 	var reader = new FileReader();
@@ -21,14 +30,14 @@ $('#uploadFile').change(function(){
 			type: "POST",//提交类型  
 			dataType: "json",//返回结果格式  
 			url: BASE_PATH + '/admin/bigCustomer/importExcel.html',//请求地址  
-			async: true  ,
+			async: false  ,
 			processData: false, //当FormData在jquery中使用的时候需要设置此项
 			contentType: false ,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
 			//请求数据  
 			data:formData ,
 			success: function (obj) {//请求成功后的函数 
-				alert(obj);
 				layer.close(layerIndex);
+				console.log("===================="+obj);
 				successCallback(3);
 			},  
 			error: function (obj) {

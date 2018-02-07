@@ -35,6 +35,7 @@ import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
+import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity> {
@@ -101,7 +102,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		addForm.setUpdateTime(nowDate);
 		add(addForm);
 
-		return null;
+		return JsonResult.success("添加成功");
 	}
 
 	/**
@@ -128,7 +129,6 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 */
 	public Object importExcel(File file, HttpServletRequest request) throws Exception {
 
-		Map<String, Object> result = Maps.newHashMap();
 		HttpSession session = request.getSession();
 		//当前登录公司
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -175,8 +175,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			}
 			dbDao.insert(baseInfos);
 		}
-		result.put("status", 200);
-		return result;
+		return JsonResult.success("上次成功");
 
 	}
 
@@ -218,7 +217,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return JsonResult.success("下载成功");
 
 	}
 
