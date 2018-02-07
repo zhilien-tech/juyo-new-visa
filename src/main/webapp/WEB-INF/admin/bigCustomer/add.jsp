@@ -291,11 +291,6 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
-		var sessionId = '${obj.sessionid}';
-		var localAddr = '${obj.localAddr}';
-		var localPort = '${obj.localPort}';
-		var websocketaddr = '${obj.websocketaddr}';
-		var orderProcessType = '${obj.orderProcessType}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -308,7 +303,7 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-	<script type="text/javascript" src="${base}/admin/orderJp/addApplicantSale.js"></script>
+	<script type="text/javascript" src="${base}/admin/bigCustomer/addStaff.js"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 
 	<script type="text/javascript">
