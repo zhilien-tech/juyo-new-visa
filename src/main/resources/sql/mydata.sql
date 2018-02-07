@@ -32,9 +32,12 @@ $condition
 /*mydata_applys*/
 SELECT
 	ttb.applicantId,
+	taoj.id applyJpId,
+	toj.id orderJpId,
 	CONCAT( ttb.firstName, ttb.lastName ) applicantname,
 	ttb.telephone,
-	ttp.passport
+	ttp.passport,
+	ttb.userId
 FROM
 t_applicant ta
 LEFT JOIN
@@ -43,10 +46,10 @@ LEFT JOIN
 t_order_jp toj ON taoj.orderId = toj.id
 LEFT JOIN
 t_order tr ON toj.orderId = tr.id
+INNER JOIN
+t_tourist_baseinfo ttb ON ttb.userId = ta.userId
 LEFT JOIN
-t_tourist_baseinfo ttb ON ttb.applicantId = ta.id
-LEFT JOIN
-t_tourist_passport ttp ON ttp.applicantId = ta.id
+t_tourist_passport ttp ON ttp.userId = ta.userId
 $condition
 
 /*mydata_inProcessVisa_list*/

@@ -91,7 +91,6 @@
 									<i class="Refusal" v-on:click="sendInsurance(data.id,27)"></i>
 									<i class="download" v-on:click="downLoadFile(data.id)"> </i>
 									<i class="handoverTable"> </i>
-									<i class="afterSales" v-on:click="aftermarket(data.id)"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
@@ -102,7 +101,7 @@
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证补录</a></div>
+										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证录入</a></div>
 									</span>
 									<span v-else class="visaListSpan">
 										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
@@ -110,7 +109,7 @@
 										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证补录</a></div>
+										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证录入</a></div>
 									</span>
 								</li>
 							</ul> 
