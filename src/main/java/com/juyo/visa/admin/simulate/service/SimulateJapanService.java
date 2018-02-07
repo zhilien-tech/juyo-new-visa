@@ -48,7 +48,6 @@ import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
 import com.juyo.visa.entities.TOrderTripMultiJpEntity;
-import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -81,7 +80,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		List<Record> orderjplist = dbDao.query(sql,
 				Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);
 		if (!Util.isEmpty(orderjplist) && orderjplist.size() > 0) {
-			DateFormat dateFormat = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 			//获取第一条
 			Record record = orderjplist.get(0);
 			//用来存放信息

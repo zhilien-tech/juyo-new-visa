@@ -782,9 +782,21 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		sql.setParam("orderid", orderid);
 		List<Record> travelplans = dbDao.query(sql, null, null);
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		int count = 1;
+		String prehotelname = "";
 		for (Record record : travelplans) {
 			Date outdate = (Date) record.get("outdate");
 			record.put("outdate", format.format(outdate));
+			if (!Util.isEmpty(record.get("hotelname"))) {
+				String hotelname = (String) record.get("hotelname");
+				if (count > 1) {
+					if (hotelname.equals(prehotelname)) {
+						record.put("hotelname", "同上");
+					}
+				}
+				prehotelname = hotelname;
+			}
+			count++;
 		}
 		return travelplans;
 	}
