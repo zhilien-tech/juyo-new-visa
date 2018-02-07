@@ -13,6 +13,8 @@
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 	    <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 	    <link rel="stylesheet" href="${base}/references/public/css/style.css">
+	    <!-- 本页css -->
+	    <link rel="stylesheet" href="${base}/references/common/css/bigCustomer.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<!-- Main content -->
@@ -21,25 +23,19 @@
 			<div class="box">
 				<div class="box-header">
 				
-					<div class="row form-right">
-						<!-- <div class="col-md-2 left-5px right-0px">
-							<select class="input-class input-sm">
-								<option>状态</option>
-							</select>
-						</div> -->
-						<div class="col-md-2 left-5px right-0px">
-							<input id="searchStr" name="searchStr" onkeypress="onkeyEnter();"  type="text" class="input-sm input-class" placeholder="姓名/电话/部门/职位" />
+					<div class="row form-right listMain">
+						<div class="col-md-2 left-5px right-0px groupLeft">
+							<input id="searchStr" name="searchStr" onkeypress="onkeyEnter();"  type="text" class="searchInfo" placeholder="姓名/电话/部门/职位" />
+							<a id="searchBtn" class="bigBtn bigSearchBtn" onclick="">搜索</a>
 						</div>
-						<!-- <div class="col-md-3 left-5px right-0px">
-							<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
-							<span class="picker-span">至</span>
-							<input id="" name="" type="text" class="input-sm input-class picker" onClick="WdatePicker()"/>
-						</div> -->
-						<div class="col-md-5 left-5px">
-							<a id="searchBtn" class="btn btn-primary btn-sm pull-left" onclick="">搜索</a>
-							<a id="addBtn" class="btn btn-primary btn-sm pull-right" onclick="add();">添加</a>
-							<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file" value="上传" />
-							<a id="downloadBtn" href="${obj.downloadurl }" class="btn btn-primary btn-sm pull-right" >模板下载</a>
+						<div class="col-md-5 left-5px groupRight">
+							<a id="addBtn" class="bigBtn bigAddBtn" onclick="add();">添加</a>
+							<a class="bigBtn bigUploadBtn">
+								上传
+								<input id="uploadFile" name="uploadFile" class="" type="file" value="" />
+							</a>
+							
+							<a id="downloadBtn" href="${obj.downloadurl }" class="bigBtn bigDownloadBtn" >模板下载</a>
 						</div>
 					</div>
 					
