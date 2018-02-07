@@ -29,6 +29,7 @@
 			<div class="modal-body">
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
+						<div></div>
 						<!-- start 身份证 正面 -->
 						<div class="info-imgUpload front">
 							<div class="col-xs-6 mainWidth">

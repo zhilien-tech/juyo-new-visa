@@ -138,11 +138,11 @@ function deleteById(id) {
 			dataType : 'json',
 			url : url,
 			success : function(data) {
-				layer.msg("删除成功",{time:2000});
+				layer.msg("删除成功");
 				datatable.ajax.reload();
 			},
 			error : function(xhr) {
-				layer.msg("删除失败",{time:2000});
+				layer.msg("删除失败");
 			}
 		});
 	}, function(){

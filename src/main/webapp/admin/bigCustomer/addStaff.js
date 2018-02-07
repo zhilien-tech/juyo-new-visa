@@ -108,11 +108,12 @@ function applyValidate(){
 $(".nowProvince").change(function(){
 	searchByCard();
 });
-
+//身份证号变更
 $("#cardId").change(function(){
 	searchByCard();
 });
 
+//现居住地是否与身份证相同
 function searchByCard(){
 	var str=""; 
 	//是否同身份证相同
@@ -397,3 +398,64 @@ $(".onceID").change(function(){
 	}
 });	
 
+function saveApplicant(status){
+	$("#applicantInfo").data('bootstrapValidator').destroy();
+	$("#applicantInfo").data('bootstrapValidator', null);
+	applyValidate();
+	//得到获取validator对象或实例 
+	var bootstrapValidator = $("#applicantInfo").data('bootstrapValidator');
+	// 执行表单验证 
+	bootstrapValidator.validate();
+	if (bootstrapValidator.isValid()){
+		//获取必填项信息
+		var firstName = $("#firstName").val();
+		if (firstName == "") {
+			layer.msg('姓不能为空');
+			return;
+		}
+		var lastName = $("#lastName").val();
+		if (lastName == "") {
+			layer.msg('名不能为空');
+			return;
+		}
+		var str="";     
+	    $("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+	    	str=$(this).val();     
+	    });     
+		if(str != 1){
+			var applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
+		}else{
+			var applicantInfo = $("#applicantInfo").serialize();
+		}
+		
+		$.ajax({
+			type : 'POST',
+			data : applicantInfo,
+			async : false,
+			url : BASE_PATH+'/admin/bigCustomer/addStaff',
+			success : function(data) {
+				if(200 == data.status){
+					if(status == 1){
+						//点击保存按钮
+						parent.successCallback(1);
+						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						parent.layer.close(index);
+					}else if(status == 2){
+						//点击右侧箭头，跳转护照信息页
+						/*parent.successCallback(4,data);
+						var applyId = $("#applyId").val();
+						socket.onclose();
+						window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'+'&isTrial=0&orderProcessType='+orderProcessType+'&addApply=1';*/
+					}
+				}
+				layer.closeAll('loading');
+				
+			},
+			error : function() {
+				layer.msg("添加失败");
+				layer.closeAll('loading');
+			}
+		}); 
+	}
+	
+}
