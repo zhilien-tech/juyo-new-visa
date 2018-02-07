@@ -34,6 +34,7 @@ import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
+import com.juyo.visa.forms.TAppStaffBasicinfoUpdateForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
@@ -170,6 +171,24 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("infoType", ApplicantInfoTypeEnum.BASE.intKey());
 		result.put("staffId", staffId);
 		return result;
+	}
+
+	/**
+	 * 
+	 * 更新基本信息
+	 *
+	 * @param updateForm
+	 * @param session
+	 * @return 
+	 */
+	public Object updateStaffInfo(TAppStaffBasicinfoUpdateForm updateForm, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		Date nowDate = DateUtil.nowDate();
+		updateForm.setOpId(userId);
+		updateForm.setUpdateTime(nowDate);
+
+		return update(updateForm);
 	}
 
 	/**

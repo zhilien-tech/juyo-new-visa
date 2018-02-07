@@ -318,6 +318,12 @@
 	<script type="text/javascript" src="${base}/admin/bigCustomer/updateStaff.js"></script>
 	<script type="text/javascript">
 	
+		//返回 
+		function closeWindow() {
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
+		}
+	
 		$(function(){
 			var nation = '${obj.applicant.hasOtherNationality}';
 			var otherName = '${obj.applicant.hasOtherName}';

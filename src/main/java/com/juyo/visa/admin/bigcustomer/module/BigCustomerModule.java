@@ -99,8 +99,8 @@ public class BigCustomerModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..") TAppStaffBasicinfoUpdateForm updateForm) {
-		return bigCustomerViewService.update(updateForm);
+	public Object updateStaffInfo(@Param("..") TAppStaffBasicinfoUpdateForm updateForm, HttpSession session) {
+		return bigCustomerViewService.updateStaffInfo(updateForm, session);
 	}
 
 	/**
