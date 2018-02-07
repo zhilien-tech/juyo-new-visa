@@ -85,21 +85,13 @@ public class BigCustomerModule {
 	}
 
 	/**
-	 * 根据id获取人员信息
-	 */
-	@At
-	public Object getStaffInfo(@Param("staffId") Integer staffId) {
-		return bigCustomerViewService.getStaffInfo(staffId);
-	}
-
-	/**
-	 * 跳转到'修改操作'的录入数据页面,实际就是[按照主键查询单个实体]
+	 *跳转到基本信息编辑页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
-	public Object update(@Param("id") final long id) {
-		return bigCustomerViewService.fetch(id);
+	public Object update(@Param("staffId") Integer staffId, HttpSession session) {
+		return bigCustomerViewService.getStaffInfo(staffId, session);
 	}
 
 	/**

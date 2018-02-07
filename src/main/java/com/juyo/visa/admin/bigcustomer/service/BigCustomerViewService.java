@@ -25,6 +25,8 @@ import org.nutz.log.Logs;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
+import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.util.ExcelReader;
 import com.juyo.visa.common.util.IpUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
@@ -33,6 +35,7 @@ import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
@@ -113,9 +116,60 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param staffId
 	 * @return 
 	 */
-	public Object getStaffInfo(Integer staffId) {
+	public Object getStaffInfo(Integer staffId, HttpSession session) {
+
 		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
-		return staffInfo;
+
+		Map<String, Object> result = Maps.newHashMap();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		result.put("userType", userType);
+
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		if (!Util.isEmpty(staffInfo.getBirthday())) {
+			Date birthday = staffInfo.getBirthday();
+			String birthdayStr = sdf.format(birthday);
+			result.put("birthday", birthdayStr);
+		}
+		if (!Util.isEmpty(staffInfo.getValidStartDate())) {
+			Date validStartDate = staffInfo.getValidStartDate();
+			String validStartDateStr = sdf.format(validStartDate);
+			result.put("validStartDate", validStartDateStr);
+		}
+		if (!Util.isEmpty(staffInfo.getValidEndDate())) {
+			Date validEndDate = staffInfo.getValidEndDate();
+			String validEndDateStr = sdf.format(validEndDate);
+			result.put("validEndDate", validEndDateStr);
+		}
+
+		if (!Util.isEmpty(staffInfo.getFirstNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(staffInfo.getFirstNameEn());
+			result.put("firstNameEn", sb.toString());
+		}
+		if (!Util.isEmpty(staffInfo.getOtherFirstNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(staffInfo.getOtherFirstNameEn());
+			result.put("otherFirstNameEn", sb.toString());
+		}
+
+		if (!Util.isEmpty(staffInfo.getLastNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(staffInfo.getLastNameEn());
+			result.put("lastNameEn", sb.toString());
+		}
+
+		if (!Util.isEmpty(staffInfo.getOtherLastNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(staffInfo.getOtherLastNameEn());
+			result.put("otherLastNameEn", sb.toString());
+		}
+
+		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
+		result.put("applicant", staffInfo);
+		result.put("infoType", ApplicantInfoTypeEnum.BASE.intKey());
+		result.put("staffId", staffId);
+		return result;
 	}
 
 	/**

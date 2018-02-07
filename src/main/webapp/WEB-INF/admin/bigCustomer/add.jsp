@@ -5,7 +5,7 @@
 <html lang="en-US" id="addHtml">
 <head>
 	<meta charset="UTF-8">
-	<title>添加申请人</title>
+	<title>添加基本信息</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
@@ -22,7 +22,7 @@
 		</a>
 		<form id="applicantInfo">
 			<div class="modal-header">
-				<span class="heading">添加人员</span> 
+				<span class="heading">添加基本信息</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" onclick="saveApplicant(1);" />
 			</div>
@@ -39,7 +39,7 @@
 										<input id="cardFront" name="cardFront" type="hidden" />
 										<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file" value="上传" /> 
 										<img id="sqImg" alt="" src=""> 
-										<i class="delete" tyle="display: none;" onclick="deleteApplicantFrontImg(${obj.orderid});"></i>
+										<i class="delete" tyle="display: none;" onclick="deleteApplicantFrontImg();"></i>
 									</div>
 								</div>
 							</div>
@@ -55,7 +55,7 @@
 										<input id="cardBack" name="cardBack" type="hidden" /> 
 										<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file" value="上传" /> 
 										<img id="sqImgBack" alt="" src=""> 
-										<i class="delete" style="display: none;" onclick="deleteApplicantBackImg(${obj.orderid});"></i>
+										<i class="delete" style="display: none;" onclick="deleteApplicantBackImg();"></i>
 									</div>
 								</div>
 							</div>
@@ -314,12 +314,12 @@
 			parent.layer.close(index);
 		}
 		
-		function deleteApplicantFrontImg(id){
+		function deleteApplicantFrontImg(){
 			$('#cardFront').val("");
 			$('#sqImg').attr('src', "");
 			$("#uploadFile").siblings("i").css("display","none");
 		}
-		function deleteApplicantBackImg(id){
+		function deleteApplicantBackImg(){
 			$('#cardBack').val("");
 			$('#sqImgBack').attr('src', "");
 			$("#uploadFileBack").siblings("i").css("display","none");
