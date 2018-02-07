@@ -149,7 +149,7 @@ public class MyDataModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object topContacts(HttpSession session, HttpServletRequest request) {
+	public Object topContacts(HttpSession session) {
 		return null;
 	}
 
@@ -265,4 +265,12 @@ public class MyDataModule {
 		return myDataService.isPrompted(applyid, session);
 	}
 
+	/**
+	 * 删除申请人
+	 */
+	@At
+	@POST
+	public Object deleteApplicant(@Param("userId") Integer userId) {
+		return myDataService.deleteApplicant(userId);
+	}
 }
