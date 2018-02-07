@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -24,15 +25,21 @@ import org.nutz.log.Logs;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
+import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.util.ExcelReader;
 import com.juyo.visa.common.util.IpUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
+import com.juyo.visa.forms.TAppStaffBasicinfoUpdateForm;
 import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
+import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity> {
@@ -76,6 +83,166 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 	/**
 	 * 
+	 * 人员管理 添加
+	 * <p>
+	 *
+	 * @param TAppStaffBasicinfoForm addForm
+	 * @param session
+	 * @return 
+	 */
+	public Object addStaff(TAppStaffBasicinfoAddForm addForm, HttpSession session) {
+
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+
+		Date nowDate = DateUtil.nowDate();
+
+		addForm.setComId(comId);
+		addForm.setUserId(userId);
+		addForm.setOpId(userId);
+		addForm.setCreateTime(nowDate);
+		addForm.setUpdateTime(nowDate);
+		add(addForm);
+
+		return JsonResult.success("添加成功");
+	}
+
+	/**
+	 * 
+	 * 根据人员Id获取人员信息
+	 * <p>
+	 *
+	 * @param staffId
+	 * @return 
+	 */
+	public Object getStaffInfo(Integer staffId, HttpSession session) {
+
+		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
+
+		Map<String, Object> result = Maps.newHashMap();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		result.put("userType", userType);
+
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		if (!Util.isEmpty(staffInfo.getBirthday())) {
+			Date birthday = staffInfo.getBirthday();
+			String birthdayStr = sdf.format(birthday);
+			result.put("birthday", birthdayStr);
+		}
+		if (!Util.isEmpty(staffInfo.getValidStartDate())) {
+			Date validStartDate = staffInfo.getValidStartDate();
+			String validStartDateStr = sdf.format(validStartDate);
+			result.put("validStartDate", validStartDateStr);
+		}
+		if (!Util.isEmpty(staffInfo.getValidEndDate())) {
+			Date validEndDate = staffInfo.getValidEndDate();
+			String validEndDateStr = sdf.format(validEndDate);
+			result.put("validEndDate", validEndDateStr);
+		}
+
+		if (!Util.isEmpty(staffInfo.getFirstNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(staffInfo.getFirstNameEn());
+			result.put("firstNameEn", sb.toString());
+		}
+		if (!Util.isEmpty(staffInfo.getOtherFirstNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(staffInfo.getOtherFirstNameEn());
+			result.put("otherFirstNameEn", sb.toString());
+		}
+
+		if (!Util.isEmpty(staffInfo.getLastNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(staffInfo.getLastNameEn());
+			result.put("lastNameEn", sb.toString());
+		}
+
+		if (!Util.isEmpty(staffInfo.getOtherLastNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(staffInfo.getOtherLastNameEn());
+			result.put("otherLastNameEn", sb.toString());
+		}
+
+		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
+		result.put("applicant", staffInfo);
+		result.put("infoType", ApplicantInfoTypeEnum.BASE.intKey());
+		result.put("staffId", staffId);
+		return result;
+	}
+
+	/**
+	 * 
+	 * 更新基本信息
+	 *
+	 * @param updateForm
+	 * @param session
+	 * @return 
+	 */
+	public Object updateStaffInfo(TAppStaffBasicinfoUpdateForm updateForm, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		Date nowDate = DateUtil.nowDate();
+
+		int updateNum = 0;
+		long staffId = updateForm.getId();
+		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
+		if (!Util.isEmpty(staffInfo)) {
+			staffInfo.setOpId(userId);
+			staffInfo.setUpdateTime(nowDate);
+			staffInfo.setCardFront(updateForm.getCardFront());
+			staffInfo.setCardBack(updateForm.getCardBack());
+			staffInfo.setAddress(updateForm.getAddress());
+			staffInfo.setBirthday(updateForm.getBirthday());
+			if (!Util.isEmpty(updateForm.getCardProvince())) {
+				staffInfo.setCardProvince(updateForm.getCardProvince());
+			}
+			if (!Util.isEmpty(updateForm.getCardCity())) {
+				staffInfo.setCardCity(updateForm.getCardCity());
+			}
+			staffInfo.setCardId(updateForm.getCardId());
+			staffInfo.setCity(updateForm.getCity());
+			staffInfo.setDetailedAddress(updateForm.getDetailedAddress());
+			staffInfo.setEmail(updateForm.getEmail());
+			staffInfo.setFirstName(updateForm.getFirstName());
+			staffInfo.setFirstNameEn(updateForm.getFirstNameEn().substring(1));
+			staffInfo.setIssueOrganization(updateForm.getIssueOrganization());
+			staffInfo.setLastName(updateForm.getLastName());
+			staffInfo.setLastNameEn(updateForm.getLastNameEn().substring(1));
+			staffInfo.setOtherFirstName(updateForm.getOtherFirstName());
+			if (!Util.isEmpty(updateForm.getOtherFirstNameEn())) {
+				staffInfo.setOtherFirstNameEn(updateForm.getOtherFirstNameEn().substring(1));
+			}
+			staffInfo.setOtherLastName(updateForm.getOtherLastName());
+			if (!Util.isEmpty(updateForm.getOtherLastNameEn())) {
+				staffInfo.setOtherLastNameEn(updateForm.getOtherLastNameEn().substring(1));
+			}
+			staffInfo.setNation(updateForm.getNation());
+			staffInfo.setNationality(updateForm.getNationality());
+			staffInfo.setProvince(updateForm.getProvince());
+			staffInfo.setSex(updateForm.getSex());
+			staffInfo.setHasOtherName(updateForm.getHasOtherName());
+			staffInfo.setHasOtherNationality(updateForm.getHasOtherNationality());
+
+			staffInfo.setTelephone(updateForm.getTelephone());
+			if (!Util.isEmpty(updateForm.getAddressIsSameWithCard())) {
+				staffInfo.setAddressIsSameWithCard(updateForm.getAddressIsSameWithCard());
+			}
+			staffInfo.setEmergencyLinkman(updateForm.getEmergencyLinkman());
+			staffInfo.setEmergencyTelephone(updateForm.getEmergencyTelephone());
+			staffInfo.setValidEndDate(updateForm.getValidEndDate());
+			staffInfo.setValidStartDate(updateForm.getValidStartDate());
+
+			updateNum = dbDao.update(staffInfo);
+		}
+
+		return updateNum;
+	}
+
+	/**
+	 * 
 	 * 人员管理Excel信息导入
 	 *
 	 * @param file
@@ -85,7 +252,6 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 */
 	public Object importExcel(File file, HttpServletRequest request) throws Exception {
 
-		Map<String, Object> result = Maps.newHashMap();
 		HttpSession session = request.getSession();
 		//当前登录公司
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -132,8 +298,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			}
 			dbDao.insert(baseInfos);
 		}
-		result.put("status", 200);
-		return result;
+		return JsonResult.success("上次成功");
 
 	}
 
@@ -175,7 +340,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return JsonResult.success("下载成功");
 
 	}
 

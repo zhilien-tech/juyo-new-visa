@@ -111,6 +111,12 @@ public class TAppStaffBasicinfoForm extends DataTablesParamForm {
 	/**紧急联系人手机*/
 	private String emergencyTelephone;
 
+	/**身份证省份*/
+	private String cardProvince;
+
+	/**身份证城市*/
+	private String cardCity;
+
 	/**'是否另有国籍*/
 	private Integer hasOtherNationality;
 

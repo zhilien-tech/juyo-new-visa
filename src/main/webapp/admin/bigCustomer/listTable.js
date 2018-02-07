@@ -82,8 +82,8 @@ function initDatatable() {
 		            },
 		            {"data": " ", "bSortable": false, "width":120,
 		            	render: function(data, type, row, meta) {
-		            		var modify = '<a style="cursor:pointer;" class="edit-icon" onclick="edit('+row.id+');"></a>';
-		            		var judge = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.id+');"></a>';
+		            		var modify = '<a style="cursor:pointer;" class="edit-icon" onclick="edit('+row.staffid+');"></a>';
+		            		var judge = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.staffid+');"></a>';
 		            		return modify+judge;
 		            	}	
 		            } 
@@ -117,7 +117,7 @@ function edit(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '550px'],
-		content: BASE_PATH + '/admin/bigCustomer/update.html?id='+id
+		content: BASE_PATH + '/admin/bigCustomer/update.html?staffId='+id
 	});
 }
 
@@ -138,11 +138,11 @@ function deleteById(id) {
 			dataType : 'json',
 			url : url,
 			success : function(data) {
-				layer.msg("删除成功",{time:2000});
+				layer.msg("删除成功");
 				datatable.ajax.reload();
 			},
 			error : function(xhr) {
-				layer.msg("删除失败",{time:2000});
+				layer.msg("删除失败");
 			}
 		});
 	}, function(){

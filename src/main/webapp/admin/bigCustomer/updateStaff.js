@@ -1,57 +1,24 @@
-function addStaff(){
-	layer.open({
-		type: 2,
-		title: false,
-		closeBtn:false,
-		fix: false,
-		maxmin: false,
-		shadeClose: false,
-		scrollbar: false,
-		area: ['900px', '80%'],
-		content:'/admin/bigCustomer/addStaff.html'
-	});
-}
-
 $(function(){
-	$('#applicantInfo').bootstrapValidator({
-		message : '验证不通过',
-		feedbackIcons : {
-			valid : 'glyphicon glyphicon-ok',
-			invalid : 'glyphicon glyphicon-remove',
-			validating : 'glyphicon glyphicon-refresh'
-		},
-		fields : {
-			telephone : {
-				validators : {
-					regexp: {
-						regexp: /^[1][34578][0-9]{9}$/,
-						message: '手机号格式错误'
-					}
-				}
-			},
-			emergencyTelephone : {
-				validators : {
-					regexp: {
-						regexp: /^[1][34578][0-9]{9}$/,
-						message: '手机号格式错误'
-					}
-				}
-			},
-			email : {
-				validators : {
-					regexp: {
-						regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-						message: '邮箱格式错误'
-					}
-				}
-			}
-		}
-	});
-	$('#applicantInfo').bootstrapValidator('validate');
+	//校验
+	applyValidate();
+
+	var front = $("#cardFront").val();
+	var back = $("#cardBack").val();
+	if(front != ""){
+		$("#uploadFile").siblings("i").css("display","block");
+	}else{
+		$("#uploadFile").siblings("i").css("display","none");
+	}
+
+	if(back != ""){
+		$("#uploadFileBck").siblings("i").css("display","block");
+	}else{
+		$("#uploadFileBack").siblings("i").css("display","none");
+	} 
 });
 
 function applyValidate(){
-	//校验
+	//身份证图片验证
 	$('#applicantInfo').bootstrapValidator({
 		message : '验证不通过',
 		feedbackIcons : {
@@ -79,7 +46,7 @@ function applyValidate(){
 				validators : {
 					regexp: {
 						regexp: /^[1][34578][0-9]{9}$/,
-						message: '电话号格式错误'
+						message: '手机号格式错误'
 					}
 				}
 			},
@@ -102,47 +69,6 @@ function applyValidate(){
 		}
 	});
 	$('#applicantInfo').bootstrapValidator('validate');
-};
-
-//居住地与身份证相同
-$(".nowProvince").change(function(){
-	searchByCard();
-});
-//身份证号变更
-$("#cardId").change(function(){
-	searchByCard();
-});
-
-//现居住地是否与身份证相同
-function searchByCard(){
-	var str=""; 
-	//是否同身份证相同
-	$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
-		str=$(this).val();     
-	});     
-	if(str == 1){//相同
-		var cardId = $("#cardId").val();
-		layer.load(1);
-		$.ajax({
-			type: 'POST',
-			data : {
-				cardId : cardId
-			},
-			dataType : 'json',
-			url: BASE_PATH+'/admin/orderJp/getInfoByCard',
-			success :function(data) {
-				console.log(JSON.stringify(data));
-				layer.closeAll('loading');
-				$("#province").val(data.province);
-				$("#city").val(data.city);
-				$("#detailedAddress").val($("#address").val());
-			}
-		});
-	}else{
-		$("#province").val("");
-		$("#city").val("");
-		$("#detailedAddress").val("");
-	}
 }
 
 //国籍检索
@@ -170,7 +96,7 @@ $("#nationality").on('input',function(){
 //国籍检索下拉项
 function setNationality(nationality){
 	$("#nationality").nextAll("ul.ui-autocomplete").remove();
-	$("#nationality").val(nationality);
+	$("#nationality").val(nationality).change();
 } 
 $("#nationalityDiv").mouseleave(function(){
 	$("#nationality").nextAll("ul.ui-autocomplete").remove();
@@ -202,7 +128,7 @@ $("#province").on('input',function(){
 //省份 检索下拉项
 function setProvince(province){
 	$("#province").nextAll("ul.ui-autocomplete").remove();
-	$("#province").val(province);
+	$("#province").val(province).change();
 } 
 $("#provinceDiv").mouseleave(function(){
 	$("#province").nextAll("ul.ui-autocomplete").remove();
@@ -235,7 +161,7 @@ $("#city").on('input',function(){
 //市 检索下拉项
 function setCity(city){
 	$("#city").nextAll("ul.ui-autocomplete").remove();
-	$("#city").val(city);
+	$("#city").val(city).change();
 } 
 $("#cityDiv").mouseleave(function(){
 	$("#city").nextAll("ul.ui-autocomplete").remove();
@@ -272,13 +198,25 @@ $('#uploadFile').change(function() {
 					$('#cardFront').val(obj.url);
 					$('#sqImg').attr('src', obj.url);
 					$("#uploadFile").siblings("i").css("display","block");
-					$('#address').val(obj.address);
-					$('#nation').val(obj.nationality);
-					$('#cardId').val(obj.num);
-					searchByCard();
-					$('#cardProvince').val(obj.province);
-					$('#cardCity').val(obj.city);
-					$('#birthday').val(obj.birth);
+					$(".front").attr("class", "info-imgUpload front has-success");  
+					$(".help-blockFront").attr("data-bv-result","IVALID");  
+					$(".help-blockFront").attr("style","display: none;");
+					$("#borderColorFront").attr("style", null);
+					$('#address').val(obj.address).change();
+					$('#nation').val(obj.nationality).change();
+					$('#cardId').val(obj.num).change();
+					var str="";  
+					//是否同身份证相同
+					$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+						str=$(this).val();     
+					});     
+					if(str == 1){//相同
+						searchByCard();
+					}
+					
+					$('#cardProvince').val(obj.province).change();
+					$('#cardCity').val(obj.city).change();
+					$('#birthday').val(obj.birth).change();
 					$('#sex').val(obj.sex);
 				}
 				$("#addBtn").attr('disabled', false);
@@ -325,9 +263,13 @@ $('#uploadFileBack').change(function() {
 					$('#cardBack').val(obj.url);
 					$('#sqImgBack').attr('src', obj.url);
 					$("#uploadFileBack").siblings("i").css("display","block");
-					$('#validStartDate').val(obj.starttime);
-					$('#validEndDate').val(obj.endtime);
-					$('#issueOrganization').val(obj.issue);
+					$(".back").attr("class", "info-imgUpload back has-success");  
+					$(".help-blockBack").attr("data-bv-result","IVALID");  
+					$(".help-blockBack").attr("style","display: none;"); 
+					$("#borderColorBack").attr("style", null);
+					$('#validStartDate').val(obj.starttime).change();
+					$('#validEndDate').val(obj.endtime).change();
+					$('#issueOrganization').val(obj.issue).change();
 				}
 				$("#addBtn").attr('disabled', false);
 				$("#updateBtn").attr('disabled', false);
@@ -364,12 +306,16 @@ $(".nameBefore").change(function(){
 		$(".wordSpell").show();
 		$(".onceIDTop").removeClass('col-sm-offset-1');
 		$(".onceIDTop").css('margin-left','45px');
+		$("#otherFirstName").val("").change();
+		$("#otherFirstNameEn").val("");
+		$("#otherLastName").val("").change();
+		$("#otherLastNameEn").val("");
 	}else {
-		
+
 		$(".nameBeforeHide").hide();
 		$(".wordSpell").hide();
 		if(checked2 == 1){
-			
+			$("#nationality").val("").change();
 		}else {
 			$(".nameBeforeTop").css('float','left');
 			$(".onceIDTop").css('margin-left','0px');
@@ -386,18 +332,62 @@ $(".onceID").change(function(){
 		$(".onceIDTop").css('float','left');
 		$(".onceIDTop").removeClass('col-sm-offset-1');
 		$(".onceIDTop").css('margin-left','45px');
+		$("#nationality").val("").change();
 	}else {
-		
+
 		$(".nationalityHide").hide();
 		if(checked2 == 1){
-			
+			$("#otherFirstName").val("").change();
+			$("#otherFirstNameEn").val("");
+			$("#otherLastName").val("").change();
+			$("#otherLastNameEn").val("");
 		}else {
 			$(".nameBeforeTop").css('float','left');
 			$(".onceIDTop").css('margin-left','0px');
 		}
 	}
-});	
+});
 
+//居住地与身份证相同
+$(".nowProvince").change(function(){
+	var str="";  
+	//是否同身份证相同
+	$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+		str=$(this).val();     
+	});     
+	if(str == 1){//相同
+		searchByCard();
+	}else{
+		$("#province").val("").change();
+		$("#city").val("").change();
+		$("#detailedAddress").val("").change();
+	}
+});
+
+function searchByCard(){
+
+	var cardId = $("#cardId").val();
+	layer.load(1);
+	$.ajax({
+		type: 'POST',
+		data : {
+			cardId : cardId
+		},
+		url: BASE_PATH + '/admin/orderJp/getInfoByCard',
+		success :function(data) {
+			console.log(JSON.stringify(data));
+			layer.closeAll('loading');
+			$("#detailedAddress").val($("#address").val()).change();
+			if(data != null){
+				$("#province").val(data.province).change();
+				$("#city").val(data.city).change();
+			}
+		}
+	});
+
+}
+
+//更新保存基本信息
 function saveApplicant(status){
 	$("#applicantInfo").data('bootstrapValidator').destroy();
 	$("#applicantInfo").data('bootstrapValidator', null);
@@ -407,54 +397,77 @@ function saveApplicant(status){
 	// 执行表单验证 
 	bootstrapValidator.validate();
 	if (bootstrapValidator.isValid()){
-		//获取必填项信息
-		var firstName = $("#firstName").val();
-		if (firstName == "") {
-			layer.msg('姓不能为空');
-			return;
-		}
-		var lastName = $("#lastName").val();
-		if (lastName == "") {
-			layer.msg('名不能为空');
-			return;
-		}
-		var str="";     
-	    $("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
-	    	str=$(this).val();     
-	    });     
+		var str="";
+		var applicantInfo;
+		$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+			str=$(this).val();     
+		});
 		if(str != 1){
-			var applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
+			applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
 		}else{
-			var applicantInfo = $("#applicantInfo").serialize();
+			applicantInfo = $("#applicantInfo").serialize();
 		}
-		
-		$.ajax({
-			type : 'POST',
-			data : applicantInfo,
-			async : false,
-			url : BASE_PATH+'/admin/bigCustomer/addStaff',
-			success : function(data) {
-				if(200 == data.status){
-					if(status == 1){
-						//点击保存按钮
-						parent.successCallback(1);
+		applicantInfo.id = applicantId;
+
+		if(status == 2){
+			//向右跳转
+
+		}else{
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : applicantInfo,
+				url: BASE_PATH + '/admin/bigCustomer/update.html',
+				success :function(data) {
+					layer.closeAll("loading");
+					closeWindow();
+					parent.successCallBack(2);
+				}
+			});
+		}
+	}
+}
+
+function saveApplicant(status){
+	$("#applicantInfo").data('bootstrapValidator').destroy();
+	$("#applicantInfo").data('bootstrapValidator', null);
+	applyValidate();
+	//得到获取validator对象或实例 
+	var bootstrapValidator = $("#applicantInfo").data(
+	'bootstrapValidator');
+	// 执行表单验证 
+	bootstrapValidator.validate();
+	if (bootstrapValidator.isValid()){
+
+		var str="";
+		var applicantInfo;
+		$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+			str=$(this).val();     
+		});
+		if(str != 1){
+			applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
+		}else{
+			applicantInfo = $("#applicantInfo").serialize();
+		}
+		applicantInfo.id = applicantId;
+
+
+		if(status == 2){
+			//右箭头跳转
+		}else{
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : applicantInfo,
+				url: BASE_PATH + '/admin/bigCustomer/updateStaffInfo.html',
+				success :function(data) {
+					if(data>0){
+						parent.successCallback(2);
 						closeWindow();
-					}else if(status == 2){
-						//点击右侧箭头，跳转护照信息页
-						/*parent.successCallback(4,data);
-						var applyId = $("#applyId").val();
-						socket.onclose();
-						window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'+'&isTrial=0&orderProcessType='+orderProcessType+'&addApply=1';*/
 					}
 				}
-				layer.closeAll('loading');
-				
-			},
-			error : function() {
-				layer.msg("添加失败");
-				layer.closeAll('loading');
-			}
-		}); 
+			});
+		}
+		layer.closeAll("loading");
 	}
-	
 }

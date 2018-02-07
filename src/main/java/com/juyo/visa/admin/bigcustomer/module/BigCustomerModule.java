@@ -76,13 +76,22 @@ public class BigCustomerModule {
 	}
 
 	/**
-	 * 跳转到'修改操作'的录入数据页面,实际就是[按照主键查询单个实体]
+	 * 人员管理添加
+	 */
+	@At
+	@POST
+	public Object addStaff(@Param("..") TAppStaffBasicinfoAddForm addForm, HttpSession session) {
+		return bigCustomerViewService.addStaff(addForm, session);
+	}
+
+	/**
+	 *跳转到基本信息编辑页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
-	public Object update(@Param("id") final long id) {
-		return bigCustomerViewService.fetch(id);
+	public Object update(@Param("staffId") Integer staffId, HttpSession session) {
+		return bigCustomerViewService.getStaffInfo(staffId, session);
 	}
 
 	/**
@@ -90,8 +99,8 @@ public class BigCustomerModule {
 	 */
 	@At
 	@POST
-	public Object update(@Param("..") TAppStaffBasicinfoUpdateForm updateForm) {
-		return bigCustomerViewService.update(updateForm);
+	public Object updateStaffInfo(@Param("..") TAppStaffBasicinfoUpdateForm updateForm, HttpSession session) {
+		return bigCustomerViewService.updateStaffInfo(updateForm, session);
 	}
 
 	/**

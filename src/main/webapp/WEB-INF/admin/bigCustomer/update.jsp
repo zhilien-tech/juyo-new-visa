@@ -1,965 +1,425 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-
 <c:set var="url" value="${base}/admin/bigCustomer" />
-
 <!DOCTYPE HTML>
 <html lang="en-US" id="updateHtml">
 <head>
 	<meta charset="UTF-8">
-	<title>更新</title>
+	<title>更新基本信息</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appAddStaff.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appUpdateStaff.css">
 </head>
 <body>
-	
 	<div class="modal-content">
-		<form id="bigcustomerUpdateForm">
+		<a id="toPassport" class="rightNav" onclick="passportBtn();">
+			<span></span>
+		</a>
+		<form id="applicantInfo">
 			<div class="modal-header">
-			<span class="heading">编辑</span>
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消"/>
-				<input id="updateBtn" type="button" onclick="save()" class="btn btn-primary pull-right btn-sm btn-right" value="保存"/>
+				<span class="heading">更新基本信息</span> 
+				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
+				<input id="addBtn" type="button" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" onclick="saveApplicant(1)" />
 			</div>
 			<div class="modal-body">
-				<div class="tab-content">
-					<input name="id" type="hidden" value="${obj.id}">
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>公司id：</label>
-										<input id="comId" name="comId" value="${obj.comId}" type="text" class="form-control input-sm" placeholder=" " />
+				<div class="tab-content row">
+					<input id="comId" name="comId" type="hidden" value="${obj.applicant.comId }">
+					<input id="userId" name="userId" type="hidden" value="${obj.applicant.userId }">
+					<div class="col-sm-6 padding-right-0">
+						<div></div>
+						<!-- start 身份证 正面 -->
+						<div class="info-imgUpload front has-error" id="borderColorFront">
+							<div class="col-xs-6 mainWidth">
+							<div class="form-group">
+								<div class="cardFront-div">
+									<span>点击上传身份证正面</span>
+									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
+									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
+									<img id="sqImg" name="sqImg" alt="" src="${obj.applicant.cardFront }" >
+									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+								</div>
+							</div>
+						</div>
+						</div>
+						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 -20px 32px !important">
+							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">身份证正面必须上传</small>
+						</div>
+						<!-- end 身份证 正面 -->
+						<!-- start 身份证 反面 -->
+						<div class="info-imgUpload back has-error" id="borderColorBack">
+							<div class="col-xs-6 mainWidth">
+								<div class="form-group">
+									<div class="cardFront-div">
+										<span>点击上传身份证背面</span>
+										<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
+										<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
+										<img id="sqImgBack" alt="" src="${obj.applicant.cardBack }" >
+										<i class="delete" onclick="deleteApplicantBackImg();"></i>
 									</div>
 								</div>
-																
-																																												<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>用户id（登录用户id）：</label>
-												<input id="userId" name="userId" value="${obj.userId}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>姓：</label>
-										<input id="firstName" name="firstName" value="${obj.firstName}" type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+						<div class="col-xs-6 front has-error" style="width:320px; height:20px; border:0 !important; color:red;margin:-20px 0 0 32px !important">
+							<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
+						</div>
+						<!-- end 身份证 反面 -->
+
+						<div class="row">
+							<!-- 签发机关 -->
+							<div class="col-sm-10 padding-right-0 marginL">
+								<div class="form-group">
+									<label><span>*</span>签发机关</label> 
+									<input id="issueOrganization" name="issueOrganization" tabIndex="1" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
+								</div>
+							</div>
+						</div>
+						<!-- end 签发机关 -->
+						<div class="row">
+							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
+							<div class="col-sm-5 padding-right-0 nameBeforeTop">
+								<div class="form-group">
+									<label>是否有曾用名</label> 
+									<div>
+										<span class="nameBeforeYes">
+											<input type="radio" name="hasOtherName" class="nameBefore" value="1"/>是
+										</span>
+										<span>
+											<input type="radio" name="hasOtherName" class="nameBefore"   value="2"/>否
+										</span>
 									</div>
 								</div>
-																
-																																																																														<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>姓(拼音)：</label>
-												<input id="firstNameEn" name="firstNameEn" value="${obj.firstNameEn}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																												</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>名：</label>
-										<input id="lastName" name="lastName" value="${obj.lastName}" type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+							<!-- 姓/名 拼音 -->
+							<div class="nameBeforeHide">
+							    <div class="col-sm-10 padding-right-0 marginL">
+									<div class="form-group" style="position:relative;">
+										<label>姓/拼音</label> 
+										<input id="otherFirstName" name="otherFirstName" type="text" class="form-control input-sm "  tabIndex="15" placeholder=" " value="${obj.applicant.otherFirstName }" />
+										<input id="otherFirstNameEn" name="otherFirstNameEn" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.otherFirstNameEn }"/>
 									</div>
 								</div>
-																
-																																																																																																																<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>名(拼音)：</label>
-												<input id="lastNameEn" name="lastNameEn" value="${obj.lastNameEn}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																										</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>状态：</label>
-										<input id="status" name="status" value="${obj.status}" type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+							<!-- 姓/名 拼音 end -->
+							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
+								<div class="form-group">
+									<label>曾有的或另有的国籍(或公民身份)</label> 
+									<div>
+										<span class="onceIDYes">
+											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
+										</span>
+										<span>
+											<input type="radio" name="hasOtherNationality" class="onceID"  value="2" />否
+										</span>
 									</div>
 								</div>
-																
-																																																																																																																																																		<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>手机号：</label>
-												<input id="telephone" name="telephone" value="${obj.telephone}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																								</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>邮箱：</label>
-										<input id="email" name="email" value="${obj.email}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+							<!-- 曾用国籍 -->
+							<div class="col-sm-5 padding-right-0 nationalityHide">
+								<div class="form-group" id="nationalityDiv">
+									<label>国籍</label> 
+									<input id="nationality" name="nationality"  tabIndex="17" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 								</div>
-																
-																																																																																																																																																																																				<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>性别：</label>
-												<input id="sex" name="sex" value="${obj.sex}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>部门：</label>
-										<input id="department" name="department" value="${obj.department}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-6 padding-right-0">
+						<div class="row">
+							<!-- 姓/拼音 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0 " >
+								<div class="form-group" style="position:relative;">
+									<label>
+										<span>*</span>姓/拼音
+									</label> 
+									<input id="firstName" name="firstName" type="text" class="form-control input-sm "  tabIndex="2" placeholder=" " value="${obj.applicant.firstName }" />
+									<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
+									<input id="firstNameEn" name="firstNameEn" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.firstNameEn }"/>
 								</div>
-																
-																																																																																																																																																																																																																						<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>职位：</label>
-												<input id="job" name="job" value="${obj.job}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																				</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>民族：</label>
-										<input id="nation" name="nation" value="${obj.nation}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+						</div>
+						<!-- end 姓/拼音 -->
+						<div class="row">
+							<!-- 名/拼音 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group" style="position:relative;">
+									<label>
+										<span>*</span>名/拼音
+									</label> 
+									<input id="lastName" name="lastName" type="text" class="form-control input-sm "  tabIndex="3" placeholder=" " value="${obj.applicant.lastName }" />
+									<input id="lastNameEn" name="lastNameEn" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.lastNameEn }"/>
 								</div>
-																
-																																																																																																																																																																																																																																																								<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>出生日期：</label>
-												<input id="birthday" name="birthday" value="${obj.birthday}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																		</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>住址：</label>
-										<input id="address" name="address" value="${obj.address}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+						</div>
+						<!-- end 名/拼音 -->
+						<div class="row">
+							<!-- 手机号/邮箱 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>
+										<span>*</span>手机号
+									</label> 
+									<input id="telephone" name="telephone" type="text" class="form-control input-sm"  tabIndex="4" placeholder=" " value="${obj.applicant.telephone }" />
 								</div>
-																
-																																																																																																																																																																																																																																																																																										<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>身份证号：</label>
-												<input id="cardId" name="cardId" value="${obj.cardId}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>身份证正面：</label>
-										<input id="cardFront" name="cardFront" value="${obj.cardFront}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>邮箱</label> 
+									<input id="email" name="email" type="text" class="form-control input-sm" placeholder=" "  tabIndex="5" value="${obj.applicant.email }" />
 								</div>
-																
-																																																																																																																																																																																																																																																																																																																												<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>身份证反面：</label>
-												<input id="cardBack" name="cardBack" value="${obj.cardBack}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																																																																																																																																																														</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>签发机关：</label>
-										<input id="issueOrganization" name="issueOrganization" value="${obj.issueOrganization}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+						</div>
+						<!-- end 手机号/邮箱 -->
+						
+						<div class="row">
+							<!-- 公民身份证 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>公民身份证</label> 
+									<input id="cardId" name="cardId" type="text" class="form-control input-sm"  tabIndex="6" placeholder=" " value="${obj.applicant.cardId }" />
 								</div>
-																
-																																																																																																																																																																																																																																																																																																																																																														<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>有效期始：</label>
-												<input id="validStartDate" name="validStartDate" value="${obj.validStartDate}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																																																																																																																												</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>有效期至：</label>
-										<input id="validEndDate" name="validEndDate" value="${obj.validEndDate}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+						</div>
+						<!-- end 公民身份证 -->
+						<div class="row">
+							<!-- 姓名/民族 -->
+							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>性别</label> 
+									<select class="form-control input-sm selectHeight" id="sex" name="sex">
+										<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
+										<option value="女" ${obj.applicant.sex == "女"?"selected":"" }>女</option>
+									</select>
 								</div>
-																
-																																																																																																																																																																																																																																																																																																																																																																																																<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>现居住地址省份：</label>
-												<input id="province" name="province" value="${obj.province}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																																																																																										</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>现居住地址城市：</label>
-										<input id="city" name="city" value="${obj.city}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+							<div class="col-sm-3 padding-right-0">
+								<div class="form-group">
+									<label>民族</label> 
+									<input id="nation" name="nation" type="text" class="form-control input-sm"  tabIndex="7" placeholder=" " value="${obj.applicant.nation }" />
 								</div>
-																
-																																																																																																																																																																																																																																																																																																																																																																																																																																		<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>详细地址：</label>
-												<input id="detailedAddress" name="detailedAddress" value="${obj.detailedAddress}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																																																								</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>曾用姓：</label>
-										<input id="otherFirstName" name="otherFirstName" value="${obj.otherFirstName}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+							<div class="col-sm-5 padding-right-0">
+								<div class="form-group">
+									<label>出生日期</label> 
+									<input id="birthday" name="birthday" type="text"  tabIndex="8" class="form-control input-sm" value="${obj.birthday }"/>
 								</div>
-																
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																				<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>曾用姓(拼音)：</label>
-												<input id="otherFirstNameEn" name="otherFirstNameEn" value="${obj.otherFirstNameEn}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																																																						</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>曾用名：</label>
-										<input id="otherLastName" name="otherLastName" value="${obj.otherLastName}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+						</div>
+						<!-- end 姓名/民族 -->
+						<div class="row">
+							<!-- 住宅 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>住址</label> 
+									<input id="address" name="address" type="text" class="form-control input-sm"  tabIndex="9" placeholder=" " value="${obj.applicant.address }" />
 								</div>
-																
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>曾用名(拼音)：</label>
-												<input id="otherLastNameEn" name="otherLastNameEn" value="${obj.otherLastNameEn}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																																																				</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>紧急联系人姓名：</label>
-										<input id="emergencyLinkman" name="emergencyLinkman" value="${obj.emergencyLinkman}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+						</div>
+						<!-- end 住宅 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>有效期限</label> 
+									<input id="validStartDate" name="validStartDate" tabIndex="10" type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
 								</div>
-																
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																								<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>紧急联系人手机：</label>
-												<input id="emergencyTelephone" name="emergencyTelephone" value="${obj.emergencyTelephone}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																																																		</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>'是否另有国籍：</label>
-										<input id="hasOtherNationality" name="hasOtherNationality" value="${obj.hasOtherNationality}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label> &nbsp; &nbsp;</label> 
+									<input id="validEndDate" name="validEndDate" tabIndex="11" type="text" class="form-control input-sm" value="${obj.validEndDate }">
 								</div>
-																
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																										<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>是否有曾用名：</label>
-												<input id="hasOtherName" name="hasOtherName" value="${obj.hasOtherName}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																																																																</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>结婚证/离婚证地址：</label>
-										<input id="marryUrl" name="marryUrl" value="${obj.marryUrl}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+						</div>
+						<div class="row">
+							<!-- 现居住地址省份/现居住地址城市 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group" id="provinceDiv">
+									<label>现居住地是否与身份证相同</label>
+									<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
+									<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
+									<input type="hidden" id="sameAddress" value=""/>
+									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
+									<input id="province" name="province" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.applicant.province }" />
 								</div>
-																
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																												<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>结婚状况：</label>
-												<input id="marryStatus" name="marryStatus" value="${obj.marryStatus}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																																																														</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>婚姻状况证件类型：</label>
-										<input id="marryurltype" name="marryurltype" value="${obj.marryurltype}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group" id="cityDiv">
+									<label>现居住地址城市</label> 
+									<input id="city" name="city" type="text" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.city }" />
 								</div>
-																
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>国籍：</label>
-												<input id="nationality" name="nationality" value="${obj.nationality}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																																																												</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>现居住地是否与身份证相同：</label>
-										<input id="addressIsSameWithCard" name="addressIsSameWithCard" value="${obj.addressIsSameWithCard}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+						</div>
+						<!-- end 现居住地址省份/现居住地址城市 -->
+						<div class="row">
+							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>详细地址</label> 
+									<input id="detailedAddress" name="detailedAddress" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedAddress }" />
 								</div>
-																
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>操作人：</label>
-												<input id="opId" name="opId" value="${obj.opId}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																																																										</div>
-											
-										
-											
-										
-													<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label><span>*</span>更新时间：</label>
-										<input id="updateTime" name="updateTime" value="${obj.updateTime}" type="text" class="form-control input-sm" placeholder=" " />
-									</div>
+							</div>
+						</div>
+						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
+						<div class="row wordSpell" style="height:62px;">
+							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
+							
+							</div>
+						</div>	
+						<!-- 名/拼音 -->
+						<div class="row wordSpell">
+							<div class="col-sm-11 padding-right-0 col-sm-offset-1" >
+								<div class="form-group" style="position:relative;">
+									<label>名/拼音</label> 
+									<input id="otherLastName" name="otherLastName"  tabIndex="16" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
+									<input id="otherLastNameEn" name="otherLastNameEn" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.otherLastNameEn }"/>
 								</div>
-																
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																		<div class="col-sm-6">
-											<div class="form-group">
-												<label><span>*</span>创建时间：</label>
-												<input id="createTime" name="createTime" value="${obj.createTime}" type="text" class="form-control input-sm" placeholder=" " />
-											</div>
-										</div>
-																								</div>
-											
-										
-											
-										
+							</div>
+						</div>
+						<div class="row">
+							<!-- 紧急联系人姓名/手机 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>紧急联系人姓名</label> 
+									<input id="emergencyLinkman" name="emergencyLinkman" type="text" class="form-control input-sm"  tabIndex="18" placeholder=" " value="${obj.applicant.emergencyLinkman }" />
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>紧急联系人手机</label> 
+									<input id="emergencyTelephone" name="emergencyTelephone"  tabIndex="19" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.emergencyTelephone }" />
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</form>
 	</div>
-	
+
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var applicantId = '${obj.staffId}';
+		var infoType = '${obj.infoType}';
 	</script>
-	<!-- jQuery 2.2.3 -->
-	<script src="${base}/references/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
-	<!-- Bootstrap 3.3.6 -->
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<!-- DataTables -->
+	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	
+	<!-- 公用js文件 -->
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+	<script type="text/javascript" src="${base}/admin/bigCustomer/updateStaff.js"></script>
 	<script type="text/javascript">
-		var base = "${base}";
-
-		function initvalidate(){
-			//校验
-			$('#bigcustomerUpdateForm').bootstrapValidator({
-				message : '验证不通过',
-				feedbackIcons : {
-					valid : 'glyphicon glyphicon-ok',
-					invalid : 'glyphicon glyphicon-remove',
-					validating : 'glyphicon glyphicon-refresh'
-				},
-				fields : {
-											comId : {
-							validators : {
-								notEmpty : {
-									message : '公司id不能为空'
-								}
-							}
-						},
-											userId : {
-							validators : {
-								notEmpty : {
-									message : '用户id（登录用户id）不能为空'
-								}
-							}
-						},
-											firstName : {
-							validators : {
-								notEmpty : {
-									message : '姓不能为空'
-								}
-							}
-						},
-											firstNameEn : {
-							validators : {
-								notEmpty : {
-									message : '姓(拼音)不能为空'
-								}
-							}
-						},
-											lastName : {
-							validators : {
-								notEmpty : {
-									message : '名不能为空'
-								}
-							}
-						},
-											lastNameEn : {
-							validators : {
-								notEmpty : {
-									message : '名(拼音)不能为空'
-								}
-							}
-						},
-											status : {
-							validators : {
-								notEmpty : {
-									message : '状态不能为空'
-								}
-							}
-						},
-											telephone : {
-							validators : {
-								notEmpty : {
-									message : '手机号不能为空'
-								}
-							}
-						},
-											email : {
-							validators : {
-								notEmpty : {
-									message : '邮箱不能为空'
-								}
-							}
-						},
-											sex : {
-							validators : {
-								notEmpty : {
-									message : '性别不能为空'
-								}
-							}
-						},
-											department : {
-							validators : {
-								notEmpty : {
-									message : '部门不能为空'
-								}
-							}
-						},
-											job : {
-							validators : {
-								notEmpty : {
-									message : '职位不能为空'
-								}
-							}
-						},
-											nation : {
-							validators : {
-								notEmpty : {
-									message : '民族不能为空'
-								}
-							}
-						},
-											birthday : {
-							validators : {
-								notEmpty : {
-									message : '出生日期不能为空'
-								}
-							}
-						},
-											address : {
-							validators : {
-								notEmpty : {
-									message : '住址不能为空'
-								}
-							}
-						},
-											cardId : {
-							validators : {
-								notEmpty : {
-									message : '身份证号不能为空'
-								}
-							}
-						},
-											cardFront : {
-							validators : {
-								notEmpty : {
-									message : '身份证正面不能为空'
-								}
-							}
-						},
-											cardBack : {
-							validators : {
-								notEmpty : {
-									message : '身份证反面不能为空'
-								}
-							}
-						},
-											issueOrganization : {
-							validators : {
-								notEmpty : {
-									message : '签发机关不能为空'
-								}
-							}
-						},
-											validStartDate : {
-							validators : {
-								notEmpty : {
-									message : '有效期始不能为空'
-								}
-							}
-						},
-											validEndDate : {
-							validators : {
-								notEmpty : {
-									message : '有效期至不能为空'
-								}
-							}
-						},
-											province : {
-							validators : {
-								notEmpty : {
-									message : '现居住地址省份不能为空'
-								}
-							}
-						},
-											city : {
-							validators : {
-								notEmpty : {
-									message : '现居住地址城市不能为空'
-								}
-							}
-						},
-											detailedAddress : {
-							validators : {
-								notEmpty : {
-									message : '详细地址不能为空'
-								}
-							}
-						},
-											otherFirstName : {
-							validators : {
-								notEmpty : {
-									message : '曾用姓不能为空'
-								}
-							}
-						},
-											otherFirstNameEn : {
-							validators : {
-								notEmpty : {
-									message : '曾用姓(拼音)不能为空'
-								}
-							}
-						},
-											otherLastName : {
-							validators : {
-								notEmpty : {
-									message : '曾用名不能为空'
-								}
-							}
-						},
-											otherLastNameEn : {
-							validators : {
-								notEmpty : {
-									message : '曾用名(拼音)不能为空'
-								}
-							}
-						},
-											emergencyLinkman : {
-							validators : {
-								notEmpty : {
-									message : '紧急联系人姓名不能为空'
-								}
-							}
-						},
-											emergencyTelephone : {
-							validators : {
-								notEmpty : {
-									message : '紧急联系人手机不能为空'
-								}
-							}
-						},
-											hasOtherNationality : {
-							validators : {
-								notEmpty : {
-									message : ''是否另有国籍不能为空'
-								}
-							}
-						},
-											hasOtherName : {
-							validators : {
-								notEmpty : {
-									message : '是否有曾用名不能为空'
-								}
-							}
-						},
-											marryUrl : {
-							validators : {
-								notEmpty : {
-									message : '结婚证/离婚证地址不能为空'
-								}
-							}
-						},
-											marryStatus : {
-							validators : {
-								notEmpty : {
-									message : '结婚状况不能为空'
-								}
-							}
-						},
-											marryurltype : {
-							validators : {
-								notEmpty : {
-									message : '婚姻状况证件类型不能为空'
-								}
-							}
-						},
-											nationality : {
-							validators : {
-								notEmpty : {
-									message : '国籍不能为空'
-								}
-							}
-						},
-											addressIsSameWithCard : {
-							validators : {
-								notEmpty : {
-									message : '现居住地是否与身份证相同不能为空'
-								}
-							}
-						},
-											opId : {
-							validators : {
-								notEmpty : {
-									message : '操作人不能为空'
-								}
-							}
-						},
-											updateTime : {
-							validators : {
-								notEmpty : {
-									message : '更新时间不能为空'
-								}
-							}
-						},
-											createTime : {
-							validators : {
-								notEmpty : {
-									message : '创建时间不能为空'
-								}
-							}
-						},
-									}
-			});
-		}
-		
-		//更新时刷新页面
-		function update() {
-			window.location.reload();
-		}
-		
-	    initvalidate();
-		$('#bigcustomerUpdateForm').bootstrapValidator('validate');
-		function save() {
-			$('#bigcustomerUpdateForm').bootstrapValidator('validate');
-			var bootstrapValidator = $("#bigcustomerUpdateForm").data('bootstrapValidator');
-			if (bootstrapValidator.isValid()) {
-			
-				//获取必填项信息
-									var comId = $("#comId").val();
-					if(comId==""){
-						layer.msg('comId不能为空');
-						return;
-					}
-									var userId = $("#userId").val();
-					if(userId==""){
-						layer.msg('userId不能为空');
-						return;
-					}
-									var firstName = $("#firstName").val();
-					if(firstName==""){
-						layer.msg('firstName不能为空');
-						return;
-					}
-									var firstNameEn = $("#firstNameEn").val();
-					if(firstNameEn==""){
-						layer.msg('firstNameEn不能为空');
-						return;
-					}
-									var lastName = $("#lastName").val();
-					if(lastName==""){
-						layer.msg('lastName不能为空');
-						return;
-					}
-									var lastNameEn = $("#lastNameEn").val();
-					if(lastNameEn==""){
-						layer.msg('lastNameEn不能为空');
-						return;
-					}
-									var status = $("#status").val();
-					if(status==""){
-						layer.msg('status不能为空');
-						return;
-					}
-									var telephone = $("#telephone").val();
-					if(telephone==""){
-						layer.msg('telephone不能为空');
-						return;
-					}
-									var email = $("#email").val();
-					if(email==""){
-						layer.msg('email不能为空');
-						return;
-					}
-									var sex = $("#sex").val();
-					if(sex==""){
-						layer.msg('sex不能为空');
-						return;
-					}
-									var department = $("#department").val();
-					if(department==""){
-						layer.msg('department不能为空');
-						return;
-					}
-									var job = $("#job").val();
-					if(job==""){
-						layer.msg('job不能为空');
-						return;
-					}
-									var nation = $("#nation").val();
-					if(nation==""){
-						layer.msg('nation不能为空');
-						return;
-					}
-									var birthday = $("#birthday").val();
-					if(birthday==""){
-						layer.msg('birthday不能为空');
-						return;
-					}
-									var address = $("#address").val();
-					if(address==""){
-						layer.msg('address不能为空');
-						return;
-					}
-									var cardId = $("#cardId").val();
-					if(cardId==""){
-						layer.msg('cardId不能为空');
-						return;
-					}
-									var cardFront = $("#cardFront").val();
-					if(cardFront==""){
-						layer.msg('cardFront不能为空');
-						return;
-					}
-									var cardBack = $("#cardBack").val();
-					if(cardBack==""){
-						layer.msg('cardBack不能为空');
-						return;
-					}
-									var issueOrganization = $("#issueOrganization").val();
-					if(issueOrganization==""){
-						layer.msg('issueOrganization不能为空');
-						return;
-					}
-									var validStartDate = $("#validStartDate").val();
-					if(validStartDate==""){
-						layer.msg('validStartDate不能为空');
-						return;
-					}
-									var validEndDate = $("#validEndDate").val();
-					if(validEndDate==""){
-						layer.msg('validEndDate不能为空');
-						return;
-					}
-									var province = $("#province").val();
-					if(province==""){
-						layer.msg('province不能为空');
-						return;
-					}
-									var city = $("#city").val();
-					if(city==""){
-						layer.msg('city不能为空');
-						return;
-					}
-									var detailedAddress = $("#detailedAddress").val();
-					if(detailedAddress==""){
-						layer.msg('detailedAddress不能为空');
-						return;
-					}
-									var otherFirstName = $("#otherFirstName").val();
-					if(otherFirstName==""){
-						layer.msg('otherFirstName不能为空');
-						return;
-					}
-									var otherFirstNameEn = $("#otherFirstNameEn").val();
-					if(otherFirstNameEn==""){
-						layer.msg('otherFirstNameEn不能为空');
-						return;
-					}
-									var otherLastName = $("#otherLastName").val();
-					if(otherLastName==""){
-						layer.msg('otherLastName不能为空');
-						return;
-					}
-									var otherLastNameEn = $("#otherLastNameEn").val();
-					if(otherLastNameEn==""){
-						layer.msg('otherLastNameEn不能为空');
-						return;
-					}
-									var emergencyLinkman = $("#emergencyLinkman").val();
-					if(emergencyLinkman==""){
-						layer.msg('emergencyLinkman不能为空');
-						return;
-					}
-									var emergencyTelephone = $("#emergencyTelephone").val();
-					if(emergencyTelephone==""){
-						layer.msg('emergencyTelephone不能为空');
-						return;
-					}
-									var hasOtherNationality = $("#hasOtherNationality").val();
-					if(hasOtherNationality==""){
-						layer.msg('hasOtherNationality不能为空');
-						return;
-					}
-									var hasOtherName = $("#hasOtherName").val();
-					if(hasOtherName==""){
-						layer.msg('hasOtherName不能为空');
-						return;
-					}
-									var marryUrl = $("#marryUrl").val();
-					if(marryUrl==""){
-						layer.msg('marryUrl不能为空');
-						return;
-					}
-									var marryStatus = $("#marryStatus").val();
-					if(marryStatus==""){
-						layer.msg('marryStatus不能为空');
-						return;
-					}
-									var marryurltype = $("#marryurltype").val();
-					if(marryurltype==""){
-						layer.msg('marryurltype不能为空');
-						return;
-					}
-									var nationality = $("#nationality").val();
-					if(nationality==""){
-						layer.msg('nationality不能为空');
-						return;
-					}
-									var addressIsSameWithCard = $("#addressIsSameWithCard").val();
-					if(addressIsSameWithCard==""){
-						layer.msg('addressIsSameWithCard不能为空');
-						return;
-					}
-									var opId = $("#opId").val();
-					if(opId==""){
-						layer.msg('opId不能为空');
-						return;
-					}
-									var updateTime = $("#updateTime").val();
-					if(updateTime==""){
-						layer.msg('updateTime不能为空');
-						return;
-					}
-									var createTime = $("#createTime").val();
-					if(createTime==""){
-						layer.msg('createTime不能为空');
-						return;
-					}
-								
-				
-				$.ajax({
-					type : 'POST',
-					data : $("#bigcustomerUpdateForm").serialize(),
-					url : '${base}/admin/bigCustomer/update.html',
-					success : function(data) {
-						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-						layer.close(index);
-						window.parent.layer.msg("编辑成功", "", 3000);
-						parent.layer.close(index);
-						parent.datatable.ajax.reload();
-					},
-					error : function(xhr) {
-						layer.msg("编辑失败", "", 3000);
-					}
-				});
-			}
-		}
 	
-		//返回刷新页面 
+		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-        	parent.layer.close(index);
+			parent.layer.close(index);
+		}
+	
+		$(function(){
+			var nation = '${obj.applicant.hasOtherNationality}';
+			var otherName = '${obj.applicant.hasOtherName}';
+			var address = '${obj.applicant.addressIsSameWithCard}';
+			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
+			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
+			if(nation == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nationalityHide").show();
+				$(".onceIDTop").css({'float':'left','margin-left':'45px','padding':'0px'});
+			}else {
+				$(".nationalityHide").hide();
+			}
+			
+			if(otherName == 1){
+				$(".nameBeforeTop").css('float','none');
+				$(".nameBeforeHide").show();
+				$(".wordSpell").show();
+				$(".onceIDTop").removeClass('col-sm-offset-1');
+				$(".onceIDTop").css({"margin-left":"45px"});
+			}else {
+				
+				$(".nameBeforeHide").hide();
+				$(".wordSpell").hide();
+			}
+			
+			if(address == 1){
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
+			}else{
+				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
+			}
+		});
+		function successCallBack(status){
+			if(status == 1){
+				parent.successCallBack(1);
+				closeWindow();
+			}
+		}
+		function cancelCallBack(status){
+			closeWindow();
+		}
+		
+		//点击身份证图片上的删除按钮
+		function deleteApplicantFrontImg(){
+			$('#cardFront').val("");
+			$('#sqImg').attr('src', "");
+			$("#uploadFile").siblings("i").css("display","none");
+			if(userType == 2){
+				$(".front").attr("class", "info-imgUpload front has-error");  
+		        $(".help-blockFront").attr("data-bv-result","INVALID");  
+			}
+		}
+		function deleteApplicantBackImg(){
+			$('#cardBack').val("");
+			$('#sqImgBack').attr('src', "");
+			$("#uploadFileBack").siblings("i").css("display","none");
+			if(userType == 2){
+				$(".back").attr("class", "info-imgUpload back has-error");  
+		        $(".help-blockBack").attr("data-bv-result","INVALID");  
+			}
+		}
+		
+		$(function(){
+			$("#validStartDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#validEndDate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+				autoclose: true,//选中日期后 自动关闭
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#birthday").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+		        weekStart: 1,
+		        todayBtn: 1,
+				autoclose: true,
+				todayHighlight: true,//高亮
+				startView: 4,//从年开始选择
+				forceParse: 0,
+		        showMeridian: false,
+				pickerPosition:"top-left",//显示位置
+				minView: "month"//只显示年月日
+			});
+		});
+		function passportBtn(){
+			saveApplicant(2);
 		}
 	</script>
-	
-	
 </body>
 </html>
-
