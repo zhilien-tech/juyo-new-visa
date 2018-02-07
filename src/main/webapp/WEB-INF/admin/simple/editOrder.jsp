@@ -70,8 +70,7 @@
 			<section class="content">
 				<form id="orderInfo">
 					<div class="info" id="customerInfo" ref="customerInfo">
-						<p class="info-head">客户信息</p><input id="addCustomer"
-					type="button" value="添加" class="btn btn-primary btn-sm pull-right" />
+						<p class="info-head">客户信息</p>
 						<!-- *** -->
 						<div class="info-body-from"  style="margin-left:6%;">
 							<div class="row body-from-input">
@@ -362,7 +361,7 @@
 										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" >
 											<c:forEach items="${obj.flightlist }" var="flight">
 												<c:if test="${obj.tripinfo.goFlightNum eq  flight.flightnum}">
-													<option selected="selected" value="${flight.id }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
+													<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
 												</c:if>
 											</c:forEach>
 										</select>
@@ -416,7 +415,7 @@
 											</c:if> --%>
 											<c:forEach items="${obj.flightlist }" var="flight">
 												<c:if test="${obj.tripinfo.returnFlightNum eq  flight.flightnum}">
-													<option selected="selected" value="${flight.id }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
+													<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
 												</c:if>
 											</c:forEach>
 										</select>

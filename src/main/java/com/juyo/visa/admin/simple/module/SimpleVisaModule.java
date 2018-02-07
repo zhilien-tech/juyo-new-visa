@@ -183,4 +183,13 @@ public class SimpleVisaModule {
 	public Object saveEditVisa(@Param("..") VisaEditDataForm form, HttpServletRequest request) {
 		return simpleVisaService.saveEditVisa(form, request);
 	}
+
+	/**
+	 * 取消订单
+	 */
+	@At
+	@POST
+	public Object cancelOrder(@Param("orderid") Long orderid) {
+		return simpleVisaService.cancelOrder(orderid);
+	}
 }
