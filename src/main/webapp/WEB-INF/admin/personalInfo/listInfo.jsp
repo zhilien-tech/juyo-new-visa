@@ -22,7 +22,7 @@
 
 						<div class="row form-right">
 							<div class="col-md-12 left-5px">
-								<a id="" class="btn btn-primary btn-sm pull-right" onclick="updatePassword();">修改密码</a>
+								<a id="" class="btn btn-primary btn-sm pull-right" onclick="updatePassword();" style=" width:70px !important;">修改密码</a>
 								<a id="" class="btn btn-primary btn-sm pull-right" onclick="updateInfo();" style="margin-right: 15px;">编辑</a>
 							</div>
 						</div>
@@ -115,7 +115,7 @@
 		    	    maxmin: false,
 		    	    shadeClose: false,
 		    	    scrollbar: false,
-		    	    area: ['900px', '550px'],
+		    	    area: ['900px', '80%'],
 		    	    content: BASE_PATH + '/admin/personalInfo/update.html'
 		    	  });
 		}
@@ -129,7 +129,7 @@
 		    	    maxmin: false,
 		    	    shadeClose: false,
 		    	    scrollbar: false,
-		    	    area: ['900px', '550px'],
+		    	    area: ['900px', '80%'],
 		    	    content: BASE_PATH + '/admin/personalInfo/updatePassword.html'
 		    	  });
 		}

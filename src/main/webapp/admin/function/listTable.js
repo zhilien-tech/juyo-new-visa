@@ -76,11 +76,6 @@ function initDatatable() {
 		            	if(null==comtype || ""==comtype){
 		            		return "";
 		            	}else{
-		            		if("1" == comtype){
-		            			comtype = "送签社";
-		            		}else if("2" == comtype){
-		            			comtype = "地接社";
-		            		}
 		            		return comtype;
 		            	}
 		            } 	

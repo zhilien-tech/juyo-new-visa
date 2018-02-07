@@ -32,15 +32,18 @@
 .leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
 .leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 .nationalityHide { margin-left:3%;}
-.row { margin-top:3px;}
+.row { margin-top:3px; margin-bottom:10px;}
 .nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
 .btn-margin { margin-top:10px;}
 #sqImg ,#sqImgBack { width:335px;}
-.delete { z-index:999999999;}
+.delete { z-index:1099;}
 .marginL { margin-left:30px;}
 .nameBeforeTop { margin-left:30px;}
 img[src=""],img:not([src]) { opacity:0;}
-input[type="file"] { z-index:999999;}
+input[type="file"] { z-index:999;}
+.widthBig { width:100%;}
+#uploadFile , #uploadFileBack { width:100% !important; }
+#sqImg ,#sqImgBack { z-index:1000;}
 </style>
 </head>
 <body>
@@ -69,7 +72,7 @@ input[type="file"] { z-index:999999;}
 						</div> <!-- end 身份证 正面 -->
 						<div class="info-imgUpload front has-error" id="borderColorFront">
 							<!-- 身份证 正面 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 widthBig">
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传身份证正面</span>
@@ -88,7 +91,7 @@ input[type="file"] { z-index:999999;}
 
 						<div class="info-imgUpload back has-error" id="borderColorBack">
 							<!-- 身份证 反面 -->
-							<div class="col-xs-6">
+							<div class="col-xs-6 widthBig">
 								<div class="form-group">
 									<div class="cardFront-div">
 										<span>点击上传身份证背面</span>
@@ -141,7 +144,7 @@ input[type="file"] { z-index:999999;}
 										<label>姓/拼音</label> <input id="otherFirstName"
 											name="otherFirstName" type="text" class="form-control input-sm "
 											placeholder=" " value="${obj.applicant.otherFirstName }" />
-											<input type="text" id="otherFirstNameEn" style="position:absolute;top:38px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:30px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -179,7 +182,7 @@ input[type="file"] { z-index:999999;}
 										name="firstName" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.firstName }" />
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
-										<input type="text" id="firstNameEn" style="position:absolute;top:37px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
+										<input type="text" id="firstNameEn" style="position:absolute;top:30px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -192,7 +195,7 @@ input[type="file"] { z-index:999999;}
 									<label><span>*</span>名/拼音</label> <input id="lastName"
 										name="lastName" type="text" class="form-control input-sm "
 										placeholder=" " value="${obj.applicant.lastName }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:37px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
+										<input type="text" id="lastNameEn" style="position:absolute;top:30px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -328,9 +331,8 @@ input[type="file"] { z-index:999999;}
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
-						<div class="row wordSpell" style="height:62px;">
+						<div class="row wordSpell" style="height:54px;">
 							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
-							
 							</div>
 						</div>	
 						<!-- 名/拼音 -->
@@ -339,7 +341,7 @@ input[type="file"] { z-index:999999;}
 								<div class="form-group" style="position:relative;">
 									<label>名/拼音</label> 
 									<input id="otherLastName" name="otherLastName" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
-									<input type="text" id="otherLastNameEn" style="position:absolute;top:37px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+									<input type="text" id="otherLastNameEn" style="position:absolute;top:30px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
 								</div>
 							</div>
 						</div>

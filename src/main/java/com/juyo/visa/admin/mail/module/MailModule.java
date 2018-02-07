@@ -33,6 +33,6 @@ public class MailModule {
 	@At
 	public Object download(@Param("url") final String url, @Param("fileName") final String fileName,
 			HttpServletRequest request, HttpServletResponse response) {
-		return mailService.download(url, fileName, request, response);
+		return mailService.downloadTemplate(request, response);
 	}
 }

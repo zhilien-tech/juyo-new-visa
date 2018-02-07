@@ -117,7 +117,9 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		} else if (CompanyTypeEnum.DIJI.intKey() == comType) {
 			user.setUserType(UserLoginEnum.DJ_COMPANY_ADMIN.intKey());//地接社公司管理员
 		} else if (CompanyTypeEnum.SONGQIANSIMPLE.intKey() == comType) {
-			user.setUserType(UserLoginEnum.JJ_COMPANY_ADMIN.intKey());//地接社公司管理员
+			user.setUserType(UserLoginEnum.JJ_COMPANY_ADMIN.intKey());//送签社精简公司管理员
+		} else if (CompanyTypeEnum.BIGCUSTOMER.intKey() == comType) {
+			user.setUserType(UserLoginEnum.BIG_COMPANY_ADMIN.intKey());//大客户公司管理员
 		}
 		TUserEntity insertUser = dbDao.insert(user);
 

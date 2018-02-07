@@ -52,7 +52,8 @@
 	padding-left:15px;
 	font-size:15px;
 	color:#FFF;
-	curcor:pointer;
+	cursor:pointer;
+	margin-right:20px;
 }
 .closeWindow:hover {
 	background:rgba(0,0,0,.1);
