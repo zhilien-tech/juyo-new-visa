@@ -933,6 +933,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		visa.setMainRelation(applyJp.getMainRelation());
 		visa.setMarryStatus(apply.getMarryStatus());
 		visa.setMarryUrl(apply.getMarryUrl());
+		visa.setApplicantId(apply.getId());
 		visa.setName(workJp.getName());
 		visa.setRelationRemark(applyJp.getRelationRemark());
 		visa.setSameMainWealth(applyJp.getSameMainWealth());

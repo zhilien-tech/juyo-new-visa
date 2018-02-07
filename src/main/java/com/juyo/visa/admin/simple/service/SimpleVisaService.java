@@ -372,9 +372,24 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		sql.setParam("orderid", orderid);
 		List<Record> travelplans = dbDao.query(sql, null, null);
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		int count = 1;
+		String prehotelname = "";
 		for (Record record : travelplans) {
 			Date outdate = (Date) record.get("outdate");
 			record.put("outdate", format.format(outdate));
+			if (count > 1) {
+				if (!Util.isEmpty(record.get("hotelname"))) {
+					String hotelname = (String) record.get("hotelname");
+					if (hotelname.equals(prehotelname)) {
+						record.put("hotelname", "同上");
+					}
+				}
+			}
+			count++;
+			if (!Util.isEmpty(record.get("hotelname"))) {
+				prehotelname = (String) record.get("hotelname");
+			}
+
 		}
 		return travelplans;
 	}
@@ -527,7 +542,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					tripinfo.getReturnDepartureCity(), tripinfo.getReturnArrivedCity() };
 			citylist = dbDao.query(TCityEntity.class, Cnd.where("id", "in", cityids), null);
 			String[] flightnums = { tripinfo.getGoFlightNum(), tripinfo.getReturnFlightNum() };
-			flightlist = dbDao.query(TFlightEntity.class, Cnd.where("flightnum", "in", flightnums), null);
+			List<TFlightEntity> flightlistpre = dbDao.query(TFlightEntity.class,
+					Cnd.where("flightnum", "in", flightnums), null);
+			for (TFlightEntity tFlightEntity : flightlistpre) {
+				if (!flightlist.contains(tFlightEntity)) {
+					flightlist.add(tFlightEntity);
+				}
+			}
 		}
 		result.put("flightlist", flightlist);
 		result.put("collarAreaEnum", EnumUtil.enum2(CollarAreaEnum.class));
@@ -1502,5 +1523,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		return visaList;
+	}
+
+	public Object cancelOrder(Long orderid) {
+		if (!Util.isEmpty(orderid)) {
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+
+		}
+		return null;
 	}
 }

@@ -71,6 +71,7 @@
 							<div class="form-group">
 								<label><span>*</span>部门：</label> 
 								<select id="departmentId" name="departmentId" class="form-control input-sm selectHeight">
+									<option value="">--请选择--</option>
 									<c:forEach items="${obj.department}" var="one">
 										<option value='${one.id}'
 											${one.id==obj.user.departmentId?'selected':''}>
@@ -83,6 +84,7 @@
 							<div class="form-group">
 								<label><span>*</span>职位：</label> 
 								<select id="jobId" name="jobId" class="form-control input-sm selectHeight">
+									<option value="">--请选择--</option>
 									<c:forEach items="${obj.job}" var="one">
 										<option value='${one.id}'
 											${one.id==obj.user.jobId?'selected':''}>
@@ -152,7 +154,7 @@
 						}
 					});
 				});
-		function initvalidate() {
+		$(function(){
 			//校验
 			$('#userUpdateForm').bootstrapValidator({
 				message : '验证不通过',
@@ -221,14 +223,14 @@
 					departmentId : {
 						validators : {
 							notEmpty : {
-								message : '所属部门id不能为空'
+								message : '所属部门不能为空'
 							}
 						}
 					},
 					jobId : {
 						validators : {
 							notEmpty : {
-								message : '用户职位id不能为空'
+								message : '用户职位不能为空'
 							}
 						}
 					},
@@ -262,77 +264,21 @@
 					},
 				}
 			});
-		}
+		});
 
 		//更新时刷新页面
 		function update() {
 			window.location.reload();
 		}
 
-		initvalidate();
-		$('#userUpdateForm').bootstrapValidator('validate');
+		//$('#userUpdateForm').bootstrapValidator('validate');
 		function save() {
+			//initvalidate();
 			$('#userUpdateForm').bootstrapValidator('validate');
 			var bootstrapValidator = $("#userUpdateForm").data(
 					'bootstrapValidator');
+			bootstrapValidator.validate();
 			if (bootstrapValidator.isValid()) {
-
-				//获取必填项信息
-				var comId = $("#comId").val();
-				if (comId == "") {
-					layer.msg('comId不能为空');
-					return;
-				}
-				var name = $("#name").val();
-				if (name == "") {
-					layer.msg('name不能为空');
-					return;
-				}
-				var mobile = $("#mobile").val();
-				if (mobile == "") {
-					layer.msg('mobile不能为空');
-					return;
-				}
-				var qq = $("#qq").val();
-				if (qq == "") {
-					layer.msg('qq不能为空');
-					return;
-				}
-				var email = $("#email").val();
-				if (email == "") {
-					layer.msg('email不能为空');
-					return;
-				}
-				var departmentId = $("#departmentId").val();
-				if (departmentId == "") {
-					layer.msg('departmentId不能为空');
-					return;
-				}
-				var jobId = $("#jobId").val();
-				if (jobId == "") {
-					layer.msg('jobId不能为空');
-					return;
-				}
-				var isDisable = $("#isDisable").val();
-				if (isDisable == "") {
-					layer.msg('isDisable不能为空');
-					return;
-				}
-				var password = $("#password").val();
-				if (password == "") {
-					layer.msg('password不能为空');
-					return;
-				}
-				var userType = $("#userType").val();
-				if (userType == "") {
-					layer.msg('userType不能为空');
-					return;
-				}
-				var lastLoginTime = $("#lastLoginTime").val();
-				if (lastLoginTime == "") {
-					layer.msg('lastLoginTime不能为空');
-					return;
-				}
 
 				$.ajax({
 					type : 'POST',
