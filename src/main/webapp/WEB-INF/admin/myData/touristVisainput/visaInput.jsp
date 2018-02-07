@@ -32,15 +32,15 @@
 			.everybody-info div:nth-child(5){width:11%;}
 			.liClose { float:right !important;}
 			.liClose a { display:block; width:40px; height:51px; cursor:pointer;}
-			.card-list{height: 87px; margin-top: 10px;}
-			.card-list:hover{height: 87px !important;min-height: 87px !important;}
 			.box-header{padding-right: 16px;}
 			.box-body{padding-top:0;}
 			.qz-head { border-bottom:2px solid #deecff; padding:15px 20px; display: table; width: 100%;}
 			.btn-sm { width:110px !important;}
-			.btn-Add { margin: 10px 15px 0 0;}
+			.btn-Add { margin: 10px 15px 10px 0;}
 			.cf { clear:both;}
-			.delete { height: 25px !important;background-position:0 !important; top:8px !important;}
+			.closed { font-size:30px; text-align:center;}
+			.edit { margin-right:20px !important;}
+			.delete { height: 25px !important;background-position:0 !important; top:8px !important; border:0 !important; margin-right:20px !important;}
 		</style>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -50,7 +50,7 @@
 					<li>签证录入</li>
 					<li class="liClose">
 						<a onclick="closeWindow()">
-							<div class="closed">X</div>
+							<div class="closed">×</div>
 						</a>
 					</li>
 				</ul>
