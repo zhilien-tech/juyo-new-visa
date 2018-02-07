@@ -185,10 +185,60 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
 		Date nowDate = DateUtil.nowDate();
-		updateForm.setOpId(userId);
-		updateForm.setUpdateTime(nowDate);
 
-		return update(updateForm);
+		int updateNum = 0;
+		long staffId = updateForm.getId();
+		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
+		if (!Util.isEmpty(staffInfo)) {
+			staffInfo.setOpId(userId);
+			staffInfo.setUpdateTime(nowDate);
+			staffInfo.setCardFront(updateForm.getCardFront());
+			staffInfo.setCardBack(updateForm.getCardBack());
+			staffInfo.setAddress(updateForm.getAddress());
+			staffInfo.setBirthday(updateForm.getBirthday());
+			if (!Util.isEmpty(updateForm.getCardProvince())) {
+				staffInfo.setCardProvince(updateForm.getCardProvince());
+			}
+			if (!Util.isEmpty(updateForm.getCardCity())) {
+				staffInfo.setCardCity(updateForm.getCardCity());
+			}
+			staffInfo.setCardId(updateForm.getCardId());
+			staffInfo.setCity(updateForm.getCity());
+			staffInfo.setDetailedAddress(updateForm.getDetailedAddress());
+			staffInfo.setEmail(updateForm.getEmail());
+			staffInfo.setFirstName(updateForm.getFirstName());
+			staffInfo.setFirstNameEn(updateForm.getFirstNameEn().substring(1));
+			staffInfo.setIssueOrganization(updateForm.getIssueOrganization());
+			staffInfo.setLastName(updateForm.getLastName());
+			staffInfo.setLastNameEn(updateForm.getLastNameEn().substring(1));
+			staffInfo.setOtherFirstName(updateForm.getOtherFirstName());
+			if (!Util.isEmpty(updateForm.getOtherFirstNameEn())) {
+				staffInfo.setOtherFirstNameEn(updateForm.getOtherFirstNameEn().substring(1));
+			}
+			staffInfo.setOtherLastName(updateForm.getOtherLastName());
+			if (!Util.isEmpty(updateForm.getOtherLastNameEn())) {
+				staffInfo.setOtherLastNameEn(updateForm.getOtherLastNameEn().substring(1));
+			}
+			staffInfo.setNation(updateForm.getNation());
+			staffInfo.setNationality(updateForm.getNationality());
+			staffInfo.setProvince(updateForm.getProvince());
+			staffInfo.setSex(updateForm.getSex());
+			staffInfo.setHasOtherName(updateForm.getHasOtherName());
+			staffInfo.setHasOtherNationality(updateForm.getHasOtherNationality());
+
+			staffInfo.setTelephone(updateForm.getTelephone());
+			if (!Util.isEmpty(updateForm.getAddressIsSameWithCard())) {
+				staffInfo.setAddressIsSameWithCard(updateForm.getAddressIsSameWithCard());
+			}
+			staffInfo.setEmergencyLinkman(updateForm.getEmergencyLinkman());
+			staffInfo.setEmergencyTelephone(updateForm.getEmergencyTelephone());
+			staffInfo.setValidEndDate(updateForm.getValidEndDate());
+			staffInfo.setValidStartDate(updateForm.getValidStartDate());
+
+			updateNum = dbDao.update(staffInfo);
+		}
+
+		return updateNum;
 	}
 
 	/**

@@ -28,6 +28,8 @@
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
+					<input id="comId" name="comId" type="hidden" value="${obj.applicant.comId }">
+					<input id="userId" name="userId" type="hidden" value="${obj.applicant.userId }">
 					<div class="col-sm-6 padding-right-0">
 						<div></div>
 						<!-- start 身份证 正面 -->

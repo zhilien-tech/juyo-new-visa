@@ -438,8 +438,7 @@ function saveApplicant(status){
 					if(status == 1){
 						//点击保存按钮
 						parent.successCallback(1);
-						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-						parent.layer.close(index);
+						closeWindow();
 					}else if(status == 2){
 						//点击右侧箭头，跳转护照信息页
 						/*parent.successCallback(4,data);

@@ -213,6 +213,7 @@ $('#uploadFile').change(function() {
 					if(str == 1){//相同
 						searchByCard();
 					}
+					
 					$('#cardProvince').val(obj.province).change();
 					$('#cardCity').val(obj.city).change();
 					$('#birthday').val(obj.birth).change();
@@ -410,7 +411,7 @@ function saveApplicant(status){
 
 		if(status == 2){
 			//向右跳转
-			
+
 		}else{
 			layer.load(1);
 			$.ajax({
@@ -427,142 +428,30 @@ function saveApplicant(status){
 	}
 }
 
-//返回 
-function closeWindow() {
-	if(userType == 2){
-		$.ajax({
-			async: false,
-			type: 'POST',
-			data : {applyid:applicantId},
-			url: BASE_PATH + '/admin/myData/infoIsChanged.html',
-			success :function(data) {
-				if(data.isPrompted == 0){//没有提示过
-					if(data.base == 0){//如果返回0则说明游客信息改变，提示是否更新
-						layer.confirm("信息已改变，您是否要更新？", {
-							title:"提示",
-							btn: ["是","否"], //按钮
-							shade: false //不显示遮罩
-						}, 
-						function(){
-							layer.msg("已同步", {
-								time: 1000,
-								end: function () {
-									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-									parent.layer.close(index);
-								}
-							});
-							//parent.cancelCallBack(1);
-							$.ajax({ 
-								url: BASE_PATH + '/admin/myVisa/copyAllInfoToTourist.html',
-								dataType:"json",
-								data:{applyid:applicantId},
-								type:'post',
-								success: function(data){
-
-								}
-							}); 
-
-							$.ajax({ 
-								url: BASE_PATH + '/admin/myVisa/saveIsOrNot.html',
-								dataType:"json",
-								data:{
-									applyid:applicantId,
-									updateOrNot : "YES"
-								},
-								type:'post',
-								success: function(data){
-
-								}
-							}); 
-						},
-						function(){
-							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-							parent.layer.close(index);
-							//parent.cancelCallBack(1);
-							$.ajax({ 
-								url: BASE_PATH + '/admin/myVisa/saveIsOrNot.html',
-								dataType:"json",
-								data:{
-									applyid:applicantId,
-									updateOrNot : "NO"
-								},
-								type:'post',
-								success: function(data){
-
-								}
-							}); 
-						});
-					}else{//信息没变
-						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-						parent.layer.close(index);
-						//parent.cancelCallBack(1);
-					}
-				}else if(data.isPrompted == 1){//提示过
-					//parent.cancelCallBack(1);
-					if(data.base == 0){//内容改变
-						if(data.isUpdated == 1){//更新
-							layer.msg("已同步", {
-								time: 1000,
-								end: function () {
-									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-									parent.layer.close(index);
-								}
-							});
-							$.ajax({ 
-								url: BASE_PATH + '/admin/myVisa/copyAllInfoToTourist.html',
-								dataType:"json",
-								data:{applyid:applicantId},
-								type:'post',
-								success: function(data){
-
-								}
-							});
-						}else{
-							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-							parent.layer.close(index);
-						}
-					}else{
-						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-						parent.layer.close(index);
-					}
-				}else{
-					var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					parent.layer.close(index);
-				}
-			}
-		});
-		parent.successCallBack();
-	}else{
-		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-		parent.layer.close(index);
-		parent.cancelCallBack(1);
-	}
-}
-
 function saveApplicant(status){
 	$("#applicantInfo").data('bootstrapValidator').destroy();
 	$("#applicantInfo").data('bootstrapValidator', null);
 	applyValidate();
 	//得到获取validator对象或实例 
 	var bootstrapValidator = $("#applicantInfo").data(
-			'bootstrapValidator');
+	'bootstrapValidator');
 	// 执行表单验证 
 	bootstrapValidator.validate();
 	if (bootstrapValidator.isValid()){
-		
-	var str="";
-	var applicantInfo;
-	$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
-	    str=$(this).val();     
-	});
-	if(str != 1){
-		applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
-	}else{
-		applicantInfo = $("#applicantInfo").serialize();
-	}
-	applicantInfo.id = applicantId;
-	
-	
+
+		var str="";
+		var applicantInfo;
+		$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+			str=$(this).val();     
+		});
+		if(str != 1){
+			applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
+		}else{
+			applicantInfo = $("#applicantInfo").serialize();
+		}
+		applicantInfo.id = applicantId;
+
+
 		if(status == 2){
 			//右箭头跳转
 		}else{
@@ -572,12 +461,13 @@ function saveApplicant(status){
 				data : applicantInfo,
 				url: BASE_PATH + '/admin/bigCustomer/updateStaffInfo.html',
 				success :function(data) {
-					layer.closeAll("loading");
-					console.log(JSON.stringify(data));
+					if(data>0){
+						parent.successCallback(2);
 						closeWindow();
-						parent.successCallBack(2);
+					}
 				}
 			});
 		}
+		layer.closeAll("loading");
 	}
 }
