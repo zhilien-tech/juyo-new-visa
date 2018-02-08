@@ -22,7 +22,7 @@ import com.juyo.visa.admin.bigcustomer.service.BigCustomerViewService;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoUpdateForm;
-import com.uxuexi.core.web.chain.support.JsonResult;
+import com.juyo.visa.forms.TAppStaffPassportUpdateForm;
 
 @IocBean
 @At("/admin/bigCustomer")
@@ -40,7 +40,7 @@ public class BigCustomerModule {
 	@GET
 	@Ok("jsp")
 	public Object list(HttpServletRequest request) {
-		return bigCustomerViewService.toList(request);
+		return bigCustomerViewService.staffList(request);
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class BigCustomerModule {
 	 */
 	/*@At
 	@Ok("jsp")
-	public Pagination list(@Param("..") final TAppStaffBasicinfoForm sqlParamForm,@Param("..") final Pager pager) {
+	public Pagination staffList(@Param("..") final TAppStaffBasicinfoForm sqlParamForm,@Param("..") final Pager pager) {
 		return bigcustomerViewService.listPage(sqlParamForm,pager);
 	}*/
 	@At
@@ -62,17 +62,8 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object add() {
+	public Object addBaseInfo() {
 		return null;
-	}
-
-	/**
-	 * 添加
-	 */
-	@At
-	@POST
-	public Object add(@Param("..") TAppStaffBasicinfoAddForm addForm) {
-		return bigCustomerViewService.add(addForm);
 	}
 
 	/**
@@ -90,7 +81,7 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object update(@Param("staffId") Integer staffId, HttpSession session) {
+	public Object updateBaseInfo(@Param("staffId") Integer staffId, HttpSession session) {
 		return bigCustomerViewService.getStaffInfo(staffId, session);
 	}
 
@@ -107,18 +98,9 @@ public class BigCustomerModule {
 	 * 删除记录
 	 */
 	@At
-	public Object delete(@Param("id") final long id) {
-		bigCustomerViewService.deleteById(id);
-		return JsonResult.success("删除成功");
-	}
-
-	/**
-	 * 批量删除记录
-	 */
-	@At
-	public Object batchDelete(@Param("ids") final Long[] ids) {
-		bigCustomerViewService.batchDelete(ids);
-		return JsonResult.success("删除成功");
+	@POST
+	public Object delete(@Param("id") final long staffId, HttpSession session) {
+		return bigCustomerViewService.deleteStaffById(staffId, session);
 	}
 
 	/**
@@ -145,4 +127,32 @@ public class BigCustomerModule {
 		return bigCustomerViewService.downloadTemplate(request, response);
 	}
 
+	/**
+	 *跳转到护照信息编辑页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object updatePassportInfo(@Param("passportId") Integer passportId, HttpSession session) {
+		return bigCustomerViewService.getPassportInfo(passportId, session);
+	}
+
+	/**
+	 * 执行护照信息保存
+	 */
+	@At
+	@POST
+	public Object saveEditPassport(@Param("..") TAppStaffPassportUpdateForm passportForm, HttpSession session) {
+		return bigCustomerViewService.saveEditPassport(passportForm, session);
+	}
+
+	/**
+	 * 护照号唯一性验证
+	 */
+	@At
+	@POST
+	public Object checkPassport(@Param("passport") String passport, @Param("passportId") Integer passportId,
+			HttpSession session) {
+		return bigCustomerViewService.checkPassport(passport, passportId, session);
+	}
 }

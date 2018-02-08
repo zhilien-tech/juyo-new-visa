@@ -302,7 +302,8 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
-		var applicantId = '${obj.staffId}';
+		var staffId = '${obj.staffId}';
+		var passportId = '${obj.passportId}';
 		var infoType = '${obj.infoType}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>

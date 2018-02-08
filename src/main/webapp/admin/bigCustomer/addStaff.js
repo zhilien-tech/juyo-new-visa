@@ -441,10 +441,11 @@ function saveApplicant(status){
 						closeWindow();
 					}else if(status == 2){
 						//点击右侧箭头，跳转护照信息页
-						/*parent.successCallback(4,data);
-						var applyId = $("#applyId").val();
-						socket.onclose();
-						window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applyId+'&orderid'+'&isTrial=0&orderProcessType='+orderProcessType+'&addApply=1';*/
+						var passportId = data.passportId;
+						if("" != passportId){
+							parent.successCallback(1);
+							window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='+passportId;
+						}
 					}
 				}
 				layer.closeAll('loading');

@@ -1,5 +1,4 @@
 $(function() {
-
 	//校验
 	$('#passportInfo').bootstrapValidator({
 		message : '验证不通过',
