@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -27,16 +31,19 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
+import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.util.ExcelReader;
-import com.juyo.visa.common.util.IpUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoUpdateForm;
+import com.juyo.visa.forms.TAppStaffPassportUpdateForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
@@ -50,15 +57,16 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 	/**
 	 * 
-	 * 跳转到 列表页
+	 * 跳转到 人员管理列表页
 	 *
 	 * @param request
 	 * @return 
 	 */
-	public Object toList(HttpServletRequest request) {
+	public Object staffList(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
-		String ipAddress = IpUtil.getIpAddr(request);
-		String downloadUrl = "http://" + ipAddress + ":8080/admin/bigCustomer/download.html";
+		String localAddr = request.getLocalAddr();
+		int localPort = request.getLocalPort();
+		String downloadUrl = "http://" + localAddr + ":" + localPort + "/admin/bigCustomer/download.html";
 		result.put("downloadurl", downloadUrl);
 		return result;
 	}
@@ -99,14 +107,32 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		Date nowDate = DateUtil.nowDate();
 
+		//基本信息
 		addForm.setComId(comId);
 		addForm.setUserId(userId);
 		addForm.setOpId(userId);
 		addForm.setCreateTime(nowDate);
 		addForm.setUpdateTime(nowDate);
-		add(addForm);
+		TAppStaffBasicinfoEntity staffInfo = add(addForm);
 
-		return JsonResult.success("添加成功");
+		//护照信息
+		Integer staffId = staffInfo.getId();
+		TAppStaffPassportEntity staffPassport = new TAppStaffPassportEntity();
+		staffPassport.setStaffId(staffId);
+		staffPassport.setOpId(userId);
+		staffPassport.setCreateTime(nowDate);
+		staffPassport.setUpdateTime(nowDate);
+		TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
+		Integer passportId = passportEntity.getId();
+
+		Map<String, String> map = JsonResult.success("添加成功");
+		if (!Util.isEmpty(passportId)) {
+			map.put("passportId", String.valueOf(passportId));
+		} else {
+			map.put("passportId", String.valueOf(""));
+		}
+
+		return map;
 	}
 
 	/**
@@ -126,7 +152,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
 
-		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		if (!Util.isEmpty(staffInfo.getBirthday())) {
 			Date birthday = staffInfo.getBirthday();
 			String birthdayStr = sdf.format(birthday);
@@ -166,10 +192,16 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			result.put("otherLastNameEn", sb.toString());
 		}
 
+		//获取护照id
+		TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
+				Cnd.where("staffId", "=", staffId));
+		Integer passportId = passportEntity.getId();
+
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("applicant", staffInfo);
 		result.put("infoType", ApplicantInfoTypeEnum.BASE.intKey());
 		result.put("staffId", staffId);
+		result.put("passportId", passportId);
 		return result;
 	}
 
@@ -262,14 +294,12 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		//当前时间
 		Date nowDate = DateUtil.nowDate();
-
 		//字符编码为utf-8
 		request.setCharacterEncoding("UTF-8");
 
 		if (file != null) {
 			InputStream is = new FileInputStream(file);
 			ExcelReader excelReader = new ExcelReader();
-			SimpleDateFormat FORMAT_DEFAULT_DATE = new SimpleDateFormat("yyyy-MM-dd");
 			//获取Excel模板第二行之后的数据
 			Map<Integer, String[]> map = excelReader.readExcelContent(is);
 
@@ -293,13 +323,30 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				baseInfo.setOpId(userId);
 				baseInfo.setCreateTime(nowDate);
 				baseInfo.setUpdateTime(nowDate);
-
 				baseInfos.add(baseInfo);
 			}
-			dbDao.insert(baseInfos);
-		}
-		return JsonResult.success("上次成功");
+			//批量添加基本信息
+			List<TAppStaffBasicinfoEntity> baseInfoLists = dbDao.insert(baseInfos);
 
+			//批量添加护照信息
+			if (!Util.isEmpty(baseInfoLists)) {
+				List<TAppStaffPassportEntity> passportInfos = Lists.newArrayList();
+				for (TAppStaffBasicinfoEntity baseEntity : baseInfoLists) {
+					if (!Util.isEmpty(baseEntity)) {
+						Integer staffId = baseEntity.getId();
+						TAppStaffPassportEntity passportEntity = new TAppStaffPassportEntity();
+						passportEntity.setStaffId(staffId);
+						passportEntity.setOpId(userId);
+						passportEntity.setCreateTime(nowDate);
+						passportEntity.setUpdateTime(nowDate);
+						passportInfos.add(passportEntity);
+					}
+				}
+				dbDao.insert(passportInfos);
+			}
+		}
+
+		return JsonResult.success("添加成功");
 	}
 
 	/**
@@ -341,7 +388,152 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			}
 		}
 		return JsonResult.success("下载成功");
+	}
+
+	/**
+	 * 
+	 * 获取护照信息 
+	 *
+	 * @param passportId 护照id
+	 * @param session
+	 * @return 
+	 */
+	public Object getPassportInfo(Integer passportId, HttpSession session) {
+
+		Map<String, Object> result = MapUtil.map();
+
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		result.put("userType", userType);
+
+		String passportSqlstr = sqlManager.get("bigCustomer_staff_passport");
+		Sql passportSql = Sqls.create(passportSqlstr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tasp.id", "=", passportId);
+		passportSql.setCondition(cnd);
+		Record passport = dbDao.fetch(passportSql);
+
+		//格式化日期
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		if (!Util.isEmpty(passport.get("birthday"))) {
+			Date goTripDate = (Date) passport.get("birthday");
+			passport.put("birthday", format.format(goTripDate));
+		}
+		if (!Util.isEmpty(passport.get("validEndDate"))) {
+			Date goTripDate = (Date) passport.get("validEndDate");
+			passport.put("validEndDate", format.format(goTripDate));
+		}
+		if (!Util.isEmpty(passport.get("issuedDate"))) {
+			Date goTripDate = (Date) passport.get("issuedDate");
+			passport.put("issuedDate", format.format(goTripDate));
+		}
+
+		result.put("passport", passport);
+		result.put("infoType", ApplicantInfoTypeEnum.PASSPORT.intKey());
+		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
+		return result;
+	}
+
+	public Object saveEditPassport(TAppStaffPassportUpdateForm passportForm, HttpSession session) {
+
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		Date nowDate = DateUtil.nowDate();
+		long passortId = passportForm.getId();
+		if (!Util.isEmpty(passortId)) {
+
+			TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
+					Cnd.where("id", "=", passortId));
+
+			passport.setOpId(userId);
+			passport.setPassportUrl(passportForm.getPassportUrl());
+			passport.setOCRline1(passportForm.getOCRline1());
+			passport.setOCRline2(passportForm.getOCRline2());
+			passport.setBirthAddress(passportForm.getBirthAddress());
+			passport.setBirthAddressEn(passportForm.getBirthAddressEn());
+			passport.setBirthday(passportForm.getBirthday());
+			passport.setIssuedDate(passportForm.getIssuedDate());
+			passport.setIssuedOrganization(passportForm.getIssuedOrganization());
+			passport.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
+			passport.setIssuedPlace(passportForm.getIssuedPlace());
+			passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
+			passport.setPassport(passportForm.getPassport());
+			passport.setSex(passportForm.getSex());
+			passport.setSexEn(passportForm.getSexEn());
+			passport.setType(passportForm.getType());
+			passport.setValidEndDate(passportForm.getValidEndDate());
+			passport.setValidStartDate(passportForm.getValidStartDate());
+			passport.setValidType(passportForm.getValidType());
+			passport.setUpdateTime(nowDate);
+			dbDao.update(passport);
+		}
+
+		return JsonResult.success("更新成功");
+	}
+
+	/**
+	 * 
+	 * 删除基本信息
+	 *
+	 * @param staffId 基本信息id
+	 * @return 
+	 */
+	public Object deleteStaffById(long staffId, HttpSession session) {
+
+		//当前登录公司
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();
+
+		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
+		Integer staffComId = staffInfo.getComId();
+
+		if (Util.eq(comId, staffComId)) {
+			//删除护照信息
+			TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
+					Cnd.where("staffId", "=", staffId));
+			if (!Util.isEmpty(passport)) {
+				dbDao.delete(passport);
+			}
+
+			//删除基本信息
+			if (!Util.isEmpty(staffInfo)) {
+				dbDao.delete(passport);
+			}
+
+			return JsonResult.success("删除成功");
+		} else {
+			return JsonResult.error("权限不足");
+		}
 
 	}
 
+	/**
+	 * 
+	 * 护照号 唯一性校验
+	 *
+	 * @param passport 护照号
+	 * @param session
+	 * @return 
+	 */
+	public Object checkPassport(String passport, Integer passportId, HttpSession session) {
+		Map<String, Object> result = MapUtil.map();
+
+		//当前登录公司
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();
+
+		String passportSqlstr = sqlManager.get("bigCustomer_staff_checkPassport");
+		Sql passportSql = Sqls.create(passportSqlstr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tasb.comid", "=", comId);
+		cnd.and("tasp.passport", "=", passport);
+
+		if (!Util.isEmpty(passportId)) {
+			cnd.and("tasp.id", "!=", passportId);
+		}
+		List<Record> passportInfo = dbDao.query(passportSql, cnd, null);
+		result.put("valid", passportInfo.size() <= 0);
+
+		return result;
+	}
 }
