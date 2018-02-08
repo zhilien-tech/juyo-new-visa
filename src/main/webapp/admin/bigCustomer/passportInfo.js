@@ -247,6 +247,7 @@ function save(status){
 					data : passportInfo,
 					url: '/admin/bigCustomer/saveEditPassport',
 					success :function(data) {
+						console.log(data);
 						if(data.status == 200){
 							closeWindow();
 							parent.successCallback(2);
@@ -292,5 +293,4 @@ function visaBtn(){
 function closeWindow() {
 	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	parent.layer.close(index);
-	parent.cancelCallBack(1);
 }
