@@ -22,6 +22,7 @@ import com.juyo.visa.admin.bigcustomer.service.BigCustomerViewService;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoUpdateForm;
+import com.juyo.visa.forms.TAppStaffPassportUpdateForm;
 import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
@@ -146,4 +147,12 @@ public class BigCustomerModule {
 		return bigCustomerViewService.getPassportInfo(passportId, session);
 	}
 
+	/**
+	 * 执行护照信息保存
+	 */
+	@At
+	@POST
+	public Object saveEditPassport(@Param("..") TAppStaffPassportUpdateForm passportForm, HttpSession session) {
+		return bigCustomerViewService.saveEditPassport(passportForm, session);
+	}
 }

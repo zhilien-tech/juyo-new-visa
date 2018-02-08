@@ -65,7 +65,7 @@
 									<span>点击上传护照</span>
 									<input id="passportUrl" name="passportUrl" type="hidden" value="${obj.passport.passportUrl }"/>
 									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
-									<img id="sqImg" alt="" src="${obj.passport.passportUrl }" >
+									<img id="sqImg" alt="" src="${obj.passport.passporturl }" >
 									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 								</div>
 							</div>
@@ -82,11 +82,11 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>类型</label>
-									<input id="id" name="id" type="hidden" value="${obj.passport.id }"/>
+									<input id="id" name="id" type="hidden" value="${obj.passport.possportid }"/>
 									<input id="OCRline1" name="OCRline1" type="hidden" value="">
 									<input id="OCRline2" name="OCRline2" type="hidden" value="">
 									<input name="userType" type="hidden" value="${obj.userType }"/>
-									<input id="staffId" name="staffId" type="hidden" value="${obj.passport.staffId }"/>
+									<input id="staffId" name="staffId" type="hidden" value="${obj.passport.staffid }"/>
 									<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
 								</div>
 							</div>

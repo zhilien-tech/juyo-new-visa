@@ -23,6 +23,7 @@ SELECT
 	tasp.lastNameEn,
 	tasp.type,
 	tasp.passport,
+	tasp.passportUrl,
 	tasp.sex,
 	tasp.sexEn,
 	tasp.birthAddress,

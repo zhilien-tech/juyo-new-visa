@@ -31,6 +31,7 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
+import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.util.ExcelReader;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
@@ -39,6 +40,7 @@ import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoUpdateForm;
+import com.juyo.visa.forms.TAppStaffPassportUpdateForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.MapUtil;
@@ -412,8 +414,45 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		result.put("passport", passport);
 		result.put("infoType", ApplicantInfoTypeEnum.PASSPORT.intKey());
-
+		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		return result;
+	}
+
+	public Object saveEditPassport(TAppStaffPassportUpdateForm passportForm, HttpSession session) {
+
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		Date nowDate = DateUtil.nowDate();
+		long passortId = passportForm.getId();
+		if (!Util.isEmpty(passortId)) {
+
+			TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
+					Cnd.where("id", "=", passortId));
+
+			passport.setOpId(loginUser.getId());
+			passport.setPassportUrl(passportForm.getPassportUrl());
+			passport.setOCRline1(passportForm.getOCRline1());
+			passport.setOCRline2(passportForm.getOCRline2());
+			passport.setBirthAddress(passportForm.getBirthAddress());
+			passport.setBirthAddressEn(passportForm.getBirthAddressEn());
+			passport.setBirthday(passportForm.getBirthday());
+			passport.setIssuedDate(passportForm.getIssuedDate());
+			passport.setIssuedOrganization(passportForm.getIssuedOrganization());
+			passport.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
+			passport.setIssuedPlace(passportForm.getIssuedPlace());
+			passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
+			passport.setPassport(passportForm.getPassport());
+			passport.setSex(passportForm.getSex());
+			passport.setSexEn(passportForm.getSexEn());
+			passport.setType(passportForm.getType());
+			passport.setValidEndDate(passportForm.getValidEndDate());
+			passport.setValidStartDate(passportForm.getValidStartDate());
+			passport.setValidType(passportForm.getValidType());
+			passport.setUpdateTime(new Date());
+			dbDao.update(passport);
+		}
+
+		return JsonResult.success("更新成功");
 	}
 
 }
