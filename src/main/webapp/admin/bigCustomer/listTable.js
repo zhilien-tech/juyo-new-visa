@@ -80,12 +80,14 @@ function initDatatable() {
 			            	}
 			            } 	
 		            },
-		            {"data": " ", "bSortable": false, "width":120,
+		            {"data": " ", "bSortable": false, 
 		            	render: function(data, type, row, meta) {
-		            		var baseInfo = '<a style="cursor:pointer;" class="edit-icon" onclick="baseInfo('+row.staffid+');"></a>';
-		            		var passport = '<a style="cursor:pointer;" class="edit-icon" onclick="passport('+row.passportid+');"></a>';
-		            		var judge = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.staffid+');"></a>';
-		            		return baseInfo+passport+judge;
+		            		var updateApplicant = '<a style="cursor:pointer;" class="updateApplicant" onclick="baseInfo('+row.staffid+');"></a>';
+		            		var passport = '<a style="cursor:pointer;" class="passport" onclick="passport('+row.passportid+');"></a>';
+		            		var visa = '<a class="visa" onclick=""></a>';
+		            		var otherVisa = '<a class="otherVisa" onclick=""></a>';
+		            		var deleteIcon = '<a style="cursor:pointer;" class="deleteIcon" onclick="deleteById('+row.staffid+');"></a>';
+		            		return updateApplicant+passport+visa+otherVisa+deleteIcon;
 		            	}	
 		            } 
 		            ],
@@ -103,7 +105,7 @@ function add(){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
+		area: ['900px', '80%'],
 		content: BASE_PATH + '/admin/bigCustomer/addBaseInfo.html'
 	});
 }
@@ -117,7 +119,7 @@ function baseInfo(id){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
+		area: ['900px', '80%'],
 		content: BASE_PATH + '/admin/bigCustomer/updateBaseInfo.html?staffId='+id
 	});
 }
@@ -132,7 +134,7 @@ function passport(id){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
+		area: ['900px', '80%'],
 		content: BASE_PATH + '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
 	});
 }
