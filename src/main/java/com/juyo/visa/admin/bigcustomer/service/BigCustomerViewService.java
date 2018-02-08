@@ -31,6 +31,7 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
+import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.util.ExcelReader;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
@@ -190,6 +191,16 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			StringBuffer sb = new StringBuffer();
 			sb.append("/").append(staffInfo.getOtherLastNameEn());
 			result.put("otherLastNameEn", sb.toString());
+		}
+
+		if (Util.isEmpty(staffInfo.getHasOtherName())) {
+			//是否有曾用名
+			staffInfo.setHasOtherName(IsHasOrderOrNotEnum.NO.intKey());
+		}
+
+		if (Util.isEmpty(staffInfo.getHasOtherNationality())) {
+			//是否另有国籍
+			staffInfo.setHasOtherNationality(IsHasOrderOrNotEnum.NO.intKey());
 		}
 
 		//获取护照id
