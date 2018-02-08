@@ -89,7 +89,7 @@
 											<input type="radio" name="hasOtherName" class="nameBefore" value="1"/>是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherName" class="nameBefore"   value="2"/>否
+											<input type="radio" name="hasOtherName" class="nameBefore" value="2"/>否
 										</span>
 									</div>
 								</div>
