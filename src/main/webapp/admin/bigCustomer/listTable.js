@@ -82,9 +82,10 @@ function initDatatable() {
 		            },
 		            {"data": " ", "bSortable": false, "width":120,
 		            	render: function(data, type, row, meta) {
-		            		var modify = '<a style="cursor:pointer;" class="edit-icon" onclick="edit('+row.staffid+');"></a>';
+		            		var baseInfo = '<a style="cursor:pointer;" class="edit-icon" onclick="baseInfo('+row.staffid+');"></a>';
+		            		var passport = '<a style="cursor:pointer;" class="edit-icon" onclick="passport('+row.passportid+');"></a>';
 		            		var judge = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.staffid+');"></a>';
-		            		return modify+judge;
+		            		return baseInfo+passport+judge;
 		            	}	
 		            } 
 		            ],
@@ -92,7 +93,7 @@ function initDatatable() {
 	});
 }
 
-/* layer添加 */
+/* 基本信息添加 */
 function add(){
 	layer.open({
 		type: 2,
@@ -103,11 +104,11 @@ function add(){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '550px'],
-		content: BASE_PATH + '/admin/bigCustomer/add.html'
+		content: BASE_PATH + '/admin/bigCustomer/addBaseInfo.html'
 	});
 }
-/* layer编辑 */
-function edit(id){
+/* 基本信息编辑 */
+function baseInfo(id){
 	layer.open({
 		type: 2,
 		title: false,
@@ -117,7 +118,22 @@ function edit(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '550px'],
-		content: BASE_PATH + '/admin/bigCustomer/update.html?staffId='+id
+		content: BASE_PATH + '/admin/bigCustomer/updateBaseInfo.html?staffId='+id
+	});
+}
+
+/* 护照信息编辑 */
+function passport(id){
+	layer.open({
+		type: 2,
+		title: false,
+		closeBtn:false,
+		fix: false,
+		maxmin: false,
+		shadeClose: false,
+		scrollbar: false,
+		area: ['900px', '550px'],
+		content: BASE_PATH + '/admin/bigCustomer/passportInfo.html?passportId='+id
 	});
 }
 

@@ -6,7 +6,8 @@ SELECT
 	tasb.email,
 	tasb.department,
 	tasb.job,
-	tasp.passport 
+	tasp.passport,
+	tasp.id passportId
 FROM
 	t_app_staff_basicinfo tasb
 	LEFT JOIN t_app_staff_passport tasp ON tasp.staffId = tasb.id

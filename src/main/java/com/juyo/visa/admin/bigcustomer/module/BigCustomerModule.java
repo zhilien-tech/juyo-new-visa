@@ -39,7 +39,7 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object list(HttpServletRequest request) {
+	public Object staffList(HttpServletRequest request) {
 		return bigCustomerViewService.toList(request);
 	}
 
@@ -48,7 +48,7 @@ public class BigCustomerModule {
 	 */
 	/*@At
 	@Ok("jsp")
-	public Pagination list(@Param("..") final TAppStaffBasicinfoForm sqlParamForm,@Param("..") final Pager pager) {
+	public Pagination staffList(@Param("..") final TAppStaffBasicinfoForm sqlParamForm,@Param("..") final Pager pager) {
 		return bigcustomerViewService.listPage(sqlParamForm,pager);
 	}*/
 	@At
@@ -62,17 +62,8 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object add() {
+	public Object addBaseInfo() {
 		return null;
-	}
-
-	/**
-	 * 添加
-	 */
-	@At
-	@POST
-	public Object add(@Param("..") TAppStaffBasicinfoAddForm addForm) {
-		return bigCustomerViewService.add(addForm);
 	}
 
 	/**
@@ -90,7 +81,7 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object update(@Param("staffId") Integer staffId, HttpSession session) {
+	public Object updateBaseInfo(@Param("staffId") Integer staffId, HttpSession session) {
 		return bigCustomerViewService.getStaffInfo(staffId, session);
 	}
 
