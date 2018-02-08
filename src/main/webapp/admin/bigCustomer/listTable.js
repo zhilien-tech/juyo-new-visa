@@ -133,7 +133,7 @@ function passport(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '550px'],
-		content: BASE_PATH + '/admin/bigCustomer/passportInfo.html?passportId='+id
+		content: BASE_PATH + '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
 	});
 }
 

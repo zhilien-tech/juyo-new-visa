@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -28,7 +32,6 @@ import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.util.ExcelReader;
-import com.juyo.visa.common.util.IpUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -38,6 +41,7 @@ import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoUpdateForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
@@ -51,15 +55,16 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 	/**
 	 * 
-	 * 跳转到 列表页
+	 * 跳转到 人员管理列表页
 	 *
 	 * @param request
 	 * @return 
 	 */
-	public Object toList(HttpServletRequest request) {
+	public Object staffList(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
-		String ipAddress = IpUtil.getIpAddr(request);
-		String downloadUrl = "http://114.215.195.220:8080/admin/bigCustomer/download.html";
+		String localAddr = request.getLocalAddr();
+		int localPort = request.getLocalPort();
+		String downloadUrl = "http://" + localAddr + ":" + localPort + "/admin/bigCustomer/download.html";
 		result.put("downloadurl", downloadUrl);
 		return result;
 	}
@@ -137,7 +142,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
 
-		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		if (!Util.isEmpty(staffInfo.getBirthday())) {
 			Date birthday = staffInfo.getBirthday();
 			String birthdayStr = sdf.format(birthday);
@@ -367,7 +372,48 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			}
 		}
 		return JsonResult.success("下载成功");
+	}
 
+	/**
+	 * 
+	 * 获取护照信息 TODO
+	 *
+	 * @param passportId 护照id
+	 * @param session
+	 * @return 
+	 */
+	public Object getPassportInfo(Integer passportId, HttpSession session) {
+
+		Map<String, Object> result = MapUtil.map();
+
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		result.put("userType", userType);
+
+		String passportSqlstr = sqlManager.get("bigCustomer_staff_passport");
+		Sql passportSql = Sqls.create(passportSqlstr);
+		passportSql.setParam("tasp.id", passportId);
+		Record passport = dbDao.fetch(passportSql);
+
+		//格式化日期
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		if (!Util.isEmpty(passport.get("birthday"))) {
+			Date goTripDate = (Date) passport.get("birthday");
+			passport.put("birthday", format.format(goTripDate));
+		}
+		if (!Util.isEmpty(passport.get("validEndDate"))) {
+			Date goTripDate = (Date) passport.get("validEndDate");
+			passport.put("validEndDate", format.format(goTripDate));
+		}
+		if (!Util.isEmpty(passport.get("issuedDate"))) {
+			Date goTripDate = (Date) passport.get("issuedDate");
+			passport.put("issuedDate", format.format(goTripDate));
+		}
+
+		result.put("passport", passport);
+		result.put("infoType", ApplicantInfoTypeEnum.PASSPORT.intKey());
+
+		return result;
 	}
 
 }

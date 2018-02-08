@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<c:set var="url" value="${base}/admin/orderJp" />
+<c:set var="url" value="${base}/admin/bigCustomer" />
 <!DOCTYPE HTML>
 <html lang="en-US" id="addHtml">
 <head>
@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appAddStaff.css">
 	<style>
 	img[src=""],img:not([src]) { opacity:0;}
 	input[type="file"] { z-index:99999;}
@@ -45,7 +45,7 @@
 		<a id="toVisa" class="rightNav" onclick="visaBtn();">
 			<span></span>
 		</a>
-		<a id="toApply" class="leftNav" onclick="applyBtn();">
+		<a id="toBase" class="leftNav" onclick="baseBtn();">
 			<span></span>
 		</a>
 		<form id="passportInfo">
@@ -53,24 +53,10 @@
 				<span class="heading">护照信息</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
-				<c:choose>
-						<c:when test="${(obj.orderStatus > 4 && obj.orderStatus < 9 )|| (obj.orderStatus ==88 && obj.isTrailOrder==1)}"> 
-							<input id="unqualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right Unqualified btn-margin" value="不合格" />
-							<input id="qualifiedBtn" style="display:none" type="button"  class="btn btn-primary pull-right btn-sm btn-right qualified btn-margin" value="合格" />
-						</c:when>
-						<c:otherwise> 
-						</c:otherwise>
-					</c:choose>
 			</div>
 			<div class="modal-body">
-			<div class="ipt-info">
-					<input id="passRemark" name="passRemark" placeholder="请输入不合格原因" type="text" value="${obj.unqualified.passRemark }" class="NoInfo" />
-				</div>
 				<div class="tab-content row">
 					<div class="col-sm-5 padding-right-0">
-						<div class="info-QRcode"> <!-- 二维码 -->
-							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
-						</div><!-- end 二维码 -->
 						
 						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
 							<div class="col-xs-6 mainWidth">
@@ -78,7 +64,7 @@
 								<div class="cardFront-div">
 									<span>点击上传护照</span>
 									<input id="passportUrl" name="passportUrl" type="hidden" value="${obj.passport.passportUrl }"/>
-									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
 									<img id="sqImg" alt="" src="${obj.passport.passportUrl }" >
 									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 								</div>
@@ -96,23 +82,18 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>类型</label>
-									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
-									<input type="hidden" id="OCRline1" name="OCRline1" value="">
-									<input type="hidden" id="OCRline2" name="OCRline2" value="">
-									<input type="hidden" name="userType" value="${obj.userType }"/>
-									<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
-									<input type="hidden"  name="addApply" value="${obj.addApply }"/>
-									<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
-									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+									<input id="id" name="id" type="hidden" value="${obj.passport.id }"/>
+									<input id="OCRline1" name="OCRline1" type="hidden" value="">
+									<input id="OCRline2" name="OCRline2" type="hidden" value="">
+									<input name="userType" type="hidden" value="${obj.userType }"/>
+									<input id="staffId" name="staffId" type="hidden" value="${obj.passport.staffId }"/>
 									<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
-									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth">
 									<label><span>*</span>护照号</label>
 									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
-									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div><!-- end 类型/护照号 -->
@@ -120,21 +101,16 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0 ">
 								<div class="form-group">
 									<label><span>*</span>性别</label>
-									<%-- <input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.sex }"/> --%>
 									<select class="form-control input-sm selectHeight" id="sex" name="sex">
-										<%-- <c:forEach var="map" items="${obj.boyOrGirlEnum}">
-												<option value="${map.key}" ${map.key==obj.passport.sex?'selected':''}>${map.value}</option>
-											</c:forEach> --%>
-											<option value="男" ${obj.passport.sex == "男"?"selected":"" }>男</option>
+										<option value="男" ${obj.passport.sex == "男"?"selected":"" }>男</option>
 										<option value="女" ${obj.passport.sex == "女"?"selected":"" }>女</option>
 									</select>
-									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<input id="sexEn" class="form-control input-sm" name="sexEn" type="text" value="${obj.passport.sexEn }"/>
+									<input id="sexEn" name="sexEn" class="form-control input-sm" type="text" value="${obj.passport.sexEn }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
@@ -142,7 +118,6 @@
 									<label><span>*</span>出生地点/拼音</label>
 									<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
 									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:32px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
-									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div><!-- end 性别/出生地点 拼音 -->
@@ -151,24 +126,25 @@
 								<div class="form-group">
 									<label><span>*</span>出生日期</label>
 									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.birthday}"/>
-									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth" style="position:relative;">
-									<label><span>*</span>签发地点/拼音</label>
+									<label>
+										<span>*</span>签发地点/拼音
+									</label>
 									<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
 									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:32px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
-									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div><!-- end 出生日期/签发地点 拼音 -->
 						<div class="row"><!-- 签发日期/有效期至 -->
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>签发日期</label>
+									<label>
+										<span>*</span>签发日期
+									</label>
 									<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedDate }"/>
-									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
@@ -183,16 +159,19 @@
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth">
-									<label><span>*</span>有效期至</label>
+									<label>
+										<span>*</span>有效期至
+									</label>
 									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.validEndDate }"/>
-									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div><!-- end 签发日期/有效期至 -->
 						<div class="row none"><!-- 签发机关 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>签发机关</label>
+									<label>
+										<span>*</span>签发机关
+									</label>
 									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
 								</div>
 							</div>
@@ -202,7 +181,6 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
-									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div>
@@ -210,24 +188,12 @@
 						
 				</div>
 			</div>
-			<!-- 订单流程枚举 -->
-			<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
 		</form>
 	</div>
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
-		var userType = '${obj.userType}';
-		var isTrail = '${obj.isTrailOrder}';
-		var sessionId = '${obj.sessionid}';
-		var localAddr = '${obj.localAddr}';
-		var localPort = '${obj.localPort}';
-		var websocketaddr = '${obj.websocketaddr}';
-		var applicantId = '${obj.applicantId}';
-        var orderid = '${obj.orderid}';
-        var addApply = '${obj.addApply}';
-        var orderProcessType = '${obj.orderProcessType}';
-        var orderJpId = '${obj.orderJpId}';
+		var staffId = '${obj.passport.staffId}';
 		var infoType = '${obj.infoType}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
@@ -241,9 +207,10 @@
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script type="text/javascript" src="${base}/admin/orderJp/passportInfo.js"></script>
-	
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+	
+	<!-- 本页面js -->
+	<script type="text/javascript" src="${base}/admin/bigCustomer/passportInfo.js"></script>
 	
 	
 	<script type="text/javascript">

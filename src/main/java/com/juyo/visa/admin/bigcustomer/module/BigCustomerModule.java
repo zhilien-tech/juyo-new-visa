@@ -39,8 +39,8 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object staffList(HttpServletRequest request) {
-		return bigCustomerViewService.toList(request);
+	public Object list(HttpServletRequest request) {
+		return bigCustomerViewService.staffList(request);
 	}
 
 	/**
@@ -134,6 +134,16 @@ public class BigCustomerModule {
 	@At
 	public Object download(HttpServletRequest request, HttpServletResponse response) {
 		return bigCustomerViewService.downloadTemplate(request, response);
+	}
+
+	/**
+	 *跳转到护照信息编辑页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object updatePassportInfo(@Param("passportId") Integer passportId, HttpSession session) {
+		return bigCustomerViewService.getPassportInfo(passportId, session);
 	}
 
 }
