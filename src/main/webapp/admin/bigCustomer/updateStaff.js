@@ -407,7 +407,7 @@ function saveApplicant(status){
 		}else{
 			applicantInfo = $("#applicantInfo").serialize();
 		}
-		applicantInfo.id = applicantId;
+		applicantInfo.id = staffId;
 
 		if(status == 2){
 			//向右跳转
@@ -449,11 +449,18 @@ function saveApplicant(status){
 		}else{
 			applicantInfo = $("#applicantInfo").serialize();
 		}
-		applicantInfo.id = applicantId;
-
+		applicantInfo.id = staffId;
 
 		if(status == 2){
 			//右箭头跳转
+			window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='+passportId;
+			$.ajax({
+				type: 'POST',
+				data : applicantInfo,
+				url: BASE_PATH + '/admin/bigCustomer/updateStaffInfo.html',
+				success :function(data) {
+				}
+			});
 		}else{
 			layer.load(1);
 			$.ajax({

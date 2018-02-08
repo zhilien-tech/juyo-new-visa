@@ -122,9 +122,17 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		staffPassport.setOpId(userId);
 		staffPassport.setCreateTime(nowDate);
 		staffPassport.setUpdateTime(nowDate);
-		dbDao.insert(staffPassport);
+		TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
+		Integer passportId = passportEntity.getId();
 
-		return JsonResult.success("添加成功");
+		Map<String, String> map = JsonResult.success("添加成功");
+		if (!Util.isEmpty(passportId)) {
+			map.put("passportId", String.valueOf(passportId));
+		} else {
+			map.put("passportId", String.valueOf(""));
+		}
+
+		return map;
 	}
 
 	/**
@@ -184,10 +192,16 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			result.put("otherLastNameEn", sb.toString());
 		}
 
+		//获取护照id
+		TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
+				Cnd.where("staffId", "=", staffId));
+		Integer passportId = passportEntity.getId();
+
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("applicant", staffInfo);
 		result.put("infoType", ApplicantInfoTypeEnum.BASE.intKey());
 		result.put("staffId", staffId);
+		result.put("passportId", passportId);
 		return result;
 	}
 
@@ -429,7 +443,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
 					Cnd.where("id", "=", passortId));
 
-			passport.setOpId(loginUser.getId());
+			passport.setOpId(userId);
 			passport.setPassportUrl(passportForm.getPassportUrl());
 			passport.setOCRline1(passportForm.getOCRline1());
 			passport.setOCRline2(passportForm.getOCRline2());
@@ -448,7 +462,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			passport.setValidEndDate(passportForm.getValidEndDate());
 			passport.setValidStartDate(passportForm.getValidStartDate());
 			passport.setValidType(passportForm.getValidType());
-			passport.setUpdateTime(new Date());
+			passport.setUpdateTime(nowDate);
 			dbDao.update(passport);
 		}
 
