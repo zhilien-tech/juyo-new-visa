@@ -136,7 +136,6 @@ function passport(id){
 		scrollbar: false,
 		area: ['900px', '550px'],
 		content: BASE_PATH + '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
->>>>>>> refs/remotes/origin/dev
 	});
 }
 
