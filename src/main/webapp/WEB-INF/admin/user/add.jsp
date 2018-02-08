@@ -68,7 +68,7 @@
 							<div class="form-group">
 								<label><span>*</span>部门：</label> 
 								<select id="departmentId" name="departmentId" class="form-control input-sm selectHeight" onchange="selectListData();">
-									<option>--请选择--</option>
+									<option value="">--请选择--</option>
 									<c:forEach var="map" items="${obj.department}">
 										<option value="${map.id}">${map.deptName}</option>
 									</c:forEach>
@@ -79,7 +79,7 @@
 							<div class="form-group">
 								<label><span>*</span>职位：</label> 
 								<select id="jobId" name="jobId" class="form-control input-sm selectHeight">
-									<option>--请选择--</option>
+									<option value="">--请选择--</option>
 								</select>
 							</div>
 						</div>

@@ -66,21 +66,6 @@
 		var applicantId = '${obj.applicantId}';
 		function fillIn(){
 			window.location.href = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid&isTrial=0';
-			$("#layui-layer2").css({"width":"900px","height":"551px","top":"0px"});
-			/* layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['400px', '251px'],
-				content:'${base}/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid&isTrial=0',
-				success : function(index, layero){
-					console.log(index);
-				}
-			}); */
 		}
 		
 		function cancelBtn(){

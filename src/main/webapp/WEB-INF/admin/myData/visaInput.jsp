@@ -92,8 +92,7 @@
 		<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 		<script type="text/javascript">
 		var orderobj;
-		var applyid = '${obj.applyid}';
-		var orderJpId = '${obj.orderJpId}';
+		var userid = '${obj.userId}';
 		new Vue({
 			el: '#card',
 			data: {
@@ -101,11 +100,11 @@
 			},
 			created:function(){
 		        orderobj=this;
-		        var url = '${base}/admin/visaJapan/getJpVisaInputListData.html';
+		        var url = '${base}/admin/touristVisa/getTouristVisaInput.html';
 		        $.ajax({ 
 		        	url: url,
 		        	dataType:"json",
-		        	data:{applyid:applyid},
+		        	data:{userId:userid},
 		        	type:'post',
 		        	success: function(data){
 		        		orderobj.visaInputData = data.visaInputData;

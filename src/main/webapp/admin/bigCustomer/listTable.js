@@ -80,11 +80,14 @@ function initDatatable() {
 			            	}
 			            } 	
 		            },
-		            {"data": " ", "bSortable": false, "width":120,
+		            {"data": " ", "bSortable": false, 
 		            	render: function(data, type, row, meta) {
-		            		var modify = '<a style="cursor:pointer;" class="edit-icon" onclick="edit('+row.id+');"></a>';
-		            		var judge = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.id+');"></a>';
-		            		return modify+judge;
+		            		var updateApplicant = '<a style="cursor:pointer;" class="updateApplicant" onclick="baseInfo('+row.staffid+');"></a>';
+		            		var passport = '<a style="cursor:pointer;" class="passport" onclick="passport('+row.passportid+');"></a>';
+		            		var visa = '<a class="visa" onclick=""></a>';
+		            		var otherVisa = '<a class="otherVisa" onclick=""></a>';
+		            		var deleteIcon = '<a style="cursor:pointer;" class="deleteIcon" onclick="deleteById('+row.staffid+');"></a>';
+		            		return updateApplicant+passport+visa+otherVisa+deleteIcon;
 		            	}	
 		            } 
 		            ],
@@ -92,7 +95,7 @@ function initDatatable() {
 	});
 }
 
-/* layer添加 */
+/* 基本信息添加 */
 function add(){
 	layer.open({
 		type: 2,
@@ -102,12 +105,12 @@ function add(){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
-		content: BASE_PATH + '/admin/bigCustomer/add.html'
+		area: ['900px', '80%'],
+		content: BASE_PATH + '/admin/bigCustomer/addBaseInfo.html'
 	});
 }
-/* layer编辑 */
-function edit(id){
+/* 基本信息编辑 */
+function baseInfo(id){
 	layer.open({
 		type: 2,
 		title: false,
@@ -116,8 +119,23 @@ function edit(id){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
-		content: BASE_PATH + '/admin/bigCustomer/update.html?id='+id
+		area: ['900px', '80%'],
+		content: BASE_PATH + '/admin/bigCustomer/updateBaseInfo.html?staffId='+id
+	});
+}
+
+/* 护照信息编辑 */
+function passport(id){
+	layer.open({
+		type: 2,
+		title: false,
+		closeBtn:false,
+		fix: false,
+		maxmin: false,
+		shadeClose: false,
+		scrollbar: false,
+		area: ['900px', '80%'],
+		content: BASE_PATH + '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
 	});
 }
 
@@ -138,11 +156,17 @@ function deleteById(id) {
 			dataType : 'json',
 			url : url,
 			success : function(data) {
-				layer.msg("删除成功",{time:2000});
-				datatable.ajax.reload();
+				var message = data.message;
+				console.log(data);
+				if(data.status == '200'){
+					successCallback(4);
+				}else{
+					layer.msg(message);
+				}
+				
 			},
 			error : function(xhr) {
-				layer.msg("删除失败",{time:2000});
+				layer.msg("删除失败");
 			}
 		});
 	}, function(){
@@ -166,6 +190,8 @@ function successCallback(status){
 		layer.msg("编辑成功");
 	}else if(status==3){
 		layer.msg("上传成功");
+	}else if(status==4){
+		layer.msg("删除成功");
 	}
 	 var param = {
 		"searchStr": ""

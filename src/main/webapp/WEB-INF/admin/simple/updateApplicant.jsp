@@ -14,37 +14,8 @@
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
-<style type="text/css">
-.modal-content { position:relative; }
-.modal-body { padding:15px 72px 15px 20px; height:100%; margin-top:50px;overflow-y:hidden;}
-.modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
-.NoInfo { width:100%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
-.ipt-info { display:none; }
-.Unqualified, .qualified  { margin-right:10px; }
-.info-imgUpload { margin-top:35px;}
-.nameBeforeYes { margin-right:20px; }
-.onceIDYes { margin-right:30px; }
-.nameBeforeHide , .nationalityHide{ display:none; }
-.nationalityHide { width:35%;}
-.wordSpell { display:none; margin-top:3px !important;}
-.rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
-.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
-.leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
-.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
-.nationalityHide { margin-left:3%;}
-.row { margin-top:3px; margin-bottom:10px;}
-.nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
-.btn-margin { margin-top:10px;}
-#sqImg ,#sqImgBack { width:335px;}
-.delete { z-index:1099;}
-.marginL { margin-left:30px;}
-.nameBeforeTop { margin-left:30px;}
-img[src=""],img:not([src]) { opacity:0;}
-input[type="file"] { z-index:999;}
-.widthBig { width:100%;}
-#uploadFile , #uploadFileBack { width:100% !important; }
-#sqImg ,#sqImgBack { z-index:1000;}
-</style>
+<!-- 本页css -->
+<link rel="stylesheet" href="${base}/references/common/css/liteUpdateApplicant.css">
 </head>
 <body>
 	<div class="modal-content">

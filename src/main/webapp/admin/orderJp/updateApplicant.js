@@ -33,6 +33,14 @@ $(function(){
 						}
 					}
 				},
+				cardId : {
+					validators : {
+						regexp: {
+							regexp: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+							message: '身份证号格式错误'
+						}
+					}
+				},
 				emergencyTelephone : {
 					validators : {
 						regexp: {
@@ -60,12 +68,19 @@ $(function(){
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
-
 				telephone : {
 					validators : {
 						regexp: {
 							regexp: /^[1][34578][0-9]{9}$/,
 							message: '手机号格式错误'
+						}
+					}
+				},
+				cardId : {
+					validators : {
+						regexp: {
+							regexp: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+							message: '身份证号格式错误'
 						}
 					}
 				},
@@ -1094,6 +1109,7 @@ $(".qualified").click(function(){
 		}
 	});
 });
+
 //保存申请人基本信息
 function saveApplicant(status){
 	$("#applicantInfo").data('bootstrapValidator').destroy();

@@ -149,7 +149,7 @@ SET
 	tb.city=ta.city,tb.detailedAddress=ta.detailedAddress,tb.otherFirstName=ta.otherFirstName,tb.otherFirstNameEn=ta.otherFirstNameEn,
 	tb.otherLastName=ta.otherLastName,tb.otherLastNameEn=ta.otherLastNameEn,tb.emergencyLinkman=ta.emergencyLinkman,tb.emergencyTelephone=ta.emergencyTelephone,
 	tb.cardProvince=ta.cardProvince,tb.cardCity=ta.cardCity,tb.hasOtherName=ta.hasOtherName,tb.hasOtherNationality=ta.hasOtherNationality,
-	tb.addressIsSameWithCard=ta.addressIsSameWithCard,tb.nationality=ta.nationality
+	tb.addressIsSameWithCard=ta.addressIsSameWithCard,tb.nationality=ta.nationality,tb.applicantId=ta.id
 	$condition
 
 /*copyPassToTourist*/
@@ -157,7 +157,7 @@ UPDATE
 	t_tourist_passport tp,t_applicant_passport ta
 SET 
 	tp.type=ta.type,tp.passport=ta.passport,tp.sex=ta.sex,tp.sexEn=ta.sexEn,tp.birthAddress=ta.birthAddress,tp.issuedDate=ta.issuedDate,tp.validType=ta.validType,tp.passportUrl=ta.passportUrl,
-	tp.birthAddressEn=ta.birthAddressEn,tp.birthday=ta.birthday,tp.issuedPlace=ta.issuedPlace,tp.issuedPlaceEn=ta.issuedPlaceEn,tp.validEndDate=ta.validEndDate,tp.validStartDate=ta.validStartDate
+	tp.birthAddressEn=ta.birthAddressEn,tp.birthday=ta.birthday,tp.issuedPlace=ta.issuedPlace,tp.issuedPlaceEn=ta.issuedPlaceEn,tp.validEndDate=ta.validEndDate,tp.validStartDate=ta.validStartDate,tp.applicantId=ta.applicantId
 	$condition
 	
 /*copyBaseToPersonnel*/

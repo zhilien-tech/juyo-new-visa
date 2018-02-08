@@ -1,0 +1,33 @@
+.modal-content { position:relative; }
+.modal-body { padding:15px 72px 15px 20px; height:100%; margin-top:50px;overflow-y:hidden;}
+.modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
+.NoInfo { width:100%; height:30px; margin-left:3.5%; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
+.ipt-info { display:none; }
+.Unqualified, .qualified  { margin-right:10px; }
+.info-imgUpload { margin-top:35px;}
+.nameBeforeYes { margin-right:20px; }
+.onceIDYes { margin-right:30px; }
+.nameBeforeHide , .nationalityHide{ display:none; }
+.nationalityHide { width:35%;}
+.wordSpell { display:none; margin-top:3px !important;}
+.rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
+.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
+.nationalityHide { margin-left:3%;}
+.row { margin-top:8.3px;}
+.nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
+.btn-margin { margin-top:10px;}
+#sqImg ,#sqImgBack { width:335px;}
+.delete { z-index:1000000;}
+.marginL { margin-left:30px;}
+.nameBeforeTop { margin-left:30px;}
+img[src=""],img:not([src]) { opacity:0;}
+input[type="file"] { z-index:99999;}
+#sqImg { z-index:999999;}
+#sqImgBack { z-index:999999;}
+.IdInfo { border:1px solid #7a9cd3;}
+.IdInfo li { padding-left:2%;}
+.IdInfo li:hover { background:#1e90ff; cursor:pointer;}
+.IdInfo li:hover a { color:#FFF;}
+.IdInfo li a { color:#000;}
+.mainWidth { width:100% !important;}
+#uploadFile,#uploadFileBack { width:100% !important;}

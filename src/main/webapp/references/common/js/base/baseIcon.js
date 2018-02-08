@@ -154,6 +154,29 @@
 		var t = "发短信";
 		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
 	});
+	$(document).on("mouseover",".updateApplicant",function(){
+		var t = "基本信息";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});
+	
+	$(document).on("mouseover",".passport",function(){
+		var t = "护照信息";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});
+	
+	$(document).on("mouseover",".visa",function(){
+		var t = "签证信息";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});
+	
+	$(document).on("mouseover",".otherVisa",function(){
+		var t = "其他证件";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});
+	$(document).on("mouseover",".deleteIcon",function(){
+		var t = "删除";
+		layer.tips("<span style='font-size:12px;height:20px;line-height:20px;'>"+t+"</span>", ($(this)),{ tips: [1, '#242d34'],time:1000});
+	});
 	/*--------------------end card---------------------*/
 	
 	
