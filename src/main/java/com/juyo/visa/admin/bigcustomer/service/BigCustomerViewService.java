@@ -408,7 +408,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		String passportSqlstr = sqlManager.get("bigCustomer_staff_passport");
 		Sql passportSql = Sqls.create(passportSqlstr);
-		passportSql.setParam("tasp.id", passportId);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tasp.id", "=", passportId);
+		passportSql.setCondition(cnd);
 		Record passport = dbDao.fetch(passportSql);
 
 		//格式化日期
@@ -503,5 +505,35 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			return JsonResult.error("权限不足");
 		}
 
+	}
+
+	/**
+	 * 
+	 * 护照号 唯一性校验
+	 *
+	 * @param passport 护照号
+	 * @param session
+	 * @return 
+	 */
+	public Object checkPassport(String passport, Integer passportId, HttpSession session) {
+		Map<String, Object> result = MapUtil.map();
+
+		//当前登录公司
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();
+
+		String passportSqlstr = sqlManager.get("bigCustomer_staff_checkPassport");
+		Sql passportSql = Sqls.create(passportSqlstr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tasb.comid", "=", comId);
+		cnd.and("tasp.passport", "=", passport);
+
+		if (!Util.isEmpty(passportId)) {
+			cnd.and("tasp.id", "!=", passportId);
+		}
+		List<Record> passportInfo = dbDao.query(passportSql, cnd, null);
+		result.put("valid", passportInfo.size() <= 0);
+
+		return result;
 	}
 }

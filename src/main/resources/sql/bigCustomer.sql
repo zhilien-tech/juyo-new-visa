@@ -41,3 +41,15 @@ FROM
 	t_app_staff_passport tasp
 	INNER JOIN t_app_staff_basicinfo tasb ON tasb.id = tasp.staffId
 	$condition
+
+/*bigCustomer_staff_checkPassport*/
+SELECT
+	tasb.id staffid,
+	tasp.id passportid,
+	tasb.comid,
+	CONCAT( tasb.firstname, tasb.lastname ) NAME,
+	tasp.passport 
+FROM
+	t_app_staff_basicinfo tasb
+	INNER JOIN t_app_staff_passport tasp ON tasp.staffId = tasb.id 
+	$condition

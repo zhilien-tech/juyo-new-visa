@@ -145,4 +145,14 @@ public class BigCustomerModule {
 	public Object saveEditPassport(@Param("..") TAppStaffPassportUpdateForm passportForm, HttpSession session) {
 		return bigCustomerViewService.saveEditPassport(passportForm, session);
 	}
+
+	/**
+	 * 护照号唯一性验证
+	 */
+	@At
+	@POST
+	public Object checkPassport(@Param("passport") String passport, @Param("passportId") Integer passportId,
+			HttpSession session) {
+		return bigCustomerViewService.checkPassport(passport, passportId, session);
+	}
 }

@@ -12,7 +12,7 @@ $(function() {
 				trigger:"change keyup",
 				validators : {
 					remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
-						url: '/admin/orderJp/checkPassport.html',
+						url: '/admin/bigCustomer/checkPassport.html',
 						async:false,
 						message: '护照号已存在，请重新输入',//提示消息
 						delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
@@ -21,8 +21,7 @@ $(function() {
 						data: function(validator) {
 							return {
 								passport:$('#passport').val(),
-								adminId:$('#id').val(),
-								orderid:$('#orderid').val()
+								passportId:$('#id').val()
 							};
 						}
 					}
