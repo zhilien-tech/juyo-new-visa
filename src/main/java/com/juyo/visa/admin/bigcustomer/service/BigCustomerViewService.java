@@ -273,14 +273,12 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		//当前时间
 		Date nowDate = DateUtil.nowDate();
-
 		//字符编码为utf-8
 		request.setCharacterEncoding("UTF-8");
 
 		if (file != null) {
 			InputStream is = new FileInputStream(file);
 			ExcelReader excelReader = new ExcelReader();
-			SimpleDateFormat FORMAT_DEFAULT_DATE = new SimpleDateFormat("yyyy-MM-dd");
 			//获取Excel模板第二行之后的数据
 			Map<Integer, String[]> map = excelReader.readExcelContent(is);
 
@@ -304,11 +302,12 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				baseInfo.setOpId(userId);
 				baseInfo.setCreateTime(nowDate);
 				baseInfo.setUpdateTime(nowDate);
-
 				baseInfos.add(baseInfo);
 			}
 			//批量添加基本信息
 			List<TAppStaffBasicinfoEntity> baseInfoLists = dbDao.insert(baseInfos);
+
+			//批量添加护照信息
 			if (!Util.isEmpty(baseInfoLists)) {
 				List<TAppStaffPassportEntity> passportInfos = Lists.newArrayList();
 				for (TAppStaffBasicinfoEntity baseEntity : baseInfoLists) {
@@ -322,12 +321,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 						passportInfos.add(passportEntity);
 					}
 				}
-				//批量添加护照信息
 				dbDao.insert(passportInfos);
 			}
 		}
-		return JsonResult.success("添加成功");
 
+		return JsonResult.success("添加成功");
 	}
 
 	/**
