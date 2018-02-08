@@ -154,8 +154,14 @@ function deleteById(id) {
 			dataType : 'json',
 			url : url,
 			success : function(data) {
-				layer.msg("删除成功");
-				datatable.ajax.reload();
+				var message = data.message;
+				console.log(data);
+				if(data.status == '200'){
+					successCallback(4);
+				}else{
+					layer.msg(message);
+				}
+				
 			},
 			error : function(xhr) {
 				layer.msg("删除失败");
@@ -182,6 +188,8 @@ function successCallback(status){
 		layer.msg("编辑成功");
 	}else if(status==3){
 		layer.msg("上传成功");
+	}else if(status==4){
+		layer.msg("删除成功");
 	}
 	 var param = {
 		"searchStr": ""

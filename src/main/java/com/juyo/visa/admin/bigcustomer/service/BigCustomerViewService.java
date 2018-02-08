@@ -392,7 +392,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 	/**
 	 * 
-	 * 获取护照信息 TODO
+	 * 获取护照信息 
 	 *
 	 * @param passportId 护照id
 	 * @param session
@@ -469,4 +469,39 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		return JsonResult.success("更新成功");
 	}
 
+	/**
+	 * 
+	 * 删除基本信息
+	 *
+	 * @param staffId 基本信息id
+	 * @return 
+	 */
+	public Object deleteStaffById(long staffId, HttpSession session) {
+
+		//当前登录公司
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();
+
+		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
+		Integer staffComId = staffInfo.getComId();
+
+		if (Util.eq(comId, staffComId)) {
+			//删除护照信息
+			TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
+					Cnd.where("staffId", "=", staffId));
+			if (!Util.isEmpty(passport)) {
+				dbDao.delete(passport);
+			}
+
+			//删除基本信息
+			if (!Util.isEmpty(staffInfo)) {
+				dbDao.delete(passport);
+			}
+
+			return JsonResult.success("删除成功");
+		} else {
+			return JsonResult.error("权限不足");
+		}
+
+	}
 }

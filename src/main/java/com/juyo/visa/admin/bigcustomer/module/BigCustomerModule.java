@@ -23,7 +23,6 @@ import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoUpdateForm;
 import com.juyo.visa.forms.TAppStaffPassportUpdateForm;
-import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 @At("/admin/bigCustomer")
@@ -99,18 +98,9 @@ public class BigCustomerModule {
 	 * 删除记录
 	 */
 	@At
-	public Object delete(@Param("id") final long id) {
-		bigCustomerViewService.deleteById(id);
-		return JsonResult.success("删除成功");
-	}
-
-	/**
-	 * 批量删除记录
-	 */
-	@At
-	public Object batchDelete(@Param("ids") final Long[] ids) {
-		bigCustomerViewService.batchDelete(ids);
-		return JsonResult.success("删除成功");
+	@POST
+	public Object delete(@Param("id") final long staffId, HttpSession session) {
+		return bigCustomerViewService.deleteStaffById(staffId, session);
 	}
 
 	/**
