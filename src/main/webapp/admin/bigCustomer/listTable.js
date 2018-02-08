@@ -80,11 +80,14 @@ function initDatatable() {
 			            	}
 			            } 	
 		            },
-		            {"data": " ", "bSortable": false, "width":120,
+		            {"data": " ", "bSortable": false, 
 		            	render: function(data, type, row, meta) {
-		            		var modify = '<a style="cursor:pointer;" class="edit-icon" onclick="edit('+row.staffid+');"></a>';
-		            		var judge = '<a style="cursor:pointer;" class="delete-icon" onclick="deleteById('+row.staffid+');"></a>';
-		            		return modify+judge;
+		            		var updateApplicant = '<a style="cursor:pointer;" class="updateApplicant" onclick="edit('+row.staffid+');"></a>';
+		            		var passport = '<a style="cursor:pointer;" class="passport" onclick=""></a>';
+		            		var visa = '<a class="visa" onclick=""></a>';
+		            		var otherVisa = '<a class="otherVisa" onclick=""></a>';
+		            		var deleteIcon = '<a style="cursor:pointer;" class="deleteIcon" onclick="deleteById('+row.staffid+');"></a>';
+		            		return updateApplicant+passport+visa+otherVisa+deleteIcon;
 		            	}	
 		            } 
 		            ],
@@ -102,7 +105,7 @@ function add(){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
+		area: ['900px', '80%'],
 		content: BASE_PATH + '/admin/bigCustomer/add.html'
 	});
 }
@@ -116,7 +119,7 @@ function edit(id){
 		maxmin: false,
 		shadeClose: false,
 		scrollbar: false,
-		area: ['900px', '550px'],
+		area: ['900px', '80%'],
 		content: BASE_PATH + '/admin/bigCustomer/update.html?staffId='+id
 	});
 }

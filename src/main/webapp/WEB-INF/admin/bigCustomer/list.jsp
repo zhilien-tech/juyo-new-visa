@@ -73,6 +73,7 @@
 		<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 		<script src="${base}/references/common/js/layer/layer.js"></script>
 		<script src="${base}/references/common/js/upload/jquery.uploadify.min.js"></script>
+		<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 		<!-- 公用js文件 -->
 		<script src="${base}/references/common/js/base/base.js"></script>
 		<!-- 引入DataTables JS -->
