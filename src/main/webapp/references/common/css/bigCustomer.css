@@ -4,7 +4,7 @@
 .searchInfo { display:inline-block; outline:none; width:40%;color:#555; background-color:#FFF; border:1px solid #ededed; padding:5px 10px;font-size:12px;border-radius:3px;}
 .groupLeft { float:left;width:50%;}
 .groupRight { float:right; width:50%; text-align:right;}
-.bigBtn { width: 80px; display: inline-block; text-align: center; height: 30px; line-height: 30px; background: rgb(24,155,212); color: #FFF; border-radius: 5px; font-size: 14px; margin-left: 3%;cursor:pointer; text-decoration:none;}
+.bigBtn { width: 80px; display: inline-block; text-align: center; height: 30px; line-height: 30px; background: rgb(99,164,243); color: #FFF; border-radius: 5px; font-size: 14px; margin-left: 3%;cursor:pointer; text-decoration:none;}
 .bigUploadBtn { position: relative; text-indent: 0;}
 #uploadFile { position: absolute !important; font-size: 16px; left: 0 !important; top: 0 !important; opacity: 0; width:80px;height:30px;}
 .bigBtn:hover { color:#FFF;}
