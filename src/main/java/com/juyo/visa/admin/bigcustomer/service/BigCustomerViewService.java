@@ -30,6 +30,7 @@ import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.util.ExcelReader;
 import com.juyo.visa.common.util.IpUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
@@ -99,12 +100,22 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		Date nowDate = DateUtil.nowDate();
 
+		//基本信息
 		addForm.setComId(comId);
 		addForm.setUserId(userId);
 		addForm.setOpId(userId);
 		addForm.setCreateTime(nowDate);
 		addForm.setUpdateTime(nowDate);
-		add(addForm);
+		TAppStaffBasicinfoEntity staffInfo = add(addForm);
+
+		//护照信息
+		Integer staffId = staffInfo.getId();
+		TAppStaffPassportEntity staffPassport = new TAppStaffPassportEntity();
+		staffPassport.setStaffId(staffId);
+		staffPassport.setOpId(userId);
+		staffPassport.setCreateTime(nowDate);
+		staffPassport.setUpdateTime(nowDate);
+		dbDao.insert(staffPassport);
 
 		return JsonResult.success("添加成功");
 	}
@@ -296,9 +307,26 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 				baseInfos.add(baseInfo);
 			}
-			dbDao.insert(baseInfos);
+			//批量添加基本信息
+			List<TAppStaffBasicinfoEntity> baseInfoLists = dbDao.insert(baseInfos);
+			if (!Util.isEmpty(baseInfoLists)) {
+				List<TAppStaffPassportEntity> passportInfos = Lists.newArrayList();
+				for (TAppStaffBasicinfoEntity baseEntity : baseInfoLists) {
+					if (!Util.isEmpty(baseEntity)) {
+						Integer staffId = baseEntity.getId();
+						TAppStaffPassportEntity passportEntity = new TAppStaffPassportEntity();
+						passportEntity.setStaffId(staffId);
+						passportEntity.setOpId(userId);
+						passportEntity.setCreateTime(nowDate);
+						passportEntity.setUpdateTime(nowDate);
+						passportInfos.add(passportEntity);
+					}
+				}
+				//批量添加护照信息
+				dbDao.insert(passportInfos);
+			}
 		}
-		return JsonResult.success("上次成功");
+		return JsonResult.success("添加成功");
 
 	}
 
