@@ -274,6 +274,12 @@
 											placeholder=" "  value="<fmt:formatDate value="${obj.orderinfo.outVisaDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>送签编号：</label>
+										<input id="sendvisanum" type="text" class="form-control input-sm" value="${obj.orderinfo.sendVisaNum }"/>
+									</div>
+								</div>
 							</div>
 							<!-- end 送签时间/出签时间 -->
 						</div>

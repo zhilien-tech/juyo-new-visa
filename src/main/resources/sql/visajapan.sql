@@ -2,6 +2,7 @@
 SELECT
 	toj.id,
 	tr.orderNum japanNumber,
+	tr.sendvisanum,
 	toj.acceptDesign number,
 	DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
 	DATE_FORMAT(tr.outVisaDate, '%Y-%m-%d') signingTime,

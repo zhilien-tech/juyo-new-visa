@@ -49,8 +49,9 @@ public class SimpleMobileModule {
 	 */
 	@At
 	@POST
-	public Object savePassportInfo(@Param("..") TApplicantPassportLowerEntity passportinfo) {
-		return simpleMobileService.savePassportInfo(passportinfo);
+	public Object savePassportInfo(@Param("..") TApplicantPassportLowerEntity passportinfo,
+			@Param("..") MobileApplicantForm form) {
+		return simpleMobileService.savePassportInfo(passportinfo, form);
 	}
 
 	/**
