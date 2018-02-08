@@ -75,7 +75,7 @@
 						<div class="card-list" v-for="data in visaJapanData">
 							<div class="card-head">
 								<div><label>订单号：</label><span><a v-on:click="visaDetail(data.id)" href="javascript:;">{{data.japannumber}}</a></span></div>	
-								<div><label>送签编号：</label><span>{{data.number}}</span></div>	
+								<div><label>送签编号：</label><span>{{data.sendvisanum}}</span></div>	
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	

@@ -72,4 +72,6 @@ public class AddOrderForm {
 	private Date outvisadate;
 
 	private Integer customerid;
+
+	private String sendvisanum;
 }

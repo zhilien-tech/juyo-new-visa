@@ -100,6 +100,8 @@ function saveAddOrder(status){
 	orderinfo.sendvisadate = sendvisadate;
 	var outvisadate = $('#outVisaDate').val();
 	orderinfo.outvisadate = outvisadate;
+	var sendvisanum = $('#sendvisanum').val();
+	orderinfo.sendvisanum = sendvisanum;
 	var customerid = $('#customerid').val();
 	orderinfo.customerid = customerid;
 	$.ajax({
