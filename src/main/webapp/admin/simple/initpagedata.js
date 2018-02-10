@@ -189,3 +189,11 @@ $(document).on("input","#stayday",function(){
 		});
 	}
 });
+$(document).on("focus",".select2-search__field",function(){
+	var thisval = $(this).val();
+	if(!thisval){
+		$(this).val(' ');
+		$(this).trigger("input");
+		$(this).val('');
+	}
+});

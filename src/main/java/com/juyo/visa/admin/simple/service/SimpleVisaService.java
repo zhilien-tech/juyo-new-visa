@@ -32,6 +32,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
+import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.admin.simple.form.AddOrderForm;
 import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
@@ -51,6 +52,7 @@ import com.juyo.visa.common.enums.JobStatusPreschoolEnum;
 import com.juyo.visa.common.enums.JobStatusRetirementEnum;
 import com.juyo.visa.common.enums.JobStatusStudentEnum;
 import com.juyo.visa.common.enums.JobStatusWorkingEnum;
+import com.juyo.visa.common.enums.JpOrderSimpleEnum;
 import com.juyo.visa.common.enums.MainApplicantRelationEnum;
 import com.juyo.visa.common.enums.MainApplicantRemarkEnum;
 import com.juyo.visa.common.enums.MainOrViceEnum;
@@ -109,6 +111,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	private QrCodeService qrCodeService;
 	@Inject
 	private UserViewService userViewService;
+	@Inject
+	private OrderJpViewService orderJpViewService;
 
 	/**
 	 *列表页数据展示
@@ -515,6 +519,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		} else {
 			dbDao.insert(orderjptrip);
 		}
+		//添加日志下单
+		orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
 		return null;
 	}
 
@@ -825,7 +831,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			dbDao.update(passport);
 		} else {
 			Integer orderjpid = form.getOrderid();
-			if (!Util.isEmpty(orderjpid)) {
+			if (Util.isEmpty(orderjpid)) {
 				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
 				orderjpid = generrateorder.get("orderjpid");
 			}
@@ -854,7 +860,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			result.put("orderid", applicantjp.getOrderId());
 		}
 		//int update = dbDao.update(passport);
-		return null;
+		return result;
 	}
 
 	/**
@@ -1670,7 +1676,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
 		result.put("sessionid", session.getId());
-		return null;
+		return result;
 
 	}
 }

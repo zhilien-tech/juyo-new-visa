@@ -414,3 +414,12 @@ function initFlightByInterface(departuredate,departurecity,arrivedcity){
 		}
 	});
 }
+//select2自动查询
+$(document).on("focus",".select2-search__field",function(){
+	var thisval = $(this).val();
+	if(!thisval){
+		$(this).val(' ');
+		$(this).trigger("input");
+		$(this).val('');
+	}
+});

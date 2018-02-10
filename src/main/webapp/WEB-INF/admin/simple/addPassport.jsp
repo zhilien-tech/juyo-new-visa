@@ -122,7 +122,7 @@
 							 	<div class="form-group groupWidth" style="position:relative;">
 									<label><span>*</span>出生地点/拼音</label>
 									<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " value=""/>
-									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:30px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
+									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:30px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -148,7 +148,7 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发日期</label>
-									<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value="<fmt:formatDate value="" pattern="yyyy-MM-dd" />"/>
+									<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -463,17 +463,15 @@
 				data : passportInfo,
 				url: '${base}/admin/simple/saveEditPassport.html',
 				success :function(data) {
-					window.parent.document.getElementById("orderid").value = data.orderjpid;
 					layer.closeAll("loading");
+					window.parent.document.getElementById("orderid").value = data.orderid;
 					console.log(JSON.stringify(data));
 					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					layer.close(index); */
 					if(status == 2){
 						socket.onclose();
-						window.location.href = '/admin/simple/updateApplicant.html?applicantid='+data.applicantid+'&orderid='+data.orderjpid;
-					}
-					if(status == 1){
-						parent.successCallBack(1);
+						window.location.href = '/admin/simple/updateApplicant.html?applicantid='+data.applicantid+'&orderid='+data.orderid;
+					}else if(status == 1){
 						closeWindow();
 					}
 				}

@@ -191,7 +191,7 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 			dbDao.update(passportinfo);
 		} else {
 			Integer orderjpid = form.getOrderid();
-			if (!Util.isEmpty(orderjpid)) {
+			if (Util.isEmpty(orderjpid)) {
 				TUserEntity loginUser = new TUserEntity();
 				if (!Util.isEmpty(form.getUserid())) {
 					loginUser = dbDao.fetch(TUserEntity.class, form.getUserid().longValue());
