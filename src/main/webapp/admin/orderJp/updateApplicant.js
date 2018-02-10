@@ -369,20 +369,9 @@ function applyValidate(){
 						}
 					}
 				},
-				emergencyLinkman : {
-					trigger:"change keyup",
-					validators : {
-						notEmpty : {
-							message : '紧急联系人姓名不能为空'
-						}
-					}
-				},
 				emergencyTelephone : {
 					trigger:"change keyup",
 					validators : {
-						notEmpty : {
-							message : '紧急联系人手机不能为空'
-						},
 						regexp: {
 	                	 	regexp: /^[1][34578][0-9]{9}$/,
 	                        message: '手机号格式错误'
