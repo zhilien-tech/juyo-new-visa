@@ -13,7 +13,7 @@ function addApplicant(){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '80%'],
-		content:'/admin/simple/addApplicant.html?orderid='+orderid
+		content:'/admin/simple/addPassport.html?orderid='+orderid
 	});
 }
 

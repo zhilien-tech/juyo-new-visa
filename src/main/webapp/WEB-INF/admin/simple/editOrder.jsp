@@ -63,9 +63,15 @@
 				<span class="">状态：
 					<p>下单</p>
 				</span> <input type="button" value="取消"
-					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> <input type="button"
-					value="保存" class="btn btn-primary btn-sm pull-right"
-					onclick="saveAddOrder(2);" />
+					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
+					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="saveAddOrder(2);" />
+					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
+					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/>
+					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(22)"/>
+					<input type="button" value="招宝变更" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(19)"/>
+					<input type="button" value="发招宝" class="btn btn-primary btn-sm pull-right" onclick="sendzhaobao()"/>
+					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue()"/>
+					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log()"/>
 				<input type="hidden" id="orderid" name="orderid" value="${obj.orderjpinfo.id }"/>
 			</div>
 			<section class="content">
@@ -103,7 +109,9 @@
 											<select id="compName"
 												name="name" class="form-control select2 cityselect2 "
 												multiple="multiple" data-placeholder="">
-												<option value="${obj.customerinfo.name }" selected="selected">${obj.customerinfo.name }</option>
+												<c:if test="${not empty obj.customerinfo.name }">
+													<option value="${obj.customerinfo.name }" selected="selected">${obj.customerinfo.name }</option>
+												</c:if>
 											</select>
 										</div>
 									</div>
@@ -113,7 +121,9 @@
 											<select id="comShortName"
 												name="shortname" class="form-control select2 cityselect2 "
 												multiple="multiple" data-placeholder="">
-												<option value="${obj.customerinfo.shortname }" selected="selected">${obj.customerinfo.shortname }</option>
+												<c:if test="${not empty obj.customerinfo.shortname }">
+													<option value="${obj.customerinfo.shortname }" selected="selected">${obj.customerinfo.shortname }</option>
+												</c:if>
 											</select>
 										</div>
 									</div>
@@ -502,11 +512,13 @@
 	</div>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var orderid = '${obj.orderjpinfo.id}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script>
+	<script src="${base}/references/public/plugins/jquery.fileDownload.js"></script>
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
@@ -658,6 +670,91 @@
 			}
 			function successAddCustomer(data){
 				
+			}
+			
+			function log(orderid){//日志
+				var orderinfoid = '${obj.orderinfo.id}';
+				layer.open({
+					type: 2,
+					title: false,
+					closeBtn:false,
+					fix: false,
+					maxmin: false,
+					shadeClose: false,
+					scrollbar: false,
+					area: ['700px', '80%'],
+					content:'/admin/orderJp/log.html?id='+orderinfoid
+				});
+			}
+			//招宝变更、招宝取消、拒签
+			function sendInsurance(visastatus){
+				$.ajax({
+                 	url: '${base}/admin/visaJapan/sendInsurance',
+                 	data:{orderid:orderid,visastatus:visastatus},
+                 	dataType:"json",
+                 	type:'post',
+                 	success: function(data){
+                 		if(visastatus == 16){
+	                 		layer.msg('发招宝');
+                 		}else if(visastatus == 19){
+	                 		layer.msg('招宝变更');
+                 		}else if(visastatus == 22){
+	                 		layer.msg('招宝取消');
+                 		}else if(visastatus == 27){
+	                 		layer.msg('报告拒签');
+                 		}
+                   	}
+                 });
+			}
+			//实收弹框
+			function revenue(){
+				layer.open({
+        		    type: 2,
+        		    title: false,
+        		    closeBtn:false,
+        		    fix: false,
+        		    maxmin: false,
+        		    shadeClose: false,
+        		    scrollbar: false,
+        		    area: ['900px', '550px'],
+        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
+        		  });
+			}
+			//发招宝
+			function sendzhaobao(){
+				$.ajax({
+                 	url: '${base}/admin/visaJapan/validateInfoIsFull.html',
+                 	data:{orderjpid:orderid},
+                 	dataType:"json",
+                 	type:'post',
+                 	async:false,
+                 	success: function(data){
+                 		var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
+                 		if(data.data){
+                 			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data;
+                 		}
+		        		layer.open({
+		        		    type: 2,
+		        		    title: false,
+		        		    closeBtn:false,
+		        		    fix: false,
+		        		    maxmin: false,
+		        		    shadeClose: false,
+		        		    scrollbar: false,
+		        		    area: ['400px', '300px'],
+		        		    content: url
+		        		  });
+                   	}
+                 });
+			}
+			function downLoadFile(){
+				$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=${obj.orderinfo.id}", {
+			        successCallback: function (url) {
+			        },
+			        failCallback: function (html, url) {
+			       		layer.msg('下载失败');
+			        }
+			    });
 			}
 		</script>
 </body>
