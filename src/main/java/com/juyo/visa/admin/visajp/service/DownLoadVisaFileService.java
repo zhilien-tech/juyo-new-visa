@@ -1079,7 +1079,15 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("name_en", (!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : " ")
 					+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : " "));
 			//性别
-			map.put("gender", !Util.isEmpty(record.get("sex")) ? record.getString("sex") : "");
+			String sex = "";
+			if (!Util.isEmpty(record.get("sex"))) {
+				if ("男".equals(record.getString("sex"))) {
+					sex = "1";
+				} else {
+					sex = "2";
+				}
+			}
+			map.put("gender", sex);
 			//居住地域
 			map.put("city", !Util.isEmpty(record.get("city")) ? record.getString("city") : "");
 			//生年月日
