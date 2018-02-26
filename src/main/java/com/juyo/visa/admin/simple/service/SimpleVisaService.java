@@ -32,6 +32,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
+import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.admin.simple.form.AddOrderForm;
 import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
@@ -51,6 +52,7 @@ import com.juyo.visa.common.enums.JobStatusPreschoolEnum;
 import com.juyo.visa.common.enums.JobStatusRetirementEnum;
 import com.juyo.visa.common.enums.JobStatusStudentEnum;
 import com.juyo.visa.common.enums.JobStatusWorkingEnum;
+import com.juyo.visa.common.enums.JpOrderSimpleEnum;
 import com.juyo.visa.common.enums.MainApplicantRelationEnum;
 import com.juyo.visa.common.enums.MainApplicantRemarkEnum;
 import com.juyo.visa.common.enums.MainOrViceEnum;
@@ -66,6 +68,7 @@ import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
+import com.juyo.visa.entities.TApplicantVisaJpEntity;
 import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
@@ -108,6 +111,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	private QrCodeService qrCodeService;
 	@Inject
 	private UserViewService userViewService;
+	@Inject
+	private OrderJpViewService orderJpViewService;
 
 	/**
 	 *列表页数据展示
@@ -308,7 +313,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	private Map<String, Integer> generrateorder(TUserEntity user, TCompanyEntity company) {
+	public Map<String, Integer> generrateorder(TUserEntity user, TCompanyEntity company) {
 		Map<String, Integer> result = Maps.newHashMap();
 		//如果订单不存在，则先创建订单
 		TOrderEntity orderinfo = new TOrderEntity();
@@ -487,6 +492,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderinfo.setGoTripDate(form.getGoDate());
 		orderinfo.setStayDay(form.getStayday());
 		orderinfo.setBackTripDate(form.getReturnDate());
+		orderinfo.setSendVisaNum(form.getSendvisanum());
 		dbDao.update(orderinfo);
 		//更新日本订单表
 		orderjpinfo.setVisastatus(form.getVisatype());
@@ -513,6 +519,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		} else {
 			dbDao.insert(orderjptrip);
 		}
+		//添加日志下单
+		orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
 		return null;
 	}
 
@@ -780,9 +788,20 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveEditPassport(TApplicantPassportForm form, HttpServletRequest request) {
+		Map<String, Object> result = Maps.newHashMap();
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class, form.getId().longValue());
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TApplicantPassportEntity passport = new TApplicantPassportEntity();
+		if (!Util.isEmpty(form.getId())) {
+			passport = dbDao.fetch(TApplicantPassportEntity.class, form.getId().longValue());
+			TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class, passport
+					.getApplicantId().longValue());
+			result.put("applicantjpid", applicantorder.getApplicantId());
+			result.put("applicantid", applicantorder.getApplicantId());
+			result.put("orderid", applicantorder.getOrderId());
+		}
+		//TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class, form.getId().longValue());
 		passport.setOpId(loginUser.getId());
 
 		passport.setPassportUrl(form.getPassportUrl());
@@ -808,8 +827,40 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		passport.setValidStartDate(form.getValidStartDate());
 		passport.setValidType(form.getValidType());
 		passport.setUpdateTime(new Date());
-		int update = dbDao.update(passport);
-		return null;
+		if (!Util.isEmpty(form.getId())) {
+			dbDao.update(passport);
+		} else {
+			Integer orderjpid = form.getOrderid();
+			if (Util.isEmpty(orderjpid)) {
+				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
+				orderjpid = generrateorder.get("orderjpid");
+			}
+			TApplicantEntity applicantEntity = new TApplicantEntity();
+			applicantEntity.setFirstName(form.getFirstName());
+			applicantEntity.setFirstNameEn(form.getFirstNameEn());
+			applicantEntity.setLastName(form.getLastName());
+			applicantEntity.setLastNameEn(form.getLastNameEn());
+			TApplicantEntity insertapplicant = dbDao.insert(applicantEntity);
+			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+			applicantjp.setApplicantId(insertapplicant.getId());
+			applicantjp.setOrderId(orderjpid);
+			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
+			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
+			workJp.setApplicantId(insertappjp.getId());
+			workJp.setCreateTime(new Date());
+			workJp.setOpId(loginUser.getId());
+			dbDao.insert(workJp);
+			passport.setApplicantId(insertapplicant.getId());
+			dbDao.insert(passport);
+			result.put("applicantjpid", applicantjp.getApplicantId());
+			result.put("applicantid", applicantjp.getApplicantId());
+			result.put("orderid", applicantjp.getOrderId());
+		}
+		//int update = dbDao.update(passport);
+		return result;
 	}
 
 	/**
@@ -1525,11 +1576,107 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return visaList;
 	}
 
+	/**
+	 * 取消订单
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object cancelOrder(Long orderid) {
 		if (!Util.isEmpty(orderid)) {
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+			List<TOrderTravelplanJpEntity> travelplan = dbDao.query(TOrderTravelplanJpEntity.class,
+					Cnd.where("orderid", "=", orderid), null);
+			if (!Util.isEmpty(travelplan)) {
+				dbDao.delete(travelplan);
+			}
+			List<TApplicantOrderJpEntity> applicantjp = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderid", "=", orderid), null);
+			if (!Util.isEmpty(applicantjp)) {
+				Integer[] applicantids = new Integer[applicantjp.size()];
+				Integer[] applicantidjps = new Integer[applicantjp.size()];
+				int i = 0;
+				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applicantjp) {
+					applicantids[i] = tApplicantOrderJpEntity.getOrderId();
+					applicantidjps[i] = tApplicantOrderJpEntity.getId();
+					i++;
+				}
+				//签证录入删除
+				List<TApplicantVisaJpEntity> applicantvisajp = dbDao.query(TApplicantVisaJpEntity.class,
+						Cnd.where("applicantId", "in", applicantidjps), null);
+				if (!Util.isEmpty(applicantvisajp)) {
+					dbDao.delete(applicantvisajp);
+				}
+				//删除前台实收
+				List<TApplicantFrontPaperworkJpEntity> frontpaper = dbDao.query(TApplicantFrontPaperworkJpEntity.class,
+						Cnd.where("applicantId", "in", applicantidjps), null);
+				if (!Util.isEmpty(frontpaper)) {
+					dbDao.delete(frontpaper);
+				}
+				//删除签证实收
+				List<TApplicantVisaPaperworkJpEntity> visapaper = dbDao.query(TApplicantVisaPaperworkJpEntity.class,
+						Cnd.where("applicantId", "in", applicantidjps), null);
+				if (!Util.isEmpty(visapaper)) {
+					dbDao.delete(visapaper);
+				}
+				//删除财产信息
+				List<TApplicantWealthJpEntity> wealthjp = dbDao.query(TApplicantWealthJpEntity.class,
+						Cnd.where("applicantId", "in", applicantidjps), null);
+				if (!Util.isEmpty(wealthjp)) {
+					dbDao.delete(wealthjp);
+				}
+				List<TApplicantWorkJpEntity> workjp = dbDao.query(TApplicantWorkJpEntity.class,
+						Cnd.where("applicantId", "in", applicantidjps), null);
+				if (!Util.isEmpty(workjp)) {
+					dbDao.delete(workjp);
+				}
+				//删除护照信息
+				List<TApplicantPassportEntity> passport = dbDao.query(TApplicantPassportEntity.class,
+						Cnd.where("applicantId", "in", applicantids), null);
+				if (!Util.isEmpty(passport)) {
+					dbDao.delete(passport);
+				}
+				List<TApplicantEntity> applicant = dbDao.query(TApplicantEntity.class,
+						Cnd.where("id", "in", applicantids), null);
+				dbDao.delete(applicantjp);
+				dbDao.delete(applicant);
+			}
+			//删除日本订单表
+			dbDao.delete(orderjp);
+			//删除订单表
+			dbDao.delete(orderinfo);
 
 		}
 		return null;
+	}
+
+	public Object addPassport(Integer orderid, HttpServletRequest request) {
+
+		HttpSession session = request.getSession();
+		Map<String, Object> result = Maps.newHashMap();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		result.put("orderid", orderid);
+		String localAddr = request.getLocalAddr();
+		int localPort = request.getLocalPort();
+		result.put("localAddr", localAddr);
+		result.put("localPort", localPort);
+		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
+		String qrurl = "http://" + localAddr + ":" + localPort + "/simplemobile/passport.html";
+		if (Util.isEmpty(orderid)) {
+			qrurl += "?comid=" + loginCompany.getId() + "&userid=" + loginUser.getId() + "&sessionid="
+					+ session.getId();
+		} else {
+			qrurl += "?comid=" + loginCompany.getId() + "&userid=" + loginUser.getId() + "&orderid=" + orderid
+					+ "&sessionid=" + session.getId();
+		}
+		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
+		result.put("qrCode", qrCode);
+		result.put("sessionid", session.getId());
+		return result;
+
 	}
 }

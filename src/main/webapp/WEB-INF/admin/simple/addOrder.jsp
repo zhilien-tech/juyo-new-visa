@@ -216,6 +216,12 @@
 											placeholder=" "  />
 									</div>
 								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label><span>*</span>送签编号：</label>
+										<input id="sendvisanum" type="text" class="form-control input-sm"/>
+									</div>
+								</div>
 							</div>
 							<!-- end 送签时间/出签时间 -->
 						</div>
@@ -539,7 +545,17 @@
 			
 			//下单取消
 			function cancelAddOrder(){
-				window.location.href = '${base}/admin/simple/list.html';
+				var orderid = $('#orderid').val();
+				$.ajax({ 
+			    	url: '${base}/admin/simple/cancelOrder.html',
+			    	dataType:"json",
+			    	data:{orderid:orderid},
+			    	type:'post',
+			    	async:false,
+			    	success: function(data){
+						window.location.href = '${base}/admin/simple/list.html';
+			      	}
+			    }); 
 			}
 			function successAddCustomer(data){
 				

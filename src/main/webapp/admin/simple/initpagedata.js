@@ -37,10 +37,18 @@ function initApplicantTable(){
 					}else{
 						html += '<td></td>';
 					}
-					if(value.relationRemark != undefined){
-						html += '<td>'+value.relationRemark+'</td>';
+					if(value.id == value.mainid){
+						if(value.relationremark != undefined){
+							html += '<td>'+value.relationremark+'</td>';
+						}else{
+							html += '<td></td>';
+						}
 					}else{
-						html += '<td></td>';
+						if(value.mainrelation != undefined){
+							html += '<td>'+value.mainrelation+'</td>';
+						}else{
+							html += '<td></td>';
+						}
 					}
 					html += '<td><a onclick="passportInfo('+value.id+')">护照信息</a>&nbsp;';
 					html += '<a onclick="updateApplicant('+value.id+')">基本信息</a>&nbsp;';
@@ -179,5 +187,13 @@ $(document).on("input","#stayday",function(){
 				}
 			}
 		});
+	}
+});
+$(document).on("focus",".select2-search__field",function(){
+	var thisval = $(this).val();
+	if(!thisval){
+		$(this).val(' ');
+		$(this).trigger("input");
+		$(this).val('');
 	}
 });

@@ -192,4 +192,13 @@ public class SimpleVisaModule {
 	public Object cancelOrder(@Param("orderid") Long orderid) {
 		return simpleVisaService.cancelOrder(orderid);
 	}
+
+	/**
+	 * 添加护照
+	 */
+	@At
+	@Ok("jsp")
+	public Object addPassport(@Param("orderid") Integer orderid, HttpServletRequest request) {
+		return simpleVisaService.addPassport(orderid, request);
+	}
 }

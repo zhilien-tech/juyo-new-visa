@@ -13,7 +13,7 @@ function addApplicant(){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '80%'],
-		content:'/admin/simple/addApplicant.html?orderid='+orderid
+		content:'/admin/simple/addPassport.html?orderid='+orderid
 	});
 }
 
@@ -100,6 +100,8 @@ function saveAddOrder(status){
 	orderinfo.sendvisadate = sendvisadate;
 	var outvisadate = $('#outVisaDate').val();
 	orderinfo.outvisadate = outvisadate;
+	var sendvisanum = $('#sendvisanum').val();
+	orderinfo.sendvisanum = sendvisanum;
 	var customerid = $('#customerid').val();
 	orderinfo.customerid = customerid;
 	$.ajax({

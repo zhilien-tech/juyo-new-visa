@@ -9,6 +9,7 @@ package com.juyo.visa.admin.simple.service;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -27,6 +28,7 @@ import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantPassportLowerEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
@@ -48,6 +50,8 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 
 	@Inject
 	private MobileService mobileService;
+	@Inject
+	private SimpleVisaService simpleVisaService;
 
 	SimpleInfoWSHandler simpleInfoWSHandler = (SimpleInfoWSHandler) SpringContextUtil.getBean("mySimpleInfoHander",
 			SimpleInfoWSHandler.class);
@@ -182,9 +186,43 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 	 * @param passportinfo
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object savePassportInfo(TApplicantPassportLowerEntity passportinfo) {
-		dbDao.update(passportinfo);
-		MobileApplicantForm form = new MobileApplicantForm();
+	public Object savePassportInfo(TApplicantPassportLowerEntity passportinfo, MobileApplicantForm form) {
+		if (!Util.isEmpty(passportinfo.getId())) {
+			dbDao.update(passportinfo);
+		} else {
+			Integer orderjpid = form.getOrderid();
+			if (Util.isEmpty(orderjpid)) {
+				TUserEntity loginUser = new TUserEntity();
+				if (!Util.isEmpty(form.getUserid())) {
+					loginUser = dbDao.fetch(TUserEntity.class, form.getUserid().longValue());
+				}
+				TCompanyEntity loginCompany = new TCompanyEntity();
+				if (!Util.isEmpty(form.getComid())) {
+					loginCompany = dbDao.fetch(TCompanyEntity.class, form.getComid().longValue());
+				}
+				Map<String, Integer> generrateorder = simpleVisaService.generrateorder(loginUser, loginCompany);
+				orderjpid = generrateorder.get("orderjpid");
+			}
+			TApplicantEntity applicantEntity = new TApplicantEntity();
+			applicantEntity.setFirstName(passportinfo.getFirstname());
+			applicantEntity.setFirstNameEn(passportinfo.getFirstnameen());
+			applicantEntity.setLastName(passportinfo.getLastname());
+			applicantEntity.setLastNameEn(passportinfo.getLastnameen());
+			TApplicantEntity insertapplicant = dbDao.insert(applicantEntity);
+			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+			applicantjp.setApplicantId(insertapplicant.getId());
+			applicantjp.setOrderId(orderjpid);
+			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
+			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
+			workJp.setApplicantId(insertappjp.getId());
+			workJp.setCreateTime(new Date());
+			dbDao.insert(workJp);
+			passportinfo.setApplicantid(insertapplicant.getId());
+			dbDao.insert(passportinfo);
+		}
 		form.setApplicantid(passportinfo.getApplicantid());
 		form.setMessagetype(2);
 		try {
