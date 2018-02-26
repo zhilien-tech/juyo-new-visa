@@ -39,7 +39,7 @@
 										<input id="cardFront" name="cardFront" type="hidden" />
 										<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file" value="上传" /> 
 										<img id="sqImg" alt="" src=""> 
-										<i class="delete" tyle="display: none;" onclick="deleteApplicantFrontImg();"></i>
+										<i class="delete" style="display: none;" onclick="deleteApplicantFrontImg();"></i>
 									</div>
 								</div>
 							</div>
@@ -94,6 +94,15 @@
 										<label>姓/拼音</label> 
 										<input id="otherFirstName" name="otherFirstName" type="text" class="form-control input-sm " placeholder=" " value="" /> 
 										<input id="otherFirstNameEn" name="otherFirstNameEn" type="text" style="position: absolute; top: 32px; border: none; left: 150px;" value="" />
+									</div>
+								</div>
+							</div>
+							<div class="wordSpell">
+								<div class="col-sm-10 padding-right-0 marginL">
+									<div class="form-group" style="position: relative;">
+										<label>名/拼音</label> 
+										<input id="otherLastName" name="otherLastName" type="text" class="form-control input-sm" placeholder=" " value="" /> 
+										<input id="otherLastNameEn" name="otherLastNameEn" type="text" style="position: absolute; top: 32px; border: none; left: 150px;" value="" />
 									</div>
 								</div>
 							</div>
@@ -257,18 +266,7 @@
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
-						<div class="row wordSpell" style="height: 54px;">
-							<div class="col-sm-11 padding-right-0 col-sm-offset-1"></div>
-						</div>
-						<div class="row wordSpell">
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group" style="position: relative;">
-									<label>名/拼音</label> 
-									<input id="otherLastName" name="otherLastName" type="text" class="form-control input-sm" placeholder=" " value="" /> 
-									<input id="otherLastNameEn" name="otherLastNameEn" type="text" style="position: absolute; top: 32px; border: none; left: 150px;" value="" />
-								</div>
-							</div>
-						</div>
+						
 						<div class="row">
 							<!-- 紧急联系人姓名/手机 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">

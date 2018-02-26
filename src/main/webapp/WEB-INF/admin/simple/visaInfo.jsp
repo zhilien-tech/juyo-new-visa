@@ -41,6 +41,8 @@
     /*左右导航样式*/
     .leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
+	/*父母/配偶输入框*/
+	.parentsUnitNameRow ,.spouseUnitNameRow { display:none;}
 </style>
 	<style type="text/css">
 		body {min-width:auto;}
@@ -71,7 +73,7 @@
 				<div class="tab-content row">
 					<!-- 结婚状况 -->
 					<div class="info">
-						<div class="info-head">结婚状况 </div>
+						<div class="info-head">婚姻状况 </div>
 						<div class="info-body-from cf ">
 							<div class="row colSm">
 								<div class="">
@@ -310,8 +312,24 @@
 									</div>
 								</div>
 							</div>
-							
 							<!-- end 单位地址 -->
+							<!-- 父母单位名称/配偶单位名称 -->
+							<div class="row parentsUnitNameRow">
+								<div class="col-sm-8 preSchool">
+									<div class="form-group">
+										<label id="parentsUnitNameLabel"><span>*</span>父母单位名称</label>
+										<input id="parentsUnitName" name="" type="text" class="form-control input-sm" value=""/>
+									</div>
+								</div>
+							</div>
+							<div class="row spouseUnitNameRow">
+								<div class="col-sm-8 preSchool">
+									<div class="form-group">
+										<label id="spouseUnitNameLabel"><span>*</span>配偶单位名称</label>
+										<input id="spouseUnitName" name="" type="text" class="form-control input-sm" value=""/>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<!-- end 工作信息 -->
@@ -342,7 +360,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>银行存款</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" />
+										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" disabled />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -367,7 +385,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>车产</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="车产" />
+										<input id="" name=""  type="text" class="form-control input-sm" value="车产" disabled />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -375,6 +393,9 @@
 										<label>&nbsp;</label>
 										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder=" "/>
 									</div>
+								</div>
+								<div style="float:left;  margin:40px 0 0 -23px;">
+								例如：大众速腾
 								</div>
 							</div><!-- end 车产 -->
 							<i class="remove-btn delete-icon"></i>
@@ -389,7 +410,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>房产</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="房产" />
+										<input id="" name="" type="text" class="form-control input-sm" value="房产" disabled/>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -414,7 +435,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>理财</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="理财" />
+										<input id="" name="" type="text" class="form-control input-sm" value="理财" disabled/>
 									</div>
 								</div>
 								<div class="col-sm-3">

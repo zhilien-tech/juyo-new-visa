@@ -104,6 +104,16 @@
 									</div>
 								</div>
 							</div>
+							<!-- 名/拼音 -->
+							<div class="wordSpell">
+								<div class="col-sm-10 padding-right-0 marginL" >
+									<div class="form-group" style="position:relative;">
+										<label>名/拼音</label> 
+										<input id="otherLastName" name="otherLastName"  tabIndex="16" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
+										<input id="otherLastNameEn" name="otherLastNameEn" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.otherLastNameEn }"/>
+									</div>
+								</div>
+							</div>
 							<!-- 姓/名 拼音 end -->
 							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
 								<div class="form-group">
@@ -264,21 +274,7 @@
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
-						<div class="row wordSpell" style="height:62px;">
-							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
-							
-							</div>
-						</div>	
-						<!-- 名/拼音 -->
-						<div class="row wordSpell">
-							<div class="col-sm-11 padding-right-0 col-sm-offset-1" >
-								<div class="form-group" style="position:relative;">
-									<label>名/拼音</label> 
-									<input id="otherLastName" name="otherLastName"  tabIndex="16" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
-									<input id="otherLastNameEn" name="otherLastNameEn" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.otherLastNameEn }"/>
-								</div>
-							</div>
-						</div>
+						
 						<div class="row">
 							<!-- 紧急联系人姓名/手机 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
