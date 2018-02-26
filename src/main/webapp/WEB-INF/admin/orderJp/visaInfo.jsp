@@ -277,7 +277,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>银行存款</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" />
+										<input id="" name="" type="text" class="form-control input-sm" readonly="readonly" value="银行存款" />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -302,13 +302,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>车产</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="车产" />
+										<input id="" name="" type="text" class="form-control input-sm" readonly="readonly" value="车产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder=" "/>
+										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder="大众速腾 "/>
 									</div>
 								</div>
 							</div><!-- end 车产 -->
@@ -324,7 +324,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>房产</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="房产" />
+										<input id="" name="" type="text" class="form-control input-sm" readonly value="房产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -349,7 +349,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>理财</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="理财" />
+										<input id="" name="" type="text" class="form-control input-sm" readonly="readonly" value="理财" />
 									</div>
 								</div>
 								<div class="col-sm-3">

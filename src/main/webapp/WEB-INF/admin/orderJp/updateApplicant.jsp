@@ -85,7 +85,7 @@
 						</div>
 						<!-- end 身份证 反面 -->
 
-						<div class="row">
+						<%-- <div class="row">
 							<!-- 签发机关 -->
 							<div class="col-sm-10 padding-right-0 marginL">
 								<div class="form-group">
@@ -96,7 +96,7 @@
 								</div>
 							</div>
 						</div>
-						<!-- end 签发机关 -->
+						<!-- end 签发机关 --> --%>
 						<div class="row">
 							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
 							<div class="col-sm-5 padding-right-0 nameBeforeTop">
@@ -151,44 +151,19 @@
 					</div>
 
 					<div class="col-sm-6 padding-right-0">
+						
 						<div class="row">
-							<!-- 姓/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0 " >
-								<div class="form-group" style="position:relative;">
-									<label><span>*</span>姓/拼音</label> <input id="firstName"
-										name="firstName" type="text" class="form-control input-sm "  tabIndex="2"
-										placeholder=" " value="${obj.applicant.firstName }" />
-										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
+							<!-- 手机号/邮箱 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>手机号</label> 
+									<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
 										<input type="hidden" name="userType" value="${obj.userType }"/>
 										<input type="hidden" name="addApply" value="${obj.addApply }"/>
 										<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 										<input type="hidden" name="orderProcessType" value="${obj.orderProcessType }"/>
 										<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
-										<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
-						<!-- end 姓/拼音 -->
-						<div class="row">
-							<!-- 名/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group" style="position:relative;">
-									<label><span>*</span>名/拼音</label> <input id="lastName"
-										name="lastName" type="text" class="form-control input-sm "  tabIndex="3"
-										placeholder=" " value="${obj.applicant.lastName }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
-
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
-						<!-- end 名/拼音 -->
-						<div class="row">
-							<!-- 手机号/邮箱 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>手机号</label> <input id="telephone"
+									<input id="telephone"
 										name="telephone" type="text" class="form-control input-sm"  tabIndex="4"
 										placeholder=" " value="${obj.applicant.telephone }" />
 									<!-- <i class="bulb"></i> -->
@@ -221,7 +196,7 @@
 							<!-- 姓名/民族 -->
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>性别</label> 
+									<label>性别</label> 
 									<%-- <input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.sex }"/> --%>
 									<select
 										class="form-control input-sm selectHeight" id="sex" name="sex">
