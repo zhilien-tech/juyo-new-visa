@@ -1620,6 +1620,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				}
 				applicantWorkJpEntity.setPrepareMaterials(null);
 			}
+			applicantWorkJpEntity.setUnitName(visaForm.getUnitName());
 			applicantWorkJpEntity.setCareerStatus(visaForm.getCareerStatus());
 			applicantWorkJpEntity.setName(visaForm.getName());
 			applicantWorkJpEntity.setAddress(visaForm.getAddress());

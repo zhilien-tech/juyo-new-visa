@@ -452,6 +452,7 @@
 	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/admin/orderJp/searchCustomerInfo.js"></script>
+	<%-- <script type="text/javascript" src="${base}/admin/common/commonjs.js"></script> --%>
 
 	<script type="text/javascript">
 
