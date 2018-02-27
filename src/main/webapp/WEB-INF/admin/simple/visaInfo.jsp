@@ -42,7 +42,7 @@
     .leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 	/*父母/配偶输入框*/
-	.parentsUnitNameRow ,.spouseUnitNameRow { display:none;}
+	.unitNameRow { display:block;}
 </style>
 	<style type="text/css">
 		body {min-width:auto;}
@@ -314,19 +314,11 @@
 							</div>
 							<!-- end 单位地址 -->
 							<!-- 父母单位名称/配偶单位名称 -->
-							<div class="row parentsUnitNameRow">
+							<div class="row unitNameRow">
 								<div class="col-sm-8 preSchool">
 									<div class="form-group">
-										<label id="parentsUnitNameLabel"><span>*</span>父母单位名称</label>
-										<input id="parentsUnitName" name="" type="text" class="form-control input-sm" value=""/>
-									</div>
-								</div>
-							</div>
-							<div class="row spouseUnitNameRow">
-								<div class="col-sm-8 preSchool">
-									<div class="form-group">
-										<label id="spouseUnitNameLabel"><span>*</span>配偶单位名称</label>
-										<input id="spouseUnitName" name="" type="text" class="form-control input-sm" value=""/>
+										<label id="unitNameLabel"></label>
+										<input id="unitName" name="unitName" type="text" class="form-control input-sm" value="${obj.workJp.unitName }"/>
 									</div>
 								</div>
 							</div>
@@ -391,12 +383,12 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder=" "/>
+										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder="例如:大众速腾"/>
 									</div>
 								</div>
-								<div style="float:left;  margin:40px 0 0 -23px;">
+								<!-- <div style="float:left;  margin:40px 0 0 -23px;">
 								例如：大众速腾
-								</div>
+								</div> -->
 							</div><!-- end 车产 -->
 							<i class="remove-btn delete-icon"></i>
 						</div>
@@ -496,15 +488,29 @@
 			var marryStatus = $("#marryStatus").val();
 			if(marryStatus == 3 || marryStatus == 4 || !marryStatus){
 				$(".info-imgUpload").hide();
+				$("#unitNameLabel").html("<span>*</span>父母单位名称");
+			}else{
+				$(".info-imgUpload").show();
+				if(marryStatus == 1){
+					$("#unitNameLabel").html("<span>*</span>配偶单位名称");
+				}else{
+					$("#unitNameLabel").html("<span>*</span>父母单位名称");
+				}
 			}
 			$("#marryStatus").change(function(){
 				var status = $(this).val();
 				if(status == 3 || status == 4 || !status){
+					$("#unitNameLabel").html("<span>*</span>父母单位名称");
 					$(".info-imgUpload").hide();
 					$('#marryUrl').val("");
 					$('#sqImg').attr('src', "");
 					$("#uploadFile").siblings("i").css("display","none");
 				}else{
+					if(status == 1){
+						$("#unitNameLabel").html("<span>*</span>配偶单位名称");
+					}else{
+						$("#unitNameLabel").html("<span>*</span>父母单位名称");
+					}
 					$(".info-imgUpload").show();
 				}
 			});
@@ -670,12 +676,12 @@
 						$(".deposit").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#deposit").val("");
-						if(userType == 2){
+						/* if(userType == 2){
 							$(".help-blockdeposit").attr("data-bv-result","INVALID");  
 						    $(".deposits").css({"display":"block"});
 						    $(".deposits").attr("class", "col-xs-6 deposits has-error");
 						    $("#deposit").attr("style", "border-color:#ff1a1a");
-						}
+						} */
 						//$("#deposit").placeholder("万");
 					}
 				}else if(financeBtnInfo == "车产"){
@@ -690,12 +696,12 @@
 						$(".vehicle").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#vehicle").val("");
-						if(userType == 2){
+						/* if(userType == 2){
 					        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
 					        $(".vehicles").css({"display":"block"});
 					        $(".vehicles").attr("class", "col-xs-6 vehicles has-error");
 					        $("#vehicle").attr("style", "border-color:#ff1a1a");
-						}
+						} */
 					}
 				}else if(financeBtnInfo == "房产"){
 					if($(this).hasClass("btnState-true")){
@@ -709,12 +715,12 @@
 						$(".houseProperty").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#houseProperty").val("");
-						if(userType == 2){
+						/* if(userType == 2){
 							$(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
 						    $(".housePropertys").css({"display":"block"});
 						    $(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");
 						    $("#houseProperty").attr("style", "border-color:#ff1a1a");
-						}
+						} */
 						//$("#houseProperty").placeholder("平米");
 					}
 				}else if(financeBtnInfo == "理财"){
@@ -729,12 +735,12 @@
 						$(".financial").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#financial").val("");
-						if(userType == 2){
+						/* if(userType == 2){
 							$(".help-blockfinancial").attr("data-bv-result","INVALID");  
 						    $(".financials").css({"display":"block"});
 						    $(".financials").attr("class", "col-xs-6 financials has-error");
 						    $("#financial").attr("style", "border-color:#ff1a1a");
-						}
+						} */
 						//$("#financial").placeholder("万");
 					}
 				}

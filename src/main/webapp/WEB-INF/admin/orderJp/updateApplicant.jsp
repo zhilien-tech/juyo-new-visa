@@ -97,7 +97,7 @@
 							</div>
 						</div>
 						<!-- end 签发机关 --> --%>
-						<div class="row">
+						<%-- <div class="row">
 							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
 							<div class="col-sm-5 padding-right-0 nameBeforeTop">
 								<div class="form-group">
@@ -147,7 +147,7 @@
 									<input id="nationality" name="nationality"  tabIndex="17" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 								</div>
 							</div>
-						</div>
+						</div> --%>
 					</div>
 
 					<div class="col-sm-6 padding-right-0">
@@ -157,7 +157,8 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>手机号</label> 
-									<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
+										<input id="issueOrganization" name="issueOrganization" type="hidden"  value="${obj.applicant.issueOrganization }"/>
+										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
 										<input type="hidden" name="userType" value="${obj.userType }"/>
 										<input type="hidden" name="addApply" value="${obj.addApply }"/>
 										<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
@@ -288,13 +289,41 @@
 							</div>
 						</div>
 						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
-						<div class="row wordSpell" style="height:62px;">
-							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
-							
+						<div class="row">
+							<div class="col-sm-5 padding-right-0 nameBeforeTop">
+								<div class="form-group">
+									<label>是否有曾用名</label> 
+									<div>
+										<span class="nameBeforeYes">
+											<input type="radio" name="hasOtherName" class="nameBefore" value="1"
+											/>是
+										</span>
+										<span>
+											<input type="radio" name="hasOtherName" class="nameBefore"   value="2"
+											/>否
+										</span>
+									</div>
+								</div>
 							</div>
-						</div>	
-						<!-- 名/拼音 -->
-						<div class="row wordSpell">
+						</div>
+						<div class="row">
+							<!-- 姓/名 拼音 -->
+							<div class="nameBeforeHide">
+							    <div class="col-sm-11 padding-right-0 col-sm-offset-1">
+									<div class="form-group" style="position:relative;">
+										<label>姓/拼音</label> <input id="otherFirstName"
+											name="otherFirstName" type="text" class="form-control input-sm "  tabIndex="15"
+											placeholder=" " value="${obj.applicant.otherFirstName }" />
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
+										<!-- <i class="bulb"></i> -->
+									</div>
+								</div>
+							</div>
+							<!-- 姓/名 拼音 end -->
+						</div>
+						<div class="row">
+							<!-- 名/拼音 -->
+						<div class="nameBeforeHide">
 							<div class="col-sm-11 padding-right-0 col-sm-offset-1" >
 								<div class="form-group" style="position:relative;">
 									<label>名/拼音</label> 
@@ -303,6 +332,32 @@
 								</div>
 							</div>
 						</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
+								<div class="form-group">
+									<label>曾有的或另有的国籍(或公民身份)</label> 
+									<div>
+										<span class="onceIDYes">
+											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
+										</span>
+										<span>
+											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  />否
+										</span>
+									</div>
+								</div>
+							</div>
+							<!-- 曾用国籍 -->
+							<div class="col-sm-5 padding-right-0 nationalityHide">
+								<div class="form-group" id="nationalityDiv">
+									<label>国籍</label> 
+									<input id="nationality" name="nationality"  tabIndex="17" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
+								</div>
+							</div>
+						</div>
+						
+						
+						
 						
 						<div class="row">
 							<!-- 紧急联系人姓名/手机 -->

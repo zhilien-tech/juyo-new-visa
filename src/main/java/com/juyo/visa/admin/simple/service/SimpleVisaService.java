@@ -62,6 +62,7 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
+import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
@@ -761,6 +762,21 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
 				Cnd.where("applicantId", "=", applicantid));
 		result.put("passport", passport);
+		//格式化日期
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		if (!Util.isEmpty(passport.getBirthday())) {
+			Date birthday = passport.getBirthday();
+			result.put("birthday", sdf.format(birthday));
+		}
+		if (!Util.isEmpty(passport.getIssuedDate())) {
+			Date issuedDate = passport.getIssuedDate();
+			result.put("issuedDate", sdf.format(issuedDate));
+		}
+		if (!Util.isEmpty(passport.getValidEndDate())) {
+			Date validEndDate = passport.getValidEndDate();
+			result.put("validEndDate", sdf.format(validEndDate));
+		}
+		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		//所访问的ip地址
 		String localAddr = request.getLocalAddr();
 		result.put("localAddr", localAddr);
@@ -1339,6 +1355,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 				applicantWorkJpEntity.setPrepareMaterials(null);
 			}
+			applicantWorkJpEntity.setUnitName(form.getUnitName());
 			applicantWorkJpEntity.setCareerStatus(form.getCareerStatus());
 			applicantWorkJpEntity.setName(form.getName());
 			applicantWorkJpEntity.setAddress(form.getAddress());

@@ -134,8 +134,8 @@ public class OrderJpModule {
 	 */
 	@At
 	@POST
-	public Object getOrder(@Param("id") Integer orderid) {
-		return saleViewService.fetchOrder(orderid);
+	public Object getOrder(@Param("id") Integer orderid, HttpServletRequest request) {
+		return saleViewService.fetchOrder(orderid, request);
 	}
 
 	/**

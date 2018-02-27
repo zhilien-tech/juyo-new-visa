@@ -23,7 +23,7 @@ $(function() {
 
 	//婚姻状况为单身和丧偶时没有上传图片接口
 	var marryStatus = $("#marryStatus").val();
-	if(marryStatus == 3 || marryStatus == 4){
+	if(marryStatus == 3 || marryStatus == 4 || !marryStatus){
 		$(".info-imgUpload").hide();
 		$("#unitNameLabel").html("<span>*</span>父母单位名称");
 	}else{
@@ -36,7 +36,7 @@ $(function() {
 	}
 	$("#marryStatus").change(function(){
 		var status = $(this).val();
-		if(status == 3 || status == 4){
+		if(status == 3 || status == 4 || !status){
 			$("#unitNameLabel").html("<span>*</span>父母单位名称");
 			$(".info-imgUpload").hide();
 			$('#marryUrl').val("");

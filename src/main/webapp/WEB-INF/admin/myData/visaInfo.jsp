@@ -650,7 +650,7 @@
 												<c:otherwise>
 												</c:otherwise>
 											</c:choose >
-										 id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder=" "/>
+										 id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder="例如:大众速腾"/>
 									</div>
 								</div>
 							</div><!-- end 车产 -->

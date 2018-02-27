@@ -92,7 +92,7 @@
 					</div>
 						
 					<div class="col-sm-7 padding-right-0">
-					<div class="row">
+						<div class="row">
 							<!-- 姓/拼音 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 									<div class="form-group" style="position:relative;">
@@ -134,7 +134,7 @@
 						<div class="row"><!-- 类型/护照号 -->
 							
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group groupWidth">
+								<div class="form-group">
 									<label><span>*</span>护照号</label>
 									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
 									<!-- <i class="bulb"></i> -->

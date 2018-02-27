@@ -334,7 +334,6 @@ function getNewDate(temp){
 	var year = temp.substring(0,4);
 	var month = temp.substring(4,6);
 	var day = temp.substring(6,8);
-	
 	if(month<1||month>12){
 		alert("月份必须在01和12之间!");
 		$(this).val("");
@@ -368,5 +367,6 @@ function getNewDate(temp){
 	var MM = date.getMonth()+1;
 	if (MM < 10) MM = "0" + MM;
 	var DD = date.getDate();
+	if (DD < 10) DD = "0" + DD;
     return (YYYY+"-"+MM+"-"+DD);
 }

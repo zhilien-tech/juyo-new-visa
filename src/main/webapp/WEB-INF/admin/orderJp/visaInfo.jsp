@@ -319,7 +319,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder="大众速腾 "/>
+										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder="例如:大众速腾 "/>
 									</div>
 								</div>
 							</div><!-- end 车产 -->
