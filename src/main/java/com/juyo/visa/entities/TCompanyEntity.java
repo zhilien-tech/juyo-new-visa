@@ -54,6 +54,10 @@ public class TCompanyEntity implements Serializable {
 	private String license;
 
 	@Column
+	@Comment("公章")
+	private String seal;
+
+	@Column
 	@Comment("是否是客户")
 	private Integer isCustomer;
 

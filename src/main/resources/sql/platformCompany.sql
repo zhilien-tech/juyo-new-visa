@@ -21,6 +21,7 @@ SELECT
 			cbs.comId = c.id
 	) AS scopes,
 	c.license,
+	c.seal,
 	c.createTime
 FROM
 	t_company c

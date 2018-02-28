@@ -271,6 +271,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		String email = updateForm.getEmail();
 		String address = updateForm.getAddress();
 		String license = updateForm.getLicense();
+		String seal = updateForm.getSeal();
 		TCompanyEntity company = dbDao.fetch(TCompanyEntity.class, Cnd.where("id", "=", compId));
 		if (!Util.isEmpty(company)) {
 			company.setComType(comType);
@@ -281,6 +282,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			company.setEmail(email);
 			company.setAddress(address);
 			company.setLicense(license);
+			company.setSeal(seal);
 			company.setIsCustomer(IsYesOrNoEnum.NO.intKey());
 			company.setUpdateTime(nowDate);
 			dbDao.update(company);

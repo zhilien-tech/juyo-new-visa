@@ -7,12 +7,12 @@
 .imgPreview{width: 99.5%; height: 200px;text-align: center;line-height: 200px;}
 .sqImgPreview{width: 99.5%;text-align: center;line-height: 200px; border:1px solid #e6e6e6;}
 #img{width: 99.5%;text-align: center;line-height: 200px;border: solid 1px #c9c9c9;}
-#sqImg{display: block;width: 100%;text-align: center;line-height: 200px;border: solid 1px #c9c9c9;}
+#sqImg{display: block;width: 100%;text-align: center;line-height: 200px;border: solid 1px #c9c9c9; left:0 !important;}
 #uploadFile-button{width:100px !important;}
 #uploadSQFile-button{width:100px !important;}
 object#SWFUpload_0 {width: 100px !important;}
 .multiselectBtn span{line-height: 25px;}
-
+#sqImgSeal { display: block;width: 100%;text-align: center;line-height: 200px;border: solid 1px #c9c9c9; height:200px;}
 
 
 
