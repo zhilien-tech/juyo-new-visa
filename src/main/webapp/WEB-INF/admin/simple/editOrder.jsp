@@ -31,7 +31,7 @@
 					<p>下单</p>
 				</span> <input type="button" value="取消"
 					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
-					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right" onclick="saveAddOrder(2);" />
+					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-ToBig" onclick="saveAddOrder(2);" />
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
 					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/>
 					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(22)"/>
