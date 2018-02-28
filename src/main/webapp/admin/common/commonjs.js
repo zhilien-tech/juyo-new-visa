@@ -236,7 +236,7 @@ function getPinYinStr(hanzi){
 	for(var i=0;i<onehanzi.length;i++){
 		pinyinchar += PinYin.getPinYin(onehanzi[i]);
 	}
-	return pinyinchar;
+	return pinyinchar.toUpperCase();
 }
 
 $(document).on("input","#birthday",function(){

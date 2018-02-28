@@ -131,7 +131,7 @@ function returnYears(year){
 	}
 }
 
-function getPinYinStr(hanzi){
+function getPinyinStr(hanzi){
 	var onehanzi = hanzi.split('');
 	var pinyinchar = '';
 	for(var i=0;i<onehanzi.length;i++){
@@ -201,6 +201,22 @@ function passValidate(){
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
+				firstName : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '姓不能为空'
+						}
+					}
+				},
+				lastName : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '名不能为空'
+						}
+					}
+				},
 				passport : {
 					trigger:"change keyup",
 					validators : {
@@ -346,6 +362,10 @@ $('#uploadFile').change(function() {
 				layer.close(layerIndex);
 				if (true === obj.success) {
 					layer.msg("识别成功");
+					$('#firstName').val(obj.xingCn).change();
+					$('#firstNameEn').val("/"+getPinYinStr(obj.xingCn));
+					$('#lastName').val(obj.mingCn).change();
+					$('#lastNameEn').val("/"+getPinYinStr(obj.mingCn));
 					$('#passportUrl').val(obj.url);
 					$('#sqImg').attr('src', obj.url);
 					$("#uploadFile").siblings("i").css("display","block");

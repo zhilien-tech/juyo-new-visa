@@ -98,7 +98,7 @@
 									<div class="form-group" style="position:relative;">
 									<label><span>*</span>姓/拼音</label> <input id="firstName"
 										name="firstName" type="text" class="form-control input-sm "  tabIndex="2"
-										placeholder=" " value="${obj.applicant.firstName }" />
+										placeholder=" " value="${obj.passport.firstName }" />
 										
 										<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
@@ -123,7 +123,7 @@
 								<div class="form-group" style="position:relative;">
 									<label><span>*</span>名/拼音</label> <input id="lastName"
 										name="lastName" type="text" class="form-control input-sm "  tabIndex="3"
-										placeholder=" " value="${obj.applicant.lastName }" />
+										placeholder=" " value="${obj.passport.lastName }" />
 										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 
 									<!-- <i class="bulb"></i> -->

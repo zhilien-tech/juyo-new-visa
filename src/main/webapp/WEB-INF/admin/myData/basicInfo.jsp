@@ -1231,23 +1231,6 @@
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
-
-				firstName : {
-					trigger:"change keyup",
-					validators : {
-						notEmpty : {
-							message : '姓不能为空'
-						}
-					}
-				},
-				lastName : {
-					trigger:"change keyup",
-					validators : {
-						notEmpty : {
-							message : '名不能为空'
-						}
-					}
-				},
 				telephone : {
 					trigger:"change keyup",
 					validators : {
