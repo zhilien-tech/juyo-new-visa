@@ -20,6 +20,8 @@
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <!-- 本页css -->
 <link rel="stylesheet" href="${base}/references/common/css/simpleEditOrder.css">
+<!-- 加载中。。。样式 -->
+<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper" id="wrapper">
@@ -27,7 +29,7 @@
 			<div class="qz-head">
 				<!-- <span class="">订单号：<p>170202-JP0001</p></span> -->
 				<!-- <span class="">受付番号：<p>JDY27163</p></span> -->
-				<span class="">状态：
+				<span class="stateOrder">状态：
 					<p>下单</p>
 				</span> <input type="button" value="取消"
 					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
@@ -40,6 +42,13 @@
 					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue()"/>
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log()"/>
 				<input type="hidden" id="orderid" name="orderid" value="${obj.orderjpinfo.id }"/>
+				
+				<!-- 加载中 -->
+					<div class="spinner">
+					  <div class="bounce1"></div>
+					  <div class="bounce2"></div>
+					  <div class="bounce3"></div>
+					</div>
 			</div>
 			<section class="content">
 				<form id="orderInfo">

@@ -144,3 +144,5 @@
 #schedulingTable thead tr th:nth-child(6) {
 	width: 8%;
 }
+/* 加载中样式 */
+.spinner { display:none; position:absolute;top:34%;left:92px;}

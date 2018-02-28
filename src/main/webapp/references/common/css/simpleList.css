@@ -56,3 +56,5 @@
 [v-cloak] {
 	display: none;
 }
+/* 加载中样式 */
+.spinner { position:absolute;width:66px !important; margin-left:-10px;margin-top:4px;}
