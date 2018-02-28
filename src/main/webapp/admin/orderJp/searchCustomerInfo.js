@@ -189,7 +189,6 @@ $("#mobile").select2({
 $("#linkman").on('select2:select', function (evt) {
 	var customerId = $(this).select2("val");
 	var id = parseInt($("#linkman").val());
-	alert($("#linkman").val());
 	$.ajax({
 		url : 'getCustomerById',
 		type : 'POST',

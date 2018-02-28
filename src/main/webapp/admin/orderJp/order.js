@@ -244,7 +244,7 @@ new Vue({
 						layer.msg("保存成功", {
 							time: 500,
 							end: function () {
-								self.location.reload();
+								window.close();
 							}
 						});
 						//window.location.href = '${base}/admin/orderJp/list';
@@ -282,7 +282,7 @@ new Vue({
 								layer.msg("保存成功", {
 									time: 500,
 									end: function () {
-										self.location.reload();
+										window.close();
 									}
 								});
 								//window.location.href = '${base}/admin/orderJp/list';
