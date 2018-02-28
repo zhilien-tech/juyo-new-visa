@@ -69,8 +69,8 @@
 		<script src="${base}/references/common/js/layer/layer.js"></script>
 		<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 		<script src="${base}/admin/login.js"></script><!-- 本页面js文件 -->
-		<!-- iCheck -->
-		<script src="${base}/references/public/plugins/iCheck/icheck.min.js"></script>
+		<%-- <!-- iCheck -->
+		<script src="${base}/references/public/plugins/iCheck/icheck.min.js"></script> --%>
 		<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 		<script type="text/javascript">
 		//解决登录页面嵌套框架问题
