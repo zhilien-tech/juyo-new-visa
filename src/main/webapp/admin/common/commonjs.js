@@ -182,6 +182,20 @@ $(document).on("input","#issuedPlace",function(){
 		$("#issuedPlaceEn").val("/"+pinyinchar.toUpperCase());
 	}
 });
+
+$(document).on("input","#passport",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	$(this).val($(this).val().toUpperCase());
+});
+
+$(document).on("input","#sexEn",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	$(this).val($(this).val().toUpperCase());
+});
 /*$(document).on("input","#cardId",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
@@ -223,4 +237,127 @@ function getPinYinStr(hanzi){
 		pinyinchar += PinYin.getPinYin(onehanzi[i]);
 	}
 	return pinyinchar;
+}
+
+$(document).on("input","#birthday",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if($(this).val().length == 8){
+		$(this).val(getNewDate(temp));
+	}
+});
+
+$(document).on("input","#issuedDate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if($(this).val().length == 8){
+		$(this).val(getNewDate(temp));
+	}
+});
+
+$(document).on("input","#validEndDate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if($(this).val().length == 8){
+		$(this).val(getNewDate(temp));
+	}
+});
+
+$(document).on("input","#validStartDate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if($(this).val().length == 8){
+		$(this).val(getNewDate(temp));
+	}
+});
+
+
+$(document).on("input","#goTripDate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if($(this).val().length == 8){
+		$(this).val(getNewDate(temp));
+	}
+});
+
+$(document).on("input","#backTripDate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if($(this).val().length == 8){
+		$(this).val(getNewDate(temp));
+	}
+});
+
+$(document).on("input","#sendVisaDate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if($(this).val().length == 8){
+		$(this).val(getNewDate(temp));
+	}
+});
+
+$(document).on("input","#outVisaDate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if($(this).val().length == 8){
+		$(this).val(getNewDate(temp));
+	}
+});
+
+function getNewDate(temp){
+	var tmd = temp.substring(0, 4)+'-' +temp.substring(4,6) + '-' + temp.substring(6,8);
+	var year = temp.substring(0,4);
+	var month = temp.substring(4,6);
+	var day = temp.substring(6,8);
+	if(month<1||month>12){
+		alert("月份必须在01和12之间!");
+		$(this).val("");
+		return;
+	}    
+    if(day<1||day>31){
+    	alert("日期必须在01和31之间!");
+    	$(this).val("");
+    	return;
+    }else{  
+    	if(month==2){      
+    		if((year%4)==0&&day>29){
+    			alert("二月份日期必须在01到29之间!");
+    			$(this).val("");
+    			return;
+    		}                
+            if((year%4)>0&&day>28){
+            	alert("二月份日期必须在01到28之间!");
+            	$(this).val("");
+            	return;
+            }    
+         }    
+         if((month==4||month==6||month==9||month==11)&&(day>30)){
+        	 alert(" 在四，六，九，十一月份   /n日期必须在01到30之间!");
+        	 $(this).val("");
+        	 return;
+         }    
+    }
+    var date =  new Date(tmd);
+	var YYYY = date.getFullYear();
+	var MM = date.getMonth()+1;
+	if (MM < 10) MM = "0" + MM;
+	var DD = date.getDate();
+	if (DD < 10) DD = "0" + DD;
+    return (YYYY+"-"+MM+"-"+DD);
 }

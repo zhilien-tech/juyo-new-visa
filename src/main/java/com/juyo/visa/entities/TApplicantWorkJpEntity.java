@@ -57,4 +57,8 @@ public class TApplicantWorkJpEntity implements Serializable {
 	@Comment("更新时间")
 	private Date updateTime;
 
+	@Column
+	@Comment("父母/配偶单位名称")
+	private String unitName;
+
 }

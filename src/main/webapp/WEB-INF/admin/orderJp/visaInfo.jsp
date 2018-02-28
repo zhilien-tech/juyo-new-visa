@@ -41,6 +41,8 @@
     /*左右导航样式*/
     .leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
 	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
+	/*父母/配偶输入框*/
+	.unitNameRow { display:block;}
 </style>
 	<style type="text/css">
 		body {min-width:auto;}
@@ -247,6 +249,15 @@
 							</div>
 							
 							<!-- end 单位地址 -->
+							<!-- 父母单位名称/配偶单位名称 -->
+							<div class="row unitNameRow">
+								<div class="col-sm-8 preSchool">
+									<div class="form-group">
+										<label id="unitNameLabel"></label>
+										<input id="unitName" name="unitName" type="text" class="form-control input-sm" value="${obj.workJp.unitName }"/>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<!-- end 工作信息 -->
@@ -277,7 +288,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>银行存款</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" />
+										<input id="" name="" type="text" class="form-control input-sm" readonly="readonly" value="银行存款" />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -302,13 +313,13 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>车产</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="车产" />
+										<input id="" name="" type="text" class="form-control input-sm" readonly="readonly" value="车产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder=" "/>
+										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder="例如:大众速腾 "/>
 									</div>
 								</div>
 							</div><!-- end 车产 -->
@@ -324,7 +335,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>房产</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="房产" />
+										<input id="" name="" type="text" class="form-control input-sm" readonly value="房产" />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -349,7 +360,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span>理财</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="理财" />
+										<input id="" name="" type="text" class="form-control input-sm" readonly="readonly" value="理财" />
 									</div>
 								</div>
 								<div class="col-sm-3">

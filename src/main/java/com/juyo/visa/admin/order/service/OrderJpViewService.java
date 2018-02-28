@@ -735,7 +735,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return orderEntity;
 	}
 
-	public Object fetchOrder(Integer id) {
+	public Object fetchOrder(Integer id, HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
 		//订单信息
 		String orderSqlstr = sqlManager.get("orderJp_list_orderInfo_byOrderId");
@@ -810,6 +810,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		result.put("applicantInfo", applicantInfo);
+		String localAddr = request.getLocalAddr();
+		int localPort = request.getLocalPort();
+		result.put("localAddr", localAddr);
+		result.put("localPort", localPort);
+		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
 		//回邮信息
 		List<TOrderBackmailEntity> backinfo = dbDao.query(TOrderBackmailEntity.class, Cnd.where("orderId", "=", id)
 				.orderBy("createTime", "DESC"), null);
@@ -1620,6 +1625,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				}
 				applicantWorkJpEntity.setPrepareMaterials(null);
 			}
+			applicantWorkJpEntity.setUnitName(visaForm.getUnitName());
 			applicantWorkJpEntity.setCareerStatus(visaForm.getCareerStatus());
 			applicantWorkJpEntity.setName(visaForm.getName());
 			applicantWorkJpEntity.setAddress(visaForm.getAddress());

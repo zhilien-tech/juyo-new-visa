@@ -90,6 +90,8 @@ public class TTouristVisaForm extends DataTablesParamForm {
 
 	private Integer contact;
 
+	private String unitName;
+
 	private String houseProperty;
 
 	private String deposit;
