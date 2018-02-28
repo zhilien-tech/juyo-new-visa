@@ -74,4 +74,6 @@ public class AddOrderForm {
 	private Integer customerid;
 
 	private String sendvisanum;
+
+	private Integer zhikecustomid;
 }

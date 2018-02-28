@@ -107,6 +107,7 @@
 								<div class="zhiKe none">
 									<!-- input 直客 -->
 									<div class="col-sm-3">
+										<input type="hidden" id="zhikecustomid" name="zhikecustomid" value="">
 										<div class="form-group">
 											<label><span>*</span>公司全称：</label> <input id="compName2"
 												name="name" type="text" class="form-control input-sm"
@@ -148,7 +149,7 @@
 											</select>
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-3" id="customamount">
 									<div class="form-group">
 										<label><span>*</span>金额：</label> <input id="amount"
 											name="amount" type="text" class="form-control input-sm"

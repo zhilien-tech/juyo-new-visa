@@ -64,7 +64,7 @@
 					<p>下单</p>
 				</span> <input type="button" value="取消"
 					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
-					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="saveAddOrder(2);" />
+					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right" onclick="saveAddOrder(2);" />
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
 					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/>
 					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(22)"/>
@@ -131,6 +131,7 @@
 								<!-- end select2 线上/OTS/线下 -->
 
 								<div class="zhiKe none">
+									<input type="hidden" id="zhikecustomid" name="zhikecustomid" value="${obj.customerinfo.id }">
 									<!-- input 直客 -->
 									<div class="col-sm-3">
 										<div class="form-group">
@@ -143,7 +144,7 @@
 										<div class="form-group">
 											<label><span>*</span>公司简称：</label> <input id="comShortName2"
 												name="shortname" type="text" class="form-control input-sm"
-												placeholder=" " ${obj.customerinfo.shortname }/>
+												placeholder=" " value="${obj.customerinfo.shortname }"/>
 										</div>
 									</div>
 								</div>
@@ -177,7 +178,7 @@
 											placeholder=" " >
 												<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 													<c:choose>
-														<c:when test="${map.key eq obj.orderjpinfo.visastatus }">
+														<c:when test="${map.key eq obj.orderjpinfo.visaType }">
 															<option value="${map.key}" selected="selected">${map.value}</option>
 														</c:when>
 														<c:otherwise>
@@ -188,7 +189,7 @@
 											</select>
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-3" id="customamount">
 									<div class="form-group">
 										<label><span>*</span>金额：</label> <input id="amount"
 											name="amount" type="text" class="form-control input-sm"
@@ -546,7 +547,7 @@
 					$("#urgentDays").addClass("none");
 				}
 			});
-			
+			$('#customerType').trigger('change');
 		});
 			$("#addCustomer").click(function(){
 				layer.open({

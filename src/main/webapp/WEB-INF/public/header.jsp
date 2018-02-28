@@ -52,7 +52,7 @@
           </li>
           <li class="dropdown messages-menu">
           	<c:choose>
-	            <c:when test="${userType == 5}">
+	            <c:when test="${userType == 5 or userType == 7}">
 	            	<!-- 送签社管理员 -->
 	            	<a id="psersonal" href="${base}/admin/companyInfo/list.html" target="main" class="dropdown-toggle name" data-toggle="dropdown">${loginuser.name}</a>
 	        	</c:when>

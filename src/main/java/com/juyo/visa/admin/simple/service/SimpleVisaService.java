@@ -6,6 +6,7 @@
 
 package com.juyo.visa.admin.simple.service;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -63,6 +65,7 @@ import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
@@ -86,6 +89,7 @@ import com.juyo.visa.entities.TScenicEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;
 import com.juyo.visa.forms.TApplicantPassportForm;
+import com.juyo.visa.websocket.VisaInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
@@ -113,6 +117,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	private UserViewService userViewService;
 	@Inject
 	private OrderJpViewService orderJpViewService;
+
+	private VisaInfoWSHandler visaInfoWSHandler = (VisaInfoWSHandler) SpringContextUtil.getBean("myVisaInfoHander",
+			VisaInfoWSHandler.class);
 
 	/**
 	 *列表页数据展示
@@ -292,7 +299,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				THotelEntity hotel = hotels.get(hotelindex);
 				travelplan.setHotel(hotel.getId());
 			}
-			if (i > 0) {
+			if (i > 0 && i != daysBetween) {
 				//景区
 				int scenicindex = random.nextInt(scenics.size());
 				TScenicEntity scenic = scenics.get(scenicindex);
@@ -382,19 +389,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		for (Record record : travelplans) {
 			Date outdate = (Date) record.get("outdate");
 			record.put("outdate", format.format(outdate));
-			if (count > 1) {
-				if (!Util.isEmpty(record.get("hotelname"))) {
-					String hotelname = (String) record.get("hotelname");
+			if (!Util.isEmpty(record.get("hotelname"))) {
+				String hotelname = (String) record.get("hotelname");
+				if (count > 1) {
 					if (hotelname.equals(prehotelname)) {
 						record.put("hotelname", "同上");
 					}
 				}
+				prehotelname = hotelname;
 			}
 			count++;
-			if (!Util.isEmpty(record.get("hotelname"))) {
-				prehotelname = (String) record.get("hotelname");
-			}
-
 		}
 		return travelplans;
 	}
@@ -463,23 +467,33 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//保存客户信息
 		if (!Util.isEmpty(form.getCustomerType())) {
 			if (form.getCustomerType().equals(CustomerTypeEnum.ZHIKE.intKey())) {
-				TCustomerEntity customer = new TCustomerEntity();
-				customer.setName(form.getCompName2());
-				customer.setShortname(form.getComShortName2());
-				customer.setPayType(form.getPayType());
-				TCustomerEntity insertcustom = dbDao.insert(customer);
-				List<TCustomerVisainfoEntity> customervisas = Lists.newArrayList();
-				for (MainSaleVisaTypeEnum mainSaleVisaTypeEnum : MainSaleVisaTypeEnum.values()) {
-					TCustomerVisainfoEntity cusvisa = new TCustomerVisainfoEntity();
-					cusvisa.setVisatype(mainSaleVisaTypeEnum.key());
-					cusvisa.setCustomerid(insertcustom.getId());
-					if (!Util.isEmpty(form.getVisatype()) && form.getVisatype().equals(mainSaleVisaTypeEnum.key())) {
-						cusvisa.setAmount(form.getAmount());
+				if (!Util.isEmpty(form.getZhikecustomid())) {
+					TCustomerEntity customer = dbDao.fetch(TCustomerEntity.class, form.getZhikecustomid().longValue());
+					customer.setName(form.getCompName2());
+					customer.setShortname(form.getComShortName2());
+					customer.setPayType(form.getPayType());
+					customer.setSource(CustomerTypeEnum.ZHIKE.intKey());
+					dbDao.update(customer);
+				} else {
+					TCustomerEntity customer = new TCustomerEntity();
+					customer.setName(form.getCompName2());
+					customer.setShortname(form.getComShortName2());
+					customer.setPayType(form.getPayType());
+					customer.setSource(CustomerTypeEnum.ZHIKE.intKey());
+					TCustomerEntity insertcustom = dbDao.insert(customer);
+					List<TCustomerVisainfoEntity> customervisas = Lists.newArrayList();
+					for (MainSaleVisaTypeEnum mainSaleVisaTypeEnum : MainSaleVisaTypeEnum.values()) {
+						TCustomerVisainfoEntity cusvisa = new TCustomerVisainfoEntity();
+						cusvisa.setVisatype(mainSaleVisaTypeEnum.key());
+						cusvisa.setCustomerid(insertcustom.getId());
+						if (!Util.isEmpty(form.getVisatype()) && form.getVisatype().equals(mainSaleVisaTypeEnum.key())) {
+							cusvisa.setAmount(form.getAmount());
+						}
+						customervisas.add(cusvisa);
 					}
-					customervisas.add(cusvisa);
+					//dbDao.query(TCustomerVisainfoEntity.class, Cnd.where("customerid", "=", insertcustom), null);
+					orderinfo.setCustomerId(insertcustom.getId());
 				}
-				dbDao.query(TCustomerVisainfoEntity.class, Cnd.where("customerid", "=", insertcustom), null);
-				orderinfo.setCustomerId(insertcustom.getId());
 			} else {
 				orderinfo.setCustomerId(form.getCustomerid());
 			}
@@ -495,7 +509,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderinfo.setSendVisaNum(form.getSendvisanum());
 		dbDao.update(orderinfo);
 		//更新日本订单表
-		orderjpinfo.setVisastatus(form.getVisatype());
+		orderjpinfo.setVisaType(form.getVisatype());
 		orderjpinfo.setAmount(form.getAmount());
 		dbDao.update(orderjpinfo);
 		//出行信息
@@ -521,6 +535,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		//添加日志下单
 		orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+		//消息通知
+		try {
+			visaInfoWSHandler.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
