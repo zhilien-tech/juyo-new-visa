@@ -161,7 +161,7 @@
 													
 													</c:choose >
 											
-											 id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" "  />
+											 id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.passport.firstName }" />
 											<input 
 												<c:choose>
 														<c:when test="${empty obj.contact}">
@@ -181,7 +181,7 @@
 														</c:otherwise>
 													
 													</c:choose >
-											   name="firstNameEn" />
+											   name="firstNameEn" value="${obj.firstNameEn }"/>
 										</c:when>
 										<c:otherwise>
 											<input 
@@ -193,7 +193,7 @@
 														</c:otherwise>
 													
 													</c:choose >
-											 id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.firstName }" />
+											 id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.passport.firstName }" />
 											<input 
 												<c:choose>
 														<c:when test="${empty obj.contact}">
@@ -279,7 +279,7 @@
 													</c:choose >
 											 id="lastName"
 												name="lastName" style="position:relative;" type="text" class="form-control input-sm "
-												placeholder=" " />
+												placeholder=" " value="${obj.passport.lastName }"/>
 												<input 
 													<c:choose>
 														<c:when test="${empty obj.contact}">
@@ -300,7 +300,7 @@
 													
 													</c:choose >
 												 
-												  name="lastNameEn" />
+												  name="lastNameEn" value="${obj.lastNameEn }"/>
 										</c:when>
 										<c:otherwise>
 											<input 
@@ -314,7 +314,7 @@
 													</c:choose >
 											 id="lastName"
 												name="lastName" style="position:relative;" type="text" class="form-control input-sm "
-												placeholder=" " value="${obj.applicant.lastName }" />
+												placeholder=" " value="${obj.passport.lastName }" />
 												<input 
 													<c:choose>
 														<c:when test="${empty obj.contact}">
@@ -1047,6 +1047,22 @@
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
+				firstName : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '姓不能为空'
+						}
+					}
+				},
+				lastName : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '名不能为空'
+						}
+					}
+				},
 				passport : {
 					trigger:"change keyup",
 					validators : {
@@ -1151,6 +1167,10 @@
 					layer.close(layerIndex);
 					if (true === obj.success) {
 						layer.msg("识别成功");
+						$('#firstName').val(obj.xingCn).change();
+						$('#firstNameEn').val("/"+getPinYinStr(obj.xingCn));
+						$('#lastName').val(obj.mingCn).change();
+						$('#lastNameEn').val("/"+getPinYinStr(obj.mingCn));
 						$('#passportUrl').val(obj.url);
 						$('#sqImg').attr('src', obj.url);
 						$("#uploadFile").siblings("i").css("display","block");

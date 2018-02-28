@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -98,6 +100,8 @@ import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
 import com.juyo.visa.common.util.ImageDeal;
+import com.juyo.visa.common.util.PinyinTool;
+import com.juyo.visa.common.util.PinyinTool.Type;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantExpressEntity;
@@ -957,11 +961,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicant.setCity(applicantForm.getCity());
 			applicant.setDetailedAddress(applicantForm.getDetailedAddress());
 			applicant.setEmail(applicantForm.getEmail());
-			applicant.setFirstName(applicantForm.getFirstName());
-			applicant.setFirstNameEn(applicantForm.getFirstNameEn().substring(1));
 			applicant.setIssueOrganization(applicantForm.getIssueOrganization());
-			applicant.setLastName(applicantForm.getLastName());
-			applicant.setLastNameEn(applicantForm.getLastNameEn().substring(1));
 			applicant.setOtherFirstName(applicantForm.getOtherFirstName());
 			if (!Util.isEmpty(applicantForm.getOtherFirstNameEn())) {
 				applicant.setOtherFirstNameEn(applicantForm.getOtherFirstNameEn().substring(1));
@@ -1250,6 +1250,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		Sql passportSql = Sqls.create(passportSqlstr);
 		passportSql.setParam("id", applicantId);
 		Record passport = dbDao.fetch(passportSql);
+		if (!Util.isEmpty(passport.get("firstNameEn"))) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.get("firstNameEn"));
+			result.put("firstNameEn", sb.toString());
+		}
+		if (!Util.isEmpty(passport.get("lastNameEn"))) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.get("lastNameEn"));
+			result.put("lastNameEn", sb.toString());
+		}
 		//格式化日期
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		if (!Util.isEmpty(passport.get("birthday"))) {
@@ -2202,6 +2212,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					Cnd.where("applicantId", "=", passportForm.getApplicantId()));
 			passport.setOpId(loginUser.getId());
 
+			passport.setFirstName(passportForm.getFirstName());
+			if (!Util.isEmpty(passportForm.getFirstNameEn())) {
+				passport.setFirstNameEn(passportForm.getFirstNameEn().substring(1));
+			}
+			passport.setLastName(passportForm.getLastName());
+			if (!Util.isEmpty(passportForm.getLastNameEn())) {
+				passport.setLastNameEn(passportForm.getLastNameEn().substring(1));
+			}
 			passport.setPassportUrl(passportForm.getPassportUrl());
 			passport.setOCRline1(passportForm.getOCRline1());
 			passport.setOCRline2(passportForm.getOCRline2());
@@ -2809,6 +2827,30 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			} else {
 				jsonEntity.setSex("男");
 				jsonEntity.setSexEn("M");
+			}
+			//姓和名分开
+			String nameEn = out.getString("name");//姓名拼音
+			String nameAll = out.getString("name_cn");//姓名汉字
+			char[] nameCnCharArray = nameAll.toCharArray();
+			if (nameEn.contains(".")) {
+				String[] nameEnSplit = nameEn.split("\\.");
+				int lengthEn = nameEnSplit[0].length();
+				int count = 0;
+				int xingLength = 0;
+				PinyinTool tool = new PinyinTool();
+				try {
+					for (int i = 0; i < nameCnCharArray.length; i++) {
+						int length = tool.toPinYin(String.valueOf(nameCnCharArray[i]), "", Type.UPPERCASE).length();
+						count += length;
+						if (Util.eq(count, lengthEn)) {
+							xingLength = i + 1;
+						}
+					}
+					jsonEntity.setXingCn(nameAll.substring(0, xingLength));
+					jsonEntity.setMingCn(nameAll.substring(xingLength));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
 			}
 			jsonEntity.setUrl(url);
 			jsonEntity.setOCRline1(out.getString("line0"));

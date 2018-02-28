@@ -762,6 +762,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
 				Cnd.where("applicantId", "=", applicantid));
 		result.put("passport", passport);
+		if (!Util.isEmpty(passport.getFirstNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.getFirstNameEn());
+			result.put("firstNameEn", sb.toString());
+		}
+		if (!Util.isEmpty(passport.getLastNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.getLastNameEn());
+			result.put("lastNameEn", sb.toString());
+		}
 		//格式化日期
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		if (!Util.isEmpty(passport.getBirthday())) {
@@ -811,8 +821,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TApplicantPassportEntity passport = new TApplicantPassportEntity();
 		if (!Util.isEmpty(form.getId())) {
 			passport = dbDao.fetch(TApplicantPassportEntity.class, form.getId().longValue());
-			TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class, passport
-					.getApplicantId().longValue());
+			/*TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class, passport
+					.getApplicantId().longValue());*/
+			TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", passport.getApplicantId().longValue()));
 			result.put("applicantjpid", applicantorder.getApplicantId());
 			result.put("applicantid", applicantorder.getApplicantId());
 			result.put("orderid", applicantorder.getOrderId());
@@ -820,6 +832,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class, form.getId().longValue());
 		passport.setOpId(loginUser.getId());
 
+		passport.setFirstName(form.getFirstName());
+		if (!Util.isEmpty(form.getFirstNameEn())) {
+			passport.setFirstNameEn(form.getFirstNameEn().substring(1));
+		}
+		passport.setLastName(form.getLastName());
+		if (!Util.isEmpty(form.getLastNameEn())) {
+			passport.setLastNameEn(form.getLastNameEn().substring(1));
+		}
 		passport.setPassportUrl(form.getPassportUrl());
 		passport.setOCRline1(form.getOCRline1());
 		passport.setOCRline2(form.getOCRline2());

@@ -11,6 +11,14 @@ public class PassportJsonEntity implements Serializable {
 
 	private String type;
 
+	private String xingCn;
+
+	private String mingCn;
+
+	private String xingEn;
+
+	private String mingEn;
+
 	private String num;
 
 	private String birth;

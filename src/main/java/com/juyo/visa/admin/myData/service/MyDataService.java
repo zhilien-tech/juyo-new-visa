@@ -334,6 +334,16 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		TTouristPassportEntity passinfo = new TTouristPassportEntity();
 		TTouristPassportEntity touristPassportEntity = dbDao.fetch(TTouristPassportEntity.class,
 				Cnd.where("applicantId", "=", applyId));
+		if (!Util.isEmpty(touristPassportEntity.getFirstNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(touristPassportEntity.getFirstNameEn());
+			result.put("firstNameEn", sb.toString());
+		}
+		if (!Util.isEmpty(touristPassportEntity.getLastNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(touristPassportEntity.getLastNameEn());
+			result.put("lastNameEn", sb.toString());
+		}
 		if (!Util.isEmpty(touristPassportEntity)) {
 			//格式化日期
 			SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -353,79 +363,6 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		} else {
 			result.put("passport", passinfo);
 		}
-
-		/*TTouristPassportEntity passinfo = new TTouristPassportEntity();
-		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyId);
-		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
-				Cnd.where("applicantId", "=", apply.getId()));
-		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
-				.longValue());
-		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
-		if (!Util.isEmpty(apply.getUserId())) {
-			TTouristPassportEntity touristPassportEntity = dbDao.fetch(TTouristPassportEntity.class,
-					Cnd.where("userId", "=", apply.getUserId()));
-			if (!Util.isEmpty(touristPassportEntity)) {
-				//格式化日期
-				SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-				if (!Util.isEmpty(touristPassportEntity.getBirthday())) {
-					Date goTripDate = touristPassportEntity.getBirthday();
-					result.put("birthday", sdf.format(goTripDate));
-				}
-				if (!Util.isEmpty(touristPassportEntity.getValidEndDate())) {
-					Date goTripDate = touristPassportEntity.getValidEndDate();
-					result.put("validEndDate", sdf.format(goTripDate));
-				}
-				if (!Util.isEmpty(touristPassportEntity.getIssuedDate())) {
-					Date goTripDate = touristPassportEntity.getIssuedDate();
-					result.put("issuedDate", sdf.format(goTripDate));
-				}
-				result.put("passport", touristPassportEntity);
-			} else {
-				TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
-						Cnd.where("applicantId", "=", applyId));
-				if (!Util.isEmpty(pass)) {
-					//格式化日期
-					SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-					if (!Util.isEmpty(pass.getBirthday())) {
-						Date goTripDate = pass.getBirthday();
-						result.put("birthday", sdf.format(goTripDate));
-					}
-					if (!Util.isEmpty(pass.getValidEndDate())) {
-						Date goTripDate = pass.getValidEndDate();
-						result.put("validEndDate", sdf.format(goTripDate));
-					}
-					if (!Util.isEmpty(pass.getIssuedDate())) {
-						Date goTripDate = pass.getIssuedDate();
-						result.put("issuedDate", sdf.format(goTripDate));
-					}
-					result.put("passport", pass);
-				} else {
-					result.put("passport", passinfo);
-				}
-			}
-		} else {
-			TTouristPassportEntity pass = dbDao.fetch(TTouristPassportEntity.class,
-					Cnd.where("applicantId", "=", applyId));
-			if (!Util.isEmpty(pass)) {
-				//格式化日期
-				SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-				if (!Util.isEmpty(pass.getBirthday())) {
-					Date goTripDate = pass.getBirthday();
-					result.put("birthday", sdf.format(goTripDate));
-				}
-				if (!Util.isEmpty(pass.getValidEndDate())) {
-					Date goTripDate = pass.getValidEndDate();
-					result.put("validEndDate", sdf.format(goTripDate));
-				}
-				if (!Util.isEmpty(pass.getIssuedDate())) {
-					Date goTripDate = pass.getIssuedDate();
-					result.put("issuedDate", sdf.format(goTripDate));
-				}
-				result.put("passport", pass);
-			} else {
-				result.put("passport", passinfo);
-			}
-		}*/
 		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		result.put("contact", contact);
 		result.put("applyId", applyId);
@@ -1491,18 +1428,22 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object insertOrUpdatePass(TTouristPassportEntity touristPassportEntity, TTouristPassportForm passportForm) {
+		touristPassportEntity.setFirstName(passportForm.getFirstName());
+		if (!Util.isEmpty(touristPassportEntity.getFirstNameEn())) {
+			touristPassportEntity.setFirstNameEn(passportForm.getFirstNameEn().substring(1));
+		}
+		touristPassportEntity.setLastName(passportForm.getLastName());
+		if (!Util.isEmpty(touristPassportEntity.getLastNameEn())) {
+			touristPassportEntity.setLastNameEn(passportForm.getLastNameEn().substring(1));
+		}
 		touristPassportEntity.setBirthAddress(passportForm.getBirthAddress());
 		touristPassportEntity.setBirthAddressEn(passportForm.getBirthAddressEn());
 		touristPassportEntity.setBirthday(passportForm.getBirthday());
-		touristPassportEntity.setFirstName(passportForm.getFirstName());
-		touristPassportEntity.setFirstNameEn(passportForm.getFirstNameEn());
 		touristPassportEntity.setIssuedDate(passportForm.getIssuedDate());
 		touristPassportEntity.setIssuedOrganization(passportForm.getIssuedOrganization());
 		touristPassportEntity.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
 		touristPassportEntity.setIssuedPlace(passportForm.getIssuedPlace());
 		touristPassportEntity.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
-		touristPassportEntity.setLastName(passportForm.getLastName());
-		touristPassportEntity.setLastNameEn(passportForm.getLastNameEn());
 		touristPassportEntity.setOCRline1(passportForm.getOCRline1());
 		touristPassportEntity.setOCRline2(passportForm.getOCRline2());
 		touristPassportEntity.setPassport(passportForm.getPassport());

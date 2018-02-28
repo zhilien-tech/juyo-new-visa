@@ -45,21 +45,6 @@ function applyValidate(){
 			validating : 'glyphicon glyphicon-refresh'
 		},
 		fields : {
-
-			firstName : {
-				validators : {
-					notEmpty : {
-						message : '姓不能为空'
-					}
-				}
-			},
-			lastName : {
-				validators : {
-					notEmpty : {
-						message : '名不能为空'
-					}
-				}
-			},
 			telephone : {
 				validators : {
 					regexp: {
