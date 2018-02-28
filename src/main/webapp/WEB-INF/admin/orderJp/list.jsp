@@ -244,6 +244,37 @@
 				}
 			});
 		});
+		function loadListData(){
+			$("#searchbtn").click();
+		}
+		
+		//连接websocket
+		connectWebSocket();
+		function connectWebSocket(){
+			 if ('WebSocket' in window){  
+	            console.log('Websocket supported');  
+	            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+
+	            console.log('Connection attempted');  
+
+	            socket.onopen = function(){  
+	                 console.log('Connection open!');  
+	                 //setConnected(true);  
+	             };
+
+	            socket.onclose = function(){
+	                console.log('Disconnecting connection'); 
+	            };
+
+	            socket.onmessage = function (evt){
+	                console.log('message received!');  
+	            	loadListData();
+	             };  
+
+	          } else {  
+	            console.log('Websocket not supported');  
+	          }  
+		}
 	</script>
 </body>
 </html>
