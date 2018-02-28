@@ -283,7 +283,7 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>送签编号：</label>
+										<label>送签编号：</label>
 										<input id="sendvisanum" type="text" class="form-control input-sm" value="${obj.orderinfo.sendVisaNum }"/>
 									</div>
 								</div>
@@ -519,7 +519,7 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-	<script src="${base}/admin/orderJp/order.js"></script>
+	<%-- <script src="${base}/admin/orderJp/order.js"></script> --%>
 	<!-- 本页面js文件 -->
 	<!-- select2 -->
 	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>

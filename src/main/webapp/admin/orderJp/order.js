@@ -77,6 +77,7 @@ function successAddCustomer(data){
 	$("#customerType").val(data.source);
 	$("#payType").val(data.payType);
 }
+
 var orderobj;
 new Vue({
 	el : '#wrapper',
