@@ -579,6 +579,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 		}
+		String orderstatus = "";
+		for (JPOrderStatusEnum orderenum : JPOrderStatusEnum.values()) {
+			if (orderenum.intKey() == orderinfo.getStatus()) {
+				orderstatus = orderenum.value();
+				break;
+			}
+		}
+		result.put("orderstatus", orderstatus);
 		result.put("flightlist", flightlist);
 		result.put("collarAreaEnum", EnumUtil.enum2(CollarAreaEnum.class));
 		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
