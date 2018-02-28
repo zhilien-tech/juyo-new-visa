@@ -49,7 +49,7 @@
 				<span class="">受付番号：<p></p></span> 
 				<span class="">状态：<p id="spanStatus">${obj.orderstatus }</p></span> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancel();"/> 
-				<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
+				<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
 				<!-- <input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" /> -->
 				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" @click="firtTrialJp(orderInfo.id)"/>
 				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" @click="share(orderInfo.id)" />
@@ -467,6 +467,9 @@
 		var threecounty = '${obj.orderJpinfo.threeCounty}';
 		var orderid = '${obj.orderId}';
 		var orderJpId = '${obj.orderJpId}';
+		var localAddr = '${obj.localAddr}';
+		var localPort = '${obj.localPort}';
+		var websocketaddr = '${obj.websocketaddr}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
@@ -482,10 +485,47 @@
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script src="${base}/references/common/js/base/base.js"></script>
+	<%-- <script type="text/javascript" src="${base}/admin/common/commonjs.js"></script> --%>
 	<script src="${base}/admin/orderJp/order.js"></script>
 	
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
+	
+	/* //连接websocket
+	connectWebSocket();
+	function connectWebSocket(){
+		 if ('WebSocket' in window){  
+	        console.log('Websocket supported');  
+	        socket = new WebSocket('ws://'+localAddr+':'+localPort+'/'+websocketaddr);   
+	        console.log('Connection attempted');  
+	        socket.onopen = function(){  
+	             console.log('Connection open!');  
+	             //setConnected(true);  
+	         };
+	        socket.onclose = function(){  
+	            console.log('Disconnecting connection');  
+	        };
+	        socket.onmessage = function (evt){   
+	              var received_msg = evt.data;  
+	              if(received_msg){
+	                  var receiveMessage = JSON.parse(received_msg);
+	                  if(receiveMessage.applicantid == applicantId){
+	                	  if(receiveMessage.messagetype == 1){
+		                	  window.location.reload();
+	                	  }else if(receiveMessage.messagetype == 2){
+	                		  window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType='+orderProcessType;
+	                	  }
+	                  }
+	              }
+	              console.log('message received!');  
+	              //showMessage(received_msg);  
+	          };  
+
+	      } else {  
+	        console.log('Websocket not supported');  
+	      }  
+	} */
+	
 		//时间插件格式化  出行时间>送签时间 >今天
 		var now = new Date();
 		$("#goTripDate").datetimepicker({

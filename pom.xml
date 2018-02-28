@@ -51,6 +51,14 @@
 			<artifactId>fastdfs-client</artifactId>
 			<version>1.24.1</version>
 		</dependency>
+		
+		
+		<!-- 汉字转拼音 -->
+		<dependency>  
+    		<groupId>com.belerweb</groupId>  
+    		<artifactId>pinyin4j</artifactId>  
+    		<version>2.5.0</version>  
+		</dependency>  
 
 		<!-- 七牛 -->
 		<dependency>

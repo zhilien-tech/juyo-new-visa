@@ -154,7 +154,7 @@ public class SimpleVisaModule {
 	}
 
 	/**
-	 * 保存签证信息
+	 * 保存护照信息
 	 */
 	@At
 	@POST

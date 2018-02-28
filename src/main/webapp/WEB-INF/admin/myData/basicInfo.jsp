@@ -181,7 +181,7 @@
 							<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
 						</div>
 						<!-- end 身份证 反面 -->
-						<div class="row">
+						<%-- <div class="row">
 							<!-- 签发机关 -->
 							<div class="col-sm-10 col-sm-offset-1 padding-right-0 marginL" style="margin-top:6px;">
 								<div class="form-group">
@@ -218,7 +218,7 @@
 								</div>
 							</div>
 						</div>
-						<!-- end 签发机关 -->
+						<!-- end 签发机关 --> --%>
 						<div class="row">
 							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0 nameBeforeTop">
@@ -412,205 +412,7 @@
 					</div>
 
 					<div class="col-sm-6 padding-right-0">
-						<div class="row">
-							<!-- 姓/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group" style="position:relative;">
-									<label><span>*</span>姓/拼音</label> 
-									<c:choose>
-										<c:when test="${empty obj.applicant}">
-											<img width="100%" height="100%" alt="" src="">
-											<input 
-												<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-											
-											 id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" "  />
-											<input 
-												<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-											 type="text" id="firstNameEn" 
-											 	<c:choose>
-														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
-														</c:when>
-														<c:otherwise>
-														style="position:absolute;top:30px;border:none;left:150px;"
-														</c:otherwise>
-													
-													</c:choose >
-											   name="firstNameEn" />
-										</c:when>
-										<c:otherwise>
-											<input 
-												<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-											 id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.firstName }" />
-											<input 
-												<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-											 type="text" id="firstNameEn" 
-											 	<c:choose>
-														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
-														</c:when>
-														<c:otherwise>
-														style="position:absolute;top:30px;border:none;left:150px;"
-														</c:otherwise>
-													
-													</c:choose >
-											   name="firstNameEn" value="${obj.firstNameEn }"/>
-										</c:otherwise>
-									</c:choose>
-										<input 
-											<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-										 type="hidden" name="applyId" value="${obj.applyId }"/>
-										<input 
-											<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-										 type="hidden" name="contact" value="${obj.contact }"/>
-										<input 
-											<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-										 type="hidden" id="id" name="applicantid" value="${obj.applicantId}"/>
-										<input 
-											<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-										 type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
-						<!-- end 姓/拼音 -->
-						<div class="row">
-							<!-- 名/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group" style="position:relative;">
-									<label><span>*</span>名/拼音</label> 
-									<c:choose>
-										<c:when test="${empty obj.applicant}">
-											<input 
-												<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-											 id="lastName"
-												name="lastName" style="position:relative;" type="text" class="form-control input-sm "
-												placeholder=" " />
-												<input 
-													<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-												 type="text" id="lastNameEn" 
-												 	<c:choose>
-														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
-														</c:when>
-														<c:otherwise>
-														style="position:absolute;top:30px;border:none;left:150px;"
-														</c:otherwise>
-													
-													</c:choose >
-												 
-												  name="lastNameEn" />
-										</c:when>
-										<c:otherwise>
-											<input 
-												<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-											 id="lastName"
-												name="lastName" style="position:relative;" type="text" class="form-control input-sm "
-												placeholder=" " value="${obj.applicant.lastName }" />
-												<input 
-													<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-												 type="text" id="lastNameEn" 
-												 	<c:choose>
-														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
-														</c:when>
-														<c:otherwise>
-														style="position:absolute;top:30px;border:none;left:150px;"
-														</c:otherwise>
-													
-													</c:choose >
-												  name="lastNameEn" value="${obj.lastNameEn }"/>
-										</c:otherwise>
-									</c:choose>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
-						<!-- end 名/拼音 -->
+						
 						<div class="row">
 							<!-- 手机号/邮箱 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
@@ -1430,22 +1232,7 @@
 			},
 			fields : {
 
-				firstName : {
-					trigger:"change keyup",
-					validators : {
-						notEmpty : {
-							message : '姓不能为空'
-						}
-					}
-				},
-				lastName : {
-					trigger:"change keyup",
-					validators : {
-						notEmpty : {
-							message : '名不能为空'
-						}
-					}
-				},
+				
 				telephone : {
 					trigger:"change keyup",
 					validators : {
@@ -1483,14 +1270,6 @@
 					validators : {
 						notEmpty : {
 							message : '民族不能为空'
-						}
-					}
-				},
-				issueOrganization : {
-					trigger:"change keyup",
-					validators : {
-						notEmpty : {
-							message : '签发机关不能为空'
 						}
 					}
 				},

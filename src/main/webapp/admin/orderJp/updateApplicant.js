@@ -281,14 +281,6 @@ function applyValidate(){
 						}
 					}
 				},
-				issueOrganization : {
-					trigger:"change keyup",
-					validators : {
-						notEmpty : {
-							message : '签发机关不能为空'
-						}
-					}
-				},
 				otherFirstName : {
 					trigger:"change keyup",
 					validators : {

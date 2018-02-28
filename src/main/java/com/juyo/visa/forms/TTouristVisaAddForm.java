@@ -21,6 +21,8 @@ public class TTouristVisaAddForm extends AddForm implements Serializable {
 
 	private Integer applicantId;
 
+	private String unitName;
+
 	/**单位名称*/
 	private String name;
 

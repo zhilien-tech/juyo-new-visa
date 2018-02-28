@@ -64,6 +64,7 @@ import com.juyo.visa.common.enums.MainSaleUrgentEnum;
 import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
+import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -781,6 +782,31 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
 				Cnd.where("applicantId", "=", applicantid));
 		result.put("passport", passport);
+		if (!Util.isEmpty(passport.getFirstNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.getFirstNameEn());
+			result.put("firstNameEn", sb.toString());
+		}
+		if (!Util.isEmpty(passport.getLastNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.getLastNameEn());
+			result.put("lastNameEn", sb.toString());
+		}
+		//格式化日期
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		if (!Util.isEmpty(passport.getBirthday())) {
+			Date birthday = passport.getBirthday();
+			result.put("birthday", sdf.format(birthday));
+		}
+		if (!Util.isEmpty(passport.getIssuedDate())) {
+			Date issuedDate = passport.getIssuedDate();
+			result.put("issuedDate", sdf.format(issuedDate));
+		}
+		if (!Util.isEmpty(passport.getValidEndDate())) {
+			Date validEndDate = passport.getValidEndDate();
+			result.put("validEndDate", sdf.format(validEndDate));
+		}
+		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		//所访问的ip地址
 		String localAddr = request.getLocalAddr();
 		result.put("localAddr", localAddr);
@@ -815,8 +841,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TApplicantPassportEntity passport = new TApplicantPassportEntity();
 		if (!Util.isEmpty(form.getId())) {
 			passport = dbDao.fetch(TApplicantPassportEntity.class, form.getId().longValue());
-			TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class, passport
-					.getApplicantId().longValue());
+			/*TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class, passport
+					.getApplicantId().longValue());*/
+			TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", passport.getApplicantId().longValue()));
 			result.put("applicantjpid", applicantorder.getApplicantId());
 			result.put("applicantid", applicantorder.getApplicantId());
 			result.put("orderid", applicantorder.getOrderId());
@@ -824,6 +852,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class, form.getId().longValue());
 		passport.setOpId(loginUser.getId());
 
+		passport.setFirstName(form.getFirstName());
+		if (!Util.isEmpty(form.getFirstNameEn())) {
+			passport.setFirstNameEn(form.getFirstNameEn().substring(1));
+		}
+		passport.setLastName(form.getLastName());
+		if (!Util.isEmpty(form.getLastNameEn())) {
+			passport.setLastNameEn(form.getLastNameEn().substring(1));
+		}
 		passport.setPassportUrl(form.getPassportUrl());
 		passport.setOCRline1(form.getOCRline1());
 		passport.setOCRline2(form.getOCRline2());
@@ -1359,6 +1395,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 				applicantWorkJpEntity.setPrepareMaterials(null);
 			}
+			applicantWorkJpEntity.setUnitName(form.getUnitName());
 			applicantWorkJpEntity.setCareerStatus(form.getCareerStatus());
 			applicantWorkJpEntity.setName(form.getName());
 			applicantWorkJpEntity.setAddress(form.getAddress());

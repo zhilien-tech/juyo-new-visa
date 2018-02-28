@@ -85,7 +85,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>客户来源：</label> <select id="customerType"
-											name="customerType" class="form-control input-sm">
+											name="customerType" class="form-control input-sm" tabindex="1">
 											<option value="">--请选择--</option>
 											<c:forEach var="map" items="${obj.customerTypeEnum}">
 												<c:choose>
@@ -105,9 +105,9 @@
 									<div class="col-sm-3">
 										<div class="form-group">
 											<label><span>*</span>公司全称：</label> 
-											<input type="hidden" id="customerid" name="customerid" value="${obj.customerinfo.id }">
+											<input type="hidden" id="customerid" name="customerid" value="${obj.customerinfo.id }" >
 											<select id="compName"
-												name="name" class="form-control select2 cityselect2 "
+												name="name" class="form-control select2 cityselect2 "tabindex="2"
 												multiple="multiple" data-placeholder="">
 												<c:if test="${not empty obj.customerinfo.name }">
 													<option value="${obj.customerinfo.name }" selected="selected">${obj.customerinfo.name }</option>
@@ -119,7 +119,7 @@
 										<div class="form-group">
 											<label><span>*</span>公司简称：</label> 
 											<select id="comShortName"
-												name="shortname" class="form-control select2 cityselect2 "
+												name="shortname" class="form-control select2 cityselect2 " tabindex="3"
 												multiple="multiple" data-placeholder="">
 												<c:if test="${not empty obj.customerinfo.shortname }">
 													<option value="${obj.customerinfo.shortname }" selected="selected">${obj.customerinfo.shortname }</option>
@@ -135,14 +135,14 @@
 									<!-- input 直客 -->
 									<div class="col-sm-3">
 										<div class="form-group">
-											<label><span>*</span>公司全称：</label> <input id="compName2"
+											<label><span>*</span>公司全称：</label> <input id="compName2" tabindex="2"
 												name="name" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.customerinfo.name }"/>
 										</div>
 									</div>
 									<div class="col-sm-3">
 										<div class="form-group">
-											<label><span>*</span>公司简称：</label> <input id="comShortName2"
+											<label><span>*</span>公司简称：</label> <input id="comShortName2" tabindex="3"
 												name="shortname" type="text" class="form-control input-sm"
 												placeholder=" " value="${obj.customerinfo.shortname }"/>
 										</div>
@@ -155,9 +155,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>付款方式：</label> 
-											<select id="payType"
-												name="payType" type="text" class="form-control input-sm"
-												placeholder=" " >
+											<select id="payType" name="payType" type="text" class="form-control input-sm" tabindex="4" >
 												<c:forEach var="map" items="${obj.mainSalePayTypeEnum}">
 													<c:choose>
 														<c:when test="${map.key eq obj.customerinfo.payType }">
@@ -174,8 +172,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>签证类型：</label> <select id="visatype"
-											name="visatype" type="text" class="form-control input-sm"
-											placeholder=" " >
+											name="visatype" type="text" class="form-control input-sm" tabindex="5">
 												<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 													<c:choose>
 														<c:when test="${map.key eq obj.orderjpinfo.visaType }">
@@ -193,7 +190,7 @@
 									<div class="form-group">
 										<label><span>*</span>金额：</label> <input id="amount"
 											name="amount" type="text" class="form-control input-sm"
-											placeholder=" " value="${obj.orderjpinfo.amount }"/>
+											tabindex="6" value="${obj.orderjpinfo.amount }"/>
 									</div>
 								</div>
 							</div>
@@ -209,7 +206,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>领区：</label> <select
-											class="form-control input-sm" id="cityid" name="cityid">
+											class="form-control input-sm" id="cityid" name="cityid" tabindex="7">
 											<c:forEach var="map" items="${obj.collarAreaEnum}">
 												<c:choose>
 													<c:when test="${map.key eq obj.orderinfo.cityId}">
@@ -226,7 +223,7 @@
 								</div>
 								<div class="col-sm-1 show-select">
 									<div class="form-group">
-										<label><span>*</span>加急：</label> <select id="urgentType"
+										<label><span>*</span>加急：</label> <select id="urgentType" tabindex="8"
 											name="urgenttype" class="form-control input-sm sm">
 											<c:forEach var="map" items="${obj.mainSaleUrgentEnum}">
 												<c:choose>
@@ -251,7 +248,7 @@
 									</c:otherwise>
 								</c:choose>
 									<div class="form-group">
-										<label>&nbsp;</label> <select id="urgentDay" name="urgentday"
+										<label>&nbsp;</label> <select id="urgentDay" name="urgentday" tabindex="9"
 											class="form-control input-sm none-sm">
 											<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
 												<c:choose>
@@ -273,21 +270,21 @@
 								<!-- 送签时间/出签时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>预计送签时间：</label> <input id="sendVisaDate"
+										<label><span>*</span>预计送签时间：</label> <input id="sendVisaDate" tabindex="10"
 											name="sendvisadate" type="text" class="form-control input-sm"
 											placeholder=" "  value="<fmt:formatDate value="${obj.orderinfo.sendVisaDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>预计出签时间：</label> <input id="outVisaDate"
+										<label><span>*</span>预计出签时间：</label> <input id="outVisaDate" tabindex="11"
 											name="outvisadate" type="text" class="form-control input-sm datetimepickercss"
 											placeholder=" "  value="<fmt:formatDate value="${obj.orderinfo.outVisaDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>送签编号：</label>
+										<label>送签编号：</label>
 										<input id="sendvisanum" type="text" class="form-control input-sm" value="${obj.orderinfo.sendVisaNum }"/>
 									</div>
 								</div>
@@ -302,14 +299,14 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行目的：</label>
-										<input id="tripPurpose" name="tripPurpose" type="text" class="form-control input-sm" placeholder=" " value="${obj.tripinfo.tripPurpose }"/>
+										<input id="tripPurpose" name="tripPurpose" tabindex="12" type="text" class="form-control input-sm" placeholder=" " value="${obj.tripinfo.tripPurpose }"/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>往返/多程：</label>
-										<select id="triptype" class="form-control input-sm">
+										<select id="triptype" class="form-control input-sm" tabindex="13">
 											<option value="1">往返</option>
 											<!-- <option value="2">多程</option> -->
 										</select>
@@ -321,19 +318,19 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行时间：</label>
-										<input id="goDate" name="" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.tripinfo.goDate }" pattern="yyyy-MM-dd" />"/>
+										<input id="goDate" name="" tabindex="14" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.tripinfo.goDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>停留天数：</label>
-										<input id="stayday" type="text" class="form-control input-sm" value="${obj.orderinfo.stayDay }"/>
+										<input id="stayday" type="text" tabindex="15" class="form-control input-sm" value="${obj.orderinfo.stayDay }"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回时间：</label>
-										<input id="returnDate" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.tripinfo.returnDate }" pattern="yyyy-MM-dd" />"/>
+										<input id="returnDate" type="text" class="form-control input-sm datetimepickercss" tabindex="16" value="<fmt:formatDate value="${obj.tripinfo.returnDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 							</div>
@@ -341,7 +338,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
-										<select id="goDepartureCity" class="form-control select2 select2City" multiple="multiple" >
+										<select id="goDepartureCity" class="form-control select2 select2City" multiple="multiple" tabindex="17" >
 											<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
 													<c:when test="${city.id eq obj.tripinfo.goDepartureCity }">
@@ -358,7 +355,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>抵达城市：</label>
-										<select id="goArrivedCity" class="form-control input-sm select2City" multiple="multiple">
+										<select id="goArrivedCity" class="form-control input-sm select2City" multiple="multiple" tabindex="18">
 											<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
 													<c:when test="${city.id eq obj.tripinfo.goArrivedCity }">
@@ -376,7 +373,7 @@
 								<div class="col-sm-3 paddingRight">
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
-										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" >
+										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="19">
 											<c:forEach items="${obj.flightlist }" var="flight">
 												<c:if test="${obj.tripinfo.goFlightNum eq  flight.flightnum}">
 													<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
@@ -392,7 +389,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
-										<select id="returnDepartureCity" class="form-control select2 select2City" multiple="multiple">
+										<select id="returnDepartureCity" class="form-control select2 select2City" multiple="multiple" tabindex="20">
 											<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
 													<c:when test="${city.id eq obj.tripinfo.returnDepartureCity }">
@@ -409,7 +406,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回城市：</label>
-										<select id="returnArrivedCity" class="form-control input-sm select2City" multiple="multiple">
+										<select id="returnArrivedCity" class="form-control input-sm select2City" multiple="multiple" tabindex="21">
 											<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
 													<c:when test="${city.id eq obj.tripinfo.returnArrivedCity }">
@@ -427,7 +424,7 @@
 								<div class="col-sm-3 paddingRight">
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
-										<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple">
+										<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="22">
 											<%-- <c:if test="${!empty obj.tripinfo.returnFlightNum }">
 												<option value="${obj.tripinfo.returnFlightNum }" selected="selected">${obj.tripinfo.returnFlightNum }</option>
 											</c:if> --%>
@@ -523,7 +520,7 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-	<script src="${base}/admin/orderJp/order.js"></script>
+	<%-- <script src="${base}/admin/orderJp/order.js"></script> --%>
 	<!-- 本页面js文件 -->
 	<!-- select2 -->
 	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>

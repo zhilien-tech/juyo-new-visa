@@ -80,19 +80,42 @@
 					</div>
 						
 					<div class="col-sm-7 padding-right-0">
-						<div class="row"><!-- 类型/护照号 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>类型</label>
+						<div class="row">
+						<!-- 姓/拼音 -->
+							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
+									<div class="form-group" style="position:relative;">
+									<label><span>*</span>姓/拼音</label> <input id="firstName"
+										name="firstName" type="text" class="form-control input-sm "  tabIndex="2"
+										placeholder=" " value="${obj.applicant.firstName }" />
+										
+										<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
+									<!-- <i class="bulb"></i> -->
+								</div>
 									<input type="hidden" id="id" name="id" value=""/>
 									<input type="hidden" id="OCRline1" name="OCRline1" value="">
 									<input type="hidden" id="OCRline2" name="OCRline2" value="">
 									<input type="hidden" id="applicantid" name="applicantid" value=""/>
 									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
-									<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									
+									<!-- <i class="bulb"></i> -->
+							</div>
+						</div>
+						<!-- end 姓/拼音 -->
+					<div class="row">
+							<!-- 名/拼音 -->
+							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
+								<div class="form-group" style="position:relative;">
+									<label><span>*</span>名/拼音</label> <input id="lastName"
+										name="lastName" type="text" class="form-control input-sm "  tabIndex="3"
+										placeholder=" " value="${obj.applicant.lastName }" />
+										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
+
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
+						</div>
+						<!-- end 名/拼音 -->
+						<div class="row"><!-- 类型/护照号 -->
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth">
 									<label><span>*</span>护照号</label>
@@ -249,54 +272,6 @@
 							}
 						}
 					},
-					type : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '类型不能为空'
-							}
-						}
-					},
-					birthAddress : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '出生地点不能为空'
-							}
-						}
-					},
-					birthday : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '出生日期不能为空'
-							}
-						}
-					},
-					issuedPlace : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '签发地点不能为空'
-							}
-						}
-					},
-					issuedDate : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '签发日期不能为空'
-							}
-						}
-					},
-					validEndDate : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '有效日期不能为空'
-							}
-						}
-					}
 				}
 			});
 			$('#passportInfo').bootstrapValidator('validate');
@@ -392,6 +367,10 @@
 						layer.close(layerIndex);
 						if (true === obj.success) {
 							layer.msg("识别成功");
+							$('#firstName').val(obj.xingCn).change();
+							$('#firstNameEn').val("/"+getPinYinStr(obj.xingCn));
+							$('#lastName').val(obj.mingCn).change();
+							$('#lastNameEn').val("/"+getPinYinStr(obj.mingCn));
 							$('#passportUrl').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");
@@ -450,10 +429,8 @@
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
-			if(status != 2){
-				if (!bootstrapValidator.isValid()) {
-					return;
-				}
+			if (!bootstrapValidator.isValid()) {
+				return;
 			}
 			var passportInfo = $("#passportInfo").serialize();
 			layer.load(1);
@@ -605,9 +582,6 @@
 			var id = '${obj.applicantid}';
 			var orderid = '${obj.orderid}';
 			save(2);
-			//关闭socket连接
-			//socket.onclose();
-			//window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}';
 		 }
 	</script>
 

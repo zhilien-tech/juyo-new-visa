@@ -139,8 +139,211 @@
 					
 
 					<div class="col-sm-7 padding-right-0">
+						<div class="row">
+							<!-- 姓/拼音 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group" style="position:relative;">
+									<label><span>*</span>姓/拼音</label> 
+									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
+									<input type="hidden" id="OCRline1" name="OCRline1" value="">
+									<input type="hidden" id="OCRline2" name="OCRline2" value="">
+									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<img width="100%" height="100%" alt="" src="">
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											
+											 id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.passport.firstName }" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="text" id="firstNameEn" 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+											   name="firstNameEn" value="${obj.firstNameEn }"/>
+										</c:when>
+										<c:otherwise>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="firstName"	name="firstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.passport.firstName }" />
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="text" id="firstNameEn" 
+											 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+											   name="firstNameEn" value="${obj.firstNameEn }"/>
+										</c:otherwise>
+									</c:choose>
+										<input 
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 type="hidden" name="applyId" value="${obj.applyId }"/>
+										<input 
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 type="hidden" name="contact" value="${obj.contact }"/>
+										<input 
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 type="hidden" id="id" name="applicantid" value="${obj.applicantId}"/>
+										<input 
+											<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+										 type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
+						<!-- end 姓/拼音 -->
+						<div class="row">
+							<!-- 名/拼音 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group" style="position:relative;">
+									<label><span>*</span>名/拼音</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="lastName"
+												name="lastName" style="position:relative;" type="text" class="form-control input-sm "
+												placeholder=" " value="${obj.passport.lastName }"/>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 type="text" id="lastNameEn" 
+												 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+												 
+												  name="lastNameEn" value="${obj.lastNameEn }"/>
+										</c:when>
+										<c:otherwise>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="lastName"
+												name="lastName" style="position:relative;" type="text" class="form-control input-sm "
+												placeholder=" " value="${obj.passport.lastName }" />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 type="text" id="lastNameEn" 
+												 	<c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+												  name="lastNameEn" value="${obj.lastNameEn }"/>
+										</c:otherwise>
+									</c:choose>
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
+						<!-- end 名/拼音 -->
 						<div class="row"><!-- 类型/护照号 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+							<%-- <div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>类型</label>
 									<c:choose>
@@ -261,7 +464,7 @@
 									 type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
-							</div>
+							</div> --%>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>护照号</label>
@@ -844,6 +1047,22 @@
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
+				firstName : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '姓不能为空'
+						}
+					}
+				},
+				lastName : {
+					trigger:"change keyup",
+					validators : {
+						notEmpty : {
+							message : '名不能为空'
+						}
+					}
+				},
 				passport : {
 					trigger:"change keyup",
 					validators : {
@@ -948,6 +1167,10 @@
 					layer.close(layerIndex);
 					if (true === obj.success) {
 						layer.msg("识别成功");
+						$('#firstName').val(obj.xingCn).change();
+						$('#firstNameEn').val("/"+getPinYinStr(obj.xingCn));
+						$('#lastName').val(obj.mingCn).change();
+						$('#lastNameEn').val("/"+getPinYinStr(obj.mingCn));
 						$('#passportUrl').val(obj.url);
 						$('#sqImg').attr('src', obj.url);
 						$("#uploadFile").siblings("i").css("display","block");
