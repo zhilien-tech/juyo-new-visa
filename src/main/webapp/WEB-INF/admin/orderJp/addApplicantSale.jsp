@@ -106,8 +106,8 @@ input[type="file"] { z-index:99999;}
 								</div>
 							</div>
 						</div>end 签发机关 -->
-						<div class="row">
-							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
+						<!-- <div class="row">
+							是否有曾用名/曾有的或另有的国际(或公民身份)
 							<div class="col-sm-5 padding-right-0 nameBeforeTop">
 								<div class="form-group">
 									<label>是否有曾用名</label> 
@@ -121,7 +121,7 @@ input[type="file"] { z-index:99999;}
 									</div>
 								</div>
 							</div>
-							<!-- 姓/名 拼音 -->
+							姓/名 拼音
 							<div class="nameBeforeHide">
 							    <div class="col-sm-10 padding-right-0 marginL">
 									<div class="form-group" style="position:relative;">
@@ -130,11 +130,11 @@ input[type="file"] { z-index:99999;}
 											placeholder=" " value="" />
 											<input type="text" id="otherFirstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
 
-										<!-- <i class="bulb"></i> -->
+										<i class="bulb"></i>
 									</div>
 								</div>
 							</div>
-							<!-- 姓/名 拼音 end -->
+							姓/名 拼音 end
 							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
 								<div class="form-group">
 									<label>曾有的或另有的国籍(或公民身份)</label> 
@@ -148,14 +148,14 @@ input[type="file"] { z-index:99999;}
 									</div>
 								</div>
 							</div>
-							<!-- 曾用国籍 -->
+							曾用国籍
 							<div class="col-sm-5 padding-right-0 nationalityHide">
 								<div class="form-group" id="nationalityDiv">
 									<label>国籍</label> 
 									<input id="nationality" name="nationality" type="text" class="form-control input-sm"/>
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 						
 					<div class="col-sm-6 padding-right-0">
@@ -270,7 +270,41 @@ input[type="file"] { z-index:99999;}
 							
 							</div>
 						</div>	
-						<div class="row wordSpell">
+						
+						<div class="row">
+							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
+							<div class="col-sm-5 padding-right-0 nameBeforeTop">
+								<div class="form-group">
+									<label>是否有曾用名</label> 
+									<div>
+										<span class="nameBeforeYes">
+											<input type="radio" name="hasOtherName" class="nameBefore" value="1" />是
+										</span>
+										<span>
+											<input type="radio" name="hasOtherName" class="nameBefore" checked value="2" />否
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<!-- 姓/名 拼音 -->
+							<div class="nameBeforeHide">
+							    <div class="col-sm-11 padding-right-0 padding-right-0">
+									<div class="form-group" style="position:relative;">
+										<label>姓/拼音</label> <input id="otherFirstName"
+											name="otherFirstName"  type="text" class="form-control input-sm "
+											placeholder=" " value="" />
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="otherFirstNameEn" value=""/>
+
+										<!-- <i class="bulb"></i> -->
+									</div>
+								</div>
+							</div>
+							<!-- 姓/名 拼音 end -->
+						</div>
+						<div class="row">
+							<div class="nameBeforeHide">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group" style="position:relative;" >
 									<label>名/拼音</label> 
@@ -279,6 +313,31 @@ input[type="file"] { z-index:99999;}
 								</div>
 							</div>
 						</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
+								<div class="form-group">
+									<label>曾有的或另有的国籍(或公民身份)</label> 
+									<div>
+										<span class="onceIDYes">
+											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
+										</span>
+										<span>
+											<input type="radio" name="hasOtherNationality" class="onceID" checked value="2"  />否
+										</span>
+									</div>
+								</div>
+							</div>
+							<!-- 曾用国籍 -->
+							<div class="col-sm-5 padding-right-0 nationalityHide">
+								<div class="form-group" id="nationalityDiv">
+									<label>国籍</label> 
+									<input id="nationality" name="nationality" type="text" class="form-control input-sm"/>
+								</div>
+							</div>
+						</div>
+						
+						
 						<div class="row">
 							<!-- 紧急联系人姓名/手机 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
