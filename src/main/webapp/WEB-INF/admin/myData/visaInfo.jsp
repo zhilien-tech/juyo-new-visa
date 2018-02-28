@@ -508,6 +508,15 @@
 							</div>
 							
 							<!-- end 单位地址 -->
+							<!-- 父母单位名称/配偶单位名称 -->
+							<div class="row unitNameRow">
+								<div class="col-sm-8 preSchool">
+									<div class="form-group">
+										<label id="unitNameLabel"></label>
+										<input id="unitName" name="unitName" type="text" class="form-control input-sm" value="${obj.visaInfo.unitName }"/>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<!-- end 工作信息 -->
@@ -829,12 +838,21 @@
 			
 			//婚姻状况为单身和丧偶时没有上传图片接口
 			var marryStatus = $("#marryStatus").val();
-			if(marryStatus == 3 || marryStatus == 4){
+			if(marryStatus == 3 || marryStatus == 4 || !marryStatus){
 				$(".info-imgUpload").hide();
+				$("#unitNameLabel").html("<span>*</span>父母单位名称");
+			}else{
+				$(".info-imgUpload").show();
+				if(marryStatus == 1){
+					$("#unitNameLabel").html("<span>*</span>配偶单位名称");
+				}else{
+					$("#unitNameLabel").html("<span>*</span>父母单位名称");
+				}
 			}
 			$("#marryStatus").change(function(){
 				var status = $(this).val();
-				if(status == 3 || status == 4){
+				if(status == 3 || status == 4 || !status){
+					$("#unitNameLabel").html("<span>*</span>父母单位名称");
 					$(".info-imgUpload").hide();
 					$('#marryUrl').val("");
 					$('#sqImg').attr('src', "");
@@ -844,6 +862,11 @@
 				    $(".help-blockFront").attr("style","display: none;");
 				    $("#borderColor").attr("style",null);
 				}else{
+					if(status == 1){
+						$("#unitNameLabel").html("<span>*</span>配偶单位名称");
+					}else{
+						$("#unitNameLabel").html("<span>*</span>父母单位名称");
+					}
 					if($("#sqImg").attr("src") == ""){
 						$(".front").attr("class", "info-imgUpload front has-error");  
 					    $(".help-blockFront").attr("data-bv-result","INVALID");  
@@ -1214,6 +1237,14 @@
 						validators : {
 							notEmpty : {
 								message : '地址不能为空'
+							}
+						}
+					},
+					unitName : {
+						trigger:"change keyup",
+						validators : {
+							notEmpty : {
+								message : '单位名称不能为空'
 							}
 						}
 					},

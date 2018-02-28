@@ -1430,6 +1430,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 				visaEntity.setVehicle(visaForm.getVehicle());
 			}
 		}
+		visaEntity.setUnitName(visaForm.getUnitName());
 		visaEntity.setIsMainApplicant(visaForm.getApplicant());
 		visaEntity.setMainId(visaForm.getMainApplicant());
 		visaEntity.setMainRelation(visaForm.getMainRelation());
@@ -1580,6 +1581,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 				visaEntity.setVehicle(visaForm.getVehicle());
 			}
 		}
+		visaEntity.setUnitName(visaForm.getUnitName());
 		visaEntity.setIsMainApplicant(visaForm.getApplicant());
 		visaEntity.setMainId(visaForm.getMainApplicant());
 		visaEntity.setMainRelation(visaForm.getMainRelation());

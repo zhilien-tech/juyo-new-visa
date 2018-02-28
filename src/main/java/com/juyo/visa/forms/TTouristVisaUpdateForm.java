@@ -86,4 +86,6 @@ public class TTouristVisaUpdateForm extends ModForm implements Serializable {
 
 	private String vehicle;
 
+	private String unitName;
+
 }

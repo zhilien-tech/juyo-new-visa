@@ -79,9 +79,9 @@ $(function() {
 	$("#issuedDate").change(function(){
 		if($("#issuedDate").val() != ""){
 			if($("#validType").val() == 1){
-				$('#validEndDate').val(getNewDate($('#issuedDate').val(), 5));
+				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
 			}else{
-				$('#validEndDate').val(getNewDate($('#issuedDate').val(), 10));
+				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
 			}
 		}
 	});
@@ -89,15 +89,15 @@ $(function() {
 	$("#validType").change(function(){
 		var type = $(this).val();
 		if(type == 1){
-			$('#validEndDate').val(getNewDate($('#issuedDate').val(), 5));
+			$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
 		}else{
-			$('#validEndDate').val(getNewDate($('#issuedDate').val(), 10));
+			$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
 		}
 		
 	});
 });
 
-function getNewDate(dateTemp, days){
+function getNewDates(dateTemp, days){
 	var d1 = new Date(dateTemp);
 	var d2 = new Date(d1);
 	d2.setFullYear(d2.getFullYear()+days);

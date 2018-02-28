@@ -279,15 +279,6 @@ $(document).on("input","#validStartDate",function(){
 	}
 });
 
-$(document).on("input","#validEndDate",function(){
-	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
-		return;
-	}
-	var temp = $(this).val();
-	if($(this).val().length == 8){
-		$(this).val(getNewDate(temp));
-	}
-});
 
 $(document).on("input","#goTripDate",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
