@@ -78,70 +78,6 @@
 							<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
 						</div>
 						<!-- end 身份证 反面 -->
-
-						<%-- <div class="row">
-							<!-- 签发机关 -->
-							<div class="col-sm-10 padding-right-0 marginL">
-								<div class="form-group">
-									<label><span>*</span>签发机关</label> 
-									<input id="issueOrganization" name="issueOrganization"
-										type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
-						<!-- end 签发机关 --> --%>
-						<%-- <div class="row">
-							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
-							<div class="col-sm-5 padding-right-0 nameBeforeTop">
-								<div class="form-group">
-									<label>是否有曾用名</label> 
-									<div>
-										<span class="nameBeforeYes">
-											<input type="radio" name="hasOtherName" class="nameBefore" value="1"
-											/>是
-										</span>
-										<span>
-											<input type="radio" name="hasOtherName" class="nameBefore"   value="2"
-											/>否
-										</span>
-									</div>
-								</div>
-							</div>
-							<!-- 姓/名 拼音 -->
-							<div class="nameBeforeHide">
-							    <div class="col-sm-10 padding-right-0 marginL">
-									<div class="form-group" style="position:relative;">
-										<label>姓/拼音</label> <input id="otherFirstName"
-											name="otherFirstName" type="text" class="form-control input-sm "
-											placeholder=" " value="${obj.applicant.otherFirstName }" />
-											<input type="text" id="otherFirstNameEn" style="position:absolute;top:30px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
-										<!-- <i class="bulb"></i> -->
-									</div>
-								</div>
-							</div>
-							<!-- 姓/名 拼音 end -->
-							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
-								<div class="form-group">
-									<label>曾有的或另有的国籍(或公民身份)</label> 
-									<div>
-										<span class="onceIDYes">
-											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
-										</span>
-										<span>
-											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  />否
-										</span>
-									</div>
-								</div>
-							</div>
-							<!-- 曾用国籍 -->
-							<div class="col-sm-5 padding-right-0 nationalityHide">
-								<div class="form-group" id="nationalityDiv">
-									<label>国籍</label> 
-									<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
-								</div>
-							</div>
-						</div> --%>
 					</div>
 
 					<div class="col-sm-6 padding-right-0">
@@ -155,14 +91,14 @@
 									<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
 									<input id="telephone"
 										name="telephone" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.telephone }" />
+										value="${obj.applicant.telephone }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>邮箱</label> <input id="email" name="email"
-										type="text" class="form-control input-sm" placeholder=" "
+										type="text" class="form-control input-sm"
 										value="${obj.applicant.email }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -176,7 +112,7 @@
 								<div class="form-group">
 									<label>公民身份证</label> <input id="cardId"
 										name="cardId" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.cardId }" />
+										value="${obj.applicant.cardId }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -187,13 +123,8 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>性别</label> 
-									<%-- <input id="sex" name="sex" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.sex }"/> --%>
-									<select
-										class="form-control input-sm selectHeight" id="sex" name="sex">
-										<%-- <c:forEach var="map" items="${obj.boyOrGirlEnum}">
-												<option value="${map.key}" ${map.key==obj.applicant.sex?'selected':''}>${map.value}</option>
-											</c:forEach> --%>
-											<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
+									<select class="form-control input-sm selectHeight" id="sex" name="sex">
+										<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
 										<option value="女" ${obj.applicant.sex == "女"?"selected":"" }>女</option>
 									</select>
 								</div>
@@ -202,7 +133,7 @@
 								<div class="form-group">
 									<label>民族</label> <input id="nation"
 										name="nation" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.nation }" />
+										value="${obj.applicant.nation }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -210,7 +141,6 @@
 								<div class="form-group">
 									<label>出生日期</label> 
 									<input id="birthday" name="birthday" type="text" class="form-control input-sm" value="${obj.birthday }"/>
-									
 								</div>
 							</div>
 						</div>
@@ -221,7 +151,7 @@
 								<div class="form-group">
 									<label>住址</label> <input id="address"
 										name="address" type="text" class="form-control input-sm"
-										placeholder=" " value="${obj.applicant.address }" />
+										value="${obj.applicant.address }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -237,7 +167,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label> &nbsp; &nbsp;</label> 
-									<input id="validEndDate" type="text" name="validEndDate"  class="form-control input-sm" value="${obj.validEndDate }">
+									<input id="validEndDate" type="text" name="validEndDate" class="form-control input-sm" value="${obj.validEndDate }">
 								</div>
 							</div>
 						</div>
@@ -289,7 +219,7 @@
 											/>是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherName" class="nameBefore"   value="2"
+											<input type="radio" name="hasOtherName" class="nameBefore" checked value="2"
 											/>否
 										</span>
 									</div>
@@ -325,25 +255,26 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
-								<div class="form-group">
+								<div class="form-group" id="onceNationalityRadio">
 									<label>曾有的或另有的国籍(或公民身份)</label> 
 									<div>
 										<span class="onceIDYes">
 											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherNationality" class="onceID"  value="2"  />否
+											<input type="radio" name="hasOtherNationality" class="onceID" checked value="2"  />否
 										</span>
 									</div>
 								</div>
-							</div>
-							<!-- 曾用国籍 -->
-							<div class="col-sm-5 padding-right-0 nationalityHide">
-								<div class="form-group" id="nationalityDiv">
-									<label>国籍</label> 
-									<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
+								<div class="col-sm-5 padding-right-0 nationalityHide">
+									<div class="form-group" id="nationalityDiv">
+										<label>国籍</label> 
+										<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
+									</div>
 								</div>
-							</div>
+						</div>
+							<!-- 曾用国籍 -->
+							
 						</div>
 						
 						
@@ -446,17 +377,13 @@
 			if(nation == 1){
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
-				$(".onceIDTop").css({'float':'left','margin-left':'0px','padding':'0px'});
 			}else {
 				$(".nationalityHide").hide();
 			}
 			
 			if(otherName == 1){
-				$(".nameBeforeTop").css('float','none');
 				$(".nameBeforeHide").show();
 				$(".wordSpell").show();
-				$(".onceIDTop").removeClass('col-sm-offset-1');
-				$(".onceIDTop").css({"margin-left":"45px"});
 			}else {
 				
 				$(".nameBeforeHide").hide();
@@ -815,13 +742,9 @@
 		$(".nameBefore").change(function(){
 
 			let checked = $("input[name='hasOtherName']:checked").val();
-			let checked2 = $("input[name='hasOtherNationality']:checked").val();
 			if(checked == 1){
-				$(".nameBeforeTop").css('float','none');
 				$(".nameBeforeHide").show();
 				$(".wordSpell").show();
-				$(".onceIDTop").removeClass('col-sm-offset-1');
-				$(".onceIDTop").css('margin-left','45px');
 				$("#otherFirstName").val("").change();
 				$("#otherFirstNameEn").val("");
 				$("#otherLastName").val("").change();
@@ -830,37 +753,17 @@
 				
 				$(".nameBeforeHide").hide();
 				$(".wordSpell").hide();
-				if(checked2 == 1){
-					$("#nationality").val("").change();
-				}else {
-					$(".nameBeforeTop").css('float','left');
-					$(".onceIDTop").css('margin-left','0px');
-				}
 			}
 		});
 		//曾用国籍
 		$(".onceID").change(function(){
 			let checked = $("input[name='hasOtherNationality']:checked").val();
-			let checked2 = $("input[name='hasOtherName']:checked").val();
 			if(checked == 1){
-				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
-				$(".onceIDTop").css('float','left');
-				$(".onceIDTop").removeClass('col-sm-offset-1');
-				$(".onceIDTop").css('margin-left','45px');
 				$("#nationality").val("").change();
 			}else {
 				
 				$(".nationalityHide").hide();
-				if(checked2 == 1){
-					$("#otherFirstName").val("").change();
-					$("#otherFirstNameEn").val("");
-					$("#otherLastName").val("").change();
-					$("#otherLastNameEn").val("");
-				}else {
-					$(".nameBeforeTop").css('float','left');
-					$(".onceIDTop").css('margin-left','0px');
-				}
 			}
 		});
 		

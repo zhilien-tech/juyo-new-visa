@@ -43,6 +43,8 @@ public class TCompanyUpdateForm extends ModForm implements Serializable {
 	/**营业执照*/
 	private String license;
 
+	private String seal;
+
 	/**经营范围*/
 	private String businessScopes;
 
