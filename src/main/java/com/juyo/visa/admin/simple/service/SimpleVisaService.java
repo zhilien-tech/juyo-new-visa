@@ -885,6 +885,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		passport.setUpdateTime(new Date());
 		if (!Util.isEmpty(form.getId())) {
 			dbDao.update(passport);
+			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, passport.getApplicantId().longValue());
+			applicant.setFirstName(form.getFirstName());
+			applicant.setLastName(form.getLastName());
+			if (!Util.isEmpty(form.getFirstNameEn())) {
+				applicant.setFirstNameEn(form.getFirstNameEn().substring(1));
+			}
+			if (!Util.isEmpty(form.getLastNameEn())) {
+				applicant.setLastNameEn(form.getLastNameEn().substring(1));
+			}
+			dbDao.update(applicant);
 		} else {
 			Integer orderjpid = form.getOrderid();
 			if (Util.isEmpty(orderjpid)) {
@@ -893,8 +903,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 			TApplicantEntity applicantEntity = new TApplicantEntity();
 			applicantEntity.setFirstName(form.getFirstName());
-			applicantEntity.setFirstNameEn(form.getFirstNameEn());
+			//applicantEntity.setFirstNameEn(form.getFirstNameEn());
 			applicantEntity.setLastName(form.getLastName());
+			if (!Util.isEmpty(form.getFirstNameEn())) {
+				applicantEntity.setFirstNameEn(form.getFirstNameEn().substring(1));
+			}
+			if (!Util.isEmpty(form.getLastNameEn())) {
+				applicantEntity.setLastNameEn(form.getLastNameEn().substring(1));
+			}
 			applicantEntity.setLastNameEn(form.getLastNameEn());
 			TApplicantEntity insertapplicant = dbDao.insert(applicantEntity);
 			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
