@@ -49,7 +49,7 @@
 						</div>
 					</div>
 					<div class="checkbox">
-						<input id="" name="" type="checkbox" class="login-check"/>记住密码
+						<input id="" name="" type="checkbox" class=""/>记住密码
 					</div>
 					<div class="row">
 						<div class="col-sm-12">                                                                                                

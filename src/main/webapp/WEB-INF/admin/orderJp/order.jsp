@@ -38,6 +38,7 @@
 			.select2 { width:100% !important;}
 			.addApplicantBtn { width:30% !important;}
 			[v-cloak]{display:none;}
+			.btn-Big { width:82px !important;}
 		</style>
 	</head>
 
@@ -49,7 +50,7 @@
 				<span class="">受付番号：<p></p></span> 
 				<span class="">状态：<p id="spanStatus">${obj.orderstatus }</p></span> 
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancel();"/> 
-				<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right" id="saveOrder" v-on:click="order()" /> 
+				<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" id="saveOrder" v-on:click="order()" /> 
 				<!-- <input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" /> -->
 				<input type="button" value="初审" class="btn btn-primary btn-sm pull-right" @click="firtTrialJp(orderInfo.id)"/>
 				<input type="button" value="分享" class="btn btn-primary btn-sm pull-right" @click="share(orderInfo.id)" />

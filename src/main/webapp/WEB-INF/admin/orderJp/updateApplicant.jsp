@@ -418,19 +418,14 @@
 			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
 			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
 			if(nation == 1){
-				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
-				$(".onceIDTop").css({'float':'left','margin-left':'45px','padding':'0px'});
 			}else {
 				$(".nationalityHide").hide();
 			}
 			
 			if(otherName == 1){
-				$(".nameBeforeTop").css('float','none');
 				$(".nameBeforeHide").show();
 				$(".wordSpell").show();
-				$(".onceIDTop").removeClass('col-sm-offset-1');
-				$(".onceIDTop").css({"margin-left":"45px"});
 			}else {
 				
 				$(".nameBeforeHide").hide();
