@@ -86,7 +86,9 @@
 .btn-Big {
 	width: 75px !important;
 }
-
+.btn-ToBig {
+	width:80px !important;
+}
 #applicantsTable tr td:nth-child(1) {
 	width: 4%;
 }
