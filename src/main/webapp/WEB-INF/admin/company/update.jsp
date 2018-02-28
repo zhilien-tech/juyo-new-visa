@@ -155,6 +155,29 @@
 						</div>
 					</div>
 					<!-- end 上传营业执照 -->
+					<!-- 上传公章  -->
+					<div class="row" style="margin-top: 15px;">
+						<div class="col-xs-3">
+							<div class="form-group">
+								<div class="upload-btn">
+									<input id="seal" name="seal" value="${obj.company.seal}" type="hidden"/>
+									<a href="javascript:;" class="uploadP">
+										上传营业执照
+										<input id="uploadFileSeal" name="uploadFileSeal" class="btn btn-primary btn-sm" type="file" value="上传公章" />
+									</a>
+									
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="form-group">
+								<div class="sqImgPreview">
+									<img id="sqImgSeal" alt="公章" src="${obj.company.seal}">
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- end 上传公章-->
 				</div>
 
 				<!-- 指定番号 -->
