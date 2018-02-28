@@ -29,10 +29,26 @@
 			<div class="qz-head">
 				<!-- <span class="">订单号：<p>170202-JP0001</p></span> -->
 				<!-- <span class="">受付番号：<p>JDY27163</p></span> -->
-				<span class="stateOrder">状态：
-					<p>下单</p>
-				</span> <input type="button" value="取消"
-					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
+				<c:choose>
+						<c:when test="${obj.orderstatus == '发招宝中'}">
+							<span >状态：
+						<p class="cateInfo">${obj.orderstatus }</p>
+					</span> 
+					<!-- 加载中 -->
+					<div class="spinner">
+					  <div class="bounce1"></div>
+					  <div class="bounce2"></div>
+					  <div class="bounce3"></div>
+					</div>
+					</c:when>
+					<c:otherwise>
+						<span >状态：
+							<p class="cateInfo">${obj.orderstatus }</p>
+						</span> 
+					</c:otherwise>
+													
+					</c:choose >
+					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
 					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-ToBig" onclick="saveAddOrder(2);" />
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
 					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/>
@@ -43,12 +59,7 @@
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log()"/>
 				<input type="hidden" id="orderid" name="orderid" value="${obj.orderjpinfo.id }"/>
 				
-				<!-- 加载中 -->
-					<div class="spinner">
-					  <div class="bounce1"></div>
-					  <div class="bounce2"></div>
-					  <div class="bounce3"></div>
-					</div>
+				
 			</div>
 			<section class="content">
 				<form id="orderInfo">
