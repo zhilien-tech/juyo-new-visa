@@ -31,7 +31,14 @@ public class WebSocketConfig implements WebSocketConfigurer {
 				.setAllowedOrigins("*");
 		registry.addHandler(mySimpleInfoHander(), "/simpleinfowebsocket").addInterceptors(myInterceptors())
 				.setAllowedOrigins("*");
+		registry.addHandler(myVisaInfoHander(), "/visainfowebsocket").addInterceptors(myInterceptors())
+				.setAllowedOrigins("*");
 		registry.addHandler(myhandler(), "/sockjs/websocket").addInterceptors(myInterceptors()).withSockJS();
+	}
+
+	@Bean
+	public VisaInfoWSHandler myVisaInfoHander() {
+		return new VisaInfoWSHandler();
 	}
 
 	@Bean

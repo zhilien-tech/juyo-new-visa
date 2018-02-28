@@ -16,25 +16,10 @@
 	<link rel="stylesheet" href="${base}/references/public/css/visaJapan.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
-	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
-	<style>
-	/*顶部 不随导航移动*/
-	/* .box-header { position:fixed; top:0;left:0; width:100%; height:70px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	.box-body {  overflow:hidden;margin-top:60px;} */
-	.card-head { overflow:hidden; white-space:nowrap;}
-	.card-head span { font-size:12px;}
-	.everybody-info {position:relative; }
-	.cf { overflow:visible !important;}
-	.whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:390px;}
-	.showInfo { cursor:pointer; }
-	.hideInfo { display:none; position:absolute; top:-33px;right:0;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
-	.card-head i { cursor:pointer;}
-	.marginLR { margin:0px 20px;}
-	.btnSearch { margin-left:20px;}
-	[v-cloak] {
-	  display: none;
-	}
-	</style>
+	<!-- 订单切换卡 样式 -->
+	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css">
+	<!-- 本页css -->
+	<link rel="stylesheet" href="${base}/references/common/css/simpleList.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">
@@ -79,7 +64,15 @@
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
-								<div><label></label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
+								<div><label></label><span style="font-weight:bold;font-size:16px;">
+									<span v-if="data.visastatus === '已发招宝'">
+										<font color="red">{{data.visastatus}}</font>
+									</span>
+									<span v-else>
+										{{data.visastatus}}
+									</span>
+								
+								</span></div>	
 								
 								<div>
 									<label>操作：</label>
@@ -379,6 +372,23 @@
 	    	search();
 		 }
 	}
+	function loadListData(){
+		var orderAuthority = "allOrder";
+		$(".searchOrderBtn").each(function(){
+			if($(this).hasClass("bgColor")){
+				orderAuthority = $(this).attr("name");
+			}
+		});
+		$.ajax({ 
+        	url: url,
+        	data:{orderAuthority:orderAuthority},
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		_self.visaJapanData = data.visaJapanData;
+          	}
+        });
+	}
 	
 	function successCallBack(status){
 		var orderAuthority = "allOrder";
@@ -439,6 +449,34 @@
 			$(".hideInfo").hide();
 		});
 	});
+	
+	//连接websocket
+	connectWebSocket();
+	function connectWebSocket(){
+		 if ('WebSocket' in window){  
+            console.log('Websocket supported');  
+            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+
+            console.log('Connection attempted');  
+
+            socket.onopen = function(){  
+                 console.log('Connection open!');  
+                 //setConnected(true);  
+             };
+
+            socket.onclose = function(){
+                console.log('Disconnecting connection'); 
+            };
+
+            socket.onmessage = function (evt){
+                console.log('message received!');  
+            	loadListData();
+             };  
+
+          } else {  
+            console.log('Websocket not supported');  
+          }  
+	}
 	</script>
 </body>
 </html>

@@ -367,44 +367,23 @@ function dataURLtoBlob(dataurl) {
 //checkbox 曾用名
 $(".nameBefore").change(function(){
 	let checked = $("input[name='hasOtherName']:checked").val();
-	let checked2 = $("input[name='hasOtherNationality']:checked").val();
 	if(checked == 1){
-		$(".nameBeforeTop").css('float','none');
 		$(".nameBeforeHide").show();
 		$(".wordSpell").show();
-		$(".onceIDTop").removeClass('col-sm-offset-1');
-		$(".onceIDTop").css('margin-left','45px');
 	}else {
 		
 		$(".nameBeforeHide").hide();
 		$(".wordSpell").hide();
-		if(checked2 == 1){
-			
-		}else {
-			$(".nameBeforeTop").css('float','left');
-			$(".onceIDTop").css('margin-left','0px');
-		}
 	}
 });
 //曾用国籍
 $(".onceID").change(function(){
 	let checked = $("input[name='hasOtherNationality']:checked").val();
-	let checked2 = $("input[name='hasOtherName']:checked").val();
 	if(checked == 1){
-		$(".nameBeforeTop").css('float','none');
 		$(".nationalityHide").show();
-		$(".onceIDTop").css('float','left');
-		$(".onceIDTop").removeClass('col-sm-offset-1');
-		$(".onceIDTop").css('margin-left','45px');
 	}else {
 		
 		$(".nationalityHide").hide();
-		if(checked2 == 1){
-			
-		}else {
-			$(".nameBeforeTop").css('float','left');
-			$(".onceIDTop").css('margin-left','0px');
-		}
 	}
 });	
 

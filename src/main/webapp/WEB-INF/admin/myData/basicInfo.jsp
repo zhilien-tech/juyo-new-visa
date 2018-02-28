@@ -44,7 +44,7 @@
 			<section class="content">
 			<div class="ipt-info">
 					<input disabled id="baseRemark" name="baseRemark" type="text"   class="NoInfo form-control input-sm" />
-				</div>
+			</div>
 				<div class="tab-content row">
 					<div class="col-sm-6 padding-right-0">
 						<div class="info-QRcode"> <!-- 身份证 正面 -->
@@ -219,197 +219,9 @@
 							</div>
 						</div>
 						<!-- end 签发机关 --> --%>
-						<div class="row">
-							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0 nameBeforeTop">
-								<div class="form-group">
-									<label>是否有曾用名</label> 
-									<div>
-										<span class="nameBeforeYes ">
-											<input 
-												<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-											 type="radio" name="hasOtherName" class="nameBefore"  value="1"
-											/>是
-										</span>
-										<span>
-											<input 
-												<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-											 type="radio" name="hasOtherName" class="nameBefore"  value="2"
-											/>否
-										</span>
-									</div>
-								</div>
-							</div>
-							<!-- 姓/名 拼音 -->
-							<div class="nameBeforeHide">
-							    <div class="col-sm-10 col-sm-offset-1 padding-right-0 marginL">
-									<div class="form-group" style="position:relative;">
-										<label>姓/拼音</label> 
-										<c:choose>
-											<c:when test="${empty obj.applicant}">
-												<input 
-													<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-												
-												id="otherFirstName" name="otherFirstName" type="text" class="form-control input-sm " placeholder=" "  />
-												<input 
-													<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-												 type="text" id="otherFirstNameEn" 
-												 <c:choose>
-														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
-														</c:when>
-														<c:otherwise>
-														style="position:absolute;top:30px;border:none;left:150px;"
-														</c:otherwise>
-													
-													</c:choose >
-												 
-												   name="otherFirstNameEn" />
-											</c:when>
-											<c:otherwise>
-												<input 
-													<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-												 id="otherFirstName"	name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.otherFirstName }" />
-												<input 
-													<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-												 type="text" id="otherFirstNameEn" 
-												 <c:choose>
-														<c:when test="${empty obj.contact}">
-														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
-														</c:when>
-														<c:otherwise>
-														style="position:absolute;top:30px;border:none;left:150px;"
-														</c:otherwise>
-													
-													</c:choose >
-												 
-												 
-												   name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
-											</c:otherwise>
-										</c:choose>
-										<!-- <i class="bulb"></i> -->
-									</div>
-								</div>
-								
-							</div>
-							<!-- 姓/名 拼音 end -->
-							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
-								<div class="form-group">
-									<label>曾有的或另有的国籍(或公民身份)</label> 
-									<div>
-										<span class="onceIDYes ">
-											<input 
-												<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-											 type="radio" name="hasOtherNationality" class="onceID" value="1" />是
-										</span>
-										<span>
-											<input 
-												<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-											 type="radio" name="hasOtherNationality" class="onceID"  value="2" />否
-										</span>
-									</div>
-								</div>
-							</div>
-							<!-- 曾用国籍 -->
-							<c:choose>
-								<c:when test="${empty obj.contact}">
-									<div class="col-sm-5 padding-right-0 nationalityHide" style="margin-left:13%;">
-								</c:when>
-								<c:otherwise>
-									<div class="col-sm-5 padding-right-0 nationalityHide" style="margin-left:2%;">
-								</c:otherwise>
-													
-							</c:choose >
-							
-							
-								<div class="form-group" id="nationalityDiv">
-									<label>国籍</label> 
-									<c:choose>
-										<c:when test="${empty obj.applicant}">
-											<input 
-												<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-											 id="nationality" name="nationality"  type="text" class="form-control input-sm"/>
-										</c:when>
-										<c:otherwise>
-											<input 
-												<c:choose>
-														<c:when test="${empty obj.contact}">
-														disabled 
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
-													
-													</c:choose >
-											 id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
-										</c:otherwise>
-									</c:choose>
-								</div>
-							</div>
+						
 						</div>
-					</div>
+
 
 					<div class="col-sm-6 padding-right-0">
 						
@@ -884,13 +696,128 @@
 								</div>
 							</div>
 						</div>
-						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
-						<div class="row wordSpell" style="height:66px;">
-							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
-							
+						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->	
+						
+						
+						<div class="row">
+							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0 nameBeforeTop">
+								<div class="form-group">
+									<label>是否有曾用名</label> 
+									<div>
+										<span class="nameBeforeYes ">
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="radio" name="hasOtherName" class="nameBefore"  value="1"
+											/>是
+										</span>
+										<span>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="radio" name="hasOtherName" class="nameBefore"  value="2"
+											/>否
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<!-- 姓/名 拼音 -->
+							<div class="nameBeforeHide">
+							    <div class="col-sm-11 col-sm-offset-1 padding-right-0 marginL">
+									<div class="form-group" style="position:relative;">
+										<label>姓/拼音</label> 
+										<c:choose>
+											<c:when test="${empty obj.applicant}">
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												
+												id="otherFirstName" name="otherFirstName" type="text" class="form-control input-sm " placeholder=" "  />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 type="text" id="otherFirstNameEn" 
+												 <c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+												 
+												   name="otherFirstNameEn" />
+											</c:when>
+											<c:otherwise>
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 id="otherFirstName"	name="otherFirstName" style="position:relative;" type="text" class="form-control input-sm "	placeholder=" " value="${obj.applicant.otherFirstName }" />
+												<input 
+													<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+												 type="text" id="otherFirstNameEn" 
+												 <c:choose>
+														<c:when test="${empty obj.contact}">
+														style="position:absolute;top:30px;border:none;left:150px;background-color:#eee;" 
+														</c:when>
+														<c:otherwise>
+														style="position:absolute;top:30px;border:none;left:150px;"
+														</c:otherwise>
+													
+													</c:choose >
+												 
+												 
+												   name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
+											</c:otherwise>
+										</c:choose>
+										<!-- <i class="bulb"></i> -->
+									</div>
+								</div>
+								
 							</div>
 						</div>	
-						<!-- 名/拼音 -->
+							<!-- 名/拼音 -->
 						<div class="row wordSpell">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0 col-sm-offset-1">
 								<div class="form-group" style="position:relative;">
@@ -959,6 +886,72 @@
 													
 											</c:choose >
 											  name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+										</c:otherwise>
+									</c:choose>
+								</div>
+							</div>
+						</div>
+							<!-- 姓/名 拼音 end -->
+						<div class="row">	
+							<div class="col-sm-7 col-sm-offset-1 padding-right-0 onceIDTop">
+								<div class="form-group">
+									<label>曾有的或另有的国籍(或公民身份)</label> 
+									<div>
+										<span class="onceIDYes ">
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="radio" name="hasOtherNationality" class="onceID" value="1" />是
+										</span>
+										<span>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 type="radio" name="hasOtherNationality" class="onceID"  value="2" />否
+										</span>
+									</div>
+								</div>
+							</div>
+							<!-- 曾用国籍 -->
+							<div class="col-sm-5 padding-right-0 nationalityHide" >
+								<div class="form-group" id="nationalityDiv">
+									<label>国籍</label> 
+									<c:choose>
+										<c:when test="${empty obj.applicant}">
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="nationality" name="nationality"  type="text" class="form-control input-sm"/>
+										</c:when>
+										<c:otherwise>
+											<input 
+												<c:choose>
+														<c:when test="${empty obj.contact}">
+														disabled 
+														</c:when>
+														<c:otherwise>
+														</c:otherwise>
+													
+													</c:choose >
+											 id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -1038,7 +1031,6 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-						</div>
 					</div>
 
 				</div>
@@ -1836,43 +1828,24 @@
 	$(".nameBefore").change(function(){
 
 			let checked = $("input[name='hasOtherName']:checked").val();
-			let checked2 = $("input[name='hasOtherNationality']:checked").val();
 			if(checked == 1){
-				$(".nameBeforeTop").css('float','none');
 				$(".nameBeforeHide").show();
 				$(".wordSpell").show();
-				$(".onceIDTop").css('margin-left','30px');
 			}else {
 				
 				$(".nameBeforeHide").hide();
 				$(".wordSpell").hide();
-				if(checked2 == 1){
-					
-				}else {
-					$(".nameBeforeTop").css('float','left');
-					$(".onceIDTop").css('margin-left','0px');
-				}
 			}
 		});
 		//曾用国籍
 		$(".onceID").change(function(){
 			let checked = $("input[name='hasOtherNationality']:checked").val();
-			let checked2 = $("input[name='hasOtherName']:checked").val();
 			if(checked == 1){
-				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
-				$(".onceIDTop").css('float','left');
-				$(".onceIDTop").css('margin-left','30px');
 				$("#nationality").val("").change();
 			}else {
 				
 				$(".nationalityHide").hide();
-				if(checked2 == 1){
-					
-				}else {
-					$(".nameBeforeTop").css('float','left');
-					$(".onceIDTop").css('margin-left','0px');
-				}
 			}
 		});
 		//曾用名

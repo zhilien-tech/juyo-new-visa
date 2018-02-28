@@ -13,32 +13,8 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
-	<style>
-	img[src=""],img:not([src]) { opacity:0;}
-	input[type="file"] { z-index:999;}
-	.modal-content { position:relative;}
-	.info-imgUpload {width: 98%;}
-	.col-sm-offset-1 { margin-left:3% !important;}
-	.groupWidth { width:215px;}
-	.NoInfo { width:101.5%; height:30px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
-	.ipt-info { display:none; }
-    .Unqualified, .qualified  { margin-right:10px; }
-    .delete { z-index:10000;}
-    /*弹框头部固定*/
-    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10099; padding:0px 15px;}
-    .btn-margin { margin-top:10px;}
-    .modal-body { margin-top:50px; height:100%; padding:15px 37px 15px 40px;}
-    #sqImg { width:332px;}
-    /*左右导航样式*/
-    .rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
-	.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
-    .leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
-	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
-	.info-QRcode { width:153px;}
-	.widthBig { width:100%;}
-	#uploadFile { width:100% !important;}
-	#sqImg { z-index:1099;}
-	</style>
+	<!-- 本页css -->
+	<link rel="stylesheet" href="${base}/references/common/css/simpleAddPassport.css">
 </head>
 <body>
 	<div class="modal-content">
@@ -85,7 +61,7 @@
 							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
 									<div class="form-group" style="position:relative;">
 									<label><span>*</span>姓/拼音</label> <input id="firstName"
-										name="firstName" type="text" class="form-control input-sm "  tabIndex="2"
+										name="firstName" type="text" class="form-control input-sm"  tabIndex="2"
 										placeholder=" " value="${obj.applicant.firstName }" />
 										
 										<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
@@ -106,7 +82,7 @@
 							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
 								<div class="form-group" style="position:relative;">
 									<label><span>*</span>名/拼音</label> <input id="lastName"
-										name="lastName" type="text" class="form-control input-sm "  tabIndex="3"
+										name="lastName" type="text" class="form-control input-sm" tabIndex="3"
 										placeholder=" " value="${obj.applicant.lastName }" />
 										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 
@@ -119,7 +95,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth">
 									<label><span>*</span>护照号</label>
-									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									<input id="passport" name="passport" type="text" class="form-control input-sm" tabIndex="4" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -128,7 +104,7 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0 ">
 								<div class="form-group">
 									<label><span>*</span>性别</label>
-									<select class="form-control input-sm selectHeight" id="sex" name="sex">
+									<select class="form-control input-sm selectHeight" id="sex" name="sex" tabIndex="5">
 										<option value="男">男</option>
 										<option value="女">女</option>
 									</select>
@@ -138,13 +114,13 @@
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<input id="sexEn" class="form-control input-sm" name="sexEn" type="text" value=""/>
+									<input id="sexEn" class="form-control input-sm" name="sexEn" tabIndex="6" type="text" value=""/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 							 	<div class="form-group groupWidth" style="position:relative;">
 									<label><span>*</span>出生地点/拼音</label>
-									<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " value=""/>
+									<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " tabIndex="7" value=""/>
 									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:30px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -154,14 +130,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生日期</label>
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									<input id="birthday" name="birthday" type="text" class="form-control input-sm" tabIndex="8" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth" style="position:relative;">
 									<label><span>*</span>签发地点/拼音</label>
-									<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " value=""/>
+									<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " tabIndex="9" value=""/>
 									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:30px;border:0px;left:80px;width:120px;" placeholder=" " value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -171,14 +147,14 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发日期</label>
-									<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" tabIndex="10" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<select id="validType" name="validType" class="form-control input-sm selectHeight" >
+									<select id="validType" name="validType" class="form-control input-sm selectHeight" tabIndex="11">
 									<c:forEach var="map" items="${obj.passportType}">
 										<option value="${map.key}">${map.value}</option>
 									</c:forEach>
@@ -188,7 +164,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth">
 									<label><span>*</span>有效期至</label>
-									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" tabIndex="12" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>

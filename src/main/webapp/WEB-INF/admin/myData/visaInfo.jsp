@@ -562,7 +562,7 @@
 									<c:otherwise>
 									</c:otherwise>
 								</c:choose >
-							 id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState btn-Bank" />
+							 id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState btn-Bank"  />
 							<input 
 								<c:choose>
 									<c:when test="${empty obj.contact}">
@@ -571,7 +571,7 @@
 									<c:otherwise>
 									</c:otherwise>
 								</c:choose >
-							 id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
+							 id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState"  />
 							<input 
 								<c:choose>
 									<c:when test="${empty obj.contact}">
@@ -589,7 +589,7 @@
 									<c:otherwise>
 									</c:otherwise>
 								</c:choose >
-							 id="financialType" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
+							 id="financialType" name="wealthType" value="理财" type="button" class="btn btn-sm btnState"  />
 						</div>
 						<div class="info-body-from  clone-module cf deposit">
 							<div class="row body-from-input"><!-- 银行存款 -->
@@ -604,7 +604,7 @@
 												<c:otherwise>
 												</c:otherwise>
 											</c:choose >
-										 id="" name="" type="text" class="form-control input-sm" value="银行存款" />
+										 id="" name="" type="text" class="form-control input-sm" value="银行存款" disabled />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -645,7 +645,7 @@
 												<c:otherwise>
 												</c:otherwise>
 											</c:choose >
-										 id="" name="" type="text" class="form-control input-sm" value="车产" />
+										 id="" name="" type="text" class="form-control input-sm" value="车产" disabled />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -683,7 +683,7 @@
 												<c:otherwise>
 												</c:otherwise>
 											</c:choose >
-										 id="" name="" type="text" class="form-control input-sm" value="房产" />
+										 id="" name="" type="text" class="form-control input-sm" value="房产" disabled />
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -697,7 +697,7 @@
 												<c:otherwise>
 												</c:otherwise>
 											</c:choose >
-										 id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder=" "  />
+										 id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" />
 									</div>
 								</div>
 								<div style="float:left;  margin:40px 0 0 -23px;">
@@ -724,7 +724,7 @@
 												<c:otherwise>
 												</c:otherwise>
 											</c:choose >
-										 id="" name="" type="text" class="form-control input-sm" value="理财" />
+										 id="" name="" type="text" class="form-control input-sm" value="理财" disabled />
 									</div>
 								</div>
 								<div class="col-sm-3">

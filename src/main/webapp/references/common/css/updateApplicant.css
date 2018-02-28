@@ -5,21 +5,21 @@
 .ipt-info { display:none; }
 .Unqualified, .qualified  { margin-right:10px; }
 .info-imgUpload { margin-top:35px;}
-.nameBeforeYes { margin-right:20px; }
+.nameBeforeYes { margin-right:30px; }
 .onceIDYes { margin-right:30px; }
+.onceIDTop { float:left; margin-left:60px;}
 .nameBeforeHide , .nationalityHide{ display:none; }
-.nationalityHide { width:35%;}
+.nationalityHide { width:41%;}
 .wordSpell { display:none; margin-top:3px !important;}
 .rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
 .rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 .nationalityHide { margin-left:3%;}
-.row { margin-top:8.3px;}
 .nowProvince { width:12px; height:12px; vertical-align: middle; margin-top:0px !important;}
 .btn-margin { margin-top:10px;}
 #sqImg ,#sqImgBack { width:335px;}
 .delete { z-index:1000000;}
 .marginL { margin-left:30px;}
-.nameBeforeTop { margin-left:30px;}
+.nameBeforeTop { margin-left:45px;}
 img[src=""],img:not([src]) { opacity:0;}
 input[type="file"] { z-index:99999;}
 #sqImg { z-index:999999;}
