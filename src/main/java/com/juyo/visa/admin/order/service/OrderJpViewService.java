@@ -49,6 +49,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Strings;
+import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
@@ -102,6 +103,7 @@ import com.juyo.visa.common.ocr.RecognizeData;
 import com.juyo.visa.common.util.ImageDeal;
 import com.juyo.visa.common.util.PinyinTool;
 import com.juyo.visa.common.util.PinyinTool.Type;
+import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantExpressEntity;
@@ -127,6 +129,7 @@ import com.juyo.visa.entities.TTouristVisaEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;
 import com.juyo.visa.forms.TApplicantPassportForm;
+import com.juyo.visa.websocket.VisaInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.JsonUtil;
@@ -164,6 +167,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	//基本信息连接websocket的地址
 	private static final String BASIC_WEBSPCKET_ADDR = "basicinfowebsocket";
+
+	private VisaInfoWSHandler visaInfoWSHandler = (VisaInfoWSHandler) SpringContextUtil.getBean("myVisaInfoHander",
+			VisaInfoWSHandler.class);
 
 	public Object listData(OrderJpForm queryForm, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
@@ -548,6 +554,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		dbDao.update(order);
+		//消息通知
+		try {
+			visaInfoWSHandler.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		//回邮信息
 		//List<TOrderBackmailEntity> backMailInfos = orderInfo.getBackMailInfos();
 		//String editBackMailInfos = editBackMailInfos(backMailInfos, orderId);
