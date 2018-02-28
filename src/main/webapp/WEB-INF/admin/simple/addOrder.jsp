@@ -193,7 +193,7 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>送签编号：</label>
+										<label>送签编号：</label>
 										<input id="sendvisanum" type="text" class="form-control input-sm"/>
 									</div>
 								</div>

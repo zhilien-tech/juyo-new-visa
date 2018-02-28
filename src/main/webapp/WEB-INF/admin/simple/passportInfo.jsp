@@ -63,7 +63,6 @@
 									<label><span>*</span>姓/拼音</label> <input id="firstName"
 										name="firstName" type="text" class="form-control input-sm " tabIndex="1"
 										placeholder=" " value="${obj.applicant.firstName }" />
-										
 										<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -387,6 +386,10 @@
 						layer.close(layerIndex);
 						if (true === obj.success) {
 							layer.msg("识别成功");
+							$('#firstName').val(obj.xingCn).change();
+							$('#firstNameEn').val("/"+getPinYinStr(obj.xingCn));
+							$('#lastName').val(obj.mingCn).change();
+							$('#lastNameEn').val("/"+getPinYinStr(obj.mingCn));
 							$('#passportUrl').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");

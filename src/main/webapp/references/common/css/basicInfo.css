@@ -107,7 +107,9 @@ input[type="file"] {
 }
 
 .nationalityHide {
-	width: 35%;
+	width: 42%;
+	display:block;
+	float:right;
 }
 
 .qz-head {
@@ -123,7 +125,7 @@ input[type="file"] {
 
 .onceIDTop {
 	padding-left: 15px;
-	
+	width:48%;
 }
 
 .onceIDYes {
