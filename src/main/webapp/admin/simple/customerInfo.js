@@ -84,9 +84,6 @@ $('#customerType').on('change',function(){
 		$('.on-line').removeClass('none');
 		$('#customamount').addClass('none');
 	}
-	$('#compName').html('');
-	$('#comShortName').html('');
-	
 });
 
 //客户名称选中事件
