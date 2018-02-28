@@ -1,0 +1,206 @@
+@CHARSET "UTF-8";
+
+img[src=""], img:not ([src] ) {
+	opacity: 0;
+}
+
+input[type="file"] {
+	z-index: 9999;
+}
+
+.delete {
+	z-index: 100000;
+}
+
+#sqImg, #sqImgBack {
+	z-index: 10000;
+}
+
+.modal-body {
+	height: 100%;
+	margin-top: 50px;
+}
+
+.modal-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	background: #FFF;
+	z-index: 100000;
+	padding: 0px 15px;
+}
+
+.btn-margin {
+	margin-top: 10px;
+}
+
+.modal-content {
+	position: relative;
+}
+
+.modal-body {
+	padding: 15px 100px 15px 20px;
+}
+
+.nameBeforeYes {
+	margin-right: 20px;
+}
+
+.onceIDYes {
+	margin-right: 30px;
+}
+
+.nameBeforeHide, .nationalityHide {
+	display: none;
+}
+
+.nationalityHide {
+	width: 35%;
+}
+
+.wordSpell {
+	display: none;
+}
+
+.nationalityHide {
+	margin-left: 3%;
+}
+
+.marginL {
+	margin-left: 30px;
+}
+
+.nameBeforeTop {
+	margin-left: 30px;
+}
+
+.form-group {
+	position: relative;
+}
+
+#firstNameEn {
+	position: absolute;
+	top: 30px;
+	border: none;
+	left: 150px;
+}
+
+#lastNameEn {
+	position: absolute;
+	top: 30px;
+	border: none;
+	left: 150px;
+}
+
+#otherFirstNameEn {
+	position: absolute;
+	top: 30px;
+	border: none;
+	left: 150px;
+}
+
+#otherLastNameEn {
+	position: absolute;
+	top: 30px;
+	border: none;
+	left: 150px;
+}
+
+.row {
+	margin-top: 6.3px;
+}
+
+.widthBig {
+	width: 100%;
+}
+
+#uploadFile {
+	width: 100% !important;
+}
+
+#uploadFileBack {
+	width: 100% !important;
+}
+/*右导航*/
+.rightNav {
+	position: fixed;
+	top: 15px;
+	right: 0;
+	z-index: 999;
+	width: 40px;
+	height: 100%;
+	cursor: pointer;
+}
+
+.rightNav span {
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	top: 50%;
+	border-left: 4px solid #999;
+	border-bottom: 4px solid #999;
+	-webkit-transform: translate(0, -50%) rotate(-135deg);
+	transform: translate(0, -50%) rotate(-135deg);
+}
+
+.leftNav {
+	position: fixed;
+	top: 15px;
+	left: 4px;
+	z-index: 999;
+	width: 40px;
+	height: 100%;
+	cursor: pointer;
+}
+
+.leftNav span {
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	top: 50%;
+	margin-left: 10px;
+	border-right: 4px solid #999;
+	border-top: 4px solid #999;
+	-webkit-transform: translate(0, -50%) rotate(-135deg);
+	transform: translate(0, -50%) rotate(-135deg);
+}
+
+<!--
+-->
+.front, .back {
+	margin-bottom: 8px !important;
+}
+
+.nowProvince {
+	width: 12px;
+	height: 12px;
+	vertical-align: middle;
+	margin-top: 0px !important;
+}
+
+#schedulingTable thead tr th:nth-child(1) {
+	width: 8%;
+}
+
+#schedulingTable thead tr th:nth-child(2) {
+	width: 10%;
+}
+
+#schedulingTable thead tr th:nth-child(3) {
+	width: 12%;
+}
+
+#schedulingTable thead tr th:nth-child(4) {
+	width: 24%;
+}
+
+#schedulingTable thead tr th:nth-child(5) {
+	width: 24%;
+}
+
+#schedulingTable thead tr th:nth-child(6) {
+	width: 8%;
+}
