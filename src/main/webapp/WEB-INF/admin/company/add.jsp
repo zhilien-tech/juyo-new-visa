@@ -15,7 +15,8 @@
 		img#sqImg {top: 0;}
 		#sgImg{top:1%}
 		.uploadP { position:relative; cursor:pointer;}
-		#uploadFile { position:absolute !important;top:0 !important;left:0 !important; width:100% !important; cursor:pointer;}
+		#uploadFile,#uploadFileSeal { position:absolute !important;top:0 !important;left:0 !important; width:100% !important; cursor:pointer; opacity:0;}
+		
 	</style>
 </head>
 <body>
