@@ -55,11 +55,6 @@ input[type="file"] {
 	transform: translate(0, -50%) rotate(-135deg);
 	-webkit-transform: translate(0, -50%) rotate(-135deg);
 }
-
-.row {
-	margin-top: 11px;
-}
-
 .wordSpell {
 	margin-top: 3px !important;
 }

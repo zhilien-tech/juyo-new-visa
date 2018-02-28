@@ -734,6 +734,8 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div class="row">
 							<!-- 姓/名 拼音 -->
 							<div class="nameBeforeHide">
 							    <div class="col-sm-11 col-sm-offset-1 padding-right-0 marginL">
@@ -814,7 +816,7 @@
 								</div>
 								
 							</div>
-							
+						</div>	
 							<!-- 名/拼音 -->
 						<div class="row wordSpell">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0 col-sm-offset-1">
@@ -890,6 +892,7 @@
 							</div>
 						</div>
 							<!-- 姓/名 拼音 end -->
+						<div class="row">	
 							<div class="col-sm-7 col-sm-offset-1 padding-right-0 onceIDTop">
 								<div class="form-group">
 									<label>曾有的或另有的国籍(或公民身份)</label> 
