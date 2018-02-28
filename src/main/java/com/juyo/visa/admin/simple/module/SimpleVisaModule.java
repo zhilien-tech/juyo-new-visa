@@ -43,14 +43,21 @@ public class SimpleVisaModule {
 	@Inject
 	private SimpleVisaService simpleVisaService;
 
+	private static final String VISAINFO_WEBSPCKET_ADDR = "visainfowebsocket";
+
 	/**
 	 * 跳转到列表
 	 */
 	@At
 	@Ok("jsp")
-	public Object list() {
+	public Object list(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("orderstatus", EnumUtil.enum2(JpOrderSimpleEnum.class));
+		String localAddr = request.getLocalAddr();
+		int localPort = request.getLocalPort();
+		result.put("localAddr", localAddr);
+		result.put("localPort", localPort);
+		result.put("websocketaddr", VISAINFO_WEBSPCKET_ADDR);
 		return result;
 	}
 

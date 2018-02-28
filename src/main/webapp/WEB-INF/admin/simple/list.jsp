@@ -64,7 +64,15 @@
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
-								<div><label></label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
+								<div><label></label><span style="font-weight:bold;font-size:16px;">
+									<span v-if="data.visastatus === '已发招宝'">
+										<font color="red">{{data.visastatus}}</font>
+									</span>
+									<span v-else>
+										{{data.visastatus}}
+									</span>
+								
+								</span></div>	
 								
 								<div>
 									<label>操作：</label>
@@ -364,6 +372,23 @@
 	    	search();
 		 }
 	}
+	function loadListData(){
+		var orderAuthority = "allOrder";
+		$(".searchOrderBtn").each(function(){
+			if($(this).hasClass("bgColor")){
+				orderAuthority = $(this).attr("name");
+			}
+		});
+		$.ajax({ 
+        	url: url,
+        	data:{orderAuthority:orderAuthority},
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		_self.visaJapanData = data.visaJapanData;
+          	}
+        });
+	}
 	
 	function successCallBack(status){
 		var orderAuthority = "allOrder";
@@ -424,6 +449,34 @@
 			$(".hideInfo").hide();
 		});
 	});
+	
+	//连接websocket
+	connectWebSocket();
+	function connectWebSocket(){
+		 if ('WebSocket' in window){  
+            console.log('Websocket supported');  
+            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+
+            console.log('Connection attempted');  
+
+            socket.onopen = function(){  
+                 console.log('Connection open!');  
+                 //setConnected(true);  
+             };
+
+            socket.onclose = function(){
+                console.log('Disconnecting connection'); 
+            };
+
+            socket.onmessage = function (evt){
+                console.log('message received!');  
+            	loadListData();
+             };  
+
+          } else {  
+            console.log('Websocket not supported');  
+          }  
+	}
 	</script>
 </body>
 </html>

@@ -405,10 +405,8 @@
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
-			if(status != 2){
-				if (!bootstrapValidator.isValid()) {
-					return;
-				}
+			if (!bootstrapValidator.isValid()) {
+				return;
 			}
 			var passportInfo = $("#passportInfo").serialize();
 			layer.load(1);
@@ -560,9 +558,6 @@
 			var id = '${obj.applicantid}';
 			var orderid = '${obj.orderid}';
 			save(2);
-			//关闭socket连接
-			//socket.onclose();
-			//window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}';
 		 }
 	</script>
 

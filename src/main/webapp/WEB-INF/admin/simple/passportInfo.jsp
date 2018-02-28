@@ -227,6 +227,9 @@
 					passport : {
 						trigger:"change keyup",
 						validators : {
+							notEmpty : {
+								message : '护照号不能为空'
+							},
 		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 								url: '${base}/admin/orderJp/checkPassport.html',
 								message: '护照号已存在，请重新输入',//提示消息
@@ -243,54 +246,6 @@
 							}
 						}
 					},
-					type : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '类型不能为空'
-							}
-						}
-					},
-					birthAddress : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '出生地点不能为空'
-							}
-						}
-					},
-					birthday : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '出生日期不能为空'
-							}
-						}
-					},
-					issuedPlace : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '签发地点不能为空'
-							}
-						}
-					},
-					issuedDate : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '签发日期不能为空'
-							}
-						}
-					},
-					validEndDate : {
-						trigger:"change keyup",
-						validators : {
-							notEmpty : {
-								message : '有效日期不能为空'
-							}
-						}
-					}
 				}
 			});
 			$('#passportInfo').bootstrapValidator('validate');
@@ -448,10 +403,8 @@
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
-			if(status != 2){
-				if (!bootstrapValidator.isValid()) {
-					return;
-				}
+			if (!bootstrapValidator.isValid()) {
+				return;
 			}
 			var passportInfo = $("#passportInfo").serialize();
 			var id = '${obj.applicantid}';

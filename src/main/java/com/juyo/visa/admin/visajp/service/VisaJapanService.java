@@ -663,7 +663,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 					THotelEntity hotel = hotels.get(hotelindex);
 					travelplan.setHotel(hotel.getId());
 				}
-				if (i > 0) {
+				if (i > 0 && i != daysBetween) {
 					//景区
 					int scenicindex = random.nextInt(scenics.size());
 					TScenicEntity scenic = scenics.get(scenicindex);
@@ -733,8 +733,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 							travelplan.setOutDate(DateUtil.addDay(departureDate, day - 1));
 
 							//景区
-							//第一天没有景区
-							if (day > 1) {
+							//第一天、最后一天没有景区
+							if (day > 1 && (i < betweenday - 1 || count < tripMultis.size() - 1)) {
 								int scenicindex = random.nextInt(scenics.size());
 								TScenicEntity scenic = scenics.get(scenicindex);
 								scenics.remove(scenic);
@@ -1453,12 +1453,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		//送签社
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
-			orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
+			orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
 			//订单负责人变更
 			Integer userId = loginuser.getId();
 			changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 		} else if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
-			orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
+			orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
 		} else {
 			//地接社为准备提交大使馆
 			orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
@@ -1583,6 +1583,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			resultstrbuf.append("返回日期、");
 		}
 		int count = 1;
+		int passportflag = 0;
 		for (Record record : applyinfo) {
 			if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
 				resultstrbuf.append("申请人" + count + "的姓名、");
@@ -1590,13 +1591,34 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			if (Util.isEmpty(record.get("firstnameen")) && Util.isEmpty(record.get("lastnameen"))) {
 				resultstrbuf.append("申请人" + count + "的姓名英文、");
 			}
+			if (Util.isEmpty(record.get("sex"))) {
+				resultstrbuf.append("申请人" + count + "的性别、");
+			}
+			if (Util.isEmpty(record.get("passportno"))) {
+				resultstrbuf.append("申请人" + count + "的护照号、");
+			}
 			count++;
 		}
 		String resultstr = resultstrbuf.toString();
+		//姓名长度限制
+		String namelength = "";
+		for (Record record : applyinfo) {
+			if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
+				String name = record.getString("firstname") + record.getString("lastname");
+				if (name.length() > 8) {
+					namelength = "申请人姓名不能超过八位！";
+				}
+			}
+		}
 		if (!Util.isEmpty(resultstr)) {
 			resultstr = resultstr.substring(0, resultstr.length() - 1);
 			resultstr += "不能为空";
+			if (!Util.isEmpty(namelength)) {
+				resultstr += namelength;
+			}
 			return JuYouResult.ok(resultstr);
+		} else if (!Util.isEmpty(namelength)) {
+			return JuYouResult.ok(namelength);
 		} else {
 			return JuYouResult.ok();
 		}

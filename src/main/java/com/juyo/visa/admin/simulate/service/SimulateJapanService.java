@@ -31,6 +31,7 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Files;
+import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.simulate.enums.ErrorCodeEnum;
@@ -42,12 +43,14 @@ import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.util.ResultObject;
+import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TComBusinessscopeEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
 import com.juyo.visa.entities.TOrderTripMultiJpEntity;
+import com.juyo.visa.websocket.VisaInfoWSHandler;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -64,6 +67,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 
 	@Inject
 	private QiniuUploadServiceImpl qiniuUploadService;
+	private VisaInfoWSHandler visaInfoWSHandler = (VisaInfoWSHandler) SpringContextUtil.getBean("myVisaInfoHander",
+			VisaInfoWSHandler.class);
 
 	/**
 	 * 查看是否有可以执行的订单
@@ -116,6 +121,9 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					}
 				}
 				TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+				//将订单设置为提交中
+				orderinfo.setStatus(JPOrderStatusEnum.COMMITING.intKey());
+				dbDao.update(orderinfo);
 				map.put("ordernum", orderinfo.getOrderNum());
 			}
 			//登录的用户名密码
@@ -301,6 +309,12 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			dbDao.update(order);
 		} catch (Exception e) {
 			return ResultObject.fail("文件上传失败,请稍后重试！");
+		}
+		//消息通知
+		try {
+			visaInfoWSHandler.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return ResultObject.success(visaFile);
 

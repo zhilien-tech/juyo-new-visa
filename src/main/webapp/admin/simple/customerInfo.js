@@ -78,15 +78,15 @@ $('#customerType').on('change',function(){
 	if (thisval == 4) {
 		$('.zhiKe').removeClass('none');
 		$('.on-line').addClass('none');
+		$('#customamount').removeClass('none');
 	}else if(thisval){
 		$('.zhiKe').addClass('none');
 		$('.on-line').removeClass('none');
+		$('#customamount').addClass('none');
 	}
 	$('#compName').html('');
 	$('#comShortName').html('');
-	$('#payType').val('');
-	$('#visatype').val('');
-	$('#amount').val('');
+	
 });
 
 //客户名称选中事件

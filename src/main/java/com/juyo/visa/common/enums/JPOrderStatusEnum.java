@@ -15,7 +15,7 @@ public enum JPOrderStatusEnum implements IEnum {
 			5, "初审"), UNQUALIFIED_ORDER(6, "不合格"), QUALIFIED_ORDER(7, "合格"), SEND_ADDRESS(8, "已发地址"), SEND_DATA(9,
 			"已寄出"), RECEPTION_ORDER(10, "待收件"), RECEPTION_RECEIVED(11, "前台实收"), TRANSFER_VISA(12, "移交签证"), VISA_ORDER(
 			13, "签证"), VISA_RECEIVED(14, "签证实收"), AUTO_FILL_FORM_PREPARE(15, "准备发招宝"), AUTO_FILL_FORM_ING(16, "发招宝中"), READYCOMMING(
-			28, "准备提交大使馆"), COMMITING(32, "提交中"), COMMINGFAIL(31, "提交失败"), AUTO_FILL_FORM_ED(17, "已发招宝"), AUTO_FILL_FORM_FAILED(
+			28, "发招宝中"), COMMITING(32, "提交中"), COMMINGFAIL(31, "提交失败"), AUTO_FILL_FORM_ED(17, "已发招宝"), AUTO_FILL_FORM_FAILED(
 			18, "发招宝失败"), BIANGENGZHONG(19, "招宝变更中"), YIBIANGENG(20, "招宝已变更"), BIANGENGSHIBAI(21, "招宝变更失败"), QUXIAOZHONG(
 			22, "招宝取消中"), YIQUXIAO(23, "招宝已取消"), QUXIAOSHIBAI(24, "招宝取消失败"), REFUSE_SIGN(27, "报告拒签"), AFTERMARKET_ORDER(
 			25, "售后"), CAN_BACKMAIL(33, "可以回邮"), DISABLED(26, "作废"), JAPANREPORT(29, "上传归国报告"), JAPANREPORTFAIL(30,

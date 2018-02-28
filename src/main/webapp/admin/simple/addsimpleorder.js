@@ -104,6 +104,8 @@ function saveAddOrder(status){
 	orderinfo.sendvisanum = sendvisanum;
 	var customerid = $('#customerid').val();
 	orderinfo.customerid = customerid;
+	var zhikecustomid = $('#zhikecustomid').val();
+	orderinfo.zhikecustomid = zhikecustomid;
 	$.ajax({
 		type : 'POST',
 		data : orderinfo ,
@@ -114,7 +116,7 @@ function saveAddOrder(status){
 			if(status == 1){
 				window.location.href = '/admin/simple/list.html';
 			}else{
-				window.location.reload();
+				window.close();
 			}
 		},
 		error : function() {

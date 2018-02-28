@@ -52,7 +52,7 @@
 						</form>
 					</div><!-- end 短信登录 -->
 					<div class="password none"><!-- 密码登录 -->
-						<form action="${base}/admin/tlogin.html" method="post">
+						<form action="${base}/admin/tlogin.html" method="post" id="userform">
 						<font color="red">${obj.errMsg}</font>
 						<div class="row">
 							<div class="col-sm-12">                                                                                                
@@ -71,7 +71,7 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="form-group">
-									<input id="validateCode" name="validateCode" type="text" class="form-control login-txt" placeholder="验证码" />
+									<input id="validateCode" name="validateCode" type="text" onkeypress="onkeyEnter()" class="form-control login-txt" placeholder="验证码" />
 									<span class="verificationCode">
 										<img title="看不清，点击换一张" onclick="changeValidateCode()" id="confirmCode" src="${base}/validateImage.html"/>
 									</span>
@@ -79,12 +79,12 @@
 							</div>
 						</div>
 						<div class="checkbox top-30">
-							<input id="" name="" type="checkbox" class="login-check"/>记住密码
+							<input id="savepassword" name="savepassword" type="checkbox" class="login-check"/>记住密码
 						</div>
 						<div class="row top-38">
 							<div class="col-sm-12">                                                                                                
 								<div class="form-group">
-									<input id="" name="" type="submit" class="login-btn" value="登 录"/>
+									<input id="" name="" type="button" onclick="submitlogin()" class="login-btn" value="登 录"/>
 								</div>
 							</div>
 						</div>
@@ -105,6 +105,11 @@
 			if (top != window){
 			    top.location.href = window.location.href; 
 			}
+			//从cookie中获取用户名密码
+		    var loginName = getCookie('visitloginName');
+		    $('#loginName').val(loginName);
+		    var password = getCookie('visitpassword');
+		    $('#password').val(password);
 			//切换卡
 			var passwordlogin = '${obj.passwordlogin}';
 			if(passwordlogin && passwordlogin != undefined){
@@ -183,6 +188,41 @@
 		            1000) 
 		        } 
 		    } 
+			
+			 function submitlogin(){
+				  var ischecked = $('#savepassword').prop("checked");
+				  if(ischecked){
+					  var loginName = $('#loginName').val();
+					  var password = $('#password').val();
+					  setCookie('visitloginName',loginName,30);
+					  setCookie('visitpassword',password,30);
+				  }
+				  $('#userform').submit();
+			  }
+			  //设置cookie
+			  function setCookie(cname,cvalue,exdays){
+			    var d = new Date();
+			    d.setTime(d.getTime()+(exdays*24*60*60*1000));
+			    var expires = "expires="+d.toGMTString();
+			    document.cookie = cname + "=" + cvalue + "; " + expires;
+			  }
+			  //获取cookie中的值
+			  function getCookie(cname){
+			    var name = cname + "=";
+			    var ca = document.cookie.split(';');
+			    for(var i=0; i<ca.length; i++){
+			      var c = ca[i].trim();
+			      if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+			    }
+			    return "";
+			  }
+			  
+			  function onkeyEnter(){
+				  var e = window.event || arguments.callee.caller.arguments[0];
+			      if(e && e.keyCode == 13){
+			    	  submitlogin();
+				  }
+			  }
 			//document.getElementById("btn").onclick=function(){time(this);} 
 
 		</script>
