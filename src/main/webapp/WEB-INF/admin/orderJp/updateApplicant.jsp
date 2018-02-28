@@ -356,9 +356,6 @@
 							</div>
 						</div>
 						
-						
-						
-						
 						<div class="row">
 							<!-- 紧急联系人姓名/手机 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
