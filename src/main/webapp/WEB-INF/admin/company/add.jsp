@@ -15,7 +15,8 @@
 		img#sqImg {top: 0;}
 		#sgImg{top:1%}
 		.uploadP { position:relative; cursor:pointer;}
-		#uploadFile { position:absolute !important;top:0 !important;left:0 !important; width:100% !important; cursor:pointer;}
+		#uploadFile,#uploadFileSeal { position:absolute !important;top:0 !important;left:0 !important; width:100% !important; cursor:pointer; opacity:0;}
+		
 	</style>
 </head>
 <body>
@@ -136,6 +137,29 @@
 							<div class="form-group">
 								<div class="sqImgPreview">
 									<img id="sqImg" alt="营业执照" src="">
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- end 上传营业执照 -->
+					
+					<!-- 上传公章  -->
+					<div class="row" style="margin-top: 15px;">
+						<div class="col-xs-3">
+							<div class="form-group">
+								<div class="upload-btn">
+									<input id="seal" name="seal" type="hidden"/>
+									<a href="javascript:;" class="uploadP">
+										上传公章
+										<input id="uploadFileSeal" name="uploadFileSeal" class="btn btn-primary btn-sm" type="file" value="上传公章" />
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="form-group">
+								<div class="sqImgPreview">
+									<img id="sqImgSeal" alt="公章" src="">
 								</div>
 							</div>
 						</div>
