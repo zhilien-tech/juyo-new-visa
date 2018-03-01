@@ -17,6 +17,8 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
+	<!-- 加载中。。。样式 -->
+	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">
@@ -57,9 +59,16 @@
 								<div><label>受付番号：</label><span>{{data.number}}</span></div>	
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
-								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
-								<div><label></label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
-								
+								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>
+								<div v-if="data.visastatus === '发招宝中'"><label></label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span>
+									<!-- 加载中 -->
+									<div class="spinner">
+									  <div class="bounce1"></div>
+									  <div class="bounce2"></div>
+									  <div class="bounce3"></div>
+									</div>
+								</div>	
+								<div  v-else><label></label><span style="font-weight:bold;font-size:16px;">{{data.visastatus}}</span></div>	
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
