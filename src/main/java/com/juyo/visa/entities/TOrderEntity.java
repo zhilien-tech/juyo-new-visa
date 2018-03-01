@@ -149,4 +149,12 @@ public class TOrderEntity implements Serializable {
 	@Comment("售后操作人id")
 	private Integer aftermarketOpid;
 
+	@Column
+	@Comment("送签截止日期")
+	private Date sendvisaenddate;
+
+	@Column
+	@Comment("出签截止日期")
+	private Date outvisaenddate;
+
 }

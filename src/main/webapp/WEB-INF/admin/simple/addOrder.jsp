@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <!-- 本页css -->
@@ -118,6 +119,7 @@
 										<label><span>*</span>签证类型：</label> <select id="visatype"
 											name="visatype" type="text" class="form-control input-sm"
 											placeholder=" " >
+												<option value=""></option>
 												<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 													<option value="${map.key}">${map.value}</option>
 												</c:forEach>
@@ -375,6 +377,8 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/moment.min.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/daterangepicker.js"></script>
 	<%-- <script src="${base}/admin/orderJp/order.js"></script> --%>
 	<!-- 本页面js文件 -->
 	<!-- select2 -->

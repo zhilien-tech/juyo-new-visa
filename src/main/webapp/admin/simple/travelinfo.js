@@ -368,3 +368,107 @@ function initTravalPlanTable(data){
 	});
 	$('#travelplantbody').html(html);
 }
+//时间插件格式化  出行时间>今天>送签时间 
+var now = new Date();
+/*$("#sendVisaDate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	startDate: now,//日期小于今天
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+}).on("click",function(){  
+    $("#sendVisaDate").datetimepicker("setEndDate",$("#goDate").val());  
+});
+$("#outVisaDate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	startDate: now,//日期小于今天
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+}).on("click",function(){  
+	$("#outVisaDate").datetimepicker("setEndDate",$("#goDate").val());  
+});*/
+
+$("#goDate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	startDate:now,
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+}).on("click",function(){  
+	var sendVisaDate = $('#sendVisaDate').val();
+	if(sendVisaDate){
+		var sendVisaDates = sendVisaDate.split(' - ');
+		$("#goDate").datetimepicker("setStartDate",sendVisaDates[1]);  
+	}else{
+		$("#goDate").datetimepicker("setStartDate",now);  
+	}
+});
+$("#returnDate").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	startDate:now,
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+}).on("click",function(){  
+	var sendVisaDate = $('#sendVisaDate').val();
+	if(sendVisaDate){
+		var sendVisaDates = sendVisaDate.split(' - ');
+		$("#goDate").datetimepicker("setStartDate",sendVisaDates[1]);
+	}else{
+		$("#goDate").datetimepicker("setStartDate",now);  
+	}
+});
+
+$('#sendVisaDate').daterangepicker({
+  	startDate:now
+	},function(start, end, label) {
+	
+}).on("click",function(){  
+	var goDate = $("#goDate").val();
+	if(goDate){
+		$("#sendVisaDate").data('daterangepicker').setEndDate(goDate);  
+	}
+}).on('apply.daterangepicker',function(ev, picker){
+	var startDate = picker.startDate.format('YYYY-MM-DD');
+	var endDate = picker.endDate.format('YYYY-MM-DD');
+	console.log(startDate);
+	console.log(endDate);
+	//自动计算预计出签时间
+	var stayday = 7;
+	var sendvisadate = $("#sendVisaDate").val();
+	$.ajax({ 
+		url: '/admin/visaJapan/autoCalculateBackDate.html',
+		dataType:"json",
+		data:{gotripdate:startDate,stayday:stayday+1},
+		type:'post',
+		success: function(data){
+			var outstartDate = data;
+			$.ajax({ 
+				url: '/admin/visaJapan/autoCalculateBackDate.html',
+				dataType:"json",
+				data:{gotripdate:endDate,stayday:stayday+1},
+				type:'post',
+				success: function(data1){
+					var outendDate = data1;
+					var outVisaDate = outstartDate + ' - ' + outendDate;
+					$('#outVisaDate').val(outVisaDate);
+				}
+			});
+		}
+	});
+});
+$('#outVisaDate').daterangepicker({
+	startDate:now
+	},function(start, end, label) {
+	
+}).on("click",function(){  
+	var goDate = $("#goDate").val();
+	if(goDate){
+		$("#outVisaDate").data('daterangepicker').setEndDate(goDate);  
+	}
+});
