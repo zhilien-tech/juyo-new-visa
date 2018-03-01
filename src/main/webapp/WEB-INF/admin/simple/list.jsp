@@ -20,6 +20,8 @@
 	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css">
 	<!-- 本页css -->
 	<link rel="stylesheet" href="${base}/references/common/css/simpleList.css">
+	<!-- 加载中。。。样式 -->
+	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">
@@ -67,6 +69,15 @@
 								<div><label></label><span style="font-weight:bold;font-size:16px;">
 									<span v-if="data.visastatus === '已发招宝'">
 										<font color="red">{{data.visastatus}}</font>
+									</span>
+									<span v-if="data.visastatus === '发招宝中'">
+										<font>{{data.visastatus}}</font>
+										<!-- 加载中 -->
+										<div class="spinner">
+										  <div class="bounce1"></div>
+										  <div class="bounce2"></div>
+										  <div class="bounce3"></div>
+										</div>
 									</span>
 									<span v-else>
 										{{data.visastatus}}

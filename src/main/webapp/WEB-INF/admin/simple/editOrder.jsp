@@ -20,6 +20,8 @@
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <!-- 本页css -->
 <link rel="stylesheet" href="${base}/references/common/css/simpleEditOrder.css">
+<!-- 加载中。。。样式 -->
+<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper" id="wrapper">
@@ -27,10 +29,26 @@
 			<div class="qz-head">
 				<!-- <span class="">订单号：<p>170202-JP0001</p></span> -->
 				<!-- <span class="">受付番号：<p>JDY27163</p></span> -->
-				<span class="">状态：
-					<p>${obj.orderstatus }</p>
-				</span> <input type="button" value="取消"
-					class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
+				<c:choose>
+						<c:when test="${obj.orderstatus == '发招宝中'}">
+							<span >状态：
+						<p class="cateInfo">${obj.orderstatus }</p>
+					</span> 
+					<!-- 加载中 -->
+					<div class="spinner">
+					  <div class="bounce1"></div>
+					  <div class="bounce2"></div>
+					  <div class="bounce3"></div>
+					</div>
+					</c:when>
+					<c:otherwise>
+						<span >状态：
+							<p class="cateInfo">${obj.orderstatus }</p>
+						</span> 
+					</c:otherwise>
+													
+					</c:choose >
+					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
 					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-ToBig" onclick="saveAddOrder(2);" />
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
 					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/>
@@ -40,6 +58,8 @@
 					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue()"/>
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log()"/>
 				<input type="hidden" id="orderid" name="orderid" value="${obj.orderjpinfo.id }"/>
+				
+				
 			</div>
 			<section class="content">
 				<form id="orderInfo">
