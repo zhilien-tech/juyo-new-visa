@@ -227,9 +227,6 @@
 					passport : {
 						trigger:"change keyup",
 						validators : {
-							notEmpty : {
-								message : '护照号不能为空'
-							},
 		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 								url: '${base}/admin/orderJp/checkPassport.html',
 								message: '护照号已存在，请重新输入',//提示消息
@@ -264,9 +261,9 @@
 			$("#issuedDate").change(function(){
 				if($("#issuedDate").val() != ""){
 					if($("#validType").val() == 1){
-						$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
-					}else{
 						$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
+					}else{
+						$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
 					}
 				}
 			});
@@ -367,9 +364,9 @@
 							$("#borderColor").attr("style", null);
 							var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
 							if(years == 5){
-								$("#validType").val(1);
-							}else{
 								$("#validType").val(2);
+							}else{
+								$("#validType").val(1);
 							}
 							
 						}
@@ -460,12 +457,13 @@
 		
 		$("#validType").change(function(){
 			var type = $(this).val();
-			if(type == 1){
-				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
-			}else{
-				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
+			if($("#issuedDate").val() != ""){
+				if(type == 1){
+					$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
+				}else{
+					$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
+				}
 			}
-			
 		});
 		
 		function getNewDates(dateTemp, days){

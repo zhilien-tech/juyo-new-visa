@@ -244,8 +244,19 @@ $(document).on("input","#birthday",function(){
 		return;
 	}
 	var temp = $(this).val();
-	if($(this).val().length == 8){
-		$(this).val(getNewDate(temp));
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
 	}
 });
 
@@ -254,8 +265,19 @@ $(document).on("input","#issuedDate",function(){
 		return;
 	}
 	var temp = $(this).val();
-	if($(this).val().length == 8){
-		$(this).val(getNewDate(temp));
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
 	}
 });
 
@@ -264,8 +286,19 @@ $(document).on("input","#validEndDate",function(){
 		return;
 	}
 	var temp = $(this).val();
-	if($(this).val().length == 8){
-		$(this).val(getNewDate(temp));
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
 	}
 });
 
@@ -274,51 +307,22 @@ $(document).on("input","#validStartDate",function(){
 		return;
 	}
 	var temp = $(this).val();
-	if($(this).val().length == 8){
-		$(this).val(getNewDate(temp));
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
 	}
 });
 
-
-$(document).on("input","#goTripDate",function(){
-	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
-		return;
-	}
-	var temp = $(this).val();
-	if($(this).val().length == 8){
-		$(this).val(getNewDate(temp));
-	}
-});
-
-$(document).on("input","#backTripDate",function(){
-	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
-		return;
-	}
-	var temp = $(this).val();
-	if($(this).val().length == 8){
-		$(this).val(getNewDate(temp));
-	}
-});
-
-$(document).on("input","#sendVisaDate",function(){
-	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
-		return;
-	}
-	var temp = $(this).val();
-	if($(this).val().length == 8){
-		$(this).val(getNewDate(temp));
-	}
-});
-
-$(document).on("input","#outVisaDate",function(){
-	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
-		return;
-	}
-	var temp = $(this).val();
-	if($(this).val().length == 8){
-		$(this).val(getNewDate(temp));
-	}
-});
 
 function getNewDate(temp){
 	var tmd = temp.substring(0, 4)+'-' +temp.substring(4,6) + '-' + temp.substring(6,8);
