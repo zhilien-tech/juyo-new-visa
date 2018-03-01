@@ -21,6 +21,8 @@
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<!-- 签证详情样式 -->
 		<link rel="stylesheet" href="${base}/references/common/css/visaDetail.css">
+		<!-- 加载中。。。样式 -->
+		<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper" id="wrapper" v-cloak>
@@ -28,7 +30,15 @@
 				<div class="qz-head">
 					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
 					<span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span>
-					<span class="">状态：<p>{{orderinfo.visastatus}}</p></span>
+					<span v-if="orderinfo.visastatus === '发招宝中'">状态：<p>{{orderinfo.visastatus}}</p>
+						<!-- 加载中 -->
+						<div class="spinner">
+						  <div class="bounce1"></div>
+						  <div class="bounce2"></div>
+						  <div class="bounce3"></div>
+						</div>
+					</span>
+					<span v-else>状态：<p>{{orderinfo.visastatus}}</p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>

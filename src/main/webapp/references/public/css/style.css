@@ -6,7 +6,8 @@
 .form-control{font-size: 13px;}
 .inpImportant{width: 96%;display: inline-block;}
 .inpImpWid{width:98.5%;display: inline-block;}
-
+/* 将所有的input框变成大写 */
+input { text-transform: uppercase;}
 /*公司管理*/
 .padLeft{padding-left: 14px;font-size: 14px;margin: 15px 0 2px 0;}
 .paddiLeAdd{padding-left: inherit;}

@@ -94,7 +94,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>护照号</label>
-									<input id="passport" name="passport" type="text" class="form-control input-sm" tabIndex="3" value="${obj.passport.passport }"/>
+									<input id="passport" name="passport" type="text" class="form-control input-sm" maxlength="9" tabIndex="3" value="${obj.passport.passport }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>

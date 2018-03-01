@@ -145,3 +145,7 @@
 .btn-Big {
 	width: 70px !important;
 }
+.spinner {
+	display:inline-block;
+	margin-left:-12px;
+}
