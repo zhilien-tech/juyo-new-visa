@@ -162,3 +162,9 @@ input[type="file"] {
 #uploadFile, #uploadFileBack {
 	width: 100% !important;
 }
+.nowProvince {
+	width:14px;
+	height:14px;
+	margin-top:0px !important;
+	vertical-align:middle;
+}
