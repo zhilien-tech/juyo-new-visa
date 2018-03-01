@@ -1016,9 +1016,9 @@
 		$("#issuedDate").change(function(){
 			if($("#issuedDate").val() != ""){
 				if($("#validType").val() == 1){
-					$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
-				}else{
 					$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+				}else{
+					$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
 				}
 			}
 		});
@@ -1193,9 +1193,9 @@
 						$('#OCRline2').val(obj.OCRline2);
 						var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
 						if(years == 5){
-							$("#validType").val(1);
-						}else{
 							$("#validType").val(2);
+						}else{
+							$("#validType").val(1);
 						}
 						
 					}
@@ -1320,43 +1320,16 @@
 			$("#uploadFile").siblings("i").css("display","none");
 			$(".front").attr("class", "info-imgUpload front has-error");  
 	        $(".help-blockFront").attr("data-bv-result","INVALID");  
-	        //$(".help-blockFront").attr("style","display: block;");
-	        //$("#borderColor").attr("style", "border-color:#ff1a1a");
 		});
 		$("#passRemark").attr("disabled", true);
 	}
 	
 	 function applyBtn(){
-		/* var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-		bootstrapValidator.validate();
-		if (!bootstrapValidator.isValid()) {
-			return;
-		}
-		if($(".front").hasClass("has-error")){
-			return;
-		} */
 		save(2);
-		//关闭socket连接
-		//socket.onclose();
-		//var id = '${obj.applyId}';
-		//window.location.href = '/admin/myData/basic.html?contact=1&applyId='+id;
 	 }
 		
 	 function visaBtn(){
-		/* var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-		bootstrapValidator.validate();
-		if (!bootstrapValidator.isValid()) {
-			return;
-		}
-		
-		if($(".front").hasClass("has-error")){
-			return;
-		} */
 		save(3);
-		//关闭socket连接
-		//socket.onclose();
-		//var id = '${obj.applyId}';
-		//window.location.href = '/admin/myData/visa.html?contact=1&applyId='+id;
 	 }
 	
 	//取消按钮
@@ -1404,12 +1377,13 @@
 	
 	$("#validType").change(function(){
 		var type = $(this).val();
-		if(type == 1){
-			$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
-		}else{
-			$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+		if($("#issuedDate").val() != ""){
+			if(type == 1){
+				$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+			}else{
+				$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
+			}
 		}
-		
 	});
 	function getNewDay(dateTemp, days) {  
 	    var dateTemp = dateTemp.split("-");  

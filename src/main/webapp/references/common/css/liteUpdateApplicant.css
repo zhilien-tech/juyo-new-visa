@@ -185,3 +185,8 @@ input[type="file"] {
 #onceNationalityRadio {
 	display: inline-block;
 }
+/* 现居住地是否与身份证相同的checkbox样式 */
+.nowProvince {
+	width:16px;
+	height:16px;
+}

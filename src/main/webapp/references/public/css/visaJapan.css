@@ -128,3 +128,8 @@
 label {
 	margin-bottom: 0;
 }
+.spinner {
+	position:absolute;
+	margin-left:-14px;
+	width:66px !important;
+}

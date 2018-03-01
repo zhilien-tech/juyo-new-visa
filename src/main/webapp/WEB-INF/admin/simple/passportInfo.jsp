@@ -62,7 +62,7 @@
 									<div class="form-group" style="position:relative;">
 									<label><span>*</span>姓/拼音</label> <input id="firstName"
 										name="firstName" type="text" class="form-control input-sm " tabIndex="1"
-										placeholder=" " value="${obj.applicant.firstName }" />
+										placeholder=" " value="${obj.passport.firstName }" />
 										<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -82,7 +82,7 @@
 								<div class="form-group" style="position:relative;">
 									<label><span>*</span>名/拼音</label> <input id="lastName"
 										name="lastName" type="text" class="form-control input-sm" tabIndex="2"
-										placeholder=" " value="${obj.applicant.lastName }" />
+										placeholder=" " value="${obj.passport.lastName }" />
 										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 
 									<!-- <i class="bulb"></i> -->
@@ -94,7 +94,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>护照号</label>
-									<input id="passport" name="passport" type="text" class="form-control input-sm" tabIndex="3" value="${obj.passport.passport }"/>
+									<input id="passport" name="passport" type="text" class="form-control input-sm" maxlength="9" tabIndex="3" value="${obj.passport.passport }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -227,9 +227,6 @@
 					passport : {
 						trigger:"change keyup",
 						validators : {
-							notEmpty : {
-								message : '护照号不能为空'
-							},
 		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 								url: '${base}/admin/orderJp/checkPassport.html',
 								message: '护照号已存在，请重新输入',//提示消息
@@ -264,9 +261,9 @@
 			$("#issuedDate").change(function(){
 				if($("#issuedDate").val() != ""){
 					if($("#validType").val() == 1){
-						$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
-					}else{
 						$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
+					}else{
+						$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
 					}
 				}
 			});
@@ -367,9 +364,9 @@
 							$("#borderColor").attr("style", null);
 							var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
 							if(years == 5){
-								$("#validType").val(1);
-							}else{
 								$("#validType").val(2);
+							}else{
+								$("#validType").val(1);
 							}
 							
 						}
@@ -460,12 +457,13 @@
 		
 		$("#validType").change(function(){
 			var type = $(this).val();
-			if(type == 1){
-				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
-			}else{
-				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
+			if($("#issuedDate").val() != ""){
+				if(type == 1){
+					$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
+				}else{
+					$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
+				}
 			}
-			
 		});
 		
 		function getNewDates(dateTemp, days){

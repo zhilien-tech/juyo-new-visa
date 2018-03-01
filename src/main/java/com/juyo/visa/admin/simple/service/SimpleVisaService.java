@@ -1778,6 +1778,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		result.put("orderid", orderid);
+		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		String localAddr = request.getLocalAddr();
 		int localPort = request.getLocalPort();
 		result.put("localAddr", localAddr);

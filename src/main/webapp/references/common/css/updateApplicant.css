@@ -31,3 +31,4 @@ input[type="file"] { z-index:99999;}
 .IdInfo li a { color:#000;}
 .mainWidth { width:100% !important;}
 #uploadFile,#uploadFileBack { width:100% !important;}
+.nowProvince { width:16px; height:16px;}
