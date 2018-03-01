@@ -502,8 +502,24 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderinfo.setCityId(form.getCityid());
 		orderinfo.setUrgentType(form.getUrgentType());
 		orderinfo.setUrgentDay(form.getUrgentDay());
-		orderinfo.setSendVisaDate(form.getSendvisadate());
-		orderinfo.setOutVisaDate(form.getOutvisadate());
+		String sendvisadate = form.getSendvisadate();
+		if (!Util.isEmpty(sendvisadate)) {
+			String[] split = sendvisadate.split(" - ");
+			orderinfo.setSendVisaDate(DateUtil.string2Date(split[0], DateUtil.FORMAT_YYYY_MM_DD));
+			orderinfo.setSendvisaenddate(DateUtil.string2Date(split[1], DateUtil.FORMAT_YYYY_MM_DD));
+		} else {
+			orderinfo.setSendVisaDate(null);
+			orderinfo.setSendvisaenddate(null);
+		}
+		String outvisadate = form.getOutvisadate();
+		if (!Util.isEmpty(outvisadate)) {
+			String[] split = outvisadate.split(" - ");
+			orderinfo.setOutVisaDate(DateUtil.string2Date(split[0], DateUtil.FORMAT_YYYY_MM_DD));
+			orderinfo.setOutvisaenddate(DateUtil.string2Date(split[1], DateUtil.FORMAT_YYYY_MM_DD));
+		} else {
+			orderinfo.setOutVisaDate(null);
+			orderinfo.setOutvisaenddate(null);
+		}
 		orderinfo.setGoTripDate(form.getGoDate());
 		orderinfo.setStayDay(form.getStayday());
 		orderinfo.setBackTripDate(form.getReturnDate());
@@ -586,6 +602,26 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				break;
 			}
 		}
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		//送签时间
+		String sendvisadatestr = "";
+		Date sendVisaDate = orderinfo.getSendVisaDate();
+		Date sendvisaenddate = orderinfo.getSendvisaenddate();
+		if (!Util.isEmpty(sendVisaDate) && !Util.isEmpty(sendvisaenddate)) {
+			String sendvisastr = format.format(sendVisaDate);
+			String sendvisaendstr = format.format(sendvisaenddate);
+			sendvisadatestr = sendvisastr + " - " + sendvisaendstr;
+		}
+		String outvisadatestr = "";
+		Date outVisaDate = orderinfo.getOutVisaDate();
+		Date outvisaenddate = orderinfo.getOutvisaenddate();
+		if (!Util.isEmpty(outVisaDate) && !Util.isEmpty(outvisaenddate)) {
+			String outvisastr = format.format(outVisaDate);
+			String outvisaendstr = format.format(outvisaenddate);
+			outvisadatestr = outvisastr + " - " + outvisaendstr;
+		}
+		result.put("sendvisadatestr", sendvisadatestr);
+		result.put("outvisadatestr", outvisadatestr);
 		result.put("orderstatus", orderstatus);
 		result.put("flightlist", flightlist);
 		result.put("collarAreaEnum", EnumUtil.enum2(CollarAreaEnum.class));
@@ -600,6 +636,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("orderinfo", orderinfo);
 		result.put("tripinfo", tripinfo);
 		result.put("customerinfo", customerinfo);
+
 		return result;
 	}
 

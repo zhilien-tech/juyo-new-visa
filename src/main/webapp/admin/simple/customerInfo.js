@@ -105,6 +105,7 @@ $("#compName").on("select2:select",function(e){
 			$('#customerid').val(data.id);
 			$('#comShortName').html('<option value="'+data.id+'" selected="selected">'+data.shortname+'</option>');
 			$('#payType').val(data.payType);
+			$('#customamount').addClass('none');
 		}
 	});
 });
@@ -136,6 +137,7 @@ $("#comShortName").on("select2:select",function(e){
 			$('#customerid').val(data.id);
 			$('#compName').html('<option value="'+data.id+'" selected="selected">'+data.name+'</option>');
 			$('#payType').val(data.payType);
+			$('#customamount').addClass('none');
 		}
 	});
 });

@@ -131,7 +131,7 @@ function resetPlan(planid){
 }
 
 
-$('.datetimepickercss').each(function(){
+/*$('.datetimepickercss').each(function(){
 	$(this).datetimepicker({
 		format: 'yyyy-mm-dd',
 		language: 'zh-CN',
@@ -139,10 +139,10 @@ $('.datetimepickercss').each(function(){
 		pickerPosition:"top-left",//显示位置
 		minView: "month"//只显示年月日
 	});
-});
+});*/
 
 
-$("#sendVisaDate").datetimepicker({
+/*$("#sendVisaDate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
 	autoclose: true,//选中日期后 自动关闭
@@ -162,7 +162,7 @@ $("#sendVisaDate").datetimepicker({
 		}
 	});
 });
-
+*/
 $(document).on("input","#stayday",function(){
 	var gotripdate = $('#goDate').val();
 	var thisval = $(this).val();

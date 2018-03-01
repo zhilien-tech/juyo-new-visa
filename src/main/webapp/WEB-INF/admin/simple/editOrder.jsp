@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <!-- 本页css -->
@@ -259,14 +260,14 @@
 									<div class="form-group">
 										<label><span>*</span>预计送签时间：</label> <input id="sendVisaDate" tabindex="10"
 											name="sendvisadate" type="text" class="form-control input-sm"
-											placeholder=" "  value="<fmt:formatDate value="${obj.orderinfo.sendVisaDate }" pattern="yyyy-MM-dd" />"/>
+											placeholder=" " value="${obj.sendvisadatestr }"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>预计出签时间：</label> <input id="outVisaDate" tabindex="11"
-											name="outvisadate" type="text" class="form-control input-sm datetimepickercss"
-											placeholder=" "  value="<fmt:formatDate value="${obj.orderinfo.outVisaDate }" pattern="yyyy-MM-dd" />"/>
+											name="outvisadate" type="text" class="form-control input-sm"
+											placeholder=" " value="${obj.outvisadatestr }"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -507,6 +508,8 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/moment.min.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/daterangepicker.js"></script>
 	<%-- <script src="${base}/admin/orderJp/order.js"></script> --%>
 	<!-- 本页面js文件 -->
 	<!-- select2 -->

@@ -67,9 +67,9 @@ public class AddOrderForm {
 
 	private Integer urgentDay;
 
-	private Date sendvisadate;
+	private String sendvisadate;
 
-	private Date outvisadate;
+	private String outvisadate;
 
 	private Integer customerid;
 
