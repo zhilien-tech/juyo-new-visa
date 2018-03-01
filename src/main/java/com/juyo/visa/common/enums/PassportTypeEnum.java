@@ -11,7 +11,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * @Date	 2017年10月20日
  */
 public enum PassportTypeEnum implements IEnum {
-	FIVE(1, "5年"), TEN(2, "10年");
+	FIVE(1, "10年"), TEN(2, "5年");
 	private int key;
 	private String value;
 
