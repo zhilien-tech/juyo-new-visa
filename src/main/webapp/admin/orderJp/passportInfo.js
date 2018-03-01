@@ -79,21 +79,22 @@ $(function() {
 	$("#issuedDate").change(function(){
 		if($("#issuedDate").val() != ""){
 			if($("#validType").val() == 1){
-				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
-			}else{
 				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
+			}else{
+				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
 			}
 		}
 	});
 	
 	$("#validType").change(function(){
 		var type = $(this).val();
-		if(type == 1){
-			$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
-		}else{
-			$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
+		if($("#issuedDate").val() != ""){
+			if(type == 1){
+				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
+			}else{
+				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
+			}
 		}
-		
 	});
 });
 
@@ -388,9 +389,9 @@ $('#uploadFile').change(function() {
 					$("#borderColor").attr("style", null);
 					var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
 					if(years == 5){
-						$("#validType").val(1);
-					}else{
 						$("#validType").val(2);
+					}else{
+						$("#validType").val(1);
 					}
 					
 				}

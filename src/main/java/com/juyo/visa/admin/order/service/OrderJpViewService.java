@@ -2254,6 +2254,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			dbDao.update(passport);
 
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, passportForm.getApplicantId().longValue());
+			apply.setFirstName(passportForm.getFirstName());
+			if (!Util.isEmpty(passportForm.getFirstNameEn())) {
+				apply.setFirstNameEn(passportForm.getFirstNameEn().substring(1));
+			}
+			apply.setLastName(passportForm.getLastName());
+			if (!Util.isEmpty(passportForm.getLastNameEn())) {
+				apply.setLastNameEn(passportForm.getLastNameEn().substring(1));
+			}
+			dbDao.update(apply);
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", passportForm.getApplicantId()));
 			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
