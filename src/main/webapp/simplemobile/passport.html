@@ -26,7 +26,10 @@
         <input type="file" id="image" style="display:none;" name="image">
     </div>
     <ul class="label">
-        <li>类型 <input type="text" class="txtInput" v-model="passportdata.type"/></li>
+        <li>姓(中文) <input type="text" class="txtInput" id="firstname" v-model="passportdata.firstname"/></li>
+        <li>姓(拼音) <input type="text" class="txtInput" v-model="passportdata.firstnameen"/></li>
+        <li>名(中文) <input type="text" class="txtInput" id="lastname" v-model="passportdata.lastname"/></li>
+        <li>名(拼音) <input type="text" class="txtInput" v-model="passportdata.lastnameen"/></li>
         <li>护照号 <input type="text" class="txtInput" v-model="passportdata.passport"/></li>
         <li>性别 <input type="text" class="txtInput" v-model="passportdata.sex"/></li>
         <li>出生日期 <input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.birthday"/></li>
@@ -73,7 +76,8 @@
 	var _self;
 	new Vue({
 		el: '#passportform',
-		data: {passportdata:""},
+		data: {passportdata:"",
+				applicatdata:""},
 		created:function(){
 			var applicantid = GetQueryString('applicantid');
 	        _self=this;
@@ -180,6 +184,7 @@
 			var userid = GetQueryString('userid');
 			var orderid = GetQueryString('orderid');
 			var applicantid = GetQueryString('applicantid');
+			var sessionid = GetQueryString('sessionid');
 			if(applicantid == undefined || applicantid == 'undefined'){
 				applicantid = '';
 			}
@@ -192,6 +197,14 @@
 			if(orderid == undefined || orderid == 'undefined'){
 				orderid = '';
 			}
+			if(sessionid == undefined || sessionid == 'undefined'){
+				sessionid = '';
+			}
+			_self.passportdata.applicantid = applicantid;
+			_self.passportdata.comid = comid;
+			_self.passportdata.userid = userid;
+			_self.passportdata.orderid = orderid;
+			_self.passportdata.sessionid = sessionid;
 			//alert('applicantid:'+applicantid+'  comid:'+comid+'  userid:'+userid+'  orderid:'+orderid);
         	$.ajax({ 
             	url: '/admin/simplemobile/savePassportInfo.html',
@@ -200,7 +213,7 @@
             	type:'post',
             	async:false,
             	success: function(data){
-            		window.location.href='/simplemobile/info.html?comid='+comid+'&userid='+userid+'&orderid='+orderid+'&applicantid='+applicantid;
+            		window.location.href='/simplemobile/info.html?comid='+comid+'&userid='+userid+'&orderid='+data.orderid+'&applicantid='+data.applicantid;
               	}
             });
         }
@@ -241,6 +254,10 @@
 				//关闭加载层
 				layer.closeAll('loading');
 				if (true === obj.success) {
+					_self.passportdata.firstname = obj.xingCn;
+					_self.passportdata.firstnameen = getPinYinStr(obj.xingCn);
+					_self.passportdata.lastname = obj.mingCn;
+					_self.passportdata.lastnameen = getPinYinStr(obj.mingCn);
 					_self.passportdata.passporturl = obj.url;
 					_self.passportdata.type = obj.type;
 					_self.passportdata.passport = obj.num;
@@ -346,6 +363,15 @@
             return 0;
         }
     }
+    //拼音
+	$('#firstname').on('input propertychange',function(){
+		var firstnameen = getPinYinStr($(this).val()).toUpperCase();
+		console.log(firstnameen);
+		_self.applicatdata.firstnameen = firstnameen;
+	});
+	$('#lastname').on('input propertychange',function(){
+		_self.applicatdata.lastnameen = getPinYinStr($(this).val()).toUpperCase();
+	});
     </script>
 </body>
 </html>

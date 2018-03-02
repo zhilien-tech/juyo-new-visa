@@ -702,9 +702,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setCity(form.getCity());
 		applicant.setDetailedAddress(form.getDetailedAddress());
 		applicant.setEmail(form.getEmail());
-		if (!Util.isEmpty(form.getFirstNameEn())) {
-			applicant.setFirstNameEn(form.getFirstNameEn().substring(1));
-		}
 		if (!Util.isEmpty(form.getOtherLastNameEn())) {
 			applicant.setOtherLastNameEn(form.getOtherLastNameEn().substring(1));
 		}
@@ -714,17 +711,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setNationality(form.getNationality());
 		applicant.setHasOtherName(form.getHasOtherName());
 		applicant.setHasOtherNationality(form.getHasOtherNationality());
-		applicant.setFirstName(form.getFirstName());
-		applicant.setLastName(form.getLastName());
 		applicant.setOtherFirstName(form.getOtherFirstName());
 		applicant.setOtherLastName(form.getOtherLastName());
 		applicant.setAddressIsSameWithCard(form.getAddressIsSameWithCard());
 		applicant.setCardProvince(form.getCardProvince());
 		applicant.setCardCity(form.getCardCity());
 		applicant.setIssueOrganization(form.getIssueOrganization());
-		if (!Util.isEmpty(form.getLastNameEn())) {
-			applicant.setLastNameEn(form.getLastNameEn().substring(1));
-		}
 		applicant.setNation(form.getNation());
 		applicant.setProvince(form.getProvince());
 		applicant.setSex(form.getSex());
