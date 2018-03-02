@@ -317,8 +317,11 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	 */
 	public Object passportinfo(MobileApplicantForm form) {
 		Map<String, Object> result = Maps.newHashMap();
-		TApplicantPassportEntity passportinfo = dbDao.fetch(TApplicantPassportEntity.class,
-				Cnd.where("applicantId", "=", form.getApplicantid()));
+		TApplicantPassportEntity passportinfo = new TApplicantPassportEntity();
+		if (!Util.isEmpty(form.getApplicantid())) {
+			passportinfo = dbDao.fetch(TApplicantPassportEntity.class,
+					Cnd.where("applicantId", "=", form.getApplicantid()));
+		}
 		Map<String, String> passportmap = MapUtil.obj2Map(passportinfo);
 		SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		SimpleDateFormat fullformat = new SimpleDateFormat(DateUtil.FORMAT_FULL_PATTERN);

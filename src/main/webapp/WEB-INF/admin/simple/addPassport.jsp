@@ -299,6 +299,7 @@
 	                  var sessionid = '${obj.sessionid}';
 	                  if(received_msg){
 		                  var receiveMessage = JSON.parse(received_msg);
+		                  console.log(receiveMessage);
 		                  if(receiveMessage.sessionid == sessionid){
 		                	  if(receiveMessage.messagetype == 2){
 		                		  window.location.href = '/admin/simple/passportInfo.html?applicantid='+receiveMessage.applicantid+'&orderid='+receiveMessage.orderid;
@@ -405,13 +406,14 @@
 		//保存
 		function save(status){
 			//得到获取validator对象或实例 
+			layer.load(1);
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
 			if (!bootstrapValidator.isValid()) {
+				layer.closeAll("loading");
 				return;
 			}
 			var passportInfo = $("#passportInfo").serialize();
-			layer.load(1);
 			$.ajax({
 				type: 'POST',
 				async : false,

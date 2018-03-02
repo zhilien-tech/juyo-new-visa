@@ -424,9 +424,11 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						map.put("stayday", String.valueOf(stayday) + "天");
 					}
 					//入境口岸
-					TCityEntity goarrivecirtentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
-					if (!Util.isEmpty(goarrivecirtentity)) {
-						map.put("goArrivedCity", goarrivecirtentity.getCity());
+					if (!Util.isEmpty(ordertripjp.getGoArrivedCity())) {
+						TCityEntity goarrivecirtentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
+						if (!Util.isEmpty(goarrivecirtentity)) {
+							map.put("goArrivedCity", goarrivecirtentity.getCity());
+						}
 					}
 					//航空公司.0
 					TFlightEntity goflightentity = dbDao.fetch(TFlightEntity.class,
@@ -542,8 +544,10 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("linkman", company.getLinkman());
 			if (!Util.isEmpty(ordertripjp)) {
 				if (ordertripjp.getTripType().equals(1)) {
-					TCityEntity cityentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
-					map.put("city", cityentity.getCity());
+					if (!Util.isEmpty(ordertripjp.getGoArrivedCity())) {
+						TCityEntity cityentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
+						map.put("city", cityentity.getCity());
+					}
 					if (!Util.isEmpty(ordertripjp.getGoDate())) {
 						map.put("checkInDate", hoteldateformat.format(ordertripjp.getGoDate()));
 					}

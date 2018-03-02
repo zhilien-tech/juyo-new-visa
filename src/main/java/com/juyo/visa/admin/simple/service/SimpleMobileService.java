@@ -202,6 +202,7 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 				}
 				Map<String, Integer> generrateorder = simpleVisaService.generrateorder(loginUser, loginCompany);
 				orderjpid = generrateorder.get("orderjpid");
+				form.setOrderid(orderjpid);
 			}
 			TApplicantEntity applicantEntity = new TApplicantEntity();
 			applicantEntity.setFirstName(passportinfo.getFirstname());

@@ -736,7 +736,7 @@
                  });
 			}
 			function downLoadFile(){
-				$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=${obj.orderinfo.id}", {
+				$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=${obj.orderjpinfo.id}", {
 			        successCallback: function (url) {
 			        },
 			        failCallback: function (html, url) {
