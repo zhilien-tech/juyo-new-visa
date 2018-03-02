@@ -110,7 +110,7 @@
 }
 
 #applicantsTable tr td:nth-child(6) {
-	width: 42%;
+	width: 40%;
 }
 
 #applicantsTable tr td:nth-child(7) {
@@ -118,7 +118,7 @@
 }
 
 #applicantsTable tr td:nth-child(8) {
-	width: 12%;
+	width: 15%;
 }
 
 #schedulingTable thead tr th:nth-child(1) {

@@ -437,10 +437,7 @@ $("#nationality").on('input',function(){
 function setNationality(nationality){
 	$("#nationality").nextAll("ul.ui-autocomplete").remove();
 	$("#nationality").val(nationality).change();
-} 
-$("#nationalityDiv").mouseleave(function(){
-	$("#nationality").nextAll("ul.ui-autocomplete").remove();
-});
+}
 
 //省份检索
 $("#province").on('input',function(){
@@ -469,10 +466,7 @@ $("#province").on('input',function(){
 function setProvince(province){
 	$("#province").nextAll("ul.ui-autocomplete").remove();
 	$("#province").val(province).change();
-} 
-$("#provinceDiv").mouseleave(function(){
-	$("#province").nextAll("ul.ui-autocomplete").remove();
-});
+}
 
 //市检索
 $("#city").on('input',function(){
@@ -502,10 +496,7 @@ $("#city").on('input',function(){
 function setCity(city){
 	$("#city").nextAll("ul.ui-autocomplete").remove();
 	$("#city").val(city).change();
-} 
-$("#cityDiv").mouseleave(function(){
-	$("#city").nextAll("ul.ui-autocomplete").remove();
-});
+}
 
 //正面上传,扫描
 $('#uploadFile').change(function() {

@@ -704,7 +704,7 @@
         		    maxmin: false,
         		    shadeClose: false,
         		    scrollbar: false,
-        		    area: ['900px', '550px'],
+        		    area: ['900px', '80%'],
         		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
         		  });
 			}
