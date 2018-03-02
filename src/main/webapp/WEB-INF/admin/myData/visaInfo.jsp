@@ -840,19 +840,19 @@
 			var marryStatus = $("#marryStatus").val();
 			if(marryStatus == 3 || marryStatus == 4 || !marryStatus){
 				$(".info-imgUpload").hide();
-				$("#unitNameLabel").html("<span>*</span>父母单位名称");
+				$("#unitNameLabel").html("<span>*</span>父母职业");
 			}else{
 				$(".info-imgUpload").show();
 				if(marryStatus == 1){
-					$("#unitNameLabel").html("<span>*</span>配偶单位名称");
+					$("#unitNameLabel").html("<span>*</span>配偶职业");
 				}else{
-					$("#unitNameLabel").html("<span>*</span>父母单位名称");
+					$("#unitNameLabel").html("<span>*</span>父母职业");
 				}
 			}
 			$("#marryStatus").change(function(){
 				var status = $(this).val();
 				if(status == 3 || status == 4 || !status){
-					$("#unitNameLabel").html("<span>*</span>父母单位名称");
+					$("#unitNameLabel").html("<span>*</span>父母职业");
 					$(".info-imgUpload").hide();
 					$('#marryUrl').val("");
 					$('#sqImg').attr('src', "");
@@ -863,9 +863,9 @@
 				    $("#borderColor").attr("style",null);
 				}else{
 					if(status == 1){
-						$("#unitNameLabel").html("<span>*</span>配偶单位名称");
+						$("#unitNameLabel").html("<span>*</span>配偶职业");
 					}else{
-						$("#unitNameLabel").html("<span>*</span>父母单位名称");
+						$("#unitNameLabel").html("<span>*</span>父母职业");
 					}
 					if($("#sqImg").attr("src") == ""){
 						$(".front").attr("class", "info-imgUpload front has-error");  

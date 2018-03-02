@@ -249,7 +249,7 @@
 							</div>
 							
 							<!-- end 单位地址 -->
-							<!-- 父母单位名称/配偶单位名称 -->
+							<!-- 父母职业/配偶职业 -->
 							<div class="row unitNameRow">
 								<div class="col-sm-8 preSchool">
 									<div class="form-group">
