@@ -1068,7 +1068,12 @@
 					validators : {
 						notEmpty : {
 							message : '护照号不能为空'
-						}/* ,
+						},
+						stringLength: {
+	                   	    min: 1,
+	                   	    max: 9,
+	                   	    message: '护照号不能超过9位'
+	                   	},/* ,
 	                     remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 							url: '${base}/admin/orderJp/checkPassport.html',
 							message: '护照号已存在，请重新输入',//提示消息
@@ -1406,6 +1411,7 @@
 		}
 	}
 	
+	var now = new Date();
 	$("#birthday").datetimepicker({
 		format: 'yyyy-mm-dd',
 		language: 'zh-CN',
@@ -1422,6 +1428,7 @@
 	$("#issuedDate").datetimepicker({
 		format: 'yyyy-mm-dd',
 		language: 'zh-CN',
+		endDate: now,
 		autoclose: true,//选中日期后 自动关闭
 		pickerPosition:"top-left",//显示位置
 		minView: "month"//只显示年月日

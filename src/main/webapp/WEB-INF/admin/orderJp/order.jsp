@@ -492,41 +492,6 @@
 	<!-- 本页面js文件 -->
 	<script type="text/javascript">
 	
-	/* //连接websocket
-	connectWebSocket();
-	function connectWebSocket(){
-		 if ('WebSocket' in window){  
-	        console.log('Websocket supported');  
-	        socket = new WebSocket('ws://'+localAddr+':'+localPort+'/'+websocketaddr);   
-	        console.log('Connection attempted');  
-	        socket.onopen = function(){  
-	             console.log('Connection open!');  
-	             //setConnected(true);  
-	         };
-	        socket.onclose = function(){  
-	            console.log('Disconnecting connection');  
-	        };
-	        socket.onmessage = function (evt){   
-	              var received_msg = evt.data;  
-	              if(received_msg){
-	                  var receiveMessage = JSON.parse(received_msg);
-	                  if(receiveMessage.applicantid == applicantId){
-	                	  if(receiveMessage.messagetype == 1){
-		                	  window.location.reload();
-	                	  }else if(receiveMessage.messagetype == 2){
-	                		  window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType='+orderProcessType;
-	                	  }
-	                  }
-	              }
-	              console.log('message received!');  
-	              //showMessage(received_msg);  
-	          };  
-
-	      } else {  
-	        console.log('Websocket not supported');  
-	      }  
-	} */
-	
 		//时间插件格式化  出行时间>送签时间 >今天
 		var now = new Date();
 		$("#goTripDate").datetimepicker({
