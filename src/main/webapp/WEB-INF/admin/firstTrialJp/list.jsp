@@ -14,11 +14,15 @@
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
     <link rel="stylesheet" href="${base}/references/public/css/style.css">
     <link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
+    <!-- 加载中。。。样式 -->
+	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
     <style>
      body { font-size:12px;}
      [v-cloak]{display:none;}
 	 .bold { font-weight:bold;font-size:16px;}
 	 label { margin-bottom:0;}
+	 .spinner { width:66px !important; margin-left:-10px;}
+	 .spinner > div { width:10px !important;}
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -55,7 +59,15 @@
 								<div><label>订单号：</label><span style="cursor:pointer" v-on:click="visaDetail(data.orderid,data.orderjpid)">{{data.ordernumber}}</span></div>	
 								<div><label>出行时间：</label><span>{{data.gotriptime}}</span></div>	
 								<div><label>返回时间：</label><span>{{data.backtriptime}}</span></div>	
-								<div style="position:absolute;right:25%;"><label></label><span class="bold">{{data.orderstatus}}</span></div>	
+								<div v-if="data.orderstatus === '发招宝中'" style="position:absolute;right:20%;"><label></label><span class="bold">{{data.orderstatus}}</span>
+								<!-- 加载中 -->
+								<div class="spinner">
+									<div class="bounce1"></div>
+									<div class="bounce2"></div>
+								    <div class="bounce3"></div>
+								</div>
+								</div>
+								<div v-else style="position:absolute;right:25%;"><label></label><span class="bold">{{data.orderstatus}}</span></div>		
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.orderid,data.orderjpid)"> </i>

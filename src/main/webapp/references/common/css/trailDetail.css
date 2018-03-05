@@ -43,5 +43,13 @@
 #urgentDays {
 	width: 14.2%;
 }
-#wrapper { background:#FFF !important;}
-
+#wrapper { 
+	background:#FFF !important;
+}
+.spinner {
+	display:inline-block;
+	margin-left:-10px;
+}
+[v-cloak] {
+	display: none;
+}
