@@ -17,7 +17,7 @@
     		<img :src="passportdata.passporturl" style="width:100%;height:100%;"  alt="" class="bacimg">
     	</span>
     	<span v-else>
-	        <img src="images/1.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
+	        <img src="images/Hz.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
     	</span>
         <div id="upload">
             <h6>点击上传护照</h6>
@@ -93,7 +93,12 @@
 	});
         $(function () {
             $('#upload').click(function () {
-           	 	$('#image').click();
+           	 	
+               $(".backgroundGray").show();
+            });
+            $(".closed").click(function(){
+            	$(".backgroundGray").hide();
+            	$('#image').click();
                 $('#image').change(function(){
                 	layer.load(1, {
             			shade : "#000"
@@ -119,8 +124,7 @@
                             console.log(err);
                         });
                 });
-               
-            });
+            })
         });
 
         //

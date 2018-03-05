@@ -19,27 +19,10 @@
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
-		<style type="text/css">
-			.modal-body { height:489px;}
-			.form-control{height: 30px; }
-			.add-btn{top:-225px;right:-1%;}
-			.remove-btn{top: -225px;right: -1%;}
-			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
-			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
-			.qz-head { position:fixed;top:0;left:0;z-index:99999; width:100%;}
-			.content { margin-top:50px;}
-			.info { position:relative;}
-			#addCustomer { position:absolute; top:5px; right:10px;}
-			.info-body-from { margin-left:8%;}
-			#urgentDays { width:14.2%;}
-			.wrapper { background-color:#f9f9f9 !important;}
-			.col-sm-3 { width:28%;}
-			.col-sm-1 { width:11.5% !important;}
-			.select2 { width:100% !important;}
-			.addApplicantBtn { width:30% !important;}
-			[v-cloak]{display:none;}
-			.btn-Big { width:82px !important;}
-		</style>
+		 <!-- 加载中。。。样式 -->
+		<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
+		<!-- 本页样式 -->
+		<link rel="stylesheet" href="${base}/references/common/css/orderJPOrder.css">
 	</head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -48,7 +31,25 @@
 			<div class="qz-head">
 				<span class="">订单号：<p>${obj.orderInfo.orderNum}</p></span> 
 				<span class="">受付番号：<p></p></span> 
-				<span class="">状态：<p id="spanStatus">${obj.orderstatus }</p></span> 
+				<c:choose>
+						<c:when test="${obj.orderstatus == '发招宝中'}">
+							<span >状态：
+						<p class="cateInfo">${obj.orderstatus }</p>
+					</span> 
+					<!-- 加载中 -->
+					<div class="spinner">
+					  <div class="bounce1"></div>
+					  <div class="bounce2"></div>
+					  <div class="bounce3"></div>
+					</div>
+					</c:when>
+					<c:otherwise>
+						<span >状态：
+							<p class="cateInfo">${obj.orderstatus }</p>
+						</span> 
+					</c:otherwise>
+													
+				</c:choose >
 				<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancel();"/> 
 				<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" id="saveOrder" v-on:click="order()" /> 
 				<!-- <input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" /> -->

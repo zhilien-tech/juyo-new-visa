@@ -16,21 +16,13 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
-	<style>
-	 [v-cloak]{display:none;}
-	.box-header { position:fixed; top:0;left:0; width:100%; height:105px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	.box-body {  overflow:hidden;margin-top:96px;}
-	.card-head span { font-size:12px;}
-	 label { margin-bottom:0;}
-	</style>
+	<!-- 加载中。。。样式 -->
+	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
+	<!-- 本页css -->
+	<link rel="stylesheet" href="${base}/references/common/css/afterMarketList.css">
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-				<!-- <ul class="title">
-					<li>签证</li>
-					<li class="arrow"></li>
-					<li>日本</li>
-				</ul> -->
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<!-- 切换卡按钮 start -->
@@ -68,7 +60,15 @@
 								<div><label>订单号：</label><span>{{data.ordernum}}</span></div>	
 								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
-								<div><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span></div>	
+								<div v-if="data.orderstatus === '发招宝中'"><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span>
+								<!-- 加载中 -->
+								<div class="spinner">
+									<div class="bounce1"></div>
+									<div class="bounce2"></div>
+								    <div class="bounce3"></div>
+								</div>
+								</div>	
+								<div v-else><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span></div>	
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="(item,index) in data.applicats">

@@ -15,25 +15,10 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
-	<style>
-		[v-cloak]{display:none;}
-		.card-head { overflow:hidden; white-space:nowrap;}
-		.card-head div:nth-child(1){width:20%;}
-		.card-head div:nth-child(2){width:10%; text-align:right;}
-		.card-head div:nth-child(3){width: 135px;float: right;position: relative;right: 0; height:31px;}
-		.everybody-info div:nth-child(1){width:10%;}
-		.everybody-info div:nth-child(2){width:12%;}
-		.everybody-info div:nth-child(3){width:14%;}
-		.everybody-info div:nth-child(4){width:10%;}
-		.everybody-info div:nth-child(5){width:11%;}
-		.everybody-info div:nth-child(6){width:40%;}
-	    .everybody-info {position:relative; }
-	    label { margin-bottom:0;}
-	    .cf { overflow:visible !important;}
-	    .whiteSpace {  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; float:right; position:absolute;}
-	    .showInfo { cursor:pointer; }
-	    .hideInfo { display:none; position:absolute; top:-33px;right:0;background:#eee;height:30px;line-height:30px; font-size:12px; padding:0 10px; border-radius:10px;}
-	</style>
+    <!-- 加载中。。。样式 -->
+	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
+	<!-- 本页样式 -->
+	<link rel="stylesheet" href="${base}/references/common/css/receptionJPList.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">
@@ -66,7 +51,15 @@
 						<div class="card-list" v-cloak v-for="data in receptionJpData">
 							<div class="card-head cf">
 								<div><label>订单号：</label><span style="cursor:pointer;font-size:12px;" @click="visaDetail(data.id)">{{data.ordernumber}}</span></div>	
-								<div style="position:absolute;right:25%;"><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span></div>		
+								<div v-if="data.orderstatus ==='发招宝中'" style="position:absolute;right:20%;"><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span>
+								<!-- 加载中 -->
+								<div class="spinner">
+									<div class="bounce1"></div>
+									<div class="bounce2"></div>
+								    <div class="bounce3"></div>
+								</div>
+								</div>
+								<div v-else style="position:absolute;right:25%;"><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span></div>		
 								<div>
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>

@@ -17,34 +17,10 @@
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
-		<style type="text/css">
-			[v-cloak]{display:none;}
-			.wrapper { background:#f9f9f9 !important; }
-			.form-control{height: 30px;}
-			.add-btn{top: -35px;right:-1.5%;}
-			.remove-btn{top: -35px;right: -1.5%;}
-			.multiPass_roundTrip-div{width: 120px;float: right;position: relative;top: 5px;}
-			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
-			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
-			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
-			.deposit,.vehicle,.houseProperty{display:none;}
-			#urgentDays { width:16.5%;}
-			.info-body-from { margin-left:12%;}
-			.qz-head { position:fixed;top:0;left:0;z-index:99999; width:100%;}
-			.content { margin-top:50px;}
-			#applicantTable tbody tr td:nth-child(1){width: 4%;}
-			#applicantTable tbody tr td:nth-child(2){width: 10%;}
-			#applicantTable tbody tr td:nth-child(3){width: 10%;}
-			#applicantTable tbody tr td:nth-child(4){width: 10%;}
-			#applicantTable tbody tr td:nth-child(5){width: 10%;}
-			#applicantTable tbody tr td:nth-child(6){width: 56%;}
-			#schedulingTable thead tr th:nth-child(1){width:8%;}
-			#schedulingTable thead tr th:nth-child(2){width:10%;}
-			#schedulingTable thead tr th:nth-child(3){width:12%;}
-			#schedulingTable thead tr th:nth-child(4){width:24%;}
-			#schedulingTable thead tr th:nth-child(5){width:24%;}
-			#schedulingTable thead tr th:nth-child(6){width:8%;}
-		</style>
+   		<!-- 加载中。。。样式 -->
+		<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
+		<!-- 本页样式 -->
+		<link rel="stylesheet" href="${base}/references/common/css/receptionDetail.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper" >
@@ -52,7 +28,25 @@
 				<div class="qz-head">
 					<span class="">订单号：<p>${obj.orderinfo.orderNum }</p></span>
 					<span class="">受付番号：<p></p></span>
-					<span class="">状态：<p id="orStatus_p">${obj.orStatus }</p></span>
+					<c:choose>
+					<c:when test="${obj.orStatus == '发招宝中'}">
+					<span >状态：
+						<p id="orStatus_p">${obj.orStatus }</p>
+					</span> 
+					<!-- 加载中 -->
+					<div class="spinner">
+					  <div class="bounce1"></div>
+					  <div class="bounce2"></div>
+					  <div class="bounce3"></div>
+					</div>
+					</c:when>
+					<c:otherwise>
+						<span >状态：
+							<p id="orStatus_p">${obj.orStatus }</p>
+						</span> 
+					</c:otherwise>
+													
+				</c:choose >
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="javascript:window.close()"/>
 					<input type="button" value="保存" class="btn btn-primary btn-sm pull-right" onclick="commitdata();"/>
 					<input type="button" value="签证" class="btn btn-primary btn-sm pull-right" onclick="visaTransfer();"/>

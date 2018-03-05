@@ -44,16 +44,13 @@
 							<div class="col-md-2 left-5px right-0px marginLR">
 								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间 - 出签时间" onkeypress="onkeyEnter()"/>
 							</div>
-							<!-- <div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/>
-							</div> -->
 							<div class="col-md-3 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter()"/>
 							</div>
 							<div class="col-md-1 left-5px btnSearch">
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
 							</div>
-							<div class="col-md-1 right-5px btnSearch">
+							<div class="col-md-1 right-5px btnSearch btnRight">
 								<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
 							</div>
 						</div>
@@ -105,7 +102,7 @@
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证录入</a></div>
+										<div class="visaBtn"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
 									</span>
 									<span v-else class="visaListSpan">
 										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
@@ -113,7 +110,7 @@
 										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证录入</a></div>
+										<div class="visaBtn"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
 									</span>
 								</li>
 							</ul> 
