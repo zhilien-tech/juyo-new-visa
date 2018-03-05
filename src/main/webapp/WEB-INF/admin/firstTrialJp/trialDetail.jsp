@@ -17,6 +17,8 @@
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 		<link rel="stylesheet" href="${base}/references/public/css/style.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
+		<!-- 加载中。。。样式 -->
+		<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 		<!-- 本页面样式 -->
 		<link rel="stylesheet" href="${base}/references/common/css/trailDetail.css">
 	</head>
@@ -26,7 +28,15 @@
 				<div class="qz-head">
 					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
 					<!-- <span class="">受付番号：<p>JDY27163</p></span> -->
-					<span class="">状态：<p>{{orderinfo.status}}</p></span>
+					<span v-if="orderinfo.status === '发招宝中'">状态：<p>{{orderinfo.status}}</p>
+					<!-- 加载中 -->
+					<div class="spinner">
+						<div class="bounce1"></div>
+						<div class="bounce2"></div>
+						<div class="bounce3"></div>
+					</div>
+					</span>
+					<span v-else>状态：<p>{{orderinfo.status}}</p></span>
 					<input type="button" value="取消" onclick="javascript:window.close()" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="保存" onclick="saveorder()" class="btn btn-primary btn-sm pull-right"/>
 					<!-- <input type="button" value="回邮" class="btn btn-primary btn-sm pull-right" /> -->

@@ -16,20 +16,10 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
-	<style type="text/css">
-	 body { font-size:12px;}
-	 [v-cloak]{display:none;}
-	 #hideOrder:hover { text-decoration: none;cursor:pointer;}
-	 /*头导航不随下拉移动*/
-	 .box-header { position:fixed; top:0;left:0; width:100%; height:120px; background:#FFF; z-index:99999; padding:20px 30px 20px 40px;}
-	 .box-body {  overflow:hidden;margin-top:120px;}
-	 .card-head div { font-weight:normal;}
-	 .box-body { padding:0 15px 0 15px;}
-	 .allDiv { width:15%;}
-	 .searchStrWidth { width: 31% !important;}
-	 .BtnWidth { width: 24% !important;}
-	 label { margin-bottom:0;}
-	</style>
+	<!-- 加载中。。。样式 -->
+	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
+	<!-- 本页样式 -->
+	<link rel="stylesheet" href="${base}/references/common/css/orderJPList.css">
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -95,6 +85,15 @@
 								<div><label>人数：</label><span>{{data.peoplenum}}</span></div>	
 								<div v-if="data.isdisabled==1" style="position:absolute;right:25%;">
 								<label></label><span  style="font-size:16px;font-weight:bold;">作废</span>
+								</div>
+								<div v-else-if="data.status ==='发招宝中'" style="position:absolute;right:20%;">
+								<label></label><span  style="font-size:16px;font-weight:bold;">{{data.status}}</span>
+								<!-- 加载中 -->
+								<div class="spinner">
+									<div class="bounce1"></div>
+									<div class="bounce2"></div>
+								    <div class="bounce3"></div>
+								</div>
 								</div>	
 								<div v-else style="position:absolute;right:25%;">
 								<label></label><span  style="font-size:16px;font-weight:bold;">{{data.status}}</span>
