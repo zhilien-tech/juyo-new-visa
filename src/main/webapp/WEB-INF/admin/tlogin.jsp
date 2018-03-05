@@ -224,7 +224,16 @@
 				  }
 			  }
 			//document.getElementById("btn").onclick=function(){time(this);} 
-
+			 $('#loginName').on('input',function(){
+				  var loginName = getCookie('visitloginName');
+				  var thisval = $(this).val();
+				  var password = getCookie('visitpassword');
+				  if(thisval == loginName){
+				     $('#password').val(password);
+				  }else{
+					 $('#password').val('');
+				  }
+			  });
 		</script>
 </body>
 </html>

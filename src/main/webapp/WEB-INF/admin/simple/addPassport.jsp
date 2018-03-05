@@ -250,6 +250,20 @@
 							}
 						}
 					},
+					firstName : {
+						validators : {
+							notEmpty : {
+								message : '姓不能为空'
+							}
+						}
+					},
+					lastName : {
+						validators : {
+							notEmpty : {
+								message : '名不能为空'
+							}
+						}
+					}
 				}
 			});
 			$('#passportInfo').bootstrapValidator('validate');
@@ -301,6 +315,7 @@
 		                  var receiveMessage = JSON.parse(received_msg);
 		                  console.log(receiveMessage);
 		                  if(receiveMessage.sessionid == sessionid){
+		                	  window.parent.document.getElementById('orderid').value = receiveMessage.orderid;
 		                	  if(receiveMessage.messagetype == 2){
 		                		  window.location.href = '/admin/simple/passportInfo.html?applicantid='+receiveMessage.applicantid+'&orderid='+receiveMessage.orderid;
 		                	  }else if(receiveMessage.messagetype == 1){
