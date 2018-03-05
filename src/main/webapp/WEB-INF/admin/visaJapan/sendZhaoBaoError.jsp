@@ -53,7 +53,12 @@
 	<script type="text/javascript">
 		var orderid = '${obj.orderid}';
 		function fillIn(){
-			window.open('${base}/admin/visaJapan/visaDetail.html?orderid='+orderid);
+			var type = '${obj.type}';
+			if(type == 1){
+				window.open('${base}/admin/simple/editOrder.html?orderid='+orderid);
+			}else{
+				window.open('${base}/admin/visaJapan/visaDetail.html?orderid='+orderid);
+			}
 		}
 		function cancelBtn(){
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

@@ -479,7 +479,7 @@
 										<th><span>电话</span></th>
 										<th><span>护照号</span></th>
 										<th><span>资料类型</span></th>
-										<th><span>真实资料</span></th>
+										<th><span>签证所需资料</span></th>
 										<th><span>备注</span></th>
 										<th><span>操作</span></th>
 									</tr>
@@ -490,7 +490,6 @@
 							</table>
 						</div>
 					</div>
-
 				</form>
 			</section>
 		</div>
@@ -736,13 +735,38 @@
                  });
 			}
 			function downLoadFile(){
-				$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=${obj.orderjpinfo.id}", {
-			        successCallback: function (url) {
-			        },
-			        failCallback: function (html, url) {
-			       		layer.msg('下载失败');
-			        }
-			    });
+				$.ajax({
+                 	url: '${base}/admin/visaJapan/validateInfoIsFull.html',
+                 	data:{orderjpid:orderid},
+                 	dataType:"json",
+                 	type:'post',
+                 	async:false,
+                 	success: function(data){
+                 		//var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
+                 		if(data.data){
+                 			var url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
+			        		layer.open({
+			        		    type: 2,
+			        		    title: false,
+			        		    closeBtn:false,
+			        		    fix: false,
+			        		    maxmin: false,
+			        		    shadeClose: false,
+			        		    scrollbar: false,
+			        		    area: ['400px', '300px'],
+			        		    content: url
+			        		  });
+                 		}else{
+							$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=${obj.orderjpinfo.id}", {
+						        successCallback: function (url) {
+						        },
+						        failCallback: function (html, url) {
+						       		layer.msg('下载失败');
+						        }
+						    });
+                 		}
+                   	}
+                 });
 			}
 		</script>
 </body>
