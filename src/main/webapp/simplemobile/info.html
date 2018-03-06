@@ -23,7 +23,7 @@
 		<img :src="applicatdata.cardfront" style="width:100%;height:100%;"  alt="" class="bacimg">
 	</span>
 	<span v-else>
-	    <img src="images/1.jpg" style="width:100%; height:100%;" alt="" class="bacimg">
+	    <img src="images/IDY.jpg" style="width:100%; height:100%;" alt="" class="bacimg">
 	</span>
     <div id="upload">
         <h6>点击上传</h6>
@@ -38,7 +38,7 @@
 		<img :src="applicatdata.cardback" style="width:100%;height:100%;"  alt="" class="bacimg">
 	</span>
 	<span v-else>
-	    <img src="images/1.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
+	    <img src="images/IDN.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
 	</span>
     <div id="upload2">
         <h6>点击上传</h6>
@@ -48,7 +48,7 @@
     <input type="file" id="image2" style="display:none;" name="image">
 </div>
  <ul class="label-info">
-        <li>手机号 <input type="text" class="txtInput" v-model="applicatdata.telephone"/></li>
+        <li>手机号 <input type="text" class="txtInput" maxlength="11" v-model="applicatdata.telephone"/></li>
         <li>邮箱 <input type="text" class="txtInput" v-model="applicatdata.email"/></li>
         <li>性别 <input type="text" class="txtInput" v-model="applicatdata.sex"/></li>
         <li>出生日期 <input type="text" class="txtInput" id="birthDate" readonly="" v-model="applicatdata.birthday"/></li>
@@ -525,5 +525,12 @@
 		};
 		reader.readAsDataURL(file);
 	}); */
+	$(function(){
+		$("form:input").blur(function(){
+			if($(this).is("#")){
+				
+			}
+		})
+	})
 </script>
 </html>

@@ -52,7 +52,7 @@
         <li>姓(拼音) <input type="text" class="txtInput" v-model="applicatdata.firstnameen"/></li>
         <li>名(中文) <input type="text" class="txtInput" id="lastname" v-model="applicatdata.lastname"/></li>
         <li>名(拼音) <input type="text" class="txtInput" v-model="applicatdata.lastnameen"/></li>
-        <li>手机号 <input type="text" class="txtInput" v-model="applicatdata.telephone"/></li>
+        <li>手机号 <input type="text" class="txtInput" maxlength="11" v-model="applicatdata.telephone"/></li>
         <li>邮箱 <input type="text" class="txtInput" v-model="applicatdata.email"/></li>
         <li>性别 <input type="text" class="txtInput" v-model="applicatdata.sex"/></li>
         <li>出生日期 <input type="text" class="txtInput" id="birthDate" readonly="" v-model="applicatdata.birthday"/></li>
