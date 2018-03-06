@@ -190,3 +190,6 @@ input[type="file"] {
 	width:16px;
 	height:16px;
 }
+.dropdown-menu {
+	top:64px !important;
+}
