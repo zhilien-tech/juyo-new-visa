@@ -1422,12 +1422,13 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param orderid
 	 * @return
 	 */
-	public Object sendZhaoBaoError(String data, Integer orderid, HttpSession session) {
+	public Object sendZhaoBaoError(String data, Integer orderid, HttpSession session, Integer type) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("orderid", orderid);
 		result.put("data", data);
+		result.put("type", type);
 		//变更订单负责人
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
 		changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);

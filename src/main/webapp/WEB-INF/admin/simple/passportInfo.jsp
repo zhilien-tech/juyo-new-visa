@@ -248,6 +248,20 @@
 							}
 						}
 					},
+					firstName : {
+						validators : {
+							notEmpty : {
+								message : '姓不能为空'
+							}
+						}
+					},
+					lastName : {
+						validators : {
+							notEmpty : {
+								message : '名不能为空'
+							}
+						}
+					}
 				}
 			});
 			$('#passportInfo').bootstrapValidator('validate');
