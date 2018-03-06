@@ -108,7 +108,7 @@
 						
 						<div class="row">
 							<!-- 公民身份证 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-8 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>公民身份证</label> <input id="cardId"
 										name="cardId" type="text" class="form-control input-sm"
@@ -116,20 +116,8 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-						</div>
-						<!-- end 公民身份证 -->
-						<div class="row">
-							<!-- 姓名/民族 -->
-							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>性别</label> 
-									<select class="form-control input-sm selectHeight" id="sex" name="sex">
-										<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
-										<option value="女" ${obj.applicant.sex == "女"?"selected":"" }>女</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-3 padding-right-0">
+						    <!-- 民族 -->
+							<div class="col-sm-5 padding-right-0">
 								<div class="form-group">
 									<label>民族</label> <input id="nation"
 										name="nation" type="text" class="form-control input-sm"
@@ -137,14 +125,8 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-							<div class="col-sm-5 padding-right-0">
-								<div class="form-group">
-									<label>出生日期</label> 
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" value="${obj.birthday }"/>
-								</div>
-							</div>
 						</div>
-						<!-- end 姓名/民族 -->
+						<!-- end 公民身份证 -->
 						<div class="row">
 							<!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
