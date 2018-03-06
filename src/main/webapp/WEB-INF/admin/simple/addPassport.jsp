@@ -266,7 +266,7 @@
 					}
 				}
 			});
-			$('#passportInfo').bootstrapValidator('validate');
+			//$('#passportInfo').bootstrapValidator('validate');
 			
 			var remark = $("#passRemark").val();
 			if(remark != ""){
@@ -440,6 +440,7 @@
 					console.log(JSON.stringify(data));
 					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					layer.close(index); */
+					parent.saveAddOrder(2);
 					if(status == 2){
 						socket.onclose();
 						window.location.href = '/admin/simple/updateApplicant.html?applicantid='+data.applicantid+'&orderid='+data.orderid;

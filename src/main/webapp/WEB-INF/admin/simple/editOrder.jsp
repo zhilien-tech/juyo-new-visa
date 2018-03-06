@@ -476,7 +476,7 @@
 									<tr>
 										<th><span>&nbsp;</span></th>
 										<th><span>姓名</span></th>
-										<th><span>电话</span></th>
+										<th><span>手机号</span></th>
 										<th><span>护照号</span></th>
 										<th><span>资料类型</span></th>
 										<th><span>签证所需资料</span></th>
@@ -514,10 +514,10 @@
 	<!-- select2 -->
 	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
-	<script src="${base}/admin/simple/customerInfo.js"></script>
-	<script src="${base}/admin/simple/travelinfo.js"></script><!-- 本页面js文件 -->
-	<script src="${base}/admin/simple/initpagedata.js"></script><!-- 本页面js文件 -->
-	<script src="${base}/admin/simple/addsimpleorder.js"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/customerInfo.js?v=0.0.1"></script>
+	<script src="${base}/admin/simple/travelinfo.js?v=0.0.1"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/initpagedata.js?v=0.0.2"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/addsimpleorder.js?v=0.0.1"></script><!-- 本页面js文件 -->
 
 	<script type="text/javascript">
 		//加载申请人表格数据
@@ -718,7 +718,7 @@
                  	success: function(data){
                  		var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
                  		if(data.data){
-                 			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data;
+                 			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
                  		}
 		        		layer.open({
 		        		    type: 2,

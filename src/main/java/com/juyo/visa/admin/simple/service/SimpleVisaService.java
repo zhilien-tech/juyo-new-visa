@@ -931,6 +931,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(form.getLastNameEn())) {
 				applicant.setLastNameEn(form.getLastNameEn().substring(1));
 			}
+			applicant.setSex(form.getSex());
+			applicant.setBirthday(form.getBirthday());
 			dbDao.update(applicant);
 		} else {
 			Integer orderjpid = form.getOrderid();
@@ -949,6 +951,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				applicantEntity.setLastNameEn(form.getLastNameEn().substring(1));
 			}
 			applicantEntity.setLastNameEn(form.getLastNameEn());
+			applicantEntity.setSex(form.getSex());
+			applicantEntity.setBirthday(form.getBirthday());
 			TApplicantEntity insertapplicant = dbDao.insert(applicantEntity);
 			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
 			applicantjp.setApplicantId(insertapplicant.getId());
@@ -956,6 +960,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
 			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
 			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+			//设置主申请人信息
+			List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderjpid), null);
+			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
+
+			} else {
+				//设置为主申请人
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+				insertapplicant.setMainId(insertapplicant.getId());
+				dbDao.update(insertapplicant);
+			}
 			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
 			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
 			workJp.setApplicantId(insertappjp.getId());
