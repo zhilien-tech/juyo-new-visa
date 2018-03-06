@@ -108,7 +108,7 @@
 						
 						<div class="row">
 							<!-- 公民身份证 -->
-							<div class="col-sm-8 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>公民身份证</label> <input id="cardId"
 										name="cardId" type="text" class="form-control input-sm"
@@ -117,7 +117,7 @@
 								</div>
 							</div>
 						    <!-- 民族 -->
-							<div class="col-sm-5 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>民族</label> <input id="nation"
 										name="nation" type="text" class="form-control input-sm"
