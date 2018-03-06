@@ -44,16 +44,16 @@
 						<div class="info-imgUpload front has-error" id="borderColorFront">
 							<!-- 身份证 正面 -->
 							<div class="col-xs-6 widthBig">
-							<div class="form-group">
-								<div class="cardFront-div">
-									<span>点击上传身份证正面</span>
-									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
-									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" name="sqImg" alt="" src="${obj.applicant.cardFront }" >
-									<i class="delete" onclick="deleteApplicantFrontImg(${obj.orderid});"></i>
+								<div class="form-group">
+									<div class="cardFront-div">
+										<span>点击上传身份证正面</span>
+										<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
+										<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+										<img id="sqImg" name="sqImg" alt="" src="${obj.applicant.cardFront }" >
+										<i class="delete" onclick="deleteApplicantFrontImg(${obj.orderid});"></i>
+									</div>
 								</div>
 							</div>
-						</div>
 						</div>
 						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 -20px 32px !important">
 							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">身份证正面必须上传</small>
