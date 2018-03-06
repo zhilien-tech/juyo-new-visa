@@ -22,6 +22,7 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -29,6 +30,8 @@ import org.nutz.log.Logs;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
@@ -52,6 +55,9 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 @IocBean
 public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	private static final Log log = Logs.get();
+
+	@Inject
+	private UploadService qiniuUploadService;//文件上传
 
 	private final static String TEMPLATE_EXCEL_URL = "download";
 	private final static String TEMPLATE_EXCEL_NAME = "人员管理之模块.xlsx";
@@ -546,5 +552,22 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("valid", passportInfo.size() <= 0);
 
 		return result;
+	}
+
+	/**
+	 * 
+	 * 七牛云 上传文件
+	 * <p>
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception 
+	 */
+	public Object uploadFile(File file, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		file.delete();
+		map.put("data", CommonConstants.IMAGES_SERVER_ADDR + map.get("data"));
+		return map;
+
 	}
 }

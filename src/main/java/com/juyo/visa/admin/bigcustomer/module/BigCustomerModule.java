@@ -155,4 +155,15 @@ public class BigCustomerModule {
 			HttpSession session) {
 		return bigCustomerViewService.checkPassport(passport, passportId, session);
 	}
+
+	/**
+	 * 上传文件
+	 */
+	@At
+	@Ok("json")
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object uploadFile(@Param("image") File file, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		return bigCustomerViewService.uploadFile(file, request, response);
+	}
 }
