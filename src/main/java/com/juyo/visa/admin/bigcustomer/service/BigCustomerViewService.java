@@ -38,15 +38,18 @@ import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.util.ExcelReader;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoUpdateForm;
+import com.juyo.visa.forms.TAppStaffCredentialsAddForm;
 import com.juyo.visa.forms.TAppStaffPassportUpdateForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -552,6 +555,66 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("valid", passportInfo.size() <= 0);
 
 		return result;
+	}
+
+	/**
+	 * 
+	 * 保存App拍摄资料
+	 *
+	 * @param addForm
+	 * @param session
+	 * @return
+	 */
+	public Object saveAppFile(TAppStaffCredentialsAddForm addForm, HttpSession session) {
+
+		if (!Util.isEmpty(addForm)) {
+			TAppStaffCredentialsEntity credentials = new TAppStaffCredentialsEntity();
+			Integer staffId = addForm.getStaffId();
+			if (!Util.isEmpty(staffId)) {
+				//人员id
+				credentials.setStaffId(staffId);
+			}
+			Integer mainId = addForm.getMainId();
+			if (!Util.isEmpty(mainId)) {
+				//主证件id
+				credentials.setMainId(mainId);
+			}
+			String url = addForm.getUrl();
+			if (!Util.isEmpty(url)) {
+				//证件Url
+				credentials.setUrl(url);
+			}
+			Integer type = addForm.getType();
+			if (!Util.isEmpty(type)) {
+				//证件类型
+				credentials.setType(type);
+			}
+			Integer status = addForm.getStatus();
+			if (!Util.isEmpty(status)) {
+				//证件状态
+				credentials.setStatus(status);
+			}
+			Integer sequence = addForm.getSequence();
+			if (!Util.isEmpty(sequence)) {
+				//证件序号
+				credentials.setSequence(sequence);
+			}
+			String pageElementId = addForm.getPageElementId();
+			if (!Util.isEmpty(pageElementId)) {
+				//页面元素id
+				credentials.setPageElementId(pageElementId);
+			}
+
+			//当前时间
+			Date nowDate = DateUtil.nowDate();
+			credentials.setCreatetime(nowDate);
+			credentials.setUpdatetime(nowDate);
+
+			TAppStaffCredentialsEntity entity = dbDao.insert(credentials);
+			return JsonUtil.toJson(entity);
+		}
+
+		return null;
 	}
 
 	/**

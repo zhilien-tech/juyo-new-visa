@@ -22,6 +22,7 @@ import com.juyo.visa.admin.bigcustomer.service.BigCustomerViewService;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoUpdateForm;
+import com.juyo.visa.forms.TAppStaffCredentialsAddForm;
 import com.juyo.visa.forms.TAppStaffPassportUpdateForm;
 
 @IocBean
@@ -165,5 +166,20 @@ public class BigCustomerModule {
 	public Object uploadFile(@Param("image") File file, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		return bigCustomerViewService.uploadFile(file, request, response);
+	}
+
+	/**
+	 * 
+	 * 保存App拍摄资料
+	 * <p>
+	 *
+	 * @param shootingsEntity
+	 * @param session
+	 * @return 
+	 */
+	@At
+	@POST
+	public Object saveAppFile(@Param("..") TAppStaffCredentialsAddForm addForm, HttpSession session) {
+		return bigCustomerViewService.saveAppFile(addForm, session);
 	}
 }
