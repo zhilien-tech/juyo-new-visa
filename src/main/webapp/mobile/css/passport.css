@@ -616,3 +616,18 @@ input[type="checkbox"] + label:after {
 .backRemark {
 	width: 80%;
 }
+/* 弹出层3 */
+.infoAlert {
+	display:none; 
+	position:fixed;
+	top:40%;
+	left:19%;
+	width:5rem;
+	height:1rem;
+	line-height:1rem;
+	color:#FFF;
+	background:rgba(0,0,0,.5);
+	z-index:1000000000;
+	text-align:center;
+	font-size:.3rem;
+}

@@ -40,7 +40,8 @@
  	</a>
 </div>
 <div class="bottom">
-    <a class="prev btn">上一步</a><a class="save btn" onclick="saveVisaInfo()">保存</a>
+	<!-- 点击保存直接返回微信 -->
+    <a class="prev btn">上一步</a><a class="save btn"  href="javascript:WeixinJSBridge.call('closeWindow');" onclick="saveVisaInfo()">保存</a>
 </div>
 </form>
 	<script src="/references/common/js/vue/vue.min.js"></script>

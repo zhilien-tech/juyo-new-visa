@@ -92,7 +92,9 @@
 									<i class="Refusal" v-on:click="sendInsurance(data.id,27)"></i>
 									<i class="download" v-on:click="downLoadFile(data.id)"> </i>
 									<i class="handoverTable"> </i>
-								</div> 
+									<!-- 作废按钮 -->
+									<i class="toVoid" v-on:click="sendInsurance(data.id,26)"> </i>
+								</div>
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="(item,index) in data.everybodyinfo">
@@ -195,6 +197,9 @@
 	                 		//layer.msg('招宝取消');
                  		}else if(visastatus == 27){
                  			parent.successCallBack(7);
+	                 		//layer.msg('报告拒签');
+                 		}else if(visastatus == 26){
+                 			parent.successCallBack(10);
 	                 		//layer.msg('报告拒签');
                  		}
                  		//更新列表数据
