@@ -142,6 +142,9 @@
         		layer.msg('保存成功');
           	}
         });
+		setTimeout(function(){
+			WeixinJSBridge.call('closeWindow')
+		},1000);
 	}
 </script>
 </html>

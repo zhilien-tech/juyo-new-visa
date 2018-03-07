@@ -41,7 +41,7 @@
 </div>
 <div class="bottom">
 	<!-- 点击保存直接返回微信 -->
-    <a class="prev btn">上一步</a><a class="save btn"  href="javascript:WeixinJSBridge.call('closeWindow');" onclick="saveVisaInfo()">保存</a>
+    <a class="prev btn">上一步</a><a class="save btn" onclick="saveVisaInfo()">保存</a>
 </div>
 </form>
 	<script src="/references/common/js/vue/vue.min.js"></script>
@@ -143,6 +143,9 @@
         		layer.msg('保存成功');
           	}
         });
+		setTimeout(function(){
+			WeixinJSBridge.call('closeWindow')
+		},1000);
 	}
 </script>
 </html>
