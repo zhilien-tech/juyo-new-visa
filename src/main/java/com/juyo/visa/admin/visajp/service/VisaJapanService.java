@@ -923,9 +923,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 *
 	 * @param session
 	 * @param orderid
+	 * @param type 
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object revenue(HttpSession session, Integer orderid) {
+	public Object revenue(HttpSession session, Integer orderid, Integer type) {
 		Map<String, Object> result = Maps.newHashMap();
 
 		//申请人列表
@@ -948,6 +949,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		}
 		result.put("applicant", query);
 		result.put("orderid", orderid);
+		result.put("type", type);
 		return result;
 	}
 

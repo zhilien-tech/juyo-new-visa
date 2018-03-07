@@ -49,8 +49,10 @@
 					</c:otherwise>
 													
 					</c:choose >
+					订单号：${obj.orderinfo.orderNum }　　　
+					受付番号：${obj.orderjpinfo.acceptDesign }
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
-					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-ToBig" onclick="saveAddOrder(2);" />
+					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-ToBig" onclick="saveAddOrder(3);" />
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
 					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/>
 					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(22)"/>
@@ -704,7 +706,7 @@
         		    shadeClose: false,
         		    scrollbar: false,
         		    area: ['900px', '80%'],
-        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
+        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid+'&type=1'
         		  });
 			}
 			//发招宝

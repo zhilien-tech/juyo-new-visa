@@ -177,8 +177,8 @@ public class VisaJapanModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object revenue(HttpSession session, @Param("orderid") Integer orderid) {
-		return visaJapanService.revenue(session, orderid);
+	public Object revenue(HttpSession session, @Param("orderid") Integer orderid, @Param("type") Integer type) {
+		return visaJapanService.revenue(session, orderid, type);
 	}
 
 	/**
