@@ -182,4 +182,19 @@ public class BigCustomerModule {
 	public Object saveAppFile(@Param("..") TAppStaffCredentialsAddForm addForm, HttpSession session) {
 		return bigCustomerViewService.saveAppFile(addForm, session);
 	}
+
+	/**
+	 * 
+	 * 根据 人员id 和 证件类型 查询对应的证件集合
+	 *
+	 * @param staffId 人员id
+	 * @param credentialType 证件类型
+	 * @return 符合条件的证件集合
+	 */
+	@At
+	@POST
+	public Object getAppFileByCondition(@Param("staffId") Integer staffId,
+			@Param("credentialType") Integer credentialType) {
+		return bigCustomerViewService.getAppFileByCondition(staffId, credentialType);
+	}
 }

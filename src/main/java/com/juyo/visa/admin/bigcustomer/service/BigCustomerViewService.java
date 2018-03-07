@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -615,6 +617,29 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		}
 
 		return null;
+	}
+
+	/**
+	 * 
+	 * 根据 人员id 和 证件类型 查询对应的证件集合
+	 *
+	 * @param staffId 人员id
+	 * @param credentialType 证件类型
+	 * @return 符合条件的证件集合
+	 */
+	public Object getAppFileByCondition(@Param("staffId") Integer staffId,
+			@Param("credentialType") Integer credentialType) {
+
+		List<TAppStaffCredentialsEntity> list = new ArrayList<TAppStaffCredentialsEntity>();
+		if (!Util.isEmpty(staffId) || !Util.isEmpty(credentialType)) {
+			Cnd cnd = Cnd.NEW();
+			cnd.and("staffId", "=", staffId);
+			cnd.and("type", "=", credentialType);
+
+			list = dbDao.query(TAppStaffCredentialsEntity.class, cnd, null);
+		}
+
+		return list;
 	}
 
 	/**
