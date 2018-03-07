@@ -14,7 +14,8 @@ $(function(){
                 var subnav = $(this).next('ul').html();
                 if(subnav == "" || subnav == null || subnav == undefined){
                 	$('.navLi').removeClass('navLi');
-                	 $(this).parent('li').addClass('nav-show').siblings('li').removeClass('nav-show');
+                	$(this).parent('li').addClass('nav-show').siblings('li').removeClass('nav-show');
+                	 
                 }
             }else{
                 //收缩已展开

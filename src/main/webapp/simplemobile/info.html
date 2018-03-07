@@ -48,11 +48,11 @@
     <input type="file" id="image2" style="display:none;" name="image">
 </div>
  <ul class="label-info">
-        <li>手机号 <input type="text" class="txtInput" maxlength="11" v-model="applicatdata.telephone"/></li>
-        <li>邮箱 <input type="text" class="txtInput" v-model="applicatdata.email"/></li>
+        <li>手机号 <input type="text" class="txtInput telphone" maxlength="11" v-model="applicatdata.telephone"/></li>
+        <li>邮箱 <input type="text" class="txtInput email" v-model="applicatdata.email"/></li>
         <li>性别 <input type="text" class="txtInput" v-model="applicatdata.sex"/></li>
         <li>出生日期 <input type="text" class="txtInput" id="birthDate" readonly="" v-model="applicatdata.birthday"/></li>
-        <li>身份证号 <input type="text" class="txtInput" v-model="applicatdata.cardid"/></li>
+        <li>身份证号 <input type="text" class="txtInput IDCard" maxlength="18" v-model="applicatdata.cardid"/></li>
         <li>住址(省) <input type="text" class="txtInput" v-model="applicatdata.cardprovince"/></li>
         <li>住址(市) <input type="text" class="txtInput" v-model="applicatdata.cardcity"/></li>
         <li>住址(街楼) <input type="text" class="txtInput" style="width:70%;" v-model="applicatdata.address"/></li>
@@ -72,18 +72,18 @@
    		<!--  -->
    		<li>曾有的或另有的国籍(或公民身份)<span class="onOff"> <input type="checkbox" id="afterNatAndID" class="afterNatAndID checkBox"> <label for="afterNatAndID" class="green"></label> </span></li>
    		<li class="afterNatAndIDinput">国籍 <input type="text" class="txtInput" id="" v-model="applicatdata.nationality"/></li>
-   		<li>紧急联系人姓名 <input type="text" class="txtInput" id="" v-model="applicatdata.emergencylinkman"/></li>
-   		<li>紧急联系人手机号 <input type="text" class="txtInput" id="" v-model="applicatdata.emergencytelephone"/></li>
+   		<li>紧急联系人姓名 <input type="text" class="txtInput emergencyContactName"  v-model="applicatdata.emergencylinkman"/></li>
+   		<li>紧急联系人手机号 <input type="text" class="txtInput emergencyContact" maxlength="11" v-model="applicatdata.emergencytelephone"/></li>
     </ul>
 <div class="bottom">
     <!-- <a class="pre btn" href="javascript:preStep();">上一步</a>
     <a class="clear btn">清除</a>
     <a class="next btn" href="javascript:nextStep();">下一步</a> -->
-    <a class="passport-prav passport-btn" href="javascript:preStep();">上一步</a>
+    <a class="passport-prav passport-btn">上一步</a>
 	<a class="passport-clear passport-btn">清除</a>
-	<a class="passport-next passport-btn" href="javascript:nextStep();">下一步</a>
+	<a class="passport-next passport-btn">下一步</a>
 </div>
-<!-- 弹出层 1-->
+<!-- 弹出层 1   <!-- href="javascript:nextStep();" -->-->
 <div class="backgroundGray">
 	<div class="dialog">
 		<div class="dialogTitle" >*请按照此规格使用相机照相以保持图片上传正确</div>
@@ -100,6 +100,10 @@
 		<a class="closed2" >确认</a>
 	</div>
 </div> -->
+<!-- 弹出层3 -->
+<div class="infoAlert">
+	
+</div>
 </form>
 <script type="text/javascript" src="js/lCalendar.min.js"></script><!-- 日历插件 .js -->
 <script src="/references/common/js/vue/vue.min.js"></script>
@@ -311,19 +315,168 @@
          if(r!=null)return  unescape(r[2]); return null;
     }
 	//保存并跳转到护照页面
-	function nextStep(){
-		$.ajax({
-        	url: '/admin/simplemobile/saveApplicatinfo.html',
-        	data:_self.applicatdata,
-        	dataType:"json",
-        	type:'post',
-        	async:false,
-        	success: function(data){
-        		window.location.href='/simplemobile/visaInfo.html?comid='+data.comid+'&userid='+data.userid+'&orderid='+data.orderid+'&applicantid='+data.applicantid;
-          	}
-        });
-	}
-	function preStep(){
+	$(function(){
+		/* 手机号只能输入数字 */
+		$(document).on("input",".telphone",function(){
+			$(this).val($(this).val().replace(/[^\d]/g,''));
+		});
+		/* 紧急联系人手机号只能输入数字 */
+		$(document).on("input",".emergencyContact",function(){
+			$(this).val($(this).val().replace(/[^\d]/g,''));
+		});
+		
+		
+		$('.telphone').focus(function(){
+			
+		}).blur(function(){
+			var telphone = $('.telphone').val();
+			var pattern = /^[1][3,4,5,7,8][0-9]{9}$/;
+			if(telphone == null || telphone == ''){
+				
+			}else if(pattern.test(telphone)){
+				
+			}else{
+				$(".infoAlert").html();
+				$(".infoAlert").show();
+				$(".infoAlert").html("你输入的手机号格式不正确")
+				setTimeout(function(){
+					$(".infoAlert").hide();
+				},2000);
+			}
+		});
+		
+		$('.email').blur(function(){
+			
+		}).blur(function(){
+			var email = $('.email').val();
+			var patternEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+			if(email == null || email == ''){
+				
+			}else if(patternEmail.test(email)){
+				
+			}else{
+				$(".infoAlert").html();
+				$(".infoAlert").show();
+				$(".infoAlert").html("您输入的邮箱格式不对")
+				setTimeout(function(){
+					$(".infoAlert").hide();
+				},2000);
+			}
+		});
+		
+		$('.emergencyContact').focus(function(){
+			
+		}).blur(function(){
+			var emergencyContact = $('.emergencyContact').val();
+			var pattern = /^[1][3,4,5,7,8][0-9]{9}$/;
+			if(emergencyContact == null || emergencyContact == ''){
+				
+			}else if(pattern.test(emergencyContact)){
+				
+			}else{
+				$(".infoAlert").html();
+				$(".infoAlert").show();
+				$(".infoAlert").html("你输入的联系人手机号格式不正确")
+				setTimeout(function(){
+					$(".infoAlert").hide();
+				},2000);
+			}
+		});
+		$('.passport-next').click(function(){
+			var telphone = $('.telphone').val();
+			var pattern = /^[1][3,4,5,7,8][0-9]{9}$/;
+			var patternEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+			var email = $('.email').val();
+			var emergencyContact = $('.emergencyContact').val();
+			if(!pattern.test(telphone) && telphone != ''){
+				$(".infoAlert").html();
+				$(".infoAlert").show();
+				$(".infoAlert").html("你输入的手机号格式不正确")
+				setTimeout(function(){
+					$(".infoAlert").hide();
+				},2000);
+			}else if(!patternEmail.test(email) && email != ''){
+				$(".infoAlert").html();
+				$(".infoAlert").show();
+				$(".infoAlert").html("您输入的邮箱格式不对")
+				setTimeout(function(){
+					$(".infoAlert").hide();
+				},2000);
+			}else if(!pattern.test(emergencyContact) && emergencyContact != ''){
+				$(".infoAlert").html();
+				$(".infoAlert").show();
+				$(".infoAlert").html("你输入的联系人手机号格式不正确")
+				setTimeout(function(){
+					$(".infoAlert").hide();
+				},2000);
+			}else{
+				$.ajax({
+		        	url: '/admin/simplemobile/saveApplicatinfo.html',
+		        	data:_self.applicatdata,
+		        	dataType:"json",
+		        	type:'post',
+		        	async:false,
+		        	success: function(data){
+		        		window.location.href='/simplemobile/visaInfo.html?comid='+data.comid+'&userid='+data.userid+'&orderid='+data.orderid+'&applicantid='+data.applicantid;
+		          	}
+		        });
+			}
+		});
+		/* 上一步 */
+		$('.passport-prav').click(function(){
+			var telphone = $('.telphone').val();
+			var pattern = /^[1][3,4,5,7,8][0-9]{9}$/;
+			var patternEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+			var email = $('.email').val();
+			var emergencyContact = $('.emergencyContact').val();
+			if(!pattern.test(telphone) && telphone != ''){
+				$(".infoAlert").html();
+				$(".infoAlert").show();
+				$(".infoAlert").html("你输入的手机号格式不正确")
+				setTimeout(function(){
+					$(".infoAlert").hide();
+				},2000);
+			}else if(!patternEmail.test(email) && email != ''){
+				$(".infoAlert").html();
+				$(".infoAlert").show();
+				$(".infoAlert").html("您输入的邮箱格式不对")
+				setTimeout(function(){
+					$(".infoAlert").hide();
+				},2000);
+			}else if(!pattern.test(emergencyContact) && emergencyContact != ''){
+				$(".infoAlert").html();
+				$(".infoAlert").show();
+				$(".infoAlert").html("你输入的联系人手机号格式不正确")
+				setTimeout(function(){
+					$(".infoAlert").hide();
+				},2000);
+			}else{
+				$.ajax({
+		        	url: '/admin/simplemobile/saveApplicatinfo.html',
+		        	data:_self.applicatdata,
+		        	dataType:"json",
+		        	type:'post',
+		        	async:false,
+		        	success: function(data){
+		        		window.location.href='/simplemobile/passport.html?comid='+data.comid+'&userid='+data.userid+'&orderid='+data.orderid+'&applicantid='+data.applicantid;
+		          	}
+		        });
+			}
+		});
+	})
+/* 	function nextStep(){
+			$.ajax({
+	        	url: '/admin/simplemobile/saveApplicatinfo.html',
+	        	data:_self.applicatdata,
+	        	dataType:"json",
+	        	type:'post',
+	        	async:false,
+	        	success: function(data){
+	        		window.location.href='/simplemobile/visaInfo.html?comid='+data.comid+'&userid='+data.userid+'&orderid='+data.orderid+'&applicantid='+data.applicantid;
+	          	}
+	        });
+	} */
+/* 	function preStep(){
 		$.ajax({
         	url: '/admin/simplemobile/saveApplicatinfo.html',
         	data:_self.applicatdata,
@@ -334,7 +487,7 @@
         		window.location.href='/simplemobile/passport.html?comid='+data.comid+'&userid='+data.userid+'&orderid='+data.orderid+'&applicantid='+data.applicantid;
           	}
         });
-	}
+	} */
 	//把dataUrl类型的数据转为blob
 	function dataURLtoBlob(dataurl) {
 		var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(

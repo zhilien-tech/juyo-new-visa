@@ -92,6 +92,8 @@
 									<i class="Refusal" v-on:click="sendInsurance(data.id,27)"></i>
 									<i class="download" v-on:click="downLoadFile(data.id)"> </i>
 									<i class="handoverTable"> </i>
+									<!-- 作废按钮 -->
+									<i class="toVoid"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
