@@ -60,7 +60,7 @@ SELECT
 	tae.eventsName,
 	tae.pictureUrl,
 	tae.dueDate,
-	( SELECT count( * ) FROM t_app_staff_events tase WHERE tase.eventsId = tae.id ) eventsCount 
+	( SELECT count( * ) FROM t_app_staff_events tase WHERE tase.eventsId = tae.id ) signUpCount 
 FROM
 	t_app_events tae
 	LEFT JOIN t_app_staff_events tase ON tae.id = tase.eventsId

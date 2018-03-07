@@ -41,4 +41,14 @@ public class AppEventsModule {
 		return appEventsViewService.listData(sqlParamForm, session);
 	}
 
+	/**
+	 *跳转到活动详情页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object appEventDetails(@Param("eventId") Integer eventId, HttpSession session) {
+		return appEventsViewService.appEventDetails(eventId, session);
+	}
+
 }
