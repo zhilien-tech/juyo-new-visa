@@ -371,10 +371,10 @@
 	$('#firstname').on('input propertychange',function(){
 		var firstnameen = getPinYinStr($(this).val()).toUpperCase();
 		console.log(firstnameen);
-		_self.applicatdata.firstnameen = firstnameen;
+		_self.passportdata.firstnameen = firstnameen;
 	});
 	$('#lastname').on('input propertychange',function(){
-		_self.applicatdata.lastnameen = getPinYinStr($(this).val()).toUpperCase();
+		_self.passportdata.lastnameen = getPinYinStr($(this).val()).toUpperCase();
 	});
     </script>
 </body>
