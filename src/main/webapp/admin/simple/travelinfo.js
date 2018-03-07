@@ -334,6 +334,7 @@ $('.schedulingBtn').click(function(){
 				$('#orderid').val(data.orderid);
 				//加载行程安排表格
 				initTravalPlanTable(data.data);
+				saveAddOrder(2);
 			}else{
 				layer.msg(data.message);
 				layer.closeAll('loading');

@@ -115,6 +115,7 @@ function saveAddOrder(status){
 			console.log(JSON.stringify(data));
 			if(status == 1){
 				window.location.href = '/admin/simple/list.html';
+			}else if(status == 2){
 			}else{
 				window.close();
 			}
