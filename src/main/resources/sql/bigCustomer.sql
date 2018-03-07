@@ -53,3 +53,17 @@ FROM
 	t_app_staff_basicinfo tasb
 	INNER JOIN t_app_staff_passport tasp ON tasp.staffId = tasb.id 
 	$condition
+
+/*bigCustomer_events_count*/
+SELECT
+	tase.eventsId,
+	tae.eventsName,
+	tae.pictureUrl,
+	tae.dueDate,
+	( SELECT count( * ) FROM t_app_staff_events tase WHERE tase.eventsId = tae.id ) eventsCount 
+FROM
+	t_app_events tae
+	LEFT JOIN t_app_staff_events tase ON tae.id = tase.eventsId
+	$condition
+GROUP BY
+	tae.pictureUrl
