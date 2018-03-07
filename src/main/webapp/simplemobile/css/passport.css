@@ -429,13 +429,13 @@ input[type="checkbox"] + label:after {
 	border:0;
 }
 .binkDiv .ui-input-text {
-	width: 74%;
+	width: 72%;
 }
 .carDiv .ui-input-text {
 	width: 83%;
 }
 .hourseDiv .ui-input-text {
-	width: 77%;
+	width: 75%;
 }
 .moneyDiv .ui-input-text {
 	width: 83%;
@@ -607,4 +607,26 @@ input[type="checkbox"] + label:after {
 }
 .backRemark {
 	width: 80%;
+}
+/* 紧急联系人姓名样式 */
+.txtInput {
+	text-transform:Uppercase;
+}
+.email {
+	text-transform:Lowercase;
+}
+/* 弹出层3 */
+.infoAlert {
+	display:none; 
+	position:fixed;
+	top:40%;
+	left:19%;
+	width:5rem;
+	height:1rem;
+	line-height:1rem;
+	color:#FFF;
+	background:rgba(0,0,0,.5);
+	z-index:1000000000;
+	text-align:center;
+	font-size:.3rem;
 }
