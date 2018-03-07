@@ -139,6 +139,16 @@ public class BigCustomerModule {
 	}
 
 	/**
+	 *跳转到其他证件页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object otherSredentials(@Param("staffId") Integer staffId, HttpSession session) {
+		return bigCustomerViewService.otherSredentials(staffId, session);
+	}
+
+	/**
 	 * 执行护照信息保存
 	 */
 	@At

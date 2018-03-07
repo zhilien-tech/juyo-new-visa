@@ -34,6 +34,7 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.AppCredentialsTypeEnum;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
@@ -80,6 +81,22 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		int localPort = request.getLocalPort();
 		String downloadUrl = "http://" + localAddr + ":" + localPort + "/admin/bigCustomer/download.html";
 		result.put("downloadurl", downloadUrl);
+		return result;
+	}
+
+	/**
+	 * 
+	 * TODO  跳转到其他证件页面
+	 * <p>
+	 *
+	 * @param staffId 人员Id
+	 * @param session
+	 * @return 
+	 */
+	public Object otherSredentials(@Param("staffId") Integer staffId, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("staffId", staffId);
+		result.put("AppCredentialsType", EnumUtil.enum2(AppCredentialsTypeEnum.class));
 		return result;
 	}
 
