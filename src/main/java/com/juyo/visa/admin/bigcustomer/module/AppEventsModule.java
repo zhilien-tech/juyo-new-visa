@@ -9,6 +9,7 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.bigcustomer.service.AppEventsViewService;
@@ -49,6 +50,15 @@ public class AppEventsModule {
 	@Ok("jsp")
 	public Object appEventDetails(@Param("eventId") Integer eventId, HttpSession session) {
 		return appEventsViewService.appEventDetails(eventId, session);
+	}
+
+	/**
+	 * 报名活动
+	 */
+	@At
+	@POST
+	public Object signUpEvents(@Param("eventId") Integer eventId, HttpSession session) {
+		return appEventsViewService.signUpEvents(eventId, session);
 	}
 
 }

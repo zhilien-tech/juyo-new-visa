@@ -12,12 +12,16 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.entities.TAppEventsIntroduceEntity;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffEventsEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppEventsForm;
+import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -67,5 +71,29 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		}
 
 		return record;
+	}
+
+	/**
+	 * 
+	 * 报名活动
+	 *
+	 * @param eventId 活动id
+	 * @param session 
+	 * @return 
+	 */
+	public Object signUpEvents(@Param("eventId") Integer eventId, HttpSession session) {
+		//当前登录用户Id
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer loginUserId = loginUser.getId();
+
+		if (!Util.isEmpty(eventId)) {
+			TAppStaffEventsEntity ase = new TAppStaffEventsEntity();
+			ase.setEventsId(eventId);
+			ase.setStaffId(loginUserId);
+			dbDao.insert(ase);
+			return JsonUtil.toJson("报名成功");
+		} else {
+			return JsonUtil.toJson("报名失败");
+		}
 	}
 }

@@ -31,6 +31,9 @@ public class TAppEventsForm extends DataTablesParamForm {
 	/**活动图片url*/
 	private String pictureUrl;
 
+	/**活动详情url*/
+	private String detailsUrl;
+
 	/**截止日期*/
 	private Date dueDate;
 
