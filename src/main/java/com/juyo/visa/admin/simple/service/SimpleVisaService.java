@@ -819,6 +819,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("applicantid", applicantid);
 		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
 				Cnd.where("applicantId", "=", applicantid));
+		if (!Util.isEmpty(passport.getIssuedPlaceEn())) {
+			if (!passport.getIssuedPlaceEn().startsWith("/")) {
+				passport.setIssuedPlaceEn("/" + passport.getIssuedPlaceEn());
+			}
+		}
+		if (!Util.isEmpty(passport.getBirthAddressEn())) {
+			if (!passport.getBirthAddressEn().startsWith("/")) {
+				passport.setBirthAddressEn("/" + passport.getBirthAddressEn());
+			}
+		}
 		result.put("passport", passport);
 		if (!Util.isEmpty(passport.getFirstNameEn())) {
 			StringBuffer sb = new StringBuffer();
