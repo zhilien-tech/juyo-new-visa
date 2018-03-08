@@ -240,6 +240,7 @@
 					$(".infoAlert").hide();
 				},2000);
         	}else {
+        		console.log(_self.passportdata);
         		$.ajax({ 
                 	url: '/admin/simplemobile/savePassportInfo.html',
                 	data:_self.passportdata,

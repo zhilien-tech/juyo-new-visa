@@ -854,7 +854,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
 		//生成二维码的URL
 		String passporturl = "http://" + localAddr + ":" + localPort + "/simplemobile/passport.html?applicantid="
-				+ applicantid;
+				+ applicantid + "&orderid=" + orderid;
 		//生成二维码
 		String qrCode = qrCodeService.encodeQrCode(request, passporturl);
 		result.put("qrCode", qrCode);
@@ -965,6 +965,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					Cnd.where("orderId", "=", orderjpid), null);
 			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
 
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
 			} else {
 				//设置为主申请人
 				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
