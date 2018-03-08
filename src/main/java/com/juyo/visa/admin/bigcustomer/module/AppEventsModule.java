@@ -61,4 +61,13 @@ public class AppEventsModule {
 		return appEventsViewService.signUpEvents(eventId, session);
 	}
 
+	/**
+	 * 查询已报名活动的人员信息
+	 */
+	@At
+	@POST
+	public Object getStaffInfoByEventId(@Param("eventId") Integer eventId) {
+		return appEventsViewService.getStaffInfoByEventId(eventId);
+	}
+
 }

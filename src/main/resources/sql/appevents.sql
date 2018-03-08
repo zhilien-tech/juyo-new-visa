@@ -1,4 +1,4 @@
-/*appevents_detail_byId*/
+/*appevents_detail_by_eventId*/
 SELECT
 	tae.id eventId,
 	tae.eventsNum,
@@ -17,3 +17,16 @@ FROM
 	t_app_events tae 
 WHERE
 	tae.id = @eventId
+
+	
+/*appevents_staffs_infos_by_eventId*/
+SELECT
+	tase.eventsId,
+	tasb.* 
+FROM
+	t_app_staff_basicinfo tasb
+	INNER JOIN t_app_staff_events tase ON tasb.id = tase.staffId
+WHERE
+	tase.eventsId = @eventId
+GROUP BY
+	tasb.id

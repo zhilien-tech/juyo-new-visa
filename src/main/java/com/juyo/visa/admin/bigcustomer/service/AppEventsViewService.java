@@ -59,7 +59,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		Record record = new Record();
 		if (!Util.isEmpty(eventId)) {
 			//活动详情
-			String sqlStr = sqlManager.get("appevents_detail_byId");
+			String sqlStr = sqlManager.get("appevents_detail_by_eventId");
 			Sql sql = Sqls.create(sqlStr);
 			sql.setParam("eventId", eventId);
 			record = dbDao.fetch(sql);
@@ -95,5 +95,25 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		} else {
 			return JsonUtil.toJson("报名失败");
 		}
+	}
+
+	/**
+	 * 
+	 * 获取已报名活动的人员信息
+	 *
+	 * @param eventId
+	 * @return 
+	 */
+	public Object getStaffInfoByEventId(@Param("eventId") Integer eventId) {
+		Record record = new Record();
+		if (!Util.isEmpty(eventId)) {
+			//活动详情
+			String sqlStr = sqlManager.get("appevents_staffs_infos_by_eventId");
+			Sql sql = Sqls.create(sqlStr);
+			sql.setParam("eventId", eventId);
+			record = dbDao.fetch(sql);
+		}
+
+		return record;
 	}
 }
