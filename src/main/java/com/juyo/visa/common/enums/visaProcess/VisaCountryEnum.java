@@ -6,7 +6,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * 签证国 枚举
  */
 public enum VisaCountryEnum implements IEnum {
-	USA(1, "美国"), ENGLAND(2, "英国");
+	USA(1, "美国"), ENGLAND(2, "英国"), JAPAN(3, "日本"), France(4, "法国");
 	private int key;
 	private String value;
 
