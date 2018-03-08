@@ -9,6 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
@@ -30,6 +31,7 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 			</div>
+			<div class="modal-main"></div>
 			<div class="modal-body">
 			<div class="ipt-info">
 				</div>
@@ -412,6 +414,211 @@
 						<!-- 提示End -->
 					</div>
 					<!-- end 财产信息 -->
+					<!-- 在日拟入住九点名称或友人姓名及地址 -->
+					<div class='info'>
+						<div class="info-head">在日拟入住九点名称或友人姓名及地址</div>
+						<div class="info-body-from cf ">
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="JapanFriendName"><span>*</span>酒店名称或友人姓名</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder="参照'赴日予定表'" value=""/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="JapanTelNumber"><span>*</span>电话</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="JapanAddress"><span>*</span>地址</label>
+										<input id="" name="" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+					<!-- end在日拟入住九点名称或友人姓名及地址 -->
+					<!-- 在日担保人guarantee -->
+					<div class='info'>
+						<div class="info-head">在日担保人</div>
+						<div class="info-body-from cf ">
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead"><span>*</span>姓名/拼音</label>
+										<input id="guaranteeName" name="" type="text" class="form-control input-sm" placeholder="参照'申元保证书'" value=""/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead"><span>*</span>电话</label>
+										<input id="guaranteeTel" name="" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead"><span>*</span>地址</label>
+										<input id="guaranteeAddress" name="" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									</div>
+								</div>
+							</div>
+							<!-- 下一行 -->
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead"><span>*</span>出生日期</label>
+										<input id="guaranteeBirthday" name="guaranteeBirthday" type="text" class="form-control input-sm"  value=""/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead"><span>*</span>性别</label>
+										</br>
+										<input id="" class="sexBoy sex" name="" type="checkbox" class="" placeholder=" " value=""/><label class="sexInfo">男</label>
+										<input id="" class="sexGirl sex" name="" type="checkbox" class="" placeholder=" " value=""/><label class="sexInfo">女</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead"><span>*</span>与主申请人的关系</label>
+										</br>
+										<div class="input-box">
+											<input type="text" id="guaranteeRelationship" name="guaranteeRelationship" class="input" value="">
+												<ul class="dropdown">
+													<li>之妻</li>
+													<li>之夫</li>
+													<li>之子</li>
+													<li>之女</li>
+													<li>之父</li>
+													<li>之母</li>
+													<li>朋友</li>
+													<li>同事</li>
+													<li>同学</li>
+												</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- 下一行 -->
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead"><span>*</span>职业和职务</label>
+										<input id="guaranteePost" name="" type="text" class="form-control input-sm" placeholder="" value=""/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead"><span>*</span>国籍(或公民身份)及签证种类</label>
+										<input id="guaranteeVisaType" name="" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									</div>
+								</div>
+							</div>
+							
+						</div>	
+					</div>
+					<!-- end在日担保人 -->
+					<!-- 在日邀请人inviter -->
+					<div class='info'>
+						<div class="info-head">在日邀请人</div>
+						<div class="info-body-from cf ">
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead"><span>*</span>姓名/拼音</label>
+										<input id="inviterName" name="" type="text" class="form-control input-sm" placeholder="参照'申元保证书'" value=""/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead"><span>*</span>电话</label>
+										<input id="inviterHeadTel" name="" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead"><span>*</span>地址</label>
+										<input id="inviterAddress" name="" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									</div>
+								</div>
+							</div>
+							<!-- 下一行 -->
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead"><span>*</span>出生日期</label>
+										<input id="inviterBirthday" name="inviterBirthday" type="text" class="form-control input-sm"  value=""/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead"><span>*</span>性别</label>
+										</br>
+										<input id="" name="" type="checkbox" class="sex " value=""/><label class="sexInfo">男</label>
+										<input id="" name="" type="checkbox" class="sex" value=""/><label class="sexInfo">女</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead"><span>*</span>与主申请人的关系</label>
+										</br>
+										<div class="input-box">
+											<input type="text" id="inviterRelationship" name="inviterRelationship" class="input" value="">
+												<ul class="dropdown">
+													<li>之妻</li>
+													<li>之夫</li>
+													<li>之子</li>
+													<li>之女</li>
+													<li>之父</li>
+													<li>之母</li>
+													<li>朋友</li>
+													<li>同事</li>
+													<li>同学</li>
+												</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- 下一行 -->
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead"><span>*</span>职业和职务</label>
+										<input id="inviterPost" name="" type="text" class="form-control input-sm" placeholder="" value=""/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead"><span>*</span>国籍(或公民身份)及签证种类</label>
+										<input id="inviterVisaType" name="" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									</div>
+								</div>
+							</div>
+							
+						</div>	
+					</div>
+					<!-- end在日邀请人 -->
+					<!-- 其他信息 otherInfo -->
+					<div class='info'>
+						<div class="info-head">其他信息</div>
+						<div class="info-body-from cf ">
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="otherInfoHead"><span>*</span>旅行社意见</label>
+										<input id="otherInfoOpinion" name="otherInfoOpinion" type="text" class="form-control input-sm" placeholder="推荐" value=""/>
+									</div>
+								</div>
+								
+							</div>
+						</div>	
+					</div>
+					<!-- end其他信息 -->
 				</div>
 			</div>
 		</form>
@@ -424,6 +631,9 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<!-- 公用js文件 -->
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>	
 	<!-- DataTables -->
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -981,6 +1191,35 @@
 			}else{
 				$('#threexian').hide();
 			}
+		});
+		/* 在日担保人出生日期 */
+		var now = new Date();
+		$("#guaranteeBirthday").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 4,//从年开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		/* 在日邀请人 */
+		$("#inviterBirthday").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 4,//从年开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
 		});
 	</script>
 </body>

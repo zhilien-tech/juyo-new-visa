@@ -55,7 +55,7 @@ input[type="file"] {
 	padding: 6px 6px;
 	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s
 		ease-in-out 0s;
-	width: 200px;
+	width: 234.3px;
 	display: inline;
 	position: relative;
 	z-index: 1;
@@ -78,7 +78,7 @@ input[type="file"] {
 	position: absolute;
 	top: 32px;
 	left: 0px;
-	width: 200px;
+	width: 234.3px;
 	background-color: #FFF;
 	border: 1px solid #23a8ce;
 	border-top: 0;
@@ -149,12 +149,14 @@ input[type="file"] {
 .btn-margin {
 	margin-top: 10px;
 }
-
+.modal-main {
+	width:100%;
+	height:50px;
+}
 .modal-body {
 	background-color: #FFF !important;
-	margin-top: 50px;
 	height: 100%;
-	padding: 15px 37px 15px 53px;
+	padding: 0px 37px 15px 53px;
 }
 
 #sqImg {
@@ -207,4 +209,23 @@ body {
 
 .houseProperty, .vehicle, .deposit, .financial, .vice {
 	display: none;
+}
+.dropdown-menu {
+	width:234px;
+	left:75.328px !important;
+}
+.table-condensed {
+	width:100%;
+}
+/* 性别 */
+.sex {
+	vertical-align:middle;
+	margin-top:-2px !important;
+	margin-right:4px;
+}
+.sexBoy {
+	margin-left:20px;
+}
+.sexInfo {
+	margin-right:20px;
 }
