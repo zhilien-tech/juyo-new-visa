@@ -82,9 +82,9 @@
 	        	type:'post',
 	        	success: function(data){
 	        		_self.passportdata = data.passportdata;
-	        		if(_self.passportdata.validtype == 1){
+	        		if(_self.passportdata.validtype == 2){
 						$(".dateVal").text("5年");
-	        		}else if(_self.passportdata.validtype == 2){
+	        		}else if(_self.passportdata.validtype == 1){
 						$(".dateVal").text("10年");
 	        		}
 	          	}
@@ -244,10 +244,10 @@
 					_self.passportdata.validenddate = obj.expiryDay;
 					var years = getDateYearSub(obj.issueDate,obj.expiryDay);
 					if(years == 5){
-						_self.passportdata.validtype = 1;
+						_self.passportdata.validtype = 2;
 						$(".dateVal").text("5年");
 					}else{
-						_self.passportdata.validtype = 2;
+						_self.passportdata.validtype = 1;
 						$(".dateVal").text("10年");
 					}
 					console.log(JSON.stringify(_self.passportdata));
