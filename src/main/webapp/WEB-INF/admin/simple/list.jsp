@@ -82,7 +82,7 @@
 								
 								</span></div>	
 								
-								<div>
+								<div v-if="data.visastatus != '作废'">
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
@@ -93,7 +93,7 @@
 									<i class="download" v-on:click="downLoadFile(data.id)"> </i>
 									<i class="handoverTable"> </i>
 									<!-- 作废按钮 -->
-									<i class="toVoid"> </i>
+									<i class="toVoid" v-on:click="sendInsurance(data.id,26)"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
@@ -104,7 +104,7 @@
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
+										<div class="visaBtn" v-if="data.visastatus != '作废'"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
 									</span>
 									<span v-else class="visaListSpan">
 										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
@@ -112,7 +112,7 @@
 										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
+										<div class="visaBtn" v-if="data.visastatus != '作废'"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
 									</span>
 								</li>
 							</ul> 
@@ -176,7 +176,7 @@
         		    shadeClose: false,
         		    scrollbar: false,
         		    area: ['900px', '550px'],
-        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
+        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid+'&type=1'
         		  });
         	},
         	sendInsurance:function(orderid,visastatus){
@@ -197,6 +197,9 @@
 	                 		//layer.msg('招宝取消');
                  		}else if(visastatus == 27){
                  			parent.successCallBack(7);
+	                 		//layer.msg('报告拒签');
+                 		}else if(visastatus == 26){
+                 			parent.successCallBack(10);
 	                 		//layer.msg('报告拒签');
                  		}
                  		//更新列表数据

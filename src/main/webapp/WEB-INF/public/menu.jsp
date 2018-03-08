@@ -239,6 +239,8 @@ $(function(){
 			layer.msg('删除成功');
 		}else if(status == 9){
 			layer.msg('已移交售后');
+		}else if(status == 10){
+			layer.msg('已作废');
 		}
 	}
 </script>
