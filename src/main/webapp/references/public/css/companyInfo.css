@@ -5,7 +5,7 @@ body { font-family: "microsoft yahei"; font-size: 14px;}
 .head { width: 90%; height: 40px; line-height: 40px; margin: 1% 5%;}
 .head-right { float: right;}
 .head-right::after { content: ""; clear: both;}
-.headBtn {display: inline-block; cursor: pointer; border-radius: 8px; padding: 0 10px; height: 30px; line-height: 30px; text-align: center; color: #FFF; background: #3087f1;}
+.headBtn {display: inline-block; cursor: pointer; border-radius: 3px; padding: 0 10px; height: 30px; line-height: 30px; text-align: center; color: #FFF; background: #3087f1;}
 .headBtn:hover { color:#FFF;}
 /*列表*/
 .section { border: 1px solid #eee; width: 90%;  margin: 0 5%; margin-bottom: 20px;}
@@ -37,6 +37,6 @@ body { font-family: "microsoft yahei"; font-size: 14px;}
 .edit-icon { vertical-align:middle;}
 /**/
 .pic { display: none; position: relative;}
-.pic img { margin-left: 2%; cursor: pointer; max-width:300px;max-height:300px; border:1px solid #eee; transition:all 0.6s;}
+.pic img { margin-left: 2%; margin-top:5px;margin-bottom:12px; cursor: pointer; max-width:300px;max-height:300px; border:1px solid #eee; transition:all 0.6s;}
 .pic img:hover { transform:scale(1.4); margin-left:30px; margin-top:-17px;}
 .fontWord { position: absolute; top: 40%; left: 0; width: 221px; text-align: center; cursor: pointer;}

@@ -371,10 +371,11 @@ input[type="checkbox"] + label:after {
 	margin-left: 4%;
 	margin-top: 2%;
 	border-radius: 5px;
+	color:#d0cece;
 }
 .blue {
-	background: blue;
-	color: #FFF;
+	border:1px solid #287ae7;
+	color: #287ae7;
 }
 .ui-loader {
 	display: none;
