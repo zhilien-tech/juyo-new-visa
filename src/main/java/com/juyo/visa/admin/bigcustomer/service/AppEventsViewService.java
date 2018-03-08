@@ -44,7 +44,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 		//当前登录公司Id
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		Integer comId = loginCompany.getId();//当前登录公司id
+		Integer comId = loginCompany.getId();
 
 		Map<String, Object> map = listPage4Datatables(queryForm);
 		return map;
@@ -134,7 +134,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 			Map<String, String> map = EnumUtil.enum2(VisaProcess_US_Enum.class);
 			return map;
 		} else if (Util.eq(VisaCountryEnum.ENGLAND.intKey(), visaCountry)) {
-			//英国签证流程
+			//英国签证流程 TODO
 		}
 		return null;
 	}
