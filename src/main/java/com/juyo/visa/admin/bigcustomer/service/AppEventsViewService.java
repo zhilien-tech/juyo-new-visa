@@ -15,12 +15,15 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.enums.visaProcess.VisaCountryEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaProcess_US_Enum;
 import com.juyo.visa.entities.TAppEventsIntroduceEntity;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffEventsEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppEventsForm;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -126,6 +129,13 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	 */
 	public Object getVisaProcessByCountry(@Param("visaCountry") Integer visaCountry) {
 
+		if (Util.eq(VisaCountryEnum.USA.intKey(), visaCountry)) {
+			//美国签证流程
+			Map<String, String> map = EnumUtil.enum2(VisaProcess_US_Enum.class);
+			return map;
+		} else if (Util.eq(VisaCountryEnum.ENGLAND.intKey(), visaCountry)) {
+			//英国签证流程
+		}
 		return null;
 	}
 }
