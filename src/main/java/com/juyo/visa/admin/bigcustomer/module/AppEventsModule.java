@@ -70,4 +70,13 @@ public class AppEventsModule {
 		return appEventsViewService.getStaffInfoByEventId(eventId);
 	}
 
+	/**
+	 * 获取签证流程
+	 */
+	@At
+	@POST
+	public Object getVisaProcessByCountry(@Param("visaCountry") Integer visaCountry) {
+		return appEventsViewService.getVisaProcessByCountry(visaCountry);
+	}
+
 }

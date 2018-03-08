@@ -116,4 +116,16 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 		return record;
 	}
+
+	/**
+	 * 
+	 * 签证办理流程 
+	 *
+	 * @param visaCountry 签证国
+	 * @return 
+	 */
+	public Object getVisaProcessByCountry(@Param("visaCountry") Integer visaCountry) {
+
+		return null;
+	}
 }
