@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>在日拟入住酒店名称或友人姓名及地址</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	    <meta name="format-detection" content="telephone=no">
+	    <link rel="stylesheet" type="text/css" href="css/common.css">
+	    <link rel="stylesheet" type="text/css" href="css/passport.css">
+	    <script src="js/rem(750).js"></script>
+	    <script src="js/jquery-1.10.2.js"></script>
+	    <script src="js/lrz.bundle.js"></script>		
+	</head>
+	<body>
+		<div class="hotelTop">
+			<a class="hotel">
+				<i class="hotelSave"><</i>
+				在日拟入住酒店名称或友人姓名及地址
+			</a>
+		</div>
+		<ul class="label-info hotelInfo">
+			<li>酒店名称或友人姓名 <input type="text" class="txtInput hotelName"/></li>
+			<li>电话 <input type="text" maxlength="11" class="txtInput hotelTel"/></li>
+			<li>地址 <input type="text" class="txtInput hotelAddress"/></li>
+		</ul>
+	</body>
+	<script>
+		$(function(){
+			
+			/* 保存并退出 */
+			$(".hotelSave").click(function(){
+				var applicantid = GetQueryString('applicantid');
+				var hotelName = $('.hotelName').val();
+				var hotelTel = $('.hotelTel').val();
+				var hotelAddress = $('.hotelAddress').val();
+				
+				$.ajax({ 
+		        	url: '',
+		        	data:{applicantid:applicantid,name:hotelName,telephone:hotelTel,address:hotelAddress},
+		        	dataType:"json",
+		        	type:'post',
+		        	success: function(data){
+		        		window.location.href='/simplemobile/visaInfo.html?applicantid='+applicantid;
+		          	}
+		        });
+			});
+		})
+	</script>
+</html>

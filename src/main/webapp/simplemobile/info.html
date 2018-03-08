@@ -73,6 +73,14 @@
    		<li>曾有的或另有的国籍(或公民身份)<span class="onOff"> <input type="checkbox" id="afterNatAndID" class="afterNatAndID checkBox"> <label for="afterNatAndID" class="green"></label> </span></li>
    		<li class="afterNatAndIDinput">国籍 <input type="text" class="txtInput" id="" v-model="applicatdata.nationality"/></li>
    		<li>紧急联系人姓名 <input type="text" class="txtInput emergencyContactName"  v-model="applicatdata.emergencylinkman"/></li>
+   		
+   		<li class="validity">与主申请人的关系<span class="dateVal"></span>
+	   		<select class="validitySelect">
+	   			<option value="0">配偶</option>
+	   			<option value="1">父母</option>
+	   			<option value="2">子女</option>
+	   		</select>
+   		</li>
    		<li>紧急联系人手机号 <input type="text" class="txtInput emergencyContact" maxlength="11" v-model="applicatdata.emergencytelephone"/></li>
     </ul>
 <div class="bottom">
@@ -683,7 +691,13 @@
 			if($(this).is("#")){
 				
 			}
-		})
+		});
+		/* 与主申请人的关系 */
+		 $(".validitySelect").change(function(){
+	        	 var selecters = $(".validitySelect").find("option:selected").text();
+	             $(".dateVal").text(selecters);
+	      });
 	})
+	
 </script>
 </html>
