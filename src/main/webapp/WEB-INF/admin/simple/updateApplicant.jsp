@@ -108,7 +108,7 @@
 						
 						<div class="row">
 							<!-- 公民身份证 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>公民身份证</label> <input id="cardId"
 										name="cardId" type="text" class="form-control input-sm"
@@ -116,7 +116,10 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-						    <!-- 民族 -->
+						</div>
+						<!-- end 公民身份证 -->
+						<div class="row">
+							 <!-- 民族 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>民族</label> <input id="nation"
@@ -126,7 +129,6 @@
 								</div>
 							</div>
 						</div>
-						<!-- end 公民身份证 -->
 						<div class="row">
 							<!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
@@ -254,12 +256,9 @@
 										<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 									</div>
 								</div>
+							</div>
+						<!-- 曾用国籍 -->
 						</div>
-							<!-- 曾用国籍 -->
-							
-						</div>
-						
-						
 						
 						<div class="row">
 							<!-- 紧急联系人姓名/手机 -->
@@ -271,6 +270,24 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
+							<div class="col-sm-4 col-sm-offset-1 padding-right-0">
+									<div class="form-group">
+										<label id="updateApplicantHead"><span>*</span>与主申请人的关系</label>
+										</br>
+										<div class="input-box">
+											<input type="text" id="" name="" class="input" value="">
+											<ul class="dropdown">
+												<li>配偶</li>
+												<li>父母</li>
+												<li>子女</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							
+						</div>
+						
+						<div class="row">
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>紧急联系人手机</label> <input id="emergencyTelephone" name="emergencyTelephone"

@@ -23,9 +23,9 @@
     $(".input").keyup(function(){
     	let $val = $('.input').val();
 		    	if( $val == null || $val == ''){
-		    		$(".dropdown").show();
+		    		$(this).siblings(".dropdown").show();
 		    	}else{
-		    		$(".dropdown").hide();
+		    		$(this).siblings(".dropdown").hide();
 		    	}
 		    	isBox = false;
     })
