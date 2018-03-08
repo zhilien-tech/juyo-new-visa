@@ -38,6 +38,26 @@
  		<span>财产信息</span>
  		<i id="wealthinfostr">></i>
  	</a>
+ 	
+ 	<a class="visa-data" onclick="">
+ 		<span>在日拟入住酒店名称或友人姓名及地址</span>
+ 		<i id="hotel">></i>
+ 	</a>
+ 	
+ 	<a class="visa-data" onclick="">
+ 		<span>在日担保人</span>
+ 		<i id="warrantor">></i>
+ 	</a>
+ 	
+ 	<a class="visa-data" onclick="">
+ 		<span>在日邀请人</span>
+ 		<i id="inviter">></i>
+ 	</a>
+ 	
+ 	<a class="visa-data" onclick="">
+ 		<span>其他信息</span>
+ 		<i id="otherInfo">></i>
+ 	</a>
 </div>
 <div class="bottom">
 	<!-- 点击保存直接返回微信 -->
@@ -128,12 +148,18 @@
 		var applicantid = GetQueryString('applicantid');
 		window.location.href='/simplemobile/property.html?applicantid='+ applicantid;
 	}
+	//在日拟入住酒店名称或友人姓名及地址
+	//在日担保人
+	//在日邀请人
+	//其他信息
+	//上一步
 	$('.prev').click(function(){
 		saveVisaInfo(2);
 		var applicantid = GetQueryString('applicantid');
 		window.location.href='/simplemobile/info.html?applicantid='+ applicantid;
 	});
 	
+	//保存
 	function saveVisaInfo(status){
 		var applicantid = GetQueryString('applicantid');
 		var marrystatus = $('#marryselect').val();
@@ -151,7 +177,7 @@
 		if(status == 1){
 			setTimeout(function(){
 				WeixinJSBridge.call('closeWindow')
-			},1000);
+			},2000);
 		}
 	}
 </script>
