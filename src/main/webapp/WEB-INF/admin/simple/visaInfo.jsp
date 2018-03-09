@@ -488,7 +488,6 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="guaranteeHead">与主申请人的关系</label>
-										
 										<div class="input-box">
 											<input type="text" id="vouchmainrelation" name="vouchmainrelation" class="input" value="${obj.visaother.vouchmainrelation }">
 												<ul class="dropdown">
