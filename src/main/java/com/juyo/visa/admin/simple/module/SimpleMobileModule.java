@@ -17,6 +17,7 @@ import com.juyo.visa.admin.mobile.form.MobileApplicantForm;
 import com.juyo.visa.admin.simple.service.SimpleMobileService;
 import com.juyo.visa.entities.TApplicantLowerEntity;
 import com.juyo.visa.entities.TApplicantPassportLowerEntity;
+import com.juyo.visa.entities.TApplicantVisaOtherInfoEntity;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -61,5 +62,50 @@ public class SimpleMobileModule {
 	@POST
 	public Object saveVisaInfo(@Param("applicantid") Integer applicantid, @Param("marrystatus") Integer marrystatus) {
 		return simpleMobileService.saveVisaInfo(applicantid, marrystatus);
+	}
+
+	/**
+	 * 获取签证其他信息数据
+	 */
+	@At
+	@POST
+	public Object getVisaOtherInfoData(@Param("applicantid") Integer applicantid) {
+		return simpleMobileService.getVisaOtherInfoData(applicantid);
+	}
+
+	/**
+	 * 保存酒店信息
+	 */
+	@At
+	@POST
+	public Object saveHotelInfo(@Param("..") TApplicantVisaOtherInfoEntity form) {
+		return simpleMobileService.saveHotelInfo(form);
+	}
+
+	/**
+	 * 保存在日担保人信息
+	 */
+	@At
+	@POST
+	public Object saveVouchInfo(@Param("..") TApplicantVisaOtherInfoEntity form) {
+		return simpleMobileService.saveVouchInfo(form);
+	}
+
+	/**
+	 * 保存邀请人信息
+	 */
+	@At
+	@POST
+	public Object saveInviteInfo(@Param("..") TApplicantVisaOtherInfoEntity form) {
+		return simpleMobileService.saveInviteInfo(form);
+	}
+
+	/**
+	 * 保存其他信息
+	 */
+	@At
+	@POST
+	public Object saveOtherInfo(@Param("..") TApplicantVisaOtherInfoEntity form) {
+		return simpleMobileService.saveOtherInfo(form);
 	}
 }

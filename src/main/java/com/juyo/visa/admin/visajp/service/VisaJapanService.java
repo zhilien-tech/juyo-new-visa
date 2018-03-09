@@ -1578,6 +1578,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//判断签证类型
 		if (Util.isEmpty(orderjp.getVisaType())) {
 			resultstrbuf.append("签证类型、");
+		} else {
+			if (!orderjp.getVisaType().equals(MainSaleVisaTypeEnum.SINGLE.intKey())) {
+				if (Util.isEmpty(orderjp.getVisaCounty())) {
+					resultstrbuf.append("签证县、");
+				}
+			}
 		}
 		if (Util.isEmpty(orderinfo.getGoTripDate())) {
 			resultstrbuf.append("出发日期、");
@@ -1767,5 +1773,80 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			dbDao.updateRelations(before, ordertriplist);
 		}
 		return null;
+	}
+
+	public Object validateDownLoadInfoIsFull(Integer orderjpid) {
+
+		StringBuffer resultstrbuf = new StringBuffer("");
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
+		//订单信息
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		//出行信息
+		TOrderTripJpEntity ordertripjp = dbDao.fetch(TOrderTripJpEntity.class,
+				Cnd.where("orderId", "=", orderjp.getId()));
+		List<TOrderTripMultiJpEntity> mutiltrip = new ArrayList<TOrderTripMultiJpEntity>();
+		if (!Util.isEmpty(ordertripjp)) {
+			mutiltrip = dbDao.query(TOrderTripMultiJpEntity.class, Cnd.where("tripid", "=", ordertripjp.getId()), null);
+		}
+		//申请人信息
+		String applysqlstr = sqlManager.get("get_applyinfo_from_filedown_by_orderid_jp");
+		Sql applysql = Sqls.create(applysqlstr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("taoj.orderId", "=", orderjp.getId());
+		List<Record> applyinfo = dbDao.query(applysql, cnd, null);
+		//行程安排
+		List<TOrderTravelplanJpEntity> ordertravelplan = dbDao.query(TOrderTravelplanJpEntity.class,
+				Cnd.where("orderId", "=", orderjp.getId()), null);
+		//公司信息
+		TCompanyEntity company = new TCompanyEntity();
+		company = dbDao.fetch(TCompanyEntity.class, orderinfo.getComId().longValue());
+		//判断签证类型
+		if (Util.isEmpty(orderjp.getVisaType())) {
+			resultstrbuf.append("签证类型、");
+		}
+		if (Util.isEmpty(orderinfo.getGoTripDate())) {
+			resultstrbuf.append("出发日期、");
+		}
+		if (Util.isEmpty(orderinfo.getBackTripDate())) {
+			resultstrbuf.append("返回日期、");
+		}
+		int count = 1;
+		int passportflag = 0;
+		for (Record record : applyinfo) {
+			if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
+				resultstrbuf.append("申请人" + count + "的姓名、");
+			}
+			if (Util.isEmpty(record.get("firstnameen")) && Util.isEmpty(record.get("lastnameen"))) {
+				resultstrbuf.append("申请人" + count + "的姓名英文、");
+			}
+			if (Util.isEmpty(record.get("sex"))) {
+				resultstrbuf.append("申请人" + count + "的性别、");
+			}
+			if (Util.isEmpty(record.get("passportno"))) {
+				resultstrbuf.append("申请人" + count + "的护照号、");
+			}
+			if (Util.isEmpty(record.get("hotelname"))) {
+				resultstrbuf.append("申请人" + count + "的酒店名称、");
+			}
+			if (Util.isEmpty(record.get("vouchname"))) {
+				resultstrbuf.append("申请人" + count + "的在日担保人姓名、");
+			}
+			if (Util.isEmpty(record.get("invitename"))) {
+				resultstrbuf.append("申请人" + count + "的在日邀请人姓名、");
+			}
+			if (Util.isEmpty(record.get("traveladvice"))) {
+				resultstrbuf.append("申请人" + count + "的旅行社意见、");
+			}
+			count++;
+		}
+		String resultstr = resultstrbuf.toString();
+		if (!Util.isEmpty(resultstr)) {
+			resultstr = resultstr.substring(0, resultstr.length() - 1);
+			resultstr += "不能为空";
+			return JuYouResult.ok(resultstr);
+		} else {
+			return JuYouResult.ok();
+		}
+
 	}
 }

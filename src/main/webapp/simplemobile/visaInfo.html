@@ -39,22 +39,22 @@
  		<i id="wealthinfostr">></i>
  	</a>
  	
- 	<a class="visa-data" onclick="">
+ 	<a class="visa-data" onclick="hotelinfo()">
  		<span>在日拟入住酒店名称或友人姓名及地址</span>
  		<i id="hotel">></i>
  	</a>
  	
- 	<a class="visa-data" onclick="">
+ 	<a class="visa-data" onclick="warrantor()">
  		<span>在日担保人</span>
  		<i id="warrantor">></i>
  	</a>
  	
- 	<a class="visa-data" onclick="">
+ 	<a class="visa-data" onclick="inviter()">
  		<span>在日邀请人</span>
  		<i id="inviter">></i>
  	</a>
  	
- 	<a class="visa-data" onclick="">
+ 	<a class="visa-data" onclick="otherInfo()">
  		<span>其他信息</span>
  		<i id="otherInfo">></i>
  	</a>
@@ -141,6 +141,26 @@
 		saveVisaInfo(2);
 		var applicantid = GetQueryString('applicantid');
 		window.location.href='/simplemobile/education.html?applicantid='+ applicantid;
+	}
+	function hotelinfo(){
+		saveVisaInfo(2);
+		var applicantid = GetQueryString('applicantid');
+		window.location.href='/simplemobile/hotel.html?applicantid='+ applicantid;
+	}
+	function warrantor(){
+		saveVisaInfo(2);
+		var applicantid = GetQueryString('applicantid');
+		window.location.href='/simplemobile/warrantor.html?applicantid='+ applicantid;
+	}
+	function inviter(){
+		saveVisaInfo(2);
+		var applicantid = GetQueryString('applicantid');
+		window.location.href='/simplemobile/inviter.html?applicantid='+ applicantid;
+	}
+	function otherInfo(){
+		saveVisaInfo(2);
+		var applicantid = GetQueryString('applicantid');
+		window.location.href='/simplemobile/otherInfo.html?applicantid='+ applicantid;
 	}
 	//财产信息
 	function wealthinfo(){

@@ -90,10 +90,7 @@ public class ListDataForm implements SQLParamForm {
 			//普通的操作员
 			cnd.and("tr.userId", "=", userid);
 		}
-
-		/*cnd.and("tr.comId", "=", companyid);
-		cnd.and("tr.opid", "=", userid);*/
-		cnd.orderBy("tr.createtime", "desc");
+		cnd.orderBy("orderstatus", "desc").orderBy("tr.updatetime", "desc");
 		return cnd;
 	}
 
