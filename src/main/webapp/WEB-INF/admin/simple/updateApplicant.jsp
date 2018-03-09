@@ -272,7 +272,7 @@
 							</div>
 							<div class="col-sm-4 col-sm-offset-1 padding-right-0">
 									<div class="form-group">
-										<label id="updateApplicantHead"><span>*</span>与主申请人的关系</label>
+										<label id="updateApplicantHead">与主申请人的关系</label>
 										</br>
 										<div class="input-box">
 											<input type="text" id="" name="" class="input" value="">
