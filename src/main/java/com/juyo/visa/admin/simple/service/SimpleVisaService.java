@@ -525,6 +525,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderinfo.setStayDay(form.getStayday());
 		orderinfo.setBackTripDate(form.getReturnDate());
 		orderinfo.setSendVisaNum(form.getSendvisanum());
+		orderinfo.setUpdateTime(new Date());
 		dbDao.update(orderinfo);
 		//更新日本订单表
 		orderjpinfo.setVisaType(form.getVisatype());
@@ -720,7 +721,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setIssueOrganization(form.getIssueOrganization());
 		applicant.setNation(form.getNation());
 		applicant.setProvince(form.getProvince());
-		applicant.setSex(form.getSex());
+		//applicant.setSex(form.getSex());
 		applicant.setTelephone(form.getTelephone());
 		applicant.setValidEndDate(form.getValidEndDate());
 		applicant.setValidStartDate(form.getValidStartDate());
@@ -1823,7 +1824,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				List<TApplicantEntity> applicant = dbDao.query(TApplicantEntity.class,
 						Cnd.where("id", "in", applicantids), null);
 				dbDao.delete(applicantjp);
-				dbDao.delete(applicant);
+				if (!Util.isEmpty(applicant)) {
+					dbDao.delete(applicant);
+				}
 			}
 			//删除日本订单表
 			dbDao.delete(orderjp);

@@ -19,9 +19,9 @@
 			</a>
 		</div>
 		<ul class="label-info hotelInfo">
-			<li>酒店名称或友人姓名 <input type="text" class="txtInput hotelName"/></li>
-			<li>电话 <input type="text" maxlength="11" class="txtInput hotelTel"/></li>
-			<li>地址 <input type="text" class="txtInput hotelAddress"/></li>
+			<li>酒店名称或友人姓名 <input type="text" class="txtInput hotelName" id="hotelname"/></li>
+			<li>电话 <input type="text" maxlength="11" class="txtInput hotelTel" id="hotelphone"/></li>
+			<li>地址 <input type="text" class="txtInput hotelAddress" id="hoteladdress"/></li>
 		</ul>
 	</body>
 	<script>
@@ -30,13 +30,13 @@
 			/* 保存并退出 */
 			$(".hotelSave").click(function(){
 				var applicantid = GetQueryString('applicantid');
-				var hotelName = $('.hotelName').val();
-				var hotelTel = $('.hotelTel').val();
-				var hotelAddress = $('.hotelAddress').val();
+				var hotelname = $('#hotelname').val();
+				var hotelphone = $('.hotelTel').val();
+				var hoteladdress = $('.hotelAddress').val();
 				
 				$.ajax({ 
-		        	url: '',
-		        	data:{applicantid:applicantid,name:hotelName,telephone:hotelTel,address:hotelAddress},
+		        	url: '/admin/simplemobile/saveHotelInfo.html',
+		        	data:{applicantid:applicantid,hotelname:hotelname,hotelphone:hotelphone,hoteladdress:hoteladdress},
 		        	dataType:"json",
 		        	type:'post',
 		        	success: function(data){
@@ -45,5 +45,27 @@
 		        });
 			});
 		})
+		//初始化页面数据
+		initPageData();
+		function initPageData(){
+			var applicantid = GetQueryString('applicantid');
+			$.ajax({
+	        	url: '/admin/simplemobile/getVisaOtherInfoData.html',
+	        	data:{applicantid:applicantid},
+	        	dataType:"json",
+	        	type:'post',
+	        	success: function(data){
+	        		$('#hotelname').val(data.otherinfo.hotelname);
+	        		$('#hotelphone').val(data.otherinfo.hotelphone);
+	        		$('#hoteladdress').val(data.otherinfo.hoteladdress);
+	          	}
+	        });
+		}
+		//获取URL地址参数
+    function GetQueryString(name){
+         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+         var r = window.location.search.substr(1).match(reg);
+         if(r!=null)return  unescape(r[2]); return null;
+    }
 	</script>
 </html>

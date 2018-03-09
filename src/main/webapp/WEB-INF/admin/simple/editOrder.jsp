@@ -44,6 +44,11 @@
 					  <div class="bounce3"></div>
 					</div>
 					</c:when>
+					<c:when test="${obj.orderstatus == '招宝成功'}">
+						<span >状态：
+							<p class="cateInfo"><font color="red">${obj.orderstatus }</font></p>
+						</span> 
+					</c:when>
 					<c:otherwise>
 						<span >状态：
 							<p class="cateInfo">${obj.orderstatus }</p>
@@ -738,7 +743,7 @@
 			}
 			function downLoadFile(){
 				$.ajax({
-                 	url: '${base}/admin/visaJapan/validateInfoIsFull.html',
+                 	url: '${base}/admin/visaJapan/validateDownLoadInfoIsFull.html',
                  	data:{orderjpid:orderid},
                  	dataType:"json",
                  	type:'post',

@@ -64,10 +64,10 @@
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
 								<div><label></label><span style="font-weight:bold;font-size:16px;">
-									<span v-if="data.visastatus === '已发招宝'">
+									<span v-if="data.visastatus === '招宝成功'">
 										<font color="red">{{data.visastatus}}</font>
 									</span>
-									<span v-if="data.visastatus === '发招宝中'">
+									<span v-else-if="data.visastatus === '发招宝中'">
 										<font>{{data.visastatus}}</font>
 										<!-- 加载中 -->
 										<div class="spinner">
@@ -254,7 +254,7 @@
         	},
         	downLoadFile:function(orderid){
         		$.ajax({
-                 	url: '${base}/admin/visaJapan/validateInfoIsFull.html',
+                 	url: '${base}/admin/visaJapan/validateDownLoadInfoIsFull.html',
                  	data:{orderjpid:orderid},
                  	dataType:"json",
                  	type:'post',

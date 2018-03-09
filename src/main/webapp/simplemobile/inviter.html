@@ -21,28 +21,28 @@
 			</a>
 		</div>
 		<ul class="label-info inviterInfo">
-			<li>姓名 <input type="text" class="txtInput inviterName"/></li>
+			<li>姓名 <input type="text" class="txtInput inviterName" id="invitename"/></li>
 			<li>姓名拼音 <input type="text" class="txtInput inviterSpell"/></li>
-			<li>电话 <input type="text" maxlength="11" class="txtInput inviterTel"/></li>
-			<li>地址 <input type="text" class="txtInput inviterAddress"/></li>
-			<li>出生日期 <input type="text" class="txtInput inviterBirthDay" id="birthDate"/></li>
+			<li>电话 <input type="text" maxlength="11" class="txtInput inviterTel" id="invitephone"/></li>
+			<li>地址 <input type="text" class="txtInput inviterAddress" id="inviteaddress"/></li>
+			<li>出生日期 <input type="text" class="txtInput inviterBirthDay" id="invitebirth"/></li>
 			<li class="validity">性别 <span class="sexVal"></span>
-				<select class="sexSelect">
+				<select class="sexSelect" id="invitesex">
 					<option value="0"></option>
-					<option value="1">男</option>
-	   				<option value="2">女</option>
+					<option value="男">男</option>
+	   				<option value="女">女</option>
 				</select>
 			</li>
 			<li class="validity">与主申请人的关系<span class="dateVal"></span>
-	   			<select class="validitySelect">
+	   			<select class="validitySelect" id="invitemainrelation">
 	   				<option value="0"></option>
-	   				<option value="1">配偶</option>
-	   				<option value="2">父母</option>
-	   				<option value="3">子女</option>
+	   				<option value="配偶">配偶</option>
+	   				<option value="父母">父母</option>
+	   				<option value="子女">子女</option>
 	   			</select>
    			</li>
-			<li>职业或职务 <input type="text" class="txtInput inviterPost"/></li>
-			<li>国籍(公民身份)及签证种类 <input type="text" class="txtInput visaType"/></li>
+			<li>职业或职务 <input type="text" class="txtInput inviterPost" id="invitejob"/></li>
+			<li>国籍(公民身份)及签证种类 <input type="text" class="txtInput visaType" id="invitecountry"/></li>
 		</ul>
 	</body>
 	<!-- 日历插件 .js -->
@@ -53,19 +53,28 @@
 	function inviterSave(){
 		
 		var applicantid = GetQueryString('applicantid');
-		var inviterName = $('.inviterName').val();
+		var invitename = $('.inviterName').val();
 		var inviterSpell = $('.inviterSpell').val();
-		var inviterTel = $('.inviterTel').val();
-		var inviterAddress = $('.inviterAddress').val();
-		var inviterBirthDay = $('.inviterBirthDay').val();
-		var sexVal = $('.sexVal').text();
-		var dateVal = $('.dateVal').text();
-		var inviterPost = $('.inviterPost').val();
-		var visaType = $('.visaType').val();
+		var invitephone = $('.inviterTel').val();
+		var inviteaddress = $('.inviterAddress').val();
+		var invitebirth = $('.inviterBirthDay').val();
+		var invitesex = $('.sexVal').text();
+		var invitemainrelation = $('.dateVal').text();
+		var invitejob = $('.inviterPost').val();
+		var invitecountry = $('.visaType').val();
 		
 		 $.ajax({ 
-        	url: '',
-        	data:{applicantid:applicantid,},
+        	url: '/admin/simplemobile/saveInviteInfo.html',
+        	data:{applicantid:applicantid,
+        			invitename:invitename,
+        			invitephone:invitephone,
+        			inviteaddress:inviteaddress,
+        			invitebirth:invitebirth,
+        			invitesex:invitesex,
+        			invitemainrelation:invitemainrelation,
+        			invitejob:invitejob,
+        			invitecountry:invitecountry
+        		},
         	dataType:"json",
         	type:'post',
         	success: function(data){
@@ -96,9 +105,37 @@
 	//日历插件
      var calendar = new lCalendar();//出生日期
      calendar.init({
-         'trigger': '#birthDate',
+         'trigger': '#invitebirth',
          'type': 'date'
      });
-     
+   //初始化页面数据
+ 	initPageData();
+ 	function initPageData(){
+ 		var applicantid = GetQueryString('applicantid');
+ 		$.ajax({
+         	url: '/admin/simplemobile/getVisaOtherInfoData.html',
+         	data:{applicantid:applicantid},
+         	dataType:"json",
+         	type:'post',
+         	success: function(data){
+         		$('#invitename').val(data.otherinfo.invitename);
+         		$('#invitephone').val(data.otherinfo.invitephone);
+         		$('#inviteaddress').val(data.otherinfo.inviteaddress);
+         		$('#invitebirth').val(data.otherinfo.invitebirth);
+         		$('#invitesex').val(data.otherinfo.invitesex);
+         		$('.sexVal').html(data.otherinfo.invitesex);
+         		$('#invitemainrelation').val(data.otherinfo.invitemainrelation);
+         		$('.dateVal').html(data.otherinfo.invitemainrelation);
+         		$('#invitejob').val(data.otherinfo.invitejob);
+         		$('#invitecountry').val(data.otherinfo.invitecountry);
+           	}
+         });
+ 	}
+ 	//获取URL地址参数
+ 	 function GetQueryString(name){
+ 	      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+ 	      var r = window.location.search.substr(1).match(reg);
+ 	      if(r!=null)return  unescape(r[2]); return null;
+ 	 }
 	</script>
 </html>
