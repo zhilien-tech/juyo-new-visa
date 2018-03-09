@@ -130,6 +130,9 @@
     padding-bottom:1.6rem;
     margin-top: .81rem;
 }
+.firstInfo {
+	margin-top:0;
+}
 .label-info>li {
 	border-bottom:1px solid #dedede;
     height:0.8rem;
@@ -371,10 +374,11 @@ input[type="checkbox"] + label:after {
 	margin-left: 4%;
 	margin-top: 2%;
 	border-radius: 5px;
+	color:#d0cece;
 }
 .blue {
-	background: blue;
-	color: #FFF;
+	border:1px solid #287ae7;
+	color: #287ae7;
 }
 .ui-loader {
 	display: none;

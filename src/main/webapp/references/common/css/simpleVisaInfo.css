@@ -19,7 +19,10 @@ input[type="file"] {
 #sqImg {
 	z-index: 1099;
 }
-
+#marryStatus {
+	margin-left:8%;
+	width:234.3px;
+}
 .NoInfo {
 	width: 100%;
 	height: 30px;
@@ -190,7 +193,9 @@ input[type="file"] {
 .unitNameRow {
 	display: block;
 }
-
+.row {
+	clear:both;
+}
 body {
 	min-width: auto;
 }
@@ -228,4 +233,58 @@ body {
 }
 .sexInfo {
 	margin-right:20px;
+}
+/* 开关样式 */
+#guaranteeHead,#inviterHead ,.guaranteeHead{
+	display:block;
+}
+#guaranteeCBInput,#inviterCBInput {
+	visibility:hidden;
+}
+#vouchname,#invitename {
+	float:right;
+	width:200px;
+}
+.guaranteeName ,.inviterName{
+	display:none;
+	float:right;
+	width:200px;
+}
+.guaranteeCB,.inviterCB {
+	margin-top:5px;
+	float:left;
+    width: 25px;
+    height: 25px;
+    background: #ddd;
+    border-radius: 100%;
+    position: relative;
+    -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+}
+.guaranteeCB label,.inviterCB label {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 100px;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    transition: all .5s ease;
+    cursor: pointer;
+    position: absolute;
+    top: 3px;
+    left: 2.5px;
+    z-index: 1;
+    background: #eee;
+    -webkit-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+    -moz-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+    box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+}
+.guaranteeCB input[type=checkbox]:checked + label {
+    background: #26ca28;
+}
+.inviterCB input[type=checkbox]:checked + label {
+    background: #26ca28;
 }
