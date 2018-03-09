@@ -61,7 +61,7 @@
 </div>
 <div class="bottom">
 	<!-- 点击保存直接返回微信 -->
-    <a class="prev btn">上一步</a><a class="save btn" onclick="saveVisaInfo()">保存</a>
+    <a class="prev btn">上一步</a><a class="save btn" onclick="saveVisaInfo(1)">保存</a>
 </div>
 </form>
 	<script src="/references/common/js/vue/vue.min.js"></script>
@@ -132,16 +132,19 @@
     }
 	//申请人信息
 	function applyinfo(){
+		saveVisaInfo(2);
 		var applicantid = GetQueryString('applicantid');
 		window.location.href='/simplemobile/proposer.html?applicantid='+ applicantid;
 	}
 	//职业、教育信息
 	function workinfo(){
+		saveVisaInfo(2);
 		var applicantid = GetQueryString('applicantid');
 		window.location.href='/simplemobile/education.html?applicantid='+ applicantid;
 	}
 	//财产信息
 	function wealthinfo(){
+		saveVisaInfo(2);
 		var applicantid = GetQueryString('applicantid');
 		window.location.href='/simplemobile/property.html?applicantid='+ applicantid;
 	}
@@ -151,12 +154,13 @@
 	//其他信息
 	//上一步
 	$('.prev').click(function(){
-		saveVisaInfo();
+		saveVisaInfo(2);
 		var applicantid = GetQueryString('applicantid');
 		window.location.href='/simplemobile/info.html?applicantid='+ applicantid;
 	});
+	
 	//保存
-	function saveVisaInfo(){
+	function saveVisaInfo(status){
 		var applicantid = GetQueryString('applicantid');
 		var marrystatus = $('#marryselect').val();
 		$.ajax({ 
@@ -165,12 +169,16 @@
         	dataType:"json",
         	type:'post',
         	success: function(data){
-        		layer.msg('保存成功');
+        		if(status == 1){
+	        		layer.msg('保存成功');
+        		}
           	}
         });
-		setTimeout(function(){
-			WeixinJSBridge.call('closeWindow')
-		},2000);
+		if(status == 1){
+			setTimeout(function(){
+				WeixinJSBridge.call('closeWindow')
+			},2000);
+		}
 	}
 </script>
 </html>

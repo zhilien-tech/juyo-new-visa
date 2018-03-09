@@ -241,6 +241,8 @@ $(function(){
 			layer.msg('已移交售后');
 		}else if(status == 10){
 			layer.msg('已作废');
+		}else if(status == 11){
+			layer.msg('已还原');
 		}
 	}
 </script>

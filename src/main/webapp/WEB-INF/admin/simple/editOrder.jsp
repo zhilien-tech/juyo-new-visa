@@ -30,6 +30,8 @@
 			<div class="qz-head">
 				<!-- <span class="">订单号：<p>170202-JP0001</p></span> -->
 				<!-- <span class="">受付番号：<p>JDY27163</p></span> -->
+				<span class="">订单号：<p>${obj.orderinfo.orderNum }　</p></span>　　
+				<span class="">受付番号：<p>${obj.orderjpinfo.acceptDesign }</p></span>
 				<c:choose>
 						<c:when test="${obj.orderstatus == '发招宝中'}">
 							<span >状态：
@@ -49,8 +51,6 @@
 					</c:otherwise>
 													
 					</c:choose >
-					订单号：${obj.orderinfo.orderNum }　　　
-					受付番号：${obj.orderjpinfo.acceptDesign }
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
 					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-ToBig" onclick="saveAddOrder(3);" />
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>

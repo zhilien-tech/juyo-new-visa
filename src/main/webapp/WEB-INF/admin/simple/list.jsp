@@ -95,6 +95,10 @@
 									<!-- 作废按钮 -->
 									<i class="toVoid" v-on:click="sendInsurance(data.id,26)"> </i>
 								</div>
+								<div v-else>
+									<label>操作：</label>
+									<i class="toVoid1" v-on:click="sendInsurance(data.id,1)"> </i>
+								</div>
 							</div>
 							<ul class="card-content cf">
 								<li class="everybody-info cf" v-for="(item,index) in data.everybodyinfo">
@@ -200,7 +204,8 @@
 	                 		//layer.msg('报告拒签');
                  		}else if(visastatus == 26){
                  			parent.successCallBack(10);
-	                 		//layer.msg('报告拒签');
+                 		}else if(visastatus == 1){
+                 			parent.successCallBack(11);
                  		}
                  		//更新列表数据
                  		var orderAuthority = "allOrder";
