@@ -32,22 +32,7 @@
     </div>
     <input type="file" id="image" style="display:none;" name="image">
 </div>
-<div class="top info">
-    <span v-if="applicatdata.cardback != ''">
-    <!-- width="340px" height="200px" -->
-		<img :src="applicatdata.cardback" style="width:100%;height:100%;"  alt="" class="bacimg">
-	</span>
-	<span v-else>
-	    <img src="images/IDN.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
-	</span>
-    <div id="upload2">
-        <h6>点击上传</h6>
-        <p>身份证背面</p>
-        <p>可自动识别</p>
-    </div>
-    <input type="file" id="image2" style="display:none;" name="image">
-</div>
- <ul class="label-info">
+ <ul class="label-info firstInfo">
         <li>手机号 <input type="text" class="txtInput telphone" maxlength="11" v-model="applicatdata.telephone"/></li>
         <li>邮箱 <input type="text" class="txtInput email" v-model="applicatdata.email"/></li>
         <li>性别 <input type="text" class="txtInput" v-model="applicatdata.sex"/></li>
