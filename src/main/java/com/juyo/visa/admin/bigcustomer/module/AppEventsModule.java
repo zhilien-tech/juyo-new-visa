@@ -79,4 +79,21 @@ public class AppEventsModule {
 		return appEventsViewService.getVisaProcessByCountry(visaCountry);
 	}
 
+	/**
+	 * 进度列表页
+	 */
+	@At
+	@POST
+	public Object getProcessListByStaffId(@Param("staffId") Integer staffId) {
+		return appEventsViewService.getProcessListByStaffId(staffId);
+	}
+
+	/**
+	 * 查看活动进度页
+	 */
+	@At
+	@POST
+	public Object getMyProcessDetails(@Param("visaCountry") Integer visaCountry, @Param("orderId") Integer orderId) {
+		return appEventsViewService.getMyProcessDetails(visaCountry, orderId);
+	}
 }

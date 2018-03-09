@@ -30,3 +30,25 @@ WHERE
 	tase.eventsId = @eventId
 GROUP BY
 	tasb.id
+
+	
+/*appevents_process_list_by_staffId*/
+	SELECT
+	tase.staffId,
+	tae.id eventId,
+	tae.eventsNum,
+	tae.eventsName,
+	tae.pictureUrl,
+	tae.detailsUrl,
+	tae.dueDate,
+	tae.departureDate,
+	tae.returnDate,
+	tae.visaCountry,
+	tae.visitCity,
+	tae.attentions,
+	tae.descriptions 
+FROM
+	t_app_events tae
+	LEFT JOIN t_app_staff_events tase ON tase.eventsId = tae.id 
+WHERE
+	tase.staffId =@staffIds

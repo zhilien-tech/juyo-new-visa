@@ -1,5 +1,6 @@
 package com.juyo.visa.admin.bigcustomer.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.Param;
 
+import com.beust.jcommander.internal.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.visaProcess.VisaCountryEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaProcess_US_Enum;
@@ -129,14 +131,78 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	 */
 	public Object getVisaProcessByCountry(@Param("visaCountry") Integer visaCountry) {
 
+		Map<String, String> map = Maps.newHashMap();
 		if (Util.eq(VisaCountryEnum.USA.intKey(), visaCountry)) {
 			//美国签证流程
-			Map<String, String> map = EnumUtil.enum2(VisaProcess_US_Enum.class);
-			return map;
-		} else if (Util.eq(VisaCountryEnum.ENGLAND.intKey(), visaCountry)) {
-			//英国签证流程 TODO
+			map = EnumUtil.enum2(VisaProcess_US_Enum.class);
+		} else if (Util.eq(VisaCountryEnum.JAPAN.intKey(), visaCountry)) {
+			//日本签证流程 TODO
 
 		}
-		return null;
+		return map;
 	}
+
+	/**
+	 * 
+	 * 根据人员id，获取相关活动的进度列表
+	 * <p>
+	 * TODO *************************重要***********************
+	 * 		1.进度页列表，签证办理状态
+	 * 		2.活动相关报名人员查询
+	 * 		3.报名活动 和 订单关联，需要获取订单相关信息（比如 订单号、订单状态、订单申请人等）
+	 *
+	 * @param staffId 人员Id
+	 * @return 
+	 */
+	public Object getProcessListByStaffId(@Param("staffId") Integer staffId) {
+		List<Record> records = new ArrayList<Record>();
+		if (!Util.isEmpty(staffId)) {
+			String sqlStr = sqlManager.get("appevents_process_list_by_staffId");
+			Sql sql = Sqls.create(sqlStr);
+			sql.setParam("staffId", staffId);
+			records = dbDao.query(sql, null, null);
+			for (Record record : records) {
+				//签证国家
+				int visacountry = record.getInt("visaCountry");
+				for (VisaCountryEnum country : VisaCountryEnum.values()) {
+					if (visacountry == country.intKey()) {
+						record.set("visaCountry", country.value());
+						break;
+					}
+				}
+			}
+
+		}
+		return records;
+	}
+
+	/**
+	 * 
+	 * 查看报名活动的进度详情
+	 * <p>
+	 * TODO	************************待完善******************************
+	 * 		1.根据订单id，查询当前订单状态----签证进度状态
+	 * 		2.查询签证进度流程
+	 * 
+	 * @param visaCountry 签证国家
+	 * @param orderId 订单id
+	 * @return 
+	 */
+	public Object getMyProcessDetails(@Param("visaCountry") Integer visaCountry, @Param("orderId") Integer orderId) {
+		Map<String, String> map = Maps.newHashMap();
+		if (Util.eq(VisaCountryEnum.USA.intKey(), visaCountry)) {
+			//美国签证流程
+			map = EnumUtil.enum2(VisaProcess_US_Enum.class);
+		} else if (Util.eq(VisaCountryEnum.JAPAN.intKey(), visaCountry)) {
+			//日本签证流程 TODO
+
+		}
+
+		//TODO 获取订单状态
+
+		//TODO 进度页渲染操作
+
+		return map;
+	}
+
 }
