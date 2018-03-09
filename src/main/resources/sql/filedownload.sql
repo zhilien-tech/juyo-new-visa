@@ -15,7 +15,11 @@ SELECT
 	tawj.address workaddress,
 	tawj.`name` workname,
 	tawlj.wealthtype,
-	tawlj.wealthcontent
+	tawlj.wealthcontent,
+	tavoi.hotelname,
+	tavoi.vouchname,
+	tavoi.invitename,
+	tavoi.traveladvice
 FROM
 	t_applicant_order_jp taoj
 INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
@@ -41,4 +45,5 @@ LEFT JOIN (
 	GROUP BY
 		applicantId
 ) tawlj ON tawlj.applicantId = taoj.id
+LEFT JOIN t_applicant_visa_other_info tavoi ON tavoi.applicantid = taoj.id
 $condition

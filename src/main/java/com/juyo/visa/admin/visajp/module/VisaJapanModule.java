@@ -367,6 +367,15 @@ public class VisaJapanModule {
 	}
 
 	/**
+	 * 验证下载信息是否完整
+	 */
+	@At
+	@POST
+	public Object validateDownLoadInfoIsFull(@Param("orderjpid") Integer orderjpid) {
+		return visaJapanService.validateDownLoadInfoIsFull(orderjpid);
+	}
+
+	/**
 	 * 跳转到发招宝信息页面
 	 */
 	@At
