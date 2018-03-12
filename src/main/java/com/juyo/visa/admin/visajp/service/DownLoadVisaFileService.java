@@ -488,6 +488,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("hoteladdress", record.getString("hoteladdress"));
 			//在日担保人信息
 			map.put("danbaoname", record.getString("vouchname"));
+			map.put("danbaonameen", record.getString("vouchnameen"));
 			map.put("danbaotelephone", record.getString("vouchphone"));
 			map.put("vouchaddress", record.getString("vouchaddress"));
 			if ("男".equals(record.getString("vouchsex"))) {

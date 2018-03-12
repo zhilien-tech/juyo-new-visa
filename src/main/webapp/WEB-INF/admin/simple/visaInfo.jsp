@@ -448,11 +448,11 @@
 									<div class="form-group">
 										<label id="guaranteeHead"><span>*</span>申元保证书/姓名-拼音</label>
 										<div class="guaranteeCB">
-											 <input type="checkbox" value="1" id="guaranteeCBInput" name="" />
+											 <input type="checkbox" value="1" ${obj.visaother.isname == 1?'checked':'' } id="guaranteeCBInput" name="" />
 											 <label for="guaranteeCBInput"></label>
 										</div>
 										<input id="vouchname" name="vouchname" type="text" class="form-control input-sm guaranty" placeholder="参照'申元保证书" value="${obj.visaother.vouchname }"/>
-										<input id="vouchname" name="vouchname" type="text" class="form-control input-sm guaranteeName" placeholder="姓名/拼音" value="${obj.visaother.vouchname }"/>
+										<%-- <input id="vouchname" name="vouchname" type="text" class="form-control input-sm guaranteeName" placeholder="姓名/拼音" value="${obj.visaother.vouchname }"/> --%>
 									</div>
 								</div>
 								
@@ -520,6 +520,24 @@
 										<input id="vouchcountry" name="vouchcountry" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchcountry }"/>
 									</div>
 								</div>
+								<c:choose>
+									<c:when test="${obj.visaother.isname == 1}">
+										<div class="col-sm-4">
+											<div class="form-group">
+												<label id="guaranteeHead">姓名拼音</label>
+												<input id="vouchnameen" name="vouchnameen" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchnameen }"/>
+											</div>
+										</div>
+									</c:when>
+									<c:otherwise>
+										<div class="col-sm-4 none vouchnameen">
+											<div class="form-group">
+												<label id="guaranteeHead">姓名拼音</label>
+												<input id="vouchnameen" name="vouchnameen" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchnameen }"/>
+											</div>
+										</div>
+									</c:otherwise>
+								</c:choose>
 							</div>
 							
 						</div>	
@@ -533,12 +551,12 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="inviterHead"><span>*</span>申元保证书/姓名-拼音</label>
-										<div class="inviterCB">
+										<!-- <div class="inviterCB">
 											 <input type="checkbox" value="1" id="inviterCBInput" name="" />
 											 <label for="inviterCBInput"></label>
-										</div>
+										</div> -->
 										<input id="invitename" name="invitename" type="text" class="form-control input-sm inviterSY" placeholder="参照'申元保证书" value="${obj.visaother.invitename }"/>
-										<input id="invitename" name="invitename" type="text" class="form-control input-sm inviterName" placeholder="姓名/拼音" value="${obj.visaother.invitename }"/>
+										<%-- <input id="invitename" name="invitename" type="text" class="form-control input-sm inviterName" placeholder="姓名/拼音" value="${obj.visaother.invitename }"/> --%>
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -647,6 +665,7 @@
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script type="text/javascript" src="${base}/admin/orderJp/visaInfo.js"></script>
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
@@ -1056,7 +1075,13 @@
 			
 			var visatype = $('#visatype').val();
 			var isVisit = $('#isVisit').val();
-			var passportInfo = $.param({"wealthType":wealthType,'visatype':visatype,'visacounty':visacounty,'isVisit':isVisit,'threecounty':threecounty}) + "&" +  $("#passportInfo").serialize();
+			var isname = $("#guaranteeCBInput").prop("checked");
+			if(isname){
+				isname = 1;
+			}else{
+				isname = 0;
+			}
+			var passportInfo = $.param({"wealthType":wealthType,'visatype':visatype,'visacounty':visacounty,'isVisit':isVisit,'threecounty':threecounty,'isname':isname}) + "&" +  $("#passportInfo").serialize();
 			layer.load(1);
 			$.ajax({
 				type: 'POST',
@@ -1233,11 +1258,9 @@
 		$("#guaranteeCBInput").click(function(){
 			var guaranteeCBInput = $("#guaranteeCBInput").prop("checked");
 			if(guaranteeCBInput){
-				$(".guaranteeName").show();
-				$(".guaranty").hide();
+				$(".vouchnameen").show();
 			}else{
-				$(".guaranty").show();
-				$(".guaranteeName").hide();
+				$(".vouchnameen").hide();
 			}
 		});
 		/* 邀请人开关 */
@@ -1250,6 +1273,10 @@
 				$(".inviterSY").show();
 				$(".inviterName").hide();
 			}
+		});
+		$('#vouchname').on('input propertychange',function(){
+			var vouchnameen = getPinYinStr($(this).val()).toUpperCase();
+			$('#vouchnameen').val(vouchnameen);
 		});
 	</script>
 </body>

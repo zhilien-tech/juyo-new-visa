@@ -95,6 +95,7 @@ public class VisaEditDataForm implements Serializable {
 	private String hoteladdress;
 
 	private String vouchname;
+	private String vouchnameen;
 
 	private String vouchphone;
 
@@ -127,5 +128,6 @@ public class VisaEditDataForm implements Serializable {
 	private String invitecountry;
 
 	private String traveladvice;
+	private String isname;
 
 }

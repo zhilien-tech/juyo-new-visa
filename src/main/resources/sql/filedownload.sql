@@ -20,6 +20,7 @@ SELECT
 	tavoi.hotelphone,
 	tavoi.hoteladdress,
 	tavoi.vouchname,
+	tavoi.vouchnameen,
 	tavoi.vouchphone,
 	tavoi.vouchaddress,
 	tavoi.vouchbirth,

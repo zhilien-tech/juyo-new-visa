@@ -1479,6 +1479,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			otherinfo.setHotelphone(form.getHotelphone());
 			otherinfo.setHoteladdress(form.getHoteladdress());
 			otherinfo.setVouchname(form.getVouchname());
+			otherinfo.setIsname(form.getIsname());
+			otherinfo.setVouchnameen(form.getVouchnameen());
 			otherinfo.setVouchphone(form.getVouchphone());
 			otherinfo.setVouchaddress(form.getVouchaddress());
 			otherinfo.setVouchbirth(form.getVouchbirth());
