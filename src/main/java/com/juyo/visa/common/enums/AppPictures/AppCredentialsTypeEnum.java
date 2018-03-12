@@ -1,4 +1,4 @@
-package com.juyo.visa.common.enums;
+package com.juyo.visa.common.enums.AppPictures;
 
 import com.uxuexi.core.common.enums.IEnum;
 

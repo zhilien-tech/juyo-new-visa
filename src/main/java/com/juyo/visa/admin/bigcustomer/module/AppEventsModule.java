@@ -96,4 +96,24 @@ public class AppEventsModule {
 	public Object getMyProcessDetails(@Param("visaCountry") Integer visaCountry, @Param("orderId") Integer orderId) {
 		return appEventsViewService.getMyProcessDetails(visaCountry, orderId);
 	}
+
+	/**
+	 * 获取申请人列表页
+	 */
+	@At
+	@POST
+	public Object getAppStaffLists(@Param("userId") Integer userId) {
+		return appEventsViewService.getAppStaffLists(userId);
+	}
+
+	/**
+	 * 申请人基本信息
+	 * <p>
+	 *  TODO
+	 */
+	@At
+	@POST
+	public Object getStaffBaseInfos(@Param("staffId") Integer staffId) {
+		return appEventsViewService.getStaffBaseInfos(staffId);
+	}
 }

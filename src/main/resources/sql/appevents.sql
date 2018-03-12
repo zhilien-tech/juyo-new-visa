@@ -52,3 +52,31 @@ FROM
 	LEFT JOIN t_app_staff_events tase ON tase.eventsId = tae.id 
 WHERE
 	tase.staffId =@staffIds
+	
+/*appevents_staff_list_by_userId*/
+SELECT
+	tasb.id staffId,
+	tasb.userId,
+	CONCAT( tasb.firstname, tasb.lastname ) staffName,
+	tasb.status
+FROM
+	t_app_staff_basicinfo tasb
+WHERE
+	tasb.userId = @userId
+	
+/*appevents_staff_baseInfo_by_staffId*/
+SELECT
+	tasb.id staffId,
+	tasb.firstname,
+	tasb.lastname,
+	tasb.firstNameEn,
+	tasb.lastNameEn,
+	tasb.hasOtherName,
+	tasb.otherFirstName,
+	tasb.otherLastName,
+	tasb.otherFirstNameEn,
+	tasb.otherLastNameEn
+FROM
+	t_app_staff_basicinfo tasb
+WHERE
+	tasb.id = @staffId

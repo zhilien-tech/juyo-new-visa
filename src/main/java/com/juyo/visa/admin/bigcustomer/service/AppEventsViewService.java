@@ -86,7 +86,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	 * @param session 
 	 * @return 
 	 */
-	public Object signUpEvents(@Param("eventId") Integer eventId, HttpSession session) {
+	public Object signUpEvents(Integer eventId, HttpSession session) {
 		//当前登录用户Id
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer loginUserId = loginUser.getId();
@@ -109,7 +109,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	 * @param eventId
 	 * @return 
 	 */
-	public Object getStaffInfoByEventId(@Param("eventId") Integer eventId) {
+	public Object getStaffInfoByEventId(Integer eventId) {
 		Record record = new Record();
 		if (!Util.isEmpty(eventId)) {
 			//活动详情
@@ -129,7 +129,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	 * @param visaCountry 签证国
 	 * @return 
 	 */
-	public Object getVisaProcessByCountry(@Param("visaCountry") Integer visaCountry) {
+	public Object getVisaProcessByCountry(Integer visaCountry) {
 
 		Map<String, String> map = Maps.newHashMap();
 		if (Util.eq(VisaCountryEnum.USA.intKey(), visaCountry)) {
@@ -154,7 +154,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	 * @param staffId 人员Id
 	 * @return 
 	 */
-	public Object getProcessListByStaffId(@Param("staffId") Integer staffId) {
+	public Object getProcessListByStaffId(Integer staffId) {
 		List<Record> records = new ArrayList<Record>();
 		if (!Util.isEmpty(staffId)) {
 			String sqlStr = sqlManager.get("appevents_process_list_by_staffId");
@@ -188,7 +188,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	 * @param orderId 订单id
 	 * @return 
 	 */
-	public Object getMyProcessDetails(@Param("visaCountry") Integer visaCountry, @Param("orderId") Integer orderId) {
+	public Object getMyProcessDetails(Integer visaCountry, Integer orderId) {
 		Map<String, String> map = Maps.newHashMap();
 		if (Util.eq(VisaCountryEnum.USA.intKey(), visaCountry)) {
 			//美国签证流程
@@ -203,6 +203,42 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//TODO 进度页渲染操作
 
 		return map;
+	}
+
+	/**
+	 * 
+	 * 获取 我的申请人列表
+	 *
+	 * @param userId 用户id
+	 * @return 
+	 */
+	public Object getAppStaffLists(Integer userId) {
+
+		String sqlStr = sqlManager.get("appevents_staff_list_by_userId");
+		Sql sql = Sqls.create(sqlStr);
+		sql.setParam("userId", userId);
+
+		//获取申请人列表页
+		List<Record> records = dbDao.query(sql, null, null);
+
+		return records;
+	}
+
+	/**
+	 * 
+	 * 获取申请人基本信息
+	 * <p>
+	 * TODO
+	 *
+	 * @param staffId 人员id
+	 * @return 
+	 */
+	public Object getStaffBaseInfos(@Param("staffId") Integer staffId) {
+		String sqlStr = sqlManager.get("appevents_staff_baseInfo_by_staffId");
+		Sql sql = Sqls.create(sqlStr);
+		sql.setParam("staffId", staffId);
+		Record record = dbDao.fetch(sql);
+		return record;
 	}
 
 }
