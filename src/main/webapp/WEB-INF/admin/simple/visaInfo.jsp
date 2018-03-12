@@ -442,7 +442,7 @@
 					<!-- 在日担保人guarantee -->
 					<div class='info'>
 						<div class="info-head">在日担保人</div>
-						<div class="info-body-from cf ">
+						<div class="info-body-from">
 							<div class="row ">
 								<div class="col-sm-4">
 									<div class="form-group">
@@ -546,7 +546,7 @@
 					<!-- 在日邀请人inviter -->
 					<div class='info'>
 						<div class="info-head">在日邀请人</div>
-						<div class="info-body-from cf ">
+						<div class="info-body-from">
 							<div class="row ">
 								<div class="col-sm-4">
 									<div class="form-group">

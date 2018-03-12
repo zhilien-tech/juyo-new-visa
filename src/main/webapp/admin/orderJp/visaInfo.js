@@ -1,5 +1,5 @@
 // 定义一个触发焦点事件的开关，默认为不开启状态 || 也可以给input设置一个属性，来判断
-	let isBox = false; 
+	var isBox = false; 
     	$(".dropdown").hide(); 
 	// input绑定焦点事件，触发时打开焦点开关
     $(".input").focus(function () { 
