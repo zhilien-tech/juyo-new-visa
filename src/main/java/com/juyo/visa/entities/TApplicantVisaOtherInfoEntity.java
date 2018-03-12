@@ -38,6 +38,10 @@ public class TApplicantVisaOtherInfoEntity implements Serializable {
 	private String vouchname;
 
 	@Column
+	@Comment("在日担保人姓名拼音")
+	private String vouchnameen;
+
+	@Column
 	@Comment("担保人电话")
 	private String vouchphone;
 
@@ -100,4 +104,9 @@ public class TApplicantVisaOtherInfoEntity implements Serializable {
 	@Column
 	@Comment("旅行社意见")
 	private String traveladvice;
+
+	@Column
+	@Comment("是否是姓名")
+	private String isname;
+
 }
