@@ -44,16 +44,16 @@
 						<div class="info-imgUpload front has-error" id="borderColorFront">
 							<!-- 身份证 正面 -->
 							<div class="col-xs-6 widthBig">
-							<div class="form-group">
-								<div class="cardFront-div">
-									<span>点击上传身份证正面</span>
-									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
-									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" name="sqImg" alt="" src="${obj.applicant.cardFront }" >
-									<i class="delete" onclick="deleteApplicantFrontImg(${obj.orderid});"></i>
+								<div class="form-group">
+									<div class="cardFront-div">
+										<span>点击上传身份证正面</span>
+										<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
+										<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+										<img id="sqImg" name="sqImg" alt="" src="${obj.applicant.cardFront }" >
+										<i class="delete" onclick="deleteApplicantFrontImg(${obj.orderid});"></i>
+									</div>
 								</div>
 							</div>
-						</div>
 						</div>
 						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 -20px 32px !important">
 							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">身份证正面必须上传</small>
@@ -119,17 +119,8 @@
 						</div>
 						<!-- end 公民身份证 -->
 						<div class="row">
-							<!-- 姓名/民族 -->
-							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>性别</label> 
-									<select class="form-control input-sm selectHeight" id="sex" name="sex">
-										<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
-										<option value="女" ${obj.applicant.sex == "女"?"selected":"" }>女</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-3 padding-right-0">
+							 <!-- 民族 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>民族</label> <input id="nation"
 										name="nation" type="text" class="form-control input-sm"
@@ -137,14 +128,7 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-							<div class="col-sm-5 padding-right-0">
-								<div class="form-group">
-									<label>出生日期</label> 
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" value="${obj.birthday }"/>
-								</div>
-							</div>
 						</div>
-						<!-- end 姓名/民族 -->
 						<div class="row">
 							<!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
@@ -272,12 +256,9 @@
 										<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 									</div>
 								</div>
+							</div>
+						<!-- 曾用国籍 -->
 						</div>
-							<!-- 曾用国籍 -->
-							
-						</div>
-						
-						
 						
 						<div class="row">
 							<!-- 紧急联系人姓名/手机 -->
@@ -289,6 +270,24 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
+							<div class="col-sm-4 col-sm-offset-1 padding-right-0">
+									<div class="form-group">
+										<label id="updateApplicantHead">与主申请人的关系</label>
+										</br>
+										<div class="input-box">
+											<input type="text" id="" name="" class="input" value="">
+											<ul class="dropdown">
+												<li>配偶</li>
+												<li>父母</li>
+												<li>子女</li>
+											</ul>
+										</div>
+									</div>
+							</div>
+							
+						</div>
+						
+						<div class="row">
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>紧急联系人手机</label> <input id="emergencyTelephone" name="emergencyTelephone"

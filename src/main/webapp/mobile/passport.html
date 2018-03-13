@@ -17,7 +17,7 @@
     		<img :src="passportdata.passporturl" style="width:100%;height:100%;"  alt="" class="bacimg">
     	</span>
     	<span v-else>
-	        <img src="images/1.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
+	        <img src="images/Hz.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
     	</span>
         <div id="upload">
             <h6>点击上传护照</h6>
@@ -38,8 +38,8 @@
         <li>签发日期 <input id="validEndDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.validenddate"/></li>
    		<li class="validity">有效期 <span class="dateVal"></span><select class="validitySelect" v-model="passportdata.validtype">
    					<option value=""></option>
-   					<option value="1">5年</option>
    					<option value="2">10年</option>
+   					<option value="1">5年</option>
    				  </select>
    		</li>
     </ul>
@@ -82,9 +82,9 @@
 	        	type:'post',
 	        	success: function(data){
 	        		_self.passportdata = data.passportdata;
-	        		if(_self.passportdata.validtype == 1){
+	        		if(_self.passportdata.validtype == 2){
 						$(".dateVal").text("5年");
-	        		}else if(_self.passportdata.validtype == 2){
+	        		}else if(_self.passportdata.validtype == 1){
 						$(".dateVal").text("10年");
 	        		}
 	          	}
@@ -93,7 +93,12 @@
 	});
         $(function () {
             $('#upload').click(function () {
-           	 	$('#image').click();
+           	 	
+               $(".backgroundGray").show();
+            });
+            $(".closed").click(function(){
+            	$(".backgroundGray").hide();
+            	$('#image').click();
                 $('#image').change(function(){
                 	layer.load(1, {
             			shade : "#000"
@@ -119,8 +124,7 @@
                             console.log(err);
                         });
                 });
-               
-            });
+            })
         });
 
         //
@@ -240,10 +244,10 @@
 					_self.passportdata.validenddate = obj.expiryDay;
 					var years = getDateYearSub(obj.issueDate,obj.expiryDay);
 					if(years == 5){
-						_self.passportdata.validtype = 1;
+						_self.passportdata.validtype = 2;
 						$(".dateVal").text("5年");
 					}else{
-						_self.passportdata.validtype = 2;
+						_self.passportdata.validtype = 1;
 						$(".dateVal").text("10年");
 					}
 					console.log(JSON.stringify(_self.passportdata));

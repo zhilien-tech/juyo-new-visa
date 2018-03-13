@@ -32,7 +32,7 @@ $(function(){
 		<span class="dian"></span>
 		<!-- 名字 -->
 		<c:choose>
-	    	<c:when test="${userType == 5}">
+	    	<c:when test="${userType == 5 or userType == 7}">
 	            <!-- 送签社管理员 -->
 	            <a id="psersonal" href="${base}/admin/companyInfo/list.html" target="mainIframe" class="dropdown-toggle name" data-toggle="dropdown">${loginuser.name}</a>
 	        </c:when>
@@ -239,6 +239,10 @@ $(function(){
 			layer.msg('删除成功');
 		}else if(status == 9){
 			layer.msg('已移交售后');
+		}else if(status == 10){
+			layer.msg('已作废');
+		}else if(status == 11){
+			layer.msg('已还原');
 		}
 	}
 </script>

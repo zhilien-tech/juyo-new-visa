@@ -250,9 +250,23 @@
 							}
 						}
 					},
+					firstName : {
+						validators : {
+							notEmpty : {
+								message : '姓不能为空'
+							}
+						}
+					},
+					lastName : {
+						validators : {
+							notEmpty : {
+								message : '名不能为空'
+							}
+						}
+					}
 				}
 			});
-			$('#passportInfo').bootstrapValidator('validate');
+			//$('#passportInfo').bootstrapValidator('validate');
 			
 			var remark = $("#passRemark").val();
 			if(remark != ""){
@@ -301,6 +315,7 @@
 		                  var receiveMessage = JSON.parse(received_msg);
 		                  console.log(receiveMessage);
 		                  if(receiveMessage.sessionid == sessionid){
+		                	  window.parent.document.getElementById('orderid').value = receiveMessage.orderid;
 		                	  if(receiveMessage.messagetype == 2){
 		                		  window.location.href = '/admin/simple/passportInfo.html?applicantid='+receiveMessage.applicantid+'&orderid='+receiveMessage.orderid;
 		                	  }else if(receiveMessage.messagetype == 1){
@@ -425,6 +440,7 @@
 					console.log(JSON.stringify(data));
 					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					layer.close(index); */
+					parent.saveAddOrder(2);
 					if(status == 2){
 						socket.onclose();
 						window.location.href = '/admin/simple/updateApplicant.html?applicantid='+data.applicantid+'&orderid='+data.orderid;

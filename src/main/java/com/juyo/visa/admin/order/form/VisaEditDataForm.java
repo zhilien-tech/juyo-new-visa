@@ -7,6 +7,7 @@
 package com.juyo.visa.admin.order.form;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -86,5 +87,47 @@ public class VisaEditDataForm implements Serializable {
 	private Integer visatype;
 
 	private Integer isVisit;
+
+	private String hotelname;
+
+	private String hotelphone;
+
+	private String hoteladdress;
+
+	private String vouchname;
+	private String vouchnameen;
+
+	private String vouchphone;
+
+	private String vouchaddress;
+
+	private Date vouchbirth;
+
+	private String vouchsex;
+
+	private String vouchmainrelation;
+
+	private String vouchjob;
+
+	private String vouchcountry;
+
+	private String invitename;
+
+	private String invitephone;
+
+	private String inviteaddress;
+
+	private Date invitebirth;
+
+	private String invitesex;
+
+	private String invitemainrelation;
+
+	private String invitejob;
+
+	private String invitecountry;
+
+	private String traveladvice;
+	private String isname;
 
 }

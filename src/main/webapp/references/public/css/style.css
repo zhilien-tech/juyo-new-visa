@@ -84,7 +84,7 @@ body{overflow-x: auto;}
 .sendSms{background-image:url(../dist/newvisacss/img/express.png);}
 .salesBtn { background-image:url(../dist/newvisacss/img/passportInfo.png);}
 .viseBtn { background-image:url(../dist/newvisacss/img/visaTransfer.png);}
-
+.visaEntry { background-image:url(../dist/newvisacss/img/visaInfo.png);}
 
 .updateApplicant { background-image:url(../dist/newvisacss/img/basicInfo.png); display:inline-block;width:20px;height:20px; margin:0px 10px;}
 .passport { background-image:url(../dist/newvisacss/img/passportInfo.png); display:inline-block;width:20px;height:20px; margin:0px 10px;}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>在日担保人</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	    <meta name="format-detection" content="telephone=no">
+	    <!-- 日历插件 .css -->
+	    <link rel="stylesheet" type="text/css" href="css/lCalendar.css">
+	    <link rel="stylesheet" type="text/css" href="css/common.css">
+	    <link rel="stylesheet" type="text/css" href="css/passport.css">
+	    <script src="js/rem(750).js"></script>
+	    <script src="js/jquery-1.10.2.js"></script>
+	    <script src="js/lrz.bundle.js"></script>		
+	</head>
+	<body>
+		<div class="warrantorTop">
+			<a class="warrantor">
+				<i class="warrantorSave" onclick="warrantorSave()"><</i>
+				在日担保人
+			</a>
+		</div>
+		<ul class="label-info warrantorInfo">
+			<li>姓名 <input type="text" class="txtInput warrantorName" id="vouchname"/></li>
+			<li>姓名拼音 <input type="text" class="txtInput warrantorSpell" id=""/></li>
+			<li>电话 <input type="text" maxlength="11" class="txtInput warrantorTel" id="vouchphone"/></li>
+			<li>地址 <input type="text" class="txtInput warrantorAddress" id="vouchaddress"/></li>
+			<li>出生日期 <input type="text" class="txtInput warrantorBirthDay" id="vouchbirth"/></li>
+			<li class="validity">性别 <span class="sexVal"></span>
+				<select class="sexSelect" id="vouchsex">
+					<option value="0"></option>
+					<option value="男">男</option>
+	   				<option value="女">女</option>
+				</select>
+			</li>
+			<li class="validity">与主申请人的关系<span class="dateVal"></span>
+	   			<select class="validitySelect" id="vouchmainrelation">
+					<option value="0"></option>
+	   				<option value="1">配偶</option>
+	   				<option value="2">父母</option>
+	   				<option value="3">子女</option>
+	   			</select>
+   			</li>
+			<li>职业或职务 <input type="text" class="txtInput warrantorPost" id="vouchjob"/></li>
+			<li>国籍(公民身份)及签证种类 <input type="text" class="txtInput visaType" id="vouchcountry"/></li>
+		</ul>
+	</body>
+	<!-- 日历插件 .js -->
+	<script type="text/javascript" src="js/lCalendar.min.js"></script>
+	<script>
+	var _self;
+	/* 返回并保存 */
+	function warrantorSave(){
+		
+		var applicantid = GetQueryString('applicantid');
+		var vouchname = $('.warrantorName').val();
+		var warrantorSpell = $('.warrantorSpell').val();
+		var vouchphone = $('.warrantorTel').val();
+		var vouchaddress = $('.warrantorAddress').val();
+		var vouchbirth = $('.warrantorBirthDay').val();
+		var vouchsex = $('.sexVal').text();
+		var vouchmainrelation = $('.dateVal').text();
+		var vouchjob = $('.warrantorPost').val();
+		var vouchcountry = $('.visaType').val();
+		
+		 $.ajax({ 
+        	url: '/admin/simplemobile/saveVouchInfo.html',
+        	data:{applicantid:applicantid,
+        			vouchname:vouchname,
+        			vouchphone:vouchphone,
+        			vouchaddress:vouchaddress,
+        			vouchbirth:vouchbirth,
+        			vouchsex:vouchsex,
+        			vouchmainrelation:vouchmainrelation,
+        			vouchjob:vouchjob,
+        			vouchcountry:vouchcountry
+        		 },
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		window.location.href='/simplemobile/visaInfo.html?applicantid='+applicantid;
+          	}
+        }); 
+	}
+	/* 手机号只能输入数字 */
+	$(document).on("input",".warrantorTel",function(){
+		$(this).val($(this).val().replace(/[^\d]/g,''));
+	});
+	 //拼音
+	$('#firstname').on('input propertychange',function(){
+		var firstnameen = getPinYinStr($(this).val()).toUpperCase();
+		console.log(firstnameen);
+		_self.passportdata.firstnameen = firstnameen;
+	});
+	/* 性别 */
+	 $(".sexSelect").change(function(){
+      	 var sexSelecter = $(".sexSelect").find("option:selected").text();
+           $(".sexVal").text(sexSelecter);
+    });
+	/* 与主申请人的关系 */
+	 $(".validitySelect").change(function(){
+       	 var selecters = $(".validitySelect").find("option:selected").text();
+            $(".dateVal").text(selecters);
+     });
+	//日历插件
+     var calendar = new lCalendar();//出生日期
+     calendar.init({
+         'trigger': '#vouchbirth',
+         'type': 'date'
+     });
+    //初始化页面数据
+	initPageData();
+	function initPageData(){
+		var applicantid = GetQueryString('applicantid');
+		$.ajax({
+        	url: '/admin/simplemobile/getVisaOtherInfoData.html',
+        	data:{applicantid:applicantid},
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		$('#vouchname').val(data.otherinfo.vouchname);
+        		$('#vouchphone').val(data.otherinfo.vouchphone);
+        		$('#vouchaddress').val(data.otherinfo.vouchaddress);
+        		$('#vouchbirth').val(data.otherinfo.vouchbirth);
+        		$('#vouchsex').val(data.otherinfo.vouchsex);
+        		$('.sexVal').html(data.otherinfo.vouchsex);
+        		$('#vouchmainrelation').val(data.otherinfo.vouchmainrelation);
+        		$('.dateVal').html(data.otherinfo.vouchmainrelation);
+        		$('#vouchjob').val(data.otherinfo.vouchjob);
+        		$('#vouchcountry').val(data.otherinfo.vouchcountry);
+          	}
+        });
+	}
+	//获取URL地址参数
+	 function GetQueryString(name){
+	      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	      var r = window.location.search.substr(1).match(reg);
+	      if(r!=null)return  unescape(r[2]); return null;
+	 }
+	</script>
+</html>

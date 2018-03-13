@@ -70,7 +70,6 @@
 					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(22)"/>
 					<input type="button" value="招宝变更" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(19)"/>
 					<input type="button" value="发招宝" class="btn btn-primary btn-sm pull-right" onclick="sendzhaobao()"/>
-					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log()"/>
 				</div>
 				<section class="content">
 					<!-- 订单信息 -->

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>在日拟入住酒店名称或友人姓名及地址</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	    <meta name="format-detection" content="telephone=no">
+	    <link rel="stylesheet" type="text/css" href="css/common.css">
+	    <link rel="stylesheet" type="text/css" href="css/passport.css">
+	    <script src="js/rem(750).js"></script>
+	    <script src="js/jquery-1.10.2.js"></script>
+	    <script src="js/lrz.bundle.js"></script>		
+	</head>
+	<body>
+		<div class="hotelTop">
+			<a class="hotel">
+				<i class="hotelSave"><</i>
+				在日拟入住酒店名称或友人姓名及地址
+			</a>
+		</div>
+		<ul class="label-info hotelInfo">
+			<li>酒店名称或友人姓名 <input type="text" class="txtInput hotelName" id="hotelname"/></li>
+			<li>电话 <input type="text" maxlength="11" class="txtInput hotelTel" id="hotelphone"/></li>
+			<li>地址 <input type="text" class="txtInput hotelAddress" id="hoteladdress"/></li>
+		</ul>
+	</body>
+	<script>
+		$(function(){
+			
+			/* 保存并退出 */
+			$(".hotelSave").click(function(){
+				var applicantid = GetQueryString('applicantid');
+				var hotelname = $('#hotelname').val();
+				var hotelphone = $('.hotelTel').val();
+				var hoteladdress = $('.hotelAddress').val();
+				
+				$.ajax({ 
+		        	url: '/admin/simplemobile/saveHotelInfo.html',
+		        	data:{applicantid:applicantid,hotelname:hotelname,hotelphone:hotelphone,hoteladdress:hoteladdress},
+		        	dataType:"json",
+		        	type:'post',
+		        	success: function(data){
+		        		window.location.href='/simplemobile/visaInfo.html?applicantid='+applicantid;
+		          	}
+		        });
+			});
+		})
+		//初始化页面数据
+		initPageData();
+		function initPageData(){
+			var applicantid = GetQueryString('applicantid');
+			$.ajax({
+	        	url: '/admin/simplemobile/getVisaOtherInfoData.html',
+	        	data:{applicantid:applicantid},
+	        	dataType:"json",
+	        	type:'post',
+	        	success: function(data){
+	        		$('#hotelname').val(data.otherinfo.hotelname);
+	        		$('#hotelphone').val(data.otherinfo.hotelphone);
+	        		$('#hoteladdress').val(data.otherinfo.hoteladdress);
+	          	}
+	        });
+		}
+		//获取URL地址参数
+    function GetQueryString(name){
+         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+         var r = window.location.search.substr(1).match(reg);
+         if(r!=null)return  unescape(r[2]); return null;
+    }
+	</script>
+</html>

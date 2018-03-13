@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>其他信息</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	    <meta name="format-detection" content="telephone=no">
+	    <link rel="stylesheet" type="text/css" href="css/common.css">
+	    <link rel="stylesheet" type="text/css" href="css/passport.css">
+	    <script src="js/rem(750).js"></script>
+	    <script src="js/jquery-1.10.2.js"></script>
+	    <script src="js/lrz.bundle.js"></script>		
+	</head>
+	<body>
+		<div class="otherInfoTop">
+			<a class="otherInfo">
+				<i onclick="otherInfoSave()"><</i>
+				其他信息
+			</a>
+		</div>
+		<ul class="label-info otherInfoUl">
+			<li>旅行社意见: </li>
+			<li class="otherInfoMain">
+				<textarea id="traveladvice" class="otherInfoTextarea" placeholder="请输入您的建议"></textarea>
+			</li>
+			<li class="otherInfoGroup" onclick="otherInfoSave()">
+				<a class="otherInfoBtn">提交建议</a>
+			</li>
+		</ul>
+	</body>
+	<script>
+	 //初始化页面数据
+ 	initPageData();
+ 	function initPageData(){
+ 		var applicantid = GetQueryString('applicantid');
+ 		$.ajax({
+         	url: '/admin/simplemobile/getVisaOtherInfoData.html',
+         	data:{applicantid:applicantid},
+         	dataType:"json",
+         	type:'post',
+         	success: function(data){
+         		$('#traveladvice').val(data.otherinfo.traveladvice);
+           	}
+         });
+ 	}
+ 	//获取URL地址参数
+ 	 function GetQueryString(name){
+ 	      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+ 	      var r = window.location.search.substr(1).match(reg);
+ 	      if(r!=null)return  unescape(r[2]); return null;
+ 	 }
+ 	function otherInfoSave(){
+ 		var traveladvice = $('#traveladvice').val();
+ 		var applicantid = GetQueryString('applicantid');
+ 		$.ajax({ 
+        	url: '/admin/simplemobile/saveOtherInfo.html',
+        	data:{applicantid:applicantid,traveladvice:traveladvice},
+        	dataType:"json",
+        	type:'post',
+        	success: function(data){
+        		window.location.href='/simplemobile/visaInfo.html?applicantid='+applicantid;
+          	}
+        });
+ 	}
+	</script>
+</html>

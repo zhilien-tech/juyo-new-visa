@@ -27,6 +27,7 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 			</div>
+			<div class="modal-main"></div>
 			<div class="modal-body">
 			<div class="ipt-info">
 				</div>
@@ -248,6 +249,20 @@
 							}
 						}
 					},
+					firstName : {
+						validators : {
+							notEmpty : {
+								message : '姓不能为空'
+							}
+						}
+					},
+					lastName : {
+						validators : {
+							notEmpty : {
+								message : '名不能为空'
+							}
+						}
+					}
 				}
 			});
 			$('#passportInfo').bootstrapValidator('validate');
@@ -270,6 +285,7 @@
 					}else{
 						$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
 					}
+					
 				}
 			});
 		});

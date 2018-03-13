@@ -152,6 +152,16 @@
 	    	  submitlogin();
 		  }
 	  }
+	  $('#loginName').on('input',function(){
+		  var loginName = getCookie('loginName');
+		  var thisval = $(this).val();
+		  var password = getCookie('password');
+		  if(thisval == loginName){
+		     $('#password').val(password);
+		  }else{
+			 $('#password').val('');
+		  }
+	  });
 		</script>
 	</body>
 </html>

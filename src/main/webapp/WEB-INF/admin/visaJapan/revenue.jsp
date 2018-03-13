@@ -28,7 +28,9 @@
 				<span class="heading">实收资料</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save()" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
-				<input id="addBtn" type="button" onclick="frontRvenue()" class="btn btn-primary pull-right btn-sm btn-right btn-Big" value="前台实收" />
+				<c:if test="${empty obj.type }">
+					<input id="addBtn" type="button" onclick="frontRvenue()" class="btn btn-primary pull-right btn-sm btn-right btn-Big" value="前台实收" />
+				</c:if>
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">

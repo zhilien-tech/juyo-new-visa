@@ -44,16 +44,13 @@
 							<div class="col-md-2 left-5px right-0px marginLR">
 								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间 - 出签时间" onkeypress="onkeyEnter()"/>
 							</div>
-							<!-- <div class="col-md-2 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="signOutDate" name="signOutDate" placeholder="出签时间" onkeypress="onkeyEnter()"/>
-							</div> -->
 							<div class="col-md-3 left-5px right-0px">
 								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter()"/>
 							</div>
 							<div class="col-md-1 left-5px btnSearch">
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
 							</div>
-							<div class="col-md-1 right-5px btnSearch">
+							<div class="col-md-1 right-5px btnSearch btnRight">
 								<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
 							</div>
 						</div>
@@ -67,10 +64,10 @@
 								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
 								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
 								<div><label></label><span style="font-weight:bold;font-size:16px;">
-									<span v-if="data.visastatus === '已发招宝'">
+									<span v-if="data.visastatus === '招宝成功'">
 										<font color="red">{{data.visastatus}}</font>
 									</span>
-									<span v-if="data.visastatus === '发招宝中'">
+									<span v-else-if="data.visastatus === '发招宝中'">
 										<font>{{data.visastatus}}</font>
 										<!-- 加载中 -->
 										<div class="spinner">
@@ -85,7 +82,7 @@
 								
 								</span></div>	
 								
-								<div>
+								<div v-if="data.visastatus != '作废'">
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
@@ -95,6 +92,12 @@
 									<i class="Refusal" v-on:click="sendInsurance(data.id,27)"></i>
 									<i class="download" v-on:click="downLoadFile(data.id)"> </i>
 									<i class="handoverTable"> </i>
+									<!-- 作废按钮 -->
+									<i class="toVoid" v-on:click="sendInsurance(data.id,26)"> </i>
+								</div>
+								<div v-else>
+									<label>操作：</label>
+									<i class="toVoid1" v-on:click="sendInsurance(data.id,1)"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
@@ -105,7 +108,7 @@
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证录入</a></div>
+										<div class="visaBtn" v-if="data.visastatus != '作废'"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
 									</span>
 									<span v-else class="visaListSpan">
 										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
@@ -113,7 +116,7 @@
 										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn"><a v-on:click="visainput(item.applicatid,data.orderid)">签证录入</a></div>
+										<div class="visaBtn" v-if="data.visastatus != '作废'"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
 									</span>
 								</li>
 							</ul> 
@@ -177,7 +180,7 @@
         		    shadeClose: false,
         		    scrollbar: false,
         		    area: ['900px', '550px'],
-        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
+        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid+'&type=1'
         		  });
         	},
         	sendInsurance:function(orderid,visastatus){
@@ -199,6 +202,10 @@
                  		}else if(visastatus == 27){
                  			parent.successCallBack(7);
 	                 		//layer.msg('报告拒签');
+                 		}else if(visastatus == 26){
+                 			parent.successCallBack(10);
+                 		}else if(visastatus == 1){
+                 			parent.successCallBack(11);
                  		}
                  		//更新列表数据
                  		var orderAuthority = "allOrder";
@@ -229,7 +236,7 @@
                  	success: function(data){
                  		var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
                  		if(data.data){
-                 			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data;
+                 			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
                  		}
 		        		layer.open({
 		        		    type: 2,
@@ -246,16 +253,41 @@
                  });
         	},
         	downLoadFile:function(orderid){
-        		layer.load(1);
-        		$.fileDownload("${base}/admin/visaJapan/downloadFile.html?orderid=" + orderid, {
-			         successCallback: function (url) {
-			        	 layer.closeAll('loading');
-			         },
-			         failCallback: function (html, url) {
-			        	layer.closeAll('loading');
-			        	layer.msg("下载失败");
-			         }
-			     });
+        		$.ajax({
+                 	url: '${base}/admin/visaJapan/validateDownLoadInfoIsFull.html',
+                 	data:{orderjpid:orderid},
+                 	dataType:"json",
+                 	type:'post',
+                 	async:false,
+                 	success: function(data){
+                 		//var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
+                 		if(data.data){
+                 			var url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
+			        		layer.open({
+			        		    type: 2,
+			        		    title: false,
+			        		    closeBtn:false,
+			        		    fix: false,
+			        		    maxmin: false,
+			        		    shadeClose: false,
+			        		    scrollbar: false,
+			        		    area: ['400px', '300px'],
+			        		    content: url
+			        		  });
+                 		}else{
+                 			layer.load(1);
+                    		$.fileDownload("${base}/admin/visaJapan/downloadFile.html?orderid=" + orderid, {
+            			         successCallback: function (url) {
+            			        	 layer.closeAll('loading');
+            			         },
+            			         failCallback: function (html, url) {
+            			        	layer.closeAll('loading');
+            			        	layer.msg("下载失败");
+            			         }
+            			     });
+                 		}
+                   	}
+                 });
         	},
         	//签证录入
     		visainput:function(applyId,orderid){

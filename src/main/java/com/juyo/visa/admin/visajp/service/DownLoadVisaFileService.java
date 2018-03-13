@@ -8,6 +8,7 @@ package com.juyo.visa.admin.visajp.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.DateFormat;
@@ -29,9 +30,11 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -470,7 +473,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				}
 			}
 			//酒店信息
-			if (!Util.isEmpty(ordertravelplan)) {
+			/*if (!Util.isEmpty(ordertravelplan)) {
 				TOrderTravelplanJpEntity travelplanEntity = ordertravelplan.get(0);
 				if (!Util.isEmpty(travelplanEntity.getHotel())) {
 					THotelEntity hotelinfo = hotelViewService.fetch(travelplanEntity.getHotel());
@@ -478,8 +481,42 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 					map.put("hotelphone", hotelinfo.getMobile());
 					map.put("hoteladdress", hotelinfo.getAddress());
 				}
+			}*/
+			//酒店信息
+			map.put("hotelname", record.getString("hotelname"));
+			map.put("hotelphone", record.getString("hotelphone"));
+			map.put("hoteladdress", record.getString("hoteladdress"));
+			//在日担保人信息
+			map.put("danbaoname", record.getString("vouchname"));
+			map.put("danbaonameen", record.getString("vouchnameen"));
+			map.put("danbaotelephone", record.getString("vouchphone"));
+			map.put("vouchaddress", record.getString("vouchaddress"));
+			if ("男".equals(record.getString("vouchsex"))) {
+				map.put("vouchnan", "0");
+			} else if ("女".equals(record.getString("vouchsex"))) {
+				map.put("vouchnv", "0");
 			}
-
+			if (!Util.isEmpty(record.get("vouchbirth"))) {
+				map.put("danbaobirthday", dateformat.format((Date) record.get("vouchbirth")));
+			}
+			map.put("vouchmainrelation", record.getString("vouchmainrelation"));
+			map.put("vouchjob", record.getString("vouchjob"));
+			map.put("vouchcountry", record.getString("vouchcountry"));
+			//在日邀请人
+			map.put("invitename", record.getString("invitename"));
+			map.put("invitephone", record.getString("invitephone"));
+			map.put("inviteaddress", record.getString("inviteaddress"));
+			if ("男".equals(record.getString("invitesex"))) {
+				map.put("invitenan", "0");
+			} else if ("女".equals(record.getString("invitesex"))) {
+				map.put("invitenv", "0");
+			}
+			if (!Util.isEmpty(record.get("invitebirth"))) {
+				map.put("invitebirth", dateformat.format((Date) record.get("invitebirth")));
+			}
+			map.put("invitejob", record.getString("invitejob"));
+			map.put("invitemainrelation", record.getString("invitemainrelation"));
+			map.put("invitecountry", record.getString("invitecountry"));
 			//家庭住址
 			map.put("homeaddress",
 					(!Util.isEmpty(record.get("province")) ? record.getString("province") : " ")
@@ -495,7 +532,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("workphone", record.getString("workphone"));
 			map.put("workaddress", record.getString("workaddress"));
 			map.put("occupation", record.getString("occupation"));
-			map.put("danbaoname", "参照身元保证书");
+			//map.put("danbaoname", "参照身元保证书");
 			map.put("text2", "0");
 			map.put("text3", "0");
 			map.put("text4", "0");
@@ -679,7 +716,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 										: ""), "无", marryStatus, "身份证\n户口本",
 						(!Util.isEmpty(record.get("wealthtype")) ? record.getString("wealthtype") : ""),
 						(!Util.isEmpty(record.get("wealthcontent")) ? record.getString("wealthcontent") : ""),
-						(!Util.isEmpty(record.get("relationremark")) ? record.getString("relationremark") : ""), "推荐" };
+						(!Util.isEmpty(record.get("relationremark")) ? record.getString("relationremark") : ""),
+						(!Util.isEmpty(record.get("traveladvice")) ? record.getString("traveladvice") : "") };
 				for (String data : datas) {
 					PdfPCell cell = new PdfPCell(new Paragraph(data, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -912,6 +950,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			String dijielinkman = "";
 			//地接社电话
 			String dijiephone = "";
+			//公章地址
+			String sealUrl = "";
 			if (!Util.isEmpty(orderjp.getGroundconnectid())) {
 				TCompanyEntity dijiecompany = dbDao.fetch(TCompanyEntity.class, orderjp.getGroundconnectid()
 						.longValue());
@@ -919,6 +959,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				dijieAddr = dijiecompany.getAddress();
 				dijielinkman = dijiecompany.getLinkman();
 				dijiephone = dijiecompany.getMobile();
+				sealUrl = dijiecompany.getSeal();
 			}
 			{
 				Paragraph p = new Paragraph("保証会社：" + dijie, font);
@@ -947,6 +988,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				p.setIndentationRight(100);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
+			}
+			if (!Util.isEmpty(sealUrl)) {
+				document.add(getSeal1(sealUrl, 0));
 			}
 			document.close();
 			IOUtils.closeQuietly(stream);
@@ -1256,6 +1300,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			String dijielinkman = "";
 			//地接社电话
 			String dijiephone = "";
+			//公章地址
+			String sealUrl = "";
 			if (!Util.isEmpty(orderjp.getGroundconnectid())) {
 				TCompanyEntity dijiecompany = dbDao.fetch(TCompanyEntity.class, orderjp.getGroundconnectid()
 						.longValue());
@@ -1263,6 +1309,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				dijieAddr = dijiecompany.getAddress();
 				dijielinkman = dijiecompany.getLinkman();
 				dijiephone = dijiecompany.getMobile();
+				sealUrl = dijiecompany.getSeal();
 			}
 			{
 				Paragraph p = new Paragraph("保証会社：" + dijie, font);
@@ -1292,11 +1339,39 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
+			if (!Util.isEmpty(sealUrl)) {
+				document.add(getSeal1(sealUrl, 0));
+			}
 			document.close();
 			IOUtils.closeQuietly(stream);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return stream;
+	}
+
+	public Image getSeal1(String address, int n) throws IOException, BadElementException {
+		if (!Util.isEmpty(address)) {
+
+			URL url = new URL(address);
+			//添加盖章
+			//Image img = Image.getInstance(getClass().getClassLoader().getResource(getPrefix() + "sealnew.jpg"));
+			Image img = Image.getInstance(url);
+			img.setAlignment(Image.RIGHT);
+			//		img.scaleToFit(400, 200);//大小
+			img.scaleToFit(100, 100);//大小
+			//img.setIndentationRight(200);
+			img.setRotation(800);
+			if (n <= 1) {
+
+				img.setAbsolutePosition(350, 530);
+			} else {
+
+				img.setAbsolutePosition(350, 510 - 34 * (n - 1));
+			}
+			img.setAlignment(Paragraph.ALIGN_RIGHT);
+			return img;
+		}
+		return null;
 	}
 }

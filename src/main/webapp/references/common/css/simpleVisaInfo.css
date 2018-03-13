@@ -19,7 +19,10 @@ input[type="file"] {
 #sqImg {
 	z-index: 1099;
 }
-
+#marryStatus {
+	margin-left:8%;
+	width:234.3px;
+}
 .NoInfo {
 	width: 100%;
 	height: 30px;
@@ -55,7 +58,7 @@ input[type="file"] {
 	padding: 6px 6px;
 	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s
 		ease-in-out 0s;
-	width: 200px;
+	width: 234.3px;
 	display: inline;
 	position: relative;
 	z-index: 1;
@@ -78,7 +81,7 @@ input[type="file"] {
 	position: absolute;
 	top: 32px;
 	left: 0px;
-	width: 200px;
+	width: 234.3px;
 	background-color: #FFF;
 	border: 1px solid #23a8ce;
 	border-top: 0;
@@ -149,12 +152,14 @@ input[type="file"] {
 .btn-margin {
 	margin-top: 10px;
 }
-
+.modal-main {
+	width:100%;
+	height:50px;
+}
 .modal-body {
 	background-color: #FFF !important;
-	margin-top: 50px;
 	height: 100%;
-	padding: 15px 37px 15px 53px;
+	padding: 0px 37px 15px 53px;
 }
 
 #sqImg {
@@ -188,7 +193,9 @@ input[type="file"] {
 .unitNameRow {
 	display: block;
 }
-
+.row {
+	clear:both;
+}
 body {
 	min-width: auto;
 }
@@ -207,4 +214,77 @@ body {
 
 .houseProperty, .vehicle, .deposit, .financial, .vice {
 	display: none;
+}
+.dropdown-menu {
+	width:234px;
+	left:75.328px !important;
+}
+.table-condensed {
+	width:100%;
+}
+/* 性别 */
+.sex {
+	vertical-align:middle;
+	margin-top:-2px !important;
+	margin-right:4px;
+}
+.sexBoy {
+	margin-left:20px;
+}
+.sexInfo {
+	margin-right:20px;
+}
+/* 开关样式 */
+#guaranteeHead,#inviterHead ,.guaranteeHead{
+	display:block;
+}
+#guaranteeCBInput,#inviterCBInput {
+	visibility:hidden;
+}
+#vouchname,#invitename {
+	float:right;
+	width:200px;
+}
+.guaranteeName ,.inviterName{
+	display:none;
+	float:right;
+	width:200px;
+}
+.guaranteeCB,.inviterCB {
+	margin-top:5px;
+	float:left;
+    width: 25px;
+    height: 25px;
+    background: #ddd;
+    border-radius: 100%;
+    position: relative;
+    -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+}
+.guaranteeCB label,.inviterCB label {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 100px;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    transition: all .5s ease;
+    cursor: pointer;
+    position: absolute;
+    top: 3px;
+    left: 2.5px;
+    z-index: 1;
+    background: #eee;
+    -webkit-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+    -moz-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+    box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+}
+.guaranteeCB input[type=checkbox]:checked + label {
+    background: #26ca28;
+}
+.inviterCB input[type=checkbox]:checked + label {
+    background: #26ca28;
 }

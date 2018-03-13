@@ -177,8 +177,8 @@ public class VisaJapanModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object revenue(HttpSession session, @Param("orderid") Integer orderid) {
-		return visaJapanService.revenue(session, orderid);
+	public Object revenue(HttpSession session, @Param("orderid") Integer orderid, @Param("type") Integer type) {
+		return visaJapanService.revenue(session, orderid, type);
 	}
 
 	/**
@@ -367,12 +367,22 @@ public class VisaJapanModule {
 	}
 
 	/**
+	 * 验证下载信息是否完整
+	 */
+	@At
+	@POST
+	public Object validateDownLoadInfoIsFull(@Param("orderjpid") Integer orderjpid) {
+		return visaJapanService.validateDownLoadInfoIsFull(orderjpid);
+	}
+
+	/**
 	 * 跳转到发招宝信息页面
 	 */
 	@At
 	@Ok("jsp")
-	public Object sendZhaoBaoError(@Param("data") String data, @Param("orderid") Integer orderid, HttpSession session) {
-		return visaJapanService.sendZhaoBaoError(data, orderid, session);
+	public Object sendZhaoBaoError(@Param("data") String data, @Param("orderid") Integer orderid, HttpSession session,
+			@Param("type") Integer type) {
+		return visaJapanService.sendZhaoBaoError(data, orderid, session, type);
 	}
 
 	/**

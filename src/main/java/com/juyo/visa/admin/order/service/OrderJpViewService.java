@@ -32,6 +32,7 @@ import javax.servlet.http.HttpSession;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
@@ -72,6 +73,7 @@ import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.ApplicantJpWealthEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
+import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
@@ -2410,6 +2412,23 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		List<Record> employees = dbDao.query(sql, cnd, null);
+		Cnd usercnd = Cnd.NEW();
+		usercnd.and("comId", "=", loginCompany.getId());
+		if (!loginCompany.getAdminId().equals(loginUser.getId())) {
+			usercnd.and("id", "!=", loginCompany.getAdminId());
+		}
+		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+
+			List<TUserEntity> companyuser = dbDao.query(TUserEntity.class, usercnd, null);
+			List<Record> companyusers = Lists.newArrayList();
+			for (TUserEntity tUserEntity : companyuser) {
+				Record record = new Record();
+				record.put("userid", tUserEntity.getId());
+				record.put("username", tUserEntity.getName());
+				companyusers.add(record);
+			}
+			employees = companyusers;
+		}
 
 		//获取对应的负责人字段 logs_order_info
 		String principalField = changePrincipalViewService.getprincipalField(orderProcessType);

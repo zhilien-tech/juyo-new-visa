@@ -30,6 +30,8 @@
 			<div class="qz-head">
 				<!-- <span class="">订单号：<p>170202-JP0001</p></span> -->
 				<!-- <span class="">受付番号：<p>JDY27163</p></span> -->
+				<span class="">订单号：<p>${obj.orderinfo.orderNum }　</p></span>　　
+				<span class="">受付番号：<p>${obj.orderjpinfo.acceptDesign }</p></span>
 				<c:choose>
 						<c:when test="${obj.orderstatus == '发招宝中'}">
 							<span >状态：
@@ -42,6 +44,11 @@
 					  <div class="bounce3"></div>
 					</div>
 					</c:when>
+					<c:when test="${obj.orderstatus == '招宝成功'}">
+						<span >状态：
+							<p class="cateInfo"><font color="red">${obj.orderstatus }</font></p>
+						</span> 
+					</c:when>
 					<c:otherwise>
 						<span >状态：
 							<p class="cateInfo">${obj.orderstatus }</p>
@@ -50,7 +57,7 @@
 													
 					</c:choose >
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
-					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-ToBig" onclick="saveAddOrder(2);" />
+					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-ToBig" onclick="saveAddOrder(3);" />
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
 					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/>
 					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(22)"/>
@@ -476,10 +483,10 @@
 									<tr>
 										<th><span>&nbsp;</span></th>
 										<th><span>姓名</span></th>
-										<th><span>电话</span></th>
+										<th><span>手机号</span></th>
 										<th><span>护照号</span></th>
 										<th><span>资料类型</span></th>
-										<th><span>真实资料</span></th>
+										<th><span>签证所需资料</span></th>
 										<th><span>备注</span></th>
 										<th><span>操作</span></th>
 									</tr>
@@ -490,7 +497,6 @@
 							</table>
 						</div>
 					</div>
-
 				</form>
 			</section>
 		</div>
@@ -515,10 +521,10 @@
 	<!-- select2 -->
 	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
-	<script src="${base}/admin/simple/customerInfo.js"></script>
-	<script src="${base}/admin/simple/travelinfo.js"></script><!-- 本页面js文件 -->
-	<script src="${base}/admin/simple/initpagedata.js"></script><!-- 本页面js文件 -->
-	<script src="${base}/admin/simple/addsimpleorder.js"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/customerInfo.js?v=0.0.1"></script>
+	<script src="${base}/admin/simple/travelinfo.js?v=0.0.1"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/initpagedata.js?v=0.0.2"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/addsimpleorder.js?v=0.0.1"></script><!-- 本页面js文件 -->
 
 	<script type="text/javascript">
 		//加载申请人表格数据
@@ -705,7 +711,7 @@
         		    shadeClose: false,
         		    scrollbar: false,
         		    area: ['900px', '80%'],
-        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
+        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid+'&type=1'
         		  });
 			}
 			//发招宝
@@ -719,7 +725,7 @@
                  	success: function(data){
                  		var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
                  		if(data.data){
-                 			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data;
+                 			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
                  		}
 		        		layer.open({
 		        		    type: 2,
@@ -736,13 +742,38 @@
                  });
 			}
 			function downLoadFile(){
-				$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=${obj.orderjpinfo.id}", {
-			        successCallback: function (url) {
-			        },
-			        failCallback: function (html, url) {
-			       		layer.msg('下载失败');
-			        }
-			    });
+				$.ajax({
+                 	url: '${base}/admin/visaJapan/validateDownLoadInfoIsFull.html',
+                 	data:{orderjpid:orderid},
+                 	dataType:"json",
+                 	type:'post',
+                 	async:false,
+                 	success: function(data){
+                 		//var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
+                 		if(data.data){
+                 			var url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
+			        		layer.open({
+			        		    type: 2,
+			        		    title: false,
+			        		    closeBtn:false,
+			        		    fix: false,
+			        		    maxmin: false,
+			        		    shadeClose: false,
+			        		    scrollbar: false,
+			        		    area: ['400px', '300px'],
+			        		    content: url
+			        		  });
+                 		}else{
+							$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=${obj.orderjpinfo.id}", {
+						        successCallback: function (url) {
+						        },
+						        failCallback: function (html, url) {
+						       		layer.msg('下载失败');
+						        }
+						    });
+                 		}
+                   	}
+                 });
 			}
 		</script>
 </body>

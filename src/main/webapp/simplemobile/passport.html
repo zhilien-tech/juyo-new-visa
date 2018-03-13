@@ -17,7 +17,7 @@
     		<img :src="passportdata.passporturl" style="width:100%;height:100%;"  alt="" class="bacimg">
     	</span>
     	<span v-else>
-	        <img src="images/1.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
+	        <img src="images/Hz.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
     	</span>
         <div id="upload">
             <h6>点击上传护照</h6>
@@ -30,7 +30,7 @@
         <li>姓(拼音) <input type="text" class="txtInput" v-model="passportdata.firstnameen"/></li>
         <li>名(中文) <input type="text" class="txtInput" id="lastname" v-model="passportdata.lastname"/></li>
         <li>名(拼音) <input type="text" class="txtInput" v-model="passportdata.lastnameen"/></li>
-        <li>护照号 <input type="text" class="txtInput" v-model="passportdata.passport"/></li>
+        <li>护照号 <input type="text" class="txtInput" id="passportInfo" maxlength="9" v-model="passportdata.passport"/></li>
         <li>性别 <input type="text" class="txtInput" v-model="passportdata.sex"/></li>
         <li>出生日期 <input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.birthday"/></li>
         <li>出生地点 <input type="text" class="txtInput" v-model="passportdata.birthaddress"/></li>
@@ -61,6 +61,10 @@
 			<a class="closed" >确认</a>
 		</div>
 	</div>
+	<!-- 弹出层2 -->
+	<div class="infoAlert">
+	
+	</div>
     </form>
     <script src="js/rem(750).js"></script>
     <script src="js/jquery-1.10.2.js"></script>
@@ -88,9 +92,9 @@
 	        	type:'post',
 	        	success: function(data){
 	        		_self.passportdata = data.passportdata;
-	        		if(_self.passportdata.validtype == 1){
+	        		if(_self.passportdata.validtype == 2){
 						$(".dateVal").text("5年");
-	        		}else if(_self.passportdata.validtype == 2){
+	        		}else if(_self.passportdata.validtype == 1){
 						$(".dateVal").text("10年");
 	        		}
 	          	}
@@ -99,7 +103,12 @@
 	});
         $(function () {
             $('#upload').click(function () {
-           	 	$('#image').click();
+            	 $(".backgroundGray").show();
+            });
+            
+            $(".closed").click(function(){
+            	$(".backgroundGray").hide();
+            	$('#image').click();
                 $('#image').change(function(){
                 	layer.load(1, {
             			shade : "#000"
@@ -125,8 +134,7 @@
                             console.log(err);
                         });
                 });
-               
-            });
+            })
         });
 
         //
@@ -206,16 +214,44 @@
 			_self.passportdata.orderid = orderid;
 			_self.passportdata.sessionid = sessionid;
 			//alert('applicantid:'+applicantid+'  comid:'+comid+'  userid:'+userid+'  orderid:'+orderid);
-        	$.ajax({ 
-            	url: '/admin/simplemobile/savePassportInfo.html',
-            	data:_self.passportdata,
-            	dataType:"json",
-            	type:'post',
-            	async:false,
-            	success: function(data){
-            		window.location.href='/simplemobile/info.html?comid='+comid+'&userid='+userid+'&orderid='+data.orderid+'&applicantid='+data.applicantid;
-              	}
-            });
+			//判断姓名护照是否为空
+			var firstName = $('#firstname').val();
+			var lastName = $('#lastname').val();
+			var passportInfo = $('#passportInfo').val();
+        	if(firstName == '' || firstName == null){
+        		$(".infoAlert").html();
+				$(".infoAlert").show();
+				$(".infoAlert").html("姓不能为空")
+				setTimeout(function(){
+					$(".infoAlert").hide();
+				},2000);
+        	}else if(lastName == '' || lastName == null){
+        		$(".infoAlert").html();
+				$(".infoAlert").show();
+				$(".infoAlert").html("名不能为空")
+				setTimeout(function(){
+					$(".infoAlert").hide();
+				},2000);
+        	}else if(passportInfo == '' || passportInfo == null){
+        		$(".infoAlert").html();
+				$(".infoAlert").show();
+				$(".infoAlert").html("护照号不能为空")
+				setTimeout(function(){
+					$(".infoAlert").hide();
+				},2000);
+        	}else {
+        		console.log(_self.passportdata);
+        		$.ajax({ 
+                	url: '/admin/simplemobile/savePassportInfo.html',
+                	data:_self.passportdata,
+                	dataType:"json",
+                	type:'post',
+                	async:false,
+                	success: function(data){
+                		window.location.href='/simplemobile/info.html?comid='+comid+'&userid='+userid+'&orderid='+data.orderid+'&applicantid='+data.applicantid;
+                  	}
+                });
+        	}
         }
       	//获取URL地址参数
         function GetQueryString(name){
@@ -272,14 +308,16 @@
 					_self.passportdata.validenddate = obj.expiryDay;
 					var years = getDateYearSub(obj.issueDate,obj.expiryDay);
 					if(years == 5){
-						_self.passportdata.validtype = 1;
+						_self.passportdata.validtype = 2;
 						$(".dateVal").text("5年");
 					}else{
-						_self.passportdata.validtype = 2;
+						_self.passportdata.validtype = 1;
 						$(".dateVal").text("10年");
 					}
 					console.log(JSON.stringify(_self.passportdata));
 				}
+				/* 关闭upload */
+				$('#upload').hide();
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
 				layer.closeAll('loading');
@@ -367,11 +405,13 @@
 	$('#firstname').on('input propertychange',function(){
 		var firstnameen = getPinYinStr($(this).val()).toUpperCase();
 		console.log(firstnameen);
-		_self.applicatdata.firstnameen = firstnameen;
+		_self.passportdata.firstnameen = firstnameen;
 	});
 	$('#lastname').on('input propertychange',function(){
-		_self.applicatdata.lastnameen = getPinYinStr($(this).val()).toUpperCase();
+		_self.passportdata.lastnameen = getPinYinStr($(this).val()).toUpperCase();
 	});
+	/* 签发日期 */
+	
     </script>
 </body>
 </html>

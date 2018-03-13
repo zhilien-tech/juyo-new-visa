@@ -145,4 +145,20 @@
 	width: 8%;
 }
 /* 加载中样式 */
-.spinner { position:absolute;top:33%;left:122px;}
+.spinner { 
+	position:absolute;
+	top:33%;
+	left:122px;
+}
+.input-sm {
+	font-size:12px !important;
+}
+#compName2 {
+	padding-left:11px !important;
+}
+#comShortName2 {
+	padding-left:11px !important;
+}
+.cateSuccee {
+	color:red;
+}

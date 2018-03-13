@@ -18,10 +18,10 @@ import com.uxuexi.core.common.enums.IEnum;
  */
 public enum JpOrderSimpleEnum implements IEnum {
 	PLACE_ORDER(1, "下单"), AUTO_FILL_FORM_PREPARE(15, "准备发招宝"), AUTO_FILL_FORM_ING(16, "发招宝中"), READYCOMMING(28,
-			"准备提交大使馆"), COMMITING(32, "提交中"), COMMINGFAIL(31, "提交失败"), AUTO_FILL_FORM_ED(17, "已发招宝"), AUTO_FILL_FORM_FAILED(
+			"准备提交大使馆"), COMMITING(32, "提交中"), COMMINGFAIL(31, "提交失败"), AUTO_FILL_FORM_ED(17, "招宝成功"), AUTO_FILL_FORM_FAILED(
 			18, "发招宝失败"), BIANGENGZHONG(19, "招宝变更中"), YIBIANGENG(20, "招宝已变更"), BIANGENGSHIBAI(21, "招宝变更失败"), QUXIAOZHONG(
 			22, "招宝取消中"), YIQUXIAO(23, "招宝已取消"), QUXIAOSHIBAI(24, "招宝取消失败"), REFUSE_SIGN(27, "报告拒签"), JAPANREPORT(29,
-			"归国报告"), JAPANREPORTFAIL(30, "归国报告失败");
+			"归国报告"), JAPANREPORTFAIL(30, "归国报告失败"), DISABLED(26, "作废");
 	private int key;
 	private String value;
 

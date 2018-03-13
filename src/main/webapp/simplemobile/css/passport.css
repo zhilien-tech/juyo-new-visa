@@ -130,6 +130,9 @@
     padding-bottom:1.6rem;
     margin-top: .81rem;
 }
+.firstInfo {
+	margin-top:0;
+}
 .label-info>li {
 	border-bottom:1px solid #dedede;
     height:0.8rem;
@@ -371,10 +374,11 @@ input[type="checkbox"] + label:after {
 	margin-left: 4%;
 	margin-top: 2%;
 	border-radius: 5px;
+	color:#d0cece;
 }
 .blue {
-	background: blue;
-	color: #FFF;
+	border:1px solid #287ae7;
+	color: #287ae7;
 }
 .ui-loader {
 	display: none;
@@ -429,13 +433,13 @@ input[type="checkbox"] + label:after {
 	border:0;
 }
 .binkDiv .ui-input-text {
-	width: 74%;
+	width: 72%;
 }
 .carDiv .ui-input-text {
 	width: 83%;
 }
 .hourseDiv .ui-input-text {
-	width: 77%;
+	width: 75%;
 }
 .moneyDiv .ui-input-text {
 	width: 83%;
@@ -608,3 +612,144 @@ input[type="checkbox"] + label:after {
 .backRemark {
 	width: 80%;
 }
+/* 紧急联系人姓名样式 */
+.txtInput {
+	text-transform:Uppercase;
+}
+.email {
+	text-transform:Lowercase;
+}
+/* 弹出层3 */
+.infoAlert {
+	display:none; 
+	position:fixed;
+	top:40%;
+	left:19%;
+	width:5rem;
+	height:1rem;
+	line-height:1rem;
+	color:#FFF;
+	background:rgba(0,0,0,.5);
+	z-index:1000000000;
+	text-align:center;
+	font-size:.3rem;
+}
+/*******在日拟入住酒店名称或友人姓名及地址**********/
+.hotelTop {
+	width:100%;
+	height:.81rem;
+	line-height:.81rem;
+	border-bottom:2px solid #585858;
+}
+.hotel {
+	width:100%;
+	text-align:center;
+	font-size:.4rem;
+	height:.81rem;
+	line-height:.81rem;
+}
+.hotelInfo {
+	margin-top:0;
+}
+/*******在日担保人**********/
+.warrantorTop {
+	width:100%;
+	height:.81rem;
+	line-height:.81rem;
+	border-bottom:2px solid #585858;
+}
+.warrantor {
+	width:100%;
+	height:.81rem;
+	line-height:.81rem;
+	font-size:.4rem;
+	text-align:center;
+}
+.warrantor i {
+	float:left;
+	margin-left:.2rem;
+}
+.warrantorInfo {
+	margin-top:0;
+}
+.sexVal {
+	float:right;
+}
+.sexSelect {
+	position:absolute;
+	top:0;
+	left:0;
+	opacity:0;
+	width:100%;
+	height:.81rem;
+	-webkit-appearance:none;
+}
+.visaType {
+	width:50%;
+}
+/*******在日邀请人**********/
+.inviterTop {
+	width:100%;
+	height:.81rem;
+	line-height:.81rem;
+	border-bottom:2px solid #585858;
+}
+.inviter {
+	width:100%;
+	height:.81rem;
+	line-height:.81rem;
+	font-size:.4rem;
+	text-align:center;
+}
+.inviter i {
+	float:left;
+	margin-left:.2rem;
+}
+.inviterInfo {
+	margin-top:0;
+}
+/*******其他信息**********/
+.otherInfoTop {
+	width:100%;
+	height:.81rem;
+	line-height:.81rem;
+	border-bottom:2px solid #585858;
+}
+.otherInfo {
+	width:100%;
+	height:.81rem;
+	line-height:.81rem;
+	font-size:.4rem;
+	text-align:center;
+}
+.otherInfo i {
+	float:left;
+	margin-left:.2rem;
+}
+.otherInfoUl {
+	margin-top:0;
+}
+.otherInfoMain {
+	height:4.1rem !important;
+}
+.otherInfoTextarea {
+	width: 100%;
+	height: 4rem !important;
+	font-size: .3rem;
+	border: 0;
+}
+.otherInfoGroup {
+	border-bottom: #FFF !important;
+	margin-top: .4rem;
+}
+.otherInfoBtn {
+	width:40%;
+	height:.81rem;
+	line-height:.8rem;
+	text-align:center;
+	display:block;
+	float:right;
+	background:#05a0e0;
+	color:#FFF;
+}
+

@@ -9,6 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
@@ -30,6 +31,7 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 			</div>
+			<div class="modal-main"></div>
 			<div class="modal-body">
 			<div class="ipt-info">
 				</div>
@@ -274,17 +276,15 @@
 										<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.address }"/>
 									</div>
 								</div>
-							</div>
-							<!-- end 单位地址 -->
-							<!-- 父母单位名称/配偶单位名称 -->
-							<div class="row unitNameRow">
-								<div class="col-sm-8 preSchool">
+								<!-- 父母单位名称/配偶单位名称 -->
+								<div class="col-sm-4 preSchool">
 									<div class="form-group">
 										<label id="unitNameLabel"></label>
 										<input id="unitName" name="unitName" type="text" class="form-control input-sm" value="${obj.workJp.unitName }"/>
 									</div>
 								</div>
 							</div>
+							<!-- end 单位地址 -->
 						</div>
 					</div>
 					<!-- end 工作信息 -->
@@ -412,6 +412,239 @@
 						<!-- 提示End -->
 					</div>
 					<!-- end 财产信息 -->
+					<!-- 在日拟入住九点名称或友人姓名及地址 -->
+					<div class='info'>
+						<div class="info-head">在日拟入住九点名称或友人姓名及地址</div>
+						<div class="info-body-from cf ">
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="JapanFriendName"><span>*</span>酒店名称或友人姓名</label>
+										<input id="hotelname" name="hotelname" type="text" class="form-control input-sm" placeholder="参照'赴日予定表'" value="${obj.visaother.hotelname }"/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="JapanTelNumber">电话</label>
+										<input id="hotelphone" name="hotelphone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.hotelphone }"/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="JapanAddress">地址</label>
+										<input id="hoteladdress" name="hoteladdress" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.hoteladdress }"/>
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+					<!-- end在日拟入住九点名称或友人姓名及地址 -->
+					<!-- 在日担保人guarantee -->
+					<div class='info'>
+						<div class="info-head">在日担保人</div>
+						<div class="info-body-from">
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead"><span>*</span>申元保证书/姓名-拼音</label>
+										<div class="guaranteeCB">
+											 <input type="checkbox" value="1" ${obj.visaother.isname == 1?'checked':'' } id="guaranteeCBInput" name="" />
+											 <label for="guaranteeCBInput"></label>
+										</div>
+										<input id="vouchname" name="vouchname" type="text" class="form-control input-sm guaranty" placeholder="参照'申元保证书" value="${obj.visaother.vouchname }"/>
+										<%-- <input id="vouchname" name="vouchname" type="text" class="form-control input-sm guaranteeName" placeholder="姓名/拼音" value="${obj.visaother.vouchname }"/> --%>
+									</div>
+								</div>
+								
+								
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead">电话</label>
+										<input id="vouchphone" name="vouchphone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchphone }"/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead">地址</label>
+										<input id="vouchaddress" name="vouchaddress" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchaddress }"/>
+									</div>
+								</div>
+							</div>
+							<!-- 下一行 -->
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead">出生日期</label>
+										<input id="vouchbirth" name="vouchbirth" type="text" class="form-control input-sm"  value="<fmt:formatDate value="${obj.visaother.vouchbirth }" pattern="yyyy-MM-dd" />"/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="vouchsex" class="guaranteeHead">性别</label>
+										<input id="" class="sexBoy sex" name="vouchsex" ${obj.visaother.vouchsex == '男'? 'checked':'' } type="radio" value="男"/><label class="sexInfo">男</label>
+										<input id="" class="sexGirl sex" name="vouchsex" ${obj.visaother.vouchsex == '女'? 'checked':'' } type="radio" value="女"/><label class="sexInfo">女</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead">与主申请人的关系</label>
+										<div class="input-box">
+											<input type="text" id="vouchmainrelation" name="vouchmainrelation" class="input" value="${obj.visaother.vouchmainrelation }">
+												<ul class="dropdown">
+													<li>之妻</li>
+													<li>之夫</li>
+													<li>之子</li>
+													<li>之女</li>
+													<li>之父</li>
+													<li>之母</li>
+													<li>朋友</li>
+													<li>同事</li>
+													<li>同学</li>
+												</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- 下一行 -->
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead">职业和职务</label>
+										<input id="vouchjob" name="vouchjob" type="text" class="form-control input-sm" placeholder="" value="${obj.visaother.vouchjob }"/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="guaranteeHead">国籍(或公民身份)及签证种类</label>
+										<input id="vouchcountry" name="vouchcountry" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchcountry }"/>
+									</div>
+								</div>
+								<c:choose>
+									<c:when test="${obj.visaother.isname == 1}">
+										<div class="col-sm-4">
+											<div class="form-group">
+												<label id="guaranteeHead">姓名拼音</label>
+												<input id="vouchnameen" name="vouchnameen" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchnameen }"/>
+											</div>
+										</div>
+									</c:when>
+									<c:otherwise>
+										<div class="col-sm-4 none vouchnameen">
+											<div class="form-group">
+												<label id="guaranteeHead">姓名拼音</label>
+												<input id="vouchnameen" name="vouchnameen" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchnameen }"/>
+											</div>
+										</div>
+									</c:otherwise>
+								</c:choose>
+							</div>
+							
+						</div>	
+					</div>
+					<!-- end在日担保人 -->
+					<!-- 在日邀请人inviter -->
+					<div class='info'>
+						<div class="info-head">在日邀请人</div>
+						<div class="info-body-from">
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead"><span>*</span>申元保证书/姓名-拼音</label>
+										<!-- <div class="inviterCB">
+											 <input type="checkbox" value="1" id="inviterCBInput" name="" />
+											 <label for="inviterCBInput"></label>
+										</div> -->
+										<input id="invitename" name="invitename" type="text" class="form-control input-sm inviterSY" placeholder="参照'申元保证书" value="${obj.visaother.invitename }"/>
+										<%-- <input id="invitename" name="invitename" type="text" class="form-control input-sm inviterName" placeholder="姓名/拼音" value="${obj.visaother.invitename }"/> --%>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead">电话</label>
+										<input id="invitephone" name="invitephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.invitephone }"/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead">地址</label>
+										<input id="inviteaddress" name="inviteaddress" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.inviteaddress }"/>
+									</div>
+								</div>
+							</div>
+							<!-- 下一行 -->
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead">出生日期</label>
+										<input id="invitebirth" name="invitebirth" type="text" class="form-control input-sm"  value="<fmt:formatDate value="${obj.visaother.invitebirth }" pattern="yyyy-MM-dd" />"/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead">性别</label>
+										
+										<input id="" name="invitesex" type="radio" class="sex" ${obj.visaother.invitesex == '男'? 'checked':'' } value="男"/><label class="sexInfo">男</label>
+										<input id="" name="invitesex" type="radio" class="sex" ${obj.visaother.invitesex == '女'? 'checked':'' } value="女"/><label class="sexInfo">女</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead">与主申请人的关系</label>
+										
+										<div class="input-box">
+											<input type="text" id="invitemainrelation" name="invitemainrelation" class="input" value="${obj.visaother.invitemainrelation }">
+												<ul class="dropdown">
+													<li>之妻</li>
+													<li>之夫</li>
+													<li>之子</li>
+													<li>之女</li>
+													<li>之父</li>
+													<li>之母</li>
+													<li>朋友</li>
+													<li>同事</li>
+													<li>同学</li>
+												</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- 下一行 -->
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead">职业和职务</label>
+										<input id="invitejob" name="invitejob" type="text" class="form-control input-sm" placeholder="" value="${obj.visaother.invitejob }"/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="inviterHead">国籍(或公民身份)及签证种类</label>
+										<input id="invitecountry" name="invitecountry" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.invitecountry }"/>
+									</div>
+								</div>
+							</div>
+							
+						</div>	
+					</div>
+					<!-- end在日邀请人 -->
+					<!-- 其他信息 otherInfo -->
+					<div class='info'>
+						<div class="info-head">其他信息</div>
+						<div class="info-body-from cf ">
+							<div class="row ">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label id="otherInfoHead"><span>*</span>旅行社意见</label>
+										<input id="traveladvice" name="traveladvice" type="text" class="form-control input-sm" placeholder="推荐" value="${obj.visaother.traveladvice }"/>
+									</div>
+								</div>
+								
+							</div>
+						</div>	
+					</div>
+					<!-- end其他信息 -->
 				</div>
 			</div>
 		</form>
@@ -424,11 +657,15 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<!-- 公用js文件 -->
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>	
 	<!-- DataTables -->
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script type="text/javascript" src="${base}/admin/orderJp/visaInfo.js"></script>
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
@@ -838,25 +1075,31 @@
 			
 			var visatype = $('#visatype').val();
 			var isVisit = $('#isVisit').val();
-			var passportInfo = $.param({"wealthType":wealthType,'visatype':visatype,'visacounty':visacounty,'isVisit':isVisit,'threecounty':threecounty}) + "&" +  $("#passportInfo").serialize();
-				layer.load(1);
-				$.ajax({
-					type: 'POST',
-					async: false,
-					data : passportInfo,
-					url: '${base}/admin/simple/saveEditVisa.html',
-					success :function(data) {
-						layer.closeAll("loading");
-						console.log(JSON.stringify(data));
-						if(status == 1){
-							parent.successCallBack(1);
-							closeWindow();
-						}else if(status == 2){
-							socket.onclose();
-							window.location.href = '/admin/simple/updateApplicant.html?applicantid='+applicantid+'&orderid='+orderid;
-						}
+			var isname = $("#guaranteeCBInput").prop("checked");
+			if(isname){
+				isname = 1;
+			}else{
+				isname = 0;
+			}
+			var passportInfo = $.param({"wealthType":wealthType,'visatype':visatype,'visacounty':visacounty,'isVisit':isVisit,'threecounty':threecounty,'isname':isname}) + "&" +  $("#passportInfo").serialize();
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				async: false,
+				data : passportInfo,
+				url: '${base}/admin/simple/saveEditVisa.html',
+				success :function(data) {
+					layer.closeAll("loading");
+					console.log(JSON.stringify(data));
+					if(status == 1){
+						parent.successCallBack(1);
+						closeWindow();
+					}else if(status == 2){
+						socket.onclose();
+						window.location.href = '/admin/simple/updateApplicant.html?applicantid='+applicantid+'&orderid='+orderid;
 					}
-				});
+				}
+			});
 		}
 		
 		//上传结婚证
@@ -981,6 +1224,59 @@
 			}else{
 				$('#threexian').hide();
 			}
+		});
+		/* 在日担保人出生日期 */
+		var now = new Date();
+		$("#vouchbirth").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 4,//从年开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		/* 在日邀请人 */
+		$("#invitebirth").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 4,//从年开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		/* 担保人开关 */
+		$("#guaranteeCBInput").click(function(){
+			var guaranteeCBInput = $("#guaranteeCBInput").prop("checked");
+			if(guaranteeCBInput){
+				$(".vouchnameen").show();
+			}else{
+				$(".vouchnameen").hide();
+			}
+		});
+		/* 邀请人开关 */
+		$("#inviterCBInput").click(function(){
+			var inviterCBInput = $("#inviterCBInput").prop("checked");
+			if(inviterCBInput){
+				$(".inviterName").show();
+				$(".inviterSY").hide();
+			}else{
+				$(".inviterSY").show();
+				$(".inviterName").hide();
+			}
+		});
+		$('#vouchname').on('input propertychange',function(){
+			var vouchnameen = getPinYinStr($(this).val()).toUpperCase();
+			$('#vouchnameen').val(vouchnameen);
 		});
 	</script>
 </body>

@@ -3,6 +3,11 @@ SELECT
 	toj.id,
 	tr.orderNum japanNumber,
 	tr.sendvisanum,
+	case when tr.status = 26 THEN
+		1
+	ELSE
+		2
+	end orderstatus,
 	toj.acceptDesign number,
 	DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
 	DATE_FORMAT(tr.outVisaDate, '%Y-%m-%d') signingTime,

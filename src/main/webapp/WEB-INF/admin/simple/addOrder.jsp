@@ -347,7 +347,7 @@
 									<tr>
 										<th><span>&nbsp;</span></th>
 										<th><span>姓名</span></th>
-										<th><span>电话</span></th>
+										<th><span>手机号</span></th>
 										<th><span>护照号</span></th>
 										<th><span>资料类型</span></th>
 										<th><span>真实资料</span></th>
@@ -385,9 +385,9 @@
 	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/admin/simple/customerInfo.js"></script>
-	<script src="${base}/admin/simple/travelinfo.js"></script><!-- 本页面js文件 -->
-	<script src="${base}/admin/simple/initpagedata.js"></script><!-- 本页面js文件 -->
-	<script src="${base}/admin/simple/addsimpleorder.js"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/travelinfo.js?v=0.0.1"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/initpagedata.js?v=0.0.2"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/addsimpleorder.js?v=0.0.1"></script><!-- 本页面js文件 -->
 
 	<script type="text/javascript">
 		$(function(){

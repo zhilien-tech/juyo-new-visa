@@ -11,7 +11,11 @@ function initApplicantTable(){
 				var html = '';
 				$.each(data.applyinfo,function(index,value){
 					html += '<tr>';
-					html += '<td></td>';
+					if(value.id == value.mainid){
+						html += '<td>主</td>';
+					}else{
+						html += '<td></td>';
+					}
 					if(value.applyname != undefined){
 						html += '<td>'+value.applyname+'</td>';
 					}else{
