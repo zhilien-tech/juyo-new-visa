@@ -47,6 +47,7 @@ import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TComBusinessscopeEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
+import com.juyo.visa.entities.TOrderFillformLogEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
 import com.juyo.visa.entities.TOrderTripMultiJpEntity;
@@ -405,6 +406,48 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 				e.printStackTrace();
 			}
 		}//end of outter try
+		return null;
+	}
+
+	/**
+	 * 更新受付番号
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateAcceptanceNumber(JapanSimulatorForm form) {
+		if (Util.isEmpty(form.getCid())) {
+			return ResultObject.fail("任务id不能为空！");
+		}
+
+		TOrderJpEntity order = dbDao.fetch(TOrderJpEntity.class, form.getCid());
+
+		if (Util.isEmpty(order)) {
+			return ResultObject.fail("任务不存在！");
+		}
+		if (!Util.isEmpty(form.getAcceptanceNumber())) {
+			order.setAcceptDesign(form.getAcceptanceNumber());
+		}
+		dbDao.update(order);
+		return ResultObject.success(order);
+	}
+
+	/**
+	 * 添加日志
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object insertLog(JapanSimulatorForm form) {
+		TOrderFillformLogEntity filllog = new TOrderFillformLogEntity();
+		filllog.setOrderid(form.getCid().intValue());
+		filllog.setLogdate(new Date());
+		filllog.setContent(form.getContent());
+		dbDao.insert(filllog);
 		return null;
 	}
 

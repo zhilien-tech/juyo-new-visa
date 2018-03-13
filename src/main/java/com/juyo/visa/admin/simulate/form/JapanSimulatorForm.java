@@ -24,4 +24,10 @@ public class JapanSimulatorForm {
 
 	/**代理下载文件地址*/
 	private String fileUrl;
+
+	/**订单id*/
+	private Long cid;
+
+	/**日志内容*/
+	private String content;
 }

@@ -82,4 +82,19 @@ public class SimulateModule {
 		return simulateJapanService.agentDownload(excelurl, response);
 	}
 
+	/**
+	 * 更新受付番号
+	 */
+	@At
+	public Object updateAcceptanceNumber(@Param("..") JapanSimulatorForm form) {
+		return simulateJapanService.updateAcceptanceNumber(form);
+	}
+
+	/**
+	 * 添加填表日志
+	 */
+	@At
+	public Object insertLog(@Param("..") JapanSimulatorForm form) {
+		return simulateJapanService.insertLog(form);
+	}
 }
