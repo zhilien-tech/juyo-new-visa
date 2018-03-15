@@ -112,7 +112,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		Integer comId = loginCompany.getId();//当前登录公司id
-		queryForm.setComId(comId);
+		queryForm.setComid(comId);
 
 		Map<String, Object> map = listPage4Datatables(queryForm);
 		return map;
