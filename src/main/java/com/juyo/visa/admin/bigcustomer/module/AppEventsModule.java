@@ -7,6 +7,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
@@ -18,6 +19,7 @@ import com.juyo.visa.forms.TAppEventsForm;
 
 @IocBean
 @At("/admin/appEvents")
+@Filters
 public class AppEventsModule {
 
 	private static final Log log = Logs.get();
