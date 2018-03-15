@@ -29,6 +29,7 @@ import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
@@ -54,6 +55,9 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	private OrderJpViewService orderJpViewService;
 	@Inject
 	private ChangePrincipalViewService changePrincipalViewService;
+	/**辽宁万达下载文件*/
+	@Inject
+	private LiaoNingWanDaService liaoNingWanDaService;
 
 	private static final Integer VISA_PROCESS = JPOrderProcessTypeEnum.VISA_PROCESS.intKey();
 
@@ -92,11 +96,17 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	public Object downloadFile(Long orderid, HttpServletResponse response, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		try {
 			//查询日本订单
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
 			//获取打包的文件
-			byte[] byteArray = downLoadVisaFileService.generateFile(orderjp).toByteArray();
+			byte[] byteArray = null;
+			if (loginCompany.getName().startsWith("辽宁万达")) {
+				byteArray = liaoNingWanDaService.generateFile(orderjp).toByteArray();
+			} else {
+				byteArray = downLoadVisaFileService.generateFile(orderjp).toByteArray();
+			}
 			//获取订单信息，准备文件名称
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 			//主申请人姓名
