@@ -1,0 +1,179 @@
+/**********活动主页样式**********/
+/*头部*/
+header {
+	width: 100%;
+	height: .81rem;
+	line-height: .81rem;
+	text-align: center;
+	font-size: .3rem;
+	position: fixed;
+	top: 0;
+	background-color: #FFF;
+}
+.title {
+	border-bottom: 2px solid #eee;
+}
+/*内容*/
+section {
+	width: 100%;
+	height: auto;
+	margin-top: .81rem;
+	padding-bottom: 1.5rem;
+}
+/*活动图片*/
+.imgActivity {
+	width: 95%;
+	margin: .2rem auto 0;
+}
+/*日期截止/出行*/
+.dateTotal {
+	width: 95%;
+	font-size: .3rem;
+	margin: .2rem auto 0;;
+}
+.endDate {
+	margin: .2rem 0 0 .2rem;
+}
+.startDate {
+	margin: .2rem 0 0 .2rem;
+}
+/*活动介绍图片*/
+.imgIntroduce {
+	width: 95%;
+	margin: .2rem auto 0;
+}
+/*下四个总class样式*/
+.content {
+	width: 95%;
+	border: 1px solid #000;
+	margin: .2rem auto 0;;
+	font-size: .3rem;
+}
+.content span {
+	display: block;
+	margin: .2rem 0 0 .2rem;
+}
+.content p {
+	margin: .2rem 0 .2rem .2rem;
+}
+/*底部*/
+footer {
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	background: #FFF;
+}
+.btnEnroll {
+	width: 95%;
+	margin: .2rem auto;
+	height: .81rem;
+	line-height: .81rem;
+	border-radius: 6px;
+	text-align: center;
+	font-size: .3rem;
+	background-color: rgba(22,155,213,1);
+	color: #FFF;
+}
+
+/**********报名**********/
+/*头部*/
+.returnAndSave {
+	width: 100%;
+	border-bottom: 2px solid #eee;
+	height: .81rem;
+	line-height: .81rem;
+}
+.returnAndSave i {
+	float: left;
+	margin-left: .2rem;
+	width: 10px;
+	height: 10px;
+	border: 1px solid #000;
+	transform: rotate(45deg);
+	border-top: 0;
+	border-right:0;
+	margin-top: .3rem;
+}
+.returnAndSave span {
+	margin-left: -.3rem;
+}
+/*填写列表*/
+.listMessage {
+	width: 90%;
+	height: auto;
+	margin: .3rem auto 0;
+}
+.listMessage ul li {
+	font-size: .3rem;
+	padding-top: .3rem;
+}
+.listMessage ul li:nth-child(1) {
+	padding-top: .6rem;
+}
+.listMessage ul li label {
+	display: block;
+}
+.listMessage ul li input {
+	width: 100%;
+	height: .81rem;
+	border: 0;
+	border-bottom: 1px solid #000;
+	outline: none;
+	text-indent: .6rem;
+	color: #999;
+	font-size: .3rem;
+}
+/*付款按钮*/
+.payForCase {
+	width: 90%;
+	height: auto;
+	margin: .3rem auto 0;
+	margin-top: 2rem;
+}
+.btnPayment {
+	width: 100%;
+	height:.81rem;
+	line-height: .81rem;
+	color: #FFF;
+	background-color: rgb(22,155,213);
+	text-align: center;
+	border-radius: 6px;
+	font-size: .3rem;
+}
+/**********去付款**********/
+/*提示信息*/
+.prompt {
+	width: 100%;
+	text-align: center;
+	margin-top: 1.5rem;
+}
+.prompt span {
+	display: block;
+	color: red;
+	font-size: .3rem;
+}
+.prompt span:nth-child(1){
+	margin-left: -.9rem;
+}
+/*现金*/
+.cash {
+	width: 100%;
+	text-align: center;
+	font-weight: bold;
+	margin-top: .60rem;
+}
+.cash i {
+	font-size: .5rem;
+}
+.cash span {
+	font-size: .5rem;
+}
+/*二维码*/
+.code {
+	width: 100%;
+	text-align: center;
+	margin-top: .60rem;
+}
+.code img {
+	display: inline-block;
+}
