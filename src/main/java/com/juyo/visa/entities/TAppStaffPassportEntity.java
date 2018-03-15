@@ -16,23 +16,23 @@ public class TAppStaffPassportEntity implements Serializable {
 	
 	@Column
     @Comment("人员id")
-	private Integer staffId;
+	private Integer staffid;
 	
 	@Column
     @Comment("姓")
-	private String firstName;
+	private String firstname;
 	
 	@Column
     @Comment("姓(拼音)")
-	private String firstNameEn;
+	private String firstnameen;
 	
 	@Column
     @Comment("名")
-	private String lastName;
+	private String lastname;
 	
 	@Column
     @Comment("名(拼音)")
-	private String lastNameEn;
+	private String lastnameen;
 	
 	@Column
     @Comment("类型")
@@ -48,15 +48,15 @@ public class TAppStaffPassportEntity implements Serializable {
 	
 	@Column
     @Comment("性别(拼音)")
-	private String sexEn;
+	private String sexen;
 	
 	@Column
     @Comment("出生地点")
-	private String birthAddress;
+	private String birthaddress;
 	
 	@Column
     @Comment("出生地点(拼音)")
-	private String birthAddressEn;
+	private String birthaddressen;
 	
 	@Column
     @Comment("出生日期")
@@ -64,51 +64,51 @@ public class TAppStaffPassportEntity implements Serializable {
 	
 	@Column
     @Comment("签发地点")
-	private String issuedPlace;
+	private String issuedplace;
 	
 	@Column
     @Comment("签发地点(拼音)")
-	private String issuedPlaceEn;
+	private String issuedplaceen;
 	
 	@Column
     @Comment("签发日期")
-	private Date issuedDate;
+	private Date issueddate;
 	
 	@Column
     @Comment("有效期始")
-	private Date validStartDate;
+	private Date validstartdate;
 	
 	@Column
     @Comment("有效类型")
-	private Integer validType;
+	private Integer validtype;
 	
 	@Column
     @Comment("有效期至")
-	private Date validEndDate;
+	private Date validenddate;
 	
 	@Column
     @Comment("签发机关")
-	private String issuedOrganization;
+	private String issuedorganization;
 	
 	@Column
     @Comment("签发机关(拼音)")
-	private String issuedOrganizationEn;
+	private String issuedorganizationen;
 	
 	@Column
     @Comment("操作人")
-	private Integer opId;
+	private Integer opid;
 	
 	@Column
     @Comment("创建时间")
-	private Date createTime;
+	private Date createtime;
 	
 	@Column
     @Comment("更新时间")
-	private Date updateTime;
+	private Date updatetime;
 	
 	@Column
     @Comment("护照地址")
-	private String passportUrl;
+	private String passporturl;
 	
 	@Column
     @Comment("OCR识别码第一行")
