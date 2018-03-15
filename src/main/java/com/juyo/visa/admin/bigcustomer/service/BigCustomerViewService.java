@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -22,28 +23,36 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
+import com.juyo.visa.common.enums.AppPictures.AppCredentialsTypeEnum;
 import com.juyo.visa.common.util.ExcelReader;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoUpdateForm;
+import com.juyo.visa.forms.TAppStaffCredentialsAddForm;
 import com.juyo.visa.forms.TAppStaffPassportUpdateForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -52,6 +61,9 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 @IocBean
 public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	private static final Log log = Logs.get();
+
+	@Inject
+	private UploadService qiniuUploadService;//文件上传
 
 	private final static String TEMPLATE_EXCEL_URL = "download";
 	private final static String TEMPLATE_EXCEL_NAME = "人员管理之模块.xlsx";
@@ -74,6 +86,22 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 	/**
 	 * 
+	 * TODO  跳转到其他证件页面
+	 * <p>
+	 *
+	 * @param staffId 人员Id
+	 * @param session
+	 * @return 
+	 */
+	public Object otherSredentials(@Param("staffId") Integer staffId, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("staffId", staffId);
+		result.put("AppCredentialsType", EnumUtil.enum2(AppCredentialsTypeEnum.class));
+		return result;
+	}
+
+	/**
+	 * 
 	 * 大客户 人员管理列表页
 	 *
 	 * @param queryForm
@@ -84,7 +112,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		Integer comId = loginCompany.getId();//当前登录公司id
-		queryForm.setComId(comId);
+		queryForm.setComid(comId);
 
 		Map<String, Object> map = listPage4Datatables(queryForm);
 		return map;
@@ -119,10 +147,10 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		//护照信息
 		Integer staffId = staffInfo.getId();
 		TAppStaffPassportEntity staffPassport = new TAppStaffPassportEntity();
-		staffPassport.setStaffId(staffId);
-		staffPassport.setOpId(userId);
-		staffPassport.setCreateTime(nowDate);
-		staffPassport.setUpdateTime(nowDate);
+		staffPassport.setStaffid(staffId);
+		staffPassport.setOpid(userId);
+		staffPassport.setCreatetime(nowDate);
+		staffPassport.setUpdatetime(nowDate);
 		TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
 		Integer passportId = passportEntity.getId();
 
@@ -159,48 +187,48 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			String birthdayStr = sdf.format(birthday);
 			result.put("birthday", birthdayStr);
 		}
-		if (!Util.isEmpty(staffInfo.getValidStartDate())) {
-			Date validStartDate = staffInfo.getValidStartDate();
+		if (!Util.isEmpty(staffInfo.getValidstartdate())) {
+			Date validStartDate = staffInfo.getValidstartdate();
 			String validStartDateStr = sdf.format(validStartDate);
 			result.put("validStartDate", validStartDateStr);
 		}
-		if (!Util.isEmpty(staffInfo.getValidEndDate())) {
-			Date validEndDate = staffInfo.getValidEndDate();
+		if (!Util.isEmpty(staffInfo.getValidenddate())) {
+			Date validEndDate = staffInfo.getValidenddate();
 			String validEndDateStr = sdf.format(validEndDate);
 			result.put("validEndDate", validEndDateStr);
 		}
 
-		if (!Util.isEmpty(staffInfo.getFirstNameEn())) {
+		if (!Util.isEmpty(staffInfo.getFirstnameen())) {
 			StringBuffer sb = new StringBuffer();
-			sb.append("/").append(staffInfo.getFirstNameEn());
+			sb.append("/").append(staffInfo.getFirstnameen());
 			result.put("firstNameEn", sb.toString());
 		}
-		if (!Util.isEmpty(staffInfo.getOtherFirstNameEn())) {
+		if (!Util.isEmpty(staffInfo.getOtherfirstnameen())) {
 			StringBuffer sb = new StringBuffer();
-			sb.append("/").append(staffInfo.getOtherFirstNameEn());
+			sb.append("/").append(staffInfo.getOtherfirstnameen());
 			result.put("otherFirstNameEn", sb.toString());
 		}
 
-		if (!Util.isEmpty(staffInfo.getLastNameEn())) {
+		if (!Util.isEmpty(staffInfo.getLastnameen())) {
 			StringBuffer sb = new StringBuffer();
-			sb.append("/").append(staffInfo.getLastNameEn());
+			sb.append("/").append(staffInfo.getLastnameen());
 			result.put("lastNameEn", sb.toString());
 		}
 
-		if (!Util.isEmpty(staffInfo.getOtherLastNameEn())) {
+		if (!Util.isEmpty(staffInfo.getOtherlastnameen())) {
 			StringBuffer sb = new StringBuffer();
-			sb.append("/").append(staffInfo.getOtherLastNameEn());
+			sb.append("/").append(staffInfo.getOtherlastnameen());
 			result.put("otherLastNameEn", sb.toString());
 		}
 
-		if (Util.isEmpty(staffInfo.getHasOtherName())) {
+		if (Util.isEmpty(staffInfo.getHasothername())) {
 			//是否有曾用名
-			staffInfo.setHasOtherName(IsHasOrderOrNotEnum.NO.intKey());
+			staffInfo.setHasothername(IsHasOrderOrNotEnum.NO.intKey());
 		}
 
-		if (Util.isEmpty(staffInfo.getHasOtherNationality())) {
+		if (Util.isEmpty(staffInfo.getHasothernationality())) {
 			//是否另有国籍
-			staffInfo.setHasOtherNationality(IsHasOrderOrNotEnum.NO.intKey());
+			staffInfo.setHasothernationality(IsHasOrderOrNotEnum.NO.intKey());
 		}
 
 		//获取护照id
@@ -233,50 +261,50 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		long staffId = updateForm.getId();
 		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
 		if (!Util.isEmpty(staffInfo)) {
-			staffInfo.setOpId(userId);
-			staffInfo.setUpdateTime(nowDate);
-			staffInfo.setCardFront(updateForm.getCardFront());
-			staffInfo.setCardBack(updateForm.getCardBack());
+			staffInfo.setOpid(userId);
+			staffInfo.setUpdatetime(nowDate);
+			staffInfo.setCardfront(updateForm.getCardFront());
+			staffInfo.setCardback(updateForm.getCardBack());
 			staffInfo.setAddress(updateForm.getAddress());
 			staffInfo.setBirthday(updateForm.getBirthday());
 			if (!Util.isEmpty(updateForm.getCardProvince())) {
-				staffInfo.setCardProvince(updateForm.getCardProvince());
+				staffInfo.setCardprovince(updateForm.getCardProvince());
 			}
 			if (!Util.isEmpty(updateForm.getCardCity())) {
-				staffInfo.setCardCity(updateForm.getCardCity());
+				staffInfo.setCardcity(updateForm.getCardCity());
 			}
 			staffInfo.setCardId(updateForm.getCardId());
 			staffInfo.setCity(updateForm.getCity());
-			staffInfo.setDetailedAddress(updateForm.getDetailedAddress());
+			staffInfo.setDetailedaddress(updateForm.getDetailedAddress());
 			staffInfo.setEmail(updateForm.getEmail());
-			staffInfo.setFirstName(updateForm.getFirstName());
-			staffInfo.setFirstNameEn(updateForm.getFirstNameEn().substring(1));
-			staffInfo.setIssueOrganization(updateForm.getIssueOrganization());
-			staffInfo.setLastName(updateForm.getLastName());
-			staffInfo.setLastNameEn(updateForm.getLastNameEn().substring(1));
-			staffInfo.setOtherFirstName(updateForm.getOtherFirstName());
+			staffInfo.setFirstname(updateForm.getFirstName());
+			staffInfo.setFirstnameen(updateForm.getFirstNameEn().substring(1));
+			staffInfo.setIssueorganization(updateForm.getIssueOrganization());
+			staffInfo.setLastname(updateForm.getLastName());
+			staffInfo.setLastnameen(updateForm.getLastNameEn().substring(1));
+			staffInfo.setOtherfirstname(updateForm.getOtherFirstName());
 			if (!Util.isEmpty(updateForm.getOtherFirstNameEn())) {
-				staffInfo.setOtherFirstNameEn(updateForm.getOtherFirstNameEn().substring(1));
+				staffInfo.setOtherfirstnameen(updateForm.getOtherFirstNameEn().substring(1));
 			}
-			staffInfo.setOtherLastName(updateForm.getOtherLastName());
+			staffInfo.setOtherlastname(updateForm.getOtherLastName());
 			if (!Util.isEmpty(updateForm.getOtherLastNameEn())) {
-				staffInfo.setOtherLastNameEn(updateForm.getOtherLastNameEn().substring(1));
+				staffInfo.setOtherlastnameen(updateForm.getOtherLastNameEn().substring(1));
 			}
 			staffInfo.setNation(updateForm.getNation());
 			staffInfo.setNationality(updateForm.getNationality());
 			staffInfo.setProvince(updateForm.getProvince());
 			staffInfo.setSex(updateForm.getSex());
-			staffInfo.setHasOtherName(updateForm.getHasOtherName());
-			staffInfo.setHasOtherNationality(updateForm.getHasOtherNationality());
+			staffInfo.setHasothername(updateForm.getHasOtherName());
+			staffInfo.setHasothernationality(updateForm.getHasOtherNationality());
 
 			staffInfo.setTelephone(updateForm.getTelephone());
 			if (!Util.isEmpty(updateForm.getAddressIsSameWithCard())) {
-				staffInfo.setAddressIsSameWithCard(updateForm.getAddressIsSameWithCard());
+				staffInfo.setAddressIssamewithcard(updateForm.getAddressIsSameWithCard());
 			}
-			staffInfo.setEmergencyLinkman(updateForm.getEmergencyLinkman());
-			staffInfo.setEmergencyTelephone(updateForm.getEmergencyTelephone());
-			staffInfo.setValidEndDate(updateForm.getValidEndDate());
-			staffInfo.setValidStartDate(updateForm.getValidStartDate());
+			staffInfo.setEmergencylinkman(updateForm.getEmergencyLinkman());
+			staffInfo.setEmergencytelephone(updateForm.getEmergencyTelephone());
+			staffInfo.setValidenddate(updateForm.getValidEndDate());
+			staffInfo.setValidstartdate(updateForm.getValidStartDate());
 
 			updateNum = dbDao.update(staffInfo);
 		}
@@ -318,10 +346,10 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			for (int i = map.size(); i > 0; i--) {
 				TAppStaffBasicinfoEntity baseInfo = new TAppStaffBasicinfoEntity();
 				String[] row = map.get(i);
-				baseInfo.setFirstName(row[1]);
-				baseInfo.setFirstNameEn(row[2]);
-				baseInfo.setLastName(row[3]);
-				baseInfo.setLastNameEn(row[4]);
+				baseInfo.setFirstname(row[1]);
+				baseInfo.setFirstnameen(row[2]);
+				baseInfo.setLastname(row[3]);
+				baseInfo.setLastnameen(row[4]);
 				if (!Util.isEmpty(row[5])) {
 					BigDecimal db = new BigDecimal(row[5]);
 					baseInfo.setTelephone(db.toPlainString());
@@ -329,11 +357,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				baseInfo.setEmail(row[6]);
 				baseInfo.setDepartment(row[7]);
 				baseInfo.setJob(row[8]);
-				baseInfo.setComId(comId);
-				baseInfo.setUserId(userId);
-				baseInfo.setOpId(userId);
-				baseInfo.setCreateTime(nowDate);
-				baseInfo.setUpdateTime(nowDate);
+				baseInfo.setComid(comId);
+				baseInfo.setUserid(userId);
+				baseInfo.setOpid(userId);
+				baseInfo.setCreatetime(nowDate);
+				baseInfo.setUpdatetime(nowDate);
 				baseInfos.add(baseInfo);
 			}
 			//批量添加基本信息
@@ -346,10 +374,10 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 					if (!Util.isEmpty(baseEntity)) {
 						Integer staffId = baseEntity.getId();
 						TAppStaffPassportEntity passportEntity = new TAppStaffPassportEntity();
-						passportEntity.setStaffId(staffId);
-						passportEntity.setOpId(userId);
-						passportEntity.setCreateTime(nowDate);
-						passportEntity.setUpdateTime(nowDate);
+						passportEntity.setStaffid(staffId);
+						passportEntity.setOpid(userId);
+						passportEntity.setCreatetime(nowDate);
+						passportEntity.setUpdatetime(nowDate);
 						passportInfos.add(passportEntity);
 					}
 				}
@@ -456,26 +484,26 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
 					Cnd.where("id", "=", passortId));
 
-			passport.setOpId(userId);
-			passport.setPassportUrl(passportForm.getPassportUrl());
+			passport.setOpid(userId);
+			passport.setPassporturl(passportForm.getPassportUrl());
 			passport.setOCRline1(passportForm.getOCRline1());
 			passport.setOCRline2(passportForm.getOCRline2());
-			passport.setBirthAddress(passportForm.getBirthAddress());
-			passport.setBirthAddressEn(passportForm.getBirthAddressEn());
+			passport.setBirthaddress(passportForm.getBirthAddress());
+			passport.setBirthaddressen(passportForm.getBirthAddressEn());
 			passport.setBirthday(passportForm.getBirthday());
-			passport.setIssuedDate(passportForm.getIssuedDate());
-			passport.setIssuedOrganization(passportForm.getIssuedOrganization());
-			passport.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
-			passport.setIssuedPlace(passportForm.getIssuedPlace());
-			passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
+			passport.setIssueddate(passportForm.getIssuedDate());
+			passport.setIssuedorganization(passportForm.getIssuedOrganization());
+			passport.setIssuedorganizationen(passportForm.getIssuedOrganizationEn());
+			passport.setIssuedplace(passportForm.getIssuedPlace());
+			passport.setIssuedplaceen(passportForm.getIssuedPlaceEn());
 			passport.setPassport(passportForm.getPassport());
 			passport.setSex(passportForm.getSex());
-			passport.setSexEn(passportForm.getSexEn());
+			passport.setSexen(passportForm.getSexEn());
 			passport.setType(passportForm.getType());
-			passport.setValidEndDate(passportForm.getValidEndDate());
-			passport.setValidStartDate(passportForm.getValidStartDate());
-			passport.setValidType(passportForm.getValidType());
-			passport.setUpdateTime(nowDate);
+			passport.setValidenddate(passportForm.getValidEndDate());
+			passport.setValidstartdate(passportForm.getValidStartDate());
+			passport.setValidtype(passportForm.getValidType());
+			passport.setUpdatetime(nowDate);
 			dbDao.update(passport);
 		}
 
@@ -496,7 +524,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Integer comId = loginCompany.getId();
 
 		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
-		Integer staffComId = staffInfo.getComId();
+		Integer staffComId = staffInfo.getComid();
 
 		if (Util.eq(comId, staffComId)) {
 			//删除护照信息
@@ -546,5 +574,105 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("valid", passportInfo.size() <= 0);
 
 		return result;
+	}
+
+	/**
+	 * 
+	 * 保存App拍摄资料
+	 *
+	 * @param addForm
+	 * @param session
+	 * @return
+	 */
+	public Object saveAppFile(TAppStaffCredentialsAddForm addForm, HttpSession session) {
+
+		if (!Util.isEmpty(addForm)) {
+			TAppStaffCredentialsEntity credentials = new TAppStaffCredentialsEntity();
+			Integer staffId = addForm.getStaffId();
+			if (!Util.isEmpty(staffId)) {
+				//人员id
+				credentials.setStaffid(staffId);
+			}
+			Integer mainId = addForm.getMainId();
+			if (!Util.isEmpty(mainId)) {
+				//主证件id
+				credentials.setMainid(mainId);
+			}
+			String url = addForm.getUrl();
+			if (!Util.isEmpty(url)) {
+				//证件Url
+				credentials.setUrl(url);
+			}
+			Integer type = addForm.getType();
+			if (!Util.isEmpty(type)) {
+				//证件类型
+				credentials.setType(type);
+			}
+			Integer status = addForm.getStatus();
+			if (!Util.isEmpty(status)) {
+				//证件状态
+				credentials.setStatus(status);
+			}
+			Integer sequence = addForm.getSequence();
+			if (!Util.isEmpty(sequence)) {
+				//证件序号
+				credentials.setSequence(sequence);
+			}
+			String pageElementId = addForm.getPageElementId();
+			if (!Util.isEmpty(pageElementId)) {
+				//页面元素id
+				credentials.setPageelementid(pageElementId);
+			}
+
+			//当前时间
+			Date nowDate = DateUtil.nowDate();
+			credentials.setCreatetime(nowDate);
+			credentials.setUpdatetime(nowDate);
+
+			TAppStaffCredentialsEntity entity = dbDao.insert(credentials);
+			return JsonUtil.toJson(entity);
+		}
+
+		return null;
+	}
+
+	/**
+	 * 
+	 * 根据 人员id 和 证件类型 查询对应的证件集合
+	 *
+	 * @param staffId 人员id
+	 * @param credentialType 证件类型
+	 * @return 符合条件的证件集合
+	 */
+	public Object getAppFileByCondition(@Param("staffId") Integer staffId,
+			@Param("credentialType") Integer credentialType) {
+
+		List<TAppStaffCredentialsEntity> list = new ArrayList<TAppStaffCredentialsEntity>();
+		if (!Util.isEmpty(staffId) || !Util.isEmpty(credentialType)) {
+			Cnd cnd = Cnd.NEW();
+			cnd.and("staffId", "=", staffId);
+			cnd.and("type", "=", credentialType);
+
+			list = dbDao.query(TAppStaffCredentialsEntity.class, cnd, null);
+		}
+
+		return list;
+	}
+
+	/**
+	 * 
+	 * 七牛云 上传文件
+	 * <p>
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception 
+	 */
+	public Object uploadFile(File file, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		file.delete();
+		map.put("data", CommonConstants.IMAGES_SERVER_ADDR + map.get("data"));
+		return map;
+
 	}
 }
