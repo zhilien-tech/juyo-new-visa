@@ -42,6 +42,10 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	private String lastnameen;
 
 	@Column
+	@Comment("微信Token")
+	private String wechattoken;
+
+	@Column
 	@Comment("状态")
 	private Integer status;
 

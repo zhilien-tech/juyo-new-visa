@@ -31,6 +31,9 @@ public class TAppStaffBasicinfoAddForm extends AddForm implements Serializable {
 	/**名(拼音)*/
 	private String lastNameEn;
 
+	/**微信Token*/
+	private String wechattoken;
+
 	/**状态*/
 	private Integer status;
 

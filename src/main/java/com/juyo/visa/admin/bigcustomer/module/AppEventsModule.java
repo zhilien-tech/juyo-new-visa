@@ -7,6 +7,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
@@ -17,6 +18,7 @@ import com.juyo.visa.admin.bigcustomer.service.AppEventsViewService;
 import com.juyo.visa.forms.TAppEventsForm;
 
 @IocBean
+@Filters
 @At("/admin/appEvents")
 public class AppEventsModule {
 
@@ -121,7 +123,7 @@ public class AppEventsModule {
 	/**
 	 * 申请人基本信息
 	 * <p>
-	 *  TODO
+	 * TODO
 	 */
 	@At
 	@POST
