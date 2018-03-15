@@ -10,12 +10,16 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.beust.jcommander.internal.Maps;
+import com.juyo.visa.admin.bigcustomer.form.SignUpEventForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.visaProcess.VisaCountryEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaProcess_US_Enum;
@@ -25,6 +29,7 @@ import com.juyo.visa.entities.TAppStaffEventsEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppEventsForm;
+import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
@@ -33,6 +38,9 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	private static final Log log = Logs.get();
+
+	@Inject
+	private BigCustomerViewService bigCustomerViewService;
 
 	/**
 	 * 
@@ -100,6 +108,36 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		} else {
 			return JsonUtil.toJson("报名失败");
 		}
+	}
+
+	/**
+	 * 通过公众号，进行报名活动
+	 * 
+	 * 注：活动详情为图片
+	 */
+	@At
+	@POST
+	public Object signUpEventByPublicNum(SignUpEventForm form, HttpSession session) {
+
+		//添加人员
+		TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
+		staffForm.setFirstName(form.getFirstname());
+		staffForm.setLastName(form.getLastname());
+		staffForm.setTelephone(form.getTelephone());
+		staffForm.setEmail(form.getEmail());
+		Map<String, String> map = (Map<String, String>) bigCustomerViewService.addStaff(staffForm, session);
+		String staffIdStr = map.get("staffId");
+
+		Integer staffId = Integer.valueOf(staffIdStr);
+		Integer eventId = form.getEventid();
+
+		//人员包名活动
+		TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
+		staffEventEntity.setEventsId(eventId);
+		staffEventEntity.setStaffId(staffId);
+		TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
+
+		return null;
 	}
 
 	/**
