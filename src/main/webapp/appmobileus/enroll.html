@@ -16,6 +16,26 @@
 					$(this).val($(this).val().replace(/[^\d]/g,''));
 				});
 				
+				$(".btnPayment").click(function(){
+					var surName = $(".surName").val();
+					var name = $(".name").val();
+					var telPhone = $(".telphone").val();
+					var email = $(".email").val();
+					//alert(surName+"---"+name+"---"+telPhone+"---"+email);
+					
+					$.ajax({
+						type:"post",
+						url:"/admin/appEvents/signUpEventByPublicNum",
+						data:{firstname:surName,lastname:name,telephone:telPhone,email:email},
+						dataType : "json",
+						async:true,
+						success:function(data){
+							if(200 == data.status){
+								window.location.href='/appmobileus/payment.html'
+							}
+						}
+					}); 
+				});
 			})
 		</script>
 	</head>
@@ -31,11 +51,11 @@
 				<ul>
 					<li>
 						<label>姓</label>
-						<input type="text" />
+						<input type="text" class="surName" />
 					</li>
 					<li>
 						<label>名</label>
-						<input type="text" />
+						<input type="text" class="name" />
 					</li>
 					<li>
 						<label>手机</label>
@@ -43,7 +63,7 @@
 					</li>
 					<li>
 						<label>邮箱</label>
-						<input type="text" />
+						<input type="text" class="email" />
 					</li>
 				</ul>
 			</div>
