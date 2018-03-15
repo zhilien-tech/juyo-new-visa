@@ -12,6 +12,7 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.bigcustomer.form.SignUpEventForm;
 import com.juyo.visa.admin.bigcustomer.service.AppEventsViewService;
 import com.juyo.visa.forms.TAppEventsForm;
 
@@ -59,6 +60,17 @@ public class AppEventsModule {
 	@POST
 	public Object signUpEvents(@Param("eventId") Integer eventId, HttpSession session) {
 		return appEventsViewService.signUpEvents(eventId, session);
+	}
+
+	/**
+	 * 通过公众号，进行报名活动
+	 * 
+	 * 注：活动详情为图片
+	 */
+	@At
+	@POST
+	public Object signUpEventByPublicNum(@Param("..") SignUpEventForm form, HttpSession session) {
+		return appEventsViewService.signUpEventByPublicNum(form, session);
 	}
 
 	/**

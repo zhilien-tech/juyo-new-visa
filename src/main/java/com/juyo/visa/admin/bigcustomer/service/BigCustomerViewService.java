@@ -160,6 +160,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		} else {
 			map.put("passportId", String.valueOf(""));
 		}
+		map.put("staffId", String.valueOf(staffId));
 
 		return map;
 	}
