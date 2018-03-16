@@ -159,8 +159,8 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 		//添加人员
 		TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
-		staffForm.setFirstName(form.getFirstname());
-		staffForm.setLastName(form.getLastname());
+		staffForm.setFirstname(form.getFirstname());
+		staffForm.setLastname(form.getLastname());
 		staffForm.setTelephone(form.getTelephone());
 		staffForm.setEmail(form.getEmail());
 		Map<String, String> map = (Map<String, String>) bigCustomerViewService.addStaff(staffForm, session);

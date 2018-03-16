@@ -53,8 +53,9 @@
 	</body>
 	
 	<script>
-			var eventId;
-			var weChatToken;
+			var eventId; //活动Id
+			var weChatToken; //微信Token
+			var isSifnUp; //是否已报名
 			$(function(){
 				$.ajax({
 					type:"post",
@@ -68,6 +69,7 @@
 					success:function(data){
 						eventId = data.eventId;
 						weChatToken = data.wechatToken;
+						isSifnUp = data.isSignUp;
 						$("#eventDetailUrl").attr("src", data.event.detailsurl); 
 					}
 				}); 
