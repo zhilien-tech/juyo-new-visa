@@ -144,8 +144,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		addForm.setUpdateTime(nowDate);
 		TAppStaffBasicinfoEntity staffInfo = add(addForm);
 
-		//护照信息
 		Integer staffId = staffInfo.getId();
+
+		//护照信息
 		TAppStaffPassportEntity staffPassport = new TAppStaffPassportEntity();
 		staffPassport.setStaffid(staffId);
 		staffPassport.setOpid(userId);

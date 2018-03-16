@@ -46,6 +46,17 @@ public class AppEventsModule {
 	}
 
 	/**
+	 *打开 活动报名页
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object toSignUpEventPage(@Param("eventId") Integer eventId, @Param("wechatToken") String wechatToken,
+			HttpSession session) {
+		return appEventsViewService.toSignUpEventPage(eventId, wechatToken, session);
+	}
+
+	/**
 	 *跳转到活动详情页面
 	 */
 	@At

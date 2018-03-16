@@ -62,6 +62,20 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 	/**
 	 * 
+	 * TODO打开 活动报名页
+	 *
+	 * @param eventId 活动id
+	 * @param wechatToken 微信个人Token
+	 * @param session
+	 * @return 
+	 */
+	public Object toSignUpEventPage(Integer eventId, String wechatToken, HttpSession session) {
+
+		return null;
+	}
+
+	/**
+	 * 
 	 * App 首页活动 详情页
 	 * 
 	 * @param eventId
