@@ -7,36 +7,6 @@
    		<meta name="format-detection" content="telephone=no">
    		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/heavyBuyer.css" />
-		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
-		<script type="text/javascript" src="js/rem(750).js" ></script>
-		<script>
-			$(function(){
-				/* 手机号只能输入数字 */
-				$(document).on("input",".telphone",function(){
-					$(this).val($(this).val().replace(/[^\d]/g,''));
-				});
-				
-				$(".btnPayment").click(function(){
-					var surName = $(".surName").val();
-					var name = $(".name").val();
-					var telPhone = $(".telphone").val();
-					var email = $(".email").val();
-					
-					$.ajax({
-						type:"post",
-						url:"/admin/appEvents/signUpEventByPublicNum",
-						data:{firstname:surName,lastname:name,telephone:telPhone,email:email},
-						dataType : "json",
-						async:true,
-						success:function(data){
-							if(200 == data.status){
-								window.location.href='/appmobileus/payment.html'
-							}
-						}
-					}); 
-				});
-			})
-		</script>
 	</head>
 	<body>
 		<header>
@@ -71,4 +41,52 @@
 			</div>
 		</section>
 	</body>
+	<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+	<script type="text/javascript" src="js/rem(750).js" ></script>
+	<script>
+		//获取URL地址参数
+	    function GetQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null)return  unescape(r[2]); return null;
+	    }
+		
+		$(function(){
+			/* 手机号只能输入数字 */
+			$(document).on("input",".telphone",function(){
+				$(this).val($(this).val().replace(/[^\d]/g,''));
+			});
+			
+			$(".btnPayment").click(function(){
+				var surName = $(".surName").val();
+				var name = $(".name").val();
+				var telPhone = $(".telphone").val();
+				var email = $(".email").val();
+				var eventId = GetQueryString("eventId");
+				var weChatToken = GetQueryString("weChatToken");
+				
+				
+				$.ajax({
+					type:"post",
+					url:"/admin/appEvents/signUpEventByPublicNum",
+					data:{
+						eventId:eventId,
+						weChatToken:weChatToken,
+						firstname:surName,
+						lastname:name,
+						telephone:telPhone,
+						email:email
+					},
+					dataType : "json",
+					async:true,
+					success:function(data){
+						if(200 == data.status){
+							window.location.href='/appmobileus/payment.html'
+						}
+					}
+				}); 
+			});
+		})
+		
+	</script>
 </html>

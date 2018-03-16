@@ -18,7 +18,7 @@
 		</header>
 		<section>
 			<div class="imgActivity">
-				<img src="img/imgActivity.jpg" alt="活动" width="100%" height="100%" />
+				<img id="eventDetailUrl" alt="活动" width="100%" height="100%" />
 			</div>
 			<!-- <div class="dateTotal">
 				<div class="endDate">截止日期：2017.12.30</div>
@@ -47,7 +47,36 @@
 			</div> -->
 		</section>
 		<footer>
-			<a class="btnEnroll" href="/appmobileus/enroll.html">报名</a>
+			<!-- <a id="signUpBtn" class="btnEnroll" href="/appmobileus/enroll.html">报名</a> -->
+			<a id="signUpBtn" class="btnEnroll">报名</a>
 		</footer>
 	</body>
+	
+	<script>
+			var eventId;
+			var weChatToken;
+			$(function(){
+				$.ajax({
+					type:"post",
+					url:"/admin/appEvents/toSignUpEventPage",
+					data:{
+						eventId:1,
+						wechatToken:""
+					},
+					dataType : "json",
+					async:true,
+					success:function(data){
+						eventId = data.eventId;
+						weChatToken = data.wechatToken;
+						$("#eventDetailUrl").attr("src", data.event.detailsurl); 
+					}
+				}); 
+					
+			})
+			
+			$("#signUpBtn").click(function(){
+				window.location.href='/appmobileus/enroll.html?eventId='+eventId+'&weChatToken='+weChatToken;
+			});
+			
+		</script>
 </html>

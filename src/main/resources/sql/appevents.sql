@@ -80,3 +80,14 @@ FROM
 	t_app_staff_basicinfo tasb
 WHERE
 	tasb.id = @staffId
+
+/*appevents_staff_whether_signup*/
+SELECT
+	tasb.id staffId,
+	CONCAT( tasb.firstname, tasb.lastname ) staffName,
+	tasb.wechattoken,
+	tase.eventsId
+FROM
+	t_app_staff_basicinfo tasb
+	LEFT JOIN t_app_staff_events tase ON tasb.id = tase.staffId
+	$condition

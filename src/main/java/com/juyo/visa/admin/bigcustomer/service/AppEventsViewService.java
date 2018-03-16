@@ -32,6 +32,7 @@ import com.juyo.visa.forms.TAppEventsForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.JsonUtil;
+import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
@@ -71,9 +72,28 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	 * @return 
 	 */
 	public Object toSignUpEventPage(Integer eventId, String wechatToken, HttpSession session) {
-		Map<String, Object> map = Maps.newHashMap();
+
+		//查询是否报名
+		String sqlStr = sqlManager.get("appevents_staff_whether_signup");
+		Sql sql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tasb.wechattoken", "=", wechatToken);
+		cnd.and("tase.eventsId", "=", eventId);
+		List<Record> list = dbDao.query(sql, cnd, null);
+
+		Map<String, Object> map = MapUtil.map();
+		Record record = new Record();
+		if (!Util.isEmpty(eventId)) {
+			//活动详情
+			String eventSqlStr = sqlManager.get("appevents_detail_by_eventId");
+			Sql eventSql = Sqls.create(eventSqlStr);
+			eventSql.setParam("eventId", eventId);
+			record = dbDao.fetch(eventSql);
+		}
 		map.put("eventId", eventId);
+		map.put("event", record);
 		map.put("wechatToken", wechatToken);
+		map.put("isSignUp", !Util.isEmpty(list));
 
 		return map;
 	}
@@ -147,7 +167,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		String staffIdStr = map.get("staffId");
 
 		Integer staffId = Integer.valueOf(staffIdStr);
-		Integer eventId = form.getEventid();
+		Integer eventId = form.getEventId();
 
 		//人员包名活动
 		TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
