@@ -34,6 +34,7 @@ import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
+import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> {
@@ -154,7 +155,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		staffEventEntity.setStaffId(staffId);
 		TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
 
-		return null;
+		return JsonResult.success("添加成功");
 	}
 
 	/**

@@ -20,6 +20,7 @@ import com.juyo.visa.forms.TAppEventsForm;
 @IocBean
 @Filters
 @At("/admin/appEvents")
+@Filters
 public class AppEventsModule {
 
 	private static final Log log = Logs.get();
