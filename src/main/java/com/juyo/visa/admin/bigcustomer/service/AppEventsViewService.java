@@ -21,6 +21,7 @@ import org.nutz.mvc.annotation.Param;
 import com.beust.jcommander.internal.Maps;
 import com.juyo.visa.admin.bigcustomer.form.SignUpEventForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.admin.orderus.service.OrderUSViewService;
 import com.juyo.visa.common.enums.visaProcess.VisaCountryEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaProcess_US_Enum;
 import com.juyo.visa.entities.TAppEventsIntroduceEntity;
@@ -32,6 +33,7 @@ import com.juyo.visa.forms.TAppEventsForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.JsonUtil;
+import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
@@ -42,6 +44,9 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 	@Inject
 	private BigCustomerViewService bigCustomerViewService;
+
+	@Inject
+	private OrderUSViewService orderUSViewService;
 
 	/**
 	 * 
@@ -58,6 +63,42 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		Integer comId = loginCompany.getId();
 
 		Map<String, Object> map = listPage4Datatables(queryForm);
+		return map;
+	}
+
+	/**
+	 * 
+	 * TODO打开 活动报名页
+	 *
+	 * @param eventId 活动id
+	 * @param wechatToken 微信个人Token
+	 * @param session
+	 * @return 
+	 */
+	public Object toSignUpEventPage(Integer eventId, String wechatToken, HttpSession session) {
+
+		//查询是否报名
+		String sqlStr = sqlManager.get("appevents_staff_whether_signup");
+		Sql sql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tasb.wechattoken", "=", wechatToken);
+		cnd.and("tase.eventsId", "=", eventId);
+		List<Record> list = dbDao.query(sql, cnd, null);
+
+		Map<String, Object> map = MapUtil.map();
+		Record record = new Record();
+		if (!Util.isEmpty(eventId)) {
+			//活动详情
+			String eventSqlStr = sqlManager.get("appevents_detail_by_eventId");
+			Sql eventSql = Sqls.create(eventSqlStr);
+			eventSql.setParam("eventId", eventId);
+			record = dbDao.fetch(eventSql);
+		}
+		map.put("eventId", eventId);
+		map.put("event", record);
+		map.put("wechatToken", wechatToken);
+		map.put("isSignUp", !Util.isEmpty(list));
+
 		return map;
 	}
 
@@ -122,21 +163,24 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 		//添加人员
 		TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
-		staffForm.setFirstName(form.getFirstname());
-		staffForm.setLastName(form.getLastname());
+		staffForm.setFirstname(form.getFirstname());
+		staffForm.setLastname(form.getLastname());
 		staffForm.setTelephone(form.getTelephone());
 		staffForm.setEmail(form.getEmail());
 		Map<String, String> map = (Map<String, String>) bigCustomerViewService.addStaff(staffForm, session);
 		String staffIdStr = map.get("staffId");
 
 		Integer staffId = Integer.valueOf(staffIdStr);
-		Integer eventId = form.getEventid();
+		Integer eventId = form.getEventId();
 
 		//人员包名活动
 		TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
 		staffEventEntity.setEventsId(eventId);
 		staffEventEntity.setStaffId(staffId);
 		TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
+
+		//添加订单
+		orderUSViewService.addOrderByStuffId(staffId);
 
 		return JsonResult.success("添加成功");
 	}

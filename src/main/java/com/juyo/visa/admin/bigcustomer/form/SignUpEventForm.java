@@ -6,7 +6,10 @@ import lombok.Data;
 public class SignUpEventForm {
 
 	/**活动id*/
-	private Integer eventid;
+	private Integer eventId;
+
+	/**微信Token*/
+	private String weChatToken;
 
 	/**活动号*/
 	private String eventsNum;
