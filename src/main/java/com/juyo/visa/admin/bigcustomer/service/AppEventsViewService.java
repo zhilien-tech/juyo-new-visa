@@ -21,6 +21,7 @@ import org.nutz.mvc.annotation.Param;
 import com.beust.jcommander.internal.Maps;
 import com.juyo.visa.admin.bigcustomer.form.SignUpEventForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.admin.orderus.service.OrderUSViewService;
 import com.juyo.visa.common.enums.visaProcess.VisaCountryEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaProcess_US_Enum;
 import com.juyo.visa.entities.TAppEventsIntroduceEntity;
@@ -43,6 +44,9 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 	@Inject
 	private BigCustomerViewService bigCustomerViewService;
+
+	@Inject
+	private OrderUSViewService orderUSViewService;
 
 	/**
 	 * 
@@ -174,6 +178,9 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		staffEventEntity.setEventsId(eventId);
 		staffEventEntity.setStaffId(staffId);
 		TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
+
+		//添加订单
+		orderUSViewService.addOrderByStuffId(staffId);
 
 		return JsonResult.success("添加成功");
 	}

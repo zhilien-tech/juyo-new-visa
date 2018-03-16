@@ -15,9 +15,13 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.juyo.visa.common.enums.USOrderStatusEnum;
+import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
+import com.uxuexi.core.web.chain.support.JsonResult;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -29,6 +33,31 @@ import com.uxuexi.core.web.base.service.BaseService;
  */
 @IocBean
 public class OrderUSViewService extends BaseService<TOrderUsEntity> {
+
+	//根据人员id添加订单
+	public Object addOrderByStuffId(Integer staffId) {
+
+		TOrderUsEntity orderUs = new TOrderUsEntity();
+		String orderNum = generateOrderNumByDate();
+		Date nowDate = DateUtil.nowDate();
+		orderUs.setOrdernumber(orderNum);
+		orderUs.setStatus(USOrderStatusEnum.PLACE_ORDER.intKey());//下单
+		orderUs.setCreatetime(nowDate);
+		orderUs.setUpdatetime(nowDate);
+		TOrderUsEntity order = dbDao.insert(orderUs);
+
+		//更新人员-订单关系表
+		if (!Util.isEmpty(order)) {
+			Integer orderId = order.getId();
+			TAppStaffOrderUsEntity staffOrder = new TAppStaffOrderUsEntity();
+			staffOrder.setOrderid(orderId);
+			staffOrder.setStaffid(staffId);
+			dbDao.insert(staffOrder);
+		}
+
+		return JsonResult.success("添加成功");
+
+	}
 
 	//生成订单号
 	public String generateOrderNumByDate() {
