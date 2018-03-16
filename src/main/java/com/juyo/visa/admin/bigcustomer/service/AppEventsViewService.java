@@ -70,8 +70,11 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	 * @return 
 	 */
 	public Object toSignUpEventPage(Integer eventId, String wechatToken, HttpSession session) {
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("eventId", eventId);
+		map.put("wechatToken", wechatToken);
 
-		return null;
+		return map;
 	}
 
 	/**
