@@ -18,8 +18,8 @@ import com.juyo.visa.admin.bigcustomer.service.AppEventsViewService;
 import com.juyo.visa.forms.TAppEventsForm;
 
 @IocBean
-@At("/admin/appEvents")
 @Filters
+@At("/admin/appEvents")
 public class AppEventsModule {
 
 	private static final Log log = Logs.get();
@@ -43,6 +43,16 @@ public class AppEventsModule {
 	@At
 	public Object listData(@Param("..") final TAppEventsForm sqlParamForm, HttpSession session) {
 		return appEventsViewService.listData(sqlParamForm, session);
+	}
+
+	/**
+	 *打开 活动报名页
+	 */
+	@At
+	@POST
+	public Object toSignUpEventPage(@Param("eventId") Integer eventId, @Param("wechatToken") String wechatToken,
+			HttpSession session) {
+		return appEventsViewService.toSignUpEventPage(eventId, wechatToken, session);
 	}
 
 	/**
@@ -123,7 +133,7 @@ public class AppEventsModule {
 	/**
 	 * 申请人基本信息
 	 * <p>
-	 *  TODO
+	 * TODO
 	 */
 	@At
 	@POST

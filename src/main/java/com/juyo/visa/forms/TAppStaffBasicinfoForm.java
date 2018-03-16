@@ -39,6 +39,9 @@ public class TAppStaffBasicinfoForm extends DataTablesParamForm {
 	/**名(拼音)*/
 	private String lastnameen;
 
+	/**微信Token*/
+	private String wechattoken;
+
 	/**状态*/
 	private Integer status;
 
