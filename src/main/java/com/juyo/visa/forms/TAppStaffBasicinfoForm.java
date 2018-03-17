@@ -79,6 +79,9 @@ public class TAppStaffBasicinfoForm extends DataTablesParamForm {
 	private String address;
 
 	/**身份证号*/
+	private String cardnum;
+
+	/**身份证号*/
 	private String cardId;
 
 	/**公民身份证号(英文)*/

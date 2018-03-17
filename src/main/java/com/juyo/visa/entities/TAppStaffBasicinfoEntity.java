@@ -94,6 +94,10 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	private String address;
 
 	@Column
+	@Comment("卡号")
+	private String cardnum;
+
+	@Column
 	@Comment("身份证号")
 	private String cardId;
 

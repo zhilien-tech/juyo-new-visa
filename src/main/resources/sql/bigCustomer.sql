@@ -67,3 +67,32 @@ FROM
 	$condition
 GROUP BY
 	tae.pictureUrl
+	
+/*bigCustomer_staff_visa_list*/
+SELECT
+	tos.id orderid,
+	tos.ordernumber,
+	tos.STATUS
+FROM
+	t_order_us tos
+	LEFT JOIN t_app_staff_order_us tasou ON tasou.orderid = tos.id
+	LEFT JOIN t_app_staff_basicinfo tasb ON tasb.id = tasou.staffid
+	$condition
+
+/*bigCustomer_order_applicant_list*/
+SELECT
+	tasb.id staffid,
+	CONCAT( tasb.firstname, tasb.lastname ) staffname,
+	tasb.telephone,
+	tasb.cardnum,
+	tasp.passport,
+	tasou.orderid,
+	tos.ordernumber,
+	tos.STATUS,
+	tos.aacode 
+FROM
+	t_app_staff_basicinfo tasb
+	LEFT JOIN t_app_staff_passport tasp ON tasb.id = tasp.staffid
+	INNER JOIN t_app_staff_order_us tasou ON tasou.staffid = tasb.id
+	LEFT JOIN t_order_us tos ON tos.id = tasou.orderid
+	$condition

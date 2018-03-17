@@ -1,6 +1,7 @@
 package com.juyo.visa.admin.bigcustomer.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,9 @@ import com.beust.jcommander.internal.Maps;
 import com.juyo.visa.admin.bigcustomer.form.SignUpEventForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.orderus.service.OrderUSViewService;
+import com.juyo.visa.admin.user.form.ApplicantUser;
+import com.juyo.visa.admin.user.service.UserViewService;
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaCountryEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaProcess_US_Enum;
 import com.juyo.visa.entities.TAppEventsIntroduceEntity;
@@ -47,6 +51,11 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 	@Inject
 	private OrderUSViewService orderUSViewService;
+
+	@Inject
+	private UserViewService userViewService;
+
+	private final static String DEFAULT_PASSWORD = "000000";
 
 	/**
 	 * 
@@ -182,7 +191,40 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//添加订单
 		orderUSViewService.addOrderByStuffId(staffId);
 
+		//用户登录，添加游客信息
+		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
+		addLoginUser(staffInfo);
+
 		return JsonResult.success("添加成功");
+	}
+
+	/**
+	 * 用户登录添加游客
+	 */
+	public Object addLoginUser(TAppStaffBasicinfoEntity applicant) {
+		//游客登录
+		ApplicantUser applicantUser = new ApplicantUser();
+		applicantUser.setMobile(applicant.getTelephone());
+		applicantUser.setOpid(applicant.getOpid());
+		applicantUser.setPassword(DEFAULT_PASSWORD);
+		applicantUser.setUsername(applicant.getFirstname() + applicant.getLastname());
+		if (!Util.isEmpty(applicant.getTelephone())) {
+			TUserEntity userEntity = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", applicant.getTelephone())
+					.and("userType", "=", UserLoginEnum.TOURIST_IDENTITY.intKey()));
+			if (Util.isEmpty(userEntity)) {
+				TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
+				applicant.setUserid(tUserEntity.getId());
+			} else {
+				userEntity.setName(applicantUser.getUsername());
+				userEntity.setMobile(applicant.getTelephone());
+				userEntity.setPassword(applicantUser.getPassword());
+				userEntity.setOpId(applicantUser.getOpid());
+				userEntity.setUpdateTime(new Date());
+				applicant.setUserid(userEntity.getId());
+				dbDao.update(userEntity);
+			}
+		}
+		return null;
 	}
 
 	/**
