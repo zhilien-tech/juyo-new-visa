@@ -20,6 +20,11 @@ import org.nutz.log.Logs;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.bigcustomer.form.VisaListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.entities.TAppStaffContactpointEntity;
+import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
+import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
+import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
+import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TUserEntity;
@@ -80,4 +85,50 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 
 		return result;
 	}
+
+	/**
+	 * 获取签证 旅伴信息
+	 */
+	public Object getStaffTravelCompanion(Integer staffid) {
+		TAppStaffTravelcompanionEntity entity = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		return entity;
+	}
+
+	/**
+	 * 获取签证 以前的美国旅游信息
+	 */
+	public Object getStaffpreviousTripInfo(Integer staffid) {
+		TAppStaffPrevioustripinfoEntity entity = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		return entity;
+	}
+
+	/**
+	 * 获取签证 美国联络点
+	 */
+	public Object getStaffContactPoint(Integer staffid) {
+		TAppStaffContactpointEntity entity = dbDao.fetch(TAppStaffContactpointEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		return entity;
+	}
+
+	/**
+	 * 获取签证 家庭信息
+	 */
+	public Object getStaffFamilyInfo(Integer staffid) {
+		TAppStaffFamilyinfoEntity entity = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		return entity;
+	}
+
+	/**
+	 * 获取签证 工作/教育/培训信息
+	 */
+	public Object getStaffWorkEducationTraining(Integer staffid) {
+		TAppStaffWorkEducationTrainingEntity entity = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		return entity;
+	}
+
 }
