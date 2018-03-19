@@ -277,4 +277,7 @@ public class TAppStaffBasicinfoUpdateForm extends ModForm implements Serializabl
 	/**面试时间*/
 	private Date interviewdate;
 
+	/**签证状态*/
+	private Integer visastatus;
+
 }

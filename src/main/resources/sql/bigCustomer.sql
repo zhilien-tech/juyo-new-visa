@@ -85,10 +85,10 @@ SELECT
 	CONCAT( tasb.firstname, tasb.lastname ) staffname,
 	tasb.telephone,
 	tasb.cardnum,
+	tasb.visastatus,
 	tasp.passport,
 	tasou.orderid,
 	tos.ordernumber,
-	tos.STATUS,
 	tos.aacode 
 FROM
 	t_app_staff_basicinfo tasb

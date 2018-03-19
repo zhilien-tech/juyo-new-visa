@@ -49,7 +49,7 @@ public class VisaListDataForm implements SQLParamForm {
 		Cnd cnd = Cnd.NEW();
 		cnd.and("tasb.userid", "=", userid);
 		cnd.groupBy("tos.id");
-		cnd.orderBy("tr.createtime", "desc");
+		cnd.orderBy("tasb.createtime", "desc");
 		return cnd;
 	}
 
