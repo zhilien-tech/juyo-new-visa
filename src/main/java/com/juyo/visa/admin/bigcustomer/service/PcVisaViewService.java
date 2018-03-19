@@ -70,7 +70,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		for (Record order : orderList) {
 			String orderid = order.getString("orderid");
 			//获取该订单下的申请人
-			String sqlStr = sqlManager.get(" bigCustomer_order_applicant_list");
+			String sqlStr = sqlManager.get("bigCustomer_order_applicant_list");
 			Sql applysql = Sqls.create(sqlStr);
 			Cnd cnd = Cnd.NEW();
 			cnd.and("tasou.orderid", "=", orderid);
@@ -120,6 +120,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffFamilyinfoEntity entity = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		return entity;
+
 	}
 
 	/**

@@ -54,10 +54,6 @@ public class TOrderUsEntity implements Serializable {
 	private Integer ispayed;
 
 	@Column
-	@Comment("面试时间")
-	private Date interviewdate;
-
-	@Column
 	@Comment("操作人")
 	private Integer opid;
 

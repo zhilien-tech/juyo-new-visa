@@ -365,4 +365,8 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	@Comment("更新时间")
 	private Date updatetime;
 
+	@Column
+	@Comment("面试时间")
+	private Date interviewdate;
+
 }

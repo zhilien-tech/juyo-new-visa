@@ -282,6 +282,9 @@ public class TAppStaffBasicinfoForm extends DataTablesParamForm {
 	/**更新时间*/
 	private Date updatetime;
 
+	/**面试时间*/
+	private Date interviewdate;
+
 	/**姓名*/
 	private String name;
 
