@@ -7,7 +7,6 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>办理中签证</title>
 		<link rel="stylesheet" href="${base}/references/public/css/handleVisa.css">
-		<link rel="stylesheet" href="css/handleVisa.css" />
 		
 		<style>
 			[v-cloak]{display:none}
@@ -23,7 +22,7 @@
 			<div id="card" class="box-body"><!-- start 卡片列表 -->
 				<div class="main" v-on:click="toInProcess(data.orderid)" v-cloak v-for="data in visaListData">
 					<div class="title">
-						<span class="titleName">{{data.STATUS}}</span>
+						<span class="titleName">{{data.firstbodyinfo.staffname}}</span>
 						<span class="titleOrderNum">{{data.ordernumber}}</span>
 					</div>
 					<div class="infomation">
@@ -31,15 +30,15 @@
 							<dl>
 								<dd>
 									<label>姓&nbsp;&nbsp;&nbsp;&nbsp;名:</label>
-									<span>{{data.firstbodyInfo.staffname}}</span>
+									<span>{{data.firstbodyinfo.staffname}}</span>
 								</dd>
 								<dd>
 									<label>手机号:</label>
-									<span>{{data.firstbodyInfo.telephone}}</span>
+									<span>{{data.firstbodyinfo.telephone}}</span>
 								</dd>
 								<dd>
 									<label>护照号:</label>
-									<span>{{data.firstbodyInfo.passport}}</span>
+									<span>{{data.firstbodyinfo.passport}}</span>
 								</dd>
 							</dl>
 						</div>
@@ -47,22 +46,22 @@
 							<dl>
 								<dd>
 									<label>订单号:</label>
-									<span>{{data.firstbodyInfo.ordernumber}}</span>
+									<span>{{data.firstbodyinfo.ordernumber}}</span>
 								</dd>
 								<dd>
 									<label>A&nbsp;A&nbsp;码:</label>
-									<span>{{data.firstbodyInfo.aacode}}</span>
+									<span>{{data.firstbodyinfo.aacode}}</span>
 								</dd>
 								<dd>
 									<label>卡&nbsp;&nbsp;&nbsp;号:</label>
-									<span>{{data.firstbodyInfo.cardnum}}</span>
+									<span>{{data.firstbodyinfo.cardnum}}</span>
 								</dd>
 							</dl>
 						</div>
 					</div>
 					
 					<div class="moduleThird">
-						<span>{{data.STATUS}}</span>
+						<span>{{data.firstbodyinfo.visastatus}}</span>
 					</div>
 					<div class="moduleFourth">
 						<div class="btnGroup">
@@ -83,8 +82,6 @@
 		<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="${base}/references/common/js/vue/vue.min.js"></script>
 		<script type="text/javascript" src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
-		<script type="text/javascript" src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
-		<script type="text/javascript" src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 		<script type="text/javascript">
 			//异步加载的URL地址
 		    var url="${base}/admin/pcvisa/visaListData.html";
@@ -103,6 +100,7 @@
 		            	success: function(data){
 		            		var end = new Date().getTime();//接受时间
 		            		_self.visaListData = data.visaListData;
+		            		console.log(JSON.stringify(_self.visaListData));
 		            		$('#pagetotal').val(data.pagetotal);
 		                    //alert((end - start)+"ms");//返回函数执行需要时间
 		              	}
@@ -110,7 +108,6 @@
 		        },
 		        methods:{
 		        	toInProcess:function(id){
-		        		alert(id);
 		        		/* window.location.href = '/admin/myVisa/inProcessVisa.html?orderJpId=' + id; */
 		        	}
 		        }

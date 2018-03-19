@@ -27,6 +27,7 @@ import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaCountryEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaProcess_US_Enum;
+import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
 import com.juyo.visa.entities.TAppEventsIntroduceEntity;
 import com.juyo.visa.entities.TAppStaffAddressEntity;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
@@ -176,6 +177,8 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		staffForm.setLastname(form.getLastname());
 		staffForm.setTelephone(form.getTelephone());
 		staffForm.setEmail(form.getEmail());
+		//默认签证状态为办理中
+		staffForm.setVisastatus(VisaStatusEnum.HANDLING_VISA.intKey());
 		Map<String, String> map = (Map<String, String>) bigCustomerViewService.addStaff(staffForm, session);
 		String staffIdStr = map.get("staffId");
 

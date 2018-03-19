@@ -277,4 +277,7 @@ public class TAppStaffBasicinfoAddForm extends AddForm implements Serializable {
 	/**面试时间*/
 	private Date interviewdate;
 
+	/**签证状态*/
+	private Integer visastatus;
+
 }

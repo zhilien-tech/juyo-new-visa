@@ -369,4 +369,8 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	@Comment("面试时间")
 	private Date interviewdate;
 
+	@Column
+	@Comment("签证状态")
+	private Integer visastatus;
+
 }

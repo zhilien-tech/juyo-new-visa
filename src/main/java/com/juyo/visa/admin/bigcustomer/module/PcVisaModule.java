@@ -32,7 +32,7 @@ public class PcVisaModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object list() {
+	public Object visaList() {
 		return null;
 	}
 

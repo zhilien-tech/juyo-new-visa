@@ -285,6 +285,9 @@ public class TAppStaffBasicinfoForm extends DataTablesParamForm {
 	/**面试时间*/
 	private Date interviewdate;
 
+	/**签证状态*/
+	private Integer visastatus;
+
 	/**姓名*/
 	private String name;
 

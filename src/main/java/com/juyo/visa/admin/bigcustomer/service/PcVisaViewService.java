@@ -20,6 +20,7 @@ import org.nutz.log.Logs;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.bigcustomer.form.VisaListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
@@ -29,6 +30,7 @@ import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TOrderUsTravelinfoEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -49,9 +51,9 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		form.setUserid(loginUser.getId());
+		/*form.setUserid(loginUser.getId());
 		form.setCompanyid(loginCompany.getId());
-		form.setAdminId(loginCompany.getAdminId());
+		form.setAdminId(loginCompany.getAdminId());*/
 
 		Map<String, Object> result = Maps.newHashMap();
 		List<Record> list = new ArrayList<>();
@@ -76,8 +78,32 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			Cnd cnd = Cnd.NEW();
 			cnd.and("tasou.orderid", "=", orderid);
 			List<Record> applicantList = dbDao.query(applysql, cnd, null);
+			for (Record app : applicantList) {
+				int status = app.getInt("visastatus");
+				for (VisaStatusEnum statusEnum : VisaStatusEnum.values()) {
+					if (!Util.isEmpty(status) && status == statusEnum.intKey()) {
+						app.set("visastatus", statusEnum.value());
+						break;
+					}
+				}
+			}
 			order.put("everybodyInfo", applicantList);
-			order.put("firstbodyInfo", applicantList.get(0));
+			if (applicantList.size() > 0) {
+				order.put("firstbodyInfo", applicantList.get(0));
+			} else {
+				Record record = new Record();
+				record.set("staffid", "");
+				record.set("staffname", "");
+				record.set("telephone", "");
+				record.set("cardnum", "");
+				record.set("passport", "");
+				record.set("ordernumber", "");
+				record.set("status", "");
+				record.set("aacode", "");
+				record.set("orderid", "");
+
+				order.put("firstbodyInfo", record);
+			}
 			list.add(order);
 		}
 
