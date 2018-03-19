@@ -77,6 +77,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			cnd.and("tasou.orderid", "=", orderid);
 			List<Record> applicantList = dbDao.query(applysql, cnd, null);
 			order.put("everybodyInfo", applicantList);
+			order.put("firstbodyInfo", applicantList.get(0));
 			list.add(order);
 		}
 
