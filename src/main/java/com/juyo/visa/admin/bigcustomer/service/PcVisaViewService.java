@@ -27,6 +27,7 @@ import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
+import com.juyo.visa.entities.TOrderUsTravelinfoEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -130,6 +131,35 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffWorkEducationTrainingEntity entity = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		return entity;
+	}
+
+	/**
+	 * 
+	 * 获取订单出行信息
+	 *
+	 * @param orderid 订单id
+	 * @return 订单出行信息
+	 */
+	public Object getOrderTravelInfo(Integer orderid) {
+		TOrderUsTravelinfoEntity entity = dbDao.fetch(TOrderUsTravelinfoEntity.class,
+				Cnd.where("orderid", "=", orderid));
+		return entity;
+	}
+
+	/**
+	 * 
+	 * 获取申请人概要信息
+	 *
+	 * @param orderid 订单id
+	 * @return 人员概要信息集合
+	 */
+	public Object getStaffSummaryInfo(Integer orderid) {
+		String sqlStr = sqlManager.get("appevents_staff_Summary_info");
+		Sql applysql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tasou.orderid", "=", orderid);
+		List<Record> summaryInfos = dbDao.query(applysql, cnd, null);
+		return summaryInfos;
 	}
 
 }
