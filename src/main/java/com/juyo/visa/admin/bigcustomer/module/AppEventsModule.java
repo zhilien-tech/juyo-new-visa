@@ -140,4 +140,15 @@ public class AppEventsModule {
 	public Object getStaffBaseInfos(@Param("staffId") Integer staffId) {
 		return appEventsViewService.getStaffBaseInfos(staffId);
 	}
+
+	/**
+	 * 申请人地址管理
+	 * <p>
+	 * TODO
+	 */
+	@At
+	@POST
+	public Object getStaffAddressInfos(@Param("staffId") Integer staffId) {
+		return appEventsViewService.getStaffAddressInfos(staffId);
+	}
 }

@@ -17,7 +17,6 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.POST;
-import org.nutz.mvc.annotation.Param;
 
 import com.beust.jcommander.internal.Maps;
 import com.juyo.visa.admin.bigcustomer.form.SignUpEventForm;
@@ -29,6 +28,7 @@ import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaCountryEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaProcess_US_Enum;
 import com.juyo.visa.entities.TAppEventsIntroduceEntity;
+import com.juyo.visa.entities.TAppStaffAddressEntity;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffEventsEntity;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -358,12 +358,25 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	 * @param staffId 人员id
 	 * @return 
 	 */
-	public Object getStaffBaseInfos(@Param("staffId") Integer staffId) {
+	public Object getStaffBaseInfos(Integer staffId) {
 		String sqlStr = sqlManager.get("appevents_staff_baseInfo_by_staffId");
 		Sql sql = Sqls.create(sqlStr);
 		sql.setParam("staffId", staffId);
 		Record record = dbDao.fetch(sql);
 		return record;
+	}
+
+	/**
+	 * 申请人地址管理
+	 * <p>
+	 * TODO
+	 */
+	@At
+	@POST
+	public Object getStaffAddressInfos(Integer staffId) {
+		List<TAppStaffAddressEntity> list = dbDao.query(TAppStaffAddressEntity.class,
+				Cnd.where("staffId", "=", staffId), null);
+		return list;
 	}
 
 }
