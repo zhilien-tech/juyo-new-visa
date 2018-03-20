@@ -189,4 +189,20 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		return summaryInfos;
 	}
 
+	/**
+	 * 跳转到签证详情页
+	 */
+	public Object visaInfos(Integer orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
+		List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
+		result.put("travelInfo", orderTravelInfo);
+		if (!Util.isEmpty(staffSummaryInfoList)) {
+			result.put("summaryInfo", staffSummaryInfoList.get(0));
+		} else {
+			result.put("summaryInfo", null);
+		}
+		return result;
+	}
+
 }

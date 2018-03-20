@@ -45,4 +45,13 @@ public class PcVisaModule {
 		return pcVisaViewService.visaListData(form, session);
 	}
 
+	/**
+	 * 跳转到签证详情页
+	 */
+	@At
+	@POST
+	@Ok("jsp")
+	public Object visaInfos(@Param("orderid") Integer orderid) {
+		return pcVisaViewService.visaInfos(orderid);
+	}
 }
