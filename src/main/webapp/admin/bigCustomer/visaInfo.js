@@ -6,6 +6,8 @@ $(".companyInfo").change(function(){
 		$(".teamnamefalse").show();
 	}else {
 		$(".teamture").hide();
+		deleteBrotherEle($("div.teamnamefalse"));
+		emptyContentById($("div.teamnamefalse"));
 	}
 });
 //旅伴信息--是否作为团队或组织的一部分旅游
@@ -64,6 +66,9 @@ function emptyContentById(obj){
 	});
 	obj.find("checkbox").each(function() {
 		$(this).attr("checked",false);
+	});
+	obj.find("radio").each(function() {
+		$(this).eq(1).attr("checked",true);
 	});
 	
 }
