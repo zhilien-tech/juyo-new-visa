@@ -129,17 +129,17 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 */
 	public Object addStaff(TAppStaffBasicinfoAddForm addForm, HttpSession session) {
 
-		//		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		//		Integer comId = loginCompany.getId();
-		//		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		//		Integer userId = loginUser.getId();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
 
 		Date nowDate = DateUtil.nowDate();
 
 		//基本信息
-		//		addForm.setComId(comId);
-		//		addForm.setUserId(userId);
-		//		addForm.setOpId(userId);
+		addForm.setComid(comId);
+		addForm.setUserid(userId);
+		addForm.setOpid(userId);
 		addForm.setCreatetime(nowDate);
 		addForm.setUpdatetime(nowDate);
 
