@@ -58,15 +58,14 @@
 								</dd>
 							</dl>
 						</div>
-					</div>
-					
-					<div class="moduleThird">
+						<div class="moduleThird">
 						<span>{{data.firstbodyinfo.visastatus}}</span>
-					</div>
-					<div class="moduleFourth">
-						<div class="btnGroup">
-							<a class="edit">资料编辑</a>
-							<a class="download">下载</a>
+						</div>
+						<div class="moduleFourth">
+							<div class="btnGroup">
+								<a class="edit"></a>
+								<a class="download">下载</a>
+							</div>
 						</div>
 					</div>
 				</div>
