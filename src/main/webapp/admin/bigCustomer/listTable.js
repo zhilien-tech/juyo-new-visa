@@ -150,7 +150,7 @@ function visa(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '80%'],
-		content: BASE_PATH + '/admin/bigCustomer/updateVisaInfo.jsp.html?staffId='+id
+		content: BASE_PATH + '/admin/bigCustomer/updateVisaInfo.html?staffId='+id
 	});
 }
 

@@ -14,7 +14,7 @@
 			</div>
 			<div class="btnRight">
 				<a class="saveVisa">保存</a>
-				<a class="cancelVisa">取消</a>
+				<a class="cancelVisa" onclick="closeWindow()">取消</a>
 			</div>
 		</div>
 		<div class="topHide"></div>
@@ -29,11 +29,11 @@
 						<input type="radio" class="companyInfo" name="companyInfo" value="2" checked/>否
 					</div>
 					<!--yes-->
-					<div class="teamture">
+					<div class="teamture elementHide">
 						<div class="groupRadioInfo">
 							<label>是否作为团队或组织的一部分旅游</label>
 							<input type="radio" class="team" name="team" value="1" />是
-							<input type="radio" class="team" name="team" value="2" />否
+							<input type="radio" class="team" name="team" value="2" checked/>否
 						</div>
 						<!--第二部分yes-->
 						<div class="teamnameture groupInputInfo">
@@ -41,6 +41,34 @@
 							<input type="text" placeholder="团队名称" />
 						</div>
 						<!--第二部分No-->
+						<div class="teamnamefalse groupInputInfo">
+							<div class="companionSurnName">
+								<label>同伴姓</label>
+								<input type="text" placeholder="同伴姓" />
+							</div>
+							<div class="companionName">
+								<label>同伴名</label>
+								<input type="text" placeholder="同伴名" />
+							</div>
+							<div class="clear"></div>
+							<div class="youRelationship">
+								<label>与你的关系</label>
+								<select>
+									<option value="0">请选择</option>
+									<option>父母</option>
+									<option>配偶</option>
+									<option>子女</option>
+									<option>其他亲属</option>
+									<option>商业伙伴</option>
+									<option>其他</option>
+								</select>
+							</div>
+							<div class="btnGroup">
+								<a class="save">添加</a>
+								<a class="cancel">去掉 </a>
+							</div>
+						</div>
+						
 						<div class="teamnamefalse groupInputInfo">
 							<div class="companionSurnName">
 								<label>同伴姓</label>
@@ -67,6 +95,7 @@
 								<a class="cancel">去掉 </a>
 							</div>
 						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -1255,137 +1284,7 @@
 			<!--旅伴信息END-->
 		</div>
 	</body>
-	<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
-		<script>
-			$(function(){
-				//旅伴信息
-				$(".companyInfo").change(function(){
-					var companyVal = $(".companyInfo:checked").val();
-					if(companyVal == 1){
-						$(".teamture").show();
-					}else {
-						$(".teamture").hide();
-					}
-				});
-				//旅伴信息--是否作为团队或组织的一部分旅游
-				$(".team").change(function(){
-					var teamVal = $("input[name=team]:checked").val(); 
-					if(teamVal == 1){
-						$(".teamnameture").show();
-						$(".teamnamefalse").hide();
-					}else {
-						$(".teamnameture").hide();
-						$(".teamnamefalse").show();
-					}
-				});
-				//旅伴信息END
-				
-				//以前的美国旅游信息
-				//(1)是否去过美国
-				$(".goUS").change(function(){
-					var goUS = $("input[name=goUS]:checked").val();
-					if(goUS == 1){
-						$(".goUSInfo").show();
-					}else{
-						$(".goUSInfo").hide();
-					}
-					
-				});
-				$(".license").change(function(){
-					var license = $("input[name=license]:checked").val();
-					if(license == 1){
-						$(".driverInfo").show();
-					}else{
-						$(".driverInfo").hide();
-					}
-				});
-				//(2)是否有美国签证
-				$(".visaUS").change(function(){
-					var visaUS = $("input[name=visaUS]:checked").val();
-					if(visaUS == 1){
-						$(".dateIssue").show();
-					}else {
-						$(".dateIssue").hide();
-					}
-				});
-				$(".lose").change(function(){
-					var lose = $("input[name=lose]:checked").val();
-					if(lose == 1){
-						$(".yearExplain").show();
-					}else {
-						$(".yearExplain").hide();
-					}
-				});
-				$(".revoke").change(function(){
-					var revoke = $("input[name=revoke]:checked").val();
-					if(revoke == 1){
-						$(".explain").show();
-					}else {
-						$(".explain").hide();
-					}
-				});
-				$(".refuse").change(function(){
-					var refuse = $("input[name=refuse]:checked").val();
-					if(refuse == 1){
-						$(".refuseExplain").show();
-					}else {
-						$(".refuseExplain").hide();
-					}
-				});
-				$(".onceLegitimate").change(function(){
-					var onceLegitimate = $("input[name=onceLegitimate]:checked").val();
-					if(onceLegitimate == 1){
-						$(".onceExplain").show();
-					}else {
-						$(".onceExplain").hide();
-					}
-				});
-				$(".onceImmigration").change(function(){
-					var onceImmigration = $("input[name=onceImmigration]:checked").val();
-					if(onceImmigration == 1){
-						$(".immigrationExplain").show();
-					}else {
-						$(".immigrationExplain").hide();
-					}
-				});
-				
-				//亲属信息
-				$(".fatherUS").change(function(){
-					var fatherUS = $("input[name=fatherUS]:checked").val();
-					if(fatherUS == 1){
-						$(".fatherUSYes").show();
-					}else {
-						$(".fatherUSYes").hide();
-					}
-				});
-				$(".motherUS").change(function(){
-					var motherUS = $("input[name=motherUS]:checked").val();
-					if(motherUS == 1){
-						$(".motherUSYes").show();
-					}else {
-						$(".motherUSYes").hide();
-					}
-				});
-				$(".directRelatives").change(function(){
-					var directRelatives = $("input[name=directRelatives]:checked").val();
-					if(directRelatives == 1){
-						$(".directRelativesYes").show();
-						$(".directRelativesNo").hide();
-					}else {
-						$(".directRelativesYes").hide();
-						$(".directRelativesNo").show();
-					}
-				});
-				
-				//以前工作经历
-				$(".beforeWork").change(function(){
-					var beforeWork = $("input[name=beforeWork]:checked").val();
-					if(beforeWork == 1){
-						$(".beforeWorkInfo").show();
-					}else {
-						$(".beforeWorkInfo").hide();
-					}
-				});
-			})
-		</script>
+	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
+	<script src="${base}/admin/bigCustomer/visaInfo.js"></script><!-- 本页面js -->
+	
 </html>
