@@ -28,8 +28,8 @@
 			</div>
 			<div class="modal-body">
 				<div class="tab-content row">
-					<input id="comId" name="comId" type="hidden" value="${obj.applicant.comId }">
-					<input id="userId" name="userId" type="hidden" value="${obj.applicant.userId }">
+					<input id="comId" name="comid" type="hidden" value="${obj.applicant.comid }">
+					<input id="userId" name="userid" type="hidden" value="${obj.applicant.userid }">
 					<div class="col-sm-6 padding-right-0">
 						<div></div>
 						<!-- start 身份证 正面 -->
@@ -38,9 +38,9 @@
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传身份证正面</span>
-									<input id="cardFront" name="cardFront" type="hidden" value="${obj.applicant.cardFront }"/>
-									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
-									<img id="sqImg" name="sqImg" alt="" src="${obj.applicant.cardFront }" >
+									<input id="cardFront" name="cardfront" type="hidden" value="${obj.applicant.cardfront }"/>
+									<input id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
+									<img id="sqImg" name="sqimg" alt="" src="${obj.applicant.cardfront }" >
 									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 								</div>
 							</div>
@@ -56,9 +56,9 @@
 								<div class="form-group">
 									<div class="cardFront-div">
 										<span>点击上传身份证背面</span>
-										<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardBack }"/>
+										<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardback }"/>
 										<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
-										<img id="sqImgBack" alt="" src="${obj.applicant.cardBack }" >
+										<img id="sqImgBack" alt="" src="${obj.applicant.cardback }" >
 										<i class="delete" onclick="deleteApplicantBackImg();"></i>
 									</div>
 								</div>
@@ -74,7 +74,7 @@
 							<div class="col-sm-10 padding-right-0 marginL">
 								<div class="form-group">
 									<label><span>*</span>签发机关</label> 
-									<input id="issueOrganization" name="issueOrganization" tabIndex="1" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueOrganization }"/>
+									<input id="issueOrganization" name="issueorganization" tabIndex="1" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueorganization }"/>
 								</div>
 							</div>
 						</div>
@@ -86,10 +86,10 @@
 									<label>是否有曾用名</label> 
 									<div>
 										<span class="nameBeforeYes">
-											<input type="radio" name="hasOtherName" class="nameBefore" value="1"/>是
+											<input type="radio" name="hasothername" class="nameBefore" value="1"/>是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherName" class="nameBefore" value="2"/>否
+											<input type="radio" name="hasothername" class="nameBefore" value="2"/>否
 										</span>
 									</div>
 								</div>
@@ -99,8 +99,8 @@
 							    <div class="col-sm-10 padding-right-0 marginL">
 									<div class="form-group" style="position:relative;">
 										<label>姓/拼音</label> 
-										<input id="otherFirstName" name="otherFirstName" type="text" class="form-control input-sm "  tabIndex="15" placeholder=" " value="${obj.applicant.otherFirstName }" />
-										<input id="otherFirstNameEn" name="otherFirstNameEn" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.otherFirstNameEn }"/>
+										<input id="otherFirstName" name="otherfirstname" type="text" class="form-control input-sm "  tabIndex="15" placeholder=" " value="${obj.applicant.otherfirstname }" />
+										<input id="otherFirstNameEn" name="otherfirstnameen" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.otherfirstnameen }"/>
 									</div>
 								</div>
 							</div>
@@ -109,8 +109,8 @@
 								<div class="col-sm-10 padding-right-0 marginL" >
 									<div class="form-group" style="position:relative;">
 										<label>名/拼音</label> 
-										<input id="otherLastName" name="otherLastName"  tabIndex="16" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
-										<input id="otherLastNameEn" name="otherLastNameEn" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.otherLastNameEn }"/>
+										<input id="otherLastName" name="otherlastname"  tabIndex="16" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherlastname }" />
+										<input id="otherLastNameEn" name="otherlastnameen" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.otherlastnameen }"/>
 									</div>
 								</div>
 							</div>
@@ -120,10 +120,10 @@
 									<label>曾有的或另有的国籍(或公民身份)</label> 
 									<div>
 										<span class="onceIDYes">
-											<input type="radio" name="hasOtherNationality" class="onceID" value="1" />是
+											<input type="radio" name="hasothernationality" class="onceID" value="1" />是
 										</span>
 										<span>
-											<input type="radio" name="hasOtherNationality" class="onceID"  value="2" />否
+											<input type="radio" name="hasothernationality" class="onceID"  value="2" />否
 										</span>
 									</div>
 								</div>
@@ -146,9 +146,9 @@
 									<label>
 										<span>*</span>姓/拼音
 									</label> 
-									<input id="firstName" name="firstName" type="text" class="form-control input-sm "  tabIndex="2" placeholder=" " value="${obj.applicant.firstName }" />
+									<input id="firstName" name="firstname" type="text" class="form-control input-sm "  tabIndex="2" placeholder=" " value="${obj.applicant.firstname }" />
 									<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
-									<input id="firstNameEn" name="firstNameEn" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.firstNameEn }"/>
+									<input id="firstNameEn" name="firstnameen" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.firstnameen }"/>
 								</div>
 							</div>
 						</div>
@@ -160,8 +160,8 @@
 									<label>
 										<span>*</span>名/拼音
 									</label> 
-									<input id="lastName" name="lastName" type="text" class="form-control input-sm "  tabIndex="3" placeholder=" " value="${obj.applicant.lastName }" />
-									<input id="lastNameEn" name="lastNameEn" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.lastNameEn }"/>
+									<input id="lastName" name="lastname" type="text" class="form-control input-sm "  tabIndex="3" placeholder=" " value="${obj.applicant.lastname }" />
+									<input id="lastNameEn" name="lastnameen" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.lastnameen }"/>
 								</div>
 							</div>
 						</div>
@@ -234,13 +234,13 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>有效期限</label> 
-									<input id="validStartDate" name="validStartDate" tabIndex="10" type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
+									<input id="validStartDate" name="validstartdate" tabIndex="10" type="text" class="form-control input-sm" value="${obj.validstartdate }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label> &nbsp; &nbsp;</label> 
-									<input id="validEndDate" name="validEndDate" tabIndex="11" type="text" class="form-control input-sm" value="${obj.validEndDate }">
+									<input id="validEndDate" name="validenddate" tabIndex="11" type="text" class="form-control input-sm" value="${obj.validenddate }">
 								</div>
 							</div>
 						</div>
@@ -249,10 +249,10 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="provinceDiv">
 									<label>现居住地是否与身份证相同</label>
-									<input type="hidden" name="cardProvince" id="cardProvince" value="${obj.applicant.cardProvince }"/>
-									<input type="hidden" name="cardCity" id="cardCity" value="${obj.applicant.cardCity }"/>
+									<input type="hidden" name="cardprovince" id="cardProvince" value="${obj.applicant.cardprovince }"/>
+									<input type="hidden" name="cardcity" id="cardCity" value="${obj.applicant.cardcity }"/>
 									<input type="hidden" id="sameAddress" value=""/>
-									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> 
+									<input class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" /> 
 									<input id="province" name="province" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.applicant.province }" />
 								</div>
 							</div>
@@ -269,7 +269,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>详细地址</label> 
-									<input id="detailedAddress" name="detailedAddress" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedAddress }" />
+									<input id="detailedAddress" name="detailedaddress" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedaddress }" />
 								</div>
 							</div>
 						</div>
@@ -280,13 +280,13 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>紧急联系人姓名</label> 
-									<input id="emergencyLinkman" name="emergencyLinkman" type="text" class="form-control input-sm"  tabIndex="18" placeholder=" " value="${obj.applicant.emergencyLinkman }" />
+									<input id="emergencyLinkman" name="emergencylinkman" type="text" class="form-control input-sm"  tabIndex="18" placeholder=" " value="${obj.applicant.emergencylinkman }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>紧急联系人手机</label> 
-									<input id="emergencyTelephone" name="emergencyTelephone"  tabIndex="19" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.emergencyTelephone }" />
+									<input id="emergencyTelephone" name="emergencytelephone"  tabIndex="19" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.emergencytelephone }" />
 								</div>
 							</div>
 						</div>
@@ -324,11 +324,11 @@
 		}
 	
 		$(function(){
-			var nation = '${obj.applicant.hasOtherNationality}';
-			var otherName = '${obj.applicant.hasOtherName}';
-			var address = '${obj.applicant.addressIsSameWithCard}';
-			$("input[name='hasOtherNationality'][value='"+nation+"']").attr("checked",'checked');
-			$("input[name='hasOtherName'][value='"+otherName+"']").attr("checked",'checked');
+			var nation = '${obj.applicant.hasothernationality}';
+			var otherName = '${obj.applicant.hasothername}';
+			var address = '${obj.applicant.addressIssamewithcard}';
+			$("input[name='hasothernationality'][value='"+nation+"']").attr("checked",'checked');
+			$("input[name='hasothername'][value='"+otherName+"']").attr("checked",'checked');
 			if(nation == 1){
 				$(".nameBeforeTop").css('float','none');
 				$(".nationalityHide").show();
@@ -350,9 +350,9 @@
 			}
 			
 			if(address == 1){
-				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",true);
+				var boxObj = $("input:checkbox[name='addressIssamewithcard']").attr("checked",true);
 			}else{
-				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked",false);
+				var boxObj = $("input:checkbox[name='addressIssamewithcard']").attr("checked",false);
 			}
 		});
 		function successCallBack(status){

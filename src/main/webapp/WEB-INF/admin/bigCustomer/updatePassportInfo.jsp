@@ -63,8 +63,8 @@
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传护照</span>
-									<input id="passportUrl" name="passportUrl" type="hidden" value="${obj.passport.passportUrl }"/>
-									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
+									<input id="passportUrl" name="passporturl" type="hidden" value="${obj.passport.passporturl }"/>
+									<input id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
 									<img id="sqImg" alt="" src="${obj.passport.passporturl }" >
 									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 								</div>
@@ -85,7 +85,7 @@
 									<input id="id" name="id" type="hidden" value="${obj.passport.possportid }"/>
 									<input id="OCRline1" name="OCRline1" type="hidden" value="">
 									<input id="OCRline2" name="OCRline2" type="hidden" value="">
-									<input name="userType" type="hidden" value="${obj.userType }"/>
+									<input name="userType" type="hidden" value="${obj.usertype }"/>
 									<input id="staffId" name="staffId" type="hidden" value="${obj.passport.staffid }"/>
 									<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
 								</div>
@@ -110,14 +110,14 @@
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<input id="sexEn" name="sexEn" class="form-control input-sm" type="text" value="${obj.passport.sexEn }"/>
+									<input id="sexEn" name="sexen" class="form-control input-sm" type="text" value="${obj.passport.sexen }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 							 	<div class="form-group groupWidth" style="position:relative;">
 									<label><span>*</span>出生地点/拼音</label>
-									<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthAddress }"/>
-									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:32px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
+									<input id="birthAddress" name="birthaddress"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthaddress }"/>
+									<input id="birthAddressEn" name="birthaddressen" style="position:absolute;top:32px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value="${obj.passport.birthaddressen }"/>
 								</div>
 							</div>
 						</div><!-- end 性别/出生地点 拼音 -->
@@ -133,8 +133,8 @@
 									<label>
 										<span>*</span>签发地点/拼音
 									</label>
-									<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedPlace }"/>
-									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:32px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
+									<input id="issuedPlace" name="issuedplace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedplace }"/>
+									<input id="issuedPlaceEn" name="issuedplaceen" type="text" style="position:absolute;top:32px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passport.issuedplaceen }"/>
 								</div>
 							</div>
 						</div><!-- end 出生日期/签发地点 拼音 -->
@@ -144,15 +144,15 @@
 									<label>
 										<span>*</span>签发日期
 									</label>
-									<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedDate }"/>
+									<input id="issuedDate" name="issueddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issueddate }"/>
 								</div>
 							</div>
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<select id="validType" name="validType" class="form-control input-sm selectHeight" >
-									<c:forEach var="map" items="${obj.passportType}">
-										<option value="${map.key}" ${map.key == obj.passport.validType?'selected':'' }>${map.value}</option>
+									<select id="validType" name="validtype" class="form-control input-sm selectHeight" >
+									<c:forEach var="map" items="${obj.passporttype}">
+										<option value="${map.key}" ${map.key == obj.passport.validtype?'selected':'' }>${map.value}</option>
 									</c:forEach>
 								</select>
 								</div>
@@ -162,7 +162,7 @@
 									<label>
 										<span>*</span>有效期至
 									</label>
-									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.validEndDate }"/>
+									<input id="validEndDate" name="validenddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.validenddate }"/>
 								</div>
 							</div>
 						</div><!-- end 签发日期/有效期至 -->
@@ -172,7 +172,7 @@
 									<label>
 										<span>*</span>签发机关
 									</label>
-									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
+									<input id="issuedOrganization" name="issuedorganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedorganization }"/>
 								</div>
 							</div>
 						</div><!-- end 签发机关 -->
@@ -180,7 +180,7 @@
 						<div class="row none">
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
+									<input id="issuedOrganizationEn" name="issuedorganizationen" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedorganizationen }"/>
 								</div>
 							</div>
 						</div>
@@ -194,7 +194,7 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		var staffId = '${obj.passport.staffId}';
-		var infoType = '${obj.infoType}';
+		var infoType = '${obj.infotype}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>

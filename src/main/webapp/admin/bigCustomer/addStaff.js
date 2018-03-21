@@ -61,14 +61,14 @@ function applyValidate(){
 		},
 		fields : {
 
-			firstName : {
+			firstname : {
 				validators : {
 					notEmpty : {
 						message : '姓不能为空'
 					}
 				}
 			},
-			lastName : {
+			lastname : {
 				validators : {
 					notEmpty : {
 						message : '名不能为空'
@@ -83,7 +83,7 @@ function applyValidate(){
 					}
 				}
 			},
-			emergencyTelephone : {
+			emergencytelephone : {
 				validators : {
 					regexp: {
 						regexp: /^[1][34578][0-9]{9}$/,

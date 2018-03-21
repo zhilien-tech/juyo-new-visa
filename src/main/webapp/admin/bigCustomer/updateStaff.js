@@ -28,14 +28,14 @@ function applyValidate(){
 		},
 		fields : {
 
-			firstName : {
+			firstname : {
 				validators : {
 					notEmpty : {
 						message : '姓不能为空'
 					}
 				}
 			},
-			lastName : {
+			lastname : {
 				validators : {
 					notEmpty : {
 						message : '名不能为空'
@@ -207,7 +207,7 @@ $('#uploadFile').change(function() {
 					$('#cardId').val(obj.num).change();
 					var str="";  
 					//是否同身份证相同
-					$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+					$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
 						str=$(this).val();     
 					});     
 					if(str == 1){//相同
@@ -298,8 +298,8 @@ function dataURLtoBlob(dataurl) {
 
 //checkbox 曾用名
 $(".nameBefore").change(function(){
-	let checked = $("input[name='hasOtherName']:checked").val();
-	let checked2 = $("input[name='hasOtherNationality']:checked").val();
+	let checked = $("input[name='hasothername']:checked").val();
+	let checked2 = $("input[name='hasothernationality']:checked").val();
 	if(checked == 1){
 		$(".nameBeforeTop").css('float','none');
 		$(".nameBeforeHide").show();
@@ -324,8 +324,8 @@ $(".nameBefore").change(function(){
 });
 //曾用国籍
 $(".onceID").change(function(){
-	let checked = $("input[name='hasOtherNationality']:checked").val();
-	let checked2 = $("input[name='hasOtherName']:checked").val();
+	let checked = $("input[name='hasothernationality']:checked").val();
+	let checked2 = $("input[name='hasothername']:checked").val();
 	if(checked == 1){
 		$(".nameBeforeTop").css('float','none');
 		$(".nationalityHide").show();
@@ -352,7 +352,7 @@ $(".onceID").change(function(){
 $(".nowProvince").change(function(){
 	var str="";  
 	//是否同身份证相同
-	$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+	$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
 		str=$(this).val();     
 	});     
 	if(str == 1){//相同
@@ -399,7 +399,7 @@ function saveApplicant(status){
 	if (bootstrapValidator.isValid()){
 		var str="";
 		var applicantInfo;
-		$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+		$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
 			str=$(this).val();     
 		});
 		if(str != 1){
@@ -441,7 +441,7 @@ function saveApplicant(status){
 
 		var str="";
 		var applicantInfo;
-		$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
+		$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
 			str=$(this).val();     
 		});
 		if(str != 1){
