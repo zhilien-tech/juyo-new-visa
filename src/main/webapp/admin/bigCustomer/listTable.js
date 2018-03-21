@@ -84,7 +84,7 @@ function initDatatable() {
 		            	render: function(data, type, row, meta) {
 		            		var updateApplicant = '<a style="cursor:pointer;" class="updateApplicant" onclick="baseInfo('+row.staffid+');"></a>';
 		            		var passport = '<a style="cursor:pointer;" class="passport" onclick="passport('+row.passportid+');"></a>';
-		            		var visa = '<a class="visa" onclick=""></a>';
+		            		var visa = '<a class="visa" onclick="visa('+row.staffid+');"></a>';
 		            		var otherVisa = '<a class="otherVisa" onclick=""></a>';
 		            		var deleteIcon = '<a style="cursor:pointer;" class="deleteIcon" onclick="deleteById('+row.staffid+');"></a>';
 		            		return updateApplicant+passport+visa+otherVisa+deleteIcon;
@@ -136,6 +136,21 @@ function passport(id){
 		scrollbar: false,
 		area: ['900px', '80%'],
 		content: BASE_PATH + '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
+	});
+}
+
+/* 签证信息编辑 */
+function visa(id){
+	layer.open({
+		type: 2,
+		title: false,
+		closeBtn:false,
+		fix: false,
+		maxmin: false,
+		shadeClose: false,
+		scrollbar: false,
+		area: ['900px', '80%'],
+		content: BASE_PATH + '/admin/bigCustomer/updateVisaInfo.jsp.html?staffId='+id
 	});
 }
 
