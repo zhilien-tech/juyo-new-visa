@@ -51,9 +51,8 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		/*form.setUserid(loginUser.getId());
-		form.setCompanyid(loginCompany.getId());
-		form.setAdminId(loginCompany.getAdminId());*/
+		form.setUserid(loginUser.getId());
+		form.setAdminId(loginCompany.getAdminId());
 
 		Map<String, Object> result = Maps.newHashMap();
 		List<Record> list = new ArrayList<>();
