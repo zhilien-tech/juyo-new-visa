@@ -82,6 +82,7 @@
 							<div class="youRelationship">
 								<label>与你的关系</label>
 								<select>
+									<option value="0">请选择</option>
 									<option>父母</option>
 									<option>配偶</option>
 									<option>子女</option>
@@ -113,48 +114,90 @@
 						</div>
 						<!--yes-->
 						<div class="goUSInfo goUSYes">
-							<div class="groupInputInfo">
-								<label>抵达日期</label>
-								<input type="text" placeholder="日/月/年">
-							</div>
-							<div class="groupInputInfo stopDate">
-								<label>停留时间</label>
-								<input type="text" />
-								<select>
-									<option>年</option>
-									<option>月</option>
-									<option>周</option>
-									<option>日</option>
-									<option>少于24小时</option>
-								</select>
+							<div>
+								<div class="goUS_Country">
+									<div class="groupInputInfo">
+										<label>抵达日期</label>
+										<input type="text" placeholder="日/月/年">
+									</div>
+									<div class="groupInputInfo stopDate goUS_Country">
+										<label>停留时间</label>
+										<input type="text" />
+										<select>
+											<option value="0">请选择</option>
+											<option>年</option>
+											<option>月</option>
+											<option>周</option>
+											<option>日</option>
+											<option>少于24小时</option>
+										</select>
+									</div>
+								</div>
+								<div class="goUS_Country">
+									<div class="groupInputInfo">
+										<label>抵达日期</label>
+										<input type="text" placeholder="日/月/年">
+									</div>
+									<div class="groupInputInfo stopDate goUS_Country">
+										<label>停留时间</label>
+										<input type="text" />
+										<select>
+											<option value="0">请选择</option>
+											<option>年</option>
+											<option>月</option>
+											<option>周</option>
+											<option>日</option>
+											<option>少于24小时</option>
+										</select>
+									</div>
+								</div>
+								
 							</div>
 							<div class="btnGroup">
 								<a class="save">添加</a>
 								<a class="cancel">去掉</a>
 							</div>
+							
 							<div class="groupRadioInfo drivingUS">
 								<label>是否有美国驾照</label>
 								<input type="radio" name="license" class="license" value="1" />是
 								<input type="radio" name="license" class="license" value="2" checked />否
 							</div>
-							<div class="driverInfo">
-								<div class="groupcheckBoxInfo driverMain">
-									<label>驾照号</label>
-									<input type="text" >
-									<input type="checkbox"/>
+							<div>
+								<div class="driverInfo goUS_drivers">
+									<div class="groupcheckBoxInfo driverMain">
+										<label>驾照号</label>
+										<input type="text" >
+										<input type="checkbox"/>
+									</div>
+									<div class="groupSelectInfo driverR">
+										<label>哪个州的驾照</label>
+										<select>
+											<option value="0">请选择</option>
+											<option>北卡罗莱纳州</option>
+										</select>
+									</div>
 								</div>
-								<div class="groupSelectInfo driverR">
-									<label>哪个州的驾照</label>
-									<select>
-										<option>北卡罗莱纳州</option>
-									</select>
-								</div>
-								<div class="clear"></div>
-								<div class="btnGroup">
-									<a class="save">添加</a>
-									<a class="cancel">去掉</a>
+								<div class="driverInfo goUS_drivers">
+									<div class="groupcheckBoxInfo driverMain">
+										<label>驾照号</label>
+										<input type="text" >
+										<input type="checkbox"/>
+									</div>
+									<div class="groupSelectInfo driverR">
+										<label>哪个州的驾照</label>
+										<select>
+											<option value="0">请选择</option>
+											<option>北卡罗莱纳州</option>
+										</select>
+									</div>
 								</div>
 							</div>
+							<div class="btnGroup">
+								<a class="save">添加</a>
+								<a class="cancel">去掉</a>
+							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -282,7 +325,7 @@
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>组织名称</label>
 					<input type="text" />
-					<input type="checkbox" />
+					<input class="groupname_us" type="checkbox" />
 				</div>
 				<div class="paddingRight groupSelectInfo">
 					<label>与你的关系</label>

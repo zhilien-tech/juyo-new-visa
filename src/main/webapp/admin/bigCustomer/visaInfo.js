@@ -14,7 +14,7 @@ $(".companyInfo").change(function(){
 });
 //旅伴信息--是否作为团队或组织的一部分旅游
 $(".team").change(function(){
-	var teamVal = $("input[name=team]:checked").val(); 
+	var teamVal = $("input[class=team]:checked").val(); 
 	if(teamVal == 1){
 		$(".teamnameture").show();
 		$(".teamnamefalse").hide();
@@ -30,16 +30,30 @@ $(".team").change(function(){
 //以前的美国旅游信息
 //(1)是否去过美国
 $(".goUS").change(function(){
-	var goUS = $("input[name=goUS]:checked").val();
+	var goUS = $("input[class=goUS]:checked").val();
 	if(goUS == 1){
 		$(".goUSInfo").show();
 	}else{
 		$(".goUSInfo").hide();
-		deleteBrotherEle($("div.goUSInfo"));
-		emptyContentById($("div.goUSInfo"));
+		deleteBrotherEle($("div.goUS_Country"));
+		emptyContentById($("div.goUS_Country"));
+		//触发单选按钮的点击事件
+		$(".license").eq(1).click();
 	}
 
 });
+//(2)是否有美国驾照
+$(".license").change(function(){
+	var license = $("input[class=license]:checked").val();
+	if(license == 1){
+		$(".driverInfo").show();
+	}else{
+		$(".driverInfo").hide();
+		deleteBrotherEle($("div.goUS_drivers"));
+		emptyContentById($("div.goUS_drivers"));
+	}
+});
+
 
 
 
@@ -89,6 +103,12 @@ function emptyContentById(obj){
 	
 }
 
+//勾选checkbox("不知道")，设置前一个兄弟级元素disable和no edit
+function editEleBeforeCheckbox(obj){
+	var beforeEle = obj.prev();
+	beforeEle.val("");
+	beforeEle.attr("disabled","disabled");
+}
 
 
 
