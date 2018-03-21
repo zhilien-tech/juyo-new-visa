@@ -136,7 +136,6 @@
 								</div>
 							</div>
 						</div>
-						
 					</div>
 
 					<div class="col-sm-6 padding-right-0">
@@ -292,7 +291,6 @@
 							</div>
 						</div>
 					</div>
-					
 				</div>
 			</div>
 		</form>

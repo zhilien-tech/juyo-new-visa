@@ -24,6 +24,8 @@ import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.orderus.service.OrderUSViewService;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
+import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaCountryEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaProcess_US_Enum;
@@ -34,6 +36,7 @@ import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffEventsEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.juyo.visa.entities.TUserJobEntity;
 import com.juyo.visa.forms.TAppEventsForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.uxuexi.core.common.util.EnumUtil;
@@ -171,8 +174,13 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	@POST
 	public Object signUpEventByPublicNum(SignUpEventForm form, HttpSession session) {
 
+		//当前登录用户Id
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer loginUserId = loginUser.getId();
+
 		//添加人员
 		TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
+		staffForm.setUserid(loginUserId);
 		staffForm.setFirstname(form.getFirstname());
 		staffForm.setLastname(form.getLastname());
 		staffForm.setTelephone(form.getTelephone());
@@ -185,7 +193,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		Integer staffId = Integer.valueOf(staffIdStr);
 		Integer eventId = form.getEventId();
 
-		//人员包名活动
+		//人员报名名活动
 		TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
 		staffEventEntity.setEventsId(eventId);
 		staffEventEntity.setStaffId(staffId);
@@ -208,14 +216,14 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//游客登录
 		ApplicantUser applicantUser = new ApplicantUser();
 		applicantUser.setMobile(applicant.getTelephone());
-		applicantUser.setOpid(applicant.getOpid());
+		//applicantUser.setOpid(applicant.getOpid());
 		applicantUser.setPassword(DEFAULT_PASSWORD);
 		applicantUser.setUsername(applicant.getFirstname() + applicant.getLastname());
 		if (!Util.isEmpty(applicant.getTelephone())) {
 			TUserEntity userEntity = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", applicant.getTelephone())
-					.and("userType", "=", UserLoginEnum.TOURIST_IDENTITY.intKey()));
+					.and("userType", "=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey()));
 			if (Util.isEmpty(userEntity)) {
-				TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
+				TUserEntity tUserEntity = addApplicantUser(applicantUser);
 				applicant.setUserid(tUserEntity.getId());
 			} else {
 				userEntity.setName(applicantUser.getUsername());
@@ -228,6 +236,39 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * TODO 添加申请人
+	 * <p>
+	 * TODO 添加申请人（大客户游客）到用户表   以便登录
+	 *
+	 * @param applyuser
+	 * @return TODO 添加申请人
+	 */
+	public TUserEntity addApplicantUser(ApplicantUser applyuser) {
+		//用户信息
+		TUserEntity user = new TUserEntity();
+		user.setComId(CommonConstants.BIG_COMPANY_TOURIST_ID);
+		user.setName(applyuser.getUsername());
+		user.setMobile(applyuser.getMobile());
+		user.setPassword(applyuser.getPassword());
+		user.setDepartmentId(CommonConstants.BIG_DEPARTMENT_TOURIST_ID);
+		user.setIsDisable(IsYesOrNoEnum.YES.intKey());
+		user.setJobId(CommonConstants.BIG_JOB_TOURIST_ID);
+		user.setOpId(applyuser.getOpid());
+		user.setUserType(UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
+		user.setCreateTime(new Date());
+		user.setUpdateTime(new Date());
+		//添加用户
+		TUserEntity insertuser = dbDao.insert(user);
+		//用户就职信息
+		TUserJobEntity userjob = new TUserJobEntity();
+		userjob.setEmpId(insertuser.getId());
+		userjob.setComJobId(CommonConstants.BIG_COMPANY_JOB_ID);
+		userjob.setStatus(IsYesOrNoEnum.YES.intKey());
+		dbDao.insert(userjob);
+		return insertuser;
 	}
 
 	/**

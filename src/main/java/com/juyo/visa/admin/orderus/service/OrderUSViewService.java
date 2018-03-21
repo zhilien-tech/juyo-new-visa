@@ -68,7 +68,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		List<Record> query = dbDao.query(sql, null, null);
 		int sum = 1;
 		if (!Util.isEmpty(query) && query.size() > 0) {
-			String string = query.get(0).getString("orderNum");
+			String string = query.get(0).getString("ordernumber");
 			int a = Integer.valueOf(string.substring(9, string.length()));
 			sum += a;
 		}
