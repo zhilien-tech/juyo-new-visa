@@ -1286,5 +1286,6 @@
 	</body>
 	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
 	<script src="${base}/admin/bigCustomer/visaInfo.js"></script><!-- 本页面js -->
+	<script src="${base}/admin/bigCustomer/visaInfo1.js"></script><!-- 本页面js -->
 	
 </html>

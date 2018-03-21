@@ -8,6 +8,8 @@ $(".companyInfo").change(function(){
 		$(".teamture").hide();
 		deleteBrotherEle($("div.teamnamefalse"));
 		emptyContentById($("div.teamnamefalse"));
+		//触发单选按钮的点击事件
+		$(".team").eq(1).click();
 	}
 });
 //旅伴信息--是否作为团队或组织的一部分旅游
@@ -23,6 +25,20 @@ $(".team").change(function(){
 		deleteBrotherEle($("div.teamnamefalse"));
 		emptyContentById($("div.teamnamefalse"));
 	}
+});
+
+//以前的美国旅游信息
+//(1)是否去过美国
+$(".goUS").change(function(){
+	var goUS = $("input[name=goUS]:checked").val();
+	if(goUS == 1){
+		$(".goUSInfo").show();
+	}else{
+		$(".goUSInfo").hide();
+		deleteBrotherEle($("div.goUSInfo"));
+		emptyContentById($("div.goUSInfo"));
+	}
+
 });
 
 
