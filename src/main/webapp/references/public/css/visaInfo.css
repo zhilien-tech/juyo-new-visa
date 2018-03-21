@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+*{
+	margin:0;
+	padding:0;
+}
+.head {
+	width:100%;
+	hieght:60px;
+	line-height:60px;
+	position:fixed;
+	top:0;
+	border-bottom:1px solid #eee;
+}
