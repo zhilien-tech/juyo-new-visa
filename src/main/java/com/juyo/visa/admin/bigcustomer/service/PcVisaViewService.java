@@ -51,9 +51,8 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		/*form.setUserid(loginUser.getId());
-		form.setCompanyid(loginCompany.getId());
-		form.setAdminId(loginCompany.getAdminId());*/
+		form.setUserid(loginUser.getId());
+		form.setAdminId(loginCompany.getAdminId());
 
 		Map<String, Object> result = Maps.newHashMap();
 		List<Record> list = new ArrayList<>();
@@ -187,6 +186,22 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		cnd.and("tasou.orderid", "=", orderid);
 		List<Record> summaryInfos = dbDao.query(applysql, cnd, null);
 		return summaryInfos;
+	}
+
+	/**
+	 * 跳转到签证详情页
+	 */
+	public Object visaInfos(Integer orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
+		List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
+		result.put("travelInfo", orderTravelInfo);
+		if (!Util.isEmpty(staffSummaryInfoList)) {
+			result.put("summaryInfo", staffSummaryInfoList.get(0));
+		} else {
+			result.put("summaryInfo", null);
+		}
+		return result;
 	}
 
 }

@@ -160,6 +160,9 @@ public class LoginService extends BaseService<TUserEntity> {
 			} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
 				//游客跳转的页面
 				form.setMainurl("/admin/myVisa/visaList.html");
+			} else if (UserLoginEnum.BIG_TOURIST_IDENTITY.intKey() == userType) {
+				//大客户游客跳转的页面
+				form.setMainurl("/admin/pcVisa/visaList.html");
 			} else {
 				//功能列表为空
 				if (Util.isEmpty(allUserFunction)) {
