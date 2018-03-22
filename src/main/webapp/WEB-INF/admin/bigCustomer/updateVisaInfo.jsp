@@ -1086,10 +1086,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否是曾在美国或美国以外犯有或密谋人口走私案的配偶或子女？是否在最近5年里从走私活动中获得过好处</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isSmugglingBenefits" class="isSmugglingBenefits" value="1"/>是
+						<input type="radio" name="isSmugglingBenefits" class="isSmugglingBenefits" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isSmugglingBenefitsDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1097,10 +1097,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否在美国企图从事间谍活动，破坏活动，违反出口管制或任何其他非法活动</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isSpyActivities" class="isSpyActivities" value="1"/>是
+						<input type="radio" name="isSpyActivities" class="isSpyActivities" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isSpyActivitiesDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1108,10 +1108,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否在美国企图从事恐怖活动，还是曾经参与过恐怖行动</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isTerroristActivities" class="isTerroristActivities" value="1"/>是
+						<input type="radio" name="isTerroristActivities" class="isTerroristActivities" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isTerroristActivitiesDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1119,10 +1119,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否有意向向恐怖分子或组织提供财政支援或其他支持</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isSupportTerrorists" class="isSupportTerrorists" value="1"/>是
+						<input type="radio" name="isSupportTerrorists" class="isSupportTerrorists" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isSupportTerroristsDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1130,10 +1130,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否是恐怖组织的成员或代表</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isTerrorist" class="isTerrorist" value="1"/>是
+						<input type="radio" name="isTerrorist" class="isTerrorist" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isTerroristDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1141,10 +1141,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否曾经下令、煽动、承诺、协助或以其他方式参与种族灭绝</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isTakeGenocide" class="isTakeGenocide" value="1"/>是
+						<input type="radio" name="isTakeGenocide" class="isTakeGenocide" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isTakeGenocideDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1152,10 +1152,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否曾经犯下、下令、煽动协助或以其他方式参与过酷刑</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isOrderedThreat" class="isOrderedThreat" value="1"/>是
+						<input type="radio" name="isOrderedThreat" class="isOrderedThreat" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isOrderedThreat grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1163,10 +1163,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否曾经犯下、下令、煽动协助或以其他方式参与过法外杀戮、政治杀戮或其他暴力行为</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isPoliticalKilling" class="isPoliticalKilling" value="1"/>是
+						<input type="radio" name="isPoliticalKilling" class="isPoliticalKilling" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isPoliticalKillingDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1174,10 +1174,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否参与招募或使用童兵</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isRecruitChildSoldier" class="isRecruitChildSoldier" value="1"/>是
+						<input type="radio" name="isRecruitChildSoldier" class="isRecruitChildSoldier" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isRecruitChildSoldierDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1185,22 +1185,21 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>担任官员时，是否曾经负责或直接执行特别严重的侵犯宗教自由的行为</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isInroadReligion" class="isInroadReligion" value="1"/>是
+						<input type="radio" name="isInroadReligion" class="isInroadReligion" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isInroadReligionDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
 				</div>
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
-						<label>是否曾经直接参与或建立执行人口控制措施，强迫妇女对其自由选择进行堕胎，或是否有男人或女人
-违反其自由意志进行绝育</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<label>是否曾经直接参与或建立执行人口控制措施，强迫妇女对其自由选择进行堕胎，或是否有男人或女人违反其自由意志进行绝育</label>
+						<input type="radio" name="isForcedControlPopulation" class="isForcedControlPopulation" value="1"/>是
+						<input type="radio" name="isForcedControlPopulation" class="isForcedControlPopulation" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isForcedControlPopulationDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1208,22 +1207,21 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否曾经直接参与人体器官或身体组织的强制移植</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isForcedOrganTake" class="isForcedOrganTake" value="1"/>是
+						<input type="radio" name="isForcedOrganTake" class="isForcedOrganTake" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isForcedOrganTakeDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
 				</div>
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
-						<label>是否曾通过欺诈或故意虚假陈述或其他非法手段获得或协助他人获得美国签证，入境美国或获取任何
-其他移民福利</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<label>是否曾通过欺诈或故意虚假陈述或其他非法手段获得或协助他人获得美国签证，入境美国或获取任何其他移民福利</label>
+						<input type="radio" name="isIllegalVisaUS" class="isIllegalVisaUS" value="1"/>是
+						<input type="radio" name="isIllegalVisaUS" class="isIllegalVisaUS" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isIllegalVisaUSDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1231,10 +1229,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否曾被驱逐出境</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isDeported" class="isDeported" value="1"/>是
+						<input type="radio" name="isDeported" class="isDeported" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isDeportedDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1242,10 +1240,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>在过去的5年中是否参加过远程访问或不可受理的听证会</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isRemoteHearing" class="isRemoteHearing" value="1"/>是
+						<input type="radio" name="isRemoteHearing" class="isRemoteHearing" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isRemoteHearingDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1253,10 +1251,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label style="display: block;">是否曾经非法存在，超出了入境官员的时间，或以其他方式违反了美国的签证条款</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isViolationVisaConditions" class="isViolationVisaConditions" value="1"/>是
+						<input type="radio" name="isViolationVisaConditions" class="isViolationVisaConditions" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isViolationVisaConditionsDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1264,10 +1262,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>您是否曾经拒绝将一在美国境外的美籍儿童的监护权移交给一被美国法庭批准享有法定监护权的人</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isRefusalTransferCustody" class="isRefusalTransferCustody" value="1"/>是
+						<input type="radio" name="isRefusalTransferCustody" class="isRefusalTransferCustody" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isRefusalTransferCustodyDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1275,10 +1273,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否违反了法律或规定在美国进行过投票选举</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isIllegalVoting" class="isIllegalVoting" value="1"/>是
+						<input type="radio" name="isIllegalVoting" class="isIllegalVoting" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isIllegalVotingDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1286,10 +1284,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否为逃税放弃过美国公民身份</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isTaxEvasion" class="isTaxEvasion" value="1"/>是
+						<input type="radio" name="isTaxEvasion" class="isTaxEvasion" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isTaxEvasionDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1297,10 +1295,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否曾在1996年11月30日之后以学生身份到美国的一公立小学或公立中学就读而没有向学校补交费用</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isNotPayTuitionFees" class="isNotPayTuitionFees" value="1"/>是
+						<input type="radio" name="isNotPayTuitionFees" class="isNotPayTuitionFees" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isNotPayTuitionFeesDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
