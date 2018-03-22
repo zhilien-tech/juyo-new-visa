@@ -588,6 +588,7 @@
 				<div class="paddingTop groupSelectInfo" >
 					<label>主要职业</label>
 					<select id="occupation" name="occupation" onchange="occupationChange()">
+						<option value="0">请选择</option>
 						<option value="1">农业</option>
 						<option value="2">艺术家/表演家</option>
 						<option value="3">商业</option>
@@ -612,7 +613,7 @@
 						<option value="22">其他</option>
 					</select>
 				</div>
-				<div class="paddingTop">
+				<div class="paddingTop elementHide jobEduLearningInfoDiv">
 					<div class="floatLeft groupInputInfo">
 						<label>目前的工作点位或者学校名称</label>
 						<input type="text" />
@@ -649,6 +650,7 @@
 					<div class="paddingRight groupSelectInfo" >
 						<label>国家/地区</label>
 						<select>
+							<option value="0">请选择</option>
 							<option>中国</option>
 							<option>美国</option>
 						</select>
@@ -673,7 +675,9 @@
 					</div>
 					<div class="clear"></div>
 				</div>
-				<div class="grouptextareaInfo">
+				
+				
+				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea">
 					<label>说明</label>
 					<textarea></textarea>
 				</div>
@@ -685,79 +689,86 @@
 						<div class="groupRadioInfo">
 							<label>以前是否工作过</label>
 							<input type="radio" name="beforeWork" class="beforeWork" value="1" />是
-							<input type="radio" name="beforeWork" class="beforeWork" value="2" />否
+							<input type="radio" name="beforeWork" class="beforeWork" value="2" checked/>否
 						</div>
 						<!--yes-->
-						<div class="beforeWorkInfo">
-							<div class="paddingLeft groupInputInfo" >
-								<label>雇主名字</label>
-								<input type="text" />
+						<div class="beforeWorkInfo elementHide">
+							<div>
+								<div class="workBeforeInfosDiv">
+									<div class="paddingLeft groupInputInfo" >
+										<label>雇主名字</label>
+										<input type="text" />
+									</div>
+									<div class="paddingRight groupInputInfo">
+										<label>雇主街道地址(首选)</label>
+										<input type="text" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft groupInputInfo">
+										<label>雇主街道地址(次选)*可选</label>
+										<input type="text" />
+									</div>
+									<div class="paddingRight groupcheckBoxInfo" >
+										<label>市</label>
+										<input type="text" />
+										<input type="checkbox" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft groupInputInfo">
+										<label>州/省</label>
+										<input type="text" />
+									</div>
+									<div class="paddingRight groupcheckBoxInfo">
+										<label>邮政编码</label>
+										<input type="text" />
+										<input type="checkbox" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft groupSelectInfo">
+										<label>国家/地区</label>
+										<select>
+											<option value="0">请选择</option>
+											<option>中国</option>
+											<option>美国</option>
+										</select>
+									</div>
+									<div class="paddingRight groupInputInfo">
+										<label>电话号码</label>
+										<input type="text" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft groupInputInfo">
+										<label>职称</label>
+										<input type="text"/>
+									</div>
+									<div class="paddingRight groupcheckBoxInfo">
+										<label>主管的姓</label>
+										<input type="text" />
+										<input type="checkbox" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft groupcheckBoxInfo">
+										<label>主管的名</label>
+										<input type="text" />
+										<input type="checkbox" />
+									</div>
+									<div class="paddingRight groupInputInfo" >
+										<label>入职时间</label>
+										<input type="text" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft groupInputInfo">
+										<label>离职时间</label>
+										<input type="text" />
+									</div>
+									<div class="paddingRight grouptextareaInfo">
+										<label>简要描述你的指责</label>
+										<textarea></textarea>
+									</div>
+								</div>
+							
 							</div>
-							<div class="paddingRight groupInputInfo">
-								<label>雇主街道地址(首选)</label>
-								<input type="text" />
-							</div>
-							<div class="clear"></div>
-							<div class="paddingLeft groupInputInfo">
-								<label>雇主街道地址(次选)*可选</label>
-								<input type="text" />
-							</div>
-							<div class="paddingRight groupcheckBoxInfo" >
-								<label>市</label>
-								<input type="text" />
-								<input type="checkbox" />
-							</div>
-							<div class="clear"></div>
-							<div class="paddingLeft groupInputInfo">
-								<label>州/省</label>
-								<input type="text" />
-							</div>
-							<div class="paddingRight groupcheckBoxInfo">
-								<label>邮政编码</label>
-								<input type="text" />
-								<input type="checkbox" />
-							</div>
-							<div class="clear"></div>
-							<div class="paddingLeft groupSelectInfo">
-								<label>国家/地区</label>
-								<select>
-									<option>中国</option>
-									<option>美国</option>
-								</select>
-							</div>
-							<div class="paddingRight groupInputInfo">
-								<label>电话号码</label>
-								<input type="text" />
-							</div>
-							<div class="clear"></div>
-							<div class="paddingLeft groupInputInfo">
-								<label>职称</label>
-								<input type="text"/>
-							</div>
-							<div class="paddingRight groupcheckBoxInfo">
-								<label>主管的姓</label>
-								<input type="text" />
-								<input type="checkbox" />
-							</div>
-							<div class="clear"></div>
-							<div class="paddingLeft groupcheckBoxInfo">
-								<label>主管的名</label>
-								<input type="text" />
-								<input type="checkbox" />
-							</div>
-							<div class="paddingRight groupInputInfo" >
-								<label>入职时间</label>
-								<input type="text" />
-							</div>
-							<div class="clear"></div>
-							<div class="paddingLeft groupInputInfo">
-								<label>离职时间</label>
-								<input type="text" />
-							</div>
-							<div class="paddingRight grouptextareaInfo">
-								<label>简要描述你的指责</label>
-								<textarea></textarea>
-							</div>
+							
 							<div class="clear"></div>
 							<div class="btnGroup">
 								<a class="save">添加</a>
@@ -771,59 +782,65 @@
 						<div class="groupRadioInfo">
 							<label>是否上过中学或以上的任何教育</label>
 							<input type="radio" name="education" class="education" value="1" />是
-							<input type="radio" name="education" class="education" value="2" />否
+							<input type="radio" name="education" class="education" value="2" checked/>否
 						</div>
 						<!--yes-->
-						<div class="educationInfo">
-							<div class="paddingLeft groupInputInfo">
-								<label>机构名称</label>
-								<input type="text"/>
+						<div class="educationInfo elementHide">
+							<div>
+								<div class="midSchoolEduDiv">
+									<div class="paddingLeft groupInputInfo">
+										<label>机构名称</label>
+										<input type="text"/>
+									</div>
+									<div class="paddingRight groupInputInfo">
+										<label>街道地址(首选)</label>
+										<input type="text" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft groupInputInfo">
+										<label>街道地址(次选)*可选</label>
+										<input type="text" />
+									</div>
+									<div class="paddingRight groupcheckBoxInfo" >
+										<label >市</label>
+										<input type="text" />
+										<input type="checkbox" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft groupInputInfo">
+										<label>州/省</label>
+										<input type="text" />
+									</div>
+									<div class="paddingRight groupcheckBoxInfo">
+										<label>邮政编码</label>
+										<input type="text" />
+										<input type="checkbox" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft groupSelectInfo" >
+										<label>国家/地区</label>
+										<select>
+											<option value="0">请选择</option>
+											<option>中国</option>
+											<option>美国</option>
+										</select>
+									</div>
+									<div class="paddingRight groupInputInfo">
+										<label>学科</label>
+										<input type="text" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft groupInputInfo">
+										<label>参加课程开始时间</label>
+										<input type="text" />
+									</div>
+									<div class="paddingRight groupInputInfo">
+										<label>结束时间</label>
+										<input type="text"/>
+									</div>
+								</div>
 							</div>
-							<div class="paddingRight groupInputInfo">
-								<label>街道地址(首选)</label>
-								<input type="text" />
-							</div>
-							<div class="clear"></div>
-							<div class="paddingLeft groupInputInfo">
-								<label>街道地址(次选)*可选</label>
-								<input type="text" />
-							</div>
-							<div class="paddingRight groupcheckBoxInfo" >
-								<label >市</label>
-								<input type="text" />
-								<input type="checkbox" />
-							</div>
-							<div class="clear"></div>
-							<div class="paddingLeft groupInputInfo">
-								<label>州/省</label>
-								<input type="text" />
-							</div>
-							<div class="paddingRight groupcheckBoxInfo">
-								<label>邮政编码</label>
-								<input type="text" />
-								<input type="checkbox" />
-							</div>
-							<div class="clear"></div>
-							<div class="paddingLeft groupSelectInfo" >
-								<label>国家/地区</label>
-								<select>
-									<option>中国</option>
-									<option>美国</option>
-								</select>
-							</div>
-							<div class="paddingRight groupInputInfo">
-								<label>学科</label>
-								<input type="text" />
-							</div>
-							<div class="clear"></div>
-							<div class="paddingLeft groupInputInfo">
-								<label>参加课程开始时间</label>
-								<input type="text" />
-							</div>
-							<div class="paddingRight groupInputInfo">
-								<label>结束时间</label>
-								<input type="text"/>
-							</div>
+							
 							<div class="clear"></div>
 							<div class="btnGroup">
 								<a class="save" >添加</a>
@@ -844,11 +861,11 @@
 					</div>
 					
 					<!--yes-->
-					<div class="isclanYes">
+					<div class="isclanYes elementHide">
 						<div>
 							<div class="clannameDiv">
 								<div class="paddingTop groupInputInfo" >
-									<label >氏族或部落名称</label>
+									<label>氏族或部落名称</label>
 									<input type="text"  />
 								</div>
 								<div class="paddingTop groupInputInfo">
@@ -874,7 +891,7 @@
 						<input type="radio" name="istraveledanycountry" class="istraveledanycountry" value="2" checked/>否
 					</div>
 					<!--yes-->
-					<div class="isTravelYes">
+					<div class="isTravelYes elementHide">
 						<div>
 							<div class="paddingTop travelCountry groupInputInfo">
 								<label>国家/地区</label>
@@ -896,7 +913,7 @@
 						<input type="radio" name="isworkedcharitableorganization" class="isworkedcharitableorganization" value="2" checked/>否
 					</div>
 					<!--yes-->
-					<div class="isOrganizationYes">
+					<div class="isOrganizationYes elementHide">
 						<div>
 							<div class="paddingTop organizationDiv groupInputInfo">
 								<label>组织名称</label>
@@ -916,7 +933,7 @@
 						<input type="radio"name="hasspecializedskill" class="hasspecializedskill" value="2" checked />否
 					</div>
 					<!--yes-->
-					<div class="paddingTop skillDiv grouptextareaInfo">
+					<div class="paddingTop skillDiv elementHide grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -928,11 +945,12 @@
 						<input type="radio"name="hasservedinmilitary" class="hasservedinmilitary" value="2" checked/>否
 					</div>
 					<!--yes-->
-					<div class="paddingTop militaryServiceYes">
+					<div class="paddingTop elementHide militaryServiceYes">
 						<div class="militaryInfoDiv">
 							<div class="floatLeft groupSelectInfo">
 								<label>国家/地区</label>
 								<select>
+									<option value="0">请选择</option>
 									<option>中国</option>
 									<option>美国</option>
 								</select>
@@ -974,7 +992,7 @@
 						<input type="radio" name="isservedinrebelgroup" class="isservedinrebelgroup" value="2" checked/>否
 					</div>
 					<!--yes-->
-					<div class="paddingTop dinrebelDiv grouptextareaInfo">
+					<div class="paddingTop elementHide dinrebelDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>

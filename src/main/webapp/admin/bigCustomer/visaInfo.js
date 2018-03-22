@@ -175,6 +175,53 @@ function changeSpouse(){
 
 
 //-------------------------------------------工作/教育/培训信息 start----------------------------------
+//主要职业Change事件
+function occupationChange(){
+	emptyContentByObj($("div.jobEduLearningInfoDiv"));
+	emptyContentByObj($(".jobEduLearningInfoTextarea"));
+	var occupation = $("#occupation").val();
+	if(occupation==10 || occupation==19){
+		//家庭主妇和退休人员
+		$("div.jobEduLearningInfoDiv").hide();
+		$(".jobEduLearningInfoTextarea").hide();
+	}else if(occupation==15){
+		//不受雇
+		$("div.jobEduLearningInfoDiv").hide();
+		$(".jobEduLearningInfoTextarea").show();
+	}else if(occupation==22){
+		//其他
+		$("div.jobEduLearningInfoDiv").show();
+		$(".jobEduLearningInfoTextarea").show();
+	}else{
+		//农民、艺术家等等
+		$("div.jobEduLearningInfoDiv").show();
+		$(".jobEduLearningInfoTextarea").hide();
+	}
+}
+//以前是否工作过
+$(".beforeWork").change(function(){
+	var beforeWork = $("input[class=beforeWork]:checked").val();
+	if(beforeWork == 1){
+		$(".beforeWorkInfo").show();
+	}else {
+		$(".beforeWorkInfo").hide();
+		deleteBrotherEle($("div.workBeforeInfosDiv"));
+		emptyContentByObj($("div.beforeWorkInfo"));
+	}
+});
+
+//是否上过中学或以上的任何教育
+$(".education").change(function(){
+	var education = $("input[class=education]:checked").val();
+	if(education == 1){
+		$(".educationInfo").show();
+	}else {
+		$(".educationInfo").hide();
+		deleteBrotherEle($("div.midSchoolEduDiv"));
+		emptyContentByObj($("div.educationInfo"));
+	}
+});
+
 //是否属于氏族或部落
 $(".isclan").change(function(){
 	var isclan = $("input[class=isclan]:checked").val();
@@ -239,6 +286,30 @@ $(".isservedinrebelgroup").change(function(){
 		emptyContentByObj($("div.dinrebelDiv"));
 	}
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //-------------------------------------------工作/教育/培训信息 end------------------------------------
 
 
