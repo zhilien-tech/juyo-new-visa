@@ -1,3 +1,4 @@
+//-------------------------------------------旅伴信息 Start----------------------------------
 //旅伴信息
 $(".companyInfo").change(function(){
 	var companyVal = $(".companyInfo:checked").val();
@@ -26,8 +27,9 @@ $(".team").change(function(){
 		emptyContentByObj($("div.teamnamefalse"));
 	}
 });
+//-------------------------------------------家庭信息 end----------------------------------
 
-//以前的美国旅游信息
+//---------------------------------------以前的美国旅游信息 start----------------------------------
 //(1)是否去过美国
 $(".goUS").change(function(){
 	var goUS = $("input[class=goUS]:checked").val();
@@ -42,7 +44,7 @@ $(".goUS").change(function(){
 	}
 
 });
-//(2)是否有美国驾照
+//是否有美国驾照
 $(".license").change(function(){
 	var license = $("input[class=license]:checked").val();
 	if(license == 1){
@@ -114,7 +116,60 @@ $(".onceImmigration").change(function(){
 		emptyContentByObj($("div.immigrationExplain"));
 	}
 });
+//---------------------------------------以前的美国旅游信息 end----------------------------------
 
+
+
+
+//-------------------------------------------美国联络点 Start----------------------------------
+
+//-------------------------------------------美国联络点 end------------------------------------
+
+
+
+
+//-------------------------------------------家庭信息 Start----------------------------------
+//亲属信息
+$(".fatherUS").change(function(){
+	var fatherUS = $("input[class=fatherUS]:checked").val();
+	if(fatherUS == 1){
+		$(".fatherUSYes").show();
+	}else {
+		$(".fatherUSYes").hide();
+		emptyContentByObj($("div.fatherUSYes"));
+	}
+});
+$(".motherUS").change(function(){
+	var motherUS = $("input[class=motherUS]:checked").val();
+	if(motherUS == 1){
+		$(".motherUSYes").show();
+	}else {
+		$(".motherUSYes").hide();
+		emptyContentByObj($("div.motherUSYes"));
+	}
+});
+$(".directRelatives").change(function(){
+	var directRelatives = $("input[class=directRelatives]:checked").val();
+	if(directRelatives == 1){
+		$(".directRelativesYes").show();
+		$(".directRelativesNo").hide();
+	}else {
+		$(".directRelativesYes").hide();
+		$(".directRelativesNo").show();
+		emptyContentByObj($("div.directRelatives"));
+	}
+});
+
+function changeSpouse(){
+	var opt = $("#spouseaddress").val();
+	if(opt == 5){
+		$(".otherSpouseInfo").show();
+	}else{
+		$(".otherSpouseInfo").hide();
+		emptyContentByObj($("div.otherSpouseInfo"));
+	}
+}
+//-------------------------------------------家庭信息 end------------------------------------
 
 
 

@@ -330,7 +330,7 @@
 				<div class="paddingRight groupSelectInfo">
 					<label>与你的关系</label>
 					<select>
-						<option>请选择</option>
+						<option value="0">请选择</option>
 						<option>亲属</option>
 						<option>配偶</option>
 						<option>朋友</option>
@@ -404,6 +404,7 @@
 					<div class="fatherUSYes groupSelectInfo paddingNone">
 						<label>身份状态</label>
 						<select>
+							<option value="0">请选择</option>
 							<option>美国公民</option>
 							<option>美国合法永久居住者</option>
 							<option>非移民</option>
@@ -431,6 +432,7 @@
 					<div class="motherUSYes paddingNone groupSelectInfo">
 						<label>身份状态</label>
 						<select>
+							<option value="0">请选择</option>
 							<option>美国公民</option>
 							<option>美国合法永久居住者</option>
 							<option>非移民</option>
@@ -442,49 +444,57 @@
 					<div class="groupRadioInfo">
 						<label>在美国除了父母还有没有直系亲属</label>
 						<input type="radio" name="directRelatives" class="directRelatives" value="1" />是
-						<input type="radio" name="directRelatives" class="directRelatives" value="2" />否
+						<input type="radio" name="directRelatives" class="directRelatives" value="2" checked/>否
 					</div>
-					<!--yes-->
-					<div class="directRelativesYes paddingNone">
-						<div class="floatLeft groupInputInfo">
-							<label>姓</label>
-							<input type="text" />
+					<div class="directRelatives">
+						<!--yes-->
+						<div class="directRelativesYes paddingNone">
+							<div class="floatLeft groupInputInfo">
+								<label>姓</label>
+								<input type="text" />
+							</div>
+							<div class="floatRight groupInputInfo">
+								<label>名</label>
+								<input type="text" />
+							</div>
+							<div class="clear"></div>
+							<div class="paddingLeft groupSelectInfo">
+								<label>与你的关系</label>
+								<select>
+									<option value="0">请选择</option>
+									<option>配偶</option>
+									<option>未婚夫/妻子</option>
+									<option>子女</option>
+									<option>兄弟姐妹</option>
+								</select>
+							</div>
+							<div class="paddingRight groupSelectInfo">
+								<label>亲属的身份</label>
+								<select>
+									<option value="0">请选择</option>
+									<option>美国公民</option>
+									<option>美国合法永久居住者</option>
+									<option>非移民</option>
+									<option>其他/不知道</option>
+								</select>
+							</div>
+							<div class="clear"></div>
 						</div>
-						<div class="floatRight groupInputInfo">
-							<label>名</label>
-							<input type="text" />
+						<!--NO-->
+						<div class="directRelativesNo groupRadioInfo">
+							<label>在美国是否还有别的亲属</label>
+							<input type="radio" name="otherDirect" value="1"/>是
+							<input type="radio" name="otherDirect" value="2" checked/>否
 						</div>
-						<div class="clear"></div>
-						<div class="paddingLeft groupSelectInfo">
-							<label>与你的关系</label>
-							<select>
-								<option>配偶</option>
-								<option>未婚夫/妻子</option>
-								<option>子女</option>
-								<option>兄弟姐妹</option>
-							</select>
-						</div>
-						<div class="paddingRight groupSelectInfo">
-							<label>亲属的身份</label>
-							<select>
-								<option>美国公民</option>
-								<option>美国合法永久居住者</option>
-								<option>非移民</option>
-								<option>其他/不知道</option>
-							</select>
-						</div>
-						<div class="clear"></div>
 					</div>
-					<!--NO-->
-					<div class="directRelativesNo paddingNone groupRadioInfo">
-						<label>在美国是否还有别的亲属</label>
-						<input type="radio" name="otherDirect" />是
-						<input type="radio" name="otherDirect" checked/>否
-					</div>
+					
 				</div>
 			</div>
 			<!--配偶-->
 			<div class="paddingTop">
+				
+				
+				<div class="titleInfo">配偶信息</div>
 				<div class="floatLeft groupInputInfo">
 					<label>配偶的名</label>
 					<input type="text" />
@@ -501,6 +511,7 @@
 				<div class="paddingRight groupSelectInfo">
 					<label>配偶的国籍</label>
 					<select>
+						<option value="0">请选择</option>
 						<option>中国</option>
 						<option>美国</option>
 					</select>
@@ -514,6 +525,7 @@
 				<div class="paddingRight groupSelectInfo" >
 					<label>配偶的出生国家</label>
 					<select>
+						<option value="0">请选择</option>
 						<option>中国</option>
 						<option>美国</option>
 					</select>
@@ -521,16 +533,19 @@
 				<div class="clear"></div>
 				<div class="paddingTop groupSelectInfo" >
 					<label>配偶的联系地址</label>
-					<select>
-						<option>与居住地址一样</option>
-						<option>与邮寄地址一样</option>
-						<option>与美国联系地址一样</option>
-						<option>不知道</option>
-						<option>其他(制定地址)</option>
+					<select id="spouseaddress" name="spouseaddress" class="spouse_Address" change="changeSpouse()">
+						<option value="0">请选择</option>
+						<option value="1">与居住地址一样</option>
+						<option value="2">与邮寄地址一样</option>
+						<option value="3">与美国联系地址一样</option>
+						<option value="4">不知道</option>
+						<option value="5">其他(制定地址)</option>
 					</select>
 				</div>
+				
+				
 				<!--选择其他-->
-				<div class="otherSpouseInfo paddingTop" >
+				<div class="otherSpouseInfo elementHide paddingTop" >
 					<div class="floatLeft groupInputInfo">
 						<label>街道地址(首选)</label>
 						<input type="text" />
