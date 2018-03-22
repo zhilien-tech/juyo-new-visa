@@ -443,8 +443,8 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>在美国除了父母还有没有直系亲属</label>
-						<input type="radio" name="directRelatives" class="directRelatives" value="1" />是
-						<input type="radio" name="directRelatives" class="directRelatives" value="2" checked/>否
+						<input type="radio" name="directRelatives" class="directRelatives directUSRelatives" value="1" />是
+						<input type="radio" name="directRelatives" class="directRelatives directUSRelatives" value="2" checked/>否
 					</div>
 					<div class="directRelatives">
 						<!--yes-->
@@ -533,7 +533,7 @@
 				<div class="clear"></div>
 				<div class="paddingTop groupSelectInfo" >
 					<label>配偶的联系地址</label>
-					<select id="spouseaddress" name="spouseaddress" class="spouse_Address" change="changeSpouse()">
+					<select id="spouseaddress" name="spouseaddress" class="spouse_Address" onchange="changeSpouse()">
 						<option value="0">请选择</option>
 						<option value="1">与居住地址一样</option>
 						<option value="2">与邮寄地址一样</option>
@@ -573,6 +573,7 @@
 					<div class="paddingRight groupSelectInfo">
 						<label>国家/地区</label>
 						<select>
+							<option value="0">请选择</option>
 							<option>美国</option>
 							<option>中国</option>
 						</select>
@@ -586,7 +587,7 @@
 				<div class="titleInfo">工作/教育/培训信息</div>
 				<div class="paddingTop groupSelectInfo" >
 					<label>主要职业</label>
-					<select>
+					<select id="occupation" name="occupation" onchange="occupationChange()">
 						<option value="1">农业</option>
 						<option value="2">艺术家/表演家</option>
 						<option value="3">商业</option>
@@ -838,52 +839,69 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否属于氏族或部落</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isclan" class="isclan" value="1"/>是
+						<input type="radio" name="isclan" class="isclan" value="2" checked/>否
 					</div>
+					
 					<!--yes-->
-					<div class="paddingTop groupInputInfo" >
-						<label >氏族或部落名称</label>
-						<input type="text"  />
-					</div>
-				</div>
-				<div class="paddingTop groupInputInfo">
-					<label>使用的语言名称</label>
-					<input type="text" />
-				</div>
-				<div class="btnGroup">
-					<a class="save">添加</a>
-					<a class="cancel">去掉</a>
-				</div>
-				<div class="paddingTop">
-					<div class="groupRadioInfo">
-						<label>过去五年是否曾去过任何国家/地区旅游</label>
-						<input type="radio" />是
-						<input type="radio" />否
-					</div>
-					<!--yes-->
-					<div>
-						<div class="paddingTop groupInputInfo">
-							<label>国家/地区</label>
-							<input type="text"/>
+					<div class="isclanYes">
+						<div>
+							<div class="clannameDiv">
+								<div class="paddingTop groupInputInfo" >
+									<label >氏族或部落名称</label>
+									<input type="text"  />
+								</div>
+								<div class="paddingTop groupInputInfo">
+									<label>使用的语言名称</label>
+									<input type="text" />
+								</div>
+							</div>
 						</div>
 						<div class="btnGroup">
 							<a class="save">添加</a>
 							<a class="cancel">去掉</a>
 						</div>
 					</div>
+					
+					
+				</div>
+				
+
+				<div class="paddingTop">
+					<div class="groupRadioInfo">
+						<label>过去五年是否曾去过任何国家/地区旅游</label>
+						<input type="radio" name="istraveledanycountry" class="istraveledanycountry" value="1" />是
+						<input type="radio" name="istraveledanycountry" class="istraveledanycountry" value="2" checked/>否
+					</div>
+					<!--yes-->
+					<div class="isTravelYes">
+						<div>
+							<div class="paddingTop travelCountry groupInputInfo">
+								<label>国家/地区</label>
+								<input type="text"/>
+							</div>
+						</div>
+						<div class="btnGroup">
+							<a class="save">添加</a>
+							<a class="cancel">去掉</a>
+						</div>
+					</div>
+					
+					
 				</div>
 				<div>
 					<div class="groupRadioInfo">
 						<label>是否属于、致力于、或为任何专业、社会或慈善组织而工作</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isworkedcharitableorganization" class="isworkedcharitableorganization" value="1"/>是
+						<input type="radio" name="isworkedcharitableorganization" class="isworkedcharitableorganization" value="2" checked/>否
 					</div>
 					<!--yes-->
-					<div>
-						<div class="paddingTop groupInputInfo">
-							<label>组织名称</label>
-							<input type="text"/>
+					<div class="isOrganizationYes">
+						<div>
+							<div class="paddingTop organizationDiv groupInputInfo">
+								<label>组织名称</label>
+								<input type="text"/>
+							</div>
 						</div>
 						<div class="btnGroup">
 							<a class="save">添加</a>
@@ -894,11 +912,11 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否有专业技能或培训，如强制、爆炸物、核能、生物或化学</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="hasspecializedskill" class="hasspecializedskill" value="1" />是
+						<input type="radio"name="hasspecializedskill" class="hasspecializedskill" value="2" checked />否
 					</div>
 					<!--yes-->
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop skillDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -906,39 +924,41 @@
 				<div>
 					<div class="groupRadioInfo">
 						<label style="display: block;">是否曾服兵役</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="hasservedinmilitary" class="hasservedinmilitary" value="1"/>是
+						<input type="radio"name="hasservedinmilitary" class="hasservedinmilitary" value="2" checked/>否
 					</div>
 					<!--yes-->
-					<div class="paddingTop">
-						<div class="floatLeft groupSelectInfo">
-							<label>国家/地区</label>
-							<select>
-								<option>中国</option>
-								<option>美国</option>
-							</select>
-						</div>
-						<div class="floatRight groupInputInfo">
-							<label>服务分支</label>
-							<input type="text" />
-						</div>
-						<div class="clear"></div>
-						<div class="paddingLeft groupInputInfo" >
-							<label>排名/位置</label>
-							<input type="text" />
-						</div>
-						<div class="paddingRight groupInputInfo">
-							<label>军事专业</label>
-							<input type="text"/>
-						</div>
-						<div class="clear"></div>
-						<div class="paddingLeft groupInputInfo">
-							<label>服兵役开始时间日期</label>
-							<input type="text"/>
-						</div>
-						<div class="paddingRight groupInputInfo">
-							<label>结束时间</label>
-							<input type="text"/>
+					<div class="paddingTop militaryServiceYes">
+						<div class="militaryInfoDiv">
+							<div class="floatLeft groupSelectInfo">
+								<label>国家/地区</label>
+								<select>
+									<option>中国</option>
+									<option>美国</option>
+								</select>
+							</div>
+							<div class="floatRight groupInputInfo">
+								<label>服务分支</label>
+								<input type="text" />
+							</div>
+							<div class="clear"></div>
+							<div class="paddingLeft groupInputInfo" >
+								<label>排名/位置</label>
+								<input type="text" />
+							</div>
+							<div class="paddingRight groupInputInfo">
+								<label>军事专业</label>
+								<input type="text"/>
+							</div>
+							<div class="clear"></div>
+							<div class="paddingLeft groupInputInfo">
+								<label>服兵役开始时间日期</label>
+								<input type="text"/>
+							</div>
+							<div class="paddingRight groupInputInfo">
+								<label>结束时间</label>
+								<input type="text"/>
+							</div>
 						</div>
 						<div class="clear"></div>
 						<div class="btnGroup">
@@ -950,11 +970,11 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isservedinrebelgroup" class="isservedinrebelgroup" value="1"/>是
+						<input type="radio" name="isservedinrebelgroup" class="isservedinrebelgroup" value="2" checked/>否
 					</div>
 					<!--yes-->
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop dinrebelDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -967,10 +987,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否患有传染性疾病</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isPestilence" class="isPestilence" value="1"/>是
+						<input type="radio" name="isPestilence" class="isPestilence" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isPestilenceDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -978,10 +998,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否有精神或身体疾病，可能对他人安全和福利构成威胁</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isThreatIllness" class="isThreatIllness" value="1"/>是
+						<input type="radio" name="isThreatIllness" class="isThreatIllness" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isThreatIllnessDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -989,10 +1009,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否吸毒或曾经吸毒</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isDrug" class="isDrug" value="1"/>是
+						<input type="radio" name="isDrug" class="isDrug" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isDrugDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1000,10 +1020,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否因犯罪或违法而逮捕或被判刑，即使后来受到赦免、宽恕或其他类似的裁决</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isSentenced" class="isSentenced" value="1"/>是
+						<input type="radio" name="isSentenced" class="isSentenced" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isSentencedDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1011,10 +1031,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否违反过有关管控物资方面法律</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isMaterialLaw" class="isMaterialLaw" value="1"/>是
+						<input type="radio" name="isMaterialLaw" class="isMaterialLaw" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isMaterialLawDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1022,10 +1042,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label style="display: block;">您是来美国从事卖淫或非法商业性交吗？在过去十年中，您是否从事过卖淫或组织介绍过卖淫</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isProstitution" class="isProstitution" value="1"/>是
+						<input type="radio" name="isProstitution" class="isProstitution" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isProstitutionDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1033,10 +1053,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否曾经彩玉或意图从事洗钱活动</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isLaundering" class="isLaundering" value="1"/>是
+						<input type="radio" name="isLaundering" class="isLaundering" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isLaunderingDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1044,10 +1064,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label style="display: block;">是否曾在美国或美国意外的地方犯有或密谋人口走私罪</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isSmuggling" class="isSmuggling" value="1"/>是
+						<input type="radio" name="isSmuggling" class="isSmuggling" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isSmugglingDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1055,10 +1075,10 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否故意资助、教唆、协助或勾结某个人，而这个人在美国或美国以外的地方曾犯有或密谋了严重的人口走私案</label>
-						<input type="radio" />是
-						<input type="radio" />否
+						<input type="radio" name="isThreateningOthers" class="isThreateningOthers" value="1"/>是
+						<input type="radio" name="isThreateningOthers" class="isThreateningOthers" value="2" checked/>否
 					</div>
-					<div class="paddingTop grouptextareaInfo">
+					<div class="paddingTop isThreateningOthersDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1344,6 +1364,5 @@
 	</body>
 	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
 	<script src="${base}/admin/bigCustomer/visaInfo.js"></script><!-- 本页面js -->
-	<script src="${base}/admin/bigCustomer/visaInfo1.js"></script><!-- 本页面js -->
 	
 </html>

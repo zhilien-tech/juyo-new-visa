@@ -148,9 +148,9 @@ $(".motherUS").change(function(){
 		emptyContentByObj($("div.motherUSYes"));
 	}
 });
-$(".directRelatives").change(function(){
-	var directRelatives = $("input[class=directRelatives]:checked").val();
-	if(directRelatives == 1){
+$(".directRelatives.directUSRelatives").change(function(){
+	var directUSRelatives = $("input[class='directRelatives directUSRelatives']:checked").val();
+	if(directUSRelatives == 1){
 		$(".directRelativesYes").show();
 		$(".directRelativesNo").hide();
 	}else {
@@ -174,6 +174,111 @@ function changeSpouse(){
 
 
 
+//-------------------------------------------工作/教育/培训信息 start----------------------------------
+//是否属于氏族或部落
+$(".isclan").change(function(){
+	var isclan = $("input[class=isclan]:checked").val();
+	if(isclan == 1){
+		$(".isclanYes").show();
+	}else {
+		$(".isclanYes").hide();
+		deleteBrotherEle($("div.clannameDiv"));
+		emptyContentByObj($("div.clannameDiv"));
+	}
+});
+//过去五年是否曾去过任何国家/地区旅游
+$(".istraveledanycountry").change(function(){
+	var istraveledanycountry = $("input[class=istraveledanycountry]:checked").val();
+	if(istraveledanycountry == 1){
+		$(".isTravelYes").show();
+	}else {
+		$(".isTravelYes").hide();
+		deleteBrotherEle($("div.travelCountry"));
+		emptyContentByObj($("div.travelCountry"));
+	}
+});
+//是否属于、致力于、或为任何专业、社会或慈善组织而工作
+$(".isworkedcharitableorganization").change(function(){
+	var isorganization = $("input[class=isworkedcharitableorganization]:checked").val();
+	if(isorganization == 1){
+		$(".isOrganizationYes").show();
+	}else {
+		$(".isOrganizationYes").hide();
+		deleteBrotherEle($("div.organizationDiv"));
+		emptyContentByObj($("div.organizationDiv"));
+	}
+});
+//是否有专业技能或培训，如强制、爆炸物、核能、生物或化学
+$(".hasspecializedskill").change(function(){
+	var isSkill = $("input[class=hasspecializedskill]:checked").val();
+	if(isSkill == 1){
+		$(".skillDiv").show();
+	}else {
+		$(".skillDiv").hide();
+		emptyContentByObj($("div.skillDiv"));
+	}
+});
+//是否曾服兵役
+$(".hasservedinmilitary").change(function(){
+	var isMilitary = $("input[class=hasservedinmilitary]:checked").val();
+	if(isMilitary == 1){
+		$(".militaryServiceYes").show();
+	}else {
+		$(".militaryServiceYes").hide();
+		deleteBrotherEle($("div.militaryInfoDiv"));
+		emptyContentByObj($("div.militaryInfoDiv"));
+	}
+});
+//是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织
+$(".isservedinrebelgroup").change(function(){
+	var isDinrebel = $("input[class=isservedinrebelgroup]:checked").val();
+	if(isDinrebel == 1){
+		$(".dinrebelDiv").show();
+	}else {
+		$(".dinrebelDiv").hide();
+		emptyContentByObj($("div.dinrebelDiv"));
+	}
+});
+//-------------------------------------------工作/教育/培训信息 end------------------------------------
+
+
+
+//-------------------------------------------安全和背景 start------------------------------------
+//是否患有传染性疾病
+safeInfoRadioClick("isPestilence");
+/*$(".isPestilence").change(function(){
+var isPestilence = $("input[class=isPestilence]:checked").val();
+if(isPestilence == 1){
+	$(".isPestilenceDiv").show();
+}else {
+	$(".isPestilenceDiv").hide();
+	emptyContentByObj($("div.isPestilenceDiv"));
+}
+});*/
+
+//是否有精神或身体疾病，可能对他人安全和福利构成威胁
+safeInfoRadioClick("isThreatIllness");
+
+//是否吸毒或曾经吸毒
+safeInfoRadioClick("isDrug");
+
+//是否因犯罪或违法而逮捕或被判刑，即使后来受到赦免、宽恕或其他类似的裁决
+safeInfoRadioClick("isSentenced");
+
+//是否违反过有关管控物资方面法律
+safeInfoRadioClick("isMaterialLaw");
+
+//是否从事卖淫活动
+safeInfoRadioClick("isProstitution");
+
+//是否曾经彩玉或意图从事洗钱活动
+safeInfoRadioClick("isLaundering");
+
+//是否曾在美国或美国意外的地方犯有或密谋人口走私罪
+safeInfoRadioClick("isSmuggling");
+
+//是否故意资助、教唆、协助或勾结某个人，而这个人在美国或美国以外的地方曾犯有或密谋了严重的人口走私案
+safeInfoRadioClick("isThreateningOthers");
 
 
 
@@ -181,6 +286,47 @@ function changeSpouse(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//安全信息 单选点击事件
+function safeInfoRadioClick(eltClass){
+	$("."+eltClass).change(function(){
+		var isElt = $("input[class="+eltClass+"]:checked").val();
+		if(isElt == 1){
+			$("."+eltClass+"Div").show();
+		}else {
+			$("."+eltClass+"Div").hide();
+			emptyContentByObj($("div."+eltClass+"Div"));
+		}
+	});
+}
+	
+
+//-------------------------------------------安全和背景 end------------------------------------
 
 
 
