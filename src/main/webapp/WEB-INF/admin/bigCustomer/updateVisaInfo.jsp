@@ -168,21 +168,7 @@
 									<div class="groupcheckBoxInfo driverMain">
 										<label>驾照号</label>
 										<input type="text" >
-										<input type="checkbox"/>
-									</div>
-									<div class="groupSelectInfo driverR">
-										<label>哪个州的驾照</label>
-										<select>
-											<option value="0">请选择</option>
-											<option>北卡罗莱纳州</option>
-										</select>
-									</div>
-								</div>
-								<div class="driverInfo goUS_drivers">
-									<div class="groupcheckBoxInfo driverMain">
-										<label>驾照号</label>
-										<input type="text" >
-										<input type="checkbox"/>
+										<input id="isknowdrivernumber" name="isknowdrivernumber" type="checkbox"/>
 									</div>
 									<div class="groupSelectInfo driverR">
 										<label>哪个州的驾照</label>
@@ -219,7 +205,7 @@
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
 								<input type="text" />
-								<input type="checkbox"/>
+								<input id="idknowvisanumber" name="idknowvisanumber" type="checkbox"/>
 							</div>
 							<div class="clear"></div>
 							<div class="Alike groupRadioInfo paddingTop">
@@ -319,13 +305,13 @@
 				<div class="groupcheckBoxInfo paddingRight">
 					<label>联系人名</label>
 					<input type="text"  />
-					<input type="checkbox" />
+					<input id="isknowname" name="isknowname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>组织名称</label>
 					<input type="text" />
-					<input class="groupname_us" type="checkbox" />
+					<input id="isknoworganizationname" name="isknoworganizationname" class="groupname_us" type="checkbox" />
 				</div>
 				<div class="paddingRight groupSelectInfo">
 					<label>与你的关系</label>
@@ -374,7 +360,7 @@
 					<div class="paddingTop groupcheckBoxInfo">
 						<label>邮件地址</label>
 						<input type="text" />
-						<input type="checkbox" />
+						<input id="isKnowEmailAddress" type="checkbox" />
 					</div>
 				</div>
 			</div>
@@ -386,12 +372,12 @@
 				<div class="paddingLeft groupcheckBoxInfo" >
 					<label>父亲的姓</label>
 					<input type="text"/>
-					<input type="checkbox" />
+					<input id="isKnowFatherXing" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo" >
 					<label>父亲的名</label>
 					<input type="text" />
-					<input type="checkbox" />
+					<input id="isKnowFatherMing" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop">
@@ -415,12 +401,12 @@
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>母亲的姓</label>
 					<input type="text" />
-					<input type="checkbox" />
+					<input id="isKnowMotherXing" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo">
 					<label>母亲的名</label>
 					<input type="text" />
-					<input type="checkbox" />
+					<input id="isKnowMotherMing" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop">
@@ -520,7 +506,7 @@
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>配偶的出生城市</label>
 					<input type="text" />
-					<input type="checkbox" />
+					<input id="isKnowMateCity" type="checkbox" />
 				</div>
 				<div class="paddingRight groupSelectInfo" >
 					<label>配偶的出生国家</label>
@@ -562,13 +548,13 @@
 					<div class="paddingRight groupcheckBoxInfo">
 						<label>州/省</label>
 						<input type="text" />
-						<input type="checkbox" />
+						<input id="isKnowOrtherSpouseProvince" type="checkbox" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>邮政编码</label>
 						<input type="text" />
-						<input type="checkbox" />
+						<input id="isKonwOrtherZipCode" type="checkbox" />
 					</div>
 					<div class="paddingRight groupSelectInfo">
 						<label>国家/地区</label>

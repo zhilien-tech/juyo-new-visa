@@ -56,6 +56,10 @@ $(".license").change(function(){
 	}
 });
 
+//不知道驾照号
+editEleBeforeCheckbox($("#isknowdrivernumber"));
+
+
 //是否有美国签证
 $(".visaUS").change(function(){
 	var visaUS = $("input[class=visaUS]:checked").val();
@@ -66,6 +70,9 @@ $(".visaUS").change(function(){
 		emptyContentByObj($("div.goUS_visa"));
 	}
 });
+//不知道签证好
+editEleBeforeCheckbox($("#idknowvisanumber"));
+
 //是否丢失签证
 $(".lose").change(function(){
 	var lose = $("input[class=lose]:checked").val();
@@ -122,6 +129,14 @@ $(".onceImmigration").change(function(){
 
 
 //-------------------------------------------美国联络点 Start----------------------------------
+//不知道联系人名
+editEleBeforeCheckbox($("#isknowname"));
+
+//不知道组织名
+editEleBeforeCheckbox($("#isknoworganizationname"));
+
+//是否 邮件地址
+editEleBeforeCheckbox($("#isKnowEmailAddress"));
 
 //-------------------------------------------美国联络点 end------------------------------------
 
@@ -139,6 +154,11 @@ $(".fatherUS").change(function(){
 		emptyContentByObj($("div.fatherUSYes"));
 	}
 });
+//不知道父亲的姓 
+editEleBeforeCheckbox($("#isKnowFatherXing"));
+//不知道父亲的名
+editEleBeforeCheckbox($("#isKnowFatherMing"));
+
 $(".motherUS").change(function(){
 	var motherUS = $("input[class=motherUS]:checked").val();
 	if(motherUS == 1){
@@ -148,6 +168,11 @@ $(".motherUS").change(function(){
 		emptyContentByObj($("div.motherUSYes"));
 	}
 });
+//不知道母亲的姓 
+editEleBeforeCheckbox($("#isKnowMotherXing"));
+//不知道父亲的名
+editEleBeforeCheckbox($("#isKnowMotherMing"));
+
 $(".directRelatives.directUSRelatives").change(function(){
 	var directUSRelatives = $("input[class='directRelatives directUSRelatives']:checked").val();
 	if(directUSRelatives == 1){
@@ -159,7 +184,7 @@ $(".directRelatives.directUSRelatives").change(function(){
 		emptyContentByObj($("div.directRelatives"));
 	}
 });
-
+//配偶信息
 function changeSpouse(){
 	var opt = $("#spouseaddress").val();
 	if(opt == 5){
@@ -169,6 +194,10 @@ function changeSpouse(){
 		emptyContentByObj($("div.otherSpouseInfo"));
 	}
 }
+
+//不知道配偶的城市
+editEleBeforeCheckbox($("#isKnowMateCity"));
+
 //-------------------------------------------家庭信息 end------------------------------------
 
 
@@ -198,6 +227,12 @@ function occupationChange(){
 		$(".jobEduLearningInfoTextarea").hide();
 	}
 }
+//不知道州、省
+editEleBeforeCheckbox($("#isKnowOrtherSpouseProvince"));
+
+//不知道邮政编码
+editEleBeforeCheckbox($("#isKonwOrtherZipCode"));
+
 //以前是否工作过
 $(".beforeWork").change(function(){
 	var beforeWork = $("input[class=beforeWork]:checked").val();
@@ -422,14 +457,7 @@ function safeInfoRadioClick(eltClass){
 
 
 
-
-
-
-
-
-
-
-
+//-------------------------------------------功能函数 勿删------------------------------------
 //删除同类型的其他兄弟节点
 function deleteBrotherEle(obj){
 	obj.nextAll().remove();
@@ -459,9 +487,16 @@ function emptyContentByObj(obj){
 
 //勾选checkbox("不知道")，设置前一个兄弟级元素disable和no edit
 function editEleBeforeCheckbox(obj){
-	var beforeEle = obj.prev();
-	beforeEle.val("");
-	beforeEle.attr("disabled","disabled");
+	obj.change(function(){
+		var beforeEle = obj.prev();
+		beforeEle.val("");
+		if(obj.is(':checked')){
+			beforeEle.attr("disabled",true);
+		}else{
+			beforeEle.attr("disabled",false);
+		}
+	});
+	
 }
 
 
