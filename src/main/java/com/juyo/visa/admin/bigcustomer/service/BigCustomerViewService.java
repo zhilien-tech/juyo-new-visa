@@ -34,6 +34,7 @@ import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.util.ExcelReader;
+import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -65,7 +66,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 */
 	public Object staffList(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
-		String localAddr = request.getLocalAddr();
+		String localAddr = PublicIpUtil.getPublicIpAddr();
 		int localPort = request.getLocalPort();
 		String downloadUrl = "http://" + localAddr + ":" + localPort + "/admin/bigCustomer/download.html";
 		result.put("downloadurl", downloadUrl);

@@ -369,9 +369,13 @@
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
 										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="19">
+											<c:set var="isDoneAir" value="0" scope="page"></c:set>
 											<c:forEach items="${obj.flightlist }" var="flight">
 												<c:if test="${obj.tripinfo.goFlightNum eq  flight.flightnum}">
-													<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
+													<c:if test="${isDoneAir != 1 }">
+														<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
+													</c:if>
+													<c:set var="isDoneAir" value="1" scope="page"></c:set>
 												</c:if>
 											</c:forEach>
 										</select>
@@ -423,9 +427,13 @@
 											<%-- <c:if test="${!empty obj.tripinfo.returnFlightNum }">
 												<option value="${obj.tripinfo.returnFlightNum }" selected="selected">${obj.tripinfo.returnFlightNum }</option>
 											</c:if> --%>
+											<c:set var="isDone" value="0" scope="page"></c:set>
 											<c:forEach items="${obj.flightlist }" var="flight">
 												<c:if test="${obj.tripinfo.returnFlightNum eq  flight.flightnum}">
-													<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
+													<c:if test="${isDone != 1 }">
+														<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
+													</c:if>
+													<c:set var="isDone" value="1" scope="page"></c:set>
 												</c:if>
 											</c:forEach>
 										</select>

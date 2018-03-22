@@ -105,6 +105,7 @@ import com.juyo.visa.common.ocr.RecognizeData;
 import com.juyo.visa.common.util.ImageDeal;
 import com.juyo.visa.common.util.PinyinTool;
 import com.juyo.visa.common.util.PinyinTool.Type;
+import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -828,7 +829,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		result.put("applicantInfo", applicantInfo);
-		String localAddr = request.getLocalAddr();
+		String localAddr = PublicIpUtil.getPublicIpAddr();
 		int localPort = request.getLocalPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
@@ -909,13 +910,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(unqualifiedEntity)) {
 			result.put("unqualified", unqualifiedEntity);
 		}
-		String localAddr = request.getLocalAddr();
+		String localAddr = PublicIpUtil.getPublicIpAddr();
 		int localPort = request.getLocalPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
 		//生成二维码
-		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+		String qrurl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + id;
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
@@ -1226,7 +1227,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("visaInfo", visaInfo);
 		result.put("isOrderUpTime", isOrderUpTime);
 		//获取所访问的ip地址
-		String localAddr = request.getLocalAddr();
+		String localAddr = PublicIpUtil.getPublicIpAddr();
 		//所访问的端口
 		int localPort = request.getLocalPort();
 		result.put("localAddr", localAddr);
@@ -1306,7 +1307,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			result.put("orderid", orderJpEntity.getOrderId());
 		}
 		//所访问的ip地址
-		String localAddr = request.getLocalAddr();
+		String localAddr = PublicIpUtil.getPublicIpAddr();
 		result.put("localAddr", localAddr);
 		//所访问的端口
 		int localPort = request.getLocalPort();
@@ -1999,7 +2000,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			tmp.append(line);
 		}
 
-		String pcUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
+		String pcUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/tlogin";
 
 		//查询订单号
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
@@ -2039,7 +2040,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			tmp.append(line);
 		}
 
-		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+		String mobileUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + applicantid;
 		//转换长连接为短地址
 		mobileUrl = firstTrialJpViewService.getEncryptlink(mobileUrl, request);
@@ -2079,7 +2080,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		for (String line : readLines) {
 			tmp.append(line);
 		}
-		String pcUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
+		String pcUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/tlogin";
 
 		//查询订单号
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
@@ -2137,7 +2138,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		for (String line : readLines) {
 			tmp.append(line);
 		}
-		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+		String mobileUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + applicantid;
 		//转换长连接为短地址
 		mobileUrl = firstTrialJpViewService.getEncryptlink(mobileUrl, request);

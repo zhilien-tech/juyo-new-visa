@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.entities.TEncryptlinkinfoEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -23,7 +24,7 @@ public class JoyuViewService extends BaseService<TEncryptlinkinfoEntity> {
 
 	public Object joyu(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		String originallink = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
+		String originallink = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/tlogin";
 
 		//获取请求路径参数部分
 		String encryptUrl = request.getQueryString();

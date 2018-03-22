@@ -412,7 +412,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['800px', '400px'],
-					content: '/admin/customer/add.html?isCustomerAdd=0'
+					content: '/admin/simple/customer/add.html?isCustomerAdd=0'
 				});
 		});
 		

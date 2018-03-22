@@ -66,6 +66,7 @@ import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
@@ -421,7 +422,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("orderid", orderid);
-		String localAddr = request.getLocalAddr();
+		String localAddr = PublicIpUtil.getPublicIpAddr();
 		int localPort = request.getLocalPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
@@ -857,7 +858,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		//所访问的ip地址
-		String localAddr = request.getLocalAddr();
+		String localAddr = PublicIpUtil.getPublicIpAddr();
 		result.put("localAddr", localAddr);
 		//所访问的端口
 		int localPort = request.getLocalPort();
@@ -1060,13 +1061,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			sb.append("/").append(applicant.getOtherLastNameEn());
 			result.put("otherLastNameEn", sb.toString());
 		}
-		String localAddr = request.getLocalAddr();
+		String localAddr = PublicIpUtil.getPublicIpAddr();
 		int localPort = request.getLocalPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
 		//生成二维码
-		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+		String qrurl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + localPort
 				+ "/simplemobile/info.html?applicantid=" + applicantid;
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
@@ -1169,7 +1170,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		result.put("visaother", visaother);
 		//获取所访问的ip地址
-		String localAddr = request.getLocalAddr();
+		String localAddr = PublicIpUtil.getPublicIpAddr();
 		//所访问的端口
 		int localPort = request.getLocalPort();
 		result.put("localAddr", localAddr);
@@ -1847,7 +1848,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		result.put("orderid", orderid);
 		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
-		String localAddr = request.getLocalAddr();
+		String localAddr = PublicIpUtil.getPublicIpAddr();
+		PublicIpUtil.getPublicIpAddr();
 		int localPort = request.getLocalPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);

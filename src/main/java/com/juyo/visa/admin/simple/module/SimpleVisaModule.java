@@ -24,6 +24,7 @@ import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
 import com.juyo.visa.admin.simple.service.SimpleVisaService;
 import com.juyo.visa.common.enums.JpOrderSimpleEnum;
+import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.forms.TApplicantForm;
 import com.juyo.visa.forms.TApplicantPassportForm;
 import com.uxuexi.core.common.util.EnumUtil;
@@ -53,7 +54,7 @@ public class SimpleVisaModule {
 	public Object list(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("orderstatus", EnumUtil.enum2(JpOrderSimpleEnum.class));
-		String localAddr = request.getLocalAddr();
+		String localAddr = PublicIpUtil.getPublicIpAddr();
 		int localPort = request.getLocalPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);

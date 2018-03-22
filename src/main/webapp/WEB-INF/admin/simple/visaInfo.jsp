@@ -169,7 +169,7 @@
 												<input name="visacounty" type="button" value="宫城县" class="btn btn-sm btnState">
 												<input name="visacounty" type="button" value="秋田县" class="btn btn-sm btnState">
 												<input name="visacounty" type="button" value="山形县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="福鸟县" class="btn btn-sm btnState">
+												<input name="visacounty" type="button" value="福岛县" class="btn btn-sm btnState">
 											</div>
 										</div>
 							</div><!-- end 签证类型 -->

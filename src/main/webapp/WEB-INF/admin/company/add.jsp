@@ -279,10 +279,10 @@
 							/* notEmpty : {
 								message : '电话不能为空'
 							}, */
-							regexp: {
+							/* regexp: {
 		                	 	regexp: /^[1][34578][0-9]{9}$/,
 		                        message: '电话号格式错误'
-		                    }
+		                    } */
 						}
 					},
 					email : {

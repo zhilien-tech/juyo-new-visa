@@ -17,6 +17,7 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
@@ -104,8 +105,8 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 
 		//公司管理员信息
 		TUserEntity user = new TUserEntity();
-		user.setMobile(adminLoginName);//用户名
-		user.setName(adminLoginName);//用户名
+		user.setMobile(Strings.trim(adminLoginName));//用户名
+		user.setName(Strings.trim(adminLoginName));//用户名
 		String password = MD5.sign(MANAGE_PASSWORD, AccessConfig.password_secret, AccessConfig.INPUT_CHARSET);//密码加密
 		user.setPassword(password);//密码
 		user.setCreateTime(nowDate);//创建时间
@@ -246,8 +247,8 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		if (!Util.isEmpty(user)) {
 			String adminLoginName = updateForm.getAdminLoginName();
 			if (!Util.isEmpty(adminLoginName)) {
-				user.setMobile(adminLoginName);
-				user.setName(adminLoginName);
+				user.setMobile(Strings.trim(adminLoginName));
+				user.setName(Strings.trim(adminLoginName));
 				user.setOpId(opId);
 			}
 			user.setName(updateForm.getAdminLoginName());

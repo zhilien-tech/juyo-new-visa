@@ -59,6 +59,7 @@ import com.juyo.visa.common.enums.ShareTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.util.NewShortUrlUtil;
+import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
@@ -689,8 +690,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			orderJpViewService.insertLogs(orderid, firsttrialstatus, session);
 		}
 
-		String pcUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
-		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+		String pcUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/tlogin";
+		String mobileUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + applicantId;
 		//转换长连接为短地址
 		mobileUrl = getEncryptlink(mobileUrl, request);
@@ -1471,7 +1472,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					Cnd.where("originallink", "=", originallink));
 		}
 
-		encryptUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/joyu?" + encryptUrl;
+		encryptUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/joyu?" + encryptUrl;
 
 		return encryptUrl;
 	}
@@ -1650,8 +1651,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	//不合格发送短信邮件
 	public String sendUnqualifiedMsg(Integer applicantId, Integer orderid, HttpServletRequest request) {
 
-		String pcUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin";
-		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+		String pcUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/tlogin";
+		String mobileUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort()
 				+ "/mobile/info.html?applicantid=" + applicantId;
 		//转换长连接为短地址
 		mobileUrl = getEncryptlink(mobileUrl, request);
