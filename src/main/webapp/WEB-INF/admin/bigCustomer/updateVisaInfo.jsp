@@ -157,7 +157,7 @@
 								<a class="save">添加</a>
 								<a class="cancel">去掉</a>
 							</div>
-							
+							<div class="clear"></div>
 							<div class="groupRadioInfo drivingUS">
 								<label>是否有美国驾照</label>
 								<input type="radio" name="license" class="license" value="1" />是
@@ -193,7 +193,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="btnGroup">
+							<div class="btnGroup driverInfo">
 								<a class="save">添加</a>
 								<a class="cancel">去掉</a>
 							</div>
@@ -211,7 +211,7 @@
 						<input type="radio" name="visaUS" class="visaUS" value="2" checked />否
 					</div>
 					<div>
-						<div class="dateIssue">
+						<div class="dateIssue goUS_visa">
 							<div class="groupInputInfo lastVisaDate">
 								<label>最后一次签证的签发日期</label>
 								<input type="text"/>
@@ -219,23 +219,23 @@
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
 								<input type="text" />
-								<input type="checkbox" />
+								<input type="checkbox"/>
 							</div>
 							<div class="clear"></div>
 							<div class="Alike groupRadioInfo paddingTop">
 								<label>是否在申请相同类型的签证</label>
-								<input type="radio" name="1" />是
-								<input type="radio" name="1" checked />否
+								<input type="radio" name="isapplyingsametypevisa" value="1" />是
+								<input type="radio" name="isapplyingsametypevisa" value="2" checked />否
 							</div>
 							<div class="describleCountry groupRadioInfo paddingTop">
 								<label>是否在签发上述签证的国家或地区申请并且是您所在的国家或地区的居住地</label>
-								<input type="radio" name="2" />是
-								<input type="radio" name="2" checked />否
+								<input type="radio" name="2" value="1" />是
+								<input type="radio" name="2" value="2" checked />否
 							</div>
 							<div class="paddingTop groupRadioInfo">
 								<label>是否采集过指纹</label>
-								<input type="radio" name="4"/>是
-								<input type="radio" name="4" checked />否
+								<input type="radio" name="4" value="1"/>是
+								<input type="radio" name="4" value="2" checked />否
 							</div>
 							<div class="paddingTop">
 								<div class="groupRadioInfo">

@@ -1,62 +1,7 @@
 $(function(){
-	//旅伴信息
-	$(".companyInfo").change(function(){
-		var companyVal = $(".companyInfo:checked").val();
-		if(companyVal == 1){
-			$(".teamture").show();
-		}else {
-			$(".teamture").hide();
-		}
-	});
-	//旅伴信息--是否作为团队或组织的一部分旅游
-	$(".team").change(function(){
-		var teamVal = $("input[name=team]:checked").val(); 
-		if(teamVal == 1){
-			$(".teamnameture").show();
-			$(".teamnamefalse").hide();
-		}else {
-			$(".teamnameture").hide();
-			$(".teamnamefalse").show();
-		}
-	});
-	//旅伴信息END
-
-	//以前的美国旅游信息
-	//(1)是否去过美国
-	$(".goUS").change(function(){
-		var goUS = $("input[name=goUS]:checked").val();
-		if(goUS == 1){
-			$(".goUSInfo").show();
-		}else{
-			$(".goUSInfo").hide();
-		}
-
-	});
-	$(".license").change(function(){
-		var license = $("input[name=license]:checked").val();
-		if(license == 1){
-			$(".driverInfo").show();
-		}else{
-			$(".driverInfo").hide();
-		}
-	});
-	//(2)是否有美国签证
-	$(".visaUS").change(function(){
-		var visaUS = $("input[name=visaUS]:checked").val();
-		if(visaUS == 1){
-			$(".dateIssue").show();
-		}else {
-			$(".dateIssue").hide();
-		}
-	});
-	$(".lose").change(function(){
-		var lose = $("input[name=lose]:checked").val();
-		if(lose == 1){
-			$(".yearExplain").show();
-		}else {
-			$(".yearExplain").hide();
-		}
-	});
+	
+	
+	
 	$(".revoke").change(function(){
 		var revoke = $("input[name=revoke]:checked").val();
 		if(revoke == 1){

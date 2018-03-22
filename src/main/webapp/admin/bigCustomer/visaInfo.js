@@ -54,6 +54,17 @@ $(".license").change(function(){
 	}
 });
 
+//是否有美国签证
+$(".visaUS").change(function(){
+	var visaUS = $("input[class=visaUS]:checked").val();
+	if(visaUS == 1){
+		$(".dateIssue").show();
+	}else {
+		$(".dateIssue").hide();
+		emptyContentById($("div.goUS_visa"));
+	}
+});
+
 
 
 
@@ -85,7 +96,7 @@ function deleteBrotherEle(obj){
 
 //清空子元素内容
 function emptyContentById(obj){
-	obj.find("input").each(function() {
+	obj.find("input[type='text']").each(function() {
 		$(this).val("");
 	});
 	obj.find("select").each(function() {
@@ -94,11 +105,13 @@ function emptyContentById(obj){
 	obj.find("textarea").each(function() {
 		$(this).val("");
 	});
-	obj.find("checkbox").each(function() {
-		$(this).attr("checked",false);
+	obj.find("input[type='checkbox']").each(function() {
+		$(this).prop('checked', false);
 	});
-	obj.find("radio").each(function() {
-		$(this).eq(1).attr("checked",true);
+	obj.find("input[type='radio']").each(function() {
+		if($(this).val() == 2){
+			$(this).prop("checked", "checked");
+		}
 	});
 	
 }
