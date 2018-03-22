@@ -243,7 +243,7 @@
 									<input type="radio" name="lose" class="lose" value="1" />是
 									<input type="radio" name="lose" class="lose" value="2" checked />否
 								</div>
-								<div class="yearExplain displayTop">
+								<div class="yearExplain displayTop elementHide"><!-- 默认隐藏 -->
 									<div class="displayLeft groupInputInfo">
 										<label>年份</label>
 										<input type="text" />

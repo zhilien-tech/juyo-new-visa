@@ -2,38 +2,9 @@ $(function(){
 	
 	
 	
-	$(".revoke").change(function(){
-		var revoke = $("input[name=revoke]:checked").val();
-		if(revoke == 1){
-			$(".explain").show();
-		}else {
-			$(".explain").hide();
-		}
-	});
-	$(".refuse").change(function(){
-		var refuse = $("input[name=refuse]:checked").val();
-		if(refuse == 1){
-			$(".refuseExplain").show();
-		}else {
-			$(".refuseExplain").hide();
-		}
-	});
-	$(".onceLegitimate").change(function(){
-		var onceLegitimate = $("input[name=onceLegitimate]:checked").val();
-		if(onceLegitimate == 1){
-			$(".onceExplain").show();
-		}else {
-			$(".onceExplain").hide();
-		}
-	});
-	$(".onceImmigration").change(function(){
-		var onceImmigration = $("input[name=onceImmigration]:checked").val();
-		if(onceImmigration == 1){
-			$(".immigrationExplain").hide();
-		}else {
-			$(".immigrationExplain").show();
-		}
-	});
+	
+
+	
 
 	//亲属信息
 	$(".fatherUS").change(function(){

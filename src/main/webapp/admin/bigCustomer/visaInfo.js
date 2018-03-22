@@ -7,7 +7,7 @@ $(".companyInfo").change(function(){
 	}else {
 		$(".teamture").hide();
 		deleteBrotherEle($("div.teamnamefalse"));
-		emptyContentById($("div.teamnamefalse"));
+		emptyContentByObj($("div.teamnamefalse"));
 		//触发单选按钮的点击事件
 		$(".team").eq(1).click();
 	}
@@ -18,12 +18,12 @@ $(".team").change(function(){
 	if(teamVal == 1){
 		$(".teamnameture").show();
 		$(".teamnamefalse").hide();
-		emptyContentById($("div.teamnameture"));
+		emptyContentByObj($("div.teamnameture"));
 	}else {
 		$(".teamnameture").hide();
 		$(".teamnamefalse").show();
 		deleteBrotherEle($("div.teamnamefalse"));
-		emptyContentById($("div.teamnamefalse"));
+		emptyContentByObj($("div.teamnamefalse"));
 	}
 });
 
@@ -36,7 +36,7 @@ $(".goUS").change(function(){
 	}else{
 		$(".goUSInfo").hide();
 		deleteBrotherEle($("div.goUS_Country"));
-		emptyContentById($("div.goUS_Country"));
+		emptyContentByObj($("div.goUS_Country"));
 		//触发单选按钮的点击事件
 		$(".license").eq(1).click();
 	}
@@ -50,7 +50,7 @@ $(".license").change(function(){
 	}else{
 		$(".driverInfo").hide();
 		deleteBrotherEle($("div.goUS_drivers"));
-		emptyContentById($("div.goUS_drivers"));
+		emptyContentByObj($("div.goUS_drivers"));
 	}
 });
 
@@ -61,10 +61,59 @@ $(".visaUS").change(function(){
 		$(".dateIssue").show();
 	}else {
 		$(".dateIssue").hide();
-		emptyContentById($("div.goUS_visa"));
+		emptyContentByObj($("div.goUS_visa"));
 	}
 });
-
+//是否丢失签证
+$(".lose").change(function(){
+	var lose = $("input[class=lose]:checked").val();
+	if(lose == 1){
+		$(".yearExplain").show();
+	}else {
+		$(".yearExplain").hide();
+		emptyContentByObj($("div.yearExplain"));
+	}
+});
+//是否取消、撤销签证
+$(".revoke").change(function(){
+	var revoke = $("input[class=revoke]:checked").val();
+	if(revoke == 1){
+		$(".explain").show();
+	}else {
+		$(".explain").hide();
+		emptyContentByObj($("div.explain"));
+	}
+});
+//是否被拒绝过
+$(".refuse").change(function(){
+	var refuse = $("input[class=refuse]:checked").val();
+	if(refuse == 1){
+		$(".refuseExplain").show();
+	}else {
+		$(".refuseExplain").hide();
+		emptyContentByObj($("div.refuseExplain"));
+	}
+});
+//曾经是否是美国合法永久居民
+$(".onceLegitimate").change(function(){
+	var onceLegitimate = $("input[class=onceLegitimate]:checked").val();
+	if(onceLegitimate == 1){
+		$(".onceExplain").show();
+	}else {
+		$(".onceExplain").hide();
+		emptyContentByObj($("div.onceExplain"));
+	}
+});
+//有没有人曾代表您向美国公民和移民服务局提交过移民申请
+$(".onceImmigration").change(function(){
+	var onceImmigration = $("input[class=onceImmigration]:checked").val();
+	if(onceImmigration == 1){
+		$(".immigrationExplain").show();
+	}else {
+		$(".immigrationExplain").hide();
+		emptyContentByObj($("div.immigrationExplain"));
+	}
+});
 
 
 
@@ -95,7 +144,7 @@ function deleteBrotherEle(obj){
 }
 
 //清空子元素内容
-function emptyContentById(obj){
+function emptyContentByObj(obj){
 	obj.find("input[type='text']").each(function() {
 		$(this).val("");
 	});
