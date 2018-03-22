@@ -246,15 +246,6 @@ $(".isservedinrebelgroup").change(function(){
 //-------------------------------------------安全和背景 start------------------------------------
 //是否患有传染性疾病
 safeInfoRadioClick("isPestilence");
-/*$(".isPestilence").change(function(){
-var isPestilence = $("input[class=isPestilence]:checked").val();
-if(isPestilence == 1){
-	$(".isPestilenceDiv").show();
-}else {
-	$(".isPestilenceDiv").hide();
-	emptyContentByObj($("div.isPestilenceDiv"));
-}
-});*/
 
 //是否有精神或身体疾病，可能对他人安全和福利构成威胁
 safeInfoRadioClick("isThreatIllness");
@@ -339,43 +330,6 @@ safeInfoRadioClick("isTaxEvasion");
 
 //是否曾在1996年11月30日之后以学生身份到美国的一公立小学或公立中学就读而没有向学校补交费用
 safeInfoRadioClick("isNotPayTuitionFees");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //安全信息 单选点击事件

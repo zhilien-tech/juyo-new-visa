@@ -990,7 +990,7 @@
 						<input type="radio" name="isPestilence" class="isPestilence" value="1"/>是
 						<input type="radio" name="isPestilence" class="isPestilence" value="2" checked/>否
 					</div>
-					<div class="paddingTop isPestilenceDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isPestilenceDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1001,7 +1001,7 @@
 						<input type="radio" name="isThreatIllness" class="isThreatIllness" value="1"/>是
 						<input type="radio" name="isThreatIllness" class="isThreatIllness" value="2" checked/>否
 					</div>
-					<div class="paddingTop isThreatIllnessDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isThreatIllnessDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1012,7 +1012,7 @@
 						<input type="radio" name="isDrug" class="isDrug" value="1"/>是
 						<input type="radio" name="isDrug" class="isDrug" value="2" checked/>否
 					</div>
-					<div class="paddingTop isDrugDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isDrugDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1023,7 +1023,7 @@
 						<input type="radio" name="isSentenced" class="isSentenced" value="1"/>是
 						<input type="radio" name="isSentenced" class="isSentenced" value="2" checked/>否
 					</div>
-					<div class="paddingTop isSentencedDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isSentencedDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1034,7 +1034,7 @@
 						<input type="radio" name="isMaterialLaw" class="isMaterialLaw" value="1"/>是
 						<input type="radio" name="isMaterialLaw" class="isMaterialLaw" value="2" checked/>否
 					</div>
-					<div class="paddingTop isMaterialLawDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isMaterialLawDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1045,7 +1045,7 @@
 						<input type="radio" name="isProstitution" class="isProstitution" value="1"/>是
 						<input type="radio" name="isProstitution" class="isProstitution" value="2" checked/>否
 					</div>
-					<div class="paddingTop isProstitutionDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isProstitutionDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1056,7 +1056,7 @@
 						<input type="radio" name="isLaundering" class="isLaundering" value="1"/>是
 						<input type="radio" name="isLaundering" class="isLaundering" value="2" checked/>否
 					</div>
-					<div class="paddingTop isLaunderingDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isLaunderingDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1067,7 +1067,7 @@
 						<input type="radio" name="isSmuggling" class="isSmuggling" value="1"/>是
 						<input type="radio" name="isSmuggling" class="isSmuggling" value="2" checked/>否
 					</div>
-					<div class="paddingTop isSmugglingDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isSmugglingDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1078,7 +1078,7 @@
 						<input type="radio" name="isThreateningOthers" class="isThreateningOthers" value="1"/>是
 						<input type="radio" name="isThreateningOthers" class="isThreateningOthers" value="2" checked/>否
 					</div>
-					<div class="paddingTop isThreateningOthersDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isThreateningOthersDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1089,7 +1089,7 @@
 						<input type="radio" name="isSmugglingBenefits" class="isSmugglingBenefits" value="1"/>是
 						<input type="radio" name="isSmugglingBenefits" class="isSmugglingBenefits" value="2" checked/>否
 					</div>
-					<div class="paddingTop isSmugglingBenefitsDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isSmugglingBenefitsDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1100,7 +1100,7 @@
 						<input type="radio" name="isSpyActivities" class="isSpyActivities" value="1"/>是
 						<input type="radio" name="isSpyActivities" class="isSpyActivities" value="2" checked/>否
 					</div>
-					<div class="paddingTop isSpyActivitiesDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isSpyActivitiesDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1111,7 +1111,7 @@
 						<input type="radio" name="isTerroristActivities" class="isTerroristActivities" value="1"/>是
 						<input type="radio" name="isTerroristActivities" class="isTerroristActivities" value="2" checked/>否
 					</div>
-					<div class="paddingTop isTerroristActivitiesDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isTerroristActivitiesDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1122,7 +1122,7 @@
 						<input type="radio" name="isSupportTerrorists" class="isSupportTerrorists" value="1"/>是
 						<input type="radio" name="isSupportTerrorists" class="isSupportTerrorists" value="2" checked/>否
 					</div>
-					<div class="paddingTop isSupportTerroristsDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isSupportTerroristsDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1133,7 +1133,7 @@
 						<input type="radio" name="isTerrorist" class="isTerrorist" value="1"/>是
 						<input type="radio" name="isTerrorist" class="isTerrorist" value="2" checked/>否
 					</div>
-					<div class="paddingTop isTerroristDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isTerroristDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1144,7 +1144,7 @@
 						<input type="radio" name="isTakeGenocide" class="isTakeGenocide" value="1"/>是
 						<input type="radio" name="isTakeGenocide" class="isTakeGenocide" value="2" checked/>否
 					</div>
-					<div class="paddingTop isTakeGenocideDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isTakeGenocideDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1155,7 +1155,7 @@
 						<input type="radio" name="isOrderedThreat" class="isOrderedThreat" value="1"/>是
 						<input type="radio" name="isOrderedThreat" class="isOrderedThreat" value="2" checked/>否
 					</div>
-					<div class="paddingTop isOrderedThreat grouptextareaInfo">
+					<div class="paddingTop elementHide isOrderedThreat grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1166,7 +1166,7 @@
 						<input type="radio" name="isPoliticalKilling" class="isPoliticalKilling" value="1"/>是
 						<input type="radio" name="isPoliticalKilling" class="isPoliticalKilling" value="2" checked/>否
 					</div>
-					<div class="paddingTop isPoliticalKillingDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isPoliticalKillingDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1177,7 +1177,7 @@
 						<input type="radio" name="isRecruitChildSoldier" class="isRecruitChildSoldier" value="1"/>是
 						<input type="radio" name="isRecruitChildSoldier" class="isRecruitChildSoldier" value="2" checked/>否
 					</div>
-					<div class="paddingTop isRecruitChildSoldierDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isRecruitChildSoldierDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1188,7 +1188,7 @@
 						<input type="radio" name="isInroadReligion" class="isInroadReligion" value="1"/>是
 						<input type="radio" name="isInroadReligion" class="isInroadReligion" value="2" checked/>否
 					</div>
-					<div class="paddingTop isInroadReligionDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isInroadReligionDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1199,7 +1199,7 @@
 						<input type="radio" name="isForcedControlPopulation" class="isForcedControlPopulation" value="1"/>是
 						<input type="radio" name="isForcedControlPopulation" class="isForcedControlPopulation" value="2" checked/>否
 					</div>
-					<div class="paddingTop isForcedControlPopulationDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isForcedControlPopulationDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1210,7 +1210,7 @@
 						<input type="radio" name="isForcedOrganTake" class="isForcedOrganTake" value="1"/>是
 						<input type="radio" name="isForcedOrganTake" class="isForcedOrganTake" value="2" checked/>否
 					</div>
-					<div class="paddingTop isForcedOrganTakeDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isForcedOrganTakeDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1221,7 +1221,7 @@
 						<input type="radio" name="isIllegalVisaUS" class="isIllegalVisaUS" value="1"/>是
 						<input type="radio" name="isIllegalVisaUS" class="isIllegalVisaUS" value="2" checked/>否
 					</div>
-					<div class="paddingTop isIllegalVisaUSDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isIllegalVisaUSDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1232,7 +1232,7 @@
 						<input type="radio" name="isDeported" class="isDeported" value="1"/>是
 						<input type="radio" name="isDeported" class="isDeported" value="2" checked/>否
 					</div>
-					<div class="paddingTop isDeportedDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isDeportedDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1243,7 +1243,7 @@
 						<input type="radio" name="isRemoteHearing" class="isRemoteHearing" value="1"/>是
 						<input type="radio" name="isRemoteHearing" class="isRemoteHearing" value="2" checked/>否
 					</div>
-					<div class="paddingTop isRemoteHearingDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isRemoteHearingDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1254,7 +1254,7 @@
 						<input type="radio" name="isViolationVisaConditions" class="isViolationVisaConditions" value="1"/>是
 						<input type="radio" name="isViolationVisaConditions" class="isViolationVisaConditions" value="2" checked/>否
 					</div>
-					<div class="paddingTop isViolationVisaConditionsDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isViolationVisaConditionsDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1265,7 +1265,7 @@
 						<input type="radio" name="isRefusalTransferCustody" class="isRefusalTransferCustody" value="1"/>是
 						<input type="radio" name="isRefusalTransferCustody" class="isRefusalTransferCustody" value="2" checked/>否
 					</div>
-					<div class="paddingTop isRefusalTransferCustodyDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isRefusalTransferCustodyDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1276,7 +1276,7 @@
 						<input type="radio" name="isIllegalVoting" class="isIllegalVoting" value="1"/>是
 						<input type="radio" name="isIllegalVoting" class="isIllegalVoting" value="2" checked/>否
 					</div>
-					<div class="paddingTop isIllegalVotingDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isIllegalVotingDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1287,7 +1287,7 @@
 						<input type="radio" name="isTaxEvasion" class="isTaxEvasion" value="1"/>是
 						<input type="radio" name="isTaxEvasion" class="isTaxEvasion" value="2" checked/>否
 					</div>
-					<div class="paddingTop isTaxEvasionDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isTaxEvasionDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1298,7 +1298,7 @@
 						<input type="radio" name="isNotPayTuitionFees" class="isNotPayTuitionFees" value="1"/>是
 						<input type="radio" name="isNotPayTuitionFees" class="isNotPayTuitionFees" value="2" checked/>否
 					</div>
-					<div class="paddingTop isNotPayTuitionFeesDiv grouptextareaInfo">
+					<div class="paddingTop elementHide isNotPayTuitionFeesDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
