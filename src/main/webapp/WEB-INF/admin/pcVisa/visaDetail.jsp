@@ -261,13 +261,6 @@
 				</section>
 			</div>
 		</div>
-		<script type="text/javascript">
-			var BASE_PATH = '${base}';
-			var orderid = '${obj.orderid}';
-			var orderinfoid = '${obj.orderinfo.id}';
-			var triptype = '${obj.travelinfo.tripType}';
-			var multitripjson = '${obj.multitripjson}';
-		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 		<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -285,23 +278,5 @@
 		<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 		<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 		<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
-		<script src="${base}/admin/visaJapan/visaDetailSelect2.js"></script>
-		<!-- 本页面js文件 -->
-		<script type="text/javascript">			
-			//弹框
-			function revenue(){
-				layer.open({
-        		    type: 2,
-        		    title: false,
-        		    closeBtn:false,
-        		    fix: false,
-        		    maxmin: false,
-        		    shadeClose: false,
-        		    scrollbar: false,
-        		    area: ['900px', '80%'],
-        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
-        		  });
-			}
-		</script>
 	</body>
 </html>

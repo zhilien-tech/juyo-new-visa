@@ -49,9 +49,9 @@ public class PcVisaModule {
 	 * 跳转到签证详情页
 	 */
 	@At
-	@POST
+	@GET
 	@Ok("jsp")
-	public Object visaInfos(@Param("orderid") Integer orderid) {
-		return pcVisaViewService.visaInfos(orderid);
+	public Object visaDetail(@Param("orderid") Integer orderid) {
+		return pcVisaViewService.visaDetail(orderid);
 	}
 }
