@@ -1849,4 +1849,21 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		}
 
 	}
+
+	public Object initOrderstatus(Long orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		String orderstatus = "";
+		for (JPOrderStatusEnum jpordersimpleenum : JPOrderStatusEnum.values()) {
+			if (jpordersimpleenum.intKey() == order.getStatus()) {
+				orderstatus = jpordersimpleenum.value();
+				break;
+			}
+
+		}
+		result.put("orderstatus", orderstatus);
+		result.put("orderjp", orderjp);
+		return result;
+	}
 }

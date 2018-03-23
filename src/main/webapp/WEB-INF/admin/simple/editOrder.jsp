@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <!-- 本页css -->
-<link rel="stylesheet" href="${base}/references/common/css/simpleEditOrder.css">
+<link rel="stylesheet" href="${base}/references/common/css/simpleEditOrder.css?v=0.0.1">
 <!-- 加载中。。。样式 -->
 <link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 </head>
@@ -576,6 +576,26 @@
 				}
 				initApplicantTable();
 				initTravelPlanTable();
+				initOrderstatus();
+			}
+			
+			//初始化页面状态
+			function initOrderstatus(){
+				var orderid = $('#orderid').val();
+				$.ajax({ 
+			    	url: '${base}/admin/visaJapan/initOrderstatus.html',
+			    	dataType:"json",
+			    	data:{orderid:orderid},
+			    	type:'post',
+			    	success: function(data){
+			    		$('.cateInfo').html(data.orderstatus);
+			    		if(data.orderstatus == '发招宝中'){
+			    			$('.spinner').show();
+			    		}else{
+			    			$('.spinner').hide();
+			    		}
+			      	}
+			    }); 
 			}
 			
 			function cancelCallBack(status){
@@ -705,6 +725,7 @@
                  		}else if(visastatus == 27){
 	                 		layer.msg('报告拒签');
                  		}
+                 		initOrderstatus();
                    	}
                  });
 			}

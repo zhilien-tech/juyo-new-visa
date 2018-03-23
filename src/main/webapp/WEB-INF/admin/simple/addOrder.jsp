@@ -467,7 +467,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '80%'],
-					content:'/admin/orderJp/passportInfo.html?applicantid='+applicantId+'&orderid='+orderid
+					content:'/admin/simple/passportInfo.html?applicantid='+applicantId+'&orderid='+orderid
 				});
 			}
 			
