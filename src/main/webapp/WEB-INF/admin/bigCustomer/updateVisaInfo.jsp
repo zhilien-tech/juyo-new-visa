@@ -5,6 +5,11 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>签证信息</title>
+		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
+		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<link rel="stylesheet" href="${base}/references/public/css/visaInfo.css">
 	</head>
 	<body>
@@ -55,12 +60,9 @@
 								<label>与你的关系</label>
 								<select>
 									<option value="0">请选择</option>
-									<option>父母</option>
-									<option>配偶</option>
-									<option>子女</option>
-									<option>其他亲属</option>
-									<option>商业伙伴</option>
-									<option>其他</option>
+									<c:forEach items="${obj.TravelCompanionRelationshipEnum }" var="map">
+										<option value="${map.key }">${map.value }</option>
+									</c:forEach>
 								</select>
 							</div>
 							<!-- 业务需求，先隐藏 -->
@@ -98,11 +100,9 @@
 										<input type="text" />
 										<select>
 											<option value="0">请选择</option>
-											<option>年</option>
-											<option>月</option>
-											<option>周</option>
-											<option>日</option>
-											<option>少于24小时</option>
+											<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
+												<option value="${map.key }">${map.value }</option>
+											</c:forEach>
 										</select>
 									</div>
 								</div>
@@ -146,7 +146,9 @@
 										<label>哪个州的驾照</label>
 										<select>
 											<option value="0">请选择</option>
-											<option>北卡罗莱纳州</option>
+											<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
+												<option value="${map.key }">${map.value }</option>
+											</c:forEach>
 										</select>
 									</div>
 								</div>
@@ -289,13 +291,9 @@
 					<label>与你的关系</label>
 					<select>
 						<option value="0">请选择</option>
-						<option>亲属</option>
-						<option>配偶</option>
-						<option>朋友</option>
-						<option>商业伙伴</option>
-						<option>雇主</option>
-						<option>学校官方</option>
-						<option>其他</option>
+						<c:forEach items="${obj.ContactPointRelationshipStatusEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
 					</select>
 				</div>
 				<div class="clear"></div>
@@ -363,10 +361,9 @@
 						<label>身份状态</label>
 						<select>
 							<option value="0">请选择</option>
-							<option>美国公民</option>
-							<option>美国合法永久居住者</option>
-							<option>非移民</option>
-							<option>其他/不知道</option>
+							<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
 						</select>
 					</div>
 				</div>
@@ -391,10 +388,9 @@
 						<label>身份状态</label>
 						<select>
 							<option value="0">请选择</option>
-							<option>美国公民</option>
-							<option>美国合法永久居住者</option>
-							<option>非移民</option>
-							<option>其他/不知道</option>
+							<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
 						</select>
 					</div>
 				</div>
@@ -420,20 +416,18 @@
 								<label>与你的关系</label>
 								<select>
 									<option value="0">请选择</option>
-									<option>配偶</option>
-									<option>未婚夫/妻子</option>
-									<option>子女</option>
-									<option>兄弟姐妹</option>
+									<c:forEach items="${obj.ImmediateRelationshipEnum }" var="map">
+										<option value="${map.key }">${map.value }</option>
+									</c:forEach>
 								</select>
 							</div>
 							<div class="paddingRight groupSelectInfo">
 								<label>亲属的身份</label>
 								<select>
 									<option value="0">请选择</option>
-									<option>美国公民</option>
-									<option>美国合法永久居住者</option>
-									<option>非移民</option>
-									<option>其他/不知道</option>
+									<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
+										<option value="${map.key }">${map.value }</option>
+									</c:forEach>
 								</select>
 							</div>
 							<div class="clear"></div>
@@ -470,8 +464,9 @@
 					<label>配偶的国籍</label>
 					<select>
 						<option value="0">请选择</option>
-						<option>中国</option>
-						<option>美国</option>
+						<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
 					</select>
 				</div>
 				<div class="clear"></div>
@@ -484,8 +479,9 @@
 					<label>配偶的出生国家</label>
 					<select>
 						<option value="0">请选择</option>
-						<option>中国</option>
-						<option>美国</option>
+						<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
 					</select>
 				</div>
 				<div class="clear"></div>
@@ -493,11 +489,9 @@
 					<label>配偶的联系地址</label>
 					<select id="spouseaddress" name="spouseaddress" class="spouse_Address" onchange="changeSpouse()">
 						<option value="0">请选择</option>
-						<option value="1">与居住地址一样</option>
-						<option value="2">与邮寄地址一样</option>
-						<option value="3">与美国联系地址一样</option>
-						<option value="4">不知道</option>
-						<option value="5">其他(制定地址)</option>
+						<c:forEach items="${obj.VisaSpouseContactAddressEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
 					</select>
 				</div>
 				
@@ -532,8 +526,9 @@
 						<label>国家/地区</label>
 						<select>
 							<option value="0">请选择</option>
-							<option>美国</option>
-							<option>中国</option>
+							<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
 						</select>
 					</div>
 					<div class="clear"></div>
@@ -547,28 +542,9 @@
 					<label>主要职业</label>
 					<select id="occupation" name="occupation" onchange="occupationChange()">
 						<option value="0">请选择</option>
-						<option value="1">农业</option>
-						<option value="2">艺术家/表演家</option>
-						<option value="3">商业</option>
-						<option value="4">通信</option>
-						<option value="5">计算机科学</option>
-						<option value="6">烹饪/食品服务</option>
-						<option value="7">教育</option>
-						<option value="8">工程</option>
-						<option value="9">政府</option>
-						<option value="10">家庭主妇</option>
-						<option value="11">法律界人士</option>
-						<option value="12">医疗/保健</option>
-						<option value="13">军事</option>
-						<option value="14">自然科学</option>
-						<option value="15">不受雇佣</option>
-						<option value="16">物理科学</option>
-						<option value="17">宗教职业</option>
-						<option value="18">研究</option>
-						<option value="19">退休</option>
-						<option value="20 ">社会科学</option>
-						<option value="21">学生</option>
-						<option value="22">其他</option>
+						<c:forEach items="${obj.VisaCareersEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
 					</select>
 				</div>
 				<div class="paddingTop elementHide jobEduLearningInfoDiv">
@@ -609,8 +585,9 @@
 						<label>国家/地区</label>
 						<select>
 							<option value="0">请选择</option>
-							<option>中国</option>
-							<option>美国</option>
+							<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
 						</select>
 					</div>
 					<div class="clear"></div>
@@ -686,8 +663,9 @@
 										<label>国家/地区</label>
 										<select>
 											<option value="0">请选择</option>
-											<option>中国</option>
-											<option>美国</option>
+											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+												<option value="${map.key }">${map.value }</option>
+											</c:forEach>
 										</select>
 									</div>
 									<div class="paddingRight groupInputInfo">
@@ -779,8 +757,9 @@
 										<label>国家/地区</label>
 										<select>
 											<option value="0">请选择</option>
-											<option>中国</option>
-											<option>美国</option>
+											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+												<option value="${map.key }">${map.value }</option>
+											</c:forEach>
 										</select>
 									</div>
 									<div class="paddingRight groupInputInfo">
@@ -909,8 +888,9 @@
 								<label>国家/地区</label>
 								<select>
 									<option value="0">请选择</option>
-									<option>中国</option>
-									<option>美国</option>
+									<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+										<option value="${map.key }">${map.value }</option>
+									</c:forEach>
 								</select>
 							</div>
 							<div class="floatRight groupInputInfo">
@@ -1284,59 +1264,21 @@
 		</div>
 		<div class="English">
 			<!--旅伴信息-->
-			<!-- <div class="companyInfoModule">
-				<div>旅伴信息</div>
-				<div class="companyMain">
-					<label>是否与其他人一起旅游</label>
-					<input type="radio" class="companyInfo" name="companyInfo1" value="1" />是
-					<input type="radio" class="companyInfo" name="companyInfo1" value="2"/>否
-				</div>
-				yes
-				<div class="teamture" style="display: none;">
-					<label>是否作为团队或组织的一部分旅游</label>
-					<input type="radio" class="team" name="team" value="1" />是
-					<input type="radio" class="team" name="team" value="2" />否
-				</div>
-				第二部分yes
-				<div class="teamnameture" style="display: none;">
-					<label>团队名称</label>
-					<input type="text" placeholder="团队名称" />
-				</div>
-				第二部分No
-				<div class="teamnamefalse" style="display: none;">
-					<div>
-						<label>同伴名称</label>
-						<input type="text" placeholder="同伴名称" />
-					</div>
-					<div>
-						<label>同伴姓</label>
-						<input type="text" placeholder="同伴姓" />
-					</div>
-					<div>
-						<label>同伴名</label>
-						<input type="text" placeholder="同伴名" />
-					</div>
-					<div>
-						<label>与你的关系</label>
-						<select>
-							<option>父母</option>
-							<option>配偶</option>
-							<option>子女</option>
-							<option>其他亲属</option>
-							<option>商业伙伴</option>
-							<option>其他</option>
-						</select>
-					</div>
-					<div>
-						<a>添加</a>
-						<a>去掉 </a>
-					</div>
-				</div>
-			</div> -->
-			<!--旅伴信息END-->
+			
 		</div>
 	</body>
 	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
+	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<script src="${base}/references/common/js/vue/vue.min.js"></script>
+	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
+	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+	<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	
 	<script src="${base}/admin/bigCustomer/visaInfo.js"></script><!-- 本页面js -->
 	
 </html>
