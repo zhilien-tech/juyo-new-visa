@@ -22,7 +22,7 @@
 		</a>
 		<form id="applicantInfo">
 			<div class="modal-header">
-				<span class="heading">更新基本信息</span> 
+				<span class="heading">基本信息</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" onclick="saveApplicant(1)" />
 			</div>
@@ -30,143 +30,60 @@
 				<div class="tab-content row">
 					<input id="comId" name="comid" type="hidden" value="${obj.applicant.comid }">
 					<input id="userId" name="userid" type="hidden" value="${obj.applicant.userid }">
-					<div class="col-sm-6 padding-right-0">
-						<div></div>
+					<div class="col-sm-12 padding-right-0">
 						<!-- start 身份证 正面 -->
-						<div class="info-imgUpload front has-error" id="borderColorFront">
-							<div class="col-xs-6 mainWidth">
-							<div class="form-group">
-								<div class="cardFront-div">
-									<span>点击上传身份证正面</span>
-									<input id="cardFront" name="cardfront" type="hidden" value="${obj.applicant.cardfront }"/>
-									<input id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
-									<img id="sqImg" name="sqimg" alt="" src="${obj.applicant.cardfront }" >
-									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+							<div class="col-xs-4 pictures">
+								<div class="form-group pictureTop">
+									<div class="uploadInfo">
+										<span class="promptInfo">点击上传身份证正面</span>
+										<input id="cardFront" name="cardfront" type="hidden" value="${obj.applicant.cardfront }"/>
+										<img id="imgShow" name="sqimg" alt="" src="${obj.applicant.cardfront }" >
+										<input id="uploadFileImg" name="uploadfile" class="btn btn-primary btn-sm" type="file" value="上传" />
+										<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+									</div>
 								</div>
 							</div>
-						</div>
-						</div>
-						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 -20px 32px !important">
+						<!-- <div class="col-xs-4 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 -20px 32px !important">
 							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">身份证正面必须上传</small>
-						</div>
+						</div> -->
 						<!-- end 身份证 正面 -->
 						<!-- start 身份证 反面 -->
-						<div class="info-imgUpload back has-error" id="borderColorBack">
-							<div class="col-xs-6 mainWidth">
-								<div class="form-group">
-									<div class="cardFront-div">
-										<span>点击上传身份证背面</span>
+							<div class="col-xs-4 picturesBack">
+								<div class="form-group pictureTop">
+									<div class="uploadInfo">
+										<span class="promptInfo">点击上传身份证背面</span>
 										<input id="cardBack" name="cardBack" type="hidden" value="${obj.applicant.cardback }"/>
-										<input id="uploadFileBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
-										<img id="sqImgBack" alt="" src="${obj.applicant.cardback }" >
+										<img id="imgShowBack" alt="" src="${obj.applicant.cardback }" >
+										<input id="uploadFileImgBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
 										<i class="delete" onclick="deleteApplicantBackImg();"></i>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="col-xs-6 front has-error" style="width:320px; height:20px; border:0 !important; color:red;margin:-20px 0 0 32px !important">
+						<!-- <div class="col-xs-4 front has-error" style="width:320px; height:20px; border:0 !important; color:red;margin:-20px 0 0 32px !important">
 							<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
-						</div>
+						</div> -->
 						<!-- end 身份证 反面 -->
-
-						<div class="row">
-							<!-- 签发机关 -->
-							<div class="col-sm-10 padding-right-0 marginL">
-								<div class="form-group">
-									<label><span>*</span>签发机关</label> 
-									<input id="issueOrganization" name="issueorganization" tabIndex="1" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.issueorganization }"/>
-								</div>
-							</div>
-						</div>
-						<!-- end 签发机关 -->
-						<div class="row">
-							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
-							<div class="col-sm-5 padding-right-0 nameBeforeTop">
-								<div class="form-group">
-									<label>是否有曾用名</label> 
-									<div>
-										<span class="nameBeforeYes">
-											<input type="radio" name="hasothername" class="nameBefore" value="1"/>是
-										</span>
-										<span>
-											<input type="radio" name="hasothername" class="nameBefore" value="2"/>否
-										</span>
+						<!-- start 二寸免冠照片 -->
+							<div class="col-xs-3 picturesInch">
+								<div class="form-group pictureTop">
+									<div class="uploadInfo">
+										<span class="inchInfo">二寸免冠照片</span>
+										<input id="cardInch" name="cardfront" type="hidden" value=""/>
+										<img id="imgInch" name="imgInch" alt="" src="" >
+										<input id="uploadFileInchImg" name="uploadFileInchImg" class="btn btn-primary btn-sm" type="file"  value="上传"/>
+										<i class="delete" onclick="deleteApplicantInchImg()"></i>
 									</div>
 								</div>
 							</div>
-							<!-- 姓/名 拼音 -->
-							<div class="nameBeforeHide">
-							    <div class="col-sm-10 padding-right-0 marginL">
-									<div class="form-group" style="position:relative;">
-										<label>姓/拼音</label> 
-										<input id="otherFirstName" name="otherfirstname" type="text" class="form-control input-sm "  tabIndex="15" placeholder=" " value="${obj.applicant.otherfirstname }" />
-										<input id="otherFirstNameEn" name="otherfirstnameen" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.otherfirstnameen }"/>
-									</div>
-								</div>
-							</div>
-							<!-- 名/拼音 -->
-							<div class="wordSpell">
-								<div class="col-sm-10 padding-right-0 marginL" >
-									<div class="form-group" style="position:relative;">
-										<label>名/拼音</label> 
-										<input id="otherLastName" name="otherlastname"  tabIndex="16" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherlastname }" />
-										<input id="otherLastNameEn" name="otherlastnameen" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.otherlastnameen }"/>
-									</div>
-								</div>
-							</div>
-							<!-- 姓/名 拼音 end -->
-							<div class="col-sm-offset-1 padding-right-0 onceIDTop">
-								<div class="form-group">
-									<label>曾有的或另有的国籍(或公民身份)</label> 
-									<div>
-										<span class="onceIDYes">
-											<input type="radio" name="hasothernationality" class="onceID" value="1" />是
-										</span>
-										<span>
-											<input type="radio" name="hasothernationality" class="onceID"  value="2" />否
-										</span>
-									</div>
-								</div>
-							</div>
-							<!-- 曾用国籍 -->
-							<div class="col-sm-5 padding-right-0 nationalityHide">
-								<div class="form-group" id="nationalityDiv">
-									<label>国籍</label> 
-									<input id="nationality" name="nationality"  tabIndex="17" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
-								</div>
-							</div>
-						</div>
+						<!-- 验证 -->
+						<!-- <div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 -20px 32px !important">
+							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">二寸免冠照片必须上传</small>
+						</div> -->
+						<!-- end 二寸免冠照片 -->
 						
 					</div>
-
 					<div class="col-sm-6 padding-right-0">
-						<div class="row">
-							<!-- 姓/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0 " >
-								<div class="form-group" style="position:relative;">
-									<label>
-										<span>*</span>姓/拼音
-									</label> 
-									<input id="firstName" name="firstname" type="text" class="form-control input-sm "  tabIndex="2" placeholder=" " value="${obj.applicant.firstname }" />
-									<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
-									<input id="firstNameEn" name="firstnameen" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.firstnameen }"/>
-								</div>
-							</div>
-						</div>
-						<!-- end 姓/拼音 -->
-						<div class="row">
-							<!-- 名/拼音 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group" style="position:relative;">
-									<label>
-										<span>*</span>名/拼音
-									</label> 
-									<input id="lastName" name="lastname" type="text" class="form-control input-sm "  tabIndex="3" placeholder=" " value="${obj.applicant.lastname }" />
-									<input id="lastNameEn" name="lastnameen" type="text" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.lastnameen }"/>
-								</div>
-							</div>
-						</div>
-						<!-- end 名/拼音 -->
+						<!-- 手机号和邮箱 -->
 						<div class="row">
 							<!-- 手机号/邮箱 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
@@ -184,8 +101,9 @@
 								</div>
 							</div>
 						</div>
-						<!-- end 手机号/邮箱 -->
+						<!-- 手机号和邮箱 END -->
 						
+						<!-- 身份证 -->
 						<div class="row">
 							<!-- 公民身份证 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
@@ -195,32 +113,17 @@
 								</div>
 							</div>
 						</div>
-						<!-- end 公民身份证 -->
+						<!-- 民族 -->
 						<div class="row">
-							<!-- 姓名/民族 -->
-							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>性别</label> 
-									<select class="form-control input-sm selectHeight" id="sex" name="sex">
-										<option value="男" ${obj.applicant.sex == "男"?"selected":"" }>男</option>
-										<option value="女" ${obj.applicant.sex == "女"?"selected":"" }>女</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-3 padding-right-0">
+							<!-- 民族 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>民族</label> 
-									<input id="nation" name="nation" type="text" class="form-control input-sm"  tabIndex="7" placeholder=" " value="${obj.applicant.nation }" />
-								</div>
-							</div>
-							<div class="col-sm-5 padding-right-0">
-								<div class="form-group">
-									<label>出生日期</label> 
-									<input id="birthday" name="birthday" type="text"  tabIndex="8" class="form-control input-sm" value="${obj.birthday }"/>
+									<input id="" name="" type="text" class="form-control input-sm"  value="" />
 								</div>
 							</div>
 						</div>
-						<!-- end 姓名/民族 -->
+						<!-- 住址 -->
 						<div class="row">
 							<!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
@@ -230,21 +133,7 @@
 								</div>
 							</div>
 						</div>
-						<!-- end 住宅 -->
-						<div class="row">
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>有效期限</label> 
-									<input id="validStartDate" name="validstartdate" tabIndex="10" type="text" class="form-control input-sm" value="${obj.validstartdate }"/>
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label> &nbsp; &nbsp;</label> 
-									<input id="validEndDate" name="validenddate" tabIndex="11" type="text" class="form-control input-sm" value="${obj.validenddate }">
-								</div>
-							</div>
-						</div>
+						<!-- 现居住地是否与身份证相同  和  现居住地址城市 -->
 						<div class="row">
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
@@ -264,7 +153,7 @@
 								</div>
 							</div>
 						</div>
-						<!-- end 现居住地址省份/现居住地址城市 -->
+						<!-- 详细地址 -->
 						<div class="row">
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
@@ -274,25 +163,364 @@
 								</div>
 							</div>
 						</div>
-						<!-- end 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间 -->
-						
+						<!-- 婚姻状况  和说明 -->
 						<div class="row">
-							<!-- 紧急联系人姓名/手机 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>紧急联系人姓名</label> 
-									<input id="emergencyLinkman" name="emergencylinkman" type="text" class="form-control input-sm"  tabIndex="18" placeholder=" " value="${obj.applicant.emergencylinkman }" />
+									<label>
+										<span>*</span>婚姻状况
+									</label> 
+									<input id="" name="" type="text" class="form-control input-sm" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>紧急联系人手机</label> 
-									<input id="emergencyTelephone" name="emergencytelephone"  tabIndex="19" type="text" class="form-control input-sm" placeholder=" " value="${obj.applicant.emergencytelephone }" />
+									<label>说明</label> 
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+						</div>
+						<!-- 曾用名 -->
+						<div class="row">
+							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
+							<div class="col-sm-10 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>是否有曾用名</label> 
+									<div>
+										<span class="nameBeforeYes">
+											<input type="radio" name="usedBefore" class="usedBefore" value="1"/>是
+										</span>
+										<span>
+											<input type="radio" name="usedBefore" class="usedBefore" value="2" checked />否
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row usedBeforeTrue">
+							<!-- 姓/名 -->
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>姓</label> 
+									<input id="" name="" type="text" class="form-control input-sm " />
+								</div>
+							</div>
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>名</label> 
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+						</div>
+						<!-- 曾用国籍 -->
+						<div class="row">	
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>曾有的或另有的国籍(或公民身份)</label> 
+									<div>
+										<span class="onceIDYes">
+											<input type="radio" name="usedNationality" class="usedNationality" value="1" />是
+										</span>
+										<span>
+											<input type="radio" name="usedNationality" class="usedNationality"  value="2" checked />否
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1 usedNationalityTrue">
+								<div class="form-group" id="">
+									<label>国籍</label> 
+									<input id="" name="" class="form-control input-sm"/>
+								</div>
+							</div>
+						</div>
+						<!-- 您是否与上述国家/地区(国籍)意外的国家/地区的永久居民 -->
+						<div class="row">	
+							<label class="EngLabel">您是否与上述国家/地区(国籍)意外的国家/地区的永久居民</label>
+							<div class=" col-sm-5 col-sm-offset-1 padding-right-0 ">
+								<div class="form-group">
+									<div>
+										<span class="onceIDYes">
+											<input type="radio" name="permanent" class="permanent" value="1" />是
+										</span>
+										<span>
+											<input type="radio" name="permanent" class="permanent"  value="2" checked />否
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0 permanentTrue">
+								<div class="form-group">
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+						</div>
+						<!-- 国家注册号码 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>国家注册号码</label> 
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
+								<div class="form-group">
+									<input type="checkbox" class="vertical"/>
+									<label>不适用</label> 
+								</div>
+							</div>
+						</div>
+						<!-- 美国社会安全号码 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>美国社会安全号码</label> 
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
+								<div class="form-group">
+									<input type="checkbox" class="vertical"/>
+									<label>不适用</label> 
+								</div>
+							</div>
+						</div>
+						<!-- 美国纳税人证件号 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>美国纳税人证件号</label> 
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
+								<div class="form-group">
+									<input type="checkbox" class="vertical"/>
+									<label>不适用</label> 
 								</div>
 							</div>
 						</div>
 					</div>
-					
+					<!-- 左侧结束 -->
+					<div class="col-sm-6 padding-right-0">
+						<!-- 手机号和邮箱 -->
+						<div class="row">
+							<!-- 手机号/邮箱 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>
+										<span>*</span>Phone Number
+									</label> 
+									<input id="telephone" name="telephone" type="text" class="form-control input-sm"/>
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Email Address</label> 
+									<input id="email" name="email" type="text" class="form-control input-sm"/>
+								</div>
+							</div>
+						</div>
+						<!-- 手机号和邮箱 END -->
+						
+						<!-- 身份证 -->
+						<div class="row">
+							<!-- 公民身份证 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>The identity card of the people's Republic of China</label> 
+									<input id="cardId" name="cardId" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+						</div>
+						<!-- 民族 -->
+						<div class="row">
+							<!-- 民族 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Nationality</label> 
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+						</div>
+						<!-- 住址 -->
+						<div class="row">
+							<!-- 住宅 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Address</label> 
+									<input id="address" name="address" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+						</div>
+						<!-- 现居住地是否与身份证相同  和  现居住地址城市 -->
+						<div class="row">
+							<!-- 现居住地址省份/现居住地址城市 -->
+							<label class="EngLabel">
+							Is your Mailing Address the same as your Home Address
+							<input class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" />
+							</label>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group" id="provinceDiv">
+									<input type="hidden" name="cardprovince" id="cardProvince" />
+									<input type="hidden" name="cardcity" id="cardCity" />
+									<input type="hidden" id="sameAddress" value=""/>
+									<input id="province" name="province" type="text" class="form-control input-sm" placeholder="省" />
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group" id="cityDiv">
+									<input id="city" name="city" type="text" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.city }" />
+								</div>
+							</div>
+						</div>
+						<!-- 详细地址 -->
+						<div class="row">
+							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Street Address</label> 
+									<input id="detailedAddress" name="detailedaddress" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedaddress }" />
+								</div>
+							</div>
+						</div>
+						<!-- 婚姻状况  和说明 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>
+										<span>*</span>Marital Status
+									</label> 
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Expain</label> 
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+						</div>
+						<!-- 曾用名 -->
+						<div class="row">
+							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
+							<div class="col-sm-10 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>Have you ever used other names</label> 
+									<div>
+										<span class="nameBeforeYes">
+											<input type="radio" name="usedBeforeUS" class="usedBeforeUS1" value="1"/>yes
+										</span>
+										<span>
+											<input type="radio" name="usedBeforeUS" class="usedBeforeUS2" value="2" checked />No
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row usedBeforeUSTrue">
+							<!-- 姓/名 -->
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>Other Surnames Used</label> 
+									<input id="" name="" type="text" class="form-control input-sm " />
+								</div>
+							</div>
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>Other Given Names Used</label> 
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+						</div>
+						<!-- 曾用国籍 -->
+						<div class="row">
+							<label class="EngLabel">Do you hold or have you held any nationality other than the one indicated above on nationality</label> 	
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<div>
+										<span class="onceIDYes">
+											<input type="radio" name="usedNationalityUS" class="usedNationalityUS1" value="1" />yes
+										</span>
+										<span>
+											<input type="radio" name="usedNationalityUS" class="usedNationalityUS2"  value="2" checked />No
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1 usedNationalityUSTrue">
+								<div class="form-group" id="">
+									<input id="" name="" class="form-control input-sm"/>
+								</div>
+							</div>
+						</div>
+						<!-- 您是否与上述国家/地区(国籍)意外的国家/地区的永久居民 -->
+						<div class="row">	
+							<label class="EngLabel">Are you a permanent resident of a country/region other than your country/region of origin (nationality) indicated above </label> 
+							<div class=" col-sm-5 col-sm-offset-1 padding-right-0 ">
+								<div class="form-group">
+									<div>
+										<span class="onceIDYes">
+											<input type="radio" name="permanentUS" class="permanentUS1" value="1" />yes
+										</span>
+										<span>
+											<input type="radio" name="permanentUS" class="permanentUS2"  value="2" checked />No
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0 permanentUSTrue">
+								<div class="form-group">
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+						</div>
+						<!-- 国家注册号码 -->
+						<div class="row">
+							<label class="EngLabel">National Identification Number</label> 
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMarginEng">
+								<div class="form-group">
+									<input type="checkbox" class="vertical" />
+									<label>Does Not Apply</label> 
+								</div>
+							</div>
+						</div>
+						<!-- 美国社会安全号码 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>U.S. Social Security Number</label> 
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
+								<div class="form-group">
+									<input type="checkbox" class="vertical" />
+									<label>Does Not Apply</label> 
+								</div>
+							</div>
+						</div>
+						<!-- 美国纳税人证件号 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>U.S. Taxpayer ID Number</label> 
+									<input id="" name="" type="text" class="form-control input-sm" />
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
+								<div class="form-group">
+									<input type="checkbox" class="vertical" />
+									<label>Does Not Apply</label> 
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</form>
@@ -370,22 +598,32 @@
 		//点击身份证图片上的删除按钮
 		function deleteApplicantFrontImg(){
 			$('#cardFront').val("");
-			$('#sqImg').attr('src', "");
-			$("#uploadFile").siblings("i").css("display","none");
+			$('#imgShow').attr('src', "");
+			$("#uploadFileImg").siblings("i").css("display","none");
 			if(userType == 2){
-				$(".front").attr("class", "info-imgUpload front has-error");  
+				/* $(".front").attr("class", "info-imgUpload front has-error");  */ 
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
 			}
 		}
 		function deleteApplicantBackImg(){
 			$('#cardBack').val("");
-			$('#sqImgBack').attr('src', "");
-			$("#uploadFileBack").siblings("i").css("display","none");
+			$('#imgShowBack').attr('src', "");
+			$("#uploadFileImgBack").siblings("i").css("display","none");
 			if(userType == 2){
-				$(".back").attr("class", "info-imgUpload back has-error");  
+				/* $(".back").attr("class", "info-imgUpload back has-error"); */  
 		        $(".help-blockBack").attr("data-bv-result","INVALID");  
 			}
 		}
+		function deleteApplicantInchImg(){
+			$('#cardInch').val("");
+			$('#imgInch').attr('src', "");
+			$("#uploadFileInchImg").siblings("i").css("display","none");
+			if(userType == 2){
+				/* $(".back").attr("class", "info-imgUpload back has-error"); */  
+		        $(".help-blockBack").attr("data-bv-result","INVALID");  
+			}
+		}
+		
 		
 		$(function(){
 			$("#validStartDate").datetimepicker({
