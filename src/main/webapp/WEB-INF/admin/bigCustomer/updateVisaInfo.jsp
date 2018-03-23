@@ -93,7 +93,7 @@
 								<div class="goUS_Country">
 									<div class="groupInputInfo">
 										<label>抵达日期</label>
-										<input type="text" placeholder="日/月/年">
+										<input type="text" id="arrivedate" class="datetimepickercss" placeholder="日/月/年">
 									</div>
 									<div class="groupInputInfo stopDate goUS_Country">
 										<label>停留时间</label>
@@ -174,7 +174,7 @@
 						<div class="dateIssue goUS_visa">
 							<div class="groupInputInfo lastVisaDate">
 								<label>最后一次签证的签发日期</label>
-								<input type="text"/>
+								<input id="issueddate" name="issueddate" class="datetimepickercss" placeholder="日/月/年" type="text"/>
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
@@ -458,7 +458,7 @@
 				<div class="clear"></div>
 				<div class="paddingLeft groupInputInfo">
 					<label>配偶的生日</label>
-					<input type="date" placeholder="日月年" />
+					<input id="spousebirthday" name="spousebirthday" class="datetimepickercss" type="text" placeholder="日/月/年" />
 				</div>
 				<div class="paddingRight groupSelectInfo">
 					<label>配偶的国籍</label>
@@ -593,7 +593,7 @@
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo">
 						<label>开始日期</label>
-						<input type="text" />
+						<input id="workstartdate" name="workstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 					</div>
 					<div class="paddingRight groupInputInfo" >
 						<label>当地月收入(如果雇佣)</label>
@@ -690,12 +690,12 @@
 									</div>
 									<div class="paddingRight groupInputInfo" >
 										<label>入职时间</label>
-										<input type="text" />
+										<input id="employstartdate" name="employstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft groupInputInfo">
 										<label>离职时间</label>
-										<input type="text" />
+										<input id="employenddate" name="employenddate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
 									<div class="paddingRight grouptextareaInfo">
 										<label>简要描述你的指责</label>
@@ -769,11 +769,11 @@
 									<div class="clear"></div>
 									<div class="paddingLeft groupInputInfo">
 										<label>参加课程开始时间</label>
-										<input type="text" />
+										<input id="coursestartdate" name="coursestartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
 									<div class="paddingRight groupInputInfo">
 										<label>结束时间</label>
-										<input type="text"/>
+										<input id="courseenddate" name="courseenddate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
 								</div>
 							</div>
@@ -1280,5 +1280,6 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	
 	<script src="${base}/admin/bigCustomer/visaInfo.js"></script><!-- 本页面js -->
+	<script src="${base}/admin/bigCustomer/initDatetimepicker.js"></script><!-- 本页面js -->
 	
 </html>
