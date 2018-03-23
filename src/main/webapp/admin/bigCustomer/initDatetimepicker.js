@@ -61,3 +61,19 @@ $("#courseenddate").datetimepicker({
 	minView: "month"//只显示年月日
 });
 
+
+//工作教育培训信息---服兵役开始日期
+$("#servicestartdate").datetimepicker({
+	format: 'dd/mm/yyyy',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+//工作教育培训信息---服兵役结束日期
+$("#serviceenddate").datetimepicker({
+	format: 'dd/mm/yyyy',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"top-left",//显示位置
+	minView: "month"//只显示年月日
+});
+
