@@ -18,7 +18,7 @@ import com.juyo.visa.admin.bigcustomer.service.PcVisaViewService;
 
 @IocBean
 @Filters
-@At("/admin/pcvisa")
+@At("/admin/pcVisa")
 public class PcVisaModule {
 
 	private static final Log log = Logs.get();
