@@ -94,7 +94,6 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 */
 	public Object updateVisaInfo(@Param("staffId") Integer staffId, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
-		System.out.println("我是签证信息页。。。");
 		return result;
 	}
 

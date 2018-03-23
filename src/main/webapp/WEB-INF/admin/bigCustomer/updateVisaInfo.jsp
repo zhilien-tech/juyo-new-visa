@@ -70,34 +70,6 @@
 							</div> -->
 						</div>
 						
-						<div class="teamnamefalse groupInputInfo">
-							<div class="companionSurnName">
-								<label>同伴姓</label>
-								<input type="text" placeholder="同伴姓" />
-							</div>
-							<div class="companionName">
-								<label>同伴名</label>
-								<input type="text" placeholder="同伴名" />
-							</div>
-							<div class="clear"></div>
-							<div class="youRelationship">
-								<label>与你的关系</label>
-								<select>
-									<option value="0">请选择</option>
-									<option>父母</option>
-									<option>配偶</option>
-									<option>子女</option>
-									<option>其他亲属</option>
-									<option>商业伙伴</option>
-									<option>其他</option>
-								</select>
-							</div>
-							<div class="btnGroup">
-								<a class="save">添加</a>
-								<a class="cancel">去掉 </a>
-							</div>
-						</div>
-						
 					</div>
 				</div>
 			</div>
@@ -134,7 +106,7 @@
 										</select>
 									</div>
 								</div>
-								<div class="goUS_Country">
+								<!-- <div class="goUS_Country">
 									<div class="groupInputInfo">
 										<label>抵达日期</label>
 										<input type="text" placeholder="日/月/年">
@@ -151,14 +123,13 @@
 											<option>少于24小时</option>
 										</select>
 									</div>
-								</div>
+								</div> -->
 								
 							</div>
-							<div class="btnGroup">
+							<!-- <div class="btnGroup">
 								<a class="save">添加</a>
 								<a class="cancel">去掉</a>
-							</div>
-							<div class="clear"></div>
+							</div> -->
 							<div class="groupRadioInfo drivingUS">
 								<label>是否有美国驾照</label>
 								<input type="radio" name="license" class="license" value="1" />是
@@ -180,10 +151,10 @@
 									</div>
 								</div>
 							</div>
-							<div class="btnGroup driverInfo">
+							<!-- <div class="btnGroup driverInfo">
 								<a class="save">添加</a>
 								<a class="cancel">去掉</a>
-							</div>
+							</div> -->
 							
 						</div>
 					</div>
@@ -757,10 +728,10 @@
 							</div>
 							
 							<div class="clear"></div>
-							<div class="btnGroup">
+							<!-- <div class="btnGroup">
 								<a class="save">添加</a>
 								<a class="cancel">去掉</a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -829,10 +800,10 @@
 							</div>
 							
 							<div class="clear"></div>
-							<div class="btnGroup">
+							<!-- <div class="btnGroup">
 								<a class="save" >添加</a>
 								<a class="cancel" >去掉</a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 					
@@ -861,10 +832,10 @@
 								</div>
 							</div>
 						</div>
-						<div class="btnGroup">
+						<!-- <div class="btnGroup">
 							<a class="save">添加</a>
 							<a class="cancel">去掉</a>
-						</div>
+						</div> -->
 					</div>
 					
 					
@@ -885,10 +856,10 @@
 								<input type="text"/>
 							</div>
 						</div>
-						<div class="btnGroup">
+						<!-- <div class="btnGroup">
 							<a class="save">添加</a>
 							<a class="cancel">去掉</a>
-						</div>
+						</div> -->
 					</div>
 					
 					
@@ -907,10 +878,10 @@
 								<input type="text"/>
 							</div>
 						</div>
-						<div class="btnGroup">
+						<!-- <div class="btnGroup">
 							<a class="save">添加</a>
 							<a class="cancel">去掉</a>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="paddingTop">
@@ -966,10 +937,10 @@
 							</div>
 						</div>
 						<div class="clear"></div>
-						<div class="btnGroup">
+						<!-- <div class="btnGroup">
 							<a class="save">添加</a>
 							<a class="cancel">去掉</a>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="paddingTop">
@@ -1160,7 +1131,7 @@
 						<input type="radio" name="isOrderedThreat" class="isOrderedThreat" value="1"/>是
 						<input type="radio" name="isOrderedThreat" class="isOrderedThreat" value="2" checked/>否
 					</div>
-					<div class="paddingTop elementHide isOrderedThreat grouptextareaInfo">
+					<div class="paddingTop elementHide isOrderedThreatDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
