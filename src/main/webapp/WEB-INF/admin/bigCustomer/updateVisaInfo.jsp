@@ -1284,25 +1284,25 @@
 		</div>
 		<div class="English">
 			<!--旅伴信息-->
-			<div class="companyInfoModule">
+			<!-- <div class="companyInfoModule">
 				<div>旅伴信息</div>
 				<div class="companyMain">
 					<label>是否与其他人一起旅游</label>
 					<input type="radio" class="companyInfo" name="companyInfo1" value="1" />是
 					<input type="radio" class="companyInfo" name="companyInfo1" value="2"/>否
 				</div>
-				<!--yes-->
+				yes
 				<div class="teamture" style="display: none;">
 					<label>是否作为团队或组织的一部分旅游</label>
 					<input type="radio" class="team" name="team" value="1" />是
 					<input type="radio" class="team" name="team" value="2" />否
 				</div>
-				<!--第二部分yes-->
+				第二部分yes
 				<div class="teamnameture" style="display: none;">
 					<label>团队名称</label>
 					<input type="text" placeholder="团队名称" />
 				</div>
-				<!--第二部分No-->
+				第二部分No
 				<div class="teamnamefalse" style="display: none;">
 					<div>
 						<label>同伴名称</label>
@@ -1332,7 +1332,7 @@
 						<a>去掉 </a>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<!--旅伴信息END-->
 		</div>
 	</body>
