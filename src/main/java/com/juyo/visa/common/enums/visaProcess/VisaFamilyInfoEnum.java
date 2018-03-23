@@ -3,15 +3,16 @@ package com.juyo.visa.common.enums.visaProcess;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 旅伴信息---与你的关系
+ * 家庭信息---父母亲身体状态
  */
-public enum RelationshipStatusEnum implements IEnum {
-	PARENTS(1, "父母"), SPOUSE(2, "配偶"), CHILD(3, "子女"), OTHER_RELATIVES(4, "其他亲属"), BUSINESS_PARTNER(5, "商业伙伴"), OTHER(
-			6, "其他");
+public enum VisaFamilyInfoEnum implements IEnum {
+
+	US_CITIZENS(1, "美国公民"), PERMANENT_OCCUPANTS(2, "美国合法永久居住者"), NONIMMIGRANT(3, "非移民"), ORTHER(4, "其他/不知道");
+
 	private int key;
 	private String value;
 
-	private RelationshipStatusEnum(final int key, final String value) {
+	private VisaFamilyInfoEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}

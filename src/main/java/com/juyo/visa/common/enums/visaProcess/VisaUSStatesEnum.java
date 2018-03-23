@@ -22,9 +22,8 @@ public enum VisaUSStatesEnum implements IEnum {
 
 	SOUTH_DAKOTA(41, "南达科他州"), TENNESSEE(42, "田纳西州"), TEXAS(43, "德克萨斯州"), UTAH(44, "犹他州"), VERMONT(45, "佛蒙特州"), VIRGINIA(
 			46, "弗吉尼亚州"), WASHINGTON(47, "华盛顿州"), WEST_VIRGINIA(48, "西弗吉尼亚州"), WISCONSIN(49, "威斯康辛州"), WYOMING(50,
-			"怀俄明州")
+			"怀俄明州");
 
-	;
 	private int key;
 	private String value;
 
