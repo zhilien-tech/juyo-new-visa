@@ -86,6 +86,20 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 	/**
 	 * 
+	 * 跳转到签证信息页
+	 *
+	 * @param staffId
+	 * @param session
+	 * @return 
+	 */
+	public Object updateVisaInfo(@Param("staffId") Integer staffId, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		System.out.println("我是签证信息页。。。");
+		return result;
+	}
+
+	/**
+	 * 
 	 * TODO  跳转到其他证件页面
 	 * <p>
 	 *
@@ -476,6 +490,14 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		return result;
 	}
 
+	/**
+	 * 
+	 * 更新护照信息
+	 *
+	 * @param passportForm
+	 * @param session
+	 * @return 
+	 */
 	public Object saveEditPassport(TAppStaffPassportUpdateForm passportForm, HttpSession session) {
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -678,4 +700,5 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		return map;
 
 	}
+
 }
