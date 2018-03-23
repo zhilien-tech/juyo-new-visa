@@ -20,7 +20,15 @@ import org.nutz.log.Logs;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.bigcustomer.form.VisaListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.enums.visaProcess.ContactPointRelationshipStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.TimeUnitStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaCareersEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaCitizenshipEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaFamilyInfoEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
@@ -30,6 +38,7 @@ import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TOrderUsTravelinfoEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -193,6 +202,29 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object visaDetail(Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
+
+		//旅伴信息---与你的关系
+		result.put("TravelCompanionRelationshipEnum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
+
+		//以前的美国旅游信息---时间单位枚举
+		result.put("TimeUnitStatusEnum", EnumUtil.enum2(TimeUnitStatusEnum.class));
+		//以前的美国旅游信息---州枚举
+		result.put("VisaUSStatesEnum", EnumUtil.enum2(VisaUSStatesEnum.class));
+
+		//美国联络点---与你的关系
+		result.put("ContactPointRelationshipStatusEnum", EnumUtil.enum2(ContactPointRelationshipStatusEnum.class));
+
+		//家庭信息---身份状态
+		result.put("VisaFamilyInfoEnum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
+
+		//配偶信息---国籍
+		result.put("VisaCitizenshipEnum", EnumUtil.enum2(VisaCitizenshipEnum.class));
+		//配偶信息---配偶联系地址
+		result.put("VisaSpouseContactAddressEnum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
+
+		//工作/教育/培训信息---主要职业
+		result.put("VisaCareersEnum", EnumUtil.enum2(VisaCareersEnum.class));
+
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
 		result.put("travelInfo", orderTravelInfo);

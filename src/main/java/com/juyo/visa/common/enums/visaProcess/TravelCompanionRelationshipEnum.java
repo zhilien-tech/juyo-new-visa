@@ -5,13 +5,13 @@ import com.uxuexi.core.common.enums.IEnum;
 /**
  * 旅伴信息---与你的关系
  */
-public enum TravelCompanionRelationshipStatusEnum implements IEnum {
+public enum TravelCompanionRelationshipEnum implements IEnum {
 	PARENTS(1, "父母"), SPOUSE(2, "配偶"), CHILD(3, "子女"), OTHER_RELATIVES(4, "其他亲属"), BUSINESS_PARTNER(5, "商业伙伴"), OTHER(
 			6, "其他");
 	private int key;
 	private String value;
 
-	private TravelCompanionRelationshipStatusEnum(final int key, final String value) {
+	private TravelCompanionRelationshipEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}

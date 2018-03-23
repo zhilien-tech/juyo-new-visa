@@ -3,11 +3,11 @@ package com.juyo.visa.common.enums.visaProcess;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 配偶联系地址
+ * 签证信息---国籍
  */
 public enum VisaCitizenshipEnum implements IEnum {
-	SAME_RESIDENTIAL_ADDRESS(1, "与居住地址一样"), SAME_MAILING_ADDRESS(2, "与邮寄地址一样"), SAME_US_CONTACT_ADDRESS(3, "与美国联系地址一样"), NOT_KNOW(
-			4, "不知道"), ORTHER(5, "其他(指定地址)");
+	CHINA(1, "中国"), US(2, "美国");
+
 	private int key;
 	private String value;
 
