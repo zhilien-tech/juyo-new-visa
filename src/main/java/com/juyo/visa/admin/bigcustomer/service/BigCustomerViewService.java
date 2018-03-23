@@ -39,6 +39,15 @@ import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.AppPictures.AppCredentialsTypeEnum;
+import com.juyo.visa.common.enums.visaProcess.ContactPointRelationshipStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
+import com.juyo.visa.common.enums.visaProcess.TimeUnitStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaCareersEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaCitizenshipEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaFamilyInfoEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.util.ExcelReader;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
@@ -94,7 +103,30 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 */
 	public Object updateVisaInfo(@Param("staffId") Integer staffId, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
-		System.out.println("我是签证信息页。。。");
+		//旅伴信息---与你的关系
+		result.put("TravelCompanionRelationshipEnum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
+
+		//以前的美国旅游信息---时间单位枚举
+		result.put("TimeUnitStatusEnum", EnumUtil.enum2(TimeUnitStatusEnum.class));
+		//以前的美国旅游信息---州枚举
+		result.put("VisaUSStatesEnum", EnumUtil.enum2(VisaUSStatesEnum.class));
+
+		//美国联络点---与你的关系
+		result.put("ContactPointRelationshipStatusEnum", EnumUtil.enum2(ContactPointRelationshipStatusEnum.class));
+
+		//家庭信息---身份状态
+		result.put("VisaFamilyInfoEnum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
+
+		//直系亲属---与你的关系
+		result.put("ImmediateRelationshipEnum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
+
+		//配偶信息---国籍
+		result.put("VisaCitizenshipEnum", EnumUtil.enum2(VisaCitizenshipEnum.class));
+		//配偶信息---配偶联系地址
+		result.put("VisaSpouseContactAddressEnum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
+
+		//工作/教育/培训信息---主要职业
+		result.put("VisaCareersEnum", EnumUtil.enum2(VisaCareersEnum.class));
 		return result;
 	}
 

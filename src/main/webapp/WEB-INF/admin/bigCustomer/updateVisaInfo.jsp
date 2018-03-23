@@ -5,6 +5,11 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>签证信息</title>
+		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
+		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<link rel="stylesheet" href="${base}/references/public/css/visaInfo.css">
 	</head>
 	<body>
@@ -25,42 +30,39 @@
 				<div class="companyMain">
 					<div class="companyMainInfo groupRadioInfo">
 						<label>是否与其他人一起旅游</label>
-						<input type="radio" class="companyInfo" name="companyInfo" value="1" />是
-						<input type="radio" class="companyInfo" name="companyInfo" value="2" checked/>否
+						<input type="radio" class="companyInfo" name="istravelwithother" value="1" />是
+						<input type="radio" class="companyInfo" name="istravelwithother" value="2" checked/>否
 					</div>
 					<!--yes-->
 					<div class="teamture elementHide">
 						<div class="groupRadioInfo">
 							<label>是否作为团队或组织的一部分旅游</label>
-							<input type="radio" class="team" name="team" value="1" />是
-							<input type="radio" class="team" name="team" value="2" checked/>否
+							<input type="radio" class="team" name="istravelwithotheren" value="1" />是
+							<input type="radio" class="team" name="istravelwithotheren" value="2" checked/>否
 						</div>
 						<!--第二部分yes-->
 						<div class="teamnameture groupInputInfo">
 							<label>团队名称</label>
-							<input type="text" placeholder="团队名称" />
+							<input id="groupname" name="groupname" type="text" placeholder="团队名称" />
 						</div>
 						<!--第二部分No-->
 						<div class="teamnamefalse groupInputInfo">
 							<div class="companionSurnName">
 								<label>同伴姓</label>
-								<input type="text" placeholder="同伴姓" />
+								<input id="firstname" name="firstname" type="text" placeholder="同伴姓" />
 							</div>
 							<div class="companionName">
 								<label>同伴名</label>
-								<input type="text" placeholder="同伴名" />
+								<input id="lastname" name="lastname" type="text" placeholder="同伴名" />
 							</div>
 							<div class="clear"></div>
 							<div class="youRelationship">
 								<label>与你的关系</label>
-								<select>
+								<select id="relationship" name="relationship">
 									<option value="0">请选择</option>
-									<option>父母</option>
-									<option>配偶</option>
-									<option>子女</option>
-									<option>其他亲属</option>
-									<option>商业伙伴</option>
-									<option>其他</option>
+									<c:forEach items="${obj.TravelCompanionRelationshipEnum }" var="map">
+										<option value="${map.key }">${map.value }</option>
+									</c:forEach>
 								</select>
 							</div>
 							<!-- 业务需求，先隐藏 -->
@@ -68,34 +70,6 @@
 								<a class="save">添加</a>
 								<a class="cancel">去掉 </a>
 							</div> -->
-						</div>
-						
-						<div class="teamnamefalse groupInputInfo">
-							<div class="companionSurnName">
-								<label>同伴姓</label>
-								<input type="text" placeholder="同伴姓" />
-							</div>
-							<div class="companionName">
-								<label>同伴名</label>
-								<input type="text" placeholder="同伴名" />
-							</div>
-							<div class="clear"></div>
-							<div class="youRelationship">
-								<label>与你的关系</label>
-								<select>
-									<option value="0">请选择</option>
-									<option>父母</option>
-									<option>配偶</option>
-									<option>子女</option>
-									<option>其他亲属</option>
-									<option>商业伙伴</option>
-									<option>其他</option>
-								</select>
-							</div>
-							<div class="btnGroup">
-								<a class="save">添加</a>
-								<a class="cancel">去掉 </a>
-							</div>
 						</div>
 						
 					</div>
@@ -110,8 +84,8 @@
 					<div class="goUSMain">
 						<div class="groupRadioInfo goUSPad">
 							<label>是否去过美国</label>
-					 		<input type="radio" name="goUS" class="goUS" value="1" />是
-							<input type="radio" name="goUS" class="goUS" value="2" checked />否
+					 		<input type="radio" id="hasbeeninus" name="hasbeeninus" class="goUS" value="1" />是
+							<input type="radio" id="hasbeeninus" name="hasbeeninus" class="goUS" value="2" checked />否
 						</div>
 						<!--yes-->
 						<div class="goUSInfo goUSYes">
@@ -119,22 +93,20 @@
 								<div class="goUS_Country">
 									<div class="groupInputInfo">
 										<label>抵达日期</label>
-										<input type="text" placeholder="日/月/年">
+										<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
 									</div>
 									<div class="groupInputInfo stopDate goUS_Country">
 										<label>停留时间</label>
-										<input type="text" />
-										<select>
+										<input id="staydays" name="staydays" type="text" />
+										<select id="dateunit" name="dateunit">
 											<option value="0">请选择</option>
-											<option>年</option>
-											<option>月</option>
-											<option>周</option>
-											<option>日</option>
-											<option>少于24小时</option>
+											<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
+												<option value="${map.key }">${map.value }</option>
+											</c:forEach>
 										</select>
 									</div>
 								</div>
-								<div class="goUS_Country">
+								<!-- <div class="goUS_Country">
 									<div class="groupInputInfo">
 										<label>抵达日期</label>
 										<input type="text" placeholder="日/月/年">
@@ -151,39 +123,40 @@
 											<option>少于24小时</option>
 										</select>
 									</div>
-								</div>
+								</div> -->
 								
 							</div>
-							<div class="btnGroup">
+							<!-- <div class="btnGroup">
 								<a class="save">添加</a>
 								<a class="cancel">去掉</a>
-							</div>
-							<div class="clear"></div>
+							</div> -->
 							<div class="groupRadioInfo drivingUS">
 								<label>是否有美国驾照</label>
-								<input type="radio" name="license" class="license" value="1" />是
-								<input type="radio" name="license" class="license" value="2" checked />否
+								<input type="radio" name="hasdriverlicense" class="license" value="1" />是
+								<input type="radio" name="hasdriverlicense" class="license" value="2" checked />否
 							</div>
 							<div>
 								<div class="driverInfo goUS_drivers">
 									<div class="groupcheckBoxInfo driverMain">
 										<label>驾照号</label>
-										<input type="text" >
+										<input id="driverlicensenumber" name="driverlicensenumber" type="text" >
 										<input id="isknowdrivernumber" name="isknowdrivernumber" type="checkbox"/>
 									</div>
 									<div class="groupSelectInfo driverR">
 										<label>哪个州的驾照</label>
-										<select>
+										<select id="witchstateofdriver" name="witchstateofdriver">
 											<option value="0">请选择</option>
-											<option>北卡罗莱纳州</option>
+											<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
+												<option value="${map.key }">${map.value }</option>
+											</c:forEach>
 										</select>
 									</div>
 								</div>
 							</div>
-							<div class="btnGroup driverInfo">
+							<!-- <div class="btnGroup driverInfo">
 								<a class="save">添加</a>
 								<a class="cancel">去掉</a>
-							</div>
+							</div> -->
 							
 						</div>
 					</div>
@@ -194,14 +167,14 @@
 				<div>
 					<div class="groupRadioInfo">
 						<label>是否有美国签证</label>
-						<input type="radio" name="visaUS" class="visaUS" value="1" />是
-						<input type="radio" name="visaUS" class="visaUS" value="2" checked />否
+						<input type="radio" name="isissuedvisa" class="visaUS" value="1" />是
+						<input type="radio" name="isissuedvisa" class="visaUS" value="2" checked />否
 					</div>
 					<div>
 						<div class="dateIssue goUS_visa">
 							<div class="groupInputInfo lastVisaDate">
 								<label>最后一次签证的签发日期</label>
-								<input type="text"/>
+								<input id="issueddate" name="issueddate" class="datetimepickercss" placeholder="日/月/年" type="text"/>
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
@@ -216,28 +189,28 @@
 							</div>
 							<div class="describleCountry groupRadioInfo paddingTop">
 								<label>是否在签发上述签证的国家或地区申请并且是您所在的国家或地区的居住地</label>
-								<input type="radio" name="2" value="1" />是
-								<input type="radio" name="2" value="2" checked />否
+								<input type="radio"  name="issamecountry" value="1" />是
+								<input type="radio"  name="2" value="issamecountry" checked />否
 							</div>
 							<div class="paddingTop groupRadioInfo">
 								<label>是否采集过指纹</label>
-								<input type="radio" name="4" value="1"/>是
-								<input type="radio" name="4" value="2" checked />否
+								<input type="radio" name="istenprinted" value="1"/>是
+								<input type="radio" name="istenprinted" value="2" checked />否
 							</div>
 							<div class="paddingTop">
 								<div class="groupRadioInfo">
 									<label style="display: block;">你的美国签证是否丢失或被盗过</label>
-									<input type="radio" name="lose" class="lose" value="1" />是
-									<input type="radio" name="lose" class="lose" value="2" checked />否
+									<input type="radio" name="islost" class="lose" value="1" />是
+									<input type="radio" name="islost" class="lose" value="2" checked />否
 								</div>
 								<div class="yearExplain displayTop elementHide"><!-- 默认隐藏 -->
 									<div class="displayLeft groupInputInfo">
 										<label>年份</label>
-										<input type="text" />
+										<input name="lostyear" type="text" />
 									</div>
 									<div class="displayRight grouptextareaInfo">
 										<label>说明</label>
-										<textarea></textarea>
+										<textarea name="lostexplain"></textarea>
 									</div>
 								</div>
 							</div>
@@ -246,12 +219,12 @@
 								<div>
 									<div class="groupRadioInfo">
 										<label>你的美国签证是否被取消或撤销过</label>
-										<input type="radio" name="revoke" class="revoke" value="1" />是
-										<input type="radio" name="revoke" class="revoke" value="2" checked />否
+										<input type="radio" name="iscancelled" class="revoke" value="1" />是
+										<input type="radio" name="iscancelled" class="revoke" value="2" checked />否
 									</div>
 									<div class="explain grouptextareaInfo paddingTop">
 										<label>说明</label>
-										<textarea></textarea>
+										<textarea name="cancelexplain"></textarea>
 									</div>
 								</div>
 							</div>
@@ -263,36 +236,36 @@
 			<div class="paddingBottom">
 				<div class="groupRadioInfo">
 					<label>被拒绝过美国签证，或被拒绝入境美国，或撤回入境口岸的入境</label>
-					<input type="radio" name="refuse" class="refuse" value="1" />是
-					<input type="radio" name="refuse" class="refuse" value="2" checked />否
+					<input type="radio" name="isrefused" class="refuse" value="1" />是
+					<input type="radio" name="isrefused" class="refuse" value="2" checked />否
 				</div>
 				<div class="refuseExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<textarea></textarea>
+					<textarea name="refusedexplain"></textarea>
 				</div>
 			</div>
 			<!--曾经是否是美国合法永久居民-->
 			<div class="paddingBottom">
 				<div class="groupRadioInfo">
 					<label>曾经是否是美国合法永久居民</label>
-					<input type="radio" name="onceLegitimate" class="onceLegitimate" value="1" />是
-					<input type="radio" name="onceLegitimate" class="onceLegitimate" value="2" checked />否
+					<input type="radio" name="islegalpermanentresident" class="onceLegitimate" value="1" />是
+					<input type="radio" name="islegalpermanentresident" class="onceLegitimate" value="2" checked />否
 				</div>
 				<div class="onceExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<textarea></textarea>
+					<textarea name="permanentresidentexplain"></textarea>
 				</div>
 			</div>
 			<!--有没有人曾代表您向美国公民和移民服务局提交过移民申请-->
 			<div class="paddingBottom">
 				<div class="groupRadioInfo">
 					<label>有没有人曾代表您向美国公民和移民服务局提交过移民申请</label>
-					<input type="radio" name="onceImmigration" class="onceImmigration" value="1" />是
-					<input type="radio" name="onceImmigration" class="onceImmigration" value="2" checked />否
+					<input type="radio" name="isfiledimmigrantpetition" class="onceImmigration" value="1" />是
+					<input type="radio" name="isfiledimmigrantpetition" class="onceImmigration" value="2" checked />否
 				</div>
 				<div class="immigrationExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<textarea></textarea>
+					<textarea name="immigrantpetitionexplain"></textarea>
 				</div>
 			</div>
 			<!--以前的美国旅游信息END-->
@@ -301,37 +274,33 @@
 				<div class="titleInfo">美国联络点</div>
 				<div class="groupInputInfo paddingLeft">
 					<label>联系人姓</label>
-					<input type="text" />
+					<input name="firstname" type="text" />
 				</div>
 				<div class="groupcheckBoxInfo paddingRight">
 					<label>联系人名</label>
-					<input type="text"  />
+					<input name="lastname" type="text"  />
 					<input id="isknowname" name="isknowname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>组织名称</label>
-					<input type="text" />
+					<input id="organizationname" name="organizationname" type="text" />
 					<input id="isknoworganizationname" name="isknoworganizationname" class="groupname_us" type="checkbox" />
 				</div>
 				<div class="paddingRight groupSelectInfo">
 					<label>与你的关系</label>
-					<select>
+					<select id="ralationship" name="ralationship">
 						<option value="0">请选择</option>
-						<option>亲属</option>
-						<option>配偶</option>
-						<option>朋友</option>
-						<option>商业伙伴</option>
-						<option>雇主</option>
-						<option>学校官方</option>
-						<option>其他</option>
+						<c:forEach items="${obj.ContactPointRelationshipStatusEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
 					</select>
 				</div>
 				<div class="clear"></div>
 				<div class="" style="padding: 10px 0;">
 					<div class="groupInputInfo floatLeft">
 						<label>美国街道地址(首选)</label>
-						<input type="text" />
+						<input name="address" type="text" />
 					</div>
 					<div class="groupInputInfo floatRight">
 						<label>美国街道地址(次选)*可选</label>
@@ -340,18 +309,21 @@
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo" >
 						<label>市</label>
-						<input type="text" />
+						<input id="city" name="city" type="text" />
 					</div>
 					<div class="paddingRight groupSelectInfo" >
 						<label>州</label>
-						<select>
-							<option>加州</option>
+						<select id="state" name="state">
+							<option value="0">请选择</option>
+							<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
 						</select>
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo" >
 						<label>邮政编码</label>
-						<input type="text" />
+						<input name="zipcode" type="text" />
 					</div>
 					<div class="paddingRight groupInputInfo" >
 						<label>电话号码</label>
@@ -360,7 +332,7 @@
 					<div class="clear"></div>
 					<div class="paddingTop groupcheckBoxInfo">
 						<label>邮件地址</label>
-						<input type="text" />
+						<input name="email" type="text" />
 						<input id="isKnowEmailAddress" type="checkbox" />
 					</div>
 				</div>
@@ -372,97 +344,93 @@
 				<div class="titleInfo">家庭信息</div>
 				<div class="paddingLeft groupcheckBoxInfo" >
 					<label>父亲的姓</label>
-					<input type="text"/>
-					<input id="isKnowFatherXing" type="checkbox" />
+					<input name="fatherfirstname" type="text"/>
+					<input id="isKnowFatherXing" name="isknowfatherfirstname" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo" >
 					<label>父亲的名</label>
-					<input type="text" />
-					<input id="isKnowFatherMing" type="checkbox" />
+					<input name="fatherlastname" type="text" />
+					<input id="isKnowFatherMing" name="isknowfatherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>你的父亲是否在美国</label>
-						<input type="radio" name="fatherUS" class="fatherUS" value="1" />是
-						<input type="radio" name="fatherUS" class="fatherUS" value="2" checked />否
+						<input type="radio" name="isfatherinus" class="fatherUS" value="1" />是
+						<input type="radio" name="isfatherinus" class="fatherUS" value="2" checked />否
 					</div>
 					<!--yes-->
 					<div class="fatherUSYes groupSelectInfo paddingNone">
 						<label>身份状态</label>
-						<select>
+						<select id="fatherstatus" name="fatherstatus">
 							<option value="0">请选择</option>
-							<option>美国公民</option>
-							<option>美国合法永久居住者</option>
-							<option>非移民</option>
-							<option>其他/不知道</option>
+							<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
 						</select>
 					</div>
 				</div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>母亲的姓</label>
-					<input type="text" />
-					<input id="isKnowMotherXing" type="checkbox" />
+					<input id="motherfirstname" name="motherfirstname" type="text" />
+					<input id="isKnowMotherXing" name="isknowmotherfirstname" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo">
 					<label>母亲的名</label>
-					<input type="text" />
-					<input id="isKnowMotherMing" type="checkbox" />
+					<input id="motherlastname" name="motherlastname" type="text" />
+					<input id="isKnowMotherMing" name="isknowmotherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>你的母亲是否在美国</label>
-						<input type="radio" name="motherUS" class="motherUS" value="1" />是
-						<input type="radio" name="motherUS" class="motherUS" value="2" checked />否
+						<input type="radio" name="ismotherinus" class="motherUS" value="1" />是
+						<input type="radio" name="ismotherinus" class="motherUS" value="2" checked />否
 					</div>
 					<div class="motherUSYes paddingNone groupSelectInfo">
 						<label>身份状态</label>
-						<select>
+						<select id="motherstatus" name="motherstatus">
 							<option value="0">请选择</option>
-							<option>美国公民</option>
-							<option>美国合法永久居住者</option>
-							<option>非移民</option>
-							<option>其他/不知道</option>
+							<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
 						</select>
 					</div>
 				</div>
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>在美国除了父母还有没有直系亲属</label>
-						<input type="radio" name="directRelatives" class="directRelatives directUSRelatives" value="1" />是
-						<input type="radio" name="directRelatives" class="directRelatives directUSRelatives" value="2" checked/>否
+						<input type="radio" name="hasimmediaterelatives" class="directRelatives directUSRelatives" value="1" />是
+						<input type="radio" name="hasimmediaterelatives" class="directRelatives directUSRelatives" value="2" checked/>否
 					</div>
 					<div class="directRelatives">
 						<!--yes-->
 						<div class="directRelativesYes paddingNone">
 							<div class="floatLeft groupInputInfo">
 								<label>姓</label>
-								<input type="text" />
+								<input name="relativesfirstname" type="text" />
 							</div>
 							<div class="floatRight groupInputInfo">
 								<label>名</label>
-								<input type="text" />
+								<input name="relativeslastname" type="text" />
 							</div>
 							<div class="clear"></div>
 							<div class="paddingLeft groupSelectInfo">
 								<label>与你的关系</label>
-								<select>
+								<select name="relationship">
 									<option value="0">请选择</option>
-									<option>配偶</option>
-									<option>未婚夫/妻子</option>
-									<option>子女</option>
-									<option>兄弟姐妹</option>
+									<c:forEach items="${obj.ImmediateRelationshipEnum }" var="map">
+										<option value="${map.key }">${map.value }</option>
+									</c:forEach>
 								</select>
 							</div>
 							<div class="paddingRight groupSelectInfo">
 								<label>亲属的身份</label>
-								<select>
+								<select id="relativesstatus" name="relativesstatus">
 									<option value="0">请选择</option>
-									<option>美国公民</option>
-									<option>美国合法永久居住者</option>
-									<option>非移民</option>
-									<option>其他/不知道</option>
+									<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
+										<option value="${map.key }">${map.value }</option>
+									</c:forEach>
 								</select>
 							</div>
 							<div class="clear"></div>
@@ -470,8 +438,8 @@
 						<!--NO-->
 						<div class="directRelativesNo groupRadioInfo">
 							<label>在美国是否还有别的亲属</label>
-							<input type="radio" name="otherDirect" value="1"/>是
-							<input type="radio" name="otherDirect" value="2" checked/>否
+							<input type="radio" name="hasotherrelatives" value="1"/>是
+							<input type="radio" name="hasotherrelatives" value="2" checked/>否
 						</div>
 					</div>
 					
@@ -483,38 +451,40 @@
 				
 				<div class="titleInfo">配偶信息</div>
 				<div class="floatLeft groupInputInfo">
-					<label>配偶的名</label>
-					<input type="text" />
+					<label>配偶的姓</label>
+					<input name="spousefirstname" type="text" />
 				</div>
 				<div class="floatRight groupInputInfo">
-					<label>配偶的姓</label>
-					<input type="text" />
+					<label>配偶的名</label>
+					<input name="spouselastname" type="text" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingLeft groupInputInfo">
 					<label>配偶的生日</label>
-					<input type="date" placeholder="日月年" />
+					<input id="spousebirthday" name="spousebirthday" class="datetimepickercss" type="text" placeholder="日/月/年" />
 				</div>
 				<div class="paddingRight groupSelectInfo">
 					<label>配偶的国籍</label>
-					<select>
+					<select id="spousenationality" name="spousenationality">
 						<option value="0">请选择</option>
-						<option>中国</option>
-						<option>美国</option>
+						<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
 					</select>
 				</div>
 				<div class="clear"></div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>配偶的出生城市</label>
-					<input type="text" />
-					<input id="isKnowMateCity" type="checkbox" />
+					<input name="spousecity" type="text" />
+					<input id="isKnowMateCity" name="isknowspousecity" type="checkbox" />
 				</div>
 				<div class="paddingRight groupSelectInfo" >
 					<label>配偶的出生国家</label>
-					<select>
+					<select id="spousecountry" name="spousecountry">
 						<option value="0">请选择</option>
-						<option>中国</option>
-						<option>美国</option>
+						<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
 					</select>
 				</div>
 				<div class="clear"></div>
@@ -522,11 +492,9 @@
 					<label>配偶的联系地址</label>
 					<select id="spouseaddress" name="spouseaddress" class="spouse_Address" onchange="changeSpouse()">
 						<option value="0">请选择</option>
-						<option value="1">与居住地址一样</option>
-						<option value="2">与邮寄地址一样</option>
-						<option value="3">与美国联系地址一样</option>
-						<option value="4">不知道</option>
-						<option value="5">其他(制定地址)</option>
+						<c:forEach items="${obj.VisaSpouseContactAddressEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
 					</select>
 				</div>
 				
@@ -535,34 +503,35 @@
 				<div class="otherSpouseInfo elementHide paddingTop" >
 					<div class="floatLeft groupInputInfo">
 						<label>街道地址(首选)</label>
-						<input type="text" />
+						<input name="firstaddress" type="text" />
 					</div>
 					<div class="floatRight groupInputInfo">
 						<label>街道地址(次要)*可选</label>
-						<input type="text" />
+						<input name="secondaddress" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo">
 						<label>市</label>
-						<input type="text"/>
+						<input name="city" type="text"/>
 					</div>
 					<div class="paddingRight groupcheckBoxInfo">
 						<label>州/省</label>
-						<input type="text" />
-						<input id="isKnowOrtherSpouseProvince" type="checkbox" />
+						<input name="province" type="text" />
+						<input id="isKnowOrtherSpouseProvince" name="isprovinceapply" type="checkbox" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>邮政编码</label>
-						<input type="text" />
-						<input id="isKonwOrtherZipCode" type="checkbox" />
+						<input name="zipcode" type="text" />
+						<input id="isKonwOrtherZipCode" name="iszipcodeapply" type="checkbox" />
 					</div>
 					<div class="paddingRight groupSelectInfo">
 						<label>国家/地区</label>
-						<select>
+						<select name="country">
 							<option value="0">请选择</option>
-							<option>美国</option>
-							<option>中国</option>
+							<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
 						</select>
 					</div>
 					<div class="clear"></div>
@@ -576,38 +545,19 @@
 					<label>主要职业</label>
 					<select id="occupation" name="occupation" onchange="occupationChange()">
 						<option value="0">请选择</option>
-						<option value="1">农业</option>
-						<option value="2">艺术家/表演家</option>
-						<option value="3">商业</option>
-						<option value="4">通信</option>
-						<option value="5">计算机科学</option>
-						<option value="6">烹饪/食品服务</option>
-						<option value="7">教育</option>
-						<option value="8">工程</option>
-						<option value="9">政府</option>
-						<option value="10">家庭主妇</option>
-						<option value="11">法律界人士</option>
-						<option value="12">医疗/保健</option>
-						<option value="13">军事</option>
-						<option value="14">自然科学</option>
-						<option value="15">不受雇佣</option>
-						<option value="16">物理科学</option>
-						<option value="17">宗教职业</option>
-						<option value="18">研究</option>
-						<option value="19">退休</option>
-						<option value="20 ">社会科学</option>
-						<option value="21">学生</option>
-						<option value="22">其他</option>
+						<c:forEach items="${obj.VisaCareersEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
 					</select>
 				</div>
 				<div class="paddingTop elementHide jobEduLearningInfoDiv">
 					<div class="floatLeft groupInputInfo">
 						<label>目前的工作点位或者学校名称</label>
-						<input type="text" />
+						<input name="unitname" type="text" />
 					</div>
 					<div class="floatRight groupInputInfo">
 						<label >街道地址(首选)</label>
-						<input type="text" />
+						<input name="address" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo">
@@ -616,57 +566,57 @@
 					</div>
 					<div class="paddingRight groupInputInfo">
 						<label>市</label>
-						<input type="text"/>
+						<input name="city" type="text"/>
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>州/省</label>
-						<input type="text"/>
-						<input type="checkbox"/>
+						<input name="province" type="text"/>
+						<input name="isprovinceapply" type="checkbox"/>
 					</div>
 					<div class="paddingRight groupcheckBoxInfo">
 						<label>邮政编码</label>
-						<input type="text" />
-						<input type="checkbox" />
+						<input name="zipcode" type="text" />
+						<input name="iszipcodeapply" type="checkbox" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo">
 						<label>电话号吗</label>
-						<input type="text" />
+						<input name="telephone" type="text" />
 					</div>
 					<div class="paddingRight groupSelectInfo" >
 						<label>国家/地区</label>
-						<select>
+						<select name="country">
 							<option value="0">请选择</option>
-							<option>中国</option>
-							<option>美国</option>
+							<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
 						</select>
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo">
 						<label>开始日期</label>
-						<input type="text" />
+						<input id="workstartdate" name="workstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 					</div>
 					<div class="paddingRight groupInputInfo" >
 						<label>当地月收入(如果雇佣)</label>
-						<input type="text" />
+						<input name="salary" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft">
 						<label>不适用</label>
-						<input type="checkbox" />
+						<input name="issalaryapply" type="checkbox" />
 					</div>
 					<div class="paddingRight grouptextareaInfo">
 						<label>简要描述你的指责</label>
-						<textarea></textarea>
+						<textarea name="duty"></textarea>
 					</div>
 					<div class="clear"></div>
 				</div>
 				
-				
 				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea">
 					<label>说明</label>
-					<textarea></textarea>
+					<textarea name=""></textarea>
 				</div>
 			</div>
 			<!--以前-->
@@ -675,8 +625,8 @@
 					<div>
 						<div class="groupRadioInfo">
 							<label>以前是否工作过</label>
-							<input type="radio" name="beforeWork" class="beforeWork" value="1" />是
-							<input type="radio" name="beforeWork" class="beforeWork" value="2" checked/>否
+							<input type="radio" name="isemployed" class="beforeWork" value="1" />是
+							<input type="radio" name="isemployed" class="beforeWork" value="2" checked/>否
 						</div>
 						<!--yes-->
 						<div class="beforeWorkInfo elementHide">
@@ -684,11 +634,11 @@
 								<div class="workBeforeInfosDiv">
 									<div class="paddingLeft groupInputInfo" >
 										<label>雇主名字</label>
-										<input type="text" />
+										<input name="employername" type="text" />
 									</div>
 									<div class="paddingRight groupInputInfo">
 										<label>雇主街道地址(首选)</label>
-										<input type="text" />
+										<input name="employeraddress" type="text" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft groupInputInfo">
@@ -698,69 +648,70 @@
 									<div class="paddingRight groupcheckBoxInfo" >
 										<label>市</label>
 										<input type="text" />
-										<input type="checkbox" />
+										<input name="employercity" type="checkbox" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft groupInputInfo">
 										<label>州/省</label>
-										<input type="text" />
+										<input name="employerprovince" type="text" />
 									</div>
 									<div class="paddingRight groupcheckBoxInfo">
 										<label>邮政编码</label>
-										<input type="text" />
-										<input type="checkbox" />
+										<input name="employerzipcode" type="text" />
+										<input name="isemployerzipcodeapply" type="checkbox" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft groupSelectInfo">
 										<label>国家/地区</label>
-										<select>
+										<select name="employercountry">
 											<option value="0">请选择</option>
-											<option>中国</option>
-											<option>美国</option>
+											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+												<option value="${map.key }">${map.value }</option>
+											</c:forEach>
 										</select>
 									</div>
 									<div class="paddingRight groupInputInfo">
 										<label>电话号码</label>
-										<input type="text" />
+										<input name="employertelephone" type="text" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft groupInputInfo">
 										<label>职称</label>
-										<input type="text"/>
+										<input name="jobtitle" type="text"/>
 									</div>
 									<div class="paddingRight groupcheckBoxInfo">
 										<label>主管的姓</label>
-										<input type="text" />
-										<input type="checkbox" />
+										<input name="supervisorfirstname" type="text" />
+										<input name="isknowsupervisorfirstname" type="checkbox" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft groupcheckBoxInfo">
 										<label>主管的名</label>
-										<input type="text" />
-										<input type="checkbox" />
+										<input name="supervisorlastname" type="text" />
+										<input name="isknowsupervisorlastname" type="checkbox" />
 									</div>
 									<div class="paddingRight groupInputInfo" >
 										<label>入职时间</label>
-										<input type="text" />
+										<input id="employstartdate" name="employstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft groupInputInfo">
 										<label>离职时间</label>
-										<input type="text" />
+										<input id="employenddate" name="employenddate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
 									<div class="paddingRight grouptextareaInfo">
-										<label>简要描述你的指责</label>
-										<textarea></textarea>
+										<label>简要描述你的职责</label>
+										<textarea name="previousduty"></textarea>
 									</div>
 								</div>
 							
 							</div>
 							
 							<div class="clear"></div>
-							<div class="btnGroup">
+							<!-- <div class="btnGroup">
 								<a class="save">添加</a>
 								<a class="cancel">去掉</a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -768,8 +719,8 @@
 					<div class="paddingTop">
 						<div class="groupRadioInfo">
 							<label>是否上过中学或以上的任何教育</label>
-							<input type="radio" name="education" class="education" value="1" />是
-							<input type="radio" name="education" class="education" value="2" checked/>否
+							<input type="radio" name="issecondarylevel" class="education" value="1" />是
+							<input type="radio" name="issecondarylevel" class="education" value="2" checked/>否
 						</div>
 						<!--yes-->
 						<div class="educationInfo elementHide">
@@ -777,11 +728,11 @@
 								<div class="midSchoolEduDiv">
 									<div class="paddingLeft groupInputInfo">
 										<label>机构名称</label>
-										<input type="text"/>
+										<input name="institution" type="text"/>
 									</div>
 									<div class="paddingRight groupInputInfo">
 										<label>街道地址(首选)</label>
-										<input type="text" />
+										<input name="institutionaddress" type="text" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft groupInputInfo">
@@ -790,49 +741,50 @@
 									</div>
 									<div class="paddingRight groupcheckBoxInfo" >
 										<label >市</label>
-										<input type="text" />
+										<input name="institutioncity" type="text" />
 										<input type="checkbox" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft groupInputInfo">
 										<label>州/省</label>
-										<input type="text" />
+										<input name="institutionprovince" type="text" />
 									</div>
 									<div class="paddingRight groupcheckBoxInfo">
 										<label>邮政编码</label>
-										<input type="text" />
-										<input type="checkbox" />
+										<input name="institutionzipcode" type="text" />
+										<input name="isinstitutionzipcodeapply" type="checkbox" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft groupSelectInfo" >
 										<label>国家/地区</label>
-										<select>
+										<select name="institutioncountry">
 											<option value="0">请选择</option>
-											<option>中国</option>
-											<option>美国</option>
+											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+												<option value="${map.key }">${map.value }</option>
+											</c:forEach>
 										</select>
 									</div>
 									<div class="paddingRight groupInputInfo">
 										<label>学科</label>
-										<input type="text" />
+										<input name="course" type="text" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft groupInputInfo">
 										<label>参加课程开始时间</label>
-										<input type="text" />
+										<input id="coursestartdate" name="coursestartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
 									<div class="paddingRight groupInputInfo">
 										<label>结束时间</label>
-										<input type="text"/>
+										<input id="courseenddate" name="courseenddate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
 								</div>
 							</div>
 							
 							<div class="clear"></div>
-							<div class="btnGroup">
+							<!-- <div class="btnGroup">
 								<a class="save" >添加</a>
 								<a class="cancel" >去掉</a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 					
@@ -853,18 +805,18 @@
 							<div class="clannameDiv">
 								<div class="paddingTop groupInputInfo" >
 									<label>氏族或部落名称</label>
-									<input type="text"  />
+									<input name="clanname" type="text"  />
 								</div>
 								<div class="paddingTop groupInputInfo">
 									<label>使用的语言名称</label>
-									<input type="text" />
+									<input name="languagename" type="text" />
 								</div>
 							</div>
 						</div>
-						<div class="btnGroup">
+						<!-- <div class="btnGroup">
 							<a class="save">添加</a>
 							<a class="cancel">去掉</a>
-						</div>
+						</div> -->
 					</div>
 					
 					
@@ -882,13 +834,13 @@
 						<div>
 							<div class="paddingTop travelCountry groupInputInfo">
 								<label>国家/地区</label>
-								<input type="text"/>
+								<input name="traveledcountry" type="text"/>
 							</div>
 						</div>
-						<div class="btnGroup">
+						<!-- <div class="btnGroup">
 							<a class="save">添加</a>
 							<a class="cancel">去掉</a>
-						</div>
+						</div> -->
 					</div>
 					
 					
@@ -904,13 +856,13 @@
 						<div>
 							<div class="paddingTop organizationDiv groupInputInfo">
 								<label>组织名称</label>
-								<input type="text"/>
+								<input name="organizationname" type="text"/>
 							</div>
 						</div>
-						<div class="btnGroup">
+						<!-- <div class="btnGroup">
 							<a class="save">添加</a>
 							<a class="cancel">去掉</a>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="paddingTop">
@@ -922,7 +874,7 @@
 					<!--yes-->
 					<div class="paddingTop skillDiv elementHide grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<textarea name="skillexplain"></textarea>
 					</div>
 				</div>
 				<div>
@@ -936,40 +888,41 @@
 						<div class="militaryInfoDiv">
 							<div class="floatLeft groupSelectInfo">
 								<label>国家/地区</label>
-								<select>
+								<select name="militarycountry">
 									<option value="0">请选择</option>
-									<option>中国</option>
-									<option>美国</option>
+									<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+										<option value="${map.key }">${map.value }</option>
+									</c:forEach>
 								</select>
 							</div>
 							<div class="floatRight groupInputInfo">
 								<label>服务分支</label>
-								<input type="text" />
+								<input name="servicebranch" type="text" />
 							</div>
 							<div class="clear"></div>
 							<div class="paddingLeft groupInputInfo" >
 								<label>排名/位置</label>
-								<input type="text" />
+								<input name="rank" type="text" />
 							</div>
 							<div class="paddingRight groupInputInfo">
 								<label>军事专业</label>
-								<input type="text"/>
+								<input name="militaryspecialty" type="text"/>
 							</div>
 							<div class="clear"></div>
 							<div class="paddingLeft groupInputInfo">
 								<label>服兵役开始时间日期</label>
-								<input type="text"/>
+								<input id="servicestartdate" name="servicestartdate" type="text" class="datetimepickercss" placeholder="日/月/年"/>
 							</div>
 							<div class="paddingRight groupInputInfo">
 								<label>结束时间</label>
-								<input type="text"/>
+								<input id="serviceenddate" name="serviceenddate" type="text" class="datetimepickercss" placeholder="日/月/年"/>
 							</div>
 						</div>
 						<div class="clear"></div>
-						<div class="btnGroup">
+						<!-- <div class="btnGroup">
 							<a class="save">添加</a>
 							<a class="cancel">去掉</a>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="paddingTop">
@@ -1160,7 +1113,7 @@
 						<input type="radio" name="isOrderedThreat" class="isOrderedThreat" value="1"/>是
 						<input type="radio" name="isOrderedThreat" class="isOrderedThreat" value="2" checked/>否
 					</div>
-					<div class="paddingTop elementHide isOrderedThreat grouptextareaInfo">
+					<div class="paddingTop elementHide isOrderedThreatDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div>
@@ -1313,59 +1266,22 @@
 		</div>
 		<div class="English">
 			<!--旅伴信息-->
-			<div class="companyInfoModule">
-				<div>旅伴信息</div>
-				<div class="companyMain">
-					<label>是否与其他人一起旅游</label>
-					<input type="radio" class="companyInfo" name="companyInfo1" value="1" />是
-					<input type="radio" class="companyInfo" name="companyInfo1" value="2"/>否
-				</div>
-				<!--yes-->
-				<div class="teamture" style="display: none;">
-					<label>是否作为团队或组织的一部分旅游</label>
-					<input type="radio" class="team" name="team" value="1" />是
-					<input type="radio" class="team" name="team" value="2" />否
-				</div>
-				<!--第二部分yes-->
-				<div class="teamnameture" style="display: none;">
-					<label>团队名称</label>
-					<input type="text" placeholder="团队名称" />
-				</div>
-				<!--第二部分No-->
-				<div class="teamnamefalse" style="display: none;">
-					<div>
-						<label>同伴名称</label>
-						<input type="text" placeholder="同伴名称" />
-					</div>
-					<div>
-						<label>同伴姓</label>
-						<input type="text" placeholder="同伴姓" />
-					</div>
-					<div>
-						<label>同伴名</label>
-						<input type="text" placeholder="同伴名" />
-					</div>
-					<div>
-						<label>与你的关系</label>
-						<select>
-							<option>父母</option>
-							<option>配偶</option>
-							<option>子女</option>
-							<option>其他亲属</option>
-							<option>商业伙伴</option>
-							<option>其他</option>
-						</select>
-					</div>
-					<div>
-						<a>添加</a>
-						<a>去掉 </a>
-					</div>
-				</div>
-			</div>
-			<!--旅伴信息END-->
+			
 		</div>
 	</body>
 	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
+	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<script src="${base}/references/common/js/vue/vue.min.js"></script>
+	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
+	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+	<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	
 	<script src="${base}/admin/bigCustomer/visaInfo.js"></script><!-- 本页面js -->
+	<script src="${base}/admin/bigCustomer/initDatetimepicker.js"></script><!-- 本页面js -->
 	
 </html>
