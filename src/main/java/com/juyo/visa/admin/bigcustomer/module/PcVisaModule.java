@@ -18,7 +18,7 @@ import com.juyo.visa.admin.bigcustomer.service.PcVisaViewService;
 
 @IocBean
 @Filters
-@At("/admin/pcvisa")
+@At("/admin/pcVisa")
 public class PcVisaModule {
 
 	private static final Log log = Logs.get();
@@ -49,9 +49,9 @@ public class PcVisaModule {
 	 * 跳转到签证详情页
 	 */
 	@At
-	@POST
+	@GET
 	@Ok("jsp")
-	public Object visaInfos(@Param("orderid") Integer orderid) {
-		return pcVisaViewService.visaInfos(orderid);
+	public Object visaDetail(@Param("orderid") Integer orderid) {
+		return pcVisaViewService.visaDetail(orderid);
 	}
 }

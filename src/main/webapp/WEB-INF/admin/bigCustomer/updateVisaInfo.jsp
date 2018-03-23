@@ -63,10 +63,11 @@
 									<option>其他</option>
 								</select>
 							</div>
-							<div class="btnGroup">
+							<!-- 业务需求，先隐藏 -->
+							<!-- <div class="btnGroup">
 								<a class="save">添加</a>
 								<a class="cancel">去掉 </a>
-							</div>
+							</div> -->
 						</div>
 						
 						<div class="teamnamefalse groupInputInfo">

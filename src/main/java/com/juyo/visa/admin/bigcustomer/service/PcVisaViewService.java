@@ -191,7 +191,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	/**
 	 * 跳转到签证详情页
 	 */
-	public Object visaInfos(Integer orderid) {
+	public Object visaDetail(Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<c:set var="url" value="${base}/admin/visaJapan" />
+<c:set var="url" value="${base}/admin/pcVisa" />
 <!DOCTYPE html>
 <html lang="en-US">
 	<head>
@@ -25,12 +25,12 @@
 		<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
-		<div class="wrapper" id="wrapper" v-cloak>
+		<div class="wrapper" id="wrapper" >
 			<div class="content-wrapper"  style="min-height: 848px;">
 				<div class="qz-head">
-					<span class="">订单号：<p>{{orderinfo.ordernum}}</p></span>
+					<span class="">订单号：<p></p></span>
 					<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
-					<span>状态：<p>{{orderinfo.visastatus}}</p></span>
+					<span>状态：<p></p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" />
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right"/>
@@ -88,31 +88,31 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
-										<select id="goDepartureCity" class="form-control select2 select2City departurecity" multiple="multiple" v-model="travelinfo.goDepartureCity">
+										<%-- <select id="goDepartureCity" class="form-control select2 select2City departurecity" multiple="multiple" v-model="travelinfo.goDepartureCity">
 											<c:if test="${!empty obj.goleavecity.id}">
 												<option value="${obj.goleavecity.id}" selected="selected">${obj.goleavecity.city}</option>
 											</c:if>
-										</select>
+										</select> --%>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>抵达城市：</label>
-										<select id="goArrivedCity" class="form-control input-sm select2City arrivedcity" multiple="multiple" v-model="travelinfo.goArrivedCity">
+										<%-- <select id="goArrivedCity" class="form-control input-sm select2City arrivedcity" multiple="multiple" v-model="travelinfo.goArrivedCity">
 											<c:if test="${!empty obj.goarrivecity.id}">
 												<option value="${obj.goarrivecity.id}" selected="selected">${obj.goarrivecity.city}</option>
 											</c:if>
-										</select>
+										</select> --%>
 									</div>
 								</div>
 								<div class="col-sm-6 paddingRight">
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
-										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.goFlightNum">
+										<%-- <select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.goFlightNum">
 											<c:if test="${!empty obj.goflightnum.id }">
 												<option value="${obj.goflightnum.id }" selected="selected">${obj.goflightnum.takeOffName }-${obj.goflightnum.landingName } ${obj.goflightnum.flightnum } ${obj.goflightnum.takeOffTime }/${obj.goflightnum.landingTime }</option>
 											</c:if>
-										</select>
+										</select> --%>
 									</div>
 								</div>
 							</div>
@@ -121,31 +121,31 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
-										<select id="returnDepartureCity" class="form-control select2 select2City departurecity" multiple="multiple" v-model="travelinfo.returnDepartureCity">
+										<%-- <select id="returnDepartureCity" class="form-control select2 select2City departurecity" multiple="multiple" v-model="travelinfo.returnDepartureCity">
 											<c:if test="${!empty obj.backleavecity.id}">
 												<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
 											</c:if>
-										</select>
+										</select> --%>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回城市：</label>
-										<select id="returnArrivedCity" class="form-control input-sm select2City arrivedcity" multiple="multiple" v-model="travelinfo.returnArrivedCity">
+										<%-- <select id="returnArrivedCity" class="form-control input-sm select2City arrivedcity" multiple="multiple" v-model="travelinfo.returnArrivedCity">
 											<c:if test="${!empty obj.backarrivecity.id}">
 												<option value="${obj.backarrivecity.id}" selected="selected">${obj.backarrivecity.city}</option>
 											</c:if>
-										</select>
+										</select> --%>
 									</div>
 								</div>
 								<div class="col-sm-3 paddingRight">
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
-										<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.returnFlightNum">
+										<%-- <select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" v-model="travelinfo.returnFlightNum">
 											<c:if test="${!empty obj.returnflightnum.id }">
 												<option value="${obj.returnflightnum.id }" selected="selected">${obj.returnflightnum.takeOffName }-${obj.returnflightnum.landingName } ${obj.returnflightnum.flightnum } ${obj.returnflightnum.takeOffTime }/${obj.returnflightnum.landingTime }</option>
 											</c:if>
-										</select>
+										</select> --%>
 									</div>
 								</div>
 							</div>
@@ -261,13 +261,6 @@
 				</section>
 			</div>
 		</div>
-		<script type="text/javascript">
-			var BASE_PATH = '${base}';
-			var orderid = '${obj.orderid}';
-			var orderinfoid = '${obj.orderinfo.id}';
-			var triptype = '${obj.travelinfo.tripType}';
-			var multitripjson = '${obj.multitripjson}';
-		</script>
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 		<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 		<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -285,23 +278,5 @@
 		<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 		<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 		<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
-		<script src="${base}/admin/visaJapan/visaDetailSelect2.js"></script>
-		<!-- 本页面js文件 -->
-		<script type="text/javascript">			
-			//弹框
-			function revenue(){
-				layer.open({
-        		    type: 2,
-        		    title: false,
-        		    closeBtn:false,
-        		    fix: false,
-        		    maxmin: false,
-        		    shadeClose: false,
-        		    scrollbar: false,
-        		    area: ['900px', '80%'],
-        		    content: '${base}/admin/visaJapan/revenue.html?orderid='+orderid
-        		  });
-			}
-		</script>
 	</body>
 </html>
