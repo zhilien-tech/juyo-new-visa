@@ -30,35 +30,35 @@
 				<div class="companyMain">
 					<div class="companyMainInfo groupRadioInfo">
 						<label>是否与其他人一起旅游</label>
-						<input type="radio" class="companyInfo" name="companyInfo" value="1" />是
-						<input type="radio" class="companyInfo" name="companyInfo" value="2" checked/>否
+						<input type="radio" class="companyInfo" name="istravelwithother" value="1" />是
+						<input type="radio" class="companyInfo" name="istravelwithother" value="2" checked/>否
 					</div>
 					<!--yes-->
 					<div class="teamture elementHide">
 						<div class="groupRadioInfo">
 							<label>是否作为团队或组织的一部分旅游</label>
-							<input type="radio" class="team" name="team" value="1" />是
-							<input type="radio" class="team" name="team" value="2" checked/>否
+							<input type="radio" class="team" name="istravelwithotheren" value="1" />是
+							<input type="radio" class="team" name="istravelwithotheren" value="2" checked/>否
 						</div>
 						<!--第二部分yes-->
 						<div class="teamnameture groupInputInfo">
 							<label>团队名称</label>
-							<input type="text" placeholder="团队名称" />
+							<input id="groupname" name="groupname" type="text" placeholder="团队名称" />
 						</div>
 						<!--第二部分No-->
 						<div class="teamnamefalse groupInputInfo">
 							<div class="companionSurnName">
 								<label>同伴姓</label>
-								<input type="text" placeholder="同伴姓" />
+								<input id="firstname" name="firstname" type="text" placeholder="同伴姓" />
 							</div>
 							<div class="companionName">
 								<label>同伴名</label>
-								<input type="text" placeholder="同伴名" />
+								<input id="lastname" name="lastname" type="text" placeholder="同伴名" />
 							</div>
 							<div class="clear"></div>
 							<div class="youRelationship">
 								<label>与你的关系</label>
-								<select>
+								<select id="relationship" name="relationship">
 									<option value="0">请选择</option>
 									<c:forEach items="${obj.TravelCompanionRelationshipEnum }" var="map">
 										<option value="${map.key }">${map.value }</option>
@@ -84,8 +84,8 @@
 					<div class="goUSMain">
 						<div class="groupRadioInfo goUSPad">
 							<label>是否去过美国</label>
-					 		<input type="radio" name="goUS" class="goUS" value="1" />是
-							<input type="radio" name="goUS" class="goUS" value="2" checked />否
+					 		<input type="radio" id="hasbeeninus" name="hasbeeninus" class="goUS" value="1" />是
+							<input type="radio" id="hasbeeninus" name="hasbeeninus" class="goUS" value="2" checked />否
 						</div>
 						<!--yes-->
 						<div class="goUSInfo goUSYes">
@@ -93,11 +93,11 @@
 								<div class="goUS_Country">
 									<div class="groupInputInfo">
 										<label>抵达日期</label>
-										<input type="text" id="arrivedate" class="datetimepickercss" placeholder="日/月/年">
+										<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
 									</div>
 									<div class="groupInputInfo stopDate goUS_Country">
 										<label>停留时间</label>
-										<input type="text" />
+										<input id="staydays" name="staydays" type="text" />
 										<select>
 											<option value="0">请选择</option>
 											<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
