@@ -447,8 +447,6 @@
 			</div>
 			<!--配偶-->
 			<div class="paddingTop">
-				
-				
 				<div class="titleInfo">配偶信息</div>
 				<div class="floatLeft groupInputInfo">
 					<label>配偶的姓</label>
@@ -615,8 +613,8 @@
 				</div>
 				
 				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea">
-					<label>说明</label>
-					<textarea name=""></textarea>
+					<!-- <label>说明</label>
+					<textarea></textarea> -->
 				</div>
 			</div>
 			<!--以前-->
@@ -933,8 +931,8 @@
 					</div>
 					<!--yes-->
 					<div class="paddingTop elementHide dinrebelDiv grouptextareaInfo">
-						<label>说明</label>
-						<textarea></textarea>
+						<!-- <label>说明</label>
+						<textarea></textarea> -->
 					</div>
 				</div>
 			</div>
