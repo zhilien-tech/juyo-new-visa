@@ -387,7 +387,7 @@ safeInfoRadioClick("isSpyActivities");
 safeInfoRadioClick("isTerroristActivities");
 
 //是否有意向向恐怖分子或组织提供财政支援或其他支持
-safeInfoRadioClick("isTerroristActivities");
+safeInfoRadioClick("isSupportTerrorists");
 
 //是否是恐怖组织的成员或代表
 safeInfoRadioClick("isTerrorist");

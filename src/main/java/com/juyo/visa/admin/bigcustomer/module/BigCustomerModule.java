@@ -149,6 +149,15 @@ public class BigCustomerModule {
 	}
 
 	/**
+	 * 获取签证信息数据
+	 */
+	@At
+	@POST
+	public Object getVisaInfos(@Param("staffId") Integer staffId, HttpSession session) {
+		return bigCustomerViewService.getVisaInfos(staffId, session);
+	}
+
+	/**
 	 *跳转到其他证件页面
 	 */
 	@At
