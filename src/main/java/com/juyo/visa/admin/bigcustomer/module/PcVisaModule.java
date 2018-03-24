@@ -15,6 +15,7 @@ import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.bigcustomer.form.VisaListDataForm;
 import com.juyo.visa.admin.bigcustomer.service.PcVisaViewService;
+import com.juyo.visa.forms.OrderUpdateForm;
 
 @IocBean
 @Filters
@@ -53,5 +54,15 @@ public class PcVisaModule {
 	@Ok("jsp")
 	public Object visaDetail(@Param("orderid") Integer orderid) {
 		return pcVisaViewService.visaDetail(orderid);
+	}
+
+	/**
+	 * 保存后跳转list页面
+	 */
+	@At
+	@POST
+	public Object visaSave(@Param("..") OrderUpdateForm form, final HttpSession session) {
+		return pcVisaViewService.visaSave(form, session);
+
 	}
 }

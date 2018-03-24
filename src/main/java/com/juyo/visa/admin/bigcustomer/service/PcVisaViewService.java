@@ -30,6 +30,7 @@ import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TOrderUsTravelinfoEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.juyo.visa.forms.OrderUpdateForm;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -202,6 +203,39 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			result.put("summaryInfo", null);
 		}
 		return result;
+	}
+
+	public Object visaSave(OrderUpdateForm form, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
+		//订单id
+		Integer orderid = form.getOrderid();
+		//获取出行信息表
+		TOrderUsTravelinfoEntity orderTravelInfo = dbDao.fetch(TOrderUsTravelinfoEntity.class,
+				Cnd.where("orderId", "=", orderid));
+
+		if (!Util.isEmpty(form.getGodate())) {
+			orderTravelInfo.setGodate(form.getGodate());
+		}
+		if (!Util.isEmpty(form.getLeavedate())) {
+			orderTravelInfo.setLeavedate(form.getLeavedate());
+		}
+		if (!Util.isEmpty(form.getArrivedate())) {
+			orderTravelInfo.setArrivedate(form.getArrivedate());
+		}
+		if (!Util.isEmpty(form.getStaydays())) {
+			orderTravelInfo.setStaydays(form.getStaydays());
+		}
+		if (!Util.isEmpty(form.getPlanaddress())) {
+			orderTravelInfo.setPlanaddress(form.getPlanaddress());
+		}
+		if (!Util.isEmpty(form.getPlancity())) {
+			orderTravelInfo.setPlancity(form.getPlancity());
+		}
+		if (!Util.isEmpty(form.getPlanstate())) {
+			orderTravelInfo.setPlanstate(form.getPlanstate());
+		}
+		return dbDao.update(orderTravelInfo);
 	}
 
 }

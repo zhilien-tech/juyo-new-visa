@@ -25,19 +25,20 @@
 		<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
+	
 		<div class="wrapper" id="wrapper" >
 			<div class="content-wrapper">
 				<div class="qz-head">
-					<span class="orderNum">订单号：<p>3213132131313123</p></span>
+					<span class="orderNum">订单号：<p>${obj.travelInfo.orderid}</p></span>
 					<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
 					<span class="state">状态：<p>下单</p></span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" />
+					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" />
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right"/>
 				</div>
 				<section class="content">
 					<!-- 订单信息 -->
-					<div class="info">
+					<div id="save" class="info">
 						<p class="info-head">订单信息</p>
 						<div class="info-body-from">
 							<div class="row body-from-input">
@@ -45,7 +46,12 @@
 									<div class="form-group">
 										<label><span>*</span>出行目的</label>
 										<select class="form-control input-sm">
+										<c:if test="${empty obj.travelInfo.travelpurpose}">
+											<option>"${obj.travelInfo.travelpurpose}"</option>
+										</c:if>
+										<c:if test="${not empty obj.travelInfo.travelpurpose}">
 											<option>--请选择--</option>
+										</c:if>
 										</select>
 									</div>
 								</div>
@@ -59,30 +65,37 @@
 									</div>
 								</div>
 							</div>
-						
+						<form id="orderUpdateForm">
 							<div class="row body-from-input">
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>预计出发日期：</label>
-										<input name="" type="text" class="form-control input-sm datetimepickertoday departuredate" />
+										<label><span>*</span>预计出发日期：</label> <input name="godate"
+											type="text" class="form-control input-sm datetimepickercss"
+											value="<fmt:formatDate value="${obj.travelInfo.godate }" pattern="yyyy-MM-dd" />" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>抵达美国日期：</label>
-										<input name="" type="text" class="form-control input-sm datetimepickertoday departuredate" />
+										<input name="arrivedate"
+											type="text" class="form-control input-sm datetimepickercss"
+											value="<fmt:formatDate value="${obj.travelInfo.arrivedate }" pattern="yyyy-MM-dd" />" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>停留天数：</label>
-										<input id="" name="" type="text" class="form-control input-sm mustNumberPoint" />
+										<label><span>*</span>停留天数：</label> <input name="staydays"
+											name="" value="${obj.travelInfo.staydays}" type="text"
+											 />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>离开美国日期：</label>
-										<input name="" type="text" class="form-control input-sm datetimepickertoday departuredate" />
+										<input name="leavedate"
+											type="text" class="form-control input-sm datetimepickercss"
+											value="<fmt:formatDate value="${obj.travelInfo.leavedate }" pattern="yyyy-MM-dd" />" />
+										</div>
 									</div>
 								</div>
 							</div>
@@ -91,7 +104,7 @@
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
 										<select id="goDepartureCity" class="form-control select2 select2City departurecity" multiple="multiple" >
-											<option>231321</option>
+											<option>${obj.travelInfo.godeparturecity }</option>
 											<%-- <c:if test="${!empty obj.goleavecity.id}">
 												<option value="${obj.goleavecity.id}" selected="selected">${obj.goleavecity.city}</option>
 											</c:if> --%>
@@ -102,7 +115,7 @@
 									<div class="form-group">
 										<label><span>*</span>抵达城市：</label>
 										<select id="goArrivedCity" class="form-control input-sm select2City arrivedcity" multiple="multiple" >
-											<option>231321</option>
+											<option>${obj.travelInfo.goArrivedCity }</option>
 											<%-- <c:if test="${!empty obj.goarrivecity.id}">
 												<option value="${obj.goarrivecity.id}" selected="selected">${obj.goarrivecity.city}</option>
 											</c:if> --%>
@@ -113,7 +126,7 @@
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
 										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" >
-											<option>231321</option>
+											<option>${obj.travelInfo.goFlightNum }</option>
 											<%-- <c:if test="${!empty obj.goflightnum.id }">
 												<option value="${obj.goflightnum.id }" selected="selected">${obj.goflightnum.takeOffName }-${obj.goflightnum.landingName } ${obj.goflightnum.flightnum } ${obj.goflightnum.takeOffTime }/${obj.goflightnum.landingTime }</option>
 											</c:if> --%>
@@ -127,7 +140,7 @@
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
 										<select id="returnDepartureCity" class="form-control select2 select2City departurecity" multiple="multiple">
-											<option>231321</option>
+											<option>${obj.travelInfo.returnDepartureCity }</option>
 											<%-- <c:if test="${!empty obj.backleavecity.id}">
 												<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
 											</c:if>--%>
@@ -138,7 +151,7 @@
 									<div class="form-group">
 										<label><span>*</span>返回城市：</label>
 										<select id="returnArrivedCity" class="form-control input-sm select2City arrivedcity" multiple="multiple">
-											<option>231321</option>
+											<option>${obj.travelInfo.returnArrivedCity }</option>
 											<%-- <c:if test="${!empty obj.backarrivecity.id}">
 												<option value="${obj.backarrivecity.id}" selected="selected">${obj.backarrivecity.city}</option>
 											</c:if>--%>
@@ -149,7 +162,7 @@
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
 										<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple">
-											<option>231321</option>
+											<option>${obj.travelInfo.returnFlightNum }</option>
 											<%-- <c:if test="${!empty obj.returnflightnum.id }">
 												<option value="${obj.returnflightnum.id }" selected="selected">${obj.returnflightnum.takeOffName }-${obj.returnflightnum.landingName } ${obj.returnflightnum.flightnum } ${obj.returnflightnum.takeOffTime }/${obj.returnflightnum.landingTime }</option>
 											</c:if> --%>
@@ -157,31 +170,32 @@
 									</div>
 								</div>
 							</div>
-							
+			
+				<input type="hidden" name="orderid" value="${obj.travelInfo.orderid}">	
 							<div class="row body-from-input">
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>送签计划去美国地点：</label>
-										<input id="" type="text" class="form-control input-sm" placeholder="州/省"  />
+										<input name="planstate" type="text" value="${obj.travelInfo.state}" class="form-control input-sm" placeholder="州/省"  />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span></span></label>
-										<input id="" type="text" class="form-control input-sm" placeholder="市" />
+										<input name="plancity" type="text" value="${obj.travelInfo.city}" class="form-control input-sm" placeholder="市" />
 									</div>
 								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label><span></span></label>
-										<input id="" type="text" class="form-control input-sm" placeholder="街道" />
+										<input name="planaddress" type="text" value="${obj.travelInfo.address}" class="form-control input-sm" placeholder="街道" />
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<!-- end 订单信息 -->
-
+				</form>
 					<!-- 申请人 -->
 					<div class="info" id="mySwitch">
 						<p class="info-head">申请人</p>
@@ -209,7 +223,7 @@
 									<div class="col-sm-12 purpose">
 										<div class="form-group">
 											<label>出行目的</label>
-											<input id="" type="text" class="form-control input-sm" placeholder="" />
+											<input name="travelpurpose" value="${obj.summaryInfo.travelpurpose }" type="text" class="form-control input-sm" placeholder="" />
 										</div>
 									</div>
 								</div>
@@ -219,19 +233,19 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>姓名/拼音</label>
-												<input id="" type="text" class="form-control input-sm" placeholder="" />
+												<input name="staffname" value="${obj.summaryInfo.staffname }" type="text" class="form-control input-sm" placeholder="" />
 											</div>
 										</div>
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>性别</label>
-												<input id="" type="text" class="form-control input-sm" placeholder="" />
+												<input name="sex" value="${obj.summaryInfo.sex }" type="text" class="form-control input-sm" placeholder="" />
 											</div>
 										</div>
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>出生日期</label>
-												<input id="" type="text" class="form-control input-sm" placeholder="" />
+												<input name="birthday" type="text" value="${obj.summaryInfo.birthday }" class="form-control input-sm" placeholder="" />
 											</div>
 										</div>
 									</div>
@@ -247,19 +261,19 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>AA码</label>
-												<input id="" type="text" class="form-control input-sm" placeholder="" />
+												<input name="aacode" type="text" value="${obj.summaryInfo.aacode }" class="form-control input-sm" placeholder="" />
 											</div>
 										</div>
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>护照号</label>
-												<input id="" type="text" class="form-control input-sm" placeholder="" />
+												<input name="passport" type="text" value="${obj.summaryInfo.passport }" class="form-control input-sm" placeholder="" />
 											</div>
 										</div>
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>面试时间</label>
-												<input id="" type="text" class="form-control input-sm" placeholder="" />
+												<input name="Interviewdate" type="text" value="${obj.summaryInfo.Interviewdate }" class="form-control input-sm" placeholder="" />
 											</div>
 										</div>
 									</div>
@@ -311,6 +325,12 @@
 		<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 		<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 		<script type="text/javascript">
+	    $(".form-control").datetimepicker({
+	        format: "yyyy-mm-dd",
+	        showMeridian: true,
+	        autoclose: true,
+	        todayBtn: true
+	    });       
 			$(function(){
 				
 				$(".tripPlan").change(function(){
@@ -324,7 +344,24 @@
 						$(".checkShowORHide").hide();
 					}
 				});
-			})
+			});
+			/* 异步保存数据 */
+			function save(){
+			 $.ajax({ 
+	            	url: "${base}/admin/pcVisa/visaSave",
+	            	dataType:"json",
+	            	data:$("#orderUpdateForm").serialize(),
+	            	type:'POST',
+	            	success: function(data){
+	            		if(1==data){
+	            			layer.msg('添加成功');
+	            		}else{
+	            			layer.msg('添加失败');
+	            		}
+	            		/* window.location.href = '/admin/pcVisa/visaDetail.html'; */
+	              	}
+	            });
+			};
 		</script>
 	</body>
 </html>
