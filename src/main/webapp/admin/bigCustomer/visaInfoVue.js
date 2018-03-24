@@ -18,11 +18,11 @@ var visaInfo;
 new Vue({
 	el: '#wrapper',
 	data: {
-		travelCompanionInfo:"",
-		previUSTripInfo:"",
-		contactPointInfo:"",
-		familyInfo:"",
-		workEducationInfo:""
+		travelcompanioninfo:"",
+		previustripinfo:"",
+		contactpointinfo:"",
+		familyinfo:"",
+		workeducationinfo:""
 
 	},
 	created:function(){
@@ -36,13 +36,13 @@ new Vue({
 			},
 			type:'post',
 			success: function(data){
-				visaInfo.travelCompanionInfo = data.travelCompanionInfo;
-				visaInfo.previUSTripInfo = data.previUSTripInfo;
-				visaInfo.contactPointInfo = data.contactPointInfo;
-				visaInfo.familyInfo = data.familyInfo;
-				visaInfo.workEducationInfo = data.workEducationInfo;
+				visaInfo.travelcompanioninfo = data.travelcompanioninfo;
+				visaInfo.previustripinfo = data.previustripinfo;
+				visaInfo.contactpointinfo = data.contactpointinfo;
+				visaInfo.familyinfo = data.familyinfo;
+				visaInfo.workeducationinfo = data.workeducationinfo;
 				
-				console.log(JSON.stringify(visaInfo.staffId));
+				console.log(JSON.stringify(data));
 			}
 		});
 	},
