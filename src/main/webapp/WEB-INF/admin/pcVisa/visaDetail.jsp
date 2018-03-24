@@ -29,13 +29,20 @@
 		<div class="wrapper" id="wrapper" >
 			<div class="content-wrapper">
 				<div class="qz-head">
-					<span class="orderNum">订单号：<p>${obj.travelInfo.orderid}</p></span>
+					<span class="orderNum">订单号：<p>${obj.orderInfo.ordernumber}</p></span>
 					<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
-					<span class="state">状态：<p>下单</p></span>
+					<span class="state">状态：
+					<c:if test="${obj.orderInfo.status == '1'}">
+						<p>下单</p>
+					</c:if> <c:if test="${obj.orderInfo.status == '0'}">
+						<p>0</p>
+					</c:if>
+					</span>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" />
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right"/>
 				</div>
+				<form id="orderUpdateForm">
 				<section class="content">
 					<!-- 订单信息 -->
 					<div id="save" class="info">
@@ -45,12 +52,38 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行目的</label>
-										<select class="form-control input-sm">
+										<select name="travelpurpose" class="form-control input-sm" onchange="change()">
+										
 										<c:if test="${empty obj.travelInfo.travelpurpose}">
-											<option>"${obj.travelInfo.travelpurpose}"</option>
+											<option value="${obj.travelInfo.travelpurpose}">"${obj.travelInfo.travelpurpose}"</option>
 										</c:if>
 										<c:if test="${not empty obj.travelInfo.travelpurpose}">
-											<option>--请选择--</option>
+											<option value="">--请选择--</option>
+											<option value="FOREIGN GOVERNMENT OFFICIAL(A)">外国政府官员（A）</option>
+											<option value="TEMP. BUSINESS PLEASURE VISITOR(B)">商务旅游游客(B)</option>
+											<option value="ALIEN IN TRANSIT(C)">过境的外国公民(C)</option>
+											<option value="CNMI WORKER OR INVESTOR(CW/E2C)">CNMI工作者或投资者(CW/E2C)</option>
+											<option value="CREWMEMBER(D)">机船组人员(D)</option>
+											<option value="TREATY TRADER OR INVESTOR(E)">贸易协议国贸易人员或投资者(E)</option>
+											<option value="ACADEMIC OR LANGUAGE STUDENT(F)">学术或语言学生(F)</option>
+											<option value="INTERNATIONAL ORGANIZATION REP./EMP.(G)">国际组织代表/雇员(G)</option>
+											<option value="TEMPORARY WORKER(H)">临时工作(H)</option>
+											<option value="FOREIGN MEDIA REPRESENTATIVE(I)">外国媒体代表</option>
+											<option value="EXCHANGE VISITOR(J)">交流访问者</option>
+											<option value="FIANCE(E) OR SPOUSE OF A U.S. CITIZEN(K)">美国公民的未婚夫（妻）或配偶（K）</option>
+											<option value="INTRACOMPANY TRANSFEREE(L)">公司内部调派人员(L)</option>
+											<option value="VOCATIONAL/NONACADEMIC STUDENT(M)">职业/非学术学校的学生(M)</option>
+											<option value="OTHER(N)">其他(N)</option>
+											<option value="NATO STAFF(NATO)">北约工作人员(NATO)</option>
+											<option value="ALIEN WITH EXTRAORDINARY ABILITY(O)">具有特殊才能的人员(O)</option>
+											<option value="INTERNATIONALLY RECOGNIZED ALIEN(P)">国际承认的外国人士(P)</option>
+											<option value="CULTURAL EXCHANGE VISITOR(Q)">文化交流访问者(Q)</option>
+											<option value="RELIGIOUS WORKER(R)">宗教人士(R)</option>
+											<option value="INFORMANT OR WITNESS(S)">提供信息者或证人(S)</option>
+											<option value="VICTIM OF TRAFFICKING(T)">人口贩运的受害者(T)</option>
+											<option value="NAFTA PROFESSIONAL(TD/TN)">北美自由贸易协议专业人员(TD/TN)</option>
+											<option value="VICTIM OF CRIMINAL ACTIVITY(U)">犯罪活动的受害者(U)</option>
+											<option value="PAROLE BENEFICIARY(PARCIS)">假释收益者(PARCIS)</option>
 										</c:if>
 										</select>
 									</div>
@@ -65,12 +98,12 @@
 									</div>
 								</div>
 							</div>
-						<form id="orderUpdateForm">
+						
 							<div class="row body-from-input">
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>预计出发日期：</label> <input name="godate"
-											type="text" class="form-control input-sm datetimepickercss"
+											type="text" class="form-format input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.godate }" pattern="yyyy-MM-dd" />" />
 									</div>
 								</div>
@@ -78,7 +111,7 @@
 									<div class="form-group">
 										<label><span>*</span>抵达美国日期：</label>
 										<input name="arrivedate"
-											type="text" class="form-control input-sm datetimepickercss"
+											type="text" class="form-format input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.arrivedate }" pattern="yyyy-MM-dd" />" />
 									</div>
 								</div>
@@ -93,7 +126,7 @@
 									<div class="form-group">
 										<label><span>*</span>离开美国日期：</label>
 										<input name="leavedate"
-											type="text" class="form-control input-sm datetimepickercss"
+											type="text" class="form-format input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.leavedate }" pattern="yyyy-MM-dd" />" />
 										</div>
 									</div>
@@ -195,7 +228,7 @@
 						</div>
 					</div>
 					<!-- end 订单信息 -->
-				</form>
+				
 					<!-- 申请人 -->
 					<div class="info" id="mySwitch">
 						<p class="info-head">申请人</p>
@@ -223,7 +256,7 @@
 									<div class="col-sm-12 purpose">
 										<div class="form-group">
 											<label>出行目的</label>
-											<input name="travelpurpose" value="${obj.summaryInfo.travelpurpose }" type="text" class="form-control input-sm" placeholder="" />
+											<input type="text" class="form-control input-sm" placeholder="" />
 										</div>
 									</div>
 								</div>
@@ -233,7 +266,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>姓名/拼音</label>
-												<input name="staffname" value="${obj.summaryInfo.staffname }" type="text" class="form-control input-sm" placeholder="" />
+												<input disabled="true" value="${obj.summaryInfo.staffname }" type="text" class="form-control input-sm" placeholder="" />
 											</div>
 										</div>
 										<div class="col-sm-4">
@@ -245,7 +278,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>出生日期</label>
-												<input name="birthday" type="text" value="${obj.summaryInfo.birthday }" class="form-control input-sm" placeholder="" />
+												<input name="birthday" type="text" value="${obj.summaryInfo.birthday }" class="form-format form-control input-sm" placeholder="" />
 											</div>
 										</div>
 									</div>
@@ -254,6 +287,7 @@
 											<div class="form-group">
 												<label>所需资料</label>
 												<input id="" type="text" class="form-control input-sm" placeholder="" />
+												<input name="staffid" type="hidden" value="${obj.summaryInfo.staffid }">
 											</div>
 										</div>
 									</div>
@@ -261,7 +295,8 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>AA码</label>
-												<input name="aacode" type="text" value="${obj.summaryInfo.aacode }" class="form-control input-sm" placeholder="" />
+												<input type="text" disabled="true" value="${obj.summaryInfo.aacode }" class="form-control input-sm" placeholder="" />
+												<input name="aacode" type="hidden" value="${obj.summaryInfo.aacode }">
 											</div>
 										</div>
 										<div class="col-sm-4">
@@ -273,10 +308,12 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>面试时间</label>
-												<input name="Interviewdate" type="text" value="${obj.summaryInfo.Interviewdate }" class="form-control input-sm" placeholder="" />
+												<input name="Interviewdate" type="text" value="${obj.summaryInfo.Interviewdate }" class="form-format form-control input-sm" placeholder="" />
 											</div>
 										</div>
 									</div>
+									
+							</form>
 									<div class="row body-from-input">
 										<div class="col-sm-4">
 											<div class="form-group">
@@ -287,7 +324,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>出行时间</label>
-												<input id="" type="text" class="form-control input-sm" placeholder="" />
+												<input id="" type="text" class="form-format form-control input-sm" placeholder="" />
 											</div>
 										</div>
 										<div class="col-sm-4">
@@ -325,7 +362,7 @@
 		<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 		<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 		<script type="text/javascript">
-	    $(".form-control").datetimepicker({
+	    $(".form-format").datetimepicker({
 	        format: "yyyy-mm-dd",
 	        showMeridian: true,
 	        autoclose: true,

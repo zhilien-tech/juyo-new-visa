@@ -15,11 +15,10 @@ import lombok.Data;
  * <p>
  * TODO(这里描述这个类补充说明 – 可选)
  *
- * @author    
+ * @author   马云鹏 
  */
 @Data
 public class OrderUpdateForm {
-
 	/*
 	 * 预计出发日期
 	 */
@@ -60,5 +59,32 @@ public class OrderUpdateForm {
 	/*
 	 * 出行目的
 	 */
-	//	private Integer travelpurpose;
+	private String travelpurpose;
+	/*
+	 * 人员id
+	 */
+	private Integer staffid;
+	/*
+	 * 性别
+	 */
+	private String sex;
+	/*
+	 * 出生日期
+	 */
+	private Date birthday;
+	/*
+	 * AA码
+	 */
+	private String aacode;
+
+	/*
+	 * 护照号
+	 */
+	private String passport;
+
+	/*
+	 * 面试时间
+	 */
+	private Date Interviewdate;
+
 }

@@ -21,13 +21,16 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.bigcustomer.form.VisaListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
+import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
+import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
+import com.juyo.visa.entities.TOrderUsInfoEntitiy;
 import com.juyo.visa.entities.TOrderUsTravelinfoEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.OrderUpdateForm;
@@ -189,6 +192,15 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		return summaryInfos;
 	}
 
+	/*
+	 * 
+	 * 
+	 */
+	public Object getOrderInfo(Integer orderid) {
+		TOrderUsInfoEntitiy entitiy = dbDao.fetch(TOrderUsInfoEntitiy.class, Cnd.where("id", "=", orderid));
+		return entitiy;
+	}
+
 	/**
 	 * 跳转到签证详情页
 	 */
@@ -197,6 +209,8 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
+		TOrderUsInfoEntitiy orderInfoEntity = (TOrderUsInfoEntitiy) getOrderInfo(orderid);
+		result.put("orderInfo", orderInfoEntity);
 		result.put("travelInfo", orderTravelInfo);
 		if (!Util.isEmpty(staffSummaryInfoList)) {
 			result.put("summaryInfo", staffSummaryInfoList.get(0));
@@ -236,7 +250,26 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(form.getPlanstate())) {
 			orderTravelInfo.setPlanstate(form.getPlanstate());
 		}
-		return dbDao.update(orderTravelInfo);
-	}
+		//修改出行信息表
+		int orderUpdateNum = dbDao.update(orderTravelInfo);
 
+		//获取护照信息表
+		TAppStaffPassportEntity passPortInfo = dbDao.fetch(TAppStaffPassportEntity.class,
+				Cnd.where("staffid", "=", form.getStaffid()));
+		passPortInfo.setBirthday(form.getBirthday());
+		passPortInfo.setSex(form.getSex());
+		passPortInfo.setPassport(form.getPassport());
+		int passPortInfoUpdateNum = dbDao.update(passPortInfo);
+
+		//获取人员基本信息表
+		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+				Cnd.where("id", "=", form.getStaffid()));
+		basicinfo.setInterviewdate(form.getInterviewdate());
+		int basicinfoUpdate = dbDao.update(basicinfo);
+		if (orderUpdateNum == 1 && passPortInfoUpdateNum == 1 && basicinfoUpdate == 1) {
+			return "1";
+		} else {
+			return "0";
+		}
+	}
 }
