@@ -194,6 +194,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object visaDetail(Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
+
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
 		result.put("travelInfo", orderTravelInfo);
