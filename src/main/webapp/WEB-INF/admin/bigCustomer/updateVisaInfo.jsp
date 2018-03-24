@@ -30,8 +30,8 @@
 				<div class="companyMain">
 					<div class="companyMainInfo groupRadioInfo">
 						<label>是否与其他人一起旅游</label>
-						<input type="radio" class="companyInfo" v-model="travelCompanionInfo.istravelwithother" value="1" />是
-						<input type="radio" class="companyInfo" v-model="travelCompanionInfo.istravelwithother" value="2" checked/>否
+						<input type="radio" class="companyInfo" name="istravelwithother" value="1" />是
+						<input type="radio" class="companyInfo" name="istravelwithother" value="2" checked/>否
 					</div>
 					<!--yes-->
 					<div class="teamture elementHide">

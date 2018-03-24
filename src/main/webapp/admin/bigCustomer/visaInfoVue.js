@@ -18,31 +18,29 @@ var visaInfo;
 new Vue({
 	el: '#wrapper',
 	data: {
-		travelcompanioninfo:"",
-		previustripinfo:"",
-		contactpointinfo:"",
-		familyinfo:"",
-		workeducationinfo:""
-
+		travelCompanionInfo:"",
+		previUSTripInfo:"",
+		contactPointInfo:"",
+		familyInfo:"",
+		workEducationInfo:""
 	},
 	created:function(){
 		visaInfo=this;
 		var url = '/admin/bigCustomer/getVisaInfos.html';
 		$.ajax({ 
 			url: url,
-			dataType:"json",
 			data:{
 				staffId:staffId
 			},
 			type:'post',
 			success: function(data){
-				visaInfo.travelcompanioninfo = data.travelcompanioninfo;
-				visaInfo.previustripinfo = data.previustripinfo;
-				visaInfo.contactpointinfo = data.contactpointinfo;
-				visaInfo.familyinfo = data.familyinfo;
-				visaInfo.workeducationinfo = data.workeducationinfo;
+				visaInfo.travelCompanionInfo = data.travelCompanionInfo;
+				visaInfo.previUSTripInfo = data.previUSTripInfo;
+				visaInfo.contactPointInfo = data.contactPointInfo;
+				visaInfo.familyInfo = data.familyInfo;
+				visaInfo.workEducationInfo = data.workEducationInfo;
 				
-				console.log(JSON.stringify(data));
+				console.log("==========131231====="+JSON.stringify(visaInfo.previUSTripInfo));
 			}
 		});
 	},
