@@ -14,7 +14,7 @@ public class TAppStaffWorkEducationTrainingUpdateForm extends ModForm implements
 	private static final long serialVersionUID = 1L;
 
 	/**人员id*/
-	private String staffid;
+	private Integer staffid;
 
 	/**我的职业*/
 	private Integer occupation;

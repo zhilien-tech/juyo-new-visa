@@ -22,7 +22,7 @@ public class TAppStaffWorkEducationTrainingForm extends DataTablesParamForm {
 	private Integer id;
 
 	/**人员id*/
-	private String staffid;
+	private Integer staffid;
 
 	/**我的职业*/
 	private Integer occupation;

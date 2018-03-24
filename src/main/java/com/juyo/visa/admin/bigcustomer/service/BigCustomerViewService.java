@@ -27,6 +27,8 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Lists;
@@ -112,7 +114,6 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	public Object updateVisaInfo(Integer staffId, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 
-		/*****************************************枚举数据 start*******************************************************************/
 		//旅伴信息---与你的关系
 		result.put("TravelCompanionRelationshipEnum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
 		//以前的美国旅游信息---时间单位枚举
@@ -131,8 +132,26 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("VisaSpouseContactAddressEnum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
 		//工作/教育/培训信息---主要职业
 		result.put("VisaCareersEnum", EnumUtil.enum2(VisaCareersEnum.class));
-		/*****************************************枚举数据 end*******************************************************************/
 
+		//人员id
+		result.put("staffId", staffId);
+
+		return result;
+
+	}
+
+	/**
+	 * 
+	 * 获取签证信息数据
+	 *
+	 * @param staffId
+	 * @param session
+	 * @return
+	 */
+	@At
+	@POST
+	public Object getVisaInfos(Integer staffId, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
 		//旅伴信息
 		TAppStaffTravelcompanionEntity travelCompanionInfo = (TAppStaffTravelcompanionEntity) pcVisaViewService
 				.getStaffTravelCompanion(staffId);
@@ -239,6 +258,28 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			map.put("passportId", String.valueOf(""));
 		}
 		map.put("staffId", String.valueOf(staffId));
+
+		//签证信息的添加
+		//旅伴信息
+		TAppStaffTravelcompanionEntity travelCompanionInfo = new TAppStaffTravelcompanionEntity();
+		travelCompanionInfo.setStaffid(staffId);
+		dbDao.insert(travelCompanionInfo);
+		//以前的美国旅游信息
+		TAppStaffPrevioustripinfoEntity previUSTripInfo = new TAppStaffPrevioustripinfoEntity();
+		previUSTripInfo.setStaffid(staffId);
+		dbDao.insert(previUSTripInfo);
+		//美国联络点
+		TAppStaffContactpointEntity contactPointInfo = new TAppStaffContactpointEntity();
+		contactPointInfo.setStaffid(staffId);
+		dbDao.insert(contactPointInfo);
+		//家庭信息
+		TAppStaffFamilyinfoEntity familyInfo = new TAppStaffFamilyinfoEntity();
+		familyInfo.setStaffid(staffId);
+		dbDao.insert(familyInfo);
+		//工作/教育/培训信息 
+		TAppStaffWorkEducationTrainingEntity workEducationInfo = new TAppStaffWorkEducationTrainingEntity();
+		workEducationInfo.setStaffid(staffId);
+		dbDao.insert(workEducationInfo);
 
 		return map;
 	}

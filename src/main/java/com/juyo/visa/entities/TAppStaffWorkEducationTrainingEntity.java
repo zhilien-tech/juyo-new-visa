@@ -19,7 +19,7 @@ public class TAppStaffWorkEducationTrainingEntity implements Serializable {
 
 	@Column
 	@Comment("人员id")
-	private String staffid;
+	private Integer staffid;
 
 	@Column
 	@Comment("我的职业")

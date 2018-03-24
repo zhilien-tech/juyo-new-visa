@@ -19,7 +19,7 @@ public class TAppStaffPrevioustripinfoEntity implements Serializable {
 
 	@Column
 	@Comment("人员id")
-	private String staffid;
+	private Integer staffid;
 
 	@Column
 	@Comment("是否去过美国")

@@ -23,7 +23,7 @@
 			</div>
 		</div>
 		<div class="topHide"></div>
-		<div class="section">
+		<div id="wrapper" class="section">
 			<!--旅伴信息-->
 			<div class="companyInfoModule">
 				<div class="titleInfo">旅伴信息</div>
@@ -1267,6 +1267,10 @@
 			
 		</div>
 	</body>
+	<script type="text/javascript">
+		var BASE_PATH = '${base}';
+		var staffId = ${obj.staffId};
+	</script>
 	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
@@ -1280,6 +1284,7 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	
 	<script src="${base}/admin/bigCustomer/visaInfo.js"></script><!-- 本页面js -->
+	<script src="${base}/admin/bigCustomer/visaInfoVue.js"></script><!-- 本页面js -->
 	<script src="${base}/admin/bigCustomer/initDatetimepicker.js"></script><!-- 本页面js -->
 	
 </html>
