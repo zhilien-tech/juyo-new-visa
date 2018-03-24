@@ -22,7 +22,7 @@ public class TAppStaffPrevioustripinfoForm extends DataTablesParamForm {
 	private Integer id;
 
 	/**人员id*/
-	private String staffid;
+	private Integer staffid;
 
 	/**是否去过美国*/
 	private Integer hasbeeninus;

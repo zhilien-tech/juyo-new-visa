@@ -27,6 +27,8 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Lists;
@@ -50,8 +52,13 @@ import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.util.ExcelReader;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
+import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
+import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
+import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
+import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
@@ -73,6 +80,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 	@Inject
 	private UploadService qiniuUploadService;//文件上传
+
+	@Inject
+	private PcVisaViewService pcVisaViewService;
 
 	private final static String TEMPLATE_EXCEL_URL = "download";
 	private final static String TEMPLATE_EXCEL_NAME = "人员管理之模块.xlsx";
@@ -101,32 +111,71 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param session
 	 * @return 
 	 */
-	public Object updateVisaInfo(@Param("staffId") Integer staffId, HttpSession session) {
+	public Object updateVisaInfo(Integer staffId, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
+
 		//旅伴信息---与你的关系
 		result.put("TravelCompanionRelationshipEnum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
-
 		//以前的美国旅游信息---时间单位枚举
 		result.put("TimeUnitStatusEnum", EnumUtil.enum2(TimeUnitStatusEnum.class));
 		//以前的美国旅游信息---州枚举
 		result.put("VisaUSStatesEnum", EnumUtil.enum2(VisaUSStatesEnum.class));
-
 		//美国联络点---与你的关系
 		result.put("ContactPointRelationshipStatusEnum", EnumUtil.enum2(ContactPointRelationshipStatusEnum.class));
-
 		//家庭信息---身份状态
 		result.put("VisaFamilyInfoEnum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
-
 		//直系亲属---与你的关系
 		result.put("ImmediateRelationshipEnum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
-
 		//配偶信息---国籍
 		result.put("VisaCitizenshipEnum", EnumUtil.enum2(VisaCitizenshipEnum.class));
 		//配偶信息---配偶联系地址
 		result.put("VisaSpouseContactAddressEnum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
-
 		//工作/教育/培训信息---主要职业
 		result.put("VisaCareersEnum", EnumUtil.enum2(VisaCareersEnum.class));
+
+		//人员id
+		result.put("staffId", staffId);
+
+		return result;
+
+	}
+
+	/**
+	 * 
+	 * 获取签证信息数据
+	 *
+	 * @param staffId
+	 * @param session
+	 * @return
+	 */
+	@At
+	@POST
+	public Object getVisaInfos(Integer staffId, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		//旅伴信息
+		TAppStaffTravelcompanionEntity travelCompanionInfo = (TAppStaffTravelcompanionEntity) pcVisaViewService
+				.getStaffTravelCompanion(staffId);
+		result.put("travelCompanionInfo", travelCompanionInfo);
+		//以前的美国旅游信息
+		TAppStaffPrevioustripinfoEntity previUSTripInfo = (TAppStaffPrevioustripinfoEntity) pcVisaViewService
+				.getStaffpreviousTripInfo(staffId);
+		result.put("previUSTripInfo", previUSTripInfo);
+		//美国联络点
+		TAppStaffContactpointEntity contactPointInfo = (TAppStaffContactpointEntity) pcVisaViewService
+				.getStaffContactPoint(staffId);
+		result.put("contactPointInfo", contactPointInfo);
+		//家庭信息
+		TAppStaffFamilyinfoEntity familyInfo = (TAppStaffFamilyinfoEntity) pcVisaViewService
+				.getStaffFamilyInfo(staffId);
+		result.put("familyInfo", familyInfo);
+		//工作/教育/培训信息 
+		TAppStaffWorkEducationTrainingEntity workEducationInfo = (TAppStaffWorkEducationTrainingEntity) pcVisaViewService
+				.getStaffWorkEducationTraining(staffId);
+		result.put("workEducationInfo", workEducationInfo);
+
+		//人员id
+		result.put("staffId", staffId);
+
 		return result;
 	}
 
@@ -139,7 +188,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param session
 	 * @return 
 	 */
-	public Object otherSredentials(@Param("staffId") Integer staffId, HttpSession session) {
+	public Object otherSredentials(Integer staffId, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("staffId", staffId);
 		result.put("AppCredentialsType", EnumUtil.enum2(AppCredentialsTypeEnum.class));
@@ -209,6 +258,28 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			map.put("passportId", String.valueOf(""));
 		}
 		map.put("staffId", String.valueOf(staffId));
+
+		//签证信息的添加
+		//旅伴信息
+		TAppStaffTravelcompanionEntity travelCompanionInfo = new TAppStaffTravelcompanionEntity();
+		travelCompanionInfo.setStaffid(staffId);
+		dbDao.insert(travelCompanionInfo);
+		//以前的美国旅游信息
+		TAppStaffPrevioustripinfoEntity previUSTripInfo = new TAppStaffPrevioustripinfoEntity();
+		previUSTripInfo.setStaffid(staffId);
+		dbDao.insert(previUSTripInfo);
+		//美国联络点
+		TAppStaffContactpointEntity contactPointInfo = new TAppStaffContactpointEntity();
+		contactPointInfo.setStaffid(staffId);
+		dbDao.insert(contactPointInfo);
+		//家庭信息
+		TAppStaffFamilyinfoEntity familyInfo = new TAppStaffFamilyinfoEntity();
+		familyInfo.setStaffid(staffId);
+		dbDao.insert(familyInfo);
+		//工作/教育/培训信息 
+		TAppStaffWorkEducationTrainingEntity workEducationInfo = new TAppStaffWorkEducationTrainingEntity();
+		workEducationInfo.setStaffid(staffId);
+		dbDao.insert(workEducationInfo);
 
 		return map;
 	}

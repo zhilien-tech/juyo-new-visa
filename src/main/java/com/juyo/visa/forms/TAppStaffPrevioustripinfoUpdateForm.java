@@ -14,7 +14,7 @@ public class TAppStaffPrevioustripinfoUpdateForm extends ModForm implements Seri
 	private static final long serialVersionUID = 1L;
 
 	/**人员id*/
-	private String staffid;
+	private Integer staffid;
 
 	/**是否去过美国*/
 	private Integer hasbeeninus;
