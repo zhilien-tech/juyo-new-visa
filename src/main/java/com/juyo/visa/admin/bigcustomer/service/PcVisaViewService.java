@@ -211,7 +211,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		String travelpurpose = orderTravelInfo.getTravelpurpose();
 		if (!Util.isEmpty(travelpurpose)) {
-			String travelpurposeString = TravelpurposeEnum.getValue(travelpurpose).getValue().replaceAll("\"", "");
+			String travelpurposeString = TravelpurposeEnum.getValue(travelpurpose).getValue();
 			//获取出行目的
 			orderTravelInfo.setTravelpurpose(travelpurposeString);
 		}
@@ -260,15 +260,24 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(form.getPlanstate())) {
 			orderTravelInfo.setPlanstate(form.getPlanstate());
 		}
-		if (!Util.isEmpty(form.getPlanstate())) {
-			orderTravelInfo.setTravelpurpose(form.getTravelpurpose());
+		if (!Util.isEmpty(form.getTravelpurpose())) {
+			String travelpurpose = form.getTravelpurpose();
+			String key = TravelpurposeEnum.getEnum(travelpurpose).getKey();
+			orderTravelInfo.setTravelpurpose(key);
 		}
+		orderTravelInfo.setGodeparturecity(form.getGodeparturecity());
+		orderTravelInfo.setGoArrivedCity(form.getGoArrivedCity());
+		orderTravelInfo.setGoFlightNum(form.getGoFlightNum());
+		orderTravelInfo.setReturnDepartureCity(form.getReturnDepartureCity());
+		orderTravelInfo.setReturnArrivedCity(form.getReturnArrivedCity());
+		orderTravelInfo.setReturnFlightNum(form.getReturnFlightNum());
 		//修改出行信息
 		int orderUpdateNum = dbDao.update(orderTravelInfo);
 
 		//获取人员基本信息
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
 				Cnd.where("id", "=", form.getStaffid()));
+		basicinfo.setAacode(form.getAacode());
 		basicinfo.setInterviewdate(form.getInterviewdate());
 		basicinfo.setBirthday(form.getBirthday());
 		int basicinfoUpdate = dbDao.update(basicinfo);

@@ -69,36 +69,36 @@
 										<label><span>*</span>出行目的</label> <select name="travelpurpose"
 											class="form-control input-sm" onchange="change()">
 											<c:if test="${not empty obj.travelInfo.travelpurpose}">
-												<option value="${obj.travelInfo.travelpurpose}">${obj.travelInfo.travelpurpose}</option>
+												<option >${obj.travelInfo.travelpurpose}</option>
 											</c:if>
 											<c:if test="${empty obj.travelInfo.travelpurpose}">
 												<option value="">--请选择--</option>
 											</c:if>
-											<option value="FOREIGN GOVERNMENT OFFICIAL(A)">外国政府官员（A）</option>
-											<option value="TEMP. BUSINESS PLEASURE VISITOR(B)">商务旅游游客(B)</option>
-											<option value="ALIEN IN TRANSIT(C)">过境的外国公民(C)</option>
-											<option value="CNMI WORKER OR INVESTOR(CW/E2C)">CNMI工作者或投资者(CW/E2C)</option>
-											<option value="CREWMEMBER(D)">机船组人员(D)</option>
-											<option value="TREATY TRADER OR INVESTOR(E)">贸易协议国贸易人员或投资者(E)</option>
-											<option value="ACADEMIC OR LANGUAGE STUDENT(F)">学术或语言学生(F)</option>
-											<option value="INTERNATIONAL ORGANIZATION REP./EMP.(G)">国际组织代表/雇员(G)</option>
-											<option value="TEMPORARY WORKER(H)">临时工作(H)</option>
-											<option value="FOREIGN MEDIA REPRESENTATIVE(I)">外国媒体代表</option>
-											<option value="EXCHANGE VISITOR(J)">交流访问者</option>
-											<option value="FIANCE(E) OR SPOUSE OF A U.S. CITIZEN(K)">美国公民的未婚夫（妻）或配偶（K）</option>
-											<option value="INTRACOMPANY TRANSFEREE(L)">公司内部调派人员(L)</option>
-											<option value="VOCATIONAL/NONACADEMIC STUDENT(M)">职业/非学术学校的学生(M)</option>
-											<option value="OTHER(N)">其他(N)</option>
-											<option value="NATO STAFF(NATO)">北约工作人员(NATO)</option>
-											<option value="ALIEN WITH EXTRAORDINARY ABILITY(O)">具有特殊才能的人员(O)</option>
-											<option value="INTERNATIONALLY RECOGNIZED ALIEN(P)">国际承认的外国人士(P)</option>
-											<option value="CULTURAL EXCHANGE VISITOR(Q)">文化交流访问者(Q)</option>
-											<option value="RELIGIOUS WORKER(R)">宗教人士(R)</option>
-											<option value="INFORMANT OR WITNESS(S)">提供信息者或证人(S)</option>
-											<option value="VICTIM OF TRAFFICKING(T)">人口贩运的受害者(T)</option>
-											<option value="NAFTA PROFESSIONAL(TD/TN)">北美自由贸易协议专业人员(TD/TN)</option>
-											<option value="VICTIM OF CRIMINAL ACTIVITY(U)">犯罪活动的受害者(U)</option>
-											<option value="PAROLE BENEFICIARY(PARCIS)">假释收益者(PARCIS)</option>
+											<option >外国政府官员（A）</option>
+											<option >商务旅游游客(B)</option>
+											<option >过境的外国公民(C)</option>
+											<option >CNMI工作者或投资者(CW/E2C)</option>
+											<option >机船组人员(D)</option>
+											<option >贸易协议国贸易人员或投资者(E)</option>
+											<option >学术或语言学生(F)</option>
+											<option >国际组织代表/雇员(G)</option>
+											<option >临时工作(H)</option>
+											<option >外国媒体代表</option>
+											<option >交流访问者</option>
+											<option >美国公民的未婚夫（妻）或配偶（K）</option>
+											<option >公司内部调派人员(L)</option>
+											<option >职业/非学术学校的学生(M)</option>
+											<option >其他(N)</option>
+											<option >北约工作人员(NATO)</option>
+											<option >具有特殊才能的人员(O)</option>
+											<option >国际承认的外国人士(P)</option>
+											<option >文化交流访问者(Q)</option>
+											<option >宗教人士(R)</option>
+											<option >提供信息者或证人(S)</option>
+											<option >人口贩运的受害者(T)</option>
+											<option >北美自由贸易协议专业人员(TD/TN)</option>
+											<option >犯罪活动的受害者(U)</option>
+											<option >假释收益者(PARCIS)</option>
 
 										</select>
 									</div>
@@ -118,7 +118,7 @@
 							<div class="row body-from-input">
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>预计出发日期：</label> <input name="godate"
+										<label><span>*</span>预计出发日期：</label> <input id="goDate" name="godate"
 											type="text" class="form-format input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.godate }" pattern="yyyy-MM-dd" />" />
 									</div>
@@ -132,13 +132,13 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>停留天数：</label> <input name="staydays"
+										<label><span>*</span>停留天数：</label> <input id="stayday" name="staydays"
 											name="" value="${obj.travelInfo.staydays}" type="text" />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>离开美国日期：</label> <input name="leavedate"
+										<label><span>*</span>离开美国日期：</label> <input id="returnDate" name="leavedate"
 											type="text" class="form-format input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.leavedate }" pattern="yyyy-MM-dd" />" />
 									</div>
@@ -148,13 +148,24 @@
 						<div class="row body-from-input checkShowORHide">
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>出发城市：</label> <select id="goDepartureCity"
+										<input id="gocity" name="godeparturecity" type="hidden" >
+									<label><span>*</span>出发城市：</label> <select id="goDepartureCity" onchange="goDepartureCitychange()"
 										class="form-control select2 select2City departurecity"
 										multiple="multiple">
-										<option id="goDepartureCity" name="godeparturecity">${obj.travelInfo.godeparturecity }</option>
+										<!-- <option id="goDepartureCity" name="godeparturecity"></option> -->
 										<%-- <c:if test="${!empty obj.goleavecity.id}">
 												<option value="${obj.goleavecity.id}" selected="selected">${obj.goleavecity.city}</option>
 											</c:if> --%>
+											<c:forEach items="${obj.citylist }" var="city">
+												<c:choose>
+													<c:when test="${city.id eq obj.tripinfo.goDepartureCity }">
+														<option value="${city.id }" selected="selected">${city.city }</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${city.id }">${city.city }</option>
+													</c:otherwise>
+												</c:choose>
+											</c:forEach>
 									</select>
 								</div>
 							</div>
@@ -163,10 +174,21 @@
 									<label><span>*</span>抵达城市：</label> <select id="goArrivedCity"
 										class="form-control input-sm select2City arrivedcity"
 										multiple="multiple">
-										<option id="goArrivedCity" name="goArrivedCity">${obj.travelInfo.goArrivedCity }</option>
+										<input id="goarrivecity" name="goArrivedCity" type="hidden" >
+										<!-- <option id="goArrivedCity" name="goArrivedCity"></option> -->
 										<%-- <c:if test="${!empty obj.goarrivecity.id}">
 												<option value="${obj.goarrivecity.id}" selected="selected">${obj.goarrivecity.city}</option>
 											</c:if> --%>
+											<c:forEach items="${obj.citylist }" var="city">
+												<c:choose>
+													<c:when test="${city.id eq obj.tripinfo.goArrivedCity }">
+														<option value="${city.id }" selected="selected">${city.city }</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${city.id }">${city.city }</option>
+													</c:otherwise>
+												</c:choose>
+											</c:forEach>
 									</select>
 								</div>
 							</div>
@@ -175,14 +197,20 @@
 									<label><span>*</span>航班号：</label> <select id="goFlightNum"
 										class="form-control input-sm flightSelect2"
 										multiple="multiple">
-										<option id="goFlightNum" name="goFlightNum">${obj.travelInfo.goFlightNum }</option>
-										<%-- <c:if test="${!empty obj.goflightnum.id }">
+										<input id="goflightnum" name="goFlightNum" type="hidden" >
+										<%-- <option id="goFlightNum" name="goFlightNum"></option> 
+										<c:if test="${!empty obj.goflightnum.id }">
 												<option value="${obj.goflightnum.id }" selected="selected">${obj.goflightnum.takeOffName }-${obj.goflightnum.landingName } ${obj.goflightnum.flightnum } ${obj.goflightnum.takeOffTime }/${obj.goflightnum.landingTime }</option>
 											</c:if> --%>
+											<c:forEach items="${obj.flightlist }" var="flight">
+												<c:if test="${obj.tripinfo.goFlightNum eq  flight.flightnum}">
+													<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
+												</c:if>
+											</c:forEach>
 									</select>
 								</div>
 							</div>
-						</div>
+						</div><!-- 出发城市、返回城市、航班号（启程） -->
 
 						<div class="row body-from-input checkShowORHide">
 							<div class="col-sm-3">
@@ -191,10 +219,21 @@
 										id="returnDepartureCity"
 										class="form-control select2 select2City departurecity"
 										multiple="multiple">
-										<option id="returnDepartureCity" name="returnDepartureCity">${obj.travelInfo.returnDepartureCity }</option>
+										<input id="returncity" name="returnDepartureCity" type="hidden" " >
+										<!-- <option id="returnDepartureCity" name="returnDepartureCity"></option> -->
 										<%-- <c:if test="${!empty obj.backleavecity.id}">
 												<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
 											</c:if>--%>
+												<c:forEach items="${obj.citylist }" var="city">
+												<c:choose>
+													<c:when test="${city.id eq obj.tripinfo.returnDepartureCity }">
+														<option value="${city.id }" selected="selected">${city.city }</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${city.id }">${city.city }</option>
+													</c:otherwise>
+												</c:choose>
+											</c:forEach>
 									</select>
 								</div>
 							</div>
@@ -204,10 +243,21 @@
 										id="returnArrivedCity"
 										class="form-control input-sm select2City arrivedcity"
 										multiple="multiple">
-										<option id="returnArrivedCity" name="returnArrivedCity">${obj.travelInfo.returnArrivedCity }</option>
+										<input id="returnarrivecity" name="returnArrivedCity" type="hidden" >
+										<!-- <option id="returnArrivedCity" name="returnArrivedCity"></option> -->
 										<%-- <c:if test="${!empty obj.backarrivecity.id}">
 												<option value="${obj.backarrivecity.id}" selected="selected">${obj.backarrivecity.city}</option>
 											</c:if>--%>
+											<c:forEach items="${obj.citylist }" var="city">
+												<c:choose>
+													<c:when test="${city.id eq obj.tripinfo.returnArrivedCity }">
+														<option value="${city.id }" selected="selected">${city.city }</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${city.id }">${city.city }</option>
+													</c:otherwise>
+												</c:choose>
+											</c:forEach>
 									</select>
 								</div>
 							</div>
@@ -216,14 +266,20 @@
 									<label><span>*</span>航班号：</label> <select id="returnFlightNum"
 										class="form-control input-sm flightSelect2"
 										multiple="multiple">
-										<option id="returnFlightNum" name="returnFlightNum">${obj.travelInfo.returnFlightNum }</option>
+										<input id="returnflightnum" name="returnFlightNum" type="hidden" >
+										<!-- <option id="returnFlightNum" name="returnFlightNum"></option> -->
 										<%-- <c:if test="${!empty obj.returnflightnum.id }">
 												<option value="${obj.returnflightnum.id }" selected="selected">${obj.returnflightnum.takeOffName }-${obj.returnflightnum.landingName } ${obj.returnflightnum.flightnum } ${obj.returnflightnum.takeOffTime }/${obj.returnflightnum.landingTime }</option>
 											</c:if> --%>
+											<c:forEach items="${obj.flightlist }" var="flight">
+												<c:if test="${obj.tripinfo.returnFlightNum eq  flight.flightnum}">
+													<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
+												</c:if>
+											</c:forEach>
 									</select>
 								</div>
 							</div>
-						</div>
+						</div><!--出发城市、返回城市、航班号（返程）  -->
 
 						<input type="hidden" name="orderid"
 							value="${obj.travelInfo.orderid}">
@@ -309,13 +365,20 @@
 							</div>
 						</div>
 						<div class="row body-from-input">
-							<div class="col-sm-12">
+							<div class="col-sm-8">
 								<div class="form-group">
 									<label>所需资料</label> <input id=""
 										value="${obj.summaryInfo.preparematerials }" type="text"
 										class="form-control input-sm" placeholder="" /> <input
 										name="staffid" type="hidden"
 										value="${obj.summaryInfo.staffid }">
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label>卡号</label> <input name="" type="text"
+										value=""
+										class="form-control input-sm" placeholder="" />
 								</div>
 							</div>
 						</div>
@@ -402,7 +465,6 @@
 		src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"
 		charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
-	<script src="${base}/admin/simple/travelinfo.js?v=0.0.1"></script><!-- 本页面js文件 -->
 	<script type="text/javascript">
 		$(".form-format").datetimepicker({
 			format : "yyyy-mm-dd",
@@ -424,8 +486,22 @@
 				}
 			});
 		});
+		
+		
 		/* 异步保存数据 */
 		function save() {
+			var goDepartureCity = $('#goDepartureCity').val();
+			var goArrivedCity = $('#goArrivedCity').val();
+			var returnDepartureCity = $('#returnDepartureCity').val();
+			var returnArrivedCity = $('#returnArrivedCity').val();
+			var goflightnum =  $('#goFlightNum').val();
+			var returnflightnum = $('#returnFlightNum').val();
+			$('#gocity').val(goDepartureCity);
+			$('#goarrivecity').val(goArrivedCity);
+			$('#goflightnum').val(goflightnum);
+			$('#returncity').val(returnDepartureCity);
+			$('#returnarrivecity').val(returnArrivedCity);
+			$('#returnflightnum').val(returnflightnum);
 			$.ajax({
 				url : "${base}/admin/pcVisa/visaSave",
 				dataType : "json",
@@ -441,6 +517,279 @@
 				}
 			});
 		};
+		
+		
+		//加载城市的select2
+		$('.select2City').select2({
+			ajax : {
+				url : "/admin/city/getCustomerCitySelect.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					/*var cArrivalcity = $('#cArrivalcity').val();
+					if(cArrivalcity){
+						cArrivalcity = cArrivalcity.join(',');
+					}*/
+					return {
+						//exname : cArrivalcity,
+						cityname : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function (obj) {
+						obj.id = obj.id; // replace pk with your identifier
+						obj.text = obj.city; // replace pk with your identifier
+						/*obj.text = obj.dictCode;*/
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false //设置必须存在的选项 才能选中
+		});
+		
+		//出发航班select2
+		$('#goFlightNum').select2({
+			ajax : {
+				url : "/admin/tripairline/getTripAirlineSelect.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					/*var cArrivalcity = $('#cArrivalcity').val();
+					if(cArrivalcity){
+						cArrivalcity = cArrivalcity.join(',');
+					}*/
+					//去程出发城市
+					var goDepartureCity = $('#goDepartureCity').val();
+					if (goDepartureCity) {
+						goDepartureCity = goDepartureCity.join(',');
+					}else{
+						goDepartureCity = '';
+					}
+					//去程抵达城市
+					var goArrivedCity = $('#goArrivedCity').val();
+					if (goArrivedCity) {
+						goArrivedCity = goArrivedCity.join(',');
+					}else{
+						goArrivedCity = '';
+					}
+					var date = $('#goDate').val();
+					return {
+						date:date,
+						//exname : cArrivalcity,
+						gocity:goDepartureCity,
+						arrivecity:goArrivedCity,
+						flight : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function (obj) {
+						//obj.id = obj.id; // replace pk with your identifier
+						obj.id = obj.flightnum; // replace pk with your identifier
+						obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime;
+						/*obj.text = obj.dictCode;*/
+						goflightnum = obj.flightnum;
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false //设置必须存在的选项 才能选中
+		});
+		
+		//返程航班select2
+		$('#returnFlightNum').select2({
+			ajax : {
+				url : "/admin/tripairline/getTripAirlineSelect.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					/*var cArrivalcity = $('#cArrivalcity').val();
+					if(cArrivalcity){
+						cArrivalcity = cArrivalcity.join(',');
+					}*/
+					//去程出发城市
+					var returnDepartureCity = $('#returnDepartureCity').val();
+					if (returnDepartureCity) {
+						returnDepartureCity = returnDepartureCity.join(',');
+					}else{
+						returnDepartureCity += '';
+					}
+					//去程抵达城市
+					var returnArrivedCity = $('#returnArrivedCity').val();
+					if (returnArrivedCity) {
+						returnArrivedCity = returnArrivedCity.join(',');
+					}else{
+						returnArrivedCity += '';
+					}
+					var date = $('#returnDate').val();
+					return {
+						//exname : cArrivalcity,
+						date:date,
+						gocity:returnDepartureCity,
+						arrivecity:returnArrivedCity,
+						flight : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function (obj) {
+						//obj.id = obj.id; // replace pk with your identifier
+						obj.id = obj.flightnum; // replace pk with your identifier
+						obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime;
+						/*obj.text = obj.dictCode;*/
+						returnflightnum = obj.flightnum;
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false //设置必须存在的选项 才能选中
+		});
+		
+		//去程出发城市
+		$("#goDepartureCity").on("select2:select",function(e){
+			var thisval = $(this).val();
+			if (thisval) {
+				thisval = thisval.join(',');
+			}else{
+				thisval += '';
+			}
+			//设置回程抵达城市
+			var thistext = $(this).text();
+			$("#returnArrivedCity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
+			var goArrivedCity = $('#goArrivedCity').val();
+			if (goArrivedCity) {
+				goArrivedCity = goArrivedCity.join(',');
+			}else{
+				goArrivedCity += '';
+			}
+			var goDate = $('#goDate').val();
+			var returnDate = $('#returnDate').val();
+			//查询航班接口到缓存
+			initFlightByInterface(goDate,thisval,goArrivedCity);
+			initFlightByInterface(returnDate,goArrivedCity,thisval);
+		});
+		$("#goDepartureCity").on("select2:unselect",function(e){
+			$(this).text('');
+			$("#returnArrivedCity").html('');
+		});
+		//去程抵达城市
+		$("#goArrivedCity").on("select2:select",function(e){
+			var thisval = $(this).val();
+			if (thisval) {
+				thisval = thisval.join(',');
+			}else{
+				thisval += '';
+			}
+			//设置回程出发城市
+			var thistext = $(this).text();
+			$("#returnDepartureCity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
+			var goDepartureCity = $('#goDepartureCity').val();
+			if (goDepartureCity) {
+				goDepartureCity = goDepartureCity.join(',');
+			}else{
+				goDepartureCity += '';
+			}
+			var goDate = $('#goDate').val();
+			var returnDate = $('#returnDate').val();
+			//查询航班接口到缓存
+			initFlightByInterface(goDate,goDepartureCity,thisval);
+			initFlightByInterface(returnDate,thisval,goDepartureCity);
+		});
+		$("#goArrivedCity").on("select2:unselect",function(e){
+			$(this).text('');
+			$("#returnDepartureCity").html('');
+		});
+		//返程出发城市
+		$("#returnDepartureCity").on("select2:select",function(e){
+			var thisval = $(this).val();
+			if (thisval) {
+				thisval = thisval.join(',');
+			}else{
+				thisval += '';
+			}
+			var returnArrivedCity = $('#returnArrivedCity').val();
+			if (returnArrivedCity) {
+				returnArrivedCity = returnArrivedCity.join(',');
+			}else{
+				returnArrivedCity += '';
+			}
+			var returnDate = $('#returnDate').val();
+			//查询航班接口到缓存
+			initFlightByInterface(returnDate,thisval,returnArrivedCity);
+		});
+		//返程抵达城市
+		$("#returnArrivedCity").on("select2:select",function(e){
+			var thisval = $(this).val();
+			if (thisval) {
+				thisval = thisval.join(',');
+			}else{
+				thisval += '';
+			}
+			var returnDepartureCity = $('#returnDepartureCity').val();
+			if (returnDepartureCity) {
+				returnDepartureCity = returnDepartureCity.join(',');
+			}else{
+				returnDepartureCity += '';
+			}
+			var returnDate = $('#returnDate').val();
+			//查询航班接口到缓存
+			initFlightByInterface(returnDate,returnDepartureCity,thisval);
+		});
+
+		//加载航班号到缓存并同步到数据库
+		function initFlightByInterface(departuredate,departurecity,arrivedcity){
+			$.ajax({ 
+				url: '/admin/tripairline/getAirLineByInterfate.html',
+				dataType:"json",
+				data:{date:departuredate,gocity:departurecity,arrivecity:arrivedcity},
+				type:'post',
+				success: function(data){
+				}
+			});
+		}
 	</script>
 </body>
 </html>
