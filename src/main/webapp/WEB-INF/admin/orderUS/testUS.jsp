@@ -31,7 +31,6 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script src="${base}/admin/orderJp/log.js"></script><!-- 日志 js -->
 	<script type="text/javascript">
 		
 	</script>
@@ -58,6 +57,17 @@ function connectWebSocket(){
               var received_msg = evt.data;  
               if(received_msg){
             	  document.getElementById("vcode").src=received_msg;
+            	  layer.open({
+						type: 2,
+						title: false,
+						closeBtn:false,
+						fix: false,
+						maxmin: false,
+						shadeClose: false,
+						scrollbar: false,
+						area: ['900px', '100%'],
+						content:'/admin/orderUS/writeVcode.html'
+					});
               }
               console.log('message received!');  
               //showMessage(received_msg);  

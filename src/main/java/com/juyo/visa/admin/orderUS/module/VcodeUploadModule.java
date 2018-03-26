@@ -65,4 +65,11 @@ public class VcodeUploadModule {
 	public Object getVcode() {
 		return vcodeUploadService.getVcode();
 	}
+
+	@At
+	@GET
+	@Ok("jsp")
+	public Object testUS() {
+		return null;
+	}
 }
