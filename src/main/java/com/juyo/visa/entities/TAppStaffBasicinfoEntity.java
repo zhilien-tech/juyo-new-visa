@@ -373,4 +373,8 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	@Comment("签证状态")
 	private Integer visastatus;
 
+	@Column
+	@Comment("AA码")
+	private String aacode;
+
 }

@@ -280,4 +280,7 @@ public class TAppStaffBasicinfoAddForm extends AddForm implements Serializable {
 	/**签证状态*/
 	private Integer visastatus;
 
+	/**AA码*/
+	private String aacode;
+
 }

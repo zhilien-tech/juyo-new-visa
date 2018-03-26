@@ -25,20 +25,11 @@ public class TOrderUsUpdateForm extends ModForm implements Serializable {
 	/**团名*/
 	private String groupname;
 
-	/**验证码图片*/
-	private String vcodeurl;
-
-	/**验证码*/
-	private String vcode;
-
 	/**领区*/
 	private Integer cityid;
 
 	/**订单状态*/
 	private Integer status;
-
-	/**AA码*/
-	private String aacode;
 
 	/**是否作废*/
 	private Integer isdisable;

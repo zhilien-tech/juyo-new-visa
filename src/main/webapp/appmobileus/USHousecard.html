@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>房产证</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+   		<!--公共样式-->
+		<link rel="stylesheet" href="css/common.css" />
+		<!--本页css-->
+		<link rel="stylesheet" href="css/filming.css" />
+	</head>
+	<body>
+		<header>
+			<div class="filming">
+				<i></i>
+				<span>房产证</span>	
+			</div>
+		</header>
+		<section>
+			<div class="household">
+				<!--示例-->
+				<div class="householdPage householdExpain">
+					<span class="homePageTitle">房产证拍摄图例</span>
+				</div>
+				<!--第一页-->
+				<div class="householdPage firstPage">
+					<span class="homePageTitle">第一页</span>
+					<img src="img/camera.png"  class="camera" />
+					<img src="" class="pageImg" />
+				</div>
+				<input type="file" name="" class="fileHide firstPageImg" />
+				<!--第二页-->
+				<div class="householdPage secondPage">
+					<span class="homePageTitle">第二页</span>
+					<img src="img/camera.png" class="camera" />
+					<img src="" class="pageImg" />
+				</div>
+				<input type="file" class="fileHide secondPageImg" name="" />
+				<!--第三页-->
+				<div class="householdPage thirdPage">
+					<span class="homePageTitle">第三页</span>
+					<img src="img/camera.png" class="camera" />
+					<img src="" class="pageImg" />
+				</div>
+				<input type="file" class="fileHide thirdPageImg" name="" />
+				<!--第四页-->
+				<div class="householdPage fouthPage">
+					<span class="homePageTitle">第四页</span>
+					<img src="img/camera.png" class="camera" />
+					<img src="" class="pageImg" />
+				</div>
+				<input type="file" class="fileHide fouthPageImg" name="" />
+				<!--第五页-->
+				<div class="householdPage fifPage">
+					<span class="homePageTitle">第五页</span>
+					<img src="img/camera.png" class="camera" />
+					<img src="" class="pageImg" />
+				</div>
+				<input type="file" class="fileHide fifPageImg" name="" />
+				<!--结束-->
+			</div>
+			<!--注解-->
+			<div class="notes">注：两套及以上点击添加备注</div>
+			<!--按钮-->
+			<div class="addSetOfBtn">
+				<a class="addSet">添加第二套房产说明</a>
+			</div>
+			<!--展示说明-->
+			<div class="addhouseCard">
+				<ul>
+					<li>
+						产权人
+						<input type="text" class="txtInput" />
+					</li>
+					<li>
+						面积
+						<input type="text" class="txtInput" />
+					</li>
+					<li>
+						地址
+						<input type="text" class="txtInput" />
+					</li>
+				</ul>
+			</div>
+		</section>
+		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script type="text/javascript" src="js/rem(750).js" ></script>
+		<script type="text/javascript" src="js/lrz.bundle.js" ></script>
+		<script type="text/javascript" src="js/vue.min.js" ></script>
+		<script>
+			$(function(){
+				//添加第二套房产说明
+				$(".addSet").click(function(){
+					
+					$(".addhouseCard").toggle();
+				});
+				//图片上传
+				$(".firstPage").click(function(){
+					
+					$(".firstPageImg").click();
+					
+				});
+			})
+		</script>
+	</body>
+</html>

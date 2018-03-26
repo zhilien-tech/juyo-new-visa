@@ -280,4 +280,7 @@ public class TAppStaffBasicinfoUpdateForm extends ModForm implements Serializabl
 	/**签证状态*/
 	private Integer visastatus;
 
+	/**AA码*/
+	private String aacode;
+
 }
