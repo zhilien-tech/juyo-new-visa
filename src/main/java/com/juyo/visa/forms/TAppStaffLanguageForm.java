@@ -7,38 +7,26 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
+import com.juyo.visa.entities.TAppStaffLanguageEntity;
 import com.uxuexi.core.web.form.DataTablesParamForm;
 
 import java.io.Serializable;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class TAppStaffTravelcompanionForm extends DataTablesParamForm {
+public class TAppStaffLanguageForm extends DataTablesParamForm {
 	private static final long serialVersionUID = 1L;
 	/**主键*/
 	private Integer id;
 	
 	/**人员id*/
-	private String staffid;
+	private Integer staffid;
 	
-	/**是否与其他人一起旅行*/
-	private Integer istravelwithother;
+	/**使用的语言名称*/
+	private String languagename;
 	
-	/**是否与其他人一起旅行(英文)*/
-	private Integer istravelwithotheren;
-	
-	/**是否作为团队或组织的一部分*/
-	private Integer ispart;
-	
-	/**是否作为团队或组织的一部分(英文)*/
-	private Integer isparten;
-	
-	/**团队名称*/
-	private String groupname;
-	
-	/**团队名称(英文)*/
-	private String groupnameen;
+	/**使用的语言名称(英文)*/
+	private String languagenameen;
 	
 	@Override
 	public Sql sql(SqlManager sqlManager) {
@@ -46,7 +34,7 @@ public class TAppStaffTravelcompanionForm extends DataTablesParamForm {
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
-		String sqlString = EntityUtil.entityCndSql(TAppStaffTravelcompanionEntity.class);
+		String sqlString = EntityUtil.entityCndSql(TAppStaffLanguageEntity.class);
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
 		return sql;
