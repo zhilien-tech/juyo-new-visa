@@ -13,6 +13,7 @@ $(".companyInfo").change(function(){
 		$(".team").eq(1).click();
 	}
 });
+
 //旅伴信息--是否作为团队或组织的一部分旅游
 $(".team").change(function(){
 	var teamVal = $("input[class=team]:checked").val(); 
