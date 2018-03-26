@@ -1,0 +1,110 @@
+/**********************/
+section {
+	
+}
+section ul li{
+	height: .81rem;
+	line-height: .81rem;
+	font-size: .3rem;
+	border-bottom: 1px solid #eee;
+	padding:0 0.2rem;
+}
+section ul li span {
+	float: left;
+}
+section ul li i {
+	float: right;
+	margin-top: .3rem;
+}
+
+/*右三角*/
+.more {
+	width:10px;
+	height: 10px;
+	border: 1px solid #000;
+	transform: rotate(45deg);
+	display: inline-block;
+	border-left: 0;
+	border-bottom: 0;
+}
+.headPortrait {
+	background: url(../img/head.png) no-repeat;
+	width: 20px;
+	height: 20px;
+	float: left;
+	background-size: 100%;
+	margin-top: .2rem;
+	margin-right: .3rem;
+}
+
+.edit {
+	background: url(../img/tableEdit1.png) no-repeat;
+	width: 20px;
+	height: 20px;
+	float: right;
+	margin-top: .2rem;
+}
+/*footer*/
+footer {
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+}
+.nav {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	background: #FFF;
+}
+.nav a {
+	width: 24%;
+	text-align: center;
+	display: inline-block;
+}
+.linkStyle {
+	width:100%;
+	height:.81rem;
+	color:#000;
+}
+/**********************/
+header {
+	width: 100%;
+	height: .81rem;
+	line-height: .81rem;
+	position: fixed;
+	top: 0;
+	background: #FFFFFF;
+	border-bottom: 2px solid #eee;
+	text-align: center;
+	font-size: .3rem;
+}
+header i {
+	width: 10px;
+	height: 10px;
+	border: 1px solid #000;
+	transform: rotate(45deg);
+	border-right: 0;
+	border-top: 0;
+	display: inline-block;
+	margin-left: .2rem;
+	float: left;
+	margin-top: .3rem;
+}
+header span {
+	margin-left: -.2rem;
+}
+.topHide {
+	width: 100%;
+	height: .81rem;
+}
+.prompt {
+	width: 100%;
+	text-align: center;
+	height: .5rem;
+	line-height: .5rem;
+	padding: .2rem 0;
+	border-bottom: 1px solid #eee;
+}
+
+
+
