@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>新增地址</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+   		<!--公共样式-->
+		<link rel="stylesheet" href="css/common.css" />
+		<!--本页样式-->
+		<link rel="stylesheet" href="css/management.css" />
+		<!--下三个省市县联动样式-->
+		<link href="css/font-awesome.min.css" rel="stylesheet">
+   	 	<link href="css/framework7.ios.min.css" rel="stylesheet">
+    		<link href="css/framework7.ios.colors.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<header>
+			<div class="management">
+				<i></i>
+				<span>新增地址</span>
+				<a class="delete">删除</a>
+			</div>
+		</header>
+		<div class="main">
+			<ul>
+				<li>
+					联系人
+					<input type="text" class="txtInput" />
+				</li>
+				<li>
+					手机号码
+					<input type="text" class="txtInput" />
+				</li>
+				<li>
+					常用邮箱
+					<input type="text" class="txtInput" />
+				</li>
+				<li>
+					所在地区
+					<input type="text" class="txtInput" placeholder="请选择城市" readonly id="location" name="location" />
+				</li>
+				<li>
+					详细地址
+					<input type="text" class="txtInput detail" />
+				</li>
+			</ul>
+		</div>
+	</body>
+		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script src="js/framework7.min.js"></script>
+		<script type="text/javascript" src="js/rem(750).js" ></script>
+		<script type="text/javascript" src="js/regionsObject2.js" ></script>
+		<script type="text/javascript" src="js/cityPicker.js" ></script>
+</html>

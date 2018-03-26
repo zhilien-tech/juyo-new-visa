@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>婚姻状况</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+   		<!--公共样式-->
+		<link rel="stylesheet" href="css/common.css" />
+		<!--本页css-->
+		<link rel="stylesheet" href="css/filming.css" />
+	</head>
+	<body>
+		<header>
+			<div class="filming">
+				<i></i>
+				<span>婚姻状况</span>	
+			</div>
+		</header>
+		<section>
+			<div class="household">
+				<div class="householdPage householdExpain">
+					<span class="homePageTitle">婚姻拍摄图例</span>
+				</div>
+				<!--婚姻-->
+				<div class="householdPage marriageMain">
+					<span class="homePageTitle">婚姻状况</span>
+					<img src="img/camera.png"  class="camera" />
+					<img src="" class="pageImg" />
+				</div>
+				<input type="file" name="" class="fileHide uploadMarriage" />
+			</div>
+		</section>
+		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script type="text/javascript" src="js/rem(750).js" ></script>
+		<script type="text/javascript" src="js/layer.js" ></script>
+		<script type="text/javascript" src="js/lrz.bundle.js" ></script>
+		<script type="text/javascript" src="js/vue.min.js" ></script>
+		<script>
+			$(function(){
+				
+				//图片上传
+				$(".marriageMain").click(function(){
+					$(".uploadMarriage").click();
+					$(".uploadMarriage").change(function(){
+						
+					});
+				})
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>银行流水</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+   		<!--公共样式-->
+		<link rel="stylesheet" href="css/common.css" />
+		<!--本页css-->
+		<link rel="stylesheet" href="css/filming.css" />
+	</head>
+	<body>
+		<header>
+			<div class="filming">
+				<i></i>
+				<span>银行流水</span>	
+			</div>
+		</header>
+		<section>
+			<div class="household">
+				<div class="householdPage householdExpain">
+					<span class="homePageTitle">银行流水拍摄图例</span>
+				</div>
+				<!--可多选上传-->
+				<div class="householdPage multiselect">
+					<span class="homePageTitle">可多选上传</span>
+					<img src="img/camera.png"  class="camera" />
+					<img src="" class="pageImg" />
+				</div>
+				<input type="file" name="" class="fileHide multiselectImg" />
+			</div>
+		</section>
+		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script type="text/javascript" src="js/rem(750).js" ></script>
+		<script type="text/javascript" src="js/layer.js" ></script>
+		<script type="text/javascript" src="js/lrz.bundle.js" ></script>
+		<script type="text/javascript" src="js/vue.min.js" ></script>
+		<script>
+			$(function(){
+				
+				//多张上传
+				$(".multiselect").click(function(){
+					
+					$(".multiselectImg").click();
+					$(".multiselectImg").change(function(){
+						
+						var file = $(".multiselectImg").files;
+						var result;
+						for(i = 0; i< file.length; i ++) {
+					        var reader = new FileReader();    
+					        reader.readAsDataURL(file[i]);  
+					        reader.onload=function(e){  
+					            //多图预览
+					            result = '<div class="householdPage multiselect">'+
+										 '<span class="homePageTitle">可多选上传</span>'+
+										 '<img src="img/camera.png"  class="camera" />'+
+										 '<img src="'+ this.result +'" class="pageImg" />'+
+										 '</div>'+
+										 '<input type="file" name="" class="fileHide multiselectImg" />'
+					        	$(".householdExpain").after(result);
+					        }
+					    }    
+					})
+				});
+			})
+		</script>
+	</body>
+</html>
