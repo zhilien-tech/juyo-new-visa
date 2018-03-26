@@ -40,7 +40,10 @@ new Vue({
 				visaInfo.familyInfo = data.familyInfo;
 				visaInfo.workEducationInfo = data.workEducationInfo;
 				
-				console.log("==========131231====="+JSON.stringify(visaInfo.previUSTripInfo));
+				
+				$(".teamture").show();
+				$(".teamnamefalse").show();
+				
 			}
 		});
 	},
