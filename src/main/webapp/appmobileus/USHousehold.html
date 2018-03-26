@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>户口本</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+   		<!--公共样式-->
+		<link rel="stylesheet" href="css/common.css" />
+		<!--本页css-->
+		<link rel="stylesheet" href="css/filming.css" />
+	</head>
+	<body>
+		<header>
+			<div class="filming">
+				<i></i>
+				<span>户口本</span>	
+			</div>
+		</header>
+		<section>
+			<div class="household">
+				<div class="householdPage householdExpain">
+					<span class="homePageTitle">户口本拍摄图例</span>
+				</div>
+				<!--户主页-->
+				<div class="householdPage homePage">
+					<span class="homePageTitle">户主页</span>
+					<img src="img/camera.png"  class="camera" />
+					<img src="img/imgIntroduce.jpg" class="pageImg" />
+				</div>
+				<input type="file" name="" class="fileHide" />
+				<!--副页-->
+				<div class="householdPage vicePage">
+					<span class="homePageTitle">副页</span>
+					<img src="img/camera.png" class="camera" />
+					<img src="" class="pageImg" />
+				</div>
+				<input type="file" class="fileHide" name="" />
+				<!--添加页-->
+				<div class="addPage">
+					<span class="homePageTitle">添加副页</span>
+					<span class="plus">+</span>
+				</div>
+			</div>
+			
+			<div class="addSetOfBtn">
+				<a class="addSet">加一套</a>
+			</div>
+		</section>
+		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script type="text/javascript" src="js/rem(750).js" ></script>
+		<script type="text/javascript" src="js/layer.js" ></script>
+		<script type="text/javascript" src="js/lrz.bundle.js" ></script>
+		<script type="text/javascript" src="js/vue.min.js" ></script>
+		<script>
+			$(function(){
+				//当前模块下的添加一页
+				$(".addPage").click(function(){
+					$(this).before('<div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img src="" class="pageImg" /></div><input type="file" class="fileHide" />');
+				});
+				//添加一套
+				$(".addSet").click(function(){
+					$(".addSetOfBtn").before('<div class="household"><div class="householdPage homePage"><span class="homePageTitle">户主页</span><img src="img/camera.png"  class="camera" /><img src="img/imgIntroduce.jpg" class="pageImg" /></div><input type="file" class="fileHide" />'+
+											 '<div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img src="" class="pageImg" /></div><input type="file" class="fileHide" />'+
+											 '<div class="addPage"><span class="homePageTitle">添加副页</span><span class="plus">+</span></div></div>');
+				});
+				
+				//图片上传
+				
+			})
+		</script>
+	</body>
+</html>
