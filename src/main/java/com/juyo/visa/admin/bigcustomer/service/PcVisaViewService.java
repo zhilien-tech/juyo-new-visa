@@ -20,6 +20,7 @@ import org.nutz.log.Logs;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.bigcustomer.form.VisaListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.enums.TravelpurposeEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
@@ -208,6 +209,12 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
+		String travelpurpose = orderTravelInfo.getTravelpurpose();
+		if (!Util.isEmpty(travelpurpose)) {
+			String travelpurposeString = TravelpurposeEnum.getValue(travelpurpose).getValue().replaceAll("\"", "");
+			//获取出行目的
+			orderTravelInfo.setTravelpurpose(travelpurposeString);
+		}
 		List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
 		TOrderUsInfoEntitiy orderInfoEntity = (TOrderUsInfoEntitiy) getOrderInfo(orderid);
 		result.put("orderInfo", orderInfoEntity);
@@ -250,13 +257,16 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(form.getPlanstate())) {
 			orderTravelInfo.setPlanstate(form.getPlanstate());
 		}
+		if (!Util.isEmpty(form.getPlanstate())) {
+			orderTravelInfo.setTravelpurpose(form.getTravelpurpose());
+		}
 		//修改出行信息表
 		int orderUpdateNum = dbDao.update(orderTravelInfo);
 
 		//获取护照信息表
 		TAppStaffPassportEntity passPortInfo = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", form.getStaffid()));
-		passPortInfo.setBirthday(form.getBirthday());
+
 		passPortInfo.setSex(form.getSex());
 		passPortInfo.setPassport(form.getPassport());
 		int passPortInfoUpdateNum = dbDao.update(passPortInfo);
@@ -265,6 +275,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
 				Cnd.where("id", "=", form.getStaffid()));
 		basicinfo.setInterviewdate(form.getInterviewdate());
+		basicinfo.setBirthday(form.getBirthday());
 		int basicinfoUpdate = dbDao.update(basicinfo);
 		if (orderUpdateNum == 1 && passPortInfoUpdateNum == 1 && basicinfoUpdate == 1) {
 			return "1";

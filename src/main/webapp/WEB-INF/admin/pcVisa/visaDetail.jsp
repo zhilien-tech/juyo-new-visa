@@ -53,12 +53,12 @@
 									<div class="form-group">
 										<label><span>*</span>出行目的</label>
 										<select name="travelpurpose" class="form-control input-sm" onchange="change()">
-										
-										<c:if test="${empty obj.travelInfo.travelpurpose}">
-											<option value="${obj.travelInfo.travelpurpose}">"${obj.travelInfo.travelpurpose}"</option>
-										</c:if>
 										<c:if test="${not empty obj.travelInfo.travelpurpose}">
+											<option value="${obj.travelInfo.travelpurpose}">${obj.travelInfo.travelpurpose}</option>
+										</c:if>
+										<c:if test="${empty obj.travelInfo.travelpurpose}">
 											<option value="">--请选择--</option>
+										</c:if>
 											<option value="FOREIGN GOVERNMENT OFFICIAL(A)">外国政府官员（A）</option>
 											<option value="TEMP. BUSINESS PLEASURE VISITOR(B)">商务旅游游客(B)</option>
 											<option value="ALIEN IN TRANSIT(C)">过境的外国公民(C)</option>
@@ -84,7 +84,7 @@
 											<option value="NAFTA PROFESSIONAL(TD/TN)">北美自由贸易协议专业人员(TD/TN)</option>
 											<option value="VICTIM OF CRIMINAL ACTIVITY(U)">犯罪活动的受害者(U)</option>
 											<option value="PAROLE BENEFICIARY(PARCIS)">假释收益者(PARCIS)</option>
-										</c:if>
+										
 										</select>
 									</div>
 								</div>
@@ -266,7 +266,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>姓名/拼音</label>
-												<input disabled="true" value="${obj.summaryInfo.staffname }" type="text" class="form-control input-sm" placeholder="" />
+												<input disabled="true" value="${obj.summaryInfo.staffname }/${obj.summaryInfo.staffnameen}" type="text" class="form-control input-sm" placeholder="" />
 											</div>
 										</div>
 										<div class="col-sm-4">
@@ -286,7 +286,7 @@
 										<div class="col-sm-12">
 											<div class="form-group">
 												<label>所需资料</label>
-												<input id="" type="text" class="form-control input-sm" placeholder="" />
+												<input id="" value="${obj.summaryInfo.preparematerials }" type="text" class="form-control input-sm" placeholder="" />
 												<input name="staffid" type="hidden" value="${obj.summaryInfo.staffid }">
 											</div>
 										</div>
