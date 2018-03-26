@@ -7,15 +7,18 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.juyo.visa.admin.bigcustomer.form.SignUpEventForm;
 import com.juyo.visa.admin.bigcustomer.service.AppEventsViewService;
 import com.juyo.visa.forms.TAppEventsForm;
 
 @IocBean
+@Filters
 @At("/admin/appEvents")
 public class AppEventsModule {
 
@@ -43,6 +46,16 @@ public class AppEventsModule {
 	}
 
 	/**
+	 *打开 活动报名页
+	 */
+	@At
+	@POST
+	public Object toSignUpEventPage(@Param("eventId") Integer eventId, @Param("wechatToken") String wechatToken,
+			HttpSession session) {
+		return appEventsViewService.toSignUpEventPage(eventId, wechatToken, session);
+	}
+
+	/**
 	 *跳转到活动详情页面
 	 */
 	@At
@@ -59,6 +72,17 @@ public class AppEventsModule {
 	@POST
 	public Object signUpEvents(@Param("eventId") Integer eventId, HttpSession session) {
 		return appEventsViewService.signUpEvents(eventId, session);
+	}
+
+	/**
+	 * 通过公众号，进行报名活动
+	 * 
+	 * 注：活动详情为图片
+	 */
+	@At
+	@POST
+	public Object signUpEventByPublicNum(@Param("..") SignUpEventForm form, HttpSession session) {
+		return appEventsViewService.signUpEventByPublicNum(form, session);
 	}
 
 	/**
@@ -109,11 +133,22 @@ public class AppEventsModule {
 	/**
 	 * 申请人基本信息
 	 * <p>
-	 *  TODO
+	 * TODO
 	 */
 	@At
 	@POST
 	public Object getStaffBaseInfos(@Param("staffId") Integer staffId) {
 		return appEventsViewService.getStaffBaseInfos(staffId);
+	}
+
+	/**
+	 * 申请人地址管理
+	 * <p>
+	 * TODO
+	 */
+	@At
+	@POST
+	public Object getStaffAddressInfos(@Param("staffId") Integer staffId) {
+		return appEventsViewService.getStaffAddressInfos(staffId);
 	}
 }

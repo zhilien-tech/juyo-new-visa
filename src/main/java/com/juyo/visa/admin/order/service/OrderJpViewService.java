@@ -64,7 +64,6 @@ import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
-import com.juyo.visa.admin.orderUS.service.VcodeUploadService;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.base.QrCodeService;
@@ -167,8 +166,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	@Inject
 	private ChangePrincipalViewService changePrincipalViewService;
-	@Inject
-	private VcodeUploadService vcodeUploadService;
 
 	//基本信息连接websocket的地址
 	private static final String BASIC_WEBSPCKET_ADDR = "basicinfowebsocket";
@@ -568,7 +565,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		//回邮信息
 		//List<TOrderBackmailEntity> backMailInfos = orderInfo.getBackMailInfos();
 		//String editBackMailInfos = editBackMailInfos(backMailInfos, orderId);
-		vcodeUploadService.socketLink();
 		return null;
 	}
 

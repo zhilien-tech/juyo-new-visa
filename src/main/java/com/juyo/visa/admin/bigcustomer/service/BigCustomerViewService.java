@@ -27,6 +27,8 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Lists;
@@ -39,10 +41,24 @@ import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.AppPictures.AppCredentialsTypeEnum;
+import com.juyo.visa.common.enums.visaProcess.ContactPointRelationshipStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
+import com.juyo.visa.common.enums.visaProcess.TimeUnitStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaCareersEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaCitizenshipEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaFamilyInfoEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.util.ExcelReader;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
+import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
+import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
+import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
+import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
@@ -65,6 +81,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	@Inject
 	private UploadService qiniuUploadService;//文件上传
 
+	@Inject
+	private PcVisaViewService pcVisaViewService;
+
 	private final static String TEMPLATE_EXCEL_URL = "download";
 	private final static String TEMPLATE_EXCEL_NAME = "人员管理之模块.xlsx";
 
@@ -86,6 +105,82 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 	/**
 	 * 
+	 * 跳转到签证信息页
+	 *
+	 * @param staffId
+	 * @param session
+	 * @return 
+	 */
+	public Object updateVisaInfo(Integer staffId, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+
+		//旅伴信息---与你的关系
+		result.put("TravelCompanionRelationshipEnum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
+		//以前的美国旅游信息---时间单位枚举
+		result.put("TimeUnitStatusEnum", EnumUtil.enum2(TimeUnitStatusEnum.class));
+		//以前的美国旅游信息---州枚举
+		result.put("VisaUSStatesEnum", EnumUtil.enum2(VisaUSStatesEnum.class));
+		//美国联络点---与你的关系
+		result.put("ContactPointRelationshipStatusEnum", EnumUtil.enum2(ContactPointRelationshipStatusEnum.class));
+		//家庭信息---身份状态
+		result.put("VisaFamilyInfoEnum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
+		//直系亲属---与你的关系
+		result.put("ImmediateRelationshipEnum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
+		//配偶信息---国籍
+		result.put("VisaCitizenshipEnum", EnumUtil.enum2(VisaCitizenshipEnum.class));
+		//配偶信息---配偶联系地址
+		result.put("VisaSpouseContactAddressEnum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
+		//工作/教育/培训信息---主要职业
+		result.put("VisaCareersEnum", EnumUtil.enum2(VisaCareersEnum.class));
+
+		//人员id
+		result.put("staffId", staffId);
+
+		return result;
+
+	}
+
+	/**
+	 * 
+	 * 获取签证信息数据
+	 *
+	 * @param staffId
+	 * @param session
+	 * @return
+	 */
+	@At
+	@POST
+	public Object getVisaInfos(Integer staffId, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		//旅伴信息
+		TAppStaffTravelcompanionEntity travelCompanionInfo = (TAppStaffTravelcompanionEntity) pcVisaViewService
+				.getStaffTravelCompanion(staffId);
+		result.put("travelCompanionInfo", travelCompanionInfo);
+		//以前的美国旅游信息
+		TAppStaffPrevioustripinfoEntity previUSTripInfo = (TAppStaffPrevioustripinfoEntity) pcVisaViewService
+				.getStaffpreviousTripInfo(staffId);
+		result.put("previUSTripInfo", previUSTripInfo);
+		//美国联络点
+		TAppStaffContactpointEntity contactPointInfo = (TAppStaffContactpointEntity) pcVisaViewService
+				.getStaffContactPoint(staffId);
+		result.put("contactPointInfo", contactPointInfo);
+		//家庭信息
+		TAppStaffFamilyinfoEntity familyInfo = (TAppStaffFamilyinfoEntity) pcVisaViewService
+				.getStaffFamilyInfo(staffId);
+		result.put("familyInfo", familyInfo);
+		//工作/教育/培训信息 
+		TAppStaffWorkEducationTrainingEntity workEducationInfo = (TAppStaffWorkEducationTrainingEntity) pcVisaViewService
+				.getStaffWorkEducationTraining(staffId);
+		result.put("workEducationInfo", workEducationInfo);
+
+		//人员id
+		result.put("staffId", staffId);
+
+		return result;
+	}
+
+	/**
+	 * 
 	 * TODO  跳转到其他证件页面
 	 * <p>
 	 *
@@ -93,7 +188,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param session
 	 * @return 
 	 */
-	public Object otherSredentials(@Param("staffId") Integer staffId, HttpSession session) {
+	public Object otherSredentials(Integer staffId, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("staffId", staffId);
 		result.put("AppCredentialsType", EnumUtil.enum2(AppCredentialsTypeEnum.class));
@@ -137,18 +232,20 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Date nowDate = DateUtil.nowDate();
 
 		//基本信息
-		addForm.setComId(comId);
-		addForm.setUserId(userId);
-		addForm.setOpId(userId);
-		addForm.setCreateTime(nowDate);
-		addForm.setUpdateTime(nowDate);
+		addForm.setComid(comId);
+		addForm.setUserid(userId);
+		addForm.setOpid(userId);
+		addForm.setCreatetime(nowDate);
+		addForm.setUpdatetime(nowDate);
+
 		TAppStaffBasicinfoEntity staffInfo = add(addForm);
 
-		//护照信息
 		Integer staffId = staffInfo.getId();
+
+		//护照信息
 		TAppStaffPassportEntity staffPassport = new TAppStaffPassportEntity();
 		staffPassport.setStaffid(staffId);
-		staffPassport.setOpid(userId);
+		//		staffPassport.setOpid(userId);
 		staffPassport.setCreatetime(nowDate);
 		staffPassport.setUpdatetime(nowDate);
 		TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
@@ -160,6 +257,29 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		} else {
 			map.put("passportId", String.valueOf(""));
 		}
+		map.put("staffId", String.valueOf(staffId));
+
+		//签证信息的添加
+		//旅伴信息
+		TAppStaffTravelcompanionEntity travelCompanionInfo = new TAppStaffTravelcompanionEntity();
+		travelCompanionInfo.setStaffid(staffId);
+		dbDao.insert(travelCompanionInfo);
+		//以前的美国旅游信息
+		TAppStaffPrevioustripinfoEntity previUSTripInfo = new TAppStaffPrevioustripinfoEntity();
+		previUSTripInfo.setStaffid(staffId);
+		dbDao.insert(previUSTripInfo);
+		//美国联络点
+		TAppStaffContactpointEntity contactPointInfo = new TAppStaffContactpointEntity();
+		contactPointInfo.setStaffid(staffId);
+		dbDao.insert(contactPointInfo);
+		//家庭信息
+		TAppStaffFamilyinfoEntity familyInfo = new TAppStaffFamilyinfoEntity();
+		familyInfo.setStaffid(staffId);
+		dbDao.insert(familyInfo);
+		//工作/教育/培训信息 
+		TAppStaffWorkEducationTrainingEntity workEducationInfo = new TAppStaffWorkEducationTrainingEntity();
+		workEducationInfo.setStaffid(staffId);
+		dbDao.insert(workEducationInfo);
 
 		return map;
 	}
@@ -263,48 +383,48 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		if (!Util.isEmpty(staffInfo)) {
 			staffInfo.setOpid(userId);
 			staffInfo.setUpdatetime(nowDate);
-			staffInfo.setCardfront(updateForm.getCardFront());
-			staffInfo.setCardback(updateForm.getCardBack());
+			staffInfo.setCardfront(updateForm.getCardfront());
+			staffInfo.setCardback(updateForm.getCardback());
 			staffInfo.setAddress(updateForm.getAddress());
 			staffInfo.setBirthday(updateForm.getBirthday());
-			if (!Util.isEmpty(updateForm.getCardProvince())) {
-				staffInfo.setCardprovince(updateForm.getCardProvince());
+			if (!Util.isEmpty(updateForm.getCardprovince())) {
+				staffInfo.setCardprovince(updateForm.getCardprovince());
 			}
-			if (!Util.isEmpty(updateForm.getCardCity())) {
-				staffInfo.setCardcity(updateForm.getCardCity());
+			if (!Util.isEmpty(updateForm.getCardcity())) {
+				staffInfo.setCardcity(updateForm.getCardcity());
 			}
 			staffInfo.setCardId(updateForm.getCardId());
 			staffInfo.setCity(updateForm.getCity());
-			staffInfo.setDetailedaddress(updateForm.getDetailedAddress());
+			staffInfo.setDetailedaddress(updateForm.getDetailedaddress());
 			staffInfo.setEmail(updateForm.getEmail());
-			staffInfo.setFirstname(updateForm.getFirstName());
-			staffInfo.setFirstnameen(updateForm.getFirstNameEn().substring(1));
-			staffInfo.setIssueorganization(updateForm.getIssueOrganization());
-			staffInfo.setLastname(updateForm.getLastName());
-			staffInfo.setLastnameen(updateForm.getLastNameEn().substring(1));
-			staffInfo.setOtherfirstname(updateForm.getOtherFirstName());
-			if (!Util.isEmpty(updateForm.getOtherFirstNameEn())) {
-				staffInfo.setOtherfirstnameen(updateForm.getOtherFirstNameEn().substring(1));
+			staffInfo.setFirstname(updateForm.getFirstname());
+			staffInfo.setFirstnameen(updateForm.getFirstnameen().substring(1));
+			staffInfo.setIssueorganization(updateForm.getIssueorganization());
+			staffInfo.setLastname(updateForm.getLastname());
+			staffInfo.setLastnameen(updateForm.getLastnameen().substring(1));
+			staffInfo.setOtherfirstname(updateForm.getOtherfirstname());
+			if (!Util.isEmpty(updateForm.getOtherfirstnameen())) {
+				staffInfo.setOtherfirstnameen(updateForm.getOtherfirstnameen().substring(1));
 			}
-			staffInfo.setOtherlastname(updateForm.getOtherLastName());
-			if (!Util.isEmpty(updateForm.getOtherLastNameEn())) {
-				staffInfo.setOtherlastnameen(updateForm.getOtherLastNameEn().substring(1));
+			staffInfo.setOtherlastname(updateForm.getOtherlastname());
+			if (!Util.isEmpty(updateForm.getOtherlastnameen())) {
+				staffInfo.setOtherlastnameen(updateForm.getOtherlastnameen().substring(1));
 			}
 			staffInfo.setNation(updateForm.getNation());
 			staffInfo.setNationality(updateForm.getNationality());
 			staffInfo.setProvince(updateForm.getProvince());
 			staffInfo.setSex(updateForm.getSex());
-			staffInfo.setHasothername(updateForm.getHasOtherName());
-			staffInfo.setHasothernationality(updateForm.getHasOtherNationality());
+			staffInfo.setHasothername(updateForm.getHasothername());
+			staffInfo.setHasothernationality(updateForm.getHasothernationality());
 
 			staffInfo.setTelephone(updateForm.getTelephone());
-			if (!Util.isEmpty(updateForm.getAddressIsSameWithCard())) {
-				staffInfo.setAddressIssamewithcard(updateForm.getAddressIsSameWithCard());
+			if (!Util.isEmpty(updateForm.getAddressIssamewithcard())) {
+				staffInfo.setAddressIssamewithcard(updateForm.getAddressIssamewithcard());
 			}
-			staffInfo.setEmergencylinkman(updateForm.getEmergencyLinkman());
-			staffInfo.setEmergencytelephone(updateForm.getEmergencyTelephone());
-			staffInfo.setValidenddate(updateForm.getValidEndDate());
-			staffInfo.setValidstartdate(updateForm.getValidStartDate());
+			staffInfo.setEmergencylinkman(updateForm.getEmergencylinkman());
+			staffInfo.setEmergencytelephone(updateForm.getEmergencytelephone());
+			staffInfo.setValidenddate(updateForm.getValidenddate());
+			staffInfo.setValidstartdate(updateForm.getValidstartdate());
 
 			updateNum = dbDao.update(staffInfo);
 		}
@@ -473,6 +593,14 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		return result;
 	}
 
+	/**
+	 * 
+	 * 更新护照信息
+	 *
+	 * @param passportForm
+	 * @param session
+	 * @return 
+	 */
 	public Object saveEditPassport(TAppStaffPassportUpdateForm passportForm, HttpSession session) {
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -675,4 +803,5 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		return map;
 
 	}
+
 }

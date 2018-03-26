@@ -1,0 +1,253 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+.head {
+	width: 100%;
+	height: 60px;
+	line-height: 60px;
+	position: fixed;
+	top: 0;
+	border-bottom:1px solid #eee;
+	background: #FFF;
+}
+.title {
+	display: block;
+	float: left;
+	margin-left: 20px;
+	font-size: 18px;
+}
+.btnRight {
+	display: block;
+	float: right;
+}
+.saveVisa {
+	padding: 5px 20px;
+	background: #0099FF;
+	color: #FFF;
+	border-radius: 6px;
+	margin-right: 20px;
+}
+.cancelVisa {
+	padding: 5px 20px;
+	background: #0099FF;
+	color: #FFF;
+	border-radius: 6px;
+	margin-right: 20px;
+}
+.topHide {
+	width: 100%;
+	height: 60px;
+}
+.section {
+	width: 45%;
+	float: left;
+	margin-left: 40px;
+}
+.English {
+	width: 45%;
+	float: right;
+	margin-right: 40px;
+}
+.titleInfo {
+	height: 30px;
+	line-height: 30px;
+	background: #eee;
+	color: blue;
+	margin-top: 10px;
+}
+.companyMain {
+	width: 100%;
+}
+.companyMainInfo {
+	padding: 10px 0;
+}
+.groupRadioInfo label {
+	display: block;
+}
+.groupInputInfo label {
+	display: block;
+	font-size: 12px;
+}
+.groupInputInfo input {
+	width: 182px;
+	height: 30px; 
+	font-size: 13px;
+	padding: 0 0 0 10px;
+	margin-top: 5px;
+}
+.teamture {
+	display: none;
+}
+.teamnameture,.teamnamefalse {
+	display: none; 
+	padding: 10px 0;
+}
+.companionSurnName {
+	display: inline-block; 
+	float: left;
+}
+.companionName {
+	display: inline-block;
+	float: right;
+}
+.youRelationship {
+	padding-top: 10px;
+}
+.youRelationship select {
+	width: 182px; 
+	height: 34px; 
+	margin-top: 5px;
+}
+.clear {
+	clear: both;
+}
+.btnGroup {
+	margin-top: 10px;
+}
+.save {
+	display: inline-block; 
+	border-radius: 6px; 
+	font-size: 14px; 
+	padding: 3px 20px; 
+	color: #FFFFFF; 
+	background: #0099FF;
+}
+.cancel {
+	display: inline-block; 
+	border-radius: 6px; 
+	font-size: 14px; 
+	padding: 3px 20px; 
+	color: #FFFFFF; 
+	background: #0099FF;
+	margin-left: 9%;
+}
+/*以前的美国旅游信息*/
+.beforeTourism {
+	width: 100%;
+}
+.goUSPad {
+	padding: 10px 0;
+}
+.goUSYes {
+	display: none;
+}
+.stopDate {
+	margin-top: 10px;
+}
+.stopDate select {
+	width: 100px;height: 34px;
+}
+.drivingUS {
+	padding: 10px 0;
+}
+.driverInfo {
+	display: none;
+}
+.driverMain {
+	float: left;
+}
+.groupcheckBoxInfo label {
+	display: block;
+	font-size:12px;
+}
+.groupcheckBoxInfo  input:nth-child(2){
+	width: 156px;
+	height: 30px;
+	padding-left: 10px;
+	font-size: 13px;
+	margin-top: 5px;
+}
+.groupcheckBoxInfo  input:nth-child(3){
+	width: 20px;
+	height: 20px;
+	vertical-align: middle;	
+}
+.driverR {
+	float: right;
+}
+.groupSelectInfo label {
+	display: block;
+	font-size:12px;
+}
+.groupSelectInfo select {
+	width: 196px;
+	height: 30px; 
+	padding-left: 10px; 
+	font-size: 13px; 
+	margin-top: 5px;
+}
+.visaUSMain {
+	padding: 10px 0;
+}
+.dateIssue {
+	display: none;
+}
+.lastVisaDate {
+	padding-top: 10px; 
+	float: left;
+}
+.visaNum {
+	padding-top: 10px; 
+	float: right;
+}
+.paddingTop {
+	padding-top: 10px;
+}
+.displayTop {
+	display: inline-block;
+	padding-top: 10px;
+}
+.displayLeft {
+	display: inline-block; 
+	float: left;
+}
+.displayRight {
+	display: inline-block; 
+	float: right;
+}
+.grouptextareaInfo label {
+	display: block;
+	font-size: 12px;
+}
+.grouptextareaInfo textarea {
+	width: 182px;
+	height: 30px;
+	padding-left: 10px;
+	font-size: 13px;
+	margin-top: 5px;
+}
+.explain ,.refuseExplain {
+	display: none;
+}
+.paddingBottom {
+	padding-bottom: 10px;
+}
+.onceExplain,.immigrationExplain {
+	display: none;
+}
+.paddingLeft {
+	padding-top: 10px; 
+	float: left;
+}
+.paddingRight {
+	padding-top: 10px; 
+	float: right;
+}
+.floatLeft {
+	float: left;
+}
+.floatRight {
+	float: right;
+}
+.paddingNone {
+	display: none; 
+	padding-top: 10px;
+}
+.beforeWorkInfo {
+	display: none;
+}
+.elementHide{
+	display: none;
+}
+

@@ -80,3 +80,37 @@ FROM
 	t_app_staff_basicinfo tasb
 WHERE
 	tasb.id = @staffId
+
+/*appevents_staff_whether_signup*/
+SELECT
+	tasb.id staffId,
+	CONCAT( tasb.firstname, tasb.lastname ) staffName,
+	tasb.wechattoken,
+	tase.eventsId
+FROM
+	t_app_staff_basicinfo tasb
+	LEFT JOIN t_app_staff_events tase ON tasb.id = tase.staffId
+	$condition
+
+/*appevents_staff_Summary_info*/
+SELECT
+	tasb.id staffid,
+	tou.id orderid,
+	tasp.id passportid,
+	CONCAT( tasb.firstname, tasb.lastname ) staffname,
+	concat( tasb.firstnameen, tasb.lastnameen ) staffnameen,
+	tasp.sex,
+	tasp.sexen,
+	tasb.birthday,
+	tasb.twoinchphoto,
+	tasb.Interviewdate,
+	taswet.preparematerials,
+	tou.aacode,
+	tasp.passport 
+FROM
+	t_app_staff_order_us tasou
+	LEFT JOIN t_app_staff_basicinfo tasb ON tasb.id = tasou.staffid
+	LEFT JOIN t_order_us tou ON tou.id = tasou.orderid
+	LEFT JOIN t_app_staff_passport tasp ON tasp.staffid = tasb.id
+	LEFT JOIN t_app_staff_work_education_training taswet ON taswet.staffid = tasb.id
+	$condition

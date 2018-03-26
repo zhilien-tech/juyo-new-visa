@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>活动</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/heavyBuyer.css" />
+		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script type="text/javascript" src="js/rem(750).js" ></script>
+	</head>
+	<body>
+		<header>
+			<div class="title">
+				2018葆婴美国行
+			</div>
+		</header>
+		<section>
+			<div class="imgActivity">
+				<img id="eventDetailUrl" alt="活动" width="100%" height="100%" />
+			</div>
+			<!-- <div class="dateTotal">
+				<div class="endDate">截止日期：2017.12.30</div>
+				<div class="startDate">出行日期：2018.01.30 ～ 02.15</div>
+			</div>
+			<div class="imgIntroduce">
+				<img src="img/imgIntroduce.jpg" alt="活动介绍" width="100%" height="100%" />
+			</div>
+			<div class="content transactVisa">
+				<span>所需办理签证</span>
+				<p>
+					<a>美国</a>
+				</p>
+			</div>
+			<div class="content visityCity">
+				<span>访问城市</span>
+				<p>西雅图、纽约、华盛顿</p>
+			</div>
+			<div class="content beCareful">
+				<span>注意事项</span>
+				<p>请务必填写完整真实资料</p>
+			</div>
+			<div class="content explain">
+				<span>说明</span>
+				<p>请务必填写完整真实资料</p>
+			</div> -->
+		</section>
+		<footer>
+			<!-- <a id="signUpBtn" class="btnEnroll" href="/appmobileus/enroll.html">报名</a> -->
+			<a id="signUpBtn" class="btnEnroll">报名</a>
+		</footer>
+	</body>
+	
+	<script>
+			var eventId; //活动Id
+			var weChatToken; //微信Token
+			var isSifnUp; //是否已报名
+			$(function(){
+				$.ajax({
+					type:"post",
+					url:"/admin/appEvents/toSignUpEventPage",
+					data:{
+						eventId:1,
+						wechatToken:""
+					},
+					dataType : "json",
+					async:true,
+					success:function(data){
+						eventId = data.eventId;
+						weChatToken = data.wechatToken;
+						isSifnUp = data.isSignUp;
+						$("#eventDetailUrl").attr("src", data.event.detailsurl); 
+					}
+				}); 
+					
+			})
+			
+			$("#signUpBtn").click(function(){
+				window.location.href='/appmobileus/enroll.html?eventId='+eventId+'&weChatToken='+weChatToken;
+			});
+			
+		</script>
+</html>

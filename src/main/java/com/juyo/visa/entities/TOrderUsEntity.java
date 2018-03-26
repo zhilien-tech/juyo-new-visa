@@ -50,6 +50,10 @@ public class TOrderUsEntity implements Serializable {
 	private Integer status;
 
 	@Column
+	@Comment("AA码")
+	private Integer aacode;
+
+	@Column
 	@Comment("是否作废")
 	private Integer isdisable;
 

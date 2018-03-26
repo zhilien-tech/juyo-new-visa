@@ -31,3 +31,22 @@ input[type="file"] { z-index:99999;}
 .IdInfo li a { color:#000;}
 .mainWidth { width:100% !important;}
 #uploadFile,#uploadFileBack { width:100% !important;}
+/* 公共样式 */
+.topMargin { margin-top:7%; }
+.vertical { vertical-align:middle; margin:0 !important; }
+.delete { display:none;}
+.EngLabel { width:375px !important; margin-left:12%;}
+.topMarginEng { margin-top:1%;}
+
+.pictures {height:183px; border:1px solid #eee;margin-left:33px;padding:0px 0px;}
+.pictureTop {height:183px;margin:0px !important;}
+.uploadInfo {position:relative;height:183px;}
+.promptInfo {position:relative;top:80px;left:70px;color:#4c8fe9;cursor:pointer;}
+#imgShow,#imgShowBack,#imgInch {position:absolute;top:0;left:0;height:183px;width:100%;}
+#uploadFileImg,#uploadFileImgBack,#uploadFileInchImg {width:100% !important; height:180px; margin-top:-21px;opacity:0;}
+.picturesBack { height:183px; border:1px solid #eee;margin:0px 16px;padding:0px 0px;}
+.picturesInch {height:183px; border:1px solid #eee;padding:0px 0px;}
+.inchInfo {position:relative;top:80px;left:60px;color:#4c8fe9;cursor:pointer;}
+.usedBeforeTrue,.usedBeforeUSTrue { display:none;}
+.usedNationalityTrue,.usedNationalityUSTrue {display:none;}
+.permanentTrue,.permanentUSTrue { display:none;}

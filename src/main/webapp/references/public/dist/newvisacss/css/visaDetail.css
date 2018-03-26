@@ -1,0 +1,195 @@
+@CHARSET "UTF-8";
+.form-control {
+	height: 30px;
+}
+
+.add-btn {
+	top: -35px;
+	right: -1.5%;
+}
+
+.remove-btn {
+	top: -35px;
+	right: -1.5%;
+}
+
+.multiPass_roundTrip-div {
+	width: 120px;
+	float: right;
+	position: relative;
+	top: 5px;
+}
+
+.content-wrapper, .right-side, .main-footer {
+	margin-left: 0;
+}
+
+.btnState {
+	color: #b0b0b0 !important;
+	border: solid 1px #d2d6de;
+	background-color: #fff;
+	margin-right: 2.26rem;
+}
+
+.btnState-true {
+	color: #287ae7 !important;
+	border-color: #cee1ff;
+}
+
+.deposit, .vehicle, .houseProperty {
+	display: none;
+}
+
+.qz-head {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 99999;
+	width: 100%;
+}
+
+.content {
+	margin-top: 50px;
+}
+
+#urgentday {
+	width: 16.5%;
+}
+
+.bodyMargin {
+	margin-left: 12%;
+}
+
+.select2-container--default {
+	width: auto !important;
+}
+
+.select2-container .select2-search--inline {
+	float: none;
+}
+
+.info {
+	margin-bottom: 0px;
+	position:relative;
+}
+
+.paddingRight {
+	padding-right: 0px !important;
+	margin-left: -15px;
+}
+
+[v-cloak] {
+	display: none;
+}
+.schedulingBtn {
+	width: 30% !important;
+}
+.btn-Big {
+	width: 80px !important;
+}
+.spinner {
+	display:inline-block;
+	margin-left:-12px;
+}
+.checkShowORHide {
+	display:none;
+}
+.orderNum,.state {
+	height:50px;
+	line-height:50px;
+	display:inline-block;
+}
+.dataInfoGroup {
+	position:absolute;
+	top:8px;
+	right:0;
+}
+.dataInfoGroup a {
+	background-color:#3087f1;
+	color:#FFF;
+	padding:6px 15px;
+	margin-right:10px;
+	border-radius:4px;
+}
+.dataInfoGroup a:last-child {
+	margin-right:15px;
+}
+.pictures {
+	height: 183px;
+	border: 1px solid #eee;
+	margin-left: 33px;
+	padding: 0px 0px;
+}
+
+.pictureTop {
+	height: 183px;
+	margin: 0px !important;
+}
+
+.uploadInfo {
+	position: relative;
+	height: 183px;
+}
+
+.promptInfo {
+	position: relative;
+	top: 80px;
+	left: 70px;
+	color: #4c8fe9;
+	cursor: pointer;
+}
+
+#imgShow, #imgShowBack, #imgInch {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 183px;
+	width: 100%;
+}
+
+#uploadFileImg, #uploadFileImgBack, #uploadFileInchImg {
+	width: 100% !important;
+	height: 180px;
+	margin-top: -21px;
+	opacity: 0;
+}
+
+.picturesBack {
+	height: 183px;
+	border: 1px solid #eee;
+	margin: 0px 16px;
+	padding: 0px 0px;
+}
+
+.picturesInch {
+	height: 183px;
+	border: 1px solid #eee;
+	padding: 0px 0px;
+	margin-left:20px;
+}
+
+.inchInfo {
+	position: relative;
+	top: 80px;
+	left: 56px;
+	color: #4c8fe9;
+	cursor: pointer;
+}
+
+.usedBeforeTrue, .usedBeforeUSTrue {
+	display: none;
+}
+
+.usedNationalityTrue, .usedNationalityUSTrue {
+	display: none;
+}
+
+.permanentTrue, .permanentUSTrue {
+	display: none;
+}
+.purpose {
+	margin-top:21px;
+}
+.delete {
+	display:none;
+}

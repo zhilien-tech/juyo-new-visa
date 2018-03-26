@@ -42,6 +42,10 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	private String lastnameen;
 
 	@Column
+	@Comment("微信Token")
+	private String wechattoken;
+
+	@Column
 	@Comment("状态")
 	private Integer status;
 
@@ -88,6 +92,10 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	@Column
 	@Comment("住址")
 	private String address;
+
+	@Column
+	@Comment("卡号")
+	private String cardnum;
 
 	@Column
 	@Comment("身份证号")
@@ -356,5 +364,13 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	@Column
 	@Comment("更新时间")
 	private Date updatetime;
+
+	@Column
+	@Comment("面试时间")
+	private Date interviewdate;
+
+	@Column
+	@Comment("签证状态")
+	private Integer visastatus;
 
 }

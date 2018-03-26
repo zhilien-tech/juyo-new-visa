@@ -39,6 +39,9 @@ public class TAppStaffBasicinfoForm extends DataTablesParamForm {
 	/**名(拼音)*/
 	private String lastnameen;
 
+	/**微信Token*/
+	private String wechattoken;
+
 	/**状态*/
 	private Integer status;
 
@@ -74,6 +77,9 @@ public class TAppStaffBasicinfoForm extends DataTablesParamForm {
 
 	/**住址*/
 	private String address;
+
+	/**身份证号*/
+	private String cardnum;
 
 	/**身份证号*/
 	private String cardId;
@@ -275,6 +281,12 @@ public class TAppStaffBasicinfoForm extends DataTablesParamForm {
 
 	/**更新时间*/
 	private Date updatetime;
+
+	/**面试时间*/
+	private Date interviewdate;
+
+	/**签证状态*/
+	private Integer visastatus;
 
 	/**姓名*/
 	private String name;
