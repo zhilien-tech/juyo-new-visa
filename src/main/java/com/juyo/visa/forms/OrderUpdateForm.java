@@ -86,5 +86,29 @@ public class OrderUpdateForm {
 	 * 面试时间
 	 */
 	private Date Interviewdate;
+	/*
+	 * 出发城市（去程）
+	 */
+	private Integer godeparturecity;
+	/*
+	 * 抵达城市（去程）
+	 */
+	private Integer goArrivedCity;
+	/*
+	 * 航班号（去程）
+	 */
+	private String goFlightNum;
+	/*
+	 * 出发城市（返程）
+	 */
+	private Integer returnDepartureCity;
+	/*
+	 * 抵达城市（返程）
+	 */
+	private Integer returnArrivedCity;
+	/*
+	 * 航班号（返程）
+	 */
+	private String returnFlightNum;
 
 }

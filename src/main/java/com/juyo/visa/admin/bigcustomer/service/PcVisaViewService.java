@@ -227,6 +227,9 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	/*
+	 * 基本信息保存
+	 */
 	public Object visaSave(OrderUpdateForm form, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userid = loginUser.getId();
@@ -260,23 +263,26 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(form.getPlanstate())) {
 			orderTravelInfo.setTravelpurpose(form.getTravelpurpose());
 		}
-		//修改出行信息表
+		//修改出行信息
 		int orderUpdateNum = dbDao.update(orderTravelInfo);
 
-		//获取护照信息表
-		TAppStaffPassportEntity passPortInfo = dbDao.fetch(TAppStaffPassportEntity.class,
-				Cnd.where("staffid", "=", form.getStaffid()));
-
-		passPortInfo.setSex(form.getSex());
-		passPortInfo.setPassport(form.getPassport());
-		int passPortInfoUpdateNum = dbDao.update(passPortInfo);
-
-		//获取人员基本信息表
+		//获取人员基本信息
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
 				Cnd.where("id", "=", form.getStaffid()));
 		basicinfo.setInterviewdate(form.getInterviewdate());
 		basicinfo.setBirthday(form.getBirthday());
 		int basicinfoUpdate = dbDao.update(basicinfo);
+
+		//获取护照信息
+		TAppStaffPassportEntity passPortInfo = dbDao.fetch(TAppStaffPassportEntity.class,
+				Cnd.where("staffid", "=", form.getStaffid()));
+		passPortInfo.setFirstname(basicinfo.getFirstname());
+		passPortInfo.setFirstnameen(basicinfo.getFirstnameen());
+		passPortInfo.setLastname(basicinfo.getLastname());
+		passPortInfo.setLastnameen(basicinfo.getLastnameen());
+		passPortInfo.setSex(form.getSex());
+		passPortInfo.setPassport(form.getPassport());
+		int passPortInfoUpdateNum = dbDao.update(passPortInfo);
 		if (orderUpdateNum == 1 && passPortInfoUpdateNum == 1 && basicinfoUpdate == 1) {
 			return "1";
 		} else {

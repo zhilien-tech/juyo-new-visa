@@ -57,7 +57,7 @@ public class PcVisaModule {
 	}
 
 	/**
-	 * 保存后跳转list页面
+	 * 修改基本信息
 	 */
 	@At
 	@POST
