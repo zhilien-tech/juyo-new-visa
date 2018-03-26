@@ -11,6 +11,9 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<link rel="stylesheet" href="${base}/references/public/css/visaInfo.css">
+		<style>
+     		[v-cloak]{display:none;}
+     	</style>
 	</head>
 	<body>
 		<div class="head">
@@ -23,27 +26,27 @@
 			</div>
 		</div>
 		<div class="topHide"></div>
-		<div id="wrapper" class="section">
+		<div id="wrapper" v-cloak class="section">
 			<!--旅伴信息-->
 			<div class="companyInfoModule">
 				<div class="titleInfo">旅伴信息</div>
 				<div class="companyMain">
 					<div class="companyMainInfo groupRadioInfo">
 						<label>是否与其他人一起旅游</label>
-						<input type="radio" class="companyInfo" name="istravelwithother" value="1" />是
-						<input type="radio" class="companyInfo" name="istravelwithother" value="2" checked/>否
+						<input type="radio" class="companyInfo" v-model="visaInfo.travelCompanionInfo.istravelwithother" value="1" />是
+						<input type="radio" class="companyInfo" v-model="visaInfo.travelCompanionInfo.istravelwithother" value="2" checked/>否
 					</div>
 					<!--yes-->
 					<div class="teamture elementHide">
 						<div class="groupRadioInfo">
 							<label>是否作为团队或组织的一部分旅游</label>
-							<input type="radio" class="team" name="istravelwithotheren" value="1" />是
-							<input type="radio" class="team" name="istravelwithotheren" value="2" checked/>否
+							<input type="radio" class="team" name="ispart" v-model="visaInfo.travelCompanionInfo.ispart" value="1" />是
+							<input type="radio" class="team" name="ispart" v-model="visaInfo.travelCompanionInfo.ispart" value="2" checked/>否
 						</div>
 						<!--第二部分yes-->
 						<div class="teamnameture groupInputInfo">
 							<label>团队名称</label>
-							<input id="groupname" name="groupname" type="text" placeholder="团队名称" />
+							<input id="groupname" name="groupname" v-model="visaInfo.travelCompanionInfo.groupname" type="text" placeholder="团队名称" />
 						</div>
 						<!--第二部分No-->
 						<div class="teamnamefalse groupInputInfo">
@@ -805,10 +808,6 @@
 									<label>氏族或部落名称</label>
 									<input name="clanname" type="text"  />
 								</div>
-								<div class="paddingTop groupInputInfo">
-									<label>使用的语言名称</label>
-									<input name="languagename" type="text" />
-								</div>
 							</div>
 						</div>
 						<!-- <div class="btnGroup">
@@ -816,10 +815,16 @@
 							<a class="cancel">去掉</a>
 						</div> -->
 					</div>
-					
-					
 				</div>
 				
+				<div>
+					<div class="paddingTop">
+						<label>使用的语言名称</label>
+						<div class="groupInputInfo">
+							<input name="languagename" type="text" />
+						</div>
+					</div>
+				</div>
 
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
@@ -1283,8 +1288,8 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	
-	<script src="${base}/admin/bigCustomer/visaInfo.js"></script><!-- 本页面js -->
 	<script src="${base}/admin/bigCustomer/visaInfoVue.js"></script><!-- 本页面js -->
+	<script src="${base}/admin/bigCustomer/visaInfo.js"></script><!-- 本页面js -->
 	<script src="${base}/admin/bigCustomer/initDatetimepicker.js"></script><!-- 本页面js -->
 	
 </html>

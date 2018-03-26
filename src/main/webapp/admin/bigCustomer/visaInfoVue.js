@@ -23,14 +23,12 @@ new Vue({
 		contactPointInfo:"",
 		familyInfo:"",
 		workEducationInfo:""
-
 	},
 	created:function(){
 		visaInfo=this;
 		var url = '/admin/bigCustomer/getVisaInfos.html';
 		$.ajax({ 
 			url: url,
-			dataType:"json",
 			data:{
 				staffId:staffId
 			},
@@ -42,7 +40,10 @@ new Vue({
 				visaInfo.familyInfo = data.familyInfo;
 				visaInfo.workEducationInfo = data.workEducationInfo;
 				
-				console.log(JSON.stringify(visaInfo.staffId));
+				
+				$(".teamture").show();
+				$(".teamnamefalse").show();
+				
 			}
 		});
 	},

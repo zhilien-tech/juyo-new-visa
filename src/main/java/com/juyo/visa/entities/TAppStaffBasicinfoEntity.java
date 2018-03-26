@@ -376,4 +376,8 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	@Comment("AA码")
 	private String aacode;
 
+	@Column
+	@Comment("AA码")
+	private String aacode;
+
 }
