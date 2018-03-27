@@ -293,3 +293,6 @@ body {
 	padding-right:2%;
 	width:100%;
 }
+.hideLabel,.hideInviter {
+	display:none;
+} 

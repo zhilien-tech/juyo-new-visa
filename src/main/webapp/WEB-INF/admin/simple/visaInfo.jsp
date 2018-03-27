@@ -491,13 +491,13 @@
 								</div>
 								
 								
-								<div class="col-sm-4">
+								<div class="col-sm-4 hideLabel">
 									<div class="form-group">
 										<label id="guaranteeHead">电话</label>
 										<input id="vouchphone" name="vouchphone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchphone }"/>
 									</div>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-4 hideLabel">
 									<div class="form-group">
 										<label id="guaranteeHead">地址</label>
 										<input id="vouchaddress" name="vouchaddress" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchaddress }"/>
@@ -505,7 +505,7 @@
 								</div>
 							</div>
 							<!-- 下一行 -->
-							<div class="row ">
+							<div class="row hideLabel">
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="guaranteeHead">出生日期</label>
@@ -541,7 +541,7 @@
 							</div>
 							
 							<!-- 下一行 -->
-							<div class="row ">
+							<div class="row hideLabel">
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="guaranteeHead">职业和职务</label>
@@ -554,7 +554,7 @@
 										<input id="vouchcountry" name="vouchcountry" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchcountry }"/>
 									</div>
 								</div>
-								<c:choose>
+								<%-- <c:choose>
 									<c:when test="${obj.visaother.isname == 1}">
 										<div class="col-sm-4">
 											<div class="form-group">
@@ -571,7 +571,7 @@
 											</div>
 										</div>
 									</c:otherwise>
-								</c:choose>
+								</c:choose> --%>
 							</div>
 							
 						</div>	
@@ -585,21 +585,21 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="inviterHead"><span>*</span>申元保证书/姓名-拼音</label>
-										<!-- <div class="inviterCB">
+										<div class="inviterCB">
 											 <input type="checkbox" value="1" id="inviterCBInput" name="" />
 											 <label for="inviterCBInput"></label>
-										</div> -->
-										<input id="invitename" name="invitename" type="text" class="form-control input-sm inviterSY" placeholder="参照'申元保证书" value="${obj.visaother.invitename }"/>
+										</div>
+										<input id="invitename" name="invitename" type="text" class="form-control input-sm " placeholder="参照'申元保证书" value="${obj.visaother.invitename }"/>
 										<%-- <input id="invitename" name="invitename" type="text" class="form-control input-sm inviterName" placeholder="姓名/拼音" value="${obj.visaother.invitename }"/> --%>
 									</div>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-4 hideInviter">
 									<div class="form-group">
 										<label id="inviterHead">电话</label>
 										<input id="invitephone" name="invitephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.invitephone }"/>
 									</div>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-4 hideInviter">
 									<div class="form-group">
 										<label id="inviterHead">地址</label>
 										<input id="inviteaddress" name="inviteaddress" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.inviteaddress }"/>
@@ -607,7 +607,7 @@
 								</div>
 							</div>
 							<!-- 下一行 -->
-							<div class="row ">
+							<div class="row hideInviter">
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="inviterHead">出生日期</label>
@@ -645,7 +645,7 @@
 							</div>
 							
 							<!-- 下一行 -->
-							<div class="row ">
+							<div class="row hideInviter">
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="inviterHead">职业和职务</label>
@@ -1296,9 +1296,11 @@
 		$("#guaranteeCBInput").click(function(){
 			var guaranteeCBInput = $("#guaranteeCBInput").prop("checked");
 			if(guaranteeCBInput){
-				$(".vouchnameen").show();
+				/* $(".vouchnameen").show(); */
+				$(".hideLabel").show();
 			}else{
-				$(".vouchnameen").hide();
+				/* $(".vouchnameen").hide(); */
+				$(".hideLabel").hide();
 			}
 		});
 		/* 邀请人开关 */
@@ -1306,10 +1308,12 @@
 			var inviterCBInput = $("#inviterCBInput").prop("checked");
 			if(inviterCBInput){
 				$(".inviterName").show();
-				$(".inviterSY").hide();
+				/* $(".inviterSY").hide(); */
+				$(".hideInviter").show();
 			}else{
 				$(".inviterSY").show();
-				$(".inviterName").hide();
+				/* $(".inviterName").hide(); */
+				$(".hideInviter").hide();
 			}
 		});
 		$('#vouchname').on('input propertychange',function(){
