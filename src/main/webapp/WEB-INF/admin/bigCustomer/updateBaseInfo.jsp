@@ -30,6 +30,7 @@
 				<div class="tab-content row">
 					<input id="comId" name="comid" type="hidden" value="${obj.applicant.comid }">
 					<input id="userId" name="userid" type="hidden" value="${obj.applicant.userid }">
+					<input id="staffId" name="id" type="hidden" value="${obj.staffId }">
 					<div class="col-sm-12 padding-right-0">
 						<!-- start 身份证 正面 -->
 							<div class="col-xs-4 pictures">
@@ -236,7 +237,7 @@
 						</div>
 						<!-- 您是否与上述国家/地区(国籍)意外的国家/地区的永久居民 -->
 						<div class="row">	
-							<label class="EngLabel">您是否与上述国家/地区(国籍)意外的国家/地区的永久居民</label>
+							<label class="EngLabel">您是否与上述国家/地区(国籍)以外的国家/地区的永久居民</label>
 							<div class=" col-sm-5 col-sm-offset-1 padding-right-0 ">
 								<div class="form-group">
 									<div>

@@ -42,10 +42,10 @@
 </head>
 <body>
 	<div class="modal-content">
-		<a id="toVisa" class="rightNav" onclick="visaBtn();">
+		<!-- <a id="toVisa" class="rightNav" onclick="visaBtn();">
 			<span></span>
-		</a>
-		<a id="toBase" class="leftNav" onclick="baseBtn();">
+		</a> -->
+		<a id="toBase" class="rightNav" onclick="baseBtn();">
 			<span></span>
 		</a>
 		<form id="passportInfo">
@@ -78,21 +78,43 @@
 					</div>
 						
 					<div class="col-sm-7 padding-right-0">
+						<div class="row">
+						<!-- 姓/拼音 -->
+							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
+									<div class="form-group" style="position:relative;">
+									<label><span>*</span>姓/拼音</label> <input id="firstName"
+										name="firstname" type="text" class="form-control input-sm " tabIndex="1"
+										placeholder=" " value="${obj.passport.firstname }" />
+										<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstnameen" value="${obj.passport.firstnameen }"/>
+									<!-- <i class="bulb"></i> -->
+								</div>
+									<!-- <i class="bulb"></i> -->
+							</div>
+						</div>
+						<!-- end 姓/拼音 -->
+					<div class="row">
+							<!-- 名/拼音 -->
+							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
+								<div class="form-group" style="position:relative;">
+									<label><span>*</span>名/拼音</label> <input id="lastName"
+										name="lastname" type="text" class="form-control input-sm" tabIndex="2"
+										placeholder=" " value="${obj.passport.lastname }" />
+										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastnameen" value="${obj.passport.lastnameen }"/>
+
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
+						<!-- end 名/拼音 -->
 						<div class="row"><!-- 类型/护照号 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label><span>*</span>类型</label>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group groupWidth">
+									<label><span>*</span>护照号</label>
 									<input id="id" name="id" type="hidden" value="${obj.passport.possportid }"/>
 									<input id="OCRline1" name="OCRline1" type="hidden" value="">
 									<input id="OCRline2" name="OCRline2" type="hidden" value="">
 									<input name="userType" type="hidden" value="${obj.usertype }"/>
 									<input id="staffId" name="staffId" type="hidden" value="${obj.passport.staffid }"/>
-									<input id="type" name="type" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.type }"/>
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group groupWidth">
-									<label><span>*</span>护照号</label>
 									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
 								</div>
 							</div>
@@ -214,6 +236,17 @@
 	
 	
 	<script type="text/javascript">
+	    var firstname = '${obj.passport.firstname }';
+	    var firstnameen = '${obj.passport.firstnameen }';
+	    var lastname = '${obj.passport.lastname }';
+	    var lastnameen = '${obj.passport.lastnameen }';
+	    if(firstnameen == "" && firstname != ""){
+			$('#firstNameEn').val("/"+getPinYinStr(firstname));
+	    }
+	    if(lastnameen == "" && lastname != ""){
+			$('#lastNameEn').val("/"+getPinYinStr(lastname));
+	    }
+	
 		$("#birthday").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
