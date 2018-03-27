@@ -181,8 +181,8 @@
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
-								<input type="text" />
-								<input id="idknowvisanumber" name="idknowvisanumber" type="checkbox"/>
+								<input name="visanumber" value="1231231231" type="text" />
+								<input id="idknowvisanumber" name="idknowvisanumber" v-model="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/>
 							</div>
 							<div class="clear"></div>
 							<div class="Alike groupRadioInfo paddingTop">

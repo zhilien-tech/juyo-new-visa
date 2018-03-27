@@ -234,6 +234,12 @@ function openYesOrNoPage(){
 		$(".militaryServiceYes").hide();
 	}
 	
+	$("input[type='checkbox']:checked").each(function(){
+		alert($(this).val("value"));
+		var beforeEle = $(this).prev();
+		beforeEle.attr("disabled",true);
+	});
+	
 }
 
 
