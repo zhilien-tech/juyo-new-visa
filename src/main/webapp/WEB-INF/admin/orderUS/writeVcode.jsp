@@ -34,7 +34,6 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		//异步加载的URL地址
-		var url = "${base}/admin/orderJp/listData";
 	</script>
 	<!-- jQuery 2.2.3 -->
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
@@ -43,7 +42,6 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
-	<script src="${base}/admin/orderJp/list.js"></script>
 	<!-- 公用js文件 -->
 		<script src="${base}/references/public/bootstrap/js/moment.js"></script>
 	<script src="${base}/references/public/bootstrap/js/daterangepicker.js"></script>

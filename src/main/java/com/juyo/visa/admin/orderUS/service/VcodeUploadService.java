@@ -19,8 +19,8 @@ import com.juyo.visa.admin.orderUS.form.VcodeForm;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.util.SpringContextUtil;
+import com.juyo.visa.entities.TAppStaffVcodeEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
-import com.juyo.visa.entities.TVcodeEntity;
 import com.juyo.visa.websocket.VcodeWSHandler;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -57,21 +57,21 @@ public class VcodeUploadService extends BaseService<TOrderJpEntity> {
 			e.printStackTrace();
 
 		}
-		List<TVcodeEntity> vcodeList = dbDao.query(TVcodeEntity.class, null, null);
+		List<TAppStaffVcodeEntity> vcodeList = dbDao.query(TAppStaffVcodeEntity.class, null, null);
 		if (!Util.isEmpty(vcodeList)) {
-			for (TVcodeEntity tVcodeEntity : vcodeList) {
+			for (TAppStaffVcodeEntity tVcodeEntity : vcodeList) {
 				dbDao.delete(tVcodeEntity);
 			}
 		}
-		TVcodeEntity vcodeEntity = new TVcodeEntity();
+		TAppStaffVcodeEntity vcodeEntity = new TAppStaffVcodeEntity();
 		vcodeEntity.setVcodeurl(String.valueOf(map.get("data")));
-		TVcodeEntity insert = dbDao.insert(vcodeEntity);
+		TAppStaffVcodeEntity insert = dbDao.insert(vcodeEntity);
 		return map;
 	}
 
 	public Object writeVcode() {
 		Map<String, Object> result = Maps.newHashMap();
-		List<TVcodeEntity> usList = dbDao.query(TVcodeEntity.class, null, null);
+		List<TAppStaffVcodeEntity> usList = dbDao.query(TAppStaffVcodeEntity.class, null, null);
 		if (!Util.isEmpty(usList)) {
 			result.put("vcode", usList.get(0));
 		}
@@ -80,8 +80,8 @@ public class VcodeUploadService extends BaseService<TOrderJpEntity> {
 
 	public Object returnVcode(VcodeForm form) {
 		String vcode = form.getVcode();
-		TVcodeEntity vcodeEntity = null;
-		List<TVcodeEntity> usList = dbDao.query(TVcodeEntity.class, null, null);
+		TAppStaffVcodeEntity vcodeEntity = null;
+		List<TAppStaffVcodeEntity> usList = dbDao.query(TAppStaffVcodeEntity.class, null, null);
 		if (!Util.isEmpty(usList)) {
 			vcodeEntity = usList.get(0);
 			vcodeEntity.setVcode(vcode);
@@ -92,7 +92,7 @@ public class VcodeUploadService extends BaseService<TOrderJpEntity> {
 
 	public Object getVcode() {
 		String result = "";
-		List<TVcodeEntity> usList = dbDao.query(TVcodeEntity.class, null, null);
+		List<TAppStaffVcodeEntity> usList = dbDao.query(TAppStaffVcodeEntity.class, null, null);
 		if (!Util.isEmpty(usList)) {
 			result = usList.get(0).getVcode();
 		}

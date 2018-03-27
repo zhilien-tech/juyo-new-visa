@@ -70,7 +70,7 @@ public class AutoFillUSViewService extends BaseService<TOrderJpEntity> {
 	private static final String BASIC_WEBSPCKET_ADDR = "vcodewebsocket";
 
 	/**
-	 * 查看是否有订单可以执行
+	 * 查看是否有订单可以执行，如果有则返回数据
 	 * <p>
 	 * TODO(这里描述这个方法详情– 可选)
 	 *
@@ -144,9 +144,7 @@ public class AutoFillUSViewService extends BaseService<TOrderJpEntity> {
 			//婚姻状况(需要key还是value?)
 			map.put("marrystatus", staffBase.getMarrystatus());
 			//如果是其他多一个说明
-			if (Util.eq(staffBase.getMarrystatus(), "O")) {
-				map.put("marryexplain", staffBase.getMarryexplainen());
-			}
+			map.put("marryexplain", staffBase.getMarryexplainen());
 			//出生地点和日期
 			//年月日
 			Date birthday = staffPassport.getBirthday();
@@ -209,9 +207,11 @@ public class AutoFillUSViewService extends BaseService<TOrderJpEntity> {
 			}
 			//美国社会安全码
 			String socialsecuritynumber = staffBase.getSocialsecuritynumber();
-			map.put("socialsecuritynumber1", socialsecuritynumber.substring(0, 3));
-			map.put("socialsecuritynumber2", socialsecuritynumber.substring(3, 5));
-			map.put("socialsecuritynumber3", socialsecuritynumber.substring(5, 9));
+			if (!Util.isEmpty(socialsecuritynumber) && socialsecuritynumber.length() == 9) {
+				map.put("socialsecuritynumber1", socialsecuritynumber.substring(0, 3));
+				map.put("socialsecuritynumber2", socialsecuritynumber.substring(3, 5));
+				map.put("socialsecuritynumber3", socialsecuritynumber.substring(5, 9));
+			}
 			//美国纳税人证件号
 			map.put("taxpayernumber", staffBase.getTaxpayernumber());
 			//美国纳税人证件号是否适用

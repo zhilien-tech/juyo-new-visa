@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<c:set var="url" value="${base}/admin/orderJp" />
+<c:set var="url" value="${base}/admin/orderUS" />
 <!DOCTYPE HTML>
 <html lang="en-US" id="addHtml">
 <head>

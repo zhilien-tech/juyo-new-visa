@@ -405,10 +405,14 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffInfo.setDetailedaddress(updateForm.getDetailedaddress());
 			staffInfo.setEmail(updateForm.getEmail());
 			staffInfo.setFirstname(updateForm.getFirstname());
-			staffInfo.setFirstnameen(updateForm.getFirstnameen().substring(1));
+			if (!Util.isEmpty(updateForm.getFirstnameen())) {
+				staffInfo.setFirstnameen(updateForm.getFirstnameen().substring(1));
+			}
 			staffInfo.setIssueorganization(updateForm.getIssueorganization());
 			staffInfo.setLastname(updateForm.getLastname());
-			staffInfo.setLastnameen(updateForm.getLastnameen().substring(1));
+			if (!Util.isEmpty(updateForm.getLastnameen())) {
+				staffInfo.setLastnameen(updateForm.getLastnameen().substring(1));
+			}
 			staffInfo.setOtherfirstname(updateForm.getOtherfirstname());
 			if (!Util.isEmpty(updateForm.getOtherfirstnameen())) {
 				staffInfo.setOtherfirstnameen(updateForm.getOtherfirstnameen().substring(1));
