@@ -284,15 +284,24 @@
 										</div>
 									</div>
 							</div>
-							
 						</div>
-						
+						<!-- 紧急联系人手机 -->
 						<div class="row">
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>紧急联系人手机</label> <input id="emergencyTelephone" name="emergencyTelephone"
 										type="text" class="form-control input-sm" placeholder=" "
 										value="${obj.applicant.emergencyTelephone }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
+						<!-- 紧急联系人地址 -->
+						<div class="row">
+							<div class="col-sm-11  col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>紧急联系人地址</label> <input id="emergencyAddress" name="emergencyAddress"
+										type="text" class="form-control input-sm" value="" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>

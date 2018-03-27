@@ -12,6 +12,8 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<!-- 本页css -->
 	<link rel="stylesheet" href="${base}/references/common/css/simpleVisaInfo.css">
@@ -213,6 +215,38 @@
 												<input name="threecounty" type="button" value="山形县" class="btn btn-sm btnState">
 											</div>
 										</div>
+										
+										<c:choose>
+											<c:when test="${obj.jporderinfo.isVisit == 1 }">
+												<div class="alignment cf viseType-btn">
+											</c:when>
+											<c:otherwise>
+												<div class="alignment cf viseType-btn none">
+											</c:otherwise>
+										</c:choose>
+										
+											<div class="row body-from-input">
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label>上次出行时间</label>
+														<input id="" name="" type="text" class="form-control input-sm datetimepickercss" value=""/>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label>上次停留天数</label>
+														<input id="" name="" type="text" class="form-control input-sm" value=""/>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label>上次返回时间</label>
+														<input id="" name="" type="text" class="form-control input-sm datetimepickercss" value=""/>
+													</div>
+												</div>
+											</div>
+										</div>	
+										
 									</div><!-- end 过去三年是否访问过 -->
 						</div>
 					</div>
@@ -457,13 +491,13 @@
 								</div>
 								
 								
-								<div class="col-sm-4">
+								<div class="col-sm-4 hideLabel">
 									<div class="form-group">
 										<label id="guaranteeHead">电话</label>
 										<input id="vouchphone" name="vouchphone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchphone }"/>
 									</div>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-4 hideLabel">
 									<div class="form-group">
 										<label id="guaranteeHead">地址</label>
 										<input id="vouchaddress" name="vouchaddress" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchaddress }"/>
@@ -471,7 +505,7 @@
 								</div>
 							</div>
 							<!-- 下一行 -->
-							<div class="row ">
+							<div class="row hideLabel">
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="guaranteeHead">出生日期</label>
@@ -507,7 +541,7 @@
 							</div>
 							
 							<!-- 下一行 -->
-							<div class="row ">
+							<div class="row hideLabel">
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="guaranteeHead">职业和职务</label>
@@ -520,7 +554,7 @@
 										<input id="vouchcountry" name="vouchcountry" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.vouchcountry }"/>
 									</div>
 								</div>
-								<c:choose>
+								<%-- <c:choose>
 									<c:when test="${obj.visaother.isname == 1}">
 										<div class="col-sm-4">
 											<div class="form-group">
@@ -537,7 +571,7 @@
 											</div>
 										</div>
 									</c:otherwise>
-								</c:choose>
+								</c:choose> --%>
 							</div>
 							
 						</div>	
@@ -551,21 +585,21 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="inviterHead"><span>*</span>申元保证书/姓名-拼音</label>
-										<!-- <div class="inviterCB">
+										<div class="inviterCB">
 											 <input type="checkbox" value="1" id="inviterCBInput" name="" />
 											 <label for="inviterCBInput"></label>
-										</div> -->
-										<input id="invitename" name="invitename" type="text" class="form-control input-sm inviterSY" placeholder="参照'申元保证书" value="${obj.visaother.invitename }"/>
+										</div>
+										<input id="invitename" name="invitename" type="text" class="form-control input-sm " placeholder="参照'申元保证书" value="${obj.visaother.invitename }"/>
 										<%-- <input id="invitename" name="invitename" type="text" class="form-control input-sm inviterName" placeholder="姓名/拼音" value="${obj.visaother.invitename }"/> --%>
 									</div>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-4 hideInviter">
 									<div class="form-group">
 										<label id="inviterHead">电话</label>
 										<input id="invitephone" name="invitephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.invitephone }"/>
 									</div>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-4 hideInviter">
 									<div class="form-group">
 										<label id="inviterHead">地址</label>
 										<input id="inviteaddress" name="inviteaddress" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.inviteaddress }"/>
@@ -573,7 +607,7 @@
 								</div>
 							</div>
 							<!-- 下一行 -->
-							<div class="row ">
+							<div class="row hideInviter">
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="inviterHead">出生日期</label>
@@ -611,7 +645,7 @@
 							</div>
 							
 							<!-- 下一行 -->
-							<div class="row ">
+							<div class="row hideInviter">
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="inviterHead">职业和职务</label>
@@ -660,6 +694,8 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>	
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/moment.min.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/daterangepicker.js"></script>	
 	<!-- DataTables -->
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -1221,8 +1257,10 @@
 			var thisval = $(this).val();
 			if(thisval == 1){
 				$('#threexian').show();
+				$('.alignment').show();
 			}else{
 				$('#threexian').hide();
+				$('.alignment').hide();
 			}
 		});
 		/* 在日担保人出生日期 */
@@ -1258,9 +1296,11 @@
 		$("#guaranteeCBInput").click(function(){
 			var guaranteeCBInput = $("#guaranteeCBInput").prop("checked");
 			if(guaranteeCBInput){
-				$(".vouchnameen").show();
+				/* $(".vouchnameen").show(); */
+				$(".hideLabel").show();
 			}else{
-				$(".vouchnameen").hide();
+				/* $(".vouchnameen").hide(); */
+				$(".hideLabel").hide();
 			}
 		});
 		/* 邀请人开关 */
@@ -1268,10 +1308,12 @@
 			var inviterCBInput = $("#inviterCBInput").prop("checked");
 			if(inviterCBInput){
 				$(".inviterName").show();
-				$(".inviterSY").hide();
+				/* $(".inviterSY").hide(); */
+				$(".hideInviter").show();
 			}else{
 				$(".inviterSY").show();
-				$(".inviterName").hide();
+				/* $(".inviterName").hide(); */
+				$(".hideInviter").hide();
 			}
 		});
 		$('#vouchname').on('input propertychange',function(){
