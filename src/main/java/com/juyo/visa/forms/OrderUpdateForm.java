@@ -111,4 +111,9 @@ public class OrderUpdateForm {
 	 */
 	private String returnFlightNum;
 
+	/*
+	 * 所需资料
+	 */
+	private String realinfo;
+
 }

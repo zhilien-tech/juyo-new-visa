@@ -371,22 +371,22 @@
 							</div>
 						</div>
 						<div class="row body-from-input">
-							<div class="col-sm-8">
+							<div class="col-sm-12">
 								<div class="form-group">
-									<label>所需资料</label> <input id=""
-										value="${obj.summaryInfo.preparematerials }" type="text"
+									<label>所需资料</label> <input name="realinfo"
+										value="${obj.realinfo }" type="text"
 										class="form-control input-sm" placeholder="" /> <input
 										name="staffid" type="hidden"
 										value="${obj.summaryInfo.staffid }">
 								</div>
 							</div>
-							<div class="col-sm-4">
+							<!-- <div class="col-sm-4">
 								<div class="form-group">
 									<label>卡号</label> <input name="" type="text"
 										value=""
 										class="form-control input-sm" placeholder="" />
 								</div>
-							</div>
+							</div> -->
 						</div>
 						<div class="row body-from-input">
 							<div class="col-sm-4">
