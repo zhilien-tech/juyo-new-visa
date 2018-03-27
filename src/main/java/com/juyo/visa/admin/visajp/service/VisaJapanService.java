@@ -1860,7 +1860,6 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				orderstatus = jpordersimpleenum.value();
 				break;
 			}
-
 		}
 		result.put("orderstatus", orderstatus);
 		result.put("orderjp", orderjp);

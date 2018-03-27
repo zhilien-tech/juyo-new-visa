@@ -82,7 +82,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 	@Inject
 	private CityViewService cityViewService;
 
-	private static DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
+	private static DateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd");
 
 	/**
 	 * 准备下载文件并打包为ZIP文件字节流
@@ -172,6 +172,8 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 		List<Record> applyinfo = (List<Record>) tempdata.get("applyinfo");
 		//日本订单信息
 		TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
+		//订单信息
+		TOrderEntity orderinfo = (TOrderEntity) tempdata.get("orderinfo");
 		//多程信息
 		List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
 
@@ -195,7 +197,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 		}
 		String companyname = "";
 		if (!Util.isEmpty(company.getName())) {
-			company.getName();
+			companyname = company.getName();
 		}
 		content.append("　　" + companyname).append("根据与").append(dijie).append("的合同约定，组织").append(applyinfo.size())
 				.append("人赴日本旅游光，请协助办理赴日签证。（有料√、无料）");
@@ -264,7 +266,10 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 		map.put("phone", company.getMobile());
 		map.put("createDate", dateFormat.format(new Date()));
 		map.put("companyaddr", company.getAddress());
-
+		Date sendvisadate = orderinfo.getSendVisaDate();
+		map.put("sendvisadate", dateFormat.format(sendvisadate));
+		Date outvisadate = orderinfo.getOutVisaDate();
+		map.put("outvisadate", dateFormat.format(outvisadate));
 		//获取模板文件
 		URL resource = getClass().getClassLoader().getResource("japanfile/liaoningwanda/note.pdf");
 		TemplateUtil templateUtil = new TemplateUtil();
@@ -319,18 +324,18 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			//婚姻状况
 			if (!Util.isEmpty(record.get("marrystatus"))) {
 				Integer marrystatus = record.getInt("marrystatus");
-				if (marrystatus.equals(MarryStatusEnum.YIHUN.intKey())) {
+				if (marrystatus.equals(MarryStatusEnum.DANSHEN.intKey())) {
 					//已婚
 					map.put("toggle_3", "On");
-				} else if (marrystatus.equals(MarryStatusEnum.DANSHEN.intKey())) {
+				} else if (marrystatus.equals(MarryStatusEnum.YIHUN.intKey())) {
 					//单身
 					map.put("toggle_4", "On");
 				} else if (marrystatus.equals(MarryStatusEnum.LIYI.intKey())) {
 					//离婚
-					map.put("toggle_5", "On");
+					map.put("toggle_6", "On");
 				} else if (marrystatus.equals(MarryStatusEnum.SANGOU.intKey())) {
 					//丧偶
-					map.put("toggle_6", "On");
+					map.put("toggle_5", "On");
 				}
 			}
 			//国籍
@@ -347,7 +352,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			map.put("fill_13", record.getString("issuedplace"));
 			//签发日期
 			if (!Util.isEmpty(record.get("issuedDate"))) {
-				map.put("fill_13", dateformat.format((Date) record.get("issuedDate")));
+				map.put("fill_14", dateformat.format((Date) record.get("issuedDate")));
 			}
 			//签发机关
 			map.put("fill_16", record.getString("issuedOrganization"));
@@ -434,6 +439,8 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			map.put("fill_24", record.getString("hotelphone"));
 			//地址
 			map.put("fill_25", record.getString("hoteladdress"));
+			//配偶职业
+			map.put("fill_1_2", record.getString("unitname"));
 			//在日担保人信息
 			map.put("fill_2_2", record.getString("vouchname"));
 			//木有英文
@@ -672,7 +679,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 						(!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "")
 								+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""),
 						(!Util.isEmpty(record.get("sex")) ? record.getString("sex") : ""),
-						(!Util.isEmpty(record.get("issuedorganization")) ? record.getString("issuedorganization") : ""),
+						(!Util.isEmpty(record.get("issuedplace")) ? record.getString("issuedplace") : ""),
 						(!Util.isEmpty(record.get("province")) ? record.getString("province") : "")
 								+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : "")
 								+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress")
@@ -844,6 +851,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			//格式化为日本的日期
 			String pointpattren = "平成yy年MM月dd日";
 			int count = 0;
+			Integer lasthotel = null;
 			for (TOrderTravelplanJpEntity ordertravelplan : ordertravelplans) {
 				count++;
 				//行程安排
@@ -888,9 +896,13 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				//酒店信息
 				String hotel = "";
 				if (!Util.isEmpty(ordertravelplan.getHotel())) {
-					THotelEntity hotelentity = hotelViewService.fetch(ordertravelplan.getHotel());
-					hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
-							+ hotelentity.getMobile();
+					if (ordertravelplan.getHotel().equals(lasthotel)) {
+						hotel = "同上";
+					} else {
+						THotelEntity hotelentity = hotelViewService.fetch(ordertravelplan.getHotel());
+						hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
+								+ hotelentity.getMobile();
+					}
 				} else {
 					hotel = " ";
 				}
@@ -901,6 +913,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table.addCell(cell);
 				}
+				lasthotel = ordertravelplan.getHotel();
 			}
 			document.add(table);
 			//底部
@@ -968,7 +981,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				document.add(p);
 			}
 			if (!Util.isEmpty(sealUrl)) {
-				document.add(getSeal1(sealUrl, 0));
+				document.add(getSeal1(sealUrl, ordertravelplans.size() / 2));
 			}
 			document.close();
 			IOUtils.closeQuietly(stream);
@@ -1105,11 +1118,11 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			int count = 1;
 			for (Record record : applyinfo) {
 				{
-					String genderstr = "";
+					String genderstr = " ";
 					if (!Util.isEmpty(record.get("sex")) && "男".equals(record.getString("sex"))) {
-						genderstr = "MR";
+						genderstr = " MR";
 					} else {
-						genderstr = "MS";
+						genderstr = " MS";
 					}
 					Paragraph p = new Paragraph(count + "." + record.getString("firstnameen") + "/"
 							+ record.getString("lastnameen") + genderstr, font);
@@ -1147,7 +1160,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				p.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(p);
 			}
-			{
+			/*{
 				Paragraph p = new Paragraph(count + ".SHE/T SHE/T024-2709064/JIN CHENG TKT AGENCY/JIAHUI XU ABCDEFG",
 						font);
 				count++;
@@ -1171,7 +1184,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				p.setIndentationLeft(20);
 				p.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(p);
-			}
+			}*/
 			document.close();
 			IOUtils.closeQuietly(stream);
 		} catch (Exception e) {
@@ -1194,10 +1207,10 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			img.setRotation(800);
 			if (n <= 1) {
 
-				img.setAbsolutePosition(350, 530);
+				img.setAbsolutePosition(400, 530);
 			} else {
 
-				img.setAbsolutePosition(350, 510 - 34 * (n - 1));
+				img.setAbsolutePosition(400, 530 - 34 * (n - 1));
 			}
 			img.setAlignment(Paragraph.ALIGN_RIGHT);
 			return img;
@@ -1412,7 +1425,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				document.add(p);
 			}
 			if (!Util.isEmpty(sealUrl)) {
-				document.add(getSeal1(sealUrl, 0));
+				document.add(getSeal1(sealUrl, applyinfo.size()));
 			}
 			document.close();
 			IOUtils.closeQuietly(stream);

@@ -97,4 +97,12 @@ public class SimulateModule {
 	public Object insertLog(@Param("..") JapanSimulatorForm form) {
 		return simulateJapanService.insertLog(form);
 	}
+
+	/**
+	 * 更新为已发招宝
+	 */
+	@At
+	public Object updateYifa(@Param("..") JapanSimulatorForm form) {
+		return simulateJapanService.updateYifa(form);
+	}
 }

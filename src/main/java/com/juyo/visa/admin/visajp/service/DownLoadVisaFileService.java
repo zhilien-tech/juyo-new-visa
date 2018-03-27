@@ -250,7 +250,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		}
 		String companyname = "";
 		if (!Util.isEmpty(company.getName())) {
-			company.getName();
+			companyname = company.getName();
 		}
 		content.append("　　" + companyname).append("根据与").append(dijie).append("的合同约定，组织").append(applyinfo.size())
 				.append("人访日个人旅游，请协助办理").append(visatypestr).append("往返赴日签证");

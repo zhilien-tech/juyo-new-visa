@@ -36,7 +36,8 @@ SELECT
 	tavoi.invitejob,
 	tavoi.invitemainrelation,
 	tavoi.invitecountry,
-	tavoi.traveladvice
+	tavoi.traveladvice,
+	tawj.unitName
 FROM
 	t_applicant_order_jp taoj
 INNER JOIN t_applicant ta ON taoj.applicantId = ta.id

@@ -451,4 +451,26 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
+	/**
+	 * 更新为已发招宝
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateYifa(JapanSimulatorForm form) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, form.getCid());
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
+		dbDao.update(order);
+		//消息通知
+		try {
+			visaInfoWSHandler.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

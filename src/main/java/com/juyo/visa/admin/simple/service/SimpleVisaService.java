@@ -700,7 +700,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 		applicant.setIsPrompted(IsYesOrNoEnum.NO.intKey());
 		applicant.setAddress(form.getAddress());
-		applicant.setBirthday(form.getBirthday());
+		//applicant.setBirthday(form.getBirthday());
 		applicant.setCardId(form.getCardId());
 		applicant.setCity(form.getCity());
 		applicant.setDetailedAddress(form.getDetailedAddress());
@@ -919,7 +919,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		passport.setFirstName(form.getFirstName());
 		//passport.setFirstNameEn(passportForm.getFirstNameEn().substring(1));
 		passport.setIssuedDate(form.getIssuedDate());
-		passport.setIssuedOrganization(form.getIssuedOrganization());
+		passport.setIssuedOrganization("公安部出入境管理局");
 		passport.setIssuedOrganizationEn(form.getIssuedOrganizationEn());
 		passport.setIssuedPlace(form.getIssuedPlace());
 		passport.setIssuedPlaceEn(form.getIssuedPlaceEn());
@@ -963,7 +963,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(form.getLastNameEn())) {
 				applicantEntity.setLastNameEn(form.getLastNameEn().substring(1));
 			}
-			applicantEntity.setLastNameEn(form.getLastNameEn());
+			//applicantEntity.setLastNameEn(form.getLastNameEn());
 			applicantEntity.setSex(form.getSex());
 			applicantEntity.setBirthday(form.getBirthday());
 			TApplicantEntity insertapplicant = dbDao.insert(applicantEntity);
