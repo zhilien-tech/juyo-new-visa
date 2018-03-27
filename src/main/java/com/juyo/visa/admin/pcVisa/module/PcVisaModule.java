@@ -8,7 +8,6 @@ package com.juyo.visa.admin.pcVisa.module;
 
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
-import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 
@@ -22,7 +21,6 @@ import org.nutz.mvc.annotation.Ok;
  */
 @At("admin/pcvisa")
 @IocBean
-@Filters
 public class PcVisaModule {
 
 	@At
