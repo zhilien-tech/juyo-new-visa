@@ -148,17 +148,14 @@
 						<div class="row body-from-input checkShowORHide">
 							<div class="col-sm-3">
 								<div class="form-group">
-										<input id="gocity" name="godeparturecity" type="hidden" >
-									<label><span>*</span>出发城市：</label> <select id="goDepartureCity" onchange="goDepartureCitychange()"
+										<input id="gocity" name="godeparturecity" type="hidden">
+									<label><span>*</span>出发城市：</label> <select id="goDepartureCity" 
 										class="form-control select2 select2City departurecity"
 										multiple="multiple">
 										<!-- <option id="goDepartureCity" name="godeparturecity"></option> -->
-										<%-- <c:if test="${!empty obj.goleavecity.id}">
-												<option value="${obj.goleavecity.id}" selected="selected">${obj.goleavecity.city}</option>
-											</c:if> --%>
 											<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
-													<c:when test="${city.id eq obj.tripinfo.goDepartureCity }">
+													<c:when test="${city.id eq obj.travelInfo.goDepartureCity }">
 														<option value="${city.id }" selected="selected">${city.city }</option>
 													</c:when>
 													<c:otherwise>
@@ -166,6 +163,9 @@
 													</c:otherwise>
 												</c:choose>
 											</c:forEach>
+										<c:if test="${!empty obj.orderInfo.goDepartureCity}">
+												<option value="${obj.travelInfo.godeparturecity}" selected="selected">${obj.orderInfo.goDepartureCity}</option>
+											</c:if> 
 									</select>
 								</div>
 							</div>
@@ -174,6 +174,9 @@
 									<label><span>*</span>抵达城市：</label> <select id="goArrivedCity"
 										class="form-control input-sm select2City arrivedcity"
 										multiple="multiple">
+										<c:if test="${not empty obj.orderInfo.goArrivedCity }">
+											<option value="${obj.travelInfo.goArrivedCity}" selected="selected">${obj.orderInfo.goArrivedCity}</option>
+										</c:if>
 										<input id="goarrivecity" name="goArrivedCity" type="hidden" >
 										<!-- <option id="goArrivedCity" name="goArrivedCity"></option> -->
 										<%-- <c:if test="${!empty obj.goarrivecity.id}">
@@ -181,7 +184,7 @@
 											</c:if> --%>
 											<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
-													<c:when test="${city.id eq obj.tripinfo.goArrivedCity }">
+													<c:when test="${city.id eq obj.travelInfo.goArrivedCity }">
 														<option value="${city.id }" selected="selected">${city.city }</option>
 													</c:when>
 													<c:otherwise>
@@ -197,11 +200,11 @@
 									<label><span>*</span>航班号：</label> <select id="goFlightNum"
 										class="form-control input-sm flightSelect2"
 										multiple="multiple">
+										<c:if test="${!empty obj.goFlightInfo }">
+												<option value="${obj.goFlightInfo.flightnum }" selected="selected">${obj.goFlightInfo.takeOffName }-${obj.goFlightInfo.landingName } ${obj.goFlightInfo.flightnum } ${obj.goFlightInfo.takeOffTime }/${obj.goFlightInfo.landingTime }</option>
+											</c:if>
 										<input id="goflightnum" name="goFlightNum" type="hidden" >
-										<%-- <option id="goFlightNum" name="goFlightNum"></option> 
-										<c:if test="${!empty obj.goflightnum.id }">
-												<option value="${obj.goflightnum.id }" selected="selected">${obj.goflightnum.takeOffName }-${obj.goflightnum.landingName } ${obj.goflightnum.flightnum } ${obj.goflightnum.takeOffTime }/${obj.goflightnum.landingTime }</option>
-											</c:if> --%>
+										<option id="goFlightNum" name="goFlightNum"></option> 
 											<c:forEach items="${obj.flightlist }" var="flight">
 												<c:if test="${obj.tripinfo.goFlightNum eq  flight.flightnum}">
 													<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
@@ -219,11 +222,11 @@
 										id="returnDepartureCity"
 										class="form-control select2 select2City departurecity"
 										multiple="multiple">
-										<input id="returncity" name="returnDepartureCity" type="hidden" " >
+										<c:if test="${!empty obj.orderInfo.returnDepartureCity}">
+												<option value="${obj.travelInfo.returnDepartureCity}" selected="selected">${obj.orderInfo.returnDepartureCity}</option>
+											</c:if>
+										<input id="returncity" name="returndepartureCity" type="hidden" " >
 										<!-- <option id="returnDepartureCity" name="returnDepartureCity"></option> -->
-										<%-- <c:if test="${!empty obj.backleavecity.id}">
-												<option value="${obj.backleavecity.id}" selected="selected">${obj.backleavecity.city}</option>
-											</c:if>--%>
 												<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
 													<c:when test="${city.id eq obj.tripinfo.returnDepartureCity }">
@@ -243,11 +246,11 @@
 										id="returnArrivedCity"
 										class="form-control input-sm select2City arrivedcity"
 										multiple="multiple">
+										<c:if test="${!empty obj.orderInfo.returnArrivedCity}">
+												<option value="${obj.travelInfo.returnArrivedCity}" selected="selected">${obj.orderInfo.returnArrivedCity}</option>
+											</c:if>
 										<input id="returnarrivecity" name="returnArrivedCity" type="hidden" >
 										<!-- <option id="returnArrivedCity" name="returnArrivedCity"></option> -->
-										<%-- <c:if test="${!empty obj.backarrivecity.id}">
-												<option value="${obj.backarrivecity.id}" selected="selected">${obj.backarrivecity.city}</option>
-											</c:if>--%>
 											<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
 													<c:when test="${city.id eq obj.tripinfo.returnArrivedCity }">
@@ -266,6 +269,9 @@
 									<label><span>*</span>航班号：</label> <select id="returnFlightNum"
 										class="form-control input-sm flightSelect2"
 										multiple="multiple">
+										<c:if test="${!empty obj.returnFlightInfo }">
+												<option value="${obj.returnFlightInfo.flightnum }" selected="selected">${obj.returnFlightInfo.takeOffName }-${obj.returnFlightInfo.landingName } ${obj.returnFlightInfo.flightnum } ${obj.returnFlightInfo.takeOffTime }/${obj.returnFlightInfo.landingTime }</option>
+											</c:if>
 										<input id="returnflightnum" name="returnFlightNum" type="hidden" >
 										<!-- <option id="returnFlightNum" name="returnFlightNum"></option> -->
 										<%-- <c:if test="${!empty obj.returnflightnum.id }">

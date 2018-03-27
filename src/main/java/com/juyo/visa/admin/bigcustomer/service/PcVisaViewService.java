@@ -29,7 +29,9 @@ import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
+import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TOrderUsInfoEntitiy;
 import com.juyo.visa.entities.TOrderUsTravelinfoEntity;
@@ -217,8 +219,46 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		}
 		List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
 		TOrderUsInfoEntitiy orderInfoEntity = (TOrderUsInfoEntitiy) getOrderInfo(orderid);
+		if (!Util.isEmpty(orderTravelInfo.getGodeparturecity())) {
+			TCityEntity gocity = dbDao.fetch(TCityEntity.class,
+					Cnd.where("id", "=", orderTravelInfo.getGodeparturecity()));
+			orderInfoEntity.setGoDepartureCity(gocity.getCity());
+		}
+		if (!Util.isEmpty(orderTravelInfo.getGoArrivedCity())) {
+			TCityEntity gocity = dbDao.fetch(TCityEntity.class,
+					Cnd.where("id", "=", orderTravelInfo.getGoArrivedCity()));
+			orderInfoEntity.setGoArrivedCity((gocity.getCity()));
+		}
+		if (!Util.isEmpty(orderTravelInfo.getReturnDepartureCity())) {
+			TCityEntity gocity = dbDao.fetch(TCityEntity.class,
+					Cnd.where("id", "=", orderTravelInfo.getReturnDepartureCity()));
+			orderInfoEntity.setReturnDepartureCity(gocity.getCity());
+		}
+		if (!Util.isEmpty(orderTravelInfo.getReturnArrivedCity())) {
+			TCityEntity gocity = dbDao.fetch(TCityEntity.class,
+					Cnd.where("id", "=", orderTravelInfo.getReturnArrivedCity()));
+			orderInfoEntity.setReturnArrivedCity(gocity.getCity());
+		}
+
 		result.put("orderInfo", orderInfoEntity);
 		result.put("travelInfo", orderTravelInfo);
+
+		//获取航班信息
+		TFlightEntity goFlightEntity = dbDao.fetch(TFlightEntity.class,
+				Cnd.where("flightnum", "=", orderTravelInfo.getGoFlightNum()));
+		TFlightEntity returnFlightEntity = dbDao.fetch(TFlightEntity.class,
+				Cnd.where("flightnum", "=", orderTravelInfo.getReturnFlightNum()));
+		if (!Util.isEmpty(goFlightEntity)) {
+			result.put("goFlightInfo", goFlightEntity);
+		} else {
+			result.put("goFlightInfo", null);
+		}
+		if (!Util.isEmpty(returnFlightEntity)) {
+			result.put("returnFlightInfo", returnFlightEntity);
+		} else {
+			result.put("returnFlightInfo", null);
+		}
+
 		if (!Util.isEmpty(staffSummaryInfoList)) {
 			result.put("summaryInfo", staffSummaryInfoList.get(0));
 		} else {
