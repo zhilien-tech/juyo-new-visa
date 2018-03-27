@@ -193,7 +193,7 @@
 							<div class="describleCountry groupRadioInfo paddingTop">
 								<label>是否在签发上述签证的国家或地区申请并且是您所在的国家或地区的居住地</label>
 								<input type="radio"  name="issamecountry" value="1" />是
-								<input type="radio"  name="issamecountry" value="issamecountry" checked />否
+								<input type="radio"  name="issamecountry" value="2" checked />否
 							</div>
 							<div class="paddingTop groupRadioInfo">
 								<label>是否采集过指纹</label>
@@ -263,8 +263,8 @@
 			<div class="paddingBottom">
 				<div class="groupRadioInfo">
 					<label>有没有人曾代表您向美国公民和移民服务局提交过移民申请</label>
-					<input type="radio" name="isfiledimmigrantpetition" class="onceImmigration" value="1" />是
-					<input type="radio" name="isfiledimmigrantpetition" class="onceImmigration" value="2" checked />否
+					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" class="onceImmigration" value="1" />是
+					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" class="onceImmigration" value="2" checked />否
 				</div>
 				<div class="immigrationExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
@@ -359,8 +359,8 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>你的父亲是否在美国</label>
-						<input type="radio" name="isfatherinus" class="fatherUS" value="1" />是
-						<input type="radio" name="isfatherinus" class="fatherUS" value="2" checked />否
+						<input type="radio" name="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" class="fatherUS" value="1" />是
+						<input type="radio" name="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" class="fatherUS" value="2" checked />否
 					</div>
 					<!--yes-->
 					<div class="fatherUSYes groupSelectInfo paddingNone">
@@ -387,8 +387,8 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>你的母亲是否在美国</label>
-						<input type="radio" name="ismotherinus" class="motherUS" value="1" />是
-						<input type="radio" name="ismotherinus" class="motherUS" value="2" checked />否
+						<input type="radio" name="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" class="motherUS" value="1" />是
+						<input type="radio" name="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" class="motherUS" value="2" checked />否
 					</div>
 					<div class="motherUSYes paddingNone groupSelectInfo">
 						<label>身份状态</label>
@@ -403,8 +403,8 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>在美国除了父母还有没有直系亲属</label>
-						<input type="radio" name="hasimmediaterelatives" class="directRelatives directUSRelatives" value="1" />是
-						<input type="radio" name="hasimmediaterelatives" class="directRelatives directUSRelatives" value="2" checked/>否
+						<input type="radio" name="hasimmediaterelatives" v-model="visaInfo.familyInfo.hasimmediaterelatives" class="directRelatives directUSRelatives" value="1" />是
+						<input type="radio" name="hasimmediaterelatives" v-model="visaInfo.familyInfo.hasimmediaterelatives" class="directRelatives directUSRelatives" value="2" checked/>否
 					</div>
 					<div class="directRelatives">
 						<!--yes-->
@@ -720,8 +720,8 @@
 					<div class="paddingTop">
 						<div class="groupRadioInfo">
 							<label>是否上过中学或以上的任何教育</label>
-							<input type="radio" name="issecondarylevel" class="education" value="1" />是
-							<input type="radio" name="issecondarylevel" class="education" value="2" checked/>否
+							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" class="education" value="1" />是
+							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" class="education" value="2" checked/>否
 						</div>
 						<!--yes-->
 						<div class="educationInfo elementHide">
@@ -796,8 +796,8 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否属于氏族或部落</label>
-						<input type="radio" name="isclan" class="isclan" value="1"/>是
-						<input type="radio" name="isclan" class="isclan" value="2" checked/>否
+						<input type="radio" name="isclan" v-model="visaInfo.workEducationInfo.isclan" class="isclan" value="1"/>是
+						<input type="radio" name="isclan" v-model="visaInfo.workEducationInfo.isclan" class="isclan" value="2" checked/>否
 					</div>
 					
 					<!--yes-->
@@ -829,8 +829,8 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>过去五年是否曾去过任何国家/地区旅游</label>
-						<input type="radio" name="istraveledanycountry" class="istraveledanycountry" value="1" />是
-						<input type="radio" name="istraveledanycountry" class="istraveledanycountry" value="2" checked/>否
+						<input type="radio" name="istraveledanycountry" v-model="visaInfo.workEducationInfo.istraveledanycountry" class="istraveledanycountry" value="1" />是
+						<input type="radio" name="istraveledanycountry" v-model="visaInfo.workEducationInfo.istraveledanycountry" class="istraveledanycountry" value="2" checked/>否
 					</div>
 					<!--yes-->
 					<div class="isTravelYes elementHide">
@@ -851,8 +851,8 @@
 				<div>
 					<div class="groupRadioInfo">
 						<label>是否属于、致力于、或为任何专业、社会或慈善组织而工作</label>
-						<input type="radio" name="isworkedcharitableorganization" class="isworkedcharitableorganization" value="1"/>是
-						<input type="radio" name="isworkedcharitableorganization" class="isworkedcharitableorganization" value="2" checked/>否
+						<input type="radio" name="isworkedcharitableorganization" v-model="visaInfo.workEducationInfo.isworkedcharitableorganization" class="isworkedcharitableorganization" value="1"/>是
+						<input type="radio" name="isworkedcharitableorganization" v-model="visaInfo.workEducationInfo.isworkedcharitableorganization" class="isworkedcharitableorganization" value="2" checked/>否
 					</div>
 					<!--yes-->
 					<div class="isOrganizationYes elementHide">
@@ -871,8 +871,8 @@
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否有专业技能或培训，如强制、爆炸物、核能、生物或化学</label>
-						<input type="radio" name="hasspecializedskill" class="hasspecializedskill" value="1" />是
-						<input type="radio"name="hasspecializedskill" class="hasspecializedskill" value="2" checked />否
+						<input type="radio" name="hasspecializedskill" v-model="visaInfo.workEducationInfo.hasspecializedskill" class="hasspecializedskill" value="1" />是
+						<input type="radio"name="hasspecializedskill" v-model="visaInfo.workEducationInfo.hasspecializedskill" class="hasspecializedskill" value="2" checked />否
 					</div>
 					<!--yes-->
 					<div class="paddingTop skillDiv elementHide grouptextareaInfo">
@@ -883,8 +883,8 @@
 				<div>
 					<div class="groupRadioInfo">
 						<label style="display: block;">是否曾服兵役</label>
-						<input type="radio" name="hasservedinmilitary" class="hasservedinmilitary" value="1"/>是
-						<input type="radio"name="hasservedinmilitary" class="hasservedinmilitary" value="2" checked/>否
+						<input type="radio" name="hasservedinmilitary" v-model="visaInfo.workEducationInfo.hasservedinmilitary" class="hasservedinmilitary" value="1"/>是
+						<input type="radio"name="hasservedinmilitary" v-model="visaInfo.workEducationInfo.hasservedinmilitary" class="hasservedinmilitary" value="2" checked/>否
 					</div>
 					<!--yes-->
 					<div class="paddingTop elementHide militaryServiceYes">
