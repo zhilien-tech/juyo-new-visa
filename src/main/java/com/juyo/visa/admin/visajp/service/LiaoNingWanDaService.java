@@ -149,6 +149,8 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			ByteArrayOutputStream apply = applyinfo(record, tempdata);
 			pdffiles.add(apply);
 		}
+		ByteArrayOutputStream returnhome = returnhome(tempdata);
+		pdffiles.add(returnhome);
 		ByteArrayOutputStream mergePdf = templateUtil.mergePdf(pdffiles);
 		//申请人信息
 		//return stream;
@@ -804,6 +806,34 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					}
 				}
 			}
+			String applyname = "";
+			int dengsize = 0;
+			int boysize = 0;
+			int grilsize = 0;
+			if (!Util.isEmpty(applyinfo)) {
+				Record record = applyinfo.get(0);
+				applyname += record.getString("firstname");
+				applyname += record.getString("lastname");
+				for (Record records : applyinfo) {
+					if (!Util.isEmpty(records.get("sex"))) {
+						if ("男".equals(records.getString("sex"))) {
+							boysize++;
+						} else {
+							grilsize++;
+						}
+					}
+				}
+				dengsize = applyinfo.size() - 1;
+			}
+			//副标题2
+			{
+				String text = applyname + "，他" + dengsize + "名（男" + boysize + "/女" + grilsize + "）";
+				Paragraph p = new Paragraph(text, font);
+				p.setSpacingAfter(15);
+				p.setIndentationRight(20);
+				p.setAlignment(Paragraph.ALIGN_RIGHT);
+				document.add(p);
+			}
 			{
 				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
 				Paragraph p = new Paragraph(subtitle, font);
@@ -811,25 +841,6 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				p.setIndentationRight(20);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				//添加副标题1
-				document.add(p);
-			}
-			String applyname = "";
-			int dengsize = 0;
-			int totalsize = 0;
-			if (!Util.isEmpty(applyinfo)) {
-				Record record = applyinfo.get(0);
-				applyname += record.getString("firstname");
-				applyname += record.getString("lastname");
-				dengsize = applyinfo.size() - 1;
-				totalsize = applyinfo.size();
-			}
-			//副标题2
-			{
-				String text = "（旅行参加者 " + applyname + " 他" + dengsize + "名、計" + totalsize + "名）";
-				Paragraph p = new Paragraph(text, font);
-				p.setSpacingAfter(15);
-				p.setIndentationRight(20);
-				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
 			//表格
@@ -1432,6 +1443,88 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return stream;
+	}
+
+	public ByteArrayOutputStream returnhome(Map<String, Object> tempdata) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+
+		//公司信息
+		TCompanyEntity company = (TCompanyEntity) tempdata.get("company");
+		//出行信息
+		TOrderTripJpEntity ordertripjp = (TOrderTripJpEntity) tempdata.get("ordertripjp");
+		//申请人信息
+		List<Record> applyinfo = (List<Record>) tempdata.get("applyinfo");
+		//日本订单信息
+		TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
+		//订单信息
+		TOrderEntity orderinfo = (TOrderEntity) tempdata.get("orderinfo");
+		//地接社名称
+		String dijie = "";
+		//地接社联系人
+		String dijielinkman = "";
+		//地接社电话
+		String dijiephone = "";
+		//公章地址
+		String dijieDes = "";
+		if (!Util.isEmpty(orderjp.getGroundconnectid())) {
+			TCompanyEntity dijiecompany = dbDao.fetch(TCompanyEntity.class, orderjp.getGroundconnectid().longValue());
+			dijie = dijiecompany.getName();
+			dijielinkman = dijiecompany.getLinkman();
+			dijiephone = dijiecompany.getMobile();
+			dijieDes = dijiecompany.getCdesignNum();
+		}
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("acceptDesign", orderjp.getAcceptDesign());
+		map.put("dijiename", dijie);
+		map.put("dijietel", dijiephone);
+		map.put("dijieDes", dijieDes);
+		map.put("dijiefuze", dijielinkman);
+		map.put("songqianname", company.getName());
+		map.put("songqiantel", company.getMobile());
+		map.put("songqiandes", company.getCdesignNum());
+		map.put("songqianfuze", company.getLinkman());
+		DateFormat traveldateformat = new SimpleDateFormat("MM/dd");
+		Date goTripDate = orderinfo.getGoTripDate();
+		Date backTripDate = orderinfo.getBackTripDate();
+		String godatestr = "";
+		if (!Util.isEmpty(goTripDate)) {
+			godatestr += traveldateformat.format(goTripDate);
+		}
+		godatestr += "~";
+		if (!Util.isEmpty(backTripDate)) {
+			godatestr += traveldateformat.format(backTripDate);
+		}
+		map.put("traveltime", godatestr);
+		int count = 1;
+		for (Record record : applyinfo) {
+			//姓名
+			String applyname = (!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
+					+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : "");
+			//职业
+			String careerstatus = "";
+			if (!Util.isEmpty(record.get("careerstatus"))) {
+				for (JobStatusEnum jobstatusenum : JobStatusEnum.values()) {
+					if (record.getInt("careerstatus") == jobstatusenum.intKey()) {
+						careerstatus = jobstatusenum.value();
+					}
+				}
+			}
+			map.put("applyname" + count, applyname);
+			map.put("gender" + count, !Util.isEmpty(record.get("sex")) ? record.getString("sex") : "");
+			map.put("province" + count, !Util.isEmpty(record.get("province")) ? record.getString("province") : "");
+			map.put("birthday" + count,
+					!Util.isEmpty(record.get("birthday")) ? dateformat.format((Date) record.get("birthday")) : "");
+			map.put("passport" + count, !Util.isEmpty(record.get("passportno")) ? record.getString("passportno") : "");
+			map.put("remark" + count, careerstatus);
+			count++;
+		}
+
+		//获取模板文件
+		URL resource = getClass().getClassLoader().getResource("japanfile/liaoningwanda/returnhome.pdf");
+		TemplateUtil templateUtil = new TemplateUtil();
+		stream = templateUtil.pdfTemplateStream(resource, map);
 		return stream;
 	}
 }
