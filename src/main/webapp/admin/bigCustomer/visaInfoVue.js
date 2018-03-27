@@ -33,6 +33,7 @@ new Vue({
 				staffId:staffId
 			},
 			type:'post',
+			async:false,
 			success: function(data){
 				visaInfo.travelCompanionInfo = data.travelCompanionInfo;
 				visaInfo.previUSTripInfo = data.previUSTripInfo;
@@ -234,10 +235,13 @@ function openYesOrNoPage(){
 		$(".militaryServiceYes").hide();
 	}
 	
-	$("input[type='checkbox']:checked").each(function(){
-		alert($(this).val("value"));
-		var beforeEle = $(this).prev();
-		beforeEle.attr("disabled",true);
+	
+	$("input[type='checkbox']").each(function(index,ele){
+		if($(this).val()=="on"){
+			var beforeEle = $(this).prev();
+			beforeEle.attr("disabled",true);
+		}
+		
 	});
 	
 }
