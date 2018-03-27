@@ -61,32 +61,6 @@ public class OrderUpdateForm {
 	 */
 	private String travelpurpose;
 	/*
-	 * 人员id
-	 */
-	private Integer staffid;
-	/*
-	 * 性别
-	 */
-	private String sex;
-	/*
-	 * 出生日期
-	 */
-	private Date birthday;
-	/*
-	 * AA码
-	 */
-	private String aacode;
-
-	/*
-	 * 护照号
-	 */
-	private String passport;
-
-	/*
-	 * 面试时间
-	 */
-	private Date Interviewdate;
-	/*
 	 * 出发城市（去程）
 	 */
 	private Integer godeparturecity;
@@ -110,10 +84,5 @@ public class OrderUpdateForm {
 	 * 航班号（返程）
 	 */
 	private String returnFlightNum;
-
-	/*
-	 * 所需资料
-	 */
-	private String realinfo;
 
 }

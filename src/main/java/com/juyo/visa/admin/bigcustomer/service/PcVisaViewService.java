@@ -2,7 +2,6 @@ package com.juyo.visa.admin.bigcustomer.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +27,6 @@ import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffPaperworkUsEntity;
-import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
@@ -290,26 +288,6 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object visaSave(OrderUpdateForm form, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer userid = loginUser.getId();
-		//获取所需资料
-		TAppStaffPaperworkUsEntity taspuEntity = dbDao.fetch(TAppStaffPaperworkUsEntity.class,
-				Cnd.where("staffid", "=", form.getStaffid()));
-		int realinfoUpdate = 1;
-		if (!Util.isEmpty(taspuEntity)) {
-			if (Util.isEmpty(taspuEntity.getCreatetime())) {
-				taspuEntity.setCreatetime(new Date());
-			}
-			taspuEntity.setRealinfo(form.getRealinfo());
-			taspuEntity.setUpdatetime(new Date());
-			realinfoUpdate = dbDao.update(taspuEntity);
-		} else {
-			taspuEntity = new TAppStaffPaperworkUsEntity();
-			taspuEntity.setStaffid(form.getStaffid());
-			taspuEntity.setCreatetime(new Date());
-			taspuEntity.setRealinfo(form.getRealinfo());
-			taspuEntity.setUpdatetime(new Date());
-			dbDao.insert(taspuEntity);
-		}
 		//订单id
 		Integer orderid = form.getOrderid();
 		//获取出行信息表
@@ -329,13 +307,13 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			orderTravelInfo.setStaydays(form.getStaydays());
 		}
 		if (!Util.isEmpty(form.getPlanaddress())) {
-			orderTravelInfo.setPlanaddress(form.getPlanaddress());
+			orderTravelInfo.setAddress(form.getPlanaddress());
 		}
 		if (!Util.isEmpty(form.getPlancity())) {
-			orderTravelInfo.setPlancity(form.getPlancity());
+			orderTravelInfo.setCity(form.getPlancity());
 		}
 		if (!Util.isEmpty(form.getPlanstate())) {
-			orderTravelInfo.setPlanstate(form.getPlanstate());
+			orderTravelInfo.setState(form.getPlanstate());
 		}
 		if (!Util.isEmpty(form.getTravelpurpose())) {
 			String travelpurpose = form.getTravelpurpose();
@@ -351,29 +329,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		//修改出行信息
 		int orderUpdateNum = dbDao.update(orderTravelInfo);
 
-		//获取人员基本信息
-		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
-				Cnd.where("id", "=", form.getStaffid()));
-		basicinfo.setAacode(form.getAacode());
-		basicinfo.setInterviewdate(form.getInterviewdate());
-		basicinfo.setBirthday(form.getBirthday());
-		int basicinfoUpdate = dbDao.update(basicinfo);
-
-		//获取护照信息
-		TAppStaffPassportEntity passPortInfo = dbDao.fetch(TAppStaffPassportEntity.class,
-				Cnd.where("staffid", "=", form.getStaffid()));
-		passPortInfo.setFirstname(basicinfo.getFirstname());
-		passPortInfo.setFirstnameen(basicinfo.getFirstnameen());
-		passPortInfo.setLastname(basicinfo.getLastname());
-		passPortInfo.setLastnameen(basicinfo.getLastnameen());
-		passPortInfo.setSex(form.getSex());
-		passPortInfo.setPassport(form.getPassport());
-		int passPortInfoUpdateNum = dbDao.update(passPortInfo);
-		if (orderUpdateNum == 1 && passPortInfoUpdateNum == 1 && basicinfoUpdate == 1 && realinfoUpdate == 1) {
-			return "1";
-		} else {
-			return "0";
-		}
+		return orderUpdateNum;
 	}
 
 	/*

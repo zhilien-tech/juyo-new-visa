@@ -99,7 +99,6 @@
 											<option >北美自由贸易协议专业人员(TD/TN)</option>
 											<option >犯罪活动的受害者(U)</option>
 											<option >假释收益者(PARCIS)</option>
-
 										</select>
 									</div>
 								</div>
@@ -225,9 +224,8 @@
 										<c:if test="${!empty obj.orderInfo.returnDepartureCity}">
 												<option value="${obj.travelInfo.returnDepartureCity}" selected="selected">${obj.orderInfo.returnDepartureCity}</option>
 											</c:if>
-										<input id="returncity" name="returndepartureCity" type="hidden" " >
 										<!-- <option id="returnDepartureCity" name="returnDepartureCity"></option> -->
-												<c:forEach items="${obj.citylist }" var="city">
+											<%-- 	<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
 													<c:when test="${city.id eq obj.tripinfo.returnDepartureCity }">
 														<option value="${city.id }" selected="selected">${city.city }</option>
@@ -236,7 +234,8 @@
 														<option value="${city.id }">${city.city }</option>
 													</c:otherwise>
 												</c:choose>
-											</c:forEach>
+											</c:forEach> --%>
+										<input id="returncity" name="returnDepartureCity" type="hidden"  >
 									</select>
 								</div>
 							</div>
@@ -351,20 +350,20 @@
 							<div class="col-sm-4">
 								<div class="form-group">
 									<label>姓名/拼音</label> <input disabled="true"
-										value="${obj.summaryInfo.staffname }/${obj.summaryInfo.staffnameen}"
+										value="${obj.summaryInfo.staffname }"
 										type="text" class="form-control input-sm" placeholder="" />
 								</div>
 							</div>
 							<div class="col-sm-4">
 								<div class="form-group">
-									<label>性别</label> <input name="sex"
+									<label>性别</label> <input name="sex" disabled="true"
 										value="${obj.summaryInfo.sex }" type="text"
 										class="form-control input-sm" placeholder="" />
 								</div>
 							</div>
 							<div class="col-sm-4">
 								<div class="form-group">
-									<label>出生日期</label> <input name="birthday" type="text"
+									<label>出生日期</label> <input name="birthday" type="text" disabled="true"
 										value="${obj.summaryInfo.birthday }"
 										class="form-format form-control input-sm" placeholder="" />
 								</div>
@@ -373,7 +372,7 @@
 						<div class="row body-from-input">
 							<div class="col-sm-12">
 								<div class="form-group">
-									<label>所需资料</label> <input name="realinfo"
+									<label>所需资料</label> <input name="realinfo" disabled="true"
 										value="${obj.realinfo }" type="text"
 										class="form-control input-sm" placeholder="" /> <input
 										name="staffid" type="hidden"
@@ -391,22 +390,21 @@
 						<div class="row body-from-input">
 							<div class="col-sm-4">
 								<div class="form-group">
-									<label>AA码</label> <input type="text" disabled="true"
+									<label>AA码</label> <input name="aacode" type="text" disabled="true" 
 										value="${obj.summaryInfo.aacode }"
-										class="form-control input-sm" placeholder="" /> <input
-										name="aacode" type="hidden" value="${obj.summaryInfo.aacode }">
+										class="form-control input-sm" placeholder="" /> 
 								</div>
 							</div>
 							<div class="col-sm-4">
 								<div class="form-group">
-									<label>护照号</label> <input name="passport" type="text"
+									<label>护照号</label> <input name="passport" type="text" disabled="true"
 										value="${obj.summaryInfo.passport }"
 										class="form-control input-sm" placeholder="" />
 								</div>
 							</div>
 							<div class="col-sm-4">
 								<div class="form-group">
-									<label>面试时间</label> <input name="Interviewdate" type="text"
+									<label>面试时间</label> <input name="Interviewdate" type="text" disabled="true"
 										value="${obj.summaryInfo.Interviewdate }"
 										class="form-format form-control input-sm" placeholder="" />
 								</div>
@@ -493,7 +491,23 @@
 				}
 			});
 		});
-		
+		/* 获取form下所有值 */
+		 function getFormJson(form) {
+			  var o = {};
+			  var a = $(form).serializeArray();
+			  $.each(a, function (){
+				  if (o[this.name] != undefined) {
+				  	if (!o[this.name].push) {
+			  	  		o[this.name] = [o[this.name]];
+			  		}
+			  		o[this.name].push(this.value || '');
+			  	  } else {
+			  	  	o[this.name] = this.value || '';
+			  	  }
+			  });
+			  return o;
+		  }
+
 		
 		/* 异步保存数据 */
 		function save() {
@@ -509,6 +523,7 @@
 			$('#returncity').val(returnDepartureCity);
 			$('#returnarrivecity').val(returnArrivedCity);
 			$('#returnflightnum').val(returnflightnum);
+			var data = getFormJson("#orderUpdateForm");
 			$.ajax({
 				url : "${base}/admin/pcVisa/visaSave",
 				dataType : "json",
