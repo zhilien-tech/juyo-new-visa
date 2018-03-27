@@ -21,7 +21,7 @@ import org.nutz.mvc.annotation.POST;
 import com.beust.jcommander.internal.Maps;
 import com.juyo.visa.admin.bigcustomer.form.SignUpEventForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
-import com.juyo.visa.admin.orderus.service.OrderUSViewService;
+import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.comstants.CommonConstants;
@@ -176,11 +176,11 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 		//当前登录用户Id
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer loginUserId = loginUser.getId();
+		//Integer loginUserId = loginUser.getId();
 
 		//添加人员
 		TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
-		staffForm.setUserid(loginUserId);
+		//staffForm.setUserid(loginUserId);
 		staffForm.setFirstname(form.getFirstname());
 		staffForm.setLastname(form.getLastname());
 		staffForm.setTelephone(form.getTelephone());

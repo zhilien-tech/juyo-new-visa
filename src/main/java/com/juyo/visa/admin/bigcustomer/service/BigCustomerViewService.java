@@ -225,16 +225,16 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	public Object addStaff(TAppStaffBasicinfoAddForm addForm, HttpSession session) {
 
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		Integer comId = loginCompany.getId();
+		//Integer comId = loginCompany.getId();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer userId = loginUser.getId();
+		//Integer userId = loginUser.getId();
 
 		Date nowDate = DateUtil.nowDate();
 
 		//基本信息
-		addForm.setComid(comId);
-		addForm.setUserid(userId);
-		addForm.setOpid(userId);
+		//addForm.setComid(comId);
+		//addForm.setUserid(userId);
+		//addForm.setOpid(userId);
 		addForm.setCreatetime(nowDate);
 		addForm.setUpdatetime(nowDate);
 
@@ -248,6 +248,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		//		staffPassport.setOpid(userId);
 		staffPassport.setCreatetime(nowDate);
 		staffPassport.setUpdatetime(nowDate);
+		staffPassport.setFirstname(addForm.getFirstname());
+		staffPassport.setLastname(addForm.getLastname());
 		TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
 		Integer passportId = passportEntity.getId();
 
@@ -351,6 +353,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffInfo.setHasothernationality(IsHasOrderOrNotEnum.NO.intKey());
 		}
 
+		if (Util.isEmpty(staffInfo.getIsothercountrypermanentresident())) {
+			//是否是其他国家永久居民
+			staffInfo.setIsothercountrypermanentresident(IsHasOrderOrNotEnum.NO.intKey());
+		}
+
 		//获取护照id
 		TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffId", "=", staffId));
@@ -398,10 +405,14 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffInfo.setDetailedaddress(updateForm.getDetailedaddress());
 			staffInfo.setEmail(updateForm.getEmail());
 			staffInfo.setFirstname(updateForm.getFirstname());
-			staffInfo.setFirstnameen(updateForm.getFirstnameen().substring(1));
+			if (!Util.isEmpty(updateForm.getFirstnameen())) {
+				staffInfo.setFirstnameen(updateForm.getFirstnameen().substring(1));
+			}
 			staffInfo.setIssueorganization(updateForm.getIssueorganization());
 			staffInfo.setLastname(updateForm.getLastname());
-			staffInfo.setLastnameen(updateForm.getLastnameen().substring(1));
+			if (!Util.isEmpty(updateForm.getLastnameen())) {
+				staffInfo.setLastnameen(updateForm.getLastnameen().substring(1));
+			}
 			staffInfo.setOtherfirstname(updateForm.getOtherfirstname());
 			if (!Util.isEmpty(updateForm.getOtherfirstnameen())) {
 				staffInfo.setOtherfirstnameen(updateForm.getOtherfirstnameen().substring(1));
@@ -588,8 +599,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		}
 
 		result.put("passport", passport);
-		result.put("infoType", ApplicantInfoTypeEnum.PASSPORT.intKey());
-		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
+		result.put("infotype", ApplicantInfoTypeEnum.PASSPORT.intKey());
+		result.put("passporttype", EnumUtil.enum2(PassportTypeEnum.class));
 		return result;
 	}
 
@@ -611,26 +622,40 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 			TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
 					Cnd.where("id", "=", passortId));
-
+			TAppStaffBasicinfoEntity staffBase = dbDao.fetch(TAppStaffBasicinfoEntity.class, passport.getStaffid()
+					.longValue());
+			staffBase.setFirstname(passportForm.getFirstname());
+			staffBase.setLastname(passportForm.getLastname());
 			passport.setOpid(userId);
-			passport.setPassporturl(passportForm.getPassportUrl());
+			passport.setFirstname(passportForm.getFirstname());
+			if (!Util.isEmpty(passportForm.getFirstnameen())) {
+				passport.setFirstnameen(passportForm.getFirstnameen());
+				staffBase.setFirstnameen(passportForm.getFirstnameen().substring(1));
+			}
+			passport.setLastname(passportForm.getLastname());
+			if (!Util.isEmpty(passportForm.getLastnameen())) {
+				passport.setLastnameen(passportForm.getLastnameen());
+				staffBase.setLastnameen(passportForm.getLastnameen().substring(1));
+			}
+			dbDao.update(staffBase);
+			passport.setPassporturl(passportForm.getPassporturl());
 			passport.setOCRline1(passportForm.getOCRline1());
 			passport.setOCRline2(passportForm.getOCRline2());
-			passport.setBirthaddress(passportForm.getBirthAddress());
-			passport.setBirthaddressen(passportForm.getBirthAddressEn());
+			passport.setBirthaddress(passportForm.getBirthaddress());
+			passport.setBirthaddressen(passportForm.getBirthaddressen());
 			passport.setBirthday(passportForm.getBirthday());
-			passport.setIssueddate(passportForm.getIssuedDate());
-			passport.setIssuedorganization(passportForm.getIssuedOrganization());
-			passport.setIssuedorganizationen(passportForm.getIssuedOrganizationEn());
-			passport.setIssuedplace(passportForm.getIssuedPlace());
-			passport.setIssuedplaceen(passportForm.getIssuedPlaceEn());
+			passport.setIssueddate(passportForm.getIssueddate());
+			passport.setIssuedorganization(passportForm.getIssuedorganization());
+			passport.setIssuedorganizationen(passportForm.getIssuedorganizationen());
+			passport.setIssuedplace(passportForm.getIssuedplace());
+			passport.setIssuedplaceen(passportForm.getIssuedplaceen());
 			passport.setPassport(passportForm.getPassport());
 			passport.setSex(passportForm.getSex());
-			passport.setSexen(passportForm.getSexEn());
+			passport.setSexen(passportForm.getSexen());
 			passport.setType(passportForm.getType());
-			passport.setValidenddate(passportForm.getValidEndDate());
-			passport.setValidstartdate(passportForm.getValidStartDate());
-			passport.setValidtype(passportForm.getValidType());
+			passport.setValidenddate(passportForm.getValidenddate());
+			passport.setValidstartdate(passportForm.getValidstartdate());
+			passport.setValidtype(passportForm.getValidtype());
 			passport.setUpdatetime(nowDate);
 			dbDao.update(passport);
 		}

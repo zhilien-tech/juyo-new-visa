@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>基本信息</title>
+    <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+</head>
+
+<body>
+	<img id="vcode" alt="" width="500px" height="200px" src="images/iphoneHZ.png">
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
+</body>
+<script>
+connectWebSocket();
+function connectWebSocket(){
+	 if ('WebSocket' in window){  
+        console.log('Websocket supported');  
+        socket = new WebSocket('ws://192.168.1.20:8080/vcodewebsocket');   
+
+        console.log('Connection attempted');  
+
+        socket.onopen = function(){  
+             console.log('Connection open!');  
+             //setConnected(true);  
+         };
+
+        socket.onclose = function(){  
+            console.log('Disconnecting connection');  
+        };
+
+        socket.onmessage = function (evt){
+              console.log(evt); 
+              var received_msg = evt.data;  
+              console.log(received_msg); 
+              if(received_msg){
+            	  document.getElementById("vcode").src=received_msg;
+            	  layer.open({
+            			type: 2,
+            			title: false,
+            			closeBtn:false,
+            			fix: false,
+            			maxmin: false,
+            			shadeClose: false,
+            			scrollbar: false,
+            			area: ['800px', '400px'],
+            			content: '/admin/orderUS/writeVcode.html'
+            		});
+              }
+              console.log('message received!');  
+              //showMessage(received_msg);  
+         };  
+
+      } else {  
+        console.log('Websocket not supported');  
+      }  
+}
+</script>
+</html>
