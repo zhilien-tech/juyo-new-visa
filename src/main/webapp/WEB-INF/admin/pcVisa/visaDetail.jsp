@@ -320,7 +320,7 @@
 		<div class="info" id="mySwitch">
 			<p class="info-head">申请人</p>
 			<div class="dataInfoGroup">
-				<a>拍照资料</a> <a>护照信息</a> <a>基本信息</a> <a>签证信息</a>
+				<a v-on:click="updatePhoto(${obj.summaryInfo.staffid })">拍照资料</a> <a>护照信息</a> <a>基本信息</a> <a>签证信息</a>
 			</div>
 			<div class="info-body-from">
 				<div class="row body-from-input">
@@ -471,6 +471,7 @@
 		src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"
 		charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+	<script src="${base}/admin/pcVisa/updatePhoto.js"></script>
 	<script type="text/javascript">
 		$(".form-format").datetimepicker({
 			format : "yyyy-mm-dd",

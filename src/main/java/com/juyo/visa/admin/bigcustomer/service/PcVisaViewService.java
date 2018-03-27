@@ -375,4 +375,16 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			return "0";
 		}
 	}
+
+	/*
+	 * 拍照资料获取
+	 */
+	public Object updatePhoto(Integer staffid) {
+		TAppStaffBasicinfoEntity basicInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffid));
+		if (!Util.isEmpty(basicInfo)) {
+			return basicInfo;
+		} else {
+			return null;
+		}
+	}
 }

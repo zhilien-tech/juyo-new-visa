@@ -65,4 +65,14 @@ public class PcVisaModule {
 		return pcVisaViewService.visaSave(form, session);
 
 	}
+
+	/*
+	 * 跳转拍照资料
+	 */
+	@At
+	@GET
+	public Object updatePhoto(@Param("staffid") Integer staffid) {
+		return pcVisaViewService.updatePhoto(staffid);
+	}
+
 }
