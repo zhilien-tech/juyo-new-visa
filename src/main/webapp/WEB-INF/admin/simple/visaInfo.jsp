@@ -12,6 +12,8 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<!-- 本页css -->
 	<link rel="stylesheet" href="${base}/references/common/css/simpleVisaInfo.css">
@@ -213,6 +215,38 @@
 												<input name="threecounty" type="button" value="山形县" class="btn btn-sm btnState">
 											</div>
 										</div>
+										
+										<c:choose>
+											<c:when test="${obj.jporderinfo.isVisit == 1 }">
+												<div class="alignment cf viseType-btn">
+											</c:when>
+											<c:otherwise>
+												<div class="alignment cf viseType-btn none">
+											</c:otherwise>
+										</c:choose>
+										
+											<div class="row body-from-input">
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label>上次出行时间</label>
+														<input id="" name="" type="text" class="form-control input-sm datetimepickercss" value=""/>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label>上次停留天数</label>
+														<input id="" name="" type="text" class="form-control input-sm" value=""/>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label>上次返回时间</label>
+														<input id="" name="" type="text" class="form-control input-sm datetimepickercss" value=""/>
+													</div>
+												</div>
+											</div>
+										</div>	
+										
 									</div><!-- end 过去三年是否访问过 -->
 						</div>
 					</div>
@@ -660,6 +694,8 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>	
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/moment.min.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/daterangepicker.js"></script>	
 	<!-- DataTables -->
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -1221,8 +1257,10 @@
 			var thisval = $(this).val();
 			if(thisval == 1){
 				$('#threexian').show();
+				$('.alignment').show();
 			}else{
 				$('#threexian').hide();
+				$('.alignment').hide();
 			}
 		});
 		/* 在日担保人出生日期 */

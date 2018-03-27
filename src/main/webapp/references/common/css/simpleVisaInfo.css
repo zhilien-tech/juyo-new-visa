@@ -288,3 +288,8 @@ body {
 .inviterCB input[type=checkbox]:checked + label {
     background: #26ca28;
 }
+.alignment {
+	padding-left:1.8%;
+	padding-right:2%;
+	width:100%;
+}
