@@ -14,6 +14,12 @@ import lombok.Data;
 @Data
 public class VisaEditDataForm implements Serializable {
 
+	/**
+	 * TODO（用一句话描述这个变量表示什么）
+	 */
+
+	private static final long serialVersionUID = 1L;
+
 	//本身申请人ID
 	private Integer applicantId;
 
@@ -129,5 +135,11 @@ public class VisaEditDataForm implements Serializable {
 
 	private String traveladvice;
 	private String isname;
+	private String isyaoqing;
 
+	private Date laststartdate;
+
+	private Integer laststayday;
+
+	private Date lastreturndate;
 }

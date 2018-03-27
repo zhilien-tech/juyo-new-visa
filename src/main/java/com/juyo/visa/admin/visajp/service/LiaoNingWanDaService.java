@@ -289,6 +289,8 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 		List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
 		List<TOrderTravelplanJpEntity> ordertravelplan = (List<TOrderTravelplanJpEntity>) tempdata
 				.get("ordertravelplan");
+		//日本订单信息
+		TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			//中文姓
@@ -441,6 +443,16 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			map.put("fill_24", record.getString("hotelphone"));
 			//地址
 			map.put("fill_25", record.getString("hoteladdress"));
+			String lastinfo = "";
+			if (!Util.isEmpty(orderjp.getLaststartdate())) {
+				lastinfo += dateformat.format(orderjp.getLaststartdate());
+			}
+			lastinfo += "~";
+			if (!Util.isEmpty(orderjp.getLastreturndate())) {
+				lastinfo += dateformat.format(orderjp.getLastreturndate());
+			}
+			lastinfo += "      " + orderjp.getLaststayday();
+			map.put("fill_26", lastinfo);
 			//配偶职业
 			map.put("fill_1_2", record.getString("unitname"));
 			//在日担保人信息

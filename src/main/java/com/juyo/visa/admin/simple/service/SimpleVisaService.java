@@ -1201,6 +1201,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			orderjp.setVisaCounty(form.getVisacounty());
 			orderjp.setIsVisit(form.getIsVisit());
 			orderjp.setThreeCounty(form.getThreecounty());
+			orderjp.setLaststartdate(form.getLaststartdate());
+			orderjp.setLaststayday(form.getLaststayday());
+			orderjp.setLastreturndate(form.getLastreturndate());
 			dbDao.update(orderjp);
 			//申请人
 			TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
@@ -1498,6 +1501,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			otherinfo.setInvitejob(form.getInvitejob());
 			otherinfo.setInvitecountry(form.getInvitecountry());
 			otherinfo.setTraveladvice(form.getTraveladvice());
+			otherinfo.setIsyaoqing(form.getIsyaoqing());
 			if (!Util.isEmpty(otherinfo.getId())) {
 				dbDao.update(otherinfo);
 			} else {

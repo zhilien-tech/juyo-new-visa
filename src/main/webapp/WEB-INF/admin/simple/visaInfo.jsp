@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
-<c:set var="url" value="${base}/admin/firstTrialJp" />
 <!DOCTYPE HTML>
 <html lang="en-US" id="addHtml">
 <head>
@@ -229,19 +228,19 @@
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次出行时间</label>
-														<input id="" name="" type="text" class="form-control input-sm datetimepickercss" value=""/>
+														<input id="laststartdate" name="laststartdate" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.laststartdate }" pattern="yyyy-MM-dd" />"/>
 													</div>
 												</div>
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次停留天数</label>
-														<input id="" name="" type="text" class="form-control input-sm" value=""/>
+														<input id="laststayday" name="laststayday" type="text" class="form-control input-sm" value="${obj.jporderinfo.laststayday }"/>
 													</div>
 												</div>
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次返回时间</label>
-														<input id="" name="" type="text" class="form-control input-sm datetimepickercss" value=""/>
+														<input id="lastreturndate" name="lastreturndate" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.lastreturndate }" pattern="yyyy-MM-dd" />"/>
 													</div>
 												</div>
 											</div>
@@ -586,7 +585,7 @@
 									<div class="form-group">
 										<label id="inviterHead"><span>*</span>申元保证书/姓名-拼音</label>
 										<div class="inviterCB">
-											 <input type="checkbox" value="1" id="inviterCBInput" name="" />
+											 <input type="checkbox" value="1" ${obj.visaother.isyaoqing == 1?'checked':'' } id="inviterCBInput" name="" />
 											 <label for="inviterCBInput"></label>
 										</div>
 										<input id="invitename" name="invitename" type="text" class="form-control input-sm " placeholder="参照'申元保证书" value="${obj.visaother.invitename }"/>
@@ -1112,12 +1111,19 @@
 			var visatype = $('#visatype').val();
 			var isVisit = $('#isVisit').val();
 			var isname = $("#guaranteeCBInput").prop("checked");
+			var isyaoqing = $("#inviterCBInput").prop("checked");
 			if(isname){
 				isname = 1;
 			}else{
 				isname = 0;
 			}
-			var passportInfo = $.param({"wealthType":wealthType,'visatype':visatype,'visacounty':visacounty,'isVisit':isVisit,'threecounty':threecounty,'isname':isname}) + "&" +  $("#passportInfo").serialize();
+			if(isyaoqing){
+				isyaoqing = 1;
+			}else{
+				isyaoqing = 0;
+			}
+			
+			var passportInfo = $.param({"wealthType":wealthType,'visatype':visatype,'visacounty':visacounty,'isVisit':isVisit,'threecounty':threecounty,'isname':isname,'isyaoqing':isyaoqing}) + "&" +  $("#passportInfo").serialize();
 			layer.load(1);
 			$.ajax({
 				type: 'POST',
@@ -1316,9 +1322,68 @@
 				$(".hideInviter").hide();
 			}
 		});
+		initPageData();
+		function initPageData(){
+			var guaranteeCBInput = $("#guaranteeCBInput").prop("checked");
+			if(guaranteeCBInput){
+				/* $(".vouchnameen").show(); */
+				$(".hideLabel").show();
+			}else{
+				/* $(".vouchnameen").hide(); */
+				$(".hideLabel").hide();
+			}
+			var inviterCBInput = $("#inviterCBInput").prop("checked");
+			if(inviterCBInput){
+				$(".inviterName").show();
+				/* $(".inviterSY").hide(); */
+				$(".hideInviter").show();
+			}else{
+				$(".inviterSY").show();
+				/* $(".inviterName").hide(); */
+				$(".hideInviter").hide();
+			}
+		}
 		$('#vouchname').on('input propertychange',function(){
 			var vouchnameen = getPinYinStr($(this).val()).toUpperCase();
 			$('#vouchnameen').val(vouchnameen);
+		});
+		var now = new Date();
+		//出行时间
+		$("#laststartdate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		//返回时间
+		$("#lastreturndate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		});
+		$(document).on("input","#laststayday",function(){
+			var gotripdate = $('#laststartdate').val();
+			var thisval = $(this).val();
+			thisval = thisval.replace(/[^\d]/g,'');
+			$(this).val(thisval);
+			if(!thisval){
+				$('#lastreturndate').val('');
+			}
+			if(gotripdate && thisval){
+				$.ajax({ 
+					url: '/admin/visaJapan/autoCalculateBackDate.html',
+					dataType:"json",
+					data:{gotripdate:gotripdate,stayday:thisval},
+					type:'post',
+					success: function(data){
+						//往返设置返回日期
+						$('#lastreturndate').val(data);
+					}
+				});
+			}
 		});
 	</script>
 </body>
