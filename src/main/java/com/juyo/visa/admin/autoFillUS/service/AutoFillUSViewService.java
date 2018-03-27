@@ -25,20 +25,27 @@ import com.juyo.visa.common.enums.MonthsEnum;
 import com.juyo.visa.common.util.ResultObject;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
+import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
 import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
+import com.juyo.visa.entities.TAppStaffConscientiousEntity;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffDriverinfoEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
+import com.juyo.visa.entities.TAppStaffGocountryEntity;
 import com.juyo.visa.entities.TAppStaffGousinfoEntity;
 import com.juyo.visa.entities.TAppStaffImmediaterelativesEntity;
+import com.juyo.visa.entities.TAppStaffLanguageEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
+import com.juyo.visa.entities.TAppStaffOrganizationEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
+import com.juyo.visa.entities.TAppStaffVcodeEntity;
+import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TOrderUsTravelinfoEntity;
-import com.juyo.visa.entities.TVcodeEntity;
 import com.juyo.visa.websocket.VcodeWSHandler;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -276,6 +283,35 @@ public class AutoFillUSViewService extends BaseService<TOrderJpEntity> {
 					TAppStaffImmediaterelativesEntity.class, Cnd.where("staffid", "=", staffBase.getId()), null);
 			map.put("immediaterelatives", immediaterelativesList);
 
+			//工作、教育、培训信息
+			TAppStaffWorkEducationTrainingEntity workEducationTraining = dbDao.fetch(
+					TAppStaffWorkEducationTrainingEntity.class, Cnd.where("staffid", "=", staffBase.getId()));
+			map.put("workEducationTraining", workEducationTraining);
+			//以前的工作信息
+			List<TAppStaffBeforeworkEntity> beforeworkList = dbDao.query(TAppStaffBeforeworkEntity.class,
+					Cnd.where("staffid", "=", staffBase.getId()), null);
+			map.put("beforework", beforeworkList);
+			//以前的教育信息
+			List<TAppStaffBeforeeducationEntity> beforeeducationList = dbDao.query(
+					TAppStaffBeforeeducationEntity.class, Cnd.where("staffid", "=", staffBase.getId()), null);
+			map.put("beforeeducation", beforeeducationList);
+			//使用的语言
+			List<TAppStaffLanguageEntity> languageList = dbDao.query(TAppStaffLanguageEntity.class,
+					Cnd.where("staffid", "=", staffBase.getId()), null);
+			map.put("language", languageList);
+			//去过的国家
+			List<TAppStaffGocountryEntity> gocountryList = dbDao.query(TAppStaffGocountryEntity.class,
+					Cnd.where("staffid", "=", staffBase.getId()), null);
+			map.put("gocountry", gocountryList);
+			//组织名称
+			List<TAppStaffOrganizationEntity> organizationList = dbDao.query(TAppStaffOrganizationEntity.class,
+					Cnd.where("staffid", "=", staffBase.getId()), null);
+			map.put("organization", organizationList);
+			//服兵役信息
+			List<TAppStaffConscientiousEntity> conscientiousList = dbDao.query(TAppStaffConscientiousEntity.class,
+					Cnd.where("staffid", "=", staffBase.getId()), null);
+			map.put("conscientious", conscientiousList);
+
 			return map;
 		}
 		return ResultObject.fail("暂无可执行的任务");
@@ -295,15 +331,15 @@ public class AutoFillUSViewService extends BaseService<TOrderJpEntity> {
 			e.printStackTrace();
 
 		}
-		List<TVcodeEntity> vcodeList = dbDao.query(TVcodeEntity.class, null, null);
+		List<TAppStaffVcodeEntity> vcodeList = dbDao.query(TAppStaffVcodeEntity.class, null, null);
 		if (!Util.isEmpty(vcodeList)) {
-			for (TVcodeEntity tVcodeEntity : vcodeList) {
+			for (TAppStaffVcodeEntity tVcodeEntity : vcodeList) {
 				dbDao.delete(tVcodeEntity);
 			}
 		}
-		TVcodeEntity vcodeEntity = new TVcodeEntity();
+		TAppStaffVcodeEntity vcodeEntity = new TAppStaffVcodeEntity();
 		vcodeEntity.setVcodeurl(String.valueOf(map.get("data")));
-		TVcodeEntity insert = dbDao.insert(vcodeEntity);
+		TAppStaffVcodeEntity insert = dbDao.insert(vcodeEntity);
 		return map;
 	}
 }
