@@ -34,14 +34,6 @@ public class TOrderUsEntity implements Serializable {
 	private String ordernumber;
 
 	@Column
-	@Comment("验证码图片")
-	private String vcodeurl;
-
-	@Column
-	@Comment("验证码")
-	private String vcode;
-
-	@Column
 	@Comment("领区")
 	private Integer cityid;
 
@@ -56,10 +48,6 @@ public class TOrderUsEntity implements Serializable {
 	@Column
 	@Comment("是否付款")
 	private Integer ispayed;
-
-	@Column
-	@Comment("面试时间")
-	private Date interviewdate;
 
 	@Column
 	@Comment("操作人")

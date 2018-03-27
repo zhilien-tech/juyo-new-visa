@@ -176,11 +176,11 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 		//当前登录用户Id
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer loginUserId = loginUser.getId();
+		//Integer loginUserId = loginUser.getId();
 
 		//添加人员
 		TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
-		staffForm.setUserid(loginUserId);
+		//staffForm.setUserid(loginUserId);
 		staffForm.setFirstname(form.getFirstname());
 		staffForm.setLastname(form.getLastname());
 		staffForm.setTelephone(form.getTelephone());

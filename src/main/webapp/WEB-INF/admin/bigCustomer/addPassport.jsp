@@ -443,7 +443,7 @@
 					parent.saveAddOrder(2);
 					if(status == 2){
 						socket.onclose();
-						window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+data.applicantid;
+						window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+data.staffId;
 					}else if(status == 1){
 						closeWindow();
 					}

@@ -13,19 +13,19 @@ public class TAppStaffPassportAddForm extends AddForm implements Serializable{
 	private static final long serialVersionUID = 1L;
 		
 	/**人员id*/
-	private Integer staffId;
+	private Integer staffid;
 		
 	/**姓*/
-	private String firstName;
+	private String firstname;
 		
 	/**姓(拼音)*/
-	private String firstNameEn;
+	private String firstnameen;
 		
 	/**名*/
-	private String lastName;
+	private String lastname;
 		
 	/**名(拼音)*/
-	private String lastNameEn;
+	private String lastnameen;
 		
 	/**类型*/
 	private String type;
@@ -37,52 +37,52 @@ public class TAppStaffPassportAddForm extends AddForm implements Serializable{
 	private String sex;
 		
 	/**性别(拼音)*/
-	private String sexEn;
+	private String sexen;
 		
 	/**出生地点*/
-	private String birthAddress;
+	private String birthaddress;
 		
 	/**出生地点(拼音)*/
-	private String birthAddressEn;
+	private String birthaddressen;
 		
 	/**出生日期*/
 	private Date birthday;
 		
 	/**签发地点*/
-	private String issuedPlace;
+	private String issuedplace;
 		
 	/**签发地点(拼音)*/
-	private String issuedPlaceEn;
+	private String issuedplaceen;
 		
 	/**签发日期*/
-	private Date issuedDate;
+	private Date issueddate;
 		
 	/**有效期始*/
-	private Date validStartDate;
+	private Date validstartdate;
 		
 	/**有效类型*/
-	private Integer validType;
+	private Integer validtype;
 		
 	/**有效期至*/
-	private Date validEndDate;
+	private Date validenddate;
 		
 	/**签发机关*/
-	private String issuedOrganization;
+	private String issuedorganization;
 		
 	/**签发机关(拼音)*/
-	private String issuedOrganizationEn;
+	private String issuedorganizationen;
 		
 	/**操作人*/
-	private Integer opId;
+	private Integer opid;
 		
 	/**创建时间*/
-	private Date createTime;
+	private Date createtime;
 		
 	/**更新时间*/
-	private Date updateTime;
+	private Date updatetime;
 		
 	/**护照地址*/
-	private String passportUrl;
+	private String passporturl;
 		
 	/**OCR识别码第一行*/
 	private String oCRline1;

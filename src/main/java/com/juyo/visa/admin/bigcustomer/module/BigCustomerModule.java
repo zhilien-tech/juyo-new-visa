@@ -63,7 +63,7 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object addPassport() {
+	public Object addBaseInfo() {
 		return null;
 	}
 
