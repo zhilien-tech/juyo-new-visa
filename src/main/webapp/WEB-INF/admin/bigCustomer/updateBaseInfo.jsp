@@ -30,6 +30,7 @@
 				<div class="tab-content row">
 					<input id="comId" name="comid" type="hidden" value="${obj.applicant.comid }">
 					<input id="userId" name="userid" type="hidden" value="${obj.applicant.userid }">
+					<input id="staffId" name="id" type="hidden" value="${obj.staffId }">
 					<div class="col-sm-12 padding-right-0">
 						<!-- start 身份证 正面 -->
 							<div class="col-xs-4 pictures">
@@ -119,7 +120,7 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>民族</label> 
-									<input id="" name="" type="text" class="form-control input-sm"  value="" />
+									<input id="nation" name="nation" type="text" class="form-control input-sm"  value="${obj.applicant.nation }" />
 								</div>
 							</div>
 						</div>
@@ -170,13 +171,13 @@
 									<label>
 										<span>*</span>婚姻状况
 									</label> 
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="marrystatus" name="marrystatus" type="text" class="form-control input-sm" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>说明</label> 
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="marryexplain" name="marryexplain" type="text" class="form-control input-sm" />
 								</div>
 							</div>
 						</div>
@@ -188,10 +189,10 @@
 									<label>是否有曾用名</label> 
 									<div>
 										<span class="nameBeforeYes">
-											<input type="radio" name="usedBefore" class="usedBefore" value="1"/>是
+											<input type="radio" name="hasothername" class="usedBefore" value="1"/>是
 										</span>
 										<span>
-											<input type="radio" name="usedBefore" class="usedBefore" value="2" checked />否
+											<input type="radio" name="hasothername" class="usedBefore" value="2" checked />否
 										</span>
 									</div>
 								</div>
@@ -236,7 +237,7 @@
 						</div>
 						<!-- 您是否与上述国家/地区(国籍)意外的国家/地区的永久居民 -->
 						<div class="row">	
-							<label class="EngLabel">您是否与上述国家/地区(国籍)意外的国家/地区的永久居民</label>
+							<label class="EngLabel">您是否与上述国家/地区(国籍)以外的国家/地区的永久居民</label>
 							<div class=" col-sm-5 col-sm-offset-1 padding-right-0 ">
 								<div class="form-group">
 									<div>
@@ -311,13 +312,13 @@
 									<label>
 										<span>*</span>Phone Number
 									</label> 
-									<input id="telephone" name="telephone" type="text" class="form-control input-sm"/>
+									<input id="telephoneen" name="telephoneen" type="text" class="form-control input-sm"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Email Address</label> 
-									<input id="email" name="email" type="text" class="form-control input-sm"/>
+									<input id="emailen" name="emailen" type="text" class="form-control input-sm"/>
 								</div>
 							</div>
 						</div>
@@ -329,7 +330,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>The identity card of the people's Republic of China</label> 
-									<input id="cardId" name="cardId" type="text" class="form-control input-sm" />
+									<input id="cardIden" name="cardIden" type="text" class="form-control input-sm" />
 								</div>
 							</div>
 						</div>
@@ -339,7 +340,7 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Nationality</label> 
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="nationen" name="nationen" type="text" class="form-control input-sm" />
 								</div>
 							</div>
 						</div>
@@ -349,7 +350,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Address</label> 
-									<input id="address" name="address" type="text" class="form-control input-sm" />
+									<input id="addressen" name="addressen" type="text" class="form-control input-sm" />
 								</div>
 							</div>
 						</div>
@@ -358,19 +359,19 @@
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<label class="EngLabel">
 							Is your Mailing Address the same as your Home Address
-							<input class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" />
+							<input class="nowProvince" type="checkbox" name="addressIssamewithcarden" value="1" />
 							</label>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="provinceDiv">
 									<input type="hidden" name="cardprovince" id="cardProvince" />
 									<input type="hidden" name="cardcity" id="cardCity" />
 									<input type="hidden" id="sameAddress" value=""/>
-									<input id="province" name="province" type="text" class="form-control input-sm" placeholder="省" />
+									<input id="provinceen" name="provinceen" type="text" class="form-control input-sm" placeholder="省" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
-									<input id="city" name="city" type="text" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.city }" />
+									<input id="cityen" name="cityen" type="text" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.city }" />
 								</div>
 							</div>
 						</div>
@@ -380,7 +381,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Street Address</label> 
-									<input id="detailedAddress" name="detailedaddress" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedaddress }" />
+									<input id="detailedAddressen" name="detailedaddressen" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedaddress }" />
 								</div>
 							</div>
 						</div>
@@ -403,13 +404,13 @@
 						</div>
 						<!-- 曾用名 -->
 						<div class="row">
-							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
+							<!-- 是否有曾用名/曾有的或另有的国籍(或公民身份) -->
 							<div class="col-sm-10 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>Have you ever used other names</label> 
 									<div>
 										<span class="nameBeforeYes">
-											<input type="radio" name="usedBeforeUS" class="usedBeforeUS1" value="1"/>yes
+											<input type="radio" name="usedBeforeUSen" class="usedBeforeUS1" value="1"/>yes
 										</span>
 										<span>
 											<input type="radio" name="usedBeforeUS" class="usedBeforeUS2" value="2" checked />No
