@@ -87,6 +87,8 @@ public class AutoFillUSViewService extends BaseService<TOrderJpEntity> {
 			//获取第一条信息
 			TOrderUsEntity orderUS = orderList.get(0);
 
+			//订单id
+			map.put("orderid", orderUS.getId());
 			//领区
 			map.put("cityid", orderUS.getCityid());
 
@@ -238,6 +240,9 @@ public class AutoFillUSViewService extends BaseService<TOrderJpEntity> {
 			map.put("isworktelephoneapply", true);
 			//邮箱
 			map.put("email", staffBase.getEmailen());
+
+			//基本信息
+			map.put("staffBase", staffBase);
 
 			//护照信息
 			map.put("passport", staffPassport);
