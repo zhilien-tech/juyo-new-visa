@@ -139,6 +139,10 @@ editEleBeforeCheckbox($("#isknoworganizationname"));
 //是否 邮件地址
 editEleBeforeCheckbox($("#isKnowEmailAddress"));
 
+//与你的关系
+emptyContentByObj($("#contactPoint_ralationship_div"));
+
+
 //-------------------------------------------美国联络点 end------------------------------------
 
 
