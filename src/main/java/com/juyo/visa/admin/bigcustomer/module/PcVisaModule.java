@@ -36,6 +36,13 @@ public class PcVisaModule {
 	public Object visaList() {
 		return null;
 	}
+	
+	@At
+	@GET
+	@Ok("jsp")
+	public Object visaDetailUS() {
+		return null;
+	}
 
 	/**
 	 * 申请人 订单列表数据

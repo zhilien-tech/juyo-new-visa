@@ -40,6 +40,7 @@ import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
+import com.juyo.visa.common.enums.USMarryStatusEnum;
 import com.juyo.visa.common.enums.AppPictures.AppCredentialsTypeEnum;
 import com.juyo.visa.common.enums.visaProcess.ContactPointRelationshipStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
@@ -302,6 +303,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
+
+		result.put("marryStatus", staffInfo.getMarrystatus());
+		result.put("marryStatusEnum", EnumUtil.enum2(USMarryStatusEnum.class));
 
 		SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		if (!Util.isEmpty(staffInfo.getBirthday())) {
