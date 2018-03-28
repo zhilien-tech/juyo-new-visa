@@ -33,7 +33,7 @@ new Vue({
 				staffId:staffId
 			},
 			type:'post',
-			async:false,
+			//async:false,
 			success: function(data){
 				visaInfo.travelCompanionInfo = data.travelCompanionInfo;
 				visaInfo.previUSTripInfo = data.previUSTripInfo;
@@ -236,12 +236,12 @@ function openYesOrNoPage(){
 	}
 	
 	
+	//checkbox勾选时回显，设置input--->disabled
 	$("input[type='checkbox']").each(function(index,ele){
-		if($(this).val()=="on"){
+		if($(this).val()!="on"){
 			var beforeEle = $(this).prev();
 			beforeEle.attr("disabled",true);
 		}
-		
 	});
 	
 }
