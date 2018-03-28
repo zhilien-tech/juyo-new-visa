@@ -1,4 +1,4 @@
-package com.juyo.visa.admin.orderus.form;
+package com.juyo.visa.admin.orderUS.form;
 
 import lombok.Data;
 

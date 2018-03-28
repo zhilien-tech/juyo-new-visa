@@ -4,7 +4,7 @@
  * Copyright (c) 2018, 北京科技有限公司版权所有.
 */
 
-package com.juyo.visa.admin.orderus.service;
+package com.juyo.visa.admin.orderUS.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
-import com.juyo.visa.admin.orderus.form.VcodeForm;
+import com.juyo.visa.admin.orderUS.form.VcodeForm;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.util.SpringContextUtil;
