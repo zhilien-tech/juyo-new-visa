@@ -21,7 +21,7 @@ import org.nutz.mvc.annotation.POST;
 import com.beust.jcommander.internal.Maps;
 import com.juyo.visa.admin.bigcustomer.form.SignUpEventForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
-import com.juyo.visa.admin.orderus.service.OrderUSViewService;
+import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.comstants.CommonConstants;
