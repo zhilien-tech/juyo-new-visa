@@ -36,7 +36,7 @@ public class PcVisaModule {
 	public Object visaList() {
 		return null;
 	}
-	
+
 	@At
 	@GET
 	@Ok("jsp")
@@ -76,6 +76,7 @@ public class PcVisaModule {
 	/*
 	 * 跳转拍照资料
 	 */
+
 	@At
 	@GET
 	public Object updatePhoto(@Param("staffid") Integer staffid) {
