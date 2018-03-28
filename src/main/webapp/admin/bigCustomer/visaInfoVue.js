@@ -238,9 +238,11 @@ function openYesOrNoPage(){
 	
 	//checkbox勾选时回显，设置input--->disabled
 	$("input[type='checkbox']").each(function(index,ele){
+		var beforeEle = $(this).prev();
 		if($(this).val()!="on"){
-			var beforeEle = $(this).prev();
 			beforeEle.attr("disabled",true);
+		}else{
+			beforeEle.attr("disabled",false);
 		}
 	});
 	
