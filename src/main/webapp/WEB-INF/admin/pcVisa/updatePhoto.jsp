@@ -5,7 +5,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>拍摄资料</title>
-		<link rel="stylesheet" href="css/photograph.css" />
+		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/photograph.css" />
 	</head>
 	<body>
 		<div class="head">
@@ -22,7 +22,7 @@
 					微信扫描二维码上传识别
 				</div>
 				<div class="scan">
-					<img src="img/QRCode.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/QRCode.png" />
 				</div>
 			</div>
 			<!--二寸免冠照-->
@@ -35,11 +35,11 @@
 					<span>3.漏出耳朵</span>
 				</div>
 				<div class="samplePhoto">
-					<img src="img/photo.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/picture.png" />
 				</div>
 				<div class="uploadPhoto">
 					<div>上传</div>
-					<img src="" class="loadImg" />
+					<img src="${obj.twoinchphoto }" class="loadImg" width="100%" height="100%" />
 				</div>
 				<input type="file" class="publicFile uploadFileImg" name="" />
 			</div>
@@ -48,7 +48,7 @@
 				<div class="sectionHead">护照首页</div>
 				<div class="explain"></div>
 				<div class="samplePassport">
-					<img src="img/passport.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/passport.png" />
 				</div>
 				<div class="uploadPassport">
 					<div>上传</div>
@@ -61,7 +61,7 @@
 				<div class="sectionHead">旧护照</div>
 				<div class="explain"></div>
 				<div class="samplePassport">
-					<img src="img/passport.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/passport.png" />
 				</div>
 				<div class="uploadPassport">
 					<div>上传</div>
@@ -74,11 +74,11 @@
 				<div class="sectionHead">身份证</div>
 				<div class="explain"></div>
 				<div class="samplePassport">
-					<img src="img/passport.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/passport.png" />
 				</div>
 				<div class="uploadPassport">
 					<div>上传</div>
-					<img />
+					<img src="${obj.cardfront }"/>
 				</div>
 				<input type="file" class="publicFile" name="" />
 			</div>
@@ -87,7 +87,7 @@
 				<div class="sectionHead">户口本</div>
 				<div class="explain"></div>
 				<div class="sampleHuKouBook">
-					<img src="img/hukouBook.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<div class="uploadHuKouBook">
 					<div>户主页</div>
@@ -100,7 +100,7 @@
 				<div class="sectionHead">房产证</div>
 				<div class="explain"></div>
 				<div class="sampleHuKouBook">
-					<img src="img/hukouBook.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<div class="uploadHuKouBook">
 					<div>上传</div>
@@ -113,7 +113,7 @@
 				<div class="sectionHead">婚姻状况</div>
 				<div class="explain"></div>
 				<div class="sampleHuKouBook">
-					<img src="img/hukouBook.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<div class="uploadHuKouBook">
 					<div>上传</div>
@@ -126,7 +126,7 @@
 				<div class="sectionHead">银行流水</div>
 				<div class="explain"></div>
 				<div class="sampleHuKouBook">
-					<img src="img/hukouBook.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<div class="uploadHuKouBook">
 					<div>上传</div>
@@ -139,7 +139,7 @@
 				<div class="sectionHead">在职证明</div>
 				<div class="explain"></div>
 				<div class="sampleHuKouBook">
-					<img src="img/hukouBook.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<div class="uploadHuKouBook">
 					<div>上传</div>
@@ -152,7 +152,7 @@
 				<div class="sectionHead">营业执照或机构代码证</div>
 				<div class="explain"></div>
 				<div class="sampleHuKouBook">
-					<img src="img/hukouBook.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<div class="uploadHuKouBook">
 					<div>上传</div>
@@ -165,7 +165,7 @@
 				<div class="sectionHead">行驶证</div>
 				<div class="explain"></div>
 				<div class="sampleHuKouBook">
-					<img src="img/hukouBook.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<div class="uploadHuKouBook">
 					<div>上传</div>
@@ -178,7 +178,7 @@
 				<div class="sectionHead">过期美签</div>
 				<div class="explain"></div>
 				<div class="sampleHuKouBook">
-					<img src="img/hukouBook.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<div class="uploadHuKouBook">
 					<div>上传</div>
@@ -191,7 +191,7 @@
 				<div class="sectionHead">美国出签</div>
 				<div class="explain"></div>
 				<div class="sampleHuKouBook">
-					<img src="img/hukouBook.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<div class="uploadHuKouBook">
 					<div>上传</div>
@@ -202,12 +202,17 @@
 			
 		</div>
 	</body>
-	<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+	<script
+		src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+	<script src="${base}/admin/pcVisa/photo.js"></script>
 	<script>
 		$(function(){
 			$(".uploadPhoto").click(function(){
 				$(".uploadFileImg").click();
-				console.log("aaa")
+				$(".uploadFileImg").change(function(){
+					
+				});
+				
 			})
 		})
 	</script>

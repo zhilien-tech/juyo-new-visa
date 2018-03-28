@@ -76,9 +76,9 @@ public class PcVisaModule {
 	/*
 	 * 跳转拍照资料
 	 */
-
 	@At
 	@GET
+	@Ok("jsp")
 	public Object updatePhoto(@Param("staffid") Integer staffid) {
 		return pcVisaViewService.updatePhoto(staffid);
 	}
