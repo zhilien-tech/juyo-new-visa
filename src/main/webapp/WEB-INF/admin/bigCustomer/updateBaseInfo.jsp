@@ -171,13 +171,18 @@
 									<label>
 										<span>*</span>婚姻状况
 									</label> 
-									<input id="marrystatus" name="marrystatus" type="text" class="form-control input-sm" />
+									<select id="marrystatus" name="marrystatus" class="form-control input-sm selectHeight">
+											<option value="">请选择</option>
+											<c:forEach var="map" items="${obj.marryStatusEnum}">
+												<option value="${map.key}" ${map.key==obj.marryStatus?'selected':''}>${map.value}</option>
+											</c:forEach>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>说明</label> 
-									<input id="marryexplain" name="marryexplain" type="text" class="form-control input-sm" />
+									<input id="marryexplain" name="marryexplain" type="text" class="form-control input-sm" value="${obj.applicant.marryexplain }"/>
 								</div>
 							</div>
 						</div>
@@ -203,13 +208,13 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>姓</label> 
-									<input id="" name="" type="text" class="form-control input-sm " />
+									<input id="otherfirstname" name="otherfirstname" type="text" class="form-control input-sm " value="${obj.applicant.otherfirstname }"/>
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>名</label> 
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="otherlastname" name="otherlastname" type="text" class="form-control input-sm" value="${obj.applicant.otherlastname }"/>
 								</div>
 							</div>
 						</div>
@@ -220,10 +225,10 @@
 									<label>曾有的或另有的国籍(或公民身份)</label> 
 									<div>
 										<span class="onceIDYes">
-											<input type="radio" name="usedNationality" class="usedNationality" value="1" />是
+											<input type="radio" name="hasothernationality" class="usedNationality" value="1" />是
 										</span>
 										<span>
-											<input type="radio" name="usedNationality" class="usedNationality"  value="2" checked />否
+											<input type="radio" name="hasothernationality" class="usedNationality"  value="2" checked />否
 										</span>
 									</div>
 								</div>
@@ -231,7 +236,7 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1 usedNationalityTrue">
 								<div class="form-group" id="">
 									<label>国籍</label> 
-									<input id="" name="" class="form-control input-sm"/>
+									<input id="nationality" name="nationality" class="form-control input-sm" value="${obj.applicant.nationality }"/>
 								</div>
 							</div>
 						</div>
@@ -242,17 +247,17 @@
 								<div class="form-group">
 									<div>
 										<span class="onceIDYes">
-											<input type="radio" name="permanent" class="permanent" value="1" />是
+											<input type="radio" name="isothercountrypermanentresident" class="permanent" value="1" />是
 										</span>
 										<span>
-											<input type="radio" name="permanent" class="permanent"  value="2" checked />否
+											<input type="radio" name="isothercountrypermanentresident" class="permanent"  value="2" checked />否
 										</span>
 									</div>
 								</div>
 							</div>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0 permanentTrue">
 								<div class="form-group">
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="othercountry" name="othercountry" type="text" class="form-control input-sm" value="${obj.applicant.othercountry }"/>
 								</div>
 							</div>
 						</div>
@@ -261,12 +266,12 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>国家注册号码</label> 
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="nationalidentificationnumber" name="nationalidentificationnumber" type="text" class="form-control input-sm" value="${obj.applicant.nationalidentificationnumber }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
 								<div class="form-group">
-									<input type="checkbox" class="vertical"/>
+									<input type="checkbox" class="vertical" name="isidentificationnumberapply" value="1"/>
 									<label>不适用</label> 
 								</div>
 							</div>
@@ -276,12 +281,12 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>美国社会安全号码</label> 
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="socialsecuritynumber" name="socialsecuritynumber" type="text" class="form-control input-sm" value="${obj.applicant.socialsecuritynumber }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
 								<div class="form-group">
-									<input type="checkbox" class="vertical"/>
+									<input type="checkbox" class="vertical" name="issecuritynumberapply" value="1"/>
 									<label>不适用</label> 
 								</div>
 							</div>
@@ -291,12 +296,12 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>美国纳税人证件号</label> 
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="taxpayernumber" name="taxpayernumber" type="text" class="form-control input-sm" value="${obj.applicant.taxpayernumber }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
 								<div class="form-group">
-									<input type="checkbox" class="vertical"/>
+									<input type="checkbox" class="vertical" name="istaxpayernumberapply" value="1"/>
 									<label>不适用</label> 
 								</div>
 							</div>
@@ -312,13 +317,13 @@
 									<label>
 										<span>*</span>Phone Number
 									</label> 
-									<input id="telephoneen" name="telephoneen" type="text" class="form-control input-sm"/>
+									<input id="telephoneen" name="telephoneen" type="text" class="form-control input-sm" value="${obj.applicant.telephoneen }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Email Address</label> 
-									<input id="emailen" name="emailen" type="text" class="form-control input-sm"/>
+									<input id="emailen" name="emailen" type="text" class="form-control input-sm" value="${obj.applicant.emailen }"/>
 								</div>
 							</div>
 						</div>
@@ -330,7 +335,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>The identity card of the people's Republic of China</label> 
-									<input id="cardIden" name="cardIden" type="text" class="form-control input-sm" />
+									<input id="cardIden" name="cardIden" type="text" class="form-control input-sm" value="${obj.applicant.cardIden }" />
 								</div>
 							</div>
 						</div>
@@ -340,7 +345,7 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Nationality</label> 
-									<input id="nationen" name="nationen" type="text" class="form-control input-sm" />
+									<input id="nationen" name="nationen" type="text" class="form-control input-sm" value="${obj.applicant.nationen }" />
 								</div>
 							</div>
 						</div>
@@ -350,7 +355,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Address</label> 
-									<input id="addressen" name="addressen" type="text" class="form-control input-sm" />
+									<input id="addressen" name="addressen" type="text" class="form-control input-sm" value="${obj.applicant.addressen }"/>
 								</div>
 							</div>
 						</div>
@@ -366,12 +371,12 @@
 									<input type="hidden" name="cardprovince" id="cardProvince" />
 									<input type="hidden" name="cardcity" id="cardCity" />
 									<input type="hidden" id="sameAddress" value=""/>
-									<input id="provinceen" name="provinceen" type="text" class="form-control input-sm" placeholder="省" />
+									<input id="provinceen" name="provinceen" type="text" class="form-control input-sm" placeholder="省" value="${obj.applicant.provinceen }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
-									<input id="cityen" name="cityen" type="text" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.city }" />
+									<input id="cityen" name="cityen" type="text" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.cityen }" />
 								</div>
 							</div>
 						</div>
@@ -381,7 +386,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Street Address</label> 
-									<input id="detailedAddressen" name="detailedaddressen" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedaddress }" />
+									<input id="detailedAddressen" name="detailedaddressen" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedaddressen }" />
 								</div>
 							</div>
 						</div>
@@ -391,14 +396,19 @@
 								<div class="form-group">
 									<label>
 										<span>*</span>Marital Status
-									</label> 
-									<input id="" name="" type="text" class="form-control input-sm" />
+									</label>
+									<select id="marrystatusen" name="marrystatusen" class="form-control input-sm selectHeight">
+											<option value="">请选择</option>
+											<c:forEach var="map" items="${obj.marryStatusEnum}">
+												<option value="${map.key}" ${map.key==obj.marryStatus?'selected':''}>${map.value}</option>
+											</c:forEach>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Expain</label> 
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="marryexplainen" name="marryexplainen" type="text" class="form-control input-sm" value="${obj.applicant.marryexplainen }" />
 								</div>
 							</div>
 						</div>
@@ -410,10 +420,10 @@
 									<label>Have you ever used other names</label> 
 									<div>
 										<span class="nameBeforeYes">
-											<input type="radio" name="usedBeforeUSen" class="usedBeforeUS1" value="1"/>yes
+											<input type="radio" name="hasothernationalityen" class="usedBeforeUS1" value="1"/>yes
 										</span>
 										<span>
-											<input type="radio" name="usedBeforeUS" class="usedBeforeUS2" value="2" checked />No
+											<input type="radio" name="hasothernationalityen" class="usedBeforeUS2" value="2" checked />No
 										</span>
 									</div>
 								</div>
@@ -424,13 +434,13 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>Other Surnames Used</label> 
-									<input id="" name="" type="text" class="form-control input-sm " />
+									<input id="otherfirstnameen" name="otherfirstnameen" type="text" class="form-control input-sm " value="${obj.applicant.otherfirstnameen }" />
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>Other Given Names Used</label> 
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="otherlastnameen" name="otherlastnameen" type="text" class="form-control input-sm" value="${obj.applicant.otherlastnameen }" />
 								</div>
 							</div>
 						</div>
@@ -441,17 +451,17 @@
 								<div class="form-group">
 									<div>
 										<span class="onceIDYes">
-											<input type="radio" name="usedNationalityUS" class="usedNationalityUS1" value="1" />yes
+											<input type="radio" name="hasothernationalityen" class="usedNationalityUS1" value="1" />yes
 										</span>
 										<span>
-											<input type="radio" name="usedNationalityUS" class="usedNationalityUS2"  value="2" checked />No
+											<input type="radio" name="hasothernationalityen" class="usedNationalityUS2"  value="2" checked />No
 										</span>
 									</div>
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1 usedNationalityUSTrue">
 								<div class="form-group" id="">
-									<input id="" name="" class="form-control input-sm"/>
+									<input id="nationalityen" name="nationalityen" class="form-control input-sm" value="${obj.applicant.nationalityen }"/>
 								</div>
 							</div>
 						</div>
@@ -462,17 +472,17 @@
 								<div class="form-group">
 									<div>
 										<span class="onceIDYes">
-											<input type="radio" name="permanentUS" class="permanentUS1" value="1" />yes
+											<input type="radio" name="isothercountrypermanentresidenten" class="permanentUS1" value="1" />yes
 										</span>
 										<span>
-											<input type="radio" name="permanentUS" class="permanentUS2"  value="2" checked />No
+											<input type="radio" name="isothercountrypermanentresidenten" class="permanentUS2"  value="2" checked />No
 										</span>
 									</div>
 								</div>
 							</div>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0 permanentUSTrue">
 								<div class="form-group">
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="othercountryen" name="othercountryen" type="text" class="form-control input-sm" value="${obj.applicant.othercountryen }" />
 								</div>
 							</div>
 						</div>
@@ -481,12 +491,12 @@
 							<label class="EngLabel">National Identification Number</label> 
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="nationalidentificationnumberen" name="nationalidentificationnumberen" type="text" class="form-control input-sm" value="${obj.applicant.nationalidentificationnumberen }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMarginEng">
 								<div class="form-group">
-									<input type="checkbox" class="vertical" />
+									<input type="checkbox" class="vertical" name="isidentificationnumberapplyen" value="1"/>
 									<label>Does Not Apply</label> 
 								</div>
 							</div>
@@ -496,12 +506,12 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>U.S. Social Security Number</label> 
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="socialsecuritynumberen" name="socialsecuritynumberen" type="text" class="form-control input-sm" value="${obj.applicant.socialsecuritynumberen }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
 								<div class="form-group">
-									<input type="checkbox" class="vertical" />
+									<input type="checkbox" class="vertical" name="issecuritynumberapplyen" value="1"/>
 									<label>Does Not Apply</label> 
 								</div>
 							</div>
@@ -511,12 +521,12 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>U.S. Taxpayer ID Number</label> 
-									<input id="" name="" type="text" class="form-control input-sm" />
+									<input id="taxpayernumberen" name="taxpayernumberen" type="text" class="form-control input-sm" / value="${obj.applicant.taxpayernumberen }">
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
 								<div class="form-group">
-									<input type="checkbox" class="vertical" />
+									<input type="checkbox" class="vertical" name="istaxpayernumberapplyen" value="1"/>
 									<label>Does Not Apply</label> 
 								</div>
 							</div>

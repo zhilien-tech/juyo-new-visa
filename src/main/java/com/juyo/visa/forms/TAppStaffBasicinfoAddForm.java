@@ -69,6 +69,7 @@ public class TAppStaffBasicinfoAddForm extends AddForm implements Serializable {
 
 	/**住址*/
 	private String address;
+	private String addressen;
 
 	/**身份证号*/
 	private String cardnum;

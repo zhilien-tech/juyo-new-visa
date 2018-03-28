@@ -94,6 +94,10 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	private String address;
 
 	@Column
+	@Comment("住址(英文)")
+	private String addressen;
+
+	@Column
 	@Comment("卡号")
 	private String cardnum;
 
@@ -372,7 +376,6 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	@Column
 	@Comment("签证状态")
 	private Integer visastatus;
-
 	@Column
 	@Comment("AA码")
 	private String aacode;

@@ -4,7 +4,7 @@
  * Copyright (c) 2018, 北京科技有限公司版权所有.
 */
 
-package com.juyo.visa.admin.orderUS.module;
+package com.juyo.visa.admin.orderus.module;
 
 import java.io.File;
 
@@ -19,8 +19,8 @@ import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.upload.UploadAdaptor;
 
-import com.juyo.visa.admin.orderUS.form.VcodeForm;
-import com.juyo.visa.admin.orderUS.service.VcodeUploadService;
+import com.juyo.visa.admin.orderus.form.VcodeForm;
+import com.juyo.visa.admin.orderus.service.VcodeUploadService;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
