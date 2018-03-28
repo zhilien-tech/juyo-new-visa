@@ -200,8 +200,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		sqlf.setParam("staffid", staffId);
 		Record familyInfo = dbDao.fetch(sqlf);
 		//---直属亲戚信息集合
-		TAppStaffImmediaterelativesEntity zhiFamilyList = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
-				Cnd.where("staffid", "=", staffId));
+		List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
 		familyInfo.put("zhiFamilyList", zhiFamilyList);
 		result.put("familyInfo", familyInfo);
 
@@ -211,9 +211,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		sqlw.setParam("staffid", staffId);
 		Record workEducationInfo = dbDao.fetch(sqlw);
 		//---以前工作信息集合
-		List<TAppStaffBeforeworkEntity> beforeWordList = dbDao.query(TAppStaffBeforeworkEntity.class,
+		List<TAppStaffBeforeworkEntity> beforeWorkList = dbDao.query(TAppStaffBeforeworkEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
-		workEducationInfo.put("beforeWordList", beforeWordList);
+		workEducationInfo.put("beforeWorkList", beforeWorkList);
 		//---以前教育信息集合 
 		List<TAppStaffBeforeeducationEntity> beforeEducationList = dbDao.query(TAppStaffBeforeeducationEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
