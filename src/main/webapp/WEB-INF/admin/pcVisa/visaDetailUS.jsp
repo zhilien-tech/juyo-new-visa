@@ -13,12 +13,10 @@
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
     <link rel="stylesheet" href="${base}/references/public/css/style.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
-    <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
     <!-- 加载中。。。样式 -->
 	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 	<!-- 本页样式 -->
-	<link rel="stylesheet" href="${base}/references/common/css/receptionJPList.css">
+	<link rel="stylesheet" href="${base}/references/common/css/viasDetailUS.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">
@@ -27,297 +25,91 @@
 							<div class="col-md-2 left-5px right-0px">
 								<select class="input-class input-sm" id="status" name="status">
 									<option value="">状态</option>
-									<c:forEach var="map" items="${obj.receptionSearchStatus}">
-										<option value="${map.key}">${map.value}</option>
-									</c:forEach>
+									<option value="">签证</option>
+									<option value="">签证实收</option>
+									<option value="">自动填表</option>
+									<option value="">送签</option>
+									<option value="">签证返回</option>
+								</select>
+							</div>
+							<div class="col-md-2 left-5px right-0px">
+								<select class="input-class input-sm" id="status" name="status">
+									<option value="">领取</option>
+									<option value="">北京</option>
+									<option value="">上海</option>
+									<option value="">沈阳</option>
+									<option value="">成都</option>
+									<option value="">杭州</option>
+								</select>
+							</div>
+							<div class="col-md-2 left-5px right-0px">
+								<select class="input-class input-sm" id="status" name="status">
+									<option value="">是否付款</option>
+									<option value="">未付款</option>
+									<option value="">已付款</option>
+									<option value="">退款</option>
 								</select>
 							</div>
 							<div class="col-md-3 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter()"/>
+								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/AA码/申请人/护照号/电话/邮箱" onkeypress="onkeyEnter()"/>
 							</div>
-							<div class="col-md-7 left-5px">
+							<div class="col-md-1 left-5px">
 								<a class="btn btn-primary btn-sm pull-left"  id="searchbtn">搜索</a>
-								<!-- <a class="btn btn-primary btn-sm pull-right" href="javascript:;" id="">拍视频</a> -->
+							</div>
+							<div class="col-md-1 left-5px pull-right">
+								<a class="btn btn-primary btn-sm"  id="">下单</a>
 							</div>
 						</div>
-					</div><!-- end 检索条件 -->
-					<div class="box-body" id="card"><!-- 卡片列表 -->
-						<div class="card-list" v-cloak v-for="data in receptionJpData">
+					</div>
+					<!-- end 检索条件 -->
+					<!-- 卡片列表 -->
+					<div class="box-body" id="card">
+						<div class="card-list" ><!-- v-cloak v-for="data in receptionJpData" -->
 							<div class="card-head cf">
-								<div><label>订单号：</label><span style="cursor:pointer;font-size:12px;" @click="visaDetail(data.id)">{{data.ordernumber}}</span></div>	
-								<div v-if="data.orderstatus ==='发招宝中'" style="position:absolute;right:20%;"><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span>
-								<!-- 加载中 -->
-								<div class="spinner">
-									<div class="bounce1"></div>
-									<div class="bounce2"></div>
-								    <div class="bounce3"></div>
+								<div><label>订单号：</label><span>1232131-ABCDEFG</span></div>
+								<div><label>领取：</label><span>北京</span></div>
+								<div><label>面试时间：</label><span>2018-04-01</span></div>
+								<div><label>是否付款：</label><span>已付款</span></div>
+								<div><label></label><span>通过</span>
 								</div>
-								</div>
-								<div v-else style="position:absolute;right:25%;"><label></label><span style="font-size:16px;font-weight:bold;">{{data.orderstatus}}</span></div>		
 								<div>
 									<label>操作：</label>
-									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
-									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<i class="sendSms" v-on:click="sendSms(data.id)"> </i>
-									<i class="visaTransfer" v-on:click="visaTransfer(data.id)"> </i>
+									<i class="edit" > </i><!-- v-on:click="visaDetail(data.id)" -->
 								</div>
 							</div>
 							<ul class="card-content cf">
-								<!-- <li class="everybody-info cf" v-for="item in data.everybodyinfo">
-									<div><label>申请人：</label><span>{{item.applicant}}</span></div>
-									<div><label>护照号：</label><span>{{item.passportno}}</span></div>
-									<div><label>快递号：</label><span>{{item.expressnum}}</span></div>
-									<div><label>方式：</label><span>{{item.expresstype}}</span></div>
-									<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
-									<div><label>资料：</label><span>{{item.data}}</span></div>
-									<div><i class="videoShoot"> </i></div>
-								</li> -->
-								
-								<li class="everybody-info cf" v-for="(item,index) in data.everybodyinfo">
-									<span v-if="index === 0">
-										<div><label>申请人：</label><span>{{item.applicant}}</span></div>
-										<div><label>护照号：</label><span>{{item.passportno}}</span></div>
-										<div><label>快递号：</label><span>{{item.expressnum}}</span></div>
-										<div><label>方式：</label><span>{{item.expresstype}}</span></div>
-										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
-										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"><!-- {{item.data}} --></span></div>
+								<li class="everybody-info cf">
+									<span>
+										<div><label>申请人：</label><span>李智慧</span></div>
+										<div><label>AA码：</label><span>M8888888888</span></div>
+										<div><label>手机号：</label><span>13315679521</span></div>
+										<div><label>护照号：</label><span>G8888888888</span></div>
+										<div><label>资料类型：</label><span>在职</span></div>
+										<div class="whiteSpace"><label>资料：</label><span class="showInfo">护照、身份证、一寸照片、退休证明、结婚证、小学毕业证</span></div>
 										<span class="hideInfo"></span>
-									</span>
-									<span v-else >
-										<div><label style="width:48px;">   </label><span>{{item.applicant}}</span></div>
-										<div><label style="width:48px;">   </label><span>{{item.passportno}}</span></div>
-										<div><label style="width:48px;">   </label><span>{{item.expressnum}}</span></div>
-										<div><label style="width:36px;">   </label><span>{{item.expresstype}}</span></div>
-										<div><label style="width:60px;">   </label><span>{{item.datatype}}</span></div>
-										<div class="whiteSpace"><label style="width:36px;">&nbsp;&nbsp;</label><span v-html="item.data" class="showInfo"></span></div>
-										<span class="hideInfo"></span>
+										<div><span>签证录入</span></div>
 									</span>
 								</li>
-								
 							</ul>
 						</div>
-					</div><!-- end 卡片列表 -->
+					</div>
+					<!-- end 卡片列表 -->
 				</section>
-			<input type="hidden" id="pageNumber" name="pageNumber" value="1">
-				<input type="hidden" id="pageTotal" name="pageTotal">
-				<input type="hidden" id="pageListCount" name="pageListCount">
-
-	<script type="text/javascript">
-		var BASE_PATH = '${base}';
-	</script>
-	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
-	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
-	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script src="${base}/references/common/js/vue/vue.min.js"></script>
-	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
-	<%-- <script src="${base}/admin/visaJapan/visaList.js"></script> --%>
-	<script src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
-	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
-	<%-- <script src="${base}/references/common/js/switchCardOfOrder.js"></script> --%><!-- 订单切换卡 js -->
-	<script type="text/javascript">
+<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>		
+<script src="${base}/references/common/js/base/baseIcon.js"></script>
+<script src="${base}/references/common/js/layer/layer.js"></script>
+<script>
+//资料鼠标移入事件
+$(document).on('mouseover','.showInfo',function(){
 	
-	//异步加载的URL地址
-    var url="/* ${base}/admin/receptionJP/listData.html */";
-    //vue表格数据对象
-    var _self;
-	new Vue({
-		el: '#card',
-		data: {receptionJpData:""},
-		created:function(){
-            _self=this;
-            $.ajax({ 
-            	url: url,
-            	dataType:"json",
-            	type:'post',
-            	success: function(data){
-            		_self.receptionJpData = data.receptionJpData;
-            		console.log(_self.receptionJpData);
-            		$('#pageTotal').val(data.pageTotal);
-					$('#pageListCount').val(data.pageListCount);
-              	}
-            });
-        },
-        methods:{
-        	visaDetail:function(orderid){
-        		//跳转到详情页面
-        		window.open(/* '${base}/admin/receptionJP/receptionDetail.html?orderid='+orderid */);
-        		//console.log(message);
-        		//alert(JSON.stringify(event.target));
-        	},
-        	revenue:function(orderid){
-        		layer.open({
-        		    type: 2,
-        		    title: false,
-        		    closeBtn:false,
-        		    fix: false,
-        		    maxmin: false,
-        		    shadeClose: false,
-        		    scrollbar: false,
-        		    area: ['900px', '60%'],
-        		    content: '${base}/admin/receptionJP/revenue.html?orderid='+orderid
-        		  });
-        	},
-        	visaTransfer:function(orderid){
-        		 $.ajax({ 
-                 	url: '${base}/admin/receptionJP/visaTransfer.html',
-                 	dataType:"json",
-                 	data:{orderid:orderid},
-                 	type:'post',
-                 	success: function(data){
-                 		successCallBack(3)
-                   	}
-                 });
-        	},
-        	sendSms:function(orderid){
-        		layer.load(1);
-        		$.ajax({ 
-                 	url: '${base}/admin/receptionJP/sendSms.html',
-                 	dataType:"json",
-                 	data:{orderid:orderid},
-                 	type:'post',
-                 	success: function(data){
-                 		layer.closeAll("loading");
-                 		layer.msg("发送成功");
-                   	}
-                 });
-        	}
-        }
-	});
-	
-	$(function(){
-		$(".btnList").click(function(){
-			$(this).addClass('bgColor').siblings().removeClass('bgColor');
-			clearSearchEle();
-			$("#searchbtn").trigger("click");
-		})
-		
-	});
-	
-	function clearSearchEle(){
-		//检索框
-		$("#status").val("");
-		$("#searchStr").val("");
-		//分页项
-		$("#pageNumber").val(1);
-		$("#pageTotal").val("");
-		$("#pageListCount").val("");
-	}
-	
-	$("#searchbtn").click(function(){
-		var status = $('#status').val();
-		var searchStr = $('#searchStr').val();
-		var orderAuthority = "allOrder";
-		$(".searchOrderBtn").each(function(){
-			if($(this).hasClass("bgColor")){
-				orderAuthority = $(this).attr("name");
-			}
-		});
-		
-		$.ajax({ 
-        	url: url,
-        	data:{
-        		status:status,
-        		searchStr:searchStr,
-        		orderAuthority:orderAuthority
-        	},
-        	dataType:"json",
-        	type:'post',
-        	success: function(data){
-        		_self.receptionJpData = data.receptionJpData;
-          	}
-        });
-	}); 
-	
-	$("#status").change(function(){
-		$("#searchbtn").click();
-		$('#pageNumber').val(1);
-	});
-	
-	//注册scroll事件并监听 
-	$(window).scroll(function(){
-		var scrollTop = $(this).scrollTop();
-		var scrollHeight = $(document).height();
-		var windowHeight = $(this).height();
-		var pageTotal = parseInt($('#pageTotal').val());
-		var pageListCount = parseInt($('#pageListCount').val());
-		// 判断是否滚动到底部  
-		if(Math.ceil(scrollTop + windowHeight) == scrollHeight){
-			//分页条件
-			var pageNumber = $('#pageNumber').val();
-			pageNumber = parseInt(pageNumber) + 1;
-			$('#pageNumber').val(pageNumber);
-			//搜索条件
-			var searchStr = $('#searchStr').val();
-			var status = $('#status').val();
-			//异步加载数据
-			if(pageNumber <= pageTotal){
-				//遮罩
-				layer.load(1);
-				$.ajax({ 
-					url: url,
-					data:{
-						status : status,
-						searchStr : searchStr
-					},
-					dataType:"json",
-					type:'post',
-					success: function(data){
-						//关闭遮罩
-						layer.closeAll('loading');
-						$.each(data.receptionJpData,function(index,item){
-							_self.receptionJpData.push(item);
-						});
-						//没有更多数据
-					}
-				});
-			}/* else{
-				//没有更多数据，底部提示语
-				if($("#card-bottom-line").length <= 0 && pageListCount>=6){
-					$(".card-list").last().after("<div id='card-bottom-line' class='bottom-line'><span style='margin-left: 38%; color:#999'>-------  没有更多数据可以加载  -------</span></div>");
-				}
-			} */
-		}
-	});
-	
-	//回车事件
-	function onkeyEnter(){
-	    var e = window.event || arguments.callee.caller.arguments[0];
-	    if(e && e.keyCode == 13){
-	    	$("#searchbtn").click();
-		 }
-	}
-	
-	function successCallBack(status){
-		if(status == 1){
-			layer.msg('保存成功<br>订单进入"我的"标签页');
-		}
-		if(status == 2){
-			layer.msg('修改成功<br>订单进入"我的"标签页');
-		}
-		if(status == 3){
-			layer.msg('移交签证成功<br>订单进入"我的"标签页');
-		}
-		if(status == 88){
-			layer.msg('负责人变更成功');
-		}
-		
-		$("#searchbtn").click();
-	}
-
-	//鼠标移入事件
-	$(document).on('mouseover','.showInfo',function(){
-		
-		let text = $(this).html();
-		$(this).parent().next().show();
-		$(this).parent().next().html(text);
-	});
-	//鼠标移出事件
-	$(document).on('mouseleave','.showInfo',function(){
-		$(".hideInfo").hide();
-	});
-	</script>
+	let text = $(this).html();
+	$(this).parent().next().show();
+	$(this).parent().next().html(text);
+});
+//资料鼠标移出事件
+$(document).on('mouseleave','.showInfo',function(){
+	$(".hideInfo").hide();
+});
+</script>			
 </body>
 </html>
