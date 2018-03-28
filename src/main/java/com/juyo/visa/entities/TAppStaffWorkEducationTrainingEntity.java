@@ -91,120 +91,8 @@ public class TAppStaffWorkEducationTrainingEntity implements Serializable {
 	private Integer isemployed;
 	
 	@Column
-    @Comment("雇主姓名")
-	private String employername;
-	
-	@Column
-    @Comment("雇主街道地址")
-	private String employeraddress;
-	
-	@Column
-    @Comment("雇主所在市")
-	private String employercity;
-	
-	@Column
-    @Comment("雇主所在省")
-	private String employerprovince;
-	
-	@Column
-    @Comment("雇主所在省是否适用")
-	private Integer isemployerprovinceapply;
-	
-	@Column
-    @Comment("雇主邮政编码")
-	private String employerzipcode;
-	
-	@Column
-    @Comment("雇主邮政编码是否适用")
-	private Integer isemployerzipcodeapply;
-	
-	@Column
-    @Comment("雇主所在国家")
-	private Integer employercountry;
-	
-	@Column
-    @Comment("雇主电话")
-	private String employertelephone;
-	
-	@Column
-    @Comment("职称")
-	private String jobtitle;
-	
-	@Column
-    @Comment("主管的姓")
-	private String supervisorfirstname;
-	
-	@Column
-    @Comment("是否知道主管的姓")
-	private Integer isknowsupervisorfirstname;
-	
-	@Column
-    @Comment("主管的名")
-	private String supervisorlastname;
-	
-	@Column
-    @Comment("是否知道主管的名")
-	private Integer isknowsupervisorlastname;
-	
-	@Column
-    @Comment("入职时间")
-	private Date employstartdate;
-	
-	@Column
-    @Comment("离职时间")
-	private Date employenddate;
-	
-	@Column
-    @Comment("以前的工作职责")
-	private String previousduty;
-	
-	@Column
     @Comment("是否上过中学")
 	private Integer issecondarylevel;
-	
-	@Column
-    @Comment("机构名称")
-	private String institution;
-	
-	@Column
-    @Comment("机构地址")
-	private String institutionaddress;
-	
-	@Column
-    @Comment("机构所在市")
-	private String institutioncity;
-	
-	@Column
-    @Comment("机构所在省")
-	private String institutionprovince;
-	
-	@Column
-    @Comment("机构所在省是否适用")
-	private Integer isinstitutionprovinceapply;
-	
-	@Column
-    @Comment("机构邮政编码")
-	private String institutionzipcode;
-	
-	@Column
-    @Comment("机构邮政编码是否适用")
-	private Integer isinstitutionzipcodeapply;
-	
-	@Column
-    @Comment("机构所在国家")
-	private Integer institutioncountry;
-	
-	@Column
-    @Comment("学科")
-	private String course;
-	
-	@Column
-    @Comment("课程开始时间")
-	private Date coursestartdate;
-	
-	@Column
-    @Comment("课程结束时间")
-	private Date courseenddate;
 	
 	@Column
     @Comment("是否属于氏族或部落")
@@ -215,24 +103,12 @@ public class TAppStaffWorkEducationTrainingEntity implements Serializable {
 	private String clanname;
 	
 	@Column
-    @Comment("使用的语言名称")
-	private String languagename;
-	
-	@Column
     @Comment("过去五年是否去过任何国家旅游")
 	private Integer istraveledanycountry;
 	
 	@Column
-    @Comment("去旅游的国家")
-	private Integer traveledcountry;
-	
-	@Column
     @Comment("是否参加过慈善组织")
 	private Integer isworkedcharitableorganization;
-	
-	@Column
-    @Comment("组织名称")
-	private String organizationname;
 	
 	@Column
     @Comment("是否有专业技能")
@@ -245,30 +121,6 @@ public class TAppStaffWorkEducationTrainingEntity implements Serializable {
 	@Column
     @Comment("是否曾服兵役")
 	private Integer hasservedinmilitary;
-	
-	@Column
-    @Comment("服兵役国家")
-	private Integer militarycountry;
-	
-	@Column
-    @Comment("服务分支")
-	private String servicebranch;
-	
-	@Column
-    @Comment("排名")
-	private String rank;
-	
-	@Column
-    @Comment("军事专业")
-	private String militaryspecialty;
-	
-	@Column
-    @Comment("服兵役开始时间")
-	private Date servicestartdate;
-	
-	@Column
-    @Comment("服兵役结束时间")
-	private Date serviceenddate;
 	
 	@Column
     @Comment("是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织")
@@ -343,120 +195,8 @@ public class TAppStaffWorkEducationTrainingEntity implements Serializable {
 	private Integer isemployeden;
 	
 	@Column
-    @Comment("雇主姓名(英文)")
-	private String employernameen;
-	
-	@Column
-    @Comment("雇主街道地址(英文)")
-	private String employeraddressen;
-	
-	@Column
-    @Comment("雇主所在市(英文)")
-	private String employercityen;
-	
-	@Column
-    @Comment("雇主所在省(英文)")
-	private String employerprovinceen;
-	
-	@Column
-    @Comment("雇主所在省是否适用(英文)")
-	private Integer isemployerprovinceapplyen;
-	
-	@Column
-    @Comment("雇主邮政编码(英文)")
-	private String employerzipcodeen;
-	
-	@Column
-    @Comment("雇主邮政编码是否适用(英文)")
-	private Integer isemployerzipcodeapplyen;
-	
-	@Column
-    @Comment("雇主所在国家(英文)")
-	private Integer employercountryen;
-	
-	@Column
-    @Comment("雇主电话(英文)")
-	private String employertelephoneen;
-	
-	@Column
-    @Comment("职称(英文)")
-	private String jobtitleen;
-	
-	@Column
-    @Comment("主管的姓(英文)")
-	private String supervisorfirstnameen;
-	
-	@Column
-    @Comment("是否知道主管的姓(英文)")
-	private Integer isknowsupervisorfirstnameen;
-	
-	@Column
-    @Comment("主管的名(英文)")
-	private String supervisorlastnameen;
-	
-	@Column
-    @Comment("是否知道主管的名(英文)")
-	private Integer isknowsupervisorlastnameen;
-	
-	@Column
-    @Comment("入职时间(英文)")
-	private Date employstartdateen;
-	
-	@Column
-    @Comment("离职时间(英文)")
-	private Date employenddateen;
-	
-	@Column
-    @Comment("以前的工作职责(英文)")
-	private String previousdutyen;
-	
-	@Column
     @Comment("是否上过中学(英文)")
 	private Integer issecondarylevelen;
-	
-	@Column
-    @Comment("机构名称(英文)")
-	private String institutionen;
-	
-	@Column
-    @Comment("机构地址(英文)")
-	private String institutionaddressen;
-	
-	@Column
-    @Comment("机构所在市(英文)")
-	private String institutioncityen;
-	
-	@Column
-    @Comment("机构所在省(英文)")
-	private String institutionprovinceen;
-	
-	@Column
-    @Comment("机构所在省是否适用(英文)")
-	private Integer isinstitutionprovinceapplyen;
-	
-	@Column
-    @Comment("机构邮政编码(英文)")
-	private String institutionzipcodeen;
-	
-	@Column
-    @Comment("机构邮政编码是否适用(英文)")
-	private Integer isinstitutionzipcodeapplyen;
-	
-	@Column
-    @Comment("机构所在国家(英文)")
-	private Integer institutioncountryen;
-	
-	@Column
-    @Comment("学科(英文)")
-	private String courseen;
-	
-	@Column
-    @Comment("课程开始时间(英文)")
-	private Date coursestartdateen;
-	
-	@Column
-    @Comment("课程结束时间(英文)")
-	private Date courseenddateen;
 	
 	@Column
     @Comment("是否属于氏族或部落(英文)")
@@ -467,24 +207,12 @@ public class TAppStaffWorkEducationTrainingEntity implements Serializable {
 	private String clannameen;
 	
 	@Column
-    @Comment("使用的语言名称(英文)")
-	private String languagenameen;
-	
-	@Column
     @Comment("过去五年是否去过任何国家旅游(英文)")
 	private Integer istraveledanycountryen;
 	
 	@Column
-    @Comment("去旅游的国家(英文)")
-	private Integer traveledcountryen;
-	
-	@Column
     @Comment("是否参加过慈善组织(英文)")
 	private Integer isworkedcharitableorganizationen;
-	
-	@Column
-    @Comment("组织名称(英文)")
-	private String organizationnameen;
 	
 	@Column
     @Comment("是否有专业技能(英文)")
@@ -497,30 +225,6 @@ public class TAppStaffWorkEducationTrainingEntity implements Serializable {
 	@Column
     @Comment("是否曾服兵役(英文)")
 	private Integer hasservedinmilitaryen;
-	
-	@Column
-    @Comment("服兵役国家(英文)")
-	private Integer militarycountryen;
-	
-	@Column
-    @Comment("服务分支(英文)")
-	private String servicebranchen;
-	
-	@Column
-    @Comment("排名(英文)")
-	private String ranken;
-	
-	@Column
-    @Comment("军事专业(英文)")
-	private String militaryspecialtyen;
-	
-	@Column
-    @Comment("服兵役开始时间(英文)")
-	private Date servicestartdateen;
-	
-	@Column
-    @Comment("服兵役结束时间(英文)")
-	private Date serviceenddateen;
 	
 	@Column
     @Comment("是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织(英文)")
