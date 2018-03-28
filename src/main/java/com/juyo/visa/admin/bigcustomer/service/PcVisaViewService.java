@@ -22,9 +22,11 @@ import com.juyo.visa.admin.bigcustomer.form.VisaListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TravelpurposeEnum;
+import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
+import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
@@ -347,13 +349,68 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	 * 拍照资料获取
 	 */
 	public Object updatePhoto(Integer staffid) {
-
+		//获取用户基本信息
 		TAppStaffBasicinfoEntity basicInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffid));
 		Map<String, Object> result = Maps.newHashMap();
 		if (!Util.isEmpty(basicInfo))
 			result.put("basicInfo", basicInfo);
 		else
 			result.put("basicInfo", null);
-		return null;
+		//获取该用户的证件资料
+		String sqlStr = sqlManager.get("t_app_staff_credentials_info");
+		Sql applysql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("staffid", "=", staffid);
+		List<Record> infoList = dbDao.query(applysql, cnd, null);
+		for (Record appRecord : infoList) {
+			int type = appRecord.getInt("type");
+			for (TAppStaffCredentialsEnum pmEnum : TAppStaffCredentialsEnum.values())
+				if (!Util.isEmpty(type) && type == pmEnum.intKey()) {
+					appRecord.set("type", pmEnum.value());
+					break;
+				}
+		}
+		TAppStaffCredentialsEntity newHuzhao = new TAppStaffCredentialsEntity();
+		if (!Util.isEmpty(infoList)) {
+			for (Record record : infoList) {
+				if ("新护照".equals(record.getString("type"))) {
+
+				}
+				if ("旧护照".equals(record.getString("type"))) {
+
+				}
+				if ("身份证".equals(record.getString("type"))) {
+
+				}
+				if ("户口本".equals(record.getString("type"))) {
+
+				}
+				if ("房产证".equals(record.getString("type"))) {
+
+				}
+				if ("结婚证".equals(record.getString("type"))) {
+
+				}
+				if ("银行流水".equals(record.getString("type"))) {
+
+				}
+				if ("在职证明".equals(record.getString("type"))) {
+
+				}
+				if ("营业执照".equals(record.getString("type"))) {
+
+				}
+				if ("驾驶证".equals(record.getString("type"))) {
+
+				}
+				if ("过期美签".equals(record.getString("type"))) {
+
+				}
+				if ("美国出签".equals(record.getString("type"))) {
+
+				}
+			}
+		}
+		return result;
 	}
 }
