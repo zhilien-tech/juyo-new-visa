@@ -106,7 +106,7 @@ function add(){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '80%'],
-		content: BASE_PATH + '/admin/bigCustomer/addBaseInfo.html'
+		content: BASE_PATH + '/admin/bigCustomer/addPassportInfo.html'
 	});
 }
 /* 基本信息编辑 */

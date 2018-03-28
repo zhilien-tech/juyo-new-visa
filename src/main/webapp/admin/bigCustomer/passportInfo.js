@@ -179,6 +179,10 @@ $('#uploadFile').change(function() {
 				layer.close(layerIndex);
 				if (true === obj.success) {
 					layer.msg("识别成功");
+					$('#firstName').val(obj.xingCn).change();
+					$('#firstNameEn').val("/"+getPinYinStr(obj.xingCn));
+					$('#lastName').val(obj.mingCn).change();
+					$('#lastNameEn').val("/"+getPinYinStr(obj.mingCn));
 					$('#passportUrl').val(obj.url);
 					$('#sqImg').attr('src', obj.url);
 					$("#uploadFile").siblings("i").css("display","block");
