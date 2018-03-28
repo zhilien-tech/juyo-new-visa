@@ -45,6 +45,11 @@
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="通过" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />
+					<input type="button" value="通知" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" />
 			</div>
 			<!-- 头部END -->
 			<!-- form -->
@@ -52,8 +57,47 @@
 				<!-- 主体 -->
 				<section class="content">
 					<!-- 订单信息 -->
+					<p class="info-head">订单信息</p>
+					<div class="info-body-from">
+						<!-- 模块 -->
+						<div class="row body-from-input">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label><span>*</span>团名</label>
+									<input type="text" class="input-sm form-control" />
+								</div>
+							</div>
+							
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label><span>*</span>领区</label>
+									<select class="form-control input-sm">
+										<option>北京</option>
+										<option>上海</option>
+										<option>广州</option>
+										<option>成都</option>
+										<option>沈阳</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label><span>*</span>是否付款</label>
+									<select class="form-control input-sm">
+										<option>未付款</option>
+										<option>已付款</option>
+										<option>退款</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<!-- 模块END -->
+					</div>
+					<!-- 订单信息END -->
+					<!-- 出行信息 -->
 					<div id="save" class="info">
-						<p class="info-head">订单信息</p>
+						<p class="info-head">出行信息</p>
 						<!-- 大模块 -->
 						<div class="info-body-from">
 							<!-- 模块1 -->
@@ -458,6 +502,148 @@
 						</div>
 					</div>
 					<!-- 大模块2END -->
+					<!-- 大模块3 -->
+					<!-- 标题以及按钮组 -->
+					<p class="info-head">跟进</p>
+					<div class="dataInfoGroup">
+						<a>加跟进</a> 
+					</div>
+					<!-- 标题以及按钮组END -->
+					<div class="info-body-from">
+						<div class="row body-from">
+							<div class="" style="width:100%; height:400px; overflow-y:auto;">
+								<ul>
+									<!-- 循环 -->
+									<li style="border-bottom:1px solid #eee;">
+										<div>
+											<span>2018.03.28  15:30</span>
+											<span>李智慧</span>
+											<span>
+												<span>2018.03.28</span>
+												由
+												<span>李智慧</span>
+												解决
+											</span>
+											<span>解决</span>
+										</div>
+										<p>
+											1.二寸照片不合格已通知重新拍照上传
+											2.护照照片不清晰，重新上传
+										</p>
+									</li>
+									<!-- 循环END -->
+									<li>
+										<div>
+											<span>2018.03.28  15:30</span>
+											<span>李智慧</span>
+											<span>
+												<span>2018.03.28</span>
+												由
+												<span>李智慧</span>
+												解决
+											</span>
+											<span>解决</span>
+										</div>
+										<p>
+											1.二寸照片不合格已通知重新拍照上传
+											2.护照照片不清晰，重新上传
+										</p>
+									</li>
+									
+									<li>
+										<div>
+											<span>2018.03.28  15:30</span>
+											<span>李智慧</span>
+											<span>
+												<span>2018.03.28</span>
+												由
+												<span>李智慧</span>
+												解决
+											</span>
+											<span>解决</span>
+										</div>
+										<p>
+											1.二寸照片不合格已通知重新拍照上传
+											2.护照照片不清晰，重新上传
+										</p>
+									</li>
+									
+									<li>
+										<div>
+											<span>2018.03.28  15:30</span>
+											<span>李智慧</span>
+											<span>
+												<span>2018.03.28</span>
+												由
+												<span>李智慧</span>
+												解决
+											</span>
+											<span>解决</span>
+										</div>
+										<p>
+											1.二寸照片不合格已通知重新拍照上传
+											2.护照照片不清晰，重新上传
+										</p>
+									</li>
+									
+									<li>
+										<div>
+											<span>2018.03.28  15:30</span>
+											<span>李智慧</span>
+											<span>
+												<span>2018.03.28</span>
+												由
+												<span>李智慧</span>
+												解决
+											</span>
+											<span>解决</span>
+										</div>
+										<p>
+											1.二寸照片不合格已通知重新拍照上传
+											2.护照照片不清晰，重新上传
+										</p>
+									</li>
+									
+									<li>
+										<div>
+											<span>2018.03.28  15:30</span>
+											<span>李智慧</span>
+											<span>
+												<span>2018.03.28</span>
+												由
+												<span>李智慧</span>
+												解决
+											</span>
+											<span>解决</span>
+										</div>
+										<p>
+											1.二寸照片不合格已通知重新拍照上传
+											2.护照照片不清晰，重新上传
+										</p>
+									</li>
+									
+									<li>
+										<div>
+											<span>2018.03.28  15:30</span>
+											<span>李智慧</span>
+											<span>
+												<span>2018.03.28</span>
+												由
+												<span>李智慧</span>
+												解决
+											</span>
+											<span>解决</span>
+										</div>
+										<p>
+											1.二寸照片不合格已通知重新拍照上传
+											2.护照照片不清晰，重新上传
+										</p>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- 大模块3END -->
 				</section>
 			</form>
 		</div>
