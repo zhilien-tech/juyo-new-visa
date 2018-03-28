@@ -83,4 +83,14 @@ public class PcVisaModule {
 		return pcVisaViewService.updatePhoto(staffid);
 	}
 
+	/**
+	 * 身份证正面上传、扫描
+	 */
+	//	@At
+	//	@Ok("json")
+	//	@Filters
+	//	@AdaptBy(type = UploadAdaptor.class)
+	//	public Object IDCardRecognition(@Param("image") File file, HttpServletRequest request, HttpServletResponse response) {
+	//		return pcVisaViewService.IDCardRecognition(file, request, response);
+	//	}
 }
