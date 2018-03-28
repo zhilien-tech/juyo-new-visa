@@ -20,13 +20,13 @@ import org.nutz.log.Logs;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.bigcustomer.form.VisaListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TravelpurposeEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
-import com.juyo.visa.entities.TAppStaffPaperworkUsEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
@@ -87,17 +87,16 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			List<Record> applicantList = dbDao.query(applysql, cnd, null);
 			for (Record app : applicantList) {
 				int status = app.getInt("visastatus");
-				for (VisaStatusEnum statusEnum : VisaStatusEnum.values()) {
+				for (VisaStatusEnum statusEnum : VisaStatusEnum.values())
 					if (!Util.isEmpty(status) && status == statusEnum.intKey()) {
 						app.set("visastatus", statusEnum.value());
 						break;
 					}
-				}
 			}
 			order.put("everybodyInfo", applicantList);
-			if (applicantList.size() > 0) {
+			if (applicantList.size() > 0)
 				order.put("firstbodyInfo", applicantList.get(0));
-			} else {
+			else {
 				Record record = new Record();
 				record.set("staffid", "");
 				record.set("staffname", "");
@@ -213,20 +212,41 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 
-		//获取用户信息
+		//获取用户资料信息
 		TAppStaffOrderUsEntity orderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
 				Cnd.where("orderid", "=", orderid));
 		if (!Util.isEmpty(orderUsEntity)) {
-			TAppStaffPaperworkUsEntity taspuEntity = dbDao.fetch(TAppStaffPaperworkUsEntity.class,
-					Cnd.where("staffid", "=", orderUsEntity.getStaffid()));
-			if (!Util.isEmpty(taspuEntity)) {
-				result.put("realinfo", taspuEntity.getRealinfo());
-			} else {
-				result.put("realinfo", null);
+			//获取该用户的资料类型
+			String sqlStr = sqlManager.get("t_app_paperwork_US_info");
+			Sql applysql = Sqls.create(sqlStr);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("staffid", "=", orderUsEntity.getStaffid());
+			List<Record> infoList = dbDao.query(applysql, cnd, null);
+			for (Record appRecord : infoList) {
+				int type = appRecord.getInt("type");
+				for (PrepareMaterialsEnum_JP pmEnum : PrepareMaterialsEnum_JP.values())
+					if (!Util.isEmpty(type) && type == pmEnum.intKey()) {
+						appRecord.set("type", pmEnum.value());
+						break;
+					}
 			}
-		} else {
+			StringBuffer str = new StringBuffer();
+			for (Record record : infoList) {
+				if (record.getString("type") != null) {
+					str.append(record.getString("type"));
+					str.append("、");
+				}
+			}
+			result.put("realinfo", str);
+			//			TAppStaffPaperworkUsEntity taspuEntity = dbDao.fetch(TAppStaffPaperworkUsEntity.class,
+			//					Cnd.where("staffid", "=", orderUsEntity.getStaffid()));
+			//			if (!Util.isEmpty(taspuEntity)) {
+			//				//				Integer type = taspuEntity.getType();
+			//				result.put("realinfo", taspuEntity.getRealinfo());
+			//			} else
+			//				result.put("realinfo", null);
+		} else
 			result.put("realinfo", null);
-		}
 		String travelpurpose = orderTravelInfo.getTravelpurpose();
 		if (!Util.isEmpty(travelpurpose)) {
 			String travelpurposeString = TravelpurposeEnum.getValue(travelpurpose).getValue();
@@ -264,23 +284,21 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("flightnum", "=", orderTravelInfo.getGoFlightNum()));
 		TFlightEntity returnFlightEntity = dbDao.fetch(TFlightEntity.class,
 				Cnd.where("flightnum", "=", orderTravelInfo.getReturnFlightNum()));
-		if (!Util.isEmpty(goFlightEntity)) {
+		if (!Util.isEmpty(goFlightEntity))
 			result.put("goFlightInfo", goFlightEntity);
-		} else {
+		else
 			result.put("goFlightInfo", null);
-		}
-		if (!Util.isEmpty(returnFlightEntity)) {
+		if (!Util.isEmpty(returnFlightEntity))
 			result.put("returnFlightInfo", returnFlightEntity);
-		} else {
+		else
 			result.put("returnFlightInfo", null);
-		}
 
-		if (!Util.isEmpty(staffSummaryInfoList)) {
+		if (!Util.isEmpty(staffSummaryInfoList))
 			result.put("summaryInfo", staffSummaryInfoList.get(0));
-		} else {
+		else
 			result.put("summaryInfo", null);
-		}
 		return result;
+
 	}
 
 	/*
@@ -294,27 +312,20 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TOrderUsTravelinfoEntity orderTravelInfo = dbDao.fetch(TOrderUsTravelinfoEntity.class,
 				Cnd.where("orderId", "=", orderid));
 
-		if (!Util.isEmpty(form.getGodate())) {
+		if (!Util.isEmpty(form.getGodate()))
 			orderTravelInfo.setGodate(form.getGodate());
-		}
-		if (!Util.isEmpty(form.getLeavedate())) {
+		if (!Util.isEmpty(form.getLeavedate()))
 			orderTravelInfo.setLeavedate(form.getLeavedate());
-		}
-		if (!Util.isEmpty(form.getArrivedate())) {
+		if (!Util.isEmpty(form.getArrivedate()))
 			orderTravelInfo.setArrivedate(form.getArrivedate());
-		}
-		if (!Util.isEmpty(form.getStaydays())) {
+		if (!Util.isEmpty(form.getStaydays()))
 			orderTravelInfo.setStaydays(form.getStaydays());
-		}
-		if (!Util.isEmpty(form.getPlanaddress())) {
+		if (!Util.isEmpty(form.getPlanaddress()))
 			orderTravelInfo.setAddress(form.getPlanaddress());
-		}
-		if (!Util.isEmpty(form.getPlancity())) {
+		if (!Util.isEmpty(form.getPlancity()))
 			orderTravelInfo.setCity(form.getPlancity());
-		}
-		if (!Util.isEmpty(form.getPlanstate())) {
+		if (!Util.isEmpty(form.getPlanstate()))
 			orderTravelInfo.setState(form.getPlanstate());
-		}
 		if (!Util.isEmpty(form.getTravelpurpose())) {
 			String travelpurpose = form.getTravelpurpose();
 			String key = TravelpurposeEnum.getEnum(travelpurpose).getKey();
@@ -337,10 +348,9 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object updatePhoto(Integer staffid) {
 		TAppStaffBasicinfoEntity basicInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffid));
-		if (!Util.isEmpty(basicInfo)) {
+		if (!Util.isEmpty(basicInfo))
 			return basicInfo;
-		} else {
+		else
 			return null;
-		}
 	}
 }
