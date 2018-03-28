@@ -878,11 +878,6 @@
 										</div>
 									
 									</span>
-									
-									
-									
-								
-									
 								</div>
 							
 							</div>
@@ -904,61 +899,122 @@
 						</div>
 						<!--yes-->
 						<div class="educationInfo elementHide">
-							<div>
-								<div class="midSchoolEduDiv">
-									<div class="paddingLeft groupInputInfo">
-										<label>机构名称</label>
-										<input name="institution" type="text"/>
-									</div>
-									<div class="paddingRight groupInputInfo">
-										<label>街道地址(首选)</label>
-										<input name="institutionaddress" type="text" />
-									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupInputInfo">
-										<label>街道地址(次选)*可选</label>
-										<input type="text" />
-									</div>
-									<div class="paddingRight groupcheckBoxInfo" >
-										<label >市</label>
-										<input name="institutioncity" type="text" />
-										<input type="checkbox" />
-									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupInputInfo">
-										<label>州/省</label>
-										<input name="institutionprovince" type="text" />
-									</div>
-									<div class="paddingRight groupcheckBoxInfo">
-										<label>邮政编码</label>
-										<input name="institutionzipcode" type="text" />
-										<input name="isinstitutionzipcodeapply" type="checkbox" />
-									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupSelectInfo" >
-										<label>国家/地区</label>
-										<select name="institutioncountry">
-											<option value="0">请选择</option>
-											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-												<option value="${map.key }">${map.value }</option>
-											</c:forEach>
-										</select>
-									</div>
-									<div class="paddingRight groupInputInfo">
-										<label>学科</label>
-										<input name="course" type="text" />
-									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupInputInfo">
-										<label>参加课程开始时间</label>
-										<input id="coursestartdate" name="coursestartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
-									</div>
-									<div class="paddingRight groupInputInfo">
-										<label>结束时间</label>
-										<input id="courseenddate" name="courseenddate" class="datetimepickercss" type="text" placeholder="日/月/年" />
+							<span v-if="visaInfo.workEducationInfo.beforeeducationlist != null">
+								<div v-for="education in visaInfo.workEducationInfo.beforeeducationlist">
+									<div class="midSchoolEduDiv">
+										<div class="paddingLeft groupInputInfo">
+											<label>机构名称</label>
+											<input name="institution" v-model="education.institution" type="text"/>
+										</div>
+										<div class="paddingRight groupInputInfo">
+											<label>街道地址(首选)</label>
+											<input name="institutionaddress" v-model="education.institutionaddress" type="text" />
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft groupInputInfo">
+											<label>街道地址(次选)*可选</label>
+											<input type="text" v-model="education.secinstitutionaddress" />
+										</div>
+										<div class="paddingRight groupcheckBoxInfo" >
+											<label >市</label>
+											<input name="institutioncity" v-model="education.institutioncity" type="text" />
+											<input type="checkbox" />
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft groupInputInfo">
+											<label>州/省</label>
+											<input name="institutionprovince" v-model="education.institutionprovince" type="text" />
+										</div>
+										<div class="paddingRight groupcheckBoxInfo">
+											<label>邮政编码</label>
+											<input name="institutionzipcode" v-model="education.institutionzipcode" type="text" />
+											<input name="isinstitutionzipcodeapply" v-model="education.isinstitutionzipcodeapply" type="checkbox" />
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft groupSelectInfo" >
+											<label>国家/地区</label>
+											<select name="institutioncountry" v-model="education.institutioncountry">
+												<option value="0">请选择</option>
+												<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+													<option value="${map.key }">${map.value }</option>
+												</c:forEach>
+											</select>
+										</div>
+										<div class="paddingRight groupInputInfo">
+											<label>学科</label>
+											<input name="course" v-model="education.course" type="text" />
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft groupInputInfo">
+											<label>参加课程开始时间</label>
+											<input id="coursestartdate" name="coursestartdate" v-model="education.coursestartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
+										</div>
+										<div class="paddingRight groupInputInfo">
+											<label>结束时间</label>
+											<input id="courseenddate" name="courseenddate" v-model="education.courseenddate" class="datetimepickercss" type="text" placeholder="日/月/年" />
+										</div>
 									</div>
 								</div>
-							</div>
+							
+							</span>
+							<span v-else>
+								<div>
+									<div class="midSchoolEduDiv">
+										<div class="paddingLeft groupInputInfo">
+											<label>机构名称</label>
+											<input name="institution" type="text"/>
+										</div>
+										<div class="paddingRight groupInputInfo">
+											<label>街道地址(首选)</label>
+											<input name="institutionaddress" type="text" />
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft groupInputInfo">
+											<label>街道地址(次选)*可选</label>
+											<input type="text" />
+										</div>
+										<div class="paddingRight groupcheckBoxInfo" >
+											<label >市</label>
+											<input name="institutioncity" type="text" />
+											<input type="checkbox" />
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft groupInputInfo">
+											<label>州/省</label>
+											<input name="institutionprovince" type="text" />
+										</div>
+										<div class="paddingRight groupcheckBoxInfo">
+											<label>邮政编码</label>
+											<input name="institutionzipcode" type="text" />
+											<input name="isinstitutionzipcodeapply" type="checkbox" />
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft groupSelectInfo" >
+											<label>国家/地区</label>
+											<select name="institutioncountry">
+												<option value="0">请选择</option>
+												<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+													<option value="${map.key }">${map.value }</option>
+												</c:forEach>
+											</select>
+										</div>
+										<div class="paddingRight groupInputInfo">
+											<label>学科</label>
+											<input name="course" type="text" />
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft groupInputInfo">
+											<label>参加课程开始时间</label>
+											<input id="coursestartdate" name="coursestartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
+										</div>
+										<div class="paddingRight groupInputInfo">
+											<label>结束时间</label>
+											<input id="courseenddate" name="courseenddate" class="datetimepickercss" type="text" placeholder="日/月/年" />
+										</div>
+									</div>
+								</div>
+							</span>
+							
 							
 							<div class="clear"></div>
 							<!-- <div class="btnGroup">
@@ -996,15 +1052,27 @@
 					</div>
 				</div>
 				
-				<div>
-					<div class="paddingTop">
-						<label>使用的语言名称</label>
-						<div class="groupInputInfo">
-							<input name="languagename" type="text" />
+				<span v-if="visaInfo.workEducationInfo.languagelist != null">
+					<div v-for="language in visaInfo.workEducationInfo.languagelist">
+						<div class="paddingTop">
+							<label>使用的语言名称</label>
+							<div class="groupInputInfo">
+								<input name="languagename" v-model="language.languagename" type="text" />
+							</div>
 						</div>
 					</div>
-				</div>
-
+				</span>
+				<span v-else>
+					<div>
+						<div class="paddingTop">
+							<label>使用的语言名称</label>
+							<div class="groupInputInfo">
+								<input name="languagename" type="text" />
+							</div>
+						</div>
+					</div>
+				</span>
+				
 				<div class="paddingTop">
 					<div class="groupRadioInfo">
 						<label>过去五年是否曾去过任何国家/地区旅游</label>
@@ -1013,6 +1081,24 @@
 					</div>
 					<!--yes-->
 					<div class="isTravelYes elementHide">
+					
+						<span v-if="visaInfo.workEducationInfo.gocountrylist != null">
+							<div v-for="gocountry in visaInfo.workEducationInfo.gocountrylist">
+								<div class="paddingTop travelCountry groupInputInfo">
+									<label>国家/地区</label>
+									<input name="traveledcountry" v-model="gocountry.traveledcountry" type="text"/>
+								</div>
+							</div>
+						</span>
+						<span v-else>
+							<div>
+								<div class="paddingTop travelCountry groupInputInfo">
+									<label>国家/地区</label>
+									<input name="traveledcountry" type="text"/>
+								</div>
+							</div>
+						</span>
+					
 						<div>
 							<div class="paddingTop travelCountry groupInputInfo">
 								<label>国家/地区</label>
@@ -1035,12 +1121,24 @@
 					</div>
 					<!--yes-->
 					<div class="isOrganizationYes elementHide">
-						<div>
-							<div class="paddingTop organizationDiv groupInputInfo">
-								<label>组织名称</label>
-								<input name="organizationname" type="text"/>
+						<span v-if="visaInfo.workEducationInfo.organizationlist != null">
+							<div v-for="organization in visaInfo.workEducationInfo.organizationlist">
+								<div class="paddingTop organizationDiv groupInputInfo">
+									<label>组织名称</label>
+									<input name="organizationname" v-model="organization.organizationname" type="text"/>
+								</div>
 							</div>
-						</div>
+						</span>
+						<span v-else>
+							<div>
+								<div class="paddingTop organizationDiv groupInputInfo">
+									<label>组织名称</label>
+									<input name="organizationname" type="text"/>
+								</div>
+							</div>
+						</span>
+						
+						
 						<!-- <div class="btnGroup">
 							<a class="save">添加</a>
 							<a class="cancel">去掉</a>
