@@ -83,9 +83,13 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		//查询是否有需要自动填表的订单
 		String sqlstring = sqlManager.get("select_simulate_jp_order");
 		Sql sql = Sqls.create(sqlstring);
-		List<Record> orderjplist = dbDao.query(sql,
-				Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);
-		if (!Util.isEmpty(orderjplist) && orderjplist.size() > 0) {
+		//查询发招宝、招宝变更中、招宝取消中的订单
+		Integer[] orderstatus = { JPOrderStatusEnum.READYCOMMING.intKey(), JPOrderStatusEnum.BIANGENGZHONG.intKey(),
+				JPOrderStatusEnum.QUXIAOZHONG.intKey() };
+		List<Record> orderjplist = dbDao.query(sql, Cnd.where("tr.status", "in", orderstatus), null);
+		/*		List<Record> orderjplist = dbDao.query(sql,
+						Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);
+		*/if (!Util.isEmpty(orderjplist) && orderjplist.size() > 0) {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 			//获取第一条
 			Record record = orderjplist.get(0);
@@ -122,8 +126,19 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					}
 				}
 				TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+				Integer status = orderinfo.getStatus();
+				map.put("orderstatus", status);
 				//将订单设置为提交中
-				orderinfo.setStatus(JPOrderStatusEnum.COMMITING.intKey());
+				if (JPOrderStatusEnum.READYCOMMING.intKey() == status) {
+					//如果是发招宝状态，将订单状态变为提交中
+					orderinfo.setStatus(JPOrderStatusEnum.COMMITING.intKey());
+				} else if (JPOrderStatusEnum.BIANGENGZHONG.intKey() == status) {
+					//如果是招宝变更状态变为网站变更中
+					orderinfo.setStatus(JPOrderStatusEnum.WANGZHANBIANGENGZHONG.intKey());
+				} else if (JPOrderStatusEnum.QUXIAOZHONG.intKey() == status) {
+					//如果是招宝取消状态，变为网站招宝取消中
+					orderinfo.setStatus(JPOrderStatusEnum.WANGZHANQUXIAOZHONG.intKey());
+				}
 				dbDao.update(orderinfo);
 				map.put("ordernum", orderinfo.getOrderNum());
 			}
