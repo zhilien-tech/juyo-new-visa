@@ -4,7 +4,7 @@
  * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
  */
 
-package com.juyo.visa.admin.orderUS.service;
+package com.juyo.visa.admin.orderus.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

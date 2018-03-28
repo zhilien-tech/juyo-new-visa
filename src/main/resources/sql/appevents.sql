@@ -105,7 +105,7 @@ SELECT
 	tasb.twoinchphoto,
 	tasb.Interviewdate,
 	taswet.preparematerials,
-	tou.aacode,
+	tasb.aacode,
 	tasp.passport 
 FROM
 	t_app_staff_order_us tasou
