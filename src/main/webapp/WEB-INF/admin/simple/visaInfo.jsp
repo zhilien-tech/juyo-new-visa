@@ -312,8 +312,16 @@
 								<!-- 父母单位名称/配偶单位名称 -->
 								<div class="col-sm-4 preSchool">
 									<div class="form-group">
-										<label id="unitNameLabel"></label>
+										<label id="unitNameLabel"><span>*</span>职位</label>
 										<input id="unitName" name="unitName" type="text" class="form-control input-sm" value="${obj.workJp.unitName }"/>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>配偶职业</label>
+										<input id="" name="" type="text" class="form-control input-sm" value=""/>
 									</div>
 								</div>
 							</div>
@@ -718,7 +726,7 @@
 			}else{
 				$(".delete").css("display","none");
 			}
-			
+			//删除——————————————————————————————————————————————
 			//婚姻状况为单身和丧偶时没有上传图片接口
 			var marryStatus = $("#marryStatus").val();
 			if(marryStatus == 3 || marryStatus == 4 || !marryStatus){
