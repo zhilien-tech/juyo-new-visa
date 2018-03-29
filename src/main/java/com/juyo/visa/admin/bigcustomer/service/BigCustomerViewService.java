@@ -40,6 +40,7 @@ import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
+import com.juyo.visa.common.enums.USMarryStatusEnEnum;
 import com.juyo.visa.common.enums.USMarryStatusEnum;
 import com.juyo.visa.common.enums.AppPictures.AppCredentialsTypeEnum;
 import com.juyo.visa.common.enums.visaProcess.ContactPointRelationshipStatusEnum;
@@ -305,7 +306,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("userType", userType);
 
 		result.put("marryStatus", staffInfo.getMarrystatus());
+		result.put("marryStatusEn", staffInfo.getMarrystatusen());
 		result.put("marryStatusEnum", EnumUtil.enum2(USMarryStatusEnum.class));
+		result.put("marryStatusEnEnum", EnumUtil.enum2(USMarryStatusEnEnum.class));
 
 		SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		if (!Util.isEmpty(staffInfo.getBirthday())) {
@@ -396,7 +399,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffInfo.setUpdatetime(nowDate);
 			staffInfo.setCardfront(updateForm.getCardfront());
 			staffInfo.setCardback(updateForm.getCardback());
+			staffInfo.setTwoinchphoto(updateForm.getTwoinchphoto());
 			staffInfo.setAddress(updateForm.getAddress());
+			staffInfo.setAddressen(updateForm.getAddressen());
 			staffInfo.setBirthday(updateForm.getBirthday());
 			if (!Util.isEmpty(updateForm.getCardprovince())) {
 				staffInfo.setCardprovince(updateForm.getCardprovince());
@@ -405,18 +410,14 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				staffInfo.setCardcity(updateForm.getCardcity());
 			}
 			staffInfo.setCardId(updateForm.getCardId());
+			staffInfo.setCardIden(updateForm.getCardIden());
 			staffInfo.setCity(updateForm.getCity());
+			staffInfo.setCityen(updateForm.getCityen());
 			staffInfo.setDetailedaddress(updateForm.getDetailedaddress());
+			staffInfo.setDetailedaddressen(updateForm.getDetailedaddressen());
 			staffInfo.setEmail(updateForm.getEmail());
-			staffInfo.setFirstname(updateForm.getFirstname());
-			if (!Util.isEmpty(updateForm.getFirstnameen())) {
-				staffInfo.setFirstnameen(updateForm.getFirstnameen().substring(1));
-			}
+			staffInfo.setEmailen(updateForm.getEmailen());
 			staffInfo.setIssueorganization(updateForm.getIssueorganization());
-			staffInfo.setLastname(updateForm.getLastname());
-			if (!Util.isEmpty(updateForm.getLastnameen())) {
-				staffInfo.setLastnameen(updateForm.getLastnameen().substring(1));
-			}
 			staffInfo.setOtherfirstname(updateForm.getOtherfirstname());
 			if (!Util.isEmpty(updateForm.getOtherfirstnameen())) {
 				staffInfo.setOtherfirstnameen(updateForm.getOtherfirstnameen().substring(1));
@@ -426,16 +427,46 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				staffInfo.setOtherlastnameen(updateForm.getOtherlastnameen().substring(1));
 			}
 			staffInfo.setNation(updateForm.getNation());
+			staffInfo.setNationen(updateForm.getNationen());
 			staffInfo.setNationality(updateForm.getNationality());
+			staffInfo.setNationalityen(updateForm.getNationalityen());
 			staffInfo.setProvince(updateForm.getProvince());
+			staffInfo.setProvinceen(updateForm.getProvinceen());
 			staffInfo.setSex(updateForm.getSex());
 			staffInfo.setHasothername(updateForm.getHasothername());
+			staffInfo.setHasothernameen(updateForm.getHasothernameen());
 			staffInfo.setHasothernationality(updateForm.getHasothernationality());
-
+			staffInfo.setHasothernationalityen(updateForm.getHasothernationalityen());
+			staffInfo.setHasotherpassport(updateForm.getHasotherpassport());
+			staffInfo.setHasotherpassporten(updateForm.getHasotherpassporten());
+			staffInfo.setTelephoneen(updateForm.getTelephoneen());
 			staffInfo.setTelephone(updateForm.getTelephone());
 			if (!Util.isEmpty(updateForm.getAddressIssamewithcard())) {
 				staffInfo.setAddressIssamewithcard(updateForm.getAddressIssamewithcard());
 			}
+			if (!Util.isEmpty(updateForm.getAddressIssamewithcarden())) {
+				staffInfo.setAddressIssamewithcarden(updateForm.getAddressIssamewithcarden());
+			}
+			staffInfo.setMarrystatus(updateForm.getMarrystatus());
+			staffInfo.setMarrystatusen(updateForm.getMarrystatusen());
+			staffInfo.setMarryexplainen(updateForm.getMarryexplainen());
+			staffInfo.setMarryexplain(updateForm.getMarryexplain());
+			staffInfo.setNationalidentificationnumber(updateForm.getNationalidentificationnumber());
+			staffInfo.setNationalidentificationnumberen(updateForm.getNationalidentificationnumberen());
+			staffInfo.setSocialsecuritynumber(updateForm.getSocialsecuritynumber());
+			staffInfo.setSocialsecuritynumberen(updateForm.getSocialsecuritynumberen());
+			staffInfo.setTaxpayernumber(updateForm.getTaxpayernumber());
+			staffInfo.setTaxpayernumberen(updateForm.getTaxpayernumberen());
+			staffInfo.setIstaxpayernumberapply(updateForm.getIstaxpayernumberapply());
+			staffInfo.setIstaxpayernumberapplyen(updateForm.getIstaxpayernumberapplyen());
+			staffInfo.setIsidentificationnumberapply(updateForm.getIsidentificationnumberapply());
+			staffInfo.setIsidentificationnumberapplyen(updateForm.getIsidentificationnumberapplyen());
+			staffInfo.setIsothercountrypermanentresident(updateForm.getIsothercountrypermanentresident());
+			staffInfo.setIsothercountrypermanentresidenten(updateForm.getIsothercountrypermanentresidenten());
+			staffInfo.setOthercountry(updateForm.getOthercountry());
+			staffInfo.setOthercountryen(updateForm.getOthercountryen());
+			staffInfo.setIssecuritynumberapply(updateForm.getIssecuritynumberapply());
+			staffInfo.setIssecuritynumberapplyen(updateForm.getIssecuritynumberapplyen());
 			staffInfo.setEmergencylinkman(updateForm.getEmergencylinkman());
 			staffInfo.setEmergencytelephone(updateForm.getEmergencytelephone());
 			staffInfo.setValidenddate(updateForm.getValidenddate());
