@@ -1,10 +1,13 @@
 package com.juyo.visa.admin.bigcustomer.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
@@ -13,6 +16,7 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -20,13 +24,14 @@ import org.nutz.log.Logs;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.bigcustomer.form.VisaListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.base.QrCodeService;
+import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TravelpurposeEnum;
-import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
-import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
@@ -47,6 +52,12 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	private static final Log log = Logs.get();
+
+	@Inject
+	private UploadService qiniuUploadService;//文件上传
+	//二维码生成
+	@Inject
+	private QrCodeService qrCodeService;
 
 	/**
 	 * 
@@ -348,69 +359,41 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	/*
 	 * 拍照资料获取
 	 */
-	public Object updatePhoto(Integer staffid) {
+	public Object updatePhoto(Integer staffid, HttpServletRequest request, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		//生成二维码
+		String id = session.getId();
+		String serverName = request.getServerName();
+		int serverPort = request.getServerPort();
+		String content = "http://" + serverName + ":" + serverPort + "/appmobileus/USFilming.html?sessionid=" + id
+				+ "&staffid=" + staffid;
+		String encodeQrCode = qrCodeService.encodeQrCode(request, content);
+		result.put("encodeQrCode", encodeQrCode);
 		//获取用户基本信息
 		TAppStaffBasicinfoEntity basicInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffid));
-		Map<String, Object> result = Maps.newHashMap();
 		if (!Util.isEmpty(basicInfo))
 			result.put("basicInfo", basicInfo);
 		else
 			result.put("basicInfo", null);
-		//获取该用户的证件资料
-		String sqlStr = sqlManager.get("t_app_staff_credentials_info");
-		Sql applysql = Sqls.create(sqlStr);
-		Cnd cnd = Cnd.NEW();
-		cnd.and("staffid", "=", staffid);
-		List<Record> infoList = dbDao.query(applysql, cnd, null);
-		for (Record appRecord : infoList) {
-			int type = appRecord.getInt("type");
-			for (TAppStaffCredentialsEnum pmEnum : TAppStaffCredentialsEnum.values())
-				if (!Util.isEmpty(type) && type == pmEnum.intKey()) {
-					appRecord.set("type", pmEnum.value());
-					break;
-				}
-		}
-		TAppStaffCredentialsEntity newHuzhao = new TAppStaffCredentialsEntity();
-		if (!Util.isEmpty(infoList)) {
-			for (Record record : infoList) {
-				if ("新护照".equals(record.getString("type"))) {
-
-				}
-				if ("旧护照".equals(record.getString("type"))) {
-
-				}
-				if ("身份证".equals(record.getString("type"))) {
-
-				}
-				if ("户口本".equals(record.getString("type"))) {
-
-				}
-				if ("房产证".equals(record.getString("type"))) {
-
-				}
-				if ("结婚证".equals(record.getString("type"))) {
-
-				}
-				if ("银行流水".equals(record.getString("type"))) {
-
-				}
-				if ("在职证明".equals(record.getString("type"))) {
-
-				}
-				if ("营业执照".equals(record.getString("type"))) {
-
-				}
-				if ("驾驶证".equals(record.getString("type"))) {
-
-				}
-				if ("过期美签".equals(record.getString("type"))) {
-
-				}
-				if ("美国出签".equals(record.getString("type"))) {
-
-				}
-			}
-		}
 		return result;
+	}
+
+	/*
+	 * 返回上传图片地址
+	 */
+	public String uploadImage(File file, HttpServletRequest request, HttpServletResponse response) {
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		file.delete();
+		map.put("data", CommonConstants.IMAGES_SERVER_ADDR + map.get("data"));
+		String picurl = (String) map.get("data");
+		return picurl;
+
+	}
+
+	/*
+	 * 图片上传
+	 */
+	public void addPhoto(Integer staffid, String imageUrl, Integer type) {
+
 	}
 }

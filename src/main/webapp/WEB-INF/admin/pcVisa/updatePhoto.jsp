@@ -14,6 +14,7 @@
 <body>
 	<div class="head">
 		<span>拍摄资料</span>
+		<input id="staffid" type="hidden" value="${obj.basicInfo.id }">
 		<div class="btnGroup">
 			<a class="btnSave">保存</a> <a class="btnCancel">取消</a>
 		</div>
@@ -23,7 +24,7 @@
 		<div class="QRCode">
 			<div class="explain">微信扫描二维码上传识别</div>
 			<div class="scan">
-				<img src="${base}/references/public/dist/newvisacss/img/QRCode.png" />
+				<img src="${obj.encodeQrCode }" />
 			</div>
 		</div>
 		<!--二寸免冠照-->
@@ -33,10 +34,8 @@
 				<span>二寸免冠照片注意事项</span> <span>1.白底</span> <span>2.摘掉帽子</span> <span>3.漏出耳朵</span>
 			</div>
 			<div class="samplePhoto">
-				<c:if test="1">
-					<img
+					<img id="twonichphoto"
 						src="${base}/references/public/dist/newvisacss/img/picture.png" />
-				</c:if>
 			</div>
 			<div class="uploadPhoto">
 				<div>上传</div>
@@ -45,14 +44,14 @@
 						height="100%" />
 				</c:if> --%>
 			</div>
-			<input type="file" class="publicFile uploadFileImg" name="" />
+			<input id="1" type="file" class="publicFile uploadFileImg" name="" />
 		</div>
 		<!--护照首页-->
 		<div class="passport">
 			<div class="sectionHead">护照首页</div>
 			<div class="explain"></div>
 			<div class="samplePassport">
-				<img
+				<img id = "huzhao"
 					src="${base}/references/public/dist/newvisacss/img/passport.png" />
 			</div>
 			<div class="uploadPassport">
@@ -66,7 +65,7 @@
 			<div class="sectionHead">旧护照</div>
 			<div class="explain"></div>
 			<div class="samplePassport">
-				<img
+				<img id="oldhuzhao"
 					src="${base}/references/public/dist/newvisacss/img/passport.png" />
 			</div>
 			<div class="uploadPassport">
@@ -80,14 +79,9 @@
 			<div class="sectionHead">身份证</div>
 			<div class="explain"></div>
 			<div class="samplePassport">
-				<c:if test="${empty obj.cardfront }">
-					<img
+					<img id="card"
 						src="${base}/references/public/dist/newvisacss/img/passport.png" />
-				</c:if>
-				<c:if test="${not empty obj.cardfront }">
-					<img src="${obj.cardfront }" width="400px" height="300px" />
-					<img src="${obj.cardback }" width="400px" height="300px" />
-				</c:if>
+
 
 			</div>
 			<div class="uploadPassport">
@@ -231,19 +225,43 @@
 <script type="text/javascript" src="/admin/common/commonjs.js"></script>
 <script src="/appmobileus/js/jquery-1.10.2.js"></script>
 <script src="/appmobileus/js/lrz.bundle.js"></script>
-<script src="${base}/admin/pcVisa/photo.js"></script>
 <script>
 	$(function() {
-		$(".uploadPhoto").click(function() {
-			$(".uploadFileImg").click();
-			$(".uploadFileImg").change(function() {
-				layer.load(1, {
-					shade : "#000"
-				});
-				uploadImg();
-			});
-
-		})
-	})
+		var staffid = $("#staffid").val();
+		twonichphoto(staffid,13);
+		twonichphoto(staffid,1);
+		twonichphoto(staffid,2);
+		twonichphoto(staffid,3);
+	});
+	//2寸照片回显
+	function twonichphoto(staffid, type) {
+		$.ajax({
+			url : "/admin/mobileVisa/getInfoByType.html",
+			data : {
+				type : type,
+				staffid : staffid
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != null) {
+					if(13==data.credentialEntity.type){
+						$("#twonichphoto").attr("src", data.credentialEntity.url);
+					}
+					if(1==data.credentialEntity.type){
+						$("#huhzao").attr("src", data.credentialEntity.url);
+					}
+					if(2==data.credentialEntity.type){
+						$("#oldhuzhao").attr("src", data.credentialEntity.url);
+					}
+					if(3==data.credentialEntity.type){
+						$("#card").attr("src", data.credentialEntity.url);
+					}
+				}
+			}
+		});
+	};
 </script>
 </html>
