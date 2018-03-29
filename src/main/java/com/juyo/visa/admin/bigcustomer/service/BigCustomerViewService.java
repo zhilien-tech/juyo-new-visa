@@ -53,9 +53,19 @@ import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.util.ExcelReader;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
+import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
+import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
+import com.juyo.visa.entities.TAppStaffConscientiousEntity;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
+import com.juyo.visa.entities.TAppStaffDriverinfoEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
+import com.juyo.visa.entities.TAppStaffGocountryEntity;
+import com.juyo.visa.entities.TAppStaffGousinfoEntity;
+import com.juyo.visa.entities.TAppStaffImmediaterelativesEntity;
+import com.juyo.visa.entities.TAppStaffLanguageEntity;
+import com.juyo.visa.entities.TAppStaffOrganizationEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
@@ -117,10 +127,10 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		//旅伴信息---与你的关系
 		result.put("TravelCompanionRelationshipEnum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
-		//以前的美国旅游信息---时间单位枚举
-		result.put("TimeUnitStatusEnum", EnumUtil.enum2(TimeUnitStatusEnum.class));
 		//以前的美国旅游信息---州枚举
 		result.put("VisaUSStatesEnum", EnumUtil.enum2(VisaUSStatesEnum.class));
+		//以前的美国旅游信息---时间单位枚举
+		result.put("TimeUnitStatusEnum", EnumUtil.enum2(TimeUnitStatusEnum.class));
 		//美国联络点---与你的关系
 		result.put("ContactPointRelationshipStatusEnum", EnumUtil.enum2(ContactPointRelationshipStatusEnum.class));
 		//家庭信息---身份状态
@@ -133,6 +143,49 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("VisaSpouseContactAddressEnum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
 		//工作/教育/培训信息---主要职业
 		result.put("VisaCareersEnum", EnumUtil.enum2(VisaCareersEnum.class));
+
+		//---同伴信息
+		List<TAppStaffCompanioninfoEntity> companionList = dbDao.query(TAppStaffCompanioninfoEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		result.put("companionList", companionList);
+		//---去过美国信息集合
+		List<TAppStaffGousinfoEntity> gousList = dbDao.query(TAppStaffGousinfoEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		result.put("gousList", gousList);
+		//---美国驾照集合
+		List<TAppStaffDriverinfoEntity> driverList = dbDao.query(TAppStaffDriverinfoEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		result.put("driverList", driverList);
+
+		//---直属亲戚信息集合
+		List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		result.put("zhiFamilyList", zhiFamilyList);
+
+		//---以前工作信息集合
+		List<TAppStaffBeforeworkEntity> beforeWorkList = dbDao.query(TAppStaffBeforeworkEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		result.put("beforeWorkList", beforeWorkList);
+		//---以前教育信息集合 
+		List<TAppStaffBeforeeducationEntity> beforeEducationList = dbDao.query(TAppStaffBeforeeducationEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		result.put("beforeEducationList", beforeEducationList);
+		//---服兵役信息集合
+		List<TAppStaffConscientiousEntity> conscientiousList = dbDao.query(TAppStaffConscientiousEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		result.put("conscientiousList", conscientiousList);
+		//使用过的语言集合
+		List<TAppStaffLanguageEntity> languageList = dbDao.query(TAppStaffLanguageEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		result.put("languageList", languageList);
+		//去过的国家集合
+		List<TAppStaffGocountryEntity> gocountryList = dbDao.query(TAppStaffGocountryEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		result.put("gocountryList", gocountryList);
+		//参加过的慈善组织集合
+		List<TAppStaffOrganizationEntity> organizationList = dbDao.query(TAppStaffOrganizationEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		result.put("organizationList", organizationList);
 
 		//人员id
 		result.put("staffId", staffId);
@@ -154,24 +207,77 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	public Object getVisaInfos(Integer staffId, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 		//旅伴信息
-		TAppStaffTravelcompanionEntity travelCompanionInfo = (TAppStaffTravelcompanionEntity) pcVisaViewService
-				.getStaffTravelCompanion(staffId);
+		String sqlStrt = sqlManager.get("pcVisa_travelCompanion");
+		Sql sqlt = Sqls.create(sqlStrt);
+		sqlt.setParam("staffid", staffId);
+		Record travelCompanionInfo = dbDao.fetch(sqlt);
+		//---同伴信息
+		List<TAppStaffCompanioninfoEntity> companionList = dbDao.query(TAppStaffCompanioninfoEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		travelCompanionInfo.put("companionList", companionList);
 		result.put("travelCompanionInfo", travelCompanionInfo);
+
 		//以前的美国旅游信息
-		TAppStaffPrevioustripinfoEntity previUSTripInfo = (TAppStaffPrevioustripinfoEntity) pcVisaViewService
-				.getStaffpreviousTripInfo(staffId);
+		String sqlStrp = sqlManager.get("pcVisa_previousTrip");
+		Sql sqlp = Sqls.create(sqlStrp);
+		sqlp.setParam("staffid", staffId);
+		Record previUSTripInfo = dbDao.fetch(sqlp);
+		//---去过美国信息集合
+		List<TAppStaffGousinfoEntity> gousList = dbDao.query(TAppStaffGousinfoEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		previUSTripInfo.put("gousList", gousList);
+		//---美国驾照集合
+		List<TAppStaffDriverinfoEntity> driverList = dbDao.query(TAppStaffDriverinfoEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		previUSTripInfo.put("driverList", driverList);
 		result.put("previUSTripInfo", previUSTripInfo);
+
 		//美国联络点
-		TAppStaffContactpointEntity contactPointInfo = (TAppStaffContactpointEntity) pcVisaViewService
-				.getStaffContactPoint(staffId);
+		TAppStaffContactpointEntity contactPointInfo = dbDao.fetch(TAppStaffContactpointEntity.class,
+				Cnd.where("staffid", "=", staffId));
 		result.put("contactPointInfo", contactPointInfo);
+
 		//家庭信息
-		TAppStaffFamilyinfoEntity familyInfo = (TAppStaffFamilyinfoEntity) pcVisaViewService
-				.getStaffFamilyInfo(staffId);
+		String sqlStrf = sqlManager.get("pcVisa_familyInfo");
+		Sql sqlf = Sqls.create(sqlStrf);
+		sqlf.setParam("staffid", staffId);
+		Record familyInfo = dbDao.fetch(sqlf);
+		//---直属亲戚信息集合
+		List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		familyInfo.put("zhiFamilyList", zhiFamilyList);
 		result.put("familyInfo", familyInfo);
+
 		//工作/教育/培训信息 
-		TAppStaffWorkEducationTrainingEntity workEducationInfo = (TAppStaffWorkEducationTrainingEntity) pcVisaViewService
-				.getStaffWorkEducationTraining(staffId);
+		String sqlStrw = sqlManager.get("bigCustomer_order_applicant_list");
+		Sql sqlw = Sqls.create(sqlStrw);
+		sqlw.setParam("staffid", staffId);
+		Record workEducationInfo = dbDao.fetch(sqlw);
+		//---以前工作信息集合
+		List<TAppStaffBeforeworkEntity> beforeWorkList = dbDao.query(TAppStaffBeforeworkEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		workEducationInfo.put("beforeWorkList", beforeWorkList);
+		//---以前教育信息集合 
+		List<TAppStaffBeforeeducationEntity> beforeEducationList = dbDao.query(TAppStaffBeforeeducationEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		workEducationInfo.put("beforeEducationList", beforeEducationList);
+		//---服兵役信息集合
+		List<TAppStaffConscientiousEntity> conscientiousList = dbDao.query(TAppStaffConscientiousEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		workEducationInfo.put("conscientiousList", conscientiousList);
+		//使用过的语言集合
+		List<TAppStaffLanguageEntity> languageList = dbDao.query(TAppStaffLanguageEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		workEducationInfo.put("languageList", languageList);
+		//去过的国家集合
+		List<TAppStaffGocountryEntity> gocountryList = dbDao.query(TAppStaffGocountryEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		workEducationInfo.put("gocountryList", gocountryList);
+		//参加过的慈善组织集合
+		List<TAppStaffOrganizationEntity> organizationList = dbDao.query(TAppStaffOrganizationEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		workEducationInfo.put("organizationList", organizationList);
+
 		result.put("workEducationInfo", workEducationInfo);
 
 		//人员id

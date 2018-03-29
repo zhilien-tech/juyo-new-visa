@@ -50,30 +50,62 @@
 						</div>
 						<!--第二部分No-->
 						<div class="teamnamefalse groupInputInfo">
-							<div class="companionSurnName">
-								<label>同伴姓</label>
-								<input id="firstname" name="firstname" type="text" placeholder="同伴姓" />
-							</div>
-							<div class="companionName">
-								<label>同伴名</label>
-								<input id="lastname" name="lastname" type="text" placeholder="同伴名" />
-							</div>
-							<div class="clear"></div>
-							<div class="youRelationship">
-								<label>与你的关系</label>
-								<select id="relationship" name="relationship">
-									<option value="0">请选择</option>
-									<c:forEach items="${obj.TravelCompanionRelationshipEnum }" var="map">
-										<option value="${map.key }">${map.value }</option>
-									</c:forEach>
-								</select>
-							</div>
-							<!-- 业务需求，先隐藏 -->
-							<!-- <div class="btnGroup">
-								<a class="save">添加</a>
-								<a class="cancel">去掉 </a>
-							</div> -->
+						
+							<c:if test="${!empty obj.companionlist }">
+								<c:forEach var="companion" items="${obj.companionlist }">
+									<div class="teamnamefalseDiv" >
+										<div class="companionSurnName">
+											<label>同伴姓</label>
+											<input id="firstname" name="firstname" value="${companion.firstname }" type="text" placeholder="同伴姓" />
+										</div>
+										<div class="companionName">
+											<label>同伴名</label>
+											<input id="lastname" name="lastname" value="${companion.lastname }" type="text" placeholder="同伴名" />
+										</div>
+										<div class="clear"></div>
+										<div class="youRelationship">
+											<label>与你的关系</label>
+											<select id="relationship" value="${companion.relationship }" name="relationship">
+												<option value="0">请选择</option>
+												<c:forEach items="${obj.TravelCompanionRelationshipEnum }" var="map">
+													<option value="${map.key }">${map.value }</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
+							<c:if test="${empty obj.companionlist }">
+								<div class="teamnamefalseDiv">
+									<div class="companionSurnName">
+										<label>同伴姓</label>
+										<input id="firstname" name="firstname" type="text" placeholder="同伴姓" />
+									</div>
+									<div class="companionName">
+										<label>同伴名</label>
+										<input id="lastname" name="lastname" type="text" placeholder="同伴名" />
+									</div>
+									<div class="clear"></div>
+									<div class="youRelationship">
+										<label>与你的关系</label>
+										<select id="relationship" name="relationship">
+											<option value="0">请选择</option>
+											<c:forEach items="${obj.TravelCompanionRelationshipEnum }" var="map">
+												<option value="${map.key }">${map.value }</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+							</c:if>
+						
+							
 						</div>
+						
+						<!-- 业务需求，先隐藏 -->
+						<!-- <div class="btnGroup">
+							<a class="save">添加</a>
+							<a class="cancel">去掉 </a>
+						</div> -->
 						
 					</div>
 				</div>
@@ -92,16 +124,21 @@
 						</div>
 						<!--yes-->
 						<div class="goUSInfo goUSYes">
-							<div>
-								<div class="goUS_Country">
+							<c:if test="${!empty previUSTripInfo.gouslist }">
+								<c:forEach var="gous" items="${previUSTripInfo.gouslist }">
+								
+								</c:forEach>
+							</c:if>
+							
+								<div class="goUS_Country" v-for="gous in visaInfo.previUSTripInfo.gouslist">
 									<div class="groupInputInfo">
 										<label>抵达日期</label>
-										<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
+										<input type="text" id="arrivedate" v-model="gous.arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
 									</div>
 									<div class="groupInputInfo stopDate goUS_Country">
 										<label>停留时间</label>
-										<input id="staydays" name="staydays" type="text" />
-										<select id="dateunit" name="dateunit">
+										<input id="staydays" v-model="gous.staydays" name="staydays" type="text" />
+										<select id="dateunit" v-model="gous.dateunit" name="dateunit">
 											<option value="0">请选择</option>
 											<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
 												<option value="${map.key }">${map.value }</option>
@@ -109,26 +146,23 @@
 										</select>
 									</div>
 								</div>
-								<!-- <div class="goUS_Country">
-									<div class="groupInputInfo">
-										<label>抵达日期</label>
-										<input type="text" placeholder="日/月/年">
-									</div>
-									<div class="groupInputInfo stopDate goUS_Country">
-										<label>停留时间</label>
-										<input type="text" />
-										<select>
-											<option value="0">请选择</option>
-											<option>年</option>
-											<option>月</option>
-											<option>周</option>
-											<option>日</option>
-											<option>少于24小时</option>
-										</select>
-									</div>
-								</div> -->
-								
-							</div>
+							</span>
+							<span v-else class="goUS_Country">
+								<div class="groupInputInfo">
+									<label>抵达日期</label>
+									<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
+								</div>
+								<div class="groupInputInfo stopDate goUS_Country">
+									<label>停留时间</label>
+									<input id="staydays" name="staydays" type="text" />
+									<select id="dateunit" name="dateunit">
+										<option value="0">请选择</option>
+										<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
+											<option value="${map.key }">${map.value }</option>
+										</c:forEach>
+									</select>
+								</div>
+							</span>
 							<!-- <div class="btnGroup">
 								<a class="save">添加</a>
 								<a class="cancel">去掉</a>
@@ -139,7 +173,25 @@
 								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" class="license" value="2" checked />否
 							</div>
 							<div>
-								<div class="driverInfo goUS_drivers">
+								<span v-if="visaInfo.previUSTripInfo.driverlist != ''">
+									<div v-for="driver in visaInfo.previUSTripInfo.driverlist">
+										<div class="groupcheckBoxInfo driverMain">
+											<label>驾照号</label>
+											<input id="driverlicensenumber" v-model="driver.driverlicensenumber" name="driverlicensenumber" type="text" >
+											<input id="isknowdrivernumber" v-model="driver.isknowdrivernumber" name="isknowdrivernumber" type="checkbox"/>
+										</div>
+										<div class="groupSelectInfo driverR">
+											<label>哪个州的驾照</label>
+											<select id="witchstateofdriver" v-model="driver.witchstateofdriver" name="witchstateofdriver">
+												<option value="0">请选择</option>
+												<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
+													<option value="${map.key }">${map.value }</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+								</span>
+								<span v-else>
 									<div class="groupcheckBoxInfo driverMain">
 										<label>驾照号</label>
 										<input id="driverlicensenumber" name="driverlicensenumber" type="text" >
@@ -154,7 +206,7 @@
 											</c:forEach>
 										</select>
 									</div>
-								</div>
+								</span>
 							</div>
 							<!-- <div class="btnGroup driverInfo">
 								<a class="save">添加</a>
