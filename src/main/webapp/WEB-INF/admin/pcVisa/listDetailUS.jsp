@@ -1015,6 +1015,7 @@
 		function sendEmailUS(){
 			var staffid = '${obj.staffid}';
 			var orderid = '${obj.orderid}';
+			layer.load(1);
 			$.ajax({
 				url : '/admin/orderUS/sendShareMsg.html',
 				data : {
@@ -1024,6 +1025,7 @@
 				dataType : "json",
 				type : 'post',
 				success : function(data) {
+					layer.closeAll("loading");
 					console.log(data);
 					if(data){
 						layer.msg("发送成功");

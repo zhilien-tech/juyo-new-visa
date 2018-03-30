@@ -234,7 +234,7 @@ function applyValidate(){
 					}
 				}
 			},
-			nationalidentificationnumber : {
+			/*nationalidentificationnumber : {
 				trigger:"change keyup",
 				validators : {
 					notEmpty : {
@@ -281,7 +281,7 @@ function applyValidate(){
 						message : '纳税人证件号不能为空'
 					}
 				}
-			},
+			},*/
 		}
 	});
 	$('#applicantInfo').bootstrapValidator('validate');
@@ -305,7 +305,7 @@ function translateZhToEn(from, to, param){
 		type : 'POST',
 		dataType : 'json',
 		success : function(data) {
-			$("#" + to).val(data);
+			$("#" + to).val(data).change();
 		}
 	});
 	/*$.getJSON("/admin/translate/google", {q: $(from).val()}, function (result) {
@@ -813,10 +813,10 @@ $(".issecuritynumberapplyen").click(function(){
 });
 $(".issecuritynumberapply").click(function(){
 	if(this.checked){
-		$("#socialsecuritynumber").val("");
+		$("#socialsecuritynumber").val("").change();
 		$("#socialsecuritynumber").attr("disabled",true);
 		$(".issecuritynumberapplyen").prop("checked",true);
-		$("#socialsecuritynumberen").val("");
+		$("#socialsecuritynumberen").val("").change();
 		$("#socialsecuritynumberen").attr("disabled",true);
 	}else{
 		$("#socialsecuritynumber").attr("disabled",false);
@@ -827,7 +827,7 @@ $(".issecuritynumberapply").click(function(){
 //美国纳税人证件号
 $(".istaxpayernumberapplyen").click(function(){
 	if(this.checked){
-		$("#taxpayernumberen").val("");
+		$("#taxpayernumberen").val("").change();
 		$("#taxpayernumberen").attr("disabled",true);
 	}else{
 		$("#taxpayernumberen").attr("disabled",false);
@@ -835,10 +835,10 @@ $(".istaxpayernumberapplyen").click(function(){
 });
 $(".istaxpayernumberapply").click(function(){
 	if(this.checked){
-		$("#taxpayernumber").val("");
+		$("#taxpayernumber").val("").change();
 		$("#taxpayernumber").attr("disabled",true);
 		$(".istaxpayernumberapplyen").prop("checked",true);
-		$("#taxpayernumberen").val("");
+		$("#taxpayernumberen").val("").change();
 		$("#taxpayernumberen").attr("disabled",true);
 	}else{
 		$("#taxpayernumber").attr("disabled",false);
@@ -971,7 +971,7 @@ function saveApplicant(status){
 				url: BASE_PATH + '/admin/bigCustomer/updateStaffInfo.html',
 				success :function(data) {
 					if(data>0){
-						parent.successCallback(2);
+						//parent.successCallback(2);
 						closeWindow();
 					}
 				}
