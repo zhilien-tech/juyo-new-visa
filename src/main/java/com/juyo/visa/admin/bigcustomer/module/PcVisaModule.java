@@ -1,7 +1,10 @@
 package com.juyo.visa.admin.bigcustomer.module;
 
+import java.io.File;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -111,11 +114,23 @@ public class PcVisaModule {
 	/*
 	 * 跳转拍照资料
 	 */
-
 	@At
 	@GET
-	public Object updatePhoto(@Param("staffid") Integer staffid) {
-		return pcVisaViewService.updatePhoto(staffid);
+	@Ok("jsp")
+	public Object updatePhoto(@Param("staffid") Integer staffid, HttpServletRequest request, HttpSession session) {
+		return pcVisaViewService.updatePhoto(staffid, request, session);
 	}
 
+	/**
+	 * 身份证正面上传、扫描
+	 */
+	@At
+	@Ok("json")
+	@Filters
+	public Object IDCardRecognition(@Param("image") File file, @Param("staffid") Integer staffid,
+			@Param("type") Integer type, HttpServletRequest request, HttpServletResponse response) {
+		String imageUrl = pcVisaViewService.uploadImage(file, request, response);
+		pcVisaViewService.addPhoto(staffid, imageUrl, type);
+		return null;
+	}
 }

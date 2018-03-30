@@ -99,7 +99,6 @@
 		            	success: function(data){
 		            		var end = new Date().getTime();//接受时间
 		            		_self.visaListData = data.visaListData;
-		            		console.log(JSON.stringify(_self.visaListData));
 		            		$('#pagetotal').val(data.pagetotal);
 		                    //alert((end - start)+"ms");//返回函数执行需要时间
 		              	}
