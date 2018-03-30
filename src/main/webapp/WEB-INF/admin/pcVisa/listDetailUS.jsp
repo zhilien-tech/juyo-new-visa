@@ -1013,6 +1013,7 @@
 		}
 		
 		function sendEmailUS(){
+			layer.load(1);
 			var staffid = '${obj.staffid}';
 			var orderid = '${obj.orderid}';
 			$.ajax({
@@ -1024,6 +1025,7 @@
 				dataType : "json",
 				type : 'post',
 				success : function(data) {
+					layer.closeAll("loading");
 					console.log(data);
 					if(data){
 						layer.msg("发送成功");
