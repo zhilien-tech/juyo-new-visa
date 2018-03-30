@@ -8,6 +8,7 @@ package com.juyo.visa;
 
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
+import com.juyo.visa.admin.bigcustomer.module.TranslateUtil;
 import com.juyo.visa.common.util.PinyinTool;
 import com.juyo.visa.common.util.PinyinTool.Type;
 
@@ -15,8 +16,11 @@ import com.juyo.visa.common.util.PinyinTool.Type;
  * 测试发邮件
  */
 public class TestPinyin {
+	static final String ENGLISH = "en"; // 英
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws Exception {
+		String translate = TranslateUtil.translate("河南省卢氏县徐家湾乡徐庄村后村组", ENGLISH);
+		System.out.println("中文翻译成英语：" + translate);
 		PinyinTool tool = new PinyinTool();
 		try {
 			String name = "LIUYA";

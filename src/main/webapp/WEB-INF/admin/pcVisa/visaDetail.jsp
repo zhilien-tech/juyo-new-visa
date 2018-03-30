@@ -822,6 +822,40 @@
 				}
 			});
 		}
+		
+		//连接websocket
+		connectWebSocket();
+		function connectWebSocket(){
+			 if ('WebSocket' in window){  
+	            console.log('Websocket supported');  
+	            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+
+	            console.log('Connection attempted');  
+
+	            socket.onopen = function(){  
+	                 console.log('Connection open!');  
+	                 //setConnected(true);  
+	             };
+
+	            socket.onclose = function(){  
+	                console.log('Disconnecting connection');  
+	            };
+
+	            socket.onmessage = function (evt){
+	            		var type = evt.type;
+	            		var staffid = evt.staffid;
+	                  if(evt){
+		                  console.log(evt);
+		                		  window.location.href = '/admin/pcVisa/updatePhoto.html?staffid='+staffid;
+	                  }
+	                  console.log('message received!');  
+	                  //showMessage(received_msg);  
+	             };  
+
+	          } else {  
+	            console.log('Websocket not supported');  
+	          }  
+		} 
 	</script>
 </body>
 </html>

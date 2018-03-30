@@ -8,6 +8,7 @@ new Vue({
 	methods : {
 		//修改申请人信息
 		updatePhoto : function(id){
+			save();
 			layer.open({
 				type: 2,
 				title: false,

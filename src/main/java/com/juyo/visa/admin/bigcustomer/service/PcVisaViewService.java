@@ -1,10 +1,13 @@
 package com.juyo.visa.admin.bigcustomer.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
@@ -13,13 +16,18 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.bigcustomer.form.ListDetailUSDataForm;
 import com.juyo.visa.admin.bigcustomer.form.VisaListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.base.QrCodeService;
+import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TravelpurposeEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
@@ -46,6 +54,12 @@ import com.uxuexi.core.web.base.service.BaseService;
 public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	private static final Log log = Logs.get();
 
+	@Inject
+	private UploadService qiniuUploadService;//文件上传
+	//二维码生成
+	@Inject
+	private QrCodeService qrCodeService;
+
 	/**
 	 * 
 	 * 办理证签证列表页
@@ -61,6 +75,72 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		form.setUserid(loginUser.getId());
 		form.setAdminId(loginCompany.getAdminId());
+
+		Map<String, Object> result = Maps.newHashMap();
+		List<Record> list = new ArrayList<>();
+
+		//分页
+		Sql sql = form.sql(sqlManager);
+		Integer pageNumber = form.getPageNumber();
+		Integer pageSize = form.getPageSize();
+		Pager pager = new OffsetPager((pageNumber - 1) * pageSize, pageSize);
+		pager.setRecordCount((int) Daos.queryCount(nutDao, sql.toString()));
+		sql.setPager(pager);
+		sql.setCallback(Sqls.callback.records());
+		nutDao.execute(sql);
+
+		//主sql数据 
+		List<Record> orderList = (List<Record>) sql.getResult();
+		for (Record order : orderList) {
+			String orderid = order.getString("orderid");
+			//获取该订单下的申请人
+			String sqlStr = sqlManager.get("bigCustomer_order_applicant_list");
+			Sql applysql = Sqls.create(sqlStr);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("tasou.orderid", "=", orderid);
+			List<Record> applicantList = dbDao.query(applysql, cnd, null);
+			for (Record app : applicantList) {
+				int status = app.getInt("visastatus");
+				for (VisaStatusEnum statusEnum : VisaStatusEnum.values())
+					if (!Util.isEmpty(status) && status == statusEnum.intKey()) {
+						app.set("visastatus", statusEnum.value());
+						break;
+					}
+			}
+			order.put("everybodyInfo", applicantList);
+			if (applicantList.size() > 0)
+				order.put("firstbodyInfo", applicantList.get(0));
+			else {
+				Record record = new Record();
+				record.set("staffid", "");
+				record.set("staffname", "");
+				record.set("telephone", "");
+				record.set("cardnum", "");
+				record.set("passport", "");
+				record.set("ordernumber", "");
+				record.set("status", "");
+				record.set("aacode", "");
+				record.set("orderid", "");
+
+				order.put("firstbodyInfo", record);
+			}
+			list.add(order);
+		}
+
+		//list前后倒置，这样第一个对象为最新的订单
+		Collections.reverse(list);
+		result.put("visaListData", list);
+
+		return result;
+	}
+
+	public Object listDetailUSData(ListDetailUSDataForm form, HttpSession session) {
+		//获取当前公司
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		//获取当前用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		//form.setUserid(loginUser.getId());
+		//form.setAdminId(loginCompany.getAdminId());
 
 		Map<String, Object> result = Maps.newHashMap();
 		List<Record> list = new ArrayList<>();
@@ -247,7 +327,11 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			//				result.put("realinfo", null);
 		} else
 			result.put("realinfo", null);
-		String travelpurpose = orderTravelInfo.getTravelpurpose();
+		String travelpurpose = "";
+		if (!Util.isEmpty(orderTravelInfo)) {
+			travelpurpose = orderTravelInfo.getTravelpurpose();
+
+		}
 		if (!Util.isEmpty(travelpurpose)) {
 			String travelpurposeString = TravelpurposeEnum.getValue(travelpurpose).getValue();
 			//获取出行目的
@@ -346,11 +430,41 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	/*
 	 * 拍照资料获取
 	 */
-	public Object updatePhoto(Integer staffid) {
+	public Object updatePhoto(Integer staffid, HttpServletRequest request, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		//生成二维码
+		String id = session.getId();
+		String serverName = request.getServerName();
+		int serverPort = request.getServerPort();
+		String content = "http://" + serverName + ":" + serverPort + "/appmobileus/USFilming.html?sessionid=" + id
+				+ "&staffid=" + staffid;
+		String encodeQrCode = qrCodeService.encodeQrCode(request, content);
+		result.put("encodeQrCode", encodeQrCode);
+		//获取用户基本信息
 		TAppStaffBasicinfoEntity basicInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffid));
 		if (!Util.isEmpty(basicInfo))
-			return basicInfo;
+			result.put("basicInfo", basicInfo);
 		else
-			return null;
+			result.put("basicInfo", null);
+		return result;
+	}
+
+	/*
+	 * 返回上传图片地址
+	 */
+	public String uploadImage(File file, HttpServletRequest request, HttpServletResponse response) {
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		file.delete();
+		map.put("data", CommonConstants.IMAGES_SERVER_ADDR + map.get("data"));
+		String picurl = (String) map.get("data");
+		return picurl;
+
+	}
+
+	/*
+	 * 图片上传
+	 */
+	public void addPhoto(Integer staffid, String imageUrl, Integer type) {
+
 	}
 }

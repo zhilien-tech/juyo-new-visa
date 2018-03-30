@@ -1,5 +1,10 @@
 package com.juyo.visa.admin.bigcustomer.module;
 
+import java.io.File;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -13,6 +18,8 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.google.common.collect.Maps;
+import com.juyo.visa.admin.bigcustomer.form.ListDetailUSDataForm;
 import com.juyo.visa.admin.bigcustomer.form.VisaListDataForm;
 import com.juyo.visa.admin.bigcustomer.service.PcVisaViewService;
 import com.juyo.visa.forms.OrderUpdateForm;
@@ -37,6 +44,28 @@ public class PcVisaModule {
 		return null;
 	}
 
+	/**
+	 * 跳转到list页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object listUS() {
+		return null;
+	}
+
+	@At
+	@GET
+	@Ok("jsp")
+	public Object listDetailUS(@Param("ordernum") String ordernum, @Param("staffid") int staffid,
+			@Param("orderid") String orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("ordernum", ordernum);
+		result.put("staffid", staffid);
+		result.put("orderid", orderid);
+		return result;
+	}
+
 	@At
 	@GET
 	@Ok("jsp")
@@ -51,6 +80,15 @@ public class PcVisaModule {
 	@POST
 	public Object visaListData(@Param("..") VisaListDataForm form, HttpSession session) {
 		return pcVisaViewService.visaListData(form, session);
+	}
+
+	/**
+	 * 申请人 订单列表数据1
+	 */
+	@At
+	@POST
+	public Object listDetailUSData(@Param("..") ListDetailUSDataForm form, HttpSession session) {
+		return pcVisaViewService.listDetailUSData(form, session);
 	}
 
 	/**
@@ -76,11 +114,23 @@ public class PcVisaModule {
 	/*
 	 * 跳转拍照资料
 	 */
-
 	@At
 	@GET
-	public Object updatePhoto(@Param("staffid") Integer staffid) {
-		return pcVisaViewService.updatePhoto(staffid);
+	@Ok("jsp")
+	public Object updatePhoto(@Param("staffid") Integer staffid, HttpServletRequest request, HttpSession session) {
+		return pcVisaViewService.updatePhoto(staffid, request, session);
 	}
 
+	/**
+	 * 身份证正面上传、扫描
+	 */
+	@At
+	@Ok("json")
+	@Filters
+	public Object IDCardRecognition(@Param("image") File file, @Param("staffid") Integer staffid,
+			@Param("type") Integer type, HttpServletRequest request, HttpServletResponse response) {
+		String imageUrl = pcVisaViewService.uploadImage(file, request, response);
+		pcVisaViewService.addPhoto(staffid, imageUrl, type);
+		return null;
+	}
 }
