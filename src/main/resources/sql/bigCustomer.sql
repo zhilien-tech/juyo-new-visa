@@ -85,15 +85,37 @@ SELECT
 	CONCAT( tasb.firstname, tasb.lastname ) staffname,
 	tasb.telephone,
 	tasb.cardnum,
+	tasb.email,
 	tasb.visastatus,
 	tasp.passport,
 	tasou.orderid,
 	tos.ordernumber,
-	tasb.aacode 
+	tasb.aacode,
+	tos.id
 FROM
 	t_app_staff_basicinfo tasb
 	LEFT JOIN t_app_staff_passport tasp ON tasb.id = tasp.staffid
 	INNER JOIN t_app_staff_order_us tasou ON tasou.staffid = tasb.id
+	LEFT JOIN t_order_us tos ON tos.id = tasou.orderid
+	$condition
+	
+/*bigCustomer_order_applicant_list2*/
+SELECT
+	tasb.id staffid,
+	CONCAT( tasb.firstname, tasb.lastname ) staffname,
+	tasb.telephone,
+	tasb.cardnum,
+	tasb.email,
+	tasb.visastatus,
+	tasp.passport,
+	tasou.orderid,
+	tos.ordernumber,
+	tasb.aacode,
+	tos.id
+FROM
+	t_app_staff_basicinfo tasb
+	LEFT JOIN t_app_staff_passport tasp ON tasb.id = tasp.staffid
+	LEFT JOIN t_app_staff_order_us tasou ON tasou.staffid = tasb.id
 	LEFT JOIN t_order_us tos ON tos.id = tasou.orderid
 	$condition
 

@@ -8,6 +8,22 @@ $(function() {
 			validating : 'glyphicon glyphicon-refresh'
 		},
 		fields : {
+			firstname : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '姓不能为空'
+					}
+				}
+			},
+			lastname : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '名不能为空'
+					}
+				}
+			},
 			passport : {
 				trigger:"change keyup",
 				validators : {
@@ -26,10 +42,50 @@ $(function() {
 						}
 					}
 				}
+			},
+			birthaddress : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '出生地点不能为空'
+					}
+				}
+			},
+			birthday : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '出生日期不能为空'
+					}
+				}
+			},
+			issuedplace : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '签发地点不能为空'
+					}
+				}
+			},
+			issueddate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '签发日期不能为空'
+					}
+				}
+			},
+			validenddate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '有效日期不能为空'
+					}
+				}
 			}
 		}
 	});
-	$('#passportInfo').bootstrapValidator('validate');
+	//$('#passportInfo').bootstrapValidator('validate');
 	//护照图片验证
 	var passportUrl = $("#passportUrl").val();
 	if(passportUrl == ""){
@@ -65,9 +121,9 @@ $(function() {
 	$("#issuedDate").change(function(){
 		if($("#issuedDate").val() != ""){
 			if($("#validType").val() == 1){
-				$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
+				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
 			}else{
-				$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
 			}
 		}
 	});
@@ -75,13 +131,26 @@ $(function() {
 	$("#validType").change(function(){
 		var type = $(this).val();
 		if(type == 1){
-			$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
+			$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
 		}else{
-			$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+			$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
 		}
 
 	});
 });
+
+function getNewDates(dateTemp, days){
+	var d1 = new Date(dateTemp);
+	var d2 = new Date(d1);
+	d2.setFullYear(d2.getFullYear()+days);
+	d2.setDate(d2.getDate()-1);
+	var year = d2.getFullYear();  
+	var month = d2.getMonth() + 1;  
+	if (month < 10) month = "0" + month;  
+	var date = d2.getDate();  
+	if (date < 10) date = "0" + date;  
+	return (year + "-" + month + "-" + date);
+}
 
 function getNewDay(dateTemp, days) {  
 	var dateTemp = dateTemp.split("-");  
@@ -205,9 +274,9 @@ $('#uploadFile').change(function() {
 					$("#borderColor").attr("style", null);
 					var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
 					if(years == 5){
-						$("#validType").val(1);
-					}else{
 						$("#validType").val(2);
+					}else{
+						$("#validType").val(1);
 					}
 
 				}
@@ -240,6 +309,7 @@ function dataURLtoBlob(dataurl) {
 function save(status){
 	//得到获取validator对象或实例 
 	var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+	bootstrapValidator.validate();
 	//延时校验
 	setTimeout(function(){
 		if(bootstrapValidator.isValid()){

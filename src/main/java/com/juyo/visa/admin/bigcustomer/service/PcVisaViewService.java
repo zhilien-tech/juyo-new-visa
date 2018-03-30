@@ -22,6 +22,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.bigcustomer.form.ListDetailUSDataForm;
 import com.juyo.visa.admin.bigcustomer.form.VisaListDataForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.base.QrCodeService;
@@ -74,6 +75,72 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		form.setUserid(loginUser.getId());
 		form.setAdminId(loginCompany.getAdminId());
+
+		Map<String, Object> result = Maps.newHashMap();
+		List<Record> list = new ArrayList<>();
+
+		//分页
+		Sql sql = form.sql(sqlManager);
+		Integer pageNumber = form.getPageNumber();
+		Integer pageSize = form.getPageSize();
+		Pager pager = new OffsetPager((pageNumber - 1) * pageSize, pageSize);
+		pager.setRecordCount((int) Daos.queryCount(nutDao, sql.toString()));
+		sql.setPager(pager);
+		sql.setCallback(Sqls.callback.records());
+		nutDao.execute(sql);
+
+		//主sql数据 
+		List<Record> orderList = (List<Record>) sql.getResult();
+		for (Record order : orderList) {
+			String orderid = order.getString("orderid");
+			//获取该订单下的申请人
+			String sqlStr = sqlManager.get("bigCustomer_order_applicant_list");
+			Sql applysql = Sqls.create(sqlStr);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("tasou.orderid", "=", orderid);
+			List<Record> applicantList = dbDao.query(applysql, cnd, null);
+			for (Record app : applicantList) {
+				int status = app.getInt("visastatus");
+				for (VisaStatusEnum statusEnum : VisaStatusEnum.values())
+					if (!Util.isEmpty(status) && status == statusEnum.intKey()) {
+						app.set("visastatus", statusEnum.value());
+						break;
+					}
+			}
+			order.put("everybodyInfo", applicantList);
+			if (applicantList.size() > 0)
+				order.put("firstbodyInfo", applicantList.get(0));
+			else {
+				Record record = new Record();
+				record.set("staffid", "");
+				record.set("staffname", "");
+				record.set("telephone", "");
+				record.set("cardnum", "");
+				record.set("passport", "");
+				record.set("ordernumber", "");
+				record.set("status", "");
+				record.set("aacode", "");
+				record.set("orderid", "");
+
+				order.put("firstbodyInfo", record);
+			}
+			list.add(order);
+		}
+
+		//list前后倒置，这样第一个对象为最新的订单
+		Collections.reverse(list);
+		result.put("visaListData", list);
+
+		return result;
+	}
+
+	public Object listDetailUSData(ListDetailUSDataForm form, HttpSession session) {
+		//获取当前公司
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		//获取当前用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		//form.setUserid(loginUser.getId());
+		//form.setAdminId(loginCompany.getAdminId());
 
 		Map<String, Object> result = Maps.newHashMap();
 		List<Record> list = new ArrayList<>();
