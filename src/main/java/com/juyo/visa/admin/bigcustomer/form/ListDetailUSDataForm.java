@@ -28,7 +28,7 @@ public class ListDetailUSDataForm implements SQLParamForm {
 	//页码
 	private Integer pageNumber = 1;
 	//每页多少条
-	private Integer pageSize = 10;
+	private Integer pageSize = 100;
 	//公司id
 	private Integer companyid;
 	//用户id
