@@ -44,26 +44,32 @@
 		<script type="text/javascript" src="js/vue.min.js" ></script>
 		<script>
 			//异步加载的URL地址
-			var url="/admin/mobile/passportinfo.html";
+			var url="/admin/mobileVisa/getInfoByType.html";
 			var _self;
 			new Vue({
 				el: '#passportform',
 				data: {passportdata:"",
 						applicatdata:""},
 				created:function(){
-					var applicantid = GetQueryString('applicantid');
+					
 			        _self=this;
 			        $.ajax({
 			        	url: url,
-			        	data:{applicantid:applicantid},
+			        	data:{type:13,staffid:16},
 			        	dataType:"json",
 			        	type:'post',
 			        	success: function(data){
-			        		_self.passportdata = data.passportdata;
+			        	/* _self.passportdata = data.passportdata;  */
+			        		if(data!=null){
+			        			 $(".uploadPhotoReady").attr("src",data.credentialEntity.url); 
+			        		}
 			          	}
 			        });
 			    }
 			});
+			
+			
+			//上传图片
 			$(function(){
 				$("#uploadImg").click(function(){
 					$("#image").click();
@@ -92,11 +98,14 @@
 					});
 				});
 			})
+			
 			function uploadPositive(rst, formData){
 				if(!formData){
 					formData = new FormData();
 				}
 		        formData.append("image", rst.file); 
+		        formData.append("type", 13); 
+		        formData.append("staffid", 16); 
 		        console.log('------------------------------');
 		        console.log(formData); 
 		        console.log(rst.file);
@@ -106,7 +115,7 @@
 		        $.ajax({
 					type : "POST",//提交类型  
 					//dataType : "json",//返回结果格式  
-					url : '/admin/orderJp/IDCardRecognition.html',//请求地址  
+					url : '/admin/mobileVisa/uploadImage.html',//请求地址  
 					async : true,
 					processData : false, //当FormData在jquery中使用的时候需要设置此项
 					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
@@ -117,7 +126,9 @@
 						//关闭加载层
 						layer.closeAll('loading');
 						//layer.close(layerIndex);
-						if (true === obj.success) {
+						if (obj!=null) {
+							layer.msg("上传成功");
+							$(".uploadPhotoReady").attr("src",obj.url);
 							_self.applicatdata.cardfront = obj.url;
 							_self.applicatdata.address = obj.address;
 							_self.applicatdata.nation = obj.nationality;

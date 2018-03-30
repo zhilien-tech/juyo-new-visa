@@ -9,6 +9,12 @@
 		<link rel="stylesheet" href="css/heavyBuyer.css" />
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script type="text/javascript" src="js/rem(750).js" ></script>
+		<style type="text/css"> 
+		.secound{
+		padding:2em;
+		margin:2em;
+		}
+		</style> 
 	</head>
 	<body>
 		<header>
@@ -18,8 +24,31 @@
 		</header>
 		<section>
 			<div class="imgActivity">
-				<img id="eventDetailUrl" alt="活动" width="100%" height="100%" />
+				<img id="eventDetailUrl" alt="活动介绍" width="100%" height="100%" />
 			</div>
+			<ul style="font-size:12px;line-height:24px;font-family:'宋体'" class="secound">
+			<li>多年以来，您一直期待国际年会给您带来最好的体验。我们卓越的演讲嘉宾、开创性的培训课及独特的社交机会都让我们与众不同，这次25周年的庆祝也是这样。</li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+			<li>我们还在一直进步。在2018年8月15日至18日于盐湖城，加入我们这个世界上最健康的大家庭。您一定会喜欢上我们为您准备的计划。</li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+			<li>今天就报名，享受提前注册优惠。 最超值的方式是在2017年8月18日至9月30日之间，仅付$1,999购买2018国际年会10张门票套餐。</li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+			<li>这是为您团队买票最划算的方式。 指定门票姓名很容易。我们取消了网上指定门票的转让费，并且每张票可以无限次指定姓名。</li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+			<li> 只需要访问The Hub枢纽站，就能为您的团队成员重新指定年会门票。若通过顾客服务部指定门票，则将收取每张票$25的费用。</li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+			<li>活动通行证（event pass）不同于活动门票。如果您拥有活动通行证，联络顾客服务部将您的活动通行证转成活动门票。活动通行证不可退款不可转让，并且从购买日起一年过期。 取消将收取百分之50取消费用。</li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+			<li>如购买10张门票套装，可退回代金券。 2018年6月29日之后不可退款。 如您有更多关于门票价格及指定门票姓名的问题，请联络顾客服务部。</li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+			<li>*所有价格都已美元为单位。 价格： * $229：现场注册，2017年8月18日 - 8月25日</li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+			<li>$249：特别注册期，2017年8月26日 - 9月30日 $279：提前注册， 2017年10月1日 – 2018年7月20日</li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+			<li>$499：普通现场注册，2018年8月15日 - 18日，包含四天 $150：现场注册，2018年8月15日 – 8月18日，包含一天</li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+			<li>$229：新晋特许专营商，加入六周内 重要日期： 2018年6月29日： 取消截止日 表扬截止日 2018年7月20日： 停止门票销售指定门票姓名截止</li>
+			</ul>
 			<!-- <div class="dateTotal">
 				<div class="endDate">截止日期：2017.12.30</div>
 				<div class="startDate">出行日期：2018.01.30 ～ 02.15</div>
@@ -70,7 +99,7 @@
 						eventId = data.eventId;
 						weChatToken = data.wechatToken;
 						isSifnUp = data.isSignUp;
-						$("#eventDetailUrl").attr("src", data.event.detailsurl); 
+						/* $("#eventDetailUrl").attr("src", data.event.detailsurl);  */
 					}
 				}); 
 					
