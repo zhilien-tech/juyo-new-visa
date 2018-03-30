@@ -124,7 +124,7 @@
 								<!-- 抵达美国日期 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>抵达美国日期：</label> <input name="arrivedate"
+										<label><span>*</span>抵达美国日期：</label> <input onchange="leaveDate()" name="arrivedate"
 											type="text" class="form-format input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.arrivedate }" pattern="yyyy-MM-dd" />" />
 									</div>
@@ -284,7 +284,7 @@
 								<!-- 送签计划去美国地点 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>送签计划去美国地点：</label> <input name="planstate"
+										<label><!-- <span>*</span> -->送签计划去美国地点：</label> <input name="planstate"
 											type="text" value="${obj.travelInfo.state}"
 											class="form-control input-sm" placeholder="州/省" />
 									</div>
@@ -343,12 +343,12 @@
 									</div>
 									<!-- 二寸免冠照片END -->
 									<!-- 出行目的 -->
-									<div class="col-sm-12 purpose">
+									<!-- <div class="col-sm-12 purpose">
 										<div class="form-group">
 											<label>出行目的</label> <input type="text"
 												class="form-control input-sm" placeholder="" />
 										</div>
-									</div>
+									</div> -->
 									<!-- 出行目的END -->
 								</div>
 								<!-- 申请人左侧END -->
@@ -424,32 +424,32 @@
 									</div>
 									<!-- 右侧模块3END -->
 									<!-- 右侧模块4 -->
-									<div class="row body-from-input">
-										<!-- 出行目的 -->
+									<!-- <div class="row body-from-input">
+										出行目的
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>出行目的</label> 
 												<input id="" type="text" class="form-control input-sm" />
 											</div>
 										</div>
-										<!-- 出行目的END -->
-										<!-- 出行时间 -->
+										出行目的END
+										出行时间
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>出行时间</label> 
 												<input id="" type="text" class="form-format form-control input-sm" />
 											</div>
 										</div>
-										<!-- 出行时间END -->
-										<!-- 停留天数 -->
+										出行时间END
+										停留天数
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>停留天数</label> 
 												<input id="" type="text" class="form-control input-sm" />
 											</div>
 										</div>
-										<!-- 停留天数END -->
-									</div>
+										停留天数END
+									</div> -->
 									<!-- 右侧模块4END -->
 								</div>
 								<!-- 申请人右侧END -->
@@ -485,7 +485,8 @@
 			format : "yyyy-mm-dd",
 			showMeridian : true,
 			autoclose : true,
-			todayBtn : true
+			todayBtn : true,
+			minView : 2
 		});
 		$(function() {
 
@@ -540,7 +541,7 @@
 				data : $("#orderUpdateForm").serialize(),
 				type : 'POST',
 				success : function(data) {
-					/* window.location.href = '/admin/pcVisa/visaDetail.html'; */
+					/* window.location.href = '/admin/pcVisa/VisaList';  */
 				}
 			});
 		};
