@@ -300,6 +300,7 @@ public class LoginService extends BaseService<TUserEntity> {
 					//跳转到办理中的签证页面
 					form.setMainurl("/admin/myVisa/visaList.html");
 				} else if (UserLoginEnum.BIG_TOURIST_IDENTITY.intKey() == userType) {
+					//美国 办理中签证页面
 					form.setMainurl("/admin/pcVisa/visaList.html");
 				}
 
