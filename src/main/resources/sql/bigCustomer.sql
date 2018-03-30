@@ -89,10 +89,26 @@ SELECT
 	tasp.passport,
 	tasou.orderid,
 	tos.ordernumber,
-	tos.aacode 
+	tasb.aacode 
 FROM
 	t_app_staff_basicinfo tasb
 	LEFT JOIN t_app_staff_passport tasp ON tasb.id = tasp.staffid
 	INNER JOIN t_app_staff_order_us tasou ON tasou.staffid = tasb.id
 	LEFT JOIN t_order_us tos ON tos.id = tasou.orderid
 	$condition
+
+/*t_app_paperwork_US_info*/
+SELECT
+	taspu.id,
+	taspu.staffid,
+	taspu.type,
+	taspu.content,
+	taspu.count,
+	taspu.opid,
+	taspu.createtime,
+	taspu.updatetime,
+	taspu.realinfo,
+	taspu.status
+FROM
+	t_app_staff_paperwork_us taspu
+	

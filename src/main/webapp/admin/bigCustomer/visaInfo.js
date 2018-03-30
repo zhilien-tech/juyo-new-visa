@@ -11,6 +11,8 @@ $(".companyInfo").change(function(){
 		emptyContentByObj($("div.teamnamefalse"));
 		//触发单选按钮的点击事件
 		$(".team").eq(1).click();
+		deleteBrotherEle($("div.teamnamefalseDiv"));
+		emptyContentByObj($("div.teamnamefalse"));
 	}
 });
 
@@ -24,7 +26,7 @@ $(".team").change(function(){
 	}else {
 		$(".teamnameture").hide();
 		$(".teamnamefalse").show();
-		deleteBrotherEle($("div.teamnamefalse"));
+		deleteBrotherEle($("div.teamnamefalseDiv"));
 		emptyContentByObj($("div.teamnamefalse"));
 	}
 });
@@ -138,6 +140,10 @@ editEleBeforeCheckbox($("#isknoworganizationname"));
 
 //是否 邮件地址
 editEleBeforeCheckbox($("#isKnowEmailAddress"));
+
+//与你的关系
+emptyContentByObj($("#contactPoint_ralationship_div"));
+
 
 //-------------------------------------------美国联络点 end------------------------------------
 
@@ -265,8 +271,8 @@ $(".isclan").change(function(){
 		$(".isclanYes").show();
 	}else {
 		$(".isclanYes").hide();
-		deleteBrotherEle($("div.clannameDiv"));
-		emptyContentByObj($("div.clannameDiv"));
+		deleteBrotherEle($("div.languagename"));
+		emptyContentByObj($("div.languagename"));
 	}
 });
 //过去五年是否曾去过任何国家/地区旅游
