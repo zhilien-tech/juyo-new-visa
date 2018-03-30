@@ -7,18 +7,24 @@
 package com.juyo.visa.admin.mobileVisa.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.mobileVisa.form.MobileVisaBasicInfoForm;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
+import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -36,6 +42,9 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	@Inject
 	private UploadService qiniuupService;
 
+	private SimpleSendInfoWSHandler simpleSendInfoWSHandler = (SimpleSendInfoWSHandler) SpringContextUtil.getBean(
+			"mySimpleSendInfoWSHandler", SimpleSendInfoWSHandler.class);
+
 	public String uploadImage(File file) {
 		Map<String, Object> map = qiniuupService.ajaxUploadImage(file);
 		file.delete();
@@ -47,7 +56,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	/*
 	 * 上传单张图片
 	 */
-	public Object updateImage(String url, Integer type, Integer staffid) {
+	public Object updateImage(String url, Integer type, Integer staffid, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type));
@@ -56,11 +65,6 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 			credentialEntity.setUpdatetime(new Date());
 			result.put("url", url);
 			int update = dbDao.update(credentialEntity);
-			if (1 == update) {
-				return result;
-			} else {
-				return null;
-			}
 		} else {
 			credentialEntity = new TAppStaffCredentialsEntity();
 			credentialEntity.setCreatetime(new Date());
@@ -70,8 +74,14 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 			credentialEntity.setUrl(url);
 			result.put("url", url);
 			dbDao.insert(credentialEntity);
-			return result;
 		}
+		try {
+			//刷新电脑端页面
+			simpleSendInfoWSHandler.broadcast(new TextMessage("上传成功"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 
 	}
 

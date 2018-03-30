@@ -822,6 +822,44 @@
 				}
 			});
 		}
+		
+		//连接websocket
+		connectWebSocket();
+		function connectWebSocket(){
+			 if ('WebSocket' in window){  
+	            console.log('Websocket supported');  
+	            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+
+	            console.log('Connection attempted');  
+
+	            socket.onopen = function(){  
+	                 console.log('Connection open!');  
+	                 //setConnected(true);  
+	             };
+
+	            socket.onclose = function(){  
+	                console.log('Disconnecting connection');  
+	            };
+
+	            socket.onmessage = function (evt){
+	                  var received_msg = evt.data;  
+	                  var orderid = '${obj.orderid}';
+	                  var sessionid = '${obj.sessionid}';
+	                  if(received_msg){
+		                  var receiveMessage = JSON.parse(received_msg);
+		                  console.log(receiveMessage);
+		                  if(receiveMessage.sessionid == sessionid){
+		                		  window.location.href = '/admin/simple/passportInfo.html?applicantid='+receiveMessage.applicantid+'&orderid='+receiveMessage.orderid;
+		                  }
+	                  }
+	                  console.log('message received!');  
+	                  //showMessage(received_msg);  
+	             };  
+
+	          } else {  
+	            console.log('Websocket not supported');  
+	          }  
+		} 
 	</script>
 </body>
 </html>
