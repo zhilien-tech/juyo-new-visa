@@ -16,7 +16,7 @@
 		<span>拍摄资料</span>
 		<input id="staffid" type="hidden" value="${obj.basicInfo.id }">
 		<div class="btnGroup">
-			<a class="btnSave">保存</a> <a class="btnCancel">取消</a>
+			<a class="btnSave">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
 		</div>
 	</div>
 	<div class="topHide"></div>
@@ -239,7 +239,7 @@
 			url : "/admin/mobileVisa/getInfoByType.html",
 			data : {
 				type : type,
-				staffid : staffid
+				staffid : staffid,
 			},
 			dataType : "json",
 			type : 'post',
@@ -263,5 +263,11 @@
 			}
 		});
 	};
+	
+	//返回 
+	function closeWindow() {
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		parent.layer.close(index);
+	}
 </script>
 </html>

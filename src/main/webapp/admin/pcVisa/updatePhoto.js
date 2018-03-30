@@ -6,7 +6,7 @@ new Vue({
 		applicantInfo : ""
 	},
 	methods : {
-		//修改申请人信息
+		//修改申请人拍摄资料信息
 		updatePhoto : function(id){
 			save();
 			layer.open({
@@ -21,8 +21,8 @@ new Vue({
 				content:'/admin/pcVisa/updatePhoto.html?staffid='+id
 			});
 		},
-		//修改护照信息
-		passport : function(applicantId,orderid){
+		//基本信息
+		baseInfo : function(id){
 			layer.open({
 				type: 2,
 				title: false,
@@ -32,29 +32,11 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content:'/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial=0&orderProcessType=1'
+				content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id
 			});
 		},
-		//删除申请人
-		deleteApplicant : function(id){
-			layer.confirm("您确认要删除吗？", {
-				title:"删除",
-				btn: ["是","否"], //按钮
-				shade: false //不显示遮罩
-			}, function(){
-			$.ajax({ 
-		    	url: '/admin/orderJp/deleteApplicant',
-		    	dataType:"json",
-		    	data:{applicantId:id},
-		    	type:'post',
-		    	success: function(data){
-		    		successCallBack(2);
-		      	}
-		    }); 
-			});
-		},
-		share:function(id){//分享
-			//window.location.href = '/admin/orderJp/share.html?id='+id;
+		//护照信息
+		passport : function(id){
 			layer.open({
 				type: 2,
 				title: false,
@@ -64,81 +46,12 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content:'/admin/orderJp/share.html?id='+id
+				content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
 			});
-		},
-		log:function(id){//日志
-			layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['700px', '80%'],
-				content:'/admin/orderJp/log.html?id='+id+'&orderProcessType=1'
-			});
-		},
-		//签证录入
-		visaInput : function (applicantId){
-			layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['1000px', '80%'],
-				content: '/admin/visaJapan/visaInput.html?applyid='+applicantId+'&orderid='+orderJpId
-			});
-		},
-		//签证信息
-		visa : function(id,orderid){
-			layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['900px', '80%'],
-				content:'/admin/orderJp/visaInfo.html?id='+id+'&orderid='+orderid+'&isOrderUpTime&isTrial=0&orderProcessType=1'
-			});
-		},
-		//回邮信息
-		backmailInfo:function(applyId){
-			layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['900px', '80%'],
-				content:'/admin/backMailJp/backMailInfo.html?applicantId='+applyId+'&isAfterMarket=0&orderProcessType=1'
-
-			});
-		},
-		//初审按钮
-		firtTrialJp : function(id){
-			layer.load(1);
-			$.ajax({ 
-		    	url: '/admin/orderJp/firtTrialJp',
-		    	dataType:"json",
-		    	data:{orderId:id},
-		    	type:'post',
-		    	success: function(data){
-		    		layer.closeAll('loading');
-		    		layer.msg('进入初审');
-		    		successCallBack(7);
-		      	}
-		    }); 
 		}
-	}
+		
+	},
+	
 });
 
 //日期转换 加上指定天数
