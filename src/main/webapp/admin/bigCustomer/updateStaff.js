@@ -26,31 +26,24 @@ function applyValidate(){
 			validating : 'glyphicon glyphicon-refresh'
 		},
 		fields : {
-
-			firstname : {
-				validators : {
-					notEmpty : {
-						message : '姓不能为空'
-					}
-				}
-			},
-			lastname : {
-				validators : {
-					notEmpty : {
-						message : '名不能为空'
-					}
-				}
-			},
 			telephone : {
+				trigger:"change keyup",
 				validators : {
+					notEmpty : {
+						message : '手机号不能为空'
+					},
 					regexp: {
 						regexp: /^[1][34578][0-9]{9}$/,
 						message: '手机号格式错误'
 					}
 				}
 			},
-			emergencyTelephone : {
+			telephoneen : {
+				trigger:"change keyup",
 				validators : {
+					notEmpty : {
+						message : '手机号不能为空'
+					},
 					regexp: {
 						regexp: /^[1][34578][0-9]{9}$/,
 						message: '手机号格式错误'
@@ -58,13 +51,237 @@ function applyValidate(){
 				}
 			},
 			email : {
+				trigger:"change keyup",
 				validators : {
+					notEmpty : {
+						message : '邮箱不能为空'
+					},
 					regexp: {
 						regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
 						message: '邮箱格式错误'
 					}
 				}
-			}
+			},
+			emailen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '邮箱不能为空'
+					},
+					regexp: {
+						regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+						message: '邮箱格式错误'
+					}
+				}
+			},
+			cardId : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '身份证号不能为空'
+					}
+				}
+			},
+			cardIden : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '身份证号不能为空'
+					}
+				}
+			},
+			nation : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '民族不能为空'
+					}
+				}
+			},
+			nationen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '民族不能为空'
+					}
+				}
+			},
+			address : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '住址不能为空'
+					}
+				}
+			},
+			addressen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '住址不能为空'
+					}
+				}
+			},
+			province : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '省不能为空'
+					}
+				}
+			},
+			provinceen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '省不能为空'
+					}
+				}
+			},
+			city : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '市不能为空'
+					}
+				}
+			},
+			cityen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '市不能为空'
+					}
+				}
+			},
+			detailedaddress : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '详细地址不能为空'
+					}
+				}
+			},
+			detailedaddressen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '详细地址不能为空'
+					}
+				}
+			},
+			marryexplain : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '说明不能为空'
+					}
+				}
+			},
+			marryexplainen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '说明不能为空'
+					}
+				}
+			},
+			otherfirstname : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '姓不能为空'
+					}
+				}
+			},
+			otherfirstnameen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '名不能为空'
+					}
+				}
+			},
+			nationality : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国籍不能为空'
+					}
+				}
+			},
+			nationalityen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国籍不能为空'
+					}
+				}
+			},
+			othercountry : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国家不能为空'
+					}
+				}
+			},
+			othercountryen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国家不能为空'
+					}
+				}
+			},
+			nationalidentificationnumber : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '注册码不能为空'
+					}
+				}
+			},
+			nationalidentificationnumberen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '注册码不能为空'
+					}
+				}
+			},
+			socialsecuritynumber : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '安全码不能为空'
+					}
+				}
+			},
+			socialsecuritynumberen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '安全码不能为空'
+					}
+				}
+			},
+			taxpayernumber : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '纳税人证件号不能为空'
+					}
+				}
+			},
+			taxpayernumberen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '纳税人证件号不能为空'
+					}
+				}
+			},
 		}
 	});
 	$('#applicantInfo').bootstrapValidator('validate');
@@ -566,10 +783,10 @@ $(".nowProvinceen").click(function(){
 //国家注册码
 $(".isidentificationnumberapply").click(function(){
 	if(this.checked){
-		$("#nationalidentificationnumber").val("");
+		$("#nationalidentificationnumber").val("").change();
 		$("#nationalidentificationnumber").attr("disabled",true);
 		$(".isidentificationnumberapplyen").prop("checked",true);
-		$("#nationalidentificationnumberen").val("");
+		$("#nationalidentificationnumberen").val("").change();
 		$("#nationalidentificationnumberen").attr("disabled",true);
 	}else{
 		$("#nationalidentificationnumber").attr("disabled",false);
@@ -579,7 +796,7 @@ $(".isidentificationnumberapply").click(function(){
 });
 $(".isidentificationnumberapplyen").click(function(){
 	if(this.checked){
-		$("#nationalidentificationnumberen").val("");
+		$("#nationalidentificationnumberen").val("").change();
 		$("#nationalidentificationnumberen").attr("disabled",true);
 	}else{
 		$("#nationalidentificationnumberen").attr("disabled",false);
@@ -588,7 +805,7 @@ $(".isidentificationnumberapplyen").click(function(){
 //美国社会安全码
 $(".issecuritynumberapplyen").click(function(){
 	if(this.checked){
-		$("#socialsecuritynumberen").val("");
+		$("#socialsecuritynumberen").val("").change();
 		$("#socialsecuritynumberen").attr("disabled",true);
 	}else{
 		$("#socialsecuritynumberen").attr("disabled",false);
