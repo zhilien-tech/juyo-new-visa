@@ -842,15 +842,11 @@
 	            };
 
 	            socket.onmessage = function (evt){
-	                  var received_msg = evt.data;  
-	                  var orderid = '${obj.orderid}';
-	                  var sessionid = '${obj.sessionid}';
-	                  if(received_msg){
-		                  var receiveMessage = JSON.parse(received_msg);
-		                  console.log(receiveMessage);
-		                  if(receiveMessage.sessionid == sessionid){
-		                		  window.location.href = '/admin/simple/passportInfo.html?applicantid='+receiveMessage.applicantid+'&orderid='+receiveMessage.orderid;
-		                  }
+	            		var type = evt.type;
+	            		var staffid = evt.staffid;
+	                  if(evt){
+		                  console.log(evt);
+		                		  window.location.href = '/admin/pcVisa/updatePhoto.html?staffid='+staffid;
 	                  }
 	                  console.log('message received!');  
 	                  //showMessage(received_msg);  

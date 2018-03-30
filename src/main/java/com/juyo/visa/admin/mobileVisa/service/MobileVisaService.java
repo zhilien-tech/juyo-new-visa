@@ -20,11 +20,13 @@ import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.mobileVisa.form.MobileVisaBasicInfoForm;
+import com.juyo.visa.admin.mobileVisa.form.UpdateImageForm;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
+import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -56,28 +58,28 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	/*
 	 * 上传单张图片
 	 */
-	public Object updateImage(String url, Integer type, Integer staffid, HttpSession session) {
+	public Object updateImage(UpdateImageForm updateImageForm, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffid).and("type", "=", type));
+				Cnd.where("staffid", "=", updateImageForm.getStaffid()).and("type", "=", updateImageForm.getType()));
 		if (!Util.isEmpty(credentialEntity)) {
-			credentialEntity.setUrl(url);
+			credentialEntity.setUrl(updateImageForm.getUrl());
 			credentialEntity.setUpdatetime(new Date());
-			result.put("url", url);
+			result.put("url", updateImageForm.getUrl());
 			int update = dbDao.update(credentialEntity);
 		} else {
 			credentialEntity = new TAppStaffCredentialsEntity();
 			credentialEntity.setCreatetime(new Date());
-			credentialEntity.setStaffid(staffid);
+			credentialEntity.setStaffid(updateImageForm.getStaffid());
 			credentialEntity.setUpdatetime(new Date());
-			credentialEntity.setType(type);
-			credentialEntity.setUrl(url);
-			result.put("url", url);
+			credentialEntity.setType(updateImageForm.getType());
+			credentialEntity.setUrl(updateImageForm.getUrl());
+			result.put("url", updateImageForm.getUrl());
 			dbDao.insert(credentialEntity);
 		}
 		try {
 			//刷新电脑端页面
-			simpleSendInfoWSHandler.broadcast(new TextMessage("上传成功"));
+			simpleSendInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson(updateImageForm)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -8,6 +8,8 @@ package com.juyo.visa.admin.mobileVisa.form;
 
 import java.io.File;
 
+import javax.servlet.http.HttpSession;
+
 import lombok.Data;
 
 /**
@@ -26,4 +28,8 @@ public class UpdateImageForm {
 	private Integer type;
 
 	private File file;
+
+	private String url;
+
+	private HttpSession session;
 }
