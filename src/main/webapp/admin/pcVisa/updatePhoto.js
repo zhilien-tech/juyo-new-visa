@@ -32,7 +32,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: BASE_PATH + '/admin/bigCustomer/updateBaseInfo.html?staffId='+id
+				content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id
 			});
 		},
 		//护照信息
@@ -46,7 +46,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: BASE_PATH + '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
+				content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
 			});
 		}
 		
