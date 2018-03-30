@@ -62,10 +62,10 @@ function openYesOrNoPage(){
 		var ispart = visaInfo.travelCompanionInfo.ispart; 
 		if(ispart == 1){
 			$(".teamnameture").show();
-			$(".teamnamefalse").hide();
+			$(".teamnamefalseDiv").hide();
 		}else {
 			$(".teamnameture").hide();
-			$(".teamnamefalse").show();
+			$(".teamnamefalseDiv").show();
 		}
 	}else {
 		$(".teamture").hide();
@@ -237,14 +237,15 @@ function openYesOrNoPage(){
 	
 	
 	//checkbox勾选时回显，设置input--->disabled           TODO
-	$("input[type='checkbox']").each(function(index,ele){
+	/*$("input[type='checkbox']").each(function(index,ele){
 		/*var beforeEle = $(this).prev();
 		if($(this).is(":checkbox")){
 			beforeEle.attr("disabled",true);
 		}else{
 			beforeEle.attr("disabled",false);
-		}*/
-	});
+		}
+	});*/
+
 	
 }
 
