@@ -46,6 +46,7 @@ import com.juyo.visa.entities.TOrderUsInfoEntitiy;
 import com.juyo.visa.entities.TOrderUsTravelinfoEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.OrderUpdateForm;
+import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -290,97 +291,99 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	public Object visaDetail(Integer orderid) {
 		Map<String, Object> result = Maps.newHashMap();
 
+		result.put("orderid", orderid);
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
-
-		//获取用户资料信息
-		TAppStaffOrderUsEntity orderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
-				Cnd.where("orderid", "=", orderid));
-		if (!Util.isEmpty(orderUsEntity)) {
-			//获取该用户的资料类型
-			String sqlStr = sqlManager.get("t_app_paperwork_US_info");
-			Sql applysql = Sqls.create(sqlStr);
-			Cnd cnd = Cnd.NEW();
-			cnd.and("staffid", "=", orderUsEntity.getStaffid());
-			List<Record> infoList = dbDao.query(applysql, cnd, null);
-			for (Record appRecord : infoList) {
-				int type = appRecord.getInt("type");
-				for (PrepareMaterialsEnum_JP pmEnum : PrepareMaterialsEnum_JP.values())
-					if (!Util.isEmpty(type) && type == pmEnum.intKey()) {
-						appRecord.set("type", pmEnum.value());
-						break;
-					}
-			}
-			StringBuffer str = new StringBuffer();
-			for (Record record : infoList) {
-				if (record.getString("type") != null) {
-					str.append(record.getString("type"));
-					str.append("、");
-				}
-			}
-			result.put("realinfo", str);
-			//			TAppStaffPaperworkUsEntity taspuEntity = dbDao.fetch(TAppStaffPaperworkUsEntity.class,
-			//					Cnd.where("staffid", "=", orderUsEntity.getStaffid()));
-			//			if (!Util.isEmpty(taspuEntity)) {
-			//				//				Integer type = taspuEntity.getType();
-			//				result.put("realinfo", taspuEntity.getRealinfo());
-			//			} else
-			//				result.put("realinfo", null);
-		} else
-			result.put("realinfo", null);
-		String travelpurpose = "";
 		if (!Util.isEmpty(orderTravelInfo)) {
-			travelpurpose = orderTravelInfo.getTravelpurpose();
 
-		}
-		if (!Util.isEmpty(travelpurpose)) {
-			String travelpurposeString = TravelpurposeEnum.getValue(travelpurpose).getValue();
-			//获取出行目的
-			orderTravelInfo.setTravelpurpose(travelpurposeString);
-		}
-		List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
-		TOrderUsInfoEntitiy orderInfoEntity = (TOrderUsInfoEntitiy) getOrderInfo(orderid);
-		if (!Util.isEmpty(orderTravelInfo.getGodeparturecity())) {
-			TCityEntity gocity = dbDao.fetch(TCityEntity.class,
-					Cnd.where("id", "=", orderTravelInfo.getGodeparturecity()));
-			orderInfoEntity.setGoDepartureCity(gocity.getCity());
-		}
-		if (!Util.isEmpty(orderTravelInfo.getGoArrivedCity())) {
-			TCityEntity gocity = dbDao.fetch(TCityEntity.class,
-					Cnd.where("id", "=", orderTravelInfo.getGoArrivedCity()));
-			orderInfoEntity.setGoArrivedCity((gocity.getCity()));
-		}
-		if (!Util.isEmpty(orderTravelInfo.getReturnDepartureCity())) {
-			TCityEntity gocity = dbDao.fetch(TCityEntity.class,
-					Cnd.where("id", "=", orderTravelInfo.getReturnDepartureCity()));
-			orderInfoEntity.setReturnDepartureCity(gocity.getCity());
-		}
-		if (!Util.isEmpty(orderTravelInfo.getReturnArrivedCity())) {
-			TCityEntity gocity = dbDao.fetch(TCityEntity.class,
-					Cnd.where("id", "=", orderTravelInfo.getReturnArrivedCity()));
-			orderInfoEntity.setReturnArrivedCity(gocity.getCity());
+			//获取用户资料信息
+			TAppStaffOrderUsEntity orderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
+					Cnd.where("orderid", "=", orderid));
+			if (!Util.isEmpty(orderUsEntity)) {
+				//获取该用户的资料类型
+				String sqlStr = sqlManager.get("t_app_paperwork_US_info");
+				Sql applysql = Sqls.create(sqlStr);
+				Cnd cnd = Cnd.NEW();
+				cnd.and("staffid", "=", orderUsEntity.getStaffid());
+				List<Record> infoList = dbDao.query(applysql, cnd, null);
+				for (Record appRecord : infoList) {
+					int type = appRecord.getInt("type");
+					for (PrepareMaterialsEnum_JP pmEnum : PrepareMaterialsEnum_JP.values())
+						if (!Util.isEmpty(type) && type == pmEnum.intKey()) {
+							appRecord.set("type", pmEnum.value());
+							break;
+						}
+				}
+				StringBuffer str = new StringBuffer();
+				for (Record record : infoList) {
+					if (record.getString("type") != null) {
+						str.append(record.getString("type"));
+						str.append("、");
+					}
+				}
+				result.put("realinfo", str);
+				//			TAppStaffPaperworkUsEntity taspuEntity = dbDao.fetch(TAppStaffPaperworkUsEntity.class,
+				//					Cnd.where("staffid", "=", orderUsEntity.getStaffid()));
+				//			if (!Util.isEmpty(taspuEntity)) {
+				//				//				Integer type = taspuEntity.getType();
+				//				result.put("realinfo", taspuEntity.getRealinfo());
+				//			} else
+				//				result.put("realinfo", null);
+			} else
+				result.put("realinfo", null);
+			String travelpurpose = "";
+			if (!Util.isEmpty(orderTravelInfo)) {
+				travelpurpose = orderTravelInfo.getTravelpurpose();
+
+			}
+			if (!Util.isEmpty(travelpurpose)) {
+				String travelpurposeString = TravelpurposeEnum.getValue(travelpurpose).getValue();
+				//获取出行目的
+				orderTravelInfo.setTravelpurpose(travelpurposeString);
+			}
+			List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
+			TOrderUsInfoEntitiy orderInfoEntity = (TOrderUsInfoEntitiy) getOrderInfo(orderid);
+			if (!Util.isEmpty(orderTravelInfo.getGodeparturecity())) {
+				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
+						Cnd.where("id", "=", orderTravelInfo.getGodeparturecity()));
+				orderInfoEntity.setGoDepartureCity(gocity.getCity());
+			}
+			if (!Util.isEmpty(orderTravelInfo.getGoArrivedCity())) {
+				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
+						Cnd.where("id", "=", orderTravelInfo.getGoArrivedCity()));
+				orderInfoEntity.setGoArrivedCity((gocity.getCity()));
+			}
+			if (!Util.isEmpty(orderTravelInfo.getReturnDepartureCity())) {
+				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
+						Cnd.where("id", "=", orderTravelInfo.getReturnDepartureCity()));
+				orderInfoEntity.setReturnDepartureCity(gocity.getCity());
+			}
+			if (!Util.isEmpty(orderTravelInfo.getReturnArrivedCity())) {
+				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
+						Cnd.where("id", "=", orderTravelInfo.getReturnArrivedCity()));
+				orderInfoEntity.setReturnArrivedCity(gocity.getCity());
+			}
+			result.put("orderInfo", orderInfoEntity);
+			result.put("travelInfo", orderTravelInfo);
+			//获取航班信息
+			TFlightEntity goFlightEntity = dbDao.fetch(TFlightEntity.class,
+					Cnd.where("flightnum", "=", orderTravelInfo.getGoFlightNum()));
+			TFlightEntity returnFlightEntity = dbDao.fetch(TFlightEntity.class,
+					Cnd.where("flightnum", "=", orderTravelInfo.getReturnFlightNum()));
+			if (!Util.isEmpty(goFlightEntity))
+				result.put("goFlightInfo", goFlightEntity);
+			else
+				result.put("goFlightInfo", null);
+			if (!Util.isEmpty(returnFlightEntity))
+				result.put("returnFlightInfo", returnFlightEntity);
+			else
+				result.put("returnFlightInfo", null);
+
+			if (!Util.isEmpty(staffSummaryInfoList))
+				result.put("summaryInfo", staffSummaryInfoList.get(0));
+			else
+				result.put("summaryInfo", null);
 		}
 
-		result.put("orderInfo", orderInfoEntity);
-		result.put("travelInfo", orderTravelInfo);
-
-		//获取航班信息
-		TFlightEntity goFlightEntity = dbDao.fetch(TFlightEntity.class,
-				Cnd.where("flightnum", "=", orderTravelInfo.getGoFlightNum()));
-		TFlightEntity returnFlightEntity = dbDao.fetch(TFlightEntity.class,
-				Cnd.where("flightnum", "=", orderTravelInfo.getReturnFlightNum()));
-		if (!Util.isEmpty(goFlightEntity))
-			result.put("goFlightInfo", goFlightEntity);
-		else
-			result.put("goFlightInfo", null);
-		if (!Util.isEmpty(returnFlightEntity))
-			result.put("returnFlightInfo", returnFlightEntity);
-		else
-			result.put("returnFlightInfo", null);
-
-		if (!Util.isEmpty(staffSummaryInfoList))
-			result.put("summaryInfo", staffSummaryInfoList.get(0));
-		else
-			result.put("summaryInfo", null);
 		return result;
 
 	}
@@ -390,12 +393,18 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object visaSave(OrderUpdateForm form, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer id = loginUser.getId();
+		TAppStaffBasicinfoForm infoForm = dbDao.fetch(TAppStaffBasicinfoForm.class, Cnd.where("id", "=", id));
 		//订单id
 		Integer orderid = form.getOrderid();
 		//获取出行信息表
 		TOrderUsTravelinfoEntity orderTravelInfo = dbDao.fetch(TOrderUsTravelinfoEntity.class,
 				Cnd.where("orderId", "=", orderid));
-
+		if (Util.isEmpty(orderTravelInfo)) {
+			orderTravelInfo = new TOrderUsTravelinfoEntity();
+			orderTravelInfo.setOrderid(orderid);
+			orderTravelInfo = dbDao.insert(orderTravelInfo);
+		}
 		if (!Util.isEmpty(form.getGodate()))
 			orderTravelInfo.setGodate(form.getGodate());
 		if (!Util.isEmpty(form.getLeavedate()))

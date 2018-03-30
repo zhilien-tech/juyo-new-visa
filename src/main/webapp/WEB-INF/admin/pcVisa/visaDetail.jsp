@@ -277,7 +277,7 @@
 							</div>
 							<!-- 模块3END -->
 							<!-- 隐藏域 -->
-							<input type="hidden" name="orderid" value="${obj.travelInfo.orderid}">
+							<input type="hidden" name="orderid" value="${obj.orderid}">
 							<!-- 隐藏域END -->
 							<!-- 模块4 -->
 							<div class="row body-from-input">
