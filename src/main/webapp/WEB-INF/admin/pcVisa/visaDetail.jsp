@@ -277,7 +277,7 @@
 							</div>
 							<!-- 模块3END -->
 							<!-- 隐藏域 -->
-							<input type="hidden" name="orderid" value="${obj.travelInfo.orderid}">
+							<input type="hidden" name="orderid" value="${obj.orderid}">
 							<!-- 隐藏域END -->
 							<!-- 模块4 -->
 							<div class="row body-from-input">
@@ -318,8 +318,8 @@
 						<p class="info-head">申请人</p>
 						<div class="dataInfoGroup">
 							<a v-on:click="updatePhoto(${obj.summaryInfo.staffid })">拍照资料</a> 
-							<a>护照信息</a> 
-							<a>基本信息</a> 
+							<a v-on:click="passport(${obj.summaryInfo.passportId })">护照信息</a> 
+							<a v-on:click="baseInfo(${obj.summaryInfo.staffid })">基本信息</a> 
 							<a>签证信息</a>
 						</div>
 						<!-- 标题以及按钮组END -->
@@ -360,7 +360,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>姓名/拼音</label> 
-												<input disabled="true" value="${obj.summaryInfo.staffname }" type="text" class="form-control input-sm" />
+												<input disabled="true" value="${obj.username }" type="text" class="form-control input-sm" />
 											</div>
 										</div>
 										<!-- 姓名/拼音END -->
@@ -540,11 +540,6 @@
 				data : $("#orderUpdateForm").serialize(),
 				type : 'POST',
 				success : function(data) {
-					if (1 == data) {
-						layer.msg('添加成功');
-					} else {
-						layer.msg('添加失败');
-					}
 					/* window.location.href = '/admin/pcVisa/visaDetail.html'; */
 				}
 			});

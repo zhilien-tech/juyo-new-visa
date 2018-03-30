@@ -26,6 +26,7 @@
 					<span>3.露出耳朵</span>
 				</div>
 				<div class="case">
+				<input id="staffid" type="hidden" value="${}">
 					<span>照片拍摄图例</span>
 				</div>
 			</div>
@@ -46,20 +47,22 @@
 			//异步加载的URL地址
 			var url="/admin/mobileVisa/getInfoByType.html";
 			var _self;
+			var staffid;
 			new Vue({
 				el: '#passportform',
-				data: {passportdata:"",
-						applicatdata:""},
+				data: {
+					passportdata:"",
+					applicatdata:""
+				},
 				created:function(){
-					
+					staffid=GetQueryString('staffid');
 			        _self=this;
 			        $.ajax({
 			        	url: url,
-			        	data:{type:13,staffid:16},
+			        	data:{type:13,staffid:staffid},
 			        	dataType:"json",
 			        	type:'post',
 			        	success: function(data){
-			        	/* _self.passportdata = data.passportdata;  */
 			        		if(data!=null){
 			        			 $(".uploadPhotoReady").attr("src",data.credentialEntity.url); 
 			        		}
@@ -90,7 +93,7 @@
 //			                alert(JSON.stringify(rst.formData));
 //			                alert(rst.file);
 //			                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
-//							alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+							console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
 			                uploadPositive(rst,rst.formData); 
 			            }).catch(function (err) {
 			                console.log(err);
@@ -99,13 +102,19 @@
 				});
 			})
 			
+			//获取URL地址参数
+		    function GetQueryString(name){
+		         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		         var r = window.location.search.substr(1).match(reg);
+		         if(r!=null)return  unescape(r[2]); return null;
+		    }
 			function uploadPositive(rst, formData){
 				if(!formData){
 					formData = new FormData();
 				}
 		        formData.append("image", rst.file); 
 		        formData.append("type", 13); 
-		        formData.append("staffid", 16); 
+		        formData.append("staffid", staffid); 
 		        console.log('------------------------------');
 		        console.log(formData); 
 		        console.log(rst.file);
@@ -125,18 +134,9 @@
 						//console.log('=====成功========');
 						//关闭加载层
 						layer.closeAll('loading');
-						//layer.close(layerIndex);
 						if (obj!=null) {
-							layer.msg("上传成功");
+							/* layer.msg("上传成功"); */
 							$(".uploadPhotoReady").attr("src",obj.url);
-							_self.applicatdata.cardfront = obj.url;
-							_self.applicatdata.address = obj.address;
-							_self.applicatdata.nation = obj.nationality;
-							_self.applicatdata.cardid = obj.num;
-							_self.applicatdata.cardprovince = obj.province;
-							_self.applicatdata.cardcity = obj.city;
-							_self.applicatdata.birthday = obj.birth;
-							_self.applicatdata.sex = obj.sex;
 						}
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
