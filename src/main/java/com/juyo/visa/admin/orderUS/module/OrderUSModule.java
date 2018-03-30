@@ -8,10 +8,13 @@ package com.juyo.visa.admin.orderUS.module;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
+
+import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 
 /**
  * 美国订单US
@@ -22,6 +25,9 @@ import org.nutz.mvc.annotation.Param;
 @IocBean
 @At("/admin/orderUS")
 public class OrderUSModule {
+
+	@Inject
+	private OrderUSViewService orderUSViewService;
 
 	/**
 	 * 
@@ -36,7 +42,7 @@ public class OrderUSModule {
 	@POST
 	public Object sendShareMsg(@Param("staffId") Integer staffId, @Param("orderid") Integer orderid,
 			HttpServletRequest request) {
-		return sendShareMsg(staffId, orderid, request);
+		return orderUSViewService.sendShareMsg(staffId, orderid, request);
 	}
 
 }
