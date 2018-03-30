@@ -42,7 +42,7 @@
 </head>
 <body>
 	<div class="modal-content">
-		<!-- <a id="toVisa" class="rightNav" onclick="visaBtn();">
+		<!-- <a id="toVisa" class="lefttNav" onclick="visaBtn();">
 			<span></span>
 		</a> -->
 		<a id="toBase" class="rightNav" onclick="baseBtn();">
