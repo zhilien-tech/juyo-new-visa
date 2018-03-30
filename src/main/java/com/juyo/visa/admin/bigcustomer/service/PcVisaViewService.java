@@ -260,7 +260,11 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			//				result.put("realinfo", null);
 		} else
 			result.put("realinfo", null);
-		String travelpurpose = orderTravelInfo.getTravelpurpose();
+		String travelpurpose = "";
+		if (!Util.isEmpty(orderTravelInfo)) {
+			travelpurpose = orderTravelInfo.getTravelpurpose();
+
+		}
 		if (!Util.isEmpty(travelpurpose)) {
 			String travelpurposeString = TravelpurposeEnum.getValue(travelpurpose).getValue();
 			//获取出行目的
