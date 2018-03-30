@@ -71,6 +71,28 @@ function applyValidate(){
 	$('#applicantInfo').bootstrapValidator('validate');
 }
 
+function translateZhToEn(from, to){
+	var toval = $(from).val();
+	$.ajax({
+		url : BASE_PATH+'/admin/translate/translate',
+		data : {
+			api : 'google',
+			auto : 'auto',
+			en : 'en',
+			q : toval
+		},
+		type : 'POST',
+		dataType : 'json',
+		success : function(data) {
+			$("#" + to).val(data);
+		}
+	});
+	/*$.getJSON("/admin/translate/google", {q: $(from).val()}, function (result) {
+        $("#" + to).val(result.data);
+    });*/
+}
+
+
 //国籍检索
 $("#nationality").on('input',function(){
 	$("#nationality").nextAll("ul.ui-autocomplete").remove();
