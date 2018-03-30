@@ -156,7 +156,7 @@ public class LoginService extends BaseService<TUserEntity> {
 				form.setMainurl("/admin/simple/list.html");
 			} else if (UserLoginEnum.BIG_COMPANY_ADMIN.intKey() == userType) {
 				//大客户公司管理员
-				form.setMainurl("/admin/bigCustomer/list.html");
+				form.setMainurl("/admin/authority/list.html");
 			} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
 				//游客跳转的页面
 				form.setMainurl("/admin/myVisa/visaList.html");
@@ -266,10 +266,9 @@ public class LoginService extends BaseService<TUserEntity> {
 			form.setMessageErrMsg("验证码错误");
 			return false;
 		}
-		TUserEntity user = dbDao.fetch(
-				TUserEntity.class,
-				Cnd.where("mobile", "=", form.getLoginName()).and("userType", "=",
-						UserLoginEnum.TOURIST_IDENTITY.intKey()));
+		Integer[] usertypes = { UserLoginEnum.TOURIST_IDENTITY.intKey(), UserLoginEnum.BIG_TOURIST_IDENTITY.intKey() };
+		TUserEntity user = dbDao.fetch(TUserEntity.class,
+				Cnd.where("mobile", "=", form.getLoginName()).and("userType", "in", usertypes));
 		if (Util.isEmpty(user)) {
 			form.setMessageErrMsg("该游客不存在");
 			return false;
@@ -295,8 +294,15 @@ public class LoginService extends BaseService<TUserEntity> {
 				//设置session过期时间为24小时
 				session.setMaxInactiveInterval(60 * 60 * 10);
 				form.setReturnUrl(">>:/public/menu.html");
-				//跳转到办理中的签证页面
-				form.setMainurl("/admin/myVisa/visaList.html");
+
+				Integer userType = user.getUserType();
+				if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
+					//跳转到办理中的签证页面
+					form.setMainurl("/admin/myVisa/visaList.html");
+				} else if (UserLoginEnum.BIG_TOURIST_IDENTITY.intKey() == userType) {
+					form.setMainurl("/admin/pcVisa/visaList.html");
+				}
+
 			}
 		}
 		return true;

@@ -1016,9 +1016,9 @@
 			var staffid = '${obj.staffid}';
 			var orderid = '${obj.orderid}';
 			$.ajax({
-				url : '/admin/orderUS/sendShareSMS.html',
+				url : '/admin/orderUS/sendShareMsg.html',
 				data : {
-					staffid : staffid,
+					staffId : staffid,
 					orderid : orderid
 				},
 				dataType : "json",

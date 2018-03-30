@@ -115,7 +115,7 @@ SELECT
 FROM
 	t_app_staff_basicinfo tasb
 	LEFT JOIN t_app_staff_passport tasp ON tasb.id = tasp.staffid
-	LEFT JOIN t_app_staff_order_us tasou ON tasou.staffid = tasb.id
+	INNER JOIN t_app_staff_order_us tasou ON tasou.staffid = tasb.id
 	LEFT JOIN t_order_us tos ON tos.id = tasou.orderid
 	$condition
 
