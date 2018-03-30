@@ -14,12 +14,19 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appAddStaff.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appUpdateStaff.css">
+	<style type="text/css">
+		.leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
+	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
+	</style>
 </head>
 <body>
 	<div class="modal-content">
-		<a id="toPassport" class="rightNav" onclick="passportBtn();">
+		<a id="toPassport" class="leftNav" onclick="passportBtn();">
 			<span></span>
 		</a>
+		<!-- <a id="toVisa" class="rightNav" onclick="toVisaInfo();">
+			<span></span>
+		</a> -->
 		<form id="applicantInfo">
 			<div class="modal-header">
 				<span class="heading">基本信息</span> 
@@ -744,6 +751,9 @@
 		});
 		function passportBtn(){
 			saveApplicant(2);
+		}
+		function toVisaInfo(){
+			saveApplicant(3);
 		}
 	</script>
 </body>

@@ -622,7 +622,7 @@ function searchByCard(){
 }
 
 //更新保存基本信息
-function saveApplicant(status){
+/*function saveApplicant(status){
 	$("#applicantInfo").data('bootstrapValidator').destroy();
 	$("#applicantInfo").data('bootstrapValidator', null);
 	applyValidate();
@@ -660,7 +660,7 @@ function saveApplicant(status){
 			});
 		}
 	}
-}
+}*/
 
 function saveApplicant(status){
 	$("#applicantInfo").data('bootstrapValidator').destroy();
@@ -686,8 +686,18 @@ function saveApplicant(status){
 		applicantInfo.id = staffId;
 
 		if(status == 2){
-			//右箭头跳转
+			//左箭头跳转
 			window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='+passportId;
+			$.ajax({
+				type: 'POST',
+				data : applicantInfo,
+				url: BASE_PATH + '/admin/bigCustomer/updateStaffInfo.html',
+				success :function(data) {
+				}
+			});
+		}else if(status == 3){
+			//右箭头跳转
+			window.location.href = '/admin/bigCustomer/updateVisaInfo.html?staffId='+staffId;
 			$.ajax({
 				type: 'POST',
 				data : applicantInfo,

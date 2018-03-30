@@ -53,6 +53,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	private MailService mailService;
 
 	private final static String SMS_SIGNATURE = "【优悦签】";
+	private final static Integer US_YUSHANG_COMID = 65;
 
 	//根据人员id添加订单
 	public Object addOrderByStuffId(Integer staffId) {
@@ -61,6 +62,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String orderNum = generateOrderNumByDate();
 		Date nowDate = DateUtil.nowDate();
 		orderUs.setOrdernumber(orderNum);
+		orderUs.setComid(US_YUSHANG_COMID);
 		orderUs.setStatus(USOrderStatusEnum.PLACE_ORDER.intKey());//下单
 		orderUs.setCreatetime(nowDate);
 		orderUs.setUpdatetime(nowDate);
@@ -166,7 +168,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			sex = "先生/女士";
 
 			emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-					.replace("${pcUrl}", pcUrl);
+					.replace("${telephone}", telephone).replace("${pcUrl}", pcUrl);
 			result = mailService.send(toEmail, emailText, "美国订单分享", MailService.Type.HTML);
 		}
 

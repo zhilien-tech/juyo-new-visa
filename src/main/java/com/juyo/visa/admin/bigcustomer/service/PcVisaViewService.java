@@ -321,13 +321,6 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 					}
 				}
 				result.put("realinfo", str);
-				//			TAppStaffPaperworkUsEntity taspuEntity = dbDao.fetch(TAppStaffPaperworkUsEntity.class,
-				//					Cnd.where("staffid", "=", orderUsEntity.getStaffid()));
-				//			if (!Util.isEmpty(taspuEntity)) {
-				//				//				Integer type = taspuEntity.getType();
-				//				result.put("realinfo", taspuEntity.getRealinfo());
-				//			} else
-				//				result.put("realinfo", null);
 			} else
 				result.put("realinfo", null);
 			String travelpurpose = "";
