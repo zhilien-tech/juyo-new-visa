@@ -105,7 +105,7 @@
 		            });
 		        },
 		        methods:{
-		        	toInProcess:function(id){
+		        	toInProcess:function(id,){
 		        		window.location.href = '/admin/pcVisa/visaDetail.html?orderid=' + id;
 		        	}
 		        }

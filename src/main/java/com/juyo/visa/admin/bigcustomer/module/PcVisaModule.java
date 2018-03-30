@@ -97,8 +97,8 @@ public class PcVisaModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object visaDetail(@Param("orderid") Integer orderid) {
-		return pcVisaViewService.visaDetail(orderid);
+	public Object visaDetail(@Param("orderid") Integer orderid, HttpSession session) {
+		return pcVisaViewService.visaDetail(orderid, session);
 	}
 
 	/**

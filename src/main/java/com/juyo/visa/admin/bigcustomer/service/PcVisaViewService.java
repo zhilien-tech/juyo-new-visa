@@ -46,7 +46,6 @@ import com.juyo.visa.entities.TOrderUsInfoEntitiy;
 import com.juyo.visa.entities.TOrderUsTravelinfoEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.OrderUpdateForm;
-import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -288,9 +287,10 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	/**
 	 * 跳转到签证详情页
 	 */
-	public Object visaDetail(Integer orderid) {
+	public Object visaDetail(Integer orderid, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
-
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		String name = loginUser.getName();
 		result.put("orderid", orderid);
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		if (!Util.isEmpty(orderTravelInfo)) {
@@ -383,7 +383,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			else
 				result.put("summaryInfo", null);
 		}
-
+		result.put("username", name);
 		return result;
 
 	}
@@ -393,8 +393,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object visaSave(OrderUpdateForm form, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer id = loginUser.getId();
-		TAppStaffBasicinfoForm infoForm = dbDao.fetch(TAppStaffBasicinfoForm.class, Cnd.where("id", "=", id));
+		//	 TAppStaffBasicinfoForm infoForm = dbDao.fetch(TAppStaffBasicinfoForm.class, Cnd.where("id", "=", id));
 		//订单id
 		Integer orderid = form.getOrderid();
 		//获取出行信息表

@@ -26,6 +26,7 @@
 					<span>3.露出耳朵</span>
 				</div>
 				<div class="case">
+				<input id="staffid" type="hidden" value="${staffid}">
 					<span>照片拍摄图例</span>
 				</div>
 			</div>
@@ -51,11 +52,11 @@
 				data: {passportdata:"",
 						applicatdata:""},
 				created:function(){
-					
+					var staffid=$("#staffid").val();
 			        _self=this;
 			        $.ajax({
 			        	url: url,
-			        	data:{type:13,staffid:16},
+			        	data:{type:13,staffid:staffid},
 			        	dataType:"json",
 			        	type:'post',
 			        	success: function(data){

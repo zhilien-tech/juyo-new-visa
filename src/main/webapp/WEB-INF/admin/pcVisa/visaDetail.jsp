@@ -360,7 +360,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>姓名/拼音</label> 
-												<input disabled="true" value="${obj.summaryInfo.staffname }" type="text" class="form-control input-sm" />
+												<input disabled="true" value="${obj.username }" type="text" class="form-control input-sm" />
 											</div>
 										</div>
 										<!-- 姓名/拼音END -->
@@ -540,11 +540,6 @@
 				data : $("#orderUpdateForm").serialize(),
 				type : 'POST',
 				success : function(data) {
-					if (1 == data) {
-						layer.msg('添加成功');
-					} else {
-						layer.msg('添加失败');
-					}
 					/* window.location.href = '/admin/pcVisa/visaDetail.html'; */
 				}
 			});
