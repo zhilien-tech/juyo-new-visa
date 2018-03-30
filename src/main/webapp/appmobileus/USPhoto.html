@@ -26,7 +26,7 @@
 					<span>3.露出耳朵</span>
 				</div>
 				<div class="case">
-				<input id="staffid" type="hidden" value="${staffid}">
+				<input id="staffid" type="hidden" value="${}">
 					<span>照片拍摄图例</span>
 				</div>
 			</div>
@@ -52,7 +52,7 @@
 				data: {passportdata:"",
 						applicatdata:""},
 				created:function(){
-					var staffid=$("#staffid").val();
+					var staffid=GetQueryString("staffid");
 			        _self=this;
 			        $.ajax({
 			        	url: url,
@@ -100,6 +100,12 @@
 				});
 			})
 			
+			//获取URL地址参数
+		    function GetQueryString(name){
+		         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		         var r = window.location.search.substr(1).match(reg);
+		         if(r!=null)return  unescape(r[2]); return null;
+		    }
 			function uploadPositive(rst, formData){
 				if(!formData){
 					formData = new FormData();

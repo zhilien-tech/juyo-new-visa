@@ -444,8 +444,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		String id = session.getId();
 		String serverName = request.getServerName();
 		int serverPort = request.getServerPort();
-		String content = "http://" + serverName + ":" + serverPort + "/appmobileus/USFilming.html?sessionid=" + id
-				+ "&staffid=" + staffid;
+		String content = "http://" + serverName + ":" + serverPort + "/appmobileus/USFilming.html?&staffid=" + staffid;
 		String encodeQrCode = qrCodeService.encodeQrCode(request, content);
 		result.put("encodeQrCode", encodeQrCode);
 		//获取用户基本信息
