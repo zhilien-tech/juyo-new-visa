@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.io.IOUtils;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -115,11 +117,16 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @param mobileUrl 手机号
 	 * @return 
 	 */
-	public Object sendShareMsg(Integer staffId, Integer orderid, String mobileUrl) {
-		if (!Util.isEmpty(mobileUrl)) {
+	public Object sendShareMsg(Integer staffId, Integer orderid, HttpServletRequest request) {
+
+		String pcUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin";
+
+		if (!Util.isEmpty(staffId)) {
 			try {
 				//发送短信
-				sendSMSUs(staffId, orderid, mobileUrl, "orderustemp/order_us_share_sms.txt");
+				sendSMSUS(staffId, orderid, "orderustemp/order_us_share_sms.txt");
+				//发送邮件
+				sendEmailUS(staffId, orderid, pcUrl, "orderustemp/order_us_share_mail.html");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -129,8 +136,45 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 	}
 
+	//发送邮件
+	public Object sendEmailUS(Integer staffId, Integer orderid, String pcUrl, String mailTemplate) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(mailTemplate));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+		String emailText = tmp.toString();
+		String result = "";
+		//查询订单号
+		TOrderUsEntity order = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
+		String orderNum = order.getOrdernumber();
+
+		//申请人
+		TAppStaffBasicinfoEntity staffBaseInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+				Cnd.where("id", "=", staffId));
+		String name = staffBaseInfo.getFirstname() + staffBaseInfo.getLastname();
+		String telephone = staffBaseInfo.getTelephone();
+		String toEmail = staffBaseInfo.getEmail();
+		String sex = staffBaseInfo.getSex();
+
+		if (!Util.isEmpty(toEmail)) {
+			/*if (Util.eq("男", sex)) {
+				sex = "先生";
+			} else {
+				sex = "女士";
+			}*/
+			sex = "先生/女士";
+
+			emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+					.replace("${pcUrl}", pcUrl);
+			result = mailService.send(toEmail, emailText, "美国订单分享", MailService.Type.HTML);
+		}
+
+		return result;
+	}
+
 	//发送短信
-	public Object sendSMSUs(Integer staffId, Integer orderid, String mobileUrl, String smsTemplate) throws IOException {
+	public Object sendSMSUS(Integer staffId, Integer orderid, String smsTemplate) throws IOException {
 		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(smsTemplate));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
@@ -154,7 +198,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			String orderNum = order.getOrdernumber();
 			String smsContent = tmp.toString();
 			smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-					.replace("${mobileUrl}", mobileUrl).replace("${email}", email);
+					.replace("${mobileUrl}", telephone).replace("${email}", email);
 			result = sendSMS(telephone, smsContent);
 		}
 
