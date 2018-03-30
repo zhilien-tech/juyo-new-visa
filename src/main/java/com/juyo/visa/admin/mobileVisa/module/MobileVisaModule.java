@@ -54,10 +54,8 @@ public class MobileVisaModule {
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object uploadImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
 			@Param("type") Integer type) {
-
 		String uploadImage = mobileVisaService.uploadImage(file);
 		return mobileVisaService.updateImage(uploadImage, staffid, type);
-
 	}
 
 }

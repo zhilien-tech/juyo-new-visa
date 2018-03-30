@@ -95,6 +95,5 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 				Cnd.where("staffid", "=", staffid).and("type", "=", type));
 		result.put("credentialEntity", credentialEntity);
 		return result;
-
 	}
 }
