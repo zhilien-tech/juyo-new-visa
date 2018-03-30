@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -204,7 +205,9 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 		//用户登录，添加游客信息
 		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
-		addLoginUser(staffInfo);
+		Integer loginUserId = (Integer) addLoginUser(staffInfo);
+
+		dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId), Cnd.where("id", "=", staffId));
 
 		return JsonResult.success("添加成功");
 	}
@@ -214,6 +217,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	 */
 	public Object addLoginUser(TAppStaffBasicinfoEntity applicant) {
 		//游客登录
+		Integer userId = null;
 		ApplicantUser applicantUser = new ApplicantUser();
 		applicantUser.setMobile(applicant.getTelephone());
 		//applicantUser.setOpid(applicant.getOpid());
@@ -224,18 +228,20 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 					.and("userType", "=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey()));
 			if (Util.isEmpty(userEntity)) {
 				TUserEntity tUserEntity = addApplicantUser(applicantUser);
-				applicant.setUserid(tUserEntity.getId());
+				userId = tUserEntity.getId();
+				applicant.setUserid(userId);
 			} else {
 				userEntity.setName(applicantUser.getUsername());
 				userEntity.setMobile(applicant.getTelephone());
 				userEntity.setPassword(applicantUser.getPassword());
 				userEntity.setOpId(applicantUser.getOpid());
 				userEntity.setUpdateTime(new Date());
-				applicant.setUserid(userEntity.getId());
+				userId = userEntity.getId();
+				applicant.setUserid(userId);
 				dbDao.update(userEntity);
 			}
 		}
-		return null;
+		return userId;
 	}
 
 	/**
