@@ -47,12 +47,15 @@
 			//异步加载的URL地址
 			var url="/admin/mobileVisa/getInfoByType.html";
 			var _self;
+			var staffid;
 			new Vue({
 				el: '#passportform',
-				data: {passportdata:"",
-						applicatdata:""},
+				data: {
+					passportdata:"",
+					applicatdata:""
+				},
 				created:function(){
-					var staffid=GetQueryString("staffid");
+					staffid=GetQueryString('staffid');
 			        _self=this;
 			        $.ajax({
 			        	url: url,
@@ -60,7 +63,6 @@
 			        	dataType:"json",
 			        	type:'post',
 			        	success: function(data){
-			        	/* _self.passportdata = data.passportdata;  */
 			        		if(data!=null){
 			        			 $(".uploadPhotoReady").attr("src",data.credentialEntity.url); 
 			        		}
@@ -91,7 +93,7 @@
 //			                alert(JSON.stringify(rst.formData));
 //			                alert(rst.file);
 //			                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
-//							alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+							console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
 			                uploadPositive(rst,rst.formData); 
 			            }).catch(function (err) {
 			                console.log(err);
@@ -112,7 +114,7 @@
 				}
 		        formData.append("image", rst.file); 
 		        formData.append("type", 13); 
-		        formData.append("staffid", 16); 
+		        formData.append("staffid", staffid); 
 		        console.log('------------------------------');
 		        console.log(formData); 
 		        console.log(rst.file);
@@ -132,18 +134,9 @@
 						//console.log('=====成功========');
 						//关闭加载层
 						layer.closeAll('loading');
-						//layer.close(layerIndex);
 						if (obj!=null) {
-							layer.msg("上传成功");
+							/* layer.msg("上传成功"); */
 							$(".uploadPhotoReady").attr("src",obj.url);
-							_self.applicatdata.cardfront = obj.url;
-							_self.applicatdata.address = obj.address;
-							_self.applicatdata.nation = obj.nationality;
-							_self.applicatdata.cardid = obj.num;
-							_self.applicatdata.cardprovince = obj.province;
-							_self.applicatdata.cardcity = obj.city;
-							_self.applicatdata.birthday = obj.birth;
-							_self.applicatdata.sex = obj.sex;
 						}
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {

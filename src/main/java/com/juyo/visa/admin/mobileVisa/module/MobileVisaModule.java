@@ -6,6 +6,8 @@
 
 package com.juyo.visa.admin.mobileVisa.module;
 
+import java.io.File;
+
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -18,7 +20,6 @@ import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.upload.UploadAdaptor;
 
 import com.juyo.visa.admin.mobileVisa.form.MobileVisaBasicInfoForm;
-import com.juyo.visa.admin.mobileVisa.form.UpdateImageForm;
 import com.juyo.visa.admin.mobileVisa.service.MobileVisaService;
 
 /**
@@ -51,11 +52,11 @@ public class MobileVisaModule {
 	 */
 	@At
 	@AdaptBy(type = UploadAdaptor.class)
-	public Object uploadImage(HttpSession session, @Param("..") UpdateImageForm updateImageForm) {
+	public Object uploadImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
+			@Param("type") Integer type) {
 
-		String uploadImage = mobileVisaService.uploadImage(updateImageForm.getFile());
-		updateImageForm.setUrl(uploadImage);
-		return mobileVisaService.updateImage(updateImageForm, session);
+		String uploadImage = mobileVisaService.uploadImage(file);
+		return mobileVisaService.updateImage(uploadImage, staffid, type);
 
 	}
 
