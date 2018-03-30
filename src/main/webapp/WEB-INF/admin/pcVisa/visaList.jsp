@@ -83,7 +83,7 @@
 		<script type="text/javascript" src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
 		<script type="text/javascript">
 			//异步加载的URL地址
-		    var url="${base}/admin/pcvisa/visaListData.html";
+		    var url="${base}/admin/pcVisa/visaListData.html";
 		    //vue表格数据对象
 		    var _self;
 			new Vue({
