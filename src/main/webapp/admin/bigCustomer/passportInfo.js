@@ -121,9 +121,9 @@ $(function() {
 	$("#issuedDate").change(function(){
 		if($("#issuedDate").val() != ""){
 			if($("#validType").val() == 1){
-				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
+				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10)).change();
 			}else{
-				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
+				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5)).change();
 			}
 		}
 	});
@@ -131,13 +131,29 @@ $(function() {
 	$("#validType").change(function(){
 		var type = $(this).val();
 		if(type == 1){
-			$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10));
+			$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10)).change();
 		}else{
-			$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5));
+			$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5)).change();
 		}
 
 	});
 });
+
+function passportValidate(){
+	//护照图片验证
+	var passportUrl = $("#passportUrl").val();
+	if(passportUrl == ""){
+		$("#borderColor").attr("style", "border-color:#ff1a1a");  
+		$(".front").attr("class", "info-imgUpload front has-error");  
+        $(".help-blockFront").attr("data-bv-result","INVALID");  
+        $(".help-blockFront").attr("style","display: block;");  
+	}else{
+		$("#borderColor").attr("style", null);
+		$(".front").attr("class", "info-imgUpload front has-success");  
+        $(".help-blockFront").attr("data-bv-result","IVALID");  
+        $(".help-blockFront").attr("style","display: none;");  
+	}
+}
 
 function getNewDates(dateTemp, days){
 	var d1 = new Date(dateTemp);
@@ -307,9 +323,13 @@ function dataURLtoBlob(dataurl) {
 
 //保存
 function save(status){
+	passportValidate();
 	//得到获取validator对象或实例 
 	var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 	bootstrapValidator.validate();
+	if($(".front").hasClass("has-error")){
+		return;
+	}
 	//延时校验
 	setTimeout(function(){
 		if(bootstrapValidator.isValid()){

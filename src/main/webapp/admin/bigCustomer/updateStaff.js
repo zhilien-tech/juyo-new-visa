@@ -18,7 +18,6 @@ $(function(){
 });
 
 function applyValidate(){
-	//身份证图片验证
 	$('#applicantInfo').bootstrapValidator({
 		message : '验证不通过',
 		feedbackIcons : {
@@ -71,8 +70,13 @@ function applyValidate(){
 	$('#applicantInfo').bootstrapValidator('validate');
 }
 
-function translateZhToEn(from, to){
-	var toval = $(from).val();
+function translateZhToEn(from, to, param){
+	var toval = "";
+	if(param != ""){
+		toval = param;
+	}else{
+		toval = $(from).val();
+	}
 	$.ajax({
 		url : BASE_PATH+'/admin/translate/translate',
 		data : {
@@ -253,13 +257,20 @@ $('#uploadFileImg').change(function() {
 					$('#address').val(obj.address).change();
 					$('#nation').val(obj.nationality).change();
 					$('#cardId').val(obj.num).change();
-					var str="";  
+					var str=""; 
+					var stren="";
 					//是否同身份证相同
 					$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
 						str=$(this).val();     
 					});     
 					if(str == 1){//相同
-						searchByCard();
+						searchByCard(1);
+					}
+					$("input:checkbox[name='addressIssamewithcarden']:checked").each(function(){     
+						stren=$(this).val();     
+					});     
+					if(stren == 1){//相同
+						searchByCard(2);
 					}
 					
 					$('#cardProvince').val(obj.province).change();
@@ -517,7 +528,7 @@ $(".permanentUS2").click(function(){
 });
 
 //checkbox居住地与身份证相同
-$(".nowProvince").change(function(){
+/*$(".nowProvince").change(function(){
 	var str="";  
 	//是否同身份证相同
 	$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
@@ -529,6 +540,27 @@ $(".nowProvince").change(function(){
 		$("#province").val("").change();
 		$("#city").val("").change();
 		$("#detailedAddress").val("").change();
+	}
+});*/
+//居住地与身份证相同
+$(".nowProvince").click(function(){
+	if(this.checked){
+		$(".nowProvinceen").prop("checked",true);
+		searchByCard(1);
+	}else{
+		$(".nowProvinceen").prop("checked",false);
+		$("#province").val("").change();
+		$("#city").val("").change();
+		$("#detailedAddress").val("").change();
+	}
+});
+$(".nowProvinceen").click(function(){
+	if(this.checked){
+		searchByCard(2);
+	}else{
+		$("#provinceen").val("").change();
+		$("#cityen").val("").change();
+		$("#detailedAddressen").val("").change();
 	}
 });
 //国家注册码
@@ -598,7 +630,7 @@ $(".istaxpayernumberapply").click(function(){
 	}
 });
 
-function searchByCard(){
+function searchByCard(status){
 
 	var cardId = $("#cardId").val();
 	layer.load(1);
@@ -611,10 +643,18 @@ function searchByCard(){
 		success :function(data) {
 			console.log(JSON.stringify(data));
 			layer.closeAll('loading');
-			$("#detailedAddress").val($("#address").val()).change();
-			if(data != null){
-				$("#province").val(data.province).change();
-				$("#city").val(data.city).change();
+			if(status == 1){
+				$("#detailedAddress").val($("#address").val()).change();
+				if(data != null){
+					$("#province").val(data.province).change();
+					$("#city").val(data.city).change();
+				}
+			}else{
+				translateZhToEn("#address","detailedAddressen","");
+				if(data != null){
+					translateZhToEn("#province","provinceen",data.province);
+					translateZhToEn("#city","cityen",data.city);
+				}
 			}
 		}
 	});
@@ -673,7 +713,7 @@ function saveApplicant(status){
 	bootstrapValidator.validate();
 	if (bootstrapValidator.isValid()){
 
-		var str="";
+		/*var str="";
 		var applicantInfo;
 		$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
 			str=$(this).val();     
@@ -682,7 +722,8 @@ function saveApplicant(status){
 			applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
 		}else{
 			applicantInfo = $("#applicantInfo").serialize();
-		}
+		}*/
+		applicantInfo = $("#applicantInfo").serialize();
 		applicantInfo.id = staffId;
 
 		if(status == 2){
