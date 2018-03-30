@@ -71,6 +71,28 @@ function applyValidate(){
 	$('#applicantInfo').bootstrapValidator('validate');
 }
 
+function translateZhToEn(from, to){
+	var toval = $(from).val();
+	$.ajax({
+		url : BASE_PATH+'/admin/translate/translate',
+		data : {
+			api : 'google',
+			auto : 'auto',
+			en : 'en',
+			q : toval
+		},
+		type : 'POST',
+		dataType : 'json',
+		success : function(data) {
+			$("#" + to).val(data);
+		}
+	});
+	/*$.getJSON("/admin/translate/google", {q: $(from).val()}, function (result) {
+        $("#" + to).val(result.data);
+    });*/
+}
+
+
 //国籍检索
 $("#nationality").on('input',function(){
 	$("#nationality").nextAll("ul.ui-autocomplete").remove();
@@ -93,13 +115,39 @@ $("#nationality").on('input',function(){
 		}
 	});
 });
+$("#nationalityen").on('input',function(){
+	$("#nationalityen").nextAll("ul.ui-autocomplete").remove();
+	$.ajax({
+		type : 'POST',
+		async: false,
+		data : {
+			searchStr : $("#nationalityen").val()
+		},
+		url : BASE_PATH+'/admin/orderJp/getNationality.html',
+		success : function(data) {
+			if(data != ""){
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				$.each(data,function(index,element) { 
+					liStr += "<li onclick='setNationalityen("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+				});
+				liStr += "</ul>";
+				$("#nationalityen").after(liStr);
+			}
+		}
+	});
+});
 //国籍检索下拉项
 function setNationality(nationality){
 	$("#nationality").nextAll("ul.ui-autocomplete").remove();
 	$("#nationality").val(nationality).change();
 } 
+function setNationalityen(nationality){
+	$("#nationalityen").nextAll("ul.ui-autocomplete").remove();
+	$("#nationalityen").val(nationality).change();
+} 
 $("#nationalityDiv").mouseleave(function(){
 	$("#nationality").nextAll("ul.ui-autocomplete").remove();
+	$("#nationalityen").nextAll("ul.ui-autocomplete").remove();
 });
 
 //省份检索
@@ -284,7 +332,7 @@ $('#uploadFileImgBack').change(function() {
 	reader.readAsDataURL(file);
 });
 
-//二寸免冠照片,扫描
+//二寸免冠照片上传
 $('#uploadFileInchImg').change(function() {
 	var layerIndex = layer.load(1, {
 		shade : "#000"
@@ -301,7 +349,7 @@ $('#uploadFileInchImg').change(function() {
 		$.ajax({
 			type : "POST",//提交类型  
 			//dataType : "json",//返回结果格式  
-			url : BASE_PATH + '/admin/orderJp/IDCardRecognition',//请求地址  
+			url : BASE_PATH + '/admin/company/uploadFile.html',//请求地址  
 			async : true,
 			processData : false, //当FormData在jquery中使用的时候需要设置此项
 			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
@@ -310,31 +358,15 @@ $('#uploadFileInchImg').change(function() {
 			success : function(obj) {//请求成功后的函数 
 				//关闭加载层
 				layer.close(layerIndex);
-				if (true === obj.success) {
+				if ('200' === obj.status) {
 					layer.msg("识别成功");
-					$('#cardFront').val(obj.url);
-					$('#imgInch').attr('src', obj.url);
+					$('#cardInch').val(obj.data);
+					$('#imgInch').attr('src', obj.data);
 					$("#uploadFileInchImg").siblings("i").css("display","block");
 //					$(".front").attr("class", "info-imgUpload front has-success");  
-					$(".help-blockFront").attr("data-bv-result","IVALID");  
-					$(".help-blockFront").attr("style","display: none;");
-					$("#borderColorFront").attr("style", null);
-					$('#address').val(obj.address).change();
-					$('#nation').val(obj.nationality).change();
-					$('#cardId').val(obj.num).change();
-					var str="";  
-					//是否同身份证相同
-					$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
-						str=$(this).val();     
-					});     
-					if(str == 1){//相同
-						searchByCard();
-					}
-					
-					$('#cardProvince').val(obj.province).change();
-					$('#cardCity').val(obj.city).change();
-					$('#birthday').val(obj.birth).change();
-					$('#sex').val(obj.sex);
+					$(".help-blockInch").attr("data-bv-result","IVALID");  
+					$(".help-blockInch").attr("style","display: none;");
+					//$("#borderColorFront").attr("style", null);
 				}
 				$("#addBtn").attr('disabled', false);
 				$("#updateBtn").attr('disabled', false);
@@ -361,16 +393,64 @@ function dataURLtoBlob(dataurl) {
 	});
 }
 
-//checkbox 曾用名
+//婚姻状况处理
+//左边
+if(marrystatus == 8 || marrystatus == ""){//其他，隐藏婚姻说明
+	$(".marryexplain").hide();
+}else{
+	$(".marryexplain").show();
+}
+
+$("#marrystatus").change(function(){
+	var status = $(this).val();
+	$("#marrystatusen").val(status);
+	if($("#marrystatusen").val() == 8 || $("#marrystatusen").val() == ""){//其他，隐藏婚姻说明
+		$(".marryexplainen").hide();
+	}else{
+		$(".marryexplainen").show();
+	}
+	if(status == 8 || status == ""){
+		$(".marryexplain").hide();
+	}else{
+		$(".marryexplain").show();
+	}
+});
+//右边
+if(marrystatusen == 8 || marrystatusen == ""){//其他，隐藏婚姻说明
+	$(".marryexplainen").hide();
+}else{
+	$(".marryexplainen").show();
+}
+
+$("#marrystatusen").change(function(){
+	var status = $(this).val();
+	if(status == 8 || status == ""){
+		$(".marryexplainen").hide();
+	}else{
+		$(".marryexplainen").show();
+	}
+})
+
+//radio 曾用名
 $(".usedBefore").change(function(){
-	var usedBeforeVal = $("input[name='usedBefore']:checked").val();
+	var usedBeforeVal = $("input[name='hasothername']:checked").val();
 	if(usedBeforeVal == 1){
 		
 		$(".usedBeforeTrue").show();
-		$(".usedBeforeUS1").trigger("click");
+		$("input[name='hasothernameen'][value='1']").trigger("click");
+		//$(".usedBeforeUS1").trigger("click");
 	}else{
 		$(".usedBeforeTrue").hide();
-		$(".usedBeforeUS2").trigger("click");
+		$("input[name='hasothernameen'][value='2']").trigger("click");
+		//$(".usedBeforeUS2").trigger("click");
+	}
+});
+$(".usedBeforeUS").change(function(){
+	var usedBeforeVal = $("input[name='hasothernameen']:checked").val();
+	if(usedBeforeVal == 1){
+		$(".usedBeforeUSTrue").show();
+	}else{
+		$(".usedBeforeUSTrue").hide();
 	}
 });
 $(".usedBeforeUS1").click(function(){
@@ -381,14 +461,24 @@ $(".usedBeforeUS2").click(function(){
 });
 //曾用国籍
 $(".usedNationality").change(function(){
-	var usedNationalityVal = $("input[name='usedNationality']:checked").val();
+	var usedNationalityVal = $("input[name='hasothernationality']:checked").val();
 	if(usedNationalityVal == 1){
 		
 		$(".usedNationalityTrue").show();
-		$(".usedNationalityUS1").trigger("click");
+		$("input[name='hasothernationalityen'][value='1']").trigger("click");
+		//$(".usedNationalityUS1").trigger("click");
 	}else{
 		$(".usedNationalityTrue").hide();
-		$(".usedNationalityUS2").trigger("click");
+		$("input[name='hasothernationalityen'][value='2']").trigger("click");
+		//$(".usedNationalityUS2").trigger("click");
+	}
+});
+$(".usedNationalityUS").change(function(){
+	var usedNationalityVal = $("input[name='hasothernationalityen']:checked").val();
+	if(usedNationalityVal == 1){
+		$(".usedNationalityUSTrue").show();
+	}else{
+		$(".usedNationalityUSTrue").hide();
 	}
 });
 $(".usedNationalityUS1").click(function(){
@@ -399,14 +489,24 @@ $(".usedNationalityUS2").click(function(){
 });
 //永久居民
 $(".permanent").change(function(){
-	var permanentVal = $("input[name='permanent']:checked").val();
+	var permanentVal = $("input[name='isothercountrypermanentresident']:checked").val();
 	if(permanentVal == 1){
 		
 		$(".permanentTrue").show();
-		$(".permanentUS1").trigger("click");
+		$("input[name='isothercountrypermanentresidenten'][value='1']").trigger("click");
+		//$(".permanentUS1").trigger("click");
 	}else{
 		$(".permanentTrue").hide();
-		$(".permanentUS2").trigger("click");
+		$("input[name='isothercountrypermanentresidenten'][value='2']").trigger("click");
+		//$(".permanentUS2").trigger("click");
+	}
+});
+$(".permanentUS").change(function(){
+	var permanentVal = $("input[name='isothercountrypermanentresidenten']:checked").val();
+	if(permanentVal == 1){
+		$(".permanentUSTrue").show();
+	}else{
+		$(".permanentUSTrue").hide();
 	}
 });
 $(".permanentUS1").click(function(){
@@ -415,7 +515,8 @@ $(".permanentUS1").click(function(){
 $(".permanentUS2").click(function(){
 	$(".permanentUSTrue").hide();
 });
-//居住地与身份证相同
+
+//checkbox居住地与身份证相同
 $(".nowProvince").change(function(){
 	var str="";  
 	//是否同身份证相同
@@ -428,6 +529,72 @@ $(".nowProvince").change(function(){
 		$("#province").val("").change();
 		$("#city").val("").change();
 		$("#detailedAddress").val("").change();
+	}
+});
+//国家注册码
+$(".isidentificationnumberapply").click(function(){
+	if(this.checked){
+		$("#nationalidentificationnumber").val("");
+		$("#nationalidentificationnumber").attr("disabled",true);
+		$(".isidentificationnumberapplyen").prop("checked",true);
+		$("#nationalidentificationnumberen").val("");
+		$("#nationalidentificationnumberen").attr("disabled",true);
+	}else{
+		$("#nationalidentificationnumber").attr("disabled",false);
+		$(".isidentificationnumberapplyen").prop("checked",false);
+		$("#nationalidentificationnumberen").attr("disabled",false);
+	}
+});
+$(".isidentificationnumberapplyen").click(function(){
+	if(this.checked){
+		$("#nationalidentificationnumberen").val("");
+		$("#nationalidentificationnumberen").attr("disabled",true);
+	}else{
+		$("#nationalidentificationnumberen").attr("disabled",false);
+	}
+});
+//美国社会安全码
+$(".issecuritynumberapplyen").click(function(){
+	if(this.checked){
+		$("#socialsecuritynumberen").val("");
+		$("#socialsecuritynumberen").attr("disabled",true);
+	}else{
+		$("#socialsecuritynumberen").attr("disabled",false);
+	}
+});
+$(".issecuritynumberapply").click(function(){
+	if(this.checked){
+		$("#socialsecuritynumber").val("");
+		$("#socialsecuritynumber").attr("disabled",true);
+		$(".issecuritynumberapplyen").prop("checked",true);
+		$("#socialsecuritynumberen").val("");
+		$("#socialsecuritynumberen").attr("disabled",true);
+	}else{
+		$("#socialsecuritynumber").attr("disabled",false);
+		$(".issecuritynumberapplyen").prop("checked",false);
+		$("#socialsecuritynumberen").attr("disabled",false);
+	}
+});
+//美国纳税人证件号
+$(".istaxpayernumberapplyen").click(function(){
+	if(this.checked){
+		$("#taxpayernumberen").val("");
+		$("#taxpayernumberen").attr("disabled",true);
+	}else{
+		$("#taxpayernumberen").attr("disabled",false);
+	}
+});
+$(".istaxpayernumberapply").click(function(){
+	if(this.checked){
+		$("#taxpayernumber").val("");
+		$("#taxpayernumber").attr("disabled",true);
+		$(".istaxpayernumberapplyen").prop("checked",true);
+		$("#taxpayernumberen").val("");
+		$("#taxpayernumberen").attr("disabled",true);
+	}else{
+		$("#taxpayernumber").attr("disabled",false);
+		$(".istaxpayernumberapplyen").prop("checked",false);
+		$("#taxpayernumberen").attr("disabled",false);
 	}
 });
 

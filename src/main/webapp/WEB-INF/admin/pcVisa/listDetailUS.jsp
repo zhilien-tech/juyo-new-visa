@@ -31,24 +31,27 @@
 			<!-- 头部 -->
 			<div class="qz-head">
 				<span class="orderNum">订单号：
-					<span>${obj.orderInfo.ordernumber}</span>
+					<span>${obj.ordernum}</span>
+				</span>
+				<span class="state">状态： 
+					<p>下单</p>
 				</span>
 				<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
-				<span class="state">状态： 
+				<%-- <span class="state">状态： 
 					<c:if test="${obj.orderInfo.status == '1'}">
 						<p>下单</p>
 					</c:if> 
 					<c:if test="${obj.orderInfo.status == '0'}">
 						<p>0</p>
 					</c:if>
-				</span> 
+				</span>  --%>
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="通过" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />
-					<input type="button" value="通知" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="通知" onclick="sendEmailUS()" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" />
 			</div>
 			<!-- 头部END -->
@@ -1005,6 +1008,26 @@
 				data:{date:departuredate,gocity:departurecity,arrivecity:arrivedcity},
 				type:'post',
 				success: function(data){
+				}
+			});
+		}
+		
+		function sendEmailUS(){
+			var staffid = '${obj.staffid}';
+			var orderid = '${obj.orderid}';
+			$.ajax({
+				url : '/admin/orderUS/sendShareSMS.html',
+				data : {
+					staffid : staffid,
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'post',
+				success : function(data) {
+					console.log(data);
+					if(data){
+						layer.msg("发送成功");
+					}
 				}
 			});
 		}
