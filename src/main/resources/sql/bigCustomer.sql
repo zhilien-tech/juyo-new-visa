@@ -90,7 +90,8 @@ SELECT
 	tasp.passport,
 	tasou.orderid,
 	tos.ordernumber,
-	tasb.aacode 
+	tasb.aacode,
+	tos.id
 FROM
 	t_app_staff_basicinfo tasb
 	LEFT JOIN t_app_staff_passport tasp ON tasb.id = tasp.staffid
@@ -109,7 +110,8 @@ SELECT
 	tasp.passport,
 	tasou.orderid,
 	tos.ordernumber,
-	tasb.aacode 
+	tasb.aacode,
+	tos.id
 FROM
 	t_app_staff_basicinfo tasb
 	LEFT JOIN t_app_staff_passport tasp ON tasb.id = tasp.staffid

@@ -1014,19 +1014,20 @@
 		
 		function sendEmailUS(){
 			var staffid = '${obj.staffid}';
-			var telephone = '${obj.telephone}';
-			var email = '${obj.email}';
+			var orderid = '${obj.orderid}';
 			$.ajax({
 				url : '/admin/orderUS/sendShareSMS.html',
 				data : {
 					staffid : staffid,
-					telephone : telephone,
-					email : email
+					orderid : orderid
 				},
 				dataType : "json",
 				type : 'post',
 				success : function(data) {
 					console.log(data);
+					if(data){
+						layer.msg("发送成功");
+					}
 				}
 			});
 		}

@@ -20,8 +20,8 @@ new Vue({
 		});
 	},
 	methods : {
-		order : function(ordernum, staffid, telephone, email) {
-			window.open('/admin/pcVisa/listDetailUS.html?ordernum='+ordernum + '&staffid='+staffid + '&telephone='+telephone + '&email='+email);
+		order : function(ordernum, staffid, orderid) {
+			window.open('/admin/pcVisa/listDetailUS.html?ordernum='+ordernum + '&staffid='+staffid + '&orderid='+orderid);
 					//跳转到更新页面
 			//window.location.href = '${base}/admin/orderJp/order.html?id='+id;
 		}

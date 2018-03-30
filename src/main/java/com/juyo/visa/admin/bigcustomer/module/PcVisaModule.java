@@ -55,12 +55,11 @@ public class PcVisaModule {
 	@GET
 	@Ok("jsp")
 	public Object listDetailUS(@Param("ordernum") String ordernum, @Param("staffid") int staffid,
-			@Param("telephone") String telephone, @Param("email") String email) {
+			@Param("orderid") String orderid) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("ordernum", ordernum);
 		result.put("staffid", staffid);
-		result.put("telephone", telephone);
-		result.put("email", email);
+		result.put("orderid", orderid);
 		return result;
 	}
 

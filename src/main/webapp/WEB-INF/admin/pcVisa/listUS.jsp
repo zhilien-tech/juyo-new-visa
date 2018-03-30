@@ -74,7 +74,7 @@
 								</div>
 								<div>
 									<label>操作：</label>
-									<i class="edit" v-on:click="order(data.ordernumber,data.staffid,data.telephone,data.email)" > </i>
+									<i class="edit" v-on:click="order(data.ordernumber,data.staffid,data.id)" > </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
