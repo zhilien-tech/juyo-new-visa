@@ -340,15 +340,15 @@ function save(status){
 					}
 				});
 			}else if(status ==3){
-				//签证信息
-				/*window.location.href = '/admin/orderJp/visaInfo.html?id='+visaId;
+				//拍摄资料
+				window.location.href = '/admin/orderJp/visaInfo.html?id='+visaId;
 				$.ajax({
 					type: 'POST',
 					data : passportInfo,
 					url: '/admin/orderJp/saveEditPassport',
 					success :function(data) {
 					}
-				});*/
+				});
 			}
 		}
 	}, 500);
