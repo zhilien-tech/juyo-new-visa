@@ -3,6 +3,7 @@ package com.juyo.visa.admin.bigcustomer.service;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TravelpurposeEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
@@ -276,7 +278,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	/*
-	 * 
+	 * 获取订单详情
 	 * 
 	 */
 	public Object getOrderInfo(Integer orderid) {
@@ -292,6 +294,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		String name = loginUser.getName();
 		result.put("orderid", orderid);
+
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		if (!Util.isEmpty(orderTravelInfo)) {
 
@@ -299,6 +302,11 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			TAppStaffOrderUsEntity orderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
 					Cnd.where("orderid", "=", orderid));
 			if (!Util.isEmpty(orderUsEntity)) {
+
+				//获取用户基本信息
+				TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+						Cnd.where("id", "=", orderUsEntity.getStaffid()));
+				result.put("basicinfo", basicinfoEntity);
 				//获取该用户的资料类型
 				String sqlStr = sqlManager.get("t_app_paperwork_US_info");
 				Sql applysql = Sqls.create(sqlStr);
@@ -377,6 +385,11 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 				result.put("summaryInfo", null);
 		}
 		result.put("username", name);
+		Map<Integer, String> stateMap = new HashMap<Integer, String>();
+		for (VisaUSStatesEnum e : VisaUSStatesEnum.values()) {
+			stateMap.put(e.intKey(), e.value());
+		}
+		result.put("state", stateMap);
 		return result;
 
 	}
@@ -433,11 +446,18 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object updatePhoto(Integer staffid, HttpServletRequest request, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
+		//获取用户基本信息
+		TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+				Cnd.where("id", "=", staffid));
+		String firstname = basicinfoEntity.getFirstname();
+		String lastname = basicinfoEntity.getLastname();
+		String name = firstname + lastname;
 		//生成二维码
 		String id = session.getId();
 		String serverName = request.getServerName();
 		int serverPort = request.getServerPort();
-		String content = "http://" + serverName + ":" + serverPort + "/appmobileus/USFilming.html?&staffid=" + staffid;
+		String content = "http://" + serverName + ":" + serverPort + "/appmobileus/USFilming.html?&staffid=" + staffid
+				+ "&name=" + name;
 		String encodeQrCode = qrCodeService.encodeQrCode(request, content);
 		result.put("encodeQrCode", encodeQrCode);
 		//获取用户基本信息
@@ -461,10 +481,4 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 
 	}
 
-	/*
-	 * 图片上传
-	 */
-	public void addPhoto(Integer staffid, String imageUrl, Integer type) {
-
-	}
 }

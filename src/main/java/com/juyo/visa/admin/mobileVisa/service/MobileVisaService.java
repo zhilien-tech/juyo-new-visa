@@ -9,9 +9,13 @@ package com.juyo.visa.admin.mobileVisa.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.springframework.web.socket.TextMessage;
@@ -95,5 +99,26 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 				Cnd.where("staffid", "=", staffid).and("type", "=", type));
 		result.put("credentialEntity", credentialEntity);
 		return result;
+	}
+
+	/*
+	 * 图片是否存在
+	 */
+	public Object getImageInfoBytypeAndStaffid(Integer staffid) {
+		//获取该用户的资料类型
+		String sqlStr = sqlManager.get("t_app_paperwork_US_info");
+		Sql applysql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("staffid", "=", staffid);
+		List<Record> infoList = dbDao.query(applysql, cnd, null);
+		for (Record appRecord : infoList) {
+			if (!Util.isEmpty(appRecord.getInt("type"))) {
+				appRecord.set("type", "已上传");
+			} else {
+				appRecord.set("type", "待上传");
+			}
+		}
+		return infoList;
+
 	}
 }
