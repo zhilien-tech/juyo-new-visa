@@ -785,7 +785,13 @@
 										<div class="paddingRight groupcheckBoxInfo">
 											<label>邮政编码</label>
 											<input name="employerzipcode" value="${beforeWork.employerzipcode }" type="text" />
-											<input id="isKonwOrtherZipCode" name="isemployerzipcodeapply" value="${beforeWork.isemployerzipcodeapply }" type="checkbox" />
+											<c:if test="${beforeWork.isemployerzipcodeapply == 1}">
+												<input id="isKonwOrtherZipCode" name="isemployerzipcodeapply" value="${beforeWork.isemployerzipcodeapply }" checked="checked" type="checkbox"/>
+											</c:if>
+											<c:if test="${beforeWork.isemployerzipcodeapply != 1}">
+												<input id="isKonwOrtherZipCode" name="isemployerzipcodeapply" value="${beforeWork.isemployerzipcodeapply }" type="checkbox" />
+											</c:if>
+											
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft groupSelectInfo">
@@ -820,7 +826,13 @@
 										<div class="paddingLeft groupcheckBoxInfo">
 											<label>主管的名</label>
 											<input name="supervisorlastname" value="${beforeWork.supervisorlastname }" type="text" />
-											<input name="isknowsupervisorlastname" value="${beforeWork.isknowsupervisorlastname }" type="checkbox" />
+											<c:if test="${beforeWork.isknowsupervisorlastname == 1}">
+												<input name="isknowsupervisorlastname" value="${beforeWork.isknowsupervisorlastname }" checked="checked" type="checkbox"/>
+											</c:if>
+											<c:if test="${beforeWork.isknowsupervisorlastname != 1}">
+												<input name="isknowsupervisorlastname" value="${beforeWork.isknowsupervisorlastname }" type="checkbox" />
+											</c:if>
+											
 										</div>
 										<div class="paddingRight groupInputInfo" >
 											<label>入职时间</label>

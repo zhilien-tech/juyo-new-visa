@@ -173,7 +173,7 @@ function save(){
 			direct.relativeslastname = relativeslastname;
 			direct.relationship = relationship;
 			direct.relativesstatus = relativesstatus;
-			directList.push(direct)
+			directList.push(direct);
 		}
 	});
 	visadata.directList = directList;
@@ -182,22 +182,70 @@ function save(){
 	//以前工作信息
 	var beforeWorkList = [];
 	$('.workBeforeInfosDiv').each(function(i){
-		var beforeWorkLLength = '';
-		var beforeWorkL = {};
+		var beforeWorkLength = '';
+		var beforeWork = {};
 		
 		var employername = $(this).find('[name=employername]').val();
 		var employeraddress = $(this).find('[name=employeraddress]').val();
 		var employeraddressSec = $(this).find('[name=employeraddressSec]').val();
 		var employercity = $(this).find('[name=employercity]').val();
 		var employerprovince = $(this).find('[name=employerprovince]').val();
+		var employerzipcode = $(this).find('[name=employerzipcode]').val();
+		var employercountry = $(this).find('[name=employercountry]').val();
+		var employertelephone = $(this).find('[name=employertelephone]').val();
+		var jobtitle = $(this).find('[name=jobtitle]').val();
+		var isemployerzipcodeapply = $(this).find('[name=isemployerzipcodeapply]').is(':checked');
+		if(isemployerzipcodeapply){
+			isemployerzipcodeapply = 1;
+		}else{
+			isemployerzipcodeapply = 0;
+		}
+		var supervisorlastname = $(this).find('[name=supervisorlastname]').val();
+		var isknowsupervisorlastname = $(this).find('[name=isknowsupervisorlastname]').val();
+		if(isknowsupervisorlastname){
+			isknowsupervisorlastname = 1;
+		}else{
+			isknowsupervisorlastname = 0;
+		}
+		var employstartdate = $(this).find('[name=employstartdate]').val();
+		var employenddate = $(this).find('[name=employenddate]').val();
+		var previousduty = $(this).find('[name=previousduty]').val();
 		
-		
-		
-		
+		beforeWorkLength += employername;
+		beforeWorkLength += employeraddress;
+		beforeWorkLength += employeraddressSec;
+		beforeWorkLength += employercity;
+		beforeWorkLength += employerprovince;
+		beforeWorkLength += employerzipcode;
+		beforeWorkLength += employercountry;
+		beforeWorkLength += employertelephone;
+		beforeWorkLength += jobtitle;
+		beforeWorkLength += supervisorlastname;
+		beforeWorkLength += employstartdate;
+		beforeWorkLength += employenddate;
+		beforeWorkLength += previousduty;
+		if(beforeWorkLength.length >0){
+			beforeWork.employername = employername;
+			beforeWork.employeraddress = employeraddress;
+			beforeWork.employeraddressSec = employeraddressSec;
+			beforeWork.employercity = employercity;
+			beforeWork.employerprovince = employerprovince;
+			beforeWork.employerzipcode = employerzipcode;
+			beforeWork.employercountry = employercountry;
+			beforeWork.employertelephone = employertelephone;
+			beforeWork.jobtitle = jobtitle;
+			beforeWork.isemployerzipcodeapply = isemployerzipcodeapply;
+			beforeWork.supervisorlastname = supervisorlastname;
+			beforeWork.isknowsupervisorlastname = isknowsupervisorlastname;
+			beforeWork.employstartdate = employstartdate;
+			beforeWork.employenddate = employenddate;
+			beforeWork.previousduty = previousduty;
+			beforeWorkList.push(beforeWork);
+		}
 	});
+	visadata.beforeWorkList = beforeWorkList;
 	
-	
-	alert(JSON.stringify(directRelativesList));
+	alert(JSON.stringify(beforeWorkList));
 	
 }
 	
