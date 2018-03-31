@@ -50,10 +50,11 @@
 										<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 									</div>
 								</div>
+								<div class="front has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">身份证正面必须上传</small>
+								</div>
 							</div>
-						<div class="col-xs-4 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 -20px 32px !important">
-							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">身份证正面必须上传</small>
-						</div> 
+						
 						<!-- end 身份证 正面 -->
 						<!-- start 身份证 反面 -->
 							<div class="col-xs-4 picturesBack">
@@ -66,10 +67,10 @@
 										<i class="delete" onclick="deleteApplicantBackImg();"></i>
 									</div>
 								</div>
+								<div class="front has-error" style="width:100%; height:20px; border:0 !important; color:red;margin:0px 0 0 0px !important">
+									<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
+								</div> 
 							</div>
-						<div class="col-xs-4 front has-error" style="width:320px; height:20px; border:0 !important; color:red;margin:-20px 0 0 32px !important">
-							<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
-						</div>
 						<!-- end 身份证 反面 -->
 						<!-- start 二寸免冠照片 -->
 							<div class="col-xs-3 picturesInch">
@@ -82,11 +83,11 @@
 										<i class="delete" onclick="deleteApplicantInchImg()"></i>
 									</div>
 								</div>
+								 <div class="front has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-blockInch" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">二寸免冠照片必须上传</small>
+								</div>
 							</div>
 						<!-- 验证 -->
-						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 -20px 32px !important">
-							<small class="help-blockInch" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">二寸免冠照片必须上传</small>
-						</div>
 						<!-- end 二寸免冠照片 -->
 						
 					</div>
