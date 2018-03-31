@@ -13,38 +13,14 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appAddStaff.css">
-	<style>
-	img[src=""],img:not([src]) { opacity:0;}
-	input[type="file"] { z-index:99999;}
-	#sqImg { z-index:999999;}
-	#sqImgBack { z-index:999999;}
-	.modal-content { position:relative;}
-	.info-imgUpload {width: 98%;}
-	.col-sm-offset-1 { margin-left:3% !important;}
-	.groupWidth { width:215px;}
-	.NoInfo { width:101.5%; height:30px; transtion:height 1s; -webkit-transtion:height 1s; -moz-transtion:height 1s; }
-	.ipt-info { display:none; }
-    .Unqualified, .qualified  { margin-right:10px; }
-    .delete { z-index:1000000;}
-    /*弹框头部固定*/
-    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:10000000; padding:0px 15px;}
-    .btn-margin { margin-top:10px;}
-    .modal-body { margin-top:50px; height:100%; padding:15px 37px 15px 40px;}
-    #sqImg { width:332px;}
-    /*左右导航样式*/
-    .rightNav { position:fixed;top:15px;right:0;z-index:999; width:40px;height:100%; cursor:pointer;}
-	.rightNav span { width: 24px; height: 24px; position: absolute;top:50%; border-left: 4px solid #999;  border-bottom: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
-    .leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
-	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
-	.info-QRcode { width:153px;}
-	.mainWidth,#uploadFile { width:100% !important;}
-	</style>
+	<!-- 本页css -->
+	<link rel="stylesheet" href="${base}/references/public/css/passportInfo.css">
 </head>
 <body>
 	<div class="modal-content">
-		<!-- <a id="toVisa" class="lefttNav" onclick="visaBtn();">
+		<a id="toVisa" class="leftNav" onclick="visaBtn();">
 			<span></span>
-		</a> -->
+		</a>
 		<a id="toBase" class="rightNav" onclick="baseBtn();">
 			<span></span>
 		</a>

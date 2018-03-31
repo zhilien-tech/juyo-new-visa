@@ -25,7 +25,7 @@
 		<div class="QRCode">
 			<div class="explain">微信扫描二维码上传识别</div>
 			<div class="scan">
-				<img src="${obj.encodeQrCode }" />
+				<img src="${obj.encodeQrCode }"  width="100%" height="auto"/>
 			</div>
 		</div>
 		<!--二寸免冠照-->
@@ -35,11 +35,12 @@
 				<span>二寸免冠照片注意事项</span> <span>1.白底</span> <span>2.摘掉帽子</span> <span>3.漏出耳朵</span>
 			</div>
 			<div class="samplePhoto">
-					<img id="twonichphoto"
-						src="${base}/references/public/dist/newvisacss/img/picture.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/picture.png" />
 			</div>
-			<div class="uploadPhoto">
+			<div id="uploadPhoto" class="uploadPhoto" >
 				<div>上传</div>
+				<img id="twonichphoto" class="loadImg" src="" width="100%" height="100%" />
+				<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 				<%-- <c:if test="${not empty obj.twoinchphoto }">
 					<img src="${obj.twoinchphoto }" class="loadImg" width="100%"
 						height="100%" />
@@ -310,8 +311,23 @@
 				/* _self.passportdata = data.passportdata; */
 				console.log(data);
 				if (data != null) {
+<<<<<<< HEAD
 					if(13==data.type){
 						$("#twonichphoto").attr("src", data.url);
+=======
+					if(13==data.credentialEntity.type){
+						$("#twonichphoto").attr("src", data.credentialEntity.url);
+						$("#uploadPhoto").siblings("i").show();
+					}
+					if(1==data.credentialEntity.type){
+						$("#huhzao").attr("src", data.credentialEntity.url);
+					}
+					if(2==data.credentialEntity.type){
+						$("#oldhuzhao").attr("src", data.credentialEntity.url);
+					}
+					if(3==data.credentialEntity.type){
+						$("#card").attr("src", data.credentialEntity.url);
+>>>>>>> refs/remotes/origin/dev
 					}
 				}
 			}
@@ -329,6 +345,14 @@
 		var staffid = $("#staffid").val();
 		var passportId = $("#passportId").val();
 		window.location.href='/admin/bigCustomer/updatePassportInfo.html?passportId='+passportId;
+	}
+	
+	/* 删除二寸免冠照 */
+	function deleteApplicantFrontImg(){
+		
+		$('#twonichphoto').attr('src', "");
+		$("#uploadPhoto .delete").hide();
+		/* $("#uploadPhoto").siblings("i").css("display","none"); */
 	}
 </script>
 </html>
