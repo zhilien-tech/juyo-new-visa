@@ -52,6 +52,7 @@ import com.juyo.visa.common.enums.visaProcess.VisaCitizenshipEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaFamilyInfoEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
+import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
 import com.juyo.visa.common.util.ExcelReader;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
@@ -98,6 +99,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 	private final static String TEMPLATE_EXCEL_URL = "download";
 	private final static String TEMPLATE_EXCEL_NAME = "人员管理之模块.xlsx";
+
+	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
 
 	/**
 	 * 
@@ -213,9 +216,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		sqlt.setParam("staffid", staffId);
 		Record travelCompanionInfo = dbDao.fetch(sqlt);
 		//---同伴信息
-		List<TAppStaffCompanioninfoEntity> companionList = dbDao.query(TAppStaffCompanioninfoEntity.class,
+		/*List<TAppStaffCompanioninfoEntity> companionList = dbDao.query(TAppStaffCompanioninfoEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
-		travelCompanionInfo.put("companionList", companionList);
+		travelCompanionInfo.put("companionList", companionList);*/
 		result.put("travelCompanionInfo", travelCompanionInfo);
 
 		//以前的美国旅游信息
@@ -224,13 +227,13 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		sqlp.setParam("staffid", staffId);
 		Record previUSTripInfo = dbDao.fetch(sqlp);
 		//---去过美国信息集合
-		List<TAppStaffGousinfoEntity> gousList = dbDao.query(TAppStaffGousinfoEntity.class,
+		/*List<TAppStaffGousinfoEntity> gousList = dbDao.query(TAppStaffGousinfoEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
-		previUSTripInfo.put("gousList", gousList);
+		previUSTripInfo.put("gousList", gousList);*/
 		//---美国驾照集合
-		List<TAppStaffDriverinfoEntity> driverList = dbDao.query(TAppStaffDriverinfoEntity.class,
+		/*List<TAppStaffDriverinfoEntity> driverList = dbDao.query(TAppStaffDriverinfoEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
-		previUSTripInfo.put("driverList", driverList);
+		previUSTripInfo.put("driverList", driverList);*/
 		result.put("previUSTripInfo", previUSTripInfo);
 
 		//美国联络点
@@ -244,17 +247,17 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		sqlf.setParam("staffid", staffId);
 		Record familyInfo = dbDao.fetch(sqlf);
 		//---直属亲戚信息集合
-		List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
+		/*List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
-		familyInfo.put("zhiFamilyList", zhiFamilyList);
+		familyInfo.put("zhiFamilyList", zhiFamilyList);*/
 		result.put("familyInfo", familyInfo);
 
 		//工作/教育/培训信息 
-		String sqlStrw = sqlManager.get("bigCustomer_order_applicant_list");
+		String sqlStrw = sqlManager.get("pcVisa_word_education_training_list");
 		Sql sqlw = Sqls.create(sqlStrw);
 		sqlw.setParam("staffid", staffId);
 		Record workEducationInfo = dbDao.fetch(sqlw);
-		//---以前工作信息集合
+		/*//---以前工作信息集合
 		List<TAppStaffBeforeworkEntity> beforeWorkList = dbDao.query(TAppStaffBeforeworkEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
 		workEducationInfo.put("beforeWorkList", beforeWorkList);
@@ -277,7 +280,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		//参加过的慈善组织集合
 		List<TAppStaffOrganizationEntity> organizationList = dbDao.query(TAppStaffOrganizationEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
-		workEducationInfo.put("organizationList", organizationList);
+		workEducationInfo.put("organizationList", organizationList);*/
 
 		result.put("workEducationInfo", workEducationInfo);
 
@@ -373,22 +376,80 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		//旅伴信息
 		TAppStaffTravelcompanionEntity travelCompanionInfo = new TAppStaffTravelcompanionEntity();
 		travelCompanionInfo.setStaffid(staffId);
+		travelCompanionInfo.setIspart(DEFAULT_IS_NO);
+		travelCompanionInfo.setIstravelwithother(DEFAULT_IS_NO);
+		travelCompanionInfo.setIsparten(DEFAULT_IS_NO);
+		travelCompanionInfo.setIstravelwithotheren(DEFAULT_IS_NO);
 		dbDao.insert(travelCompanionInfo);
 		//以前的美国旅游信息
 		TAppStaffPrevioustripinfoEntity previUSTripInfo = new TAppStaffPrevioustripinfoEntity();
 		previUSTripInfo.setStaffid(staffId);
+		previUSTripInfo.setHasbeeninus(DEFAULT_IS_NO); //是否去过美国
+		previUSTripInfo.setHasdriverlicense(DEFAULT_IS_NO);//是否有美国驾照
+		previUSTripInfo.setIsissuedvisa(DEFAULT_IS_NO);
+		previUSTripInfo.setIsapplyingsametypevisa(DEFAULT_IS_NO);
+		previUSTripInfo.setIssamecountry(DEFAULT_IS_NO);
+		previUSTripInfo.setIslost(DEFAULT_IS_NO);
+		previUSTripInfo.setIstenprinted(DEFAULT_IS_NO);
+		previUSTripInfo.setIscancelled(DEFAULT_IS_NO);
+		previUSTripInfo.setIsrefused(DEFAULT_IS_NO);
+		previUSTripInfo.setIslegalpermanentresident(DEFAULT_IS_NO);
+		previUSTripInfo.setIsfiledimmigrantpetition(DEFAULT_IS_NO);
+
+		previUSTripInfo.setHasbeeninusen(DEFAULT_IS_NO);
+		previUSTripInfo.setHasdriverlicenseen(DEFAULT_IS_NO);
+		previUSTripInfo.setIsissuedvisaen(DEFAULT_IS_NO);
+		previUSTripInfo.setIsapplyingsametypevisaen(DEFAULT_IS_NO);
+		previUSTripInfo.setIssamecountryen(DEFAULT_IS_NO);
+		previUSTripInfo.setIslosten(DEFAULT_IS_NO);
+		previUSTripInfo.setIstenprinteden(DEFAULT_IS_NO);
+		previUSTripInfo.setIscancelleden(DEFAULT_IS_NO);
+		previUSTripInfo.setIsrefuseden(DEFAULT_IS_NO);
+		previUSTripInfo.setIslegalpermanentresidenten(DEFAULT_IS_NO);
+		previUSTripInfo.setIsfiledimmigrantpetitionen(DEFAULT_IS_NO);
 		dbDao.insert(previUSTripInfo);
+
 		//美国联络点
 		TAppStaffContactpointEntity contactPointInfo = new TAppStaffContactpointEntity();
 		contactPointInfo.setStaffid(staffId);
 		dbDao.insert(contactPointInfo);
+
 		//家庭信息
 		TAppStaffFamilyinfoEntity familyInfo = new TAppStaffFamilyinfoEntity();
 		familyInfo.setStaffid(staffId);
+		familyInfo.setIsfatherinus(DEFAULT_IS_NO);
+		familyInfo.setIsmotherinus(DEFAULT_IS_NO);
+		familyInfo.setHasimmediaterelatives(DEFAULT_IS_NO);
+		familyInfo.setHasotherrelatives(DEFAULT_IS_NO);
+		familyInfo.setIsknowspousecity(DEFAULT_IS_NO);
+
+		familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
+		familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
+		familyInfo.setHasimmediaterelativesen(DEFAULT_IS_NO);
+		familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
+		familyInfo.setIsknowspousecityen(DEFAULT_IS_NO);
 		dbDao.insert(familyInfo);
+
 		//工作/教育/培训信息 
 		TAppStaffWorkEducationTrainingEntity workEducationInfo = new TAppStaffWorkEducationTrainingEntity();
 		workEducationInfo.setStaffid(staffId);
+		workEducationInfo.setIsemployed(DEFAULT_IS_NO);
+		workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
+		workEducationInfo.setIsclan(DEFAULT_IS_NO);
+		workEducationInfo.setIstraveledanycountry(DEFAULT_IS_NO);
+		workEducationInfo.setIsworkedcharitableorganization(DEFAULT_IS_NO);
+		workEducationInfo.setHasspecializedskill(DEFAULT_IS_NO);
+		workEducationInfo.setHasservedinmilitary(DEFAULT_IS_NO);
+		workEducationInfo.setIsservedinrebelgroup(DEFAULT_IS_NO);
+
+		workEducationInfo.setIsemployeden(DEFAULT_IS_NO);
+		workEducationInfo.setIssecondarylevelen(DEFAULT_IS_NO);
+		workEducationInfo.setIsclanen(DEFAULT_IS_NO);
+		workEducationInfo.setIstraveledanycountryen(DEFAULT_IS_NO);
+		workEducationInfo.setIsworkedcharitableorganizationen(DEFAULT_IS_NO);
+		workEducationInfo.setHasspecializedskillen(DEFAULT_IS_NO);
+		workEducationInfo.setHasservedinmilitaryen(DEFAULT_IS_NO);
+		workEducationInfo.setIsservedinrebelgroupen(DEFAULT_IS_NO);
 		dbDao.insert(workEducationInfo);
 
 		return map;

@@ -27,6 +27,7 @@
 		<!-- <a id="toVisa" class="rightNav" onclick="toVisaInfo();">
 			<span></span>
 		</a> -->
+		
 		<form id="applicantInfo">
 			<div class="modal-header">
 				<span class="heading">基本信息</span> 
