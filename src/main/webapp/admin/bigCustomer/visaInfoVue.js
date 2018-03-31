@@ -179,6 +179,22 @@ function save(){
 	visadata.directList = directList;
 	
 	
+	//以前工作信息
+	var beforeWorkList = [];
+	$('.workBeforeInfosDiv').each(function(i){
+		var beforeWorkLLength = '';
+		var beforeWorkL = {};
+		
+		var employername = $(this).find('[name=employername]').val();
+		var employeraddress = $(this).find('[name=employeraddress]').val();
+		var employeraddressSec = $(this).find('[name=employeraddressSec]').val();
+		var employercity = $(this).find('[name=employercity]').val();
+		var employerprovince = $(this).find('[name=employerprovince]').val();
+		
+		
+		
+		
+	});
 	
 	
 	alert(JSON.stringify(directRelativesList));

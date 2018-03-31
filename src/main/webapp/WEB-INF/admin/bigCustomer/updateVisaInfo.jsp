@@ -769,7 +769,7 @@
 										<div class="clear"></div>
 										<div class="paddingLeft groupInputInfo">
 											<label>雇主街道地址(次选)*可选</label>
-											<input value="${beforeWork.employeraddressSec }" type="text" />
+											<input name="employeraddressSec" value="${beforeWork.employeraddressSec }" type="text" />
 										</div>
 										<div class="paddingRight groupcheckBoxInfo" >
 											<label>市</label>
