@@ -368,9 +368,13 @@
 						<!-- 标题以及按钮组 -->
 						<p class="info-head">申请人</p>
 						<div class="dataInfoGroup">
-							<a v-on:click="updatePhoto(${obj.summaryInfo.staffid })">拍照资料</a>
-							<a v-on:click="passport(${obj.summaryInfo.passportId })">护照信息</a>
-							<a v-on:click="baseInfo(${obj.summaryInfo.staffid })">基本信息</a> <a>签证信息</a>
+
+						<a v-on:click="updatePhoto(${obj.summaryInfo.staffid })">拍照资料</a> 
+						<a v-on:click="passport(${obj.summaryInfo.passportId })">护照信息</a> 
+						<a v-on:click="baseInfo(${obj.summaryInfo.staffid })">基本信息</a> 
+						<a>签证信息</a>
+<%-- 					<a v-on:click="visa(${obj.summaryInfo.staffid })">签证信息</a> --%>
+
 						</div>
 						<!-- 标题以及按钮组END -->
 
