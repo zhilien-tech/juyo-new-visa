@@ -9,6 +9,8 @@ import org.nutz.dao.entity.annotation.Comment;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
+import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
+
 @Data
 @Table("t_app_staff_travelcompanion")
 public class TAppStaffTravelcompanionEntity implements Serializable {

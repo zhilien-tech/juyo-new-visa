@@ -6,6 +6,19 @@ new Vue({
 		applicantInfo : ""
 	},
 	methods : {
+		visa : function(id){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+id
+			});
+		},
 		//修改申请人拍摄资料信息
 		updatePhoto : function(id){
 			save();
@@ -50,9 +63,11 @@ new Vue({
 			});
 		}
 		
+		
 	},
 	
 });
+
 
 //日期转换 加上指定天数
 function getNewDay(dateTemp, days) {  
