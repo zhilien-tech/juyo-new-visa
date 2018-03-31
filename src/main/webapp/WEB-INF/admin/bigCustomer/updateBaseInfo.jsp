@@ -99,13 +99,13 @@
 									<label>
 										<span>*</span>手机号
 									</label> 
-									<input id="telephone" name="telephone" type="text" onchange="translateZhToEn(this,'telephoneen')" class="form-control input-sm"  tabIndex="4" placeholder=" " value="${obj.applicant.telephone }" />
+									<input id="telephone" name="telephone" type="text" onchange="translateZhToEn(this,'telephoneen','')" class="form-control input-sm"  tabIndex="4" placeholder=" " value="${obj.applicant.telephone }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>邮箱</label> 
-									<input id="email" name="email" type="text" onchange="translateZhToEn(this,'emailen')" class="form-control input-sm" placeholder=" "  tabIndex="5" value="${obj.applicant.email }" />
+									<input id="email" name="email" type="text" onchange="translateZhToEn(this,'emailen','')" class="form-control input-sm" placeholder=" "  tabIndex="5" value="${obj.applicant.email }" />
 								</div>
 							</div>
 						</div>
@@ -117,7 +117,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>公民身份证</label> 
-									<input id="cardId" name="cardId" onchange="translateZhToEn(this,'cardIden')" type="text" class="form-control input-sm"  tabIndex="6" placeholder=" " value="${obj.applicant.cardId }" />
+									<input id="cardId" name="cardId" onchange="translateZhToEn(this,'cardIden','')" type="text" class="form-control input-sm"  tabIndex="6" placeholder=" " value="${obj.applicant.cardId }" />
 								</div>
 							</div>
 						</div>
@@ -127,7 +127,7 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>民族</label> 
-									<input id="nation" name="nation" onchange="translateZhToEn(this,'nationen')" type="text" class="form-control input-sm"  value="${obj.applicant.nation }" />
+									<input id="nation" name="nation" onchange="translateZhToEn(this,'nationen','')" type="text" class="form-control input-sm"  value="${obj.applicant.nation }" />
 								</div>
 							</div>
 						</div>
@@ -137,7 +137,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>住址</label> 
-									<input id="address" name="address" onchange="translateZhToEn(this,'addressen')" type="text" class="form-control input-sm"  tabIndex="9" placeholder=" " value="${obj.applicant.address }" />
+									<input id="address" name="address" onchange="translateZhToEn(this,'addressen','')" type="text" class="form-control input-sm"  tabIndex="9" placeholder=" " value="${obj.applicant.address }" />
 								</div>
 							</div>
 						</div>
@@ -151,13 +151,13 @@
 									<input type="hidden" name="cardcity" id="cardCity" value="${obj.applicant.cardcity }"/>
 									<input type="hidden" id="sameAddress" value=""/>
 									<input class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" /> 
-									<input id="province" name="province" onchange="translateZhToEn(this,'provinceen')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.applicant.province }" />
+									<input id="province" name="province" onchange="translateZhToEn(this,'provinceen','')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.applicant.province }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
 									<label>现居住地址城市</label> 
-									<input id="city" name="city" type="text" onchange="translateZhToEn(this,'cityen')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.city }" />
+									<input id="city" name="city" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.city }" />
 								</div>
 							</div>
 						</div>
@@ -167,7 +167,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>详细地址</label> 
-									<input id="detailedAddress" name="detailedaddress" onchange="translateZhToEn(this,'detailedAddressen')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedaddress }" />
+									<input id="detailedAddress" name="detailedaddress" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedaddress }" />
 								</div>
 							</div>
 						</div>
@@ -189,7 +189,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group marryexplain">
 									<label>说明</label> 
-									<input id="marryexplain" onchange="translateZhToEn(this,'marryexplainen')" name="marryexplain" type="text" class="form-control input-sm" value="${obj.applicant.marryexplain }"/>
+									<input id="marryexplain" onchange="translateZhToEn(this,'marryexplainen','')" name="marryexplain" type="text" class="form-control input-sm" value="${obj.applicant.marryexplain }"/>
 								</div>
 							</div>
 						</div>
@@ -243,7 +243,7 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1 usedNationalityTrue">
 								<div class="form-group" id="">
 									<label>国籍</label> 
-									<input id="nationality" name="nationality" onchange="translateZhToEn(this,'nationalityen')" class="form-control input-sm" value="${obj.applicant.nationality }"/>
+									<input id="nationality" name="nationality" onchange="translateZhToEn(this,'nationalityen','')" class="form-control input-sm" value="${obj.applicant.nationality }"/>
 								</div>
 							</div>
 						</div>
@@ -264,7 +264,7 @@
 							</div>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0 permanentTrue">
 								<div class="form-group">
-									<input id="othercountry" name="othercountry" onchange="translateZhToEn(this,'othercountryen')" type="text" class="form-control input-sm" value="${obj.applicant.othercountry }"/>
+									<input id="othercountry" name="othercountry" onchange="translateZhToEn(this,'othercountryen','')" type="text" class="form-control input-sm" value="${obj.applicant.othercountry }"/>
 								</div>
 							</div>
 						</div>
@@ -273,7 +273,7 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>国家注册号码</label> 
-									<input id="nationalidentificationnumber" onchange="translateZhToEn(this,'nationalidentificationnumberen')" name="nationalidentificationnumber" type="text" class="form-control input-sm" value="${obj.applicant.nationalidentificationnumber }"/>
+									<input id="nationalidentificationnumber" onchange="translateZhToEn(this,'nationalidentificationnumberen','')" name="nationalidentificationnumber" type="text" class="form-control input-sm" value="${obj.applicant.nationalidentificationnumber }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
@@ -288,7 +288,7 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>美国社会安全号码</label> 
-									<input id="socialsecuritynumber" onchange="translateZhToEn(this,'socialsecuritynumberen')" name="socialsecuritynumber" type="text" class="form-control input-sm" value="${obj.applicant.socialsecuritynumber }" />
+									<input id="socialsecuritynumber" onchange="translateZhToEn(this,'socialsecuritynumberen','')" name="socialsecuritynumber" type="text" class="form-control input-sm" value="${obj.applicant.socialsecuritynumber }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
@@ -303,7 +303,7 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>美国纳税人证件号</label> 
-									<input id="taxpayernumber" onchange="translateZhToEn(this,'taxpayernumberen')" name="taxpayernumber" type="text" class="form-control input-sm" value="${obj.applicant.taxpayernumber }" />
+									<input id="taxpayernumber" onchange="translateZhToEn(this,'taxpayernumberen','')" name="taxpayernumber" type="text" class="form-control input-sm" value="${obj.applicant.taxpayernumber }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
@@ -371,7 +371,7 @@
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<label class="EngLabel">
 							Is your Mailing Address the same as your Home Address
-							<input class="nowProvince" type="checkbox" name="addressIssamewithcarden" value="1" />
+							<input class="nowProvinceen" type="checkbox" name="addressIssamewithcarden" value="1" />
 							</label>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="provinceDiv">
@@ -689,34 +689,43 @@
 		function cancelCallBack(status){
 			closeWindow();
 		}
+		//图片上的删除按钮
+		var front = $("#cardFront").val();
+		var back = $("#cardBack").val();
+		var inch = $("#cardInch").val();
+		if(front != ""){
+			$("#uploadFileImg").siblings("i").css("display","block");
+		}else{
+			$("#uploadFileImg").siblings("i").css("display","none");
+		}
+		
+		if(back != ""){
+			$("#uploadFileImgBack").siblings("i").css("display","block");
+		}else{
+			$("#uploadFileImgBack").siblings("i").css("display","none");
+		} 
+		
+		if(inch != ""){
+			$("#uploadFileInchImg").siblings("i").css("display","block");
+		}else{
+			$("#uploadFileInchImg").siblings("i").css("display","none");
+		} 
 		
 		//点击身份证图片上的删除按钮
 		function deleteApplicantFrontImg(){
 			$('#cardFront').val("");
 			$('#imgShow').attr('src', "");
 			$("#uploadFileImg").siblings("i").css("display","none");
-			if(userType == 2){
-				/* $(".front").attr("class", "info-imgUpload front has-error");  */ 
-		        $(".help-blockFront").attr("data-bv-result","INVALID");  
-			}
 		}
 		function deleteApplicantBackImg(){
 			$('#cardBack').val("");
 			$('#imgShowBack').attr('src', "");
 			$("#uploadFileImgBack").siblings("i").css("display","none");
-			if(userType == 2){
-				/* $(".back").attr("class", "info-imgUpload back has-error"); */  
-		        $(".help-blockBack").attr("data-bv-result","INVALID");  
-			}
 		}
 		function deleteApplicantInchImg(){
 			$('#cardInch').val("");
 			$('#imgInch').attr('src', "");
 			$("#uploadFileInchImg").siblings("i").css("display","none");
-			if(userType == 2){
-				/* $(".back").attr("class", "info-imgUpload back has-error"); */  
-		        $(".help-blockBack").attr("data-bv-result","INVALID");  
-			}
 		}
 		
 		

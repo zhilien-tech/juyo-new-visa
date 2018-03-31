@@ -569,6 +569,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffInfo.setTwoinchphoto(updateForm.getTwoinchphoto());
 			staffInfo.setAddress(updateForm.getAddress());
 			staffInfo.setAddressen(updateForm.getAddressen());
+			staffInfo.setAddressIssamewithcard(updateForm.getAddressIssamewithcard());
+			staffInfo.setAddressIssamewithcarden(updateForm.getAddressIssamewithcarden());
 			staffInfo.setBirthday(updateForm.getBirthday());
 			if (!Util.isEmpty(updateForm.getCardprovince())) {
 				staffInfo.setCardprovince(updateForm.getCardprovince());

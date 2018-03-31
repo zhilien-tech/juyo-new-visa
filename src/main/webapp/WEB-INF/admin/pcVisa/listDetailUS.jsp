@@ -1016,6 +1016,7 @@
 			layer.load(1);
 			var staffid = '${obj.staffid}';
 			var orderid = '${obj.orderid}';
+			layer.load(1);
 			$.ajax({
 				url : '/admin/orderUS/sendShareMsg.html',
 				data : {

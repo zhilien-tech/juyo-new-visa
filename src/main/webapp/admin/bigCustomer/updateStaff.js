@@ -18,7 +18,6 @@ $(function(){
 });
 
 function applyValidate(){
-	//身份证图片验证
 	$('#applicantInfo').bootstrapValidator({
 		message : '验证不通过',
 		feedbackIcons : {
@@ -27,31 +26,24 @@ function applyValidate(){
 			validating : 'glyphicon glyphicon-refresh'
 		},
 		fields : {
-
-			firstname : {
-				validators : {
-					notEmpty : {
-						message : '姓不能为空'
-					}
-				}
-			},
-			lastname : {
-				validators : {
-					notEmpty : {
-						message : '名不能为空'
-					}
-				}
-			},
 			telephone : {
+				trigger:"change keyup",
 				validators : {
+					notEmpty : {
+						message : '手机号不能为空'
+					},
 					regexp: {
 						regexp: /^[1][34578][0-9]{9}$/,
 						message: '手机号格式错误'
 					}
 				}
 			},
-			emergencyTelephone : {
+			telephoneen : {
+				trigger:"change keyup",
 				validators : {
+					notEmpty : {
+						message : '手机号不能为空'
+					},
 					regexp: {
 						regexp: /^[1][34578][0-9]{9}$/,
 						message: '手机号格式错误'
@@ -59,20 +51,249 @@ function applyValidate(){
 				}
 			},
 			email : {
+				trigger:"change keyup",
 				validators : {
+					notEmpty : {
+						message : '邮箱不能为空'
+					},
 					regexp: {
 						regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
 						message: '邮箱格式错误'
 					}
 				}
-			}
+			},
+			emailen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '邮箱不能为空'
+					},
+					regexp: {
+						regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+						message: '邮箱格式错误'
+					}
+				}
+			},
+			cardId : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '身份证号不能为空'
+					}
+				}
+			},
+			cardIden : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '身份证号不能为空'
+					}
+				}
+			},
+			nation : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '民族不能为空'
+					}
+				}
+			},
+			nationen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '民族不能为空'
+					}
+				}
+			},
+			address : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '住址不能为空'
+					}
+				}
+			},
+			addressen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '住址不能为空'
+					}
+				}
+			},
+			province : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '省不能为空'
+					}
+				}
+			},
+			provinceen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '省不能为空'
+					}
+				}
+			},
+			city : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '市不能为空'
+					}
+				}
+			},
+			cityen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '市不能为空'
+					}
+				}
+			},
+			detailedaddress : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '详细地址不能为空'
+					}
+				}
+			},
+			detailedaddressen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '详细地址不能为空'
+					}
+				}
+			},
+			marryexplain : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '说明不能为空'
+					}
+				}
+			},
+			marryexplainen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '说明不能为空'
+					}
+				}
+			},
+			otherfirstname : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '姓不能为空'
+					}
+				}
+			},
+			otherfirstnameen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '名不能为空'
+					}
+				}
+			},
+			nationality : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国籍不能为空'
+					}
+				}
+			},
+			nationalityen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国籍不能为空'
+					}
+				}
+			},
+			othercountry : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国家不能为空'
+					}
+				}
+			},
+			othercountryen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国家不能为空'
+					}
+				}
+			},
+			/*nationalidentificationnumber : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '注册码不能为空'
+					}
+				}
+			},
+			nationalidentificationnumberen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '注册码不能为空'
+					}
+				}
+			},
+			socialsecuritynumber : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '安全码不能为空'
+					}
+				}
+			},
+			socialsecuritynumberen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '安全码不能为空'
+					}
+				}
+			},
+			taxpayernumber : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '纳税人证件号不能为空'
+					}
+				}
+			},
+			taxpayernumberen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '纳税人证件号不能为空'
+					}
+				}
+			},*/
 		}
 	});
 	$('#applicantInfo').bootstrapValidator('validate');
 }
 
-function translateZhToEn(from, to){
-	var toval = $(from).val();
+function translateZhToEn(from, to, param){
+	var toval = "";
+	if(param != ""){
+		toval = param;
+	}else{
+		toval = $(from).val();
+	}
 	$.ajax({
 		url : BASE_PATH+'/admin/translate/translate',
 		data : {
@@ -84,7 +305,7 @@ function translateZhToEn(from, to){
 		type : 'POST',
 		dataType : 'json',
 		success : function(data) {
-			$("#" + to).val(data);
+			$("#" + to).val(data).change();
 		}
 	});
 	/*$.getJSON("/admin/translate/google", {q: $(from).val()}, function (result) {
@@ -253,13 +474,20 @@ $('#uploadFileImg').change(function() {
 					$('#address').val(obj.address).change();
 					$('#nation').val(obj.nationality).change();
 					$('#cardId').val(obj.num).change();
-					var str="";  
+					var str=""; 
+					var stren="";
 					//是否同身份证相同
 					$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
 						str=$(this).val();     
 					});     
 					if(str == 1){//相同
-						searchByCard();
+						searchByCard(1);
+					}
+					$("input:checkbox[name='addressIssamewithcarden']:checked").each(function(){     
+						stren=$(this).val();     
+					});     
+					if(stren == 1){//相同
+						searchByCard(2);
 					}
 					
 					$('#cardProvince').val(obj.province).change();
@@ -517,7 +745,7 @@ $(".permanentUS2").click(function(){
 });
 
 //checkbox居住地与身份证相同
-$(".nowProvince").change(function(){
+/*$(".nowProvince").change(function(){
 	var str="";  
 	//是否同身份证相同
 	$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
@@ -530,14 +758,35 @@ $(".nowProvince").change(function(){
 		$("#city").val("").change();
 		$("#detailedAddress").val("").change();
 	}
+});*/
+//居住地与身份证相同
+$(".nowProvince").click(function(){
+	if(this.checked){
+		$(".nowProvinceen").prop("checked",true);
+		searchByCard(1);
+	}else{
+		$(".nowProvinceen").prop("checked",false);
+		$("#province").val("").change();
+		$("#city").val("").change();
+		$("#detailedAddress").val("").change();
+	}
+});
+$(".nowProvinceen").click(function(){
+	if(this.checked){
+		searchByCard(2);
+	}else{
+		$("#provinceen").val("").change();
+		$("#cityen").val("").change();
+		$("#detailedAddressen").val("").change();
+	}
 });
 //国家注册码
 $(".isidentificationnumberapply").click(function(){
 	if(this.checked){
-		$("#nationalidentificationnumber").val("");
+		$("#nationalidentificationnumber").val("").change();
 		$("#nationalidentificationnumber").attr("disabled",true);
 		$(".isidentificationnumberapplyen").prop("checked",true);
-		$("#nationalidentificationnumberen").val("");
+		$("#nationalidentificationnumberen").val("").change();
 		$("#nationalidentificationnumberen").attr("disabled",true);
 	}else{
 		$("#nationalidentificationnumber").attr("disabled",false);
@@ -547,7 +796,7 @@ $(".isidentificationnumberapply").click(function(){
 });
 $(".isidentificationnumberapplyen").click(function(){
 	if(this.checked){
-		$("#nationalidentificationnumberen").val("");
+		$("#nationalidentificationnumberen").val("").change();
 		$("#nationalidentificationnumberen").attr("disabled",true);
 	}else{
 		$("#nationalidentificationnumberen").attr("disabled",false);
@@ -556,7 +805,7 @@ $(".isidentificationnumberapplyen").click(function(){
 //美国社会安全码
 $(".issecuritynumberapplyen").click(function(){
 	if(this.checked){
-		$("#socialsecuritynumberen").val("");
+		$("#socialsecuritynumberen").val("").change();
 		$("#socialsecuritynumberen").attr("disabled",true);
 	}else{
 		$("#socialsecuritynumberen").attr("disabled",false);
@@ -564,10 +813,10 @@ $(".issecuritynumberapplyen").click(function(){
 });
 $(".issecuritynumberapply").click(function(){
 	if(this.checked){
-		$("#socialsecuritynumber").val("");
+		$("#socialsecuritynumber").val("").change();
 		$("#socialsecuritynumber").attr("disabled",true);
 		$(".issecuritynumberapplyen").prop("checked",true);
-		$("#socialsecuritynumberen").val("");
+		$("#socialsecuritynumberen").val("").change();
 		$("#socialsecuritynumberen").attr("disabled",true);
 	}else{
 		$("#socialsecuritynumber").attr("disabled",false);
@@ -578,7 +827,7 @@ $(".issecuritynumberapply").click(function(){
 //美国纳税人证件号
 $(".istaxpayernumberapplyen").click(function(){
 	if(this.checked){
-		$("#taxpayernumberen").val("");
+		$("#taxpayernumberen").val("").change();
 		$("#taxpayernumberen").attr("disabled",true);
 	}else{
 		$("#taxpayernumberen").attr("disabled",false);
@@ -586,10 +835,10 @@ $(".istaxpayernumberapplyen").click(function(){
 });
 $(".istaxpayernumberapply").click(function(){
 	if(this.checked){
-		$("#taxpayernumber").val("");
+		$("#taxpayernumber").val("").change();
 		$("#taxpayernumber").attr("disabled",true);
 		$(".istaxpayernumberapplyen").prop("checked",true);
-		$("#taxpayernumberen").val("");
+		$("#taxpayernumberen").val("").change();
 		$("#taxpayernumberen").attr("disabled",true);
 	}else{
 		$("#taxpayernumber").attr("disabled",false);
@@ -598,7 +847,7 @@ $(".istaxpayernumberapply").click(function(){
 	}
 });
 
-function searchByCard(){
+function searchByCard(status){
 
 	var cardId = $("#cardId").val();
 	layer.load(1);
@@ -611,10 +860,18 @@ function searchByCard(){
 		success :function(data) {
 			console.log(JSON.stringify(data));
 			layer.closeAll('loading');
-			$("#detailedAddress").val($("#address").val()).change();
-			if(data != null){
-				$("#province").val(data.province).change();
-				$("#city").val(data.city).change();
+			if(status == 1){
+				$("#detailedAddress").val($("#address").val()).change();
+				if(data != null){
+					$("#province").val(data.province).change();
+					$("#city").val(data.city).change();
+				}
+			}else{
+				translateZhToEn("#address","detailedAddressen","");
+				if(data != null){
+					translateZhToEn("#province","provinceen",data.province);
+					translateZhToEn("#city","cityen",data.city);
+				}
 			}
 		}
 	});
@@ -673,7 +930,7 @@ function saveApplicant(status){
 	bootstrapValidator.validate();
 	if (bootstrapValidator.isValid()){
 
-		var str="";
+		/*var str="";
 		var applicantInfo;
 		$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
 			str=$(this).val();     
@@ -682,7 +939,8 @@ function saveApplicant(status){
 			applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
 		}else{
 			applicantInfo = $("#applicantInfo").serialize();
-		}
+		}*/
+		applicantInfo = $("#applicantInfo").serialize();
 		applicantInfo.id = staffId;
 
 		if(status == 2){
@@ -713,7 +971,7 @@ function saveApplicant(status){
 				url: BASE_PATH + '/admin/bigCustomer/updateStaffInfo.html',
 				success :function(data) {
 					if(data>0){
-						parent.successCallback(2);
+						//parent.successCallback(2);
 						closeWindow();
 					}
 				}
