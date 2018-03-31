@@ -5,6 +5,9 @@
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 }
+img[src=""] {
+	opacity:0;
+}
 .head {
 	width: 100%;
 	height: 50px;
@@ -139,4 +142,19 @@
 	border: 1px solid rgba(121,121,121,1);
 	text-align: center;
 	margin-top: 2%;
+}
+.delete {
+	background-image:url(../img/delete.png);
+	height:32px;
+	width:30px;
+	position:absolute;
+	top:3px;
+	background-color:#FFF;
+	right:8px;
+	background-repeat:no-repeat;
+	background-position:5px 5px;
+	border-radius:4px;
+	cursor:pointer;
+	border:1px solid rgb(209,213,221);
+	display:block;
 }

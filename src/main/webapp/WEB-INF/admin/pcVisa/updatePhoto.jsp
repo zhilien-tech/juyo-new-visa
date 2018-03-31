@@ -36,9 +36,10 @@
 			<div class="samplePhoto">
 					<img src="${base}/references/public/dist/newvisacss/img/picture.png" />
 			</div>
-			<div class="uploadPhoto">
+			<div id="uploadPhoto" class="uploadPhoto" >
 				<div>上传</div>
 				<img id="twonichphoto" class="loadImg" src="" width="100%" height="100%" />
+				<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 				<%-- <c:if test="${not empty obj.twoinchphoto }">
 					<img src="${obj.twoinchphoto }" class="loadImg" width="100%"
 						height="100%" />
@@ -249,6 +250,7 @@
 				if (data != null) {
 					if(13==data.credentialEntity.type){
 						$("#twonichphoto").attr("src", data.credentialEntity.url);
+						$("#uploadPhoto").siblings("i").show();
 					}
 					if(1==data.credentialEntity.type){
 						$("#huhzao").attr("src", data.credentialEntity.url);
@@ -273,6 +275,14 @@
 	//保存跳转下一页
 	function nextWindow(){
 		window.location.href='';
+	}
+	
+	/* 删除二寸免冠照 */
+	function deleteApplicantFrontImg(){
+		
+		$('#twonichphoto').attr('src', "");
+		$("#uploadPhoto .delete").hide();
+		/* $("#uploadPhoto").siblings("i").css("display","none"); */
 	}
 </script>
 </html>
