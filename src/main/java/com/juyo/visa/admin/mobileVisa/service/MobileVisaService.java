@@ -9,13 +9,9 @@ package com.juyo.visa.admin.mobileVisa.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.nutz.dao.Cnd;
-import org.nutz.dao.Sqls;
-import org.nutz.dao.entity.Record;
-import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.springframework.web.socket.TextMessage;
@@ -116,12 +112,9 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	 */
 	public Object getImageInfoBytypeAndStaffid(Integer staffid, Integer type) {
 		//获取该用户的资料类型
-		String sqlStr = sqlManager.get("t_app_paperwork_US_info");
-		Sql applysql = Sqls.create(sqlStr);
-		Cnd cnd = Cnd.NEW();
-		cnd.and("staffid", "=", staffid).and("type", "=", type);
-		List<Record> infoList = dbDao.query(applysql, cnd, null);
-		if (!Util.isEmpty(infoList)) {
+		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", type));
+		if (!Util.isEmpty(credentialEntity)) {
 			return type;
 		} else {
 			return 0;

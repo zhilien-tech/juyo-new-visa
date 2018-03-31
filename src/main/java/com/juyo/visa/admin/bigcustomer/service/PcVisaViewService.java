@@ -312,7 +312,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 				String sqlStr = sqlManager.get("t_app_paperwork_US_info");
 				Sql applysql = Sqls.create(sqlStr);
 				Cnd cnd = Cnd.NEW();
-				cnd.and("staffid", "=", orderUsEntity.getStaffid());
+				cnd.where("staffid", "=", orderUsEntity.getStaffid());
 				List<Record> infoList = dbDao.query(applysql, cnd, null);
 				for (Record appRecord : infoList) {
 					int type = appRecord.getInt("type");
