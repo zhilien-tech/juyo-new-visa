@@ -160,7 +160,7 @@
 										<label>抵达日期</label>
 										<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
 									</div>
-									<div class="groupInputInfo stopDate goUS_Country">
+									<div class="groupInputInfo stopDate">
 										<label>停留时间</label>
 										<input id="staydays" name="staydays" type="text" />
 										<select id="dateunit" name="dateunit">

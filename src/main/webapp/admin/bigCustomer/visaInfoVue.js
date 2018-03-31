@@ -64,7 +64,6 @@ function save(){
 	//同伴信息
 	var companionList = [];
 	$('.teamnamefalseDiv').each(function(i){
-		//临时变量判断是否为空
 		var companionLength = '';
 		var companion = {};
 		var firstname = $(this).find('[name=firstname]').val();
@@ -74,7 +73,6 @@ function save(){
 		companionLength += firstname;
 		companionLength += lastname;
 		if (relationship != 0) {
-			alert(relationship);
 			companionLength += relationship;
 		}else{
 			companionLength += '';
@@ -90,6 +88,31 @@ function save(){
 	visadata.companionList = companionList;
 	
 	//去过美国信息
+	var gousList = [];
+	$('.goUS_Country').each(function(i){
+		var gousLength = '';
+		var gous = {};
+		
+		var arrivedate = $(this).find('[name=arrivedate]').val();
+		var staydays = $(this).find('[name=staydays]').val();
+		var dateunit = $(this).find('[name=dateunit]').val();
+		
+		gousLength += arrivedate;
+		gousLength += staydays;
+		if (dateunit != 0) {
+			alert();
+			gousLength += dateunit;
+		}else{
+			gousLength += '';
+		}
+		if(gousLength.length > 0){
+			gous.arrivedate = arrivedate;
+			gous.staydays = staydays;
+			gous.dateunit = dateunit;
+			gousList.push(gous);
+		}
+	});
+	visadata.gousList = gousList;
 	
 	alert(JSON.stringify(visadata));
 	
