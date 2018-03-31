@@ -110,6 +110,7 @@
 	padding:6px 15px;
 	margin-right:10px;
 	border-radius:4px;
+	cursor:pointer;
 }
 .pictures {
 	height: 183px;
