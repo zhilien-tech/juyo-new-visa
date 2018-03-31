@@ -53,8 +53,8 @@ public class MobileVisaModule {
 	 */
 	@At
 	@GET
-	public Object getImageInfoBytypeAndStaffid(@Param("staffid") Integer staffid) {
-		return mobileVisaService.getImageInfoBytypeAndStaffid(staffid);
+	public Object getImageInfoBytypeAndStaffid(@Param("staffid") Integer staffid, @Param("type") Integer type) {
+		return mobileVisaService.getImageInfoBytypeAndStaffid(staffid, type);
 	}
 
 	/*

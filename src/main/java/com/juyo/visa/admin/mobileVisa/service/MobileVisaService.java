@@ -104,7 +104,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	/*
 	 * 图片是否存在
 	 */
-	public Object getImageInfoBytypeAndStaffid(Integer staffid) {
+	public Object getImageInfoBytypeAndStaffid(Integer staffid, Integer type) {
 		//获取该用户的资料类型
 		String sqlStr = sqlManager.get("t_app_paperwork_US_info");
 		Sql applysql = Sqls.create(sqlStr);

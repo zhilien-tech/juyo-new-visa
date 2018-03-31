@@ -446,18 +446,11 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object updatePhoto(Integer staffid, HttpServletRequest request, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
-		//获取用户基本信息
-		TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
-				Cnd.where("id", "=", staffid));
-		String firstname = basicinfoEntity.getFirstname();
-		String lastname = basicinfoEntity.getLastname();
-		String name = firstname + lastname;
 		//生成二维码
 		String id = session.getId();
 		String serverName = request.getServerName();
 		int serverPort = request.getServerPort();
-		String content = "http://" + serverName + ":" + serverPort + "/appmobileus/USFilming.html?&staffid=" + staffid
-				+ "&name=" + name;
+		String content = "http://" + serverName + ":" + serverPort + "/appmobileus/USFilming.html?&staffid=" + staffid;
 		String encodeQrCode = qrCodeService.encodeQrCode(request, content);
 		result.put("encodeQrCode", encodeQrCode);
 		//获取用户基本信息
