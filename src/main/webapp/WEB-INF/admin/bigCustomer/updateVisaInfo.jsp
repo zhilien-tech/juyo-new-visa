@@ -189,7 +189,12 @@
 												<div class="groupcheckBoxInfo driverMain">
 													<label>驾照号</label>
 													<input id="driverlicensenumber" value="${driver.driverlicensenumber }" name="driverlicensenumber" type="text" >
-													<input id="isknowdrivernumber" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" type="checkbox"/>
+													<c:if test="${driver.isknowdrivernumber == 1}">
+														<input id="isknowdrivernumber" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" checked="checked" type="checkbox"/>
+													</c:if>
+													<c:if test="${driver.isknowdrivernumber != 1}">
+														<input id="isknowdrivernumber" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" type="checkbox"/>
+													</c:if>
 												</div>
 												<div class="groupSelectInfo driverR">
 													<label>哪个州的驾照</label>

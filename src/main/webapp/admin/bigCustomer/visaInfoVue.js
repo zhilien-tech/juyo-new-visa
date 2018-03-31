@@ -100,7 +100,6 @@ function save(){
 		gousLength += arrivedate;
 		gousLength += staydays;
 		if (dateunit != 0) {
-			alert();
 			gousLength += dateunit;
 		}else{
 			gousLength += '';
@@ -114,7 +113,40 @@ function save(){
 	});
 	visadata.gousList = gousList;
 	
-	alert(JSON.stringify(visadata));
+	//美国驾照信息
+	var driverList = [];
+	$('.goUS_drivers').each(function(i){
+		var driverLength = '';
+		var driver = {};
+		
+		var drivernumber = $(this).find('[name=driverlicensenumber]').val();
+		var isknownumber = $(this).find('[name=isknowdrivernumber]').is(':checked');
+		if(isknownumber){
+			isknownumber = 1;
+		}else{
+			isknownumber = 0;
+		}
+		var stateofdriver = $(this).find('[name=witchstateofdriver]').val();
+		driverLength += drivernumber;
+		if(stateofdriver != 0){
+			driverLength += stateofdriver;
+		}else{
+			driverLength += '';
+		}
+		
+		if(driverLength.length >0){
+			driver.driverlicensenumber = drivernumber;
+			driver.isknowdrivernumber = isknownumber;
+			driver.witchstateofdriver = stateofdriver;
+			driverList.push(driver);
+		}
+	});
+	visadata.driverList = driverList;
+	
+	
+	
+	
+	alert(JSON.stringify(driverList));
 	
 }
 	
