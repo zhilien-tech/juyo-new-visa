@@ -145,8 +145,43 @@ function save(){
 	
 	
 	
+	//直系亲属信息 
+	var directList = [];
+	$('.directRelativesYes').each(function(i){
+		var directLength = '';
+		var direct = {};
+		
+		var relativesfirstname = $(this).find('[name=relativesfirstname]').val();
+		var relativeslastname = $(this).find('[name=relativeslastname]').val();
+		var relationship = $(this).find('[name=relationship]').val();
+		var relativesstatus = $(this).find('[name=relativesstatus]').val();
+		directLength += relativesfirstname;
+		directLength += relativeslastname;
+		if(relationship != 0){
+			directLength += relationship;
+		}else{
+			directLength += '';
+		}
+		if(relativesstatus != 0){
+			directLength += relativesstatus;
+		}else{
+			directLength += '';
+		}
+		
+		if(directLength.length > 0){
+			direct.relativesfirstname = relativesfirstname;
+			direct.relativeslastname = relativeslastname;
+			direct.relationship = relationship;
+			direct.relativesstatus = relativesstatus;
+			directList.push(direct)
+		}
+	});
+	visadata.directList = directList;
 	
-	alert(JSON.stringify(driverList));
+	
+	
+	
+	alert(JSON.stringify(directRelativesList));
 	
 }
 	

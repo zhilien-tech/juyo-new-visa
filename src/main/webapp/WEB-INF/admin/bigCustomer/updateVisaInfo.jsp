@@ -529,7 +529,7 @@
 								</div>
 							</c:forEach>
 						</c:if>
-						<c:if test="empty obj.zhiFamilyList">
+						<c:if test="${empty obj.zhiFamilyList}">
 							<div class="directRelativesYes">
 								<div class="floatLeft groupInputInfo">
 									<label>姓</label>
