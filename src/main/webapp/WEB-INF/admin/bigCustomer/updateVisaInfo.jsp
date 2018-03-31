@@ -182,50 +182,50 @@
 								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" class="license" value="1" />是
 								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" class="license" value="2" checked />否
 							</div>
-							<div>
-								<c:if test="${!empty obj.driverList }">
-									<c:forEach var="driver" items="${obj.driverList }">
+							<div class="driverInfo elementHide">
+									<c:if test="${!empty obj.driverList }">
+										<c:forEach var="driver" items="${obj.driverList }">
+											<div class="goUS_drivers">
+												<div class="groupcheckBoxInfo driverMain">
+													<label>驾照号</label>
+													<input id="driverlicensenumber" value="${driver.driverlicensenumber }" name="driverlicensenumber" type="text" >
+													<input id="isknowdrivernumber" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" type="checkbox"/>
+												</div>
+												<div class="groupSelectInfo driverR">
+													<label>哪个州的驾照</label>
+													<select id="witchstateofdriver" name="witchstateofdriver">
+														<option value="0">请选择</option>
+														<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
+															<c:if test="${driver.witchstateofdriver != map.key}">
+																<option value="${map.key }">${map.value }</option>
+															</c:if>
+															<c:if test="${driver.witchstateofdriver == map.key}">
+																<option value="${map.key }" selected="selected">${map.value }</option>
+															</c:if>
+														</c:forEach>
+													</select>
+												</div>
+											</div>
+										</c:forEach>
+									</c:if>
+									<c:if test="${empty obj.driverList }">
 										<div class="goUS_drivers">
 											<div class="groupcheckBoxInfo driverMain">
 												<label>驾照号</label>
-												<input id="driverlicensenumber" value="${driver.driverlicensenumber }" name="driverlicensenumber" type="text" >
-												<input id="isknowdrivernumber" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" type="checkbox"/>
+												<input id="driverlicensenumber" name="driverlicensenumber" type="text" >
+												<input id="isknowdrivernumber" name="isknowdrivernumber" type="checkbox"/>
 											</div>
 											<div class="groupSelectInfo driverR">
 												<label>哪个州的驾照</label>
 												<select id="witchstateofdriver" name="witchstateofdriver">
 													<option value="0">请选择</option>
 													<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
-														<c:if test="${driver.witchstateofdriver != map.key}">
-															<option value="${map.key }">${map.value }</option>
-														</c:if>
-														<c:if test="${driver.witchstateofdriver == map.key}">
-															<option value="${map.key }" selected="selected">${map.value }</option>
-														</c:if>
+														<option value="${map.key }">${map.value }</option>
 													</c:forEach>
 												</select>
 											</div>
 										</div>
-									</c:forEach>
-								</c:if>
-								<c:if test="${empty obj.driverList }">
-									<div class="goUS_drivers">
-										<div class="groupcheckBoxInfo driverMain">
-											<label>驾照号</label>
-											<input id="driverlicensenumber" name="driverlicensenumber" type="text" >
-											<input id="isknowdrivernumber" name="isknowdrivernumber" type="checkbox"/>
-										</div>
-										<div class="groupSelectInfo driverR">
-											<label>哪个州的驾照</label>
-											<select id="witchstateofdriver" name="witchstateofdriver">
-												<option value="0">请选择</option>
-												<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
-													<option value="${map.key }">${map.value }</option>
-												</c:forEach>
-											</select>
-										</div>
-									</div>
-								</c:if>
+									</c:if>
 								
 								<!-- <div class="btnGroup driverInfo">
 									<a class="save">添加</a>
@@ -241,7 +241,7 @@
 			<!--是否有美国签证-->
 			<div class="visaUSMain">
 				<div>
-					<div class="groupRadioInfo">
+					<div class="groupRadioInfo" style="clear: both;">
 						<label>是否有美国签证</label>
 						<input type="radio" name="isissuedvisa" v-model="visaInfo.previUSTripInfo.isissuedvisa" class="visaUS" value="1" />是
 						<input type="radio" name="isissuedvisa" v-model="visaInfo.previUSTripInfo.isissuedvisa" class="visaUS" value="2" checked />否

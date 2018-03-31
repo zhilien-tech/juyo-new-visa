@@ -253,7 +253,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("familyInfo", familyInfo);
 
 		//工作/教育/培训信息 
-		String sqlStrw = sqlManager.get("bigCustomer_order_applicant_list");
+		String sqlStrw = sqlManager.get("pcVisa_word_education_training_list");
 		Sql sqlw = Sqls.create(sqlStrw);
 		sqlw.setParam("staffid", staffId);
 		Record workEducationInfo = dbDao.fetch(sqlw);
