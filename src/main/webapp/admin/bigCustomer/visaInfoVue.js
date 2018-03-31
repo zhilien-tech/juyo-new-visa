@@ -51,9 +51,50 @@ new Vue({
 	}
 });
 
+//签证信息页保存
 function save(){
-	alert(JSON.stringify(visaInfo.travelCompanionInfo));
+	var visadata = {};
+	
+	visadata.travelCompanionInfo = visaInfo.travelCompanionInfo;
+	visadata.previUSTripInfo = visaInfo.previUSTripInfo;
+	visadata.contactPointInfo = visaInfo.contactPointInfo;
+	visadata.familyInfo = visaInfo.familyInfo;
+	visadata.workEducationInfo = visaInfo.workEducationInfo;
+	
+	//同伴信息
+	var companionList = [];
+	$('.teamnamefalseDiv').each(function(i){
+		//临时变量判断是否为空
+		var companionLength = '';
+		var companion = {};
+		var firstname = $(this).find('[name=firstname]').val();
+		var lastname = $(this).find('[name=lastname]').val();
+		var relationship = $(this).find('[name=relationship]').val();
+		
+		companionLength += firstname;
+		companionLength += lastname;
+		if (relationship != 0) {
+			alert(relationship);
+			companionLength += relationship;
+		}else{
+			companionLength += '';
+		}
+		
+		if(companionLength.length > 0){
+			companion.firstname = firstname;
+			companion.lastname = lastname;
+			companion.relationship = relationship;
+			companionList.push(companion);
+		}
+	});
+	visadata.companionList = companionList;
+	
+	//去过美国信息
+	
+	alert(JSON.stringify(visadata));
+	
 }
+	
 
 function openYesOrNoPage(){
 	//是否与其他人一起旅游
