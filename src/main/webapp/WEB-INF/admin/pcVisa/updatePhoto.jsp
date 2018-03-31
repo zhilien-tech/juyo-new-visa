@@ -15,6 +15,7 @@
 	<div class="head">
 		<span>拍摄资料</span>
 		<input id="staffid" type="hidden" value="${obj.basicInfo.id }">
+		<input id="passportId" type="hidden" value="${obj.passportId }">
 		<div class="btnGroup">
 			<a class="btnSave" onclick="nextWindow()">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
 		</div>
@@ -229,10 +230,72 @@
 	$(function() {
 		var staffid = $("#staffid").val();
 		twonichphoto(staffid,13);
-		twonichphoto(staffid,1);
-		twonichphoto(staffid,2);
-		twonichphoto(staffid,3);
+		$(".uploadPhoto").click(function(){
+			$(".uploadFileImg").click();
+			$(".uploadFileImg").change(function(){
+				layer.load(1,{
+					shade : "#000"
+				});
+				var that = this;
+	            lrz(this.files[0]).then(function (rst) {
+	                /* $('.bacimg2').attr('src',rst.base64);*/
+	                $('#upload').hide(); 
+	                // 处理成功会执行
+	                sourceSize = (that.files[0].size / 1024).toFixed(2);
+	                resultSize = (rst.fileLen / 1024).toFixed(2);
+	                scale = parseInt(100 - (resultSize / sourceSize * 100));
+	                rst.formData.append('image',rst.file);
+//	                alert(rst);
+//	                alert(JSON.stringify(rst.formData));
+//	                alert(rst.file);
+//	                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
+					console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+	                uploadPositive(rst,rst.formData,staffid); 
+	            }).catch(function (err) {
+	                console.log(err);
+	            });
+			});
+		})
 	});
+	
+	
+	//单张图片上传
+	function uploadPositive(rst, formData,staffid){
+				if(!formData){
+					formData = new FormData();
+				}
+		        formData.append("image", rst.file); 
+		        formData.append("type", 13); 
+		        formData.append("staffid", staffid); 
+		        console.log('------------------------------');
+		        console.log(formData); 
+		        console.log(rst.file);
+		        /* var layerIndex = layer.load(1, {
+					shade : "#000"
+				}); */
+		        $.ajax({
+					type : "POST",//提交类型  
+					//dataType : "json",//返回结果格式  
+					url : '/admin/mobileVisa/uploadImage.html',//请求地址  
+					async : true,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//console.log('=====成功========');
+						//关闭加载层
+						layer.closeAll('loading');
+						if (obj!=null) {
+							location.reload();
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						//console.log('-----------------失败-------------');
+						layer.closeAll('loading');
+					}
+				}); // end of ajaxSubmit
+			}
 	//2寸照片回显
 	function twonichphoto(staffid, type) {
 		$.ajax({
@@ -247,17 +310,8 @@
 				/* _self.passportdata = data.passportdata; */
 				console.log(data);
 				if (data != null) {
-					if(13==data.credentialEntity.type){
-						$("#twonichphoto").attr("src", data.credentialEntity.url);
-					}
-					if(1==data.credentialEntity.type){
-						$("#huhzao").attr("src", data.credentialEntity.url);
-					}
-					if(2==data.credentialEntity.type){
-						$("#oldhuzhao").attr("src", data.credentialEntity.url);
-					}
-					if(3==data.credentialEntity.type){
-						$("#card").attr("src", data.credentialEntity.url);
+					if(13==data.type){
+						$("#twonichphoto").attr("src", data.url);
 					}
 				}
 			}
@@ -272,7 +326,9 @@
 	
 	//保存跳转下一页
 	function nextWindow(){
-		window.location.href='';
+		var staffid = $("#staffid").val();
+		var passportId = $("#passportId").val();
+		window.location.href='/admin/bigCustomer/updatePassportInfo.html?passportId='+passportId;
 	}
 </script>
 </html>

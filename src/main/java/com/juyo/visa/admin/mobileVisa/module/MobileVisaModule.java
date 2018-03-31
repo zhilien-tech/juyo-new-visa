@@ -15,7 +15,6 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
-import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.upload.UploadAdaptor;
@@ -49,10 +48,19 @@ public class MobileVisaModule {
 	}
 
 	/*
+	 * 获取用户基本信息
+	 */
+	@At
+	@POST
+	public Object getBasicInfoByStaffid(@Param("staffid") Integer staffid) {
+		return mobileVisaService.getBasicInfoByStaffid(staffid);
+	}
+
+	/*
 	 * 获取图片信息是否存在
 	 */
 	@At
-	@GET
+	@POST
 	public Object getImageInfoBytypeAndStaffid(@Param("staffid") Integer staffid, @Param("type") Integer type) {
 		return mobileVisaService.getImageInfoBytypeAndStaffid(staffid, type);
 	}

@@ -25,6 +25,7 @@ import com.juyo.visa.admin.mobileVisa.form.MobileVisaBasicInfoForm;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.util.SpringContextUtil;
+import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.uxuexi.core.common.util.JsonUtil;
@@ -60,13 +61,19 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	 * 上传单张图片
 	 */
 	public Object updateImage(String url, Integer staffid, Integer type) {
-		Map<String, Object> result = Maps.newHashMap();
+		if (13 == type) {
+			//获取用户基本信息
+			TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+					Cnd.where("id", "=", staffid));
+			basicinfoEntity.setTwoinchphoto(url);
+			dbDao.update(basicinfoEntity);
+
+		}
 		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type));
 		if (!Util.isEmpty(credentialEntity)) {
 			credentialEntity.setUrl(url);
 			credentialEntity.setUpdatetime(new Date());
-			result.put("url", url);
 			int update = dbDao.update(credentialEntity);
 		} else {
 			credentialEntity = new TAppStaffCredentialsEntity();
@@ -75,7 +82,6 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 			credentialEntity.setUpdatetime(new Date());
 			credentialEntity.setType(type);
 			credentialEntity.setUrl(url);
-			result.put("url", url);
 			dbDao.insert(credentialEntity);
 		}
 		try {
@@ -84,7 +90,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return result;
+		return 1;
 
 	}
 
@@ -97,7 +103,11 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		Integer type = mobileVisaBasicInfoForm.getType();
 		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type));
-		result.put("credentialEntity", credentialEntity);
+		if (!Util.isEmpty(credentialEntity)) {
+
+			result.put("url", credentialEntity.getUrl());
+			result.put("type", credentialEntity.getType());
+		}
 		return result;
 	}
 
@@ -109,16 +119,22 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		String sqlStr = sqlManager.get("t_app_paperwork_US_info");
 		Sql applysql = Sqls.create(sqlStr);
 		Cnd cnd = Cnd.NEW();
-		cnd.and("staffid", "=", staffid);
+		cnd.and("staffid", "=", staffid).and("type", "=", type);
 		List<Record> infoList = dbDao.query(applysql, cnd, null);
-		for (Record appRecord : infoList) {
-			if (!Util.isEmpty(appRecord.getInt("type"))) {
-				appRecord.set("type", "已上传");
-			} else {
-				appRecord.set("type", "待上传");
-			}
+		if (!Util.isEmpty(infoList)) {
+			return type;
+		} else {
+			return 0;
 		}
-		return infoList;
+
+	}
+
+	/*
+	 * 获取用户基本信息
+	 */
+	public Object getBasicInfoByStaffid(Integer staffid) {
+		TAppStaffBasicinfoEntity entity = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffid));
+		return entity;
 
 	}
 }
