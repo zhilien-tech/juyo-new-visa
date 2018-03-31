@@ -637,13 +637,13 @@
 					<div class="paddingRight groupcheckBoxInfo">
 						<label>州/省</label>
 						<input name="province" type="text" />
-						<input id="isKnowOrtherSpouseProvince" name="isprovinceapply" type="checkbox" />
+						<input id="isprovinceapply" name="isprovinceapply" type="checkbox" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>邮政编码</label>
 						<input name="zipcode" type="text" />
-						<input id="isKonwOrtherZipCode" name="iszipcodeapply" type="checkbox" />
+						<input id="iszipcodeapply" name="iszipcodeapply" type="checkbox" />
 					</div>
 					<div class="paddingRight groupSelectInfo">
 						<label>国家/地区</label>
@@ -780,7 +780,7 @@
 										<div class="paddingRight groupcheckBoxInfo">
 											<label>邮政编码</label>
 											<input name="employerzipcode" value="${beforeWork.employerzipcode }" type="text" />
-											<input name="isemployerzipcodeapply" value="${beforeWork.isemployerzipcodeapply }" type="checkbox" />
+											<input id="isKonwOrtherZipCode" name="isemployerzipcodeapply" value="${beforeWork.isemployerzipcodeapply }" type="checkbox" />
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft groupSelectInfo">
