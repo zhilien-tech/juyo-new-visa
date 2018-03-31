@@ -6,7 +6,7 @@ new Vue({
 		applicantInfo : ""
 	},
 	methods : {
-		visa : function(id){
+		/*visa : function(id){
 			layer.open({
 				type: 2,
 				title: false,
@@ -18,7 +18,7 @@ new Vue({
 				area: ['900px', '80%'],
 				content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+id
 			});
-		},
+		},*/
 		//修改申请人拍摄资料信息
 		updatePhoto : function(id){
 			save();
