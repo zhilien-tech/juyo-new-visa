@@ -311,23 +311,8 @@
 				/* _self.passportdata = data.passportdata; */
 				console.log(data);
 				if (data != null) {
-<<<<<<< HEAD
 					if(13==data.type){
 						$("#twonichphoto").attr("src", data.url);
-=======
-					if(13==data.credentialEntity.type){
-						$("#twonichphoto").attr("src", data.credentialEntity.url);
-						$("#uploadPhoto").siblings("i").show();
-					}
-					if(1==data.credentialEntity.type){
-						$("#huhzao").attr("src", data.credentialEntity.url);
-					}
-					if(2==data.credentialEntity.type){
-						$("#oldhuzhao").attr("src", data.credentialEntity.url);
-					}
-					if(3==data.credentialEntity.type){
-						$("#card").attr("src", data.credentialEntity.url);
->>>>>>> refs/remotes/origin/dev
 					}
 				}
 			}

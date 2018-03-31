@@ -13,8 +13,9 @@
 	<body>
 		<header>
 			<div class="filming">
+			<a onclick="returnPage()">
 				<i></i>
-				<span>旧护照</span>	
+				<span>旧护照</span></a>	
 			</div>
 		</header>
 		<section>
@@ -26,7 +27,7 @@
 			<div class="passportShoot">
 				<div class="uploadPassport">
 					<p>上传旧护照</p>
-					<img src="img/hz.jpg" class="uploadImgReady" />
+					<img src="" class="uploadImgReady" />
 				</div>
 				<input type="file" class="passportImg" id="passportImg" name="passportImg" />
 			</div>
@@ -72,13 +73,27 @@
 			        });
 			    }
 			});
+			function getImage(staffid){
+				$.ajax({
+					url : "/admin/mobileVisa/getInfoByType.html",
+					data : {
+						type : 2,
+						staffid : staffid,
+					},
+					dataType : "json",
+					type : 'post',
+					success : function(data) {
+						$(".uploadImgReady").attr("src",data.url);
+					}
+				});
+			}
+			//点击上传图片
 			$(function(){
-				
+				var	staffid=GetQueryString('staffid');
+				getImage(staffid);
 				$(".uploadPassport").click(function(){
-					
 					$(".passportImg").click();
 					$(".passportImg").change(function(){
-						
 						layer.load(1,{
 							shade : "#000"
 						});
@@ -95,21 +110,36 @@
 //			                alert(JSON.stringify(rst.formData));
 //			                alert(rst.file);
 //			                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
-//							alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-			                uploadPositive(rst,rst.formData); 
+							//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+			                uploadPositive(rst,rst.formData,staffid); 
 			            }).catch(function (err) {
 			                console.log(err);
 			            });
-			            
 					});
 				});
 			})
 			
-			function uploadPositive(rst, formData){
+			//跳转2寸图片
+			function returnPage(){
+				var staffid = GetQueryString("staffid");
+				window.location.href='/appmobileus/USFilming.html?staffid='+ staffid;
+			}
+			
+			//获取URL地址参数
+		    function GetQueryString(name){
+		         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		         var r = window.location.search.substr(1).match(reg);
+		         if(r!=null)return  unescape(r[2]); return null;
+		    }
+			
+			//上传图片
+			function uploadPositive(rst, formData,staffid){
 				if(!formData){
 					formData = new FormData();
 				}
 		        formData.append("image", rst.file); 
+		        formData.append("type", 2); 
+		        formData.append("staffid", staffid); 
 		        console.log('------------------------------');
 		        console.log(formData); 
 		        console.log(rst.file);
@@ -119,7 +149,7 @@
 		        $.ajax({
 					type : "POST",//提交类型  
 					//dataType : "json",//返回结果格式  
-					url : '/admin/orderJp/IDCardRecognition.html',//请求地址  
+					url : '/admin/mobileVisa/uploadImage.html',//请求地址  
 					async : true,
 					processData : false, //当FormData在jquery中使用的时候需要设置此项
 					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
@@ -129,16 +159,9 @@
 						//console.log('=====成功========');
 						//关闭加载层
 						layer.closeAll('loading');
-						//layer.close(layerIndex);
-						if (true === obj.success) {
-							_self.applicatdata.cardfront = obj.url;
-							_self.applicatdata.address = obj.address;
-							_self.applicatdata.nation = obj.nationality;
-							_self.applicatdata.cardid = obj.num;
-							_self.applicatdata.cardprovince = obj.province;
-							_self.applicatdata.cardcity = obj.city;
-							_self.applicatdata.birthday = obj.birth;
-							_self.applicatdata.sex = obj.sex;
+						if (obj!=null) {
+							layer.msg("上传成功"); 
+							location.reload();
 						}
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {

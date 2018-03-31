@@ -46,33 +46,6 @@
 		<script type="text/javascript" src="js/lrz.bundle.js" ></script>
 		<script type="text/javascript" src="js/vue.min.js" ></script>
 		<script>
-			//异步加载的URL地址
-			var url="/admin/mobileVisa/getInfoByType.html";
-			var _self;
-			var staffid;
-			new Vue({
-				el: '#passportform',
-				data: {
-					passportdata:"",
-					applicatdata:""
-				},
-				created:function(){
-					staffid=GetQueryString('staffid');
-			        _self=this;
-			        /* 回显 */
-			        $.ajax({
-			        	url: url,
-			        	data:{type:13,staffid:staffid},
-			        	dataType:"json",
-			        	type:'post',
-			        	success: function(data){
-			        		if(data!=null){
-			        			 $(".uploadPhotoReady").attr("src",data.credentialEntity.url); 
-			        		}
-			          	}
-			        });
-			    }
-			});
 			function getImage(staffid){
 				$.ajax({
 					url : "/admin/mobileVisa/getInfoByType.html",

@@ -25,28 +25,28 @@
 						<i class="icon-error iconGroup13"></i>
 					</div> <span>照片</span> <i class="more"></i> <span id="13" class="info photo"></span>
 			</a></li>
-			<li><a class="linkStyle" href="USPassport.html">
+			<li><a class="linkStyle" onclick="passport()">
 					<div class="circleRed replaceCircle1" >
 						<i class="icon-error iconGroup1"></i>
 					</div> <span>护照首页</span> <i class="more"></i> <span id="1" class="info">待上传</span>
 			</a></li>
-			<li><a class="linkStyle" href="USOldpassport.html">
+			<li><a class="linkStyle" onclick="oldpassport()">
 					<div class="circleRed replaceCircle2">
 						<i class="icon-error iconGroup2"></i>
 					</div> <span>旧护照</span> <i class="more"></i> <span id="2" class="info">待上传</span>
 			</a></li>
-			<li><a class="linkStyle" href="USISCard.html">
+			<li><a class="linkStyle" onclick="uscard()">
 					<div class="circleRed replaceCircle3">
 						<i class="icon-error iconGroup3"></i>
 					</div> <span>身份证</span> <i class="more"></i> <span id="3" class="info">待上传</span>
 			</a></li>
 			<li class="title">面试所需资料</li>
-			<li><a class="linkStyle" href="UShousehold.html">
+			<li><a class="linkStyle" onclick="ushousehold()">
 					<div class="circleRed replaceCircle4">
 						<i class="icon-error iconGroup4"></i>
 					</div> <span>户口本</span> <i class="more"></i> <span id="4" class="info">待上传</span>
 			</a></li>
-			<li><a class="linkStyle" href="USHousecard.html">
+			<li><a class="linkStyle" onclick="ushousecard()">
 					<div class="circleRed replaceCircle5">
 						<i class="icon-error iconGroup5"></i>
 					</div> <span>房产证</span> <i class="more"></i> <span id="5" class="info">待上传</span>
@@ -63,32 +63,32 @@
 					<option>丧偶</option>
 			</select>
 			</li>
-			<li><a class="linkStyle" href="USBankflow.html">
+			<li><a class="linkStyle" onclick="usbankflow()">
 					<div class="circleRed replaceCircle7">
 						<i class="icon-error iconGroup7"></i>
 					</div> <span>银行流水</span> <i class="more"></i> <span id="7" class="info">待上传</span>
 			</a></li>
-			<li><a class="linkStyle" href="USJobcertificate.html">
+			<li><a class="linkStyle" onclick="usjobcertificate()">
 					<div class="circleRed replaceCircle8">
 						<i class="icon-error iconGroup8"></i>
 					</div> <span>在职证明</span> <i class="more"></i> <span id="8" class="info">待上传</span>
 			</a></li>
-			<li><a class="linkStyle" href="USBiness.html">
+			<li><a class="linkStyle" onclick="usbiness()">
 					<div class="circleRed replaceCircle9">
 						<i class="icon-error iconGroup9"></i>
 					</div> <span>营业执照或机构代码证</span> <i class="more"></i> <span id="9" class="info">待上传</span>
 			</a></li>
-			<li><a class="linkStyle" href="USDriving.html">
+			<li><a class="linkStyle" onclick="usdriving()">
 					<div class="circleRed replaceCircle10">
 						<i class="icon-error iconGroup10"></i>
 					</div> <span>行驶证</span> <i class="more"></i> <span id="10" class="info">待上传</span>
 			</a></li>
-			<li><a class="linkStyle" href="USOldsigned.html">
+			<li><a class="linkStyle" onclick="usoldsigned()">
 					<div class="circleRed replaceCircle11">
 						<i class="icon-error iconGroup11"></i>
 					</div> <span>过期美签上传</span> <i class="more"></i> <span id="11" class="info">待上传</span>
 			</a></li>
-			<li><a class="linkStyle" href="USsigning.html">
+			<li><a class="linkStyle" onclick="ussigning()">
 					<div class="circleRed replaceCircle12">
 						<i class="icon-error iconGroup12"></i>
 					</div> <span>美国出签上传</span> <i class="more"></i> <span id="12" class="info">待上传</span>
@@ -128,6 +128,66 @@
 		function twoinchphoto(){
 			var staffid = GetQueryString("staffid");
 			window.location.href='/appmobileus/USPhoto.html?staffid='+ staffid;
+		}
+		//跳转新护照
+		function passport(){
+			var staffid = GetQueryString("staffid");
+			window.location.href='/appmobileus/USPassport.html?staffid='+ staffid;
+		}
+		//跳转老护照
+		function oldpassport(){
+			var staffid = GetQueryString("staffid");
+			window.location.href='/appmobileus/USOldpassport.html?staffid='+ staffid;
+		}
+		//跳转身份证
+		function uscard(){
+			var staffid = GetQueryString("staffid");
+			window.location.href='/appmobileus/USIDCard.html?staffid='+ staffid;
+		}
+		//跳转户口本
+		function ushousehold(){
+			var staffid = GetQueryString("staffid");
+			window.location.href='/appmobileus/USHousehold.html?staffid='+ staffid;
+		}
+		//跳转房产证
+		function ushousecard(){
+			var staffid = GetQueryString("staffid");
+			window.location.href='/appmobileus/USHousecard.html?staffid='+ staffid;
+		}
+		//跳转结婚证
+		function twoinchphoto(){
+			var staffid = GetQueryString("staffid");
+			window.location.href='/appmobileus/USPhoto.html?staffid='+ staffid;
+		}
+		//跳转银行流水
+		function usbankflow(){
+			var staffid = GetQueryString("staffid");
+			window.location.href='/appmobileus/USBankflow.html?staffid='+ staffid;
+		}
+		//跳转在职证明
+		function usjobcertificate(){
+			var staffid = GetQueryString("staffid");
+			window.location.href='/appmobileus/USJobcertificate.html?staffid='+ staffid;
+		}
+		//跳转营业执照
+		function usbiness(){
+			var staffid = GetQueryString("staffid");
+			window.location.href='/appmobileus/USBusiness.html?staffid='+ staffid;
+		}
+		//跳转驾驶证
+		function usdriving(){
+			var staffid = GetQueryString("staffid");
+			window.location.href='/appmobileus/USDriving.html?staffid='+ staffid;
+		}
+		//跳转过期美签
+		function usoldsigned(){
+			var staffid = GetQueryString("staffid");
+			window.location.href='/appmobileus/USOldsigned.html?staffid='+ staffid;
+		}
+		//跳转美国出签
+		function ussigning(){
+			var staffid = GetQueryString("staffid");
+			window.location.href='/appmobileus/USsigning.html?staffid='+ staffid;
 		}
 		
 		//获取用户拍摄信息

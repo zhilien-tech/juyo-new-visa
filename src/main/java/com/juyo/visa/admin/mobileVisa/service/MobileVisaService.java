@@ -17,9 +17,11 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.juyo.visa.admin.mobileVisa.form.MobileVisaBasicInfoForm;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
@@ -57,13 +59,24 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	 * 上传单张图片
 	 */
 	public Object updateImage(String url, Integer staffid, Integer type) {
-		if (13 == type) {
+		if (TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey() == type) {
 			//获取用户基本信息
 			TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
 					Cnd.where("id", "=", staffid));
 			basicinfoEntity.setTwoinchphoto(url);
 			dbDao.update(basicinfoEntity);
-
+		}
+		if (TAppStaffCredentialsEnum.OLDHUZHAO.intKey() == type) {
+			TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffid).and("type", "=", type));
+			credentialEntity = new TAppStaffCredentialsEntity();
+			credentialEntity.setCreatetime(new Date());
+			credentialEntity.setStaffid(staffid);
+			credentialEntity.setUpdatetime(new Date());
+			credentialEntity.setType(type);
+			credentialEntity.setUrl(url);
+			dbDao.insert(credentialEntity);
+			return 1;
 		}
 		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type));
