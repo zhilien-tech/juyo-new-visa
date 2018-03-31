@@ -213,9 +213,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		sqlt.setParam("staffid", staffId);
 		Record travelCompanionInfo = dbDao.fetch(sqlt);
 		//---同伴信息
-		List<TAppStaffCompanioninfoEntity> companionList = dbDao.query(TAppStaffCompanioninfoEntity.class,
+		/*List<TAppStaffCompanioninfoEntity> companionList = dbDao.query(TAppStaffCompanioninfoEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
-		travelCompanionInfo.put("companionList", companionList);
+		travelCompanionInfo.put("companionList", companionList);*/
 		result.put("travelCompanionInfo", travelCompanionInfo);
 
 		//以前的美国旅游信息
@@ -224,13 +224,13 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		sqlp.setParam("staffid", staffId);
 		Record previUSTripInfo = dbDao.fetch(sqlp);
 		//---去过美国信息集合
-		List<TAppStaffGousinfoEntity> gousList = dbDao.query(TAppStaffGousinfoEntity.class,
+		/*List<TAppStaffGousinfoEntity> gousList = dbDao.query(TAppStaffGousinfoEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
-		previUSTripInfo.put("gousList", gousList);
+		previUSTripInfo.put("gousList", gousList);*/
 		//---美国驾照集合
-		List<TAppStaffDriverinfoEntity> driverList = dbDao.query(TAppStaffDriverinfoEntity.class,
+		/*List<TAppStaffDriverinfoEntity> driverList = dbDao.query(TAppStaffDriverinfoEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
-		previUSTripInfo.put("driverList", driverList);
+		previUSTripInfo.put("driverList", driverList);*/
 		result.put("previUSTripInfo", previUSTripInfo);
 
 		//美国联络点
@@ -244,9 +244,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		sqlf.setParam("staffid", staffId);
 		Record familyInfo = dbDao.fetch(sqlf);
 		//---直属亲戚信息集合
-		List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
+		/*List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
-		familyInfo.put("zhiFamilyList", zhiFamilyList);
+		familyInfo.put("zhiFamilyList", zhiFamilyList);*/
 		result.put("familyInfo", familyInfo);
 
 		//工作/教育/培训信息 
@@ -254,7 +254,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Sql sqlw = Sqls.create(sqlStrw);
 		sqlw.setParam("staffid", staffId);
 		Record workEducationInfo = dbDao.fetch(sqlw);
-		//---以前工作信息集合
+		/*//---以前工作信息集合
 		List<TAppStaffBeforeworkEntity> beforeWorkList = dbDao.query(TAppStaffBeforeworkEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
 		workEducationInfo.put("beforeWorkList", beforeWorkList);
@@ -277,7 +277,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		//参加过的慈善组织集合
 		List<TAppStaffOrganizationEntity> organizationList = dbDao.query(TAppStaffOrganizationEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
-		workEducationInfo.put("organizationList", organizationList);
+		workEducationInfo.put("organizationList", organizationList);*/
 
 		result.put("workEducationInfo", workEducationInfo);
 

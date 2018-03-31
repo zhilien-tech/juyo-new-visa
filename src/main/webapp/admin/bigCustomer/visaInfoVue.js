@@ -51,6 +51,10 @@ new Vue({
 	}
 });
 
+function save(){
+	alert(JSON.stringify(visaInfo.travelCompanionInfo));
+}
+
 function openYesOrNoPage(){
 	//是否与其他人一起旅游
 	var istravelwithother = visaInfo.travelCompanionInfo.istravelwithother;

@@ -22,7 +22,7 @@
 				<span>美国签证信息</span>
 			</div>
 			<div class="btnRight">
-				<a class="saveVisa">保存</a>
+				<a class="saveVisa" onclick="save()">保存</a>
 				<a class="cancelVisa" onclick="closeWindow()">取消</a>
 			</div>
 		</div>
