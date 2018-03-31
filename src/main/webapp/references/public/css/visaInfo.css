@@ -162,6 +162,7 @@
 	width: 20px;
 	height: 20px;
 	vertical-align: middle;	
+	margin:-5px 0 0 5px;
 }
 .driverR {
 	float: right;
@@ -171,7 +172,7 @@
 	font-size:12px;
 }
 .groupSelectInfo select {
-	width: 196px;
+	width: 182px;
 	height: 30px; 
 	padding-left: 10px; 
 	font-size: 13px; 
