@@ -130,7 +130,6 @@ public class PcVisaModule {
 	public Object IDCardRecognition(@Param("image") File file, @Param("staffid") Integer staffid,
 			@Param("type") Integer type, HttpServletRequest request, HttpServletResponse response) {
 		String imageUrl = pcVisaViewService.uploadImage(file, request, response);
-		pcVisaViewService.addPhoto(staffid, imageUrl, type);
 		return null;
 	}
 }

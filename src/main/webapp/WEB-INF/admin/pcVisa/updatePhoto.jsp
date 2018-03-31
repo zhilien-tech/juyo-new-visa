@@ -16,7 +16,7 @@
 		<span>拍摄资料</span>
 		<input id="staffid" type="hidden" value="${obj.basicInfo.id }">
 		<div class="btnGroup">
-			<a class="btnSave">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
+			<a class="btnSave" onclick="nextWindow()">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
 		</div>
 	</div>
 	<div class="topHide"></div>
@@ -268,6 +268,11 @@
 	function closeWindow() {
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 		parent.layer.close(index);
+	}
+	
+	//保存跳转下一页
+	function nextWindow(){
+		window.location.href='';
 	}
 </script>
 </html>

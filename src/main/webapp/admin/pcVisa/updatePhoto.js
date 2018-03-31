@@ -21,7 +21,6 @@ new Vue({
 		},*/
 		//修改申请人拍摄资料信息
 		updatePhoto : function(id){
-			save();
 			layer.open({
 				type: 2,
 				title: false,
