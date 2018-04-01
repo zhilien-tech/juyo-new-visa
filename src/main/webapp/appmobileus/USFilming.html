@@ -23,10 +23,11 @@
 			<li><a class="linkStyle" onclick="twoinchphoto()">
 					<div class="circleRed replaceCircle13">
 						<i class="icon-error iconGroup13"></i>
-					</div> <span>照片</span> <i class="more"></i> <span id="13" class="info photo"></span>
+					</div> <span>照片</span> <i class="more"></i> <span id="13"
+					class="info photo"></span>
 			</a></li>
 			<li><a class="linkStyle" onclick="passport()">
-					<div class="circleRed replaceCircle1" >
+					<div class="circleRed replaceCircle1">
 						<i class="icon-error iconGroup1"></i>
 					</div> <span>护照首页</span> <i class="more"></i> <span id="1" class="info">待上传</span>
 			</a></li>
@@ -52,15 +53,15 @@
 					</div> <span>房产证</span> <i class="more"></i> <span id="5" class="info">待上传</span>
 			</a></li>
 			<li class="selectArea">
-				<div class="circleRed">
-					<i class="icon-error"></i>
+				<div class="circleRed replaceCircle6">
+					<i class="icon-error iconGroup6" ></i>
 				</div> <span>婚姻状况</span> <i class="more"></i> <span
 				class="info marriageInfo"></span> <select class="selector" dir="rtl">
 					<option>--请选择--</option>
-					<option>单身</option>
-					<option>已婚</option>
-					<option>离异</option>
-					<option>丧偶</option>
+					<option value="1">单身</option>
+					<option value="2">已婚</option>
+					<option value="3">离异</option>
+					<option value="4">丧偶</option>
 			</select>
 			</li>
 			<li><a class="linkStyle" onclick="usbankflow()">
@@ -76,7 +77,8 @@
 			<li><a class="linkStyle" onclick="usbiness()">
 					<div class="circleRed replaceCircle9">
 						<i class="icon-error iconGroup9"></i>
-					</div> <span>营业执照或机构代码证</span> <i class="more"></i> <span id="9" class="info">待上传</span>
+					</div> <span>营业执照或机构代码证</span> <i class="more"></i> <span id="9"
+					class="info">待上传</span>
 			</a></li>
 			<li><a class="linkStyle" onclick="usdriving()">
 					<div class="circleRed replaceCircle10">
@@ -86,12 +88,14 @@
 			<li><a class="linkStyle" onclick="usoldsigned()">
 					<div class="circleRed replaceCircle11">
 						<i class="icon-error iconGroup11"></i>
-					</div> <span>过期美签上传</span> <i class="more"></i> <span id="11" class="info">待上传</span>
+					</div> <span>过期美签上传</span> <i class="more"></i> <span id="11"
+					class="info">待上传</span>
 			</a></li>
 			<li><a class="linkStyle" onclick="ussigning()">
 					<div class="circleRed replaceCircle12">
 						<i class="icon-error iconGroup12"></i>
-					</div> <span>美国出签上传</span> <i class="more"></i> <span id="12" class="info">待上传</span>
+					</div> <span>美国出签上传</span> <i class="more"></i> <span id="12"
+					class="info">待上传</span>
 			</a></li>
 		</ul>
 	</section>
@@ -102,391 +106,437 @@
 <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="js/rem(750).js"></script>
 <script>
-		$(function(){
-			var staffid = GetQueryString("staffid");
-			//婚姻状况
-			$(".selector").change(function(){
-				var marriage = $(".selector").val();
-				$(".marriageInfo").text(marriage);
-			});
-			getUserInfo(staffid);
-			determineUpload13(staffid);
-			determineUpload12(staffid);
-			determineUpload11(staffid);
-			determineUpload10(staffid);
-			determineUpload9(staffid);
-			determineUpload8(staffid);
-			determineUpload7(staffid);
-			determineUpload6(staffid);
-			determineUpload5(staffid);
-			determineUpload4(staffid);
-			determineUpload3(staffid);
-			determineUpload2(staffid);
-			determineUpload1(staffid);
-		})
-		//跳转2寸图片
-		function twoinchphoto(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USPhoto.html?staffid='+ staffid;
-		}
-		//跳转新护照
-		function passport(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USPassport.html?staffid='+ staffid;
-		}
-		//跳转老护照
-		function oldpassport(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USOldpassport.html?staffid='+ staffid;
-		}
-		//跳转身份证
-		function uscard(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USIDCard.html?staffid='+ staffid;
-		}
-		//跳转户口本
-		function ushousehold(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USHousehold.html?staffid='+ staffid;
-		}
-		//跳转房产证
-		function ushousecard(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USHousecard.html?staffid='+ staffid;
-		}
-		//跳转结婚证
-		function twoinchphoto(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USPhoto.html?staffid='+ staffid;
-		}
-		//跳转银行流水
-		function usbankflow(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USBankflow.html?staffid='+ staffid;
-		}
-		//跳转在职证明
-		function usjobcertificate(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USJobcertificate.html?staffid='+ staffid;
-		}
-		//跳转营业执照
-		function usbiness(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USBusiness.html?staffid='+ staffid;
-		}
-		//跳转驾驶证
-		function usdriving(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USDriving.html?staffid='+ staffid;
-		}
-		//跳转过期美签
-		function usoldsigned(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USOldsigned.html?staffid='+ staffid;
-		}
-		//跳转美国出签
-		function ussigning(){
-			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USsigning.html?staffid='+ staffid;
-		}
-		
-		//获取用户拍摄信息
-		function getUserInfo(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getBasicInfoByStaffid.html",
-				data : {
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					var username = data.firstname;
-					var username = username + data.lastname;
-					$("#username").html(username);
+	$(function() {
+		var staffid = GetQueryString("staffid");
+
+		getUserInfo(staffid);
+		determineUpload13(staffid);
+		determineUpload12(staffid);
+		determineUpload11(staffid);
+		determineUpload10(staffid);
+		determineUpload9(staffid);
+		determineUpload8(staffid);
+		determineUpload7(staffid);
+		determineUpload6(staffid);
+		determineUpload5(staffid);
+		determineUpload4(staffid);
+		determineUpload3(staffid);
+		determineUpload2(staffid);
+		determineUpload1(staffid);
+		//婚姻状况
+		$('.selector')
+				.change(
+						function() {
+							var staffid = GetQueryString("staffid");
+							var name = $(".selector").find("option:selected")
+									.text();
+							var selectvalue = $(".selector").find(
+									"option:selected").val();
+							$(".marriageInfo").text(name);
+							
+							if (selectvalue == 4 || selectvalue == 2
+									|| selectvalue == 3) {
+								window.location.href = '/appmobileus/USMarital.html?staffid='
+										+ staffid
+										+ '&marryurltype='
+										+ selectvalue;
+							}
+
+						});
+	});
+	//跳转2寸图片
+	function twoinchphoto() {
+		var staffid = GetQueryString("staffid");
+		window.location.href = '/appmobileus/USPhoto.html?staffid=' + staffid;
+	}
+	//跳转新护照
+	function passport() {
+		var staffid = GetQueryString("staffid");
+		window.location.href = '/appmobileus/USPassport.html?staffid='
+				+ staffid;
+	}
+	//跳转老护照
+	function oldpassport() {
+		var staffid = GetQueryString("staffid");
+		window.location.href = '/appmobileus/USOldpassport.html?staffid='
+				+ staffid;
+	}
+	//跳转身份证
+	function uscard() {
+		var staffid = GetQueryString("staffid");
+		window.location.href = '/appmobileus/USIDCard.html?staffid=' + staffid;
+	}
+	//跳转户口本
+	function ushousehold() {
+		var staffid = GetQueryString("staffid");
+		window.location.href = '/appmobileus/USHousehold.html?staffid='
+				+ staffid;
+	}
+	//跳转房产证
+	function ushousecard() {
+		var staffid = GetQueryString("staffid");
+		window.location.href = '/appmobileus/USHousecard.html?staffid='
+				+ staffid;
+	}
+	//跳转银行流水
+	function usbankflow() {
+		var staffid = GetQueryString("staffid");
+		window.location.href = '/appmobileus/USBankflow.html?staffid='
+				+ staffid;
+	}
+	//跳转在职证明
+	function usjobcertificate() {
+		var staffid = GetQueryString("staffid");
+		window.location.href = '/appmobileus/USJobcertificate.html?staffid='
+				+ staffid;
+	}
+	//跳转营业执照
+	function usbiness() {
+		var staffid = GetQueryString("staffid");
+		window.location.href = '/appmobileus/USBusiness.html?staffid='
+				+ staffid;
+	}
+	//跳转驾驶证
+	function usdriving() {
+		var staffid = GetQueryString("staffid");
+		window.location.href = '/appmobileus/USDriving.html?staffid=' + staffid;
+	}
+	//跳转过期美签
+	function usoldsigned() {
+		var staffid = GetQueryString("staffid");
+		window.location.href = '/appmobileus/USOldsigned.html?staffid='
+				+ staffid;
+	}
+	//跳转美国出签
+	function ussigning() {
+		var staffid = GetQueryString("staffid");
+		window.location.href = '/appmobileus/USsigning.html?staffid=' + staffid;
+	}
+
+	//获取用户拍摄信息
+	function getUserInfo(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getBasicInfoByStaffid.html",
+			data : {
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				var username = data.firstname;
+				var username = username + data.lastname;
+				$("#username").html(username);
+			}
+		});
+	}
+
+	//获取是否上传过13
+	function determineUpload13(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 13,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#13").html("已上传");
+					$(".replaceCircle13").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup13").removeClass("icon-error").addClass(
+							"icon-true");
 				}
-			});
-		}
-		
-		//获取是否上传过13
-		function determineUpload13(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 13,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#13").html("已上传");
-							$(".replaceCircle13").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup13").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		//获取是否上传过12
-		function determineUpload12(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 12,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#12").html("已上传");
-							$(".replaceCircle12").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup12").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		//获取是否上传过11
-		function determineUpload11(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 11,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#11").html("已上传");
-							$(".replaceCircle11").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup11").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		//获取是否上传过10
-		function determineUpload10(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 10,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#10").html("已上传");
-							$(".replaceCircle10").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup10").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		//获取是否上传过9
-		function determineUpload9(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 9,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#9").html("已上传");
-							$(".replaceCircle9").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup9").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		//获取是否上传过8
-		function determineUpload8(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 8,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#8").html("已上传");
-							$(".replaceCircle8").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup8").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		//获取是否上传过7
-		function determineUpload7(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 7,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#7").html("已上传");
-							$(".replaceCircle7").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup7").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		//获取是否上传过6
-		function determineUpload6(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 6,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#6").html("已上传");
-							$(".replaceCircle6").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup6").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		//获取是否上传过5
-		function determineUpload5(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 5,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#5").html("已上传");
-							$(".replaceCircle5").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup5").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		//获取是否上传过4
-		function determineUpload4(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 4,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#4").html("已上传");
-							$(".replaceCircle4").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup4").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		//获取是否上传过3
-		function determineUpload3(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 3,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#3").html("已上传");
-							$(".replaceCircle3").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup3").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		//获取是否上传过2
-		function determineUpload2(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 2,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#2").html("已上传");
-							$(".replaceCircle2").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup2").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		//获取是否上传过1
-		function determineUpload1(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
-				data : {
-					type : 1,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					/* _self.passportdata = data.passportdata; */
-					console.log(data);
-						if (data != 0) {
-							$("#1").html("已上传");
-							$(".replaceCircle1").removeClass("circleRed").addClass("circleGreen");
-							$(".iconGroup1").removeClass("icon-error").addClass("icon-true");
-						}
-					}
-				});
-		}
-		
-		//获取URL地址参数
-		 function GetQueryString(name){
-		      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-		      var r = window.location.search.substr(1).match(reg);
-		      if(r!=null)return  unescape(r[2]); return null;
-		 }
-		
-	</script>
+			}
+		});
+	}
+	//获取是否上传过12
+	function determineUpload12(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 12,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#12").html("已上传");
+					$(".replaceCircle12").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup12").removeClass("icon-error").addClass(
+							"icon-true");
+				}
+			}
+		});
+	}
+	//获取是否上传过11
+	function determineUpload11(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 11,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#11").html("已上传");
+					$(".replaceCircle11").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup11").removeClass("icon-error").addClass(
+							"icon-true");
+				}
+			}
+		});
+	}
+	//获取是否上传过10
+	function determineUpload10(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 10,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#10").html("已上传");
+					$(".replaceCircle10").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup10").removeClass("icon-error").addClass(
+							"icon-true");
+				}
+			}
+		});
+	}
+	//获取是否上传过9
+	function determineUpload9(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 9,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#9").html("已上传");
+					$(".replaceCircle9").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup9").removeClass("icon-error").addClass(
+							"icon-true");
+				}
+			}
+		});
+	}
+	//获取是否上传过8
+	function determineUpload8(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 8,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#8").html("已上传");
+					$(".replaceCircle8").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup8").removeClass("icon-error").addClass(
+							"icon-true");
+				}
+			}
+		});
+	}
+	//获取是否上传过7
+	function determineUpload7(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 7,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#7").html("已上传");
+					$(".replaceCircle7").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup7").removeClass("icon-error").addClass(
+							"icon-true");
+				}
+			}
+		});
+	}
+	//获取是否上传过6
+	function determineUpload6(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 6,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#6").html("已上传");
+					$(".replaceCircle6").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup6").removeClass("icon-error").addClass(
+							"icon-true");
+				}
+			}
+		});
+	}
+	//获取是否上传过5
+	function determineUpload5(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 5,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#5").html("已上传");
+					$(".replaceCircle5").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup5").removeClass("icon-error").addClass(
+							"icon-true");
+				}
+			}
+		});
+	}
+	//获取是否上传过4
+	function determineUpload4(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 4,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#4").html("已上传");
+					$(".replaceCircle4").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup4").removeClass("icon-error").addClass(
+							"icon-true");
+				}
+			}
+		});
+	}
+	//获取是否上传过3
+	function determineUpload3(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 3,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#3").html("已上传");
+					$(".replaceCircle3").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup3").removeClass("icon-error").addClass(
+							"icon-true");
+				}
+			}
+		});
+	}
+	//获取是否上传过2
+	function determineUpload2(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 2,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#2").html("已上传");
+					$(".replaceCircle2").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup2").removeClass("icon-error").addClass(
+							"icon-true");
+				}
+			}
+		});
+	}
+	//获取是否上传过1
+	function determineUpload1(staffid) {
+		$.ajax({
+			url : "/admin/mobileVisa/getImageInfoBytypeAndStaffid.html",
+			data : {
+				type : 1,
+				staffid : staffid,
+			},
+			dataType : "json",
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+				console.log(data);
+				if (data != 0) {
+					$("#1").html("已上传");
+					$(".replaceCircle1").removeClass("circleRed").addClass(
+							"circleGreen");
+					$(".iconGroup1").removeClass("icon-error").addClass(
+							"icon-true");
+				}
+			}
+		});
+	}
+
+	//获取URL地址参数
+	function GetQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null)
+			return unescape(r[2]);
+		return null;
+	}
+</script>
 </html>

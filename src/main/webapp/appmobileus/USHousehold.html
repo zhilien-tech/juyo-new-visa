@@ -25,9 +25,9 @@
 			<!--户主页-->
 			<div class="householdPage homePage">
 				<span class="homePageTitle">户主页</span> <img src="img/camera.png"
-					class="camera" /> <img src="img/imgIntroduce.jpg" class="pageImg" />
+					class="camera" /> <img src="" class="pageImg" />
 			</div>
-			<input type="file" name="" class="fileHide" />
+			<input type="file" name="" class="fileHide homeinput" />
 			<!--副页-->
 			<div class="householdPage vicePage">
 				<span class="homePageTitle">副页</span> <img src="img/camera.png"
@@ -61,13 +61,23 @@
 											 '<div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img src="" class="pageImg" /></div><input type="file" class="fileHide" />'+
 											 '<div class="addPage"><span class="homePageTitle">添加副页</span><span class="plus">+</span></div></div>');
 				});
+				getImage();
+				//主页点击
+				 $(".homePage").click(function(){
+					$(".homeinput").click();
+					$(".homeinput").change(function(){
+						
+					});
+				}); 
 			})
-		function getImage(staffid){
+		function getImage(staffid,mainid,sequence){
 			$.ajax({
 				url : "/admin/mobileVisa/getInfoByType.html",
 				data : {
 					type : 4,
 					staffid : staffid,
+					mainid : mainid,
+					sequence : sequence
 				},
 				dataType : "json",
 				type : 'post',
@@ -127,7 +137,7 @@
 				formData = new FormData();
 			}
 	        formData.append("image", rst.file); 
-	        formData.append("type", 10); 
+	        formData.append("type", 4); 
 	        formData.append("staffid", staffid); 
 	        console.log('------------------------------');
 	        console.log(formData); 
@@ -138,7 +148,7 @@
 	        $.ajax({
 				type : "POST",//提交类型  
 				//dataType : "json",//返回结果格式  
-				url : '/admin/mobileVisa/uploadImage.html',//请求地址  
+				url : '/admin/mobileVisa/uploadMuchImage.html',//请求地址  
 				async : true,
 				processData : false, //当FormData在jquery中使用的时候需要设置此项
 				contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )

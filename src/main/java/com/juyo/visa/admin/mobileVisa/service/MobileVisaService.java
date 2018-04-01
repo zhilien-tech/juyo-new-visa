@@ -15,14 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.nutz.dao.Cnd;
-import org.nutz.dao.Sqls;
-import org.nutz.dao.entity.Record;
-import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.mobileVisa.form.MobileVisaBasicInfoForm;
+import com.juyo.visa.admin.orderUS.entity.USPassportJsonEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.common.base.UploadService;
@@ -69,53 +67,124 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	/*
 	 * 上传单张图片
 	 */
-	public Object updateImage(File file, Integer staffid, Integer type, Integer state, Integer sequence,
+	public Object updateImage(File file, Integer staffid, Integer type, Integer status, Integer sequence,
 			HttpServletRequest request, HttpServletResponse response) {
 		USStaffJsonEntity jsonEntity = null;
+		USPassportJsonEntity passportJsonEntity = null;
 		//身份证扫描上传
 		if (TAppStaffCredentialsEnum.IDCARD.intKey() == type) {
 			jsonEntity = (USStaffJsonEntity) orderUSViewService.IDCardRecognition(file, request, response);
+			if (!Util.isEmpty(jsonEntity)) {
+				if (jsonEntity.isSuccess()) {
+					TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class, Cnd
+							.where("staffid", "=", staffid).and("type", "=", type));
+					if (!Util.isEmpty(credentialEntity)) {
+						credentialEntity.setType(type);
+						credentialEntity.setUrl(jsonEntity.getUrl());
+						credentialEntity.setUpdatetime(new Date());
+						credentialEntity.setStaffid(staffid);
+						dbDao.update(credentialEntity);
+						return 1;
+					} else {
+						credentialEntity = new TAppStaffCredentialsEntity();
+						credentialEntity.setType(type);
+						credentialEntity.setUrl(jsonEntity.getUrl());
+						credentialEntity.setUpdatetime(new Date());
+						credentialEntity.setStaffid(staffid);
+						credentialEntity.setCreatetime(new Date());
+						dbDao.insert(credentialEntity);
+						return 1;
+					}
+				} else {
+					return 0;
+				}
+			}
 		}
 		//身份证背面扫描上传
 		if (TAppStaffCredentialsEnum.IDCARDBACK.intKey() == type) {
 			jsonEntity = (USStaffJsonEntity) orderUSViewService.IDCardRecognitionBack(file, request, response);
-		}
-		//新护照扫描上传
-		if (TAppStaffCredentialsEnum.NEWHUZHAO.intKey() == type) {
-			jsonEntity = (USStaffJsonEntity) orderUSViewService.passportRecognitionBack(file, request, response);
-		}
-		//旧护照扫描上传
-		if (TAppStaffCredentialsEnum.OLDHUZHAO.intKey() == type) {
-			jsonEntity = (USStaffJsonEntity) orderUSViewService.passportRecognitionBack(file, request, response);
-		}
-		if (!Util.isEmpty(jsonEntity)) {
-			if (jsonEntity.isSuccess()) {
-				TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
-						Cnd.where("staffid", "=", staffid).and("type", "=", type));
-				if (!Util.isEmpty(credentialEntity)) {
-					credentialEntity.setType(type);
-					credentialEntity.setUrl(jsonEntity.getUrl());
-					credentialEntity.setUpdatetime(new Date());
-					credentialEntity.setStaffid(staffid);
-					dbDao.update(credentialEntity);
-					return 1;
+			if (!Util.isEmpty(jsonEntity)) {
+				if (jsonEntity.isSuccess()) {
+					TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class, Cnd
+							.where("staffid", "=", staffid).and("type", "=", type));
+					if (!Util.isEmpty(credentialEntity)) {
+						credentialEntity.setType(type);
+						credentialEntity.setUrl(jsonEntity.getUrl());
+						credentialEntity.setUpdatetime(new Date());
+						credentialEntity.setStaffid(staffid);
+						dbDao.update(credentialEntity);
+						return 1;
+					} else {
+						credentialEntity = new TAppStaffCredentialsEntity();
+						credentialEntity.setType(type);
+						credentialEntity.setUrl(jsonEntity.getUrl());
+						credentialEntity.setUpdatetime(new Date());
+						credentialEntity.setStaffid(staffid);
+						credentialEntity.setCreatetime(new Date());
+						dbDao.insert(credentialEntity);
+						return 1;
+					}
 				} else {
-					credentialEntity = new TAppStaffCredentialsEntity();
-					credentialEntity.setType(type);
-					credentialEntity.setUrl(jsonEntity.getUrl());
-					credentialEntity.setUpdatetime(new Date());
-					credentialEntity.setStaffid(staffid);
-					credentialEntity.setCreatetime(new Date());
-					dbDao.insert(credentialEntity);
-					return 1;
+					return 0;
 				}
-			} else {
-				return 0;
+			}
+			//新护照扫描上传
+			if (TAppStaffCredentialsEnum.NEWHUZHAO.intKey() == type) {
+				passportJsonEntity = (USPassportJsonEntity) orderUSViewService.passportRecognitionBack(file, request,
+						response);
+				if (!Util.isEmpty(jsonEntity)) {
+					if (jsonEntity.isSuccess()) {
+						TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class, Cnd
+								.where("staffid", "=", staffid).and("type", "=", type));
+						if (!Util.isEmpty(credentialEntity)) {
+							credentialEntity.setType(type);
+							credentialEntity.setUrl(jsonEntity.getUrl());
+							credentialEntity.setUpdatetime(new Date());
+							credentialEntity.setStaffid(staffid);
+							dbDao.update(credentialEntity);
+							return 1;
+						} else {
+							credentialEntity = new TAppStaffCredentialsEntity();
+							credentialEntity.setType(type);
+							credentialEntity.setUrl(jsonEntity.getUrl());
+							credentialEntity.setUpdatetime(new Date());
+							credentialEntity.setStaffid(staffid);
+							credentialEntity.setCreatetime(new Date());
+							dbDao.insert(credentialEntity);
+							return 1;
+						}
+					} else {
+						return 0;
+					}
+				}
 			}
 		} else {
 			//多套单张上传(户口本，房产证)
 			if (TAppStaffCredentialsEnum.HUKOUBEN.intKey() == type || TAppStaffCredentialsEnum.HOME.intKey() == type) {
 
+			}
+
+			//结婚证上传
+			if (TAppStaffCredentialsEnum.MARRAY.intKey() == type) {
+				String url = mobileVisaService.uploadImage(file);
+				TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
+						Cnd.where("staffid", "=", staffid).and("type", "=", type).and("status", "=", status));
+				if (!Util.isEmpty(credentialEntity)) {
+					credentialEntity.setUrl(url);
+					credentialEntity.setStatus(status);
+					credentialEntity.setUpdatetime(new Date());
+					int update = dbDao.update(credentialEntity);
+				} else {
+					credentialEntity = new TAppStaffCredentialsEntity();
+					credentialEntity.setCreatetime(new Date());
+					credentialEntity.setStaffid(staffid);
+					credentialEntity.setUpdatetime(new Date());
+					credentialEntity.setType(type);
+					credentialEntity.setStatus(status);
+					credentialEntity.setUrl(url);
+					dbDao.insert(credentialEntity);
+				}
+				return 1;
 			}
 			String url = mobileVisaService.uploadImage(file);
 			if (TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey() == type) {
@@ -125,6 +194,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 				basicinfoEntity.setTwoinchphoto(url);
 				dbDao.update(basicinfoEntity);
 			}
+			//老护照添加
 			if (TAppStaffCredentialsEnum.OLDHUZHAO.intKey() == type) {
 				//			TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				//					Cnd.where("staffid", "=", staffid).and("type", "=", type));
@@ -199,7 +269,8 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 
 	}
 
-	public Object updateMuchImage(File file, Integer staffid, Integer type, Integer sequence) {
+	//上传多张图片
+	public Object updateMuchImage(File file, Integer staffid, Integer mainid, Integer type, Integer sequence) {
 		String url = mobileVisaService.uploadImage(file);
 		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type).and("sequnce", "=", sequence));
@@ -222,16 +293,20 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	}
 
 	/*
-	 * 获取一类多张图片
+	 * 获取多张图片
 	 */
 	public Object getMuchPhotoByStaffid(Integer staffid, Integer type) {
-		//获取该订单下的申请人
-		String sqlStr = sqlManager.get("t_app_staffid_credentials_getmuchphoto");
-		Sql applysql = Sqls.create(sqlStr);
-		Cnd cnd = Cnd.NEW();
-		Cnd.where("staffid", "=", staffid).and("type", "=", type);
-		List<Record> applicantList = dbDao.query(applysql, cnd, null);
-		return applicantList;
+		List<TAppStaffCredentialsEntity> query = dbDao.query(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", type), null);
+		return query;
+
+	}
+
+	//一套图片获取
+	public Object getPhotoByMainid(Integer staffid, Integer type, Integer mainid) {
+
+		// TODO Auto-generated method stub
+		return null;
 
 	}
 }
