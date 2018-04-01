@@ -106,6 +106,22 @@ function applyValidate(){
 					}
 				}
 			},
+			cardnum : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '卡号不能为空'
+					}
+				}
+			},
+			cardnumen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '卡号不能为空'
+					}
+				}
+			},
 			address : {
 				trigger:"change keyup",
 				validators : {
@@ -234,57 +250,9 @@ function applyValidate(){
 					}
 				}
 			},
-			/*nationalidentificationnumber : {
-				trigger:"change keyup",
-				validators : {
-					notEmpty : {
-						message : '注册码不能为空'
-					}
-				}
-			},
-			nationalidentificationnumberen : {
-				trigger:"change keyup",
-				validators : {
-					notEmpty : {
-						message : '注册码不能为空'
-					}
-				}
-			},
-			socialsecuritynumber : {
-				trigger:"change keyup",
-				validators : {
-					notEmpty : {
-						message : '安全码不能为空'
-					}
-				}
-			},
-			socialsecuritynumberen : {
-				trigger:"change keyup",
-				validators : {
-					notEmpty : {
-						message : '安全码不能为空'
-					}
-				}
-			},
-			taxpayernumber : {
-				trigger:"change keyup",
-				validators : {
-					notEmpty : {
-						message : '纳税人证件号不能为空'
-					}
-				}
-			},
-			taxpayernumberen : {
-				trigger:"change keyup",
-				validators : {
-					notEmpty : {
-						message : '纳税人证件号不能为空'
-					}
-				}
-			},*/
 		}
 	});
-	$('#applicantInfo').bootstrapValidator('validate');
+	//$('#applicantInfo').bootstrapValidator('validate');
 }
 
 function translateZhToEn(from, to, param){
@@ -295,6 +263,7 @@ function translateZhToEn(from, to, param){
 		toval = $(from).val();
 	}
 	$.ajax({
+		//async : false,
 		url : BASE_PATH+'/admin/translate/translate',
 		data : {
 			api : 'google',
@@ -788,6 +757,16 @@ $(".isidentificationnumberapply").click(function(){
 		$(".isidentificationnumberapplyen").prop("checked",true);
 		$("#nationalidentificationnumberen").val("").change();
 		$("#nationalidentificationnumberen").attr("disabled",true);
+		
+		$(".countryNum").attr("class", "countryNum has-success");  
+	    $(".help-countryNum").attr("data-bv-result","IVALID");  
+	    $(".help-countryNum").attr("style","display: none;");  
+	    $("#nationalidentificationnumber").attr("style", null);
+	    
+	    $(".countryNumen").attr("class", "countryNumen has-success");  
+	    $(".help-countryNumen").attr("data-bv-result","IVALID");  
+	    $(".help-countryNumen").attr("style","display: none;");  
+	    $("#nationalidentificationnumberen").attr("style", null);
 	}else{
 		$("#nationalidentificationnumber").attr("disabled",false);
 		$(".isidentificationnumberapplyen").prop("checked",false);
@@ -798,6 +777,11 @@ $(".isidentificationnumberapplyen").click(function(){
 	if(this.checked){
 		$("#nationalidentificationnumberen").val("").change();
 		$("#nationalidentificationnumberen").attr("disabled",true);
+		
+		$(".countryNumen").attr("class", "countryNumen has-success");  
+	    $(".help-countryNumen").attr("data-bv-result","IVALID");  
+	    $(".help-countryNumen").attr("style","display: none;");  
+	    $("#nationalidentificationnumberen").attr("style", null);
 	}else{
 		$("#nationalidentificationnumberen").attr("disabled",false);
 	}
@@ -807,6 +791,11 @@ $(".issecuritynumberapplyen").click(function(){
 	if(this.checked){
 		$("#socialsecuritynumberen").val("").change();
 		$("#socialsecuritynumberen").attr("disabled",true);
+		
+		$(".safeNumen").attr("class", "safeNumen has-success");  
+	    $(".help-blocksafeen").attr("data-bv-result","IVALID");  
+	    $(".help-blocksafeen").attr("style","display: none;");  
+	    $("#socialsecuritynumberen").attr("style", null);
 	}else{
 		$("#socialsecuritynumberen").attr("disabled",false);
 	}
@@ -818,6 +807,16 @@ $(".issecuritynumberapply").click(function(){
 		$(".issecuritynumberapplyen").prop("checked",true);
 		$("#socialsecuritynumberen").val("").change();
 		$("#socialsecuritynumberen").attr("disabled",true);
+		
+		$(".safeNum").attr("class", "safeNum has-success");  
+	    $(".help-blocksafe").attr("data-bv-result","IVALID");  
+	    $(".help-blocksafe").attr("style","display: none;");  
+	    $("#socialsecuritynumber").attr("style", null);
+	    
+	    $(".safeNumen").attr("class", "safeNumen has-success");  
+	    $(".help-blocksafeen").attr("data-bv-result","IVALID");  
+	    $(".help-blocksafeen").attr("style","display: none;");  
+	    $("#socialsecuritynumberen").attr("style", null);
 	}else{
 		$("#socialsecuritynumber").attr("disabled",false);
 		$(".issecuritynumberapplyen").prop("checked",false);
@@ -829,6 +828,11 @@ $(".istaxpayernumberapplyen").click(function(){
 	if(this.checked){
 		$("#taxpayernumberen").val("").change();
 		$("#taxpayernumberen").attr("disabled",true);
+		
+		$(".safepayen").attr("class", "safepayen has-success");  
+	    $(".help-ratepayingen").attr("data-bv-result","IVALID");  
+	    $(".help-ratepayingen").attr("style","display: none;");  
+	    $("#taxpayernumberen").attr("style", null);
 	}else{
 		$("#taxpayernumberen").attr("disabled",false);
 	}
@@ -840,6 +844,16 @@ $(".istaxpayernumberapply").click(function(){
 		$(".istaxpayernumberapplyen").prop("checked",true);
 		$("#taxpayernumberen").val("").change();
 		$("#taxpayernumberen").attr("disabled",true);
+		
+		$(".safepay").attr("class", "safepay has-success");  
+	    $(".help-ratepaying").attr("data-bv-result","IVALID");  
+	    $(".help-ratepaying").attr("style","display: none;");  
+	    $("#taxpayernumber").attr("style", null);
+	    
+	    $(".safepayen").attr("class", "safepayen has-success");  
+	    $(".help-ratepayingen").attr("data-bv-result","IVALID");  
+	    $(".help-ratepayingen").attr("style","display: none;");  
+	    $("#taxpayernumberen").attr("style", null);
 	}else{
 		$("#taxpayernumber").attr("disabled",false);
 		$(".istaxpayernumberapplyen").prop("checked",false);
@@ -928,6 +942,145 @@ function saveApplicant(status){
 	'bootstrapValidator');
 	// 执行表单验证 
 	bootstrapValidator.validate();
+	
+	
+	var country = $("#nationalidentificationnumber").val();
+	if(country == ""){
+		if(!$(".isidentificationnumberapply").is(":checked")){
+			$(".countryNum").attr("class", "countryNum has-error");  
+			$(".help-countryNum").attr("data-bv-result","INVALID");  
+			$(".help-countryNum").attr("style","display: block;");  
+			$("#nationalidentificationnumber").attr("style", "border-color:#ff1a1a");
+		}else{
+			$(".countryNum").attr("class", "countryNum has-success");  
+	        $(".help-countryNum").attr("data-bv-result","IVALID");  
+	        $(".help-countryNum").attr("style","display: none;");  
+	        $("#nationalidentificationnumber").attr("style", null);
+		}
+	}else{
+		$(".countryNum").attr("class", "countryNum has-success");  
+        $(".help-countryNum").attr("data-bv-result","IVALID");  
+        $(".help-countryNum").attr("style","display: none;");  
+        $("#nationalidentificationnumber").attr("style", null);
+	}
+	var countryen = $("#nationalidentificationnumberen").val();
+	if(countryen == ""){
+		if(!$(".isidentificationnumberapplyen").is(":checked")){
+			$(".countryNumen").attr("class", "countryNumen has-error");  
+			$(".help-countryNumen").attr("data-bv-result","INVALID");  
+			$(".help-countryNumen").attr("style","display: block;");  
+			$("#nationalidentificationnumberen").attr("style", "border-color:#ff1a1a");
+		}else{
+			$(".countryNumen").attr("class", "countryNumen has-success");  
+	        $(".help-countryNumen").attr("data-bv-result","IVALID");  
+	        $(".help-countryNumen").attr("style","display: none;");  
+	        $("#nationalidentificationnumberen").attr("style", null);
+		}
+	}else{
+		$(".countryNumen").attr("class", "countryNumen has-success");  
+        $(".help-countryNumen").attr("data-bv-result","IVALID");  
+        $(".help-countryNumen").attr("style","display: none;");  
+        $("#nationalidentificationnumberen").attr("style", null);
+	}
+	
+	var safeNumber = $("#socialsecuritynumber").val();
+	if(safeNumber == ""){
+		if(!$(".issecuritynumberapply").is(":checked")){
+			$(".safeNum").attr("class", "safeNum has-error");  
+			$(".help-blocksafe").attr("data-bv-result","INVALID");  
+			$(".help-blocksafe").attr("style","display: block;");  
+			$("#socialsecuritynumber").attr("style", "border-color:#ff1a1a");
+		}else{
+			$(".safeNum").attr("class", "safeNum front has-success");  
+			$(".help-blocksafe").attr("data-bv-result","IVALID");  
+			$(".help-blocksafe").attr("style","display: none;");  
+			$("#socialsecuritynumber").attr("style", null);
+		}
+	}else{
+		$(".safeNum").attr("class", "safeNum front has-success");  
+        $(".help-blocksafe").attr("data-bv-result","IVALID");  
+        $(".help-blocksafe").attr("style","display: none;");  
+        $("#socialsecuritynumber").attr("style", null);
+	}
+	var safeNumberen = $("#socialsecuritynumberen").val();
+	if(safeNumberen == ""){
+		if(!$(".issecuritynumberapplyen").is(":checked")){
+			$(".safeNumen").attr("class", "safeNumen has-error");  
+			$(".help-blocksafeen").attr("data-bv-result","INVALID");  
+			$(".help-blocksafeen").attr("style","display: block;");  
+			$("#socialsecuritynumberen").attr("style", "border-color:#ff1a1a");
+		}else{
+			$(".safeNumen").attr("class", "safeNumen has-success");  
+			$(".help-blocksafeen").attr("data-bv-result","IVALID");  
+			$(".help-blocksafeen").attr("style","display: none;");  
+			$("#socialsecuritynumberen").attr("style", null);
+		}
+	}else{
+		$(".safeNumen").attr("class", "safeNumen has-success");  
+        $(".help-blocksafeen").attr("data-bv-result","IVALID");  
+        $(".help-blocksafeen").attr("style","display: none;");  
+        $("#socialsecuritynumberen").attr("style", null);
+	}
+	
+	var taxpayernumber = $("#taxpayernumber").val();
+	if(taxpayernumber == ""){
+		if(!$(".istaxpayernumberapply").is(":checked")){
+			$(".safepay").attr("class", "safepay has-error");  
+			$(".help-ratepaying").attr("data-bv-result","INVALID");  
+			$(".help-ratepaying").attr("style","display: block;");  
+			$("#taxpayernumber").attr("style", "border-color:#ff1a1a");
+		}else{
+			$(".safepay").attr("class", "safepayen has-success");  
+			$(".help-ratepaying").attr("data-bv-result","IVALID");  
+			$(".help-ratepaying").attr("style","display: none;");  
+			$("#taxpayernumber").attr("style", null);
+		}
+	}else{
+		$(".safepay").attr("class", "safepayen has-success");  
+        $(".help-ratepaying").attr("data-bv-result","IVALID");  
+        $(".help-ratepaying").attr("style","display: none;");  
+        $("#taxpayernumber").attr("style", null);
+	}
+	
+	var taxpayernumberen = $("#taxpayernumberen").val();
+	if(taxpayernumberen == ""){
+		if(!$(".istaxpayernumberapplyen").is(":checked")){
+			$(".safepayen").attr("class", "safepayen has-error");  
+			$(".help-ratepayingen").attr("data-bv-result","INVALID");  
+			$(".help-ratepayingen").attr("style","display: block;");  
+			$("#taxpayernumberen").attr("style", "border-color:#ff1a1a");
+		}else{
+			$(".safepayen").attr("class", "safepayen has-success");  
+			$(".help-ratepayingen").attr("data-bv-result","IVALID");  
+			$(".help-ratepayingen").attr("style","display: none;");  
+			$("#taxpayernumberen").attr("style", null);
+		}
+	}else{
+		$(".safepayen").attr("class", "safepayen has-success");  
+        $(".help-ratepayingen").attr("data-bv-result","IVALID");  
+        $(".help-ratepayingen").attr("style","display: none;");  
+        $("#taxpayernumberen").attr("style", null);
+	}
+	
+	if($(".countryNum").hasClass("has-error")){
+		return;
+	}
+	if($(".countryNumen").hasClass("has-error")){
+		return;
+	}
+	if($(".safeNum").hasClass("has-error")){
+		return;
+	}
+	if($(".safeNumen").hasClass("has-error")){
+		return;
+	}
+	if($(".safepay").hasClass("has-error")){
+		return;
+	}
+	if($(".safepayen").hasClass("has-error")){
+		return;
+	}
+	
 	if (bootstrapValidator.isValid()){
 
 		/*var str="";
@@ -980,3 +1133,42 @@ function saveApplicant(status){
 		layer.closeAll("loading");
 	}
 }
+
+$("#nationalidentificationnumber").on('input',function(){
+	$(".countryNum").attr("class", "countryNum has-success");  
+    $(".help-countryNum").attr("data-bv-result","IVALID");  
+    $(".help-countryNum").attr("style","display: none;");  
+    $("#nationalidentificationnumber").attr("style", null);
+});
+$("#nationalidentificationnumberen").on('input',function(){
+	$(".countryNumen").attr("class", "countryNumen has-success");  
+    $(".help-countryNumen").attr("data-bv-result","IVALID");  
+    $(".help-countryNumen").attr("style","display: none;");  
+    $("#nationalidentificationnumberen").attr("style", null);
+});
+
+$("#socialsecuritynumber").on('input',function(){
+	$(".safeNum").attr("class", "safeNum has-success");  
+    $(".help-blocksafe").attr("data-bv-result","IVALID");  
+    $(".help-blocksafe").attr("style","display: none;");  
+    $("#socialsecuritynumber").attr("style", null);
+});
+$("#socialsecuritynumberen").on('input',function(){
+	$(".safeNumen").attr("class", "safeNumen has-success");  
+    $(".help-blocksafeen").attr("data-bv-result","IVALID");  
+    $(".help-blocksafeen").attr("style","display: none;");  
+    $("#socialsecuritynumberen").attr("style", null);
+});
+
+$("#taxpayernumber").on('input',function(){
+	$(".safepay").attr("class", "safepay has-success");  
+    $(".help-ratepaying").attr("data-bv-result","IVALID");  
+    $(".help-ratepaying").attr("style","display: none;");  
+    $("#taxpayernumber").attr("style", null);
+});
+$("#taxpayernumberen").on('input',function(){
+	$(".safepayen").attr("class", "safepayen has-success");  
+    $(".help-ratepayingen").attr("data-bv-result","IVALID");  
+    $(".help-ratepayingen").attr("style","display: none;");  
+    $("#taxpayernumberen").attr("style", null);
+});

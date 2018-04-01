@@ -7,6 +7,13 @@
 package com.juyo.visa;
 
 
+import com.juyo.visa.common.util.PinyinTool;
+import com.juyo.visa.common.util.PinyinTool.Type;
+import com.juyo.visa.common.util.TranslateUtil;
+
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
+
 /**
  * 测试发邮件
  */
