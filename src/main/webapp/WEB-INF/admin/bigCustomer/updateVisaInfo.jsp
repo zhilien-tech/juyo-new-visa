@@ -1096,7 +1096,7 @@
 				
 				<c:if test="${!empty obj.languageList }">
 					<c:forEach var="language" items="${obj.languageList }">
-						<div class="languagename paddingTop">
+						<div class="languagename languagenameDiv paddingTop">
 							<label>使用的语言名称</label>
 							<div class="groupInputInfo">
 								<input name="languagename" value="${language.languagename }" type="text" />
@@ -1105,7 +1105,7 @@
 					</c:forEach>
 				</c:if>
 				<c:if test="${empty obj.languageList }">
-					<div class="languagename paddingTop">
+					<div class="languagename languagenameDiv paddingTop">
 						<label>使用的语言名称</label>
 						<div class="groupInputInfo">
 							<input name="languagename" type="text" />

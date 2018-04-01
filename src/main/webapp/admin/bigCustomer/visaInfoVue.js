@@ -304,7 +304,22 @@ function save(){
 	});
 	visadata.beforeEducationList = beforeEducationList;
 	
-	alert(JSON.stringify(beforeEducationList));
+	//使用过的语言信息
+	var languageList = [];
+	$('.languagenameDiv').each(function(i){
+		var languageLength = '';
+		var language = {};
+		
+		var languagename = $(this).find('[name=languagename]').val();
+		if(languagename.length > 0 ){
+			language.languagename = languagename;
+			languageList.push(language);
+		}
+	});
+	visadata.languageList = languageList;
+	
+	
+	alert(JSON.stringify(languageList));
 	
 }
 	
