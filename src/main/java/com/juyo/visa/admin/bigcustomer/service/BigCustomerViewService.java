@@ -648,6 +648,16 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	}
 
 	/**
+	 * 更新签证信息
+	 */
+	public Object updateVisaInfos(String data, HttpServletRequest request) {
+
+		Map<String, Object> fromJson = JsonUtil.fromJson(data, Map.class);
+
+		return null;
+	}
+
+	/**
 	 * 
 	 * 人员管理Excel信息导入
 	 *

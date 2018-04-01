@@ -40,19 +40,22 @@ new Vue({
 				visaInfo.contactPointInfo = data.contactPointInfo;
 				visaInfo.familyInfo = data.familyInfo;
 				visaInfo.workEducationInfo = data.workEducationInfo;
-				
+
 				openYesOrNoPage();
-				
+
 			}
 		});
 	},
 	methods:{
-		
+
 	}
 });
 
 //签证信息页保存
 function save(){
+	
+	layer.load(1);
+	
 	var visadata = {};
 	
 	//旅伴信息
@@ -85,8 +88,22 @@ function save(){
 	visadata.organizationList = getOrganizationList();
 	//服兵役信息
 	visadata.militaryInfoList = getMilitaryInfoList();
-	
-	console.log(JSON.stringify(visadata));
-	
+
+	$.ajax({ 
+		type: 'POST', 
+		data: {
+			data:JSON.stringify(visadata)
+		}, 
+		url: '/admin/bigCustomer/updateVisaInfos.html',
+		success: function (data) { 
+			layer.closeAll('loading');
+			//window.location.reload();
+			layer.msg("保存成功");
+		},
+		error: function (xhr) {
+			layer.msg("保存失败");
+		} 
+	});
+
 }
 
