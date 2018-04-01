@@ -332,8 +332,22 @@ function save(){
 	});
 	visadata.countryList = countryList;
 	
+	//参加过的组织信息
+	var organizationList = [];
+	$('.organizationDiv').each(function(i){
+		var organizationLength = '';
+		var organization = {};
+		
+		var organizationname = $(this).find('[name=organizationname]').val();
+		if(organizationname.length > 0 ){
+			organization.organizationname = organizationname;
+			organizationList.push(organization);
+		}
+	});
+	visadata.organizationList = organizationList;
 	
-	alert(JSON.stringify(countryList));
+	
+	alert(JSON.stringify(organizationList));
 	
 }
 	
