@@ -1646,9 +1646,11 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	
-	<script src="${base}/admin/bigCustomer/visaInfoVue.js"></script><!-- 本页面js -->
-	<script src="${base}/admin/bigCustomer/visaInfo.js"></script><!-- 本页面js -->
-	<script src="${base}/admin/bigCustomer/initDatetimepicker.js"></script><!-- 本页面js -->
+	<script src="${base}/admin/bigCustomer/visa/openPageYesOrNo.js"></script><!-- 本页面  打开默认开关 js -->
+	<script src="${base}/admin/bigCustomer/visa/visaGetInfoList.js"></script><!-- 本页面  获取一对多信息 js -->
+	<script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
+	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js -->
+	<script src="${base}/admin/bigCustomer/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
 	
 </html>
 
