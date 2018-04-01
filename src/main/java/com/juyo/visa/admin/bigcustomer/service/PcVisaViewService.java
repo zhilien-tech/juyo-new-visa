@@ -296,12 +296,21 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		String name = loginUser.getName();
 		result.put("orderid", orderid);
 
+		//获取用户资料信息
+		TAppStaffOrderUsEntity orderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
+				Cnd.where("orderid", "=", orderid));
+		Integer staffid = orderUsEntity.getStaffid();
+		result.put("staffid", staffid);
+
+		//获取护照信息
+		TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		Integer passportId = passportEntity.getId();
+		result.put("passportId", passportId);
+
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		if (!Util.isEmpty(orderTravelInfo)) {
 
-			//获取用户资料信息
-			TAppStaffOrderUsEntity orderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
-					Cnd.where("orderid", "=", orderid));
 			if (!Util.isEmpty(orderUsEntity)) {
 
 				//获取用户基本信息
@@ -371,19 +380,23 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 					Cnd.where("flightnum", "=", orderTravelInfo.getGoFlightNum()));
 			TFlightEntity returnFlightEntity = dbDao.fetch(TFlightEntity.class,
 					Cnd.where("flightnum", "=", orderTravelInfo.getReturnFlightNum()));
-			if (!Util.isEmpty(goFlightEntity))
+			if (!Util.isEmpty(goFlightEntity)) {
 				result.put("goFlightInfo", goFlightEntity);
-			else
+			} else {
 				result.put("goFlightInfo", null);
-			if (!Util.isEmpty(returnFlightEntity))
-				result.put("returnFlightInfo", returnFlightEntity);
-			else
-				result.put("returnFlightInfo", null);
+			}
 
-			if (!Util.isEmpty(staffSummaryInfoList))
+			if (!Util.isEmpty(returnFlightEntity)) {
+				result.put("returnFlightInfo", returnFlightEntity);
+			} else {
+				result.put("returnFlightInfo", null);
+			}
+
+			if (!Util.isEmpty(staffSummaryInfoList)) {
 				result.put("summaryInfo", staffSummaryInfoList.get(0));
-			else
+			} else {
 				result.put("summaryInfo", null);
+			}
 		}
 		Map<Integer, String> stateMap = new HashMap<Integer, String>();
 		for (VisaUSStatesEnum e : VisaUSStatesEnum.values()) {
