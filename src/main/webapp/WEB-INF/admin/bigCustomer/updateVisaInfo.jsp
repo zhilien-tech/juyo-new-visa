@@ -1245,7 +1245,7 @@
 							</c:forEach>
 						</c:if>
 						
-
+						<c:if test="${empty obj.conscientiousList }">
 							<div class="militaryInfoDiv">
 								<div class="floatLeft groupSelectInfo">
 									<label>国家/地区</label>
