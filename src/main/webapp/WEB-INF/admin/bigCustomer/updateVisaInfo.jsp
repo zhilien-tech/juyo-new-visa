@@ -255,28 +255,28 @@
 						<div class="dateIssue goUS_visa">
 							<div class="groupInputInfo lastVisaDate">
 								<label>最后一次签证的签发日期</label>
-								<input id="issueddate" name="issueddate" class="datetimepickercss" placeholder="日/月/年" type="text"/>
+								<input id="issueddate" name="issueddate" v-model="visaInfo.previUSTripInfo.issueddate" class="datetimepickercss" placeholder="日/月/年" type="text"/>
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
-								<input name="visanumber" type="text" />
+								<input name="visanumber" v-model="visaInfo.previUSTripInfo.visanumber" type="text" />
 								<input id="idknowvisanumber" :value="visaInfo.previUSTripInfo.idknowvisanumber" name="idknowvisanumber" v-model="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/>
 							</div>
 							<div class="clear"></div>
 							<div class="Alike groupRadioInfo paddingTop">
 								<label>是否在申请相同类型的签证</label>
-								<input type="radio" name="isapplyingsametypevisa" value="1" />是
-								<input type="radio" name="isapplyingsametypevisa" value="2" checked />否
+								<input type="radio" name="isapplyingsametypevisa" v-model="visaInfo.previUSTripInfo.isapplyingsametypevisa" value="1" />是
+								<input type="radio" name="isapplyingsametypevisa" v-model="visaInfo.previUSTripInfo.isapplyingsametypevisa" value="2" checked />否
 							</div>
 							<div class="describleCountry groupRadioInfo paddingTop">
 								<label>是否在签发上述签证的国家或地区申请并且是您所在的国家或地区的居住地</label>
-								<input type="radio"  name="issamecountry" value="1" />是
-								<input type="radio"  name="issamecountry" value="2" checked />否
+								<input type="radio"  name="issamecountry" v-model="visaInfo.previUSTripInfo.issamecountry" value="1" />是
+								<input type="radio"  name="issamecountry" v-model="visaInfo.previUSTripInfo.issamecountry" value="2" checked />否
 							</div>
 							<div class="paddingTop groupRadioInfo">
 								<label>是否采集过指纹</label>
-								<input type="radio" name="istenprinted" value="1"/>是
-								<input type="radio" name="istenprinted" value="2" checked />否
+								<input type="radio" name="istenprinted" v-model="visaInfo.previUSTripInfo.istenprinted"  value="1"/>是
+								<input type="radio" name="istenprinted" v-model="visaInfo.previUSTripInfo.istenprinted"  value="2" checked />否
 							</div>
 							<div class="paddingTop">
 								<div class="groupRadioInfo">
@@ -287,11 +287,11 @@
 								<div class="yearExplain displayTop elementHide"><!-- 默认隐藏 -->
 									<div class="displayLeft groupInputInfo">
 										<label>年份</label>
-										<input name="lostyear" type="text" />
+										<input name="lostyear" v-model="visaInfo.previUSTripInfo.lostyear" type="text" />
 									</div>
 									<div class="displayRight grouptextareaInfo">
 										<label>说明</label>
-										<textarea name="lostexplain"></textarea>
+										<textarea name="lostexplain" v-model="visaInfo.previUSTripInfo.lostexplain"></textarea>
 									</div>
 								</div>
 							</div>
@@ -305,7 +305,7 @@
 									</div>
 									<div class="explain grouptextareaInfo paddingTop">
 										<label>说明</label>
-										<textarea name="cancelexplain"></textarea>
+										<textarea name="cancelexplain" v-model="visaInfo.previUSTripInfo.cancelexplain"></textarea>
 									</div>
 								</div>
 							</div>
@@ -322,7 +322,7 @@
 				</div>
 				<div class="refuseExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<textarea name="refusedexplain"></textarea>
+					<textarea name="refusedexplain" v-model="visaInfo.previUSTripInfo.refusedexplain"></textarea>
 				</div>
 			</div>
 			<!--曾经是否是美国合法永久居民-->
@@ -334,7 +334,7 @@
 				</div>
 				<div class="onceExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<textarea name="permanentresidentexplain"></textarea>
+					<textarea name="permanentresidentexplain" v-model="visaInfo.previUSTripInfo.permanentresidentexplain"></textarea>
 				</div>
 			</div>
 			<!--有没有人曾代表您向美国公民和移民服务局提交过移民申请-->
@@ -346,7 +346,7 @@
 				</div>
 				<div class="immigrationExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<textarea name="immigrantpetitionexplain"></textarea>
+					<textarea name="immigrantpetitionexplain" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplain"></textarea>
 				</div>
 			</div>
 			<!--以前的美国旅游信息END-->
@@ -355,22 +355,22 @@
 				<div class="titleInfo">美国联络点</div>
 				<div class="groupInputInfo paddingLeft">
 					<label>联系人姓</label>
-					<input name="firstname" type="text" />
+					<input name="firstname" v-model="visaInfo.contactPointInfo.firstname" type="text" />
 				</div>
 				<div class="groupcheckBoxInfo paddingRight">
 					<label>联系人名</label>
-					<input name="lastname" type="text"  />
+					<input name="lastname" v-model="visaInfo.contactPointInfo.lastname" type="text"  />
 					<input id="isknowname" :value="visaInfo.contactPointInfo.isknowname" name="isknowname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>组织名称</label>
-					<input id="organizationname" name="organizationname" type="text" />
-					<input id="isknoworganizationname" name="isknoworganizationname" class="groupname_us" type="checkbox" />
+					<input id="organizationname" name="organizationname" v-model="visaInfo.contactPointInfo.organizationname" type="text" />
+					<input id="isknoworganizationname" name="isknoworganizationname" v-model="visaInfo.contactPointInfo.isknoworganizationname"  class="groupname_us" type="checkbox" />
 				</div>
 				<div class="paddingRight groupSelectInfo">
 					<label>与你的关系</label>
-					<select id="ralationship" name="ralationship">
+					<select id="ralationship"   name="ralationship">
 						<option value="0">请选择</option>
 						<c:forEach items="${obj.ContactPointRelationshipStatusEnum }" var="map">
 							<option value="${map.key }">${map.value }</option>
@@ -381,20 +381,20 @@
 				<div class="" style="padding: 10px 0;">
 					<div class="groupInputInfo floatLeft">
 						<label>美国街道地址(首选)</label>
-						<input name="address" type="text" />
+						<input name="address" v-model="visaInfo.contactPointInfo.address" type="text" />
 					</div>
 					<div class="groupInputInfo floatRight">
 						<label>美国街道地址(次选)*可选</label>
-						<input type="text" />
+						<input name="secaddress" v-model="visaInfo.contactPointInfo.secaddress" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo" >
 						<label>市</label>
-						<input id="city" name="city" type="text" />
+						<input id="city" name="city" v-model="visaInfo.contactPointInfo.city" type="text" />
 					</div>
 					<div class="paddingRight groupSelectInfo" >
 						<label>州</label>
-						<select id="state" name="state">
+						<select id="state" name="state" v-model="visaInfo.contactPointInfo.state">
 							<option value="0">请选择</option>
 							<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
 								<option value="${map.key }">${map.value }</option>
@@ -404,17 +404,17 @@
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo" >
 						<label>邮政编码</label>
-						<input name="zipcode" type="text" />
+						<input name="zipcode" v-model="visaInfo.contactPointInfo.zipcode" type="text" />
 					</div>
 					<div class="paddingRight groupInputInfo" >
 						<label>电话号码</label>
-						<input type="text" />
+						<input name="telephone" v-model="visaInfo.contactPointInfo.telephone" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingTop groupcheckBoxInfo">
 						<label>邮件地址</label>
-						<input name="email" type="text" />
-						<input id="isKnowEmailAddress" type="checkbox" />
+						<input name="email" v-model="visaInfo.contactPointInfo.email" type="text" />
+						<input id="isKnowEmailAddress" name="isknowemail" v-model="visaInfo.contactPointInfo.isknowemail" type="checkbox" />
 					</div>
 				</div>
 			</div>
@@ -425,13 +425,13 @@
 				<div class="titleInfo">家庭信息</div>
 				<div class="paddingLeft groupcheckBoxInfo" >
 					<label>父亲的姓</label>
-					<input name="fatherfirstname" type="text"/>
-					<input id="isKnowFatherXing" name="isknowfatherfirstname" type="checkbox" />
+					<input name="fatherfirstname" v-model="visaInfo.familyInfo.fatherfirstname" type="text"/>
+					<input id="isKnowFatherXing" name="isknowfatherfirstname" v-model="visaInfo.familyInfo.isknowfatherfirstname" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo" >
 					<label>父亲的名</label>
-					<input name="fatherlastname" type="text" />
-					<input id="isKnowFatherMing" name="isknowfatherlastname" type="checkbox" />
+					<input name="fatherlastname" v-model="visaInfo.familyInfo.fatherlastname" type="text" />
+					<input id="isKnowFatherMing" name="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop">
@@ -443,7 +443,7 @@
 					<!--yes-->
 					<div class="fatherUSYes groupSelectInfo paddingNone">
 						<label>身份状态</label>
-						<select id="fatherstatus" name="fatherstatus">
+						<select id="fatherstatus" v-model="visaInfo.familyInfo.fatherstatus" name="fatherstatus">
 							<option value="0">请选择</option>
 							<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
 								<option value="${map.key }">${map.value }</option>
@@ -453,13 +453,13 @@
 				</div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>母亲的姓</label>
-					<input id="motherfirstname" name="motherfirstname" type="text" />
-					<input id="isKnowMotherXing" name="isknowmotherfirstname" type="checkbox" />
+					<input id="motherfirstname" name="motherfirstname" v-model="visaInfo.familyInfo.motherfirstname" type="text" />
+					<input id="isKnowMotherXing" name="isknowmotherfirstname" v-model="visaInfo.familyInfo.isknowmotherfirstname" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo">
 					<label>母亲的名</label>
-					<input id="motherlastname" name="motherlastname" type="text" />
-					<input id="isKnowMotherMing" name="isknowmotherlastname" type="checkbox" />
+					<input id="motherlastname" name="motherlastname" v-model="visaInfo.familyInfo.motherlastname" type="text" />
+					<input id="isKnowMotherMing" name="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop">
@@ -470,7 +470,7 @@
 					</div>
 					<div class="motherUSYes paddingNone groupSelectInfo">
 						<label>身份状态</label>
-						<select id="motherstatus" name="motherstatus">
+						<select id="motherstatus" name="motherstatus" v-model="visaInfo.familyInfo.motherstatus">
 							<option value="0">请选择</option>
 							<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
 								<option value="${map.key }">${map.value }</option>
@@ -566,8 +566,8 @@
 						<!--NO-->
 						<div class="directRelativesNo groupRadioInfo">
 							<label>在美国是否还有别的亲属</label>
-							<input type="radio" name="hasotherrelatives" value="1"/>是
-							<input type="radio" name="hasotherrelatives" value="2" checked/>否
+							<input type="radio" name="hasotherrelatives" v-model="visaInfo.familyInfo.hasotherrelatives" value="1"/>是
+							<input type="radio" name="hasotherrelatives" v-model="visaInfo.familyInfo.hasotherrelatives" value="2" checked/>否
 						</div>
 					</div>
 					
@@ -577,20 +577,20 @@
 				<div class="titleInfo">配偶信息</div>
 				<div class="floatLeft groupInputInfo">
 					<label>配偶的姓</label>
-					<input name="spousefirstname" type="text" />
+					<input name="spousefirstname" v-model="visaInfo.familyInfo.spousefirstname" type="text" />
 				</div>
 				<div class="floatRight groupInputInfo">
 					<label>配偶的名</label>
-					<input name="spouselastname" type="text" />
+					<input name="spouselastname" v-model="visaInfo.familyInfo.spouselastname" type="text" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingLeft groupInputInfo">
 					<label>配偶的生日</label>
-					<input id="spousebirthday" name="spousebirthday" class="datetimepickercss" type="text" placeholder="日/月/年" />
+					<input id="spousebirthday" name="spousebirthday" v-model="visaInfo.familyInfo.spousebirthday" class="datetimepickercss" type="text" placeholder="日/月/年" />
 				</div>
 				<div class="paddingRight groupSelectInfo">
 					<label>配偶的国籍</label>
-					<select id="spousenationality" name="spousenationality">
+					<select id="spousenationality" name="spousenationality" v-model="visaInfo.familyInfo.spousenationality">
 						<option value="0">请选择</option>
 						<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
 							<option value="${map.key }">${map.value }</option>
@@ -600,12 +600,12 @@
 				<div class="clear"></div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>配偶的出生城市</label>
-					<input name="spousecity" type="text" />
-					<input id="isKnowMateCity" name="isknowspousecity" type="checkbox" />
+					<input name="spousecity" v-model="visaInfo.familyInfo.spousecity" type="text" />
+					<input id="isKnowMateCity" name="isknowspousecity" v-model="visaInfo.familyInfo.isknowspousecity" type="checkbox" />
 				</div>
 				<div class="paddingRight groupSelectInfo" >
 					<label>配偶的出生国家</label>
-					<select id="spousecountry" name="spousecountry">
+					<select id="spousecountry" name="spousecountry" v-model="visaInfo.familyInfo.spousecountry">
 						<option value="0">请选择</option>
 						<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
 							<option value="${map.key }">${map.value }</option>
@@ -615,7 +615,7 @@
 				<div class="clear"></div>
 				<div class="paddingTop groupSelectInfo" >
 					<label>配偶的联系地址</label>
-					<select id="spouseaddress" name="spouseaddress" class="spouse_Address" onchange="changeSpouse()">
+					<select id="spouseaddress" name="spouseaddress" v-model="visaInfo.familyInfo.spouseaddress" class="spouse_Address" onchange="changeSpouse()">
 						<option value="0">请选择</option>
 						<c:forEach items="${obj.VisaSpouseContactAddressEnum }" var="map">
 							<option value="${map.key }">${map.value }</option>
@@ -628,31 +628,31 @@
 				<div class="otherSpouseInfo elementHide paddingTop" >
 					<div class="floatLeft groupInputInfo">
 						<label>街道地址(首选)</label>
-						<input name="firstaddress" type="text" />
+						<input name="firstaddress" v-model="visaInfo.familyInfo.firstaddress" type="text" />
 					</div>
 					<div class="floatRight groupInputInfo">
 						<label>街道地址(次要)*可选</label>
-						<input name="secondaddress" type="text" />
+						<input name="secondaddress" v-model="visaInfo.familyInfo.secondaddress" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo">
 						<label>市</label>
-						<input name="city" type="text"/>
+						<input name="city" v-model="visaInfo.familyInfo.city" type="text"/>
 					</div>
 					<div class="paddingRight groupcheckBoxInfo">
 						<label>州/省</label>
-						<input name="province" type="text" />
-						<input id="isprovinceapply" name="isprovinceapply" type="checkbox" />
+						<input name="province" v-model="visaInfo.familyInfo.province" type="text" />
+						<input id="isprovinceapply" name="isprovinceapply" v-model="visaInfo.familyInfo.isprovinceapply" type="checkbox" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>邮政编码</label>
-						<input name="zipcode" type="text" />
-						<input id="iszipcodeapply" name="iszipcodeapply" type="checkbox" />
+						<input name="zipcode" v-model="visaInfo.familyInfo.zipcode" type="text" />
+						<input id="iszipcodeapply" name="iszipcodeapply" v-model="visaInfo.familyInfo.iszipcodeapply" type="checkbox" />
 					</div>
 					<div class="paddingRight groupSelectInfo">
 						<label>国家/地区</label>
-						<select name="country">
+						<select name="country" v-model="visaInfo.familyInfo.country">
 							<option value="0">请选择</option>
 							<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
 								<option value="${map.key }">${map.value }</option>
@@ -678,40 +678,40 @@
 				<div class="paddingTop elementHide jobEduLearningInfoDiv">
 					<div class="floatLeft groupInputInfo">
 						<label>目前的工作点位或者学校名称</label>
-						<input name="unitname" type="text" />
+						<input name="unitname" v-model="visaInfo.workEducationInfo.unitname" type="text" />
 					</div>
 					<div class="floatRight groupInputInfo">
 						<label >街道地址(首选)</label>
-						<input name="address" type="text" />
+						<input name="address" v-model="visaInfo.workEducationInfo.address" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo">
 						<label>街道地址(次要)*可选</label>
-						<input type="text" />
+						<input name="secaddress" v-model="visaInfo.workEducationInfo.secaddress" type="text" />
 					</div>
 					<div class="paddingRight groupInputInfo">
 						<label>市</label>
-						<input name="city" type="text"/>
+						<input name="city" v-model="visaInfo.workEducationInfo.city" type="text"/>
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>州/省</label>
-						<input name="province" type="text"/>
-						<input name="isprovinceapply" type="checkbox"/>
+						<input name="province" v-model="visaInfo.workEducationInfo.province" type="text"/>
+						<input name="isprovinceapply" v-model="visaInfo.workEducationInfo.isprovinceapply" type="checkbox"/>
 					</div>
 					<div class="paddingRight groupcheckBoxInfo">
 						<label>邮政编码</label>
-						<input name="zipcode" type="text" />
-						<input name="iszipcodeapply" type="checkbox" />
+						<input name="zipcode" v-model="visaInfo.workEducationInfo.zipcode" type="text" />
+						<input name="iszipcodeapply" v-model="visaInfo.workEducationInfo.iszipcodeapply" type="checkbox" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo">
 						<label>电话号吗</label>
-						<input name="telephone" type="text" />
+						<input name="telephone" v-model="visaInfo.workEducationInfo.telephone" type="text" />
 					</div>
 					<div class="paddingRight groupSelectInfo" >
 						<label>国家/地区</label>
-						<select name="country">
+						<select name="country" v-model="visaInfo.workEducationInfo.country">
 							<option value="0">请选择</option>
 							<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
 								<option value="${map.key }">${map.value }</option>
@@ -721,20 +721,20 @@
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo">
 						<label>开始日期</label>
-						<input id="workstartdate" name="workstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
+						<input id="workstartdate" name="workstartdate" v-model="visaInfo.workEducationInfo.workstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 					</div>
 					<div class="paddingRight groupInputInfo" >
 						<label>当地月收入(如果雇佣)</label>
-						<input name="salary" type="text" />
+						<input name="salary" v-model="visaInfo.workEducationInfo.salary" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft">
 						<label>不适用</label>
-						<input name="issalaryapply" type="checkbox" />
+						<input name="issalaryapply" v-model="visaInfo.workEducationInfo.issalaryapply" type="checkbox" />
 					</div>
 					<div class="paddingRight grouptextareaInfo">
 						<label>简要描述你的指责</label>
-						<textarea name="duty"></textarea>
+						<textarea name="duty" v-model="visaInfo.workEducationInfo.duty"></textarea>
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -1244,7 +1244,8 @@
 								</div>
 							</c:forEach>
 						</c:if>
-						<c:if test="${empty obj.conscientiousList }">
+						
+
 							<div class="militaryInfoDiv">
 								<div class="floatLeft groupSelectInfo">
 									<label>国家/地区</label>
