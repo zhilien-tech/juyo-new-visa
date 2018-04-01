@@ -8,8 +8,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>拍摄资料</title>
-<link rel="stylesheet"
-	href="/references/public/dist/newvisacss/css/photograph.css" />
+<link rel="stylesheet" href="/references/public/dist/newvisacss/css/photograph.css" />
 </head>
 <body>
 	<div class="head">
@@ -20,6 +19,9 @@
 			<a class="btnSave" onclick="nextWindow()">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
 		</div>
 	</div>
+	<a id="toBase" class="rightNav" onclick="passportBtn();">
+		<span></span>
+	</a>
 	<div class="topHide"></div>
 	<div class="section">
 		<div class="QRCode">
