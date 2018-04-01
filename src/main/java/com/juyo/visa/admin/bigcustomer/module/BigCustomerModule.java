@@ -158,6 +158,15 @@ public class BigCustomerModule {
 	}
 
 	/**
+	 * 更新签证信息
+	 */
+	@At
+	@POST
+	public Object updateVisaInfos(@Param("data") String data, HttpServletRequest request) {
+		return bigCustomerViewService.updateVisaInfos(data, request);
+	}
+
+	/**
 	 *跳转到其他证件页面
 	 */
 	@At
