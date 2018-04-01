@@ -296,11 +296,23 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		String name = loginUser.getName();
 		result.put("orderid", orderid);
 
+		//获取用户资料信息
+		TAppStaffOrderUsEntity orderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
+				Cnd.where("orderid", "=", orderid));
+		Integer staffid = orderUsEntity.getStaffid();
+		result.put("staffid", staffid);
+
+		//获取护照信息
+		TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		Integer passportId = passportEntity.getId();
+		result.put("passportId", passportId);
+
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		if (!Util.isEmpty(orderTravelInfo)) {
 
 			//获取用户资料信息
-			TAppStaffOrderUsEntity orderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
+			TAppStaffOrderUsEntity stafforderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
 					Cnd.where("orderid", "=", orderid));
 			if (!Util.isEmpty(orderUsEntity)) {
 

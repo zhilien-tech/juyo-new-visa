@@ -24,9 +24,9 @@
 		<a id="toPassport" class="leftNav" onclick="passportBtn();">
 			<span></span>
 		</a>
-		<!-- <a id="toVisa" class="rightNav" onclick="toVisaInfo();">
+		<a id="toVisa" class="rightNav" onclick="toVisaInfo();">
 			<span></span>
-		</a> -->
+		</a>
 		
 		<form id="applicantInfo">
 			<div class="modal-header">
