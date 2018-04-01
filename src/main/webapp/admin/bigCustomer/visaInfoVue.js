@@ -318,8 +318,22 @@ function save(){
 	});
 	visadata.languageList = languageList;
 	
+	//过去五年去过的国家信息
+	var countryList = [];
+	$('.travelCountry').each(function(i){
+		var countryLength = '';
+		var country = {};
+		
+		var traveledcountry = $(this).find('[name=traveledcountry]').val();
+		if(traveledcountry.length > 0 ){
+			country.traveledcountry = traveledcountry;
+			countryList.push(country);
+		}
+	});
+	visadata.countryList = countryList;
 	
-	alert(JSON.stringify(languageList));
+	
+	alert(JSON.stringify(countryList));
 	
 }
 	
