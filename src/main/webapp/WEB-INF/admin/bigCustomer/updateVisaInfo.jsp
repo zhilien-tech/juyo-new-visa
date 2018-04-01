@@ -773,8 +773,8 @@
 										</div>
 										<div class="paddingRight groupcheckBoxInfo" >
 											<label>市</label>
-											<input type="text" />
-											<input name="employercity" value="${beforeWork.employercity }" type="checkbox" />
+											<input name="employercity" value="${beforeWork.employercity }" type="text" />
+											<!-- <input type="checkbox" /> -->
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft groupInputInfo">
@@ -867,8 +867,8 @@
 									</div>
 									<div class="paddingRight groupcheckBoxInfo" >
 										<label>市</label>
-										<input type="text" />
-										<input name="employercity" type="checkbox" />
+										<input name="employercity" type="text" />
+										<input type="checkbox" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft groupInputInfo">
@@ -958,7 +958,7 @@
 										<div class="clear"></div>
 										<div class="paddingLeft groupInputInfo">
 											<label>街道地址(次选)*可选</label>
-											<input type="text" value="${education.secinstitutionaddress }" />
+											<input name="secinstitutionaddress" type="text" value="${education.secinstitutionaddress }" />
 										</div>
 										<div class="paddingRight groupcheckBoxInfo" >
 											<label >市</label>

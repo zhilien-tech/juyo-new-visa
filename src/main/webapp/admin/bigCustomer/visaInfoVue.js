@@ -192,6 +192,11 @@ function save(){
 		var employerprovince = $(this).find('[name=employerprovince]').val();
 		var employerzipcode = $(this).find('[name=employerzipcode]').val();
 		var employercountry = $(this).find('[name=employercountry]').val();
+		if(employercountry != 0){
+			beforeWorkLength += employercountry;
+		}else{
+			beforeWorkLength += '';
+		}
 		var employertelephone = $(this).find('[name=employertelephone]').val();
 		var jobtitle = $(this).find('[name=jobtitle]').val();
 		var isemployerzipcodeapply = $(this).find('[name=isemployerzipcodeapply]').is(':checked');
@@ -201,7 +206,7 @@ function save(){
 			isemployerzipcodeapply = 0;
 		}
 		var supervisorlastname = $(this).find('[name=supervisorlastname]').val();
-		var isknowsupervisorlastname = $(this).find('[name=isknowsupervisorlastname]').val();
+		var isknowsupervisorlastname = $(this).find('[name=isknowsupervisorlastname]').is(':checked');
 		if(isknowsupervisorlastname){
 			isknowsupervisorlastname = 1;
 		}else{
@@ -245,7 +250,61 @@ function save(){
 	});
 	visadata.beforeWorkList = beforeWorkList;
 	
-	alert(JSON.stringify(beforeWorkList));
+	//以前教育信息
+	var beforeEducationList = [];
+	$('.midSchoolEduDiv').each(function(i){
+		var beforeEducationLength = '';
+		var beforeEducation = {};
+		
+		var institution = $(this).find('[name=institution]').val();
+		var institutionaddress = $(this).find('[name=institutionaddress]').val();
+		var secinstitutionaddress = $(this).find('[name=secinstitutionaddress]').val();
+		var institutioncity = $(this).find('[name=institutioncity]').val();
+		var institutionprovince = $(this).find('[name=institutionprovince]').val();
+		var institutionzipcode = $(this).find('[name=institutionzipcode]').val();
+		var isinstitutionzipcodeapply = $(this).find('[name=isinstitutionzipcodeapply]').is(':checked');
+		if(isinstitutionzipcodeapply){
+			isinstitutionzipcodeapply = 1;
+		}else{
+			isinstitutionzipcodeapply = 0;
+		}
+		var course = $(this).find('[name=course]').val();
+		var coursestartdate = $(this).find('[name=coursestartdate]').val();
+		var courseenddate = $(this).find('[name=courseenddate]').val();
+		var institutioncountry = $(this).find('[name=institutioncountry]').val();
+		if(institutioncountry != 0){
+			beforeEducationLength += institutioncountry;
+		}else{
+			institutioncountry += '';
+		}
+		beforeEducationLength += institution;
+		beforeEducationLength += institutionaddress;
+		beforeEducationLength += secinstitutionaddress;
+		beforeEducationLength += institutioncity;
+		beforeEducationLength += institutionprovince;
+		beforeEducationLength += institutionzipcode;
+		beforeEducationLength += course;
+		beforeEducationLength += coursestartdate;
+		beforeEducationLength += courseenddate;
+		beforeEducationLength += institutioncountry;
+		if(beforeEducationLength.length > 0 ){
+			beforeEducation.institution = institution;
+			beforeEducation.institutionaddress = institutionaddress;
+			beforeEducation.secinstitutionaddress = secinstitutionaddress;
+			beforeEducation.institutioncity = institutioncity;
+			beforeEducation.institutionprovince = institutionprovince;
+			beforeEducation.institutionzipcode = institutionzipcode;
+			beforeEducation.isinstitutionzipcodeapply = isinstitutionzipcodeapply;
+			beforeEducation.course = course;
+			beforeEducation.coursestartdate = coursestartdate;
+			beforeEducation.courseenddate = courseenddate;
+			beforeEducation.institutioncountry = institutioncountry;
+			beforeEducationList.push(beforeEducation);
+		}
+	});
+	visadata.beforeEducationList = beforeEducationList;
+	
+	alert(JSON.stringify(beforeEducationList));
 	
 }
 	
