@@ -277,6 +277,10 @@
 									<label>国家注册号码</label> 
 									<input id="nationalidentificationnumber" onchange="translateZhToEn(this,'nationalidentificationnumberen','')" name="nationalidentificationnumber" type="text" class="form-control input-sm" value="${obj.applicant.nationalidentificationnumber }"/>
 								</div>
+								
+								<div class="countryNum has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-countryNum" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">国家注册号码不能为空</small>
+								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
 								<div class="form-group">
@@ -292,6 +296,9 @@
 									<label>美国社会安全号码</label> 
 									<input id="socialsecuritynumber" onchange="translateZhToEn(this,'socialsecuritynumberen','')" name="socialsecuritynumber" type="text" class="form-control input-sm" value="${obj.applicant.socialsecuritynumber }" />
 								</div>
+								<div class="safeNum has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-blocksafe" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国社会安全号码</small>
+								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
 								<div class="form-group">
@@ -306,6 +313,9 @@
 								<div class="form-group">
 									<label>美国纳税人证件号</label> 
 									<input id="taxpayernumber" onchange="translateZhToEn(this,'taxpayernumberen','')" name="taxpayernumber" type="text" class="form-control input-sm" value="${obj.applicant.taxpayernumber }" />
+								</div>
+								<div class="safepay has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-ratepaying" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国纳税人证件号</small>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
@@ -502,6 +512,9 @@
 								<div class="form-group">
 									<input id="nationalidentificationnumberen" name="nationalidentificationnumberen" type="text" class="form-control input-sm" value="${obj.applicant.nationalidentificationnumberen }" />
 								</div>
+								<div class="countryNumen has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-countryNumen" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">国家注册号码不能为空</small>
+								</div>	
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMarginEng">
 								<div class="form-group">
@@ -517,6 +530,9 @@
 									<label>U.S. Social Security Number</label> 
 									<input id="socialsecuritynumberen" name="socialsecuritynumberen" type="text" class="form-control input-sm" value="${obj.applicant.socialsecuritynumberen }" />
 								</div>
+								<div class="safeNumen has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-blocksafeen" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国社会安全号码</small>
+								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
 								<div class="form-group">
@@ -531,6 +547,9 @@
 								<div class="form-group">
 									<label>U.S. Taxpayer ID Number</label> 
 									<input id="taxpayernumberen" name="taxpayernumberen" type="text" class="form-control input-sm" / value="${obj.applicant.taxpayernumberen }">
+								</div>
+								<div class="safepayen has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-ratepayingen" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国纳税人证件号</small>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
