@@ -25,6 +25,7 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
@@ -654,23 +655,71 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		Map<String, Object> fromJson = JsonUtil.fromJson(data, Map.class);
 
+		//人员id
+		Integer staffId = (Integer) fromJson.get("staffId");
+
 		//旅伴信息
-		TAppStaffTravelcompanionEntity travelcompanionEntity = (TAppStaffTravelcompanionEntity) fromJson
-				.get("travelCompanionInfo");
+		String travelcompanionJson = Json.toJson(fromJson.get("travelCompanionInfo"));
+		TAppStaffTravelcompanionEntity travelcompanion = JsonUtil.fromJson(travelcompanionJson,
+				TAppStaffTravelcompanionEntity.class);
+		dbDao.update(travelcompanion);
 
 		//以前的美国旅游信息
-		TAppStaffPrevioustripinfoEntity previoustripinfoEntity = (TAppStaffPrevioustripinfoEntity) fromJson
-				.get("previUSTripInfo");
+		String previUSTripInfoJson = Json.toJson(fromJson.get("previUSTripInfo"));
+		TAppStaffPrevioustripinfoEntity previUSTrip = JsonUtil.fromJson(previUSTripInfoJson,
+				TAppStaffPrevioustripinfoEntity.class);
+		dbDao.update(previUSTrip);
 
 		//美国联络点
-		TAppStaffContactpointEntity contactpointEntity = (TAppStaffContactpointEntity) fromJson.get("contactPointInfo");
+		String contactPointJson = Json.toJson(fromJson.get("contactPointInfo"));
+		TAppStaffContactpointEntity contactPoint = JsonUtil.fromJson(contactPointJson,
+				TAppStaffContactpointEntity.class);
+		dbDao.update(contactPoint);
 
 		//家庭信息
-		TAppStaffFamilyinfoEntity familyinfoEntity = (TAppStaffFamilyinfoEntity) fromJson.get("familyInfo");
+		String familyInfoJson = Json.toJson(fromJson.get("familyInfo"));
+		TAppStaffFamilyinfoEntity familyInfo = JsonUtil.fromJson(familyInfoJson, TAppStaffFamilyinfoEntity.class);
+		dbDao.update(familyInfo);
 
 		//工作/教育/培训信息
-		TAppStaffWorkEducationTrainingEntity workEducationTrainingEntity = (TAppStaffWorkEducationTrainingEntity) fromJson
-				.get("workEducationInfo");
+		String workEducationJson = Json.toJson(fromJson.get("workEducationInfo"));
+		TAppStaffWorkEducationTrainingEntity workEducationTraining = JsonUtil.fromJson(workEducationJson,
+				TAppStaffWorkEducationTrainingEntity.class);
+		dbDao.update(workEducationTraining);
+
+		//同伴信息
+		String companionListJson = Json.toJson(fromJson.get("companionList"));
+		List<TAppStaffCompanioninfoEntity> companionList_old = dbDao.query(TAppStaffCompanioninfoEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		List<TAppStaffCompanioninfoEntity> companionList_New = JsonUtil.fromJsonAsList(
+				TAppStaffCompanioninfoEntity.class, companionListJson);
+		dbDao.updateRelations(companionList_old, companionList_New);
+
+		//去过美国信息
+		String gousListJson = Json.toJson(fromJson.get("gousList"));
+		List<TAppStaffGousinfoEntity> gousList_old = dbDao.query(TAppStaffGousinfoEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		List<TAppStaffGousinfoEntity> gousList_New = JsonUtil.fromJsonAsList(TAppStaffGousinfoEntity.class,
+				gousListJson);
+		dbDao.updateRelations(gousList_old, gousList_New);
+
+		//美国驾照信息
+		String driverListJson = Json.toJson(fromJson.get("driverList"));
+		List<TAppStaffDriverinfoEntity> driverList_old = dbDao.query(TAppStaffDriverinfoEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		List<TAppStaffDriverinfoEntity> driverList_New = JsonUtil.fromJsonAsList(TAppStaffDriverinfoEntity.class,
+				driverListJson);
+		dbDao.updateRelations(driverList_old, driverList_New);
+
+		//直系亲属信息 
+		String directListJson = Json.toJson(fromJson.get("directList"));
+		List<TAppStaffImmediaterelativesEntity> directList_old = dbDao.query(TAppStaffImmediaterelativesEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		List<TAppStaffImmediaterelativesEntity> directList_New = JsonUtil.fromJsonAsList(
+				TAppStaffImmediaterelativesEntity.class, directListJson);
+		dbDao.updateRelations(directList_old, directList_New);
+
+		//以前工作信息
 
 		return null;
 	}

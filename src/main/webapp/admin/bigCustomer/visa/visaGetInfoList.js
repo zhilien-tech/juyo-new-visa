@@ -17,6 +17,7 @@ function getCompanionList(){
 		}
 		
 		if(companionLength.length > 0){
+			companion.staffid = staffId;
 			companion.firstname = firstname;
 			companion.lastname = lastname;
 			companion.relationship = relationship;
@@ -46,6 +47,7 @@ function getGoUSList(){
 			gousLength += '';
 		}
 		if(gousLength.length > 0){
+			gous.staffid = staffId;
 			gous.arrivedate = arrivedate;
 			gous.staydays = staydays;
 			gous.dateunit = dateunit;
@@ -78,6 +80,7 @@ function getDriverList(){
 		}
 		
 		if(driverLength.length >0){
+			driver.staffid = staffId;
 			driver.driverlicensenumber = drivernumber;
 			driver.isknowdrivernumber = isknownumber;
 			driver.witchstateofdriver = stateofdriver;
@@ -113,6 +116,7 @@ function getDirectList(){
 		}
 		
 		if(directLength.length > 0){
+			direct.staffid = staffId;
 			direct.relativesfirstname = relativesfirstname;
 			direct.relativeslastname = relativeslastname;
 			direct.relationship = relationship;
@@ -174,6 +178,7 @@ function getBeforeWorkList(){
 		beforeWorkLength += employenddate;
 		beforeWorkLength += previousduty;
 		if(beforeWorkLength.length >0){
+			beforeWork.staffid = staffId;
 			beforeWork.employername = employername;
 			beforeWork.employeraddress = employeraddress;
 			beforeWork.employeraddressSec = employeraddressSec;
@@ -234,6 +239,7 @@ function getBeforeEducationList(){
 		beforeEducationLength += coursestartdate;
 		beforeEducationLength += courseenddate;
 		if(beforeEducationLength.length > 0 ){
+			beforeEducation.staffid = staffId;
 			beforeEducation.institution = institution;
 			beforeEducation.institutionaddress = institutionaddress;
 			beforeEducation.secinstitutionaddress = secinstitutionaddress;
@@ -261,6 +267,7 @@ function getLanguageList(){
 		
 		var languagename = $(this).find('[name=languagename]').val();
 		if(languagename.length > 0 ){
+			language.staffid = staffId;
 			language.languagename = languagename;
 			languageList.push(language);
 		}
@@ -278,6 +285,7 @@ function getCountryList(){
 		
 		var traveledcountry = $(this).find('[name=traveledcountry]').val();
 		if(traveledcountry.length > 0 ){
+			country.staffid = staffId;
 			country.traveledcountry = traveledcountry;
 			countryList.push(country);
 		}
@@ -294,6 +302,7 @@ function getOrganizationList(){
 		
 		var organizationname = $(this).find('[name=organizationname]').val();
 		if(organizationname.length > 0 ){
+			organization.staffid = staffId;
 			organization.organizationname = organizationname;
 			organizationList.push(organization);
 		}
@@ -326,6 +335,7 @@ function getMilitaryInfoList(){
 		militaryInfoLength += serviceenddate;
 		
 		if(militaryInfoLength.length >0){
+			militaryInfo.staffid = staffId;
 			militaryInfo.militarycountry = militarycountry;
 			militaryInfo.servicebranch = servicebranch;
 			militaryInfo.rank = rank;

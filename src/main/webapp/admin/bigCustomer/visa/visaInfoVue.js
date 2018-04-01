@@ -58,6 +58,8 @@ function save(){
 	
 	var visadata = {};
 	
+	//staffId
+	visadata.staffId = staffId;
 	//旅伴信息
 	visadata.travelCompanionInfo = visaInfo.travelCompanionInfo;
 	//以前的美国旅游信息
