@@ -608,6 +608,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			}
 			staffInfo.setCardId(updateForm.getCardId());
 			staffInfo.setCardIden(updateForm.getCardIden());
+			staffInfo.setCardnum(updateForm.getCardnum());
+			staffInfo.setCardnumen(updateForm.getCardnumen());
 			staffInfo.setCity(updateForm.getCity());
 			staffInfo.setCityen(updateForm.getCityen());
 			staffInfo.setDetailedaddress(updateForm.getDetailedaddress());

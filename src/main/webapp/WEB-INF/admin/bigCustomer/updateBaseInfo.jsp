@@ -125,6 +125,12 @@
 						</div>
 						<!-- 民族 -->
 						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>卡号</label> 
+									<input id="cardnum" name="cardnum" onchange="translateZhToEn(this,'cardnumen','')" type="text" class="form-control input-sm"  value="${obj.applicant.cardnum }" />
+								</div>
+							</div>
 							<!-- 民族 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
@@ -350,6 +356,12 @@
 						</div>
 						<!-- 民族 -->
 						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Cardnum</label> 
+									<input id="cardnumen" name="cardnumen" type="text" class="form-control input-sm" value="${obj.applicant.cardnumen }" />
+								</div>
+							</div>
 							<!-- 民族 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
@@ -553,6 +565,10 @@
 		var infoType = '${obj.infoType}';
 		var marrystatus = '${obj.marryStatus}';
 		var marrystatusen = '${obj.marryStatusEn}';
+		var telephone = '${obj.applicant.telephone}';
+		var telephoneen = '${obj.applicant.telephoneen}';
+		var email = '${obj.applicant.email}';
+		var emailen = '${obj.applicant.emailen}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>

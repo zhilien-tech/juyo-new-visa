@@ -106,6 +106,22 @@ function applyValidate(){
 					}
 				}
 			},
+			cardnum : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '卡号不能为空'
+					}
+				}
+			},
+			cardnumen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '卡号不能为空'
+					}
+				}
+			},
 			address : {
 				trigger:"change keyup",
 				validators : {
@@ -284,7 +300,13 @@ function applyValidate(){
 			},*/
 		}
 	});
-	$('#applicantInfo').bootstrapValidator('validate');
+	//$('#applicantInfo').bootstrapValidator('validate');
+}
+if(telephone != "" && telephoneen == ""){
+	translateZhToEn("#telephone", "telephoneen", "");
+}
+if(email != "" && emailen == ""){
+	translateZhToEn("#email", "emailen", "");
 }
 
 function translateZhToEn(from, to, param){
