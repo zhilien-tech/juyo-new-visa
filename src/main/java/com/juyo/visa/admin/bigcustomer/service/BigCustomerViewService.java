@@ -32,6 +32,7 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
@@ -720,8 +721,54 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		dbDao.updateRelations(directList_old, directList_New);
 
 		//以前工作信息
+		String beforeWorkListJson = Json.toJson(fromJson.get("beforeWorkList"));
+		List<TAppStaffBeforeworkEntity> beforeWorkList_old = dbDao.query(TAppStaffBeforeworkEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		List<TAppStaffBeforeworkEntity> beforeWorkList_New = JsonUtil.fromJsonAsList(TAppStaffBeforeworkEntity.class,
+				beforeWorkListJson);
+		dbDao.updateRelations(beforeWorkList_old, beforeWorkList_New);
 
-		return null;
+		//以前教育信息
+		String beforeEducationListJson = Json.toJson(fromJson.get("beforeEducationList"));
+		List<TAppStaffBeforeeducationEntity> beforeEducationList_old = dbDao.query(
+				TAppStaffBeforeeducationEntity.class, Cnd.where("staffid", "=", staffId), null);
+		List<TAppStaffBeforeeducationEntity> beforeEducationList_New = JsonUtil.fromJsonAsList(
+				TAppStaffBeforeeducationEntity.class, beforeEducationListJson);
+		dbDao.updateRelations(beforeEducationList_old, beforeEducationList_New);
+
+		//使用过的语言信息
+		String languageListJson = Json.toJson(fromJson.get("languageList"));
+		List<TAppStaffLanguageEntity> languageList_old = dbDao.query(TAppStaffLanguageEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		List<TAppStaffLanguageEntity> languageList_New = JsonUtil.fromJsonAsList(TAppStaffLanguageEntity.class,
+				languageListJson);
+		dbDao.updateRelations(languageList_old, languageList_New);
+
+		//过去五年去过的国家信息
+		String countryListJson = Json.toJson(fromJson.get("countryList"));
+		List<TAppStaffGocountryEntity> countryList_old = dbDao.query(TAppStaffGocountryEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		List<TAppStaffGocountryEntity> countryList_New = JsonUtil.fromJsonAsList(TAppStaffGocountryEntity.class,
+				countryListJson);
+		dbDao.updateRelations(countryList_old, countryList_New);
+
+		//参加过的组织信息
+		String organizationListJson = Json.toJson(fromJson.get("organizationList"));
+		List<TAppStaffOrganizationEntity> organizationList_old = dbDao.query(TAppStaffOrganizationEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		List<TAppStaffOrganizationEntity> organizationList_New = JsonUtil.fromJsonAsList(
+				TAppStaffOrganizationEntity.class, organizationListJson);
+		dbDao.updateRelations(organizationList_old, organizationList_New);
+
+		//服兵役信息
+		String militaryInfoListJson = Json.toJson(fromJson.get("militaryInfoList"));
+		List<TAppStaffConscientiousEntity> militaryInfoList_old = dbDao.query(TAppStaffConscientiousEntity.class,
+				Cnd.where("staffid", "=", staffId), null);
+		List<TAppStaffConscientiousEntity> militaryInfoList_New = JsonUtil.fromJsonAsList(
+				TAppStaffConscientiousEntity.class, militaryInfoListJson);
+		dbDao.updateRelations(militaryInfoList_old, militaryInfoList_New);
+
+		return JSON.toJSON("操作成功");
 	}
 
 	/**
