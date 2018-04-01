@@ -332,13 +332,13 @@
 									<label>
 										<span>*</span>Phone Number
 									</label> 
-									<input id="telephoneen" name="telephoneen" type="text" class="form-control input-sm" value="${obj.applicant.telephoneen }"/>
+									<input id="telephoneen" name="telephoneen" type="text" class="form-control input-sm" value="${obj.telephoneen }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Email Address</label> 
-									<input id="emailen" name="emailen" type="text" class="form-control input-sm" value="${obj.applicant.emailen }"/>
+									<input id="emailen" name="emailen" type="text" class="form-control input-sm" value="${obj.emailen }"/>
 								</div>
 							</div>
 						</div>
@@ -565,10 +565,6 @@
 		var infoType = '${obj.infoType}';
 		var marrystatus = '${obj.marryStatus}';
 		var marrystatusen = '${obj.marryStatusEn}';
-		var telephone = '${obj.applicant.telephone}';
-		var telephoneen = '${obj.applicant.telephoneen}';
-		var email = '${obj.applicant.email}';
-		var emailen = '${obj.applicant.emailen}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>

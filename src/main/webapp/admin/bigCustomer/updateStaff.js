@@ -302,12 +302,6 @@ function applyValidate(){
 	});
 	//$('#applicantInfo').bootstrapValidator('validate');
 }
-if(telephone != "" && telephoneen == ""){
-	translateZhToEn("#telephone", "telephoneen", "");
-}
-if(email != "" && emailen == ""){
-	translateZhToEn("#email", "emailen", "");
-}
 
 function translateZhToEn(from, to, param){
 	var toval = "";
@@ -317,6 +311,7 @@ function translateZhToEn(from, to, param){
 		toval = $(from).val();
 	}
 	$.ajax({
+		//async : false,
 		url : BASE_PATH+'/admin/translate/translate',
 		data : {
 			api : 'google',

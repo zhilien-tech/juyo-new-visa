@@ -565,6 +565,17 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("front", front);
 		result.put("back", back);
 		result.put("twoinch", twoinch);
+		//电话、邮箱
+		if (!Util.isEmpty(staffInfo.getTelephone()) && Util.isEmpty(staffInfo.getTelephoneen())) {
+			result.put("telephoneen", staffInfo.getTelephone());
+		} else {
+			result.put("telephoneen", staffInfo.getTelephoneen());
+		}
+		if (!Util.isEmpty(staffInfo.getEmail()) && Util.isEmpty(staffInfo.getEmailen())) {
+			result.put("emailen", staffInfo.getEmail());
+		} else {
+			result.put("emailen", staffInfo.getEmailen());
+		}
 		return result;
 	}
 
