@@ -35,6 +35,7 @@ new Vue({
 			type:'post',
 			//async:false,
 			success: function(data){
+				
 				visaInfo.travelCompanionInfo = data.travelCompanionInfo;
 				visaInfo.previUSTripInfo = data.previUSTripInfo;
 				visaInfo.contactPointInfo = data.contactPointInfo;
@@ -99,9 +100,13 @@ function save(){
 		}, 
 		url: '/admin/bigCustomer/updateVisaInfos.html',
 		success: function (data) { 
-			layer.closeAll('loading');
-			//window.location.reload();
-			layer.msg("保存成功");
+			if(data.status == 200){
+				layer.closeAll('loading');
+				layer.msg("保存成功");
+			}else{
+				layer.msg("保存失败");
+			}
+			
 		},
 		error: function (xhr) {
 			layer.msg("保存失败");
