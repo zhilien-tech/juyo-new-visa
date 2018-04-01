@@ -222,7 +222,6 @@ function save(){
 		beforeWorkLength += employercity;
 		beforeWorkLength += employerprovince;
 		beforeWorkLength += employerzipcode;
-		beforeWorkLength += employercountry;
 		beforeWorkLength += employertelephone;
 		beforeWorkLength += jobtitle;
 		beforeWorkLength += supervisorlastname;
@@ -275,7 +274,7 @@ function save(){
 		if(institutioncountry != 0){
 			beforeEducationLength += institutioncountry;
 		}else{
-			institutioncountry += '';
+			beforeEducationLength += '';
 		}
 		beforeEducationLength += institution;
 		beforeEducationLength += institutionaddress;
@@ -286,7 +285,6 @@ function save(){
 		beforeEducationLength += course;
 		beforeEducationLength += coursestartdate;
 		beforeEducationLength += courseenddate;
-		beforeEducationLength += institutioncountry;
 		if(beforeEducationLength.length > 0 ){
 			beforeEducation.institution = institution;
 			beforeEducation.institutionaddress = institutionaddress;
@@ -346,8 +344,44 @@ function save(){
 	});
 	visadata.organizationList = organizationList;
 	
+	//是否曾服兵役
+	var militaryInfoList = [];
+	$('.militaryInfoDiv').each(function(i){
+		var militaryInfoLength = '';
+		var militaryInfo = {};
+		
+		var militarycountry = $(this).find('[name=militarycountry]').val();
+		if(militarycountry != 0){
+			militaryInfoLength += militarycountry;
+		}else{
+			militaryInfoLength += '';
+		}
+		var servicebranch = $(this).find('[name=servicebranch]').val();
+		var rank = $(this).find('[name=rank]').val();
+		var militaryspecialty = $(this).find('[name=militaryspecialty]').val();
+		var servicestartdate = $(this).find('[name=servicestartdate]').val();
+		var serviceenddate = $(this).find('[name=serviceenddate]').val();
+		militaryInfoLength += servicebranch;
+		militaryInfoLength += rank;
+		militaryInfoLength += militaryspecialty;
+		militaryInfoLength += servicestartdate;
+		militaryInfoLength += serviceenddate;
+		
+		if(militaryInfoLength.length >0){
+			militaryInfo.militarycountry = militarycountry;
+			militaryInfo.servicebranch = servicebranch;
+			militaryInfo.rank = rank;
+			militaryInfo.militaryspecialty = militaryspecialty;
+			militaryInfo.servicestartdate = servicestartdate;
+			militaryInfo.serviceenddate = serviceenddate;
+			militaryInfoList.push(militaryInfo);
+		}
+		visadata.militaryInfoList = militaryInfoList;
+		
+		
+	});
 	
-	alert(JSON.stringify(organizationList));
+	alert(JSON.stringify(militaryInfoList));
 	
 }
 	
