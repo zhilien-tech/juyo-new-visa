@@ -8,6 +8,8 @@ import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.juyo.visa.common.util.TranslateUtil;
+
 @IocBean
 @At("/admin/translate")
 public class TranslateController {

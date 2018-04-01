@@ -39,15 +39,15 @@
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传护照</span>
-									<input id="passportUrl" name="passporturl" type="hidden" value="${obj.passport.passporturl }"/>
+									<input id="passportUrl" name="passporturl" type="hidden" value="${obj.passurl.url }"/>
 									<input id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
-									<img id="sqImg" alt="" src="${obj.passport.passporturl }" >
+									<img id="sqImg" alt="" src="${obj.passurl.url }" >
 									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 								</div>
 							</div>
 						</div>
 						</div><!-- end 护照 -->
-						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 0 8px !important;">
+						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:0px 0 0 8px !important;">
 							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="passportUrl" data-bv-result="IVVALID" style="display: none;">护照必须上传</small>
 						</div>
 						

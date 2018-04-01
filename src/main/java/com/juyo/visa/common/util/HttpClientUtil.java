@@ -1,4 +1,4 @@
-package com.juyo.visa.admin.bigcustomer.module;
+package com.juyo.visa.common.util;
 
 import java.io.File;
 import java.io.FileOutputStream;
