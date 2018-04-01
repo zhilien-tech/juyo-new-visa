@@ -32,7 +32,6 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
@@ -809,7 +808,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				TAppStaffConscientiousEntity.class, militaryInfoListJson);
 		dbDao.updateRelations(militaryInfoList_old, militaryInfoList_New);
 
-		return JSON.toJSON("操作成功");
+		return JsonResult.success("保存成功");
 	}
 
 	/**

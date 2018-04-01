@@ -11,6 +11,10 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<link rel="stylesheet" href="${base}/references/public/css/visaInfo.css">
+		<style type="text/css">
+			.leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
+			.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
+		</style>
 		<style>
      		[v-cloak]{display:none;}
      	</style>
@@ -26,7 +30,7 @@
 			</div>
 		</div>
 		<!-- 左右按钮 -->
-		<a class="prevstep">
+		<a id="toPassport" class="leftNav" onclick="baseInfoBtn();">
 			<span></span>
 		</a>
 		<!-- <a class="nextstep">
@@ -787,7 +791,7 @@
 										<div class="paddingLeft groupInputInfo">
 											<label>州/省</label>
 											<input name="employerprovince" value="${beforeWork.employerprovince }" type="text" />
-											<input name="isemployerprovinceapply" value="${beforeWork.isemployerprovinceapply }" type="checkbox" />
+											<input name="isemployerprovinceapply" value="${beforeWork.isemployerprovinceapply }" type="text" />
 										</div>
 										<div class="paddingRight groupcheckBoxInfo">
 											<label>邮政编码</label>
@@ -827,7 +831,13 @@
 										<div class="paddingRight groupcheckBoxInfo">
 											<label>主管的姓</label>
 											<input name="supervisorfirstname" value="${beforeWork.supervisorfirstname }" type="text" />
-											<input name="isknowsupervisorfirstname" value="${beforeWork.isknowsupervisorfirstname }" type="checkbox" />
+											<c:if test="${beforeWork.isknowsupervisorfirstname == 1}">
+												<input name="isknowsupervisorfirstname" value="${beforeWork.isknowsupervisorfirstname }" checked="checked" type="checkbox"/>
+											</c:if>
+											<c:if test="${beforeWork.isknowsupervisorlastname != 1}">
+												<input name="isknowsupervisorfirstname" value="${beforeWork.isknowsupervisorfirstname }" type="checkbox" />
+											</c:if>
+											
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft groupcheckBoxInfo">
@@ -852,7 +862,7 @@
 										</div>
 										<div class="paddingRight grouptextareaInfo">
 											<label>简要描述你的职责</label>
-											<textarea name="previousduty" v-model="beforeWork.employstartdate" value="${beforeWork.previousduty }"></textarea>
+											<textarea name="previousduty" value="${beforeWork.previousduty }"></textarea>
 										</div>
 									</div>
 								</c:forEach>
@@ -1659,6 +1669,15 @@
 	<script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js -->
 	<script src="${base}/admin/bigCustomer/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
-	
+	<script type="text/javascript">
+		//跳转到基本信息页
+		function baseInfoBtn(){
+			//左箭头跳转
+			window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId;
+			//保存签证信息
+			save();
+		}
+		
+	</script>
 </html>
 

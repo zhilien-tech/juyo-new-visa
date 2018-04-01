@@ -101,12 +101,11 @@ function save(){
 		url: '/admin/bigCustomer/updateVisaInfos.html',
 		success: function (data) { 
 			if(data.status == 200){
-				layer.closeAll('loading');
 				layer.msg("保存成功");
 			}else{
 				layer.msg("保存失败");
 			}
-			
+			layer.closeAll('loading');
 		},
 		error: function (xhr) {
 			layer.msg("保存失败");
