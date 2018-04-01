@@ -8,6 +8,8 @@ package com.juyo.visa.admin.mobileVisa.module;
 
 import java.io.File;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -15,7 +17,6 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
-import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.upload.UploadAdaptor;
@@ -49,10 +50,19 @@ public class MobileVisaModule {
 	}
 
 	/*
+	 * 获取用户基本信息
+	 */
+	@At
+	@POST
+	public Object getBasicInfoByStaffid(@Param("staffid") Integer staffid) {
+		return mobileVisaService.getBasicInfoByStaffid(staffid);
+	}
+
+	/*
 	 * 获取图片信息是否存在
 	 */
 	@At
-	@GET
+	@POST
 	public Object getImageInfoBytypeAndStaffid(@Param("staffid") Integer staffid, @Param("type") Integer type) {
 		return mobileVisaService.getImageInfoBytypeAndStaffid(staffid, type);
 	}
@@ -63,9 +73,29 @@ public class MobileVisaModule {
 	@At
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object uploadImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
-			@Param("type") Integer type) {
-		String uploadImage = mobileVisaService.uploadImage(file);
-		return mobileVisaService.updateImage(uploadImage, staffid, type);
+			@Param("type") Integer type, @Param("status") Integer status, @Param("sequence") Integer sequence,
+			HttpServletRequest request, HttpServletResponse response) {
+		return mobileVisaService.updateImage(file, staffid, type, status, sequence, request, response);
+	}
+
+	/*
+	 * 添加修改一套多张照片
+	 */
+	@At
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object uploadMuchImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
+			@Param("type") Integer type, @Param("mainid") Integer mainid, @Param("sequence") Integer sequence) {
+
+		return mobileVisaService.updateMuchImage(file, staffid, mainid, type, sequence);
+	}
+
+	/*
+	 * 获取一个类型多张图片
+	 */
+	@At
+	@POST
+	public Object getMuchPhotoByStaffid(@Param("staffid") Integer staffid, @Param("type") Integer type) {
+		return mobileVisaService.getMuchPhotoByStaffid(staffid, type);
 	}
 
 }

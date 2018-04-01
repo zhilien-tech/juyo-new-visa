@@ -37,6 +37,7 @@ import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
+import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
@@ -311,7 +312,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 				String sqlStr = sqlManager.get("t_app_paperwork_US_info");
 				Sql applysql = Sqls.create(sqlStr);
 				Cnd cnd = Cnd.NEW();
-				cnd.and("staffid", "=", orderUsEntity.getStaffid());
+				cnd.where("staffid", "=", orderUsEntity.getStaffid());
 				List<Record> infoList = dbDao.query(applysql, cnd, null);
 				for (Record appRecord : infoList) {
 					int type = appRecord.getInt("type");
@@ -384,7 +385,6 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			else
 				result.put("summaryInfo", null);
 		}
-		result.put("username", name);
 		Map<Integer, String> stateMap = new HashMap<Integer, String>();
 		for (VisaUSStatesEnum e : VisaUSStatesEnum.values()) {
 			stateMap.put(e.intKey(), e.value());
@@ -446,6 +446,12 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object updatePhoto(Integer staffid, HttpServletRequest request, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
+
+		TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
+				Cnd.where("id", "=", staffid));
+		if (!Util.isEmpty(passportEntity)) {
+			result.put("passportId", passportEntity.getId());
+		}
 		//生成二维码
 		String id = session.getId();
 		String serverName = request.getServerName();
