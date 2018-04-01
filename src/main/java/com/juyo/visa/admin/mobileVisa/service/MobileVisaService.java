@@ -9,15 +9,18 @@ package com.juyo.visa.admin.mobileVisa.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.juyo.visa.admin.mobileVisa.form.MobileVisaBasicInfoForm;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
@@ -141,6 +144,43 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	public Object getBasicInfoByStaffid(Integer staffid) {
 		TAppStaffBasicinfoEntity entity = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffid));
 		return entity;
+
+	}
+
+	public Object updateMuchImage(String url, Integer staffid, Integer type, Integer sequence) {
+
+		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", type).and("sequnce", "=", sequence));
+		if (!Util.isEmpty(credentialEntity)) {
+			credentialEntity.setUrl(url);
+			credentialEntity.setUpdatetime(new Date());
+			int update = dbDao.update(credentialEntity);
+		} else {
+			credentialEntity = new TAppStaffCredentialsEntity();
+			credentialEntity.setCreatetime(new Date());
+			credentialEntity.setStaffid(staffid);
+			credentialEntity.setUpdatetime(new Date());
+			credentialEntity.setType(type);
+			credentialEntity.setSequence(sequence);
+			;
+			credentialEntity.setUrl(url);
+			dbDao.insert(credentialEntity);
+		}
+		return null;
+
+	}
+
+	/*
+	 * 获取一类多张图片
+	 */
+	public Object getMuchPhotoByStaffid(Integer staffid, Integer type) {
+		//获取该订单下的申请人
+		String sqlStr = sqlManager.get("t_app_staffid_credentials_getmuchphoto");
+		Sql applysql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		Cnd.where("staffid", "=", staffid).and("type", "=", type);
+		List<Record> applicantList = dbDao.query(applysql, cnd, null);
+		return applicantList;
 
 	}
 }

@@ -231,6 +231,7 @@
 	$(function() {
 		var staffid = $("#staffid").val();
 		twonichphoto(staffid,13);
+		twonichphoto(staffid,13);
 		$(".uploadPhoto").click(function(){
 			$(".uploadFileImg").click();
 			$(".uploadFileImg").change(function(){

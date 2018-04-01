@@ -19,7 +19,7 @@ import com.uxuexi.core.common.enums.IEnum;
 public enum TAppStaffCredentialsEnum implements IEnum {
 	NEWHUZHAO(1, "新护照"), OLDHUZHAO(2, "旧护照"), IDCARD(3, "身份证"), HUKOUBEN(4, "户口本"), HOME(5, "房产证"), MARRAY(6, "结婚证"), BANK(
 			7, "银行流水"), WORKE(8, "在职证明"), YINGYEZHIHZAO(9, "营业执照"), DRIVE(10, "驾驶证"), OLDUS(11, "过期美签"), NEWUS(12,
-			"美国出签"), TWOINCHPHOTO(13, "2寸免冠照");
+			"美国出签"), TWOINCHPHOTO(13, "2寸免冠照"), IDCARDBACK(14, "身份证反面");
 	private int key;
 	private String value;
 

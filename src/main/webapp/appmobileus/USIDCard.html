@@ -78,7 +78,7 @@
 					dataType : "json",
 					type : 'post',
 					success : function(data) {
-						$(".uploadImgReady").attr("src",data.url);
+						$(".uploadImgFace").attr("src",data.url);
 					}
 				});
 			}
@@ -92,18 +92,18 @@
 					dataType : "json",
 					type : 'post',
 					success : function(data) {
-						$(".uploadImgReady").attr("src",data.url);
+						$(".uploadImgBack").attr("src",data.url);
 					}
 				});
 			}
 			//点击上传图片
 			$(function(){
 				var	staffid=GetQueryString('staffid');
-				getImage(staffid);
+				getImageFront(staffid);
 				getImageBack(staffid);
-				$(".uploadPassport").click(function(){
-					$("#passportImg").click();
-					$("#passportImg").change(function(){
+				$(".uploadImgFace").click(function(){
+					$("#faceImg").click();
+					$("#faceImg").change(function(){
 						layer.load(1,{
 							shade : "#000"
 						});
@@ -121,7 +121,7 @@
 //			                alert(rst.file);
 //			                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
 							//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-			                uploadPositive(rst,rst.formData,staffid); 
+			                uploadPositiveFront(rst,rst.formData,staffid); 
 			            }).catch(function (err) {
 			                console.log(err);
 			            });
@@ -147,7 +147,7 @@
 //			                alert(rst.file);
 //			                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
 							//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-			                uploadPositive(rst,rst.formData,staffid); 
+			                uploadPositiveBack(rst,rst.formData,staffid); 
 			            }).catch(function (err) {
 			                console.log(err);
 			            });
@@ -169,7 +169,7 @@
 		    }
 			
 			//上传图片(前面)
-			function uploadPositive(rst, formData,staffid){
+			function uploadPositiveFront(rst, formData,staffid){
 				if(!formData){
 					formData = new FormData();
 				}
@@ -207,7 +207,7 @@
 				}); // end of ajaxSubmit
 			}
 			//上传图片(后面)
-			function uploadPositive(rst, formData,staffid){
+			function uploadPositiveBack(rst, formData,staffid){
 				if(!formData){
 					formData = new FormData();
 				}

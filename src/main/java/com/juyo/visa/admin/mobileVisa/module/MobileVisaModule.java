@@ -15,6 +15,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.upload.UploadAdaptor;
@@ -74,6 +75,26 @@ public class MobileVisaModule {
 			@Param("type") Integer type) {
 		String uploadImage = mobileVisaService.uploadImage(file);
 		return mobileVisaService.updateImage(uploadImage, staffid, type);
+	}
+
+	/*
+	 * 添加修改一套多张照片
+	 */
+	@At
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object uploadMuchImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
+			@Param("type") Integer type, @Param("sequence") Integer sequence) {
+		String uploadImage = mobileVisaService.uploadImage(file);
+		return mobileVisaService.updateMuchImage(uploadImage, staffid, type, sequence);
+	}
+
+	/*
+	 * 获取一个类型多张图片
+	 */
+	@At
+	@GET
+	public Object getMuchPhotoByStaffid(@Param("staffid") Integer staffid, @Param("type") Integer type) {
+		return mobileVisaService.getMuchPhotoByStaffid(staffid, type);
 	}
 
 }
