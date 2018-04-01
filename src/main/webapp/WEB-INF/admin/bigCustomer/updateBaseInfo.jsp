@@ -125,6 +125,12 @@
 						</div>
 						<!-- 民族 -->
 						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>卡号</label> 
+									<input id="cardnum" name="cardnum" onchange="translateZhToEn(this,'cardnumen','')" type="text" class="form-control input-sm"  value="${obj.applicant.cardnum }" />
+								</div>
+							</div>
 							<!-- 民族 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
@@ -326,13 +332,13 @@
 									<label>
 										<span>*</span>Phone Number
 									</label> 
-									<input id="telephoneen" name="telephoneen" type="text" class="form-control input-sm" value="${obj.applicant.telephoneen }"/>
+									<input id="telephoneen" name="telephoneen" type="text" class="form-control input-sm" value="${obj.telephoneen }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Email Address</label> 
-									<input id="emailen" name="emailen" type="text" class="form-control input-sm" value="${obj.applicant.emailen }"/>
+									<input id="emailen" name="emailen" type="text" class="form-control input-sm" value="${obj.emailen }"/>
 								</div>
 							</div>
 						</div>
@@ -350,6 +356,12 @@
 						</div>
 						<!-- 民族 -->
 						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Cardnum</label> 
+									<input id="cardnumen" name="cardnumen" type="text" class="form-control input-sm" value="${obj.applicant.cardnumen }" />
+								</div>
+							</div>
 							<!-- 民族 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">

@@ -106,6 +106,22 @@ function applyValidate(){
 					}
 				}
 			},
+			cardnum : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '卡号不能为空'
+					}
+				}
+			},
+			cardnumen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '卡号不能为空'
+					}
+				}
+			},
 			address : {
 				trigger:"change keyup",
 				validators : {
@@ -284,7 +300,7 @@ function applyValidate(){
 			},*/
 		}
 	});
-	$('#applicantInfo').bootstrapValidator('validate');
+	//$('#applicantInfo').bootstrapValidator('validate');
 }
 
 function translateZhToEn(from, to, param){
@@ -295,6 +311,7 @@ function translateZhToEn(from, to, param){
 		toval = $(from).val();
 	}
 	$.ajax({
+		//async : false,
 		url : BASE_PATH+'/admin/translate/translate',
 		data : {
 			api : 'google',
