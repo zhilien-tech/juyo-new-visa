@@ -1,60 +1,6 @@
-/*
- ************************VUE 准备数据
- * 
- * 
- *旅伴信息	travelCompanionInfo
- *
- *以前的美国旅游信息	previUSTripInfo
- *
- *美国联络点	contactPointInfo
- *
- *家庭信息	familyInfo
- *
- *工作/教育/培训信息 	workEducationInfo
- *
+/**
+ * 页面首次加载时，打开默认Yes No 开关
  */
-
-var visaInfo;
-new Vue({
-	el: '#wrapper',
-	data: {
-		travelCompanionInfo:"",
-		previUSTripInfo:"",
-		contactPointInfo:"",
-		familyInfo:"",
-		workEducationInfo:""
-	},
-	created:function(){
-		visaInfo=this;
-		var url = '/admin/bigCustomer/getVisaInfos.html';
-		$.ajax({ 
-			url: url,
-			data:{
-				staffId:staffId
-			},
-			type:'post',
-			//async:false,
-			success: function(data){
-				visaInfo.travelCompanionInfo = data.travelCompanionInfo;
-				visaInfo.previUSTripInfo = data.previUSTripInfo;
-				visaInfo.contactPointInfo = data.contactPointInfo;
-				visaInfo.familyInfo = data.familyInfo;
-				visaInfo.workEducationInfo = data.workEducationInfo;
-				
-				openYesOrNoPage();
-				
-			}
-		});
-	},
-	methods:{
-		
-	}
-});
-
-function save(){
-	alert(JSON.stringify(visaInfo.travelCompanionInfo));
-}
-
 function openYesOrNoPage(){
 	//是否与其他人一起旅游
 	var istravelwithother = visaInfo.travelCompanionInfo.istravelwithother;
@@ -253,16 +199,6 @@ function openYesOrNoPage(){
 	
 }
 
-
-
-
-
-
-
-
-
-
-
 //勾选checkbox("不知道")，回显
 function showEleBeforeCheckbox(obj){
 	var beforeEle = obj.prev();
@@ -273,4 +209,3 @@ function showEleBeforeCheckbox(obj){
 		beforeEle.attr("disabled",false);
 	}
 }
-
