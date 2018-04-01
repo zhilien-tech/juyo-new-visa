@@ -45,8 +45,8 @@
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="promptInfo">点击上传身份证正面</span>
-										<input id="cardFront" name="cardfront" type="hidden" value="${obj.applicant.cardfront }"/>
-										<img id="imgShow" name="sqimg" alt="" src="${obj.applicant.cardfront }" >
+										<input id="cardFront" name="cardfront" type="hidden" value="${obj.front.url }"/>
+										<img id="imgShow" name="sqimg" alt="" src="${obj.front.url }" >
 										<input id="uploadFileImg" name="uploadfile" class="btn btn-primary btn-sm" type="file" value="上传" />
 										<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 									</div>
@@ -62,8 +62,8 @@
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="promptInfo">点击上传身份证背面</span>
-										<input id="cardBack" name="cardback" type="hidden" value="${obj.applicant.cardback }"/>
-										<img id="imgShowBack" alt="" src="${obj.applicant.cardback }" >
+										<input id="cardBack" name="cardback" type="hidden" value="${obj.back.url }"/>
+										<img id="imgShowBack" alt="" src="${obj.back.url }" >
 										<input id="uploadFileImgBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
 										<i class="delete" onclick="deleteApplicantBackImg();"></i>
 									</div>
@@ -78,8 +78,8 @@
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="inchInfo">二寸免冠照片</span>
-										<input id="cardInch" name="twoinchphoto" type="hidden" value="${obj.applicant.twoinchphoto }"/>
-										<img id="imgInch" name="imgInch" alt="" src="${obj.applicant.twoinchphoto }" >
+										<input id="cardInch" name="twoinchphoto" type="hidden" value="${obj.twoinch.url }"/>
+										<img id="imgInch" name="imgInch" alt="" src="${obj.twoinch.url }" >
 										<input id="uploadFileInchImg" name="uploadFileInchImg" class="btn btn-primary btn-sm" type="file"  value="上传"/>
 										<i class="delete" onclick="deleteApplicantInchImg()"></i>
 									</div>
