@@ -27,6 +27,9 @@ $(function() {
 			passport : {
 				trigger:"change keyup",
 				validators : {
+					notEmpty : {
+						message : '护照号不能为空'
+					},
 					stringLength: {
                    	    min: 1,
                    	    max: 9,
