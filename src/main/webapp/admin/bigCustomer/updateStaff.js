@@ -106,6 +106,22 @@ function applyValidate(){
 					}
 				}
 			},
+			cardnum : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '卡号不能为空'
+					}
+				}
+			},
+			cardnumen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '卡号不能为空'
+					}
+				}
+			},
 			address : {
 				trigger:"change keyup",
 				validators : {
@@ -284,7 +300,7 @@ function applyValidate(){
 			},*/
 		}
 	});
-	$('#applicantInfo').bootstrapValidator('validate');
+	//$('#applicantInfo').bootstrapValidator('validate');
 }
 
 function translateZhToEn(from, to, param){
@@ -295,6 +311,7 @@ function translateZhToEn(from, to, param){
 		toval = $(from).val();
 	}
 	$.ajax({
+		//async : false,
 		url : BASE_PATH+'/admin/translate/translate',
 		data : {
 			api : 'google',
@@ -928,6 +945,96 @@ function saveApplicant(status){
 	'bootstrapValidator');
 	// 执行表单验证 
 	bootstrapValidator.validate();
+	
+	
+	var country = $("#nationalidentificationnumber").val();
+	if(country == ""){
+		$(".countryNum").attr("class", "info-imgUpload front has-error");  
+        $(".help-countryNum").attr("data-bv-result","INVALID");  
+        $(".help-countryNum").attr("style","display: block;");  
+        $("#nationalidentificationnumber").attr("style", "border-color:#ff1a1a");
+        
+	}else{
+		$(".countryNum").attr("class", "info-imgUpload front has-success");  
+        $(".help-countryNum").attr("data-bv-result","IVALID");  
+        $(".help-countryNum").attr("style","display: none;");  
+        $("#nationalidentificationnumber").attr("style", null);
+	}
+	var countryen = $("#nationalidentificationnumberen").val();
+	if(countryen == ""){
+		$(".countryNumen").attr("class", "info-imgUpload front has-error");  
+        $(".help-countryNumen").attr("data-bv-result","INVALID");  
+        $(".help-countryNumen").attr("style","display: block;");  
+        $("#nationalidentificationnumberen").attr("style", "border-color:#ff1a1a");
+        
+	}else{
+		$(".countryNumen").attr("class", "info-imgUpload front has-success");  
+        $(".help-countryNumen").attr("data-bv-result","IVALID");  
+        $(".help-countryNumen").attr("style","display: none;");  
+        $("#nationalidentificationnumberen").attr("style", null);
+	}
+	
+	var safeNumber = $("#socialsecuritynumber").val();
+	if(safeNumber == ""){
+		$(".safeNum").attr("class", "info-imgUpload front has-error");  
+        $(".help-blocksafe").attr("data-bv-result","INVALID");  
+        $(".help-blocksafe").attr("style","display: block;");  
+        $("#socialsecuritynumber").attr("style", "border-color:#ff1a1a");
+	}else{
+		$(".safeNum").attr("class", "info-imgUpload front has-success");  
+        $(".help-blocksafe").attr("data-bv-result","IVALID");  
+        $(".help-blocksafe").attr("style","display: none;");  
+        $("#socialsecuritynumber").attr("style", null);
+	}
+	var safeNumberen = $("#socialsecuritynumberen").val();
+	if(safeNumberen == ""){
+		$(".safeNumen").attr("class", "info-imgUpload front has-error");  
+        $(".help-blocksafeen").attr("data-bv-result","INVALID");  
+        $(".help-blocksafeen").attr("style","display: block;");  
+        $("#socialsecuritynumberen").attr("style", "border-color:#ff1a1a");
+	}else{
+		$(".safeNumen").attr("class", "info-imgUpload front has-success");  
+        $(".help-blocksafeen").attr("data-bv-result","IVALID");  
+        $(".help-blocksafeen").attr("style","display: none;");  
+        $("#socialsecuritynumberen").attr("style", null);
+	}
+	
+	var taxpayernumber = $("#taxpayernumber").val();
+	if(taxpayernumber == ""){
+		$(".safepay").attr("class", "info-imgUpload front has-error");  
+        $(".help-ratepaying").attr("data-bv-result","INVALID");  
+        $(".help-ratepaying").attr("style","display: block;");  
+        $("#taxpayernumber").attr("style", "border-color:#ff1a1a");
+	}else{
+		$(".safepay").attr("class", "info-imgUpload front has-success");  
+        $(".help-ratepaying").attr("data-bv-result","IVALID");  
+        $(".help-ratepaying").attr("style","display: none;");  
+        $("#taxpayernumber").attr("style", null);
+	}
+	
+	var taxpayernumberen = $("#taxpayernumberen").val();
+	if(taxpayernumberen == ""){
+		$(".safepayen").attr("class", "info-imgUpload front has-error");  
+        $(".help-ratepayingen").attr("data-bv-result","INVALID");  
+        $(".help-ratepayingen").attr("style","display: block;");  
+        $("#taxpayernumberen").attr("style", "border-color:#ff1a1a");
+	}else{
+		$(".safepayen").attr("class", "info-imgUpload front has-success");  
+        $(".help-ratepayingen").attr("data-bv-result","IVALID");  
+        $(".help-ratepayingen").attr("style","display: none;");  
+        $("#taxpayernumberen").attr("style", null);
+	}
+	
+	if($(".front").hasClass("has-error")){
+		return;
+	}
+	if($(".safeNum").hasClass("has-error")){
+		return;
+	}
+	if($(".safeNum").hasClass("has-error")){
+		return;
+	}
+	
 	if (bootstrapValidator.isValid()){
 
 		/*var str="";
@@ -980,3 +1087,42 @@ function saveApplicant(status){
 		layer.closeAll("loading");
 	}
 }
+
+$("#nationalidentificationnumber").on('input',function(){
+	$(".countryNum").attr("class", "info-imgUpload front has-success");  
+    $(".help-countryNum").attr("data-bv-result","IVALID");  
+    $(".help-countryNum").attr("style","display: none;");  
+    $("#nationalidentificationnumber").attr("style", null);
+});
+$("#nationalidentificationnumberen").on('input',function(){
+	$(".countryNumen").attr("class", "info-imgUpload front has-success");  
+    $(".help-countryNumen").attr("data-bv-result","IVALID");  
+    $(".help-countryNumen").attr("style","display: none;");  
+    $("#nationalidentificationnumberen").attr("style", null);
+});
+
+$("#socialsecuritynumber").on('input',function(){
+	$(".safeNum").attr("class", "info-imgUpload front has-success");  
+    $(".help-blocksafe").attr("data-bv-result","IVALID");  
+    $(".help-blocksafe").attr("style","display: none;");  
+    $("#socialsecuritynumber").attr("style", null);
+});
+$("#socialsecuritynumberen").on('input',function(){
+	$(".safeNumen").attr("class", "info-imgUpload front has-success");  
+    $(".help-blocksafeen").attr("data-bv-result","IVALID");  
+    $(".help-blocksafeen").attr("style","display: none;");  
+    $("#socialsecuritynumberen").attr("style", null);
+});
+
+$("#taxpayernumber").on('input',function(){
+	$(".safepay").attr("class", "info-imgUpload front has-success");  
+    $(".help-ratepaying").attr("data-bv-result","IVALID");  
+    $(".help-ratepaying").attr("style","display: none;");  
+    $("#taxpayernumber").attr("style", null);
+});
+$("#taxpayernumberen").on('input',function(){
+	$(".safepayen").attr("class", "info-imgUpload front has-success");  
+    $(".help-ratepayingen").attr("data-bv-result","IVALID");  
+    $(".help-ratepayingen").attr("style","display: none;");  
+    $("#taxpayernumberen").attr("style", null);
+});

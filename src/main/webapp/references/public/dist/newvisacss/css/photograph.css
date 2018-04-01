@@ -5,6 +5,9 @@
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 }
+img[src=""] {
+	opacity:0;
+}
 .head {
 	width: 100%;
 	height: 50px;
@@ -23,25 +26,18 @@
 .btnGroup {
 	float: right;
 }
-.btnSave {
-	width: 80px;
-	height: 30px;
-	line-height: 30px;
-	display: inline-block;
+.btnSave,.btnCancel {
+	padding:5px 10px;
+	font-size:12px;
 	text-align: center;
 	color: #FFF;
-	background-color: rgba(22, 155, 213, 1);
-	border-radius: 5px;
-}
-.btnCancel {
-	width: 80px;
-	height: 30px;
-	line-height: 30px;
-	display: inline-block;
-	text-align: center;
-	color: #FFF;
-	background-color: rgba(22, 155, 213, 1);
-	border-radius: 5px;
+	background-color: #3087f1;
+	border-radius: 3px;
+	margin-right:10px;
+	cursor:pointer;
+	width:60px;
+	line-height:1.5;
+	display:inline-block;
 }
 .head::after {
 	content: "";
@@ -66,7 +62,7 @@
 	padding-left: 15px;
 }
 .explain {
-	width: 30%;
+	width: 22%;
 	display: inline-block;
 	float: left;
 	margin-right: 6%;
@@ -75,7 +71,8 @@
 .scan {
 	margin-top: 2%;
 	display: inline-block;
-	display: float;
+	width:200px;
+	height:200px;
 }
 
 .photo{
@@ -145,4 +142,19 @@
 	border: 1px solid rgba(121,121,121,1);
 	text-align: center;
 	margin-top: 2%;
+}
+.delete {
+	background-image:url(../img/delete.png);
+	height:32px;
+	width:30px;
+	position:absolute;
+	top:3px;
+	background-color:#FFF;
+	right:8px;
+	background-repeat:no-repeat;
+	background-position:5px 5px;
+	border-radius:4px;
+	cursor:pointer;
+	border:1px solid rgb(209,213,221);
+	display:block;
 }

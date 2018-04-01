@@ -16,7 +16,7 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appUpdateStaff.css">
 	<style type="text/css">
 		.leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
-	.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
+		.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
 	</style>
 </head>
 <body>
@@ -45,49 +45,50 @@
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="promptInfo">点击上传身份证正面</span>
-										<input id="cardFront" name="cardfront" type="hidden" value="${obj.applicant.cardfront }"/>
-										<img id="imgShow" name="sqimg" alt="" src="${obj.applicant.cardfront }" >
+										<input id="cardFront" name="cardfront" type="hidden" value="${obj.front.url }"/>
+										<img id="imgShow" name="sqimg" alt="" src="${obj.front.url }" >
 										<input id="uploadFileImg" name="uploadfile" class="btn btn-primary btn-sm" type="file" value="上传" />
 										<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 									</div>
 								</div>
+								<div class="front has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">身份证正面必须上传</small>
+								</div>
 							</div>
-						<div class="col-xs-4 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 -20px 32px !important">
-							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">身份证正面必须上传</small>
-						</div> 
+						
 						<!-- end 身份证 正面 -->
 						<!-- start 身份证 反面 -->
 							<div class="col-xs-4 picturesBack">
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="promptInfo">点击上传身份证背面</span>
-										<input id="cardBack" name="cardback" type="hidden" value="${obj.applicant.cardback }"/>
-										<img id="imgShowBack" alt="" src="${obj.applicant.cardback }" >
+										<input id="cardBack" name="cardback" type="hidden" value="${obj.back.url }"/>
+										<img id="imgShowBack" alt="" src="${obj.back.url }" >
 										<input id="uploadFileImgBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
 										<i class="delete" onclick="deleteApplicantBackImg();"></i>
 									</div>
 								</div>
+								<div class="front has-error" style="width:100%; height:20px; border:0 !important; color:red;margin:0px 0 0 0px !important">
+									<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
+								</div> 
 							</div>
-						<div class="col-xs-4 front has-error" style="width:320px; height:20px; border:0 !important; color:red;margin:-20px 0 0 32px !important">
-							<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
-						</div>
 						<!-- end 身份证 反面 -->
 						<!-- start 二寸免冠照片 -->
 							<div class="col-xs-3 picturesInch">
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="inchInfo">二寸免冠照片</span>
-										<input id="cardInch" name="twoinchphoto" type="hidden" value="${obj.applicant.twoinchphoto }"/>
-										<img id="imgInch" name="imgInch" alt="" src="${obj.applicant.twoinchphoto }" >
+										<input id="cardInch" name="twoinchphoto" type="hidden" value="${obj.twoinch.url }"/>
+										<img id="imgInch" name="imgInch" alt="" src="${obj.twoinch.url }" >
 										<input id="uploadFileInchImg" name="uploadFileInchImg" class="btn btn-primary btn-sm" type="file"  value="上传"/>
 										<i class="delete" onclick="deleteApplicantInchImg()"></i>
 									</div>
 								</div>
+								 <div class="front has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-blockInch" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">二寸免冠照片必须上传</small>
+								</div>
 							</div>
 						<!-- 验证 -->
-						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 -20px 32px !important">
-							<small class="help-blockInch" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">二寸免冠照片必须上传</small>
-						</div>
 						<!-- end 二寸免冠照片 -->
 						
 					</div>
@@ -124,6 +125,12 @@
 						</div>
 						<!-- 民族 -->
 						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>卡号</label> 
+									<input id="cardnum" name="cardnum" onchange="translateZhToEn(this,'cardnumen','')" type="text" class="form-control input-sm"  value="${obj.applicant.cardnum }" />
+								</div>
+							</div>
 							<!-- 民族 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
@@ -276,6 +283,10 @@
 									<label>国家注册号码</label> 
 									<input id="nationalidentificationnumber" onchange="translateZhToEn(this,'nationalidentificationnumberen','')" name="nationalidentificationnumber" type="text" class="form-control input-sm" value="${obj.applicant.nationalidentificationnumber }"/>
 								</div>
+								
+								<div class="countryNum has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-countryNum" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">国家注册号码不能为空</small>
+								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
 								<div class="form-group">
@@ -291,6 +302,9 @@
 									<label>美国社会安全号码</label> 
 									<input id="socialsecuritynumber" onchange="translateZhToEn(this,'socialsecuritynumberen','')" name="socialsecuritynumber" type="text" class="form-control input-sm" value="${obj.applicant.socialsecuritynumber }" />
 								</div>
+								<div class="safeNum has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-blocksafe" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国社会安全号码</small>
+								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
 								<div class="form-group">
@@ -305,6 +319,9 @@
 								<div class="form-group">
 									<label>美国纳税人证件号</label> 
 									<input id="taxpayernumber" onchange="translateZhToEn(this,'taxpayernumberen','')" name="taxpayernumber" type="text" class="form-control input-sm" value="${obj.applicant.taxpayernumber }" />
+								</div>
+								<div class="safepay has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-ratepaying" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国纳税人证件号</small>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
@@ -325,13 +342,13 @@
 									<label>
 										<span>*</span>Phone Number
 									</label> 
-									<input id="telephoneen" name="telephoneen" type="text" class="form-control input-sm" value="${obj.applicant.telephoneen }"/>
+									<input id="telephoneen" name="telephoneen" type="text" class="form-control input-sm" value="${obj.telephoneen }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Email Address</label> 
-									<input id="emailen" name="emailen" type="text" class="form-control input-sm" value="${obj.applicant.emailen }"/>
+									<input id="emailen" name="emailen" type="text" class="form-control input-sm" value="${obj.emailen }"/>
 								</div>
 							</div>
 						</div>
@@ -349,6 +366,12 @@
 						</div>
 						<!-- 民族 -->
 						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Cardnum</label> 
+									<input id="cardnumen" name="cardnumen" type="text" class="form-control input-sm" value="${obj.applicant.cardnumen }" />
+								</div>
+							</div>
 							<!-- 民族 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
@@ -501,6 +524,9 @@
 								<div class="form-group">
 									<input id="nationalidentificationnumberen" name="nationalidentificationnumberen" type="text" class="form-control input-sm" value="${obj.applicant.nationalidentificationnumberen }" />
 								</div>
+								<div class="countryNumen has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-countryNumen" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">国家注册号码不能为空</small>
+								</div>	
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMarginEng">
 								<div class="form-group">
@@ -516,6 +542,9 @@
 									<label>U.S. Social Security Number</label> 
 									<input id="socialsecuritynumberen" name="socialsecuritynumberen" type="text" class="form-control input-sm" value="${obj.applicant.socialsecuritynumberen }" />
 								</div>
+								<div class="safeNumen has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-blocksafeen" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国社会安全号码</small>
+								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
 								<div class="form-group">
@@ -530,6 +559,9 @@
 								<div class="form-group">
 									<label>U.S. Taxpayer ID Number</label> 
 									<input id="taxpayernumberen" name="taxpayernumberen" type="text" class="form-control input-sm" / value="${obj.applicant.taxpayernumberen }">
+								</div>
+								<div class="safepayen has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-ratepayingen" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国纳税人证件号</small>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">

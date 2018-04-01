@@ -27,6 +27,11 @@
 	color: #FFF;
 	border-radius: 6px;
 	margin-right: 20px;
+	cursor:pointer;
+}
+.saveVisa:hover,.cancelVisa:hover {
+	color:#FFF;
+	text-decoration:none;
 }
 .cancelVisa {
 	padding: 5px 20px;
@@ -34,6 +39,7 @@
 	color: #FFF;
 	border-radius: 6px;
 	margin-right: 20px;
+	cursor:pointer;
 }
 .topHide {
 	width: 100%;
@@ -52,12 +58,14 @@
 .titleInfo {
 	height: 30px;
 	line-height: 30px;
-	background: #eee;
+	border-left:3px solid #2f86f0;
+	padding-left:15px;
 	color: blue;
 	margin-top: 10px;
 }
 .companyMain {
 	width: 100%;
+	padding-left:15px;
 }
 .companyMainInfo {
 	padding: 10px 0;
@@ -127,10 +135,14 @@
 	width: 100%;
 }
 .goUSPad {
-	padding: 10px 0;
+	padding: 10px 0 10px 0;
 }
 .goUSYes {
 	display: none;
+	padding-left:15px;
+}
+.goUSMain {
+	padding-left:15px;
 }
 .stopDate {
 	margin-top: 10px;
@@ -179,7 +191,7 @@
 	margin-top: 5px;
 }
 .visaUSMain {
-	padding: 10px 0;
+	padding: 10px 0 10px 15px;
 }
 .dateIssue {
 	display: none;
@@ -207,6 +219,9 @@
 	display: inline-block; 
 	float: right;
 }
+.groupcheckBoxInfo ,.padding-left{
+	padding-left:15px;
+}
 .grouptextareaInfo label {
 	display: block;
 	font-size: 12px;
@@ -223,12 +238,14 @@
 }
 .paddingBottom {
 	padding-bottom: 10px;
+	padding-left:15px;
 }
 .onceExplain,.immigrationExplain {
 	display: none;
 }
 .paddingLeft {
 	padding-top: 10px; 
+	padding-left:15px;
 	float: left;
 }
 .paddingRight {
@@ -237,6 +254,7 @@
 }
 .floatLeft {
 	float: left;
+	padding-left:15px;
 }
 .floatRight {
 	float: right;
@@ -251,4 +269,43 @@
 .elementHide{
 	display: none;
 }
-
+/* 左右按钮样式 */
+.prevstep {
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:9999;
+	width:40px;
+	height:100%;
+	cursor:pointer;
+}
+.prevstep span {
+	position:absolute;
+	top:50%;
+	width:24px;
+	height:24px;
+	border-right:4px solid #999;
+	border-top:4px solid #999;
+	margin-left:15px;
+	transform:translate(0,-50%) rotate(-135deg);
+	-webkit-transform:translate(0,-50%) rotate(-135deg);
+}
+.nextstep {
+	position:fixed;
+	top:0;
+	right:0;
+	z-index:9999;
+	width:40px;
+	height:100%;
+	cursor:pointer;
+}
+.nextstep span {
+	position:absolute;
+	top:50%;
+	width:24px;
+	height:24px;
+	border-left:4px solid #999;
+	border-bottom:4px solid #999;
+	transform:translate(0,-50%) rotate(-135deg);
+	-webkit-transform:translate(0,-50%) rotate(-135deg);
+}
