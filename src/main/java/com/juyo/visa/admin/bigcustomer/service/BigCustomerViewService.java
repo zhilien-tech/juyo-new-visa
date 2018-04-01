@@ -654,6 +654,24 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		Map<String, Object> fromJson = JsonUtil.fromJson(data, Map.class);
 
+		//旅伴信息
+		TAppStaffTravelcompanionEntity travelcompanionEntity = (TAppStaffTravelcompanionEntity) fromJson
+				.get("travelCompanionInfo");
+
+		//以前的美国旅游信息
+		TAppStaffPrevioustripinfoEntity previoustripinfoEntity = (TAppStaffPrevioustripinfoEntity) fromJson
+				.get("previUSTripInfo");
+
+		//美国联络点
+		TAppStaffContactpointEntity contactpointEntity = (TAppStaffContactpointEntity) fromJson.get("contactPointInfo");
+
+		//家庭信息
+		TAppStaffFamilyinfoEntity familyinfoEntity = (TAppStaffFamilyinfoEntity) fromJson.get("familyInfo");
+
+		//工作/教育/培训信息
+		TAppStaffWorkEducationTrainingEntity workEducationTrainingEntity = (TAppStaffWorkEducationTrainingEntity) fromJson
+				.get("workEducationInfo");
+
 		return null;
 	}
 

@@ -68,6 +68,7 @@ function save(){
 	visadata.familyInfo = visaInfo.familyInfo;
 	//工作/教育/培训信息
 	visadata.workEducationInfo = visaInfo.workEducationInfo;
+	
 	//同伴信息
 	visadata.companionList = getCompanionList();
 	//去过美国信息
