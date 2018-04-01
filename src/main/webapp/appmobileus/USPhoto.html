@@ -13,8 +13,10 @@
 	<body>
 		<header>
 			<div class="filming">
-				<i></i>
-				<span>照片</span>	
+				<a onclick="returnPage()">
+					<i></i>
+					<span>照片</span>
+				</a>	
 			</div>
 		</header>
 		<section>
@@ -44,37 +46,24 @@
 		<script type="text/javascript" src="js/lrz.bundle.js" ></script>
 		<script type="text/javascript" src="js/vue.min.js" ></script>
 		<script>
-			//异步加载的URL地址
-			var url="/admin/mobileVisa/getInfoByType.html";
-			var _self;
-			var staffid;
-			new Vue({
-				el: '#passportform',
-				data: {
-					passportdata:"",
-					applicatdata:""
-				},
-				created:function(){
-					staffid=GetQueryString('staffid');
-			        _self=this;
-			        /* 回显 */
-			        $.ajax({
-			        	url: url,
-			        	data:{type:13,staffid:staffid},
-			        	dataType:"json",
-			        	type:'post',
-			        	success: function(data){
-			        		if(data!=null){
-			        			 $(".uploadPhotoReady").attr("src",data.credentialEntity.url); 
-			        		}
-			          	}
-			        });
-			    }
-			});
-			
-			
-			//上传图片
+			function getImage(staffid){
+				$.ajax({
+					url : "/admin/mobileVisa/getInfoByType.html",
+					data : {
+						type : 13,
+						staffid : staffid,
+					},
+					dataType : "json",
+					type : 'post',
+					success : function(data) {
+						$(".uploadPhotoReady").attr("src",data.url);
+					}
+				});
+			}
+			//点击上传图片
 			$(function(){
+				var	staffid=GetQueryString('staffid');
+				getImage(staffid);
 				$("#uploadImg").click(function(){
 					$("#image").click();
 					$("#image").change(function(){
@@ -94,8 +83,8 @@
 //			                alert(JSON.stringify(rst.formData));
 //			                alert(rst.file);
 //			                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
-							console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-			                uploadPositive(rst,rst.formData); 
+							//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+			                uploadPositive(rst,rst.formData,staffid); 
 			            }).catch(function (err) {
 			                console.log(err);
 			            });
@@ -103,13 +92,21 @@
 				});
 			})
 			
+			//跳转2寸图片
+			function returnPage(){
+				var staffid = GetQueryString("staffid");
+				window.location.href='/appmobileus/USFilming.html?staffid='+ staffid;
+			}
+			
 			//获取URL地址参数
 		    function GetQueryString(name){
 		         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
 		         var r = window.location.search.substr(1).match(reg);
 		         if(r!=null)return  unescape(r[2]); return null;
 		    }
-			function uploadPositive(rst, formData){
+			
+			//上传图片
+			function uploadPositive(rst, formData,staffid){
 				if(!formData){
 					formData = new FormData();
 				}
@@ -136,8 +133,8 @@
 						//关闭加载层
 						layer.closeAll('loading');
 						if (obj!=null) {
-							/* layer.msg("上传成功"); */
-							$(".uploadPhotoReady").attr("src",obj.url);
+							layer.msg("上传成功"); 
+							location.reload();
 						}
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {

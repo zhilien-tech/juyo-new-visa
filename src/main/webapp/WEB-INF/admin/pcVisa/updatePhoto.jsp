@@ -15,6 +15,7 @@
 	<div class="head">
 		<span>拍摄资料</span>
 		<input id="staffid" type="hidden" value="${obj.basicInfo.id }">
+		<input id="passportId" type="hidden" value="${obj.passportId }">
 		<div class="btnGroup">
 			<a class="btnSave" onclick="nextWindow()">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
 		</div>
@@ -52,12 +53,12 @@
 			<div class="sectionHead">护照首页</div>
 			<div class="explain"></div>
 			<div class="samplePassport">
-				<img id = "huzhao"
+				<img 
 					src="${base}/references/public/dist/newvisacss/img/passport.png" />
 			</div>
-			<div class="uploadPassport">
+			<div class="uploadPassport" style="position:relative;">
 				<div>上传</div>
-				<img />
+				<img id = "huzhao" class="loadImg" width="100%" height="170px;"/>
 			</div>
 			<input type="file" class="publicFile" name="" />
 		</div>
@@ -66,28 +67,28 @@
 			<div class="sectionHead">旧护照</div>
 			<div class="explain"></div>
 			<div class="samplePassport">
-				<img id="oldhuzhao"
+				<img 
 					src="${base}/references/public/dist/newvisacss/img/passport.png" />
 			</div>
-			<div class="uploadPassport">
+			<div class="beforeInfo"></div>
+			<div class="uploadPassport oldpassports" style="position:relative;">
 				<div>上传</div>
-				<img />
+				<img id="oldhuzhao" class="loadImg" width="100%" height="170px;"/>
 			</div>
 			<input type="file" class="publicFile" name="" />
+			
 		</div>
 		<!--身份证-->
 		<div class="passport">
 			<div class="sectionHead">身份证</div>
 			<div class="explain"></div>
 			<div class="samplePassport">
-					<img id="card"
+					<img 
 						src="${base}/references/public/dist/newvisacss/img/passport.png" />
-
-
 			</div>
-			<div class="uploadPassport">
+			<div class="uploadPassport" style="position:relative;">
 				<div>上传</div>
-				<img src="">
+				<img id="card" src=""  class="loadImg" width="100%" height="170px;">
 			</div>
 			<input type="file" class="publicFile" name="" />
 		</div>
@@ -99,9 +100,9 @@
 				<img
 					src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 			</div>
-			<div class="uploadHuKouBook">
+			<div class="uploadHuKouBook" style="position:relative;">
 				<div>户主页</div>
-				<img />
+				<img id="household" class="loadImg" width="100%" height="284px;" />
 			</div>
 			<input type="file" class="publicFile" name="" multiple />
 		</div>
@@ -113,9 +114,9 @@
 				<img
 					src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 			</div>
-			<div class="uploadHuKouBook">
+			<div class="uploadHuKouBook" style="position:relative;">
 				<div>上传</div>
-				<img />
+				<img id="housecard" class="loadImg" width="100%" height="284px;"s />
 			</div>
 			<input type="file" class="publicFile" name="" multiple />
 		</div>
@@ -127,9 +128,9 @@
 				<img
 					src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 			</div>
-			<div class="uploadHuKouBook">
+			<div class="uploadHuKouBook" style="position:relative;">
 				<div>上传</div>
-				<img />
+				<img id="marray" class="loadImg" width="100%" height="284px;"/>
 			</div>
 			<input type="file" class="publicFile" name="" multiple />
 		</div>
@@ -141,9 +142,9 @@
 				<img
 					src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 			</div>
-			<div class="uploadHuKouBook">
+			<div class="uploadHuKouBook" style="position:relative;">
 				<div>上传</div>
-				<img />
+				<img class="loadImg" width="100%" height="284px;" />
 			</div>
 			<input type="file" class="publicFile" name="" multiple />
 		</div>
@@ -155,9 +156,9 @@
 				<img
 					src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 			</div>
-			<div class="uploadHuKouBook">
+			<div class="uploadHuKouBook" style="position:relative;">
 				<div>上传</div>
-				<img />
+				<img id="jobCertificate" class="loadImg" width="100%" height="284px;"/>
 			</div>
 			<input type="file" class="publicFile" name="" multiple />
 		</div>
@@ -169,9 +170,9 @@
 				<img
 					src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 			</div>
-			<div class="uploadHuKouBook">
+			<div class="uploadHuKouBook" style="position:relative;">
 				<div>上传</div>
-				<img />
+				<img id="business" class="loadImg" width="100%" height="284px;"/>
 			</div>
 			<input type="file" class="publicFile" name="" multiple />
 		</div>
@@ -183,9 +184,9 @@
 				<img
 					src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 			</div>
-			<div class="uploadHuKouBook">
+			<div class="uploadHuKouBook" style="position:relative;">
 				<div>上传</div>
-				<img />
+				<img id="drive" class="loadImg" width="100%" height="284px;"/>
 			</div>
 			<input type="file" class="publicFile" name="" multiple />
 		</div>
@@ -197,7 +198,7 @@
 				<img
 					src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 			</div>
-			<div class="uploadHuKouBook">
+			<div class="uploadHuKouBook" style="position:relative;">
 				<div>上传</div>
 				<img />
 			</div>
@@ -211,7 +212,7 @@
 				<img
 					src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 			</div>
-			<div class="uploadHuKouBook">
+			<div class="uploadHuKouBook" style="position:relative;">
 				<div>上传</div>
 				<img />
 			</div>
@@ -226,63 +227,49 @@
 <script type="text/javascript" src="/admin/common/commonjs.js"></script>
 <script src="/appmobileus/js/jquery-1.10.2.js"></script>
 <script src="/appmobileus/js/lrz.bundle.js"></script>
+<script src="/admin/pcVisa/getphoto.js"></script>
 <script>
 	$(function() {
 		var staffid = $("#staffid").val();
 		twonichphoto(staffid,13);
-		twonichphoto(staffid,1);
-		twonichphoto(staffid,2);
-		twonichphoto(staffid,3);
+		huzhao(staffid,1);
+		oldhuzhao(staffid,2);
+		card(staffid,3);
+		marray(staffid,6);
+		business(staffid,9);
+		drive(staffid,10);
+		jobCertificate(staffid,8);
+		housecard(staffid,5);
+		household(staffid,4);
+		$(".uploadPhoto").click(function(){
+			$(".uploadFileImg").click();
+			$(".uploadFileImg").change(function(){
+				layer.load(1,{
+					shade : "#000"
+				});
+				var that = this;
+	            lrz(this.files[0]).then(function (rst) {
+	                /* $('.bacimg2').attr('src',rst.base64);*/
+	                $('#upload').hide(); 
+	                // 处理成功会执行
+	                sourceSize = (that.files[0].size / 1024).toFixed(2);
+	                resultSize = (rst.fileLen / 1024).toFixed(2);
+	                scale = parseInt(100 - (resultSize / sourceSize * 100));
+	                rst.formData.append('image',rst.file);
+//	                alert(rst);
+//	                alert(JSON.stringify(rst.formData));
+//	                alert(rst.file);
+//	                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
+					console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+	                uploadPositive(rst,rst.formData,staffid); 
+	            }).catch(function (err) {
+	                console.log(err);
+	            });
+			});
+		})
 	});
-	//2寸照片回显
-	function twonichphoto(staffid, type) {
-		$.ajax({
-			url : "/admin/mobileVisa/getInfoByType.html",
-			data : {
-				type : type,
-				staffid : staffid,
-			},
-			dataType : "json",
-			type : 'post',
-			success : function(data) {
-				/* _self.passportdata = data.passportdata; */
-				console.log(data);
-				if (data != null) {
-					if(13==data.credentialEntity.type){
-						$("#twonichphoto").attr("src", data.credentialEntity.url);
-						$("#uploadPhoto").siblings("i").show();
-					}
-					if(1==data.credentialEntity.type){
-						$("#huhzao").attr("src", data.credentialEntity.url);
-					}
-					if(2==data.credentialEntity.type){
-						$("#oldhuzhao").attr("src", data.credentialEntity.url);
-					}
-					if(3==data.credentialEntity.type){
-						$("#card").attr("src", data.credentialEntity.url);
-					}
-				}
-			}
-		});
-	};
 	
-	//返回 
-	function closeWindow() {
-		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-		parent.layer.close(index);
-	}
 	
-	//保存跳转下一页
-	function nextWindow(){
-		window.location.href='';
-	}
 	
-	/* 删除二寸免冠照 */
-	function deleteApplicantFrontImg(){
-		
-		$('#twonichphoto').attr('src', "");
-		$("#uploadPhoto .delete").hide();
-		/* $("#uploadPhoto").siblings("i").css("display","none"); */
-	}
 </script>
 </html>
