@@ -50,17 +50,6 @@ public class MobileVisaModule {
 	}
 
 	/*
-	 * 获取一套图片的所有图片
-	 */
-	@At
-	@POST
-	public Object getPhotoByMainid(@Param("staffid") Integer staffid, @Param("type") Integer type,
-			@Param("mainid") Integer mainid) {
-
-		return mobileVisaService.getPhotoByMainid(staffid, type, mainid);
-	}
-
-	/*
 	 * 获取用户基本信息
 	 */
 	@At

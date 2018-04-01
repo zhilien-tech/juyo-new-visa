@@ -13,8 +13,9 @@
 	<body>
 		<header>
 			<div class="filming">
+			<a onclick="returnPage()">
 				<i></i>
-				<span>房产证</span>	
+				<span>房产证</span></a>	
 			</div>
 		</header>
 		<section>
@@ -27,37 +28,37 @@
 				<div class="householdPage firstPage">
 					<span class="homePageTitle">第一页</span>
 					<img src="img/camera.png"  class="camera" />
-					<img src="" class="pageImg" />
+					<img id="11" src="" class="pageImg" />
 				</div>
-				<input type="file" name="" class="fileHide firstPageImg" />
+				<input id="1" type="file" name="1" class="fileHide firstPageImg" />
 				<!--第二页-->
 				<div class="householdPage secondPage">
 					<span class="homePageTitle">第二页</span>
 					<img src="img/camera.png" class="camera" />
-					<img src="" class="pageImg" />
+					<img id="12" src="" class="pageImg" />
 				</div>
-				<input type="file" class="fileHide secondPageImg" name="" />
+				<input id="1" type="file" class="fileHide secondPageImg" name="2" />
 				<!--第三页-->
 				<div class="householdPage thirdPage">
 					<span class="homePageTitle">第三页</span>
 					<img src="img/camera.png" class="camera" />
-					<img src="" class="pageImg" />
+					<img id="13" src="" class="pageImg" />
 				</div>
-				<input type="file" class="fileHide thirdPageImg" name="" />
+				<input id="1" type="file" class="fileHide thirdPageImg" name="3" />
 				<!--第四页-->
 				<div class="householdPage fouthPage">
 					<span class="homePageTitle">第四页</span>
 					<img src="img/camera.png" class="camera" />
-					<img src="" class="pageImg" />
+					<img id="14" src="" class="pageImg" />
 				</div>
-				<input type="file" class="fileHide fouthPageImg" name="" />
+				<input id="1" type="file" class="fileHide fouthPageImg" name="4" />
 				<!--第五页-->
-				<div class="householdPage fifPage">
+				<div class="householdPage fivePage">
 					<span class="homePageTitle">第五页</span>
 					<img src="img/camera.png" class="camera" />
-					<img src="" class="pageImg" />
+					<img id="15" src="" class="pageImg" />
 				</div>
-				<input type="file" class="fileHide fifPageImg" name="" />
+				<input id="1" type="file" class="fileHide fivePageImg" name="5" />
 				<!--结束-->
 			</div>
 			<!--注解-->
@@ -87,21 +88,218 @@
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script type="text/javascript" src="js/rem(750).js" ></script>
 		<script type="text/javascript" src="js/lrz.bundle.js" ></script>
+		<script type="text/javascript" src="js/layer.js"></script>
 		<script type="text/javascript" src="js/vue.min.js" ></script>
 		<script>
-			$(function(){
+
+			$(function() {
 				//添加第二套房产说明
-				$(".addSet").click(function(){
-					
+				$(".addSet").click(function() {
+
 					$(".addhouseCard").toggle();
 				});
-				//图片上传
-				$(".firstPage").click(function(){
-					
-					$(".firstPageImg").click();
-					
-				});
 			})
+			//获取图片信息
+			function getImage(staffid) {
+				$.ajax({
+					url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
+					data : {
+						type : 5,
+						staffid : staffid,
+					},
+					dataType : "json",
+					type : 'post',
+					success : function(data) {
+						console.log(data);
+						for (var i = 0; i < data.length; i++) {
+							var url = data[i].url;
+							var num = "#" + data[i].mainid + data[i].sequence;
+							$(num).attr('src', url);
+						}
+					}
+				});
+			}
+			
+			//点击上传图片
+			$(function(){
+				var	staffid=GetQueryString('staffid');
+				getImage(staffid);
+				//第一页点击
+				$(".firstPage").click(function(){
+					$(".firstPageImg").click();
+					$(".firstPageImg").change(function(){
+						var sequence = $(this).attr("name");
+						var mainid = $(this).attr("id");
+						layer.load(1,{
+							shade : "#000"
+						});
+						var that = this;
+			            lrz(this.files[0]).then(function (rst) {
+			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                $('#upload').hide(); 
+			                // 处理成功会执行
+			                sourceSize = (that.files[0].size / 1024).toFixed(2);
+			                resultSize = (rst.fileLen / 1024).toFixed(2);
+			                scale = parseInt(100 - (resultSize / sourceSize * 100));
+			                rst.formData.append('image',rst.file);
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence); 
+			            }).catch(function (err) {
+			                console.log(err);
+			            });
+					});
+				});
+				//第二页点击
+				$(".secondPage").click(function(){
+					$(".secondPageImg").click();
+					$(".secondPageImg").change(function(){
+						var sequence = $(this).attr("name");
+						var mainid = $(this).attr("id");
+						layer.load(1,{
+							shade : "#000"
+						});
+						var that = this;
+			            lrz(this.files[0]).then(function (rst) {
+			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                $('#upload').hide(); 
+			                // 处理成功会执行
+			                sourceSize = (that.files[0].size / 1024).toFixed(2);
+			                resultSize = (rst.fileLen / 1024).toFixed(2);
+			                scale = parseInt(100 - (resultSize / sourceSize * 100));
+			                rst.formData.append('image',rst.file);
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence); 
+			            }).catch(function (err) {
+			                console.log(err);
+			            });
+					});
+				});
+				//第三页点击
+				$(".thirdPage").click(function(){
+					$(".thirdPageImg").click();
+					$(".thirdPageImg").change(function(){
+						var sequence = $(this).attr("name");
+						var mainid = $(this).attr("id");
+						layer.load(1,{
+							shade : "#000"
+						});
+						var that = this;
+			            lrz(this.files[0]).then(function (rst) {
+			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                $('#upload').hide(); 
+			                // 处理成功会执行
+			                sourceSize = (that.files[0].size / 1024).toFixed(2);
+			                resultSize = (rst.fileLen / 1024).toFixed(2);
+			                scale = parseInt(100 - (resultSize / sourceSize * 100));
+			                rst.formData.append('image',rst.file);
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence); 
+			            }).catch(function (err) {
+			                console.log(err);
+			            });
+					});
+				});
+				//第四页点击
+				$(".fouthPage").click(function(){
+					$(".fouthPageImg").click();
+					$(".fouthPageImg").change(function(){
+						var sequence = $(this).attr("name");
+						var mainid = $(this).attr("id");
+						layer.load(1,{
+							shade : "#000"
+						});
+						var that = this;
+			            lrz(this.files[0]).then(function (rst) {
+			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                $('#upload').hide(); 
+			                // 处理成功会执行
+			                sourceSize = (that.files[0].size / 1024).toFixed(2);
+			                resultSize = (rst.fileLen / 1024).toFixed(2);
+			                scale = parseInt(100 - (resultSize / sourceSize * 100));
+			                rst.formData.append('image',rst.file);
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence); 
+			            }).catch(function (err) {
+			                console.log(err);
+			            });
+					});
+				});
+				//第五页点击
+				$(".fivePage").click(function(){
+					$(".fivePageImg").click();
+					$(".fivePageImg").change(function(){
+						var sequence = $(this).attr("name");
+						var mainid = $(this).attr("id");
+						layer.load(1,{
+							shade : "#000"
+						});
+						var that = this;
+			            lrz(this.files[0]).then(function (rst) {
+			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                $('#upload').hide(); 
+			                // 处理成功会执行
+			                sourceSize = (that.files[0].size / 1024).toFixed(2);
+			                resultSize = (rst.fileLen / 1024).toFixed(2);
+			                scale = parseInt(100 - (resultSize / sourceSize * 100));
+			                rst.formData.append('image',rst.file);
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence); 
+			            }).catch(function (err) {
+			                console.log(err);
+			            });
+					});
+				});
+			});
+			
+			//跳转2寸图片
+			function returnPage(){
+				var staffid = GetQueryString("staffid");
+				window.location.href='/appmobileus/USFilming.html?staffid='+ staffid;
+			}
+			
+			//获取URL地址参数
+		    function GetQueryString(name){
+		         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		         var r = window.location.search.substr(1).match(reg);
+		         if(r!=null)return  unescape(r[2]); return null;
+		    }
+			
+			//上传图片
+			function uploadPositive(rst, formData,staffid,mainid,sequence){
+				if(!formData){
+					formData = new FormData();
+				}
+		        formData.append("image", rst.file); 
+		        formData.append("type", 5); 
+		        formData.append("staffid", staffid); 
+		        formData.append("mainid", mainid); 
+		        formData.append("sequence", sequence); 
+		        console.log('------------------------------');
+		        console.log(formData); 
+		        console.log(rst.file);
+		        /* var layerIndex = layer.load(1, {
+					shade : "#000"
+				}); */
+		        $.ajax({
+					type : "POST",//提交类型  
+					//dataType : "json",//返回结果格式  
+					url : '/admin/mobileVisa/uploadMuchImage.html',//请求地址  
+					async : true,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//console.log('=====成功========');
+						//关闭加载层
+						layer.closeAll('loading');
+						if (obj!=null) {
+							layer.msg("上传成功");
+							var img = "#"+mainid+sequence;
+							$(img).attr("src",obj);
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						//console.log('-----------------失败-------------');
+						layer.closeAll('loading');
+					}
+				}); // end of ajaxSubmit
+			}
 		</script>
 	</body>
 </html>

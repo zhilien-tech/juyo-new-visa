@@ -25,6 +25,7 @@ import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.AppPictures.AppPicturesTypeEnum;
 import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
@@ -76,13 +77,16 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 			jsonEntity = (USStaffJsonEntity) orderUSViewService.IDCardRecognition(file, request, response);
 			if (!Util.isEmpty(jsonEntity)) {
 				if (jsonEntity.isSuccess()) {
-					TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class, Cnd
-							.where("staffid", "=", staffid).and("type", "=", type));
+					TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(
+							TAppStaffCredentialsEntity.class,
+							Cnd.where("staffid", "=", staffid).and("type", "=", type)
+									.and("status", "=", AppPicturesTypeEnum.FRONT.intKey()));
 					if (!Util.isEmpty(credentialEntity)) {
 						credentialEntity.setType(type);
 						credentialEntity.setUrl(jsonEntity.getUrl());
 						credentialEntity.setUpdatetime(new Date());
 						credentialEntity.setStaffid(staffid);
+						credentialEntity.setStatus(AppPicturesTypeEnum.FRONT.intKey());
 						dbDao.update(credentialEntity);
 						return 1;
 					} else {
@@ -92,6 +96,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 						credentialEntity.setUpdatetime(new Date());
 						credentialEntity.setStaffid(staffid);
 						credentialEntity.setCreatetime(new Date());
+						credentialEntity.setStatus(AppPicturesTypeEnum.FRONT.intKey());
 						dbDao.insert(credentialEntity);
 						return 1;
 					}
@@ -105,13 +110,16 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 			jsonEntity = (USStaffJsonEntity) orderUSViewService.IDCardRecognitionBack(file, request, response);
 			if (!Util.isEmpty(jsonEntity)) {
 				if (jsonEntity.isSuccess()) {
-					TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class, Cnd
-							.where("staffid", "=", staffid).and("type", "=", type));
+					TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(
+							TAppStaffCredentialsEntity.class,
+							Cnd.where("staffid", "=", staffid).and("type", "=", type)
+									.and("status", "=", AppPicturesTypeEnum.BACK.intKey()));
 					if (!Util.isEmpty(credentialEntity)) {
 						credentialEntity.setType(type);
 						credentialEntity.setUrl(jsonEntity.getUrl());
 						credentialEntity.setUpdatetime(new Date());
 						credentialEntity.setStaffid(staffid);
+						credentialEntity.setStatus(AppPicturesTypeEnum.BACK.intKey());
 						dbDao.update(credentialEntity);
 						return 1;
 					} else {
@@ -121,6 +129,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 						credentialEntity.setUpdatetime(new Date());
 						credentialEntity.setStaffid(staffid);
 						credentialEntity.setCreatetime(new Date());
+						credentialEntity.setStatus(AppPicturesTypeEnum.BACK.intKey());
 						dbDao.insert(credentialEntity);
 						return 1;
 					}
@@ -159,10 +168,6 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 				}
 			}
 		} else {
-			//多套单张上传(户口本，房产证)
-			if (TAppStaffCredentialsEnum.HUKOUBEN.intKey() == type || TAppStaffCredentialsEnum.HOME.intKey() == type) {
-
-			}
 
 			//结婚证上传
 			if (TAppStaffCredentialsEnum.MARRAY.intKey() == type) {
@@ -272,10 +277,14 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	//上传多张图片
 	public Object updateMuchImage(File file, Integer staffid, Integer mainid, Integer type, Integer sequence) {
 		String url = mobileVisaService.uploadImage(file);
-		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffid).and("type", "=", type).and("sequnce", "=", sequence));
+		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(
+				TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", type).and("mainid", "=", mainid)
+						.and("sequence", "=", sequence));
 		if (!Util.isEmpty(credentialEntity)) {
 			credentialEntity.setUrl(url);
+			credentialEntity.setMainid(mainid);
+			credentialEntity.setSequence(sequence);
 			credentialEntity.setUpdatetime(new Date());
 			int update = dbDao.update(credentialEntity);
 		} else {
@@ -286,9 +295,11 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 			credentialEntity.setType(type);
 			credentialEntity.setSequence(sequence);
 			credentialEntity.setUrl(url);
+			credentialEntity.setMainid(mainid);
+			credentialEntity.setSequence(sequence);
 			dbDao.insert(credentialEntity);
 		}
-		return null;
+		return url;
 
 	}
 
@@ -302,11 +313,4 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 
 	}
 
-	//一套图片获取
-	public Object getPhotoByMainid(Integer staffid, Integer type, Integer mainid) {
-
-		// TODO Auto-generated method stub
-		return null;
-
-	}
 }
