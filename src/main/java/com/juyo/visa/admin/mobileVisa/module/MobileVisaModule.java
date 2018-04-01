@@ -8,6 +8,8 @@ package com.juyo.visa.admin.mobileVisa.module;
 
 import java.io.File;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -72,9 +74,9 @@ public class MobileVisaModule {
 	@At
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object uploadImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
-			@Param("type") Integer type) {
-		String uploadImage = mobileVisaService.uploadImage(file);
-		return mobileVisaService.updateImage(uploadImage, staffid, type);
+			@Param("type") Integer type, @Param("state") Integer state, @Param("sequence") Integer sequence,
+			HttpServletRequest request, HttpServletResponse response) {
+		return mobileVisaService.updateImage(file, staffid, type, state, sequence, request, response);
 	}
 
 	/*
@@ -84,8 +86,8 @@ public class MobileVisaModule {
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object uploadMuchImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
 			@Param("type") Integer type, @Param("sequence") Integer sequence) {
-		String uploadImage = mobileVisaService.uploadImage(file);
-		return mobileVisaService.updateMuchImage(uploadImage, staffid, type, sequence);
+
+		return mobileVisaService.updateMuchImage(file, staffid, type, sequence);
 	}
 
 	/*

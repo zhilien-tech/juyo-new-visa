@@ -198,6 +198,8 @@
 						if (obj!=null) {
 							layer.msg("上传成功"); 
 							location.reload();
+						}else{
+							layer.msg("身份证无法识别，请从新上传"); 
 						}
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -236,6 +238,8 @@
 						if (obj!=null) {
 							layer.msg("上传成功"); 
 							location.reload();
+						}else{
+							layer.msg("身份证无法识别，请从新上传"); 
 						}
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {

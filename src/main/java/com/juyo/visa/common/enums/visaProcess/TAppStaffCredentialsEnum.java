@@ -13,7 +13,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * <p>
  * TODO(这里描述这个类补充说明 – 可选)
  *
- * @author   朱晓川
+ * @author  马云鹏
  * @Date	 2018年3月28日 	 
  */
 public enum TAppStaffCredentialsEnum implements IEnum {

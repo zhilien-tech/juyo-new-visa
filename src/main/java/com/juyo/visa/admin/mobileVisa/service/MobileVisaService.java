@@ -7,10 +7,12 @@
 package com.juyo.visa.admin.mobileVisa.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -18,10 +20,11 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.mobileVisa.form.MobileVisaBasicInfoForm;
+import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
+import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
@@ -29,7 +32,6 @@ import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
-import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -47,6 +49,12 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	@Inject
 	private UploadService qiniuupService;
 
+	@Inject
+	private OrderUSViewService orderUSViewService;
+
+	@Inject
+	private MobileVisaService mobileVisaService;
+
 	private SimpleSendInfoWSHandler simpleSendInfoWSHandler = (SimpleSendInfoWSHandler) SpringContextUtil.getBean(
 			"mySimpleSendInfoWSHandler", SimpleSendInfoWSHandler.class);
 
@@ -61,47 +69,92 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	/*
 	 * 上传单张图片
 	 */
-	public Object updateImage(String url, Integer staffid, Integer type) {
-		if (TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey() == type) {
-			//获取用户基本信息
-			TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
-					Cnd.where("id", "=", staffid));
-			basicinfoEntity.setTwoinchphoto(url);
-			dbDao.update(basicinfoEntity);
+	public Object updateImage(File file, Integer staffid, Integer type, Integer state, Integer sequence,
+			HttpServletRequest request, HttpServletResponse response) {
+		USStaffJsonEntity jsonEntity = null;
+		//身份证扫描上传
+		if (TAppStaffCredentialsEnum.IDCARD.intKey() == type) {
+			jsonEntity = (USStaffJsonEntity) orderUSViewService.IDCardRecognition(file, request, response);
 		}
+		//身份证背面扫描上传
+		if (TAppStaffCredentialsEnum.IDCARDBACK.intKey() == type) {
+			jsonEntity = (USStaffJsonEntity) orderUSViewService.IDCardRecognitionBack(file, request, response);
+		}
+		//新护照扫描上传
+		if (TAppStaffCredentialsEnum.NEWHUZHAO.intKey() == type) {
+			jsonEntity = (USStaffJsonEntity) orderUSViewService.passportRecognitionBack(file, request, response);
+		}
+		//旧护照扫描上传
 		if (TAppStaffCredentialsEnum.OLDHUZHAO.intKey() == type) {
+			jsonEntity = (USStaffJsonEntity) orderUSViewService.passportRecognitionBack(file, request, response);
+		}
+		if (!Util.isEmpty(jsonEntity)) {
+			if (jsonEntity.isSuccess()) {
+				TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
+						Cnd.where("staffid", "=", staffid).and("type", "=", type));
+				if (!Util.isEmpty(credentialEntity)) {
+					credentialEntity.setType(type);
+					credentialEntity.setUrl(jsonEntity.getUrl());
+					credentialEntity.setUpdatetime(new Date());
+					credentialEntity.setStaffid(staffid);
+					dbDao.update(credentialEntity);
+					return 1;
+				} else {
+					credentialEntity = new TAppStaffCredentialsEntity();
+					credentialEntity.setType(type);
+					credentialEntity.setUrl(jsonEntity.getUrl());
+					credentialEntity.setUpdatetime(new Date());
+					credentialEntity.setStaffid(staffid);
+					credentialEntity.setCreatetime(new Date());
+					dbDao.insert(credentialEntity);
+					return 1;
+				}
+			} else {
+				return 0;
+			}
+		} else {
+			//多套单张上传(户口本，房产证)
+			if (TAppStaffCredentialsEnum.HUKOUBEN.intKey() == type || TAppStaffCredentialsEnum.HOME.intKey() == type) {
+
+			}
+			String url = mobileVisaService.uploadImage(file);
+			if (TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey() == type) {
+				//获取用户基本信息
+				TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+						Cnd.where("id", "=", staffid));
+				basicinfoEntity.setTwoinchphoto(url);
+				dbDao.update(basicinfoEntity);
+			}
+			if (TAppStaffCredentialsEnum.OLDHUZHAO.intKey() == type) {
+				//			TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				//					Cnd.where("staffid", "=", staffid).and("type", "=", type));
+
+				TAppStaffCredentialsEntity credentialEntity = new TAppStaffCredentialsEntity();
+				credentialEntity.setCreatetime(new Date());
+				credentialEntity.setStaffid(staffid);
+				credentialEntity.setUpdatetime(new Date());
+				credentialEntity.setType(type);
+				credentialEntity.setUrl(url);
+				dbDao.insert(credentialEntity);
+				return 1;
+			}
 			TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 					Cnd.where("staffid", "=", staffid).and("type", "=", type));
-			credentialEntity = new TAppStaffCredentialsEntity();
-			credentialEntity.setCreatetime(new Date());
-			credentialEntity.setStaffid(staffid);
-			credentialEntity.setUpdatetime(new Date());
-			credentialEntity.setType(type);
-			credentialEntity.setUrl(url);
-			dbDao.insert(credentialEntity);
-			return 1;
+			if (!Util.isEmpty(credentialEntity)) {
+				credentialEntity.setUrl(url);
+				credentialEntity.setUpdatetime(new Date());
+				int update = dbDao.update(credentialEntity);
+			} else {
+				credentialEntity = new TAppStaffCredentialsEntity();
+				credentialEntity.setCreatetime(new Date());
+				credentialEntity.setStaffid(staffid);
+				credentialEntity.setUpdatetime(new Date());
+				credentialEntity.setType(type);
+				credentialEntity.setUrl(url);
+				dbDao.insert(credentialEntity);
+			}
 		}
-		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffid).and("type", "=", type));
-		if (!Util.isEmpty(credentialEntity)) {
-			credentialEntity.setUrl(url);
-			credentialEntity.setUpdatetime(new Date());
-			int update = dbDao.update(credentialEntity);
-		} else {
-			credentialEntity = new TAppStaffCredentialsEntity();
-			credentialEntity.setCreatetime(new Date());
-			credentialEntity.setStaffid(staffid);
-			credentialEntity.setUpdatetime(new Date());
-			credentialEntity.setType(type);
-			credentialEntity.setUrl(url);
-			dbDao.insert(credentialEntity);
-		}
-		try {
-			//刷新电脑端页面
-			simpleSendInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson("")));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
 		return 1;
 
 	}
@@ -116,7 +169,6 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type));
 		if (!Util.isEmpty(credentialEntity)) {
-
 			result.put("url", credentialEntity.getUrl());
 			result.put("type", credentialEntity.getType());
 		}
@@ -147,8 +199,8 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 
 	}
 
-	public Object updateMuchImage(String url, Integer staffid, Integer type, Integer sequence) {
-
+	public Object updateMuchImage(File file, Integer staffid, Integer type, Integer sequence) {
+		String url = mobileVisaService.uploadImage(file);
 		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type).and("sequnce", "=", sequence));
 		if (!Util.isEmpty(credentialEntity)) {
@@ -162,7 +214,6 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 			credentialEntity.setUpdatetime(new Date());
 			credentialEntity.setType(type);
 			credentialEntity.setSequence(sequence);
-			;
 			credentialEntity.setUrl(url);
 			dbDao.insert(credentialEntity);
 		}
