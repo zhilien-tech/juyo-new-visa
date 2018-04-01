@@ -102,6 +102,10 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	private String cardnum;
 
 	@Column
+	@Comment("卡号(英文)")
+	private String cardnumen;
+
+	@Column
 	@Comment("身份证号")
 	private String cardId;
 

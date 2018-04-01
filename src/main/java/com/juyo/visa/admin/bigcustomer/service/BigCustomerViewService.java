@@ -39,12 +39,15 @@ import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.USMarryStatusEnEnum;
 import com.juyo.visa.common.enums.USMarryStatusEnum;
 import com.juyo.visa.common.enums.AppPictures.AppCredentialsTypeEnum;
+import com.juyo.visa.common.enums.AppPictures.AppPicturesTypeEnum;
 import com.juyo.visa.common.enums.visaProcess.ContactPointRelationshipStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
+import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.enums.visaProcess.TimeUnitStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaCareersEnum;
@@ -346,6 +349,12 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		//addForm.setComid(comId);
 		//addForm.setUserid(userId);
 		//addForm.setOpid(userId);
+		addForm.setIsidentificationnumberapply(IsYesOrNoEnum.YES.intKey());
+		addForm.setIsidentificationnumberapplyen(IsYesOrNoEnum.YES.intKey());
+		addForm.setIssecuritynumberapply(IsYesOrNoEnum.YES.intKey());
+		addForm.setIssecuritynumberapplyen(IsYesOrNoEnum.YES.intKey());
+		addForm.setIstaxpayernumberapply(IsYesOrNoEnum.YES.intKey());
+		addForm.setIstaxpayernumberapplyen(IsYesOrNoEnum.YES.intKey());
 		addForm.setCreatetime(nowDate);
 		addForm.setUpdatetime(nowDate);
 
@@ -542,6 +551,31 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("infoType", ApplicantInfoTypeEnum.BASE.intKey());
 		result.put("staffId", staffId);
 		result.put("passportId", passportId);
+		//获取身份证、2寸照片
+		TAppStaffCredentialsEntity front = dbDao.fetch(
+				TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
+						.and("status", "=", AppPicturesTypeEnum.FRONT.intKey()));
+		TAppStaffCredentialsEntity back = dbDao.fetch(
+				TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
+						.and("status", "=", AppPicturesTypeEnum.BACK.intKey()));
+		TAppStaffCredentialsEntity twoinch = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey()));
+		result.put("front", front);
+		result.put("back", back);
+		result.put("twoinch", twoinch);
+		//电话、邮箱
+		if (!Util.isEmpty(staffInfo.getTelephone()) && Util.isEmpty(staffInfo.getTelephoneen())) {
+			result.put("telephoneen", staffInfo.getTelephone());
+		} else {
+			result.put("telephoneen", staffInfo.getTelephoneen());
+		}
+		if (!Util.isEmpty(staffInfo.getEmail()) && Util.isEmpty(staffInfo.getEmailen())) {
+			result.put("emailen", staffInfo.getEmail());
+		} else {
+			result.put("emailen", staffInfo.getEmailen());
+		}
 		return result;
 	}
 
@@ -572,6 +606,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffInfo.setAddressIssamewithcard(updateForm.getAddressIssamewithcard());
 			staffInfo.setAddressIssamewithcarden(updateForm.getAddressIssamewithcarden());
 			staffInfo.setBirthday(updateForm.getBirthday());
+			insertImage(updateForm.getCardfront(), TAppStaffCredentialsEnum.IDCARD.intKey(), (int) staffId,
+					AppPicturesTypeEnum.FRONT.intKey());
+			insertImage(updateForm.getCardback(), TAppStaffCredentialsEnum.IDCARD.intKey(), (int) staffId,
+					AppPicturesTypeEnum.BACK.intKey());
+			insertImage(updateForm.getTwoinchphoto(), TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey(), (int) staffId, -1);
 			if (!Util.isEmpty(updateForm.getCardprovince())) {
 				staffInfo.setCardprovince(updateForm.getCardprovince());
 			}
@@ -580,6 +619,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			}
 			staffInfo.setCardId(updateForm.getCardId());
 			staffInfo.setCardIden(updateForm.getCardIden());
+			staffInfo.setCardnum(updateForm.getCardnum());
+			staffInfo.setCardnumen(updateForm.getCardnumen());
 			staffInfo.setCity(updateForm.getCity());
 			staffInfo.setCityen(updateForm.getCityen());
 			staffInfo.setDetailedaddress(updateForm.getDetailedaddress());
@@ -786,6 +827,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		cnd.and("tasp.id", "=", passportId);
 		passportSql.setCondition(cnd);
 		Record passport = dbDao.fetch(passportSql);
+		int staffid = (int) passport.get("staffId");
 
 		//格式化日期
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
@@ -805,6 +847,10 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("passport", passport);
 		result.put("infotype", ApplicantInfoTypeEnum.PASSPORT.intKey());
 		result.put("passporttype", EnumUtil.enum2(PassportTypeEnum.class));
+		//护照照片
+		TAppStaffCredentialsEntity passurl = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.NEWHUZHAO.intKey()));
+		result.put("passurl", passurl);
 		return result;
 	}
 
@@ -828,6 +874,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 					Cnd.where("id", "=", passortId));
 			TAppStaffBasicinfoEntity staffBase = dbDao.fetch(TAppStaffBasicinfoEntity.class, passport.getStaffid()
 					.longValue());
+			insertImage(passportForm.getPassporturl(), TAppStaffCredentialsEnum.NEWHUZHAO.intKey(),
+					passport.getStaffid(), -1);
 			staffBase.setFirstname(passportForm.getFirstname());
 			staffBase.setLastname(passportForm.getLastname());
 			passport.setOpid(userId);
@@ -1031,6 +1079,43 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		map.put("data", CommonConstants.IMAGES_SERVER_ADDR + map.get("data"));
 		return map;
 
+	}
+
+	/**
+	 * 把身份证、护照的照片放到人员证件信息表中
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param imgStr 照片地址
+	 * @param imgType 是身份证还是护照
+	 * @param staffid 人员id
+	 * @param imgStatus 身份证正面还是反面
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object insertImage(String imgStr, int imgType, int staffid, int imgStatus) {
+		TAppStaffCredentialsEntity credentials = null;
+		if (Util.eq(imgStatus, -1)) {
+			credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffid).and("type", "=", imgType));
+		} else {
+			credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffid).and("type", "=", imgType).and("status", "=", imgStatus));
+		}
+		if (!Util.isEmpty(credentials)) {
+			credentials.setUrl(imgStr);
+			dbDao.update(credentials);
+		} else {
+			TAppStaffCredentialsEntity credentialsEntity = new TAppStaffCredentialsEntity();
+			credentialsEntity.setType(imgType);
+			credentialsEntity.setUrl(imgStr);
+			credentialsEntity.setStaffid(staffid);
+			credentialsEntity.setStatus(imgStatus);
+			credentialsEntity.setCreatetime(new Date());
+			credentialsEntity.setUpdatetime(new Date());
+			dbDao.insert(credentialsEntity);
+		}
+		return null;
 	}
 
 }

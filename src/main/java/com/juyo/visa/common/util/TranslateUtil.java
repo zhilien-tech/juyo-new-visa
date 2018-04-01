@@ -4,7 +4,7 @@
  * Copyright (c) 2017, 北京科技有限公司版权所有.
 */
 
-package com.juyo.visa.admin.bigcustomer.module;
+package com.juyo.visa.common.util;
 
 import java.io.InputStream;
 import java.net.URLEncoder;

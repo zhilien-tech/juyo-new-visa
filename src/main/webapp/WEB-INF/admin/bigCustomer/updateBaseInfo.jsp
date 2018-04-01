@@ -45,8 +45,8 @@
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="promptInfo">点击上传身份证正面</span>
-										<input id="cardFront" name="cardfront" type="hidden" value="${obj.applicant.cardfront }"/>
-										<img id="imgShow" name="sqimg" alt="" src="${obj.applicant.cardfront }" >
+										<input id="cardFront" name="cardfront" type="hidden" value="${obj.front.url }"/>
+										<img id="imgShow" name="sqimg" alt="" src="${obj.front.url }" >
 										<input id="uploadFileImg" name="uploadfile" class="btn btn-primary btn-sm" type="file" value="上传" />
 										<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 									</div>
@@ -62,8 +62,8 @@
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="promptInfo">点击上传身份证背面</span>
-										<input id="cardBack" name="cardback" type="hidden" value="${obj.applicant.cardback }"/>
-										<img id="imgShowBack" alt="" src="${obj.applicant.cardback }" >
+										<input id="cardBack" name="cardback" type="hidden" value="${obj.back.url }"/>
+										<img id="imgShowBack" alt="" src="${obj.back.url }" >
 										<input id="uploadFileImgBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
 										<i class="delete" onclick="deleteApplicantBackImg();"></i>
 									</div>
@@ -78,8 +78,8 @@
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="inchInfo">二寸免冠照片</span>
-										<input id="cardInch" name="twoinchphoto" type="hidden" value="${obj.applicant.twoinchphoto }"/>
-										<img id="imgInch" name="imgInch" alt="" src="${obj.applicant.twoinchphoto }" >
+										<input id="cardInch" name="twoinchphoto" type="hidden" value="${obj.twoinch.url }"/>
+										<img id="imgInch" name="imgInch" alt="" src="${obj.twoinch.url }" >
 										<input id="uploadFileInchImg" name="uploadFileInchImg" class="btn btn-primary btn-sm" type="file"  value="上传"/>
 										<i class="delete" onclick="deleteApplicantInchImg()"></i>
 									</div>
@@ -125,6 +125,12 @@
 						</div>
 						<!-- 民族 -->
 						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>卡号</label> 
+									<input id="cardnum" name="cardnum" onchange="translateZhToEn(this,'cardnumen','')" type="text" class="form-control input-sm"  value="${obj.applicant.cardnum }" />
+								</div>
+							</div>
 							<!-- 民族 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
@@ -336,13 +342,13 @@
 									<label>
 										<span>*</span>Phone Number
 									</label> 
-									<input id="telephoneen" name="telephoneen" type="text" class="form-control input-sm" value="${obj.applicant.telephoneen }"/>
+									<input id="telephoneen" name="telephoneen" type="text" class="form-control input-sm" value="${obj.telephoneen }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Email Address</label> 
-									<input id="emailen" name="emailen" type="text" class="form-control input-sm" value="${obj.applicant.emailen }"/>
+									<input id="emailen" name="emailen" type="text" class="form-control input-sm" value="${obj.emailen }"/>
 								</div>
 							</div>
 						</div>
@@ -360,6 +366,12 @@
 						</div>
 						<!-- 民族 -->
 						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Cardnum</label> 
+									<input id="cardnumen" name="cardnumen" type="text" class="form-control input-sm" value="${obj.applicant.cardnumen }" />
+								</div>
+							</div>
 							<!-- 民族 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
