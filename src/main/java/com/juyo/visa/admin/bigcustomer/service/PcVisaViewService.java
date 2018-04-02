@@ -310,6 +310,9 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		if (!Util.isEmpty(orderTravelInfo)) {
 
+			//获取用户资料信息
+			TAppStaffOrderUsEntity stafforderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
+					Cnd.where("orderid", "=", orderid));
 			if (!Util.isEmpty(orderUsEntity)) {
 
 				//获取用户基本信息

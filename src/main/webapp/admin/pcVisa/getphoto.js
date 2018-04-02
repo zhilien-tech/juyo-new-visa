@@ -233,10 +233,10 @@ function closeWindow() {
 
 // 保存跳转下一页
 function nextWindow() {
-	var staffid = $("#staffid").val();
+	/*var staffid = $("#staffid").val();
 	var passportId = $("#passportId").val();
 	window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='
-			+ passportId;
+			+ passportId;*/
 }
 
 /* 删除二寸免冠照 */
