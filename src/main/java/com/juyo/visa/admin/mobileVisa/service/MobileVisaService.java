@@ -309,7 +309,11 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	public Object getMuchPhotoByStaffid(Integer staffid, Integer type) {
 		List<TAppStaffCredentialsEntity> query = dbDao.query(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type), null);
-		return query;
+		if (!Util.isEmpty(query)) {
+			return query;
+		} else {
+			return null;
+		}
 
 	}
 
