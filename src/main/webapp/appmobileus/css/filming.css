@@ -381,8 +381,17 @@ footer {
 	position: absolute;
 	top: 0;
 }
+.viceFile {
+	width:100%;
+	height:4rem;
+	position:absolute;
+	top:0;
+	left:0;
+	opacity:0;
+	z-index:9999;
+}
 .fileHide {
-	display: none;
+	display:none;
 }
 /**********************************房产证**********************************/
 .notes {

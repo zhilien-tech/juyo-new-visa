@@ -31,10 +31,12 @@
 			<input type="hidden" value="1" />
 			<!--副页-->
 			<div class="householdPage vicePage">
-				<span class="homePageTitle">副页</span> <img src="img/camera.png"
-					class="camera" /> <img id="12" src="" class="pageImg" />
+				<span class="homePageTitle">副页</span> 
+				<img src="img/camera.png" class="camera" /> 
+				<img id="12" src="" class="pageImg" />
+				<input type="file" class="viceFile" name="1" />
 			</div>
-			<input type="file" class="fileHide viceinput" name="1" />
+			
 			<input type="hidden" value="2" />
 			<!--添加页-->
 			<div class="addPage">
@@ -58,7 +60,7 @@
 				var count = 1;
 				$(".addPage").click(function(){
 					var num = fuyecount+""+count;
-					$(this).before('<div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img id="'+num+'" src="" class="pageImg" /></div><input type="file" class="fileHide" /><input type="hidden" value="'+fuyecount+'" />');
+					$(this).before('<div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img id="'+num+'" src="" class="pageImg" /><input type="file" class="viceFile" /></div><input type="hidden" value="'+fuyecount+'" />');
 					fuyecount = fuyecount+1;
 				});
 				//添加一套
@@ -68,6 +70,15 @@
 											 '<input type="hidden" value="1" /><div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img src="" class="pageImg" /></div><input type="file" class="fileHide" />'+
 											 '<div class="addPage"><span class="homePageTitle">添加副页</span><span class="plus">+</span></div></div>');
 				});
+				
+				//循环遍历出发当前元素的change事件
+				$(".viceFile").each(function(){
+	     
+				     $(document).on('change',this,function(){
+				      //点击每个添加，都触发alert
+				      alert("aaa");
+				     })
+			    });
 			})
 		function getImage(staffid){
 			$.ajax({
@@ -115,7 +126,9 @@
 		            });
 				});
 			});
-			$(".vicePage").click(function(){
+			
+			
+			/* $(".vicePage").click(function(){
 				$(".viceinput").click();
 				$(".viceinput").change(function(){
 					var mainid = $(this).attr("name");
@@ -126,7 +139,7 @@
 					var that = this;
 				        lrz(this.files[0]).then(function (rst) {
 				            /* $('.bacimg2').attr('src',rst.base64);*/
-				            $('#upload').hide(); 
+				           /* $('#upload').hide(); 
 				            // 处理成功会执行
 				            sourceSize = (that.files[0].size / 1024).toFixed(2);
 				            resultSize = (rst.fileLen / 1024).toFixed(2);
@@ -137,7 +150,7 @@
 				            console.log(err);
 				        });
 				});
-			});
+			}); */
 			
 		})
 		
