@@ -56,6 +56,7 @@
 		$(function(){
 			var	staffid=GetQueryString('staffid');
 			var	status=GetQueryString('marryurltype');
+			var	sessionid=GetQueryString('sessionid');
 			getImage(staffid);
 			$(".marriageMain").click(function(){
 				$(".uploadMarriage").click();
@@ -72,7 +73,7 @@
 		                resultSize = (rst.fileLen / 1024).toFixed(2);
 		                scale = parseInt(100 - (resultSize / sourceSize * 100));
 		                rst.formData.append('image',rst.file);
-		                uploadPositive(rst,rst.formData,staffid,status); 
+		                uploadPositive(rst,rst.formData,staffid,status,sessionid); 
 		            }).catch(function (err) {
 		                console.log(err);
 		            });
@@ -83,7 +84,8 @@
 		//跳转2寸图片
 		function returnPage(){
 			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid;
+			var	sessionid=GetQueryString('sessionid');
+			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid;
 		}
 		
 		//获取URL地址参数
@@ -94,7 +96,7 @@
 	    }
 		
 		//上传图片
-		function uploadPositive(rst, formData,staffid,status){
+		function uploadPositive(rst, formData,staffid,status,sessionid){
 			if(!formData){
 				formData = new FormData();
 			}
@@ -102,6 +104,7 @@
 	        formData.append("status", status); 
 	        formData.append("type", 6); 
 	        formData.append("staffid", staffid); 
+	        formData.append("sessionid", sessionid); 
 	        console.log('------------------------------');
 	        console.log(formData); 
 	        console.log(rst.file);
