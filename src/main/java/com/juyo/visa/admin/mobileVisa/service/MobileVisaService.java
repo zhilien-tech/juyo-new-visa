@@ -243,11 +243,16 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		Integer type = mobileVisaBasicInfoForm.getType();
 		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type));
-		if (!Util.isEmpty(credentialEntity)) {
-			result.put("url", credentialEntity.getUrl());
-			result.put("type", credentialEntity.getType());
-		}
-		return result;
+		return credentialEntity;
+		//		if (!Util.isEmpty(credentialEntity)) {
+		//			result.put("url", credentialEntity.getUrl());
+		//			result.put("type", credentialEntity.getType());
+		//		}
+		//		if (!Util.isEmpty(result)) {
+		//			return result;
+		//		} else {
+		//			return 0;
+		//		}
 	}
 
 	/*
@@ -312,9 +317,8 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		if (!Util.isEmpty(query)) {
 			return query;
 		} else {
-			return null;
+			return 0;
 		}
-
 	}
 
 }

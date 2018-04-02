@@ -72,12 +72,6 @@
 		                resultSize = (rst.fileLen / 1024).toFixed(2);
 		                scale = parseInt(100 - (resultSize / sourceSize * 100));
 		                rst.formData.append('image',rst.file);
-//		                alert(rst);
-//		                alert(JSON.stringify(rst.formData));
-//		                alert(rst.file);
-//		                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
-						//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-						alert(status);
 		                uploadPositive(rst,rst.formData,staffid,status); 
 		            }).catch(function (err) {
 		                console.log(err);

@@ -77,7 +77,7 @@
 												<option>${obj.travelInfo.travelpurpose}</option>
 											</c:if>
 											<c:if test="${empty obj.travelInfo.travelpurpose}">
-												<option value="">--请选择--</option>
+												<option value="">商务旅游游客(B)</option>
 											</c:if>
 											<option>外国政府官员（A）</option>
 											<option>商务旅游游客(B)</option>
@@ -559,11 +559,13 @@
 		//离开美国日期联动
 		function sendDate() {
 			var stayday = $("#stayday").val();
-			//自动计算预计出签时间
+			//自动计算离开美国时间
 			var stayday = stayday;
 			var sendvisadate = $("#sendVisaDate").val();
+			console.log(sendvisadate);
 			console.log(stayday);
 			var days = getNewDay(sendvisadate, stayday);
+			console.log(days);
 			$("#returnDate").val(days);
 		}
 
@@ -571,7 +573,8 @@
 		function getNewDay(dateTemp, days) {
 			var dateTemp = dateTemp.split("-");
 			var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-'
-					+ dateTemp[0]); //转换为MM-DD-YYYY格式    
+					+ dateTemp[0]); //转换为MM-DD-YYYY格式
+			console.log(nDate);
 			var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);
 			var rDate = new Date(millSeconds);
 			var year = rDate.getFullYear();
@@ -634,6 +637,7 @@
 				dataType : "json",
 				data : $("#orderUpdateForm").serialize(),
 				type : 'POST',
+				async:false,
 				success : function(data) {
 					/* window.location.href = '/admin/pcVisa/VisaList';  */
 					window.history.go(-1);

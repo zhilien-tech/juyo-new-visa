@@ -44,6 +44,7 @@ function twonichphoto(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -65,6 +66,7 @@ function huzhao(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -84,12 +86,12 @@ function oldhuzhao(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			console.log(data);
-			if (data != null) {
-				
+			if (data != 0) {
 				for(var i=0;i<data.length;i++){
 					var url=data[i].url;
 					$(".beforeInfo").before('<div class="uploadPassport" style="position:relative; clear:both;">'+
@@ -111,13 +113,16 @@ function card(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			console.log(data);
-			for(var i=0;i<data.length;i++){
-				var url=data[i].url;
-				$("#card").attr('src',url);
+			if(data!=0){
+				for(var i=0;i<data.length;i++){
+					var url=data[i].url;
+					$("#card").attr('src',url);
+				}
 			}
 		}
 	});
@@ -131,11 +136,14 @@ function marray(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			console.log(data);
+			if(data!=null){
 			$("#marray").attr("src",data.url);
+			}
 		}
 	});
 };
@@ -148,11 +156,14 @@ function jobCertificate(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			console.log(data);
+			if(data!=null){
 			$("#jobCertificate").attr("src",data.url);
+			}
 		}
 	});
 };
@@ -165,11 +176,14 @@ function business(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			console.log(data);
+			if(data!=""){
 			$("#business").attr("src",data.url);
+			}
 		}
 	});
 };
@@ -182,11 +196,14 @@ function drive(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			console.log(data);
+			if(data!=""){
 			$("#drive").attr("src",data.url);
+			}
 		}
 	});
 };
@@ -199,11 +216,14 @@ function housecard(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			console.log(data);
+			if(data!=null){
 			$("#housecard").attr("src",data.url);
+			}
 		}
 	});
 };
@@ -216,11 +236,14 @@ function household(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			console.log(data);
+			if(data!=0){
 			$("#household").attr("src",data.url);
+			}
 		}
 	});
 };
