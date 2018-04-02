@@ -26,6 +26,7 @@ $(".team").change(function(){
 	}else {
 		$(".teamnameture").hide();
 		$(".teamnamefalse").show();
+		$(".teamnamefalseDiv").show();
 		deleteBrotherEle($("div.teamnamefalseDiv"));
 		emptyContentByObj($("div.teamnamefalse"));
 	}
