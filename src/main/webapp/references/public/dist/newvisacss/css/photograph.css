@@ -107,9 +107,21 @@ img[src=""] {
 	top: 0;
 	left: 0;
 	width:100%;
-	height:auto;
 }
-
+.transverseImg {
+	position: absolute; 
+	top: 0;
+	left: 0;
+	width:100%;
+	height:170px;
+}
+.longitudinal {
+	position: absolute; 
+	top: 0;
+	left: 0;
+	width:100%;
+	height:284px;
+}
 .passport {
 	clear: both;
 } 
@@ -119,6 +131,11 @@ img[src=""] {
 	margin-right: 4%;
 	margin-top: 2%;
 }
+.samplePassportImg {
+	margin-right: 4%;
+	margin-top: 2%;
+	display:inline-block;
+} 
 .uploadPassport {
 	margin-top: 2%;
 	float: left;
@@ -129,22 +146,43 @@ img[src=""] {
 	text-align: center;
 	position:relative;
 }
+.uploadPassports {
+	margin-top: 2%;
+	width: 260px;
+	height: 170px;
+	line-height: 170px;
+	border: 1px solid rgba(121,121,121,1);
+	text-align: center;
+	display:inline-block;
+	position:relative;
+	margin-right:4%;
+	vertical-align:middle;
+}
+.imgInfoRight .uploadPassports:nth-child(2) {
+	margin-top:-164px;
+}
 .huKouBook {
 	clear: both;
 }
-.sampleHuKouBook {
-	float: left;
+.sampleReleaseImg {
+	display:inline-block;
 	margin-right: 4%;
 	margin-top: 2%;
 }
-.uploadHuKouBook {
-	float: left;
+.uploadReleases {
 	width: 212px;
 	height: 284px;
 	line-height: 284px;
 	border: 1px solid rgba(121,121,121,1);
 	text-align: center;
 	margin-top: 2%;
+	display:inline-block;
+	position:relative;
+	margin-right:4%;
+	vertical-align:middle;
+}
+.imgInfoRight .uploadReleases:nth-child(2) {
+	margin-top:-278px;
 }
 .delete {
 	background-image:url(../img/delete.png);
@@ -160,4 +198,41 @@ img[src=""] {
 	cursor:pointer;
 	border:1px solid rgb(209,213,221);
 	display:block;
+}
+.alignment {
+	position:relative;
+}
+/* 右按钮样式 */
+.rightNav {
+	position: fixed;
+	top: 15px;
+	right: 0;
+	z-index: 999;
+	width: 40px;
+	height: 100%;
+	cursor: pointer;
+}
+
+.rightNav span {
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	top: 50%;
+	border-left: 4px solid #999;
+	border-bottom: 4px solid #999;
+	-webkit-transform: translate(0, -50%) rotate(-135deg);
+	transform: translate(0, -50%) rotate(-135deg);
+}
+.explainLeft {
+	width: 22%;
+	display: inline-block;
+	float: left;
+	margin-right: 6%;
+	margin-top: 2%;
+	height:auto;
+}
+.imgInfoRight {
+	float:right;
+	width:72%;
+	height:auto;
 }

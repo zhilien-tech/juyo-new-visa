@@ -92,11 +92,11 @@ function oldhuzhao(staffid, type) {
 				
 				for(var i=0;i<data.length;i++){
 					var url=data[i].url;
-					$(".beforeInfo").before('<div class="uploadPassport" style="position:relative; clear:both;">'+
+					$(".beforeInfo").before('<div class="uploadPassports">'+
 							'<div>上传</div>'+
 							'<img src='+url+' class="loadImg" width="100%" height="170px;"/>'+
 						'</div>');
-					$(".oldpassports").css("opacity","0");
+					$(".oldpassports").css("display","none");
 				}	
 			}
 		}
@@ -245,4 +245,11 @@ function deleteApplicantFrontImg() {
 	$('#twonichphoto').attr('src', "");
 	$("#uploadPhoto .delete").hide();
 	/* $("#uploadPhoto").siblings("i").css("display","none"); */
+}
+
+//右箭头跳转
+function saveApplicant(status){
+	if(status == 2){
+		window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='+passportId;
+	}
 }
