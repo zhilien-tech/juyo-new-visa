@@ -1668,7 +1668,7 @@
 	<script src="${base}/admin/bigCustomer/visa/visaGetInfoList.js"></script><!-- 本页面  获取一对多信息 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js -->
-	<script src="${base}/admin/bigCustomer/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
+	<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
 	<script type="text/javascript">
 		//跳转到基本信息页
 		function baseInfoBtn(){
