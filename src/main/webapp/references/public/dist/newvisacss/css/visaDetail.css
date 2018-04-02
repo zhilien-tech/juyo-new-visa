@@ -195,3 +195,20 @@
 	border-radius:0;
 	width:100%;
 }
+/* 出行信息标题 */
+.info-head span {
+	font-size:12px;
+	margin-left:5%;
+	color:red;
+}
+/* 出行信息 radio样式 */
+.tripYes {
+	vertical-align:middle;
+	margin-top:-2px !important;
+	margin-right:5px !important;
+}
+.tripNo {
+	margin:0 5px 0 15px !important;
+	vertical-align:middle;
+	margin-top:-2px !important;
+}

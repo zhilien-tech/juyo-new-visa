@@ -35,7 +35,7 @@ public class PcVisaModule {
 	private PcVisaViewService pcVisaViewService;
 
 	/**
-	 * 跳转到list页面
+	 * 跳转到美国游客list页面
 	 */
 	@At
 	@GET
@@ -45,7 +45,7 @@ public class PcVisaModule {
 	}
 
 	/**
-	 * 跳转到list页面
+	 * 跳转到美国订单list页面
 	 */
 	@At
 	@GET

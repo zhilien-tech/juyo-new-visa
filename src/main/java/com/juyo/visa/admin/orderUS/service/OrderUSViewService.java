@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
@@ -37,18 +38,26 @@ import org.json.JSONObject;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
+import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
+import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 
+import com.google.common.collect.Maps;
+import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.orderUS.entity.USPassportJsonEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
+import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.USOrderStatusEnum;
+import com.juyo.visa.common.enums.orderUS.DistrictEnum;
+import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
+import com.juyo.visa.common.enums.orderUS.isPayedEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
@@ -57,10 +66,14 @@ import com.juyo.visa.common.util.PinyinTool;
 import com.juyo.visa.common.util.PinyinTool.Type;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
+import com.juyo.visa.entities.TUserEntity;
 import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
+import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
 import com.uxuexi.core.web.chain.support.JsonResult;
 import com.we.business.sms.SMSService;
@@ -88,6 +101,94 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	private final static String SMS_SIGNATURE = "【优悦签】";
 	private final static Integer US_YUSHANG_COMID = 65;
+
+	/**
+	 * 列表页下拉框内容获取
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object toList() {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("searchStatus", EnumUtil.enum2(USOrderListStatusEnum.class));
+		result.put("cityid", EnumUtil.enum2(DistrictEnum.class));
+		result.put("ispayed", EnumUtil.enum2(isPayedEnum.class));
+		return result;
+	}
+
+	/**
+	 * 获取美国订单列表页数据
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object listData(OrderUSListDataForm form, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		//获取当前公司
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		//获取当前用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		form.setUserid(loginUser.getId());
+		form.setCompanyid(loginCompany.getId());
+		form.setAdminId(loginCompany.getAdminId());
+		Sql sql = form.sql(sqlManager);
+
+		Integer pageNumber = form.getPageNumber();
+		Integer pageSize = form.getPageSize();
+
+		Pager pager = new OffsetPager((pageNumber - 1) * pageSize, pageSize);
+		pager.setRecordCount((int) Daos.queryCount(nutDao, sql.toString()));
+		sql.setPager(pager);
+		sql.setCallback(Sqls.callback.records());
+		nutDao.execute(sql);
+
+		@SuppressWarnings("unchecked")
+		//主sql数据
+		List<Record> list = (List<Record>) sql.getResult();
+		for (Record record : list) {
+			Integer orderid = (Integer) record.get("orderid");
+			String sqlStr = sqlManager.get("orderUS_listData_staff");
+			Sql applysql = Sqls.create(sqlStr);
+			List<Record> records = dbDao.query(applysql, Cnd.where("tasou.orderid", "=", orderid), null);
+			record.put("everybodyInfo", records);
+
+			String orderStatus = record.getString("orderstatus");
+			for (USOrderListStatusEnum statusEnum : USOrderListStatusEnum.values()) {
+				if (!Util.isEmpty(orderStatus) && orderStatus.equals(String.valueOf(statusEnum.intKey()))) {
+					record.set("orderstatus", statusEnum.value());
+				}
+			}
+
+		}
+		result.put("orderUSListData", list);
+		result.put("pageTotal", pager.getPageCount());
+		result.put("pageListCount", list.size());
+		return result;
+	}
+
+	public Object getOrderUSDetail(int orderid, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		//订单信息
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		result.put("orderinfo", orderus);
+		Integer status = orderus.getStatus();
+		for (USOrderListStatusEnum statusenum : USOrderListStatusEnum.values()) {
+			if (status == statusenum.intKey()) {
+				result.put("orderstatus", statusenum.value());
+			}
+		}
+		//领区下拉
+		result.put("cityidenum", EnumUtil.enum2(DistrictEnum.class));
+		//是否付款下拉
+		result.put("ispayedenum", EnumUtil.enum2(isPayedEnum.class));
+		return result;
+	}
 
 	//根据人员id添加订单
 	public Object addOrderByStuffId(Integer staffId) {
