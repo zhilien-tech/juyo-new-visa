@@ -383,19 +383,23 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 					Cnd.where("flightnum", "=", orderTravelInfo.getGoFlightNum()));
 			TFlightEntity returnFlightEntity = dbDao.fetch(TFlightEntity.class,
 					Cnd.where("flightnum", "=", orderTravelInfo.getReturnFlightNum()));
-			if (!Util.isEmpty(goFlightEntity))
+			if (!Util.isEmpty(goFlightEntity)) {
 				result.put("goFlightInfo", goFlightEntity);
-			else
+			} else {
 				result.put("goFlightInfo", null);
-			if (!Util.isEmpty(returnFlightEntity))
-				result.put("returnFlightInfo", returnFlightEntity);
-			else
-				result.put("returnFlightInfo", null);
+			}
 
-			if (!Util.isEmpty(staffSummaryInfoList))
+			if (!Util.isEmpty(returnFlightEntity)) {
+				result.put("returnFlightInfo", returnFlightEntity);
+			} else {
+				result.put("returnFlightInfo", null);
+			}
+
+			if (!Util.isEmpty(staffSummaryInfoList)) {
 				result.put("summaryInfo", staffSummaryInfoList.get(0));
-			else
+			} else {
 				result.put("summaryInfo", null);
+			}
 		}
 		Map<Integer, String> stateMap = new HashMap<Integer, String>();
 		for (VisaUSStatesEnum e : VisaUSStatesEnum.values()) {
