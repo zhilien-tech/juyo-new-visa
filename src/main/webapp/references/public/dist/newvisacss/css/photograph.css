@@ -106,6 +106,8 @@ img[src=""] {
 	position: absolute; 
 	top: 0;
 	left: 0;
+	width:100%;
+	height:auto;
 }
 
 .passport {
@@ -125,6 +127,7 @@ img[src=""] {
 	line-height: 170px;
 	border: 1px solid rgba(121,121,121,1);
 	text-align: center;
+	position:relative;
 }
 .huKouBook {
 	clear: both;

@@ -63,7 +63,8 @@
 				<section class="content">
 					<!-- 订单信息 -->
 					<div id="save" class="info">
-						<p class="info-head">订单信息</p>
+						<p class="info-head">出行信息<span>如不清楚出行信息，可不必填写</span></p>
+						
 						<!-- 大模块 -->
 						<div class="info-body-from">
 							<!-- 模块1 -->
@@ -113,9 +114,8 @@
 									<div class="form-group">
 										<label><span>*</span>是否有具体的旅行计划</label>
 										<div>
-											<input type="radio" name="tripPlan" class="tripPlan"
-												value="1">是 <input type="radio" name="tripPlan"
-												class="tripPlan" value="2" checked>否
+											<input type="radio" name="tripPlan" class="tripPlan tripYes" value="1">是 
+											<input type="radio" name="tripPlan" class="tripPlan tripNo" value="2" checked>否
 										</div>
 									</div>
 								</div>
@@ -127,7 +127,7 @@
 								<!-- 预计出发时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>预计出发日期：</label> <input id="goDate"
+										<label><span></span>预计出发日期：</label> <input id="goDate"
 											name="godate" type="text"
 											class="form-format input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.godate }" pattern="yyyy-MM-dd" />" />
@@ -137,7 +137,7 @@
 								<!-- 抵达美国日期 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>抵达美国日期：</label> <input id="sendVisaDate"
+										<label><span></span>抵达美国日期：</label> <input id="sendVisaDate"
 											name="arrivedate" type="text"
 											class="form-format input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.arrivedate }" pattern="yyyy-MM-dd" />" />
@@ -147,7 +147,7 @@
 								<!-- 停留天数 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>停留天数：</label> <input id="stayday"
+										<label><span></span>停留天数：</label> <input id="stayday"
 											onchange="sendDate()" name="staydays" class="input-sm"
 											value="${obj.travelInfo.staydays}" type="text" />
 									</div>
@@ -156,7 +156,7 @@
 								<!-- 离开美国日期 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>离开美国日期：</label> <input id="returnDate"
+										<label><span></span>离开美国日期：</label> <input id="returnDate"
 											name="leavedate" type="text"
 											class="form-format input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.leavedate }" pattern="yyyy-MM-dd" />" />
@@ -441,7 +441,7 @@
 									<!-- 右侧模块1END -->
 									<!-- 右侧模块2 -->
 									<div class="row body-from-input">
-										<div class="col-sm-12">
+										<div class="col-sm-8">
 											<div class="form-group">
 												<label>所需资料</label> <input name="realinfo" disabled="true"
 													value="${obj.realinfo }" type="text"
@@ -449,6 +449,13 @@
 													type="hidden" value="${obj.summaryInfo.staffid }">
 											</div>
 										</div>
+										<div class="col-sm-4">
+											<div class="form-group">
+												<label>卡号</label> 
+												<input name="" type="text" disabled value="" class="form-control input-sm"  />
+											</div>
+										</div>
+										
 									</div>
 									<!-- 右侧模块2END -->
 									<!-- 右侧模块3 -->
@@ -457,7 +464,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>AA码</label> <input name="aacode" type="text"
-													disabled="true" value="${obj.summaryInfo.aacode }"
+													disabled value="${obj.summaryInfo.aacode }"
 													class="form-control input-sm" placeholder="" />
 											</div>
 										</div>
