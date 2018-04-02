@@ -10,17 +10,20 @@ import java.io.File;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.upload.UploadAdaptor;
 
+import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 
 /**
@@ -35,6 +38,35 @@ public class OrderUSModule {
 
 	@Inject
 	private OrderUSViewService orderUSViewService;
+
+	/**
+	 * 跳转到美国订单list页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object listUS() {
+		return orderUSViewService.toList();
+	}
+
+	/**
+	 * 加载列表页数据
+	 */
+	@At
+	@POST
+	public Object listDetailUSData(@Param("..") final OrderUSListDataForm sqlParamForm, HttpSession session) {
+		return orderUSViewService.listData(sqlParamForm, session);
+	}
+
+	/**
+	 * 跳转到美国订单详情页
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object listDetailUS(@Param("orderid") int orderid, HttpSession session) {
+		return orderUSViewService.getOrderUSDetail(orderid, session);
+	}
 
 	/**
 	 * 
