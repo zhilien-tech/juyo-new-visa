@@ -212,3 +212,50 @@
 	vertical-align:middle;
 	margin-top:-2px !important;
 }
+
+.listDetailContent {
+	background:#FFF;
+}
+/* 解决按钮 */
+.solve {
+	width:40px;
+	text-align:center;
+	display:inline-block;
+	background:#3087f1;
+	color:#FFF;
+	border-radius:4px;
+	cursor:pointer;
+	margin-left:10px;
+}
+.solve:hover {
+	color:#FFF;
+}
+.followUpMain {
+	margin:0 3.5% 0 7%;
+}
+.fixedheight {
+	width:100%; 
+	height:200px; 
+	overflow-y:auto;
+}
+.dateNameBtn {
+	margin-bottom:5px;
+}
+.dateInfo,.nameInfo,.solveHide{
+	margin-left:10px;
+}
+.solveHide {
+	display:none;
+}
+.errorInfo {
+	margin-left:10%;
+	font-size:13px;
+	margin-bottom:10px;
+}
+.fixedheight ul li {
+	border-bottom:1px solid #eee;
+	margin-top:10px;
+}
+.solveContent {
+	padding-bottom:5%;
+}
