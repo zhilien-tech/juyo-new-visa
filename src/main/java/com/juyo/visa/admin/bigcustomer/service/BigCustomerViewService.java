@@ -742,11 +742,6 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				Cnd.where("staffid", "=", staffId), null);
 		List<TAppStaffGousinfoEntity> gousList_New = JsonUtil.fromJsonAsList(TAppStaffGousinfoEntity.class,
 				gousListJson);
-		for (TAppStaffGousinfoEntity tAppStaffGousinfoEntity : gousList_New) {
-			Date arrivedate = tAppStaffGousinfoEntity.getArrivedate();
-			Date arrivedateen = tAppStaffGousinfoEntity.getArrivedateen();
-
-		}
 		dbDao.updateRelations(gousList_old, gousList_New);
 
 		//美国驾照信息
