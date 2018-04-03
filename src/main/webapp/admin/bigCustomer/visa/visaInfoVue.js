@@ -54,7 +54,7 @@ new Vue({
 
 //签证信息页保存
 function save(){
-	
+
 	layer.load(1);
 	
 	var visadata = {};
