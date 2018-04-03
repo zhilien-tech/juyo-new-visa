@@ -54,7 +54,7 @@ new Vue({
 
 //签证信息页保存
 function save(){
-	
+
 	layer.load(1);
 	
 	var visadata = {};
@@ -106,6 +106,7 @@ function save(){
 				layer.msg("保存失败");
 			}
 			layer.closeAll('loading');
+			closeWindow();
 		},
 		error: function (xhr) {
 			layer.msg("保存失败");

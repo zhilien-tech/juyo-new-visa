@@ -58,9 +58,9 @@
 			<!-- form -->
 			<form id="orderUpdateForm">
 				<!-- 主体 -->
-				<section class="content">
+				<section class="content listDetailContent">
 					<!-- 订单信息 -->
-					<p class="info-head">订单信息</p>
+					<p class="info-head">订单信息<span>如不清楚出行信息，可不必填写</span></p>
 					<div class="info-body-from">
 						<!-- 模块 -->
 						<div class="row body-from-input">
@@ -148,8 +148,8 @@
 									<div class="form-group">
 										<label><span>*</span>是否有具体的旅行计划</label>
 										<div>
-											<input type="radio" name="tripPlan" class="tripPlan" value="1">是 
-											<input type="radio" name="tripPlan" class="tripPlan" value="2" checked>否
+											<input type="radio" name="tripPlan" class="tripPlan tripYes" value="1">是 
+											<input type="radio" name="tripPlan" class="tripPlan tripNo" value="2" checked>否
 										</div>
 									</div>
 								</div>
@@ -431,11 +431,17 @@
 									<!-- 右侧模块1END -->
 									<!-- 右侧模块2 -->
 									<div class="row body-from-input">
-										<div class="col-sm-12">
+										<div class="col-sm-8">
 											<div class="form-group">
 												<label>所需资料</label> 
-												<input name="realinfo" disabled="true" value="${obj.realinfo }" type="text" class="form-control input-sm" /> 
+												<input name="realinfo" disabled value="${obj.realinfo }" type="text" class="form-control input-sm" /> 
 												<input name="staffid" type="hidden" value="${obj.summaryInfo.staffid }">
+											</div>
+										</div>
+										<div class="col-sm-4">
+											<div class="form-group">
+												<label>卡号</label> 
+												<input name="" type="text" disabled value="" class="form-control input-sm" placeholder="" /> 
 											</div>
 										</div>
 									</div>
@@ -505,145 +511,155 @@
 					<!-- 大模块2END -->
 					<!-- 大模块3 -->
 					<!-- 标题以及按钮组 -->
-					<p class="info-head">跟进</p>
-					<div class="dataInfoGroup">
-						<a>加跟进</a> 
-					</div>
-					<!-- 标题以及按钮组END -->
-					<div class="info-body-from">
-						<div class="row body-from">
-							<div class="" style="width:100%; height:400px; overflow-y:auto;">
-								<ul>
-									<!-- 循环 -->
-									<li style="border-bottom:1px solid #eee;">
-										<div>
-											<span>2018.03.28  15:30</span>
-											<span>李智慧</span>
-											<span>
-												<span>2018.03.28</span>
-												由
-												<span>李智慧</span>
-												解决
-											</span>
-											<span>解决</span>
-										</div>
-										<p>
-											1.二寸照片不合格已通知重新拍照上传
-											2.护照照片不清晰，重新上传
-										</p>
-									</li>
-									<!-- 循环END -->
-									<li>
-										<div>
-											<span>2018.03.28  15:30</span>
-											<span>李智慧</span>
-											<span>
-												<span>2018.03.28</span>
-												由
-												<span>李智慧</span>
-												解决
-											</span>
-											<span>解决</span>
-										</div>
-										<p>
-											1.二寸照片不合格已通知重新拍照上传
-											2.护照照片不清晰，重新上传
-										</p>
-									</li>
-									
-									<li>
-										<div>
-											<span>2018.03.28  15:30</span>
-											<span>李智慧</span>
-											<span>
-												<span>2018.03.28</span>
-												由
-												<span>李智慧</span>
-												解决
-											</span>
-											<span>解决</span>
-										</div>
-										<p>
-											1.二寸照片不合格已通知重新拍照上传
-											2.护照照片不清晰，重新上传
-										</p>
-									</li>
-									
-									<li>
-										<div>
-											<span>2018.03.28  15:30</span>
-											<span>李智慧</span>
-											<span>
-												<span>2018.03.28</span>
-												由
-												<span>李智慧</span>
-												解决
-											</span>
-											<span>解决</span>
-										</div>
-										<p>
-											1.二寸照片不合格已通知重新拍照上传
-											2.护照照片不清晰，重新上传
-										</p>
-									</li>
-									
-									<li>
-										<div>
-											<span>2018.03.28  15:30</span>
-											<span>李智慧</span>
-											<span>
-												<span>2018.03.28</span>
-												由
-												<span>李智慧</span>
-												解决
-											</span>
-											<span>解决</span>
-										</div>
-										<p>
-											1.二寸照片不合格已通知重新拍照上传
-											2.护照照片不清晰，重新上传
-										</p>
-									</li>
-									
-									<li>
-										<div>
-											<span>2018.03.28  15:30</span>
-											<span>李智慧</span>
-											<span>
-												<span>2018.03.28</span>
-												由
-												<span>李智慧</span>
-												解决
-											</span>
-											<span>解决</span>
-										</div>
-										<p>
-											1.二寸照片不合格已通知重新拍照上传
-											2.护照照片不清晰，重新上传
-										</p>
-									</li>
-									
-									<li>
-										<div>
-											<span>2018.03.28  15:30</span>
-											<span>李智慧</span>
-											<span>
-												<span>2018.03.28</span>
-												由
-												<span>李智慧</span>
-												解决
-											</span>
-											<span>解决</span>
-										</div>
-										<p>
-											1.二寸照片不合格已通知重新拍照上传
-											2.护照照片不清晰，重新上传
-										</p>
-									</li>
-								</ul>
+					<div class="info solveContent" id="mySwitch">
+						<p class="info-head followUp">
+							跟进
+							<div class="dataInfoGroup">
+								<a>加跟进</a> 
+							</div>
+						</p>
+						<!-- 标题以及按钮组END -->
+						<div class="followUpMain">
+							<div class="row body-from">
+								<div class="fixedheight">
+									<ul>
+										<!-- 循环 -->
+										<li>
+											<div class="dateNameBtn">
+												<span class="dateInfo">2018.03.28  15:30</span>
+												<span class="nameInfo">李智慧</span>
+												<span class="solveHide">
+													<span>2018.03.28</span>
+													由
+													<span>李智慧</span>
+													解决
+												</span>
+												<a class="solve" >解决</a>
+											</div>
+											<div class="errorInfo">
+												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
+												<span>2.护照照片不清晰，重新上传</span>
+											</div>
+										</li>
+										<!-- 循环END -->
+										<li>
+											<div class="dateNameBtn">
+												<span class="dateInfo">2018.03.28  15:30</span>
+												<span class="nameInfo">李智慧</span>
+												<span class="solveHide">
+													<span>2018.03.28</span>
+													由
+													<span>李智慧</span>
+													解决
+												</span>
+												<a class="solve" >解决</a>
+											</div>
+											<div class="errorInfo">
+												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
+												<span>2.护照照片不清晰，重新上传</span>
+											</div>
+										</li><li>
+											<div class="dateNameBtn">
+												<span class="dateInfo">2018.03.28  15:30</span>
+												<span class="nameInfo">李智慧</span>
+												<span class="solveHide">
+													<span>2018.03.28</span>
+													由
+													<span>李智慧</span>
+													解决
+												</span>
+												<a class="solve" >解决</a>
+											</div>
+											<div class="errorInfo">
+												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
+												<span>2.护照照片不清晰，重新上传</span>
+											</div>
+										</li><li>
+											<div class="dateNameBtn">
+												<span class="dateInfo">2018.03.28  15:30</span>
+												<span class="nameInfo">李智慧</span>
+												<span class="solveHide">
+													<span>2018.03.28</span>
+													由
+													<span>李智慧</span>
+													解决
+												</span>
+												<a class="solve" >解决</a>
+											</div>
+											<div class="errorInfo">
+												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
+												<span>2.护照照片不清晰，重新上传</span>
+											</div>
+										</li><li>
+											<div class="dateNameBtn">
+												<span class="dateInfo">2018.03.28  15:30</span>
+												<span class="nameInfo">李智慧</span>
+												<span class="solveHide">
+													<span>2018.03.28</span>
+													由
+													<span>李智慧</span>
+													解决
+												</span>
+												<a class="solve" >解决</a>
+											</div>
+											<div class="errorInfo">
+												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
+												<span>2.护照照片不清晰，重新上传</span>
+											</div>
+										</li><li>
+											<div class="dateNameBtn">
+												<span class="dateInfo">2018.03.28  15:30</span>
+												<span class="nameInfo">李智慧</span>
+												<span class="solveHide">
+													<span>2018.03.28</span>
+													由
+													<span>李智慧</span>
+													解决
+												</span>
+												<a class="solve" >解决</a>
+											</div>
+											<div class="errorInfo">
+												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
+												<span>2.护照照片不清晰，重新上传</span>
+											</div>
+										</li><li>
+											<div class="dateNameBtn">
+												<span class="dateInfo">2018.03.28  15:30</span>
+												<span class="nameInfo">李智慧</span>
+												<span class="solveHide">
+													<span>2018.03.28</span>
+													由
+													<span>李智慧</span>
+													解决
+												</span>
+												<a class="solve" >解决</a>
+											</div>
+											<div class="errorInfo">
+												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
+												<span>2.护照照片不清晰，重新上传</span>
+											</div>
+										</li><li>
+											<div class="dateNameBtn">
+												<span class="dateInfo">2018.03.28  15:30</span>
+												<span class="nameInfo">李智慧</span>
+												<span class="solveHide">
+													<span>2018.03.28</span>
+													由
+													<span>李智慧</span>
+													解决
+												</span>
+												<a class="solve" >解决</a>
+											</div>
+											<div class="errorInfo">
+												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
+												<span>2.护照照片不清晰，重新上传</span>
+											</div>
+										</li>
+									</ul>
+								</div>
 							</div>
 						</div>
-					</div>
+					</div>	
 					<!-- 大模块3END -->
 				</section>
 			</form>

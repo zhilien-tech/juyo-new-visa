@@ -36,6 +36,7 @@ function getGoUSList(){
 		var gous = {};
 		
 		var arrivedate = $(this).find('[name=arrivedate]').val();
+		arrivedate = formatDate(arrivedate);
 		var staydays = $(this).find('[name=staydays]').val();
 		var dateunit = $(this).find('[name=dateunit]').val();
 		
@@ -57,6 +58,7 @@ function getGoUSList(){
 	return gousList;
 }
 
+  
 //获取驾照信息
 function getDriverList(){
 	var driverList = [];
@@ -162,7 +164,9 @@ function getBeforeWorkList(){
 			isknowsupervisorlastname = 0;
 		}
 		var employstartdate = $(this).find('[name=employstartdate]').val();
+		employstartdate = formatDate(employstartdate);
 		var employenddate = $(this).find('[name=employenddate]').val();
+		employenddate = formatDate(employenddate);
 		var previousduty = $(this).find('[name=previousduty]').val();
 		
 		beforeWorkLength += employername;
@@ -222,7 +226,9 @@ function getBeforeEducationList(){
 		}
 		var course = $(this).find('[name=course]').val();
 		var coursestartdate = $(this).find('[name=coursestartdate]').val();
+		coursestartdate = formatDate(coursestartdate);
 		var courseenddate = $(this).find('[name=courseenddate]').val();
+		courseenddate = formatDate(courseenddate);
 		var institutioncountry = $(this).find('[name=institutioncountry]').val();
 		if(institutioncountry != 0){
 			beforeEducationLength += institutioncountry;
@@ -327,7 +333,9 @@ function getMilitaryInfoList(){
 		var rank = $(this).find('[name=rank]').val();
 		var militaryspecialty = $(this).find('[name=militaryspecialty]').val();
 		var servicestartdate = $(this).find('[name=servicestartdate]').val();
+		servicestartdate = formatDate(servicestartdate);
 		var serviceenddate = $(this).find('[name=serviceenddate]').val();
+		serviceenddate = formatDate(serviceenddate);
 		militaryInfoLength += servicebranch;
 		militaryInfoLength += rank;
 		militaryInfoLength += militaryspecialty;
@@ -348,3 +356,29 @@ function getMilitaryInfoList(){
 	
 	return militaryInfoList;
 }
+
+
+//格式化日期
+function formatDate(dataStr) { 
+	 var date = dataStr;
+	 if(date != "" && date != null && date != undefined){
+		 var date = dataStr.split('/');
+			if(date != null || date !="")
+		    var y = date[2];  
+		    var m = date[1];  
+		    var d = date[0];  
+		    return y + '-' + m + '-' + d;  
+	 }else{
+		 return "";
+	 }
+	/*if(dataStr.length>0){
+		var date = dataStr.split('/');
+		if(date != null || date !="")
+	    var y = date[2];  
+	    var m = date[1];  
+	    var d = date[0];  
+	    return y + '-' + m + '-' + d;  
+	}else{
+		return null;
+	}*/
+};

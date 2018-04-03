@@ -145,7 +145,7 @@
 									<div class="goUS_Country">
 										<div class="groupInputInfo">
 											<label>抵达日期</label>
-											<input type="text" id="arrivedate" value="${gous.arrivedate }" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
+											<input type="text" id="arrivedate" value="<fmt:formatDate value="${gous.arrivedate }" pattern="dd/MM/yyyy" />" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
 										</div>
 										<div class="groupInputInfo stopDate goUS_Country">
 											<label>停留时间</label>
@@ -853,12 +853,12 @@
 										</div>
 										<div class="paddingRight groupInputInfo" >
 											<label>入职时间</label>
-											<input id="employstartdate" name="employstartdate" value="${beforeWork.employstartdate }" class="datetimepickercss" type="text" placeholder="日/月/年" />
+											<input id="employstartdate" name="employstartdate" value="<fmt:formatDate value="${beforeWork.employstartdate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft groupInputInfo">
 											<label>离职时间</label>
-											<input id="employenddate" name="employenddate" class="datetimepickercss" value="${beforeWork.employenddate }" type="text" placeholder="日/月/年" />
+											<input id="employenddate" name="employenddate" class="datetimepickercss" value="<fmt:formatDate value="${beforeWork.employenddate }" pattern="dd/MM/yyyy" />"  type="text" placeholder="日/月/年" />
 										</div>
 										<div class="paddingRight grouptextareaInfo">
 											<label>简要描述你的职责</label>
@@ -1014,11 +1014,11 @@
 										<div class="clear"></div>
 										<div class="paddingLeft groupInputInfo">
 											<label>参加课程开始时间</label>
-											<input id="coursestartdate" name="coursestartdate" value="${education.coursestartdate }" class="datetimepickercss" type="text" placeholder="日/月/年" />
+											<input id="coursestartdate" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
 										<div class="paddingRight groupInputInfo">
 											<label>结束时间</label>
-											<input id="courseenddate" name="courseenddate" value="${education.courseenddate }" class="datetimepickercss" type="text" placeholder="日/月/年" />
+											<input id="courseenddate" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
 									</div>
 								</c:forEach>
@@ -1252,11 +1252,11 @@
 									<div class="clear"></div>
 									<div class="paddingLeft groupInputInfo">
 										<label>服兵役开始时间日期</label>
-										<input id="servicestartdate" name="servicestartdate" value="${conscientious.servicestartdate }" type="text" class="datetimepickercss" placeholder="日/月/年"/>
+										<input id="servicestartdate" name="servicestartdate" value="<fmt:formatDate value="${conscientious.servicestartdate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss" placeholder="日/月/年"/>
 									</div>
 									<div class="paddingRight groupInputInfo">
 										<label>结束时间</label>
-										<input id="serviceenddate" name="serviceenddate" value="${conscientious.serviceenddate }" type="text" class="datetimepickercss" placeholder="日/月/年"/>
+										<input id="serviceenddate" name="serviceenddate" value="<fmt:formatDate value="${conscientious.serviceenddate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss" placeholder="日/月/年"/>
 									</div>
 								</div>
 							</c:forEach>
@@ -1668,7 +1668,7 @@
 	<script src="${base}/admin/bigCustomer/visa/visaGetInfoList.js"></script><!-- 本页面  获取一对多信息 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js -->
-	<script src="${base}/admin/bigCustomer/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
+	<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
 	<script type="text/javascript">
 		//跳转到基本信息页
 		function baseInfoBtn(){
