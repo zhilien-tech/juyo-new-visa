@@ -149,7 +149,7 @@
 										</div>
 										<div class="groupInputInfo stopDate goUS_Country">
 											<label>停留时间</label>
-											<input id="staydays" name="staydays" type="text" />
+											<input id="staydays" name="staydays" value="${gous.staydays }" type="text" />
 											<select id="dateunit" name="dateunit">
 												<option value="0">请选择</option>
 												<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
