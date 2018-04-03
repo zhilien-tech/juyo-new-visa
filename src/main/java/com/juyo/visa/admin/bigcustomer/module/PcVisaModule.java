@@ -23,7 +23,7 @@ import com.juyo.visa.forms.OrderUpdateForm;
 public class PcVisaModule {
 
 	private static final Log log = Logs.get();
-
+	//配置与变量名一致
 	@Inject
 	private PcVisaViewService pcVisaViewService;
 
