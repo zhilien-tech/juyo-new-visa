@@ -122,3 +122,4 @@ function cancel(){
 	self.window.close();
 	parent.window.reload();
 }
+

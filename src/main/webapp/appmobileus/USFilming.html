@@ -108,7 +108,7 @@
 <script>
 	$(function() {
 		var staffid = GetQueryString("staffid");
-
+		var sessionid = GetQueryString("sessionid");
 		getUserInfo(staffid);
 		determineUpload13(staffid);
 		determineUpload12(staffid);
@@ -139,7 +139,7 @@
 								window.location.href = '/appmobileus/USMarital.html?staffid='
 										+ staffid
 										+ '&marryurltype='
-										+ selectvalue;
+										+ selectvalue+'&sessionid='+sessionid;
 							}
 
 						});
@@ -147,70 +147,82 @@
 	//跳转2寸图片
 	function twoinchphoto() {
 		var staffid = GetQueryString("staffid");
-		window.location.href = '/appmobileus/USPhoto.html?staffid=' + staffid;
+		var sessionid = GetQueryString("sessionid");
+		window.location.href = '/appmobileus/USPhoto.html?staffid=' + staffid+'&sessionid='+sessionid;
 	}
 	//跳转新护照
 	function passport() {
 		var staffid = GetQueryString("staffid");
+		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USPassport.html?staffid='
-				+ staffid;
+				+ staffid+'&sessionid='+sessionid;
 	}
 	//跳转老护照
 	function oldpassport() {
 		var staffid = GetQueryString("staffid");
+		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USOldpassport.html?staffid='
-				+ staffid;
+				+ staffid+'&sessionid='+sessionid;
 	}
 	//跳转身份证
 	function uscard() {
 		var staffid = GetQueryString("staffid");
-		window.location.href = '/appmobileus/USIDCard.html?staffid=' + staffid;
+		var sessionid = GetQueryString("sessionid");
+		window.location.href = '/appmobileus/USIDCard.html?staffid=' + staffid+'&sessionid='+sessionid;
 	}
 	//跳转户口本
 	function ushousehold() {
 		var staffid = GetQueryString("staffid");
+		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USHousehold.html?staffid='
-				+ staffid;
+				+ staffid+'&sessionid='+sessionid;
 	}
 	//跳转房产证
 	function ushousecard() {
 		var staffid = GetQueryString("staffid");
+		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USHousecard.html?staffid='
-				+ staffid;
+				+ staffid+'&sessionid='+sessionid;
 	}
 	//跳转银行流水
 	function usbankflow() {
 		var staffid = GetQueryString("staffid");
+		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USBankflow.html?staffid='
-				+ staffid;
+				+ staffid+'&sessionid='+sessionid;
 	}
 	//跳转在职证明
 	function usjobcertificate() {
 		var staffid = GetQueryString("staffid");
+		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USJobcertificate.html?staffid='
-				+ staffid;
+				+ staffid+'&sessionid='+sessionid;
 	}
 	//跳转营业执照
 	function usbiness() {
 		var staffid = GetQueryString("staffid");
+		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USBusiness.html?staffid='
-				+ staffid;
+				+ staffid+'&sessionid='+sessionid;
 	}
 	//跳转驾驶证
 	function usdriving() {
 		var staffid = GetQueryString("staffid");
-		window.location.href = '/appmobileus/USDriving.html?staffid=' + staffid;
+		var sessionid = GetQueryString("sessionid");
+		window.location.href = '/appmobileus/USDriving.html?staffid=' + staffid+'&sessionid='+sessionid;
 	}
 	//跳转过期美签
 	function usoldsigned() {
 		var staffid = GetQueryString("staffid");
+		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USOldsigned.html?staffid='
-				+ staffid;
+				+ staffid+'&sessionid='+sessionid;
 	}
 	//跳转美国出签
 	function ussigning() {
 		var staffid = GetQueryString("staffid");
-		window.location.href = '/appmobileus/USsigning.html?staffid=' + staffid;
+		var sessionid = GetQueryString("sessionid");
+		window.location.href = '/appmobileus/USsigning.html?staffid=' + staffid+'&sessionid='+sessionid;
 	}
 
 	//获取用户拍摄信息
@@ -221,6 +233,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				var username = data.firstname;
@@ -239,6 +252,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */
@@ -262,6 +276,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */
@@ -285,6 +300,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */
@@ -308,6 +324,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */
@@ -331,6 +348,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */
@@ -354,6 +372,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */
@@ -377,6 +396,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */
@@ -400,6 +420,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */
@@ -423,6 +444,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */
@@ -446,6 +468,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */
@@ -469,6 +492,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */
@@ -492,6 +516,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */
@@ -515,6 +540,7 @@
 				staffid : staffid,
 			},
 			dataType : "json",
+			async: false,
 			type : 'post',
 			success : function(data) {
 				/* _self.passportdata = data.passportdata; */

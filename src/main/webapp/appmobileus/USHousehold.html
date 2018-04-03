@@ -86,7 +86,6 @@
 						 '</div>'+
 						 '</div>'
 				);
-				
 			})
 		
 		function getImage(staffid){
@@ -110,6 +109,7 @@
 		/* //点击上传图片
 		$(function(){
 			var	staffid=GetQueryString('staffid');
+			var	sessionid=GetQueryString('sessionid');
 			getImage(staffid);
 			$(".homePage").click(function(){
 				$(".homeinput").click();
@@ -128,7 +128,7 @@
 		                resultSize = (rst.fileLen / 1024).toFixed(2);
 		                scale = parseInt(100 - (resultSize / sourceSize * 100));
 		                rst.formData.append('image',rst.file);
-		               uploadPositive(rst,rst.formData,staffid,mainid,sequence); 
+		               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid); 
 		            }).catch(function (err) {
 		                console.log(err);
 		            });
@@ -156,7 +156,7 @@
 				            resultSize = (rst.fileLen / 1024).toFixed(2);
 				            scale = parseInt(100 - (resultSize / sourceSize * 100));
 				            rst.formData.append('image',rst.file);
-				           uploadPositive(rst,rst.formData,staffid,mainid,sequence); 
+				           uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid); 
 				        }).catch(function (err) {
 				            console.log(err);
 				        });
@@ -168,7 +168,8 @@
 		//跳转2寸图片
 		function returnPage(){
 			var staffid = GetQueryString("staffid");
-			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid;
+			var	sessionid=GetQueryString('sessionid');
+			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid;
 		}
 		
 		//获取URL地址参数
@@ -179,7 +180,7 @@
 	    }
 		
 		//上传图片
-		function uploadPositive(rst, formData,staffid,mainid,sequence){
+		function uploadPositive(rst, formData,staffid,mainid,sequence,sessionid){
 			if(!formData){
 				formData = new FormData();
 			}
@@ -188,6 +189,7 @@
 	        formData.append("staffid", staffid); 
 	        formData.append("mainid", mainid); 
 	        formData.append("sequence", sequence); 
+	        formData.append("sessionid", sessionid); 
 	        console.log('------------------------------');
 	        console.log(formData); 
 	        console.log(rst.file);

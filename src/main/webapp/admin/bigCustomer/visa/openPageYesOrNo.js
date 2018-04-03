@@ -187,14 +187,14 @@ function openYesOrNoPage(){
 	
 	
 	//checkbox勾选时回显，设置input--->disabled           TODO
-	/*$("input[type='checkbox']").each(function(index,ele){
-		/*var beforeEle = $(this).prev();
-		if($(this).is(":checkbox")){
+	$("input[type='checkbox']").each(function(index,ele){
+		var beforeEle = $(this).prev();
+		if($(this).prop('checked')){
 			beforeEle.attr("disabled",true);
 		}else{
 			beforeEle.attr("disabled",false);
 		}
-	});*/
+	});
 
 	
 }

@@ -42,8 +42,6 @@ new Vue({
 				visaInfo.familyInfo = data.familyInfo;
 				visaInfo.workEducationInfo = data.workEducationInfo;
 
-				openYesOrNoPage();
-
 			}
 		});
 	},
@@ -106,6 +104,7 @@ function save(){
 				layer.msg("保存失败");
 			}
 			layer.closeAll('loading');
+			closeWindow();
 		},
 		error: function (xhr) {
 			layer.msg("保存失败");

@@ -41,6 +41,7 @@
 		<div class="content-wrapper">
 			<!-- 头部 -->
 			<div class="qz-head">
+			<input id="flag" type="hidden" value="${obj.flag}">
 				<span class="orderNum">订单号： <span>${obj.orderInfo.ordernumber}</span>
 				</span>
 				<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
@@ -50,11 +51,10 @@
 					</c:if> <c:if test="${obj.orderInfo.status == '0'}">
 						<p>0</p>
 					</c:if>
-				</span> <input type="button" value="取消"
-					class="btn btn-primary btn-sm pull-right" /> <input type="button"
-					onclick="save()" value="保存并返回"
-					class="btn btn-primary btn-sm pull-right btn-Big" /> <input
-					type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
+				</span> 
+					<input type="button"  onclick="returnBack()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
+					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
+					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
 			</div>
 			<!-- 头部END -->
 			<!-- form -->
@@ -78,7 +78,7 @@
 												<option>${obj.travelInfo.travelpurpose}</option>
 											</c:if>
 											<c:if test="${empty obj.travelInfo.travelpurpose}">
-												<option value="">--请选择--</option>
+												<option value="">商务旅游游客(B)</option>
 											</c:if>
 											<option>外国政府官员（A）</option>
 											<option>商务旅游游客(B)</option>
@@ -369,7 +369,7 @@
 						<p class="info-head">申请人</p>
 						<div class="dataInfoGroup">
 						<input id="mypassportId" type="hidden" value="${obj.passportId }">
-							<a v-on:click="updatePhoto(${obj.staffid })">拍照资料</a>
+							<a id="photoInfo" v-on:click="updatePhoto(${obj.staffid })">拍照资料</a>
 							<a v-on:click="passport(${obj.passportId })">护照信息</a>
 							<a v-on:click="baseInfo(${obj.staffid })">基本信息</a>
 							<a v-on:click="visa(${obj.staffid })">签证信息</a>
@@ -443,7 +443,7 @@
 											<div class="form-group">
 												<label>所需资料</label> <input name="realinfo" disabled="true"
 													value="${obj.realinfo }" type="text"
-													class="form-control input-sm" /> <input name="staffid"
+													class="form-control input-sm" /> <input id="staffid" name="staffid"
 													type="hidden" value="${obj.staffid }">
 											</div>
 										</div>
@@ -566,11 +566,13 @@
 		//离开美国日期联动
 		function sendDate() {
 			var stayday = $("#stayday").val();
-			//自动计算预计出签时间
+			//自动计算离开美国时间
 			var stayday = stayday;
 			var sendvisadate = $("#sendVisaDate").val();
+			console.log(sendvisadate);
 			console.log(stayday);
 			var days = getNewDay(sendvisadate, stayday);
+			console.log(days);
 			$("#returnDate").val(days);
 		}
 
@@ -578,7 +580,8 @@
 		function getNewDay(dateTemp, days) {
 			var dateTemp = dateTemp.split("-");
 			var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-'
-					+ dateTemp[0]); //转换为MM-DD-YYYY格式    
+					+ dateTemp[0]); //转换为MM-DD-YYYY格式
+			console.log(nDate);
 			var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);
 			var rDate = new Date(millSeconds);
 			var year = rDate.getFullYear();
@@ -591,7 +594,12 @@
 			return (year + "-" + month + "-" + date);
 		}
 		$(function() {
-
+			var flag = $("#flag").val();
+			var staffid = $("#staffid").val();
+			if(0==flag){
+				//有课第一次登陆弹出拍摄资料
+				$("#photoInfo").trigger("click");
+			}
 			$(".tripPlan").change(function() {
 
 				var tripPlan = $("input[name='tripPlan']:checked").val();
@@ -603,6 +611,7 @@
 					$(".checkShowORHide").hide();
 				}
 			});
+			
 		});
 		/* 获取form下所有值 */
 		function getFormJson(form) {
@@ -621,6 +630,10 @@
 			return o;
 		}
 
+		//取消返回上个页面
+		function returnBack(){
+			window.history.go(-1);
+		}
 		/* 异步保存数据 */
 		function save() {
 			var goDepartureCity = $('#goDepartureCity').val();
@@ -641,6 +654,7 @@
 				dataType : "json",
 				data : $("#orderUpdateForm").serialize(),
 				type : 'POST',
+				async:false,
 				success : function(data) {
 					/* window.location.href = '/admin/pcVisa/VisaList';  */
 					window.history.go(-1);
@@ -953,41 +967,7 @@
 			});
 		}
 
-		//连接websocket
-		connectWebSocket();
-		function connectWebSocket() {
-			if ('WebSocket' in window) {
-				console.log('Websocket supported');
-				socket = new WebSocket(
-						'ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');
-
-				console.log('Connection attempted');
-
-				socket.onopen = function() {
-					console.log('Connection open!');
-					//setConnected(true);  
-				};
-
-				socket.onclose = function() {
-					console.log('Disconnecting connection');
-				};
-
-				socket.onmessage = function(evt) {
-					var type = evt.type;
-					var staffid = evt.staffid;
-					if (evt) {
-						console.log(evt);
-						window.location.href = '/admin/pcVisa/updatePhoto.html?staffid='
-								+ staffid;
-					}
-					console.log('message received!');
-					//showMessage(received_msg);  
-				};
-
-			} else {
-				console.log('Websocket not supported');
-			}
-		}
+		
 	</script>
 </body>
 </html>

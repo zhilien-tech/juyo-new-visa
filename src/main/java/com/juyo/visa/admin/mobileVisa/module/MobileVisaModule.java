@@ -41,6 +41,16 @@ public class MobileVisaModule {
 	private MobileVisaService mobileVisaService;
 
 	/*
+	 * 获取身份证照片
+	 */
+	@At
+	@POST
+	public Object getIDcardphoto(@Param("staffid") Integer staffid, @Param("type") Integer type,
+			@Param("status") Integer status) {
+		return mobileVisaService.getIDcardphoto(staffid, type, status);
+	}
+
+	/*
 	 * 获取单张照片信息
 	 */
 	@At
@@ -74,8 +84,8 @@ public class MobileVisaModule {
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object uploadImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
 			@Param("type") Integer type, @Param("status") Integer status, @Param("sequence") Integer sequence,
-			HttpServletRequest request, HttpServletResponse response) {
-		return mobileVisaService.updateImage(file, staffid, type, status, sequence, request, response);
+			HttpServletRequest request, HttpServletResponse response, @Param("sessionid") String sessionid) {
+		return mobileVisaService.updateImage(file, staffid, type, status, sequence, request, response, sessionid);
 	}
 
 	/*
@@ -84,9 +94,10 @@ public class MobileVisaModule {
 	@At
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object uploadMuchImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
-			@Param("type") Integer type, @Param("mainid") Integer mainid, @Param("sequence") Integer sequence) {
+			@Param("type") Integer type, @Param("mainid") Integer mainid, @Param("sequence") Integer sequence,
+			@Param("sessionid") String sessionid) {
 
-		return mobileVisaService.updateMuchImage(file, staffid, mainid, type, sequence);
+		return mobileVisaService.updateMuchImage(file, staffid, mainid, type, sequence, sessionid);
 	}
 
 	/*
