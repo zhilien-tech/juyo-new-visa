@@ -210,7 +210,7 @@
 												<div class="groupSelectInfo driverR">
 													<label>哪个州的驾照</label>
 													<select id="witchstateofdriver" name="witchstateofdriver">
-														<option value="0">请选择</option>
+														<option value="0" selected="selected">请选择</option>
 														<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
 															<c:if test="${driver.witchstateofdriver != map.key}">
 																<option value="${map.key }">${map.value }</option>
@@ -381,7 +381,7 @@
 				</div>
 				<div class="paddingRight groupSelectInfo">
 					<label>与你的关系</label>
-					<select id="ralationship"   name="ralationship">
+					<select id="ralationship" v-model="visaInfo.contactPointInfo.ralationship" name="ralationship">
 						<option value="0">请选择</option>
 						<c:forEach items="${obj.ContactPointRelationshipStatusEnum }" var="map">
 							<option value="${map.key }">${map.value }</option>
@@ -955,7 +955,7 @@
 				<div class="padding-left">
 					<div class="paddingTop">
 						<div class="groupRadioInfo">
-							<label>是否上过中学或以上的任何教育</label>
+							<label>是否上过高中或以上的任何教育</label>
 							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" class="education" value="1" />是
 							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" class="education" value="2" checked/>否
 						</div>
@@ -1670,6 +1670,10 @@
 	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js -->
 	<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
 	<script type="text/javascript">
+	
+		$(function(){
+			openYesOrNoPage();
+		});
 		//跳转到基本信息页
 		function baseInfoBtn(){
 			//左箭头跳转
