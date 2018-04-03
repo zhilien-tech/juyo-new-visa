@@ -85,8 +85,8 @@ public class OrderJpModule {
 		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
 		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(MainSaleVisaTypeEnum.class));
 		result.put("orderStatus", EnumUtil.enum2(JPOrderStatusEnum.class));
-		String localAddr = PublicIpUtil.getPublicIpAddr();
-		int localPort = request.getLocalPort();
+		String localAddr = request.getServerName();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", VISAINFO_WEBSPCKET_ADDR);
@@ -167,8 +167,8 @@ public class OrderJpModule {
 		Map<String, Object> result = MapUtil.map();
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("orderid", orderid);
-		String localAddr = PublicIpUtil.getPublicIpAddr();
-		int localPort = request.getLocalPort();
+		String localAddr = request.getServerName();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);

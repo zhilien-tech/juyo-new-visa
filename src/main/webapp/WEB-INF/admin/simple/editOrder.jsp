@@ -267,14 +267,14 @@
 									<div class="form-group">
 										<label><span>*</span>预计送签时间：</label> <input id="sendVisaDate" tabindex="10"
 											name="sendvisadate" type="text" class="form-control input-sm"
-											placeholder=" " value="${obj.sendvisadatestr }"/>
+											placeholder=" " value="<fmt:formatDate value="${obj.orderinfo.sendVisaDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>预计出签时间：</label> <input id="outVisaDate" tabindex="11"
 											name="outvisadate" type="text" class="form-control input-sm"
-											placeholder=" " value="${obj.outvisadatestr }"/>
+											placeholder=" " value="<fmt:formatDate value="${obj.orderinfo.outVisaDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -530,7 +530,7 @@
 	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/admin/simple/customerInfo.js?v=0.0.1"></script>
-	<script src="${base}/admin/simple/travelinfo.js?v=0.0.1"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/travelinfo.js?v=0.0.4"></script><!-- 本页面js文件 -->
 	<script src="${base}/admin/simple/initpagedata.js?v=0.0.2"></script><!-- 本页面js文件 -->
 	<script src="${base}/admin/simple/addsimpleorder.js?v=0.0.1"></script><!-- 本页面js文件 -->
 

@@ -24,7 +24,7 @@ public class JoyuViewService extends BaseService<TEncryptlinkinfoEntity> {
 
 	public Object joyu(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		String originallink = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/tlogin";
+		String originallink = "http://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin";
 
 		//获取请求路径参数部分
 		String encryptUrl = request.getQueryString();

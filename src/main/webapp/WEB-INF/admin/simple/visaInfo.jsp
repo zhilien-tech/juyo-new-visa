@@ -312,16 +312,16 @@
 								<!-- 父母单位名称/配偶单位名称 -->
 								<div class="col-sm-4 preSchool">
 									<div class="form-group">
-										<label id="unitNameLabel"><span>*</span>职位</label>
-										<input id="unitName" name="unitName" type="text" class="form-control input-sm" value="${obj.workJp.unitName }"/>
+										<label><span>*</span>职位</label>
+										<input id="position" name="position" type="text" class="form-control input-sm" value="${obj.workJp.position }"/>
 									</div>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-sm-4">
 									<div class="form-group">
-										<label><span>*</span>配偶职业</label>
-										<input id="" name="" type="text" class="form-control input-sm" value=""/>
+										<label id="unitNameLabel"><span>*</span>配偶职业</label>
+										<input id="unitName" name="unitName" type="text" class="form-control input-sm" value="${obj.workJp.unitName }"/>
 									</div>
 								</div>
 							</div>
@@ -1079,6 +1079,22 @@
 				if (!bootstrapValidator.isValid()) {
 					return;
 				}
+			}
+			var relationRemark = $('#relationRemark').val();
+			var applicant = $('#applicant').val();
+			if(applicant == 1 && !relationRemark){
+				layer.msg('主申请人备注不能为空');
+				return;
+			}
+			var position = $('#position').val();
+			if(!position){
+				layer.msg('职位不能为空');
+				return;
+			}
+			var unitName = $('#unitName').val();
+			if(!unitName){
+				layer.msg('父母（配偶）职业不能为空');
+				return;
 			}
 			//绑定财产类型
 			var wealthType = "";

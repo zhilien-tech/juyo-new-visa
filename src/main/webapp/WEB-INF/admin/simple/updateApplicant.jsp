@@ -59,7 +59,7 @@
 							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">身份证正面必须上传</small>
 						</div>
 						<!-- end 身份证 正面 -->
-
+<%-- 
 						<div class="info-imgUpload back has-error" id="borderColorBack">
 							<!-- 身份证 反面 -->
 							<div class="col-xs-6 widthBig">
@@ -76,7 +76,7 @@
 						</div>
 						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 0 32px !important">
 							<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
-						</div>
+						</div> --%>
 						<!-- end 身份证 反面 -->
 					</div>
 
@@ -300,8 +300,8 @@
 						<div class="row">
 							<div class="col-sm-11  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>紧急联系人地址</label> <input id="emergencyAddress" name="emergencyAddress"
-										type="text" class="form-control input-sm" value="" />
+									<label>紧急联系人地址</label> <input id="emergencyaddress" name="emergencyaddress"
+										type="text" class="form-control input-sm" value="${obj.applicant.emergencyaddress }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>

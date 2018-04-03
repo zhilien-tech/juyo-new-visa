@@ -1606,6 +1606,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			if (Util.isEmpty(record.get("passportno"))) {
 				resultstrbuf.append("申请人" + count + "的护照号、");
 			}
+			if (Util.isEmpty(record.get("position"))) {
+				resultstrbuf.append("申请人" + count + "的职位、");
+			}
+			if (Util.isEmpty(record.get("unitName"))) {
+				resultstrbuf.append("申请人" + count + "的父母（配偶）职业、");
+			}
 			count++;
 		}
 		String resultstr = resultstrbuf.toString();

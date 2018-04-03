@@ -829,8 +829,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		result.put("applicantInfo", applicantInfo);
-		String localAddr = PublicIpUtil.getPublicIpAddr();
-		int localPort = request.getLocalPort();
+		String localAddr = request.getServerName();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
@@ -910,13 +910,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(unqualifiedEntity)) {
 			result.put("unqualified", unqualifiedEntity);
 		}
-		String localAddr = PublicIpUtil.getPublicIpAddr();
-		int localPort = request.getLocalPort();
+		String localAddr = request.getServerName();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
 		//生成二维码
-		String qrurl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort()
+		String qrurl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/info.html?applicantid=" + id;
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
@@ -1227,9 +1227,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("visaInfo", visaInfo);
 		result.put("isOrderUpTime", isOrderUpTime);
 		//获取所访问的ip地址
-		String localAddr = PublicIpUtil.getPublicIpAddr();
+		String localAddr = request.getServerName();
 		//所访问的端口
-		int localPort = request.getLocalPort();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
@@ -1307,10 +1307,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			result.put("orderid", orderJpEntity.getOrderId());
 		}
 		//所访问的ip地址
-		String localAddr = PublicIpUtil.getPublicIpAddr();
+		String localAddr = request.getServerName();
 		result.put("localAddr", localAddr);
 		//所访问的端口
-		int localPort = request.getLocalPort();
+		int localPort = request.getServerPort();
 		result.put("localPort", localPort);
 		//websocket地址
 		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);
@@ -2000,7 +2000,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			tmp.append(line);
 		}
 
-		String pcUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/tlogin";
+		String pcUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin";
 
 		//查询订单号
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
@@ -2040,7 +2040,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			tmp.append(line);
 		}
 
-		String mobileUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort()
+		String mobileUrl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/info.html?applicantid=" + applicantid;
 		//转换长连接为短地址
 		mobileUrl = firstTrialJpViewService.getEncryptlink(mobileUrl, request);
@@ -2080,7 +2080,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		for (String line : readLines) {
 			tmp.append(line);
 		}
-		String pcUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/tlogin";
+		String pcUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin";
 
 		//查询订单号
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
@@ -2138,7 +2138,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		for (String line : readLines) {
 			tmp.append(line);
 		}
-		String mobileUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort()
+		String mobileUrl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/info.html?applicantid=" + applicantid;
 		//转换长连接为短地址
 		mobileUrl = firstTrialJpViewService.getEncryptlink(mobileUrl, request);

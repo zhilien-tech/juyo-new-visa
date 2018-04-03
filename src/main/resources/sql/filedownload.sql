@@ -14,6 +14,7 @@ SELECT
 	tawj.telephone workphone,
 	tawj.address workaddress,
 	tawj.`name` workname,
+	tawj.position,
 	tawlj.wealthtype,
 	tawlj.wealthcontent,
 	tavoi.hotelname,
@@ -56,7 +57,18 @@ LEFT JOIN t_applicant_work_jp tawj ON tawj.applicantId = taoj.id
 LEFT JOIN (
 	SELECT
 		GROUP_CONCAT(type SEPARATOR '\n') wealthtype,
-		GROUP_CONCAT(details SEPARATOR '\n') wealthcontent,
+		GROUP_CONCAT(
+			CASE
+			WHEN type = '银行存款' THEN
+				CONCAT(details, '万')
+			WHEN type = '理财' THEN
+				CONCAT(details, '万')
+			WHEN type = '房产' THEN
+				CONCAT(details, '平米')
+			ELSE
+				details
+			END SEPARATOR '\n'
+		) wealthcontent,
 		applicantId
 	FROM
 		t_applicant_wealth_jp

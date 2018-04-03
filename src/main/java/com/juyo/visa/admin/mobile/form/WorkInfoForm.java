@@ -28,4 +28,8 @@ public class WorkInfoForm {
 	private String telephone;
 
 	private String address;
+
+	private String position;
+
+	private String unitName;
 }

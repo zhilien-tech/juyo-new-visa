@@ -593,6 +593,8 @@ public class MobileService extends BaseService<TApplicantEntity> {
 		workinfo.setName(form.getName());
 		workinfo.setTelephone(form.getTelephone());
 		workinfo.setAddress(form.getAddress());
+		workinfo.setPosition(form.getPosition());
+		workinfo.setUnitName(form.getUnitName());
 		dbDao.update(workinfo);
 		//实收资料表
 		List<TApplicantFrontPaperworkJpEntity> fronts = Lists.newArrayList();

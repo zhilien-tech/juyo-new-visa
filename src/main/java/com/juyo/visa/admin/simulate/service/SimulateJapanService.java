@@ -87,9 +87,9 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		Integer[] orderstatus = { JPOrderStatusEnum.READYCOMMING.intKey(), JPOrderStatusEnum.BIANGENGZHONG.intKey(),
 				JPOrderStatusEnum.QUXIAOZHONG.intKey() };
 		List<Record> orderjplist = dbDao.query(sql, Cnd.where("tr.status", "in", orderstatus), null);
-		/*		List<Record> orderjplist = dbDao.query(sql,
-						Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);
-		*/if (!Util.isEmpty(orderjplist) && orderjplist.size() > 0) {
+		/*List<Record> orderjplist = dbDao.query(sql,
+				Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);*/
+		if (!Util.isEmpty(orderjplist) && orderjplist.size() > 0) {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 			//获取第一条
 			Record record = orderjplist.get(0);
@@ -207,6 +207,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					map.put("VISA_STAY_PREF_7", false);
 					map.put("VISA_STAY_PREF_47", false);
 				}
+				map.put("acceptdesign", orderjp.getAcceptDesign());
 			}
 			map.put("agentNo", agentNo);
 			map.put("visaType1", record.get("visatype"));
@@ -477,7 +478,14 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 	public Object updateYifa(JapanSimulatorForm form) {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, form.getCid());
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-		order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
+		//order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
+		if (JPOrderStatusEnum.READYCOMMING.intKey() == form.getOrderstatus()) {
+			order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
+		} else if (JPOrderStatusEnum.BIANGENGZHONG.intKey() == form.getOrderstatus()) {
+			order.setStatus(JPOrderStatusEnum.YIBIANGENG.intKey());
+		} else if (JPOrderStatusEnum.QUXIAOZHONG.intKey() == form.getOrderstatus()) {
+			order.setStatus(JPOrderStatusEnum.YIQUXIAO.intKey());
+		}
 		dbDao.update(order);
 		//消息通知
 		try {

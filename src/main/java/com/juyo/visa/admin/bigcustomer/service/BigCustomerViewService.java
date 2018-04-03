@@ -66,8 +66,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 */
 	public Object staffList(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
-		String localAddr = PublicIpUtil.getPublicIpAddr();
-		int localPort = request.getLocalPort();
+		String localAddr = request.getServerName();
+		int localPort = request.getServerPort();
 		String downloadUrl = "http://" + localAddr + ":" + localPort + "/admin/bigCustomer/download.html";
 		result.put("downloadurl", downloadUrl);
 		return result;

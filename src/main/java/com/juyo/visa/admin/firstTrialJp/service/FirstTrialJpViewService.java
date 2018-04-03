@@ -690,8 +690,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 			orderJpViewService.insertLogs(orderid, firsttrialstatus, session);
 		}
 
-		String pcUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/tlogin";
-		String mobileUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort()
+		String pcUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin";
+		String mobileUrl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/info.html?applicantid=" + applicantId;
 		//转换长连接为短地址
 		mobileUrl = getEncryptlink(mobileUrl, request);
@@ -1472,7 +1472,7 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 					Cnd.where("originallink", "=", originallink));
 		}
 
-		encryptUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/joyu?" + encryptUrl;
+		encryptUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + "/joyu?" + encryptUrl;
 
 		return encryptUrl;
 	}
@@ -1651,8 +1651,8 @@ public class FirstTrialJpViewService extends BaseService<TOrderEntity> {
 	//不合格发送短信邮件
 	public String sendUnqualifiedMsg(Integer applicantId, Integer orderid, HttpServletRequest request) {
 
-		String pcUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/tlogin";
-		String mobileUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort()
+		String pcUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin";
+		String mobileUrl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/info.html?applicantid=" + applicantId;
 		//转换长连接为短地址
 		mobileUrl = getEncryptlink(mobileUrl, request);

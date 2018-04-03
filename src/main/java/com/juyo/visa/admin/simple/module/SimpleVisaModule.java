@@ -54,8 +54,8 @@ public class SimpleVisaModule {
 	public Object list(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("orderstatus", EnumUtil.enum2(JpOrderSimpleEnum.class));
-		String localAddr = PublicIpUtil.getPublicIpAddr();
-		int localPort = request.getLocalPort();
+		String localAddr = request.getServerName();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", VISAINFO_WEBSPCKET_ADDR);

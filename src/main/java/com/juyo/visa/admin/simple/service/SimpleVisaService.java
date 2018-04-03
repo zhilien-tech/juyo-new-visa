@@ -422,8 +422,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("orderid", orderid);
-		String localAddr = PublicIpUtil.getPublicIpAddr();
-		int localPort = request.getLocalPort();
+		String localAddr = request.getServerName();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
@@ -504,7 +504,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderinfo.setCityId(form.getCityid());
 		orderinfo.setUrgentType(form.getUrgentType());
 		orderinfo.setUrgentDay(form.getUrgentDay());
-		String sendvisadate = form.getSendvisadate();
+		orderinfo.setSendVisaDate(form.getSendvisadate());
+		/*String sendvisadate = form.getSendvisadate();
 		if (!Util.isEmpty(sendvisadate)) {
 			String[] split = sendvisadate.split(" - ");
 			orderinfo.setSendVisaDate(DateUtil.string2Date(split[0], DateUtil.FORMAT_YYYY_MM_DD));
@@ -512,8 +513,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		} else {
 			orderinfo.setSendVisaDate(null);
 			orderinfo.setSendvisaenddate(null);
-		}
-		String outvisadate = form.getOutvisadate();
+		}*/
+		orderinfo.setOutVisaDate(form.getOutvisadate());
+		/*String outvisadate = form.getOutvisadate();
 		if (!Util.isEmpty(outvisadate)) {
 			String[] split = outvisadate.split(" - ");
 			orderinfo.setOutVisaDate(DateUtil.string2Date(split[0], DateUtil.FORMAT_YYYY_MM_DD));
@@ -521,7 +523,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		} else {
 			orderinfo.setOutVisaDate(null);
 			orderinfo.setOutvisaenddate(null);
-		}
+		}*/
 		orderinfo.setGoTripDate(form.getGoDate());
 		orderinfo.setStayDay(form.getStayday());
 		orderinfo.setBackTripDate(form.getReturnDate());
@@ -732,6 +734,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setCreateTime(new Date());
 		applicant.setEmergencyLinkman(form.getEmergencyLinkman());
 		applicant.setEmergencyTelephone(form.getEmergencyTelephone());
+		applicant.setEmergencyaddress(form.getEmergencyaddress());
 		//游客登录
 		ApplicantUser applicantUser = new ApplicantUser();
 		applicantUser.setMobile(applicant.getTelephone());
@@ -858,10 +861,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		//所访问的ip地址
-		String localAddr = PublicIpUtil.getPublicIpAddr();
+		String localAddr = request.getServerName();
 		result.put("localAddr", localAddr);
 		//所访问的端口
-		int localPort = request.getLocalPort();
+		int localPort = request.getServerPort();
 		result.put("localPort", localPort);
 		//websocket地址
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
@@ -1061,13 +1064,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			sb.append("/").append(applicant.getOtherLastNameEn());
 			result.put("otherLastNameEn", sb.toString());
 		}
-		String localAddr = PublicIpUtil.getPublicIpAddr();
-		int localPort = request.getLocalPort();
+		String localAddr = request.getServerName();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
 		//生成二维码
-		String qrurl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + localPort
+		String qrurl = "http://" + request.getServerName() + ":" + localPort
 				+ "/simplemobile/info.html?applicantid=" + applicantid;
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
@@ -1170,9 +1173,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		result.put("visaother", visaother);
 		//获取所访问的ip地址
-		String localAddr = PublicIpUtil.getPublicIpAddr();
+		String localAddr = request.getServerName();
 		//所访问的端口
-		int localPort = request.getLocalPort();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
@@ -1528,6 +1531,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				applicantWorkJpEntity.setPrepareMaterials(null);
 			}
 			applicantWorkJpEntity.setUnitName(form.getUnitName());
+			applicantWorkJpEntity.setPosition(form.getPosition());
 			applicantWorkJpEntity.setCareerStatus(form.getCareerStatus());
 			applicantWorkJpEntity.setName(form.getName());
 			applicantWorkJpEntity.setAddress(form.getAddress());
@@ -1852,9 +1856,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		result.put("orderid", orderid);
 		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
-		String localAddr = PublicIpUtil.getPublicIpAddr();
-		PublicIpUtil.getPublicIpAddr();
-		int localPort = request.getLocalPort();
+		String localAddr = request.getServerName();
+		request.getServerName();
+		String serverName = request.getServerName();
+		int serverPort = request.getServerPort();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);

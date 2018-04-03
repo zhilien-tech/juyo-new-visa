@@ -168,13 +168,13 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		}
 		map.put("${ordernum}", order.getOrderNum());
 		//手机端页面链接
-		String mobileUrl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort()
+		String mobileUrl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/backEmailInfo.html?applicantId=" + applicant.getId();
 		//转换长连接为短地址
 		mobileUrl = firstTrialJpViewService.getEncryptlink(mobileUrl, request);
 		map.put("${mobileUrl}", mobileUrl);
 		//电子邮件链接
-		String emailurl = "http://" + PublicIpUtil.getPublicIpAddr() + ":" + request.getLocalPort() + "/tlogin.html";
+		String emailurl = "http://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin.html";
 		map.put("${emailurl}", emailurl);
 		//发送邮件
 		mailService.sendHtml(email, map, AFTERMARKET_EMAIL_URL, "售后通知");
