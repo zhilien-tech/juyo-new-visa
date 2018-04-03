@@ -42,8 +42,6 @@ new Vue({
 				visaInfo.familyInfo = data.familyInfo;
 				visaInfo.workEducationInfo = data.workEducationInfo;
 
-				openYesOrNoPage();
-
 			}
 		});
 	},
