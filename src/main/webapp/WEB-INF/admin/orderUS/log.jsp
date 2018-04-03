@@ -26,14 +26,14 @@
 					<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="关闭" /> 
 				</c:if>
 				<c:if test="${obj.userType != 1 }">
-					<select id="principal" name="principal" class="input-sm" style="margin-left:55%;" >
+					<select id="principal" name="opid" class="input-sm" style="margin-left:55%;" >
 						<option value="">负责人</option>
-						<c:forEach var="user" items="${obj.employees}">
-							<c:if test="${obj.princiapalId ==  user.userid}">
-								<option value="${user.userid}" selected="selected">${user.username}</option>
+						<c:forEach var="user" items="${obj.staffs}">
+							<c:if test="${obj.opid ==  user.userid}">
+								<option value="${user.userid}" selected="selected">${user.firstname}+${user.lastname }</option>
 							</c:if>
 							<c:if test="${obj.princiapalId !=  user.userid}">
-								<option value="${user.userid}">${user.username}</option>
+								<option value="${user.userid}">${user.firstname}+${user.lastname }</option>
 							</c:if>
 							
 						</c:forEach>
@@ -76,7 +76,7 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script src="${base}/admin/orderJp/log.js"></script><!-- 日志 js -->
+	<script src="${base}/admin/orderUS/log.js"></script><!-- 日志 js -->
 	<script type="text/javascript">
 		
 	</script>

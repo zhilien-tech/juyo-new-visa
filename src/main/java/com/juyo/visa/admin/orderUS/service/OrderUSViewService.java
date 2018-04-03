@@ -55,6 +55,7 @@ import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.USOrderStatusEnum;
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.orderUS.DistrictEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.orderUS.isPayedEnum;
@@ -172,6 +173,16 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	/**
+	 * 获取美国订单详情页信息
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid 订单id
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object getOrderUSDetail(int orderid, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 		//订单信息
@@ -187,6 +198,47 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("cityidenum", EnumUtil.enum2(DistrictEnum.class));
 		//是否付款下拉
 		result.put("ispayedenum", EnumUtil.enum2(isPayedEnum.class));
+		return result;
+	}
+
+	/**
+	 * 认领功能，调用之后订单进入“我的”里面
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object toMyself(int orderid, HttpSession session) {
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		orderus.setOpid(loginUser.getId());
+		dbDao.update(orderus);
+		return null;
+	}
+
+	public Object toLog(int orderid, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		TCompanyEntity company = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		Integer userid = loginUser.getId();
+		//获取公司下的所有工作人员，包括管理员
+		List<TUserEntity> staffList = dbDao.query(
+				TUserEntity.class,
+				Cnd.where("comId", "=", company.getId()).and("userType", "=", UserLoginEnum.PERSONNEL.intKey())
+						.and("userType", "=", UserLoginEnum.BIG_COMPANY_ADMIN.intKey()), null);
+		if (!Util.isEmpty(staffList)) {
+			result.put("staffs", staffList);
+		}
+		//获取订单操作人
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		Integer opid = orderus.getOpid();
+		result.put("userid", userid);
+		result.put("opid", opid);
+		result.put("userType", userType);
 		return result;
 	}
 

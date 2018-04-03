@@ -47,6 +47,26 @@ new Vue({
 			window.open('/admin/orderUS/listDetailUS.html?orderid='+orderid);
 			//console.log(message);
 			//alert(JSON.stringify(event.target));
+		},
+		toMyself:function(orderid){
+			layer.load(1);
+			$.ajax({ 
+				url: '/admin/orderUS/toMyself',
+				data:{
+					orderid:orderid,
+				},
+				dataType:"json",
+				type:'post',
+				success: function(data){
+					layer.closeAll("loading");
+					layer.msg("认领成功", {
+						time: 100,
+						end: function () {
+							$("#searchBtn").click();
+						}
+					});
+				}
+			});
 		}
 	}
 });

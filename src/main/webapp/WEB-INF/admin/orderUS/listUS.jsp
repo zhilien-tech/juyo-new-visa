@@ -79,8 +79,13 @@
 								</div>
 								<div>
 									<label>操作：</label>
-									<i class="edit" v-on:click="toDetail(data.orderid)" > </i>
-									<i class="toSure" v-on:click="order(data.ordernumber,data.staffid,data.id)"  >认领 </i>
+									<div v-if="data.opid == null">
+										<i class="edit" v-on:click="toDetail(data.orderid)" > </i>
+										<i class="toSure" v-on:click="toMyself(data.orderid)" >认领 </i>
+									</div>
+									<div v-else>
+										<i class="edit" v-on:click="toDetail(data.orderid)" > </i>
+									</div>
 								</div>
 							</div>
 							<ul class="card-content cf">

@@ -69,6 +69,25 @@ public class OrderUSModule {
 	}
 
 	/**
+	 * 认领按钮功能
+	 */
+	@At
+	@POST
+	public Object toMyself(@Param("orderid") int orderid, HttpSession session) {
+		return orderUSViewService.toMyself(orderid, session);
+	}
+
+	/**
+	 * 跳转到日志页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object toLog(@Param("orderid") int orderid, HttpSession session) {
+		return orderUSViewService.toLog(orderid, session);
+	}
+
+	/**
 	 * 
 	 * 分享发送消息
 	 *

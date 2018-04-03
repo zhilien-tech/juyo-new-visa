@@ -63,9 +63,17 @@ public class OrderUSListDataForm implements SQLParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
+		//订单状态检索
 		if (!Util.isEmpty(status)) {
-			//订单+申请人状态cnd.and("CONCAT( CAST( tr.STATUS AS CHAR ), 'төл', taj.applicantStatus )", "like", "%" + status + "%");
-			cnd.and("tr.STATUS", "like", "%" + status + "%");
+			cnd.and("tou.status", "like", "%" + status + "%");
+		}
+		//领区检索
+		if (!Util.isEmpty(cityid)) {
+			cnd.and("tou.cityid", "like", "%" + cityid + "%");
+		}
+		//是否付款检索
+		if (!Util.isEmpty(ispayed)) {
+			cnd.and("tou.ispayed", "like", "%" + ispayed + "%");
 		}
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();

@@ -105,6 +105,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	private final static String TEMPLATE_EXCEL_NAME = "人员管理之模块.xlsx";
 
 	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
+	private final static Integer US_YUSHANG_COMID = 65;
 
 	/**
 	 * 
@@ -347,7 +348,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Date nowDate = DateUtil.nowDate();
 
 		//基本信息
-		//addForm.setComid(comId);
+		addForm.setComid(US_YUSHANG_COMID);
 		//addForm.setUserid(userId);
 		//addForm.setOpid(userId);
 		addForm.setIsidentificationnumberapply(IsYesOrNoEnum.YES.intKey());
