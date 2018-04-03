@@ -293,7 +293,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	/**
 	 * 跳转到签证详情页
 	 */
-	public Object visaDetail(Integer orderid, HttpSession session) {
+	public Object visaDetail(Integer orderid, Integer flag, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		String name = loginUser.getName();
@@ -408,6 +408,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			stateMap.put(e.intKey(), e.value());
 		}
 		result.put("state", stateMap);
+		result.put("flag", flag);
 		return result;
 
 	}
