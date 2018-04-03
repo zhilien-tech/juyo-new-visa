@@ -36,7 +36,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 		registry.addHandler(myVcodeHander(), "/vcodewebsocket").addInterceptors(myInterceptors())
 				.setAllowedOrigins("*");
 		registry.addHandler(myhandler(), "/sockjs/websocket").addInterceptors(myInterceptors()).withSockJS();
-		registry.addHandler(myVcodeHander(), "/simplesendinfosocket").addInterceptors(myInterceptors())
+		registry.addHandler(mySimpleSendInfoWSHandler(), "/simplesendinfosocket").addInterceptors(myInterceptors())
 				.setAllowedOrigins("*");
 	}
 

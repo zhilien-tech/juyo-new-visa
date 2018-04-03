@@ -94,7 +94,10 @@
 					<div>上传</div>
 					<img id="card" src="" class="transverseImg" >
 				</div>
-				<input type="file" class="publicFile" name="" />
+				<div class="uploadPassports alignment" >
+					<div>上传</div>
+					<img id="cardBack" src="" class="transverseImg" >
+				</div>
 			</div>	
 		</div>
 		<!--户口本-->
@@ -251,7 +254,6 @@
 <script src="/admin/pcVisa/getphoto.js"></script>
 <script>
 	var passportId = $("#passportId").val();
-	
 	$(function() {
 		var staffid = $("#staffid").val();
 		twonichphoto(staffid,13);
@@ -283,7 +285,6 @@
 //	                alert(JSON.stringify(rst.formData));
 //	                alert(rst.file);
 //	                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
-					console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
 	                uploadPositive(rst,rst.formData,staffid); 
 	            }).catch(function (err) {
 	                console.log(err);
@@ -291,6 +292,41 @@
 			});
 		})
 	});
+	//连接websocket
+	connectWebSocket();
+	function connectWebSocket() {
+		if ('WebSocket' in window) {
+			console.log('Websocket supported');
+			socket = new WebSocket(
+					'ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');
+
+			console.log('Connection attempted');
+
+			socket.onopen = function() {
+				console.log('Connection open!');
+				//setConnected(true);  
+			};
+
+			socket.onclose = function() {
+				console.log('Disconnecting connection');
+			};
+
+			socket.onmessage = function(state) {
+				
+				console.log("state");
+				console.log(state);
+				console.log(state.data);
+				if (state.data==200) {
+					window.location.reload();
+				}
+				console.log('message received!');
+				//showMessage(received_msg);  
+			};
+
+		} else {
+			console.log('Websocket not supported');
+		}
+	}
 	
 	function passportBtn(){
 		saveApplicant(2);
