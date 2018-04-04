@@ -1023,7 +1023,12 @@
 				dataType : "json",
 				type : 'POST',
 				success : function(data) {
-					dataReload();
+					layer.msg("操作成功", {
+						time: 500,
+						end: function () {
+							dataReload();
+						}
+					});
 				}
 			});
 		}
@@ -1039,7 +1044,12 @@
 				dataType : "json",
 				type : 'POST',
 				success : function(data) {
-					dataReload();
+					layer.msg("操作成功", {
+						time: 500,
+						end: function () {
+							dataReload();
+						}
+					});
 				}
 			});
 		}

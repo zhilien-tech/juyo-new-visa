@@ -23,7 +23,7 @@ import com.uxuexi.core.common.util.Util;
  */
 public class USListWSHandler implements WebSocketHandler {
 
-	public static final Map<String, List<WebSocketSession>> vcodeinfoSocketSessionMap = Maps.newConcurrentMap();
+	public static final Map<String, List<WebSocketSession>> uslistSocketSessionMap = Maps.newConcurrentMap();
 
 	/**
 	 * 连接建立
@@ -33,11 +33,11 @@ public class USListWSHandler implements WebSocketHandler {
 		System.out.println("connect to the websocket success......");
 
 		String uid = (String) wss.getAttributes().get("uid");
-		List<WebSocketSession> wssLst = vcodeinfoSocketSessionMap.get(uid);
+		List<WebSocketSession> wssLst = uslistSocketSessionMap.get(uid);
 		if (Util.isEmpty(wssLst)) {
 			wssLst = Lists.newArrayList();
 			wssLst.add(wss);
-			vcodeinfoSocketSessionMap.put(uid, wssLst);
+			uslistSocketSessionMap.put(uid, wssLst);
 		} else {
 			wssLst.add(wss);
 		}
@@ -82,11 +82,11 @@ public class USListWSHandler implements WebSocketHandler {
 
 		//移除已经关闭的连接 
 		String uid = (String) wss.getAttributes().get("uid");
-		List<WebSocketSession> wssLst = vcodeinfoSocketSessionMap.get(uid);
+		List<WebSocketSession> wssLst = uslistSocketSessionMap.get(uid);
 		if (Util.isEmpty(wssLst)) {
 			wssLst = Lists.newArrayList();
 			wssLst.add(wss);
-			vcodeinfoSocketSessionMap.put(uid, wssLst);
+			uslistSocketSessionMap.put(uid, wssLst);
 		} else {
 			wssLst.remove(wss);
 		}
@@ -99,12 +99,12 @@ public class USListWSHandler implements WebSocketHandler {
 	* @throws IOException
 	*/
 	public void broadcast(final TextMessage message) throws IOException {
-		Set<String> keySet = vcodeinfoSocketSessionMap.keySet();
+		Set<String> keySet = uslistSocketSessionMap.keySet();
 		if (!Util.isEmpty(keySet)) {
 			Iterator<String> iter = keySet.iterator();
 			while (iter.hasNext()) {
 				String nextJ = iter.next();
-				List<WebSocketSession> lst = vcodeinfoSocketSessionMap.get(nextJ);
+				List<WebSocketSession> lst = uslistSocketSessionMap.get(nextJ);
 				if (!Util.isEmpty(lst)) {
 					//多线程群发  TODO
 					for (WebSocketSession wss : lst) {
@@ -123,7 +123,7 @@ public class USListWSHandler implements WebSocketHandler {
 	}
 
 	public static Map<String, List<WebSocketSession>> getUsersocketsessionmap() {
-		return vcodeinfoSocketSessionMap;
+		return uslistSocketSessionMap;
 	}
 
 }

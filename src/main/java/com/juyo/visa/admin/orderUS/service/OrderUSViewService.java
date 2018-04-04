@@ -45,6 +45,7 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
+import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
@@ -68,6 +69,7 @@ import com.juyo.visa.common.ocr.RecognizeData;
 import com.juyo.visa.common.util.ImageDeal;
 import com.juyo.visa.common.util.PinyinTool;
 import com.juyo.visa.common.util.PinyinTool.Type;
+import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -76,6 +78,7 @@ import com.juyo.visa.entities.TOrderUsFollowupEntity;
 import com.juyo.visa.entities.TOrderUsLogsEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.OrderUpdateForm;
+import com.juyo.visa.websocket.USListWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
@@ -110,6 +113,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	private final static Integer US_YUSHANG_COMID = 65;
 	//订单列表页连接websocket的地址
 	private static final String USLIST_WEBSPCKET_ADDR = "uslistwebsocket";
+
+	private USListWSHandler uslistwebsocket = (USListWSHandler) SpringContextUtil.getBean("usListHander",
+			USListWSHandler.class);
 
 	/**
 	 * 列表页下拉框内容获取
@@ -168,16 +174,22 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		List<Record> list = (List<Record>) sql.getResult();
 		for (Record record : list) {
 			Integer orderid = (Integer) record.get("orderid");
-			int ispayed = (int) record.get("ispayed");
-			int cityid = (int) record.get("cityid");
-			for (DistrictEnum district : DistrictEnum.values()) {
-				if (cityid == district.intKey()) {
-					record.set("cityid", district.value());
+			Object payObj = record.get("ispayed");
+			Object cityObj = record.get("cityid");
+			if (!Util.isEmpty(cityObj)) {
+				int cityid = (int) cityObj;
+				for (DistrictEnum district : DistrictEnum.values()) {
+					if (cityid == district.intKey()) {
+						record.set("cityid", district.value());
+					}
 				}
 			}
-			for (IsPayedEnum pay : IsPayedEnum.values()) {
-				if (cityid == pay.intKey()) {
-					record.set("ispayed", pay.value());
+			if (!Util.isEmpty(payObj)) {
+				int ispayed = (int) payObj;
+				for (IsPayedEnum pay : IsPayedEnum.values()) {
+					if (ispayed == pay.intKey()) {
+						record.set("ispayed", pay.value());
+					}
 				}
 			}
 			String sqlStr = sqlManager.get("orderUS_listData_staff");
@@ -487,6 +499,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderus.setIspayed(form.getIspayed());
 		orderus.setGroupname(form.getGroupname());
 		dbDao.update(orderus);
+		//消息通知
+		try {
+			uslistwebsocket.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
