@@ -266,7 +266,7 @@
 						<div class="dateIssue goUS_visa">
 							<div class="groupInputInfo lastVisaDate">
 								<label>最后一次签证的签发日期</label>
-								<input id="issueddate" name="issueddate" v-model="visaInfo.previUSTripInfo.issueddate" class="datetimepickercss" placeholder="日/月/年" type="text"/>
+								<input id="issueddate" name="issueddate" v-model="visaInfo.previUSTripInfo.issueddate" @change="dateChangeissueddate" class="datetimepickercss" placeholder="日/月/年" type="text"/>
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
@@ -858,7 +858,7 @@
 										<div class="clear"></div>
 										<div class="paddingLeft groupInputInfo">
 											<label>离职时间</label>
-											<input id="employenddate" name="employenddate" class="datetimepickercss" value="<fmt:formatDate value="${beforeWork.employenddate }" pattern="dd/MM/yyyy" />"  type="text" placeholder="日/月/年" />
+											<input id="employenddate" name="employenddate" value="<fmt:formatDate value="${beforeWork.employenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
 										<div class="paddingRight grouptextareaInfo">
 											<label>简要描述你的职责</label>

@@ -46,7 +46,11 @@ new Vue({
 		});
 	},
 	methods:{
-
+		dateChangeissueddate:function(val){
+			alert(val);
+			var self = this;
+			self.visaInfo.previUSTripInfo.issueddate=val;
+		}
 	}
 });
 
@@ -63,13 +67,15 @@ function save(){
 	visadata.travelCompanionInfo = visaInfo.travelCompanionInfo;
 	//以前的美国旅游信息
 	visadata.previUSTripInfo = visaInfo.previUSTripInfo;
+	visaInfo.previUSTripInfo.issueddate = formatDate($('#issueddate').val());//最后一次签证的签发日期
 	//美国联络点
 	visadata.contactPointInfo = visaInfo.contactPointInfo;
 	//家庭信息
 	visadata.familyInfo = visaInfo.familyInfo;
+	visaInfo.familyInfo.spousebirthday = formatDate($('#spousebirthday').val());//配偶生日
 	//工作/教育/培训信息
 	visadata.workEducationInfo = visaInfo.workEducationInfo;
-	
+	visaInfo.workEducationInfo.workstartdate = formatDate($('#workstartdate').val());//工作开始日期
 	//同伴信息
 	visadata.companionList = getCompanionList();
 	//去过美国信息
