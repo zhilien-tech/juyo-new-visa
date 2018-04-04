@@ -1,0 +1,49 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+.head {
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 1px solid #eee;
+	padding: 0px 15px;
+}
+.head span {
+	float: left;
+}
+.head i {
+	float: right;
+	display: inline-block; 
+	width: 20px;
+	height:2px; 
+	background: #000;
+	line-height: 0;
+	font-size:0;
+	vertical-align: middle;
+	-webkit-transform: rotate(45deg);
+	margin-top: 25px;
+}
+.head i:after{
+	content:'/';
+	display:block;
+	width: 20px;
+	height:2px; 
+	background: #000;
+	-webkit-transform: rotate(-90deg);
+}
+.share,.qualified,.Interview {
+	color: #FFFFFF;
+	background: #2F86F0;
+	width: 90px;
+	height:40px;
+	line-height: 40px;
+	text-align: center;
+	display: inline-block;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-right: 10px;
+}
+.shareInfo,.qualifiedInfo,.InterviewInfo {
+	margin: 5%;
+}
+
