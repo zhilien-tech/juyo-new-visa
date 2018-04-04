@@ -71,7 +71,7 @@ new Vue({
 		isKnowContactPointName:function(){
 			var isknowname = visaInfo.contactPointInfo.isknowname;
 			if(isknowname){
-				visaInfo.contactPointInfo.isknowname = "";
+				visaInfo.contactPointInfo.lastname = "";
 			}
 		},
 		isKnowOrganizationName:function(){
@@ -79,7 +79,38 @@ new Vue({
 			if(isknoworganizationname){
 				visaInfo.contactPointInfo.organizationname = "";
 			}
+		},
+		isKnowEmailAddress:function(){
+			var isknowemail = visaInfo.contactPointInfo.isknowemail;
+			if(isknowemail){
+				visaInfo.contactPointInfo.email = "";
+			}
+		},
+		isknowfatherfirstname:function(){
+			var isknowfatherfirstname = visaInfo.familyInfo.isknowfatherfirstname;
+			if(isknowfatherfirstname){
+				visaInfo.familyInfo.fatherfirstname = "";
+			}
+		},
+		isknowfatherlastname:function(){
+			var isknowfatherlastname = visaInfo.familyInfo.isknowfatherlastname;
+			if(isknowfatherlastname){
+				visaInfo.familyInfo.fatherlastname = "";
+			}
+		},
+		isknowmotherfirstname:function(){
+			var isknowmotherfirstname = visaInfo.familyInfo.isknowmotherfirstname;
+			if(isknowmotherfirstname){
+				visaInfo.familyInfo.motherfirstname = "";
+			}
+		},
+		isknowmotherlastname:function(){
+			var isknowmotherlastname = visaInfo.familyInfo.isknowmotherlastname;
+			if(isknowmotherlastname){
+				visaInfo.familyInfo.motherlastname = "";
+			}
 		}
+		
 	}
 });
 

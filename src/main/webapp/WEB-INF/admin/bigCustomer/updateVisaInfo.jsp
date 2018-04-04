@@ -425,7 +425,7 @@
 					<div class="paddingTop groupcheckBoxInfo">
 						<label>邮件地址</label>
 						<input name="email" v-model="visaInfo.contactPointInfo.email" type="text" />
-						<input id="isKnowEmailAddress" name="isknowemail" v-model="visaInfo.contactPointInfo.isknowemail" type="checkbox" />
+						<input id="isKnowEmailAddress" name="isknowemail" v-on:click="isKnowEmailAddress" v-model="visaInfo.contactPointInfo.isknowemail" type="checkbox" />
 					</div>
 				</div>
 			</div>
@@ -437,12 +437,12 @@
 				<div class="paddingLeft groupcheckBoxInfo" >
 					<label>父亲的姓</label>
 					<input name="fatherfirstname" v-model="visaInfo.familyInfo.fatherfirstname" type="text"/>
-					<input id="isKnowFatherXing" name="isknowfatherfirstname" v-model="visaInfo.familyInfo.isknowfatherfirstname" type="checkbox" />
+					<input id="isKnowFatherXing" name="isknowfatherfirstname"  v-on:click="isknowfatherfirstname"  v-model="visaInfo.familyInfo.isknowfatherfirstname" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo" >
 					<label>父亲的名</label>
 					<input name="fatherlastname" v-model="visaInfo.familyInfo.fatherlastname" type="text" />
-					<input id="isKnowFatherMing" name="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" />
+					<input id="isKnowFatherMing" name="isknowfatherlastname" v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop padding-left">
@@ -465,12 +465,12 @@
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>母亲的姓</label>
 					<input id="motherfirstname" name="motherfirstname" v-model="visaInfo.familyInfo.motherfirstname" type="text" />
-					<input id="isKnowMotherXing" name="isknowmotherfirstname" v-model="visaInfo.familyInfo.isknowmotherfirstname" type="checkbox" />
+					<input id="isKnowMotherXing" name="isknowmotherfirstname" v-on:click="isknowmotherfirstname" v-model="visaInfo.familyInfo.isknowmotherfirstname" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo">
 					<label>母亲的名</label>
 					<input id="motherlastname" name="motherlastname" v-model="visaInfo.familyInfo.motherlastname" type="text" />
-					<input id="isKnowMotherMing" name="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" />
+					<input id="isKnowMotherMing" name="isknowmotherlastname" v-on:click="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop padding-left">
