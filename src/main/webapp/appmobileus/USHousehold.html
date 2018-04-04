@@ -24,24 +24,22 @@
 			</div>
 			<!--户主页-->
 			<div class="householdPage homePage">
-				<span class="homePageTitle">户主页</span> 
-				<img src="img/camera.png" class="camera" /> 
-				<img id="11" src="" class="pageImg" />
-				<input type="file" name="1" class="viceFile" onclick="addHousehold()" />
+				<span class="homePageTitle">户主页</span> <img src="img/camera.png"
+					class="camera" /> <img id="11" src="" class="pageImg" /> <input
+					id="1" type="file" name="1" class="viceFile"
+					onclick="addHousehold()" />
 			</div>
-			
-			<input type="hidden" value="1" />
+
 			<!--副页-->
 			<div class="householdPage vicePage">
-				<span class="homePageTitle">副页</span> 
-				<img src="img/camera.png" class="camera" /> 
-				<img id="12" src="" class="pageImg" />
-				<input type="file" class="viceFile" onclick="addHousehold()" name="1" />
+				<span class="homePageTitle">副页</span> <img src="img/camera.png"
+					class="camera" /> <img id="12" src="" class="pageImg" /> <input
+					id="2" type="file" class="viceFile" onclick="addHousehold()"
+					name="1" />
 			</div>
-			
-			<input type="hidden" value="2" />
+
 			<!--添加页-->
-			<div class="addPage">
+			<div class="addPage 1">
 				<span class="homePageTitle">添加副页</span> <span class="plus">+</span>
 			</div>
 		</div>
@@ -57,28 +55,49 @@
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script>
 		$(function(){
-			//当前模块下的添加一页
+			var	staffid=GetQueryString('staffid');
 			var fuyecount = 2;
 			var count = 1;
-			$(document).on('click','.addPage',function(){
-				var num = fuyecount+""+count;
-				$(this).before('<div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img id="'+num+'" src="" class="pageImg" /><input type="file" class="viceFile" onclick="addHousehold()" /></div><input type="hidden" value="'+fuyecount+'" />');
-				fuyecount = fuyecount+1;
+			getImage(staffid);
+			var maxid = 0 ;
+			var maxname = 0;
+			 $("input").each(function() {
+				  var id = parseInt($(this).attr("id"));
+				  var name = parseInt($(this).attr("name"));
+				  if (id > maxid) {
+				   maxid = id;
+				  }
+				  if(name>maxname){
+				   maxname = name;
+				 }
 			});
-				//添加一套
+			 fuyecount = maxid;
+			 count = maxname;
+			//当前模块下的添加一页
+			$(document).on('click','.addPage',function(){
+				var name = $(this).prev().find('input').attr("name");
+				var id = $(this).prev().find('input').attr("id");
+				id = parseInt(id);
+				id = id+1; 
+				var num = name+""+id;
+				$(this).before('<div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img id="'+num+'" src="" class="pageImg" /><input id="'+id+'" name="'+name+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
+			});
+			//添加一套
 			$(".addSet").click(function(){
-				count=count+1;
+				count = count+1;
+				var zhuye = count+""+1;
+				var fuye = count+""+2;
 				$(".addSetOfBtn").before('<div class="household">'+
 						 '<div class="householdPage homePage">'+
 						 '<span class="homePageTitle">户主页</span>'+
 						 '<img src="img/camera.png" class="camera" />'+
-						 '<img src="" class="pageImg" />'+
-						 '<input type="file" name="'+count+'" class="viceFile" onclick="addHousehold()" /></div>'+
+						 '<img id="'+zhuye+'" src="" class="pageImg" />'+
+						 '<input id="1" type="file" name="'+count+'" class="viceFile" onclick="addHousehold()" /></div>'+
 						 '<div id="vice1" class="householdPage householdInfo vicePage">'+
 						 '<span class="homePageTitle">副页</span>'+
 						 '<img src="img/camera.png" class="camera" />'+
-						 '<img src="" class="pageImg" />'+
-						 '<input type="file" id="file1" class="viceFile viceStatus" onclick="addHousehold()" name="" />'+
+						 '<img id="'+fuye+'" src="" class="pageImg" />'+
+						 '<input id="2" type="file" id="file1" class="viceFile viceStatus" onclick="addHousehold()" name="'+count+'" />'+
 						 '</div>'+
 						 '<div class="addPage">'+
 						 '<span class="homePageTitle">添加副页</span>'+
@@ -87,7 +106,7 @@
 						 '</div>'
 				);
 			})
-		
+		});
 		function getImage(staffid){
 			$.ajax({
 				url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
@@ -97,74 +116,58 @@
 				},
 				dataType : "json",
 				type : 'post',
+				async:false,
 				success : function(data) {
+					$(".homePage").remove();
+					$(".vicePage").remove();
+					console.log(data);
 					for(var i=0;i<data.length;i++){
 						var url=data[i].url;
 						var num = "#"+data[i].mainid+data[i].sequence;
-						$(num).attr('src',url);
+							sequence = data[i].sequence-1;
+							num = "#"+data[i].mainid+sequence;
+							var id=data[i].mainid+""+data[i].sequence;
+							
+							if(data[i].mainid == 1){
+								/* 第一条主页 */
+								if(data[i].sequence==1){
+									$(".householdExpain").after('<div class="householdPage homePage ">'+
+																'<span class="homePageTitle">户主页</span>'+
+											 '<img src="img/camera.png" class="camera" />'+
+											 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
+											 '<input id="'+data[i].sequence+'" type="file" name="'+data[i].mainid+'" class="viceFile" onclick="addHousehold()" /></div>')
+								}else{
+									$(".1").before('<div class="householdPage vicePage">'+
+											'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
+											'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
+											'<input id="'+data[i].sequence+'" name="'+data[i].mainid+'" value="'+url+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
+									}
+							}else{
+								/* 其他的页面 */
+								if(data[i].sequence==1){
+									$(".addSetOfBtn").before(
+											'<div class="household"><div class="householdPage homePage ">'+
+																'<span class="homePageTitle">户主页</span>'+
+											 '<img src="img/camera.png" class="camera" />'+
+											 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
+											 '<input id="'+data[i].sequence+'" type="file" name="'+data[i].mainid+'" class="viceFile" onclick="addHousehold()" /></div>'+
+											 '<div class="addPage '+data[i].mainid+'">'+
+											 '<span class="homePageTitle">添加副页</span>'+
+											 '<span class="plus">+</span>'+
+											 '</div></div>'
+									)
+								}else{
+									var group = "."+data[i].mainid;
+									$(group).before('<div class="householdPage vicePage">'+
+											'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
+											'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
+											'<input id="'+data[i].sequence+'" name="'+data[i].mainid+'" value="'+url+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
+									}
+							}
 					}
 				}
 			});
 		}
-		/* //点击上传图片
-		$(function(){
-			var	staffid=GetQueryString('staffid');
-			var	sessionid=GetQueryString('sessionid');
-			getImage(staffid);
-			$(".homePage").click(function(){
-				$(".homeinput").click();
-				$(".homeinput").change(function(){
-					var mainid = $(this).attr("name");
-					var sequence = $(this).next().val();
-					layer.load(1,{
-						shade : "#000"
-					});
-					var that = this;
-		            lrz(this.files[0]).then(function (rst) {
-		                /* $('.bacimg2').attr('src',rst.base64);*/
-		               /* $('#upload').hide(); 
-		                // 处理成功会执行
-		                sourceSize = (that.files[0].size / 1024).toFixed(2);
-		                resultSize = (rst.fileLen / 1024).toFixed(2);
-		                scale = parseInt(100 - (resultSize / sourceSize * 100));
-		                rst.formData.append('image',rst.file);
-		               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid); 
-		            }).catch(function (err) {
-		                console.log(err);
-		            });
-				});
-			}); */
-			
-			
-			/* $(".vicePage").click(function(){
-				$(".viceinput").click();
-				$(".viceinput").change(function(){
-
-
-					
-					var mainid = $(this).attr("name");
-					var sequence = $(this).next().val();
-					layer.load(1,{
-						shade : "#000"
-					});
-					var that = this;
-				        lrz(this.files[0]).then(function (rst) {
-				            /* $('.bacimg2').attr('src',rst.base64);*/
-				           /* $('#upload').hide(); 
-				            // 处理成功会执行
-				            sourceSize = (that.files[0].size / 1024).toFixed(2);
-				            resultSize = (rst.fileLen / 1024).toFixed(2);
-				            scale = parseInt(100 - (resultSize / sourceSize * 100));
-				            rst.formData.append('image',rst.file);
-				           uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid); 
-				        }).catch(function (err) {
-				            console.log(err);
-				        });
-				});
-			}); */
-			
-		})
-		
 		//跳转2寸图片
 		function returnPage(){
 			var staffid = GetQueryString("staffid");
@@ -208,11 +211,9 @@
 				success : function(obj) {//请求成功后的函数 
 					//console.log('=====成功========');
 					//关闭加载层
-					layer.closeAll('loading');
 					if (obj!=null) {
 						layer.msg("上传成功");
-						var img = "#"+mainid+sequence;
-						$(img).attr("src",obj);
+						location.reload();
 					}
 				},
 				error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -223,14 +224,26 @@
 		}
 		//点击上传
 		function addHousehold(){
+			var	staffid=GetQueryString('staffid');
+			var	sessionid=GetQueryString('sessionid');
 			$(".viceFile").change(function(){
-				
+				var mainid = $(this).attr("name");
+				var sequence = $(this).attr("id");
+				layer.load(1,{
+					shade : "#000"
+				});
+				var that = this;
+			        lrz(this.files[0]).then(function (rst) {
+			        	uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid); 
+			        }).catch(function (err) {
+			            console.log(err);
+			        });
 				//压缩
 				//上传
 				//给当前元素的上一个节点添加src的值
-				$(this).prev().attr('src','123456789');
-			})
-		}
+				//$(this).prev().attr('src','123456789');
+				});
+			}
 		</script>
 </body>
 </html>
