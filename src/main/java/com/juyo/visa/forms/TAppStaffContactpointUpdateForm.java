@@ -92,5 +92,11 @@ public class TAppStaffContactpointUpdateForm extends ModForm implements Serializ
 
 	/**电话(英文)*/
 	private String telephoneen;
+	
+	/**是否知道邮箱"*/
+	private Integer isknowemail;
+	
+	/**是否知道邮箱(英文)*/
+	private Integer isknowemailen;
 
 }

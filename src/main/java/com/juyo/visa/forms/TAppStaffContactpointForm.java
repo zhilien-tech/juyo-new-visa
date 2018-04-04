@@ -99,6 +99,12 @@ public class TAppStaffContactpointForm extends DataTablesParamForm {
 
 	/**电话(英文)*/
 	private String telephoneen;
+	
+	/**是否知道邮箱"*/
+	private Integer isknowemail;
+	
+	/**是否知道邮箱(英文)*/
+	private Integer isknowemailen;
 
 	@Override
 	public Sql sql(SqlManager sqlManager) {

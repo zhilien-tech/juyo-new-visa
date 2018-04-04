@@ -46,11 +46,71 @@ new Vue({
 		});
 	},
 	methods:{
-		dateChangeissueddate:function(val){
-			alert(val);
-			var self = this;
-			self.visaInfo.previUSTripInfo.issueddate=val;
+		idknowvisanumberChange:function(){
+			var isKnowNum = visaInfo.previUSTripInfo.idknowvisanumber;
+			if(isKnowNum){
+				visaInfo.previUSTripInfo.visanumber = "";
+			}
+		},
+		visaNotLost:function(){
+			visaInfo.previUSTripInfo.lostyear = "";
+			visaInfo.previUSTripInfo.lostexplain = "";
+		},
+		visaNotCancel:function(){
+			visaInfo.previUSTripInfo.cancelexplain="";
+		},
+		visaNotRefused:function(){
+			visaInfo.previUSTripInfo.refusedexplain="";
+		},
+		visaNotIegal:function(){
+			visaInfo.previUSTripInfo.permanentresidentexplai="";
+		},
+		visaNotfiledimmigrantpetition:function(){
+			visaInfo.previUSTripInfo.immigrantpetitionexplain="";
+		},
+		isKnowContactPointName:function(){
+			var isknowname = visaInfo.contactPointInfo.isknowname;
+			if(isknowname){
+				visaInfo.contactPointInfo.lastname = "";
+			}
+		},
+		isKnowOrganizationName:function(){
+			var isknoworganizationname = visaInfo.contactPointInfo.isknoworganizationname;
+			if(isknoworganizationname){
+				visaInfo.contactPointInfo.organizationname = "";
+			}
+		},
+		isKnowEmailAddress:function(){
+			var isknowemail = visaInfo.contactPointInfo.isknowemail;
+			if(isknowemail){
+				visaInfo.contactPointInfo.email = "";
+			}
+		},
+		isknowfatherfirstname:function(){
+			var isknowfatherfirstname = visaInfo.familyInfo.isknowfatherfirstname;
+			if(isknowfatherfirstname){
+				visaInfo.familyInfo.fatherfirstname = "";
+			}
+		},
+		isknowfatherlastname:function(){
+			var isknowfatherlastname = visaInfo.familyInfo.isknowfatherlastname;
+			if(isknowfatherlastname){
+				visaInfo.familyInfo.fatherlastname = "";
+			}
+		},
+		isknowmotherfirstname:function(){
+			var isknowmotherfirstname = visaInfo.familyInfo.isknowmotherfirstname;
+			if(isknowmotherfirstname){
+				visaInfo.familyInfo.motherfirstname = "";
+			}
+		},
+		isknowmotherlastname:function(){
+			var isknowmotherlastname = visaInfo.familyInfo.isknowmotherlastname;
+			if(isknowmotherlastname){
+				visaInfo.familyInfo.motherlastname = "";
+			}
 		}
+		
 	}
 });
 
@@ -105,9 +165,9 @@ function save(){
 		url: '/admin/bigCustomer/updateVisaInfos.html',
 		success: function (data) { 
 			if(data.status == 200){
-				layer.msg("保存成功");
+				layer.msg("保存成功","", 2000);
 			}else{
-				layer.msg("保存失败");
+				layer.msg("保存失败","", 2000);
 			}
 			layer.closeAll('loading');
 			closeWindow();

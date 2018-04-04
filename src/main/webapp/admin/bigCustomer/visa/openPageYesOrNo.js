@@ -77,9 +77,9 @@ function openYesOrNoPage(){
 	//有没有人曾代表您向美国公民和移民服务局提交过移民申请
 	var islegal = visaInfo.previUSTripInfo.isfiledimmigrantpetition;
 	if(islegal == 1){
-		$(".islegal").show();
+		$(".immigrationExplain").show();
 	}else {
-		$(".islegal").hide();
+		$(".immigrationExplain").hide();
 	}
 	
 	
