@@ -81,7 +81,7 @@ function getDriverList(){
 			driverLength += '';
 		}
 		
-		if(driverLength.length >0){
+		if(driverLength.length >0 || isknownumber==1){
 			driver.staffid = staffId;
 			driver.driverlicensenumber = drivernumber;
 			driver.isknowdrivernumber = isknownumber;

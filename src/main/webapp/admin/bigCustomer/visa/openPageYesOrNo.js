@@ -39,7 +39,7 @@ function openYesOrNoPage(){
 	//是否有美国签证
 	var visaUS = visaInfo.previUSTripInfo.isissuedvisa;
 	if(visaUS == 1){
-		$(".dateIssue").show();
+		$(".goUS_visa").show();
 		//是否丢失签证
 		var lose = visaInfo.previUSTripInfo.islost;
 		if(lose == 1){
@@ -55,7 +55,7 @@ function openYesOrNoPage(){
 			$(".explain").hide();
 		}
 	}else {
-		$(".dateIssue").hide();
+		$(".goUS_visa").hide();
 	}
 	
 	//是否被拒绝过美国签证

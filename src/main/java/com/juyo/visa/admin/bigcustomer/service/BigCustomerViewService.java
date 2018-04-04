@@ -690,7 +690,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	}
 
 	/**
-	 * 更新签证信息
+	 * 更新签证信息 TODO
 	 */
 	public Object updateVisaInfos(String data, HttpServletRequest request) {
 
