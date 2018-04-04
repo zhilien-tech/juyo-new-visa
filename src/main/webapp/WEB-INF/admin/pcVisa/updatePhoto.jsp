@@ -125,9 +125,9 @@
 					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<!-- <div class="beforeHouseInfo"></div> -->
-				<div class="uploadReleases" >
+				<div class="uploadReleases housecard 1" >
 					<div>上传</div>
-					<img id="housecard" class="longitudinal"/>
+					<img id="" class="longitudinal"/>
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
 			</div>			
@@ -312,10 +312,6 @@
 			};
 
 			socket.onmessage = function(state) {
-				
-				console.log("state");
-				console.log(state);
-				console.log(state.data);
 				if (state.data==200) {
 					window.location.reload();
 				}
