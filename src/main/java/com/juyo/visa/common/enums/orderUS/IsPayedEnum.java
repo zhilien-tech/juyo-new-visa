@@ -10,12 +10,12 @@ import com.uxuexi.core.common.enums.IEnum;
  * 
  * 
  */
-public enum isPayedEnum implements IEnum {
+public enum IsPayedEnum implements IEnum {
 	NOTPAY(1, "未付款"), PAYED(2, "已付款"), TUIKUAN(3, "退款");
 	private int key;
 	private String value;
 
-	private isPayedEnum(final int key, final String value) {
+	private IsPayedEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}

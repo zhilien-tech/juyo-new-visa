@@ -44,7 +44,7 @@ new Vue({
 				} */
 		toDetail:function(orderid){
 			//跳转到签证详情页面
-			window.open('/admin/orderUS/listDetailUS.html?orderid='+orderid);
+			window.open('/admin/orderUS/orderUSDetail.html?orderid='+orderid);
 			//console.log(message);
 			//alert(JSON.stringify(event.target));
 		},

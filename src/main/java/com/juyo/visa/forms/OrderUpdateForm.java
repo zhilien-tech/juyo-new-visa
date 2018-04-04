@@ -85,4 +85,11 @@ public class OrderUpdateForm {
 	 */
 	private String returnFlightNum;
 
+	//团名
+	private String groupname;
+	//领区
+	private Integer cityid;
+	//是否付款
+	private Integer ispayed;
+
 }

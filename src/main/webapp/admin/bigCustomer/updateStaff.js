@@ -267,7 +267,7 @@ function translateZhToEn(from, to, param){
 		url : BASE_PATH+'/admin/translate/translate',
 		data : {
 			api : 'google',
-			auto : 'auto',
+			strType : to,
 			en : 'en',
 			q : toval
 		},

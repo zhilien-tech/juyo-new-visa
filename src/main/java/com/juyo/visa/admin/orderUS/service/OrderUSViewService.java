@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -54,11 +55,13 @@ import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JapanPrincipalChangeEnum;
 import com.juyo.visa.common.enums.USOrderStatusEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.orderUS.DistrictEnum;
+import com.juyo.visa.common.enums.orderUS.IsPayedEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
-import com.juyo.visa.common.enums.orderUS.isPayedEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
@@ -69,7 +72,10 @@ import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
+import com.juyo.visa.entities.TOrderUsFollowupEntity;
+import com.juyo.visa.entities.TOrderUsLogsEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.juyo.visa.forms.OrderUpdateForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
@@ -102,6 +108,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	private final static String SMS_SIGNATURE = "【优悦签】";
 	private final static Integer US_YUSHANG_COMID = 65;
+	//订单列表页连接websocket的地址
+	private static final String USLIST_WEBSPCKET_ADDR = "uslistwebsocket";
 
 	/**
 	 * 列表页下拉框内容获取
@@ -111,11 +119,17 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 *
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object toList() {
+	public Object toList(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("searchStatus", EnumUtil.enum2(USOrderListStatusEnum.class));
 		result.put("cityid", EnumUtil.enum2(DistrictEnum.class));
-		result.put("ispayed", EnumUtil.enum2(isPayedEnum.class));
+		result.put("ispayed", EnumUtil.enum2(IsPayedEnum.class));
+		//websocket
+		String localAddr = request.getLocalAddr();
+		int localPort = request.getLocalPort();
+		result.put("localAddr", localAddr);
+		result.put("localPort", localPort);
+		result.put("websocketaddr", USLIST_WEBSPCKET_ADDR);
 		return result;
 	}
 
@@ -154,15 +168,29 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		List<Record> list = (List<Record>) sql.getResult();
 		for (Record record : list) {
 			Integer orderid = (Integer) record.get("orderid");
+			int ispayed = (int) record.get("ispayed");
+			int cityid = (int) record.get("cityid");
+			for (DistrictEnum district : DistrictEnum.values()) {
+				if (cityid == district.intKey()) {
+					record.set("cityid", district.value());
+				}
+			}
+			for (IsPayedEnum pay : IsPayedEnum.values()) {
+				if (cityid == pay.intKey()) {
+					record.set("ispayed", pay.value());
+				}
+			}
 			String sqlStr = sqlManager.get("orderUS_listData_staff");
 			Sql applysql = Sqls.create(sqlStr);
 			List<Record> records = dbDao.query(applysql, Cnd.where("tasou.orderid", "=", orderid), null);
 			record.put("everybodyInfo", records);
 
-			String orderStatus = record.getString("orderstatus");
+			int orderStatus = (int) record.get("orderstatus");
 			for (USOrderListStatusEnum statusEnum : USOrderListStatusEnum.values()) {
-				if (!Util.isEmpty(orderStatus) && orderStatus.equals(String.valueOf(statusEnum.intKey()))) {
+				if (!Util.isEmpty(orderStatus) && orderStatus == statusEnum.intKey()) {
 					record.set("orderstatus", statusEnum.value());
+				} else if (orderStatus == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+					record.set("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
 				}
 			}
 
@@ -183,21 +211,70 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @param session
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object getOrderUSDetail(int orderid, HttpSession session) {
+	public Object getOrderUSDetail(int orderid, HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
+		HttpSession session = request.getSession();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
 		//订单信息
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		result.put("orderinfo", orderus);
+		//基本信息
+		TAppStaffOrderUsEntity staffOrder = dbDao.fetch(TAppStaffOrderUsEntity.class,
+				Cnd.where("orderid", "=", orderid));
+		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffOrder.getStaffid()
+				.longValue());
+		result.put("basicinfo", basicinfo);
 		Integer status = orderus.getStatus();
 		for (USOrderListStatusEnum statusenum : USOrderListStatusEnum.values()) {
 			if (status == statusenum.intKey()) {
 				result.put("orderstatus", statusenum.value());
+			} else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+				result.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
 			}
 		}
+		//跟进信息
+		String followSqlstr = sqlManager.get("orderUS_getFollows");
+		Sql followSql = Sqls.create(followSqlstr);
+		followSql.setParam("id", userid);
+		List<Record> followList = dbDao.query(followSql, null, null);
+		//格式化日期
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_FULLPART_PATTERN);
+		for (Record record : followList) {
+			if (!Util.isEmpty(record.get("solveid"))) {
+				int solveid = (int) record.get("solveid");
+				TUserEntity solveUser = dbDao.fetch(TUserEntity.class, solveid);
+				record.set("solveid", solveUser.getName());
+			}
+			if (!Util.isEmpty(record.get("solvetime"))) {
+				Date solvetime = (Date) record.get("solvetime");
+				record.set("solvetime", format.format(solvetime));
+			}
+			if (!Util.isEmpty(record.get("createtime"))) {
+				Date solvetime = (Date) record.get("createtime");
+				record.set("createtime", format.format(solvetime));
+			}
+		}
+		result.put("followinfo", followList);
 		//领区下拉
 		result.put("cityidenum", EnumUtil.enum2(DistrictEnum.class));
 		//是否付款下拉
-		result.put("ispayedenum", EnumUtil.enum2(isPayedEnum.class));
+		result.put("ispayedenum", EnumUtil.enum2(IsPayedEnum.class));
+		return result;
+	}
+
+	public Object getOrderStatus(int orderid, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		//订单信息
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		Integer status = orderus.getStatus();
+		for (USOrderListStatusEnum statusenum : USOrderListStatusEnum.values()) {
+			if (status == statusenum.intKey()) {
+				result.put("orderstatus", statusenum.value());
+			} else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+				result.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
+			}
+		}
 		return result;
 	}
 
@@ -219,27 +296,198 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return null;
 	}
 
+	/**
+	 * 跟进内容保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid 订单id
+	 * @param content 跟进内容
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object saveFollow(int orderid, String content, HttpSession session) {
+		TOrderUsFollowupEntity follow = new TOrderUsFollowupEntity();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
+		follow.setContent(content);
+		follow.setCreatetime(new Date());
+		follow.setOrderid(orderid);
+		follow.setUpdatetime(new Date());
+		follow.setStatus(IsYesOrNoEnum.NO.intKey());
+		follow.setUserid(userid);
+		dbDao.insert(follow);
+		return null;
+	}
+
+	/**
+	 * 点击跟进中解决按钮
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param id
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object solveFollow(int id, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
+		TOrderUsFollowupEntity follow = dbDao.fetch(TOrderUsFollowupEntity.class, id);
+		follow.setSolveid(userid);
+		follow.setSolvetime(new Date());
+		follow.setStatus(IsYesOrNoEnum.YES.intKey());
+		follow.setUpdatetime(new Date());
+		dbDao.update(follow);
+		return null;
+	}
+
+	/**
+	 * 跳转到日志页面，获取日志页面下拉框数据
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid 订单id
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object toLog(int orderid, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 		TCompanyEntity company = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userType = loginUser.getUserType();
 		Integer userid = loginUser.getId();
-		//获取公司下的所有工作人员，包括管理员
-		List<TUserEntity> staffList = dbDao.query(
-				TUserEntity.class,
-				Cnd.where("comId", "=", company.getId()).and("userType", "=", UserLoginEnum.PERSONNEL.intKey())
-						.and("userType", "=", UserLoginEnum.BIG_COMPANY_ADMIN.intKey()), null);
-		if (!Util.isEmpty(staffList)) {
-			result.put("staffs", staffList);
+		//如果是管理员，则需要查询公司下所有的员工来给下拉框赋值
+		if (Util.eq(userType, UserLoginEnum.BIG_COMPANY_ADMIN.intKey())) {
+			//获取公司下的所有工作人员,除去管理员
+			List<TUserEntity> userList = dbDao.query(TUserEntity.class,
+					Cnd.where("comId", "=", company.getId()).and("userType", "=", UserLoginEnum.PERSONNEL.intKey()),
+					null);
+			//获取管理员信息
+			TUserEntity adminUser = dbDao.fetch(TUserEntity.class, userid.longValue());
+			userList.add(adminUser);
+			result.put("users", userList);
 		}
 		//获取订单操作人
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
-		Integer opid = orderus.getOpid();
+		if (!Util.isEmpty(orderus.getOpid())) {
+			Integer opid = orderus.getOpid();
+			result.put("opid", opid);
+		}
 		result.put("userid", userid);
-		result.put("opid", opid);
 		result.put("userType", userType);
+		result.put("orderid", orderid);
 		return result;
+	}
+
+	/**
+	 * 获取日志页面vue数据
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid 订单id
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getLogs(int orderid, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		String logSqlstr = sqlManager.get("orderUS_getLogs");
+		Sql logSql = Sqls.create(logSqlstr);
+		logSql.setParam("id", orderid);
+		List<Record> logs = dbDao.query(logSql, null, null); //日志列表
+		for (Record record : logs) {
+			if (!Util.isEmpty(record.get("orderstatus"))) {
+				Integer status = (Integer) record.get("orderstatus");
+				for (USOrderListStatusEnum statusEnum : USOrderListStatusEnum.values()) {
+					if (status == statusEnum.intKey()) {
+						record.put("orderstatus", statusEnum.value());
+					} else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+						record.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
+					}
+				}
+			}
+		}
+		result.put("logs", logs);
+		return result;
+	}
+
+	/**
+	 * 日志页面负责人变更
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid 订单id
+	 * @param principal 指定的负责人id
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object changePrincipal(int orderid, int principal, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		//把订单的操作人id改为管理员指定的id
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		orderus.setOpid(principal);
+		orderus.setUpdatetime(new Date());
+		orderus.setStatus(JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey());
+		dbDao.update(orderus);
+		//插入日志
+		insertLogs(orderid, orderus.getStatus(), loginUser.getId());
+		return null;
+	}
+
+	/**
+	 * 插入日志
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid 订单id
+	 * @param orderstatus 订单状态
+	 * @param userid 操作人id
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object insertLogs(int orderid, int orderstatus, int userid) {
+		TOrderUsLogsEntity log = new TOrderUsLogsEntity();
+		log.setOrderid(orderid);
+		log.setOrderstatus(orderstatus);
+		log.setOpid(userid);
+		log.setCreatetime(new Date());
+		log.setUpdatetime(new Date());
+		dbDao.insert(log);
+		return null;
+	}
+
+	public Object passUS(int orderid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		orderus.setStatus(USOrderListStatusEnum.TONGGUO.intKey());
+		dbDao.update(orderus);
+		insertLogs(orderid, USOrderListStatusEnum.TONGGUO.intKey(), userid);
+		return null;
+	}
+
+	public Object refuseUS(int orderid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		orderus.setStatus(USOrderListStatusEnum.JUJUE.intKey());
+		dbDao.update(orderus);
+		insertLogs(orderid, USOrderListStatusEnum.JUJUE.intKey(), userid);
+		return null;
+	}
+
+	public Object orderSave(OrderUpdateForm form, HttpSession session) {
+		Integer orderid = form.getOrderid();
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
+		orderus.setCityid(form.getCityid());
+		orderus.setIspayed(form.getIspayed());
+		orderus.setGroupname(form.getGroupname());
+		dbDao.update(orderus);
+		return null;
 	}
 
 	//根据人员id添加订单

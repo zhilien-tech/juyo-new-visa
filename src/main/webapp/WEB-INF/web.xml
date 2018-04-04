@@ -31,6 +31,7 @@
     <servlet-mapping>
 		<servlet-name>SpringWebsocket</servlet-name>
 		<url-pattern>/websocket/*</url-pattern>
+		<url-pattern>/uslistwebsocket/*</url-pattern>
 		<url-pattern>/basicinfowebsocket/*</url-pattern>
 		<url-pattern>/simpleinfowebsocket/*</url-pattern>
 		<url-pattern>/visainfowebsocket/*</url-pattern>

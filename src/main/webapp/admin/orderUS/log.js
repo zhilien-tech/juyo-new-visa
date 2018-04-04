@@ -8,10 +8,9 @@ new Vue({
 	created:function(){
 		_self=this;
 		$.ajax({ 
-			url: '/admin/orderJp/getLogs.html',
+			url: '/admin/orderUS/getLogs.html',
 			data:{
-				orderid:orderid,
-				orderProcessType:$("#orderProcessType").val()
+				orderid:orderid
 			},
 			dataType:"json",
 			type:'post',
@@ -25,28 +24,22 @@ new Vue({
 
 //变更负责人
 function savePrincipal(){
-	var orderProcessType = $("#orderProcessType").val();
 	var principal = $("#principal").val();
 	if(principal == "" || principal==null || principal==undefined){
 		layer.msg("负责人不能为空");
 		return;
 	}
-
 	var layerIndex =  layer.load(1, {shade: "#000"});
 	$.ajax({ 
-		url: '/admin/orderJp/changePrincipal.html',
+		url: '/admin/orderUS/changePrincipal.html',
 		data:{
 			orderid:orderid,
 			principal:principal,
-			orderProcessType:orderProcessType
 		},
 		dataType:"json",
 		type:'post',
 		success: function(data){
-			if(data>0){
-				layer.close(layerIndex);
-				parent.successCallBack(88);
-			}
+			dataReload();
 			closeWindow();
 		}
 	});

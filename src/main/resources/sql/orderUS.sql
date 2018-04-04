@@ -64,3 +64,31 @@ FROM
 	LEFT JOIN t_app_staff_passport tasp ON tasp.staffid = tasb.id
 	LEFT JOIN t_app_staff_paperwork_us taspu ON taspu.staffid = tasb.id
 	$condition
+	
+/*orderUS_getLogs*/
+SELECT
+	tu.`name`,
+	toul.orderstatus,
+	toul.createtime
+FROM
+	t_order_us_logs toul
+	LEFT JOIN t_user tu ON tu.id = toul.opid
+	LEFT JOIN t_order_us tou ON tou.id = toul.orderid
+WHERE
+	tou.id = @id
+
+/*orderUS_getFollows*/
+SELECT
+	touf.id,
+	touf.solveid,
+	tu.`name`,
+	touf.createtime,
+	touf.solvetime,
+	touf.content,
+	touf.`status`
+FROM
+	t_order_us_followup touf
+	LEFT JOIN t_user tu ON touf.userid = tu.id
+WHERE
+	tu.id = @id
+	ORDER BY touf.createtime DESC

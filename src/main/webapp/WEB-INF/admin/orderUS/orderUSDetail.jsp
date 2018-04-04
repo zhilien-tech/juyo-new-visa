@@ -30,11 +30,11 @@
 		<div class="content-wrapper">
 			<!-- 头部 -->
 			<div class="qz-head">
-				<span class="orderNum">订单号：
+				<span  class="orderNum">订单号：
 					<span>${obj.orderinfo.ordernumber}</span>
 				</span>
-				<span class="state">状态： 
-					<p>${obj.orderstatus }</p>
+				<span  class="state">状态： 
+					<p id="orderstatus_US">${obj.orderstatus }</p>
 				</span>
 				<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
 				<%-- <span class="state">状态： 
@@ -45,14 +45,14 @@
 						<p>0</p>
 					</c:if>
 				</span>  --%>
-					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" /> 
+					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" value="通过" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" onclick="refuse()" value="拒签" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" onclick="pass()" value="通过" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />
 					<input type="button" value="通知" onclick="sendEmailUS()" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="日志" onclick="toLog()" class="btn btn-primary btn-sm pull-right" />
 			</div>
 			<!-- 头部END -->
 			<!-- form -->
@@ -67,7 +67,7 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>团名</label>
-									<input type="text" class="input-sm form-control" />
+									<input type="text" class="input-sm form-control" name="groupname" value="${obj.orderinfo.groupname }" />
 								</div>
 							</div>
 							
@@ -75,7 +75,7 @@
 								<div class="form-group">
 									<label><span>*</span>领区</label>
 									<select id="cityid" name="cityid"  class="form-control input-sm" >
-									<c:forEach var="map" items="${obj.cityid}">
+									<c:forEach var="map" items="${obj.cityidenum}">
 										<option value="${map.key}"  ${map.key==obj.orderinfo.cityid?"selected":"" } >${map.value}</option>
 									</c:forEach>
 								</select>
@@ -85,11 +85,11 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>是否付款</label>
-									<select class="form-control input-sm">
-										<option>未付款</option>
-										<option>已付款</option>
-										<option>退款</option>
-									</select>
+									<select id="ispayed" name="ispayed"  class="form-control input-sm" >
+									<c:forEach var="map" items="${obj.ispayedenum}">
+										<option value="${map.key}"  ${map.key==obj.orderinfo.ispayed?"selected":"" } >${map.value}</option>
+									</c:forEach>
+								</select>
 								</div>
 							</div>
 						</div>
@@ -322,7 +322,7 @@
 							</div>
 							<!-- 模块3END -->
 							<!-- 隐藏域 -->
-							<input type="hidden" name="orderid" value="${obj.travelInfo.orderid}">
+							<input type="hidden" name="orderid" value="${obj.orderinfo.id}">
 							<!-- 隐藏域END -->
 							<!-- 模块4 -->
 							<div class="row body-from-input">
@@ -515,146 +515,16 @@
 						<p class="info-head followUp">
 							跟进
 							<div class="dataInfoGroup">
-								<a>加跟进</a> 
+								<a onclick="addFollow()">加跟进</a> 
 							</div>
 						</p>
 						<!-- 标题以及按钮组END -->
 						<div class="followUpMain">
 							<div class="row body-from">
 								<div class="fixedheight">
-									<ul>
+									<ul  id="forFollow">
 										<!-- 循环 -->
-										<li>
-											<div class="dateNameBtn">
-												<span class="dateInfo">2018.03.28  15:30</span>
-												<span class="nameInfo">李智慧</span>
-												<span class="solveHide">
-													<span>2018.03.28</span>
-													由
-													<span>李智慧</span>
-													解决
-												</span>
-												<a class="solve" >解决</a>
-											</div>
-											<div class="errorInfo">
-												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
-												<span>2.护照照片不清晰，重新上传</span>
-											</div>
-										</li>
 										<!-- 循环END -->
-										<li>
-											<div class="dateNameBtn">
-												<span class="dateInfo">2018.03.28  15:30</span>
-												<span class="nameInfo">李智慧</span>
-												<span class="solveHide">
-													<span>2018.03.28</span>
-													由
-													<span>李智慧</span>
-													解决
-												</span>
-												<a class="solve" >解决</a>
-											</div>
-											<div class="errorInfo">
-												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
-												<span>2.护照照片不清晰，重新上传</span>
-											</div>
-										</li><li>
-											<div class="dateNameBtn">
-												<span class="dateInfo">2018.03.28  15:30</span>
-												<span class="nameInfo">李智慧</span>
-												<span class="solveHide">
-													<span>2018.03.28</span>
-													由
-													<span>李智慧</span>
-													解决
-												</span>
-												<a class="solve" >解决</a>
-											</div>
-											<div class="errorInfo">
-												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
-												<span>2.护照照片不清晰，重新上传</span>
-											</div>
-										</li><li>
-											<div class="dateNameBtn">
-												<span class="dateInfo">2018.03.28  15:30</span>
-												<span class="nameInfo">李智慧</span>
-												<span class="solveHide">
-													<span>2018.03.28</span>
-													由
-													<span>李智慧</span>
-													解决
-												</span>
-												<a class="solve" >解决</a>
-											</div>
-											<div class="errorInfo">
-												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
-												<span>2.护照照片不清晰，重新上传</span>
-											</div>
-										</li><li>
-											<div class="dateNameBtn">
-												<span class="dateInfo">2018.03.28  15:30</span>
-												<span class="nameInfo">李智慧</span>
-												<span class="solveHide">
-													<span>2018.03.28</span>
-													由
-													<span>李智慧</span>
-													解决
-												</span>
-												<a class="solve" >解决</a>
-											</div>
-											<div class="errorInfo">
-												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
-												<span>2.护照照片不清晰，重新上传</span>
-											</div>
-										</li><li>
-											<div class="dateNameBtn">
-												<span class="dateInfo">2018.03.28  15:30</span>
-												<span class="nameInfo">李智慧</span>
-												<span class="solveHide">
-													<span>2018.03.28</span>
-													由
-													<span>李智慧</span>
-													解决
-												</span>
-												<a class="solve" >解决</a>
-											</div>
-											<div class="errorInfo">
-												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
-												<span>2.护照照片不清晰，重新上传</span>
-											</div>
-										</li><li>
-											<div class="dateNameBtn">
-												<span class="dateInfo">2018.03.28  15:30</span>
-												<span class="nameInfo">李智慧</span>
-												<span class="solveHide">
-													<span>2018.03.28</span>
-													由
-													<span>李智慧</span>
-													解决
-												</span>
-												<a class="solve" >解决</a>
-											</div>
-											<div class="errorInfo">
-												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
-												<span>2.护照照片不清晰，重新上传</span>
-											</div>
-										</li><li>
-											<div class="dateNameBtn">
-												<span class="dateInfo">2018.03.28  15:30</span>
-												<span class="nameInfo">李智慧</span>
-												<span class="solveHide">
-													<span>2018.03.28</span>
-													由
-													<span>李智慧</span>
-													解决
-												</span>
-												<a class="solve" >解决</a>
-											</div>
-											<div class="errorInfo">
-												<span>1.二寸照片不合格已通知重新拍照上传</span><br>
-												<span>2.护照照片不清晰，重新上传</span>
-											</div>
-										</li>
 									</ul>
 								</div>
 							</div>
@@ -691,6 +561,8 @@
 			todayBtn : true
 		});
 		$(function() {
+			
+			dataReload();
 
 			$(".tripPlan").change(function() {
 
@@ -723,7 +595,7 @@
 
 		
 		/* 异步保存数据 */
-		function save() {
+		/* function save() {
 			var goDepartureCity = $('#goDepartureCity').val();
 			var goArrivedCity = $('#goArrivedCity').val();
 			var returnDepartureCity = $('#returnDepartureCity').val();
@@ -748,10 +620,10 @@
 					} else {
 						layer.msg('添加失败');
 					}
-					/* window.location.href = '/admin/pcVisa/visaDetail.html'; */
+					// window.location.href = '/admin/pcVisa/visaDetail.html'; 
 				}
 			});
-		};
+		};  */
 		
 		
 		//加载城市的select2
@@ -1025,11 +897,25 @@
 				}
 			});
 		}
-		
+		//日志
+		function toLog(){
+			var orderid = '${obj.orderinfo.id}';
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['700px', '80%'],
+				content:'/admin/orderUS/log.html?orderid='+orderid
+			});
+		}
+		//通知
 		function sendEmailUS(){
-			layer.load(1);
-			var staffid = '${obj.staffid}';
-			var orderid = '${obj.orderid}';
+			var staffid = '${obj.basicinfo.id}';
+			var orderid = '${obj.orderinfo.id}';
 			layer.load(1);
 			$.ajax({
 				url : '/admin/orderUS/sendShareMsg.html',
@@ -1047,6 +933,140 @@
 					}
 				}
 			});
+		}
+		
+		//刷新订单状态
+		function dataReload(){
+			var orderid = '${obj.orderinfo.id}';
+			$.ajax({
+				url : '/admin/orderUS/getOrderRefresh.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					console.log(data);
+					$("#orderstatus_US").html(data.orderstatus);
+					var followinfos = data.followinfo;
+					if(followinfos.length > 0){
+						var Str = "";
+						for(var i = 0;i < followinfos.length;i++){
+							if(followinfos[i].status == 1){
+								Str += '<li> <div class="dateNameBtn">'+
+								'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
+								'<span class="nameInfo">'+followinfos[i].name+'</span>'+
+								'<span>'+followinfos[i].solvetime+'</span>由<span>'+followinfos[i].solveid+'</span>解决</span></div>'+
+								'<div class="errorInfo">'+
+								'<span>'+followinfos[i].content+'</span></div></li>';
+							}else{
+								Str += '<li> <div class="dateNameBtn">'+
+								'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
+								'<span class="nameInfo">'+followinfos[i].name+'</span>'+
+								'<a class="solve" onclick="solveClick('+followinfos[i].id+')">解决</a></div>'+
+								'<div class="errorInfo">'+
+								'<span>'+followinfos[i].content+'</span></div></li>';
+								
+							}
+/* 								Str += '<li> <div class="dateNameBtn">'+
+								'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
+								'<span class="nameInfo">'+followinfos[i].name+'</span>'+
+								'<c:choose><c:when test="{'+followinfos[i].status+' == 1}"><span>'+followinfos[i].solvetime+'</span>由<span>'+followinfos[i].solveid+'</span>解决</span></c:when><c:otherwise><a class="solve" onclick="solveClick('+followinfos[i].id+')">解决</a></c:otherwise></c:choose></div>'+
+								'<div class="errorInfo">'+
+								'<span>'+followinfos[i].content+'</span></div></li>'; */
+						}
+						$("#forFollow").html(Str);
+					}
+				}
+			});
+		}
+		
+		//添加跟进
+		function addFollow(){
+			var orderid = '${obj.orderinfo.id}';
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['800px', '400px'],
+				content: '/admin/orderUS/addFollow.html?orderid='+orderid
+			});
+		}
+		
+		//跟进中的解决按钮
+		function solveClick(id){
+			$.ajax({
+				url : '/admin/orderUS/solveFollow.html',
+				data : {
+					id : id
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					dataReload();
+				}
+			});
+		}
+		
+		//通过
+		function pass(){
+			var orderid = '${obj.orderinfo.id}';
+			$.ajax({
+				url : '/admin/orderUS/passUS.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					dataReload();
+				}
+			});
+		}
+		
+		//拒绝
+		function refuse(){
+			var orderid = '${obj.orderinfo.id}';
+			$.ajax({
+				url : '/admin/orderUS/refuseUS.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					dataReload();
+				}
+			});
+		}
+		
+		//保存并返回
+		function save(){
+			$.ajax({
+				url : "${base}/admin/orderUS/orderSave",
+				dataType : "json",
+				data : $("#orderUpdateForm").serialize(),
+				type : 'POST',
+				success : function(data) {
+					layer.msg("保存成功", {
+						time: 500,
+						end: function () {
+							self.window.close();
+						}
+					});
+					// window.location.href = '/admin/pcVisa/visaDetail.html'; 
+				}
+			});
+		}
+		
+		//取消
+		function closeWindow(){
+			self.window.close();
+			//parent.window.reload();
 		}
 	</script>
 </body>
