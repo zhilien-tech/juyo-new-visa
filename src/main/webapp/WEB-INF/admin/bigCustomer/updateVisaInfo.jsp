@@ -142,7 +142,7 @@
 						<div class="goUSInfo goUSYes">
 							<c:if test="${!empty obj.gousList }">
 								<c:forEach var="gous" items="${obj.gousList }">
-									<div class="goUS_Country">
+									<div class="goUS_CountryDiv">
 										<div class="groupInputInfo">
 											<label>抵达日期</label>
 											<input type="text" id="arrivedate" value="<fmt:formatDate value="${gous.arrivedate }" pattern="dd/MM/yyyy" />" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
@@ -166,7 +166,7 @@
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.gousList }">
-								<div class="goUS_Country">
+								<div class="goUS_CountryDiv">
 									<div class="groupInputInfo">
 										<label>抵达日期</label>
 										<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
@@ -266,12 +266,12 @@
 						<div class="dateIssue goUS_visa">
 							<div class="groupInputInfo lastVisaDate">
 								<label>最后一次签证的签发日期</label>
-								<input id="issueddate" name="issueddate" v-model="visaInfo.previUSTripInfo.issueddate" @change="dateChangeissueddate" class="datetimepickercss" placeholder="日/月/年" type="text"/>
+								<input id="issueddate" name="issueddate" v-model="visaInfo.previUSTripInfo.issueddate" class="datetimepickercss" placeholder="日/月/年" type="text"/>
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
 								<input name="visanumber" v-model="visaInfo.previUSTripInfo.visanumber" type="text" />
-								<input id="idknowvisanumber" :value="visaInfo.previUSTripInfo.idknowvisanumber" name="idknowvisanumber" v-model="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/>
+								<input id="idknowvisanumber" :value="visaInfo.previUSTripInfo.idknowvisanumber" name="idknowvisanumber" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/>
 							</div>
 							<div class="clear"></div>
 							<div class="Alike groupRadioInfo paddingTop">
@@ -293,7 +293,7 @@
 								<div class="groupRadioInfo">
 									<label style="display: block;">你的美国签证是否丢失或被盗过</label>
 									<input type="radio" name="islost" v-model="visaInfo.previUSTripInfo.islost" class="lose" value="1" />是
-									<input type="radio" name="islost" v-model="visaInfo.previUSTripInfo.islost" class="lose" value="2" checked />否
+									<input type="radio" name="islost" v-model="visaInfo.previUSTripInfo.islost" v-on:click="visaNotLost" class="lose" value="2" checked />否
 								</div>
 								<div class="yearExplain displayTop elementHide"><!-- 默认隐藏 -->
 									<div class="displayLeft groupInputInfo">
@@ -312,7 +312,7 @@
 									<div class="groupRadioInfo">
 										<label>你的美国签证是否被取消或撤销过</label>
 										<input type="radio" name="iscancelled" v-model="visaInfo.previUSTripInfo.iscancelled" class="revoke" value="1" />是
-										<input type="radio" name="iscancelled" v-model="visaInfo.previUSTripInfo.iscancelled" class="revoke" value="2" checked />否
+										<input type="radio" name="iscancelled" v-model="visaInfo.previUSTripInfo.iscancelled" v-on:click="visaNotCancel" class="revoke" value="2" checked />否
 									</div>
 									<div class="explain grouptextareaInfo paddingTop">
 										<label>说明</label>
@@ -329,7 +329,7 @@
 				<div class="groupRadioInfo">
 					<label>被拒绝过美国签证，或被拒绝入境美国，或撤回入境口岸的入境</label>
 					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" class="refuse" value="1" />是
-					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" class="refuse" value="2" checked />否
+					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" v-on:click="visaNotRefused" class="refuse" value="2" checked />否
 				</div>
 				<div class="refuseExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
@@ -341,7 +341,7 @@
 				<div class="groupRadioInfo">
 					<label>曾经是否是美国合法永久居民</label>
 					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" class="onceLegitimate" value="1" />是
-					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" class="onceLegitimate" value="2" checked />否
+					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" v-on:click="visaNotIegal" class="onceLegitimate" value="2" checked />否
 				</div>
 				<div class="onceExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
@@ -353,7 +353,7 @@
 				<div class="groupRadioInfo">
 					<label>有没有人曾代表您向美国公民和移民服务局提交过移民申请</label>
 					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" class="onceImmigration" value="1" />是
-					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" class="onceImmigration" value="2" checked />否
+					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" v-on:click="visaNotfiledimmigrantpetition" class="onceImmigration" value="2" checked />否
 				</div>
 				<div class="immigrationExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
@@ -371,18 +371,18 @@
 				<div class="groupcheckBoxInfo paddingRight">
 					<label>联系人名</label>
 					<input name="lastname" v-model="visaInfo.contactPointInfo.lastname" type="text"  />
-					<input id="isknowname" :value="visaInfo.contactPointInfo.isknowname" name="isknowname" type="checkbox" />
+					<input id="isknowname" v-model="visaInfo.contactPointInfo.isknowname" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknowname" name="isknowname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>组织名称</label>
 					<input id="organizationname" name="organizationname" v-model="visaInfo.contactPointInfo.organizationname" type="text" />
-					<input id="isknoworganizationname" name="isknoworganizationname" v-model="visaInfo.contactPointInfo.isknoworganizationname"  class="groupname_us" type="checkbox" />
+					<input id="isknoworganizationname" name="isknoworganizationname" v-on:click="isKnowOrganizationName" v-model="visaInfo.contactPointInfo.isknoworganizationname"  class="groupname_us" type="checkbox" />
 				</div>
 				<div class="paddingRight groupSelectInfo">
 					<label>与你的关系</label>
 					<select id="ralationship" v-model="visaInfo.contactPointInfo.ralationship" name="ralationship">
-						<option value="0">请选择</option>
+						<option value="0" selected="selected">请选择</option>
 						<c:forEach items="${obj.ContactPointRelationshipStatusEnum }" var="map">
 							<option value="${map.key }">${map.value }</option>
 						</c:forEach>
@@ -1148,8 +1148,19 @@
 							<c:forEach var="gocountry" items="${obj.gocountryList }">
 								<div class="travelCountry paddingTop groupInputInfo">
 									<label>国家/地区</label>
-									<div class="groupInputInfo">
-										<input name="traveledcountry" value="${gocountry.traveledcountry }" type="text" />
+									<div class="groupInputInfo groupSelectInfo">
+									
+										<select name="traveledcountry">
+											<option value="0">请选择</option>
+											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+													<c:if test="${gocountry.traveledcountry != map.key}">
+														<option value="${map.key }">${map.value }</option>
+													</c:if>
+													<c:if test="${gocountry.traveledcountry == map.key}">
+														<option value="${map.key }" selected="selected">${map.value }</option>
+													</c:if>
+											</c:forEach>
+										</select>
 									</div>
 								</div>
 							</c:forEach>
