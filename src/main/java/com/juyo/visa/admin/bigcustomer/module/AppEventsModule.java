@@ -44,6 +44,7 @@ public class AppEventsModule {
 	public Object listData(@Param("..") final TAppEventsForm sqlParamForm, HttpSession session) {
 		return appEventsViewService.listData(sqlParamForm, session);
 	}
+	
 
 	/**
 	 *打开 活动报名页

@@ -63,6 +63,9 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	@Inject
 	private QrCodeService qrCodeService;
 
+	//图片上传后连接websocket的地址
+	private static final String SEND_INFO_WEBSPCKET_ADDR = "simplesendinfosocket";
+
 	/**
 	 * 
 	 * 办理证签证列表页
@@ -290,12 +293,11 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	/**
 	 * 跳转到签证详情页
 	 */
-	public Object visaDetail(Integer orderid, HttpSession session) {
+	public Object visaDetail(Integer orderid, Integer flag, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		String name = loginUser.getName();
 		result.put("orderid", orderid);
-
 		//获取用户资料信息
 		TAppStaffOrderUsEntity orderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
 				Cnd.where("orderid", "=", orderid));
@@ -406,6 +408,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			stateMap.put(e.intKey(), e.value());
 		}
 		result.put("state", stateMap);
+		result.put("flag", flag);
 		return result;
 
 	}
@@ -463,8 +466,10 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	public Object updatePhoto(Integer staffid, HttpServletRequest request, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 
+		//获取sessionid
+		String sessionid = session.getId();
 		TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
-				Cnd.where("id", "=", staffid));
+				Cnd.where("staffid", "=", staffid));
 		if (!Util.isEmpty(passportEntity)) {
 			result.put("passportId", passportEntity.getId());
 		}
@@ -472,15 +477,20 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		String id = session.getId();
 		String serverName = request.getServerName();
 		int serverPort = request.getServerPort();
-		String content = "http://" + serverName + ":" + serverPort + "/appmobileus/USFilming.html?&staffid=" + staffid;
+		result.put("localAddr", serverName);
+		result.put("localPort", serverPort);
+		result.put("websocketaddr", SEND_INFO_WEBSPCKET_ADDR);
+		String content = "http://" + serverName + ":" + serverPort + "/appmobileus/USFilming.html?&staffid=" + staffid
+				+ "&sessionid=" + sessionid;
 		String encodeQrCode = qrCodeService.encodeQrCode(request, content);
 		result.put("encodeQrCode", encodeQrCode);
 		//获取用户基本信息
 		TAppStaffBasicinfoEntity basicInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffid));
-		if (!Util.isEmpty(basicInfo))
+		if (!Util.isEmpty(basicInfo)) {
 			result.put("basicInfo", basicInfo);
-		else
+		} else {
 			result.put("basicInfo", null);
+		}
 		return result;
 	}
 

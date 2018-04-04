@@ -81,7 +81,7 @@ function getDriverList(){
 			driverLength += '';
 		}
 		
-		if(driverLength.length >0){
+		if(driverLength.length >0 || isknownumber==1){
 			driver.staffid = staffId;
 			driver.driverlicensenumber = drivernumber;
 			driver.isknowdrivernumber = isknownumber;
@@ -360,7 +360,18 @@ function getMilitaryInfoList(){
 
 //格式化日期
 function formatDate(dataStr) { 
-	if(dataStr.length>0){
+	 var date = dataStr;
+	 if(date != "" && date != null && date != undefined){
+		 var date = dataStr.split('/');
+			if(date != null || date !="")
+		    var y = date[2];  
+		    var m = date[1];  
+		    var d = date[0];  
+		    return y + '-' + m + '-' + d;  
+	 }else{
+		 return "";
+	 }
+	/*if(dataStr.length>0){
 		var date = dataStr.split('/');
 		if(date != null || date !="")
 	    var y = date[2];  
@@ -369,5 +380,5 @@ function formatDate(dataStr) {
 	    return y + '-' + m + '-' + d;  
 	}else{
 		return null;
-	}
+	}*/
 };

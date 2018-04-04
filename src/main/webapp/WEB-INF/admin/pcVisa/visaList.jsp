@@ -70,6 +70,7 @@
 					</div>
 				</div>
 			</div>
+			<input id="flag" type="hidden" value="0">
 			<!-- end 卡片列表 -->
 		</div>
 		<input type="hidden" id="pageNumber" name="pageNumber" value="1">
@@ -106,7 +107,8 @@
 		        },
 		        methods:{
 		        	toInProcess:function(id,){
-		        		window.location.href = '/admin/pcVisa/visaDetail.html?orderid=' + id;
+		        		var flag = $("#flag").val();
+		        		window.location.href = '/admin/pcVisa/visaDetail.html?orderid=' + id+'&flag='+flag;
 		        	}
 		        }
 			});

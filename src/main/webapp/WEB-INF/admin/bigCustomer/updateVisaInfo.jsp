@@ -145,11 +145,11 @@
 									<div class="goUS_Country">
 										<div class="groupInputInfo">
 											<label>抵达日期</label>
-											<input type="text" id="arrivedate" value="${gous.arrivedate }" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
+											<input type="text" id="arrivedate" value="<fmt:formatDate value="${gous.arrivedate }" pattern="dd/MM/yyyy" />" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
 										</div>
 										<div class="groupInputInfo stopDate goUS_Country">
 											<label>停留时间</label>
-											<input id="staydays" name="staydays" type="text" />
+											<input id="staydays" name="staydays" value="${gous.staydays }" type="text" />
 											<select id="dateunit" name="dateunit">
 												<option value="0">请选择</option>
 												<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
@@ -210,7 +210,7 @@
 												<div class="groupSelectInfo driverR">
 													<label>哪个州的驾照</label>
 													<select id="witchstateofdriver" name="witchstateofdriver">
-														<option value="0">请选择</option>
+														<option value="0" selected="selected">请选择</option>
 														<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
 															<c:if test="${driver.witchstateofdriver != map.key}">
 																<option value="${map.key }">${map.value }</option>
@@ -266,7 +266,7 @@
 						<div class="dateIssue goUS_visa">
 							<div class="groupInputInfo lastVisaDate">
 								<label>最后一次签证的签发日期</label>
-								<input id="issueddate" name="issueddate" v-model="visaInfo.previUSTripInfo.issueddate" class="datetimepickercss" placeholder="日/月/年" type="text"/>
+								<input id="issueddate" name="issueddate" v-model="visaInfo.previUSTripInfo.issueddate" @change="dateChangeissueddate" class="datetimepickercss" placeholder="日/月/年" type="text"/>
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
@@ -381,7 +381,7 @@
 				</div>
 				<div class="paddingRight groupSelectInfo">
 					<label>与你的关系</label>
-					<select id="ralationship"   name="ralationship">
+					<select id="ralationship" v-model="visaInfo.contactPointInfo.ralationship" name="ralationship">
 						<option value="0">请选择</option>
 						<c:forEach items="${obj.ContactPointRelationshipStatusEnum }" var="map">
 							<option value="${map.key }">${map.value }</option>
@@ -853,12 +853,12 @@
 										</div>
 										<div class="paddingRight groupInputInfo" >
 											<label>入职时间</label>
-											<input id="employstartdate" name="employstartdate" value="${beforeWork.employstartdate }" class="datetimepickercss" type="text" placeholder="日/月/年" />
+											<input id="employstartdate" name="employstartdate" value="<fmt:formatDate value="${beforeWork.employstartdate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft groupInputInfo">
 											<label>离职时间</label>
-											<input id="employenddate" name="employenddate" class="datetimepickercss" value="${beforeWork.employenddate }" type="text" placeholder="日/月/年" />
+											<input id="employenddate" name="employenddate" value="<fmt:formatDate value="${beforeWork.employenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
 										<div class="paddingRight grouptextareaInfo">
 											<label>简要描述你的职责</label>
@@ -955,7 +955,7 @@
 				<div class="padding-left">
 					<div class="paddingTop">
 						<div class="groupRadioInfo">
-							<label>是否上过中学或以上的任何教育</label>
+							<label>是否上过高中或以上的任何教育</label>
 							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" class="education" value="1" />是
 							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" class="education" value="2" checked/>否
 						</div>
@@ -1014,11 +1014,11 @@
 										<div class="clear"></div>
 										<div class="paddingLeft groupInputInfo">
 											<label>参加课程开始时间</label>
-											<input id="coursestartdate" name="coursestartdate" value="${education.coursestartdate }" class="datetimepickercss" type="text" placeholder="日/月/年" />
+											<input id="coursestartdate" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
 										<div class="paddingRight groupInputInfo">
 											<label>结束时间</label>
-											<input id="courseenddate" name="courseenddate" value="${education.courseenddate }" class="datetimepickercss" type="text" placeholder="日/月/年" />
+											<input id="courseenddate" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
 									</div>
 								</c:forEach>
@@ -1252,11 +1252,11 @@
 									<div class="clear"></div>
 									<div class="paddingLeft groupInputInfo">
 										<label>服兵役开始时间日期</label>
-										<input id="servicestartdate" name="servicestartdate" value="${conscientious.servicestartdate }" type="text" class="datetimepickercss" placeholder="日/月/年"/>
+										<input id="servicestartdate" name="servicestartdate" value="<fmt:formatDate value="${conscientious.servicestartdate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss" placeholder="日/月/年"/>
 									</div>
 									<div class="paddingRight groupInputInfo">
 										<label>结束时间</label>
-										<input id="serviceenddate" name="serviceenddate" value="${conscientious.serviceenddate }" type="text" class="datetimepickercss" placeholder="日/月/年"/>
+										<input id="serviceenddate" name="serviceenddate" value="<fmt:formatDate value="${conscientious.serviceenddate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss" placeholder="日/月/年"/>
 									</div>
 								</div>
 							</c:forEach>
@@ -1670,6 +1670,10 @@
 	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js -->
 	<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
 	<script type="text/javascript">
+	
+		$(function(){
+			openYesOrNoPage();
+		});
 		//跳转到基本信息页
 		function baseInfoBtn(){
 			//左箭头跳转

@@ -22,8 +22,9 @@ section {
 }
 /*活动图片*/
 .imgActivity {
-	width: 95%;
-	margin: .2rem auto 0;
+	width:100%;
+	/* width: 95%;
+	margin: .2rem auto 0; */
 }
 /*日期截止/出行*/
 .dateTotal {

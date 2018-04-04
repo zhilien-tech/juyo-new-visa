@@ -8,7 +8,6 @@ function uploadPositive(rst, formData, staffid) {
 	formData.append("staffid", staffid);
 	console.log('------------------------------');
 	console.log(formData);
-	console.log(rst.file);
 	/*
 	 * var layerIndex = layer.load(1, { shade : "#000" });
 	 */
@@ -44,10 +43,10 @@ function twonichphoto(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			console.log(data);
 			if (data != null) {
 				if (13 == data.type) {
 					$("#twonichphoto").attr("src", data.url);
@@ -65,10 +64,10 @@ function huzhao(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			console.log(data);
 			if (data != null) {
 				$("#huzhao").attr("src", data.url);
 			}
@@ -84,12 +83,11 @@ function oldhuzhao(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			console.log(data);
-			if (data != null) {
-				
+			if (data != 0) {
 				for(var i=0;i<data.length;i++){
 					var url=data[i].url;
 					$(".beforeInfo").before('<div class="uploadPassports">'+
@@ -111,13 +109,14 @@ function card(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			console.log(data);
-			for(var i=0;i<data.length;i++){
-				var url=data[i].url;
-				$("#card").attr('src',url);
+			if(data!=0){
+					var url=data[0].url;
+					$("#card").attr('src',url);
+					$("#cardBack").attr('src',data[1].url);
 			}
 		}
 	});
@@ -131,11 +130,13 @@ function marray(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			console.log(data);
+			if(data!=null){
 			$("#marray").attr("src",data.url);
+			}
 		}
 	});
 };
@@ -148,11 +149,13 @@ function jobCertificate(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			console.log(data);
+			if(data!=null){
 			$("#jobCertificate").attr("src",data.url);
+			}
 		}
 	});
 };
@@ -165,11 +168,13 @@ function business(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			console.log(data);
+			if(data!=null){
 			$("#business").attr("src",data.url);
+			}
 		}
 	});
 };
@@ -182,11 +187,13 @@ function drive(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			console.log(data);
+			if(data!=null){
 			$("#drive").attr("src",data.url);
+			}
 		}
 	});
 };
@@ -199,11 +206,13 @@ function housecard(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			console.log(data);
+			if(data!=null){
 			$("#housecard").attr("src",data.url);
+			}
 		}
 	});
 };
@@ -216,11 +225,13 @@ function household(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
+		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			console.log(data);
+			if(data!=null){
 			$("#household").attr("src",data.url);
+			}
 		}
 	});
 };

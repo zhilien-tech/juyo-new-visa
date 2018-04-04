@@ -94,6 +94,9 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 @IocBean
 public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	private static final Log log = Logs.get();
+	
+	/**日/月/年格式*/
+	public static final String FORMAT_DD_MM_YYYY = "dd/MM/yyyy";
 
 	@Inject
 	private UploadService qiniuUploadService;//文件上传
@@ -226,11 +229,19 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		travelCompanionInfo.put("companionList", companionList);*/
 		result.put("travelCompanionInfo", travelCompanionInfo);
 
+		
+		
+		
 		//以前的美国旅游信息
 		String sqlStrp = sqlManager.get("pcVisa_previousTrip");
 		Sql sqlp = Sqls.create(sqlStrp);
 		sqlp.setParam("staffid", staffId);
 		Record previUSTripInfo = dbDao.fetch(sqlp);
+		//最后一次签证的签发日期
+		String issueddate = previUSTripInfo.getString("issueddate");
+		issueddate=formatDateStr(issueddate,FORMAT_DD_MM_YYYY);
+		previUSTripInfo.set("issueddate", issueddate);
+		
 		//---去过美国信息集合
 		/*List<TAppStaffGousinfoEntity> gousList = dbDao.query(TAppStaffGousinfoEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
@@ -251,6 +262,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Sql sqlf = Sqls.create(sqlStrf);
 		sqlf.setParam("staffid", staffId);
 		Record familyInfo = dbDao.fetch(sqlf);
+		//格式化配偶生日
+		String spousebirthday = familyInfo.getString("spousebirthday");
+		spousebirthday=formatDateStr(spousebirthday,FORMAT_DD_MM_YYYY);
+		familyInfo.set("spousebirthday", spousebirthday);
+		
 		//---直属亲戚信息集合
 		/*List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
@@ -262,6 +278,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Sql sqlw = Sqls.create(sqlStrw);
 		sqlw.setParam("staffid", staffId);
 		Record workEducationInfo = dbDao.fetch(sqlw);
+		//格式化工作开始日期
+		String workstartdate = workEducationInfo.getString("workstartdate");
+		workstartdate=formatDateStr(workstartdate,FORMAT_DD_MM_YYYY);
+		workEducationInfo.set("workstartdate", workstartdate);
+		
 		/*//---以前工作信息集合
 		List<TAppStaffBeforeworkEntity> beforeWorkList = dbDao.query(TAppStaffBeforeworkEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
@@ -691,7 +712,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	}
 
 	/**
-	 * 更新签证信息
+	 * 更新签证信息 TODO
 	 */
 	public Object updateVisaInfos(String data, HttpServletRequest request) {
 
@@ -743,11 +764,6 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				Cnd.where("staffid", "=", staffId), null);
 		List<TAppStaffGousinfoEntity> gousList_New = JsonUtil.fromJsonAsList(TAppStaffGousinfoEntity.class,
 				gousListJson);
-		for (TAppStaffGousinfoEntity tAppStaffGousinfoEntity : gousList_New) {
-			Date arrivedate = tAppStaffGousinfoEntity.getArrivedate();
-			Date arrivedateen = tAppStaffGousinfoEntity.getArrivedateen();
-
-		}
 		dbDao.updateRelations(gousList_old, gousList_New);
 
 		//美国驾照信息
@@ -1245,6 +1261,14 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			dbDao.insert(credentialsEntity);
 		}
 		return null;
+	}
+	
+	//格式化日期 
+	public String formatDateStr(String dateStr, String formatPattern) {
+		if(!Util.isEmpty(dateStr)) {
+			dateStr = DateUtil.format(dateStr,formatPattern);
+		}
+		return dateStr;
 	}
 
 }

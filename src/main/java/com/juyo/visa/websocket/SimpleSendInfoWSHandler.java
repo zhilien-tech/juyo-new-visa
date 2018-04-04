@@ -126,6 +126,20 @@ public class SimpleSendInfoWSHandler implements WebSocketHandler {
 		}
 	}
 
+	public void sendMsg(final TextMessage message, String sessionid) throws IOException {
+		if (simpleSocketSessionMap.containsKey(sessionid)) {
+			List<WebSocketSession> lst = simpleSocketSessionMap.get(sessionid);
+			if (!Util.isEmpty(lst)) {
+				//多线程群发  TODO
+				for (WebSocketSession wss : lst) {
+					if (wss.isOpen()) {
+						wss.sendMessage(message);
+					}
+				}
+			}
+		}
+	}
+
 	@Override
 	public boolean supportsPartialMessages() {
 		return false;
