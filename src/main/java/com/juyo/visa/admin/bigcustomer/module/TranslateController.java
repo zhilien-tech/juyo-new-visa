@@ -9,6 +9,7 @@ import org.nutz.mvc.annotation.Param;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.juyo.visa.common.util.TranslateUtil;
+import com.uxuexi.core.common.util.Util;
 
 @IocBean
 @At("/admin/translate")
@@ -29,15 +30,34 @@ public class TranslateController {
 
 	@At
 	@POST
-	public Object translate(@Param("q") String q) throws UnsupportedEncodingException {
+	public Object translate(@Param("strType") String type, @Param("q") String q) throws UnsupportedEncodingException {
 
 		String result = null;
 		try {
-			result = TranslateUtil.translate(q, "en");
+			if (Util.eq(type, "addressen") || Util.eq(type, "detailedAddressen")) {
+				StringBuilder sb = new StringBuilder(q);//构造一个StringBuilder对象
+				if (q.contains("省")) {
+					sb.insert(sb.toString().indexOf("省") + 1, "/");
+				}
+				if (q.contains("市")) {
+					sb.insert(sb.toString().indexOf("市") + 1, "/");
+				}
+				if (q.contains("区")) {
+					sb.insert(sb.toString().indexOf("区") + 1, "/");
+				}
+				if (q.contains("县")) {
+					sb.insert(sb.toString().indexOf("县") + 1, "/");
+				}
+				String translateStr = TranslateUtil.translate(sb.toString(), "en");
+				result = translateStr.replaceAll("/", ",");
+			} else {
+				result = TranslateUtil.translate(q, "en");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		//return ResultObject.success(result);
 		return result;
 	}
+
 }
