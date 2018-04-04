@@ -309,7 +309,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid));
 		Integer passportId = passportEntity.getId();
 		result.put("passportId", passportId);
-
+		result.put("passportInfo", passportEntity);
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		if (!Util.isEmpty(orderTravelInfo)) {
 
@@ -403,6 +403,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 				result.put("summaryInfo", null);
 			}
 		}
+		//送签美国州
 		Map<Integer, String> stateMap = new HashMap<Integer, String>();
 		for (VisaUSStatesEnum e : VisaUSStatesEnum.values()) {
 			stateMap.put(e.intKey(), e.value());
