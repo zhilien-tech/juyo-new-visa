@@ -16,7 +16,7 @@
 		<input id="staffid" type="hidden" value="${obj.basicInfo.id }">
 		<input id="passportId" type="hidden" value="${obj.passportId }">
 		<div class="btnGroup">
-			<a class="btnSave" onclick="nextWindow()">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
+			<a class="btnSave" onclick="savePhoto()">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
 		</div>
 	</div>
 	

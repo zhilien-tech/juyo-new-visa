@@ -243,11 +243,13 @@ function closeWindow() {
 }
 
 // 保存跳转下一页
-function nextWindow() {
+function savePhoto() {
 	/*var staffid = $("#staffid").val();
 	var passportId = $("#passportId").val();
 	window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='
 			+ passportId;*/
+	var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+	parent.layer.close(index);
 }
 
 /* 删除二寸免冠照 */
