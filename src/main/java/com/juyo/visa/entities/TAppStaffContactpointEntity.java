@@ -123,5 +123,13 @@ public class TAppStaffContactpointEntity implements Serializable {
 	@Column
 	@Comment("电话(英文)")
 	private String telephoneen;
+	
+	@Column
+    @Comment("是否知道邮箱")
+	private Integer isknowemail;
+	
+	@Column
+    @Comment("是否知道邮箱(英文)")
+	private Integer isknowemailen;
 
 }

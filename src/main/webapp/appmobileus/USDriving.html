@@ -48,7 +48,9 @@
 				dataType : "json",
 				type : 'post',
 				success : function(data) {
-					$(".pageImg").attr("src",data.url);
+					if(data ! = null){
+						$(".pageImg").attr("src",data.url);
+					}
 				}
 			});
 		}

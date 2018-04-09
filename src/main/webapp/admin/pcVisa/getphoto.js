@@ -200,7 +200,7 @@ function drive(staffid, type) {
 //房产证回显
 function housecard(staffid, type) {
 	$.ajax({
-		url : "/admin/mobileVisa/getInfoByType.html",
+		url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
 		data : {
 			type : type,
 			staffid : staffid,
@@ -211,7 +211,13 @@ function housecard(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
-			$("#housecard").attr("src",data.url);
+				for(var i = 0;i<data.length;i++){
+				$(".housecard").after('<div class="uploadReleases housecard" >'+
+					'<div>上传</div>'+
+					'<img src="'+data[i].url+'" class="longitudinal"/>'+
+				'</div>');
+				}
+				$(".1").remove();
 			}
 		}
 	});
@@ -219,7 +225,7 @@ function housecard(staffid, type) {
 //户口回显
 function household(staffid, type) {
 	$.ajax({
-		url : "/admin/mobileVisa/getInfoByType.html",
+		url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
 		data : {
 			type : type,
 			staffid : staffid,
@@ -230,7 +236,15 @@ function household(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
-			$("#household").attr("src",data.url);
+			//	console.log(data);
+			//$("#household").attr("src",data.url);
+				$(".householdBack").next().remove();
+				for(var i = 0;i<data.length;i++){
+					$(".householdBack").after('<div class="uploadReleases" >'+
+					'<div>户主页</div>'+
+					'<img src="'+data[i].url+'" class="longitudinal" />'+
+				'</div>');
+				}
 			}
 		}
 	});
@@ -243,11 +257,13 @@ function closeWindow() {
 }
 
 // 保存跳转下一页
-function nextWindow() {
+function savePhoto() {
 	/*var staffid = $("#staffid").val();
 	var passportId = $("#passportId").val();
 	window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='
 			+ passportId;*/
+	var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+	parent.layer.close(index);
 }
 
 /* 删除二寸免冠照 */

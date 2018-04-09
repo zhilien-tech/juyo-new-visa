@@ -41,8 +41,8 @@ $(".goUS").change(function(){
 		$(".goUSInfo").show();
 	}else{
 		$(".goUSInfo").hide();
-		deleteBrotherEle($("div.goUS_Country"));
-		emptyContentByObj($("div.goUS_Country"));
+		deleteBrotherEle($("div.goUS_CountryDiv"));
+		emptyContentByObj($("div.goUS_CountryDiv"));
 		//触发单选按钮的点击事件
 		$(".license").eq(1).click();
 	}

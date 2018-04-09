@@ -32,6 +32,7 @@ new Vue({
 				area: ['900px', '80%'],
 				content:'/admin/pcVisa/updatePhoto.html?staffid='+id
 			});
+			this.$emit('updatePhoto');
 		},
 		//基本信息
 		baseInfo : function(id){

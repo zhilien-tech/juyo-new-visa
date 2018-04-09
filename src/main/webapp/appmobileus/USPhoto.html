@@ -56,7 +56,9 @@
 					dataType : "json",
 					type : 'post',
 					success : function(data) {
-						$(".uploadPhotoReady").attr("src",data.url);
+						if(data != null){
+							$(".uploadPhotoReady").attr("src",data.url);
+						}
 					}
 				});
 			}
