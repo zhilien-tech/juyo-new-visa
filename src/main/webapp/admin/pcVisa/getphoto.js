@@ -225,7 +225,7 @@ function housecard(staffid, type) {
 //户口回显
 function household(staffid, type) {
 	$.ajax({
-		url : "/admin/mobileVisa/getInfoByType.html",
+		url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
 		data : {
 			type : type,
 			staffid : staffid,
@@ -236,7 +236,15 @@ function household(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
-			$("#household").attr("src",data.url);
+			//	console.log(data);
+			//$("#household").attr("src",data.url);
+				$(".householdBack").next().remove();
+				for(var i = 0;i<data.length;i++){
+					$(".householdBack").after('<div class="uploadReleases" >'+
+					'<div>户主页</div>'+
+					'<img src="'+data[i].url+'" class="longitudinal" />'+
+				'</div>');
+				}
 			}
 		}
 	});

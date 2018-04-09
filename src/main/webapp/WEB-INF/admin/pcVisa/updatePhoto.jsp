@@ -105,7 +105,7 @@
 			<div class="sectionHead">户口本</div>
 			<div class="explain"></div>
 			<div class="imgInfoRight">
-				<div class="sampleReleaseImg">
+				<div class="sampleReleaseImg householdBack">
 					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<!-- <div class="beforeHuKouInfo"></div> -->
