@@ -79,7 +79,9 @@
 					dataType : "json",
 					type : 'post',
 					success : function(data) {
-						$(".uploadImgFace").attr("src",data.url);
+						if(data != null){
+							$(".uploadImgFace").attr("src",data.url);
+						}
 					}
 				});
 			}
@@ -94,7 +96,9 @@
 					dataType : "json",
 					type : 'post',
 					success : function(data) {
-						$(".uploadImgBack").attr("src",data.url);
+						if(data != null){
+							$(".uploadImgBack").attr("src",data.url);
+						}
 					}
 				});
 			}

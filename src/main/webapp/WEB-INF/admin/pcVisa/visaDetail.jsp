@@ -129,7 +129,7 @@
 									<div class="form-group">
 										<label><span></span>预计出发日期：</label> <input id="goDate"
 											name="godate" type="text"
-											class="form-format input-sm datetimepickercss"
+											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.godate }" pattern="yyyy-MM-dd" />" />
 									</div>
 								</div>
@@ -139,7 +139,7 @@
 									<div class="form-group">
 										<label><span></span>抵达美国日期：</label> <input id="sendVisaDate"
 											name="arrivedate" type="text"
-											class="form-format input-sm datetimepickercss"
+											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.arrivedate }" pattern="yyyy-MM-dd" />" />
 									</div>
 								</div>
@@ -158,7 +158,7 @@
 									<div class="form-group">
 										<label><span></span>离开美国日期：</label> <input id="returnDate"
 											name="leavedate" type="text"
-											class="form-format input-sm datetimepickercss"
+											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.leavedate }" pattern="yyyy-MM-dd" />" />
 									</div>
 								</div>
