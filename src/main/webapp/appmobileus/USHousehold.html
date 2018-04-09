@@ -118,8 +118,10 @@
 				type : 'post',
 				async:false,
 				success : function(data) {
-					$(".homePage").remove();
-					$(".vicePage").remove();
+					if(data != ""){
+						$(".homePage").remove();
+						$(".vicePage").remove();
+					}
 					console.log(data);
 					for(var i=0;i<data.length;i++){
 						var url=data[i].url;
@@ -183,7 +185,7 @@
 	    }
 		
 		//上传图片
-		function uploadPositive(rst, formData,staffid,mainid,sequence,sessionid){
+		function uploadPositive(rst,formData,staffid,mainid,sequence,sessionid,that){
 			if(!formData){
 				formData = new FormData();
 			}
@@ -213,7 +215,7 @@
 					//关闭加载层
 					if (obj!=null) {
 						layer.msg("上传成功");
-						location.reload();
+						$(that).prev().attr("src",obj);
 					}
 				},
 				error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -229,12 +231,13 @@
 			$(".viceFile").change(function(){
 				var mainid = $(this).attr("name");
 				var sequence = $(this).attr("id");
+				var that = this;
 				layer.load(1,{
 					shade : "#000"
 				});
 				var that = this;
 			        lrz(this.files[0]).then(function (rst) {
-			        	uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid); 
+			        	uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,that); 
 			        }).catch(function (err) {
 			            console.log(err);
 			        });
