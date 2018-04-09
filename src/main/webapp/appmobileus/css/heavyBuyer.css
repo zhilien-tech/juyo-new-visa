@@ -12,6 +12,7 @@ header {
 }
 .title {
 	border-bottom: 2px solid #eee;
+	font-size:.4rem;
 }
 /*内容*/
 section {
@@ -192,4 +193,12 @@ footer {
 }
 .code img {
 	display: inline-block;
+}
+.activeInfo {
+	font-size:.3rem;
+	padding:.4rem;
+}
+.activeInfo li {
+	text-indent:.6rem;
+	margin-bottom:.2rem;
 }
