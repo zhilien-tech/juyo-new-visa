@@ -72,7 +72,7 @@
 						<div class="card-list"  v-cloak v-for="data in orderUSListData"><!-- v-cloak v-for="data in receptionJpData" -->
 							<div class="card-head cf">
 								<div><label>订单号：</label><span>{{data.ordernumber}}</span></div>
-								<div><label>领区：</label><span>{{data.cityid}}</span></div>
+								<div class="ctid"><label>领区：</label><span>{{data.cityid}}</span></div>
 								<div><label>面试时间：</label><span></span></div>
 								<div><label>是否付款：</label><span>{{data.ispayed}}</span></div>
 								<div><label></label><span>{{data.orderstatus}}</span>
@@ -81,7 +81,7 @@
 									<label>操作：</label>
 									<div v-if="data.opid == null">
 										<i class="edit" v-on:click="toDetail(data.orderid)" > </i>
-										<i class="toSure" v-on:click="toMyself(data.orderid)" >认领 </i>
+										<i class="toSure" v-on:click="toMyself(data.orderid)" ></i>
 									</div>
 									<div v-else>
 										<i class="edit" v-on:click="toDetail(data.orderid)" > </i>
@@ -98,7 +98,7 @@
 										<div><label>资料类型：</label><span>{{data.type}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div><span>签证录入</span></div>
+										<div><a class="visaInputUS" v-on:click="visaInput(data.staffid, data.orderid)">签证录入</a></div>
 									</span>
 								</li>
 							</ul>

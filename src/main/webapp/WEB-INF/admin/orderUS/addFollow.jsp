@@ -5,7 +5,7 @@
 <html lang="en-US" id="addHtml">
 <head>
 	<meta charset="UTF-8">
-	<title>销售 - 日志</title>
+	<title>加跟进</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
@@ -24,7 +24,10 @@
 				<span class="heading">加跟进</span>
 					<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 					<input id="saveBtn" type="button" onclick="saveFollow('${obj.orderid}')" style="margin:10px 10px 0 10px;" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="保存" /> 
-				<input id="content" name="content" type="textarea" >
+			</div>
+			<div class="modal-body">
+				<p><span style="color:red;">*</span>跟进内容</p>
+				<textarea rows="" cols="" id="content" name="content" style="width:100%;height:200px;"></textarea>
 			</div>
 	</div>
 

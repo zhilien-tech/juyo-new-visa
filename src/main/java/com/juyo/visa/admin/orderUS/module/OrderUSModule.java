@@ -28,6 +28,8 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.forms.OrderUpdateForm;
+import com.juyo.visa.forms.TAppStaffVisaUsAddForm;
+import com.juyo.visa.forms.TAppStaffVisaUsUpdateForm;
 
 /**
  * 美国订单US
@@ -87,6 +89,72 @@ public class OrderUSModule {
 	@POST
 	public Object toMyself(@Param("orderid") int orderid, HttpSession session) {
 		return orderUSViewService.toMyself(orderid, session);
+	}
+
+	/**
+	 * 跳转到签证录入页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object visaInput(@Param("staffid") int staffid, @Param("orderid") int orderid, HttpSession session) {
+		return orderUSViewService.visaInfo(staffid, orderid, session);
+	}
+
+	/**
+	 * 获取签证录入页面数据
+	 */
+	@At
+	@POST
+	public Object getVisaInfoData(@Param("staffid") int staffid) {
+		return orderUSViewService.getVisaInfoData(staffid);
+	}
+
+	/**
+	 * 跳转到签证录入修改页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object visaInputUpdate(@Param("id") int id, @Param("orderid") int orderid) {
+		return orderUSViewService.visaInputUpdate(id, orderid);
+	}
+
+	/**
+	 * 删除签证录入
+	 */
+	@At
+	@POST
+	public Object deleteVisainput(@Param("id") int id) {
+		return orderUSViewService.deleteVisainput(id);
+	}
+
+	/**
+	 * 跳转到添加签证录入页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object visaInputAdd(@Param("staffid") int staffid, @Param("orderid") int orderid) {
+		return orderUSViewService.visaInputAdd(staffid, orderid);
+	}
+
+	/**
+	 * 保存签证录入添加
+	 */
+	@At
+	@POST
+	public Object addVisainput(@Param("..") TAppStaffVisaUsAddForm addForm, HttpSession session) {
+		return orderUSViewService.addVisainput(addForm, session);
+	}
+
+	/**
+	 * 保存签证录入修改信息
+	 */
+	@At
+	@POST
+	public Object updateVisainput(@Param("..") TAppStaffVisaUsUpdateForm updateForm, HttpSession session) {
+		return orderUSViewService.updatedata(updateForm, session);
 	}
 
 	/**
@@ -159,8 +227,8 @@ public class OrderUSModule {
 	@At
 	@POST
 	public Object sendShareMsg(@Param("staffId") Integer staffId, @Param("orderid") Integer orderid,
-			HttpServletRequest request) {
-		return orderUSViewService.sendShareMsg(staffId, orderid, request);
+			@Param("sendType") String sendType, HttpServletRequest request) {
+		return orderUSViewService.sendShareMsg(staffId, orderid, sendType, request);
 	}
 
 	/**
@@ -188,6 +256,16 @@ public class OrderUSModule {
 	@POST
 	public Object orderSave(@Param("..") OrderUpdateForm form, HttpSession session) {
 		return orderUSViewService.orderSave(form, session);
+	}
+
+	/**
+	 * 跳转到通知页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object notice(@Param("orderid") int orderid, @Param("staffid") int staffid, HttpSession session) {
+		return orderUSViewService.toNotice(orderid, staffid, session);
 	}
 
 	/**

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -47,6 +48,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.springframework.web.socket.TextMessage;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
@@ -56,6 +58,7 @@ import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JapanPrincipalChangeEnum;
 import com.juyo.visa.common.enums.USOrderStatusEnum;
@@ -72,12 +75,15 @@ import com.juyo.visa.common.util.PinyinTool.Type;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
+import com.juyo.visa.entities.TAppStaffVisaUsEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TOrderUsFollowupEntity;
 import com.juyo.visa.entities.TOrderUsLogsEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.OrderUpdateForm;
+import com.juyo.visa.forms.TAppStaffVisaUsAddForm;
+import com.juyo.visa.forms.TAppStaffVisaUsUpdateForm;
 import com.juyo.visa.websocket.USListWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
@@ -248,7 +254,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//跟进信息
 		String followSqlstr = sqlManager.get("orderUS_getFollows");
 		Sql followSql = Sqls.create(followSqlstr);
-		followSql.setParam("id", userid);
+		followSql.setParam("id", orderid);
 		List<Record> followList = dbDao.query(followSql, null, null);
 		//格式化日期
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_FULLPART_PATTERN);
@@ -304,7 +310,140 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		orderus.setOpid(loginUser.getId());
+		orderus.setUpdatetime(new Date());
 		dbDao.update(orderus);
+		return null;
+	}
+
+	public Object visaInfo(int staffid, int orderid, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("staffid", staffid);
+		result.put("orderid", orderid);
+		return result;
+	}
+
+	public Object getVisaInfoData(int staffid) {
+		Map<String, Object> result = Maps.newHashMap();
+		List<TAppStaffVisaUsEntity> visainfoList = dbDao.query(TAppStaffVisaUsEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		List<Map<String, Object>> visainputmaps = Lists.newArrayList();
+		for (TAppStaffVisaUsEntity VisaJpEntity : visainfoList) {
+			DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+			Map<String, Object> visainputmap = Maps.newHashMap();
+			if (!Util.isEmpty(VisaJpEntity.getVisadate())) {
+				visainputmap.put("visadatestr", format.format(VisaJpEntity.getVisadate()));
+			}
+			if (!Util.isEmpty(VisaJpEntity.getValiddate())) {
+				visainputmap.put("validdatestr", format.format(VisaJpEntity.getValiddate()));
+			}
+			String visatypestr = "";
+			if (!Util.isEmpty(VisaJpEntity.getVisatype())) {
+				for (AlredyVisaTypeEnum typeEnum : AlredyVisaTypeEnum.values()) {
+					if (VisaJpEntity.getVisatype().equals(typeEnum.intKey())) {
+						visatypestr = typeEnum.value();
+					}
+				}
+			}
+			visainputmap.put("visatypestr", visatypestr);
+			visainputmap.putAll(obj2Map(VisaJpEntity));
+			visainputmaps.add(visainputmap);
+		}
+		result.put("visaInputData", visainputmaps);
+		return result;
+	}
+
+	private static Map<String, String> obj2Map(Object obj) {
+
+		Map<String, String> map = new HashMap<String, String>();
+		// System.out.println(obj.getClass());  
+		// 获取f对象对应类中的所有属性域  
+		Field[] fields = obj.getClass().getDeclaredFields();
+		for (int i = 0, len = fields.length; i < len; i++) {
+			String varName = fields[i].getName();
+			varName = varName.toLowerCase();//将key置为小写，默认为对象的属性  
+			try {
+				// 获取原来的访问控制权限  
+				boolean accessFlag = fields[i].isAccessible();
+				// 修改访问控制权限  
+				fields[i].setAccessible(true);
+				// 获取在对象f中属性fields[i]对应的对象中的变量  
+				Object o = fields[i].get(obj);
+				if (o != null)
+					map.put(varName, o.toString());
+				// System.out.println("传入的对象中包含一个如下的变量：" + varName + " = " + o);  
+				// 恢复访问控制权限  
+				fields[i].setAccessible(accessFlag);
+			} catch (IllegalArgumentException ex) {
+				ex.printStackTrace();
+			} catch (IllegalAccessException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return map;
+	}
+
+	public Object visaInputUpdate(int id, int orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("visadatatypeenum", EnumUtil.enum2(AlredyVisaTypeEnum.class));
+		TAppStaffVisaUsEntity staffvisaus = dbDao.fetch(TAppStaffVisaUsEntity.class, id);
+		result.put("staffvisa", staffvisaus);
+		result.put("staffid", staffvisaus.getStaffid());
+		result.put("orderid", orderid);
+		return result;
+	}
+
+	public Object updatedata(TAppStaffVisaUsUpdateForm updateForm, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userId = loginUser.getId();
+		TAppStaffVisaUsEntity fetch = dbDao.fetch(TAppStaffVisaUsEntity.class, updateForm.getId());
+		fetch.setStaydays(updateForm.getStaydays());
+		fetch.setUpdatetime(new Date());
+		fetch.setValiddate(updateForm.getValiddate());
+		fetch.setVisaaddress(updateForm.getVisaaddress());
+		fetch.setVisacountry(updateForm.getVisacountry());
+		fetch.setVisadate(updateForm.getVisadate());
+		fetch.setVisanum(updateForm.getVisanum());
+		fetch.setVisatype(updateForm.getVisatype());
+		fetch.setVisayears(updateForm.getVisayears());
+		fetch.setPicurl(updateForm.getPicurl());
+		//fetch.setVisaEntrytime(new Date());
+		return dbDao.update(fetch);
+	}
+
+	public Object deleteVisainput(int id) {
+		TAppStaffVisaUsEntity fetch = dbDao.fetch(TAppStaffVisaUsEntity.class, id);
+		dbDao.delete(fetch);
+		return JsonResult.success("删除成功");
+	}
+
+	public Object visaInputAdd(int staffid, int orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("visadatatypeenum", EnumUtil.enum2(AlredyVisaTypeEnum.class));
+		result.put("orderid", orderid);
+		result.put("staffid", staffid);
+		return result;
+	}
+
+	public Object addVisainput(TAppStaffVisaUsAddForm addForm, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
+		TAppStaffVisaUsEntity visaus = new TAppStaffVisaUsEntity();
+		visaus.setCreatetime(new Date());
+		visaus.setOpid(userid);
+		visaus.setPicurl(addForm.getPicurl());
+		visaus.setRealinfo(addForm.getRealinfo());
+		visaus.setStaffid(addForm.getStaffid());
+		visaus.setStaydays(addForm.getStaydays());
+		visaus.setUpdatetime(new Date());
+		visaus.setValiddate(addForm.getValiddate());
+		visaus.setVisaaddress(addForm.getVisaaddress());
+		visaus.setVisacountry(addForm.getVisacountry());
+		visaus.setVisadate(addForm.getVisadate());
+		visaus.setVisaentrytime(addForm.getVisaentrytime());
+		visaus.setVisanum(addForm.getVisanum());
+		visaus.setVisatype(addForm.getVisatype());
+		visaus.setVisayears(addForm.getVisayears());
+		dbDao.insert(visaus);
 		return null;
 	}
 
@@ -472,32 +611,65 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return null;
 	}
 
+	/**
+	 * 点击订单详情中的通过按钮，改变订单状态为通过
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid 订单id
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object passUS(int orderid, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userid = loginUser.getId();
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		orderus.setStatus(USOrderListStatusEnum.TONGGUO.intKey());
+		orderus.setUpdatetime(new Date());
 		dbDao.update(orderus);
 		insertLogs(orderid, USOrderListStatusEnum.TONGGUO.intKey(), userid);
 		return null;
 	}
 
+	/**
+	 * 点击订单详情中的拒签按钮，改变订单状态为拒绝
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid 订单id
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object refuseUS(int orderid, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userid = loginUser.getId();
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		orderus.setStatus(USOrderListStatusEnum.JUJUE.intKey());
+		orderus.setUpdatetime(new Date());
 		dbDao.update(orderus);
 		insertLogs(orderid, USOrderListStatusEnum.JUJUE.intKey(), userid);
 		return null;
 	}
 
+	/**
+	 * 保存订单并返回
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object orderSave(OrderUpdateForm form, HttpSession session) {
 		Integer orderid = form.getOrderid();
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
 		orderus.setCityid(form.getCityid());
 		orderus.setIspayed(form.getIspayed());
 		orderus.setGroupname(form.getGroupname());
+		orderus.setUpdatetime(new Date());
 		dbDao.update(orderus);
 		//消息通知
 		try {
@@ -506,6 +678,24 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * 跳转到通知页面
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid 订单id
+	 * @param staffid 人员id
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object toNotice(int orderid, int staffid, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("orderid", orderid);
+		result.put("staffid", staffid);
+		return result;
 	}
 
 	//根据人员id添加订单
@@ -572,16 +762,38 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @param mobileUrl 手机号
 	 * @return 
 	 */
-	public Object sendShareMsg(Integer staffId, Integer orderid, HttpServletRequest request) {
+	public Object sendShareMsg(Integer staffId, Integer orderid, String sendType, HttpServletRequest request) {
 
 		String pcUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin";
 
 		if (!Util.isEmpty(staffId)) {
 			try {
 				//发送短信
-				sendSMSUS(staffId, orderid, "orderustemp/order_us_share_sms.txt");
+				//分享
+				if (Util.eq(sendType, "share")) {
+					sendSMSUS(staffId, orderid, sendType, "orderustemp/order_us_share_sms.txt");
+				}
+				//合格
+				if (Util.eq(sendType, "qualified")) {
+					sendSMSUS(staffId, orderid, sendType, "orderustemp/order_us_qualified_sms.txt");
+				}
+				//面试
+				if (Util.eq(sendType, "interview")) {
+					sendSMSUS(staffId, orderid, sendType, "orderustemp/order_us_interview_sms.txt");
+				}
 				//发送邮件
-				sendEmailUS(staffId, orderid, pcUrl, "orderustemp/order_us_share_mail.html");
+				//分享
+				if (Util.eq(sendType, "share")) {
+					sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/order_us_share_mail.html");
+				}
+				//合格
+				if (Util.eq(sendType, "qualified")) {
+					sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/order_us_qualified_mail.html");
+				}
+				//面试
+				if (Util.eq(sendType, "interview")) {
+					sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/order_us_interview_mail.html");
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -592,7 +804,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//发送邮件
-	public Object sendEmailUS(Integer staffId, Integer orderid, String pcUrl, String mailTemplate) throws IOException {
+	public Object sendEmailUS(Integer staffId, Integer orderid, String pcUrl, String sendType, String mailTemplate)
+			throws IOException {
 		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(mailTemplate));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
@@ -619,17 +832,29 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				sex = "女士";
 			}*/
 			sex = "先生/女士";
-
-			emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-					.replace("${telephone}", telephone).replace("${pcUrl}", pcUrl);
-			result = mailService.send(toEmail, emailText, "美国订单分享", MailService.Type.HTML);
+			//分享
+			if (Util.eq(sendType, "share")) {
+				emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+						.replace("${telephone}", telephone).replace("${pcUrl}", pcUrl);
+				result = mailService.send(toEmail, emailText, "美国订单分享", MailService.Type.HTML);
+			}
+			//合格
+			if (Util.eq(sendType, "qualified")) {
+				emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum);
+				result = mailService.send(toEmail, emailText, "美国订单合格", MailService.Type.HTML);
+			}
+			//面试
+			if (Util.eq(sendType, "interview")) {
+				emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum);
+				result = mailService.send(toEmail, emailText, "美国面试通知", MailService.Type.HTML);
+			}
 		}
 
 		return result;
 	}
 
 	//发送短信
-	public Object sendSMSUS(Integer staffId, Integer orderid, String smsTemplate) throws IOException {
+	public Object sendSMSUS(Integer staffId, Integer orderid, String sendType, String smsTemplate) throws IOException {
 		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(smsTemplate));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
@@ -652,9 +877,25 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			TOrderUsEntity order = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
 			String orderNum = order.getOrdernumber();
 			String smsContent = tmp.toString();
-			smsContent = smsContent.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-					.replace("${mobileUrl}", telephone).replace("${email}", email);
-			result = sendSMS(telephone, smsContent);
+
+			//分享
+			if (Util.eq(sendType, "share")) {
+				smsContent = smsContent.replace("${name}", name).replace("${sex}", sex)
+						.replace("${ordernum}", orderNum).replace("${mobileUrl}", telephone).replace("${email}", email);
+				result = sendSMS(telephone, smsContent);
+			}
+			//合格
+			if (Util.eq(sendType, "qualified")) {
+				smsContent = smsContent.replace("${name}", name).replace("${sex}", sex)
+						.replace("${ordernum}", orderNum);
+				result = sendSMS(telephone, smsContent);
+			}
+			//面试
+			if (Util.eq(sendType, "interview")) {
+				smsContent = smsContent.replace("${name}", name).replace("${sex}", sex)
+						.replace("${ordernum}", orderNum);
+				result = sendSMS(telephone, smsContent);
+			}
 		}
 
 		return result;

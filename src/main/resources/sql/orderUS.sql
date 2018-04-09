@@ -51,6 +51,7 @@ INNER JOIN (
 /*orderUS_listData_staff*/
 SELECT
 	tasb.id staffid,
+	tasou.id orderid,
 	CONCAT(tasp.firstname, tasp.lastname) applicantname ,
 	tasb.telephone,
 	tasb.email,
@@ -89,6 +90,7 @@ SELECT
 FROM
 	t_order_us_followup touf
 	LEFT JOIN t_user tu ON touf.userid = tu.id
+	LEFT JOIN t_order_us tou ON tou.id = touf.orderid
 WHERE
-	tu.id = @id
+	tou.id = @id
 	ORDER BY touf.createtime DESC

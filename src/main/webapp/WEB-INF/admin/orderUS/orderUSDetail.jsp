@@ -554,6 +554,8 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script src="${base}/admin/pcVisa/updatePhoto.js"></script>
 	<script type="text/javascript">
+		var staffid = '${obj.basicinfo.id}';
+		var orderid = '${obj.orderinfo.id}';
 		$(".form-format").datetimepicker({
 			format : "yyyy-mm-dd",
 			showMeridian : true,
@@ -912,8 +914,25 @@
 				content:'/admin/orderUS/log.html?orderid='+orderid
 			});
 		}
+		
 		//通知
 		function sendEmailUS(){
+			var staffid = '${obj.basicinfo.id}';
+			var orderid = '${obj.orderinfo.id}';
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['800px', '400px'],
+				content: '/admin/orderUS/notice.html?orderid='+orderid+'&staffid='+staffid
+			});
+		}
+		//通知
+		/* function sendEmailUS(){
 			var staffid = '${obj.basicinfo.id}';
 			var orderid = '${obj.orderinfo.id}';
 			layer.load(1);
@@ -933,7 +952,7 @@
 					}
 				}
 			});
-		}
+		} */
 		
 		//刷新订单状态
 		function dataReload(){
@@ -955,8 +974,8 @@
 							if(followinfos[i].status == 1){
 								Str += '<li> <div class="dateNameBtn">'+
 								'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
-								'<span class="nameInfo">'+followinfos[i].name+'</span>'+
-								'<span>'+followinfos[i].solvetime+'</span>由<span>'+followinfos[i].solveid+'</span>解决</span></div>'+
+								'<span class="nameInfo">'+followinfos[i].name+'</span>&nbsp;'+
+								'<span>'+followinfos[i].solvetime+'</span>&nbsp;&nbsp;由&nbsp;&nbsp;<span>'+followinfos[i].solveid+'</span>&nbsp;&nbsp;解决&nbsp;&nbsp;</span></div>'+
 								'<div class="errorInfo">'+
 								'<span>'+followinfos[i].content+'</span></div></li>';
 							}else{
@@ -992,7 +1011,7 @@
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['800px', '400px'],
+				area: ['800px', '40%'],
 				content: '/admin/orderUS/addFollow.html?orderid='+orderid
 			});
 		}
