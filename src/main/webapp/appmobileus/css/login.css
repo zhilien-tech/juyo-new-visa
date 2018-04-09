@@ -16,7 +16,7 @@ a, body, center, cite, code, dd, del, div, dl, dt, em, fieldset, figcaption, fig
                 list-style-type: none;
                 width: 100%;
                 position: absolute;
-                bottom: 22%;
+                top: 47%;
                 left: 0;
             }
             .video_list>li{
@@ -27,7 +27,7 @@ a, body, center, cite, code, dd, del, div, dl, dt, em, fieldset, figcaption, fig
                 margin-left: 1%;
                 margin-top: 1%;
                 position: relative;
-                margin-bottom: 5%;
+                margin-bottom: 7.5%;
             }
             .video_list>li>div{
                 position: absolute;
@@ -48,10 +48,14 @@ a, body, center, cite, code, dd, del, div, dl, dt, em, fieldset, figcaption, fig
             .bgImg img {
             	width: 100%;
             	height: 100%;
+            	position:absolute;
+            	left:0;
+            	top:0;
+            	z-index:-1;
             }
             .btnGroupImg {
-        		width: 100px;
-        		height: 34px;
+        		width: 110px;
+        		height: 38px;
         		display: inline-block;
         	}
         	.iconHD {
