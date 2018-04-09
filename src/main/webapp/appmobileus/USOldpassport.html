@@ -116,15 +116,17 @@
 					type : 'post',
 					success : function(data) {
 						/* $(".uploadImgReady").attr("src",data.url); */
-						for(var i=0;i<data.length;i++){
-							var url=data[i].url;
-							$(".passportSetImage").before('<div class="passportShoot">'+
-									'<div class="uploadPassport">'+
-									'<p>上传旧护照</p>'+
-									'<img src="'+url+'" class="uploadImgReady" />'+
-									'</div>'+
-									'</div>');
-						}	
+						if(data != null){
+							for(var i=0;i<data.length;i++){
+								var url=data[i].url;
+								$(".passportSetImage").before('<div class="passportShoot">'+
+										'<div class="uploadPassport">'+
+										'<p>上传旧护照</p>'+
+										'<img src="'+url+'" class="uploadImgReady" />'+
+										'</div>'+
+										'</div>');
+							}	
+						}
 					}
 				})
 			}

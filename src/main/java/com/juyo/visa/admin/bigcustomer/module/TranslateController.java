@@ -59,4 +59,5 @@ public class TranslateController {
 		//return ResultObject.success(result);
 		return result;
 	}
+
 }

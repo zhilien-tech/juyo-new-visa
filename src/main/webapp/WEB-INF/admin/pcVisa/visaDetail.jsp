@@ -129,7 +129,7 @@
 									<div class="form-group">
 										<label><span></span>预计出发日期：</label> <input id="goDate"
 											name="godate" type="text"
-											class="form-format input-sm datetimepickercss"
+											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.godate }" pattern="yyyy-MM-dd" />" />
 									</div>
 								</div>
@@ -139,7 +139,7 @@
 									<div class="form-group">
 										<label><span></span>抵达美国日期：</label> <input id="sendVisaDate"
 											name="arrivedate" type="text"
-											class="form-format input-sm datetimepickercss"
+											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.arrivedate }" pattern="yyyy-MM-dd" />" />
 									</div>
 								</div>
@@ -158,7 +158,7 @@
 									<div class="form-group">
 										<label><span></span>离开美国日期：</label> <input id="returnDate"
 											name="leavedate" type="text"
-											class="form-format input-sm datetimepickercss"
+											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.leavedate }" pattern="yyyy-MM-dd" />" />
 									</div>
 								</div>
@@ -412,7 +412,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>姓名/拼音</label> <input disabled="true"
-													value="${obj.username }" type="text"
+													value="${obj.passportInfo.firstname }${obj.passportInfo.lastname }/${obj.passportInfo.firstnameen } ${obj.passportInfo.lastnameen }" type="text"
 													class="form-control input-sm" />
 											</div>
 										</div>
@@ -421,7 +421,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>性别</label> <input name="sex" disabled="true"
-													value="${obj.summaryInfo.sex }" type="text"
+													value="${obj.passportInfo.sex }" type="text"
 													class="form-control input-sm" placeholder="" />
 											</div>
 										</div>
@@ -430,7 +430,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>出生日期</label> <input name="birthday" type="text"
-													disabled="true" value="${obj.summaryInfo.birthday }"
+													disabled="true" value="<fmt:formatDate value="${obj.passportInfo.birthday }" pattern="yyyy-MM-dd" />" 
 													class="form-format form-control input-sm" placeholder="" />
 											</div>
 										</div>
@@ -450,7 +450,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>卡号</label> 
-												<input name="" type="text" disabled value="" class="form-control input-sm"  />
+												<input name="" type="text" disabled value="${obj.basicinfo.cardnum }" class="form-control input-sm"  />
 											</div>
 										</div>
 										

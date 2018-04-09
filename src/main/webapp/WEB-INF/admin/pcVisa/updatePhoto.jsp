@@ -16,7 +16,7 @@
 		<input id="staffid" type="hidden" value="${obj.basicInfo.id }">
 		<input id="passportId" type="hidden" value="${obj.passportId }">
 		<div class="btnGroup">
-			<a class="btnSave" onclick="nextWindow()">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
+			<a class="btnSave" onclick="savePhoto()">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
 		</div>
 	</div>
 	
@@ -105,7 +105,7 @@
 			<div class="sectionHead">户口本</div>
 			<div class="explain"></div>
 			<div class="imgInfoRight">
-				<div class="sampleReleaseImg">
+				<div class="sampleReleaseImg householdBack">
 					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<!-- <div class="beforeHuKouInfo"></div> -->
@@ -125,9 +125,9 @@
 					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<!-- <div class="beforeHouseInfo"></div> -->
-				<div class="uploadReleases" >
+				<div class="uploadReleases housecard 1" >
 					<div>上传</div>
-					<img id="housecard" class="longitudinal"/>
+					<img id="" class="longitudinal"/>
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
 			</div>			
@@ -312,10 +312,6 @@
 			};
 
 			socket.onmessage = function(state) {
-				
-				console.log("state");
-				console.log(state);
-				console.log(state.data);
 				if (state.data==200) {
 					window.location.reload();
 				}

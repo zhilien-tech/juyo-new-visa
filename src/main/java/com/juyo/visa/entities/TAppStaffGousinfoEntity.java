@@ -45,10 +45,6 @@ public class TAppStaffGousinfoEntity implements Serializable {
 	@Comment("日期单位(英文)")
 	private Integer dateuniten;
 
-	/**
-	 * (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -78,6 +74,11 @@ public class TAppStaffGousinfoEntity implements Serializable {
 				return false;
 		} else if (!dateuniten.equals(other.dateuniten))
 			return false;
+		if (staffid == null) {
+			if (other.staffid != null)
+				return false;
+		} else if (!staffid.equals(other.staffid))
+			return false;
 		if (staydays == null) {
 			if (other.staydays != null)
 				return false;
@@ -91,10 +92,6 @@ public class TAppStaffGousinfoEntity implements Serializable {
 		return true;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -103,6 +100,7 @@ public class TAppStaffGousinfoEntity implements Serializable {
 		result = prime * result + ((arrivedateen == null) ? 0 : arrivedateen.hashCode());
 		result = prime * result + ((dateunit == null) ? 0 : dateunit.hashCode());
 		result = prime * result + ((dateuniten == null) ? 0 : dateuniten.hashCode());
+		result = prime * result + ((staffid == null) ? 0 : staffid.hashCode());
 		result = prime * result + ((staydays == null) ? 0 : staydays.hashCode());
 		result = prime * result + ((staydaysen == null) ? 0 : staydaysen.hashCode());
 		return result;
