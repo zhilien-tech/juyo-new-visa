@@ -2,6 +2,9 @@ package com.juyo.visa.forms;
 
 import java.io.Serializable;
 
+import org.nutz.dao.entity.annotation.Column;
+import org.nutz.dao.entity.annotation.Comment;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -92,5 +95,11 @@ public class TAppStaffContactpointAddForm extends AddForm implements Serializabl
 
 	/**电话(英文)*/
 	private String telephoneen;
+	
+	/**是否知道邮箱"*/
+	private Integer isknowemail;
+	
+	/**是否知道邮箱(英文)*/
+	private Integer isknowemailen;
 
 }

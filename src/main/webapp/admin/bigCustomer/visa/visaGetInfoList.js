@@ -31,7 +31,7 @@ function getCompanionList(){
 //获取去过美国信息
 function getGoUSList(){
 	var gousList = [];
-	$('.goUS_Country').each(function(i){
+	$('.goUS_CountryDiv').each(function(i){
 		var gousLength = '';
 		var gous = {};
 		
