@@ -81,14 +81,24 @@
 									</span>
 								
 								</span></div>	
-								
 								<div v-if="data.visastatus != '作废'">
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
-									<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
-									<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
+									<span v-if="data.japanstate !=17 && data.japanstate!=19 && data.japanstate !=20 && data.japanstate !=34 && data.japanstate !=35 && data.japanstate !=22">
+										<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
+									</span>
+									<span v-else>
+										<i class="theTrial1"> </i>
+									</span>
+									<span v-if="data.japanstate ==17 || data.japanstate ==20">
+										<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
+										<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
+									</span>
+									<span v-else>
+										<i class="theTrial1"> </i>
+										<i class="theTrial1"> </i>
+									</span>
 									<i class="Refusal" v-on:click="sendInsurance(data.id,27)"></i>
 									<i class="download" v-on:click="downLoadFile(data.id)"> </i>
 									<i class="handoverTable"> </i>
@@ -184,47 +194,88 @@
         		  });
         	},
         	sendInsurance:function(orderid,visastatus){
-        		 $.ajax({
-                 	url: '${base}/admin/visaJapan/sendInsurance',
-                 	data:{orderid:orderid,visastatus:visastatus},
-                 	dataType:"json",
-                 	type:'post',
-                 	success: function(data){
-                 		if(visastatus == 16){
-                 			parent.successCallBack(4);
-	                 		//layer.msg('发招宝');
-                 		}else if(visastatus == 19){
-                 			parent.successCallBack(5);
-	                 		//layer.msg('招宝变更');
-                 		}else if(visastatus == 22){
-                 			parent.successCallBack(6);
-	                 		//layer.msg('招宝取消');
-                 		}else if(visastatus == 27){
-                 			parent.successCallBack(7);
-	                 		//layer.msg('报告拒签');
-                 		}else if(visastatus == 26){
-                 			parent.successCallBack(10);
-                 		}else if(visastatus == 1){
+        		var title = '';
+        		if(visastatus == 19 || visastatus == 22|| visastatus == 27|| visastatus == 26){
+        			if(visastatus == 19){
+        				title = '确定要招宝变更吗？';
+        			}else if(visastatus == 22){
+        				title = '确定要招宝取消吗？';
+        			}else if(visastatus == 27){
+        				title = '确定要拒签吗？';
+        			}else if(visastatus == 26){
+        				title = '确定要作废吗？';
+        			}
+        			layer.confirm(title, {
+    					title:title,
+    					btn: ["是","否"], //按钮
+    					shade: false //不显示遮罩
+    				}, function(index){
+    					$.ajax({
+    	                 	url: '${base}/admin/visaJapan/sendInsurance',
+    	                 	data:{orderid:orderid,visastatus:visastatus},
+    	                 	dataType:"json",
+    	                 	type:'post',
+    	                 	success: function(data){
+    	                 		if(visastatus == 19){
+    	                 			parent.successCallBack(5);
+    		                 		//layer.msg('招宝变更');
+    	                 		}else if(visastatus == 22){
+    	                 			parent.successCallBack(6);
+    		                 		//layer.msg('招宝取消');
+    	                 		}else if(visastatus == 27){
+    	                 			parent.successCallBack(7);
+    		                 		//layer.msg('报告拒签');
+    	                 		}else if(visastatus == 26){
+    	                 			parent.successCallBack(10);
+    	                 		}
+    	                 		//更新列表数据
+    	                 		var orderAuthority = "allOrder";
+    							$(".searchOrderBtn").each(function(){
+    								if($(this).hasClass("bgColor")){
+    									orderAuthority = $(this).attr("name");
+    								}
+    							});
+    	                 		$.ajax({ 
+    	                        	url: url,
+    	                        	data:{orderAuthority:orderAuthority},
+    	                        	dataType:"json",
+    	                        	type:'post',
+    	                        	success: function(data){
+    	                        		_self.visaJapanData = data.visaJapanData;
+    	                          	}
+    	                        });
+    	                 		layer.close(index);
+    	                   	}
+    	                 });
+    				});
+         		}else{
+         			$.ajax({
+	                 	url: '${base}/admin/visaJapan/sendInsurance.html',
+	                 	data:{orderid:orderid,visastatus:visastatus},
+	                 	dataType:"json",
+	                 	type:'post',
+	                 	success: function(data){
                  			parent.successCallBack(11);
-                 		}
-                 		//更新列表数据
-                 		var orderAuthority = "allOrder";
-						$(".searchOrderBtn").each(function(){
-							if($(this).hasClass("bgColor")){
-								orderAuthority = $(this).attr("name");
-							}
-						});
-                 		$.ajax({ 
-                        	url: url,
-                        	data:{orderAuthority:orderAuthority},
-                        	dataType:"json",
-                        	type:'post',
-                        	success: function(data){
-                        		_self.visaJapanData = data.visaJapanData;
-                          	}
-                        });
-                   	}
-                 });
+	                 		//更新列表数据
+	                 		var orderAuthority = "allOrder";
+							$(".searchOrderBtn").each(function(){
+								if($(this).hasClass("bgColor")){
+									orderAuthority = $(this).attr("name");
+								}
+							});
+	                 		$.ajax({ 
+	                        	url: url,
+	                        	data:{orderAuthority:orderAuthority},
+	                        	dataType:"json",
+	                        	type:'post',
+	                        	success: function(data){
+	                        		_self.visaJapanData = data.visaJapanData;
+	                          	}
+	                        });
+	                   	}
+	                 });
+         		}
+        		
         	},
         	sendzhaobao:function(orderid){
         		$.ajax({
