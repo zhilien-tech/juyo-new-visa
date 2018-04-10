@@ -255,6 +255,7 @@
 <script>
 	var passportId = $("#passportId").val();
 	var staffid = '${obj.staffid}';
+	var usertype = '${obj.userType}';
 	$(function() {
 		twonichphoto(staffid,13);
 		huzhao(staffid,1);

@@ -555,6 +555,22 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script src="${base}/admin/pcVisa/updatePhoto.js"></script>
 	<script type="text/javascript">
+		var usertype = '${obj.usertype}';
+		var isfirst = '${obj.basicinfo.isfirst}';
+		var id = '${obj.staffid}';
+		if(usertype == 9 && isfirst != 1){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content:'/admin/pcVisa/updatePhoto.html?staffid='+id
+			});
+		}
 		$(".form-format").datetimepicker({
 			format : "yyyy-mm-dd",
 			showMeridian : true,

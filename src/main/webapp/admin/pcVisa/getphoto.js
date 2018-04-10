@@ -1,5 +1,5 @@
 //单张图片上传
-function uploadPositive(rst, formData, staffid) {
+function uploadPositive(rst, formData, staffid, usertype) {
 	if (!formData) {
 		formData = new FormData();
 	}

@@ -296,6 +296,8 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	public Object visaDetail(Integer orderid, Integer flag, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		result.put("usertype", userType);
 		String name = loginUser.getName();
 		result.put("orderid", orderid);
 		//获取用户资料信息
@@ -475,6 +477,10 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			result.put("passportId", passportEntity.getId());
 		}
 		result.put("staffid", staffid);
+		//获取usertype来判断是否从游客进入
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		result.put("userType", userType);
 		//生成二维码
 		String id = session.getId();
 		String serverName = request.getServerName();

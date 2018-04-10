@@ -31,6 +31,7 @@ import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.AppPictures.AppPicturesTypeEnum;
 import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.util.PinyinTool;
@@ -242,6 +243,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 						credentialEntity.setStaffid(staffid);
 						credentialEntity.setStatus(AppPicturesTypeEnum.FRONT.intKey());
 						dbDao.update(credentialEntity);
+						changeStaffStatus(staffid);
 						return 1;
 					} else {
 						credentialEntity = new TAppStaffCredentialsEntity();
@@ -252,6 +254,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 						credentialEntity.setCreatetime(new Date());
 						credentialEntity.setStatus(AppPicturesTypeEnum.FRONT.intKey());
 						dbDao.insert(credentialEntity);
+						changeStaffStatus(staffid);
 						try {
 							simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
 						} catch (IOException e) {
@@ -281,6 +284,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 						credentialEntity.setUpdatetime(new Date());
 						credentialEntity.setStatus(AppPicturesTypeEnum.BACK.intKey());
 						dbDao.update(credentialEntity);
+						changeStaffStatus(staffid);
 						try {
 							simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
 						} catch (IOException e) {
@@ -296,6 +300,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 						credentialEntity.setCreatetime(new Date());
 						credentialEntity.setStatus(AppPicturesTypeEnum.BACK.intKey());
 						dbDao.insert(credentialEntity);
+						changeStaffStatus(staffid);
 						try {
 							simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
 						} catch (IOException e) {
@@ -327,6 +332,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 						credentialEntity.setUpdatetime(new Date());
 						credentialEntity.setStaffid(staffid);
 						dbDao.update(credentialEntity);
+						changeStaffStatus(staffid);
 						try {
 							simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
 						} catch (IOException e) {
@@ -341,6 +347,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 						credentialEntity.setStaffid(staffid);
 						credentialEntity.setCreatetime(new Date());
 						dbDao.insert(credentialEntity);
+						changeStaffStatus(staffid);
 						try {
 							simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
 						} catch (IOException e) {
@@ -361,6 +368,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 				credentialEntity.setStatus(status);
 				credentialEntity.setUpdatetime(new Date());
 				int update = dbDao.update(credentialEntity);
+				changeStaffStatus(staffid);
 			} else {
 				credentialEntity = new TAppStaffCredentialsEntity();
 				credentialEntity.setCreatetime(new Date());
@@ -370,6 +378,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 				credentialEntity.setStatus(status);
 				credentialEntity.setUrl(url);
 				dbDao.insert(credentialEntity);
+				changeStaffStatus(staffid);
 			}
 			try {
 				simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
@@ -391,6 +400,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 				credentialEntity.setType(type);
 				credentialEntity.setUrl(url);
 				dbDao.insert(credentialEntity);
+				changeStaffStatus(staffid);
 				try {
 					simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
 				} catch (IOException e) {
@@ -404,6 +414,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 						Cnd.where("id", "=", staffid));
 				basicinfoEntity.setTwoinchphoto(url);
 				dbDao.update(basicinfoEntity);
+				changeStaffStatus(staffid);
 				try {
 					simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
 				} catch (IOException e) {
@@ -417,6 +428,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 				credentialEntity.setUrl(url);
 				credentialEntity.setUpdatetime(new Date());
 				int update = dbDao.update(credentialEntity);
+				changeStaffStatus(staffid);
 			} else {
 				credentialEntity = new TAppStaffCredentialsEntity();
 				credentialEntity.setCreatetime(new Date());
@@ -425,6 +437,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 				credentialEntity.setType(type);
 				credentialEntity.setUrl(url);
 				dbDao.insert(credentialEntity);
+				changeStaffStatus(staffid);
 			}
 			try {
 				simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
@@ -434,6 +447,15 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		}
 		return 1;
 
+	}
+
+	public Object changeStaffStatus(Integer staffid) {
+		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid.longValue());
+		if (!Util.isEmpty(basic)) {
+			basic.setIsfirst(IsYesOrNoEnum.YES.intKey());
+			dbDao.update(basic);
+		}
+		return null;
 	}
 
 	/*
