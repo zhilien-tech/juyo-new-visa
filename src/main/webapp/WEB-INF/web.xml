@@ -34,7 +34,9 @@
 		<url-pattern>/basicinfowebsocket/*</url-pattern>
 		<url-pattern>/simpleinfowebsocket/*</url-pattern>
 		<url-pattern>/visainfowebsocket/*</url-pattern>
+		<url-pattern>/vcodewebsocket/*</url-pattern>
 		<url-pattern>/sockjs/websocket/*</url-pattern>
+		<url-pattern>/simplesendinfosocket/*</url-pattern>
 	</servlet-mapping>
 
 

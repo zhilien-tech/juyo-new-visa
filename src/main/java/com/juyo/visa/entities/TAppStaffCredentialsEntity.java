@@ -16,11 +16,11 @@ public class TAppStaffCredentialsEntity implements Serializable {
 	
 	@Column
     @Comment("人员id")
-	private Integer staffId;
+	private Integer staffid;
 	
 	@Column
     @Comment("主证件id")
-	private Integer mainId;
+	private Integer mainid;
 	
 	@Column
     @Comment("证件url")
@@ -40,7 +40,7 @@ public class TAppStaffCredentialsEntity implements Serializable {
 	
 	@Column
     @Comment("页面元素id")
-	private String pageElementId;
+	private String pageelementid;
 	
 	@Column
     @Comment("创建时间")

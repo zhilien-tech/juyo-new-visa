@@ -1,0 +1,13 @@
+*{margin: 0;padding: 0;}
+html{font-size: 13.33vw;}
+body{width: 100%; margin: 0px auto; font-family:'微软雅黑', 'helvetica neue',tahoma,'hiragino sans gb',stheiti,'wenquanyi micro hei',\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif; font-size: 9px;-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important;-moz-text-size-adjust:100%!important;}
+img{display: block;border: 0;}
+a{text-decoration: none;display: block;}
+ul,li{list-style: none;}
+i,em{font-style: normal;}
+.font30{font-size: 0.3rem;}
+.marT{margin-top: 0.13rem;}
+b,strong{font-weight: 500;}
+a{text-decoration: none;}
+p{margin: 0;}
+img[src=""]{ opacity: 0; }

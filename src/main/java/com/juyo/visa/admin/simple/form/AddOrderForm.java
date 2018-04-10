@@ -23,57 +23,58 @@ public class AddOrderForm {
 
 	private Integer orderid;
 
+	//出行目的 
 	private String tripPurpose;
-
+	//行程类型
 	private Integer triptype;
-
+	//出发日期
 	private Date goDate;
-
+	//停留天数
 	private Integer stayday;
-
+	//
 	private Date returnDate;
-
+	//出发城市（出程）
 	private Integer goDepartureCity;
-
+	//抵达城市(去程)
 	private Integer goArrivedCity;
-
+	//航班号(去程)
 	private String goFlightNum;
-
+	//出发城市(返程)
 	private Integer returnDepartureCity;
-
+	//返回城市(返程)===
 	private Integer returnArrivedCity;
-
+	//航班号(返程)
 	private String returnFlightNum;
-
+	//客户管理类型 1, "线上" 2, "OTS" 3, "线下", 4, "直客"
 	private Integer customerType;
-
+	//公司名称
 	private String compName;
-
+	//公司简称
 	private String comShortName;
-
+	//公司别名
 	private String compName2;
 
 	private String comShortName2;
-
+	//支付方式
 	private Integer payType;
-
+	//签证类型
 	private Integer visatype;
-
+	//金额
 	private String amount;
-
+	//城市ID
 	private Integer cityid;
-
+	//加急类型
 	private Integer urgentType;
-
+	//加急天数
 	private Integer urgentDay;
-
+	//送签时间
 	private Date sendvisadate;
-
+	//出签时间
 	private Date outvisadate;
-
+	//客户信息Id
 	private Integer customerid;
-
+	//送签编号
 	private String sendvisanum;
-
+	//直客用户Id
 	private Integer zhikecustomid;
 }

@@ -1,0 +1,238 @@
+/*************拍摄资料******************/
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+img[src=""] {
+	opacity:0;
+}
+.head {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	position: fixed;
+	top: 0;
+	background: #FFF;
+	z-index: 200;
+	padding: 0px 15px;
+	border-bottom: 1px solid #eee;
+}
+.head span {
+	float: left;
+	font-size: 16px;
+}
+.btnGroup {
+	float: right;
+}
+.btnSave,.btnCancel {
+	padding:5px 10px;
+	font-size:12px;
+	text-align: center;
+	color: #FFF;
+	background-color: #3087f1;
+	border-radius: 3px;
+	margin-right:10px;
+	cursor:pointer;
+	width:60px;
+	line-height:1.5;
+	display:inline-block;
+}
+.head::after {
+	content: "";
+	clear: both;
+}
+.topHide {
+	height: 50px;
+	width: 100%;
+}
+.section {
+	padding: 10px 40px;
+}
+.QRCode::after {
+	content: "";
+	clear: both;
+}
+.sectionHead {
+	width: 100%;
+	height: 35px;
+	line-height: 35px;
+	border-left: 3px solid #2f86f0;
+	padding-left: 15px;
+}
+.explain {
+	width: 22%;
+	display: inline-block;
+	float: left;
+	margin-right: 6%;
+	margin-top: 2%;
+}
+.scan {
+	margin-top: 2%;
+	display: inline-block;
+	width:200px;
+	height:200px;
+}
+
+.photo{
+	clear: both;
+}
+.explain span {
+	display: block;
+}
+.explain span:nth-child(1) {
+	margin-bottom: 6%;
+}
+.samplePhoto {
+	float: left;
+	margin-right: 4%;
+	margin-top: 2%;
+}
+.uploadPhoto {
+	float: left;
+	width: 170px;
+	height: 170px;
+	line-height: 170px;
+	text-align: center;
+	border: 1px solid rgba(121,121,121,1);
+	margin-top: 2%;
+	position: relative;
+}
+.publicFile {
+	opacity: 0;
+}
+.loadImg {
+	position: absolute; 
+	top: 0;
+	left: 0;
+	width:100%;
+}
+.transverseImg {
+	position: absolute; 
+	top: 0;
+	left: 0;
+	width:100%;
+	height:170px;
+}
+.longitudinal {
+	position: absolute; 
+	top: 0;
+	left: 0;
+	width:100%;
+	height:284px;
+}
+.passport {
+	clear: both;
+} 
+
+.samplePassport {
+	float: left;
+	margin-right: 4%;
+	margin-top: 2%;
+}
+.samplePassportImg {
+	margin-right: 4%;
+	margin-top: 2%;
+	display:inline-block;
+} 
+.uploadPassport {
+	margin-top: 2%;
+	float: left;
+	width: 260px;
+	height: 170px;
+	line-height: 170px;
+	border: 1px solid rgba(121,121,121,1);
+	text-align: center;
+	position:relative;
+}
+.uploadPassports {
+	margin-top: 2%;
+	width: 260px;
+	height: 170px;
+	line-height: 170px;
+	border: 1px solid rgba(121,121,121,1);
+	text-align: center;
+	display:inline-block;
+	position:relative;
+	margin-right:4%;
+	vertical-align:middle;
+}
+.imgInfoRight .uploadPassports:nth-child(2) {
+	margin-top:-164px;
+}
+.huKouBook {
+	clear: both;
+}
+.sampleReleaseImg {
+	display:inline-block;
+	margin-right: 4%;
+	margin-top: 2%;
+}
+.uploadReleases {
+	width: 212px;
+	height: 284px;
+	line-height: 284px;
+	border: 1px solid rgba(121,121,121,1);
+	text-align: center;
+	margin-top: 2%;
+	display:inline-block;
+	position:relative;
+	margin-right:4%;
+	vertical-align:middle;
+}
+.imgInfoRight .uploadReleases:nth-child(2) {
+	margin-top:-278px;
+}
+.delete {
+	background-image:url(../img/delete.png);
+	height:32px;
+	width:30px;
+	position:absolute;
+	top:3px;
+	background-color:#FFF;
+	right:8px;
+	background-repeat:no-repeat;
+	background-position:5px 5px;
+	border-radius:4px;
+	cursor:pointer;
+	border:1px solid rgb(209,213,221);
+	display:block;
+}
+.alignment {
+	position:relative;
+}
+/* 右按钮样式 */
+.rightNav {
+	position: fixed;
+	top: 15px;
+	right: 0;
+	z-index: 999;
+	width: 40px;
+	height: 100%;
+	cursor: pointer;
+}
+
+.rightNav span {
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	top: 50%;
+	border-left: 4px solid #999;
+	border-bottom: 4px solid #999;
+	-webkit-transform: translate(0, -50%) rotate(-135deg);
+	transform: translate(0, -50%) rotate(-135deg);
+}
+.explainLeft {
+	width: 22%;
+	display: inline-block;
+	float: left;
+	margin-right: 6%;
+	margin-top: 2%;
+	height:auto;
+}
+.imgInfoRight {
+	float:right;
+	width:72%;
+	height:auto;
+}

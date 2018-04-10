@@ -1,0 +1,13 @@
+/*t_app_staff_credentials_info*/
+SELECT
+	staffid,
+	mainid,
+	url,
+	type,
+	STATUS,
+	sequence,
+	pageelementid,
+	createtime,
+	updatetime
+FROM
+	t_app_staff_credentials

@@ -208,7 +208,10 @@ public class UserViewService extends BaseService<TUserEntity> {
 		cnd.and(exp).and("password", "=", passwd);
 		//判断是否为游客
 		if (isTourist == IsYesOrNoEnum.YES.intKey()) {
-			cnd.and("userType", "=", UserLoginEnum.TOURIST_IDENTITY.intKey());
+			SqlExpressionGroup expT = new SqlExpressionGroup();
+			expT.and("userType", "=", UserLoginEnum.TOURIST_IDENTITY.intKey()).or("userType", "=",
+					UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
+			cnd.and(expT);
 		} else {
 			cnd.and("userType", "!=", UserLoginEnum.TOURIST_IDENTITY.intKey());
 		}
