@@ -23,6 +23,7 @@ header {
 	height: 10px;
 	border: 1px solid #000;
 	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
 	border-top: 0;
 	border-right:0;
 	margin-top: .3rem;
