@@ -20,8 +20,11 @@ import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.juyo.visa.common.util.HttpUtil;
+import com.juyo.visa.entities.TConfMailEntity;
+import com.juyo.visa.entities.TConfWxEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
+import com.uxuexi.core.web.base.service.BaseService;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -31,37 +34,46 @@ import org.nutz.mvc.annotation.At;
 
 @IocBean
 @At("admin/weixinToken")
-public class WeiXinTokenModule {
+public class WeiXinTokenModule extends BaseService<TConfWxEntity>{
 
 	@Inject
 	private RedisDao redisDao;
 	
 	public static Log logger = LogFactory.getLog(WeiXinTokenModule.class);
-	private final static String WX_APPID = "000000";
-	private final static String WX_APPSECRET = "000000";
-	private final static String WX_TOKENKEY = "000000";
 	
 	//获取accessToken
-	private JSONObject getAccessToken(){
+	private Object getAccessToken(){
+		
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 1);
+		String WX_APPID = wx.getAppid();
+		String WX_APPSECRET = wx.getAppsecret();
+		String WX_TOKENKEY = wx.getAccesstokenkey();
+		
+		String accessTokenUrl;
+		if (wx == null) {
+			 accessTokenUrl = "请联系管理员配置微信公众号!";
+		} else {
+			 accessTokenUrl = redisDao.get(WX_TOKENKEY);
+			 if(Util.isEmpty(accessTokenUrl)) {
+			    	accessTokenUrl= "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+		    	    String requestUrl = accessTokenUrl.replace("APPID",WX_APPID).replace("APPSECRET",WX_APPSECRET);
+		    	    logger.info("getAccessToken.requestUrl====>"+requestUrl);
+		    	    JSONObject result = HttpUtil.doGet(requestUrl);
+		    	    //redis中设置 access_token
+		    	    redisDao.set(WX_TOKENKEY, requestUrl);
+		    	    redisDao.expire(WX_TOKENKEY, 5000);
+		    	    accessTokenUrl = requestUrl;
+			    }
+		}
 	    
-	    String accessTokenUrl = redisDao.get(WX_TOKENKEY);
-	    if(Util.isEmpty(accessTokenUrl)) {
-	    	accessTokenUrl= "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
-    	    String requestUrl = accessTokenUrl.replace("APPID",WX_APPID).replace("APPSECRET",WX_APPSECRET);
-    	    logger.info("getAccessToken.requestUrl====>"+requestUrl);
-    	    JSONObject result = HttpUtil.doGet(requestUrl);
-    	    //redis中设置 access_token
-    	    redisDao.set(WX_TOKENKEY, requestUrl);
-    	    redisDao.expire(WX_TOKENKEY, 7000);
-	    }
-	    
-	    return null ;
+	    return accessTokenUrl ;
 	}
 
 	//获取ticket
 	private JSONObject getJsApiTicket(){
+		String accessToken = (String)getAccessToken();
 	    String apiTicketUrl= "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
-	    String requestUrl = apiTicketUrl.replace("ACCESS_TOKEN", "accessToken");
+	    String requestUrl = apiTicketUrl.replace("ACCESS_TOKEN", accessToken);
 	    logger.info("getJsApiTicket.requestUrl====>"+requestUrl);
 	    JSONObject result = HttpUtil.doGet(requestUrl);
 	    return result;
@@ -69,6 +81,12 @@ public class WeiXinTokenModule {
 
 	//生成微信权限验证的参数
 	public Map<String, String> makeWXTicket(String jsApiTicket, String url) {
+		
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 1);
+		String WX_APPID = wx.getAppid();
+		String WX_APPSECRET = wx.getAppsecret();
+		String WX_TOKENKEY = wx.getAccesstokenkey();
+		
 	    Map<String, String> ret = new HashMap<String, String>();
 	    String nonceStr = createNonceStr();
 	    String timestamp = createTimestamp();
