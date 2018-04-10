@@ -91,5 +91,7 @@ public class OrderUpdateForm {
 	private Integer cityid;
 	//是否付款
 	private Integer ispayed;
+	//是否有旅行计划
+	private Integer hastripplan;
 
 }

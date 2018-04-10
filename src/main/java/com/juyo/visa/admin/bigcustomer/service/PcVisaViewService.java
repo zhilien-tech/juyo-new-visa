@@ -326,7 +326,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 				String sqlStr = sqlManager.get("t_app_paperwork_US_info");
 				Sql applysql = Sqls.create(sqlStr);
 				Cnd cnd = Cnd.NEW();
-				cnd.where("staffid", "=", orderUsEntity.getStaffid());
+				cnd.and("staffid", "=", orderUsEntity.getStaffid());
 				List<Record> infoList = dbDao.query(applysql, cnd, null);
 				for (Record appRecord : infoList) {
 					int type = appRecord.getInt("type");
@@ -474,6 +474,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(passportEntity)) {
 			result.put("passportId", passportEntity.getId());
 		}
+		result.put("staffid", staffid);
 		//生成二维码
 		String id = session.getId();
 		String serverName = request.getServerName();

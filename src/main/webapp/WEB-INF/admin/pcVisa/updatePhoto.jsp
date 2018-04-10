@@ -13,7 +13,7 @@
 <body>
 	<div class="head">
 		<span>拍摄资料</span>
-		<input id="staffid" type="hidden" value="${obj.basicInfo.id }">
+		<input id="staffid" type="hidden" value="${obj.staffid }">
 		<input id="passportId" type="hidden" value="${obj.passportId }">
 		<div class="btnGroup">
 			<a class="btnSave" onclick="savePhoto()">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
@@ -49,7 +49,7 @@
 						height="100%" />
 				</c:if> --%>
 			</div>
-			<input id="1" type="file" class="publicFile uploadFileImg" name="" />
+			<input id="1" type="file" id="uploadFileImg" class="publicFile uploadFileImg" name="uploadFileImg" />
 		</div>
 		<!--护照首页-->
 		<div class="passport">
@@ -254,8 +254,8 @@
 <script src="/admin/pcVisa/getphoto.js"></script>
 <script>
 	var passportId = $("#passportId").val();
+	var staffid = '${obj.staffid}';
 	$(function() {
-		var staffid = $("#staffid").val();
 		twonichphoto(staffid,13);
 		huzhao(staffid,1);
 		oldhuzhao(staffid,2);
@@ -267,20 +267,21 @@
 		housecard(staffid,5);
 		household(staffid,4);
 		$(".uploadPhoto").click(function(){
-			$(".uploadFileImg").click();
-			$(".uploadFileImg").change(function(){
+			$("#uploadFileImg").click();
+			$("#uploadFileImg").change(function(){
 				layer.load(1,{
 					shade : "#000"
 				});
 				var that = this;
-	            lrz(this.files[0]).then(function (rst) {
+	            lrz(this.files[0])
+	            	.then(function (rst) {
 	                /* $('.bacimg2').attr('src',rst.base64);*/
 	                $('#upload').hide(); 
 	                // 处理成功会执行
 	                sourceSize = (that.files[0].size / 1024).toFixed(2);
 	                resultSize = (rst.fileLen / 1024).toFixed(2);
 	                scale = parseInt(100 - (resultSize / sourceSize * 100));
-	                rst.formData.append('image',rst.file);
+	                rst.formData.append('uploadFileImg',rst.file);
 //	                alert(rst);
 //	                alert(JSON.stringify(rst.formData));
 //	                alert(rst.file);

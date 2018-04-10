@@ -17,6 +17,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.upload.UploadAdaptor;
@@ -81,6 +82,8 @@ public class MobileVisaModule {
 	 * 添加修改单张照片
 	 */
 	@At
+	@Ok("json")
+	@Filters
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object uploadImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
 			@Param("type") Integer type, @Param("status") Integer status, @Param("sequence") Integer sequence,
