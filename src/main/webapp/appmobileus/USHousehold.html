@@ -24,16 +24,16 @@
 			</div>
 			<!--户主页-->
 			<div class="householdPage homePage">
-				<span class="homePageTitle">户主页</span> <img src="img/camera.png"
-					class="camera" /> <img id="11" src="" class="pageImg" /> <input
+				<span class="homePageTitle">户主页</span> <img src="img/camera.png" style="pointer-events:none;"
+					class="camera" /> <img id="11" src="" style="pointer-events:none;" class="pageImg" /> <input
 					id="1" type="file" name="1" class="viceFile"
 					onclick="addHousehold()" />
 			</div>
 
 			<!--副页-->
 			<div class="householdPage vicePage">
-				<span class="homePageTitle">副页</span> <img src="img/camera.png"
-					class="camera" /> <img id="12" src="" class="pageImg" /> <input
+				<span class="homePageTitle">副页</span> <img src="img/camera.png" style="pointer-events:none;"
+					class="camera" /> <img id="12" src="" style="pointer-events:none;" class="pageImg" /> <input
 					id="2" type="file" class="viceFile" onclick="addHousehold()"
 					name="1" />
 			</div>
@@ -51,11 +51,11 @@
 	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 	<script type="text/javascript" src="js/rem(750).js"></script>
 	<script type="text/javascript" src="js/layer.js"></script>
-	<script type="text/javascript" src="js/lrz.bundle.js"></script>
-	<script type="text/javascript" src="js/vue.min.js"></script>
+	<script type="text/javascript" src="js/lrz.all.bundle.js"></script>
 	<script>
 		$(function(){
 			var	staffid=GetQueryString('staffid');
+			var	flag=GetQueryString('flag');
 			var fuyecount = 2;
 			var count = 1;
 			getImage(staffid);
@@ -174,7 +174,8 @@
 		function returnPage(){
 			var staffid = GetQueryString("staffid");
 			var	sessionid=GetQueryString('sessionid');
-			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid;
+			var	flag=GetQueryString('flag');
+			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 		}
 		
 		//获取URL地址参数
@@ -185,7 +186,7 @@
 	    }
 		
 		//上传图片
-		function uploadPositive(rst,formData,staffid,mainid,sequence,sessionid,that){
+		function uploadPositive(rst,formData,staffid,mainid,sequence,sessionid,that,flag){
 			if(!formData){
 				formData = new FormData();
 			}
@@ -195,6 +196,7 @@
 	        formData.append("mainid", mainid); 
 	        formData.append("sequence", sequence); 
 	        formData.append("sessionid", sessionid); 
+	        formData.append("flag", flag); 
 	        console.log('------------------------------');
 	        console.log(formData); 
 	        console.log(rst.file);
@@ -228,6 +230,7 @@
 		function addHousehold(){
 			var	staffid=GetQueryString('staffid');
 			var	sessionid=GetQueryString('sessionid');
+			var	flag=GetQueryString('flag');
 			$(".viceFile").change(function(){
 				var mainid = $(this).attr("name");
 				var sequence = $(this).attr("id");
@@ -237,7 +240,7 @@
 				});
 				var that = this;
 			        lrz(this.files[0]).then(function (rst) {
-			        	uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,that); 
+			        	uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,that,flag); 
 			        }).catch(function (err) {
 			            console.log(err);
 			        });

@@ -17,9 +17,12 @@
 .card-head div:nth-child(1) {
 	width: 20%;
 }
-
-.card-head div:nth-child(2) {
-	width: 10%;
+.visaInputUS {
+	cursor:pointer;
+	
+}
+.ctid {
+	width:10%;
 }
 
 .card-head div:nth-child(3) {
@@ -115,4 +118,7 @@ label {
 }
 .pull-right {
 	float:right;
+}
+.toSure {
+	cursor:pointer;
 }

@@ -27,36 +27,36 @@
 				<!--第一页-->
 				<div class="householdPage firstPage">
 					<span class="homePageTitle">第一页</span>
-					<img src="img/camera.png"  class="camera" />
-					<img id="11" src="" class="pageImg" />
+					<img src="img/camera.png" style="pointer-events:none;"  class="camera" />
+					<img id="11" src="" style="pointer-events:none;" class="pageImg" />
 				</div>
 				<input id="1" type="file" name="1" class="fileHide firstPageImg" />
 				<!--第二页-->
 				<div class="householdPage secondPage">
 					<span class="homePageTitle">第二页</span>
-					<img src="img/camera.png" class="camera" />
-					<img id="12" src="" class="pageImg" />
+					<img src="img/camera.png" style="pointer-events:none;" class="camera" />
+					<img id="12" src="" style="pointer-events:none;" class="pageImg" />
 				</div>
 				<input id="1" type="file" class="fileHide secondPageImg" name="2" />
 				<!--第三页-->
 				<div class="householdPage thirdPage">
 					<span class="homePageTitle">第三页</span>
-					<img src="img/camera.png" class="camera" />
-					<img id="13" src="" class="pageImg" />
+					<img src="img/camera.png" style="pointer-events:none;" class="camera" />
+					<img id="13" src="" style="pointer-events:none;" class="pageImg" />
 				</div>
 				<input id="1" type="file" class="fileHide thirdPageImg" name="3" />
 				<!--第四页-->
 				<div class="householdPage fouthPage">
 					<span class="homePageTitle">第四页</span>
-					<img src="img/camera.png" class="camera" />
-					<img id="14" src="" class="pageImg" />
+					<img src="img/camera.png" style="pointer-events:none;" class="camera" />
+					<img id="14" src="" style="pointer-events:none;" class="pageImg" />
 				</div>
 				<input id="1" type="file" class="fileHide fouthPageImg" name="4" />
 				<!--第五页-->
 				<div class="householdPage fivePage">
 					<span class="homePageTitle">第五页</span>
-					<img src="img/camera.png" class="camera" />
-					<img id="15" src="" class="pageImg" />
+					<img src="img/camera.png" style="pointer-events:none;" class="camera" />
+					<img id="15" src="" style="pointer-events:none;" class="pageImg" />
 				</div>
 				<input id="1" type="file" class="fileHide fivePageImg" name="5" />
 				<!--结束-->
@@ -87,9 +87,8 @@
 		</section>
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script type="text/javascript" src="js/rem(750).js" ></script>
-		<script type="text/javascript" src="js/lrz.bundle.js" ></script>
+		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
 		<script type="text/javascript" src="js/layer.js"></script>
-		<script type="text/javascript" src="js/vue.min.js" ></script>
 		<script>
 
 			$(function() {
@@ -124,6 +123,7 @@
 			$(function(){
 				var	staffid=GetQueryString('staffid');
 				var	sessionid=GetQueryString('sessionid');
+				var	flag=GetQueryString('flag');
 				getImage(staffid);
 				//第一页点击
 				$(".firstPage").click(function(){
@@ -143,7 +143,7 @@
 			                resultSize = (rst.fileLen / 1024).toFixed(2);
 			                scale = parseInt(100 - (resultSize / sourceSize * 100));
 			                rst.formData.append('image',rst.file);
-			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid); 
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,flag); 
 			            }).catch(function (err) {
 			                console.log(err);
 			            });
@@ -167,7 +167,7 @@
 			                resultSize = (rst.fileLen / 1024).toFixed(2);
 			                scale = parseInt(100 - (resultSize / sourceSize * 100));
 			                rst.formData.append('image',rst.file);
-			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid); 
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,flag); 
 			            }).catch(function (err) {
 			                console.log(err);
 			            });
@@ -191,7 +191,7 @@
 			                resultSize = (rst.fileLen / 1024).toFixed(2);
 			                scale = parseInt(100 - (resultSize / sourceSize * 100));
 			                rst.formData.append('image',rst.file);
-			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid); 
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,flag); 
 			            }).catch(function (err) {
 			                console.log(err);
 			            });
@@ -215,7 +215,7 @@
 			                resultSize = (rst.fileLen / 1024).toFixed(2);
 			                scale = parseInt(100 - (resultSize / sourceSize * 100));
 			                rst.formData.append('image',rst.file);
-			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid); 
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,flag); 
 			            }).catch(function (err) {
 			                console.log(err);
 			            });
@@ -239,7 +239,7 @@
 			                resultSize = (rst.fileLen / 1024).toFixed(2);
 			                scale = parseInt(100 - (resultSize / sourceSize * 100));
 			                rst.formData.append('image',rst.file);
-			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid); 
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,flag); 
 			            }).catch(function (err) {
 			                console.log(err);
 			            });
@@ -251,7 +251,8 @@
 			function returnPage(){
 				var staffid = GetQueryString("staffid");
 				var	sessionid=GetQueryString('sessionid');
-				window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid;
+				var	flag=GetQueryString('flag');
+				window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 			}
 			
 			//获取URL地址参数
@@ -262,7 +263,7 @@
 		    }
 			
 			//上传图片
-			function uploadPositive(rst, formData,staffid,mainid,sequence,sessionid){
+			function uploadPositive(rst, formData,staffid,mainid,sequence,sessionid,flag){
 				if(!formData){
 					formData = new FormData();
 				}
@@ -272,6 +273,7 @@
 		        formData.append("mainid", mainid); 
 		        formData.append("sequence", sequence); 
 		        formData.append("sessionid", sessionid); 
+		        formData.append("flag", flag); 
 		        console.log('------------------------------');
 		        console.log(formData); 
 		        console.log(rst.file);

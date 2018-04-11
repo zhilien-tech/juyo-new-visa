@@ -42,12 +42,48 @@ new Vue({
 		/* editClick:function(){//编辑图标  页面跳转
 					window.location.href = '${base}/admin/firstTrialJp/edit.html';
 				} */
+		//跳转到详情
 		toDetail:function(orderid){
 			//跳转到签证详情页面
-			window.open('/admin/orderUS/listDetailUS.html?orderid='+orderid);
+			window.open('/admin/orderUS/orderUSDetail.html?orderid='+orderid);
 			//console.log(message);
 			//alert(JSON.stringify(event.target));
-		}
+		},
+		//认领
+		toMyself:function(orderid){
+			layer.load(1);
+			$.ajax({ 
+				url: '/admin/orderUS/toMyself',
+				data:{
+					orderid:orderid,
+				},
+				dataType:"json",
+				type:'post',
+				success: function(data){
+					layer.closeAll("loading");
+					layer.msg("认领成功", {
+						time: 100,
+						end: function () {
+							$("#searchBtn").click();
+						}
+					});
+				}
+			});
+		},
+		//签证录入
+		visaInput:function(staffid, orderid){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content:'/admin/orderUS/visaInput.html?staffid='+staffid+'&orderid='+orderid
+			});
+		},
 	}
 });
 $("#searchBtn").on('click', function () {

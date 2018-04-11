@@ -1,36 +1,38 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>美国出签上传</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-<meta name="format-detection" content="telephone=no">
-<!--公共样式-->
-<link rel="stylesheet" href="css/common.css" />
-<!--本页css-->
-<link rel="stylesheet" href="css/filming.css" />
-</head>
-<body>
-	<header>
-		<div class="filming">
-			<a onclick="returnPage()"> <i></i> <span>美国出签上传</span>
-			</a>
-		</div>
-	</header>
-	<section>
-		<div class="household">
-			<div class="householdPage householdExpain">
-				<span class="homePageTitle">美国出签上传拍摄图例</span>
+	<head>
+		<meta charset="UTF-8">
+		<title>美国出签上传</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+   		<!--公共样式-->
+		<link rel="stylesheet" href="css/common.css" />
+		<!--本页css-->
+		<link rel="stylesheet" href="css/filming.css" />
+	</head>
+	<body>
+		<header>
+			<div class="filming">
+			<a onclick="returnPage()">
+				<i></i>
+				<span>美国出签上传</span>	</a>
 			</div>
-			<!--可多选上传-->
-			<div class="householdPage multiselect chooseImage">
-				<span class="homePageTitle">可多选上传</span> <img src="img/camera.png"
-					class="camera" /> <img src="" class="pageImg" />
+
+		</header>
+		<section>
+			<div class="household">
+				<div class="householdPage householdExpain">
+					<span class="homePageTitle">美国出签上传拍摄图例</span>
+				</div>
+
+				<!--可多选上传-->
+				<div class="householdPage multiselect chooseImage">
+					<span class="homePageTitle">可多选上传</span> 
+					<img src="img/camera.png" class="camera" /> 
+					<img src="" class="pageImg" />
+				</div>
 			</div>
-			<input type="file" name="" class="fileHide multiselectImg" />
-		</div>
-	</section>
+		</section>
 	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 	<script type="text/javascript" src="js/rem(750).js"></script>
 	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
@@ -41,11 +43,41 @@
 		$(function(){
 			$.ajax({
 		        type : "post",
-		        url : "/admin/weixinToken/getAccessToken",
+		        url : "/admin/weixinToken/getJsApiTicket",
 		        dataType : "json",
 		        async : false,
 		        success : function(data) {
-		            alert(JSON.stringify(data));
+		        	var jsApiTicket = data.ticket;
+		        	var url = location.href.split('#').toString();//url不能写死
+		        	
+		        	$.ajax({
+		                type : "post",
+		                url : "/admin/weixinToken/makeWXTicket",
+		                dataType : "json",
+		                async : false,
+		                data:{
+		                	jsApiTicket:jsApiTicket,
+		                	url:url
+		                },
+		                success : function(data) {
+		                    wx.config({
+		                        debug: true,////生产环境需要关闭debug模式
+		                        appId: data.appid,//appId通过微信服务号后台查看
+		                        timestamp: data.timestamp,//生成签名的时间戳
+		                        nonceStr: data.nonceStr,//生成签名的随机字符串
+		                        signature: data.signature,//签名
+		                        jsApiList: [//需要调用的JS接口列表
+                                    'chooseImage',
+                    		        'previewImage',
+                    		        'uploadImage'
+		                        ]
+		                    });
+		                },
+		                error: function(xhr, status, error) {
+		                    //alert(status);
+		                    //alert(xhr.responseText);
+		                }
+		            })
 		        },
 		        error: function(xhr, status, error) {
 		            
@@ -53,19 +85,6 @@
 		    })
 		});
 	
-		wx.config({
-		      debug: true,
-		      appId: '9rJWVru53Ljg2xXs',
-		      timestamp: new Date().getTime(),
-		      nonceStr: 'wKFFp3I20s9INUps',
-		      signature: '80c80e5af969142f18ccdaf29ad00c13d5486b78',
-		      jsApiList: [
-		        'chooseImage',
-		        'previewImage',
-		        'uploadImage'
-		      ]
-		  });
-		
 		
 		wx.ready(function(){
 			//页面加载时就调用相关接口
@@ -82,6 +101,7 @@
 				sizeType : [ 'compressed' ], // 压缩图
 				sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者都有   
 				success : function(res) {
+					alert(JSON.stringify(res));
 					images.localId = res.localIds;
 					syncUpload(res.localIds);
 				}
@@ -126,6 +146,7 @@
 		$(function(){
 			var	staffid=GetQueryString('staffid');
 			var	sessionid=GetQueryString('sessionid');
+			var	flag=GetQueryString('flag');
 			getImage(staffid);
 			$(".multiselect").click(function(){
 				$(".multiselectImg").click();
@@ -147,7 +168,7 @@
 //		                alert(rst.file);
 //		                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
 						//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-		                uploadPositive(rst,rst.formData,staffid,sessionid); 
+		                uploadPositive(rst,rst.formData,staffid,sessionid,flag); 
 		            }).catch(function (err) {
 		                console.log(err);
 		            });
@@ -159,7 +180,8 @@
 		function returnPage(){
 			var staffid = GetQueryString("staffid");
 			var	sessionid=GetQueryString('sessionid');
-			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid;
+			var	flag=GetQueryString('flag');
+			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 		}
 		
 		//获取URL地址参数
@@ -170,7 +192,7 @@
 	    }
 		
 		//上传图片
-		function uploadPositive(rst, formData,staffid,sessionid){
+		function uploadPositive(rst, formData,staffid,sessionid,flag){
 			if(!formData){
 				formData = new FormData();
 			}
@@ -178,6 +200,7 @@
 	        formData.append("type", 12); 
 	        formData.append("staffid", staffid); 
 	        formData.append("sessionid", sessionid); 
+	        formData.append("flag", flag); 
 	        console.log('------------------------------');
 	        console.log(formData); 
 	        console.log(rst.file);
@@ -209,5 +232,5 @@
 			}); // end of ajaxSubmit
 		}
 		</script> -->
-</body>
+	</body>
 </html>

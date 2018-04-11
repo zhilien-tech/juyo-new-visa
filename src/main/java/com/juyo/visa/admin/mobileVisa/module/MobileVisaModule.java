@@ -83,9 +83,10 @@ public class MobileVisaModule {
 	@At
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object uploadImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
-			@Param("type") Integer type, @Param("status") Integer status, @Param("sequence") Integer sequence,
-			HttpServletRequest request, HttpServletResponse response, @Param("sessionid") String sessionid) {
-		return mobileVisaService.updateImage(file, staffid, type, status, sequence, request, response, sessionid);
+			@Param("type") Integer type, @Param("flag") int flag, @Param("status") Integer status,
+			@Param("sequence") Integer sequence, HttpServletRequest request, HttpServletResponse response,
+			@Param("sessionid") String sessionid) {
+		return mobileVisaService.updateImage(file, staffid, type, flag, status, sequence, request, response, sessionid);
 	}
 
 	/*

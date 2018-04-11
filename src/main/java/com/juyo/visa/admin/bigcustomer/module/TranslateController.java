@@ -2,6 +2,7 @@ package com.juyo.visa.admin.bigcustomer.module;
 
 import java.io.UnsupportedEncodingException;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.POST;
@@ -32,24 +33,17 @@ public class TranslateController {
 	@POST
 	public Object translate(@Param("strType") String type, @Param("q") String q) throws UnsupportedEncodingException {
 
-		String result = null;
+		String result = "";
 		try {
 			if (Util.eq(type, "addressen") || Util.eq(type, "detailedAddressen")) {
-				StringBuilder sb = new StringBuilder(q);//构造一个StringBuilder对象
-				if (q.contains("省")) {
-					sb.insert(sb.toString().indexOf("省") + 1, "/");
+				String translateStr = TranslateUtil.translate(q, "en");
+				if (translateStr.contains("/")) {
+					String[] strings = translateStr.split("/");
+					ArrayUtils.reverse(strings);
+					for (int i = 0; i < strings.length; i++) {
+						result += strings[i] + ' ';
+					}
 				}
-				if (q.contains("市")) {
-					sb.insert(sb.toString().indexOf("市") + 1, "/");
-				}
-				if (q.contains("区")) {
-					sb.insert(sb.toString().indexOf("区") + 1, "/");
-				}
-				if (q.contains("县")) {
-					sb.insert(sb.toString().indexOf("县") + 1, "/");
-				}
-				String translateStr = TranslateUtil.translate(sb.toString(), "en");
-				result = translateStr.replaceAll("/", ",");
 			} else {
 				result = TranslateUtil.translate(q, "en");
 			}

@@ -46,7 +46,8 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 				logger.info("getAccessToken.requestUrl====>" + requestUrl);
 				JSONObject result = HttpUtil.doGet(requestUrl);
 				//redis中设置 access_token
-				redisDao.set(WX_TOKENKEY, requestUrl);
+				accessTokenUrl = result.getString("access_token");
+				redisDao.set(WX_TOKENKEY, accessTokenUrl);
 				redisDao.expire(WX_TOKENKEY, 5000);
 
 				accessTokenUrl = requestUrl;
