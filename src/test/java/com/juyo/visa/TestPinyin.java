@@ -6,6 +6,8 @@
 
 package com.juyo.visa;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.juyo.visa.common.util.TranslateUtil;
 
 /**
@@ -15,9 +17,17 @@ public class TestPinyin {
 	static final String ENGLISH = "en"; // 英
 
 	public static void main(String args[]) throws Exception {
-		String translate = TranslateUtil.translate("河北省/保定市/清苑区/徐家湾乡徐庄村后村组", ENGLISH);
-		System.out.println("中文翻译成英语：" + translate);
-		System.out.println("中文翻译成英语：" + new StringBuilder(translate).reverse());
+		String translate = TranslateUtil.translate("河北省/保定市/清苑区/徐家湾乡/徐庄村后村组/奉贤街/21号楼/202", ENGLISH);
+		String translate1 = TranslateUtil.translate("徐家湾乡徐庄村后村组/清苑区/保定市/河北省", ENGLISH);
+		String[] strings = translate.split("/");
+		ArrayUtils.reverse(strings);
+		String result = "";
+		for (int i = 0; i < strings.length; i++) {
+			result += strings[i] + ' ';
+		}
+		System.out.println("中文翻译成英语：" + result);
+		//System.out.println("中文翻译成英语：" + translate1);
+		//System.out.println("中文翻译成英语：" + new StringBuilder(translate).reverse());
 		/*PinyinTool tool = new PinyinTool();
 		try {
 			String name = "LIUYA";
