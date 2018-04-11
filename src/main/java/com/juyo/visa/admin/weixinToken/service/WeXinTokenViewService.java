@@ -43,7 +43,6 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 			if (Util.isEmpty(accessTokenUrl)) {
 				accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 				String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("APPSECRET", WX_APPSECRET);
-				logger.info("getAccessToken.requestUrl====>" + requestUrl);
 				JSONObject result = HttpUtil.doGet(requestUrl);
 				//redis中设置 access_token
 				accessTokenUrl = result.getString("access_token");
@@ -63,7 +62,6 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		String accessToken = (String) getAccessToken();
 		String apiTicketUrl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
 		String requestUrl = apiTicketUrl.replace("ACCESS_TOKEN", accessToken);
-		logger.info("getJsApiTicket.requestUrl====>" + requestUrl);
 		JSONObject result = HttpUtil.doGet(requestUrl);
 		return result;
 	}
@@ -84,13 +82,12 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 		//注意这里参数名必须全部小写，且必须有序
 		string1 = "jsapi_ticket=" + jsApiTicket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + url;
-		logger.info("String1=====>" + string1);
 		try {
 			MessageDigest crypt = MessageDigest.getInstance("SHA-1");
 			crypt.reset();
 			crypt.update(string1.getBytes("UTF-8"));
 			signature = byteToHex(crypt.digest());
-			logger.info("signature=====>" + signature);
+			//logger.info("signature=====>" + signature);
 		} catch (NoSuchAlgorithmException e) {
 			logger.error("WeChatController.makeWXTicket=====Start");
 			logger.error(e.getMessage(), e);

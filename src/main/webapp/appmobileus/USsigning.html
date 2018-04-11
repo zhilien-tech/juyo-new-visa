@@ -101,7 +101,7 @@
 				sizeType : [ 'compressed' ], // 压缩图
 				sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者都有   
 				success : function(res) {
-					alert(JSON.stringify(res));
+					deleteBrotherEle($(".chooseImage"));
 					images.localId = res.localIds;
 					syncUpload(res.localIds);
 				}
@@ -123,6 +123,11 @@
 				}
 			});
 		};
+		
+		//删除同类型的其他兄弟节点
+		function deleteBrotherEle(obj){
+			obj.nextAll().remove();
+		}
 	</script>
 
 
