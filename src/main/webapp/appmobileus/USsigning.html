@@ -31,6 +31,7 @@
 					<img src="img/camera.png" class="camera" /> 
 					<img src="" class="pageImg" />
 				</div>
+				
 			</div>
 		</section>
 	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
@@ -61,7 +62,7 @@
 		                },
 		                success : function(data) {
 		                    wx.config({
-		                        debug: false,////生产环境需要关闭debug模式
+		                        debug: true,//生产环境需要关闭debug模式
 		                        appId: data.appid,//appId通过微信服务号后台查看
 		                        timestamp: data.timestamp,//生成签名的时间戳
 		                        nonceStr: data.nonceStr,//生成签名的随机字符串
@@ -101,10 +102,20 @@
 				sizeType : [ 'compressed' ], // 压缩图
 				sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者都有   
 				success : function(res) {
-					deleteBrotherEle($(".chooseImage"));
+					$('.wxChooseImages ').remove();
+					var localIds = res.localIds;
+					if(localIds != ""){
+						for(var i = 0;i<localIds .length;i++){
+							var imgDivStr = '<div class="householdPage wxChooseImages multiselect"><img src="'+localIds[i]+'" class="pageImg" /></div>';
+							$(".chooseImage").before(imgDivStr);
+						}
+					}
+
+					
 					images.localId = res.localIds;
-					syncUpload(res.localIds);
-					$(".chooseImage").last().append('<div class="householdPage multiselect chooseImage"><img src="'+res.localIds+'" class="pageImg" /></div>	');
+					//syncUpload(res.localIds);
+					
+					
 				}
 			});
 		});
