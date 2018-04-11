@@ -2,6 +2,9 @@
 	margin: 0;
 	padding: 0;
 }
+label {
+	font-weight:normal !important;
+}
 .head {
 	width: 100%;
 	height: 60px;
@@ -49,6 +52,7 @@
 	width: 45%;
 	float: left;
 	margin-left: 40px;
+	color:#656565;
 }
 .English {
 	width: 45%;
@@ -60,7 +64,7 @@
 	line-height: 30px;
 	border-left:3px solid #2f86f0;
 	padding-left:15px;
-	color: blue;
+	color: #000;
 	margin-top: 10px;
 }
 .companyMain {
@@ -91,6 +95,9 @@
 	display: none; 
 	padding: 10px 0;
 }
+.teamnamefalseDiv {
+	margin-bottom:10px;
+}
 .companionSurnName {
 	display: inline-block; 
 	float: left;
@@ -111,7 +118,7 @@
 	clear: both;
 }
 .btnGroup {
-	margin-top: 10px;
+	/* margin-top: 10px; */
 }
 .save {
 	display: inline-block; 
@@ -120,6 +127,7 @@
 	padding: 3px 20px; 
 	color: #FFFFFF; 
 	background: #0099FF;
+	cursor:pointer;
 }
 .cancel {
 	display: inline-block; 
@@ -129,6 +137,11 @@
 	color: #FFFFFF; 
 	background: #0099FF;
 	margin-left: 9%;
+	cursor:pointer;
+}
+.save:hover,.cancel:hover {
+	color:#FFF;
+	text-decoration:none;
 }
 /*以前的美国旅游信息*/
 .beforeTourism {
@@ -147,7 +160,7 @@
 	margin-top: 10px;
 }
 .stopDate select {
-	width: 100px;height: 34px;
+	width: 100px;height: 30px;
 }
 .drivingUS {
 	padding: 10px 0;
@@ -157,6 +170,13 @@
 }
 .driverMain {
 	float: left;
+	margin-bottom:10px;
+}
+.goUS_CountryDiv {
+	margin-bottom:10px;
+}
+.cbox {
+	padding-left:15px;
 }
 .groupcheckBoxInfo label {
 	display: block;
@@ -177,6 +197,10 @@
 }
 .driverR {
 	float: right;
+	margin-bottom:10px;
+}
+.driverGroup {
+	margin-bottom:10px;
 }
 .groupSelectInfo label {
 	display: block;
@@ -190,7 +214,7 @@
 	margin-top: 5px;
 }
 .visaUSMain {
-	padding: 10px 0 10px 15px;
+	padding: 0px 0 10px 15px;
 }
 .dateIssue {
 	display: none;
@@ -218,7 +242,7 @@
 	display: inline-block; 
 	float: right;
 }
-.groupcheckBoxInfo ,.padding-left{
+.padding-left{
 	padding-left:15px;
 }
 .grouptextareaInfo label {
@@ -254,6 +278,9 @@
 .floatLeft {
 	float: left;
 	padding-left:15px;
+}
+.leftNo {
+	padding-left:0 !important;
 }
 .floatRight {
 	float: right;
@@ -307,4 +334,36 @@
 	border-bottom:4px solid #999;
 	transform:translate(0,-50%) rotate(-135deg);
 	-webkit-transform:translate(0,-50%) rotate(-135deg);
+}
+.bigArea {
+	width:100% !important;
+}
+.directRelatives {
+	margin-top:10px;
+}
+.groupPM {
+	padding-left:15px;
+	margin-top:10px;
+}
+/* 左按钮 */
+.leftNav {
+	position: fixed;
+	top: 15px;
+	left: 4px;
+	z-index: 999;
+	width: 40px;
+	height: 100%;
+	cursor: pointer;
+}
+
+.leftNav span {
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	top: 50%;
+	margin-left: 10px;
+	border-right: 4px solid #999;
+	border-top: 4px solid #999;
+	-webkit-transform: translate(0, -50%) rotate(-135deg);
+	transform: translate(0, -50%) rotate(-135deg);
 }

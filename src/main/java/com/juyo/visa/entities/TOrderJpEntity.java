@@ -85,4 +85,16 @@ public class TOrderJpEntity implements Serializable {
 	@Comment("金额")
 	private String amount;
 
+	@Column
+	@Comment("上次赴日时间")
+	private Date laststartdate;
+
+	@Column
+	@Comment("上次停留天数")
+	private Integer laststayday;
+
+	@Column
+	@Comment("上次返回时间")
+	private Date lastreturndate;
+
 }

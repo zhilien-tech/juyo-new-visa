@@ -310,7 +310,7 @@ connectWebSocket();
 function connectWebSocket(){
 	 if ('WebSocket' in window){  
         console.log('Websocket supported');  
-        socket = new WebSocket('ws://'+localAddr+':' + localPort+ '/' + websocketaddr);   
+        socket = new WebSocket('ws://'+localAddr+ '/' + websocketaddr);   
 
         console.log('Connection attempted');  
 

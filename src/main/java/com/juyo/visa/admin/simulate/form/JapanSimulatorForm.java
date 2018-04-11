@@ -30,4 +30,7 @@ public class JapanSimulatorForm {
 
 	/**日志内容*/
 	private String content;
+
+	/**订单状态*/
+	private Integer orderstatus;
 }

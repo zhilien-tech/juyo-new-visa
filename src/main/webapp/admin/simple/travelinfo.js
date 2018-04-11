@@ -371,7 +371,7 @@ function initTravalPlanTable(data){
 }
 //时间插件格式化  出行时间>今天>送签时间 
 var now = new Date();
-/*$("#sendVisaDate").datetimepicker({
+$("#sendVisaDate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
 	startDate: now,//日期小于今天
@@ -379,7 +379,20 @@ var now = new Date();
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
 }).on("click",function(){  
-    $("#sendVisaDate").datetimepicker("setEndDate",$("#goDate").val());  
+    $("#sendVisaDate").datetimepicker("setEndDate",$("#goDate").val()); 
+}).on('changeDate', function(ev){
+	var stayday = 7;
+	var startDate = $("#sendVisaDate").val();
+	$.ajax({ 
+		url: '/admin/visaJapan/autoCalculateBackDate.html',
+		dataType:"json",
+		data:{gotripdate:startDate,stayday:stayday+1},
+		type:'post',
+		success: function(data){
+			$("#outVisaDate").val(data);
+			$("#goDate").datetimepicker("setStartDate",data);
+		}
+	});
 });
 $("#outVisaDate").datetimepicker({
 	format: 'yyyy-mm-dd',
@@ -390,7 +403,7 @@ $("#outVisaDate").datetimepicker({
 	minView: "month"//只显示年月日
 }).on("click",function(){  
 	$("#outVisaDate").datetimepicker("setEndDate",$("#goDate").val());  
-});*/
+});
 
 $("#goDate").datetimepicker({
 	format: 'yyyy-mm-dd',
@@ -425,7 +438,7 @@ $("#returnDate").datetimepicker({
 	}
 });
 
-$('#sendVisaDate').daterangepicker({
+/*$('#sendVisaDate').daterangepicker({
   	startDate:now
 	},function(start, end, label) {
 	
@@ -472,4 +485,4 @@ $('#outVisaDate').daterangepicker({
 	if(goDate){
 		$("#outVisaDate").data('daterangepicker').setEndDate(goDate);  
 	}
-});
+});*/

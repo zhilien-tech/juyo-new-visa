@@ -83,4 +83,6 @@ public class CommonConstants {
 	public static final String AIRPORT_CODE_NAME = "juyo_TripAirlineService_airport_code_name:";
 	//接口数据缓存key
 	public static final String AIRLINE_INFO_KEY = "juyo_TripAirlineService_airlineinfo_code_key";
+
+	public static final String PUBLIC_HOST = "192.168.1.21";
 }

@@ -298,7 +298,7 @@
 										<input type="button" name="visacounty" value="秋田县"
 											class="btn btn-sm btnState"> <input type="button"
 											name="visacounty" value="山形县" class="btn btn-sm btnState">
-										<input type="button" name="visacounty" value="福鸟县"
+										<input type="button" name="visacounty" value="福岛县"
 											class="btn btn-sm btnState">
 									</div>
 								</div>
