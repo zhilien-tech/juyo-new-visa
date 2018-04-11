@@ -551,4 +551,8 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		return cardEntity;
 
 	}
+
+	public Object saveSecondHousecard(int type, int staffid, String propertyholder, String area, String address) {
+		return null;
+	}
 }
