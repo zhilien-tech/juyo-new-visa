@@ -104,6 +104,7 @@
 					deleteBrotherEle($(".chooseImage"));
 					images.localId = res.localIds;
 					syncUpload(res.localIds);
+					$(".chooseImage").last().append('<div class="householdPage multiselect chooseImage"><img src="'+res.localIds+'" class="pageImg" /></div>	');
 				}
 			});
 		});
