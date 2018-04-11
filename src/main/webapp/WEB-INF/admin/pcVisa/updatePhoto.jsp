@@ -49,7 +49,7 @@
 						height="100%" />
 				</c:if> --%>
 			</div>
-			<input id="1" type="file" id="uploadFileImg" class="publicFile uploadFileImg" name="uploadFileImg" />
+			<input type="file" id="uploadFileImg" class="publicFile uploadFileImg" name="uploadFileImg" />
 		</div>
 		<!--护照首页-->
 		<div class="passport">
@@ -270,10 +270,12 @@
 		$(".uploadPhoto").click(function(){
 			$("#uploadFileImg").click();
 			$("#uploadFileImg").change(function(){
+				alert(111);
 				layer.load(1,{
 					shade : "#000"
 				});
 				var that = this;
+				alert(that);
 	            lrz(this.files[0])
 	            	.then(function (rst) {
 	                /* $('.bacimg2').attr('src',rst.base64);*/
@@ -283,10 +285,10 @@
 	                resultSize = (rst.fileLen / 1024).toFixed(2);
 	                scale = parseInt(100 - (resultSize / sourceSize * 100));
 	                rst.formData.append('uploadFileImg',rst.file);
-//	                alert(rst);
-//	                alert(JSON.stringify(rst.formData));
-//	                alert(rst.file);
-//	                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
+	                //alert(rst);
+	                //alert(JSON.stringify(rst.formData));
+	                //alert(rst.file);
+	                //alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
 	                uploadPositive(rst,rst.formData,staffid); 
 	            }).catch(function (err) {
 	                console.log(err);

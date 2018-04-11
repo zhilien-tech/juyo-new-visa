@@ -109,6 +109,7 @@
 	$(function() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
+		var flag = GetQueryString("flag");
 		getUserInfo(staffid);
 		determineUpload13(staffid);
 		determineUpload12(staffid);
@@ -139,7 +140,7 @@
 								window.location.href = '/appmobileus/USMarital.html?staffid='
 										+ staffid
 										+ '&marryurltype='
-										+ selectvalue+'&sessionid='+sessionid;
+										+ selectvalue+'&sessionid='+sessionid+'&flag='+flag;
 							}
 
 						});
@@ -148,81 +149,81 @@
 	function twoinchphoto() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
-		window.location.href = '/appmobileus/USPhoto.html?staffid=' + staffid+'&sessionid='+sessionid;
+		window.location.href = '/appmobileus/USPhoto.html?staffid=' + staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转新护照
 	function passport() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USPassport.html?staffid='
-				+ staffid+'&sessionid='+sessionid;
+				+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转老护照
 	function oldpassport() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USOldpassport.html?staffid='
-				+ staffid+'&sessionid='+sessionid;
+				+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转身份证
 	function uscard() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
-		window.location.href = '/appmobileus/USIDCard.html?staffid=' + staffid+'&sessionid='+sessionid;
+		window.location.href = '/appmobileus/USIDCard.html?staffid=' + staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转户口本
 	function ushousehold() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USHousehold.html?staffid='
-				+ staffid+'&sessionid='+sessionid;
+				+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转房产证
 	function ushousecard() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USHousecard.html?staffid='
-				+ staffid+'&sessionid='+sessionid;
+				+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转银行流水
 	function usbankflow() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USBankflow.html?staffid='
-				+ staffid+'&sessionid='+sessionid;
+				+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转在职证明
 	function usjobcertificate() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USJobcertificate.html?staffid='
-				+ staffid+'&sessionid='+sessionid;
+				+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转营业执照
 	function usbiness() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USBusiness.html?staffid='
-				+ staffid+'&sessionid='+sessionid;
+				+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转驾驶证
 	function usdriving() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
-		window.location.href = '/appmobileus/USDriving.html?staffid=' + staffid+'&sessionid='+sessionid;
+		window.location.href = '/appmobileus/USDriving.html?staffid=' + staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转过期美签
 	function usoldsigned() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
 		window.location.href = '/appmobileus/USOldsigned.html?staffid='
-				+ staffid+'&sessionid='+sessionid;
+				+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转美国出签
 	function ussigning() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
-		window.location.href = '/appmobileus/USsigning.html?staffid=' + staffid+'&sessionid='+sessionid;
+		window.location.href = '/appmobileus/USsigning.html?staffid=' + staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 
 	//获取用户拍摄信息

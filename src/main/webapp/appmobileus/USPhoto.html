@@ -35,7 +35,7 @@
 			<div class="picShoot">
 				<div id="uploadImg"> 
 					<p>拍摄上传</p>
-					<img :src="passportdata.passporturl" class="uploadPhotoReady" />
+					<img :src="passportdata.passporturl" style="pointer-events:none;" class="uploadPhotoReady" />
 				</div>
 				<input type="file" id="image" name="image" />
 			</div>
@@ -43,8 +43,7 @@
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script type="text/javascript" src="js/rem(750).js" ></script>
 		<script type="text/javascript" src="js/layer.js" ></script>
-		<script type="text/javascript" src="js/lrz.bundle.js" ></script>
-		<script type="text/javascript" src="js/vue.min.js" ></script>
+		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
 		<script>
 			function getImage(staffid){
 				$.ajax({
@@ -74,7 +73,8 @@
 							shade : "#000"
 						});
 						var that = this;
-			            lrz(this.files[0]).then(function (rst) {
+						lrz(this.files[0])
+	                    .then(function (rst) {
 			                /* $('.bacimg2').attr('src',rst.base64);*/
 			                $('#upload').hide(); 
 			                // 处理成功会执行
@@ -82,7 +82,6 @@
 			                resultSize = (rst.fileLen / 1024).toFixed(2);
 			                scale = parseInt(100 - (resultSize / sourceSize * 100));
 			                rst.formData.append('image',rst.file);
-//			                alert(rst);
 //			                alert(JSON.stringify(rst.formData));
 //			                alert(rst.file);
 //			                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);

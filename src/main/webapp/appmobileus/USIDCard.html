@@ -27,14 +27,14 @@
 			<div class="IDShoot">
 				<div class="uploadIDFace">
 					<p>上传身份证正面</p>
-					<img :src="passportdata.passporturl" class="uploadImgFace" />
+					<img :src="passportdata.passporturl" style="pointer-events:none;" class="uploadImgFace" />
 				</div>
-				<input type="file" class="faceImg" id="faceImg" name="faceImg" />
+				<input type="file" style="pointer-events:none;" class="faceImg" id="faceImg" name="faceImg" />
 			</div>
 			<div class="IDShoot">
 				<div class="uploadIDBack">
 					<p>上传身份证背面</p>
-					<img :src="passportdata.passporturl" class="uploadImgBack" />
+					<img :src="passportdata.passporturl" style="pointer-events:none;" class="uploadImgBack" />
 				</div>
 				<input type="file" class="backImg" id="backImg" name="backImg" />
 			</div>
@@ -42,7 +42,7 @@
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script type="text/javascript" src="js/rem(750).js" ></script>
 		<script type="text/javascript" src="js/layer.js" ></script>
-		<script type="text/javascript" src="js/lrz.bundle.js" ></script>
+		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
 		<script type="text/javascript" src="js/vue.min.js" ></script>
 		<script>
 			//异步加载的URL地址
@@ -108,7 +108,7 @@
 				var	sessionid=GetQueryString('sessionid');
 				getImageFront(staffid);
 				getImageBack(staffid);
-				$(".uploadImgFace").click(function(){
+				$(".uploadIDFace").click(function(){
 					$("#faceImg").click();
 					$("#faceImg").change(function(){
 						layer.load(1,{
@@ -134,7 +134,7 @@
 			            });
 					});
 				});
-				$(".uploadImgBack").click(function(){
+				$(".uploadIDBack").click(function(){
 					$("#backImg").click();
 					$("#backImg").change(function(){
 						layer.load(1,{

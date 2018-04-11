@@ -45,12 +45,15 @@
 				<span class="orderNum">订单号： <span>${obj.orderInfo.ordernumber}</span>
 				</span>
 				<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
-				<span class="state">状态： <c:if
+				<%-- <span class="state">状态： <c:if
 						test="${obj.orderInfo.status == '1'}">
 						<p>下单</p>
 					</c:if> <c:if test="${obj.orderInfo.status == '0'}">
 						<p>0</p>
 					</c:if>
+				</span>  --%>
+				<span class="state">状态： 
+					<p id="orderstatus">${obj.orderstatus }</p>
 				</span> 
 					<input type="button"  onclick="returnBack()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
@@ -568,7 +571,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content:'/admin/pcVisa/updatePhoto.html?staffid='+id
+				content:'/admin/pcVisa/updatePhoto.html?staffid='+id+'&flag=1'
 			});
 		}
 		$(".form-format").datetimepicker({

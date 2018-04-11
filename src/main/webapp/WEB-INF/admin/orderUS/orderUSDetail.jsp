@@ -446,7 +446,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>姓名/拼音</label> <input id="allname" disabled="true"
-													value="${obj.passport.firstname }${obj.passport.lastname }${obj.passport.firstnameen } ${obj.lastnameen }" type="text"
+													value="${obj.passport.firstname }${obj.passport.lastname }/${obj.passport.firstnameen } ${obj.passport.lastnameen }" type="text"
 													class="form-control input-sm" />
 											</div>
 										</div>
@@ -607,7 +607,7 @@
 		var firstname =  '${obj.passport.firstname }';
 		var lastname =  '${obj.passport.lastname }';
 		var firstnameen =  '${obj.passport.firstnameen }';
-		var lastnameen =  '${obj.lastnameen }';
+		var lastnameen =  '${obj.passport.lastnameen }';
 		if((firstname != "" || lastname != "") && (firstnameen == "" || lastnameen == "")){
 			$("#allname").val(firstname+lastname+"/"+getPinyinStr(firstname)+getPinyinStr(lastname));
 		}
@@ -1283,7 +1283,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content:'/admin/pcVisa/updatePhoto.html?staffid='+staffid
+				content:'/admin/pcVisa/updatePhoto.html?staffid='+staffid+'&flag=0'
 			});
 		}
 		

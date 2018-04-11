@@ -592,39 +592,39 @@ function dataURLtoBlob(dataurl) {
 
 //婚姻状况处理
 //左边
-if(marrystatus == 8 || marrystatus == ""){//其他，隐藏婚姻说明
-	$(".marryexplain").hide();
-}else{
+if(marrystatus == 8 ){//其他有婚姻说明
 	$(".marryexplain").show();
+}else{
+	$(".marryexplain").hide();
 }
 
 $("#marrystatus").change(function(){
 	var status = $(this).val();
 	$("#marrystatusen").val(status);
-	if($("#marrystatusen").val() == 8 || $("#marrystatusen").val() == ""){//其他，隐藏婚姻说明
-		$(".marryexplainen").hide();
-	}else{
+	if($("#marrystatusen").val() == 8 ){//其他有婚姻说明
 		$(".marryexplainen").show();
-	}
-	if(status == 8 || status == ""){
-		$(".marryexplain").hide();
 	}else{
+		$(".marryexplainen").hide();
+	}
+	if(status == 8 ){
 		$(".marryexplain").show();
+	}else{
+		$(".marryexplain").hide();
 	}
 });
 //右边
-if(marrystatusen == 8 || marrystatusen == ""){//其他，隐藏婚姻说明
-	$(".marryexplainen").hide();
-}else{
+if(marrystatusen == 8 ){//其他有婚姻说明
 	$(".marryexplainen").show();
+}else{
+	$(".marryexplainen").hide();
 }
 
 $("#marrystatusen").change(function(){
 	var status = $(this).val();
-	if(status == 8 || status == ""){
-		$(".marryexplainen").hide();
-	}else{
+	if(status == 8 ){
 		$(".marryexplainen").show();
+	}else{
+		$(".marryexplainen").hide();
 	}
 })
 

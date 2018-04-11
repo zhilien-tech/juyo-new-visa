@@ -243,7 +243,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userid = loginUser.getId();
 		//格式化日期
-		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_FULLPART_PATTERN);
+		DateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm");
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		//订单信息
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
@@ -269,9 +269,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//护照信息
 		TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", staffid));
-		if (!Util.isEmpty(passport.getLastnameen())) {
+		/*if (!Util.isEmpty(passport.getLastnameen())) {
 			result.put("lastnameen", passport.getLastnameen().substring(1));
-		}
+		}*/
 		if (!Util.isEmpty(passport.getBirthday())) {
 			result.put("birthday", sdf.format(passport.getBirthday()));
 		}
@@ -1196,6 +1196,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		rd.getInputs().add(input);
 		String content = Json.toJson(rd);
 		String info = (String) appCodeCall(content);//扫描完毕
+		System.out.println("info:" + info);
 		//解析扫描的结果，结构化成标准json格式
 		USStaffJsonEntity jsonEntity = new USStaffJsonEntity();
 		JSONObject resultObj = new JSONObject(info);
@@ -1255,6 +1256,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		String content = Json.toJson(rd);
 		String info = (String) aliPassportOcrAppCodeCall(content);
+		System.out.println("info:" + info);
 
 		//解析扫描的结果，结构化成标准json格式
 		USPassportJsonEntity jsonEntity = new USPassportJsonEntity();
