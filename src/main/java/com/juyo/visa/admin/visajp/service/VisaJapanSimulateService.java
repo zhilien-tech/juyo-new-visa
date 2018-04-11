@@ -6,9 +6,13 @@
 
 package com.juyo.visa.admin.visajp.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,17 +22,24 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
+import com.juyo.visa.admin.visajp.util.TemplateUtil;
+import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
+import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TUserEntity;
@@ -54,6 +65,11 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	private OrderJpViewService orderJpViewService;
 	@Inject
 	private ChangePrincipalViewService changePrincipalViewService;
+	@Inject
+	private UploadService qiniuUpService;
+	/**辽宁万达下载文件*/
+	@Inject
+	private LiaoNingWanDaService liaoNingWanDaService;
 
 	private static final Integer VISA_PROCESS = JPOrderProcessTypeEnum.VISA_PROCESS.intKey();
 
@@ -70,7 +86,35 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		orderinfo.setStatus(visastatus);
-		//orderjp.setVisastatus(visastatus);
+		if (!Util.isEmpty(visastatus) && visastatus.equals(JPOrderStatusEnum.BIANGENGZHONG.intKey())) {
+			//orderjp.setVisastatus(visastatus);
+			//生成excel
+			//申请人信息
+			Map<String, Object> tempdata = new HashMap<String, Object>();
+			String applysqlstr = sqlManager.get("get_applyinfo_from_filedown_by_orderid_jp");
+			Sql applysql = Sqls.create(applysqlstr);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("taoj.orderId", "=", orderjp.getId());
+			List<Record> applyinfo = dbDao.query(applysql, cnd, null);
+			tempdata.put("applyinfo", applyinfo);
+			//excel导出
+			ByteArrayOutputStream excelExport = downLoadVisaFileService.excelExport(tempdata);
+			//生成excel临时文件
+			TemplateUtil templateUtil = new TemplateUtil();
+			File excelfile = templateUtil.createTempFile(excelExport);
+			FileInputStream fileInputStream = null;
+			try {
+				fileInputStream = new FileInputStream(excelfile);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			String qiniuurl = qiniuUpService.uploadImage(fileInputStream, "xlsx", null);
+			//返回上传后七牛云的路径
+			String fileqiniupath = CommonConstants.IMAGES_SERVER_ADDR + qiniuurl;
+			//保存生成的七牛excel路径
+			orderjp.setExcelurl(fileqiniupath);
+			dbDao.update(orderjp);
+		}
 		//添加日志
 		orderJpViewService.insertLogs(orderinfo.getId(), visastatus, session);
 		//订单负责人变更
@@ -92,11 +136,17 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	public Object downloadFile(Long orderid, HttpServletResponse response, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		try {
 			//查询日本订单
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
 			//获取打包的文件
-			byte[] byteArray = downLoadVisaFileService.generateFile(orderjp).toByteArray();
+			byte[] byteArray = null;
+			if (loginCompany.getName().startsWith("辽宁万达")) {
+				byteArray = liaoNingWanDaService.generateFile(orderjp).toByteArray();
+			} else {
+				byteArray = downLoadVisaFileService.generateFile(orderjp).toByteArray();
+			}
 			//获取订单信息，准备文件名称
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 			//主申请人姓名

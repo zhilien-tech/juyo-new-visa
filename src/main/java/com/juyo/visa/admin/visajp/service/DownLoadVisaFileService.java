@@ -136,6 +136,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		//准备封皮信息
 		ByteArrayOutputStream note = note(tempdata);
 		pdffiles.add(note);
+		//
 		for (Record record : applyinfo) {
 			ByteArrayOutputStream apply = applyinfo(record, tempdata);
 			pdffiles.add(apply);
@@ -196,6 +197,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		//査 証 申 請 人 名 簿
 		ByteArrayOutputStream book = book(tempdata);
 		pdffiles.add(book);
+
 		ByteArrayOutputStream mergePdf = templateUtil.mergePdf(pdffiles);
 		fileMap.put("照会.pdf", templateUtil.createTempFile(mergePdf));
 		ByteArrayOutputStream bodyElement = bodyElement(tempdata);
@@ -250,7 +252,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		}
 		String companyname = "";
 		if (!Util.isEmpty(company.getName())) {
-			company.getName();
+			companyname = company.getName();
 		}
 		content.append("　　" + companyname).append("根据与").append(dijie).append("的合同约定，组织").append(applyinfo.size())
 				.append("人访日个人旅游，请协助办理").append(visatypestr).append("往返赴日签证");

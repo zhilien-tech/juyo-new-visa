@@ -307,7 +307,7 @@
 									<input type="button" name="visacounty" value="宫城县" class="btn btn-sm btnState">
 									<input type="button" name="visacounty" value="秋田县" class="btn btn-sm btnState">
 									<input type="button" name="visacounty" value="山形县" class="btn btn-sm btnState">
-									<input type="button" name="visacounty" value="福鸟县" class="btn btn-sm btnState">
+									<input type="button" name="visacounty" value="福岛县" class="btn btn-sm btnState">
 								</div>
 							</div>
 						</div>
@@ -469,7 +469,7 @@
 		var threecounty = '${obj.orderJpinfo.threeCounty}';
 		var orderid = '${obj.orderId}';
 		var orderJpId = '${obj.orderJpId}';
-		var localAddr = '${obj.localAddr}';
+		var localAddr = '${obj.localAddr}:${obj.localPort}';
 		var localPort = '${obj.localPort}';
 		var websocketaddr = '${obj.websocketaddr}';
 	</script>

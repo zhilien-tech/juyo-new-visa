@@ -1606,6 +1606,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			if (Util.isEmpty(record.get("passportno"))) {
 				resultstrbuf.append("申请人" + count + "的护照号、");
 			}
+			if (Util.isEmpty(record.get("position"))) {
+				resultstrbuf.append("申请人" + count + "的职位、");
+			}
+			if (Util.isEmpty(record.get("unitName"))) {
+				resultstrbuf.append("申请人" + count + "的父母（配偶）职业、");
+			}
 			count++;
 		}
 		String resultstr = resultstrbuf.toString();
@@ -1848,5 +1854,21 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			return JuYouResult.ok();
 		}
 
+	}
+
+	public Object initOrderstatus(Long orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		String orderstatus = "";
+		for (JPOrderStatusEnum jpordersimpleenum : JPOrderStatusEnum.values()) {
+			if (jpordersimpleenum.intKey() == order.getStatus()) {
+				orderstatus = jpordersimpleenum.value();
+				break;
+			}
+		}
+		result.put("orderstatus", orderstatus);
+		result.put("orderjp", orderjp);
+		return result;
 	}
 }

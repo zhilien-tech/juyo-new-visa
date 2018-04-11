@@ -36,6 +36,7 @@ import com.juyo.visa.common.enums.MainApplicantRemarkEnum;
 import com.juyo.visa.common.enums.MainOrViceEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
+import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
@@ -273,7 +274,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		result.put("contact", contact);
 		result.put("applyId", applyId);
 		//生成二维码
-		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+		String qrurl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/info.html?applicantid=" + applyId;
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
@@ -367,7 +368,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		result.put("contact", contact);
 		result.put("applyId", applyId);
 		//生成二维码
-		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+		String qrurl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/info.html?applicantid=" + applyId;
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
@@ -1101,7 +1102,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		}
 
 		//生成二维码
-		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+		String qrurl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/info.html?applicantid=" + applicantEntity.getId();
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
@@ -1148,7 +1149,7 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		}
 
 		//生成二维码
-		String qrurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+		String qrurl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/info.html?applicantid=" + applicantEntity.getId();
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
@@ -1219,9 +1220,9 @@ public class MyDataService extends BaseService<TOrderJpEntity> {
 		result.put("mainApply", records);
 		//result.put("visaInfo", visaInfo);
 		//获取所访问的ip地址
-		String localAddr = request.getLocalAddr();
+		String localAddr = request.getServerName();
 		//所访问的端口
-		int localPort = request.getLocalPort();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);

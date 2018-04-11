@@ -76,4 +76,3 @@ $("#serviceenddate").datetimepicker({
 	pickerPosition:"top-left",//显示位置
 	minView: "month"//只显示年月日
 });
-

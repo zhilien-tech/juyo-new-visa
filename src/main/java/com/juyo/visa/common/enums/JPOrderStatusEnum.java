@@ -19,7 +19,7 @@ public enum JPOrderStatusEnum implements IEnum {
 			18, "发招宝失败"), BIANGENGZHONG(19, "招宝变更中"), YIBIANGENG(20, "招宝已变更"), BIANGENGSHIBAI(21, "招宝变更失败"), QUXIAOZHONG(
 			22, "招宝取消中"), YIQUXIAO(23, "招宝已取消"), QUXIAOSHIBAI(24, "招宝取消失败"), REFUSE_SIGN(27, "报告拒签"), AFTERMARKET_ORDER(
 			25, "售后"), CAN_BACKMAIL(33, "可以回邮"), DISABLED(26, "作废"), JAPANREPORT(29, "上传归国报告"), JAPANREPORTFAIL(30,
-			"归国报告失败");
+			"归国报告失败"), WANGZHANBIANGENGZHONG(34, "招宝变更中"), WANGZHANQUXIAOZHONG(35, "招宝取消中");
 	private int key;
 	private String value;
 

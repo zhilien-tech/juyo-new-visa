@@ -195,6 +195,19 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 	public Object savePassportInfo(TApplicantPassportLowerEntity passportinfo, MobileApplicantForm form) {
 		if (!Util.isEmpty(passportinfo.getId())) {
 			dbDao.update(passportinfo);
+			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, passportinfo.getApplicantid().longValue());
+			//applicant.setSex(passportinfo.getSex());
+			applicant.setFirstName(passportinfo.getFirstname());
+			applicant.setLastName(passportinfo.getLastname());
+			if (!Util.isEmpty(passportinfo.getFirstnameen())) {
+				applicant.setFirstNameEn(passportinfo.getFirstnameen().substring(1));
+			}
+			if (!Util.isEmpty(passportinfo.getLastnameen())) {
+				applicant.setLastNameEn(passportinfo.getLastnameen().substring(1));
+			}
+			applicant.setSex(passportinfo.getSex());
+			applicant.setBirthday(passportinfo.getBirthday());
+			dbDao.update(applicant);
 		} else {
 			Integer orderjpid = form.getOrderid();
 			if (Util.isEmpty(orderjpid)) {
@@ -215,6 +228,8 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 			applicantEntity.setFirstNameEn(passportinfo.getFirstnameen());
 			applicantEntity.setLastName(passportinfo.getLastname());
 			applicantEntity.setLastNameEn(passportinfo.getLastnameen());
+			applicantEntity.setSex(passportinfo.getSex());
+			applicantEntity.setBirthday(passportinfo.getBirthday());
 			TApplicantEntity insertapplicant = dbDao.insert(applicantEntity);
 			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
 			applicantjp.setApplicantId(insertapplicant.getId());
@@ -241,6 +256,13 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 			dbDao.insert(workJp);
 			passportinfo.setApplicantid(insertapplicant.getId());
 			dbDao.insert(passportinfo);
+			TApplicantVisaOtherInfoEntity visaother = new TApplicantVisaOtherInfoEntity();
+			visaother.setApplicantid(insertappjp.getId());
+			visaother.setHotelname("参照'赴日予定表'");
+			visaother.setVouchname("参照'身元保证书'");
+			visaother.setInvitename("参照'身元保证书'");
+			visaother.setTraveladvice("推荐");
+			dbDao.insert(visaother);
 		}
 		form.setApplicantid(passportinfo.getApplicantid());
 		form.setMessagetype(2);
