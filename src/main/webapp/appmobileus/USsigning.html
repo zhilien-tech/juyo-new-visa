@@ -33,13 +33,26 @@
 	</section>
 	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 	<script type="text/javascript" src="js/rem(750).js"></script>
-	<script type="text/javascript" src="js/layer.js"></script>
-	<script type="text/javascript" src="js/lrz.bundle.js"></script>
-	<script type="text/javascript" src="js/vue.min.js"></script>
-	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 
 
 	<script type="text/javascript">
+	
+		$(function(){
+			$.ajax({
+		        type : "post",
+		        url : "/admin/weixinToken/getAccessToken",
+		        dataType : "json",
+		        async : false,
+		        success : function(data) {
+		            alert(JSON.stringify(data));
+		        },
+		        error: function(xhr, status, error) {
+		            
+		        }
+		    })
+		});
+	
 		wx.config({
 		      debug: true,
 		      appId: '9rJWVru53Ljg2xXs',

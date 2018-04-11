@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 
 @IocBean
+@Filters
 @At("admin/weixinToken")
 public class WeiXinTokenModule {
 

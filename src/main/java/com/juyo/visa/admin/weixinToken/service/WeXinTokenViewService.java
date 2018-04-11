@@ -48,7 +48,9 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 				//redis中设置 access_token
 				redisDao.set(WX_TOKENKEY, requestUrl);
 				redisDao.expire(WX_TOKENKEY, 5000);
+
 				accessTokenUrl = requestUrl;
+
 			}
 		}
 
