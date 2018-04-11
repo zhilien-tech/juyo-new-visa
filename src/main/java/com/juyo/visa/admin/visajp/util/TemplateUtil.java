@@ -101,6 +101,7 @@ public class TemplateUtil {
 			PdfStamper ps = new PdfStamper(reader, stream);
 			//4 获取pdf表单
 			AcroFields fields = ps.getAcroFields();
+			fields.removeXfa();//必须执行否则配偶职业和曾用名field名称重复
 			Set<Entry<String, Item>> entrySet = fields.getFields().entrySet();
 			for (Entry<String, Item> entry : entrySet) {
 				String key = entry.getKey();

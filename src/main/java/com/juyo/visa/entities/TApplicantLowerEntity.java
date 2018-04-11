@@ -70,6 +70,10 @@ public class TApplicantLowerEntity implements Serializable {
 	private String emergencytelephone;
 
 	@Column
+	@Comment("紧急联系人地址")
+	private String emergencyaddress;
+
+	@Column
 	@Comment("是否另有国籍")
 	private Integer hasothernationality;
 

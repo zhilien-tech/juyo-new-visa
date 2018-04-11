@@ -31,6 +31,7 @@ import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.common.util.RegExpUtil;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -167,13 +168,13 @@ public class AftermarketService extends BaseService<TOrderEntity> {
 		}
 		map.put("${ordernum}", order.getOrderNum());
 		//手机端页面链接
-		String mobileUrl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort()
+		String mobileUrl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/backEmailInfo.html?applicantId=" + applicant.getId();
 		//转换长连接为短地址
 		mobileUrl = firstTrialJpViewService.getEncryptlink(mobileUrl, request);
 		map.put("${mobileUrl}", mobileUrl);
 		//电子邮件链接
-		String emailurl = "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/tlogin.html";
+		String emailurl = "http://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin.html";
 		map.put("${emailurl}", emailurl);
 		//发送邮件
 		mailService.sendHtml(email, map, AFTERMARKET_EMAIL_URL, "售后通知");

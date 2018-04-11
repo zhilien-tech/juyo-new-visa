@@ -108,5 +108,8 @@ public class TApplicantVisaOtherInfoEntity implements Serializable {
 	@Column
 	@Comment("是否是姓名")
 	private String isname;
+	@Column
+	@Comment("是否是邀请人")
+	private String isyaoqing;
 
 }

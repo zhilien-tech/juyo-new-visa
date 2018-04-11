@@ -7,11 +7,37 @@
         <link rel="stylesheet" href="css/login.css" />
         <script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
         <script>
+      //获取URL地址参数
+        function GetQueryString(name){
+             var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+             var r = window.location.search.substr(1).match(reg);
+             if(r!=null)return  unescape(r[2]); return null;
+        }
+      
         	$(function(){
-        		
+        		var code = GetQueryString("code");
         		$("#bgImgPic").height($(window).height());
         		$("#bgImgPic").width($(window).width());
+        		$.ajax({
+        			type : "POST",//提交类型  
+        			//dataType : "json",//返回结果格式  
+        			url : '/admin/weixinToken/saveWxinfo',//请求地址  
+        			async : true,
+        			processData : false, //当FormData在jquery中使用的时候需要设置此项
+        			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+        			data:{code:code},
+        			//请求数据  
+        			success : function(obj) {//请求成功后的函数 
+        				//关闭加载层
+        				console.log(obj);
+        			},
+        			error : function(XMLHttpRequest, textStatus, errorThrown) {
+        				
+        			}
+        		});
         	})
+        	
+        	
         </script>
     </head>
     <body>
