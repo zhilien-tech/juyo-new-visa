@@ -421,10 +421,12 @@
 		//保存
 		function save(status){
 			//得到获取validator对象或实例 
+			$("#addBtn").attr('disabled', true);
 			layer.load(1);
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
 			if (!bootstrapValidator.isValid()) {
+				$("#addBtn").attr('disabled', false);
 				layer.closeAll("loading");
 				return;
 			}
@@ -435,6 +437,7 @@
 				data : passportInfo,
 				url: '${base}/admin/simple/saveEditPassport.html',
 				success :function(data) {
+					$("#addBtn").attr('disabled', false);
 					layer.closeAll("loading");
 					window.parent.document.getElementById("orderid").value = data.orderid;
 					console.log(JSON.stringify(data));

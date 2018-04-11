@@ -11,3 +11,6 @@ b,strong{font-weight: 500;}
 a{text-decoration: none;}
 p{margin: 0;}
 img[src=""]{ opacity: 0; }
+img {
+	pointer-events:none;
+}

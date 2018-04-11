@@ -62,6 +62,8 @@ public class TApplicantForm extends DataTablesParamForm {
 
 	private String emergencyTelephone;
 
+	private String emergencyaddress;
+
 	private Integer hasOtherNationality;
 
 	private Integer hasOtherName;

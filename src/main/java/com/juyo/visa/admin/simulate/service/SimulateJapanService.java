@@ -83,8 +83,12 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		//查询是否有需要自动填表的订单
 		String sqlstring = sqlManager.get("select_simulate_jp_order");
 		Sql sql = Sqls.create(sqlstring);
-		List<Record> orderjplist = dbDao.query(sql,
-				Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);
+		//查询发招宝、招宝变更中、招宝取消中的订单
+		Integer[] orderstatus = { JPOrderStatusEnum.READYCOMMING.intKey(), JPOrderStatusEnum.BIANGENGZHONG.intKey(),
+				JPOrderStatusEnum.QUXIAOZHONG.intKey() };
+		List<Record> orderjplist = dbDao.query(sql, Cnd.where("tr.status", "in", orderstatus), null);
+		/*List<Record> orderjplist = dbDao.query(sql,
+				Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);*/
 		if (!Util.isEmpty(orderjplist) && orderjplist.size() > 0) {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 			//获取第一条
@@ -122,8 +126,19 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					}
 				}
 				TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+				Integer status = orderinfo.getStatus();
+				map.put("orderstatus", status);
 				//将订单设置为提交中
-				orderinfo.setStatus(JPOrderStatusEnum.COMMITING.intKey());
+				if (JPOrderStatusEnum.READYCOMMING.intKey() == status) {
+					//如果是发招宝状态，将订单状态变为提交中
+					orderinfo.setStatus(JPOrderStatusEnum.COMMITING.intKey());
+				} else if (JPOrderStatusEnum.BIANGENGZHONG.intKey() == status) {
+					//如果是招宝变更状态变为网站变更中
+					orderinfo.setStatus(JPOrderStatusEnum.WANGZHANBIANGENGZHONG.intKey());
+				} else if (JPOrderStatusEnum.QUXIAOZHONG.intKey() == status) {
+					//如果是招宝取消状态，变为网站招宝取消中
+					orderinfo.setStatus(JPOrderStatusEnum.WANGZHANQUXIAOZHONG.intKey());
+				}
 				dbDao.update(orderinfo);
 				map.put("ordernum", orderinfo.getOrderNum());
 			}
@@ -192,6 +207,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					map.put("VISA_STAY_PREF_7", false);
 					map.put("VISA_STAY_PREF_47", false);
 				}
+				map.put("acceptdesign", orderjp.getAcceptDesign());
 			}
 			map.put("agentNo", agentNo);
 			map.put("visaType1", record.get("visatype"));
@@ -448,6 +464,35 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		filllog.setLogdate(new Date());
 		filllog.setContent(form.getContent());
 		dbDao.insert(filllog);
+		return null;
+	}
+
+	/**
+	 * 更新为已发招宝
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateYifa(JapanSimulatorForm form) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, form.getCid());
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		//order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
+		if (JPOrderStatusEnum.READYCOMMING.intKey() == form.getOrderstatus()) {
+			order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
+		} else if (JPOrderStatusEnum.BIANGENGZHONG.intKey() == form.getOrderstatus()) {
+			order.setStatus(JPOrderStatusEnum.YIBIANGENG.intKey());
+		} else if (JPOrderStatusEnum.QUXIAOZHONG.intKey() == form.getOrderstatus()) {
+			order.setStatus(JPOrderStatusEnum.YIQUXIAO.intKey());
+		}
+		dbDao.update(order);
+		//消息通知
+		try {
+			visaInfoWSHandler.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

@@ -60,13 +60,13 @@ public class TestAirLineInterface {
 			List<NameValuePair> paramList = new ArrayList<>();
 			paramList.add(new BasicNameValuePair("key", "99915bf5907d45a38ee2cfc6f19031a4"));
 			//出发城市
-			paramList.add(new BasicNameValuePair("orgCity", "SHA"));
+			paramList.add(new BasicNameValuePair("orgCity", "BJS"));
 			//抵达城市
-			paramList.add(new BasicNameValuePair("dstCity", "TYO"));
+			paramList.add(new BasicNameValuePair("dstCity", "SHA"));
 			//航班号
 			//			paramList.add(new BasicNameValuePair("flightNo", "CA181"));
 			//出发时间
-			paramList.add(new BasicNameValuePair("flightDate", "30180121"));
+			paramList.add(new BasicNameValuePair("flightDate", "20180403"));
 			// 模拟表单
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList);
 			httpPost.setEntity(entity);

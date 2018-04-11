@@ -1,5 +1,5 @@
 /**
- * SaleModule.java
+s * SaleModule.java
  * com.juyo.visa.admin.sale.module
  * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
 */
@@ -35,6 +35,7 @@ import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.ShareTypeEnum;
+import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;
@@ -84,8 +85,8 @@ public class OrderJpModule {
 		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
 		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(MainSaleVisaTypeEnum.class));
 		result.put("orderStatus", EnumUtil.enum2(JPOrderStatusEnum.class));
-		String localAddr = request.getLocalAddr();
-		int localPort = request.getLocalPort();
+		String localAddr = request.getServerName();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", VISAINFO_WEBSPCKET_ADDR);
@@ -166,8 +167,8 @@ public class OrderJpModule {
 		Map<String, Object> result = MapUtil.map();
 		result.put("boyOrGirlEnum", EnumUtil.enum2(BoyOrGirlEnum.class));
 		result.put("orderid", orderid);
-		String localAddr = request.getLocalAddr();
-		int localPort = request.getLocalPort();
+		String localAddr = request.getServerName();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", BASIC_WEBSPCKET_ADDR);

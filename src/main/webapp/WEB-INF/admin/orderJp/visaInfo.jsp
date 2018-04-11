@@ -393,7 +393,7 @@
 		var isTrail = '${obj.isTrail}';
 		var wealthType = '${obj.wealthJp}';
 		var sessionId = '${obj.sessionid}';
-		var localAddr = '${obj.localAddr}';
+		var localAddr = '${obj.localAddr}:${obj.localPort}';
 		var localPort = '${obj.localPort}';
 		var websocketaddr = '${obj.websocketaddr}';
 		var applicantId = '${obj.applicant.id}';

@@ -33,6 +33,8 @@ public class TAppStaffBasicinfoForm extends DataTablesParamForm {
 	/**姓(拼音)*/
 	private String firstnameen;
 
+	private Integer isfirst;
+
 	/**名*/
 	private String lastname;
 

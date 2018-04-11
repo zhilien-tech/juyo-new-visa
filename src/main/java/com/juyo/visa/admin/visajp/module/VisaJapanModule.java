@@ -402,4 +402,13 @@ public class VisaJapanModule {
 	public Object saveJpVisaTravelInfo(@Param("..") SaveTravelForm form, HttpSession session) {
 		return visaJapanService.saveJpVisaTravelInfo(form, session);
 	}
+
+	/**
+	 * 加载订单状态
+	 */
+	@At
+	@POST
+	public Object initOrderstatus(@Param("orderid") Long orderid) {
+		return visaJapanService.initOrderstatus(orderid);
+	}
 }

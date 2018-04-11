@@ -45,12 +45,15 @@
 				<span class="orderNum">订单号： <span>${obj.orderInfo.ordernumber}</span>
 				</span>
 				<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
-				<span class="state">状态： <c:if
+				<%-- <span class="state">状态： <c:if
 						test="${obj.orderInfo.status == '1'}">
 						<p>下单</p>
 					</c:if> <c:if test="${obj.orderInfo.status == '0'}">
 						<p>0</p>
 					</c:if>
+				</span>  --%>
+				<span class="state">状态： 
+					<p id="orderstatus">${obj.orderstatus }</p>
 				</span> 
 					<input type="button"  onclick="returnBack()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
@@ -114,8 +117,8 @@
 									<div class="form-group">
 										<label><span>*</span>是否有具体的旅行计划</label>
 										<div>
-											<input type="radio" name="tripPlan" class="tripPlan tripYes" value="1">是 
-											<input type="radio" name="tripPlan" class="tripPlan tripNo" value="2" checked>否
+											<input type="radio" name="hastripplan" class="tripPlan tripYes" value="1">是 
+											<input type="radio" name="hastripplan" class="tripPlan tripNo" value="2" checked>否
 										</div>
 									</div>
 								</div>
@@ -319,7 +322,7 @@
 								</div>
 								<!-- 航班号END -->
 							</div>
-							<!-- 模块3END -->
+							<!-- 模块4END -->
 							<!-- 隐藏域 -->
 							<input type="hidden" name="orderid" value="${obj.orderid}">
 							<!-- 隐藏域END -->
@@ -385,7 +388,7 @@
 									<div class="col-xs-10 picturesInch">
 										<div class="form-group pictureTop">
 											<div class="uploadInfo">
-												<span class="inchInfo">二寸免冠照片</span>  
+												<span class="inchInfo">美签照片51*51mm</span>  
 												<img id="imgInch" name="imgInch" alt="" src="${obj.basicinfo.twoinchphoto }"> 
 												<!-- <input id="uploadFileInchImg" name="uploadFileInchImg" disable="true"
 													class="btn btn-primary btn-sm" type="file" value="上传" />  -->
@@ -411,7 +414,7 @@
 										<!-- 姓名/拼音 -->
 										<div class="col-sm-4">
 											<div class="form-group">
-												<label>姓名/拼音</label> <input disabled="true"
+												<label>姓名/拼音</label> <input id="allname" disabled="true"
 													value="${obj.passportInfo.firstname }${obj.passportInfo.lastname }/${obj.passportInfo.firstnameen } ${obj.passportInfo.lastnameen }" type="text"
 													class="form-control input-sm" />
 											</div>
@@ -555,13 +558,62 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script src="${base}/admin/pcVisa/updatePhoto.js"></script>
 	<script type="text/javascript">
+		var usertype = '${obj.usertype}';
+		var isfirst = '${obj.basicinfo.isfirst}';
+		var id = '${obj.staffid}';
+		//游客登录是否上传过图片，如果没有则弹出拍摄资料页面
+		if(usertype == 9 && isfirst != 1){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content:'/admin/pcVisa/updatePhoto.html?staffid='+id+'&flag=1'
+			});
+		}
+		//姓名处理
+		var firstname =  '${obj.passportInfo.firstname }';
+		var lastname =  '${obj.passportInfo.lastname }';
+		var firstnameen =  '${obj.passportInfo.firstnameen }';
+		var lastnameen =  '${obj.passportInfo.lastnameen }';
+		if((firstname != "" || lastname != "") && (firstnameen == "" || lastnameen == "")){
+			$("#allname").val(firstname+lastname+"/"+getPinyinStr(firstname)+getPinyinStr(lastname));
+		}
+		//将汉字转为拼音
+		function getPinyinStr(hanzi){
+			var onehanzi = hanzi.split('');
+			var pinyinchar = '';
+			for(var i=0;i<onehanzi.length;i++){
+				pinyinchar += PinYin.getPinYin(onehanzi[i]);
+			}
+			return pinyinchar.toUpperCase();
+		}
+		//是否有旅行计划radio处理
+		var hasplan = '${obj.travelInfo.hastripplan}';
+		$("input[name='hastripplan'][value='"+hasplan+"']").attr("checked",'checked');
+		if(hasplan == 1){
+			$(".checkShowORHide").show();
+		}else {
+			$(".checkShowORHide").hide();
+		}
+		//日期格式处理
 		$(".form-format").datetimepicker({
-			format : "yyyy-mm-dd",
-			showMeridian : true,
-			autoclose : true,
-			todayBtn : true,
-			minView : 2
-		});
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 4,//从年开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		}); 
 
 		//离开美国日期联动
 		function sendDate() {
@@ -602,7 +654,7 @@
 			}
 			$(".tripPlan").change(function() {
 
-				var tripPlan = $("input[name='tripPlan']:checked").val();
+				var tripPlan = $("input[name='hastripplan']:checked").val();
 
 				if (tripPlan == 1) {
 

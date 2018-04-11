@@ -54,6 +54,10 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	private String telephone;
 
 	@Column
+	@Comment("是否是第一次上传图片")
+	private Integer isfirst;
+
+	@Column
 	@Comment("手机号(英文)")
 	private String telephoneen;
 

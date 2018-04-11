@@ -1,9 +1,9 @@
 //单张图片上传
-function uploadPositive(rst, formData, staffid) {
+function uploadPositive(rst, formData, staffid, usertype) {
 	if (!formData) {
 		formData = new FormData();
 	}
-	formData.append("image", rst.file);
+	formData.append("uploadFileImg", rst.file);
 	formData.append("type", 13);
 	formData.append("staffid", staffid);
 	console.log('------------------------------');

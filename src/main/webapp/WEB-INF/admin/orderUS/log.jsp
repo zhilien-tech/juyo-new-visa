@@ -28,12 +28,12 @@
 				<c:if test="${obj.userType != 1 }">
 					<select id="principal" name="principal" class="input-sm" style="margin-left:55%;" >
 						<option value="">负责人</option>
-						<c:forEach var="user" items="${obj.employees}">
-							<c:if test="${obj.princiapalId ==  user.userid}">
-								<option value="${user.userid}" selected="selected">${user.username}</option>
+						<c:forEach var="user" items="${obj.users}">
+							<c:if test="${obj.opid ==  user.id}">
+								<option value="${user.id}" selected="selected">${user.name}</option>
 							</c:if>
-							<c:if test="${obj.princiapalId !=  user.userid}">
-								<option value="${user.userid}">${user.username}</option>
+							<c:if test="${obj.opid !=  user.id}">
+								<option value="${user.id}">${user.name}</option>
 							</c:if>
 							
 						</c:forEach>
@@ -76,9 +76,11 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script src="${base}/admin/orderJp/log.js"></script><!-- 日志 js -->
+	<script src="${base}/admin/orderUS/log.js"></script><!-- 日志 js -->
 	<script type="text/javascript">
-		
+		function dataReload(){
+			parent.dataReload();
+		}
 	</script>
 </body>
 </html>
