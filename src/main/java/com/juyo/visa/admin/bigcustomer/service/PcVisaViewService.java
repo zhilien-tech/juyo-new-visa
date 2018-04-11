@@ -1,6 +1,7 @@
 package com.juyo.visa.admin.bigcustomer.service;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -322,6 +323,11 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		//获取护照信息
 		TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		//格式化日期
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		if (!Util.isEmpty(passportEntity.getBirthday())) {
+			result.put("birthday", sdf.format(passportEntity.getBirthday()));
+		}
 		Integer passportId = passportEntity.getId();
 		result.put("passportId", passportId);
 		result.put("passportInfo", passportEntity);
@@ -464,6 +470,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			String key = TravelpurposeEnum.getEnum(travelpurpose).getKey();
 			orderTravelInfo.setTravelpurpose(key);
 		}
+		orderTravelInfo.setHastripplan(form.getHastripplan());
 		orderTravelInfo.setGodeparturecity(form.getGodeparturecity());
 		orderTravelInfo.setGoArrivedCity(form.getGoArrivedCity());
 		orderTravelInfo.setGoFlightNum(form.getGoFlightNum());

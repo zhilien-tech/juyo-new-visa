@@ -57,6 +57,7 @@
 		$(function(){
 			var	staffid=GetQueryString('staffid');
 			var	sessionid=GetQueryString('sessionid');
+			var	flag=GetQueryString('flag');
 			getImage(staffid);
 			$(".jobCertificate").click(function(){
 				$(".jobCertificateFile").click();
@@ -73,7 +74,7 @@
 		                resultSize = (rst.fileLen / 1024).toFixed(2);
 		                scale = parseInt(100 - (resultSize / sourceSize * 100));
 		                rst.formData.append('image',rst.file);
-		                uploadPositive(rst,rst.formData,staffid,sessionid); 
+		                uploadPositive(rst,rst.formData,staffid,sessionid,flag); 
 		            }).catch(function (err) {
 		                console.log(err);
 		            });
@@ -85,7 +86,8 @@
 		function returnPage(){
 			var staffid = GetQueryString("staffid");
 			var	sessionid=GetQueryString('sessionid');
-			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid;
+			var	flag=GetQueryString('flag');
+			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 		}
 		
 		//获取URL地址参数
@@ -96,7 +98,7 @@
 	    }
 		
 		//上传图片
-		function uploadPositive(rst, formData,staffid,sessionid){
+		function uploadPositive(rst, formData,staffid,sessionid,flag){
 			if(!formData){
 				formData = new FormData();
 			}
@@ -104,6 +106,7 @@
 	        formData.append("type", 8); 
 	        formData.append("staffid", staffid); 
 	        formData.append("sessionid", sessionid); 
+	        formData.append("flag", flag); 
 	        console.log('------------------------------');
 	        console.log(formData); 
 	        console.log(rst.file);

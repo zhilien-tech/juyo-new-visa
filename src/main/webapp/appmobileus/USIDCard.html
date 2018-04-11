@@ -106,6 +106,7 @@
 			$(function(){
 				var	staffid=GetQueryString('staffid');
 				var	sessionid=GetQueryString('sessionid');
+				var	flag=GetQueryString('flag');
 				getImageFront(staffid);
 				getImageBack(staffid);
 				$(".uploadIDFace").click(function(){
@@ -128,7 +129,7 @@
 //			                alert(rst.file);
 //			                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
 							//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-			                uploadPositiveFront(rst,rst.formData,staffid,sessionid); 
+			                uploadPositiveFront(rst,rst.formData,staffid,sessionid,flag); 
 			            }).catch(function (err) {
 			                console.log(err);
 			            });
@@ -154,7 +155,7 @@
 //			                alert(rst.file);
 //			                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
 							//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-			                uploadPositiveBack(rst,rst.formData,staffid,sessionid); 
+			                uploadPositiveBack(rst,rst.formData,staffid,sessionid,flag); 
 			            }).catch(function (err) {
 			                console.log(err);
 			            });
@@ -166,7 +167,8 @@
 			function returnPage(){
 				var staffid = GetQueryString("staffid");
 				var	sessionid=GetQueryString('sessionid');
-				window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid;
+				var	flag=GetQueryString('flag');
+				window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 			}
 			
 			//获取URL地址参数
@@ -177,7 +179,7 @@
 		    }
 			
 			//上传图片(前面)
-			function uploadPositiveFront(rst, formData,staffid,sessionid){
+			function uploadPositiveFront(rst, formData,staffid,sessionid,flag){
 				if(!formData){
 					formData = new FormData();
 				}
@@ -185,6 +187,7 @@
 		        formData.append("type", 3); 
 		        formData.append("staffid", staffid); 
 		        formData.append("sessionid", sessionid); 
+		        formData.append("flag", flag); 
 		        console.log('------------------------------');
 		        console.log(formData); 
 		        console.log(rst.file);
@@ -218,7 +221,7 @@
 				}); // end of ajaxSubmit
 			}
 			//上传图片(后面)
-			function uploadPositiveBack(rst, formData,staffid,sessionid){
+			function uploadPositiveBack(rst, formData,staffid,sessionid,flag){
 				if(!formData){
 					formData = new FormData();
 				}
@@ -226,6 +229,7 @@
 		        formData.append("type", 14); 
 		        formData.append("staffid", staffid); 
 		        formData.append("sessionid", sessionid); 
+		        formData.append("flag", flag); 
 		        console.log('------------------------------');
 		        console.log(formData); 
 		        console.log(rst.file);

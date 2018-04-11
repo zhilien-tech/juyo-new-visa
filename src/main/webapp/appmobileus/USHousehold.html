@@ -55,6 +55,7 @@
 	<script>
 		$(function(){
 			var	staffid=GetQueryString('staffid');
+			var	flag=GetQueryString('flag');
 			var fuyecount = 2;
 			var count = 1;
 			getImage(staffid);
@@ -173,7 +174,8 @@
 		function returnPage(){
 			var staffid = GetQueryString("staffid");
 			var	sessionid=GetQueryString('sessionid');
-			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid;
+			var	flag=GetQueryString('flag');
+			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 		}
 		
 		//获取URL地址参数
@@ -184,7 +186,7 @@
 	    }
 		
 		//上传图片
-		function uploadPositive(rst,formData,staffid,mainid,sequence,sessionid,that){
+		function uploadPositive(rst,formData,staffid,mainid,sequence,sessionid,that,flag){
 			if(!formData){
 				formData = new FormData();
 			}
@@ -194,6 +196,7 @@
 	        formData.append("mainid", mainid); 
 	        formData.append("sequence", sequence); 
 	        formData.append("sessionid", sessionid); 
+	        formData.append("flag", flag); 
 	        console.log('------------------------------');
 	        console.log(formData); 
 	        console.log(rst.file);
@@ -227,6 +230,7 @@
 		function addHousehold(){
 			var	staffid=GetQueryString('staffid');
 			var	sessionid=GetQueryString('sessionid');
+			var	flag=GetQueryString('flag');
 			$(".viceFile").change(function(){
 				var mainid = $(this).attr("name");
 				var sequence = $(this).attr("id");
@@ -236,7 +240,7 @@
 				});
 				var that = this;
 			        lrz(this.files[0]).then(function (rst) {
-			        	uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,that); 
+			        	uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,that,flag); 
 			        }).catch(function (err) {
 			            console.log(err);
 			        });

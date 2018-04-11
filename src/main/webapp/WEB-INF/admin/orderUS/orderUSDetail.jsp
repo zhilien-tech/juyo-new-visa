@@ -419,7 +419,7 @@
 									<div class="col-xs-10 picturesInch">
 										<div class="form-group pictureTop">
 											<div class="uploadInfo">
-												<span class="inchInfo">二寸免冠照片</span>  
+												<span class="inchInfo">美签照片51*51mm</span>  
 												<img id="imgInch" name="imgInch" alt="" src="${obj.basicinfo.twoinchphoto }"> 
 												<!-- <input id="uploadFileInchImg" name="uploadFileInchImg" disable="true"
 													class="btn btn-primary btn-sm" type="file" value="上传" />  -->

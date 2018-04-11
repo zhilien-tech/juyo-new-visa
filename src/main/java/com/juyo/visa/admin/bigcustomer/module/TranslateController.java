@@ -33,7 +33,7 @@ public class TranslateController {
 	@POST
 	public Object translate(@Param("strType") String type, @Param("q") String q) throws UnsupportedEncodingException {
 
-		String result = null;
+		String result = "";
 		try {
 			if (Util.eq(type, "addressen") || Util.eq(type, "detailedAddressen")) {
 				String translateStr = TranslateUtil.translate(q, "en");
