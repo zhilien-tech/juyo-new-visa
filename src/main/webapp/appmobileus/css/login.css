@@ -16,14 +16,14 @@ a, body, center, cite, code, dd, del, div, dl, dt, em, fieldset, figcaption, fig
                 list-style-type: none;
                 width: 100%;
                 position: absolute;
-                top: 47%;
+                top: 26%;
                 left: 0;
             }
             .video_list>li{
                 float: left;
                 width: 32%;
                 text-align: center;
-                padding-top: 10%;
+                padding-top: 12%;
                 margin-left: 1%;
                 margin-top: 1%;
                 position: relative;
@@ -59,7 +59,7 @@ a, body, center, cite, code, dd, del, div, dl, dt, em, fieldset, figcaption, fig
         		display: inline-block;
         	}
         	.iconHD {
-        		background: url(../img/icon-HD.jpg) no-repeat;
+        		background: url(../img/icon-operation.jpg) no-repeat;
         		background-size: 100% 100%;
         	}
         	.iconVisa {
