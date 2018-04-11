@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
@@ -15,8 +16,8 @@ import com.juyo.visa.admin.firstTrialJp.from.FirstTrialJpListDataForm;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 
 
-
 @IocBean
+@Filters
 @At("admin/weixinToken")
 public class WeiXinTokenModule{
 
