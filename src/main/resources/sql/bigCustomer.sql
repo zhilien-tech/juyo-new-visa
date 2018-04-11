@@ -133,4 +133,5 @@ SELECT
 	taspu.status
 FROM
 	t_app_staff_paperwork_us taspu
+	$condition
 	

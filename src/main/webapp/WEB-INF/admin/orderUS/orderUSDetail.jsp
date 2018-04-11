@@ -7,32 +7,21 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>签证详情</title>
-<link rel="stylesheet"
-	href="${base}/references/common/js/vue/vue-multiselect.min.css">
-<link rel="stylesheet"
-	href="${base}/references/public/plugins/select2/select2.css">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/bootstrapcss/css/font-awesome.min.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/bootstrapcss/css/ionicons.min.css">
-<link rel="stylesheet"
-	href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
+<title>订单详情</title>
+<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
+<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="${base}/references/public/dist/bootstrapcss/css/font-awesome.min.css">
+<link rel="stylesheet" href="${base}/references/public/dist/bootstrapcss/css/ionicons.min.css">
+<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <!-- 签证详情样式 -->
-<link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/visaDetail.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/visaDetail.css">
 <!-- 加载中。。。样式 -->
 <link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 </head>
@@ -41,33 +30,75 @@
 		<div class="content-wrapper">
 			<!-- 头部 -->
 			<div class="qz-head">
-			<input id="flag" type="hidden" value="${obj.flag}">
-				<span class="orderNum">订单号： <span>${obj.orderInfo.ordernumber}</span>
+				<span  class="orderNum">订单号：
+					<span>${obj.orderinfo.ordernumber}</span>
+				</span>
+				<span  class="state">状态： 
+					<p id="orderstatus_US">${obj.orderstatus }</p>
 				</span>
 				<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
-				<%-- <span class="state">状态： <c:if
-						test="${obj.orderInfo.status == '1'}">
+				<%-- <span class="state">状态： 
+					<c:if test="${obj.orderInfo.status == '1'}">
 						<p>下单</p>
-					</c:if> <c:if test="${obj.orderInfo.status == '0'}">
+					</c:if> 
+					<c:if test="${obj.orderInfo.status == '0'}">
 						<p>0</p>
 					</c:if>
 				</span>  --%>
-				<span class="state">状态： 
-					<p id="orderstatus">${obj.orderstatus }</p>
-				</span> 
-					<input type="button"  onclick="returnBack()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
+					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" onclick="refuse()" value="拒签" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" onclick="pass()" value="通过" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />
+					<input type="button" value="通知" onclick="sendEmailUS()" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" value="日志" onclick="toLog()" class="btn btn-primary btn-sm pull-right" />
 			</div>
 			<!-- 头部END -->
 			<!-- form -->
 			<form id="orderUpdateForm">
 				<!-- 主体 -->
-				<section class="content">
+				<section class="content listDetailContent">
 					<!-- 订单信息 -->
+					<p class="info-head">订单信息<span>如不清楚出行信息，可不必填写</span></p>
+					<div class="info-body-from">
+						<!-- 模块 -->
+						<div class="row body-from-input">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label><span>*</span>团名</label>
+									<input type="text" class="input-sm form-control" name="groupname" value="${obj.orderinfo.groupname }" />
+								</div>
+							</div>
+							
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label><span>*</span>领区</label>
+									<select id="cityid" name="cityid"  class="form-control input-sm" >
+									<c:forEach var="map" items="${obj.cityidenum}">
+										<option value="${map.key}"  ${map.key==obj.orderinfo.cityid?"selected":"" } >${map.value}</option>
+									</c:forEach>
+								</select>
+								</div>
+							</div>
+							
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label><span>*</span>是否付款</label>
+									<select id="ispayed" name="ispayed"  class="form-control input-sm" >
+									<c:forEach var="map" items="${obj.ispayedenum}">
+										<option value="${map.key}"  ${map.key==obj.orderinfo.ispayed?"selected":"" } >${map.value}</option>
+									</c:forEach>
+								</select>
+								</div>
+							</div>
+						</div>
+						<!-- 模块END -->
+					</div>
+					<!-- 订单信息END -->
+					<!-- 出行信息 -->
 					<div id="save" class="info">
-						<p class="info-head">出行信息<span>如不清楚出行信息，可不必填写</span></p>
-						
+						<p class="info-head">出行信息</p>
 						<!-- 大模块 -->
 						<div class="info-body-from">
 							<!-- 模块1 -->
@@ -132,7 +163,7 @@
 									<div class="form-group">
 										<label><span></span>预计出发日期：</label> <input id="goDate"
 											name="godate" type="text"
-											class="form-format form-control input-sm datetimepickercss"
+											class="form-format form-control input-sm"
 											value="<fmt:formatDate value="${obj.travelInfo.godate }" pattern="yyyy-MM-dd" />" />
 									</div>
 								</div>
@@ -324,9 +355,9 @@
 							</div>
 							<!-- 模块4END -->
 							<!-- 隐藏域 -->
-							<input type="hidden" name="orderid" value="${obj.orderid}">
+							<input type="hidden" name="orderid" value="${obj.orderinfo.id}">
 							<!-- 隐藏域END -->
-							<!-- 模块4 -->
+							<!-- 模块5 -->
 							<div class="row body-from-input">
 								<!-- 送签计划去美国地点 -->
 								<div class="col-sm-3">
@@ -361,7 +392,7 @@
 								</div>
 								<!-- 街道END -->
 							</div>
-							<!-- 模块4END -->
+							<!-- 模块5END -->
 						</div>
 						<!-- 大模块END -->
 					</div>
@@ -371,11 +402,11 @@
 						<!-- 标题以及按钮组 -->
 						<p class="info-head">申请人</p>
 						<div class="dataInfoGroup">
-						<input id="mypassportId" type="hidden" value="${obj.passportId }">
-							<a id="photoInfo" v-on:click="updatePhoto(${obj.staffid })">拍照资料</a>
-							<a v-on:click="passport(${obj.passportId })">护照信息</a>
-							<a v-on:click="baseInfo(${obj.staffid })">基本信息</a>
-							<a v-on:click="visa(${obj.staffid })">签证信息</a>
+						<input id="mypassportId" type="hidden" value="${obj.passport.id }">
+							<a id="photoInfo" onclick="updatePhoto(${obj.basicinfo.id })">拍照资料</a>
+							<a onclick="passport(${obj.passport.id })">护照信息</a>
+							<a onclick="baseInfo(${obj.basicinfo.id })">基本信息</a>
+							<a onclick="visa(${obj.basicinfo.id })">签证信息</a>
 						</div>
 						<!-- 标题以及按钮组END -->
 
@@ -415,7 +446,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>姓名/拼音</label> <input id="allname" disabled="true"
-													value="${obj.passportInfo.firstname }${obj.passportInfo.lastname }/${obj.passportInfo.firstnameen } ${obj.passportInfo.lastnameen }" type="text"
+													value="${obj.passport.firstname }${obj.passport.lastname }/${obj.passport.firstnameen } ${obj.passport.lastnameen }" type="text"
 													class="form-control input-sm" />
 											</div>
 										</div>
@@ -423,8 +454,8 @@
 										<!-- 性别 -->
 										<div class="col-sm-4">
 											<div class="form-group">
-												<label>性别</label> <input name="sex" disabled="true"
-													value="${obj.passportInfo.sex }" type="text"
+												<label>性别</label> <input id="sex" name="sex" disabled="true"
+													value="${obj.passport.sex }" type="text"
 													class="form-control input-sm" placeholder="" />
 											</div>
 										</div>
@@ -432,8 +463,8 @@
 										<!-- 出生日期 -->
 										<div class="col-sm-4">
 											<div class="form-group">
-												<label>出生日期</label> <input name="birthday" type="text"
-													disabled="true" value="<fmt:formatDate value="${obj.passportInfo.birthday }" pattern="yyyy-MM-dd" />" 
+												<label>出生日期</label> <input id="birthday" name="birthday" type="text"
+													disabled="true" value="${obj.birthday }" 
 													class="form-format form-control input-sm" placeholder="" />
 											</div>
 										</div>
@@ -444,7 +475,7 @@
 									<div class="row body-from-input">
 										<div class="col-sm-8">
 											<div class="form-group">
-												<label>所需资料</label> <input name="realinfo" disabled="true"
+												<label>所需资料</label> <input id="realinfo" name="realinfo" disabled="true"
 													value="${obj.realinfo }" type="text"
 													class="form-control input-sm" /> <input id="staffid" name="staffid"
 													type="hidden" value="${obj.staffid }">
@@ -453,7 +484,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>卡号</label> 
-												<input name="" type="text" disabled value="${obj.basicinfo.cardnum }" class="form-control input-sm"  />
+												<input id="cardnum" name="cardnum" type="text" disabled value="${obj.basicinfo.cardnum }" class="form-control input-sm"  />
 											</div>
 										</div>
 										
@@ -464,7 +495,7 @@
 										<!-- AA码 -->
 										<div class="col-sm-4">
 											<div class="form-group">
-												<label>AA码</label> <input name="aacode" type="text"
+												<label>AA码</label> <input id="aacode" name="aacode" type="text"
 													disabled value="${obj.summaryInfo.aacode }"
 													class="form-control input-sm" placeholder="" />
 											</div>
@@ -473,7 +504,7 @@
 										<!-- 护照号 -->
 										<div class="col-sm-4">
 											<div class="form-group">
-												<label>护照号</label> <input name="passport" type="text"
+												<label>护照号</label> <input id="passport" name="passport" type="text"
 													disabled="true" value="${obj.summaryInfo.passport }"
 													class="form-control input-sm" placeholder="" />
 											</div>
@@ -482,7 +513,7 @@
 										<!-- 面试时间 -->
 										<div class="col-sm-4">
 											<div class="form-group">
-												<label>面试时间</label> <input name="Interviewdate" type="text"
+												<label>面试时间</label> <input id="interviewdate" name="interviewdate" type="text"
 													disabled="true" value="${obj.summaryInfo.Interviewdate }"
 													class="form-format form-control input-sm" placeholder="" />
 											</div>
@@ -525,61 +556,58 @@
 						</div>
 					</div>
 					<!-- 大模块2END -->
+					<!-- 大模块3 -->
+					<!-- 标题以及按钮组 -->
+					<div class="info solveContent" id="mySwitch">
+						<p class="info-head followUp">
+							跟进
+							<div class="dataInfoGroup">
+								<a onclick="addFollow()">加跟进</a> 
+							</div>
+						</p>
+						<!-- 标题以及按钮组END -->
+						<div class="followUpMain">
+							<div class="row body-from">
+								<div class="fixedheight">
+									<ul  id="forFollow">
+										<!-- 循环 -->
+										<!-- 循环END -->
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>	
+					<!-- 大模块3END -->
 				</section>
 			</form>
 		</div>
 	</div>
-	<script
-		src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
-	<script
-		src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script
-		src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
-	<script
-		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- select2 -->
-	<script
-		src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/public/plugins/jquery.fileDownload.js"></script>
-	<script
-		src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+	<script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
 	<!-- 公用js文件 -->
-	<script type="text/javascript"
-		src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js"
-		charset="UTF-8"></script>
-	<script type="text/javascript"
-		src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"
-		charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
-	<script src="${base}/admin/pcVisa/updatePhoto.js"></script>
+	<%-- <script src="${base}/admin/pcVisa/updatePhoto.js"></script> --%>
 	<script type="text/javascript">
-		var usertype = '${obj.usertype}';
-		var isfirst = '${obj.basicinfo.isfirst}';
-		var id = '${obj.staffid}';
-		//游客登录是否上传过图片，如果没有则弹出拍摄资料页面
-		if(usertype == 9 && isfirst != 1){
-			layer.open({
-				type: 2,
-				title: false,
-				closeBtn:false,
-				fix: false,
-				maxmin: false,
-				shadeClose: false,
-				scrollbar: false,
-				area: ['900px', '80%'],
-				content:'/admin/pcVisa/updatePhoto.html?staffid='+id+'&flag=1'
-			});
-		}
+		var staffid = '${obj.basicinfo.id}';
+		var orderid = '${obj.orderinfo.id}';
 		//姓名处理
-		var firstname =  '${obj.passportInfo.firstname }';
-		var lastname =  '${obj.passportInfo.lastname }';
-		var firstnameen =  '${obj.passportInfo.firstnameen }';
-		var lastnameen =  '${obj.passportInfo.lastnameen }';
+		var firstname =  '${obj.passport.firstname }';
+		var lastname =  '${obj.passport.lastname }';
+		var firstnameen =  '${obj.passport.firstnameen }';
+		var lastnameen =  '${obj.passport.lastnameen }';
 		if((firstname != "" || lastname != "") && (firstnameen == "" || lastnameen == "")){
 			$("#allname").val(firstname+lastname+"/"+getPinyinStr(firstname)+getPinyinStr(lastname));
 		}
@@ -686,33 +714,6 @@
 		function returnBack(){
 			window.history.go(-1);
 		}
-		/* 异步保存数据 */
-		function save() {
-			var goDepartureCity = $('#goDepartureCity').val();
-			var goArrivedCity = $('#goArrivedCity').val();
-			var returnDepartureCity = $('#returnDepartureCity').val();
-			var returnArrivedCity = $('#returnArrivedCity').val();
-			var goflightnum = $('#goFlightNum').val();
-			var returnflightnum = $('#returnFlightNum').val();
-			$('#gocity').val(goDepartureCity);
-			$('#goarrivecity').val(goArrivedCity);
-			$('#goflightnum').val(goflightnum);
-			$('#returncity').val(returnDepartureCity);
-			$('#returnarrivecity').val(returnArrivedCity);
-			$('#returnflightnum').val(returnflightnum);
-			var data = getFormJson("#orderUpdateForm");
-			$.ajax({
-				url : "${base}/admin/pcVisa/visaSave",
-				dataType : "json",
-				data : $("#orderUpdateForm").serialize(),
-				type : 'POST',
-				async:false,
-				success : function(data) {
-					/* window.location.href = '/admin/pcVisa/VisaList';  */
-					window.history.go(-1);
-				}
-			});
-		};
 
 		//加载城市的select2
 		$('.select2City').select2({
@@ -1019,7 +1020,321 @@
 			});
 		}
 
+		//日志
+		function toLog(){
+			var orderid = '${obj.orderinfo.id}';
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['700px', '80%'],
+				content:'/admin/orderUS/log.html?orderid='+orderid
+			});
+		}
 		
+		//通知
+		function sendEmailUS(){
+			var staffid = '${obj.basicinfo.id}';
+			var orderid = '${obj.orderinfo.id}';
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['800px', '400px'],
+				content: '/admin/orderUS/notice.html?orderid='+orderid+'&staffid='+staffid
+			});
+		}
+		//通知
+		/* function sendEmailUS(){
+			var staffid = '${obj.basicinfo.id}';
+			var orderid = '${obj.orderinfo.id}';
+			layer.load(1);
+			$.ajax({
+				url : '/admin/orderUS/sendShareMsg.html',
+				data : {
+					staffId : staffid,
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'post',
+				success : function(data) {
+					layer.closeAll("loading");
+					console.log(data);
+					if(data){
+						layer.msg("发送成功");
+					}
+				}
+			});
+		} */
+		
+		//刷新订单详情页面数据
+		function dataReload(){
+			var orderid = '${obj.orderinfo.id}';
+			$.ajax({
+				url : '/admin/orderUS/getOrderRefresh.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					console.log(data);
+					//刷新订单状态
+					$("#orderstatus_US").html(data.orderstatus);
+					//刷新跟进信息
+					var followinfos = data.followinfo;
+					if(followinfos.length > 0){
+						var Str = "";
+						for(var i = 0;i < followinfos.length;i++){
+							if(followinfos[i].status == 1){
+								Str += '<li> <div class="dateNameBtn">'+
+								'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
+								'<span class="nameInfo">'+followinfos[i].name+'</span>&nbsp;'+
+								'<span>'+followinfos[i].solvetime+'</span>&nbsp;&nbsp;由&nbsp;&nbsp;<span>'+followinfos[i].solveid+'</span>&nbsp;&nbsp;解决&nbsp;&nbsp;</span></div>'+
+								'<div class="errorInfo">'+
+								'<span>'+followinfos[i].content+'</span></div></li>';
+							}else{
+								Str += '<li> <div class="dateNameBtn">'+
+								'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
+								'<span class="nameInfo">'+followinfos[i].name+'</span>'+
+								'<a class="solve" onclick="solveClick('+followinfos[i].id+')">解决</a></div>'+
+								'<div class="errorInfo">'+
+								'<span>'+followinfos[i].content+'</span></div></li>';
+								
+							}
+/* 								Str += '<li> <div class="dateNameBtn">'+
+								'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
+								'<span class="nameInfo">'+followinfos[i].name+'</span>'+
+								'<c:choose><c:when test="{'+followinfos[i].status+' == 1}"><span>'+followinfos[i].solvetime+'</span>由<span>'+followinfos[i].solveid+'</span>解决</span></c:when><c:otherwise><a class="solve" onclick="solveClick('+followinfos[i].id+')">解决</a></c:otherwise></c:choose></div>'+
+								'<div class="errorInfo">'+
+								'<span>'+followinfos[i].content+'</span></div></li>'; */
+						}
+						$("#forFollow").html(Str);
+					}
+					//刷新申请人信息
+					$('#imgInch').attr('src', data.basicinfo.twoinchphoto);
+					$('#allname').val(data.passport.firstname+data.passport.lastname+data.passport.firstnameen+data.lastnameen);
+					$('#sex').val(data.passport.sex);
+					$('#birthday').val(data.birthday);
+					$('#realinfo').val(data.realinfo);
+					$('#cardnum').val(data.basicinfo.cardnum);
+					$('#aacode').val(data.summaryInfo.aacode);
+					$('#passport').val(data.passport.passport);
+					$('#interviewdate').val(data.summaryInfo.Interviewdate);
+				}
+			});
+		}
+		
+		//添加跟进
+		function addFollow(){
+			var orderid = '${obj.orderinfo.id}';
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['800px', '40%'],
+				content: '/admin/orderUS/addFollow.html?orderid='+orderid
+			});
+		}
+		
+		//跟进中的解决按钮
+		function solveClick(id){
+			$.ajax({
+				url : '/admin/orderUS/solveFollow.html',
+				data : {
+					id : id
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					dataReload();
+				}
+			});
+		}
+		
+		//通过
+		function pass(){
+			var orderid = '${obj.orderinfo.id}';
+			$.ajax({
+				url : '/admin/orderUS/passUS.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					layer.msg("操作成功", {
+						time: 500,
+						end: function () {
+							dataReload();
+						}
+					});
+				}
+			});
+		}
+		
+		//拒绝
+		function refuse(){
+			var orderid = '${obj.orderinfo.id}';
+			$.ajax({
+				url : '/admin/orderUS/refuseUS.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					layer.msg("操作成功", {
+						time: 500,
+						end: function () {
+							dataReload();
+						}
+					});
+				}
+			});
+		}
+		
+		/* //异步保存数据 
+		function save() {
+			var goDepartureCity = $('#goDepartureCity').val();
+			var goArrivedCity = $('#goArrivedCity').val();
+			var returnDepartureCity = $('#returnDepartureCity').val();
+			var returnArrivedCity = $('#returnArrivedCity').val();
+			var goflightnum = $('#goFlightNum').val();
+			var returnflightnum = $('#returnFlightNum').val();
+			$('#gocity').val(goDepartureCity);
+			$('#goarrivecity').val(goArrivedCity);
+			$('#goflightnum').val(goflightnum);
+			$('#returncity').val(returnDepartureCity);
+			$('#returnarrivecity').val(returnArrivedCity);
+			$('#returnflightnum').val(returnflightnum);
+			var data = getFormJson("#orderUpdateForm");
+			$.ajax({
+				url : "${base}/admin/pcVisa/visaSave",
+				dataType : "json",
+				data : $("#orderUpdateForm").serialize(),
+				type : 'POST',
+				async:false,
+				success : function(data) {
+					//window.location.href = '/admin/pcVisa/VisaList';
+					window.history.go(-1);
+				}
+			});
+		}; */
+		
+		//保存并返回
+		function save(){
+			var goDepartureCity = $('#goDepartureCity').val();
+			var goArrivedCity = $('#goArrivedCity').val();
+			var returnDepartureCity = $('#returnDepartureCity').val();
+			var returnArrivedCity = $('#returnArrivedCity').val();
+			var goflightnum = $('#goFlightNum').val();
+			var returnflightnum = $('#returnFlightNum').val();
+			$('#gocity').val(goDepartureCity);
+			$('#goarrivecity').val(goArrivedCity);
+			$('#goflightnum').val(goflightnum);
+			$('#returncity').val(returnDepartureCity);
+			$('#returnarrivecity').val(returnArrivedCity);
+			$('#returnflightnum').val(returnflightnum);
+			var data = getFormJson("#orderUpdateForm");
+			$.ajax({
+				url : "${base}/admin/orderUS/orderSave",
+				dataType : "json",
+				data : $("#orderUpdateForm").serialize(),
+				type : 'POST',
+				success : function(data) {
+					layer.msg("保存成功", {
+						time: 500,
+						end: function () {
+							self.window.close();
+						}
+					});
+					// window.location.href = '/admin/pcVisa/visaDetail.html'; 
+				}
+			});
+		}
+		
+		//取消
+		function closeWindow(){
+			self.window.close();
+			//parent.window.reload();
+		}
+		
+		//拍摄资料
+		function updatePhoto(staffid){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content:'/admin/pcVisa/updatePhoto.html?staffid='+staffid+'&flag=0'
+			});
+		}
+		
+		//护照信息
+		function passport(id){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
+			});
+		}
+		
+		//基本信息
+		function baseInfo(id){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id
+			});
+		}
+		
+		//签证信息
+		function visa(staffid){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+staffid
+			});
+		}
+		
+		function successCallback(status){
+			dataReload();
+		}
 	</script>
 </body>
 </html>

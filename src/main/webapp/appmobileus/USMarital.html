@@ -26,8 +26,8 @@
 				<!--婚姻-->
 				<div class="householdPage marriageMain">
 					<span class="homePageTitle">婚姻状况</span>
-					<img src="img/camera.png"  class="camera" />
-					<img src="" class="pageImg" />
+					<img src="img/camera.png" style="pointer-events:none;"  class="camera" />
+					<img src="" style="pointer-events:none;" class="pageImg" />
 				</div>
 				<input type="file" name="" class="fileHide uploadMarriage" />
 			</div>
@@ -35,8 +35,7 @@
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script type="text/javascript" src="js/rem(750).js" ></script>
 		<script type="text/javascript" src="js/layer.js" ></script>
-		<script type="text/javascript" src="js/lrz.bundle.js" ></script>
-		<script type="text/javascript" src="js/vue.min.js" ></script>
+		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
 		<script>
 			function getImage(staffid){
 			$.ajax({
@@ -59,6 +58,7 @@
 			var	staffid=GetQueryString('staffid');
 			var	status=GetQueryString('marryurltype');
 			var	sessionid=GetQueryString('sessionid');
+			var	flag=GetQueryString('flag');
 			getImage(staffid);
 			$(".marriageMain").click(function(){
 				$(".uploadMarriage").click();
@@ -75,7 +75,7 @@
 		                resultSize = (rst.fileLen / 1024).toFixed(2);
 		                scale = parseInt(100 - (resultSize / sourceSize * 100));
 		                rst.formData.append('image',rst.file);
-		                uploadPositive(rst,rst.formData,staffid,status,sessionid); 
+		                uploadPositive(rst,rst.formData,staffid,status,sessionid,flag); 
 		            }).catch(function (err) {
 		                console.log(err);
 		            });
@@ -87,7 +87,8 @@
 		function returnPage(){
 			var staffid = GetQueryString("staffid");
 			var	sessionid=GetQueryString('sessionid');
-			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid;
+			var	flag=GetQueryString('flag');
+			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 		}
 		
 		//获取URL地址参数
@@ -98,7 +99,7 @@
 	    }
 		
 		//上传图片
-		function uploadPositive(rst, formData,staffid,status,sessionid){
+		function uploadPositive(rst, formData,staffid,status,sessionid,flag){
 			if(!formData){
 				formData = new FormData();
 			}
@@ -107,6 +108,7 @@
 	        formData.append("type", 6); 
 	        formData.append("staffid", staffid); 
 	        formData.append("sessionid", sessionid); 
+	        formData.append("flag", flag); 
 	        console.log('------------------------------');
 	        console.log(formData); 
 	        console.log(rst.file);

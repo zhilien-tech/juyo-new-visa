@@ -35,9 +35,16 @@ public class WebSocketConfig implements WebSocketConfigurer {
 				.setAllowedOrigins("*");
 		registry.addHandler(myVcodeHander(), "/vcodewebsocket").addInterceptors(myInterceptors())
 				.setAllowedOrigins("*");
+		registry.addHandler(usListHander(), "/uslistwebsocket").addInterceptors(myInterceptors())
+				.setAllowedOrigins("*");
 		registry.addHandler(myhandler(), "/sockjs/websocket").addInterceptors(myInterceptors()).withSockJS();
 		registry.addHandler(mySimpleSendInfoWSHandler(), "/simplesendinfosocket").addInterceptors(myInterceptors())
 				.setAllowedOrigins("*");
+	}
+
+	@Bean
+	public USListWSHandler usListHander() {
+		return new USListWSHandler();
 	}
 
 	@Bean

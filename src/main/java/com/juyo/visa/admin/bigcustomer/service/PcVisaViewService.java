@@ -1,6 +1,7 @@
 package com.juyo.visa.admin.bigcustomer.service;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,8 +30,10 @@ import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.JapanPrincipalChangeEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TravelpurposeEnum;
+import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
@@ -296,9 +299,22 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	public Object visaDetail(Integer orderid, Integer flag, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		result.put("usertype", userType);
 		String name = loginUser.getName();
 		result.put("orderid", orderid);
 		//获取用户资料信息
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
+		result.put("orderinfo", orderus);
+		Integer status = orderus.getStatus();
+		//订单状态
+		for (USOrderListStatusEnum statusenum : USOrderListStatusEnum.values()) {
+			if (status == statusenum.intKey()) {
+				result.put("orderstatus", statusenum.value());
+			} else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+				result.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
+			}
+		}
 		TAppStaffOrderUsEntity orderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
 				Cnd.where("orderid", "=", orderid));
 		Integer staffid = orderUsEntity.getStaffid();
@@ -307,9 +323,18 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		//获取护照信息
 		TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		//格式化日期
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		if (!Util.isEmpty(passportEntity.getBirthday())) {
+			result.put("birthday", sdf.format(passportEntity.getBirthday()));
+		}
 		Integer passportId = passportEntity.getId();
 		result.put("passportId", passportId);
 		result.put("passportInfo", passportEntity);
+		//获取用户基本信息
+		TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+				Cnd.where("id", "=", orderUsEntity.getStaffid()));
+		result.put("basicinfo", basicinfoEntity);
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		if (!Util.isEmpty(orderTravelInfo)) {
 
@@ -318,15 +343,11 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 					Cnd.where("orderid", "=", orderid));
 			if (!Util.isEmpty(orderUsEntity)) {
 
-				//获取用户基本信息
-				TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
-						Cnd.where("id", "=", orderUsEntity.getStaffid()));
-				result.put("basicinfo", basicinfoEntity);
 				//获取该用户的资料类型
 				String sqlStr = sqlManager.get("t_app_paperwork_US_info");
 				Sql applysql = Sqls.create(sqlStr);
 				Cnd cnd = Cnd.NEW();
-				cnd.where("staffid", "=", orderUsEntity.getStaffid());
+				cnd.and("staffid", "=", orderUsEntity.getStaffid());
 				List<Record> infoList = dbDao.query(applysql, cnd, null);
 				for (Record appRecord : infoList) {
 					int type = appRecord.getInt("type");
@@ -449,6 +470,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			String key = TravelpurposeEnum.getEnum(travelpurpose).getKey();
 			orderTravelInfo.setTravelpurpose(key);
 		}
+		orderTravelInfo.setHastripplan(form.getHastripplan());
 		orderTravelInfo.setGodeparturecity(form.getGodeparturecity());
 		orderTravelInfo.setGoArrivedCity(form.getGoArrivedCity());
 		orderTravelInfo.setGoFlightNum(form.getGoFlightNum());
@@ -464,7 +486,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	/*
 	 * 拍照资料获取
 	 */
-	public Object updatePhoto(Integer staffid, HttpServletRequest request, HttpSession session) {
+	public Object updatePhoto(Integer staffid, int flag, HttpServletRequest request, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 
 		//获取sessionid
@@ -474,6 +496,11 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(passportEntity)) {
 			result.put("passportId", passportEntity.getId());
 		}
+		result.put("staffid", staffid);
+		//获取usertype来判断是否从游客进入
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		result.put("userType", userType);
 		//生成二维码
 		String id = session.getId();
 		String serverName = request.getServerName();
@@ -482,7 +509,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		result.put("localPort", serverPort);
 		result.put("websocketaddr", SEND_INFO_WEBSPCKET_ADDR);
 		String content = "http://" + serverName + ":" + serverPort + "/appmobileus/USFilming.html?&staffid=" + staffid
-				+ "&sessionid=" + sessionid;
+				+ "&sessionid=" + sessionid + "&flag=" + flag;
 		String encodeQrCode = qrCodeService.encodeQrCode(request, content);
 		result.put("encodeQrCode", encodeQrCode);
 		//获取用户基本信息

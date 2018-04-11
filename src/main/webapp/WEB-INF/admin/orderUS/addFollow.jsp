@@ -5,7 +5,7 @@
 <html lang="en-US" id="addHtml">
 <head>
 	<meta charset="UTF-8">
-	<title>销售 - 日志</title>
+	<title>加跟进</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
@@ -21,52 +21,17 @@
 <body>
 	<div class="modal-content">
 			<div class="modal-header">
-				<span class="heading">日志</span>
-				<c:if test="${obj.userType == 1 }">
-					<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="关闭" /> 
-				</c:if>
-				<c:if test="${obj.userType != 1 }">
-					<select id="principal" name="principal" class="input-sm" style="margin-left:55%;" >
-						<option value="">负责人</option>
-						<c:forEach var="user" items="${obj.users}">
-							<c:if test="${obj.opid ==  user.id}">
-								<option value="${user.id}" selected="selected">${user.name}</option>
-							</c:if>
-							<c:if test="${obj.opid !=  user.id}">
-								<option value="${user.id}">${user.name}</option>
-							</c:if>
-							
-						</c:forEach>
-					</select>
+				<span class="heading">加跟进</span>
 					<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
-					<input id="saveBtn" type="button" onclick="savePrincipal()" style="margin:10px 10px 0 10px;" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="保存" /> 
-				</c:if>
-				<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
+					<input id="saveBtn" type="button" onclick="saveFollow('${obj.orderid}')" style="margin:10px 10px 0 10px;" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="保存" /> 
 			</div>
 			<div class="modal-body">
-				<div class="tab-content">
-					<table id="datatableId" class="table table-hover" style="width:100%;">
-						<thead>
-							<tr>
-								<th><span>时间</span></th>
-								<th><span>状态</span></th>
-								<th><span>操作人</span></th>
-							</tr>
-						</thead>
-						<tbody >
-							<tr v-cloak v-for="data in loginfo">
-								<td >{{data.createtime}}</td>
-								<td >{{data.orderstatus}}</td>
-								<td >{{data.name}}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+				<p><span style="color:red;">*</span>跟进内容</p>
+				<textarea rows="" cols="" id="content" name="content" style="width:100%;height:200px;"></textarea>
 			</div>
 	</div>
 
 	<script type="text/javascript">
-		var BASE_PATH = '${base}';
 		var orderid = '${obj.orderid}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
@@ -80,6 +45,27 @@
 	<script type="text/javascript">
 		function dataReload(){
 			parent.dataReload();
+		}
+		function saveFollow(orderid){
+			$.ajax({
+				url : '/admin/orderUS/saveFollow.html',
+				data : {
+					orderid : orderid,
+					content : $("#content").val()
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					console.log(data);
+					parent.dataReload();
+					closeWindow();
+				}
+			});
+		}
+		//取消
+		function closeWindow() {
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
 		}
 	</script>
 </body>

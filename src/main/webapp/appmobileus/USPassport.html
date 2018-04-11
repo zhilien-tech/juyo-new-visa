@@ -27,7 +27,7 @@
 			<div class="passportShoot">
 				<div class="uploadPassport">
 					<p>上传护照</p>
-					<img :src=":src="passportdata.passporturl"" class="uploadImgReady" />
+					<img :src="passportdata.passporturl" style="pointer-events:none;" class="uploadImgReady" />
 				</div>
 				<input type="file" class="passportImg" id="passportImg" name="passportImg" />
 			</div>
@@ -35,8 +35,7 @@
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script type="text/javascript" src="js/rem(750).js" ></script>
 		<script type="text/javascript" src="js/layer.js" ></script>
-		<script type="text/javascript" src="js/lrz.bundle.js" ></script>
-		<script type="text/javascript" src="js/vue.min.js" ></script>
+		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
 		<script>
 		function getImage(staffid){
 			$.ajax({
@@ -58,6 +57,7 @@
 		$(function(){
 			var	staffid=GetQueryString('staffid');
 			var	sessionid=GetQueryString('sessionid');
+			var	flag=GetQueryString('flag');
 			getImage(staffid);
 			$(".uploadPassport").click(function(){
 				$("#passportImg").click();
@@ -79,7 +79,7 @@
 //		                alert(rst.file);
 //		                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
 						//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-		                uploadPositive(rst,rst.formData,staffid,sessionid); 
+		                uploadPositive(rst,rst.formData,staffid,sessionid,flag); 
 		            }).catch(function (err) {
 		                console.log(err);
 		            });
@@ -91,7 +91,8 @@
 		function returnPage(){
 			var staffid = GetQueryString("staffid");
 			var	sessionid=GetQueryString('sessionid');
-			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid;
+			var	flag=GetQueryString('flag');
+			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 		}
 		
 		//获取URL地址参数
@@ -102,7 +103,7 @@
 	    }
 		
 		//上传图片
-		function uploadPositive(rst, formData,staffid,sessionid){
+		function uploadPositive(rst, formData,staffid,sessionid,flag){
 			if(!formData){
 				formData = new FormData();
 			}
@@ -110,6 +111,7 @@
 	        formData.append("type", 1); 
 	        formData.append("staffid", staffid); 
 	        formData.append("sessionid", sessionid); 
+	        formData.append("flag", flag); 
 	        console.log('------------------------------');
 	        console.log(formData); 
 	        console.log(rst.file);
