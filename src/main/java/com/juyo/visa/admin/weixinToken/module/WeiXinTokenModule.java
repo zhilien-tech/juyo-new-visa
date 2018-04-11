@@ -10,6 +10,7 @@ import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.alibaba.fastjson.JSONObject;
+import com.juyo.visa.admin.weixinToken.service.WeXinAccreditService;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 
 @IocBean
@@ -19,6 +20,8 @@ public class WeiXinTokenModule {
 
 	@Inject
 	private WeXinTokenViewService weXinTokenViewService;
+	@Inject
+	private WeXinAccreditService weXinAccreditService;
 
 	/**
 	 *获取 AccessToken
@@ -30,10 +33,17 @@ public class WeiXinTokenModule {
 		return weXinTokenViewService.getAccessToken();
 	}
 
-	//获取ticket
+	//获取授权用户信息
 	@At
 	@POST
 	@Filters
+	public Object saveWxinfo(@Param("code") String code) {
+		return weXinAccreditService.SaveUser(code);
+	}
+
+	//获取ticket
+	@At
+	@POST
 	public JSONObject getJsApiTicket() {
 		return weXinTokenViewService.getJsApiTicket();
 	}

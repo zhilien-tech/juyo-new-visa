@@ -6,6 +6,7 @@
 
 package com.juyo.visa.admin.weixinToken.service;
 
+import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 
 import com.alibaba.druid.support.logging.Log;
@@ -13,7 +14,9 @@ import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
 import com.juyo.visa.common.util.HttpUtil;
+import com.juyo.visa.entities.TAppStaffWxinfoEntity;
 import com.juyo.visa.entities.TConfWxEntity;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -48,14 +51,10 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 					.replace("SECRET", WX_APPSECRET);
 			logger.info("getCode.requestUrl====>" + requestUrl);
 			accessToken = HttpUtil.doGet(requestUrl);
-			//			{
-			//			   "access_token":"ACCESS_TOKEN",
-			//			   "expires_in":7200,
-			//			   "refresh_token":"REFRESH_TOKEN",
-			//			   "openid":"OPENID",
-			//			   "scope":"SCOPE",
-			//			   "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"
-			//			}
+			//返回的参数
+			//{"access_token":"ACCESS_TOKEN","expires_in":7200,"refresh_token":"REFRESH_TOKEN",
+			//"openid":"OPENID","scope":"SCOPE","unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"}
+
 			//redis中设置 access_token
 			redisDao.set("access_token", accessToken.get("access_token").toString());
 			redisDao.set("openid", accessToken.get("openid").toString());
@@ -66,7 +65,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 	}
 
 	//根据accessToken获取用户个人信息
-	public void SaveUser(String code) {
+	public Object SaveUser(String code) {
 		JSONObject accessTokenObject = getCode(code);
 		String getUserUrl;
 		//获取access_token
@@ -76,7 +75,46 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 		getUserUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
 		String requestUrl = getUserUrl.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openid);
 		JSONObject user = HttpUtil.doGet(requestUrl);
-		//
+		//		{
+		//			   "openid":" OPENID",
+		//			   " nickname": NICKNAME,
+		//			   "sex":"1",
+		//			   "province":"PROVINCE"
+		//			   "city":"CITY",
+		//			   "country":"COUNTRY",
+		//			    "headimgurl":    "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46", 
+		//				"privilege":[
+		//				"PRIVILEGE1"
+		//				"PRIVILEGE2"
+		//			    ],
+		//			    "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"
+		//			}
+		//根据openid查询用户信息
+		TAppStaffWxinfoEntity wxinfo = dbDao.fetch(TAppStaffWxinfoEntity.class, Cnd.where("openid", "=", openid));
+		if (Util.isEmpty(wxinfo)) {
+			wxinfo = new TAppStaffWxinfoEntity();
+		}
+		//openid
+		wxinfo.setOpenid(openid);
+		//微信用户昵称
+		wxinfo.setNickname(user.get("nickname").toString());
+		//用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
+		wxinfo.setSex((int) user.get("sex"));
+		//用户个人资料填写的省份
+		wxinfo.setPrivilege(user.get("province").toString());
+		//普通用户个人资料填写的城市
+		wxinfo.setCity(user.get("city").toString());
+		//国家，如中国为CN
+		wxinfo.setCountry(user.get("country").toString());
+		//用户头像，最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像），用户没有头像时该项为空。若用户更换头像，原有头像URL将失效。
+		wxinfo.setHeadimgurl(user.get("headimgurl").toString());
+		if (Util.isEmpty(wxinfo.getId())) {
+			dbDao.insert(wxinfo);
+		} else {
+			dbDao.update(wxinfo);
+		}
+		return null;
+
 	}
 
 }
