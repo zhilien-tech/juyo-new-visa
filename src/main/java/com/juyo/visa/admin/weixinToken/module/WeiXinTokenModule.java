@@ -39,7 +39,7 @@ public class WeiXinTokenModule {
 	@Filters
 	public Object saveWxinfo(@Param("code") String code) {
 		System.out.println(code);
-		return null;
+		return weXinAccreditService.SaveUser(code);
 	}
 
 	//获取ticket
