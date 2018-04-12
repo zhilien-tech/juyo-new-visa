@@ -115,8 +115,13 @@ function card(staffid, type) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=0){
 					var url=data[0].url;
-					$("#card").attr('src',url);
-					$("#cardBack").attr('src',data[1].url);
+					if(data[0].status == 1){
+						$("#card").attr('src',url);
+						$("#cardBack").attr('src',data[1].url);
+					}else{
+						$("#cardBack").attr('src',url);
+						$("#card").attr('src',data[1].url);
+					}
 			}
 		}
 	});
@@ -178,8 +183,8 @@ function business(staffid, type) {
 		}
 	});
 };
-//驾驶证回显
-function drive(staffid, type) {
+//美国出签回显
+function chuqian(staffid, type) {
 	$.ajax({
 		url : "/admin/mobileVisa/getInfoByType.html",
 		data : {
@@ -192,7 +197,28 @@ function drive(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
-			$("#drive").attr("src",data.url);
+				$("#chuqian").attr("src",data.url);
+			}
+		}
+	});
+};
+//驾驶证回显
+function drive(staffid, type) {
+	$.ajax({
+		url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
+		data : {
+			type : type,
+			staffid : staffid
+		},
+		dataType : "json",
+		async: false,
+		type : 'post',
+		success : function(data) {
+			/* _self.passportdata = data.passportdata; */
+			if(data!=0){
+				var url=data[0].url;
+				$("#drive").attr('src',url);
+				$("#drive2").attr('src',data[1].url);
 			}
 		}
 	});
@@ -212,7 +238,7 @@ function housecard(staffid, type) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
 				for(var i = 0;i<data.length;i++){
-				$(".housecard").after('<div class="uploadReleases housecard" >'+
+				$(".housecard").after('<div class="uploadReleases housecard'+i+'" >'+
 					'<div>上传</div>'+
 					'<img src="'+data[i].url+'" class="longitudinal"/>'+
 				'</div>');
