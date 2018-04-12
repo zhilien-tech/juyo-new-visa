@@ -8,6 +8,29 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<script type="text/javascript" src="js/rem(750).js" ></script>
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script>
+      //获取URL地址参数
+     
+        	$(function(){
+        		$.ajax({
+        			type : "POST",//提交类型  
+        			//dataType : "json",//返回结果格式  
+        	 		url : '/admin/weixinToken/saveWxinfo.html',//请求地址  
+        			data:{code:code},
+        			//请求数据  
+        			success : function(obj) {//请求成功后的函数 
+        				//关闭加载层
+        				console.log(obj);
+        			},
+        			error : function(XMLHttpRequest, textStatus, errorThrown) {
+        				
+        			}
+        		});
+        		
+        	})
+        	
+        	
+        </script>
 		<style>
 			.sectionInfo {
 				padding: 0 .2rem;
