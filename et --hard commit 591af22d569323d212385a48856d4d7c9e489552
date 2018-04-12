@@ -1,0 +1,27 @@
+[33mcommit 591af22d569323d212385a48856d4d7c9e489552[m
+Merge: 738010f a404f2b
+Author: 彭辉 <penghui1156@163.com>
+Date:   Thu Apr 12 16:47:33 2018 +0800
+
+    Merge pull request #516 from zhilien-tech/line-dong
+    
+    Line dong
+
+[33mcommit a404f2b4cdd523b0e184e3ba4205ee0a296d8de4[m
+Merge: 3ba7e3c 738010f
+Author: dong <dong@dong>
+Date:   Thu Apr 12 16:27:02 2018 +0800
+
+    Merge remote-tracking branch 'origin/dev' into line-dong
+
+[33mcommit 3ba7e3c928d35cd28b7a86c1796f2ea2526558aa[m
+Author: dong <dong@dong>
+Date:   Thu Apr 12 16:26:02 2018 +0800
+
+    验证用户是否已授权
+
+[33mcommit b720ca0daf3932f17e1660bcd570dbab098b365c[m
+Author: dong <dong@dong>
+Date:   Thu Apr 12 14:53:28 2018 +0800
+
+    修改微信授权
