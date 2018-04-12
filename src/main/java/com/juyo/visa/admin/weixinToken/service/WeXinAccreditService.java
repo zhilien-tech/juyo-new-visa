@@ -47,7 +47,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 		//			if (Util.isEmpty(WX_CODEURL)) {
 		//应用授权作用域，snsapi_base （不弹出授权页面，直接跳转，只能获取用户openid），snsapi_userinfo （弹出授权页面，可通过openid拿到昵称、性别、所在地。并且，即使在未关注的情况下，只要用户授权，也能获取其信息）
 		accessTokenUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
-		String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("REDIRECT_URI", code)
+		String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("CODE", code)
 				.replace("SECRET", WX_APPSECRET);
 		System.out.println("getCode.requestUrl====>" + requestUrl);
 		accessToken = HttpUtil.doGet(requestUrl);
@@ -119,5 +119,4 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 		return null;
 
 	}
-
 }
