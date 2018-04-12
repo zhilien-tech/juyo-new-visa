@@ -38,6 +38,7 @@ public class WeiXinTokenModule {
 	@POST
 	@Filters
 	public Object saveWxinfo(@Param("code") String code) {
+		System.out.println("module,code=" + code);
 		return weXinAccreditService.SaveUser(code);
 	}
 
@@ -54,10 +55,11 @@ public class WeiXinTokenModule {
 	public Map<String, String> makeWXTicket(@Param("jsApiTicket") String jsApiTicket, @Param("url") String url) {
 		return weXinTokenViewService.makeWXTicket(jsApiTicket, url);
 	}
-	
+
 	//
-	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaId") String mediaId, @Param("type")Integer type) {
-		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId,mediaId, type);
-	 }
+	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaId") String mediaId,
+			@Param("type") Integer type) {
+		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaId, type);
+	}
 
 }

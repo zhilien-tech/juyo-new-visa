@@ -15,6 +15,7 @@
         }
         	$(function(){
         		var code = GetQueryString("code");
+        		alert(code);
         		$("#bgImgPic").height($(window).height());
         		$("#bgImgPic").width($(window).width());
         		$.ajax({
@@ -26,8 +27,8 @@
         			success : function(obj) {//请求成功后的函数 
         				//关闭加载层
         				if(obj == '12'){
-        					window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?
-        							+'appid=wxd77f341f1b849e68&redirect_uri=http%3A%2F%2Fwww.f-visa.com%2Fappmobileus%2Flogin.html
+        					window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?'+
+        							+'appid=wxd77f341f1b849e68&redirect_uri=http%3A%2F%2Fwww.f-visa.com%2Fappmobileus%2Flogin.html'+
         							+'&response_type=code&scope=snsapi_userinfo&state=STATE';
         					
         				}
