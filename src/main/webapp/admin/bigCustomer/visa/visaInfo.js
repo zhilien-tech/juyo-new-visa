@@ -33,6 +33,7 @@ $(".team").change(function(){
 		emptyContentByObj($("div.teamnamefalse"));
 	}
 });
+
 //添加多段
 //先这样写日后修改
 //添加
@@ -57,6 +58,8 @@ $(".companycancel").click(function(){
 	
 	$(".teamnamefalseDiv:last").remove();
 })
+
+
 //-------------------------------------------家庭信息 end----------------------------------
 
 //---------------------------------------以前的美国旅游信息 start----------------------------------
@@ -470,7 +473,7 @@ $(".gocountrycancel").click(function(){
 })
 //组织
 $(".organizationsave").click(function(){
-	$(".organizationYes").append('<div class="paddingTop organizationDiv groupInputInfo"><label>组织名称</label><input name="organizationname" type="text"/></div>');
+	$(".organizationYes").append('<div class="paddingTop draBig leftNo organizationDiv groupInputInfo"><label>组织名称</label><input name="organizationname" type="text"/></div>');
 });
 
 $(".organizationcancel").click(function(){
@@ -492,7 +495,7 @@ $(".militarysave").click(function(){
 });
 $(".militarycancel").click(function(){
 	$(".militaryInfoDiv:last").remove();
-})
+});
 //-------------------------------------------工作/教育/培训信息 end------------------------------------
 
 
@@ -646,9 +649,6 @@ function editEleBeforeCheckbox(obj){
 	});
 	
 }
-
-
-
 
 //取消关闭窗口
 function closeWindow() {

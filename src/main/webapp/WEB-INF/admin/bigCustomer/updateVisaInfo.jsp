@@ -537,7 +537,7 @@
 						</c:if>
 						<c:if test="${empty obj.zhiFamilyList}">
 							<div class="directRelativesYes">
-								<div class="floatLeft groupInputInfo">
+								<div class="floatLeft leftNo groupInputInfo">
 									<label>姓</label>
 									<input name="relativesfirstname" type="text" />
 								</div>
@@ -546,7 +546,7 @@
 									<input name="relativeslastname" type="text" />
 								</div>
 								<div class="clear"></div>
-								<div class="paddingLeft groupSelectInfo">
+								<div class="paddingLeft leftNo groupSelectInfo">
 									<label>与你的关系</label>
 									<select name="relationship">
 										<option value="0">请选择</option>
@@ -566,8 +566,7 @@
 								</div>
 							</div>
 						</c:if>
-							
-							<div class="clear"></div>
+						<div class="clear"></div>
 						</div>
 						<!--NO-->
 						<div class="directRelativesNo groupRadioInfo">
@@ -1121,9 +1120,9 @@
 					</c:if>
 				</div>	
 				<div class="btnGroup draBig languageGroup">
-						<a class="save languagesave">添加</a>
-						<a class="cancel languagecancel">去掉</a>
-					</div>
+					<a class="save languagesave">添加</a>
+					<a class="cancel languagecancel">去掉</a>
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>过去五年是否曾去过任何国家/地区旅游</label>
@@ -1316,6 +1315,7 @@
 						<textarea></textarea> -->
 					</div>
 				</div>
+			</div>	
 			<!--工作/教育/培训信息END-->
 			<!--安全和背景-->
 			<div class="safe paddingTop">
