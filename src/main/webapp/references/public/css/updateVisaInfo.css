@@ -178,6 +178,9 @@ label {
 .cbox {
 	padding-left:15px;
 }
+.cbox input:nth-child(2) {
+	width:92% !important;
+}
 .groupcheckBoxInfo label {
 	display: block;
 	font-size:12px;
@@ -344,6 +347,18 @@ label {
 .groupPM {
 	padding-left:15px;
 	margin-top:10px;
+}
+.draBig {
+	padding-left:15px;
+}
+.draBig input {
+	width:100% !important;
+}
+.marginLS,.educationYes ,.languageGroup,.educationGroup,.gocountryGroup,.organizationGroup,.militaryGroup {
+	margin-top:10px;
+}
+.gocountryGroup {
+	margin-bottom:10px;
 }
 /* 左按钮 */
 .leftNav {
