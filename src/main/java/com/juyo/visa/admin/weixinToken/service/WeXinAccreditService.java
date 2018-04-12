@@ -54,24 +54,25 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 			//返回的参数
 			//{"access_token":"ACCESS_TOKEN","expires_in":7200,"refresh_token":"REFRESH_TOKEN",
 			//"openid":"OPENID","scope":"SCOPE","unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"}
-
 			//redis中设置 access_token
 			redisDao.set("access_token", accessToken.get("access_token").toString());
 			redisDao.set("openid", accessToken.get("openid").toString());
 			//							redisDao.expire("openid", 5000);
 		}
-
 		return accessToken;
 	}
 
 	//根据accessToken获取用户个人信息
 	public Object SaveUser(String code) {
+		System.out.println("code=" + code);
 		JSONObject accessTokenObject = getCode(code);
 		String getUserUrl;
 		//获取access_token
 		String accessToken = accessTokenObject.get("access_token").toString();
+		System.out.println("accessToken=" + accessToken);
 		//获取openid
 		String openid = accessTokenObject.get("openid").toString();
+		System.out.println("openid=" + openid);
 		getUserUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
 		String requestUrl = getUserUrl.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openid);
 		JSONObject user = HttpUtil.doGet(requestUrl);
@@ -97,6 +98,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 		//openid
 		wxinfo.setOpenid(openid);
 		//微信用户昵称
+		System.out.println("nickname=" + user.get("nickname").toString());
 		wxinfo.setNickname(user.get("nickname").toString());
 		//用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
 		wxinfo.setSex((int) user.get("sex"));
