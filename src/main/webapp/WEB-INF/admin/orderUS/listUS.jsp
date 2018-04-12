@@ -28,7 +28,7 @@
 							<a name="myOrder"  class="searchOrderBtn btnList">我的</a>
 						</div>
 						<div class="row searchMar">
-							<div class="col-md-2 left-5px right-0px">
+							<div class="col-md-1 left-5px right-0px">
 								<select id="status" name="status" onchange="selectListData();" class="input-class input-sm" >
 									<option value="">状态</option>
 									<c:forEach var="map" items="${obj.searchStatus}">
@@ -36,7 +36,7 @@
 									</c:forEach>
 								</select>
 							</div>
-							<div class="col-md-2 left-5px right-0px">
+							<div class="col-md-1 left-5px right-0px">
 								<select id="cityid" name="cityid" onchange="selectListData();" class="input-class input-sm" >
 									<option value="">领区</option>
 									<c:forEach var="map" items="${obj.cityid}">
@@ -44,7 +44,7 @@
 									</c:forEach>
 								</select>
 							</div>
-							<div class="col-md-2 left-5px right-0px">
+							<div class="col-md-1 left-5px right-0px">
 								<select id="ispayed" name="ispayed" onchange="selectListData();" class="input-class input-sm" >
 									<option value="">是否付款</option>
 									<c:forEach var="map" items="${obj.ispayed}">
