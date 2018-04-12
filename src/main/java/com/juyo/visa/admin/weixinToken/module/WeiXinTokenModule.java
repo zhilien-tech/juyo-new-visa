@@ -58,8 +58,8 @@ public class WeiXinTokenModule {
 	//微信JSSDK上传的文件需要重新下载后上传到七牛云
 	@At
 	@POST
-	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaId") String mediaId, @Param("type")Integer type) {
-		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId,mediaId,type);
+	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String[] mediaIds, @Param("type")Integer type) {
+		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId,mediaIds,type);
 	 }
 
 }

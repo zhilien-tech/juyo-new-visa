@@ -10,12 +10,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 
 import com.alibaba.druid.support.logging.Log;
@@ -23,6 +26,7 @@ import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
 import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TConfWxEntity;
@@ -133,22 +137,33 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	 * @param 
 	 * @return
 	 */
-	 public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaId, Integer type) {
-		 
+	 public Object wechatJsSDKUploadToQiniu(Integer staffId, String[] mediaIds, Integer type) {
 		 Date nowDate = DateUtil.nowDate();
-		 String accessToken = (String)getAccessToken();
-		 String extName = getExtName(accessToken, mediaId);//获取扩展名
-		 InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
-		 String url = "http://oyu1xyxxk.bkt.clouddn.com/"+qiniuUploadService.uploadImage(inputStream, extName, mediaId);
 		 
-		 TAppStaffCredentialsEntity credentialEntity = new TAppStaffCredentialsEntity();
-		 credentialEntity.setStaffid(staffId);
-		 credentialEntity.setUrl(url);
-		 credentialEntity.setType(type);
-		 credentialEntity.setCreatetime(nowDate);
-		 credentialEntity.setUpdatetime(nowDate);
-		 dbDao.insert(credentialEntity);
-		 return url;
+		 List<TAppStaffCredentialsEntity> celist_old = dbDao.query(TAppStaffCredentialsEntity.class, Cnd.where("id","=",staffId), null);
+		 
+		 List<TAppStaffCredentialsEntity> celist_new = new ArrayList<TAppStaffCredentialsEntity>();
+		 if(!Util.isEmpty(mediaIds)) {
+			 for (String mediaId : mediaIds) {
+				 String accessToken = (String)getAccessToken();
+				 String extName = getExtName(accessToken, mediaId);//获取扩展名
+				 InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
+				 String url = "http://oyu1xyxxk.bkt.clouddn.com/"+qiniuUploadService.uploadImage(inputStream, extName, mediaId);
+				 
+				 TAppStaffCredentialsEntity credentialEntity = new TAppStaffCredentialsEntity();
+				 credentialEntity.setStaffid(staffId);
+				 credentialEntity.setUrl(url);
+				 credentialEntity.setType(type);
+				 credentialEntity.setCreatetime(nowDate);
+				 credentialEntity.setUpdatetime(nowDate);
+				 
+				 celist_new.add(credentialEntity);
+			 }
+		 }
+		 
+		 dbDao.updateRelations(celist_old, celist_new);
+		 
+		 return null;
 	 }
 
 
