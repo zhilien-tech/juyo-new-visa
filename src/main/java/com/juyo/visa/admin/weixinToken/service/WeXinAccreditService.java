@@ -36,29 +36,29 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 
 	//获取code
 	public JSONObject getCode(String code) {
-		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 1);
-		String WX_APPID = wx.getAppid();
-		String WX_APPSECRET = wx.getAppsecret();
-		String WX_TOKENKEY = wx.getAccesstokenkey();
+		//		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 1);
+		String WX_APPID = "wxd77f341f1b849e68";
+		String WX_APPSECRET = "e30756ac75799946d0d89868d89547be";
+		//		String WX_TOKENKEY = wx.getAccesstokenkey();
 		String accessTokenUrl;
 		JSONObject accessToken = null;
-		if (wx != null) {
-			//				WX_CODEURL = redisDao.get(WX_CODEURL);
-			//			if (Util.isEmpty(WX_CODEURL)) {
-			//应用授权作用域，snsapi_base （不弹出授权页面，直接跳转，只能获取用户openid），snsapi_userinfo （弹出授权页面，可通过openid拿到昵称、性别、所在地。并且，即使在未关注的情况下，只要用户授权，也能获取其信息）
-			accessTokenUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
-			String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("REDIRECT_URI", code)
-					.replace("SECRET", WX_APPSECRET);
-			logger.info("getCode.requestUrl====>" + requestUrl);
-			accessToken = HttpUtil.doGet(requestUrl);
-			//返回的参数
-			//{"access_token":"ACCESS_TOKEN","expires_in":7200,"refresh_token":"REFRESH_TOKEN",
-			//"openid":"OPENID","scope":"SCOPE","unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"}
-			//redis中设置 access_token
-			redisDao.set("access_token", accessToken.get("access_token").toString());
-			redisDao.set("openid", accessToken.get("openid").toString());
-			//							redisDao.expire("openid", 5000);
-		}
+		//		if (wx != null) {
+		//				WX_CODEURL = redisDao.get(WX_CODEURL);
+		//			if (Util.isEmpty(WX_CODEURL)) {
+		//应用授权作用域，snsapi_base （不弹出授权页面，直接跳转，只能获取用户openid），snsapi_userinfo （弹出授权页面，可通过openid拿到昵称、性别、所在地。并且，即使在未关注的情况下，只要用户授权，也能获取其信息）
+		accessTokenUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
+		String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("REDIRECT_URI", code)
+				.replace("SECRET", WX_APPSECRET);
+		System.out.println("getCode.requestUrl====>" + requestUrl);
+		accessToken = HttpUtil.doGet(requestUrl);
+		//返回的参数
+		//{"access_token":"ACCESS_TOKEN","expires_in":7200,"refresh_token":"REFRESH_TOKEN",
+		//"openid":"OPENID","scope":"SCOPE","unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"}
+		//redis中设置 access_token
+		//		redisDao.set("access_token", accessToken.get("access_token").toString());
+		//		redisDao.set("openid", accessToken.get("openid").toString());
+		//							redisDao.expire("openid", 5000);
+		//		}
 		return accessToken;
 	}
 
@@ -75,6 +75,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 		System.out.println("openid=" + openid);
 		getUserUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
 		String requestUrl = getUserUrl.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openid);
+		System.out.println("userUrl" + requestUrl);
 		JSONObject user = HttpUtil.doGet(requestUrl);
 		//		{
 		//			   "openid":" OPENID",
