@@ -132,7 +132,8 @@ public class LoginService extends BaseService<TUserEntity> {
 			} else if (UserLoginEnum.SQ_COMPANY_ADMIN.intKey() == userType
 					|| UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType
 					|| UserLoginEnum.JJ_COMPANY_ADMIN.intKey() == userType
-					|| UserLoginEnum.BIG_COMPANY_ADMIN.intKey() == userType) {
+					|| UserLoginEnum.BIG_COMPANY_ADMIN.intKey() == userType
+					|| UserLoginEnum.BIG_COMPANY_CUSTOMER.intKey() == userType) {
 				//公司管理员
 				allUserFunction = companyViewService.getCompanyFunctions(company.getId());
 			} else {
@@ -160,7 +161,11 @@ public class LoginService extends BaseService<TUserEntity> {
 			} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
 				//游客跳转的页面
 				form.setMainurl("/admin/myVisa/visaList.html");
-			} else if (UserLoginEnum.BIG_TOURIST_IDENTITY.intKey() == userType) {
+			}else if (UserLoginEnum.BIG_COMPANY_CUSTOMER.intKey() == userType) {
+				//大客户跳转的页面
+				form.setMainurl("/admin/bigCustomer/list.html");
+			} 
+			else if (UserLoginEnum.BIG_TOURIST_IDENTITY.intKey() == userType) {
 				//大客户游客跳转的页面
 				form.setMainurl("/admin/pcVisa/visaList.html");
 			} else {

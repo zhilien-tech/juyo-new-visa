@@ -13,34 +13,163 @@
 	<body>
 		<header>
 			<div class="filming">
+			<a onclick="returnPage()">
 				<i></i>
-				<span>过期美签上传</span>	
+				<span>过期美签上传</span>	</a>
 			</div>
+
 		</header>
 		<section>
 			<div class="household">
 				<div class="householdPage householdExpain">
 					<span class="homePageTitle">过期美签上传拍摄图例</span>
 				</div>
+				<!-- 过期美签 图片类型枚举 -->
+				<input id="CredentialsEnum_OLDUS" type="hidden" value="11">
 				<!--可多选上传-->
-				<div class="householdPage multiselect">
-					<span class="homePageTitle">可多选上传</span>
-					<img src="img/camera.png" style="pointer-events:none;"  class="camera" />
-					<img src="" style="pointer-events:none;" class="pageImg" />
+				<div class="householdPage multiselect chooseImage">
+					<span class="homePageTitle">可多选上传</span> 
+					<img src="img/camera.png" class="camera" /> 
+					<img src="" class="pageImg" />
 				</div>
-				<input type="file" name="" class="fileHide multiselectImg" />
+				
 			</div>
 		</section>
-		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
-		<script type="text/javascript" src="js/rem(750).js" ></script>
-		<script type="text/javascript" src="js/layer.js" ></script>
-		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
-		<script>
-			$(function(){
-				
-				//多张上传
-				
-			})
-		</script>
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/rem(750).js"></script>
+	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+
+	<script type="text/javascript">
+	
+		$(function(){
+			
+			var	staffid=GetQueryString('staffid');
+			
+			$.ajax({
+		        type : "post",
+		        url : "/admin/weixinToken/getJsApiTicket",
+		        dataType : "json",
+		        async : false,
+		        success : function(data) {
+		        	var jsApiTicket = data.ticket;
+		        	var url = location.href.split('#').toString();//url不能写死
+		        	
+		        	$.ajax({
+		                type : "post",
+		                url : "/admin/weixinToken/makeWXTicket",
+		                dataType : "json",
+		                async : false,
+		                data:{
+		                	jsApiTicket:jsApiTicket,
+		                	url:url
+		                },
+		                success : function(data) {
+		                    wx.config({
+		                        debug: false,//生产环境需要关闭debug模式
+		                        appId: data.appid,//appId通过微信服务号后台查看
+		                        timestamp: data.timestamp,//生成签名的时间戳
+		                        nonceStr: data.nonceStr,//生成签名的随机字符串
+		                        signature: data.signature,//签名
+		                        jsApiList: [//需要调用的JS接口列表
+                                    'chooseImage',
+                    		        'previewImage',
+                    		        'uploadImage'
+		                        ]
+		                    });
+		                },
+		                error: function(xhr, status, error) {
+		                    //alert(status);
+		                    //alert(xhr.responseText);
+		                }
+		            });
+		        },
+		        error: function(xhr, status, error) {
+		            
+		        }
+		    })
+		});
+	
+		
+		wx.ready(function(){
+			//页面加载时就调用相关接口
+		});
+		
+		 
+		var images = {
+			localId : [],
+			serverId : []
+		};
+		$('.chooseImage').on('click', function() {
+			wx.chooseImage({
+				count : 9, // 默认9   
+				sizeType : [ 'compressed' ], // 压缩图
+				sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者都有   
+				success : function(res) {
+					$('.wxChooseImages ').remove();
+					var localIds = res.localIds;
+					if(localIds != ""){
+						for(var i = 0;i<localIds .length;i++){
+							var imgDivStr = '<div class="householdPage wxChooseImages multiselect"><img src="'+localIds[i]+'" class="pageImg" /></div>';
+							$(".chooseImage").before(imgDivStr);
+						}
+					}
+					
+					images.localId = res.localIds;
+					uploadImage(res.localIds);
+				}
+			});
+		});
+
+		var uploadImage = function(localIds) {
+			var localId = localIds.pop();
+			wx.uploadImage({
+				localId : localId,
+				isShowProgressTips : 1,
+				success : function(res) {
+					var serverId = res.serverId; // 返回图片的服务器端ID
+					images.serverId = serverId;
+					//从微信服务器保存到七牛云服务器 type:11
+					$.ajax({
+		                type : "post",
+		                url : "/admin/weixinToken/wechatJsSDKUploadToOss",
+		                dataType : "json",
+		                async : false,
+		                data:{
+		                	staffId:staffid,
+		                	mediaId:serverId,
+		                	type:$("#CredentialsEnum_OLDUS").val()
+		                },
+		                success : function(data) {
+		                    alert(data);
+		                },
+		                error: function(xhr, status, error) {
+		                    
+		                }
+		            });
+					
+					alert(JSON.stringify(images));
+					//其他对serverId做处理的代码
+					if (localIds.length > 0) {
+						uploadImage(localIds);
+					}
+				}
+			});
+		};
+		
+		//删除同类型的其他兄弟节点
+		function deleteBrotherEle(obj){
+			obj.nextAll().remove();
+		}
+		
+		//获取URL地址参数
+	    function GetQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null)return  unescape(r[2]); return null;
+	    }
+	</script>
+
+
 	</body>
 </html>

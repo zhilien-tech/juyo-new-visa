@@ -45,18 +45,50 @@
 					<table id="datatableId" class="table table-hover" style="width:100%;">
 						<thead>
 							<tr>
-								<th><span>序号</span></th>
+								<th><span>订单号</span></th>
 								<th><span>姓名</span></th>
-								<th><span>手机号</span></th>
 								<th><span>邮箱</span></th>
-								<th><span>部门</span></th>
-								<th><span>职位</span></th>
+								<th><span>面式领区</span></th>
+								<th><span>面试时间</span></th>
+								<th><span>签证结果</span></th>
+								<th><span>进度</span></th>
 								<th><span>操作</span></th>
 							</tr>
 						</thead>
 						<tbody>
+							<tr>
+								<td>180410-US0003</td>
+								<td>李智慧</td>
+								<td>82347344@qq.com</td>
+								<td>北京</td>
+								<td>2018-05-01</td>
+								<td>审核中</td>
+								<td>办理中</td>
+								<td><a style="cursor:pointer;" class="updateApplicant" ></a><a style="cursor:pointer;" class="passport" ></a><a class="visa"></a><a class="otherVisa" onclick=""></a><a style="cursor:pointer;" class="deleteIcon" ></a></td>
+							</tr>
+							<tr>
+								<td>180410-US0002</td>
+								<td>李芳</td>
+								<td>3489459@qq.com</td>
+								<td>上海</td>
+								<td>2018-05-12</td>
+								<td>审核中</td>
+								<td>办理中</td>
+								<td><a style="cursor:pointer;" class="updateApplicant" ></a><a style="cursor:pointer;" class="passport" ></a><a class="visa"></a><a class="otherVisa" onclick=""></a><a style="cursor:pointer;" class="deleteIcon" ></a></td>
+							</tr>
+							<tr>
+								<td>180410-US0001</td>
+								<td>王晓</td>
+								<td>839675723@qq.com</td>
+								<td>北京</td>
+								<td>2018-05-15</td>
+								<td>审核中</td>
+								<td>办理中</td>
+								<td><a style="cursor:pointer;" class="updateApplicant" ></a><a style="cursor:pointer;" class="passport" ></a><a class="visa"></a><a class="otherVisa" onclick=""></a><a style="cursor:pointer;" class="deleteIcon" ></a></td>
+							</tr>
 						</tbody>
 					</table>
+					<div class="row"><div class="col-sm-5"><div class="dataTables_info" id="datatableId_info" role="status" aria-live="polite">显示第 1 至 3 条结果，共 3 条 (每页显示 10 条)</div></div><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="datatableId_paginate"><ul class="pagination"><li class="paginate_button previous disabled" id="datatableId_previous"><a href="#" aria-controls="datatableId" data-dt-idx="0" tabindex="0">上页</a></li><li class="paginate_button active"><a href="#" aria-controls="datatableId" data-dt-idx="1" tabindex="0">1</a></li><li class="paginate_button next disabled" id="datatableId_next"><a href="#" aria-controls="datatableId" data-dt-idx="2" tabindex="0">下页</a></li></ul></div></div></div>
 				</div>
 				<!-- /.box-body -->
 			</div>
@@ -80,13 +112,13 @@
 		<script type="text/javascript">
 			var BASE_PATH = '${base}';
 		</script>
-		<script src="${base}/admin/bigCustomer/listTable.js"></script>
+		<%-- <script src="${base}/admin/bigCustomer/listTable.js"></script> --%>
 		<!-- 上传excel -->
-		<script src="${base}/admin/bigCustomer/uploadFile.js"></script>
-		<script type="text/javascript">
+		<%-- <script src="${base}/admin/bigCustomer/uploadFile.js"></script> --%>
+		<!-- <script type="text/javascript">
 			$(function () {
 			    initDatatable();
 			});
-		</script>
+		</script> -->
 	</body>
 </html>
