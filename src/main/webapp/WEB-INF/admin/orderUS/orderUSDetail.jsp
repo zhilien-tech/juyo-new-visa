@@ -610,6 +610,7 @@
 	<script type="text/javascript">
 		var staffid = '${obj.basicinfo.id}';
 		var orderid = '${obj.orderinfo.id}';
+		var neworderid = '${obj.orderid}';
 		//姓名处理
 		var firstname =  '${obj.passport.firstname }';
 		var lastname =  '${obj.passport.lastname }';
@@ -618,6 +619,10 @@
 		if((firstname != "" || lastname != "") && (firstnameen == "" || lastnameen == "")){
 			$("#allname").val(firstname+lastname+"/"+getPinyinStr(firstname)+getPinyinStr(lastname));
 		}
+		if((firstname == "" && lastname == "") && (firstnameen == "" || lastnameen == "")){
+			$("#allname").val("");
+		}
+		
 		//将汉字转为拼音
 		function getPinyinStr(hanzi){
 			var onehanzi = hanzi.split('');
@@ -1275,7 +1280,11 @@
 		
 		//取消
 		function closeWindow(){
-			self.window.close();
+			if(neworderid == 0){
+				window.location.href = '/admin/orderUS/listUS.html';
+			}else{
+				self.window.close();
+			}
 			//parent.window.reload();
 		}
 		
