@@ -74,7 +74,8 @@
 			 fuyecount = maxid;
 			 count = maxname;
 			//当前模块下的添加一页
-			$(document).on('click','.addPage',function(){
+			$('.addPage').on('click',function(){
+				alert("success");
 				var name = $(this).prev().find('input').attr("name");
 				var id = $(this).prev().find('input').attr("id");
 				id = parseInt(id);
