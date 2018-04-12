@@ -34,6 +34,7 @@ $(".team").change(function(){
 	}
 });
 //添加多段
+//先这样写日后修改
 //添加
 $(".companysave").click(function(){
 	
@@ -387,32 +388,36 @@ $(".isservedinrebelgroup").change(function(){
 });
 
 //添加多段
+//先这样写日后修改
 //之前工作
 $(".beforeWorksave").click(function(){
-	$(".beforeWorkYes").append('<div class="workBeforeInfosDiv"><div class="paddingLeft groupInputInfo" >'+
+	$(".beforeWorkYes").append('<div class="workBeforeInfosDiv"><div class="leftNo marginLS groupInputInfo" >'+
 							   '<label>雇主名字</label><input name="employername" type="text" /></div>'+
-							   '<div class="paddingRight groupInputInfo"><label>雇主街道地址(首选)</label>'+
+							   '<div class="draBig leftNo marginLS groupInputInfo"><label>雇主街道地址(首选)</label>'+
 							   '<input name="employeraddress" type="text" /></div>'+
 							   '<div class="clear"></div>'+
-							   '<div class="paddingLeft groupInputInfo"><label>雇主街道地址(次选)*可选</label>'+
+							   '<div class="draBig leftNo marginLS groupInputInfo"><label>雇主街道地址(次选)*可选</label>'+
 							   '<input type="text" /></div>'+
-							   '<div class="paddingRight groupcheckBoxInfo"><label>市</label>'+
+							   '<div class="paddingLeft leftNo groupcheckBoxInfo"><label>市</label>'+
 							   '<input name="employercity" type="text" /><input type="checkbox" /></div>'+
-							   '<div class="clear"></div>'+
-							   '<div class="paddingLeft groupInputInfo"><label>州/省</label>'+
+							   '<div class="paddingRight leftNo groupInputInfo"><label>州/省</label>'+
 							   '<input name="employerprovince" type="text"/></div>'+
-							   '<div class="paddingRight groupcheckBoxInfo"><label>邮政编码</label>'+
-							   '<input name="employerzipcode" type="text" /><input name="isemployerzipcodeapply" type="checkbox"/></div>'+
-							   '<div class="clear"></div><div class="paddingLeft groupSelectInfo"><label>国家/地区</label>'+
-							   '<select name="employercountry"><option value="0">请选择</option><c:forEach items="${obj.VisaCitizenshipEnum }" var="map"><option value="${map.key }">${map.value }</option></c:forEach></select></div>'+
-							   '<div class="paddingRight groupInputInfo"><label>电话号码</label><input name="employertelephone" type="text" /></div>'+
-							   '<div class="clear"></div><div class="paddingLeft groupInputInfo"><label>职称</label><input name="jobtitle" type="text"/></div>'+
-							   '<div class="paddingRight groupcheckBoxInfo"><label>主管的姓</label><input name="supervisorfirstname" type="text" /><input name="isknowsupervisorfirstname" type="checkbox" /></div>'+
-							   '<div class="clear"></div><div class="paddingLeft groupcheckBoxInfo"><label>主管的名</label><input name="supervisorlastname" type="text" /><input name="isknowsupervisorlastname" type="checkbox" /></div>'+
-							   '<div class="paddingRight groupInputInfo" ><label>入职时间</label><input id="employstartdate" name="employstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" /></div>'+
 							   '<div class="clear"></div>'+
-							   '<div class="paddingLeft groupInputInfo"><label>离职时间</label><input id="employenddate" name="employenddate" class="datetimepickercss" type="text" placeholder="日/月/年" /></div>'+
-							   '<div class="paddingRight grouptextareaInfo"><label>简要描述你的职责</label><textarea name="previousduty"></textarea></div></div>'
+							   '<div class="paddingLeft leftNo groupcheckBoxInfo"><label>邮政编码</label>'+
+							   '<input name="employerzipcode" type="text" /><input name="isemployerzipcodeapply" type="checkbox"/></div>'+
+							   '<div class="paddingRight leftNo groupSelectInfo"><label>国家/地区</label>'+
+							   '<select name="employercountry"><option value="0">请选择</option><c:forEach items="${obj.VisaCitizenshipEnum }" var="map"><option value="${map.key }">${map.value }</option></c:forEach></select></div>'+
+							   '<div class="clear"></div>'+
+							   '<div class="paddingLeft leftNo groupInputInfo"><label>电话号码</label><input name="employertelephone" type="text" /></div>'+
+							   '<div class="paddingRight leftNo groupInputInfo"><label>职称</label><input name="jobtitle" type="text"/></div>'+
+							   '<div class="clear"></div>'+
+							   '<div class="paddingLeft leftNo groupcheckBoxInfo"><label>主管的姓</label><input name="supervisorfirstname" type="text" /><input name="isknowsupervisorfirstname" type="checkbox" /></div>'+
+							   '<div class="paddingRight leftNo groupcheckBoxInfo"><label>主管的名</label><input name="supervisorlastname" type="text" /><input name="isknowsupervisorlastname" type="checkbox" /></div>'+
+							   '<div class="clear"></div>'+
+							   '<div class="paddingLeft leftNo groupInputInfo" ><label>入职时间</label><input id="employstartdate" name="employstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" /></div>'+
+							   '<div class="paddingRight leftNo groupInputInfo"><label>离职时间</label><input id="employenddate" name="employenddate" class="datetimepickercss" type="text" placeholder="日/月/年" /></div>'+
+							   '<div class="clear"></div>'+
+							   '<div class="draBig leftNo grouptextareaInfo"><label>简要描述你的职责</label><textarea name="previousduty"></textarea></div></div>'
 							);
 });
 
@@ -422,22 +427,21 @@ $(".beforeWorkcancel").click(function(){
 //教育
 $(".educationsave").click(function(){
 	$(".educationYes").append('<div class="midSchoolEduDiv">'+
-							   '<div class="paddingLeft groupInputInfo"><label>机构名称</label><input name="institution" type="text"/></div>'+	
-							   '<div class="paddingRight groupInputInfo"><label>街道地址(首选)</label><input name="institutionaddress" type="text" /></div>'+
+							   '<div class="draBig leftNo groupInputInfo"><label>机构名称</label><input name="institution" type="text"/></div>'+	
+							   '<div class="draBig leftNo groupInputInfo"><label>街道地址(首选)</label><input name="institutionaddress" type="text" /></div>'+
+							   '<div class="draBig leftNo groupInputInfo"><label>街道地址(次选)*可选</label><input type="text" /></div>'+
+							   '<div class="paddingLeft leftNo  groupcheckBoxInfo" ><label >市</label><input name="institutioncity" type="text" /><input type="checkbox" /></div>'+
+							   '<div class="paddingRight leftNo groupInputInfo"><label>州/省</label><input name="institutionprovince" type="text" /></div>'+
 							   '<div class="clear"></div>'+
-							   '<div class="paddingLeft groupInputInfo"><label>街道地址(次选)*可选</label><input type="text" /></div>'+
-							   '<div class="paddingRight groupcheckBoxInfo" ><label >市</label><input name="institutioncity" type="text" /><input type="checkbox" /></div>'+
-							   '<div class="clear"></div>'+
-							   '<div class="paddingLeft groupInputInfo"><label>州/省</label><input name="institutionprovince" type="text" /></div>'+
-							   '<div class="paddingRight groupcheckBoxInfo"><label>邮政编码</label><input name="institutionzipcode" type="text" /><input name="isinstitutionzipcodeapply" type="checkbox" /></div>'+
-							   '<div class="clear"></div>'+
-							   '<div class="paddingLeft groupSelectInfo"><label>国家/地区</label>'+
+							   '<div class="paddingLeft leftNo  groupcheckBoxInfo"><label>邮政编码</label><input name="institutionzipcode" type="text" /><input name="isinstitutionzipcodeapply" type="checkbox" /></div>'+
+							   '<div class="paddingRight leftNo groupSelectInfo"><label>国家/地区</label>'+
 							   '<select name="institutioncountry"><option value="0">请选择</option><c:forEach items="${obj.VisaCitizenshipEnum }" var="map"><option value="${map.key }">${map.value }</option></c:forEach></select>'+
 							   '</div>'+
-							   '<div class="paddingRight groupInputInfo"><label>学科</label><input name="course" type="text" /></div>'+
 							   '<div class="clear"></div>'+
-							   '<div class="paddingLeft groupInputInfo"><label>参加课程开始时间</label><input id="coursestartdate" name="coursestartdate" class="datetimepickercss" type="text" placeholder="日/月/年" /></div>'+
-							   '<div class="paddingRight groupInputInfo"><label>结束时间</label><input id="courseenddate" name="courseenddate" class="datetimepickercss" type="text" placeholder="日/月/年" /></div>'+
+							   '<div class="paddingLeft leftNo  groupInputInfo"><label>学科</label><input name="course" type="text" /></div>'+
+							   '<div class="paddingRight leftNo groupInputInfo"><label>参加课程开始时间</label><input id="coursestartdate" name="coursestartdate" class="datetimepickercss" type="text" placeholder="日/月/年" /></div>'+
+							   '<div class="clear"></div>'+
+							   '<div class="paddingLeft leftNo  groupInputInfo"><label>结束时间</label><input id="courseenddate" name="courseenddate" class="datetimepickercss" type="text" placeholder="日/月/年" /></div>'+
 							   '</div>'
 								);
 });
@@ -471,6 +475,23 @@ $(".organizationsave").click(function(){
 
 $(".organizationcancel").click(function(){
 	$(".organizationDiv:last").remove();
+})
+//服兵役
+$(".militarysave").click(function(){
+	$(".militaryYes").append('<div class="militaryInfoDiv">'+
+							'<div class="paddingLeft leftNo groupSelectInfo"><label>国家/地区</label>'+
+							'<select name="militarycountry"><option value="0">请选择</option><c:forEach items="${obj.VisaCitizenshipEnum }" var="map"><option value="${map.key }">${map.value }</option></c:forEach></select></div>'+
+							'<div class="paddingRight leftNo groupInputInfo"><label>服务分支</label><input name="servicebranch" type="text" /></div>'+
+							'<div class="clear"></div>'+
+							'<div class="paddingLeft leftNo groupInputInfo" ><label>排名/位置</label><input name="rank" type="text" /></div>'+
+							'<div class="paddingRight leftNo groupInputInfo"><label>军事专业</label><input name="militaryspecialty" type="text"/></div>'+
+							'<div class="clear"></div>'+
+							'<div class="paddingLeft leftNo groupInputInfo"><label>服兵役开始时间日期</label><input id="servicestartdate" name="servicestartdate" type="text" class="datetimepickercss" placeholder="日/月/年"/></div>'+
+							'<div class="paddingRight leftNo groupInputInfo"><label>结束时间</label><input id="serviceenddate" name="serviceenddate" type="text" class="datetimepickercss" placeholder="日/月/年"/></div></div>'
+								);
+});
+$(".militarycancel").click(function(){
+	$(".militaryInfoDiv:last").remove();
 })
 //-------------------------------------------工作/教育/培训信息 end------------------------------------
 

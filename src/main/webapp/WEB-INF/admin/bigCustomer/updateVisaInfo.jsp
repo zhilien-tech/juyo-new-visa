@@ -385,11 +385,11 @@
 				</div>
 				<div class="clear"></div>
 				<div class="" style="padding: 10px 0;">
-					<div class="groupInputInfo floatLeft">
+					<div class="groupInputInfo draBig">
 						<label>美国街道地址(首选)</label>
 						<input name="address" v-model="visaInfo.contactPointInfo.address" type="text" />
 					</div>
-					<div class="groupInputInfo floatRight">
+					<div class="groupInputInfo draBig marginLS">
 						<label>美国街道地址(次选)*可选</label>
 						<input name="secaddress" v-model="visaInfo.contactPointInfo.secaddress" type="text" />
 					</div>
@@ -682,40 +682,41 @@
 					</select>
 				</div>
 				<div class="paddingTop elementHide jobEduLearningInfoDiv">
-					<div class="floatLeft groupInputInfo">
-						<label>目前的工作点位或者学校名称</label>
+					<div class="groupInputInfo draBig">
+						<label>目前的工作单位或者学校名称</label>
 						<input name="unitname" v-model="visaInfo.workEducationInfo.unitname" type="text" />
 					</div>
-					<div class="floatRight groupInputInfo">
+					<div class="groupInputInfo draBig">
 						<label >街道地址(首选)</label>
 						<input name="address" v-model="visaInfo.workEducationInfo.address" type="text" />
 					</div>
 					<div class="clear"></div>
-					<div class="paddingLeft groupInputInfo">
+					<div class="groupInputInfo draBig">
 						<label>街道地址(次要)*可选</label>
 						<input name="secaddress" v-model="visaInfo.workEducationInfo.secaddress" type="text" />
 					</div>
-					<div class="paddingRight groupInputInfo">
+					<div class="paddingLeft groupInputInfo">
 						<label>市</label>
 						<input name="city" v-model="visaInfo.workEducationInfo.city" type="text"/>
 					</div>
-					<div class="clear"></div>
-					<div class="paddingLeft groupcheckBoxInfo">
+					
+					<div class="paddingRight groupcheckBoxInfo">
 						<label>州/省</label>
 						<input name="province" v-model="visaInfo.workEducationInfo.province" type="text"/>
 						<input name="isprovinceapply" v-model="visaInfo.workEducationInfo.isprovinceapply" type="checkbox"/>
 					</div>
-					<div class="paddingRight groupcheckBoxInfo">
+					<div class="clear"></div>
+					<div class="paddingLeft groupcheckBoxInfo">
 						<label>邮政编码</label>
 						<input name="zipcode" v-model="visaInfo.workEducationInfo.zipcode" type="text" />
 						<input name="iszipcodeapply" v-model="visaInfo.workEducationInfo.iszipcodeapply" type="checkbox" />
 					</div>
-					<div class="clear"></div>
-					<div class="paddingLeft groupInputInfo">
+					<div class="paddingRight groupInputInfo">
 						<label>电话号吗</label>
 						<input name="telephone" v-model="visaInfo.workEducationInfo.telephone" type="text" />
 					</div>
-					<div class="paddingRight groupSelectInfo" >
+					<div class="clear"></div>
+					<div class="paddingLeft groupSelectInfo" >
 						<label>国家/地区</label>
 						<select name="country" v-model="visaInfo.workEducationInfo.country">
 							<option value="0">请选择</option>
@@ -724,12 +725,13 @@
 							</c:forEach>
 						</select>
 					</div>
-					<div class="clear"></div>
-					<div class="paddingLeft groupInputInfo">
+					
+					<div class="paddingRight groupInputInfo">
 						<label>开始日期</label>
 						<input id="workstartdate" name="workstartdate" v-model="visaInfo.workEducationInfo.workstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 					</div>
-					<div class="paddingRight groupcheckBoxInfo" >
+					<div class="clear"></div>
+					<div class="paddingLeft groupcheckBoxInfo" >
 						<label>当地月收入(如果雇佣)</label>
 						<input name="salary" v-model="visaInfo.workEducationInfo.salary" type="text" />
 						<input name="issalaryapply" v-model="visaInfo.workEducationInfo.issalaryapply" type="checkbox" />
@@ -762,31 +764,30 @@
 							<c:if test="${!empty obj.beforeWorkList }">
 								<c:forEach var="beforeWork" items="${obj.beforeWorkList }">
 									<div class="workBeforeInfosDiv">
-										<div class="paddingLeft groupInputInfo" >
+										<div class="leftNo marginLS groupInputInfo" >
 											<label>雇主名字</label>
 											<input name="employername" value="${beforeWork.employername }" type="text" />
 										</div>
-										<div class="paddingRight groupInputInfo">
+										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>雇主街道地址(首选)</label>
 											<input name="employeraddress" value="${beforeWork.employeraddress }" type="text" />
 										</div>
-										<div class="clear"></div>
-										<div class="paddingLeft groupInputInfo">
+										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>雇主街道地址(次选)*可选</label>
 											<input name="employeraddressSec" value="${beforeWork.employeraddressSec }" type="text" />
 										</div>
-										<div class="paddingRight groupcheckBoxInfo" >
+										<div class="paddingLeft leftNo groupcheckBoxInfo" >
 											<label>市</label>
 											<input name="employercity" value="${beforeWork.employercity }" type="text" />
 											<!-- <input type="checkbox" /> -->
 										</div>
-										<div class="clear"></div>
-										<div class="paddingLeft groupInputInfo">
+										<div class="paddingRight leftNo groupInputInfo">
 											<label>州/省</label>
 											<input name="employerprovince" value="${beforeWork.employerprovince }" type="text" />
-											<input name="isemployerprovinceapply" value="${beforeWork.isemployerprovinceapply }" type="text" />
+											<%-- <input name="isemployerprovinceapply" value="${beforeWork.isemployerprovinceapply }" type="text" /> --%>
 										</div>
-										<div class="paddingRight groupcheckBoxInfo">
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>邮政编码</label>
 											<input name="employerzipcode" value="${beforeWork.employerzipcode }" type="text" />
 											<c:if test="${beforeWork.isemployerzipcodeapply == 1}">
@@ -797,8 +798,7 @@
 											</c:if>
 											
 										</div>
-										<div class="clear"></div>
-										<div class="paddingLeft groupSelectInfo">
+										<div class="paddingRight groupSelectInfo">
 											<label>国家/地区</label>
 											<select name="employercountry">
 												<option value="0">请选择</option>
@@ -812,16 +812,17 @@
 												</c:forEach>
 											</select>
 										</div>
-										<div class="paddingRight groupInputInfo">
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupInputInfo">
 											<label>电话号码</label>
 											<input name="employertelephone" value="${beforeWork.employertelephone }" type="text" />
 										</div>
-										<div class="clear"></div>
-										<div class="paddingLeft groupInputInfo">
+										<div class="paddingRight groupInputInfo">
 											<label>职称</label>
 											<input name="jobtitle" value="${beforeWork.jobtitle }" type="text"/>
 										</div>
-										<div class="paddingRight groupcheckBoxInfo">
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>主管的姓</label>
 											<input name="supervisorfirstname" value="${beforeWork.supervisorfirstname }" type="text" />
 											<c:if test="${beforeWork.isknowsupervisorfirstname == 1}">
@@ -830,10 +831,8 @@
 											<c:if test="${beforeWork.isknowsupervisorlastname != 1}">
 												<input name="isknowsupervisorfirstname" value="${beforeWork.isknowsupervisorfirstname }" type="checkbox" />
 											</c:if>
-											
 										</div>
-										<div class="clear"></div>
-										<div class="paddingLeft groupcheckBoxInfo">
+										<div class="paddingRight groupcheckBoxInfo">
 											<label>主管的名</label>
 											<input name="supervisorlastname" value="${beforeWork.supervisorlastname }" type="text" />
 											<c:if test="${beforeWork.isknowsupervisorlastname == 1}">
@@ -842,56 +841,54 @@
 											<c:if test="${beforeWork.isknowsupervisorlastname != 1}">
 												<input name="isknowsupervisorlastname" value="${beforeWork.isknowsupervisorlastname }" type="checkbox" />
 											</c:if>
-											
 										</div>
-										<div class="paddingRight groupInputInfo" >
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupInputInfo" >
 											<label>入职时间</label>
 											<input id="employstartdate" name="employstartdate" value="<fmt:formatDate value="${beforeWork.employstartdate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
-										<div class="clear"></div>
-										<div class="paddingLeft groupInputInfo">
+										<div class="paddingRight groupInputInfo">
 											<label>离职时间</label>
 											<input id="employenddate" name="employenddate" value="<fmt:formatDate value="${beforeWork.employenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
-										<div class="paddingRight grouptextareaInfo">
+										<div class="clear"></div>
+										<div class="draBig leftNo marginLS grouptextareaInfo">
 											<label>简要描述你的职责</label>
-											<textarea name="previousduty" value="${beforeWork.previousduty }"></textarea>
+											<textarea name="previousduty" class="bigArea" value="${beforeWork.previousduty }"></textarea>
 										</div>
 									</div>
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.beforeWorkList }">
 								<div class="workBeforeInfosDiv">
-									<div class="paddingLeft groupInputInfo" >
+									<div class="leftNo marginLS groupInputInfo" >
 										<label>雇主名字</label>
 										<input name="employername" type="text" />
 									</div>
-									<div class="paddingRight groupInputInfo">
+									<div class="draBig leftNo marginLS groupInputInfo">
 										<label>雇主街道地址(首选)</label>
 										<input name="employeraddress" type="text" />
 									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupInputInfo">
+									<div class="draBig leftNo marginLS groupInputInfo">
 										<label>雇主街道地址(次选)*可选</label>
 										<input type="text" />
 									</div>
-									<div class="paddingRight groupcheckBoxInfo" >
+									<div class="paddingLeft leftNo groupcheckBoxInfo" >
 										<label>市</label>
 										<input name="employercity" type="text" />
 										<input type="checkbox" />
 									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupInputInfo">
+									<div class="paddingRight leftNo groupInputInfo">
 										<label>州/省</label>
 										<input name="employerprovince" type="text" />
 									</div>
-									<div class="paddingRight groupcheckBoxInfo">
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupcheckBoxInfo">
 										<label>邮政编码</label>
 										<input name="employerzipcode" type="text" />
 										<input name="isemployerzipcodeapply" type="checkbox" />
 									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupSelectInfo">
+									<div class="paddingRight leftNo groupSelectInfo">
 										<label>国家/地区</label>
 										<select name="employercountry">
 											<option value="0">请选择</option>
@@ -900,44 +897,45 @@
 											</c:forEach>
 										</select>
 									</div>
-									<div class="paddingRight groupInputInfo">
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupInputInfo">
 										<label>电话号码</label>
 										<input name="employertelephone" type="text" />
 									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupInputInfo">
+									<div class="paddingRight leftNo groupInputInfo">
 										<label>职称</label>
 										<input name="jobtitle" type="text"/>
 									</div>
-									<div class="paddingRight groupcheckBoxInfo">
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupcheckBoxInfo">
 										<label>主管的姓</label>
 										<input name="supervisorfirstname" type="text" />
 										<input name="isknowsupervisorfirstname" type="checkbox" />
 									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupcheckBoxInfo">
+									<div class="paddingRight leftNo groupcheckBoxInfo">
 										<label>主管的名</label>
 										<input name="supervisorlastname" type="text" />
 										<input name="isknowsupervisorlastname" type="checkbox" />
 									</div>
-									<div class="paddingRight groupInputInfo" >
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupInputInfo" >
 										<label>入职时间</label>
 										<input id="employstartdate" name="employstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupInputInfo">
+									<div class="paddingRight leftNo groupInputInfo">
 										<label>离职时间</label>
 										<input id="employenddate" name="employenddate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
-									<div class="paddingRight grouptextareaInfo">
+									<div class="clear"></div>
+									<div class="draBig leftNo marginLS grouptextareaInfo">
 										<label>简要描述你的职责</label>
-										<textarea name="previousduty"></textarea>
+										<textarea class="bigArea" name="previousduty"></textarea>
 									</div>
 								</div>
 							</c:if>
 							</div>
 							<div class="clear"></div>
-							<div class="btnGroup beforeWorkGroup">
+							<div class="btnGroup marginLS beforeWorkGroup">
 								<a class="save beforeWorksave">添加</a>
 								<a class="cancel beforeWorkcancel">去掉</a>
 							</div>
@@ -957,36 +955,34 @@
 							<c:if test="${empty obj.beforeEducationList }">
 								<c:forEach var="education" items="${obj.beforeEducationList }">
 									<div class="midSchoolEduDiv">
-										<div class="paddingLeft groupInputInfo">
+										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>机构名称</label>
 											<input name="institution" value="${education.institution }" type="text"/>
 										</div>
-										<div class="paddingRight groupInputInfo">
+										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>街道地址(首选)</label>
 											<input name="institutionaddress" value="${education.institutionaddress }" type="text" />
 										</div>
-										<div class="clear"></div>
-										<div class="paddingLeft groupInputInfo">
+										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>街道地址(次选)*可选</label>
 											<input name="secinstitutionaddress" type="text" value="${education.secinstitutionaddress }" />
 										</div>
-										<div class="paddingRight groupcheckBoxInfo" >
+										<div class="paddingLeft leftNo groupcheckBoxInfo" >
 											<label >市</label>
 											<input name="institutioncity" value="${education.institutioncity }" type="text" />
 											<input type="checkbox" />
 										</div>
-										<div class="clear"></div>
-										<div class="paddingLeft groupInputInfo">
+										<div class="paddingRight leftNo groupInputInfo">
 											<label>州/省</label>
 											<input name="institutionprovince" value="${education.institutionprovince }" type="text" />
 										</div>
-										<div class="paddingRight groupcheckBoxInfo">
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>邮政编码</label>
 											<input name="institutionzipcode" value="${education.institutionzipcode }" type="text" />
 											<input name="isinstitutionzipcodeapply" value="${education.isinstitutionzipcodeapply }" type="checkbox" />
 										</div>
-										<div class="clear"></div>
-										<div class="paddingLeft groupSelectInfo" >
+										<div class="paddingRight leftNo groupSelectInfo" >
 											<label>国家/地区</label>
 											<select name="institutioncountry">
 												<option value="0">请选择</option>
@@ -1000,16 +996,18 @@
 												</c:forEach>
 											</select>
 										</div>
-										<div class="paddingRight groupInputInfo">
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupInputInfo">
 											<label>学科</label>
 											<input name="course" value="${education.course }" type="text" />
 										</div>
-										<div class="clear"></div>
-										<div class="paddingLeft groupInputInfo">
+										
+										<div class="paddingRight leftNo groupInputInfo">
 											<label>参加课程开始时间</label>
 											<input id="coursestartdate" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
-										<div class="paddingRight groupInputInfo">
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupInputInfo">
 											<label>结束时间</label>
 											<input id="courseenddate" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
@@ -1018,36 +1016,34 @@
 							</c:if>
 							<c:if test="${empty obj.beforeEducationList }">
 								<div class="midSchoolEduDiv">
-									<div class="paddingLeft groupInputInfo">
+									<div class="draBig leftNo groupInputInfo">
 										<label>机构名称</label>
 										<input name="institution" type="text"/>
 									</div>
-									<div class="paddingRight groupInputInfo">
+									<div class="draBig leftNo groupInputInfo">
 										<label>街道地址(首选)</label>
 										<input name="institutionaddress" type="text" />
 									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupInputInfo">
+									<div class="draBig leftNo groupInputInfo">
 										<label>街道地址(次选)*可选</label>
 										<input type="text" />
 									</div>
-									<div class="paddingRight groupcheckBoxInfo" >
+									<div class="paddingLeft leftNo groupcheckBoxInfo" >
 										<label >市</label>
 										<input name="institutioncity" type="text" />
 										<input type="checkbox" />
 									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupInputInfo">
+									<div class="paddingRight leftNo groupInputInfo">
 										<label>州/省</label>
 										<input name="institutionprovince" type="text" />
 									</div>
-									<div class="paddingRight groupcheckBoxInfo">
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupcheckBoxInfo">
 										<label>邮政编码</label>
 										<input name="institutionzipcode" type="text" />
 										<input name="isinstitutionzipcodeapply" type="checkbox" />
 									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupSelectInfo" >
+									<div class="paddingRight leftNo groupSelectInfo" >
 										<label>国家/地区</label>
 										<select name="institutioncountry">
 											<option value="0">请选择</option>
@@ -1056,16 +1052,17 @@
 											</c:forEach>
 										</select>
 									</div>
-									<div class="paddingRight groupInputInfo">
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupInputInfo">
 										<label>学科</label>
 										<input name="course" type="text" />
 									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft groupInputInfo">
+									<div class="paddingRight leftNo groupInputInfo">
 										<label>参加课程开始时间</label>
 										<input id="coursestartdate" name="coursestartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
-									<div class="paddingRight groupInputInfo">
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupInputInfo">
 										<label>结束时间</label>
 										<input id="courseenddate" name="courseenddate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
@@ -1095,7 +1092,7 @@
 					<div class="isclanYes elementHide">
 						<div>
 							<div class="clannameDiv">
-								<div class="paddingTop groupInputInfo" >
+								<div class="draBig leftNo groupInputInfo" >
 									<label>氏族或部落名称</label>
 									<input name="clanname" type="text"  />
 								</div>
@@ -1123,11 +1120,10 @@
 						</div>
 					</c:if>
 				</div>	
-				<div class="btnGroup languageGroup">
-					<a class="save languagesave">添加</a>
-					<a class="cancel languagecancel">去掉</a>
-				</div>
-				
+				<div class="btnGroup draBig languageGroup">
+						<a class="save languagesave">添加</a>
+						<a class="cancel languagecancel">去掉</a>
+					</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>过去五年是否曾去过任何国家/地区旅游</label>
@@ -1170,8 +1166,6 @@
 							<a class="cancel gocountrycancel">去掉</a>
 						</div>
 					</div>
-					
-					
 				</div>
 				<div class="padding-left">
 					<div class="groupRadioInfo">
@@ -1184,14 +1178,14 @@
 						<div class="organizationYes">
 							<c:if test="${!empty obj.organizationList }">
 								<c:forEach var="organization" items="${obj.organizationList }">
-									<div class="paddingTop organizationDiv groupInputInfo">
+									<div class="paddingTop draBig leftNo organizationDiv groupInputInfo">
 										<label>组织名称</label>
 										<input name="organizationname" value="${organization.organizationname }" type="text"/>
 									</div>
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.organizationList }">
-								<div class="paddingTop organizationDiv groupInputInfo">
+								<div class="paddingTop draBig leftNo organizationDiv groupInputInfo">
 									<label>组织名称</label>
 									<input name="organizationname" type="text"/>
 								</div>
@@ -1223,11 +1217,11 @@
 					</div>
 					<!--yes-->
 					<div class="paddingTop elementHide militaryServiceYes">
-					
+					  <div class="militaryYes">
 						<c:if test="${!empty obj.conscientiousList }">
 							<c:forEach var="conscientious" items="${obj.conscientiousList }">
 								<div class="militaryInfoDiv">
-									<div class="floatLeft groupSelectInfo">
+									<div class="paddingLeft leftNo groupSelectInfo">
 										<label>国家/地区</label>
 										<select name="militarycountry">
 											<option value="0">请选择</option>
@@ -1241,25 +1235,25 @@
 											</c:forEach>
 										</select>
 									</div>
-									<div class="floatRight groupInputInfo">
+									<div class="paddingRight leftNo groupInputInfo">
 										<label>服务分支</label>
 										<input name="servicebranch" value="${conscientious.servicebranch }" type="text" />
 									</div>
 									<div class="clear"></div>
-									<div class="paddingLeft groupInputInfo" >
+									<div class="paddingLeft leftNo groupInputInfo" >
 										<label>排名/位置</label>
 										<input name="rank" value="${conscientious.rank }" type="text" />
 									</div>
-									<div class="paddingRight groupInputInfo">
+									<div class="paddingRight leftNo groupInputInfo">
 										<label>军事专业</label>
 										<input name="militaryspecialty" value="${conscientious.militaryspecialty }" type="text"/>
 									</div>
 									<div class="clear"></div>
-									<div class="paddingLeft groupInputInfo">
+									<div class="paddingLeft leftNo groupInputInfo">
 										<label>服兵役开始时间日期</label>
 										<input id="servicestartdate" name="servicestartdate" value="<fmt:formatDate value="${conscientious.servicestartdate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss" placeholder="日/月/年"/>
 									</div>
-									<div class="paddingRight groupInputInfo">
+									<div class="paddingRight leftNo groupInputInfo">
 										<label>结束时间</label>
 										<input id="serviceenddate" name="serviceenddate" value="<fmt:formatDate value="${conscientious.serviceenddate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss" placeholder="日/月/年"/>
 									</div>
@@ -1269,7 +1263,7 @@
 						
 						<c:if test="${empty obj.conscientiousList }">
 							<div class="militaryInfoDiv">
-								<div class="floatLeft groupSelectInfo">
+								<div class="paddingLeft leftNo groupSelectInfo">
 									<label>国家/地区</label>
 									<select name="militarycountry">
 										<option value="0">请选择</option>
@@ -1278,35 +1272,36 @@
 										</c:forEach>
 									</select>
 								</div>
-								<div class="floatRight groupInputInfo">
+								<div class="paddingRight leftNo groupInputInfo">
 									<label>服务分支</label>
 									<input name="servicebranch" type="text" />
 								</div>
 								<div class="clear"></div>
-								<div class="paddingLeft groupInputInfo" >
+								<div class="paddingLeft leftNo groupInputInfo" >
 									<label>排名/位置</label>
 									<input name="rank" type="text" />
 								</div>
-								<div class="paddingRight groupInputInfo">
+								<div class="paddingRight leftNo groupInputInfo">
 									<label>军事专业</label>
 									<input name="militaryspecialty" type="text"/>
 								</div>
 								<div class="clear"></div>
-								<div class="paddingLeft groupInputInfo">
+								<div class="paddingLeft leftNo groupInputInfo">
 									<label>服兵役开始时间日期</label>
 									<input id="servicestartdate" name="servicestartdate" type="text" class="datetimepickercss" placeholder="日/月/年"/>
 								</div>
-								<div class="paddingRight groupInputInfo">
+								<div class="paddingRight leftNo groupInputInfo">
 									<label>结束时间</label>
 									<input id="serviceenddate" name="serviceenddate" type="text" class="datetimepickercss" placeholder="日/月/年"/>
 								</div>
-							</c:if>
+							</div>
+						</c:if>	
 						</div>
 						<div class="clear"></div>
-						<!-- <div class="btnGroup">
-							<a class="save">添加</a>
-							<a class="cancel">去掉</a>
-						</div> -->
+						<div class="btnGroup militaryGroup">
+							<a class="save militarysave">添加</a>
+							<a class="cancel militarycancel">去掉</a>
+						</div>
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
