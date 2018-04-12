@@ -7,7 +7,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>订单详情</title>
+<title>下单</title>
 <link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
@@ -610,7 +610,6 @@
 	<script type="text/javascript">
 		var staffid = '${obj.basicinfo.id}';
 		var orderid = '${obj.orderinfo.id}';
-		var neworderid = '${obj.orderid}';
 		//姓名处理
 		var firstname =  '${obj.passport.firstname }';
 		var lastname =  '${obj.passport.lastname }';
@@ -619,10 +618,6 @@
 		if((firstname != "" || lastname != "") && (firstnameen == "" || lastnameen == "")){
 			$("#allname").val(firstname+lastname+"/"+getPinyinStr(firstname)+getPinyinStr(lastname));
 		}
-		if((firstname == "" && lastname == "") && (firstnameen == "" || lastnameen == "")){
-			$("#allname").val("");
-		}
-		
 		//将汉字转为拼音
 		function getPinyinStr(hanzi){
 			var onehanzi = hanzi.split('');
@@ -1280,11 +1275,7 @@
 		
 		//取消
 		function closeWindow(){
-			if(neworderid == 0){
-				window.location.href = '/admin/orderUS/listUS.html';
-			}else{
-				self.window.close();
-			}
+			self.window.close();
 			//parent.window.reload();
 		}
 		

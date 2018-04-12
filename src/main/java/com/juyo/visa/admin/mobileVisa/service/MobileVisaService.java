@@ -591,7 +591,9 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		List<TAppStaffCredentialsEntity> query = dbDao.query(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type), null);
 		if (!Util.isEmpty(query)) {
-			Collections.reverse(query);
+			if (type != 4) {
+				Collections.reverse(query);
+			}
 			return query;
 		} else {
 			return 0;
