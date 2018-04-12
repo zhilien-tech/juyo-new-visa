@@ -208,6 +208,10 @@
 					<div>上传</div>
 					<img id="drive" class="longitudinal" />
 				</div>
+				<div class="uploadReleases" >
+					<div>上传</div>
+					<img id="drive2" class="longitudinal" />
+				</div>
 				<input type="file" class="publicFile" name="" multiple />
 			</div>
 		</div>
@@ -238,7 +242,7 @@
 				<!-- <div class="beforeSignInfo"></div> -->
 				<div class="uploadReleases" >
 					<div>上传</div>
-					<img class="longitudinal" />
+					<img id="chuqian" class="longitudinal" />
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
 			</div>	
@@ -258,6 +262,7 @@
 	var usertype = '${obj.userType}';
 	$(function() {
 		twonichphoto(staffid,13);
+		chuqian(staffid,12);
 		huzhao(staffid,1);
 		oldhuzhao(staffid,2);
 		card(staffid,3);

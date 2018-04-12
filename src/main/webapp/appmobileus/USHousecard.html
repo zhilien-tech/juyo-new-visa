@@ -72,15 +72,15 @@
 				<ul>
 					<li>
 						产权人
-						<input type="text" class="txtInput" />
+						<input id="propertyholder" name="propertyholder" type="text" class="txtInput" />
 					</li>
 					<li>
 						面积
-						<input type="text" class="txtInput" />
+						<input id="area" name="area" type="text" class="txtInput" />
 					</li>
 					<li>
 						地址
-						<input type="text" class="txtInput" />
+						<input id="address" name="address" type="text" class="txtInput" />
 					</li>
 				</ul>
 			</div>
@@ -118,6 +118,31 @@
 					}
 				});
 			}
+			//获取第二套房产证说明
+			function getSecondHousecard(staffid){
+				$.ajax({
+						url : "/admin/mobileVisa/getSecondHousecard.html",
+						data : {
+							type : 5,
+							staffid : staffid,
+						},
+						dataType : "json",
+						type : 'post',
+						success : function(data) {
+							console.log(data);
+							if(data.propertyholder != "" || data.area != "" || data.address != ""){
+								$(".addhouseCard").show();
+								$("#propertyholder").val(data.propertyholder);
+								$("#area").val(data.area);
+								$("#address").val(data.address);
+							}
+						}
+					});
+			}
+			
+			/* window.addEventListener("popstate", function(e) { 
+				alert(e);//根据自己的需求实现自己的功能 
+				}, false); */
 			
 			//点击上传图片
 			$(function(){
@@ -125,6 +150,7 @@
 				var	sessionid=GetQueryString('sessionid');
 				var	flag=GetQueryString('flag');
 				getImage(staffid);
+				getSecondHousecard(staffid);
 				//第一页点击
 				$(".firstPage").click(function(){
 					$(".firstPageImg").click();
@@ -252,6 +278,27 @@
 				var staffid = GetQueryString("staffid");
 				var	sessionid=GetQueryString('sessionid');
 				var	flag=GetQueryString('flag');
+				if($(".addhouseCard").is(":hidden")){
+					$("#propertyholder").val("");
+					$("#area").val("");
+					$("#address").val("");
+				}
+				//保存第二套房产说明
+				$.ajax({
+					url : "/admin/mobileVisa/saveSecondHousecard.html",
+					data : {
+						type : 5,
+						staffid : staffid,
+						propertyholder : $("#propertyholder").val(),
+						area : $("#area").val(),
+						address : $("#address").val()
+					},
+					dataType : "json",
+					type : 'post',
+					success : function(data) {
+						console.log(data);
+					}
+				}); 
 				window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 			}
 			
