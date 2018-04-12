@@ -10,21 +10,29 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.mvc.annotation.Param;
 
 import com.alibaba.druid.support.logging.Log;
 import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
 import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TConfWxEntity;
+import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -33,7 +41,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 	@Inject
 	private RedisDao redisDao;
-	
+
 	@Inject
 	private UploadService qiniuUploadService;//文件上传
 
@@ -131,25 +139,51 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	 * @param 
 	 * @return
 	 */
-	 public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaId, Integer type) {
-		 String accessToken = (String)getAccessToken();
-		 String extName = getExtName(accessToken, mediaId);//获取扩展名
-		 InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
-		 String url = qiniuUploadService.uploadImage(inputStream, extName, mediaId);
-		 logger.error("jssdk to qiuniu===================");
-		 logger.error("accessToken："+accessToken);
-		 logger.error("extName："+extName);
-		 logger.error("url："+url);
-		 logger.error("jssdk to qiuniu==================");
-		 
-		 TAppStaffCredentialsEntity credentialEntity = new TAppStaffCredentialsEntity();
-		 credentialEntity.setStaffid(staffId);
-		 credentialEntity.setUrl(url);
-		 credentialEntity.setType(type);
-		 dbDao.insert(credentialEntity);
-		 return url;
-	 }
+	public Object wechatJsSDKUploadToQiniu(Integer staffId, String[] mediaIds, Integer type) {
+		Date nowDate = DateUtil.nowDate();
 
+		List<TAppStaffCredentialsEntity> celist_old = dbDao.query(TAppStaffCredentialsEntity.class, Cnd.where("staffid","=",staffId), null);
+
+		List<TAppStaffCredentialsEntity> celist_new = new ArrayList<TAppStaffCredentialsEntity>();
+		if(!Util.isEmpty(mediaIds)) {
+			for (String mediaId : mediaIds) {
+				String accessToken = (String)getAccessToken();
+				String extName = getExtName(accessToken, mediaId);//获取扩展名
+				InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
+				String url = "http://oyu1xyxxk.bkt.clouddn.com/"+qiniuUploadService.uploadImage(inputStream, extName, mediaId);
+
+				TAppStaffCredentialsEntity credentialEntity = new TAppStaffCredentialsEntity();
+				credentialEntity.setStaffid(staffId);
+				credentialEntity.setUrl(url);
+				credentialEntity.setType(type);
+				credentialEntity.setCreatetime(nowDate);
+				credentialEntity.setUpdatetime(nowDate);
+
+				celist_new.add(credentialEntity);
+			}
+		}
+
+		dbDao.updateRelations(celist_old, celist_new);
+
+		return null;
+	}
+
+
+	/**
+	 * 
+	 * @param staffId 人员id
+	 * @param type 图片枚举类型
+	 * @return
+	 */
+	public Object getEchoPictureList(Integer staffId, Integer type) {
+		List<TAppStaffCredentialsEntity> celist = dbDao.query(TAppStaffCredentialsEntity.class, Cnd.where("staffid","=",staffId).and("type", "=", type), null);
+		String jsonStr = "";
+		if(!Util.isEmpty(celist)) {
+			jsonStr = JsonUtil.toJson(celist);
+		}
+				
+		return jsonStr;
+	}
 
 
 	/**
@@ -204,22 +238,22 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		// 拼接请求地址
 		String requestUrl = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID";
 		requestUrl = requestUrl.replace("ACCESS_TOKEN", accessToken).replace("MEDIA_ID", mediaId);
-		
-			HttpURLConnection conn;
-			try {
-				URL url = new URL(requestUrl);
-				conn = (HttpURLConnection) url.openConnection();
-				conn.setDoInput(true);
-				conn.setRequestMethod("GET");
 
-				// 根据内容类型获取扩展名
-				fileExt = getFileexpandedName(conn.getHeaderField("Content-Type"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		
+		HttpURLConnection conn;
+		try {
+			URL url = new URL(requestUrl);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setDoInput(true);
+			conn.setRequestMethod("GET");
+
+			// 根据内容类型获取扩展名
+			fileExt = getFileexpandedName(conn.getHeaderField("Content-Type"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
 		return fileExt;
 	}
 
@@ -281,7 +315,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		} catch (Exception e) {  
 			e.printStackTrace();  
 		}  
-		
+
 		return is;
 
 	}  
