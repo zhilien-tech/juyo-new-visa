@@ -59,7 +59,7 @@ public class WeiXinTokenModule {
 	@At
 	@POST
 	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaId") String mediaId, @Param("type")Integer type) {
-		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId,mediaId, type);
+		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId,mediaId,type);
 	 }
 
 }

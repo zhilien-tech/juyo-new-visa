@@ -128,7 +128,7 @@
 				isShowProgressTips : 1,
 				success : function(res) {
 					var serverId = res.serverId; // 返回图片的服务器端ID
-					images.serverId = serverId;
+					images.serverId.push(serverId);
 					//从微信服务器保存到七牛云服务器 type:11
 					$.ajax({
 		                type : "post",
@@ -141,7 +141,7 @@
 		                	type:$("#CredentialsEnum_OLDUS").val()
 		                },
 		                success : function(data) {
-		                    alert(data);
+		                    alert("=======>>>>"+data);
 		                },
 		                error: function(xhr, status, error) {
 		                    
