@@ -119,24 +119,30 @@
 				});
 			}
 			//获取第二套房产证说明
-			$.ajax({
-					url : "/admin/mobileVisa/getSecondHousecard.html",
-					data : {
-						type : 5,
-						staffid : staffid,
-					},
-					dataType : "json",
-					type : 'post',
-					success : function(data) {
-						console.log(data);
-						if(data != ""){
-							$(".addhouseCard").toggle();
-							$("#propertyholder").val(data.propertyholder);
-							$("#area").val(data.area);
-							$("#address").val(data.address);
+			function getSecondHousecard(staffid){
+				$.ajax({
+						url : "/admin/mobileVisa/getSecondHousecard.html",
+						data : {
+							type : 5,
+							staffid : staffid,
+						},
+						dataType : "json",
+						type : 'post',
+						success : function(data) {
+							console.log(data);
+							if(data.propertyholder != "" || data.area != "" || data.address != ""){
+								$(".addhouseCard").show();
+								$("#propertyholder").val(data.propertyholder);
+								$("#area").val(data.area);
+								$("#address").val(data.address);
+							}
 						}
-					}
-				});
+					});
+			}
+			
+			/* window.addEventListener("popstate", function(e) { 
+				alert(e);//根据自己的需求实现自己的功能 
+				}, false); */
 			
 			//点击上传图片
 			$(function(){
@@ -272,6 +278,11 @@
 				var staffid = GetQueryString("staffid");
 				var	sessionid=GetQueryString('sessionid');
 				var	flag=GetQueryString('flag');
+				if($(".addhouseCard").is(":hidden")){
+					$("#propertyholder").val("");
+					$("#area").val("");
+					$("#address").val("");
+				}
 				//保存第二套房产说明
 				$.ajax({
 					url : "/admin/mobileVisa/saveSecondHousecard.html",

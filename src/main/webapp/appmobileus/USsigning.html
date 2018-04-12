@@ -24,23 +24,37 @@
 				<div class="householdPage householdExpain">
 					<span class="homePageTitle">美国出签上传拍摄图例</span>
 				</div>
-
-				<!--可多选上传-->
-				<div class="householdPage multiselect chooseImage">
-					<span class="homePageTitle">可多选上传</span> 
-					<img src="img/camera.png" class="camera" /> 
-					<img src="" class="pageImg" />
+				<div class="householdPage marriageMain">
+					<span class="homePageTitle">拍摄上传</span>
+					<img src="img/camera.png" style="pointer-events:none;"  class="camera" />
+					<img src="" style="pointer-events:none;" class="pageImg" />
 				</div>
+				<input type="file" name="" class="fileHide uploadMarriage" />
 			</div>
+				<!-- <div class="householdPage householdExpain">
+					<span class="homePageTitle">美国出签上传拍摄图例</span>
+				</div>
+
+				上传
+				<div class="householdPage chooseImage">
+					<div class="householdUploadImg">
+						<span class="homePageTitle">拍摄上传</span> 
+						<img src="img/camera.png" style="pointer-events:none;" class="camera" /> 
+						<img :src="" style="pointer-events:none;" class="pageImg" />
+					</div>
+					<input type="file" id="householdImg" name="householdImg" />
+				</div> -->
 		</section>
 	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 	<script type="text/javascript" src="js/rem(750).js"></script>
-	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script type="text/javascript" src="js/layer.js" ></script>
+	<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
+	<!-- <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> -->
 
 
 	<script type="text/javascript">
 	
-		$(function(){
+		/* $(function(){
 			$.ajax({
 		        type : "post",
 		        url : "/admin/weixinToken/getJsApiTicket",
@@ -128,12 +142,9 @@
 		//删除同类型的其他兄弟节点
 		function deleteBrotherEle(obj){
 			obj.nextAll().remove();
-		}
-	</script>
+		} */
 
-
-
-	<!-- <script>
+		
 		function getImage(staffid){
 			$.ajax({
 				url : "/admin/mobileVisa/getInfoByType.html",
@@ -154,9 +165,9 @@
 			var	sessionid=GetQueryString('sessionid');
 			var	flag=GetQueryString('flag');
 			getImage(staffid);
-			$(".multiselect").click(function(){
-				$(".multiselectImg").click();
-				$(".multiselectImg").change(function(){
+			$(".marriageMain").click(function(){
+				$(".uploadMarriage").click();
+				$(".uploadMarriage").change(function(){
 					layer.load(1,{
 						shade : "#000"
 					});
@@ -237,6 +248,6 @@
 				}
 			}); // end of ajaxSubmit
 		}
-		</script> -->
+		</script> 
 	</body>
 </html>
