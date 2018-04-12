@@ -118,6 +118,25 @@
 					}
 				});
 			}
+			//获取第二套房产证说明
+			$.ajax({
+					url : "/admin/mobileVisa/getSecondHousecard.html",
+					data : {
+						type : 5,
+						staffid : staffid,
+					},
+					dataType : "json",
+					type : 'post',
+					success : function(data) {
+						console.log(data);
+						if(data != ""){
+							$(".addhouseCard").toggle();
+							$("#propertyholder").val(data.propertyholder);
+							$("#area").val(data.area);
+							$("#address").val(data.address);
+						}
+					}
+				});
 			
 			//点击上传图片
 			$(function(){
@@ -125,6 +144,7 @@
 				var	sessionid=GetQueryString('sessionid');
 				var	flag=GetQueryString('flag');
 				getImage(staffid);
+				getSecondHousecard(staffid);
 				//第一页点击
 				$(".firstPage").click(function(){
 					$(".firstPageImg").click();
@@ -260,14 +280,14 @@
 						staffid : staffid,
 						propertyholder : $("#propertyholder").val(),
 						area : $("#area").val(),
-						address : $("#address").val();
+						address : $("#address").val()
 					},
 					dataType : "json",
 					type : 'post',
 					success : function(data) {
 						console.log(data);
 					}
-				});
+				}); 
 				window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 			}
 			

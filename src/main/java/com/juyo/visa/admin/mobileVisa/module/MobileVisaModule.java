@@ -120,4 +120,13 @@ public class MobileVisaModule {
 		return mobileVisaService.saveSecondHousecard(type, staffid, propertyholder, area, address);
 	}
 
+	/*
+	 * 获取第二套房产说明
+	 */
+	@At
+	@POST
+	public Object getSecondHousecard(@Param("type") int type, @Param("staffid") int staffid) {
+		return mobileVisaService.getSecondHousecard(type, staffid);
+	}
+
 }

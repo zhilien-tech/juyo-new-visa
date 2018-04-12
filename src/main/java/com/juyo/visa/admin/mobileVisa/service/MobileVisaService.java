@@ -40,6 +40,7 @@ import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.common.util.TranslateUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
+import com.juyo.visa.entities.TAppStaffCredentialsExplainEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.uxuexi.core.common.util.Util;
@@ -553,6 +554,31 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	}
 
 	public Object saveSecondHousecard(int type, int staffid, String propertyholder, String area, String address) {
+		TAppStaffCredentialsExplainEntity fetch = dbDao.fetch(TAppStaffCredentialsExplainEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", type));
+		if (!Util.isEmpty(fetch)) {
+			fetch.setPropertyholder(propertyholder);
+			fetch.setArea(area);
+			fetch.setAddress(address);
+			fetch.setUpdatetime(new Date());
+			dbDao.update(fetch);
+		} else {
+			TAppStaffCredentialsExplainEntity explain = new TAppStaffCredentialsExplainEntity();
+			explain.setStaffid(staffid);
+			explain.setType(type);
+			explain.setAddress(address);
+			explain.setArea(area);
+			explain.setCreatetime(new Date());
+			explain.setPropertyholder(propertyholder);
+			explain.setUpdatetime(new Date());
+			dbDao.insert(explain);
+		}
 		return null;
+	}
+
+	public Object getSecondHousecard(int type, int staffid) {
+		TAppStaffCredentialsExplainEntity fetch = dbDao.fetch(TAppStaffCredentialsExplainEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", type));
+		return fetch;
 	}
 }
