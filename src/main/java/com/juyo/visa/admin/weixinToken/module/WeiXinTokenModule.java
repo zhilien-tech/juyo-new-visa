@@ -54,5 +54,10 @@ public class WeiXinTokenModule {
 	public Map<String, String> makeWXTicket(@Param("jsApiTicket") String jsApiTicket, @Param("url") String url) {
 		return weXinTokenViewService.makeWXTicket(jsApiTicket, url);
 	}
+	
+	//
+	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaId") String mediaId, @Param("type")Integer type) {
+		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId,mediaId, type);
+	 }
 
 }
