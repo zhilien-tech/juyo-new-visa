@@ -102,7 +102,7 @@
 .dataInfoGroup {
 	position:absolute;
 	top:8px;
-	right:25px;
+	right:4%;
 }
 .dataInfoGroup a {
 	background-color:#3087f1;
@@ -169,7 +169,7 @@
 .inchInfo {
 	position: relative;
 	top: 80px;
-	left: 56px;
+	left: 22%;
 	color: #4c8fe9;
 	cursor: pointer;
 }
@@ -234,7 +234,7 @@
 	margin:0 3.5% 0 7%;
 }
 .fixedheight {
-	width:100%; 
+	width:97%; 
 	height:200px; 
 	overflow-y:auto;
 }
@@ -258,4 +258,17 @@
 }
 .solveContent {
 	padding-bottom:5%;
+}
+.colWidth {
+	width:73% !important;
+}
+.colwidthsm {
+	width:31% !important;
+}
+.colwidthLR {
+	margin: 0 3.2% 0 3.4%;
+}
+.col8Width {
+	width:65.5% !important;
+	margin-right:3.2%;
 }

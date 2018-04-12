@@ -7,7 +7,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>订单详情</title>
+<title>下单</title>
 <link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">

@@ -62,7 +62,7 @@
 								<a id="emptyBtn" class="btn btn-primary btn-sm pull-left">清空</a> 
 							</div>
 							<div class="col-md-1 left-5px pull-right">
-								<a class="btn btn-primary btn-sm"  id="">下单</a>
+								<a class="btn btn-primary btn-sm"  id="addOrder" onclick="addOrder()">下单</a>
 							</div>
 						</div>
 					</div>
@@ -190,6 +190,9 @@ $(function(){
           } else {  
             console.log('Websocket not supported');  
           }  
+	}
+	function addOrder() {
+		window.location.href = '/admin/orderUS/addOrderUS.html?orderid=';
 	}
 
 </script>	
