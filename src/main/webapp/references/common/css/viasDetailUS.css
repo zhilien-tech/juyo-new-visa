@@ -9,10 +9,10 @@
 	white-space: nowrap;
 }
 .box-header {
-	padding:20px 15px 0 26px;
+	/* padding:20px 15px 0 26px; */
 }
 .box-body {
-	padding:20px 15px 0 15px;
+	padding:12px 15px 0 15px;
 }
 .card-head div:nth-child(1) {
 	width: 20%;

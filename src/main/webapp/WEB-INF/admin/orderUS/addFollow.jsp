@@ -19,7 +19,7 @@
 	</style>
 </head>
 <body>
-	<div class="modal-content">
+	<div>
 			<div class="modal-header">
 				<span class="heading">加跟进</span>
 					<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 

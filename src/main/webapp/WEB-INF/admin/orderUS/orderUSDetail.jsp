@@ -92,6 +92,13 @@
 								</select>
 								</div>
 							</div>
+							
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label><span>*</span>面签时间</label>
+									<input type="text" class="input-sm form-control" name="" value="" />
+								</div>
+							</div>
 						</div>
 						<!-- 模块END -->
 					</div>
@@ -439,11 +446,11 @@
 								</div>
 								<!-- 申请人左侧END -->
 								<!-- 申请人右侧 -->
-								<div class="col-sm-9">
+								<div class="col-sm-9 colWidth">
 									<!-- 右侧模块1 -->
 									<div class="row body-from-input">
 										<!-- 姓名/拼音 -->
-										<div class="col-sm-4">
+										<div class="col-sm-4 colwidthsm">
 											<div class="form-group">
 												<label>姓名/拼音</label> <input id="allname" disabled="true"
 													value="${obj.passport.firstname }${obj.passport.lastname }/${obj.passport.firstnameen } ${obj.passport.lastnameen }" type="text"
@@ -452,7 +459,7 @@
 										</div>
 										<!-- 姓名/拼音END -->
 										<!-- 性别 -->
-										<div class="col-sm-4">
+										<div class="col-sm-4 colwidthsm colwidthLR">
 											<div class="form-group">
 												<label>性别</label> <input id="sex" name="sex" disabled="true"
 													value="${obj.passport.sex }" type="text"
@@ -461,7 +468,7 @@
 										</div>
 										<!-- 性别END -->
 										<!-- 出生日期 -->
-										<div class="col-sm-4">
+										<div class="col-sm-4 colwidthsm">
 											<div class="form-group">
 												<label>出生日期</label> <input id="birthday" name="birthday" type="text"
 													disabled="true" value="${obj.birthday }" 
@@ -473,7 +480,7 @@
 									<!-- 右侧模块1END -->
 									<!-- 右侧模块2 -->
 									<div class="row body-from-input">
-										<div class="col-sm-8">
+										<div class="col-sm-8 col8Width">
 											<div class="form-group">
 												<label>所需资料</label> <input id="realinfo" name="realinfo" disabled="true"
 													value="${obj.realinfo }" type="text"
@@ -481,7 +488,7 @@
 													type="hidden" value="${obj.staffid }">
 											</div>
 										</div>
-										<div class="col-sm-4">
+										<div class="col-sm-4 colwidthsm">
 											<div class="form-group">
 												<label>卡号</label> 
 												<input id="cardnum" name="cardnum" type="text" disabled value="${obj.basicinfo.cardnum }" class="form-control input-sm"  />
@@ -493,7 +500,7 @@
 									<!-- 右侧模块3 -->
 									<div class="row body-from-input">
 										<!-- AA码 -->
-										<div class="col-sm-4">
+										<div class="col-sm-4 colwidthsm">
 											<div class="form-group">
 												<label>AA码</label> <input id="aacode" name="aacode" type="text"
 													disabled value="${obj.summaryInfo.aacode }"
@@ -502,7 +509,7 @@
 										</div>
 										<!-- AA码END -->
 										<!-- 护照号 -->
-										<div class="col-sm-4">
+										<div class="col-sm-4 colwidthsm colwidthLR">
 											<div class="form-group">
 												<label>护照号</label> <input id="passport" name="passport" type="text"
 													disabled="true" value="${obj.summaryInfo.passport }"
@@ -511,7 +518,7 @@
 										</div>
 										<!-- 护照号END -->
 										<!-- 面试时间 -->
-										<div class="col-sm-4">
+										<div class="col-sm-4 colwidthsm">
 											<div class="form-group">
 												<label>面试时间</label> <input id="interviewdate" name="interviewdate" type="text"
 													disabled="true" value="${obj.summaryInfo.Interviewdate }"
@@ -1144,7 +1151,7 @@
 				maxmin: false,
 				shadeClose: false,
 				scrollbar: false,
-				area: ['800px', '40%'],
+				area: ['800px', '350px'],
 				content: '/admin/orderUS/addFollow.html?orderid='+orderid
 			});
 		}
