@@ -54,12 +54,19 @@ public class WeiXinTokenModule {
 	public Map<String, String> makeWXTicket(@Param("jsApiTicket") String jsApiTicket, @Param("url") String url) {
 		return weXinTokenViewService.makeWXTicket(jsApiTicket, url);
 	}
-	
+
 	//微信JSSDK上传的文件需要重新下载后上传到七牛云
 	@At
 	@POST
 	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String[] mediaIds, @Param("type")Integer type) {
 		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId,mediaIds,type);
-	 }
+	}
+
+	//获取图片集合
+	@At
+	@POST
+	public Object getEchoPictureList(@Param("staffId") Integer staffId, @Param("type")Integer type) {
+		return weXinTokenViewService.getEchoPictureList(staffId,type);
+	}
 
 }
