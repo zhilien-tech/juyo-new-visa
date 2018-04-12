@@ -266,7 +266,7 @@ function household(staffid, type) {
 			//$("#household").attr("src",data.url);
 				$(".householdBack").next().remove();
 				for(var i = 0;i<data.length;i++){
-					$(".householdBack").after('<div class="uploadReleases" >'+
+					$(".householdBack").after('<div class="uploadReleases">'+
 					'<div>户主页</div>'+
 					'<img src="'+data[i].url+'" class="longitudinal" />'+
 				'</div>');

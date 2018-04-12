@@ -239,6 +239,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object getOrderUSDetail(int orderid, HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
+		if (orderid == 0) {
+			result.put("orderid", orderid);
+			return result;
+		}
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userid = loginUser.getId();
