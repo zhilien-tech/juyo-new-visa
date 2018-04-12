@@ -22,15 +22,40 @@ $(".team").change(function(){
 	if(teamVal == 1){
 		$(".teamnameture").show();
 		$(".teamnamefalse").hide();
+		$(".companyGroup").hide();
 		emptyContentByObj($("div.teamnameture"));
 	}else {
 		$(".teamnameture").hide();
 		$(".teamnamefalse").show();
 		$(".teamnamefalseDiv").show();
+		$(".companyGroup").show();
 		deleteBrotherEle($("div.teamnamefalseDiv"));
 		emptyContentByObj($("div.teamnamefalse"));
 	}
 });
+//添加多段
+//添加
+$(".companysave").click(function(){
+	
+	$(".teamnamefalse").append('<div class="teamnamefalseDiv ">'+
+								'<div class="companionSurnName">'+
+								'<label>同伴姓</label>'+
+								'<input id="firstname" name="firstname" type="text" placeholder="同伴姓" /></div>'+
+								'<div class="companionName">'+
+								'<label>同伴名</label>'+
+								'<input id="lastname" name="lastname" type="text" placeholder="同伴名" /></div><div class="clear"></div>'+
+								'<div class="youRelationship">'+
+								'<label>与你的关系</label>'+
+								'<select id="relationship" name="relationship">'+
+								'<option value="0">请选择</option>'+
+								'<c:forEach items="${obj.TravelCompanionRelationshipEnum }" var="map"><option value="${map.key }">${map.value }</option></c:forEach></select></div></div>'
+								);
+});
+//删除
+$(".companycancel").click(function(){
+	
+	$(".teamnamefalseDiv:last").remove();
+})
 //-------------------------------------------家庭信息 end----------------------------------
 
 //---------------------------------------以前的美国旅游信息 start----------------------------------
@@ -127,6 +152,37 @@ $(".onceImmigration").change(function(){
 		emptyContentByObj($("div.immigrationExplain"));
 	}
 });
+
+
+//添加多段
+$(".beforesave").click(function(){
+	$(".gotousInfo").append('<div class="goUS_CountryDiv"><div class="groupInputInfo">'+
+							'<label>抵达日期</label>'+
+							'<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年"></div>'+
+							'<div class="groupInputInfo stopDate">'+
+							'<label>停留时间</label>'+
+							'<input id="staydays" name="staydays" type="text" />'+
+							'<select id="dateunit" name="dateunit"><option value="0">请选择</option><c:forEach items="${obj.TimeUnitStatusEnum }" var="map"><option value="${map.key }">${map.value }</option></c:forEach></select></div></div>'
+							);
+});											
+$(".beforecancel").click(function(){
+	$('.goUS_CountryDiv:last').remove();
+});
+//是否有驾照
+$(".driversave").click(function(){
+	$(".driverYes").append(	'<div class="goUS_drivers">'+
+							'<div class="groupcheckBoxInfo driverMain">'+
+							'<label>驾照号</label>'+
+							'<input id="driverlicensenumber" name="driverlicensenumber" type="text" >'+
+							'<input id="isknowdrivernumber" name="isknowdrivernumber" type="checkbox"/></div>'+
+							'<div class="groupSelectInfo driverR">'+
+							'<label>哪个州的驾照</label>'+
+							'<select id="witchstateofdriver" name="witchstateofdriver"><option value="0">请选择</option><c:forEach items="${obj.VisaUSStatesEnum }" var="map"><option value="${map.key }">${map.value }</option></c:forEach></select></div></div>'
+							);
+});
+$(".drivercancel").click(function(){
+	$(".goUS_drivers:last").remove();
+})
 //---------------------------------------以前的美国旅游信息 end----------------------------------
 
 
@@ -330,29 +386,92 @@ $(".isservedinrebelgroup").change(function(){
 	}
 });
 
+//添加多段
+//之前工作
+$(".beforeWorksave").click(function(){
+	$(".beforeWorkYes").append('<div class="workBeforeInfosDiv"><div class="paddingLeft groupInputInfo" >'+
+							   '<label>雇主名字</label><input name="employername" type="text" /></div>'+
+							   '<div class="paddingRight groupInputInfo"><label>雇主街道地址(首选)</label>'+
+							   '<input name="employeraddress" type="text" /></div>'+
+							   '<div class="clear"></div>'+
+							   '<div class="paddingLeft groupInputInfo"><label>雇主街道地址(次选)*可选</label>'+
+							   '<input type="text" /></div>'+
+							   '<div class="paddingRight groupcheckBoxInfo"><label>市</label>'+
+							   '<input name="employercity" type="text" /><input type="checkbox" /></div>'+
+							   '<div class="clear"></div>'+
+							   '<div class="paddingLeft groupInputInfo"><label>州/省</label>'+
+							   '<input name="employerprovince" type="text"/></div>'+
+							   '<div class="paddingRight groupcheckBoxInfo"><label>邮政编码</label>'+
+							   '<input name="employerzipcode" type="text" /><input name="isemployerzipcodeapply" type="checkbox"/></div>'+
+							   '<div class="clear"></div><div class="paddingLeft groupSelectInfo"><label>国家/地区</label>'+
+							   '<select name="employercountry"><option value="0">请选择</option><c:forEach items="${obj.VisaCitizenshipEnum }" var="map"><option value="${map.key }">${map.value }</option></c:forEach></select></div>'+
+							   '<div class="paddingRight groupInputInfo"><label>电话号码</label><input name="employertelephone" type="text" /></div>'+
+							   '<div class="clear"></div><div class="paddingLeft groupInputInfo"><label>职称</label><input name="jobtitle" type="text"/></div>'+
+							   '<div class="paddingRight groupcheckBoxInfo"><label>主管的姓</label><input name="supervisorfirstname" type="text" /><input name="isknowsupervisorfirstname" type="checkbox" /></div>'+
+							   '<div class="clear"></div><div class="paddingLeft groupcheckBoxInfo"><label>主管的名</label><input name="supervisorlastname" type="text" /><input name="isknowsupervisorlastname" type="checkbox" /></div>'+
+							   '<div class="paddingRight groupInputInfo" ><label>入职时间</label><input id="employstartdate" name="employstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" /></div>'+
+							   '<div class="clear"></div>'+
+							   '<div class="paddingLeft groupInputInfo"><label>离职时间</label><input id="employenddate" name="employenddate" class="datetimepickercss" type="text" placeholder="日/月/年" /></div>'+
+							   '<div class="paddingRight grouptextareaInfo"><label>简要描述你的职责</label><textarea name="previousduty"></textarea></div></div>'
+							);
+});
 
+$(".beforeWorkcancel").click(function(){
+	$(".workBeforeInfosDiv:last").remove();
+})
+//教育
+$(".educationsave").click(function(){
+	$(".educationYes").append('<div class="midSchoolEduDiv">'+
+							   '<div class="paddingLeft groupInputInfo"><label>机构名称</label><input name="institution" type="text"/></div>'+	
+							   '<div class="paddingRight groupInputInfo"><label>街道地址(首选)</label><input name="institutionaddress" type="text" /></div>'+
+							   '<div class="clear"></div>'+
+							   '<div class="paddingLeft groupInputInfo"><label>街道地址(次选)*可选</label><input type="text" /></div>'+
+							   '<div class="paddingRight groupcheckBoxInfo" ><label >市</label><input name="institutioncity" type="text" /><input type="checkbox" /></div>'+
+							   '<div class="clear"></div>'+
+							   '<div class="paddingLeft groupInputInfo"><label>州/省</label><input name="institutionprovince" type="text" /></div>'+
+							   '<div class="paddingRight groupcheckBoxInfo"><label>邮政编码</label><input name="institutionzipcode" type="text" /><input name="isinstitutionzipcodeapply" type="checkbox" /></div>'+
+							   '<div class="clear"></div>'+
+							   '<div class="paddingLeft groupSelectInfo"><label>国家/地区</label>'+
+							   '<select name="institutioncountry"><option value="0">请选择</option><c:forEach items="${obj.VisaCitizenshipEnum }" var="map"><option value="${map.key }">${map.value }</option></c:forEach></select>'+
+							   '</div>'+
+							   '<div class="paddingRight groupInputInfo"><label>学科</label><input name="course" type="text" /></div>'+
+							   '<div class="clear"></div>'+
+							   '<div class="paddingLeft groupInputInfo"><label>参加课程开始时间</label><input id="coursestartdate" name="coursestartdate" class="datetimepickercss" type="text" placeholder="日/月/年" /></div>'+
+							   '<div class="paddingRight groupInputInfo"><label>结束时间</label><input id="courseenddate" name="courseenddate" class="datetimepickercss" type="text" placeholder="日/月/年" /></div>'+
+							   '</div>'
+								);
+});
 
+$(".educationcancel").click(function(){
+	$(".midSchoolEduDiv:last").remove();
+});
 
+//语言
+$(".languagesave").click(function(){
+	$(".languageYes").append('<div class="languagename languagenameDiv paddingTop padding-left">'+
+							  '<label>使用的语言名称</label>'+
+							  '<div class="groupInputInfo"><input name="languagename" type="text" /></div></div>'
+								);
+});
+$(".languagecancel").click(function(){
+	$(".languagenameDiv:last").remove();
+})
+//国家
+$(".gocountrysave").click(function(){
+	$(".gocountryYes").append('<div class="paddingTop travelCountry groupInputInfo"><label>国家/地区</label><input name="traveledcountry" type="text"/></div>');
+});
 
+$(".gocountrycancel").click(function(){
+	$(".travelCountry:last").remove();
+})
+//组织
+$(".organizationsave").click(function(){
+	$(".organizationYes").append('<div class="paddingTop organizationDiv groupInputInfo"><label>组织名称</label><input name="organizationname" type="text"/></div>');
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$(".organizationcancel").click(function(){
+	$(".organizationDiv:last").remove();
+})
 //-------------------------------------------工作/教育/培训信息 end------------------------------------
 
 

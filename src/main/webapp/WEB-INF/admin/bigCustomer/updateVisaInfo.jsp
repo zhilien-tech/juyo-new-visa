@@ -10,11 +10,8 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
-		<link rel="stylesheet" href="${base}/references/public/css/visaInfo.css">
-		<style type="text/css">
-			.leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
-			.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
-		</style>
+		<!-- 本页样式 -->
+		<link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css">
 		<style>
      		[v-cloak]{display:none;}
      	</style>
@@ -113,16 +110,12 @@
 									</div>
 								</div>
 							</c:if>
-						
-							
 						</div>
-						
-						<!-- 业务需求，先隐藏 -->
-						<!-- <div class="btnGroup">
-							<a class="save">添加</a>
-							<a class="cancel">去掉 </a>
-						</div> -->
-						
+					<!-- 业务需求，先隐藏 -->
+						<div class="btnGroup companyGroup">
+							<a class="save companysave">添加</a>
+							<a class="cancel companycancel">去掉 </a>
+						</div>	
 					</div>
 				</div>
 			</div>
@@ -140,60 +133,62 @@
 						</div>
 						<!--yes-->
 						<div class="goUSInfo goUSYes">
-							<c:if test="${!empty obj.gousList }">
-								<c:forEach var="gous" items="${obj.gousList }">
+							<div class="gotousInfo">
+								<c:if test="${!empty obj.gousList }">
+									<c:forEach var="gous" items="${obj.gousList }">
+										<div class="goUS_CountryDiv">
+											<div class="groupInputInfo">
+												<label>抵达日期</label>
+												<input type="text" id="arrivedate" value="<fmt:formatDate value="${gous.arrivedate }" pattern="dd/MM/yyyy" />" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
+											</div>
+											<div class="groupInputInfo stopDate goUS_Country">
+												<label>停留时间</label>
+												<input id="staydays" name="staydays" value="${gous.staydays }" type="text" />
+												<select id="dateunit" name="dateunit">
+													<option value="0">请选择</option>
+													<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
+														<c:if test="${gous.dateunit != map.key}">
+															<option value="${map.key }">${map.value }</option>
+														</c:if>
+														<c:if test="${gous.dateunit == map.key}">
+															<option value="${map.key }" selected="selected">${map.value }</option>
+														</c:if>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+									</c:forEach>
+								</c:if>
+								<c:if test="${empty obj.gousList }">
 									<div class="goUS_CountryDiv">
 										<div class="groupInputInfo">
 											<label>抵达日期</label>
-											<input type="text" id="arrivedate" value="<fmt:formatDate value="${gous.arrivedate }" pattern="dd/MM/yyyy" />" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
+											<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
 										</div>
-										<div class="groupInputInfo stopDate goUS_Country">
+										<div class="groupInputInfo stopDate">
 											<label>停留时间</label>
-											<input id="staydays" name="staydays" value="${gous.staydays }" type="text" />
+											<input id="staydays" name="staydays" type="text" />
 											<select id="dateunit" name="dateunit">
 												<option value="0">请选择</option>
 												<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
-													<c:if test="${gous.dateunit != map.key}">
-														<option value="${map.key }">${map.value }</option>
-													</c:if>
-													<c:if test="${gous.dateunit == map.key}">
-														<option value="${map.key }" selected="selected">${map.value }</option>
-													</c:if>
+													<option value="${map.key }">${map.value }</option>
 												</c:forEach>
 											</select>
 										</div>
 									</div>
-								</c:forEach>
-							</c:if>
-							<c:if test="${empty obj.gousList }">
-								<div class="goUS_CountryDiv">
-									<div class="groupInputInfo">
-										<label>抵达日期</label>
-										<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
-									</div>
-									<div class="groupInputInfo stopDate">
-										<label>停留时间</label>
-										<input id="staydays" name="staydays" type="text" />
-										<select id="dateunit" name="dateunit">
-											<option value="0">请选择</option>
-											<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
-												<option value="${map.key }">${map.value }</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-							</c:if>
-							
-							<!-- <div class="btnGroup">
-								<a class="save">添加</a>
-								<a class="cancel">去掉</a>
-							</div> -->
+								</c:if>
+							</div>
+							<div class="btnGroup beforeGroup">
+								<a class="save beforesave">添加</a>
+								<a class="cancel beforecancel">去掉</a>
+							</div>
 							<div class="groupRadioInfo drivingUS">
 								<label>是否有美国驾照</label>
 								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" class="license" value="1" />是
 								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" class="license" value="2" checked />否
 							</div>
 							<div class="driverInfo elementHide">
+								<div class="driverYes">
 									<c:if test="${!empty obj.driverList }">
 										<c:forEach var="driver" items="${obj.driverList }">
 											<div class="goUS_drivers">
@@ -232,7 +227,7 @@
 												<input id="isknowdrivernumber" name="isknowdrivernumber" type="checkbox"/>
 											</div>
 											<div class="groupSelectInfo driverR">
-												<label>哪个州的驾照</label>
+						-						<label>哪个州的驾照</label>
 												<select id="witchstateofdriver" name="witchstateofdriver">
 													<option value="0">请选择</option>
 													<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
@@ -242,11 +237,11 @@
 											</div>
 										</div>
 									</c:if>
-								
-								<!-- <div class="btnGroup driverInfo">
-									<a class="save">添加</a>
-									<a class="cancel">去掉</a>
-								</div> -->
+								</div>
+								<div class="btnGroup driverInfo driverGroup">
+									<a class="save driversave">添加</a>
+									<a class="cancel drivercancel">去掉</a>
+								</div>
 							</div>
 							
 							
@@ -316,7 +311,7 @@
 									</div>
 									<div class="explain grouptextareaInfo paddingTop">
 										<label>说明</label>
-										<textarea name="cancelexplain" v-model="visaInfo.previUSTripInfo.cancelexplain"></textarea>
+										<textarea name="cancelexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.cancelexplain"></textarea>
 									</div>
 								</div>
 							</div>
@@ -333,7 +328,7 @@
 				</div>
 				<div class="refuseExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<textarea name="refusedexplain" v-model="visaInfo.previUSTripInfo.refusedexplain"></textarea>
+					<textarea name="refusedexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.refusedexplain"></textarea>
 				</div>
 			</div>
 			<!--曾经是否是美国合法永久居民-->
@@ -345,7 +340,7 @@
 				</div>
 				<div class="onceExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<textarea name="permanentresidentexplain" v-model="visaInfo.previUSTripInfo.permanentresidentexplain"></textarea>
+					<textarea name="permanentresidentexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.permanentresidentexplain"></textarea>
 				</div>
 			</div>
 			<!--有没有人曾代表您向美国公民和移民服务局提交过移民申请-->
@@ -357,7 +352,7 @@
 				</div>
 				<div class="immigrationExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<textarea name="immigrantpetitionexplain" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplain"></textarea>
+					<textarea name="immigrantpetitionexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplain"></textarea>
 				</div>
 			</div>
 			<!--以前的美国旅游信息END-->
@@ -422,7 +417,7 @@
 						<input name="telephone" v-model="visaInfo.contactPointInfo.telephone" type="text" />
 					</div>
 					<div class="clear"></div>
-					<div class="paddingTop groupcheckBoxInfo">
+					<div class="paddingTop groupcheckBoxInfo cbox">
 						<label>邮件地址</label>
 						<input name="email" v-model="visaInfo.contactPointInfo.email" type="text" />
 						<input id="isKnowEmailAddress" name="isknowemail" v-on:click="isKnowEmailAddress" v-model="visaInfo.contactPointInfo.isknowemail" type="checkbox" />
@@ -500,7 +495,7 @@
 						<c:if test="${!empty obj.zhiFamilyList }">
 							<c:forEach var="zhifamily" items="${obj.zhiFamilyList }">
 								<div class="directRelativesYes">
-									<div class="floatLeft groupInputInfo">
+									<div class="floatLeft leftNo groupInputInfo">
 										<label>姓</label>
 										<input name="relativesfirstname" value="${zhifamily.relativesfirstname }" type="text" />
 									</div>
@@ -509,7 +504,7 @@
 										<input name="relativeslastname" value="${zhifamily.relativeslastname }"  type="text" />
 									</div>
 									<div class="clear"></div>
-									<div class="paddingLeft groupSelectInfo">
+									<div class="paddingLeft leftNo groupSelectInfo">
 										<label>与你的关系</label>
 										<select name="relationship">
 											<option value="0">请选择</option>
@@ -734,18 +729,15 @@
 						<label>开始日期</label>
 						<input id="workstartdate" name="workstartdate" v-model="visaInfo.workEducationInfo.workstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 					</div>
-					<div class="paddingRight groupInputInfo" >
+					<div class="paddingRight groupcheckBoxInfo" >
 						<label>当地月收入(如果雇佣)</label>
 						<input name="salary" v-model="visaInfo.workEducationInfo.salary" type="text" />
-					</div>
-					<div class="clear"></div>
-					<div class="paddingLeft">
-						<label>不适用</label>
 						<input name="issalaryapply" v-model="visaInfo.workEducationInfo.issalaryapply" type="checkbox" />
 					</div>
-					<div class="paddingRight grouptextareaInfo">
+					<div class="clear"></div>
+					<div class="grouptextareaInfo groupPM">
 						<label>简要描述你的指责</label>
-						<textarea name="duty" v-model="visaInfo.workEducationInfo.duty"></textarea>
+						<textarea name="duty" class="bigArea" v-model="visaInfo.workEducationInfo.duty"></textarea>
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -766,6 +758,7 @@
 						</div>
 						<!--yes-->
 						<div class="beforeWorkInfo elementHide">
+						  <div class="beforeWorkYes">
 							<c:if test="${!empty obj.beforeWorkList }">
 								<c:forEach var="beforeWork" items="${obj.beforeWorkList }">
 									<div class="workBeforeInfosDiv">
@@ -942,13 +935,12 @@
 									</div>
 								</div>
 							</c:if>
-						
-							
+							</div>
 							<div class="clear"></div>
-							<!-- <div class="btnGroup">
-								<a class="save">添加</a>
-								<a class="cancel">去掉</a>
-							</div> -->
+							<div class="btnGroup beforeWorkGroup">
+								<a class="save beforeWorksave">添加</a>
+								<a class="cancel beforeWorkcancel">去掉</a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -961,6 +953,7 @@
 						</div>
 						<!--yes-->
 						<div class="educationInfo elementHide">
+							<div class="educationYes">
 							<c:if test="${empty obj.beforeEducationList }">
 								<c:forEach var="education" items="${obj.beforeEducationList }">
 									<div class="midSchoolEduDiv">
@@ -1078,12 +1071,12 @@
 									</div>
 								</div>
 							</c:if>
-							
+							</div>
 							<div class="clear"></div>
-							<!-- <div class="btnGroup">
-								<a class="save" >添加</a>
-								<a class="cancel" >去掉</a>
-							</div> -->
+							<div class="btnGroup educationGroup">
+								<a class="save educationsave" >添加</a>
+								<a class="cancel educationcancel" >去掉</a>
+							</div>
 						</div>
 					</div>
 					
@@ -1110,32 +1103,31 @@
 						</div>
 					</div>
 				</div>
-				
-				<c:if test="${!empty obj.languageList }">
-					<c:forEach var="language" items="${obj.languageList }">
+				<div class="languageYes">
+					<c:if test="${!empty obj.languageList }">
+						<c:forEach var="language" items="${obj.languageList }">
+							<div class="languagename languagenameDiv paddingTop padding-left">
+								<label>使用的语言名称</label>
+								<div class="groupInputInfo">
+									<input name="languagename" value="${language.languagename }" type="text" />
+								</div>
+							</div>
+						</c:forEach>
+					</c:if>
+					<c:if test="${empty obj.languageList }">
 						<div class="languagename languagenameDiv paddingTop padding-left">
 							<label>使用的语言名称</label>
 							<div class="groupInputInfo">
-								<input name="languagename" value="${language.languagename }" type="text" />
+								<input name="languagename" type="text" />
 							</div>
 						</div>
-					</c:forEach>
-				</c:if>
-				<c:if test="${empty obj.languageList }">
-					<div class="languagename languagenameDiv paddingTop padding-left">
-						<label>使用的语言名称</label>
-						<div class="groupInputInfo">
-							<input name="languagename" type="text" />
-						</div>
-					</div>
-				</c:if>
-				<!-- <div class="btnGroup">
-					<a class="save">添加</a>
-					<a class="cancel">去掉</a>
-				</div> -->
+					</c:if>
+				</div>	
+				<div class="btnGroup languageGroup">
+					<a class="save languagesave">添加</a>
+					<a class="cancel languagecancel">去掉</a>
+				</div>
 				
-				
-
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>过去五年是否曾去过任何国家/地区旅游</label>
@@ -1144,38 +1136,39 @@
 					</div>
 					<!--yes-->
 					<div class="isTravelYes elementHide">
-						<c:if test="${!empty obj.gocountryList }">
-							<c:forEach var="gocountry" items="${obj.gocountryList }">
-								<div class="travelCountry paddingTop groupInputInfo">
-									<label>国家/地区</label>
-									<div class="groupInputInfo groupSelectInfo">
-									
-										<select name="traveledcountry">
-											<option value="0">请选择</option>
-											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-													<c:if test="${gocountry.traveledcountry != map.key}">
-														<option value="${map.key }">${map.value }</option>
-													</c:if>
-													<c:if test="${gocountry.traveledcountry == map.key}">
-														<option value="${map.key }" selected="selected">${map.value }</option>
-													</c:if>
-											</c:forEach>
-										</select>
+						<div class="gocountryYes">
+							<c:if test="${!empty obj.gocountryList }">
+								<c:forEach var="gocountry" items="${obj.gocountryList }">
+									<div class="travelCountry paddingTop groupInputInfo">
+										<label>国家/地区</label>
+										<div class="groupInputInfo groupSelectInfo">
+										
+											<select name="traveledcountry">
+												<option value="0">请选择</option>
+												<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+														<c:if test="${gocountry.traveledcountry != map.key}">
+															<option value="${map.key }">${map.value }</option>
+														</c:if>
+														<c:if test="${gocountry.traveledcountry == map.key}">
+															<option value="${map.key }" selected="selected">${map.value }</option>
+														</c:if>
+												</c:forEach>
+											</select>
+										</div>
 									</div>
+								</c:forEach>
+							</c:if>
+							<c:if test="${empty obj.gocountryList }">
+								<div class="paddingTop travelCountry groupInputInfo">
+									<label>国家/地区</label>
+									<input name="traveledcountry" type="text"/>
 								</div>
-							</c:forEach>
-						</c:if>
-						<c:if test="${empty obj.gocountryList }">
-							<div class="paddingTop travelCountry groupInputInfo">
-								<label>国家/地区</label>
-								<input name="traveledcountry" type="text"/>
-							</div>
-						</c:if>
-					
-						<!-- <div class="btnGroup">
-							<a class="save">添加</a>
-							<a class="cancel">去掉</a>
-						</div> -->
+							</c:if>
+						</div>
+						<div class="btnGroup gocountryGroup">
+							<a class="save gocountrysave">添加</a>
+							<a class="cancel gocountrycancel">去掉</a>
+						</div>
 					</div>
 					
 					
@@ -1188,25 +1181,26 @@
 					</div>
 					<!--yes-->
 					<div class="isOrganizationYes elementHide">
-						<c:if test="${!empty obj.organizationList }">
-							<c:forEach var="organization" items="${obj.organizationList }">
+						<div class="organizationYes">
+							<c:if test="${!empty obj.organizationList }">
+								<c:forEach var="organization" items="${obj.organizationList }">
+									<div class="paddingTop organizationDiv groupInputInfo">
+										<label>组织名称</label>
+										<input name="organizationname" value="${organization.organizationname }" type="text"/>
+									</div>
+								</c:forEach>
+							</c:if>
+							<c:if test="${empty obj.organizationList }">
 								<div class="paddingTop organizationDiv groupInputInfo">
 									<label>组织名称</label>
-									<input name="organizationname" value="${organization.organizationname }" type="text"/>
+									<input name="organizationname" type="text"/>
 								</div>
-							</c:forEach>
-						</c:if>
-						<c:if test="${empty obj.organizationList }">
-							<div class="paddingTop organizationDiv groupInputInfo">
-								<label>组织名称</label>
-								<input name="organizationname" type="text"/>
-							</div>
-						</c:if>
-					
-						<!-- <div class="btnGroup">
-							<a class="save">添加</a>
-							<a class="cancel">去掉</a>
-						</div> -->
+							</c:if>
+						</div>
+						<div class="btnGroup organizationGroup">
+							<a class="save organizationsave">添加</a>
+							<a class="cancel organizationcancel">去掉</a>
+						</div>
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1327,7 +1321,6 @@
 						<textarea></textarea> -->
 					</div>
 				</div>
-			</div>
 			<!--工作/教育/培训信息END-->
 			<!--安全和背景-->
 			<div class="safe paddingTop">
