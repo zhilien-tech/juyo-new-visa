@@ -132,7 +132,7 @@
 					//从微信服务器保存到七牛云服务器 type:11
 					$.ajax({
 		                type : "post",
-		                url : "/admin/weixinToken/wechatJsSDKUploadToOss",
+		                url : "/admin/weixinToken/wechatJsSDKUploadToQiniu",
 		                dataType : "json",
 		                async : false,
 		                data:{
@@ -141,7 +141,7 @@
 		                	type:$("#CredentialsEnum_OLDUS").val()
 		                },
 		                success : function(data) {
-		                    alert(data);
+		                    alert("=======>>>>"+data);
 		                },
 		                error: function(xhr, status, error) {
 		                    

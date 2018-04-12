@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.common.util.TranslateUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
+import com.juyo.visa.entities.TAppStaffCredentialsExplainEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.uxuexi.core.common.util.Util;
@@ -312,6 +314,59 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 					return 0;
 				}
 			}
+		} else if (TAppStaffCredentialsEnum.DRIVE.intKey() == type) {//行驶证
+			String url = mobileVisaService.uploadImage(file);
+			TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffid).and("type", "=", type).and("status", "=", status));
+			if (!Util.isEmpty(credentialEntity)) {
+				credentialEntity.setUrl(url);
+				credentialEntity.setStatus(status);
+				credentialEntity.setUpdatetime(new Date());
+				int update = dbDao.update(credentialEntity);
+				changeStaffStatus(staffid, flag);
+			} else {
+				credentialEntity = new TAppStaffCredentialsEntity();
+				credentialEntity.setCreatetime(new Date());
+				credentialEntity.setStaffid(staffid);
+				credentialEntity.setUpdatetime(new Date());
+				credentialEntity.setType(type);
+				credentialEntity.setStatus(status);
+				credentialEntity.setUrl(url);
+				dbDao.insert(credentialEntity);
+				changeStaffStatus(staffid, flag);
+			}
+			try {
+				simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return 1;
+		} else if (TAppStaffCredentialsEnum.NEWUS.intKey() == type) {//美国出签上传
+			String url = mobileVisaService.uploadImage(file);
+			TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffid).and("type", "=", type));
+			if (!Util.isEmpty(credentialEntity)) {
+				credentialEntity.setUrl(url);
+				credentialEntity.setUpdatetime(new Date());
+				int update = dbDao.update(credentialEntity);
+				changeStaffStatus(staffid, flag);
+			} else {
+				credentialEntity = new TAppStaffCredentialsEntity();
+				credentialEntity.setCreatetime(new Date());
+				credentialEntity.setStaffid(staffid);
+				credentialEntity.setUpdatetime(new Date());
+				credentialEntity.setType(type);
+				credentialEntity.setUrl(url);
+				dbDao.insert(credentialEntity);
+				changeStaffStatus(staffid, flag);
+			}
+			try {
+				simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return 1;
+
 		} else if (TAppStaffCredentialsEnum.NEWHUZHAO.intKey() == type) {//新护照
 			passportJsonEntity = (USPassportJsonEntity) orderUSViewService.passportRecognitionBack(file, request,
 					response);
@@ -536,6 +591,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		List<TAppStaffCredentialsEntity> query = dbDao.query(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type), null);
 		if (!Util.isEmpty(query)) {
+			Collections.reverse(query);
 			return query;
 		} else {
 			return 0;
@@ -550,5 +606,34 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 				Cnd.where("staffid", "=", staffid).and("type", "=", type).and("status", "=", status));
 		return cardEntity;
 
+	}
+
+	public Object saveSecondHousecard(int type, int staffid, String propertyholder, String area, String address) {
+		TAppStaffCredentialsExplainEntity fetch = dbDao.fetch(TAppStaffCredentialsExplainEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", type));
+		if (!Util.isEmpty(fetch)) {
+			fetch.setPropertyholder(propertyholder);
+			fetch.setArea(area);
+			fetch.setAddress(address);
+			fetch.setUpdatetime(new Date());
+			dbDao.update(fetch);
+		} else {
+			TAppStaffCredentialsExplainEntity explain = new TAppStaffCredentialsExplainEntity();
+			explain.setStaffid(staffid);
+			explain.setType(type);
+			explain.setAddress(address);
+			explain.setArea(area);
+			explain.setCreatetime(new Date());
+			explain.setPropertyholder(propertyholder);
+			explain.setUpdatetime(new Date());
+			dbDao.insert(explain);
+		}
+		return null;
+	}
+
+	public Object getSecondHousecard(int type, int staffid) {
+		TAppStaffCredentialsExplainEntity fetch = dbDao.fetch(TAppStaffCredentialsExplainEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", type));
+		return fetch;
 	}
 }
