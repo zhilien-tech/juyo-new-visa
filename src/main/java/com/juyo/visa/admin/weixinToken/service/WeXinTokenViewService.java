@@ -136,7 +136,11 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		 String extName = getExtName(accessToken, mediaId);//获取扩展名
 		 InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
 		 String url = qiniuUploadService.uploadImage(inputStream, extName, mediaId);
-		 System.out.println(url);
+		 logger.error("jssdk to qiuniu===================");
+		 logger.error("accessToken："+accessToken);
+		 logger.error("extName："+extName);
+		 logger.error("url："+url);
+		 logger.error("jssdk to qiuniu==================");
 		 
 		 TAppStaffCredentialsEntity credentialEntity = new TAppStaffCredentialsEntity();
 		 credentialEntity.setStaffid(staffId);

@@ -55,9 +55,11 @@ public class WeiXinTokenModule {
 		return weXinTokenViewService.makeWXTicket(jsApiTicket, url);
 	}
 	
-	//
+	//微信JSSDK上传的文件需要重新下载后上传到七牛云
+	@At
+	@POST
 	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaId") String mediaId, @Param("type")Integer type) {
-		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId,mediaId, type);
+		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId,mediaId,type);
 	 }
 
 }
