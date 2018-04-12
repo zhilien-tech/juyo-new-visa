@@ -128,11 +128,11 @@
 				isShowProgressTips : 1,
 				success : function(res) {
 					var serverId = res.serverId; // 返回图片的服务器端ID
-					images.serverId.push(serverId);
+					images.serverId = serverId;
 					//从微信服务器保存到七牛云服务器 type:11
 					$.ajax({
 		                type : "post",
-		                url : "/admin/weixinToken/wechatJsSDKUploadToOss",
+		                url : "/admin/weixinToken/wechatJsSDKUploadToQiniu",
 		                dataType : "json",
 		                async : false,
 		                data:{
