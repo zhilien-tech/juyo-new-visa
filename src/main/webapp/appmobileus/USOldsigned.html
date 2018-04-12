@@ -25,7 +25,7 @@
 					<span class="homePageTitle">过期美签上传拍摄图例</span>
 				</div>
 				<!-- 过期美签 图片类型枚举 -->
-				<input id="CredentialsEnum_OLDUS" type="hidden" value="11">
+				<input id="CredentialsEnum_OLDUS" type="hidden" value=11>
 				<!--可多选上传-->
 				<div class="householdPage multiselect chooseImage">
 					<span class="homePageTitle">可多选上传</span> 
@@ -41,10 +41,20 @@
 
 
 	<script type="text/javascript">
+
+		//获取URL地址参数
+	    function GetQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null)return  unescape(r[2]); return null;
+	    }
 	
+
+
 		$(function(){
 			
-			var	staffid=GetQueryString('staffid');
+			
+
 			
 			$.ajax({
 		        type : "post",
@@ -66,7 +76,7 @@
 		                },
 		                success : function(data) {
 		                    wx.config({
-		                        debug: false,//生产环境需要关闭debug模式
+		                        debug: true,//生产环境需要关闭debug模式
 		                        appId: data.appid,//appId通过微信服务号后台查看
 		                        timestamp: data.timestamp,//生成签名的时间戳
 		                        nonceStr: data.nonceStr,//生成签名的随机字符串
@@ -122,6 +132,7 @@
 		});
 
 		var uploadImage = function(localIds) {
+			var staffid=GetQueryString('staffid');
 			var localId = localIds.pop();
 			wx.uploadImage({
 				localId : localId,
@@ -148,7 +159,7 @@
 		                }
 		            });
 					
-					alert(JSON.stringify(images));
+					
 					//其他对serverId做处理的代码
 					if (localIds.length > 0) {
 						uploadImage(localIds);
@@ -162,12 +173,7 @@
 			obj.nextAll().remove();
 		}
 		
-		//获取URL地址参数
-	    function GetQueryString(name){
-	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-	         var r = window.location.search.substr(1).match(reg);
-	         if(r!=null)return  unescape(r[2]); return null;
-	    }
+		
 	</script>
 
 
