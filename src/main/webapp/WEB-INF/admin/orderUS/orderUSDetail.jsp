@@ -45,6 +45,11 @@
 						<p>0</p>
 					</c:if>
 				</span>  --%>
+				<%-- <c:when test="${obj.orderid == 0 }">
+				
+				</c:when>
+				
+				<c:otherwise> --%>
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
@@ -53,6 +58,7 @@
 					<input type="button" onclick="autofill()" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />
 					<input type="button" value="通知" onclick="sendEmailUS()" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="日志" onclick="toLog()" class="btn btn-primary btn-sm pull-right" />
+				<%-- </c:otherwise> --%>
 			</div>
 			<!-- 头部END -->
 			<!-- form -->
