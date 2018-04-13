@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
+import org.springframework.web.socket.TextMessage;
 
 import com.alibaba.druid.support.logging.Log;
 import com.alibaba.druid.support.logging.LogFactory;
@@ -27,8 +28,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.util.HttpUtil;
+import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TConfWxEntity;
+import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
@@ -43,6 +46,9 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 	@Inject
 	private UploadService qiniuUploadService;//文件上传
+	
+	private SimpleSendInfoWSHandler simpleSendInfoWSHandler = (SimpleSendInfoWSHandler) SpringContextUtil.getBean(
+			"mySimpleSendInfoWSHandler", SimpleSendInfoWSHandler.class);
 
 	public static Log logger = LogFactory.getLog(WeiXinTokenModule.class);
 
@@ -136,10 +142,12 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	 * @param 
 	 * @return
 	 */
-	public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, Integer type) {
+	public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type) {
 		Date nowDate = DateUtil.nowDate();
-		List<TAppStaffCredentialsEntity> celist_old = dbDao.query(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffId).and("type", "=", type), null);
+		List<TAppStaffCredentialsEntity> celist_old = dbDao.query(TAppStaffCredentialsEntity.class, Cnd.where("staffid","=",staffId).and("type", "=", type), null);
+		if(!Util.isEmpty(celist_old)) {
+			dbDao.delete(celist_old);
+		}
 
 		List<TAppStaffCredentialsEntity> celist_new = new ArrayList<TAppStaffCredentialsEntity>();
 
@@ -161,14 +169,17 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 				celist_new.add(credentialEntity);
 
-				System.out.println("staffid-----" + staffId);
-				System.out.println("url-----" + url);
-				System.out.println("type-----" + type);
-				System.out.println("celist_new-----" + celist_new.toString());
 			}
 		}
 		if (!Util.isEmpty(celist_new)) {
 			dbDao.insert(celist_new);
+		}
+		
+		//webSocket发消息
+		try {
+			simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		return JsonResult.success("SUCCESS");
