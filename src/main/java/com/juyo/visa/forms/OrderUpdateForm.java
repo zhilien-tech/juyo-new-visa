@@ -93,5 +93,7 @@ public class OrderUpdateForm {
 	private Integer ispayed;
 	//是否有旅行计划
 	private Integer hastripplan;
+	//面签时间
+	private Date Interviewdate;
 
 }

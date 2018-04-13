@@ -50,7 +50,7 @@
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="refuse()" value="拒签" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="pass()" value="通过" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />
+					<input type="button" onclick="autofill()" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />
 					<input type="button" value="通知" onclick="sendEmailUS()" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="日志" onclick="toLog()" class="btn btn-primary btn-sm pull-right" />
 			</div>
@@ -96,7 +96,7 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>面签时间</label>
-									<input type="text" class="input-sm form-control" name="" value="" />
+									<input id="Interviewdate" type="text" class="form-format input-sm form-control" name="Interviewdate" value="${obj.Interviewdate }" />
 								</div>
 							</div>
 						</div>
@@ -520,8 +520,8 @@
 										<!-- 面试时间 -->
 										<div class="col-sm-4 colwidthsm">
 											<div class="form-group">
-												<label>面试时间</label> <input id="interviewdate" name="interviewdate" type="text"
-													disabled="true" value="${obj.summaryInfo.Interviewdate }"
+												<label>面签时间</label> <input id="interviewdate2"  type="text"
+													disabled="true" value="${obj.Interviewdate }"
 													class="form-format form-control input-sm" placeholder="" />
 											</div>
 										</div>
@@ -608,6 +608,7 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<%-- <script src="${base}/admin/pcVisa/updatePhoto.js"></script> --%>
 	<script type="text/javascript">
+		dataReload();
 		var staffid = '${obj.basicinfo.id}';
 		var orderid = '${obj.orderinfo.id}';
 		var neworderid = '${obj.orderid}';
@@ -1140,7 +1141,7 @@
 					$('#cardnum').val(data.basicinfo.cardnum);
 					$('#aacode').val(data.summaryInfo.aacode);
 					$('#passport').val(data.passport.passport);
-					$('#interviewdate').val(data.summaryInfo.Interviewdate);
+					$('#interviewdate2').val(data.Interviewdate);
 				}
 			});
 		}
@@ -1172,6 +1173,27 @@
 				type : 'POST',
 				success : function(data) {
 					dataReload();
+				}
+			});
+		}
+		
+		//自动填表
+		function autofill(){
+			var orderid = '${obj.orderinfo.id}';
+			$.ajax({
+				url : '/admin/orderUS/autofill.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					layer.msg("操作成功", {
+						time: 500,
+						end: function () {
+							dataReload();
+						}
+					});
 				}
 			});
 		}

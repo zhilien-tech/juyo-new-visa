@@ -231,6 +231,15 @@ public class OrderUSModule {
 		return orderUSViewService.sendShareMsg(staffId, orderid, sendType, request);
 	}
 
+	/*
+	 * 自动填表
+	 */
+	@At
+	@POST
+	public Object autofill(@Param("orderid") int orderid, HttpSession session) {
+		return orderUSViewService.autofill(orderid, session);
+	}
+
 	/**
 	 * 通过
 	 */
