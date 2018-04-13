@@ -20,15 +20,13 @@
         		$.ajax({
         			type : "POST",//提交类型  
         			//dataType : "json",//返回结果格式  
-        	 		url : '/admin/weixinToken/saveWxinfo.html',//请求地址  
+        	 		url : '/admin/weixinOpenId/saveWxinfo.html',//请求地址  
         			data:{code:code},
         			//请求数据  
         			success : function(obj) {//请求成功后的函数 
         				//关闭加载层
-        				if(obj == '12'){
-        					window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?
-        							+'appid=wxd77f341f1b849e68&redirect_uri=http%3A%2F%2Fwww.f-visa.com%2Fappmobileus%2Flogin.html
-        							+'&response_type=code&scope=snsapi_userinfo&state=STATE';
+        				if(obj.flag == '12'){
+        					
         					
         				}
         				console.log(obj);
