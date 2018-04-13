@@ -25,18 +25,6 @@ public class TAppStaffWxinfoEntity implements Serializable {
 	private String openid;
 
 	@Column
-	@Comment("关注状态")
-	private Integer subscribe;
-
-	@Column
-	@Comment("用户关注时间")
-	private String subscribeTime;
-
-	@Column
-	@Comment("用户语言")
-	private String language;
-
-	@Column
 	@Comment("用户昵称")
 	private String nickname;
 
@@ -45,8 +33,20 @@ public class TAppStaffWxinfoEntity implements Serializable {
 	private Integer sex;
 
 	@Column
+	@Comment("关注状态")
+	private Integer subscribe;
+
+	@Column
 	@Comment("省")
 	private String province;
+
+	@Column
+	@Comment("用户关注时间")
+	private String subscribeTime;
+
+	@Column
+	@Comment("用户的语言")
+	private String language;
 
 	@Column
 	@Comment("市")

@@ -331,6 +331,7 @@ footer {
 	display: inline-block;
 	margin: .1rem;
 	position: relative;
+	float:left;
 }
 .addPage {
 	width: 45%;
