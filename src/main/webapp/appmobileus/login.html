@@ -25,11 +25,14 @@
         			data:{code:code},
         			//请求数据  
         			success : function(obj) {//请求成功后的函数 
+        				
+        				alert(obj.flag);
         				//关闭加载层
-        				if(obj.flag == '1'){
+        				if(obj.flag == 0){
+        					alert("ok");
         					alert(obj.data);
         					//跳转到微信授权页面
-        					window.location.href(obj.data);
+        					window.location.href=obj.data;
         				}else{
         					//获取openid 存到页面上
         					var openid = obj.data;

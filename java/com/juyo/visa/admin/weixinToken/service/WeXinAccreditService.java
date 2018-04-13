@@ -42,9 +42,6 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 		String accessTokenUrl;
 		JSONObject accessToken = null;
 		if (!Util.isEmpty(code)) {
-			//			TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 1);
-			//		String WX_TOKENKEY = wx.getAccesstokenkey();
-
 			//应用授权作用域，snsapi_base （不弹出授权页面，直接跳转，只能获取用户openid），snsapi_userinfo （弹出授权页面，可通过openid拿到昵称、性别、所在地。并且，即使在未关注的情况下，只要用户授权，也能获取其信息）
 			accessTokenUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
 			String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("CODE", code)
@@ -54,11 +51,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 			//返回的参数
 			//{"access_token":"ACCESS_TOKEN","expires_in":7200,"refresh_token":"REFRESH_TOKEN",
 			//"openid":"OPENID","scope":"SCOPE","unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"}
-			//redis中设置 access_token
-			//		redisDao.set("access_token", accessToken.get("access_token").toString());
-			//		redisDao.set("openid", accessToken.get("openid").toString());
-			//							redisDao.expire("openid", 5000);
-			//		}
+
 		}
 		return accessToken;
 	}
@@ -69,27 +62,29 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 		if (!Util.isEmpty(code)) {
 			System.out.println("code=" + code);
 			JSONObject accessTokenObject = getAccessToken(code);
-			String getUserUrl;
 			String wxUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?"
-					+ "appid=APPID&redirect_uri=http://www.f-visa.com/Fappmobileus/login.html"
-					+ "&response_type=code&scope=snsapi_userinfo&state=STATE';";
-			String url = wxUrl.replace("AppID", WX_APPID);
+					+ "appid=APPID&redirect_uri=http%3A%2F%2Fwww.f-visa.com/appmobileus/login.html"
+					+ "&response_type=code&scope=snsapi_userinfo&state=STATE";
+			String url = wxUrl.replace("APPID", WX_APPID);
 			//获取access_token
 			String accessToken = accessTokenObject.get("access_token").toString();
 			System.out.println("accessToken=" + accessToken);
 			//获取openid
 			String openid = accessTokenObject.get("openid").toString();
+			System.out.println("openid=" + openid);
 			//判断用户是否授权过
 			if (!Util.isEmpty(openid)) {
 				TAppStaffWxinfoEntity wxinfoEntity = dbDao.fetch(TAppStaffWxinfoEntity.class,
 						Cnd.where("openid", "=", openid));
 
 				if (Util.isEmpty(wxinfoEntity)) {
-					System.out.println("1111");
+
+					System.out.println("00000");
 					jo.put("flag", 0);
 					jo.put("data", url);
 					return jo;
 				} else {
+					System.out.println("11111");
 					SaveOrUpdateUserInfo(accessToken, openid);
 					//将openid返回给前台
 					jo.put("flag", 1);
