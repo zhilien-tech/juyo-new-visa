@@ -44,7 +44,6 @@ public class AppEventsModule {
 	public Object listData(@Param("..") final TAppEventsForm sqlParamForm, HttpSession session) {
 		return appEventsViewService.listData(sqlParamForm, session);
 	}
-	
 
 	/**
 	 *打开 活动报名页
@@ -84,6 +83,16 @@ public class AppEventsModule {
 	@POST
 	public Object signUpEventByPublicNum(@Param("..") SignUpEventForm form, HttpSession session) {
 		return appEventsViewService.signUpEventByPublicNum(form, session);
+	}
+
+	/***
+	 * 校验用户是否已经报名
+	 */
+	@At
+	@POST
+	public Object checkUserLogin(@Param("openid") String openid) {
+		return appEventsViewService.checkUserLogin(openid);
+
 	}
 
 	/**

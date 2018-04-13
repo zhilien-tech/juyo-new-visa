@@ -35,6 +35,7 @@ import com.juyo.visa.entities.TAppEventsIntroduceEntity;
 import com.juyo.visa.entities.TAppStaffAddressEntity;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffEventsEntity;
+import com.juyo.visa.entities.TAppStaffWxinfoEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.entities.TUserJobEntity;
@@ -190,14 +191,18 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		staffForm.setVisastatus(VisaStatusEnum.HANDLING_VISA.intKey());
 		Map<String, String> map = (Map<String, String>) bigCustomerViewService.addStaff(staffForm, session);
 		String staffIdStr = map.get("staffId");
-
 		Integer staffId = Integer.valueOf(staffIdStr);
+		if (!Util.isEmpty(form.getWeChatToken())) {
+			//保存staffid至t_app_staff_wxinfo 微信授权用户表
+			saveStaffIdToWx(staffId, form.getWeChatToken());
+		}
 		Integer eventId = form.getEventId();
 
 		//人员报名名活动
 		TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
 		staffEventEntity.setEventsId(eventId);
 		staffEventEntity.setStaffId(staffId);
+
 		TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
 
 		//添加订单
@@ -210,6 +215,16 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId), Cnd.where("id", "=", staffId));
 
 		return JsonResult.success("添加成功");
+	}
+
+	public void saveStaffIdToWx(int staffid, String openid) {
+		//根据openid查询微信授权表
+		TAppStaffWxinfoEntity wxInfo = dbDao.fetch(TAppStaffWxinfoEntity.class, Cnd.where("openid", "=", openid));
+		if (!Util.isEmpty(wxInfo) && !Util.isEmpty(staffid)) {
+			wxInfo.setStaffid(staffid);
+			dbDao.update(wxInfo);
+		}
+
 	}
 
 	/**
@@ -427,6 +442,15 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		List<TAppStaffAddressEntity> list = dbDao.query(TAppStaffAddressEntity.class,
 				Cnd.where("staffId", "=", staffId), null);
 		return list;
+	}
+
+	public Object checkUserLogin(String openid) {
+
+		//根据openid查询用户信息
+
+		// TODO Auto-generated method stub
+		return null;
+
 	}
 
 }
