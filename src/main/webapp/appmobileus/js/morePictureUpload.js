@@ -98,7 +98,14 @@ var uploadImage = function(localIds) {
 			if (localIds.length > 0) {
 				uploadImage(localIds);
 			}else if(localIds.length == 0 && images.serverId != ""){
-				uploadToQiniu(staffid,images.serverId);
+				var serverId = images.serverId;
+
+				var serverIdStr = "";
+				for(var i = 0;i<serverId.length;i++){
+					serverIdStr += serverId[i]+",";
+				}
+				
+				uploadToQiniu(staffid,serverIdStr);
 			}
 		}
 	});

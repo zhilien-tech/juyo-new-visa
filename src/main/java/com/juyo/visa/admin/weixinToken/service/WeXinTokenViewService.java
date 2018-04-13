@@ -142,7 +142,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, Integer type) {
 		Date nowDate = DateUtil.nowDate();
 
-		List<TAppStaffCredentialsEntity> celist_old = dbDao.query(TAppStaffCredentialsEntity.class, Cnd.where("staffid","=",staffId), null);
+		List<TAppStaffCredentialsEntity> celist_old = dbDao.query(TAppStaffCredentialsEntity.class, Cnd.where("staffid","=",staffId).and("type", "=", type), null);
 
 		List<TAppStaffCredentialsEntity> celist_new = new ArrayList<TAppStaffCredentialsEntity>();
 		String[] split = mediaIds.split(",");
