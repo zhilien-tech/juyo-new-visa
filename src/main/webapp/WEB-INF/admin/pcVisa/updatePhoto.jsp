@@ -38,7 +38,7 @@
 				<span>二寸免冠照片注意事项</span> <span>1.白底</span> <span>2.摘掉帽子</span> <span>3.漏出耳朵</span>
 			</div>
 			<div class="samplePhoto">
-				<img src="${base}/references/public/dist/newvisacss/img/picture.png" />
+				<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-photo.jpg" />
 			</div>
 			<div id="uploadPhoto" class="uploadPhoto" >
 				<div>上传</div>
@@ -56,7 +56,7 @@
 			<div class="sectionHead">护照首页</div>
 			<div class="explain"></div>
 			<div class="samplePassport">
-				<img src="${base}/references/public/dist/newvisacss/img/passport.png" />
+				<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-visa.jpg" />
 			</div>
 			<div class="uploadPassport alignment">
 				<div>上传</div>
@@ -70,7 +70,7 @@
 			<div class="explainLeft"></div>
 			<div class="imgInfoRight">
 				<div class="samplePassportImg">
-					<img src="${base}/references/public/dist/newvisacss/img/passport.png" />
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-visa.jpg" />
 				</div>
 				<div class="beforeInfo"></div>
 				<div class="uploadPassports oldpassports alignment" >
@@ -87,12 +87,15 @@
 			<div class="explainLeft"></div>
 			<div class="imgInfoRight">
 				<div class="samplePassportImg">
-					<img src="${base}/references/public/dist/newvisacss/img/passport.png" />
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-ID.jpg" />
 				</div>
 				<!-- <div class="beforeIDInfo"></div> -->
 				<div class="uploadPassports alignment" >
 					<div>上传</div>
 					<img id="card" src="" class="transverseImg" >
+				</div>
+				<div class="samplePassportImg">
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-IDBack.jpg" />
 				</div>
 				<div class="uploadPassports alignment" >
 					<div>上传</div>
@@ -106,7 +109,7 @@
 			<div class="explain"></div>
 			<div class="imgInfoRight">
 				<div class="sampleReleaseImg householdBack">
-					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-hold.jpeg" />
 				</div>
 				<!-- <div class="beforeHuKouInfo"></div> -->
 				<div class="uploadReleases" >
