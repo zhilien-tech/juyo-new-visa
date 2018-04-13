@@ -708,8 +708,8 @@
 				type : 'POST',
 				async:false,
 				success : function(data) {
-					/* window.location.href = '/admin/pcVisa/VisaList';  */
-					window.history.go(-1);
+					window.location.href = '/admin/pcVisa/visaList.html'; 
+					//window.history.go(-1);
 				}
 			});
 		};
@@ -1018,7 +1018,39 @@
 				}
 			});
 		}
-
+		
+		function successCallback(status){
+			dataReload();
+		}
+		
+		//刷新详情页面数据
+		function dataReload(){
+			var orderid = '${obj.orderinfo.id}';
+			$.ajax({
+				url : '/admin/orderUS/getOrderRefresh.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					console.log(data);
+					//刷新订单状态
+					$("#orderstatus_US").html(data.orderstatus);
+					
+					//刷新申请人信息
+					$('#imgInch').attr('src', data.basicinfo.twoinchphoto);
+					$('#allname').val(data.passport.firstname+data.passport.lastname+data.passport.firstnameen+data.lastnameen);
+					$('#sex').val(data.passport.sex);
+					$('#birthday').val(data.birthday);
+					$('#realinfo').val(data.realinfo);
+					$('#cardnum').val(data.basicinfo.cardnum);
+					$('#aacode').val(data.summaryInfo.aacode);
+					$('#passport').val(data.passport.passport);
+					$('#interviewdate').val(data.summaryInfo.Interviewdate);
+				}
+			});
+		}
 		
 	</script>
 </body>
