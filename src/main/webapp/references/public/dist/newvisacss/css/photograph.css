@@ -170,7 +170,7 @@ img[src=""] {
 	margin-right: 4%;
 	margin-top: 2%;
 }
-.uploadReleases,.householdBack {
+.uploadReleases,.householdBack,.sampleReleaseImg {
 	width: 212px;
 	height: 284px;
 	line-height: 284px;
@@ -236,4 +236,57 @@ img[src=""] {
 	float:right;
 	width:72%;
 	height:auto;
+}
+.driverGroup,.driverface,.driverback {
+	width:542px !important;
+}
+.bankGroup {
+	width:542px !important;
+	height:300px !important;
+}
+.businesswidth {
+	width:542px !important;
+	height:320px !important;
+}
+.jobwidth {
+	width:250px !important;
+	height:340px !important;
+}
+.beforeInfo {
+	display:none;
+}
+.updatebtn {
+	position:absolute;
+	top:20%;
+	left:46%;
+}
+.housecardAnother {
+	width:100%;
+}
+.housecardInfo {
+	width:100%;
+}
+.housecardL {
+	width:212px;
+	display:inline-block;
+	float:left;
+}
+.housecardL label,..housecardR label {
+	font-size:14px;
+}
+.housecardR {
+	width:212px;
+	display:inline-block;
+	float:left;
+	margin-left:24px;
+}
+.housecardAddressInfo {
+	clear:both;
+	width:77.5%;
+	padding-top:10px;
+}
+.writter {
+	width:100%;
+	height:30px;
+	margin-top:5px;
 }
