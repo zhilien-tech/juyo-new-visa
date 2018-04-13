@@ -15,22 +15,21 @@
         }
         	$(function(){
         		var code = GetQueryString("code");
-        		alert("123");
-        		alert(code);
         		$("#bgImgPic").height($(window).height());
         		$("#bgImgPic").width($(window).width());
         		
         		$.ajax({
         			type : "POST",//提交类型  
-        			
-        			//dataType : "json",//返回结果格式  
+        			dataType : "json",//返回结果格式  
         	 		url : '/admin/weixinOpenId/saveWxinfo.html',//请求地址  
         			data:{code:code},
         			//请求数据  
         			success : function(obj) {//请求成功后的函数 
         				//关闭加载层
-        				if(obj == '12'){
-        					
+        				if(obj.flag == '1'){
+        					alert(obj.data);
+        					//跳转到微信授权页面
+        					window.location.href(obj.data);
         					
         				}
         				console.log(obj);
