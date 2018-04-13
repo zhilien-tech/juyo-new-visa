@@ -58,7 +58,7 @@
 							<div class="col-md-1 left-5px">
 								<a class="btn btn-primary btn-sm pull-left"  id="searchBtn">搜索</a>
 							</div>
-							<div class="col-md-1 left-5px">
+							<div class="col-md-1 left-5px" style="margin-left:-3.5% !important;">
 								<a id="emptyBtn" class="btn btn-primary btn-sm pull-left">清空</a> 
 							</div>
 							<div class="col-md-1 left-5px pull-right">
