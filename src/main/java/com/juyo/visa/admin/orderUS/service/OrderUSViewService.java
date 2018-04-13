@@ -260,6 +260,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffOrder.getStaffid()
 				.longValue());
 		result.put("basicinfo", basicinfo);
+		if (!Util.isEmpty(basicinfo.getInterviewdate())) {
+			result.put("Interviewdate", sdf.format(basicinfo.getInterviewdate()));
+		}
 		Integer staffid = basicinfo.getId();
 		Integer status = orderus.getStatus();
 		//订单状态
@@ -775,6 +778,13 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return null;
 	}
 
+	public Object autofill(int orderid, HttpSession session) {
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		orderus.setStatus(USOrderListStatusEnum.AUTOFILL.intKey());
+		dbDao.update(orderus);
+		return null;
+	}
+
 	/**
 	 * 点击订单详情中的通过按钮，改变订单状态为通过
 	 * TODO(这里用一句话描述这个方法的作用)
@@ -810,10 +820,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userid = loginUser.getId();
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
-		orderus.setStatus(USOrderListStatusEnum.TONGGUO.intKey());
+		orderus.setStatus(USOrderListStatusEnum.JUJUE.intKey());
 		orderus.setUpdatetime(new Date());
 		dbDao.update(orderus);
-		insertLogs(orderid, USOrderListStatusEnum.TONGGUO.intKey(), userid);
+		insertLogs(orderid, USOrderListStatusEnum.JUJUE.intKey(), userid);
 		return null;
 	}
 
@@ -863,14 +873,22 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderTravelInfo.setReturnDepartureCity(form.getReturnDepartureCity());
 		orderTravelInfo.setReturnArrivedCity(form.getReturnArrivedCity());
 		orderTravelInfo.setReturnFlightNum(form.getReturnFlightNum());
-		//修改出行信息
+		//修改订单信息
 		int orderUpdateNum = dbDao.update(orderTravelInfo);
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
+		if (!Util.isEmpty(form.getInterviewdate())) {
+			orderus.setStatus(USOrderListStatusEnum.MIANQIAN.intKey());
+		}
 		orderus.setCityid(form.getCityid());
 		orderus.setIspayed(form.getIspayed());
 		orderus.setGroupname(form.getGroupname());
 		orderus.setUpdatetime(new Date());
 		dbDao.update(orderus);
+		//把面签时间添加到人员信息中
+		TAppStaffOrderUsEntity fetch = dbDao.fetch(TAppStaffOrderUsEntity.class, Cnd.where("orderid", "=", orderid));
+		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, fetch.getStaffid().longValue());
+		basic.setInterviewdate(form.getInterviewdate());
+		dbDao.update(basic);
 		//消息通知
 		try {
 			uslistwebsocket.broadcast(new TextMessage(""));
@@ -966,16 +984,21 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		String pcUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin";
 
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
 		if (!Util.isEmpty(staffId)) {
 			try {
 				//发送短信
 				//分享
 				if (Util.eq(sendType, "share")) {
 					sendSMSUS(staffId, orderid, sendType, "orderustemp/order_us_share_sms.txt");
+					orderus.setStatus(USOrderListStatusEnum.FILLING.intKey());
+					dbDao.update(orderus);
 				}
 				//合格
 				if (Util.eq(sendType, "qualified")) {
 					sendSMSUS(staffId, orderid, sendType, "orderustemp/order_us_qualified_sms.txt");
+					orderus.setStatus(USOrderListStatusEnum.HEGE.intKey());
+					dbDao.update(orderus);
 				}
 				//面试
 				if (Util.eq(sendType, "interview")) {
@@ -993,6 +1016,21 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				//面试
 				if (Util.eq(sendType, "interview")) {
 					sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/order_us_interview_mail.html");
+				}
+				//改变订单状态
+				//分享
+				if (Util.eq(sendType, "share")) {
+					orderus.setStatus(USOrderListStatusEnum.FILLING.intKey());
+					dbDao.update(orderus);
+				}
+				//合格
+				if (Util.eq(sendType, "qualified")) {
+					orderus.setStatus(USOrderListStatusEnum.HEGE.intKey());
+					dbDao.update(orderus);
+				}
+				//面试
+				if (Util.eq(sendType, "interview")) {
+
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

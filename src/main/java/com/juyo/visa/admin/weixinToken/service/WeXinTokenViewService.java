@@ -152,9 +152,9 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		List<TAppStaffCredentialsEntity> celist_new = new ArrayList<TAppStaffCredentialsEntity>();
 
 		String[] split = mediaIds.split(",");
-		if(!Util.isEmpty(split)) {
+		if (!Util.isEmpty(split)) {
 			for (String mediaId : split) {
-				String accessToken = (String)getAccessToken();
+				String accessToken = (String) getAccessToken();
 				String extName = getExtName(accessToken, mediaId);//获取扩展名
 				InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
 				String url = "http://oyu1xyxxk.bkt.clouddn.com/"
@@ -166,8 +166,9 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 				credentialEntity.setType(type);
 				credentialEntity.setCreatetime(nowDate);
 				credentialEntity.setUpdatetime(nowDate);
-			
+
 				celist_new.add(credentialEntity);
+
 			}
 		}
 		if (!Util.isEmpty(celist_new)) {

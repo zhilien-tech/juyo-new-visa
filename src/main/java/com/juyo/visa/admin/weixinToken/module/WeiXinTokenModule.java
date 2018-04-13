@@ -56,7 +56,6 @@ public class WeiXinTokenModule {
 	@POST
 	public Object getEchoPictureList(@Param("staffId") Integer staffId, @Param("type") Integer type) {
 		return weXinTokenViewService.getEchoPictureList(staffId, type);
-
 	}
 
 }
