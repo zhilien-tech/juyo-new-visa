@@ -34,6 +34,7 @@ import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
+import com.uxuexi.core.web.chain.support.JsonResult;
 
 public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
@@ -137,11 +138,11 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	 */
 	public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, Integer type) {
 		Date nowDate = DateUtil.nowDate();
-
 		List<TAppStaffCredentialsEntity> celist_old = dbDao.query(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffId), null);
+				Cnd.where("staffid", "=", staffId).and("type", "=", type), null);
 
 		List<TAppStaffCredentialsEntity> celist_new = new ArrayList<TAppStaffCredentialsEntity>();
+
 		String[] split = mediaIds.split(",");
 		if (!Util.isEmpty(split)) {
 			for (String mediaId : split) {
@@ -159,12 +160,18 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 				credentialEntity.setUpdatetime(nowDate);
 
 				celist_new.add(credentialEntity);
+
+				System.out.println("staffid-----" + staffId);
+				System.out.println("url-----" + url);
+				System.out.println("type-----" + type);
+				System.out.println("celist_new-----" + celist_new.toString());
 			}
 		}
+		if (!Util.isEmpty(celist_new)) {
+			dbDao.insert(celist_new);
+		}
 
-		dbDao.updateRelations(celist_old, celist_new);
-
-		return null;
+		return JsonResult.success("SUCCESS");
 	}
 
 	/**
