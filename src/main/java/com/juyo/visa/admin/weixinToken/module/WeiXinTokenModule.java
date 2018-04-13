@@ -10,7 +10,6 @@ import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.alibaba.fastjson.JSONObject;
-import com.juyo.visa.admin.weixinToken.service.WeXinAccreditService;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 
 @IocBean
@@ -20,8 +19,6 @@ public class WeiXinTokenModule {
 
 	@Inject
 	private WeXinTokenViewService weXinTokenViewService;
-	@Inject
-	private WeXinAccreditService weXinAccreditService;
 
 	/**
 	 *获取 AccessToken
@@ -31,15 +28,6 @@ public class WeiXinTokenModule {
 	@POST
 	public Object getAccessToken() {
 		return weXinTokenViewService.getAccessToken();
-	}
-
-	//获取授权用户信息
-	@At
-	@POST
-	@Filters
-	public Object saveWxinfo(@Param("code") String code) {
-		System.out.println("module,code=" + code);
-		return weXinAccreditService.SaveUser(code);
 	}
 
 	//获取ticket
@@ -59,9 +47,17 @@ public class WeiXinTokenModule {
 	//微信JSSDK上传的文件需要重新下载后上传到七牛云
 	@At
 	@POST
-	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaId") String mediaId,
+	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String[] mediaIds,
 			@Param("type") Integer type) {
-		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaId, type);
+		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, type);
+	}
+
+	//获取图片集合
+	@At
+	@POST
+	public Object getEchoPictureList(@Param("staffId") Integer staffId, @Param("type") Integer type) {
+		return weXinTokenViewService.getEchoPictureList(staffId, type);
+
 	}
 
 }
