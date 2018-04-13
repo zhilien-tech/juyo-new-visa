@@ -30,22 +30,21 @@ function initDatatable() {
 		            	return "";
 		            } 	
 		            },
-		            {"data": "name", "bSortable": false,render: function(data, type, row, meta) {
+		            {"data": "ordernumber", "bSortable": false,render: function(data, type, row, meta) {
+		            	var ordernumber = row.ordernumber;
+		            	if(null==ordernumber || ""==ordernumber){
+		            		return "";
+		            	}else{
+		            		return ordernumber;
+		            	}
+		            } 	
+		            },
+		            {"data": "name", "name": false,render: function(data, type, row, meta) {
 		            	var name = row.name;
 		            	if(null==name || ""==name){
 		            		return "";
 		            	}else{
 		            		return name;
-		            	}
-		            } 	
-		            },
-		            {"data": "telephone", "bSortable": false,render: function(data, type, row, meta) {
-		            	var telephone = row.telephone;
-		            	if(null==telephone || ""==telephone){
-		            		return "";
-		            	}else{
-		            		/*telephone = '<span data-toggle="tooltip" data-placement="right" title="'+telephone+'">'+telephone+'<span>';*/
-		            		return telephone;
 		            	}
 		            } 	
 		            },

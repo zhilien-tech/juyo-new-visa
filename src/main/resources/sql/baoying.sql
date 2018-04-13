@@ -5,6 +5,7 @@ SELECT
 	CONCAT( tasb.firstname, tasb.lastname ) NAME,
 	tasb.telephone,
 	tasb.email,
+	tasb.interviewdate,
 	tou.id orderid,
 	tou.ordernumber,
 	tou.cityid,
