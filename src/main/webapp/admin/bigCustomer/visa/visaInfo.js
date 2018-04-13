@@ -213,6 +213,7 @@ emptyContentByObj($("#contactPoint_ralationship_div"));
 
 //-------------------------------------------家庭信息 Start----------------------------------
 //亲属信息
+//父亲是否在美国       *********有问题
 $(".fatherUS").change(function(){
 	var fatherUS = $("input[class=fatherUS]:checked").val();
 	if(fatherUS == 1){
@@ -226,7 +227,7 @@ $(".fatherUS").change(function(){
 editEleBeforeCheckbox($("#isKnowFatherXing"));
 //不知道父亲的名
 editEleBeforeCheckbox($("#isKnowFatherMing"));
-
+//母亲是否在美国		 *********有问题
 $(".motherUS").change(function(){
 	var motherUS = $("input[class=motherUS]:checked").val();
 	if(motherUS == 1){
@@ -240,7 +241,7 @@ $(".motherUS").change(function(){
 editEleBeforeCheckbox($("#isKnowMotherXing"));
 //不知道父亲的名
 editEleBeforeCheckbox($("#isKnowMotherMing"));
-
+//在美国除了父母还有没有直系亲属
 $(".directRelatives.directUSRelatives").change(function(){
 	var directUSRelatives = $("input[class='directRelatives directUSRelatives']:checked").val();
 	if(directUSRelatives == 1){
@@ -295,13 +296,13 @@ function occupationChange(){
 		$(".jobEduLearningInfoTextarea").hide();
 	}
 }
-//不知道州、省
+//不知道州、省				*********有问题
 editEleBeforeCheckbox($("#isKnowOrtherSpouseProvince"));
-
-//不知道邮政编码
+editEleBeforeCheckbox($("#isprovinceapply"));
+//不知道邮政编码			*********有问题
 editEleBeforeCheckbox($("#isKonwOrtherZipCode"));
 
-//以前是否工作过
+//以前是否工作过			
 $(".beforeWork").change(function(){
 	var beforeWork = $("input[class=beforeWork]:checked").val();
 	if(beforeWork == 1){
@@ -334,6 +335,8 @@ $(".isclan").change(function(){
 		$(".isclanYes").hide();
 		deleteBrotherEle($("div.languagename"));
 		emptyContentByObj($("div.languagename"));
+		deleteBrotherEle($("div.clannameDiv"));
+		emptyContentByObj($("div.clannameDiv"));
 	}
 });
 //过去五年是否曾去过任何国家/地区旅游

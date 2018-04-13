@@ -110,8 +110,6 @@ new Vue({
 				visaInfo.familyInfo.motherlastname = "";
 			}
 		}
-		
-		
 	}
 });
 
