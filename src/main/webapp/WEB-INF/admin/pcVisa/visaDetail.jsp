@@ -432,8 +432,8 @@
 										<!-- 出生日期 -->
 										<div class="col-sm-4">
 											<div class="form-group">
-												<label>出生日期</label> <input name="birthday" type="text"
-													disabled="true" value="<fmt:formatDate value="${obj.passportInfo.birthday }" pattern="yyyy-MM-dd" />" 
+												<label>出生日期</label> <input id="birthday" name="birthday" type="text"
+													disabled="true"  value="${obj.birthday }" 
 													class="form-format form-control input-sm" placeholder="" />
 											</div>
 										</div>
@@ -444,7 +444,7 @@
 									<div class="row body-from-input">
 										<div class="col-sm-8">
 											<div class="form-group">
-												<label>所需资料</label> <input name="realinfo" disabled="true"
+												<label>所需资料</label> <input id="realinfo" name="realinfo" disabled="true"
 													value="${obj.realinfo }" type="text"
 													class="form-control input-sm" /> <input id="staffid" name="staffid"
 													type="hidden" value="${obj.staffid }">
@@ -453,7 +453,7 @@
 										<div class="col-sm-4">
 											<div class="form-group">
 												<label>卡号</label> 
-												<input name="" type="text" disabled value="${obj.basicinfo.cardnum }" class="form-control input-sm"  />
+												<input id="cardnum" name="cardnum" type="text" disabled value="${obj.basicinfo.cardnum }" class="form-control input-sm"  />
 											</div>
 										</div>
 										
@@ -464,7 +464,7 @@
 										<!-- AA码 -->
 										<div class="col-sm-4">
 											<div class="form-group">
-												<label>AA码</label> <input name="aacode" type="text"
+												<label>AA码</label> <input id="aacode" name="aacode" type="text"
 													disabled value="${obj.summaryInfo.aacode }"
 													class="form-control input-sm" placeholder="" />
 											</div>
@@ -473,7 +473,7 @@
 										<!-- 护照号 -->
 										<div class="col-sm-4">
 											<div class="form-group">
-												<label>护照号</label> <input name="passport" type="text"
+												<label>护照号</label> <input id="passport" name="passport" type="text"
 													disabled="true" value="${obj.summaryInfo.passport }"
 													class="form-control input-sm" placeholder="" />
 											</div>
@@ -482,7 +482,7 @@
 										<!-- 面试时间 -->
 										<div class="col-sm-4">
 											<div class="form-group">
-												<label>面试时间</label> <input name="Interviewdate" type="text"
+												<label>面试时间</label> <input id="interviewdate" name="Interviewdate" type="text"
 													disabled="true" value="${obj.summaryInfo.Interviewdate }"
 													class="form-format form-control input-sm" placeholder="" />
 											</div>
@@ -582,6 +582,9 @@
 		var lastnameen =  '${obj.passportInfo.lastnameen }';
 		if((firstname != "" || lastname != "") && (firstnameen == "" || lastnameen == "")){
 			$("#allname").val(firstname+lastname+"/"+getPinyinStr(firstname)+getPinyinStr(lastname));
+		}
+		if((firstname == "" && lastname == "") && (firstnameen == "" && lastnameen == "")){
+			$("#allname").val("");
 		}
 		//将汉字转为拼音
 		function getPinyinStr(hanzi){
@@ -1027,26 +1030,27 @@
 		function dataReload(){
 			var orderid = '${obj.orderinfo.id}';
 			$.ajax({
-				url : '/admin/orderUS/getOrderRefresh.html',
+				url : '/admin/pcVisa/getNewDetail.html',
 				data : {
-					orderid : orderid
+					orderid : orderid,
+					flag : 20
 				},
 				dataType : "json",
 				type : 'POST',
 				success : function(data) {
 					console.log(data);
 					//刷新订单状态
-					$("#orderstatus_US").html(data.orderstatus);
+					$("#orderstatus").html(data.orderstatus);
 					
 					//刷新申请人信息
 					$('#imgInch').attr('src', data.basicinfo.twoinchphoto);
-					$('#allname').val(data.passport.firstname+data.passport.lastname+data.passport.firstnameen+data.lastnameen);
-					$('#sex').val(data.passport.sex);
+					$('#allname').val(data.passportInfo.firstname+data.passportInfo.lastname+'/'+data.passportInfo.firstnameen+data.passportInfo.lastnameen);
+					$('#sex').val(data.passportInfo.sex);
 					$('#birthday').val(data.birthday);
 					$('#realinfo').val(data.realinfo);
 					$('#cardnum').val(data.basicinfo.cardnum);
 					$('#aacode').val(data.summaryInfo.aacode);
-					$('#passport').val(data.passport.passport);
+					$('#passport').val(data.passportInfo.passport);
 					$('#interviewdate').val(data.summaryInfo.Interviewdate);
 				}
 			});

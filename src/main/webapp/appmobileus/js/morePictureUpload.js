@@ -7,6 +7,8 @@ function GetQueryString(name){
 
 $(function(){
 	var staffid=GetQueryString('staffid');
+	var	sessionid=GetQueryString('sessionid');
+	var	flag=GetQueryString('flag');
 	getEchoPicture(staffid);
 	$.ajax({
 		type : "post",
@@ -78,6 +80,7 @@ $('.chooseImage').on('click', function() {
 
 			images.localId = res.localIds;
 			uploadImage(res.localIds);
+
 		}
 	});
 });
@@ -96,8 +99,17 @@ var uploadImage = function(localIds) {
 			//其他对serverId做处理的代码
 			if (localIds.length > 0) {
 				uploadImage(localIds);
-			}else if(localIds.length ==0 && images.serverId != ""){
-				uploadToQiniu(staffid,images.serverId);
+
+			}else if(localIds.length == 0 && images.serverId != ""){
+				var serverId = images.serverId;
+
+				var serverIdStr = "";
+				for(var i = 0;i<serverId.length;i++){
+					serverIdStr += serverId[i]+",";
+				}
+				
+				uploadToQiniu(staffid,serverIdStr);
+
 			}
 		}
 	});
@@ -156,4 +168,12 @@ function uploadToQiniu(staffid,serverIds){
 //删除同类型的其他兄弟节点
 function deleteBrotherEle(obj){
 	obj.nextAll().remove();
+}
+
+//返回前一页
+function returnPage(){
+	var staffid = GetQueryString("staffid");
+	var	sessionid=GetQueryString('sessionid');
+	var	flag=GetQueryString('flag');
+	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 }

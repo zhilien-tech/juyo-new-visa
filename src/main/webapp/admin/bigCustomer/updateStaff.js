@@ -443,6 +443,7 @@ $('#uploadFileImg').change(function() {
 					$('#address').val(obj.address).change();
 					$('#nation').val(obj.nationality).change();
 					$('#cardId').val(obj.num).change();
+					$('#cardIden').val(obj.num).change();
 					var str=""; 
 					var stren="";
 					//是否同身份证相同

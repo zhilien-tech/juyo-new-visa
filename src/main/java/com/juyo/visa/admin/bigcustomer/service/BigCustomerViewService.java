@@ -1035,12 +1035,12 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			passport.setOpid(userId);
 			passport.setFirstname(passportForm.getFirstname());
 			if (!Util.isEmpty(passportForm.getFirstnameen())) {
-				passport.setFirstnameen(passportForm.getFirstnameen());
+				passport.setFirstnameen(passportForm.getFirstnameen().substring(1));
 				staffBase.setFirstnameen(passportForm.getFirstnameen().substring(1));
 			}
 			passport.setLastname(passportForm.getLastname());
 			if (!Util.isEmpty(passportForm.getLastnameen())) {
-				passport.setLastnameen(passportForm.getLastnameen());
+				passport.setLastnameen(passportForm.getLastnameen().substring(1));
 				staffBase.setLastnameen(passportForm.getLastnameen().substring(1));
 			}
 			dbDao.update(staffBase);

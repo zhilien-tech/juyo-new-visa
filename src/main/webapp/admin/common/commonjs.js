@@ -156,6 +156,58 @@ $(document).on("input","#otherfirstname",function(){
 		$("#otherfirstnameen").val(pinyinchar.toUpperCase());
 	}
 });
+$(document).on("input","#email",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#emailen").val("").change();
+	}else{
+		$("#emailen").val(temp).change();
+	}
+});
+$(document).on("input","#telephone",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#telephoneen").val("").change();
+	}else{
+		$("#telephoneen").val(temp).change();
+	}
+});
+$(document).on("input","#cardnum",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#cardnumen").val("").change();
+	}else{
+		$("#cardnumen").val(temp).change();
+	}
+});
+$(document).on("input","#cardId",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#cardIden").val("").change();
+	}else{
+		$("#cardIden").val(temp).change();
+	}
+});
 $(document).on("input","#otherLastName",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
