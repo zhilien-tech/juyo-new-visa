@@ -61,7 +61,7 @@ var images = {
 		serverId : []
 };
 $('.chooseImage').on('click', function() {
-	images.serverId = [];//清空serverid集合
+	images.serverId = "";//清空serverid集合
 	wx.chooseImage({
 		count : 9, // 默认9   
 		sizeType : [ 'compressed' ], // 压缩图
@@ -78,7 +78,6 @@ $('.chooseImage').on('click', function() {
 
 			images.localId = res.localIds;
 			uploadImage(res.localIds);
-			uploadToQiniu(staffid,images.serverId);
 		}
 	});
 });
@@ -97,6 +96,8 @@ var uploadImage = function(localIds) {
 			//其他对serverId做处理的代码
 			if (localIds.length > 0) {
 				uploadImage(localIds);
+			}else if(localIds.length ==0 && images.serverId != ""){
+				uploadToQiniu(staffid,images.serverId);
 			}
 		}
 	});
