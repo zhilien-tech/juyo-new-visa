@@ -101,13 +101,13 @@
 									<label>
 										<span>*</span>手机号
 									</label> 
-									<input id="telephone" name="telephone" type="text" onchange="translateZhToEn(this,'telephoneen','')" class="form-control input-sm"  tabIndex="4" placeholder=" " value="${obj.applicant.telephone }" />
+									<input id="telephone" name="telephone" type="text"  class="form-control input-sm"  tabIndex="4" placeholder=" " value="${obj.applicant.telephone }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>邮箱</label> 
-									<input id="email" name="email" type="text" onchange="translateZhToEn(this,'emailen','')" class="form-control input-sm" placeholder=" "  tabIndex="5" value="${obj.applicant.email }" />
+									<input id="email" name="email" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="5" value="${obj.applicant.email }" />
 								</div>
 							</div>
 						</div>
@@ -119,7 +119,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>公民身份证</label> 
-									<input id="cardId" name="cardId" onchange="translateZhToEn(this,'cardIden','')" type="text" class="form-control input-sm"  tabIndex="6" placeholder=" " value="${obj.applicant.cardId }" />
+									<input id="cardId" name="cardId"  type="text" class="form-control input-sm"  tabIndex="6" placeholder=" " value="${obj.applicant.cardId }" />
 								</div>
 							</div>
 						</div>
@@ -128,7 +128,7 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>卡号</label> 
-									<input id="cardnum" name="cardnum" onchange="translateZhToEn(this,'cardnumen','')" type="text" class="form-control input-sm"  value="${obj.applicant.cardnum }" />
+									<input id="cardnum" name="cardnum"  type="text" class="form-control input-sm"  value="${obj.applicant.cardnum }" />
 								</div>
 							</div>
 							<!-- 民族 -->

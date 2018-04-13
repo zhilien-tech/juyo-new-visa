@@ -102,6 +102,15 @@ public class PcVisaModule {
 	}
 
 	/**
+	 * 获取详情页最新内容
+	 */
+	@At
+	@POST
+	public Object getNewDetail(@Param("orderid") Integer orderid, @Param("flag") Integer flag, HttpSession session) {
+		return pcVisaViewService.visaDetail(orderid, flag, session);
+	}
+
+	/**
 	 * 修改基本信息
 	 */
 	@At

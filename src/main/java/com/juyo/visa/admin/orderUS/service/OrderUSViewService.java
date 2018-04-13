@@ -274,7 +274,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		//姓名拼音处理
-		if (!Util.isEmpty(passport.getFirstnameen())) {
+		/*if (!Util.isEmpty(passport.getFirstnameen())) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("/").append(passport.getFirstnameen());
 			result.put("firstnameen", sb.toString());
@@ -283,7 +283,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			StringBuffer sb = new StringBuffer();
 			sb.append("/").append(passport.getLastnameen());
 			result.put("lastnameen", sb.toString());
-		}
+		}*/
 		/*if (!Util.isEmpty(passport.getLastnameen())) {
 			result.put("lastnameen", passport.getLastnameen().substring(1));
 		}*/

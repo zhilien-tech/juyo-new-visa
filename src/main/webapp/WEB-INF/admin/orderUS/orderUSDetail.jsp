@@ -619,7 +619,7 @@
 		if((firstname != "" || lastname != "") && (firstnameen == "" || lastnameen == "")){
 			$("#allname").val(firstname+lastname+"/"+getPinyinStr(firstname)+getPinyinStr(lastname));
 		}
-		if((firstname == "" && lastname == "") && (firstnameen == "" || lastnameen == "")){
+		if((firstname == "" && lastname == "") && (firstnameen == "" && lastnameen == "")){
 			$("#allname").val("");
 		}
 		
@@ -1133,7 +1133,7 @@
 					}
 					//刷新申请人信息
 					$('#imgInch').attr('src', data.basicinfo.twoinchphoto);
-					$('#allname').val(data.passport.firstname+data.passport.lastname+data.passport.firstnameen+data.lastnameen);
+					$('#allname').val(data.passport.firstname+data.passport.lastname+'/'+data.passport.firstnameen+data.passport.lastnameen);
 					$('#sex').val(data.passport.sex);
 					$('#birthday').val(data.birthday);
 					$('#realinfo').val(data.realinfo);
