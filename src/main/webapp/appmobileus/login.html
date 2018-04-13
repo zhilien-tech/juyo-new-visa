@@ -30,14 +30,23 @@
         					alert(obj.data);
         					//跳转到微信授权页面
         					window.location.href(obj.data);
+        				}else{
+        					//获取openid 存到页面上
+        					var openid = obj.data;
         					
-        				}
+        					
+        					}
         				console.log(obj);
         			},
         			error : function(XMLHttpRequest, textStatus, errorThrown) {
         				
         			}
         		});
+        		
+        		$(".iconJD").click(function(){
+        			window.location = "http://114.215.195.220:8080/appmobileus/progress.html?openid="+openid;
+        		})
+        		
         		
         	})
         	

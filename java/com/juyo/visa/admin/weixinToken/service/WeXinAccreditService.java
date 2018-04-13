@@ -86,16 +86,19 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 
 				if (Util.isEmpty(wxinfoEntity)) {
 					System.out.println("1111");
-					jo.put("flag", 1);
-					jo.put("date", "url");
+					jo.put("flag", 0);
+					jo.put("data", url);
 					return jo;
 				} else {
 					SaveOrUpdateUserInfo(accessToken, openid);
+					//将openid返回给前台
+					jo.put("flag", 1);
+					jo.put("data", openid);
 				}
 			}
 
 		}
-		return "1";
+		return jo;
 	}
 
 	//根据 token openid  获取用户个人信息 并保存
