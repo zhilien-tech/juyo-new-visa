@@ -417,7 +417,7 @@
 						</div>
 						<!-- 标题以及按钮组END -->
 
-						<div class="info-body-from">
+						<div class="info-body-from infobody">
 							<!-- 模块1 -->
 							<div class="row body-from-input">
 								<!-- 申请人左侧 -->

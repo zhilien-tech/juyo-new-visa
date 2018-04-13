@@ -20,14 +20,12 @@ import java.util.UUID;
 
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
-import org.nutz.mvc.annotation.Param;
 
 import com.alibaba.druid.support.logging.Log;
 import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
 import com.juyo.visa.common.base.UploadService;
-import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TConfWxEntity;
@@ -36,6 +34,7 @@ import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
+import com.uxuexi.core.web.chain.support.JsonResult;
 
 public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
@@ -128,8 +127,6 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		return ret;
 	}
 
-
-
 	/**
 	 * 微信JSSDK上传的文件需要重新下载后上传到七牛云
 	 *
@@ -141,17 +138,19 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	 */
 	public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, Integer type) {
 		Date nowDate = DateUtil.nowDate();
-
 		List<TAppStaffCredentialsEntity> celist_old = dbDao.query(TAppStaffCredentialsEntity.class, Cnd.where("staffid","=",staffId).and("type", "=", type), null);
 
+
 		List<TAppStaffCredentialsEntity> celist_new = new ArrayList<TAppStaffCredentialsEntity>();
+
 		String[] split = mediaIds.split(",");
 		if(!Util.isEmpty(split)) {
 			for (String mediaId : split) {
 				String accessToken = (String)getAccessToken();
 				String extName = getExtName(accessToken, mediaId);//获取扩展名
 				InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
-				String url = "http://oyu1xyxxk.bkt.clouddn.com/"+qiniuUploadService.uploadImage(inputStream, extName, mediaId);
+				String url = "http://oyu1xyxxk.bkt.clouddn.com/"
+						+ qiniuUploadService.uploadImage(inputStream, extName, mediaId);
 
 				TAppStaffCredentialsEntity credentialEntity = new TAppStaffCredentialsEntity();
 				credentialEntity.setStaffid(staffId);
@@ -159,16 +158,21 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 				credentialEntity.setType(type);
 				credentialEntity.setCreatetime(nowDate);
 				credentialEntity.setUpdatetime(nowDate);
-
+			
 				celist_new.add(credentialEntity);
+				
+				System.out.println("staffid-----"+staffId);
+				System.out.println("url-----"+url);
+				System.out.println("type-----"+type);
+				System.out.println("celist_new-----"+celist_new.toString());
 			}
 		}
+		if (!Util.isEmpty(celist_new)) {
+			dbDao.insert(celist_new);
+		}
 
-		dbDao.updateRelations(celist_old, celist_new);
-
-		return null;
+		return JsonResult.success("SUCCESS");
 	}
-
 
 	/**
 	 * 
@@ -177,15 +181,15 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	 * @return
 	 */
 	public Object getEchoPictureList(Integer staffId, Integer type) {
-		List<TAppStaffCredentialsEntity> celist = dbDao.query(TAppStaffCredentialsEntity.class, Cnd.where("staffid","=",staffId).and("type", "=", type), null);
+		List<TAppStaffCredentialsEntity> celist = dbDao.query(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffId).and("type", "=", type), null);
 		String jsonStr = "";
-		if(!Util.isEmpty(celist)) {
+		if (!Util.isEmpty(celist)) {
 			jsonStr = JsonUtil.toJson(celist);
 		}
-				
+
 		return jsonStr;
 	}
-
 
 	/**
 	 * 获取媒体文件
@@ -254,7 +258,6 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 			e.printStackTrace();
 		}
 
-
 		return fileExt;
 	}
 
@@ -268,19 +271,19 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		String fileEndWitsh = "";
 		if ("image/jpeg".equals(contentType)) {
 			fileEndWitsh = ".jpeg";
-		}else if ("application/x-jpg".equals(contentType)) {
+		} else if ("application/x-jpg".equals(contentType)) {
 			fileEndWitsh = ".jpg";
-		}else if ("application/x-png".equals(contentType)) {
+		} else if ("application/x-png".equals(contentType)) {
 			fileEndWitsh = ".png";
-		}else if ("image/gif".equals(contentType)) {
+		} else if ("image/gif".equals(contentType)) {
 			fileEndWitsh = ".gif";
-		}else if ("application/x-bmp".equals(contentType)) {
+		} else if ("application/x-bmp".equals(contentType)) {
 			fileEndWitsh = ".bmp";
-		}else if ("image/fax".equals(contentType)) {
+		} else if ("image/fax".equals(contentType)) {
 			fileEndWitsh = ".fax";
-		}else if ("image/x-icon".equals(contentType)) {
+		} else if ("image/x-icon".equals(contentType)) {
 			fileEndWitsh = ".ico";
-		}else if ("image/pnetvue".equals(contentType)) {
+		} else if ("image/pnetvue".equals(contentType)) {
 			fileEndWitsh = ".net";
 		}
 
@@ -293,33 +296,32 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	 * @param mediaId 媒体id 
 	 *  
 	 * @throws Exception 
-	 */  
+	 */
 
-	public static InputStream getInputStream(String accessToken, String mediaId) {  
-		InputStream is = null;  
-		String url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token="  
-				+ accessToken + "&media_id=" + mediaId;  
-		try {  
-			URL urlGet = new URL(url);  
-			HttpURLConnection http = (HttpURLConnection) urlGet  
-					.openConnection();  
+	public static InputStream getInputStream(String accessToken, String mediaId) {
+		InputStream is = null;
+		String url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=" + accessToken + "&media_id="
+				+ mediaId;
+		try {
+			URL urlGet = new URL(url);
+			HttpURLConnection http = (HttpURLConnection) urlGet.openConnection();
 			http.setRequestMethod("GET"); // 必须是get方式请求  
-			http.setRequestProperty("Content-Type","application/x-www-form-urlencoded");  
-			http.setDoOutput(true);  
-			http.setDoInput(true);  
+			http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			http.setDoOutput(true);
+			http.setDoInput(true);
 			System.setProperty("sun.net.client.defaultConnectTimeout", "30000");// 连接超时30秒  
 			System.setProperty("sun.net.client.defaultReadTimeout", "30000"); // 读取超时30秒  
-			http.connect();  
+			http.connect();
 			// 获取文件转化为byte流  
-			is = http.getInputStream();  
+			is = http.getInputStream();
 
-		} catch (Exception e) {  
-			e.printStackTrace();  
-		}  
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return is;
 
-	}  
+	}
 
 	//字节数组转换为十六进制字符串
 	private static String byteToHex(final byte[] hash) {

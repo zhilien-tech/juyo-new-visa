@@ -231,11 +231,12 @@
 	color:#FFF;
 }
 .followUpMain {
-	margin:0 3.5% 0 7%;
+	margin:2% 3.5% 0 5%;
 }
 .fixedheight {
-	width:97%; 
-	height:200px; 
+	width:97.5%; 
+	height:321px;
+	border:1px solid #eee; 
 	overflow-y:auto;
 }
 .dateNameBtn {
@@ -271,4 +272,10 @@
 .col8Width {
 	width:65.5% !important;
 	margin-right:3.2%;
+}
+.info-body-from {
+	margin-top:10px;
+}
+.infobody {
+	padding-top:7px;
 }

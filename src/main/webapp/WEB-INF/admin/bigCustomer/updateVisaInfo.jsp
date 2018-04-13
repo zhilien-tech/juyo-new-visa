@@ -647,7 +647,7 @@
 					<div class="paddingRight groupcheckBoxInfo">
 						<label>州/省</label>
 						<input name="province" v-model="visaInfo.familyInfo.province" type="text" />
-						<input id="isprovinceapply" name="isprovinceapply" v-model="visaInfo.familyInfo.isprovinceapply" type="checkbox" />
+						<input id="isprovinceapply" name="isprovinceapply"  v-model="visaInfo.familyInfo.isprovinceapply" type="checkbox" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
@@ -685,12 +685,12 @@
 						<label>目前的工作单位或者学校名称</label>
 						<input name="unitname" v-model="visaInfo.workEducationInfo.unitname" type="text" />
 					</div>
-					<div class="groupInputInfo draBig">
+					<div class="groupInputInfo draBig marginLS">
 						<label >街道地址(首选)</label>
 						<input name="address" v-model="visaInfo.workEducationInfo.address" type="text" />
 					</div>
 					<div class="clear"></div>
-					<div class="groupInputInfo draBig">
+					<div class="groupInputInfo draBig marginLS">
 						<label>街道地址(次要)*可选</label>
 						<input name="secaddress" v-model="visaInfo.workEducationInfo.secaddress" type="text" />
 					</div>
@@ -702,7 +702,7 @@
 					<div class="paddingRight groupcheckBoxInfo">
 						<label>州/省</label>
 						<input name="province" v-model="visaInfo.workEducationInfo.province" type="text"/>
-						<input name="isprovinceapply" v-model="visaInfo.workEducationInfo.isprovinceapply" type="checkbox"/>
+						<input name="isprovinceapply" id="isprovinceapply" v-on:click="isprovinceapply" v-model="visaInfo.workEducationInfo.isprovinceapply" type="checkbox"/>
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
