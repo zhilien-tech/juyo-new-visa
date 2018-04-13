@@ -7,6 +7,8 @@ function GetQueryString(name){
 
 $(function(){
 	var staffid=GetQueryString('staffid');
+	var	sessionid=GetQueryString('sessionid');
+	var	flag=GetQueryString('flag');
 	getEchoPicture(staffid);
 	$.ajax({
 		type : "post",
@@ -164,4 +166,12 @@ function uploadToQiniu(staffid,serverIds){
 //删除同类型的其他兄弟节点
 function deleteBrotherEle(obj){
 	obj.nextAll().remove();
+}
+
+//返回前一页
+function returnPage(){
+	var staffid = GetQueryString("staffid");
+	var	sessionid=GetQueryString('sessionid');
+	var	flag=GetQueryString('flag');
+	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 }
