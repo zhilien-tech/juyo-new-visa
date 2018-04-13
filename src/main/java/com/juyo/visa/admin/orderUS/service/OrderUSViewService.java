@@ -273,6 +273,17 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//护照信息
 		TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		//姓名拼音处理
+		if (!Util.isEmpty(passport.getFirstnameen())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.getFirstnameen());
+			result.put("firstnameen", sb.toString());
+		}
+		if (!Util.isEmpty(passport.getLastnameen())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.getLastnameen());
+			result.put("lastnameen", sb.toString());
+		}
 		/*if (!Util.isEmpty(passport.getLastnameen())) {
 			result.put("lastnameen", passport.getLastnameen().substring(1));
 		}*/
@@ -799,10 +810,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userid = loginUser.getId();
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
-		orderus.setStatus(USOrderListStatusEnum.JUJUE.intKey());
+		orderus.setStatus(USOrderListStatusEnum.TONGGUO.intKey());
 		orderus.setUpdatetime(new Date());
 		dbDao.update(orderus);
-		insertLogs(orderid, USOrderListStatusEnum.JUJUE.intKey(), userid);
+		insertLogs(orderid, USOrderListStatusEnum.TONGGUO.intKey(), userid);
 		return null;
 	}
 
