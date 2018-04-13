@@ -153,6 +153,7 @@ function uploadToQiniu(staffid,serverIds){
 		data:{
 			staffId:staffid,
 			mediaIds:serverIds,
+			sessionid:sessionid,
 			type:$("#CredentialsEnum_OLDUS").val()
 		},
 		success : function(data) {
