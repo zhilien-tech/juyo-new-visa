@@ -80,7 +80,6 @@ $('.chooseImage').on('click', function() {
 
 			images.localId = res.localIds;
 			uploadImage(res.localIds);
-
 		}
 	});
 });

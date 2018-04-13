@@ -346,6 +346,9 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
 				Cnd.where("id", "=", orderUsEntity.getStaffid()));
 		result.put("basicinfo", basicinfoEntity);
+		if (!Util.isEmpty(basicinfoEntity.getInterviewdate())) {
+			result.put("Interviewdate", sdf.format(basicinfoEntity.getInterviewdate()));
+		}
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		if (!Util.isEmpty(orderTravelInfo)) {
 
