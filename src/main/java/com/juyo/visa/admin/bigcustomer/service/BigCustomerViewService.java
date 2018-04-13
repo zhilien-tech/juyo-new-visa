@@ -58,7 +58,6 @@ import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
 import com.juyo.visa.common.util.ExcelReader;
-import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
 import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
@@ -95,7 +94,7 @@ import com.uxuexi.core.web.chain.support.JsonResult;
 @IocBean
 public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	private static final Log log = Logs.get();
-	
+
 	/**日/月/年格式*/
 	public static final String FORMAT_DD_MM_YYYY = "dd/MM/yyyy";
 
@@ -230,9 +229,6 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		travelCompanionInfo.put("companionList", companionList);*/
 		result.put("travelCompanionInfo", travelCompanionInfo);
 
-		
-		
-		
 		//以前的美国旅游信息
 		String sqlStrp = sqlManager.get("pcVisa_previousTrip");
 		Sql sqlp = Sqls.create(sqlStrp);
@@ -240,9 +236,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Record previUSTripInfo = dbDao.fetch(sqlp);
 		//最后一次签证的签发日期
 		String issueddate = previUSTripInfo.getString("issueddate");
-		issueddate=formatDateStr(issueddate,FORMAT_DD_MM_YYYY);
+		issueddate = formatDateStr(issueddate, FORMAT_DD_MM_YYYY);
 		previUSTripInfo.set("issueddate", issueddate);
-		
+
 		//---去过美国信息集合
 		/*List<TAppStaffGousinfoEntity> gousList = dbDao.query(TAppStaffGousinfoEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
@@ -265,9 +261,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Record familyInfo = dbDao.fetch(sqlf);
 		//格式化配偶生日
 		String spousebirthday = familyInfo.getString("spousebirthday");
-		spousebirthday=formatDateStr(spousebirthday,FORMAT_DD_MM_YYYY);
+		spousebirthday = formatDateStr(spousebirthday, FORMAT_DD_MM_YYYY);
 		familyInfo.set("spousebirthday", spousebirthday);
-		
+
 		//---直属亲戚信息集合
 		/*List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
@@ -281,9 +277,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Record workEducationInfo = dbDao.fetch(sqlw);
 		//格式化工作开始日期
 		String workstartdate = workEducationInfo.getString("workstartdate");
-		workstartdate=formatDateStr(workstartdate,FORMAT_DD_MM_YYYY);
+		workstartdate = formatDateStr(workstartdate, FORMAT_DD_MM_YYYY);
 		workEducationInfo.set("workstartdate", workstartdate);
-		
+
 		/*//---以前工作信息集合
 		List<TAppStaffBeforeworkEntity> beforeWorkList = dbDao.query(TAppStaffBeforeworkEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
@@ -990,6 +986,18 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			passport.put("issuedDate", format.format(goTripDate));
 		}
 
+		//姓名拼音处理
+		if (!Util.isEmpty(passport.get("firstnameen"))) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.get("firstnameen"));
+			result.put("firstnameen", sb.toString());
+		}
+		if (!Util.isEmpty(passport.get("lastnameen"))) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.get("lastnameen"));
+			result.put("lastnameen", sb.toString());
+		}
+
 		result.put("passport", passport);
 		result.put("infotype", ApplicantInfoTypeEnum.PASSPORT.intKey());
 		result.put("passporttype", EnumUtil.enum2(PassportTypeEnum.class));
@@ -1263,11 +1271,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		}
 		return null;
 	}
-	
+
 	//格式化日期 
 	public String formatDateStr(String dateStr, String formatPattern) {
-		if(!Util.isEmpty(dateStr)) {
-			dateStr = DateUtil.format(dateStr,formatPattern);
+		if (!Util.isEmpty(dateStr)) {
+			dateStr = DateUtil.format(dateStr, formatPattern);
 		}
 		return dateStr;
 	}

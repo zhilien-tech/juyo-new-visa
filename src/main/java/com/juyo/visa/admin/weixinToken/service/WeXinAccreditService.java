@@ -74,11 +74,11 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 			System.out.println("accessToken=" + accessToken);
 			//获取openid
 			String openid = accessTokenObject.get("openid").toString();
-			System.out.println(openid);
 			//判断用户是否授权过
 			TAppStaffWxinfoEntity wxinfoEntity = dbDao.fetch(TAppStaffWxinfoEntity.class,
 					Cnd.where("openid", "=", openid));
 			if (Util.isEmpty(wxinfoEntity)) {
+				System.out.println("1111");
 				return "12";
 			} else {
 				System.out.println("openid=" + openid);
@@ -106,24 +106,47 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 				if (Util.isEmpty(wxinfo)) {
 					wxinfo = new TAppStaffWxinfoEntity();
 				}
-				//openid
-				wxinfo.setOpenid(openid);
-				//微信用户昵称
-				System.out.println("nickname=" + user.get("nickname").toString());
-				wxinfo.setNickname(user.get("nickname").toString());
-				//用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
-				wxinfo.setSex((int) user.get("sex"));
-				//用户个人资料填写的省份
-				wxinfo.setPrivilege(user.get("province").toString());
-				//普通用户个人资料填写的城市
-				wxinfo.setCity(user.get("city").toString());
-				//国家，如中国为CN
-				wxinfo.setCountry(user.get("country").toString());
-				//用户头像，最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像），用户没有头像时该项为空。若用户更换头像，原有头像URL将失效。
-				wxinfo.setHeadimgurl(user.get("headimgurl").toString());
+				if (null != user) {
+					try {
+						// 用户的标识
+						wxinfo.setOpenid(user.getString("openid"));
+						System.out.println("用户标识=======" + user.getString("openid"));
+						// 关注状态（1是关注，0是未关注），未关注时获取不到其余信息
+						wxinfo.setSubscribe(user.getInteger("subscribe"));
+						System.out.println("关注状态=======" + user.getString("openid"));
+						// 用户关注时间
+						wxinfo.setSubscribeTime(user.getString("subscribe_time"));
+						System.out.println("用户关注时间=======" + user.getString("openid"));
+						// 昵称
+						wxinfo.setNickname(user.getString("nickname"));
+						System.out.println("昵称=======" + user.getString("openid"));
+						// 用户的性别（1是男性，2是女性，0是未知）
+						wxinfo.setSex(user.getInteger("sex"));
+						System.out.println("用户的性别=======" + user.getString("openid"));
+						// 用户所在国家
+						wxinfo.setCountry(user.getString("country"));
+						System.out.println("用户所在国家=======" + user.getString("openid"));
+						// 用户所在省份
+						wxinfo.setProvince(user.getString("province"));
+						System.out.println("用户所在省份=======" + user.getString("openid"));
+						// 用户所在城市
+						wxinfo.setCity(user.getString("city"));
+						System.out.println("用户所在城市=======" + user.getString("openid"));
+						// 用户的语言，简体中文为zh_CN
+						wxinfo.setLanguage(user.getString("language"));
+						System.out.println("用户的语=======" + user.getString("openid"));
+						// 用户头像
+						wxinfo.setHeadimgurl(user.getString("headimgurl"));
+						System.out.println("用户头像=======" + user.getString("openid"));
+					} catch (Exception e) {
+
+					}
+				}
 				if (Util.isEmpty(wxinfo.getId())) {
+					System.out.println("1111111111111111");
 					dbDao.insert(wxinfo);
 				} else {
+					System.out.println("2222222222222222");
 					dbDao.update(wxinfo);
 				}
 			}
