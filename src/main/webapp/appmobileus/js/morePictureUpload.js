@@ -61,7 +61,7 @@ var images = {
 		serverId : []
 };
 $('.chooseImage').on('click', function() {
-	images.serverId = [];//清空serverid集合
+	images.serverId = "";//清空serverid集合
 	wx.chooseImage({
 		count : 9, // 默认9   
 		sizeType : [ 'compressed' ], // 压缩图
