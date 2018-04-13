@@ -482,8 +482,8 @@
 										<!-- 面试时间 -->
 										<div class="col-sm-4">
 											<div class="form-group">
-												<label>面试时间</label> <input id="interviewdate" name="Interviewdate" type="text"
-													disabled="true" value="${obj.summaryInfo.Interviewdate }"
+												<label>面签时间</label> <input id="interviewdate" name="Interviewdate" type="text"
+													disabled="true" value="${obj.Interviewdate }"
 													class="form-format form-control input-sm" placeholder="" />
 											</div>
 										</div>

@@ -281,7 +281,7 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>国家注册号码</label> 
-									<input id="nationalidentificationnumber" onchange="translateZhToEn(this,'nationalidentificationnumberen','')" name="nationalidentificationnumber" type="text" class="form-control input-sm" value="${obj.applicant.nationalidentificationnumber }"/>
+									<input id="nationalidentificationnumber"  name="nationalidentificationnumber" type="text" class="form-control input-sm" value="${obj.applicant.nationalidentificationnumber }"/>
 								</div>
 								
 								<div class="countryNum has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
@@ -300,7 +300,7 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>美国社会安全号码</label> 
-									<input id="socialsecuritynumber" onchange="translateZhToEn(this,'socialsecuritynumberen','')" name="socialsecuritynumber" type="text" class="form-control input-sm" value="${obj.applicant.socialsecuritynumber }" />
+									<input id="socialsecuritynumber"  name="socialsecuritynumber" type="text" class="form-control input-sm" value="${obj.applicant.socialsecuritynumber }" />
 								</div>
 								<div class="safeNum has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
 									<small class="help-blocksafe" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国社会安全号码</small>
@@ -318,7 +318,7 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>美国纳税人证件号</label> 
-									<input id="taxpayernumber" onchange="translateZhToEn(this,'taxpayernumberen','')" name="taxpayernumber" type="text" class="form-control input-sm" value="${obj.applicant.taxpayernumber }" />
+									<input id="taxpayernumber"  name="taxpayernumber" type="text" class="form-control input-sm" value="${obj.applicant.taxpayernumber }" />
 								</div>
 								<div class="safepay has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
 									<small class="help-ratepaying" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国纳税人证件号</small>

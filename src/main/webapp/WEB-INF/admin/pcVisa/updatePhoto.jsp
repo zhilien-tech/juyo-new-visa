@@ -155,7 +155,7 @@
 			<div class="sectionHead">银行流水</div>
 			<div class="explain"></div>
 			<div class="imgInfoRight">
-				<div class="sampleReleaseImg">
+				<div class="sampleReleaseImg bankflow_moreImaage_WX_jssdk">
 					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<!-- <div class="beforeBankInfo"></div> -->
@@ -163,7 +163,6 @@
 					<div>上传</div>
 					<img class="longitudinal"  />
 				</div>
-				<input type="file" class="publicFile" name="" multiple />
 			</div>	
 		</div>
 		<!--在职证明-->
@@ -223,7 +222,7 @@
 			<div class="sectionHead">过期美签</div>
 			<div class="explain"></div>
 			<div class="imgInfoRight">
-				<div class="sampleReleaseImg">
+				<div class="sampleReleaseImg oldsigned_moreImaage_WX_jssdk">
 					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
 				</div>
 				<!-- <div class="beforeOverdueInfo"></div> -->
@@ -231,7 +230,6 @@
 					<div>上传</div>
 					<img class="longitudinal" />
 				</div>
-				<input type="file" class="publicFile" name="" multiple />
 			</div>
 		</div>
 		<!--美国出签-->
@@ -275,6 +273,9 @@
 		jobCertificate(staffid,8);
 		housecard(staffid,5);
 		household(staffid,4);
+		bankflow(staffid,7);
+		oldsigned(staffid,11);
+		
 		$(".uploadPhoto").click(function(){
 			$("#uploadFileImg").click();
 			$("#uploadFileImg").change(function(){
@@ -293,10 +294,6 @@
 	                resultSize = (rst.fileLen / 1024).toFixed(2);
 	                scale = parseInt(100 - (resultSize / sourceSize * 100));
 	                rst.formData.append('uploadFileImg',rst.file);
-	                //alert(rst);
-	                //alert(JSON.stringify(rst.formData));
-	                //alert(rst.file);
-	                //alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
 	                uploadPositive(rst,rst.formData,staffid); 
 	            }).catch(function (err) {
 	                console.log(err);
