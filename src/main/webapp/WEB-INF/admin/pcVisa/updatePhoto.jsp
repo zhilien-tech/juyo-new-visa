@@ -43,7 +43,7 @@
 			<div id="uploadPhoto" class="uploadPhoto" >
 				<div>上传</div>
 				<img id="twonichphoto" class="loadImg" src=""/>
-				<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+				<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 				<%-- <c:if test="${not empty obj.twoinchphoto }">
 					<img src="${obj.twoinchphoto }" class="loadImg" width="100%"
 						height="100%" />

@@ -323,6 +323,17 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		//获取护照信息
 		TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		//姓名拼音处理
+		if (!Util.isEmpty(passportEntity.getFirstnameen())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passportEntity.getFirstnameen());
+			result.put("firstnameen", sb.toString());
+		}
+		if (!Util.isEmpty(passportEntity.getLastnameen())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passportEntity.getLastnameen());
+			result.put("lastnameen", sb.toString());
+		}
 		//格式化日期
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		if (!Util.isEmpty(passportEntity.getBirthday())) {

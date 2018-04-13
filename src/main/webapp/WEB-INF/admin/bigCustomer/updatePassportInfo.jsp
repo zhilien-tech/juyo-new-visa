@@ -61,7 +61,7 @@
 									<label><span>*</span>姓/拼音</label> <input id="firstName"
 										name="firstname" type="text" class="form-control input-sm " tabIndex="1"
 										placeholder=" " value="${obj.passport.firstname }" />
-										<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstnameen" value="${obj.passport.firstnameen }"/>
+										<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstnameen" value="${obj.firstnameen }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 									<!-- <i class="bulb"></i> -->
@@ -75,7 +75,7 @@
 									<label><span>*</span>名/拼音</label> <input id="lastName"
 										name="lastname" type="text" class="form-control input-sm" tabIndex="2"
 										placeholder=" " value="${obj.passport.lastname }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastnameen" value="${obj.passport.lastnameen }"/>
+										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastnameen" value="${obj.lastnameen }"/>
 
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -213,9 +213,9 @@
 	
 	<script type="text/javascript">
 	    var firstname = '${obj.passport.firstname }';
-	    var firstnameen = '${obj.passport.firstnameen }';
+	    var firstnameen = '${obj.firstnameen }';
 	    var lastname = '${obj.passport.lastname }';
-	    var lastnameen = '${obj.passport.lastnameen }';
+	    var lastnameen = '${obj.lastnameen }';
 	    if(firstnameen == "" && firstname != ""){
 			$('#firstNameEn').val("/"+getPinYinStr(firstname));
 	    }
