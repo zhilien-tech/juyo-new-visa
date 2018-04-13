@@ -217,8 +217,8 @@ function drive(staffid, type) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=0){
 				var url=data[0].url;
-				$("#drive").attr('src',url);
-				$("#drive2").attr('src',data[1].url);
+				$("#drive2").attr('src',url);
+				$("#drive").attr('src',data[1].url);
 			}
 		}
 	});
@@ -265,7 +265,7 @@ function household(staffid, type) {
 			//	console.log(data);
 			//$("#household").attr("src",data.url);
 				$(".householdBack").next().remove();
-				for(var i = 0;i<data.length;i++){
+				for(var i = data.length-1;i>=0;i--){
 					$(".householdBack").after('<div class="uploadReleases">'+
 					'<div>户主页</div>'+
 					'<img src="'+data[i].url+'" class="longitudinal" />'+

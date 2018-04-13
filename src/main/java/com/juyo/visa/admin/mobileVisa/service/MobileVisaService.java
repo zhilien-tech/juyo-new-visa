@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -588,8 +589,14 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	 * 获取多张图片
 	 */
 	public Object getMuchPhotoByStaffid(Integer staffid, Integer type) {
-		List<TAppStaffCredentialsEntity> query = dbDao.query(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffid).and("type", "=", type), null);
+		List<TAppStaffCredentialsEntity> query = new ArrayList<TAppStaffCredentialsEntity>();
+		if (type == TAppStaffCredentialsEnum.HOME.intKey()) {
+			query = dbDao.query(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffid).and("type", "=", type).orderBy("sequence", "ASC"), null);
+		} else {
+			query = dbDao.query(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffid).and("type", "=", type), null);
+		}
 		if (!Util.isEmpty(query)) {
 			if (type != 4) {
 				Collections.reverse(query);

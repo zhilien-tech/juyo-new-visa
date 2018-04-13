@@ -376,7 +376,7 @@ footer {
 	font-size: .5rem;
 	font-weight: bold;
 }
-.pageImg {
+.pageImg,.pageImg2 {
 	width: 100%;
 	height: 4rem;
 	position: absolute;
