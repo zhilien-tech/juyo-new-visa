@@ -139,14 +139,15 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	 * @param 
 	 * @return
 	 */
-	public Object wechatJsSDKUploadToQiniu(Integer staffId, String[] mediaIds, Integer type) {
+	public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, Integer type) {
 		Date nowDate = DateUtil.nowDate();
 
 		List<TAppStaffCredentialsEntity> celist_old = dbDao.query(TAppStaffCredentialsEntity.class, Cnd.where("staffid","=",staffId), null);
 
 		List<TAppStaffCredentialsEntity> celist_new = new ArrayList<TAppStaffCredentialsEntity>();
-		if(!Util.isEmpty(mediaIds)) {
-			for (String mediaId : mediaIds) {
+		String[] split = mediaIds.split(",");
+		if(!Util.isEmpty(split)) {
+			for (String mediaId : split) {
 				String accessToken = (String)getAccessToken();
 				String extName = getExtName(accessToken, mediaId);//获取扩展名
 				InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流

@@ -78,7 +78,7 @@ $('.chooseImage').on('click', function() {
 
 			images.localId = res.localIds;
 			uploadImage(res.localIds);
-			uploadToQiniu(staffid,images.serverId);
+			
 		}
 	});
 });
@@ -97,6 +97,8 @@ var uploadImage = function(localIds) {
 			//其他对serverId做处理的代码
 			if (localIds.length > 0) {
 				uploadImage(localIds);
+			}else if(localIds.length == 0 && images.serverId != ""){
+				uploadToQiniu(staffid,images.serverId);
 			}
 		}
 	});
