@@ -596,7 +596,7 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript" src="${base}/admin/bigCustomer/updateStaff.js"></script>
 	<script type="text/javascript">
-	
+		var isDisable = '${obj.isDisable}';
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -604,7 +604,6 @@
 		}
 	
 		$(function(){
-			var isDisable = '${obj.isDisable}';
 			//页面不可编辑
 			if(isDisable == 1){
 				$(".modal-body").attr('disabled', true);
