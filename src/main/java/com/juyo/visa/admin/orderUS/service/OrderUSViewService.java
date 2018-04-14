@@ -1021,13 +1021,17 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				//改变订单状态
 				//分享
 				if (Util.eq(sendType, "share")) {
-					orderus.setStatus(USOrderListStatusEnum.FILLING.intKey());
-					dbDao.update(orderus);
+					if (orderus.getStatus() < USOrderListStatusEnum.FILLING.intKey()) {
+						orderus.setStatus(USOrderListStatusEnum.FILLING.intKey());
+						dbDao.update(orderus);
+					}
 				}
 				//合格
 				if (Util.eq(sendType, "qualified")) {
-					orderus.setStatus(USOrderListStatusEnum.HEGE.intKey());
-					dbDao.update(orderus);
+					if (orderus.getStatus() < USOrderListStatusEnum.HEGE.intKey()) {
+						orderus.setStatus(USOrderListStatusEnum.HEGE.intKey());
+						dbDao.update(orderus);
+					}
 				}
 				//面试
 				if (Util.eq(sendType, "interview")) {
