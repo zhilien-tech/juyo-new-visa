@@ -16,7 +16,6 @@ function returnPage(){
 		type : "post",
 		url : "/admin/orderUS/passportRecognition",
 		dataType : "json",
-		async : false,
 		data:{
 			staffid:staffid
 		},
