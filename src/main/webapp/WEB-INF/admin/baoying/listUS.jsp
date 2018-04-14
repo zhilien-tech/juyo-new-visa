@@ -64,6 +64,9 @@
 			<!-- /.box -->
 		</section><!-- /.content -->
 	
+		<script type="text/javascript">
+			var BASE_PATH = '${base}';
+		</script>
 		<!-- jQuery 3.2.1 -->
 		<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 		<!-- Bootstrap 3.3.6 -->
@@ -78,9 +81,6 @@
 		<!-- 公用js文件 -->
 		<script src="${base}/references/common/js/base/base.js"></script>
 		<!-- 引入DataTables JS -->
-		<script type="text/javascript">
-			var BASE_PATH = '${base}';
-		</script>
 		<script src="${base}/admin/baoying/listTable.js"></script>
 		<!-- 上传excel -->
 		<%-- <script src="${base}/admin/baoying/uploadFile.js"></script> --%>

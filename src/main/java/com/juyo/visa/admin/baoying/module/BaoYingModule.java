@@ -30,7 +30,7 @@ public class BaoYingModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object list(HttpServletRequest request) {
+	public Object listUS(HttpServletRequest request) {
 		return null;
 	}
 

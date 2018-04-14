@@ -7,123 +7,95 @@ function initDatatable() {
 		"serverSide": true,
 		"stripeClasses": [ 'strip1','strip2' ],
 		"language": {
-			"url": BASE_PATH + "/references/public/plugins/datatables/cn.json"
+			"url": "/references/public/plugins/datatables/cn.json"
 		},
 		"ajax": {
-			"url": BASE_PATH + "/admin/baoying/listData.html",
+			"url": "/admin/baoying/listData.html",
 			"type": "post",
 			/* "data": function (d) {
 
             } */
 		},
-		/* 列表序号 */
-		"fnDrawCallback"    : function(){
-			var api = this.api();
-			var startIndex= api.context[0]._iDisplayStart;
-			api.column(0).nodes().each(function(cell, i) {
-				cell.innerHTML = startIndex + i + 1;
-			});
-		},
-
 		"columns": [
-		            {"data": "", "bSortable": false,render: function(data, type, row, meta) {
-		            	return "";
-		            } 	
-		            },
-		            {"data": "ordernumber", "bSortable": false,render: function(data, type, row, meta) {
-		            	var ordernumber = row.ordernumber;
-		            	if(null==ordernumber || ""==ordernumber){
-		            		return "";
-		            	}else{
-		            		return ordernumber;
-		            	}
-		            } 	
-		            },
-		            {"data": "name", "name": false,render: function(data, type, row, meta) {
-		            	var name = row.name;
-		            	if(null==name || ""==name){
-		            		return "";
-		            	}else{
-		            		return name;
-		            	}
-		            } 	
-		            },
-		            {"data": "telephone", "bSortable": false,render: function(data, type, row, meta) {
-		            	var telephone = row.telephone;
-		            	if(null==telephone || ""==telephone){
-		            		return "";
-		            	}else{
-		            		return telephone;
-		            	}
-		            } 	
-		            },
-		            {"data": "email", "bSortable": false,render: function(data, type, row, meta) {
-		            	var email = row.email;
-		            	if(null==email || ""==email){
-		            		return "";
-		            	}else{
-		            		/*email = '<span data-toggle="tooltip" data-placement="right" title="'+email+'">'+email+'<span>';*/
-		            		return email;
-		            	}
-		            } 	
-		            },
-		            {"data": "cityid", "bSortable": false,render: function(data, type, row, meta) {
-		            	var cityid = row.cityid;
-		            	if(null==cityid || ""==cityid){
-		            		return "";
-		            	}else{
-		            		return cityid;
-		            	}
-		            } 	
-		            },
-		            {"data": "interviewdate", "bSortable": false,
-		            	render: function(data, type, row, meta) {
-			            	var interviewdate = row.interviewdate;
-			            	if(null==interviewdate || ""==interviewdate){
-			            		return "";
-			            	}else{
-			            		return interviewdate;
-			            	}
-			            } 	
-		            },
-		            {"data": "orderstatus", "bSortable": false,
-		            	render: function(data, type, row, meta) {
-		            		var orderstatus = row.orderstatus;
-		            		if(null==orderstatus || ""==orderstatus){
-		            			return "";
-		            		}else{
-		            			return orderstatus;
-		            		}
-		            	} 	
-		            },
-		            {"data": " ", "bSortable": false, 
-		            	render: function(data, type, row, meta) {
-		            		var updateApplicant = '<a style="cursor:pointer;" class="updateApplicant" onclick="baseInfo('+row.staffid+');"></a>';
-		            		var passport = '<a style="cursor:pointer;" class="passport" onclick="passport('+row.passportid+');"></a>';
-		            		var visa = '<a class="visa" onclick="visa('+row.staffid+');"></a>';
-		            		var otherVisa = '<a class="otherVisa" onclick=""></a>';
-		            		return updateApplicant+passport+visa+otherVisa;
-		            	}	
-		            } 
-		            ],
-		            columnDefs: [{}]
+			{"data": "ordernumber", "bSortable": false,render: function(data, type, row, meta) {
+				var ordernumber = row.ordernumber;
+				if(null==ordernumber || ""==ordernumber){
+					return "";
+				}else{
+					return ordernumber;
+				}
+			} 	
+			},
+			{"data": "name", "name": false,render: function(data, type, row, meta) {
+				var name = row.name;
+				if(null==name || ""==name){
+					return "";
+				}else{
+					return name;
+				}
+			} 	
+			},
+			{"data": "telephone", "bSortable": false,render: function(data, type, row, meta) {
+				var telephone = row.telephone;
+				if(null==telephone || ""==telephone){
+					return "";
+				}else{
+					return telephone;
+				}
+			} 	
+			},
+			{"data": "email", "bSortable": false,render: function(data, type, row, meta) {
+				var email = row.email;
+				if(null==email || ""==email){
+					return "";
+				}else{
+					return email;
+				}
+			} 	
+			},
+			{"data": "cityid", "bSortable": false,render: function(data, type, row, meta) {
+				var cityid = row.cityid;
+				if(null==cityid || ""==cityid){
+					return "";
+				}else{
+					return cityid;
+				}
+			} 	
+			},
+			{"data": "interviewdate", "bSortable": false,
+				render: function(data, type, row, meta) {
+					var interviewdate = row.interviewdate;
+					if(null==interviewdate || ""==interviewdate){
+						return "";
+					}else{
+						return interviewdate;
+					}
+				} 	
+			},
+			{"data": "orderstatus", "bSortable": false,
+				render: function(data, type, row, meta) {
+					var orderstatus = row.orderstatus;
+					if(null==orderstatus || ""==orderstatus){
+						return "";
+					}else{
+						return orderstatus;
+					}
+				} 	
+			},
+			{"data": " ", "bSortable": false, 
+				render: function(data, type, row, meta) {
+					var updateApplicant = '<a style="cursor:pointer;" class="updateApplicant" onclick="baseInfo('+row.staffid+');"></a>';
+					var passport = '<a style="cursor:pointer;" class="passport" onclick="passport('+row.passportid+');"></a>';
+					var visa = '<a class="visa" onclick="visa('+row.staffid+');"></a>';
+					var otherVisa = '<a class="otherVisa" onclick=""></a>';
+					return updateApplicant+passport+visa+otherVisa;
+				}	
+			} 
+			],
+			columnDefs: [{}]
 	});
 }
 
-/* 基本信息添加 */
-function add(){
-	layer.open({
-		type: 2,
-		title: false,
-		closeBtn:false,
-		fix: false,
-		maxmin: false,
-		shadeClose: false,
-		scrollbar: false,
-		area: ['900px', '80%'],
-		content: BASE_PATH + '/admin/bigCustomer/addPassportInfo.html'
-	});
-}
 /* 基本信息编辑 */
 function baseInfo(id){
 	layer.open({
@@ -169,66 +141,15 @@ function visa(id){
 	});
 }
 
-//删除提示
-function deleteById(id) {
-	layer.confirm("您确认要删除吗？", {
-		title:"删除",
-		btn: ["是","否"], //按钮
-		shade: false //不显示遮罩
-	}, function(){
-		// 点击确定之后
-		var url = BASE_PATH + '/admin/bigCustomer/delete.html';
-		$.ajax({
-			type : 'POST',
-			data : {
-				id : id
-			},
-			dataType : 'json',
-			url : url,
-			success : function(data) {
-				var message = data.message;
-				console.log(data);
-				if(data.status == '200'){
-					successCallback(4);
-				}else{
-					layer.msg(message);
-				}
-				
-			},
-			error : function(xhr) {
-				layer.msg("删除失败");
-			}
-		});
-	}, function(){
-		// 取消之后不用处理
-	});
-}
-
+//搜索按钮
 $("#searchBtn").on('click', function () {
 	var searchStr = $("#searchStr").val();
-    var param = {
-		"searchStr": searchStr
+	    var param = {
+			"searchStr": searchStr
 	};
-    datatable.settings()[0].ajax.data = param;
+	    datatable.settings()[0].ajax.data = param;
 	datatable.ajax.reload();
 });
-
-function successCallback(status){
-	if(status==1){
-		layer.msg("添加成功");
-	}else if(status==2){
-		layer.msg("编辑成功");
-	}else if(status==3){
-		layer.msg("上传成功");
-	}else if(status==4){
-		layer.msg("删除成功");
-	}
-	 var param = {
-		"searchStr": ""
-	};
-    datatable.settings()[0].ajax.data = param;
-	datatable.ajax.reload();
-}
 
 /*回车事件*/
 function onkeyEnter(){
