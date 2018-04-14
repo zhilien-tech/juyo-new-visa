@@ -29,10 +29,9 @@
         			//请求数据  
         			success : function(obj) {//请求成功后的函数 
         				//关闭加载层
-        				if(obj == '12'){
+
+        				if(obj.flag == '12'){
         					
-        					
-        				}
         				console.log(obj);
         			},
         			error : function(XMLHttpRequest, textStatus, errorThrown) {
