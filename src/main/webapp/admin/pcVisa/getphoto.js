@@ -292,7 +292,7 @@ function bankflow(staffid, type) {
 			if(data!=null){
 				for(var i = 0;i<data.length;i++){
 					$(".bankflow_moreImaage_WX_jssdk").after(
-						'<div class="uploadReleases"><img src="'+data[i].url+'" class="longitudinal"/></div>'
+						'<div class="uploadReleases bankGroup"><img src="'+data[i].url+'" class="sampleImg"/></div>'
 					);
 				}
 				
