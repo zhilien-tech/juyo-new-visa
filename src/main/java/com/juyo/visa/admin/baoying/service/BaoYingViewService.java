@@ -1,10 +1,12 @@
 package com.juyo.visa.admin.baoying.service;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.entity.Record;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
@@ -14,7 +16,9 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.baoying.form.TAppStaffMixInfoForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JapanPrincipalChangeEnum;
 import com.juyo.visa.common.enums.orderUS.DistrictEnum;
 import com.juyo.visa.common.enums.orderUS.IsPayedEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
@@ -22,6 +26,7 @@ import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
 @IocBean
@@ -60,10 +65,33 @@ public class BaoYingViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	public Object listData(TAppStaffMixInfoForm queryForm, HttpSession session) {
 
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		
+		//葆婴 可以看到誉尚的订单信息
 		queryForm.setComid(US_YUSHANG_COMID);
 
 		Map<String, Object> map = listPage4Datatables(queryForm);
+		List<Record> records = (List<Record>) map.get("data");
+		for (Record record : records) {
+			
+			Object cityObj = record.get("cityid");
+			if (!Util.isEmpty(cityObj)) {
+				int cityid = (int) cityObj;
+				for (DistrictEnum district : DistrictEnum.values()) {
+					if (cityid == district.intKey()) {
+						record.set("cityid", district.value());
+					}
+				}
+			}
+			int orderStatus = (int) record.get("orderstatus");
+			for (USOrderListStatusEnum statusEnum : USOrderListStatusEnum.values()) {
+				if (!Util.isEmpty(orderStatus) && orderStatus == statusEnum.intKey()) {
+					record.set("orderstatus", statusEnum.value());
+				} else if (orderStatus == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+					record.set("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
+				}
+			}
+			
+		}
+		
 		return map;
 	}
 
