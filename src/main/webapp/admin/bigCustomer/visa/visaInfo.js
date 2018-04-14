@@ -25,6 +25,39 @@ function initDateTimePicker(obj){
 	});
 }
 
+initDateTimePicker($(document));
+
+//勾选checkbox("不知道")，设置前一个兄弟级元素disable和no edit
+function editEleBeforeCheckbox(obj){
+	/*
+	 //适合单个
+	 obj.change(function(){
+		var beforeEle = obj.prev();
+		beforeEle.val("");
+		if(obj.is(':checked')){
+			beforeEle.prop("disabled",true);
+		}else{
+			beforeEle.prop("disabled",false);
+		}
+	});*/
+	//适合多段
+	$(document).click(function (e) {
+		var obj = $(e.target);
+		if(obj.attr("type")=="checkbox"){
+			obj.change(function(){
+				var beforeEle = obj.prev();
+				beforeEle.val("");
+				if(obj.is(':checked')){
+					beforeEle.prop("disabled",true);
+				}else{
+					beforeEle.prop("disabled",false);
+				}
+			});
+		}
+	});
+	
+}
+
 //---------------------------------------工具方法 end-------------------------------------------
 
 
@@ -607,36 +640,7 @@ function emptyContentByObj(obj){
 	
 }
 
-//勾选checkbox("不知道")，设置前一个兄弟级元素disable和no edit
-function editEleBeforeCheckbox(obj){
-	/*
-	 //适合单个
-	 obj.change(function(){
-		var beforeEle = obj.prev();
-		beforeEle.val("");
-		if(obj.is(':checked')){
-			beforeEle.prop("disabled",true);
-		}else{
-			beforeEle.prop("disabled",false);
-		}
-	});*/
-	//适合多段
-	$(document).click(function (e) {
-		var obj = $(e.target);
-		if(obj.attr("type")=="checkbox"){
-			obj.change(function(){
-				var beforeEle = obj.prev();
-				beforeEle.val("");
-				if(obj.is(':checked')){
-					beforeEle.prop("disabled",true);
-				}else{
-					beforeEle.prop("disabled",false);
-				}
-			});
-		}
-	});
-	
-}
+
 
 //取消关闭窗口
 function closeWindow() {
