@@ -1276,7 +1276,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return jsonEntity;
 	}
 
-	public Object passportRecognitionBack(String url, Integer staffid) {
+	public Object passportRecognitionBack(int staffid) {
+		TAppStaffCredentialsEntity fetch = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		String url = fetch.getUrl();
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);
 
@@ -1643,7 +1646,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//微信JSSDK上传的文件需要重新下载后上传到七牛云
-	public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type) {
+	/*public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type) {
 		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
 				+ type);
 		weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
@@ -1657,5 +1660,5 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
 				+ type);
 		return null;
-	}
+	}*/
 }
