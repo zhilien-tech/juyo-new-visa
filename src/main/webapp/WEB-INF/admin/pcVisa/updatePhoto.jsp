@@ -25,6 +25,7 @@
 	</a>
 	<div class="topHide"></div>
 	<div class="section">
+		<div class="dislogHide"></div>
 		<div class="QRCode">
 			<div class="explain">微信扫描二维码上传识别</div>
 			<div class="scan">
@@ -312,12 +313,13 @@
 	var passportId = $("#passportId").val();
 	var staffid = '${obj.staffid}';
 	var usertype = '${obj.userType}';
+	var isDisable = '${obj.isDisable}';
 	$(function() {
-		
-		var isDisable = '${obj.isDisable}';
 		//页面不可编辑
 		if(isDisable == 1){
 			$(".section").attr('readonly', true);
+			$(".dislogHide").show();
+			$(".btnSave").hide();
 		}
 		
 		twonichphoto(staffid,13);

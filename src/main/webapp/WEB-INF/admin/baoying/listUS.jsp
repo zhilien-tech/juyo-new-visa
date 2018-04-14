@@ -24,9 +24,6 @@
 				<div class="box-header">
 				
 					<div class="row form-right listMain">
-						<div class="col-md-4 left-5px right-0px ">
-							<input id="searchStr" name="searchStr" onkeypress="onkeyEnter();"  type="text" class="searchInfo" placeholder="订单号/姓名/手机号/邮箱" />
-						</div>
 						<div class="col-md-1 left-5px right-0px selectJD">
 							<select id="status" name="status" onchange="selectListData();" class="input-class input-sm" >
 								<option value="">进度</option>
@@ -43,7 +40,10 @@
 								</c:forEach>
 							</select>
 						</div>
-						<div class="col-md-2 left-5px right-0px ">
+						<div class="col-md-4 left-5px right-0px ">
+							<input id="searchStr" name="searchStr" onkeypress="onkeyEnter();"  type="text" class="searchInfo" placeholder="订单号/姓名/手机号/邮箱" />
+						</div>
+						<div class="col-md-1 left-5px right-0px ">
 							<a id="searchBtn" class="bigBtn bigSearchBtn" >搜索</a>
 						</div>
 						<div class="col-md-2 left-5px right-0px ">

@@ -60,15 +60,9 @@ $(function(){
 				success : function(data) {
 					wx.config({
 						debug: false,//生产环境需要关闭debug模式
-						appId: data.appid,//appId通过微信服务号后台
-
-查看
-						timestamp: data.timestamp,//生成签名的时间
-
-戳
-						nonceStr: data.nonceStr,//生成签名的随机字
-
-符串
+						appId: data.appid,//appId通过微信服务号后台查看
+						timestamp: data.timestamp,//生成签名的时间戳
+						nonceStr: data.nonceStr,//生成签名的随机字符串
 						signature: data.signature,//签名
 						jsApiList: [//需要调用的JS接口列表
 							'chooseImage',
@@ -102,9 +96,7 @@ $('.chooseImage').on('click', function() {
 	wx.chooseImage({
 		count : 1, // 默认9   
 		sizeType : [ 'compressed' ], // 压缩图
-		sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者
-
-都有   
+		sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者都有   
 		success : function(res) {
 			$('.wxChooseImages ').remove();
 			var localIds = res.localIds;

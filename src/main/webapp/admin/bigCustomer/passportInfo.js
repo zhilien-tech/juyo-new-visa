@@ -359,7 +359,7 @@ function save(status){
 
 			}else if(status == 2){
 				//基本信息
-				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId;
+				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
 				$.ajax({
 					type: 'POST',
 					data : passportInfo,
@@ -369,7 +369,7 @@ function save(status){
 				});
 			}else if(status ==3){
 				//拍摄资料
-				window.location.href = '/admin/orderJp/visaInfo.html?id='+visaId;
+				window.location.href = '/admin/orderJp/visaInfo.html?id='+visaId+'&isDisable='+isDisable;
 				$.ajax({
 					type: 'POST',
 					data : passportInfo,

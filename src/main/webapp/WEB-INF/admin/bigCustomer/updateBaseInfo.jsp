@@ -14,10 +14,6 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appAddStaff.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appUpdateStaff.css">
-	<style type="text/css">
-		.leftNav { position:fixed;top:15px;left:4px;z-index:999; width:40px;height:100%; cursor:pointer;}
-		.leftNav span { width: 24px; height: 24px; position: absolute;top:50%;margin-left:10px; border-right: 4px solid #999;  border-top: 4px solid #999;  -webkit-transform: translate(0,-50%) rotate(-135deg);  transform: translate(0,-50%) rotate(-135deg);}
-	</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -35,6 +31,7 @@
 				<input id="addBtn" type="button" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" onclick="saveApplicant(1)" />
 			</div>
 			<div class="modal-body">
+				<div class="dislogHide"></div>
 				<div class="tab-content row">
 					<input id="comId" name="comid" type="hidden" value="${obj.applicant.comid }">
 					<input id="userId" name="userid" type="hidden" value="${obj.applicant.userid }">
@@ -599,7 +596,7 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript" src="${base}/admin/bigCustomer/updateStaff.js"></script>
 	<script type="text/javascript">
-	
+		var isDisable = '${obj.isDisable}';
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -607,10 +604,11 @@
 		}
 	
 		$(function(){
-			var isDisable = '${obj.isDisable}';
 			//页面不可编辑
 			if(isDisable == 1){
 				$(".modal-body").attr('disabled', true);
+				$(".dislogHide").show();
+				$("#addBtn").hide();
 			}
 			
 			var nation = '${obj.applicant.hasothernationality}';
