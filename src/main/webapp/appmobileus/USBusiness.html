@@ -20,22 +20,28 @@
 		</header>
 		<section>
 			<div class="household">
-				<div class="householdPage householdExpain">
-					<span class="homePageTitle">营业执照或机构代码证拍摄图例</span>
+				<div class="businessPage">
+					<img alt="" src="img/icon-business.jpeg" width="100%" height="100%">
+					<div class="businessdialog"></div>
+					<span class="businesstitle">图例</span>
 				</div>
 				<!--营业执照或机构代码证-->
-				<div class="householdPage bisLicense">
+				<div class="businessPage bisLicense">
 					<span class="homePageTitle">行营业执照或机构代码证</span>
 					<img src="img/camera.png" style="pointer-events:none;" class="camera" />
 					<img src="" style="pointer-events:none;" class="pageImg" />
 				</div>
 				<input type="file" class="fileHide bisLicenseFile" name="" />
 			</div>
+			<div class="savetitle">
+				<a class="savebutton">保存</a>
+			</div>
 		</section>
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script type="text/javascript" src="js/rem(750).js" ></script>
 		<script type="text/javascript" src="js/layer.js" ></script>
 		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
+		<script type="text/javascript" src="js/saveButton.js" ></script>
 		<script>
 			function getImage(staffid){
 			$.ajax({
@@ -121,7 +127,7 @@
 	        $.ajax({
 				type : "POST",//提交类型  
 				//dataType : "json",//返回结果格式  
-				url : '/admin/mobileVisa/uploadImage.html',//请求地址  
+				url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
 				async : true,
 				processData : false, //当FormData在jquery中使用的时候需要设置此项
 				contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )

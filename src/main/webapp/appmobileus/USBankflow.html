@@ -20,24 +20,28 @@
 
 		</header>
 		<section>
-			<div class="household">
-				<div class="householdPage householdExpain">
-					<span class="homePageTitle">银行流水拍摄图例</span>
+			<div class="bankhold">
+				<div class="bankPage householdExpain">
+					<img src="img/icon-bank.jpeg" width="100%" height="100%" />
+					<span class="PageTitle">图例</span>
 				</div>
 				<!-- 过期美签 图片类型枚举 -->
 				<input id="CredentialsEnum_OLDUS" type="hidden" value=7>
 				<!--可多选上传-->
-				<div class="householdPage multiselect chooseImage">
+				<div class="bankPage multiselect chooseImage">
 					<span class="homePageTitle">可多选上传</span> 
 					<img src="img/camera.png" class="camera" /> 
 					<img src="" class="pageImg" />
 				</div>
-				
+			</div>
+			<div class="savetitle">
+				<a class="savebutton">保存</a>
 			</div>
 		</section>
 	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 	<script type="text/javascript" src="js/rem(750).js"></script>
 	<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	<script type="text/javascript" src="js/saveButton.js" ></script>
 	<!-- 微信多图上传 js -->
 	<script type="text/javascript" src="js/morePictureUpload.js"></script>
 	</body>

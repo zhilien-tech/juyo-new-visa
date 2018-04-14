@@ -38,7 +38,7 @@
 				<span>二寸免冠照片注意事项</span> <span>1.白底</span> <span>2.摘掉帽子</span> <span>3.漏出耳朵</span>
 			</div>
 			<div class="samplePhoto">
-				<img src="${base}/references/public/dist/newvisacss/img/picture.png" />
+				<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-photo.jpg" />
 			</div>
 			<div id="uploadPhoto" class="uploadPhoto" >
 				<div>上传</div>
@@ -56,7 +56,7 @@
 			<div class="sectionHead">护照首页</div>
 			<div class="explain"></div>
 			<div class="samplePassport">
-				<img src="${base}/references/public/dist/newvisacss/img/passport.png" />
+				<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-visa.jpg" />
 			</div>
 			<div class="uploadPassport alignment">
 				<div>上传</div>
@@ -70,7 +70,7 @@
 			<div class="explainLeft"></div>
 			<div class="imgInfoRight">
 				<div class="samplePassportImg">
-					<img src="${base}/references/public/dist/newvisacss/img/passport.png" />
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-visa.jpg" />
 				</div>
 				<div class="beforeInfo"></div>
 				<div class="uploadPassports oldpassports alignment" >
@@ -87,12 +87,15 @@
 			<div class="explainLeft"></div>
 			<div class="imgInfoRight">
 				<div class="samplePassportImg">
-					<img src="${base}/references/public/dist/newvisacss/img/passport.png" />
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-ID.jpg" />
 				</div>
 				<!-- <div class="beforeIDInfo"></div> -->
 				<div class="uploadPassports alignment" >
 					<div>上传</div>
 					<img id="card" src="" class="transverseImg" >
+				</div>
+				<div class="samplePassportImg">
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-IDBack.jpg" />
 				</div>
 				<div class="uploadPassports alignment" >
 					<div>上传</div>
@@ -106,7 +109,7 @@
 			<div class="explain"></div>
 			<div class="imgInfoRight">
 				<div class="sampleReleaseImg householdBack">
-					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-hold.jpeg" />
 				</div>
 				<!-- <div class="beforeHuKouInfo"></div> -->
 				<div class="uploadReleases" >
@@ -130,6 +133,23 @@
 					<img id="" class="longitudinal"/>
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
+				
+				<div class="housecardAnother">
+					<div class="housecardInfo">
+						<div class="housecardL">
+							<label>产权人</label>
+							<input id="propertyholder" readonly="readonly" type="text" class="writter" >
+						</div>
+						<div class="housecardR">
+							<label>面积</label>
+							<input id="area" readonly="readonly" type="text" class="writter" >
+						</div>
+					</div>
+					<div class="housecardAddressInfo">
+						<label>地址</label>
+						<input id="address" readonly="readonly" type="text" class="writter"> 
+					</div>
+				</div>
 			</div>			
 		</div>
 		<!--婚姻状况-->
@@ -138,7 +158,7 @@
 			<div class="explain"></div>
 			<div class="imgInfoRight">
 				<div class="sampleReleaseImg">
-					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-marry.jpeg" />
 				</div>
 				<div class="uploadReleases" >
 					<div>上传</div>
@@ -148,12 +168,26 @@
 			</div>	
 		</div>
 		<!--银行流水-->
-		<div class="huKouBook">
+		<div class="passport">
+			<div class="sectionHead">银行流水</div>
+			<div class="explainLeft"></div>
+			<div class="imgInfoRight">
+				<div class="samplePassportImg bankGroup bankflow_moreImaage_WX_jssdk">
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-bank.jpeg" />
+				</div>
+				
+				<div class="uploadPassports bankGroup alignment" >
+					<div class="updatebtn">上传</div>
+					<img src="" class="longitudinal" >
+				</div>
+			</div>	
+		</div>
+		<%-- <div class="huKouBook">
 			<div class="sectionHead">银行流水</div>
 			<div class="explain"></div>
 			<div class="imgInfoRight">
 				<div class="sampleReleaseImg bankflow_moreImaage_WX_jssdk">
-					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
+					<img src="${base}/references/public/dist/newvisacss/img/icon-bank.jpeg" />
 				</div>
 				<!-- <div class="beforeBankInfo"></div> -->
 				<div class="uploadReleases" >
@@ -161,19 +195,19 @@
 					<img class="longitudinal"  />
 				</div>
 			</div>	
-		</div>
+		</div> --%>
 		<!--在职证明-->
 		<div class="huKouBook">
 			<div class="sectionHead">在职证明</div>
 			<div class="explain"></div>
 			<div class="imgInfoRight">
-				<div class="sampleReleaseImg">
-					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
+				<div class="sampleReleaseImg jobwidth">
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-job.jpeg" />
 				</div>
 				<!-- <div class="beforeJobInfo"></div> -->
-				<div class="uploadReleases">
+				<div class="uploadReleases jobwidth">
 					<div>上传</div>
-					<img id="jobCertificate" class="longitudinal" />
+					<img id="jobCertificate" class="sampleImg" />
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
 			</div>	
@@ -183,19 +217,39 @@
 			<div class="sectionHead">营业执照或机构代码证</div>
 			<div class="explain"></div>
 			<div class="imgInfoRight">
-				<div class="sampleReleaseImg">
-					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
+				<div class="sampleReleaseImg businesswidth">
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-business.jpeg" />
 				</div>
 				<!-- <div class="beforeOZCardInfo"></div> -->
-				<div class="uploadReleases" >
+				<div class="uploadReleases businesswidth" >
 					<div>上传</div>
-					<img id="business" class="longitudinal" />
+					<img id="business" class="sampleImg" />
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
 			</div>
 		</div>
 		<!--行驶证-->
-		<div class="huKouBook">
+		<div class="passport">
+			<div class="sectionHead">行驶证</div>
+			<div class="explainLeft"></div>
+			<div class="imgInfoRight">
+				<div class="samplePassportImg driverGroup">
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-driver.jpg" />
+				</div>
+				<!-- <div class="beforeIDInfo"></div> -->
+				<div class="uploadPassports driverface alignment" >
+					<div>上传</div>
+					<img id="drive" src="" class="transverseImg" >
+				</div>
+				<div class="uploadPassports driverback alignment" >
+					<div>上传</div>
+					<img id="drive2" src="" class="transverseImg" >
+				</div>
+				<input type="file" class="publicFile" name="" multiple />
+			</div>	
+		</div>
+		
+		<%-- <div class="huKouBook">
 			<div class="sectionHead">行驶证</div>
 			<div class="explain"></div>
 			<div class="imgInfoRight">
@@ -211,16 +265,16 @@
 					<div>上传</div>
 					<img id="drive2" class="longitudinal" />
 				</div>
-				<input type="file" class="publicFile" name="" multiple />
+				
 			</div>
-		</div>
+		</div> --%>
 		<!--过期美签-->
 		<div class="huKouBook">
 			<div class="sectionHead">过期美签</div>
 			<div class="explain"></div>
 			<div class="imgInfoRight">
 				<div class="sampleReleaseImg oldsigned_moreImaage_WX_jssdk">
-					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-overdue.jpeg" />
 				</div>
 				<!-- <div class="beforeOverdueInfo"></div> -->
 				<div class="uploadReleases" >
@@ -235,7 +289,7 @@
 			<div class="explain"></div>
 			<div class="imgInfoRight">
 				<div class="sampleReleaseImg">
-					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-overdue.jpeg" />
 				</div>
 				<!-- <div class="beforeSignInfo"></div> -->
 				<div class="uploadReleases" >

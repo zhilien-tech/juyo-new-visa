@@ -21,7 +21,9 @@
 		<section>
 			<div class="household">
 				<div class="householdPage householdExpain">
-					<span class="homePageTitle">在职证明</span>
+					<img alt="" src="img/icon-job.jpeg" width="100%" height="100%">
+					<div class="jobdislog"></div>
+					<span class="jobtitle">图例</span>
 				</div>
 				<!--在职证明-->
 				<div class="householdPage jobCertificate">
@@ -31,11 +33,15 @@
 				</div>
 				<input type="file" class="fileHide jobCertificateFile" name="" />
 			</div>
+			<div class="savetitle">
+				<a class="savebutton">保存</a>
+			</div>
 		</section>
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script type="text/javascript" src="js/rem(750).js" ></script>
 		<script type="text/javascript" src="js/layer.js" ></script>
 		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
+		<script type="text/javascript" src="js/saveButton.js" ></script>
 		<script>
 		function getImage(staffid){
 			$.ajax({
@@ -116,7 +122,7 @@
 	        $.ajax({
 				type : "POST",//提交类型  
 				//dataType : "json",//返回结果格式  
-				url : '/admin/mobileVisa/uploadImage.html',//请求地址  
+				url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
 				async : true,
 				processData : false, //当FormData在jquery中使用的时候需要设置此项
 				contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )

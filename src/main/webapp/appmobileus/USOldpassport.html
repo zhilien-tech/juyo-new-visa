@@ -20,9 +20,9 @@
 		</header>
 		<section>
 			<div class="passport">
-				<img src="img/hz.jpg" />
+				<img src="img/icon-visaImg.jpg" />
 				<div class="dialog"></div>
-				<span class="passportExpain">旧护照拍摄图例</span>
+				<span class="passportExpain">图例</span>
 			</div>
 			<div class="passportSetImage passportShoot">
 				<div class="uploadPassport">
@@ -34,11 +34,15 @@
 			<div class="addSetOfBtn">
 				<a class="addSet" onclick="addOldPassPort()">加一页</a>
 			</div>
+			<div class="savetitle">
+				<a class="savebutton">保存</a>
+			</div>
 		</section>
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script type="text/javascript" src="js/rem(750).js" ></script>
 		<script type="text/javascript" src="js/layer.js" ></script>
 		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
+		<script type="text/javascript" src="js/saveButton.js" ></script>
 		<script>
 		//点击上传图片
 		$(function(){
@@ -166,7 +170,7 @@
 		        $.ajax({
 					type : "POST",//提交类型  
 					//dataType : "json",//返回结果格式  
-					url : '/admin/mobileVisa/uploadImage.html',//请求地址  
+					url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
 					async : true,
 					processData : false, //当FormData在jquery中使用的时候需要设置此项
 					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )

@@ -89,9 +89,9 @@ img[src=""] {
 	margin-right: 4%;
 	margin-top: 2%;
 }
-.uploadPhoto {
+.uploadPhoto,.samplePhoto {
 	float: left;
-	width: 170px;
+	width: 190px;
 	height: 170px;
 	line-height: 170px;
 	text-align: center;
@@ -102,11 +102,12 @@ img[src=""] {
 .publicFile {
 	opacity: 0;
 }
-.loadImg {
+.loadImg,.sampleImg {
 	position: absolute; 
 	top: 0;
 	left: 0;
 	width:100%;
+	height:100%;
 }
 .transverseImg {
 	position: absolute; 
@@ -136,7 +137,7 @@ img[src=""] {
 	margin-top: 2%;
 	display:inline-block;
 } 
-.uploadPassport {
+.uploadPassport,.samplePassport {
 	margin-top: 2%;
 	float: left;
 	width: 260px;
@@ -146,7 +147,7 @@ img[src=""] {
 	text-align: center;
 	position:relative;
 }
-.uploadPassports {
+.uploadPassports,.samplePassportImg {
 	margin-top: 2%;
 	width: 260px;
 	height: 170px;
@@ -158,9 +159,9 @@ img[src=""] {
 	margin-right:4%;
 	vertical-align:middle;
 }
-.imgInfoRight .uploadPassports:nth-child(2) {
+/* .imgInfoRight .uploadPassports:nth-child(2) {
 	margin-top:-164px;
-}
+} */
 .huKouBook {
 	clear: both;
 }
@@ -169,7 +170,7 @@ img[src=""] {
 	margin-right: 4%;
 	margin-top: 2%;
 }
-.uploadReleases {
+.uploadReleases,.householdBack,.sampleReleaseImg {
 	width: 212px;
 	height: 284px;
 	line-height: 284px;
@@ -181,9 +182,9 @@ img[src=""] {
 	margin-right:4%;
 	vertical-align:middle;
 }
-.imgInfoRight .uploadReleases:nth-child(2) {
+/* .imgInfoRight .uploadReleases:nth-child(2) {
 	margin-top:-278px;
-}
+} */
 .delete {
 	background-image:url(../img/delete.png);
 	height:32px;
@@ -235,4 +236,57 @@ img[src=""] {
 	float:right;
 	width:72%;
 	height:auto;
+}
+.driverGroup,.driverface,.driverback {
+	width:542px !important;
+}
+.bankGroup {
+	width:542px !important;
+	height:300px !important;
+}
+.businesswidth {
+	width:542px !important;
+	height:320px !important;
+}
+.jobwidth {
+	width:250px !important;
+	height:340px !important;
+}
+.beforeInfo {
+	display:none;
+}
+.updatebtn {
+	position:absolute;
+	top:20%;
+	left:46%;
+}
+.housecardAnother {
+	width:100%;
+}
+.housecardInfo {
+	width:100%;
+}
+.housecardL {
+	width:212px;
+	display:inline-block;
+	float:left;
+}
+.housecardL label,..housecardR label {
+	font-size:14px;
+}
+.housecardR {
+	width:212px;
+	display:inline-block;
+	float:left;
+	margin-left:24px;
+}
+.housecardAddressInfo {
+	clear:both;
+	width:77.5%;
+	padding-top:10px;
+}
+.writter {
+	width:100%;
+	height:30px;
+	margin-top:5px;
 }

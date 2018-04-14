@@ -150,6 +150,7 @@ section ul li {
 	height: 10px;
 	border: 1px solid #000;
 	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
 	border-bottom: 0;
 	border-left:0;
 	margin-top: .34rem;
@@ -186,13 +187,14 @@ footer {
 }
 .case {
 	float: right;
-	width: 45%;
+	width: 47%;
 	border: 1px solid #000;
 	height: 3rem;
 	line-height: 3rem;
 	text-align: center;
 	background: #f2f2f2;
 	font-size: .3rem;
+	position:relative;
 }
 .picShoot {
 	width: 100%;
@@ -217,6 +219,23 @@ footer {
 #image {
 	display: none;
 }
+.photodialog {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	background:#eee;
+	opacity:.4;
+}
+.photoDemo {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	color:#FFF;
+}
 /**********************************护照首页**********************************/
 .passport {
 	position: relative;
@@ -233,12 +252,13 @@ footer {
 	height: 4rem;
 	position: absolute;
 	top: 0;
-	background: rgba(0,0,0,.5);
+	background: #eee;
+	opacity:.3;
 }
 .passportExpain {
 	position: absolute;
 	top: 45%;
-	left: 37%;
+	left: 45%;
 	font-size: .4rem;
 	z-index: 1000;
 	color: #FFF;
@@ -280,17 +300,10 @@ footer {
 	width: 100%;
 	height: 4rem;
 }
-.dialog {
-	width: 95.5%;
-	height: 4rem;
-	position: absolute;
-	top: 0;
-	background: rgba(0,0,0,.5);
-}
 .IDExpain {
 	position: absolute;
 	top: 45%;
-	left: 37%;
+	left: 45%;
 	font-size: .4rem;
 	z-index: 1000;
 	color: #FFF;
@@ -368,7 +381,7 @@ footer {
 .camera {
 	position: absolute;
 	top: 45%;
-	left: 41%;
+	left: 45%;
 }
 .plus {
 	position: absolute;
@@ -395,11 +408,28 @@ footer {
 .fileHide {
 	display:none;
 }
+.dialoghold {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:4rem;
+	background:#eee;
+	opacity:.3;
+}
+.titlehold {
+	position:absolute;
+	top:45%;
+	left:0;
+	width:100%;
+	height:4rem;
+}
 /**********************************房产证**********************************/
 .notes {
 	font-size: .3rem;
 	color: red;
 	padding: .2rem .2rem 0 .4rem;
+	opacity:0;
 }
 .addhouseCard {
 	padding-top: .3rem;
@@ -419,12 +449,141 @@ footer {
 	outline: none;
 }
 /**********************************婚姻情况**********************************/
-/*同上*/
+
+.marrydialog {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:4rem;
+	background:#eee;
+	opacity:.3;
+}
+.marrytitle {
+	position:absolute;
+	top:45%;
+	left:0;
+	width:100%;
+	height:4rem;
+}
 /**********************************银行流水**********************************/
-
+.bankhold {
+	padding:.2rem;
+}
+.bankPage {
+	width: 97%;
+	height: 4rem;
+	text-align: center;
+	border: 1px solid #000;
+	font-size: .3rem;
+	display: inline-block;
+	margin: .1rem;
+	position: relative;
+}
+.PageTitle {
+	position:absolute;
+	top:45%;
+	left:45%;
+}
 /**********************************在职证明**********************************/
+.jobdislog {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:4rem;
+	background:#eee;
+	opacity:.3;
+}
+.jobtitle {
+	position:absolute;
+	top:45%;
+	left:42%;
+	color:#8f8f8f;
+}
 /**********************************营业执照或机构代码证**********************************/
+.businessPage {
+	width: 97%;
+	height: 4rem;
+	text-align: center;
+	border: 1px solid #000;
+	font-size: .3rem;
+	display: inline-block;
+	margin: .1rem;
+	position: relative;
+}
+.businessdialog {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:4rem;
+	background:#eee;
+	opacity:.3;
+}
+.businesstitle {
+	position:absolute;
+	top:45%;
+	left:45%;
+	color:#fff;
+}
 /**********************************行驶本**********************************/
-
-
+.driverPage {
+	width: 97%;
+	height: 4rem;
+	text-align: center;
+	border: 1px solid #000;
+	font-size: .3rem;
+	display: inline-block;
+	margin: .1rem;
+	position: relative;
+}
+.driverdialog {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:4rem;
+	background:#eee;
+	opacity:.3;
+}
+.driverTitle {
+	position:absolute;
+	top:45%;
+	left:45%;
+	color:#fff;
+}
+/**********************************过期美签**********************************/
+.signdialog {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:4rem;
+	background:#eee;
+	opacity:.3;
+}
+.digntitle {
+	position:absolute;
+	top:45%;
+	left:45%;
+	color:#fff;
+}
+/**********************************公共样式**********************************/
+.savetitle {
+	position:fixed;
+	width:100%;
+	bottom:0;
+	left:0;
+	text-align:center;
+}
+.savebutton {
+	width: 100%;
+	height:.81rem;
+	line-height: .81rem;
+	color: #FFF;
+	background-color: rgb(22,155,213);
+	text-align: center;
+	font-size: .3rem;
+}
 

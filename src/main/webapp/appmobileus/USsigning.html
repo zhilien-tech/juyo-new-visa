@@ -22,7 +22,9 @@
 		<section>
 			<div class="household">
 				<div class="householdPage householdExpain">
-					<span class="homePageTitle">美国出签上传拍摄图例</span>
+					<img alt="" src="img/icon-overdue.jpeg" width="100%" height="100%">
+					<div class="signdialog"></div>
+					<span class="digntitle">图例</span>
 				</div>
 				<div class="householdPage marriageMain">
 					<span class="homePageTitle">拍摄上传</span>
@@ -44,11 +46,15 @@
 					</div>
 					<input type="file" id="householdImg" name="householdImg" />
 				</div> -->
+			<div class="savetitle">
+				<a class="savebutton">保存</a>
+			</div>	
 		</section>
 	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 	<script type="text/javascript" src="js/rem(750).js"></script>
 	<script type="text/javascript" src="js/layer.js" ></script>
 	<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
+	<script type="text/javascript" src="js/saveButton.js" ></script>
 	<!-- <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> -->
 	<script type="text/javascript">
 	
@@ -167,9 +173,7 @@
 			$(".marriageMain").click(function(){
 				$(".uploadMarriage").click();
 				$(".uploadMarriage").change(function(){
-					layer.load(1,{
-						shade : "#000"
-					});
+					layer.load(1);
 					var that = this;
 		            lrz(this.files[0]).then(function (rst) {
 		                /* $('.bacimg2').attr('src',rst.base64);*/
@@ -223,10 +227,11 @@
 	        /* var layerIndex = layer.load(1, {
 				shade : "#000"
 			}); */
+			layer.load(1);
 	        $.ajax({
 				type : "POST",//提交类型  
 				//dataType : "json",//返回结果格式  
-				url : '/admin/mobileVisa/uploadImage.html',//请求地址  
+				url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
 				async : true,
 				processData : false, //当FormData在jquery中使用的时候需要设置此项
 				contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )

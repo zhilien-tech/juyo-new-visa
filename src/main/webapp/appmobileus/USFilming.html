@@ -55,7 +55,7 @@
 			<li class="selectArea">
 				<div class="circleRed replaceCircle6">
 					<i class="icon-error iconGroup6" ></i>
-				</div> <span>婚姻状况</span> <i class="more"></i> <span
+				</div> <span>婚姻状况</span> <i class="more"></i> <span id="6"
 				class="info marriageInfo"></span> <select class="selector" dir="rtl">
 					<option>--请选择--</option>
 					<option value="1">单身</option>
@@ -100,7 +100,7 @@
 		</ul>
 	</section>
 	<footer>
-		<a class="next">下一步</a>
+		<a class="next">完成</a>
 	</footer>
 </body>
 <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
@@ -125,25 +125,17 @@
 		determineUpload2(staffid);
 		determineUpload1(staffid);
 		//婚姻状况
-		$('.selector')
-				.change(
-						function() {
-							var staffid = GetQueryString("staffid");
-							var name = $(".selector").find("option:selected")
-									.text();
-							var selectvalue = $(".selector").find(
-									"option:selected").val();
-							$(".marriageInfo").text(name);
+		$('.selector').change(function() {
+				var staffid = GetQueryString("staffid");
+				var name = $(".selector").find("option:selected").text();
+				var selectvalue = $(".selector").find("option:selected").val();
+				$(".marriageInfo").text(name);
 							
-							if (selectvalue == 4 || selectvalue == 2
-									|| selectvalue == 3) {
-								window.location.href = '/appmobileus/USMarital.html?staffid='
-										+ staffid
-										+ '&marryurltype='
-										+ selectvalue+'&sessionid='+sessionid+'&flag='+flag;
-							}
+				if (selectvalue == 4 || selectvalue == 2 || selectvalue == 3) {
+					window.location.href = '/appmobileus/USMarital.html?staffid=' + staffid + '&marryurltype=' + selectvalue+'&sessionid='+sessionid+'&flag='+flag;
+				}
 
-						});
+			});
 	});
 	//跳转2寸图片
 	function twoinchphoto() {
@@ -157,16 +149,14 @@
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
 		var flag = GetQueryString("flag");
-		window.location.href = '/appmobileus/USPassport.html?staffid='
-				+ staffid+'&sessionid='+sessionid+'&flag='+flag;
+		window.location.href = '/appmobileus/USPassport.html?staffid=' + staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转老护照
 	function oldpassport() {
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
 		var flag = GetQueryString("flag");
-		window.location.href = '/appmobileus/USOldpassport.html?staffid='
-				+ staffid+'&sessionid='+sessionid+'&flag='+flag;
+		window.location.href = '/appmobileus/USOldpassport.html?staffid=' + staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转身份证
 	function uscard() {
@@ -180,8 +170,7 @@
 		var staffid = GetQueryString("staffid");
 		var sessionid = GetQueryString("sessionid");
 		var flag = GetQueryString("flag");
-		window.location.href = '/appmobileus/USHousehold.html?staffid='
-				+ staffid+'&sessionid='+sessionid+'&flag='+flag;
+		window.location.href = '/appmobileus/USHousehold.html?staffid=' + staffid+'&sessionid='+sessionid+'&flag='+flag;
 	}
 	//跳转房产证
 	function ushousecard() {
