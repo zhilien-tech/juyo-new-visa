@@ -79,14 +79,29 @@ public class MobileVisaModule {
 
 	/*
 	 * 添加修改单张照片
-	 */
+	 
 	@At
 	@AdaptBy(type = UploadAdaptor.class)
-	public Object uploadImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
+	public Object saveUploadImage(@Param("url") String url, @Param("staffid") Integer staffid,
 			@Param("type") Integer type, @Param("flag") int flag, @Param("status") Integer status,
 			@Param("sequence") Integer sequence, HttpServletRequest request, HttpServletResponse response,
 			@Param("sessionid") String sessionid) {
-		return mobileVisaService.updateImage(file, staffid, type, flag, status, sequence, request, response, sessionid);
+		return mobileVisaService.saveUpdateImage(url, staffid, type, flag, status, sequence, request, response,
+				sessionid);
+	}*/
+
+	/*
+	 * 添加修改单张照片
+	 */
+	@At
+	@POST
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object uploadImageOnly(@Param("image") File file, @Param("staffid") Integer staffid,
+			@Param("type") Integer type, @Param("flag") int flag, @Param("status") Integer status,
+			@Param("sequence") Integer sequence, HttpServletRequest request, HttpServletResponse response,
+			@Param("sessionid") String sessionid) {
+		return mobileVisaService.uploadImageOnly(file, staffid, type, flag, status, sequence, request, response,
+				sessionid);
 	}
 
 	/*
@@ -96,9 +111,9 @@ public class MobileVisaModule {
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object uploadMuchImage(HttpSession session, @Param("image") File file, @Param("staffid") Integer staffid,
 			@Param("type") Integer type, @Param("mainid") Integer mainid, @Param("sequence") Integer sequence,
-			@Param("sessionid") String sessionid) {
+			@Param("sessionid") String sessionid, HttpServletRequest request) {
 
-		return mobileVisaService.updateMuchImage(file, staffid, mainid, type, sequence, sessionid);
+		return mobileVisaService.updateMuchImage(file, staffid, mainid, type, sequence, sessionid, request);
 	}
 
 	/*
@@ -127,6 +142,16 @@ public class MobileVisaModule {
 	@POST
 	public Object getSecondHousecard(@Param("type") int type, @Param("staffid") int staffid) {
 		return mobileVisaService.getSecondHousecard(type, staffid);
+	}
+	
+	
+	/*
+	 * 获取微信多图上传 图片集合
+	 */
+	@At
+	@POST
+	public Object getWxMorePhotos(@Param("type") int type, @Param("staffid") int staffid) {
+		return mobileVisaService.getWxMorePhotos(type, staffid);
 	}
 
 }

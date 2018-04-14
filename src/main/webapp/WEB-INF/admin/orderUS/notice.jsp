@@ -61,6 +61,7 @@
 					console.log(data);
 					if(data){
 						layer.msg("发送成功");
+						parent.successCallback();
 					}
 				}
 			});
@@ -81,6 +82,7 @@
 					console.log(data);
 					if(data){
 						layer.msg("发送成功");
+						parent.successCallback();
 					}
 				}
 			});
@@ -101,6 +103,7 @@
 					console.log(data);
 					if(data){
 						layer.msg("发送成功");
+						parent.successCallback();
 					}
 				}
 			});

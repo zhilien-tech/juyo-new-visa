@@ -1,7 +1,3 @@
-var staffid=GetQueryString('staffid');
-var sessionid=GetQueryString('sessionid');
-var flag=GetQueryString('flag');
-
 //获取URL地址参数
 function GetQueryString(name){
 	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -9,9 +5,38 @@ function GetQueryString(name){
 	if(r!=null)return  unescape(r[2]); return null;
 }
 
+//返回上一级
+function returnPage(){
+	var staffid = GetQueryString("staffid");
+	var	sessionid=GetQueryString('sessionid');
+	var	flag=GetQueryString('flag');
+	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
+}
+
+
+//回显
+function getImage(staffid){
+	$.ajax({
+		url : "/admin/mobileVisa/getInfoByType.html",
+		data : {
+			type : 1,
+			staffid : staffid,
+		},
+		dataType : "json",
+		type : 'post',
+		success : function(data) {
+			if(data != null){
+				$(".uploadImgReady").attr("src",data.url);
+			}
+		}
+	});
+}
+
 $(function(){
-	
-	getEchoPicture(staffid);
+	var staffid=GetQueryString('staffid');
+	var	sessionid=GetQueryString('sessionid');
+	var	flag=GetQueryString('flag');
+	getImage(staffid);
 	$.ajax({
 		type : "post",
 		url : "/admin/weixinToken/getJsApiTicket",
@@ -67,7 +92,7 @@ var images = {
 $('.chooseImage').on('click', function() {
 	images.serverId = [];//清空serverid集合
 	wx.chooseImage({
-		count : 9, // 默认9   
+		count : 1, // 默认9   
 		sizeType : [ 'compressed' ], // 压缩图
 		sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者都有   
 		success : function(res) {
@@ -75,8 +100,8 @@ $('.chooseImage').on('click', function() {
 			var localIds = res.localIds;
 			if(localIds != ""){
 				for(var i = 0;i<localIds .length;i++){
-					var imgDivStr = '<div class="householdPage wxChooseImages multiselect"><img src="'+localIds[i]+'" class="pageImg" /></div>';
-					$(".chooseImage").before(imgDivStr);
+					//YEMIAN HUIXIAN
+					$(".uploadImgReady").attr("src",localIds[i]);
 				}
 			}
 
@@ -88,7 +113,7 @@ $('.chooseImage').on('click', function() {
 });
 
 var uploadImage = function(localIds) {
-	
+	var staffid=GetQueryString('staffid');
 	var localId = localIds.pop();
 	wx.uploadImage({
 		localId : localId,
@@ -116,47 +141,19 @@ var uploadImage = function(localIds) {
 	});
 };
 
-//页面回显数据
-function getEchoPicture(staffid){
-	$.ajax({
-		type : "post",
-		url : "/admin/weixinToken/getEchoPictureList",
-		dataType : "json",
-		async : false,
-		data:{
-			staffId:staffid,
-			type:$("#CredentialsEnum_OLDUS").val()
-		},
-		success : function(data) {
-			if(data != ""){
-				var imgDivStr = '';
-				$.each($.parseJSON(data),function(i,item){  
-				    var url = item.url;
-				    imgDivStr += '<div class="householdPage wxChooseImages multiselect"><img src="'+url+'" class="pageImg" /></div>'; 
-				}); 
-				$(".chooseImage").before(imgDivStr);
-			}
-			
-		},
-		error: function(xhr, status, error) {
-
-		}
-	});
-}
-
 //从微信服务器保存到七牛云服务器 
 function uploadToQiniu(staffid,serverIds){
-	
+
 	$.ajax({
 		type : "post",
-		url : "/admin/weixinToken/wechatJsSDKUploadToQiniu",
+		url : "/admin/orderUS/passportRecognition",
 		dataType : "json",
 		async : false,
 		data:{
 			staffId:staffid,
 			mediaIds:serverIds,
 			sessionid:sessionid,
-			type:$("#CredentialsEnum_OLDUS").val()
+			type:1
 		},
 		success : function(data) {
 
@@ -167,12 +164,3 @@ function uploadToQiniu(staffid,serverIds){
 	});
 }
 
-//删除同类型的其他兄弟节点
-function deleteBrotherEle(obj){
-	obj.nextAll().remove();
-}
-
-//返回前一页
-function returnPage(){
-	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
-}

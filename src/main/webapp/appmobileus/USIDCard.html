@@ -46,7 +46,7 @@
 		<script type="text/javascript" src="js/vue.min.js" ></script>
 		<script>
 			//异步加载的URL地址
-			var url="/admin/mobile/passportinfo.html";
+			/* var url="/admin/mobile/passportinfo.html";
 			var _self;
 			new Vue({
 				el: '#passportform',
@@ -65,7 +65,7 @@
 			          	}
 			        });
 			    }
-			});
+			}); */
 			
 			
 			function getImageFront(staffid){
@@ -196,9 +196,8 @@
 				}); */
 		        $.ajax({
 					type : "POST",//提交类型  
-					//dataType : "json",//返回结果格式  
-					url : '/admin/mobileVisa/uploadImage.html',//请求地址  
-					async : true,
+					url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
+					async : false,
 					processData : false, //当FormData在jquery中使用的时候需要设置此项
 					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
 					//请求数据  
@@ -207,9 +206,21 @@
 						//console.log('=====成功========');
 						//关闭加载层
 						layer.closeAll('loading');
-						if (obj!=null) {
+						getImageFront(staffid);
+						if (obj!=null || obj != "") {
 							layer.msg("上传成功"); 
-							location.reload();
+							$.ajax({
+								type : "POST",//提交类型  
+								url : '/admin/orderUS/IDCardRecognition.html',
+								data : {
+									url : obj,
+									staffid : staffid
+								},
+								success : function(obj) {
+									
+								}
+							});
+							
 						}else{
 							layer.msg("身份证无法识别，请从新上传"); 
 						}
@@ -238,9 +249,8 @@
 				}); */
 		        $.ajax({
 					type : "POST",//提交类型  
-					//dataType : "json",//返回结果格式  
-					url : '/admin/mobileVisa/uploadImage.html',//请求地址  
-					async : true,
+					url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
+					async : false,
 					processData : false, //当FormData在jquery中使用的时候需要设置此项
 					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
 					//请求数据  
@@ -249,9 +259,21 @@
 						//console.log('=====成功========');
 						//关闭加载层
 						layer.closeAll('loading');
+						getImageBack(staffid);
 						if (obj!=null) {
 							layer.msg("上传成功"); 
-							location.reload();
+							$.ajax({
+								type : "POST",//提交类型  
+								url : '/admin/orderUS/IDCardRecognitionBack.html',
+								data : {
+									url : obj,
+									staffid : staffid
+								},
+								success : function(obj) {
+									
+								}
+							});
+							
 						}else{
 							layer.msg("身份证无法识别，请从新上传"); 
 						}

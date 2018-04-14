@@ -218,7 +218,7 @@ function drive(staffid, type) {
 			if(data!=0){
 				var url=data[0].url;
 				$("#drive2").attr('src',url);
-				$("#drive").attr('src',data[1].url);
+				//$("#drive").attr('src',data[1].url);
 			}
 		}
 	});
@@ -275,6 +275,57 @@ function household(staffid, type) {
 		}
 	});
 };
+
+//银行流水
+function bankflow(staffid, type) {
+	$.ajax({
+		url : "/admin/mobileVisa/getWxMorePhotos.html",
+		data : {
+			type : type,
+			staffid : staffid
+		},
+		dataType : "json",
+		async: false,
+		type : 'post',
+		success : function(data) {
+			/* _self.passportdata = data.passportdata; */
+			if(data!=null){
+				for(var i = 0;i<data.length;i++){
+					$(".bankflow_moreImaage_WX_jssdk").after(
+						'<div class="uploadReleases"><img src="'+data[i].url+'" class="longitudinal"/></div>'
+					);
+				}
+				
+			}
+		}
+	});
+}
+
+//过期美签
+function oldsigned(staffid, type) {
+	$.ajax({
+		url : "/admin/mobileVisa/getWxMorePhotos.html",
+		data : {
+			type : type,
+			staffid : staffid
+		},
+		dataType : "json",
+		async: false,
+		type : 'post',
+		success : function(data) {
+			/* _self.passportdata = data.passportdata; */
+			if(data!=null){
+				for(var i = 0;i<data.length;i++){
+					$(".oldsigned_moreImaage_WX_jssdk").after(
+						'<div class="uploadReleases"><img src="'+data[i].url+'" class="longitudinal"/></div>'
+					);
+				}
+				
+			}
+		}
+	});
+}
+
 
 // 返回
 function closeWindow() {
