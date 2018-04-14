@@ -104,6 +104,12 @@ new Vue({
 				visaInfo.familyInfo.motherfirstname = "";
 			}
 		},
+		isknowmotherlastname:function(){
+			var isknowmotherlastname = visaInfo.familyInfo.isknowmotherlastname;
+			if(isknowmotherlastname){
+				visaInfo.familyInfo.motherlastname = "";
+			}
+		},
 		isfatherinus:function(){
 			var isfatherinus = visaInfo.familyInfo.isfatherinus;
 			if(isfatherinus){
