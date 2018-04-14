@@ -552,13 +552,15 @@ footer {
 	color:#fff;
 }
 /**********************************公共样式**********************************/
-/**********************************公共样式**********************************/
 .savetitle {
-	padding:0 .2rem;
-	margin-top:1.5rem;
+	position:fixed;
+	width:100%;
+	bottom:0;
+	left:0;
+	text-align:center;
 }
 .savebutton {
-	width: 100%;
+	width: 98%;
 	height:.81rem;
 	line-height: .81rem;
 	color: #FFF;
