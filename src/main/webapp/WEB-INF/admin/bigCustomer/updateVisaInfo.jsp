@@ -449,7 +449,7 @@
 					<div class="groupRadioInfo">
 						<label>你的父亲是否在美国</label>
 						<input type="radio" name="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" class="fatherUS" value="1" />是
-						<input type="radio" name="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" class="fatherUS" value="2" checked />否
+						<input type="radio" name="isfatherinus"  v-on:click="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" class="fatherUS" value="2" checked />否
 					</div>
 					<!--yes-->
 					<div class="fatherUSYes groupSelectInfo paddingNone">
@@ -477,7 +477,7 @@
 					<div class="groupRadioInfo">
 						<label>你的母亲是否在美国</label>
 						<input type="radio" name="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" class="motherUS" value="1" />是
-						<input type="radio" name="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" class="motherUS" value="2" checked />否
+						<input type="radio" name="ismotherinus" v-on:click="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" class="motherUS" value="2" checked />否
 					</div>
 					<div class="motherUSYes paddingNone groupSelectInfo">
 						<label>身份状态</label>
@@ -955,7 +955,7 @@
 						<!--yes-->
 						<div class="educationInfo elementHide">
 							<div class="educationYes">
-							<c:if test="${empty obj.beforeEducationList }">
+							<c:if test="${!empty obj.beforeEducationList }">
 								<c:forEach var="education" items="${obj.beforeEducationList }">
 									<div class="midSchoolEduDiv">
 										<div class="draBig leftNo marginLS groupInputInfo">
@@ -1010,7 +1010,7 @@
 											<input id="coursestartdate" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
 										<div class="clear"></div>
-										<div class="paddingLeft leftNo groupInputInfo">
+										<div class="leftNo groupInputInfo">
 											<label>结束时间</label>
 											<input id="courseenddate" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
 										</div>
@@ -1065,7 +1065,7 @@
 										<input id="coursestartdate" name="coursestartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
 									<div class="clear"></div>
-									<div class="paddingLeft leftNo groupInputInfo">
+									<div class="leftNo groupInputInfo">
 										<label>结束时间</label>
 										<input id="courseenddate" name="courseenddate" class="datetimepickercss" type="text" placeholder="日/月/年" />
 									</div>
@@ -1097,7 +1097,7 @@
 							<div class="clannameDiv">
 								<div class="draBig leftNo groupInputInfo" >
 									<label>氏族或部落名称</label>
-									<input name="clanname" type="text"  />
+									<input name="clanname" v-model="visaInfo.workEducationInfo.clanname"  type="text"  />
 								</div>
 							</div>
 						</div>
