@@ -275,7 +275,6 @@
 		$(".uploadPhoto").click(function(){
 			$("#uploadFileImg").click();
 			$("#uploadFileImg").change(function(){
-				alert(111);
 				layer.load(1,{
 					shade : "#000"
 				});

@@ -218,7 +218,7 @@ function drive(staffid, type) {
 			if(data!=0){
 				var url=data[0].url;
 				$("#drive2").attr('src',url);
-				$("#drive").attr('src',data[1].url);
+				//$("#drive").attr('src',data[1].url);
 			}
 		}
 	});

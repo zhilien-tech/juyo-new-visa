@@ -6,7 +6,6 @@
 
 package com.juyo.visa.admin.orderUS.module;
 
-import java.io.File;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,14 +14,12 @@ import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
-import org.nutz.mvc.upload.UploadAdaptor;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
@@ -278,38 +275,36 @@ public class OrderUSModule {
 	}
 
 	/**
-	 * 身份证正面上传、扫描
+	 * 身份证正面扫描
 	 */
 	@At
-	@Ok("json")
+	@POST
 	@Filters
-	@AdaptBy(type = UploadAdaptor.class)
-	public Object IDCardRecognition(@Param("image") File file, HttpServletRequest request, HttpServletResponse response) {
-		return orderUSViewService.IDCardRecognition(file, request, response);
+	public Object IDCardRecognition(@Param("url") String url, @Param("staffid") int staffid,
+			HttpServletRequest request, HttpServletResponse response) {
+		return orderUSViewService.IDCardRecognition(url, staffid, request, response);
 	}
 
 	/**
-	 * 身份证背面上传、扫描
+	 * 身份证背面扫描
 	 */
 	@At
-	@Ok("json")
+	@POST
 	@Filters
-	@AdaptBy(type = UploadAdaptor.class)
-	public Object IDCardRecognitionBack(@Param("image") File file, HttpServletRequest request,
-			HttpServletResponse response) {
-		return orderUSViewService.IDCardRecognitionBack(file, request, response);
+	public Object IDCardRecognitionBack(@Param("url") String url, @Param("staffid") int staffid,
+			HttpServletRequest request, HttpServletResponse response) {
+		return orderUSViewService.IDCardRecognitionBack(url, staffid, request, response);
 	}
 
 	/**
-	 * 护照上传、扫描
+	 * 护照扫描
 	 */
 	@At
-	@Ok("json")
+	@POST
 	@Filters
-	@AdaptBy(type = UploadAdaptor.class)
-	public Object passportRecognition(@Param("image") File file, HttpServletRequest request,
-			HttpServletResponse response) {
-		return orderUSViewService.passportRecognitionBack(file, request, response);
+	public Object passportRecognition(@Param("url") String url, @Param("staffid") int staffid,
+			HttpServletRequest request, HttpServletResponse response) {
+		return orderUSViewService.passportRecognitionBack(url, staffid, request, response);
 	}
 
 }
