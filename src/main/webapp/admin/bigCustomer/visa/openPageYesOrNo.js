@@ -12,10 +12,10 @@ function openYesOrNoPage(){
 		var ispart = visaInfo.travelCompanionInfo.ispart; 
 		if(ispart == 1){
 			$(".teamnameture").show();
-			$(".teamnamefalseDiv").hide();
+			$(".teamnamefalse").hide();
 		}else {
 			$(".teamnameture").hide();
-			$(".teamnamefalseDiv").show();
+			$(".teamnamefalse").show();
 		}
 	}else {
 		$(".teamture").hide();
