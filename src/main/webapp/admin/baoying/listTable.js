@@ -87,7 +87,7 @@ function initDatatable() {
 					var updateApplicant = '<a style="cursor:pointer;" class="updateApplicant" onclick="baseInfo('+row.staffid+');"></a>';
 					var passport = '<a style="cursor:pointer;" class="passport" onclick="passport('+row.passportid+');"></a>';
 					var visa = '<a class="visa" onclick="visa('+row.staffid+');"></a>';
-					var otherVisa = '<a class="otherVisa" onclick=""></a>';
+					var otherVisa = '<a class="otherVisa" onclick="updatePhoto('+row.staffid+');"></a>';
 					return updateApplicant+passport+visa+otherVisa;
 				}	
 			} 
@@ -137,7 +137,7 @@ function updatePhoto(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '80%'],
-		content:'/admin/pcVisa/updatePhoto.html?staffid='+staffid+'&flag=0'+'&isDisable='+$("#disablePageInfo").val()
+		content:'/admin/pcVisa/updatePhoto.html?staffid='+id+'&flag=0'+'&isDisable='+$("#disablePageInfo").val()
 	});
 }
 

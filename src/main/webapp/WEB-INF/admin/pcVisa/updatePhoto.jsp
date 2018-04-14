@@ -259,6 +259,13 @@
 	var staffid = '${obj.staffid}';
 	var usertype = '${obj.userType}';
 	$(function() {
+		
+		var isDisable = '${obj.isDisable}';
+		//页面不可编辑
+		if(isDisable == 1){
+			$(".section").attr('readonly', true);
+		}
+		
 		twonichphoto(staffid,13);
 		chuqian(staffid,12);
 		huzhao(staffid,1);
