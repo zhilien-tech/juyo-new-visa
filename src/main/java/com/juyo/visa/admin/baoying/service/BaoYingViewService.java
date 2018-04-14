@@ -1,5 +1,7 @@
 package com.juyo.visa.admin.baoying.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -16,11 +18,9 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.baoying.form.TAppStaffMixInfoForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.base.UploadService;
-import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JapanPrincipalChangeEnum;
 import com.juyo.visa.common.enums.orderUS.DistrictEnum;
-import com.juyo.visa.common.enums.orderUS.IsPayedEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
@@ -71,6 +71,12 @@ public class BaoYingViewService extends BaseService<TAppStaffBasicinfoEntity> {
 		Map<String, Object> map = listPage4Datatables(queryForm);
 		List<Record> records = (List<Record>) map.get("data");
 		for (Record record : records) {
+			Object interviewdateStr = record.get("interviewdate");
+			if(!Util.isEmpty(interviewdateStr)) {
+				Date interviewdate = (Date)interviewdateStr;
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				record.set("interviewdate", sdf.format(interviewdate));
+			}
 			
 			Object cityObj = record.get("cityid");
 			if (!Util.isEmpty(cityObj)) {
