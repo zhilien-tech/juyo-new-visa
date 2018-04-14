@@ -150,6 +150,7 @@ section ul li {
 	height: 10px;
 	border: 1px solid #000;
 	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
 	border-bottom: 0;
 	border-left:0;
 	margin-top: .34rem;
@@ -447,7 +448,23 @@ footer {
 	outline: none;
 }
 /**********************************婚姻情况**********************************/
-/*同上*/
+
+.marrydialog {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:4rem;
+	background:#eee;
+	opacity:.3;
+}
+.marrytitle {
+	position:absolute;
+	top:45%;
+	left:0;
+	width:100%;
+	height:4rem;
+}
 /**********************************银行流水**********************************/
 .bankhold {
 	padding:.2rem;
@@ -560,13 +577,12 @@ footer {
 	text-align:center;
 }
 .savebutton {
-	width: 98%;
+	width: 100%;
 	height:.81rem;
 	line-height: .81rem;
 	color: #FFF;
 	background-color: rgb(22,155,213);
 	text-align: center;
-	border-radius: 6px;
 	font-size: .3rem;
 }
 
