@@ -193,8 +193,7 @@
 					async:true,
 					success:function(data){
 						layer.closeAll("loading");
-						alert(data.flag);
-						if(200 == data.status || data.flag == 1){
+						if(200 == data.status || data.flag == "1"){
 							$("#redirect").val("1");
 							window.location.href='https://detail.youzan.com/show/goods?alias=2fu4k1rbjazh2&v2/goods/2fu4k1rbjazh2'
 						}else{
