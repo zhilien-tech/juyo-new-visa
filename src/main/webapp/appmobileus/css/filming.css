@@ -399,7 +399,7 @@ footer {
 .camera {
 	position: absolute;
 	top: 45%;
-	left: 45%;
+	left: 42%;
 }
 .plus {
 	position: absolute;
@@ -445,9 +445,8 @@ footer {
 /**********************************房产证**********************************/
 .notes {
 	font-size: .3rem;
-	color: red;
+	color: #FFF;
 	padding: .2rem .2rem 0 .4rem;
-	opacity:0;
 }
 .addhouseCard {
 	padding-top: .3rem;
