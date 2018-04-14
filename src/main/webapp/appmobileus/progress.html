@@ -9,9 +9,14 @@
 		<script type="text/javascript" src="js/rem(750).js" ></script>
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script>
-      //获取URL地址参数
-     
+     	//获取URL地址参数
+	    function GetQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null)return  unescape(r[2]); return null;
+	    }
         	$(function(){
+        		var code = GetQueryString("code");        		
         		$.ajax({
         			type : "POST",//提交类型  
         			//dataType : "json",//返回结果格式  
