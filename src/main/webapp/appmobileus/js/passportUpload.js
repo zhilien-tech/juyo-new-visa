@@ -9,9 +9,24 @@ function GetQueryString(name){
 	if(r!=null)return  unescape(r[2]); return null;
 }
 
-//返回上一级
+//返回上一级，开始护照扫描
 function returnPage(){
 	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
+	$.ajax({
+		type : "post",
+		url : "/admin/orderUS/passportRecognition",
+		dataType : "json",
+		async : false,
+		data:{
+			staffid:staffid
+		},
+		success : function(data) {
+
+		},
+		error: function(xhr, status, error) {
+
+		}
+	});
 }
 
 
@@ -143,7 +158,7 @@ function uploadToQiniu(staffid,serverIds){
 
 	$.ajax({
 		type : "post",
-		url : "/admin/orderUS/wechatJsSDKUploadToQiniu",
+		url : "/admin/weixinToken/wechatJsSDKUploadToQiniu",
 		dataType : "json",
 		async : false,
 		data:{
@@ -160,4 +175,9 @@ function uploadToQiniu(staffid,serverIds){
 		}
 	});
 }
+
+//返回上一级
+$(".savebutton").click(function(){
+	returnPage();
+});
 
