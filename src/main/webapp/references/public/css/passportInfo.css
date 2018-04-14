@@ -127,3 +127,14 @@ input[type="file"] {
 .mainWidth, #uploadFile {
 	width: 100% !important;
 }
+.dislogHide {
+	width: 91%;
+	height: 100%;
+	position: fixed;
+	top: 50px;
+	left: 40px;
+	background: #FFF;
+	opacity: 0;
+	z-index: 100000000;
+	display:none;
+}

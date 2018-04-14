@@ -290,3 +290,15 @@ img[src=""] {
 	height:30px;
 	margin-top:5px;
 }
+/* 隐藏 */
+.dislogHide {
+	width: 91%;
+	height: 100%;
+	position: fixed;
+	top: 50px;
+	left: 40px;
+	background: #FFF;
+	opacity: 0;
+	z-index: 100000000;
+	display:none;
+}

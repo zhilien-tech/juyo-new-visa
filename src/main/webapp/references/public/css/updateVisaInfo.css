@@ -382,3 +382,14 @@ label {
 	-webkit-transform: translate(0, -50%) rotate(-135deg);
 	transform: translate(0, -50%) rotate(-135deg);
 }
+.dislogHide {
+	width: 92%;
+	height: 100%;
+	position: fixed;
+	top: 60px;
+	left: 35px;
+	background: #fff;
+	opacity: 0;
+	z-index: 100000000;
+	display: none;
+}
