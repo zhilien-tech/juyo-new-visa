@@ -1098,8 +1098,8 @@ function saveApplicant(status){
 		applicantInfo.id = staffId;
 
 		if(status == 2){
-			//左箭头跳转
-			window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='+passportId;
+			//左箭头跳转 添加不可编辑
+			window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='+passportId+'&isDisable='+isDisable;
 			$.ajax({
 				type: 'POST',
 				data : applicantInfo,
@@ -1109,7 +1109,7 @@ function saveApplicant(status){
 			});
 		}else if(status == 3){
 			//右箭头跳转
-			window.location.href = '/admin/bigCustomer/updateVisaInfo.html?staffId='+staffId;
+			window.location.href = '/admin/bigCustomer/updateVisaInfo.html?staffId='+staffId+'&isDisable='+isDisable;
 			$.ajax({
 				type: 'POST',
 				data : applicantInfo,

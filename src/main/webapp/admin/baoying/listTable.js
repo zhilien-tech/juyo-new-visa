@@ -88,7 +88,7 @@ function initDatatable() {
 					var passport = '<a style="cursor:pointer;" class="passport" onclick="passport('+row.passportid+');"></a>';
 					var visa = '<a class="visa" onclick="visa('+row.staffid+');"></a>';
 					var otherVisa = '<a class="otherVisa" onclick="updatePhoto('+row.staffid+');"></a>';
-					return updateApplicant+passport+visa+otherVisa;
+					return otherVisa+passport+updateApplicant+visa;
 				}	
 			} 
 			],
