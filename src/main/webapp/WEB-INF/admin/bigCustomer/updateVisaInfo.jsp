@@ -628,8 +628,7 @@
 					</select>
 				</div>
 				
-				
-				<!--选择其他-->
+				<!--配偶的联系地址select选择其他-->
 				<div class="otherSpouseInfo elementHide paddingTop" >
 					<div class="floatLeft groupInputInfo">
 						<label>街道地址(首选)</label>
@@ -702,13 +701,13 @@
 					<div class="paddingRight groupcheckBoxInfo">
 						<label>州/省</label>
 						<input name="province" v-model="visaInfo.workEducationInfo.province" type="text"/>
-						<input name="isprovinceapply" id="isprovinceapply" v-on:click="isprovinceapply" v-model="visaInfo.workEducationInfo.isprovinceapply" type="checkbox"/>
+						<input name="isprovinceapply" id="isprovinceapplywork" v-model="visaInfo.workEducationInfo.isprovinceapply" type="checkbox"/>
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>邮政编码</label>
 						<input name="zipcode" v-model="visaInfo.workEducationInfo.zipcode" type="text" />
-						<input name="iszipcodeapply" v-model="visaInfo.workEducationInfo.iszipcodeapply" type="checkbox" />
+						<input name="iszipcodeapply" id="iszipcodeapplywork" v-model="visaInfo.workEducationInfo.iszipcodeapply" type="checkbox" />
 					</div>
 					<div class="paddingRight groupInputInfo">
 						<label>电话号吗</label>
@@ -733,7 +732,7 @@
 					<div class="paddingLeft groupcheckBoxInfo" >
 						<label>当地月收入(如果雇佣)</label>
 						<input name="salary" v-model="visaInfo.workEducationInfo.salary" type="text" />
-						<input name="issalaryapply" v-model="visaInfo.workEducationInfo.issalaryapply" type="checkbox" />
+						<input name="issalaryapply" id="issalaryapplywork" v-model="visaInfo.workEducationInfo.issalaryapply" type="checkbox" />
 					</div>
 					<div class="clear"></div>
 					<div class="grouptextareaInfo groupPM">
@@ -777,7 +776,7 @@
 										</div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo" >
 											<label>市</label>
-											<input name="employercity" value="${beforeWork.employercity }" type="text" />
+											<input name="employercity" id="employercitybefore" value="${beforeWork.employercity }" type="text" />
 											<!-- <input type="checkbox" /> -->
 										</div>
 										<div class="paddingRight leftNo groupInputInfo">
@@ -825,20 +824,20 @@
 											<label>主管的姓</label>
 											<input name="supervisorfirstname" value="${beforeWork.supervisorfirstname }" type="text" />
 											<c:if test="${beforeWork.isknowsupervisorfirstname == 1}">
-												<input name="isknowsupervisorfirstname" value="${beforeWork.isknowsupervisorfirstname }" checked="checked" type="checkbox"/>
+												<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" value="${beforeWork.isknowsupervisorfirstname }" checked="checked" type="checkbox"/>
 											</c:if>
 											<c:if test="${beforeWork.isknowsupervisorlastname != 1}">
-												<input name="isknowsupervisorfirstname" value="${beforeWork.isknowsupervisorfirstname }" type="checkbox" />
+												<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" value="${beforeWork.isknowsupervisorfirstname }" type="checkbox" />
 											</c:if>
 										</div>
 										<div class="paddingRight groupcheckBoxInfo">
 											<label>主管的名</label>
 											<input name="supervisorlastname" value="${beforeWork.supervisorlastname }" type="text" />
 											<c:if test="${beforeWork.isknowsupervisorlastname == 1}">
-												<input name="isknowsupervisorlastname" value="${beforeWork.isknowsupervisorlastname }" checked="checked" type="checkbox"/>
+												<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" value="${beforeWork.isknowsupervisorlastname }" checked="checked" type="checkbox"/>
 											</c:if>
 											<c:if test="${beforeWork.isknowsupervisorlastname != 1}">
-												<input name="isknowsupervisorlastname" value="${beforeWork.isknowsupervisorlastname }" type="checkbox" />
+												<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" value="${beforeWork.isknowsupervisorlastname }" type="checkbox" />
 											</c:if>
 										</div>
 										<div class="clear"></div>
@@ -875,7 +874,7 @@
 									<div class="paddingLeft leftNo groupcheckBoxInfo" >
 										<label>市</label>
 										<input name="employercity" type="text" />
-										<input type="checkbox" />
+										<input type="checkbox" id="employercitybefore" />
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>州/省</label>
@@ -885,7 +884,7 @@
 									<div class="paddingLeft leftNo groupcheckBoxInfo">
 										<label>邮政编码</label>
 										<input name="employerzipcode" type="text" />
-										<input name="isemployerzipcodeapply" type="checkbox" />
+										<input name="isemployerzipcodeapply" id="isKonwOrtherZipCode" type="checkbox" />
 									</div>
 									<div class="paddingRight leftNo groupSelectInfo">
 										<label>国家/地区</label>
@@ -909,12 +908,12 @@
 									<div class="paddingLeft leftNo groupcheckBoxInfo">
 										<label>主管的姓</label>
 										<input name="supervisorfirstname" type="text" />
-										<input name="isknowsupervisorfirstname" type="checkbox" />
+										<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" type="checkbox" />
 									</div>
 									<div class="paddingRight leftNo groupcheckBoxInfo">
 										<label>主管的名</label>
 										<input name="supervisorlastname" type="text" />
-										<input name="isknowsupervisorlastname" type="checkbox" />
+										<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" type="checkbox" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupInputInfo" >
@@ -969,7 +968,7 @@
 										<div class="paddingLeft leftNo groupcheckBoxInfo" >
 											<label >市</label>
 											<input name="institutioncity" value="${education.institutioncity }" type="text" />
-											<input type="checkbox" />
+											<input type="checkbox" id="institutioncityedu" />
 										</div>
 										<div class="paddingRight leftNo groupInputInfo">
 											<label>州/省</label>
@@ -979,7 +978,7 @@
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>邮政编码</label>
 											<input name="institutionzipcode" value="${education.institutionzipcode }" type="text" />
-											<input name="isinstitutionzipcodeapply" value="${education.isinstitutionzipcodeapply }" type="checkbox" />
+											<input name="isinstitutionzipcodeapply" id="codeEdu" value="${education.isinstitutionzipcodeapply }" type="checkbox" />
 										</div>
 										<div class="paddingRight leftNo groupSelectInfo" >
 											<label>国家/地区</label>
@@ -1671,8 +1670,15 @@
 	<script type="text/javascript">
 	
 		$(function(){
+			var isDisable = '${obj.isDisable}';
+			//页面不可编辑
+			if(isDisable == 1){
+				$(".section").attr('readonly', true);
+			}
+			
 			openYesOrNoPage();
 		});
+	
 		//跳转到基本信息页
 		function baseInfoBtn(){
 			//左箭头跳转

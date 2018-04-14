@@ -607,6 +607,12 @@
 		}
 	
 		$(function(){
+			var isDisable = '${obj.isDisable}';
+			//页面不可编辑
+			if(isDisable == 1){
+				$(".modal-body").attr('disabled', true);
+			}
+			
 			var nation = '${obj.applicant.hasothernationality}';
 			var nationen = '${obj.applicant.hasothernationalityen}';
 			var otherName = '${obj.applicant.hasothername}';

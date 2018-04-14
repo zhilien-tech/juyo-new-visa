@@ -16,7 +16,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+id
+				content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+id+'&isDisable'
 			});
 		},
 		//修改申请人拍摄资料信息
@@ -30,7 +30,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content:'/admin/pcVisa/updatePhoto.html?staffid='+id
+				content:'/admin/pcVisa/updatePhoto.html?staffid='+id+'&isDisable'
 			});
 			this.$emit('updatePhoto');
 		},
@@ -45,7 +45,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id
+				content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id+'&isDisable'
 			});
 		},
 		//护照信息
@@ -59,7 +59,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
+				content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id+'&isDisable'
 			});
 		}
 		

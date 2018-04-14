@@ -134,9 +134,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param session
 	 * @return 
 	 */
-	public Object updateVisaInfo(Integer staffId, HttpSession session) {
+	public Object updateVisaInfo(Integer staffId, Integer isDisable, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
-
+		result.put("isDisable", isDisable);//页面是否可编辑
 		//旅伴信息---与你的关系
 		result.put("TravelCompanionRelationshipEnum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
 		//以前的美国旅游信息---州枚举
@@ -492,7 +492,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param staffId
 	 * @return 
 	 */
-	public Object getStaffInfo(Integer staffId, HttpSession session) {
+	public Object getStaffInfo(Integer staffId, Integer isDisable, HttpSession session) {
 
 		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
 
@@ -501,6 +501,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
 
+		result.put("isDisable", isDisable);//页面是否可编辑
 		result.put("marryStatus", staffInfo.getMarrystatus());
 		result.put("marryStatusEn", staffInfo.getMarrystatusen());
 		result.put("marryStatusEnum", EnumUtil.enum2(USMarryStatusEnum.class));
@@ -955,14 +956,14 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param session
 	 * @return 
 	 */
-	public Object getPassportInfo(Integer passportId, HttpSession session) {
+	public Object getPassportInfo(Integer passportId, Integer isDisable, HttpSession session) {
 
 		Map<String, Object> result = MapUtil.map();
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
-
+		result.put("isDisable", isDisable);//页面是否可编辑
 		String passportSqlstr = sqlManager.get("bigCustomer_staff_passport");
 		Sql passportSql = Sqls.create(passportSqlstr);
 		Cnd cnd = Cnd.NEW();

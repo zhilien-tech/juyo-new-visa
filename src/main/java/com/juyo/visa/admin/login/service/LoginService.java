@@ -133,6 +133,7 @@ public class LoginService extends BaseService<TUserEntity> {
 					|| UserLoginEnum.DJ_COMPANY_ADMIN.intKey() == userType
 					|| UserLoginEnum.JJ_COMPANY_ADMIN.intKey() == userType
 					|| UserLoginEnum.BIG_COMPANY_ADMIN.intKey() == userType
+					|| UserLoginEnum.BAOYING_US.intKey() == userType
 					|| UserLoginEnum.BIG_COMPANY_CUSTOMER.intKey() == userType) {
 				//公司管理员
 				allUserFunction = companyViewService.getCompanyFunctions(company.getId());
@@ -168,7 +169,11 @@ public class LoginService extends BaseService<TUserEntity> {
 			else if (UserLoginEnum.BIG_TOURIST_IDENTITY.intKey() == userType) {
 				//大客户游客跳转的页面
 				form.setMainurl("/admin/pcVisa/visaList.html");
-			} else {
+			}
+			else if (UserLoginEnum.BAOYING_US.intKey() == userType) {
+				//大客户游客跳转的页面
+				form.setMainurl("/admin/baoying/listUS.html");
+			}else {
 				//功能列表为空
 				if (Util.isEmpty(allUserFunction)) {
 					form.setErrMsg("未设置权限");

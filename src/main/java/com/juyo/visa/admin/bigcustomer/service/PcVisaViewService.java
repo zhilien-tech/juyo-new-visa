@@ -500,9 +500,11 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	/*
 	 * 拍照资料获取
 	 */
-	public Object updatePhoto(Integer staffid, int flag, HttpServletRequest request, HttpSession session) {
+	public Object updatePhoto(Integer staffid, int flag, Integer isDisable, HttpServletRequest request, HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 
+		result.put("isDisable", isDisable);//页面是否可编辑
+		
 		//获取sessionid
 		String sessionid = session.getId();
 		TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,

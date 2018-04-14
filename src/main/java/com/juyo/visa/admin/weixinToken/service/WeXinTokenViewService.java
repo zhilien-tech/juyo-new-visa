@@ -27,6 +27,7 @@ import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
 import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
@@ -157,7 +158,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 				String accessToken = (String) getAccessToken();
 				String extName = getExtName(accessToken, mediaId);//获取扩展名
 				InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
-				String url = "http://oyu1xyxxk.bkt.clouddn.com/"
+				String url = CommonConstants.IMAGES_SERVER_ADDR
 						+ qiniuUploadService.uploadImage(inputStream, extName, mediaId);
 
 				TAppStaffCredentialsEntity credentialEntity = new TAppStaffCredentialsEntity();
