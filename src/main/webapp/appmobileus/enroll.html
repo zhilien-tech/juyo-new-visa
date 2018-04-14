@@ -57,8 +57,13 @@
 		
 		$(function(){
 			var code = GetQueryString("code");
-			var openid = "";
-			$.ajax({
+			
+			var openid = GetQueryString("openid");
+			checkUserInfo();
+/*
+ * 
+ 
+$.ajax({
     			type : "POST",//提交类型  
     			async:false,
     			//dataType : "json",//返回结果格式  ss
@@ -72,7 +77,7 @@
     					openid = obj.data;
     					alert('OK----');
     					//验证用户是否已经注册
-    					checkUserInfo();
+    					
     			 		
     				}else{
     					alert('获取用户信息失败');
@@ -80,6 +85,7 @@
     			}
     				//关闭加载层
     		})
+    		*/
 			/* 手机号只能输入数字 */
 			$(document).on("input",".telphone",function(){
 				$(this).val($(this).val().replace(/[^\d]/g,''));
