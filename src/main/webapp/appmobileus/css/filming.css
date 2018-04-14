@@ -428,6 +428,7 @@ footer {
 	font-size: .3rem;
 	color: red;
 	padding: .2rem .2rem 0 .4rem;
+	opacity:0;
 }
 .addhouseCard {
 	padding-top: .3rem;

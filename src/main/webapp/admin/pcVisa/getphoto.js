@@ -202,7 +202,7 @@ function chuqian(staffid, type) {
 		}
 	});
 };
-//驾驶证回显
+//行驶证回显
 function drive(staffid, type) {
 	$.ajax({
 		url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
@@ -217,8 +217,14 @@ function drive(staffid, type) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=0){
 				var url=data[0].url;
-				$("#drive2").attr('src',url);
-				//$("#drive").attr('src',data[1].url);
+				if(data.length == 1){
+					$("#drive").attr('src',url);
+				}
+				if(data.length == 2){
+					$("#drive").attr('src',data[1].url);
+					$("#drive2").attr('src',url);
+				}
+				
 			}
 		}
 	});
@@ -240,7 +246,7 @@ function housecard(staffid, type) {
 				for(var i = 0;i<data.query.length;i++){
 				$(".housecard").after('<div class="uploadReleases housecard'+i+'" >'+
 					'<div>上传</div>'+
-					'<img src="'+data[i].query.url+'" class="longitudinal"/>'+
+					'<img src="'+data.query[i].url+'" class="longitudinal"/>'+
 				'</div>');
 				}
 				$(".1").remove();

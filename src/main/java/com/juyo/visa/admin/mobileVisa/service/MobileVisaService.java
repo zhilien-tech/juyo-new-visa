@@ -436,13 +436,17 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		if (!Util.isEmpty(query)) {
 			if (type != 4) {
 				Collections.reverse(query);
-				return query;
+				if (Util.eq(type, TAppStaffCredentialsEnum.HOME.intKey())) {
+					TAppStaffCredentialsExplainEntity expain = dbDao.fetch(TAppStaffCredentialsExplainEntity.class,
+							Cnd.where("staffid", "=", staffid));
+					result.put("explain", expain);
+					result.put("query", query);
+					return result;
+				} else {
+					return query;
+				}
 			} else {
-				TAppStaffCredentialsExplainEntity expain = dbDao.fetch(TAppStaffCredentialsExplainEntity.class,
-						Cnd.where("staffid", "=", staffid));
-				result.put("explain", expain);
-				result.put("query", query);
-				return result;
+				return query;
 			}
 		} else {
 			return 0;
