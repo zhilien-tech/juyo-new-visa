@@ -1654,7 +1654,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				+ type);
 		String url = passport.getUrl();
 		passportRecognitionBack(url, staffId, request, response);
+		System.out.println("url=" + url);
+		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
+				+ type);
 		return null;
 	}
-
 }
