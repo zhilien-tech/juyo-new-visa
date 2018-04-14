@@ -6,12 +6,16 @@
 
 package com.juyo.visa.admin.weixinToken.service;
 
+import java.util.Map;
+
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 
 import com.alibaba.druid.support.logging.Log;
 import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
+import com.juyo.visa.admin.bigcustomer.service.AppEventsViewService;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.entities.TAppStaffWxinfoEntity;
@@ -32,6 +36,8 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 	@Inject
 	private RedisDao redisDao;
 
+	@Inject
+	private AppEventsViewService appEventsViewService;
 	public static Log logger = LogFactory.getLog(WeiXinTokenModule.class);
 
 	private String WX_APPID = "wxd77f341f1b849e68";
@@ -54,6 +60,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 
 	//根据accessToken获取用户个人信息
 	public Object SaveUser(String code) {
+		Map<String, Object> result = Maps.newHashMap();
 		JSONObject jo = new JSONObject();
 		if (!Util.isEmpty(code)) {
 			System.out.println("code=" + code);
@@ -66,11 +73,21 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 			System.out.println("openid=" + openid);
 			//新增or更新微信授权用户信息
 			SaveOrUpdateUserInfo(accessToken, openid);
-			//将openid返回给前台
-			jo.put("flag", 1);
-			jo.put("data", openid);
+			//调用验证用户是否已注册
+			Map<String, Object> userInfo = (Map<String, Object>) appEventsViewService.checkUserLogin(openid);
+			//用户已注册
+			result.put("flag", "1");
+			//姓
+			result.put("firstname", userInfo.get("firstname"));
+			//名
+			result.put("lastname", userInfo.get("lastname"));
+			//电话
+			result.put("telephone", userInfo.get("telephone"));
+			//邮箱
+			result.put("email", userInfo.get("email"));
 		}
-		return jo;
+
+		return result;
 	}
 
 	//根据 token openid  获取用户个人信息 并保存

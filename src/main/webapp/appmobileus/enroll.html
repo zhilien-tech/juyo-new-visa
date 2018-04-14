@@ -58,12 +58,7 @@
 		$(function(){
 			var code = GetQueryString("code");
 			
-			var openid = GetQueryString("openid");
-			checkUserInfo();
-/*
- * 
- 
-$.ajax({
+			$.ajax({
     			type : "POST",//提交类型  
     			async:false,
     			//dataType : "json",//返回结果格式  ss
@@ -71,21 +66,28 @@ $.ajax({
     			data:{code:code},
     			//请求数据  
     			success : function(obj) {
-    				alert(obj);
  				//请求成功后的函数 
     				if(obj.flag == 1){
-    					openid = obj.data;
-    					alert('OK----');
     					//验证用户是否已经注册
-    					
+    					$(".surName").val(obj.firstname);
+    					$(".surName").attr('readOnly',"true");
+    					$(".name").val(obj.lastname);
+    					$(".name").attr('readOnly',"true");
+    					$(".telphone").val(obj.telephone);
+    					$(".telphone").attr('readOnly',"true");
+    					$(".email").val(objss.email);
+    					$(".email").attr('readOnly',"true");
+    					$(".btnPayment").text("已报名");
+    					$(".payForCase a").addClass("btnPaymentHide");
+    					$(".payForCase a").removeClass("btnPayment");
     			 		
     				}else{
-    					alert('获取用户信息失败');
+    					alert('用户未注册');
     				}
     			}
     				//关闭加载层
     		})
-    		*/
+    		alert("openid-----"+openid);
 			/* 手机号只能输入数字 */
 			$(document).on("input",".telphone",function(){
 				$(this).val($(this).val().replace(/[^\d]/g,''));
@@ -204,32 +206,7 @@ $.ajax({
 			});
 		})
 		function checkUserInfo(){
-			$.ajax({
-    			type : "POST",//提交类型  
-    			//dataType : "json",//返回结果格式  
-    	 		url : '/admin/appEvent/checkUserLogin.html',//请求地址  
-    			data:{openid:openid},
-    			//请求数据  
-    			success : function(data) {
-    				alert("ajaxTow");
-    				alert("------------------------"+data);
- 				//请求成功后的函数 
-    				if(data.flag == 1){
-    					$(".surName").val(data.firstname);
-    					$(".surName").attr('readOnly',"true");
-    					$(".name").val(data.lastname);
-    					$(".name").attr('readOnly',"true");
-    					$(".telphone").val(data.telephone);
-    					$(".telphone").attr('readOnly',"true");
-    					$(".email").val(data.email);
-    					$(".email").attr('readOnly',"true");
-    					$(".btnPayment").text("已报名");
-    					$(".payForCase a").addClass("btnPaymentHide");
-    					$(".payForCase a").removeClass("btnPayment");
-    				}
-    			}
-    				//关闭加载层
-    		})
+
 		}
 	</script>
 </html>
