@@ -32,7 +32,7 @@ import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
-import com.juyo.visa.common.enums.USMarryStatusEnum;
+import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.AppPictures.AppPicturesTypeEnum;
 import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.util.ImageDeal;
@@ -373,7 +373,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		if (!Util.isEmpty(credentialEntity)) {
 			if (Util.eq(type, TAppStaffCredentialsEnum.MARRAY.intKey())) {
 				Integer status = credentialEntity.getStatus();
-				for (USMarryStatusEnum enu : USMarryStatusEnum.values()) {
+				for (MarryStatusEnum enu : MarryStatusEnum.values()) {
 					if (enu.intKey() == type) {
 						typeStr = enu.value();
 					}
