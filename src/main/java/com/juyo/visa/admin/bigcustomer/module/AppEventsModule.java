@@ -91,6 +91,7 @@ public class AppEventsModule {
 	@At
 	@POST
 	public Object checkUserLogin(@Param("openid") String openid) {
+		System.out.println("module =====" + openid);
 		return appEventsViewService.checkUserLogin(openid);
 
 	}

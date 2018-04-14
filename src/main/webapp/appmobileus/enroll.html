@@ -56,6 +56,30 @@
 	    }
 		
 		$(function(){
+			var code = GetQueryString("code");
+			var openid = "";
+			$.ajax({
+    			type : "POST",//提交类型  
+    			async:false,
+    			//dataType : "json",//返回结果格式  ss
+    	 		url : '/admin/weixinOpenId/saveWxinfo.html',//请求地址  
+    			data:{code:code},
+    			//请求数据  
+    			success : function(obj) {
+    				alert(obj);
+ 				//请求成功后的函数 
+    				if(obj.flag == 1){
+    					openid = obj.data;
+    					alert('OK----');
+    					//验证用户是否已经注册
+    					checkUserInfo();
+    			 		
+    				}else{
+    					alert('获取用户信息失败');
+    				}
+    			}
+    				//关闭加载层
+    		})
 			/* 手机号只能输入数字 */
 			$(document).on("input",".telphone",function(){
 				$(this).val($(this).val().replace(/[^\d]/g,''));
@@ -72,14 +96,13 @@
 			$(".email").focus(function(){
 				$(".email").css('border-bottom-color','#000');
 			});
-			
+		
 			$(".btnPayment").click(function(){
 				var surName = $(".surName").val();
 				var name = $(".name").val();
 				var telphone = $(".telphone").val();
 				var email = $(".email").val();
-				var eventId = GetQueryString("eventId");
-				var weChatToken = GetQueryString("weChatToken");
+				var eventId = "1";
 				var pattern = /^[1][3,4,5,7,8][0-9]{9}$/;
 				var patternEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
 				if(surName == null || surName == ""){
@@ -149,7 +172,7 @@
 					url:"/admin/appEvents/signUpEventByPublicNum",
 					data:{
 						eventId:eventId,
-						weChatToken:weChatToken,
+						weChatToken:openid,
 						firstname:surName,
 						lastname:name,
 						telephone:telphone,
@@ -174,6 +197,33 @@
 				}
 			});
 		})
-		
+		function checkUserInfo(){
+			$.ajax({
+    			type : "POST",//提交类型  
+    			//dataType : "json",//返回结果格式  
+    	 		url : '/admin/appEvent/checkUserLogin.html',//请求地址  
+    			data:{openid:openid},
+    			//请求数据  
+    			success : function(data) {
+    				alert("ajaxTow");
+    				alert("------------------------"+data);
+ 				//请求成功后的函数 
+    				if(data.flag == 1){
+    					$(".surName").val(data.firstname);
+    					$(".surName").attr('readOnly',"true");
+    					$(".name").val(data.lastname);
+    					$(".name").attr('readOnly',"true");
+    					$(".telphone").val(data.telephone);
+    					$(".telphone").attr('readOnly',"true");
+    					$(".email").val(data.email);
+    					$(".email").attr('readOnly',"true");
+    					$(".btnPayment").text("已报名");
+    					$(".payForCase a").addClass("btnPaymentHide");
+    					$(".payForCase a").removeClass("btnPayment");
+    				}
+    			}
+    				//关闭加载层
+    		})
+		}
 	</script>
 </html>

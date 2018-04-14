@@ -14,32 +14,15 @@
              if(r!=null)return  unescape(r[2]); return null;
         }
         	$(function(){
-        		var code = GetQueryString("code");
         		$("#bgImgPic").height($(window).height());
         		$("#bgImgPic").width($(window).width());
         		
-        		$.ajax({
-        			type : "POST",//提交类型  
-        			//dataType : "json",//返回结果格式  
-        	 		url : '/admin/weixinOpenId/saveWxinfo.html',//请求地址  
-        			data:{code:code},
-        			//请求数据  
-        			success : function(obj) {
-        				//请求成功后的函数 
-        				if(obj.flag == 1){
-        					var openid = obj.data
-        					
-        					
-        				}
-        			}
-        			
-        				//关闭加载层
-        		})
-        	
+        		
+       		$(".iconBM").click(function(){
+        		//window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd77f341f1b849e68&redirect_uri=http%3A%2F%2Fwww.f-visa.com%2Fappmobileus%2Fenroll.html&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+       			window.location.href = "https://localhost:8080/appmobileus/enroll.html?openid=oossH0oeOwzz94k6TX2yrHhpRaDo"
+       		});
         	});
-        	$(".iconBM").click(function(){
-        		window.location.href = "http://114.215.195.220:8080/appmobileus/enroll.html?weChatToken="+openid+"&eventId=1"
-        	})
         	
         </script>
     </head>
