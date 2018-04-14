@@ -73,7 +73,7 @@ $('.chooseImage').on('click', function() {
 			var localIds = res.localIds;
 			if(localIds != ""){
 				for(var i = 0;i<localIds .length;i++){
-					var imgDivStr = '<div class="householdPage wxChooseImages multiselect"><img src="'+localIds[i]+'" class="pageImg" /></div>';
+					var imgDivStr = '<div class="bankPage wxChooseImages multiselect"><img src="'+localIds[i]+'" class="pageImg" /></div>';
 					$(".chooseImage").before(imgDivStr);
 				}
 			}
