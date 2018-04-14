@@ -21,39 +21,39 @@
 		<ul>
 			<li class="title">签约所需资料</li>
 			<li><a class="linkStyle" onclick="twoinchphoto()">
-					<div class="circleRed replaceCircle13">
+					<div class="circleRed replaceCircle13 photostatus">
 						<i class="icon-error iconGroup13"></i>
 					</div> <span>照片</span> <i class="more"></i> <span id="13"
 					class="info photo"></span>
 			</a></li>
 			<li><a class="linkStyle" onclick="passport()">
-					<div class="circleRed replaceCircle1">
+					<div class="circleRed replaceCircle1 visafirststats">
 						<i class="icon-error iconGroup1"></i>
 					</div> <span>护照首页</span> <i class="more"></i> <span id="1" class="info">待上传</span>
 			</a></li>
 			<li><a class="linkStyle" onclick="oldpassport()">
 					<div class="circleRed replaceCircle2">
 						<i class="icon-error iconGroup2"></i>
-					</div> <span>旧护照</span> <i class="more"></i> <span id="2" class="info">待上传</span>
+					</div> <span>旧护照</span> <span class="Nomust">非必填</span> <i class="more"></i> <span id="2" class="info">待上传</span>
 			</a></li>
 			<li><a class="linkStyle" onclick="uscard()">
-					<div class="circleRed replaceCircle3">
+					<div class="circleRed replaceCircle3 IDstatus">
 						<i class="icon-error iconGroup3"></i>
 					</div> <span>身份证</span> <i class="more"></i> <span id="3" class="info">待上传</span>
 			</a></li>
 			<li class="title">面试所需资料</li>
 			<li><a class="linkStyle" onclick="ushousehold()">
-					<div class="circleRed replaceCircle4">
+					<div class="circleRed replaceCircle4 holdstatus">
 						<i class="icon-error iconGroup4"></i>
 					</div> <span>户口本</span> <i class="more"></i> <span id="4" class="info">待上传</span>
 			</a></li>
 			<li><a class="linkStyle" onclick="ushousecard()">
-					<div class="circleRed replaceCircle5">
+					<div class="circleRed replaceCircle5 cardstatus">
 						<i class="icon-error iconGroup5"></i>
 					</div> <span>房产证</span> <i class="more"></i> <span id="5" class="info">待上传</span>
 			</a></li>
 			<li class="selectArea">
-				<div class="circleRed replaceCircle6">
+				<div class="circleRed replaceCircle6 marrystatus">
 					<i class="icon-error iconGroup6" ></i>
 				</div> <span>婚姻状况</span> <i class="more"></i> <span id="6"
 				class="info marriageInfo"></span> <select class="selector" dir="rtl">
@@ -65,42 +65,44 @@
 			</select>
 			</li>
 			<li><a class="linkStyle" onclick="usbankflow()">
-					<div class="circleRed replaceCircle7">
+					<div class="circleRed replaceCircle7 bankstatus">
 						<i class="icon-error iconGroup7"></i>
 					</div> <span>银行流水</span> <i class="more"></i> <span id="7" class="info">待上传</span>
 			</a></li>
 			<li><a class="linkStyle" onclick="usjobcertificate()">
-					<div class="circleRed replaceCircle8">
+					<div class="circleRed replaceCircle8 jobstatus">
 						<i class="icon-error iconGroup8"></i>
 					</div> <span>在职证明</span> <i class="more"></i> <span id="8" class="info">待上传</span>
 			</a></li>
 			<li><a class="linkStyle" onclick="usbiness()">
-					<div class="circleRed replaceCircle9">
+					<div class="circleRed replaceCircle9 businesstatus">
 						<i class="icon-error iconGroup9"></i>
 					</div> <span>营业执照或机构代码证</span> <i class="more"></i> <span id="9"
 					class="info">待上传</span>
 			</a></li>
 			<li><a class="linkStyle" onclick="usdriving()">
-					<div class="circleRed replaceCircle10">
+					<div class="circleRed replaceCircle10 driverstatus">
 						<i class="icon-error iconGroup10"></i>
 					</div> <span>行驶证</span> <i class="more"></i> <span id="10" class="info">待上传</span>
 			</a></li>
 			<li><a class="linkStyle" onclick="usoldsigned()">
-					<div class="circleRed replaceCircle11">
+					<div class="circleRed replaceCircle11 ">
 						<i class="icon-error iconGroup11"></i>
-					</div> <span>过期美签上传</span> <i class="more"></i> <span id="11"
+					</div> <span>过期美签上传</span> <span class="signNomust">非必填</span> <i class="more"></i> <span id="11"
 					class="info">待上传</span>
 			</a></li>
 			<li><a class="linkStyle" onclick="ussigning()">
 					<div class="circleRed replaceCircle12">
 						<i class="icon-error iconGroup12"></i>
-					</div> <span>美国出签上传</span> <i class="more"></i> <span id="12"
+					</div> <span>美国出签上传</span><span class="signingNomust">非必填</span> <i class="more"></i> <span id="12"
 					class="info">待上传</span>
 			</a></li>
 		</ul>
+	<!-- 弹出层 -->
+	<div class="dialogTwoMin"></div>
 	</section>
 	<footer>
-		<a class="next">完成</a>
+		<a class="next" onclick="done()">完成</a>
 	</footer>
 </body>
 <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
@@ -126,16 +128,16 @@
 		determineUpload1(staffid);
 		//婚姻状况
 		$('.selector').change(function() {
-				var staffid = GetQueryString("staffid");
-				var name = $(".selector").find("option:selected").text();
-				var selectvalue = $(".selector").find("option:selected").val();
-				$(".marriageInfo").text(name);
+			var staffid = GetQueryString("staffid");
+			var name = $(".selector").find("option:selected").text();
+			var selectvalue = $(".selector").find("option:selected").val();
+			$(".marriageInfo").text(name);
 							
-				if (selectvalue == 4 || selectvalue == 2 || selectvalue == 3) {
-					window.location.href = '/appmobileus/USMarital.html?staffid=' + staffid + '&marryurltype=' + selectvalue+'&sessionid='+sessionid+'&flag='+flag;
-				}
+			if (selectvalue == 4 || selectvalue == 2 || selectvalue == 3) {
+				window.location.href = '/appmobileus/USMarital.html?staffid=' + staffid + '&marryurltype=' + selectvalue+'&sessionid='+sessionid+'&flag='+flag;
+			}
 
-			});
+		});
 	});
 	//跳转2寸图片
 	function twoinchphoto() {
@@ -565,6 +567,103 @@
 		if (r != null)
 			return unescape(r[2]);
 		return null;
+	}
+	
+	function done(){
+		var photo = $(".photostatus").hasClass("circleGreen");
+		var visafirst = $(".visafirststatus").hasClass("circleGreen");
+		var IDstatus = $(".IDstatus").hasClass("circleGreen");
+		var holdstatus = $(".holdstatus").hasClass("circleGreen");
+		var cardstatus = $(".cardstatus").hasClass("circleGreen");
+		var marrystatus = $(".marrystatus").hasClass("circleGreen");
+		var bankstatus = $(".bankstatus").hasClass("circleGreen");
+		var jobstatus = $(".jobstatus").hasClass("circleGreen");
+		var businesstatus = $(".businesstatus").hasClass("circleGreen");
+		var driverstatus = $(".driverstatus").hasClass("circleGreen");
+		
+		if(!photo){
+			$(".dialogTwoMin").html();
+			$(".dialogTwoMin").show();
+			$(".dialogTwoMin").html("请上传照片");
+			setTimeout(function(){
+				$(".dialogTwoMin").hide();
+			},2000);
+			return false;
+		}
+		if(!IDstatus){
+			$(".dialogTwoMin").html();
+			$(".dialogTwoMin").show();
+			$(".dialogTwoMin").html("请上传护照");
+			setTimeout(function(){
+				$(".dialogTwoMin").hide();
+			},2000);
+			return false;
+		}
+		if(!holdstatus){
+			$(".dialogTwoMin").html();
+			$(".dialogTwoMin").show();
+			$(".dialogTwoMin").html("请上传身份证");
+			setTimeout(function(){
+				$(".dialogTwoMin").hide();
+			},2000);
+			return false;
+		}
+		if(!IDstatus){
+			$(".dialogTwoMin").html();
+			$(".dialogTwoMin").show();
+			$(".dialogTwoMin").html("请上传户口本");
+			setTimeout(function(){
+				$(".dialogTwoMin").hide();
+			},2000);
+			return false;
+		}
+		if(!cardstatus){
+			$(".dialogTwoMin").html();
+			$(".dialogTwoMin").show();
+			$(".dialogTwoMin").html("请上传房产证");
+			setTimeout(function(){
+				$(".dialogTwoMin").hide();
+			},2000);
+			return false;
+		}
+		if(!marrystatus){
+			$(".dialogTwoMin").html();
+			$(".dialogTwoMin").show();
+			$(".dialogTwoMin").html("请上传银行流水");
+			setTimeout(function(){
+				$(".dialogTwoMin").hide();
+			},2000);
+			return false;
+		}
+		if(!bankstatus){
+			$(".dialogTwoMin").html();
+			$(".dialogTwoMin").show();
+			$(".dialogTwoMin").html("请上传在职证明");
+			setTimeout(function(){
+				$(".dialogTwoMin").hide();
+			},2000);
+			return false;
+		}
+		if(!jobstatus){
+			$(".dialogTwoMin").html();
+			$(".dialogTwoMin").show();
+			$(".dialogTwoMin").html("请上传营业执照");
+			setTimeout(function(){
+				$(".dialogTwoMin").hide();
+			},2000);
+			return false;
+		}
+		if(!driverstatus){
+			$(".dialogTwoMin").html();
+			$(".dialogTwoMin").show();
+			$(".dialogTwoMin").html("请上传行驶证");
+			setTimeout(function(){
+				$(".dialogTwoMin").hide();
+			},2000);
+			return false;
+		}
+		window.close();
+		
 	}
 </script>
 </html>

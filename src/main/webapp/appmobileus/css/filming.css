@@ -171,6 +171,21 @@ footer {
 	color: #FFF;
 	background-color: rgba(22,155,213,1);
 }
+/* 弹出层2秒钟 */
+.dialogTwoMin {
+	display:none; 
+	position:fixed;
+	top:40%;
+	left:19%;
+	width:5rem;
+	height:1rem;
+	line-height:1rem;
+	color:#FFF;
+	background:rgba(0,0,0,.5);
+	z-index:1000000000;
+	text-align:center;
+	font-size:.3rem;
+}
 /**********************************照片**********************************/
 .explain {
 	padding: .2rem .2rem 0 .2rem;
@@ -288,7 +303,10 @@ footer {
 }
 /**********************************旧护照**********************************/
 /*同上样式*/
-
+.Nomust {
+	color:red;
+	margin-left:2rem;
+}
 /**********************************身份证**********************************/
 .IDInfo {
 	position: relative;
@@ -568,6 +586,15 @@ footer {
 	top:45%;
 	left:45%;
 	color:#fff;
+}
+.signNomust {
+	color:red;
+	margin-left:1rem;
+}
+/**********************************美国出签**********************************/
+.signingNomust {
+	color:red;
+	margin-left:1.1rem;
 }
 /**********************************公共样式**********************************/
 .savetitle {
