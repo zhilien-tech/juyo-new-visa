@@ -126,9 +126,9 @@ public class PcVisaModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object updatePhoto(@Param("staffid") Integer staffid, @Param("flag") int flag, HttpServletRequest request,
+	public Object updatePhoto(@Param("staffid") Integer staffid, @Param("flag") int flag,  @Param("isDisable") Integer isDisable, HttpServletRequest request,
 			HttpSession session) {
-		return pcVisaViewService.updatePhoto(staffid, flag, request, session);
+		return pcVisaViewService.updatePhoto(staffid, flag, isDisable, request, session);
 	}
 
 	/**

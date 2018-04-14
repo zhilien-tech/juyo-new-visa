@@ -137,7 +137,7 @@ function updatePhoto(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '80%'],
-		content:'/admin/pcVisa/updatePhoto.html?staffid='+id+'&isDisable'
+		content:'/admin/pcVisa/updatePhoto.html?staffid='+staffid+'&flag=0'+'&isDisable='+$("#disablePageInfo").val()
 	});
 }
 
