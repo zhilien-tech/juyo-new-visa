@@ -1276,8 +1276,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return jsonEntity;
 	}
 
-	public Object passportRecognitionBack(String url, int staffid, HttpServletRequest request,
-			HttpServletResponse response) {
+	public Object passportRecognitionBack(String url, Integer staffid) {
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);
 
@@ -1644,8 +1643,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//微信JSSDK上传的文件需要重新下载后上传到七牛云
-	public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type,
-			HttpServletRequest request, HttpServletResponse response) {
+	public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type) {
 		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
 				+ type);
 		weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
@@ -1654,7 +1652,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
 				+ type);
 		String url = passport.getUrl();
-		passportRecognitionBack(url, staffId, request, response);
+		passportRecognitionBack(url, staffId);
 		System.out.println("url=" + url);
 		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
 				+ type);
