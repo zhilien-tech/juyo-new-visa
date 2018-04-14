@@ -7,7 +7,6 @@
 package com.juyo.visa.admin.orderUS.service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +21,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +44,7 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
+import org.nutz.mvc.annotation.Param;
 import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Lists;
@@ -56,8 +55,8 @@ import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.orderUS.entity.USPassportJsonEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
+import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 import com.juyo.visa.common.base.UploadService;
-import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JapanPrincipalChangeEnum;
@@ -72,11 +71,12 @@ import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
-import com.juyo.visa.common.util.ImageDeal;
 import com.juyo.visa.common.util.PinyinTool;
 import com.juyo.visa.common.util.PinyinTool.Type;
 import com.juyo.visa.common.util.SpringContextUtil;
+import com.juyo.visa.common.util.TranslateUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffVisaUsEntity;
@@ -119,6 +119,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	@Inject
 	private MailService mailService;
+
+	@Inject
+	private WeXinTokenViewService weXinTokenViewService;
 
 	@Inject
 	private UploadService qiniuUploadService;//文件上传
@@ -1158,23 +1161,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
-	public Object IDCardRecognition(File file, HttpServletRequest request, HttpServletResponse response) {
-		//将图片进行旋转处理
-		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
-				"jpeg");
-		File spin = null;
-		try {
-			spin = imageDeal.spin(-90);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
-		file.delete();
-		if (!Util.isEmpty(spin)) {
-			spin.delete();
-		}
-		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+	public Object IDCardRecognition(String url, int staffid, HttpServletRequest request, HttpServletResponse response) {
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);
 		String imageDataValue = Base64.encodeBase64String(bytes);
@@ -1221,26 +1208,22 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				jsonEntity.setCity(IDcardEntity.getCity());
 			}
 		}
+
+		if (!Util.isEmpty(jsonEntity)) {
+			if (jsonEntity.isSuccess()) {
+				//获取用户的基本信息
+				TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+						Cnd.where("id", "=", staffid));
+				//保存身份证正面信息
+				saveBasicinfoFront(jsonEntity, staffInfo);
+
+			}
+		}
 		return jsonEntity;
 	}
 
-	public Object IDCardRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
-		//将图片进行旋转处理
-		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
-				"jpeg");
-		File spin = null;
-		try {
-			spin = imageDeal.spin(-90);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
-		file.delete();
-		if (!Util.isEmpty(spin)) {
-			spin.delete();
-		}
-		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+	public Object IDCardRecognitionBack(String url, int staffid, HttpServletRequest request,
+			HttpServletResponse response) {
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);
 		String imageDataValue = Base64.encodeBase64String(bytes);
@@ -1278,26 +1261,21 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 			jsonEntity.setSuccess(out.getBoolean("success"));
 		}
+
+		if (!Util.isEmpty(jsonEntity)) {
+			if (jsonEntity.isSuccess()) {
+				//获取用户的基本信息
+				TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+						Cnd.where("id", "=", staffid));
+				//保存身份证背面信息
+				saveBasicinfoBack(jsonEntity, staffInfo);
+			}
+		}
 		return jsonEntity;
 	}
 
-	public Object passportRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
-		//将图片进行旋转处理
-		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
-				"jpeg");
-		File spin = null;
-		try {
-			spin = imageDeal.spin(-90);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
-		file.delete();
-		if (!Util.isEmpty(spin)) {
-			spin.delete();
-		}
-		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+	public Object passportRecognitionBack(String url, int staffid, HttpServletRequest request,
+			HttpServletResponse response) {
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);
 
@@ -1383,7 +1361,156 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 			jsonEntity.setSuccess(out.getBoolean("success"));
 		}
+		if (!Util.isEmpty(jsonEntity)) {
+			if (jsonEntity.isSuccess()) {
+				//获取用户的基本信息
+				TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+						Cnd.where("id", "=", staffid));
+				//获取用户的护照信息
+				TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
+						Cnd.where("staffid", "=", staffid));
+				savePassport(jsonEntity, passportEntity, staffInfo);
+
+			}
+		}
+
 		return jsonEntity;
+	}
+
+	/*
+	 * 身份证正面资料保存
+	 */
+	public void saveBasicinfoFront(USStaffJsonEntity jsonEntity, TAppStaffBasicinfoEntity staffInfo) {
+		staffInfo.setAddress(jsonEntity.getAddress());
+		staffInfo.setAddressen(translate(jsonEntity.getAddress()));
+		staffInfo.setCardfront(jsonEntity.getUrl());
+		staffInfo.setCardId(jsonEntity.getNum());
+		staffInfo.setCardIden(jsonEntity.getNum());
+		staffInfo.setCardcity(jsonEntity.getCity());
+		staffInfo.setCardcityen(translate(jsonEntity.getCity()));
+		staffInfo.setCardprovince(jsonEntity.getProvince());
+		staffInfo.setCardprovinceen(translate(jsonEntity.getProvince()));
+		staffInfo.setSex(jsonEntity.getSex());
+		staffInfo.setNation(jsonEntity.getNationality());
+		staffInfo.setNationen(translate(jsonEntity.getNationality()));
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = new Date();
+		try {
+			String d = jsonEntity.getBirth() + " 00:00:00";
+			date = formatter.parse(d);
+		} catch (ParseException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		staffInfo.setBirthday(date);
+		dbDao.update(staffInfo);
+	}
+
+	/*
+	 * 身份证背面信息保存
+	 */
+	public void saveBasicinfoBack(USStaffJsonEntity jsonEntity, TAppStaffBasicinfoEntity staffInfo) {
+		staffInfo.setIssueorganization(jsonEntity.getIssue());
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date datestar = new Date();
+		Date dateend = new Date();
+		try {
+			String dstar = jsonEntity.getStarttime() + " 00:00:00";
+			datestar = formatter.parse(dstar);
+			String dend = jsonEntity.getEndtime() + " 00:00:00";
+			dateend = formatter.parse(dend);
+		} catch (ParseException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		staffInfo.setValidstartdate(datestar);
+		staffInfo.setValidenddate(dateend);
+		staffInfo.setCardback(jsonEntity.getUrl());
+		dbDao.update(staffInfo, null);
+	}
+
+	/*
+	 * 护照信息保存
+	 */
+	public void savePassport(USPassportJsonEntity passportJsonEntity, TAppStaffPassportEntity passportEntity,
+			TAppStaffBasicinfoEntity staffInfo) {
+		//用户基本信息修改
+		staffInfo.setFirstname(passportJsonEntity.getXingCn());//姓
+		staffInfo.setFirstnameen(translatename(passportJsonEntity.getXingCn()));//姓英
+		staffInfo.setLastname(passportJsonEntity.getMingCn());//名
+		staffInfo.setLastnameen(translatename(passportJsonEntity.getMingCn()));//名英
+		dbDao.update(staffInfo);
+		//护照信息修改
+		passportEntity.setFirstname(passportJsonEntity.getXingCn());//姓
+		passportEntity.setFirstnameen(translatename(passportJsonEntity.getXingCn()));//姓英
+		passportEntity.setLastname(passportJsonEntity.getMingCn());//名
+		passportEntity.setLastnameen(translatename(passportJsonEntity.getMingCn()));//名英	
+		passportEntity.setPassporturl(passportJsonEntity.getUrl());//护照照片地址
+		passportEntity.setOCRline1(passportJsonEntity.getOCRline1());
+		passportEntity.setOCRline2(passportJsonEntity.getOCRline2());
+		passportEntity.setSex(passportJsonEntity.getSex());
+		passportEntity.setSexen(translate(passportJsonEntity.getSexEn()));
+		passportEntity.setBirthaddress(passportJsonEntity.getBirthCountry());//出生地
+		passportEntity.setBirthaddressen(translate(passportJsonEntity.getBirthCountry()));
+		passportEntity.setType(passportJsonEntity.getType());
+		//出生日期
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date birthday = new Date();
+		Date issueDate = new Date();//签发日期
+		Date expiryDay = new Date();//有效期
+		try {
+			String d1 = passportJsonEntity.getBirth() + " 00:00:00";
+			String d2 = passportJsonEntity.getIssueDate() + " 00:00:00";
+			String d3 = passportJsonEntity.getExpiryDay() + " 00:00:00";
+			birthday = formatter.parse(d1);
+			issueDate = formatter.parse(d2);
+			expiryDay = formatter.parse(d3);
+		} catch (ParseException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		passportEntity.setBirthday(birthday);//设置出生日期
+		passportEntity.setIssueddate(issueDate);//设置签发日期
+		passportEntity.setValidenddate(expiryDay);//设置有效期至
+		passportEntity.setIssuedplace(passportJsonEntity.getVisaCountry());//设置签发地点
+		passportEntity.setIssuedplaceen(translate(passportJsonEntity.getVisaCountry()));
+		passportEntity.setPassport(passportJsonEntity.getNum());
+		dbDao.update(passportEntity, null);
+
+	}
+
+	//翻译姓名
+	public String translatename(String str) {
+		PinyinTool tool = new PinyinTool();
+		String result = null;
+		try {
+			result = tool.toPinYin(str, "", Type.UPPERCASE);
+		} catch (BadHanyuPinyinOutputFormatCombination e1) {
+
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+
+		}
+		return result;
+
+	}
+
+	//翻译英文
+	public String translate(String str) {
+		String result = null;
+		try {
+			result = TranslateUtil.translate(str, "en");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+
 	}
 
 	private static Object appCodeCall(String content) {
@@ -1512,6 +1639,18 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			e.printStackTrace();
 		}
 		return inputStream;
+	}
+
+	//微信JSSDK上传的文件需要重新下载后上传到七牛云
+	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String mediaIds,
+			@Param("sessionid") String sessionid, @Param("type") Integer type, HttpServletRequest request,
+			HttpServletResponse response) {
+		weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
+		TAppStaffCredentialsEntity passport = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffId).and("type", "=", type));
+		String url = passport.getUrl();
+		passportRecognitionBack(url, staffId, request, response);
+		return null;
 	}
 
 }

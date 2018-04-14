@@ -330,12 +330,10 @@
 		$(".uploadPhoto").click(function(){
 			$("#uploadFileImg").click();
 			$("#uploadFileImg").change(function(){
-				alert(111);
 				layer.load(1,{
 					shade : "#000"
 				});
 				var that = this;
-				alert(that);
 	            lrz(this.files[0])
 	            	.then(function (rst) {
 	                /* $('.bacimg2').attr('src',rst.base64);*/

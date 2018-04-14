@@ -288,7 +288,6 @@ function bankflow(staffid, type) {
 		async: false,
 		type : 'post',
 		success : function(data) {
-			alert(JSON.stringify(data));
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
 				for(var i = 0;i<data.length;i++){
@@ -314,7 +313,6 @@ function oldsigned(staffid, type) {
 		async: false,
 		type : 'post',
 		success : function(data) {
-			alert(JSON.stringify(data));
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
 				for(var i = 0;i<data.length;i++){
