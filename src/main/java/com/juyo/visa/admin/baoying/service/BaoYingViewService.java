@@ -2,6 +2,7 @@ package com.juyo.visa.admin.baoying.service;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -9,12 +10,18 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import com.google.common.collect.Maps;
 import com.juyo.visa.admin.baoying.form.TAppStaffMixInfoForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.orderUS.DistrictEnum;
+import com.juyo.visa.common.enums.orderUS.IsPayedEnum;
+import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.web.base.service.BaseService;
 
 @IocBean
@@ -31,7 +38,16 @@ public class BaoYingViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
 	private final static Integer US_YUSHANG_COMID = 65;
 
-	
+	/**
+	 * 列表页准备内容
+	 */
+	public Object toList(HttpServletRequest request) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("searchStatus", EnumUtil.enum2(USOrderListStatusEnum.class));
+		result.put("cityid", EnumUtil.enum2(DistrictEnum.class));
+		result.put("isDisable", IsYesOrNoEnum.YES.intKey());//详情页不可编辑
+		return result;
+	}
 
 	/**
 	 * 

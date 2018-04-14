@@ -107,7 +107,7 @@ function baseInfo(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '80%'],
-		content: BASE_PATH + '/admin/bigCustomer/updateBaseInfo.html?staffId='+id
+		content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id
 	});
 }
 
@@ -122,7 +122,7 @@ function passport(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '80%'],
-		content: BASE_PATH + '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
+		content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
 	});
 }
 
@@ -137,18 +137,35 @@ function visa(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '80%'],
-		content: BASE_PATH + '/admin/bigCustomer/updateVisaInfo.html?staffId='+id
+		content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+id
 	});
+}
+
+/*状态改变事件*/
+function selectListData(){
+	$("#searchBtn").click();
 }
 
 //搜索按钮
 $("#searchBtn").on('click', function () {
 	var searchStr = $("#searchStr").val();
-	    var param = {
-			"searchStr": searchStr
+	var orderstatus = $("#status").val();
+	var cityid = $("#cityid").val();
+    var param = {
+		"searchStr": searchStr,
+		"orderstatus":orderstatus,
+		"cityid":cityid
 	};
-	    datatable.settings()[0].ajax.data = param;
+	datatable.settings()[0].ajax.data = param;
 	datatable.ajax.reload();
+});
+
+//清空按钮
+$("#emptyBtn").on('click', function () {
+	$("#searchStr").val("");
+	$("#status").val("");
+	$("#cityid").val("");
+	$("#searchBtn").click();
 });
 
 /*回车事件*/

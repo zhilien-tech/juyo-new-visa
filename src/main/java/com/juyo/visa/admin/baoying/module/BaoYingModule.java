@@ -31,7 +31,7 @@ public class BaoYingModule {
 	@GET
 	@Ok("jsp")
 	public Object listUS(HttpServletRequest request) {
-		return null;
+		return baoYingViewService.toList(request);
 	}
 
 	/**

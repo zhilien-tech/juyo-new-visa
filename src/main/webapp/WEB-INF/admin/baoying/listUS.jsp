@@ -14,7 +14,7 @@
 	    <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 	    <link rel="stylesheet" href="${base}/references/public/css/style.css">
 	    <!-- 本页css -->
-	    <link rel="stylesheet" href="${base}/references/common/css/bigCustomer.css">
+	    <link rel="stylesheet" href="${base}/references/common/css/baoying.css">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<!-- Main content -->
@@ -24,24 +24,38 @@
 				<div class="box-header">
 				
 					<div class="row form-right listMain">
-						<div class="col-md-2 left-5px right-0px groupLeft">
-							<input id="searchStr" name="searchStr" onkeypress="onkeyEnter();"  type="text" class="searchInfo" placeholder="姓名/电话/部门/职位" />
-							<a id="searchBtn" class="bigBtn bigSearchBtn" onclick="">搜索</a>
+						<div class="col-md-4 left-5px right-0px ">
+							<input id="searchStr" name="searchStr" onkeypress="onkeyEnter();"  type="text" class="searchInfo" placeholder="订单号/姓名/手机号/邮箱" />
 						</div>
-						<%-- <div class="col-md-5 left-5px groupRight">
-							<a id="addBtn" class="bigBtn bigAddBtn" onclick="add();">添加</a>
-							<a class="bigBtn bigUploadBtn">
-								上传
-								<input id="uploadFile" name="uploadFile" class="" type="file" value="" />
-							</a>
-							
-							<a id="downloadBtn" href="${obj.downloadurl }" class="bigBtn bigDownloadBtn" >模板下载</a>
-						</div> --%>
+						<div class="col-md-1 left-5px right-0px selectJD">
+							<select id="status" name="status" onchange="selectListData();" class="input-class input-sm" >
+								<option value="">进度</option>
+								<c:forEach var="map" items="${obj.searchStatus}">
+									<option value="${map.key}">${map.value}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div class="col-md-1 left-5px right-0px selectFace">
+							<select id="cityid" name="cityid" onchange="selectListData();" class="input-class input-sm" >
+								<option value="">面试领区</option>
+								<c:forEach var="map" items="${obj.cityid}">
+									<option value="${map.key}">${map.value}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div class="col-md-2 left-5px right-0px ">
+							<a id="searchBtn" class="bigBtn bigSearchBtn" >搜索</a>
+						</div>
+						<div class="col-md-2 left-5px right-0px ">
+							<a id="emptyBtn" class="bigBtn bigSearchBtn">清空</a> 
+						</div>
 					</div>
 					
 				</div>
 				<!-- /.box-header -->
 				<div class="box-body">
+					<!--业务要求： 葆婴  信息详情页不可编辑 -->
+					<input id="disablePageInfo" type="hidden" value="${obj.isDisable}">
 					<table id="datatableId" class="table table-hover" style="width:100%;">
 						<thead>
 							<tr>

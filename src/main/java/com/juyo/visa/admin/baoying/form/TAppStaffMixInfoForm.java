@@ -28,7 +28,7 @@ public class TAppStaffMixInfoForm extends DataTablesParamForm{
 	private String ordernumber;
 	
 	/**订单状态*/
-	private Integer status;
+	private Integer orderstatus;
 	
 	/**面试领区*/
 	private Integer cityid;
@@ -82,16 +82,25 @@ public class TAppStaffMixInfoForm extends DataTablesParamForm{
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
-		//TODO 添加自定义查询条件（可选）
+		//订单状态检索
+		if (!Util.isEmpty(orderstatus)) {
+			cnd.and("tou.status", "like", "%" + orderstatus + "%");
+		}
+		//面试领区检索
+		if (!Util.isEmpty(cityid)) {
+			cnd.and("tou.cityid", "like", "%" + cityid + "%");
+		}
+		//姓名、手机、邮箱、订单号 检索
 		if (!Util.isEmpty(searchStr)) {
 			SqlExpressionGroup expg = new SqlExpressionGroup();
 			expg.and("CONCAT( tasb.firstname, tasb.lastname )", "LIKE", "%" + searchStr + "%")
 					.or("tasb.email", "LIKE", "%" + searchStr + "%")
+					.or("tasb.telephone", "LIKE", "%" + searchStr + "%")
 					.or("tou.ordernumber", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
 		cnd.and("tasb.comId", "=", comid);
-		cnd.orderBy("tasb.updateTime", "DESC");
+		cnd.orderBy("tou.updateTime", "DESC");
 		return cnd;
 	}
 }
