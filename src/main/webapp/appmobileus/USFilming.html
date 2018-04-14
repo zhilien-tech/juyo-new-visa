@@ -27,7 +27,7 @@
 					class="info photo"></span>
 			</a></li>
 			<li><a class="linkStyle" onclick="passport()">
-					<div class="circleRed replaceCircle1 visafirststats">
+					<div class="circleRed replaceCircle1 visafirststatus">
 						<i class="icon-error iconGroup1"></i>
 					</div> <span>护照首页</span> <i class="more"></i> <span id="1" class="info">待上传</span>
 			</a></li>
@@ -135,6 +135,9 @@
 							
 			if (selectvalue == 4 || selectvalue == 2 || selectvalue == 3) {
 				window.location.href = '/appmobileus/USMarital.html?staffid=' + staffid + '&marryurltype=' + selectvalue+'&sessionid='+sessionid+'&flag='+flag;
+			}else if(selectvalue == 1){
+				$(".replaceCircle6").removeClass("circleRed").addClass("circleGreen");
+				$(".iconGroup6").removeClass("icon-error").addClass("icon-true");
 			}
 
 		});
@@ -671,8 +674,8 @@
 			},2000);
 			return false;
 		} */
-		window.close();
-		
+		alert("所有的都上传成功");
+		WeixinJSBridge.call('closeWindow');
 	}
 </script>
 </html>
