@@ -1,3 +1,7 @@
+var staffid=GetQueryString('staffid');
+var sessionid=GetQueryString('sessionid');
+var flag=GetQueryString('flag');
+
 //获取URL地址参数
 function GetQueryString(name){
 	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -7,12 +11,7 @@ function GetQueryString(name){
 
 //返回上一级
 function returnPage(){
-	var staffid = GetQueryString("staffid");
-	var	sessionid=GetQueryString('sessionid');
-	var	flag=GetQueryString('flag');
-	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid
-
-+'&sessionid='+sessionid+'&flag='+flag;
+	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 }
 
 
@@ -35,9 +34,6 @@ function getImage(staffid){
 }
 
 $(function(){
-	var staffid=GetQueryString('staffid');
-	var	sessionid=GetQueryString('sessionid');
-	var	flag=GetQueryString('flag');
 	getImage(staffid);
 	$.ajax({
 		type : "post",
@@ -115,7 +111,6 @@ $('.chooseImage').on('click', function() {
 });
 
 var uploadImage = function(localIds) {
-	var staffid=GetQueryString('staffid');
 	var localId = localIds.pop();
 	wx.uploadImage({
 		localId : localId,
