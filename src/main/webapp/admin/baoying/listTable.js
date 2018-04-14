@@ -107,7 +107,7 @@ function baseInfo(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '80%'],
-		content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id
+		content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id+'&isDisable='+$("#disablePageInfo").val()
 	});
 }
 
@@ -122,7 +122,22 @@ function passport(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '80%'],
-		content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
+		content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id+'&isDisable='+$("#disablePageInfo").val()
+	});
+}
+
+//修改申请人拍摄资料信息
+function updatePhoto(id){
+	layer.open({
+		type: 2,
+		title: false,
+		closeBtn:false,
+		fix: false,
+		maxmin: false,
+		shadeClose: false,
+		scrollbar: false,
+		area: ['900px', '80%'],
+		content:'/admin/pcVisa/updatePhoto.html?staffid='+id+'&isDisable'
 	});
 }
 
@@ -137,7 +152,7 @@ function visa(id){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['900px', '80%'],
-		content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+id
+		content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+id+'&isDisable='+$("#disablePageInfo").val()
 	});
 }
 
