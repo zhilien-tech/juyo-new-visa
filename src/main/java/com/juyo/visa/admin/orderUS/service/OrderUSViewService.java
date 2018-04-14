@@ -1645,9 +1645,13 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String mediaIds,
 			@Param("sessionid") String sessionid, @Param("type") Integer type, HttpServletRequest request,
 			HttpServletResponse response) {
+		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
+				+ type);
 		weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
 		TAppStaffCredentialsEntity passport = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", type));
+		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
+				+ type);
 		String url = passport.getUrl();
 		passportRecognitionBack(url, staffId, request, response);
 		return null;
