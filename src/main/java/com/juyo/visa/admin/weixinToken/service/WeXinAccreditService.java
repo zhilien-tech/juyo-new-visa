@@ -18,6 +18,7 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.bigcustomer.service.AppEventsViewService;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
 import com.juyo.visa.common.util.HttpUtil;
+import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffWxinfoEntity;
 import com.juyo.visa.entities.TConfWxEntity;
 import com.uxuexi.core.common.util.Util;
@@ -58,6 +59,24 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 		return accessToken;
 	}
 
+	//查询申请进度
+	public Object CheckProgress(String code) {
+		Map<String, Object> result = Maps.newHashMap();
+		//获得openid
+		JSONObject accessToken = getAccessToken(code);
+		String openid = accessToken.get("openid").toString();
+		//根据openid获取用户进出信息
+		TAppStaffBasicinfoEntity userInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+				Cnd.where("wechattoken", "=", openid));
+		if (!Util.isEmpty(userInfo)) {
+			//获取用户的进度状态
+			Integer status = userInfo.getStatus();
+
+		}
+		return null;
+
+	}
+
 	//根据accessToken获取用户个人信息
 	public Object SaveUser(String code) {
 		Map<String, Object> result = Maps.newHashMap();
@@ -71,7 +90,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 			String openid = accessTokenObject.get("openid").toString();
 			System.out.println("openid=" + openid);
 			//新增or更新微信授权用户信息
-			.0
+
 			//调用验证用户是否已注册
 			Map<String, Object> userInfo = (Map<String, Object>) appEventsViewService.checkUserLogin(openid);
 

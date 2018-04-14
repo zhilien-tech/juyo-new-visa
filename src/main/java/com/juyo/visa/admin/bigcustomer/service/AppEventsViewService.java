@@ -184,6 +184,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//staffForm.setUserid(loginUserId);
 		staffForm.setFirstname(form.getFirstname());
 		staffForm.setLastname(form.getLastname());
+		//旧用户无openid时 根据手机验证是否已经登陆
 		staffForm.setTelephone(form.getTelephone());
 		staffForm.setEmail(form.getEmail());
 		if (!Util.isEmpty(form.getWeChatToken())) {
@@ -192,27 +193,34 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//默认签证状态为办理中
 		staffForm.setVisastatus(VisaStatusEnum.HANDLING_VISA.intKey());
 		Map<String, String> map = (Map<String, String>) bigCustomerViewService.addStaff(staffForm, session);
-		String staffIdStr = map.get("staffId");
-		Integer staffId = Integer.valueOf(staffIdStr);
-		Integer eventId = form.getEventId();
+		if (map.get("flag") == "1") {
+			String staffIdStr = map.get("staffId");
+			Integer staffId = Integer.valueOf(staffIdStr);
+			Integer eventId = form.getEventId();
 
-		//人员报名名活动
-		TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
-		staffEventEntity.setEventsId(eventId);
-		staffEventEntity.setStaffId(staffId);
+			//人员报名名活动
+			TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
+			staffEventEntity.setEventsId(eventId);
+			staffEventEntity.setStaffId(staffId);
 
-		TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
+			TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
 
-		//添加订单
-		orderUSViewService.addOrderByStuffId(staffId);
+			//添加订单
+			orderUSViewService.addOrderByStuffId(staffId);
 
-		//用户登录，添加游客信息
-		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
-		Integer loginUserId = (Integer) addLoginUser(staffInfo);
+			//用户登录，添加游客信息
+			TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
+			Integer loginUserId = (Integer) addLoginUser(staffInfo);
 
-		dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId), Cnd.where("id", "=", staffId));
+			dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
+					Cnd.where("id", "=", staffId));
 
-		return JsonResult.success("添加成功");
+			return JsonResult.success("添加成功");
+		} else {
+			return map;
+
+		}
+
 	}
 
 	//更新staffid到微信授权用户信息表中
@@ -448,6 +456,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//根据staffId查询大客户人员基本信息表
 		TAppStaffBasicinfoEntity basicInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
 				Cnd.where("wechattoken", "=", openid));
+
 		if (!Util.isEmpty(basicInfo)) {
 			System.out.println("zhuceOK");
 			//用户已注册
