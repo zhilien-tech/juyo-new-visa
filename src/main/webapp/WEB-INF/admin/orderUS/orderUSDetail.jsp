@@ -509,7 +509,7 @@
 										<div class="col-sm-4 colwidthsm">
 											<div class="form-group">
 												<label>AA码</label> <input id="aacode" name="aacode" type="text"
-													disabled value="${obj.summaryInfo.aacode }"
+													disabled="true" value="${obj.summaryInfo.aacode }"
 													class="form-control input-sm" placeholder="" />
 											</div>
 										</div>
@@ -1139,13 +1139,13 @@
 						$("#forFollow").html(Str);
 					}
 					//刷新申请人信息
+					$('#aacode').val(data.summaryInfo.aacode);
 					$('#imgInch').attr('src', data.basicinfo.twoinchphoto);
 					$('#allname').val(data.passport.firstname+data.passport.lastname+'/'+data.passport.firstnameen+data.passport.lastnameen);
 					$('#sex').val(data.passport.sex);
 					$('#birthday').val(data.birthday);
 					$('#realinfo').val(data.realinfo);
 					$('#cardnum').val(data.basicinfo.cardnum);
-					$('#aacode').val(data.summaryInfo.aacode);
 					$('#passport').val(data.passport.passport);
 					$('#interviewdate2').val(data.Interviewdate);
 				}

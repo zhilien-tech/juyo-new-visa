@@ -44,7 +44,6 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
-import org.nutz.mvc.annotation.Param;
 import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Lists;
@@ -300,41 +299,49 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//出行信息
 		TOrderUsTravelinfoEntity orderTravelInfo = dbDao.fetch(TOrderUsTravelinfoEntity.class,
 				Cnd.where("orderid", "=", orderid));
+		//获取用户资料信息
+		TAppStaffOrderUsEntity stafforderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
+				Cnd.where("orderid", "=", orderid));
+		if (!Util.isEmpty(orderUsEntity)) {
+
+			//获取用户基本信息
+			TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+					Cnd.where("id", "=", orderUsEntity.getStaffid()));
+			result.put("basicinfo", basicinfoEntity);
+			//获取该用户的资料类型
+			String sqlStr = sqlManager.get("t_app_paperwork_US_info");
+			Sql applysql = Sqls.create(sqlStr);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("staffid", "=", orderUsEntity.getStaffid());
+			List<Record> infoList = dbDao.query(applysql, cnd, null);
+			for (Record appRecord : infoList) {
+				int type = appRecord.getInt("type");
+				for (PrepareMaterialsEnum_JP pmEnum : PrepareMaterialsEnum_JP.values())
+					if (!Util.isEmpty(type) && type == pmEnum.intKey()) {
+						appRecord.set("type", pmEnum.value());
+						break;
+					}
+			}
+			StringBuffer str = new StringBuffer();
+			for (Record record : infoList) {
+				if (record.getString("type") != null) {
+					str.append(record.getString("type"));
+					str.append("、");
+				}
+			}
+			result.put("realinfo", str);
+		} else
+			result.put("realinfo", null);
+		List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
+		if (!Util.isEmpty(staffSummaryInfoList)) {
+			result.put("summaryInfo", staffSummaryInfoList.get(0));
+		} else {
+			result.put("summaryInfo", null);
+		}
+		TOrderUsInfoEntitiy orderInfoEntity = (TOrderUsInfoEntitiy) getOrderInfo(orderid);
+		result.put("orderInfo", orderInfoEntity);
 		if (!Util.isEmpty(orderTravelInfo)) {
 
-			//获取用户资料信息
-			TAppStaffOrderUsEntity stafforderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
-					Cnd.where("orderid", "=", orderid));
-			if (!Util.isEmpty(orderUsEntity)) {
-
-				//获取用户基本信息
-				TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
-						Cnd.where("id", "=", orderUsEntity.getStaffid()));
-				result.put("basicinfo", basicinfoEntity);
-				//获取该用户的资料类型
-				String sqlStr = sqlManager.get("t_app_paperwork_US_info");
-				Sql applysql = Sqls.create(sqlStr);
-				Cnd cnd = Cnd.NEW();
-				cnd.and("staffid", "=", orderUsEntity.getStaffid());
-				List<Record> infoList = dbDao.query(applysql, cnd, null);
-				for (Record appRecord : infoList) {
-					int type = appRecord.getInt("type");
-					for (PrepareMaterialsEnum_JP pmEnum : PrepareMaterialsEnum_JP.values())
-						if (!Util.isEmpty(type) && type == pmEnum.intKey()) {
-							appRecord.set("type", pmEnum.value());
-							break;
-						}
-				}
-				StringBuffer str = new StringBuffer();
-				for (Record record : infoList) {
-					if (record.getString("type") != null) {
-						str.append(record.getString("type"));
-						str.append("、");
-					}
-				}
-				result.put("realinfo", str);
-			} else
-				result.put("realinfo", null);
 			String travelpurpose = "";
 			if (!Util.isEmpty(orderTravelInfo)) {
 				travelpurpose = orderTravelInfo.getTravelpurpose();
@@ -345,8 +352,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				//获取出行目的
 				orderTravelInfo.setTravelpurpose(travelpurposeString);
 			}
-			List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
-			TOrderUsInfoEntitiy orderInfoEntity = (TOrderUsInfoEntitiy) getOrderInfo(orderid);
 			if (!Util.isEmpty(orderTravelInfo.getGodeparturecity())) {
 				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
 						Cnd.where("id", "=", orderTravelInfo.getGodeparturecity()));
@@ -367,7 +372,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 						Cnd.where("id", "=", orderTravelInfo.getReturnArrivedCity()));
 				orderInfoEntity.setReturnArrivedCity(gocity.getCity());
 			}
-			result.put("orderInfo", orderInfoEntity);
 			result.put("travelInfo", orderTravelInfo);
 			//获取航班信息
 			TFlightEntity goFlightEntity = dbDao.fetch(TFlightEntity.class,
@@ -384,12 +388,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				result.put("returnFlightInfo", returnFlightEntity);
 			} else {
 				result.put("returnFlightInfo", null);
-			}
-
-			if (!Util.isEmpty(staffSummaryInfoList)) {
-				result.put("summaryInfo", staffSummaryInfoList.get(0));
-			} else {
-				result.put("summaryInfo", null);
 			}
 		}
 		//送签美国州
@@ -1642,9 +1640,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//微信JSSDK上传的文件需要重新下载后上传到七牛云
-	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String mediaIds,
-			@Param("sessionid") String sessionid, @Param("type") Integer type, HttpServletRequest request,
-			HttpServletResponse response) {
+	public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type,
+			HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
 				+ type);
 		weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
