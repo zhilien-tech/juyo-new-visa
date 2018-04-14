@@ -349,38 +349,46 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(basicinfoEntity.getInterviewdate())) {
 			result.put("Interviewdate", sdf.format(basicinfoEntity.getInterviewdate()));
 		}
+		//获取用户资料信息
+		TAppStaffOrderUsEntity stafforderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
+				Cnd.where("orderid", "=", orderid));
+		if (!Util.isEmpty(orderUsEntity)) {
+
+			//获取该用户的资料类型
+			String sqlStr = sqlManager.get("t_app_paperwork_US_info");
+			Sql applysql = Sqls.create(sqlStr);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("staffid", "=", orderUsEntity.getStaffid());
+			List<Record> infoList = dbDao.query(applysql, cnd, null);
+			for (Record appRecord : infoList) {
+				int type = appRecord.getInt("type");
+				for (PrepareMaterialsEnum_JP pmEnum : PrepareMaterialsEnum_JP.values())
+					if (!Util.isEmpty(type) && type == pmEnum.intKey()) {
+						appRecord.set("type", pmEnum.value());
+						break;
+					}
+			}
+			StringBuffer str = new StringBuffer();
+			for (Record record : infoList) {
+				if (record.getString("type") != null) {
+					str.append(record.getString("type"));
+					str.append("、");
+				}
+			}
+			result.put("realinfo", str);
+		} else
+			result.put("realinfo", null);
+		List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
+		if (!Util.isEmpty(staffSummaryInfoList)) {
+			result.put("summaryInfo", staffSummaryInfoList.get(0));
+		} else {
+			result.put("summaryInfo", null);
+		}
+		TOrderUsInfoEntitiy orderInfoEntity = (TOrderUsInfoEntitiy) getOrderInfo(orderid);
+		result.put("orderInfo", orderInfoEntity);
 		TOrderUsTravelinfoEntity orderTravelInfo = (TOrderUsTravelinfoEntity) getOrderTravelInfo(orderid);
 		if (!Util.isEmpty(orderTravelInfo)) {
 
-			//获取用户资料信息
-			TAppStaffOrderUsEntity stafforderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
-					Cnd.where("orderid", "=", orderid));
-			if (!Util.isEmpty(orderUsEntity)) {
-
-				//获取该用户的资料类型
-				String sqlStr = sqlManager.get("t_app_paperwork_US_info");
-				Sql applysql = Sqls.create(sqlStr);
-				Cnd cnd = Cnd.NEW();
-				cnd.and("staffid", "=", orderUsEntity.getStaffid());
-				List<Record> infoList = dbDao.query(applysql, cnd, null);
-				for (Record appRecord : infoList) {
-					int type = appRecord.getInt("type");
-					for (PrepareMaterialsEnum_JP pmEnum : PrepareMaterialsEnum_JP.values())
-						if (!Util.isEmpty(type) && type == pmEnum.intKey()) {
-							appRecord.set("type", pmEnum.value());
-							break;
-						}
-				}
-				StringBuffer str = new StringBuffer();
-				for (Record record : infoList) {
-					if (record.getString("type") != null) {
-						str.append(record.getString("type"));
-						str.append("、");
-					}
-				}
-				result.put("realinfo", str);
-			} else
-				result.put("realinfo", null);
 			String travelpurpose = "";
 			if (!Util.isEmpty(orderTravelInfo)) {
 				travelpurpose = orderTravelInfo.getTravelpurpose();
@@ -391,8 +399,6 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 				//获取出行目的
 				orderTravelInfo.setTravelpurpose(travelpurposeString);
 			}
-			List<Record> staffSummaryInfoList = (List<Record>) getStaffSummaryInfo(orderid);
-			TOrderUsInfoEntitiy orderInfoEntity = (TOrderUsInfoEntitiy) getOrderInfo(orderid);
 			if (!Util.isEmpty(orderTravelInfo.getGodeparturecity())) {
 				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
 						Cnd.where("id", "=", orderTravelInfo.getGodeparturecity()));
@@ -413,7 +419,6 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 						Cnd.where("id", "=", orderTravelInfo.getReturnArrivedCity()));
 				orderInfoEntity.setReturnArrivedCity(gocity.getCity());
 			}
-			result.put("orderInfo", orderInfoEntity);
 			result.put("travelInfo", orderTravelInfo);
 			//获取航班信息
 			TFlightEntity goFlightEntity = dbDao.fetch(TFlightEntity.class,
@@ -430,12 +435,6 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 				result.put("returnFlightInfo", returnFlightEntity);
 			} else {
 				result.put("returnFlightInfo", null);
-			}
-
-			if (!Util.isEmpty(staffSummaryInfoList)) {
-				result.put("summaryInfo", staffSummaryInfoList.get(0));
-			} else {
-				result.put("summaryInfo", null);
 			}
 		}
 		//送签美国州
@@ -500,11 +499,12 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	/*
 	 * 拍照资料获取
 	 */
-	public Object updatePhoto(Integer staffid, int flag, Integer isDisable, HttpServletRequest request, HttpSession session) {
+	public Object updatePhoto(Integer staffid, int flag, Integer isDisable, HttpServletRequest request,
+			HttpSession session) {
 		Map<String, Object> result = Maps.newHashMap();
 
 		result.put("isDisable", isDisable);//页面是否可编辑
-		
+
 		//获取sessionid
 		String sessionid = session.getId();
 		TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,

@@ -1669,9 +1669,8 @@
 	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js -->
 	<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
 	<script type="text/javascript">
-	
+		var isDisable = '${obj.isDisable}';
 		$(function(){
-			var isDisable = '${obj.isDisable}';
 			//页面不可编辑
 			if(isDisable == 1){
 				$(".section").attr('readonly', true);
@@ -1685,7 +1684,7 @@
 		//跳转到基本信息页
 		function baseInfoBtn(){
 			//左箭头跳转
-			window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId;
+			window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
 			//保存签证信息
 			save();
 		}

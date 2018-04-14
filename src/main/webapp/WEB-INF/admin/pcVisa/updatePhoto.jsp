@@ -313,9 +313,8 @@
 	var passportId = $("#passportId").val();
 	var staffid = '${obj.staffid}';
 	var usertype = '${obj.userType}';
+	var isDisable = '${obj.isDisable}';
 	$(function() {
-		
-		var isDisable = '${obj.isDisable}';
 		//页面不可编辑
 		if(isDisable == 1){
 			$(".section").attr('readonly', true);
