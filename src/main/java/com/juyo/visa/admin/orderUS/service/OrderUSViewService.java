@@ -50,8 +50,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
+import com.juyo.visa.admin.order.entity.PassportJsonEntity;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
-import com.juyo.visa.admin.orderUS.entity.USPassportJsonEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
@@ -1294,7 +1294,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		System.out.println("info:" + info);
 
 		//解析扫描的结果，结构化成标准json格式
-		USPassportJsonEntity jsonEntity = new USPassportJsonEntity();
+		PassportJsonEntity jsonEntity = new PassportJsonEntity();
 		JSONObject resultObj = new JSONObject(info);
 		JSONArray outputArray = resultObj.getJSONArray("outputs");
 		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
@@ -1440,7 +1440,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	/*
 	 * 护照信息保存
 	 */
-	public void savePassport(USPassportJsonEntity passportJsonEntity, TAppStaffPassportEntity passportEntity,
+	public void savePassport(PassportJsonEntity passportJsonEntity, TAppStaffPassportEntity passportEntity,
 			TAppStaffBasicinfoEntity staffInfo) {
 		//用户基本信息修改
 		staffInfo.setFirstname(passportJsonEntity.getXingCn());//姓

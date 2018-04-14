@@ -133,7 +133,7 @@
 			var selectvalue = $(".selector").find("option:selected").val();
 			$(".marriageInfo").text(name);
 							
-			if (selectvalue == 4 || selectvalue == 2 || selectvalue == 3) {
+			if (selectvalue == 2 || selectvalue == 3) {
 				window.location.href = '/appmobileus/USMarital.html?staffid=' + staffid + '&marryurltype=' + selectvalue+'&sessionid='+sessionid+'&flag='+flag;
 			}else if(selectvalue == 1){
 				$(".replaceCircle6").removeClass("circleRed").addClass("circleGreen");

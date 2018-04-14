@@ -475,7 +475,8 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 
 	}
 
-	public Object saveSecondHousecard(int type, int staffid, String propertyholder, String area, String address) {
+	public Object saveSecondHousecard(int type, int staffid, String propertyholder, String area, String address,
+			String sessionid) {
 		TAppStaffCredentialsExplainEntity fetch = dbDao.fetch(TAppStaffCredentialsExplainEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type));
 		if (!Util.isEmpty(fetch)) {
@@ -494,6 +495,11 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 			explain.setPropertyholder(propertyholder);
 			explain.setUpdatetime(new Date());
 			dbDao.insert(explain);
+		}
+		try {
+			simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}

@@ -131,8 +131,9 @@ public class MobileVisaModule {
 	@At
 	@POST
 	public Object saveSecondHousecard(@Param("type") int type, @Param("staffid") int staffid,
-			@Param("propertyholder") String propertyholder, @Param("area") String area, @Param("address") String address) {
-		return mobileVisaService.saveSecondHousecard(type, staffid, propertyholder, area, address);
+			@Param("propertyholder") String propertyholder, @Param("area") String area,
+			@Param("address") String address, @Param("sessionid") String sessionid) {
+		return mobileVisaService.saveSecondHousecard(type, staffid, propertyholder, area, address, sessionid);
 	}
 
 	/*
@@ -143,8 +144,7 @@ public class MobileVisaModule {
 	public Object getSecondHousecard(@Param("type") int type, @Param("staffid") int staffid) {
 		return mobileVisaService.getSecondHousecard(type, staffid);
 	}
-	
-	
+
 	/*
 	 * 获取微信多图上传 图片集合
 	 */
