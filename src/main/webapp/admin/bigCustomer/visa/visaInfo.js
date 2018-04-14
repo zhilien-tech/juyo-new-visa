@@ -4,6 +4,7 @@ function cloneMoreDiv(divClass){
 	var cloneDiv = $("."+divClass).eq(0).clone();
 	emptyContentByObj(cloneDiv);
 	$("."+divClass).last().after(cloneDiv);
+	initDateTimePicker($("."+divClass));
 }
 //删除多段
 function deleteMoreDiv(divClass){
@@ -11,6 +12,19 @@ function deleteMoreDiv(divClass){
 		$("."+divClass+":last").remove();
 	}
 }
+
+//克隆时，查看当前div下是否有DateTimePicker，如果有则进行初始化
+function initDateTimePicker(obj){
+	obj.find("input[type='text'][class='datetimepickercss']").each(function() {
+		$(this).datetimepicker({
+			format: 'dd/mm/yyyy',
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition:"top-left",//显示位置
+			minView: "month"//只显示年月日
+		}); 
+	});
+}
+
 //---------------------------------------工具方法 end-------------------------------------------
 
 
