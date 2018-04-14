@@ -590,7 +590,7 @@
 			},2000);
 			return false;
 		}
-		if(!IDstatus){
+		if(!visafirst){
 			$(".dialogTwoMin").html();
 			$(".dialogTwoMin").show();
 			$(".dialogTwoMin").html("请上传护照");
@@ -599,7 +599,7 @@
 			},2000);
 			return false;
 		}
-		if(!holdstatus){
+		if(!IDstatus){
 			$(".dialogTwoMin").html();
 			$(".dialogTwoMin").show();
 			$(".dialogTwoMin").html("请上传身份证");
@@ -608,7 +608,7 @@
 			},2000);
 			return false;
 		}
-		if(!IDstatus){
+		if(!holdstatus){
 			$(".dialogTwoMin").html();
 			$(".dialogTwoMin").show();
 			$(".dialogTwoMin").html("请上传户口本");
@@ -629,7 +629,7 @@
 		if(!marrystatus){
 			$(".dialogTwoMin").html();
 			$(".dialogTwoMin").show();
-			$(".dialogTwoMin").html("请上传银行流水");
+			$(".dialogTwoMin").html("请上传结婚证");
 			setTimeout(function(){
 				$(".dialogTwoMin").hide();
 			},2000);
@@ -638,7 +638,7 @@
 		if(!bankstatus){
 			$(".dialogTwoMin").html();
 			$(".dialogTwoMin").show();
-			$(".dialogTwoMin").html("请上传在职证明");
+			$(".dialogTwoMin").html("请上传银行流水照");
 			setTimeout(function(){
 				$(".dialogTwoMin").hide();
 			},2000);
@@ -647,7 +647,16 @@
 		if(!jobstatus){
 			$(".dialogTwoMin").html();
 			$(".dialogTwoMin").show();
-			$(".dialogTwoMin").html("请上传营业执照");
+			$(".dialogTwoMin").html("请上传在职证明照");
+			setTimeout(function(){
+				$(".dialogTwoMin").hide();
+			},2000);
+			return false;
+		}
+		if(!businesstatus){
+			$(".dialogTwoMin").html();
+			$(".dialogTwoMin").show();
+			$(".dialogTwoMin").html("请上传营业执照或机构代码证");
 			setTimeout(function(){
 				$(".dialogTwoMin").hide();
 			},2000);
