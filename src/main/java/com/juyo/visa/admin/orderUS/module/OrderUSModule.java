@@ -302,18 +302,16 @@ public class OrderUSModule {
 	@At
 	@POST
 	@Filters
-	public Object passportRecognition(@Param("url") String url, @Param("staffid") int staffid,
-			HttpServletRequest request, HttpServletResponse response) {
-		return orderUSViewService.passportRecognitionBack(url, staffid, request, response);
+	public Object passportRecognition(@Param("staffid") int staffid) {
+		return orderUSViewService.passportRecognitionBack(staffid);
 	}
 
 	//微信JSSDK上传的文件需要重新下载后上传到七牛云
-	@At
+	/*@At
 	@POST
 	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String mediaIds,
-			@Param("sessionid") String sessionid, @Param("type") Integer type, HttpServletRequest request,
-			HttpServletResponse response) {
-		return orderUSViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type, request, response);
-	}
+			@Param("sessionid") String sessionid, @Param("type") Integer type) {
+		return orderUSViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
+	}*/
 
 }

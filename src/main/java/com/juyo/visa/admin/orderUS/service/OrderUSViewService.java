@@ -50,8 +50,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
+import com.juyo.visa.admin.order.entity.PassportJsonEntity;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
-import com.juyo.visa.admin.orderUS.entity.USPassportJsonEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
@@ -1021,13 +1021,17 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				//改变订单状态
 				//分享
 				if (Util.eq(sendType, "share")) {
-					orderus.setStatus(USOrderListStatusEnum.FILLING.intKey());
-					dbDao.update(orderus);
+					if (orderus.getStatus() < USOrderListStatusEnum.FILLING.intKey()) {
+						orderus.setStatus(USOrderListStatusEnum.FILLING.intKey());
+						dbDao.update(orderus);
+					}
 				}
 				//合格
 				if (Util.eq(sendType, "qualified")) {
-					orderus.setStatus(USOrderListStatusEnum.HEGE.intKey());
-					dbDao.update(orderus);
+					if (orderus.getStatus() < USOrderListStatusEnum.HEGE.intKey()) {
+						orderus.setStatus(USOrderListStatusEnum.HEGE.intKey());
+						dbDao.update(orderus);
+					}
 				}
 				//面试
 				if (Util.eq(sendType, "interview")) {
@@ -1272,8 +1276,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return jsonEntity;
 	}
 
-	public Object passportRecognitionBack(String url, int staffid, HttpServletRequest request,
-			HttpServletResponse response) {
+	public Object passportRecognitionBack(int staffid) {
+		TAppStaffCredentialsEntity fetch = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		String url = fetch.getUrl();
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);
 
@@ -1288,7 +1294,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		System.out.println("info:" + info);
 
 		//解析扫描的结果，结构化成标准json格式
-		USPassportJsonEntity jsonEntity = new USPassportJsonEntity();
+		PassportJsonEntity jsonEntity = new PassportJsonEntity();
 		JSONObject resultObj = new JSONObject(info);
 		JSONArray outputArray = resultObj.getJSONArray("outputs");
 		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
@@ -1434,7 +1440,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	/*
 	 * 护照信息保存
 	 */
-	public void savePassport(USPassportJsonEntity passportJsonEntity, TAppStaffPassportEntity passportEntity,
+	public void savePassport(PassportJsonEntity passportJsonEntity, TAppStaffPassportEntity passportEntity,
 			TAppStaffBasicinfoEntity staffInfo) {
 		//用户基本信息修改
 		staffInfo.setFirstname(passportJsonEntity.getXingCn());//姓
@@ -1640,8 +1646,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//微信JSSDK上传的文件需要重新下载后上传到七牛云
-	public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type,
-			HttpServletRequest request, HttpServletResponse response) {
+	/*public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type) {
 		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
 				+ type);
 		weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
@@ -1650,10 +1655,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
 				+ type);
 		String url = passport.getUrl();
-		passportRecognitionBack(url, staffId, request, response);
+		passportRecognitionBack(url, staffId);
 		System.out.println("url=" + url);
 		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
 				+ type);
 		return null;
-	}
+	}*/
 }
