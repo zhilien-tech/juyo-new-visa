@@ -48,6 +48,15 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
+		            {"data": "telephone", "bSortable": false,render: function(data, type, row, meta) {
+		            	var telephone = row.telephone;
+		            	if(null==telephone || ""==telephone){
+		            		return "";
+		            	}else{
+		            		return telephone;
+		            	}
+		            } 	
+		            },
 		            {"data": "email", "bSortable": false,render: function(data, type, row, meta) {
 		            	var email = row.email;
 		            	if(null==email || ""==email){
@@ -58,26 +67,34 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
-		            {"data": "department", "bSortable": false,render: function(data, type, row, meta) {
-		            	var department = row.department;
-		            	if(null==department || ""==department){
+		            {"data": "cityid", "bSortable": false,render: function(data, type, row, meta) {
+		            	var cityid = row.cityid;
+		            	if(null==cityid || ""==cityid){
 		            		return "";
 		            	}else{
-		            		/*department = '<span data-toggle="tooltip" data-placement="right" title="'+department+'">'+department+'<span>';*/
-		            		return department;
+		            		return cityid;
 		            	}
 		            } 	
 		            },
-		            {"data": "job", "bSortable": false,
+		            {"data": "interviewdate", "bSortable": false,
 		            	render: function(data, type, row, meta) {
-			            	var job = row.job;
-			            	if(null==job || ""==job){
+			            	var interviewdate = row.interviewdate;
+			            	if(null==interviewdate || ""==interviewdate){
 			            		return "";
 			            	}else{
-			            		/*job = '<span data-toggle="tooltip" data-placement="right" title="'+job+'">'+job+'<span>';*/
-			            		return job;
+			            		return interviewdate;
 			            	}
 			            } 	
+		            },
+		            {"data": "orderstatus", "bSortable": false,
+		            	render: function(data, type, row, meta) {
+		            		var orderstatus = row.orderstatus;
+		            		if(null==orderstatus || ""==orderstatus){
+		            			return "";
+		            		}else{
+		            			return orderstatus;
+		            		}
+		            	} 	
 		            },
 		            {"data": " ", "bSortable": false, 
 		            	render: function(data, type, row, meta) {
@@ -85,8 +102,7 @@ function initDatatable() {
 		            		var passport = '<a style="cursor:pointer;" class="passport" onclick="passport('+row.passportid+');"></a>';
 		            		var visa = '<a class="visa" onclick="visa('+row.staffid+');"></a>';
 		            		var otherVisa = '<a class="otherVisa" onclick=""></a>';
-		            		var deleteIcon = '<a style="cursor:pointer;" class="deleteIcon" onclick="deleteById('+row.staffid+');"></a>';
-		            		return updateApplicant+passport+visa+otherVisa+deleteIcon;
+		            		return updateApplicant+passport+visa+otherVisa;
 		            	}	
 		            } 
 		            ],

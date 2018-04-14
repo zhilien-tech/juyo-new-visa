@@ -47,10 +47,10 @@
 							<tr>
 								<th><span>订单号</span></th>
 								<th><span>姓名</span></th>
+								<th><span>手机号</span></th>
 								<th><span>邮箱</span></th>
 								<th><span>面式领区</span></th>
 								<th><span>面试时间</span></th>
-								<th><span>签证结果</span></th>
 								<th><span>进度</span></th>
 								<th><span>操作</span></th>
 							</tr>
