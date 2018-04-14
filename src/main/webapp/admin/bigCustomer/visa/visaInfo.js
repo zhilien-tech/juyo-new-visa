@@ -3,7 +3,7 @@
 function cloneMoreDiv(divClass){
 	var cloneDiv = $("."+divClass).eq(0).clone();
 	emptyContentByObj(cloneDiv);
-	$("."+divClass).last().append(cloneDiv);
+	$("."+divClass).last().after(cloneDiv);
 }
 //删除多段
 function deleteMoreDiv(divClass){
@@ -400,10 +400,10 @@ $(".isservedinrebelgroup").change(function(){
 
 //以前工作信息多段操作
 $(".beforeWorksave").click(function(){
-	cloneMoreDiv(workBeforeInfosDiv);
+	cloneMoreDiv("workBeforeInfosDiv");
 });
 $(".beforeWorkcancel").click(function(){
-	deleteMoreDiv(workBeforeInfosDiv);
+	deleteMoreDiv("workBeforeInfosDiv");
 });
 
 
@@ -574,6 +574,7 @@ function deleteBrotherEle(obj){
 function emptyContentByObj(obj){
 	obj.find("input[type='text']").each(function() {
 		$(this).val("");
+		$(this).prop("disabled",false);
 	});
 	obj.find("select").each(function() {
 		$(this).val(0);

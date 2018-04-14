@@ -59,7 +59,7 @@
 						</div>
 						<!--第二部分No-->
 						<div class="teamnamefalse groupInputInfo">
-						
+							<div>
 							<c:if test="${!empty obj.companionList }">
 								<c:forEach var="companion" items="${obj.companionList }">
 									<div class="teamnamefalseDiv" >
@@ -111,12 +111,16 @@
 									</div>
 								</div>
 							</c:if>
+							</div>
+							
+							<div class="btnGroup companyGroup">
+								<a class="save companysave">添加</a>
+								<a class="cancel companycancel">去掉 </a>
+							</div>
+							
 						</div>
-					<!-- 业务需求，先隐藏 -->
-						<div class="btnGroup companyGroup">
-							<a class="save companysave">添加</a>
-							<a class="cancel companycancel">去掉 </a>
-						</div>	
+						
+							
 					</div>
 				</div>
 			</div>
@@ -1311,8 +1315,8 @@
 					</div>
 					<!--yes-->
 					<div class="paddingTop elementHide dinrebelDiv grouptextareaInfo">
-						<!-- <label>说明</label>
-						<textarea></textarea> -->
+						<label>说明</label>
+						<textarea></textarea>
 					</div>
 				</div>
 			</div>	
