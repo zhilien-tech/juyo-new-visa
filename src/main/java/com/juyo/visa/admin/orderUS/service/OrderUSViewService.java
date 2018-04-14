@@ -44,6 +44,7 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
+import org.nutz.mvc.annotation.Param;
 import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Lists;
@@ -54,6 +55,7 @@ import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.orderUS.entity.USPassportJsonEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
+import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -74,6 +76,7 @@ import com.juyo.visa.common.util.PinyinTool.Type;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.common.util.TranslateUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffVisaUsEntity;
@@ -116,6 +119,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	@Inject
 	private MailService mailService;
+
+	@Inject
+	private WeXinTokenViewService weXinTokenViewService;
 
 	@Inject
 	private UploadService qiniuUploadService;//文件上传
@@ -1633,6 +1639,18 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			e.printStackTrace();
 		}
 		return inputStream;
+	}
+
+	//微信JSSDK上传的文件需要重新下载后上传到七牛云
+	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String mediaIds,
+			@Param("sessionid") String sessionid, @Param("type") Integer type, HttpServletRequest request,
+			HttpServletResponse response) {
+		weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
+		TAppStaffCredentialsEntity passport = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffId).and("type", "=", type));
+		String url = passport.getUrl();
+		passportRecognitionBack(url, staffId, request, response);
+		return null;
 	}
 
 }

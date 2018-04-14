@@ -143,5 +143,15 @@ public class MobileVisaModule {
 	public Object getSecondHousecard(@Param("type") int type, @Param("staffid") int staffid) {
 		return mobileVisaService.getSecondHousecard(type, staffid);
 	}
+	
+	
+	/*
+	 * 获取微信多图上传 图片集合
+	 */
+	@At
+	@POST
+	public Object getWxMorePhotos(@Param("type") int type, @Param("staffid") int staffid) {
+		return mobileVisaService.getWxMorePhotos(type, staffid);
+	}
 
 }

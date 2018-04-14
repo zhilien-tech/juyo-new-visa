@@ -307,4 +307,13 @@ public class OrderUSModule {
 		return orderUSViewService.passportRecognitionBack(url, staffid, request, response);
 	}
 
+	//微信JSSDK上传的文件需要重新下载后上传到七牛云
+	@At
+	@POST
+	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String mediaIds,
+			@Param("sessionid") String sessionid, @Param("type") Integer type, HttpServletRequest request,
+			HttpServletResponse response) {
+		return orderUSViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type, request, response);
+	}
+
 }

@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.annotation.Param;
 import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
@@ -480,4 +481,15 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		return fetch;
 	}
 
+	/**
+	 * 获取微信多图上传 图片集合
+	 * @param type
+	 * @param staffid
+	 * @return
+	 */
+	public Object getWxMorePhotos(@Param("type") int type, @Param("staffid") int staffid) {
+		List<TAppStaffCredentialsEntity> photoList = dbDao.query(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", type), null);
+		return photoList;
+	}
 }

@@ -1,156 +1,56 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>护照首页</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-   		<meta name="format-detection" content="telephone=no">
-   		<!--公共样式-->
-		<link rel="stylesheet" href="css/common.css" />
-		<!--本页css-->
-		<link rel="stylesheet" href="css/filming.css" />
-	</head>
-	<body>
-		<header>
-			<div class="filming">
-				<a onclick="returnPage()">
-				<i></i>
-				<span>护照首页</span>	</a>
+<head>
+<meta charset="UTF-8">
+<title>护照首页</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<!--公共样式-->
+<link rel="stylesheet" href="css/common.css" />
+<!--本页css-->
+<link rel="stylesheet" href="css/filming.css" />
+</head>
+<body>
+	<header>
+		<div class="filming">
+			<a onclick="returnPage()"> <i></i> <span>护照首页</span>
+			</a>
+		</div>
+	</header>
+	<section>
+		<div class="passport">
+			<img src="img/hz.jpg" />
+			<div class="dialog"></div>
+			<span class="passportExpain">护照拍摄图例</span>
+		</div>
+		<div class="passportShoot">
+			<div class="uploadPassport">
+				<p>上传护照</p>
+				<img style="pointer-events: none;" class="uploadImgReady" />
 			</div>
-		</header>
-		<section>
-			<div class="passport">
-				<img src="img/hz.jpg" />
-				<div class="dialog"></div>
-				<span class="passportExpain">护照拍摄图例</span>
-			</div>
-			<div class="passportShoot">
-				<div class="uploadPassport">
-					<p>上传护照</p>
-					<img style="pointer-events:none;" class="uploadImgReady" />
-				</div>
-				<input type="file" class="passportImg" id="passportImg" name="passportImg" />
-			</div>
-		</section>
-		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
-		<script type="text/javascript" src="js/rem(750).js" ></script>
-		<script type="text/javascript" src="js/layer.js" ></script>
-		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
-		<script>
-		function getImage(staffid){
-			$.ajax({
-				url : "/admin/mobileVisa/getInfoByType.html",
-				data : {
-					type : 1,
-					staffid : staffid,
-				},
-				dataType : "json",
-				type : 'post',
-				success : function(data) {
-					if(data != null){
-						$(".uploadImgReady").attr("src",data.url);
-					}
-				}
-			});
-		}
-		//点击上传图片
-		$(function(){
-			var	staffid=GetQueryString('staffid');
-			var	sessionid=GetQueryString('sessionid');
-			var	flag=GetQueryString('flag');
-			getImage(staffid);
-			$(".uploadPassport").click(function(){
-				$("#passportImg").click();
-				$("#passportImg").change(function(){
-					layer.load(1,{
-						shade : "#000"
-					});
-					var that = this;
-		            lrz(this.files[0]).then(function (rst) {
-		                /* $('.bacimg2').attr('src',rst.base64);*/
-		                $('#upload').hide(); 
-		                // 处理成功会执行
-		                sourceSize = (that.files[0].size / 1024).toFixed(2);
-		                resultSize = (rst.fileLen / 1024).toFixed(2);
-		                scale = parseInt(100 - (resultSize / sourceSize * 100));
-		                rst.formData.append('image',rst.file);
-//		                alert(rst);
-//		                alert(JSON.stringify(rst.formData));
-//		                alert(rst.file);
-//		                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
-						//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
-		                uploadPositive(rst,rst.formData,staffid,sessionid,flag); 
-		            }).catch(function (err) {
-		                console.log(err);
-		            });
-				});
-			});
-		})
-		
-		//跳转2寸图片
-		function returnPage(){
-			var staffid = GetQueryString("staffid");
-			var	sessionid=GetQueryString('sessionid');
-			var	flag=GetQueryString('flag');
-			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
-		}
-		
-		//获取URL地址参数
-	    function GetQueryString(name){
-	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-	         var r = window.location.search.substr(1).match(reg);
-	         if(r!=null)return  unescape(r[2]); return null;
-	    }
-		
-		//上传图片
-		function uploadPositive(rst, formData,staffid,sessionid,flag){
-			if(!formData){
-				formData = new FormData();
+			<input type="file" class="passportImg" id="passportImg"
+				name="passportImg" />
+		</div>
+	</section>
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/rem(750).js"></script>
+	<script type="text/javascript" src="js/layer.js"></script>
+	<script type="text/javascript" src="js/lrz.all.bundle.js"></script>
+	<script type="text/javascript" src="js/passportUpload.js"></script>
+	<script>
+		//护照识别				
+		/* $.ajax({
+			type : "POST",//提交类型  
+			url : '/admin/orderUS/passportRecognition.html',
+			data : {
+				url : url,
+				staffid : staffid
+			},
+			success : function(obj) {
+
 			}
-	        formData.append("image", rst.file); 
-	        formData.append("type", 1); 
-	        formData.append("staffid", staffid); 
-	        formData.append("sessionid", sessionid); 
-	        formData.append("flag", flag); 
-	        console.log('------------------------------');
-	        console.log(formData); 
-	        console.log(rst.file);
-	        /* var layerIndex = layer.load(1, {
-				shade : "#000"
-			}); */
-	        $.ajax({
-				type : "POST",//提交类型  
-				dataType : "json",//返回结果格式  
-				url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
-				async : false,
-				processData : false, //当FormData在jquery中使用的时候需要设置此项
-				contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
-				//请求数据  
-				data : formData,
-				success : function(obj) {//请求成功后的函数 
-					//console.log('=====成功========');
-					//关闭加载层
-					getImage(staffid);
-					//$(".uploadImgReady").attr("src",obj);
-					//layer.closeAll('loading');
-					/* if (obj!=null) {
-						//layer.msg("上传成功"); 
-						$.ajax({
-							type : "POST",//提交类型  
-							url : '/admin/orderUS/passportRecognition.html',
-							data : {
-								url : obj,
-								staffid : staffid
-							},
-							success : function(obj) {
-								
-							}
-						});
-					} */
-				}
-			}); // end of ajaxSubmit
-			alert(111);
-		}
-		</script>
-	</body>
+		}); */
+	</script>
+</body>
 </html>
