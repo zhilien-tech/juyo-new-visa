@@ -61,7 +61,6 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 	//根据accessToken获取用户个人信息
 	public Object SaveUser(String code) {
 		Map<String, Object> result = Maps.newHashMap();
-		JSONObject jo = new JSONObject();
 		if (!Util.isEmpty(code)) {
 			System.out.println("code=" + code);
 			JSONObject accessTokenObject = getAccessToken(code);
@@ -75,16 +74,28 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 			SaveOrUpdateUserInfo(accessToken, openid);
 			//调用验证用户是否已注册
 			Map<String, Object> userInfo = (Map<String, Object>) appEventsViewService.checkUserLogin(openid);
-			//用户已注册
-			result.put("flag", "1");
-			//姓
-			result.put("firstname", userInfo.get("firstname"));
-			//名
-			result.put("lastname", userInfo.get("lastname"));
-			//电话
-			result.put("telephone", userInfo.get("telephone"));
-			//邮箱
-			result.put("email", userInfo.get("email"));
+
+			if (!Util.isEmpty(userInfo)) {
+				//用户已注册
+				result.put("flag", "1");
+				//openid
+				result.put("openid", openid);
+				System.out.println();
+				//姓
+				result.put("firstname", userInfo.get("firstname"));
+				//名
+				result.put("lastname", userInfo.get("lastname"));
+				//电话
+				result.put("telephone", userInfo.get("telephone"));
+				//邮箱
+				result.put("email", userInfo.get("email"));
+			} else {
+				result.put("flag", "0");
+				//openid
+				result.put("openid", openid);
+
+			}
+
 		}
 
 		return result;
@@ -100,7 +111,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 		if (Util.isEmpty(wxinfo)) {
 			wxinfo = new TAppStaffWxinfoEntity();
 		}
-		if (null != user) {
+		if (!Util.isEmpty(user)) {
 			try {
 				// 用户的标识
 				wxinfo.setOpenid(user.getString("openid"));

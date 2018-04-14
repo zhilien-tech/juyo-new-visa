@@ -57,7 +57,7 @@
 		
 		$(function(){
 			var code = GetQueryString("code");
-			
+			var openid = "";
 			$.ajax({
     			type : "POST",//提交类型  
     			async:false,
@@ -69,25 +69,26 @@
  				//请求成功后的函数 
     				if(obj.flag == 1){
     					//验证用户是否已经注册
+    					openid = obj.openid;
     					$(".surName").val(obj.firstname);
     					$(".surName").attr('readOnly',"true");
     					$(".name").val(obj.lastname);
     					$(".name").attr('readOnly',"true");
     					$(".telphone").val(obj.telephone);
     					$(".telphone").attr('readOnly',"true");
-    					$(".email").val(objss.email);
+    					$(".email").val(obj.email);
     					$(".email").attr('readOnly',"true");
     					$(".btnPayment").text("已报名");
     					$(".payForCase a").addClass("btnPaymentHide");
     					$(".payForCase a").removeClass("btnPayment");
     			 		
     				}else{
+    					openid = obj.openid;
     					alert('用户未注册');
     				}
     			}
     				//关闭加载层
     		})
-    		alert("openid-----"+openid);
 			/* 手机号只能输入数字 */
 			$(document).on("input",".telphone",function(){
 				$(this).val($(this).val().replace(/[^\d]/g,''));
@@ -106,6 +107,7 @@
 			});
 		
 			$(".btnPayment").click(function(){
+				layer.load(1);
 				var surName = $(".surName").val();
 				var name = $(".name").val();
 				var telphone = $(".telphone").val();
@@ -174,13 +176,14 @@
 					return;
 				} */
 				var redirect = $("#redirect").val();
+				var penid = openid;
 				if(0 == redirect){
 				$.ajax({
 					type:"post",
 					url:"/admin/appEvents/signUpEventByPublicNum",
 					data:{
 						eventId:eventId,
-						weChatToken:openid,
+						weChatToken:penid,
 						firstname:surName,
 						lastname:name,
 						telephone:telphone,
@@ -189,6 +192,7 @@
 					dataType : "json",
 					async:true,
 					success:function(data){
+						layer.closeAll("loading");
 						if(200 == data.status){
 							$("#redirect").val("1");
 							window.location.href='https://detail.youzan.com/show/goods?alias=2fu4k1rbjazh2&v2/goods/2fu4k1rbjazh2'
@@ -205,8 +209,6 @@
 				}
 			});
 		})
-		function checkUserInfo(){
-
-		}
+		
 	</script>
 </html>

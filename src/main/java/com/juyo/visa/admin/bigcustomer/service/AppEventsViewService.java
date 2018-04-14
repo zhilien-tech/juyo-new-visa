@@ -452,6 +452,8 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 			System.out.println("zhuceOK");
 			//用户已注册
 			result.put("flag", "1");
+			//openid
+			result.put("openid", openid);
 			//姓
 			result.put("firstname", basicInfo.getFirstname());
 			//名
