@@ -363,6 +363,6 @@ function deleteApplicantFrontImg() {
 //右箭头跳转
 function saveApplicant(status){
 	if(status == 2){
-		window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='+passportId;
+		window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='+passportId+'&isDisable='+isDisable;
 	}
 }
