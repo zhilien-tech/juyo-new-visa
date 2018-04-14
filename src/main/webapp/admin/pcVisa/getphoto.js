@@ -237,13 +237,16 @@ function housecard(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
-				for(var i = 0;i<data.length;i++){
+				for(var i = 0;i<data.query.length;i++){
 				$(".housecard").after('<div class="uploadReleases housecard'+i+'" >'+
 					'<div>上传</div>'+
-					'<img src="'+data[i].url+'" class="longitudinal"/>'+
+					'<img src="'+data[i].query.url+'" class="longitudinal"/>'+
 				'</div>');
 				}
 				$(".1").remove();
+				$("#propertyholder").val(data.explain.propertyholder);
+				$("#area").val(data.explain.area);
+				$("#address").val(data.explain.address);
 			}
 		}
 	});

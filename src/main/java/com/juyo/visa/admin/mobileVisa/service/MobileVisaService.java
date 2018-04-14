@@ -424,6 +424,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	 * 获取多张图片
 	 */
 	public Object getMuchPhotoByStaffid(Integer staffid, Integer type) {
+		Map<String, Object> result = Maps.newHashMap();
 		List<TAppStaffCredentialsEntity> query = new ArrayList<TAppStaffCredentialsEntity>();
 		if (type == TAppStaffCredentialsEnum.HOME.intKey()) {
 			query = dbDao.query(TAppStaffCredentialsEntity.class,
@@ -435,8 +436,14 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		if (!Util.isEmpty(query)) {
 			if (type != 4) {
 				Collections.reverse(query);
+				return query;
+			} else {
+				TAppStaffCredentialsExplainEntity expain = dbDao.fetch(TAppStaffCredentialsExplainEntity.class,
+						Cnd.where("staffid", "=", staffid));
+				result.put("explain", expain);
+				result.put("query", query);
+				return result;
 			}
-			return query;
 		} else {
 			return 0;
 		}
