@@ -34,30 +34,26 @@ $(".team").change(function(){
 	}
 });
 
-//添加多段
-//先这样写日后修改
-//添加
+//旅伴信息多段操作
 $(".companysave").click(function(){
-	
-	$(".teamnamefalse").append('<div class="teamnamefalseDiv ">'+
-								'<div class="companionSurnName">'+
-								'<label>同伴姓</label>'+
-								'<input id="firstname" name="firstname" type="text" placeholder="同伴姓" /></div>'+
-								'<div class="companionName">'+
-								'<label>同伴名</label>'+
-								'<input id="lastname" name="lastname" type="text" placeholder="同伴名" /></div><div class="clear"></div>'+
-								'<div class="youRelationship">'+
-								'<label>与你的关系</label>'+
-								'<select id="relationship" name="relationship">'+
-								'<option value="0">请选择</option>'+
-								'<c:forEach items="${obj.TravelCompanionRelationshipEnum }" var="map"><option value="${map.key }">${map.value }</option></c:forEach></select></div></div>'
-								);
+	cloneMoreDiv("teamnamefalseDiv");
 });
-//删除
 $(".companycancel").click(function(){
-	
-	$(".teamnamefalseDiv:last").remove();
-})
+	deleteMoreDiv("teamnamefalseDiv");
+});
+
+//克隆添加多段
+function cloneMoreDiv(divClass){
+	var cloneDiv = $("."+divClass).eq(0).clone();
+	emptyContentByObj(cloneDiv);
+	$("."+divClass).last().append(cloneDiv);
+}
+//删除多段
+function deleteMoreDiv(divClass){
+	if($("."+divClass).length>1){
+		$("."+divClass+":last").remove();
+	}
+}
 
 
 //-------------------------------------------家庭信息 end----------------------------------
@@ -158,8 +154,11 @@ $(".onceImmigration").change(function(){
 });
 
 
-//添加多段
+//去过美国多段
 $(".beforesave").click(function(){
+	
+	
+	
 	$(".gotousInfo").append('<div class="goUS_CountryDiv"><div class="groupInputInfo">'+
 							'<label>抵达日期</label>'+
 							'<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年"></div>'+
@@ -172,6 +171,10 @@ $(".beforesave").click(function(){
 $(".beforecancel").click(function(){
 	$('.goUS_CountryDiv:last').remove();
 });
+
+
+
+
 //是否有驾照
 $(".driversave").click(function(){
 	$(".driverYes").append(	'<div class="goUS_drivers">'+

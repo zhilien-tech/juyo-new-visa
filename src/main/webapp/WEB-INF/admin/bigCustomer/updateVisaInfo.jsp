@@ -164,7 +164,7 @@
 									<div class="goUS_CountryDiv">
 										<div class="groupInputInfo">
 											<label>抵达日期</label>
-											<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
+											<input type="text" id="arrivedate" name="arrivedate" class="arrivedate datetimepickercss" placeholder="日/月/年">
 										</div>
 										<div class="groupInputInfo stopDate">
 											<label>停留时间</label>
