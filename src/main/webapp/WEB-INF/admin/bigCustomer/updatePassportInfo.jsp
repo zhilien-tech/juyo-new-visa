@@ -31,6 +31,7 @@
 				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 			</div>
 			<div class="modal-body">
+				<div class="dislogHide"></div>
 				<div class="tab-content row">
 					<div class="col-sm-5 padding-right-0">
 						
@@ -218,6 +219,8 @@
 		//页面不可编辑
 		if(isDisable == 1){
 			$(".modal-body").attr('readonly', true);
+			$(".dislogHide").show();
+			$("#addBtn").hide();
 		}
 	});
 		

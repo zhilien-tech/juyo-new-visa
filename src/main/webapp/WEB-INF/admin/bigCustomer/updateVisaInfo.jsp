@@ -35,6 +35,7 @@
 		</a> -->
 		<div class="topHide"></div>
 		<div id="wrapper" v-cloak class="section">
+			<div class="dislogHide"></div>
 			<!--旅伴信息-->
 			<div class="companyInfoModule">
 				<div class="titleInfo">旅伴信息</div>
@@ -1674,6 +1675,8 @@
 			//页面不可编辑
 			if(isDisable == 1){
 				$(".section").attr('readonly', true);
+				$(".dislogHide").show();
+				$(".saveVisa").hide();
 			}
 			
 			openYesOrNoPage();
