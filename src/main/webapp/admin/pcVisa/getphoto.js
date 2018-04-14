@@ -242,7 +242,7 @@ function housecard(staffid, type) {
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			if(data!=null){
+			if(data!=0){
 				for(var i = 0;i<data.query.length;i++){
 				$(".housecard").after('<div class="uploadReleases housecard'+i+'" >'+
 					'<div>上传</div>'+
@@ -270,7 +270,7 @@ function household(staffid, type) {
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			if(data!=null){
+			if(data!=0){
 			//	console.log(data);
 			//$("#household").attr("src",data.url);
 				$(".householdBack").next().remove();

@@ -1,3 +1,7 @@
+var staffid=GetQueryString('staffid');
+var sessionid=GetQueryString('sessionid');
+var flag=GetQueryString('flag');
+
 //获取URL地址参数
 function GetQueryString(name){
 	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -5,14 +9,23 @@ function GetQueryString(name){
 	if(r!=null)return  unescape(r[2]); return null;
 }
 
-//返回上一级
+//返回上一级，开始护照扫描
 function returnPage(){
-	var staffid = GetQueryString("staffid");
-	var	sessionid=GetQueryString('sessionid');
-	var	flag=GetQueryString('flag');
-	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid
+	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
+	$.ajax({
+		type : "post",
+		url : "/admin/orderUS/passportRecognition",
+		dataType : "json",
+		data:{
+			staffid:staffid
+		},
+		success : function(data) {
 
-+'&sessionid='+sessionid+'&flag='+flag;
+		},
+		error: function(xhr, status, error) {
+
+		}
+	});
 }
 
 
@@ -35,9 +48,6 @@ function getImage(staffid){
 }
 
 $(function(){
-	var staffid=GetQueryString('staffid');
-	var	sessionid=GetQueryString('sessionid');
-	var	flag=GetQueryString('flag');
 	getImage(staffid);
 	$.ajax({
 		type : "post",
@@ -115,7 +125,6 @@ $('.chooseImage').on('click', function() {
 });
 
 var uploadImage = function(localIds) {
-	var staffid=GetQueryString('staffid');
 	var localId = localIds.pop();
 	wx.uploadImage({
 		localId : localId,
@@ -148,7 +157,7 @@ function uploadToQiniu(staffid,serverIds){
 
 	$.ajax({
 		type : "post",
-		url : "/admin/orderUS/wechatJsSDKUploadToQiniu",
+		url : "/admin/weixinToken/wechatJsSDKUploadToQiniu",
 		dataType : "json",
 		async : false,
 		data:{
@@ -165,4 +174,9 @@ function uploadToQiniu(staffid,serverIds){
 		}
 	});
 }
+
+//返回上一级
+$(".savebutton").click(function(){
+	returnPage();
+});
 
