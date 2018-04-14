@@ -171,7 +171,7 @@ $(".driversave").click(function(){
 	cloneMoreDiv("goUS_drivers");
 });
 $(".drivercancel").click(function(){
-	deleteMoreDiv("goUS_CountryDiv");
+	deleteMoreDiv("goUS_drivers");
 });
 //---------------------------------------以前的美国旅游信息 end----------------------------------
 

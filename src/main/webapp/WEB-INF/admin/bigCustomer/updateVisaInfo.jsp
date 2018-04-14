@@ -232,7 +232,7 @@
 												<input id="isknowdrivernumber" name="isknowdrivernumber" type="checkbox"/>
 											</div>
 											<div class="groupSelectInfo driverR">
-						-						<label>哪个州的驾照</label>
+												<label>哪个州的驾照</label>
 												<select id="witchstateofdriver" name="witchstateofdriver">
 													<option value="0">请选择</option>
 													<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
