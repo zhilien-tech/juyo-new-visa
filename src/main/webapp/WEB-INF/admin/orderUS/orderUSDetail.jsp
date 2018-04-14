@@ -1327,7 +1327,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content:'/admin/pcVisa/updatePhoto.html?staffid='+staffid+'&flag=0'
+				content:'/admin/pcVisa/updatePhoto.html?staffid='+staffid+'&flag=0'+'&isDisable'
 			});
 		}
 		
@@ -1342,7 +1342,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id
+				content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id+'&isDisable'
 			});
 		}
 		
@@ -1357,7 +1357,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id
+				content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id+'&isDisable'
 			});
 		}
 		
@@ -1372,7 +1372,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+staffid
+				content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+staffid+'&isDisable'
 			});
 		}
 		

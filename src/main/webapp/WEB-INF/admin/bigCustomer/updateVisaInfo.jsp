@@ -1670,8 +1670,15 @@
 	<script type="text/javascript">
 	
 		$(function(){
+			var isDisable = '${obj.isDisable}';
+			//页面不可编辑
+			if(isDisable == 1){
+				$(".section").attr('readonly', true);
+			}
+			
 			openYesOrNoPage();
 		});
+	
 		//跳转到基本信息页
 		function baseInfoBtn(){
 			//左箭头跳转

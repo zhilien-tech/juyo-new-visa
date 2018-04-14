@@ -212,6 +212,15 @@
 	
 	
 	<script type="text/javascript">
+	
+	$(function(){
+		var isDisable = '${obj.isDisable}';
+		//页面不可编辑
+		if(isDisable == 1){
+			$(".modal-body").attr('readonly', true);
+		}
+	});
+		
 	    var firstname = '${obj.passport.firstname }';
 	    var firstnameen = '${obj.firstnameen }';
 	    var lastname = '${obj.passport.lastname }';
