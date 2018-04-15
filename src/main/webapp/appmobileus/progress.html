@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
    		<meta name="format-detection" content="telephone=no">		
 		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/progress.css" />
 		<script type="text/javascript" src="js/rem(750).js" ></script>
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script>
@@ -20,61 +21,49 @@
         		$.ajax({
         			type : "POST",//提交类型  
         			//dataType : "json",//返回结果格式  
-        	 		url : '/admin/weixinToken/saveWxinfo.html',//请求地址  
+        	 		url : '/admin/weixinOpenId/checkProgress.html',//请求地址  
         			data:{code:code},
         			//请求数据  
-        			success : function(obj) {//请求成功后的函数 
-        				//关闭加载层
-        				console.log(obj);
-        			},
-        			error : function(XMLHttpRequest, textStatus, errorThrown) {
-        				
+        			success : function(data) {//请求成功后的函数 
+        				for(var i = 0;i < data.length;i++){
+							if(data[i].flag == 1){
+								var name = data[i].name;
+								var status = data[i].orderStatus;
+								$(".sectionInfo").append('<div class="mainInfo"> <div class="titleHead">USANA &nbsp;2018国际年会</div>'+
+														 '<ul class="downUpInfo"> <li>'+
+														 '<span id="name">'+name+'</span></li> </ul>'+
+														 '<div class="statusInfo"><span class="UsName">美国</span>'+
+														 '<span class="UsStatus">'+status+'</span></div></div>'
+														);
+							}else{
+								$(".enrolldialogBG").show();
+	        					$(".enrollDialog").show();
+							}
         			}
+        		}	
         		});
         		
         	})
         	
         	
         </script>
-		<style>
-			.sectionInfo {
-				padding: 0 .2rem;
-				margin-top: .2rem;
-			}
-			.mainInfo {
-				border: 1px solid #000;
-				padding: .2rem ;
-			}
-			.titleHead {
-				font-size: .4rem;
-			}
-			.downUpInfo li {
-				font-size: .3rem;
-				padding:.2rem 0;
-			}
-			.statusInfo span {
-				font-size: .3rem;
-				display: inline-block;
-			}
-			.UsStatus {
-				display: block;
-				float: right;
-			}
-		</style>
 	</head>
 	<body>
 		<div class="sectionInfo">
-			<div class="mainInfo">
-				<div class="titleHead">USANA &nbsp;2018国际年会</div>
-				<ul class="downUpInfo">
-					<li>
-						<span>刘德华</span>
-					</li>
-				</ul>
-				<div class="statusInfo">
-					<span class="UsName">美国</span>
-					<span class="UsStatus">资料已进使馆</span>
-				</div>
+			
+		</div>
+		<!-- 弹框 -->
+		<div class="enrolldialogBG"></div>
+		<div class="enrollDialog">
+			<div class="enrollTitle">
+				如果您<span>已报名</span>成功请点击"去登陆"
+			</div>
+			<div class="enrollTitle2">
+				如果您还<span>没有报名</span>成功请点击"去报名"
+			</div>
+			<div class="enrollBtnGroup">
+				<a class="goEnroll" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd77f341f1b849e68&redirect_uri=http%3A%2F%2Fwww.f-visa.com%2Fappmobileus%2Fenroll.html&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect">去报名</a>
+				<a class="goLogin" href="">去登陆</a>
 			</div>
 		</div>
 	</body>

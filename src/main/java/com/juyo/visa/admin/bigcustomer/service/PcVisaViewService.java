@@ -110,7 +110,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 			List<Record> applicantList = dbDao.query(applysql, cnd, null);
 			for (Record app : applicantList) {
 				int status = app.getInt("visastatus");
-				for (VisaStatusEnum statusEnum : VisaStatusEnum.values())
+				for (USOrderListStatusEnum statusEnum : USOrderListStatusEnum.values())
 					if (!Util.isEmpty(status) && status == statusEnum.intKey()) {
 						app.set("visastatus", statusEnum.value());
 						break;

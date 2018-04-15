@@ -229,9 +229,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			for (USOrderListStatusEnum statusEnum : USOrderListStatusEnum.values()) {
 				if (!Util.isEmpty(orderStatus) && orderStatus == statusEnum.intKey()) {
 					record.set("orderstatus", statusEnum.value());
-				} else if (orderStatus == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
-					record.set("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
 				}
+				/*else if (orderStatus == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+					record.set("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
+				}*/
 			}
 
 		}
@@ -295,9 +296,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		for (USOrderListStatusEnum statusenum : USOrderListStatusEnum.values()) {
 			if (status == statusenum.intKey()) {
 				result.put("orderstatus", statusenum.value());
-			} else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
-				result.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
 			}
+			/*else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+				result.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
+			}*/
 		}
 		//护照信息
 		TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
@@ -661,9 +663,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		for (USOrderListStatusEnum statusenum : USOrderListStatusEnum.values()) {
 			if (status == statusenum.intKey()) {
 				result.put("orderstatus", statusenum.value());
-			} else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
-				result.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
 			}
+			/*else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+				result.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
+			}*/
 		}
 		return result;
 	}
@@ -927,9 +930,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				for (USOrderListStatusEnum statusEnum : USOrderListStatusEnum.values()) {
 					if (status == statusEnum.intKey()) {
 						record.put("orderstatus", statusEnum.value());
-					} else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
-						record.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
 					}
+					/*else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+						record.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
+					}*/
 				}
 			}
 		}
@@ -954,10 +958,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		orderus.setOpid(principal);
 		orderus.setUpdatetime(new Date());
-		orderus.setStatus(JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey());
+		//orderus.setStatus(JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey());
 		dbDao.update(orderus);
 		//插入日志
-		insertLogs(orderid, orderus.getStatus(), loginUser.getId());
+		insertLogs(orderid, JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey(), loginUser.getId());
 		return null;
 	}
 
@@ -1501,6 +1505,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffCredentialsEntity fetch = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.NEWHUZHAO.intKey()));
 		String url = fetch.getUrl();
+		System.out.println(url);
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);
 
@@ -1511,6 +1516,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		rd.getInputs().add(input);
 
 		String content = Json.toJson(rd);
+		System.out.println("============");
 		String info = (String) aliPassportOcrAppCodeCall(content);
 		System.out.println("info:" + info);
 
