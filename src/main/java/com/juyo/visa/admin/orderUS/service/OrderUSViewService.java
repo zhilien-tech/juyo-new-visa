@@ -1280,6 +1280,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffCredentialsEntity fetch = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		String url = fetch.getUrl();
+		System.out.println(url);
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);
 
@@ -1290,6 +1291,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		rd.getInputs().add(input);
 
 		String content = Json.toJson(rd);
+		System.out.println("============");
 		String info = (String) aliPassportOcrAppCodeCall(content);
 		System.out.println("info:" + info);
 

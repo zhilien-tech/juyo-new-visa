@@ -45,7 +45,7 @@ public class WeXinAccreditModule {
 	@Filters
 	public Object checkProgress(@Param("code") String code) {
 		System.out.println(code);
-		return weXinAccreditService.SaveUser(code);
+		return weXinAccreditService.CheckProgress(code);
 	}
 
 	//	//校验用户是否授权过

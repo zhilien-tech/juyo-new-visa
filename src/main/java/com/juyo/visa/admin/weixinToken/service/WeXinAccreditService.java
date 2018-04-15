@@ -6,6 +6,9 @@
 
 package com.juyo.visa.admin.weixinToken.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.nutz.dao.Cnd;
@@ -17,10 +20,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.bigcustomer.service.AppEventsViewService;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
+import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffWxinfoEntity;
 import com.juyo.visa.entities.TConfWxEntity;
+import com.juyo.visa.entities.TOrderUsEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -61,20 +67,55 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 
 	//查询申请进度
 	public Object CheckProgress(String code) {
-		Map<String, Object> result = Maps.newHashMap();
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		Map<String, Object> orderMap = new HashMap<String, Object>();
 		//获得openid
 		JSONObject accessToken = getAccessToken(code);
 		String openid = accessToken.get("openid").toString();
-		//根据openid获取用户进出信息
-		TAppStaffBasicinfoEntity userInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
-				Cnd.where("wechattoken", "=", openid));
-		if (!Util.isEmpty(userInfo)) {
-			//获取用户的进度状态
-			Integer status = userInfo.getStatus();
+		if (Util.isEmpty(openid)) {
+			System.out.println("no openid");
+			//没有openid 提示用户去注册或者登陆
+			orderMap.put("flag", 1);
+			result.add(orderMap);
+		} else {
+			System.out.println("have openid");
+			//根据openid获取用户进出信息
+			TAppStaffBasicinfoEntity OneuserInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+					Cnd.where("wechattoken", "=", openid));
 
+			//根据手机号查询所有人员id
+			List<TAppStaffBasicinfoEntity> listOrderUsInfo = dbDao.query(TAppStaffBasicinfoEntity.class,
+					Cnd.where("telephone", "=", OneuserInfo.getTelephone()), null);
+			for (TAppStaffBasicinfoEntity orderUsr : listOrderUsInfo) {
+				//订单人名称
+				orderMap.put("name", orderUsr.getFirstname() + orderUsr.getLastname());
+				System.out.println("name" + orderUsr.getFirstname() + orderUsr.getLastname());
+
+				//根据staffID查询美国订单ID
+				List<TAppStaffOrderUsEntity> listOrderId = dbDao.query(TAppStaffOrderUsEntity.class,
+						Cnd.where("staffid", "=", orderUsr.getId()), null);
+				for (TAppStaffOrderUsEntity tOrderUsEntity : listOrderId) {
+					//根据订单ID查询美国订单
+					TOrderUsEntity order = dbDao.fetch(TOrderUsEntity.class,
+							Cnd.where("id", "=", tOrderUsEntity.getOrderid()));
+					//订单状态
+					if (!Util.isEmpty(order)) {
+						//获取用户的进度状态
+						Integer status = order.getStatus();
+						System.out.println("status===" + status);
+						for (USOrderListStatusEnum e : USOrderListStatusEnum.values()) {
+							if (status == e.intKey()) {
+								orderMap.put("orderStatus", e.value());
+								System.out.println("orderStatus=" + e.value());
+								break;
+							}
+						}
+					}
+				}
+				result.add(orderMap);
+			}
 		}
-		return null;
-
+		return result;
 	}
 
 	//根据accessToken获取用户个人信息
