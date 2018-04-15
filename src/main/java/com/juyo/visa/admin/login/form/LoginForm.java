@@ -29,4 +29,7 @@ public class LoginForm {
 	private String messageErrMsg;
 	/**主页面的URL地址*/
 	private String mainurl;
+	
+	/**用户类型*/
+	private Integer userType;
 }
