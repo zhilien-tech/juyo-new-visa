@@ -25,7 +25,7 @@ import com.juyo.visa.admin.weixinToken.service.WeXinAccreditService;
  */
 @IocBean
 @Filters
-@At("admin/weixinOpenId")
+@At("/admin/weixinOpenId")
 public class WeXinAccreditModule {
 	@Inject
 	private WeXinAccreditService weXinAccreditService;
@@ -35,16 +35,20 @@ public class WeXinAccreditModule {
 	@POST
 	@Filters
 	public Object saveWxinfo(@Param("code") String code) {
-		System.out.println(code);
+
 		return weXinAccreditService.SaveUser(code);
 	}
 
-	//查询进度
+	//根据openid查询进度
+
+	//	public Object checkProgress(@Param("code") String code) {
+	//		System.out.println("checkProgress ===" + code);
+	//		return weXinAccreditService.CheckProgress(code);
+	//	}
 	@At
 	@POST
 	@Filters
 	public Object checkProgress(@Param("code") String code) {
-		System.out.println(code);
 		return weXinAccreditService.CheckProgress(code);
 	}
 

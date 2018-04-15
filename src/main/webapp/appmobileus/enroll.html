@@ -45,7 +45,7 @@
 		<div class="dialog"></div>
 	</body>
 	<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
-	<script type="text/javascript" src="js/layer.js" ></script>
+	<script type="text/javascript" src="/references/common/js/layer/layer.js" ></script>
 	<script type="text/javascript" src="js/rem(750).js" ></script>
 	<script>
 		//获取URL地址参数
@@ -177,6 +177,7 @@
 				var redirect = $("#redirect").val();
 				var penid = openid;
 				if(0 == redirect){
+			    var index = layer.load();
 				$.ajax({
 					type:"post",
 					url:"/admin/appEvents/signUpEventByPublicNum",
@@ -191,7 +192,8 @@
 					dataType : "json",
 					async:true,
 					success:function(data){
-						layer.closeAll("loading");
+						layer.close(index);
+						
 						if(200 == data.status){
 							$("#redirect").val("1");
 							window.location.href='https://detail.youzan.com/show/goods?alias=2fu4k1rbjazh2&v2/goods/2fu4k1rbjazh2'
