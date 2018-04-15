@@ -13,8 +13,6 @@
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
     <link rel="stylesheet" href="${base}/references/public/css/style.css">
-	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
     <!-- 加载中。。。样式 -->
 	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 	<!-- 本页样式 -->
@@ -61,6 +59,7 @@
 	</body>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>		
 	<script src="${base}/references/common/js/base/baseIcon.js"></script>
+	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script>
@@ -117,19 +116,100 @@
 		});
 		//$('#applicantInfo').bootstrapValidator('validate');
 	}
+		/* 手机号只能输入数字 */
+		$(document).on("input",".telphone",function(){
+			$(this).val($(this).val().replace(/[^\d]/g,''));
+		});
+	
 		$("#insertbtn").click(function(){
+				var surName = $(".surName").val();
+				var name = $(".name").val();
+				var telphone = $(".telphone").val();
+				var email = $(".email").val();
+				var eventId = "1";
+				var pattern = /^[1][3,4,5,7,8][0-9]{9}$/;
+				var patternEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+				if(surName == null || surName == ""){
+					layer.msg("姓不能为空");
+					/* $(".surName").css('border-bottom-color','red');
+					$(".dialog").html();
+					$(".dialog").show();
+					$(".dialog").html("姓不能为空");
+					setTimeout(function(){
+						$(".dialog").hide();
+					},2000); */
+					return;
+				}
+				if(name == null || name == ""){
+					layer.msg("名不能为空");
+					/* $(".name").css('border-bottom-color','red');
+					$(".dialog").html();
+					$(".dialog").show();
+					$(".dialog").html("名不能为空");
+					setTimeout(function(){
+						$(".dialog").hide();
+					},2000); */
+					return;
+				}
+				if(telphone == null || telphone == ""){
+					layer.msg("手机号不能为空");
+					/* $(".telphone").css('border-bottom-color','red');
+					$(".dialog").html();
+					$(".dialog").show();
+					$(".dialog").html("手机号不能为空");
+					setTimeout(function(){
+						$(".dialog").hide();
+					},2000); */
+					return;
+				}	
+				if(!pattern.test(telphone)){
+					layer.msg("手机号格式不正确");
+					/* $(".telphone").css('border-bottom-color','red');
+					$(".dialog").html();
+					$(".dialog").show();
+					$(".dialog").html("手机号格式不正确");
+					setTimeout(function(){
+						$(".dialog").hide();
+					},2000); */
+					return;
+				}
+				if(email == null || email == ""){
+					layer.msg("邮箱不能为空");
+					/* $(".email").css('border-bottom-color','red');
+					$(".dialog").html();
+					$(".dialog").show();
+					$(".dialog").html("邮箱不能为空");
+					setTimeout(function(){
+						$(".dialog").hide();
+					},2000); */
+					return;
+				}
+				
+				if(!patternEmail.test(email)){
+					layer.msg("邮箱格式不正确");
+				/* $(".email").css('border-bottom-color','red');
+				$(".dialog").html();
+				$(".dialog").show();
+				$(".dialog").html("邮箱格式不正确");
+				setTimeout(function(){
+					$(".dialog").hide();
+				},2000); */
+				return;
+			}
 			
-			applyValidate();
 			
+			
+			//applyValidate();
 			$.ajax({
 				type:"post",
-				url:"/admin/appEvents/signUpEventByPublicNum",
+				url:"/admin/appEvents/addOrder",
 				data:$("#insertOrder").serialize(),
 				dataType : "json",
 				success:function(data){
 					layer.closeAll("loading");
+					parent.reloadData();
 					closeWindow();
-					window.location.href = '/admin/orderUS/listUS.html';
+					//window.location.href = '/admin/orderUS/listUS.html';
 				}
 			});
 		});
