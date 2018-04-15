@@ -88,8 +88,8 @@ function oldhuzhao(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if (data != 0) {
-				for(var i=0;i<data.length;i++){
-					var url=data[i].url;
+				for(var i=0;i<data.query.length;i++){
+					var url=data.query[i].url;
 					$(".beforeInfo").before('<div class="uploadPassports">'+
 							'<div>上传</div>'+
 							'<img src='+url+' class="loadImg" width="100%" height="170px;"/>'+
@@ -114,13 +114,13 @@ function card(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=0){
-					var url=data[0].url;
-					if(data[0].status == 1){
+					var url=data.query[0].url;
+					if(data.query[0].status == 1){
 						$("#card").attr('src',url);
-						$("#cardBack").attr('src',data[1].url);
+						$("#cardBack").attr('src',data.query[1].url);
 					}else{
 						$("#cardBack").attr('src',url);
-						$("#card").attr('src',data[1].url);
+						$("#card").attr('src',data.query[1].url);
 					}
 			}
 		}
@@ -216,12 +216,12 @@ function drive(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=0){
-				var url=data[0].url;
+				var url=data.query[0].url;
 				if(data.length == 1){
 					$("#drive").attr('src',url);
 				}
 				if(data.length == 2){
-					$("#drive").attr('src',data[1].url);
+					$("#drive").attr('src',data.query[1].url);
 					$("#drive2").attr('src',url);
 				}
 				
@@ -250,9 +250,11 @@ function housecard(staffid, type) {
 				'</div>');
 				}
 				$(".1").remove();
-				$("#propertyholder").val(data.explain.propertyholder);
-				$("#area").val(data.explain.area);
-				$("#address").val(data.explain.address);
+				if(data.explain != null){
+					$("#propertyholder").val(data.explain.propertyholder);
+					$("#area").val(data.explain.area);
+					$("#address").val(data.explain.address);
+				}
 			}
 		}
 	});
@@ -274,10 +276,10 @@ function household(staffid, type) {
 			//	console.log(data);
 			//$("#household").attr("src",data.url);
 				$(".householdBack").next().remove();
-				for(var i = data.length-1;i>=0;i--){
+				for(var i = data.query.length-1;i>=0;i--){
 					$(".householdBack").after('<div class="uploadReleases">'+
 					'<div>户主页</div>'+
-					'<img src="'+data[i].url+'" class="longitudinal" />'+
+					'<img src="'+data.query[i].url+'" class="longitudinal" />'+
 				'</div>');
 				}
 			}
