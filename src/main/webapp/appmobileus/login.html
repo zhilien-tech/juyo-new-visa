@@ -14,33 +14,16 @@
              if(r!=null)return  unescape(r[2]); return null;
         }
         	$(function(){
-        		var code = GetQueryString("code");
-        		alert("123");
-        		alert(code);
         		$("#bgImgPic").height($(window).height());
         		$("#bgImgPic").width($(window).width());
         		
-        		$.ajax({
-        			type : "POST",//提交类型  
-        			
-        			//dataType : "json",//返回结果格式  
-        	 		url : '/admin/weixinOpenId/saveWxinfo.html',//请求地址  
-        			data:{code:code},
-        			//请求数据  
-        			success : function(obj) {//请求成功后的函数 
-        				//关闭加载层
-
-        				if(obj.flag == '12'){
-        					
-        				console.log(obj);
-        			},
-        			error : function(XMLHttpRequest, textStatus, errorThrown) {
-        				
-        			}
-        		});
-        		
-        	})
-        	
+       		$(".iconBM").click(function(){
+        		window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd77f341f1b849e68&redirect_uri=http%3A%2F%2Fwww.f-visa.com%2Fappmobileus%2Fenroll.html&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+        	});
+       		$(".iconJD").click(function(){
+        		window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd77f341f1b849e68&redirect_uri=http%3A%2F%2Fwww.f-visa.com%2Fappmobileus%2Fprogress.html&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+        	});
+        	});
         	
         </script>
     </head>
@@ -53,7 +36,7 @@
             <li><div><a href="https://h5.youzan.com/v2/showcase/mpnews?alias=YZru8RBcvM" class="btnGroupImg iconHD"></a></div></li>                    
             <li><div><a href="https://h5.youzan.com/v2/showcase/mpnews?alias=YZq0JPZBtF" class="btnGroupImg iconVisa"></a></div></li>                    
             <li><div><a href="https://h5.youzan.com/v2/showcase/mpnews?alias=YZVq0I5pEx" class="btnGroupImg iconZL"></a></div></li>                    
-            <li><div><a href="http://114.215.195.220:8080/appmobileus/enroll.html" class="btnGroupImg iconBM"></a></div></li>                    
+            <li><div><a class="btnGroupImg iconBM"></a></div></li>                    
             <li><div><a href="https://h5.youzan.com/v2/showcase/mpnews?alias=YZLmhAIJdd" class="btnGroupImg iconSelect"></a></div></li>                    
             <li><div><a href="https://h5.youzan.com/v2/showcase/mpnews?alias=YZbLMoxebi" class="btnGroupImg iconMQ"></a></div></li>                    
             <li><div><a href="http://114.215.195.220:8080/appmobileus/progress.html" class="btnGroupImg iconJD"></a></div></li>                    
