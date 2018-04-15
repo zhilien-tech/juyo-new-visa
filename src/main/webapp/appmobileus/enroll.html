@@ -84,7 +84,6 @@
     			 		
     				}else{
     					openid = obj.openid;
-    					alert('用户未注册');
     				}
     			}
     				//关闭加载层
@@ -193,9 +192,13 @@
 					async:true,
 					success:function(data){
 						layer.closeAll("loading");
-						if(200 == data.status || data.flag == "1"){
+						if(200 == data.status){
 							$("#redirect").val("1");
 							window.location.href='https://detail.youzan.com/show/goods?alias=2fu4k1rbjazh2&v2/goods/2fu4k1rbjazh2'
+						}else if("1" == data.flag){
+							alert("注册成功！");
+							window.location.href='http://www.f-visa.com/appmobileus/login.html'
+							
 						}else{
 							$(".dialog").html();
 							$(".dialog").show();
@@ -203,6 +206,8 @@
 							setTimeout(function(){
 								$(".dialog").hide();
 							},2000);
+							
+							
 						}
 					},
 				}); 
