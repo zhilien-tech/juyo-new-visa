@@ -153,7 +153,7 @@ section ul li {
 	-webkit-transform: rotate(45deg);
 	border-bottom: 0;
 	border-left:0;
-	margin-top: .34rem;
+	margin-top: .3rem;
 	display: inline-block;
 	float: right;
 }
@@ -170,6 +170,21 @@ footer {
 	text-align: center;
 	color: #FFF;
 	background-color: rgba(22,155,213,1);
+}
+/* 弹出层2秒钟 */
+.dialogTwoMin {
+	display:none; 
+	position:fixed;
+	top:40%;
+	left:19%;
+	width:5rem;
+	height:1rem;
+	line-height:1rem;
+	color:#FFF;
+	background:rgba(0,0,0,.5);
+	z-index:1000000000;
+	text-align:center;
+	font-size:.3rem;
 }
 /**********************************照片**********************************/
 .explain {
@@ -288,7 +303,10 @@ footer {
 }
 /**********************************旧护照**********************************/
 /*同上样式*/
-
+.Nomust {
+	color:red;
+	margin-left:2rem;
+}
 /**********************************身份证**********************************/
 .IDInfo {
 	position: relative;
@@ -381,7 +399,7 @@ footer {
 .camera {
 	position: absolute;
 	top: 45%;
-	left: 45%;
+	left: 42%;
 }
 .plus {
 	position: absolute;
@@ -427,9 +445,8 @@ footer {
 /**********************************房产证**********************************/
 .notes {
 	font-size: .3rem;
-	color: red;
+	color: #FFF;
 	padding: .2rem .2rem 0 .4rem;
-	opacity:0;
 }
 .addhouseCard {
 	padding-top: .3rem;
@@ -568,6 +585,15 @@ footer {
 	top:45%;
 	left:45%;
 	color:#fff;
+}
+.signNomust {
+	color:red;
+	margin-left:1rem;
+}
+/**********************************美国出签**********************************/
+.signingNomust {
+	color:red;
+	margin-left:1.1rem;
 }
 /**********************************公共样式**********************************/
 .savetitle {

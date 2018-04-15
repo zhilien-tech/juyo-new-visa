@@ -87,7 +87,7 @@
 	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 	<script type="text/javascript" src="js/rem(750).js"></script>
 	<script type="text/javascript" src="js/lrz.all.bundle.js"></script>
-	<script type="text/javascript" src="js/layer.js"></script>
+	<script type="text/javascript" src="/references/common/js/layer/layer.js"></script>
 	<script>
 
 			$(function() {
@@ -294,7 +294,8 @@
 						staffid : staffid,
 						propertyholder : $("#propertyholder").val(),
 						area : $("#area").val(),
-						address : $("#address").val()
+						address : $("#address").val(),
+						sessionid : sessionid
 					},
 					dataType : "json",
 					type : 'post',

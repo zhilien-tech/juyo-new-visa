@@ -371,14 +371,5 @@ function formatDate(dataStr) {
 	 }else{
 		 return "";
 	 }
-	/*if(dataStr.length>0){
-		var date = dataStr.split('/');
-		if(date != null || date !="")
-	    var y = date[2];  
-	    var m = date[1];  
-	    var d = date[0];  
-	    return y + '-' + m + '-' + d;  
-	}else{
-		return null;
-	}*/
+	
 };
