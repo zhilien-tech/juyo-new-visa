@@ -86,11 +86,11 @@ SELECT
 	tasb.telephone,
 	tasb.cardnum,
 	tasb.email,
-	tasb.visastatus,
 	tasp.passport,
 	tasou.orderid,
 	tos.ordernumber,
 	tasb.aacode,
+	tos.status visastatus,
 	tos.id
 FROM
 	t_app_staff_basicinfo tasb

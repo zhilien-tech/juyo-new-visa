@@ -200,7 +200,7 @@ $(function(){
 			maxmin: false,
 			shadeClose: false,
 			scrollbar: false,
-			area: ['400px', '45%'],
+			area: ['400px', '300px'],
 			content:'/admin/orderUS/addOrderUS.html'
 		});
 		//window.location.href = '/admin/orderUS/addOrderUS.html';
