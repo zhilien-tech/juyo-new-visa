@@ -459,6 +459,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			//美国联络点
 			TAppStaffContactpointEntity contactPointInfo = new TAppStaffContactpointEntity();
 			contactPointInfo.setStaffid(staffId);
+			contactPointInfo.setRalationship(DEFAULT_IS_NO);
+			contactPointInfo.setState(DEFAULT_IS_NO);
 			dbDao.insert(contactPointInfo);
 
 			//家庭信息
@@ -469,17 +471,32 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			familyInfo.setHasimmediaterelatives(DEFAULT_IS_NO);
 			familyInfo.setHasotherrelatives(DEFAULT_IS_NO);
 			familyInfo.setIsknowspousecity(DEFAULT_IS_NO);
-
+			familyInfo.setFatherstatus(DEFAULT_IS_NO);
+			familyInfo.setFatherstatusen(DEFAULT_IS_NO);
 			familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
 			familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
+			familyInfo.setMotherstatus(DEFAULT_IS_NO);
+			familyInfo.setMotherstatusen(DEFAULT_IS_NO);
 			familyInfo.setHasimmediaterelativesen(DEFAULT_IS_NO);
 			familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
 			familyInfo.setIsknowspousecityen(DEFAULT_IS_NO);
+			
+			familyInfo.setSpousenationality(DEFAULT_IS_NO);
+			familyInfo.setSpousenationalityen(DEFAULT_IS_NO);
+			familyInfo.setSpousecountry(DEFAULT_IS_NO);
+			familyInfo.setSpousecountryen(DEFAULT_IS_NO);
+			familyInfo.setSpouseaddress(DEFAULT_IS_NO);
+			familyInfo.setSpouseaddressen(DEFAULT_IS_NO);
+			
 			dbDao.insert(familyInfo);
 
 			//工作/教育/培训信息 
 			TAppStaffWorkEducationTrainingEntity workEducationInfo = new TAppStaffWorkEducationTrainingEntity();
 			workEducationInfo.setStaffid(staffId);
+			workEducationInfo.setOccupation(DEFAULT_IS_NO);
+			workEducationInfo.setOccupationen(DEFAULT_IS_NO);
+			workEducationInfo.setCountry(DEFAULT_IS_NO);
+			workEducationInfo.setCountryen(DEFAULT_IS_NO);
 			workEducationInfo.setIsemployed(DEFAULT_IS_NO);
 			workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
 			workEducationInfo.setIsclan(DEFAULT_IS_NO);
