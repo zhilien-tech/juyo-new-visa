@@ -152,6 +152,7 @@ function save(){
 	visaInfo.familyInfo.spousebirthday = formatDate($('#spousebirthday').val());//配偶生日
 	//工作/教育/培训信息
 	visadata.workEducationInfo = visaInfo.workEducationInfo;
+	alert("work:"+JSON.stringify(visadata.workEducationInfo));
 	visaInfo.workEducationInfo.workstartdate = formatDate($('#workstartdate').val());//工作开始日期
 	//同伴信息
 	visadata.companionList = getCompanionList();
