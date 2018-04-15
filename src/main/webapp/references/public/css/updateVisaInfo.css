@@ -13,6 +13,7 @@ label {
 	top: 0;
 	border-bottom:1px solid #eee;
 	background: #FFF;
+	z-index:10000000000;
 }
 .title {
 	display: block;

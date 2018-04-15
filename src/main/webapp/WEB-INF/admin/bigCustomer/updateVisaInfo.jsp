@@ -857,7 +857,8 @@
 										<div class="clear"></div>
 										<div class="draBig leftNo marginLS grouptextareaInfo">
 											<label>简要描述你的职责</label>
-											<textarea name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }"></textarea>
+											<input type="text" name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }" />
+											<%-- <textarea name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }"></textarea> --%>
 										</div>
 									</div>
 								</c:forEach>
@@ -932,7 +933,8 @@
 									<div class="clear"></div>
 									<div class="draBig leftNo marginLS grouptextareaInfo">
 										<label>简要描述你的职责</label>
-										<textarea class="bigArea" name="previousduty"></textarea>
+										<input type="text" name="previousduty" class="bigArea previousduty" />
+										<!-- <textarea class="bigArea" name="previousduty"></textarea> -->
 									</div>
 								</div>
 							</c:if>
@@ -1220,7 +1222,8 @@
 					<!--yes-->
 					<div class="paddingTop skillDiv elementHide grouptextareaInfo">
 						<label>说明</label>
-						<textarea name="skillexplain" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain"></textarea>
+						<input type="text" name="skillexplain" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain" />
+						<!-- <textarea name="skillexplain" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain"></textarea> -->
 					</div>
 				</div>
 				<div class="padding-left">
