@@ -18,13 +18,12 @@
     <!-- 加载中。。。样式 -->
 	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 	<!-- 本页样式 -->
-	<link rel="stylesheet" href="${base}/references/common/css/viasDetailUS.css">
+	<link rel="stylesheet" href="${base}/references/common/css/addOrderUS.css">
 	</head>
 	<body>
 		<header>
 			<div class="returnAndSave">
-				<i></i>
-				<span>下单</span>	
+				<span>下单</span>
 			</div>
 		</header>
 		<section>
@@ -32,20 +31,20 @@
 				<form id="insertOrder">
 				<ul>
 					<li>
-						<label>姓</label>
+						<label>姓:</label>
 						<input type="text" id="firstname" name="firstname" class="surName" />
 						<input type="hidden" id="eventid" name="eventid"/>
 					</li>
 					<li>
-						<label>名</label>
+						<label>名:</label>
 						<input type="text" id="lastname" name="lastname" class="name" />
 					</li>
 					<li>
-						<label>手机</label>
+						<label>手机:</label>
 						<input type="text" id="telephone" name="telephone" class="telphone" maxlength="11" />
 					</li>
 					<li>
-						<label>邮箱</label>
+						<label>邮箱:</label>
 						<input type="text" id="email" name="email" class="email" />
 					</li>
 				</ul>
@@ -53,6 +52,7 @@
 			</div>
 			<div class="payForCase">
 				<a class="btnPayment" id="insertbtn">保存</a>
+				<a class="btnPayment" id="cancelbtn" onclick="closeWindow()">取消</a>
 			</div>
 			<input id="redirect" type="hidden" value="0" >
 		</section>
@@ -118,6 +118,9 @@
 		//$('#applicantInfo').bootstrapValidator('validate');
 	}
 		$("#insertbtn").click(function(){
+			
+			applyValidate();
+			
 			$.ajax({
 				type:"post",
 				url:"/admin/appEvents/signUpEventByPublicNum",
@@ -125,9 +128,15 @@
 				dataType : "json",
 				success:function(data){
 					layer.closeAll("loading");
+					closeWindow();
 					window.location.href = '/admin/orderUS/listUS.html';
 				}
 			});
 		});
+		
+		function closeWindow(){
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
+		}
 	</script>
 </html>

@@ -1,0 +1,57 @@
+@CHARSET "UTF-8";
+.returnAndSave {
+	width:100%;
+	text-align:center;
+	padding:10px 0;
+	font-size:18px;
+}
+.listMessage {
+	width:80%;
+	display:inline-block;
+	margin-left:24px;
+}
+.listMessage ul li {
+	margin:15px 0;
+}
+
+.listMessage ul li label {
+	width:15%;
+	text-align:right;
+	margin-right:5%;
+	font-size:16px;
+}
+
+.listMessage ul li input {
+	width:80%;
+	border-top:0px;
+	border-left:0px;
+	border-right:0px;
+	outline:none;
+	text-indent:10px;
+}
+
+.payForCase {
+	width:100%;
+	text-align:center;
+}
+
+.btnPayment {
+	width:20%;
+	height:30px;
+	line-height:30px;
+	display:inline-block;
+	color:#FFF;
+	margin-top:15px;
+	background:#3087f1;
+	border-radius:5px;
+	cursor:pointer;
+}
+.btnPayment:hover {
+	color:#FFF;
+}
+#cancelbtn {
+	margin-left:40px;
+}
+.name{
+	padding-left:0 !important;
+}

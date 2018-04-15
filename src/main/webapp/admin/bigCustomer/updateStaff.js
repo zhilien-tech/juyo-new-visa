@@ -106,22 +106,22 @@ function applyValidate(){
 					}
 				}
 			},
-			cardnum : {
+			/*cardnum : {
 				trigger:"change keyup",
 				validators : {
 					notEmpty : {
 						message : '卡号不能为空'
 					}
 				}
-			},
-			cardnumen : {
+			},*/
+			/*cardnumen : {
 				trigger:"change keyup",
 				validators : {
 					notEmpty : {
 						message : '卡号不能为空'
 					}
 				}
-			},
+			},*/
 			address : {
 				trigger:"change keyup",
 				validators : {
