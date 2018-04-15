@@ -50,7 +50,9 @@
 		    		
 		    	}else{
 		    		//false 弹出错误信息，拒绝登陆
-		    		
+		    		var messageErrMsg = data.loginData.messageErrMsg;
+		    		dialogToMsg(messageErrMsg);
+		    		return;
 		    	}
 		    },
 		    error:function(error,status){
