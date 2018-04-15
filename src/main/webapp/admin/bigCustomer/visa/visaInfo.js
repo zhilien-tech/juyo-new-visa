@@ -58,6 +58,33 @@ function editEleBeforeCheckbox(obj){
 	
 }
 
+//删除同类型的其他兄弟节点
+function deleteBrotherEle(obj){
+	obj.nextAll().remove();
+}
+
+//清空子元素内容
+function emptyContentByObj(obj){
+	obj.find("input[type='text']").each(function() {
+		$(this).val("");
+		$(this).prop("disabled",false);
+	});
+	obj.find("select").each(function() {
+		$(this).val(0);
+	});
+	obj.find("textarea").each(function() {
+		$(this).val("");
+	});
+	obj.find("input[type='checkbox']").each(function() {
+		$(this).prop('checked', false);
+	});
+	obj.find("input[type='radio']").each(function() {
+		if($(this).val() == 2){
+			$(this).prop("checked", "checked");
+		}
+	});
+	
+}
 //---------------------------------------工具方法 end-------------------------------------------
 
 
@@ -613,36 +640,6 @@ function safeInfoRadioClick(eltClass){
 
 
 //-------------------------------------------功能函数 勿删------------------------------------
-//删除同类型的其他兄弟节点
-function deleteBrotherEle(obj){
-	obj.nextAll().remove();
-}
-
-//清空子元素内容
-function emptyContentByObj(obj){
-	obj.find("input[type='text']").each(function() {
-		$(this).val("");
-		$(this).prop("disabled",false);
-	});
-	obj.find("select").each(function() {
-		$(this).val(0);
-	});
-	obj.find("textarea").each(function() {
-		$(this).val("");
-	});
-	obj.find("input[type='checkbox']").each(function() {
-		$(this).prop('checked', false);
-	});
-	obj.find("input[type='radio']").each(function() {
-		if($(this).val() == 2){
-			$(this).prop("checked", "checked");
-		}
-	});
-	
-}
-
-
-
 //取消关闭窗口
 function closeWindow() {
 	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

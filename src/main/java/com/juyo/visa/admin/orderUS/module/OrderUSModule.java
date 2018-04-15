@@ -72,6 +72,16 @@ public class OrderUSModule {
 	}
 
 	/**
+	 * 下单
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object addOrderUS() {
+		return null;
+	}
+
+	/**
 	 * 获取最新订单
 	 */
 	@At

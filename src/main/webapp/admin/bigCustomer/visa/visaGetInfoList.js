@@ -175,7 +175,6 @@ function getBeforeWorkList(){
 		var employenddate = $(this).find('[name=employenddate]').val();
 		employenddate = formatDate(employenddate);
 		var previousduty = $(this).find('[name=previousduty]').val();
-		alert(previousduty);
 		
 		beforeWorkLength += employername;
 		beforeWorkLength += employeraddress;
