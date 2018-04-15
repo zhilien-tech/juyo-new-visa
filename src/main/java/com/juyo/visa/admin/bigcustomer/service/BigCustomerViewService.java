@@ -12,6 +12,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -365,7 +366,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		Date nowDate = DateUtil.nowDate();
 
-		Map<String, String> map = null;
+		Map<String, String> map = new HashMap<String, String>();
 		//基本信息
 		addForm.setComid(US_YUSHANG_COMID);
 		//addForm.setUserid(userId);
@@ -387,6 +388,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		if (!Util.isEmpty(userInfo)) {
 			//将openid插入
 			userInfo.setWechattoken(addForm.getWechattoken());
+			userInfo.setFirstname(addForm.getFirstname());
+			userInfo.setLastname(addForm.getLastname());
+			userInfo.setEmail(addForm.getEmail());
 			//执行更新操作
 			dbDao.update(userInfo);
 			System.out.println("updateUserInfo");

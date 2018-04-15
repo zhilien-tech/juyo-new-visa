@@ -193,7 +193,9 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//默认签证状态为办理中
 		staffForm.setVisastatus(VisaStatusEnum.HANDLING_VISA.intKey());
 		Map<String, String> map = (Map<String, String>) bigCustomerViewService.addStaff(staffForm, session);
-		if (map.get("flag") == "1") {
+		//只进行更新操作
+		if (map.get("flag") != "1") {
+
 			String staffIdStr = map.get("staffId");
 			Integer staffId = Integer.valueOf(staffIdStr);
 			Integer eventId = form.getEventId();
