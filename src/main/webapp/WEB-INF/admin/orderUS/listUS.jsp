@@ -192,7 +192,18 @@ $(function(){
           }  
 	}
 	function addOrder() {
-		window.location.href = '/admin/orderUS/orderUSDetail.html?orderid&addOrder=1';
+		layer.open({
+			type: 2,
+			title: false,
+			closeBtn:false,
+			fix: false,
+			maxmin: false,
+			shadeClose: false,
+			scrollbar: false,
+			area: ['700px', '80%'],
+			content:'/admin/orderUS/addOrderUS.html'
+		});
+		//window.location.href = '/admin/orderUS/addOrderUS.html';
 	}
 
 </script>	
