@@ -532,9 +532,9 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		for (int i = 0; i < c.length; i++) {
 			Matcher matcher = pattern.matcher(String.valueOf(c[i]));
 			if (!matcher.matches()) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 }
