@@ -76,9 +76,7 @@
 				$("#uploadImg").click(function(){
 					$("#image").click();
 					$("#image").change(function(){
-						layer.load(1,{
-							shade : "#000"
-						});
+						layer.load(1);
 						var that = this;
 						lrz(this.files[0])
 	                    .then(function (rst) {

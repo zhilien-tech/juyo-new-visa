@@ -237,10 +237,10 @@
 					<div>上传</div>
 					<img id="drive" src="" class="transverseImg" >
 				</div>
-				<div class="uploadPassports driverback alignment" >
+				<!-- <div class="uploadPassports driverback alignment" >
 					<div>上传</div>
 					<img id="drive2" src="" class="transverseImg" >
-				</div>
+				</div> -->
 				<input type="file" class="publicFile" name="" multiple />
 			</div>	
 		</div>

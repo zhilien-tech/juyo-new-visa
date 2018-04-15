@@ -369,7 +369,7 @@ function save(status){
 				});
 			}else if(status ==3){
 				//拍摄资料
-				window.location.href = '/admin/orderJp/visaInfo.html?id='+visaId+'&isDisable='+isDisable;
+				window.location.href = '/admin/pcVisa/updatePhoto.html?staffid='+staffId+'&flag&isDisable='+isDisable;
 				$.ajax({
 					type: 'POST',
 					data : passportInfo,
