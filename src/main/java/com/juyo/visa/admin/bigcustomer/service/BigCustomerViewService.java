@@ -499,10 +499,12 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			//工作/教育/培训信息 
 			TAppStaffWorkEducationTrainingEntity workEducationInfo = new TAppStaffWorkEducationTrainingEntity();
 			workEducationInfo.setStaffid(staffId);
+			
 			workEducationInfo.setOccupation(DEFAULT_SELECT);
 			workEducationInfo.setOccupationen(DEFAULT_SELECT);
-			workEducationInfo.setCountry(DEFAULT_IS_NO);
-			workEducationInfo.setCountryen(DEFAULT_IS_NO);
+			workEducationInfo.setCountry(DEFAULT_SELECT);
+			workEducationInfo.setCountryen(DEFAULT_SELECT);
+			
 			workEducationInfo.setIsemployed(DEFAULT_IS_NO);
 			workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
 			workEducationInfo.setIsclan(DEFAULT_IS_NO);
