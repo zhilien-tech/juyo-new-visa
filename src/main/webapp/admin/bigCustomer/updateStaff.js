@@ -1125,8 +1125,8 @@ function saveApplicant(status){
 				url: BASE_PATH + '/admin/bigCustomer/updateStaffInfo.html',
 				success :function(data) {
 					if(data>0){
-						//parent.successCallback(2);
 						closeWindow();
+						parent.successCallback();
 					}
 				}
 			});

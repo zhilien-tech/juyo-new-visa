@@ -52,6 +52,7 @@
 			getImage(staffid);
 			$(".uploadPassport").click(function(){
 				/* $(".passportImg").click(); */
+				console.log($(this).next());
 				$(this).next().click();
 				$(this).next().change(function(){
 					layer.load(1,{
