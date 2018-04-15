@@ -461,6 +461,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			contactPointInfo.setStaffid(staffId);
 			contactPointInfo.setRalationship(DEFAULT_IS_NO);
 			contactPointInfo.setState(DEFAULT_IS_NO);
+			contactPointInfo.setRalationshipen(DEFAULT_IS_NO);
+			contactPointInfo.setStateen(DEFAULT_IS_NO);
 			dbDao.insert(contactPointInfo);
 
 			//家庭信息
@@ -472,10 +474,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			familyInfo.setHasotherrelatives(DEFAULT_IS_NO);
 			familyInfo.setIsknowspousecity(DEFAULT_IS_NO);
 			familyInfo.setFatherstatus(DEFAULT_IS_NO);
+			familyInfo.setMotherstatus(DEFAULT_IS_NO);
+			
 			familyInfo.setFatherstatusen(DEFAULT_IS_NO);
 			familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
 			familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
-			familyInfo.setMotherstatus(DEFAULT_IS_NO);
 			familyInfo.setMotherstatusen(DEFAULT_IS_NO);
 			familyInfo.setHasimmediaterelativesen(DEFAULT_IS_NO);
 			familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
