@@ -31,9 +31,9 @@
 				</div>
 				<input type="file" class="passportImg" id="passportImg" name="passportImg" />
 			</div>
-			<div class="addSetOfBtn">
+			<!-- <div class="addSetOfBtn">
 				<a class="addSet" onclick="addOldPassPort()">加一页</a>
-			</div>
+			</div> -->
 			<div class="savetitle">
 				<a class="savebutton">保存</a>
 			</div>
@@ -51,8 +51,9 @@
 			var	flag=GetQueryString('flag');
 			getImage(staffid);
 			$(".uploadPassport").click(function(){
-				$(".passportImg").click();
-				$(".passportImg").change(function(){
+				/* $(".passportImg").click(); */
+				$(this).next().click();
+				$(this).next().change(function(){
 					layer.load(1,{
 						shade : "#000"
 					});
@@ -78,7 +79,7 @@
 			});
 		})
 			/* 加一页 */
-			function addOldPassPort(){
+			/* function addOldPassPort(){
 				$(".addSetOfBtn").before('<div class="passportShoot">'+
 										'<div class="uploadPassport">'+
 										'<p>上传旧护照</p>'+
@@ -87,7 +88,7 @@
 										'<input type="file" class="passportImg" id="passportImg" name="passportImg" />'+
 										'</div>'
 				);
-			}
+			} */
 		/* 	//异步加载的URL地址
 			var url="/admin/mobile/passportinfo.html";
 			var _self;
@@ -120,14 +121,15 @@
 					type : 'post',
 					success : function(data) {
 						/* $(".uploadImgReady").attr("src",data.url); */
+						console.log(data);
 						if(data != null){
 							for(var i=0;i<data.length;i++){
 								var url=data[i].url;
 								$(".passportSetImage").before('<div class="passportShoot">'+
 										'<div class="uploadPassport">'+
-										'<p>上传旧护照</p>'+
 										'<img src="'+url+'" class="uploadImgReady" />'+
 										'</div>'+
+										'<input type="file" class="passportImg" id="passportImg" name="passportImg" />'+
 										'</div>');
 							}	
 						}

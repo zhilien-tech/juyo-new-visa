@@ -176,11 +176,6 @@
 				<div class="samplePassportImg bankGroup bankflow_moreImaage_WX_jssdk">
 					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-bank.jpeg" />
 				</div>
-				
-				<div class="uploadPassports bankGroup alignment" >
-					<div class="updatebtn">上传</div>
-					<img src="" class="longitudinal" >
-				</div>
 			</div>	
 		</div>
 		<%-- <div class="huKouBook">
