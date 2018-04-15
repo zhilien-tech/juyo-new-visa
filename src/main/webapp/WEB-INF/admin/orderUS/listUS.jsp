@@ -192,7 +192,7 @@ $(function(){
           }  
 	}
 	function addOrder() {
-		window.location.href = '/admin/orderUS/orderUSDetail.html?orderid&addOrder=1';
+		window.location.href = '/admin/orderUS/addOrderUS.html';
 	}
 
 </script>	
