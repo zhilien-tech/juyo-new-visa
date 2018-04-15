@@ -677,7 +677,7 @@
 				<div class="titleInfo">工作/教育/培训信息</div>
 				<div class="paddingTop groupSelectInfo padding-left" >
 					<label>主要职业</label>
-					<select id="occupation" name="occupation" v-model="visaInfo.workEducationInfo.occupation" onchange="occupationChange()">
+					<select id="occupation" name="occupation" v-model="visaInfo.workEducationInfo.occupation" @change="occupationChange()">
 						<option value="0">请选择</option>
 						<c:forEach items="${obj.VisaCareersEnum }" var="map">
 							<option value="${map.key }">${map.value }</option>
@@ -831,7 +831,7 @@
 											<c:if test="${beforeWork.isknowsupervisorfirstname == 1}">
 												<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" value="${beforeWork.isknowsupervisorfirstname }" checked="checked" type="checkbox"/>
 											</c:if>
-											<c:if test="${beforeWork.isknowsupervisorlastname != 1}">
+											<c:if test="${beforeWork.isknowsupervisorfirstname != 1}">
 												<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" value="${beforeWork.isknowsupervisorfirstname }" type="checkbox" />
 											</c:if>
 										</div>
@@ -857,7 +857,7 @@
 										<div class="clear"></div>
 										<div class="draBig leftNo marginLS grouptextareaInfo">
 											<label>简要描述你的职责</label>
-											<textarea name="previousduty" class="bigArea" value="${beforeWork.previousduty }"></textarea>
+											<textarea name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }"></textarea>
 										</div>
 									</div>
 								</c:forEach>
@@ -971,19 +971,30 @@
 											<input name="secinstitutionaddress" type="text" value="${education.secinstitutionaddress }" />
 										</div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo" >
-											<label >市</label>
-											<input name="institutioncity" value="${education.institutioncity }" type="text" />
-											<input type="checkbox" id="institutioncityedu" />
-										</div>
-										<div class="paddingRight leftNo groupInputInfo">
 											<label>州/省</label>
 											<input name="institutionprovince" value="${education.institutionprovince }" type="text" />
+											<c:if test="${education.isinstitutionprovinceapply == 1}">
+												<input name="isinstitutionprovinceapply" value="${education.isinstitutionprovinceapply }"  checked="checked" type="checkbox"/>
+											</c:if>
+											<c:if test="${education.isinstitutionprovinceapply != 1}">
+												<input name="isinstitutionprovinceapply" value="${education.isinstitutionprovinceapply }" type="checkbox" />
+											</c:if>
+											
+										</div>
+										<div class="paddingRight leftNo groupInputInfo">
+											<label >市</label>
+											<input name="institutioncity" value="${education.institutioncity }" type="text" />
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>邮政编码</label>
 											<input name="institutionzipcode" value="${education.institutionzipcode }" type="text" />
-											<input name="isinstitutionzipcodeapply" id="codeEdu" value="${education.isinstitutionzipcodeapply }" type="checkbox" />
+											<c:if test="${education.isinstitutionzipcodeapply == 1}">
+													<input name="isinstitutionzipcodeapply" id="codeEdu" value="${education.isinstitutionzipcodeapply }"  checked="checked" type="checkbox"/>
+											</c:if>
+											<c:if test="${education.isinstitutionzipcodeapply != 1}">
+												<input name="isinstitutionzipcodeapply" id="codeEdu" value="${education.isinstitutionzipcodeapply }" type="checkbox" />
+											</c:if>
 										</div>
 										<div class="paddingRight leftNo groupSelectInfo" >
 											<label>国家/地区</label>
@@ -1032,14 +1043,14 @@
 										<input type="text" />
 									</div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo" >
-										<label >市</label>
-										<input name="institutioncity" type="text" />
-										<input type="checkbox" />
-									</div>
-									<div class="paddingRight leftNo groupInputInfo">
-										<label>州/省</label>
-										<input name="institutionprovince" type="text" />
-									</div>
+											<label>州/省</label>
+											<input name="institutionprovince" type="text" />
+											<input name="isinstitutionprovinceapply"  type="checkbox" />
+										</div>
+										<div class="paddingRight leftNo groupInputInfo">
+											<label >市</label>
+											<input name="institutioncity" type="text" />
+										</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo">
 										<label>邮政编码</label>
@@ -1209,7 +1220,7 @@
 					<!--yes-->
 					<div class="paddingTop skillDiv elementHide grouptextareaInfo">
 						<label>说明</label>
-						<textarea name="skillexplain" v-model="visaInfo.workEducationInfo.skillexplain"></textarea>
+						<textarea name="skillexplain" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain"></textarea>
 					</div>
 				</div>
 				<div class="padding-left">
