@@ -39,6 +39,15 @@ public class WeXinAccreditModule {
 		return weXinAccreditService.SaveUser(code);
 	}
 
+	//查询进度
+	@At
+	@POST
+	@Filters
+	public Object checkProgress(@Param("code") String code) {
+		System.out.println(code);
+		return weXinAccreditService.SaveUser(code);
+	}
+
 	//	//校验用户是否授权过
 	//	public Object verifyUser(@Param("code") String code) {
 	//

@@ -12,6 +12,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -365,6 +366,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		Date nowDate = DateUtil.nowDate();
 
+		Map<String, String> map = new HashMap<String, String>();
 		//基本信息
 		addForm.setComid(US_YUSHANG_COMID);
 		//addForm.setUserid(userId);
@@ -377,111 +379,129 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		addForm.setIstaxpayernumberapplyen(IsYesOrNoEnum.YES.intKey());
 		addForm.setCreatetime(nowDate);
 		addForm.setUpdatetime(nowDate);
+		String telephone = addForm.getTelephone();
 
-		TAppStaffBasicinfoEntity staffInfo = add(addForm);
+		//根据手机号查询这个人是否注册过
 
-		Integer staffId = staffInfo.getId();
-
-		//护照信息
-		TAppStaffPassportEntity staffPassport = new TAppStaffPassportEntity();
-		staffPassport.setStaffid(staffId);
-		//		staffPassport.setOpid(userId);
-		staffPassport.setCreatetime(nowDate);
-		staffPassport.setUpdatetime(nowDate);
-		staffPassport.setFirstname(addForm.getFirstname());
-		staffPassport.setLastname(addForm.getLastname());
-		TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
-		Integer passportId = passportEntity.getId();
-
-		Map<String, String> map = JsonResult.success("添加成功");
-		if (!Util.isEmpty(passportId)) {
-			map.put("passportId", String.valueOf(passportId));
+		TAppStaffBasicinfoEntity userInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+				Cnd.where("telephone", "=", telephone));
+		if (!Util.isEmpty(userInfo)) {
+			//将openid插入
+			userInfo.setWechattoken(addForm.getWechattoken());
+			userInfo.setFirstname(addForm.getFirstname());
+			userInfo.setLastname(addForm.getLastname());
+			userInfo.setEmail(addForm.getEmail());
+			//执行更新操作
+			dbDao.update(userInfo);
+			System.out.println("updateUserInfo");
+			map.put("flag", "1");
 		} else {
-			map.put("passportId", String.valueOf(""));
+			TAppStaffBasicinfoEntity staffInfo = add(addForm);
+
+			Integer staffId = staffInfo.getId();
+
+			//护照信息
+			TAppStaffPassportEntity staffPassport = new TAppStaffPassportEntity();
+			staffPassport.setStaffid(staffId);
+			//		staffPassport.setOpid(userId);
+			staffPassport.setCreatetime(nowDate);
+			staffPassport.setUpdatetime(nowDate);
+			staffPassport.setFirstname(addForm.getFirstname());
+			staffPassport.setLastname(addForm.getLastname());
+			TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
+			Integer passportId = passportEntity.getId();
+
+			map = JsonResult.success("添加成功");
+			if (!Util.isEmpty(passportId)) {
+				map.put("passportId", String.valueOf(passportId));
+			} else {
+				map.put("passportId", String.valueOf(""));
+			}
+			map.put("staffId", String.valueOf(staffId));
+
+			//签证信息的添加
+			//旅伴信息
+			TAppStaffTravelcompanionEntity travelCompanionInfo = new TAppStaffTravelcompanionEntity();
+			travelCompanionInfo.setStaffid(staffId);
+			travelCompanionInfo.setIspart(DEFAULT_IS_NO);
+			travelCompanionInfo.setIstravelwithother(DEFAULT_IS_NO);
+			travelCompanionInfo.setIsparten(DEFAULT_IS_NO);
+			travelCompanionInfo.setIstravelwithotheren(DEFAULT_IS_NO);
+			dbDao.insert(travelCompanionInfo);
+			//以前的美国旅游信息
+			TAppStaffPrevioustripinfoEntity previUSTripInfo = new TAppStaffPrevioustripinfoEntity();
+			previUSTripInfo.setStaffid(staffId);
+			previUSTripInfo.setHasbeeninus(DEFAULT_IS_NO); //是否去过美国
+			previUSTripInfo.setHasdriverlicense(DEFAULT_IS_NO);//是否有美国驾照
+			previUSTripInfo.setIsissuedvisa(DEFAULT_IS_NO);
+			previUSTripInfo.setIsapplyingsametypevisa(DEFAULT_IS_NO);
+			previUSTripInfo.setIssamecountry(DEFAULT_IS_NO);
+			previUSTripInfo.setIslost(DEFAULT_IS_NO);
+			previUSTripInfo.setIstenprinted(DEFAULT_IS_NO);
+			previUSTripInfo.setIscancelled(DEFAULT_IS_NO);
+			previUSTripInfo.setIsrefused(DEFAULT_IS_NO);
+			previUSTripInfo.setIslegalpermanentresident(DEFAULT_IS_NO);
+			previUSTripInfo.setIsfiledimmigrantpetition(DEFAULT_IS_NO);
+
+			previUSTripInfo.setHasbeeninusen(DEFAULT_IS_NO);
+			previUSTripInfo.setHasdriverlicenseen(DEFAULT_IS_NO);
+			previUSTripInfo.setIsissuedvisaen(DEFAULT_IS_NO);
+			previUSTripInfo.setIsapplyingsametypevisaen(DEFAULT_IS_NO);
+			previUSTripInfo.setIssamecountryen(DEFAULT_IS_NO);
+			previUSTripInfo.setIslosten(DEFAULT_IS_NO);
+			previUSTripInfo.setIstenprinteden(DEFAULT_IS_NO);
+			previUSTripInfo.setIscancelleden(DEFAULT_IS_NO);
+			previUSTripInfo.setIsrefuseden(DEFAULT_IS_NO);
+			previUSTripInfo.setIslegalpermanentresidenten(DEFAULT_IS_NO);
+			previUSTripInfo.setIsfiledimmigrantpetitionen(DEFAULT_IS_NO);
+			dbDao.insert(previUSTripInfo);
+
+			//美国联络点
+			TAppStaffContactpointEntity contactPointInfo = new TAppStaffContactpointEntity();
+			contactPointInfo.setStaffid(staffId);
+			dbDao.insert(contactPointInfo);
+
+			//家庭信息
+			TAppStaffFamilyinfoEntity familyInfo = new TAppStaffFamilyinfoEntity();
+			familyInfo.setStaffid(staffId);
+			familyInfo.setIsfatherinus(DEFAULT_IS_NO);
+			familyInfo.setIsmotherinus(DEFAULT_IS_NO);
+			familyInfo.setHasimmediaterelatives(DEFAULT_IS_NO);
+			familyInfo.setHasotherrelatives(DEFAULT_IS_NO);
+			familyInfo.setIsknowspousecity(DEFAULT_IS_NO);
+
+			familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
+			familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
+			familyInfo.setHasimmediaterelativesen(DEFAULT_IS_NO);
+			familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
+			familyInfo.setIsknowspousecityen(DEFAULT_IS_NO);
+			dbDao.insert(familyInfo);
+
+			//工作/教育/培训信息 
+			TAppStaffWorkEducationTrainingEntity workEducationInfo = new TAppStaffWorkEducationTrainingEntity();
+			workEducationInfo.setStaffid(staffId);
+			workEducationInfo.setIsemployed(DEFAULT_IS_NO);
+			workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
+			workEducationInfo.setIsclan(DEFAULT_IS_NO);
+			workEducationInfo.setIstraveledanycountry(DEFAULT_IS_NO);
+			workEducationInfo.setIsworkedcharitableorganization(DEFAULT_IS_NO);
+			workEducationInfo.setHasspecializedskill(DEFAULT_IS_NO);
+			workEducationInfo.setHasservedinmilitary(DEFAULT_IS_NO);
+			workEducationInfo.setIsservedinrebelgroup(DEFAULT_IS_NO);
+
+			workEducationInfo.setIsemployeden(DEFAULT_IS_NO);
+			workEducationInfo.setIssecondarylevelen(DEFAULT_IS_NO);
+			workEducationInfo.setIsclanen(DEFAULT_IS_NO);
+			workEducationInfo.setIstraveledanycountryen(DEFAULT_IS_NO);
+			workEducationInfo.setIsworkedcharitableorganizationen(DEFAULT_IS_NO);
+			workEducationInfo.setHasspecializedskillen(DEFAULT_IS_NO);
+			workEducationInfo.setHasservedinmilitaryen(DEFAULT_IS_NO);
+			workEducationInfo.setIsservedinrebelgroupen(DEFAULT_IS_NO);
+			dbDao.insert(workEducationInfo);
+
 		}
-		map.put("staffId", String.valueOf(staffId));
-
-		//签证信息的添加
-		//旅伴信息
-		TAppStaffTravelcompanionEntity travelCompanionInfo = new TAppStaffTravelcompanionEntity();
-		travelCompanionInfo.setStaffid(staffId);
-		travelCompanionInfo.setIspart(DEFAULT_IS_NO);
-		travelCompanionInfo.setIstravelwithother(DEFAULT_IS_NO);
-		travelCompanionInfo.setIsparten(DEFAULT_IS_NO);
-		travelCompanionInfo.setIstravelwithotheren(DEFAULT_IS_NO);
-		dbDao.insert(travelCompanionInfo);
-		//以前的美国旅游信息
-		TAppStaffPrevioustripinfoEntity previUSTripInfo = new TAppStaffPrevioustripinfoEntity();
-		previUSTripInfo.setStaffid(staffId);
-		previUSTripInfo.setHasbeeninus(DEFAULT_IS_NO); //是否去过美国
-		previUSTripInfo.setHasdriverlicense(DEFAULT_IS_NO);//是否有美国驾照
-		previUSTripInfo.setIsissuedvisa(DEFAULT_IS_NO);
-		previUSTripInfo.setIsapplyingsametypevisa(DEFAULT_IS_NO);
-		previUSTripInfo.setIssamecountry(DEFAULT_IS_NO);
-		previUSTripInfo.setIslost(DEFAULT_IS_NO);
-		previUSTripInfo.setIstenprinted(DEFAULT_IS_NO);
-		previUSTripInfo.setIscancelled(DEFAULT_IS_NO);
-		previUSTripInfo.setIsrefused(DEFAULT_IS_NO);
-		previUSTripInfo.setIslegalpermanentresident(DEFAULT_IS_NO);
-		previUSTripInfo.setIsfiledimmigrantpetition(DEFAULT_IS_NO);
-
-		previUSTripInfo.setHasbeeninusen(DEFAULT_IS_NO);
-		previUSTripInfo.setHasdriverlicenseen(DEFAULT_IS_NO);
-		previUSTripInfo.setIsissuedvisaen(DEFAULT_IS_NO);
-		previUSTripInfo.setIsapplyingsametypevisaen(DEFAULT_IS_NO);
-		previUSTripInfo.setIssamecountryen(DEFAULT_IS_NO);
-		previUSTripInfo.setIslosten(DEFAULT_IS_NO);
-		previUSTripInfo.setIstenprinteden(DEFAULT_IS_NO);
-		previUSTripInfo.setIscancelleden(DEFAULT_IS_NO);
-		previUSTripInfo.setIsrefuseden(DEFAULT_IS_NO);
-		previUSTripInfo.setIslegalpermanentresidenten(DEFAULT_IS_NO);
-		previUSTripInfo.setIsfiledimmigrantpetitionen(DEFAULT_IS_NO);
-		dbDao.insert(previUSTripInfo);
-
-		//美国联络点
-		TAppStaffContactpointEntity contactPointInfo = new TAppStaffContactpointEntity();
-		contactPointInfo.setStaffid(staffId);
-		dbDao.insert(contactPointInfo);
-
-		//家庭信息
-		TAppStaffFamilyinfoEntity familyInfo = new TAppStaffFamilyinfoEntity();
-		familyInfo.setStaffid(staffId);
-		familyInfo.setIsfatherinus(DEFAULT_IS_NO);
-		familyInfo.setIsmotherinus(DEFAULT_IS_NO);
-		familyInfo.setHasimmediaterelatives(DEFAULT_IS_NO);
-		familyInfo.setHasotherrelatives(DEFAULT_IS_NO);
-		familyInfo.setIsknowspousecity(DEFAULT_IS_NO);
-
-		familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
-		familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
-		familyInfo.setHasimmediaterelativesen(DEFAULT_IS_NO);
-		familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
-		familyInfo.setIsknowspousecityen(DEFAULT_IS_NO);
-		dbDao.insert(familyInfo);
-
-		//工作/教育/培训信息 
-		TAppStaffWorkEducationTrainingEntity workEducationInfo = new TAppStaffWorkEducationTrainingEntity();
-		workEducationInfo.setStaffid(staffId);
-		workEducationInfo.setIsemployed(DEFAULT_IS_NO);
-		workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
-		workEducationInfo.setIsclan(DEFAULT_IS_NO);
-		workEducationInfo.setIstraveledanycountry(DEFAULT_IS_NO);
-		workEducationInfo.setIsworkedcharitableorganization(DEFAULT_IS_NO);
-		workEducationInfo.setHasspecializedskill(DEFAULT_IS_NO);
-		workEducationInfo.setHasservedinmilitary(DEFAULT_IS_NO);
-		workEducationInfo.setIsservedinrebelgroup(DEFAULT_IS_NO);
-
-		workEducationInfo.setIsemployeden(DEFAULT_IS_NO);
-		workEducationInfo.setIssecondarylevelen(DEFAULT_IS_NO);
-		workEducationInfo.setIsclanen(DEFAULT_IS_NO);
-		workEducationInfo.setIstraveledanycountryen(DEFAULT_IS_NO);
-		workEducationInfo.setIsworkedcharitableorganizationen(DEFAULT_IS_NO);
-		workEducationInfo.setHasspecializedskillen(DEFAULT_IS_NO);
-		workEducationInfo.setHasservedinmilitaryen(DEFAULT_IS_NO);
-		workEducationInfo.setIsservedinrebelgroupen(DEFAULT_IS_NO);
-		dbDao.insert(workEducationInfo);
-
 		return map;
+
 	}
 
 	/**
