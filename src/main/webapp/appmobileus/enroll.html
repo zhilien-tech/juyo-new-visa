@@ -192,10 +192,11 @@
 					dataType : "json",
 					async:true,
 					success:function(data){
-						if(data == ""){
+layer.closeAll("loading");
+						if(data == "" || data==null){
 							$(".dialog").html();
 							$(".dialog").show();
-							$(".dialog").html("报名失败，请重新提交");
+							$(".dialog").html("姓名必须为中文");
 							setTimeout(function(){
 								$(".dialog").hide();
 							},2000);
