@@ -105,12 +105,15 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	@Inject
 	private PcVisaViewService pcVisaViewService;
 
+	@Inject
+	private AppEventsViewService appEventsViewService;
+
 	private final static String TEMPLATE_EXCEL_URL = "download";
 	private final static String TEMPLATE_EXCEL_NAME = "人员管理之模块.xlsx";
 
 	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
 	private final static Integer DEFAULT_SELECT = IsYesOrNoEnum.NO.intKey();
-	
+
 	private final static Integer US_YUSHANG_COMID = 65;
 
 	/**
@@ -475,36 +478,36 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			familyInfo.setHasimmediaterelatives(DEFAULT_IS_NO);
 			familyInfo.setHasotherrelatives(DEFAULT_IS_NO);
 			familyInfo.setIsknowspousecity(DEFAULT_IS_NO);
-			
+
 			familyInfo.setFatherstatus(DEFAULT_SELECT);
 			familyInfo.setMotherstatus(DEFAULT_SELECT);
 			familyInfo.setFatherstatusen(DEFAULT_SELECT);
 			familyInfo.setMotherstatusen(DEFAULT_SELECT);
-			
+
 			familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
 			familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
 			familyInfo.setHasimmediaterelativesen(DEFAULT_IS_NO);
 			familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
 			familyInfo.setIsknowspousecityen(DEFAULT_IS_NO);
-			
+
 			familyInfo.setSpousenationality(DEFAULT_SELECT);
 			familyInfo.setSpousenationalityen(DEFAULT_SELECT);
 			familyInfo.setSpousecountry(DEFAULT_SELECT);
 			familyInfo.setSpousecountryen(DEFAULT_SELECT);
 			familyInfo.setSpouseaddress(DEFAULT_SELECT);
 			familyInfo.setSpouseaddressen(DEFAULT_SELECT);
-			
+
 			dbDao.insert(familyInfo);
 
 			//工作/教育/培训信息 
 			TAppStaffWorkEducationTrainingEntity workEducationInfo = new TAppStaffWorkEducationTrainingEntity();
 			workEducationInfo.setStaffid(staffId);
-			
+
 			workEducationInfo.setOccupation(DEFAULT_SELECT);
 			workEducationInfo.setOccupationen(DEFAULT_SELECT);
 			workEducationInfo.setCountry(DEFAULT_SELECT);
 			workEducationInfo.setCountryen(DEFAULT_SELECT);
-			
+
 			workEducationInfo.setIsemployed(DEFAULT_IS_NO);
 			workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
 			workEducationInfo.setIsclan(DEFAULT_IS_NO);
@@ -749,6 +752,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffInfo.setValidstartdate(updateForm.getValidstartdate());
 
 			updateNum = dbDao.update(staffInfo);
+			appEventsViewService.addLoginUser(staffInfo);
 		}
 
 		return updateNum;

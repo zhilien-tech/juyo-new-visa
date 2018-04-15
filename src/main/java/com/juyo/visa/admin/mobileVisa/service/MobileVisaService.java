@@ -317,29 +317,6 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 					e.printStackTrace();
 				}
 			}
-			//单张图片上传
-			TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
-					Cnd.where("staffid", "=", staffid).and("type", "=", type));
-			if (!Util.isEmpty(credentialEntity)) {
-				credentialEntity.setUrl(url);
-				credentialEntity.setUpdatetime(new Date());
-				int update = dbDao.update(credentialEntity);
-				changeStaffStatus(staffid, flag);
-			} else {
-				credentialEntity = new TAppStaffCredentialsEntity();
-				credentialEntity.setCreatetime(new Date());
-				credentialEntity.setStaffid(staffid);
-				credentialEntity.setUpdatetime(new Date());
-				credentialEntity.setType(type);
-				credentialEntity.setUrl(url);
-				dbDao.insert(credentialEntity);
-				changeStaffStatus(staffid, flag);
-			}
-			try {
-				simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return url;
 
