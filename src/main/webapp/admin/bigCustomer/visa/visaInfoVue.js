@@ -121,6 +121,12 @@ new Vue({
 			if(ismotherinus){
 				visaInfo.familyInfo.motherstatus = 0;
 			}
+		},
+		hasspecializedskill:function(){
+			var hasspecializedskill = visaInfo.workEducationInfo.hasspecializedskill;
+			if(hasspecializedskill){
+				visaInfo.workEducationInfo.skillexplain = "";
+			}
 		}
 	}
 });
