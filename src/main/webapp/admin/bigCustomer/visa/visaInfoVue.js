@@ -127,6 +127,43 @@ new Vue({
 			if(hasspecializedskill){
 				visaInfo.workEducationInfo.skillexplain = "";
 			}
+		},
+		occupationChange:function(){
+			visaInfo.workEducationInfo.unitname ="";
+			visaInfo.workEducationInfo.address ="";
+			visaInfo.workEducationInfo.secaddress="";
+			visaInfo.workEducationInfo.city="";
+			visaInfo.workEducationInfo.province="";
+			visaInfo.workEducationInfo.isprovinceapply="";
+			visaInfo.workEducationInfo.zipcode="";
+			visaInfo.workEducationInfo.iszipcodeapply="";
+			visaInfo.workEducationInfo.telephone="";
+			visaInfo.workEducationInfo.country=0;
+			visaInfo.workEducationInfo.salary="";
+			visaInfo.workEducationInfo.issalaryapply="";
+			visaInfo.workEducationInfo.workstartdate="";
+			visaInfo.workEducationInfo.duty="";
+			
+			emptyContentByObj($("div.jobEduLearningInfoDiv"));
+			emptyContentByObj($(".jobEduLearningInfoTextarea"));
+			var occupation = $("#occupation").val();
+			if(occupation==10 || occupation==19){
+				//家庭主妇和退休人员
+				$("div.jobEduLearningInfoDiv").hide();
+				$(".jobEduLearningInfoTextarea").hide();
+			}else if(occupation==15){
+				//不受雇
+				$("div.jobEduLearningInfoDiv").hide();
+				$(".jobEduLearningInfoTextarea").show();
+			}else if(occupation==22){
+				//其他
+				$("div.jobEduLearningInfoDiv").show();
+				$(".jobEduLearningInfoTextarea").show();
+			}else{
+				//农民、艺术家等等
+				$("div.jobEduLearningInfoDiv").show();
+				$(".jobEduLearningInfoTextarea").hide();
+			}
 		}
 	}
 });

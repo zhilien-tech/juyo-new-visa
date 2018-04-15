@@ -58,10 +58,10 @@
 				</div> <span>婚姻状况</span> <i class="more"></i> <span id="6"
 				class="info marriageInfo"></span> <select class="selector" dir="rtl">
 					<option>--请选择--</option>
-					<option value="1">单身</option>
-					<option value="2">已婚</option>
-					<option value="3">离异</option>
-					<option value="4">丧偶</option>
+					<option value="4">单身</option>
+					<option value="1">已婚</option>
+					<option value="2">离异</option>
+					<option value="3">丧偶</option>
 			</select>
 			</li>
 			<li><a class="linkStyle" onclick="usbankflow()">
@@ -133,7 +133,7 @@
 			var selectvalue = $(".selector").find("option:selected").val();
 			$(".marriageInfo").text(name);
 							
-			if (selectvalue == 2 || selectvalue == 3) {
+			if (selectvalue == 2 || selectvalue == 1) {
 				window.location.href = '/appmobileus/USMarital.html?staffid=' + staffid + '&marryurltype=' + selectvalue+'&sessionid='+sessionid+'&flag='+flag;
 			}else if(selectvalue == 1){
 				$(".replaceCircle6").removeClass("circleRed").addClass("circleGreen");
@@ -434,6 +434,7 @@
 				console.log(data);
 				if (data != 0) {
 					$("#6").html(data);
+					//$(".marriageInfo").text(data);
 					$(".replaceCircle6").removeClass("circleRed").addClass(
 							"circleGreen");
 					$(".iconGroup6").removeClass("icon-error").addClass(
@@ -638,6 +639,23 @@
 			},2000);
 			return false;
 		}
+		
+		var selectvalue = $(".selector").find("option:selected").val();
+		var staffid = GetQueryString("staffid");
+		$.ajax({
+			url : "/admin/mobileVisa/updateMarry.html",
+			data : {
+				staffid : staffid,
+				type : 6,
+				status : selectvalue
+			},
+			dataType : "json",
+			async: false,
+			type : 'post',
+			success : function(data) {
+				/* _self.passportdata = data.passportdata; */
+			}
+		});
 		/* if(!bankstatus){
 			$(".dialogTwoMin").html();
 			$(".dialogTwoMin").show();

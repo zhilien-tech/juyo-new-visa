@@ -154,4 +154,13 @@ public class MobileVisaModule {
 		return mobileVisaService.getWxMorePhotos(type, staffid);
 	}
 
+	/**
+	 * 手机端拍摄资料点击完成时保存婚姻状态的单身和丧偶
+	 */
+	@At
+	@POST
+	public Object updateMarry(@Param("staffid") int staffid, @Param("type") int type, @Param("status") int status) {
+		return mobileVisaService.updateMarry(staffid, type, status);
+	}
+
 }
