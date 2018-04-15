@@ -1204,12 +1204,12 @@
 					<div class="groupRadioInfo">
 						<label>是否有专业技能或培训，如强制、爆炸物、核能、生物或化学</label>
 						<input type="radio" name="hasspecializedskill" v-model="visaInfo.workEducationInfo.hasspecializedskill" class="hasspecializedskill" value="1" />是
-						<input type="radio"name="hasspecializedskill" v-model="visaInfo.workEducationInfo.hasspecializedskill" class="hasspecializedskill" value="2" checked />否
+						<input type="radio"name="hasspecializedskill" v-on:click="hasspecializedskill" v-model="visaInfo.workEducationInfo.hasspecializedskill" class="hasspecializedskill" value="2" checked />否
 					</div>
 					<!--yes-->
 					<div class="paddingTop skillDiv elementHide grouptextareaInfo">
 						<label>说明</label>
-						<textarea name="skillexplain"></textarea>
+						<textarea name="skillexplain" v-model="visaInfo.workEducationInfo.skillexplain"></textarea>
 					</div>
 				</div>
 				<div class="padding-left">
@@ -1310,14 +1310,14 @@
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织</label>
-						<input type="radio" name="isservedinrebelgroup" class="isservedinrebelgroup" value="1"/>是
-						<input type="radio" name="isservedinrebelgroup" class="isservedinrebelgroup" value="2" checked/>否
+						<input type="radio" name="isservedinrebelgroup" v-model="visaInfo.workEducationInfo.isservedinrebelgroup" class="isservedinrebelgroup" value="1"/>是
+						<input type="radio" name="isservedinrebelgroup" v-model="visaInfo.workEducationInfo.isservedinrebelgroup" class="isservedinrebelgroup" value="2" checked/>否
 					</div>
 					<!--yes-->
-					<div class="paddingTop elementHide dinrebelDiv grouptextareaInfo">
+					<!-- <div class="paddingTop elementHide dinrebelDiv grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
-					</div>
+					</div> -->
 				</div>
 			</div>	
 			<!--工作/教育/培训信息END-->
