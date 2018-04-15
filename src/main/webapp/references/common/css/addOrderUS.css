@@ -55,3 +55,5 @@
 .name{
 	padding-left:0 !important;
 }
+input {
+	text-transform:none !important;

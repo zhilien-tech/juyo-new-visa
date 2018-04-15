@@ -85,6 +85,12 @@ public class AppEventsModule {
 		return appEventsViewService.signUpEventByPublicNum(form, session);
 	}
 
+	@At
+	@POST
+	public Object addOrder(@Param("..") SignUpEventForm form, HttpSession session) {
+		return appEventsViewService.addOrder(form, session);
+	}
+
 	/***
 	 * 校验用户是否已经报名
 	 */
