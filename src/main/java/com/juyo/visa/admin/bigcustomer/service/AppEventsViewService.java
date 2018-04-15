@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 
@@ -173,66 +175,61 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	 */
 	public Object signUpEventByPublicNum(SignUpEventForm form, HttpSession session) {
 
-		//当前登录用户Id
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		//Integer loginUserId = loginUser.getId();
+		String firstname = form.getFirstname();
+		String lastname = form.getLastname();
 
-		//添加人员
-		TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
-		//staffForm.setUserid(loginUserId);
-		staffForm.setFirstname(form.getFirstname());
-		staffForm.setLastname(form.getLastname());
-		//旧用户无openid时 根据手机验证是否已经登陆
-		staffForm.setTelephone(form.getTelephone());
-		staffForm.setEmail(form.getEmail());
-		if (!Util.isEmpty(form.getWeChatToken())) {
-			staffForm.setWechattoken(form.getWeChatToken());
-		}
-		//默认签证状态为办理中
-		staffForm.setVisastatus(VisaStatusEnum.HANDLING_VISA.intKey());
-		Map<String, String> map = (Map<String, String>) bigCustomerViewService.addStaff(staffForm, session);
-		//只进行更新操作
-		if (map.get("flag") != "1") {
-
-			String staffIdStr = map.get("staffId");
-			Integer staffId = Integer.valueOf(staffIdStr);
-			Integer eventId = form.getEventId();
-
-			//人员报名活动
-			TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
-			staffEventEntity.setEventsId(eventId);
-			staffEventEntity.setStaffId(staffId);
-
-			TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
-
-			//添加订单
-			orderUSViewService.addOrderByStuffId(staffId);
-
-			//用户登录，添加游客信息
-			TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
-			Integer loginUserId = (Integer) addLoginUser(staffInfo);
-
-			dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
-					Cnd.where("id", "=", staffId));
-
-			return JsonResult.success("添加成功");
+		//校验姓名是否合格
+		if (isChineseStr(firstname) && isChineseStr(lastname)) {
+			return null;
 		} else {
-			return map;
+			//当前登录用户Id
+			TUserEntity loginUser = LoginUtil.getLoginUser(session);
+			//Integer loginUserId = loginUser.getId();
 
+			//添加人员
+			TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
+			staffForm.setLastname(form.getLastname());
+			//旧用户无openid时 根据手机验证是否已经登陆
+			staffForm.setTelephone(form.getTelephone());
+			staffForm.setEmail(form.getEmail());
+			if (!Util.isEmpty(form.getWeChatToken())) {
+				staffForm.setWechattoken(form.getWeChatToken());
+			}
+			//默认签证状态为办理中
+			staffForm.setVisastatus(VisaStatusEnum.HANDLING_VISA.intKey());
+			Map<String, String> map = (Map<String, String>) bigCustomerViewService.addStaff(staffForm, session);
+			//只进行更新操作
+			if (map.get("flag") != "1") {
+
+				String staffIdStr = map.get("staffId");
+				Integer staffId = Integer.valueOf(staffIdStr);
+				Integer eventId = form.getEventId();
+
+				//人员报名活动
+				TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
+				staffEventEntity.setEventsId(eventId);
+				staffEventEntity.setStaffId(staffId);
+
+				TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
+
+				//添加订单
+				orderUSViewService.addOrderByStuffId(staffId);
+
+				//用户登录，添加游客信息
+				TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
+				Integer loginUserId = (Integer) addLoginUser(staffInfo);
+
+				dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
+						Cnd.where("id", "=", staffId));
+
+				return JsonResult.success("添加成功");
+			} else {
+				return map;
+
+			}
 		}
 
 	}
-
-	//更新staffid到微信授权用户信息表中
-	//	public void saveStaffIdToWx(int staffid, String openid) {
-	//		//根据openid查询微信授权表
-	//		TAppStaffWxinfoEntity wxInfo = dbDao.fetch(TAppStaffWxinfoEntity.class, Cnd.where("openid", "=", openid));
-	//		if (!Util.isEmpty(wxInfo) && !Util.isEmpty(staffid)) {
-	//			wxInfo.setStaffid(staffid);
-	//			dbDao.update(wxInfo);
-	//		}
-	//
-	//	}
 
 	/**
 	 * 用户登录添加游客
@@ -477,47 +474,67 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 	public Object addOrder(SignUpEventForm form, HttpSession session) {
 
-		//当前登录用户Id
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		//Integer loginUserId = loginUser.getId();
+		//校验姓名是否合格
+		String firstname = form.getFirstname();
+		String lastname = form.getLastname();
+		if (isChineseStr(firstname) && isChineseStr(lastname)) {
+			return null;
+		} else {
+			//当前登录用户Id
+			TUserEntity loginUser = LoginUtil.getLoginUser(session);
+			//Integer loginUserId = loginUser.getId();
 
-		//添加人员
-		TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
-		//staffForm.setUserid(loginUserId);
-		staffForm.setFirstname(form.getFirstname());
-		staffForm.setLastname(form.getLastname());
-		//旧用户无openid时 根据手机验证是否已经登陆
-		staffForm.setTelephone(form.getTelephone());
-		staffForm.setEmail(form.getEmail());
-		if (!Util.isEmpty(form.getWeChatToken())) {
-			staffForm.setWechattoken(form.getWeChatToken());
+			//添加人员
+			TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
+			//staffForm.setUserid(loginUserId);
+			staffForm.setFirstname(form.getFirstname());
+			staffForm.setLastname(form.getLastname());
+			//旧用户无openid时 根据手机验证是否已经登陆
+			staffForm.setTelephone(form.getTelephone());
+			staffForm.setEmail(form.getEmail());
+			if (!Util.isEmpty(form.getWeChatToken())) {
+				staffForm.setWechattoken(form.getWeChatToken());
+			}
+			//默认签证状态为办理中
+			staffForm.setVisastatus(VisaStatusEnum.HANDLING_VISA.intKey());
+			Map<String, String> map = (Map<String, String>) bigCustomerViewService.addOrderStaff(staffForm, session);
+			//只进行更新操作
+
+			String staffIdStr = map.get("staffId");
+			Integer staffId = Integer.valueOf(staffIdStr);
+			Integer eventId = form.getEventId();
+
+			//人员报名活动
+			TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
+			staffEventEntity.setEventsId(eventId);
+			staffEventEntity.setStaffId(staffId);
+
+			TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
+
+			//添加订单
+			orderUSViewService.addOrderByStuffId(staffId);
+
+			//用户登录，添加游客信息
+			TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
+			Integer loginUserId = (Integer) addLoginUser(staffInfo);
+
+			dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
+					Cnd.where("id", "=", staffId));
+
+			return JsonResult.success("添加成功");
 		}
-		//默认签证状态为办理中
-		staffForm.setVisastatus(VisaStatusEnum.HANDLING_VISA.intKey());
-		Map<String, String> map = (Map<String, String>) bigCustomerViewService.addOrderStaff(staffForm, session);
-		//只进行更新操作
 
-		String staffIdStr = map.get("staffId");
-		Integer staffId = Integer.valueOf(staffIdStr);
-		Integer eventId = form.getEventId();
+	}
 
-		//人员报名活动
-		TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
-		staffEventEntity.setEventsId(eventId);
-		staffEventEntity.setStaffId(staffId);
-
-		TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
-
-		//添加订单
-		orderUSViewService.addOrderByStuffId(staffId);
-
-		//用户登录，添加游客信息
-		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
-		Integer loginUserId = (Integer) addLoginUser(staffInfo);
-
-		dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId), Cnd.where("id", "=", staffId));
-
-		return JsonResult.success("添加成功");
-
+	public boolean isChineseStr(String str) {
+		Pattern pattern = Pattern.compile("[\u4e00-\u9fa5]");
+		char c[] = str.toCharArray();
+		for (int i = 0; i < c.length; i++) {
+			Matcher matcher = pattern.matcher(String.valueOf(c[i]));
+			if (!matcher.matches()) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
