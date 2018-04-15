@@ -60,9 +60,24 @@
 					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-ToBig" onclick="saveAddOrder(3);" />
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
 					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/>
-					<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(22)"/>
-					<input type="button" value="招宝变更" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(19)"/>
-					<input type="button" value="发招宝" class="btn btn-primary btn-sm pull-right" onclick="sendzhaobao()"/>
+					<c:choose>
+						<c:when test="${obj.orderinfo.status ==17 or obj.orderinfo.status == 20 }">
+							<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(22)"/>
+							<input type="button" value="招宝变更" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(19)"/>
+						</c:when>
+						<c:otherwise>
+							<input type="button" value="招宝取消" class="btn btn_del btn-sm pull-right btn-Big" />
+							<input type="button" value="招宝变更" class="btn btn_del btn-sm pull-right btn-Big" />
+						</c:otherwise>
+					</c:choose>
+					<c:choose>
+						<c:when test="${obj.orderinfo.status !=17 && obj.orderinfo.status !=19 and obj.orderinfo.status !=20 and obj.orderinfo.status !=34 and obj.orderinfo.status !=35 and obj.orderinfo.status !=22}">
+							<input type="button" value="发招宝" class="btn btn-primary btn-sm pull-right" onclick="sendzhaobao()"/>
+						</c:when>
+						<c:otherwise>
+							<input type="button" value="发招宝" class="btn btn_del btn-sm pull-right"/>
+						</c:otherwise>
+					</c:choose>
 					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue()"/>
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log()"/>
 				<input type="hidden" id="orderid" name="orderid" value="${obj.orderjpinfo.id }"/>
@@ -710,24 +725,63 @@
 			}
 			//招宝变更、招宝取消、拒签
 			function sendInsurance(visastatus){
-				$.ajax({
-                 	url: '${base}/admin/visaJapan/sendInsurance',
-                 	data:{orderid:orderid,visastatus:visastatus},
-                 	dataType:"json",
-                 	type:'post',
-                 	success: function(data){
-                 		if(visastatus == 16){
-	                 		layer.msg('发招宝');
-                 		}else if(visastatus == 19){
-	                 		layer.msg('招宝变更');
-                 		}else if(visastatus == 22){
-	                 		layer.msg('招宝取消');
-                 		}else if(visastatus == 27){
-	                 		layer.msg('报告拒签');
-                 		}
-                 		initOrderstatus();
-                   	}
-                 });
+				var title = '';
+        		if(visastatus == 19 || visastatus == 22|| visastatus == 27|| visastatus == 26){
+        			if(visastatus == 19){
+        				title = '确定要招宝变更吗？';
+        			}else if(visastatus == 22){
+        				title = '确定要招宝取消吗？';
+        			}else if(visastatus == 27){
+        				title = '确定要拒签吗？';
+        			}else if(visastatus == 26){
+        				title = '确定要作废吗？';
+        			}
+        			layer.confirm(title, {
+    					title:title,
+    					btn: ["是","否"], //按钮
+    					shade: false //不显示遮罩
+    				}, function(index){
+    					$.ajax({
+    	                 	url: '${base}/admin/visaJapan/sendInsurance',
+    	                 	data:{orderid:orderid,visastatus:visastatus},
+    	                 	dataType:"json",
+    	                 	type:'post',
+    	                 	success: function(data){
+    	                 		if(visastatus == 19){
+    		                 		layer.msg('招宝变更');
+    	                 		}else if(visastatus == 22){
+    		                 		layer.msg('招宝取消');
+    	                 		}else if(visastatus == 27){
+    		                 		layer.msg('报告拒签');
+    	                 		}else if(visastatus == 26){
+    		                 		layer.msg('已作废');
+    	                 		}
+    	                 		initOrderstatus();
+    	                 		layer.close(index);
+    	                   	}
+    	                 });
+    				});
+         		}else{
+         			$.ajax({
+	                 	url: '${base}/admin/visaJapan/sendInsurance.html',
+	                 	data:{orderid:orderid,visastatus:visastatus},
+	                 	dataType:"json",
+	                 	type:'post',
+	                 	success: function(data){
+	                 		if(visastatus == 19){
+		                 		layer.msg('招宝变更');
+	                 		}else if(visastatus == 22){
+		                 		layer.msg('招宝取消');
+	                 		}else if(visastatus == 27){
+		                 		layer.msg('报告拒签');
+	                 		}else if(visastatus == 26){
+		                 		layer.msg('已作废');
+	                 		}
+	                 		initOrderstatus();
+	                 		layer.close(index);
+	                   	}
+	                 });
+         		}
 			}
 			//实收弹框
 			function revenue(){

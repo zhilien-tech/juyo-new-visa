@@ -456,7 +456,6 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//根据staffId查询大客户人员基本信息表
 		TAppStaffBasicinfoEntity basicInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
 				Cnd.where("wechattoken", "=", openid));
-
 		if (!Util.isEmpty(basicInfo)) {
 			System.out.println("zhuceOK");
 			//用户已注册
