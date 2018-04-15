@@ -24,14 +24,15 @@
 				<div class="dialog"></div>
 				<span class="passportExpain">图例</span>
 			</div>
-			<div class="passportSetImage passportShoot">
+			<div class="passportSetImage passportShoot" id="passportShoot">
 				<div class="uploadPassport">
 					<p>上传旧护照</p>
 					<img id="11" src="" style="pointer-events:none;" class="uploadImgReady" />
+					<input type="file" class="oldpassportImg viceFile" id="1" name="1" onclick="addHousehold()"/>
 				</div>
-				<input type="file" class="passportImg" id="1" name="1" class="viceFile" onclick="addOldPassport()"/>
+				
 			</div>
-			<div class="addPage">
+			<div class="addPage addOldGroup">
 				<a class="addSet" onclick="addOldPassPort()">加一页</a>
 			</div>
 			<div class="savetitle">
@@ -85,7 +86,7 @@
 					id = parseInt(id);
 					id = id+1; 
 					var num = name+""+id;
-					$(this).before('<div class="passportSetImage passportShoot"><div class="uploadPassport"><p>上传旧护照</p><img id="'+num+'" src="" style="pointer-events:none;" class="uploadImgReady" /></div><input type="file" class="passportImg" id="'+id+'" name="'+name+'" class="viceFile" onclick="addOldPassport()"/></div>');
+					$(this).before('<div class="passportSetImage passportShoot"><div class="uploadPassport"><p>上传旧护照</p><img id="'+num+'" src="" style="pointer-events:none;" class="uploadImgReady" /><input type="file" class="oldpassportImg viceFile" id="'+id+'" name="'+name+'" onclick="addHousehold()"/></div></div>');
 					//$(this).before('<div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img id="'+num+'" src="" class="pageImg" /><input id="'+id+'" name="'+name+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
 				});
 			 
@@ -136,9 +137,8 @@
 								$(".passportSetImage").before('<div class="passportShoot">'+
 										'<div class="uploadPassport">'+
 										'<img src="'+url+'" class="uploadImgReady" />'+
-										'</div>'+
-										'<input type="file" class="passportImg" id="passportImg" name="passportImg" />'+
-										'</div>');
+										'<input type="file" class="oldpassportImg viceFile" id="passportImg" name="passportImg" onclick="addHousehold()" />'+
+										'</div></div>');
 							}	
 						}
 					}
