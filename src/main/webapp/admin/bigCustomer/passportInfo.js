@@ -8,9 +8,33 @@ $(function() {
 			validating : 'glyphicon glyphicon-refresh'
 		},
 		fields : {
+			firstname : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '姓不能为空'
+					}
+				}
+			},
+			lastname : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '名不能为空'
+					}
+				}
+			},
 			passport : {
 				trigger:"change keyup",
 				validators : {
+					notEmpty : {
+						message : '护照号不能为空'
+					},
+					stringLength: {
+                   	    min: 1,
+                   	    max: 9,
+                   	    message: '护照号不能超过9位'
+                   	},
 					remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 						url: '/admin/bigCustomer/checkPassport.html',
 						async:false,
@@ -26,10 +50,50 @@ $(function() {
 						}
 					}
 				}
+			},
+			birthaddress : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '出生地点不能为空'
+					}
+				}
+			},
+			birthday : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '出生日期不能为空'
+					}
+				}
+			},
+			issuedplace : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '签发地点不能为空'
+					}
+				}
+			},
+			issueddate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '签发日期不能为空'
+					}
+				}
+			},
+			validenddate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '有效日期不能为空'
+					}
+				}
 			}
 		}
 	});
-	$('#passportInfo').bootstrapValidator('validate');
+	//$('#passportInfo').bootstrapValidator('validate');
 	//护照图片验证
 	var passportUrl = $("#passportUrl").val();
 	if(passportUrl == ""){
@@ -65,9 +129,9 @@ $(function() {
 	$("#issuedDate").change(function(){
 		if($("#issuedDate").val() != ""){
 			if($("#validType").val() == 1){
-				$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
+				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10)).change();
 			}else{
-				$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+				$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5)).change();
 			}
 		}
 	});
@@ -75,13 +139,42 @@ $(function() {
 	$("#validType").change(function(){
 		var type = $(this).val();
 		if(type == 1){
-			$('#validEndDate').val(getNewDay($('#issuedDate').val(), 5));
+			$('#validEndDate').val(getNewDates($('#issuedDate').val(), 10)).change();
 		}else{
-			$('#validEndDate').val(getNewDay($('#issuedDate').val(), 10));
+			$('#validEndDate').val(getNewDates($('#issuedDate').val(), 5)).change();
 		}
 
 	});
 });
+
+function passportValidate(){
+	//护照图片验证
+	var passportUrl = $("#passportUrl").val();
+	if(passportUrl == ""){
+		$("#borderColor").attr("style", "border-color:#ff1a1a");  
+		$(".front").attr("class", "info-imgUpload front has-error");  
+        $(".help-blockFront").attr("data-bv-result","INVALID");  
+        $(".help-blockFront").attr("style","display: block;");  
+	}else{
+		$("#borderColor").attr("style", null);
+		$(".front").attr("class", "info-imgUpload front has-success");  
+        $(".help-blockFront").attr("data-bv-result","IVALID");  
+        $(".help-blockFront").attr("style","display: none;");  
+	}
+}
+
+function getNewDates(dateTemp, days){
+	var d1 = new Date(dateTemp);
+	var d2 = new Date(d1);
+	d2.setFullYear(d2.getFullYear()+days);
+	d2.setDate(d2.getDate()-1);
+	var year = d2.getFullYear();  
+	var month = d2.getMonth() + 1;  
+	if (month < 10) month = "0" + month;  
+	var date = d2.getDate();  
+	if (date < 10) date = "0" + date;  
+	return (year + "-" + month + "-" + date);
+}
 
 function getNewDay(dateTemp, days) {  
 	var dateTemp = dateTemp.split("-");  
@@ -179,6 +272,10 @@ $('#uploadFile').change(function() {
 				layer.close(layerIndex);
 				if (true === obj.success) {
 					layer.msg("识别成功");
+					$('#firstName').val(obj.xingCn).change();
+					$('#firstNameEn').val("/"+getPinYinStr(obj.xingCn));
+					$('#lastName').val(obj.mingCn).change();
+					$('#lastNameEn').val("/"+getPinYinStr(obj.mingCn));
 					$('#passportUrl').val(obj.url);
 					$('#sqImg').attr('src', obj.url);
 					$("#uploadFile").siblings("i").css("display","block");
@@ -201,9 +298,9 @@ $('#uploadFile').change(function() {
 					$("#borderColor").attr("style", null);
 					var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
 					if(years == 5){
-						$("#validType").val(1);
-					}else{
 						$("#validType").val(2);
+					}else{
+						$("#validType").val(1);
 					}
 
 				}
@@ -234,8 +331,13 @@ function dataURLtoBlob(dataurl) {
 
 //保存
 function save(status){
+	passportValidate();
 	//得到获取validator对象或实例 
 	var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+	bootstrapValidator.validate();
+	if($(".front").hasClass("has-error")){
+		return;
+	}
 	//延时校验
 	setTimeout(function(){
 		if(bootstrapValidator.isValid()){
@@ -257,7 +359,7 @@ function save(status){
 
 			}else if(status == 2){
 				//基本信息
-				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId;
+				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
 				$.ajax({
 					type: 'POST',
 					data : passportInfo,
@@ -266,15 +368,15 @@ function save(status){
 					}
 				});
 			}else if(status ==3){
-				//签证信息
-				/*window.location.href = '/admin/orderJp/visaInfo.html?id='+visaId;
+				//拍摄资料
+				window.location.href = '/admin/orderJp/visaInfo.html?id='+visaId+'&isDisable='+isDisable;
 				$.ajax({
 					type: 'POST',
 					data : passportInfo,
 					url: '/admin/orderJp/saveEditPassport',
 					success :function(data) {
 					}
-				});*/
+				});
 			}
 		}
 	}, 500);

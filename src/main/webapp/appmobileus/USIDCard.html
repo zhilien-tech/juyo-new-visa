@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>身份证</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+   		<!--公共样式-->
+		<link rel="stylesheet" href="css/common.css" />
+		<!--本页css-->
+		<link rel="stylesheet" href="css/filming.css" />
+	</head>
+	<body>
+		<header>
+			<div class="filming">
+			<a onclick="returnPage()">
+				<i></i>
+				<span>身份证</span></a>
+			</div>
+		</header>
+		<section>
+			<div class="IDInfo">
+				<img src="img/icon-ID.jpg" />
+				<div class="dialog"></div>
+				<span class="IDExpain">图例</span>
+			</div>
+			<div class="IDShoot">
+				<div class="uploadIDFace">
+					<p>上传身份证正面</p>
+					<img :src="passportdata.passporturl" style="pointer-events:none;" class="uploadImgFace" />
+				</div>
+				<input type="file" style="pointer-events:none;" class="faceImg" id="faceImg" name="faceImg" />
+			</div>
+			<div class="IDShoot">
+				<div class="uploadIDBack">
+					<p>上传身份证背面</p>
+					<img :src="passportdata.passporturl" style="pointer-events:none;" class="uploadImgBack" />
+				</div>
+				<input type="file" class="backImg" id="backImg" name="backImg" />
+			</div>
+			<div class="savetitle">
+				<a class="savebutton">保存</a>
+			</div>
+		</section>
+		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script type="text/javascript" src="js/rem(750).js" ></script>
+		<script type="text/javascript" src="/references/common/js/layer/layer.js" ></script>
+		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
+		<script type="text/javascript" src="js/vue.min.js" ></script>
+		<script type="text/javascript" src="js/saveButton.js" ></script>
+		<script>
+			//异步加载的URL地址
+			/* var url="/admin/mobile/passportinfo.html";
+			var _self;
+			new Vue({
+				el: '#passportform',
+				data: {passportdata:"",
+						applicatdata:""},
+				created:function(){
+					var applicantid = GetQueryString('applicantid');
+			        _self=this;
+			        $.ajax({
+			        	url: url,
+			        	data:{applicantid:applicantid},
+			        	dataType:"json",
+			        	type:'post',
+			        	success: function(data){
+			        		_self.passportdata = data.passportdata;
+			          	}
+			        });
+			    }
+			}); */
+			
+			
+			function getImageFront(staffid){
+				$.ajax({
+					url : "/admin/mobileVisa/getIDcardphoto.html",
+					data : {
+						type : 3,
+						staffid : staffid,
+						status : 1
+					},
+					dataType : "json",
+					type : 'post',
+					success : function(data) {
+						if(data != null){
+							$(".uploadImgFace").attr("src",data.url);
+						}
+					}
+				});
+			}
+			function getImageBack(staffid){
+				$.ajax({
+					url : "/admin/mobileVisa/getIDcardphoto.html",
+					data : {
+						type : 3,
+						staffid : staffid,
+						status : 2
+					},
+					dataType : "json",
+					type : 'post',
+					success : function(data) {
+						if(data != null){
+							$(".uploadImgBack").attr("src",data.url);
+						}
+					}
+				});
+			}
+			//点击上传图片
+			$(function(){
+				var	staffid=GetQueryString('staffid');
+				var	sessionid=GetQueryString('sessionid');
+				var	flag=GetQueryString('flag');
+				getImageFront(staffid);
+				getImageBack(staffid);
+				$(".uploadIDFace").click(function(){
+					$("#faceImg").click();
+					$("#faceImg").change(function(){
+						layer.load(1,{
+							shade : "#000"
+						});
+						var that = this;
+			            lrz(this.files[0]).then(function (rst) {
+			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                $('#upload').hide(); 
+			                // 处理成功会执行
+			                sourceSize = (that.files[0].size / 1024).toFixed(2);
+			                resultSize = (rst.fileLen / 1024).toFixed(2);
+			                scale = parseInt(100 - (resultSize / sourceSize * 100));
+			                rst.formData.append('image',rst.file);
+//			                alert(rst);
+//			                alert(JSON.stringify(rst.formData));
+//			                alert(rst.file);
+//			                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
+							//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+			                uploadPositiveFront(rst,rst.formData,staffid,sessionid,flag); 
+			            }).catch(function (err) {
+			                console.log(err);
+			            });
+					});
+				});
+				$(".uploadIDBack").click(function(){
+					$("#backImg").click();
+					$("#backImg").change(function(){
+						layer.load(1,{
+							shade : "#000"
+						});
+						var that = this;
+			            lrz(this.files[0]).then(function (rst) {
+			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                $('#upload').hide(); 
+			                // 处理成功会执行
+			                sourceSize = (that.files[0].size / 1024).toFixed(2);
+			                resultSize = (rst.fileLen / 1024).toFixed(2);
+			                scale = parseInt(100 - (resultSize / sourceSize * 100));
+			                rst.formData.append('image',rst.file);
+//			                alert(rst);
+//			                alert(JSON.stringify(rst.formData));
+//			                alert(rst.file);
+//			                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
+							//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+			                uploadPositiveBack(rst,rst.formData,staffid,sessionid,flag); 
+			            }).catch(function (err) {
+			                console.log(err);
+			            });
+					});
+				});
+			})
+			
+			//跳转2寸图片
+			function returnPage(){
+				var staffid = GetQueryString("staffid");
+				var	sessionid=GetQueryString('sessionid');
+				var	flag=GetQueryString('flag');
+				window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
+			}
+			
+			//获取URL地址参数
+		    function GetQueryString(name){
+		         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		         var r = window.location.search.substr(1).match(reg);
+		         if(r!=null)return  unescape(r[2]); return null;
+		    }
+			
+			//上传图片(前面)
+			function uploadPositiveFront(rst, formData,staffid,sessionid,flag){
+				if(!formData){
+					formData = new FormData();
+				}
+		        formData.append("image", rst.file); 
+		        formData.append("type", 3); 
+		        formData.append("staffid", staffid); 
+		        formData.append("sessionid", sessionid); 
+		        formData.append("flag", flag); 
+		        console.log('------------------------------');
+		        console.log(formData); 
+		        console.log(rst.file);
+		        /* var layerIndex = layer.load(1, {
+					shade : "#000"
+				}); */
+		        $.ajax({
+					type : "POST",//提交类型  
+					url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
+					async : false,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//console.log('=====成功========');
+						//关闭加载层
+						layer.closeAll('loading');
+						getImageFront(staffid);
+						if (obj!=null || obj != "") {
+							layer.msg("上传成功"); 
+							$.ajax({
+								type : "POST",//提交类型  
+								url : '/admin/orderUS/IDCardRecognition.html',
+								data : {
+									url : obj,
+									staffid : staffid
+								},
+								success : function(obj) {
+									
+								}
+							});
+							
+						}else{
+							layer.msg("身份证无法识别，请从新上传"); 
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						//console.log('-----------------失败-------------');
+						layer.closeAll('loading');
+					}
+				}); // end of ajaxSubmit
+			}
+			//上传图片(后面)
+			function uploadPositiveBack(rst, formData,staffid,sessionid,flag){
+				if(!formData){
+					formData = new FormData();
+				}
+		        formData.append("image", rst.file); 
+		        formData.append("type", 14); 
+		        formData.append("staffid", staffid); 
+		        formData.append("sessionid", sessionid); 
+		        formData.append("flag", flag); 
+		        console.log('------------------------------');
+		        console.log(formData); 
+		        console.log(rst.file);
+		        /* var layerIndex = layer.load(1, {
+					shade : "#000"
+				}); */
+		        $.ajax({
+					type : "POST",//提交类型  
+					url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
+					async : false,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//console.log('=====成功========');
+						//关闭加载层
+						layer.closeAll('loading');
+						getImageBack(staffid);
+						if (obj!=null) {
+							layer.msg("上传成功"); 
+							$.ajax({
+								type : "POST",//提交类型  
+								url : '/admin/orderUS/IDCardRecognitionBack.html',
+								data : {
+									url : obj,
+									staffid : staffid
+								},
+								success : function(obj) {
+									
+								}
+							});
+							
+						}else{
+							layer.msg("身份证无法识别，请从新上传"); 
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						//console.log('-----------------失败-------------');
+						layer.closeAll('loading');
+					}
+				}); // end of ajaxSubmit
+			}
+		</script>
+	</body>
+</html>

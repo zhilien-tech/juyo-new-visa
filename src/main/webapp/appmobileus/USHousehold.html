@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>户口本</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<!--公共样式-->
+<link rel="stylesheet" href="css/common.css" />
+<!--本页css-->
+<link rel="stylesheet" href="css/filming.css" />
+</head>
+<body>
+	<header>
+		<div class="filming">
+			<a onclick="returnPage()"> <i></i> <span>户口本</span></a>
+		</div>
+	</header>
+	<section>
+		<div class="household">
+			<div class="householdPage householdExpain">
+				<img alt="图例" src="img/icon-hold.jpg" width="100%" height="100%">
+				<div class="dialoghold"></div>
+				<span class="titlehold">图例</span>
+			</div>
+			<!--户主页-->
+			<div class="householdPage homePage">
+				<span class="homePageTitle">户主页</span> <img src="img/camera.png" style="pointer-events:none;"
+					class="camera" /> <img id="11" src="" style="pointer-events:none;" class="pageImg" /> <input
+					id="1" type="file" name="1" class="viceFile"
+					onclick="addHousehold()" />
+			</div>
+
+			<!--副页-->
+			<div class="householdPage vicePage">
+				<span class="homePageTitle">副页</span> <img src="img/camera.png" style="pointer-events:none;"
+					class="camera" /> <img id="12" src="" style="pointer-events:none;" class="pageImg" /> <input
+					id="2" type="file" class="viceFile" onclick="addHousehold()"
+					name="1" />
+			</div>
+
+			<!--添加页-->
+			<div class="addPage 1">
+				<span class="homePageTitle">添加副页</span> <span class="plus">+</span>
+			</div>
+		</div>
+
+		<div class="addSetOfBtn">
+			<a class="addSet">加一套</a>
+		</div>
+		<div class="savetitle">
+			<a class="savebutton">保存</a>
+		</div>
+	</section>
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/rem(750).js"></script>
+	<script type="text/javascript" src="/references/common/js/layer/layer.js"></script>
+	<script type="text/javascript" src="js/lrz.all.bundle.js"></script>
+	<script type="text/javascript" src="js/saveButton.js" ></script>
+	<script>
+		$(function(){
+			var	staffid=GetQueryString('staffid');
+			var	flag=GetQueryString('flag');
+			var fuyecount = 2;
+			var count = 1;
+			getImage(staffid);
+			var maxid = 0 ;
+			var maxname = 0;
+			 $("input").each(function() {
+				  var id = parseInt($(this).attr("id"));
+				  var name = parseInt($(this).attr("name"));
+				  if (id > maxid) {
+				   maxid = id;
+				  }
+				  if(name>maxname){
+				   maxname = name;
+				 }
+			});
+			 fuyecount = maxid;
+			 count = maxname;
+			//当前模块下的添加一页
+			$('.addPage').on('click',function(){
+				var name = $(this).prev().find('input').attr("name");
+				var id = $(this).prev().find('input').attr("id");
+				id = parseInt(id);
+				id = id+1; 
+				var num = name+""+id;
+				$(this).before('<div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img id="'+num+'" src="" class="pageImg" /><input id="'+id+'" name="'+name+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
+			});
+			//添加一套
+			$(".addSet").click(function(){
+				count = count+1;
+				var zhuye = count+""+1;
+				var fuye = count+""+2;
+				$(".addSetOfBtn").before('<div class="household">'+
+						 '<div class="householdPage homePage">'+
+						 '<span class="homePageTitle">户主页</span>'+
+						 '<img src="img/camera.png" class="camera" />'+
+						 '<img id="'+zhuye+'" src="" class="pageImg" />'+
+						 '<input id="1" type="file" name="'+count+'" class="viceFile" onclick="addHousehold()" /></div>'+
+						 '<div id="vice1" class="householdPage householdInfo vicePage">'+
+						 '<span class="homePageTitle">副页</span>'+
+						 '<img src="img/camera.png" class="camera" />'+
+						 '<img id="'+fuye+'" src="" class="pageImg" />'+
+						 '<input id="2" type="file" id="file1" class="viceFile viceStatus" onclick="addHousehold()" name="'+count+'" />'+
+						 '</div>'+
+						 '<div class="addPage">'+
+						 '<span class="homePageTitle">添加副页</span>'+
+						 '<span class="plus">+</span>'+
+						 '</div>'+
+						 '</div>'
+				);
+			})
+		});
+		function getImage(staffid){
+			$.ajax({
+				url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
+				data : {
+					type : 4,
+					staffid : staffid,
+				},
+				dataType : "json",
+				type : 'post',
+				async:false,
+				success : function(data) {
+					if(data != ""){
+						$(".homePage").remove();
+						$(".vicePage").remove();
+					}
+					console.log(data);
+					for(var i=0;i<data.length;i++){
+						var url=data[i].url;
+						var num = "#"+data[i].mainid+data[i].sequence;
+							sequence = data[i].sequence-1;
+							num = "#"+data[i].mainid+sequence;
+							var id=data[i].mainid+""+data[i].sequence;
+							
+							if(data[i].mainid == 1){
+								/* 第一条主页 */
+								if(data[i].sequence==1){
+									$(".householdExpain").after('<div class="householdPage homePage ">'+
+																'<span class="homePageTitle">户主页</span>'+
+											 '<img src="img/camera.png" class="camera" />'+
+											 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
+											 '<input id="'+data[i].sequence+'" type="file" name="'+data[i].mainid+'" class="viceFile" onclick="addHousehold()" /></div>')
+								}else{
+									$(".1").before('<div class="householdPage vicePage">'+
+											'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
+											'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
+											'<input id="'+data[i].sequence+'" name="'+data[i].mainid+'" value="'+url+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
+									}
+							}else{
+								/* 其他的页面 */
+								if(data[i].sequence ==1){
+									$(".addSetOfBtn").before(
+											'<div class="household"><div class="householdPage homePage ">'+
+																'<span class="homePageTitle">户主页</span>'+
+											 '<img src="img/camera.png" class="camera" />'+
+											 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
+											 '<input id="'+data[i].sequence+'" type="file" name="'+data[i].mainid+'" class="viceFile" onclick="addHousehold()" /></div>'+
+											 
+											 '<div class="addPage '+data[i].mainid+'">'+
+											 '<span class="homePageTitle">添加副页</span>'+
+											 '<span class="plus">+</span>'+
+											 '</div>'+
+											 '</div>'
+									)
+								}else{
+									var group = "."+data[i].mainid;
+									//if(hasClass("data[i].mainid")){
+										$(group).before('<div class="householdPage vicePage">'+
+												'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
+												'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
+												'<input id="'+data[i].sequence+'" name="'+data[i].mainid+'" value="'+url+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
+												/* '<div class="addPage '+data[i].mainid+'">'+
+										 		'<span class="homePageTitle">添加副页</span>'+
+										 		'<span class="plus">+</span>'+ 
+										 		'</div>'*/
+										//}
+										
+									}
+							}
+					}
+				}
+			});
+		}
+		//跳转2寸图片
+		function returnPage(){
+			var staffid = GetQueryString("staffid");
+			var	sessionid=GetQueryString('sessionid');
+			var	flag=GetQueryString('flag');
+			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
+		}
+		
+		//获取URL地址参数
+	    function GetQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null)return  unescape(r[2]); return null;
+	    }
+		
+		//上传图片
+		function uploadPositive(rst,formData,staffid,mainid,sequence,sessionid,that,flag){
+			if(!formData){
+				formData = new FormData();
+			}
+	        formData.append("image", rst.file); 
+	        formData.append("type", 4); 
+	        formData.append("staffid", staffid); 
+	        formData.append("mainid", mainid); 
+	        formData.append("sequence", sequence); 
+	        formData.append("sessionid", sessionid); 
+	        formData.append("flag", flag); 
+	        console.log('------------------------------');
+	        console.log(formData); 
+	        console.log(rst.file);
+	        /* var layerIndex = layer.load(1, {
+				shade : "#000"
+			}); */
+	        $.ajax({
+				type : "POST",//提交类型  
+				//dataType : "json",//返回结果格式  
+				url : '/admin/mobileVisa/uploadMuchImage.html',//请求地址  
+				async : true,
+				processData : false, //当FormData在jquery中使用的时候需要设置此项
+				contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+				//请求数据  
+				data : formData,
+				success : function(obj) {//请求成功后的函数 
+					//console.log('=====成功========');
+					//关闭加载层
+					if (obj!=null) {
+						layer.msg("上传成功");
+						$(that).prev().attr("src",obj);
+					}
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					//console.log('-----------------失败-------------');
+					layer.closeAll('loading');
+				}
+			}); // end of ajaxSubmit
+		}
+		//点击上传
+		function addHousehold(){
+			var	staffid=GetQueryString('staffid');
+			var	sessionid=GetQueryString('sessionid');
+			var	flag=GetQueryString('flag');
+			$(".viceFile").change(function(){
+				var mainid = $(this).attr("name");
+				var sequence = $(this).attr("id");
+				var that = this;
+				layer.load(1,{
+					shade : "#000"
+				});
+				var that = this;
+			        lrz(this.files[0]).then(function (rst) {
+			        	uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,that,flag); 
+			        }).catch(function (err) {
+			            console.log(err);
+			        });
+				//压缩
+				//上传
+				//给当前元素的上一个节点添加src的值
+				//$(this).prev().attr('src','123456789');
+				});
+			}
+		</script>
+</body>
+</html>

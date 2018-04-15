@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>进度</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">		
+		<link rel="stylesheet" href="css/common.css" />
+		<script type="text/javascript" src="js/rem(750).js" ></script>
+		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script>
+     	//获取URL地址参数
+	    function GetQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null)return  unescape(r[2]); return null;
+	    }
+        	$(function(){
+        		var code = GetQueryString("code");        		
+        		$.ajax({
+        			type : "POST",//提交类型  
+        			//dataType : "json",//返回结果格式  
+        	 		url : '/admin/weixinToken/saveWxinfo.html',//请求地址  
+        			data:{code:code},
+        			//请求数据  
+        			success : function(obj) {//请求成功后的函数 
+        				//关闭加载层
+        				console.log(obj);
+        			},
+        			error : function(XMLHttpRequest, textStatus, errorThrown) {
+        				
+        			}
+        		});
+        		
+        	})
+        	
+        	
+        </script>
+		<style>
+			.sectionInfo {
+				padding: 0 .2rem;
+				margin-top: .2rem;
+			}
+			.mainInfo {
+				border: 1px solid #000;
+				padding: .2rem ;
+			}
+			.titleHead {
+				font-size: .4rem;
+			}
+			.downUpInfo li {
+				font-size: .3rem;
+				padding:.2rem 0;
+			}
+			.statusInfo span {
+				font-size: .3rem;
+				display: inline-block;
+			}
+			.UsStatus {
+				display: block;
+				float: right;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="sectionInfo">
+			<div class="mainInfo">
+				<div class="titleHead">USANA &nbsp;2018国际年会</div>
+				<ul class="downUpInfo">
+					<li>
+						<span>刘德华</span>
+					</li>
+				</ul>
+				<div class="statusInfo">
+					<span class="UsName">美国</span>
+					<span class="UsStatus">资料已进使馆</span>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

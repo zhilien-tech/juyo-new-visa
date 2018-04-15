@@ -136,6 +136,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		//准备封皮信息
 		ByteArrayOutputStream note = note(tempdata);
 		pdffiles.add(note);
+		//
 		for (Record record : applyinfo) {
 			ByteArrayOutputStream apply = applyinfo(record, tempdata);
 			pdffiles.add(apply);
@@ -196,6 +197,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		//査 証 申 請 人 名 簿
 		ByteArrayOutputStream book = book(tempdata);
 		pdffiles.add(book);
+
 		ByteArrayOutputStream mergePdf = templateUtil.mergePdf(pdffiles);
 		fileMap.put("照会.pdf", templateUtil.createTempFile(mergePdf));
 		ByteArrayOutputStream bodyElement = bodyElement(tempdata);

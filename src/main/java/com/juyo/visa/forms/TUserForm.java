@@ -94,6 +94,7 @@ public class TUserForm extends DataTablesParamForm {
 
 		cnd.and("u.userType", "!=", 5);
 		cnd.and("u.userType", "!=", 7);
+		cnd.and("u.userType", "!=", 8);//特指 美国大客户公司
 		cnd.orderBy("updateTime", "DESC");
 		cnd.orderBy("createTime", "DESC");
 		return cnd;

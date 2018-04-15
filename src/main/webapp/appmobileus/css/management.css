@@ -1,0 +1,97 @@
+/*头部*/
+header {
+	width: 100%;
+	height: .81rem;
+	line-height: .81rem;
+	text-align: center;
+	font-size: .4rem;
+	position: fixed;
+	top: 0;
+	background-color: #FFF;
+}
+.management {
+	width: 100%;
+	border-bottom: 2px solid #eee;
+	height: .81rem;
+	line-height: .81rem;
+}
+.management i {
+	float: left;
+	margin-left: .2rem;
+	width: 10px;
+	height: 10px;
+	border: 1px solid #000;
+	transform: rotate(45deg);
+	border-top: 0;
+	border-right:0;
+	margin-top: .3rem;
+}
+.management span {
+	margin-left: -.3rem;
+}
+section {
+	margin-top: .81rem;
+}
+section ul li {
+	position: relative;
+	font-size: .3rem;
+	height: 1rem;
+	border-bottom: 1px solid #eee;
+	padding: .1rem .2rem 0 .2rem;
+}
+
+.edit {
+	position: absolute;
+	top: 30%;
+	right: 4%;
+	background: url(../img/tableEdit1.png) no-repeat;
+	width: 20px;
+	height: 20px;
+}
+
+footer {
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+}
+.addAddress {
+	width: 100%;
+	height: .81rem;
+	line-height: .81rem;
+	font-size: .3rem;
+	text-align: center;
+	color: #FFF;
+	background-color: rgba(22,155,213,1);
+}
+/*新增地址*/
+.delete {
+	position: absolute;
+	top: 0;
+	right: 12px;
+	font-size:.29rem;
+}
+.main {
+	width: 100%;
+	margin-top: .81rem;
+}
+.main ul li {
+	border-bottom: 1px solid #dedede;
+	height: .81rem;
+	line-height: .81rem;
+	font-size: .3rem;
+	color:#333;
+	padding:0 .2rem;
+}
+.txtInput {
+	width: 60%;
+	height: 100%;
+	float: right;
+	border: 0;
+	text-align: right;
+	outline: none;
+	font-size: .3rem;
+	color: #585858;
+}
+.detail {
+	width: 80%;
+}
