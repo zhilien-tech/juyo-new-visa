@@ -1109,7 +1109,6 @@
 		function dataReload(status){
 			var orderid = '${obj.orderid}';
 			//var addorder = '${obj.isaddorder}';
-			alert(addorder);
 			$.ajax({
 				url : '/admin/orderUS/getOrderRefresh.html',
 				data : {
