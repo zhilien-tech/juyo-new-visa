@@ -179,7 +179,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		String lastname = form.getLastname();
 
 		//校验姓名是否合格
-		if (isChineseStr(firstname) && isChineseStr(lastname)) {
+		if (!(isChineseStr(firstname) && isChineseStr(lastname))) {
 			return null;
 		} else {
 			//当前登录用户Id
@@ -477,7 +477,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//校验姓名是否合格
 		String firstname = form.getFirstname();
 		String lastname = form.getLastname();
-		if (isChineseStr(firstname) && isChineseStr(lastname)) {
+		if (!(isChineseStr(firstname) && isChineseStr(lastname))) {
 			return null;
 		} else {
 			//当前登录用户Id
@@ -527,14 +527,8 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 	}
 
 	public boolean isChineseStr(String str) {
-		Pattern pattern = Pattern.compile("[\u4e00-\u9fa5]");
-		char c[] = str.toCharArray();
-		for (int i = 0; i < c.length; i++) {
-			Matcher matcher = pattern.matcher(String.valueOf(c[i]));
-			if (!matcher.matches()) {
-				return true;
-			}
-		}
-		return false;
+		String reg = "[\\u4e00-\\u9fa5]+";  
+		boolean isChinese = str.matches(reg);
+		return isChinese;
 	}
 }
