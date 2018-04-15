@@ -304,12 +304,65 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 					e.printStackTrace();
 				}
 			}
+			//二寸照片
 			if (TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey() == type) {
 				//获取用户基本信息
 				TAppStaffBasicinfoEntity basicinfoEntity = dbDao.fetch(TAppStaffBasicinfoEntity.class,
 						Cnd.where("id", "=", staffid));
 				basicinfoEntity.setTwoinchphoto(url);
 				dbDao.update(basicinfoEntity);
+
+				TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
+						Cnd.where("staffid", "=", staffid).and("type", "=", type));
+				if (!Util.isEmpty(credentialEntity)) {
+					credentialEntity.setUrl(url);
+					credentialEntity.setUpdatetime(new Date());
+					int update = dbDao.update(credentialEntity);
+					changeStaffStatus(staffid, flag);
+				} else {
+					credentialEntity = new TAppStaffCredentialsEntity();
+					credentialEntity.setCreatetime(new Date());
+					credentialEntity.setStaffid(staffid);
+					credentialEntity.setUpdatetime(new Date());
+					credentialEntity.setType(type);
+					credentialEntity.setUrl(url);
+					dbDao.insert(credentialEntity);
+					changeStaffStatus(staffid, flag);
+				}
+				try {
+					simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			//营业执照
+			if (TAppStaffCredentialsEnum.YINGYEZHIHZAO.intKey() == type) {
+
+				TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
+						Cnd.where("staffid", "=", staffid).and("type", "=", type));
+				if (!Util.isEmpty(credentialEntity)) {
+					credentialEntity.setUrl(url);
+					credentialEntity.setUpdatetime(new Date());
+					int update = dbDao.update(credentialEntity);
+					changeStaffStatus(staffid, flag);
+				} else {
+					credentialEntity = new TAppStaffCredentialsEntity();
+					credentialEntity.setCreatetime(new Date());
+					credentialEntity.setStaffid(staffid);
+					credentialEntity.setUpdatetime(new Date());
+					credentialEntity.setType(type);
+					credentialEntity.setUrl(url);
+					dbDao.insert(credentialEntity);
+					changeStaffStatus(staffid, flag);
+				}
+				try {
+					simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			//在职证明
+			if (TAppStaffCredentialsEnum.WORKE.intKey() == type) {
 
 				TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 						Cnd.where("staffid", "=", staffid).and("type", "=", type));
@@ -443,21 +496,17 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 			query = dbDao.query(TAppStaffCredentialsEntity.class,
 					Cnd.where("staffid", "=", staffid).and("type", "=", type), null);
 		}
+		if (Util.eq(type, TAppStaffCredentialsEnum.HOME.intKey())) {
+			TAppStaffCredentialsExplainEntity expain = dbDao.fetch(TAppStaffCredentialsExplainEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			result.put("explain", expain);
+		}
 		if (!Util.isEmpty(query)) {
 			if (type != 4) {
 				Collections.reverse(query);
-				if (Util.eq(type, TAppStaffCredentialsEnum.HOME.intKey())) {
-					TAppStaffCredentialsExplainEntity expain = dbDao.fetch(TAppStaffCredentialsExplainEntity.class,
-							Cnd.where("staffid", "=", staffid));
-					result.put("explain", expain);
-					result.put("query", query);
-					return result;
-				} else {
-					return query;
-				}
-			} else {
-				return query;
 			}
+			result.put("query", query);
+			return result;
 		} else {
 			return 0;
 		}
