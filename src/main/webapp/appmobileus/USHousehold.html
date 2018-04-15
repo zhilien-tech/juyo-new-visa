@@ -129,50 +129,50 @@
 						$(".vicePage").remove();
 					}
 					console.log(data);
-					for(var i=0;i<data.length;i++){
-						var url=data[i].url;
-						var num = "#"+data[i].mainid+data[i].sequence;
-							sequence = data[i].sequence-1;
-							num = "#"+data[i].mainid+sequence;
-							var id=data[i].mainid+""+data[i].sequence;
+					for(var i=0;i<data.query.length;i++){
+						var url=data.query[i].url;
+						var num = "#"+data.query[i].mainid+data.query[i].sequence;
+							sequence = data.query[i].sequence-1;
+							num = "#"+data.query[i].mainid+sequence;
+							var id=data.query[i].mainid+""+data.query[i].sequence;
 							
-							if(data[i].mainid == 1){
+							if(data.query[i].mainid == 1){
 								/* 第一条主页 */
-								if(data[i].sequence==1){
+								if(data.query[i].sequence==1){
 									$(".householdExpain").after('<div class="householdPage homePage ">'+
 																'<span class="homePageTitle">户主页</span>'+
 											 '<img src="img/camera.png" class="camera" />'+
 											 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-											 '<input id="'+data[i].sequence+'" type="file" name="'+data[i].mainid+'" class="viceFile" onclick="addHousehold()" /></div>')
+											 '<input id="'+data.query[i].sequence+'" type="file" name="'+data.query[i].mainid+'" class="viceFile" onclick="addHousehold()" /></div>')
 								}else{
 									$(".1").before('<div class="householdPage vicePage">'+
 											'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
 											'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-											'<input id="'+data[i].sequence+'" name="'+data[i].mainid+'" value="'+url+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
+											'<input id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'" value="'+url+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
 									}
 							}else{
 								/* 其他的页面 */
-								if(data[i].sequence ==1){
+								if(data.query[i].sequence ==1){
 									$(".addSetOfBtn").before(
 											'<div class="household"><div class="householdPage homePage ">'+
 																'<span class="homePageTitle">户主页</span>'+
 											 '<img src="img/camera.png" class="camera" />'+
 											 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-											 '<input id="'+data[i].sequence+'" type="file" name="'+data[i].mainid+'" class="viceFile" onclick="addHousehold()" /></div>'+
+											 '<input id="'+data.query[i].sequence+'" type="file" name="'+data.query[i].mainid+'" class="viceFile" onclick="addHousehold()" /></div>'+
 											 
-											 '<div class="addPage '+data[i].mainid+'">'+
+											 '<div class="addPage '+data.query[i].mainid+'">'+
 											 '<span class="homePageTitle">添加副页</span>'+
 											 '<span class="plus">+</span>'+
 											 '</div>'+
 											 '</div>'
 									)
 								}else{
-									var group = "."+data[i].mainid;
+									var group = "."+data.query[i].mainid;
 									//if(hasClass("data[i].mainid")){
 										$(group).before('<div class="householdPage vicePage">'+
 												'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
 												'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-												'<input id="'+data[i].sequence+'" name="'+data[i].mainid+'" value="'+url+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
+												'<input id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'" value="'+url+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
 												/* '<div class="addPage '+data[i].mainid+'">'+
 										 		'<span class="homePageTitle">添加副页</span>'+
 										 		'<span class="plus">+</span>'+ 
