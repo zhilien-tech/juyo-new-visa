@@ -157,17 +157,25 @@ function getBeforeWorkList(){
 			isemployerzipcodeapply = 0;
 		}
 		var supervisorlastname = $(this).find('[name=supervisorlastname]').val();
+		var isknowsupervisorfirstname = $(this).find('[name=isknowsupervisorfirstname]').is(':checked');
+		if(isknowsupervisorfirstname){
+			isknowsupervisorfirstname = 1;
+		}else{
+			isknowsupervisorfirstname = 0;
+		}
 		var isknowsupervisorlastname = $(this).find('[name=isknowsupervisorlastname]').is(':checked');
 		if(isknowsupervisorlastname){
 			isknowsupervisorlastname = 1;
 		}else{
 			isknowsupervisorlastname = 0;
 		}
+		
 		var employstartdate = $(this).find('[name=employstartdate]').val();
 		employstartdate = formatDate(employstartdate);
 		var employenddate = $(this).find('[name=employenddate]').val();
 		employenddate = formatDate(employenddate);
 		var previousduty = $(this).find('[name=previousduty]').val();
+		alert(previousduty);
 		
 		beforeWorkLength += employername;
 		beforeWorkLength += employeraddress;
@@ -194,10 +202,12 @@ function getBeforeWorkList(){
 			beforeWork.jobtitle = jobtitle;
 			beforeWork.isemployerzipcodeapply = isemployerzipcodeapply;
 			beforeWork.supervisorlastname = supervisorlastname;
+			beforeWork.isknowsupervisorfirstname = isknowsupervisorfirstname;
 			beforeWork.isknowsupervisorlastname = isknowsupervisorlastname;
 			beforeWork.employstartdate = employstartdate;
 			beforeWork.employenddate = employenddate;
 			beforeWork.previousduty = previousduty;
+			alert(JSON.stringify(beforeWork));
 			beforeWorkList.push(beforeWork);
 		}
 	});
@@ -218,6 +228,12 @@ function getBeforeEducationList(){
 		var institutioncity = $(this).find('[name=institutioncity]').val();
 		var institutionprovince = $(this).find('[name=institutionprovince]').val();
 		var institutionzipcode = $(this).find('[name=institutionzipcode]').val();
+		var isinstitutionprovinceapply = $(this).find('[name=isinstitutionprovinceapply]').is(':checked');
+		if(isinstitutionprovinceapply){
+			isinstitutionprovinceapply = 1;
+		}else{
+			isinstitutionprovinceapply = 0;
+		}
 		var isinstitutionzipcodeapply = $(this).find('[name=isinstitutionzipcodeapply]').is(':checked');
 		if(isinstitutionzipcodeapply){
 			isinstitutionzipcodeapply = 1;
@@ -252,6 +268,7 @@ function getBeforeEducationList(){
 			beforeEducation.institutioncity = institutioncity;
 			beforeEducation.institutionprovince = institutionprovince;
 			beforeEducation.institutionzipcode = institutionzipcode;
+			beforeEducation.isinstitutionprovinceapply = isinstitutionprovinceapply;
 			beforeEducation.isinstitutionzipcodeapply = isinstitutionzipcodeapply;
 			beforeEducation.course = course;
 			beforeEducation.coursestartdate = coursestartdate;
