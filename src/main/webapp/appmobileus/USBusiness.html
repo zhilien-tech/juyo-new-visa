@@ -68,9 +68,7 @@
 			$(".bisLicense").click(function(){
 				$(".bisLicenseFile").click();
 				$(".bisLicenseFile").change(function(){
-					layer.load(1,{
-						shade : "#000"
-					});
+					layer.load(1);
 					var that = this;
 		            lrz(this.files[0]).then(function (rst) {
 		                /* $('.bacimg2').attr('src',rst.base64);*/

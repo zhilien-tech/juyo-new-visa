@@ -66,7 +66,9 @@ import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.orderUS.DistrictEnum;
 import com.juyo.visa.common.enums.orderUS.IsPayedEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
+import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
@@ -75,10 +77,16 @@ import com.juyo.visa.common.util.PinyinTool.Type;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.common.util.TranslateUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
+import com.juyo.visa.entities.TAppStaffEventsEntity;
+import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
+import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
+import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffVisaUsEntity;
+import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TFlightEntity;
@@ -127,6 +135,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	private final static String SMS_SIGNATURE = "【优悦签】";
 	private final static Integer US_YUSHANG_COMID = 65;
+	//活动id，默认为1
+	private final static Integer EVENTID = 1;
+	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
 	//订单列表页连接websocket的地址
 	private static final String USLIST_WEBSPCKET_ADDR = "uslistwebsocket";
 
@@ -241,9 +252,17 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object getOrderUSDetail(int orderid, HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
+		//orderid=0时为下单,下单创建人员表以及相关表
+		result.put("orderid", orderid);
+		//领区下拉
+		result.put("cityidenum", EnumUtil.enum2(DistrictEnum.class));
+		//是否付款下拉
+		result.put("ispayedenum", EnumUtil.enum2(IsPayedEnum.class));
 		if (orderid == 0) {
-			result.put("orderid", orderid);
-			return result;
+			//创建相关表
+			Map<String, Object> map = (Map<String, Object>) insertSomeInfo(result);
+
+			return map;
 		}
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -417,10 +436,118 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		}
 		result.put("followinfo", followList);
-		//领区下拉
-		result.put("cityidenum", EnumUtil.enum2(DistrictEnum.class));
-		//是否付款下拉
-		result.put("ispayedenum", EnumUtil.enum2(IsPayedEnum.class));
+		return result;
+	}
+
+	public Object insertSomeInfo(Map<String, Object> result) {
+		//创建人员信息表
+		TAppStaffBasicinfoEntity basic = new TAppStaffBasicinfoEntity();
+		basic.setIsidentificationnumberapply(IsYesOrNoEnum.YES.intKey());
+		basic.setIsidentificationnumberapplyen(IsYesOrNoEnum.YES.intKey());
+		basic.setIssecuritynumberapply(IsYesOrNoEnum.YES.intKey());
+		basic.setIssecuritynumberapplyen(IsYesOrNoEnum.YES.intKey());
+		basic.setIstaxpayernumberapply(IsYesOrNoEnum.YES.intKey());
+		basic.setIstaxpayernumberapplyen(IsYesOrNoEnum.YES.intKey());
+		basic.setComid(US_YUSHANG_COMID);
+		basic.setCreatetime(new Date());
+		basic.setUpdatetime(new Date());
+		TAppStaffBasicinfoEntity basicDB = dbDao.insert(basic);
+		result.put("basicinfo", basicDB);
+		Integer staffId = basicDB.getId();
+
+		//人员报名活动
+		TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
+		staffEventEntity.setEventsId(EVENTID);
+		staffEventEntity.setStaffId(staffId);
+		TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
+
+		//创建护照信息表
+		TAppStaffPassportEntity passport = new TAppStaffPassportEntity();
+		passport.setStaffid(staffId);
+		passport.setCreatetime(new Date());
+		passport.setUpdatetime(new Date());
+		TAppStaffPassportEntity passportDB = dbDao.insert(passport);
+		result.put("passport", passportDB);
+
+		//签证信息的添加
+		//旅伴信息
+		TAppStaffTravelcompanionEntity travelCompanionInfo = new TAppStaffTravelcompanionEntity();
+		travelCompanionInfo.setStaffid(staffId);
+		travelCompanionInfo.setIspart(DEFAULT_IS_NO);
+		travelCompanionInfo.setIstravelwithother(DEFAULT_IS_NO);
+		travelCompanionInfo.setIsparten(DEFAULT_IS_NO);
+		travelCompanionInfo.setIstravelwithotheren(DEFAULT_IS_NO);
+		dbDao.insert(travelCompanionInfo);
+		//以前的美国旅游信息
+		TAppStaffPrevioustripinfoEntity previUSTripInfo = new TAppStaffPrevioustripinfoEntity();
+		previUSTripInfo.setStaffid(staffId);
+		previUSTripInfo.setHasbeeninus(DEFAULT_IS_NO); //是否去过美国
+		previUSTripInfo.setHasdriverlicense(DEFAULT_IS_NO);//是否有美国驾照
+		previUSTripInfo.setIsissuedvisa(DEFAULT_IS_NO);
+		previUSTripInfo.setIsapplyingsametypevisa(DEFAULT_IS_NO);
+		previUSTripInfo.setIssamecountry(DEFAULT_IS_NO);
+		previUSTripInfo.setIslost(DEFAULT_IS_NO);
+		previUSTripInfo.setIstenprinted(DEFAULT_IS_NO);
+		previUSTripInfo.setIscancelled(DEFAULT_IS_NO);
+		previUSTripInfo.setIsrefused(DEFAULT_IS_NO);
+		previUSTripInfo.setIslegalpermanentresident(DEFAULT_IS_NO);
+		previUSTripInfo.setIsfiledimmigrantpetition(DEFAULT_IS_NO);
+
+		previUSTripInfo.setHasbeeninusen(DEFAULT_IS_NO);
+		previUSTripInfo.setHasdriverlicenseen(DEFAULT_IS_NO);
+		previUSTripInfo.setIsissuedvisaen(DEFAULT_IS_NO);
+		previUSTripInfo.setIsapplyingsametypevisaen(DEFAULT_IS_NO);
+		previUSTripInfo.setIssamecountryen(DEFAULT_IS_NO);
+		previUSTripInfo.setIslosten(DEFAULT_IS_NO);
+		previUSTripInfo.setIstenprinteden(DEFAULT_IS_NO);
+		previUSTripInfo.setIscancelleden(DEFAULT_IS_NO);
+		previUSTripInfo.setIsrefuseden(DEFAULT_IS_NO);
+		previUSTripInfo.setIslegalpermanentresidenten(DEFAULT_IS_NO);
+		previUSTripInfo.setIsfiledimmigrantpetitionen(DEFAULT_IS_NO);
+		dbDao.insert(previUSTripInfo);
+
+		//美国联络点
+		TAppStaffContactpointEntity contactPointInfo = new TAppStaffContactpointEntity();
+		contactPointInfo.setStaffid(staffId);
+		dbDao.insert(contactPointInfo);
+
+		//家庭信息
+		TAppStaffFamilyinfoEntity familyInfo = new TAppStaffFamilyinfoEntity();
+		familyInfo.setStaffid(staffId);
+		familyInfo.setIsfatherinus(DEFAULT_IS_NO);
+		familyInfo.setIsmotherinus(DEFAULT_IS_NO);
+		familyInfo.setHasimmediaterelatives(DEFAULT_IS_NO);
+		familyInfo.setHasotherrelatives(DEFAULT_IS_NO);
+		familyInfo.setIsknowspousecity(DEFAULT_IS_NO);
+
+		familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
+		familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
+		familyInfo.setHasimmediaterelativesen(DEFAULT_IS_NO);
+		familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
+		familyInfo.setIsknowspousecityen(DEFAULT_IS_NO);
+		dbDao.insert(familyInfo);
+
+		//工作/教育/培训信息 
+		TAppStaffWorkEducationTrainingEntity workEducationInfo = new TAppStaffWorkEducationTrainingEntity();
+		workEducationInfo.setStaffid(staffId);
+		workEducationInfo.setIsemployed(DEFAULT_IS_NO);
+		workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
+		workEducationInfo.setIsclan(DEFAULT_IS_NO);
+		workEducationInfo.setIstraveledanycountry(DEFAULT_IS_NO);
+		workEducationInfo.setIsworkedcharitableorganization(DEFAULT_IS_NO);
+		workEducationInfo.setHasspecializedskill(DEFAULT_IS_NO);
+		workEducationInfo.setHasservedinmilitary(DEFAULT_IS_NO);
+		workEducationInfo.setIsservedinrebelgroup(DEFAULT_IS_NO);
+
+		workEducationInfo.setIsemployeden(DEFAULT_IS_NO);
+		workEducationInfo.setIssecondarylevelen(DEFAULT_IS_NO);
+		workEducationInfo.setIsclanen(DEFAULT_IS_NO);
+		workEducationInfo.setIstraveledanycountryen(DEFAULT_IS_NO);
+		workEducationInfo.setIsworkedcharitableorganizationen(DEFAULT_IS_NO);
+		workEducationInfo.setHasspecializedskillen(DEFAULT_IS_NO);
+		workEducationInfo.setHasservedinmilitaryen(DEFAULT_IS_NO);
+		workEducationInfo.setIsservedinrebelgroupen(DEFAULT_IS_NO);
+		dbDao.insert(workEducationInfo);
 		return result;
 	}
 
@@ -781,8 +908,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	public Object autofill(int orderid, HttpSession session) {
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
-		orderus.setStatus(USOrderListStatusEnum.AUTOFILL.intKey());
-		dbDao.update(orderus);
+		if (orderus.getStatus() < USOrderListStatusEnum.AUTOFILL.intKey()) {
+			orderus.setStatus(USOrderListStatusEnum.AUTOFILL.intKey());
+			dbDao.update(orderus);
+		}
 		return null;
 	}
 
@@ -877,8 +1006,11 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//修改订单信息
 		int orderUpdateNum = dbDao.update(orderTravelInfo);
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
+		//如果有面签时间，则改变订单状态为面签
 		if (!Util.isEmpty(form.getInterviewdate())) {
-			orderus.setStatus(USOrderListStatusEnum.MIANQIAN.intKey());
+			if (orderus.getStatus() < USOrderListStatusEnum.MIANQIAN.intKey()) {
+				orderus.setStatus(USOrderListStatusEnum.MIANQIAN.intKey());
+			}
 		}
 		orderus.setCityid(form.getCityid());
 		orderus.setIspayed(form.getIspayed());
@@ -1278,7 +1410,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	public Object passportRecognitionBack(int staffid) {
 		TAppStaffCredentialsEntity fetch = dbDao.fetch(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffid));
+				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.NEWHUZHAO.intKey()));
 		String url = fetch.getUrl();
 		//从服务器上获取图片的流，读取扫描
 		byte[] bytes = saveImageToDisk(url);

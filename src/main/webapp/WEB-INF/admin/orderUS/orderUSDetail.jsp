@@ -45,11 +45,12 @@
 						<p>0</p>
 					</c:if>
 				</span>  --%>
-				<%-- <c:when test="${obj.orderid == 0 }">
-				
+				<c:choose>
+				<c:when test="${obj.orderid == 0 }">
+					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
+					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
 				</c:when>
-				
-				<c:otherwise> --%>
+				<c:otherwise>
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
@@ -58,7 +59,8 @@
 					<input type="button" onclick="autofill()" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />
 					<input type="button" value="通知" onclick="sendEmailUS()" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="日志" onclick="toLog()" class="btn btn-primary btn-sm pull-right" />
-				<%-- </c:otherwise> --%>
+				</c:otherwise>
+				</c:choose>
 			</div>
 			<!-- 头部END -->
 			<!-- form -->
@@ -368,7 +370,7 @@
 							</div>
 							<!-- 模块4END -->
 							<!-- 隐藏域 -->
-							<input type="hidden" name="orderid" value="${obj.orderinfo.id}">
+							<input type="hidden" name="orderid" value="${obj.orderid}">
 							<!-- 隐藏域END -->
 							<!-- 模块5 -->
 							<div class="row body-from-input">
@@ -1107,47 +1109,52 @@
 				success : function(data) {
 					console.log(data);
 					//刷新订单状态
-					$("#orderstatus_US").html(data.orderstatus);
-					//刷新跟进信息
-					var followinfos = data.followinfo;
-					if(followinfos.length > 0){
-						var Str = "";
-						for(var i = 0;i < followinfos.length;i++){
-							if(followinfos[i].status == 1){
-								Str += '<li> <div class="dateNameBtn">'+
-								'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
-								'<span class="nameInfo">'+followinfos[i].name+'</span>&nbsp;'+
-								'<span>'+followinfos[i].solvetime+'</span>&nbsp;&nbsp;由&nbsp;&nbsp;<span>'+followinfos[i].solveid+'</span>&nbsp;&nbsp;解决&nbsp;&nbsp;</span></div>'+
-								'<div class="errorInfo">'+
-								'<span>'+followinfos[i].content+'</span></div></li>';
-							}else{
-								Str += '<li> <div class="dateNameBtn">'+
-								'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
-								'<span class="nameInfo">'+followinfos[i].name+'</span>'+
-								'<a class="solve" onclick="solveClick('+followinfos[i].id+')">解决</a></div>'+
-								'<div class="errorInfo">'+
-								'<span>'+followinfos[i].content+'</span></div></li>';
-								
+					if(data.orderid == 0){
+						
+					}else{
+						$("#orderstatus_US").html(data.orderstatus);
+						//刷新跟进信息
+						var followinfos = data.followinfo;
+						if(followinfos.length > 0){
+							var Str = "";
+							for(var i = 0;i < followinfos.length;i++){
+								if(followinfos[i].status == 1){
+									Str += '<li> <div class="dateNameBtn">'+
+									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
+									'<span class="nameInfo">'+followinfos[i].name+'</span>&nbsp;'+
+									'<span>'+followinfos[i].solvetime+'</span>&nbsp;&nbsp;由&nbsp;&nbsp;<span>'+followinfos[i].solveid+'</span>&nbsp;&nbsp;解决&nbsp;&nbsp;</span></div>'+
+									'<div class="errorInfo">'+
+									'<span>'+followinfos[i].content+'</span></div></li>';
+								}else{
+									Str += '<li> <div class="dateNameBtn">'+
+									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
+									'<span class="nameInfo">'+followinfos[i].name+'</span>'+
+									'<a class="solve" onclick="solveClick('+followinfos[i].id+')">解决</a></div>'+
+									'<div class="errorInfo">'+
+									'<span>'+followinfos[i].content+'</span></div></li>';
+									
+								}
+	/* 								Str += '<li> <div class="dateNameBtn">'+
+									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
+									'<span class="nameInfo">'+followinfos[i].name+'</span>'+
+									'<c:choose><c:when test="{'+followinfos[i].status+' == 1}"><span>'+followinfos[i].solvetime+'</span>由<span>'+followinfos[i].solveid+'</span>解决</span></c:when><c:otherwise><a class="solve" onclick="solveClick('+followinfos[i].id+')">解决</a></c:otherwise></c:choose></div>'+
+									'<div class="errorInfo">'+
+									'<span>'+followinfos[i].content+'</span></div></li>'; */
 							}
-/* 								Str += '<li> <div class="dateNameBtn">'+
-								'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
-								'<span class="nameInfo">'+followinfos[i].name+'</span>'+
-								'<c:choose><c:when test="{'+followinfos[i].status+' == 1}"><span>'+followinfos[i].solvetime+'</span>由<span>'+followinfos[i].solveid+'</span>解决</span></c:when><c:otherwise><a class="solve" onclick="solveClick('+followinfos[i].id+')">解决</a></c:otherwise></c:choose></div>'+
-								'<div class="errorInfo">'+
-								'<span>'+followinfos[i].content+'</span></div></li>'; */
+							$("#forFollow").html(Str);
 						}
-						$("#forFollow").html(Str);
+						//刷新申请人信息
+						$('#aacode').val(data.summaryInfo.aacode);
+						$('#imgInch').attr('src', data.basicinfo.twoinchphoto);
+						$('#allname').val(data.passport.firstname+data.passport.lastname+'/'+data.passport.firstnameen+data.passport.lastnameen);
+						$('#sex').val(data.passport.sex);
+						$('#birthday').val(data.birthday);
+						$('#realinfo').val(data.realinfo);
+						$('#cardnum').val(data.basicinfo.cardnum);
+						$('#passport').val(data.passport.passport);
+						$('#interviewdate2').val(data.Interviewdate);
+						
 					}
-					//刷新申请人信息
-					$('#aacode').val(data.summaryInfo.aacode);
-					$('#imgInch').attr('src', data.basicinfo.twoinchphoto);
-					$('#allname').val(data.passport.firstname+data.passport.lastname+'/'+data.passport.firstnameen+data.passport.lastnameen);
-					$('#sex').val(data.passport.sex);
-					$('#birthday').val(data.birthday);
-					$('#realinfo').val(data.realinfo);
-					$('#cardnum').val(data.basicinfo.cardnum);
-					$('#passport').val(data.passport.passport);
-					$('#interviewdate2').val(data.Interviewdate);
 				}
 			});
 		}

@@ -61,7 +61,7 @@ public class OrderUSModule {
 	}
 
 	/**
-	 * 跳转到美国订单详情页
+	 * 跳转到美国订单详情页/下单 共用
 	 */
 	@At
 	@GET
