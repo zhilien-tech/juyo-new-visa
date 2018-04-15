@@ -328,6 +328,7 @@ function occupationChange(){
 		$("div.jobEduLearningInfoDiv").show();
 		$(".jobEduLearningInfoTextarea").hide();
 	}
+	
 }
 //不知道州、省				*********有问题
 editEleBeforeCheckbox($("#isKnowOrtherSpouseProvince"));
