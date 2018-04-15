@@ -95,5 +95,7 @@ public class OrderUpdateForm {
 	private Integer hastripplan;
 	//面签时间
 	private Date Interviewdate;
+	//人员id
+	private Integer staffid;
 
 }

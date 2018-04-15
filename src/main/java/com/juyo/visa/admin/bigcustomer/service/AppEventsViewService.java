@@ -200,7 +200,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 			Integer staffId = Integer.valueOf(staffIdStr);
 			Integer eventId = form.getEventId();
 
-			//人员报名名活动
+			//人员报名活动
 			TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
 			staffEventEntity.setEventsId(eventId);
 			staffEventEntity.setStaffId(staffId);

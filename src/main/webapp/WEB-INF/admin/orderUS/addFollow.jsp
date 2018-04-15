@@ -43,8 +43,9 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/admin/orderUS/log.js"></script><!-- 日志 js -->
 	<script type="text/javascript">
+		var addorder = '${obj.addorder}';
 		function dataReload(){
-			parent.dataReload();
+			parent.dataReload(addorder);
 		}
 		function saveFollow(orderid){
 			$.ajax({
@@ -57,7 +58,7 @@
 				type : 'POST',
 				success : function(data) {
 					console.log(data);
-					parent.dataReload();
+					parent.dataReload(addorder);
 					closeWindow();
 				}
 			});

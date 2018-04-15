@@ -45,7 +45,7 @@ new Vue({
 		//跳转到详情
 		toDetail:function(orderid){
 			//跳转到签证详情页面
-			window.open('/admin/orderUS/orderUSDetail.html?orderid='+orderid);
+			window.open('/admin/orderUS/orderUSDetail.html?orderid='+orderid+'&addOrder=0');
 			//console.log(message);
 			//alert(JSON.stringify(event.target));
 		},
