@@ -122,6 +122,9 @@ new Vue({
 				visaInfo.familyInfo.motherstatus = 0;
 			}
 		},
+		isclan:function(){
+			visaInfo.workEducationInfo.clanname = "";
+		},
 		hasspecializedskill:function(){
 			var hasspecializedskill = visaInfo.workEducationInfo.hasspecializedskill;
 			if(hasspecializedskill){
