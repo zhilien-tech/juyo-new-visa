@@ -9,21 +9,19 @@
 	<body>
 		<h3 class="wx-title">游客登陆</h3>
 		<!-- form表单提交 -->
-		<form action="">
-			<div class="wx-main">
-				<label>手机号:</label>
-				<input type="text" class="telNumber" maxlength="11" placeholder="请输入手机号码" />
-			</div>
-			<div class="wx-main">
-				<label>验证码:</label>
-				<input type="text" class="readCard" maxlength="4" placeholder="请输入验证码" />
-				<a class="btnCard" onclick="getMessageCode(this)">获取验证码</a>
-			</div>
-			<div class="wx-main"></div>
-			<div class="wx-footer">
-				<input type="submit" class="submit"  />
-			</div>
-		</form>
+		<div class="wx-main">
+			<label>手机号:</label>
+			<input type="text" class="telNumber" maxlength="11" placeholder="请输入手机号码" />
+		</div>
+		<div class="wx-main">
+			<label>验证码:</label>
+			<input type="text" class="readCard" maxlength="4" placeholder="请输入验证码" />
+			<a class="btnCard" onclick="getMessageCode(this)">获取验证码</a>
+		</div>
+		<div class="wx-main"></div>
+		<div class="wx-footer">
+			<input id="loginBtn" type="button" class="submit" value="登陆" />
+		</div>
 		<div class="dialogTwoMin"></div>
 	</body>
 	<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
@@ -31,79 +29,103 @@
 	<script type="text/javascript" src="/references/common/js/layer/layer.js" ></script>
 	<script>
 	
+	$("#loginBtn").click(function(){
+		var loginMobile = $('.telNumber').val();
+		var validateCode = $('.readCard').val();
+		checkMobilePhone(loginMobile,validateCode);
+		
+		$.ajax({ 
+			url: "/admin/applogin/messageLogin.html", 
+			type: "POST",
+			data:{
+				loginName:loginMobile,
+				validateCode:validateCode
+			}, 
+			dataType : "json",
+			async:true,
+			success: function(data){
+				var isLogin = data.isLogin;
+		    	if(isLogin){
+		    		//true 可以登陆，跳转进度页
+		    		
+		    	}else{
+		    		//false 弹出错误信息，拒绝登陆
+		    		
+		    	}
+		    },
+		    error:function(error,status){
+		    	
+		    }
+		});
+	});
+	
 	//获取验证码
 	function getMessageCode(obj){
 		var loginMobile = $('.telNumber').val();
-				
+		var validateCode = $('.readCard').val();
 		if(loginMobile){
 			var regu =/^1[3|4|5|7|8][0-9]\d{8}$/;
 			var re = new RegExp(regu);
 			if (re.test(loginMobile)) {
 				$.ajax({ 
-						url: "${base}", 
+						url: "/admin/applogin/validateMobile.html", 
 						type: "POST",
-						data:{mobile:loginMobile}, 
+						data:{
+							mobile:loginMobile
+						}, 
 						success: function(data){
 					        if(data){
 					        	time(obj);
 					        	sendMessage(loginMobile);
 					        }else{
-					        	$(".dialogTwoMin").html();
-								$(".dialogTwoMin").show();
-								$(".dialogTwoMin").html("游客不存在");
-								setTimeout(function(){
-									$(".dialogTwoMin").hide();
-								},2000);
+					        	dialogToMsg("游客不存在");
 					        }
 					     },
 					     error:function(error,status){
-					        $(".dialogTwoMin").html();
-							$(".dialogTwoMin").show();
-							$(".dialogTwoMin").html("服务器不可用");
-							setTimeout(function(){
-								$(".dialogTwoMin").hide();
-							},2000);
-					      }
+					    	dialogToMsg("服务器不可用");
+					     }
 					});
 			}else{
-				$(".dialogTwoMin").html();
-				$(".dialogTwoMin").show();
-				$(".dialogTwoMin").html("手机号格式错误");
-				setTimeout(function(){
-					$(".dialogTwoMin").hide();
-				},2000);
+				dialogToMsg("手机号格式错误");
 			    return;
 			}
 					
 		}else{
-			$(".dialogTwoMin").html();
-			$(".dialogTwoMin").show();
-			$(".dialogTwoMin").html("请输入手机号");
-			setTimeout(function(){
-				$(".dialogTwoMin").hide();
-			},2000);
+			dialogToMsg("请输入手机号");
 		}
 	}
+	
+	//校验手机号
+	function checkMobilePhone(loginMobile,validateCode){
+		if(loginMobile){
+			var regu =/^1[3|4|5|7|8][0-9]\d{8}$/;
+			var re = new RegExp(regu);
+			if (re.test(loginMobile)) {
+				if(!validateCode){
+					dialogToMsg("请输入验证码");
+					return false;
+				}
+			}else{
+				dialogToMsg("手机号格式错误");
+			    return false;
+			}
+		}else{
+			dialogToMsg("请输入手机号");
+			return false;
+		}
+	}
+	
+	
 	function sendMessage(loginMobile){
 		$.ajax({ 
-			url: "${base}/admin/sendValidateCode.html", 
+			url: "/admin/applogin/sendValidateCode.html", 
 			type: "POST",
 			data:{mobile:loginMobile}, 
 			success: function(data){
-				$(".dialogTwoMin").html();
-				$(".dialogTwoMin").show();
-				$(".dialogTwoMin").html(data);
-				setTimeout(function(){
-					$(".dialogTwoMin").hide();
-				},2000);
+				dialogToMsg(data);
 	        },
 	        error:function(error,status){
-	        	 	$(".dialogTwoMin").html();
-					$(".dialogTwoMin").show();
-					$(".dialogTwoMin").html("服务器不可用");
-					setTimeout(function(){
-						$(".dialogTwoMin").hide();
-					},2000);
+	        	dialogToMsg("服务器不可用");
 	        }
 		});
 	}
@@ -128,5 +150,15 @@
             1000) 
         } 
     } 
+	
+	function dialogToMsg(msgStr){
+		$(".dialogTwoMin").html();
+		$(".dialogTwoMin").show();
+		$(".dialogTwoMin").html(msgStr);
+		setTimeout(function(){
+			$(".dialogTwoMin").hide();
+		},2000);
+	}
+	
 	</script>
 </html>
