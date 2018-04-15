@@ -34,7 +34,16 @@
 					<span>${obj.orderinfo.ordernumber}</span>
 				</span>
 				<span  class="state">状态： 
-					<p id="orderstatus_US">${obj.orderstatus }</p>
+					<c:choose>
+						<c:when test="${obj.isaddorder == 1 }">
+							<p id="orderstatus_US">${obj.orderstatus }</p>
+						</c:when>
+						<c:otherwise>
+							<p id="orderstatus_US">下单</p>
+						</c:otherwise>
+					</c:choose>
+				
+				
 				</span>
 				<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
 				<%-- <span class="state">状态： 
@@ -46,7 +55,7 @@
 					</c:if>
 				</span>  --%>
 				<c:choose>
-				<c:when test="${obj.orderid == 0 }">
+				<c:when test="${obj.isaddorder == 1 }">
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
 				</c:when>
@@ -493,7 +502,7 @@
 												<label>所需资料</label> <input id="realinfo" name="realinfo" disabled="true"
 													value="${obj.realinfo }" type="text"
 													class="form-control input-sm" /> <input id="staffid" name="staffid"
-													type="hidden" value="${obj.staffid }">
+													type="hidden" value="${obj.basicinfo.id }">
 											</div>
 										</div>
 										<div class="col-sm-4 colwidthsm">
@@ -616,10 +625,10 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<%-- <script src="${base}/admin/pcVisa/updatePhoto.js"></script> --%>
 	<script type="text/javascript">
-		dataReload();
 		var staffid = '${obj.basicinfo.id}';
-		var orderid = '${obj.orderinfo.id}';
-		var neworderid = '${obj.orderid}';
+		var orderid = '${obj.orderid}';
+		var addorder = '${obj.isaddorder}';
+		dataReload(addorder);
 		//姓名处理
 		var firstname =  '${obj.passport.firstname }';
 		var lastname =  '${obj.passport.lastname }';
@@ -1043,7 +1052,7 @@
 
 		//日志
 		function toLog(){
-			var orderid = '${obj.orderinfo.id}';
+			var orderid = '${obj.orderid}';
 			layer.open({
 				type: 2,
 				title: false,
@@ -1060,7 +1069,7 @@
 		//通知
 		function sendEmailUS(){
 			var staffid = '${obj.basicinfo.id}';
-			var orderid = '${obj.orderinfo.id}';
+			var orderid = '${obj.orderid}';
 			layer.open({
 				type: 2,
 				title: false,
@@ -1097,19 +1106,22 @@
 		} */
 		
 		//刷新订单详情页面数据
-		function dataReload(){
-			var orderid = '${obj.orderinfo.id}';
+		function dataReload(status){
+			var orderid = '${obj.orderid}';
+			//var addorder = '${obj.isaddorder}';
+			alert(addorder);
 			$.ajax({
 				url : '/admin/orderUS/getOrderRefresh.html',
 				data : {
-					orderid : orderid
+					orderid : orderid,
+					addOrder : status
 				},
 				dataType : "json",
 				type : 'POST',
 				success : function(data) {
 					console.log(data);
 					//刷新订单状态
-					if(data.orderid == 0){
+					if(data.isaddorder == 1){
 						
 					}else{
 						$("#orderstatus_US").html(data.orderstatus);
@@ -1161,7 +1173,7 @@
 		
 		//添加跟进
 		function addFollow(){
-			var orderid = '${obj.orderinfo.id}';
+			var orderid = '${obj.orderid}';
 			layer.open({
 				type: 2,
 				title: false,
@@ -1171,7 +1183,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['800px', '350px'],
-				content: '/admin/orderUS/addFollow.html?orderid='+orderid
+				content: '/admin/orderUS/addFollow.html?orderid='+orderid+'&addorder='+addorder
 			});
 		}
 		
@@ -1185,14 +1197,14 @@
 				dataType : "json",
 				type : 'POST',
 				success : function(data) {
-					dataReload();
+					dataReload(addorder);
 				}
 			});
 		}
 		
 		//自动填表
 		function autofill(){
-			var orderid = '${obj.orderinfo.id}';
+			var orderid = '${obj.orderid}';
 			$.ajax({
 				url : '/admin/orderUS/autofill.html',
 				data : {
@@ -1204,7 +1216,7 @@
 					layer.msg("操作成功", {
 						time: 500,
 						end: function () {
-							dataReload();
+							dataReload(addorder);
 						}
 					});
 				}
@@ -1213,7 +1225,7 @@
 		
 		//通过
 		function pass(){
-			var orderid = '${obj.orderinfo.id}';
+			var orderid = '${obj.orderid}';
 			$.ajax({
 				url : '/admin/orderUS/passUS.html',
 				data : {
@@ -1225,7 +1237,7 @@
 					layer.msg("操作成功", {
 						time: 500,
 						end: function () {
-							dataReload();
+							dataReload(addorder);
 						}
 					});
 				}
@@ -1234,7 +1246,7 @@
 		
 		//拒绝
 		function refuse(){
-			var orderid = '${obj.orderinfo.id}';
+			var orderid = '${obj.orderid}';
 			$.ajax({
 				url : '/admin/orderUS/refuseUS.html',
 				data : {
@@ -1246,7 +1258,7 @@
 					layer.msg("操作成功", {
 						time: 500,
 						end: function () {
-							dataReload();
+							dataReload(addorder);
 						}
 					});
 				}
@@ -1315,7 +1327,7 @@
 		
 		//取消
 		function closeWindow(){
-			if(neworderid == 0){
+			if(addorder == 1){
 				window.location.href = '/admin/orderUS/listUS.html';
 			}else{
 				self.window.close();
@@ -1384,7 +1396,7 @@
 		}
 		
 		function successCallback(status){
-			dataReload();
+			dataReload(addorder);
 		}
 	</script>
 </body>

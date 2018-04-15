@@ -66,8 +66,9 @@ public class OrderUSModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object orderUSDetail(@Param("orderid") int orderid, HttpServletRequest request) {
-		return orderUSViewService.getOrderUSDetail(orderid, request);
+	public Object orderUSDetail(@Param("orderid") int orderid, @Param("addOrder") int addOrder,
+			HttpServletRequest request) {
+		return orderUSViewService.getOrderUSDetail(orderid, addOrder, request);
 	}
 
 	/**
@@ -75,8 +76,9 @@ public class OrderUSModule {
 	 */
 	@At
 	@POST
-	public Object getOrderRefresh(@Param("orderid") int orderid, HttpServletRequest request) {
-		return orderUSViewService.getOrderUSDetail(orderid, request);
+	public Object getOrderRefresh(@Param("orderid") int orderid, @Param("addOrder") int addOrder,
+			HttpServletRequest request) {
+		return orderUSViewService.getOrderUSDetail(orderid, addOrder, request);
 	}
 
 	/**
@@ -160,9 +162,10 @@ public class OrderUSModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object addFollow(@Param("orderid") int orderid) {
+	public Object addFollow(@Param("orderid") int orderid, @Param("addorder") int addorder) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("orderid", orderid);
+		result.put("addorder", addorder);
 		return result;
 	}
 

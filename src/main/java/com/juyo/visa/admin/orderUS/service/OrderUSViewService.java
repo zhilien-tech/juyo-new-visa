@@ -138,6 +138,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	//活动id，默认为1
 	private final static Integer EVENTID = 1;
 	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
+	private final static Integer DEFAULT_SELECT = IsYesOrNoEnum.NO.intKey();
 	//订单列表页连接websocket的地址
 	private static final String USLIST_WEBSPCKET_ADDR = "uslistwebsocket";
 
@@ -250,23 +251,27 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @param session
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object getOrderUSDetail(int orderid, HttpServletRequest request) {
+	public Object getOrderUSDetail(int orderid, int addOrder, HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
-		//orderid=0时为下单,下单创建人员表以及相关表
-		result.put("orderid", orderid);
+		//addOrder=1时是从下单跳转
+		result.put("isaddorder", addOrder);
+		HttpSession session = request.getSession();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comid = loginCompany.getId();
 		//领区下拉
 		result.put("cityidenum", EnumUtil.enum2(DistrictEnum.class));
 		//是否付款下拉
 		result.put("ispayedenum", EnumUtil.enum2(IsPayedEnum.class));
-		if (orderid == 0) {
+		//orderid=0时为下单,下单创建人员表以及相关表
+		if (addOrder == 1) {
 			//创建相关表
-			Map<String, Object> map = (Map<String, Object>) insertSomeInfo(result);
+			Map<String, Object> map = (Map<String, Object>) insertSomeInfo(result, comid);
 
 			return map;
 		}
-		HttpSession session = request.getSession();
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer userid = loginUser.getId();
+		result.put("orderid", orderid);
 		//格式化日期
 		DateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm");
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -420,26 +425,28 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Sql followSql = Sqls.create(followSqlstr);
 		followSql.setParam("id", orderid);
 		List<Record> followList = dbDao.query(followSql, null, null);
-		for (Record record : followList) {
-			if (!Util.isEmpty(record.get("solveid"))) {
-				int solveid = (int) record.get("solveid");
-				TUserEntity solveUser = dbDao.fetch(TUserEntity.class, solveid);
-				record.set("solveid", solveUser.getName());
-			}
-			if (!Util.isEmpty(record.get("solvetime"))) {
-				Date solvetime = (Date) record.get("solvetime");
-				record.set("solvetime", format.format(solvetime));
-			}
-			if (!Util.isEmpty(record.get("createtime"))) {
-				Date solvetime = (Date) record.get("createtime");
-				record.set("createtime", format.format(solvetime));
+		if (!Util.isEmpty(followList)) {
+			for (Record record : followList) {
+				if (!Util.isEmpty(record.get("solveid"))) {
+					int solveid = (int) record.get("solveid");
+					TUserEntity solveUser = dbDao.fetch(TUserEntity.class, solveid);
+					record.set("solveid", solveUser.getName());
+				}
+				if (!Util.isEmpty(record.get("solvetime"))) {
+					Date solvetime = (Date) record.get("solvetime");
+					record.set("solvetime", format.format(solvetime));
+				}
+				if (!Util.isEmpty(record.get("createtime"))) {
+					Date solvetime = (Date) record.get("createtime");
+					record.set("createtime", format.format(solvetime));
+				}
 			}
 		}
 		result.put("followinfo", followList);
 		return result;
 	}
 
-	public Object insertSomeInfo(Map<String, Object> result) {
+	public Object insertSomeInfo(Map<String, Object> result, Integer comid) {
 		//创建人员信息表
 		TAppStaffBasicinfoEntity basic = new TAppStaffBasicinfoEntity();
 		basic.setIsidentificationnumberapply(IsYesOrNoEnum.YES.intKey());
@@ -448,7 +455,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		basic.setIssecuritynumberapplyen(IsYesOrNoEnum.YES.intKey());
 		basic.setIstaxpayernumberapply(IsYesOrNoEnum.YES.intKey());
 		basic.setIstaxpayernumberapplyen(IsYesOrNoEnum.YES.intKey());
-		basic.setComid(US_YUSHANG_COMID);
+		basic.setComid(comid);
 		basic.setCreatetime(new Date());
 		basic.setUpdatetime(new Date());
 		TAppStaffBasicinfoEntity basicDB = dbDao.insert(basic);
@@ -509,6 +516,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//美国联络点
 		TAppStaffContactpointEntity contactPointInfo = new TAppStaffContactpointEntity();
 		contactPointInfo.setStaffid(staffId);
+		contactPointInfo.setRalationship(DEFAULT_SELECT);
+		contactPointInfo.setState(DEFAULT_SELECT);
+		contactPointInfo.setRalationshipen(DEFAULT_SELECT);
+		contactPointInfo.setStateen(DEFAULT_SELECT);
 		dbDao.insert(contactPointInfo);
 
 		//家庭信息
@@ -520,16 +531,35 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		familyInfo.setHasotherrelatives(DEFAULT_IS_NO);
 		familyInfo.setIsknowspousecity(DEFAULT_IS_NO);
 
+		familyInfo.setFatherstatus(DEFAULT_SELECT);
+		familyInfo.setMotherstatus(DEFAULT_SELECT);
+		familyInfo.setFatherstatusen(DEFAULT_SELECT);
+		familyInfo.setMotherstatusen(DEFAULT_SELECT);
+
 		familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
 		familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
 		familyInfo.setHasimmediaterelativesen(DEFAULT_IS_NO);
 		familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
 		familyInfo.setIsknowspousecityen(DEFAULT_IS_NO);
+
+		familyInfo.setSpousenationality(DEFAULT_SELECT);
+		familyInfo.setSpousenationalityen(DEFAULT_SELECT);
+		familyInfo.setSpousecountry(DEFAULT_SELECT);
+		familyInfo.setSpousecountryen(DEFAULT_SELECT);
+		familyInfo.setSpouseaddress(DEFAULT_SELECT);
+		familyInfo.setSpouseaddressen(DEFAULT_SELECT);
+
 		dbDao.insert(familyInfo);
 
 		//工作/教育/培训信息 
 		TAppStaffWorkEducationTrainingEntity workEducationInfo = new TAppStaffWorkEducationTrainingEntity();
 		workEducationInfo.setStaffid(staffId);
+
+		workEducationInfo.setOccupation(DEFAULT_SELECT);
+		workEducationInfo.setOccupationen(DEFAULT_SELECT);
+		workEducationInfo.setCountry(DEFAULT_SELECT);
+		workEducationInfo.setCountryen(DEFAULT_SELECT);
+
 		workEducationInfo.setIsemployed(DEFAULT_IS_NO);
 		workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
 		workEducationInfo.setIsclan(DEFAULT_IS_NO);
@@ -548,6 +578,53 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		workEducationInfo.setHasservedinmilitaryen(DEFAULT_IS_NO);
 		workEducationInfo.setIsservedinrebelgroupen(DEFAULT_IS_NO);
 		dbDao.insert(workEducationInfo);
+
+		TOrderUsEntity orderUs = new TOrderUsEntity();
+		String orderNum = generateOrderNumByDate();
+		Date nowDate = DateUtil.nowDate();
+		orderUs.setOrdernumber(orderNum);
+		orderUs.setComid(comid);
+		orderUs.setStatus(USOrderStatusEnum.PLACE_ORDER.intKey());//下单
+		orderUs.setCreatetime(nowDate);
+		orderUs.setUpdatetime(nowDate);
+		TOrderUsEntity order = dbDao.insert(orderUs);
+
+		//更新人员-订单关系表
+		if (!Util.isEmpty(order)) {
+			Integer orderId = order.getId();
+			TAppStaffOrderUsEntity staffOrder = new TAppStaffOrderUsEntity();
+			staffOrder.setOrderid(orderId);
+			staffOrder.setStaffid(staffId);
+			dbDao.insert(staffOrder);
+			result.put("orderid", orderId);
+
+			//跟进信息
+			//格式化日期
+			DateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+			String followSqlstr = sqlManager.get("orderUS_getFollows");
+			Sql followSql = Sqls.create(followSqlstr);
+			followSql.setParam("id", orderId);
+			List<Record> followList = dbDao.query(followSql, null, null);
+			if (Util.isEmpty(followList)) {
+				for (Record record : followList) {
+					if (!Util.isEmpty(record.get("solveid"))) {
+						int solveid = (int) record.get("solveid");
+						TUserEntity solveUser = dbDao.fetch(TUserEntity.class, solveid);
+						record.set("solveid", solveUser.getName());
+					}
+					if (!Util.isEmpty(record.get("solvetime"))) {
+						Date solvetime = (Date) record.get("solvetime");
+						record.set("solvetime", format.format(solvetime));
+					}
+					if (!Util.isEmpty(record.get("createtime"))) {
+						Date solvetime = (Date) record.get("createtime");
+						record.set("createtime", format.format(solvetime));
+					}
+				}
+			}
+			result.put("followinfo", followList);
+		}
+
 		return result;
 	}
 
@@ -969,6 +1046,18 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object orderSave(OrderUpdateForm form, HttpSession session) {
 		Integer orderid = form.getOrderid();
+		Integer staffid = form.getStaffid();
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
+		/*TOrderUsEntity orderus = new TOrderUsEntity();
+		//如果订单Id为0说明是下单，需要创建订单表，并处理下单时创建的人员表等的关系
+		if(orderid == 0){
+			orderus.setCreatetime(new Date());
+			orderus.setUpdatetime(new Date());
+			orderus = dbDao.insert(orderus);
+			orderid = orderus.getId();
+		}else{
+			orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
+		}*/
 		//获取出行信息表
 		TOrderUsTravelinfoEntity orderTravelInfo = dbDao.fetch(TOrderUsTravelinfoEntity.class,
 				Cnd.where("orderid", "=", orderid));
@@ -1005,7 +1094,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderTravelInfo.setReturnFlightNum(form.getReturnFlightNum());
 		//修改订单信息
 		int orderUpdateNum = dbDao.update(orderTravelInfo);
-		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
+
 		//如果有面签时间，则改变订单状态为面签
 		if (!Util.isEmpty(form.getInterviewdate())) {
 			if (orderus.getStatus() < USOrderListStatusEnum.MIANQIAN.intKey()) {
