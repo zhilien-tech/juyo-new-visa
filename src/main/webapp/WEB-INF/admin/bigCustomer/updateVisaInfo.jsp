@@ -1101,7 +1101,7 @@
 					<div class="groupRadioInfo">
 						<label>是否属于氏族或部落</label>
 						<input type="radio" name="isclan" v-model="visaInfo.workEducationInfo.isclan" class="isclan" value="1"/>是
-						<input type="radio" name="isclan" v-model="visaInfo.workEducationInfo.isclan" class="isclan" value="2" checked/>否
+						<input type="radio" name="isclan" v-on:click="isclan()" v-model="visaInfo.workEducationInfo.isclan" class="isclan" value="2" checked/>否
 					</div>
 					
 					<!--yes-->
