@@ -32,7 +32,8 @@
 	$("#loginBtn").click(function(){
 		var loginMobile = $('.telNumber').val();
 		var validateCode = $('.readCard').val();
-		alert(validateCode);
+		checkMobilePhone(loginMobile,validateCode);
+		
 		$.ajax({ 
 			url: "/admin/applogin/messageLogin.html", 
 			type: "POST",
@@ -61,7 +62,7 @@
 	//获取验证码
 	function getMessageCode(obj){
 		var loginMobile = $('.telNumber').val();
-				
+		var validateCode = $('.readCard').val();
 		if(loginMobile){
 			var regu =/^1[3|4|5|7|8][0-9]\d{8}$/;
 			var re = new RegExp(regu);
@@ -77,62 +78,54 @@
 					        	time(obj);
 					        	sendMessage(loginMobile);
 					        }else{
-					        	$(".dialogTwoMin").html();
-								$(".dialogTwoMin").show();
-								$(".dialogTwoMin").html("游客不存在");
-								setTimeout(function(){
-									$(".dialogTwoMin").hide();
-								},2000);
+					        	dialogToMsg("游客不存在");
 					        }
 					     },
 					     error:function(error,status){
-					        $(".dialogTwoMin").html();
-							$(".dialogTwoMin").show();
-							$(".dialogTwoMin").html("服务器不可用");
-							setTimeout(function(){
-								$(".dialogTwoMin").hide();
-							},2000);
-					      }
+					    	dialogToMsg("服务器不可用");
+					     }
 					});
 			}else{
-				$(".dialogTwoMin").html();
-				$(".dialogTwoMin").show();
-				$(".dialogTwoMin").html("手机号格式错误");
-				setTimeout(function(){
-					$(".dialogTwoMin").hide();
-				},2000);
+				dialogToMsg("手机号格式错误");
 			    return;
 			}
 					
 		}else{
-			$(".dialogTwoMin").html();
-			$(".dialogTwoMin").show();
-			$(".dialogTwoMin").html("请输入手机号");
-			setTimeout(function(){
-				$(".dialogTwoMin").hide();
-			},2000);
+			dialogToMsg("请输入手机号");
 		}
 	}
+	
+	//校验手机号
+	function checkMobilePhone(loginMobile,validateCode){
+		if(loginMobile){
+			var regu =/^1[3|4|5|7|8][0-9]\d{8}$/;
+			var re = new RegExp(regu);
+			if (re.test(loginMobile)) {
+				if(!validateCode){
+					dialogToMsg("请输入验证码");
+					return false;
+				}
+			}else{
+				dialogToMsg("手机号格式错误");
+			    return false;
+			}
+		}else{
+			dialogToMsg("请输入手机号");
+			return false;
+		}
+	}
+	
+	
 	function sendMessage(loginMobile){
 		$.ajax({ 
 			url: "/admin/applogin/sendValidateCode.html", 
 			type: "POST",
 			data:{mobile:loginMobile}, 
 			success: function(data){
-				$(".dialogTwoMin").html();
-				$(".dialogTwoMin").show();
-				$(".dialogTwoMin").html(data);
-				setTimeout(function(){
-					$(".dialogTwoMin").hide();
-				},2000);
+				dialogToMsg(data);
 	        },
 	        error:function(error,status){
-	        	 	$(".dialogTwoMin").html();
-					$(".dialogTwoMin").show();
-					$(".dialogTwoMin").html("服务器不可用");
-					setTimeout(function(){
-						$(".dialogTwoMin").hide();
-					},2000);
+	        	dialogToMsg("服务器不可用");
 	        }
 		});
 	}
@@ -157,5 +150,15 @@
             1000) 
         } 
     } 
+	
+	function dialogToMsg(msgStr){
+		$(".dialogTwoMin").html();
+		$(".dialogTwoMin").show();
+		$(".dialogTwoMin").html(msgStr);
+		setTimeout(function(){
+			$(".dialogTwoMin").hide();
+		},2000);
+	}
+	
 	</script>
 </html>
