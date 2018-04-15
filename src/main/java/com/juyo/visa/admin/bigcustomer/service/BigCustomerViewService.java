@@ -1432,7 +1432,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		familyInfo.setIsmotherinus(DEFAULT_IS_NO);
 		familyInfo.setHasimmediaterelatives(DEFAULT_IS_NO);
 		familyInfo.setHasotherrelatives(DEFAULT_IS_NO);
-		familyInfo.setIsknowspousecity(DEFAULT_IS_NO);
+		familyInfo.setIsknowspousecity(DEFAULT_SELECT);
 
 		familyInfo.setFatherstatus(DEFAULT_SELECT);
 		familyInfo.setMotherstatus(DEFAULT_SELECT);
@@ -1443,7 +1443,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
 		familyInfo.setHasimmediaterelativesen(DEFAULT_IS_NO);
 		familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
-		familyInfo.setIsknowspousecityen(DEFAULT_IS_NO);
+		familyInfo.setIsknowspousecityen(DEFAULT_SELECT);
 
 		familyInfo.setSpousenationality(DEFAULT_SELECT);
 		familyInfo.setSpousenationalityen(DEFAULT_SELECT);
