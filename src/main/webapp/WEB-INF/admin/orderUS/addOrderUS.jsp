@@ -24,7 +24,7 @@
 		<header>
 			<div class="returnAndSave">
 				<i></i>
-				<span>报名</span>	
+				<span>下单</span>	
 			</div>
 		</header>
 		<section>
@@ -52,7 +52,7 @@
 				</form>
 			</div>
 			<div class="payForCase">
-				<a class="btnPayment" id="insertbtn">去付款</a>
+				<a class="btnPayment" id="insertbtn">保存</a>
 			</div>
 			<input id="redirect" type="hidden" value="0" >
 		</section>
