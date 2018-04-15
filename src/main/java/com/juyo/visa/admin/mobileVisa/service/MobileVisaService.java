@@ -105,6 +105,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		USStaffJsonEntity jsonEntity = null;
 		USPassportJsonEntity passportJsonEntity = null;
 		//String url = uploadImage(file, request);
+		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid.longValue());
 		//身份证正面上传
 		if (TAppStaffCredentialsEnum.IDCARD.intKey() == type) {
 			TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(
@@ -257,7 +258,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 
 		} else if (TAppStaffCredentialsEnum.MARRAY.intKey() == type) {//结婚证
 			TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
-					Cnd.where("staffid", "=", staffid).and("type", "=", type).and("status", "=", status));
+					Cnd.where("staffid", "=", staffid).and("type", "=", type));
 			if (!Util.isEmpty(credentialEntity)) {
 				credentialEntity.setUrl(url);
 				credentialEntity.setStatus(status);
@@ -275,6 +276,9 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 				dbDao.insert(credentialEntity);
 				changeStaffStatus(staffid, flag);
 			}
+			basic.setMarrystatus(status);
+			basic.setMarrystatusen(status);
+			dbDao.update(basic);
 			try {
 				simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
 			} catch (IOException e) {
@@ -374,7 +378,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 			if (Util.eq(type, TAppStaffCredentialsEnum.MARRAY.intKey())) {
 				Integer status = credentialEntity.getStatus();
 				for (MarryStatusEnum enu : MarryStatusEnum.values()) {
-					if (enu.intKey() == type) {
+					if (enu.intKey() == status) {
 						typeStr = enu.value();
 					}
 				}
@@ -520,5 +524,21 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		List<TAppStaffCredentialsEntity> photoList = dbDao.query(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type).orderBy("id", "DESC"), null);
 		return photoList;
+	}
+
+	public Object updateMarry(int staffid, int type, int status) {
+		TAppStaffCredentialsEntity fetch = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", type));
+		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+		if (Util.eq(status, MarryStatusEnum.DANSHEN.intKey()) || Util.eq(status, MarryStatusEnum.SANGOU.intKey())) {
+			fetch.setStatus(status);
+			fetch.setUrl("");
+			fetch.setUpdatetime(new Date());
+			dbDao.update(fetch);
+			basic.setMarrystatus(status);
+			basic.setMarrystatusen(status);
+			dbDao.update(basic);
+		}
+		return null;
 	}
 }
