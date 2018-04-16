@@ -1133,7 +1133,7 @@
 									Str += '<li> <div class="dateNameBtn">'+
 									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
 									'<span class="nameInfo">'+followinfos[i].name+'</span>&nbsp;'+
-									'<span>'+followinfos[i].solvetime+'</span>&nbsp;&nbsp;由&nbsp;&nbsp;<span>'+followinfos[i].solveid+'</span>&nbsp;&nbsp;解决&nbsp;&nbsp;</span></div>'+
+									'<span class="gray"><span>'+followinfos[i].solvetime+'</span>&nbsp;&nbsp;由&nbsp;&nbsp;<span>'+followinfos[i].solveid+'</span>&nbsp;&nbsp;解决&nbsp;&nbsp;</span></span></div>'+
 									'<div class="errorInfo">'+
 									'<div>'+followinfos[i].content+'</div></div></li>';
 									

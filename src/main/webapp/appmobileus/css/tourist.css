@@ -48,6 +48,7 @@
 }
 .btnCard {
 	display: inline-block;
+	float:right;
 	width: 30%;
 	height: .81rem;
 	line-height: .81rem;
@@ -56,7 +57,7 @@
 	background: #008df9;
 	color: #FFFFFF;
 	border-radius: 10px;
-	margin-left: 4%;
+	margin-right: 6%;
 }
 .wx-footer {
 	width: 100%;
