@@ -179,6 +179,7 @@
 			    var index = layer.load();
 				$.ajax({
 					type:"post",
+					
 					url:"/admin/appEvents/signUpEventByPublicNum",
 					data:{
 						eventId:eventId,
@@ -191,6 +192,7 @@
 					dataType : "json",
 					async:true,
 					success:function(data){
+						//map.flag 3代表回显 1代表更新 0代表新增 2代表违法
 						//关闭加载层
 		   				layer.closeAll("loading");
 						if(data.flag == "2"){
@@ -201,10 +203,28 @@
 								$(".dialog").hide();
 							},2000);
 						}else if(data.flag == "0"){
+							//新注册用户
 								$("#redirect").val("1");
 								window.location.href='https://detail.youzan.com/show/goods?alias=2fu4k1rbjazh2&v2/goods/2fu4k1rbjazh2'
 							}else if("1" == data.flag){
+							//老客户 新增openid 
 								window.location.href='http://www.f-visa.com/appmobileus/login.html'
+							}else if("3" ==data.flag){
+							//老客户 无openid
+								$(".surName").val(data.firstname);
+		    					$(".surName").attr('readOnly',"true");
+		    					$(".name").val(data.lastname);
+		    					$(".name").attr('readOnly',"true");
+		    					$(".telphone").val(data.telephone);
+		    					$(".telphone").attr('readOnly',"true");
+		    					$(".email").val(data.email);
+		    					$(".email").attr('readOnly',"true");
+		    					$(".btnPayment").text("已报名");
+		    					$(".payForCase a").addClass("btnPaymentHide");
+		    					$(".payForCase a").removeClass("btnPayment");
+		    			 		
+								
+								
 							}
 						}
 
