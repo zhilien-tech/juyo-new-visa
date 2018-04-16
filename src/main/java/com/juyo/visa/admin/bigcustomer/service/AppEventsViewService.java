@@ -2,6 +2,7 @@ package com.juyo.visa.admin.bigcustomer.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -175,11 +176,13 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 		String firstname = form.getFirstname();
 		String lastname = form.getLastname();
-
+		Map<String, String> jo = new HashMap<String, String>();
 		//校验姓名是否合格
 
 		if (!(isChineseStr(firstname) && isChineseStr(lastname))) {
-			return null;
+			jo.put("flag", "2");
+			jo.put("msg", "姓名必须为中文");
+			return jo;
 		} else {
 			//当前登录用户Id
 			TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -187,6 +190,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 			//添加人员
 			TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
+			staffForm.setFirstname(form.getFirstname());
 			staffForm.setLastname(form.getLastname());
 			//旧用户无openid时 根据手机验证是否已经登陆
 			staffForm.setTelephone(form.getTelephone());
@@ -220,14 +224,13 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 				dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
 						Cnd.where("id", "=", staffId));
-
-				return JsonResult.success("添加成功");
+				jo.put("flag", "0");
 			} else {
 				return map;
 
 			}
 		}
-
+		return jo;
 	}
 
 	/**
@@ -479,6 +482,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 		if (!(isChineseStr(firstname) && isChineseStr(lastname))) {
 			return null;
+
 		} else {
 			//当前登录用户Id
 			TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -520,7 +524,6 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 			dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
 					Cnd.where("id", "=", staffId));
-
 			return JsonResult.success("添加成功");
 		}
 
