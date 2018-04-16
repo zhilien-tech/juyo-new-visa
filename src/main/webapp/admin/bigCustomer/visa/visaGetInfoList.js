@@ -163,6 +163,7 @@ function getBeforeWorkList(){
 		}else{
 			isknowsupervisorfirstname = 0;
 		}
+		var supervisorfirstname = $(this).find('[name=supervisorfirstname]').val();
 		var isknowsupervisorlastname = $(this).find('[name=isknowsupervisorlastname]').is(':checked');
 		if(isknowsupervisorlastname){
 			isknowsupervisorlastname = 1;
@@ -184,6 +185,7 @@ function getBeforeWorkList(){
 		beforeWorkLength += employerzipcode;
 		beforeWorkLength += employertelephone;
 		beforeWorkLength += jobtitle;
+		beforeWorkLength += supervisorfirstname;
 		beforeWorkLength += supervisorlastname;
 		beforeWorkLength += employstartdate;
 		beforeWorkLength += employenddate;
@@ -200,13 +202,13 @@ function getBeforeWorkList(){
 			beforeWork.employertelephone = employertelephone;
 			beforeWork.jobtitle = jobtitle;
 			beforeWork.isemployerzipcodeapply = isemployerzipcodeapply;
+			beforeWork.supervisorfirstname = supervisorfirstname;
 			beforeWork.supervisorlastname = supervisorlastname;
 			beforeWork.isknowsupervisorfirstname = isknowsupervisorfirstname;
 			beforeWork.isknowsupervisorlastname = isknowsupervisorlastname;
 			beforeWork.employstartdate = employstartdate;
 			beforeWork.employenddate = employenddate;
 			beforeWork.previousduty = previousduty;
-			alert(JSON.stringify(beforeWork));
 			beforeWorkList.push(beforeWork);
 		}
 	});

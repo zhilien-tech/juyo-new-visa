@@ -483,6 +483,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			familyInfo.setMotherstatus(DEFAULT_SELECT);
 			familyInfo.setFatherstatusen(DEFAULT_SELECT);
 			familyInfo.setMotherstatusen(DEFAULT_SELECT);
+			familyInfo.setCountry(DEFAULT_SELECT);
+			familyInfo.setCountryen(DEFAULT_SELECT);
 
 			familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
 			familyInfo.setIsmotherinusen(DEFAULT_IS_NO);

@@ -168,7 +168,7 @@
 									<div class="goUS_CountryDiv">
 										<div class="groupInputInfo">
 											<label>抵达日期</label>
-											<input type="text" id="arrivedate" name="arrivedate" class="arrivedate datetimepickercss" placeholder="日/月/年">
+											<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
 										</div>
 										<div class="groupInputInfo stopDate">
 											<label>停留时间</label>
@@ -611,7 +611,7 @@
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>配偶的出生城市</label>
 					<input name="spousecity" v-model="visaInfo.familyInfo.spousecity" type="text" />
-					<input id="isKnowMateCity" name="isknowspousecity" v-model="visaInfo.familyInfo.isknowspousecity" type="checkbox" />
+					<input id="isKnowMateCity" name="isknowspousecity" @change="isknowspousecity()" v-model="visaInfo.familyInfo.isknowspousecity" type="checkbox" />
 				</div>
 				<div class="paddingRight groupSelectInfo" >
 					<label>配偶的出生国家</label>
@@ -625,7 +625,7 @@
 				<div class="clear"></div>
 				<div class="paddingTop groupSelectInfo padding-left" >
 					<label>配偶的联系地址</label>
-					<select id="spouseaddress" name="spouseaddress" v-model="visaInfo.familyInfo.spouseaddress" class="spouse_Address" onchange="changeSpouse()">
+					<select id="spouseaddress" name="spouseaddress" v-model="visaInfo.familyInfo.spouseaddress" class="spouse_Address" onchange="changeSpouseShow()" @change="changeSpouse()">
 						<option value="0">请选择</option>
 						<c:forEach items="${obj.VisaSpouseContactAddressEnum }" var="map">
 							<option value="${map.key }">${map.value }</option>
@@ -741,7 +741,7 @@
 					</div>
 					<div class="clear"></div>
 					<div class="grouptextareaInfo groupPM">
-						<label>简要描述你的指责</label>
+						<label>简要描述你的职责</label>
 						<textarea name="duty" class="bigArea" v-model="visaInfo.workEducationInfo.duty"></textarea>
 					</div>
 					<div class="clear"></div>
@@ -875,7 +875,7 @@
 									</div>
 									<div class="draBig leftNo marginLS groupInputInfo">
 										<label>雇主街道地址(次选)*可选</label>
-										<input type="text" />
+										<input name="" type="text" />
 									</div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo" >
 										<label>市</label>
