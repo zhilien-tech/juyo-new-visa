@@ -611,7 +611,7 @@
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>配偶的出生城市</label>
 					<input name="spousecity" v-model="visaInfo.familyInfo.spousecity" type="text" />
-					<input id="isKnowMateCity" name="isknowspousecity" v-model="visaInfo.familyInfo.isknowspousecity" type="checkbox" />
+					<input id="isKnowMateCity" name="isknowspousecity" @change="isknowspousecity()" v-model="visaInfo.familyInfo.isknowspousecity" type="checkbox" />
 				</div>
 				<div class="paddingRight groupSelectInfo" >
 					<label>配偶的出生国家</label>

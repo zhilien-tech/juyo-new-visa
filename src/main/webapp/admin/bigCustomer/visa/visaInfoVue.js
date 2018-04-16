@@ -46,6 +46,9 @@ new Vue({
 		});
 	},
 	methods:{
+		isknowspousecity:function(){
+			visaInfo.familyInfo.spousecity = "";
+		},
 		changeSpouse:function(){
 			changeSpouseShow();
 			visaInfo.familyInfo.firstaddress = "";
