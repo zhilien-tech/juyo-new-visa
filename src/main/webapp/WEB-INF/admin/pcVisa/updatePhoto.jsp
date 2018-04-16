@@ -125,16 +125,14 @@
 			<div class="sectionHead">房产证</div>
 			<div class="explain"></div>
 			<div class="imgInfoRight">
-				<div class="sampleReleaseImg">
-					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
+				<div class="sampleReleaseImg hoursecardMain">
+					<img src="${base}/references/public/dist/newvisacss/img/icon-card.jpg" width="100%" height="100%" />
 				</div>
 				<!-- <div class="beforeHouseInfo"></div> -->
-				<div class="uploadReleases housecard 1" >
+				<div class="uploadReleases hoursecardMain housecard 1" >
 					<div>上传</div>
 					<img id="" class="longitudinal"/>
 				</div>
-				<input type="file" class="publicFile" name="" multiple />
-				
 				<div class="housecardAnother">
 					<div class="housecardInfo">
 						<div class="housecardL">

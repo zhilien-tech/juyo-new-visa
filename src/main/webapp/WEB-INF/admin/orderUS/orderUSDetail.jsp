@@ -185,7 +185,7 @@
 								<!-- 预计出发时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span></span>预计出发日期：</label> <input id="goDate"
+										<label>预计出发日期：</label> <input id="goDate"
 											name="godate" type="text"
 											class="form-format form-control input-sm"
 											value="<fmt:formatDate value="${obj.travelInfo.godate }" pattern="yyyy-MM-dd" />" />
@@ -195,7 +195,7 @@
 								<!-- 抵达美国日期 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span></span>抵达美国日期：</label> <input id="sendVisaDate"
+										<label>抵达美国日期：</label> <input id="sendVisaDate"
 											name="arrivedate" type="text"
 											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.arrivedate }" pattern="yyyy-MM-dd" />" />
@@ -205,7 +205,7 @@
 								<!-- 停留天数 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span></span>停留天数：</label> <input id="stayday"
+										<label>停留天数：</label> <input id="stayday"
 											onchange="sendDate()" name="staydays" class="input-sm"
 											value="${obj.travelInfo.staydays}" type="text" />
 									</div>
@@ -214,7 +214,7 @@
 								<!-- 离开美国日期 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span></span>离开美国日期：</label> <input id="returnDate"
+										<label>离开美国日期：</label> <input id="returnDate"
 											name="leavedate" type="text"
 											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.leavedate }" pattern="yyyy-MM-dd" />" />
@@ -669,7 +669,7 @@
 			startView: 4,//从年开始选择
 			forceParse: 0,
 	        showMeridian: false,
-			pickerPosition:"top-left",//显示位置
+			pickerPosition:"top-right",//显示位置
 			minView: "month"//只显示年月日
 		}); 
 
@@ -1135,15 +1135,17 @@
 									'<span class="nameInfo">'+followinfos[i].name+'</span>&nbsp;'+
 									'<span>'+followinfos[i].solvetime+'</span>&nbsp;&nbsp;由&nbsp;&nbsp;<span>'+followinfos[i].solveid+'</span>&nbsp;&nbsp;解决&nbsp;&nbsp;</span></div>'+
 									'<div class="errorInfo">'+
-									'<span>'+followinfos[i].content+'</span></div></li>';
+									'<div>'+followinfos[i].content+'</div></div></li>';
+									
+									console.log(followinfos[i].content);
 								}else{
 									Str += '<li> <div class="dateNameBtn">'+
 									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
 									'<span class="nameInfo">'+followinfos[i].name+'</span>'+
 									'<a class="solve" onclick="solveClick('+followinfos[i].id+')">解决</a></div>'+
 									'<div class="errorInfo">'+
-									'<span>'+followinfos[i].content+'</span></div></li>';
-									
+									'<div>'+followinfos[i].content+'</div></div></li>';
+									console.log(followinfos[i].content);
 								}
 	/* 								Str += '<li> <div class="dateNameBtn">'+
 									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
