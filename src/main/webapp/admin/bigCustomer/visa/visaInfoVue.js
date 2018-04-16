@@ -46,6 +46,17 @@ new Vue({
 		});
 	},
 	methods:{
+		changeSpouse:function(){
+			changeSpouseShow();
+			visaInfo.familyInfo.firstaddress = "";
+			visaInfo.familyInfo.secondaddress = "";
+			visaInfo.familyInfo.city = "";
+			visaInfo.familyInfo.province = "";
+			visaInfo.familyInfo.isprovinceapply = 0;
+			visaInfo.familyInfo.zipcode="";
+			visaInfo.familyInfo.iszipcodeapply = 0;
+			visaInfo.familyInfo.country = 0;
+		},
 		idknowvisanumberChange:function(){
 			var isKnowNum = visaInfo.previUSTripInfo.idknowvisanumber;
 			if(isKnowNum){
