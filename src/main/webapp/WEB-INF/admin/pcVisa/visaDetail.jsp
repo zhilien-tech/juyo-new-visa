@@ -618,6 +618,13 @@
 			minView: "month"//只显示年月日
 		}); 
 
+		//抵达美国日期和预计出发日期一致
+		$("#goDate").change(function(){
+			var godate = $("#goDate").val(); //出发日期
+			var sendvisadate = $("#sendVisaDate").val(); //抵达美国日期
+			$("#sendVisaDate").val(godate);
+		});
+		
 		//离开美国日期联动
 		function sendDate() {
 			var stayday = $("#stayday").val();

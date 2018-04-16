@@ -1,4 +1,5 @@
 $(function() {
+	if(isDisable != 1){
 	//校验
 	$('#passportInfo').bootstrapValidator({
 		message : '验证不通过',
@@ -92,7 +93,9 @@ $(function() {
 				}
 			}
 		}
+		
 	});
+	
 	//$('#passportInfo').bootstrapValidator('validate');
 	//护照图片验证
 	var passportUrl = $("#passportUrl").val();
@@ -108,6 +111,7 @@ $(function() {
 		$(".help-blockFront").attr("style","display: none;");
 		$("#borderColor").attr("style", null);
 		$("#uploadFile").siblings("i").css("display","block");
+	}
 	}
 
 
@@ -331,13 +335,14 @@ function dataURLtoBlob(dataurl) {
 
 //保存
 function save(status){
-	passportValidate();
-	//得到获取validator对象或实例 
-	var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
-	bootstrapValidator.validate();
-	if($(".front").hasClass("has-error")){
-		return;
-	}
+	if(isDisable != 1){
+		passportValidate();
+		//得到获取validator对象或实例 
+		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
+		bootstrapValidator.validate();
+		if($(".front").hasClass("has-error")){
+			return;
+		}
 	//延时校验
 	setTimeout(function(){
 		if(bootstrapValidator.isValid()){
@@ -380,6 +385,45 @@ function save(status){
 			}
 		}
 	}, 500);
+	}else{
+		var passportInfo = $("#passportInfo").serialize();
+		if(status == 1){
+			layer.load(1);
+			$.ajax({
+				type: 'POST',
+				data : passportInfo,
+				url: '/admin/bigCustomer/saveEditPassport',
+				success :function(data) {
+					console.log(data);
+					if(data.status == 200){
+						closeWindow();
+						parent.successCallback(2);
+					}
+				}
+			});
+
+		}else if(status == 2){
+			//基本信息
+			window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+			$.ajax({
+				type: 'POST',
+				data : passportInfo,
+				url: '/admin/bigCustomer/saveEditPassport',
+				success :function(data) {
+				}
+			});
+		}else if(status ==3){
+			//拍摄资料
+			window.location.href = '/admin/pcVisa/updatePhoto.html?staffid='+staffId+'&flag&isDisable='+isDisable;
+			$.ajax({
+				type: 'POST',
+				data : passportInfo,
+				url: '/admin/orderJp/saveEditPassport',
+				success :function(data) {
+				}
+			});
+		}
+	}
 }
 
 function baseBtn(){

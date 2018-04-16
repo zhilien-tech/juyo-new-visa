@@ -124,10 +124,9 @@
 				type : 'post',
 				async:false,
 				success : function(data) {
-					if(data != ""){
+					if(data != "" || data != 0){
 						$(".homePage").remove();
 						$(".vicePage").remove();
-					}
 					console.log(data);
 					for(var i=0;i<data.query.length;i++){
 						var url=data.query[i].url;
@@ -181,6 +180,7 @@
 										
 									}
 							}
+					}
 					}
 				}
 			});

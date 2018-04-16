@@ -36,6 +36,7 @@ import org.nutz.mvc.annotation.Param;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
@@ -47,6 +48,7 @@ import com.juyo.visa.common.enums.USMarryStatusEnEnum;
 import com.juyo.visa.common.enums.USMarryStatusEnum;
 import com.juyo.visa.common.enums.AppPictures.AppCredentialsTypeEnum;
 import com.juyo.visa.common.enums.AppPictures.AppPicturesTypeEnum;
+import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.ContactPointRelationshipStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
@@ -72,12 +74,14 @@ import com.juyo.visa.entities.TAppStaffGocountryEntity;
 import com.juyo.visa.entities.TAppStaffGousinfoEntity;
 import com.juyo.visa.entities.TAppStaffImmediaterelativesEntity;
 import com.juyo.visa.entities.TAppStaffLanguageEntity;
+import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffOrganizationEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
@@ -107,6 +111,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 	@Inject
 	private AppEventsViewService appEventsViewService;
+
+	@Inject
+	private OrderUSViewService orderUSViewService;
 
 	private final static String TEMPLATE_EXCEL_URL = "download";
 	private final static String TEMPLATE_EXCEL_NAME = "人员管理之模块.xlsx";
@@ -793,10 +800,16 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 */
 	public Object updateVisaInfos(String data, HttpServletRequest request) {
 
+		HttpSession session = request.getSession();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> fromJson = JsonUtil.fromJson(data, Map.class);
 
 		//人员id
 		Integer staffId = (Integer) fromJson.get("staffId");
+
+		//根据人员id获取订单
+		TAppStaffOrderUsEntity fetch = dbDao.fetch(TAppStaffOrderUsEntity.class, Cnd.where("staffid", "=", staffId));
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, fetch.getOrderid().longValue());
 
 		//旅伴信息
 		String travelcompanionJson = Json.toJson(fromJson.get("travelCompanionInfo"));
@@ -907,6 +920,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				TAppStaffConscientiousEntity.class, militaryInfoListJson);
 		dbDao.updateRelations(militaryInfoList_old, militaryInfoList_New);
 
+		//插入日志
+		orderUSViewService.insertLogs(orderus.getId(), USOrderListStatusEnum.FILlED.intKey(), loginUser.getId());
 		return JsonResult.success("保存成功");
 	}
 
