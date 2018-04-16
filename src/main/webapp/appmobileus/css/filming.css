@@ -484,6 +484,28 @@ footer {
 	color: #585858;
 	outline: none;
 }
+.carddislog {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:4rem;
+	background:#eee;
+	opacity:.3;
+}
+.cardPage {
+	position:absolute;
+	top:45%;
+	left:0;
+	width:100%;
+	height:4rem;
+}
+.PageMain {
+	width:97% !important;
+}
+.cameraMain {
+	left:46% !important;
+}
 /**********************************婚姻情况**********************************/
 
 .marrydialog {

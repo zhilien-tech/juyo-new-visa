@@ -27,7 +27,9 @@
 			</div>
 			<div class="modal-body">
 				<p><span style="color:red;">*</span>跟进内容</p>
-				<textarea rows="" cols="" id="content" name="content" style="width:100%;height:200px;"></textarea>
+				<pre>
+					<textarea rows="20" cols="3" id="content" name="content" style="width:100%;height:200px;"></textarea>
+				</pre>
 			</div>
 	</div>
 
