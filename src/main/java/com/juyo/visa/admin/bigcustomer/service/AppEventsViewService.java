@@ -179,7 +179,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		String lastname = form.getLastname();
 
 		//校验姓名是否合格
-		if (isChineseStr(firstname) && isChineseStr(lastname)) {
+		if (isChineseStr(firstname) || isChineseStr(lastname)) {
 			return null;
 		} else {
 			//当前登录用户Id
@@ -477,7 +477,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//校验姓名是否合格
 		String firstname = form.getFirstname();
 		String lastname = form.getLastname();
-		if (isChineseStr(firstname) && isChineseStr(lastname)) {
+		if (isChineseStr(firstname) || isChineseStr(lastname)) {
 			return null;
 		} else {
 			//当前登录用户Id
