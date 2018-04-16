@@ -875,7 +875,7 @@
 									</div>
 									<div class="draBig leftNo marginLS groupInputInfo">
 										<label>雇主街道地址(次选)*可选</label>
-										<input type="text" />
+										<input name="" type="text" />
 									</div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo" >
 										<label>市</label>
