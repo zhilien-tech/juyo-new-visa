@@ -112,6 +112,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	private final static String TEMPLATE_EXCEL_NAME = "人员管理之模块.xlsx";
 
 	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
+	private final static Integer DEFAULT_IS_YES = YesOrNoEnum.YES.intKey();
 	private final static Integer DEFAULT_SELECT = IsYesOrNoEnum.NO.intKey();
 
 	private final static Integer US_YUSHANG_COMID = 65;
