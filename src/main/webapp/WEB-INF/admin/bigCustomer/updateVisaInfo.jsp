@@ -741,7 +741,7 @@
 					</div>
 					<div class="clear"></div>
 					<div class="grouptextareaInfo groupPM">
-						<label>简要描述你的指责</label>
+						<label>简要描述你的职责</label>
 						<textarea name="duty" class="bigArea" v-model="visaInfo.workEducationInfo.duty"></textarea>
 					</div>
 					<div class="clear"></div>
