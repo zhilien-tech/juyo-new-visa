@@ -27,7 +27,7 @@
 			</div>
 			<div class="modal-body">
 				<p><span style="color:red;">*</span>跟进内容</p>
-				<textarea rows="" cols="" id="content" name="content" style="width:100%;height:200px;"></textarea>
+				<textarea rows="" cols="50" id="content" wrap="physical" name="content" style="width:100%;height:200px;"></textarea>
 			</div>
 	</div>
 
@@ -48,11 +48,17 @@
 			parent.dataReload(addorder);
 		}
 		function saveFollow(orderid){
+			//var temp =   document.getElementById("content").value.replace(/\n/g, '_@').replace(/\r/g, '_#');
+			//document.getElementById("content").innerHTML = temp;
+			var temp = $("#content").val();  
+			//var reg=new RegExp("\r\n","g"); (/(\r\n)|(\n)/g,'<br>')
+			//temp= $("#content").val().replace(/(\r\n)|(\n)/g,'<br>'); 
+			//var temp = $("#content").val();  
 			$.ajax({
 				url : '/admin/orderUS/saveFollow.html',
 				data : {
 					orderid : orderid,
-					content : $("#content").val()
+					content : temp
 				},
 				dataType : "json",
 				type : 'POST',

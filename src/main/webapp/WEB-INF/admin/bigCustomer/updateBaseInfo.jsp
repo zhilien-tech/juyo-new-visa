@@ -581,6 +581,7 @@
 		var infoType = '${obj.infoType}';
 		var marrystatus = '${obj.marryStatus}';
 		var marrystatusen = '${obj.marryStatusEn}';
+		var isDisable = '${obj.isDisable}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -596,7 +597,7 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript" src="${base}/admin/bigCustomer/updateStaff.js"></script>
 	<script type="text/javascript">
-		var isDisable = '${obj.isDisable}';
+		
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
