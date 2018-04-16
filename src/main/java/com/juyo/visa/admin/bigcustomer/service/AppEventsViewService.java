@@ -2,10 +2,9 @@ package com.juyo.visa.admin.bigcustomer.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 
@@ -177,10 +176,13 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 		String firstname = form.getFirstname();
 		String lastname = form.getLastname();
-
+		Map<String, String> jo = new HashMap<String, String>();
 		//校验姓名是否合格
+
 		if (!(isChineseStr(firstname) && isChineseStr(lastname))) {
-			return null;
+			jo.put("flag", "2");
+			jo.put("msg", "姓名必须为中文");
+			return jo;
 		} else {
 			//当前登录用户Id
 			TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -222,14 +224,13 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 				dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
 						Cnd.where("id", "=", staffId));
-
-				return JsonResult.success("添加成功");
+				jo.put("flag", "0");
 			} else {
 				return map;
 
 			}
 		}
-
+		return jo;
 	}
 
 	/**
@@ -478,8 +479,10 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//校验姓名是否合格
 		String firstname = form.getFirstname();
 		String lastname = form.getLastname();
+
 		if (!(isChineseStr(firstname) && isChineseStr(lastname))) {
 			return null;
+
 		} else {
 			//当前登录用户Id
 			TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -521,14 +524,13 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 			dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
 					Cnd.where("id", "=", staffId));
-
 			return JsonResult.success("添加成功");
 		}
 
 	}
 
 	public boolean isChineseStr(String str) {
-		String reg = "[\\u4e00-\\u9fa5]+";  
+		String reg = "[\\u4e00-\\u9fa5]+";
 		boolean isChinese = str.matches(reg);
 		return isChinese;
 	}
