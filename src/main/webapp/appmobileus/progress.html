@@ -17,7 +17,7 @@
 	         if(r!=null)return  unescape(r[2]); return null;
 	    }
         	$(function(){
-        		var code = GetQueryString("code");        		
+        		var code = GetQueryString("code");   
         		$.ajax({
         			type : "POST",//提交类型  
         			//dataType : "json",//返回结果格式  
@@ -25,8 +25,9 @@
         			data:{code:code},
         			//请求数据  
         			success : function(data) {//请求成功后的函数 
+        				
         				for(var i = 0;i < data.length;i++){
-							if(data[i].flag == 1){
+							if(data[i].flag == 0){
 								var name = data[i].name;
 								var status = data[i].orderStatus;
 								$(".sectionInfo").append('<div class="mainInfo"> <div class="titleHead">USANA &nbsp;2018国际年会</div>'+
@@ -63,7 +64,7 @@
 			</div>
 			<div class="enrollBtnGroup">
 				<a class="goEnroll" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd77f341f1b849e68&redirect_uri=http%3A%2F%2Fwww.f-visa.com%2Fappmobileus%2Fenroll.html&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect">去报名</a>
-				<a class="goLogin" href="">去登陆</a>
+				<a class="goLogin" href="http://www.f-visa.com/appmobileus/touristlogin.html">去登陆</a>
 			</div>
 		</div>
 	</body>

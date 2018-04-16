@@ -129,6 +129,15 @@ function openYesOrNoPage(){
 		$(".jobEduLearningInfoTextarea").hide();
 	}
 	
+	//配偶的联系地址
+	var spouseaddress = visaInfo.familyInfo.spouseaddress;
+	if(spouseaddress == 5){
+		$(".otherSpouseInfo").show();
+	}else{
+		$(".otherSpouseInfo").hide();
+		emptyContentByObj($("div.otherSpouseInfo"));
+	}
+	
 	//以前是否工作过
 	var isemployed = visaInfo.workEducationInfo.isemployed;
 	if(isemployed == 1){

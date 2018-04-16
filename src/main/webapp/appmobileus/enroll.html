@@ -86,8 +86,7 @@
     					openid = obj.openid;
     				}
     			}
-    				//关闭加载层
-    		})
+    		});
 			/* 手机号只能输入数字 */
 			$(document).on("input",".telphone",function(){
 				$(this).val($(this).val().replace(/[^\d]/g,''));
@@ -192,27 +191,26 @@
 					dataType : "json",
 					async:true,
 					success:function(data){
-						layer.close(index);
-						
-						if(200 == data.status){
-							$("#redirect").val("1");
-							window.location.href='https://detail.youzan.com/show/goods?alias=2fu4k1rbjazh2&v2/goods/2fu4k1rbjazh2'
-						}else if("1" == data.flag){
-							alert("注册成功！");
-							window.location.href='http://www.f-visa.com/appmobileus/login.html'
-							
-						}else{
+						//关闭加载层
+		   				layer.closeAll("loading");
+						if(data.flag == "2"){
 							$(".dialog").html();
 							$(".dialog").show();
-							$(".dialog").html("报名失败，请重新提交");
+							$(".dialog").html(data.msg);
 							setTimeout(function(){
 								$(".dialog").hide();
 							},2000);
+						}else if(data.flag == "0"){
+								$("#redirect").val("1");
+								window.location.href='https://detail.youzan.com/show/goods?alias=2fu4k1rbjazh2&v2/goods/2fu4k1rbjazh2'
+							}else if("1" == data.flag){
+								window.location.href='http://www.f-visa.com/appmobileus/login.html'
+							}
 						}
-					},
-				}); 
-				}
+
 			});
+				}
+		});
 		})
 		
 	</script>

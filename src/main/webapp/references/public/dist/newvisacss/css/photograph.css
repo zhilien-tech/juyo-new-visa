@@ -15,7 +15,7 @@ img[src=""] {
 	position: fixed;
 	top: 0;
 	background: #FFF;
-	z-index: 200;
+	z-index: 20000000;
 	padding: 0px 15px;
 	border-bottom: 1px solid #eee;
 }
@@ -301,4 +301,10 @@ img[src=""] {
 	opacity: 0;
 	z-index: 100000000;
 	display:none;
+}
+.hoursecardMain {
+	width:542px !important;
+}
+.housecard {
+	/* display:none; */
 }

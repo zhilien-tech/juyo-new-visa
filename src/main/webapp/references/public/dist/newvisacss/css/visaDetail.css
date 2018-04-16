@@ -164,6 +164,7 @@
 	border: 1px solid #eee;
 	padding: 0px 0px;
 	margin-left:20px;
+	margin-top:10px;
 }
 
 .inchInfo {
@@ -278,4 +279,7 @@
 }
 .infobody {
 	padding-top:7px;
+}
+.gray {
+	color:#c2c0c0;
 }

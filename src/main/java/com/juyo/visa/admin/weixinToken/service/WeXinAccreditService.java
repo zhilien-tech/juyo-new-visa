@@ -70,6 +70,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		Map<String, Object> orderMap = new HashMap<String, Object>();
 		//获得openid
+		System.out.println("checkProgress ==" + code);
 		JSONObject accessToken = getAccessToken(code);
 		String openid = accessToken.get("openid").toString();
 		System.out.println("checkProgress openid ===" + openid);
@@ -77,27 +78,38 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 		if (Util.isEmpty(openid)) {
 			System.out.println("no openid");
 			//没有openid 提示用户去注册或者登陆
-			orderMap.put("flag", 1);
 			result.add(orderMap);
 		} else {
 			//根据openid查找手机号
-			TAppStaffBasicinfoEntity telephone = dbDao.fetch(TAppStaffBasicinfoEntity.class,
-					Cnd.where("openid", "=", openid));
+			System.out.println("have openid");
+			TAppStaffBasicinfoEntity user = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+					Cnd.where("wechattoken", "=", openid));
+			if (!Util.isEmpty(user)) {
+				System.out.println("手机号==" + user.getTelephone());
+				result = (List<Map<String, Object>>) getOrderInfo(user.getTelephone());
+			} else {
+				System.out.println();
+				orderMap.put("flag", 1);
+				result.add(orderMap);
+			}
 
 		}
+		System.out.println(result.toString());
 		return result;
 	}
 
 	//根据手机号查询订单信息
 	public Object getOrderInfo(String telephone) {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-		Map<String, Object> orderMap = new HashMap<String, Object>();
-		orderMap.put("flag", 0);
-		result.add(orderMap);
+
 		//根据手机号查询所有人员id
 		List<TAppStaffBasicinfoEntity> listOrderUsInfo = dbDao.query(TAppStaffBasicinfoEntity.class,
 				Cnd.where("telephone", "=", telephone), null);
+		System.out.println("num===" + listOrderUsInfo.size());
 		for (TAppStaffBasicinfoEntity orderUsr : listOrderUsInfo) {
+			Map<String, Object> orderMap = new HashMap<String, Object>();
+			orderMap.put("flag", 0);
+			result.add(orderMap);
 			//订单人名称
 			orderMap.put("name", orderUsr.getFirstname() + orderUsr.getLastname());
 			System.out.println("name" + orderUsr.getFirstname() + orderUsr.getLastname());
@@ -122,8 +134,9 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 						}
 					}
 				}
+				result.add(orderMap);
+				System.out.println("111---resule" + result.toString());
 			}
-			result.add(orderMap);
 		}
 		return result;
 

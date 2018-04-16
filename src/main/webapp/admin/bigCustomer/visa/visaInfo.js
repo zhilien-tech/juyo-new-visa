@@ -314,7 +314,7 @@ $(".directRelatives.directUSRelatives").change(function(){
 	}
 });
 //配偶信息
-function changeSpouse(){
+function changeSpouseShow(){
 	var opt = $("#spouseaddress").val();
 	if(opt == 5){
 		$(".otherSpouseInfo").show();
