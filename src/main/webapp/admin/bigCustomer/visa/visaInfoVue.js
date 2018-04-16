@@ -46,6 +46,20 @@ new Vue({
 		});
 	},
 	methods:{
+		isknowspousecity:function(){
+			visaInfo.familyInfo.spousecity = "";
+		},
+		changeSpouse:function(){
+			changeSpouseShow();
+			visaInfo.familyInfo.firstaddress = "";
+			visaInfo.familyInfo.secondaddress = "";
+			visaInfo.familyInfo.city = "";
+			visaInfo.familyInfo.province = "";
+			visaInfo.familyInfo.isprovinceapply = 0;
+			visaInfo.familyInfo.zipcode="";
+			visaInfo.familyInfo.iszipcodeapply = 0;
+			visaInfo.familyInfo.country = 0;
+		},
 		idknowvisanumberChange:function(){
 			var isKnowNum = visaInfo.previUSTripInfo.idknowvisanumber;
 			if(isKnowNum){
@@ -180,6 +194,7 @@ function save(){
 	
 	//staffId
 	visadata.staffId = staffId;
+	
 	//旅伴信息
 	visadata.travelCompanionInfo = visaInfo.travelCompanionInfo;
 	//以前的美国旅游信息

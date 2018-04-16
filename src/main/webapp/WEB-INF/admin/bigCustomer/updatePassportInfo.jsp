@@ -194,6 +194,7 @@
 		var BASE_PATH = '${base}';
 		var staffId = '${obj.passport.staffId}';
 		var infoType = '${obj.infotype}';
+		var isDisable = '${obj.isDisable}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -213,9 +214,8 @@
 	
 	
 	<script type="text/javascript">
-		var isDisable = '${obj.isDisable}';
+		
 		$(function(){
-			
 			//页面不可编辑
 			if(isDisable == 1){
 				$(".modal-body").attr('readonly', true);

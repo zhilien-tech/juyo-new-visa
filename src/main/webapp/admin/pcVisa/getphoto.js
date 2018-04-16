@@ -244,7 +244,7 @@ function housecard(staffid, type) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=0){
 				for(var i = 0;i<data.query.length;i++){
-				$(".housecard").after('<div class="uploadReleases housecard'+i+'" >'+
+				$(".housecard").after('<div class="uploadReleases hoursecardMain housecard'+i+'" >'+
 					'<div>上传</div>'+
 					'<img src="'+data.query[i].url+'" class="longitudinal"/>'+
 				'</div>');

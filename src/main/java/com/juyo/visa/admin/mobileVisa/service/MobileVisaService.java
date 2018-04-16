@@ -76,20 +76,30 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	public String uploadImageOnly(File file, Integer staffid, Integer type, int flag, Integer status, Integer sequence,
 			HttpServletRequest request, HttpServletResponse response, String sessionid) {
 		//将图片进行旋转处理
-		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
-				"jpeg");
-		File spin = null;
-		try {
-			spin = imageDeal.spin(-90);
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		Map<String, Object> map = null;
+		//竖着的不用不旋转(2寸照片，房产证，结婚证，在职证明，美国出签)
+		if (Util.eq(type, TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey())
+				|| Util.eq(type, TAppStaffCredentialsEnum.HUKOUBEN.intKey())
+				|| Util.eq(type, TAppStaffCredentialsEnum.MARRAY.intKey())
+				|| Util.eq(type, TAppStaffCredentialsEnum.WORKE.intKey())
+				|| Util.eq(type, TAppStaffCredentialsEnum.NEWUS.intKey())) {
+			map = qiniuUploadService.ajaxUploadImage(file);
+		} else {
+			ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
+					"jpeg");
+			File spin = null;
+			try {
+				spin = imageDeal.spin(-90);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			//上传
+			map = qiniuUploadService.ajaxUploadImage(spin);
+			if (!Util.isEmpty(spin)) {
+				spin.delete();
+			}
 		}
-		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
 		file.delete();
-		if (!Util.isEmpty(spin)) {
-			spin.delete();
-		}
 		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 		if (!Util.eq(status, 0)) {
 			saveUpdateImage(url, staffid, type, flag, status, sequence, request, response, sessionid);

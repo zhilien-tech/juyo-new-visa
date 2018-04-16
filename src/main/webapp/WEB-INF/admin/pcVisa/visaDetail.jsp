@@ -130,7 +130,7 @@
 								<!-- 预计出发时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span></span>预计出发日期：</label> <input id="goDate"
+										<label>预计出发日期：</label> <input id="goDate"
 											name="godate" type="text"
 											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.godate }" pattern="yyyy-MM-dd" />" />
@@ -140,7 +140,7 @@
 								<!-- 抵达美国日期 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span></span>抵达美国日期：</label> <input id="sendVisaDate"
+										<label>抵达美国日期：</label> <input id="sendVisaDate"
 											name="arrivedate" type="text"
 											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.arrivedate }" pattern="yyyy-MM-dd" />" />
@@ -150,7 +150,7 @@
 								<!-- 停留天数 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span></span>停留天数：</label> <input id="stayday"
+										<label>停留天数：</label> <input id="stayday"
 											onchange="sendDate()" name="staydays" class="input-sm"
 											value="${obj.travelInfo.staydays}" type="text" />
 									</div>
@@ -159,7 +159,7 @@
 								<!-- 离开美国日期 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span></span>离开美国日期：</label> <input id="returnDate"
+										<label>离开美国日期：</label> <input id="returnDate"
 											name="leavedate" type="text"
 											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.leavedate }" pattern="yyyy-MM-dd" />" />
@@ -345,7 +345,7 @@
 								<!-- 市 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span></span></label> <input name="plancity"
+										<label></label> <input name="plancity"
 											type="text" value="${obj.travelInfo.city}"
 											class="form-control input-sm" placeholder="市" />
 									</div>
@@ -354,7 +354,7 @@
 								<!-- 街道 -->
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span></span></label> <input name="planaddress"
+										<label></label> <input name="planaddress"
 											type="text" value="${obj.travelInfo.address}"
 											class="form-control input-sm" placeholder="街道" />
 									</div>
@@ -614,10 +614,17 @@
 			startView: 4,//从年开始选择
 			forceParse: 0,
 	        showMeridian: false,
-			pickerPosition:"top-left",//显示位置
+			pickerPosition:"bottom-right",//显示位置
 			minView: "month"//只显示年月日
 		}); 
 
+		//抵达美国日期和预计出发日期一致
+		$("#goDate").change(function(){
+			var godate = $("#goDate").val(); //出发日期
+			var sendvisadate = $("#sendVisaDate").val(); //抵达美国日期
+			$("#sendVisaDate").val(godate);
+		});
+		
 		//离开美国日期联动
 		function sendDate() {
 			var stayday = $("#stayday").val();
