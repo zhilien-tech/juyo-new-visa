@@ -74,6 +74,14 @@ public class AppEventsModule {
 		return appEventsViewService.signUpEvents(eventId, session);
 	}
 
+	/***
+	 * 根据
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	/**
 	 * 通过公众号，进行报名活动
 	 * 

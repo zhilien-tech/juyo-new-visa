@@ -53,9 +53,12 @@ public class WeXinAccreditModule {
 	}
 
 	//	//校验用户是否授权过
-	//	public Object verifyUser(@Param("code") String code) {
-	//
-	//		return weXinAccreditService.VerifyUser();
-	//	}
+	@At
+	@POST
+	@Filters
+	public Object verifyUser(@Param("telephone") String telephone) {
+		System.out.println("tele---" + telephone);
+		return weXinAccreditService.getOrderInfo(telephone);
+	}
 
 }

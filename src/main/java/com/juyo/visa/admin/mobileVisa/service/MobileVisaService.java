@@ -79,7 +79,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		Map<String, Object> map = null;
 		//竖着的不用不旋转(2寸照片，房产证，结婚证，在职证明，美国出签)
 		if (Util.eq(type, TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey())
-				|| Util.eq(type, TAppStaffCredentialsEnum.HOME.intKey())
+				|| Util.eq(type, TAppStaffCredentialsEnum.HUKOUBEN.intKey())
 				|| Util.eq(type, TAppStaffCredentialsEnum.MARRAY.intKey())
 				|| Util.eq(type, TAppStaffCredentialsEnum.WORKE.intKey())
 				|| Util.eq(type, TAppStaffCredentialsEnum.NEWUS.intKey())) {
