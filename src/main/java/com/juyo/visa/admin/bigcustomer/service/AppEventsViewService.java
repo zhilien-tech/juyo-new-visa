@@ -188,6 +188,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 			//添加人员
 			TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
+			staffForm.setFirstname(form.getFirstname());
 			staffForm.setLastname(form.getLastname());
 			//旧用户无openid时 根据手机验证是否已经登陆
 			staffForm.setTelephone(form.getTelephone());

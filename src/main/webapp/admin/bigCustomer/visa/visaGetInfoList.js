@@ -206,7 +206,6 @@ function getBeforeWorkList(){
 			beforeWork.employstartdate = employstartdate;
 			beforeWork.employenddate = employenddate;
 			beforeWork.previousduty = previousduty;
-			alert(JSON.stringify(beforeWork));
 			beforeWorkList.push(beforeWork);
 		}
 	});
