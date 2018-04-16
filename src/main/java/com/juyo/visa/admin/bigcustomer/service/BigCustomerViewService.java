@@ -112,6 +112,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	private final static String TEMPLATE_EXCEL_NAME = "人员管理之模块.xlsx";
 
 	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
+	private final static Integer DEFAULT_IS_YES = YesOrNoEnum.YES.intKey();
 	private final static Integer DEFAULT_SELECT = IsYesOrNoEnum.NO.intKey();
 
 	private final static Integer US_YUSHANG_COMID = 65;
@@ -204,6 +205,33 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		List<TAppStaffOrganizationEntity> organizationList = dbDao.query(TAppStaffOrganizationEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
 		result.put("organizationList", organizationList);
+
+		//以前的美国旅游信息---最后一次签证的签发日期
+		String sqlStrp = sqlManager.get("pcVisa_previousTrip");
+		Sql sqlp = Sqls.create(sqlStrp);
+		sqlp.setParam("staffid", staffId);
+		Record previUSTripInfo = dbDao.fetch(sqlp);
+		String issueddate = previUSTripInfo.getString("issueddate");
+		issueddate = formatDateStr(issueddate, FORMAT_DD_MM_YYYY);
+		result.put("previUSTripInfo_issueddate", issueddate);
+
+		//家庭信息---格式化配偶生日
+		String sqlStrf = sqlManager.get("pcVisa_familyInfo");
+		Sql sqlf = Sqls.create(sqlStrf);
+		sqlf.setParam("staffid", staffId);
+		Record familyInfo = dbDao.fetch(sqlf);
+		String spousebirthday = familyInfo.getString("spousebirthday");
+		spousebirthday = formatDateStr(spousebirthday, FORMAT_DD_MM_YYYY);
+		result.put("spousebirthday", spousebirthday);
+
+		//工作/教育/培训信息---格式化工作开始日期 
+		String sqlStrw = sqlManager.get("pcVisa_word_education_training_list");
+		Sql sqlw = Sqls.create(sqlStrw);
+		sqlw.setParam("staffid", staffId);
+		Record workEducationInfo = dbDao.fetch(sqlw);
+		String workstartdate = workEducationInfo.getString("workstartdate");
+		workstartdate = formatDateStr(workstartdate, FORMAT_DD_MM_YYYY);
+		result.put("workstartdate", workstartdate);
 
 		//人员id
 		result.put("staffId", staffId);
@@ -626,11 +654,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		TAppStaffCredentialsEntity front = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-						.and("status", "=", AppPicturesTypeEnum.FRONT.intKey()));
+				.and("status", "=", AppPicturesTypeEnum.FRONT.intKey()));
 		TAppStaffCredentialsEntity back = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-						.and("status", "=", AppPicturesTypeEnum.BACK.intKey()));
+				.and("status", "=", AppPicturesTypeEnum.BACK.intKey()));
 		TAppStaffCredentialsEntity twoinch = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey()));
 		result.put("front", front);

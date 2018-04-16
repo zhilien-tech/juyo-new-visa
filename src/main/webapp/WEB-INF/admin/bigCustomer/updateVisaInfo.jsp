@@ -266,7 +266,7 @@
 						<div class="dateIssue goUS_visa">
 							<div class="groupInputInfo lastVisaDate">
 								<label>最后一次签证的签发日期</label>
-								<input id="issueddate" name="issueddate" v-model="visaInfo.previUSTripInfo.issueddate" class="datetimepickercss" placeholder="日/月/年" type="text"/>
+								<input id="issueddate" name="issueddate" value="${obj.previUSTripInfo_issueddate}" class="datetimepickercss" placeholder="日/月/年" type="text"/>
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
@@ -596,7 +596,7 @@
 				<div class="clear"></div>
 				<div class="paddingLeft groupInputInfo">
 					<label>配偶的生日</label>
-					<input id="spousebirthday" name="spousebirthday" v-model="visaInfo.familyInfo.spousebirthday" class="datetimepickercss" type="text" placeholder="日/月/年" />
+					<input id="spousebirthday" name="spousebirthday" value="${obj.spousebirthday}" class="datetimepickercss" type="text" placeholder="日/月/年" />
 				</div>
 				<div class="paddingRight groupSelectInfo">
 					<label>配偶的国籍</label>
@@ -731,7 +731,7 @@
 					
 					<div class="paddingRight groupInputInfo">
 						<label>开始日期</label>
-						<input id="workstartdate" name="workstartdate" v-model="visaInfo.workEducationInfo.workstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
+						<input id="workstartdate" name="workstartdate" value="${obj.workstartdate}" class="datetimepickercss" type="text" placeholder="日/月/年" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo" >
