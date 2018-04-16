@@ -1,43 +1,53 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>报名</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-<meta name="format-detection" content="telephone=no">
-<link rel="stylesheet" href="css/common.css" />
-<link rel="stylesheet" href="css/heavyBuyer.css" />
-</head>
-<body>
-	<header>
-		<div class="returnAndSave">
-			<i></i> <span>报名</span>
-		</div>
-	</header>
-	<section>
-		<div class="listMessage">
-			<ul>
-				<li><label>姓</label> <input type="text" class="surName" /></li>
-				<li><label>名</label> <input type="text" class="name" /></li>
-				<li><label>手机</label> <input type="text" class="telphone"
-					maxlength="11" /></li>
-				<li><label>邮箱</label> <input type="text" class="email" /></li>
-			</ul>
-		</div>
-		<div class="payForCase">
-			<a class="btnPayment">去付款</a>
-		</div>
-		<input id="redirect" type="hidden" value="0">
-	</section>
-	<!-- 弹出层 -->
-	<div class="dialog"></div>
-</body>
-<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
-<script type="text/javascript"
-	src="/references/common/js/layer/layer.js"></script>
-<script type="text/javascript" src="js/rem(750).js"></script>
-<script>
+	<head>
+		<meta charset="UTF-8">
+		<title>报名</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+   		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/heavyBuyer.css" />
+	</head>
+	<body>
+		<header>
+			<div class="returnAndSave">
+				<i></i>
+				<span>报名</span>	
+			</div>
+		</header>
+		<section>
+			<div class="listMessage">
+				<ul>
+					<li>
+						<label>姓</label>
+						<input type="text" class="surName" />
+					</li>
+					<li>
+						<label>名</label>
+						<input type="text" class="name" />
+					</li>
+					<li>
+						<label>手机</label>
+						<input type="text" class="telphone" maxlength="11" />
+					</li>
+					<li>
+						<label>邮箱</label>
+						<input type="text" class="email" />
+					</li>
+				</ul>
+			</div>
+			<div class="payForCase">
+				<a class="btnPayment">去付款</a>
+			</div>
+			<input id="redirect" type="hidden" value="0" >
+		</section>
+		<!-- 弹出层 -->
+		<div class="dialog"></div>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+	<script type="text/javascript" src="/references/common/js/layer/layer.js" ></script>
+	<script type="text/javascript" src="js/rem(750).js" ></script>
+	<script>
 		//获取URL地址参数
 	    function GetQueryString(name){
 	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -76,7 +86,6 @@
     					openid = obj.openid;
     				}
     			}
-   			
     		});
 			/* 手机号只能输入数字 */
 			$(document).on("input",".telphone",function(){
@@ -198,6 +207,7 @@
 								window.location.href='http://www.f-visa.com/appmobileus/login.html'
 							}
 						}
+
 			});
 				}
 		});
