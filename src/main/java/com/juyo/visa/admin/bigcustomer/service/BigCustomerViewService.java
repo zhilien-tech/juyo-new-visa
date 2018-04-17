@@ -434,6 +434,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			map.put("telephone", userInfo.getTelephone());
 			//邮箱
 			map.put("email", userInfo.getEmail());
+			System.out.println("no openid oleUser");
 			return map;
 		} else if (!Util.isEmpty(userInfo) && !Util.isEmpty(addForm.getWechattoken())) {
 			//含有openid 并且注册过的老用户  3代表回显 1代表更新 0代表新增 2代表违法

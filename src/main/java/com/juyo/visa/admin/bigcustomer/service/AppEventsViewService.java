@@ -206,6 +206,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 			//---------------------------------------------------------------------
 			//只进行更新操作
 			//map.flag 3代表回显 1代表更新 0代表新增 2代表违法
+			System.out.println("map.flag ===" + map.get("falg"));
 			if (map.get("flag").equals("0")) {
 				String staffIdStr = map.get("staffId");
 				Integer staffId = Integer.valueOf(staffIdStr);
@@ -217,12 +218,12 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 				TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
 
-				//添加订单
-				orderUSViewService.addOrderByStuffId(staffId, loginUser.getId());
-
 				//用户登录，添加游客信息
 				TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
 				Integer loginUserId = (Integer) addLoginUser(staffInfo);
+
+				//添加订单
+				orderUSViewService.addOrderByStuffId(staffId, loginUserId);
 
 				dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
 						Cnd.where("id", "=", staffId));
@@ -517,12 +518,11 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 			TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
 
-			//添加订单
-			orderUSViewService.addOrderByStuffId(staffId, loginUser.getId());
-
 			//用户登录，添加游客信息
 			TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
 			Integer loginUserId = (Integer) addLoginUser(staffInfo);
+			//添加订单
+			orderUSViewService.addOrderByStuffId(staffId, loginUserId);
 
 			dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
 					Cnd.where("id", "=", staffId));

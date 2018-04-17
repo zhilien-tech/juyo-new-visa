@@ -85,6 +85,9 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 			TAppStaffBasicinfoEntity user = dbDao.fetch(TAppStaffBasicinfoEntity.class,
 					Cnd.where("wechattoken", "=", openid));
 			if (!Util.isEmpty(user)) {
+				user.setWechattoken(openid);
+				//更新老客户的openid
+				dbDao.update(user);
 				System.out.println("手机号==" + user.getTelephone());
 				result = (List<Map<String, Object>>) getOrderInfo(user.getTelephone());
 			} else {
