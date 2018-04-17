@@ -628,18 +628,6 @@
 		var staffid = '${obj.basicinfo.id}';
 		var orderid = '${obj.orderid}';
 		var addorder = '${obj.isaddorder}';
-		dataReload(addorder);
-		//姓名处理
-		var firstname =  '${obj.passport.firstname }';
-		var lastname =  '${obj.passport.lastname }';
-		var firstnameen =  '${obj.passport.firstnameen }';
-		var lastnameen =  '${obj.passport.lastnameen }';
-		if((firstname != "" || lastname != "") && (firstnameen == "" || lastnameen == "")){
-			$("#allname").val(firstname+lastname+"/"+getPinyinStr(firstname)+getPinyinStr(lastname));
-		}
-		if((firstname == "" && lastname == "") && (firstnameen == "" && lastnameen == "")){
-			$("#allname").val("");
-		}
 		
 		//将汉字转为拼音
 		function getPinyinStr(hanzi){
@@ -650,6 +638,8 @@
 			}
 			return pinyinchar.toUpperCase();
 		}
+		dataReload(addorder);
+		
 		//是否有旅行计划radio处理
 		var hasplan = '${obj.travelInfo.hastripplan}';
 		$("input[name='hastripplan'][value='"+hasplan+"']").attr("checked",'checked');
@@ -1132,6 +1122,7 @@
 		function dataReload(status){
 			var orderid = '${obj.orderid}';
 			//var addorder = '${obj.isaddorder}';
+			
 			$.ajax({
 				url : '/admin/orderUS/getOrderRefresh.html',
 				data : {
@@ -1155,7 +1146,7 @@
 					        //$(this).html(temp);
 							var Str = "";
 							for(var i = 0;i < followinfos.length;i++){
-								alert(followinfos[i].content.replace(reg,"<br>"));
+								//alert(followinfos[i].content.replace(reg,"<br>"));
 								if(followinfos[i].status == 1){
 									Str += '<li> <div class="dateNameBtn">'+
 									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
@@ -1193,6 +1184,18 @@
 						$('#cardnum').val(data.basicinfo.cardnum);
 						$('#passport').val(data.passport.passport);
 						$('#interviewdate2').val(data.Interviewdate);
+						
+						//姓名处理
+						var firstname =  '${obj.passport.firstname }';
+						var lastname =  '${obj.passport.lastname }';
+						var firstnameen =  '${obj.passport.firstnameen }';
+						var lastnameen =  '${obj.passport.lastnameen }';
+						if((firstname != "" || lastname != "") && (firstnameen == "" || lastnameen == "")){
+							$("#allname").val(firstname+lastname+"/"+getPinyinStr(firstname)+getPinyinStr(lastname));
+						}
+						if((firstname == "" && lastname == "") && (firstnameen == "" && lastnameen == "")){
+							$("#allname").val("");
+						}
 						
 					}
 				}
@@ -1424,7 +1427,7 @@
 		}
 		
 		function successCallback(status){
-			dataReload(addorder);
+			dataReload(status);
 		}
 	</script>
 </body>
