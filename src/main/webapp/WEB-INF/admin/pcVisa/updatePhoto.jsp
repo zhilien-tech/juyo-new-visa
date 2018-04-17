@@ -21,6 +21,7 @@
 	</div>
 	
 	<a id="toBase" class="rightNav" onclick="passportBtn();">
+		<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';color:#3c8dbc;">第二步</i>
 		<span></span>
 	</a>
 	<div class="topHide"></div>
