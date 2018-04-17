@@ -144,7 +144,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>住址</label> 
-									<input id="address" name="address" onchange="translateZhToEn(this,'addressen','')" type="text" class="form-control input-sm"  tabIndex="9" placeholder=" " value="${obj.applicant.address }" />
+									<input id="address" name="address" onchange="translateZhToEn(this,'addressen','')" type="text" class="form-control input-sm"  tabIndex="9" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.address }" />
 								</div>
 							</div>
 						</div>
@@ -416,7 +416,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Street Address</label> 
-									<input id="detailedAddressen" name="detailedaddressen" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedaddressen }" />
+									<input id="detailedAddressen" name="detailedaddressen" type="text"  tabIndex="14" class="form-control input-sm" placeholder=" " value="${obj.applicant.detailedaddressen }" />
 								</div>
 							</div>
 						</div>
@@ -584,6 +584,7 @@
 		var marrystatus = '${obj.marryStatus}';
 		var marrystatusen = '${obj.marryStatusEn}';
 		var isDisable = '${obj.isDisable}';
+		var flag = '${obj.flag}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>

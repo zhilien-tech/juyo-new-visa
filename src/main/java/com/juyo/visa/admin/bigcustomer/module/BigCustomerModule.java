@@ -82,8 +82,9 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object updateBaseInfo(@Param("staffId") Integer staffId, @Param("isDisable") Integer isDisable, HttpSession session) {
-		return bigCustomerViewService.getStaffInfo(staffId, isDisable, session);
+	public Object updateBaseInfo(@Param("staffId") Integer staffId, @Param("isDisable") Integer isDisable,
+			@Param("flag") Integer flag, HttpSession session) {
+		return bigCustomerViewService.getStaffInfo(staffId, isDisable, flag, session);
 	}
 
 	/**
@@ -134,7 +135,8 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object updatePassportInfo(@Param("passportId") Integer passportId,@Param("isDisable") Integer isDisable, HttpSession session) {
+	public Object updatePassportInfo(@Param("passportId") Integer passportId, @Param("isDisable") Integer isDisable,
+			HttpSession session) {
 		return bigCustomerViewService.getPassportInfo(passportId, isDisable, session);
 	}
 
@@ -144,7 +146,8 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object updateVisaInfo(@Param("staffId") Integer staffId, @Param("isDisable") Integer isDisable, HttpSession session) {
+	public Object updateVisaInfo(@Param("staffId") Integer staffId, @Param("isDisable") Integer isDisable,
+			HttpSession session) {
 		return bigCustomerViewService.updateVisaInfo(staffId, isDisable, session);
 	}
 
