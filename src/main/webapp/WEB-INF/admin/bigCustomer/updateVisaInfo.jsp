@@ -733,7 +733,8 @@
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo" >
 						<label>当地月收入(如果雇佣)</label>
-						<input name="salary" v-model="visaInfo.workEducationInfo.salary" type="text" />
+						<input name="salary" v-model="visaInfo.workEducationInfo.salary" type="text" onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"
+										onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
 						<input name="issalaryapply" id="issalaryapplywork" v-model="visaInfo.workEducationInfo.issalaryapply" type="checkbox" />
 					</div>
 					<div class="clear"></div>
