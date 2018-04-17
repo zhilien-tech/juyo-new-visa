@@ -214,8 +214,8 @@
 												<input name="threecounty" type="button" value="山形县" class="btn btn-sm btnState">
 											</div>
 										</div>
-										
-										<c:choose>
+									</div><!-- end 过去三年是否访问过 -->
+									<c:choose>
 											<c:when test="${obj.jporderinfo.isVisit == 1 }">
 												<div class="alignment cf viseType-btn">
 											</c:when>
@@ -245,8 +245,6 @@
 												</div>
 											</div>
 										</div>	
-										
-									</div><!-- end 过去三年是否访问过 -->
 						</div>
 					</div>
 					<!-- end 申请人 -->
