@@ -1,7 +1,11 @@
 $(function(){
 	if(isDisable != 1){
 	//校验
-	applyValidate();
+	if(flag == 1){
+		touristValidate();
+	}else{
+		applyValidate();
+	}
 
 	var front = $("#cardFront").val();
 	var back = $("#cardBack").val();
@@ -18,7 +22,7 @@ $(function(){
 	} 
 	}
 });
-
+//工作人员进入，验证所有内容
 function applyValidate(){
 	$('#applicantInfo').bootstrapValidator({
 		message : '验证不通过',
@@ -216,6 +220,22 @@ function applyValidate(){
 				trigger:"change keyup",
 				validators : {
 					notEmpty : {
+						message : '姓不能为空'
+					}
+				}
+			},
+			otherlastname : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '名不能为空'
+					}
+				}
+			},
+			otherlastnameen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
 						message : '名不能为空'
 					}
 				}
@@ -245,6 +265,148 @@ function applyValidate(){
 				}
 			},
 			othercountryen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国家不能为空'
+					}
+				}
+			},
+		}
+	});
+	//$('#applicantInfo').bootstrapValidator('validate');
+}
+//从游客进入，不验证英文
+function touristValidate(){
+	$('#applicantInfo').bootstrapValidator({
+		message : '验证不通过',
+		feedbackIcons : {
+			valid : 'glyphicon glyphicon-ok',
+			invalid : 'glyphicon glyphicon-remove',
+			validating : 'glyphicon glyphicon-refresh'
+		},
+		fields : {
+			telephone : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '手机号不能为空'
+					},
+					regexp: {
+						regexp: /^[1][34578][0-9]{9}$/,
+						message: '手机号格式错误'
+					}
+				}
+			},
+			email : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '邮箱不能为空'
+					},
+					regexp: {
+						regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+						message: '邮箱格式错误'
+					}
+				}
+			},
+			cardId : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '身份证号不能为空'
+					}
+				}
+			},
+			nation : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '民族不能为空'
+					}
+				}
+			},
+			/*cardnum : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '卡号不能为空'
+					}
+				}
+			},*/
+			/*cardnumen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '卡号不能为空'
+					}
+				}
+			},*/
+			address : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '住址不能为空'
+					}
+				}
+			},
+			province : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '省不能为空'
+					}
+				}
+			},
+			city : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '市不能为空'
+					}
+				}
+			},
+			detailedaddress : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '详细地址不能为空'
+					}
+				}
+			},
+			marryexplain : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '说明不能为空'
+					}
+				}
+			},
+			otherfirstname : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '姓不能为空'
+					}
+				}
+			},
+			otherlastname : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '名不能为空'
+					}
+				}
+			},
+			nationality : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国籍不能为空'
+					}
+				}
+			},
+			othercountry : {
 				trigger:"change keyup",
 				validators : {
 					notEmpty : {
@@ -940,7 +1102,11 @@ function saveApplicant(status){
 	if(isDisable != 1){
 	$("#applicantInfo").data('bootstrapValidator').destroy();
 	$("#applicantInfo").data('bootstrapValidator', null);
-	applyValidate();
+	if(flag == 1){
+		touristValidate();
+	}else{
+		applyValidate();
+	}
 	//得到获取validator对象或实例 
 	var bootstrapValidator = $("#applicantInfo").data(
 	'bootstrapValidator');
@@ -950,95 +1116,131 @@ function saveApplicant(status){
 	
 	var country = $("#nationalidentificationnumber").val();
 	if(country == ""){
-		if(!$(".isidentificationnumberapply").is(":checked")){
-			$(".countryNum").attr("class", "countryNum has-error");  
-			$(".help-countryNum").attr("data-bv-result","INVALID");  
-			$(".help-countryNum").attr("style","display: block;");  
-			$("#nationalidentificationnumber").attr("style", "border-color:#ff1a1a");
-		}else{
-			$(".countryNum").attr("class", "countryNum has-success");  
-	        $(".help-countryNum").attr("data-bv-result","IVALID");  
-	        $(".help-countryNum").attr("style","display: none;");  
-	        $("#nationalidentificationnumber").attr("style", null);
-		}
+			if(!$(".isidentificationnumberapply").is(":checked")){
+				$(".countryNum").attr("class", "countryNum has-error");  
+				$(".help-countryNum").attr("data-bv-result","INVALID");  
+				$(".help-countryNum").attr("style","display: block;");  
+				$("#nationalidentificationnumber").attr("style", "border-color:#ff1a1a");
+			}else{
+				$(".countryNum").attr("class", "countryNum has-success");  
+				$(".help-countryNum").attr("data-bv-result","IVALID");  
+				$(".help-countryNum").attr("style","display: none;");  
+				$("#nationalidentificationnumber").attr("style", null);
+			}
 	}else{
 		$(".countryNum").attr("class", "countryNum has-success");  
         $(".help-countryNum").attr("data-bv-result","IVALID");  
         $(".help-countryNum").attr("style","display: none;");  
         $("#nationalidentificationnumber").attr("style", null);
 	}
-	var countryen = $("#nationalidentificationnumberen").val();
-	if(countryen == ""){
-		if(!$(".isidentificationnumberapplyen").is(":checked")){
-			$(".countryNumen").attr("class", "countryNumen has-error");  
-			$(".help-countryNumen").attr("data-bv-result","INVALID");  
-			$(".help-countryNumen").attr("style","display: block;");  
-			$("#nationalidentificationnumberen").attr("style", "border-color:#ff1a1a");
+	if(flag != 1){
+		var countryen = $("#nationalidentificationnumberen").val();
+		if(countryen == ""){
+			if(!$(".isidentificationnumberapplyen").is(":checked")){
+				$(".countryNumen").attr("class", "countryNumen has-error");  
+				$(".help-countryNumen").attr("data-bv-result","INVALID");  
+				$(".help-countryNumen").attr("style","display: block;");  
+				$("#nationalidentificationnumberen").attr("style", "border-color:#ff1a1a");
+			}else{
+				$(".countryNumen").attr("class", "countryNumen has-success");  
+				$(".help-countryNumen").attr("data-bv-result","IVALID");  
+				$(".help-countryNumen").attr("style","display: none;");  
+				$("#nationalidentificationnumberen").attr("style", null);
+			}
 		}else{
 			$(".countryNumen").attr("class", "countryNumen has-success");  
-	        $(".help-countryNumen").attr("data-bv-result","IVALID");  
-	        $(".help-countryNumen").attr("style","display: none;");  
-	        $("#nationalidentificationnumberen").attr("style", null);
+			$(".help-countryNumen").attr("data-bv-result","IVALID");  
+			$(".help-countryNumen").attr("style","display: none;");  
+			$("#nationalidentificationnumberen").attr("style", null);
 		}
-	}else{
-		$(".countryNumen").attr("class", "countryNumen has-success");  
-        $(".help-countryNumen").attr("data-bv-result","IVALID");  
-        $(".help-countryNumen").attr("style","display: none;");  
-        $("#nationalidentificationnumberen").attr("style", null);
+		
+		var safeNumberen = $("#socialsecuritynumberen").val();
+		if(safeNumberen == ""){
+			if(!$(".issecuritynumberapplyen").is(":checked")){
+				$(".safeNumen").attr("class", "safeNumen has-error");  
+				$(".help-blocksafeen").attr("data-bv-result","INVALID");  
+				$(".help-blocksafeen").attr("style","display: block;");  
+				$("#socialsecuritynumberen").attr("style", "border-color:#ff1a1a");
+			}else{
+				$(".safeNumen").attr("class", "safeNumen has-success");  
+				$(".help-blocksafeen").attr("data-bv-result","IVALID");  
+				$(".help-blocksafeen").attr("style","display: none;");  
+				$("#socialsecuritynumberen").attr("style", null);
+			}
+		}else{
+			$(".safeNumen").attr("class", "safeNumen has-success");  
+	        $(".help-blocksafeen").attr("data-bv-result","IVALID");  
+	        $(".help-blocksafeen").attr("style","display: none;");  
+	        $("#socialsecuritynumberen").attr("style", null);
+		}
+		
+		var taxpayernumberen = $("#taxpayernumberen").val();
+		if(taxpayernumberen == ""){
+			if(!$(".istaxpayernumberapplyen").is(":checked")){
+				$(".safepayen").attr("class", "safepayen has-error");  
+				$(".help-ratepayingen").attr("data-bv-result","INVALID");  
+				$(".help-ratepayingen").attr("style","display: block;");  
+				$("#taxpayernumberen").attr("style", "border-color:#ff1a1a");
+			}else{
+				$(".safepayen").attr("class", "safepayen has-success");  
+				$(".help-ratepayingen").attr("data-bv-result","IVALID");  
+				$(".help-ratepayingen").attr("style","display: none;");  
+				$("#taxpayernumberen").attr("style", null);
+			}
+		}else{
+			$(".safepayen").attr("class", "safepayen has-success");  
+	        $(".help-ratepayingen").attr("data-bv-result","IVALID");  
+	        $(".help-ratepayingen").attr("style","display: none;");  
+	        $("#taxpayernumberen").attr("style", null);
+		}
+		
+		if($(".countryNumen").hasClass("has-error")){
+			return;
+		}
+		
+		if($(".safeNumen").hasClass("has-error")){
+			return;
+		}
+		
+		if($(".safepayen").hasClass("has-error")){
+			return;
+		}
 	}
 	
 	var safeNumber = $("#socialsecuritynumber").val();
 	if(safeNumber == ""){
-		if(!$(".issecuritynumberapply").is(":checked")){
-			$(".safeNum").attr("class", "safeNum has-error");  
-			$(".help-blocksafe").attr("data-bv-result","INVALID");  
-			$(".help-blocksafe").attr("style","display: block;");  
-			$("#socialsecuritynumber").attr("style", "border-color:#ff1a1a");
-		}else{
-			$(".safeNum").attr("class", "safeNum front has-success");  
-			$(".help-blocksafe").attr("data-bv-result","IVALID");  
-			$(".help-blocksafe").attr("style","display: none;");  
-			$("#socialsecuritynumber").attr("style", null);
-		}
+			if(!$(".issecuritynumberapply").is(":checked")){
+				$(".safeNum").attr("class", "safeNum has-error");  
+				$(".help-blocksafe").attr("data-bv-result","INVALID");  
+				$(".help-blocksafe").attr("style","display: block;");  
+				$("#socialsecuritynumber").attr("style", "border-color:#ff1a1a");
+			}else{
+				$(".safeNum").attr("class", "safeNum front has-success");  
+				$(".help-blocksafe").attr("data-bv-result","IVALID");  
+				$(".help-blocksafe").attr("style","display: none;");  
+				$("#socialsecuritynumber").attr("style", null);
+			}
 	}else{
 		$(".safeNum").attr("class", "safeNum front has-success");  
         $(".help-blocksafe").attr("data-bv-result","IVALID");  
         $(".help-blocksafe").attr("style","display: none;");  
         $("#socialsecuritynumber").attr("style", null);
 	}
-	var safeNumberen = $("#socialsecuritynumberen").val();
-	if(safeNumberen == ""){
-		if(!$(".issecuritynumberapplyen").is(":checked")){
-			$(".safeNumen").attr("class", "safeNumen has-error");  
-			$(".help-blocksafeen").attr("data-bv-result","INVALID");  
-			$(".help-blocksafeen").attr("style","display: block;");  
-			$("#socialsecuritynumberen").attr("style", "border-color:#ff1a1a");
-		}else{
-			$(".safeNumen").attr("class", "safeNumen has-success");  
-			$(".help-blocksafeen").attr("data-bv-result","IVALID");  
-			$(".help-blocksafeen").attr("style","display: none;");  
-			$("#socialsecuritynumberen").attr("style", null);
-		}
-	}else{
-		$(".safeNumen").attr("class", "safeNumen has-success");  
-        $(".help-blocksafeen").attr("data-bv-result","IVALID");  
-        $(".help-blocksafeen").attr("style","display: none;");  
-        $("#socialsecuritynumberen").attr("style", null);
-	}
+	
 	
 	var taxpayernumber = $("#taxpayernumber").val();
 	if(taxpayernumber == ""){
-		if(!$(".istaxpayernumberapply").is(":checked")){
-			$(".safepay").attr("class", "safepay has-error");  
-			$(".help-ratepaying").attr("data-bv-result","INVALID");  
-			$(".help-ratepaying").attr("style","display: block;");  
-			$("#taxpayernumber").attr("style", "border-color:#ff1a1a");
-		}else{
-			$(".safepay").attr("class", "safepayen has-success");  
-			$(".help-ratepaying").attr("data-bv-result","IVALID");  
-			$(".help-ratepaying").attr("style","display: none;");  
-			$("#taxpayernumber").attr("style", null);
-		}
+			if(!$(".istaxpayernumberapply").is(":checked")){
+				$(".safepay").attr("class", "safepay has-error");  
+				$(".help-ratepaying").attr("data-bv-result","INVALID");  
+				$(".help-ratepaying").attr("style","display: block;");  
+				$("#taxpayernumber").attr("style", "border-color:#ff1a1a");
+			}else{
+				$(".safepay").attr("class", "safepayen has-success");  
+				$(".help-ratepaying").attr("data-bv-result","IVALID");  
+				$(".help-ratepaying").attr("style","display: none;");  
+				$("#taxpayernumber").attr("style", null);
+			}
 	}else{
 		$(".safepay").attr("class", "safepayen has-success");  
         $(".help-ratepaying").attr("data-bv-result","IVALID");  
@@ -1046,44 +1248,20 @@ function saveApplicant(status){
         $("#taxpayernumber").attr("style", null);
 	}
 	
-	var taxpayernumberen = $("#taxpayernumberen").val();
-	if(taxpayernumberen == ""){
-		if(!$(".istaxpayernumberapplyen").is(":checked")){
-			$(".safepayen").attr("class", "safepayen has-error");  
-			$(".help-ratepayingen").attr("data-bv-result","INVALID");  
-			$(".help-ratepayingen").attr("style","display: block;");  
-			$("#taxpayernumberen").attr("style", "border-color:#ff1a1a");
-		}else{
-			$(".safepayen").attr("class", "safepayen has-success");  
-			$(".help-ratepayingen").attr("data-bv-result","IVALID");  
-			$(".help-ratepayingen").attr("style","display: none;");  
-			$("#taxpayernumberen").attr("style", null);
-		}
-	}else{
-		$(".safepayen").attr("class", "safepayen has-success");  
-        $(".help-ratepayingen").attr("data-bv-result","IVALID");  
-        $(".help-ratepayingen").attr("style","display: none;");  
-        $("#taxpayernumberen").attr("style", null);
-	}
+	
 	
 	if($(".countryNum").hasClass("has-error")){
 		return;
 	}
-	if($(".countryNumen").hasClass("has-error")){
-		return;
-	}
+	
 	if($(".safeNum").hasClass("has-error")){
 		return;
 	}
-	if($(".safeNumen").hasClass("has-error")){
-		return;
-	}
+	
 	if($(".safepay").hasClass("has-error")){
 		return;
 	}
-	if($(".safepayen").hasClass("has-error")){
-		return;
-	}
+	
 	
 	if (bootstrapValidator.isValid()){
 

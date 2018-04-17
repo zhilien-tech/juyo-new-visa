@@ -32,7 +32,8 @@ public class TranslateController {
 	@At
 	@POST
 	public Object translate(@Param("strType") String type, @Param("q") String q) throws UnsupportedEncodingException {
-
+		//内蒙古，新疆，广西，宁夏，西藏，屯，州，盟，旗，苏木
+		StringBuffer sb = new StringBuffer();
 		String result = "";
 		try {
 			if (Util.eq(type, "addressen") || Util.eq(type, "detailedAddressen")) {

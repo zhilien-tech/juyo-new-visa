@@ -108,7 +108,7 @@
 		        methods:{
 		        	toInProcess:function(id,){
 		        		var flag = $("#flag").val();
-		        		window.location.href = '/admin/pcVisa/visaDetail.html?orderid=' + id+'&flag='+flag;
+		        		window.location.href = '/admin/pcVisa/visaDetail.html?orderid=' + id+'&flag='+flag;//flag为判断游客进入的依据
 		        	}
 		        }
 			});

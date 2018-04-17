@@ -45,7 +45,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id+'&isDisable'
+				content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id+'&isDisable&flag=1'
 			});
 		},
 		//护照信息

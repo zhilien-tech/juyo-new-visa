@@ -43,9 +43,9 @@ import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.USMarryStatusEnEnum;
-import com.juyo.visa.common.enums.USMarryStatusEnum;
 import com.juyo.visa.common.enums.AppPictures.AppCredentialsTypeEnum;
 import com.juyo.visa.common.enums.AppPictures.AppPicturesTypeEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
@@ -721,7 +721,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param staffId
 	 * @return 
 	 */
-	public Object getStaffInfo(Integer staffId, Integer isDisable, HttpSession session) {
+	public Object getStaffInfo(Integer staffId, Integer isDisable, Integer flag, HttpSession session) {
 
 		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
 
@@ -730,10 +730,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
 
+		result.put("flag", flag);//从游客处进入，要去掉英文验证
 		result.put("isDisable", isDisable);//页面是否可编辑
 		result.put("marryStatus", staffInfo.getMarrystatus());
 		result.put("marryStatusEn", staffInfo.getMarrystatusen());
-		result.put("marryStatusEnum", EnumUtil.enum2(USMarryStatusEnum.class));
+		result.put("marryStatusEnum", EnumUtil.enum2(MarryStatusEnum.class));
 		result.put("marryStatusEnEnum", EnumUtil.enum2(USMarryStatusEnEnum.class));
 
 		SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
