@@ -276,6 +276,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//格式化日期
 		DateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm");
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf2 = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
 		//订单信息
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		result.put("orderinfo", orderus);
@@ -288,7 +289,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				.longValue());
 		result.put("basicinfo", basicinfo);
 		if (!Util.isEmpty(basicinfo.getInterviewdate())) {
-			result.put("Interviewdate", sdf.format(basicinfo.getInterviewdate()));
+			result.put("Interviewdate", sdf2.format(basicinfo.getInterviewdate()));
 		}
 		Integer staffid = basicinfo.getId();
 		Integer status = orderus.getStatus();
@@ -988,11 +989,13 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	public Object autofill(int orderid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		if (orderus.getStatus() < USOrderListStatusEnum.AUTOFILL.intKey()) {
 			orderus.setStatus(USOrderListStatusEnum.AUTOFILL.intKey());
 			dbDao.update(orderus);
 		}
+		insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
 		return null;
 	}
 
@@ -1049,6 +1052,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object orderSave(OrderUpdateForm form, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer orderid = form.getOrderid();
 		Integer staffid = form.getStaffid();
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
@@ -1099,17 +1103,19 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//修改订单信息
 		int orderUpdateNum = dbDao.update(orderTravelInfo);
 
-		//如果有面签时间，则改变订单状态为面签
-		if (!Util.isEmpty(form.getInterviewdate())) {
-			if (orderus.getStatus() < USOrderListStatusEnum.MIANQIAN.intKey()) {
-				orderus.setStatus(USOrderListStatusEnum.MIANQIAN.intKey());
-			}
-		}
 		orderus.setCityid(form.getCityid());
 		orderus.setIspayed(form.getIspayed());
 		orderus.setGroupname(form.getGroupname());
 		orderus.setUpdatetime(new Date());
 		dbDao.update(orderus);
+
+		//如果有面签时间，则改变订单状态为面签
+		if (!Util.isEmpty(form.getInterviewdate())) {
+			if (orderus.getStatus() < USOrderListStatusEnum.MIANQIAN.intKey()) {
+				orderus.setStatus(USOrderListStatusEnum.MIANQIAN.intKey());
+			}
+			insertLogs(orderus.getId(), USOrderListStatusEnum.MIANQIAN.intKey(), loginUser.getId());
+		}
 		//把面签时间添加到人员信息中
 		TAppStaffOrderUsEntity fetch = dbDao.fetch(TAppStaffOrderUsEntity.class, Cnd.where("orderid", "=", orderid));
 		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, fetch.getStaffid().longValue());
@@ -1143,7 +1149,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//根据人员id添加订单
-	public Object addOrderByStuffId(Integer staffId) {
+	public Object addOrderByStuffId(Integer staffId, int userid) {
 
 		TOrderUsEntity orderUs = new TOrderUsEntity();
 		String orderNum = generateOrderNumByDate();
@@ -1151,9 +1157,11 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderUs.setOrdernumber(orderNum);
 		orderUs.setComid(US_YUSHANG_COMID);
 		orderUs.setStatus(USOrderStatusEnum.PLACE_ORDER.intKey());//下单
+		orderUs.setIspayed(IsPayedEnum.NOTPAY.intKey());
 		orderUs.setCreatetime(nowDate);
 		orderUs.setUpdatetime(nowDate);
 		TOrderUsEntity order = dbDao.insert(orderUs);
+		insertLogs(order.getId(), USOrderListStatusEnum.PLACE_ORDER.intKey(), userid);
 
 		//更新人员-订单关系表
 		if (!Util.isEmpty(order)) {
@@ -1209,7 +1217,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object sendShareMsg(Integer staffId, Integer orderid, String sendType, HttpServletRequest request) {
 
 		String pcUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin";
-
+		HttpSession session = request.getSession();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
 		if (!Util.isEmpty(staffId)) {
 			try {
@@ -1217,14 +1226,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				//分享
 				if (Util.eq(sendType, "share")) {
 					sendSMSUS(staffId, orderid, sendType, "orderustemp/order_us_share_sms.txt");
-					orderus.setStatus(USOrderListStatusEnum.FILLING.intKey());
-					dbDao.update(orderus);
 				}
 				//合格
 				if (Util.eq(sendType, "qualified")) {
 					sendSMSUS(staffId, orderid, sendType, "orderustemp/order_us_qualified_sms.txt");
-					orderus.setStatus(USOrderListStatusEnum.HEGE.intKey());
-					dbDao.update(orderus);
 				}
 				//面试
 				if (Util.eq(sendType, "interview")) {
@@ -1250,6 +1255,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 						orderus.setStatus(USOrderListStatusEnum.FILLING.intKey());
 						dbDao.update(orderus);
 					}
+					insertLogs(orderus.getId(), USOrderListStatusEnum.FILLING.intKey(), loginUser.getId());
 				}
 				//合格
 				if (Util.eq(sendType, "qualified")) {
@@ -1257,6 +1263,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 						orderus.setStatus(USOrderListStatusEnum.HEGE.intKey());
 						dbDao.update(orderus);
 					}
+					insertLogs(orderus.getId(), USOrderListStatusEnum.HEGE.intKey(), loginUser.getId());
 				}
 				//面试
 				if (Util.eq(sendType, "interview")) {

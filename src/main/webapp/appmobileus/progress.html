@@ -17,32 +17,65 @@
 	         if(r!=null)return  unescape(r[2]); return null;
 	    }
         	$(function(){
-        		var code = GetQueryString("code");   
-        		$.ajax({
-        			type : "POST",//提交类型  
-        			//dataType : "json",//返回结果格式  
-        	 		url : '/admin/weixinOpenId/checkProgress.html',//请求地址  
-        			data:{code:code},
-        			//请求数据  
-        			success : function(data) {//请求成功后的函数 
+        		
+        		var code = GetQueryString("code");
+        		var telephone = GetQueryString("telephone");
+        		var tel = telephone;
+        		//从登陆页面跳转到进度页面
+           		if(telephone != null && telephone != ''){
+        			$.ajax({
+            			type : "POST",//提交类型  
+            			//dataType : "json",//返回结果格式  
+            	 		url : '/admin/weixinOpenId/verifyUser.html',//请求地址  
+            			data:{telephone:tel},
+            			//请求数据  
+            			success : function(data) {//请求成功后的函数 
+            				
+            				for(var i = 0;i < data.length;i++){
+    							if(data[i].flag == 0){
+    								var name = data[i].name;
+    								var status = data[i].orderStatus;
+    								$(".sectionInfo").append('<div class="mainInfo"> <div class="titleHead">USANA &nbsp;2018国际年会</div>'+
+    														 '<ul class="downUpInfo"> <li>'+
+    														 '<span id="name">'+name+'</span></li> </ul>'+
+    														 '<div class="statusInfo"><span class="UsName">美国</span>'+
+    														 '<span class="UsStatus">'+status+'</span></div></div>'
+    														);
+    							}else{
+    								alert("请先注册再查询进度！");
+    							}
+            			}
+            		}	
+            		});
+        		}else if(code != null || code != ''){
+        			$.ajax({
         				
-        				for(var i = 0;i < data.length;i++){
-							if(data[i].flag == 0){
-								var name = data[i].name;
-								var status = data[i].orderStatus;
-								$(".sectionInfo").append('<div class="mainInfo"> <div class="titleHead">USANA &nbsp;2018国际年会</div>'+
-														 '<ul class="downUpInfo"> <li>'+
-														 '<span id="name">'+name+'</span></li> </ul>'+
-														 '<div class="statusInfo"><span class="UsName">美国</span>'+
-														 '<span class="UsStatus">'+status+'</span></div></div>'
-														);
-							}else{
-								$(".enrolldialogBG").show();
-	        					$(".enrollDialog").show();
-							}
-        			}
-        		}	
-        		});
+            			type : "POST",//提交类型  
+            			//dataType : "json",//返回结果格式  
+            	 		url : '/admin/weixinOpenId/checkProgress.html',//请求地址  
+            			data:{code:code},
+            			//请求数据  
+            			success : function(data) {//请求成功后的函数 
+            				
+            				for(var i = 0;i < data.length;i++){
+    							if(data[i].flag == 0){
+    								var name = data[i].name;
+    								var status = data[i].orderStatus;
+    								$(".sectionInfo").append('<div class="mainInfo"> <div class="titleHead">USANA &nbsp;2018国际年会</div>'+
+    														 '<ul class="downUpInfo"> <li>'+
+    														 '<span id="name">'+name+'</span></li> </ul>'+
+    														 '<div class="statusInfo"><span class="UsName">美国</span>'+
+    														 '<span class="UsStatus">'+status+'</span></div></div>'
+    														);
+    							}else{
+    								$(".enrolldialogBG").show();
+    	        					$(".enrollDialog").show();
+    							}
+            			}
+            		}	
+            		});
+        		}
+        
         		
         	})
         	

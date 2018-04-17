@@ -109,7 +109,6 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 		for (TAppStaffBasicinfoEntity orderUsr : listOrderUsInfo) {
 			Map<String, Object> orderMap = new HashMap<String, Object>();
 			orderMap.put("flag", 0);
-			result.add(orderMap);
 			//订单人名称
 			orderMap.put("name", orderUsr.getFirstname() + orderUsr.getLastname());
 			System.out.println("name" + orderUsr.getFirstname() + orderUsr.getLastname());
@@ -134,10 +133,10 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 						}
 					}
 				}
-				result.add(orderMap);
-				System.out.println("111---resule" + result.toString());
 			}
+			result.add(orderMap);
 		}
+		System.out.println("111---resule" + result.toString());
 		return result;
 
 	}

@@ -178,16 +178,16 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		String lastname = form.getLastname();
 		Map<String, String> jo = new HashMap<String, String>();
 		//校验姓名是否合格
-
 		if (!(isChineseStr(firstname) && isChineseStr(lastname))) {
+			//输入非法
 			jo.put("flag", "2");
 			jo.put("msg", "姓名必须为中文");
 			return jo;
+
 		} else {
 			//当前登录用户Id
 			TUserEntity loginUser = LoginUtil.getLoginUser(session);
 			//Integer loginUserId = loginUser.getId();
-
 			//添加人员
 			TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
 			staffForm.setFirstname(form.getFirstname());
@@ -200,14 +200,16 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 			}
 			//默认签证状态为办理中
 			staffForm.setVisastatus(VisaStatusEnum.HANDLING_VISA.intKey());
-			Map<String, String> map = (Map<String, String>) bigCustomerViewService.addStaff(staffForm, session);
-			//只进行更新操作
-			if (map.get("flag") != "1") {
 
+			//进行校验 更新 回显  还是新增 --------------------------------------重点
+			Map<String, String> map = (Map<String, String>) bigCustomerViewService.addStaff(staffForm, session);
+			//---------------------------------------------------------------------
+			//只进行更新操作
+			//map.flag 3代表回显 1代表更新 0代表新增 2代表违法
+			if (map.get("flag").equals("0")) {
 				String staffIdStr = map.get("staffId");
 				Integer staffId = Integer.valueOf(staffIdStr);
 				Integer eventId = form.getEventId();
-
 				//人员报名活动
 				TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
 				staffEventEntity.setEventsId(eventId);
@@ -216,7 +218,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 				TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
 
 				//添加订单
-				orderUSViewService.addOrderByStuffId(staffId);
+				orderUSViewService.addOrderByStuffId(staffId, loginUser.getId());
 
 				//用户登录，添加游客信息
 				TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
@@ -225,9 +227,8 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 				dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
 						Cnd.where("id", "=", staffId));
 				jo.put("flag", "0");
-			} else {
+			} else if (map.get("flag").equals("3")) {
 				return map;
-
 			}
 		}
 		return jo;
@@ -455,6 +456,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//根据staffId查询大客户人员基本信息表
 		TAppStaffBasicinfoEntity basicInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
 				Cnd.where("wechattoken", "=", openid));
+
 		if (!Util.isEmpty(basicInfo)) {
 			System.out.println("zhuceOK");
 			//用户已注册
@@ -516,7 +518,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 			TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
 
 			//添加订单
-			orderUSViewService.addOrderByStuffId(staffId);
+			orderUSViewService.addOrderByStuffId(staffId, loginUser.getId());
 
 			//用户登录，添加游客信息
 			TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
@@ -524,6 +526,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 			dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
 					Cnd.where("id", "=", staffId));
+
 			return JsonResult.success("添加成功");
 		}
 

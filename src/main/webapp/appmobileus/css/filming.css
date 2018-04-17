@@ -586,9 +586,12 @@ footer {
 	color:#fff;
 }
 /**********************************行驶本**********************************/
+.driverSection {
+	padding:.2rem;
+}
 .driverPage {
 	width: 97%;
-	height: 4rem;
+	height: 2.5rem;
 	text-align: center;
 	border: 1px solid #000;
 	font-size: .3rem;
@@ -601,7 +604,7 @@ footer {
 	top:0;
 	left:0;
 	width:100%;
-	height:4rem;
+	height:2.5rem;
 	background:#eee;
 	opacity:.3;
 }
@@ -610,6 +613,9 @@ footer {
 	top:45%;
 	left:45%;
 	color:#fff;
+}
+.driverPageTitle {
+	padding-top:.4rem !important;
 }
 /**********************************过期美签**********************************/
 .signdialog {
