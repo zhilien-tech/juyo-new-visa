@@ -77,7 +77,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 			HttpServletRequest request, HttpServletResponse response, String sessionid) {
 		//将图片进行旋转处理
 		Map<String, Object> map = null;
-		//竖着的不用不旋转(2寸照片，房产证，结婚证，在职证明，美国出签)
+		//竖着的不用不旋转(2寸照片，户口本，结婚证，在职证明，美国出签)
 		if (Util.eq(type, TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey())
 				|| Util.eq(type, TAppStaffCredentialsEnum.HUKOUBEN.intKey())
 				|| Util.eq(type, TAppStaffCredentialsEnum.MARRAY.intKey())
