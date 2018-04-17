@@ -1676,6 +1676,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public void savePassport(PassportJsonEntity passportJsonEntity, TAppStaffPassportEntity passportEntity,
 			TAppStaffBasicinfoEntity staffInfo) {
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
 		//用户基本信息修改
 		staffInfo.setFirstname(passportJsonEntity.getXingCn());//姓
 		staffInfo.setFirstnameen(translatename(passportJsonEntity.getXingCn()));//姓英
@@ -1691,9 +1693,22 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		passportEntity.setOCRline1(passportJsonEntity.getOCRline1());
 		passportEntity.setOCRline2(passportJsonEntity.getOCRline2());
 		passportEntity.setSex(passportJsonEntity.getSex());
-		passportEntity.setSexen(translate(passportJsonEntity.getSexEn()));
+		passportEntity.setSexen(passportJsonEntity.getSexEn());
 		passportEntity.setBirthaddress(passportJsonEntity.getBirthCountry());//出生地
-		passportEntity.setBirthaddressen(translate(passportJsonEntity.getBirthCountry()));
+
+		try {
+			passportEntity.setBirthaddressen("/"
+					+ tool.toPinYin(passportJsonEntity.getBirthCountry(), "", Type.UPPERCASE));
+			passportEntity.setIssuedplaceen("/"
+					+ tool.toPinYin(passportJsonEntity.getVisaCountry(), "", Type.UPPERCASE));
+		} catch (BadHanyuPinyinOutputFormatCombination e1) {
+
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+
+		}
+		//passportEntity.setBirthaddressen(translate(passportJsonEntity.getBirthCountry()));
+		//passportEntity.setIssuedplaceen(translate(passportJsonEntity.getVisaCountry()));
 		passportEntity.setType(passportJsonEntity.getType());
 		//出生日期
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1717,7 +1732,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		passportEntity.setIssueddate(issueDate);//设置签发日期
 		passportEntity.setValidenddate(expiryDay);//设置有效期至
 		passportEntity.setIssuedplace(passportJsonEntity.getVisaCountry());//设置签发地点
-		passportEntity.setIssuedplaceen(translate(passportJsonEntity.getVisaCountry()));
+
 		passportEntity.setPassport(passportJsonEntity.getNum());
 		dbDao.update(passportEntity, null);
 

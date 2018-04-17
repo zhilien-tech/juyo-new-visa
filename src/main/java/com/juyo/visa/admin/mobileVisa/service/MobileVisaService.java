@@ -427,6 +427,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	 * 图片是否存在
 	 */
 	public Object getImageInfoBytypeAndStaffid(Integer staffid, Integer type) {
+		Map<String, Object> result = Maps.newHashMap();
 		//获取该用户的资料类型
 		TAppStaffCredentialsEntity credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type));
@@ -439,7 +440,9 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 						typeStr = enu.value();
 					}
 				}
-				return typeStr;
+				result.put("status", typeStr);
+				result.put("marry", credentialEntity);
+				return result;
 			} else {
 				return type;
 			}

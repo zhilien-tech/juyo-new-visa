@@ -6,8 +6,12 @@
 
 package com.juyo.visa;
 
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.juyo.visa.common.util.PinyinTool;
+import com.juyo.visa.common.util.PinyinTool.Type;
 import com.juyo.visa.common.util.TranslateUtil;
 
 /**
@@ -28,16 +32,16 @@ public class TestPinyin {
 		System.out.println("中文翻译成英语：" + result);
 		//System.out.println("中文翻译成英语：" + translate1);
 		//System.out.println("中文翻译成英语：" + new StringBuilder(translate).reverse());
-		/*PinyinTool tool = new PinyinTool();
+		PinyinTool tool = new PinyinTool();
 		try {
 			String name = "LIUYA";
-			System.out.println("刘亚壮的运行测试结果为====" + tool.toPinYin("刘亚壮", "", Type.UPPERCASE));
+			System.out.println("刘亚壮的运行测试结果为====" + tool.toPinYin("/中国", "", Type.UPPERCASE));
 			System.out.println(name.length());
 		} catch (BadHanyuPinyinOutputFormatCombination e) {
 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
-		}*/
+		}
 	}
 }

@@ -57,7 +57,7 @@
 					<i class="icon-error iconGroup6" ></i>
 				</div> <span>婚姻状况</span> <i class="more"></i> <span id="6"
 				class="info marriageInfo"></span> <select class="selector" dir="rtl">
-					<option>--请选择--</option>
+					<option >--请选择--</option>
 					<option value="4">单身</option>
 					<option value="1">已婚</option>
 					<option value="2">离异</option>
@@ -135,9 +135,13 @@
 							
 			if (selectvalue == 2 || selectvalue == 1) {
 				window.location.href = '/appmobileus/USMarital.html?staffid=' + staffid + '&marryurltype=' + selectvalue+'&sessionid='+sessionid+'&flag='+flag;
-			}else if(selectvalue == 1){
+			}
+			if(selectvalue != "--请选择--"){
 				$(".replaceCircle6").removeClass("circleRed").addClass("circleGreen");
 				$(".iconGroup6").removeClass("icon-error").addClass("icon-true");
+			}else{
+				$(".replaceCircle6").removeClass("circleGreen").addClass("circleRed");
+				$(".iconGroup6").removeClass("icon-true").addClass("icon-error");
 			}
 
 		});
@@ -433,7 +437,7 @@
 				/* _self.passportdata = data.passportdata; */
 				console.log(data);
 				if (data != 0) {
-					$("#6").html(data);
+					$("#6").html(data.status);
 					//$(".marriageInfo").text(data);
 					$(".replaceCircle6").removeClass("circleRed").addClass(
 							"circleGreen");
