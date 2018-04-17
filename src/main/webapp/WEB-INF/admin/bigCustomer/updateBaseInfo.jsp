@@ -18,9 +18,11 @@
 <body>
 	<div class="modal-content">
 		<a id="toPassport" class="leftNav" onclick="passportBtn();">
+			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第二步</i>
 			<span></span>
 		</a>
 		<a id="toVisa" class="rightNav" onclick="toVisaInfo();">
+			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第四步</i>
 			<span></span>
 		</a>
 		

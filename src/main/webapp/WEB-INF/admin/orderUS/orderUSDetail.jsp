@@ -425,12 +425,15 @@
 					<div class="info" id="mySwitch">
 						<!-- 标题以及按钮组 -->
 						<p class="info-head">申请人</p>
-						<div class="dataInfoGroup">
+						<div class="dataInfoGroup orderInfoGroup">
 						<input id="mypassportId" type="hidden" value="${obj.passport.id }">
-							<a id="photoInfo" onclick="updatePhoto(${obj.basicinfo.id })">拍照资料</a>
-							<a onclick="passport(${obj.passport.id })">护照信息</a>
-							<a onclick="baseInfo(${obj.basicinfo.id })">基本信息</a>
-							<a onclick="visa(${obj.basicinfo.id })">签证信息</a>
+							<a id="photoInfo" onclick="updatePhoto(${obj.basicinfo.id })">第一步：拍照资料</a>
+							<span class="icon-line"></span>
+							<a onclick="passport(${obj.passport.id })">第二步：护照信息</a>
+							<span class="icon-line"></span>
+							<a onclick="baseInfo(${obj.basicinfo.id })">第三步：基本信息</a>
+							<span class="icon-line"></span>
+							<a onclick="visa(${obj.basicinfo.id })">第四步：签证信息</a>
 						</div>
 						<!-- 标题以及按钮组END -->
 

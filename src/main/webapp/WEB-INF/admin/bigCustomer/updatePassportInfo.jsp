@@ -19,9 +19,11 @@
 <body>
 	<div class="modal-content">
 		<a id="toVisa" class="leftNav" onclick="visaBtn();">
+			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第一步</i>
 			<span></span>
 		</a>
 		<a id="toBase" class="rightNav" onclick="baseBtn();">
+			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第三步</i>
 			<span></span>
 		</a>
 		<form id="passportInfo">
