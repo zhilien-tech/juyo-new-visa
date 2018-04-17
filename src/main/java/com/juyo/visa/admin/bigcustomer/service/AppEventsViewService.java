@@ -217,13 +217,12 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 				TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
 
-				//添加订单
-				orderUSViewService.addOrderByStuffId(staffId, loginUser.getId());
-
 				//用户登录，添加游客信息
 				TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
 				Integer loginUserId = (Integer) addLoginUser(staffInfo);
 
+				//添加订单
+				orderUSViewService.addOrderByStuffId(staffId, loginUserId);
 				dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
 						Cnd.where("id", "=", staffId));
 				jo.put("flag", "0");
@@ -517,12 +516,11 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 			TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
 
-			//添加订单
-			orderUSViewService.addOrderByStuffId(staffId, loginUser.getId());
-
 			//用户登录，添加游客信息
 			TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
 			Integer loginUserId = (Integer) addLoginUser(staffInfo);
+			//添加订单
+			orderUSViewService.addOrderByStuffId(staffId, loginUserId);
 
 			dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
 					Cnd.where("id", "=", staffId));
