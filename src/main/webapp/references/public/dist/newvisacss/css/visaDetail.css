@@ -283,3 +283,28 @@
 .gray {
 	color:#c2c0c0;
 }
+.orderInfoGroup {
+	position:absolute;
+	width:90%;
+	right:4.3% !important;
+	text-align:right;
+}
+.icon-line {
+	width:7%;
+	height:1px;
+	background:#3087f1;
+	display:inline-block;
+	margin-right:10px;
+	position:relative;
+	vertical-align:middle;
+}
+.icon-line::after {
+	content:"";
+	position:absolute;
+	top:-5px;
+	right:0px;
+	width:10px;
+	height:10px;
+	border-radius:5px;
+	background:#3087f1;
+}

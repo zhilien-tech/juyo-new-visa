@@ -27,7 +27,7 @@
 			</div>
 			<div class="modal-body">
 				<p><span style="color:red;">*</span>跟进内容</p>
-				<textarea rows="" cols="50" id="content" wrap="physical" name="content" style="width:100%;height:200px;"></textarea>
+				<textarea rows="20" cols="50" wrap="hard" id="content" name="content" style="width:100%;height:200px;"></textarea>
 			</div>
 	</div>
 
@@ -50,7 +50,7 @@
 		function saveFollow(orderid){
 			//var temp =   document.getElementById("content").value.replace(/\n/g, '_@').replace(/\r/g, '_#');
 			//document.getElementById("content").innerHTML = temp;
-			var temp = $("#content").val();  
+			var temp = $("#content").val().replace(/_@/g, '<br/>');  
 			//var reg=new RegExp("\r\n","g"); (/(\r\n)|(\n)/g,'<br>')
 			//temp= $("#content").val().replace(/(\r\n)|(\n)/g,'<br>'); 
 			//var temp = $("#content").val();  
