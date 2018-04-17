@@ -50,7 +50,7 @@
 		function saveFollow(orderid){
 			//var temp =   document.getElementById("content").value.replace(/\n/g, '_@').replace(/\r/g, '_#');
 			//document.getElementById("content").innerHTML = temp;
-			var temp = $("#content").val();  
+			var temp = $("#content").val().replace(/_@/g, '<br/>');  
 			//var reg=new RegExp("\r\n","g"); (/(\r\n)|(\n)/g,'<br>')
 			//temp= $("#content").val().replace(/(\r\n)|(\n)/g,'<br>'); 
 			//var temp = $("#content").val();  
