@@ -28,6 +28,7 @@
 		</div>
 		<!-- 左右按钮 -->
 		<a id="toPassport" class="leftNav" onclick="baseInfoBtn();">
+			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第三步</i>
 			<span></span>
 		</a>
 		<!-- <a class="nextstep">
@@ -112,15 +113,11 @@
 								</div>
 							</c:if>
 							</div>
-							
 							<div class="btnGroup companyGroup">
 								<a class="save companysave">添加</a>
 								<a class="cancel companycancel">去掉 </a>
 							</div>
-							
 						</div>
-						
-							
 					</div>
 				</div>
 			</div>
@@ -144,7 +141,7 @@
 										<div class="goUS_CountryDiv">
 											<div class="groupInputInfo">
 												<label>抵达日期</label>
-												<input type="text" id="arrivedate" value="<fmt:formatDate value="${gous.arrivedate }" pattern="dd/MM/yyyy" />" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
+												<input type="text" id="arrivedate" value="<fmt:formatDate value="${gous.arrivedate }" pattern="dd/MM/yyyy" />" name="arrivedate" class="datetimepickercss form-control" placeholder="日/月/年">
 											</div>
 											<div class="groupInputInfo stopDate goUS_Country">
 												<label>停留时间</label>
@@ -168,7 +165,7 @@
 									<div class="goUS_CountryDiv">
 										<div class="groupInputInfo">
 											<label>抵达日期</label>
-											<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss" placeholder="日/月/年">
+											<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss form-control" placeholder="日/月/年">
 										</div>
 										<div class="groupInputInfo stopDate">
 											<label>停留时间</label>
@@ -266,7 +263,7 @@
 						<div class="dateIssue goUS_visa">
 							<div class="groupInputInfo lastVisaDate">
 								<label>最后一次签证的签发日期</label>
-								<input id="issueddate" name="issueddate" value="${obj.previUSTripInfo_issueddate}" class="datetimepickercss" placeholder="日/月/年" type="text"/>
+								<input id="issueddate" name="issueddate" value="${obj.previUSTripInfo_issueddate}" class="datetimepickercss form-control" placeholder="日/月/年" type="text"/>
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
@@ -374,12 +371,12 @@
 					<input id="isknowname" v-model="visaInfo.contactPointInfo.isknowname" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknowname" name="isknowname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
-				<div class="paddingLeft groupcheckBoxInfo">
+				<div class="paddingTop groupcheckBoxInfo cbox">
 					<label>组织名称</label>
 					<input id="organizationname" name="organizationname" v-model="visaInfo.contactPointInfo.organizationname" type="text" />
 					<input id="isknoworganizationname" name="isknoworganizationname" v-on:click="isKnowOrganizationName" v-model="visaInfo.contactPointInfo.isknoworganizationname"  class="groupname_us" type="checkbox" />
 				</div>
-				<div class="paddingRight groupSelectInfo">
+				<div class="paddingLeft groupSelectInfo">
 					<label>与你的关系</label>
 					<select id="ralationship" v-model="visaInfo.contactPointInfo.ralationship" name="ralationship">
 						<option value="0" selected="selected">请选择</option>
@@ -596,7 +593,7 @@
 				<div class="clear"></div>
 				<div class="paddingLeft groupInputInfo">
 					<label>配偶的生日</label>
-					<input id="spousebirthday" name="spousebirthday" value="${obj.spousebirthday}" class="datetimepickercss" type="text" placeholder="日/月/年" />
+					<input id="spousebirthday" name="spousebirthday" value="${obj.spousebirthday}" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 				</div>
 				<div class="paddingRight groupSelectInfo">
 					<label>配偶的国籍</label>
@@ -731,12 +728,13 @@
 					
 					<div class="paddingRight groupInputInfo">
 						<label>开始日期</label>
-						<input id="workstartdate" name="workstartdate" value="${obj.workstartdate}" class="datetimepickercss" type="text" placeholder="日/月/年" />
+						<input id="workstartdate" name="workstartdate" value="${obj.workstartdate}" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo" >
 						<label>当地月收入(如果雇佣)</label>
-						<input name="salary" v-model="visaInfo.workEducationInfo.salary" type="text" />
+						<input name="salary" v-model="visaInfo.workEducationInfo.salary" type="text" onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"
+										onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
 						<input name="issalaryapply" id="issalaryapplywork" v-model="visaInfo.workEducationInfo.issalaryapply" type="checkbox" />
 					</div>
 					<div class="clear"></div>
@@ -848,11 +846,11 @@
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupInputInfo" >
 											<label>入职时间</label>
-											<input id="employstartdate" name="employstartdate" value="<fmt:formatDate value="${beforeWork.employstartdate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
+											<input id="employstartdate" name="employstartdate" value="<fmt:formatDate value="${beforeWork.employstartdate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 										</div>
 										<div class="paddingRight groupInputInfo">
 											<label>离职时间</label>
-											<input id="employenddate" name="employenddate" value="<fmt:formatDate value="${beforeWork.employenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
+											<input id="employenddate" name="employenddate" value="<fmt:formatDate value="${beforeWork.employenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 										</div>
 										<div class="clear"></div>
 										<div class="draBig leftNo marginLS grouptextareaInfo">
@@ -924,11 +922,11 @@
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupInputInfo" >
 										<label>入职时间</label>
-										<input id="employstartdate" name="employstartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
+										<input id="employstartdate" name="employstartdate" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>离职时间</label>
-										<input id="employenddate" name="employenddate" class="datetimepickercss" type="text" placeholder="日/月/年" />
+										<input id="employenddate" name="employenddate" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 									</div>
 									<div class="clear"></div>
 									<div class="draBig leftNo marginLS grouptextareaInfo">
@@ -1020,12 +1018,12 @@
 										
 										<div class="paddingRight leftNo groupInputInfo">
 											<label>参加课程开始时间</label>
-											<input id="coursestartdate" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss" type="text" placeholder="日/月/年" />
+											<input id="coursestartdate" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 										</div>
 										<div class="clear"></div>
 										<div class="leftNo groupInputInfo">
 											<label>结束时间</label>
-											<input id="courseenddate" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss" type="text" placeholder="日/月/年" />
+											<input id="courseenddate" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 										</div>
 									</div>
 								</c:forEach>
@@ -1075,12 +1073,12 @@
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>参加课程开始时间</label>
-										<input id="coursestartdate" name="coursestartdate" class="datetimepickercss" type="text" placeholder="日/月/年" />
+										<input id="coursestartdate" name="coursestartdate" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 									</div>
 									<div class="clear"></div>
 									<div class="leftNo groupInputInfo">
 										<label>结束时间</label>
-										<input id="courseenddate" name="courseenddate" class="datetimepickercss" type="text" placeholder="日/月/年" />
+										<input id="courseenddate" name="courseenddate" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 									</div>
 								</div>
 							</c:if>
@@ -1268,11 +1266,11 @@
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupInputInfo">
 										<label>服兵役开始时间日期</label>
-										<input id="servicestartdate" name="servicestartdate" value="<fmt:formatDate value="${conscientious.servicestartdate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss" placeholder="日/月/年"/>
+										<input id="servicestartdate" name="servicestartdate" value="<fmt:formatDate value="${conscientious.servicestartdate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss form-control" placeholder="日/月/年"/>
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>结束时间</label>
-										<input id="serviceenddate" name="serviceenddate" value="<fmt:formatDate value="${conscientious.serviceenddate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss" placeholder="日/月/年"/>
+										<input id="serviceenddate" name="serviceenddate" value="<fmt:formatDate value="${conscientious.serviceenddate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss form-control" placeholder="日/月/年"/>
 									</div>
 								</div>
 							</c:forEach>
@@ -1305,11 +1303,11 @@
 								<div class="clear"></div>
 								<div class="paddingLeft leftNo groupInputInfo">
 									<label>服兵役开始时间日期</label>
-									<input id="servicestartdate" name="servicestartdate" type="text" class="datetimepickercss" placeholder="日/月/年"/>
+									<input id="servicestartdate" name="servicestartdate" type="text" class="datetimepickercss form-control" placeholder="日/月/年"/>
 								</div>
 								<div class="paddingRight leftNo groupInputInfo">
 									<label>结束时间</label>
-									<input id="serviceenddate" name="serviceenddate" type="text" class="datetimepickercss" placeholder="日/月/年"/>
+									<input id="serviceenddate" name="serviceenddate" type="text" class="datetimepickercss form-control" placeholder="日/月/年"/>
 								</div>
 							</div>
 						</c:if>	

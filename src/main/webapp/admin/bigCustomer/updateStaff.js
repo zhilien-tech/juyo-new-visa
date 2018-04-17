@@ -1108,6 +1108,7 @@ function saveApplicant(status){
 				data : applicantInfo,
 				url: BASE_PATH + '/admin/bigCustomer/updateStaffInfo.html',
 				success :function(data) {
+					parent.successCallback(2);
 				}
 			});
 		}else if(status == 3){
@@ -1118,6 +1119,7 @@ function saveApplicant(status){
 				data : applicantInfo,
 				url: BASE_PATH + '/admin/bigCustomer/updateStaffInfo.html',
 				success :function(data) {
+					parent.successCallback(2);
 				}
 			});
 		}else{
@@ -1129,7 +1131,7 @@ function saveApplicant(status){
 				success :function(data) {
 					if(data>0){
 						closeWindow();
-						parent.successCallback();
+						parent.successCallback(2);
 					}
 				}
 			});

@@ -217,10 +217,10 @@ function drive(staffid, type) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=0){
 				var url=data.query[0].url;
-				if(data.length == 1){
+				if(data.query.length == 1){
 					$("#drive").attr('src',url);
 				}
-				if(data.length == 2){
+				if(data.query.length == 2){
 					$("#drive").attr('src',data.query[1].url);
 					$("#drive2").attr('src',url);
 				}
