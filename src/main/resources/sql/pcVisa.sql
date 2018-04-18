@@ -2,7 +2,7 @@
 SELECT
 	* 
 FROM
-	t_app_staff_travelCompanion tast 
+	t_app_staff_travelcompanion tast 
 WHERE
 	tast.staffid = @staffid
 	
@@ -10,7 +10,7 @@ WHERE
 SELECT
 	* 
 FROM
-	t_app_staff_previousTripInfo tasp
+	t_app_staff_previoustripinfo tasp
 WHERE
 	tasp.staffid = @staffid
 
@@ -18,7 +18,7 @@ WHERE
 SELECT
 	* 
 FROM
-	t_app_staff_familyInfo tasf
+	t_app_staff_familyinfo tasf
 WHERE
 	tasf.staffid = @staffid
 	
