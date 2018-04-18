@@ -450,9 +450,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			return map;
 		} else {
 			TAppStaffBasicinfoEntity staffInfo = add(addForm);
-
 			Integer staffId = staffInfo.getId();
-
 			//护照信息
 			TAppStaffPassportEntity staffPassport = new TAppStaffPassportEntity();
 			staffPassport.setStaffid(staffId);
@@ -463,7 +461,6 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffPassport.setLastname(addForm.getLastname());
 			TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
 			Integer passportId = passportEntity.getId();
-
 			map.put("flag", "0");
 			if (!Util.isEmpty(passportId)) {
 				map.put("passportId", String.valueOf(passportId));

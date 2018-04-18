@@ -206,7 +206,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 			//---------------------------------------------------------------------
 			//只进行更新操作
 			//map.flag 3代表回显 1代表更新 0代表新增 2代表违法
-			System.out.println("map.flag ===" + map.get("falg"));
+			System.out.println("map.flag ===" + map.get("flag"));
 			if (map.get("flag").equals("0")) {
 				String staffIdStr = map.get("staffId");
 				Integer staffId = Integer.valueOf(staffIdStr);
@@ -215,23 +215,24 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 				TAppStaffEventsEntity staffEventEntity = new TAppStaffEventsEntity();
 				staffEventEntity.setEventsId(eventId);
 				staffEventEntity.setStaffId(staffId);
-
 				TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
-
 				//用户登录，添加游客信息
 				TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
 				Integer loginUserId = (Integer) addLoginUser(staffInfo);
-
 				//添加订单
 				orderUSViewService.addOrderByStuffId(staffId, loginUserId);
-
 				//添加订单
 				orderUSViewService.addOrderByStuffId(staffId, loginUserId);
 				dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
 						Cnd.where("id", "=", staffId));
 				jo.put("flag", "0");
 			} else if (map.get("flag").equals("3")) {
+				jo.put("flag", "3");
 				return map;
+			} else {
+				jo.put("flag", "1");
+				return map;
+
 			}
 		}
 		return jo;
