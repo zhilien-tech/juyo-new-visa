@@ -105,7 +105,6 @@ import com.juyo.visa.common.ocr.RecognizeData;
 import com.juyo.visa.common.util.ImageDeal;
 import com.juyo.visa.common.util.PinyinTool;
 import com.juyo.visa.common.util.PinyinTool.Type;
-import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -2847,6 +2846,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		String content = Json.toJson(rd);
 		String info = (String) aliPassportOcrAppCodeCall(content);
+		System.out.println("info:" + info);
 
 		//解析扫描的结果，结构化成标准json格式
 		PassportJsonEntity jsonEntity = new PassportJsonEntity();
