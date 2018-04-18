@@ -1145,11 +1145,12 @@
 					    var reg = new RegExp('<br>','g'); 
 						var followinfos = data.followinfo;
 						if(followinfos.length > 0){
-							//var temp =  $(this).text().replace(/\n|\r\n/g,'<br/>');
+							/* var temp =  $(this).val().replace(/\n|\r\n/g,'<br/>'); */
 					        //$(this).html(temp);
+					        /* console.log(temp); */
 							var Str = "";
 							for(var i = 0;i < followinfos.length;i++){
-								//alert(followinfos[i].content.replace(reg,"<br>"));
+								/* console.log(followinfos[i].content.replace(reg,"<br>")); */
 								if(followinfos[i].status == 1){
 									Str += '<li> <div class="dateNameBtn">'+
 									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
@@ -1166,7 +1167,6 @@
 									'<a class="solve" onclick="solveClick('+followinfos[i].id+')">解决</a></div>'+
 									'<div class="errorInfo">'+
 									'<div>'+followinfos[i].content+'</div></div></li>';
-									console.log(followinfos[i].content);
 								}
 	/* 								Str += '<li> <div class="dateNameBtn">'+
 									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
