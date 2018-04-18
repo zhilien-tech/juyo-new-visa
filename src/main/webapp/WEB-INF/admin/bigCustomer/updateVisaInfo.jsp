@@ -876,7 +876,7 @@
 									</div>
 									<div class="draBig leftNo marginLS groupInputInfo">
 										<label>雇主街道地址(次选)*可选</label>
-										<input name="" type="text" />
+										<input name="employeraddressSec" type="text" />
 									</div>
 									
 									<div class="paddingLeft leftNo groupInputInfo">
@@ -1044,7 +1044,7 @@
 									</div>
 									<div class="draBig leftNo groupInputInfo">
 										<label>街道地址(次选)*可选</label>
-										<input type="text" />
+										<input name="secinstitutionaddress"  type="text" />
 									</div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo" >
 											<label>州/省</label>
@@ -1175,7 +1175,19 @@
 							<c:if test="${empty obj.gocountryList }">
 								<div class="paddingTop travelCountry groupInputInfo">
 									<label>国家/地区</label>
-									<input name="traveledcountry" type="text"/>
+									<div class="groupInputInfo groupSelectInfo">
+										<select name="traveledcountry">
+											<option value="0">请选择</option>
+											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+													<c:if test="${gocountry.traveledcountry != map.key}">
+														<option value="${map.key }">${map.value }</option>
+													</c:if>
+													<c:if test="${gocountry.traveledcountry == map.key}">
+														<option value="${map.key }" selected="selected">${map.value }</option>
+													</c:if>
+											</c:forEach>
+										</select>
+									</div>
 								</div>
 							</c:if>
 						</div>
