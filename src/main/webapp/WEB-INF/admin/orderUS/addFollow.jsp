@@ -27,7 +27,11 @@
 			</div>
 			<div class="modal-body">
 				<p><span style="color:red;">*</span>跟进内容</p>
+				<context>
+				<div>
 				<textarea rows="20" cols="50" wrap="hard" id="content" name="content" style="width:100%;height:200px;"></textarea>
+				</div>
+				</context>
 			</div>
 	</div>
 
@@ -50,7 +54,8 @@
 		function saveFollow(orderid){
 			//var temp =   document.getElementById("content").value.replace(/\n/g, '_@').replace(/\r/g, '_#');
 			//document.getElementById("content").innerHTML = temp;
-			var temp = $("#content").val().replace(/_@/g, '<br/>');  
+			var temp = $("#content").val().replace(/[\r\n|\n]/g,"<br>");  
+			//var temp = textareaTo($("#content").val());
 			//var reg=new RegExp("\r\n","g"); (/(\r\n)|(\n)/g,'<br>')
 			//temp= $("#content").val().replace(/(\r\n)|(\n)/g,'<br>'); 
 			//var temp = $("#content").val();  
@@ -69,6 +74,16 @@
 				}
 			});
 		}
+		function textareaTo(str){
+		    var reg=new RegExp("\n","g");
+		    var regSpace=new RegExp(" ","g");
+		    
+		    str = str.replace(reg,"<br>");
+		    str = str.replace(regSpace,"&nbsp;");
+		    
+		    return str;
+		}
+		
 		//取消
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

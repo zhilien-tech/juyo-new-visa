@@ -1142,7 +1142,7 @@
 					}else{
 						$("#orderstatus_US").html(data.orderstatus);
 						//刷新跟进信息
-					    var reg = new RegExp('<br>','g'); 
+					    var reg = new RegExp('<br/>','\r\n'); 
 						var followinfos = data.followinfo;
 						if(followinfos.length > 0){
 							//var temp =  $(this).text().replace(/\n|\r\n/g,'<br/>');
@@ -1150,6 +1150,7 @@
 							var Str = "";
 							for(var i = 0;i < followinfos.length;i++){
 								//alert(followinfos[i].content.replace(reg,"<br>"));
+								var result = followinfos[i].content.replace(reg,'\n');
 								if(followinfos[i].status == 1){
 									Str += '<li> <div class="dateNameBtn">'+
 									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+

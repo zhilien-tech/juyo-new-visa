@@ -35,7 +35,6 @@ public class TestPinyin {
 
 		String address = "内蒙古/赤峰市/松山区/林河路/临河小区46号楼/1单元/202";
 		StringBuffer sb = new StringBuffer(address);
-		System.out.println(sb.toString());
 		//内蒙古，新疆，广西，宁夏，西藏，屯，州，盟，旗，苏木
 		//sb = (StringBuffer) addLine(address, "内蒙古", sb);
 		if (address.contains("内蒙古")) {
@@ -81,25 +80,6 @@ public class TestPinyin {
 			}
 		}
 		System.out.println("最终翻译" + TranslateUtil.translate(aa, ENGLISH));
-		/*if (address.contains("新疆")) {
-			sb.insert(address.indexOf("新疆") + 1, "/");
-		}
-		if (address.contains("省")) {
-			sb.insert(address.indexOf("省") + 1, "/");
-		}
-		if (address.contains("市")) {
-			sb.insert(address.indexOf("市") + 1, "/");
-		}
-		if (address.contains("区")) {
-			sb.insert(address.indexOf("区") + 1, "/");
-		}
-		if (address.contains("县")) {
-			sb.insert(address.indexOf("县") + 1, "/");
-		}
-		if (address.contains("乡")) {
-			sb.insert(address.indexOf("乡") + 1, "/");
-		}*/
-		System.out.println(sb.toString());
 
 		PinyinTool tool = new PinyinTool();
 		try {

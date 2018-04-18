@@ -443,6 +443,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					Date solvetime = (Date) record.get("createtime");
 					record.set("createtime", format.format(solvetime));
 				}
+				String str = (String) record.get("content");
+				record.set("content", str.replace("\n", "<br/>"));
 			}
 		}
 		result.put("followinfo", followList);
@@ -623,6 +625,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 						Date solvetime = (Date) record.get("createtime");
 						record.set("createtime", format.format(solvetime));
 					}
+
 				}
 			}
 			result.put("followinfo", followList);
