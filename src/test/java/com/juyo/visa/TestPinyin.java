@@ -80,7 +80,7 @@ public class TestPinyin {
 				aa += strings2[i] + ' ';
 			}
 		}
-		System.out.println(TranslateUtil.translate(aa, ENGLISH));
+		System.out.println("最终翻译" + TranslateUtil.translate(aa, ENGLISH));
 		/*if (address.contains("新疆")) {
 			sb.insert(address.indexOf("新疆") + 1, "/");
 		}

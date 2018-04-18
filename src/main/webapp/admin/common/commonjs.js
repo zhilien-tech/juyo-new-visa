@@ -151,9 +151,9 @@ $(document).on("input","#otherfirstname",function(){
 	var temp = $(this).val();
 	var pinyinchar = getPinYinStr(temp);
 	if($(this).val().length == 0){
-		$("#otherfirstnameen").val("");
+		$("#otherfirstnameen").val("").change();
 	}else{
-		$("#otherfirstnameen").val(pinyinchar.toUpperCase());
+		$("#otherfirstnameen").val(pinyinchar.toUpperCase()).change();
 	}
 });
 $(document).on("input","#email",function(){
@@ -218,6 +218,10 @@ $(document).on("input","#nationalidentificationnumber",function(){
 	if($(this).val().length == 0){
 		$("#nationalidentificationnumberen").val("").change();
 	}else{
+		$(".countryNumen").attr("class", "countryNumen has-success");  
+		$(".help-countryNumen").attr("data-bv-result","IVALID");  
+		$(".help-countryNumen").attr("style","display: none;");  
+		$("#nationalidentificationnumberen").attr("style", null);
 		$("#nationalidentificationnumberen").val(temp).change();
 	}
 });
@@ -232,6 +236,10 @@ $(document).on("input","#socialsecuritynumber",function(){
 		$("#socialsecuritynumberen").val("").change();
 	}else{
 		$("#socialsecuritynumberen").val(temp).change();
+		 $(".safeNumen").attr("class", "safeNumen has-success");  
+		    $(".help-blocksafeen").attr("data-bv-result","IVALID");  
+		    $(".help-blocksafeen").attr("style","display: none;");  
+		    $("#socialsecuritynumberen").attr("style", null);
 	}
 });
 $(document).on("input","#taxpayernumber",function(){
@@ -245,6 +253,10 @@ $(document).on("input","#taxpayernumber",function(){
 		$("#taxpayernumberen").val("").change();
 	}else{
 		$("#taxpayernumberen").val(temp).change();
+		$(".safepayen").attr("class", "safepayen has-success");  
+	    $(".help-ratepayingen").attr("data-bv-result","IVALID");  
+	    $(".help-ratepayingen").attr("style","display: none;");  
+	    $("#taxpayernumberen").attr("style", null);
 	}
 });
 $(document).on("input","#otherLastName",function(){
@@ -268,9 +280,9 @@ $(document).on("input","#otherlastname",function(){
 	var temp = $(this).val();
 	var pinyinchar = getPinYinStr(temp);
 	if($(this).val().length == 0){
-		$("#otherlastnameen").val("");
+		$("#otherlastnameen").val("").change();
 	}else{
-		$("#otherlastnameen").val(pinyinchar.toUpperCase());
+		$("#otherlastnameen").val(pinyinchar.toUpperCase()).change();
 	}
 });
 $(document).on("input","#birthAddress",function(){
