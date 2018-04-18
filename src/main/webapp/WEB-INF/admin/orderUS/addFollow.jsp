@@ -52,13 +52,7 @@
 			parent.dataReload(addorder);
 		}
 		function saveFollow(orderid){
-			//var temp =   document.getElementById("content").value.replace(/\n/g, '_@').replace(/\r/g, '_#');
-			//document.getElementById("content").innerHTML = temp;
 			var temp = $("#content").val().replace(/[\r\n|\n]/g,"<br>");  
-			//var temp = textareaTo($("#content").val());
-			//var reg=new RegExp("\r\n","g"); (/(\r\n)|(\n)/g,'<br>')
-			//temp= $("#content").val().replace(/(\r\n)|(\n)/g,'<br>'); 
-			//var temp = $("#content").val();  
 			$.ajax({
 				url : '/admin/orderUS/saveFollow.html',
 				data : {
