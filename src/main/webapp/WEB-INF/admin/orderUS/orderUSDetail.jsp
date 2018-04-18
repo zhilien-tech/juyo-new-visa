@@ -678,7 +678,7 @@
 	        showMeridian: false,
 			pickerPosition:"bottom-right",//显示位置
 			minView: 0,//显示时分
-		    minuteStep:1//间隔为一分钟
+		    minuteStep:15//间隔为十五分钟
 			//minView: "month"//只显示年月日
 		}); 
 		
