@@ -56,9 +56,9 @@ public class WeXinAccreditModule {
 	@At
 	@POST
 	@Filters
-	public Object verifyUser(@Param("telephone") String telephone) {
+	public Object verifyUser(@Param("telephone") String telephone, @Param("userOpenid") String openid) {
 		System.out.println("tele---" + telephone);
-		return weXinAccreditService.getOrderInfo(telephone);
+		return weXinAccreditService.getOrderInfo(telephone, openid);
 	}
 
 }

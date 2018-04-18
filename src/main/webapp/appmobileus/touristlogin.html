@@ -28,13 +28,21 @@
 	<script type="text/javascript" src="js/rem(750).js" ></script>
 	<script type="text/javascript" src="/references/common/js/layer/layer.js" ></script>
 	<script>
-	
+	function GetQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null)return  unescape(r[2]); return null;
+	    }
+	$(function(){
+		//接收进度页面传来的openid;
+		var code = GetQueryString("openid");
+	})
 	$("#loginBtn").click(function(){
 		var loginMobile = $('.telNumber').val();
 		var validateCode = $('.readCard').val();
 		checkMobilePhone(loginMobile,validateCode);
-		
-		$.ajax({ 
+		var UserOpenid = code;
+ 		$.ajax({ 
 			url: "/admin/applogin/messageLogin.html", 
 			type: "POST",
 			data:{
@@ -48,7 +56,7 @@
 		    	if(isLogin){
 		    		//true 可以登陆，跳转进度页
 		    		var loginName = data.loginData.loginName;
-		    		window.location.href = "http://www.f-visa.com/appmobileus/progress.html?telephone="+loginName;	
+		    		window.location.href = "http://www.f-visa.com/appmobileus/progress.html?telephone="+loginName+"&openid="+UserOpenid;	
 		    	}else{
 		    		//false 弹出错误信息，拒绝登陆
 		    		var messageErrMsg = data.loginData.messageErrMsg;

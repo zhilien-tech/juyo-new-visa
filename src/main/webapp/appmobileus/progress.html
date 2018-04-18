@@ -17,8 +17,9 @@
 	         if(r!=null)return  unescape(r[2]); return null;
 	    }
         	$(function(){
-        		
+        		var openid = '';
         		var code = GetQueryString("code");
+        		var userOpenid = GetQueryString("openid");
         		var telephone = GetQueryString("telephone");
         		var tel = telephone;
         		//从登陆页面跳转到进度页面
@@ -27,7 +28,7 @@
             			type : "POST",//提交类型  
             			//dataType : "json",//返回结果格式  
             	 		url : '/admin/weixinOpenId/verifyUser.html',//请求地址  
-            			data:{telephone:tel},
+            			data:{telephone:tel,userOpenid:userOpenid},
             			//请求数据  
             			success : function(data) {//请求成功后的函数 
             				
@@ -48,8 +49,8 @@
             		}	
             		});
         		}else if(code != null || code != ''){
+        			
         			$.ajax({
-        				
             			type : "POST",//提交类型  
             			//dataType : "json",//返回结果格式  
             	 		url : '/admin/weixinOpenId/checkProgress.html',//请求地址  
@@ -67,7 +68,9 @@
     														 '<div class="statusInfo"><span class="UsName">美国</span>'+
     														 '<span class="UsStatus">'+status+'</span></div></div>'
     														);
-    							}else{
+    							}else if(data[i].flag == 1){
+    								//具有openid且需要更新的老客户
+    								openid = data[i].openid;
     								$(".enrolldialogBG").show();
     	        					$(".enrollDialog").show();
     							}
@@ -75,7 +78,7 @@
             		}	
             		});
         		}
-        
+        	var userOpenid = openid;
         		
         	})
         	
@@ -97,7 +100,7 @@
 			</div>
 			<div class="enrollBtnGroup">
 				<a class="goEnroll" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd77f341f1b849e68&redirect_uri=http%3A%2F%2Fwww.f-visa.com%2Fappmobileus%2Fenroll.html&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect">去报名</a>
-				<a class="goLogin" href="http://www.f-visa.com/appmobileus/touristlogin.html">去登陆</a>
+				<a class="goLogin" href="http://www.f-visa.com/appmobileus/touristlogin.html?openid="+userOpenid>去登陆</a>
 			</div>
 		</div>
 	</body>
