@@ -1142,15 +1142,10 @@
 					}else{
 						$("#orderstatus_US").html(data.orderstatus);
 						//刷新跟进信息
-					    var reg = new RegExp('<br>','g'); 
 						var followinfos = data.followinfo;
 						if(followinfos.length > 0){
-							/* var temp =  $(this).val().replace(/\n|\r\n/g,'<br/>'); */
-					        //$(this).html(temp);
-					        /* console.log(temp); */
 							var Str = "";
 							for(var i = 0;i < followinfos.length;i++){
-								/* console.log(followinfos[i].content.replace(reg,"<br>")); */
 								if(followinfos[i].status == 1){
 									Str += '<li> <div class="dateNameBtn">'+
 									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
