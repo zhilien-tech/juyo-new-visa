@@ -434,6 +434,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			map.put("telephone", userInfo.getTelephone());
 			//邮箱
 			map.put("email", userInfo.getEmail());
+			System.out.println("no openid oleUser");
 			return map;
 		} else if (!Util.isEmpty(userInfo) && !Util.isEmpty(addForm.getWechattoken())) {
 			//含有openid 并且注册过的老用户  3代表回显 1代表更新 0代表新增 2代表违法
@@ -449,9 +450,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			return map;
 		} else {
 			TAppStaffBasicinfoEntity staffInfo = add(addForm);
-
 			Integer staffId = staffInfo.getId();
-
 			//护照信息
 			TAppStaffPassportEntity staffPassport = new TAppStaffPassportEntity();
 			staffPassport.setStaffid(staffId);
@@ -462,7 +461,6 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffPassport.setLastname(addForm.getLastname());
 			TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
 			Integer passportId = passportEntity.getId();
-
 			map.put("flag", "0");
 			if (!Util.isEmpty(passportId)) {
 				map.put("passportId", String.valueOf(passportId));
