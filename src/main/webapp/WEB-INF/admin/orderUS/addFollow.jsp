@@ -27,7 +27,11 @@
 			</div>
 			<div class="modal-body">
 				<p><span style="color:red;">*</span>跟进内容</p>
+				<context>
+				<div>
 				<textarea rows="20" cols="50" wrap="hard" id="content" name="content" style="width:100%;height:200px;"></textarea>
+				</div>
+				</context>
 			</div>
 	</div>
 
@@ -48,12 +52,7 @@
 			parent.dataReload(addorder);
 		}
 		function saveFollow(orderid){
-			//var temp =   document.getElementById("content").value.replace(/\n/g, '_@').replace(/\r/g, '_#');
-			//document.getElementById("content").innerHTML = temp;
-			var temp = $("#content").val().replace(/_@/g, '<br/>');  
-			//var reg=new RegExp("\r\n","g"); (/(\r\n)|(\n)/g,'<br>')
-			//temp= $("#content").val().replace(/(\r\n)|(\n)/g,'<br>'); 
-			//var temp = $("#content").val();  
+			var temp = $("#content").val().replace(/[\r\n|\n]/g,"<br>");  
 			$.ajax({
 				url : '/admin/orderUS/saveFollow.html',
 				data : {
@@ -69,6 +68,16 @@
 				}
 			});
 		}
+		function textareaTo(str){
+		    var reg=new RegExp("\n","g");
+		    var regSpace=new RegExp(" ","g");
+		    
+		    str = str.replace(reg,"<br>");
+		    str = str.replace(regSpace,"&nbsp;");
+		    
+		    return str;
+		}
+		
 		//取消
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

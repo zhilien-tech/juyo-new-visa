@@ -85,14 +85,12 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 			TAppStaffBasicinfoEntity user = dbDao.fetch(TAppStaffBasicinfoEntity.class,
 					Cnd.where("wechattoken", "=", openid));
 			if (!Util.isEmpty(user)) {
-				user.setWechattoken(openid);
-				//更新老客户的openid
-				dbDao.update(user);
 				System.out.println("手机号==" + user.getTelephone());
-				result = (List<Map<String, Object>>) getOrderInfo(user.getTelephone());
+				result = (List<Map<String, Object>>) getOrderInfo(user.getTelephone(), openid);
 			} else {
-				System.out.println();
+				//老客户虽然具有新访问进来openid 但无法根据openid 查找到他的订单
 				orderMap.put("flag", 1);
+				orderMap.put("openid", openid);
 				result.add(orderMap);
 			}
 
@@ -102,9 +100,15 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 	}
 
 	//根据手机号查询订单信息
-	public Object getOrderInfo(String telephone) {
+	public Object getOrderInfo(String telephone, String openid) {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-
+		if (!Util.isEmpty(openid)) {
+			//执行更新老用户具有openid的情况下通过登陆实现更新openid操作
+			TAppStaffBasicinfoEntity user = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+					Cnd.where("wechattoken", "=", openid));
+			user.setWechattoken(openid);
+			dbDao.update(user);
+		}
 		//根据手机号查询所有人员id
 		List<TAppStaffBasicinfoEntity> listOrderUsInfo = dbDao.query(TAppStaffBasicinfoEntity.class,
 				Cnd.where("telephone", "=", telephone), null);
