@@ -1256,7 +1256,33 @@
 		//通过
 		function pass(){
 			var orderid = '${obj.orderid}';
-			$.ajax({
+			
+			layer.confirm("您确认要<font color='red'>通过</font>吗？", {
+				title:"通过",
+				btn: ["是","否"], //按钮
+				shade: false //不显示遮罩
+			}, function(){
+				$.ajax({
+					url : '/admin/orderUS/passUS.html',
+					data : {
+						orderid : orderid
+					},
+					dataType : "json",
+					type : 'POST',
+					success : function(data) {
+						layer.msg("操作成功", {
+							time: 500,
+							end: function () {
+								dataReload(addorder);
+							}
+						});
+					}
+				}); 
+			});
+			
+			
+			
+			/* $.ajax({
 				url : '/admin/orderUS/passUS.html',
 				data : {
 					orderid : orderid
@@ -1271,13 +1297,38 @@
 						}
 					});
 				}
-			});
+			}); */
 		}
 		
 		//拒绝
 		function refuse(){
 			var orderid = '${obj.orderid}';
-			$.ajax({
+			layer.confirm("您确认要<font color='red'>拒签</font>吗？", {
+				title:"拒签",
+				btn: ["是","否"], //按钮
+				shade: false //不显示遮罩
+			}, function(){
+				$.ajax({
+					url : '/admin/orderUS/refuseUS.html',
+					data : {
+						orderid : orderid
+					},
+					dataType : "json",
+					type : 'POST',
+					success : function(data) {
+						layer.msg("操作成功", {
+							time: 500,
+							end: function () {
+								dataReload(addorder);
+							}
+						});
+					}
+				}); 
+			});
+			
+			
+			
+			/* $.ajax({
 				url : '/admin/orderUS/refuseUS.html',
 				data : {
 					orderid : orderid
@@ -1292,7 +1343,7 @@
 						}
 					});
 				}
-			});
+			}); */
 		}
 		
 		/* //异步保存数据 
