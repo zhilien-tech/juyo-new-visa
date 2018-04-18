@@ -221,8 +221,6 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 				Integer loginUserId = (Integer) addLoginUser(staffInfo);
 				//添加订单
 				orderUSViewService.addOrderByStuffId(staffId, loginUserId);
-				//添加订单
-				orderUSViewService.addOrderByStuffId(staffId, loginUserId);
 				dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
 						Cnd.where("id", "=", staffId));
 				jo.put("flag", "0");
