@@ -396,18 +396,18 @@
 						<input name="secaddress" v-model="visaInfo.contactPointInfo.secaddress" type="text" />
 					</div>
 					<div class="clear"></div>
-					<div class="paddingLeft groupInputInfo" >
-						<label>市</label>
-						<input id="city" name="city" v-model="visaInfo.contactPointInfo.city" type="text" />
-					</div>
-					<div class="paddingRight groupSelectInfo" >
-						<label>州</label>
+					<div class="paddingLeft groupSelectInfo " >
+					<label>州/省</label>
 						<select id="state" name="state" v-model="visaInfo.contactPointInfo.state">
 							<option value="0">请选择</option>
 							<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
 								<option value="${map.key }">${map.value }</option>
 							</c:forEach>
 						</select>
+					</div>
+					<div class="paddingRight groupInputInfo" >
+						<label>市</label>
+						<input id="city" name="city" v-model="visaInfo.contactPointInfo.city" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo" >
@@ -641,15 +641,16 @@
 						<input name="secondaddress" v-model="visaInfo.familyInfo.secondaddress" type="text" />
 					</div>
 					<div class="clear"></div>
-					<div class="paddingLeft groupInputInfo">
-						<label>市</label>
-						<input name="city" v-model="visaInfo.familyInfo.city" type="text"/>
-					</div>
-					<div class="paddingRight groupcheckBoxInfo">
+					<div class="paddingLeft groupcheckBoxInfo">
 						<label>州/省</label>
 						<input name="province" v-model="visaInfo.familyInfo.province" type="text" />
 						<input id="isprovinceapply" name="isprovinceapply"  v-model="visaInfo.familyInfo.isprovinceapply" type="checkbox" />
 					</div>
+					<div class="paddingRight groupInputInfo">
+						<label>市</label>
+						<input name="city" v-model="visaInfo.familyInfo.city" type="text"/>
+					</div>
+					
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>邮政编码</label>
@@ -695,16 +696,17 @@
 						<label>街道地址(次要)*可选</label>
 						<input name="secaddress" v-model="visaInfo.workEducationInfo.secaddress" type="text" />
 					</div>
-					<div class="paddingLeft groupInputInfo">
-						<label>市</label>
-						<input name="city" v-model="visaInfo.workEducationInfo.city" type="text"/>
-					</div>
 					
-					<div class="paddingRight groupcheckBoxInfo">
+					<div class="paddingLeft groupcheckBoxInfo">
 						<label>州/省</label>
 						<input name="province" v-model="visaInfo.workEducationInfo.province" type="text"/>
 						<input name="isprovinceapply" id="isprovinceapplywork" v-model="visaInfo.workEducationInfo.isprovinceapply" type="checkbox"/>
 					</div>
+					<div class="paddingRight groupInputInfo">
+						<label>市</label>
+						<input name="city" v-model="visaInfo.workEducationInfo.city" type="text"/>
+					</div>
+					
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>邮政编码</label>
@@ -777,15 +779,16 @@
 											<label>雇主街道地址(次选)*可选</label>
 											<input name="employeraddressSec" value="${beforeWork.employeraddressSec }" type="text" />
 										</div>
-										<div class="paddingLeft leftNo groupcheckBoxInfo" >
-											<label>市</label>
-											<input name="employercity" id="employercitybefore" value="${beforeWork.employercity }" type="text" />
-											<!-- <input type="checkbox" /> -->
-										</div>
-										<div class="paddingRight leftNo groupInputInfo">
+										
+										<div class="paddingLeft leftNo groupInputInfo">
 											<label>州/省</label>
 											<input name="employerprovince" value="${beforeWork.employerprovince }" type="text" />
 											<%-- <input name="isemployerprovinceapply" value="${beforeWork.isemployerprovinceapply }" type="text" /> --%>
+										</div>
+										<div class="paddingRight leftNo groupcheckBoxInfo" >
+											<label>市</label>
+											<input name="employercity" id="employercitybefore" value="${beforeWork.employercity }" type="text" />
+											<!-- <input type="checkbox" /> -->
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
@@ -875,14 +878,15 @@
 										<label>雇主街道地址(次选)*可选</label>
 										<input name="" type="text" />
 									</div>
-									<div class="paddingLeft leftNo groupcheckBoxInfo" >
+									
+									<div class="paddingLeft leftNo groupInputInfo">
+										<label>州/省</label>
+										<input name="employerprovince" type="text" />
+									</div>
+									<div class="paddingRight leftNo groupcheckBoxInfo" >
 										<label>市</label>
 										<input name="employercity" type="text" />
 										<input type="checkbox" id="employercitybefore" />
-									</div>
-									<div class="paddingRight leftNo groupInputInfo">
-										<label>州/省</label>
-										<input name="employerprovince" type="text" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo">

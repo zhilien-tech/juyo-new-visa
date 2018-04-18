@@ -1162,7 +1162,6 @@
 									'<a class="solve" onclick="solveClick('+followinfos[i].id+')">解决</a></div>'+
 									'<div class="errorInfo">'+
 									'<div>'+followinfos[i].content+'</div></div></li>';
-									console.log(followinfos[i].content);
 								}
 	/* 								Str += '<li> <div class="dateNameBtn">'+
 									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
