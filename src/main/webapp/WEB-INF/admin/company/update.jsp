@@ -116,7 +116,8 @@
 								<input id="businessScopes" name="businessScopes" value="${obj.company.scopes}" type="hidden" />
 								<div class="multiselectBtn scopeDivInputValue form-control input-sm"></div>
 								<div class="btnVal">
-									<input type="button" value="日本" class="btn btn-sm btn-state1" />
+									<input id="jpScopeDiv" type="button" value="日本" class="btn btn-sm btn-state1" />
+									<input id="usScopeDiv" type="button" value="美国" class="btn btn-sm btn-state1" style="display:none;"/>
 									<!-- <input type="button" value="美国" class="btn btn-sm btn-state1" /> -->
 								</div>
 								<small class="help-block" data-bv-validator="choice" data-bv-for="scopeBtn[]" data-bv-result="VALID" style="display: none;">经营范围不能为空</small>
@@ -430,6 +431,9 @@
 							if ((btnVal + ",") == "日本,") {
 								$(this).addClass("btn-state2");//变灰
 								$(this).removeClass("btn-state1");//清除蓝色按钮 样式
+							}else if((btnVal + ",") == "美国,") {
+								$(this).addClass("btn-state2");//变灰
+								$(this).removeClass("btn-state1");//清除蓝色按钮 样式
 							}
 						});
 						$("#jpDesignNum_div").removeClass("none");
@@ -493,6 +497,11 @@
 				$("#scopeDiv").hide();
 			}else{
 				$("#scopeDiv").show();
+				if(type == 3){
+					$("#usScopeDiv").show();
+				}else{
+					$("#usScopeDiv").hide();
+				}
 			}
 			$(".scopeDivInputValue").empty();
 			$(".btnVal input").each(function(){

@@ -103,9 +103,9 @@
 								<input id="businessScopes" name="businessScopes" type="hidden"/>
 								<div id="scopeDiv" name="scopeDiv" class="multiselectBtn scopeDivInputValue form-control input-sm"></div>
 								<div class="btnVal">
-									<input type="button" value="日本" class="btn btn-sm btn-state1" />
-									<!-- <input type="button" value="美国" class="btn btn-sm btn-state1" />
-									<input type="button" value="澳大利亚" class="btn btn-sm btn-state1" /> -->
+									<input id="jpScopeDiv" type="button" value="日本" class="btn btn-sm btn-state1" />
+									<input id="usScopeDiv" type="button" value="美国" class="btn btn-sm btn-state1" style="display:none;"/>
+									<!-- <input type="button" value="澳大利亚" class="btn btn-sm btn-state1" /> -->
 								</div>
 								<small class="help-block" data-bv-validator="choice" data-bv-result="VALID" style="display: none;">经营范围不能为空</small>
 							</div>
@@ -450,6 +450,11 @@
 				$("#scopeDiv").hide();
 			}else{
 				$("#scopeDiv").show();
+				if(type == 3){
+					$("#usScopeDiv").show();
+				}else{
+					$("#usScopeDiv").hide();
+				}
 			}
 			$(".scopeDivInputValue").empty();
 			$(".btnVal input").each(function(){
