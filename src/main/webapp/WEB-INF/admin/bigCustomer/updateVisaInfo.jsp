@@ -22,7 +22,7 @@
 				<span>美国签证信息</span>
 			</div>
 			<div class="btnRight">
-				<a class="saveVisa" onclick="save()">保存</a>
+				<a class="saveVisa" onclick="save(1)">保存</a>
 				<a class="cancelVisa" onclick="closeWindow()">取消</a>
 			</div>
 		</div>
@@ -1681,7 +1681,8 @@
 	</body>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
-		var staffId = ${obj.staffId};
+		var staffId = '${obj.staffId}';
+		var isDisable = '${obj.isDisable}';
 	</script>
 	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
@@ -1701,7 +1702,6 @@
 	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js -->
 	<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
 	<script type="text/javascript">
-		var isDisable = '${obj.isDisable}';
 		$(function(){
 			//页面不可编辑
 			if(isDisable == 1){
@@ -1715,10 +1715,8 @@
 	
 		//跳转到基本信息页
 		function baseInfoBtn(){
-			//左箭头跳转
-			window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
 			//保存签证信息
-			save();
+			save(2);
 		}
 		
 	</script>

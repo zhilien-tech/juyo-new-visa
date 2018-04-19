@@ -948,7 +948,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Map<String, Object> fromJson = JsonUtil.fromJson(data, Map.class);
 
 		//人员id
-		Integer staffId = (Integer) fromJson.get("staffId");
+		String staffId = String.valueOf(fromJson.get("staffId"));
 
 		//根据人员id获取订单
 		TAppStaffOrderUsEntity fetch = dbDao.fetch(TAppStaffOrderUsEntity.class, Cnd.where("staffid", "=", staffId));

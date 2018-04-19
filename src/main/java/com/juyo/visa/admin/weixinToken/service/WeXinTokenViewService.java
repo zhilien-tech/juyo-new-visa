@@ -56,7 +56,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	//获取accessToken
 	public Object getAccessToken() {
 
-		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 1);
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 2);
 		String WX_APPID = wx.getAppid();
 		String WX_APPSECRET = wx.getAppsecret();
 		String WX_TOKENKEY = wx.getAccesstokenkey();
@@ -95,10 +95,8 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	//生成微信权限验证的参数
 	public Map<String, String> makeWXTicket(String jsApiTicket, String url) {
 
-		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 1);
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class,2);
 		String WX_APPID = wx.getAppid();
-		String WX_APPSECRET = wx.getAppsecret();
-		String WX_TOKENKEY = wx.getAccesstokenkey();
 
 		Map<String, String> ret = new HashMap<String, String>();
 		String nonceStr = createNonceStr();
