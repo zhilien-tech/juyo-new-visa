@@ -1264,14 +1264,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 			TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
 					Cnd.where("id", "=", passortId));
+			//更新基本信息表中的姓名
 			TAppStaffBasicinfoEntity staffBase = dbDao.fetch(TAppStaffBasicinfoEntity.class, passport.getStaffid()
 					.longValue());
-			insertImage(passportForm.getPassporturl(), TAppStaffCredentialsEnum.NEWHUZHAO.intKey(),
-					passport.getStaffid(), -1);
 			staffBase.setFirstname(passportForm.getFirstname());
 			staffBase.setLastname(passportForm.getLastname());
-			passport.setOpid(userId);
-			passport.setFirstname(passportForm.getFirstname());
 			if (!Util.isEmpty(passportForm.getFirstnameen())) {
 				passport.setFirstnameen(passportForm.getFirstnameen().substring(1));
 				staffBase.setFirstnameen(passportForm.getFirstnameen().substring(1));
@@ -1282,6 +1279,19 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				staffBase.setLastnameen(passportForm.getLastnameen().substring(1));
 			}
 			dbDao.update(staffBase);
+
+			//更新用户表中的姓名
+			TUserEntity user = dbDao.fetch(TUserEntity.class, staffBase.getUserid().longValue());
+			user.setName(staffBase.getFirstname() + staffBase.getLastname());
+			dbDao.update(user);
+
+			//将护照照片放进人员证件信息表中
+			insertImage(passportForm.getPassporturl(), TAppStaffCredentialsEnum.NEWHUZHAO.intKey(),
+					passport.getStaffid(), -1);
+
+			//更新护照信息
+			passport.setOpid(userId);
+			passport.setFirstname(passportForm.getFirstname());
 			passport.setPassporturl(passportForm.getPassporturl());
 			passport.setOCRline1(passportForm.getOCRline1());
 			passport.setOCRline2(passportForm.getOCRline2());
