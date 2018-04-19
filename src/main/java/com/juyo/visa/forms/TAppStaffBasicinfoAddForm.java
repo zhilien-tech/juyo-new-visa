@@ -30,6 +30,8 @@ public class TAppStaffBasicinfoAddForm extends AddForm implements Serializable {
 
 	private Integer isfirst;
 
+	private Integer iscompleted;
+
 	/**名(拼音)*/
 	private String lastnameen;
 

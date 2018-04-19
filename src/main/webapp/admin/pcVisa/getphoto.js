@@ -340,6 +340,7 @@ function oldsigned(staffid, type) {
 
 // 返回
 function closeWindow() {
+	parent.successCallback(2);
 	var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 	parent.layer.close(index);
 }
@@ -350,6 +351,7 @@ function savePhoto() {
 	var passportId = $("#passportId").val();
 	window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='
 			+ passportId;*/
+	parent.successCallback(2);
 	var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 	parent.layer.close(index);
 }
@@ -366,5 +368,6 @@ function deleteApplicantFrontImg() {
 function saveApplicant(status){
 	if(status == 2){
 		window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='+passportId+'&isDisable='+isDisable;
+		parent.successCallback(2);
 	}
 }

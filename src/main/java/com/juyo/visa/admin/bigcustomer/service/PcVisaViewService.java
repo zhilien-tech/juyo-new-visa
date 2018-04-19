@@ -34,10 +34,12 @@ import com.juyo.visa.common.enums.JapanPrincipalChangeEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TravelpurposeEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
+import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
@@ -348,6 +350,13 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		result.put("basicinfo", basicinfoEntity);
 		if (!Util.isEmpty(basicinfoEntity.getInterviewdate())) {
 			result.put("Interviewdate", sdf.format(basicinfoEntity.getInterviewdate()));
+		}
+
+		//二寸照片从人员证件信息表中取
+		TAppStaffCredentialsEntity twoinchphoto = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey()));
+		if (!Util.isEmpty(twoinchphoto)) {
+			result.put("twoinchphoto", twoinchphoto);
 		}
 		//获取用户资料信息
 		TAppStaffOrderUsEntity stafforderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
