@@ -293,6 +293,13 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		Integer staffid = basicinfo.getId();
 		Integer status = orderus.getStatus();
+		//二寸照片从人员证件信息表中取
+		TAppStaffCredentialsEntity twoinchphoto = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey()));
+		if (!Util.isEmpty(twoinchphoto)) {
+			result.put("twoinchphoto", twoinchphoto);
+		}
+
 		//订单状态
 		for (USOrderListStatusEnum statusenum : USOrderListStatusEnum.values()) {
 			if (status == statusenum.intKey()) {

@@ -129,12 +129,30 @@
 		//婚姻状况
 		$('.selector').change(function() {
 			var staffid = GetQueryString("staffid");
+			var sessionid = GetQueryString("sessionid");
 			var name = $(".selector").find("option:selected").text();
 			var selectvalue = $(".selector").find("option:selected").val();
 			$(".marriageInfo").text(name);
-							
 			if (selectvalue == 2 || selectvalue == 1) {
 				window.location.href = '/appmobileus/USMarital.html?staffid=' + staffid + '&marryurltype=' + selectvalue+'&sessionid='+sessionid+'&flag='+flag;
+			}else{
+				if(selectvalue != "--请选择--"){
+					$.ajax({
+						url : "/admin/mobileVisa/updateMarry.html",
+						data : {
+							staffid : staffid,
+							type : 6,
+							status : selectvalue,
+							sessionid : sessionid
+						},
+						dataType : "json",
+						async: false,
+						type : 'post',
+						success : function(data) {
+							/* _self.passportdata = data.passportdata; */
+						}
+					});
+				}
 			}
 			if(selectvalue != "--请选择--"){
 				$(".replaceCircle6").removeClass("circleRed").addClass("circleGreen");
@@ -143,7 +161,6 @@
 				$(".replaceCircle6").removeClass("circleGreen").addClass("circleRed");
 				$(".iconGroup6").removeClass("icon-true").addClass("icon-error");
 			}
-
 		});
 	});
 	//跳转2寸图片
@@ -644,7 +661,7 @@
 			return false;
 		}
 		
-		var selectvalue = $(".selector").find("option:selected").val();
+		/* var selectvalue = $(".selector").find("option:selected").val();
 		var staffid = GetQueryString("staffid");
 		$.ajax({
 			url : "/admin/mobileVisa/updateMarry.html",
@@ -657,9 +674,9 @@
 			async: false,
 			type : 'post',
 			success : function(data) {
-				/* _self.passportdata = data.passportdata; */
+				_self.passportdata = data.passportdata;
 			}
-		});
+		}); */
 		/* if(!bankstatus){
 			$(".dialogTwoMin").html();
 			$(".dialogTwoMin").show();

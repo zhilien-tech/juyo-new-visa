@@ -35,7 +35,6 @@ import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.ShareTypeEnum;
-import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;

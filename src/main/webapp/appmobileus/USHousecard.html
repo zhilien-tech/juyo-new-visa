@@ -111,10 +111,12 @@
 					type : 'post',
 					success : function(data) {
 						console.log(data);
-						for (var i = 0; i < data.query.length; i++) {
-							var url = data.query[i].url;
-							var num = "#" + data.query[i].mainid + data.query[i].sequence;
-							$(num).attr('src', url);
+						if(data.query.length > 0){
+							for (var i = 0; i < data.query.length; i++) {
+								var url = data.query[i].url;
+								var num = "#" + data.query[i].mainid + data.query[i].sequence;
+								$(num).attr('src', url);
+							}
 						}
 					}
 				});
