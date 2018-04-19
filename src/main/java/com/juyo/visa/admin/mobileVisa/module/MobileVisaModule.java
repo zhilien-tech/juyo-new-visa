@@ -159,8 +159,9 @@ public class MobileVisaModule {
 	 */
 	@At
 	@POST
-	public Object updateMarry(@Param("staffid") int staffid, @Param("type") int type, @Param("status") int status) {
-		return mobileVisaService.updateMarry(staffid, type, status);
+	public Object updateMarry(@Param("staffid") int staffid, @Param("type") int type, @Param("status") int status,
+			@Param("sessionid") String sessionid) {
+		return mobileVisaService.updateMarry(staffid, type, status, sessionid);
 	}
 
 }
