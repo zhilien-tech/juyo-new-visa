@@ -36,7 +36,7 @@ import com.uxuexi.core.web.base.service.BaseService;
  * <p>
  * TODO(这里描述这个类补充说明 – 可选)
  *
- * @author   朱晓川
+ * @author  
  * @Date	 2018年4月10日 	 
  */
 public class WeXinAccreditService extends BaseService<TConfWxEntity> {
@@ -47,11 +47,13 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 	private AppEventsViewService appEventsViewService;
 	public static Log logger = LogFactory.getLog(WeiXinTokenModule.class);
 
-	private String WX_APPID = "wxd77f341f1b849e68";
-	private String WX_APPSECRET = "e30756ac75799946d0d89868d89547be";
-
 	//获取access_token
 	public JSONObject getAccessToken(String code) {
+		
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 2);
+		String WX_APPID = wx.getAppid();
+		String WX_APPSECRET = wx.getAppsecret();
+		
 		String accessTokenUrl;
 		JSONObject accessToken = null;
 		if (!Util.isEmpty(code)) {
