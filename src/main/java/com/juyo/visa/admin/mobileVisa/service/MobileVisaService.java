@@ -505,24 +505,20 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		if (type == TAppStaffCredentialsEnum.HOME.intKey()) {
 			query = dbDao.query(TAppStaffCredentialsEntity.class,
 					Cnd.where("staffid", "=", staffid).and("type", "=", type).orderBy("sequence", "ASC"), null);
-		} else {
-			query = dbDao.query(TAppStaffCredentialsEntity.class,
-					Cnd.where("staffid", "=", staffid).and("type", "=", type), null);
-		}
-		if (Util.eq(type, TAppStaffCredentialsEnum.HOME.intKey())) {
 			TAppStaffCredentialsExplainEntity expain = dbDao.fetch(TAppStaffCredentialsExplainEntity.class,
 					Cnd.where("staffid", "=", staffid));
 			result.put("explain", expain);
+		} else {
+			query = dbDao.query(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffid).and("type", "=", type), null);
 		}
 		if (!Util.isEmpty(query)) {
 			if (type != 4) {
 				Collections.reverse(query);
 			}
-			result.put("query", query);
-			return result;
-		} else {
-			return 0;
 		}
+		result.put("query", query);
+		return result;
 	}
 
 	/*
@@ -540,11 +536,15 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		TAppStaffCredentialsExplainEntity fetch = dbDao.fetch(TAppStaffCredentialsExplainEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type));
 		if (!Util.isEmpty(fetch)) {
-			fetch.setPropertyholder(propertyholder);
-			fetch.setArea(area);
-			fetch.setAddress(address);
-			fetch.setUpdatetime(new Date());
-			dbDao.update(fetch);
+			if (Util.isEmpty(propertyholder) && Util.isEmpty(area) && Util.isEmpty(address)) {
+				dbDao.delete(fetch);
+			} else {
+				fetch.setPropertyholder(propertyholder);
+				fetch.setArea(area);
+				fetch.setAddress(address);
+				fetch.setUpdatetime(new Date());
+				dbDao.update(fetch);
+			}
 		} else {
 			TAppStaffCredentialsExplainEntity explain = new TAppStaffCredentialsExplainEntity();
 			explain.setStaffid(staffid);
@@ -582,18 +582,34 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 		return photoList;
 	}
 
-	public Object updateMarry(int staffid, int type, int status) {
+	public Object updateMarry(int staffid, int type, int status, String sessionid) {
 		TAppStaffCredentialsEntity fetch = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", type));
+		if (Util.isEmpty(fetch)) {
+			fetch = new TAppStaffCredentialsEntity();
+			fetch.setStaffid(staffid);
+		}
 		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
 		if (Util.eq(status, MarryStatusEnum.DANSHEN.intKey()) || Util.eq(status, MarryStatusEnum.SANGOU.intKey())) {
 			fetch.setStatus(status);
 			fetch.setUrl("");
 			fetch.setUpdatetime(new Date());
-			dbDao.update(fetch);
+			if (Util.isEmpty(fetch.getId())) {
+				fetch.setType(type);
+				fetch.setCreatetime(new Date());
+				dbDao.insert(fetch);
+			} else {
+				dbDao.update(fetch);
+			}
 			basic.setMarrystatus(status);
 			basic.setMarrystatusen(status);
 			dbDao.update(basic);
+		}
+
+		try {
+			simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}

@@ -447,7 +447,7 @@
 										<div class="form-group pictureTop">
 											<div class="uploadInfo">
 												<span class="inchInfo">美签照片51*51mm</span>  
-												<img id="imgInch" name="imgInch" alt="" src="${obj.basicinfo.twoinchphoto }"> 
+												<img id="imgInch" name="imgInch" alt="" src="${obj.twoinchphoto.url }"> 
 												<!-- <input id="uploadFileInchImg" name="uploadFileInchImg" disable="true"
 													class="btn btn-primary btn-sm" type="file" value="上传" />  -->
 													<i class="delete" ></i>
@@ -1173,8 +1173,12 @@
 							$("#forFollow").html(Str);
 						}
 						//刷新申请人信息
+						if(data.twoinchphoto != null){
+							$('#imgInch').attr('src', data.twoinchphoto.url);
+						}else{
+							$('#imgInch').attr('src', '');
+						}
 						$('#aacode').val(data.summaryInfo.aacode);
-						$('#imgInch').attr('src', data.basicinfo.twoinchphoto);
 						$('#allname').val(data.passport.firstname+data.passport.lastname+'/'+data.passport.firstnameen+data.passport.lastnameen);
 						$('#sex').val(data.passport.sex);
 						$('#birthday').val(data.birthday);

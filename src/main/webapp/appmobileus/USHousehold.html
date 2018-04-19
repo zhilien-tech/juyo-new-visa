@@ -124,7 +124,7 @@
 				type : 'post',
 				async:false,
 				success : function(data) {
-					if(data != "" || data != 0){
+					if(data.query.length > 0){
 						$(".homePage").remove();
 						$(".vicePage").remove();
 					console.log(data);

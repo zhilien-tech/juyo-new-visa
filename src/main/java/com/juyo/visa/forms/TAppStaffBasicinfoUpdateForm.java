@@ -30,6 +30,8 @@ public class TAppStaffBasicinfoUpdateForm extends ModForm implements Serializabl
 
 	private Integer isfirst;
 
+	private Integer iscompleted;
+
 	/**名(拼音)*/
 	private String lastnameen;
 

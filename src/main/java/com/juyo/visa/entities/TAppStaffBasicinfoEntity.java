@@ -30,6 +30,10 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	private String firstname;
 
 	@Column
+	@Comment("是否填写完成")
+	private Integer iscompleted;
+
+	@Column
 	@Comment("姓(拼音)")
 	private String firstnameen;
 

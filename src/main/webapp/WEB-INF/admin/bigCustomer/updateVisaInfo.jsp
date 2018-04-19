@@ -1715,8 +1715,12 @@
 	
 		//跳转到基本信息页
 		function baseInfoBtn(){
-			//保存签证信息
-			save(2);
+			if(isDisable == 1){
+				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+			}else{
+				//保存签证信息
+				save(2);
+			}
 		}
 		
 	</script>

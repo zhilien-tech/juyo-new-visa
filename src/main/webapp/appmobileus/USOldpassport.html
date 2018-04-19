@@ -131,7 +131,7 @@
 					success : function(data) {
 						/* $(".uploadImgReady").attr("src",data.url); */
 						console.log(data);
-						if(data != null){
+						if(data.query.length > 0){
 							for(var i=0;i<data.query.length;i++){
 								var url=data.query[i].url;
 								$(".passportSetImage").before('<div class="passportShoot">'+

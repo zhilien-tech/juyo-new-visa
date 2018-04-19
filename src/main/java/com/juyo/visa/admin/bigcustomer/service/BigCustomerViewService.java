@@ -855,6 +855,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffInfo.setAddressIssamewithcard(updateForm.getAddressIssamewithcard());
 			staffInfo.setAddressIssamewithcarden(updateForm.getAddressIssamewithcarden());
 			staffInfo.setBirthday(updateForm.getBirthday());
+			//把照片放到人员证件信息表中
 			insertImage(updateForm.getCardfront(), TAppStaffCredentialsEnum.IDCARD.intKey(), (int) staffId,
 					AppPicturesTypeEnum.FRONT.intKey());
 			insertImage(updateForm.getCardback(), TAppStaffCredentialsEnum.IDCARD.intKey(), (int) staffId,
@@ -1063,8 +1064,14 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				TAppStaffConscientiousEntity.class, militaryInfoListJson);
 		dbDao.updateRelations(militaryInfoList_old, militaryInfoList_New);
 
-		//插入日志
-		orderUSViewService.insertLogs(orderus.getId(), USOrderListStatusEnum.FILlED.intKey(), loginUser.getId());
+		//填写资料完成日志只插入第一次
+		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
+		if (!Util.eq(basic.getIscompleted(), IsYesOrNoEnum.YES.intKey())) {
+			//插入日志
+			orderUSViewService.insertLogs(orderus.getId(), USOrderListStatusEnum.FILlED.intKey(), loginUser.getId());
+			basic.setIscompleted(IsYesOrNoEnum.YES.intKey());
+			dbDao.update(basic);
+		}
 		return JsonResult.success("保存成功");
 	}
 
