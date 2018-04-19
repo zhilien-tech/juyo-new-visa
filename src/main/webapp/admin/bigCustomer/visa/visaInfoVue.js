@@ -186,7 +186,7 @@ new Vue({
 });
 
 //签证信息页保存
-function save(){
+function save(status){
 
 	layer.load(1);
 	
@@ -229,6 +229,14 @@ function save(){
 	//服兵役信息
 	visadata.militaryInfoList = getMilitaryInfoList();
 
+	if(status ==1){
+		//点击保存按钮
+		closeWindow();
+	}else if(status ==2){
+		//左箭头跳转
+		window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+	}
+	
 	$.ajax({ 
 		type: 'POST', 
 		data: {
@@ -242,7 +250,6 @@ function save(){
 				layer.msg("保存失败","", 2000);
 			}
 			layer.closeAll('loading');
-			closeWindow();
 		},
 		error: function (xhr) {
 			layer.msg("保存失败");
