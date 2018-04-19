@@ -36,7 +36,11 @@ import com.uxuexi.core.web.base.service.BaseService;
  * <p>
  * TODO(这里描述这个类补充说明 – 可选)
  *
+<<<<<<< HEAD
+ * @author  
+=======
  * @author   董霖鹏
+>>>>>>> refs/remotes/origin/dev
  * @Date	 2018年4月10日 	 
  */
 public class WeXinAccreditService extends BaseService<TConfWxEntity> {
@@ -46,14 +50,17 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 	@Inject
 	private AppEventsViewService appEventsViewService;
 	public static Log logger = LogFactory.getLog(WeiXinTokenModule.class);
+
 	//获取微信公众号唯一标识
 	public Object getAppid() {
 		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 2);
 		return wx;
 	}
+
 	//获取access_token
 	public JSONObject getAccessToken(String code) {
 		TConfWxEntity wx = (TConfWxEntity) getAppid();
+
 		String accessTokenUrl;
 		JSONObject accessToken = null;
 		if (!Util.isEmpty(code)) {

@@ -25,5 +25,9 @@ public class TConfWxEntity implements Serializable {
     @Comment("微信公众号accesstoken")
 	private String accesstokenkey;
 	
+	@Column
+    @Comment("备注")
+	private String remark;
+	
 
 }
