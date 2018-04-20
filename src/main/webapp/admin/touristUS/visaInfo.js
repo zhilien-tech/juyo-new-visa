@@ -96,7 +96,6 @@ $(".companyInfo").change(function(){
 	if(companyVal == 1){
 		$(".teamture").show();
 		$(".teamnamefalse").show();
-		alert(visaInfo.travelCompanionInfo.istravelwithotheren == 1);
 	}else {
 		$(".teamture").hide();
 		deleteBrotherEle($("div.teamnamefalse"));

@@ -1664,13 +1664,1636 @@
 		</div>
 		<div class="English">
 			<!--旅伴信息-->
-			
+			<div class="companyInfoModule">
+				<div class="titleInfo">Company information</div>
+				<div class="companyMain">
+					<div class="companyMainInfo groupRadioInfo">
+						<label>Are there other persons traveling with you</label>
+						<input type="radio" class="companyInfoen" name="companyInfoen" v-model="visaInfo.travelCompanionInfo.istravelwithotheren" value="1" />YES
+						<input type="radio" class="companyInfoen" name="companyInfoen" v-model="visaInfo.travelCompanionInfo.istravelwithotheren" value="2" checked/>NO
+					</div>
+					<!--yes-->
+					<div class="teamture elementHide">
+						<div class="groupRadioInfo">
+							<label>Are you traveling as part of a group or organization</label>
+							<input type="radio" class="team" name="isparten" v-model="visaInfo.travelCompanionInfo.isparten" value="1" />YES
+							<input type="radio" class="team" name="isparten" v-model="visaInfo.travelCompanionInfo.isparten" value="2" checked/>NO
+						</div>
+						<!--第二部分yes-->
+						<div class="teamnameture groupInputInfo">
+							<label>Group Name</label>
+							<input id="groupname" name="groupname" v-model="visaInfo.travelCompanionInfo.groupname" type="text" placeholder="Group Name" />
+						</div>
+						<!--第二部分No-->
+						<div class="teamnamefalse groupInputInfo">
+							<div>
+							<c:if test="${!empty obj.companionList }">
+								<c:forEach var="companion" items="${obj.companionList }">
+									<div class="teamnamefalseDiv" >
+										<div class="companionSurnName">
+											<label>Surnames of Person Traveling With You</label>
+											<input id="firstname" name="firstname" value="${companion.firstname }" type="text" placeholder="Surnames of Person Traveling With You" />
+										</div>
+										<div class="companionName">
+											<label>Given Names of Person Traveling With You</label>
+											<input id="lastname" name="lastname" value="${companion.lastname }" type="text" placeholder="Given Names of Person Traveling With You" />
+										</div>
+										<div class="clear"></div>
+										<div class="youRelationship">
+											<label>Relationship with Person</label>
+											<select id="relationship" value="${companion.relationship }" name="relationship">
+												<option value="0">Please choose</option>
+												<c:forEach items="${obj.TravelCompanionRelationshipEnum }" var="map">
+													<c:if test="${companion.relationship != map.key}">
+														<option value="${map.key }">${map.value }</option>
+													</c:if>
+													<c:if test="${companion.relationship == map.key}">
+														<option value="${map.key }" selected="selected">${map.value }</option>
+													</c:if>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
+							<c:if test="${empty obj.companionList }">
+								<div class="teamnamefalseDiv">
+									<div class="companionSurnName">
+										<label>Surnames of Person Traveling With You</label>
+										<input id="firstname" name="firstname" type="text" placeholder="Surnames of Person Traveling With You" />
+									</div>
+									<div class="companionName">
+										<label>Given Names of Person Traveling With You</label>
+										<input id="lastname" name="lastname" type="text" placeholder="Given Names of Person Traveling With You" />
+									</div>
+									<div class="clear"></div>
+									<div class="youRelationship">
+										<label>Relationship with Person</label>
+										<select id="relationship" name="relationship">
+											<option value="0">Please choose</option>
+											<c:forEach items="${obj.TravelCompanionRelationshipEnum }" var="map">
+												<option value="${map.key }">${map.value }</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+							</c:if>
+							</div>
+							<div class="btnGroup companyGroup">
+								<a class="save companysave">Add Another</a>
+								<a class="cancel companycancel">Remove </a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--旅伴信息END-->
+			<!--以前的美国旅游信息-->
+			<div class="beforeTourism">
+				<!--是否去过美国-->
+				<div class="goUSModule">
+					<div class="titleInfo">Previous American tourism information</div>
+					<div class="goUSMain">
+						<div class="groupRadioInfo goUSPad">
+							<label>Have you ever been in the U.S.</label>
+					 		<input type="radio" id="hasbeeninus" name="hasbeeninus" v-model="visaInfo.previUSTripInfo.hasbeeninus" class="goUS" value="1" />YES
+							<input type="radio" id="hasbeeninus" name="hasbeeninus" v-model="visaInfo.previUSTripInfo.hasbeeninus" class="goUS" value="2" checked />NO
+						</div>
+						<!--yes-->
+						<div class="goUSInfo goUSYes">
+							<div class="gotousInfo">
+								<c:if test="${!empty obj.gousList }">
+									<c:forEach var="gous" items="${obj.gousList }">
+										<div class="goUS_CountryDiv">
+											<div class="groupInputInfo">
+												<label>Date Arrived</label>
+												<input type="text" id="arrivedate" value="<fmt:formatDate value="${gous.arrivedate }" pattern="dd/MM/yyyy" />" name="arrivedate" class="datetimepickercss form-control" placeholder="Day / month / year">
+											</div>
+											<div class="groupInputInfo stopDate goUS_Country">
+												<label>Length of Stay</label>
+												<input id="staydays" name="staydays" value="${gous.staydays }" type="text" />
+												<select id="dateunit" name="dateunit">
+													<option value="0">Please choose</option>
+													<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
+														<c:if test="${gous.dateunit != map.key}">
+															<option value="${map.key }">${map.value }</option>
+														</c:if>
+														<c:if test="${gous.dateunit == map.key}">
+															<option value="${map.key }" selected="selected">${map.value }</option>
+														</c:if>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+									</c:forEach>
+								</c:if>
+								<c:if test="${empty obj.gousList }">
+									<div class="goUS_CountryDiv">
+										<div class="groupInputInfo">
+											<label>Date Arrived</label>
+											<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss form-control" placeholder="Day / month / year">
+										</div>
+										<div class="groupInputInfo stopDate">
+											<label>Length of Stay</label>
+											<input id="staydays" name="staydays" type="text" />
+											<select id="dateunit" name="dateunit">
+												<option value="0">Please choose</option>
+												<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
+													<option value="${map.key }">${map.value }</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+								</c:if>
+							</div>
+							<div class="btnGroup beforeGroup">
+								<a class="save beforesave">Add Another</a>
+								<a class="cancel beforecancel">Remove</a>
+							</div>
+							<div class="groupRadioInfo drivingUS">
+								<label>Do you or did you ever hold a U.S. Driver’s License</label>
+								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" class="license" value="1" />YES
+								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" class="license" value="2" checked />NO
+							</div>
+							<div class="driverInfo elementHide">
+								<div class="driverYes">
+									<c:if test="${!empty obj.driverList }">
+										<c:forEach var="driver" items="${obj.driverList }">
+											<div class="goUS_drivers">
+												<div class="groupcheckBoxInfo driverMain">
+													<label>Driver's License Number</label>
+													<input id="driverlicensenumber" value="${driver.driverlicensenumber }" name="driverlicensenumber" type="text" >
+													<c:if test="${driver.isknowdrivernumber == 1}">
+														<input id="isknowdrivernumber" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" checked="checked" type="checkbox"/>
+													</c:if>
+													<c:if test="${driver.isknowdrivernumber != 1}">
+														<input id="isknowdrivernumber" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" type="checkbox"/>
+													</c:if>
+												</div>
+												<div class="groupSelectInfo driverR">
+													<label>State of Driver's License</label>
+													<select id="witchstateofdriver" name="witchstateofdriver">
+														<option value="0" selected="selected">Please choose</option>
+														<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
+															<c:if test="${driver.witchstateofdriver != map.key}">
+																<option value="${map.key }">${map.value }</option>
+															</c:if>
+															<c:if test="${driver.witchstateofdriver == map.key}">
+																<option value="${map.key }" selected="selected">${map.value }</option>
+															</c:if>
+														</c:forEach>
+													</select>
+												</div>
+											</div>
+										</c:forEach>
+									</c:if>
+									<c:if test="${empty obj.driverList }">
+										<div class="goUS_drivers">
+											<div class="groupcheckBoxInfo driverMain">
+												<label>Driver's License Number</label>
+												<input id="driverlicensenumber" name="driverlicensenumber" type="text" >
+												<input id="isknowdrivernumber" name="isknowdrivernumber" type="checkbox"/>
+											</div>
+											<div class="groupSelectInfo driverR">
+												<label>State of Driver's License</label>
+												<select id="witchstateofdriver" name="witchstateofdriver">
+													<option value="0">Please choose</option>
+													<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
+														<option value="${map.key }">${map.value }</option>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+									</c:if>
+								</div>
+								<div class="btnGroup driverInfo driverGroup">
+									<a class="save driversave">Add Another</a>
+									<a class="cancel drivercancel">Remove</a>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--是否有美国签证-->
+			<div class="visaUSMain">
+				<div>
+					<div class="groupRadioInfo" style="clear: both;">
+						<label>Have you ever been issued a U.S. Visa</label>
+						<input type="radio" name="isissuedvisa" v-model="visaInfo.previUSTripInfo.isissuedvisa" class="visaUS" value="1" />是
+						<input type="radio" name="isissuedvisa" v-model="visaInfo.previUSTripInfo.isissuedvisa" class="visaUS" value="2" checked />否
+					</div>
+					<div>
+						<div class="dateIssue goUS_visa">
+							<div class="groupInputInfo lastVisaDate">
+								<label>Date Last Visa Was Issued  Click here for more information</label>
+								<input id="issueddate" name="issueddate" value="${obj.previUSTripInfo_issueddate}" class="datetimepickercss form-control" placeholder="日/月/年" type="text"/>
+							</div>
+							<div class="groupcheckBoxInfo visaNum">
+								<label>Visa Number</label>
+								<input name="visanumber" v-model="visaInfo.previUSTripInfo.visanumber" type="text" />
+								<input id="idknowvisanumber" :value="visaInfo.previUSTripInfo.idknowvisanumber" name="idknowvisanumber" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/>
+							</div>
+							<div class="clear"></div>
+							<div class="Alike groupRadioInfo paddingTop">
+								<label>Are you applying for the same type of visa</label>
+								<input type="radio" name="isapplyingsametypevisa" v-model="visaInfo.previUSTripInfo.isapplyingsametypevisa" value="1" />YES
+								<input type="radio" name="isapplyingsametypevisa" v-model="visaInfo.previUSTripInfo.isapplyingsametypevisa" value="2" checked />NO
+							</div>
+							<div class="describleCountry groupRadioInfo paddingTop">
+								<label>Are you applying in the same country or location where the visa above was issued, and is this country or location your place of principal of residence</label>
+								<input type="radio"  name="issamecountry" v-model="visaInfo.previUSTripInfo.issamecountry" value="1" />YES
+								<input type="radio"  name="issamecountry" v-model="visaInfo.previUSTripInfo.issamecountry" value="2" checked />NO
+							</div>
+							<div class="paddingTop groupRadioInfo">
+								<label>Have you been ten-printed</label>
+								<input type="radio" name="istenprinted" v-model="visaInfo.previUSTripInfo.istenprinted"  value="1"/>YES
+								<input type="radio" name="istenprinted" v-model="visaInfo.previUSTripInfo.istenprinted"  value="2" checked />NO
+							</div>
+							<div class="paddingTop">
+								<div class="groupRadioInfo">
+									<label style="display: block;">Has your U.S. Visa ever been lost or stolen</label>
+									<input type="radio" name="islost" v-model="visaInfo.previUSTripInfo.islost" class="lose" value="1" />YES
+									<input type="radio" name="islost" v-model="visaInfo.previUSTripInfo.islost" v-on:click="visaNotLost" class="lose" value="2" checked />NO
+								</div>
+								<div class="yearExplain displayTop elementHide"><!-- 默认隐藏 -->
+									<div class="displayLeft groupInputInfo">
+										<label>Year</label>
+										<input name="lostyear" v-model="visaInfo.previUSTripInfo.lostyear" type="text" />
+									</div>
+									<div class="displayRight grouptextareaInfo">
+										<label>Explain</label>
+										<textarea name="lostexplain" v-model="visaInfo.previUSTripInfo.lostexplain"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="clear"></div>
+							<div class="paddingTop">
+								<div>
+									<div class="groupRadioInfo">
+										<label>Has your U.S. Visa ever been lost or stolen</label>
+										<input type="radio" name="iscancelled" v-model="visaInfo.previUSTripInfo.iscancelled" class="revoke" value="1" />YES
+										<input type="radio" name="iscancelled" v-model="visaInfo.previUSTripInfo.iscancelled" v-on:click="visaNotCancel" class="revoke" value="2" checked />NO
+									</div>
+									<div class="explain grouptextareaInfo paddingTop">
+										<label>Explain</label>
+										<textarea name="cancelexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.cancelexplain"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--被拒绝过美国签证，或被拒绝入境美国，或撤回入境口岸的入境-->
+			<div class="paddingBottom">
+				<div class="groupRadioInfo">
+					<label>Have you ever been refused a U.S. Visa, or been refused admission to the United States, or withdrawn your application for admission at the port of entry</label>
+					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" class="refuse" value="1" />YES
+					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" v-on:click="visaNotRefused" class="refuse" value="2" checked />NO
+				</div>
+				<div class="refuseExplain paddingTop grouptextareaInfo">
+					<label>Explain</label>
+					<textarea name="refusedexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.refusedexplain"></textarea>
+				</div>
+			</div>
+			<!--曾经是否是美国合法永久居民-->
+			<div class="paddingBottom ">
+				<div class="groupRadioInfo">
+					<label>Are you or have you ever been a U.S. legal permanent resident</label>
+					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" class="onceLegitimate" value="1" />YES
+					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" v-on:click="visaNotIegal" class="onceLegitimate" value="2" checked />NO
+				</div>
+				<div class="onceExplain paddingTop grouptextareaInfo">
+					<label>Explain</label>
+					<textarea name="permanentresidentexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.permanentresidentexplain"></textarea>
+				</div>
+			</div>
+			<!--有没有人曾代表您向美国公民和移民服务局提交过移民申请-->
+			<div class="paddingBottom">
+				<div class="groupRadioInfo">
+					<label>Has anyone ever filed an immigrant petition on your behalf with the United States Citizenship and Immigration Services</label>
+					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" class="onceImmigration" value="1" />YES
+					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" v-on:click="visaNotfiledimmigrantpetition" class="onceImmigration" value="2" checked />NO
+				</div>
+				<div class="immigrationExplain paddingTop grouptextareaInfo">
+					<label>Explain</label>
+					<textarea name="immigrantpetitionexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplain"></textarea>
+				</div>
+			</div>
+			<!--以前的美国旅游信息END-->
+			<!--美国联络点-->
+			<div class="contactPoint">
+				<div class="titleInfo">Us contact point</div>
+				<div class="groupInputInfo paddingLeft">
+					<label>Surnames</label>
+					<input name="firstname" v-model="visaInfo.contactPointInfo.firstname" type="text" />
+				</div>
+				<div class="groupcheckBoxInfo paddingRight">
+					<label>Given Names  </label>
+					<input name="lastname" v-model="visaInfo.contactPointInfo.lastname" type="text"  />
+					<input id="isknowname" v-model="visaInfo.contactPointInfo.isknowname" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknowname" name="isknowname" type="checkbox" />
+				</div>
+				<div class="clear"></div>
+				<div class="paddingTop groupcheckBoxInfo cbox">
+					<label>Organization Name </label>
+					<input id="organizationname" name="organizationname" v-model="visaInfo.contactPointInfo.organizationname" type="text" />
+					<input id="isknoworganizationname" name="isknoworganizationname" v-on:click="isKnowOrganizationName" v-model="visaInfo.contactPointInfo.isknoworganizationname"  class="groupname_us" type="checkbox" />
+				</div>
+				<div class="paddingLeft groupSelectInfo">
+					<label>Relationship to You</label>
+					<select id="ralationship" v-model="visaInfo.contactPointInfo.ralationship" name="ralationship">
+						<option value="0" selected="selected">Please choose</option>
+						<c:forEach items="${obj.ContactPointRelationshipStatusEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="clear"></div>
+				<div class="" style="padding: 10px 0;">
+					<div class="groupInputInfo draBig">
+						<label>U.S. Street Address(Line 1)</label>
+						<input name="address" v-model="visaInfo.contactPointInfo.address" type="text" />
+					</div>
+					<div class="groupInputInfo draBig marginLS">
+						<label>U.S. Street Address(Line 2) *Optional</label>
+						<input name="secaddress" v-model="visaInfo.contactPointInfo.secaddress" type="text" />
+					</div>
+					<div class="clear"></div>
+					<div class="paddingLeft groupSelectInfo " >
+					<label>State</label>
+						<select id="state" name="state" v-model="visaInfo.contactPointInfo.state">
+							<option value="0">Please choose</option>
+							<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
+						</select>
+					</div>
+					<div class="paddingRight groupInputInfo" >
+						<label>City</label>
+						<input id="city" name="city" v-model="visaInfo.contactPointInfo.city" type="text" />
+					</div>
+					<div class="clear"></div>
+					<div class="paddingLeft groupInputInfo" >
+						<label>ZIP Code</label>
+						<input name="zipcode" v-model="visaInfo.contactPointInfo.zipcode" type="text" />
+					</div>
+					<div class="paddingRight groupInputInfo" >
+						<label>Phone Number</label>
+						<input name="telephone" v-model="visaInfo.contactPointInfo.telephone" type="text" />
+					</div>
+					<div class="clear"></div>
+					<div class="paddingTop groupcheckBoxInfo cbox">
+						<label>Email Address</label>
+						<input name="email" v-model="visaInfo.contactPointInfo.email" type="text" />
+						<input id="isKnowEmailAddress" name="isknowemail" v-on:click="isKnowEmailAddress" v-model="visaInfo.contactPointInfo.isknowemail" type="checkbox" />
+					</div>
+				</div>
+			</div>
+			<!--美国联络点END-->
+			<!--家庭信息-->
+			<!--亲属-->
+			<div class="familyInfo">
+				<div class="titleInfo">Family information</div>
+				<div class="paddingLeft groupcheckBoxInfo" >
+					<label>father's Surnames</label>
+					<input name="fatherfirstname" v-model="visaInfo.familyInfo.fatherfirstname" type="text"/>
+					<input id="isKnowFatherXing" name="isknowfatherfirstname"  v-on:click="isknowfatherfirstname"  v-model="visaInfo.familyInfo.isknowfatherfirstname" type="checkbox" />
+				</div>
+				<div class="paddingRight groupcheckBoxInfo" >
+					<label>father's Given Names </label>
+					<input name="fatherlastname" v-model="visaInfo.familyInfo.fatherlastname" type="text" />
+					<input id="isKnowFatherMing" name="isknowfatherlastname" v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" />
+				</div>
+				<div class="clear"></div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Is your father in the U.S.</label>
+						<input type="radio" name="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" class="fatherUS" value="1" />YES
+						<input type="radio" name="isfatherinus"  v-on:click="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" class="fatherUS" value="2" checked />NO
+					</div>
+					<!--yes-->
+					<div class="fatherUSYes groupSelectInfo paddingNone">
+						<label>Father's Status</label>
+						<select id="fatherstatus" v-model="visaInfo.familyInfo.fatherstatus" name="fatherstatus">
+							<option value="0">Please choose</option>
+							<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
+						</select>
+					</div>
+				</div>
+				<div class="paddingLeft groupcheckBoxInfo">
+					<label>Mother's Surnames</label>
+					<input id="motherfirstname" name="motherfirstname" v-model="visaInfo.familyInfo.motherfirstname" type="text" />
+					<input id="isKnowMotherXing" name="isknowmotherfirstname" v-on:click="isknowmotherfirstname" v-model="visaInfo.familyInfo.isknowmotherfirstname" type="checkbox" />
+				</div>
+				<div class="paddingRight groupcheckBoxInfo">
+					<label>Mother's Given Names</label>
+					<input id="motherlastname" name="motherlastname" v-model="visaInfo.familyInfo.motherlastname" type="text" />
+					<input id="isKnowMotherMing" name="isknowmotherlastname" v-on:click="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" />
+				</div>
+				<div class="clear"></div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Is your mother in the U.S.</label>
+						<input type="radio" name="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" class="motherUS" value="1" />YES
+						<input type="radio" name="ismotherinus" v-on:click="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" class="motherUS" value="2" checked />NO
+					</div>
+					<div class="motherUSYes paddingNone groupSelectInfo">
+						<label>Mother's Status</label>
+						<select id="motherstatus" name="motherstatus" v-model="visaInfo.familyInfo.motherstatus">
+							<option value="0">Please choose</option>
+							<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
+						</select>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Do you have any immediate relatives, not including parents, in the United States</label>
+						<input type="radio" name="hasimmediaterelatives" v-model="visaInfo.familyInfo.hasimmediaterelatives" class="directRelatives directUSRelatives" value="1" />YES
+						<input type="radio" name="hasimmediaterelatives" v-model="visaInfo.familyInfo.hasimmediaterelatives" class="directRelatives directUSRelatives" value="2" checked/>NO
+					</div>
+					<div class="directRelatives">
+						<!--yes-->
+						<c:if test="${!empty obj.zhiFamilyList }">
+							<c:forEach var="zhifamily" items="${obj.zhiFamilyList }">
+								<div class="directRelativesYes">
+									<div class="floatLeft leftNo groupInputInfo">
+										<label>Surnames</label>
+										<input name="relativesfirstname" value="${zhifamily.relativesfirstname }" type="text" />
+									</div>
+									<div class="floatRight groupInputInfo">
+										<label>Given Names</label>
+										<input name="relativeslastname" value="${zhifamily.relativeslastname }"  type="text" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupSelectInfo">
+										<label>Relationship to You</label>
+										<select name="relationship">
+											<option value="0">Please choose</option>
+											<c:forEach items="${obj.ImmediateRelationshipEnum }" var="map">
+												<c:if test="${zhifamily.relationship != map.key}">
+													<option value="${map.key }">${map.value }</option>
+												</c:if>
+												<c:if test="${zhifamily.relationship == map.key}">
+													<option value="${map.key }" selected="selected">${map.value }</option>
+												</c:if>
+											</c:forEach>
+										</select>
+									</div>
+									<div class="paddingRight groupSelectInfo">
+										<label>Relative's Status</label>
+										<select id="relativesstatus" name="relativesstatus" >
+											<option value="0">Please choose</option>
+											<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
+												<c:if test="${zhifamily.relativesstatus != map.key}">
+													<option value="${map.key }">${map.value }</option>
+												</c:if>
+												<c:if test="${zhifamily.relativesstatus == map.key}">
+													<option value="${map.key }" selected="selected">${map.value }</option>
+												</c:if>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+							</c:forEach>
+						</c:if>
+						<c:if test="${empty obj.zhiFamilyList}">
+							<div class="directRelativesYes">
+								<div class="floatLeft leftNo groupInputInfo">
+									<label>Surnames</label>
+									<input name="relativesfirstname" type="text" />
+								</div>
+								<div class="floatRight groupInputInfo">
+									<label>Given Names</label>
+									<input name="relativeslastname" type="text" />
+								</div>
+								<div class="clear"></div>
+								<div class="paddingLeft leftNo groupSelectInfo">
+									<label>Relationship to You</label>
+									<select name="relationship">
+										<option value="0">Please choose</option>
+										<c:forEach items="${obj.ImmediateRelationshipEnum }" var="map">
+											<option value="${map.key }">${map.value }</option>
+										</c:forEach>
+									</select>
+								</div>
+								<div class="paddingRight groupSelectInfo">
+									<label>Relative's Status</label>
+									<select id="relativesstatus" name="relativesstatus">
+										<option value="0">Please choose</option>
+										<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
+											<option value="${map.key }">${map.value }</option>
+										</c:forEach>
+									</select>
+								</div>
+							</div>
+						</c:if>
+						<div class="clear"></div>
+						</div>
+						<!--NO-->
+						<div class="directRelativesNo groupRadioInfo">
+							<label>Do you have any other relatives in the United States</label>
+							<input type="radio" name="hasotherrelatives" v-model="visaInfo.familyInfo.hasotherrelatives" value="1"/>YES
+							<input type="radio" name="hasotherrelatives" v-model="visaInfo.familyInfo.hasotherrelatives" value="2" checked/>NO
+						</div>
+					</div>
+					
+				</div>
+			<!--配偶-->
+			<div class="paddingTop">
+				<div class="titleInfo">Spousal information</div>
+				<div class="floatLeft groupInputInfo">
+					<label>Spouse's Surnames </label>
+					<input name="spousefirstname" v-model="visaInfo.familyInfo.spousefirstname" type="text" />
+				</div>
+				<div class="floatRight groupInputInfo">
+					<label>Spouse's Given Names</label>
+					<input name="spouselastname" v-model="visaInfo.familyInfo.spouselastname" type="text" />
+				</div>
+				<div class="clear"></div>
+				<div class="paddingLeft groupInputInfo">
+					<label>Spouse's Date of Birth</label>
+					<input id="spousebirthday" name="spousebirthday" value="${obj.spousebirthday}" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+				</div>
+				<div class="paddingRight groupSelectInfo">
+					<label>Spouse's Country/Region of Origin (Nationality)</label>
+					<select id="spousenationality" name="spousenationality" v-model="visaInfo.familyInfo.spousenationality">
+						<option value="0">Please choose</option>
+						<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="clear"></div>
+				<div class="paddingLeft groupcheckBoxInfo">
+					<label>City</label>
+					<input name="spousecity" v-model="visaInfo.familyInfo.spousecity" type="text" />
+					<input id="isKnowMateCity" name="isknowspousecity" @change="isknowspousecity()" v-model="visaInfo.familyInfo.isknowspousecity" type="checkbox" />
+				</div>
+				<div class="paddingRight groupSelectInfo" >
+					<label>Country/Region</label>
+					<select id="spousecountry" name="spousecountry" v-model="visaInfo.familyInfo.spousecountry">
+						<option value="0">Please choose</option>
+						<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="clear"></div>
+				<div class="paddingTop groupSelectInfo padding-left" >
+					<label>Spouse's Address</label>
+					<select id="spouseaddress" name="spouseaddress" v-model="visaInfo.familyInfo.spouseaddress" class="spouse_Address" onchange="changeSpouseShow()" @change="changeSpouse()">
+						<option value="0">Please choose</option>
+						<c:forEach items="${obj.VisaSpouseContactAddressEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
+					</select>
+				</div>
+				
+				<!--配偶的联系地址select选择其他-->
+				<div class="otherSpouseInfo elementHide paddingTop" >
+					<div class="floatLeft groupInputInfo">
+						<label>U.S. Street Address(Line 1)</label>
+						<input name="firstaddress" v-model="visaInfo.familyInfo.firstaddress" type="text" />
+					</div>
+					<div class="floatRight groupInputInfo">
+						<label>U.S. Street Address(Line 2) *Optional</label>
+						<input name="secondaddress" v-model="visaInfo.familyInfo.secondaddress" type="text" />
+					</div>
+					<div class="clear"></div>
+					<div class="paddingLeft groupcheckBoxInfo">
+						<label>State</label>
+						<input name="province" v-model="visaInfo.familyInfo.province" type="text" />
+						<input id="isprovinceapply" name="isprovinceapply"  v-model="visaInfo.familyInfo.isprovinceapply" type="checkbox" />
+					</div>
+					<div class="paddingRight groupInputInfo">
+						<label>City</label>
+						<input name="city" v-model="visaInfo.familyInfo.city" type="text"/>
+					</div>
+					
+					<div class="clear"></div>
+					<div class="paddingLeft groupcheckBoxInfo">
+						<label>ZIP Code</label>
+						<input name="zipcode" v-model="visaInfo.familyInfo.zipcode" type="text" />
+						<input id="iszipcodeapply" name="iszipcodeapply" v-model="visaInfo.familyInfo.iszipcodeapply" type="checkbox" />
+					</div>
+					<div class="paddingRight groupSelectInfo">
+						<label>Country/Region</label>
+						<select name="country" v-model="visaInfo.familyInfo.country">
+							<option value="0">Please choose</option>
+							<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
+						</select>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<!--家庭信息END-->
+			<!--工作/教育/培训信息-->
+			<div class="experience paddingTop">
+				<div class="titleInfo">Work / education / training information</div>
+				<div class="paddingTop groupSelectInfo padding-left" >
+					<label>Primary Occupation</label>
+					<select id="occupation" name="occupation" v-model="visaInfo.workEducationInfo.occupation" @change="occupationChange()">
+						<option value="0">Please choose</option>
+						<c:forEach items="${obj.VisaCareersEnum }" var="map">
+							<option value="${map.key }">${map.value }</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="paddingTop elementHide jobEduLearningInfoDiv">
+					<div class="groupInputInfo draBig">
+						<label>Present Employer or School Name</label>
+						<input name="unitname" v-model="visaInfo.workEducationInfo.unitname" type="text" />
+					</div>
+					<div class="groupInputInfo draBig marginLS">
+						<label >U.S. Street Address(Line 1)</label>
+						<input name="address" v-model="visaInfo.workEducationInfo.address" type="text" />
+					</div>
+					<div class="clear"></div>
+					<div class="groupInputInfo draBig marginLS">
+						<label>U.S. Street Address(Line 2) *Optional</label>
+						<input name="secaddress" v-model="visaInfo.workEducationInfo.secaddress" type="text" />
+					</div>
+					
+					<div class="paddingLeft groupcheckBoxInfo">
+						<label>State</label>
+						<input name="province" v-model="visaInfo.workEducationInfo.province" type="text"/>
+						<input name="isprovinceapply" id="isprovinceapplywork" v-model="visaInfo.workEducationInfo.isprovinceapply" type="checkbox"/>
+					</div>
+					<div class="paddingRight groupInputInfo">
+						<label>City</label>
+						<input name="city" v-model="visaInfo.workEducationInfo.city" type="text"/>
+					</div>
+					
+					<div class="clear"></div>
+					<div class="paddingLeft groupcheckBoxInfo">
+						<label>ZIP Code</label>
+						<input name="zipcode" v-model="visaInfo.workEducationInfo.zipcode" type="text" />
+						<input name="iszipcodeapply" id="iszipcodeapplywork" v-model="visaInfo.workEducationInfo.iszipcodeapply" type="checkbox" />
+					</div>
+					<div class="paddingRight groupInputInfo">
+						<label>Phone Number</label>
+						<input name="telephone" v-model="visaInfo.workEducationInfo.telephone" type="text" />
+					</div>
+					<div class="clear"></div>
+					<div class="paddingLeft groupSelectInfo" >
+						<label>Country/Region</label>
+						<select name="country" v-model="visaInfo.workEducationInfo.country">
+							<option value="0">Please choose</option>
+							<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+								<option value="${map.key }">${map.value }</option>
+							</c:forEach>
+						</select>
+					</div>
+					
+					<div class="paddingRight groupInputInfo">
+						<label>Start Date</label>
+						<input id="workstartdate" name="workstartdate" value="${obj.workstartdate}" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+					</div>
+					<div class="clear"></div>
+					<div class="paddingLeft groupcheckBoxInfo" >
+						<label>Monthly Income in Local Currency (if employed)</label>
+						<input name="salary" v-model="visaInfo.workEducationInfo.salary" type="text" onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"
+										onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
+						<input name="issalaryapply" id="issalaryapplywork" v-model="visaInfo.workEducationInfo.issalaryapply" type="checkbox" />
+					</div>
+					<div class="clear"></div>
+					<div class="grouptextareaInfo groupPM">
+						<label>Briefly describe your duties</label>
+						<textarea name="duty" class="bigArea" v-model="visaInfo.workEducationInfo.duty"></textarea>
+					</div>
+					<div class="clear"></div>
+				</div>
+				
+				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea">
+					<!-- <label>说明</label>
+					<textarea></textarea> -->
+				</div>
+			</div>
+			<!--以前-->
+			<div>
+				<div class="paddingTop padding-left">
+					<div>
+						<div class="groupRadioInfo">
+							<label>Were you previously employed</label>
+							<input type="radio" name="isemployed" v-model="visaInfo.workEducationInfo.isemployed" class="beforeWork" value="1" />YES
+							<input type="radio" name="isemployed" v-model="visaInfo.workEducationInfo.isemployed" class="beforeWork" value="2" checked/>NO
+						</div>
+						<!--yes-->
+						<div class="beforeWorkInfo elementHide">
+						  <div class="beforeWorkYes">
+							<c:if test="${!empty obj.beforeWorkList }">
+								<c:forEach var="beforeWork" items="${obj.beforeWorkList }">
+									<div class="workBeforeInfosDiv">
+										<div class="leftNo marginLS groupInputInfo" >
+											<label>Employer Name</label>
+											<input name="employername" value="${beforeWork.employername }" type="text" />
+										</div>
+										<div class="draBig leftNo marginLS groupInputInfo">
+											<label>Employer Street Address (Line 1)</label>
+											<input name="employeraddress" value="${beforeWork.employeraddress }" type="text" />
+										</div>
+										<div class="draBig leftNo marginLS groupInputInfo">
+											<label>Employer Street Address (Line 2) *Option</label>
+											<input name="employeraddressSec" value="${beforeWork.employeraddressSec }" type="text" />
+										</div>
+										
+										<div class="paddingLeft leftNo groupInputInfo">
+											<label>State/Province</label>
+											<input name="employerprovince" value="${beforeWork.employerprovince }" type="text" />
+											<%-- <input name="isemployerprovinceapply" value="${beforeWork.isemployerprovinceapply }" type="text" /> --%>
+										</div>
+										<div class="paddingRight leftNo groupcheckBoxInfo" >
+											<label>City</label>
+											<input name="employercity" id="employercitybefore" value="${beforeWork.employercity }" type="text" />
+											<!-- <input type="checkbox" /> -->
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupcheckBoxInfo">
+											<label>Postal Zone/ZIP Code</label>
+											<input name="employerzipcode" value="${beforeWork.employerzipcode }" type="text" />
+											<c:if test="${beforeWork.isemployerzipcodeapply == 1}">
+												<input id="isKonwOrtherZipCode" name="isemployerzipcodeapply" value="${beforeWork.isemployerzipcodeapply }" checked="checked" type="checkbox"/>
+											</c:if>
+											<c:if test="${beforeWork.isemployerzipcodeapply != 1}">
+												<input id="isKonwOrtherZipCode" name="isemployerzipcodeapply" value="${beforeWork.isemployerzipcodeapply }" type="checkbox" />
+											</c:if>
+											
+										</div>
+										<div class="paddingRight groupSelectInfo">
+											<label>Country/Region</label>
+											<select name="employercountry">
+												<option value="0">Please choose</option>
+												<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+													<c:if test="${beforeWork.employercountry != map.key}">
+														<option value="${map.key }">${map.value }</option>
+													</c:if>
+													<c:if test="${beforeWork.employercountry == map.key}">
+														<option value="${map.key }" selected="selected">${map.value }</option>
+													</c:if>
+												</c:forEach>
+											</select>
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupInputInfo">
+											<label>Telephone Number</label>
+											<input name="employertelephone" value="${beforeWork.employertelephone }" type="text" />
+										</div>
+										<div class="paddingRight groupInputInfo">
+											<label>Job Title</label>
+											<input name="jobtitle" value="${beforeWork.jobtitle }" type="text"/>
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupcheckBoxInfo">
+											<label>Supervisor's Surname</label>
+											<input name="supervisorfirstname" value="${beforeWork.supervisorfirstname }" type="text" />
+											<c:if test="${beforeWork.isknowsupervisorfirstname == 1}">
+												<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" value="${beforeWork.isknowsupervisorfirstname }" checked="checked" type="checkbox"/>
+											</c:if>
+											<c:if test="${beforeWork.isknowsupervisorfirstname != 1}">
+												<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" value="${beforeWork.isknowsupervisorfirstname }" type="checkbox" />
+											</c:if>
+										</div>
+										<div class="paddingRight groupcheckBoxInfo">
+											<label>Supervisor's Given Name</label>
+											<input name="supervisorlastname" value="${beforeWork.supervisorlastname }" type="text" />
+											<c:if test="${beforeWork.isknowsupervisorlastname == 1}">
+												<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" value="${beforeWork.isknowsupervisorlastname }" checked="checked" type="checkbox"/>
+											</c:if>
+											<c:if test="${beforeWork.isknowsupervisorlastname != 1}">
+												<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" value="${beforeWork.isknowsupervisorlastname }" type="checkbox" />
+											</c:if>
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupInputInfo" >
+											<label>Employment Date From</label>
+											<input id="employstartdate" name="employstartdate" value="<fmt:formatDate value="${beforeWork.employstartdate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+										</div>
+										<div class="paddingRight groupInputInfo">
+											<label>Employment Date To</label>
+											<input id="employenddate" name="employenddate" value="<fmt:formatDate value="${beforeWork.employenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+										</div>
+										<div class="clear"></div>
+										<div class="draBig leftNo marginLS grouptextareaInfo">
+											<label>Briefly describe your duties</label>
+											<input type="text" name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }" />
+											<%-- <textarea name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }"></textarea> --%>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
+							<c:if test="${empty obj.beforeWorkList }">
+								<div class="workBeforeInfosDiv">
+									<div class="leftNo marginLS groupInputInfo" >
+										<label>Employer Name  </label>
+										<input name="employername" type="text" />
+									</div>
+									<div class="draBig leftNo marginLS groupInputInfo">
+										<label>Employer Street Address (Line 1)</label>
+										<input name="employeraddress" type="text" />
+									</div>
+									<div class="draBig leftNo marginLS groupInputInfo">
+										<label>Employer Street Address (Line 2) *Option</label>
+										<input name="" type="text" />
+									</div>
+									
+									<div class="paddingLeft leftNo groupInputInfo">
+										<label>State/Province</label>
+										<input name="employerprovince" type="text" />
+									</div>
+									<div class="paddingRight leftNo groupcheckBoxInfo" >
+										<label>City</label>
+										<input name="employercity" type="text" />
+										<input type="checkbox" id="employercitybefore" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupcheckBoxInfo">
+										<label>ostal Zone/ZIP Code</label>
+										<input name="employerzipcode" type="text" />
+										<input name="isemployerzipcodeapply" id="isKonwOrtherZipCode" type="checkbox" />
+									</div>
+									<div class="paddingRight leftNo groupSelectInfo">
+										<label>Country/Region</label>
+										<select name="employercountry">
+											<option value="0">Please choose</option>
+											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+												<option value="${map.key }">${map.value }</option>
+											</c:forEach>
+										</select>
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupInputInfo">
+										<label>Telephone Number</label>
+										<input name="employertelephone" type="text" />
+									</div>
+									<div class="paddingRight leftNo groupInputInfo">
+										<label>Job Title</label>
+										<input name="jobtitle" type="text"/>
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupcheckBoxInfo">
+										<label>Supervisor's Surname</label>
+										<input name="supervisorfirstname" type="text" />
+										<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" type="checkbox" />
+									</div>
+									<div class="paddingRight leftNo groupcheckBoxInfo">
+										<label>Supervisor's Given Name</label>
+										<input name="supervisorlastname" type="text" />
+										<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" type="checkbox" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupInputInfo" >
+										<label>Employment Date From</label>
+										<input id="employstartdate" name="employstartdate" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+									</div>
+									<div class="paddingRight leftNo groupInputInfo">
+										<label>Employment Date To</label>
+										<input id="employenddate" name="employenddate" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+									</div>
+									<div class="clear"></div>
+									<div class="draBig leftNo marginLS grouptextareaInfo">
+										<label>Briefly describe your duties</label>
+										<input type="text" name="previousduty" class="bigArea previousduty" />
+										<!-- <textarea class="bigArea" name="previousduty"></textarea> -->
+									</div>
+								</div>
+							</c:if>
+							</div>
+							<div class="clear"></div>
+							<div class="btnGroup marginLS beforeWorkGroup">
+								<a class="save beforeWorksave">Add Another</a>
+								<a class="cancel beforeWorkcancel">Remove</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="padding-left">
+					<div class="paddingTop">
+						<div class="groupRadioInfo">
+							<label>Have you attended any educational institutions at a secondary level or above</label>
+							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" class="education" value="1" />YES
+							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" class="education" value="2" checked/>NO
+						</div>
+						<!--yes-->
+						<div class="educationInfo elementHide">
+							<div class="educationYes">
+							<c:if test="${!empty obj.beforeEducationList }">
+								<c:forEach var="education" items="${obj.beforeEducationList }">
+									<div class="midSchoolEduDiv">
+										<div class="draBig leftNo marginLS groupInputInfo">
+											<label>Name of Institution</label>
+											<input name="institution" value="${education.institution }" type="text"/>
+										</div>
+										<div class="draBig leftNo marginLS groupInputInfo">
+											<label>Street Address (Line 1)</label>
+											<input name="institutionaddress" value="${education.institutionaddress }" type="text" />
+										</div>
+										<div class="draBig leftNo marginLS groupInputInfo">
+											<label>Street Address (Line 2) *Optional</label>
+											<input name="secinstitutionaddress" type="text" value="${education.secinstitutionaddress }" />
+										</div>
+										<div class="paddingLeft leftNo groupcheckBoxInfo" >
+											<label>State/Province</label>
+											<input name="institutionprovince" value="${education.institutionprovince }" type="text" />
+											<c:if test="${education.isinstitutionprovinceapply == 1}">
+												<input name="isinstitutionprovinceapply" value="${education.isinstitutionprovinceapply }"  checked="checked" type="checkbox"/>
+											</c:if>
+											<c:if test="${education.isinstitutionprovinceapply != 1}">
+												<input name="isinstitutionprovinceapply" value="${education.isinstitutionprovinceapply }" type="checkbox" />
+											</c:if>
+											
+										</div>
+										<div class="paddingRight leftNo groupInputInfo">
+											<label >City</label>
+											<input name="institutioncity" value="${education.institutioncity }" type="text" />
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupcheckBoxInfo">
+											<label>Postal Zone/ZIP Code</label>
+											<input name="institutionzipcode" value="${education.institutionzipcode }" type="text" />
+											<c:if test="${education.isinstitutionzipcodeapply == 1}">
+													<input name="isinstitutionzipcodeapply" id="codeEdu" value="${education.isinstitutionzipcodeapply }"  checked="checked" type="checkbox"/>
+											</c:if>
+											<c:if test="${education.isinstitutionzipcodeapply != 1}">
+												<input name="isinstitutionzipcodeapply" id="codeEdu" value="${education.isinstitutionzipcodeapply }" type="checkbox" />
+											</c:if>
+										</div>
+										<div class="paddingRight leftNo groupSelectInfo" >
+											<label>Country/Region</label>
+											<select name="institutioncountry">
+												<option value="0">Please choose</option>
+												<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+													<c:if test="${education.institutioncountry != map.key}">
+														<option value="${map.key }">${map.value }</option>
+													</c:if>
+													<c:if test="${education.institutioncountry == map.key}">
+														<option value="${map.key }" selected="selected">${map.value }</option>
+													</c:if>
+												</c:forEach>
+											</select>
+										</div>
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupInputInfo">
+											<label>Course of Study</label>
+											<input name="course" value="${education.course }" type="text" />
+										</div>
+										
+										<div class="paddingRight leftNo groupInputInfo">
+											<label>Date of Attendance From</label>
+											<input id="coursestartdate" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control" type="text" placeholder="Day / month / year" />
+										</div>
+										<div class="clear"></div>
+										<div class="leftNo groupInputInfo">
+											<label>Date of Attendance To</label>
+											<input id="courseenddate" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control" type="text" placeholder="Day / month / year" />
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
+							<c:if test="${empty obj.beforeEducationList }">
+								<div class="midSchoolEduDiv">
+									<div class="draBig leftNo groupInputInfo">
+										<label>Name of Institution</label>
+										<input name="institution" type="text"/>
+									</div>
+									<div class="draBig leftNo groupInputInfo">
+										<label>Street Address (Line 1)</label>
+										<input name="institutionaddress" type="text" />
+									</div>
+									<div class="draBig leftNo groupInputInfo">
+										<label>Street Address (Line 2) *Optional</label>
+										<input type="text" />
+									</div>
+									<div class="paddingLeft leftNo groupcheckBoxInfo" >
+											<label>State/Province</label>
+											<input name="institutionprovince" type="text" />
+											<input name="isinstitutionprovinceapply"  type="checkbox" />
+										</div>
+										<div class="paddingRight leftNo groupInputInfo">
+											<label >City</label>
+											<input name="institutioncity" type="text" />
+										</div>
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupcheckBoxInfo">
+										<label>Postal Zone/ZIP Code</label>
+										<input name="institutionzipcode" type="text" />
+										<input name="isinstitutionzipcodeapply" type="checkbox" />
+									</div>
+									<div class="paddingRight leftNo groupSelectInfo" >
+										<label>Country/Region</label>
+										<select name="institutioncountry">
+											<option value="0">Please choose</option>
+											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+												<option value="${map.key }">${map.value }</option>
+											</c:forEach>
+										</select>
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupInputInfo">
+										<label>Course of Study</label>
+										<input name="course" type="text" />
+									</div>
+									<div class="paddingRight leftNo groupInputInfo">
+										<label>Date of Attendance From</label>
+										<input id="coursestartdate" name="coursestartdate" class="datetimepickercss form-control" type="text" placeholder="Day / month / year" />
+									</div>
+									<div class="clear"></div>
+									<div class="leftNo groupInputInfo">
+										<label>Date of Attendance To</label>
+										<input id="courseenddate" name="courseenddate" class="datetimepickercss form-control" type="text" placeholder="Day / month / year" />
+									</div>
+								</div>
+							</c:if>
+							</div>
+							<div class="clear"></div>
+							<div class="btnGroup educationGroup">
+								<a class="save educationsave" >Add Another</a>
+								<a class="cancel educationcancel" >Remove</a>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			<!--额外-->
+			<div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Do you belong to a clan or tribe</label>
+						<input type="radio" name="isclan" v-model="visaInfo.workEducationInfo.isclan" class="isclan" value="1"/>YES
+						<input type="radio" name="isclan" v-on:click="isclan()" v-model="visaInfo.workEducationInfo.isclan" class="isclan" value="2" checked/>NO
+					</div>
+					
+					<!--yes-->
+					<div class="isclanYes elementHide">
+						<div>
+							<div class="clannameDiv">
+								<div class="draBig leftNo groupInputInfo" >
+									<label>Clan or Tribe Name</label>
+									<input name="clanname" v-model="visaInfo.workEducationInfo.clanname"  type="text"  />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="languageYes">
+					<c:if test="${!empty obj.languageList }">
+						<c:forEach var="language" items="${obj.languageList }">
+							<div class="languagename languagenameDiv paddingTop padding-left">
+								<label>Language Name</label>
+								<div class="groupInputInfo">
+									<input name="languagename" value="${language.languagename }" type="text" />
+								</div>
+							</div>
+						</c:forEach>
+					</c:if>
+					<c:if test="${empty obj.languageList }">
+						<div class="languagename languagenameDiv paddingTop padding-left">
+							<label>Language Name</label>
+							<div class="groupInputInfo">
+								<input name="languagename" type="text" />
+							</div>
+						</div>
+					</c:if>
+				</div>	
+				<div class="btnGroup draBig languageGroup">
+					<a class="save languagesave">Add Another</a>
+					<a class="cancel languagecancel">Remove</a>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you traveled to any countries/regions within the last five years</label>
+						<input type="radio" name="istraveledanycountry" v-model="visaInfo.workEducationInfo.istraveledanycountry" class="istraveledanycountry" value="1" />YES
+						<input type="radio" name="istraveledanycountry" v-model="visaInfo.workEducationInfo.istraveledanycountry" class="istraveledanycountry" value="2" checked/>NO
+					</div>
+					<!--yes-->
+					<div class="isTravelYes elementHide">
+						<div class="gocountryYes">
+							<c:if test="${!empty obj.gocountryList }">
+								<c:forEach var="gocountry" items="${obj.gocountryList }">
+									<div class="travelCountry paddingTop groupInputInfo">
+										<label>Country/Region</label>
+										<div class="groupInputInfo groupSelectInfo">
+										
+											<select name="traveledcountry">
+												<option value="0">Please choose</option>
+												<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+														<c:if test="${gocountry.traveledcountry != map.key}">
+															<option value="${map.key }">${map.value }</option>
+														</c:if>
+														<c:if test="${gocountry.traveledcountry == map.key}">
+															<option value="${map.key }" selected="selected">${map.value }</option>
+														</c:if>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
+							<c:if test="${empty obj.gocountryList }">
+								<div class="paddingTop travelCountry groupInputInfo">
+									<label>Country/Region</label>
+									<input name="traveledcountry" type="text"/>
+								</div>
+							</c:if>
+						</div>
+						<div class="btnGroup gocountryGroup">
+							<a class="save gocountrysave">Add Another</a>
+							<a class="cancel gocountrycancel">Remove</a>
+						</div>
+					</div>
+				</div>
+				<div class="padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you belonged to, contributed to, or worked for any professional, social, or charitable organization</label>
+						<input type="radio" name="isworkedcharitableorganization" v-model="visaInfo.workEducationInfo.isworkedcharitableorganization" class="isworkedcharitableorganization" value="1"/>YES
+						<input type="radio" name="isworkedcharitableorganization" v-model="visaInfo.workEducationInfo.isworkedcharitableorganization" class="isworkedcharitableorganization" value="2" checked/>NO
+					</div>
+					<!--yes-->
+					<div class="isOrganizationYes elementHide">
+						<div class="organizationYes">
+							<c:if test="${!empty obj.organizationList }">
+								<c:forEach var="organization" items="${obj.organizationList }">
+									<div class="paddingTop draBig leftNo organizationDiv groupInputInfo">
+										<label>Organization Name</label>
+										<input name="organizationname" value="${organization.organizationname }" type="text"/>
+									</div>
+								</c:forEach>
+							</c:if>
+							<c:if test="${empty obj.organizationList }">
+								<div class="paddingTop draBig leftNo organizationDiv groupInputInfo">
+									<label>Organization Name</label>
+									<input name="organizationname" type="text"/>
+								</div>
+							</c:if>
+						</div>
+						<div class="btnGroup organizationGroup">
+							<a class="save organizationsave">Add Another</a>
+							<a class="cancel organizationcancel">Remove</a>
+						</div>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Do you have any specialized skills or training, such as firearms, explosives, nuclear, biological, or chemical experience</label>
+						<input type="radio" name="hasspecializedskill" v-model="visaInfo.workEducationInfo.hasspecializedskill" class="hasspecializedskill" value="1" />YES
+						<input type="radio"name="hasspecializedskill" v-on:click="hasspecializedskill()" v-model="visaInfo.workEducationInfo.hasspecializedskill" class="hasspecializedskill" value="2" checked />NO
+					</div>
+					<!--yes-->
+					<div class="paddingTop skillDiv elementHide grouptextareaInfo">
+						<label>Explain</label>
+						<input type="text" name="skillexplain" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain" />
+						<!-- <textarea name="skillexplain" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain"></textarea> -->
+					</div>
+				</div>
+				<div class="padding-left">
+					<div class="groupRadioInfo">
+						<label style="display: block;">Have you ever served in the military</label>
+						<input type="radio" name="hasservedinmilitary" v-model="visaInfo.workEducationInfo.hasservedinmilitary" class="hasservedinmilitary" value="1"/>YES
+						<input type="radio"name="hasservedinmilitary" v-model="visaInfo.workEducationInfo.hasservedinmilitary" class="hasservedinmilitary" value="2" checked/>NO
+					</div>
+					<!--yes-->
+					<div class="paddingTop elementHide militaryServiceYes">
+					  <div class="militaryYes">
+						<c:if test="${!empty obj.conscientiousList }">
+							<c:forEach var="conscientious" items="${obj.conscientiousList }">
+								<div class="militaryInfoDiv">
+									<div class="paddingLeft leftNo groupSelectInfo">
+										<label>Name of Country/Region </label>
+										<select name="militarycountry">
+											<option value="0">Please choose</option>
+											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+													<c:if test="${conscientious.militarycountry != map.key}">
+														<option value="${map.key }">${map.value }</option>
+													</c:if>
+													<c:if test="${conscientious.militarycountry == map.key}">
+														<option value="${map.key }" selected="selected">${map.value }</option>
+													</c:if>
+											</c:forEach>
+										</select>
+									</div>
+									<div class="paddingRight leftNo groupInputInfo">
+										<label>Branch of Service</label>
+										<input name="servicebranch" value="${conscientious.servicebranch }" type="text" />
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupInputInfo" >
+										<label>Rank/Position</label>
+										<input name="rank" value="${conscientious.rank }" type="text" />
+									</div>
+									<div class="paddingRight leftNo groupInputInfo">
+										<label>Military Specialty</label>
+										<input name="militaryspecialty" value="${conscientious.militaryspecialty }" type="text"/>
+									</div>
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupInputInfo">
+										<label>Date of Service From</label>
+										<input id="servicestartdate" name="servicestartdate" value="<fmt:formatDate value="${conscientious.servicestartdate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss form-control" placeholder="日/月/年"/>
+									</div>
+									<div class="paddingRight leftNo groupInputInfo">
+										<label>Date of Service To</label>
+										<input id="serviceenddate" name="serviceenddate" value="<fmt:formatDate value="${conscientious.serviceenddate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss form-control" placeholder="日/月/年"/>
+									</div>
+								</div>
+							</c:forEach>
+						</c:if>
+						
+						<c:if test="${empty obj.conscientiousList }">
+							<div class="militaryInfoDiv">
+								<div class="paddingLeft leftNo groupSelectInfo">
+									<label>Name of Country/Region</label>
+									<select name="militarycountry">
+										<option value="0">Please choose</option>
+										<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+											<option value="${map.key }">${map.value }</option>
+										</c:forEach>
+									</select>
+								</div>
+								<div class="paddingRight leftNo groupInputInfo">
+									<label>Branch of Service</label>
+									<input name="servicebranch" type="text" />
+								</div>
+								<div class="clear"></div>
+								<div class="paddingLeft leftNo groupInputInfo" >
+									<label>Rank/Position</label>
+									<input name="rank" type="text" />
+								</div>
+								<div class="paddingRight leftNo groupInputInfo">
+									<label>Military Specialty</label>
+									<input name="militaryspecialty" type="text"/>
+								</div>
+								<div class="clear"></div>
+								<div class="paddingLeft leftNo groupInputInfo">
+									<label>Date of Service From</label>
+									<input id="servicestartdate" name="servicestartdate" type="text" class="datetimepickercss form-control" placeholder="Day / month / year"/>
+								</div>
+								<div class="paddingRight leftNo groupInputInfo">
+									<label>Date of Service To</label>
+									<input id="serviceenddate" name="serviceenddate" type="text" class="datetimepickercss form-control" placeholder="Day / month / year"/>
+								</div>
+							</div>
+						</c:if>	
+						</div>
+						<div class="clear"></div>
+						<div class="btnGroup militaryGroup">
+							<a class="save militarysave">Add Another</a>
+							<a class="cancel militarycancel">Remove</a>
+						</div>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever served in, been a member of, or been involved with a paramilitary unit, vigilante unit, rebel group, guerrilla group, or insurgent organization</label>
+						<input type="radio" name="isservedinrebelgroup" v-model="visaInfo.workEducationInfo.isservedinrebelgroup" class="isservedinrebelgroup" value="1"/>YES
+						<input type="radio" name="isservedinrebelgroup" v-model="visaInfo.workEducationInfo.isservedinrebelgroup" class="isservedinrebelgroup" value="2" checked/>NO
+					</div>
+					<!--yes-->
+					<!-- <div class="paddingTop elementHide dinrebelDiv grouptextareaInfo">
+						<label>说明</label>
+						<textarea></textarea>
+					</div> -->
+				</div>
+			</div>	
+			<!--工作/教育/培训信息END-->
+			<!--安全和背景-->
+			<div class="safe paddingTop">
+				<div class="titleInfo">Safety and background</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Do you have a communicable disease of public health significance? (Communicable diseases of public significance include chancroid, gonorrhea, granuloma inguinale, infectious leprosy, lymphogranuloma venereum, infectious stage syphilis, active tuberculosis, and other diseases as determined by the Department of Health and Human Services.)</label>
+						<input type="radio" name="isPestilence" class="isPestilence" value="1"/>YES
+						<input type="radio" name="isPestilence" class="isPestilence" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isPestilenceDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Do you have a mental or physical disorder that poses or is likely to pose a threat to the safety or welfare of yourself or others</label>
+						<input type="radio" name="isThreatIllness" class="isThreatIllness" value="1"/>YES
+						<input type="radio" name="isThreatIllness" class="isThreatIllness" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isThreatIllnessDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Are you or have you ever been a drug abuser or addict</label>
+						<input type="radio" name="isDrug" class="isDrug" value="1"/>YES
+						<input type="radio" name="isDrug" class="isDrug" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isDrugDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever been arrested or convicted for any offense or crime, even though subject of a pardon, amnesty, or other similar action</label>
+						<input type="radio" name="isSentenced" class="isSentenced" value="1"/>YES
+						<input type="radio" name="isSentenced" class="isSentenced" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isSentencedDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever violated, or engaged in a conspiracy to violate, any law relating to controlled substances</label>
+						<input type="radio" name="isMaterialLaw" class="isMaterialLaw" value="1"/>YES
+						<input type="radio" name="isMaterialLaw" class="isMaterialLaw" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isMaterialLawDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label style="display: block;">Are you coming to the United States to engage in prostitution or unlawful commercialized vice or have you been engaged in prostitution or procuring prostitutes within the past 10 years</label>
+						<input type="radio" name="isProstitution" class="isProstitution" value="1"/>YES
+						<input type="radio" name="isProstitution" class="isProstitution" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isProstitutionDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever been involved in, or do you seek to engage in, money laundering</label>
+						<input type="radio" name="isLaundering" class="isLaundering" value="1"/>YES
+						<input type="radio" name="isLaundering" class="isLaundering" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isLaunderingDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label style="display: block;">Have you ever committed or conspired to commit a human trafficking offense in the United States or outside the United States</label>
+						<input type="radio" name="isSmuggling" class="isSmuggling" value="1"/>YES
+						<input type="radio" name="isSmuggling" class="isSmuggling" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isSmugglingDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever knowingly aided, abetted, assisted or colluded with an individual who has committed, or conspired to commit a severe human trafficking offense in the United States or outside the United States</label>
+						<input type="radio" name="isThreateningOthers" class="isThreateningOthers" value="1"/>YES
+						<input type="radio" name="isThreateningOthers" class="isThreateningOthers" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isThreateningOthersDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever committed or conspired to commit a human trafficking offense in the United States or outside the United States</label>
+						<input type="radio" name="isSmugglingBenefits" class="isSmugglingBenefits" value="1"/>YES
+						<input type="radio" name="isSmugglingBenefits" class="isSmugglingBenefits" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isSmugglingBenefitsDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Do you seek to engage in espionage, sabotage, export control violations, or any other illegal activity while in the United States</label>
+						<input type="radio" name="isSpyActivities" class="isSpyActivities" value="1"/>YES
+						<input type="radio" name="isSpyActivities" class="isSpyActivities" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isSpyActivitiesDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Do you seek to engage in terrorist activities while in the United States or have you ever engaged in terrorist activities</label>
+						<input type="radio" name="isTerroristActivities" class="isTerroristActivities" value="1"/>YES
+						<input type="radio" name="isTerroristActivities" class="isTerroristActivities" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isTerroristActivitiesDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever or do you intend to provide financial assistance or other support to terrorists or terrorist organizations</label>
+						<input type="radio" name="isSupportTerrorists" class="isSupportTerrorists" value="1"/>YES
+						<input type="radio" name="isSupportTerrorists" class="isSupportTerrorists" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isSupportTerroristsDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Are you a member or representative of a terrorist organization</label>
+						<input type="radio" name="isTerrorist" class="isTerrorist" value="1"/>YES
+						<input type="radio" name="isTerrorist" class="isTerrorist" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isTerroristDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever ordered, incited, committed, assisted, or otherwise participated in genocide</label>
+						<input type="radio" name="isTakeGenocide" class="isTakeGenocide" value="1"/>YES
+						<input type="radio" name="isTakeGenocide" class="isTakeGenocide" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isTakeGenocideDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever committed, ordered, incited, assisted, or otherwise participated in torture</label>
+						<input type="radio" name="isOrderedThreat" class="isOrderedThreat" value="1"/>YES
+						<input type="radio" name="isOrderedThreat" class="isOrderedThreat" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isOrderedThreatDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you committed, ordered, incited, assisted, or otherwise participated in extrajudicial killings, political killings, or other acts of violence</label>
+						<input type="radio" name="isPoliticalKilling" class="isPoliticalKilling" value="1"/>YES
+						<input type="radio" name="isPoliticalKilling" class="isPoliticalKilling" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isPoliticalKillingDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever engaged in the recruitment or the use of child soldiers</label>
+						<input type="radio" name="isRecruitChildSoldier" class="isRecruitChildSoldier" value="1"/>YES
+						<input type="radio" name="isRecruitChildSoldier" class="isRecruitChildSoldier" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isRecruitChildSoldierDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you, while serving as a government official, been responsible for or directly carried out, at any time, particularly severe violations of religious freedom</label>
+						<input type="radio" name="isInroadReligion" class="isInroadReligion" value="1"/>YES
+						<input type="radio" name="isInroadReligion" class="isInroadReligion" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isInroadReligionDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever been directly involved in the establishment or enforcement of population controls forcing a woman to undergo an abortion against her free choice or a man or a woman to undergo sterilization against his or her free will</label>
+						<input type="radio" name="isForcedControlPopulation" class="isForcedControlPopulation" value="1"/>YES
+						<input type="radio" name="isForcedControlPopulation" class="isForcedControlPopulation" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isForcedControlPopulationDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever been directly involved in the coercive transplantation of human organs or bodily tissue</label>
+						<input type="radio" name="isForcedOrganTake" class="isForcedOrganTake" value="1"/>YES
+						<input type="radio" name="isForcedOrganTake" class="isForcedOrganTake" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isForcedOrganTakeDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever sought to obtain or assist others to obtain a visa, entry into the United States, or any other United States immigration benefit by fraud or willful misrepresentation or other unlawful means</label>
+						<input type="radio" name="isIllegalVisaUS" class="isIllegalVisaUS" value="1"/>YES
+						<input type="radio" name="isIllegalVisaUS" class="isIllegalVisaUS" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isIllegalVisaUSDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label> Have you ever been the subject of a removal or deportation hearing</label>
+						<input type="radio" name="isDeported" class="isDeported" value="1"/>YES
+						<input type="radio" name="isDeported" class="isDeported" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isDeportedDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you failed to attend a hearing on removability or inadmissibility within the last five years</label>
+						<input type="radio" name="isRemoteHearing" class="isRemoteHearing" value="1"/>YES
+						<input type="radio" name="isRemoteHearing" class="isRemoteHearing" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isRemoteHearingDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label style="display: block;"> Have you ever been unlawfully present, overstayed the amount of time granted by an immigration official or otherwise violated the terms of a U.S. visa</label>
+						<input type="radio" name="isViolationVisaConditions" class="isViolationVisaConditions" value="1"/>YES
+						<input type="radio" name="isViolationVisaConditions" class="isViolationVisaConditions" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isViolationVisaConditionsDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever withheld custody of a U.S. citizen child outside the United States from a person granted legal custody by a U.S. court</label>
+						<input type="radio" name="isRefusalTransferCustody" class="isRefusalTransferCustody" value="1"/>YES
+						<input type="radio" name="isRefusalTransferCustody" class="isRefusalTransferCustody" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isRefusalTransferCustodyDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you voted in the United States in violation of any law or regulation</label>
+						<input type="radio" name="isIllegalVoting" class="isIllegalVoting" value="1"/>YES
+						<input type="radio" name="isIllegalVoting" class="isIllegalVoting" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isIllegalVotingDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label>Have you ever renounced United States citizenship for the purposes of avoiding taxation</label>
+						<input type="radio" name="isTaxEvasion" class="isTaxEvasion" value="1"/>YES
+						<input type="radio" name="isTaxEvasion" class="isTaxEvasion" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isTaxEvasionDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+				<div class="paddingTop padding-left">
+					<div class="groupRadioInfo">
+						<label> Have you attended a public elementary school on student (F) status or a public secondary school after November 30, 1996 without reimbursing the school</label>
+						<input type="radio" name="isNotPayTuitionFees" class="isNotPayTuitionFees" value="1"/>YES
+						<input type="radio" name="isNotPayTuitionFees" class="isNotPayTuitionFees" value="2" checked/>NO
+					</div>
+					<div class="paddingTop elementHide isNotPayTuitionFeesDiv grouptextareaInfo">
+						<label>Explain</label>
+						<textarea></textarea>
+					</div>
+				</div>
+			</div>
+			<!--安全和背景END-->
 		</div>
 	</body>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		var staffId = ${obj.staffId};
 	</script>
+	<!-- 公共js -->
 	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
@@ -1682,7 +3305,7 @@
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-	
+	<!-- 本页js -->
 	<script src="${base}/admin/bigCustomer/visa/openPageYesOrNo.js"></script><!-- 本页面  打开默认开关 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaGetInfoList.js"></script><!-- 本页面  获取一对多信息 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
