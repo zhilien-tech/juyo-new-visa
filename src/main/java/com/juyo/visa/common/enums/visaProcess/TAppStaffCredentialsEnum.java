@@ -9,9 +9,7 @@ package com.juyo.visa.common.enums.visaProcess;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * TODO(这里用一句话描述这个类的作用)
- * <p>
- * TODO(这里描述这个类补充说明 – 可选)
+ * APP拍摄资料枚举
  *
  * @author  马云鹏
  * @Date	 2018年3月28日 	 
