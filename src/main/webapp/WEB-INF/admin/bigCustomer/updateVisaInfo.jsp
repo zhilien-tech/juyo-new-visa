@@ -22,7 +22,7 @@
 				<span>美国签证信息</span>
 			</div>
 			<div class="btnRight">
-				<a class="saveVisa" onclick="save()">保存</a>
+				<a class="saveVisa" onclick="save(1)">保存</a>
 				<a class="cancelVisa" onclick="closeWindow()">取消</a>
 			</div>
 		</div>
@@ -876,7 +876,7 @@
 									</div>
 									<div class="draBig leftNo marginLS groupInputInfo">
 										<label>雇主街道地址(次选)*可选</label>
-										<input name="" type="text" />
+										<input name="employeraddressSec" type="text" />
 									</div>
 									
 									<div class="paddingLeft leftNo groupInputInfo">
@@ -1044,7 +1044,7 @@
 									</div>
 									<div class="draBig leftNo groupInputInfo">
 										<label>街道地址(次选)*可选</label>
-										<input type="text" />
+										<input name="secinstitutionaddress"  type="text" />
 									</div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo" >
 											<label>州/省</label>
@@ -1175,7 +1175,19 @@
 							<c:if test="${empty obj.gocountryList }">
 								<div class="paddingTop travelCountry groupInputInfo">
 									<label>国家/地区</label>
-									<input name="traveledcountry" type="text"/>
+									<div class="groupInputInfo groupSelectInfo">
+										<select name="traveledcountry">
+											<option value="0">请选择</option>
+											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
+													<c:if test="${gocountry.traveledcountry != map.key}">
+														<option value="${map.key }">${map.value }</option>
+													</c:if>
+													<c:if test="${gocountry.traveledcountry == map.key}">
+														<option value="${map.key }" selected="selected">${map.value }</option>
+													</c:if>
+											</c:forEach>
+										</select>
+									</div>
 								</div>
 							</c:if>
 						</div>
@@ -3291,7 +3303,8 @@
 	</body>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
-		var staffId = ${obj.staffId};
+		var staffId = '${obj.staffId}';
+		var isDisable = '${obj.isDisable}';
 	</script>
 	<!-- 公共js -->
 	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
@@ -3312,7 +3325,6 @@
 	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js -->
 	<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
 	<script type="text/javascript">
-		var isDisable = '${obj.isDisable}';
 		$(function(){
 			//页面不可编辑
 			if(isDisable == 1){
@@ -3326,10 +3338,12 @@
 	
 		//跳转到基本信息页
 		function baseInfoBtn(){
-			//左箭头跳转
-			window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
-			//保存签证信息
-			save();
+			if(isDisable == 1){
+				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+			}else{
+				//保存签证信息
+				save(2);
+			}
 		}
 		
 	</script>

@@ -64,23 +64,33 @@ new Vue({
 		},
 		disabled : function(orderid, status) {
 			layer.load(1);
-			$.ajax({
-				url : '/admin/orderJp/disabled',
-				dataType : "json",
-				data : {
-					orderId : orderid
-				},
-				type : 'post',
-				success : function(data) {
-					layer.closeAll("loading");
-					layer.msg("操作成功", {
-						time: 1000,
-						end: function () {
-							successCallBack();
-						}
-					});
-				}
+			layer.confirm("您确认要<font color='red'>作废</font>吗？", {
+				title:"作废",
+				btn: ["是","否"], //按钮
+				shade: false //不显示遮罩
+			}, function(){
+				$.ajax({
+					url : '/admin/orderJp/disabled',
+					dataType : "json",
+					data : {
+						orderId : orderid
+					},
+					type : 'post',
+					success : function(data) {
+						layer.closeAll("loading");
+						layer.msg("操作成功", {
+							time: 500,
+							end: function () {
+								successCallBack();
+							}
+						});
+					}
+				});
 			});
+			
+			
+			
+			
 		},
 		undisabled : function(orderid){
 			layer.load(1);

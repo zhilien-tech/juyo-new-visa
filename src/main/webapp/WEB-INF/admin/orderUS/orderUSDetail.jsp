@@ -447,7 +447,7 @@
 										<div class="form-group pictureTop">
 											<div class="uploadInfo">
 												<span class="inchInfo">美签照片51*51mm</span>  
-												<img id="imgInch" name="imgInch" alt="" src="${obj.basicinfo.twoinchphoto }"> 
+												<img id="imgInch" name="imgInch" alt="" src="${obj.twoinchphoto.url }"> 
 												<!-- <input id="uploadFileInchImg" name="uploadFileInchImg" disable="true"
 													class="btn btn-primary btn-sm" type="file" value="上传" />  -->
 													<i class="delete" ></i>
@@ -678,7 +678,7 @@
 	        showMeridian: false,
 			pickerPosition:"bottom-right",//显示位置
 			minView: 0,//显示时分
-		    minuteStep:1//间隔为一分钟
+		    minuteStep:15//间隔为十五分钟
 			//minView: "month"//只显示年月日
 		}); 
 		
@@ -1173,8 +1173,12 @@
 							$("#forFollow").html(Str);
 						}
 						//刷新申请人信息
+						if(data.twoinchphoto != null){
+							$('#imgInch').attr('src', data.twoinchphoto.url);
+						}else{
+							$('#imgInch').attr('src', '');
+						}
 						$('#aacode').val(data.summaryInfo.aacode);
-						$('#imgInch').attr('src', data.basicinfo.twoinchphoto);
 						$('#allname').val(data.passport.firstname+data.passport.lastname+'/'+data.passport.firstnameen+data.passport.lastnameen);
 						$('#sex').val(data.passport.sex);
 						$('#birthday').val(data.birthday);
@@ -1255,7 +1259,33 @@
 		//通过
 		function pass(){
 			var orderid = '${obj.orderid}';
-			$.ajax({
+			
+			layer.confirm("您确认要<font color='red'>通过</font>吗？", {
+				title:"通过",
+				btn: ["是","否"], //按钮
+				shade: false //不显示遮罩
+			}, function(){
+				$.ajax({
+					url : '/admin/orderUS/passUS.html',
+					data : {
+						orderid : orderid
+					},
+					dataType : "json",
+					type : 'POST',
+					success : function(data) {
+						layer.msg("操作成功", {
+							time: 500,
+							end: function () {
+								dataReload(addorder);
+							}
+						});
+					}
+				}); 
+			});
+			
+			
+			
+			/* $.ajax({
 				url : '/admin/orderUS/passUS.html',
 				data : {
 					orderid : orderid
@@ -1270,13 +1300,38 @@
 						}
 					});
 				}
-			});
+			}); */
 		}
 		
 		//拒绝
 		function refuse(){
 			var orderid = '${obj.orderid}';
-			$.ajax({
+			layer.confirm("您确认要<font color='red'>拒签</font>吗？", {
+				title:"拒签",
+				btn: ["是","否"], //按钮
+				shade: false //不显示遮罩
+			}, function(){
+				$.ajax({
+					url : '/admin/orderUS/refuseUS.html',
+					data : {
+						orderid : orderid
+					},
+					dataType : "json",
+					type : 'POST',
+					success : function(data) {
+						layer.msg("操作成功", {
+							time: 500,
+							end: function () {
+								dataReload(addorder);
+							}
+						});
+					}
+				}); 
+			});
+			
+			
+			
+			/* $.ajax({
 				url : '/admin/orderUS/refuseUS.html',
 				data : {
 					orderid : orderid
@@ -1291,7 +1346,7 @@
 						}
 					});
 				}
-			});
+			}); */
 		}
 		
 		/* //异步保存数据 

@@ -855,6 +855,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffInfo.setAddressIssamewithcard(updateForm.getAddressIssamewithcard());
 			staffInfo.setAddressIssamewithcarden(updateForm.getAddressIssamewithcarden());
 			staffInfo.setBirthday(updateForm.getBirthday());
+			//把照片放到人员证件信息表中
 			insertImage(updateForm.getCardfront(), TAppStaffCredentialsEnum.IDCARD.intKey(), (int) staffId,
 					AppPicturesTypeEnum.FRONT.intKey());
 			insertImage(updateForm.getCardback(), TAppStaffCredentialsEnum.IDCARD.intKey(), (int) staffId,
@@ -948,7 +949,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Map<String, Object> fromJson = JsonUtil.fromJson(data, Map.class);
 
 		//人员id
-		Integer staffId = (Integer) fromJson.get("staffId");
+		String staffId = String.valueOf(fromJson.get("staffId"));
 
 		//根据人员id获取订单
 		TAppStaffOrderUsEntity fetch = dbDao.fetch(TAppStaffOrderUsEntity.class, Cnd.where("staffid", "=", staffId));
@@ -1063,8 +1064,14 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				TAppStaffConscientiousEntity.class, militaryInfoListJson);
 		dbDao.updateRelations(militaryInfoList_old, militaryInfoList_New);
 
-		//插入日志
-		orderUSViewService.insertLogs(orderus.getId(), USOrderListStatusEnum.FILlED.intKey(), loginUser.getId());
+		//填写资料完成日志只插入第一次
+		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
+		if (!Util.eq(basic.getIscompleted(), IsYesOrNoEnum.YES.intKey())) {
+			//插入日志
+			orderUSViewService.insertLogs(orderus.getId(), USOrderListStatusEnum.FILlED.intKey(), loginUser.getId());
+			basic.setIscompleted(IsYesOrNoEnum.YES.intKey());
+			dbDao.update(basic);
+		}
 		return JsonResult.success("保存成功");
 	}
 
@@ -1264,14 +1271,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 			TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
 					Cnd.where("id", "=", passortId));
+			//更新基本信息表中的姓名
 			TAppStaffBasicinfoEntity staffBase = dbDao.fetch(TAppStaffBasicinfoEntity.class, passport.getStaffid()
 					.longValue());
-			insertImage(passportForm.getPassporturl(), TAppStaffCredentialsEnum.NEWHUZHAO.intKey(),
-					passport.getStaffid(), -1);
 			staffBase.setFirstname(passportForm.getFirstname());
 			staffBase.setLastname(passportForm.getLastname());
-			passport.setOpid(userId);
-			passport.setFirstname(passportForm.getFirstname());
 			if (!Util.isEmpty(passportForm.getFirstnameen())) {
 				passport.setFirstnameen(passportForm.getFirstnameen().substring(1));
 				staffBase.setFirstnameen(passportForm.getFirstnameen().substring(1));
@@ -1282,6 +1286,19 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 				staffBase.setLastnameen(passportForm.getLastnameen().substring(1));
 			}
 			dbDao.update(staffBase);
+
+			//更新用户表中的姓名
+			TUserEntity user = dbDao.fetch(TUserEntity.class, staffBase.getUserid().longValue());
+			user.setName(staffBase.getFirstname() + staffBase.getLastname());
+			dbDao.update(user);
+
+			//将护照照片放进人员证件信息表中
+			insertImage(passportForm.getPassporturl(), TAppStaffCredentialsEnum.NEWHUZHAO.intKey(),
+					passport.getStaffid(), -1);
+
+			//更新护照信息
+			passport.setOpid(userId);
+			passport.setFirstname(passportForm.getFirstname());
 			passport.setPassporturl(passportForm.getPassporturl());
 			passport.setOCRline1(passportForm.getOCRline1());
 			passport.setOCRline2(passportForm.getOCRline2());

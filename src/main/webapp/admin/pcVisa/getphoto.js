@@ -87,7 +87,7 @@ function oldhuzhao(staffid, type) {
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			if (data != 0) {
+			if (data.query.length > 0) {
 				for(var i=0;i<data.query.length;i++){
 					var url=data.query[i].url;
 					$(".beforeInfo").before('<div class="uploadPassports">'+
@@ -113,7 +113,7 @@ function card(staffid, type) {
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			if(data!=0){
+			if(data.query.length > 0){
 					var url=data.query[0].url;
 					if(data.query[0].status == 1){
 						$("#card").attr('src',url);
@@ -215,7 +215,7 @@ function drive(staffid, type) {
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			if(data!=0){
+			if(data.query.length > 0){
 				var url=data.query[0].url;
 				if(data.query.length == 1){
 					$("#drive").attr('src',url);
@@ -242,7 +242,7 @@ function housecard(staffid, type) {
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			if(data!=0){
+			if(data.query.length > 0){
 				for(var i = 0;i<data.query.length;i++){
 				$(".housecard").after('<div class="uploadReleases hoursecardMain housecard'+i+'" >'+
 					'<div>上传</div>'+
@@ -250,11 +250,11 @@ function housecard(staffid, type) {
 				'</div>');
 				}
 				$(".1").remove();
-				if(data.explain != null){
-					$("#propertyholder").val(data.explain.propertyholder);
-					$("#area").val(data.explain.area);
-					$("#address").val(data.explain.address);
-				}
+			}
+			if(data.explain != null){
+				$("#propertyholder").val(data.explain.propertyholder);
+				$("#area").val(data.explain.area);
+				$("#address").val(data.explain.address);
 			}
 		}
 	});
@@ -272,7 +272,7 @@ function household(staffid, type) {
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			if(data!=0){
+			if(data.query.length > 0){
 			//	console.log(data);
 			//$("#household").attr("src",data.url);
 				$(".householdBack").next().remove();
@@ -340,6 +340,7 @@ function oldsigned(staffid, type) {
 
 // 返回
 function closeWindow() {
+	parent.successCallback(2);
 	var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 	parent.layer.close(index);
 }
@@ -350,6 +351,7 @@ function savePhoto() {
 	var passportId = $("#passportId").val();
 	window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='
 			+ passportId;*/
+	parent.successCallback(2);
 	var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 	parent.layer.close(index);
 }
@@ -366,5 +368,6 @@ function deleteApplicantFrontImg() {
 function saveApplicant(status){
 	if(status == 2){
 		window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='+passportId+'&isDisable='+isDisable;
+		parent.successCallback(2);
 	}
 }

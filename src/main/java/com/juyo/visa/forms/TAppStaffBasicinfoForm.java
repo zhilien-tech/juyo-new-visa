@@ -35,6 +35,8 @@ public class TAppStaffBasicinfoForm extends DataTablesParamForm {
 
 	private Integer isfirst;
 
+	private Integer iscompleted;
+
 	/**名*/
 	private String lastname;
 

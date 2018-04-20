@@ -36,7 +36,11 @@ import com.uxuexi.core.web.base.service.BaseService;
  * <p>
  * TODO(这里描述这个类补充说明 – 可选)
  *
- * @author   朱晓川
+<<<<<<< HEAD
+ * @author  
+=======
+ * @author   董霖鹏
+>>>>>>> refs/remotes/origin/dev
  * @Date	 2018年4月10日 	 
  */
 public class WeXinAccreditService extends BaseService<TConfWxEntity> {
@@ -47,18 +51,23 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 	private AppEventsViewService appEventsViewService;
 	public static Log logger = LogFactory.getLog(WeiXinTokenModule.class);
 
-	private String WX_APPID = "wxd77f341f1b849e68";
-	private String WX_APPSECRET = "e30756ac75799946d0d89868d89547be";
+	//获取微信公众号唯一标识
+	public Object getAppid() {
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 2);
+		return wx;
+	}
 
 	//获取access_token
 	public JSONObject getAccessToken(String code) {
+		TConfWxEntity wx = (TConfWxEntity) getAppid();
+
 		String accessTokenUrl;
 		JSONObject accessToken = null;
 		if (!Util.isEmpty(code)) {
 			//应用授权作用域，snsapi_base （不弹出授权页面，直接跳转，只能获取用户openid），snsapi_userinfo （弹出授权页面，可通过openid拿到昵称、性别、所在地。并且，即使在未关注的情况下，只要用户授权，也能获取其信息）
 			accessTokenUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
-			String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("CODE", code)
-					.replace("SECRET", WX_APPSECRET);
+			String requestUrl = accessTokenUrl.replace("APPID", wx.getAppid()).replace("CODE", code)
+					.replace("SECRET", wx.getAppsecret());
 			System.out.println("getCode.requestUrl====>" + requestUrl);
 			accessToken = HttpUtil.doGet(requestUrl);
 		}
