@@ -4,11 +4,7 @@ import com.uxuexi.core.common.enums.IEnum;
 
 /**
  * 
- * 是否
- * <p>
- * 是 or 否
- * @author   彭辉
- * @Date	 2017年10月20日
+ * 主副申请人 枚举
  */
 public enum MainOrViceEnum implements IEnum {
 	YES(1, "主申请人"), NO(0, "副申请人");

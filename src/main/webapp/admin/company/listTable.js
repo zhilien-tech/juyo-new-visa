@@ -68,7 +68,7 @@ function initDatatable() {
 		            			if(arr[i] == 1){
 		            				scopeStr += "日";
 		            			}else if(arr[i] == 2){
-
+		            				scopeStr += "美";
 		            			}
 		            		}
 		            		return scopeStr;

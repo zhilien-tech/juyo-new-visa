@@ -213,7 +213,8 @@ public class UserViewService extends BaseService<TUserEntity> {
 					UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
 			cnd.and(expT);
 		} else {
-			cnd.and("userType", "!=", UserLoginEnum.TOURIST_IDENTITY.intKey());
+			cnd.and("userType", "!=", UserLoginEnum.TOURIST_IDENTITY.intKey()).and("userType", "!=",
+					UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
 		}
 		TUserEntity user = dbDao.fetch(TUserEntity.class, cnd);
 

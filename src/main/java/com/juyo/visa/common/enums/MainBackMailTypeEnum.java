@@ -2,6 +2,11 @@ package com.juyo.visa.common.enums;
 
 import com.uxuexi.core.common.enums.IEnum;
 
+/**
+ * 
+ * 回邮方式
+ *
+ */
 public enum MainBackMailTypeEnum implements IEnum {
 
 	KUAIDI(1, "快递"), ZIQU(2, "自取"), SHIGUAN(3, "使馆邮寄"), NEIBU(4, "内部交接");

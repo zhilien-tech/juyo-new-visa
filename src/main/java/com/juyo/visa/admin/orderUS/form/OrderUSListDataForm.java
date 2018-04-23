@@ -6,16 +6,17 @@
 
 package com.juyo.visa.admin.orderUS.form;
 
-import lombok.Data;
-
 import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
+
+import lombok.Data;
 
 /**
  * 美国订单列表form
@@ -94,7 +95,7 @@ public class OrderUSListDataForm implements SQLParamForm {
 				cnd.and("tou.comId", "=", companyid);
 			} else {
 				//普通的操作员
-				cnd.and("tou.opid", "IS", null);
+				cnd.and("tu.usertype", "=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
 			}
 		} else {
 			//我的
