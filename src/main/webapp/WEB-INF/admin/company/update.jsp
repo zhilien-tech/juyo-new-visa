@@ -199,6 +199,7 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var comtype = '${obj.company.comType}';
 	</script>
 	<!-- jQuery 2.2.3 -->
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
@@ -214,6 +215,13 @@
 	<!-- 上传图片 -->
 	<script src="${base}/admin/company/uploadFile.js"></script>
 	<script type="text/javascript">
+		$(function(){
+			if(comtype == 3){
+				$("#usScopeDiv").show();
+			}else{
+				$("#usScopeDiv").hide();
+			}
+		});
 		function initvalidate() {
 			//校验
 			$('#companyUpdateForm').bootstrapValidator({
@@ -438,14 +446,14 @@
 						});
 						$("#jpDesignNum_div").removeClass("none");
 					} else if (scopesList[i] == 2) {
-						/* $(".multiselectBtn").append( "<span>美国,</span>");
+						$(".multiselectBtn").append( "<span>美国,</span>");
 						$(".btnVal input").each(function(){
 							var btnVal = $(this).val();//按钮 text
 							if((btnVal+",") == "美国,"){
 								$(this).addClass("btn-state2");//变灰
 								$(this).removeClass("btn-state1");//清除蓝色按钮 样式
 							}
-						});	 */
+						});
 					}
 
 				}
