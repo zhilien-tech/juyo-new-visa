@@ -132,7 +132,7 @@ function getEchoPicture(staffid){
 				var imgDivStr = '';
 				$.each($.parseJSON(data),function(i,item){  
 				    var url = item.url;
-				    imgDivStr += '<div class="householdPage wxChooseImages multiselect"><img src="'+url+'" class="pageImg" /></div>'; 
+				    imgDivStr += '<div class="bankPage wxChooseImages multiselect"><img src="'+url+'" class="pageImg" /></div>'; 
 				}); 
 				$(".chooseImage").before(imgDivStr);
 			}
