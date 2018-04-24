@@ -390,7 +390,7 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		var userType = '${obj.userType}';
-		var isTrail = '${obj.isTrail}';
+		var isTrail = '${obj.isTrailOrder}';
 		var wealthType = '${obj.wealthJp}';
 		var sessionId = '${obj.sessionid}';
 		var localAddr = '${obj.localAddr}';

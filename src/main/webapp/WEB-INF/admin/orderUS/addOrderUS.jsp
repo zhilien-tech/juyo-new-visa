@@ -207,8 +207,12 @@
 				dataType : "json",
 				success:function(data){
 					layer.closeAll("loading");
-					parent.reloadData();
-					closeWindow();
+					if(data.flag == "2"){
+						layer.msg(data.msg);
+					}else{
+						parent.reloadData();
+						closeWindow();
+					}
 					//window.location.href = '/admin/orderUS/listUS.html';
 				}
 			});

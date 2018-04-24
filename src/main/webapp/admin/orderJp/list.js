@@ -63,12 +63,12 @@ new Vue({
 			});
 		},
 		disabled : function(orderid, status) {
-			layer.load(1);
 			layer.confirm("您确认要<font color='red'>作废</font>吗？", {
 				title:"作废",
 				btn: ["是","否"], //按钮
 				shade: false //不显示遮罩
 			}, function(){
+				layer.load(1);
 				$.ajax({
 					url : '/admin/orderJp/disabled',
 					dataType : "json",
