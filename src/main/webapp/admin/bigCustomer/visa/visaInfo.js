@@ -254,7 +254,25 @@ $(".drivercancel").click(function(){
 
 //-------------------------------------------美国联络点 Start----------------------------------
 //不知道联系人名
-editEleBeforeCheckbox($("#isknowname"));
+linkage($("#isknowname"));
+
+function linkage(obj){
+	
+	 obj.change(function(){
+		var beforeEle = obj.prev();
+		var linkageinput = obj.parent().prev().children("input");
+		console.log(linkageinput);
+		beforeEle.val("");
+		if(obj.is(':checked')){
+			linkageinput.prop("disabled",true);
+			beforeEle.prop("disabled",true);
+		}else{
+			linkageinput.prop("disabled",false);
+			beforeEle.prop("disabled",false);
+		}
+	});
+}
+
 
 //不知道组织名
 editEleBeforeCheckbox($("#isknoworganizationname"));

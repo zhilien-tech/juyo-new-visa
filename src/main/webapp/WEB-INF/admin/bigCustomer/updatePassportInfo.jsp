@@ -90,6 +90,7 @@
 								<div class="form-group groupWidth">
 									<label><span>*</span>护照号</label>
 									<input id="id" name="id" type="hidden" value="${obj.passport.possportid }"/>
+									<input id="orderid" name="orderid" type="hidden" value="${obj.orderid }"/>
 									<input id="OCRline1" name="OCRline1" type="hidden" value="">
 									<input id="OCRline2" name="OCRline2" type="hidden" value="">
 									<input name="userType" type="hidden" value="${obj.usertype }"/>

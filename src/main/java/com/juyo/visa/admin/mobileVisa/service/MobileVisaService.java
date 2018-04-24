@@ -440,6 +440,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 						typeStr = enu.value();
 					}
 				}
+				result.put("statusval", status);
 				result.put("status", typeStr);
 				result.put("marry", credentialEntity);
 				return result;
