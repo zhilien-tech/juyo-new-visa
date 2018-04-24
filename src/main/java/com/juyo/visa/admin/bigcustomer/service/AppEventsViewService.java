@@ -490,7 +490,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		} else {
 			//当前登录用户Id
 			TUserEntity loginUser = LoginUtil.getLoginUser(session);
-			//Integer loginUserId = loginUser.getId();
+			Integer loginUserId = loginUser.getId();
 
 			//添加人员
 			TAppStaffBasicinfoAddForm staffForm = new TAppStaffBasicinfoAddForm();
@@ -518,10 +518,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 			staffEventEntity.setStaffId(staffId);
 
 			TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
-
-			//用户登录，添加游客信息
-			TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
-			Integer loginUserId = (Integer) addLoginUser(staffInfo);
+			
 			//添加订单
 			orderUSViewService.addOrderByStuffId(staffId, loginUserId);
 

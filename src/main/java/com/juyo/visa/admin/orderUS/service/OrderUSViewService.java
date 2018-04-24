@@ -1165,6 +1165,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String orderNum = generateOrderNumByDate();
 		Date nowDate = DateUtil.nowDate();
 		orderUs.setOrdernumber(orderNum);
+		orderUs.setOpid(userid);
 		orderUs.setComid(US_YUSHANG_COMID);
 		orderUs.setStatus(USOrderStatusEnum.PLACE_ORDER.intKey());//下单
 		orderUs.setIspayed(IsPayedEnum.NOTPAY.intKey());

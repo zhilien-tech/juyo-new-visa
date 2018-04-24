@@ -114,7 +114,7 @@ $("#compName").on("select2:unselect",function(e){
 	$('#customerType').val('');
 	$('#customerid').val('');
 	$('#comShortName').html('');
-	$('#payType').val('');
+	$('#payType').val(0);
 	$('#visatype').val('');
 	$('#amount').val('');
 });
@@ -136,6 +136,7 @@ $("#comShortName").on("select2:select",function(e){
 			$('#customerType').val(data.source);
 			$('#customerid').val(data.id);
 			$('#compName').html('<option value="'+data.id+'" selected="selected">'+data.name+'</option>');
+			alert(data.payType);
 			$('#payType').val(data.payType);
 			$('#customamount').addClass('none');
 		}
@@ -146,7 +147,7 @@ $("#comShortName").on("select2:unselect",function(e){
 	$('#customerType').val('');
 	$('#customerid').val('');
 	$('#compName').html('');
-	$('#payType').val('');
+	$('#payType').val(0);
 	$('#visatype').val('');
 	$('#amount').val('');
 });

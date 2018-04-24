@@ -9,9 +9,7 @@ package com.juyo.visa.common.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * TODO(这里用一句话描述这个类的作用)
- * <p>
- * TODO(这里描述这个类补充说明 – 可选)
+ * 日本订单（简） 枚举
  *
  * @author   刘旭利
  * @Date	 2018年1月23日 	 

@@ -4,7 +4,7 @@ import com.uxuexi.core.common.enums.IEnum;
 
 /**
  * 
- * 日本订单状态 枚举
+ * 日本订单状态（繁琐版） 枚举
  * @author   彭辉
  * @Date	 2017年10月20日
  * 
