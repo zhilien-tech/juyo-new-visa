@@ -103,9 +103,18 @@ label {
 	display: inline-block; 
 	float: left;
 }
+.companionSurnNameen {
+	display: inline-block; 
+	width:100%;
+}
 .companionName {
 	display: inline-block;
 	float: right;
+}
+.companionNameen {
+	padding-top:10px;
+	display: inline-block;
+	width:100%;
 }
 .youRelationship {
 	padding-top: 10px;
@@ -115,11 +124,22 @@ label {
 	height: 34px; 
 	margin-top: 5px;
 }
+.firstName,.lastname {
+	width:100% !important;
+}
 .clear {
 	clear: both;
 }
 .btnGroup {
 	/* margin-top: 10px; */
+}
+.everyMarTop {
+	margin-top:10px;
+}
+.visaNumen {
+	float:none !important;
+	display:inline-block;
+	
 }
 .save {
 	display: inline-block; 
@@ -143,6 +163,9 @@ label {
 .save:hover,.cancel:hover {
 	color:#FFF;
 	text-decoration:none;
+}
+#dateunit{
+	width:150px !important;
 }
 /*以前的美国旅游信息*/
 .beforeTourism {
@@ -295,6 +318,10 @@ label {
 }
 .beforeWorkInfo {
 	display: none;
+}
+.selectInfoen {
+	display:inline-block;
+	padding:10px 0 0 15px;
 }
 .elementHide{
 	display: none;

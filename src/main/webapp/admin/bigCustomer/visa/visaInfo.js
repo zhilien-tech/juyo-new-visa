@@ -96,7 +96,6 @@ $(".companyInfo").change(function(){
 	if(companyVal == 1){
 		$(".teamture").show();
 		$(".teamnamefalse").show();
-		alert(visaInfo.travelCompanionInfo.istravelwithotheren == 1);
 	}else {
 		$(".teamture").hide();
 		deleteBrotherEle($("div.teamnamefalse"));
@@ -106,8 +105,24 @@ $(".companyInfo").change(function(){
 		deleteBrotherEle($("div.teamnamefalseDiv"));
 		emptyContentByObj($("div.teamnamefalse"));
 	}
+	$(".companyInfoen").eq(companyVal-1).click();
 });
-
+//旅伴信息英文
+$(".companyInfoen").change(function(){
+	var companyValen = $(".companyInfoen:checked").val();
+	if(companyValen == 1){
+		$(".teamtureen").show();
+		$(".teamnamefalseen").show();
+	}else {
+		$(".teamtureen").hide();
+		deleteBrotherEle($("div.teamnamefalseen"));
+		emptyContentByObj($("div.teamnamefalseen"));
+		//触发单选按钮的点击事件
+		$(".teamen").eq(1).click();
+		deleteBrotherEle($("div.teamnamefalseDiven"));
+		emptyContentByObj($("div.teamnamefalseen"));
+	}
+});
 //旅伴信息--是否作为团队或组织的一部分旅游
 $(".team").change(function(){
 	var teamVal = $("input[class=team]:checked").val(); 
@@ -124,16 +139,43 @@ $(".team").change(function(){
 		deleteBrotherEle($("div.teamnamefalseDiv"));
 		emptyContentByObj($("div.teamnamefalse"));
 	}
+	$(".teamen").eq(teamVal-1).click();
 });
-
+//旅伴信息--是否作为团队或组织的一部分旅游英文
+$(".teamen").change(function(){
+	var teamValen = $("input[class=teamen]:checked").val(); 
+	if(teamValen == 1){
+		$(".teamnametureen").show();
+		$(".teamnamefalseen").hide();
+		$(".companyGroupen").hide();
+		emptyContentByObj($("div.teamnametureen"));
+	}else {
+		$(".teamnametureen").hide();
+		$(".teamnamefalseen").show();
+		$(".teamnamefalseDiven").show();
+		$(".companyGroupen").show();
+		deleteBrotherEle($("div.teamnamefalseDiven"));
+		emptyContentByObj($("div.teamnamefalseen"));
+	}
+});
 //旅伴信息多段操作
 $(".companysave").click(function(){
-	cloneMoreDiv("teamnamefalseDiv");
+	cloneMoreDiv("teamaddfalse");
+	$(".companysaveen").trigger("click");
 });
+//旅伴信息多段操作英文
+$(".companysaveen").click(function(){
+	cloneMoreDiv("teamaddfalseen");
+});
+//删除
 $(".companycancel").click(function(){
-	deleteMoreDiv("teamnamefalseDiv");
+	deleteMoreDiv("teamaddfalse");
+	$(".companycancelen").trigger("click");
 });
-
+//删除英文 
+$(".companycancelen").click(function(){
+	deleteMoreDiv("teamaddfalseen");
+});
 //-------------------------------------------家庭信息 end----------------------------------
 
 //---------------------------------------以前的美国旅游信息 start----------------------------------
@@ -149,7 +191,20 @@ $(".goUS").change(function(){
 		//触发单选按钮的点击事件
 		$(".license").eq(1).click();
 	}
-
+	$(".goUSen").eq(goUS-1).click();
+});
+//(1)是否去过美国英文
+$(".goUSen").change(function(){
+	var goUSen = $("input[class=goUSen]:checked").val();
+	if(goUSen == 1){
+		$(".goUSInfoen").show();
+	}else{
+		$(".goUSInfoen").hide();
+		deleteBrotherEle($("div.goUS_CountryDiven"));
+		emptyContentByObj($("div.goUS_CountryDiven"));
+		//触发单选按钮的点击事件
+		$(".licenseen").eq(1).click();
+	}
 });
 //是否有美国驾照
 $(".license").change(function(){
@@ -161,8 +216,19 @@ $(".license").change(function(){
 		deleteBrotherEle($("div.goUS_drivers"));
 		emptyContentByObj($("div.goUS_drivers"));
 	}
+	$(".licenseen").eq(license-1).click();
 });
-
+//是否有美国驾照英文
+$(".licenseen").change(function(){
+	var licenseen = $("input[class=licenseen]:checked").val();
+	if(licenseen == 1){
+		$(".driverInfoen").show();
+	}else{
+		$(".driverInfoen").hide();
+		deleteBrotherEle($("div.goUS_driversen"));
+		emptyContentByObj($("div.goUS_driversen"));
+	}
+});
 //不知道驾照号
 editEleBeforeCheckbox($("#isknowdrivernumber"));
 
@@ -175,6 +241,17 @@ $(".visaUS").change(function(){
 	}else {
 		$(".dateIssue").hide();
 		emptyContentByObj($("div.goUS_visa"));
+	}
+	$(".visaUSen").eq(visaUS-1).click();
+});
+//是否有美国签证英文
+$(".visaUSen").change(function(){
+	var visaUSen = $("input[class=visaUSen]:checked").val();
+	if(visaUSen == 1){
+		$(".dateIssueen").show();
+	}else {
+		$(".dateIssueen").hide();
+		emptyContentByObj($("div.goUS_visaen"));
 	}
 });
 //不知道签证号
@@ -189,6 +266,17 @@ $(".lose").change(function(){
 		$(".yearExplain").hide();
 		emptyContentByObj($("div.yearExplain"));
 	}
+	$(".loseen").eq(lose-1).click();
+});
+//是否丢失签证英文
+$(".loseen").change(function(){
+	var loseen = $("input[class=loseen]:checked").val();
+	if(loseen == 1){
+		$(".yearExplainen").show();
+	}else {
+		$(".yearExplainen").hide();
+		emptyContentByObj($("div.yearExplainen"));
+	}
 });
 //是否取消、撤销签证
 $(".revoke").change(function(){
@@ -198,6 +286,17 @@ $(".revoke").change(function(){
 	}else {
 		$(".explain").hide();
 		emptyContentByObj($("div.explain"));
+	}
+	$(".revokeen").eq(revoke-1).click();
+});
+//是否取消、撤销签证英文
+$(".revokeen").change(function(){
+	var revokeen = $("input[class=revokeen]:checked").val();
+	if(revokeen == 1){
+		$(".explainen").show();
+	}else {
+		$(".explainen").hide();
+		emptyContentByObj($("div.explainen"));
 	}
 });
 //是否被拒绝过
@@ -209,6 +308,17 @@ $(".refuse").change(function(){
 		$(".refuseExplain").hide();
 		emptyContentByObj($("div.refuseExplain"));
 	}
+	$(".refuseen").eq(refuse-1).click();
+});
+//是否被拒绝过英文
+$(".refuseen").change(function(){
+	var refuseen = $("input[class=refuseen]:checked").val();
+	if(refuseen == 1){
+		$(".refuseExplainen").show();
+	}else {
+		$(".refuseExplainen").hide();
+		emptyContentByObj($("div.refuseExplainen"));
+	}
 });
 //曾经是否是美国合法永久居民
 $(".onceLegitimate").change(function(){
@@ -218,6 +328,17 @@ $(".onceLegitimate").change(function(){
 	}else {
 		$(".onceExplain").hide();
 		emptyContentByObj($("div.onceExplain"));
+	}
+	$(".onceLegitimateen").eq(onceLegitimate-1).click();
+});
+//曾经是否是美国合法永久居民英文
+$(".onceLegitimateen").change(function(){
+	var onceLegitimateen = $("input[class=onceLegitimateen]:checked").val();
+	if(onceLegitimateen == 1){
+		$(".onceExplainen").show();
+	}else {
+		$(".onceExplainen").hide();
+		emptyContentByObj($("div.onceExplainen"));
 	}
 });
 //有没有人曾代表您向美国公民和移民服务局提交过移民申请
@@ -229,24 +350,55 @@ $(".onceImmigration").change(function(){
 		$(".immigrationExplain").hide();
 		emptyContentByObj($("div.immigrationExplain"));
 	}
+	$(".onceImmigrationen").eq(onceImmigration-1).click();
 });
-
+//有没有人曾代表您向美国公民和移民服务局提交过移民申请英文
+$(".onceImmigrationen").change(function(){
+	var onceImmigrationen = $("input[class=onceImmigrationen]:checked").val();
+	if(onceImmigrationen == 1){
+		$(".immigrationExplainen").show();
+	}else {
+		$(".immigrationExplainen").hide();
+		emptyContentByObj($("div.immigrationExplainen"));
+	}
+});
 
 //去过美国多段
 $(".beforesave").click(function(){
 	cloneMoreDiv("goUS_CountryDiv");
-});											
+	$(".beforesaveen").trigger("click");
+});		
+//去过美国多段英文
+$(".beforesaveen").click(function(){
+	cloneMoreDiv("goUS_CountryDiven");
+});	
+//删除
 $(".beforecancel").click(function(){
 	deleteMoreDiv("goUS_CountryDiv");
+	$(".beforecancelen").trigger("click");
 });
-
+//删除英文
+$(".beforecancelen").click(function(){
+	deleteMoreDiv("goUS_CountryDiven");
+});
 
 //是否有驾照
 $(".driversave").click(function(){
 	cloneMoreDiv("goUS_drivers");
+	$(".driversaveen").trigger("click");
 });
+//是否有驾照英文
+$(".driversaveen").click(function(){
+	cloneMoreDiv("goUS_driversen");
+});
+//删除
 $(".drivercancel").click(function(){
 	deleteMoreDiv("goUS_drivers");
+	$(".drivercancelen").trigger("click");
+});
+//删除英文
+$(".drivercancelen").click(function(){
+	deleteMoreDiv("goUS_driversen");
 });
 //---------------------------------------以前的美国旅游信息 end----------------------------------
 
@@ -274,7 +426,7 @@ emptyContentByObj($("#contactPoint_ralationship_div"));
 
 //-------------------------------------------家庭信息 Start----------------------------------
 //亲属信息
-//父亲是否在美国       *********有问题
+//父亲是否在美国 
 $(".fatherUS").change(function(){
 	var fatherUS = $("input[class=fatherUS]:checked").val();
 	if(fatherUS == 1){
@@ -283,12 +435,23 @@ $(".fatherUS").change(function(){
 		$(".fatherUSYes").hide();
 		emptyContentByObj($("div.fatherUSYes"));
 	}
+	$(".fatherUSen").eq(fatherUS-1).click();
+});
+//父亲是否在美国英文
+$(".fatherUSen").change(function(){
+	var fatherUSen = $("input[class=fatherUSen]:checked").val();
+	if(fatherUSen == 1){
+		$(".fatherUSYesen").show();
+	}else {
+		$(".fatherUSYesen").hide();
+		emptyContentByObj($("div.fatherUSYesen"));
+	}
 });
 //不知道父亲的姓 
 editEleBeforeCheckbox($("#isKnowFatherXing"));
 //不知道父亲的名
 editEleBeforeCheckbox($("#isKnowFatherMing"));
-//母亲是否在美国		 *********有问题
+//母亲是否在美国
 $(".motherUS").change(function(){
 	var motherUS = $("input[class=motherUS]:checked").val();
 	if(motherUS == 1){
@@ -296,6 +459,17 @@ $(".motherUS").change(function(){
 	}else {
 		$(".motherUSYes").hide();
 		emptyContentByObj($("div.motherUSYes"));
+	}
+	$(".motherUSen").eq(motherUS-1).click();
+});
+//母亲是否在美国英文
+$(".motherUSen").change(function(){
+	var motherUSen = $("input[class=motherUSen]:checked").val();
+	if(motherUSen == 1){
+		$(".motherUSYesen").show();
+	}else {
+		$(".motherUSYesen").hide();
+		emptyContentByObj($("div.motherUSYesen"));
 	}
 });
 //不知道母亲的姓 
@@ -312,6 +486,19 @@ $(".directRelatives.directUSRelatives").change(function(){
 		$(".directRelativesYes").hide();
 		$(".directRelativesNo").show();
 		emptyContentByObj($("div.directRelatives"));
+	}
+	$(".directUSRelativesen").eq(directUSRelatives-1).click();
+});
+//在美国除了父母还有没有直系亲属英文
+$(".directUSRelativesen").change(function(){
+	var directUSRelativesen = $("input[class='directRelatives directUSRelativesen']:checked").val();
+	if(directUSRelativesen == 1){
+		$(".directRelativesYesen").show();
+		$(".directRelativesNoen").hide();
+	}else {
+		$(".directRelativesYesen").hide();
+		$(".directRelativesNoen").show();
+		emptyContentByObj($("div.directRelativesen"));
 	}
 });
 //配偶信息
@@ -390,6 +577,18 @@ $(".beforeWork").change(function(){
 		deleteBrotherEle($("div.workBeforeInfosDiv"));
 		emptyContentByObj($("div.beforeWorkInfo"));
 	}
+	$(".beforeWorken").eq(beforeWork-1).click();
+});
+//以前是否工作过英文		
+$(".beforeWorken").change(function(){
+	var beforeWorken = $("input[class=beforeWorken]:checked").val();
+	if(beforeWorken == 1){
+		$(".beforeWorkInfoen").show();
+	}else {
+		$(".beforeWorkInfoen").hide();
+		deleteBrotherEle($("div.workBeforeInfosDiven"));
+		emptyContentByObj($("div.beforeWorkInfoen"));
+	}
 });
 //
 editEleBeforeCheckbox($("#institutioncityedu"));
@@ -405,8 +604,19 @@ $(".education").change(function(){
 		deleteBrotherEle($("div.midSchoolEduDiv"));
 		emptyContentByObj($("div.educationInfo"));
 	}
+	$(".educationen").eq(education-1).click();
 });
-
+//是否上过中学或以上的任何教育英文
+$(".educationen").change(function(){
+	var educationen = $("input[class=educationen]:checked").val();
+	if(educationen == 1){
+		$(".educationInfoen").show();
+	}else {
+		$(".educationInfoen").hide();
+		deleteBrotherEle($("div.midSchoolEduDiven"));
+		emptyContentByObj($("div.educationInfoen"));
+	}
+});
 //是否属于氏族或部落
 $(".isclan").change(function(){
 	var isclan = $("input[class=isclan]:checked").val();
@@ -419,6 +629,20 @@ $(".isclan").change(function(){
 		deleteBrotherEle($("div.clannameDiv"));
 		emptyContentByObj($("div.clannameDiv"));
 	}
+	$(".isclanen").eq(isclan-1).click();
+});
+//是否属于氏族或部落英文
+$(".isclanen").change(function(){
+	var isclanen = $("input[class=isclanen]:checked").val();
+	if(isclanen == 1){
+		$(".isclanYesen").show();
+	}else {
+		$(".isclanYesen").hide();
+		deleteBrotherEle($("div.languagenameen"));
+		emptyContentByObj($("div.languagenameen"));
+		deleteBrotherEle($("div.clannameDiven"));
+		emptyContentByObj($("div.clannameDiven"));
+	}
 });
 //过去五年是否曾去过任何国家/地区旅游
 $(".istraveledanycountry").change(function(){
@@ -429,6 +653,18 @@ $(".istraveledanycountry").change(function(){
 		$(".isTravelYes").hide();
 		deleteBrotherEle($("div.travelCountry"));
 		emptyContentByObj($("div.travelCountry"));
+	}
+	$(".istraveledanycountryen").eq(istraveledanycountry-1).click();
+});
+//过去五年是否曾去过任何国家/地区旅游英文
+$(".istraveledanycountryen").change(function(){
+	var istraveledanycountryen = $("input[class=istraveledanycountryen]:checked").val();
+	if(istraveledanycountryen == 1){
+		$(".isTravelYesen").show();
+	}else {
+		$(".isTravelYesen").hide();
+		deleteBrotherEle($("div.travelCountryen"));
+		emptyContentByObj($("div.travelCountryen"));
 	}
 });
 //是否属于、致力于、或为任何专业、社会或慈善组织而工作
@@ -441,6 +677,18 @@ $(".isworkedcharitableorganization").change(function(){
 		deleteBrotherEle($("div.organizationDiv"));
 		emptyContentByObj($("div.organizationDiv"));
 	}
+	$(".isworkedcharitableorganizationen").eq(isworkedcharitableorganization-1).click();
+});
+//是否属于、致力于、或为任何专业、社会或慈善组织而工作英文
+$(".isworkedcharitableorganizationen").change(function(){
+	var isorganizationen = $("input[class=isworkedcharitableorganizationen]:checked").val();
+	if(isorganizationen == 1){
+		$(".isOrganizationYesen").show();
+	}else {
+		$(".isOrganizationYesen").hide();
+		deleteBrotherEle($("div.organizationDiven"));
+		emptyContentByObj($("div.organizationDiven"));
+	}
 });
 //是否有专业技能或培训，如强制、爆炸物、核能、生物或化学
 $(".hasspecializedskill").change(function(){
@@ -450,6 +698,17 @@ $(".hasspecializedskill").change(function(){
 	}else {
 		$(".skillDiv").hide();
 		emptyContentByObj($("div.skillDiv"));
+	}
+	$(".hasspecializedskillen").eq(isSkill-1).click();
+});
+//是否有专业技能或培训，如强制、爆炸物、核能、生物或化学英文
+$(".hasspecializedskillen").change(function(){
+	var isSkillen = $("input[class=hasspecializedskillen]:checked").val();
+	if(isSkillen == 1){
+		$(".skillDiven").show();
+	}else {
+		$(".skillDiven").hide();
+		emptyContentByObj($("div.skillDiven"));
 	}
 });
 //是否曾服兵役
@@ -462,72 +721,155 @@ $(".hasservedinmilitary").change(function(){
 		deleteBrotherEle($("div.militaryInfoDiv"));
 		emptyContentByObj($("div.militaryInfoDiv"));
 	}
+	$(".hasservedinmilitaryen").eq(isMilitary-1).click();
 });
-//是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织
-$(".isservedinrebelgroup").change(function(){
-	var isDinrebel = $("input[class=isservedinrebelgroup]:checked").val();
-	if(isDinrebel == 1){
-		$(".dinrebelDiv").show();
+//是否曾服兵役英文
+$(".hasservedinmilitaryen").change(function(){
+	var isMilitaryen = $("input[class=hasservedinmilitaryen]:checked").val();
+	if(isMilitaryen == 1){
+		$(".militaryServiceYesen").show();
 	}else {
-		$(".dinrebelDiv").hide();
-		emptyContentByObj($("div.dinrebelDiv"));
+		$(".militaryServiceYesen").hide();
+		deleteBrotherEle($("div.militaryInfoDiven"));
+		emptyContentByObj($("div.militaryInfoDiven"));
 	}
 });
-
+////是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织
+//$(".isservedinrebelgroup").change(function(){
+//	var isDinrebel = $("input[class=isservedinrebelgroup]:checked").val();
+//	if(isDinrebel == 1){
+//		$(".dinrebelDiv").show();
+//	}else {
+//		$(".dinrebelDiv").hide();
+//		emptyContentByObj($("div.dinrebelDiv"));
+//	}
+//	$(".hasservedinmilitaryen").eq(isDinrebel-1).click();
+//});
+////是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织英文
+//$(".isservedinrebelgroupen").change(function(){
+//	var isDinrebelen = $("input[class=isservedinrebelgroupen]:checked").val();
+//	if(isDinrebelen == 1){
+//		$(".dinrebelDiven").show();
+//	}else {
+//		$(".dinrebelDiven").hide();
+//		emptyContentByObj($("div.dinrebelDiven"));
+//	}
+//});
 //以前工作信息多段操作
 $(".beforeWorksave").click(function(){
 	cloneMoreDiv("workBeforeInfosDiv");
+	$(".beforeWorksaveen").trigger("click");
 });
+//以前工作信息多段操作英文
+$(".beforeWorksaveen").click(function(){
+	cloneMoreDiv("workBeforeInfosDiven");
+});
+//删除
 $(".beforeWorkcancel").click(function(){
 	deleteMoreDiv("workBeforeInfosDiv");
+	$(".beforeWorkcancelen").trigger("click");
 });
-
-
+//删除英文
+$(".beforeWorkcancelen").click(function(){
+	deleteMoreDiv("workBeforeInfosDiven");
+});
 
 //教育多段操作
 $(".educationsave").click(function(){
 	cloneMoreDiv("midSchoolEduDiv");
+	$(".educationsaveen").trigger("click");
 });
+//教育多段操作英文
+$(".educationsaveen").click(function(){
+	cloneMoreDiv("midSchoolEduDiven");
+});
+//删除
 $(".educationcancel").click(function(){
 	deleteMoreDiv("midSchoolEduDiv");
+	$(".educationcancelen").trigger("click");
+});
+//删除英文
+$(".educationcancelen").click(function(){
+	deleteMoreDiv("midSchoolEduDiven");
 });
 
 //语言多段操作
 $(".languagesave").click(function(){
 	cloneMoreDiv("languagenameDiv");
+	$(".languagesaveen").trigger("click");
 });
+//语言多段操作英文
+$(".languagesaveen").click(function(){
+	cloneMoreDiv("languagenameDiven");
+});
+//删除
 $(".languagecancel").click(function(){
 	deleteMoreDiv("languagenameDiv");
+	$(".languagecancelen").trigger("click");
 });
-
+//删除英文
+$(".languagecancelen").click(function(){
+	deleteMoreDiv("languagenameDiven");
+});
 
 //国家多段操作
 $(".gocountrysave").click(function(){
 	cloneMoreDiv("travelCountry");
+	$(".gocountrysaveen").trigger("click");
 });
+//国家多段操作
+$(".gocountrysaveen").click(function(){
+	cloneMoreDiv("travelCountryen");
+});
+//删除
 $(".gocountrycancel").click(function(){
 	deleteMoreDiv("travelCountry");
+	$(".gocountrycancelen").trigger("click");
 });
-
+//删除英文
+$(".gocountrycancelen").click(function(){
+	deleteMoreDiv("travelCountryen");
+});
 
 
 //组织多段操作
 $(".organizationsave").click(function(){
 	cloneMoreDiv("organizationDiv");
+	$(".organizationsaveen").trigger("click");
 });
-
+//组织多段操作英文
+$(".organizationsaveen").click(function(){
+	cloneMoreDiv("organizationDiven");
+});
+//删除
 $(".organizationcancel").click(function(){
 	deleteMoreDiv("organizationDiv");
+	$(".organizationcancelen").trigger("click");
 });
-
+//删除英文
+$(".organizationcancelen").click(function(){
+	deleteMoreDiv("organizationDiven");
+});
 
 //服兵役多段操作
 $(".militarysave").click(function(){
 	cloneMoreDiv("militaryInfoDiv");
+	$(".militarysaveen").trigger("click");
 });
+//服兵役多段操作
+$(".militarysaveen").click(function(){
+	cloneMoreDiv("militaryInfoDiven");
+});
+//删除
 $(".militarycancel").click(function(){
 	deleteMoreDiv("militaryInfoDiv");
+	$(".militarycancelen").trigger("click");
 });
+//删除英文
+$(".militarycancelen").click(function(){
+	deleteMoreDiv("militaryInfoDiven");
+});
+
 //-------------------------------------------工作/教育/培训信息 end------------------------------------
 
 
@@ -631,6 +973,7 @@ function safeInfoRadioClick(eltClass){
 			$("."+eltClass+"Div").hide();
 			emptyContentByObj($("div."+eltClass+"Div"));
 		}
+		
 	});
 }
 	
@@ -645,4 +988,32 @@ function safeInfoRadioClick(eltClass){
 function closeWindow() {
 	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	parent.layer.close(index);
+}
+
+//双向数据通信
+function translateZhToEn(from, to, param){
+	var toval = "";
+	if(param != ""){
+		toval = param;
+	}else{
+		toval = $(from).val();
+	}
+	$.ajax({
+		//async : false,
+		url : BASE_PATH+'/admin/translate/translate',
+		data : {
+			api : 'google',
+			strType : to,
+			en : 'en',
+			q : toval
+		},
+		type : 'POST',
+		dataType : 'json',
+		success : function(data) {
+			$("#" + to).val(data).change();
+		}
+	});
+	/*$.getJSON("/admin/translate/google", {q: $(from).val()}, function (result) {
+        $("#" + to).val(result.data);
+    });*/
 }

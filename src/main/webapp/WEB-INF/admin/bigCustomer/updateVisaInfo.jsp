@@ -43,34 +43,34 @@
 				<div class="companyMain">
 					<div class="companyMainInfo groupRadioInfo">
 						<label>是否与其他人一起旅游</label>
-						<input type="radio" class="companyInfo" v-model="visaInfo.travelCompanionInfo.istravelwithother" value="1" />是
-						<input type="radio" class="companyInfo" v-model="visaInfo.travelCompanionInfo.istravelwithother" value="2" checked/>否
+						<input type="radio" class="companyInfo" v-model="visaInfo.travelCompanionInfo.istravelwithother" @change="istravelwithother()" value="1" />是
+						<input type="radio" class="companyInfo" v-model="visaInfo.travelCompanionInfo.istravelwithother" @change="istravelwithother()" value="2" checked/>否
 					</div>
 					<!--yes-->
 					<div class="teamture elementHide">
 						<div class="groupRadioInfo">
 							<label>是否作为团队或组织的一部分旅游</label>
-							<input type="radio" class="team" name="ispart" v-model="visaInfo.travelCompanionInfo.ispart" value="1" />是
-							<input type="radio" class="team" name="ispart" v-model="visaInfo.travelCompanionInfo.ispart" value="2" checked/>否
+							<input type="radio" class="team" name="ispart" v-model="visaInfo.travelCompanionInfo.ispart"  @change="ispart()" value="1" />是
+							<input type="radio" class="team" name="ispart" v-model="visaInfo.travelCompanionInfo.ispart" @change="ispart()" value="2" checked/>否
 						</div>
 						<!--第二部分yes-->
 						<div class="teamnameture groupInputInfo">
 							<label>团队名称</label>
-							<input id="groupname" name="groupname" v-model="visaInfo.travelCompanionInfo.groupname" type="text" placeholder="团队名称" />
+							<input id="groupname" name="groupname" onchange="translateZhToEn(this,'groupnameen','')" v-model="visaInfo.travelCompanionInfo.groupname" type="text" placeholder="团队名称" />
 						</div>
 						<!--第二部分No-->
 						<div class="teamnamefalse groupInputInfo">
 							<div>
 							<c:if test="${!empty obj.companionList }">
 								<c:forEach var="companion" items="${obj.companionList }">
-									<div class="teamnamefalseDiv" >
+									<div class="teamnamefalseDiv teamaddfalse" >
 										<div class="companionSurnName">
 											<label>同伴姓</label>
-											<input id="firstname" name="firstname" value="${companion.firstname }" type="text" placeholder="同伴姓" />
+											<input id="firstname" name="firstname" onchange="translateZhToEn(this,'firstnameen','')" value="${companion.firstname }" type="text" placeholder="同伴姓" />
 										</div>
 										<div class="companionName">
 											<label>同伴名</label>
-											<input id="lastname" name="lastname" value="${companion.lastname }" type="text" placeholder="同伴名" />
+											<input id="lastname" name="lastname" onchange="translateZhToEn(this,'lastnameen','')" value="${companion.lastname }" type="text" placeholder="同伴名" />
 										</div>
 										<div class="clear"></div>
 										<div class="youRelationship">
@@ -91,14 +91,14 @@
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.companionList }">
-								<div class="teamnamefalseDiv">
+								<div class="teamnamefalseDiv teamaddfalse">
 									<div class="companionSurnName">
 										<label>同伴姓</label>
-										<input id="firstname" name="firstname" type="text" placeholder="同伴姓" />
+										<input id="firstname" name="firstname" onchange="translateZhToEn(this,'firstnameen','')" type="text" placeholder="同伴姓" />
 									</div>
 									<div class="companionName">
 										<label>同伴名</label>
-										<input id="lastname" name="lastname" type="text" placeholder="同伴名" />
+										<input id="lastname" name="lastname" onchange="translateZhToEn(this,'lastnameen','')" type="text" placeholder="同伴名" />
 									</div>
 									<div class="clear"></div>
 									<div class="youRelationship">
@@ -130,8 +130,8 @@
 					<div class="goUSMain">
 						<div class="groupRadioInfo goUSPad">
 							<label>是否去过美国</label>
-					 		<input type="radio" id="hasbeeninus" name="hasbeeninus" v-model="visaInfo.previUSTripInfo.hasbeeninus" class="goUS" value="1" />是
-							<input type="radio" id="hasbeeninus" name="hasbeeninus" v-model="visaInfo.previUSTripInfo.hasbeeninus" class="goUS" value="2" checked />否
+					 		<input type="radio" id="hasbeeninus" name="hasbeeninus" v-model="visaInfo.previUSTripInfo.hasbeeninus" @change="hasbeeninus()" class="goUS" value="1" />是
+							<input type="radio" id="hasbeeninus" name="hasbeeninus" v-model="visaInfo.previUSTripInfo.hasbeeninus" @change="hasbeeninus()" class="goUS" value="2" checked />否
 						</div>
 						<!--yes-->
 						<div class="goUSInfo goUSYes">
@@ -145,7 +145,7 @@
 											</div>
 											<div class="groupInputInfo stopDate goUS_Country">
 												<label>停留时间</label>
-												<input id="staydays" name="staydays" value="${gous.staydays }" type="text" />
+												<input id="staydays" name="staydays" onchange="translateZhToEn(this,'staydaysen','')" value="${gous.staydays }" type="text" />
 												<select id="dateunit" name="dateunit">
 													<option value="0">请选择</option>
 													<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
@@ -169,7 +169,7 @@
 										</div>
 										<div class="groupInputInfo stopDate">
 											<label>停留时间</label>
-											<input id="staydays" name="staydays" type="text" />
+											<input id="staydays" name="staydays" onchange="translateZhToEn(this,'staydaysen','')" type="text" />
 											<select id="dateunit" name="dateunit">
 												<option value="0">请选择</option>
 												<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
@@ -186,8 +186,8 @@
 							</div>
 							<div class="groupRadioInfo drivingUS">
 								<label>是否有美国驾照</label>
-								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" class="license" value="1" />是
-								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" class="license" value="2" checked />否
+								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" @change="hasdriverlicense()" class="license" value="1" />是
+								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" @change="hasdriverlicense()" class="license" value="2" checked />否
 							</div>
 							<div class="driverInfo elementHide">
 								<div class="driverYes">
@@ -196,7 +196,7 @@
 											<div class="goUS_drivers">
 												<div class="groupcheckBoxInfo driverMain">
 													<label>驾照号</label>
-													<input id="driverlicensenumber" value="${driver.driverlicensenumber }" name="driverlicensenumber" type="text" >
+													<input id="driverlicensenumber" value="${driver.driverlicensenumber }"  onchange="translateZhToEn(this,'driverlicensenumberen','')" name="driverlicensenumber" type="text" >
 													<c:if test="${driver.isknowdrivernumber == 1}">
 														<input id="isknowdrivernumber" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" checked="checked" type="checkbox"/>
 													</c:if>
@@ -225,7 +225,7 @@
 										<div class="goUS_drivers">
 											<div class="groupcheckBoxInfo driverMain">
 												<label>驾照号</label>
-												<input id="driverlicensenumber" name="driverlicensenumber" type="text" >
+												<input id="driverlicensenumber" name="driverlicensenumber" onchange="translateZhToEn(this,'driverlicensenumberen','')" type="text" >
 												<input id="isknowdrivernumber" name="isknowdrivernumber" type="checkbox"/>
 											</div>
 											<div class="groupSelectInfo driverR">
@@ -256,8 +256,8 @@
 				<div>
 					<div class="groupRadioInfo" style="clear: both;">
 						<label>是否有美国签证</label>
-						<input type="radio" name="isissuedvisa" v-model="visaInfo.previUSTripInfo.isissuedvisa" class="visaUS" value="1" />是
-						<input type="radio" name="isissuedvisa" v-model="visaInfo.previUSTripInfo.isissuedvisa" class="visaUS" value="2" checked />否
+						<input type="radio" name="isissuedvisa" v-model="visaInfo.previUSTripInfo.isissuedvisa" @change="isissuedvisa()" class="visaUS" value="1" />是
+						<input type="radio" name="isissuedvisa" v-model="visaInfo.previUSTripInfo.isissuedvisa" @change="isissuedvisa()" class="visaUS" value="2" checked />否
 					</div>
 					<div>
 						<div class="dateIssue goUS_visa">
@@ -267,7 +267,7 @@
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
-								<input name="visanumber" v-model="visaInfo.previUSTripInfo.visanumber" type="text" />
+								<input name="visanumber" v-model="visaInfo.previUSTripInfo.visanumber" onchange="translateZhToEn(this,'visanumberen','')" type="text" />
 								<input id="idknowvisanumber" :value="visaInfo.previUSTripInfo.idknowvisanumber" name="idknowvisanumber" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/>
 							</div>
 							<div class="clear"></div>
@@ -289,17 +289,17 @@
 							<div class="paddingTop">
 								<div class="groupRadioInfo">
 									<label style="display: block;">你的美国签证是否丢失或被盗过</label>
-									<input type="radio" name="islost" v-model="visaInfo.previUSTripInfo.islost" class="lose" value="1" />是
-									<input type="radio" name="islost" v-model="visaInfo.previUSTripInfo.islost" v-on:click="visaNotLost" class="lose" value="2" checked />否
+									<input type="radio" name="islost" v-model="visaInfo.previUSTripInfo.islost" @change="islost()" class="lose" value="1" />是
+									<input type="radio" name="islost" v-model="visaInfo.previUSTripInfo.islost" v-on:click="visaNotLost" @change="islost()" class="lose" value="2" checked />否
 								</div>
 								<div class="yearExplain displayTop elementHide"><!-- 默认隐藏 -->
 									<div class="displayLeft groupInputInfo">
 										<label>年份</label>
-										<input name="lostyear" v-model="visaInfo.previUSTripInfo.lostyear" type="text" />
+										<input name="lostyear" onchange="translateZhToEn(this,'lostyearen','')" v-model="visaInfo.previUSTripInfo.lostyear" type="text" />
 									</div>
 									<div class="displayRight grouptextareaInfo">
 										<label>说明</label>
-										<textarea name="lostexplain" v-model="visaInfo.previUSTripInfo.lostexplain"></textarea>
+										<textarea name="lostexplain" onchange="translateZhToEn(this,'lostexplainen','')" v-model="visaInfo.previUSTripInfo.lostexplain"></textarea>
 									</div>
 								</div>
 							</div>
@@ -308,12 +308,12 @@
 								<div>
 									<div class="groupRadioInfo">
 										<label>你的美国签证是否被取消或撤销过</label>
-										<input type="radio" name="iscancelled" v-model="visaInfo.previUSTripInfo.iscancelled" class="revoke" value="1" />是
-										<input type="radio" name="iscancelled" v-model="visaInfo.previUSTripInfo.iscancelled" v-on:click="visaNotCancel" class="revoke" value="2" checked />否
+										<input type="radio" name="iscancelled" v-model="visaInfo.previUSTripInfo.iscancelled" @change="iscancelled()" class="revoke" value="1" />是
+										<input type="radio" name="iscancelled" v-model="visaInfo.previUSTripInfo.iscancelled" v-on:click="visaNotCancel" @change="iscancelled()" class="revoke" value="2" checked />否
 									</div>
 									<div class="explain grouptextareaInfo paddingTop">
 										<label>说明</label>
-										<textarea name="cancelexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.cancelexplain"></textarea>
+										<textarea name="cancelexplain" class="bigArea" onchange="translateZhToEn(this,'cancelexplainen','')"  v-model="visaInfo.previUSTripInfo.cancelexplain"></textarea>
 									</div>
 								</div>
 							</div>
@@ -325,55 +325,55 @@
 			<div class="paddingBottom">
 				<div class="groupRadioInfo">
 					<label>被拒绝过美国签证，或被拒绝入境美国，或撤回入境口岸的入境</label>
-					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" class="refuse" value="1" />是
-					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" v-on:click="visaNotRefused" class="refuse" value="2" checked />否
+					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" @change="isrefused()" class="refuse" value="1" />是
+					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" @change="isrefused()" v-on:click="visaNotRefused" class="refuse" value="2" checked />否
 				</div>
 				<div class="refuseExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<textarea name="refusedexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.refusedexplain"></textarea>
+					<textarea name="refusedexplain" class="bigArea" onchange="translateZhToEn(this,'refusedexplainen','')"  v-model="visaInfo.previUSTripInfo.refusedexplain"></textarea>
 				</div>
 			</div>
 			<!--曾经是否是美国合法永久居民-->
 			<div class="paddingBottom ">
 				<div class="groupRadioInfo">
 					<label>曾经是否是美国合法永久居民</label>
-					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" class="onceLegitimate" value="1" />是
-					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" v-on:click="visaNotIegal" class="onceLegitimate" value="2" checked />否
+					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" @change="islegalpermanentresident()" class="onceLegitimate" value="1" />是
+					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" @change="islegalpermanentresident()" v-on:click="visaNotIegal" class="onceLegitimate" value="2" checked />否
 				</div>
 				<div class="onceExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<textarea name="permanentresidentexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.permanentresidentexplain"></textarea>
+					<textarea name="permanentresidentexplain" onchange="translateZhToEn(this,'permanentresidentexplainen','')" class="bigArea" v-model="visaInfo.previUSTripInfo.permanentresidentexplain"></textarea>
 				</div>
 			</div>
 			<!--有没有人曾代表您向美国公民和移民服务局提交过移民申请-->
 			<div class="paddingBottom">
 				<div class="groupRadioInfo">
 					<label>有没有人曾代表您向美国公民和移民服务局提交过移民申请</label>
-					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" class="onceImmigration" value="1" />是
-					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" v-on:click="visaNotfiledimmigrantpetition" class="onceImmigration" value="2" checked />否
+					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" @change="isfiledimmigrantpetition()" class="onceImmigration" value="1" />是
+					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" @change="isfiledimmigrantpetition()" v-on:click="visaNotfiledimmigrantpetition" class="onceImmigration" value="2" checked />否
 				</div>
 				<div class="immigrationExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<textarea name="immigrantpetitionexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplain"></textarea>
+					<textarea name="immigrantpetitionexplain" onchange="translateZhToEn(this,'immigrantpetitionexplainen','')" class="bigArea" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplain"></textarea>
 				</div>
 			</div>
 			<!--以前的美国旅游信息END-->
 			<!--美国联络点-->
 			<div class="contactPoint">
-				<div class="titleInfo">美国联络点</div>
+				<div class="titleInfo">美国联络人</div>
 				<div class="groupInputInfo paddingLeft">
 					<label>联系人姓</label>
-					<input name="firstname" v-model="visaInfo.contactPointInfo.firstname" type="text" />
+					<input name="firstname" v-model="visaInfo.contactPointInfo.firstname" onchange="translateZhToEn(this,'firstnameusen','')" type="text" />
 				</div>
 				<div class="groupcheckBoxInfo paddingRight">
 					<label>联系人名</label>
-					<input name="lastname" v-model="visaInfo.contactPointInfo.lastname" type="text"  />
+					<input name="lastname" v-model="visaInfo.contactPointInfo.lastname" type="text" onchange="translateZhToEn(this,'lastnameusen','')" />
 					<input id="isknowname" v-model="visaInfo.contactPointInfo.isknowname" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknowname" name="isknowname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop groupcheckBoxInfo cbox">
 					<label>组织名称</label>
-					<input id="organizationname" name="organizationname" v-model="visaInfo.contactPointInfo.organizationname" type="text" />
+					<input id="organizationname" onchange="translateZhToEn(this,'organizationnameen','')" name="organizationname" v-model="visaInfo.contactPointInfo.organizationname" type="text" />
 					<input id="isknoworganizationname" name="isknoworganizationname" v-on:click="isKnowOrganizationName" v-model="visaInfo.contactPointInfo.isknoworganizationname"  class="groupname_us" type="checkbox" />
 				</div>
 				<div class="paddingLeft groupSelectInfo">
@@ -389,11 +389,11 @@
 				<div class="" style="padding: 10px 0;">
 					<div class="groupInputInfo draBig">
 						<label>美国街道地址(首选)</label>
-						<input name="address" v-model="visaInfo.contactPointInfo.address" type="text" />
+						<input name="address" v-model="visaInfo.contactPointInfo.address" onchange="translateZhToEn(this,'addressusen','')" type="text" />
 					</div>
 					<div class="groupInputInfo draBig marginLS">
 						<label>美国街道地址(次选)*可选</label>
-						<input name="secaddress" v-model="visaInfo.contactPointInfo.secaddress" type="text" />
+						<input name="secaddress" v-model="visaInfo.contactPointInfo.secaddress" onchange="translateZhToEn(this,'secaddressusen','')" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupSelectInfo " >
@@ -407,21 +407,21 @@
 					</div>
 					<div class="paddingRight groupInputInfo" >
 						<label>市</label>
-						<input id="city" name="city" v-model="visaInfo.contactPointInfo.city" type="text" />
+						<input id="city" name="city" onchange="translateZhToEn(this,'cityen','')" v-model="visaInfo.contactPointInfo.city" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo" >
 						<label>邮政编码</label>
-						<input name="zipcode" v-model="visaInfo.contactPointInfo.zipcode" type="text" />
+						<input name="zipcode" onchange="translateZhToEn(this,'ziocodeus','')" v-model="visaInfo.contactPointInfo.zipcode" type="text" />
 					</div>
 					<div class="paddingRight groupInputInfo" >
 						<label>电话号码</label>
-						<input name="telephone" v-model="visaInfo.contactPointInfo.telephone" type="text" />
+						<input name="telephone" onchange="translateZhToEn(this,'telphoneen','')" v-model="visaInfo.contactPointInfo.telephone" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingTop groupcheckBoxInfo cbox">
 						<label>邮件地址</label>
-						<input name="email" v-model="visaInfo.contactPointInfo.email" type="text" />
+						<input name="email" v-model="visaInfo.contactPointInfo.email" onchange="translateZhToEn(this,'emailen','')" type="text" />
 						<input id="isKnowEmailAddress" name="isknowemail" v-on:click="isKnowEmailAddress" v-model="visaInfo.contactPointInfo.isknowemail" type="checkbox" />
 					</div>
 				</div>
@@ -433,20 +433,20 @@
 				<div class="titleInfo">家庭信息</div>
 				<div class="paddingLeft groupcheckBoxInfo" >
 					<label>父亲的姓</label>
-					<input name="fatherfirstname" v-model="visaInfo.familyInfo.fatherfirstname" type="text"/>
+					<input name="fatherfirstname" v-model="visaInfo.familyInfo.fatherfirstname" onchange="translateZhToEn(this,'fatherfirstnameen','')" type="text"/>
 					<input id="isKnowFatherXing" name="isknowfatherfirstname"  v-on:click="isknowfatherfirstname"  v-model="visaInfo.familyInfo.isknowfatherfirstname" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo" >
 					<label>父亲的名</label>
-					<input name="fatherlastname" v-model="visaInfo.familyInfo.fatherlastname" type="text" />
+					<input name="fatherlastname" v-model="visaInfo.familyInfo.fatherlastname" onchange="translateZhToEn(this,'fatherlastnameen','')" type="text" />
 					<input id="isKnowFatherMing" name="isknowfatherlastname" v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>你的父亲是否在美国</label>
-						<input type="radio" name="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" class="fatherUS" value="1" />是
-						<input type="radio" name="isfatherinus"  v-on:click="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" class="fatherUS" value="2" checked />否
+						<input type="radio" name="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" @change="isfatherinus()" class="fatherUS" value="1" />是
+						<input type="radio" name="isfatherinus"  v-on:click="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" @change="isfatherinus()" class="fatherUS" value="2" checked />否
 					</div>
 					<!--yes-->
 					<div class="fatherUSYes groupSelectInfo paddingNone">
@@ -461,20 +461,20 @@
 				</div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>母亲的姓</label>
-					<input id="motherfirstname" name="motherfirstname" v-model="visaInfo.familyInfo.motherfirstname" type="text" />
+					<input id="motherfirstname" name="motherfirstname" v-model="visaInfo.familyInfo.motherfirstname" onchange="translateZhToEn(this,'mothernameen','')" type="text" />
 					<input id="isKnowMotherXing" name="isknowmotherfirstname" v-on:click="isknowmotherfirstname" v-model="visaInfo.familyInfo.isknowmotherfirstname" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo">
 					<label>母亲的名</label>
-					<input id="motherlastname" name="motherlastname" v-model="visaInfo.familyInfo.motherlastname" type="text" />
+					<input id="motherlastname" name="motherlastname" v-model="visaInfo.familyInfo.motherlastname" onchange="translateZhToEn(this,'motherlastnameen','')" type="text" />
 					<input id="isKnowMotherMing" name="isknowmotherlastname" v-on:click="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>你的母亲是否在美国</label>
-						<input type="radio" name="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" class="motherUS" value="1" />是
-						<input type="radio" name="ismotherinus" v-on:click="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" class="motherUS" value="2" checked />否
+						<input type="radio" name="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" @change="ismotherinues()" class="motherUS" value="1" />是
+						<input type="radio" name="ismotherinus" v-on:click="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" @change="ismotherinues()" class="motherUS" value="2" checked />否
 					</div>
 					<div class="motherUSYes paddingNone groupSelectInfo">
 						<label>身份状态</label>
@@ -489,8 +489,8 @@
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>在美国除了父母还有没有直系亲属</label>
-						<input type="radio" name="hasimmediaterelatives" v-model="visaInfo.familyInfo.hasimmediaterelatives" class="directRelatives directUSRelatives" value="1" />是
-						<input type="radio" name="hasimmediaterelatives" v-model="visaInfo.familyInfo.hasimmediaterelatives" class="directRelatives directUSRelatives" value="2" checked/>否
+						<input type="radio" name="hasimmediaterelatives" v-model="visaInfo.familyInfo.hasimmediaterelatives" @change="hasimmediaterelatives()" class="directRelatives directUSRelatives" value="1" />是
+						<input type="radio" name="hasimmediaterelatives" v-model="visaInfo.familyInfo.hasimmediaterelatives" @change="hasimmediaterelatives()" class="directRelatives directUSRelatives" value="2" checked/>否
 					</div>
 					<div class="directRelatives">
 						<!--yes-->
@@ -499,11 +499,11 @@
 								<div class="directRelativesYes">
 									<div class="floatLeft leftNo groupInputInfo">
 										<label>姓</label>
-										<input name="relativesfirstname" value="${zhifamily.relativesfirstname }" type="text" />
+										<input name="relativesfirstname" onchange="translateZhToEn(this,'relativesfitstnameen','')" value="${zhifamily.relativesfirstname }" type="text" />
 									</div>
 									<div class="floatRight groupInputInfo">
 										<label>名</label>
-										<input name="relativeslastname" value="${zhifamily.relativeslastname }"  type="text" />
+										<input name="relativeslastname" onchange="translateZhToEn(this,'relativeslastnameen','')" value="${zhifamily.relativeslastname }"  type="text" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupSelectInfo">
@@ -541,11 +541,11 @@
 							<div class="directRelativesYes">
 								<div class="floatLeft leftNo groupInputInfo">
 									<label>姓</label>
-									<input name="relativesfirstname" type="text" />
+									<input name="relativesfirstname" onchange="translateZhToEn(this,'relativesfitstnameen','')" type="text" />
 								</div>
 								<div class="floatRight groupInputInfo">
 									<label>名</label>
-									<input name="relativeslastname" type="text" />
+									<input name="relativeslastname" onchange="translateZhToEn(this,'relativeslastnameen','')" type="text" />
 								</div>
 								<div class="clear"></div>
 								<div class="paddingLeft leftNo groupSelectInfo">
@@ -584,11 +584,11 @@
 				<div class="titleInfo">配偶信息</div>
 				<div class="floatLeft groupInputInfo">
 					<label>配偶的姓</label>
-					<input name="spousefirstname" v-model="visaInfo.familyInfo.spousefirstname" type="text" />
+					<input name="spousefirstname" onchange="translateZhToEn(this,'spousefirstnameen','')" v-model="visaInfo.familyInfo.spousefirstname" type="text" />
 				</div>
 				<div class="floatRight groupInputInfo">
 					<label>配偶的名</label>
-					<input name="spouselastname" v-model="visaInfo.familyInfo.spouselastname" type="text" />
+					<input name="spouselastname" onchange="translateZhToEn(this,'spouselastnameen','')" v-model="visaInfo.familyInfo.spouselastname" type="text" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingLeft groupInputInfo">
@@ -607,7 +607,7 @@
 				<div class="clear"></div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>配偶的出生城市</label>
-					<input name="spousecity" v-model="visaInfo.familyInfo.spousecity" type="text" />
+					<input name="spousecity" v-model="visaInfo.familyInfo.spousecity" onchange="translateZhToEn(this,'spousefcityen','')" type="text" />
 					<input id="isKnowMateCity" name="isknowspousecity" @change="isknowspousecity()" v-model="visaInfo.familyInfo.isknowspousecity" type="checkbox" />
 				</div>
 				<div class="paddingRight groupSelectInfo" >
@@ -634,27 +634,27 @@
 				<div class="otherSpouseInfo elementHide paddingTop" >
 					<div class="floatLeft groupInputInfo">
 						<label>街道地址(首选)</label>
-						<input name="firstaddress" v-model="visaInfo.familyInfo.firstaddress" type="text" />
+						<input name="firstaddress" onchange="translateZhToEn(this,'otherfrstaddressen','')" v-model="visaInfo.familyInfo.firstaddress" type="text" />
 					</div>
 					<div class="floatRight groupInputInfo">
 						<label>街道地址(次要)*可选</label>
-						<input name="secondaddress" v-model="visaInfo.familyInfo.secondaddress" type="text" />
+						<input name="secondaddress" onchange="translateZhToEn(this,'othersecondaddressen','')" v-model="visaInfo.familyInfo.secondaddress" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>州/省</label>
-						<input name="province" v-model="visaInfo.familyInfo.province" type="text" />
+						<input name="province" v-model="visaInfo.familyInfo.province" onchange="translateZhToEn(this,'otherprovinceen','')" type="text" />
 						<input id="isprovinceapply" name="isprovinceapply"  v-model="visaInfo.familyInfo.isprovinceapply" type="checkbox" />
 					</div>
 					<div class="paddingRight groupInputInfo">
 						<label>市</label>
-						<input name="city" v-model="visaInfo.familyInfo.city" type="text"/>
+						<input name="city" v-model="visaInfo.familyInfo.city"  onchange="translateZhToEn(this,'othercityen','')" type="text"/>
 					</div>
 					
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>邮政编码</label>
-						<input name="zipcode" v-model="visaInfo.familyInfo.zipcode" type="text" />
+						<input name="zipcode" v-model="visaInfo.familyInfo.zipcode"  onchange="translateZhToEn(this,'otherzipcodeen','')" type="text" />
 						<input id="iszipcodeapply" name="iszipcodeapply" v-model="visaInfo.familyInfo.iszipcodeapply" type="checkbox" />
 					</div>
 					<div class="paddingRight groupSelectInfo">
@@ -685,37 +685,37 @@
 				<div class="paddingTop elementHide jobEduLearningInfoDiv">
 					<div class="groupInputInfo draBig">
 						<label>目前的工作单位或者学校名称</label>
-						<input name="unitname" v-model="visaInfo.workEducationInfo.unitname" type="text" />
+						<input name="unitname"  onchange="translateZhToEn(this,'unitnameen','')" v-model="visaInfo.workEducationInfo.unitname" type="text" />
 					</div>
 					<div class="groupInputInfo draBig marginLS">
 						<label >街道地址(首选)</label>
-						<input name="address" v-model="visaInfo.workEducationInfo.address" type="text" />
+						<input name="address" onchange="translateZhToEn(this,'jobaddressen','')" v-model="visaInfo.workEducationInfo.address" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="groupInputInfo draBig marginLS">
 						<label>街道地址(次要)*可选</label>
-						<input name="secaddress" v-model="visaInfo.workEducationInfo.secaddress" type="text" />
+						<input name="secaddress" onchange="translateZhToEn(this,'jobsecondaddressen','')" v-model="visaInfo.workEducationInfo.secaddress" type="text" />
 					</div>
 					
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>州/省</label>
-						<input name="province" v-model="visaInfo.workEducationInfo.province" type="text"/>
+						<input name="province" v-model="visaInfo.workEducationInfo.province" onchange="translateZhToEn(this,'jobprovinceen','')" type="text"/>
 						<input name="isprovinceapply" id="isprovinceapplywork" v-model="visaInfo.workEducationInfo.isprovinceapply" type="checkbox"/>
 					</div>
 					<div class="paddingRight groupInputInfo">
 						<label>市</label>
-						<input name="city" v-model="visaInfo.workEducationInfo.city" type="text"/>
+						<input name="city" v-model="visaInfo.workEducationInfo.city" onchange="translateZhToEn(this,'jobcity','')" type="text"/>
 					</div>
 					
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>邮政编码</label>
-						<input name="zipcode" v-model="visaInfo.workEducationInfo.zipcode" type="text" />
+						<input name="zipcode" v-model="visaInfo.workEducationInfo.zipcode" onchange="translateZhToEn(this,'jobzipcodeen','')" type="text" />
 						<input name="iszipcodeapply" id="iszipcodeapplywork" v-model="visaInfo.workEducationInfo.iszipcodeapply" type="checkbox" />
 					</div>
 					<div class="paddingRight groupInputInfo">
 						<label>电话号吗</label>
-						<input name="telephone" v-model="visaInfo.workEducationInfo.telephone" type="text" />
+						<input name="telephone" v-model="visaInfo.workEducationInfo.telephone" onchange="translateZhToEn(this,'jobtelphoneen','')" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupSelectInfo" >
@@ -735,14 +735,14 @@
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo" >
 						<label>当地月收入(如果雇佣)</label>
-						<input name="salary" v-model="visaInfo.workEducationInfo.salary" type="text" onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"
+						<input name="salary" v-model="visaInfo.workEducationInfo.salary" type="text" onchange="translateZhToEn(this,'salaryen','')" onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"
 										onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
 						<input name="issalaryapply" id="issalaryapplywork" v-model="visaInfo.workEducationInfo.issalaryapply" type="checkbox" />
 					</div>
 					<div class="clear"></div>
 					<div class="grouptextareaInfo groupPM">
 						<label>简要描述你的职责</label>
-						<textarea name="duty" class="bigArea" v-model="visaInfo.workEducationInfo.duty"></textarea>
+						<textarea name="duty" class="bigArea" onchange="translateZhToEn(this,'dutyen','')"  v-model="visaInfo.workEducationInfo.duty"></textarea>
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -758,8 +758,8 @@
 					<div>
 						<div class="groupRadioInfo">
 							<label>以前是否工作过</label>
-							<input type="radio" name="isemployed" v-model="visaInfo.workEducationInfo.isemployed" class="beforeWork" value="1" />是
-							<input type="radio" name="isemployed" v-model="visaInfo.workEducationInfo.isemployed" class="beforeWork" value="2" checked/>否
+							<input type="radio" name="isemployed" v-model="visaInfo.workEducationInfo.isemployed" @change="isemployed()" class="beforeWork" value="1" />是
+							<input type="radio" name="isemployed" v-model="visaInfo.workEducationInfo.isemployed" @change="isemployed()" class="beforeWork" value="2" checked/>否
 						</div>
 						<!--yes-->
 						<div class="beforeWorkInfo elementHide">
@@ -769,25 +769,25 @@
 									<div class="workBeforeInfosDiv">
 										<div class="leftNo marginLS groupInputInfo" >
 											<label>雇主名字</label>
-											<input name="employername" value="${beforeWork.employername }" type="text" />
+											<input name="employername" onchange="translateZhToEn(this,'employernameen','')" value="${beforeWork.employername }" type="text" />
 										</div>
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>雇主街道地址(首选)</label>
-											<input name="employeraddress" value="${beforeWork.employeraddress }" type="text" />
+											<input name="employeraddress" onchange="translateZhToEn(this,'employeraddressen','')" value="${beforeWork.employeraddress }" type="text" />
 										</div>
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>雇主街道地址(次选)*可选</label>
-											<input name="employeraddressSec" value="${beforeWork.employeraddressSec }" type="text" />
+											<input name="employeraddressSec" onchange="translateZhToEn(this,'employeraddressSecen','')" value="${beforeWork.employeraddressSec }" type="text" />
 										</div>
 										
 										<div class="paddingLeft leftNo groupInputInfo">
 											<label>州/省</label>
-											<input name="employerprovince" value="${beforeWork.employerprovince }" type="text" />
+											<input name="employerprovince" onchange="translateZhToEn(this,'employerprovinceen','')" value="${beforeWork.employerprovince }" type="text" />
 											<%-- <input name="isemployerprovinceapply" value="${beforeWork.isemployerprovinceapply }" type="text" /> --%>
 										</div>
 										<div class="paddingRight leftNo groupcheckBoxInfo" >
 											<label>市</label>
-											<input name="employercity" id="employercitybefore" value="${beforeWork.employercity }" type="text" />
+											<input name="employercity" id="employercitybefore" onchange="translateZhToEn(this,'employercityen','')" value="${beforeWork.employercity }" type="text" />
 											<!-- <input type="checkbox" /> -->
 										</div>
 										<div class="clear"></div>
@@ -795,10 +795,10 @@
 											<label>邮政编码</label>
 											<input name="employerzipcode" value="${beforeWork.employerzipcode }" type="text" />
 											<c:if test="${beforeWork.isemployerzipcodeapply == 1}">
-												<input id="isKonwOrtherZipCode" name="isemployerzipcodeapply" value="${beforeWork.isemployerzipcodeapply }" checked="checked" type="checkbox"/>
+												<input id="isKonwOrtherZipCode" name="isemployerzipcodeapply" onchange="translateZhToEn(this,'isKonwOrtherZipCodeen','')" value="${beforeWork.isemployerzipcodeapply }" checked="checked" type="checkbox"/>
 											</c:if>
 											<c:if test="${beforeWork.isemployerzipcodeapply != 1}">
-												<input id="isKonwOrtherZipCode" name="isemployerzipcodeapply" value="${beforeWork.isemployerzipcodeapply }" type="checkbox" />
+												<input id="isKonwOrtherZipCode" name="isemployerzipcodeapply" onchange="translateZhToEn(this,'isKonwOrtherZipCodeen','')" value="${beforeWork.isemployerzipcodeapply }" type="checkbox" />
 											</c:if>
 											
 										</div>
@@ -819,31 +819,31 @@
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupInputInfo">
 											<label>电话号码</label>
-											<input name="employertelephone" value="${beforeWork.employertelephone }" type="text" />
+											<input name="employertelephone" onchange="translateZhToEn(this,'employertelephoneen','')" value="${beforeWork.employertelephone }" type="text" />
 										</div>
 										<div class="paddingRight groupInputInfo">
 											<label>职称</label>
-											<input name="jobtitle" value="${beforeWork.jobtitle }" type="text"/>
+											<input name="jobtitle" value="${beforeWork.jobtitle }" onchange="translateZhToEn(this,'jobtitleen','')" type="text"/>
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>主管的姓</label>
 											<input name="supervisorfirstname" value="${beforeWork.supervisorfirstname }" type="text" />
 											<c:if test="${beforeWork.isknowsupervisorfirstname == 1}">
-												<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" value="${beforeWork.isknowsupervisorfirstname }" checked="checked" type="checkbox"/>
+												<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" onchange="translateZhToEn(this,'isknowsupervisorfirstnamebeforeen','')" value="${beforeWork.isknowsupervisorfirstname }" checked="checked" type="checkbox"/>
 											</c:if>
 											<c:if test="${beforeWork.isknowsupervisorfirstname != 1}">
-												<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" value="${beforeWork.isknowsupervisorfirstname }" type="checkbox" />
+												<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" onchange="translateZhToEn(this,'isknowsupervisorfirstnamebeforeen','')" value="${beforeWork.isknowsupervisorfirstname }" type="checkbox" />
 											</c:if>
 										</div>
 										<div class="paddingRight groupcheckBoxInfo">
 											<label>主管的名</label>
 											<input name="supervisorlastname" value="${beforeWork.supervisorlastname }" type="text" />
 											<c:if test="${beforeWork.isknowsupervisorlastname == 1}">
-												<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" value="${beforeWork.isknowsupervisorlastname }" checked="checked" type="checkbox"/>
+												<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" onchange="translateZhToEn(this,'isknowsupervisorlastnamebeforeen','')" value="${beforeWork.isknowsupervisorlastname }" checked="checked" type="checkbox"/>
 											</c:if>
 											<c:if test="${beforeWork.isknowsupervisorlastname != 1}">
-												<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" value="${beforeWork.isknowsupervisorlastname }" type="checkbox" />
+												<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" onchange="translateZhToEn(this,'isknowsupervisorlastnamebeforeen','')" value="${beforeWork.isknowsupervisorlastname }" type="checkbox" />
 											</c:if>
 										</div>
 										<div class="clear"></div>
@@ -858,7 +858,7 @@
 										<div class="clear"></div>
 										<div class="draBig leftNo marginLS grouptextareaInfo">
 											<label>简要描述你的职责</label>
-											<input type="text" name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }" />
+											<input type="text" name="previousduty" onchange="translateZhToEn(this,'previousdutyen','')" class="bigArea previousduty" value="${beforeWork.previousduty }" />
 											<%-- <textarea name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }"></textarea> --%>
 										</div>
 									</div>
@@ -868,30 +868,30 @@
 								<div class="workBeforeInfosDiv">
 									<div class="leftNo marginLS groupInputInfo" >
 										<label>雇主名字</label>
-										<input name="employername" type="text" />
+										<input name="employername" onchange="translateZhToEn(this,'employernameen','')" type="text" />
 									</div>
 									<div class="draBig leftNo marginLS groupInputInfo">
 										<label>雇主街道地址(首选)</label>
-										<input name="employeraddress" type="text" />
+										<input name="employeraddress" onchange="translateZhToEn(this,'employeraddressen','')" type="text" />
 									</div>
 									<div class="draBig leftNo marginLS groupInputInfo">
 										<label>雇主街道地址(次选)*可选</label>
-										<input name="employeraddressSec" type="text" />
+										<input name="employeraddressSec" onchange="translateZhToEn(this,'employeraddressSecen','')" type="text" />
 									</div>
 									
 									<div class="paddingLeft leftNo groupInputInfo">
 										<label>州/省</label>
-										<input name="employerprovince" type="text" />
+										<input name="employerprovince" onchange="translateZhToEn(this,'employerprovinceen','')" type="text" />
 									</div>
 									<div class="paddingRight leftNo groupcheckBoxInfo" >
 										<label>市</label>
-										<input name="employercity" type="text" />
+										<input name="employercity" type="text" onchange="translateZhToEn(this,'employercityen','')" />
 										<input type="checkbox" id="employercitybefore" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo">
 										<label>邮政编码</label>
-										<input name="employerzipcode" type="text" />
+										<input name="employerzipcode" type="text" onchange="translateZhToEn(this,'employerzipcodeen','')" />
 										<input name="isemployerzipcodeapply" id="isKonwOrtherZipCode" type="checkbox" />
 									</div>
 									<div class="paddingRight leftNo groupSelectInfo">
@@ -906,21 +906,21 @@
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupInputInfo">
 										<label>电话号码</label>
-										<input name="employertelephone" type="text" />
+										<input name="employertelephone" onchange="translateZhToEn(this,'employertelephoneen','')" type="text" />
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>职称</label>
-										<input name="jobtitle" type="text"/>
+										<input name="jobtitle" onchange="translateZhToEn(this,'jobtitleen','')"  type="text"/>
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo">
 										<label>主管的姓</label>
-										<input name="supervisorfirstname" type="text" />
+										<input name="supervisorfirstname" onchange="translateZhToEn(this,'supervisorfirstnameen','')"  type="text" />
 										<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" type="checkbox" />
 									</div>
 									<div class="paddingRight leftNo groupcheckBoxInfo">
 										<label>主管的名</label>
-										<input name="supervisorlastname" type="text" />
+										<input name="supervisorlastname" onchange="translateZhToEn(this,'supervisorlastnameen','')"  type="text" />
 										<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" type="checkbox" />
 									</div>
 									<div class="clear"></div>
@@ -935,7 +935,7 @@
 									<div class="clear"></div>
 									<div class="draBig leftNo marginLS grouptextareaInfo">
 										<label>简要描述你的职责</label>
-										<input type="text" name="previousduty" class="bigArea previousduty" />
+										<input type="text" name="previousduty" onchange="translateZhToEn(this,'previousdutyen','')" class="bigArea previousduty" />
 										<!-- <textarea class="bigArea" name="previousduty"></textarea> -->
 									</div>
 								</div>
@@ -953,8 +953,8 @@
 					<div class="paddingTop">
 						<div class="groupRadioInfo">
 							<label>是否上过高中或以上的任何教育</label>
-							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" class="education" value="1" />是
-							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" class="education" value="2" checked/>否
+							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" @change="issecondarylevel()" class="education" value="1" />是
+							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" @change="issecondarylevel()" class="education" value="2" checked/>否
 						</div>
 						<!--yes-->
 						<div class="educationInfo elementHide">
@@ -964,40 +964,40 @@
 									<div class="midSchoolEduDiv">
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>机构名称</label>
-											<input name="institution" value="${education.institution }" type="text"/>
+											<input name="institution" onchange="translateZhToEn(this,'institutionen','')" value="${education.institution }" type="text"/>
 										</div>
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>街道地址(首选)</label>
-											<input name="institutionaddress" value="${education.institutionaddress }" type="text" />
+											<input name="institutionaddress" onchange="translateZhToEn(this,'institutionaddressen','')" value="${education.institutionaddress }" type="text" />
 										</div>
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>街道地址(次选)*可选</label>
-											<input name="secinstitutionaddress" type="text" value="${education.secinstitutionaddress }" />
+											<input name="secinstitutionaddress" onchange="translateZhToEn(this,'secinstitutionaddressen','')" type="text" value="${education.secinstitutionaddress }" />
 										</div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo" >
 											<label>州/省</label>
 											<input name="institutionprovince" value="${education.institutionprovince }" type="text" />
 											<c:if test="${education.isinstitutionprovinceapply == 1}">
-												<input name="isinstitutionprovinceapply" value="${education.isinstitutionprovinceapply }"  checked="checked" type="checkbox"/>
+												<input name="isinstitutionprovinceapply" onchange="translateZhToEn(this,'isinstitutionprovinceapplyen','')" value="${education.isinstitutionprovinceapply }"  checked="checked" type="checkbox"/>
 											</c:if>
 											<c:if test="${education.isinstitutionprovinceapply != 1}">
-												<input name="isinstitutionprovinceapply" value="${education.isinstitutionprovinceapply }" type="checkbox" />
+												<input name="isinstitutionprovinceapply" onchange="translateZhToEn(this,'isinstitutionprovinceapplyen','')" value="${education.isinstitutionprovinceapply }" type="checkbox" />
 											</c:if>
 											
 										</div>
 										<div class="paddingRight leftNo groupInputInfo">
 											<label >市</label>
-											<input name="institutioncity" value="${education.institutioncity }" type="text" />
+											<input name="institutioncity" onchange="translateZhToEn(this,'institutioncityen','')" value="${education.institutioncity }" type="text" />
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>邮政编码</label>
 											<input name="institutionzipcode" value="${education.institutionzipcode }" type="text" />
 											<c:if test="${education.isinstitutionzipcodeapply == 1}">
-													<input name="isinstitutionzipcodeapply" id="codeEdu" value="${education.isinstitutionzipcodeapply }"  checked="checked" type="checkbox"/>
+													<input name="isinstitutionzipcodeapply" onchange="translateZhToEn(this,'codeEduen','')" id="codeEdu" value="${education.isinstitutionzipcodeapply }"  checked="checked" type="checkbox"/>
 											</c:if>
 											<c:if test="${education.isinstitutionzipcodeapply != 1}">
-												<input name="isinstitutionzipcodeapply" id="codeEdu" value="${education.isinstitutionzipcodeapply }" type="checkbox" />
+												<input name="isinstitutionzipcodeapply" onchange="translateZhToEn(this,'codeEduen','')" id="codeEdu" value="${education.isinstitutionzipcodeapply }" type="checkbox" />
 											</c:if>
 										</div>
 										<div class="paddingRight leftNo groupSelectInfo" >
@@ -1017,7 +1017,7 @@
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupInputInfo">
 											<label>学科</label>
-											<input name="course" value="${education.course }" type="text" />
+											<input name="course" onchange="translateZhToEn(this,'courseen','')" value="${education.course }" type="text" />
 										</div>
 										
 										<div class="paddingRight leftNo groupInputInfo">
@@ -1036,29 +1036,29 @@
 								<div class="midSchoolEduDiv">
 									<div class="draBig leftNo groupInputInfo">
 										<label>机构名称</label>
-										<input name="institution" type="text"/>
+										<input name="institution" onchange="translateZhToEn(this,'institutionen','')" type="text"/>
 									</div>
 									<div class="draBig leftNo groupInputInfo">
 										<label>街道地址(首选)</label>
-										<input name="institutionaddress" type="text" />
+										<input name="institutionaddress" onchange="translateZhToEn(this,'institutionaddressen','')" type="text" />
 									</div>
 									<div class="draBig leftNo groupInputInfo">
 										<label>街道地址(次选)*可选</label>
-										<input name="secinstitutionaddress"  type="text" />
+										<input name="secinstitutionaddress" onchange="translateZhToEn(this,'secinstitutionaddressen','')" type="text" />
 									</div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo" >
 											<label>州/省</label>
-											<input name="institutionprovince" type="text" />
+											<input name="institutionprovince" onchange="translateZhToEn(this,'institutionprovinceen','')" type="text" />
 											<input name="isinstitutionprovinceapply"  type="checkbox" />
 										</div>
 										<div class="paddingRight leftNo groupInputInfo">
 											<label >市</label>
-											<input name="institutioncity" type="text" />
+											<input name="institutioncity" onchange="translateZhToEn(this,'institutioncityen','')" type="text" />
 										</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo">
 										<label>邮政编码</label>
-										<input name="institutionzipcode" type="text" />
+										<input name="institutionzipcode" onchange="translateZhToEn(this,'institutionzipcodeen','')" type="text" />
 										<input name="isinstitutionzipcodeapply" type="checkbox" />
 									</div>
 									<div class="paddingRight leftNo groupSelectInfo" >
@@ -1073,7 +1073,7 @@
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupInputInfo">
 										<label>学科</label>
-										<input name="course" type="text" />
+										<input name="course" onchange="translateZhToEn(this,'courseen','')" type="text" />
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>参加课程开始时间</label>
@@ -1102,8 +1102,8 @@
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>是否属于氏族或部落</label>
-						<input type="radio" name="isclan" v-model="visaInfo.workEducationInfo.isclan" class="isclan" value="1"/>是
-						<input type="radio" name="isclan" v-on:click="isclan()" v-model="visaInfo.workEducationInfo.isclan" class="isclan" value="2" checked/>否
+						<input type="radio" name="isclan" v-model="visaInfo.workEducationInfo.isclan" @change="isclan()" class="isclan" value="1"/>是
+						<input type="radio" name="isclan" v-on:click="isclan()" v-model="visaInfo.workEducationInfo.isclan" @change="isclan()" class="isclan" value="2" checked/>否
 					</div>
 					
 					<!--yes-->
@@ -1112,7 +1112,7 @@
 							<div class="clannameDiv">
 								<div class="draBig leftNo groupInputInfo" >
 									<label>氏族或部落名称</label>
-									<input name="clanname" v-model="visaInfo.workEducationInfo.clanname"  type="text"  />
+									<input name="clanname" onchange="translateZhToEn(this,'clannameen','')" v-model="visaInfo.workEducationInfo.clanname"  type="text"  />
 								</div>
 							</div>
 						</div>
@@ -1124,7 +1124,7 @@
 							<div class="languagename languagenameDiv paddingTop padding-left">
 								<label>使用的语言名称</label>
 								<div class="groupInputInfo">
-									<input name="languagename" value="${language.languagename }" type="text" />
+									<input name="languagename" onchange="translateZhToEn(this,'languagenameen','')" value="${language.languagename }" type="text" />
 								</div>
 							</div>
 						</c:forEach>
@@ -1133,7 +1133,7 @@
 						<div class="languagename languagenameDiv paddingTop padding-left">
 							<label>使用的语言名称</label>
 							<div class="groupInputInfo">
-								<input name="languagename" type="text" />
+								<input name="languagename" onchange="translateZhToEn(this,'languagenameen','')" type="text" />
 							</div>
 						</div>
 					</c:if>
@@ -1145,8 +1145,8 @@
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>过去五年是否曾去过任何国家/地区旅游</label>
-						<input type="radio" name="istraveledanycountry" v-model="visaInfo.workEducationInfo.istraveledanycountry" class="istraveledanycountry" value="1" />是
-						<input type="radio" name="istraveledanycountry" v-model="visaInfo.workEducationInfo.istraveledanycountry" class="istraveledanycountry" value="2" checked/>否
+						<input type="radio" name="istraveledanycountry" v-model="visaInfo.workEducationInfo.istraveledanycountry"  @change="istraveledanycountry()"  class="istraveledanycountry" value="1" />是
+						<input type="radio" name="istraveledanycountry" v-model="visaInfo.workEducationInfo.istraveledanycountry" @change="istraveledanycountry()" class="istraveledanycountry" value="2" checked/>否
 					</div>
 					<!--yes-->
 					<div class="isTravelYes elementHide">
@@ -1197,11 +1197,11 @@
 						</div>
 					</div>
 				</div>
-				<div class="padding-left">
+				<div class="padding-left paddingTop">
 					<div class="groupRadioInfo">
 						<label>是否属于、致力于、或为任何专业、社会或慈善组织而工作</label>
-						<input type="radio" name="isworkedcharitableorganization" v-model="visaInfo.workEducationInfo.isworkedcharitableorganization" class="isworkedcharitableorganization" value="1"/>是
-						<input type="radio" name="isworkedcharitableorganization" v-model="visaInfo.workEducationInfo.isworkedcharitableorganization" class="isworkedcharitableorganization" value="2" checked/>否
+						<input type="radio" name="isworkedcharitableorganization" v-model="visaInfo.workEducationInfo.isworkedcharitableorganization" @change="isworkedcharitableorganization()"  class="isworkedcharitableorganization" value="1"/>是
+						<input type="radio" name="isworkedcharitableorganization" v-model="visaInfo.workEducationInfo.isworkedcharitableorganization" @change="isworkedcharitableorganization()" class="isworkedcharitableorganization" value="2" checked/>否
 					</div>
 					<!--yes-->
 					<div class="isOrganizationYes elementHide">
@@ -1210,14 +1210,14 @@
 								<c:forEach var="organization" items="${obj.organizationList }">
 									<div class="paddingTop draBig leftNo organizationDiv groupInputInfo">
 										<label>组织名称</label>
-										<input name="organizationname" value="${organization.organizationname }" type="text"/>
+										<input name="organizationname" onchange="translateZhToEn(this,'organizationnameen','')" value="${organization.organizationname }" type="text"/>
 									</div>
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.organizationList }">
 								<div class="paddingTop draBig leftNo organizationDiv groupInputInfo">
 									<label>组织名称</label>
-									<input name="organizationname" type="text"/>
+									<input name="organizationname" onchange="translateZhToEn(this,'organizationnameen','')" type="text"/>
 								</div>
 							</c:if>
 						</div>
@@ -1230,21 +1230,21 @@
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>是否有专业技能或培训，如强制、爆炸物、核能、生物或化学</label>
-						<input type="radio" name="hasspecializedskill" v-model="visaInfo.workEducationInfo.hasspecializedskill" class="hasspecializedskill" value="1" />是
-						<input type="radio"name="hasspecializedskill" v-on:click="hasspecializedskill()" v-model="visaInfo.workEducationInfo.hasspecializedskill" class="hasspecializedskill" value="2" checked />否
+						<input type="radio" name="hasspecializedskill" v-model="visaInfo.workEducationInfo.hasspecializedskill" @change="hasspecializedskill()" class="hasspecializedskill" value="1" />是
+						<input type="radio"name="hasspecializedskill" v-on:click="hasspecializedskill()" v-model="visaInfo.workEducationInfo.hasspecializedskill" @change="hasspecializedskill()"  class="hasspecializedskill" value="2" checked />否
 					</div>
 					<!--yes-->
 					<div class="paddingTop skillDiv elementHide grouptextareaInfo">
 						<label>说明</label>
-						<input type="text" name="skillexplain" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain" />
+						<input type="text" name="skillexplain" onchange="translateZhToEn(this,'skillexplainen','')" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain" />
 						<!-- <textarea name="skillexplain" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain"></textarea> -->
 					</div>
 				</div>
-				<div class="padding-left">
+				<div class="padding-left paddingTop">
 					<div class="groupRadioInfo">
 						<label style="display: block;">是否曾服兵役</label>
-						<input type="radio" name="hasservedinmilitary" v-model="visaInfo.workEducationInfo.hasservedinmilitary" class="hasservedinmilitary" value="1"/>是
-						<input type="radio"name="hasservedinmilitary" v-model="visaInfo.workEducationInfo.hasservedinmilitary" class="hasservedinmilitary" value="2" checked/>否
+						<input type="radio" name="hasservedinmilitary" v-model="visaInfo.workEducationInfo.hasservedinmilitary" @change="hasservedinmilitary()" class="hasservedinmilitary" value="1"/>是
+						<input type="radio"name="hasservedinmilitary" v-model="visaInfo.workEducationInfo.hasservedinmilitary"@change="hasservedinmilitary()" class="hasservedinmilitary" value="2" checked/>否
 					</div>
 					<!--yes-->
 					<div class="paddingTop elementHide militaryServiceYes">
@@ -1268,16 +1268,16 @@
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>服务分支</label>
-										<input name="servicebranch" value="${conscientious.servicebranch }" type="text" />
+										<input name="servicebranch"  onchange="translateZhToEn(this,'servicebranchen','')" value="${conscientious.servicebranch }" type="text" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupInputInfo" >
 										<label>排名/位置</label>
-										<input name="rank" value="${conscientious.rank }" type="text" />
+										<input name="rank" onchange="translateZhToEn(this,'ranken','')" value="${conscientious.rank }" type="text" />
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>军事专业</label>
-										<input name="militaryspecialty" value="${conscientious.militaryspecialty }" type="text"/>
+										<input name="militaryspecialty" onchange="translateZhToEn(this,'militaryspecialtyen','')" value="${conscientious.militaryspecialty }" type="text"/>
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupInputInfo">
@@ -1305,16 +1305,16 @@
 								</div>
 								<div class="paddingRight leftNo groupInputInfo">
 									<label>服务分支</label>
-									<input name="servicebranch" type="text" />
+									<input name="servicebranch" onchange="translateZhToEn(this,'servicebranchen','')" type="text" />
 								</div>
 								<div class="clear"></div>
 								<div class="paddingLeft leftNo groupInputInfo" >
 									<label>排名/位置</label>
-									<input name="rank" type="text" />
+									<input name="rank" onchange="translateZhToEn(this,'ranken','')" type="text" />
 								</div>
 								<div class="paddingRight leftNo groupInputInfo">
 									<label>军事专业</label>
-									<input name="militaryspecialty" type="text"/>
+									<input name="militaryspecialty" onchange="translateZhToEn(this,'militaryspecialtyen','')" type="text"/>
 								</div>
 								<div class="clear"></div>
 								<div class="paddingLeft leftNo groupInputInfo">
@@ -1681,34 +1681,34 @@
 				<div class="companyMain">
 					<div class="companyMainInfo groupRadioInfo">
 						<label>Are there other persons traveling with you</label>
-						<input type="radio" class="companyInfoen" name="companyInfoen" v-model="visaInfo.travelCompanionInfo.istravelwithotheren" value="1" />YES
-						<input type="radio" class="companyInfoen" name="companyInfoen" v-model="visaInfo.travelCompanionInfo.istravelwithotheren" value="2" checked/>NO
+						<input type="radio" class="companyInfoen" name="istravelwithotheren" v-model="visaInfo.travelCompanionInfo.istravelwithotheren" value="1" />YES
+						<input type="radio" class="companyInfoen" name="istravelwithotheren" v-model="visaInfo.travelCompanionInfo.istravelwithotheren" value="2" checked/>NO
 					</div>
 					<!--yes-->
-					<div class="teamture elementHide">
+					<div class="teamture elementHide teamtureen">
 						<div class="groupRadioInfo">
 							<label>Are you traveling as part of a group or organization</label>
-							<input type="radio" class="team" name="isparten" v-model="visaInfo.travelCompanionInfo.isparten" value="1" />YES
-							<input type="radio" class="team" name="isparten" v-model="visaInfo.travelCompanionInfo.isparten" value="2" checked/>NO
+							<input type="radio" class="teamen" name="isparten" v-model="visaInfo.travelCompanionInfo.isparten" value="1" />YES
+							<input type="radio" class="teamen" name="isparten" v-model="visaInfo.travelCompanionInfo.isparten" value="2" checked/>NO
 						</div>
 						<!--第二部分yes-->
-						<div class="teamnameture groupInputInfo">
+						<div class="teamnameture teamnametureen groupInputInfo">
 							<label>Group Name</label>
-							<input id="groupname" name="groupname" v-model="visaInfo.travelCompanionInfo.groupname" type="text" placeholder="Group Name" />
+							<input id="groupnameen" name="groupname" v-model="visaInfo.travelCompanionInfo.groupname" type="text" placeholder="Group Name" />
 						</div>
 						<!--第二部分No-->
-						<div class="teamnamefalse groupInputInfo">
+						<div class="teamnamefalse teamnamefalseen groupInputInfo">
 							<div>
 							<c:if test="${!empty obj.companionList }">
 								<c:forEach var="companion" items="${obj.companionList }">
-									<div class="teamnamefalseDiv" >
-										<div class="companionSurnName">
+									<div class="teamnamefalseDiv teamnamefalseDiven teamaddfalseen" >
+										<div class="companionSurnNameen">
 											<label>Surnames of Person Traveling With You</label>
-											<input id="firstname" name="firstname" value="${companion.firstname }" type="text" placeholder="Surnames of Person Traveling With You" />
+											<input id="firstnameen" class="firstName" name="firstname" value="${companion.firstname }" type="text" placeholder="Surnames of Person Traveling With You" />
 										</div>
-										<div class="companionName">
+										<div class="companionNameen">
 											<label>Given Names of Person Traveling With You</label>
-											<input id="lastname" name="lastname" value="${companion.lastname }" type="text" placeholder="Given Names of Person Traveling With You" />
+											<input id="lastnameen" class="lastname" name="lastname" value="${companion.lastname }" type="text" placeholder="Given Names of Person Traveling With You" />
 										</div>
 										<div class="clear"></div>
 										<div class="youRelationship">
@@ -1729,14 +1729,14 @@
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.companionList }">
-								<div class="teamnamefalseDiv">
-									<div class="companionSurnName">
+								<div class="teamnamefalseDiv teamnamefalseDiven teamaddfalseen">
+									<div class="companionSurnNameen">
 										<label>Surnames of Person Traveling With You</label>
-										<input id="firstname" name="firstname" type="text" placeholder="Surnames of Person Traveling With You" />
+										<input id="firstnameen" class="firstName" name="firstname" type="text" placeholder="Surnames of Person Traveling With You" />
 									</div>
-									<div class="companionName">
+									<div class="companionNameen">
 										<label>Given Names of Person Traveling With You</label>
-										<input id="lastname" name="lastname" type="text" placeholder="Given Names of Person Traveling With You" />
+										<input id="lastnameen" class="lastname" name="lastname" type="text" placeholder="Given Names of Person Traveling With You" />
 									</div>
 									<div class="clear"></div>
 									<div class="youRelationship">
@@ -1752,8 +1752,8 @@
 							</c:if>
 							</div>
 							<div class="btnGroup companyGroup">
-								<a class="save companysave">Add Another</a>
-								<a class="cancel companycancel">Remove </a>
+								<a class="save companysaveen">Add Another</a>
+								<a class="cancel companycancelen">Remove </a>
 							</div>
 						</div>
 					</div>
@@ -1768,22 +1768,22 @@
 					<div class="goUSMain">
 						<div class="groupRadioInfo goUSPad">
 							<label>Have you ever been in the U.S.</label>
-					 		<input type="radio" id="hasbeeninus" name="hasbeeninus" v-model="visaInfo.previUSTripInfo.hasbeeninus" class="goUS" value="1" />YES
-							<input type="radio" id="hasbeeninus" name="hasbeeninus" v-model="visaInfo.previUSTripInfo.hasbeeninus" class="goUS" value="2" checked />NO
+					 		<input type="radio" id="hasbeeninusen" name="hasbeeninusen" v-model="visaInfo.previUSTripInfo.hasbeeninusen" class="goUSen" value="1" />YES
+							<input type="radio" id="hasbeeninusen" name="hasbeeninusen" v-model="visaInfo.previUSTripInfo.hasbeeninusen" class="goUSen" value="2" checked />NO
 						</div>
 						<!--yes-->
-						<div class="goUSInfo goUSYes">
+						<div class="goUSInfo goUSInfoen goUSYes">
 							<div class="gotousInfo">
 								<c:if test="${!empty obj.gousList }">
 									<c:forEach var="gous" items="${obj.gousList }">
-										<div class="goUS_CountryDiv">
-											<div class="groupInputInfo">
+										<div class="goUS_CountryDiven">
+											<div class="groupInputInfo everyMarTop">
 												<label>Date Arrived</label>
 												<input type="text" id="arrivedate" value="<fmt:formatDate value="${gous.arrivedate }" pattern="dd/MM/yyyy" />" name="arrivedate" class="datetimepickercss form-control" placeholder="Day / month / year">
 											</div>
 											<div class="groupInputInfo stopDate goUS_Country">
 												<label>Length of Stay</label>
-												<input id="staydays" name="staydays" value="${gous.staydays }" type="text" />
+												<input id="staydaysen" name="staydays"  value="${gous.staydays }" type="text" />
 												<select id="dateunit" name="dateunit">
 													<option value="0">Please choose</option>
 													<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
@@ -1800,14 +1800,14 @@
 									</c:forEach>
 								</c:if>
 								<c:if test="${empty obj.gousList }">
-									<div class="goUS_CountryDiv">
-										<div class="groupInputInfo">
+									<div class="goUS_CountryDiven">
+										<div class="groupInputInfo everyMarTop">
 											<label>Date Arrived</label>
 											<input type="text" id="arrivedate" name="arrivedate" class="datetimepickercss form-control" placeholder="Day / month / year">
 										</div>
 										<div class="groupInputInfo stopDate">
 											<label>Length of Stay</label>
-											<input id="staydays" name="staydays" type="text" />
+											<input id="staydaysen" name="staydays" type="text" />
 											<select id="dateunit" name="dateunit">
 												<option value="0">Please choose</option>
 												<c:forEach items="${obj.TimeUnitStatusEnum }" var="map">
@@ -1818,23 +1818,23 @@
 									</div>
 								</c:if>
 							</div>
-							<div class="btnGroup beforeGroup">
-								<a class="save beforesave">Add Another</a>
-								<a class="cancel beforecancel">Remove</a>
+							<div class="btnGroup beforeGroup everyMarTop">
+								<a class="save beforesaveen">Add Another</a>
+								<a class="cancel beforecancelen">Remove</a>
 							</div>
 							<div class="groupRadioInfo drivingUS">
 								<label>Do you or did you ever hold a U.S. Driver’s License</label>
-								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" class="license" value="1" />YES
-								<input type="radio" name="hasdriverlicense" v-model="visaInfo.previUSTripInfo.hasdriverlicense" class="license" value="2" checked />NO
+								<input type="radio" name="hasdriverlicenseen" v-model="visaInfo.previUSTripInfo.hasdriverlicenseen" class="licenseen" value="1" />YES
+								<input type="radio" name="hasdriverlicenseen" v-model="visaInfo.previUSTripInfo.hasdriverlicenseen" class="licenseen" value="2" checked />NO
 							</div>
-							<div class="driverInfo elementHide">
+							<div class="driverInfo driverInfoen elementHide">
 								<div class="driverYes">
 									<c:if test="${!empty obj.driverList }">
 										<c:forEach var="driver" items="${obj.driverList }">
-											<div class="goUS_drivers">
+											<div class="goUS_driversen">
 												<div class="groupcheckBoxInfo driverMain">
 													<label>Driver's License Number</label>
-													<input id="driverlicensenumber" value="${driver.driverlicensenumber }" name="driverlicensenumber" type="text" >
+													<input id="driverlicensenumberen" value="${driver.driverlicensenumber }" name="driverlicensenumber" type="text" >
 													<c:if test="${driver.isknowdrivernumber == 1}">
 														<input id="isknowdrivernumber" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" checked="checked" type="checkbox"/>
 													</c:if>
@@ -1860,10 +1860,10 @@
 										</c:forEach>
 									</c:if>
 									<c:if test="${empty obj.driverList }">
-										<div class="goUS_drivers">
+										<div class="goUS_driversen">
 											<div class="groupcheckBoxInfo driverMain">
 												<label>Driver's License Number</label>
-												<input id="driverlicensenumber" name="driverlicensenumber" type="text" >
+												<input id="driverlicensenumberen" name="driverlicensenumber" type="text" >
 												<input id="isknowdrivernumber" name="isknowdrivernumber" type="checkbox"/>
 											</div>
 											<div class="groupSelectInfo driverR">
@@ -1878,9 +1878,9 @@
 										</div>
 									</c:if>
 								</div>
-								<div class="btnGroup driverInfo driverGroup">
-									<a class="save driversave">Add Another</a>
-									<a class="cancel drivercancel">Remove</a>
+								<div class="btnGroup driverInfo driverInfoen driverGroup">
+									<a class="save driversaveen">Add Another</a>
+									<a class="cancel drivercancelen">Remove</a>
 								</div>
 							</div>
 							
@@ -1894,18 +1894,18 @@
 				<div>
 					<div class="groupRadioInfo" style="clear: both;">
 						<label>Have you ever been issued a U.S. Visa</label>
-						<input type="radio" name="isissuedvisa" v-model="visaInfo.previUSTripInfo.isissuedvisa" class="visaUS" value="1" />是
-						<input type="radio" name="isissuedvisa" v-model="visaInfo.previUSTripInfo.isissuedvisa" class="visaUS" value="2" checked />否
+						<input type="radio" name="isissuedvisaen" v-model="visaInfo.previUSTripInfo.isissuedvisaen" class="visaUSen" value="1" />是
+						<input type="radio" name="isissuedvisaen" v-model="visaInfo.previUSTripInfo.isissuedvisaen" class="visaUSen" value="2" checked />否
 					</div>
 					<div>
-						<div class="dateIssue goUS_visa">
+						<div class="dateIssue dateIssueen goUS_visa goUS_visaen">
 							<div class="groupInputInfo lastVisaDate">
 								<label>Date Last Visa Was Issued  Click here for more information</label>
 								<input id="issueddate" name="issueddate" value="${obj.previUSTripInfo_issueddate}" class="datetimepickercss form-control" placeholder="日/月/年" type="text"/>
 							</div>
-							<div class="groupcheckBoxInfo visaNum">
+							<div class="groupcheckBoxInfo visaNum visaNumen">
 								<label>Visa Number</label>
-								<input name="visanumber" v-model="visaInfo.previUSTripInfo.visanumber" type="text" />
+								<input id="visanumberen" name="visanumber" v-model="visaInfo.previUSTripInfo.visanumber" type="text" />
 								<input id="idknowvisanumber" :value="visaInfo.previUSTripInfo.idknowvisanumber" name="idknowvisanumber" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/>
 							</div>
 							<div class="clear"></div>
@@ -1927,10 +1927,10 @@
 							<div class="paddingTop">
 								<div class="groupRadioInfo">
 									<label style="display: block;">Has your U.S. Visa ever been lost or stolen</label>
-									<input type="radio" name="islost" v-model="visaInfo.previUSTripInfo.islost" class="lose" value="1" />YES
-									<input type="radio" name="islost" v-model="visaInfo.previUSTripInfo.islost" v-on:click="visaNotLost" class="lose" value="2" checked />NO
+									<input type="radio" name="islosten" v-model="visaInfo.previUSTripInfo.islosten" class="loseen" value="1" />YES
+									<input type="radio" name="islosten" v-model="visaInfo.previUSTripInfo.islosten" v-on:click="visaNotLost" class="loseen" value="2" checked />NO
 								</div>
-								<div class="yearExplain displayTop elementHide"><!-- 默认隐藏 -->
+								<div class="yearExplain yearExplainen displayTop elementHide"><!-- 默认隐藏 -->
 									<div class="displayLeft groupInputInfo">
 										<label>Year</label>
 										<input name="lostyear" v-model="visaInfo.previUSTripInfo.lostyear" type="text" />
@@ -1946,10 +1946,10 @@
 								<div>
 									<div class="groupRadioInfo">
 										<label>Has your U.S. Visa ever been lost or stolen</label>
-										<input type="radio" name="iscancelled" v-model="visaInfo.previUSTripInfo.iscancelled" class="revoke" value="1" />YES
-										<input type="radio" name="iscancelled" v-model="visaInfo.previUSTripInfo.iscancelled" v-on:click="visaNotCancel" class="revoke" value="2" checked />NO
+										<input type="radio" name="iscancelleden" v-model="visaInfo.previUSTripInfo.iscancelleden" class="revokeen" value="1" />YES
+										<input type="radio" name="iscancelleden" v-model="visaInfo.previUSTripInfo.iscancelleden" v-on:click="visaNotCancel" class="revokeen" value="2" checked />NO
 									</div>
-									<div class="explain grouptextareaInfo paddingTop">
+									<div class="explain explainen grouptextareaInfo paddingTop">
 										<label>Explain</label>
 										<textarea name="cancelexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.cancelexplain"></textarea>
 									</div>
@@ -1963,10 +1963,10 @@
 			<div class="paddingBottom">
 				<div class="groupRadioInfo">
 					<label>Have you ever been refused a U.S. Visa, or been refused admission to the United States, or withdrawn your application for admission at the port of entry</label>
-					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" class="refuse" value="1" />YES
-					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" v-on:click="visaNotRefused" class="refuse" value="2" checked />NO
+					<input type="radio" name="isrefuseden" v-model="visaInfo.previUSTripInfo.isrefuseden" class="refuseen" value="1" />YES
+					<input type="radio" name="isrefuseden" v-model="visaInfo.previUSTripInfo.isrefuseden" v-on:click="visaNotRefused" class="refuseen" value="2" checked />NO
 				</div>
-				<div class="refuseExplain paddingTop grouptextareaInfo">
+				<div class="refuseExplain refuseExplainen paddingTop grouptextareaInfo">
 					<label>Explain</label>
 					<textarea name="refusedexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.refusedexplain"></textarea>
 				</div>
@@ -1975,10 +1975,10 @@
 			<div class="paddingBottom ">
 				<div class="groupRadioInfo">
 					<label>Are you or have you ever been a U.S. legal permanent resident</label>
-					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" class="onceLegitimate" value="1" />YES
-					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" v-on:click="visaNotIegal" class="onceLegitimate" value="2" checked />NO
+					<input type="radio" name="islegalpermanentresidenten" v-model="visaInfo.previUSTripInfo.islegalpermanentresidenten" class="onceLegitimateen" value="1" />YES
+					<input type="radio" name="islegalpermanentresidenten" v-model="visaInfo.previUSTripInfo.islegalpermanentresidenten" v-on:click="visaNotIegal" class="onceLegitimateen" value="2" checked />NO
 				</div>
-				<div class="onceExplain paddingTop grouptextareaInfo">
+				<div class="onceExplain onceExplainen paddingTop grouptextareaInfo">
 					<label>Explain</label>
 					<textarea name="permanentresidentexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.permanentresidentexplain"></textarea>
 				</div>
@@ -1987,10 +1987,10 @@
 			<div class="paddingBottom">
 				<div class="groupRadioInfo">
 					<label>Has anyone ever filed an immigrant petition on your behalf with the United States Citizenship and Immigration Services</label>
-					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" class="onceImmigration" value="1" />YES
-					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" v-on:click="visaNotfiledimmigrantpetition" class="onceImmigration" value="2" checked />NO
+					<input type="radio" name="isfiledimmigrantpetitionen" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetitionen" class="onceImmigrationen" value="1" />YES
+					<input type="radio" name="isfiledimmigrantpetitionen" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetitionen" v-on:click="visaNotfiledimmigrantpetition" class="onceImmigrationen" value="2" checked />NO
 				</div>
-				<div class="immigrationExplain paddingTop grouptextareaInfo">
+				<div class="immigrationExplain immigrationExplainen paddingTop grouptextareaInfo">
 					<label>Explain</label>
 					<textarea name="immigrantpetitionexplain" class="bigArea" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplain"></textarea>
 				</div>
@@ -2083,11 +2083,11 @@
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Is your father in the U.S.</label>
-						<input type="radio" name="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" class="fatherUS" value="1" />YES
-						<input type="radio" name="isfatherinus"  v-on:click="isfatherinus" v-model="visaInfo.familyInfo.isfatherinus" class="fatherUS" value="2" checked />NO
+						<input type="radio" name="isfatherinusen" v-model="visaInfo.familyInfo.isfatherinusen" class="fatherUSen" value="1" />YES
+						<input type="radio" name="isfatherinusen"  v-on:click="isfatherinus" v-model="visaInfo.familyInfo.isfatherinusen" class="fatherUSen" value="2" checked />NO
 					</div>
 					<!--yes-->
-					<div class="fatherUSYes groupSelectInfo paddingNone">
+					<div class="fatherUSYes fatherUSYesen groupSelectInfo paddingNone">
 						<label>Father's Status</label>
 						<select id="fatherstatus" v-model="visaInfo.familyInfo.fatherstatus" name="fatherstatus">
 							<option value="0">Please choose</option>
@@ -2111,10 +2111,10 @@
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Is your mother in the U.S.</label>
-						<input type="radio" name="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" class="motherUS" value="1" />YES
-						<input type="radio" name="ismotherinus" v-on:click="ismotherinus" v-model="visaInfo.familyInfo.ismotherinus" class="motherUS" value="2" checked />NO
+						<input type="radio" name="ismotherinusen" v-model="visaInfo.familyInfo.ismotherinusen" class="motherUSen" value="1" />YES
+						<input type="radio" name="ismotherinusen" v-on:click="ismotherinus" v-model="visaInfo.familyInfo.ismotherinusen" class="motherUSen" value="2" checked />NO
 					</div>
-					<div class="motherUSYes paddingNone groupSelectInfo">
+					<div class="motherUSYes motherUSYesen paddingNone groupSelectInfo">
 						<label>Mother's Status</label>
 						<select id="motherstatus" name="motherstatus" v-model="visaInfo.familyInfo.motherstatus">
 							<option value="0">Please choose</option>
@@ -2127,14 +2127,14 @@
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Do you have any immediate relatives, not including parents, in the United States</label>
-						<input type="radio" name="hasimmediaterelatives" v-model="visaInfo.familyInfo.hasimmediaterelatives" class="directRelatives directUSRelatives" value="1" />YES
-						<input type="radio" name="hasimmediaterelatives" v-model="visaInfo.familyInfo.hasimmediaterelatives" class="directRelatives directUSRelatives" value="2" checked/>NO
+						<input type="radio" name="hasimmediaterelativesen" v-model="visaInfo.familyInfo.hasimmediaterelativesen" class="directRelatives directUSRelativesen" value="1" />YES
+						<input type="radio" name="hasimmediaterelativesen" v-model="visaInfo.familyInfo.hasimmediaterelativesen" class="directRelatives directUSRelativesen" value="2" checked/>NO
 					</div>
 					<div class="directRelatives">
 						<!--yes-->
 						<c:if test="${!empty obj.zhiFamilyList }">
 							<c:forEach var="zhifamily" items="${obj.zhiFamilyList }">
-								<div class="directRelativesYes">
+								<div class="directRelativesYes directRelativesYesen">
 									<div class="floatLeft leftNo groupInputInfo">
 										<label>Surnames</label>
 										<input name="relativesfirstname" value="${zhifamily.relativesfirstname }" type="text" />
@@ -2176,7 +2176,7 @@
 							</c:forEach>
 						</c:if>
 						<c:if test="${empty obj.zhiFamilyList}">
-							<div class="directRelativesYes">
+							<div class="directRelativesYes directRelativesYesen">
 								<div class="floatLeft leftNo groupInputInfo">
 									<label>Surnames</label>
 									<input name="relativesfirstname" type="text" />
@@ -2209,7 +2209,7 @@
 						<div class="clear"></div>
 						</div>
 						<!--NO-->
-						<div class="directRelativesNo groupRadioInfo">
+						<div class="directRelativesNo directRelativesNoen groupRadioInfo">
 							<label>Do you have any other relatives in the United States</label>
 							<input type="radio" name="hasotherrelatives" v-model="visaInfo.familyInfo.hasotherrelatives" value="1"/>YES
 							<input type="radio" name="hasotherrelatives" v-model="visaInfo.familyInfo.hasotherrelatives" value="2" checked/>NO
@@ -2233,7 +2233,7 @@
 					<label>Spouse's Date of Birth</label>
 					<input id="spousebirthday" name="spousebirthday" value="${obj.spousebirthday}" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 				</div>
-				<div class="paddingRight groupSelectInfo">
+				<div class="groupSelectInfo selectInfoen">
 					<label>Spouse's Country/Region of Origin (Nationality)</label>
 					<select id="spousenationality" name="spousenationality" v-model="visaInfo.familyInfo.spousenationality">
 						<option value="0">Please choose</option>
@@ -2396,15 +2396,15 @@
 					<div>
 						<div class="groupRadioInfo">
 							<label>Were you previously employed</label>
-							<input type="radio" name="isemployed" v-model="visaInfo.workEducationInfo.isemployed" class="beforeWork" value="1" />YES
-							<input type="radio" name="isemployed" v-model="visaInfo.workEducationInfo.isemployed" class="beforeWork" value="2" checked/>NO
+							<input type="radio" name="isemployeden" v-model="visaInfo.workEducationInfo.isemployeden" class="beforeWorken" value="1" />YES
+							<input type="radio" name="isemployeden" v-model="visaInfo.workEducationInfo.isemployeden" class="beforeWorken" value="2" checked/>NO
 						</div>
 						<!--yes-->
-						<div class="beforeWorkInfo elementHide">
+						<div class="beforeWorkInfo beforeWorkInfoen elementHide">
 						  <div class="beforeWorkYes">
 							<c:if test="${!empty obj.beforeWorkList }">
 								<c:forEach var="beforeWork" items="${obj.beforeWorkList }">
-									<div class="workBeforeInfosDiv">
+									<div class="workBeforeInfosDiven">
 										<div class="leftNo marginLS groupInputInfo" >
 											<label>Employer Name</label>
 											<input name="employername" value="${beforeWork.employername }" type="text" />
@@ -2503,7 +2503,7 @@
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.beforeWorkList }">
-								<div class="workBeforeInfosDiv">
+								<div class="workBeforeInfosDiven">
 									<div class="leftNo marginLS groupInputInfo" >
 										<label>Employer Name  </label>
 										<input name="employername" type="text" />
@@ -2581,8 +2581,8 @@
 							</div>
 							<div class="clear"></div>
 							<div class="btnGroup marginLS beforeWorkGroup">
-								<a class="save beforeWorksave">Add Another</a>
-								<a class="cancel beforeWorkcancel">Remove</a>
+								<a class="save beforeWorksaveen">Add Another</a>
+								<a class="cancel beforeWorkcancelen">Remove</a>
 							</div>
 						</div>
 					</div>
@@ -2591,15 +2591,15 @@
 					<div class="paddingTop">
 						<div class="groupRadioInfo">
 							<label>Have you attended any educational institutions at a secondary level or above</label>
-							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" class="education" value="1" />YES
-							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" class="education" value="2" checked/>NO
+							<input type="radio" name="issecondarylevelen" v-model="visaInfo.workEducationInfo.issecondarylevelen" class="educationen" value="1" />YES
+							<input type="radio" name="issecondarylevelen" v-model="visaInfo.workEducationInfo.issecondarylevelen" class="educationen" value="2" checked/>NO
 						</div>
 						<!--yes-->
-						<div class="educationInfo elementHide">
+						<div class="educationInfo educationInfoen elementHide">
 							<div class="educationYes">
 							<c:if test="${!empty obj.beforeEducationList }">
 								<c:forEach var="education" items="${obj.beforeEducationList }">
-									<div class="midSchoolEduDiv">
+									<div class="midSchoolEduDiven">
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>Name of Institution</label>
 											<input name="institution" value="${education.institution }" type="text"/>
@@ -2671,7 +2671,7 @@
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.beforeEducationList }">
-								<div class="midSchoolEduDiv">
+								<div class="midSchoolEduDiven">
 									<div class="draBig leftNo groupInputInfo">
 										<label>Name of Institution</label>
 										<input name="institution" type="text"/>
@@ -2727,8 +2727,8 @@
 							</div>
 							<div class="clear"></div>
 							<div class="btnGroup educationGroup">
-								<a class="save educationsave" >Add Another</a>
-								<a class="cancel educationcancel" >Remove</a>
+								<a class="save educationsaveen" >Add Another</a>
+								<a class="cancel educationcancelen" >Remove</a>
 							</div>
 						</div>
 					</div>
@@ -2740,14 +2740,14 @@
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Do you belong to a clan or tribe</label>
-						<input type="radio" name="isclan" v-model="visaInfo.workEducationInfo.isclan" class="isclan" value="1"/>YES
-						<input type="radio" name="isclan" v-on:click="isclan()" v-model="visaInfo.workEducationInfo.isclan" class="isclan" value="2" checked/>NO
+						<input type="radio" name="isclanen" v-model="visaInfo.workEducationInfo.isclanen" class="isclanen" value="1"/>YES
+						<input type="radio" name="isclanen" v-on:click="isclan()" v-model="visaInfo.workEducationInfo.isclanen" class="isclanen" value="2" checked/>NO
 					</div>
 					
 					<!--yes-->
-					<div class="isclanYes elementHide">
+					<div class="isclanYes isclanYesen elementHide">
 						<div>
-							<div class="clannameDiv">
+							<div class="clannameDiv clannameDiven">
 								<div class="draBig leftNo groupInputInfo" >
 									<label>Clan or Tribe Name</label>
 									<input name="clanname" v-model="visaInfo.workEducationInfo.clanname"  type="text"  />
@@ -2759,7 +2759,7 @@
 				<div class="languageYes">
 					<c:if test="${!empty obj.languageList }">
 						<c:forEach var="language" items="${obj.languageList }">
-							<div class="languagename languagenameDiv paddingTop padding-left">
+							<div class="languagename languagenameen languagenameDiven paddingTop padding-left">
 								<label>Language Name</label>
 								<div class="groupInputInfo">
 									<input name="languagename" value="${language.languagename }" type="text" />
@@ -2768,7 +2768,7 @@
 						</c:forEach>
 					</c:if>
 					<c:if test="${empty obj.languageList }">
-						<div class="languagename languagenameDiv paddingTop padding-left">
+						<div class="languagename languagenameen languagenameDiven paddingTop padding-left">
 							<label>Language Name</label>
 							<div class="groupInputInfo">
 								<input name="languagename" type="text" />
@@ -2777,21 +2777,21 @@
 					</c:if>
 				</div>	
 				<div class="btnGroup draBig languageGroup">
-					<a class="save languagesave">Add Another</a>
-					<a class="cancel languagecancel">Remove</a>
+					<a class="save languagesaveen">Add Another</a>
+					<a class="cancel languagecancelen">Remove</a>
 				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Have you traveled to any countries/regions within the last five years</label>
-						<input type="radio" name="istraveledanycountry" v-model="visaInfo.workEducationInfo.istraveledanycountry" class="istraveledanycountry" value="1" />YES
-						<input type="radio" name="istraveledanycountry" v-model="visaInfo.workEducationInfo.istraveledanycountry" class="istraveledanycountry" value="2" checked/>NO
+						<input type="radio" name="istraveledanycountryen" v-model="visaInfo.workEducationInfo.istraveledanycountryen" class="istraveledanycountryen" value="1" />YES
+						<input type="radio" name="istraveledanycountryen" v-model="visaInfo.workEducationInfo.istraveledanycountryen" class="istraveledanycountryen" value="2" checked/>NO
 					</div>
 					<!--yes-->
-					<div class="isTravelYes elementHide">
+					<div class="isTravelYes isTravelYesen elementHide">
 						<div class="gocountryYes">
 							<c:if test="${!empty obj.gocountryList }">
 								<c:forEach var="gocountry" items="${obj.gocountryList }">
-									<div class="travelCountry paddingTop groupInputInfo">
+									<div class="travelCountryen paddingTop groupInputInfo">
 										<label>Country/Region</label>
 										<div class="groupInputInfo groupSelectInfo">
 										
@@ -2811,73 +2811,73 @@
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.gocountryList }">
-								<div class="paddingTop travelCountry groupInputInfo">
+								<div class="paddingTop travelCountryen groupInputInfo">
 									<label>Country/Region</label>
 									<input name="traveledcountry" type="text"/>
 								</div>
 							</c:if>
 						</div>
 						<div class="btnGroup gocountryGroup">
-							<a class="save gocountrysave">Add Another</a>
-							<a class="cancel gocountrycancel">Remove</a>
+							<a class="save gocountrysaveen">Add Another</a>
+							<a class="cancel gocountrycancelen">Remove</a>
 						</div>
 					</div>
 				</div>
-				<div class="padding-left">
+				<div class="padding-left paddingTop">
 					<div class="groupRadioInfo">
 						<label>Have you belonged to, contributed to, or worked for any professional, social, or charitable organization</label>
-						<input type="radio" name="isworkedcharitableorganization" v-model="visaInfo.workEducationInfo.isworkedcharitableorganization" class="isworkedcharitableorganization" value="1"/>YES
-						<input type="radio" name="isworkedcharitableorganization" v-model="visaInfo.workEducationInfo.isworkedcharitableorganization" class="isworkedcharitableorganization" value="2" checked/>NO
+						<input type="radio" name="isworkedcharitableorganizationen" v-model="visaInfo.workEducationInfo.isworkedcharitableorganizationen" class="isworkedcharitableorganizationen" value="1"/>YES
+						<input type="radio" name="isworkedcharitableorganizationen" v-model="visaInfo.workEducationInfo.isworkedcharitableorganizationen" class="isworkedcharitableorganizationen" value="2" checked/>NO
 					</div>
 					<!--yes-->
-					<div class="isOrganizationYes elementHide">
+					<div class="isOrganizationYes isOrganizationYesen elementHide">
 						<div class="organizationYes">
 							<c:if test="${!empty obj.organizationList }">
 								<c:forEach var="organization" items="${obj.organizationList }">
-									<div class="paddingTop draBig leftNo organizationDiv groupInputInfo">
+									<div class="paddingTop draBig leftNo organizationDiven groupInputInfo">
 										<label>Organization Name</label>
 										<input name="organizationname" value="${organization.organizationname }" type="text"/>
 									</div>
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.organizationList }">
-								<div class="paddingTop draBig leftNo organizationDiv groupInputInfo">
+								<div class="paddingTop draBig leftNo organizationDiven groupInputInfo">
 									<label>Organization Name</label>
 									<input name="organizationname" type="text"/>
 								</div>
 							</c:if>
 						</div>
 						<div class="btnGroup organizationGroup">
-							<a class="save organizationsave">Add Another</a>
-							<a class="cancel organizationcancel">Remove</a>
+							<a class="save organizationsaveen">Add Another</a>
+							<a class="cancel organizationcancelen">Remove</a>
 						</div>
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Do you have any specialized skills or training, such as firearms, explosives, nuclear, biological, or chemical experience</label>
-						<input type="radio" name="hasspecializedskill" v-model="visaInfo.workEducationInfo.hasspecializedskill" class="hasspecializedskill" value="1" />YES
-						<input type="radio"name="hasspecializedskill" v-on:click="hasspecializedskill()" v-model="visaInfo.workEducationInfo.hasspecializedskill" class="hasspecializedskill" value="2" checked />NO
+						<input type="radio" name="hasspecializedskillen" v-model="visaInfo.workEducationInfo.hasspecializedskillen" class="hasspecializedskillen" value="1" />YES
+						<input type="radio"name="hasspecializedskillen" v-on:click="hasspecializedskill()" v-model="visaInfo.workEducationInfo.hasspecializedskillen" class="hasspecializedskillen" value="2" checked />NO
 					</div>
 					<!--yes-->
-					<div class="paddingTop skillDiv elementHide grouptextareaInfo">
+					<div class="paddingTop skillDiv skillDiven elementHide grouptextareaInfo">
 						<label>Explain</label>
 						<input type="text" name="skillexplain" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain" />
 						<!-- <textarea name="skillexplain" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain"></textarea> -->
 					</div>
 				</div>
-				<div class="padding-left">
+				<div class="padding-left paddingTop">
 					<div class="groupRadioInfo">
 						<label style="display: block;">Have you ever served in the military</label>
-						<input type="radio" name="hasservedinmilitary" v-model="visaInfo.workEducationInfo.hasservedinmilitary" class="hasservedinmilitary" value="1"/>YES
-						<input type="radio"name="hasservedinmilitary" v-model="visaInfo.workEducationInfo.hasservedinmilitary" class="hasservedinmilitary" value="2" checked/>NO
+						<input type="radio" name="hasservedinmilitaryen" v-model="visaInfo.workEducationInfo.hasservedinmilitaryen" class="hasservedinmilitaryen" value="1"/>YES
+						<input type="radio"name="hasservedinmilitaryen" v-model="visaInfo.workEducationInfo.hasservedinmilitaryen" class="hasservedinmilitaryen" value="2" checked/>NO
 					</div>
 					<!--yes-->
-					<div class="paddingTop elementHide militaryServiceYes">
+					<div class="paddingTop elementHide militaryServiceYes militaryServiceYesen">
 					  <div class="militaryYes">
 						<c:if test="${!empty obj.conscientiousList }">
 							<c:forEach var="conscientious" items="${obj.conscientiousList }">
-								<div class="militaryInfoDiv">
+								<div class="militaryInfoDiven">
 									<div class="paddingLeft leftNo groupSelectInfo">
 										<label>Name of Country/Region </label>
 										<select name="militarycountry">
@@ -2919,7 +2919,7 @@
 						</c:if>
 						
 						<c:if test="${empty obj.conscientiousList }">
-							<div class="militaryInfoDiv">
+							<div class="militaryInfoDiven">
 								<div class="paddingLeft leftNo groupSelectInfo">
 									<label>Name of Country/Region</label>
 									<select name="militarycountry">
@@ -2956,19 +2956,19 @@
 						</div>
 						<div class="clear"></div>
 						<div class="btnGroup militaryGroup">
-							<a class="save militarysave">Add Another</a>
-							<a class="cancel militarycancel">Remove</a>
+							<a class="save militarysaveen">Add Another</a>
+							<a class="cancel militarycancelen">Remove</a>
 						</div>
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Have you ever served in, been a member of, or been involved with a paramilitary unit, vigilante unit, rebel group, guerrilla group, or insurgent organization</label>
-						<input type="radio" name="isservedinrebelgroup" v-model="visaInfo.workEducationInfo.isservedinrebelgroup" class="isservedinrebelgroup" value="1"/>YES
-						<input type="radio" name="isservedinrebelgroup" v-model="visaInfo.workEducationInfo.isservedinrebelgroup" class="isservedinrebelgroup" value="2" checked/>NO
+						<input type="radio" name="isservedinrebelgroupen" v-model="visaInfo.workEducationInfo.isservedinrebelgroup" class="isservedinrebelgroupen" value="1"/>YES
+						<input type="radio" name="isservedinrebelgroupen" v-model="visaInfo.workEducationInfo.isservedinrebelgroup" class="isservedinrebelgroupen" value="2" checked/>NO
 					</div>
 					<!--yes-->
-					<!-- <div class="paddingTop elementHide dinrebelDiv grouptextareaInfo">
+					<!-- <div class="paddingTop elementHide dinrebelDiv dinrebelDiven grouptextareaInfo">
 						<label>说明</label>
 						<textarea></textarea>
 					</div> -->
