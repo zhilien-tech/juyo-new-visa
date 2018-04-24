@@ -13,6 +13,7 @@ ORDER by tou.createtime DESC
 SELECT
 	tou.id orderid,
 	tou.opid,
+	tu.usertype,
 	tou.ispayed,
 	tou.cityid,
 	tou.ordernumber,
@@ -25,27 +26,29 @@ SELECT
 	taj.type,
 	taj.content,
 	taj.aacode
+	
 FROM
 	t_order_us tou
-INNER JOIN (
-	SELECT
-	tasou.orderid stafforderid,
-	tasb.id staffid,
-	tasp.passport,
-	tasb.telephone,
-	tasb.email,
-	taspu.type,
-	tasb.aacode,
-	taspu.content,
-	GROUP_CONCAT( tasb.telephone SEPARATOR 'төл' ) phone,
-	GROUP_CONCAT( CONCAT( tasp.firstname, tasp.lastname ) SEPARATOR 'төл' ) applicantName 
-	FROM
-	t_app_staff_order_us tasou
-	INNER JOIN t_app_staff_basicinfo tasb ON tasou.staffid = tasb.id
-	LEFT JOIN t_app_staff_passport tasp ON tasp.staffid = tasb.id
-	LEFT JOIN t_app_staff_paperwork_us taspu ON taspu.staffid = tasb.id
-	GROUP BY tasou.orderid
-)taj ON taj.stafforderid = tou.id
+	LEFT JOIN t_user tu ON tu.id = tou.opid
+	INNER JOIN (
+		SELECT
+		tasou.orderid stafforderid,
+		tasb.id staffid,
+		tasp.passport,
+		tasb.telephone,
+		tasb.email,
+		taspu.type,
+		tasb.aacode,
+		taspu.content,
+		GROUP_CONCAT( tasb.telephone SEPARATOR 'төл' ) phone,
+		GROUP_CONCAT( CONCAT( tasp.firstname, tasp.lastname ) SEPARATOR 'төл' ) applicantName 
+		FROM
+		t_app_staff_order_us tasou
+		INNER JOIN t_app_staff_basicinfo tasb ON tasou.staffid = tasb.id
+		LEFT JOIN t_app_staff_passport tasp ON tasp.staffid = tasb.id
+		LEFT JOIN t_app_staff_paperwork_us taspu ON taspu.staffid = tasb.id
+		GROUP BY tasou.orderid
+	)taj ON taj.stafforderid = tou.id
 	$condition
 
 /*orderUS_listData_staff*/

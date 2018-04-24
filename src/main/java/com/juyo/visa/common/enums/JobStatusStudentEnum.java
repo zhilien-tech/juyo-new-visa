@@ -3,7 +3,7 @@ package com.juyo.visa.common.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 退休所需资料
+ * 学生所需资料
  * @author   
  * @Date	 
  */

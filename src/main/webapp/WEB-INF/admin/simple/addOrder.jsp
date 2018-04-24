@@ -119,7 +119,7 @@
 										<label><span>*</span>签证类型：</label> <select id="visatype"
 											name="visatype" type="text" class="form-control input-sm"
 											placeholder=" " >
-												<option value=""></option>
+												<option value=0>请选择</option>
 												<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 													<option value="${map.key}">${map.value}</option>
 												</c:forEach>
@@ -170,7 +170,7 @@
 										<label>&nbsp;</label> <select id="urgentDay" name="urgentday"
 											class="form-control input-sm none-sm">
 											<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
-												<option value="${map.key}">${map.value}</option>
+												<option value=${map.key}>${map.value}</option>
 											</c:forEach>
 										</select>
 									</div>
