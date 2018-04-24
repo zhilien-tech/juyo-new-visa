@@ -36,18 +36,18 @@ public class TOrderEntity implements Serializable {
 	@Column
 	@Comment("人数")
 	private Integer number;
-	@Column
-	@Comment("城市历史id")
-	private Integer city_his_id;
-	@Column
-	@Comment("航班历史id")
-	private Integer flight_his_id;
-	@Column
-	@Comment("酒店历史id")
-	private Integer hotel_his_id;
-	@Column
-	@Comment("客户历史id")
-	private Integer customer_his_id;
+	/*	@Column
+		@Comment("城市历史id")
+		private Integer city_his_id;
+		@Column
+		@Comment("航班历史id")
+		private Integer flight_his_id;
+		@Column
+		@Comment("酒店历史id")
+		private Integer hotel_his_id;
+		@Column
+		@Comment("客户历史id")
+		private Integer customer_his_id;*/
 
 	@Column
 	@Comment("领区")

@@ -213,7 +213,8 @@ public class UserViewService extends BaseService<TUserEntity> {
 					UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
 			cnd.and(expT);
 		} else {
-			cnd.and("userType", "!=", UserLoginEnum.TOURIST_IDENTITY.intKey());
+			cnd.and("userType", "!=", UserLoginEnum.TOURIST_IDENTITY.intKey()).and("userType", "!=",
+					UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
 		}
 		TUserEntity user = dbDao.fetch(TUserEntity.class, cnd);
 
@@ -277,13 +278,23 @@ public class UserViewService extends BaseService<TUserEntity> {
 		return insertuser;
 	}
 
-	public Object checkMobile(String mobile, String adminId) {
+	public Object checkMobile(String mobile, String adminId, HttpSession session) {
 		Map<String, Object> result = new HashMap<String, Object>();
+		TCompanyEntity company = LoginUtil.getLoginCompany(session);
+		Integer comid = company.getId();
 		int count = 0;
 		if (Util.isEmpty(adminId)) {
-			count = nutDao.count(TUserEntity.class, Cnd.where("mobile", "=", mobile));
+			count = nutDao.count(
+					TUserEntity.class,
+					Cnd.where("mobile", "=", mobile).and("comId", "=", comid)
+							.and("userType", "!=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey())
+							.and("userType", "!=", UserLoginEnum.TOURIST_IDENTITY.intKey()));
 		} else {
-			count = nutDao.count(TUserEntity.class, Cnd.where("mobile", "=", mobile).and("id", "!=", adminId));
+			count = nutDao.count(
+					TUserEntity.class,
+					Cnd.where("mobile", "=", mobile).and("id", "!=", adminId).and("comId", "=", comid)
+							.and("userType", "!=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey())
+							.and("userType", "!=", UserLoginEnum.TOURIST_IDENTITY.intKey()));
 		}
 		result.put("valid", count <= 0);
 		return result;

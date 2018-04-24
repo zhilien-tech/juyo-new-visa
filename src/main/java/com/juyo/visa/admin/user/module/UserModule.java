@@ -127,8 +127,8 @@ public class UserModule {
 	 */
 	@At
 	@POST
-	public Object checkMobile(@Param("mobile") String mobile, @Param("adminId") String adminId) {
-		return userViewService.checkMobile(mobile, adminId);
+	public Object checkMobile(@Param("mobile") String mobile, @Param("adminId") String adminId, HttpSession session) {
+		return userViewService.checkMobile(mobile, adminId, session);
 	}
 
 }
