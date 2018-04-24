@@ -93,6 +93,16 @@ public class AppEventsModule {
 		return appEventsViewService.signUpEventByPublicNum(form, session);
 	}
 
+	/**
+	 * 在订单列表页下单
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	@At
 	@POST
 	public Object addOrder(@Param("..") SignUpEventForm form, HttpSession session) {

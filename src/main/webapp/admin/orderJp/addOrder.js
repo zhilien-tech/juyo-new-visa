@@ -86,6 +86,27 @@ $("#addCustomer").click(function(){
 function successAddCustomer(data){
 	$(".on-line").show();//显示select2部分字段
 	$(".zhiKe").addClass("none");
+	$("#linkman2").val("");
+	$("#compName2").val("");
+	$("#comShortName2").val("");
+	$("#mobile2").val("");
+	$("#email2").val("");
+	$("#payType").val("");
+	//客户姓名清空
+	$("#linkman").val(null).trigger("change");
+	//电话清空
+	$("#mobile").val(null).trigger("change");
+	//公司全称
+	$("#compName").val(null).trigger("change");
+	//公司简称
+	$("#comShortName").val(null).trigger("change");
+	//邮箱清空
+	$("#email").val(null).trigger("change");
+	$("#linkman").empty();
+	$("#mobile").empty();
+	$("#compName").empty();
+	$("#comShortName").empty();
+	$("#email").empty();
 	$("#mobile").append('<option selected="true" value='+ data.id +'>'+data.mobile+'</option>'); 
 	/*公司全称补全*/
 	$("#compName").append('<option selected="true" value='+ data.id +'>'+data.name+'</option>'); 

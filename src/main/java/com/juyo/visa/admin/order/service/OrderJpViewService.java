@@ -328,6 +328,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(applicantForm.getOtherFirstNameEn())) {
 			applicant.setOtherFirstNameEn(applicantForm.getOtherFirstNameEn().substring(1));
 		}
+		applicant.setEmergencyLinkman(applicantForm.getEmergencyLinkman());
+		applicant.setEmergencyTelephone(applicantForm.getEmergencyTelephone());
 		applicant.setNationality(applicantForm.getNationality());
 		applicant.setHasOtherName(applicantForm.getHasOtherName());
 		applicant.setHasOtherNationality(applicantForm.getHasOtherNationality());
