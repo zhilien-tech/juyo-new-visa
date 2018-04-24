@@ -455,6 +455,7 @@
 				console.log(data);
 				if (data != 0) {
 					$("#6").html(data.status);
+					$(".selector").find("option[text=data.status]").attr("selected",true);
 					//$(".marriageInfo").text(data);
 					$(".replaceCircle6").removeClass("circleRed").addClass(
 							"circleGreen");
