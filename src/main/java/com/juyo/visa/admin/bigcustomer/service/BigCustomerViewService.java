@@ -43,9 +43,9 @@ import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.MarryStatusEnEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
-import com.juyo.visa.common.enums.USMarryStatusEnEnum;
 import com.juyo.visa.common.enums.AppPictures.AppCredentialsTypeEnum;
 import com.juyo.visa.common.enums.AppPictures.AppPicturesTypeEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
@@ -733,7 +733,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("marryStatus", staffInfo.getMarrystatus());
 		result.put("marryStatusEn", staffInfo.getMarrystatusen());
 		result.put("marryStatusEnum", EnumUtil.enum2(MarryStatusEnum.class));
-		result.put("marryStatusEnEnum", EnumUtil.enum2(USMarryStatusEnEnum.class));
+		result.put("marryStatusEnEnum", EnumUtil.enum2(MarryStatusEnEnum.class));
 
 		SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		if (!Util.isEmpty(staffInfo.getBirthday())) {
@@ -1200,13 +1200,14 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param session
 	 * @return 
 	 */
-	public Object getPassportInfo(Integer passportId, Integer isDisable, HttpSession session) {
+	public Object getPassportInfo(Integer passportId, Integer isDisable, Integer orderid, HttpSession session) {
 
 		Map<String, Object> result = MapUtil.map();
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
+		result.put("orderid", orderid);
 		result.put("isDisable", isDisable);//页面是否可编辑
 		String passportSqlstr = sqlManager.get("bigCustomer_staff_passport");
 		Sql passportSql = Sqls.create(passportSqlstr);
@@ -1368,7 +1369,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param session
 	 * @return 
 	 */
-	public Object checkPassport(String passport, Integer passportId, HttpSession session) {
+	public Object checkPassport(String passport, Integer passportId, Integer orderid, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
 
 		//当前登录公司
@@ -1378,7 +1379,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String passportSqlstr = sqlManager.get("bigCustomer_staff_checkPassport");
 		Sql passportSql = Sqls.create(passportSqlstr);
 		Cnd cnd = Cnd.NEW();
-		cnd.and("tasb.comid", "=", comId);
+		cnd.and("tou.id", "=", orderid);
 		cnd.and("tasp.passport", "=", passport);
 
 		if (!Util.isEmpty(passportId)) {

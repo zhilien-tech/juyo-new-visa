@@ -358,9 +358,9 @@
 				</div>
 			</div>
 			<!--以前的美国旅游信息END-->
-			<!--美国联络点-->
+			<!--美国联络人-->
 			<div class="contactPoint">
-				<div class="titleInfo">美国联络点</div>
+				<div class="titleInfo">美国联络人</div>
 				<div class="groupInputInfo paddingLeft">
 					<label>联系人姓</label>
 					<input name="firstname" v-model="visaInfo.contactPointInfo.firstname" type="text" />

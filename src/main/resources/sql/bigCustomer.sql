@@ -50,8 +50,10 @@ SELECT
 	CONCAT( tasb.firstname, tasb.lastname ) NAME,
 	tasp.passport 
 FROM
-	t_app_staff_basicinfo tasb
-	INNER JOIN t_app_staff_passport tasp ON tasp.staffId = tasb.id 
+	t_app_staff_passport tasp
+	INNER JOIN t_app_staff_basicinfo tasb ON tasp.staffId = tasb.id 
+	INNER JOIN t_app_staff_order_us tasou ON tasou.staffid = tasb.id
+	INNER JOIN t_order_us tou ON tasou.orderid = tou.id
 	$condition
 
 /*bigCustomer_events_count*/

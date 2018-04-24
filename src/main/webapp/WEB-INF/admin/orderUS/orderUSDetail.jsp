@@ -429,7 +429,7 @@
 						<input id="mypassportId" type="hidden" value="${obj.passport.id }">
 							<a id="photoInfo" onclick="updatePhoto(${obj.basicinfo.id })">第一步：拍照资料</a>
 							<span class="icon-line"></span>
-							<a onclick="passport(${obj.passport.id })">第二步：护照信息</a>
+							<a onclick="passport(${obj.passport.id },${obj.orderid})">第二步：护照信息</a>
 							<span class="icon-line"></span>
 							<a onclick="baseInfo(${obj.basicinfo.id })">第三步：基本信息</a>
 							<span class="icon-line"></span>
@@ -1125,7 +1125,6 @@
 		function dataReload(status){
 			var orderid = '${obj.orderid}';
 			//var addorder = '${obj.isaddorder}';
-			
 			$.ajax({
 				url : '/admin/orderUS/getOrderRefresh.html',
 				data : {
@@ -1153,8 +1152,6 @@
 									'<span class="gray"><span>'+followinfos[i].solvetime+'</span>&nbsp;&nbsp;由&nbsp;&nbsp;<span>'+followinfos[i].solveid+'</span>&nbsp;&nbsp;解决&nbsp;&nbsp;</span></span></div>'+
 									'<div class="errorInfo">'+
 									'<div>'+followinfos[i].content+'</div></div></li>';
-									
-									console.log(followinfos[i].content);
 								}else{
 									Str += '<li> <div class="dateNameBtn">'+
 									'<span class="dateInfo">'+followinfos[i].createtime+'</span>'+
@@ -1179,26 +1176,24 @@
 							$('#imgInch').attr('src', '');
 						}
 						$('#aacode').val(data.summaryInfo.aacode);
-						$('#allname').val(data.passport.firstname+data.passport.lastname+'/'+data.passport.firstnameen+data.passport.lastnameen);
+						//$('#allname').val(data.passport.firstname+data.passport.lastname+'/'+data.passport.firstnameen+data.passport.lastnameen);
 						$('#sex').val(data.passport.sex);
 						$('#birthday').val(data.birthday);
 						$('#realinfo').val(data.realinfo);
 						$('#cardnum').val(data.basicinfo.cardnum);
 						$('#passport').val(data.passport.passport);
 						$('#interviewdate2').val(data.Interviewdate);
-						
 						//姓名处理
-						var firstname =  '${obj.passport.firstname }';
-						var lastname =  '${obj.passport.lastname }';
-						var firstnameen =  '${obj.passport.firstnameen }';
-						var lastnameen =  '${obj.passport.lastnameen }';
-						if((firstname != "" || lastname != "") && (firstnameen == "" || lastnameen == "")){
+						var firstname = data.passport.firstname;
+						var lastname = data.passport.lastname;
+						var firstnameen = data.passport.firstnameen;
+						var lastnameen = data.passport.lastnameen;
+						if((firstname != "" || lastname != "") && (firstnameen == undefined || lastnameen == undefined)){
 							$("#allname").val(firstname+lastname+"/"+getPinyinStr(firstname)+getPinyinStr(lastname));
 						}
-						if((firstname == "" && lastname == "") && (firstnameen == "" && lastnameen == "")){
-							$("#allname").val("");
+						if((firstname != undefined && lastname != undefined) && (firstnameen != undefined && lastnameen != undefined)){
+							$('#allname').val(data.passport.firstname+data.passport.lastname+'/'+data.passport.firstnameen+data.passport.lastnameen);
 						}
-						
 					}
 				}
 			});
@@ -1435,7 +1430,7 @@
 		}
 		
 		//护照信息
-		function passport(id){
+		function passport(id,orderid){
 			layer.open({
 				type: 2,
 				title: false,
@@ -1445,7 +1440,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id+'&isDisable'
+				content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id+'&isDisable&orderid='+orderid
 			});
 		}
 		
