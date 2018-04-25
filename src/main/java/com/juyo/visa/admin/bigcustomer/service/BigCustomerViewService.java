@@ -81,8 +81,9 @@ import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCompanyEntity;
-import com.juyo.visa.entities.TCountryEntity;
+import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
+import com.juyo.visa.entities.TStateUsEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
@@ -154,8 +155,6 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("isDisable", isDisable);//页面是否可编辑
 		//旅伴信息---与你的关系
 		result.put("TravelCompanionRelationshipEnum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
-		//以前的美国旅游信息---州枚举
-		result.put("VisaUSStatesEnum", EnumUtil.enum2(VisaUSStatesEnum.class));
 		//以前的美国旅游信息---时间单位枚举
 		result.put("TimeUnitStatusEnum", EnumUtil.enum2(TimeUnitStatusEnum.class));
 		//美国联络点---与你的关系
@@ -171,6 +170,12 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		//工作/教育/培训信息---主要职业
 		result.put("VisaCareersEnum", EnumUtil.enum2(VisaCareersEnum.class));
 
+		//以前的美国旅游信息---州枚举
+		result.put("VisaUSStatesEnum", EnumUtil.enum2(VisaUSStatesEnum.class));
+		List<TStateUsEntity> stateUsList = dbDao.query(TStateUsEntity.class, null, null);
+		result.put("stateUsList", stateUsList);
+				
+		
 		//---同伴信息
 		List<TAppStaffCompanioninfoEntity> companionList = dbDao.query(TAppStaffCompanioninfoEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
@@ -241,7 +246,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		workstartdate = formatDateStr(workstartdate, FORMAT_DD_MM_YYYY);
 		result.put("workstartdate", workstartdate);
 		//工作/教育/培训信息---过去五年去过的国家
-		List<TCountryEntity> gocountryFiveList = dbDao.query(TCountryEntity.class, null, null);
+		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
 		result.put("gocountryFiveList", gocountryFiveList);
 
 		//人员id
