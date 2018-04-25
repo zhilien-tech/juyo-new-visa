@@ -508,7 +508,7 @@ function addApplicant(id){
 }
 
 //根据形成天数自动计算返回时间
-$("#stayDay").keyup(function(){
+/*$("#stayDay").keyup(function(){
 	var go = $("#goTripDate").val();
 	var back = $("#backTripDate").val();
 	var day = $("#stayDay").val();
@@ -517,8 +517,27 @@ $("#stayDay").keyup(function(){
 		$("#backTripDate").val(days); 
 		orderobj.orderInfo.backtripdate = days;
 	}
+});*/
+$(document).on("input","#stayDay",function(){
+	var gotripdate = $('#goTripDate').val();
+	orderobj.orderInfo.gotripdate = gotripdate;
+	var thisval = $(this).val();
+	thisval = thisval.replace(/[^\d]/g,'');
+	$(this).val(thisval);
+	if(gotripdate && thisval){
+		$.ajax({ 
+			url: '/admin/visaJapan/autoCalculateBackDate.html',
+			dataType:"json",
+			data:{gotripdate:gotripdate,stayday:thisval},
+			type:'post',
+			success: function(data){
+				$('#backTripDate').val(data);
+				orderobj.orderInfo.backtripdate = data;
+			}
+		});
+	}
 });
-//根据送签时间自动加7天计算出签时间
+/*//根据送签时间自动加7天计算出签时间
 $("#sendVisaDate").keyup(function(){
 	var stayday = 7;
 	var sendvisadate = $("#sendVisaDate").val();
@@ -527,7 +546,7 @@ $("#sendVisaDate").keyup(function(){
 		$("#outVisaDate").val(days); 
 		orderobj.orderInfo.outvisadate = days;
 	}
-});
+});*/
 //日期转换 加上指定天数
 function getNewDay(dateTemp, days) {  
     var dateTemp = dateTemp.split("-");  

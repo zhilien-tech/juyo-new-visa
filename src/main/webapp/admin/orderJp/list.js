@@ -87,10 +87,6 @@ new Vue({
 					}
 				});
 			});
-			
-			
-			
-			
 		},
 		undisabled : function(orderid){
 			layer.load(1);

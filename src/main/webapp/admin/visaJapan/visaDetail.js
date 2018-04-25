@@ -97,7 +97,19 @@ new Vue({
 				console.log(JSON.stringify(orderobj.orderinfo));
 				if(orderobj.orderinfo.urgenttype == 1){
 					$('#urgentday').addClass('none');
+				}else{
+					$('#urgentday').removeClass('none');
 				}
+				
+				$('#urgenttype').change(function(){
+					var urgenttype = $(this).val();
+					if(urgenttype == 1){
+						$('#urgentday').addClass('none');
+					}else{
+						$('#urgentday').removeClass('none');
+						orderobj.orderinfo.urgentday = 1;
+					}
+				});
 			}
 		});
 	},
@@ -228,6 +240,7 @@ function commitdata(){
 	orderobj.orderinfo.backtripdate = $('#backtripdate').val();
 	orderobj.orderinfo.sendvisadate = $('#sendvisadate').val();
 	orderobj.orderinfo.stayday = $('#stayday').val();
+	orderobj.orderinfo.money = $('#money').val();
 	orderobj.orderinfo.outvisadate = $('#outvisadate').val();
 	orderobj.orderinfo.sendvisanum = $('#sendvisanum').val();
 	orderobj.travelinfo.goDate = $('#goDate').val();
@@ -717,6 +730,29 @@ $(".schedulingBtn").click(function(){
 		}
 	}); 
 });
+
+$("#money").blur(function(){
+	var money = $("#money").val();
+	if(money != "" ){
+		var moneys = returnFloat(money);
+		$("#money").val(moneys); 
+	}
+});
+//数字保留两位小数
+function returnFloat(value){
+	var value=Math.round(parseFloat(value)*100)/100;
+	var xsd=value.toString().split(".");
+	if(xsd.length==1){
+		value=value.toString()+".00";
+	 	return value;
+	}
+	if(xsd.length>1){
+		if(xsd[1].length<2){
+	  		value=value.toString()+"0";
+	 	}
+	 	return value;
+	 }
+}
 
 function downLoadFile(){
 	$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=" + orderobj.orderinfo.orderid, {

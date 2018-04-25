@@ -269,6 +269,24 @@ public class OrderUSModule {
 	}
 
 	/**
+	 * 作废
+	 */
+	@At
+	@POST
+	public Object disabled(@Param("orderid") int orderid) {
+		return orderUSViewService.disabled(orderid);
+	}
+
+	/**
+	 * 还原
+	 */
+	@At
+	@POST
+	public Object undisabled(@Param("orderid") int orderid) {
+		return orderUSViewService.undisabled(orderid);
+	}
+
+	/**
 	 * 订单保存
 	 */
 	@At

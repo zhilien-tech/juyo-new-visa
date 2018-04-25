@@ -42,7 +42,7 @@ $(function() {
 			$('#marryUrl').val("");
 			$('#sqImg').attr('src', "");
 			$("#uploadFile").siblings("i").css("display","none");
-			if(userType == 2){
+			if(tourist == 1){
 				$(".front").attr("class", "info-imgUpload front has-success");  
 				$(".help-blockFront").attr("data-bv-result","IVALID");  
 				$(".help-blockFront").attr("style","display: none;");
@@ -55,7 +55,7 @@ $(function() {
 				$("#unitNameLabel").html("<span>*</span>父母职业");
 			}
 			$(".delete").css("display","none");
-			if(userType == 2){
+			if(tourist == 1){
 				if($("#sqImg").attr("src") == ""){
 					$(".front").attr("class", "info-imgUpload front has-error");  
 					$(".help-blockFront").attr("data-bv-result","INVALID");
@@ -199,7 +199,7 @@ $(function() {
 				$(".deposit").css("display","block");
 				$(this).addClass("btnState-true");
 				$("#deposit").val("");
-				if(userType == 2){
+				if(tourist == 1){
 					$(".help-blockdeposit").attr("data-bv-result","INVALID");  
 					// $(".deposits").css({"display":"block"});
 					$(".deposits").attr("class", "col-xs-6 deposits has-error");
@@ -219,7 +219,7 @@ $(function() {
 				$(".vehicle").css("display","block");
 				$(this).addClass("btnState-true");
 				$("#vehicle").val("");
-				if(userType == 2){
+				if(tourist == 1){
 					$(".help-blockvehicle").attr("data-bv-result","INVALID");  
 					//$(".vehicles").css({"display":"block"});
 					$(".vehicles").attr("class", "col-xs-6 vehicles has-error");
@@ -238,7 +238,7 @@ $(function() {
 				$(".houseProperty").css("display","block");
 				$(this).addClass("btnState-true");
 				$("#houseProperty").val("");
-				if(userType == 2){
+				if(tourist == 1){
 					$(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
 					// $(".housePropertys").css({"display":"block"});
 					$(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");
@@ -258,7 +258,7 @@ $(function() {
 				$(".financial").css("display","block");
 				$(this).addClass("btnState-true");
 				$("#financial").val("");
-				if(userType == 2){
+				if(tourist == 1){
 					$(".help-blockfinancial").attr("data-bv-result","INVALID");  
 					//$(".financials").css({"display":"block"});
 					$(".financials").attr("class", "col-xs-6 financials has-error");
@@ -342,7 +342,7 @@ function wealthShow(){
 
 function visaValidate(){
 //	护照图片验证
-	if(userType == 2){
+	if(tourist == 1){
 		var marryUrl = $("#marryUrl").val();
 		var marrystatus = $("#marryStatus").val();
 		if(marryUrl == ""){
@@ -365,7 +365,7 @@ function visaValidate(){
 		}
 	}
 //	财产验证
-	if(userType == 2){
+	if(tourist == 1){
 		var deposit = $("#deposit").val();
 		var vehicle = $("#vehicle").val();
 		var houseProperty = $("#houseProperty").val();
@@ -420,7 +420,7 @@ function visaValidate(){
 		}
 	}
 
-	if(userType == 2){
+	if(tourist == 1){
 		//校验
 		$('#passportInfo').bootstrapValidator({
 			message : '验证不通过',
@@ -589,7 +589,7 @@ function deleteApplicantFrontImg(){
 	$('#marryUrl').val("");
 	$('#sqImg').attr('src', "");
 	$(".delete").css("display","none");
-	if(userType == 2){
+	if(tourist == 1){
 		$(".front").attr("class", "info-imgUpload front has-error");  
         $(".help-blockFront").attr("data-bv-result","INVALID");  
         //$(".help-blockFront").attr("style","display: block;");
@@ -608,7 +608,7 @@ function save(status){
 			return;
 		}
 	}
-	if(userType == 2 && status == 1){
+	if(tourist == 1 && status == 1){
 		if($(".front").hasClass("has-error")){
 			return;
 		}
@@ -642,7 +642,7 @@ function save(status){
 		$("#wealth").val(0);
 	}
 	var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
-	if(userType == 2){
+	if(tourist == 1){
 		layer.load(1);
 		$.ajax({
 			type: 'POST',
@@ -662,12 +662,12 @@ function save(status){
 							success :function(data) {
 								layer.closeAll("loading");
 								socket.onclose();
-								window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrail+'&orderProcessType';
+								window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrail+'&orderProcessType&tourist=1';
 							}
 						});
 					}else{
 						socket.onclose();
-						window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrail+'&orderProcessType';
+						window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrail+'&orderProcessType&tourist=1';
 					}
 				}else{
 					if(data == 2){
@@ -773,7 +773,7 @@ function save(status){
 			    									layer.closeAll("loading");
 			    									console.log(JSON.stringify(data));
 			    									socket.onclose();
-			    									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrail;
+			    									window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&tourist=1&isTrial='+isTrail;
 			    									if(status == 1){
 			    										layer.msg("修改成功", {
 			    											time: 1000,
@@ -932,7 +932,7 @@ function save(status){
 
 //返回 
 function closeWindow() {
-	if(userType == 2){
+	if(tourist == 1){
 		$.ajax({
 			async: false,
 			type: 'POST',
