@@ -81,6 +81,7 @@ import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TCountryEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
@@ -239,6 +240,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String workstartdate = workEducationInfo.getString("workstartdate");
 		workstartdate = formatDateStr(workstartdate, FORMAT_DD_MM_YYYY);
 		result.put("workstartdate", workstartdate);
+		//工作/教育/培训信息---过去五年去过的国家
+		List<TCountryEntity> gocountryFiveList = dbDao.query(TCountryEntity.class, null, null);
+		result.put("gocountryFiveList", gocountryFiveList);
 
 		//人员id
 		result.put("staffId", staffId);

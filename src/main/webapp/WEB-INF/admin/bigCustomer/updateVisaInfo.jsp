@@ -1159,12 +1159,12 @@
 										
 											<select name="traveledcountry">
 												<option value="0">请选择</option>
-												<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-														<c:if test="${gocountry.traveledcountry != map.key}">
-															<option value="${map.key }">${map.value }</option>
+												<c:forEach items="${obj.gocountryFiveList }" var="country">
+														<c:if test="${gocountry.traveledcountry != country.id}">
+															<option value="${country.id }">${country.chinesename }</option>
 														</c:if>
-														<c:if test="${gocountry.traveledcountry == map.key}">
-															<option value="${map.key }" selected="selected">${map.value }</option>
+														<c:if test="${gocountry.traveledcountry == country.id}">
+															<option value="${country.id }" selected="selected">${country.chinesename }</option>
 														</c:if>
 												</c:forEach>
 											</select>
@@ -1178,12 +1178,12 @@
 									<div class="groupInputInfo groupSelectInfo">
 										<select name="traveledcountry">
 											<option value="0">请选择</option>
-											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-													<c:if test="${gocountry.traveledcountry != map.key}">
-														<option value="${map.key }">${map.value }</option>
+											<c:forEach items="${obj.gocountryFiveList }" var="country">
+													<c:if test="${gocountry.traveledcountry != country.id}">
+														<option value="${country.id }">${country.chinesename }</option>
 													</c:if>
-													<c:if test="${gocountry.traveledcountry == map.key}">
-														<option value="${map.key }" selected="selected">${map.value }</option>
+													<c:if test="${gocountry.traveledcountry == country.id}">
+														<option value="${country.id }" selected="selected">${country.chinesename }</option>
 													</c:if>
 											</c:forEach>
 										</select>
