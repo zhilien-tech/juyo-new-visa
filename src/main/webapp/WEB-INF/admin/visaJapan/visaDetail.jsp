@@ -642,6 +642,21 @@
 					}
 				});
 			}
+			
+			function reloaddata(){
+				$.ajax({ 
+					url: '/admin/visaJapan/getJpVisaDetailData.html',
+					dataType:"json",
+					data:{orderid:orderid},
+					type:'post',
+					success: function(data){
+						orderobj.orderinfo = data.orderinfo;
+						orderobj.travelinfo = data.travelinfo;
+						orderobj.applyinfo = data.applyinfo;
+						orderobj.travelplan = data.travelplan;
+					}
+				});
+			}
 			function cancelCallBack(status){
 			}
 			function log(orderid){//日志
@@ -658,14 +673,6 @@
 					content:'/admin/orderJp/log.html?id='+orderinfoid+'&orderProcessType=4'
 				});
 			}
-			$('#urgenttype').change(function(){
-				var urgenttype = $(this).val();
-				if(urgenttype == 1){
-					$('#urgentday').addClass('none');
-				}else{
-					$('#urgentday').removeClass('none');
-				}
-			});
 			
 			//实收弹框
 			function revenue(){
@@ -716,6 +723,7 @@
                  	dataType:"json",
                  	type:'post',
                  	success: function(data){
+                 		reloaddata();
                  		if(visastatus == 16){
 	                 		layer.msg('发招宝');
                  		}else if(visastatus == 19){

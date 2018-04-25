@@ -79,7 +79,7 @@
 								</div>
 								<div>
 									<label>操作：</label>
-									<div v-if="data.isdisable==1">
+									<div class="editBtn" v-if="data.isdisable==1">
 										<div v-if="data.usertype == 9">
 											<i class="edit1" v-on:click="" > </i>
 											<i class="toSure1" v-on:click="" ></i>
@@ -90,7 +90,7 @@
 											<i class="toVoid1" v-on:click="undisabled(data.orderid)"> </i>
 										</div>
 									</div>
-									<div v-else>
+									<div class="editBtn" v-else>
 										<div v-if="data.usertype == 9">
 											<i class="edit" v-on:click="toDetail(data.orderid)" > </i>
 											<i class="toSure" v-on:click="toMyself(data.orderid)" ></i>
