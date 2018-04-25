@@ -141,21 +141,21 @@
 							</div>
 						</div>
 						<!-- end 住宅 -->
-						<div class="row">
+ 						<%-- <div class="row">
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+								 <div class="form-group">
 									<label>有效期限</label> 
 									<input id="validStartDate" name="validStartDate"  type="text" class="form-control input-sm" value="${obj.validStartDate }"/>
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								</div> 
+							</div> 
+							 <div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label> &nbsp; &nbsp;</label> 
 									<input id="validEndDate" type="text" name="validEndDate" class="form-control input-sm" value="${obj.validEndDate }">
 								</div>
-							</div>
-						</div>
-						<div class="row">
+							</div> 
+						</div> --%>
+						<div class="row"> 
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="provinceDiv">

@@ -619,26 +619,26 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 //		}
 
 		//出行信息---------------------------------------------------------------------------
-//		TOrderTripJpEntity orderjptrip = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderId", "=", orderjpid));
-//		if (Util.isEmpty(orderjptrip)) {
-//			orderjptrip = new TOrderTripJpEntity();
-//		}
-//		orderjptrip.setTripPurpose(form.getTripPurpose());
-//		orderjptrip.setTripType(form.getTriptype());
-//		orderjptrip.setGoDate(form.getGoDate());
-//		orderjptrip.setReturnDate(form.getReturnDate());
-//		orderjptrip.setGoDepartureCity(form.getGoDepartureCity());
-//		orderjptrip.setGoArrivedCity(form.getGoArrivedCity());
-//		orderjptrip.setGoFlightNum(form.getGoFlightNum());
-//		orderjptrip.setReturnDepartureCity(form.getReturnDepartureCity());
-//		orderjptrip.setReturnArrivedCity(form.getReturnArrivedCity());
-//		orderjptrip.setReturnFlightNum(form.getReturnFlightNum());
-//		orderjptrip.setOrderId(orderjpid);
-//		if (!Util.isEmpty(orderjptrip.getId())) {
-//			dbDao.update(orderjptrip);
-//		} else {
-//			dbDao.insert(orderjptrip);
-//		}
+		TOrderTripJpEntity orderjptrip = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderId", "=", orderjpid));
+		if (Util.isEmpty(orderjptrip)) {
+			orderjptrip = new TOrderTripJpEntity();
+		}
+		orderjptrip.setTripPurpose(form.getTripPurpose());
+		orderjptrip.setTripType(form.getTriptype());
+		orderjptrip.setGoDate(form.getGoDate());
+		orderjptrip.setReturnDate(form.getReturnDate());
+		orderjptrip.setGoDepartureCity(form.getGoDepartureCity());
+		orderjptrip.setGoArrivedCity(form.getGoArrivedCity());
+		orderjptrip.setGoFlightNum(form.getGoFlightNum());
+		orderjptrip.setReturnDepartureCity(form.getReturnDepartureCity());
+		orderjptrip.setReturnArrivedCity(form.getReturnArrivedCity());
+		orderjptrip.setReturnFlightNum(form.getReturnFlightNum());
+		orderjptrip.setOrderId(orderjpid);
+		if (!Util.isEmpty(orderjptrip.getId())) {
+			dbDao.update(orderjptrip);
+		} else {
+			dbDao.insert(orderjptrip);
+		}
 //		//出行历史信息
 //		TOrderTripHisJpEntity tOrderTripHis = dbDao.fetch(TOrderTripHisJpEntity.class,
 //				Cnd.where("orderId", "=", orderid));
@@ -815,7 +815,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	public Object saveApplicantInfo(HttpServletRequest request, TApplicantForm form) {
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+	   TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
 		Integer orderjpid = form.getOrderid();
 		Integer orderid = null;

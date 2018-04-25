@@ -1,6 +1,6 @@
 $(function(){
 
-	if(userType != 2){
+	if(tourist != 1){
 		//校验
 		$('#applicantInfo').bootstrapValidator({
 			message : '验证不通过',
@@ -136,7 +136,7 @@ $(function(){
 
 function applyValidate(){
 	//身份证图片验证
-	if(userType == 2){
+	if(tourist == 1){
 		var cardFront = $("#cardFront").val();
 		if(cardFront == ""){
 			$(".front").attr("class", "info-imgUpload front has-error");  
@@ -164,7 +164,7 @@ function applyValidate(){
 		}
 	}
 	
-	if(userType != 2){
+	if(tourist != 1){
 		//校验
 		$('#applicantInfo').bootstrapValidator({
 			message : '验证不通过',
@@ -672,7 +672,7 @@ $(".nowProvince").change(function(){
 
 //根据身份证号搜索是否有游客信息
 $("#cardId").change(function(){
-	if(userType == 2){
+	if(tourist == 1){
 		$.ajax({
 			type : "post",
 			async : false,
@@ -810,7 +810,7 @@ $("#cardId").change(function(){
 
 //根据电话搜索是否有游客信息
 $("#telephone").change(function(){
-	if(userType == 2){
+	if(tourist == 1){
 		$.ajax({
 			type : "post",
 			async : false,
@@ -1069,7 +1069,7 @@ function saveApplicant(status){
 	// 执行表单验证 
 	bootstrapValidator.validate();
 	if (bootstrapValidator.isValid()){
-		if(userType == 2){
+		if(tourist == 1){
 			if($(".back").hasClass("has-error")){
 				return;
 			}
@@ -1090,7 +1090,7 @@ function saveApplicant(status){
 	}
 	applicantInfo.id = applicantId;
 	
-	if(userType == 2){
+	if(tourist == 1){
 		layer.load(1);
 		$.ajax({
 			async: false,
@@ -1110,12 +1110,12 @@ function saveApplicant(status){
 							success :function(data) {
 								layer.closeAll("loading");
 								socket.onclose();
-								window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType';
+								window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType&tourist=1';
 							}
 						});
 					}else{
 						socket.onclose();
-						window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType';
+						window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType&tourist=1';
 					}
 				}else{
 					if(data == 2){
@@ -1379,7 +1379,7 @@ function saveApplicant(status){
 
 //返回 
 function closeWindow() {
-	if(userType == 2){
+	if(tourist == 1){
 		$.ajax({
 			async: false,
 			type: 'POST',

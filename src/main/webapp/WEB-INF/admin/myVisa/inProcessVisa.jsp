@@ -121,7 +121,7 @@
 						shadeClose: false,
 						scrollbar: false,
 						area: ['900px', '551px'],
-						content:'/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+'&isTrial=0'
+						content:'/admin/orderJp/updateApplicant.html?id='+applyid+'&orderid='+'&isTrial=0&tourist=1'
 					});
 	    			/* $.ajax({ 
 	    				url: "/admin/myVisa/isChanged.html",
