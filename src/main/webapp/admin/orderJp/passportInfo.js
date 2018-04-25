@@ -175,7 +175,7 @@ function deleteApplicantFrontImg(){
 	$('#passportUrl').val("");
 	$('#sqImg').attr('src', "");
 	$("#uploadFile").siblings("i").css("display","none");
-	if(userType == 2){
+	if(tourist == 1){
 		$(".front").attr("class", "info-imgUpload front has-error");  
         $(".help-blockFront").attr("data-bv-result","INVALID");  
         //$(".help-blockFront").attr("style","display: block;");
@@ -184,7 +184,7 @@ function deleteApplicantFrontImg(){
 }
 
 function passValidate(){
-	if(userType == 2){
+	if(tourist == 1){
 		//护照图片验证
 		var passportUrl = $("#passportUrl").val();
 		if(passportUrl == ""){
@@ -432,7 +432,7 @@ function dataURLtoBlob(dataurl) {
 
 //根据护照号查询游客信息
 $("#passport").change(function(){
-	if(userType == 2){
+	if(tourist == 1){
 		$.ajax({
 			type : "post",
 			async : false,
@@ -576,7 +576,7 @@ function toSet(data){
 
 //保存
 function save(status){
-	if(userType == 2){
+	if(tourist == 1){
 		$("#passportInfo").data('bootstrapValidator').destroy();
 		$("#passportInfo").data('bootstrapValidator', null);
 		passValidate();
@@ -585,7 +585,7 @@ function save(status){
 	var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 	//alert(bootstrapValidator.isValid());
 	//bootstrapValidator.validate();
-	if(userType == 2 && status != 2){
+	if(tourist == 1 && status != 2){
 		if($(".front").hasClass("has-error")){
 			$(".help-blockFront").attr("style","display: block;");  
 			$("#borderColor").attr("style", "border-color:#ff1a1a");
@@ -598,7 +598,7 @@ function save(status){
 						return;
 				} */
 			var passportInfo = $("#passportInfo").serialize();
-			if(userType == 2){
+			if(tourist == 1){
 				layer.load(1);
 				$.ajax({
 					async: false,
@@ -618,12 +618,12 @@ function save(status){
 									success :function(data) {
 										layer.closeAll("loading");
 										socket.onclose();
-										window.location.href = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid='+'&isTrial='+isTrail+'&orderProcessType';
+										window.location.href = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid='+'&isTrial='+isTrail+'&orderProcessType&tourist=1';
 									}
 								});
 							}else{
 								socket.onclose();
-								window.location.href = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid='+'&isTrial='+isTrail+'&orderProcessType';
+								window.location.href = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid='+'&isTrial='+isTrail+'&orderProcessType&tourist=1';
 							}
 						}else if(status == 3){
 							if(data == 1 || data == 2){
@@ -636,12 +636,12 @@ function save(status){
 									success :function(data) {
 										layer.closeAll("loading");
 										socket.onclose();
-										window.location.href = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderid+'&isOrderUpTime&isTrial='+isTrail+'&orderProcessType';
+										window.location.href = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderid+'&isOrderUpTime&isTrial='+isTrail+'&orderProcessType&tourist=1';
 									}
 								});
 							}else{
 								socket.onclose();
-								window.location.href = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderid+'&isOrderUpTime&isTrial='+isTrail+'&orderProcessType';
+								window.location.href = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderid+'&isOrderUpTime&isTrial='+isTrail+'&orderProcessType&tourist=1';
 							}
 						}else{
 							if(data == 2){//游客表为空
@@ -958,7 +958,7 @@ $(".qualified").click(function(){
 
 //返回 
 function closeWindow() {
-	if(userType == 2){
+	if(tourist == 1){
 		$.ajax({
 			async: false,
 			type: 'POST',

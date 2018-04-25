@@ -79,12 +79,27 @@
 								</div>
 								<div>
 									<label>操作：</label>
-									<div v-if="data.opid == null">
-										<i class="edit" v-on:click="toDetail(data.orderid)" > </i>
-										<i class="toSure" v-on:click="toMyself(data.orderid)" ></i>
+									<div v-if="data.isdisable==1">
+										<div v-if="data.usertype == 9">
+											<i class="edit1" v-on:click="" > </i>
+											<i class="toSure1" v-on:click="" ></i>
+											<i class="toVoid1" v-on:click="undisabled(data.orderid)"> </i>
+										</div>
+										<div v-else>
+											<i class="edit1" v-on:click="" > </i>
+											<i class="toVoid1" v-on:click="undisabled(data.orderid)"> </i>
+										</div>
 									</div>
 									<div v-else>
-										<i class="edit" v-on:click="toDetail(data.orderid)" > </i>
+										<div v-if="data.usertype == 9">
+											<i class="edit" v-on:click="toDetail(data.orderid)" > </i>
+											<i class="toSure" v-on:click="toMyself(data.orderid)" ></i>
+											<i class="toVoid" v-on:click="disabled(data.orderid)"> </i>
+										</div>
+										<div v-else>
+											<i class="edit" v-on:click="toDetail(data.orderid)" > </i>
+											<i class="toVoid" v-on:click="disabled(data.orderid)"> </i>
+										</div>
 									</div>
 								</div>
 							</div>
