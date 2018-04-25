@@ -2,7 +2,7 @@
  * VisaJapanService.java
  * com.juyo.visa.admin.visajp.service
  * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
-*/
+ */
 
 package com.juyo.visa.admin.visajp.service;
 
@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -206,6 +207,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		Sql sql = Sqls.create(sqlstr);
 		sql.setParam("orderid", orderid);
 		Record orderinfo = dbDao.fetch(sql);
+		//格式化金额
+		DecimalFormat df = new DecimalFormat("#.00");
+		if (!Util.isEmpty(orderinfo.get("money"))) {
+			orderinfo.put("money", df.format(orderinfo.get("money")));
+		}
 		//格式化日期
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		if (!Util.isEmpty(orderinfo.get("gotripdate"))) {
@@ -432,7 +438,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		order.setUrgentDay(editDataForm.getUrgentday());
 		order.setTravel(editDataForm.getTravel());
 		order.setPayType(editDataForm.getPaytype());
-		order.setMoney(editDataForm.getMoney());
+		if (!Util.isEmpty(editDataForm.getMoney())) {
+			DecimalFormat df = new DecimalFormat("#.00");
+			order.setMoney(Double.valueOf(df.format(editDataForm.getMoney())).doubleValue());
+		}
 		order.setGoTripDate(editDataForm.getGotripdate());
 		order.setStayDay(editDataForm.getStayday());
 		order.setBackTripDate(editDataForm.getBacktripdate());
@@ -1606,7 +1615,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			if (Util.isEmpty(record.get("passportno"))) {
 				resultstrbuf.append("申请人" + count + "的护照号、");
 			}
-			if (Util.isEmpty(record.get("position"))) {
+			if (Util.isEmpty(record.get("careerstatus"))) {
 				resultstrbuf.append("申请人" + count + "的职位、");
 			}
 			if (Util.isEmpty(record.get("unitName"))) {

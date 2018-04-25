@@ -41,6 +41,15 @@ public class CommonConstants {
 	/**游客所在职位id*/
 	public static final int JOB_TOURIST_ID = 2;
 
+	/**大客户游客公司职位id*/
+	public static final int BIG_COMPANY_JOB_ID = 1;
+	/**大客户游客所在公司id*/
+	public static final int BIG_COMPANY_TOURIST_ID = 1;
+	/**大客户游客所在部门id*/
+	public static final int BIG_DEPARTMENT_TOURIST_ID = 1;
+	/**大客户游客所在职位id*/
+	public static final int BIG_JOB_TOURIST_ID = 1;
+
 	/**数据状态-删除*/
 	public static final Integer DATA_STATUS_DELETE = 2;
 

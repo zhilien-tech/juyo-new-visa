@@ -232,7 +232,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '551px'],
-					content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+'&isTrial=0&flowChart=1'
+					content:'/admin/orderJp/updateApplicant.html?id='+applyId+'&orderid='+'&isTrial=0&flowChart=1&tourist=1'
 				});
 			}
 			

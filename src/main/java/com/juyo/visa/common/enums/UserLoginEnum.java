@@ -10,7 +10,8 @@ import com.uxuexi.core.common.enums.IEnum;
 public enum UserLoginEnum implements IEnum {
 	PERSONNEL(1, "工作人员"), TOURIST_IDENTITY(2, "游客身份"), SUPERMAN(3, "超级管理员"), ADMIN(4, "平台管理员"), SQ_COMPANY_ADMIN(5,
 			"送签社公司管理员"), DJ_COMPANY_ADMIN(6, "地接社公司管理员"), JJ_COMPANY_ADMIN(7, "精简版送签社公司管理员"), BIG_COMPANY_ADMIN(8,
-			"大客户公司管理员");
+			"美国大客户公司管理员"), BIG_TOURIST_IDENTITY(9, "美国大客户游客身份"),BIG_COMPANY_CUSTOMER(10,
+					"美国大客户"),BAOYING_US(11,"美国葆婴");
 
 	private int key;
 	private String value;

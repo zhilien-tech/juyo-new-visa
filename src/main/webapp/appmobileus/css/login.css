@@ -1,0 +1,96 @@
+a, body, center, cite, code, dd, del, div, dl, dt, em, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hr, html, img, input, label, legend, li, mark, ol, p, section, span, strong, textarea, time, ul, var input{
+                margin: 0;
+                border: 0;
+                padding: 0;
+                font-style: normal;
+                color: #323232;
+                box-sizing: border-box;
+                -moz-box-sizing:border-box; /* Firefox */
+                -webkit-box-sizing:border-box; /* Safari */
+            }
+            html,body{
+                background: #fff;
+            }
+            ul{
+                text-decoration: none;
+                list-style-type: none;
+                width: 100%;
+                position: absolute;
+                top: 26%;
+                left: 0;
+            }
+            .video_list>li{
+                float: left;
+                width: 32%;
+                text-align: center;
+                padding-top: 12%;
+                margin-left: 1%;
+                margin-top: 1%;
+                position: relative;
+                margin-bottom: 7.5%;
+            }
+            .video_list>li>div{
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+            }
+            .video_list>li>div>span{
+                display: inline-block;
+                margin-top: 50%;
+                -webkit-transform: translateY(-50%);
+                transform: translateY(-50%);
+            }
+            .bgImg {
+            	position: relative;
+            }
+            .bgImg img {
+            	width: 100%;
+            	height: 100%;
+            	position:absolute;
+            	left:0;
+            	top:0;
+            	z-index:-1;
+            }
+            .btnGroupImg {
+        		width: 110px;
+        		height: 38px;
+        		display: inline-block;
+        	}
+        	.iconHD {
+        		background: url(../img/icon-operation.jpg) no-repeat;
+        		background-size: 100% 100%;
+        	}
+        	.iconVisa {
+        		background: url(../img/icon-visa.jpg) no-repeat;
+        		background-size: 100% 100%;
+        	}
+        	.iconZL {
+        		background: url(../img/icon-ZL.jpg) no-repeat;
+        		background-size: 100% 100%;
+        	}
+        	.iconBM {
+        		background: url(../img/icon-BM.jpg) no-repeat;
+        		background-size: 100% 100%;
+        	}
+        	.iconSelect {
+        		background: url(../img/icon-Select.jpg) no-repeat;
+        		background-size: 100% 100%;
+        	}
+        	.iconMQ {
+        		background: url(../img/icon-MS.jpg) no-repeat;
+        		background-size: 100% 100%;
+        	}
+        	.iconJD {
+        		background: url(../img/icon-JD.jpg) no-repeat;
+        		background-size: 100% 100%;
+        	}
+        	.iconUpdate {
+        		background: url(../img/icon-Update.jpg) no-repeat;
+        		background-size: 100% 100%;
+        	}
+        	.iconKF {
+        		background: url(../img/icon-KF.jpg) no-repeat;
+        		background-size: 100% 100%;
+        	}

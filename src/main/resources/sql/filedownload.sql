@@ -15,6 +15,7 @@ SELECT
 	tawj.address workaddress,
 	tawj.`name` workname,
 	tawj.position,
+	tawj.careerStatus,
 	tawlj.wealthtype,
 	tawlj.wealthcontent,
 	tavoi.hotelname,

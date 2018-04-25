@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>进度</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">		
+		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/progress.css" />
+		<script type="text/javascript" src="js/rem(750).js" ></script>
+		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script>
+     	//获取URL地址参数
+	    function GetQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null)return  unescape(r[2]); return null;
+	    }
+        	$(function(){
+        		var openid = '';
+        		var code = GetQueryString("code");
+        		var userOpenid = GetQueryString("openid");
+        		var telephone = GetQueryString("telephone");
+        		var tel = telephone;
+        		//从登陆页面跳转到进度页面
+           		if(telephone != null && telephone != ''){
+        			$.ajax({
+            			type : "POST",//提交类型  
+            			//dataType : "json",//返回结果格式  
+            	 		url : '/admin/weixinOpenId/verifyUser.html',//请求地址  
+            			data:{telephone:tel,userOpenid:userOpenid},
+            			//请求数据  
+            			success : function(data) {//请求成功后的函数 
+            				
+            				for(var i = 0;i < data.length;i++){
+    							if(data[i].flag == 0){
+    								var name = data[i].name;
+    								var status = data[i].orderStatus;
+    								$(".sectionInfo").append('<div class="mainInfo"> <div class="titleHead">USANA &nbsp;2018国际年会</div>'+
+    														 '<ul class="downUpInfo"> <li>'+
+    														 '<span id="name">'+name+'</span></li> </ul>'+
+    														 '<div class="statusInfo"><span class="UsName">美国</span>'+
+    														 '<span class="UsStatus">'+status+'</span></div></div>'
+    														);
+    							}else{
+    								alert("请先注册再查询进度！");
+    							}
+            			}
+            		}	
+            		});
+        		}else if(code != null || code != ''){
+        			
+        			$.ajax({
+            			type : "POST",//提交类型  
+            			//dataType : "json",//返回结果格式  
+            	 		url : '/admin/weixinOpenId/checkProgress.html',//请求地址  
+            			data:{code:code},
+            			//请求数据  
+            			success : function(data) {//请求成功后的函数 
+            				
+            				for(var i = 0;i < data.length;i++){
+    							if(data[i].flag == 0){
+    								var name = data[i].name;
+    								var status = data[i].orderStatus;
+    								$(".sectionInfo").append('<div class="mainInfo"> <div class="titleHead">USANA &nbsp;2018国际年会</div>'+
+    														 '<ul class="downUpInfo"> <li>'+
+    														 '<span id="name">'+name+'</span></li> </ul>'+
+    														 '<div class="statusInfo"><span class="UsName">美国</span>'+
+    														 '<span class="UsStatus">'+status+'</span></div></div>'
+    														);
+    							}else if(data[i].flag == 1){
+    								//具有openid且需要更新的老客户
+    								openid = data[i].openid;
+    								$(".enrolldialogBG").show();
+    	        					$(".enrollDialog").show();
+    							}
+            			}
+            		}	
+            		});
+        		}
+        	var userOpenid = openid;
+        		
+        	})
+        	
+        	
+        </script>
+	</head>
+	<body>
+		<div class="sectionInfo">
+			
+		</div>
+		<!-- 弹框 -->
+		<div class="enrolldialogBG"></div>
+		<div class="enrollDialog">
+			<div class="enrollTitle">
+				如果您<span>已报名</span>成功请点击"去登陆"
+			</div>
+			<div class="enrollTitle2">
+				如果您还<span>没有报名</span>成功请点击"去报名"
+			</div>
+			<div class="enrollBtnGroup">
+				<a class="goEnroll" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd77f341f1b849e68&redirect_uri=http%3A%2F%2Fwww.f-visa.com%2Fappmobileus%2Fenroll.html&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect">去报名</a>
+				<a class="goLogin" href="http://www.f-visa.com/appmobileus/touristlogin.html?openid="+userOpenid>去登陆</a>
+			</div>
+		</div>
+	</body>
+</html>

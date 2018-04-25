@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>报名</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+   		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/heavyBuyer.css" />
+	</head>
+	<body>
+		<header>
+			<div class="returnAndSave">
+				<i></i>
+				<span>报名</span>	
+			</div>
+		</header>
+		<section>
+			<div class="listMessage">
+				<ul>
+					<li>
+						<label>姓</label>
+						<input type="text" class="surName" />
+					</li>
+					<li>
+						<label>名</label>
+						<input type="text" class="name" />
+					</li>
+					<li>
+						<label>手机</label>
+						<input type="text" class="telphone" maxlength="11" />
+					</li>
+					<li>
+						<label>邮箱</label>
+						<input type="text" class="email" />
+					</li>
+				</ul>
+			</div>
+			<div class="payForCase">
+				<a class="btnPayment">去付款</a>
+			</div>
+			<input id="redirect" type="hidden" value="0" >
+		</section>
+		<!-- 弹出层 -->
+		<div class="dialog"></div>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+	<script type="text/javascript" src="/references/common/js/layer/layer.js" ></script>
+	<script type="text/javascript" src="js/rem(750).js" ></script>
+	<script>
+		//获取URL地址参数
+	    function GetQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null)return  unescape(r[2]); return null;
+	    }
+		
+		$(function(){
+			var code = GetQueryString("code");
+			var openid = "";
+			$.ajax({
+    			type : "POST",//提交类型  
+    			async:false,
+    			//dataType : "json",//返回结果格式  ss
+    	 		url : '/admin/weixinOpenId/saveWxinfo.html',//请求地址  
+    			data:{code:code},
+    			//请求数据  
+    			success : function(obj) {
+ 				//请求成功后的函数 
+    				if(obj.flag == 1){
+    					//验证用户是否已经注册
+    					openid = obj.openid;
+    					$(".surName").val(obj.firstname);
+    					$(".surName").attr('readOnly',"true");
+    					$(".name").val(obj.lastname);
+    					$(".name").attr('readOnly',"true");
+    					$(".telphone").val(obj.telephone);
+    					$(".telphone").attr('readOnly',"true");
+    					$(".email").val(obj.email);
+    					$(".email").attr('readOnly',"true");
+    					$(".btnPayment").text("已报名");
+    					$(".payForCase a").addClass("btnPaymentHide");
+    					$(".payForCase a").removeClass("btnPayment");
+    			 		
+    				}else{
+    					openid = obj.openid;
+    				}
+    			}
+    		});
+			/* 手机号只能输入数字 */
+			$(document).on("input",".telphone",function(){
+				$(this).val($(this).val().replace(/[^\d]/g,''));
+			});
+			$(".surName").focus(function(){
+				$(".surName").css('border-bottom-color','#000');
+			});
+			$(".name").focus(function(){
+				$(".name").css('border-bottom-color','#000');
+			});
+			$(".telphone").focus(function(){
+				$(".telphone").css('border-bottom-color','#000');
+			});
+			$(".email").focus(function(){
+				$(".email").css('border-bottom-color','#000');
+			});
+		
+			$(".btnPayment").click(function(){
+				layer.load(1);
+				var surName = $(".surName").val();
+				var name = $(".name").val();
+				var telphone = $(".telphone").val();
+				var email = $(".email").val();
+				var eventId = "1";
+				var pattern = /^[1][3,4,5,7,8][0-9]{9}$/;
+				var patternEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+				if(surName == null || surName == ""){
+					$(".surName").css('border-bottom-color','red');
+					$(".dialog").html();
+					$(".dialog").show();
+					$(".dialog").html("姓不能为空");
+					setTimeout(function(){
+						$(".dialog").hide();
+					},2000);
+					return;
+				}
+				if(name == null || name == ""){
+					$(".name").css('border-bottom-color','red');
+					$(".dialog").html();
+					$(".dialog").show();
+					$(".dialog").html("名不能为空");
+					setTimeout(function(){
+						$(".dialog").hide();
+					},2000);
+					return;
+				}
+				if(telphone == null || telphone == ""){
+					$(".telphone").css('border-bottom-color','red');
+					$(".dialog").html();
+					$(".dialog").show();
+					$(".dialog").html("手机号不能为空");
+					setTimeout(function(){
+						$(".dialog").hide();
+					},2000);
+					return;
+				}	
+				if(!pattern.test(telphone)){
+					$(".telphone").css('border-bottom-color','red');
+					$(".dialog").html();
+					$(".dialog").show();
+					$(".dialog").html("手机号格式不正确");
+					setTimeout(function(){
+						$(".dialog").hide();
+					},2000);
+					return;
+				}
+				if(email == null || email == ""){
+					$(".email").css('border-bottom-color','red');
+					$(".dialog").html();
+					$(".dialog").show();
+					$(".dialog").html("邮箱不能为空");
+					setTimeout(function(){
+						$(".dialog").hide();
+					},2000);
+					return;
+				}
+				/* if(!patternEmail.test(email)){
+					$(".email").css('border-bottom-color','red');
+					$(".dialog").html();
+					$(".dialog").show();
+					$(".dialog").html("邮箱格式不正确");
+					setTimeout(function(){
+						$(".dialog").hide();
+					},2000);
+					return;
+				} */
+				var redirect = $("#redirect").val();
+				var penid = openid;
+				if(0 == redirect){
+			    var index = layer.load();
+				$.ajax({
+					type:"post",
+					
+					url:"/admin/appEvents/signUpEventByPublicNum",
+					data:{
+						eventId:eventId,
+						weChatToken:penid,
+						firstname:surName,
+						lastname:name,
+						telephone:telphone,
+						email:email
+					},
+					dataType : "json",
+					async:true,
+					success:function(data){
+						//map.flag 3代表回显 1代表更新 0代表新增 2代表违法
+						//关闭加载层
+		   				layer.closeAll("loading");
+						if(data.flag == "2"){
+							$(".dialog").html();
+							$(".dialog").show();
+							$(".dialog").html(data.msg);
+							setTimeout(function(){
+								$(".dialog").hide();
+							},2000);
+						}else if(data.flag == "0"){
+							//新注册用户
+								$("#redirect").val("1");
+								window.location.href='https://detail.youzan.com/show/goods?alias=2fu4k1rbjazh2&v2/goods/2fu4k1rbjazh2'
+							}else if("1" == data.flag){
+							//老客户 新增openid 
+								window.location.href='http://www.f-visa.com/appmobileus/login.html'
+							}else if("3" ==data.flag){
+							//老客户 无openid
+								$(".surName").val(data.firstname);
+		    					$(".surName").attr('readOnly',"true");
+		    					$(".name").val(data.lastname);
+		    					$(".name").attr('readOnly',"true");
+		    					$(".telphone").val(data.telephone);
+		    					$(".telphone").attr('readOnly',"true");
+		    					$(".email").val(data.email);
+		    					$(".email").attr('readOnly',"true");
+		    					$(".btnPayment").text("已报名");
+		    					$(".payForCase a").addClass("btnPaymentHide");
+		    					$(".payForCase a").removeClass("btnPayment");
+		    			 		
+								
+								
+							}
+						}
+
+			});
+				}
+		});
+		})
+		
+	</script>
+</html>

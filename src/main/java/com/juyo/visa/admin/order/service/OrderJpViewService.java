@@ -105,7 +105,6 @@ import com.juyo.visa.common.ocr.RecognizeData;
 import com.juyo.visa.common.util.ImageDeal;
 import com.juyo.visa.common.util.PinyinTool;
 import com.juyo.visa.common.util.PinyinTool.Type;
-import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -329,6 +328,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(applicantForm.getOtherFirstNameEn())) {
 			applicant.setOtherFirstNameEn(applicantForm.getOtherFirstNameEn().substring(1));
 		}
+		applicant.setEmergencyLinkman(applicantForm.getEmergencyLinkman());
+		applicant.setEmergencyTelephone(applicantForm.getEmergencyTelephone());
 		applicant.setNationality(applicantForm.getNationality());
 		applicant.setHasOtherName(applicantForm.getHasOtherName());
 		applicant.setHasOtherNationality(applicantForm.getHasOtherNationality());
@@ -843,14 +844,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object updateApplicant(Integer id, Integer orderid, Integer isTrial, Integer orderProcessType, int addApply,
-			HttpServletRequest request) {
+			Integer tourist, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
 
-		Integer userType = loginUser.getUserType();
-		result.put("userType", userType);
+		//Integer userType = loginUser.getUserType();
+		//result.put("userType", userType);
+		result.put("tourist", tourist);
 		result.put("addApply", addApply);
 		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", id));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
@@ -1084,7 +1086,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 						ApplicantInfoTypeEnum.BASE.intKey(), session);
 			}
 			//游客进入，变更申请人为基本信息填写完毕
-			if (Util.eq(applicantForm.getUserType(), 2)) {
+			if (Util.eq(applicantForm.getTourist(), 1)) {
 				changeOrderStatusToFiled(applyJpList, "base", applyJp, orderEntity);
 			}
 
@@ -1142,14 +1144,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime, Integer isTrial,
-			Integer orderProcessType, int addApply, HttpServletRequest request) {
+			Integer orderProcessType, int addApply, int tourist, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 
-		Integer userType = loginUser.getUserType();
-		result.put("userType", userType);
+		//Integer userType = loginUser.getUserType();
+		//result.put("userType", userType);
+		result.put("tourist", tourist);
 		result.put("addApply", addApply);
 		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, id.longValue());
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
@@ -1237,14 +1240,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getEditPassport(Integer applicantId, Integer orderid, Integer isTrial, Integer orderProcessType,
-			int addApply, HttpServletRequest request) {
+			int addApply, int tourist, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 
-		Integer userType = loginUser.getUserType();
-		result.put("userType", userType);
+		//Integer userType = loginUser.getUserType();
+		//result.put("userType", userType);
+		result.put("tourist", tourist);
 		result.put("addApply", addApply);
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantId));
@@ -1346,7 +1350,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
 			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
-			if (Util.eq(visaForm.getUserType(), 2)) {
+			if (Util.eq(visaForm.getTourist(), 1)) {
 				changeOrderStatusToFiled(applyJpList, "visa", applicantOrderJpEntity, orderEntity);
 			}
 			applicantEntity.setMarryStatus(visaForm.getMarryStatus());
@@ -2272,7 +2276,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
 			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
-			if (Util.eq(passportForm.getUserType(), 2)) {
+			if (Util.eq(passportForm.getTourist(), 1)) {
 				changeOrderStatusToFiled(applyJpList, "pass", applyJp, orderEntity);
 			}
 
@@ -2847,6 +2851,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		String content = Json.toJson(rd);
 		String info = (String) aliPassportOcrAppCodeCall(content);
+		System.out.println("info:" + info);
 
 		//解析扫描的结果，结构化成标准json格式
 		PassportJsonEntity jsonEntity = new PassportJsonEntity();

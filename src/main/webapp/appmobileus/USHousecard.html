@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>房产证</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<!--公共样式-->
+<link rel="stylesheet" href="css/common.css" />
+<!--本页css-->
+<link rel="stylesheet" href="css/filming.css" />
+</head>
+<body>
+	<header>
+		<div class="filming">
+			<a onclick="returnPage()"> <i></i> <span>房产证</span></a>
+		</div>
+	</header>
+	<section>
+		<div class="household">
+			<!--示例-->
+			<div class="householdPage householdExpain PageMain">
+				<img width="100%" height="100%" src="img/icon-card.jpg" />
+				<div class="carddislog"></div>
+				<span class="cardPage">图例</span>
+			</div>
+			<!--第一页-->
+			<div class="householdPage firstPage PageMain">
+				<span class="homePageTitle">第一页</span> <img src="img/camera.png"
+					style="pointer-events: none;" class="camera cameraMain" /> <img id="11"
+					src="" style="pointer-events: none;" class="pageImg" />
+			</div>
+			<input id="1" type="file" name="1" class="fileHide firstPageImg" />
+			<!--第二页-->
+			<div class="householdPage secondPage PageMain">
+				<span class="homePageTitle">第二页</span> <img src="img/camera.png"
+					style="pointer-events: none;" class="camera cameraMain" /> <img id="12"
+					src="" style="pointer-events: none;" class="pageImg" />
+			</div>
+			<input id="1" type="file" class="fileHide secondPageImg" name="2" />
+			<!--第三页-->
+			<div class="householdPage thirdPage PageMain">
+				<span class="homePageTitle">第三页</span> <img src="img/camera.png"
+					style="pointer-events: none;" class="camera cameraMain" /> <img id="13"
+					src="" style="pointer-events: none;" class="pageImg" />
+			</div>
+			<input id="1" type="file" class="fileHide thirdPageImg" name="3" />
+			<!--第四页-->
+			<div class="householdPage fouthPage PageMain">
+				<span class="homePageTitle">第四页</span> <img src="img/camera.png"
+					style="pointer-events: none;" class="camera cameraMain" /> <img id="14"
+					src="" style="pointer-events: none;" class="pageImg" />
+			</div>
+			<input id="1" type="file" class="fileHide fouthPageImg" name="4" />
+			<!--第五页-->
+			<div class="householdPage fivePage PageMain">
+				<span class="homePageTitle">第五页</span> <img src="img/camera.png"
+					style="pointer-events: none;" class="camera cameraMain" /> <img id="15"
+					src="" style="pointer-events: none;" class="pageImg" />
+			</div>
+			<input id="1" type="file" class="fileHide fivePageImg" name="5" />
+			<!--结束-->
+		</div>
+		<!--注解-->
+		<div class="notes">注：两套及以上点击添加备注</div>
+		<!--按钮-->
+		<div class="addSetOfBtn">
+			<a class="addSet">两套及以上点击添加备注</a>
+		</div>
+		<!--展示说明-->
+		<div class="addhouseCard">
+			<ul>
+				<li>产权人 <input id="propertyholder" name="propertyholder"
+					type="text" class="txtInput" />
+				</li>
+				<li>面积 <input id="area" name="area" type="text"
+					class="txtInput" />
+				</li>
+				<li>地址 <input id="address" name="address" type="text"
+					class="txtInput" />
+				</li>
+			</ul>
+		</div>
+		<div class="savetitle">
+			<a class="savebutton">保存</a>
+		</div>
+	</section>
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/rem(750).js"></script>
+	<script type="text/javascript" src="js/lrz.all.bundle.js"></script>
+	<script type="text/javascript" src="/references/common/js/layer/layer.js"></script>
+	<script>
+
+			$(function() {
+				//添加第二套房产说明
+				$(".addSet").click(function() {
+
+					$(".addhouseCard").toggle();
+				});
+			})
+			//获取图片信息
+			function getImage(staffid) {
+				$.ajax({
+					url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
+					data : {
+						type : 5,
+						staffid : staffid,
+					},
+					dataType : "json",
+					type : 'post',
+					success : function(data) {
+						console.log(data);
+						if(data.query.length > 0){
+							for (var i = 0; i < data.query.length; i++) {
+								var url = data.query[i].url;
+								var num = "#" + data.query[i].mainid + data.query[i].sequence;
+								$(num).attr('src', url);
+							}
+						}
+					}
+				});
+			}
+			//获取第二套房产证说明
+			function getSecondHousecard(staffid){
+				$.ajax({
+						url : "/admin/mobileVisa/getSecondHousecard.html",
+						data : {
+							type : 5,
+							staffid : staffid,
+						},
+						dataType : "json",
+						type : 'post',
+						success : function(data) {
+							console.log(data);
+							if(data.propertyholder != "" || data.area != "" || data.address != ""){
+								$(".addhouseCard").show();
+								$("#propertyholder").val(data.propertyholder);
+								$("#area").val(data.area);
+								$("#address").val(data.address);
+							}
+						}
+					});
+			}
+			
+			/* window.addEventListener("popstate", function(e) { 
+				alert(e);//根据自己的需求实现自己的功能 
+				}, false); */
+			
+			//点击上传图片
+			$(function(){
+				var	staffid=GetQueryString('staffid');
+				var	sessionid=GetQueryString('sessionid');
+				var	flag=GetQueryString('flag');
+				getImage(staffid);
+				getSecondHousecard(staffid);
+				//第一页点击
+				$(".firstPage").click(function(){
+					$(".firstPageImg").click();
+					$(".firstPageImg").change(function(){
+						var sequence = $(this).attr("name");
+						var mainid = $(this).attr("id");
+						layer.load(1);
+						var that = this;
+			            lrz(this.files[0]).then(function (rst) {
+			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                $('#upload').hide(); 
+			                // 处理成功会执行
+			                sourceSize = (that.files[0].size / 1024).toFixed(2);
+			                resultSize = (rst.fileLen / 1024).toFixed(2);
+			                scale = parseInt(100 - (resultSize / sourceSize * 100));
+			                rst.formData.append('image',rst.file);
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,flag); 
+			            }).catch(function (err) {
+			                console.log(err);
+			            });
+					});
+				});
+				//第二页点击
+				$(".secondPage").click(function(){
+					$(".secondPageImg").click();
+					$(".secondPageImg").change(function(){
+						var sequence = $(this).attr("name");
+						var mainid = $(this).attr("id");
+						layer.load(1);
+						var that = this;
+			            lrz(this.files[0]).then(function (rst) {
+			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                $('#upload').hide(); 
+			                // 处理成功会执行
+			                sourceSize = (that.files[0].size / 1024).toFixed(2);
+			                resultSize = (rst.fileLen / 1024).toFixed(2);
+			                scale = parseInt(100 - (resultSize / sourceSize * 100));
+			                rst.formData.append('image',rst.file);
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,flag); 
+			            }).catch(function (err) {
+			                console.log(err);
+			            });
+					});
+				});
+				//第三页点击
+				$(".thirdPage").click(function(){
+					$(".thirdPageImg").click();
+					$(".thirdPageImg").change(function(){
+						var sequence = $(this).attr("name");
+						var mainid = $(this).attr("id");
+						layer.load(1);
+						var that = this;
+			            lrz(this.files[0]).then(function (rst) {
+			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                $('#upload').hide(); 
+			                // 处理成功会执行
+			                sourceSize = (that.files[0].size / 1024).toFixed(2);
+			                resultSize = (rst.fileLen / 1024).toFixed(2);
+			                scale = parseInt(100 - (resultSize / sourceSize * 100));
+			                rst.formData.append('image',rst.file);
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,flag); 
+			            }).catch(function (err) {
+			                console.log(err);
+			            });
+					});
+				});
+				//第四页点击
+				$(".fouthPage").click(function(){
+					$(".fouthPageImg").click();
+					$(".fouthPageImg").change(function(){
+						var sequence = $(this).attr("name");
+						var mainid = $(this).attr("id");
+						layer.load(1);
+						var that = this;
+			            lrz(this.files[0]).then(function (rst) {
+			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                $('#upload').hide(); 
+			                // 处理成功会执行
+			                sourceSize = (that.files[0].size / 1024).toFixed(2);
+			                resultSize = (rst.fileLen / 1024).toFixed(2);
+			                scale = parseInt(100 - (resultSize / sourceSize * 100));
+			                rst.formData.append('image',rst.file);
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,flag); 
+			            }).catch(function (err) {
+			                console.log(err);
+			            });
+					});
+				});
+				//第五页点击
+				$(".fivePage").click(function(){
+					$(".fivePageImg").click();
+					$(".fivePageImg").change(function(){
+						var sequence = $(this).attr("name");
+						var mainid = $(this).attr("id");
+						layer.load(1);
+						var that = this;
+			            lrz(this.files[0]).then(function (rst) {
+			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                $('#upload').hide(); 
+			                // 处理成功会执行
+			                sourceSize = (that.files[0].size / 1024).toFixed(2);
+			                resultSize = (rst.fileLen / 1024).toFixed(2);
+			                scale = parseInt(100 - (resultSize / sourceSize * 100));
+			                rst.formData.append('image',rst.file);
+			               uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,flag); 
+			            }).catch(function (err) {
+			                console.log(err);
+			            });
+					});
+				});
+			});
+			
+			//点击保存按钮
+			$(".savebutton").click(function(){
+				returnPage();
+			});	
+			//跳转2寸图片
+			function returnPage(){
+				var staffid = GetQueryString("staffid");
+				var	sessionid=GetQueryString('sessionid');
+				var	flag=GetQueryString('flag');
+				if($(".addhouseCard").is(":hidden")){
+					$("#propertyholder").val("");
+					$("#area").val("");
+					$("#address").val("");
+				}
+				//保存第二套房产说明
+				$.ajax({
+					url : "/admin/mobileVisa/saveSecondHousecard.html",
+					data : {
+						type : 5,
+						staffid : staffid,
+						propertyholder : $("#propertyholder").val(),
+						area : $("#area").val(),
+						address : $("#address").val(),
+						sessionid : sessionid
+					},
+					dataType : "json",
+					type : 'post',
+					success : function(data) {
+						console.log(data);
+					}
+				}); 
+				window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
+			}
+			
+			//获取URL地址参数
+		    function GetQueryString(name){
+		         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		         var r = window.location.search.substr(1).match(reg);
+		         if(r!=null)return  unescape(r[2]); return null;
+		    }
+			
+			//上传图片
+			function uploadPositive(rst, formData,staffid,mainid,sequence,sessionid,flag){
+				if(!formData){
+					formData = new FormData();
+				}
+		        formData.append("image", rst.file); 
+		        formData.append("type", 5); 
+		        formData.append("staffid", staffid); 
+		        formData.append("mainid", mainid); 
+		        formData.append("sequence", sequence); 
+		        formData.append("sessionid", sessionid); 
+		        formData.append("flag", flag); 
+		        console.log('------------------------------');
+		        console.log(formData); 
+		        console.log(rst.file);
+		        /* var layerIndex = layer.load(1, {
+					shade : "#000"
+				}); */
+		        $.ajax({
+					type : "POST",//提交类型  
+					//dataType : "json",//返回结果格式  
+					url : '/admin/mobileVisa/uploadMuchImage.html',//请求地址  
+					async : true,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//console.log('=====成功========');
+						//关闭加载层
+						layer.closeAll('loading');
+						if (obj!=null) {
+							layer.msg("上传成功");
+							var img = "#"+mainid+sequence;
+							$(img).attr("src",obj);
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						//console.log('-----------------失败-------------');
+						layer.closeAll('loading');
+					}
+				}); // end of ajaxSubmit
+			}
+		</script>
+</body>
+</html>

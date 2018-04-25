@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>登陆</title>
+		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/tourist.css" />
+	</head>	
+	<body>
+		<h3 class="wx-title">游客登陆</h3>
+		<!-- form表单提交 -->
+		<div class="wx-main">
+			<label>手机号:</label>
+			<input type="text" class="telNumber" maxlength="11" placeholder="请输入手机号码" />
+		</div>
+		<div class="wx-main">
+			<label>验证码:</label>
+			<input type="text" class="readCard" maxlength="4" placeholder="请输入验证码" />
+			<a class="btnCard" onclick="getMessageCode(this)">获取验证码</a>
+		</div>
+		<div class="wx-main"></div>
+		<div class="wx-footer">
+			<input id="loginBtn" type="button" class="submit" value="登陆" />
+		</div>
+		<div class="dialogTwoMin"></div>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+	<script type="text/javascript" src="js/rem(750).js" ></script>
+	<script type="text/javascript" src="/references/common/js/layer/layer.js" ></script>
+	<script>
+	function GetQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null)return  unescape(r[2]); return null;
+	    }
+	$(function(){
+		//接收进度页面传来的openid;
+		var code = GetQueryString("openid");
+	})
+	$("#loginBtn").click(function(){
+		var loginMobile = $('.telNumber').val();
+		var validateCode = $('.readCard').val();
+		checkMobilePhone(loginMobile,validateCode);
+		var UserOpenid = code;
+ 		$.ajax({ 
+			url: "/admin/applogin/messageLogin.html", 
+			type: "POST",
+			data:{
+				loginName:loginMobile,
+				validateCode:validateCode
+			}, 
+			dataType : "json",
+			async:true,
+			success: function(data){
+				var isLogin = data.isLogin;
+		    	if(isLogin){
+		    		//true 可以登陆，跳转进度页
+		    		var loginName = data.loginData.loginName;
+		    		window.location.href = "http://www.f-visa.com/appmobileus/progress.html?telephone="+loginName+"&openid="+UserOpenid;	
+		    	}else{
+		    		//false 弹出错误信息，拒绝登陆
+		    		var messageErrMsg = data.loginData.messageErrMsg;
+		    		dialogToMsg(messageErrMsg);
+		    		return;
+		    	}
+		    },
+		    error:function(error,status){
+		    	
+		    }
+		});
+	});
+	
+	//获取验证码
+	function getMessageCode(obj){
+		var loginMobile = $('.telNumber').val();
+		var validateCode = $('.readCard').val();
+		if(loginMobile){
+			var regu =/^1[3|4|5|7|8][0-9]\d{8}$/;
+			var re = new RegExp(regu);
+			if (re.test(loginMobile)) {
+				//跳转到进度页面
+				$.ajax({ 
+						url: "/admin/applogin/validateMobile.html", 
+						type: "POST",
+						data:{
+							mobile:loginMobile
+						}, 
+						success: function(data){
+					        if(data){
+					        	time(obj);
+					        	sendMessage(loginMobile);
+					        }else{
+					        	dialogToMsg("游客不存在");
+					        }
+					     },
+					     error:function(error,status){
+					    	dialogToMsg("服务器不可用");
+					     }
+					});
+			
+			}else{
+				dialogToMsg("手机号格式错误");
+			    return;
+			}
+					
+		}else{
+			dialogToMsg("请输入手机号");
+		}
+	}
+	
+	//校验手机号
+	function checkMobilePhone(loginMobile,validateCode){
+		if(loginMobile){
+			var regu =/^1[3|4|5|7|8][0-9]\d{8}$/;
+			var re = new RegExp(regu);
+			if (re.test(loginMobile)) {
+				if(!validateCode){
+					dialogToMsg("请输入验证码");
+					return false;
+				}
+			}else{
+				dialogToMsg("手机号格式错误");
+			    return false;
+			}
+		}else{
+			dialogToMsg("请输入手机号");
+			return false;
+		}
+	}
+	
+	
+	function sendMessage(loginMobile){
+		$.ajax({ 
+			url: "/admin/applogin/sendValidateCode.html", 
+			type: "POST",
+			data:{mobile:loginMobile}, 
+			success: function(data){
+				dialogToMsg(data);
+	        },
+	        error:function(error,status){
+	        	dialogToMsg("服务器不可用");
+	        }
+		});
+	}
+	//60秒之后获取验证码
+	var wait=60; 
+	function time(obj) { 
+        if (wait == 0) { 
+        	obj.removeAttribute("disabled");    
+        	obj.innerHTML="获取验证码";
+        	obj.style.backgroundColor = '#008df9';
+        	obj.style.border = 'solid 1px #008df9';
+            wait = 60; 
+        } else { 
+        	obj.setAttribute("disabled", true); 
+        	obj.innerHTML=wait+"秒后重新发送";
+        	obj.style.backgroundColor = '#ABABAB';
+        	obj.style.border = 'solid 1px #ABABAB';
+            wait--; 
+            setTimeout(function() { 
+                time(obj) 
+            }, 
+            1000) 
+        } 
+    } 
+	
+	function dialogToMsg(msgStr){
+		$(".dialogTwoMin").html();
+		$(".dialogTwoMin").show();
+		$(".dialogTwoMin").html(msgStr);
+		setTimeout(function(){
+			$(".dialogTwoMin").hide();
+		},2000);
+	}
+	
+	</script>
+</html>

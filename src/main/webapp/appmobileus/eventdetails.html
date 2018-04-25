@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>活动介绍</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/heavyBuyer.css" />
+		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script type="text/javascript" src="js/rem(750).js" ></script>
+	</head>
+	<body>
+		<header>
+			<div class="title">
+				USANA&nbsp;&nbsp;2018国际年会
+			</div>
+		</header>
+		<section>
+			<div class="imgActivity" style="width:100% !important;margin:0 auto !important;">
+				<img id="eventDetailUrl" alt="活动介绍" width="100%" height="100%" />
+			</div>
+			<ul class="activeInfo">
+				<li>欢迎您参加世界上最健康的大家庭--USANA&nbsp;2018国际年会!</li>
+				<li>在盛大的2018国际年会，您将有机会抢先得知公司及产品的最新消息、向业界顶尖人士学习如何在瞬息之间消除恐惧等沟通技巧，参加由全球专家提供的利用社交媒体扩展事业的专业培训。亲临现场，您将与华斯博士一同直接感受USANA的伟大愿景，并在全球家人的瞩目下，亲身参与并感受USANA尊崇的认可表彰活动</li>
+				<li>完整的年会体验将大大有助于拓展您的视野、扩展您的事业领域</li>
+				<li>没有什么比得上现场参加年会！还在等什么，快来加入我们的年会狂欢吧</li>
+				<li>为了协助您更加便捷的办理赴美签证，我们向您推荐“优悦签”签证办理平台。该平台支持全程在线拍照上传文本资料、实时自助查询签证办理进度、1对1电话面签培训等便捷服务。</li>
+				<li>您只需登录专属微信公众号，按照提示步骤操作，即可轻松完成签证申请。我们的工作人员将在您提交注册信息后的第一时间与您电话联系，指导您完成后续操作。如有任何疑问，您也可致电：400-812-3537（09:00-22:00）或在公众号中留言进行咨询。</li>
+				<li>2018年8月15-18日，盐湖城！USANA 2018国际年会见!</li>
+			</ul>
+			<!-- <div class="dateTotal">
+				<div class="endDate">截止日期：2017.12.30</div>
+				<div class="startDate">出行日期：2018.01.30 ～ 02.15</div>
+			</div>
+			<div class="imgIntroduce">
+				<img src="img/imgIntroduce.jpg" alt="活动介绍" width="100%" height="100%" />
+			</div>
+			<div class="content transactVisa">
+				<span>所需办理签证</span>
+				<p>
+					<a>美国</a>
+				</p>
+			</div>
+			<div class="content visityCity">
+				<span>访问城市</span>
+				<p>西雅图、纽约、华盛顿</p>
+			</div>
+			<div class="content beCareful">
+				<span>注意事项</span>
+				<p>请务必填写完整真实资料</p>
+			</div>
+			<div class="content explain">
+				<span>说明</span>
+				<p>请务必填写完整真实资料</p>
+			</div> -->
+		</section>
+		<footer>
+			<!-- <a id="signUpBtn" class="btnEnroll" href="/appmobileus/enroll.html">报名</a> -->
+			<!-- <a id="signUpBtn" class="btnEnroll">美国签证报名</a> -->
+		</footer>
+	</body>
+	
+	<script>
+			var eventId; //活动Id
+			var weChatToken; //微信Token
+			var isSifnUp; //是否已报名
+			$(function(){
+				$.ajax({
+					type:"post",
+					url:"/admin/appEvents/toSignUpEventPage",
+					data:{
+						eventId:1,
+						wechatToken:""
+					},
+					dataType : "json",
+					async:true,
+					success:function(data){
+						eventId = data.eventId;
+						weChatToken = data.wechatToken;
+						isSifnUp = data.isSignUp;
+						$("#eventDetailUrl").attr("src", data.event.detailsurl);
+					}
+				}); 
+					
+			})
+			
+			$("#signUpBtn").click(function(){
+				window.location.href='/appmobileus/enroll.html?eventId='+eventId+'&weChatToken='+weChatToken;
+			});
+			
+		</script>
+</html>

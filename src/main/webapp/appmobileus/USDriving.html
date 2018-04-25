@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>行驶本</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+   		<!--公共样式-->
+		<link rel="stylesheet" href="css/common.css" />
+		<!--本页css-->
+		<link rel="stylesheet" href="css/filming.css" />
+	</head>
+	<body>
+		<header>
+			<div class="filming">
+			<a onclick="returnPage()">
+				<i></i>
+				<span>行驶本</span></a>
+			</div>
+		</header>
+		<section>
+			<div class="driverSection">
+				<div class="driverPage householdExpain">
+					<img src="img/icon-driver.jpg" width="100%" height="100%"/>
+					<div class="driverdialog"></div>
+					<span class="driverTitle">图例</span>
+				</div>
+				<!--行驶本-->
+				<div class="driverPage drivingBook">
+					<span class="homePageTitle driverPageTitle">行驶本上传</span>
+					<img src="img/camera.png" style="pointer-events:none;"  class="camera cameraMain" />
+					<img src="" style="pointer-events:none;" class="pageImg" />
+				</div>
+				<input type="file" class="fileHide drivingBookFile" name="" />
+				<!--行驶本-->
+				<!-- <div class="driverPage drivingBook2">
+					<span class="homePageTitle">行驶本主页</span>
+					<img src="img/camera.png" style="pointer-events:none;"  class="camera" />
+					<img src="" style="pointer-events:none;" class="pageImg2" />
+				</div>
+				<input type="file" class="fileHide drivingBookFile2" name="" /> -->
+			</div>
+			<div class="savetitle">
+				<a class="savebutton">保存</a>
+			</div>
+		</section>
+		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script type="text/javascript" src="js/rem(750).js" ></script>
+		<script type="text/javascript" src="/references/common/js/layer/layer.js" ></script>
+		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
+		<script type="text/javascript" src="js/saveButton.js" ></script>
+		<script>
+		function getImage(staffid){
+			$.ajax({
+				url : "/admin/mobileVisa/getIDcardphoto.html",
+				data : {
+					type : 10,
+					staffid : staffid,
+					status : 1
+				},
+				dataType : "json",
+				type : 'post',
+				success : function(data) {
+					if(data != null){
+						$(".pageImg").attr("src",data.url);
+					}
+				}
+			});
+		}
+		function getImage2(staffid){
+			$.ajax({
+				url : "/admin/mobileVisa/getIDcardphoto.html",
+				data : {
+					type : 10,
+					staffid : staffid,
+					status : 2
+				},
+				dataType : "json",
+				type : 'post',
+				success : function(data) {
+					if(data != null){
+						$(".pageImg2").attr("src",data.url);
+					}
+				}
+			});
+		}
+		//点击上传图片
+		$(function(){
+			var	staffid=GetQueryString('staffid');
+			var	sessionid=GetQueryString('sessionid');
+			var	flag=GetQueryString('flag');
+			getImage(staffid);
+			//getImage2(staffid);
+			$(".drivingBook").click(function(){
+				$(".drivingBookFile").click();
+				$(".drivingBookFile").change(function(){
+					layer.load(1);
+					var that = this;
+		            lrz(this.files[0]).then(function (rst) {
+		                /* $('.bacimg2').attr('src',rst.base64);*/
+		                $('#upload').hide(); 
+		                // 处理成功会执行
+		                sourceSize = (that.files[0].size / 1024).toFixed(2);
+		                resultSize = (rst.fileLen / 1024).toFixed(2);
+		                scale = parseInt(100 - (resultSize / sourceSize * 100));
+		                rst.formData.append('image',rst.file);
+//		                alert(rst);
+//		                alert(JSON.stringify(rst.formData));
+//		                alert(rst.file);
+//		                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
+						//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+						var status = 1;
+		                uploadPositive(rst,rst.formData,staffid,sessionid,flag,status); 
+		            }).catch(function (err) {
+		                console.log(err);
+		            });
+				});
+			});
+			/* $(".drivingBook2").click(function(){
+				$(".drivingBookFile2").click();
+				$(".drivingBookFile2").change(function(){
+					layer.load(1);
+					var that = this;
+		            lrz(this.files[0]).then(function (rst) {
+		                /* $('.bacimg2').attr('src',rst.base64);
+		                $('#upload').hide(); 
+		                // 处理成功会执行
+		                sourceSize = (that.files[0].size / 1024).toFixed(2);
+		                resultSize = (rst.fileLen / 1024).toFixed(2);
+		                scale = parseInt(100 - (resultSize / sourceSize * 100));
+		                rst.formData.append('image',rst.file);
+		                var status = 2
+//		                alert(rst);
+//		                alert(JSON.stringify(rst.formData));
+//		                alert(rst.file);
+//		                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
+						//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+		                uploadPositive(rst,rst.formData,staffid,sessionid,flag,status); 
+		            }).catch(function (err) {
+		                console.log(err);
+		            });
+				});
+			}); */
+		})
+		
+		//跳转2寸图片
+		function returnPage(){
+			var staffid = GetQueryString("staffid");
+			var	sessionid=GetQueryString('sessionid');
+			var	flag=GetQueryString('flag');
+			window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
+		}
+		
+		//获取URL地址参数
+	    function GetQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null)return  unescape(r[2]); return null;
+	    }
+		
+		//上传图片
+		function uploadPositive(rst, formData,staffid,sessionid,flag,status){
+			if(!formData){
+				formData = new FormData();
+			}
+	        formData.append("image", rst.file); 
+	        formData.append("type", 10); 
+	        formData.append("staffid", staffid); 
+	        formData.append("sessionid", sessionid); 
+	        formData.append("flag", flag); 
+	        formData.append("status", status); 
+	        console.log('------------------------------');
+	        console.log(formData); 
+	        console.log(rst.file);
+	        /* var layerIndex = layer.load(1, {
+				shade : "#000"
+			}); */
+	        $.ajax({
+				type : "POST",//提交类型  
+				//dataType : "json",//返回结果格式  
+				url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
+				async : true,
+				processData : false, //当FormData在jquery中使用的时候需要设置此项
+				contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+				//请求数据  
+				data : formData,
+				success : function(obj) {//请求成功后的函数 
+					//console.log('=====成功========');
+					//关闭加载层
+					layer.closeAll('loading');
+					if (obj!=null) {
+						layer.msg("上传成功"); 
+						location.reload();
+					}
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					//console.log('-----------------失败-------------');
+					layer.closeAll('loading');
+				}
+			}); // end of ajaxSubmit
+		}
+		</script>
+	</body>
+</html>

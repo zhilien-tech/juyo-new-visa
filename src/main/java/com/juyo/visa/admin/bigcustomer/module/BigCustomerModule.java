@@ -22,6 +22,7 @@ import com.juyo.visa.admin.bigcustomer.service.BigCustomerViewService;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoUpdateForm;
+import com.juyo.visa.forms.TAppStaffCredentialsAddForm;
 import com.juyo.visa.forms.TAppStaffPassportUpdateForm;
 
 @IocBean
@@ -81,8 +82,9 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object updateBaseInfo(@Param("staffId") Integer staffId, HttpSession session) {
-		return bigCustomerViewService.getStaffInfo(staffId, session);
+	public Object updateBaseInfo(@Param("staffId") Integer staffId, @Param("isDisable") Integer isDisable,
+			@Param("flag") Integer flag, HttpSession session) {
+		return bigCustomerViewService.getStaffInfo(staffId, isDisable, flag, session);
 	}
 
 	/**
@@ -133,8 +135,48 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object updatePassportInfo(@Param("passportId") Integer passportId, HttpSession session) {
-		return bigCustomerViewService.getPassportInfo(passportId, session);
+	public Object updatePassportInfo(@Param("passportId") Integer passportId, @Param("isDisable") Integer isDisable,
+			@Param("orderid") Integer orderid, HttpSession session) {
+		return bigCustomerViewService.getPassportInfo(passportId, isDisable, orderid, session);
+	}
+
+	/**
+	 *跳转到签证信息页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object updateVisaInfo(@Param("staffId") Integer staffId, @Param("isDisable") Integer isDisable,
+			HttpSession session) {
+		return bigCustomerViewService.updateVisaInfo(staffId, isDisable, session);
+	}
+
+	/**
+	 * 获取签证信息数据
+	 */
+	@At
+	@POST
+	public Object getVisaInfos(@Param("staffId") Integer staffId, HttpSession session) {
+		return bigCustomerViewService.getVisaInfos(staffId, session);
+	}
+
+	/**
+	 * 更新签证信息
+	 */
+	@At
+	@POST
+	public Object updateVisaInfos(@Param("data") String data, HttpServletRequest request) {
+		return bigCustomerViewService.updateVisaInfos(data, request);
+	}
+
+	/**
+	 *跳转到其他证件页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object otherSredentials(@Param("staffId") Integer staffId, HttpSession session) {
+		return bigCustomerViewService.otherSredentials(staffId, session);
 	}
 
 	/**
@@ -152,7 +194,48 @@ public class BigCustomerModule {
 	@At
 	@POST
 	public Object checkPassport(@Param("passport") String passport, @Param("passportId") Integer passportId,
-			HttpSession session) {
-		return bigCustomerViewService.checkPassport(passport, passportId, session);
+			@Param("orderid") Integer orderid, HttpSession session) {
+		return bigCustomerViewService.checkPassport(passport, passportId, orderid, session);
+	}
+
+	/**
+	 * 上传文件
+	 */
+	@At
+	@Ok("json")
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object uploadFile(@Param("image") File file, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		return bigCustomerViewService.uploadFile(file, request, response);
+	}
+
+	/**
+	 * 
+	 * 保存App拍摄资料
+	 * <p>
+	 *
+	 * @param shootingsEntity
+	 * @param session
+	 * @return 
+	 */
+	@At
+	@POST
+	public Object saveAppFile(@Param("..") TAppStaffCredentialsAddForm addForm, HttpSession session) {
+		return bigCustomerViewService.saveAppFile(addForm, session);
+	}
+
+	/**
+	 * 
+	 * 根据 人员id 和 证件类型 查询对应的证件集合
+	 *
+	 * @param staffId 人员id
+	 * @param credentialType 证件类型
+	 * @return 符合条件的证件集合
+	 */
+	@At
+	@POST
+	public Object getAppFileByCondition(@Param("staffId") Integer staffId,
+			@Param("credentialType") Integer credentialType) {
+		return bigCustomerViewService.getAppFileByCondition(staffId, credentialType);
 	}
 }

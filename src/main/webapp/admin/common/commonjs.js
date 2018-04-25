@@ -143,6 +143,122 @@ $(document).on("input","#otherFirstName",function(){
 		$("#otherFirstNameEn").val("/"+pinyinchar.toUpperCase());
 	}
 });
+$(document).on("input","#otherfirstname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#otherfirstnameen").val("").change();
+	}else{
+		$("#otherfirstnameen").val(pinyinchar.toUpperCase()).change();
+	}
+});
+$(document).on("input","#email",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#emailen").val("").change();
+	}else{
+		$("#emailen").val(temp).change();
+	}
+});
+$(document).on("input","#telephone",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#telephoneen").val("").change();
+	}else{
+		$("#telephoneen").val(temp).change();
+	}
+});
+$(document).on("input","#cardnum",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#cardnumen").val("").change();
+	}else{
+		$("#cardnumen").val(temp).change();
+	}
+});
+$(document).on("input","#cardId",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#cardIden").val("").change();
+	}else{
+		$("#cardIden").val(temp).change();
+	}
+});
+$(document).on("input","#nationalidentificationnumber",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#nationalidentificationnumberen").val("").change();
+	}else{
+		$(".countryNumen").attr("class", "countryNumen has-success");  
+		$(".help-countryNumen").attr("data-bv-result","IVALID");  
+		$(".help-countryNumen").attr("style","display: none;");  
+		$("#nationalidentificationnumberen").attr("style", null);
+		$("#nationalidentificationnumberen").val(temp).change();
+	}
+});
+$(document).on("input","#socialsecuritynumber",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#socialsecuritynumberen").val("").change();
+	}else{
+		$("#socialsecuritynumberen").val(temp).change();
+		 $(".safeNumen").attr("class", "safeNumen has-success");  
+		    $(".help-blocksafeen").attr("data-bv-result","IVALID");  
+		    $(".help-blocksafeen").attr("style","display: none;");  
+		    $("#socialsecuritynumberen").attr("style", null);
+	}
+});
+$(document).on("input","#taxpayernumber",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#taxpayernumberen").val("").change();
+	}else{
+		$("#taxpayernumberen").val(temp).change();
+		$(".safepayen").attr("class", "safepayen has-success");  
+	    $(".help-ratepayingen").attr("data-bv-result","IVALID");  
+	    $(".help-ratepayingen").attr("style","display: none;");  
+	    $("#taxpayernumberen").attr("style", null);
+	}
+});
 $(document).on("input","#otherLastName",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
@@ -154,6 +270,19 @@ $(document).on("input","#otherLastName",function(){
 		$("#otherLastNameEn").val("");
 	}else{
 		$("#otherLastNameEn").val("/"+pinyinchar.toUpperCase());
+	}
+});
+$(document).on("input","#otherlastname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#otherlastnameen").val("").change();
+	}else{
+		$("#otherlastnameen").val(pinyinchar.toUpperCase()).change();
 	}
 });
 $(document).on("input","#birthAddress",function(){

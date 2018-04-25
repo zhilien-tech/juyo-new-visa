@@ -1,0 +1,87 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+.head {
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 1px solid #eee;
+	padding: 0px 15px;
+}
+.head span {
+	float: left;
+}
+.head i {
+	display:block; 
+	width: 20px;
+	height:2px; 
+	background: #000;
+	line-height: 0;
+	font-size:0;
+	vertical-align: middle;
+	-webkit-transform: rotate(45deg);
+	cursor:pointer;
+}
+.head i:after{
+	content:'/';
+	display:block;
+	width: 20px;
+	height:2px; 
+	background: #000;
+	-webkit-transform: rotate(-90deg);
+}
+.share,.qualified,.Interview {
+	color: #FFFFFF;
+	background: #2F86F0;
+	width: 90px;
+	height:40px;
+	line-height: 40px;
+	text-align: center;
+	display: inline-block;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-right: 10px;
+}
+.shareInfo,.qualifiedInfo,.InterviewInfo {
+	margin: 5%;
+}
+.modal-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	background: #FFF;
+	z-index: 9999;
+	padding: 0px 15px;
+}
+
+.btn-margin {
+	margin-top: 10px;
+}
+
+.modal-body {
+	background-color: #FFF !important;
+	margin-top: 50px;
+	height: 100%;
+}
+
+.modal-content {
+	box-shadow: 0 2px 3px rgba(255, 255, 255, 0.125);
+	-webkit-box-shadow: 0 2px 3px rgba(255, 255, 255, 0.125);
+	-moz-box-shadow: 0 2px 3px rgba(255, 255, 255, 0.125);
+}
+
+a:hover {
+	color: #FFF;
+	text-decoration: none;
+}
+.closeR {
+	display:inline-block;
+	float:right;
+	width:20px;
+	height:20px;
+	margin-top: 22px;
+	cursor:pointer;
+}

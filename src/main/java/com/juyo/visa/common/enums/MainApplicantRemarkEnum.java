@@ -4,11 +4,7 @@ import com.uxuexi.core.common.enums.IEnum;
 
 /**
  * 
- * 是否
- * <p>
- * 是 or 否
- * @author   彭辉
- * @Date	 2017年10月20日
+ * 主申请人 备注
  */
 public enum MainApplicantRemarkEnum implements IEnum {
 	ZHUKA(1, "主卡"), FRIEND(2, "朋友"), TONGSHI(3, "同事"), TONGXUE(4, "同学");

@@ -469,7 +469,7 @@
 		var threecounty = '${obj.orderJpinfo.threeCounty}';
 		var orderid = '${obj.orderId}';
 		var orderJpId = '${obj.orderJpId}';
-		var localAddr = '${obj.localAddr}:${obj.localPort}';
+		var localAddr = '${obj.localAddr}';
 		var localPort = '${obj.localPort}';
 		var websocketaddr = '${obj.websocketaddr}';
 	</script>

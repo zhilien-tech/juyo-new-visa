@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>过期美签上传</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+   		<!--公共样式-->
+		<link rel="stylesheet" href="css/common.css" />
+		<!--本页css-->
+		<link rel="stylesheet" href="css/filming.css" />
+	</head>
+	<body>
+		<header>
+			<div class="filming">
+			<a onclick="returnPage()">
+				<i>  </i>
+				<span>过期美签上传</span>	</a>
+			</div>
+
+		</header>
+		<section>
+			<div class="household">
+				<div class="householdPage householdExpain">
+					<img alt="" src="img/icon-overdue.jpeg" width="100%" height="100%">
+					<div class="signdialog"></div>
+					<span class="digntitle">图例</span>
+				</div>
+				<!-- 过期美签 图片类型枚举 -->
+				<input id="CredentialsEnum_OLDUS" type="hidden" value=11>
+				<!--可多选上传-->
+				<div class="householdPage multiselect chooseImage">
+					<span class="homePageTitle">可多选上传</span> 
+					<img src="img/camera.png" class="camera" /> 
+					<img src="" class="pageImg" />
+				</div>
+				
+			</div>
+			<div class="savetitle">
+				<a class="savebutton">保存</a>
+			</div>
+		</section>
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/rem(750).js"></script>
+	<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	<script type="text/javascript" src="js/saveButton.js" ></script>
+	<!-- 微信多图上传 js -->
+	<script type="text/javascript" src="js/morePictureUpload.js"></script>
+
+
+	</body>
+</html>

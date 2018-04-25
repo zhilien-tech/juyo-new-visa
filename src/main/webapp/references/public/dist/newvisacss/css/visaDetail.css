@@ -1,0 +1,310 @@
+@CHARSET "UTF-8";
+.form-control {
+	height: 30px;
+}
+
+.add-btn {
+	top: -35px;
+	right: -1.5%;
+}
+
+.remove-btn {
+	top: -35px;
+	right: -1.5%;
+}
+
+.multiPass_roundTrip-div {
+	width: 120px;
+	float: right;
+	position: relative;
+	top: 5px;
+}
+
+.content-wrapper, .right-side, .main-footer {
+	margin-left: 0;
+}
+
+.btnState {
+	color: #b0b0b0 !important;
+	border: solid 1px #d2d6de;
+	background-color: #fff;
+	margin-right: 2.26rem;
+}
+
+.btnState-true {
+	color: #287ae7 !important;
+	border-color: #cee1ff;
+}
+
+.deposit, .vehicle, .houseProperty {
+	display: none;
+}
+
+.qz-head {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 99999;
+	width: 100%;
+}
+
+.content {
+	margin-top: 50px;
+}
+
+#urgentday {
+	width: 16.5%;
+}
+
+.bodyMargin {
+	margin-left: 12%;
+}
+
+.select2-container--default {
+	width: auto !important;
+}
+
+.select2-container .select2-search--inline {
+	float: none;
+}
+
+.info {
+	margin-bottom: 0px;
+	position:relative;
+}
+
+.paddingRight {
+	padding-right: 0px !important;
+	margin-left: -15px;
+}
+
+[v-cloak] {
+	display: none;
+}
+.schedulingBtn {
+	width: 30% !important;
+}
+.btn-Big {
+	width: 80px !important;
+}
+.spinner {
+	display:inline-block;
+	margin-left:-12px;
+}
+.checkShowORHide {
+	display:none;
+}
+.orderNum,.state {
+	height:50px;
+	line-height:50px;
+/* 	display:inline-block; */
+}
+.dataInfoGroup {
+	position:absolute;
+	top:8px;
+	right:4%;
+}
+.dataInfoGroup a {
+	background-color:#3087f1;
+	color:#FFF;
+	padding:6px 15px;
+	margin-right:10px;
+	border-radius:4px;
+	cursor:pointer;
+}
+.pictures {
+	height: 183px;
+	border: 1px solid #eee;
+	margin-left: 33px;
+	padding: 0px 0px;
+}
+
+.pictureTop {
+	height: 183px;
+	margin: 0px !important;
+}
+
+.uploadInfo {
+	position: relative;
+	height: 183px;
+}
+
+.promptInfo {
+	position: relative;
+	top: 80px;
+	left: 70px;
+	color: #4c8fe9;
+	cursor: pointer;
+}
+
+#imgShow, #imgShowBack, #imgInch {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 183px;
+	width: 100%;
+}
+
+#uploadFileImg, #uploadFileImgBack, #uploadFileInchImg {
+	width: 100% !important;
+	height: 180px;
+	margin-top: -21px;
+	opacity: 0;
+}
+
+.picturesBack {
+	height: 183px;
+	border: 1px solid #eee;
+	margin: 0px 16px;
+	padding: 0px 0px;
+}
+
+.picturesInch {
+	height: 183px;
+	border: 1px solid #eee;
+	padding: 0px 0px;
+	margin-left:20px;
+	margin-top:10px;
+}
+
+.inchInfo {
+	position: relative;
+	top: 80px;
+	left: 22%;
+	color: #4c8fe9;
+	cursor: pointer;
+}
+
+.usedBeforeTrue, .usedBeforeUSTrue {
+	display: none;
+}
+
+.usedNationalityTrue, .usedNationalityUSTrue {
+	display: none;
+}
+
+.permanentTrue, .permanentUSTrue {
+	display: none;
+}
+.purpose {
+	margin-top:21px;
+}
+.delete {
+	display:none;
+}
+.input-sm {
+	border-radius:0;
+	width:100%;
+}
+/* 出行信息标题 */
+.info-head span {
+	font-size:12px;
+	margin-left:5%;
+	color:red;
+}
+/* 出行信息 radio样式 */
+.tripYes {
+	vertical-align:middle;
+	margin-top:-2px !important;
+	margin-right:5px !important;
+}
+.tripNo {
+	margin:0 5px 0 15px !important;
+	vertical-align:middle;
+	margin-top:-2px !important;
+}
+
+.listDetailContent {
+	background:#FFF;
+}
+/* 解决按钮 */
+.solve {
+	width:40px;
+	text-align:center;
+	display:inline-block;
+	background:#3087f1;
+	color:#FFF;
+	border-radius:4px;
+	cursor:pointer;
+	margin-left:10px;
+}
+.solve:hover {
+	color:#FFF;
+}
+.followUpMain {
+	margin:2% 3.5% 0 5%;
+}
+.fixedheight {
+	width:97.5%; 
+	height:321px;
+	border:1px solid #eee; 
+	overflow-y:auto;
+}
+.dateNameBtn {
+	margin-bottom:5px;
+}
+.dateInfo,.nameInfo,.solveHide{
+	margin:0 10px;
+}
+.solveHide {
+	display:none;
+}
+.errorInfo {
+	margin-left:10%;
+	font-size:13px;
+	margin-bottom:10px;
+}
+.fixedheight ul li {
+	border-bottom:1px solid #eee;
+	margin-top:10px;
+}
+.solveContent {
+	padding-bottom:5%;
+}
+.colWidth {
+	width:73% !important;
+}
+.colwidthsm {
+	width:31% !important;
+}
+.colwidthLR {
+	margin: 0 3.2% 0 3.4%;
+}
+.col8Width {
+	width:65.5% !important;
+	margin-right:3.2%;
+}
+.info-body-from {
+	margin-top:10px;
+}
+.infobody {
+	padding-top:7px;
+}
+.gray {
+	color:#c2c0c0;
+}
+.orderInfoGroup {
+	position:absolute;
+	width:90%;
+	right:4.3% !important;
+	text-align:right;
+}
+.icon-line {
+	width:7%;
+	height:1px;
+	background:#3087f1;
+	display:inline-block;
+	margin-right:10px;
+	position:relative;
+	vertical-align:middle;
+}
+.icon-line::after {
+	content:"";
+	position:absolute;
+	top:-5px;
+	right:0px;
+	width:10px;
+	height:10px;
+	border-radius:5px;
+	background:#3087f1;
+}

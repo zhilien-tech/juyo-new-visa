@@ -35,7 +35,6 @@ import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.ShareTypeEnum;
-import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;
@@ -203,8 +202,9 @@ public class OrderJpModule {
 	@Ok("jsp")
 	public Object updateApplicant(@Param("id") Integer applicantId, @Param("orderid") Integer orderid,
 			@Param("isTrial") Integer isTrial, @Param("orderProcessType") Integer orderProcessType,
-			@Param("addApply") int addApply, HttpServletRequest request) {
-		return saleViewService.updateApplicant(applicantId, orderid, isTrial, orderProcessType, addApply, request);
+			@Param("addApply") int addApply, @Param("tourist") Integer tourist, HttpServletRequest request) {
+		return saleViewService.updateApplicant(applicantId, orderid, isTrial, orderProcessType, addApply, tourist,
+				request);
 	}
 
 	/**
@@ -251,8 +251,8 @@ public class OrderJpModule {
 	@Ok("jsp")
 	public Object passportInfo(@Param("applicantId") Integer id, @Param("orderid") Integer orderid,
 			@Param("isTrial") Integer isTrial, @Param("orderProcessType") Integer orderProcessType,
-			@Param("addApply") int addApply, HttpServletRequest request) {
-		return saleViewService.getEditPassport(id, orderid, isTrial, orderProcessType, addApply, request);
+			@Param("addApply") int addApply, @Param("tourist") int tourist, HttpServletRequest request) {
+		return saleViewService.getEditPassport(id, orderid, isTrial, orderProcessType, addApply, tourist, request);
 	}
 
 	/**
@@ -292,8 +292,9 @@ public class OrderJpModule {
 	public Object visaInfo(@Param("id") Integer id, @Param("orderid") Integer orderid,
 			@Param("isOrderUpTime") Integer isOrderUpTime, @Param("isTrial") Integer isTrial,
 			@Param("orderProcessType") Integer orderProcessType, @Param("addApply") int addApply,
-			HttpServletRequest request) {
-		return saleViewService.getVisaInfo(id, orderid, isOrderUpTime, isTrial, orderProcessType, addApply, request);
+			@Param("tourist") int tourist, HttpServletRequest request) {
+		return saleViewService.getVisaInfo(id, orderid, isOrderUpTime, isTrial, orderProcessType, addApply, tourist,
+				request);
 	}
 
 	/**

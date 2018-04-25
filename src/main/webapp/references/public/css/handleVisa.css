@@ -1,0 +1,80 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+a {
+	text-decoration: none;
+}
+li {
+	list-style: none;
+}
+.head {
+	width: 100%;
+	height: 60px;
+	line-height: 60px;
+	text-align: left;
+	margin-left: 20px;
+}
+
+.section {
+	width: 100%;
+	height: auto;
+	cursor: pointer;
+}
+.main {
+	margin-left: 20px;
+	margin-right: 20px;
+	border: 1px solid #eee;
+	height: 161px;
+	margin-bottom:20px;
+}
+.main:hover {
+	min-height: 161px;
+	height: auto;
+	box-shadow: 1px 5px 10px rgba(0,0,0,.22);
+}
+.title {
+	clear: both;
+	margin: 15px 0 15px 20px;
+	font-size: 20px;
+}
+.titleName {
+	margin-right: 15px;
+}
+.infomation {
+	margin: 0 0 10px 20px;
+}
+.moduleOnce {
+	width: 25%;
+	display: inline-block;
+}
+.moduleSecond {
+	width: 25%;
+	display: inline-block;
+}
+.moduleThird {
+	width: 25%;
+	display: inline-block;
+	text-align: center;
+	position: relative;
+	top: -34px;
+}
+.moduleThird span {
+	font-size:24px;
+	color:#009900;
+}
+.moduleFourth {
+	display: inline-block;
+}
+.btnGroup {
+	margin-left: 50px;
+}
+.btnGroup a {
+	color: #0099ff;
+}
+.download {
+	margin-left:30px;
+}
+.module dl dd {
+	margin-bottom: 10px;
+}

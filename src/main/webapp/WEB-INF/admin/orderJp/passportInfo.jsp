@@ -106,7 +106,8 @@
 									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
 									<input type="hidden" id="OCRline1" name="OCRline1" value="">
 									<input type="hidden" id="OCRline2" name="OCRline2" value="">
-									<input type="hidden" name="userType" value="${obj.userType }"/>
+									<%-- <input type="hidden" name="userType" value="${obj.userType }"/> --%>
+									<input type="hidden" name="tourist" value="${obj.tourist }"/>
 									<input type="hidden" id="applicantId" name="applicantId" value="${obj.applicantId }"/>
 									<input type="hidden"  name="addApply" value="${obj.addApply }"/>
 									<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
@@ -236,10 +237,11 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
-		var userType = '${obj.userType}';
+		//var userType = '${obj.userType}';
+		var tourist = '${obj.tourist}';
 		var isTrail = '${obj.isTrailOrder}';
 		var sessionId = '${obj.sessionid}';
-		var localAddr = '${obj.localAddr}:${obj.localPort}';
+		var localAddr = '${obj.localAddr}';
 		var localPort = '${obj.localPort}';
 		var websocketaddr = '${obj.websocketaddr}';
 		var applicantId = '${obj.applicantId}';

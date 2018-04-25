@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>旧护照</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+   		<meta name="format-detection" content="telephone=no">
+   		<!--公共样式-->
+		<link rel="stylesheet" href="css/common.css" />
+		<!--本页css-->
+		<link rel="stylesheet" href="css/filming.css" />
+	</head>
+	<body>
+		<header>
+			<div class="filming">
+			<a onclick="returnPage()">
+				<i></i>
+				<span>旧护照</span></a>	
+			</div>
+		</header>
+		<section>
+			<div class="passport">
+				<img src="img/icon-visaImg.jpg" />
+				<div class="dialog"></div>
+				<span class="passportExpain">图例</span>
+			</div>
+			<div class="passportSetImage passportShoot" id="passportShoot">
+				<div class="uploadPassport">
+					<p>上传旧护照</p>
+					<img id="11" src="" style="pointer-events:none;" class="uploadImgReady" />
+					<input type="file" class="oldpassportImg viceFile" id="1" name="1" onclick="addHousehold()"/>
+				</div>
+				
+			</div>
+			<div class="addPage addOldGroup">
+				<a class="addSet" onclick="addOldPassPort()">加一页</a>
+			</div>
+			<div class="savetitle">
+				<a class="savebutton">保存</a>
+			</div>
+		</section>
+		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
+		<script type="text/javascript" src="js/rem(750).js" ></script>
+		<script type="text/javascript" src="/references/common/js/layer/layer.js" ></script>
+		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
+		<script type="text/javascript" src="js/saveButton.js" ></script>
+		<script>
+		
+		/* 加一页 */
+		/* function addOldPassPort(){
+			$(".addPage").before('<div class="passportShoot">'+
+									'<div class="uploadPassport">'+
+									'<p>上传旧护照</p>'+
+									'<img src="" class="uploadImgReady" />'+
+									'</div>'+
+									'<input type="file" class="passportImg" id="passportImg" name="passportImg" />'+
+									'</div>'
+			);
+		}  */
+		
+		//点击上传图片
+		$(function(){
+			var	staffid=GetQueryString('staffid');
+			var	sessionid=GetQueryString('sessionid');
+			var	flag=GetQueryString('flag');
+			var fuyecount = 2;
+			var count = 1;
+			getImage(staffid);
+			var maxid = 0 ;
+			var maxname = 0;
+			 $("input").each(function() {
+				  var id = parseInt($(this).attr("id"));
+				  var name = parseInt($(this).attr("name"));
+				  if (id > maxid) {
+				   maxid = id;
+				  }
+				  if(name>maxname){
+				   maxname = name;
+				 }
+			});
+			 fuyecount = maxid;
+			 count = maxname;
+			 $('.addPage').on('click',function(){
+					var name = $(this).prev().find('input').attr("name");
+					var id = $(this).prev().find('input').attr("id");
+					id = parseInt(id);
+					id = id+1; 
+					var num = name+""+id;
+					$(this).before('<div class="passportSetImage passportShoot"><div class="uploadPassport"><p>上传旧护照</p><img id="'+num+'" src="" style="pointer-events:none;" class="uploadImgReady" /><input type="file" class="oldpassportImg viceFile" id="'+id+'" name="'+name+'" onclick="addHousehold()"/></div></div>');
+					//$(this).before('<div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img id="'+num+'" src="" class="pageImg" /><input id="'+id+'" name="'+name+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
+				});
+			 
+			 
+			/* $(".uploadPassport").click(function(){
+				//$(".passportImg").click();
+				console.log($(this).next());
+				$(this).next().click();
+				$(this).next().change(function(){
+					layer.load(1);
+					var that = this;
+		            lrz(this.files[0]).then(function (rst) {
+		                //$('.bacimg2').attr('src',rst.base64);
+		                $('#upload').hide(); 
+		                // 处理成功会执行
+		                sourceSize = (that.files[0].size / 1024).toFixed(2);
+		                resultSize = (rst.fileLen / 1024).toFixed(2);
+		                scale = parseInt(100 - (resultSize / sourceSize * 100));
+		                rst.formData.append('image',rst.file);
+//		                alert(rst);
+//		                alert(JSON.stringify(rst.formData));
+//		                alert(rst.file);
+//		                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);
+						//console.log('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+		                uploadPositive(rst,rst.formData,staffid,sessionid,flag); 
+		            }).catch(function (err) {
+		                console.log(err);
+		            });
+				});
+			}); */
+		})
+			
+			function getImage(staffid){
+				$.ajax({
+					url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
+					data : {
+						type : 2,
+						staffid : staffid,
+					},
+					dataType : "json",
+					type : 'post',
+					success : function(data) {
+						/* $(".uploadImgReady").attr("src",data.url); */
+						console.log(data);
+						if(data.query.length > 0){
+							for(var i=0;i<data.query.length;i++){
+								var url=data.query[i].url;
+								$(".passportSetImage").before('<div class="passportShoot">'+
+										'<div class="uploadPassport">'+
+										'<img src="'+url+'" class="uploadImgReady" />'+
+										'<input type="file" class="oldpassportImg viceFile" id="passportImg" name="passportImg" onclick="addHousehold()" />'+
+										'</div></div>');
+							}	
+						}
+					}
+				})
+			}
+			
+			
+			//跳转2寸图片
+			function returnPage(){
+				var staffid = GetQueryString("staffid");
+				var	sessionid=GetQueryString('sessionid');
+				var	flag=GetQueryString('flag');
+				window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
+			}
+			
+			//获取URL地址参数
+		    function GetQueryString(name){
+		         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		         var r = window.location.search.substr(1).match(reg);
+		         if(r!=null)return  unescape(r[2]); return null;
+		    }
+			
+		  //点击上传
+			function addHousehold(){
+				var	staffid=GetQueryString('staffid');
+				var	sessionid=GetQueryString('sessionid');
+				var	flag=GetQueryString('flag');
+				$(".viceFile").change(function(){
+					var mainid = $(this).attr("name");
+					var sequence = $(this).attr("id");
+					var that = this;
+					layer.load(1);
+					var that = this;
+				        lrz(this.files[0]).then(function (rst) {
+				        	uploadPositive(rst,rst.formData,staffid,sequence,sessionid,flag); 
+				        }).catch(function (err) {
+				            console.log(err);
+				        });
+					//压缩
+					//上传
+					//给当前元素的上一个节点添加src的值
+					//$(this).prev().attr('src','123456789');
+					});
+				}
+			
+			//上传图片
+			function uploadPositive(rst, formData,staffid,sequence,sessionid,flag){
+				if(!formData){
+					formData = new FormData();
+				}
+		        formData.append("image", rst.file); 
+		        formData.append("type", 2); 
+		        formData.append("staffid", staffid); 
+		        formData.append("sessionid", sessionid); 
+		        formData.append("flag", flag); 
+		        console.log('------------------------------');
+		        console.log(formData); 
+		        console.log(rst.file);
+		        /* var layerIndex = layer.load(1, {
+					shade : "#000"
+				}); */
+		        $.ajax({
+					type : "POST",//提交类型  
+					//dataType : "json",//返回结果格式  
+					url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
+					async : true,
+					processData : false, //当FormData在jquery中使用的时候需要设置此项
+					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+					//请求数据  
+					data : formData,
+					success : function(obj) {//请求成功后的函数 
+						//console.log('=====成功========');
+						//关闭加载层
+						layer.closeAll('loading');
+						if (obj!=null) {
+							layer.msg("上传成功"); 
+							location.reload();
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						//console.log('-----------------失败-------------');
+						layer.closeAll('loading');
+					}
+				}); // end of ajaxSubmit
+			}
+		</script>
+	</body>
+</html>

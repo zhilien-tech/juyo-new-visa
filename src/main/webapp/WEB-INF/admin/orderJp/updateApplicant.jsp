@@ -159,7 +159,8 @@
 									<label>手机号</label> 
 										<input id="issueOrganization" name="issueOrganization" type="hidden"  value="${obj.applicant.issueOrganization }"/>
 										<input type="hidden" id="id" name="id" value="${obj.applicant.id }"/>
-										<input type="hidden" name="userType" value="${obj.userType }"/>
+										<%-- <input type="hidden" name="userType" value="${obj.userType }"/> --%>
+										<input type="hidden" name="tourist" value="${obj.tourist }"/>
 										<input type="hidden" name="addApply" value="${obj.addApply }"/>
 										<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 										<input type="hidden" name="orderProcessType" value="${obj.orderProcessType }"/>
@@ -383,10 +384,11 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
-		var userType = '${obj.userType}';
+		//var userType = '${obj.userType}';
+		var tourist = '${obj.tourist}';
 		var isTrailOrder = '${obj.isTrailOrder}';
 		var sessionId = '${obj.sessionid}';
-		var localAddr = '${obj.localAddr}:${obj.localPort}';
+		var localAddr = '${obj.localAddr}';
 		var localPort = '${obj.localPort}';
 		var websocketaddr = '${obj.websocketaddr}';
 		var orderProcessType = '${obj.orderProcessType}';
@@ -453,7 +455,7 @@
 			$('#cardFront').val("");
 			$('#sqImg').attr('src', "");
 			$("#uploadFile").siblings("i").css("display","none");
-			if(userType == 2){
+			if(tourist == 1){
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
 		        //$(".help-blockFront").attr("style","display: block;");
@@ -465,7 +467,7 @@
 			$('#cardBack').val("");
 			$('#sqImgBack').attr('src', "");
 			$("#uploadFileBack").siblings("i").css("display","none");
-			if(userType == 2){
+			if(tourist == 1){
 				$(".back").attr("class", "info-imgUpload back has-error");  
 		        $(".help-blockBack").attr("data-bv-result","INVALID");  
 		        //$(".help-blockBack").attr("style","display: block;");
