@@ -489,6 +489,7 @@ input[type="checkbox"] + label:after {
 	background: #FFF;
 	border-radius: 10px;
 	transform:rotate(90deg);
+	-webkit-transform:rotate(90deg);
 }
 .dialogTitle {
 	text-align: center;
