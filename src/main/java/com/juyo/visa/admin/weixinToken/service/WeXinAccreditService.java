@@ -53,7 +53,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 
 	//获取微信公众号唯一标识
 	public Object getAppid() {
-		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 2);
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 1);
 		return wx;
 	}
 
