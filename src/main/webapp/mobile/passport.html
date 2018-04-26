@@ -63,6 +63,7 @@
     <script type="text/javascript" src="js/lCalendar.min.js"></script><!-- 日历插件 .js -->
     <script src="/references/common/js/vue/vue.min.js"></script>
 	<script src="/references/common/js/layer/layer.js"></script>
+	<script language=javascript src="/references/common/js/pinyin.js"></script>
 	<script type="text/javascript" src="/admin/common/commonjs.js"></script>
     <script>
     
@@ -107,7 +108,7 @@
                     lrz(this.files[0])
                         .then(function (rst) {
                            /*  $('.bacimg').attr('src',rst.base64); */
-                            $('#upload').hide();
+                             $('#upload').css('opacity','0'); 
                             sourceSize = (that.files[0].size / 1024).toFixed(2);
                             resultSize = (rst.fileLen / 1024).toFixed(2);
                             scale = parseInt(100 - (resultSize / sourceSize * 100));
@@ -199,6 +200,16 @@
              var r = window.location.search.substr(1).match(reg);
              if(r!=null)return  unescape(r[2]); return null;
         }
+      	
+      //获取拼音字符串
+    	function getPinYinStr(hanzi){
+    		var onehanzi = hanzi.split('');
+    		var pinyinchar = '';
+    		for(var i=0;i<onehanzi.length;i++){
+    			pinyinchar += PinYin.getPinYin(onehanzi[i]);
+    		}
+    		return pinyinchar.toUpperCase();
+    	}
       	
       //把dataUrl类型的数据转为blob
    	function dataURLtoBlob(dataurl) {
@@ -311,6 +322,8 @@
 		reader.readAsDataURL(file);
 	}); */
       
+	
+	
 	function getDateYearSub(startDateStr, endDateStr) {
         var day = 24 * 60 * 60 *1000; 
 

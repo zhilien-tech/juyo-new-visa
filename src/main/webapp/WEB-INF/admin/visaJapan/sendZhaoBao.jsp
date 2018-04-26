@@ -108,7 +108,7 @@
            	         	success: function(data){
            	           		layer.closeAll('loading');
            	           		window.parent.successCallBack(1);
-           	           		window.parent.reloaddata();
+           	           		//window.parent.reloaddata();
            	           		closeWindow();
            	           	}
            	         });
