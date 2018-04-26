@@ -63,6 +63,7 @@
     <script type="text/javascript" src="js/lCalendar.min.js"></script><!-- 日历插件 .js -->
     <script src="/references/common/js/vue/vue.min.js"></script>
 	<script src="/references/common/js/layer/layer.js"></script>
+	<script language=javascript src="/references/common/js/pinyin.js"></script>
 	<script type="text/javascript" src="/admin/common/commonjs.js"></script>
     <script>
     
@@ -200,6 +201,16 @@
              if(r!=null)return  unescape(r[2]); return null;
         }
       	
+      //获取拼音字符串
+    	function getPinYinStr(hanzi){
+    		var onehanzi = hanzi.split('');
+    		var pinyinchar = '';
+    		for(var i=0;i<onehanzi.length;i++){
+    			pinyinchar += PinYin.getPinYin(onehanzi[i]);
+    		}
+    		return pinyinchar.toUpperCase();
+    	}
+      	
       //把dataUrl类型的数据转为blob
    	function dataURLtoBlob(dataurl) {
    		var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(
@@ -311,6 +322,8 @@
 		reader.readAsDataURL(file);
 	}); */
       
+	
+	
 	function getDateYearSub(startDateStr, endDateStr) {
         var day = 24 * 60 * 60 *1000; 
 
