@@ -41,7 +41,7 @@ public class BaoYingViewService extends BaseService<TAppStaffBasicinfoEntity> {
 
 
 	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
-	private final static Integer US_YUSHANG_COMID = 65;
+	private final static Integer US_YUSHANG_COMID = 68;
 
 	/**
 	 * 列表页准备内容

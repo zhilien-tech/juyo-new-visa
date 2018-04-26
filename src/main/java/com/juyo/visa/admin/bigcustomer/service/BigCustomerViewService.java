@@ -132,7 +132,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	private final static Integer DEFAULT_IS_YES = YesOrNoEnum.YES.intKey();
 	private final static Integer DEFAULT_SELECT = IsYesOrNoEnum.NO.intKey();
 
-	private final static Integer US_YUSHANG_COMID = 65;
+	private final static Integer US_YUSHANG_COMID = 68;
 
 	/**
 	 * 
