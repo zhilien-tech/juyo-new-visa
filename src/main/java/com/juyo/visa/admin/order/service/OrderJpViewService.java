@@ -920,6 +920,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		//生成二维码
 		String qrurl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/info.html?applicantid=" + id;
+		if (Util.isEmpty(orderid)) {
+			qrurl += "&comid=" + loginCompany.getId() + "&userid=" + loginUser.getId() + "&sessionid="
+					+ session.getId();
+		} else {
+			qrurl += "&comid=" + loginCompany.getId() + "&userid=" + loginUser.getId() + "&orderid=" + orderid
+					+ "&sessionid=" + session.getId();
+		}
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
 
@@ -1278,6 +1285,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			StringBuffer sb = new StringBuffer();
 			sb.append("/").append(passport.get("lastNameEn"));
 			result.put("lastNameEn", sb.toString());
+		}
+		if (!Util.isEmpty(passport.get("birthAddressEn"))) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.get("birthAddressEn"));
+			result.put("birthAddressEn", sb.toString());
+		}
+		if (!Util.isEmpty(passport.get("issuedPlaceEn"))) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.get("issuedPlaceEn"));
+			result.put("issuedPlaceEn", sb.toString());
 		}
 		//格式化日期
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
@@ -2239,17 +2256,21 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(passportForm.getLastNameEn())) {
 				passport.setLastNameEn(passportForm.getLastNameEn().substring(1));
 			}
+			if (!Util.isEmpty(passportForm.getBirthAddressEn())) {
+				passport.setBirthAddressEn(passportForm.getBirthAddressEn().substring(1));
+			}
+			if (!Util.isEmpty(passportForm.getIssuedPlaceEn())) {
+				passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn().substring(1));
+			}
 			passport.setPassportUrl(passportForm.getPassportUrl());
 			passport.setOCRline1(passportForm.getOCRline1());
 			passport.setOCRline2(passportForm.getOCRline2());
 			passport.setBirthAddress(passportForm.getBirthAddress());
-			passport.setBirthAddressEn(passportForm.getBirthAddressEn());
 			passport.setBirthday(passportForm.getBirthday());
 			passport.setIssuedDate(passportForm.getIssuedDate());
 			passport.setIssuedOrganization(passportForm.getIssuedOrganization());
 			passport.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
 			passport.setIssuedPlace(passportForm.getIssuedPlace());
-			passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
 			passport.setPassport(passportForm.getPassport());
 			passport.setSex(passportForm.getSex());
 			passport.setSexEn(passportForm.getSexEn());
@@ -2907,16 +2928,22 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			Date expiryDate;
 			Date issueDate;
 			try {
-				birthDay = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth_date"));
-				expiryDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("expiry_date"));
-				issueDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("issue_date"));
-				String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(birthDay);
-				String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(expiryDate);
-				String issueDateStr = new SimpleDateFormat("yyyy-MM-dd").format(issueDate);
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				jsonEntity.setBirth(sdf.format(sdf.parse(startDateStr)));
-				jsonEntity.setExpiryDay(sdf.format(sdf.parse(endDateStr)));
-				jsonEntity.setIssueDate(sdf.format(sdf.parse(issueDateStr)));
+				if (!Util.isEmpty(out.getString("birth_date"))) {
+					birthDay = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth_date"));
+					String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(birthDay);
+					jsonEntity.setBirth(sdf.format(sdf.parse(startDateStr)));
+				}
+				if (!Util.isEmpty(out.getString("expiry_date"))) {
+					expiryDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("expiry_date"));
+					String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(expiryDate);
+					jsonEntity.setExpiryDay(sdf.format(sdf.parse(endDateStr)));
+				}
+				if (!Util.isEmpty(out.getString("issue_date"))) {
+					issueDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("issue_date"));
+					String issueDateStr = new SimpleDateFormat("yyyy-MM-dd").format(issueDate);
+					jsonEntity.setIssueDate(sdf.format(sdf.parse(issueDateStr)));
+				}
 			} catch (JSONException | ParseException e) {
 
 				// TODO Auto-generated catch block
