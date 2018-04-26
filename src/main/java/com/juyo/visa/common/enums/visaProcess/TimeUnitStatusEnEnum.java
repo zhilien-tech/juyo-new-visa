@@ -3,15 +3,14 @@ package com.juyo.visa.common.enums.visaProcess;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 旅伴信息---与你的关系
+ * 以前的美国旅游信息---时间单位(英文)
  */
-public enum TravelCompanionRelationshipEnum implements IEnum {
-	PARENTS(1, "父母"), SPOUSE(2, "配偶"), CHILD(3, "子女"), OTHER_RELATIVES(4, "其他亲属"), FRIEND(5, "朋友"), BUSINESS_ASSOCIATE(
-			6, "商业伙伴"),OTHER(7,"其他");
+public enum TimeUnitStatusEnEnum implements IEnum {
+	YEARS(1, "YEAR"), MONTHS(2, "MONTH"), WEEKS(3, "WEEK"), DAYS(4, "DAY"), LESS_24HOURS(5, "LESS THAN 24 HOURS");
 	private int key;
 	private String value;
 
-	private TravelCompanionRelationshipEnum(final int key, final String value) {
+	private TimeUnitStatusEnEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}
