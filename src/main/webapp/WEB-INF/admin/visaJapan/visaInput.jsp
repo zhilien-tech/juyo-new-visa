@@ -20,7 +20,7 @@
 			.content-wrapper, .right-side, .main-footer{margin-left: 0;}
 			.btnState{color: #b0b0b0 !important;border: solid 1px #d2d6de;background-color: #fff;margin-right: 2.26rem;}
 			.btnState-true{color: #287ae7 !important;border-color: #cee1ff;}
-			.card-head div:nth-child(1){width:15%;}
+			.card-head div:nth-child(1){width:33%;}
 			.card-head div:nth-child(3){ width: 66px;float: right;}
 			.everybody-info div:nth-child(1){width:15%;}
 			.everybody-info div:nth-child(2){width:18%;}
