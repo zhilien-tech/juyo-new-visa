@@ -88,6 +88,7 @@
 			return;
 		}
 		layer.load(1);
+	
 		//验证指定番号是否填写
 		$.ajax({ 
          	url: '${base}/admin/visaJapan/validateDesignNum.html',
@@ -98,6 +99,7 @@
          		//受付番号未填写
            		if(data.status == 500){
            			layer.msg(data.msg);
+           			closeWindow();
            			layer.closeAll('loading');
            		}else{
            			$.ajax({ 
@@ -106,14 +108,16 @@
            	         	dataType:"json",
            	         	type:'post',
            	         	success: function(data){
-           	           		layer.closeAll('loading');
+           	         	    closeWindow();
            	           		window.parent.successCallBack(1);
            	           		window.parent.reloaddata();
-           	           		closeWindow();
+           	                layer.closeAll('loading');
            	           	}
            	         });
            		}
+           		layer.closeAll('loading');
            	}
+         	
          });
 		
 	}

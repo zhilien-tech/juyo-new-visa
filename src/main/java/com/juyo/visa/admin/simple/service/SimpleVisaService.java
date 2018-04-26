@@ -495,6 +495,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
 			orderid = generrateorder.get("orderid");
 			orderjpid = generrateorder.get("orderjpid");
+			if(JpOrderSimpleEnum.PLACE_ORDER.intKey()== 1) {
+				orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+			}
+			
 		} else {
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 			orderid = orderjp.getOrderId();
@@ -686,7 +690,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 //			dbDao.insert(tOrderTripHis);
 //		}
 		//添加日志下单
-		orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+		if(JpOrderSimpleEnum.PLACE_ORDER.intKey()!= 1) {
+			orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+		}
 		//消息通知
 		try {
 			visaInfoWSHandler.broadcast(new TextMessage(""));

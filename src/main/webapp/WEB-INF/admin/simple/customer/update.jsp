@@ -227,6 +227,13 @@
 											}
 										}
 									},
+									amount: {
+										validators : {
+											notEmpty : {
+												message : '金额不能为空'
+											}
+										}
+									},
 								}
 							});
 		}
