@@ -27,36 +27,108 @@ function initDateTimePicker(obj){
 
 initDateTimePicker($(document));
 
-//勾选checkbox("不知道")，设置前一个兄弟级元素disable和no edit
-function editEleBeforeCheckbox(obj){
-	/*
-	 //适合单个
-	 obj.change(function(){
-		var beforeEle = obj.prev();
-		beforeEle.val("");
-		if(obj.is(':checked')){
-			beforeEle.prop("disabled",true);
-		}else{
-			beforeEle.prop("disabled",false);
-		}
-	});*/
-	//适合多段
-	$(document).click(function (e) {
-		var obj = $(e.target);
-		if(obj.attr("type")=="checkbox"){
-			obj.change(function(){
-				var beforeEle = obj.prev();
-				beforeEle.val("");
-				if(obj.is(':checked')){
-					beforeEle.prop("disabled",true);
-				}else{
-					beforeEle.prop("disabled",false);
-				}
-			});
-		}
-	});
+//checkbox添加多段checked
+function AddSegment(obj,objen){
+	//获取当前在那个div下
+	var IndexCheckbox = $(obj).parent().parent().index();
+	$(obj).prev().val("");
+	$("."+objen).eq(IndexCheckbox).prev().val("");
 	
+	if($(obj).is(':checked')){
+		
+		$(obj).prev().prop("disabled",true);
+		$("."+objen).eq(IndexCheckbox).prop("checked",true);
+		$("."+objen).eq(IndexCheckbox).prev().prop("disabled",true);
+	}else{
+		
+		$(obj).prev().prop("disabled",false);
+		$("."+objen).eq(IndexCheckbox).prop("checked",false);
+		$("."+objen).eq(IndexCheckbox).prev().prop("disabled",false);
+	}
 }
+//checkbox其他
+function AddSingle(obj,objen){
+	//获取当前在那个div下
+	var IndexCheckbox = $(obj).parent().index();
+	$(obj).prev().val("");
+	$("."+objen).prev().val("");
+	
+	if($(obj).is(':checked')){
+		
+		$(obj).prev().prop("disabled",true);
+		$("."+objen).prop("checked",true);
+		$("."+objen).prev().prop("disabled",true);
+	}else{
+		
+		$(obj).prev().prop("disabled",false);
+		$("."+objen).prop("checked",false);
+		$("."+objen).prev().prop("disabled",false);
+	}
+}
+//checkbox英文
+function disableden(obj){
+	$(obj).prev().val("");
+	if($(obj).is(':checked')){
+		$(obj).prev().prop("disabled",true);
+	}else{
+		$(obj).prev().prop("disabled",false);
+	}
+}
+//勾选checkbox("不知道")，设置前一个兄弟级元素disable和no edit
+//function editEleBeforeCheckbox(obj,objen){
+//	/*
+//	 //适合单个
+//	 obj.change(function(){
+//		var beforeEle = obj.prev();
+//		beforeEle.val("");
+//		if(obj.is(':checked')){
+//			beforeEle.prop("disabled",true);
+//		}else{
+//			beforeEle.prop("disabled",false);
+//		}
+//	});*/
+//	//适合多段
+//	$(document).on('change',obj,function(){
+//		
+//		var obg = $(obj);
+//		var obgen = $(objen);
+//		var IndexCheckbox = obg.parent().parent().index();
+//		obg.prev().val("");
+//		obgen.prev().val("");
+//		if(obg.is(':checked')){
+//			obg.prev().prop("disabled",true);
+//			obgen.eq(IndexCheckbox).prop("checked",true);
+//			obgen.eq(IndexCheckbox).prev().prop("disabled",true);
+//		}else{
+//			obg.prev().prop("disabled",false);
+//			obgen.eq(IndexCheckbox).prop("checked",false);
+//			obgen.eq(IndexCheckbox).prev().prop("disabled",false);
+//		}
+//		
+//	})
+//	$(document).click(function (e) {
+//		
+//		var obj = $(e.target);
+//		
+//		var IndexCheckbox = obj.parent().parent().index();
+//		
+//		if(obj.attr("type")=="checkbox"){
+//			obj.change(function(){
+//				var beforeEle = obj.prev();
+//				beforeEle.val("");
+//				
+//				if(obj.is(':checked')){
+//					
+//					beforeEle.prop("disabled",true);
+//				}else{
+//					
+//					beforeEle.prop("disabled",false);
+//				}
+//			});
+//		}
+//	});
+	
+//}
 
 //删除同类型的其他兄弟节点
 function deleteBrotherEle(obj){
@@ -230,8 +302,7 @@ $(".licenseen").change(function(){
 	}
 });
 //不知道驾照号
-editEleBeforeCheckbox($("#isknowdrivernumber"));
-
+//editEleBeforeCheckbox(".isknowdrivernumber",".isknowdrivernumberen");
 
 //是否有美国签证
 $(".visaUS").change(function(){
@@ -255,7 +326,7 @@ $(".visaUSen").change(function(){
 	}
 });
 //不知道签证号
-editEleBeforeCheckbox($("#idknowvisanumber"));
+//editEleBeforeCheckbox($("#idknowvisanumber"));
 
 //是否丢失签证
 $(".lose").change(function(){
@@ -407,16 +478,36 @@ $(".drivercancelen").click(function(){
 
 //-------------------------------------------美国联络点 Start----------------------------------
 //不知道联系人名
-editEleBeforeCheckbox($("#isknowname"));
+linkage($("#isknowname"));
+
+function linkage(obj){
+	
+	 obj.change(function(){
+		var beforeEle = obj.prev();
+		var linkageinput = obj.parent().prev().children("input");
+		console.log(linkageinput);
+		beforeEle.val("");
+		if(obj.is(':checked')){
+			linkageinput.prop("disabled",true);
+			beforeEle.prop("disabled",true);
+		}else{
+			linkageinput.prop("disabled",false);
+			beforeEle.prop("disabled",false);
+		}
+	});
+}
+
+
+
 
 //不知道组织名
-editEleBeforeCheckbox($("#isknoworganizationname"));
+//editEleBeforeCheckbox($("#isknoworganizationname"));
 
 //是否 邮件地址
-editEleBeforeCheckbox($("#isKnowEmailAddress"));
+//editEleBeforeCheckbox($("#isKnowEmailAddress"));
 
 //与你的关系
-emptyContentByObj($("#contactPoint_ralationship_div"));
+//emptyContentByObj($("#contactPoint_ralationship_div"));
 
 
 //-------------------------------------------美国联络点 end------------------------------------
@@ -448,9 +539,9 @@ $(".fatherUSen").change(function(){
 	}
 });
 //不知道父亲的姓 
-editEleBeforeCheckbox($("#isKnowFatherXing"));
+//editEleBeforeCheckbox($("#isKnowFatherXing"));
 //不知道父亲的名
-editEleBeforeCheckbox($("#isKnowFatherMing"));
+//editEleBeforeCheckbox($("#isKnowFatherMing"));
 //母亲是否在美国
 $(".motherUS").change(function(){
 	var motherUS = $("input[class=motherUS]:checked").val();
@@ -473,9 +564,9 @@ $(".motherUSen").change(function(){
 	}
 });
 //不知道母亲的姓 
-editEleBeforeCheckbox($("#isKnowMotherXing"));
+//editEleBeforeCheckbox($("#isKnowMotherXing"));
 //不知道父亲的名
-editEleBeforeCheckbox($("#isKnowMotherMing"));
+//editEleBeforeCheckbox($("#isKnowMotherMing"));
 //在美国除了父母还有没有直系亲属
 $(".directRelatives.directUSRelatives").change(function(){
 	var directUSRelatives = $("input[class='directRelatives directUSRelatives']:checked").val();
@@ -513,7 +604,7 @@ function changeSpouseShow(){
 }
 
 //不知道配偶的城市
-editEleBeforeCheckbox($("#isKnowMateCity"));
+//editEleBeforeCheckbox($("#isKnowMateCity"));
 
 //-------------------------------------------家庭信息 end------------------------------------
 
@@ -546,26 +637,26 @@ function occupationChange(){
 	
 }
 //不知道州、省				*********有问题
-editEleBeforeCheckbox($("#isKnowOrtherSpouseProvince"));
+//editEleBeforeCheckbox($("#isKnowOrtherSpouseProvince"));
 //配偶联系地址 select 其他	州/省
-editEleBeforeCheckbox($("#isprovinceapply"));
+//editEleBeforeCheckbox($("#isprovinceapply"));
 //工作/教育	州/省
-editEleBeforeCheckbox($("#isprovinceapplywork"));
+//editEleBeforeCheckbox($("#isprovinceapplywork"));
 
 //不知道邮政编码			*********有问题
-editEleBeforeCheckbox($("#isKonwOrtherZipCode"));
+//editEleBeforeCheckbox($("#isKonwOrtherZipCode"));
 //配偶联系地址 select 其他	邮政编码
-editEleBeforeCheckbox($("#iszipcodeapply"));
+//editEleBeforeCheckbox($("#iszipcodeapply"));
 //工作/教育	邮政编码
-editEleBeforeCheckbox($("#iszipcodeapplywork"));
+//editEleBeforeCheckbox($("#iszipcodeapplywork"));
 //工作/教育	当地月收入
-editEleBeforeCheckbox($("#issalaryapplywork"));
+//editEleBeforeCheckbox($("#issalaryapplywork"));
 
 //以前工作	市
-editEleBeforeCheckbox($("#employercitybefore"));
-editEleBeforeCheckbox($("#isknowsupervisorlastnamebefore"));
-editEleBeforeCheckbox($("#isknowsupervisorfirstnamebefore"));
-editEleBeforeCheckbox($("#employercitybefore"));
+//editEleBeforeCheckbox($("#employercitybefore"));
+//editEleBeforeCheckbox($("#isknowsupervisorlastnamebefore"));
+//editEleBeforeCheckbox($("#isknowsupervisorfirstnamebefore"));
+//editEleBeforeCheckbox($("#employercitybefore"));
 
 //以前是否工作过			
 $(".beforeWork").change(function(){
@@ -591,8 +682,8 @@ $(".beforeWorken").change(function(){
 	}
 });
 //
-editEleBeforeCheckbox($("#institutioncityedu"));
-editEleBeforeCheckbox($("#codeEdu"));
+//editEleBeforeCheckbox($("#institutioncityedu"));
+//editEleBeforeCheckbox($("#codeEdu"));
 
 //是否上过中学或以上的任何教育
 $(".education").change(function(){
@@ -1000,7 +1091,7 @@ function translateZhToEn(from, to, param){
 	}
 	$.ajax({
 		//async : false,
-		url : BASE_PATH+'/admin/translate/translate',
+		url : '/admin/translate/translate',
 		data : {
 			api : 'google',
 			strType : to,
@@ -1011,6 +1102,38 @@ function translateZhToEn(from, to, param){
 		dataType : 'json',
 		success : function(data) {
 			$("#" + to).val(data).change();
+		}
+	});
+	/*$.getJSON("/admin/translate/google", {q: $(from).val()}, function (result) {
+        $("#" + to).val(result.data);
+    });*/
+}
+//添加多段中英文
+function addSegmentsTranslateZhToEn(from, to, param){
+	var toval = "";
+	
+	var Index = $(from).parent().parent().index();
+	//var Indexen = $("#"+to).parent().parent().index();
+	if(param != ""){
+		toval = param;
+	}else{
+		toval = $(from).val();
+	}
+	
+	$.ajax({
+		//async : false,
+		url : '/admin/translate/translate',
+		data : {
+			api : 'google',
+			strType : to,
+			en : 'en',
+			q : toval
+		},
+		type : 'POST',
+		dataType : 'json',
+		success : function(data) {
+			
+			$("." + to).eq(Index).val(data).change();
 		}
 	});
 	/*$.getJSON("/admin/translate/google", {q: $(from).val()}, function (result) {

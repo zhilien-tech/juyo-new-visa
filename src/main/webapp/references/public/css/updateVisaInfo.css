@@ -422,3 +422,6 @@ label {
 	display: none;
 }
 /*****************英文样式*******************/
+#dateuniten {
+	width:150px !important;
+}

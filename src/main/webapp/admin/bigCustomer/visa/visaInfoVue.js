@@ -127,6 +127,7 @@ new Vue({
 		isKnowContactPointName:function(){
 			var isknowname = visaInfo.contactPointInfo.isknowname;
 			if(isknowname){
+				visaInfo.contactPointInfo.firstname = "";
 				visaInfo.contactPointInfo.lastname = "";
 			}
 		},
