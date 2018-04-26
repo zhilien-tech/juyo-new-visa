@@ -584,7 +584,7 @@
 					layer.msg('修改成功');
 				}
 				if(status == 2){
-					layer.msg('删除成功');
+					layer.msg('保存成功');
 				}
 				if(status == 3){
 				    layer.msg('添加成功');
