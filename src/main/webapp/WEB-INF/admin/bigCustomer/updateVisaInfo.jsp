@@ -208,12 +208,12 @@
 													<label>哪个州的驾照</label>
 													<select id="witchstateofdriver" name="witchstateofdriver">
 														<option value="0" selected="selected">请选择</option>
-														<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
-															<c:if test="${driver.witchstateofdriver != map.key}">
-																<option value="${map.key }">${map.value }</option>
+														<c:forEach items="${obj.stateUsList }" var="state">
+															<c:if test="${driver.witchstateofdriver != state.id}">
+																<option value="${state.id }">${state.name }</option>
 															</c:if>
-															<c:if test="${driver.witchstateofdriver == map.key}">
-																<option value="${map.key }" selected="selected">${map.value }</option>
+															<c:if test="${driver.witchstateofdriver == state.id}">
+																<option value="${state.id }" selected="selected">${state.name }</option>
 															</c:if>
 														</c:forEach>
 													</select>
@@ -232,8 +232,8 @@
 												<label>哪个州的驾照</label>
 												<select id="witchstateofdriver" name="witchstateofdriver">
 													<option value="0">请选择</option>
-													<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
-														<option value="${map.key }">${map.value }</option>
+													<c:forEach items="${obj.stateUsList }" var="state">
+														<option value="${state.id }">${state.name }</option>
 													</c:forEach>
 												</select>
 											</div>
@@ -400,8 +400,8 @@
 					<label>州/省</label>
 						<select id="state" name="state" v-model="visaInfo.contactPointInfo.state">
 							<option value="0">请选择</option>
-							<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
-								<option value="${map.key }">${map.value }</option>
+							<c:forEach items="${obj.stateUsList }" var="state">
+								<option value="${state.id }">${state.name }</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -599,8 +599,8 @@
 					<label>配偶的国籍</label>
 					<select id="spousenationality" name="spousenationality" v-model="visaInfo.familyInfo.spousenationality">
 						<option value="0">请选择</option>
-						<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-							<option value="${map.key }">${map.value }</option>
+						<c:forEach items="${obj.gocountryFiveList }" var="country">
+							<option value="${country.id }">${country.chinesename }</option>
 						</c:forEach>
 					</select>
 				</div>
@@ -614,8 +614,8 @@
 					<label>配偶的出生国家</label>
 					<select id="spousecountry" name="spousecountry" v-model="visaInfo.familyInfo.spousecountry">
 						<option value="0">请选择</option>
-						<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-							<option value="${map.key }">${map.value }</option>
+						<c:forEach items="${obj.gocountryFiveList }" var="country">
+							<option value="${country.id }">${country.chinesename }</option>
 						</c:forEach>
 					</select>
 				</div>
@@ -661,8 +661,8 @@
 						<label>国家/地区</label>
 						<select name="country" v-model="visaInfo.familyInfo.country">
 							<option value="0">请选择</option>
-							<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-								<option value="${map.key }">${map.value }</option>
+							<c:forEach items="${obj.gocountryFiveList }" var="country">
+								<option value="${country.id }">${country.chinesename }</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -722,8 +722,8 @@
 						<label>国家/地区</label>
 						<select name="country" v-model="visaInfo.workEducationInfo.country">
 							<option value="0">请选择</option>
-							<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-								<option value="${map.key }">${map.value }</option>
+							<c:forEach items="${obj.gocountryFiveList }" var="country">
+								<option value="${country.id }">${country.chinesename }</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -806,12 +806,12 @@
 											<label>国家/地区</label>
 											<select name="employercountry">
 												<option value="0">请选择</option>
-												<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-													<c:if test="${beforeWork.employercountry != map.key}">
-														<option value="${map.key }">${map.value }</option>
+												<c:forEach items="${obj.gocountryFiveList }" var="country">
+													<c:if test="${beforeWork.employercountry != country.id}">
+														<option value="${country.id }">${country.chinesename }</option>
 													</c:if>
-													<c:if test="${beforeWork.employercountry == map.key}">
-														<option value="${map.key }" selected="selected">${map.value }</option>
+													<c:if test="${beforeWork.employercountry == country.id}">
+														<option value="${country.id }" selected="selected">${country.chinesename }</option>
 													</c:if>
 												</c:forEach>
 											</select>
@@ -898,8 +898,8 @@
 										<label>国家/地区</label>
 										<select name="employercountry">
 											<option value="0">请选择</option>
-											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-												<option value="${map.key }">${map.value }</option>
+											<c:forEach items="${obj.gocountryFiveList }" var="country">
+												<option value="${country.id }">${country.chinesename }</option>
 											</c:forEach>
 										</select>
 									</div>
@@ -1004,12 +1004,12 @@
 											<label>国家/地区</label>
 											<select name="institutioncountry">
 												<option value="0">请选择</option>
-												<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-													<c:if test="${education.institutioncountry != map.key}">
-														<option value="${map.key }">${map.value }</option>
+												<c:forEach items="${obj.gocountryFiveList }" var="country">
+													<c:if test="${education.institutioncountry != country.id}">
+														<option value="${country.id }">${country.chinesename }</option>
 													</c:if>
-													<c:if test="${education.institutioncountry == map.key}">
-														<option value="${map.key }" selected="selected">${map.value }</option>
+													<c:if test="${education.institutioncountry == country.id}">
+														<option value="${country.id }" selected="selected">${country.chinesename }</option>
 													</c:if>
 												</c:forEach>
 											</select>
@@ -1065,8 +1065,8 @@
 										<label>国家/地区</label>
 										<select name="institutioncountry">
 											<option value="0">请选择</option>
-											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-												<option value="${map.key }">${map.value }</option>
+											<c:forEach items="${obj.gocountryFiveList }" var="country">
+												<option value="${country.id }">${country.chinesename }</option>
 											</c:forEach>
 										</select>
 									</div>
@@ -1179,12 +1179,7 @@
 										<select name="traveledcountry">
 											<option value="0">请选择</option>
 											<c:forEach items="${obj.gocountryFiveList }" var="country">
-													<c:if test="${gocountry.traveledcountry != country.id}">
-														<option value="${country.id }">${country.chinesename }</option>
-													</c:if>
-													<c:if test="${gocountry.traveledcountry == country.id}">
-														<option value="${country.id }" selected="selected">${country.chinesename }</option>
-													</c:if>
+												<option value="${country.id }">${country.chinesename }</option>
 											</c:forEach>
 										</select>
 									</div>
@@ -1256,12 +1251,12 @@
 										<label>国家/地区</label>
 										<select name="militarycountry">
 											<option value="0">请选择</option>
-											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-													<c:if test="${conscientious.militarycountry != map.key}">
-														<option value="${map.key }">${map.value }</option>
+											<c:forEach items="${obj.gocountryFiveList }" var="country">
+													<c:if test="${conscientious.militarycountry != country.id}">
+														<option value="${country.id }">${country.chinesename }</option>
 													</c:if>
-													<c:if test="${conscientious.militarycountry == map.key}">
-														<option value="${map.key }" selected="selected">${map.value }</option>
+													<c:if test="${conscientious.militarycountry == country.id}">
+														<option value="${country.id }" selected="selected">${country.chinesename }</option>
 													</c:if>
 											</c:forEach>
 										</select>
@@ -1298,8 +1293,8 @@
 									<label>国家/地区</label>
 									<select name="militarycountry">
 										<option value="0">请选择</option>
-										<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-											<option value="${map.key }">${map.value }</option>
+										<c:forEach items="${obj.gocountryFiveList }" var="country">
+											<option value="${country.id }">${country.chinesename }</option>
 										</c:forEach>
 									</select>
 								</div>

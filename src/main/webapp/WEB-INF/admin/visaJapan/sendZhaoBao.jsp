@@ -99,8 +99,8 @@
          		//受付番号未填写
            		if(data.status == 500){
            			layer.msg(data.msg);
-           			closeWindow();
            			layer.closeAll('loading');
+           			closeWindow();
            		}else{
            			$.ajax({ 
            	         	url: '${base}/admin/visaJapan/saveZhaoBao.html',
@@ -108,10 +108,9 @@
            	         	dataType:"json",
            	         	type:'post',
            	         	success: function(data){
-           	         	    closeWindow();
            	           		window.parent.successCallBack(1);
-           	           		window.parent.reloaddata();
-           	                layer.closeAll('loading');
+           	           		//window.parent.reloaddata();
+           	           		closeWindow();
            	           	}
            	         });
            		}

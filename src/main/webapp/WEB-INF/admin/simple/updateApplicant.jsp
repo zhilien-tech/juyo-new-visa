@@ -861,7 +861,7 @@
 						//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						//layer.close(index);
 						if(status == 1){
-							parent.successCallBack(3);
+							parent.successCallBack(1);
 							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 							parent.layer.close(index);
 						}else if(status == 2){
