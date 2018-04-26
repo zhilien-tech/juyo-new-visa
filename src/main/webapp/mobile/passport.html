@@ -26,7 +26,11 @@
         <input type="file" id="image" style="display:none;" name="image">
     </div>
     <ul class="label">
-        <li>类型 <input type="text" class="txtInput" v-model="passportdata.type"/></li>
+    	<li>姓(中文) <input type="text" class="txtInput" id="firstname" v-model="passportdata.firstname"/></li>
+        <li>姓(拼音) <input type="text" class="txtInput" v-model="passportdata.firstnameen"/></li>
+        <li>名(中文) <input type="text" class="txtInput" id="lastname" v-model="passportdata.lastname"/></li>
+        <li>名(拼音) <input type="text" class="txtInput" v-model="passportdata.lastnameen"/></li>
+        <!-- <li>类型 <input type="text" class="txtInput" v-model="passportdata.type"/></li> -->
         <li>护照号 <input type="text" class="txtInput" v-model="passportdata.passport"/></li>
         <li>性别 <input type="text" class="txtInput" v-model="passportdata.sex"/></li>
         <li>出生日期 <input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.birthday"/></li>
@@ -158,6 +162,10 @@
         });
         //清除
         $('.passport-clear').click(function(){
+        	_self.passportdata.firstname = '';
+        	_self.passportdata.firstnameen = '';
+        	_self.passportdata.lastname = '';
+        	_self.passportdata.lastnameen = '';
         	_self.passportdata.passporturl = '';
         	_self.passportdata.type = '';
         	_self.passportdata.passport = '';
@@ -241,6 +249,10 @@
 				//关闭加载层
 				layer.closeAll('loading');
 				if (true === obj.success) {
+					_self.passportdata.firstname = obj.xingCn;
+					_self.passportdata.firstnameen = getPinYinStr(obj.xingCn);
+					_self.passportdata.lastname = obj.mingCn;
+					_self.passportdata.lastnameen = getPinYinStr(obj.mingCn);
 					_self.passportdata.passporturl = obj.url;
 					_self.passportdata.type = obj.type;
 					_self.passportdata.passport = obj.num;
