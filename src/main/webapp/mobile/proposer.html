@@ -3,6 +3,9 @@
 	<head>
 	<meta charset="UTF-8">
 	<title>申请人</title>
+	<meta http-equlv="proma" content="no-cache" />
+	<meta http-equlv="cache-control" content="no-cache" />
+	<meta http-equlv="expires" content="0" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="css/common.css">
@@ -10,6 +13,9 @@
     <script src="js/rem(750).js"></script>
     <script src="js/jquery-1.10.2.js"></script>
     <script src="js/lrz.bundle.js"></script>
+    <script type="text/javascript">
+    	jQuery.browser={};(function(){jQuery.browser.msie=false; jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)./)){ jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
+    </script>
 	</head>
 	<body>
 		<form id="applicantform">
@@ -83,11 +89,13 @@
 	function initPageData(){
 		var url="/admin/mobile/getApplicantData.html";
 		var applicantid = GetQueryString('applicantid');
+		alert(applicantid);
 	    $.ajax({ 
 	    	url: url,
 	    	data:{applicantid:applicantid},
 	    	dataType:"json",
 	    	type:'post',
+	    	cache:false,
 	    	success: function(data){
 	    		$('#applicantid').val(data.applicantinfo.id);
 	    		var applicantjpinfo = data.applicantjpinfo;
@@ -208,6 +216,7 @@
 	    	data:{applicantid:applicantid,relationRemark:relationRemark,isMainApplicant:isMainApplicant,mainId:mainId,mainRelation:mainRelation},
 	    	dataType:"json",
 	    	type:'post',
+	    	cache:false,
 	    	success: function(data){
 	    		window.location.href='/mobile/visaInfo.html?applicantid='+applicantid;
 	      	}
