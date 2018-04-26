@@ -99,6 +99,7 @@
            		if(data.status == 500){
            			layer.msg(data.msg);
            			layer.closeAll('loading');
+           			closeWindow();
            		}else{
            			$.ajax({ 
            	         	url: '${base}/admin/visaJapan/saveZhaoBao.html',

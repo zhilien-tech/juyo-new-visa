@@ -39,7 +39,6 @@ public class BaoYingViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	@Inject
 	private UploadService qiniuUploadService;//文件上传
 
-
 	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
 	private final static Integer US_YUSHANG_COMID = 68;
 
@@ -64,6 +63,7 @@ public class BaoYingViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	 */
 	public Object listData(TAppStaffMixInfoForm queryForm, HttpSession session) {
 
+		long startTime = System.currentTimeMillis();//获取当前时间
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//葆婴 可以看到誉尚的订单信息
 		queryForm.setComid(US_YUSHANG_COMID);
@@ -72,12 +72,12 @@ public class BaoYingViewService extends BaseService<TAppStaffBasicinfoEntity> {
 		List<Record> records = (List<Record>) map.get("data");
 		for (Record record : records) {
 			Object interviewdateStr = record.get("interviewdate");
-			if(!Util.isEmpty(interviewdateStr)) {
-				Date interviewdate = (Date)interviewdateStr;
+			if (!Util.isEmpty(interviewdateStr)) {
+				Date interviewdate = (Date) interviewdateStr;
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				record.set("interviewdate", sdf.format(interviewdate));
 			}
-			
+
 			Object cityObj = record.get("cityid");
 			if (!Util.isEmpty(cityObj)) {
 				int cityid = (int) cityObj;
@@ -95,9 +95,10 @@ public class BaoYingViewService extends BaseService<TAppStaffBasicinfoEntity> {
 					record.set("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
 				}
 			}
-			
+
 		}
-		
+		long endTime = System.currentTimeMillis();
+		System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
 		return map;
 	}
 

@@ -370,6 +370,15 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	 */
 	public Object savePassportInfo(TApplicantPassportLowerEntity passportinfo) {
 		dbDao.update(passportinfo);
+		Integer applicantid = passportinfo.getApplicantid();
+		if (!Util.isEmpty(applicantid)) {
+			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid.longValue());
+			apply.setFirstName(passportinfo.getFirstname());
+			apply.setFirstNameEn(passportinfo.getFirstnameen());
+			apply.setLastName(passportinfo.getLastname());
+			apply.setLastNameEn(passportinfo.getLastnameen());
+			dbDao.update(apply);
+		}
 		MobileApplicantForm form = new MobileApplicantForm();
 		form.setApplicantid(passportinfo.getApplicantid());
 		form.setMessagetype(2);
