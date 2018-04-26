@@ -823,12 +823,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Integer orderid = null;
 		TApplicantEntity applicant = new TApplicantEntity();
 		TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+		applicantjp.setMainRelation(form.getMainRelation());
 		//修改
 		if (!Util.isEmpty(form.getId())) {
 			applicant = dbDao.fetch(TApplicantEntity.class, form.getId().longValue());
 			applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", applicant.getId()));
 			result.put("applicantjpid", applicantjp.getId());
 			result.put("applicantid", applicant.getId());
+			applicantjp.setMainRelation(form.getMainRelation());
+			dbDao.update(applicantjp);
 		}
 		applicant.setOpId(loginUser.getId());
 		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
@@ -892,7 +895,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Integer applicantid = form.getId();
 		if (!Util.isEmpty(form.getId())) {
 			dbDao.update(applicant);
+
 		} else {
+			
 			TApplicantEntity insertapplicant = dbDao.insert(applicant);
 			applicantid = insertapplicant.getId();
 			result.put("applicantid", applicantid);
@@ -904,12 +909,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			} else {
 				TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 				orderid = orderjp.getOrderId();
+				applicantjp.setOrderId(orderid);
 			}
+			//新增日本订单基本信息
+			applicantjp.setMainRelation(form.getMainRelation());
+			 dbDao.insert(applicantjp);
 			applicantjp.setOrderId(orderjpid);
 			applicantjp.setApplicantId(applicantid);
 			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
 			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
 			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setMainRelation(form.getMainRelation());
 			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
 			result.put("applicantjpid", insertappjp.getId());
 			//日本工作信息
@@ -1248,6 +1258,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantid.longValue());
 		result.put("applicant", applicant);
+		TApplicantOrderJpEntity orderjp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", applicantid));
+		result.put("orderjp", orderjp);
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		if (!Util.isEmpty(applicant.getBirthday())) {
 			Date birthday = applicant.getBirthday();
