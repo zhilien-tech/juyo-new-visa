@@ -589,6 +589,9 @@
 				if(status == 3){
 				    layer.msg('添加成功');
 				}
+				if(status == 4){
+				    layer.msg('删除成功');
+				}
 				initApplicantTable();
 				initTravelPlanTable();
 				initOrderstatus();
@@ -695,7 +698,7 @@
 			    	data:{applicantId:id},
 			    	type:'post',
 			    	success: function(data){
-			    		successCallBack(2);
+			    		successCallBack(4);
 			      	}
 			    }); 
 			});
