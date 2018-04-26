@@ -134,7 +134,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	private UploadService qiniuUploadService;//文件上传
 
 	private final static String SMS_SIGNATURE = "【优悦签】";
-	private final static Integer US_YUSHANG_COMID = 65;
+	private final static Integer US_YUSHANG_COMID = 68;
 	//活动id，默认为1
 	private final static Integer EVENTID = 1;
 	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
