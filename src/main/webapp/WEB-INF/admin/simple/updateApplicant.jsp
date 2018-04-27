@@ -275,7 +275,7 @@
 										<label id="updateApplicantHead">与主申请人的关系</label>
 										</br>
 										<div class="input-box">
-											<input type="text" id="" name="" class="input" value="">
+											<input type="text" id="mainRelation" name="mainRelation" class="input" value=" ${obj.orderjp.mainRelation }" >
 											<ul class="dropdown">
 												<li>配偶</li>
 												<li>父母</li>
