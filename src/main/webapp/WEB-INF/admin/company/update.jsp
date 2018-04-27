@@ -349,10 +349,13 @@
 		function save() {
 			validateScope();
 			$('#companyUpdateForm').bootstrapValidator('validate');
-			var bootstrapValidator = $("#companyUpdateForm").data(
-					'bootstrapValidator');
+			var bootstrapValidator = $("#companyUpdateForm").data('bootstrapValidator');
+			//大客户不校验经营范围
+			if($("#comType").val() == 4){
+				removerValid();
+			}
 			if (bootstrapValidator.isValid()) {
-
+				
 				//获取必填项信息
 				var name = $("#name").val();
 				if (name == "") {
@@ -514,11 +517,18 @@
 					$("#usScopeDiv").hide();
 				}
 				
+				$(".scopeDivInputValue").empty();
+				$(".btnVal input").each(function(){
+					$(this).removeClass("btn-state2");//取消灰色
+				    $(this).addClass("btn-state1");//变蓝
+				});
+				$("#businessScopes").val("");
+				
 				//经营范围（大客户隐藏）
 				if(type==4){
 					//隐藏并设置为日本（权限使用）
 					$("#scopeDiv").hide();
-					$(".multiselectBtn").append("<span>日本,</span>");
+					$(".scopeDivInputValue").html("<span>日本,</span>");
 					var busScopes = "";
 					$(".multiselectBtn span").each(function() {
 						var spanVal = $(this).text();
@@ -527,17 +537,12 @@
 					$("#businessScopes").val(busScopes);
 				}else{
 					$("#scopeDiv").show();
-					$(".multiselectBtn").html("");
+					$(".scopeDivInputValue").html("");
 					$("#businessScopes").val("");
 				}
 				
 			}
-			$(".scopeDivInputValue").empty();
-			$(".btnVal input").each(function(){
-				$(this).removeClass("btn-state2");//取消灰色
-			    $(this).addClass("btn-state1");//变蓝
-			});
-			$("#businessScopes").val("");
+			
 		}
 	</script>
 

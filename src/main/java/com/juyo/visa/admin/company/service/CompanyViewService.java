@@ -36,7 +36,7 @@ import com.juyo.visa.entities.TComBusinessscopeEntity;
 import com.juyo.visa.entities.TComFunctionEntity;
 import com.juyo.visa.entities.TComJobEntity;
 import com.juyo.visa.entities.TCompanyEntity;
-import com.juyo.visa.entities.TCustomerCompanyMapEntity;
+import com.juyo.visa.entities.TCompanyCustomerMapEntity;
 import com.juyo.visa.entities.TDepartmentEntity;
 import com.juyo.visa.entities.TFunctionEntity;
 import com.juyo.visa.entities.TJobEntity;
@@ -75,13 +75,12 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		List<Record> records = (List<Record>) map.get("data");
 		for (Record record : records) {
 			int comtype = record.getInt("comtype");
+			if(comtype == CompanyTypeEnum.BIGCUSTOMER.intKey()) {
+				record.set("scopes", "");
+			}
 			for (CompanyTypeEnum typeEnum : CompanyTypeEnum.values()) {
-				if (comtype == typeEnum.intKey()) {
-					if(comtype==CompanyTypeEnum.BIGCUSTOMER.intKey()) {
-						record.set("comtype", "");
-					}else {
-						record.set("comtype", typeEnum.value());
-					}
+				if(comtype == typeEnum.intKey()) {
+					record.set("comtype", typeEnum.value());
 				}
 			}
 		}
@@ -205,18 +204,11 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		
 		
 		//大客户与美签简公司关系表更新
-		if(comType == CompanyTypeEnum.SONGQIANSIMPLE.intKey()) {
-			TCustomerCompanyMapEntity entity = dbDao.fetch(TCustomerCompanyMapEntity.class, Cnd.where("bigCustomerId", "=", comId));
-			if(!Util.isEmpty(entity)) {
-				entity.setBigCustomerId(comId);
-				entity.setBelongComId(US_YUSHANG_COMID);
-				dbDao.update(entity);
-			}else {
-				TCustomerCompanyMapEntity entityNew = new TCustomerCompanyMapEntity();
-				entityNew.setBigCustomerId(comId);
-				entityNew.setBelongComId(US_YUSHANG_COMID);
-				dbDao.insert(entityNew);
-			}
+		if(comType == CompanyTypeEnum.BIGCUSTOMER.intKey()) {
+			TCompanyCustomerMapEntity entityNew = new TCompanyCustomerMapEntity();
+			entityNew.setBigCustomerId(comId);
+			entityNew.setBelongComId(US_YUSHANG_COMID);
+			dbDao.insert(entityNew);
 			
 		}
 
@@ -289,20 +281,21 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			
 			
 			//大客户与美签简公司关系表更新
-			if(comType == CompanyTypeEnum.SONGQIANSIMPLE.intKey()) {
-				int bigComid= Integer.parseInt(String.valueOf(comId)); 
-				TCustomerCompanyMapEntity entity = dbDao.fetch(TCustomerCompanyMapEntity.class, Cnd.where("bigCustomerId", "=", comId));
+			int bigComid= Integer.parseInt(String.valueOf(comId)); 
+			TCompanyCustomerMapEntity entity = dbDao.fetch(TCompanyCustomerMapEntity.class, Cnd.where("bigCustomerId", "=", comId));
+			if(comType == CompanyTypeEnum.BIGCUSTOMER.intKey()) {
 				if(!Util.isEmpty(entity)) {
 					entity.setBigCustomerId(bigComid);
 					entity.setBelongComId(US_YUSHANG_COMID);
 					dbDao.update(entity);
 				}else {
-					TCustomerCompanyMapEntity entityNew = new TCustomerCompanyMapEntity();
+					TCompanyCustomerMapEntity entityNew = new TCompanyCustomerMapEntity();
 					entityNew.setBigCustomerId(bigComid);
 					entityNew.setBelongComId(US_YUSHANG_COMID);
 					dbDao.insert(entityNew);
 				}
-				
+			}else {
+				dbDao.delete(entity);
 			}
 		}
 

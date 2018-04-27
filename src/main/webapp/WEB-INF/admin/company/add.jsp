@@ -101,7 +101,7 @@
 								<label><span>*</span>经营范围：</label>
 								<!-- <input id="businessScope" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
 								<input id="businessScopes" name="businessScopes" type="hidden"/>
-								<div id="scopeDiv" name="scopeDiv" class="multiselectBtn scopeDivInputValue form-control input-sm"></div>
+								<div id="scopeDivInput" name="scopeDiv" class="multiselectBtn scopeDivInputValue form-control input-sm"></div>
 								<div class="btnVal">
 									<input id="jpScopeDiv" type="button" value="日本" class="btn btn-sm btn-state1" />
 									<input id="usScopeDiv" type="button" value="美国" class="btn btn-sm btn-state1" style="display:none;"/>
@@ -373,6 +373,10 @@
 					'bootstrapValidator');
 			// 执行表单验证 
 			bootstrapValidator.validate();
+			//大客户不校验经营范围
+			if($("#comType").val() == 4){
+				removerValid();
+			}
 			if (bootstrapValidator.isValid()) {
 				//获取必填项信息
 				var name = $("#name").val();
@@ -456,30 +460,32 @@
 					$("#usScopeDiv").hide();
 				}
 				
+				$(".scopeDivInputValue").empty();
+				$(".btnVal input").each(function(){
+					$(this).removeClass("btn-state2");//取消灰色
+				    $(this).addClass("btn-state1");//变蓝
+				});
+				$("#businessScopes").val("");
+				
 				//经营范围（大客户隐藏）
 				if(type==4){
 					//隐藏并设置为日本（权限使用）
 					$("#scopeDiv").hide();
-					$(".multiselectBtn").append("<span>日本,</span>");
+					$("#scopeDivInput").html("<span>日本,</span>");
 					var busScopes = "";
 					$(".multiselectBtn span").each(function() {
 						var spanVal = $(this).text();
 						busScopes += spanVal;
 					});
 					$("#businessScopes").val(busScopes);
+					removerValid();
 				}else{
 					$("#scopeDiv").show();
-					$(".multiselectBtn").html("");
+					$("#scopeDivInput").html("");
 					$("#businessScopes").val("");
 				}
-				
 			}
-			$(".scopeDivInputValue").empty();
-			$(".btnVal input").each(function(){
-				$(this).removeClass("btn-state2");//取消灰色
-			    $(this).addClass("btn-state1");//变蓝
-			});
-			$("#businessScopes").val("");
+			
 		}
 		
 		

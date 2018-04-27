@@ -11,8 +11,8 @@ import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
 @Data
-@Table("t_customer_company_map")
-public class TCustomerCompanyMapEntity implements Serializable {
+@Table("t_company_customer_map")
+public class TCompanyCustomerMapEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id(auto = true)
 	private Integer id;
