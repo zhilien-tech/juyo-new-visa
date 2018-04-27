@@ -380,7 +380,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 							scopeList.add(scopeEntity);
 						}
 					} else if (Util.eq("UPDATE", type)) {
-						if (Util.eq(scope, key)) {
+						if (Util.eq(scope, value)) {
 							scopeStr += key + ",";
 							scopeEntity.setComId(comId);
 							scopeEntity.setCountryId(Integer.valueOf(key));
