@@ -78,6 +78,8 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 		}
 		//编辑申请人信息
 		if (!Util.isEmpty(applicant.getId())) {
+			TApplicantOrderJpEntity applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,Cnd.where("applicantid","=",applicant.getId()));
+			applicantJp.setMainRelation(form.getMainRelation());
 			/*if (!Util.isEmpty(mobileuser)) {
 				applicant.setUserid(mobileuser.getId());
 			} else {
@@ -90,6 +92,7 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 				applicant.setUserid(tUserEntity.getId());
 			}*/
 			dbDao.update(applicant);
+			dbDao.update(applicantJp);
 			form.setMessagetype(1);
 		} else {
 			//在用户表添加信息
@@ -149,6 +152,7 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 			}
 			applicantjp.setOrderId(orderjpid);
 			applicantjp.setApplicantId(applicatinsert.getId());
+			applicantjp.setMainRelation(form.getMainRelation());
 			TApplicantOrderJpEntity applicantjpinsert = dbDao.insert(applicantjp);
 			Integer applicantJpId = applicantjpinsert.getId();
 
@@ -237,6 +241,7 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
 			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
 			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setMainRelation(form.getMainRelation());
 			//设置主申请人信息
 			List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("orderId", "=", orderjpid), null);
