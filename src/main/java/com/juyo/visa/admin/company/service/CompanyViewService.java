@@ -270,11 +270,13 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			}
 			user.setName(updateForm.getAdminLoginName());
 			if (CompanyTypeEnum.SONGQIAN.intKey() == comType) {
-				user.setUserType(UserLoginEnum.SQ_COMPANY_ADMIN.intKey());//送签社公司管理员
+				user.setUserType(UserLoginEnum.SQ_COMPANY_ADMIN.intKey());
 			} else if (CompanyTypeEnum.DIJI.intKey() == comType) {
-				user.setUserType(UserLoginEnum.DJ_COMPANY_ADMIN.intKey());//地接社公司管理员
+				user.setUserType(UserLoginEnum.DJ_COMPANY_ADMIN.intKey());
 			} else if (CompanyTypeEnum.SONGQIANSIMPLE.intKey() == comType) {
-				user.setUserType(UserLoginEnum.JJ_COMPANY_ADMIN.intKey());//地接社公司管理员
+				user.setUserType(UserLoginEnum.JJ_COMPANY_ADMIN.intKey());
+			} else if(CompanyTypeEnum.BIGCUSTOMER.intKey() == comType) {
+				user.setUserType(UserLoginEnum.BIG_COMPANY_ADMIN.intKey());
 			}
 			user.setUpdateTime(nowDate);
 			dbDao.update(user);
