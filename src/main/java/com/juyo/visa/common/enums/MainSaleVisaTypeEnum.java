@@ -2,6 +2,14 @@ package com.juyo.visa.common.enums;
 
 import com.uxuexi.core.common.enums.IEnum;
 
+/**
+ * 订单详情里签证类型 枚举
+ * TODO(这里用一句话描述这个类的作用)
+ * <p>
+ * TODO(这里描述这个类补充说明 – 可选)
+ * @author   刘旭利
+ * @Date	 2018年4月27日
+ */
 public enum MainSaleVisaTypeEnum implements IEnum {
 
 	SINGLE(1, "单次"), SIX(2, "冲绳东北六县三年多次"), PUTONGTHREE(3, "普通三年多次"), PUTONGFIVE(4, "普通五年多次");

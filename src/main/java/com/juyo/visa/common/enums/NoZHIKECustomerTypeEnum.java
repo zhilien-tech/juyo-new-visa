@@ -4,11 +4,11 @@ import com.uxuexi.core.common.enums.IEnum;
 
 /**
  * 
- * 公司类型
+ * 没有直客情况下的客户来源 枚举
  * <p>
- * 送签社 or 地接社
- * @author   彭辉
- * @Date	 2017年10月20日
+ * 
+ * @author   
+ * @Date	 
  */
 public enum NoZHIKECustomerTypeEnum implements IEnum {
 	XIANSHANG(1, "线上"), OTS(2, "OTS"), XIANXIA(3, "线下");

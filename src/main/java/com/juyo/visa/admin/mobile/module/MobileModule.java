@@ -190,4 +190,22 @@ public class MobileModule {
 	public Object saveBackMailInfo(@Param("..") TApplicantBackmailJpForm form) {
 		return mobileService.saveBackMailInfo(form);
 	}
+
+	/**
+	 * 查询照片格式是否提示过
+	 */
+	@At
+	@POST
+	public Object ismobileprompted(@Param("applicantid") int applicantid) {
+		return mobileService.ismobileprompted(applicantid);
+	}
+
+	/**
+	 * 记录已经提示过
+	 */
+	@At
+	@POST
+	public Object mobilehasprompted(@Param("applicantid") int applicantid) {
+		return mobileService.mobilehasprompted(applicantid);
+	}
 }

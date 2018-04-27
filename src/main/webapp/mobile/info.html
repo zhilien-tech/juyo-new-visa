@@ -172,11 +172,57 @@
 	    }
 	});
     $(function () {
+    	var applicantid = GetQueryString('applicantid');
         $('#upload').click(function () {
-        	$(".backgroundGray").show();
+        	$.ajax({
+	        	url: '/admin/mobile/ismobileprompted.html',
+	        	data:{
+	        		applicantid:applicantid
+	        	},
+	        	dataType:"json",
+	        	type:'post',
+	        	async:false,
+	        	success: function(data){
+	        		if(data.ismobileprompted == 1){//提示过，就不再弹出示例
+	        			$('#image').click();
+	                    $('#image').change(function(){
+	                    	layer.load(1, {
+	                			shade : "#000"
+	                		});
+	                    	var that = this;
+	                        lrz(this.files[0])
+	                            .then(function (rst) {
+	                                $('#upload').css('opacity','0'); 
+	                                 sourceSize = (that.files[0].size / 1024).toFixed(2);
+	                                resultSize = (rst.fileLen / 1024).toFixed(2);
+	                                scale = parseInt(100 - (resultSize / sourceSize * 100));
+	                                rst.formData.append('image',rst.file);
+	                                uploadPositive(rst,rst.formData);  
+	                                // 处理成功会执行
+	                            })
+	                            .catch(function (err) {
+	                                console.log(err);
+	                            });
+	                    });
+	        		}else{
+			        	$(".backgroundGray").show();
+	        		}
+	          	}
+	        });
         });
         $(".closed").click(function(){
         	$(".backgroundGray").hide();
+        	//去记录出现过示例
+        	$.ajax({
+	        	url: '/admin/mobile/mobilehasprompted.html',
+	        	data:{
+	        		applicantid:applicantid
+	        	},
+	        	dataType:"json",
+	        	type:'post',
+	        	success: function(data){
+	        	}
+        	});
         	$('#image').click();
             $('#image').change(function(){
             	layer.load(1, {

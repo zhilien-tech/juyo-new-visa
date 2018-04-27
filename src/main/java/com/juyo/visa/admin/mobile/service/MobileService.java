@@ -859,4 +859,20 @@ public class MobileService extends BaseService<TApplicantEntity> {
 
 		return result;
 	}
+
+	public Object ismobileprompted(int applicantid) {
+		Map<String, Object> result = Maps.newHashMap();
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
+		if (!Util.isEmpty(apply)) {
+			result.put("ismobileprompted", apply.getIsmobileprompted());
+		}
+		return result;
+	}
+
+	public Object mobilehasprompted(int applicantid) {
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
+		apply.setIsmobileprompted(IsYesOrNoEnum.YES.intKey());
+		dbDao.update(apply);
+		return null;
+	}
 }

@@ -9,7 +9,7 @@ package com.juyo.visa.common.enums;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 日本订单（简） 枚举
+ * 日本订单（简）订单状态 枚举
  *
  * @author   刘旭利
  * @Date	 2018年1月23日 	 
