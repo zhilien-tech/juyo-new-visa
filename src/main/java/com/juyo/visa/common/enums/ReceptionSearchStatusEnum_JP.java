@@ -5,7 +5,7 @@ import com.uxuexi.core.common.enums.IEnum;
 /**
  * 
  * <p>
- * 
+ * 前台订单状态 枚举
  * @author   
  * @Date	 2017年10月20日
  */

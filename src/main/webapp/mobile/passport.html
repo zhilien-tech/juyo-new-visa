@@ -1,75 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>护照信息</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" type="text/css" href="css/common.css">
-    <link rel="stylesheet" type="text/css" href="css/passport.css">
-    <link rel="stylesheet" type="text/css" href="css/lCalendar.css"><!-- 日历插件 .css -->
+<meta charset="UTF-8">
+<title>护照信息</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<link rel="stylesheet" type="text/css" href="css/passport.css">
+<link rel="stylesheet" type="text/css" href="css/lCalendar.css">
+<!-- 日历插件 .css -->
 </head>
 <body>
 	<form id="passportform">
-    <div class="top info">
-    	<span v-if="passportdata.passporturl != ''">
-    	<!-- width="360px" height="200px" -->
-    		<img :src="passportdata.passporturl" style="width:100%;height:100%;"  alt="" class="bacimg">
-    	</span>
-    	<span v-else>
-	        <img src="images/Hz.jpg" style="width:100%;height:100%;" alt="" class="bacimg">
-    	</span>
-        <div id="upload">
-            <h6>点击上传护照</h6>
-            <p>可自动识别</p>
-        </div>
-        <input type="file" id="image" style="display:none;" name="image">
-    </div>
-    <ul class="label">
-    	<li>姓(中文) <input type="text" class="txtInput" id="firstname" v-model="passportdata.firstname"/></li>
-        <li>姓(拼音) <input type="text" class="txtInput" v-model="passportdata.firstnameen"/></li>
-        <li>名(中文) <input type="text" class="txtInput" id="lastname" v-model="passportdata.lastname"/></li>
-        <li>名(拼音) <input type="text" class="txtInput" v-model="passportdata.lastnameen"/></li>
-        <!-- <li>类型 <input type="text" class="txtInput" v-model="passportdata.type"/></li> -->
-        <li>护照号 <input type="text" class="txtInput" v-model="passportdata.passport"/></li>
-        <li>性别 <input type="text" class="txtInput" v-model="passportdata.sex"/></li>
-        <li>出生日期 <input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.birthday"/></li>
-        <li>出生地点 <input type="text" class="txtInput" v-model="passportdata.birthaddress"/></li>
-        <li>出生地点（拼音） <input type="text" class="txtInput" v-model="passportdata.birthaddressen"/></li>
-        <li>签发地点 <input type="text" class="txtInput" v-model="passportdata.issuedplace"/></li>
-        <li>签发地点（拼音） <input type="text" class="txtInput" v-model="passportdata.issuedplaceen"/></li>
-        <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.issueddate"/></li>
-        <li>签发日期 <input id="validEndDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="passportdata.validenddate"/></li>
-   		<li class="validity">有效期 <span class="dateVal"></span><select class="validitySelect" v-model="passportdata.validtype">
-   					<option value=""></option>
-   					<option value="2">10年</option>
-   					<option value="1">5年</option>
-   				  </select>
-   		</li>
-    </ul>
-    <div class="bottom">
-    		<a class="passport-prav passport-btn">上一步</a>
-    		<a class="passport-clear passport-btn">清除</a>
-    		<a class="passport-next passport-btn">下一步</a>
-    </div>
-    <!-- 弹出层 -->
-	<div class="backgroundGray">
-		<div class="dialog">
-			<div class="dialogTitle" >*请按照此规格使用相机照相以保持图片上传正确</div>
-			<div class="dialogImg3" ></div>
-			<a class="closed" >确认</a>
+		<div class="top info">
+			<span v-if="passportdata.passporturl != ''"> <!-- width="360px" height="200px" -->
+				<img :src="passportdata.passporturl"
+				style="width: 100%; height: 100%;" alt="" class="bacimg">
+			</span> <span v-else> <img src="images/Hz.jpg"
+				style="width: 100%; height: 100%;" alt="" class="bacimg">
+			</span>
+			<div id="upload">
+				<h6>点击上传护照</h6>
+				<p>可自动识别</p>
+			</div>
+			<input type="file" id="image" style="display: none;" name="image">
 		</div>
-	</div>
-    </form>
-    <script src="js/rem(750).js"></script>
-    <script src="js/jquery-1.10.2.js"></script>
-    <script src="js/lrz.bundle.js"></script>
-    <script type="text/javascript" src="js/lCalendar.min.js"></script><!-- 日历插件 .js -->
-    <script src="/references/common/js/vue/vue.min.js"></script>
+		<ul class="label">
+			<li>姓(中文) <input type="text" class="txtInput" id="firstname"
+				v-model="passportdata.firstname" /></li>
+			<li>姓(拼音) <input type="text" class="txtInput"
+				v-model="passportdata.firstnameen" /></li>
+			<li>名(中文) <input type="text" class="txtInput" id="lastname"
+				v-model="passportdata.lastname" /></li>
+			<li>名(拼音) <input type="text" class="txtInput"
+				v-model="passportdata.lastnameen" /></li>
+			<!-- <li>类型 <input type="text" class="txtInput" v-model="passportdata.type"/></li> -->
+			<li>护照号 <input type="text" class="txtInput"
+				v-model="passportdata.passport" /></li>
+			<li>性别 <input type="text" class="txtInput"
+				v-model="passportdata.sex" /></li>
+			<li>出生日期 <input id="birthDate" type="text" class="txtInput"
+				data-lcalendar="2011-01-1,2019-12-31" readonly=""
+				v-model="passportdata.birthday" /></li>
+			<li>出生地点 <input type="text" class="txtInput"
+				v-model="passportdata.birthaddress" /></li>
+			<li>出生地点（拼音） <input type="text" class="txtInput"
+				v-model="passportdata.birthaddressen" /></li>
+			<li>签发地点 <input type="text" class="txtInput"
+				v-model="passportdata.issuedplace" /></li>
+			<li>签发地点（拼音） <input type="text" class="txtInput"
+				v-model="passportdata.issuedplaceen" /></li>
+			<li>签发日期 <input id="issueDate" type="text" class="txtInput"
+				data-lcalendar="2011-01-1,2019-12-31" readonly=""
+				v-model="passportdata.issueddate" /></li>
+			<li>签发日期 <input id="validEndDate" type="text" class="txtInput"
+				data-lcalendar="2011-01-1,2019-12-31" readonly=""
+				v-model="passportdata.validenddate" /></li>
+			<li class="validity">有效期 <span class="dateVal"></span><select
+				class="validitySelect" v-model="passportdata.validtype">
+					<option value=""></option>
+					<option value="2">10年</option>
+					<option value="1">5年</option>
+			</select>
+			</li>
+		</ul>
+		<div class="bottom">
+			<a class="passport-prav passport-btn">上一步</a> <a
+				class="passport-clear passport-btn">清除</a> <a
+				class="passport-next passport-btn">下一步</a>
+		</div>
+		<!-- 弹出层 -->
+		<div class="backgroundGray">
+			<div class="dialog">
+				<div class="dialogTitle">*请按照此规格使用相机照相以保持图片上传正确</div>
+				<div class="dialogImg3"></div>
+				<a class="closed">确认</a>
+			</div>
+		</div>
+	</form>
+	<script src="js/rem(750).js"></script>
+	<script src="js/jquery-1.10.2.js"></script>
+	<script src="js/lrz.bundle.js"></script>
+	<script type="text/javascript" src="js/lCalendar.min.js"></script>
+	<!-- 日历插件 .js -->
+	<script src="/references/common/js/vue/vue.min.js"></script>
 	<script src="/references/common/js/layer/layer.js"></script>
 	<script language=javascript src="/references/common/js/pinyin.js"></script>
 	<script type="text/javascript" src="/admin/common/commonjs.js"></script>
-    <script>
+	<script>
     
   //异步加载的URL地址
 	var url="/admin/mobile/passportinfo.html";
@@ -97,12 +116,63 @@
 	    }
 	});
         $(function () {
+        	var applicantid = GetQueryString('applicantid');
             $('#upload').click(function () {
-           	 	
-               $(".backgroundGray").show();
+                	$.ajax({
+        	        	url: '/admin/mobile/ismobileprompted.html',
+        	        	data:{
+        	        		applicantid:applicantid
+        	        	},
+        	        	dataType:"json",
+        	        	type:'post',
+        	        	async:false,
+        	        	success: function(data){
+        	        		if(data.ismobileprompted == 1){//提示过，就不再弹出示例
+        	        			$('#image').click();
+        	                    $('#image').change(function(){
+        	                    	layer.load(1, {
+        	                			shade : "#000"
+        	                		});
+        	                    	var that = this;
+        	                        lrz(this.files[0])
+        	                            .then(function (rst) {
+        	                               /*  $('.bacimg').attr('src',rst.base64); */
+        	                                 $('#upload').css('opacity','0'); 
+        	                                sourceSize = (that.files[0].size / 1024).toFixed(2);
+        	                                resultSize = (rst.fileLen / 1024).toFixed(2);
+        	                                scale = parseInt(100 - (resultSize / sourceSize * 100));
+        	                                rst.formData.append('image',rst.file);
+        	                                /* alert(rst);
+        	                                alert(JSON.stringify(rst.formData));
+        	                                alert(rst.file);
+        	                                alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);  */
+        	                                //alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
+        	                                uploadPassport(rst,rst.formData);  
+        	                                // 处理成功会执行
+        	                            })
+        	                            .catch(function (err) {
+        	                                console.log(err);
+        	                            });
+        	                    });
+        	        		}else{
+				               $(".backgroundGray").show();
+        	        		}
+        	        	}
+                	});
             });
             $(".closed").click(function(){
             	$(".backgroundGray").hide();
+            	//去记录出现过示例
+            	$.ajax({
+    	        	url: '/admin/mobile/mobilehasprompted.html',
+    	        	data:{
+    	        		applicantid:applicantid
+    	        	},
+    	        	dataType:"json",
+    	        	type:'post',
+    	        	success: function(data){
+    	        	}
+            	});
             	$('#image').click();
                 $('#image').change(function(){
                 	layer.load(1, {

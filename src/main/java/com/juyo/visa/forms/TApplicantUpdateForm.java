@@ -46,6 +46,8 @@ public class TApplicantUpdateForm extends ModForm implements Serializable {
 
 	private Integer isPrompted;
 
+	private Integer ismobileprompted;
+
 	private String emergencyLinkman;
 
 	private String emergencyTelephone;

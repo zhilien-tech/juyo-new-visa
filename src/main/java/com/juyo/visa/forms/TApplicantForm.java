@@ -58,6 +58,8 @@ public class TApplicantForm extends DataTablesParamForm {
 
 	private Integer isPrompted;
 
+	private Integer ismobileprompted;
+
 	private Integer addApply;
 
 	private String otherLastNameEn;
