@@ -297,7 +297,9 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 					dbDao.insert(entityNew);
 				}
 			}else {
-				dbDao.delete(entity);
+				if(!Util.isEmpty(entity)) {
+					dbDao.delete(entity);
+				}
 			}
 		}
 
