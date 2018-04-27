@@ -5,7 +5,7 @@ import com.uxuexi.core.common.enums.IEnum;
 /**
  * 
  * <p>
- * 男 or 女
+ * 美国婚姻状况中文 枚举
  * @author   闫腾
  * @Date	 2018年3月27日
  */

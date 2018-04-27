@@ -164,7 +164,7 @@ public class TApplicantLowerEntity implements Serializable {
 	@Column
 	@Comment("详细地址")
 	private String detailedaddress;
-
+	
 	@Column
 	@Comment("操作人")
 	private Integer opid;

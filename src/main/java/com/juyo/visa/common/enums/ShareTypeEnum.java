@@ -4,11 +4,11 @@ import com.uxuexi.core.common.enums.IEnum;
 
 /**
  * 
- * 是否
+ * 
  * <p>
- * 是 or 否
- * @author   彭辉
- * @Date	 2017年10月20日
+ * 分享类型 枚举
+ * @author   
+ * @Date	 
  */
 public enum ShareTypeEnum implements IEnum {
 	UNIFIED(1, "统一联系人"), SINGLE(2, "单独分享");

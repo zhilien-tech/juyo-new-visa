@@ -287,7 +287,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//需要生成的travelplan
 		List<TOrderTravelplanJpEntity> travelplans = Lists.newArrayList();
 		//生成行程安排历史信息
-		List<TOrderTravelplanHisJpEntity> travelplansHis = Lists.newArrayList();
+//		List<TOrderTravelplanHisJpEntity> travelplansHis = Lists.newArrayList();
 		Random random = new Random();
 		//在一个城市只住一家酒店
 		int hotelindex = random.nextInt(hotels.size());
@@ -295,7 +295,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//为什么要<=，因为最后一天也要玩
 		for (int i = 0; i <= daysBetween; i++) {
 			TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-			TOrderTravelplanHisJpEntity travelPlanHis = new TOrderTravelplanHisJpEntity();
+//			TOrderTravelplanHisJpEntity travelPlanHis = new TOrderTravelplanHisJpEntity();
 			travelplan.setCityId(form.getGoArrivedCity());
 			travelplan.setDay(String.valueOf(i + 1));
 			travelplan.setOrderId(orderjpid);
@@ -304,23 +304,23 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			travelplan.setCreateTime(new Date());
 
 			//订单Id
-			if (!Util.isEmpty(orderid)) {
-				travelPlanHis.setOrderId(orderid);
-			}
+//			if (!Util.isEmpty(orderid)) {
+//				travelPlanHis.setOrderId(orderid);
+//			}
 			//天数
-			travelPlanHis.setDay(String.valueOf(i + 1));
-			//日期
-			travelPlanHis.setOutDate(DateUtil.addDay(form.getGoDate(), i));
-			//城市Id
-			travelPlanHis.setCityId(form.getGoArrivedCity());
-			//城市名字
-			travelPlanHis.setCityName(city.getCity());
+//			travelPlanHis.setDay(String.valueOf(i + 1));
+//			//日期
+//			travelPlanHis.setOutDate(DateUtil.addDay(form.getGoDate(), i));
+//			//城市Id
+//			travelPlanHis.setCityId(form.getGoArrivedCity());
+//			//城市名字
+//			travelPlanHis.setCityName(city.getCity());
 			//酒店
 			if (i != daysBetween) {
 				THotelEntity hotel = hotels.get(hotelindex);
 				travelplan.setHotel(hotel.getId());
 				//酒店历史信息
-				travelPlanHis.setHotel(hotel.getName());
+//				travelPlanHis.setHotel(hotel.getName());
 			}
 			if (i > 0 && i != daysBetween) {
 				//景区
@@ -329,7 +329,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				scenics.remove(scenic);
 				travelplan.setScenic(scenic.getName());
 				//景点 历史信息
-				travelPlanHis.setScenic(scenic.getName());
+//				travelPlanHis.setScenic(scenic.getName());
 			}
 			travelplans.add(travelplan);
 			//			travelplansHis.add(travelPlanHis);
@@ -337,8 +337,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		List<TOrderTravelplanJpEntity> before = dbDao.query(TOrderTravelplanJpEntity.class,
 				Cnd.where("orderid", "=", orderjpid), null);
-		List<TOrderTravelplanHisJpEntity> beforeHis = dbDao.query(TOrderTravelplanHisJpEntity.class,
-				Cnd.where("orderid", "=", orderid), null);
+//		List<TOrderTravelplanHisJpEntity> beforeHis = dbDao.query(TOrderTravelplanHisJpEntity.class,
+//				Cnd.where("orderid", "=", orderid), null);
 		//更新行程安排
 		dbDao.updateRelations(before, travelplans);
 		//更新历史行程安排
@@ -817,12 +817,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Integer orderid = null;
 		TApplicantEntity applicant = new TApplicantEntity();
 		TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+		applicantjp.setMainRelation(form.getMainRelation());
 		//修改
 		if (!Util.isEmpty(form.getId())) {
 			applicant = dbDao.fetch(TApplicantEntity.class, form.getId().longValue());
 			applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", applicant.getId()));
 			result.put("applicantjpid", applicantjp.getId());
 			result.put("applicantid", applicant.getId());
+			applicantjp.setMainRelation(form.getMainRelation());
+			dbDao.update(applicantjp);
 		}
 		applicant.setOpId(loginUser.getId());
 		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
@@ -886,7 +889,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Integer applicantid = form.getId();
 		if (!Util.isEmpty(form.getId())) {
 			dbDao.update(applicant);
+
 		} else {
+			
 			TApplicantEntity insertapplicant = dbDao.insert(applicant);
 			applicantid = insertapplicant.getId();
 			result.put("applicantid", applicantid);
@@ -898,12 +903,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			} else {
 				TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 				orderid = orderjp.getOrderId();
+				applicantjp.setOrderId(orderid);
 			}
+			//新增日本订单基本信息
+			applicantjp.setMainRelation(form.getMainRelation());
+			 dbDao.insert(applicantjp);
 			applicantjp.setOrderId(orderjpid);
 			applicantjp.setApplicantId(applicantid);
 			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
 			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
 			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setMainRelation(form.getMainRelation());
 			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
 			result.put("applicantjpid", insertappjp.getId());
 			//日本工作信息
@@ -1242,6 +1252,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantid.longValue());
 		result.put("applicant", applicant);
+		TApplicantOrderJpEntity orderjp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", applicantid));
+		result.put("orderjp", orderjp);
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		if (!Util.isEmpty(applicant.getBirthday())) {
 			Date birthday = applicant.getBirthday();

@@ -5,9 +5,9 @@ import com.uxuexi.core.common.enums.IEnum;
 /**
  * 
  * <p>
- * 男 or 女
- * @author   彭辉
- * @Date	 2017年10月20日
+ * 婚姻状况  枚举
+ * @author   
+ * @Date	 
  */
 public enum MarryStatusEnum implements IEnum {
 	DANSHEN(4, "单身"), YIHUN(1, "已婚"), LIYI(2, "离异"), SANGOU(3, "丧偶");
