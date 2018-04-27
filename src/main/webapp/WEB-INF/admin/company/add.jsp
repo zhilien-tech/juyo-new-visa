@@ -455,6 +455,24 @@
 				}else{
 					$("#usScopeDiv").hide();
 				}
+				
+				//经营范围（大客户隐藏）
+				if(type==4){
+					//隐藏并设置为日本（权限使用）
+					$("#scopeDiv").hide();
+					$(".multiselectBtn").append("<span>日本,</span>");
+					var busScopes = "";
+					$(".multiselectBtn span").each(function() {
+						var spanVal = $(this).text();
+						busScopes += spanVal;
+					});
+					$("#businessScopes").val(busScopes);
+				}else{
+					$("#scopeDiv").show();
+					$(".multiselectBtn").html("");
+					$("#businessScopes").val("");
+				}
+				
 			}
 			$(".scopeDivInputValue").empty();
 			$(".btnVal input").each(function(){

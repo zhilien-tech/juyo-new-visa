@@ -73,7 +73,11 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			int comtype = record.getInt("comtype");
 			for (CompanyTypeEnum typeEnum : CompanyTypeEnum.values()) {
 				if (comtype == typeEnum.intKey()) {
-					record.set("comtype", typeEnum.value());
+					if(comtype==CompanyTypeEnum.BIGCUSTOMER.intKey()) {
+						record.set("comtype", "");
+					}else {
+						record.set("comtype", typeEnum.value());
+					}
 				}
 			}
 		}
