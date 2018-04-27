@@ -1204,6 +1204,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderUs.setStatus(USOrderStatusEnum.PLACE_ORDER.intKey());//下单
 		orderUs.setIspayed(IsPayedEnum.NOTPAY.intKey());
 		orderUs.setCreatetime(nowDate);
+		orderUs.setIsdisable(IsYesOrNoEnum.NO.intKey());
 		orderUs.setUpdatetime(nowDate);
 		TOrderUsEntity order = dbDao.insert(orderUs);
 		insertLogs(order.getId(), USOrderListStatusEnum.PLACE_ORDER.intKey(), userid);
