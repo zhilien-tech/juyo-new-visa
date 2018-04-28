@@ -1917,7 +1917,7 @@
 							<div class="groupcheckBoxInfo visaNum visaNumen">
 								<label>Visa Number</label>
 								<input id="visanumberen" name="visanumberen" v-model="visaInfo.previUSTripInfo.visanumberen" type="text" />
-								<input id="idknowvisanumber" class="idknowvisanumberen"  :value="visaInfo.previUSTripInfo.idknowvisanumber" name="idknowvisanumberen" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumberen" type="checkbox"/>
+								<input id="idknowvisanumber" class="idknowvisanumberen" name="idknowvisanumberen" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumberen" type="checkbox"/>
 							</div>
 							<div class="clear"></div>
 							<div class="Alike groupRadioInfo paddingTop">

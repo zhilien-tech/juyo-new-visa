@@ -58,6 +58,8 @@ new Vue({
 		},
 		isknowspousecity:function(){
 			visaInfo.familyInfo.spousecity = "";
+			visaInfo.familyInfo.spousecityen = "";
+			
 		},
 		changeSpouse:function(){
 			changeSpouseShow();
@@ -74,10 +76,8 @@ new Vue({
 			var isKnowNum = visaInfo.previUSTripInfo.idknowvisanumber;
 			if(isKnowNum){
 				visaInfo.previUSTripInfo.visanumber = "";
-			}
-			var isKnowNumen = visaInfo.previUSTripInfo.idknowvisanumberen;
-			if(isKnowNumen){
 				visaInfo.previUSTripInfo.visanumberen = "";
+				visaInfo.previUSTripInfo.idknowvisanumberen = true;
 			}
 		},
 		hasvisanumber:function(){
@@ -137,17 +137,13 @@ new Vue({
 			if(isknowname){
 				visaInfo.contactPointInfo.firstname = "";
 				visaInfo.contactPointInfo.lastname = "";
-			}
-			
-			var isknownameen = visaInfo.contactPointInfo.isknownameen;
-			if(isknownameen){
 				visaInfo.contactPointInfo.firstnameen = "";
 				visaInfo.contactPointInfo.lastnameen = "";
+				visaInfo.contactPointInfo.isknownameen = true;
 			}
 		},
 		isfirstname:function(){
 			var firstname = visaInfo.contactPointInfo.firstname;
-			alert(firstname);
 			visaInfo.contactPointInfo.firstnameen = firstname;
 		},
 		islastname:function(){
@@ -158,10 +154,8 @@ new Vue({
 			var isknoworganizationname = visaInfo.contactPointInfo.isknoworganizationname;
 			if(isknoworganizationname){
 				visaInfo.contactPointInfo.organizationname = "";
-			}
-			var isknoworganizationnameen = visaInfo.contactPointInfo.isknoworganizationnameen;
-			if(isknoworganizationnameen){
 				visaInfo.contactPointInfo.organizationnameen = "";
+				visaInfo.contactPointInfo.isknoworganizationnameen = true;
 			}
 		},
 		isorganizationname:function(){
@@ -184,18 +178,25 @@ new Vue({
 			var isknowemail = visaInfo.contactPointInfo.isknowemail;
 			if(isknowemail){
 				visaInfo.contactPointInfo.email = "";
+				visaInfo.contactPointInfo.emailen = "";
+				visaInfo.contactPointInfo.isknowemailen = true;
 			}
+
 		},
 		isknowfatherfirstname:function(){
 			var isknowfatherfirstname = visaInfo.familyInfo.isknowfatherfirstname;
 			if(isknowfatherfirstname){
 				visaInfo.familyInfo.fatherfirstname = "";
+				visaInfo.familyInfo.fatherfirstnameen = "";
+				visaInfo.familyInfo.isknowfatherfirstnameen = true;
 			}
 		},
 		isknowfatherlastname:function(){
 			var isknowfatherlastname = visaInfo.familyInfo.isknowfatherlastname;
 			if(isknowfatherlastname){
 				visaInfo.familyInfo.fatherlastname = "";
+				visaInfo.familyInfo.fatherlastnameen = "";
+				visaInfo.familyInfo.isknowfatherlastnameen = true;
 			}
 		},
 		isfatherinus:function(){
@@ -210,12 +211,16 @@ new Vue({
 			var isknowmotherfirstname = visaInfo.familyInfo.isknowmotherfirstname;
 			if(isknowmotherfirstname){
 				visaInfo.familyInfo.motherfirstname = "";
+				visaInfo.familyInfo.motherfirstnameen = "";
+				visaInfo.familyInfo.isknowmotherfirstnameen = true;
 			}
 		},
 		isknowmotherlastname:function(){
 			var isknowmotherlastname = visaInfo.familyInfo.isknowmotherlastname;
 			if(isknowmotherlastname){
 				visaInfo.familyInfo.motherlastname = "";
+				visaInfo.familyInfo.motherlastnameen = "";
+				visaInfo.familyInfo.isknowmotherlastnameen = true;
 			}
 		},
 		isfatherinus:function(){
@@ -272,6 +277,8 @@ new Vue({
 			var hasspecializedskill = visaInfo.workEducationInfo.hasspecializedskill;
 			if(hasspecializedskill){
 				visaInfo.workEducationInfo.skillexplain = "";
+				visaInfo.workEducationInfo.skillexplainen = "";
+				visaInfo.workEducationInfo.hasspecializedskillen = true;
 			}
 		},
 		isstate:function(){
