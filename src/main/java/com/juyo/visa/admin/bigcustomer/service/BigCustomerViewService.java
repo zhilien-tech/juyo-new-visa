@@ -243,6 +243,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String issueddate = previUSTripInfo.getString("issueddate");
 		issueddate = formatDateStr(issueddate, FORMAT_DD_MM_YYYY);
 		result.put("previUSTripInfo_issueddate", issueddate);
+		String issueddateen = previUSTripInfo.getString("issueddateen");
+		issueddateen = formatDateStr(issueddateen, FORMAT_DD_MM_YYYY);
+		result.put("previUSTripInfo_issueddateen", issueddateen);
 
 		//家庭信息---格式化配偶生日
 		String sqlStrf = sqlManager.get("pcVisa_familyInfo");
@@ -252,6 +255,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String spousebirthday = familyInfo.getString("spousebirthday");
 		spousebirthday = formatDateStr(spousebirthday, FORMAT_DD_MM_YYYY);
 		result.put("spousebirthday", spousebirthday);
+		String spousebirthdayen = familyInfo.getString("spousebirthdayen");
+		spousebirthdayen = formatDateStr(spousebirthdayen, FORMAT_DD_MM_YYYY);
+		familyInfo.set("spousebirthdayen", spousebirthdayen);
 
 		//工作/教育/培训信息---格式化工作开始日期 
 		String sqlStrw = sqlManager.get("pcVisa_word_education_training_list");
@@ -261,6 +267,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String workstartdate = workEducationInfo.getString("workstartdate");
 		workstartdate = formatDateStr(workstartdate, FORMAT_DD_MM_YYYY);
 		result.put("workstartdate", workstartdate);
+		String workstartdateen = workEducationInfo.getString("workstartdateen");
+		workstartdateen = formatDateStr(workstartdateen, FORMAT_DD_MM_YYYY);
+		result.put("workstartdateen", workstartdateen);
 		//工作/教育/培训信息---过去五年去过的国家
 		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
 		result.put("gocountryFiveList", gocountryFiveList);

@@ -75,6 +75,14 @@ new Vue({
 			if(isKnowNum){
 				visaInfo.previUSTripInfo.visanumber = "";
 			}
+			var isKnowNumen = visaInfo.previUSTripInfo.idknowvisanumberen;
+			if(isKnowNumen){
+				visaInfo.previUSTripInfo.visanumberen = "";
+			}
+		},
+		hasvisanumber:function(){
+			var visanumber = visaInfo.previUSTripInfo.visanumber;
+			visaInfo.previUSTripInfo.visanumberen = visanumber;
 		},
 		hasbeeninus:function(){
 			var hasbeeninus = visaInfo.previUSTripInfo.hasbeeninus;

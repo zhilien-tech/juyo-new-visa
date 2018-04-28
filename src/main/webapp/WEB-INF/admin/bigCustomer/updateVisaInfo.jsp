@@ -268,7 +268,7 @@
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
-								<input name="visanumber" class="visanumber" v-model="visaInfo.previUSTripInfo.visanumber" onchange="translateZhToEn(this,'visanumberen','')" type="text" />
+								<input name="visanumber" class="visanumber" @change="hasvisanumber()" v-model="visaInfo.previUSTripInfo.visanumber" onchange="translateZhToEn(this,'visanumberen','')" type="text" />
 								<input id="idknowvisanumber" :value="visaInfo.previUSTripInfo.idknowvisanumber" onchange="AddSingle(this,'idknowvisanumberen')" name="idknowvisanumber" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/>
 							</div>
 							<div class="clear"></div>
@@ -1835,7 +1835,8 @@
         										</div>   
 								 	      </div>
 								</c:if>                                                                                                                                                                                        
-							</div>                    
+							</div>
+							<div class="btnGroup beforeAGroup everyMarTop">                    
 								<a class="save beforesaveen">Add Another</a>                    
 								<a class="cancel beforecancelen">Remove</a>                       
 							</div>
@@ -1923,8 +1924,8 @@
 							</div>
 							<div class="groupcheckBoxInfo visaNum visaNumen">
 								<label>Visa Number</label>
-								<input id="visanumberen" name="visanumberen" v-model="visaInfo.previUSTripInfo.visanumber" type="text" />
-								<input id="idknowvisanumber" class="idknowvisanumberen"  :value="visaInfo.previUSTripInfo.idknowvisanumber" name="idknowvisanumberen" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/>
+								<input id="visanumberen" name="visanumberen" v-model="visaInfo.previUSTripInfo.visanumberen" type="text" />
+								<input id="idknowvisanumber" class="idknowvisanumberen"  :value="visaInfo.previUSTripInfo.idknowvisanumber" name="idknowvisanumberen" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumberen" type="checkbox"/>
 							</div>
 							<div class="clear"></div>
 							<div class="Alike groupRadioInfo paddingTop">
@@ -1951,11 +1952,11 @@
 								<div class="yearExplain yearExplainen displayTop elementHide"><!-- 默认隐藏 -->
 									<div class="groupInputInfo">
 										<label>Year</label>
-										<input name="lostyearen" id="lostyearen" v-model="visaInfo.previUSTripInfo.lostyear" type="text" />
+										<input name="lostyearen" id="lostyearen" v-model="visaInfo.previUSTripInfo.lostyearen" type="text" />
 									</div>
 									<div class="paddingTop groupInputInfo">
 										<label>Explain</label>
-										<input name="lostexplainen" class="areaInputPic" id="lostexplainen" v-model="visaInfo.previUSTripInfo.lostexplain" />
+										<input name="lostexplainen" class="areaInputPic" id="lostexplainen" v-model="visaInfo.previUSTripInfo.lostexplainen" />
 									</div>
 								</div>
 							</div>
@@ -1969,7 +1970,7 @@
 									</div>
 									<div class="explain explainen grouptextareaInfo paddingTop">
 										<label>Explain</label>
-										<input name="cancelexplainen" id="cancelexplainen" class="areaInputPic" v-model="visaInfo.previUSTripInfo.cancelexplain" />
+										<input name="cancelexplainen" id="cancelexplainen" class="areaInputPic" v-model="visaInfo.previUSTripInfo.cancelexplainen" />
 									</div>
 								</div>
 							</div>
@@ -1986,7 +1987,7 @@
 				</div>
 				<div class="refuseExplain refuseExplainen paddingTop grouptextareaInfo">
 					<label>Explain</label>
-					<input name="refusedexplainen" id="refusedexplainen" class="areaInputPic" v-model="visaInfo.previUSTripInfo.refusedexplain" />
+					<input name="refusedexplainen" id="refusedexplainen" class="areaInputPic" v-model="visaInfo.previUSTripInfo.refusedexplainen" />
 				</div>
 			</div>
 			<!--曾经是否是美国合法永久居民-->
@@ -1998,7 +1999,7 @@
 				</div>
 				<div class="onceExplain onceExplainen paddingTop grouptextareaInfo">
 					<label>Explain</label>
-					<input name="permanentresidentexplainen" id="permanentresidentexplainen" class="areaInputPic" v-model="visaInfo.previUSTripInfo.permanentresidentexplain" />
+					<input name="permanentresidentexplainen" id="permanentresidentexplainen" class="areaInputPic" v-model="visaInfo.previUSTripInfo.permanentresidentexplainen" />
 				</div>
 			</div>
 			<!--有没有人曾代表您向美国公民和移民服务局提交过移民申请-->
@@ -2010,7 +2011,7 @@
 				</div>
 				<div class="immigrationExplain immigrationExplainen paddingTop grouptextareaInfo">
 					<label>Explain</label>
-					<input name="immigrantpetitionexplainen" id="immigrantpetitionexplainen" class="areaInputPic" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplain" />
+					<input name="immigrantpetitionexplainen" id="immigrantpetitionexplainen" class="areaInputPic" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplainen" />
 				</div>
 			</div>
 			<!--以前的美国旅游信息END-->
@@ -2019,22 +2020,22 @@
 				<div class="titleInfo">Us contact point</div>
 				<div class="groupInputInfo paddingLeft">
 					<label>Surnames</label>
-					<input name="firstnameen" id="firstnameusen" v-model="visaInfo.contactPointInfo.firstname" type="text" />
+					<input name="firstnameen" id="firstnameusen" v-model="visaInfo.contactPointInfo.firstnameen" type="text" />
 				</div>
 				<div class="groupcheckBoxInfo paddingRight">
 					<label>Given Names  </label>
-					<input name="lastnameen" id="lastnameusen" v-model="visaInfo.contactPointInfo.lastname" type="text"  />
-					<input id="isknowname" v-model="visaInfo.contactPointInfo.isknowname" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknowname" name="isknownameen" type="checkbox" />
+					<input name="lastnameen" id="lastnameusen" v-model="visaInfo.contactPointInfo.lastnameen" type="text"  />
+					<input id="isknowname" v-model="visaInfo.contactPointInfo.isknownameen" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknowname" name="isknownameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop groupcheckBoxInfo cbox">
 					<label>Organization Name </label>
-					<input id="organizationnameusen" name="organizationnameen" v-model="visaInfo.contactPointInfo.organizationname" type="text" />
-					<input id="isknoworganizationname" name="isknoworganizationnameen" class="isknoworganizationnameen"  v-on:click="isKnowOrganizationName" v-model="visaInfo.contactPointInfo.isknoworganizationname"  class="groupname_us" type="checkbox" />
+					<input id="organizationnameusen" name="organizationnameen" v-model="visaInfo.contactPointInfo.organizationnameen" type="text" />
+					<input id="isknoworganizationname" name="isknoworganizationnameen" class="isknoworganizationnameen"  v-on:click="isKnowOrganizationName" v-model="visaInfo.contactPointInfo.isknoworganizationnameen"  class="groupname_us" type="checkbox" />
 				</div>
 				<div class="paddingLeft groupSelectInfo">
 					<label>Relationship to You</label>
-					<select id="ralationshipen" v-model="visaInfo.contactPointInfo.ralationship" name="ralationshipen">
+					<select id="ralationshipen" v-model="visaInfo.contactPointInfo.ralationshipen" name="ralationshipen">
 						<option value="0" selected="selected">Please choose</option>
 						<c:forEach items="${obj.ContactPointRelationshipStatusEnumen }" var="map">
 							<option value="${map.key }">${map.value }</option>
@@ -2045,11 +2046,11 @@
 				<div class="" style="padding: 10px 0;">
 					<div class="groupInputInfo draBig">
 						<label>U.S. Street Address(Line 1)</label>
-						<input name="addressen" id="addressusen" v-model="visaInfo.contactPointInfo.address" type="text" />
+						<input name="addressen" id="addressusen" v-model="visaInfo.contactPointInfo.addressen" type="text" />
 					</div>
 					<div class="groupInputInfo draBig marginLS">
 						<label>U.S. Street Address(Line 2) *Optional</label>
-						<input name="secaddressen" id="secaddressusen" v-model="visaInfo.contactPointInfo.secaddress" type="text" />
+						<input name="secaddressen" id="secaddressusen" v-model="visaInfo.contactPointInfo.secaddressen" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupSelectInfo " >
@@ -2063,22 +2064,22 @@
 					</div>
 					<div class="paddingRight groupInputInfo" >
 						<label>City</label>
-						<input id="cityusen" name="cityen" v-model="visaInfo.contactPointInfo.city" type="text" />
+						<input id="cityusen" name="cityen" v-model="visaInfo.contactPointInfo.cityen" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo" >
 						<label>ZIP Code</label>
-						<input name="zipcodeen" id="zipcodeusen" v-model="visaInfo.contactPointInfo.zipcode" type="text" />
+						<input name="zipcodeen" id="zipcodeusen" v-model="visaInfo.contactPointInfo.zipcodeen" type="text" />
 					</div>
 					<div class="paddingRight groupInputInfo" >
 						<label>Phone Number</label>
-						<input name="telephoneen" id="telephoneusen" v-model="visaInfo.contactPointInfo.telephone" type="text" />
+						<input name="telephoneen" id="telephoneusen" v-model="visaInfo.contactPointInfo.telephoneen" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingTop groupcheckBoxInfo cbox">
 						<label>Email Address</label>
-						<input name="emailen" id="emailusen" v-model="visaInfo.contactPointInfo.email" type="text" />
-						<input id="isKnowEmailAddress" class="isKnowEmailAddressen"  name="isknowemailen" v-on:click="isKnowEmailAddress" v-model="visaInfo.contactPointInfo.isknowemail" type="checkbox" />
+						<input name="emailen" id="emailusen" v-model="visaInfo.contactPointInfo.emailen" type="text" />
+						<input id="isKnowEmailAddress" class="isKnowEmailAddressen"  name="isknowemailen" v-on:click="isKnowEmailAddress" v-model="visaInfo.contactPointInfo.isknowemailen" type="checkbox" />
 					</div>
 				</div>
 			</div>
@@ -2089,13 +2090,13 @@
 				<div class="titleInfo">Family information</div>
 				<div class="paddingLeft groupcheckBoxInfo" >
 					<label>father's Surnames</label>
-					<input name="fatherfirstnameen" id="fatherfirstnameen" v-model="visaInfo.familyInfo.fatherfirstname" type="text"/>
-					<input id="isKnowFatherXing" name="isknowfatherfirstnameen" class="isknowfatherfirstnameen"   v-on:click="isknowfatherfirstname"  v-model="visaInfo.familyInfo.isknowfatherfirstname" type="checkbox" />
+					<input name="fatherfirstnameen" id="fatherfirstnameen" v-model="visaInfo.familyInfo.fatherfirstnameen" type="text"/>
+					<input id="isKnowFatherXing" name="isknowfatherfirstnameen" class="isknowfatherfirstnameen"   v-on:click="isknowfatherfirstname"  v-model="visaInfo.familyInfo.isknowfatherfirstnameen" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo" >
 					<label>father's Given Names </label>
-					<input name="fatherlastnameen" id="fatherlastnameen" v-model="visaInfo.familyInfo.fatherlastname" type="text" />
-					<input id="isKnowFatherMing" name="isknowfatherlastnameen" class="isknowfatherlastnameen"  v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" />
+					<input name="fatherlastnameen" id="fatherlastnameen" v-model="visaInfo.familyInfo.fatherlastnameen" type="text" />
+					<input id="isKnowFatherMing" name="isknowfatherlastnameen" class="isknowfatherlastnameen"  v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastnameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop padding-left">
@@ -2107,7 +2108,7 @@
 					<!--yes-->
 					<div class="fatherUSYes fatherUSYesen groupSelectInfo paddingNone">
 						<label>Father's Status</label>
-						<select id="fatherstatusen" v-model="visaInfo.familyInfo.fatherstatus" name="fatherstatusen">
+						<select id="fatherstatusen" v-model="visaInfo.familyInfo.fatherstatusen" name="fatherstatusen">
 							<option value="0">Please choose</option>
 							<c:forEach items="${obj.VisaFamilyInfoEnumen }" var="map">
 								<option value="${map.key }">${map.value }</option>
@@ -2117,13 +2118,13 @@
 				</div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>Mother's Surnames</label>
-					<input id="motherfirstnameen" name="motherfirstnameen" v-model="visaInfo.familyInfo.motherfirstname" type="text" />
-					<input id="isKnowMotherXing" name="isknowmotherfirstnameen" class="isknowmotherfirstnameen"  v-on:click="isknowmotherfirstname" v-model="visaInfo.familyInfo.isknowmotherfirstname" type="checkbox" />
+					<input id="motherfirstnameen" name="motherfirstnameen" v-model="visaInfo.familyInfo.motherfirstnameen" type="text" />
+					<input id="isKnowMotherXing" name="isknowmotherfirstnameen" class="isknowmotherfirstnameen"  v-on:click="isknowmotherfirstname" v-model="visaInfo.familyInfo.isknowmotherfirstnameen" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo">
 					<label>Mother's Given Names</label>
-					<input id="motherlastnameen" name="motherlastnameen" v-model="visaInfo.familyInfo.motherlastname" type="text" />
-					<input id="isKnowMotherMing" name="isknowmotherlastnameen" class="isknowmotherlastnameen"  v-on:click="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" />
+					<input id="motherlastnameen" name="motherlastnameen" v-model="visaInfo.familyInfo.motherlastnameen" type="text" />
+					<input id="isKnowMotherMing" name="isknowmotherlastnameen" class="isknowmotherlastnameen"  v-on:click="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastnameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop padding-left">
@@ -2134,7 +2135,7 @@
 					</div>
 					<div class="motherUSYes motherUSYesen paddingNone groupSelectInfo">
 						<label>Mother's Status</label>
-						<select id="motherstatusen" name="motherstatusen" v-model="visaInfo.familyInfo.motherstatus">
+						<select id="motherstatusen" name="motherstatusen" v-model="visaInfo.familyInfo.motherstatusen">
 							<option value="0">Please choose</option>
 							<c:forEach items="${obj.VisaFamilyInfoEnumen }" var="map">
 								<option value="${map.key }">${map.value }</option>
@@ -2240,11 +2241,11 @@
 				<div class="titleInfo">Spousal information</div>
 				<div class="floatLeft groupInputInfo">
 					<label>Spouse's Surnames </label>
-					<input name="spousefirstnameen" id="spousefirstnameen" v-model="visaInfo.familyInfo.spousefirstname" type="text" />
+					<input name="spousefirstnameen" id="spousefirstnameen" v-model="visaInfo.familyInfo.spousefirstnameen" type="text" />
 				</div>
 				<div class="floatRight groupInputInfo">
 					<label>Spouse's Given Names</label>
-					<input name="spouselastnameen" id="spouselastnameen" v-model="visaInfo.familyInfo.spouselastname" type="text" />
+					<input name="spouselastnameen" id="spouselastnameen" v-model="visaInfo.familyInfo.spouselastnameen" type="text" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingLeft groupInputInfo">
@@ -2264,7 +2265,7 @@
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>City</label>
 					<input name="spousecityen" id="spousefcityen" v-model="visaInfo.familyInfo.spousecityen" type="text" />
-					<input id="isKnowMateCity" name="isknowspousecityen" class="isknowspousecityen"  @change="isknowspousecity()" v-model="visaInfo.familyInfo.isknowspousecity" type="checkbox" />
+					<input id="isKnowMateCity" name="isknowspousecityen" class="isknowspousecityen"  @change="isknowspousecity()" v-model="visaInfo.familyInfo.isknowspousecityen" type="checkbox" />
 				</div>
 				<div class="paddingRight groupSelectInfo" >
 					<label>Country/Region</label>
@@ -2278,7 +2279,7 @@
 				<div class="clear"></div>
 				<div class="paddingTop groupSelectInfo padding-left" >
 					<label>Spouse's Address</label>
-					<select id="spouseaddressen" name="spouseaddressen" v-model="visaInfo.familyInfo.spouseaddress" class="spouse_Address" onchange="changeSpouseShow()" @change="changeSpouse()">
+					<select id="spouseaddressen" name="spouseaddressen" v-model="visaInfo.familyInfo.spouseaddressen" class="spouse_Address" onchange="changeSpouseShow()" @change="changeSpouse()">
 						<option value="0">Please choose</option>
 						<c:forEach items="${obj.VisaSpouseContactAddressEnumen }" var="map">
 							<option value="${map.key }">${map.value }</option>
@@ -2290,32 +2291,32 @@
 				<div class="otherSpouseInfo elementHide paddingTop" >
 					<div class="floatLeft groupInputInfo">
 						<label>U.S. Street Address(Line 1)</label>
-						<input name="firstaddressen" id="otherfrstaddressen"  v-model="visaInfo.familyInfo.firstaddress" type="text" />
+						<input name="firstaddressen" id="otherfrstaddressen"  v-model="visaInfo.familyInfo.firstaddressen" type="text" />
 					</div>
 					<div class="floatRight groupInputInfo">
 						<label>U.S. Street Address(Line 2) *Optional</label>
-						<input name="secondaddressen" id="othersecondaddressen" v-model="visaInfo.familyInfo.secondaddress" type="text" />
+						<input name="secondaddressen" id="othersecondaddressen" v-model="visaInfo.familyInfo.secondaddressen" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>State</label>
-						<input name="provinceen" id="otherprovinceen" v-model="visaInfo.familyInfo.province" type="text" />
-						<input id="isprovinceapply" name="isprovinceapplyen"  v-model="visaInfo.familyInfo.isprovinceapply" type="checkbox" />
+						<input name="provinceen" id="otherprovinceen" v-model="visaInfo.familyInfo.provinceen" type="text" />
+						<input id="isprovinceapply" name="isprovinceapplyen"  v-model="visaInfo.familyInfo.isprovinceapplyen" type="checkbox" />
 					</div>
 					<div class="paddingRight groupInputInfo">
 						<label>City</label>
-						<input name="cityen" id="othercityen" v-model="visaInfo.familyInfo.city" type="text"/>
+						<input name="cityen" id="othercityen" v-model="visaInfo.familyInfo.cityen" type="text"/>
 					</div>
 					
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>ZIP Code</label>
-						<input name="zipcodeen" v-model="visaInfo.familyInfo.zipcode" id="otherzipcodeen" type="text" />
-						<input id="iszipcodeapply" name="iszipcodeapplyen" v-model="visaInfo.familyInfo.iszipcodeapply" type="checkbox" />
+						<input name="zipcodeen" v-model="visaInfo.familyInfo.zipcodeen" id="otherzipcodeen" type="text" />
+						<input id="iszipcodeapply" name="iszipcodeapplyen" v-model="visaInfo.familyInfo.iszipcodeapplyen" type="checkbox" />
 					</div>
 					<div class="paddingRight groupSelectInfo">
 						<label>Country/Region</label>
-						<select name="othercountryen" v-model="visaInfo.familyInfo.country">
+						<select name="othercountryen" v-model="visaInfo.familyInfo.countryen">
 							<option value="0">Please choose</option>
 							<c:forEach items="${obj.gocountryFiveList }" var="country">
 								<option value="${country.id }">${country.name }</option>
@@ -2331,7 +2332,7 @@
 				<div class="titleInfo">Work / education / training information</div>
 				<div class="paddingTop groupSelectInfo padding-left" >
 					<label>Primary Occupation</label>
-					<select id="occupationen" name="occupationen" v-model="visaInfo.workEducationInfo.occupation" @change="occupationChange()">
+					<select id="occupationen" name="occupationen" v-model="visaInfo.workEducationInfo.occupationen" @change="occupationChange()">
 						<option value="0">Please choose</option>
 						<c:forEach items="${obj.VisaCareersEnumen }" var="map">
 							<option value="${map.key }">${map.value }</option>
@@ -2341,42 +2342,42 @@
 				<div class="paddingTop elementHide jobEduLearningInfoDiv">
 					<div class="groupInputInfo draBig">
 						<label>Present Employer or School Name</label>
-						<input name="unitnameen" id="unitnameen" v-model="visaInfo.workEducationInfo.unitname" type="text" />
+						<input name="unitnameen" id="unitnameen" v-model="visaInfo.workEducationInfo.unitnameen" type="text" />
 					</div>
 					<div class="groupInputInfo draBig marginLS">
 						<label >U.S. Street Address(Line 1)</label>
-						<input name="addressen" id="jobaddressen" v-model="visaInfo.workEducationInfo.address" type="text" />
+						<input name="addressen" id="jobaddressen" v-model="visaInfo.workEducationInfo.addressen" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="groupInputInfo draBig marginLS">
 						<label>U.S. Street Address(Line 2) *Optional</label>
-						<input name="secaddressen" id="jobsecondaddressen" v-model="visaInfo.workEducationInfo.secaddress" type="text" />
+						<input name="secaddressen" id="jobsecondaddressen" v-model="visaInfo.workEducationInfo.secaddressen" type="text" />
 					</div>
 					
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>State</label>
-						<input name="provinceen" v-model="visaInfo.workEducationInfo.province" type="text"/>
-						<input name="isprovinceapplyen" id="isprovinceapplywork" class="isprovinceapplyworken"  v-model="visaInfo.workEducationInfo.isprovinceapply" type="checkbox"/>
+						<input name="provinceen" v-model="visaInfo.workEducationInfo.provinceen" type="text"/>
+						<input name="isprovinceapplyen" id="isprovinceapplywork" class="isprovinceapplyworken"  v-model="visaInfo.workEducationInfo.isprovinceapplyen" type="checkbox"/>
 					</div>
 					<div class="paddingRight groupInputInfo">
 						<label>City</label>
-						<input name="cityen" id="jobcityen" v-model="visaInfo.workEducationInfo.city" type="text"/>
+						<input name="cityen" id="jobcityen" v-model="visaInfo.workEducationInfo.cityen" type="text"/>
 					</div>
 					
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>ZIP Code</label>
-						<input name="zipcodeen" id="jobzipcodeen" v-model="visaInfo.workEducationInfo.zipcode" type="text" />
-						<input name="iszipcodeapply" id="iszipcodeapplywork" class="iszipcodeapplyworken"  v-model="visaInfo.workEducationInfo.iszipcodeapply" type="checkbox" />
+						<input name="zipcodeen" id="jobzipcodeen" v-model="visaInfo.workEducationInfo.zipcodeen" type="text" />
+						<input name="iszipcodeapply" id="iszipcodeapplywork" class="iszipcodeapplyworken"  v-model="visaInfo.workEducationInfo.iszipcodeapplyen" type="checkbox" />
 					</div>
 					<div class="paddingRight groupInputInfo">
 						<label>Phone Number</label>
-						<input name="telephoneen" id="jobtelphoneen" v-model="visaInfo.workEducationInfo.telephone" type="text" />
+						<input name="telephoneen" id="jobtelphoneen" v-model="visaInfo.workEducationInfo.telephoneen" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupSelectInfo" >
 						<label>Country/Region</label>
-						<select name="countryen" id="jobcountryen" v-model="visaInfo.workEducationInfo.country">
+						<select name="countryen" id="jobcountryen" v-model="visaInfo.workEducationInfo.countryen">
 							<option value="0">Please choose</option>
 							<c:forEach items="${obj.gocountryFiveList }" var="country">
 								<option value="${country.id }">${country.name }</option>
@@ -2391,14 +2392,14 @@
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo" >
 						<label>Monthly Income in Local Currency (if employed)</label>
-						<input name="salaryen" v-model="visaInfo.workEducationInfo.salary" type="text" onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"
+						<input name="salaryen" v-model="visaInfo.workEducationInfo.salaryen" type="text" onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"
 										onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
-						<input name="issalaryapplyen" id="issalaryapplywork" class="issalaryapplyworken"  v-model="visaInfo.workEducationInfo.issalaryapply" type="checkbox" />
+						<input name="issalaryapplyen" id="issalaryapplywork" class="issalaryapplyworken"  v-model="visaInfo.workEducationInfo.issalaryapplyen" type="checkbox" />
 					</div>
 					<div class="clear"></div>
 					<div class="grouptextareaInfo groupPM">
 						<label>Briefly describe your duties</label>
-						<input name="dutyen" id="dutyen" class="bigArea" v-model="visaInfo.workEducationInfo.duty" />
+						<input name="dutyen" id="dutyen" class="bigArea" v-model="visaInfo.workEducationInfo.dutyen" />
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -2766,7 +2767,7 @@
 							<div class="clannameDiv clannameDiven">
 								<div class="draBig leftNo groupInputInfo" >
 									<label>Clan or Tribe Name</label>
-									<input name="clannameen" id="clannameen" v-model="visaInfo.workEducationInfo.clanname"  type="text"  />
+									<input name="clannameen" id="clannameen" v-model="visaInfo.workEducationInfo.clannameen"  type="text"  />
 								</div>
 							</div>
 						</div>
@@ -2888,8 +2889,7 @@
 					<!--yes-->
 					<div class="paddingTop skillDiv skillDiven elementHide grouptextareaInfo">
 						<label>Explain</label>
-						<input type="text" name="skillexplainen" id="skillexplainen" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain" />
-						<!-- <textarea name="skillexplain" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplain"></textarea> -->
+						<input type="text" name="skillexplainen" id="skillexplainen" class="bigArea" v-model="visaInfo.workEducationInfo.skillexplainen" />
 					</div>
 				</div>
 				<div class="padding-left paddingTop">
@@ -2990,8 +2990,8 @@
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Have you ever served in, been a member of, or been involved with a paramilitary unit, vigilante unit, rebel group, guerrilla group, or insurgent organization</label>
-						<input type="radio" name="isservedinrebelgroupen" v-model="visaInfo.workEducationInfo.isservedinrebelgroup" class="isservedinrebelgroupen" value="1"/>YES
-						<input type="radio" name="isservedinrebelgroupen" v-model="visaInfo.workEducationInfo.isservedinrebelgroup" class="isservedinrebelgroupen" value="2" checked/>NO
+						<input type="radio" name="isservedinrebelgroupen" v-model="visaInfo.workEducationInfo.isservedinrebelgroupen" class="isservedinrebelgroupen" value="1"/>YES
+						<input type="radio" name="isservedinrebelgroupen" v-model="visaInfo.workEducationInfo.isservedinrebelgroupen" class="isservedinrebelgroupen" value="2" checked/>NO
 					</div>
 					<!--yes-->
 					<!-- <div class="paddingTop elementHide dinrebelDiv dinrebelDiven grouptextareaInfo">
