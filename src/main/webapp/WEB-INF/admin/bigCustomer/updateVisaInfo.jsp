@@ -2255,7 +2255,7 @@
 				<div class="clear"></div>
 				<div class="paddingLeft groupInputInfo">
 					<label>Spouse's Date of Birth</label>
-					<input id="spousebirthdayen" name="spousebirthdayen" value="${obj.spousebirthday}" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+					<input id="spousebirthdayen" name="spousebirthdayen" value="${obj.spousebirthday}" class="datetimepickercss form-control" type="text" placeholder="Day / month / year" />
 				</div>
 				<div class="groupSelectInfo selectInfoen">
 					<label>Spouse's Country/Region of Origin (Nationality)</label>
