@@ -43,20 +43,28 @@ import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.MarryStatusEnEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
-import com.juyo.visa.common.enums.USMarryStatusEnEnum;
 import com.juyo.visa.common.enums.AppPictures.AppCredentialsTypeEnum;
 import com.juyo.visa.common.enums.AppPictures.AppPicturesTypeEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.ContactPointRelationshipStatusEnEnum;
 import com.juyo.visa.common.enums.visaProcess.ContactPointRelationshipStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
+import com.juyo.visa.common.enums.visaProcess.TimeUnitStatusEnEnum;
 import com.juyo.visa.common.enums.visaProcess.TimeUnitStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnEnum;
 import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaCareersEnEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaCareersEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaCitizenshipEnEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaCitizenshipEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaFamilyInfoEnEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaFamilyInfoEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
@@ -81,7 +89,9 @@ import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
+import com.juyo.visa.entities.TStateUsEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TAppStaffBasicinfoAddForm;
 import com.juyo.visa.forms.TAppStaffBasicinfoForm;
@@ -122,7 +132,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	private final static Integer DEFAULT_IS_YES = YesOrNoEnum.YES.intKey();
 	private final static Integer DEFAULT_SELECT = IsYesOrNoEnum.NO.intKey();
 
-	private final static Integer US_YUSHANG_COMID = 65;
+	private final static Integer US_YUSHANG_COMID = 68;
 
 	/**
 	 * 
@@ -153,23 +163,35 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("isDisable", isDisable);//页面是否可编辑
 		//旅伴信息---与你的关系
 		result.put("TravelCompanionRelationshipEnum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
-		//以前的美国旅游信息---州枚举
-		result.put("VisaUSStatesEnum", EnumUtil.enum2(VisaUSStatesEnum.class));
+		result.put("TravelCompanionRelationshipEnumen", EnumUtil.enum2(TravelCompanionRelationshipEnEnum.class));
 		//以前的美国旅游信息---时间单位枚举
 		result.put("TimeUnitStatusEnum", EnumUtil.enum2(TimeUnitStatusEnum.class));
+		result.put("TimeUnitStatusEnumen", EnumUtil.enum2(TimeUnitStatusEnEnum.class));
 		//美国联络点---与你的关系
 		result.put("ContactPointRelationshipStatusEnum", EnumUtil.enum2(ContactPointRelationshipStatusEnum.class));
+		result.put("ContactPointRelationshipStatusEnumen", EnumUtil.enum2(ContactPointRelationshipStatusEnEnum.class));
 		//家庭信息---身份状态
 		result.put("VisaFamilyInfoEnum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
+		result.put("VisaFamilyInfoEnumen", EnumUtil.enum2(VisaFamilyInfoEnEnum.class));
 		//直系亲属---与你的关系
 		result.put("ImmediateRelationshipEnum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
+		result.put("ImmediateRelationshipEnumen", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnEnum.class));
 		//配偶信息---国籍
 		result.put("VisaCitizenshipEnum", EnumUtil.enum2(VisaCitizenshipEnum.class));
+		result.put("VisaCitizenshipEnumen", EnumUtil.enum2(VisaCitizenshipEnEnum.class));
 		//配偶信息---配偶联系地址
 		result.put("VisaSpouseContactAddressEnum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
+		result.put("VisaSpouseContactAddressEnumen", EnumUtil.enum2(VisaSpouseContactAddressEnEnum.class));
 		//工作/教育/培训信息---主要职业
 		result.put("VisaCareersEnum", EnumUtil.enum2(VisaCareersEnum.class));
+		result.put("VisaCareersEnumen", EnumUtil.enum2(VisaCareersEnEnum.class));
 
+		//以前的美国旅游信息---州枚举
+		result.put("VisaUSStatesEnum", EnumUtil.enum2(VisaUSStatesEnum.class));
+		List<TStateUsEntity> stateUsList = dbDao.query(TStateUsEntity.class, null, null);
+		result.put("stateUsList", stateUsList);
+				
+		
 		//---同伴信息
 		List<TAppStaffCompanioninfoEntity> companionList = dbDao.query(TAppStaffCompanioninfoEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
@@ -239,6 +261,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String workstartdate = workEducationInfo.getString("workstartdate");
 		workstartdate = formatDateStr(workstartdate, FORMAT_DD_MM_YYYY);
 		result.put("workstartdate", workstartdate);
+		//工作/教育/培训信息---过去五年去过的国家
+		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+		result.put("gocountryFiveList", gocountryFiveList);
 
 		//人员id
 		result.put("staffId", staffId);
@@ -733,7 +758,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("marryStatus", staffInfo.getMarrystatus());
 		result.put("marryStatusEn", staffInfo.getMarrystatusen());
 		result.put("marryStatusEnum", EnumUtil.enum2(MarryStatusEnum.class));
-		result.put("marryStatusEnEnum", EnumUtil.enum2(USMarryStatusEnEnum.class));
+		result.put("marryStatusEnEnum", EnumUtil.enum2(MarryStatusEnEnum.class));
 
 		SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 		if (!Util.isEmpty(staffInfo.getBirthday())) {
@@ -1200,13 +1225,14 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param session
 	 * @return 
 	 */
-	public Object getPassportInfo(Integer passportId, Integer isDisable, HttpSession session) {
+	public Object getPassportInfo(Integer passportId, Integer isDisable, Integer orderid, HttpSession session) {
 
 		Map<String, Object> result = MapUtil.map();
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userType = loginUser.getUserType();
 		result.put("userType", userType);
+		result.put("orderid", orderid);
 		result.put("isDisable", isDisable);//页面是否可编辑
 		String passportSqlstr = sqlManager.get("bigCustomer_staff_passport");
 		Sql passportSql = Sqls.create(passportSqlstr);
@@ -1368,7 +1394,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param session
 	 * @return 
 	 */
-	public Object checkPassport(String passport, Integer passportId, HttpSession session) {
+	public Object checkPassport(String passport, Integer passportId, Integer orderid, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
 
 		//当前登录公司
@@ -1378,7 +1404,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String passportSqlstr = sqlManager.get("bigCustomer_staff_checkPassport");
 		Sql passportSql = Sqls.create(passportSqlstr);
 		Cnd cnd = Cnd.NEW();
-		cnd.and("tasb.comid", "=", comId);
+		cnd.and("tou.id", "=", orderid);
 		cnd.and("tasp.passport", "=", passport);
 
 		if (!Util.isEmpty(passportId)) {

@@ -136,8 +136,8 @@ public class BigCustomerModule {
 	@GET
 	@Ok("jsp")
 	public Object updatePassportInfo(@Param("passportId") Integer passportId, @Param("isDisable") Integer isDisable,
-			HttpSession session) {
-		return bigCustomerViewService.getPassportInfo(passportId, isDisable, session);
+			@Param("orderid") Integer orderid, HttpSession session) {
+		return bigCustomerViewService.getPassportInfo(passportId, isDisable, orderid, session);
 	}
 
 	/**
@@ -194,8 +194,8 @@ public class BigCustomerModule {
 	@At
 	@POST
 	public Object checkPassport(@Param("passport") String passport, @Param("passportId") Integer passportId,
-			HttpSession session) {
-		return bigCustomerViewService.checkPassport(passport, passportId, session);
+			@Param("orderid") Integer orderid, HttpSession session) {
+		return bigCustomerViewService.checkPassport(passport, passportId, orderid, session);
 	}
 
 	/**

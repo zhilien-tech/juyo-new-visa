@@ -46,7 +46,6 @@ import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.MapUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
-import com.uxuexi.core.web.chain.support.JsonResult;
 
 @IocBean
 public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> {
@@ -483,10 +482,10 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 		//校验姓名是否合格
 		String firstname = form.getFirstname();
 		String lastname = form.getLastname();
-
+		Map<String, String> jo = new HashMap<String, String>();
 		if (!(isChineseStr(firstname) && isChineseStr(lastname))) {
-			return null;
-
+			jo.put("flag", "2");
+			jo.put("msg", "姓名必须为中文");
 		} else {
 			//当前登录用户Id
 			TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -517,17 +516,17 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 			staffEventEntity.setEventsId(eventId);
 			staffEventEntity.setStaffId(staffId);
 
-			TAppStaffEventsEntity insertEntity = dbDao.insert(staffEventEntity);
-			
 			//添加订单
 			orderUSViewService.addOrderByStuffId(staffId, loginUserId);
 
-			dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginUserId),
-					Cnd.where("id", "=", staffId));
+			//用户登录，添加游客信息
+			TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
+			Integer loginId = (Integer) addLoginUser(staffInfo);
 
-			return JsonResult.success("添加成功");
+			dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginId), Cnd.where("id", "=", staffId));
+			jo.put("flag", "1");
 		}
-
+		return jo;
 	}
 
 	public boolean isChineseStr(String str) {

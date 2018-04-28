@@ -659,4 +659,17 @@ footer {
 	text-align: center;
 	font-size: .3rem;
 }
-
+/* 弹出层2 */
+.dialogMarry {
+	display:none;
+	width:6rem;
+	height:3rem;
+	margin-top:-1.5rem;
+	margin-left:-3rem;
+	position:fixed;
+	top:50%;
+	left:50%;
+	background:#FFF;
+	font-size:.4rem;
+	text-align:center;
+}

@@ -134,8 +134,8 @@
 			var name = $(".selector").find("option:selected").text();
 			var selectvalue = $(".selector").find("option:selected").val();
 			$(".marriageInfo").text(name);
-			if (selectvalue == 2 || selectvalue == 1) {
-				window.location.href = '/appmobileus/USMarital.html?staffid=' + staffid + '&marryurltype=' + selectvalue+'&sessionid='+sessionid+'&flag='+flag;
+			if (selectvalue == 2 || selectvalue ==  1) {
+				window.location.href = '/appmobileus/USMarital.html?staffid=' + staffid + '&marryurltype=' + (selectvalue/2)+'&sessionid='+sessionid+'&flag='+flag;
 			}else{
 				if(selectvalue != "--请选择--"){
 					$.ajax({
@@ -456,8 +456,8 @@
 				console.log(data);
 				if (data != 0) {
 					$("#6").html(data.status);
-					$(".selector").find("option[text='+data.status+']").attr("selected",true);
-					//$(".marriageInfo").text(data);
+					var statusval = data.statusval;
+					$(".selector").val(statusval);
 					$(".replaceCircle6").removeClass("circleRed").addClass(
 							"circleGreen");
 					$(".iconGroup6").removeClass("icon-error").addClass(

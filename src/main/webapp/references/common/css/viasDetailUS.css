@@ -122,3 +122,6 @@ label {
 .toSure {
 	cursor:pointer;
 }	
+.editBtn {
+	text-align:left !important;
+}

@@ -328,6 +328,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(applicantForm.getOtherFirstNameEn())) {
 			applicant.setOtherFirstNameEn(applicantForm.getOtherFirstNameEn().substring(1));
 		}
+		applicant.setEmergencyLinkman(applicantForm.getEmergencyLinkman());
+		applicant.setEmergencyTelephone(applicantForm.getEmergencyTelephone());
 		applicant.setNationality(applicantForm.getNationality());
 		applicant.setHasOtherName(applicantForm.getHasOtherName());
 		applicant.setHasOtherNationality(applicantForm.getHasOtherNationality());
@@ -842,14 +844,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object updateApplicant(Integer id, Integer orderid, Integer isTrial, Integer orderProcessType, int addApply,
-			HttpServletRequest request) {
+			Integer tourist, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
 
-		Integer userType = loginUser.getUserType();
-		result.put("userType", userType);
+		//Integer userType = loginUser.getUserType();
+		//result.put("userType", userType);
+		result.put("tourist", tourist);
 		result.put("addApply", addApply);
 		TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", id));
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
@@ -917,6 +920,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		//生成二维码
 		String qrurl = "http://" + request.getServerName() + ":" + request.getServerPort()
 				+ "/mobile/info.html?applicantid=" + id;
+		if (Util.isEmpty(orderid)) {
+			qrurl += "&comid=" + loginCompany.getId() + "&userid=" + loginUser.getId() + "&sessionid="
+					+ session.getId();
+		} else {
+			qrurl += "&comid=" + loginCompany.getId() + "&userid=" + loginUser.getId() + "&orderid=" + orderid
+					+ "&sessionid=" + session.getId();
+		}
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
 
@@ -1083,7 +1093,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 						ApplicantInfoTypeEnum.BASE.intKey(), session);
 			}
 			//游客进入，变更申请人为基本信息填写完毕
-			if (Util.eq(applicantForm.getUserType(), 2)) {
+			if (Util.eq(applicantForm.getTourist(), 1)) {
 				changeOrderStatusToFiled(applyJpList, "base", applyJp, orderEntity);
 			}
 
@@ -1141,14 +1151,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getVisaInfo(Integer id, Integer orderid, Integer isOrderUpTime, Integer isTrial,
-			Integer orderProcessType, int addApply, HttpServletRequest request) {
+			Integer orderProcessType, int addApply, int tourist, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 
-		Integer userType = loginUser.getUserType();
-		result.put("userType", userType);
+		//Integer userType = loginUser.getUserType();
+		//result.put("userType", userType);
+		result.put("tourist", tourist);
 		result.put("addApply", addApply);
 		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, id.longValue());
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
@@ -1236,14 +1247,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getEditPassport(Integer applicantId, Integer orderid, Integer isTrial, Integer orderProcessType,
-			int addApply, HttpServletRequest request) {
+			int addApply, int tourist, HttpServletRequest request) {
 		Map<String, Object> result = MapUtil.map();
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 
-		Integer userType = loginUser.getUserType();
-		result.put("userType", userType);
+		//Integer userType = loginUser.getUserType();
+		//result.put("userType", userType);
+		result.put("tourist", tourist);
 		result.put("addApply", addApply);
 		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantId));
@@ -1273,6 +1285,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			StringBuffer sb = new StringBuffer();
 			sb.append("/").append(passport.get("lastNameEn"));
 			result.put("lastNameEn", sb.toString());
+		}
+		if (!Util.isEmpty(passport.get("birthAddressEn"))) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.get("birthAddressEn"));
+			result.put("birthAddressEn", sb.toString());
+		}
+		if (!Util.isEmpty(passport.get("issuedPlaceEn"))) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.get("issuedPlaceEn"));
+			result.put("issuedPlaceEn", sb.toString());
 		}
 		//格式化日期
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
@@ -1345,7 +1367,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
 			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
-			if (Util.eq(visaForm.getUserType(), 2)) {
+			if (Util.eq(visaForm.getTourist(), 1)) {
 				changeOrderStatusToFiled(applyJpList, "visa", applicantOrderJpEntity, orderEntity);
 			}
 			applicantEntity.setMarryStatus(visaForm.getMarryStatus());
@@ -2234,17 +2256,21 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(passportForm.getLastNameEn())) {
 				passport.setLastNameEn(passportForm.getLastNameEn().substring(1));
 			}
+			if (!Util.isEmpty(passportForm.getBirthAddressEn())) {
+				passport.setBirthAddressEn(passportForm.getBirthAddressEn().substring(1));
+			}
+			if (!Util.isEmpty(passportForm.getIssuedPlaceEn())) {
+				passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn().substring(1));
+			}
 			passport.setPassportUrl(passportForm.getPassportUrl());
 			passport.setOCRline1(passportForm.getOCRline1());
 			passport.setOCRline2(passportForm.getOCRline2());
 			passport.setBirthAddress(passportForm.getBirthAddress());
-			passport.setBirthAddressEn(passportForm.getBirthAddressEn());
 			passport.setBirthday(passportForm.getBirthday());
 			passport.setIssuedDate(passportForm.getIssuedDate());
 			passport.setIssuedOrganization(passportForm.getIssuedOrganization());
 			passport.setIssuedOrganizationEn(passportForm.getIssuedOrganizationEn());
 			passport.setIssuedPlace(passportForm.getIssuedPlace());
-			passport.setIssuedPlaceEn(passportForm.getIssuedPlaceEn());
 			passport.setPassport(passportForm.getPassport());
 			passport.setSex(passportForm.getSex());
 			passport.setSexEn(passportForm.getSexEn());
@@ -2271,7 +2297,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
 			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
-			if (Util.eq(passportForm.getUserType(), 2)) {
+			if (Util.eq(passportForm.getTourist(), 1)) {
 				changeOrderStatusToFiled(applyJpList, "pass", applyJp, orderEntity);
 			}
 
@@ -2902,16 +2928,22 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			Date expiryDate;
 			Date issueDate;
 			try {
-				birthDay = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth_date"));
-				expiryDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("expiry_date"));
-				issueDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("issue_date"));
-				String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(birthDay);
-				String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(expiryDate);
-				String issueDateStr = new SimpleDateFormat("yyyy-MM-dd").format(issueDate);
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				jsonEntity.setBirth(sdf.format(sdf.parse(startDateStr)));
-				jsonEntity.setExpiryDay(sdf.format(sdf.parse(endDateStr)));
-				jsonEntity.setIssueDate(sdf.format(sdf.parse(issueDateStr)));
+				if (!Util.isEmpty(out.getString("birth_date"))) {
+					birthDay = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth_date"));
+					String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(birthDay);
+					jsonEntity.setBirth(sdf.format(sdf.parse(startDateStr)));
+				}
+				if (!Util.isEmpty(out.getString("expiry_date"))) {
+					expiryDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("expiry_date"));
+					String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(expiryDate);
+					jsonEntity.setExpiryDay(sdf.format(sdf.parse(endDateStr)));
+				}
+				if (!Util.isEmpty(out.getString("issue_date"))) {
+					issueDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("issue_date"));
+					String issueDateStr = new SimpleDateFormat("yyyy-MM-dd").format(issueDate);
+					jsonEntity.setIssueDate(sdf.format(sdf.parse(issueDateStr)));
+				}
 			} catch (JSONException | ParseException e) {
 
 				// TODO Auto-generated catch block

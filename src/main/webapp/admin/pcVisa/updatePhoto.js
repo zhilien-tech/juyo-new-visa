@@ -49,7 +49,7 @@ new Vue({
 			});
 		},
 		//护照信息
-		passport : function(id){
+		passport : function(id,orderid){
 			layer.open({
 				type: 2,
 				title: false,
@@ -59,7 +59,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id+'&isDisable'
+				content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id+'&isDisable&orderid='+orderid
 			});
 		}
 		

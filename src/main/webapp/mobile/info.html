@@ -186,7 +186,7 @@
                 lrz(this.files[0])
                     .then(function (rst) {
                         /* $('.bacimg').attr('src',rst.base64);*/
-                        $('#upload').hide(); 
+                        $('#upload').css('opacity','0'); 
                          sourceSize = (that.files[0].size / 1024).toFixed(2);
                         resultSize = (rst.fileLen / 1024).toFixed(2);
                         scale = parseInt(100 - (resultSize / sourceSize * 100));
@@ -214,7 +214,7 @@
                 lrz(this.files[0])
                     .then(function (rst) {
                         /* $('.bacimg2').attr('src',rst.base64);*/
-                        $('#upload2').hide(); 
+                        $('#upload2').css('opacity','0'); 
                         // 处理成功会执行
                         sourceSize = (that.files[0].size / 1024).toFixed(2);
                         resultSize = (rst.fileLen / 1024).toFixed(2);
@@ -501,6 +501,14 @@
 					_self.applicatdata.cardcity = obj.city;
 					_self.applicatdata.birthday = obj.birth;
 					_self.applicatdata.sex = obj.sex;
+					
+					if($(".consistent").is(":checked")){
+		 		    	_self.applicatdata.addressissamewithcard = 1;
+		  		    	_self.applicatdata.province = obj.province;
+		  		    	_self.applicatdata.city = obj.city;
+		  		    	_self.applicatdata.detailedaddress = obj.address;
+		  			}
+					
 				}
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {

@@ -196,7 +196,7 @@ label {
 	float: left;
 	margin-bottom:10px;
 }
-.goUS_CountryDiv {
+.goUS_CountryDiv,.goUS_CountryDiv {
 	margin-bottom:10px;
 }
 .cbox {
@@ -420,6 +420,16 @@ label {
 	opacity: 0;
 	z-index: 100000000;
 	display: none;
+}
+.areaInputPic {
+	width:100% !important;
+	height:30px !important;
+}
+.visanumber {
+	margin-top:0px !important;
+}
+#workstartdate ,#workstartdateen {
+	margin-top:10px !important;
 }
 /*****************英文样式*******************/
 #dateuniten {

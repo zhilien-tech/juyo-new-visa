@@ -11,28 +11,29 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class TAppStaffMixInfoForm extends DataTablesParamForm{
+public class TAppStaffMixInfoForm extends DataTablesParamForm {
 
 	/**人员id*/
 	private Integer staffid;
-	
+
 	/**订单id*/
 	private Integer orderid;
-	
+
 	/**订单号*/
 	private String ordernumber;
-	
+
 	/**订单状态*/
 	private Integer orderstatus;
-	
+
 	/**面试领区*/
 	private Integer cityid;
-	
+
 	/**公司id*/
 	private Integer comid;
 
@@ -61,13 +62,13 @@ public class TAppStaffMixInfoForm extends DataTablesParamForm{
 
 	/**面试时间*/
 	private Date interviewdate;
-	
+
 	/**姓名*/
 	private String name;
 
 	/**检索字段*/
 	private String searchStr;
-	
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**
@@ -99,6 +100,7 @@ public class TAppStaffMixInfoForm extends DataTablesParamForm{
 					.or("tou.ordernumber", "LIKE", "%" + searchStr + "%");
 			cnd.and(expg);
 		}
+		cnd.and("tou.isdisable", "!=", IsYesOrNoEnum.YES.intKey());
 		cnd.and("tasb.comId", "=", comid);
 		cnd.orderBy("tou.updateTime", "DESC");
 		return cnd;

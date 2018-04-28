@@ -46,7 +46,8 @@ $(function() {
 						data: function(validator) {
 							return {
 								passport:$('#passport').val(),
-								passportId:$('#id').val()
+								passportId:$('#id').val(),
+								orderid:$('#orderid').val()
 							};
 						}
 					}

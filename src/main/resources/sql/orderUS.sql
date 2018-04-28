@@ -16,6 +16,7 @@ SELECT
 	tu.usertype,
 	tou.ispayed,
 	tou.cityid,
+	tou.isdisable,
 	tou.ordernumber,
 	taj.staffid staffid,
 	tou.`status` orderstatus,

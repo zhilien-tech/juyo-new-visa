@@ -131,7 +131,7 @@
 					}else if(index == '2'){
 						$(".hourseItemInfo").append('<div class="item hourseSelect clearfix"> <div class="txt-item hourseDiv"><span>房产</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" /></div> <i>平米</i></div> <a class="delect-btn ui-link">删除</a> </div>');
 					}else {
-						$(".moneyItemInfo").append('<div class="item moneySelect clearfix"> <div class="txt-item moneyDiv"><span>理财</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" /></div> </div> <a class="delect-btn ui-link">删除</a> </div>');
+						$(".moneyItemInfo").append('<div class="item moneySelect clearfix"> <div class="txt-item moneyDiv"><span>理财</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" /></div><i>万</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
 					}
 				}
 			})
@@ -165,7 +165,7 @@
         				$(".hourseItemInfo").append('<div class="item hourseSelect clearfix"> <div class="txt-item hourseDiv"><span>房产</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'"/></div> <i>平米</i></div> <a class="delect-btn ui-link">删除</a> </div>');
         			}else if(value.type == '理财'){
         				$('.moneyInfo').addClass('blue');
-        				$(".moneyItemInfo").append('<div class="item moneySelect clearfix"> <div class="txt-item moneyDiv"><span>理财</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'"/></div></div> <a class="delect-btn ui-link">删除</a> </div>');
+        				$(".moneyItemInfo").append('<div class="item moneySelect clearfix"> <div class="txt-item moneyDiv"><span>理财</span><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input type="text" class="infoInput" value="'+value.details+'"/></div><i>万</i> </div> <a class="delect-btn ui-link">删除</a> </div>');
         			}
         		});
           	}

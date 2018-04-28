@@ -16,7 +16,7 @@
 
 var visaInfo;
 new Vue({
-	el: '#wrapper',
+	el: '#section',
 	data: {
 		travelCompanionInfo:"",
 		previUSTripInfo:"",
@@ -230,6 +230,21 @@ new Vue({
 			if(hasspecializedskill){
 				visaInfo.workEducationInfo.skillexplain = "";
 			}
+		},
+		isstate:function(){
+			
+			//美国联络人州/省
+			var state = visaInfo.contactPointInfo.state;
+			
+			visaInfo.contactPointInfo.stateen = state;
+		},
+		hasspousenationalityen:function(){
+			var spousenationality = visaInfo.familyInfo.spousenationality;
+			visaInfo.familyInfo.spousenationalityen = spousenationality;
+		},
+		isspousecountry:function(){
+			var spousecountry = visaInfo.familyInfo.spousecountry;
+			visaInfo.familyInfo.spousecountryen = spousecountry;
 		},
 		occupationChange:function(){
 			visaInfo.workEducationInfo.unitname ="";

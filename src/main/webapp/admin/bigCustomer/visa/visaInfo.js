@@ -65,7 +65,7 @@ function AddSingle(obj,objen){
 		$("."+objen).prev().prop("disabled",false);
 	}
 }
-//checkbox英文
+//checkbox英文 暂时不用
 function disableden(obj){
 	$(obj).prev().val("");
 	if($(obj).is(':checked')){
@@ -74,61 +74,6 @@ function disableden(obj){
 		$(obj).prev().prop("disabled",false);
 	}
 }
-//勾选checkbox("不知道")，设置前一个兄弟级元素disable和no edit
-//function editEleBeforeCheckbox(obj,objen){
-//	/*
-//	 //适合单个
-//	 obj.change(function(){
-//		var beforeEle = obj.prev();
-//		beforeEle.val("");
-//		if(obj.is(':checked')){
-//			beforeEle.prop("disabled",true);
-//		}else{
-//			beforeEle.prop("disabled",false);
-//		}
-//	});*/
-//	//适合多段
-//	$(document).on('change',obj,function(){
-//		
-//		var obg = $(obj);
-//		var obgen = $(objen);
-//		var IndexCheckbox = obg.parent().parent().index();
-//		obg.prev().val("");
-//		obgen.prev().val("");
-//		if(obg.is(':checked')){
-//			obg.prev().prop("disabled",true);
-//			obgen.eq(IndexCheckbox).prop("checked",true);
-//			obgen.eq(IndexCheckbox).prev().prop("disabled",true);
-//		}else{
-//			obg.prev().prop("disabled",false);
-//			obgen.eq(IndexCheckbox).prop("checked",false);
-//			obgen.eq(IndexCheckbox).prev().prop("disabled",false);
-//		}
-//		
-//	})
-//	$(document).click(function (e) {
-//		
-//		var obj = $(e.target);
-//		
-//		var IndexCheckbox = obj.parent().parent().index();
-//		
-//		if(obj.attr("type")=="checkbox"){
-//			obj.change(function(){
-//				var beforeEle = obj.prev();
-//				beforeEle.val("");
-//				
-//				if(obj.is(':checked')){
-//					
-//					beforeEle.prop("disabled",true);
-//				}else{
-//					
-//					beforeEle.prop("disabled",false);
-//				}
-//			});
-//		}
-//	});
-	
-//}
 
 //删除同类型的其他兄弟节点
 function deleteBrotherEle(obj){
@@ -496,9 +441,6 @@ function linkage(obj){
 		}
 	});
 }
-
-
-
 
 //不知道组织名
 //editEleBeforeCheckbox($("#isknoworganizationname"));

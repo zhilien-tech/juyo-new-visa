@@ -373,7 +373,7 @@
 						<div class="dataInfoGroup">
 						<input id="mypassportId" type="hidden" value="${obj.passportId }">
 							<a id="photoInfo" v-on:click="updatePhoto(${obj.staffid })">拍照资料</a>
-							<a v-on:click="passport(${obj.passportId })">护照信息</a>
+							<a v-on:click="passport(${obj.passportId },${obj.orderid})">护照信息</a>
 							<a v-on:click="baseInfo(${obj.staffid })">基本信息</a>
 							<a v-on:click="visa(${obj.staffid })">签证信息</a>
 						</div>

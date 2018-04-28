@@ -134,7 +134,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	private UploadService qiniuUploadService;//文件上传
 
 	private final static String SMS_SIGNATURE = "【优悦签】";
-	private final static Integer US_YUSHANG_COMID = 65;
+	private final static Integer US_YUSHANG_COMID = 68;
 	//活动id，默认为1
 	private final static Integer EVENTID = 1;
 	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
@@ -1048,6 +1048,40 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderus.setUpdatetime(new Date());
 		dbDao.update(orderus);
 		insertLogs(orderid, USOrderListStatusEnum.JUJUE.intKey(), userid);
+		return null;
+	}
+
+	/**
+	 * 作废功能
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid 订单id
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object disabled(int orderid) {
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		orderus.setIsdisable(IsYesOrNoEnum.YES.intKey());
+		orderus.setUpdatetime(new Date());
+		dbDao.update(orderus);
+		return null;
+	}
+
+	/**
+	 * 还原功能
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid 订单id
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object undisabled(int orderid) {
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		orderus.setIsdisable(IsYesOrNoEnum.NO.intKey());
+		orderus.setUpdatetime(new Date());
+		dbDao.update(orderus);
 		return null;
 	}
 

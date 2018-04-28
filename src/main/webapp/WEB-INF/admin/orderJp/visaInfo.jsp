@@ -61,7 +61,8 @@
 			<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
 			<div class="modal-header">
 				<span class="heading">签证信息</span>
-				<input type="hidden" name="userType" value="${obj.userType }"/> 
+				<%-- <input type="hidden" name="userType" value="${obj.userType }"/>  --%>
+				<input type="hidden" name="tourist" value="${obj.tourist }"/> 
 				<input type="hidden" value="${obj.visaInfo.applicantId }" name="applicantId"/>
 				<input type="hidden" value="${obj.isOrderUpTime }" name="isOrderUpTime"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
@@ -389,8 +390,9 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
-		var userType = '${obj.userType}';
-		var isTrail = '${obj.isTrail}';
+		//var userType = '${obj.userType}';
+		var tourist = '${obj.tourist}';
+		var isTrail = '${obj.isTrailOrder}';
 		var wealthType = '${obj.wealthJp}';
 		var sessionId = '${obj.sessionid}';
 		var localAddr = '${obj.localAddr}';
