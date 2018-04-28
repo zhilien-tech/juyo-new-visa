@@ -1722,11 +1722,11 @@
 									<div class="teamnamefalseDiv teamnamefalseDiven teamaddfalseen" >
 										<div class="companionSurnNameen">
 											<label>Surnames of Person Traveling With You</label>
-											<input id="firstnameen" class="firstName firstnameen" name="firstnameen" value="${companion.firstname }" type="text" placeholder="Surnames of Person Traveling With You" />
+											<input id="firstnameen" class="firstName firstnameen" name="firstnameen" value="${companion.firstnameen }" type="text" placeholder="Surnames of Person Traveling With You" />
 										</div>
 										<div class="companionNameen">
 											<label>Given Names of Person Traveling With You</label>
-											<input id="lastnameen" class="lastname lastnameen" name="lastnameen" value="${companion.lastname }" type="text" placeholder="Given Names of Person Traveling With You" />
+											<input id="lastnameen" class="lastname lastnameen" name="lastnameen" value="${companion.lastnameen }" type="text" placeholder="Given Names of Person Traveling With You" />
 										</div>
 										<div class="clear"></div>
 										<div class="youRelationship">
@@ -1797,11 +1797,11 @@
 										<div class="goUS_CountryDiven">
 											<div class="groupInputInfo">
 												<label>Date Arrived</label>
-												<input type="text" id="arrivedateen" value="<fmt:formatDate value="${gous.arrivedate }" pattern="dd/MM/yyyy" />" name="arrivedateen" class="datetimepickercss form-control arrivedateen" placeholder="Day / month / year">
+												<input type="text" id="arrivedateen" value="<fmt:formatDate value="${gous.arrivedateen }" pattern="dd/MM/yyyy" />" name="arrivedateen" class="datetimepickercss form-control arrivedateen" placeholder="Day / month / year">
 											</div>
 											<div class="groupInputInfo stopDate goUS_Country">
 												<label>Length of Stay</label>
-												<input id="staydaysen" name="staydaysen" class="staydaysen" value="${gous.staydays }" type="text" />
+												<input id="staydaysen" name="staydaysen" class="staydaysen" value="${gous.staydaysen }" type="text" />
 												<select id="dateuniten" class="dateuniten" name="dateuniten">
 													<option value="0">Please choose</option>
 													<c:forEach items="${obj.TimeUnitStatusEnumen }" var="map">
@@ -1852,12 +1852,12 @@
 											<div class="goUS_driversen">
 												<div class="groupcheckBoxInfo driverMain">
 													<label>Driver's License Number</label>
-													<input id="driverlicensenumberen" class="driverlicensenumberen" value="${driver.driverlicensenumber }" name="driverlicensenumberen" type="text" >
+													<input id="driverlicensenumberen" class="driverlicensenumberen" value="${driver.driverlicensenumberen }" name="driverlicensenumberen" type="text" >
 													<c:if test="${driver.isknowdrivernumber == 1}">
-														<input id="isknowdrivernumberen"  class="isknowdrivernumberen"  value="${driver.isknowdrivernumber }" name="isknowdrivernumberen" checked="checked" type="checkbox"/>
+														<input id="isknowdrivernumberen"  class="isknowdrivernumberen"  value="${driver.isknowdrivernumberen }" name="isknowdrivernumberen" checked="checked" type="checkbox"/>
 													</c:if>
 													<c:if test="${driver.isknowdrivernumber != 1}">
-														<input id="isknowdrivernumberen"  class="isknowdrivernumberen"  value="${driver.isknowdrivernumber }" name="isknowdrivernumberen" type="checkbox"/>
+														<input id="isknowdrivernumberen"  class="isknowdrivernumberen"  value="${driver.isknowdrivernumberen }" name="isknowdrivernumberen" type="checkbox"/>
 													</c:if>
 												</div>
 												<div class="groupSelectInfo driverR">
@@ -1865,10 +1865,10 @@
 													<select id="witchstateofdriveren" class="witchstateofdriveren" name="witchstateofdriveren">
 														<option value="0" selected="selected">Please choose</option>
 														<c:forEach items="${obj.stateUsList }" var="state">
-															<c:if test="${driver.witchstateofdriver != state.id}">
+															<c:if test="${driver.witchstateofdriveren != state.id}">
 																<option value="${state.id }">${state.nameen }</option>
 															</c:if>
-															<c:if test="${driver.witchstateofdriver == state.id}">
+															<c:if test="${driver.witchstateofdriveren == state.id}">
 																<option value="${state.id }" selected="selected">${state.nameen }</option>
 															</c:if>
 														</c:forEach>
@@ -1920,7 +1920,7 @@
 						<div class="dateIssue dateIssueen goUS_visa goUS_visaen">
 							<div class="groupInputInfo lastVisaDate">
 								<label>Date Last Visa Was Issued  Click here for more information</label>
-								<input id="issueddateen" name="issueddateen" value="${obj.previUSTripInfo_issueddate}" class="datetimepickercss form-control" placeholder="Day / month / year" type="text"/>
+								<input id="issueddateen" name="issueddateen" value="${obj.previUSTripInfo_issueddateen}" class="datetimepickercss form-control" placeholder="Day / month / year" type="text"/>
 							</div>
 							<div class="groupcheckBoxInfo visaNum visaNumen">
 								<label>Visa Number</label>
@@ -2058,12 +2058,7 @@
 						<select id="stateen" name="stateen" v-model="visaInfo.contactPointInfo.stateen">
 							<option value="0">Please choose</option>
 							<c:forEach items="${obj.stateUsList }" var="state">
-								<c:if test="${driver.witchstateofdriver != state.id}">
 								<option value="${state.id }">${state.nameen }</option>
-								</c:if>
-								<c:if test="${driver.witchstateofdriver == state.id}">
-								<option value="${state.id }" selected="selected">${state.nameen }</option>
-								</c:if>
 							</c:forEach>
 						</select>
 					</div>
@@ -2161,22 +2156,22 @@
 								<div class="directRelativesYes directRelativesYesen">
 									<div class="floatLeft leftNo groupInputInfo">
 										<label>Surnames</label>
-										<input name="relativesfirstnameen" id="relativesfirstnameen" value="${zhifamily.relativesfirstname }" type="text" />
+										<input name="relativesfirstnameen" id="relativesfirstnameen" value="${zhifamily.relativesfirstnameen }" type="text" />
 									</div>
 									<div class="floatRight groupInputInfo">
 										<label>Given Names</label>
-										<input name="relativeslastnameen" id="relativeslastnameen" value="${zhifamily.relativeslastname }"  type="text" />
+										<input name="relativeslastnameen" id="relativeslastnameen" value="${zhifamily.relativeslastnameen }"  type="text" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupSelectInfo">
 										<label>Relationship to You</label>
 										<select name="relationshipen" id="exceptrelationshipen">
 											<option value="0">Please choose</option>
-											<c:forEach items="${obj.ImmediateRelationshipEnum }" var="map">
-												<c:if test="${zhifamily.relationship != map.key}">
+											<c:forEach items="${obj.ImmediateRelationshipEnumen }" var="map">
+												<c:if test="${zhifamily.relationshipen != map.key}">
 													<option value="${map.key }">${map.value }</option>
 												</c:if>
-												<c:if test="${zhifamily.relationship == map.key}">
+												<c:if test="${zhifamily.relationshipen == map.key}">
 													<option value="${map.key }" selected="selected">${map.value }</option>
 												</c:if>
 											</c:forEach>
@@ -2186,11 +2181,11 @@
 										<label>Relative's Status</label>
 										<select id="exceptrelativesstatusen" name="relativesstatusen" >
 											<option value="0">Please choose</option>
-											<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
-												<c:if test="${zhifamily.relativesstatus != map.key}">
+											<c:forEach items="${obj.VisaFamilyInfoEnumen }" var="map">
+												<c:if test="${zhifamily.relativesstatusen != map.key}">
 													<option value="${map.key }">${map.value }</option>
 												</c:if>
-												<c:if test="${zhifamily.relativesstatus == map.key}">
+												<c:if test="${zhifamily.relativesstatusen == map.key}">
 													<option value="${map.key }" selected="selected">${map.value }</option>
 												</c:if>
 											</c:forEach>
@@ -2214,7 +2209,7 @@
 									<label>Relationship to You</label>
 									<select name="relationshipen"  id="exceptrelationshipen">
 										<option value="0">Please choose</option>
-										<c:forEach items="${obj.ImmediateRelationshipEnum }" var="map">
+										<c:forEach items="${obj.ImmediateRelationshipEnumen }" var="map">
 											<option value="${map.key }">${map.value }</option>
 										</c:forEach>
 									</select>
@@ -2223,7 +2218,7 @@
 									<label>Relative's Status</label>
 									<select id="exceptrelativesstatusen" name="relativesstatusen">
 										<option value="0">Please choose</option>
-										<c:forEach items="${obj.VisaFamilyInfoEnum }" var="map">
+										<c:forEach items="${obj.VisaFamilyInfoEnumen }" var="map">
 											<option value="${map.key }">${map.value }</option>
 										</c:forEach>
 									</select>
@@ -2255,7 +2250,7 @@
 				<div class="clear"></div>
 				<div class="paddingLeft groupInputInfo">
 					<label>Spouse's Date of Birth</label>
-					<input id="spousebirthdayen" name="spousebirthdayen" value="${obj.spousebirthday}" class="datetimepickercss form-control" type="text" placeholder="Day / month / year" />
+					<input id="spousebirthdayen" name="spousebirthdayen" value="${obj.spousebirthdayen}" class="datetimepickercss form-control" type="text" placeholder="Day / month / year" />
 				</div>
 				<div class="groupSelectInfo selectInfoen">
 					<label>Spouse's Country/Region of Origin (Nationality)</label>
@@ -2324,12 +2319,7 @@
 						<select name="othercountryen" v-model="visaInfo.familyInfo.country">
 							<option value="0">Please choose</option>
 							<c:forEach items="${obj.gocountryFiveList }" var="country">
-								<c:if test="${beforeWork.employercountryen != country.id}">
-									<option value="${country.id }">${country.name }</option>
-								</c:if>
-								<c:if test="${beforeWork.employercountryen == country.id}">
-									<option value="${country.id }" selected="selected">${country.name }</option>
-								</c:if>
+								<option value="${country.id }">${country.name }</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -2390,19 +2380,14 @@
 						<select name="countryen" id="jobcountryen" v-model="visaInfo.workEducationInfo.country">
 							<option value="0">Please choose</option>
 							<c:forEach items="${obj.gocountryFiveList }" var="country">
-								<c:if test="${beforeWork.employercountryen != country.id}">
-									<option value="${country.id }">${country.name }</option>
-								</c:if>
-								<c:if test="${beforeWork.employercountryen == country.id}">
-									<option value="${country.id }" selected="selected">${country.name }</option>
-								</c:if>
+								<option value="${country.id }">${country.name }</option>
 							</c:forEach>
 						</select>
 					</div>
 					
 					<div class="paddingRight groupInputInfo">
 						<label>Start Date</label>
-						<input id="workstartdateen" name="workstartdateen" value="${obj.workstartdate}" class="datetimepickercss form-control" type="text" placeholder="Day / month / year" />
+						<input id="workstartdateen" name="workstartdateen" value="${obj.workstartdateen}" class="datetimepickercss form-control" type="text" placeholder="Day / month / year" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo" >
@@ -2441,36 +2426,35 @@
 									<div class="workBeforeInfosDiven">
 										<div class="leftNo marginLS groupInputInfo" >
 											<label>Employer Name</label>
-											<input name="employernameen" id="employernameen" class="employernameen" value="${beforeWork.employername }" type="text" />
+											<input name="employernameen" id="employernameen" class="employernameen" value="${beforeWork.employernameen }" type="text" />
 										</div>
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>Employer Street Address (Line 1)</label>
-											<input name="employeraddressen" class="employeraddressen" value="${beforeWork.employeraddress }" type="text" />
+											<input name="employeraddressen" class="employeraddressen" value="${beforeWork.employeraddressen }" type="text" />
 										</div>
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>Employer Street Address (Line 2) *Option</label>
-											<input name="employeraddressSecen" class="employeraddressSecen" value="${beforeWork.employeraddressSec }" type="text" />
+											<input name="employeraddressSecen" class="employeraddressSecen" value="${beforeWork.employeraddressSecen }" type="text" />
 										</div>
 										
 										<div class="paddingLeft leftNo groupInputInfo">
 											<label>State/Province</label>
-											<input name="employerprovinceen" class="employerprovinceen" value="${beforeWork.employerprovince }" type="text" />
-											<%-- <input name="isemployerprovinceapply" value="${beforeWork.isemployerprovinceapply }" type="text" /> --%>
+											<input name="employerprovinceen" class="employerprovinceen" value="${beforeWork.employerprovinceen }" type="text" />
 										</div>
 										<div class="paddingRight leftNo groupcheckBoxInfo" >
 											<label>City</label>
-											<input name="employercityen" class="employercityen"  value="${beforeWork.employercity }" type="text" />
+											<input name="employercityen" class="employercityen"  value="${beforeWork.employercityen }" type="text" />
 											<!-- <input type="checkbox" /> -->
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>Postal Zone/ZIP Code</label>
-											<input name="employerzipcodeen" value="${beforeWork.employerzipcode }" classs="employerzipcodeen" type="text" />
-											<c:if test="${beforeWork.isemployerzipcodeapply == 1}">
-												<input id="isKonwOrtherZipCodeen" class="isemployerzipcodeapplyen"  name="isemployerzipcodeapplyen" value="${beforeWork.isemployerzipcodeapply }" checked="checked" type="checkbox"/>
+											<input name="employerzipcodeen" value="${beforeWork.employerzipcodeen }" classs="employerzipcodeen" type="text" />
+											<c:if test="${beforeWork.isemployerzipcodeapplyen == 1}">
+												<input id="isKonwOrtherZipCodeen" class="isemployerzipcodeapplyen"  name="isemployerzipcodeapplyen" value="${beforeWork.isemployerzipcodeapplyen }" checked="checked" type="checkbox"/>
 											</c:if>
-											<c:if test="${beforeWork.isemployerzipcodeapply != 1}">
-												<input id="isKonwOrtherZipCodeen" class="isemployerzipcodeapplyen"  name="isemployerzipcodeapplyen" value="${beforeWork.isemployerzipcodeapply }" type="checkbox" />
+											<c:if test="${beforeWork.isemployerzipcodeapplyen != 1}">
+												<input id="isKonwOrtherZipCodeen" class="isemployerzipcodeapplyen"  name="isemployerzipcodeapplyen" value="${beforeWork.isemployerzipcodeapplyen }" type="checkbox" />
 											</c:if>
 											
 										</div>
@@ -2491,46 +2475,46 @@
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupInputInfo">
 											<label>Telephone Number</label>
-											<input name="employertelephoneen" class="employertelephoneen" value="${beforeWork.employertelephone }" type="text" />
+											<input name="employertelephoneen" class="employertelephoneen" value="${beforeWork.employertelephoneen }" type="text" />
 										</div>
 										<div class="paddingRight groupInputInfo">
 											<label>Job Title</label>
-											<input name="jobtitleen" class="jobtitleen" value="${beforeWork.jobtitle }" type="text"/>
+											<input name="jobtitleen" class="jobtitleen" value="${beforeWork.jobtitleen }" type="text"/>
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>Supervisor's Surname</label>
-											<input name="supervisorfirstnameen" class="isknowsupervisorfirstnamebeforeen" value="${beforeWork.supervisorfirstname }" type="text" />
-											<c:if test="${beforeWork.isknowsupervisorfirstname == 1}">
-												<input name="isknowsupervisorfirstnameen" id="isknowsupervisorfirstnamebefore" class="isknowjobfirstnameen"  value="${beforeWork.isknowsupervisorfirstname }" checked="checked" type="checkbox"/>
+											<input name="supervisorfirstnameen" class="isknowsupervisorfirstnamebeforeen" value="${beforeWork.supervisorfirstnameen }" type="text" />
+											<c:if test="${beforeWork.isknowsupervisorfirstnameen == 1}">
+												<input name="isknowsupervisorfirstnameen" id="isknowsupervisorfirstnamebefore" class="isknowjobfirstnameen"  value="${beforeWork.isknowsupervisorfirstnameen }" checked="checked" type="checkbox"/>
 											</c:if>
-											<c:if test="${beforeWork.isknowsupervisorfirstname != 1}">
-												<input name="isknowsupervisorfirstnameen" id="isknowsupervisorfirstnamebefore" class="isknowjobfirstnameen"  value="${beforeWork.isknowsupervisorfirstname }" type="checkbox" />
+											<c:if test="${beforeWork.isknowsupervisorfirstnameen != 1}">
+												<input name="isknowsupervisorfirstnameen" id="isknowsupervisorfirstnamebefore" class="isknowjobfirstnameen"  value="${beforeWork.isknowsupervisorfirstnameen }" type="checkbox" />
 											</c:if>
 										</div>
 										<div class="paddingRight groupcheckBoxInfo">
 											<label>Supervisor's Given Name</label>
 											<input name="supervisorlastnameen" class="isknowsupervisorlastnamebeforeen" value="${beforeWork.supervisorlastname }" type="text" />
-											<c:if test="${beforeWork.isknowsupervisorlastname == 1}">
-												<input name="isknowsupervisorlastnameen" id="isknowsupervisorlastnamebefore" class="isknowjoblastnameen"  value="${beforeWork.isknowsupervisorlastname }" checked="checked" type="checkbox"/>
+											<c:if test="${beforeWork.isknowsupervisorlastnameen == 1}">
+												<input name="isknowsupervisorlastnameen" id="isknowsupervisorlastnamebefore" class="isknowjoblastnameen"  value="${beforeWork.isknowsupervisorlastnameen }" checked="checked" type="checkbox"/>
 											</c:if>
-											<c:if test="${beforeWork.isknowsupervisorlastname != 1}">
-												<input name="isknowsupervisorlastnameen" id="isknowsupervisorlastnamebefore" class="isknowjoblastnameen"  value="${beforeWork.isknowsupervisorlastname }" type="checkbox" />
+											<c:if test="${beforeWork.isknowsupervisorlastnameen != 1}">
+												<input name="isknowsupervisorlastnameen" id="isknowsupervisorlastnamebefore" class="isknowjoblastnameen"  value="${beforeWork.isknowsupervisorlastnameen }" type="checkbox" />
 											</c:if>
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupInputInfo" >
 											<label>Employment Date From</label>
-											<input id="employstartdateen" name="employstartdateen" value="<fmt:formatDate value="${beforeWork.employstartdate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control employstartdateen" type="text" placeholder="Day / month / year" />
+											<input id="employstartdateen" name="employstartdateen" value="<fmt:formatDate value="${beforeWork.employstartdateen }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control employstartdateen" type="text" placeholder="Day / month / year" />
 										</div>
 										<div class="paddingRight groupInputInfo">
 											<label>Employment Date To</label>
-											<input id="employenddateen" name="employenddateen" value="<fmt:formatDate value="${beforeWork.employenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control employenddateen" type="text" placeholder="Day / month / year" />
+											<input id="employenddateen" name="employenddateen" value="<fmt:formatDate value="${beforeWork.employenddateen }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control employenddateen" type="text" placeholder="Day / month / year" />
 										</div>
 										<div class="clear"></div>
 										<div class="draBig leftNo marginLS grouptextareaInfo">
 											<label>Briefly describe your duties</label>
-											<input type="text" id="previousdutyen" name="previousdutyen" class="bigArea previousduty previousdutyen" value="${beforeWork.previousduty }" />
+											<input type="text" id="previousdutyen" name="previousdutyen" class="bigArea previousduty previousdutyen" value="${beforeWork.previousdutyen }" />
 											<%-- <textarea name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }"></textarea> --%>
 										</div>
 									</div>
@@ -2636,39 +2620,39 @@
 									<div class="midSchoolEduDiven">
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>Name of Institution</label>
-											<input name="institutionen" class="institutionen" value="${education.institution }" type="text"/>
+											<input name="institutionen" class="institutionen" value="${education.institutionen }" type="text"/>
 										</div>
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>Street Address (Line 1)</label>
-											<input name="institutionaddressen" class="institutionaddressen" value="${education.institutionaddress }" type="text" />
+											<input name="institutionaddressen" class="institutionaddressen" value="${education.institutionaddressen }" type="text" />
 										</div>
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>Street Address (Line 2) *Optional</label>
-											<input name="secinstitutionaddressen" class="secinstitutionaddressen" type="text" value="${education.secinstitutionaddress }" />
+											<input name="secinstitutionaddressen" class="secinstitutionaddressen" type="text" value="${education.secinstitutionaddressen }" />
 										</div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo" >
 											<label>State/Province</label>
-											<input name="institutionprovinceen" class="institutionprovinceen" value="${education.institutionprovince }" type="text" />
-											<c:if test="${education.isinstitutionprovinceapply == 1}">
-												<input name="isinstitutionprovinceapplyen" class="isschoolprovinceen"  value="${education.isinstitutionprovinceapply }"  checked="checked" type="checkbox"/>
+											<input name="institutionprovinceen" class="institutionprovinceen" value="${education.institutionprovinceen }" type="text" />
+											<c:if test="${education.isinstitutionprovinceapplyen == 1}">
+												<input name="isinstitutionprovinceapplyen" class="isschoolprovinceen"  value="${education.isinstitutionprovinceapplyen }"  checked="checked" type="checkbox"/>
 											</c:if>
-											<c:if test="${education.isinstitutionprovinceapply != 1}">
-												<input name="isinstitutionprovinceapplyen" class="isschoolprovinceen"  value="${education.isinstitutionprovinceapply }" type="checkbox" />
+											<c:if test="${education.isinstitutionprovinceapplyen != 1}">
+												<input name="isinstitutionprovinceapplyen" class="isschoolprovinceen"  value="${education.isinstitutionprovinceapplyen }" type="checkbox" />
 											</c:if>
 										</div>
 										<div class="paddingRight leftNo groupInputInfo">
 											<label >City</label>
-											<input name="institutioncityen" class="institutioncityen" value="${education.institutioncity }" type="text" />
+											<input name="institutioncityen" class="institutioncityen" value="${education.institutioncityen }" type="text" />
 										</div>
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>Postal Zone/ZIP Code</label>
-											<input name="institutionzipcodeen" class="institutionzipcodeen" value="${education.institutionzipcode }" type="text" />
-											<c:if test="${education.isinstitutionzipcodeapply == 1}">
-													<input name="isinstitutionzipcodeapplyen" id="codeEdu" class="codeEduen"  value="${education.isinstitutionzipcodeapply }"  checked="checked" type="checkbox"/>
+											<input name="institutionzipcodeen" class="institutionzipcodeen" value="${education.institutionzipcodeen }" type="text" />
+											<c:if test="${education.isinstitutionzipcodeapplyen == 1}">
+													<input name="isinstitutionzipcodeapplyen" id="codeEdu" class="codeEduen"  value="${education.isinstitutionzipcodeapplyen }"  checked="checked" type="checkbox"/>
 											</c:if>
-											<c:if test="${education.isinstitutionzipcodeapply != 1}">
-												<input name="isinstitutionzipcodeapplyen" id="codeEdu" class="codeEduen"  value="${education.isinstitutionzipcodeapply }" type="checkbox" />
+											<c:if test="${education.isinstitutionzipcodeapplyen != 1}">
+												<input name="isinstitutionzipcodeapplyen" id="codeEdu" class="codeEduen"  value="${education.isinstitutionzipcodeapplyen }" type="checkbox" />
 											</c:if>
 										</div>
 										<div class="paddingRight leftNo groupSelectInfo" >
@@ -2688,17 +2672,17 @@
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupInputInfo">
 											<label>Course of Study</label>
-											<input name="courseen" class="courseen" value="${education.course }" type="text" />
+											<input name="courseen" class="courseen" value="${education.courseen }" type="text" />
 										</div>
 										
 										<div class="paddingRight leftNo groupInputInfo">
 											<label>Date of Attendance From</label>
-											<input id="coursestartdateen" name="coursestartdateen" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control coursestartdateen" type="text" placeholder="Day / month / year" />
+											<input id="coursestartdateen" name="coursestartdateen" value="<fmt:formatDate value="${education.coursestartdateen }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control coursestartdateen" type="text" placeholder="Day / month / year" />
 										</div>
 										<div class="clear"></div>
 										<div class="leftNo groupInputInfo">
 											<label>Date of Attendance To</label>
-											<input id="courseenddateen" name="courseenddateen" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control courseenddateen" type="text" placeholder="Day / month / year" />
+											<input id="courseenddateen" name="courseenddateen" value="<fmt:formatDate value="${education.courseenddateen }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control courseenddateen" type="text" placeholder="Day / month / year" />
 										</div>
 									</div>
 								</c:forEach>
@@ -2795,7 +2779,7 @@
 							<div class="languagename languagenameen languagenameDiven paddingTop padding-left">
 								<label>Language Name</label>
 								<div class="groupInputInfo">
-									<input name="languagenameen" class="languagenamewen" value="${language.languagename }" type="text" />
+									<input name="languagenameen" class="languagenamewen" value="${language.languagenameen }" type="text" />
 								</div>
 							</div>
 						</c:forEach>
@@ -2876,7 +2860,7 @@
 								<div class="organizationDiven">
 									<div class="paddingTop draBig leftNo organizationDiven groupInputInfo">
 										<label>Organization Name</label>
-										<input name="organizationnameen" class="organizationnameen" value="${organization.organizationname }" type="text"/>
+										<input name="organizationnameen" class="organizationnameen" value="${organization.organizationnameen }" type="text"/>
 									</div>
 								</div>
 								</c:forEach>
@@ -2937,25 +2921,25 @@
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>Branch of Service</label>
-										<input name="servicebranchen" class="servicebranchen" value="${conscientious.servicebranch }" type="text" />
+										<input name="servicebranchen" class="servicebranchen" value="${conscientious.servicebranchen }" type="text" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupInputInfo" >
 										<label>Rank/Position</label>
-										<input name="ranken" class="ranken" value="${conscientious.rank }" type="text" />
+										<input name="ranken" class="ranken" value="${conscientious.ranken }" type="text" />
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>Military Specialty</label>
-										<input name="militaryspecialtyen" class="militaryspecialtyen" value="${conscientious.militaryspecialty }" type="text"/>
+										<input name="militaryspecialtyen" class="militaryspecialtyen" value="${conscientious.militaryspecialtyen }" type="text"/>
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupInputInfo">
 										<label>Date of Service From</label>
-										<input id="servicestartdateen" name="servicestartdateen" value="<fmt:formatDate value="${conscientious.servicestartdate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss form-control servicestartdateen" placeholder="日/月/年"/>
+										<input id="servicestartdateen" name="servicestartdateen" value="<fmt:formatDate value="${conscientious.servicestartdateen }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss form-control servicestartdateen" placeholder="日/月/年"/>
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>Date of Service To</label>
-										<input id="serviceenddateen" name="serviceenddateen" value="<fmt:formatDate value="${conscientious.serviceenddate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss form-control serviceenddateen" placeholder="日/月/年"/>
+										<input id="serviceenddateen" name="serviceenddateen" value="<fmt:formatDate value="${conscientious.serviceenddateen }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss form-control serviceenddateen" placeholder="日/月/年"/>
 									</div>
 								</div>
 							</c:forEach>
