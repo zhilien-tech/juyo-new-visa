@@ -47,6 +47,8 @@ FROM
 LEFT JOIN t_com_function tcf ON tf.id = tcf.funId
 WHERE
 	tcf.comId =@comId
+GROUP BY
+	tf.funName 
 	
 /*authority_job_fun*/
 SELECT
