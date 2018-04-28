@@ -158,7 +158,7 @@ public class LoginService extends BaseService<TUserEntity> {
 				form.setMainurl("/admin/simple/list.html");
 			} else if (UserLoginEnum.BIG_COMPANY_ADMIN.intKey() == userType) {
 				//大客户公司管理员
-				form.setMainurl("/admin/authority/list.html");
+				form.setMainurl("/admin/baoying/listUS.html");
 			} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
 				//游客跳转的页面
 				form.setMainurl("/admin/myVisa/visaList.html");
@@ -169,7 +169,7 @@ public class LoginService extends BaseService<TUserEntity> {
 				//大客户游客跳转的页面
 				form.setMainurl("/admin/pcVisa/visaList.html");
 			} else if (UserLoginEnum.BAOYING_US.intKey() == userType) {
-				//大客户游客跳转的页面
+				//大客户管理员跳转的页面
 				form.setMainurl("/admin/baoying/listUS.html");
 			} else {
 				//功能列表为空
