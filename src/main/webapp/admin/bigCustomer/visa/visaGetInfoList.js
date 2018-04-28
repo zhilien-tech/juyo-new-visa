@@ -130,7 +130,7 @@ function getDriverList(){
 		}else{
 			isknownumberen = 0;
 		}
-		var stateofdriveren = $(this).eq(index).find('[name=witchstateofdriveren]').val();
+		var stateofdriveren = $('.goUS_driversen').eq(index).find('[name=witchstateofdriveren]').val();
 		
 		var stateofdriver = $(this).find('[name=witchstateofdriver]').val();
 		
@@ -149,6 +149,7 @@ function getDriverList(){
 			driverLength += '';
 		}
 		
+		
 		if(driverLength.length >0 || isknownumber==1){
 			driver.staffid = staffId;
 			driver.driverlicensenumber = drivernumber;
@@ -162,7 +163,6 @@ function getDriverList(){
 			driverList.push(driver);
 		}
 	});
-	
 	return driverList;
 }
 /********没有多段添加  ********/

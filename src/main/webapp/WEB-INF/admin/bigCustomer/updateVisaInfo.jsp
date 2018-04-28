@@ -1722,11 +1722,11 @@
 									<div class="teamnamefalseDiv teamnamefalseDiven teamaddfalseen" >
 										<div class="companionSurnNameen">
 											<label>Surnames of Person Traveling With You</label>
-											<input id="firstnameen" class="firstName firstnameen" name="firstnameen" value="${companion.firstnameen }" type="text" placeholder="Surnames of Person Traveling With You" />
+											<input id="firstnameen" class="firstnameen" name="firstnameen" value="${companion.firstnameen }" type="text" placeholder="Surnames of Person Traveling With You" />
 										</div>
 										<div class="companionNameen">
 											<label>Given Names of Person Traveling With You</label>
-											<input id="lastnameen" class="lastname lastnameen" name="lastnameen" value="${companion.lastnameen }" type="text" placeholder="Given Names of Person Traveling With You" />
+											<input id="lastnameen" class="lastnameen" name="lastnameen" value="${companion.lastnameen }" type="text" placeholder="Given Names of Person Traveling With You" />
 										</div>
 										<div class="clear"></div>
 										<div class="youRelationship">
@@ -1750,11 +1750,11 @@
 								<div class="teamnamefalseDiv teamnamefalseDiven teamaddfalseen">
 									<div class="companionSurnNameen">
 										<label>Surnames of Person Traveling With You</label>
-										<input id="firstnameen" class="firstName firstnameen" name="firstnameen" type="text" placeholder="Surnames of Person Traveling With You" />
+										<input id="firstnameen" class="firstnameen" name="firstnameen" type="text" placeholder="Surnames of Person Traveling With You" />
 									</div>
 									<div class="companionNameen">
 										<label>Given Names of Person Traveling With You</label>
-										<input id="lastnameen" class="lastname lastnameen" name="lastnameen" type="text" placeholder="Given Names of Person Traveling With You" />
+										<input id="lastnameen" class="lastnameen" name="lastnameen" type="text" placeholder="Given Names of Person Traveling With You" />
 									</div>
 									<div class="clear"></div>
 									<div class="youRelationship">
@@ -1832,13 +1832,12 @@
 													<option value="${map.key }">${map.value }</option>
 												</c:forEach>
 											</select>
-										</div>
-									</div>
-								</c:if>
-							</div>
-							<div class="btnGroup beforeGroup everyMarTop">
-								<a class="save beforesaveen">Add Another</a>
-								<a class="cancel beforecancelen">Remove</a>
+        										</div>   
+								 	      </div>
+								</c:if>                                                                                                                                                                                        
+							</div>                    
+								<a class="save beforesaveen">Add Another</a>                    
+								<a class="cancel beforecancelen">Remove</a>                       
 							</div>
 							<div class="groupRadioInfo drivingUS">
 								<label>Do you or did you ever hold a U.S. Driver’s License</label>

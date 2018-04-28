@@ -301,14 +301,17 @@ function save(status){
 	//以前的美国旅游信息
 	visadata.previUSTripInfo = visaInfo.previUSTripInfo;
 	visaInfo.previUSTripInfo.issueddate = formatDate($('#issueddate').val());//最后一次签证的签发日期
+	visaInfo.previUSTripInfo.issueddateen = formatDate($('#issueddateen').val());
 	//美国联络点
 	visadata.contactPointInfo = visaInfo.contactPointInfo;
 	//家庭信息
 	visadata.familyInfo = visaInfo.familyInfo;
 	visaInfo.familyInfo.spousebirthday = formatDate($('#spousebirthday').val());//配偶生日
+	visaInfo.familyInfo.spousebirthdayen = formatDate($('#spousebirthdayen').val());
 	//工作/教育/培训信息
 	visadata.workEducationInfo = visaInfo.workEducationInfo;
 	visaInfo.workEducationInfo.workstartdate = formatDate($('#workstartdate').val());//工作开始日期
+	visaInfo.workEducationInfo.workstartdateen = formatDate($('#workstartdateen').val());
 	//同伴信息
 	visadata.companionList = getCompanionList();
 	//去过美国信息
