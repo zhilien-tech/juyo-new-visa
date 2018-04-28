@@ -75,6 +75,14 @@ new Vue({
 			if(isKnowNum){
 				visaInfo.previUSTripInfo.visanumber = "";
 			}
+			var isKnowNumen = visaInfo.previUSTripInfo.idknowvisanumberen;
+			if(isKnowNumen){
+				visaInfo.previUSTripInfo.visanumberen = "";
+			}
+		},
+		hasvisanumber:function(){
+			var visanumber = visaInfo.previUSTripInfo.visanumber;
+			visaInfo.previUSTripInfo.visanumberen = visanumber;
 		},
 		hasbeeninus:function(){
 			var hasbeeninus = visaInfo.previUSTripInfo.hasbeeninus;
@@ -130,12 +138,47 @@ new Vue({
 				visaInfo.contactPointInfo.firstname = "";
 				visaInfo.contactPointInfo.lastname = "";
 			}
+			
+			var isknownameen = visaInfo.contactPointInfo.isknownameen;
+			if(isknownameen){
+				visaInfo.contactPointInfo.firstnameen = "";
+				visaInfo.contactPointInfo.lastnameen = "";
+			}
+		},
+		isfirstname:function(){
+			var firstname = visaInfo.contactPointInfo.firstname;
+			alert(firstname);
+			visaInfo.contactPointInfo.firstnameen = firstname;
+		},
+		islastname:function(){
+			var lastname = visaInfo.contactPointInfo.lastname;
+			visaInfo.contactPointInfo.lastnameen = lastname;
 		},
 		isKnowOrganizationName:function(){
 			var isknoworganizationname = visaInfo.contactPointInfo.isknoworganizationname;
 			if(isknoworganizationname){
 				visaInfo.contactPointInfo.organizationname = "";
 			}
+			var isknoworganizationnameen = visaInfo.contactPointInfo.isknoworganizationnameen;
+			if(isknoworganizationnameen){
+				visaInfo.contactPointInfo.organizationnameen = "";
+			}
+		},
+		isorganizationname:function(){
+			var organizationname = visaInfo.contactPointInfo.organizationname;
+			visaInfo.contactPointInfo.organizationnameen = organizationname;
+		},
+		isralationship:function(){
+			var ralationship = visaInfo.contactPointInfo.ralationship;
+			visaInfo.contactPointInfo.ralationshipen = ralationship;
+		},
+		isaddress:function(){
+			var address = isaInfo.contactPointInfo.address;
+			isaInfo.contactPointInfo.addressen = address;
+		},
+		issecaddress:function(){
+			var secaddress = visaInfo.contactPointInfo.secaddress;
+			visaInfo.contactPointInfo.secaddressen = secaddress;
 		},
 		isKnowEmailAddress:function(){
 			var isknowemail = visaInfo.contactPointInfo.isknowemail;
@@ -237,6 +280,22 @@ new Vue({
 			var state = visaInfo.contactPointInfo.state;
 			
 			visaInfo.contactPointInfo.stateen = state;
+		},
+		iscity:function(){
+			var city = visaInfo.contactPointInfo.city;
+			visaInfo.contactPointInfo.cityen = city;
+		},
+		iszipcode:function(){
+			var zipcode = visaInfo.contactPointInfo.zipcode;
+			visaInfo.contactPointInfo.zipcodeen = zipcode;
+		},
+		istelephone:function(){
+			var telephone = visaInfo.contactPointInfo.telephone;
+			visaInfo.contactPointInfo.telephoneen = telephone;
+		},
+		isemail:function(){
+			var email = visaInfo.contactPointInfo.email;
+			visaInfo.contactPointInfo.emailen = email;
 		},
 		hasspousenationalityen:function(){
 			var spousenationality = visaInfo.familyInfo.spousenationality;
