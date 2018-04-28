@@ -1722,11 +1722,11 @@
 									<div class="teamnamefalseDiv teamnamefalseDiven teamaddfalseen" >
 										<div class="companionSurnNameen">
 											<label>Surnames of Person Traveling With You</label>
-											<input id="firstnameen" class="firstName firstnameen" name="firstnameen" value="${companion.firstname }" type="text" placeholder="Surnames of Person Traveling With You" />
+											<input id="firstnameen" class="irstnameen" name="firstnameen" value="${companion.firstname }" type="text" placeholder="Surnames of Person Traveling With You" />
 										</div>
 										<div class="companionNameen">
 											<label>Given Names of Person Traveling With You</label>
-											<input id="lastnameen" class="lastname lastnameen" name="lastnameen" value="${companion.lastname }" type="text" placeholder="Given Names of Person Traveling With You" />
+											<input id="lastnameen" class="lastnameen" name="lastnameen" value="${companion.lastname }" type="text" placeholder="Given Names of Person Traveling With You" />
 										</div>
 										<div class="clear"></div>
 										<div class="youRelationship">
