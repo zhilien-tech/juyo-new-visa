@@ -88,6 +88,7 @@
 			return;
 		}
 		layer.load(1);
+	
 		//验证指定番号是否填写
 		$.ajax({ 
          	url: '${base}/admin/visaJapan/validateDesignNum.html',
@@ -99,6 +100,7 @@
            		if(data.status == 500){
            			layer.msg(data.msg);
            			layer.closeAll('loading');
+           			closeWindow();
            		}else{
            			$.ajax({ 
            	         	url: '${base}/admin/visaJapan/saveZhaoBao.html',
@@ -106,14 +108,15 @@
            	         	dataType:"json",
            	         	type:'post',
            	         	success: function(data){
-           	           		layer.closeAll('loading');
            	           		window.parent.successCallBack(1);
            	           		//window.parent.reloaddata();
            	           		closeWindow();
            	           	}
            	         });
            		}
+           		layer.closeAll('loading');
            	}
+         	
          });
 		
 	}

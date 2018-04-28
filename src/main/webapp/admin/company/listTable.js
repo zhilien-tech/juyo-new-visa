@@ -59,7 +59,7 @@ function initDatatable() {
 		            },
 		            {"data": "scopes", "bSortable": false,render: function(data, type, row, meta) {
 		            	var scopes = row.scopes;
-		            	if(null==scopes || ""==scopes){
+	            		if(null==scopes || ""==scopes){
 		            		return "";
 		            	}else{
 		            		var arr = scopes.split(',');
@@ -73,6 +73,7 @@ function initDatatable() {
 		            		}
 		            		return scopeStr;
 		            	}
+		            	
 		            } 	
 		            },
 		            {"data": "linkman", "bSortable": false,render: function(data, type, row, meta) {

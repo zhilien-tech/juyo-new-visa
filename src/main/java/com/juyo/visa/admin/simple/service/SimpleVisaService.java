@@ -47,9 +47,7 @@ import com.juyo.visa.common.enums.ApplicantJpWealthEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
-import com.juyo.visa.common.enums.IsHasOrderOrNotEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
-import com.juyo.visa.common.enums.IssueValidityEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.JobStatusFreeEnum;
@@ -72,10 +70,8 @@ import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
-import com.juyo.visa.entities.TApplicantHisEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
-import com.juyo.visa.entities.TApplicantPassportHisEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TApplicantVisaJpEntity;
 import com.juyo.visa.entities.TApplicantVisaOtherInfoEntity;
@@ -85,7 +81,6 @@ import com.juyo.visa.entities.TApplicantWorkJpEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCustomerEntity;
-import com.juyo.visa.entities.TCustomerHisEntity;
 import com.juyo.visa.entities.TCustomerVisainfoEntity;
 import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.entities.THotelEntity;
@@ -93,7 +88,6 @@ import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderTravelplanHisJpEntity;
 import com.juyo.visa.entities.TOrderTravelplanJpEntity;
-import com.juyo.visa.entities.TOrderTripHisJpEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
 import com.juyo.visa.entities.TScenicEntity;
 import com.juyo.visa.entities.TUserEntity;
@@ -293,14 +287,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//需要生成的travelplan
 		List<TOrderTravelplanJpEntity> travelplans = Lists.newArrayList();
 		//生成行程安排历史信息
-		List<TOrderTravelplanHisJpEntity> travelplansHis = Lists.newArrayList();
+//		List<TOrderTravelplanHisJpEntity> travelplansHis = Lists.newArrayList();
 		Random random = new Random();
 		//在一个城市只住一家酒店
 		int hotelindex = random.nextInt(hotels.size());
+
 		//为什么要<=，因为最后一天也要玩
 		for (int i = 0; i <= daysBetween; i++) {
 			TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-			TOrderTravelplanHisJpEntity travelPlanHis = new TOrderTravelplanHisJpEntity();
+//			TOrderTravelplanHisJpEntity travelPlanHis = new TOrderTravelplanHisJpEntity();
 			travelplan.setCityId(form.getGoArrivedCity());
 			travelplan.setDay(String.valueOf(i + 1));
 			travelplan.setOrderId(orderjpid);
@@ -309,23 +304,23 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			travelplan.setCreateTime(new Date());
 
 			//订单Id
-			if (!Util.isEmpty(orderid)) {
-				travelPlanHis.setOrderId(orderid);
-			}
+//			if (!Util.isEmpty(orderid)) {
+//				travelPlanHis.setOrderId(orderid);
+//			}
 			//天数
-			travelPlanHis.setDay(String.valueOf(i + 1));
-			//日期
-			travelPlanHis.setOutDate(DateUtil.addDay(form.getGoDate(), i));
-			//城市Id
-			travelPlanHis.setCityId(form.getGoArrivedCity());
-			//城市名字
-			travelPlanHis.setCityName(city.getCity());
+//			travelPlanHis.setDay(String.valueOf(i + 1));
+//			//日期
+//			travelPlanHis.setOutDate(DateUtil.addDay(form.getGoDate(), i));
+//			//城市Id
+//			travelPlanHis.setCityId(form.getGoArrivedCity());
+//			//城市名字
+//			travelPlanHis.setCityName(city.getCity());
 			//酒店
 			if (i != daysBetween) {
 				THotelEntity hotel = hotels.get(hotelindex);
 				travelplan.setHotel(hotel.getId());
 				//酒店历史信息
-				travelPlanHis.setHotel(hotel.getName());
+//				travelPlanHis.setHotel(hotel.getName());
 			}
 			if (i > 0 && i != daysBetween) {
 				//景区
@@ -334,20 +329,20 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				scenics.remove(scenic);
 				travelplan.setScenic(scenic.getName());
 				//景点 历史信息
-				travelPlanHis.setScenic(scenic.getName());
+//				travelPlanHis.setScenic(scenic.getName());
 			}
 			travelplans.add(travelplan);
-//			travelplansHis.add(travelPlanHis);
+			//			travelplansHis.add(travelPlanHis);
 		}
 
 		List<TOrderTravelplanJpEntity> before = dbDao.query(TOrderTravelplanJpEntity.class,
 				Cnd.where("orderid", "=", orderjpid), null);
-		List<TOrderTravelplanHisJpEntity> beforeHis = dbDao.query(TOrderTravelplanHisJpEntity.class,
-				Cnd.where("orderid", "=", orderid), null);
+//		List<TOrderTravelplanHisJpEntity> beforeHis = dbDao.query(TOrderTravelplanHisJpEntity.class,
+//				Cnd.where("orderid", "=", orderid), null);
 		//更新行程安排
 		dbDao.updateRelations(before, travelplans);
 		//更新历史行程安排
-//		dbDao.updateRelations(beforeHis, travelplansHis);
+		//		dbDao.updateRelations(beforeHis, travelplansHis);
 		result.put("status", "success");
 		result.put("orderid", orderjpid);
 		result.put("data", getTravelPlanByOrderId(orderjpid));
@@ -495,6 +490,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
 			orderid = generrateorder.get("orderid");
 			orderjpid = generrateorder.get("orderjpid");
+			orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+
 		} else {
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 			orderid = orderjp.getOrderId();
@@ -571,52 +568,52 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderjpinfo.setAmount(form.getAmount());
 		dbDao.update(orderjpinfo);
 		//保存或者更新客户历史表-----------------------------------------------------------------
-//		TCustomerHisEntity customerHis = dbDao.fetch(TCustomerHisEntity.class, Cnd.where("orderId", "=", orderid));
-//		if (Util.isEmpty(customerHis)) {
-//			customerHis = new TCustomerHisEntity();
-//
-//		}
-//		//用户id
-//		customerHis.setUserId(loginUser.getId());
-//		//订单Id
-//		customerHis.setOrderId(orderid);
-//		//公司Id
-//		customerHis.setCompId(loginUser.getComId());
-//		//公司名称
-//		customerHis.setName(form.getCompName());
-//		//公司简称
-//		customerHis.setShortname(form.getComShortName());
-//		//客户来源 CustomerTypeEnum
-//		Integer customerType = form.getCustomerType();
-//		for (CustomerTypeEnum pmEnum : CustomerTypeEnum.values())
-//			if (!Util.isEmpty(customerType) && customerType == pmEnum.intKey()) {
-//				customerHis.setSource(pmEnum.value());
-//				break;
-//			}
-//		//支付方式 MainSalePayTypeEnum
-//		Integer payType = form.getPayType();
-//		for (MainSalePayTypeEnum pmEnum : MainSalePayTypeEnum.values())
-//			if (!Util.isEmpty(payType) && payType == pmEnum.intKey()) {
-//				customerHis.setPayType(pmEnum.value());
-//				break;
-//			}
-//		//是否来自客户信息  是（直客）
-//		if (customerType == 4) {
-//			customerHis.setIsCustomerAdd("是");
-//		} else {
-//			customerHis.setIsCustomerAdd("否");
-//		}
-//		//手机
-//		customerHis.setMobile(loginUser.getMobile());
-//		//email
-//		customerHis.setEmail(loginUser.getEmail());
-//		if (!Util.isEmpty(customerHis.getId())) {
-//			customerHis.setUpdateTime(new Date());
-//			dbDao.update(customerHis);
-//		} else {
-//			customerHis.setCreateTime(new Date());
-//			dbDao.insert(customerHis);
-//		}
+		//		TCustomerHisEntity customerHis = dbDao.fetch(TCustomerHisEntity.class, Cnd.where("orderId", "=", orderid));
+		//		if (Util.isEmpty(customerHis)) {
+		//			customerHis = new TCustomerHisEntity();
+		//
+		//		}
+		//		//用户id
+		//		customerHis.setUserId(loginUser.getId());
+		//		//订单Id
+		//		customerHis.setOrderId(orderid);
+		//		//公司Id
+		//		customerHis.setCompId(loginUser.getComId());
+		//		//公司名称
+		//		customerHis.setName(form.getCompName());
+		//		//公司简称
+		//		customerHis.setShortname(form.getComShortName());
+		//		//客户来源 CustomerTypeEnum
+		//		Integer customerType = form.getCustomerType();
+		//		for (CustomerTypeEnum pmEnum : CustomerTypeEnum.values())
+		//			if (!Util.isEmpty(customerType) && customerType == pmEnum.intKey()) {
+		//				customerHis.setSource(pmEnum.value());
+		//				break;
+		//			}
+		//		//支付方式 MainSalePayTypeEnum
+		//		Integer payType = form.getPayType();
+		//		for (MainSalePayTypeEnum pmEnum : MainSalePayTypeEnum.values())
+		//			if (!Util.isEmpty(payType) && payType == pmEnum.intKey()) {
+		//				customerHis.setPayType(pmEnum.value());
+		//				break;
+		//			}
+		//		//是否来自客户信息  是（直客）
+		//		if (customerType == 4) {
+		//			customerHis.setIsCustomerAdd("是");
+		//		} else {
+		//			customerHis.setIsCustomerAdd("否");
+		//		}
+		//		//手机
+		//		customerHis.setMobile(loginUser.getMobile());
+		//		//email
+		//		customerHis.setEmail(loginUser.getEmail());
+		//		if (!Util.isEmpty(customerHis.getId())) {
+		//			customerHis.setUpdateTime(new Date());
+		//			dbDao.update(customerHis);
+		//		} else {
+		//			customerHis.setCreateTime(new Date());
+		//			dbDao.insert(customerHis);
+		//		}
 
 		//出行信息---------------------------------------------------------------------------
 		TOrderTripJpEntity orderjptrip = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderId", "=", orderjpid));
@@ -639,54 +636,53 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		} else {
 			dbDao.insert(orderjptrip);
 		}
-//		//出行历史信息
-//		TOrderTripHisJpEntity tOrderTripHis = dbDao.fetch(TOrderTripHisJpEntity.class,
-//				Cnd.where("orderId", "=", orderid));
-//		if (Util.isEmpty(tOrderTripHis)) {
-//			tOrderTripHis = new TOrderTripHisJpEntity();
-//		}
-//		//订单Id
-//		tOrderTripHis.setOrderId(orderid);
-//		//行程类型
-//		if (form.getTriptype() == 1) {
-//			tOrderTripHis.setTripType("往返");
-//		} else {
-//			tOrderTripHis.setTripType("多程");
-//		}
-//		//出行目的
-//		tOrderTripHis.setTripPurpose(form.getTripPurpose());
-//		//出发日期 去程
-//		tOrderTripHis.setGoDate(form.getGoDate());
-//		//出发城市 去程
-//		TCityEntity goDepartureCity = dbDao.fetch(TCityEntity.class, Cnd.where("id", "", form.getGoDepartureCity()));
-//		tOrderTripHis.setGoDepartureCity(goDepartureCity.getCity());
-//		//抵达城市 去程
-//		TCityEntity goArrivedCity = dbDao.fetch(TCityEntity.class, Cnd.where("id", "", form.getGoArrivedCity()));
-//		tOrderTripHis.setGoArrivedCity(goArrivedCity.getCity());
-//		//航班号
-//		tOrderTripHis.setGoFlightNum(form.getGoFlightNum());
-//		//出发日期
-//		tOrderTripHis.setReturnDate(form.getReturnDate());
-//		//出发城市 返程
-//		TCityEntity returnDepartureCity = dbDao.fetch(TCityEntity.class,
-//				Cnd.where("id", "", form.getReturnDepartureCity()));
-//		tOrderTripHis.setReturnDepartureCity(returnDepartureCity.getCity());
-//		//返回城市 返程
-//		TCityEntity returnArrivedCity = dbDao
-//				.fetch(TCityEntity.class, Cnd.where("id", "", form.getReturnArrivedCity()));
-//		tOrderTripHis.setReturnArrivedCity(returnArrivedCity.getCity());
-//		//航班号 返程
-//		tOrderTripHis.setReturnFlightNum(form.getReturnFlightNum());
-//		//新增 or 更新
-//		if (!Util.isEmpty(tOrderTripHis.getId())) {
-//			tOrderTripHis.setUpdateTime(new Date());
-//			dbDao.update(tOrderTripHis);
-//		} else {
-//			tOrderTripHis.setCreateTime(new Date());
-//			dbDao.insert(tOrderTripHis);
-//		}
-		//添加日志下单
-		orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+		//		//出行历史信息
+		//		TOrderTripHisJpEntity tOrderTripHis = dbDao.fetch(TOrderTripHisJpEntity.class,
+		//				Cnd.where("orderId", "=", orderid));
+		//		if (Util.isEmpty(tOrderTripHis)) {
+		//			tOrderTripHis = new TOrderTripHisJpEntity();
+		//		}
+		//		//订单Id
+		//		tOrderTripHis.setOrderId(orderid);
+		//		//行程类型
+		//		if (form.getTriptype() == 1) {
+		//			tOrderTripHis.setTripType("往返");
+		//		} else {
+		//			tOrderTripHis.setTripType("多程");
+		//		}
+		//		//出行目的
+		//		tOrderTripHis.setTripPurpose(form.getTripPurpose());
+		//		//出发日期 去程
+		//		tOrderTripHis.setGoDate(form.getGoDate());
+		//		//出发城市 去程
+		//		TCityEntity goDepartureCity = dbDao.fetch(TCityEntity.class, Cnd.where("id", "", form.getGoDepartureCity()));
+		//		tOrderTripHis.setGoDepartureCity(goDepartureCity.getCity());
+		//		//抵达城市 去程
+		//		TCityEntity goArrivedCity = dbDao.fetch(TCityEntity.class, Cnd.where("id", "", form.getGoArrivedCity()));
+		//		tOrderTripHis.setGoArrivedCity(goArrivedCity.getCity());
+		//		//航班号
+		//		tOrderTripHis.setGoFlightNum(form.getGoFlightNum());
+		//		//出发日期
+		//		tOrderTripHis.setReturnDate(form.getReturnDate());
+		//		//出发城市 返程
+		//		TCityEntity returnDepartureCity = dbDao.fetch(TCityEntity.class,
+		//				Cnd.where("id", "", form.getReturnDepartureCity()));
+		//		tOrderTripHis.setReturnDepartureCity(returnDepartureCity.getCity());
+		//		//返回城市 返程
+		//		TCityEntity returnArrivedCity = dbDao
+		//				.fetch(TCityEntity.class, Cnd.where("id", "", form.getReturnArrivedCity()));
+		//		tOrderTripHis.setReturnArrivedCity(returnArrivedCity.getCity());
+		//		//航班号 返程
+		//		tOrderTripHis.setReturnFlightNum(form.getReturnFlightNum());
+		//		//新增 or 更新
+		//		if (!Util.isEmpty(tOrderTripHis.getId())) {
+		//			tOrderTripHis.setUpdateTime(new Date());
+		//			dbDao.update(tOrderTripHis);
+		//		} else {
+		//			tOrderTripHis.setCreateTime(new Date());
+		//			dbDao.insert(tOrderTripHis);
+		//		}
+
 		//消息通知
 		try {
 			visaInfoWSHandler.broadcast(new TextMessage(""));
@@ -815,18 +811,21 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	public Object saveApplicantInfo(HttpServletRequest request, TApplicantForm form) {
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-	   TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
 		Integer orderjpid = form.getOrderid();
 		Integer orderid = null;
 		TApplicantEntity applicant = new TApplicantEntity();
 		TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+		applicantjp.setMainRelation(form.getMainRelation());
 		//修改
 		if (!Util.isEmpty(form.getId())) {
 			applicant = dbDao.fetch(TApplicantEntity.class, form.getId().longValue());
 			applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", applicant.getId()));
 			result.put("applicantjpid", applicantjp.getId());
 			result.put("applicantid", applicant.getId());
+			applicantjp.setMainRelation(form.getMainRelation());
+			dbDao.update(applicantjp);
 		}
 		applicant.setOpId(loginUser.getId());
 		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
@@ -890,7 +889,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Integer applicantid = form.getId();
 		if (!Util.isEmpty(form.getId())) {
 			dbDao.update(applicant);
+
 		} else {
+			
 			TApplicantEntity insertapplicant = dbDao.insert(applicant);
 			applicantid = insertapplicant.getId();
 			result.put("applicantid", applicantid);
@@ -902,12 +903,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			} else {
 				TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 				orderid = orderjp.getOrderId();
+				applicantjp.setOrderId(orderid);
 			}
+			//新增日本订单基本信息
+			applicantjp.setMainRelation(form.getMainRelation());
+			 dbDao.insert(applicantjp);
 			applicantjp.setOrderId(orderjpid);
 			applicantjp.setApplicantId(applicantid);
 			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
 			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
 			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setMainRelation(form.getMainRelation());
 			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
 			result.put("applicantjpid", insertappjp.getId());
 			//日本工作信息
@@ -1140,7 +1146,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		}
 		//保存历史信息
-//		savaOrUpdatePassport(form, request);
+		//		savaOrUpdatePassport(form, request);
 		//int update = dbDao.update(passport);
 		return result;
 	}
@@ -1151,86 +1157,86 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 * 
 	 * 
 	 */
-//	public void savaOrUpdatePassport(TApplicantPassportForm form, HttpServletRequest request) {
-//		HttpSession session = request.getSession();
-//		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-//		//根据日本订单Id查询订单Id
-//		Integer orderid = form.getOrderid();
-//		TOrderJpEntity orderJp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("id", "=", orderid));
-//		//根据订单Id查询申请人护照信息历史信息
-//		TApplicantPassportHisEntity passportHis = dbDao.fetch(TApplicantPassportHisEntity.class,
-//				Cnd.where("orderId", "=", orderJp.getId()));
-//		//判断是否为空
-//		if (Util.isEmpty(passportHis)) {
-//			passportHis = new TApplicantPassportHisEntity();
-//		}
-//		//订单Id
-//		passportHis.setOrderId(orderJp.getId());
-//		//姓
-//		passportHis.setFirstName(form.getFirstName());
-//		//姓(拼音)
-//		if (!Util.isEmpty(form.getFirstNameEn())) {
-//			passportHis.setFirstNameEn(form.getFirstNameEn().substring(1));
-//		}
-//		//名
-//		passportHis.setLastName(form.getLastName());
-//		//名(拼音)
-//		if (!Util.isEmpty(form.getLastNameEn())) {
-//			passportHis.setLastNameEn(form.getLastNameEn().substring(1));
-//		}
-//		//护照类型
-//		passportHis.setType(form.getType());
-//		//护照号
-//		passportHis.setPassport(form.getPassport());
-//		//性别
-//		passportHis.setSex(form.getSex());
-//		//性别(拼音)
-//		passportHis.setSexEn(form.getSexEn());
-//		//出生地点
-//		passportHis.setBirthAddress(form.getBirthAddress());
-//		//出生地点(拼音)
-//		passportHis.setBirthAddressEn(form.getBirthAddressEn());
-//		//出生日期
-//		passportHis.setBirthday(form.getBirthday());
-//		//签发地点
-//		passportHis.setIssuedPlace(form.getIssuedPlace());
-//		//签发地点(拼音)
-//		passportHis.setIssuedPlaceEn(form.getIssuedPlaceEn());
-//		//签发日期
-//		passportHis.setIssuedDate(form.getIssuedDate());
-//		//有效期始 没用
-//		passportHis.setValidStartDate(form.getValidStartDate());
-//		//有效期至
-//		passportHis.setValidEndDate(form.getValidEndDate());
-//		//有效类型
-//		if (!Util.isEmpty(form.getValidType())) {
-//			for (IssueValidityEnum issueValidityEnum : IssueValidityEnum.values()) {
-//				if (!Util.isEmpty(form.getValidType()) && form.getValidType().equals(issueValidityEnum.key())) {
-//					passportHis.setValidType(issueValidityEnum.value());
-//				}
-//			}
-//		}
-//		//签发机关
-//		passportHis.setIssuedOrganization("公安部出入境管理局");
-//		//签发机关(拼音)
-//		passportHis.setIssuedOrganizationEn(form.getIssuedOrganizationEn());
-//		//护照地址
-//		passportHis.setPassportUrl(form.getPassportUrl());
-//		//操作人Id
-//		passportHis.setOpId(loginUser.getId());
-//		//OCR识别码第一行
-//		passportHis.setOCRline1(form.getOCRline1());
-//		//OCR识别码第二行
-//		passportHis.setOCRline2(form.getOCRline2());
-//		//新增or更新
-//		if (!Util.isEmpty(passportHis.getId())) {
-//			passportHis.setUpdateTime(new Date());
-//			dbDao.update(passportHis);
-//		} else {
-//			passportHis.setCreateTime(new Date());
-//			dbDao.insert(passportHis);
-//		}
-//	}
+	//	public void savaOrUpdatePassport(TApplicantPassportForm form, HttpServletRequest request) {
+	//		HttpSession session = request.getSession();
+	//		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+	//		//根据日本订单Id查询订单Id
+	//		Integer orderid = form.getOrderid();
+	//		TOrderJpEntity orderJp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("id", "=", orderid));
+	//		//根据订单Id查询申请人护照信息历史信息
+	//		TApplicantPassportHisEntity passportHis = dbDao.fetch(TApplicantPassportHisEntity.class,
+	//				Cnd.where("orderId", "=", orderJp.getId()));
+	//		//判断是否为空
+	//		if (Util.isEmpty(passportHis)) {
+	//			passportHis = new TApplicantPassportHisEntity();
+	//		}
+	//		//订单Id
+	//		passportHis.setOrderId(orderJp.getId());
+	//		//姓
+	//		passportHis.setFirstName(form.getFirstName());
+	//		//姓(拼音)
+	//		if (!Util.isEmpty(form.getFirstNameEn())) {
+	//			passportHis.setFirstNameEn(form.getFirstNameEn().substring(1));
+	//		}
+	//		//名
+	//		passportHis.setLastName(form.getLastName());
+	//		//名(拼音)
+	//		if (!Util.isEmpty(form.getLastNameEn())) {
+	//			passportHis.setLastNameEn(form.getLastNameEn().substring(1));
+	//		}
+	//		//护照类型
+	//		passportHis.setType(form.getType());
+	//		//护照号
+	//		passportHis.setPassport(form.getPassport());
+	//		//性别
+	//		passportHis.setSex(form.getSex());
+	//		//性别(拼音)
+	//		passportHis.setSexEn(form.getSexEn());
+	//		//出生地点
+	//		passportHis.setBirthAddress(form.getBirthAddress());
+	//		//出生地点(拼音)
+	//		passportHis.setBirthAddressEn(form.getBirthAddressEn());
+	//		//出生日期
+	//		passportHis.setBirthday(form.getBirthday());
+	//		//签发地点
+	//		passportHis.setIssuedPlace(form.getIssuedPlace());
+	//		//签发地点(拼音)
+	//		passportHis.setIssuedPlaceEn(form.getIssuedPlaceEn());
+	//		//签发日期
+	//		passportHis.setIssuedDate(form.getIssuedDate());
+	//		//有效期始 没用
+	//		passportHis.setValidStartDate(form.getValidStartDate());
+	//		//有效期至
+	//		passportHis.setValidEndDate(form.getValidEndDate());
+	//		//有效类型
+	//		if (!Util.isEmpty(form.getValidType())) {
+	//			for (IssueValidityEnum issueValidityEnum : IssueValidityEnum.values()) {
+	//				if (!Util.isEmpty(form.getValidType()) && form.getValidType().equals(issueValidityEnum.key())) {
+	//					passportHis.setValidType(issueValidityEnum.value());
+	//				}
+	//			}
+	//		}
+	//		//签发机关
+	//		passportHis.setIssuedOrganization("公安部出入境管理局");
+	//		//签发机关(拼音)
+	//		passportHis.setIssuedOrganizationEn(form.getIssuedOrganizationEn());
+	//		//护照地址
+	//		passportHis.setPassportUrl(form.getPassportUrl());
+	//		//操作人Id
+	//		passportHis.setOpId(loginUser.getId());
+	//		//OCR识别码第一行
+	//		passportHis.setOCRline1(form.getOCRline1());
+	//		//OCR识别码第二行
+	//		passportHis.setOCRline2(form.getOCRline2());
+	//		//新增or更新
+	//		if (!Util.isEmpty(passportHis.getId())) {
+	//			passportHis.setUpdateTime(new Date());
+	//			dbDao.update(passportHis);
+	//		} else {
+	//			passportHis.setCreateTime(new Date());
+	//			dbDao.insert(passportHis);
+	//		}
+	//	}
 
 	/**
 	 * 跳转到编辑基本信息
@@ -1246,6 +1252,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantid.longValue());
 		result.put("applicant", applicant);
+		TApplicantOrderJpEntity orderjp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", applicantid));
+		result.put("orderjp", orderjp);
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		if (!Util.isEmpty(applicant.getBirthday())) {
 			Date birthday = applicant.getBirthday();
@@ -1286,7 +1294,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			result.put("otherLastNameEn", sb.toString());
 		}
 		//执行保存到历史表
-//		saveOrUpdateApplicant(applicantid, orderid, request);
+		//		saveOrUpdateApplicant(applicantid, orderid, request);
 		String localAddr = request.getServerName();
 		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
@@ -1305,211 +1313,211 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	/***
 	 * 新增or更新申请人基本信息
 	 */
-//	public void saveOrUpdateApplicant(Integer applicantid, Integer orderid, HttpServletRequest request) {
-//		Map<String, Object> result = Maps.newHashMap();
-//		HttpSession session = request.getSession();
-//		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-//		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-//		//根据申请人ID获取申请人基本信息
-//		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantid.longValue());
-//		//生成申请人基础信息历史实体
-//		TApplicantHisEntity applicantHis = dbDao.fetch(TApplicantHisEntity.class, orderid.longValue());
-//		if (!Util.isEmpty(applicantHis)) {
-//			applicantHis = new TApplicantHisEntity();
-//		}
-//		//主申请人ID
-//		if (!Util.isEmpty(applicant.getMainId())) {
-//			applicantHis.setMainId(applicant.getMainId());
-//		}
-//		//登陆人ID
-//		applicantHis.setId(loginUser.getId());
-//		//登陆人
-//		applicantHis.setUserName(loginUser.getName());
-//		//申请人状态
-//		Integer status = applicant.getStatus();
-//		if (!Util.isEmpty(applicant.getStatus())) {
-//
-//			for (TrialApplicantStatusEnum stEnum : TrialApplicantStatusEnum.values())
-//				if (!Util.isEmpty(status) && status == stEnum.intKey()) {
-//					applicantHis.setStatus(stEnum.value());
-//					break;
-//				}
-//		}
-//		//姓
-//		if (!Util.isEmpty(applicant.getFirstName())) {
-//			applicantHis.setFirstName(applicant.getFirstName());
-//		}
-//		//性(拼音)
-//		if (!Util.isEmpty(applicant.getFirstNameEn())) {
-//			StringBuffer sb = new StringBuffer();
-//			sb.append("/").append(applicant.getFirstNameEn());
-//			applicantHis.setFirstNameEn(sb.toString());
-//		}
-//		//名
-//		if (!Util.isEmpty(applicant.getLastName())) {
-//			applicantHis.setLastName(applicant.getLastName());
-//		}
-//		//名(拼音)
-//		if (!Util.isEmpty(applicant.getLastNameEn())) {
-//			StringBuffer sb = new StringBuffer();
-//			sb.append("/").append(applicant.getLastNameEn());
-//			applicantHis.setLastNameEn(sb.toString());
-//		}
-//		//email
-//		if (!Util.isEmpty(applicant.getEmail())) {
-//			applicantHis.setEmail(applicant.getEmail());
-//		}
-//		//性别
-//		if (!Util.isEmpty(applicant.getSex())) {
-//			applicantHis.setSex(applicant.getSex());
-//		}
-//		//民族
-//		if (!Util.isEmpty(applicant.getNation())) {
-//			applicantHis.setNation(applicant.getNation());
-//		}
-//		//出生日期
-//		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-//		if (!Util.isEmpty(applicant.getBirthday())) {
-//			Date birthday = applicant.getBirthday();
-//			String birthdayStr = sdf.format(birthday);
-//			applicantHis.setBirthday(birthday);
-//		}
-//		//手机号
-//		if (!Util.isEmpty(applicant.getTelephone())) {
-//			applicantHis.setTelephone(applicant.getTelephone());
-//		}
-//		//住址
-//		if (!Util.isEmpty(applicant.getAddress())) {
-//			applicantHis.setAddress(applicant.getAddress());
-//		}
-//		//身份证号
-//		if (!Util.isEmpty(applicant.getCardId())) {
-//			applicantHis.setCardId(applicant.getCardId());
-//		}
-//		//身份证正面
-//		if (!Util.isEmpty(applicant.getCardFront())) {
-//			applicantHis.setCardFront(applicant.getCardFront());
-//		}
-//		//身份证反面
-//		if (!Util.isEmpty(applicant.getCardBack())) {
-//			applicantHis.setCardBack(applicant.getCardBack());
-//		}
-//		//签发机关
-//		if (!Util.isEmpty(applicant.getIssueOrganization())) {
-//			applicantHis.setIssueOrganization(applicant.getIssueOrganization());
-//		}
-//		//有效期始
-//		if (!Util.isEmpty(applicant.getValidStartDate())) {
-//			Date validStartDate = applicant.getValidStartDate();
-//			String validStartDateStr = sdf.format(validStartDate);
-//			applicantHis.setValidStartDate(validStartDate);
-//		}
-//		//有效期至
-//		if (!Util.isEmpty(applicant.getValidEndDate())) {
-//			Date validEndDate = applicant.getValidEndDate();
-//			String validEndDateStr = sdf.format(validEndDate);
-//			applicantHis.setValidEndDate(validEndDate);
-//		}
-//		//现居住地址省份
-//		if (!Util.isEmpty(applicant.getProvince())) {
-//			applicantHis.setProvince(applicant.getProvince());
-//		}
-//		//现居住地址城市
-//		if (!Util.isEmpty(applicant.getCity())) {
-//			applicantHis.setCity(applicant.getCity());
-//		}
-//		//详细地址
-//		if (!Util.isEmpty(applicant.getDetailedAddress())) {
-//			applicantHis.setDetailedAddress(applicant.getDetailedAddress());
-//		}
-//		//曾用姓
-//		if (!Util.isEmpty(applicant.getOtherFirstName())) {
-//			applicantHis.setOtherFirstName(applicant.getOtherFirstName());
-//		}
-//		//曾用姓(拼音)
-//		if (!Util.isEmpty(applicant.getOtherFirstNameEn())) {
-//			StringBuffer sb = new StringBuffer();
-//			sb.append("/").append(applicant.getOtherFirstNameEn());
-//			applicantHis.setOtherFirstNameEn(sb.toString());
-//		}
-//		//曾用名
-//		if (!Util.isEmpty(applicant.getOtherLastName())) {
-//			applicantHis.setOtherLastName(applicant.getOtherLastName());
-//		}
-//		//曾用名(拼音)
-//		if (!Util.isEmpty(applicant.getOtherLastNameEn())) {
-//			StringBuffer sb = new StringBuffer();
-//			sb.append("/").append(applicant.getOtherLastNameEn());
-//			applicantHis.setOtherLastNameEn(sb.toString());
-//		}
-//		//紧急联系人姓名
-//		if (!Util.isEmpty(applicant.getEmergencyLinkman())) {
-//			applicantHis.setEmergencyLinkman(applicant.getEmergencyLinkman());
-//		}
-//		//紧急联系人手机
-//		if (!Util.isEmpty(applicant.getEmergencyTelephone())) {
-//			applicantHis.setEmergencyTelephone(applicant.getEmergencyTelephone());
-//		}
-//		//身份证省份
-//		if (!Util.isEmpty(applicant.getCardProvince())) {
-//			applicantHis.setCardProvince(applicant.getCardProvince());
-//		}
-//		//身份证城市
-//		if (!Util.isEmpty(applicant.getCardCity())) {
-//			applicantHis.setCardCity(applicant.getCardCity());
-//		}
-//		//是否另有国籍
-//
-//		Integer hasOtherNationality = applicant.getHasOtherNationality();
-//		if (!Util.isEmpty(hasOtherNationality)) {
-//			for (IsHasOrderOrNotEnum stEnum : IsHasOrderOrNotEnum.values())
-//				if (!Util.isEmpty(hasOtherNationality) && hasOtherNationality == stEnum.intKey()) {
-//					applicantHis.setHasOtherNationality(stEnum.value());
-//					break;
-//				}
-//		}
-//		//是否有曾用名
-//		Integer hasOtherName = applicant.getHasOtherName();
-//		for (IsHasOrderOrNotEnum stEnum : IsHasOrderOrNotEnum.values())
-//			if (!Util.isEmpty(hasOtherName) && hasOtherName == stEnum.intKey()) {
-//				applicantHis.setHasOtherName(stEnum.value());
-//				break;
-//			}
-//		//结婚证/离婚证地址
-//		if (!Util.isEmpty(applicant.getMarryUrl())) {
-//			applicantHis.setMarryUrl(applicant.getMarryUrl());
-//		}
-//		//结婚状况
-//		Integer marryStatus = applicant.getMarryStatus();
-//		for (MarryStatusEnum stEnum : MarryStatusEnum.values())
-//			if (!Util.isEmpty(marryStatus) && marryStatus == stEnum.intKey()) {
-//				applicantHis.setMarryStatus(stEnum.value());
-//				break;
-//			}
-//		//国籍
-//		if (!Util.isEmpty(applicant.getNationality())) {
-//			applicantHis.setNationality(applicant.getNationality());
-//		}
-//		//现居住地址是否与身份证相同
-//		Integer addressIsSameWithCard = applicant.getAddressIsSameWithCard();
-//		for (IsHasOrderOrNotEnum stEnum : IsHasOrderOrNotEnum.values())
-//			if (!Util.isEmpty(addressIsSameWithCard) && addressIsSameWithCard == stEnum.intKey()) {
-//				applicantHis.setAddressIsSameWithCard(stEnum.value());
-//				break;
-//			}
-//
-//		//操作人
-//		if (!Util.isEmpty(applicant.getOpId())) {
-//			applicantHis.setOpId(applicant.getOpId());
-//		}
-//		if (!Util.isEmpty(applicantHis.getId())) {
-//			applicantHis.setUpdateTime(new Date());
-//			dbDao.update(applicantHis);
-//		} else {
-//			applicantHis.setCreateTime(new Date());
-//			dbDao.insert(applicantHis);
-//		}
-//	}
+	//	public void saveOrUpdateApplicant(Integer applicantid, Integer orderid, HttpServletRequest request) {
+	//		Map<String, Object> result = Maps.newHashMap();
+	//		HttpSession session = request.getSession();
+	//		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+	//		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+	//		//根据申请人ID获取申请人基本信息
+	//		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantid.longValue());
+	//		//生成申请人基础信息历史实体
+	//		TApplicantHisEntity applicantHis = dbDao.fetch(TApplicantHisEntity.class, orderid.longValue());
+	//		if (!Util.isEmpty(applicantHis)) {
+	//			applicantHis = new TApplicantHisEntity();
+	//		}
+	//		//主申请人ID
+	//		if (!Util.isEmpty(applicant.getMainId())) {
+	//			applicantHis.setMainId(applicant.getMainId());
+	//		}
+	//		//登陆人ID
+	//		applicantHis.setId(loginUser.getId());
+	//		//登陆人
+	//		applicantHis.setUserName(loginUser.getName());
+	//		//申请人状态
+	//		Integer status = applicant.getStatus();
+	//		if (!Util.isEmpty(applicant.getStatus())) {
+	//
+	//			for (TrialApplicantStatusEnum stEnum : TrialApplicantStatusEnum.values())
+	//				if (!Util.isEmpty(status) && status == stEnum.intKey()) {
+	//					applicantHis.setStatus(stEnum.value());
+	//					break;
+	//				}
+	//		}
+	//		//姓
+	//		if (!Util.isEmpty(applicant.getFirstName())) {
+	//			applicantHis.setFirstName(applicant.getFirstName());
+	//		}
+	//		//性(拼音)
+	//		if (!Util.isEmpty(applicant.getFirstNameEn())) {
+	//			StringBuffer sb = new StringBuffer();
+	//			sb.append("/").append(applicant.getFirstNameEn());
+	//			applicantHis.setFirstNameEn(sb.toString());
+	//		}
+	//		//名
+	//		if (!Util.isEmpty(applicant.getLastName())) {
+	//			applicantHis.setLastName(applicant.getLastName());
+	//		}
+	//		//名(拼音)
+	//		if (!Util.isEmpty(applicant.getLastNameEn())) {
+	//			StringBuffer sb = new StringBuffer();
+	//			sb.append("/").append(applicant.getLastNameEn());
+	//			applicantHis.setLastNameEn(sb.toString());
+	//		}
+	//		//email
+	//		if (!Util.isEmpty(applicant.getEmail())) {
+	//			applicantHis.setEmail(applicant.getEmail());
+	//		}
+	//		//性别
+	//		if (!Util.isEmpty(applicant.getSex())) {
+	//			applicantHis.setSex(applicant.getSex());
+	//		}
+	//		//民族
+	//		if (!Util.isEmpty(applicant.getNation())) {
+	//			applicantHis.setNation(applicant.getNation());
+	//		}
+	//		//出生日期
+	//		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+	//		if (!Util.isEmpty(applicant.getBirthday())) {
+	//			Date birthday = applicant.getBirthday();
+	//			String birthdayStr = sdf.format(birthday);
+	//			applicantHis.setBirthday(birthday);
+	//		}
+	//		//手机号
+	//		if (!Util.isEmpty(applicant.getTelephone())) {
+	//			applicantHis.setTelephone(applicant.getTelephone());
+	//		}
+	//		//住址
+	//		if (!Util.isEmpty(applicant.getAddress())) {
+	//			applicantHis.setAddress(applicant.getAddress());
+	//		}
+	//		//身份证号
+	//		if (!Util.isEmpty(applicant.getCardId())) {
+	//			applicantHis.setCardId(applicant.getCardId());
+	//		}
+	//		//身份证正面
+	//		if (!Util.isEmpty(applicant.getCardFront())) {
+	//			applicantHis.setCardFront(applicant.getCardFront());
+	//		}
+	//		//身份证反面
+	//		if (!Util.isEmpty(applicant.getCardBack())) {
+	//			applicantHis.setCardBack(applicant.getCardBack());
+	//		}
+	//		//签发机关
+	//		if (!Util.isEmpty(applicant.getIssueOrganization())) {
+	//			applicantHis.setIssueOrganization(applicant.getIssueOrganization());
+	//		}
+	//		//有效期始
+	//		if (!Util.isEmpty(applicant.getValidStartDate())) {
+	//			Date validStartDate = applicant.getValidStartDate();
+	//			String validStartDateStr = sdf.format(validStartDate);
+	//			applicantHis.setValidStartDate(validStartDate);
+	//		}
+	//		//有效期至
+	//		if (!Util.isEmpty(applicant.getValidEndDate())) {
+	//			Date validEndDate = applicant.getValidEndDate();
+	//			String validEndDateStr = sdf.format(validEndDate);
+	//			applicantHis.setValidEndDate(validEndDate);
+	//		}
+	//		//现居住地址省份
+	//		if (!Util.isEmpty(applicant.getProvince())) {
+	//			applicantHis.setProvince(applicant.getProvince());
+	//		}
+	//		//现居住地址城市
+	//		if (!Util.isEmpty(applicant.getCity())) {
+	//			applicantHis.setCity(applicant.getCity());
+	//		}
+	//		//详细地址
+	//		if (!Util.isEmpty(applicant.getDetailedAddress())) {
+	//			applicantHis.setDetailedAddress(applicant.getDetailedAddress());
+	//		}
+	//		//曾用姓
+	//		if (!Util.isEmpty(applicant.getOtherFirstName())) {
+	//			applicantHis.setOtherFirstName(applicant.getOtherFirstName());
+	//		}
+	//		//曾用姓(拼音)
+	//		if (!Util.isEmpty(applicant.getOtherFirstNameEn())) {
+	//			StringBuffer sb = new StringBuffer();
+	//			sb.append("/").append(applicant.getOtherFirstNameEn());
+	//			applicantHis.setOtherFirstNameEn(sb.toString());
+	//		}
+	//		//曾用名
+	//		if (!Util.isEmpty(applicant.getOtherLastName())) {
+	//			applicantHis.setOtherLastName(applicant.getOtherLastName());
+	//		}
+	//		//曾用名(拼音)
+	//		if (!Util.isEmpty(applicant.getOtherLastNameEn())) {
+	//			StringBuffer sb = new StringBuffer();
+	//			sb.append("/").append(applicant.getOtherLastNameEn());
+	//			applicantHis.setOtherLastNameEn(sb.toString());
+	//		}
+	//		//紧急联系人姓名
+	//		if (!Util.isEmpty(applicant.getEmergencyLinkman())) {
+	//			applicantHis.setEmergencyLinkman(applicant.getEmergencyLinkman());
+	//		}
+	//		//紧急联系人手机
+	//		if (!Util.isEmpty(applicant.getEmergencyTelephone())) {
+	//			applicantHis.setEmergencyTelephone(applicant.getEmergencyTelephone());
+	//		}
+	//		//身份证省份
+	//		if (!Util.isEmpty(applicant.getCardProvince())) {
+	//			applicantHis.setCardProvince(applicant.getCardProvince());
+	//		}
+	//		//身份证城市
+	//		if (!Util.isEmpty(applicant.getCardCity())) {
+	//			applicantHis.setCardCity(applicant.getCardCity());
+	//		}
+	//		//是否另有国籍
+	//
+	//		Integer hasOtherNationality = applicant.getHasOtherNationality();
+	//		if (!Util.isEmpty(hasOtherNationality)) {
+	//			for (IsHasOrderOrNotEnum stEnum : IsHasOrderOrNotEnum.values())
+	//				if (!Util.isEmpty(hasOtherNationality) && hasOtherNationality == stEnum.intKey()) {
+	//					applicantHis.setHasOtherNationality(stEnum.value());
+	//					break;
+	//				}
+	//		}
+	//		//是否有曾用名
+	//		Integer hasOtherName = applicant.getHasOtherName();
+	//		for (IsHasOrderOrNotEnum stEnum : IsHasOrderOrNotEnum.values())
+	//			if (!Util.isEmpty(hasOtherName) && hasOtherName == stEnum.intKey()) {
+	//				applicantHis.setHasOtherName(stEnum.value());
+	//				break;
+	//			}
+	//		//结婚证/离婚证地址
+	//		if (!Util.isEmpty(applicant.getMarryUrl())) {
+	//			applicantHis.setMarryUrl(applicant.getMarryUrl());
+	//		}
+	//		//结婚状况
+	//		Integer marryStatus = applicant.getMarryStatus();
+	//		for (MarryStatusEnum stEnum : MarryStatusEnum.values())
+	//			if (!Util.isEmpty(marryStatus) && marryStatus == stEnum.intKey()) {
+	//				applicantHis.setMarryStatus(stEnum.value());
+	//				break;
+	//			}
+	//		//国籍
+	//		if (!Util.isEmpty(applicant.getNationality())) {
+	//			applicantHis.setNationality(applicant.getNationality());
+	//		}
+	//		//现居住地址是否与身份证相同
+	//		Integer addressIsSameWithCard = applicant.getAddressIsSameWithCard();
+	//		for (IsHasOrderOrNotEnum stEnum : IsHasOrderOrNotEnum.values())
+	//			if (!Util.isEmpty(addressIsSameWithCard) && addressIsSameWithCard == stEnum.intKey()) {
+	//				applicantHis.setAddressIsSameWithCard(stEnum.value());
+	//				break;
+	//			}
+	//
+	//		//操作人
+	//		if (!Util.isEmpty(applicant.getOpId())) {
+	//			applicantHis.setOpId(applicant.getOpId());
+	//		}
+	//		if (!Util.isEmpty(applicantHis.getId())) {
+	//			applicantHis.setUpdateTime(new Date());
+	//			dbDao.update(applicantHis);
+	//		} else {
+	//			applicantHis.setCreateTime(new Date());
+	//			dbDao.insert(applicantHis);
+	//		}
+	//	}
 
 	/**
 	 * 跳转到签证信息页面

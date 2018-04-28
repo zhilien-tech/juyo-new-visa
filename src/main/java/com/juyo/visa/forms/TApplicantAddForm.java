@@ -62,6 +62,8 @@ public class TApplicantAddForm extends AddForm implements Serializable {
 
 	private Integer isPrompted;
 
+	private Integer ismobileprompted;
+
 	private Integer marryStatus;
 
 	private String nationality;

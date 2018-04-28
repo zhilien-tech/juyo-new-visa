@@ -275,7 +275,7 @@
 										<label id="updateApplicantHead">与主申请人的关系</label>
 										</br>
 										<div class="input-box">
-											<input type="text" id="" name="" class="input" value="">
+											<input type="text" id="mainRelation" name="mainRelation" class="input" value=" ${obj.orderjp.mainRelation }" >
 											<ul class="dropdown">
 												<li>配偶</li>
 												<li>父母</li>
@@ -861,7 +861,7 @@
 						//var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						//layer.close(index);
 						if(status == 1){
-							parent.successCallBack(3);
+							parent.successCallBack(1);
 							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 							parent.layer.close(index);
 						}else if(status == 2){

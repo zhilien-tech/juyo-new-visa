@@ -17,3 +17,14 @@ function validateScope(){
 	$(".btnVal input").parent().next().attr("data-bv-result",nextDate);
 	$(".btnVal input").parent().next().attr("style",nextStyle);
 }
+
+//移除校验
+function removerValid(){
+	var parentClass = "form-group has-feedback has-success";
+	var nextDate = "VALID";
+	var nextStyle = "display: none;";
+
+	$(".btnVal input").parent().parent().attr("class",parentClass);
+	$(".btnVal input").parent().next().attr("data-bv-result",nextDate);
+	$(".btnVal input").parent().next().attr("style",nextStyle);
+}

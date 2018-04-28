@@ -109,8 +109,10 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	public Object applicatinfo(MobileApplicantForm form) {
 		Map<String, Object> result = Maps.newHashMap();
 		TApplicantEntity applicant = new TApplicantEntity();
+		TApplicantOrderJpEntity applicantJp = new TApplicantOrderJpEntity();
 		if (!Util.isEmpty(form.getApplicantid())) {
 			applicant = dbDao.fetch(TApplicantEntity.class, form.getApplicantid().longValue());
+		  applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,Cnd.where("applicantid","=",form.getApplicantid()));
 		}
 		Map<String, String> applicantmap = MapUtil.obj2Map(applicant);
 		if (!Util.isEmpty(form.getComid())) {
@@ -151,6 +153,8 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			String updatetime = format.format(applicant.getUpdateTime());
 			applicantmap.put("updatetime", updatetime);
 		}
+		//与主申请人的关系
+		applicantmap.put("mainrelation", applicantJp.getMainRelation());
 		applicantmap.put("sessionid", form.getSessionid());
 		result.put("applicatdata", applicantmap);
 		return result;
@@ -370,6 +374,15 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	 */
 	public Object savePassportInfo(TApplicantPassportLowerEntity passportinfo) {
 		dbDao.update(passportinfo);
+		Integer applicantid = passportinfo.getApplicantid();
+		if (!Util.isEmpty(applicantid)) {
+			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid.longValue());
+			apply.setFirstName(passportinfo.getFirstname());
+			apply.setFirstNameEn(passportinfo.getFirstnameen());
+			apply.setLastName(passportinfo.getLastname());
+			apply.setLastNameEn(passportinfo.getLastnameen());
+			dbDao.update(apply);
+		}
 		MobileApplicantForm form = new MobileApplicantForm();
 		form.setApplicantid(passportinfo.getApplicantid());
 		form.setMessagetype(2);
@@ -849,5 +862,21 @@ public class MobileService extends BaseService<TApplicantEntity> {
 		result.put("applicantId", form.getApplicantId());
 
 		return result;
+	}
+
+	public Object ismobileprompted(int applicantid) {
+		Map<String, Object> result = Maps.newHashMap();
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
+		if (!Util.isEmpty(apply)) {
+			result.put("ismobileprompted", apply.getIsmobileprompted());
+		}
+		return result;
+	}
+
+	public Object mobilehasprompted(int applicantid) {
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
+		apply.setIsmobileprompted(IsYesOrNoEnum.YES.intKey());
+		dbDao.update(apply);
+		return null;
 	}
 }

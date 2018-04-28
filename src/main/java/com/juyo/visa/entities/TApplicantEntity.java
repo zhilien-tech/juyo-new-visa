@@ -189,4 +189,8 @@ public class TApplicantEntity implements Serializable {
 	@Comment("是否已提示")
 	private Integer isPrompted;
 
+	@Column
+	@Comment("手机端照片格式是否提示过")
+	private Integer ismobileprompted;
+
 }

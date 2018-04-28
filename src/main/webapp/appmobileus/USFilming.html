@@ -135,7 +135,7 @@
 			var selectvalue = $(".selector").find("option:selected").val();
 			$(".marriageInfo").text(name);
 			if (selectvalue == 2 || selectvalue ==  1) {
-				window.location.href = '/appmobileus/USMarital.html?staffid=' + staffid + '&marryurltype=' + (selectvalue/2)+'&sessionid='+sessionid+'&flag='+flag;
+				window.location.href = '/appmobileus/USMarital.html?staffid=' + staffid + '&marryurltype=' + selectvalue+'&sessionid='+sessionid+'&flag='+flag;
 			}else{
 				if(selectvalue != "--请选择--"){
 					$.ajax({

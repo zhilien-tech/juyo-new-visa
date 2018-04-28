@@ -4,11 +4,11 @@ import com.uxuexi.core.common.enums.IEnum;
 
 /**
  * 
- * 是否
+ * 
  * <p>
- * 是 or 否
- * @author   彭辉
- * @Date	 2017年10月20日
+ * 员工管理是否禁用 枚举
+ * @author   
+ * @Date	 
  */
 public enum UserAbleEnum implements IEnum {
 	YES(0, "是"), NO(1, "否");
