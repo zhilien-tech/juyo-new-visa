@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.Cnd;
 import org.nutz.dao.entity.Record;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -24,6 +25,7 @@ import com.juyo.visa.common.enums.orderUS.DistrictEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
+import com.juyo.visa.entities.TCompanyCustomerMapEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
@@ -40,8 +42,7 @@ public class BaoYingViewService extends BaseService<TAppStaffBasicinfoEntity> {
 	private UploadService qiniuUploadService;//文件上传
 
 	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
-	private final static Integer US_YUSHANG_COMID = 68;
-
+	
 	/**
 	 * 列表页准备内容
 	 */
@@ -65,8 +66,13 @@ public class BaoYingViewService extends BaseService<TAppStaffBasicinfoEntity> {
 
 		long startTime = System.currentTimeMillis();//获取当前时间
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comId = loginCompany.getId();
 		//葆婴 可以看到誉尚的订单信息
-		queryForm.setComid(US_YUSHANG_COMID);
+		TCompanyCustomerMapEntity comCusEntity = dbDao.fetch(TCompanyCustomerMapEntity.class, Cnd.where("bigCustomerId", "=", comId));
+		if(!Util.isEmpty(comCusEntity)) {
+			Integer belongComId = comCusEntity.getBelongComId();
+			queryForm.setComid(belongComId);
+		}
 
 		Map<String, Object> map = listPage4Datatables(queryForm);
 		List<Record> records = (List<Record>) map.get("data");

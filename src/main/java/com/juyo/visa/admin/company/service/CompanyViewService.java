@@ -36,6 +36,7 @@ import com.juyo.visa.entities.TComBusinessscopeEntity;
 import com.juyo.visa.entities.TComFunctionEntity;
 import com.juyo.visa.entities.TComJobEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TCompanyCustomerMapEntity;
 import com.juyo.visa.entities.TDepartmentEntity;
 import com.juyo.visa.entities.TFunctionEntity;
 import com.juyo.visa.entities.TJobEntity;
@@ -65,14 +66,20 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 	private static final String MANAGE_POSITION = "公司管理员";
 	//公司管理员账号初始密码
 	private static final String MANAGE_PASSWORD = "000000";
+	
+	//目前特指誉尚国际（送签简美）
+	private final static Integer US_YUSHANG_COMID = 68;
 
 	public Object listData(TCompanyForm queryForm) {
 		Map<String, Object> map = listPage4Datatables(queryForm);
 		List<Record> records = (List<Record>) map.get("data");
 		for (Record record : records) {
 			int comtype = record.getInt("comtype");
+			if(comtype == CompanyTypeEnum.BIGCUSTOMER.intKey()) {
+				record.set("scopes", "");
+			}
 			for (CompanyTypeEnum typeEnum : CompanyTypeEnum.values()) {
-				if (comtype == typeEnum.intKey()) {
+				if(comtype == typeEnum.intKey()) {
 					record.set("comtype", typeEnum.value());
 				}
 			}
@@ -194,6 +201,16 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		if (!Util.isEmpty(comFunctions)) {
 			dbDao.insert(comFunctions);
 		}
+		
+		
+		//大客户与美签简公司关系表更新
+		if(comType == CompanyTypeEnum.BIGCUSTOMER.intKey()) {
+			TCompanyCustomerMapEntity entityNew = new TCompanyCustomerMapEntity();
+			entityNew.setBigCustomerId(comId);
+			entityNew.setBelongComId(US_YUSHANG_COMID);
+			dbDao.insert(entityNew);
+			
+		}
 
 		return JsonResult.success("添加成功");
 	}
@@ -253,14 +270,37 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			}
 			user.setName(updateForm.getAdminLoginName());
 			if (CompanyTypeEnum.SONGQIAN.intKey() == comType) {
-				user.setUserType(UserLoginEnum.SQ_COMPANY_ADMIN.intKey());//送签社公司管理员
+				user.setUserType(UserLoginEnum.SQ_COMPANY_ADMIN.intKey());
 			} else if (CompanyTypeEnum.DIJI.intKey() == comType) {
-				user.setUserType(UserLoginEnum.DJ_COMPANY_ADMIN.intKey());//地接社公司管理员
+				user.setUserType(UserLoginEnum.DJ_COMPANY_ADMIN.intKey());
 			} else if (CompanyTypeEnum.SONGQIANSIMPLE.intKey() == comType) {
-				user.setUserType(UserLoginEnum.JJ_COMPANY_ADMIN.intKey());//地接社公司管理员
+				user.setUserType(UserLoginEnum.JJ_COMPANY_ADMIN.intKey());
+			} else if(CompanyTypeEnum.BIGCUSTOMER.intKey() == comType) {
+				user.setUserType(UserLoginEnum.BIG_COMPANY_ADMIN.intKey());
 			}
 			user.setUpdateTime(nowDate);
 			dbDao.update(user);
+			
+			
+			//大客户与美签简公司关系表更新
+			int bigComid= Integer.parseInt(String.valueOf(comId)); 
+			TCompanyCustomerMapEntity entity = dbDao.fetch(TCompanyCustomerMapEntity.class, Cnd.where("bigCustomerId", "=", comId));
+			if(comType == CompanyTypeEnum.BIGCUSTOMER.intKey()) {
+				if(!Util.isEmpty(entity)) {
+					entity.setBigCustomerId(bigComid);
+					entity.setBelongComId(US_YUSHANG_COMID);
+					dbDao.update(entity);
+				}else {
+					TCompanyCustomerMapEntity entityNew = new TCompanyCustomerMapEntity();
+					entityNew.setBigCustomerId(bigComid);
+					entityNew.setBelongComId(US_YUSHANG_COMID);
+					dbDao.insert(entityNew);
+				}
+			}else {
+				if(!Util.isEmpty(entity)) {
+					dbDao.delete(entity);
+				}
+			}
 		}
 
 		//公司信息
@@ -342,7 +382,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 							scopeList.add(scopeEntity);
 						}
 					} else if (Util.eq("UPDATE", type)) {
-						if (Util.eq(scope, key)) {
+						if (Util.eq(scope, value)) {
 							scopeStr += key + ",";
 							scopeEntity.setComId(comId);
 							scopeEntity.setCountryId(Integer.valueOf(key));
