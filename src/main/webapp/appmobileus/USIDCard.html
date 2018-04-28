@@ -116,7 +116,9 @@
 				$(".uploadIDFace").click(function(){
 					$("#faceImg").click();
 					$("#faceImg").change(function(){
-						layer.load(1);
+						layer.load(1, {
+                			shade : "#000"
+                		});
 						var that = this;
 			            lrz(this.files[0]).then(function (rst) {
 			                /* $('.bacimg2').attr('src',rst.base64);*/
@@ -204,13 +206,14 @@
 					data : formData,
 					success : function(obj) {//请求成功后的函数 
 						//console.log('=====成功========');
-						//关闭加载层
 						layer.closeAll('loading');
+						//关闭加载层
 						getImageFront(staffid);
 						if (obj!=null || obj != "") {
 							layer.msg("上传成功"); 
 							$.ajax({
 								type : "POST",//提交类型  
+								async : false,
 								url : '/admin/orderUS/IDCardRecognition.html',
 								data : {
 									url : obj,
