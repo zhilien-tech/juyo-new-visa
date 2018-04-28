@@ -506,6 +506,11 @@ footer {
 .cameraMain {
 	left:46% !important;
 }
+#area {
+	float:none !important;
+	width:78% !important;
+	padding-right:.2rem;
+}
 /**********************************婚姻情况**********************************/
 
 .marrydialog {

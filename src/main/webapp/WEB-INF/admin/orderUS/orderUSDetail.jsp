@@ -113,7 +113,7 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>面签时间</label>
-									<input id="Interviewdate" type="text" class="form-format2 input-sm form-control" name="Interviewdate" value="${obj.Interviewdate }" />
+									<input id="Interviewdate" type="text" class="interviewformat input-sm form-control" name="Interviewdate" value="${obj.Interviewdate }" />
 								</div>
 							</div>
 						</div>
@@ -666,8 +666,8 @@
 			minView: "month"//只显示年月日
 		}); 
 		//面签时间日期格式处理
-		$(".form-format2").datetimepicker({
-			format: 'yyyy-mm-dd hh:ii',
+		$(".interviewformat").datetimepicker({
+			format: 'yyyy-mm-dd H:i',
 			language: 'zh-CN',
 	        weekStart: 1,
 	        todayBtn: 1,
@@ -678,9 +678,24 @@
 	        showMeridian: false,
 			pickerPosition:"bottom-right",//显示位置
 			minView: 0,//显示时分
+			hourMin: 8,
+			hourMax: 16,
+		    minTime: '08:00',              // 设置timepicker最小的限制时间   如：08:00
+		    maxTime: '18:00',
+			//timepicker: true,
+		    allowTimes:['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00'],
+		    startTime:'08:00',
+		    endTime:'18:00',
+		    onChangeDateTime:logic,
+		    onShow:logic,
 		    minuteStep:15//间隔为十五分钟
 			//minView: "month"//只显示年月日
 		}); 
+		var logic = function( currentDateTime ){
+		        this.setOptions({
+		            minTime:'11:00'
+		        });
+		};
 		
 		//抵达美国日期和预计出发日期一致
 		$("#goDate").change(function(){
