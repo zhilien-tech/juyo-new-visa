@@ -262,6 +262,7 @@ img[src=""] {
 }
 .housecardAnother {
 	width:100%;
+	margin-top:3%;
 }
 .housecardInfo {
 	width:100%;
@@ -280,6 +281,12 @@ img[src=""] {
 	float:left;
 	margin-left:24px;
 }
+.areaMetre {
+	display:inline-block;
+	float:left;
+	margin:5% 0 0 1%;
+}
+
 .housecardAddressInfo {
 	clear:both;
 	width:77.5%;
