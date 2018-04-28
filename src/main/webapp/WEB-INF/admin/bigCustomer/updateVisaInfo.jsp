@@ -1832,12 +1832,13 @@
 													<option value="${map.key }">${map.value }</option>
 												</c:forEach>
 											</select>
-        										</div>   
-								 	      </div>
-								</c:if>                                                                                                                                                                                        
-							</div>                    
-								<a class="save beforesaveen">Add Another</a>                    
-								<a class="cancel beforecancelen">Remove</a>                       
+										</div>
+									</div>
+								</c:if>
+							</div>
+							<div class="btnGroup beforeGroup everyMarTop">
+								<a class="save beforesaveen">Add Another</a>
+								<a class="cancel beforecancelen">Remove</a>
 							</div>
 							<div class="groupRadioInfo drivingUS">
 								<label>Do you or did you ever hold a U.S. Driver’s License</label>
