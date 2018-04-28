@@ -126,6 +126,9 @@
 	        	type:'post',
 	        	success: function(data){
 	        		_self.applicatdata = data.applicatdata;
+	        		_self.applicatdata.mainrelation = data.applicatdata.mainrelation;
+	        		$(".validitySelect").val(data.applicatdata.mainrelation);
+	        		$(".dateVal").text(data.applicatdata.mainrelation);
 	        		if(data.applicatdata.addressissamewithcard == 1){
 	        			$("#consistent").attr('checked',true);
 		        		/* $('.isclose').each(function(){
@@ -149,6 +152,7 @@
 		    				$(this).hide();
 		    			});
 	        		}
+	        		
 	        		//回显其他国籍
 	        		if(data.applicatdata.hasothernationality == 1){
 	        			$('#afterNatAndID').attr('checked',true);
