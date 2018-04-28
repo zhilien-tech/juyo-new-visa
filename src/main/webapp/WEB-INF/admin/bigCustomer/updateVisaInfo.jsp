@@ -64,7 +64,7 @@
 							<div>
 							<c:if test="${!empty obj.companionList }">
 								<c:forEach var="companion" items="${obj.companionList }">
-									<div class="teamnamefalseDiv teamaddfalse teamnamefalseIndexDIV" >
+									<div class="teamnamefalseDiv teamnamefalseDivzh teamaddfalse teamnamefalseIndexDIV" >
 										<div class="companionSurnName">
 											<label>同伴姓</label>
 											<input id="firstname" name="firstname" onchange="addSegmentsTranslateZhToEn(this,'firstnameen','')" value="${companion.firstname }" type="text" placeholder="同伴姓" />
@@ -92,7 +92,7 @@
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.companionList }">
-								<div class="teamnamefalseDiv teamaddfalse teamnamefalseIndexDIV">
+								<div class="teamnamefalseDiv teamnamefalseDivzh teamaddfalse teamnamefalseIndexDIV">
 									<div class="companionSurnName">
 										<label>同伴姓</label>
 										<input id="firstname" name="firstname" onchange="addSegmentsTranslateZhToEn(this,'firstnameen','')" type="text" placeholder="同伴姓" />
@@ -364,22 +364,22 @@
 				<div class="titleInfo">美国联络人</div>
 				<div class="groupInputInfo paddingLeft">
 					<label>联系人姓</label>
-					<input name="firstname" v-model="visaInfo.contactPointInfo.firstname" onchange="translateZhToEn(this,'firstnameusen','')" type="text" />
+					<input name="firstname" v-model="visaInfo.contactPointInfo.firstname" @change="isfirstname()" onchange="translateZhToEn(this,'firstnameusen','')" type="text" />
 				</div>
 				<div class="groupcheckBoxInfo paddingRight">
 					<label>联系人名</label>
-					<input name="lastname" v-model="visaInfo.contactPointInfo.lastname" type="text" onchange="translateZhToEn(this,'lastnameusen','')" />
+					<input name="lastname" v-model="visaInfo.contactPointInfo.lastname" @change="islastname()" type="text" onchange="translateZhToEn(this,'lastnameusen','')" />
 					<input id="isknowname" v-model="visaInfo.contactPointInfo.isknowname" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknowname" name="isknowname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop groupcheckBoxInfo cbox">
 					<label>组织名称</label>
-					<input id="organizationname" onchange="translateZhToEn(this,'organizationnameusen','')" name="organizationname" v-model="visaInfo.contactPointInfo.organizationname" type="text" />
+					<input id="organizationname" onchange="translateZhToEn(this,'organizationnameusen','')" name="organizationname" @change="isorganizationname()" v-model="visaInfo.contactPointInfo.organizationname" type="text" />
 					<input id="isknoworganizationname" name="isknoworganizationname" onchange="AddSingle(this,'isknoworganizationnameen')" v-on:click="isKnowOrganizationName" v-model="visaInfo.contactPointInfo.isknoworganizationname"  class="groupname_us" type="checkbox" />
 				</div>
 				<div class="paddingLeft groupSelectInfo">
 					<label>与你的关系</label>
-					<select id="ralationship" onchange="translateZhToEn(this,'ralationshipen','')" v-model="visaInfo.contactPointInfo.ralationship" name="ralationship">
+					<select id="ralationship" onchange="translateZhToEn(this,'ralationshipen','')" @change="isralationship()" v-model="visaInfo.contactPointInfo.ralationship" name="ralationship">
 						<option value="0" selected="selected">请选择</option>
 						<c:forEach items="${obj.ContactPointRelationshipStatusEnum }" var="map">
 							<option value="${map.key }">${map.value }</option>
@@ -390,11 +390,11 @@
 				<div class="" style="padding: 10px 0;">
 					<div class="groupInputInfo draBig">
 						<label>美国街道地址(首选)</label>
-						<input name="address" v-model="visaInfo.contactPointInfo.address" onchange="translateZhToEn(this,'addressusen','')" type="text" />
+						<input name="address" @change="isaddress()" v-model="visaInfo.contactPointInfo.address" onchange="translateZhToEn(this,'addressusen','')" type="text" />
 					</div>
 					<div class="groupInputInfo draBig marginLS">
 						<label>美国街道地址(次选)*可选</label>
-						<input name="secaddress" v-model="visaInfo.contactPointInfo.secaddress" onchange="translateZhToEn(this,'secaddressusen','')" type="text" />
+						<input name="secaddress" @change="issecaddress()" v-model="visaInfo.contactPointInfo.secaddress" onchange="translateZhToEn(this,'secaddressusen','')" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupSelectInfo " >
@@ -402,35 +402,27 @@
 						<select id="state" onchange="translateZhToEn(this,'stateen','')" name="state" v-model="visaInfo.contactPointInfo.state" @change="isstate()">
 							<option value="0">请选择</option>
 							<c:forEach items="${obj.stateUsList }" var="state">
-								<c:if test="${driver.witchstateofdriver != state.id}">
 								<option value="${state.id }">${state.name }</option>
-								</c:if>
-								<c:if test="${driver.witchstateofdriver == state.id}">
-								<option value="${state.id }" selected="selected">${state.name }</option>
-								</c:if>
 							</c:forEach>
-							<%-- <c:forEach items="${obj.stateUsList }" var="state">
-								<option value="${state.id }">${state.name }</option>
-							</c:forEach> --%>
 						</select>
 					</div>
 					<div class="paddingRight groupInputInfo" >
 						<label>市</label>
-						<input id="city" name="city" onchange="translateZhToEn(this,'cityusen','')" v-model="visaInfo.contactPointInfo.city" type="text" />
+						<input id="city" name="city" onchange="translateZhToEn(this,'cityusen','')" @change="iscity()" v-model="visaInfo.contactPointInfo.city" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupInputInfo" >
 						<label>邮政编码</label>
-						<input name="zipcode" onchange="translateZhToEn(this,'ziocodeusen','')" v-model="visaInfo.contactPointInfo.zipcode" type="text" />
+						<input name="zipcode" onchange="translateZhToEn(this,'ziocodeusen','')" @change="iszipcode()" v-model="visaInfo.contactPointInfo.zipcode" type="text" />
 					</div>
 					<div class="paddingRight groupInputInfo" >
 						<label>电话号码</label>
-						<input name="telephone" onchange="translateZhToEn(this,'telephoneusen','')" v-model="visaInfo.contactPointInfo.telephone" type="text" />
+						<input name="telephone" onchange="translateZhToEn(this,'telephoneusen','')" @change="istelephone()" v-model="visaInfo.contactPointInfo.telephone" type="text" />
 					</div>
 					<div class="clear"></div>
 					<div class="paddingTop groupcheckBoxInfo cbox">
 						<label>邮件地址</label>
-						<input name="email" v-model="visaInfo.contactPointInfo.email" onchange="translateZhToEn(this,'emailusen','')" type="text" />
+						<input name="email" v-model="visaInfo.contactPointInfo.email" @change="isemail()" onchange="translateZhToEn(this,'emailusen','')" type="text" />
 						<input id="isKnowEmailAddress" name="isknowemail" onchange="AddSingle(this,'isKnowEmailAddressen')" v-on:click="isKnowEmailAddress" v-model="visaInfo.contactPointInfo.isknowemail" type="checkbox" />
 					</div>
 				</div>
@@ -1769,10 +1761,10 @@
 								</div>
 							</c:if>
 							</div>
-							<div class="btnGroup companyGroup">
+							<!-- <div class="btnGroup companyGroup">
 								<a class="save companysaveen">Add Another</a>
 								<a class="cancel companycancelen">Remove </a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -1836,10 +1828,10 @@
 								 	      </div>
 								</c:if>                                                                                                                                                                                        
 							</div>
-							<div class="btnGroup beforeAGroup everyMarTop">                    
+							<!-- <div class="btnGroup beforeAGroup everyMarTop">                    
 								<a class="save beforesaveen">Add Another</a>                    
-								<a class="cancel beforecancelen">Remove</a>                       
-							</div>
+								<a class="cancel beforecancelen">Remove</a>
+							</div> -->
 							<div class="groupRadioInfo drivingUS">
 								<label>Do you or did you ever hold a U.S. Driver’s License</label>
 								<input type="radio" name="hasdriverlicenseen" v-model="visaInfo.previUSTripInfo.hasdriverlicenseen" class="licenseen" value="1" />YES
@@ -1897,10 +1889,10 @@
 										</div>
 									</c:if>
 								</div>
-								<div class="btnGroup driverInfo driverInfoen driverGroup">
+								<!-- <div class="btnGroup driverInfo driverInfoen driverGroup">
 									<a class="save driversaveen">Add Another</a>
 									<a class="cancel drivercancelen">Remove</a>
-								</div>
+								</div> -->
 							</div>
 							
 							
@@ -1925,7 +1917,7 @@
 							<div class="groupcheckBoxInfo visaNum visaNumen">
 								<label>Visa Number</label>
 								<input id="visanumberen" name="visanumberen" v-model="visaInfo.previUSTripInfo.visanumberen" type="text" />
-								<input id="idknowvisanumber" class="idknowvisanumberen"  :value="visaInfo.previUSTripInfo.idknowvisanumber" name="idknowvisanumberen" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumberen" type="checkbox"/>
+								<input id="idknowvisanumber" class="idknowvisanumberen" name="idknowvisanumberen" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumberen" type="checkbox"/>
 							</div>
 							<div class="clear"></div>
 							<div class="Alike groupRadioInfo paddingTop">
@@ -2598,10 +2590,10 @@
 							</c:if>
 							</div>
 							<div class="clear"></div>
-							<div class="btnGroup marginLS beforeWorkGroup">
+							<!-- <div class="btnGroup marginLS beforeWorkGroup">
 								<a class="save beforeWorksaveen">Add Another</a>
 								<a class="cancel beforeWorkcancelen">Remove</a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -2743,10 +2735,10 @@
 							</c:if>
 							</div>
 							<div class="clear"></div>
-							<div class="btnGroup educationGroup">
+							<!-- <div class="btnGroup educationGroup">
 								<a class="save educationsaveen" >Add Another</a>
 								<a class="cancel educationcancelen" >Remove</a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 					
@@ -2793,10 +2785,10 @@
 						</div>
 					</c:if>
 				</div>	
-				<div class="btnGroup draBig languageGroup">
+				<!-- <div class="btnGroup draBig languageGroup">
 					<a class="save languagesaveen">Add Another</a>
 					<a class="cancel languagecancelen">Remove</a>
-				</div>
+				</div> -->
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Have you traveled to any countries/regions within the last five years</label>
@@ -2840,10 +2832,10 @@
 								</div>
 							</c:if>
 						</div>
-						<div class="btnGroup gocountryGroup">
+						<!-- <div class="btnGroup gocountryGroup">
 							<a class="save gocountrysaveen">Add Another</a>
 							<a class="cancel gocountrycancelen">Remove</a>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="padding-left paddingTop">
@@ -2874,10 +2866,10 @@
 							</div>	
 							</c:if>
 						</div>
-						<div class="btnGroup organizationGroup">
+						<!-- <div class="btnGroup organizationGroup">
 							<a class="save organizationsaveen">Add Another</a>
 							<a class="cancel organizationcancelen">Remove</a>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -2981,10 +2973,10 @@
 						</c:if>	
 						</div>
 						<div class="clear"></div>
-						<div class="btnGroup militaryGroup">
+						<!-- <div class="btnGroup militaryGroup">
 							<a class="save militarysaveen">Add Another</a>
 							<a class="cancel militarycancelen">Remove</a>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="paddingTop padding-left">

@@ -1,7 +1,7 @@
 //获取旅伴信息集合
 function getCompanionList(){
 	var companionList = [];
-	$('.teamnamefalseDiv').each(function(index,i){
+	$('.teamnamefalseDivzh').each(function(index,i){
 		
 		var companionLength = '';
 		var companion = {};
