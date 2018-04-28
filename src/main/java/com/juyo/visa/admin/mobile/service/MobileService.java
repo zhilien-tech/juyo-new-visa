@@ -109,8 +109,10 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	public Object applicatinfo(MobileApplicantForm form) {
 		Map<String, Object> result = Maps.newHashMap();
 		TApplicantEntity applicant = new TApplicantEntity();
+		TApplicantOrderJpEntity applicantJp = new TApplicantOrderJpEntity();
 		if (!Util.isEmpty(form.getApplicantid())) {
 			applicant = dbDao.fetch(TApplicantEntity.class, form.getApplicantid().longValue());
+		  applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,Cnd.where("applicantid","=",form.getApplicantid()));
 		}
 		Map<String, String> applicantmap = MapUtil.obj2Map(applicant);
 		if (!Util.isEmpty(form.getComid())) {
@@ -151,6 +153,8 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			String updatetime = format.format(applicant.getUpdateTime());
 			applicantmap.put("updatetime", updatetime);
 		}
+		//与主申请人的关系
+		applicantmap.put("mainrelation", applicantJp.getMainRelation());
 		applicantmap.put("sessionid", form.getSessionid());
 		result.put("applicatdata", applicantmap);
 		return result;
