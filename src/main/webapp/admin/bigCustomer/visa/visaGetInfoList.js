@@ -130,7 +130,7 @@ function getDriverList(){
 		}else{
 			isknownumberen = 0;
 		}
-		var stateofdriveren = $(this).eq(index).find('[name=witchstateofdriveren]').val();
+		var stateofdriveren = $('.goUS_driversen').eq(index).find('[name=witchstateofdriveren]').val();
 		
 		var stateofdriver = $(this).find('[name=witchstateofdriver]').val();
 		
@@ -149,6 +149,7 @@ function getDriverList(){
 			driverLength += '';
 		}
 		
+		
 		if(driverLength.length >0 || isknownumber==1){
 			driver.staffid = staffId;
 			driver.driverlicensenumber = drivernumber;
@@ -162,7 +163,6 @@ function getDriverList(){
 			driverList.push(driver);
 		}
 	});
-	
 	return driverList;
 }
 /********没有多段添加  ********/
@@ -506,7 +506,11 @@ function getLanguageList(){
 		
 		var languagename = $(this).find('[name=languagename]').val();
 		var languagenameen = $('.languagenameDiven').eq(index).find('[name=languagenameen]').val();
-		if(languagename.length > 0 ){
+		
+		languageLength += languagename;
+		languageLength += languagenameen;
+		
+		if(languageLength.length > 0 ){
 			language.staffid = staffId;
 			language.languagename = languagename;
 			language.languagenameen = languagenameen;
@@ -526,7 +530,11 @@ function getCountryList(){
 		
 		var traveledcountry = $(this).find('[name=traveledcountry]').val();
 		var traveledcountryen = $('.travelCountryen').eq(index).find('[name=traveledcountryen]').val();
-		if(traveledcountry.length > 0 ){
+		
+		countryLength += traveledcountry;
+		countryLength += traveledcountryen;
+		
+		if(countryLength.length > 0 ){
 			country.staffid = staffId;
 			country.traveledcountry = traveledcountry;
 			country.traveledcountryen = traveledcountryen;
@@ -545,7 +553,11 @@ function getOrganizationList(){
 		
 		var organizationname = $(this).find('[name=organizationname]').val();
 		var organizationnameen = $('.organizationDiven').eq(index).find('[name=organizationnameen]').val();
-		if(organizationname.length > 0 ){
+		
+		organizationLength += organizationname;
+		organizationLength += organizationnameen;
+		
+		if(organizationLength.length > 0 ){
 			organization.staffid = staffId;
 			organization.organizationname = organizationname;
 			organization.organizationnameen = organizationnameen;
