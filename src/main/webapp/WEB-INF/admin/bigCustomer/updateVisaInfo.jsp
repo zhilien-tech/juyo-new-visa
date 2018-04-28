@@ -1761,10 +1761,10 @@
 								</div>
 							</c:if>
 							</div>
-							<div class="btnGroup companyGroup">
+							<!-- <div class="btnGroup companyGroup">
 								<a class="save companysaveen">Add Another</a>
 								<a class="cancel companycancelen">Remove </a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -1828,10 +1828,10 @@
 								 	      </div>
 								</c:if>                                                                                                                                                                                        
 							</div>
-							<div class="btnGroup beforeAGroup everyMarTop">                    
+							<!-- <div class="btnGroup beforeAGroup everyMarTop">                    
 								<a class="save beforesaveen">Add Another</a>                    
 								<a class="cancel beforecancelen">Remove</a>
-							</div>
+							</div> -->
 							<div class="groupRadioInfo drivingUS">
 								<label>Do you or did you ever hold a U.S. Driver’s License</label>
 								<input type="radio" name="hasdriverlicenseen" v-model="visaInfo.previUSTripInfo.hasdriverlicenseen" class="licenseen" value="1" />YES
@@ -1889,10 +1889,10 @@
 										</div>
 									</c:if>
 								</div>
-								<div class="btnGroup driverInfo driverInfoen driverGroup">
+								<!-- <div class="btnGroup driverInfo driverInfoen driverGroup">
 									<a class="save driversaveen">Add Another</a>
 									<a class="cancel drivercancelen">Remove</a>
-								</div>
+								</div> -->
 							</div>
 							
 							
@@ -2590,10 +2590,10 @@
 							</c:if>
 							</div>
 							<div class="clear"></div>
-							<div class="btnGroup marginLS beforeWorkGroup">
+							<!-- <div class="btnGroup marginLS beforeWorkGroup">
 								<a class="save beforeWorksaveen">Add Another</a>
 								<a class="cancel beforeWorkcancelen">Remove</a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -2735,10 +2735,10 @@
 							</c:if>
 							</div>
 							<div class="clear"></div>
-							<div class="btnGroup educationGroup">
+							<!-- <div class="btnGroup educationGroup">
 								<a class="save educationsaveen" >Add Another</a>
 								<a class="cancel educationcancelen" >Remove</a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 					
@@ -2785,10 +2785,10 @@
 						</div>
 					</c:if>
 				</div>	
-				<div class="btnGroup draBig languageGroup">
+				<!-- <div class="btnGroup draBig languageGroup">
 					<a class="save languagesaveen">Add Another</a>
 					<a class="cancel languagecancelen">Remove</a>
-				</div>
+				</div> -->
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Have you traveled to any countries/regions within the last five years</label>
@@ -2832,10 +2832,10 @@
 								</div>
 							</c:if>
 						</div>
-						<div class="btnGroup gocountryGroup">
+						<!-- <div class="btnGroup gocountryGroup">
 							<a class="save gocountrysaveen">Add Another</a>
 							<a class="cancel gocountrycancelen">Remove</a>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="padding-left paddingTop">
@@ -2866,10 +2866,10 @@
 							</div>	
 							</c:if>
 						</div>
-						<div class="btnGroup organizationGroup">
+						<!-- <div class="btnGroup organizationGroup">
 							<a class="save organizationsaveen">Add Another</a>
 							<a class="cancel organizationcancelen">Remove</a>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -2973,10 +2973,10 @@
 						</c:if>	
 						</div>
 						<div class="clear"></div>
-						<div class="btnGroup militaryGroup">
+						<!-- <div class="btnGroup militaryGroup">
 							<a class="save militarysaveen">Add Another</a>
 							<a class="cancel militarycancelen">Remove</a>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
