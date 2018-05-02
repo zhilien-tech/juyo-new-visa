@@ -9,82 +9,73 @@ function GetQueryString(name){
 	if(r!=null)return  unescape(r[2]); return null;
 }
 
-//返回上一级
+//返回上一级，开始扫描
 function returnPage(){
-	if($(".addhouseCard").is(":hidden")){
-		$("#propertyholder").val("");
-		$("#area").val("");
-		$("#address").val("");
-	}
-	//保存第二套房产说明
+	//扫描正面
 	$.ajax({
-		url : "/admin/mobileVisa/saveSecondHousecard.html",
+		type : "POST",//提交类型  
+		url : '/admin/orderUS/IDCardRecognition.html',
 		data : {
-			type : 5,
-			staffid : staffid,
-			propertyholder : $("#propertyholder").val(),
-			area : $("#area").val(),
-			address : $("#address").val(),
-			sessionid : sessionid
+			staffid : staffid
 		},
-		dataType : "json",
-		type : 'post',
-		success : function(data) {
-			console.log(data);
+		success : function(obj) {
+			
 		}
-	}); 
+	});
+	//扫描背面
+	$.ajax({
+		type : "POST",//提交类型  
+		url : '/admin/orderUS/IDCardRecognitionBack.html',
+		data : {
+			staffid : staffid
+		},
+		success : function(obj) {
+			
+		}
+	});
 	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 }
 
 
 //回显
-function getImage(staffid){
+function getImageFront(staffid){
 	$.ajax({
-		url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
+		url : "/admin/mobileVisa/getIDcardphoto.html",
 		data : {
-			type : 5,
+			type : 3,
 			staffid : staffid,
+			status : 1
 		},
 		dataType : "json",
 		type : 'post',
 		success : function(data) {
-			console.log(data);
-			if(data.query.length > 0){
-				for (var i = 0; i < data.query.length; i++) {
-					var url = data.query[i].url;
-					var num = "#" + data.query[i].mainid + data.query[i].sequence;
-					$(num).attr('src', url);
-				}
+			if(data != null){
+				$(".uploadImgFace").attr("src",data.url);
+			}
+		}
+	});
+}
+function getImageBack(staffid){
+	$.ajax({
+		url : "/admin/mobileVisa/getIDcardphoto.html",
+		data : {
+			type : 3,
+			staffid : staffid,
+			status : 2
+		},
+		dataType : "json",
+		type : 'post',
+		success : function(data) {
+			if(data != null){
+				$(".uploadImgBack").attr("src",data.url);
 			}
 		}
 	});
 }
 
-//获取第二套房产证说明
-function getSecondHousecard(staffid){
-	$.ajax({
-			url : "/admin/mobileVisa/getSecondHousecard.html",
-			data : {
-				type : 5,
-				staffid : staffid,
-			},
-			dataType : "json",
-			type : 'post',
-			success : function(data) {
-				console.log(data);
-				if(data.propertyholder != "" || data.area != "" || data.address != ""){
-					$(".addhouseCard").show();
-					$("#propertyholder").val(data.propertyholder);
-					$("#area").val(data.area);
-					$("#address").val(data.address);
-				}
-			}
-		});
-}
-
 $(function(){
-	getImage(staffid);
-	getSecondHousecard(staffid);
+	getImageFront(staffid);
+	getImageBack(staffid);
 	$.ajax({
 		type : "post",
 		url : "/admin/weixinToken/getJsApiTicket",
@@ -137,7 +128,7 @@ var images = {
 		localId : [],
 		serverId : []
 };
-$('.firstPage').on('click', function() {
+$('.uploadIDFace').on('click', function() {
 	images.serverId = [];//清空serverid集合
 	wx.chooseImage({
 		count : 1, // 默认9   
@@ -149,17 +140,17 @@ $('.firstPage').on('click', function() {
 			if(localIds != ""){
 				for(var i = 0;i<localIds .length;i++){
 					//YEMIAN HUIXIAN
-					$("#11").attr('src', localIds[i]);
+					$(".uploadImgFace").attr("src",localIds[i]);
 				}
 			}
 
 			images.localId = res.localIds;
-			uploadImage(res.localIds,1,1);
+			uploadImage(res.localIds,1);
 
 		}
 	});
 });
-$('.secondPage').on('click', function() {
+$('.uploadIDBack').on('click', function() {
 	images.serverId = [];//清空serverid集合
 	wx.chooseImage({
 		count : 1, // 默认9   
@@ -171,84 +162,18 @@ $('.secondPage').on('click', function() {
 			if(localIds != ""){
 				for(var i = 0;i<localIds .length;i++){
 					//YEMIAN HUIXIAN
-					$("#12").attr('src', localIds[i]);
+					$(".uploadImgBack").attr("src",localIds[i]);
 				}
 			}
 			
 			images.localId = res.localIds;
-			uploadImage(res.localIds,1,2);
-			
-		}
-	});
-});
-$('.thirdPage').on('click', function() {
-	images.serverId = [];//清空serverid集合
-	wx.chooseImage({
-		count : 1, // 默认9   
-		sizeType : [ 'compressed' ], // 压缩图
-		sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者都有   
-		success : function(res) {
-			$('.wxChooseImages ').remove();
-			var localIds = res.localIds;
-			if(localIds != ""){
-				for(var i = 0;i<localIds .length;i++){
-					//YEMIAN HUIXIAN
-					$("#13").attr('src', localIds[i]);
-				}
-			}
-			
-			images.localId = res.localIds;
-			uploadImage(res.localIds,1,3);
-			
-		}
-	});
-});
-$('.fouthPage').on('click', function() {
-	images.serverId = [];//清空serverid集合
-	wx.chooseImage({
-		count : 1, // 默认9   
-		sizeType : [ 'compressed' ], // 压缩图
-		sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者都有   
-		success : function(res) {
-			$('.wxChooseImages ').remove();
-			var localIds = res.localIds;
-			if(localIds != ""){
-				for(var i = 0;i<localIds .length;i++){
-					//YEMIAN HUIXIAN
-					$("#14").attr('src', localIds[i]);
-				}
-			}
-			
-			images.localId = res.localIds;
-			uploadImage(res.localIds,1,4);
-			
-		}
-	});
-});
-$('.fivePage').on('click', function() {
-	images.serverId = [];//清空serverid集合
-	wx.chooseImage({
-		count : 1, // 默认9   
-		sizeType : [ 'compressed' ], // 压缩图
-		sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者都有   
-		success : function(res) {
-			$('.wxChooseImages ').remove();
-			var localIds = res.localIds;
-			if(localIds != ""){
-				for(var i = 0;i<localIds .length;i++){
-					//YEMIAN HUIXIAN
-					$("#15").attr('src', localIds[i]);
-				}
-			}
-			
-			images.localId = res.localIds;
-			uploadImage(res.localIds,1,5);
+			uploadImage(res.localIds,2);
 			
 		}
 	});
 });
 
-var uploadImage = function(localIds,mainid,sequence) {
+var uploadImage = function(localIds,status) {
 	var localId = localIds.pop();
 	wx.uploadImage({
 		localId : localId,
@@ -269,7 +194,7 @@ var uploadImage = function(localIds,mainid,sequence) {
 					serverIdStr += serverId[i]+",";
 				}
 				
-				uploadToQiniu(staffid,serverIdStr,mainid,sequence);
+				uploadToQiniu(staffid,serverIdStr,status);
 
 			}
 		}
@@ -277,20 +202,19 @@ var uploadImage = function(localIds,mainid,sequence) {
 };
 
 //从微信服务器保存到七牛云服务器 
-function uploadToQiniu(staffid,serverIds,mainid,sequence){
+function uploadToQiniu(staffid,serverIds,status){
 
 	$.ajax({
 		type : "post",
-		url : "/admin/weixinToken/wechatJsSDKNewploadToQiniu",
+		url : "/admin/weixinToken/wechatJsSDKUploadToQiniu",
 		dataType : "json",
 		async : false,
 		data:{
 			staffId:staffid,
 			mediaIds:serverIds,
 			sessionid:sessionid,
-			type:5,
-			mainid:mainid,
-			sequence:sequence
+			type:3,
+			status:status
 		},
 		success : function(data) {
 

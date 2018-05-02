@@ -215,6 +215,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 				if (!Util.isEmpty(credentialEntity)) {
 					credentialEntity.setUrl(url);
+					credentialEntity.setStatus(status);
 					credentialEntity.setUpdatetime(new Date());
 					int update = dbDao.update(credentialEntity);
 				} else {

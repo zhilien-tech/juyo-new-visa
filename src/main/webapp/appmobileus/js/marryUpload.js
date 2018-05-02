@@ -144,7 +144,7 @@ function uploadToQiniu(staffid,serverIds){
 
 	$.ajax({
 		type : "post",
-		url : "/admin/weixinToken/wechatJsSDKUploadToQiniu",
+		url : "/admin/weixinToken/wechatJsSDKNewploadToQiniu",
 		dataType : "json",
 		async : false,
 		data:{
