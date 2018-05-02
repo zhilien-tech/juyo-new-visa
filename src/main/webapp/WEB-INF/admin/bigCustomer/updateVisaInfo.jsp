@@ -57,7 +57,7 @@
 						<!--第二部分yes-->
 						<div class="teamnameture groupInputInfo">
 							<label>团队名称</label>
-							<input id="groupname" name="groupname" onchange="translateZhToEn(this,'groupnameen','')" v-model="visaInfo.travelCompanionInfo.groupname" type="text" placeholder="团队名称" />
+							<input id="groupname" name="groupname" @change="translateZhToEnVue('groupname','groupnameen','visaInfo.travelCompanionInfo.groupnameen')" v-model="visaInfo.travelCompanionInfo.groupname" type="text" placeholder="团队名称" />
 						</div>
 						<!--第二部分No-->
 						<div class="teamnamefalse groupInputInfo">
@@ -268,7 +268,7 @@
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
-								<input name="visanumber" class="visanumber" @change="hasvisanumber()" v-model="visaInfo.previUSTripInfo.visanumber" onchange="translateZhToEn(this,'visanumberen','')" type="text" />
+								<input name="visanumber" class="visanumber" @change="hasvisanumber()" v-model="visaInfo.previUSTripInfo.visanumber" onchange="translateZhToEnVueVisanumber(this,'visanumberen','')" type="text" />
 								<input id="idknowvisanumber" :value="visaInfo.previUSTripInfo.idknowvisanumber" onchange="AddSingle(this,'idknowvisanumberen')" name="idknowvisanumber" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/>
 							</div>
 							<div class="clear"></div>
@@ -1704,7 +1704,7 @@
 						<!--第二部分yes-->
 						<div class="teamnameture teamnametureen groupInputInfo">
 							<label>Group Name</label>
-							<input id="groupnameen" name="groupnameen" v-model="visaInfo.travelCompanionInfo.groupname" type="text" placeholder="Group Name" />
+							<input id="groupnameen" name="groupnameen" v-model="visaInfo.travelCompanionInfo.groupnameen" type="text" placeholder="Group Name" />
 						</div>
 						<!--第二部分No-->
 						<div class="teamnamefalse teamnamefalseen groupInputInfo">

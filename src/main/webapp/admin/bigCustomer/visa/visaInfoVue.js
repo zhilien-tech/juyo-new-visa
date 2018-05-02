@@ -348,6 +348,24 @@ new Vue({
 				$("div.jobEduLearningInfoDiv").show();
 				$(".jobEduLearningInfoTextarea").hide();
 			}
+		},
+		translateZhToEnVue:function(from, to, vueObj){
+			var toval = $("#" + from).val();
+			$.ajax({
+				url : '/admin/translate/translate',
+				data : {
+					api : 'google',
+					strType : to,
+					en : 'en',
+					q : toval
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					$("#" + to).val(result).change();
+					visaInfo.travelCompanionInfo.groupnameen = result;
+				}
+			});
 		}
 	}
 });

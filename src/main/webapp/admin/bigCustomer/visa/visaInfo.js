@@ -1050,6 +1050,32 @@ function translateZhToEn(from, to, param){
         $("#" + to).val(result.data);
     });*/
 }
+
+function translateZhToEnVueVisanumber(from, to, param){
+	var toval = "";
+	if(param != ""){
+		toval = param;
+	}else{
+		toval = $(from).val();
+	}
+	$.ajax({
+		//async : false,
+		url : '/admin/translate/translate',
+		data : {
+			api : 'google',
+			strType : to,
+			en : 'en',
+			q : toval
+		},
+		type : 'POST',
+		dataType : 'json',
+		success : function(data) {
+			$("#" + to).val(data).change();
+			visaInfo.previUSTripInfo.visanumberen = data;
+		}
+	});
+}
+
 //添加多段中英文
 function addSegmentsTranslateZhToEn(from, to, param){
 	var toval = "";
