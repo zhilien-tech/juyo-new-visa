@@ -82,6 +82,30 @@
 							</div>
 						</div>
 					</div>
+					
+						<!-- 上传公章  -->
+					<div class="row" style="margin-top: 15px;">
+						<div class="col-xs-3">
+							<div class="form-group">
+								<div class="upload-btn">
+									<input id="seal" name="seal" value="${obj.seal}" type="hidden"/>
+									<a href="javascript:;" class="uploadP">
+										上传公章
+										<input id="uploadFileSeal" name="uploadFileSeal" class="btn btn-primary btn-sm" type="file" value="上传公章" />
+									</a>
+									
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="form-group">
+								<div class="sqImgPreview">
+									<img id="sqImgSeal" alt="公章" src="${obj.seal}">
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- end 上传公章-->
 
 				</div>
 			</div>
@@ -100,6 +124,8 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- 本页面js文件 -->
 	<script src="${base}/admin/companyInfo/companyInfo.js"></script>
+	<!-- 上传图片 -->
+	<script src="${base}/admin/companyInfo/uploadFile.js"></script>
 	<script type="text/javascript">
 		/*保存页面*/
 		function update() {
