@@ -1,6 +1,7 @@
 var staffid=GetQueryString('staffid');
 var sessionid=GetQueryString('sessionid');
 var flag=GetQueryString('flag');
+var	status=GetQueryString('marryurltype');
 
 //获取URL地址参数
 function GetQueryString(name){
@@ -20,13 +21,15 @@ function getImage(staffid){
 	$.ajax({
 		url : "/admin/mobileVisa/getInfoByType.html",
 		data : {
-			type : 12,
+			type : 6,
 			staffid : staffid,
 		},
 		dataType : "json",
 		type : 'post',
 		success : function(data) {
-			$(".pageImg").attr("src",data.url);
+			if(data != null){
+				$(".pageImg").attr("src",data.url);
+			}
 		}
 	});
 }
@@ -148,7 +151,8 @@ function uploadToQiniu(staffid,serverIds){
 			staffId:staffid,
 			mediaIds:serverIds,
 			sessionid:sessionid,
-			type:12
+			type:6,
+			status:status
 		},
 		success : function(data) {
 

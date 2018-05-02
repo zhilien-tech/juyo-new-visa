@@ -9,7 +9,7 @@ function GetQueryString(name){
 	if(r!=null)return  unescape(r[2]); return null;
 }
 
-//返回上一级，开始护照扫描
+//返回上一级
 function returnPage(){
 	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 }
@@ -20,13 +20,15 @@ function getImage(staffid){
 	$.ajax({
 		url : "/admin/mobileVisa/getInfoByType.html",
 		data : {
-			type : 12,
+			type : 10,
 			staffid : staffid,
 		},
 		dataType : "json",
 		type : 'post',
 		success : function(data) {
-			$(".pageImg").attr("src",data.url);
+			if(data != null){
+				$(".pageImg").attr("src",data.url);
+			}
 		}
 	});
 }
@@ -148,7 +150,7 @@ function uploadToQiniu(staffid,serverIds){
 			staffId:staffid,
 			mediaIds:serverIds,
 			sessionid:sessionid,
-			type:12
+			type:10
 		},
 		success : function(data) {
 

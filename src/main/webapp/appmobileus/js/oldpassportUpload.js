@@ -9,7 +9,7 @@ function GetQueryString(name){
 	if(r!=null)return  unescape(r[2]); return null;
 }
 
-//返回上一级，开始护照扫描
+//返回上一级
 function returnPage(){
 	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 }
@@ -18,15 +18,26 @@ function returnPage(){
 //回显
 function getImage(staffid){
 	$.ajax({
-		url : "/admin/mobileVisa/getInfoByType.html",
+		url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
 		data : {
-			type : 12,
+			type : 2,
 			staffid : staffid,
 		},
 		dataType : "json",
 		type : 'post',
 		success : function(data) {
-			$(".pageImg").attr("src",data.url);
+			//$(".uploadImgReady").attr("src",data.url); */
+			console.log(data);
+			if(data.query.length > 0){
+				for(var i=0;i<data.query.length;i++){
+					var url=data.query[i].url;
+					$(".passportSetImage").before('<div class="passportShoot chooseImage">'+
+							'<div class="uploadPassport">'+
+							'<img src="'+url+'" class="uploadImgReady" />'+
+							'<input type="file" class="oldpassportImg viceFile" id="passportImg" name="passportImg" onclick="addHousehold()" />'+
+							'</div></div>');
+				}	
+			}
 		}
 	});
 }
@@ -97,7 +108,12 @@ $('.chooseImage').on('click', function() {
 			if(localIds != ""){
 				for(var i = 0;i<localIds .length;i++){
 					//YEMIAN HUIXIAN
-					$(".pageImg").attr("src",localIds[i]);
+					$(".passportSetImage").before('<div class="passportShoot chooseImage">'+
+							'<div class="uploadPassport">'+
+							'<img src="'+localIds[i]+'" class="uploadImgReady" />'+
+							'<input type="file" class="oldpassportImg viceFile" id="passportImg" name="passportImg" onclick="addHousehold()" />'+
+							'</div></div>');
+					//$(".uploadImgReady").attr("src",localIds[i]);
 				}
 			}
 
@@ -148,7 +164,7 @@ function uploadToQiniu(staffid,serverIds){
 			staffId:staffid,
 			mediaIds:serverIds,
 			sessionid:sessionid,
-			type:12
+			type:2
 		},
 		success : function(data) {
 

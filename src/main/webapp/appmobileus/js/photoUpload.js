@@ -20,13 +20,15 @@ function getImage(staffid){
 	$.ajax({
 		url : "/admin/mobileVisa/getInfoByType.html",
 		data : {
-			type : 12,
+			type : 13,
 			staffid : staffid,
 		},
 		dataType : "json",
 		type : 'post',
 		success : function(data) {
-			$(".pageImg").attr("src",data.url);
+			if(data != null){
+				$(".uploadPhotoReady").attr("src",data.url);
+			}
 		}
 	});
 }
@@ -97,7 +99,7 @@ $('.chooseImage').on('click', function() {
 			if(localIds != ""){
 				for(var i = 0;i<localIds .length;i++){
 					//YEMIAN HUIXIAN
-					$(".pageImg").attr("src",localIds[i]);
+					$(".uploadPhotoReady").attr("src",localIds[i]);
 				}
 			}
 
@@ -148,7 +150,7 @@ function uploadToQiniu(staffid,serverIds){
 			staffId:staffid,
 			mediaIds:serverIds,
 			sessionid:sessionid,
-			type:12
+			type:13
 		},
 		success : function(data) {
 

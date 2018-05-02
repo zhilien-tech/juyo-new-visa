@@ -26,7 +26,7 @@
 					<span class="businesstitle">图例</span>
 				</div>
 				<!--营业执照或机构代码证-->
-				<div class="businessPage bisLicense">
+				<div class="businessPage bisLicense chooseImage">
 					<span class="homePageTitle">行营业执照或机构代码证</span>
 					<img src="img/camera.png" style="pointer-events:none;" class="camera cameraMain" />
 					<img src="" style="pointer-events:none;" class="pageImg" />
@@ -40,10 +40,10 @@
 		<script type="text/javascript" src="js/jquery-1.10.2.js" ></script>
 		<script type="text/javascript" src="js/rem(750).js" ></script>
 		<script type="text/javascript" src="/references/common/js/layer/layer.js" ></script>
-		<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
-		<script type="text/javascript" src="js/saveButton.js" ></script>
+		<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<script type="text/javascript" src="js/businessUpload.js" ></script>
 		<script>
-			function getImage(staffid){
+			/* function getImage(staffid){
 			$.ajax({
 				url : "/admin/mobileVisa/getInfoByType.html",
 				data : {
@@ -71,7 +71,7 @@
 					layer.load(1);
 					var that = this;
 		            lrz(this.files[0]).then(function (rst) {
-		                /* $('.bacimg2').attr('src',rst.base64);*/
+		                //$('.bacimg2').attr('src',rst.base64);
 		                $('#upload').hide(); 
 		                // 处理成功会执行
 		                sourceSize = (that.files[0].size / 1024).toFixed(2);
@@ -119,9 +119,6 @@
 	        console.log('------------------------------');
 	        console.log(formData); 
 	        console.log(rst.file);
-	        /* var layerIndex = layer.load(1, {
-				shade : "#000"
-			}); */
 	        $.ajax({
 				type : "POST",//提交类型  
 				//dataType : "json",//返回结果格式  
@@ -145,7 +142,7 @@
 					layer.closeAll('loading');
 				}
 			}); // end of ajaxSubmit
-		}
+		} */
 			
 		</script>
 	</body>
