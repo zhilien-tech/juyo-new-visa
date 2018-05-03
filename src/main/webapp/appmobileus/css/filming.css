@@ -372,7 +372,7 @@ footer {
 .household {
 	padding:.2rem .2rem 0 .35rem;
 }
-.householdPage {
+.householdPage,.householdExpain {
 	width: 45%;
 	height: 4rem;
 	text-align: center;
@@ -432,6 +432,9 @@ footer {
 	height: 4rem;
 	position: absolute;
 	top: 0;
+}
+.driverPageImg {
+	height:2.5rem !important;
 }
 .viceFile {
 	width:100%;

@@ -9,6 +9,9 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<!--本页css-->
 		<link rel="stylesheet" href="css/filming.css" />
+		<style type="text/css">
+			.todisplay {display: none;}
+		</style>
 	</head>
 	<body>
 		<header>
@@ -24,16 +27,16 @@
 				<div class="dialog"></div>
 				<span class="passportExpain">图例</span>
 			</div>
-			<div class="passportSetImage passportShoot chooseImage" id="passportShoot">
+			<div class="passportSetImage passportShoot chooseImage todisplay" id="0" name="1">
 				<div class="uploadPassport">
 					<p>上传旧护照</p>
 					<img id="11" src="" style="pointer-events:none;" class="uploadImgReady" />
-					<input type="file" class="oldpassportImg viceFile" id="1" name="1" onclick="addHousehold()"/>
+					<!-- <input type="file" class="oldpassportImg viceFile"/> -->
 				</div>
 				
 			</div>
 			<div class="addPage addOldGroup">
-				<a class="addSet" onclick="addOldPassPort()">加一页</a>
+				<a class="addSet" >加一页</a>
 			</div>
 			<div class="savetitle">
 				<a class="savebutton">保存</a>
@@ -70,12 +73,12 @@
 			 fuyecount = maxid;
 			 count = maxname;
 			 $('.addPage').on('click',function(){
-					var name = $(this).prev().find('input').attr("name");
-					var id = $(this).prev().find('input').attr("id");
+					var name = $(this).prev().attr("name");
+					var id = $(this).prev().attr("id");
 					id = parseInt(id);
 					id = id+1; 
 					var num = name+""+id;
-					$(this).before('<div class="passportSetImage passportShoot chooseImage"><div class="uploadPassport"><p>上传旧护照</p><img id="'+num+'" src="" style="pointer-events:none;" class="uploadImgReady" /><input type="file" class="oldpassportImg viceFile" id="'+id+'" name="'+name+'" onclick="addHousehold()"/></div></div>');
+					$(this).before('<div class="passportSetImage passportShoot chooseImage" onclick="chooseImage('+id+','+name+')" id="'+id+'" name="'+name+'"><div class="uploadPassport"><p>上传旧护照</p><img id="'+num+'" src="" style="pointer-events:none;" class="uploadImgReady" /></div></div>');
 					//$(this).before('<div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img id="'+num+'" src="" class="pageImg" /><input id="'+id+'" name="'+name+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
 				});
 		})

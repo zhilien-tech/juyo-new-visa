@@ -31,10 +31,9 @@ function getImage(staffid){
 			if(data.query.length > 0){
 				for(var i=0;i<data.query.length;i++){
 					var url=data.query[i].url;
-					$(".passportSetImage").before('<div class="passportShoot chooseImage">'+
+					$(".passportSetImage").before('<div class="passportShoot chooseImage" onclick="chooseImage('+data.query[i].sequence+','+data.query[i].mainid+')" id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'">'+
 							'<div class="uploadPassport">'+
 							'<img src="'+url+'" class="uploadImgReady" />'+
-							'<input type="file" class="oldpassportImg viceFile" id="passportImg" name="passportImg" onclick="addHousehold()" />'+
 							'</div></div>');
 				}	
 			}
@@ -96,7 +95,9 @@ var images = {
 		localId : [],
 		serverId : []
 };
-$('.chooseImage').on('click', function() {
+
+function chooseImage(sequence,mainid){
+	var num = mainid+""+sequence;
 	images.serverId = [];//清空serverid集合
 	wx.chooseImage({
 		count : 1, // 默认9   
@@ -108,23 +109,24 @@ $('.chooseImage').on('click', function() {
 			if(localIds != ""){
 				for(var i = 0;i<localIds .length;i++){
 					//YEMIAN HUIXIAN
-					$(".passportSetImage").before('<div class="passportShoot chooseImage">'+
+					$("#"+num).attr("src",localIds[i]);
+					/*$(".passportSetImage").before('<div class="passportShoot chooseImage">'+
 							'<div class="uploadPassport">'+
 							'<img src="'+localIds[i]+'" class="uploadImgReady" />'+
 							'<input type="file" class="oldpassportImg viceFile" id="passportImg" name="passportImg" onclick="addHousehold()" />'+
-							'</div></div>');
+							'</div></div>');*/
 					//$(".uploadImgReady").attr("src",localIds[i]);
 				}
 			}
 
 			images.localId = res.localIds;
-			uploadImage(res.localIds);
+			uploadImage(res.localIds,mainid,sequence);
 
 		}
 	});
-});
+}
 
-var uploadImage = function(localIds) {
+var uploadImage = function(localIds,mainid,sequence) {
 	var localId = localIds.pop();
 	wx.uploadImage({
 		localId : localId,
@@ -153,18 +155,20 @@ var uploadImage = function(localIds) {
 };
 
 //从微信服务器保存到七牛云服务器 
-function uploadToQiniu(staffid,serverIds){
+function uploadToQiniu(staffid,serverIds,mainid,sequence){
 
 	$.ajax({
 		type : "post",
-		url : "/admin/weixinToken/wechatJsSDKUploadToQiniu",
+		url : "/admin/weixinToken/wechatJsSDKNewploadToQiniu",
 		dataType : "json",
 		async : false,
 		data:{
 			staffId:staffid,
 			mediaIds:serverIds,
 			sessionid:sessionid,
-			type:2
+			type:2,
+			mainid:mainid,
+			sequence:sequence
 		},
 		success : function(data) {
 

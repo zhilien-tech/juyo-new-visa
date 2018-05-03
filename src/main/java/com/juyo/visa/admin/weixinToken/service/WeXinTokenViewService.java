@@ -191,10 +191,11 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		Date nowDate = DateUtil.nowDate();
 
 		TAppStaffCredentialsEntity credentialEntity = new TAppStaffCredentialsEntity();
-		if (type == TAppStaffCredentialsEnum.IDCARD.intKey()) {//户口本
+		if (type == TAppStaffCredentialsEnum.IDCARD.intKey()) {//身份证
 			credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
 					Cnd.where("staffid", "=", staffId).and("type", "=", type).and("status", "=", status));
-		} else if (type == TAppStaffCredentialsEnum.HUKOUBEN.intKey() || type == TAppStaffCredentialsEnum.HOME.intKey()) {//房产证、户口本
+		} else if (type == TAppStaffCredentialsEnum.HUKOUBEN.intKey() || type == TAppStaffCredentialsEnum.HOME.intKey()
+				|| type == TAppStaffCredentialsEnum.OLDHUZHAO.intKey()) {//房产证、户口本
 			credentialEntity = dbDao.fetch(
 					TAppStaffCredentialsEntity.class,
 					Cnd.where("staffid", "=", staffId).and("type", "=", type).and("mainid", "=", mainid)

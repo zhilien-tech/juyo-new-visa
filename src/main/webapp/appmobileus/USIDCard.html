@@ -72,7 +72,7 @@
 			}); */
 			
 			
-			function getImageFront(staffid){
+			/* function getImageFront(staffid){
 				$.ajax({
 					url : "/admin/mobileVisa/getIDcardphoto.html",
 					data : {
@@ -119,7 +119,7 @@
 						layer.load(1);
 						var that = this;
 			            lrz(this.files[0]).then(function (rst) {
-			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                //$('.bacimg2').attr('src',rst.base64);
 			                $('#upload').hide(); 
 			                // 处理成功会执行
 			                sourceSize = (that.files[0].size / 1024).toFixed(2);
@@ -143,7 +143,7 @@
 						layer.load(1);
 						var that = this;
 			            lrz(this.files[0]).then(function (rst) {
-			                /* $('.bacimg2').attr('src',rst.base64);*/
+			                //$('.bacimg2').attr('src',rst.base64);
 			                $('#upload').hide(); 
 			                // 处理成功会执行
 			                sourceSize = (that.files[0].size / 1024).toFixed(2);
@@ -191,9 +191,6 @@
 		        console.log('------------------------------');
 		        console.log(formData); 
 		        console.log(rst.file);
-		        /* var layerIndex = layer.load(1, {
-					shade : "#000"
-				}); */
 		        $.ajax({
 					type : "POST",//提交类型  
 					url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
@@ -209,7 +206,7 @@
 						getImageFront(staffid);
 						if (obj!=null || obj != "") {
 							layer.msg("上传成功"); 
-							/* $.ajax({
+							$.ajax({
 								type : "POST",//提交类型  
 								async : false,
 								url : '/admin/orderUS/IDCardRecognition.html',
@@ -220,7 +217,7 @@
 								success : function(obj) {
 									
 								}
-							}); */
+							});
 							
 						}else{
 							layer.msg("身份证无法识别，请从新上传"); 
@@ -245,9 +242,6 @@
 		        console.log('------------------------------');
 		        console.log(formData); 
 		        console.log(rst.file);
-		        /* var layerIndex = layer.load(1, {
-					shade : "#000"
-				}); */
 		        $.ajax({
 					type : "POST",//提交类型  
 					url : '/admin/mobileVisa/uploadImageOnly.html',//请求地址  
@@ -284,7 +278,7 @@
 						layer.closeAll('loading');
 					}
 				}); // end of ajaxSubmit
-			}
+			} */
 		</script>
 	</body>
 </html>
