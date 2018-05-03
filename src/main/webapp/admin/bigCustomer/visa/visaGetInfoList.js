@@ -189,6 +189,23 @@ function getDirectList(){
 		}else{
 			directLength += '';
 		}
+		//英文
+		var relativesfirstnameen = $('.directRelativesYesen').find('[name=relativesfirstnameen]').val();
+		var relativeslastnameen = $('.directRelativesYesen').find('[name=relativeslastnameen]').val();
+		var relationshipen = $('.directRelativesYesen').find('[name=relationshipen]').val();
+		var relativesstatusen = $('.directRelativesYesen').find('[name=relativesstatusen]').val();
+		directLength += relativesfirstnameen;
+		directLength += relativeslastnameen;
+		if(relationshipen != 0){
+			directLength += relationshipen;
+		}else{
+			directLength += '';
+		}
+		if(relativesstatus != 0){
+			directLength += relativesstatus;
+		}else{
+			directLength += '';
+		}
 		
 		if(directLength.length > 0){
 			direct.staffid = staffId;
@@ -196,6 +213,11 @@ function getDirectList(){
 			direct.relativeslastname = relativeslastname;
 			direct.relationship = relationship;
 			direct.relativesstatus = relativesstatus;
+			
+			direct.relativesfirstnameen = relativesfirstnameen;
+			direct.relativeslastnameen = relativeslastnameen;
+			direct.relationshipen = relationshipen;
+			direct.relativesstatusen = relativesstatusen;
 			directList.push(direct);
 		}
 	});
