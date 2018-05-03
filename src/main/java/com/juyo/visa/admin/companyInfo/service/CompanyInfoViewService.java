@@ -142,6 +142,7 @@ public class CompanyInfoViewService extends BaseService<TCompanyEntity> {
 		company.setMobile(addForm.getMobile());
 		company.setEmail(addForm.getEmail());
 		company.setAddress(addForm.getAddress());
+		company.setSeal(addForm.getSeal());
 		company.setComType(CompanyTypeEnum.SONGQIAN.intKey());
 		company.setIsCustomer(IsYesOrNoEnum.YES.intKey());
 		company.setOpId(userid);
@@ -178,6 +179,7 @@ public class CompanyInfoViewService extends BaseService<TCompanyEntity> {
 			company.setMobile(updateForm.getMobile());
 			company.setEmail(updateForm.getEmail());
 			company.setAddress(updateForm.getAddress());
+			company.setSeal(updateForm.getSeal());
 			company.setUpdateTime(nowDate);
 			dbDao.update(company);
 		}
