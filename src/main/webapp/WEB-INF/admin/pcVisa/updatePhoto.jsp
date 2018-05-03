@@ -142,8 +142,9 @@
 						</div>
 						<div class="housecardR">
 							<label>面积</label>
-							<input id="area" readonly="readonly" type="text" class="writter" >
+							<input id="area" readonly="readonly" type="text" class="writter" />
 						</div>
+						<div class="areaMetre">平米</div>
 					</div>
 					<div class="housecardAddressInfo">
 						<label>地址</label>

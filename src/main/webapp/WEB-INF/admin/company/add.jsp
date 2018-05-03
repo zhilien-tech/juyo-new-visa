@@ -164,7 +164,7 @@
 							</div>
 						</div>
 					</div>
-					<!-- end 上传营业执照 -->
+					<!-- end 上传公章 -->
 					
 					<!-- 指定番号 -->
 					<div id="jpDesignNum_div" class="row none">

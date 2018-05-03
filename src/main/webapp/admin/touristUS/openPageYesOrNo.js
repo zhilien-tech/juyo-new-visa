@@ -7,9 +7,9 @@ function openYesOrNoPage(){
 	if(istravelwithother == 1){
 		$(".teamture").show();
 		$(".teamnamefalse").show();
+		
 		//是否作为团队或组织的一部分旅游
 		var ispart = visaInfo.travelCompanionInfo.ispart; 
-		
 		if(ispart == 1){
 			$(".teamnameture").show();
 			$(".teamnamefalse").hide();

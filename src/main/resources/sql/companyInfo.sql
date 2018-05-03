@@ -11,7 +11,7 @@ SELECT
 	c.address,
 	c.comType,
 	( SELECT GROUP_CONCAT( cast( tcb.countryId AS CHAR ) SEPARATOR ',' ) FROM t_com_businessscope tcb WHERE tcb.comId = c.id ) AS scopes,
-	( SELECT tcb.designatedNum FROM t_com_businessscope tcb WHERE tcb.comId = c.id ) AS designatedNum,
+	( SELECT tcb.designatedNum FROM t_com_businessscope tcb WHERE tcb.comId = c.id GROUP BY tcb.comId) AS designatedNum,
 	c.license,
 	c.createTime 
 FROM
