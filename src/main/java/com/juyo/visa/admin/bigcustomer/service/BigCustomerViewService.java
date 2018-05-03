@@ -257,7 +257,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("spousebirthday", spousebirthday);
 		String spousebirthdayen = familyInfo.getString("spousebirthdayen");
 		spousebirthdayen = formatDateStr(spousebirthdayen, FORMAT_DD_MM_YYYY);
-		familyInfo.set("spousebirthdayen", spousebirthdayen);
+		result.put("spousebirthdayen", spousebirthdayen);
 
 		//工作/教育/培训信息---格式化工作开始日期 
 		String sqlStrw = sqlManager.get("pcVisa_word_education_training_list");
