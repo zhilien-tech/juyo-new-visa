@@ -363,8 +363,8 @@ var visaVue = new Vue({
 				dataType : 'json',
 				success : function(result) {
 					$("#" + to).val(result).change();
-					//visaInfo.travelCompanionInfo.groupnameen = result;
-					visaVue.set(visaInfo,"visaInfo.travelCompanionInfo.groupnameen",result);
+					visaInfo.travelCompanionInfo.groupnameen = result;
+					//visaVue.set(visaInfo,visaInfo.travelCompanionInfo.groupnameen,result);
 				}
 			});
 		}
