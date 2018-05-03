@@ -471,7 +471,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				lastinfo += dateformat.format(orderjp.getLastreturndate());
 			}
 			lastinfo += "      " + (Util.isEmpty(orderjp.getLaststayday()) ? "" : orderjp.getLaststayday());
-			map.put("fill_26", lastinfo);
+			map.put("fill_26", lastinfo+"天");
 			//配偶职业
 			map.put("fill_1_2", record.getString("unitname"));
 			//在日担保人信息
@@ -561,7 +561,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 	 * 酒店信息
 	 */
 	public ByteArrayOutputStream hotelInfo(Map<String, Object> tempdata) {
-		DateFormat hoteldateformat = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat hoteldateformat = new SimpleDateFormat("yyyy/MM/dd hh:mm");
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		try {
 			//公司信息
@@ -591,10 +591,11 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 						map.put("city", cityentity.getCity());
 					}
 					if (!Util.isEmpty(ordertripjp.getGoDate())) {
-						map.put("checkInDate", hoteldateformat.format(ordertripjp.getGoDate()));
+						map.put("checkInDate", hoteldateformat.format(ordertripjp.getGoDate()).substring(5));
 					}
+					String format = hoteldateformat.format(ordertripjp.getReturnDate());
 					if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-						map.put("checkOutDate", hoteldateformat.format(ordertripjp.getReturnDate()));
+						map.put("checkOutDate", hoteldateformat.format(ordertripjp.getReturnDate()).substring(5));
 					}
 				} else if (ordertripjp.getTripType().equals(2)) {
 					if (!Util.isEmpty(mutiltrip)) {
@@ -1357,7 +1358,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			{
 				Paragraph p = new Paragraph("BCYL35", font);
 				p.setSpacingBefore(5);
-				p.setIndentationLeft(30);
+				p.setIndentationLeft(22);
 				p.setSpacingAfter(0);
 				p.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(p);
