@@ -1704,7 +1704,7 @@
 						<!--第二部分yes-->
 						<div class="teamnameture teamnametureen groupInputInfo">
 							<label>Group Name</label>
-							<input id="groupnameen" name="groupnameen" v-model="visaInfo.travelCompanionInfo.groupnameen" type="text" placeholder="Group Name" />
+							<input id="groupnameen" name="groupnameen" :value="visaInfo.travelCompanionInfo.groupname" v-model="visaInfo.travelCompanionInfo.groupnameen" type="text" placeholder="Group Name" />
 						</div>
 						<!--第二部分No-->
 						<div class="teamnamefalse teamnamefalseen groupInputInfo">
