@@ -102,6 +102,19 @@ function emptyContentByObj(obj){
 	});
 	
 }
+
+
+//获取拼音字符串
+document.write('<script language=javascript src="/references/common/js/pinyin.js"></script>');
+function getPinYinStr(hanzi){
+	var onehanzi = hanzi.split('');
+	var pinyinchar = '';
+	for(var i=0;i<onehanzi.length;i++){
+		pinyinchar += PinYin.getPinYin(onehanzi[i]);
+	}
+	return pinyinchar.toUpperCase();
+}
+
 //---------------------------------------工具方法 end-------------------------------------------
 
 
@@ -1050,6 +1063,45 @@ function translateZhToEn(from, to, param){
         $("#" + to).val(result.data);
     });*/
 }
+
+//姓名翻译
+function translateZhToPinYin(from, to, param){
+	var toval = "";
+	if(param != ""){
+		toval = param;
+	}else{
+		toval = $(from).val();
+	}
+	
+	var pinyinchar = getPinYinStr(toval);
+	$("#" + to).val(pinyinchar).change();
+}
+
+function translateZhToEnVueVisanumber(from, to, param){
+	var toval = "";
+	if(param != ""){
+		toval = param;
+	}else{
+		toval = $(from).val();
+	}
+	$.ajax({
+		//async : false,
+		url : '/admin/translate/translate',
+		data : {
+			api : 'google',
+			strType : to,
+			en : 'en',
+			q : toval
+		},
+		type : 'POST',
+		dataType : 'json',
+		success : function(data) {
+			$("#" + to).val(data).change();
+			visaInfo.previUSTripInfo.visanumberen = data;
+		}
+	});
+}
+
 //添加多段中英文
 function addSegmentsTranslateZhToEn(from, to, param){
 	var toval = "";
@@ -1081,4 +1133,19 @@ function addSegmentsTranslateZhToEn(from, to, param){
 	/*$.getJSON("/admin/translate/google", {q: $(from).val()}, function (result) {
         $("#" + to).val(result.data);
     });*/
+}
+
+
+function addSegmentsTranslateZhToPinYin(from, to, param){
+	var toval = "";
+	
+	var Index = $(from).parent().parent().index();
+	//var Indexen = $("#"+to).parent().parent().index();
+	if(param != ""){
+		toval = param;
+	}else{
+		toval = $(from).val();
+	}
+	var pinyinchar = getPinYinStr(toval);
+	$("." + to).eq(Index).val(pinyinchar).change();
 }

@@ -57,7 +57,7 @@
 						<!--第二部分yes-->
 						<div class="teamnameture groupInputInfo">
 							<label>团队名称</label>
-							<input id="groupname" name="groupname" onchange="translateZhToEn(this,'groupnameen','')" v-model="visaInfo.travelCompanionInfo.groupname" type="text" placeholder="团队名称" />
+							<input id="groupname" name="groupname" @change="translateZhToEnVue('groupname','groupnameen','visaInfo.travelCompanionInfo.groupnameen')" v-model="visaInfo.travelCompanionInfo.groupname" type="text" placeholder="团队名称" />
 						</div>
 						<!--第二部分No-->
 						<div class="teamnamefalse groupInputInfo">
@@ -67,11 +67,11 @@
 									<div class="teamnamefalseDiv teamnamefalseDivzh teamaddfalse teamnamefalseIndexDIV" >
 										<div class="companionSurnName">
 											<label>同伴姓</label>
-											<input id="firstname" name="firstname" onchange="addSegmentsTranslateZhToEn(this,'firstnameen','')" value="${companion.firstname }" type="text" placeholder="同伴姓" />
+											<input id="firstname" name="firstname" onchange="addSegmentsTranslateZhToPinYin(this,'firstnameen','')" value="${companion.firstname }" type="text" placeholder="同伴姓" />
 										</div>
 										<div class="companionName">
 											<label>同伴名</label>
-											<input id="lastname" name="lastname" onchange="addSegmentsTranslateZhToEn(this,'lastnameen','')" value="${companion.lastname }" type="text" placeholder="同伴名" />
+											<input id="lastname" name="lastname" onchange="addSegmentsTranslateZhToPinYin(this,'lastnameen','')" value="${companion.lastname }" type="text" placeholder="同伴名" />
 										</div>
 										<div class="clear"></div>
 										<div class="youRelationship">
@@ -95,11 +95,11 @@
 								<div class="teamnamefalseDiv teamnamefalseDivzh teamaddfalse teamnamefalseIndexDIV">
 									<div class="companionSurnName">
 										<label>同伴姓</label>
-										<input id="firstname" name="firstname" onchange="addSegmentsTranslateZhToEn(this,'firstnameen','')" type="text" placeholder="同伴姓" />
+										<input id="firstname" name="firstname" onchange="addSegmentsTranslateZhToPinYin(this,'firstnameen','')" type="text" placeholder="同伴姓" />
 									</div>
 									<div class="companionName">
 										<label>同伴名</label>
-										<input id="lastname" name="lastname" onchange="addSegmentsTranslateZhToEn(this,'lastnameen','')" type="text" placeholder="同伴名" />
+										<input id="lastname" name="lastname" onchange="addSegmentsTranslateZhToPinYin(this,'lastnameen','')" type="text" placeholder="同伴名" />
 									</div>
 									<div class="clear"></div>
 									<div class="youRelationship">
@@ -268,7 +268,7 @@
 							</div>
 							<div class="groupcheckBoxInfo visaNum">
 								<label>签证号码</label>
-								<input name="visanumber" class="visanumber" @change="hasvisanumber()" v-model="visaInfo.previUSTripInfo.visanumber" onchange="translateZhToEn(this,'visanumberen','')" type="text" />
+								<input name="visanumber" class="visanumber" @change="hasvisanumber()" v-model="visaInfo.previUSTripInfo.visanumber" onchange="translateZhToEnVueVisanumber(this,'visanumberen','')" type="text" />
 								<input id="idknowvisanumber" :value="visaInfo.previUSTripInfo.idknowvisanumber" onchange="AddSingle(this,'idknowvisanumberen')" name="idknowvisanumber" v-on:click="idknowvisanumberChange" v-model="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/>
 							</div>
 							<div class="clear"></div>
@@ -364,11 +364,11 @@
 				<div class="titleInfo">美国联络人</div>
 				<div class="groupInputInfo paddingLeft">
 					<label>联系人姓</label>
-					<input name="firstname" v-model="visaInfo.contactPointInfo.firstname" @change="isfirstname()" onchange="translateZhToEn(this,'firstnameusen','')" type="text" />
+					<input name="firstname" v-model="visaInfo.contactPointInfo.firstname" @change="isfirstname()" onchange="translateZhToPinYin(this,'firstnameusen','')" type="text" />
 				</div>
 				<div class="groupcheckBoxInfo paddingRight">
 					<label>联系人名</label>
-					<input name="lastname" v-model="visaInfo.contactPointInfo.lastname" @change="islastname()" type="text" onchange="translateZhToEn(this,'lastnameusen','')" />
+					<input name="lastname" v-model="visaInfo.contactPointInfo.lastname" @change="islastname()" type="text" onchange="translateZhToPinYin(this,'lastnameusen','')" />
 					<input id="isknowname" v-model="visaInfo.contactPointInfo.isknowname" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknowname" name="isknowname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
@@ -434,12 +434,12 @@
 				<div class="titleInfo">家庭信息</div>
 				<div class="paddingLeft groupcheckBoxInfo" >
 					<label>父亲的姓</label>
-					<input name="fatherfirstname" v-model="visaInfo.familyInfo.fatherfirstname" onchange="translateZhToEn(this,'fatherfirstnameen','')" type="text"/>
+					<input name="fatherfirstname" v-model="visaInfo.familyInfo.fatherfirstname" onchange="translateZhToPinYin(this,'fatherfirstnameen','')" type="text"/>
 					<input id="isKnowFatherXing" name="isknowfatherfirstname" onchange="AddSingle(this,'isknowfatherfirstnameen')"  v-on:click="isknowfatherfirstname"  v-model="visaInfo.familyInfo.isknowfatherfirstname" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo" >
 					<label>父亲的名</label>
-					<input name="fatherlastname" v-model="visaInfo.familyInfo.fatherlastname" onchange="translateZhToEn(this,'fatherlastnameen','')" type="text" />
+					<input name="fatherlastname" v-model="visaInfo.familyInfo.fatherlastname" onchange="translateZhToPinYin(this,'fatherlastnameen','')" type="text" />
 					<input id="isKnowFatherMing" name="isknowfatherlastname" onchange="AddSingle(this,'isknowfatherlastnameen')" v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
@@ -462,12 +462,12 @@
 				</div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label>母亲的姓</label>
-					<input id="motherfirstname" name="motherfirstname" v-model="visaInfo.familyInfo.motherfirstname" onchange="translateZhToEn(this,'mothernameen','')" type="text" />
+					<input id="motherfirstname" name="motherfirstname" v-model="visaInfo.familyInfo.motherfirstname" onchange="translateZhToPinYin(this,'mothernameen','')" type="text" />
 					<input id="isKnowMotherXing" name="isknowmotherfirstname" onchange="AddSingle(this,'isknowmotherfirstnameen')" v-on:click="isknowmotherfirstname" v-model="visaInfo.familyInfo.isknowmotherfirstname" type="checkbox" />
 				</div>
 				<div class="paddingRight groupcheckBoxInfo">
 					<label>母亲的名</label>
-					<input id="motherlastname" name="motherlastname" v-model="visaInfo.familyInfo.motherlastname" onchange="translateZhToEn(this,'motherlastnameen','')" type="text" />
+					<input id="motherlastname" name="motherlastname" v-model="visaInfo.familyInfo.motherlastname" onchange="translateZhToPinYin(this,'motherlastnameen','')" type="text" />
 					<input id="isKnowMotherMing" name="isknowmotherlastname" onchange="AddSingle(this,'isknowmotherlastnameen')" v-on:click="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
@@ -500,11 +500,11 @@
 								<div class="directRelativesYes">
 									<div class="floatLeft leftNo groupInputInfo">
 										<label>姓</label>
-										<input name="relativesfirstname" onchange="translateZhToEn(this,'relativesfitstnameen','')" value="${zhifamily.relativesfirstname }" type="text" />
+										<input name="relativesfirstname" onchange="translateZhToPinYin(this,'relativesfitstnameen','')" value="${zhifamily.relativesfirstname }" type="text" />
 									</div>
 									<div class="floatRight groupInputInfo">
 										<label>名</label>
-										<input name="relativeslastname" onchange="translateZhToEn(this,'relativeslastnameen','')" value="${zhifamily.relativeslastname }"  type="text" />
+										<input name="relativeslastname" onchange="translateZhToPinYin(this,'relativeslastnameen','')" value="${zhifamily.relativeslastname }"  type="text" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupSelectInfo">
@@ -542,11 +542,11 @@
 							<div class="directRelativesYes">
 								<div class="floatLeft leftNo groupInputInfo">
 									<label>姓</label>
-									<input name="relativesfirstname" onchange="translateZhToEn(this,'relativesfitstnameen','')" type="text" />
+									<input name="relativesfirstname" onchange="translateZhToPinYin(this,'relativesfitstnameen','')" type="text" />
 								</div>
 								<div class="floatRight groupInputInfo">
 									<label>名</label>
-									<input name="relativeslastname" onchange="translateZhToEn(this,'relativeslastnameen','')" type="text" />
+									<input name="relativeslastname" onchange="translateZhToPinYin(this,'relativeslastnameen','')" type="text" />
 								</div>
 								<div class="clear"></div>
 								<div class="paddingLeft leftNo groupSelectInfo">
@@ -585,11 +585,11 @@
 				<div class="titleInfo">配偶信息</div>
 				<div class="floatLeft groupInputInfo">
 					<label>配偶的姓</label>
-					<input name="spousefirstname" onchange="translateZhToEn(this,'spousefirstnameen','')" v-model="visaInfo.familyInfo.spousefirstname" type="text" />
+					<input name="spousefirstname" onchange="translateZhToPinYin(this,'spousefirstnameen','')" v-model="visaInfo.familyInfo.spousefirstname" type="text" />
 				</div>
 				<div class="floatRight groupInputInfo">
 					<label>配偶的名</label>
-					<input name="spouselastname" onchange="translateZhToEn(this,'spouselastnameen','')" v-model="visaInfo.familyInfo.spouselastname" type="text" />
+					<input name="spouselastname" onchange="translateZhToPinYin(this,'spouselastnameen','')" v-model="visaInfo.familyInfo.spouselastname" type="text" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingLeft groupInputInfo">
@@ -780,7 +780,7 @@
 									<div class="workBeforeInfosDiv">
 										<div class="leftNo marginLS groupInputInfo" >
 											<label>雇主名字</label>
-											<input name="employername" onchange="addSegmentsTranslateZhToEn(this,'employernameen','')" value="${beforeWork.employername }" type="text" />
+											<input name="employername" onchange="addSegmentsTranslateZhToPinYin(this,'employernameen','')" value="${beforeWork.employername }" type="text" />
 										</div>
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>雇主街道地址(首选)</label>
@@ -839,7 +839,7 @@
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>主管的姓</label>
-											<input name="supervisorfirstname" onchange="addSegmentsTranslateZhToEn(this,'isknowsupervisorfirstnamebeforeen','')"  value="${beforeWork.supervisorfirstname }" type="text" />
+											<input name="supervisorfirstname" onchange="addSegmentsTranslateZhToPinYin(this,'isknowsupervisorfirstnamebeforeen','')"  value="${beforeWork.supervisorfirstname }" type="text" />
 											<c:if test="${beforeWork.isknowsupervisorfirstname == 1}">
 												<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" onchange="AddSegment(this,'isknowjobfirstnameen')" value="${beforeWork.isknowsupervisorfirstname }" checked="checked" type="checkbox"/>
 											</c:if>
@@ -849,7 +849,7 @@
 										</div>
 										<div class="paddingRight groupcheckBoxInfo">
 											<label>主管的名</label>
-											<input name="supervisorlastname" value="${beforeWork.supervisorlastname }"  onchange="addSegmentsTranslateZhToEn(this,'isknowsupervisorlastnamebeforeen','')" type="text" />
+											<input name="supervisorlastname" value="${beforeWork.supervisorlastname }"  onchange="addSegmentsTranslateZhToPinYin(this,'isknowsupervisorlastnamebeforeen','')" type="text" />
 											<c:if test="${beforeWork.isknowsupervisorlastname == 1}">
 												<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" onchange="AddSegment(this,'isknowjoblastnameen')" value="${beforeWork.isknowsupervisorlastname }" checked="checked" type="checkbox"/>
 											</c:if>
@@ -879,7 +879,7 @@
 								<div class="workBeforeInfosDiv">
 									<div class="leftNo marginLS groupInputInfo" >
 										<label>雇主名字</label>
-										<input name="employername" onchange="addSegmentsTranslateZhToEn(this,'employernameen','')" type="text" />
+										<input name="employername" onchange="addSegmentsTranslateZhToPinYin(this,'employernameen','')" type="text" />
 									</div>
 									<div class="draBig leftNo marginLS groupInputInfo">
 										<label>雇主街道地址(首选)</label>
@@ -926,12 +926,12 @@
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo">
 										<label>主管的姓</label>
-										<input name="supervisorfirstname" onchange="addSegmentsTranslateZhToEn(this,'isknowsupervisorfirstnamebeforeen','')"  type="text" />
+										<input name="supervisorfirstname" onchange="addSegmentsTranslateZhToPinYin(this,'isknowsupervisorfirstnamebeforeen','')"  type="text" />
 										<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" onchange="AddSegment(this,'isknowjobfirstnameen')" type="checkbox" />
 									</div>
 									<div class="paddingRight leftNo groupcheckBoxInfo">
 										<label>主管的名</label>
-										<input name="supervisorlastname" onchange="addSegmentsTranslateZhToEn(this,'isknowsupervisorlastnamebeforeen','')"  type="text" />
+										<input name="supervisorlastname" onchange="addSegmentsTranslateZhToPinYin(this,'isknowsupervisorlastnamebeforeen','')"  type="text" />
 										<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" onchange="AddSegment(this,'isknowjoblastnameen')" type="checkbox" />
 									</div>
 									<div class="clear"></div>
@@ -1704,7 +1704,7 @@
 						<!--第二部分yes-->
 						<div class="teamnameture teamnametureen groupInputInfo">
 							<label>Group Name</label>
-							<input id="groupnameen" name="groupnameen" v-model="visaInfo.travelCompanionInfo.groupname" type="text" placeholder="Group Name" />
+							<input id="groupnameen" name="groupnameen" :value="visaInfo.travelCompanionInfo.groupname" v-model="visaInfo.travelCompanionInfo.groupnameen" type="text" placeholder="Group Name" />
 						</div>
 						<!--第二部分No-->
 						<div class="teamnamefalse teamnamefalseen groupInputInfo">
