@@ -420,30 +420,55 @@ function save(status){
 
 	if(status ==1){
 		//点击保存按钮
-		closeWindow();
+		$.ajax({ 
+			type: 'POST', 
+			data: {
+				data:JSON.stringify(visadata)
+			}, 
+			url: '/admin/bigCustomer/updateVisaInfos.html',
+			success: function (data) { 
+				if(data.status == 200){
+					layer.msg("保存成功", {
+						time: 1000,
+						end: function () {
+							parent.successCallback();
+							closeWindow();
+						}
+					});
+				}else{
+					layer.msg("保存失败","", 2000);
+				}
+				layer.closeAll('loading');
+			},
+			error: function (xhr) {
+				layer.msg("保存失败");
+			} 
+		});
+		
 	}else if(status ==2){
+		layer.closeAll('loading');
 		//左箭头跳转
 		window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+		$.ajax({ 
+			type: 'POST', 
+			data: {
+				data:JSON.stringify(visadata)
+			}, 
+			url: '/admin/bigCustomer/updateVisaInfos.html',
+			success: function (data) { 
+				if(data.status == 200){
+					parent.successCallback();
+				}else{
+					layer.msg("保存失败","", 2000);
+				}
+				layer.closeAll('loading');
+			},
+			error: function (xhr) {
+				layer.msg("保存失败");
+			} 
+		});
 	}
 	
-	$.ajax({ 
-		type: 'POST', 
-		data: {
-			data:JSON.stringify(visadata)
-		}, 
-		url: '/admin/bigCustomer/updateVisaInfos.html',
-		success: function (data) { 
-			if(data.status == 200){
-				layer.msg("保存成功","", 2000);
-			}else{
-				layer.msg("保存失败","", 2000);
-			}
-			layer.closeAll('loading');
-		},
-		error: function (xhr) {
-			layer.msg("保存失败");
-		} 
-	});
 
 }
 
