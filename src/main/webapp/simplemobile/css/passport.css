@@ -729,12 +729,9 @@ input[type="checkbox"] + label:after {
 .otherInfoUl {
 	margin-top:0;
 }
-.otherInfoMain {
-	height:4.1rem !important;
-}
 .otherInfoTextarea {
 	width: 100%;
-	height: 4rem !important;
+	height: .8rem !important;
 	font-size: .3rem;
 	border: 0;
 }

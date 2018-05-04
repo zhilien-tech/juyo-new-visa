@@ -218,7 +218,7 @@
 										<label>姓/拼音</label> <input id="otherFirstName"
 											name="otherFirstName" type="text" class="form-control input-sm "
 											placeholder=" " value="${obj.applicant.otherFirstName }" />
-											<input type="text" id="otherFirstNameEn" style="position:absolute;top:30px;border:none;left:150px;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
+											<input type="text" id="otherFirstNameEn" style="position:absolute;top:30px;border:none;left:150px;font-size:10px !important;"  name="otherFirstNameEn" value="${obj.otherFirstNameEn }"/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -232,7 +232,7 @@
 								<div class="form-group" style="position:relative;">
 									<label>名/拼音</label> 
 									<input id="otherLastName" name="otherLastName" type="text" class="form-control input-sm otherLastName" placeholder=" " value="${obj.applicant.otherLastName }" />
-									<input type="text" id="otherLastNameEn" style="position:absolute;top:30px;border:none;left:150px;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
+									<input type="text" id="otherLastNameEn" style="position:absolute;top:30px;border:none;left:150px;font-size:10px !important;" name="otherLastNameEn" value="${obj.otherLastNameEn }"/>
 								</div>
 							</div>
 						</div>
@@ -275,8 +275,8 @@
 										<label id="updateApplicantHead">与主申请人的关系</label>
 										</br>
 										<div class="input-box">
-											<input type="text" id="mainRelation" name="mainRelation" class="input" value=" ${obj.orderjp.mainRelation }" >
-											<ul class="dropdown">
+											<input type="text" id="mainRelation" name="mainRelation" style="font-size:10px !important;" class="input" value=" ${obj.orderjp.mainRelation }" >
+											<ul class="dropdown" style="font-size:10px !important;">
 												<li>配偶</li>
 												<li>父母</li>
 												<li>子女</li>

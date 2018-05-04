@@ -33,7 +33,7 @@
     <input type="file" id="image" style="display:none;" name="image">
 </div>
  <ul class="label-info firstInfo">
-        <li>手机号 <input type="text" class="txtInput telphone" maxlength="11" v-model="applicatdata.telephone"/></li>
+        <li>手机号222 <input type="text" class="txtInput telphone" maxlength="11" v-model="applicatdata.telephone"/></li>
         <li>邮箱 <input type="text" class="txtInput email" v-model="applicatdata.email"/></li>
         <li>性别 <input type="text" class="txtInput" v-model="applicatdata.sex"/></li>
         <li>出生日期 <input type="text" class="txtInput" id="birthDate" readonly="" v-model="applicatdata.birthday"/></li>
@@ -42,8 +42,9 @@
         <li>住址(市) <input type="text" class="txtInput" v-model="applicatdata.cardcity"/></li>
         <li>住址(街楼) <input type="text" class="txtInput" style="width:70%;" v-model="applicatdata.address"/></li>
 <!--         <li>签发机关 <input type="text" class="txtInput" v-model="applicatdata.issueorganization"/></li>
- -->        <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="applicatdata.validstartdate"/></li>
+        <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="applicatdata.validstartdate"/></li>
         <li>有效期至<input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="applicatdata.validenddate"/></li>
+  -->  
         <li>现在地址是否与身份证一致<span class="onOff"> <input type="checkbox" id="consistent" class="consistent checkBox"> <label for="consistent" class="green"></label> </span></li>
         <li class="isclose">住址(省) <input type="text" class="txtInput" v-model="applicatdata.province"/></li>
         <li class="isclose">住址(市) <input type="text" class="txtInput" v-model="applicatdata.city"/></li>
@@ -58,7 +59,6 @@
    		<li>曾有的或另有的国籍(或公民身份)<span class="onOff"> <input type="checkbox" id="afterNatAndID" class="afterNatAndID checkBox"> <label for="afterNatAndID" class="green"></label> </span></li>
    		<li class="afterNatAndIDinput">国籍 <input type="text" class="txtInput" id="" v-model="applicatdata.nationality"/></li>
    		<li>紧急联系人姓名 <input type="text" class="txtInput emergencyContactName"  v-model="applicatdata.emergencylinkman"/></li>
-   		
    		<li class="validity">与主申请人的关系<span class="dateVal"></span>
 	   		<select class="validitySelect">
 	   			<option>请选择</option>
@@ -68,6 +68,7 @@
 	   		</select>
    		</li>
    		<li>紧急联系人手机号 <input type="text" class="txtInput emergencyContact" maxlength="11" v-model="applicatdata.emergencytelephone"/></li>
+   		<li>紧急联系人地址 <input type="text" class="txtInput emergencyContact" maxlength="11" v-model="applicatdata.emergencyaddress"/></li>
     </ul>
 <div class="bottom">
     <!-- <a class="pre btn" href="javascript:preStep();">上一步</a>

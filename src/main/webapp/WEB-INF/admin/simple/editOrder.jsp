@@ -828,6 +828,7 @@
                  });
 			}
 			function downLoadFile(){
+				
 				$.ajax({
                  	url: '${base}/admin/visaJapan/validateDownLoadInfoIsFull.html',
                  	data:{orderjpid:orderid},
@@ -850,10 +851,13 @@
 			        		    content: url
 			        		  });
                  		}else{
+                 			layer.load(1);
 							$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=${obj.orderjpinfo.id}", {
 						        successCallback: function (url) {
+						        	layer.closeAll('loading');
 						        },
 						        failCallback: function (html, url) {
+						        	layer.closeAll('loading');
 						       		layer.msg('下载失败');
 						        }
 						    });
