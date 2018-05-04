@@ -248,6 +248,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 				if (type == TAppStaffCredentialsEnum.MARRAY.intKey()) {
 					TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffId.longValue());
 					basic.setMarrystatus(status);
+					basic.setMarrystatusen(status);
 					dbDao.update(basic);
 				}
 			}
