@@ -47,8 +47,19 @@ public class WeiXinTokenModule {
 	//微信JSSDK上传的文件需要重新下载后上传到七牛云
 	@At
 	@POST
-	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String mediaIds, @Param("sessionid") String sessionid, @Param("type")Integer type) {
-		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId,mediaIds,sessionid,type);
+	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String mediaIds,
+			@Param("sessionid") String sessionid, @Param("type") Integer type) {
+		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
+	}
+
+	//微信JSSDK上传的文件需要重新下载后上传到七牛云(多参数)
+	@At
+	@POST
+	public Object wechatJsSDKNewploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String mediaIds,
+			@Param("sessionid") String sessionid, @Param("type") Integer type, @Param("mainid") Integer mainid,
+			@Param("sequence") Integer sequence, @Param("status") Integer status) {
+		return weXinTokenViewService.wechatJsSDKNewuploadToQiniu(staffId, mediaIds, sessionid, type, mainid, sequence,
+				status);
 	}
 
 	//获取图片集合

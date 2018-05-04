@@ -19,29 +19,25 @@
 	</header>
 	<section>
 		<div class="household">
-			<div class="householdPage householdExpain">
+			<div class="householdExpain">
 				<img alt="图例" src="img/icon-hold.jpg" width="100%" height="100%">
 				<div class="dialoghold"></div>
 				<span class="titlehold">图例</span>
 			</div>
 			<!--户主页-->
-			<div class="householdPage homePage">
+			<div class="householdPage homePage" id="1" name="1" onclick="chooseImage(1,1)">
 				<span class="homePageTitle">户主页</span> <img src="img/camera.png" style="pointer-events:none;"
-					class="camera" /> <img id="11" src="" style="pointer-events:none;" class="pageImg" /> <input
-					id="1" type="file" name="1" class="viceFile"
-					onclick="addHousehold()" />
+					class="camera" /> <img id="11" src="" style="pointer-events:none;" class="pageImg" /> 
 			</div>
 
 			<!--副页-->
-			<div class="householdPage vicePage">
+			<div class="householdPage vicePage" id="2" name="1" onclick="chooseImage(2,1)">
 				<span class="homePageTitle">副页</span> <img src="img/camera.png" style="pointer-events:none;"
-					class="camera" /> <img id="12" src="" style="pointer-events:none;" class="pageImg" /> <input
-					id="2" type="file" class="viceFile" onclick="addHousehold()"
-					name="1" />
+					class="camera" /> <img id="12" src="" style="pointer-events:none;" class="pageImg" /> 
 			</div>
 
 			<!--添加页-->
-			<div class="addPage 1">
+			<div class="addPage 1" onclick="addPage(this)">
 				<span class="homePageTitle">添加副页</span> <span class="plus">+</span>
 			</div>
 		</div>
@@ -56,20 +52,15 @@
 	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 	<script type="text/javascript" src="js/rem(750).js"></script>
 	<script type="text/javascript" src="/references/common/js/layer/layer.js"></script>
-	<script type="text/javascript" src="js/lrz.all.bundle.js"></script>
 	<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-	<!-- <script type="text/javascript" src="js/householdUpload.js"></script> -->
-	<script type="text/javascript" src="js/saveButton.js" ></script>
+	<script type="text/javascript" src="js/householdUpload.js"></script>
 	<script>
 		$(function(){
-			var	staffid=GetQueryString('staffid');
-			var	flag=GetQueryString('flag');
 			var fuyecount = 2;
 			var count = 1;
-			getImage(staffid);
 			var maxid = 0 ;
 			var maxname = 0;
-			 $("input").each(function() {
+			 $(".householdPage").each(function() {
 				  var id = parseInt($(this).attr("id"));
 				  var name = parseInt($(this).attr("name"));
 				  if (id > maxid) {
@@ -81,33 +72,23 @@
 			});
 			 fuyecount = maxid;
 			 count = maxname;
-			//当前模块下的添加一页
-			$('.addPage').on('click',function(){
-				var name = $(this).prev().find('input').attr("name");
-				var id = $(this).prev().find('input').attr("id");
-				id = parseInt(id);
-				id = id+1; 
-				var num = name+""+id;
-				$(this).before('<div class="householdPage vicePage"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img id="'+num+'" src="" class="pageImg" /><input id="'+id+'" name="'+name+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
-			});
+			
 			//添加一套
 			$(".addSet").click(function(){
 				count = count+1;
 				var zhuye = count+""+1;
 				var fuye = count+""+2;
 				$(".addSetOfBtn").before('<div class="household">'+
-						 '<div class="householdPage homePage">'+
+						 '<div class="householdPage homePage" id="1" name="'+count+'" onclick="chooseImage(1,'+count+')">'+
 						 '<span class="homePageTitle">户主页</span>'+
 						 '<img src="img/camera.png" class="camera" />'+
-						 '<img id="'+zhuye+'" src="" class="pageImg" />'+
-						 '<input type="file" name="'+count+'" class="viceFile" onclick="addHousehold()" /></div>'+
-						 '<div id="vice1" class="householdPage householdInfo vicePage">'+
+						 '<img id="'+zhuye+'" src="" class="pageImg" /></div>'+
+						 '<div class="householdPage householdInfo vicePage" id="2" name="'+count+'" onclick="chooseImage(2,'+count+')">'+
 						 '<span class="homePageTitle">副页</span>'+
 						 '<img src="img/camera.png" class="camera" />'+
 						 '<img id="'+fuye+'" src="" class="pageImg" />'+
-						 '<input type="file" id="file1" class="viceFile viceStatus" onclick="addHousehold()" name="'+count+'" />'+
 						 '</div>'+
-						 '<div class="addPage">'+
+						 '<div class="addPage" onclick="addPage(this)">'+
 						 '<span class="homePageTitle">添加副页</span>'+
 						 '<span class="plus">+</span>'+
 						 '</div>'+
@@ -115,7 +96,16 @@
 				);
 			})
 		});
-		function getImage(staffid){
+		//当前模块下的添加一页
+		function addPage(page){
+			var name = $(page).prev().attr("name");
+			var id = $(page).prev().attr("id");
+			id = parseInt(id);
+			id = id+1; 
+			var num = name+""+id;
+			$(page).before('<div class="householdPage vicePage" id="'+id+'" name="'+name+'" onclick="chooseImage('+id+','+name+')"><span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" /><img id="'+num+'" src="" class="pageImg" /></div>');
+		}
+		/* function getImage(staffid){
 			$.ajax({
 				url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
 				data : {
@@ -262,7 +252,7 @@
 				//给当前元素的上一个节点添加src的值
 				//$(this).prev().attr('src','123456789');
 				});
-			}
+			} */
 		</script>
 </body>
 </html>

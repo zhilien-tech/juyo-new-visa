@@ -26,7 +26,7 @@
 					<div class="signdialog"></div>
 					<span class="digntitle">图例</span>
 				</div>
-				<div class="householdPage marriageMain">
+				<div class="householdPage marriageMain chooseImage">
 					<span class="homePageTitle">拍摄上传</span>
 					<img src="img/camera.png" style="pointer-events:none;"  class="camera" />
 					<img src="" style="pointer-events:none;" class="pageImg" />
@@ -53,104 +53,11 @@
 	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 	<script type="text/javascript" src="js/rem(750).js"></script>
 	<script type="text/javascript" src="/references/common/js/layer/layer.js" ></script>
-	<script type="text/javascript" src="js/lrz.all.bundle.js" ></script>
-	<script type="text/javascript" src="js/saveButton.js" ></script>
-	<!-- <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> -->
+	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	<script type="text/javascript" src="js/signingUpload.js" ></script>
 	<script type="text/javascript">
 	
-		/* $(function(){
-			$.ajax({
-		        type : "post",
-		        url : "/admin/weixinToken/getJsApiTicket",
-		        dataType : "json",
-		        async : false,
-		        success : function(data) {
-		        	var jsApiTicket = data.ticket;
-		        	var url = location.href.split('#').toString();//url不能写死
-		        	
-		        	$.ajax({
-		                type : "post",
-		                url : "/admin/weixinToken/makeWXTicket",
-		                dataType : "json",
-		                async : false,
-		                data:{
-		                	jsApiTicket:jsApiTicket,
-		                	url:url
-		                },
-		                success : function(data) {
-		                    wx.config({
-		                        debug: false,////生产环境需要关闭debug模式
-		                        appId: data.appid,//appId通过微信服务号后台查看
-		                        timestamp: data.timestamp,//生成签名的时间戳
-		                        nonceStr: data.nonceStr,//生成签名的随机字符串
-		                        signature: data.signature,//签名
-		                        jsApiList: [//需要调用的JS接口列表
-                                    'chooseImage',
-                    		        'previewImage',
-                    		        'uploadImage'
-		                        ]
-		                    });
-		                },
-		                error: function(xhr, status, error) {
-		                    //alert(status);
-		                    //alert(xhr.responseText);
-		                }
-		            })
-		        },
-		        error: function(xhr, status, error) {
-		            
-		        }
-		    })
-		});
-	
-		
-		wx.ready(function(){
-			//页面加载时就调用相关接口
-		});
-		
-		 
-		var images = {
-			localId : [],
-			serverId : []
-		};
-		$('.chooseImage').on('click', function() {
-			wx.chooseImage({
-				count : 9, // 默认9   
-				sizeType : [ 'compressed' ], // 压缩图
-				sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者都有   
-				success : function(res) {
-					deleteBrotherEle($(".chooseImage"));
-					images.localId = res.localIds;
-					syncUpload(res.localIds);
-					$(".chooseImage").last().append('<div class="householdPage multiselect chooseImage"><img src="'+res.localIds+'" class="pageImg" /></div>	');
-				}
-			});
-		});
-
-		var uploadImage = function(localIds) {
-			var localId = localIds.pop();
-			wx.uploadImage({
-				localId : localId,
-				isShowProgressTips : 1,
-				success : function(res) {
-					var serverId = res.serverId; // 返回图片的服务器端ID
-					images.serverId = serverId;
-					//其他对serverId做处理的代码
-					if (localIds.length > 0) {
-						uploadImage(localIds);
-					}
-				}
-			});
-		};
-		
-		//删除同类型的其他兄弟节点
-		function deleteBrotherEle(obj){
-			obj.nextAll().remove();
-		} */
-
-		
-
-		function getImage(staffid){
+		/* function getImage(staffid){
 			$.ajax({
 				url : "/admin/mobileVisa/getInfoByType.html",
 				data : {
@@ -176,7 +83,7 @@
 					layer.load(1);
 					var that = this;
 		            lrz(this.files[0]).then(function (rst) {
-		                /* $('.bacimg2').attr('src',rst.base64);*/
+		                //$('.bacimg2').attr('src',rst.base64);
 		                $('#upload').hide(); 
 		                // 处理成功会执行
 		                sourceSize = (that.files[0].size / 1024).toFixed(2);
@@ -224,9 +131,6 @@
 	        console.log('------------------------------');
 	        console.log(formData); 
 	        console.log(rst.file);
-	        /* var layerIndex = layer.load(1, {
-				shade : "#000"
-			}); */
 			layer.load(1);
 	        $.ajax({
 				type : "POST",//提交类型  
@@ -251,7 +155,7 @@
 					layer.closeAll('loading');
 				}
 			}); // end of ajaxSubmit
-		}
+		} */
 		</script> 
 	</body>
 </html>
