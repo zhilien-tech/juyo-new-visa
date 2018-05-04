@@ -31,7 +31,6 @@ import com.juyo.visa.entities.TOrderUsEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
-import com.uxuexi.core.web.config.KvConfig;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -52,7 +51,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 	public Object getAppid() {
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
 		String wxConfigStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID"));
-		Integer T_APP_STAFF_CONF_WX_ID = Integer.valueOf(wxConfigStr);
+		Long T_APP_STAFF_CONF_WX_ID = Long.valueOf(wxConfigStr);
 		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		return wx;
 	}
@@ -159,7 +158,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 
 	//根据accessToken获取用户个人信息
 	public Object SaveUser(String code) {
-		
+
 		Map<String, Object> result = Maps.newHashMap();
 		if (!Util.isEmpty(code)) {
 			System.out.println("code=" + code);
@@ -171,7 +170,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 			String openid = accessTokenObject.get("openid").toString();
 			System.out.println("openid=" + openid);
 			//新增or更新微信授权用户信息
-			SaveOrUpdateUserInfo(accessToken,openid);
+			SaveOrUpdateUserInfo(accessToken, openid);
 			//调用验证用户是否已注册
 			Map<String, Object> userInfo = (Map<String, Object>) appEventsViewService.checkUserLogin(openid);
 

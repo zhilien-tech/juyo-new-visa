@@ -20,8 +20,6 @@ import java.util.UUID;
 
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
-import org.nutz.mvc.annotation.At;
-import org.nutz.mvc.annotation.POST;
 import org.springframework.web.socket.TextMessage;
 
 import com.alibaba.druid.support.logging.Log;
@@ -61,7 +59,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	public Object getAccessToken() {
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
 		String wxConfigStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID"));
-		Integer T_APP_STAFF_CONF_WX_ID = Integer.valueOf(wxConfigStr);
+		Long T_APP_STAFF_CONF_WX_ID = Long.valueOf(wxConfigStr);
 		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		String WX_APPID = wx.getAppid();
 		String WX_APPSECRET = wx.getAppsecret();
@@ -88,15 +86,13 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 		return accessTokenUrl;
 	}
-	
-	
+
 	//获取 九宫格访问路径
 	public String getFenrollUrl() {
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
-		String T_APP_STAFF_Fenroll_WX_URL = (String)kvConfigProperties.get("T_APP_STAFF_Fenroll_WX_URL");
+		String T_APP_STAFF_Fenroll_WX_URL = (String) kvConfigProperties.get("T_APP_STAFF_Fenroll_WX_URL");
 		return T_APP_STAFF_Fenroll_WX_URL;
 	}
-
 
 	//获取ticket
 	public JSONObject getJsApiTicket() {
@@ -111,7 +107,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	public Map<String, String> makeWXTicket(String jsApiTicket, String url) {
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
 		String wxConfigStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID"));
-		Integer T_APP_STAFF_CONF_WX_ID = Integer.valueOf(wxConfigStr);
+		Long T_APP_STAFF_CONF_WX_ID = Long.valueOf(wxConfigStr);
 		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		String WX_APPID = wx.getAppid();
 
