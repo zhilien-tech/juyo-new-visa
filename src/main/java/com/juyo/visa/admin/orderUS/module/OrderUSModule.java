@@ -311,9 +311,9 @@ public class OrderUSModule {
 	@At
 	@POST
 	@Filters
-	public Object IDCardRecognition(@Param("url") String url, @Param("staffid") int staffid,
-			HttpServletRequest request, HttpServletResponse response) {
-		return orderUSViewService.IDCardRecognition(url, staffid, request, response);
+	public Object IDCardRecognition(@Param("staffid") int staffid, HttpServletRequest request,
+			HttpServletResponse response) {
+		return orderUSViewService.IDCardRecognition(staffid, request, response);
 	}
 
 	/**
@@ -322,9 +322,9 @@ public class OrderUSModule {
 	@At
 	@POST
 	@Filters
-	public Object IDCardRecognitionBack(@Param("url") String url, @Param("staffid") int staffid,
-			HttpServletRequest request, HttpServletResponse response) {
-		return orderUSViewService.IDCardRecognitionBack(url, staffid, request, response);
+	public Object IDCardRecognitionBack(@Param("staffid") int staffid, HttpServletRequest request,
+			HttpServletResponse response) {
+		return orderUSViewService.IDCardRecognitionBack(staffid, request, response);
 	}
 
 	/**

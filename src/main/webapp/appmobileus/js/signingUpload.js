@@ -148,7 +148,7 @@ function uploadToQiniu(staffid,serverIds){
 			staffId:staffid,
 			mediaIds:serverIds,
 			sessionid:sessionid,
-			type:1
+			type:12
 		},
 		success : function(data) {
 

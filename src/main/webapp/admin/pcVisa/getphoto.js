@@ -113,15 +113,25 @@ function card(staffid, type) {
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
-			if(data.query.length > 0){
+			if(data.query.length == 1){
 					var url=data.query[0].url;
 					if(data.query[0].status == 1){
 						$("#card").attr('src',url);
-						$("#cardBack").attr('src',data.query[1].url);
+						//$("#cardBack").attr('src',data.query[1].url);
 					}else{
 						$("#cardBack").attr('src',url);
-						$("#card").attr('src',data.query[1].url);
+						//$("#card").attr('src',data.query[1].url);
 					}
+			}
+			if(data.query.length == 2){
+				var url=data.query[0].url;
+				if(data.query[0].status == 1){
+					$("#card").attr('src',url);
+					$("#cardBack").attr('src',data.query[1].url);
+				}else{
+					$("#cardBack").attr('src',url);
+					$("#card").attr('src',data.query[1].url);
+				}
 			}
 		}
 	});
@@ -277,6 +287,7 @@ function household(staffid, type) {
 			//$("#household").attr("src",data.url);
 				$(".householdBack").next().remove();
 				for(var i = data.query.length-1;i>=0;i--){
+					console.log(data.query[i].url);
 					$(".householdBack").after('<div class="uploadReleases">'+
 					'<div>户主页</div>'+
 					'<img src="'+data.query[i].url+'" class="longitudinal" />'+

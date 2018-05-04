@@ -9,7 +9,7 @@ function GetQueryString(name){
 	if(r!=null)return  unescape(r[2]); return null;
 }
 
-//返回上一级，开始护照扫描
+//返回上一级
 function returnPage(){
 	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 }
@@ -41,28 +41,28 @@ function getImage(staffid){
 					if(data.query[i].mainid == 1){
 						/* 第一条主页 */
 						if(data.query[i].sequence==1){
-							$(".householdExpain").after('<div class="householdPage homePage ">'+
+							$(".householdExpain").after('<div class="householdPage homePage" id="1" name="1" onclick="chooseImage(1,1)">'+
 														'<span class="homePageTitle">户主页</span>'+
 									 '<img src="img/camera.png" class="camera" />'+
 									 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-									 '<input id="'+data.query[i].sequence+'" type="file" name="'+data.query[i].mainid+'" class="viceFile" onclick="addHousehold()" /></div>')
+									 '</div>')
 						}else{
-							$(".1").before('<div class="householdPage vicePage">'+
+							$(".1").before('<div class="householdPage vicePage" id="2" name="1" onclick="chooseImage(2,1)">'+
 									'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
 									'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-									'<input id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'" value="'+url+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
+									'</div>');
 							}
 					}else{
 						/* 其他的页面 */
 						if(data.query[i].sequence ==1){
 							$(".addSetOfBtn").before(
-									'<div class="household"><div class="householdPage homePage ">'+
+									'<div class="household"><div class="householdPage homePage" id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'" onclick="chooseImage('+data.query[i].sequence+','+data.query[i].mainid+')">'+
 														'<span class="homePageTitle">户主页</span>'+
 									 '<img src="img/camera.png" class="camera" />'+
 									 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-									 '<input id="'+data.query[i].sequence+'" type="file" name="'+data.query[i].mainid+'" class="viceFile" onclick="addHousehold()" /></div>'+
+									 '</div>'+
 									 
-									 '<div class="addPage '+data.query[i].mainid+'">'+
+									 '<div class="addPage '+data.query[i].mainid+'" onclick="addPage(this)">'+
 									 '<span class="homePageTitle">添加副页</span>'+
 									 '<span class="plus">+</span>'+
 									 '</div>'+
@@ -71,10 +71,10 @@ function getImage(staffid){
 						}else{
 							var group = "."+data.query[i].mainid;
 							//if(hasClass("data[i].mainid")){
-								$(group).before('<div class="householdPage vicePage">'+
+								$(group).before('<div class="householdPage vicePage" id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'" onclick="chooseImage('+data.query[i].sequence+','+data.query[i].mainid+')">'+
 										'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
 										'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-										'<input id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'" value="'+url+'" type="file" class="viceFile" onclick="addHousehold()" /></div>');
+										'</div>');
 										/* '<div class="addPage '+data[i].mainid+'">'+
 								 		'<span class="homePageTitle">添加副页</span>'+
 								 		'<span class="plus">+</span>'+ 
@@ -145,31 +145,8 @@ var images = {
 };
 
 //点击上传
-$(document).on("click",".viceFile", function(){
-	var	staffid=GetQueryString('staffid');
-	var	sessionid=GetQueryString('sessionid');
-	var	flag=GetQueryString('flag');
-	var mainid = $(this).attr("name");
-	var sequence = $(this).attr("id");
-	var that = this;
-	uploadMuchImg(mainid,sequence);
-	        /*lrz(this.files[0]).then(function (rst) {
-	        	uploadPositive(rst,rst.formData,staffid,mainid,sequence,sessionid,that,flag); 
-	        }).catch(function (err) {
-	            console.log(err);
-	        });*/
-		//压缩
-		//上传
-		//给当前元素的上一个节点添加src的值
-		//$(this).prev().attr('src','123456789');
-});
-
-
-
-
-
-
- function uploadMuchImg(mainid,sequence){
+ function chooseImage(sequence,mainid){
+	 var num = mainid+""+sequence;
 	images.serverId = [];//清空serverid集合
 	wx.chooseImage({
 		count : 1, // 默认9   
@@ -181,7 +158,7 @@ $(document).on("click",".viceFile", function(){
 			if(localIds != ""){
 				for(var i = 0;i<localIds .length;i++){
 					//YEMIAN HUIXIAN
-					$("#"+sequence).attr("src",localIds[i]);
+					$("#"+num).attr("src",localIds[i]);
 				}
 			}
 
@@ -225,14 +202,16 @@ function uploadToQiniu(staffid,serverIds,mainid,sequence){
 
 	$.ajax({
 		type : "post",
-		url : "/admin/weixinToken/wechatJsSDKUploadToQiniu",
+		url : "/admin/weixinToken/wechatJsSDKNewploadToQiniu",
 		dataType : "json",
 		async : false,
 		data:{
 			staffId:staffid,
 			mediaIds:serverIds,
 			sessionid:sessionid,
-			type:1
+			type:4,
+			mainid:mainid,
+			sequence:sequence
 		},
 		success : function(data) {
 
