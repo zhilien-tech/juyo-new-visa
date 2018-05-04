@@ -171,7 +171,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 			String openid = accessTokenObject.get("openid").toString();
 			System.out.println("openid=" + openid);
 			//新增or更新微信授权用户信息
-
+			SaveOrUpdateUserInfo(accessToken,openid);
 			//调用验证用户是否已注册
 			Map<String, Object> userInfo = (Map<String, Object>) appEventsViewService.checkUserLogin(openid);
 
