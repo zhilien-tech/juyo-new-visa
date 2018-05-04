@@ -1587,10 +1587,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		return dateStr;
 	}
 
+	//工作人员下单
 	public Object addOrderStaff(TAppStaffBasicinfoAddForm addForm, HttpSession session) {
 
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		//Integer comId = loginCompany.getId();
+		Integer loginComId = loginCompany.getId();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//Integer userId = loginUser.getId();
 
@@ -1598,7 +1599,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		Map<String, String> map = new HashMap<String, String>();
 		//基本信息
-		addForm.setComid(US_YUSHANG_COMID);
+		addForm.setComid(loginComId);
 		//addForm.setUserid(userId);
 		//addForm.setOpid(userId);
 		addForm.setIsidentificationnumberapply(IsYesOrNoEnum.YES.intKey());

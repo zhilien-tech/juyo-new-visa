@@ -12,6 +12,10 @@ function addStaff(){
 	});
 }
 
+
+
+
+
 $(function(){
 	$('#applicantInfo').bootstrapValidator({
 		message : '验证不通过',

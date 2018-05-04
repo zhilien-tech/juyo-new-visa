@@ -479,6 +479,9 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 	public Object addOrder(SignUpEventForm form, HttpSession session) {
 
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer loginComId = loginCompany.getId();
+		
 		//校验姓名是否合格
 		String firstname = form.getFirstname();
 		String lastname = form.getLastname();
@@ -517,7 +520,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 			staffEventEntity.setStaffId(staffId);
 
 			//添加订单
-			orderUSViewService.addOrderByStuffId(staffId, loginUserId);
+			orderUSViewService.addWorkerOrderByStuffId(staffId, loginUserId, loginComId);
 
 			//用户登录，添加游客信息
 			TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Long.valueOf(staffId));
