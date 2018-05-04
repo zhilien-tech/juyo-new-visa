@@ -897,7 +897,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Integer userType = loginUser.getUserType();
 		Integer userid = loginUser.getId();
 		//如果是管理员，则需要查询公司下所有的员工来给下拉框赋值
-		if (Util.eq(userType, UserLoginEnum.BIG_COMPANY_ADMIN.intKey())) {
+		if (Util.eq(userType, UserLoginEnum.JJ_COMPANY_ADMIN.intKey())) {
 			//获取公司下的所有工作人员,除去管理员
 			List<TUserEntity> userList = dbDao.query(TUserEntity.class,
 					Cnd.where("comId", "=", company.getId()).and("userType", "=", UserLoginEnum.PERSONNEL.intKey()),
@@ -941,10 +941,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				for (USOrderListStatusEnum statusEnum : USOrderListStatusEnum.values()) {
 					if (status == statusEnum.intKey()) {
 						record.put("orderstatus", statusEnum.value());
-					}
-					/*else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+					} else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
 						record.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
-					}*/
+					}
 				}
 			}
 		}

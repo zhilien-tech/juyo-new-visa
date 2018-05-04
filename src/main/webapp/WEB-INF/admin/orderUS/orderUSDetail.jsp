@@ -39,7 +39,7 @@
 							<p id="orderstatus_US">${obj.orderstatus }</p>
 						</c:when>
 						<c:otherwise>
-							<p id="orderstatus_US">下单</p>
+							<p id="orderstatus_US">${obj.orderstatus }</p>
 						</c:otherwise>
 					</c:choose>
 				

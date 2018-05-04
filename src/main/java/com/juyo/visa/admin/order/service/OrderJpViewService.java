@@ -381,7 +381,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicantUser.setMobile(applicant.getTelephone());
 		applicantUser.setOpid(applicant.getOpId());
 		applicantUser.setPassword("000000");
-		applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
+		//applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
 		if (!Util.isEmpty(applicant.getTelephone())) {
 			TUserEntity userEntity = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", applicant.getTelephone())
 					.and("userType", "=", UserLoginEnum.TOURIST_IDENTITY.intKey()));
@@ -1015,7 +1015,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicantUser.setMobile(applicant.getTelephone());
 			applicantUser.setOpid(applicant.getOpId());
 			applicantUser.setPassword("000000");
-			applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
+			//applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
 			if (!Util.isEmpty(applicant.getTelephone())) {
 				TUserEntity userEntity = dbDao.fetch(
 						TUserEntity.class,
@@ -2291,6 +2291,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				apply.setLastNameEn(passportForm.getLastNameEn().substring(1));
 			}
 			dbDao.update(apply);
+			TUserEntity userEntity = dbDao.fetch(TUserEntity.class, apply.getUserId().longValue());
+			userEntity.setName(passport.getFirstName() + passport.getLastName());
+			dbDao.update(userEntity);
 			TApplicantOrderJpEntity applyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", passportForm.getApplicantId()));
 			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applyJp.getOrderId().longValue());
