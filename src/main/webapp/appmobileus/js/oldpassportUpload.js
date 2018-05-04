@@ -31,9 +31,10 @@ function getImage(staffid){
 			if(data.query.length > 0){
 				for(var i=0;i<data.query.length;i++){
 					var url=data.query[i].url;
-					$(".passportSetImage").before('<div class="passportShoot chooseImage" onclick="chooseImage('+data.query[i].sequence+','+data.query[i].mainid+')" id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'">'+
+					var num = data.query[i].mainid+""+data.query[i].sequence;
+					$(".addPage").before('<div class="passportShoot chooseImage" onclick="chooseImage('+data.query[i].sequence+','+data.query[i].mainid+')" id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'">'+
 							'<div class="uploadPassport">'+
-							'<img src="'+url+'" class="uploadImgReady" />'+
+							'<img id="'+num+'" src="'+url+'" class="uploadImgReady" />'+
 							'</div></div>');
 				}	
 			}
@@ -147,7 +148,7 @@ var uploadImage = function(localIds,mainid,sequence) {
 					serverIdStr += serverId[i]+",";
 				}
 				
-				uploadToQiniu(staffid,serverIdStr);
+				uploadToQiniu(staffid,serverIdStr,mainid,sequence);
 
 			}
 		}

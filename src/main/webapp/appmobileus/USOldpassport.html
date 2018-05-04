@@ -27,7 +27,7 @@
 				<div class="dialog"></div>
 				<span class="passportExpain">图例</span>
 			</div>
-			<div class="passportSetImage passportShoot chooseImage todisplay" id="0" name="1">
+			<div class="passportSetImage passportShoot chooseImage todisplay" id="1" name="1">
 				<div class="uploadPassport">
 					<p>上传旧护照</p>
 					<img id="11" src="" style="pointer-events:none;" class="uploadImgReady" />
@@ -60,7 +60,7 @@
 			//getImage(staffid);
 			var maxid = 0 ;
 			var maxname = 0;
-			 $("input").each(function() {
+			 $(".passportSetImage").each(function() {
 				  var id = parseInt($(this).attr("id"));
 				  var name = parseInt($(this).attr("name"));
 				  if (id > maxid) {

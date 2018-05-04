@@ -511,14 +511,19 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 			result.put("explain", expain);
 		} else if (type == TAppStaffCredentialsEnum.OLDHUZHAO.intKey()
 				|| type == TAppStaffCredentialsEnum.HUKOUBEN.intKey()) {
-			query = dbDao.query(TAppStaffCredentialsEntity.class,
-					Cnd.where("staffid", "=", staffid).and("type", "=", type).orderBy("sequence", "ASC"), null);
+			query = dbDao.query(
+					TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffid).and("type", "=", type).orderBy("mainid", "ASC")
+							.orderBy("sequence", "ASC"), null);
 		} else {
 			query = dbDao.query(TAppStaffCredentialsEntity.class,
 					Cnd.where("staffid", "=", staffid).and("type", "=", type), null);
 		}
 		if (!Util.isEmpty(query)) {
-			if (type != TAppStaffCredentialsEnum.HUKOUBEN.intKey()) {
+			if (type == TAppStaffCredentialsEnum.HUKOUBEN.intKey()
+					|| type == TAppStaffCredentialsEnum.OLDHUZHAO.intKey()) {
+
+			} else {
 				Collections.reverse(query);
 			}
 		}
