@@ -20,12 +20,15 @@ import java.util.UUID;
 
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.POST;
 import org.springframework.web.socket.TextMessage;
 
 import com.alibaba.druid.support.logging.Log;
 import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
+import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
@@ -56,8 +59,9 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 	//获取accessToken
 	public Object getAccessToken() {
-
-		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 2);
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		Integer T_APP_STAFF_CONF_WX_ID = (Integer)kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID");
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		String WX_APPID = wx.getAppid();
 		String WX_APPSECRET = wx.getAppsecret();
 		String WX_TOKENKEY = wx.getAccesstokenkey();
@@ -83,6 +87,15 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 		return accessTokenUrl;
 	}
+	
+	
+	//获取 九宫格访问路径
+	public String getFenrollUrl() {
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		String T_APP_STAFF_Fenroll_WX_URL = (String)kvConfigProperties.get("T_APP_STAFF_Fenroll_WX_URL");
+		return T_APP_STAFF_Fenroll_WX_URL;
+	}
+
 
 	//获取ticket
 	public JSONObject getJsApiTicket() {
@@ -95,8 +108,9 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 	//生成微信权限验证的参数
 	public Map<String, String> makeWXTicket(String jsApiTicket, String url) {
-
-		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 2);
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		Integer T_APP_STAFF_CONF_WX_ID = (Integer)kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID");
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		String WX_APPID = wx.getAppid();
 
 		Map<String, String> ret = new HashMap<String, String>();

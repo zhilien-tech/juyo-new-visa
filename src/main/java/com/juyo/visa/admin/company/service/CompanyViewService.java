@@ -25,6 +25,7 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.access.AccessConfig;
 import com.juyo.visa.common.access.sign.MD5;
+import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.BusinessScopesEnum;
@@ -205,9 +206,11 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		
 		//大客户与美签简公司关系表更新
 		if(comType == CompanyTypeEnum.BIGCUSTOMER.intKey()) {
+			Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+			Integer US_YUSHANG_COM_ID = (Integer)kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID");
 			TCompanyCustomerMapEntity entityNew = new TCompanyCustomerMapEntity();
 			entityNew.setBigCustomerId(comId);
-			entityNew.setBelongComId(US_YUSHANG_COMID);
+			entityNew.setBelongComId(US_YUSHANG_COM_ID);
 			dbDao.insert(entityNew);
 			
 		}
@@ -257,6 +260,9 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		int opId = loginUser.getId();
+		
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		Integer US_YUSHANG_COM_ID = (Integer)kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID");
 
 		//编辑管理员信息
 		Integer adminId = updateForm.getAdminId();
@@ -288,12 +294,12 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			if(comType == CompanyTypeEnum.BIGCUSTOMER.intKey()) {
 				if(!Util.isEmpty(entity)) {
 					entity.setBigCustomerId(bigComid);
-					entity.setBelongComId(US_YUSHANG_COMID);
+					entity.setBelongComId(US_YUSHANG_COM_ID);
 					dbDao.update(entity);
 				}else {
 					TCompanyCustomerMapEntity entityNew = new TCompanyCustomerMapEntity();
 					entityNew.setBigCustomerId(bigComid);
-					entityNew.setBelongComId(US_YUSHANG_COMID);
+					entityNew.setBelongComId(US_YUSHANG_COM_ID);
 					dbDao.insert(entityNew);
 				}
 			}else {

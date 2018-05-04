@@ -37,6 +37,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
+import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
@@ -451,8 +452,10 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Date nowDate = DateUtil.nowDate();
 
 		Map<String, String> map = new HashMap<String, String>();
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		Integer US_YUSHANG_COM_ID = (Integer)kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID");
 		//基本信息
-		addForm.setComid(US_YUSHANG_COMID);
+		addForm.setComid(US_YUSHANG_COM_ID);
 		//addForm.setUserid(userId);
 		//addForm.setOpid(userId);
 		addForm.setIsidentificationnumberapply(IsYesOrNoEnum.YES.intKey());

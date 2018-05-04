@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.bigcustomer.service.AppEventsViewService;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
+import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
@@ -30,17 +31,13 @@ import com.juyo.visa.entities.TOrderUsEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
+import com.uxuexi.core.web.config.KvConfig;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
  * <p>
  * TODO(这里描述这个类补充说明 – 可选)
  *
-<<<<<<< HEAD
- * @author  
-=======
- * @author   董霖鹏
->>>>>>> refs/remotes/origin/dev
  * @Date	 2018年4月10日 	 
  */
 public class WeXinAccreditService extends BaseService<TConfWxEntity> {
@@ -53,7 +50,9 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 
 	//获取微信公众号唯一标识
 	public Object getAppid() {
-		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 2);
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		Integer T_APP_STAFF_CONF_WX_ID = (Integer)kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID");
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		return wx;
 	}
 
@@ -159,6 +158,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 
 	//根据accessToken获取用户个人信息
 	public Object SaveUser(String code) {
+		
 		Map<String, Object> result = Maps.newHashMap();
 		if (!Util.isEmpty(code)) {
 			System.out.println("code=" + code);
