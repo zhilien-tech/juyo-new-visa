@@ -77,7 +77,7 @@ public class BigCustomerModule {
 	}
 
 	/**
-	 *跳转到基本信息编辑页面
+	 *跳转到工作人员基本信息编辑页面
 	 */
 	@At
 	@GET
@@ -86,6 +86,7 @@ public class BigCustomerModule {
 			@Param("flag") Integer flag, HttpSession session) {
 		return bigCustomerViewService.getStaffInfo(staffId, isDisable, flag, session);
 	}
+	
 
 	/**
 	 * 执行'修改操作'
@@ -141,12 +142,24 @@ public class BigCustomerModule {
 	}
 
 	/**
-	 *跳转到签证信息页面
+	 *跳转到工作人员签证信息页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
 	public Object updateVisaInfo(@Param("staffId") Integer staffId, @Param("isDisable") Integer isDisable,
+			HttpSession session) {
+		return bigCustomerViewService.updateVisaInfo(staffId, isDisable, session);
+	}
+	
+	
+	/**
+	 *跳转到游客登录签证信息页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object touristVisaInfo(@Param("staffId") Integer staffId, @Param("isDisable") Integer isDisable,
 			HttpSession session) {
 		return bigCustomerViewService.updateVisaInfo(staffId, isDisable, session);
 	}

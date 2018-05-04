@@ -16,7 +16,7 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+id+'&isDisable'
+				content: '/admin/bigCustomer/touristVisaInfo.html?staffId='+id+'&isDisable'
 			});
 		},
 		//修改申请人拍摄资料信息
