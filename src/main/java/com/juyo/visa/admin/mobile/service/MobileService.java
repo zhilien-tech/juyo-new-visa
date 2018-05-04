@@ -112,7 +112,8 @@ public class MobileService extends BaseService<TApplicantEntity> {
 		TApplicantOrderJpEntity applicantJp = new TApplicantOrderJpEntity();
 		if (!Util.isEmpty(form.getApplicantid())) {
 			applicant = dbDao.fetch(TApplicantEntity.class, form.getApplicantid().longValue());
-		  applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,Cnd.where("applicantid","=",form.getApplicantid()));
+			applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantid", "=", form.getApplicantid()));
 		}
 		Map<String, String> applicantmap = MapUtil.obj2Map(applicant);
 		if (!Util.isEmpty(form.getComid())) {
@@ -564,6 +565,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	 */
 	public Object getJobOrEducationData(Long applicantid) {
 		Map<String, Object> result = Maps.newHashMap();
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
 		TApplicantOrderJpEntity applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class,
 				Cnd.where("applicantId", "=", applicantid));
 		//工作信息
@@ -583,6 +585,7 @@ public class MobileService extends BaseService<TApplicantEntity> {
 		}
 		workinfomap.put("workststusstr", workststusstr);
 		result.put("workinfo", workinfomap);
+		result.put("marrystatus", apply.getMarryStatus());
 		//工作状态下拉
 		result.put("jobselects", jobselects);
 		return result;

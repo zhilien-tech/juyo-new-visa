@@ -1676,6 +1676,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicantWorkJpEntity.setName(visaForm.getName());
 			applicantWorkJpEntity.setAddress(visaForm.getAddress());
 			applicantWorkJpEntity.setTelephone(visaForm.getTelephone());
+			applicantWorkJpEntity.setPosition(visaForm.getPosition());
 			applicantWorkJpEntity.setUpdateTime(new Date());
 			dbDao.update(applicantWorkJpEntity);
 			if (!Util.isEmpty(visaForm.getMainRelation())) {

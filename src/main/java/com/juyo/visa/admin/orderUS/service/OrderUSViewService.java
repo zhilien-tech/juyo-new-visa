@@ -160,8 +160,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("cityid", EnumUtil.enum2(DistrictEnum.class));
 		result.put("ispayed", EnumUtil.enum2(IsPayedEnum.class));
 		//websocket
-		String localAddr = request.getLocalAddr();
-		int localPort = request.getLocalPort();
+		String localAddr = request.getServerName();
+		int localPort = request.getServerPort();
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", USLIST_WEBSPCKET_ADDR);
@@ -1197,7 +1197,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
 		String YuShangComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID"));
 		Integer US_YUSHANG_COM_ID = Integer.valueOf(YuShangComIdStr);
-		
+
 		TOrderUsEntity orderUs = new TOrderUsEntity();
 		String orderNum = generateOrderNumByDate();
 		Date nowDate = DateUtil.nowDate();

@@ -43,7 +43,6 @@ $(function(){
 		success : function(data) {
 			var jsApiTicket = data.ticket;
 			var url = location.href.split('#').toString();//url不能写死
-
 			$.ajax({
 				type : "post",
 				url : "/admin/weixinToken/makeWXTicket",
