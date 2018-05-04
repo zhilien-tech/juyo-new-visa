@@ -22,9 +22,7 @@
 	       			$.ajax({
 						type:"post",
 						url:"/admin/weixinToken/getFenrollUrl.html",
-						data:{},
 						dataType : "json",
-						async:true,
 						success:function(data){
 							window.location.href = data;
 						}
