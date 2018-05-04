@@ -296,11 +296,11 @@
 								<div class="yearExplain displayTop elementHide"><!-- 默认隐藏 -->
 									<div class="groupInputInfo">
 										<label>年份</label>
-										<input name="lostyear" onchange="translateZhToEn(this,'lostyearen','')" v-model="visaInfo.previUSTripInfo.lostyear" type="text" />
+										<input name="lostyear" id="lostyear" @change="lostyear('lostyear','lostyearen','visaInfo.previUSTripInfo.lostyearen')" v-model="visaInfo.previUSTripInfo.lostyear" type="text" />
 									</div>
 									<div class="paddingTop grouptextareaInfo">
 										<label>说明</label>
-										<input class="areaInputPic" name="lostexplain" onchange="translateZhToEn(this,'lostexplainen','')" v-model="visaInfo.previUSTripInfo.lostexplain" />
+										<input class="areaInputPic" name="lostexplain" id="lostexplain" @change="lostexplain('lostexplain','lostexplainen','visaInfo.previUSTripInfo.lostexplainen')" v-model="visaInfo.previUSTripInfo.lostexplain" />
 									</div>
 								</div>
 							</div>
@@ -314,7 +314,7 @@
 									</div>
 									<div class="explain grouptextareaInfo paddingTop">
 										<label>说明</label>
-										<input name="cancelexplain" class="areaInputPic" onchange="translateZhToEn(this,'cancelexplainen','')"  v-model="visaInfo.previUSTripInfo.cancelexplain" />
+										<input name="cancelexplain" class="areaInputPic" id="cancelexplain" @change="cancelexplainen('cancelexplain','cancelexplainen','visaInfo.previUSTripInfo.cancelexplainen')" v-model="visaInfo.previUSTripInfo.cancelexplain" />
 									</div>
 								</div>
 							</div>
@@ -331,7 +331,7 @@
 				</div>
 				<div class="refuseExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<input name="refusedexplain" class="areaInputPic" onchange="translateZhToEn(this,'refusedexplainen','')"  v-model="visaInfo.previUSTripInfo.refusedexplain" />
+					<input name="refusedexplain" class="areaInputPic" id='refusedexplain' @change="refusedexplainen('refusedexplain','refusedexplainen','visaInfo.previUSTripInfo.refusedexplainen')" v-model="visaInfo.previUSTripInfo.refusedexplain" />
 				</div>
 			</div>
 			<!--曾经是否是美国合法永久居民-->
@@ -343,7 +343,7 @@
 				</div>
 				<div class="onceExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<input name="permanentresidentexplain" onchange="translateZhToEn(this,'permanentresidentexplainen','')" class="areaInputPic" v-model="visaInfo.previUSTripInfo.permanentresidentexplain" />
+					<input name="permanentresidentexplain" id="permanentresidentexplain" @change="permanentresidentexplain('permanentresidentexplain','permanentresidentexplainen','visaInfo.previUSTripInfo.permanentresidentexplainen')" class="areaInputPic" v-model="visaInfo.previUSTripInfo.permanentresidentexplain" />
 				</div>
 			</div>
 			<!--有没有人曾代表您向美国公民和移民服务局提交过移民申请-->
@@ -355,7 +355,7 @@
 				</div>
 				<div class="immigrationExplain paddingTop grouptextareaInfo">
 					<label>说明</label>
-					<input name="immigrantpetitionexplain" onchange="translateZhToEn(this,'immigrantpetitionexplainen','')" class="areaInputPic" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplain" />
+					<input name="immigrantpetitionexplain" id="immigrantpetitionexplain" @change="immigrantpetitionexplain('immigrantpetitionexplain','immigrantpetitionexplainen','visaInfo.previUSTripInfo.immigrantpetitionexplainen')" class="areaInputPic" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplain" />
 				</div>
 			</div>
 			<!--以前的美国旅游信息END-->
@@ -645,7 +645,7 @@
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>州/省</label>
 						<input name="province" v-model="visaInfo.familyInfo.province" id="otherprovince" @change="spouseotherprovince('otherprovince','otherprovinceen','visaInfo.familyInfo.provinceen')" type="text" />
-						<input id="isprovinceapply" name="isprovinceapply"  v-model="visaInfo.familyInfo.isprovinceapply" type="checkbox" />
+						<input id="isprovinceapply" name="isprovinceapply" onchange="AddSingle(this,'isprovinceapplyen')" v-model="visaInfo.familyInfo.isprovinceapply" type="checkbox" />
 					</div>
 					<div class="paddingRight groupInputInfo">
 						<label>市</label>
@@ -656,7 +656,7 @@
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>邮政编码</label>
 						<input name="zipcode" v-model="visaInfo.familyInfo.zipcode" id="otherzipcode" @change="spouseothercode('otherzipcode','otherzipcodeen','visaInfo.familyInfo.zipcodeen')" type="text" />
-						<input id="iszipcodeapply" name="iszipcodeapply" v-model="visaInfo.familyInfo.iszipcodeapply" type="checkbox" />
+						<input id="iszipcodeapply" name="iszipcodeapply" onchange="AddSingle(this,'iszipcodeapplyen')" v-model="visaInfo.familyInfo.iszipcodeapply" type="checkbox" />
 					</div>
 					<div class="paddingRight groupSelectInfo">
 						<label>国家/地区</label>
@@ -793,7 +793,6 @@
 										<div class="paddingLeft leftNo groupInputInfo">
 											<label>州/省</label>
 											<input name="employerprovince" onchange="taddSegmentsTranslateZhToEn(this,'employerprovinceen','')" value="${beforeWork.employerprovince }" type="text" />
-											<%-- <input name="isemployerprovinceapply" value="${beforeWork.isemployerprovinceapply }" type="text" /> --%>
 										</div>
 										<div class="paddingRight leftNo groupInputInfo" >
 											<label>市</label>
@@ -863,7 +862,7 @@
 										</div>
 										<div class="paddingRight groupInputInfo">
 											<label>离职时间</label>
-											<input id="employenddate" onchange="addSegmentsTranslateZhToEn(this,'employenddateen','')" name="employenddateen" value="<fmt:formatDate value="${beforeWork.employenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+											<input id="employenddate" onchange="addSegmentsTranslateZhToEn(this,'employenddateen','')" name="employenddate" value="<fmt:formatDate value="${beforeWork.employenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 										</div>
 										<div class="clear"></div>
 										<div class="draBig leftNo marginLS grouptextareaInfo">
@@ -2013,7 +2012,7 @@
 				<div class="groupcheckBoxInfo paddingRight">
 					<label>Given Names  </label>
 					<input name="lastnameen" id="lastnameusen" v-model="visaInfo.contactPointInfo.lastnameen" type="text"  />
-					<input id="isknowname" v-model="visaInfo.contactPointInfo.isknownameen" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknowname" name="isknownameen" type="checkbox" />
+					<input id="isknownameen" v-model="visaInfo.contactPointInfo.isknownameen" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknowname" name="isknownameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop groupcheckBoxInfo cbox">
@@ -2289,7 +2288,7 @@
 					<div class="paddingLeft groupcheckBoxInfo">
 						<label>State</label>
 						<input name="provinceen" id="otherprovinceen" v-model="visaInfo.familyInfo.provinceen" type="text" />
-						<input id="isprovinceapply" name="isprovinceapplyen"  v-model="visaInfo.familyInfo.isprovinceapplyen" type="checkbox" />
+						<input id="isprovinceapplyen" name="isprovinceapplyen"  v-model="visaInfo.familyInfo.isprovinceapplyen" type="checkbox" />
 					</div>
 					<div class="paddingRight groupInputInfo">
 						<label>City</label>
@@ -2380,7 +2379,7 @@
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo" >
 						<label>Monthly Income in Local Currency (if employed)</label>
-						<input name="salaryen" v-model="visaInfo.workEducationInfo.salaryen" type="text" onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"
+						<input name="salaryen" id="salaryen" v-model="visaInfo.workEducationInfo.salaryen" type="text" onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"
 										onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
 						<input name="issalaryapplyen" id="issalaryapplywork" class="issalaryapplyworken"  v-model="visaInfo.workEducationInfo.issalaryapplyen" type="checkbox" />
 					</div>

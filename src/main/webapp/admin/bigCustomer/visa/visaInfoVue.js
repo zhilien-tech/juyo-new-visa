@@ -349,6 +349,120 @@ var visaVue = new Vue({
 				$(".jobEduLearningInfoTextarea").hide();
 			}
 		},
+		lostyear:function(from, to, vueObj){
+//			美国签证丢失或被盗--年份
+			var toval = $("#" + from).val();
+			$.ajax({
+				url : '/admin/translate/translate',
+				data : {
+					api : 'google',
+					strType : to,
+					en : 'en',
+					q : toval
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					$("#" + to).val(result).change();
+					visaInfo.previUSTripInfo.lostyearen = result;
+				}
+			});
+		},
+		lostexplain:function(from, to, vueObj){
+//			美国签证丢失或被盗--说明
+			var toval = $("#" + from).val();
+			$.ajax({
+				url : '/admin/translate/translate',
+				data : {
+					api : 'google',
+					strType : to,
+					en : 'en',
+					q : toval
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					$("#" + to).val(result).change();
+					visaInfo.previUSTripInfo.lostexplainen = result;
+				}
+			});
+		},
+		cancelexplainen:function(from, to, vueObj){
+//			美国签证是否被取消或撤销--说明
+			var toval = $("#" + from).val();
+			$.ajax({
+				url : '/admin/translate/translate',
+				data : {
+					api : 'google',
+					strType : to,
+					en : 'en',
+					q : toval
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					$("#" + to).val(result).change();
+					visaInfo.previUSTripInfo.cancelexplainen = result;
+				}
+			});
+		},
+		refusedexplainen:function(from, to, vueObj){
+//			被拒绝过美国签证，或被拒绝入境美国，或撤回入境口岸的入境--说明
+			var toval = $("#" + from).val();
+			$.ajax({
+				url : '/admin/translate/translate',
+				data : {
+					api : 'google',
+					strType : to,
+					en : 'en',
+					q : toval
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					$("#" + to).val(result).change();
+					visaInfo.previUSTripInfo.refusedexplainen = result;
+				}
+			});
+		},
+		permanentresidentexplain:function(from, to, vueObj){
+//			曾经是否是美国合法永久居民--说明
+			var toval = $("#" + from).val();
+			$.ajax({
+				url : '/admin/translate/translate',
+				data : {
+					api : 'google',
+					strType : to,
+					en : 'en',
+					q : toval
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					$("#" + to).val(result).change();
+					visaInfo.previUSTripInfo.permanentresidentexplainen = result;
+				}
+			});
+		},
+		immigrantpetitionexplain:function(from, to, vueObj){
+//			有没有人曾代表您向美国公民和移民服务局提交过移民申请--说明
+			var toval = $("#" + from).val();
+			$.ajax({
+				url : '/admin/translate/translate',
+				data : {
+					api : 'google',
+					strType : to,
+					en : 'en',
+					q : toval
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					$("#" + to).val(result).change();
+					visaInfo.previUSTripInfo.immigrantpetitionexplainen = result;
+				}
+			});
+		},
 		translateZhToEnVue:function(from, to, vueObj){
 			var toval = $("#" + from).val();
 			$.ajax({

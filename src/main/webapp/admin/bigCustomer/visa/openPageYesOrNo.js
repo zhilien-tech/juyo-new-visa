@@ -194,7 +194,6 @@ function openYesOrNoPage(){
 		$(".militaryServiceYes").hide();
 	}
 	
-	
 	//checkbox勾选时回显，设置input--->disabled           TODO
 	$("input[type='checkbox']").each(function(index,ele){
 		var beforeEle = $(this).prev();

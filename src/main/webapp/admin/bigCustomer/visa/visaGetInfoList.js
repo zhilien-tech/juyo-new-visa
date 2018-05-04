@@ -280,7 +280,9 @@ function getBeforeWorkList(){
 		var employeraddressSecen = $('.workBeforeInfosDiven').eq(index).find('[name=employeraddressSecen]').val();
 		var employercityen = $('.workBeforeInfosDiven').eq(index).find('[name=employercityen]').val();
 		var employerprovinceen = $('.workBeforeInfosDiven').eq(index).find('[name=employerprovinceen]').val();
+		alert("州省"+employerprovinceen);
 		var employerzipcodeen = $('.workBeforeInfosDiven').eq(index).find('[name=employerzipcodeen]').val();
+		alert("邮政编码"+employerzipcodeen);
 		var employercountryen = $('.workBeforeInfosDiven').eq(index).find('[name=employercountryen]').val();
 		if(employercountryen != 0){
 			beforeWorkLength += employercountryen;
@@ -289,6 +291,7 @@ function getBeforeWorkList(){
 		}
 		var employertelephoneen = $('.workBeforeInfosDiven').eq(index).find('[name=employertelephoneen]').val();
 		var jobtitleen = $(this).eq(index).find('[name=jobtitleen]').val();
+		alert("职称"+jobtitleen);
 		//checkbox
 		var isemployerzipcodeapplyen = $('.workBeforeInfosDiven').eq(index).find('[name=isemployerzipcodeapplyen]').is(':checked');
 		if(isemployerzipcodeapplyen){
