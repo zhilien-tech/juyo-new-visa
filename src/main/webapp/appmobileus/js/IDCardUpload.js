@@ -9,88 +9,73 @@ function GetQueryString(name){
 	if(r!=null)return  unescape(r[2]); return null;
 }
 
-//返回上一级
+//返回上一级，开始扫描
 function returnPage(){
+	//扫描正面
+	$.ajax({
+		type : "POST",//提交类型  
+		url : '/admin/orderUS/IDCardRecognition.html',
+		data : {
+			staffid : staffid
+		},
+		success : function(obj) {
+			
+		}
+	});
+	//扫描背面
+	$.ajax({
+		type : "POST",//提交类型  
+		url : '/admin/orderUS/IDCardRecognitionBack.html',
+		data : {
+			staffid : staffid
+		},
+		success : function(obj) {
+			
+		}
+	});
 	window.location.href='/appmobileus/USFilming.html?staffid='+ staffid+'&sessionid='+sessionid+'&flag='+flag;
 }
 
 
 //回显
-function getImage(staffid){
+function getImageFront(staffid){
 	$.ajax({
-		url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
+		url : "/admin/mobileVisa/getIDcardphoto.html",
 		data : {
-			type : 4,
+			type : 3,
 			staffid : staffid,
+			status : 1
 		},
 		dataType : "json",
 		type : 'post',
-		async:false,
 		success : function(data) {
-			if(data.query.length > 0){
-				$(".homePage").remove();
-				$(".vicePage").remove();
-			console.log(data);
-			for(var i=0;i<data.query.length;i++){
-				var url=data.query[i].url;
-				var num = "#"+data.query[i].mainid+data.query[i].sequence;
-					sequence = data.query[i].sequence-1;
-					num = "#"+data.query[i].mainid+sequence;
-					var id=data.query[i].mainid+""+data.query[i].sequence;
-					
-					if(data.query[i].mainid == 1){
-						/* 第一条主页 */
-						if(data.query[i].sequence==1){
-							$(".householdExpain").after('<div class="householdPage homePage" id="1" name="1" onclick="chooseImage(1,1)">'+
-														'<span class="homePageTitle">户主页</span>'+
-									 '<img src="img/camera.png" class="camera" />'+
-									 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-									 '</div>')
-						}else{
-							$(".1").before('<div class="householdPage vicePage" id="2" name="1" onclick="chooseImage(2,1)">'+
-									'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
-									'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-									'</div>');
-							}
-					}else{
-						/* 其他的页面 */
-						if(data.query[i].sequence ==1){
-							$(".addSetOfBtn").before(
-									'<div class="household"><div class="householdPage homePage" id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'" onclick="chooseImage('+data.query[i].sequence+','+data.query[i].mainid+')">'+
-														'<span class="homePageTitle">户主页</span>'+
-									 '<img src="img/camera.png" class="camera" />'+
-									 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-									 '</div>'+
-									 
-									 '<div class="addPage '+data.query[i].mainid+'" onclick="addPage(this)">'+
-									 '<span class="homePageTitle">添加副页</span>'+
-									 '<span class="plus">+</span>'+
-									 '</div>'+
-									 '</div>'
-							)
-						}else{
-							var group = "."+data.query[i].mainid;
-							//if(hasClass("data[i].mainid")){
-								$(group).before('<div class="householdPage vicePage" id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'" onclick="chooseImage('+data.query[i].sequence+','+data.query[i].mainid+')">'+
-										'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
-										'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-										'</div>');
-										/* '<div class="addPage '+data[i].mainid+'">'+
-								 		'<span class="homePageTitle">添加副页</span>'+
-								 		'<span class="plus">+</span>'+ 
-								 		'</div>'*/
-								//}
-								
-							}
-					}
+			if(data != null){
+				$(".uploadImgFace").attr("src",data.url);
 			}
+		}
+	});
+}
+function getImageBack(staffid){
+	$.ajax({
+		url : "/admin/mobileVisa/getIDcardphoto.html",
+		data : {
+			type : 3,
+			staffid : staffid,
+			status : 2
+		},
+		dataType : "json",
+		type : 'post',
+		success : function(data) {
+			if(data != null){
+				$(".uploadImgBack").attr("src",data.url);
 			}
 		}
 	});
 }
 
 $(function(){
-	getImage(staffid);
+	getImageFront(staffid);
+	getImageBack(staffid);
 	$.ajax({
 		type : "post",
 		url : "/admin/weixinToken/getJsApiTicket",
@@ -143,10 +128,7 @@ var images = {
 		localId : [],
 		serverId : []
 };
-
-//点击上传
- function chooseImage(sequence,mainid){
-	 var num = mainid+""+sequence;
+$('.uploadIDFace').on('click', function() {
 	images.serverId = [];//清空serverid集合
 	wx.chooseImage({
 		count : 1, // 默认9   
@@ -158,18 +140,40 @@ var images = {
 			if(localIds != ""){
 				for(var i = 0;i<localIds .length;i++){
 					//YEMIAN HUIXIAN
-					$("#"+num).attr("src",localIds[i]);
+					$(".uploadImgFace").attr("src",localIds[i]);
 				}
 			}
 
 			images.localId = res.localIds;
-			uploadImage(res.localIds,mainid,sequence);
+			uploadImage(res.localIds,1);
 
 		}
 	});
-};
+});
+$('.uploadIDBack').on('click', function() {
+	images.serverId = [];//清空serverid集合
+	wx.chooseImage({
+		count : 1, // 默认9   
+		sizeType : [ 'compressed' ], // 压缩图
+		sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者都有   
+		success : function(res) {
+			$('.wxChooseImages ').remove();
+			var localIds = res.localIds;
+			if(localIds != ""){
+				for(var i = 0;i<localIds .length;i++){
+					//YEMIAN HUIXIAN
+					$(".uploadImgBack").attr("src",localIds[i]);
+				}
+			}
+			
+			images.localId = res.localIds;
+			uploadImage(res.localIds,2);
+			
+		}
+	});
+});
 
-var uploadImage = function(localIds,mainid,sequence) {
+var uploadImage = function(localIds,status) {
 	var localId = localIds.pop();
 	wx.uploadImage({
 		localId : localId,
@@ -190,7 +194,7 @@ var uploadImage = function(localIds,mainid,sequence) {
 					serverIdStr += serverId[i]+",";
 				}
 				
-				uploadToQiniu(staffid,serverIdStr,mainid,sequence);
+				uploadToQiniu(staffid,serverIdStr,status);
 
 			}
 		}
@@ -198,7 +202,7 @@ var uploadImage = function(localIds,mainid,sequence) {
 };
 
 //从微信服务器保存到七牛云服务器 
-function uploadToQiniu(staffid,serverIds,mainid,sequence){
+function uploadToQiniu(staffid,serverIds,status){
 
 	$.ajax({
 		type : "post",
@@ -209,9 +213,8 @@ function uploadToQiniu(staffid,serverIds,mainid,sequence){
 			staffId:staffid,
 			mediaIds:serverIds,
 			sessionid:sessionid,
-			type:4,
-			mainid:mainid,
-			sequence:sequence
+			type:3,
+			status:status
 		},
 		success : function(data) {
 

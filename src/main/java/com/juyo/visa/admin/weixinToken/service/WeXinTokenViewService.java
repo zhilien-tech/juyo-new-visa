@@ -28,6 +28,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
@@ -47,7 +48,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 	@Inject
 	private UploadService qiniuUploadService;//文件上传
-	
+
 	private SimpleSendInfoWSHandler simpleSendInfoWSHandler = (SimpleSendInfoWSHandler) SpringContextUtil.getBean(
 			"mySimpleSendInfoWSHandler", SimpleSendInfoWSHandler.class);
 
@@ -95,7 +96,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	//生成微信权限验证的参数
 	public Map<String, String> makeWXTicket(String jsApiTicket, String url) {
 
-		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class,2);
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 2);
 		String WX_APPID = wx.getAppid();
 
 		Map<String, String> ret = new HashMap<String, String>();
@@ -143,8 +144,9 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	 */
 	public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type) {
 		Date nowDate = DateUtil.nowDate();
-		List<TAppStaffCredentialsEntity> celist_old = dbDao.query(TAppStaffCredentialsEntity.class, Cnd.where("staffid","=",staffId).and("type", "=", type), null);
-		if(!Util.isEmpty(celist_old)) {
+		List<TAppStaffCredentialsEntity> celist_old = dbDao.query(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffId).and("type", "=", type), null);
+		if (!Util.isEmpty(celist_old)) {
 			dbDao.delete(celist_old);
 		}
 
@@ -173,7 +175,65 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		if (!Util.isEmpty(celist_new)) {
 			dbDao.insert(celist_new);
 		}
-		
+
+		//webSocket发消息
+		try {
+			simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return JsonResult.success("SUCCESS");
+	}
+
+	public Object wechatJsSDKNewuploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type,
+			Integer mainid, Integer sequence, Integer status) {
+		Date nowDate = DateUtil.nowDate();
+
+		TAppStaffCredentialsEntity credentialEntity = new TAppStaffCredentialsEntity();
+		if (type == TAppStaffCredentialsEnum.IDCARD.intKey()) {//身份证
+			credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffId).and("type", "=", type).and("status", "=", status));
+		} else if (type == TAppStaffCredentialsEnum.HUKOUBEN.intKey() || type == TAppStaffCredentialsEnum.HOME.intKey()
+				|| type == TAppStaffCredentialsEnum.OLDHUZHAO.intKey()) {//房产证、户口本
+			credentialEntity = dbDao.fetch(
+					TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffId).and("type", "=", type).and("mainid", "=", mainid)
+							.and("sequence", "=", sequence));
+		} else {
+			credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffId).and("type", "=", type));
+		}
+
+		String[] split = mediaIds.split(",");
+		if (!Util.isEmpty(split)) {
+			for (String mediaId : split) {
+				String accessToken = (String) getAccessToken();
+				String extName = getExtName(accessToken, mediaId);//获取扩展名
+				InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
+				String url = CommonConstants.IMAGES_SERVER_ADDR
+						+ qiniuUploadService.uploadImage(inputStream, extName, mediaId);
+
+				if (!Util.isEmpty(credentialEntity)) {
+					credentialEntity.setUrl(url);
+					credentialEntity.setStatus(status);
+					credentialEntity.setUpdatetime(new Date());
+					int update = dbDao.update(credentialEntity);
+				} else {
+					credentialEntity = new TAppStaffCredentialsEntity();
+					credentialEntity.setCreatetime(new Date());
+					credentialEntity.setStaffid(staffId);
+					credentialEntity.setUpdatetime(new Date());
+					credentialEntity.setType(type);
+					credentialEntity.setSequence(sequence);
+					credentialEntity.setUrl(url);
+					credentialEntity.setStatus(status);
+					credentialEntity.setMainid(mainid);
+					dbDao.insert(credentialEntity);
+				}
+			}
+		}
+
 		//webSocket发消息
 		try {
 			simpleSendInfoWSHandler.sendMsg(new TextMessage("200"), sessionid);

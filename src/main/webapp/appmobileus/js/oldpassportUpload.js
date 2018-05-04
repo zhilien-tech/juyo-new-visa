@@ -20,70 +20,23 @@ function getImage(staffid){
 	$.ajax({
 		url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
 		data : {
-			type : 4,
+			type : 2,
 			staffid : staffid,
 		},
 		dataType : "json",
 		type : 'post',
-		async:false,
 		success : function(data) {
-			if(data.query.length > 0){
-				$(".homePage").remove();
-				$(".vicePage").remove();
+			//$(".uploadImgReady").attr("src",data.url); */
 			console.log(data);
-			for(var i=0;i<data.query.length;i++){
-				var url=data.query[i].url;
-				var num = "#"+data.query[i].mainid+data.query[i].sequence;
-					sequence = data.query[i].sequence-1;
-					num = "#"+data.query[i].mainid+sequence;
-					var id=data.query[i].mainid+""+data.query[i].sequence;
-					
-					if(data.query[i].mainid == 1){
-						/* 第一条主页 */
-						if(data.query[i].sequence==1){
-							$(".householdExpain").after('<div class="householdPage homePage" id="1" name="1" onclick="chooseImage(1,1)">'+
-														'<span class="homePageTitle">户主页</span>'+
-									 '<img src="img/camera.png" class="camera" />'+
-									 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-									 '</div>')
-						}else{
-							$(".1").before('<div class="householdPage vicePage" id="2" name="1" onclick="chooseImage(2,1)">'+
-									'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
-									'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-									'</div>');
-							}
-					}else{
-						/* 其他的页面 */
-						if(data.query[i].sequence ==1){
-							$(".addSetOfBtn").before(
-									'<div class="household"><div class="householdPage homePage" id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'" onclick="chooseImage('+data.query[i].sequence+','+data.query[i].mainid+')">'+
-														'<span class="homePageTitle">户主页</span>'+
-									 '<img src="img/camera.png" class="camera" />'+
-									 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-									 '</div>'+
-									 
-									 '<div class="addPage '+data.query[i].mainid+'" onclick="addPage(this)">'+
-									 '<span class="homePageTitle">添加副页</span>'+
-									 '<span class="plus">+</span>'+
-									 '</div>'+
-									 '</div>'
-							)
-						}else{
-							var group = "."+data.query[i].mainid;
-							//if(hasClass("data[i].mainid")){
-								$(group).before('<div class="householdPage vicePage" id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'" onclick="chooseImage('+data.query[i].sequence+','+data.query[i].mainid+')">'+
-										'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
-										'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-										'</div>');
-										/* '<div class="addPage '+data[i].mainid+'">'+
-								 		'<span class="homePageTitle">添加副页</span>'+
-								 		'<span class="plus">+</span>'+ 
-								 		'</div>'*/
-								//}
-								
-							}
-					}
-			}
+			if(data.query.length > 0){
+				for(var i=0;i<data.query.length;i++){
+					var url=data.query[i].url;
+					var num = data.query[i].mainid+""+data.query[i].sequence;
+					$(".addPage").before('<div class="passportShoot chooseImage" onclick="chooseImage('+data.query[i].sequence+','+data.query[i].mainid+')" id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'">'+
+							'<div class="uploadPassport">'+
+							'<img id="'+num+'" src="'+url+'" class="uploadImgReady" />'+
+							'</div></div>');
+				}	
 			}
 		}
 	});
@@ -144,9 +97,8 @@ var images = {
 		serverId : []
 };
 
-//点击上传
- function chooseImage(sequence,mainid){
-	 var num = mainid+""+sequence;
+function chooseImage(sequence,mainid){
+	var num = mainid+""+sequence;
 	images.serverId = [];//清空serverid集合
 	wx.chooseImage({
 		count : 1, // 默认9   
@@ -159,6 +111,12 @@ var images = {
 				for(var i = 0;i<localIds .length;i++){
 					//YEMIAN HUIXIAN
 					$("#"+num).attr("src",localIds[i]);
+					/*$(".passportSetImage").before('<div class="passportShoot chooseImage">'+
+							'<div class="uploadPassport">'+
+							'<img src="'+localIds[i]+'" class="uploadImgReady" />'+
+							'<input type="file" class="oldpassportImg viceFile" id="passportImg" name="passportImg" onclick="addHousehold()" />'+
+							'</div></div>');*/
+					//$(".uploadImgReady").attr("src",localIds[i]);
 				}
 			}
 
@@ -167,7 +125,7 @@ var images = {
 
 		}
 	});
-};
+}
 
 var uploadImage = function(localIds,mainid,sequence) {
 	var localId = localIds.pop();
@@ -209,7 +167,7 @@ function uploadToQiniu(staffid,serverIds,mainid,sequence){
 			staffId:staffid,
 			mediaIds:serverIds,
 			sessionid:sessionid,
-			type:4,
+			type:2,
 			mainid:mainid,
 			sequence:sequence
 		},

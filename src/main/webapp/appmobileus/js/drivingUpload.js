@@ -18,72 +18,16 @@ function returnPage(){
 //回显
 function getImage(staffid){
 	$.ajax({
-		url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
+		url : "/admin/mobileVisa/getInfoByType.html",
 		data : {
-			type : 4,
+			type : 10,
 			staffid : staffid,
 		},
 		dataType : "json",
 		type : 'post',
-		async:false,
 		success : function(data) {
-			if(data.query.length > 0){
-				$(".homePage").remove();
-				$(".vicePage").remove();
-			console.log(data);
-			for(var i=0;i<data.query.length;i++){
-				var url=data.query[i].url;
-				var num = "#"+data.query[i].mainid+data.query[i].sequence;
-					sequence = data.query[i].sequence-1;
-					num = "#"+data.query[i].mainid+sequence;
-					var id=data.query[i].mainid+""+data.query[i].sequence;
-					
-					if(data.query[i].mainid == 1){
-						/* 第一条主页 */
-						if(data.query[i].sequence==1){
-							$(".householdExpain").after('<div class="householdPage homePage" id="1" name="1" onclick="chooseImage(1,1)">'+
-														'<span class="homePageTitle">户主页</span>'+
-									 '<img src="img/camera.png" class="camera" />'+
-									 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-									 '</div>')
-						}else{
-							$(".1").before('<div class="householdPage vicePage" id="2" name="1" onclick="chooseImage(2,1)">'+
-									'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
-									'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-									'</div>');
-							}
-					}else{
-						/* 其他的页面 */
-						if(data.query[i].sequence ==1){
-							$(".addSetOfBtn").before(
-									'<div class="household"><div class="householdPage homePage" id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'" onclick="chooseImage('+data.query[i].sequence+','+data.query[i].mainid+')">'+
-														'<span class="homePageTitle">户主页</span>'+
-									 '<img src="img/camera.png" class="camera" />'+
-									 '<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-									 '</div>'+
-									 
-									 '<div class="addPage '+data.query[i].mainid+'" onclick="addPage(this)">'+
-									 '<span class="homePageTitle">添加副页</span>'+
-									 '<span class="plus">+</span>'+
-									 '</div>'+
-									 '</div>'
-							)
-						}else{
-							var group = "."+data.query[i].mainid;
-							//if(hasClass("data[i].mainid")){
-								$(group).before('<div class="householdPage vicePage" id="'+data.query[i].sequence+'" name="'+data.query[i].mainid+'" onclick="chooseImage('+data.query[i].sequence+','+data.query[i].mainid+')">'+
-										'<span class="homePageTitle">副页</span><img src="img/camera.png" class="camera" />'+
-										'<img id="'+id+'" src="'+url+'" class="pageImg" />'+
-										'</div>');
-										/* '<div class="addPage '+data[i].mainid+'">'+
-								 		'<span class="homePageTitle">添加副页</span>'+
-								 		'<span class="plus">+</span>'+ 
-								 		'</div>'*/
-								//}
-								
-							}
-					}
-			}
+			if(data != null){
+				$(".pageImg").attr("src",data.url);
 			}
 		}
 	});
@@ -143,10 +87,7 @@ var images = {
 		localId : [],
 		serverId : []
 };
-
-//点击上传
- function chooseImage(sequence,mainid){
-	 var num = mainid+""+sequence;
+$('.chooseImage').on('click', function() {
 	images.serverId = [];//清空serverid集合
 	wx.chooseImage({
 		count : 1, // 默认9   
@@ -158,18 +99,18 @@ var images = {
 			if(localIds != ""){
 				for(var i = 0;i<localIds .length;i++){
 					//YEMIAN HUIXIAN
-					$("#"+num).attr("src",localIds[i]);
+					$(".pageImg").attr("src",localIds[i]);
 				}
 			}
 
 			images.localId = res.localIds;
-			uploadImage(res.localIds,mainid,sequence);
+			uploadImage(res.localIds);
 
 		}
 	});
-};
+});
 
-var uploadImage = function(localIds,mainid,sequence) {
+var uploadImage = function(localIds) {
 	var localId = localIds.pop();
 	wx.uploadImage({
 		localId : localId,
@@ -190,7 +131,7 @@ var uploadImage = function(localIds,mainid,sequence) {
 					serverIdStr += serverId[i]+",";
 				}
 				
-				uploadToQiniu(staffid,serverIdStr,mainid,sequence);
+				uploadToQiniu(staffid,serverIdStr);
 
 			}
 		}
@@ -198,20 +139,18 @@ var uploadImage = function(localIds,mainid,sequence) {
 };
 
 //从微信服务器保存到七牛云服务器 
-function uploadToQiniu(staffid,serverIds,mainid,sequence){
+function uploadToQiniu(staffid,serverIds){
 
 	$.ajax({
 		type : "post",
-		url : "/admin/weixinToken/wechatJsSDKNewploadToQiniu",
+		url : "/admin/weixinToken/wechatJsSDKUploadToQiniu",
 		dataType : "json",
 		async : false,
 		data:{
 			staffId:staffid,
 			mediaIds:serverIds,
 			sessionid:sessionid,
-			type:4,
-			mainid:mainid,
-			sequence:sequence
+			type:10
 		},
 		success : function(data) {
 

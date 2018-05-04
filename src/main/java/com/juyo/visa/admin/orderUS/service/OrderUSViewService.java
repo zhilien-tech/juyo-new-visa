@@ -1441,114 +1441,130 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
-	public Object IDCardRecognition(String url, int staffid, HttpServletRequest request, HttpServletResponse response) {
-		//从服务器上获取图片的流，读取扫描
-		byte[] bytes = saveImageToDisk(url);
-		String imageDataValue = Base64.encodeBase64String(bytes);
-		Input input = new Input(imageDataValue, "face");
-		RecognizeData rd = new RecognizeData();
-		rd.getInputs().add(input);
-		String content = Json.toJson(rd);
-		String info = (String) appCodeCall(content);//扫描完毕
-		System.out.println("info:" + info);
-		//解析扫描的结果，结构化成标准json格式
+	public Object IDCardRecognition(int staffid, HttpServletRequest request, HttpServletResponse response) {
+		TAppStaffCredentialsEntity credentialsEntity = dbDao.fetch(
+				TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
+						.and("status", "=", 1));
 		USStaffJsonEntity jsonEntity = new USStaffJsonEntity();
-		JSONObject resultObj = new JSONObject(info);
-		JSONArray outputArray = resultObj.getJSONArray("outputs");
-		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
-		JSONObject out = new JSONObject(output);
-		if (out.getBoolean("success")) {
-			String addr = out.getString("address"); // 获取地址
-			String name = out.getString("name"); // 获取名字
-			String num = out.getString("num"); // 获取身份证号
-			jsonEntity.setUrl(url);
-			jsonEntity.setAddress(addr);
-			Date date;
-			try {
-				date = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth"));
-				String dateStr = new SimpleDateFormat("yyyy-MM-dd").format(date);
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				jsonEntity.setBirth(sdf.format(sdf.parse(dateStr)));
-			} catch (JSONException | ParseException e) {
+		if (!Util.isEmpty(credentialsEntity)) {
+			if (!Util.isEmpty(credentialsEntity.getUrl())) {
+				String url = credentialsEntity.getUrl();
+				//从服务器上获取图片的流，读取扫描
+				byte[] bytes = saveImageToDisk(url);
+				String imageDataValue = Base64.encodeBase64String(bytes);
+				Input input = new Input(imageDataValue, "face");
+				RecognizeData rd = new RecognizeData();
+				rd.getInputs().add(input);
+				String content = Json.toJson(rd);
+				String info = (String) appCodeCall(content);//扫描完毕
+				System.out.println("info:" + info);
+				//解析扫描的结果，结构化成标准json格式
+				JSONObject resultObj = new JSONObject(info);
+				JSONArray outputArray = resultObj.getJSONArray("outputs");
+				String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
+				JSONObject out = new JSONObject(output);
+				if (out.getBoolean("success")) {
+					String addr = out.getString("address"); // 获取地址
+					String name = out.getString("name"); // 获取名字
+					String num = out.getString("num"); // 获取身份证号
+					jsonEntity.setUrl(url);
+					jsonEntity.setAddress(addr);
+					Date date;
+					try {
+						date = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth"));
+						String dateStr = new SimpleDateFormat("yyyy-MM-dd").format(date);
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						jsonEntity.setBirth(sdf.format(sdf.parse(dateStr)));
+					} catch (JSONException | ParseException e) {
 
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 
-			}
-			jsonEntity.setName(name);
-			jsonEntity.setNationality(out.getString("nationality"));
-			jsonEntity.setNum(num);
-			jsonEntity.setRequest_id(out.getString("request_id"));
-			jsonEntity.setSex(out.getString("sex"));
-			jsonEntity.setSuccess(out.getBoolean("success"));
-			String cardId = jsonEntity.getNum().substring(0, 6);
-			TIdcardEntity IDcardEntity = dbDao.fetch(TIdcardEntity.class, Cnd.where("code", "=", cardId));
-			if (!Util.isEmpty(IDcardEntity)) {
-				jsonEntity.setProvince(IDcardEntity.getProvince());
-				jsonEntity.setCity(IDcardEntity.getCity());
-			}
-		}
+					}
+					jsonEntity.setName(name);
+					jsonEntity.setNationality(out.getString("nationality"));
+					jsonEntity.setNum(num);
+					jsonEntity.setRequest_id(out.getString("request_id"));
+					jsonEntity.setSex(out.getString("sex"));
+					jsonEntity.setSuccess(out.getBoolean("success"));
+					String cardId = jsonEntity.getNum().substring(0, 6);
+					TIdcardEntity IDcardEntity = dbDao.fetch(TIdcardEntity.class, Cnd.where("code", "=", cardId));
+					if (!Util.isEmpty(IDcardEntity)) {
+						jsonEntity.setProvince(IDcardEntity.getProvince());
+						jsonEntity.setCity(IDcardEntity.getCity());
+					}
+				}
 
-		if (!Util.isEmpty(jsonEntity)) {
-			if (jsonEntity.isSuccess()) {
-				//获取用户的基本信息
-				TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
-						Cnd.where("id", "=", staffid));
-				//保存身份证正面信息
-				saveBasicinfoFront(jsonEntity, staffInfo);
-
+				if (!Util.isEmpty(jsonEntity)) {
+					if (jsonEntity.isSuccess()) {
+						//获取用户的基本信息
+						TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+								Cnd.where("id", "=", staffid));
+						//保存身份证正面信息
+						saveBasicinfoFront(jsonEntity, staffInfo);
+					}
+				}
 			}
 		}
 		return jsonEntity;
 	}
 
-	public Object IDCardRecognitionBack(String url, int staffid, HttpServletRequest request,
-			HttpServletResponse response) {
-		//从服务器上获取图片的流，读取扫描
-		byte[] bytes = saveImageToDisk(url);
-		String imageDataValue = Base64.encodeBase64String(bytes);
-		Input input = new Input(imageDataValue, "back");
-		RecognizeData rd = new RecognizeData();
-		rd.getInputs().add(input);
-		String content = Json.toJson(rd);
-		String info = (String) appCodeCall(content);//扫描完毕
-		System.out.println("info:" + info);
-		//解析扫描的结果，结构化成标准json格式
+	public Object IDCardRecognitionBack(int staffid, HttpServletRequest request, HttpServletResponse response) {
+		TAppStaffCredentialsEntity credentialsEntity = dbDao.fetch(
+				TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
+						.and("status", "=", 2));
 		USStaffJsonEntity jsonEntity = new USStaffJsonEntity();
-		JSONObject resultObj = new JSONObject(info);
-		JSONArray outputArray = resultObj.getJSONArray("outputs");
-		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
-		JSONObject out = new JSONObject(output);
-		if (out.getBoolean("success")) {
-			String issue = out.getString("issue");
-			jsonEntity.setIssue(issue);
-			jsonEntity.setUrl(url);
-			Date startDate;
-			Date endDate;
-			try {
-				startDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("start_date"));
-				endDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("end_date"));
-				String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
-				String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(endDate);
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				jsonEntity.setStarttime(sdf.format(sdf.parse(startDateStr)));
-				jsonEntity.setEndtime(sdf.format(sdf.parse(endDateStr)));
-			} catch (JSONException | ParseException e) {
+		if (!Util.isEmpty(credentialsEntity)) {
+			if (!Util.isEmpty(credentialsEntity.getUrl())) {
+				String url = credentialsEntity.getUrl();
+				//从服务器上获取图片的流，读取扫描
+				byte[] bytes = saveImageToDisk(url);
+				String imageDataValue = Base64.encodeBase64String(bytes);
+				Input input = new Input(imageDataValue, "back");
+				RecognizeData rd = new RecognizeData();
+				rd.getInputs().add(input);
+				String content = Json.toJson(rd);
+				String info = (String) appCodeCall(content);//扫描完毕
+				System.out.println("info:" + info);
+				//解析扫描的结果，结构化成标准json格式
+				JSONObject resultObj = new JSONObject(info);
+				JSONArray outputArray = resultObj.getJSONArray("outputs");
+				String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
+				JSONObject out = new JSONObject(output);
+				if (out.getBoolean("success")) {
+					String issue = out.getString("issue");
+					jsonEntity.setIssue(issue);
+					jsonEntity.setUrl(url);
+					Date startDate;
+					Date endDate;
+					try {
+						startDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("start_date"));
+						endDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("end_date"));
+						String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
+						String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(endDate);
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						jsonEntity.setStarttime(sdf.format(sdf.parse(startDateStr)));
+						jsonEntity.setEndtime(sdf.format(sdf.parse(endDateStr)));
+					} catch (JSONException | ParseException e) {
 
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 
-			}
-			jsonEntity.setSuccess(out.getBoolean("success"));
-		}
+					}
+					jsonEntity.setSuccess(out.getBoolean("success"));
+				}
 
-		if (!Util.isEmpty(jsonEntity)) {
-			if (jsonEntity.isSuccess()) {
-				//获取用户的基本信息
-				TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
-						Cnd.where("id", "=", staffid));
-				//保存身份证背面信息
-				saveBasicinfoBack(jsonEntity, staffInfo);
+				if (!Util.isEmpty(jsonEntity)) {
+					if (jsonEntity.isSuccess()) {
+						//获取用户的基本信息
+						TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+								Cnd.where("id", "=", staffid));
+						//保存身份证背面信息
+						saveBasicinfoBack(jsonEntity, staffInfo);
+					}
+				}
 			}
 		}
 		return jsonEntity;
@@ -1557,107 +1573,110 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object passportRecognitionBack(int staffid) {
 		TAppStaffCredentialsEntity fetch = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.NEWHUZHAO.intKey()));
-		String url = fetch.getUrl();
-		System.out.println(url);
-		//从服务器上获取图片的流，读取扫描
-		byte[] bytes = saveImageToDisk(url);
-
-		String imageDataB64 = Base64.encodeBase64String(bytes);
-		Input input = new Input(imageDataB64);
-
-		RecognizeData rd = new RecognizeData();
-		rd.getInputs().add(input);
-
-		String content = Json.toJson(rd);
-		System.out.println("============");
-		String info = (String) aliPassportOcrAppCodeCall(content);
-		System.out.println("info:" + info);
-
-		//解析扫描的结果，结构化成标准json格式
 		PassportJsonEntity jsonEntity = new PassportJsonEntity();
-		JSONObject resultObj = new JSONObject(info);
-		JSONArray outputArray = resultObj.getJSONArray("outputs");
-		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
-		JSONObject out = new JSONObject(output);
-		String substring = "";
-		if (out.getBoolean("success")) {
-			String type = out.getString("type");
-			if (!Util.isEmpty(type)) {
-				substring = type.substring(0, 1);
-			}
-			jsonEntity.setType(substring);
-			jsonEntity.setNum(out.getString("passport_no"));
-			if (out.getString("sex").equals("F")) {
-				jsonEntity.setSex("女");
-				jsonEntity.setSexEn("F");
-			} else {
-				jsonEntity.setSex("男");
-				jsonEntity.setSexEn("M");
-			}
-			//姓和名分开
-			String nameEn = out.getString("name");//姓名拼音
-			String nameAll = out.getString("name_cn");//姓名汉字
-			char[] nameCnCharArray = nameAll.toCharArray();
-			if (nameEn.contains(".")) {
-				String[] nameEnSplit = nameEn.split("\\.");
-				int lengthEn = nameEnSplit[0].length();
-				int count = 0;
-				int xingLength = 0;
-				PinyinTool tool = new PinyinTool();
-				try {
-					for (int i = 0; i < nameCnCharArray.length; i++) {
-						int length = tool.toPinYin(String.valueOf(nameCnCharArray[i]), "", Type.UPPERCASE).length();
-						count += length;
-						if (Util.eq(count, lengthEn)) {
-							xingLength = i + 1;
+		if (!Util.isEmpty(fetch)) {
+			if (!Util.isEmpty(fetch.getUrl())) {
+				String url = fetch.getUrl();
+				System.out.println(url);
+				//从服务器上获取图片的流，读取扫描
+				byte[] bytes = saveImageToDisk(url);
+
+				String imageDataB64 = Base64.encodeBase64String(bytes);
+				Input input = new Input(imageDataB64);
+
+				RecognizeData rd = new RecognizeData();
+				rd.getInputs().add(input);
+
+				String content = Json.toJson(rd);
+				System.out.println("============");
+				String info = (String) aliPassportOcrAppCodeCall(content);
+				System.out.println("info:" + info);
+
+				//解析扫描的结果，结构化成标准json格式
+				JSONObject resultObj = new JSONObject(info);
+				JSONArray outputArray = resultObj.getJSONArray("outputs");
+				String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
+				JSONObject out = new JSONObject(output);
+				String substring = "";
+				if (out.getBoolean("success")) {
+					String type = out.getString("type");
+					if (!Util.isEmpty(type)) {
+						substring = type.substring(0, 1);
+					}
+					jsonEntity.setType(substring);
+					jsonEntity.setNum(out.getString("passport_no"));
+					if (out.getString("sex").equals("F")) {
+						jsonEntity.setSex("女");
+						jsonEntity.setSexEn("F");
+					} else {
+						jsonEntity.setSex("男");
+						jsonEntity.setSexEn("M");
+					}
+					//姓和名分开
+					String nameEn = out.getString("name");//姓名拼音
+					String nameAll = out.getString("name_cn");//姓名汉字
+					char[] nameCnCharArray = nameAll.toCharArray();
+					if (nameEn.contains(".")) {
+						String[] nameEnSplit = nameEn.split("\\.");
+						int lengthEn = nameEnSplit[0].length();
+						int count = 0;
+						int xingLength = 0;
+						PinyinTool tool = new PinyinTool();
+						try {
+							for (int i = 0; i < nameCnCharArray.length; i++) {
+								int length = tool.toPinYin(String.valueOf(nameCnCharArray[i]), "", Type.UPPERCASE)
+										.length();
+								count += length;
+								if (Util.eq(count, lengthEn)) {
+									xingLength = i + 1;
+								}
+							}
+							jsonEntity.setXingCn(nameAll.substring(0, xingLength));
+							jsonEntity.setMingCn(nameAll.substring(xingLength));
+						} catch (BadHanyuPinyinOutputFormatCombination e1) {
+							e1.printStackTrace();
 						}
 					}
-					jsonEntity.setXingCn(nameAll.substring(0, xingLength));
-					jsonEntity.setMingCn(nameAll.substring(xingLength));
-				} catch (BadHanyuPinyinOutputFormatCombination e1) {
-					e1.printStackTrace();
+					jsonEntity.setUrl(url);
+					jsonEntity.setOCRline1(out.getString("line0"));
+					jsonEntity.setOCRline2(out.getString("line1"));
+					jsonEntity.setBirthCountry(out.getString("birth_place"));
+					jsonEntity.setVisaCountry(out.getString("issue_place"));
+					Date birthDay;
+					Date expiryDate;
+					Date issueDate;
+					try {
+						birthDay = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth_date"));
+						expiryDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("expiry_date"));
+						issueDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("issue_date"));
+						String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(birthDay);
+						String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(expiryDate);
+						String issueDateStr = new SimpleDateFormat("yyyy-MM-dd").format(issueDate);
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						jsonEntity.setBirth(sdf.format(sdf.parse(startDateStr)));
+						jsonEntity.setExpiryDay(sdf.format(sdf.parse(endDateStr)));
+						jsonEntity.setIssueDate(sdf.format(sdf.parse(issueDateStr)));
+					} catch (JSONException | ParseException e) {
+
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+
+					}
+					jsonEntity.setSuccess(out.getBoolean("success"));
+				}
+				if (!Util.isEmpty(jsonEntity)) {
+					if (jsonEntity.isSuccess()) {
+						//获取用户的基本信息
+						TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
+								Cnd.where("id", "=", staffid));
+						//获取用户的护照信息
+						TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
+								Cnd.where("staffid", "=", staffid));
+						savePassport(jsonEntity, passportEntity, staffInfo);
+					}
 				}
 			}
-			jsonEntity.setUrl(url);
-			jsonEntity.setOCRline1(out.getString("line0"));
-			jsonEntity.setOCRline2(out.getString("line1"));
-			jsonEntity.setBirthCountry(out.getString("birth_place"));
-			jsonEntity.setVisaCountry(out.getString("issue_place"));
-			Date birthDay;
-			Date expiryDate;
-			Date issueDate;
-			try {
-				birthDay = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth_date"));
-				expiryDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("expiry_date"));
-				issueDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("issue_date"));
-				String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(birthDay);
-				String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(expiryDate);
-				String issueDateStr = new SimpleDateFormat("yyyy-MM-dd").format(issueDate);
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				jsonEntity.setBirth(sdf.format(sdf.parse(startDateStr)));
-				jsonEntity.setExpiryDay(sdf.format(sdf.parse(endDateStr)));
-				jsonEntity.setIssueDate(sdf.format(sdf.parse(issueDateStr)));
-			} catch (JSONException | ParseException e) {
-
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-
-			}
-			jsonEntity.setSuccess(out.getBoolean("success"));
 		}
-		if (!Util.isEmpty(jsonEntity)) {
-			if (jsonEntity.isSuccess()) {
-				//获取用户的基本信息
-				TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class,
-						Cnd.where("id", "=", staffid));
-				//获取用户的护照信息
-				TAppStaffPassportEntity passportEntity = dbDao.fetch(TAppStaffPassportEntity.class,
-						Cnd.where("staffid", "=", staffid));
-				savePassport(jsonEntity, passportEntity, staffInfo);
-
-			}
-		}
-
 		return jsonEntity;
 	}
 
