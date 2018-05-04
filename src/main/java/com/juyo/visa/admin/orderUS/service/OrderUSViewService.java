@@ -1196,7 +1196,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	//根据人员id添加订单
 	public Object addOrderByStuffId(Integer staffId, int userid) {
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
-		Integer US_YUSHANG_COM_ID = (Integer)kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID");
+		String YuShangComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID"));
+		Integer US_YUSHANG_COM_ID = Integer.valueOf(YuShangComIdStr);
 		
 		TOrderUsEntity orderUs = new TOrderUsEntity();
 		String orderNum = generateOrderNumByDate();

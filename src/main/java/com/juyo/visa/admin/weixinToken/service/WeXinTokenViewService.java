@@ -60,7 +60,8 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	//获取accessToken
 	public Object getAccessToken() {
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
-		Integer T_APP_STAFF_CONF_WX_ID = (Integer)kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID");
+		String wxConfigStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID"));
+		Integer T_APP_STAFF_CONF_WX_ID = Integer.valueOf(wxConfigStr);
 		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		String WX_APPID = wx.getAppid();
 		String WX_APPSECRET = wx.getAppsecret();
@@ -109,7 +110,8 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	//生成微信权限验证的参数
 	public Map<String, String> makeWXTicket(String jsApiTicket, String url) {
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
-		Integer T_APP_STAFF_CONF_WX_ID = (Integer)kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID");
+		String wxConfigStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID"));
+		Integer T_APP_STAFF_CONF_WX_ID = Integer.valueOf(wxConfigStr);
 		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		String WX_APPID = wx.getAppid();
 

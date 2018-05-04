@@ -51,7 +51,8 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 	//获取微信公众号唯一标识
 	public Object getAppid() {
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
-		Integer T_APP_STAFF_CONF_WX_ID = (Integer)kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID");
+		String wxConfigStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID"));
+		Integer T_APP_STAFF_CONF_WX_ID = Integer.valueOf(wxConfigStr);
 		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		return wx;
 	}
