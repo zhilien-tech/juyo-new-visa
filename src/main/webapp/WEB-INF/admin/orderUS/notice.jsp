@@ -15,12 +15,12 @@
 	</style>
 </head>
 <body>
-	<div class="head">
-			<span>短信邮件通知</span>
-			<div class="closeR">
-				<i onclick="closeWindow()"></i>
-			</div>
-		</div>
+		<div class="head">
+				<span>短信邮件通知</span>
+				<div class="closeR" onclick="closeWindow()">
+					<i></i>
+				</div>
+		</div>	
 		<div class="section">
 			<div class="shareInfo">
 				<a onclick="shareFun()" class="share">分享</a>
@@ -32,7 +32,7 @@
 			</div>
 			<div onclick="interviewFun()" class="InterviewInfo">
 				<a class="Interview">通知面试</a>
-				<span>短信通知面签世家你及所带资料，并发面试通知书（文件下载）</span>
+				<span>短信通知面签时间及所带资料，并发面试通知书（文件下载）</span>
 			</div>
 		</div>
 	<script type="text/javascript">
