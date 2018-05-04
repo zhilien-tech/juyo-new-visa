@@ -16,6 +16,7 @@
 	width: 20px;
 	height:2px; 
 	background: #000;
+	margin-top:11px;
 	line-height: 0;
 	font-size:0;
 	vertical-align: middle;
@@ -81,7 +82,7 @@ a:hover {
 	display:inline-block;
 	float:right;
 	width:20px;
-	height:20px;
-	margin-top: 22px;
+	height:30px;
+	margin-top: 10px;
 	cursor:pointer;
 }

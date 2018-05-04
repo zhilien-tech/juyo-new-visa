@@ -32,6 +32,7 @@ import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
+import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TConfWxEntity;
 import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
@@ -201,7 +202,6 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	public Object wechatJsSDKNewuploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type,
 			Integer mainid, Integer sequence, Integer status) {
 		Date nowDate = DateUtil.nowDate();
-
 		TAppStaffCredentialsEntity credentialEntity = new TAppStaffCredentialsEntity();
 		if (type == TAppStaffCredentialsEnum.IDCARD.intKey()) {//身份证
 			credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
@@ -231,6 +231,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 					credentialEntity.setStatus(status);
 					credentialEntity.setUpdatetime(new Date());
 					int update = dbDao.update(credentialEntity);
+
 				} else {
 					credentialEntity = new TAppStaffCredentialsEntity();
 					credentialEntity.setCreatetime(new Date());
@@ -242,6 +243,12 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 					credentialEntity.setStatus(status);
 					credentialEntity.setMainid(mainid);
 					dbDao.insert(credentialEntity);
+				}
+				//更新婚姻状态
+				if (type == TAppStaffCredentialsEnum.MARRAY.intKey()) {
+					TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffId.longValue());
+					basic.setMarrystatus(status);
+					dbDao.update(basic);
 				}
 			}
 		}
