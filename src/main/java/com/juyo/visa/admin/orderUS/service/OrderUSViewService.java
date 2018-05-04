@@ -55,6 +55,7 @@ import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
+import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -897,7 +898,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Integer userType = loginUser.getUserType();
 		Integer userid = loginUser.getId();
 		//如果是管理员，则需要查询公司下所有的员工来给下拉框赋值
-		if (Util.eq(userType, UserLoginEnum.BIG_COMPANY_ADMIN.intKey())) {
+		if (Util.eq(userType, UserLoginEnum.JJ_COMPANY_ADMIN.intKey())) {
 			//获取公司下的所有工作人员,除去管理员
 			List<TUserEntity> userList = dbDao.query(TUserEntity.class,
 					Cnd.where("comId", "=", company.getId()).and("userType", "=", UserLoginEnum.PERSONNEL.intKey()),
@@ -941,10 +942,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				for (USOrderListStatusEnum statusEnum : USOrderListStatusEnum.values()) {
 					if (status == statusEnum.intKey()) {
 						record.put("orderstatus", statusEnum.value());
-					}
-					/*else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+					} else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
 						record.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
-					}*/
+					}
 				}
 			}
 		}
@@ -1194,13 +1194,16 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	//根据人员id添加订单
 	public Object addOrderByStuffId(Integer staffId, int userid) {
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		String YuShangComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID"));
+		Integer US_YUSHANG_COM_ID = Integer.valueOf(YuShangComIdStr);
 
 		TOrderUsEntity orderUs = new TOrderUsEntity();
 		String orderNum = generateOrderNumByDate();
 		Date nowDate = DateUtil.nowDate();
 		orderUs.setOrdernumber(orderNum);
 		orderUs.setOpid(userid);
-		orderUs.setComid(US_YUSHANG_COMID);
+		orderUs.setComid(US_YUSHANG_COM_ID);
 		orderUs.setStatus(USOrderStatusEnum.PLACE_ORDER.intKey());//下单
 		orderUs.setIspayed(IsPayedEnum.NOTPAY.intKey());
 		orderUs.setCreatetime(nowDate);
@@ -1208,6 +1211,36 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderUs.setUpdatetime(nowDate);
 		TOrderUsEntity order = dbDao.insert(orderUs);
 		insertLogs(order.getId(), USOrderListStatusEnum.PLACE_ORDER.intKey(), userid);
+
+		//更新人员-订单关系表
+		if (!Util.isEmpty(order)) {
+			Integer orderId = order.getId();
+			TAppStaffOrderUsEntity staffOrder = new TAppStaffOrderUsEntity();
+			staffOrder.setOrderid(orderId);
+			staffOrder.setStaffid(staffId);
+			dbDao.insert(staffOrder);
+		}
+
+		return JsonResult.success("添加成功");
+
+	}
+
+
+	//工作人员  根据人员id添加订单
+	public Object addWorkerOrderByStuffId(Integer staffId, int loginUserid, int loginComId) {
+		TOrderUsEntity orderUs = new TOrderUsEntity();
+		String orderNum = generateOrderNumByDate();
+		Date nowDate = DateUtil.nowDate();
+		orderUs.setOrdernumber(orderNum);
+		orderUs.setOpid(loginUserid);
+		orderUs.setComid(loginComId);
+		orderUs.setStatus(USOrderStatusEnum.PLACE_ORDER.intKey());//下单
+		orderUs.setIspayed(IsPayedEnum.NOTPAY.intKey());
+		orderUs.setCreatetime(nowDate);
+		orderUs.setIsdisable(IsYesOrNoEnum.NO.intKey());
+		orderUs.setUpdatetime(nowDate);
+		TOrderUsEntity order = dbDao.insert(orderUs);
+		insertLogs(order.getId(), USOrderListStatusEnum.PLACE_ORDER.intKey(), loginUserid);
 
 		//更新人员-订单关系表
 		if (!Util.isEmpty(order)) {
@@ -1445,7 +1478,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffCredentialsEntity credentialsEntity = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-						.and("status", "=", 1));
+				.and("status", "=", 1));
 		USStaffJsonEntity jsonEntity = new USStaffJsonEntity();
 		if (!Util.isEmpty(credentialsEntity)) {
 			if (!Util.isEmpty(credentialsEntity.getUrl())) {
@@ -1514,7 +1547,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffCredentialsEntity credentialsEntity = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-						.and("status", "=", 2));
+				.and("status", "=", 2));
 		USStaffJsonEntity jsonEntity = new USStaffJsonEntity();
 		if (!Util.isEmpty(credentialsEntity)) {
 			if (!Util.isEmpty(credentialsEntity.getUrl())) {
