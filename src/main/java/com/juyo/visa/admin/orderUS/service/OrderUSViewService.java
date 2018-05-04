@@ -55,6 +55,7 @@ import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
+import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -1194,13 +1195,16 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	//根据人员id添加订单
 	public Object addOrderByStuffId(Integer staffId, int userid) {
-
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		String YuShangComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID"));
+		Integer US_YUSHANG_COM_ID = Integer.valueOf(YuShangComIdStr);
+		
 		TOrderUsEntity orderUs = new TOrderUsEntity();
 		String orderNum = generateOrderNumByDate();
 		Date nowDate = DateUtil.nowDate();
 		orderUs.setOrdernumber(orderNum);
 		orderUs.setOpid(userid);
-		orderUs.setComid(US_YUSHANG_COMID);
+		orderUs.setComid(US_YUSHANG_COM_ID);
 		orderUs.setStatus(USOrderStatusEnum.PLACE_ORDER.intKey());//下单
 		orderUs.setIspayed(IsPayedEnum.NOTPAY.intKey());
 		orderUs.setCreatetime(nowDate);

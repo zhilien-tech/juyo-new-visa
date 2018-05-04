@@ -29,6 +29,19 @@ public class WeiXinTokenModule {
 	public Object getAccessToken() {
 		return weXinTokenViewService.getAccessToken();
 	}
+	
+	
+	
+	
+	/**
+	 *获取 九宫格访问路径
+	 * <p>
+	 */
+	@At
+	@POST
+	public String getFenrollUrl() {
+		return weXinTokenViewService.getFenrollUrl();
+	}
 
 	//获取ticket
 	@At
