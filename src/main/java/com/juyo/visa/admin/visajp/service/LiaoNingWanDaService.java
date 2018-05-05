@@ -680,7 +680,10 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			Paragraph p = new Paragraph();
 			Chunk chunk1 = new Chunk("签证申请人名单", font1);
 			Chunk chunk3 = new Chunk("                                                                                            ", font);
-			Chunk chunk2= new Chunk(company.getName(), font1);
+			Chunk chunk2 = null;
+			if(!Util.isEmpty(company.getName())) {
+				chunk2= new Chunk(company.getName(), font1);
+			}
 			p.add(chunk1);
 			p.add(chunk3);
 			p.add(chunk2);
