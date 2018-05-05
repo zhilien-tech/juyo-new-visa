@@ -107,6 +107,7 @@ public class OrderUSListDataForm implements SQLParamForm {
 			} else {
 				//普通的操作员
 				cnd.and("tu.usertype", "=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
+				cnd.and("tou.comId", "=", companyid);
 			}
 		} else {
 			//我的
