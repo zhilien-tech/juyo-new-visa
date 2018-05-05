@@ -376,6 +376,17 @@
 								</div>
 							</div>
 						</div>
+						<div class="row">
+							<!-- 紧急联系人地址-->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>紧急联系人地址</label> <input id="emergencyaddress"
+										name="emergencyaddress" type="text" class="form-control input-sm"  tabIndex="18"
+										placeholder=" " value="${obj.applicant.emergencyaddress }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
