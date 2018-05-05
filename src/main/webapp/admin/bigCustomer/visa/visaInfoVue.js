@@ -35,7 +35,7 @@ var visaVue = new Vue({
 			type:'post',
 			//async:false,
 			success: function(data){
-				
+				console.log(data.familyInfo);
 				visaInfo.travelCompanionInfo = data.travelCompanionInfo;
 				visaInfo.previUSTripInfo = data.previUSTripInfo;
 				visaInfo.contactPointInfo = data.contactPointInfo;
@@ -57,9 +57,55 @@ var visaVue = new Vue({
 			visaInfo.travelCompanionInfo.isparten = ispart;
 		},
 		isknowspousecity:function(){
+			
+			var isknowspousecity = visaInfo.familyInfo.isknowspousecity;
+			visaInfo.familyInfo.isknowspousecityen = isknowspousecity;
 			visaInfo.familyInfo.spousecity = "";
 			visaInfo.familyInfo.spousecityen = "";
+		},
+		isprovincesapply:function(){
 			
+			var isprovinceapply = visaInfo.familyInfo.isprovinceapply;
+			visaInfo.familyInfo.isprovinceapplyen = isprovinceapply;
+			visaInfo.familyInfo.isprovinceapply = "";
+			visaInfo.familyInfo.isprovinceapplyen = "";
+		},
+		isprovinceapplywork:function(){
+			
+			var isprovinceapply = visaInfo.workEducationInfo.isprovinceapply;
+			
+			visaInfo.workEducationInfo.isprovinceapplyen = isprovinceapply;
+			visaInfo.workEducationInfo.province = "";
+			visaInfo.workEducationInfo.provinceen = "";
+		},
+		isjobcodechecked:function(){
+			
+			var codechecked = visaInfo.workEducationInfo.iszipcodeapply;
+			visaInfo.workEducationInfo.iszipcodeapplyen = codechecked;
+			visaInfo.workEducationInfo.zipcode = "";
+			visaInfo.workEducationInfo.zipcodeen = "";
+		},
+		ismoneychecked:function(){
+			
+			var moneychecked = visaInfo.workEducationInfo.issalaryapply;
+			visaInfo.workEducationInfo.issalaryapplyen = moneychecked;
+			visaInfo.workEducationInfo.salary = "";
+			visaInfo.workEducationInfo.salaryen = "";
+		},
+		isotherapply:function(){
+			
+			visaInfo.familyInfo.apply = "";
+			visaInfo.familyInfo.applyen = "";
+			var otherapply = visaInfo.familyInfo.apply;
+			//alert(otherapply);
+			visaInfo.familyInfo.applyen = otherapply;
+		},
+		isselectcodeapply:function(){
+			
+			visaInfo.familyInfo.selectcodeapply = "";
+			visaInfo.familyInfo.selectcodeapplyen = "";
+			var selectcodeapply = visaInfo.familyInfo.selectcodeapply;
+			visaInfo.familyInfo.selectcodeapplyen = selectcodeapply;
 		},
 		changeSpouse:function(){
 			changeSpouseShow();
@@ -316,17 +362,17 @@ var visaVue = new Vue({
 			visaInfo.workEducationInfo.unitname ="";
 			visaInfo.workEducationInfo.address ="";
 			visaInfo.workEducationInfo.secaddress="";
-			visaInfo.workEducationInfo.city="";
+			visaInfo.workEducationInfo.jobcity="";
 			visaInfo.workEducationInfo.province="";
 			visaInfo.workEducationInfo.isprovinceapply="";
 			visaInfo.workEducationInfo.zipcode="";
-			visaInfo.workEducationInfo.iszipcodeapply="";
+			visaInfo.workEducationInfo.codechecked="";
 			visaInfo.workEducationInfo.telephone="";
 			visaInfo.workEducationInfo.country=0;
 			visaInfo.workEducationInfo.salary="";
 			visaInfo.workEducationInfo.issalaryapply="";
 			visaInfo.workEducationInfo.workstartdate="";
-			visaInfo.workEducationInfo.duty="";
+			visaInfo.workEducationInfo.jobduty="";
 			
 			emptyContentByObj($("div.jobEduLearningInfoDiv"));
 			emptyContentByObj($(".jobEduLearningInfoTextarea"));
@@ -996,7 +1042,7 @@ var visaVue = new Vue({
 				dataType : 'json',
 				success : function(result) {
 					$("#" + to).val(result).change();
-					visaInfo.familyInfo.cityen = result;
+					visaInfo.familyInfo.othercityen = result;
 				}
 			});
 		},
@@ -1034,7 +1080,7 @@ var visaVue = new Vue({
 				dataType : 'json',
 				success : function(result) {
 					$("#" + to).val(result).change();
-					visaInfo.familyInfo.countryen = result;
+					visaInfo.familyInfo.othercountryen = result;
 				}
 			});
 		},

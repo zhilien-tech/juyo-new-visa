@@ -436,5 +436,5 @@ label {
 	width:150px !important;
 }
 .companyGroupen {
-	display:none;
+	display:none !important;
 }
