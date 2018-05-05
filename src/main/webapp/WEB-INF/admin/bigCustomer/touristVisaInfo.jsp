@@ -1212,7 +1212,7 @@
 							<c:if test="${!empty obj.organizationList }">
 								<c:forEach var="organization" items="${obj.organizationList }">
 								<div class="organizationDiv">
-									<div class="paddingTop draBig leftNo organizationDiv groupInputInfo">
+									<div class="paddingTop draBig leftNo groupInputInfo">
 										<label>组织名称</label>
 										<input name="organizationname" onchange="addSegmentsTranslateZhToEn(this,'organizationnameen','')" value="${organization.organizationname }" type="text"/>
 									</div>
@@ -1221,7 +1221,7 @@
 							</c:if>
 							<c:if test="${empty obj.organizationList }">
 							<div class="organizationDiv">
-								<div class="paddingTop draBig leftNo organizationDiv groupInputInfo">
+								<div class="paddingTop draBig leftNo groupInputInfo">
 									<label>组织名称</label>
 									<input name="organizationname" onchange="addSegmentsTranslateZhToEn(this,'organizationnameen','')" type="text"/>
 								</div>

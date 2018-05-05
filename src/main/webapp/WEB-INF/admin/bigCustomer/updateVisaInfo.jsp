@@ -1212,7 +1212,7 @@
 							<c:if test="${!empty obj.organizationList }">
 								<c:forEach var="organization" items="${obj.organizationList }">
 								<div class="organizationDiv">
-									<div class="paddingTop draBig leftNo organizationDiv groupInputInfo">
+									<div class="paddingTop draBig leftNo groupInputInfo">
 										<label>组织名称</label>
 										<input name="organizationname" onchange="addSegmentsTranslateZhToEn(this,'organizationnameen','')" value="${organization.organizationname }" type="text"/>
 									</div>
@@ -1221,7 +1221,7 @@
 							</c:if>
 							<c:if test="${empty obj.organizationList }">
 							<div class="organizationDiv">
-								<div class="paddingTop draBig leftNo organizationDiv groupInputInfo">
+								<div class="paddingTop draBig leftNo groupInputInfo">
 									<label>组织名称</label>
 									<input name="organizationname" onchange="addSegmentsTranslateZhToEn(this,'organizationnameen','')" type="text"/>
 								</div>
@@ -2011,7 +2011,7 @@
 				<div class="groupcheckBoxInfo paddingRight">
 					<label>Given Names  </label>
 					<input name="lastnameen" id="lastnameusen" v-model="visaInfo.contactPointInfo.lastnameen" type="text"  />
-					<input id="isknownameen" v-model="visaInfo.contactPointInfo.isknownameen" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknowname" name="isknownameen" type="checkbox" />
+					<input id="isknownameen" v-model="visaInfo.contactPointInfo.isknownameen" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknownameen" name="isknownameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop groupcheckBoxInfo cbox">
@@ -2844,7 +2844,7 @@
 							<c:if test="${!empty obj.organizationList }">
 								<c:forEach var="organization" items="${obj.organizationList }">
 								<div class="organizationDiven">
-									<div class="paddingTop draBig leftNo organizationDiven groupInputInfo">
+									<div class="paddingTop draBig leftNo  groupInputInfo">
 										<label>Organization Name</label>
 										<input name="organizationnameen" class="organizationnameen" value="${organization.organizationnameen }" type="text"/>
 									</div>
@@ -2853,7 +2853,7 @@
 							</c:if>
 							<c:if test="${empty obj.organizationList }">
 							<div class="organizationDiven">
-								<div class="paddingTop draBig leftNo organizationDiven groupInputInfo">
+								<div class="paddingTop draBig leftNo groupInputInfo">
 									<label>Organization Name</label>
 									<input name="organizationnameen" class="organizationnameen" type="text"/>
 								</div>

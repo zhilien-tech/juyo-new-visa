@@ -198,11 +198,12 @@ var visaVue = new Vue({
 		},
 		isKnowOrganizationName:function(){
 			var isknoworganizationname = visaInfo.contactPointInfo.isknoworganizationname;
+			visaInfo.contactPointInfo.isknoworganizationnameen = isknoworganizationname;
 			if(isknoworganizationname){
 				visaInfo.contactPointInfo.organizationname = "";
 				visaInfo.contactPointInfo.organizationnameen = "";
 			}
-			visaInfo.contactPointInfo.isknoworganizationnameen = isknoworganizationname;
+			
 		},
 		isorganizationname:function(){
 			var organizationname = visaInfo.contactPointInfo.organizationname;
@@ -528,42 +529,17 @@ var visaVue = new Vue({
 			});
 		},
 		liaisonfirstname:function(from, to, vueObj){
-//			联络人姓   修改成拼音
+//			联络人姓   
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.contactPointInfo.firstnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.contactPointInfo.firstnameen = pinyinchar;
 		},
 		liaisonlastname:function(from, to, vueObj){
-//			联络人名   修改成拼音
+//			联络人名   
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.contactPointInfo.lastnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.contactPointInfo.lastnameen = pinyinchar;
+			
 		},
 		liaisonOrg:function(from, to, vueObj){
 //			联络人组织名称   
@@ -739,40 +715,16 @@ var visaVue = new Vue({
 		familyinfofirstname:function(from, to, vueObj){
 //			家庭信息 父亲的姓   拼音显示  需要修改
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.familyInfo.fatherfirstnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.familyInfo.fatherfirstnameen = pinyinchar;
+			
 		},
 		familyinfolastname:function(from, to, vueObj){
 //			家庭信息 父亲的名   拼音显示  需要修改
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.familyInfo.fatherlastnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.familyInfo.fatherlastnameen = pinyinchar;
+			
 		},
 		familyinfostatus:function(from, to, vueObj){
 //			家庭信息 父亲身份
@@ -796,40 +748,16 @@ var visaVue = new Vue({
 		familyinfomofirstname:function(from, to, vueObj){
 //			家庭信息 母亲的名   拼音显示  需要修改
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.familyInfo.motherfirstnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.familyInfo.motherfirstnameen = pinyincharb;
+			
 		},
 		familyinfomolastname:function(from, to, vueObj){
 //			家庭信息 母亲的名   拼音显示  需要修改
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.familyInfo.motherlastnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.familyInfo.motherlastnameen = pinyinchar;
+			
 		},
 		familyinfomostatus:function(from, to, vueObj){
 //			家庭信息 母亲身份
@@ -853,40 +781,16 @@ var visaVue = new Vue({
 		spousefirstname:function(from, to, vueObj){
 //			配偶姓
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.familyInfo.spousefirstnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.familyInfo.spousefirstnameen = pinyinchar;
+		
 		},
 		spouselastname:function(from, to, vueObj){
 //			配偶名
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.familyInfo.spouselastnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.familyInfo.spouselastnameen = pinyinchar;
+			
 		},
 		spousenationality:function(from, to, vueObj){
 //			配偶国籍
