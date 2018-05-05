@@ -197,6 +197,7 @@ function save(){
 	
 	//旅伴信息
 	visadata.travelCompanionInfo = visaInfo.travelCompanionInfo;
+
 	//以前的美国旅游信息
 	visadata.previUSTripInfo = visaInfo.previUSTripInfo;
 	visaInfo.previUSTripInfo.issueddate = formatDate($('#issueddate').val());//最后一次签证的签发日期
@@ -210,6 +211,7 @@ function save(){
 	visaInfo.workEducationInfo.workstartdate = formatDate($('#workstartdate').val());//工作开始日期
 	//同伴信息
 	visadata.companionList = getCompanionList();
+	console.log(visadata.companionList);
 	//去过美国信息
 	visadata.gousList = getGoUSList();
 	//美国驾照信息

@@ -338,6 +338,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicant.setOtherFirstName(applicantForm.getOtherFirstName());
 		applicant.setOtherLastName(applicantForm.getOtherLastName());
 		applicant.setAddressIsSameWithCard(applicantForm.getAddressIsSameWithCard());
+		applicant.setEmergencyaddress(applicantForm.getEmergencyaddress());
 		if (!Util.isEmpty(applicantForm.getCardProvince())) {
 			applicant.setCardProvince(applicantForm.getCardProvince());
 		}
@@ -1007,6 +1008,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 			applicant.setEmergencyLinkman(applicantForm.getEmergencyLinkman());
 			applicant.setEmergencyTelephone(applicantForm.getEmergencyTelephone());
+			applicant.setEmergencyaddress(applicantForm.getEmergencyaddress());
 			applicant.setValidEndDate(applicantForm.getValidEndDate());
 			applicant.setValidStartDate(applicantForm.getValidStartDate());
 			applicant.setUpdateTime(new Date());

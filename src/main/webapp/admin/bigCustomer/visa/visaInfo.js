@@ -15,7 +15,7 @@ function deleteMoreDiv(divClass){
 
 //克隆时，查看当前div下是否有DateTimePicker，如果有则进行初始化
 function initDateTimePicker(obj){
-	obj.find("input[type='text'][class='datetimepickercss']").each(function() {
+	obj.find("input[type='text'][class *='datetimepickercss']").each(function() {
 		$(this).datetimepicker({
 			format: 'dd/mm/yyyy',
 			autoclose: true,//选中日期后 自动关闭
@@ -435,35 +435,31 @@ $(".drivercancelen").click(function(){
 
 
 //-------------------------------------------美国联络点 Start----------------------------------
-//不知道联系人名
-linkage($("#isknowname"));
+//美国联络人姓名
 
-function linkage(obj){
-	
-	 obj.change(function(){
-		var beforeEle = obj.prev();
-		var linkageinput = obj.parent().prev().children("input");
+	$("#isknowname").change(function(){
+		var beforeEle = $("#isknowname").prev();
+		var beforeEleen = $("#isknownameen").prev();
+		var linkageinput = $("#isknowname").parent().prev().children("input");
+		var linkageinputen = $("#isknownameen").parent().prev().children("input");
 		console.log(linkageinput);
+		console.log(linkageinputen);
 		beforeEle.val("");
-		if(obj.is(':checked')){
+		beforeEleen.val("");
+		if($("#isknowname").is(':checked')){
 			linkageinput.prop("disabled",true);
 			beforeEle.prop("disabled",true);
+			$("#isknownameen").prop('checked',true);
+			linkageinputen.prop("disabled",true);
+			beforeEleen.prop("disabled",true);
 		}else{
 			linkageinput.prop("disabled",false);
 			beforeEle.prop("disabled",false);
+			$("#isknownameen").prop('checked',false);
+			linkageinputen.prop("disabled",false);
+			beforeEleen.prop("disabled",false);
 		}
 	});
-}
-
-//不知道组织名
-//editEleBeforeCheckbox($("#isknoworganizationname"));
-
-//是否 邮件地址
-//editEleBeforeCheckbox($("#isKnowEmailAddress"));
-
-//与你的关系
-//emptyContentByObj($("#contactPoint_ralationship_div"));
-
 
 //-------------------------------------------美国联络点 end------------------------------------
 

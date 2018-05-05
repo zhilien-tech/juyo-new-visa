@@ -119,6 +119,9 @@ label {
 .youRelationship {
 	padding-top: 10px;
 }
+.AndYouRS {
+	padding-bottom:68px;
+}
 .youRelationship select {
 	width: 182px; 
 	height: 34px; 
@@ -137,9 +140,8 @@ label {
 	margin-top:10px;
 }
 .visaNumen {
-	float:none !important;
 	display:inline-block;
-	
+	padding-top:11px !important;
 }
 .save {
 	display: inline-block; 
@@ -247,8 +249,17 @@ label {
 	display: none;
 }
 .lastVisaDate {
-	padding-top: 10px; 
+	padding-top: 15px; 
 	float: left;
+}
+.lastVisaDateen {
+	float:left;
+}
+.lastVisaDateen label {
+	width:182px !important;
+}
+.visaisnumber {
+	padding-top:15px !important;
 }
 .visaNum {
 	padding-top: 10px; 
@@ -434,4 +445,45 @@ label {
 /*****************英文样式*******************/
 #dateuniten {
 	width:150px !important;
+}
+.companyGroupen {
+	display:none !important;
+}
+/* 旅伴信息 */
+.firstnameen,.lastnameen {
+	width:100% !important;
+}
+.teamnamefalseen {
+	margin-bottom:38px;
+}
+/* 以前的美国旅游信息 */
+#dateunit,.dateuniten {
+	margin-left:10px;
+}
+.gotousInfoen {
+	margin-bottom:35px;
+}
+.goUS_CountryDiven {
+	margin-bottom:10px;
+}
+.paddingBom {
+	padding-bottom:20px;
+}
+#lostexplainen {
+	margin-top:0px !important;
+}
+.pad-top {
+	padding-top:30px;
+}
+.pad-fivetop {
+	padding-top:50px;
+}
+#fatherstatusen {
+	width:100% !important;
+}
+#motherstatusen {
+	width:100% !important;
+}
+.margtop {
+	margin-top:30px !important;
 }
