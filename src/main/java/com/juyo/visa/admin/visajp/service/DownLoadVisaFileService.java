@@ -31,6 +31,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -277,7 +278,12 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				/*if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
 					TFlightEntity goflight = flightViewService.fetch(ordertripjp.getGoFlightNum().longValue());
 				}*/
-				map.put("entryFlight", ordertripjp.getGoFlightNum());
+				//入境航班
+				if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
+					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
+					map.put("entryPort", goflight.getLandingName()+",");
+				}
+				map.put("entryFlight", ordertripjp.getGoFlightNum().replace("*",""));
 				if (!Util.isEmpty(ordertripjp.getReturnDate())) {
 					map.put("departDate", dateFormat.format(ordertripjp.getReturnDate()));
 				}
@@ -285,14 +291,21 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
 
 					map.put("stay", String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(),
-							ordertripjp.getReturnDate()) + 1));
+							ordertripjp.getReturnDate()) + 1)+"天");
 				}
 				/*if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
 					//出境航班
 					TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
 					map.put("departFlight", returnflight.getFlightnum());
 				}*/
-				map.put("departFlight", ordertripjp.getReturnFlightNum());
+				if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
+					//出境航班
+//					TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
+//					map.put("departFlight", returnflight.getFlightnum());
+					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
+					map.put("departPort", goflight.getLandingName()+",");
+				}
+				map.put("departFlight", ordertripjp.getReturnFlightNum().replace("*", ""));
 			} else if (ordertripjp.getTripType().equals(2)) {
 				//多程处理
 				if (!Util.isEmpty(mutiltrip)) {
@@ -305,7 +318,12 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 					/*if (!Util.isEmpty(entrytrip.getFlightNum())) {
 						TFlightEntity goflight = flightViewService.fetch(entrytrip.getFlightNum().longValue());
 					}*/
-					map.put("entryFlight", entrytrip.getFlightNum());
+					//入境航班
+					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
+						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
+						map.put("entryPort", goflight.getLandingName()+",");
+					}
+					map.put("entryFlight", entrytrip.getFlightNum().replaceAll("*", ""));
 					//最后一程作为返回日期
 					TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
 					if (!Util.isEmpty(returntrip.getDepartureDate())) {
@@ -316,6 +334,13 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						TFlightEntity returnflight = flightViewService.fetch(returntrip.getFlightNum().longValue());
 						map.put("departFlight", returnflight.getFlightnum());
 					}*/
+					if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
+						//出境航班
+//						TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
+//						map.put("departFlight", returnflight.getFlightnum());
+						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
+						map.put("departPort", goflight.getLandingName()+",");
+					}
 					map.put("departFlight", returntrip.getFlightNum());
 					//停留天数
 					if (!Util.isEmpty(entrytrip.getDepartureDate()) && !Util.isEmpty(returntrip.getDepartureDate())) {
@@ -348,6 +373,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
 		List<TOrderTravelplanJpEntity> ordertravelplan = (List<TOrderTravelplanJpEntity>) tempdata
 				.get("ordertravelplan");
+		TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
+		
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("firstName", record.getString("firstname"));
@@ -392,6 +419,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			//国籍
 			map.put("country", "中国");
 			//曾有的或另有的国际
+//			if(Util.isEmpty(record.getString("nationality"))) {
+//				map.put("othernationality", "无");
+//			}
 			map.put("othernationality", record.getString("nationality"));
 			//身份证号
 			map.put("cardId", record.getString("cardid"));
@@ -441,6 +471,11 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 					if (!Util.isEmpty(goflightentity)) {
 						map.put("goFlightNum", goflightentity.getAirlinecomp());
 					}
+//					if (!Util.isEmpty(entrytrip.getFlightNum())) {
+//						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+//								Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
+//						map.put("fill_22", goflight.getFlightnum());
+//					}
 				} else if (ordertripjp.getTripType().equals(2)) {
 					//多程处理
 					if (!Util.isEmpty(mutiltrip)) {
@@ -488,15 +523,26 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("hotelname", record.getString("hotelname"));
 			map.put("hotelphone", record.getString("hotelphone"));
 			map.put("hoteladdress", record.getString("hoteladdress"));
+			String lastinfo = "";
+			if (!Util.isEmpty(orderjp.getLaststartdate())) {
+				lastinfo += dateformat.format(orderjp.getLaststartdate());
+			}
+			lastinfo += "~";
+			if (!Util.isEmpty(orderjp.getLastreturndate())) {
+				lastinfo += dateformat.format(orderjp.getLastreturndate());
+			}
+			lastinfo += "      " + (Util.isEmpty(orderjp.getLaststayday()) ? "" : orderjp.getLaststayday());
+			map.put("fill_26", lastinfo+"天");
 			//在日担保人信息
 			map.put("danbaoname", record.getString("vouchname"));
-			map.put("danbaonameen", record.getString("vouchnameen"));
+			 int lastIndexOf = record.getString("vouchname").lastIndexOf("-");
+			map.put("danbaonameen", record.getString("vouchname").substring(lastIndexOf+1,  record.getString("vouchname").length()));
 			map.put("danbaotelephone", record.getString("vouchphone"));
 			map.put("vouchaddress", record.getString("vouchaddress"));
 			if ("男".equals(record.getString("vouchsex"))) {
-				map.put("vouchnan", "0");
+				map.put("vouchnan", "On");
 			} else if ("女".equals(record.getString("vouchsex"))) {
-				map.put("vouchnv", "0");
+				map.put("vouchnv", "On");
 			}
 			if (!Util.isEmpty(record.get("vouchbirth"))) {
 				map.put("danbaobirthday", dateformat.format((Date) record.get("vouchbirth")));
@@ -509,9 +555,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("invitephone", record.getString("invitephone"));
 			map.put("inviteaddress", record.getString("inviteaddress"));
 			if ("男".equals(record.getString("invitesex"))) {
-				map.put("invitenan", "0");
+				map.put("invitenan", "On");
 			} else if ("女".equals(record.getString("invitesex"))) {
-				map.put("invitenv", "0");
+				map.put("invitenv", "On");
 			}
 			if (!Util.isEmpty(record.get("invitebirth"))) {
 				map.put("invitebirth", dateformat.format((Date) record.get("invitebirth")));
@@ -533,8 +579,12 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("workname", record.getString("workname"));
 			map.put("workphone", record.getString("workphone"));
 			map.put("workaddress", record.getString("workaddress"));
-			map.put("occupation", record.getString("occupation"));
+			//目前的职位
+			map.put("occupation", record.getString("position"));
+			//配偶所从事的职业
+			map.put("otheroccupation", record.getString("unitname"));
 			//map.put("danbaoname", "参照身元保证书");
+			//出生日期
 			map.put("text2", "0");
 			map.put("text3", "0");
 			map.put("text4", "0");
@@ -624,6 +674,19 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				strb.append("\n");
 			}
 			map.put("guest", strb.toString().toUpperCase());
+			String room = null;
+			if(applyinfo.size()>0){
+				if(applyinfo.size()%2 ==1) {
+				
+				int c = applyinfo.size()/2+1;
+			   room = "TWN "+c+" 室";
+					map.put("room", room);
+			}else {
+				int c = applyinfo.size()/2;
+				   room = "TWN "+c+" 室";
+						map.put("room", room);
+			}
+			}
 			//酒店信息
 			if (!Util.isEmpty(ordertravelplan)) {
 				TOrderTravelplanJpEntity travelplanEntity = ordertravelplan.get(0);
@@ -648,19 +711,42 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	public ByteArrayOutputStream applyList(Map<String, Object> tempdata) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DateFormat applydateformat = new SimpleDateFormat("yyyy/MM/dd");
+		//公司信息
+		TCompanyEntity company = (TCompanyEntity) tempdata.get("company");
 		try {
+//			Document document = new Document(PageSize.A4.rotate(), 0, 0, 36, 36);
+//			TtfClassLoader ttf = new TtfClassLoader();
+//			PdfWriter.getInstance(document, stream);
+//			document.open();
+//
+//			Font font = ttf.getFont();
+//
+//			Paragraph p = new Paragraph("签证申请人名单", font);
+//			p.setSpacingBefore(5);
+//			p.setSpacingAfter(5);
+//			p.setIndentationLeft(50);
+//			p.setIndentationRight(50);
+//			document.add(p);
 			Document document = new Document(PageSize.A4.rotate(), 0, 0, 36, 36);
 			TtfClassLoader ttf = new TtfClassLoader();
 			PdfWriter.getInstance(document, stream);
 			document.open();
-
 			Font font = ttf.getFont();
-
-			Paragraph p = new Paragraph("签证申请人名单", font);
+			font.setFamily("宋体");
+			Font font1 = ttf.getFont();
+			font1.setFamily("宋体");
+			font1.setSize(17);
+			Paragraph p = new Paragraph();
+			Chunk chunk1 = new Chunk("签证申请人名单", font1);
+			Chunk chunk3 = new Chunk("                                                                                            ", font);
+			Chunk chunk2= new Chunk(company.getName(), font1);
+			p.add(chunk1);
+			p.add(chunk3);
+			p.add(chunk2);
 			p.setSpacingBefore(5);
 			p.setSpacingAfter(5);
-			p.setIndentationLeft(50);
-			p.setIndentationRight(50);
+			p.setIndentationLeft(20);
+			p.setIndentationRight(20);
 			document.add(p);
 
 			float[] columns = { 2, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 4, 3, 2, 4, };
@@ -799,9 +885,10 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			document.open();
 			TtfClassLoader ttf = new TtfClassLoader();
 			Font font = ttf.getFont();
-			font.setSize(15);
+			font.setSize(22);
+			font.setFamily("宋体");
 			{
-				Paragraph p = new Paragraph("滞　在　予　定　表", font);
+				Paragraph p = new Paragraph("滞在予定表", font);
 				p.setSpacingBefore(5);
 				p.setSpacingAfter(5);
 				p.setAlignment(Paragraph.ALIGN_CENTER);
@@ -837,10 +924,12 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				}
 			}
 			{
-				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
+//				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
+				String subtitle = "(平成" + godatestr + "～" + returndatestr.substring(3, 8) + ")";
 				Paragraph p = new Paragraph(subtitle, font);
-				p.setSpacingBefore(5);
-				p.setIndentationRight(20);
+//				p.setSpacingBefore(5);
+				p.setIndentationRight(13);
+				p.setSpacingAfter(5);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				//添加副标题1
 				document.add(p);
@@ -871,17 +960,18 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			table.setTotalWidth(PageSize.A4.getWidth());
 
 			//设置表头
-			String titles[] = { "日数", "年月日", "行　動　予　定", "宿　泊　先", };
+			String titles[] = { "日数", "年月日", "行動予定", "宿泊先", };
 			font.setSize(12);
 			for (String title : titles) {
 				PdfPCell cell = new PdfPCell(new Paragraph(title, font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table.addCell(cell);
-			}
+			} 
 			font.setSize(10);
 			//格式化为日本的日期
-			String pointpattren = "yy.MM.dd";
+//			String pointpattren = "yy.MM.dd";
+			String pointpattren = "平成yy年MM月dd日";
 			int count = 0;
 			for (TOrderTravelplanJpEntity ordertravelplan : ordertravelplans) {
 				count++;
@@ -1361,7 +1451,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			Image img = Image.getInstance(url);
 			img.setAlignment(Image.RIGHT);
 			//		img.scaleToFit(400, 200);//大小
-			img.scaleToFit(100, 100);//大小
+			img.scaleToFit(200, 100);//大小
 			//img.setIndentationRight(200);
 			img.setRotation(800);
 			if (n <= 1) {
