@@ -189,6 +189,23 @@ function getDirectList(){
 		}else{
 			directLength += '';
 		}
+		//英文
+		var relativesfirstnameen = $('.directRelativesYesen').find('[name=relativesfirstnameen]').val();
+		var relativeslastnameen = $('.directRelativesYesen').find('[name=relativeslastnameen]').val();
+		var relationshipen = $('.directRelativesYesen').find('[name=relationshipen]').val();
+		var relativesstatusen = $('.directRelativesYesen').find('[name=relativesstatusen]').val();
+		directLength += relativesfirstnameen;
+		directLength += relativeslastnameen;
+		if(relationshipen != 0){
+			directLength += relationshipen;
+		}else{
+			directLength += '';
+		}
+		if(relativesstatus != 0){
+			directLength += relativesstatus;
+		}else{
+			directLength += '';
+		}
 		
 		if(directLength.length > 0){
 			direct.staffid = staffId;
@@ -196,6 +213,11 @@ function getDirectList(){
 			direct.relativeslastname = relativeslastname;
 			direct.relationship = relationship;
 			direct.relativesstatus = relativesstatus;
+			
+			direct.relativesfirstnameen = relativesfirstnameen;
+			direct.relativeslastnameen = relativeslastnameen;
+			direct.relationshipen = relationshipen;
+			direct.relativesstatusen = relativesstatusen;
 			directList.push(direct);
 		}
 	});
@@ -258,7 +280,9 @@ function getBeforeWorkList(){
 		var employeraddressSecen = $('.workBeforeInfosDiven').eq(index).find('[name=employeraddressSecen]').val();
 		var employercityen = $('.workBeforeInfosDiven').eq(index).find('[name=employercityen]').val();
 		var employerprovinceen = $('.workBeforeInfosDiven').eq(index).find('[name=employerprovinceen]').val();
+//		alert("州省"+employerprovinceen);
 		var employerzipcodeen = $('.workBeforeInfosDiven').eq(index).find('[name=employerzipcodeen]').val();
+		//alert("邮政编码"+employerzipcodeen);
 		var employercountryen = $('.workBeforeInfosDiven').eq(index).find('[name=employercountryen]').val();
 		if(employercountryen != 0){
 			beforeWorkLength += employercountryen;
@@ -266,7 +290,8 @@ function getBeforeWorkList(){
 			beforeWorkLength += '';
 		}
 		var employertelephoneen = $('.workBeforeInfosDiven').eq(index).find('[name=employertelephoneen]').val();
-		var jobtitleen = $(this).eq(index).find('[name=jobtitleen]').val();
+		var jobtitleen = $('.workBeforeInfosDiven').eq(index).find('[name=jobtitleen]').val();
+		console.log("职称"+jobtitleen);
 		//checkbox
 		var isemployerzipcodeapplyen = $('.workBeforeInfosDiven').eq(index).find('[name=isemployerzipcodeapplyen]').is(':checked');
 		if(isemployerzipcodeapplyen){
