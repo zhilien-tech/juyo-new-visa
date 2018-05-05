@@ -277,7 +277,7 @@
 								<input type="radio" name="isapplyingsametypevisa" v-model="visaInfo.previUSTripInfo.isapplyingsametypevisa" value="1" />是
 								<input type="radio" name="isapplyingsametypevisa" v-model="visaInfo.previUSTripInfo.isapplyingsametypevisa" value="2" checked />否
 							</div>
-							<div class="describleCountry groupRadioInfo paddingTop paddingBom">
+							<div class="describleCountry groupRadioInfo paddingTop">
 								<label>是否在签发上述签证的国家或地区申请并且是您所在的国家或地区的居住地</label>
 								<input type="radio"  name="issamecountry" v-model="visaInfo.previUSTripInfo.issamecountry" value="1" />是
 								<input type="radio"  name="issamecountry" v-model="visaInfo.previUSTripInfo.issamecountry" value="2" checked />否
@@ -329,7 +329,7 @@
 					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" @change="isrefused()" class="refuse" value="1" />是
 					<input type="radio" name="isrefused" v-model="visaInfo.previUSTripInfo.isrefused" @change="isrefused()" v-on:click="visaNotRefused" class="refuse" value="2" checked />否
 				</div>
-				<div class="refuseExplain pad-top grouptextareaInfo">
+				<div class="refuseExplain grouptextareaInfo">
 					<label>说明</label>
 					<input name="refusedexplain" class="areaInputPic" id='refusedexplain' @change="refusedexplainen('refusedexplain','refusedexplainen','visaInfo.previUSTripInfo.refusedexplainen')" v-model="visaInfo.previUSTripInfo.refusedexplain" />
 				</div>
@@ -341,7 +341,7 @@
 					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" @change="islegalpermanentresident()" class="onceLegitimate" value="1" />是
 					<input type="radio" name="islegalpermanentresident" v-model="visaInfo.previUSTripInfo.islegalpermanentresident" @change="islegalpermanentresident()" v-on:click="visaNotIegal" class="onceLegitimate" value="2" checked />否
 				</div>
-				<div class="onceExplain pad-top grouptextareaInfo">
+				<div class="onceExplain grouptextareaInfo">
 					<label>说明</label>
 					<input name="permanentresidentexplain" id="permanentresidentexplain" @change="permanentresidentexplain('permanentresidentexplain','permanentresidentexplainen','visaInfo.previUSTripInfo.permanentresidentexplainen')" class="areaInputPic" v-model="visaInfo.previUSTripInfo.permanentresidentexplain" />
 				</div>
@@ -353,7 +353,7 @@
 					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" @change="isfiledimmigrantpetition()" class="onceImmigration" value="1" />是
 					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" @change="isfiledimmigrantpetition()" v-on:click="visaNotfiledimmigrantpetition" class="onceImmigration" value="2" checked />否
 				</div>
-				<div class="immigrationExplain pad-fivetop grouptextareaInfo">
+				<div class="immigrationExplain grouptextareaInfo">
 					<label>说明</label>
 					<input name="immigrantpetitionexplain" id="immigrantpetitionexplain" @change="immigrantpetitionexplain('immigrantpetitionexplain','immigrantpetitionexplainen','visaInfo.previUSTripInfo.immigrantpetitionexplainen')" class="areaInputPic" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplain" />
 				</div>
@@ -493,7 +493,7 @@
 						<input type="radio" name="hasimmediaterelatives" v-model="visaInfo.familyInfo.hasimmediaterelatives" @change="hasimmediaterelatives()" class="directRelatives directUSRelatives" value="1" />是
 						<input type="radio" name="hasimmediaterelatives" v-model="visaInfo.familyInfo.hasimmediaterelatives" @change="hasimmediaterelatives()" class="directRelatives directUSRelatives" value="2" checked/>否
 					</div>
-					<div class="directRelatives margtop">
+					<div class="directRelatives">
 						<!--yes-->
 						<c:if test="${!empty obj.zhiFamilyList }">
 							<c:forEach var="zhifamily" items="${obj.zhiFamilyList }">
