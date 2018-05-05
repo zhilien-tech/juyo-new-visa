@@ -37,6 +37,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
+import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
@@ -190,8 +191,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		result.put("VisaUSStatesEnum", EnumUtil.enum2(VisaUSStatesEnum.class));
 		List<TStateUsEntity> stateUsList = dbDao.query(TStateUsEntity.class, null, null);
 		result.put("stateUsList", stateUsList);
-				
-		
+
 		//---同伴信息
 		List<TAppStaffCompanioninfoEntity> companionList = dbDao.query(TAppStaffCompanioninfoEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
@@ -363,8 +363,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String workstartdateen = workEducationInfo.getString("workstartdateen");
 		workstartdateen = formatDateStr(workstartdateen, FORMAT_DD_MM_YYYY);
 		workEducationInfo.set("workstartdateen", workstartdateen);
-		
-		
+
 		/*//---以前工作信息集合
 		List<TAppStaffBeforeworkEntity> beforeWorkList = dbDao.query(TAppStaffBeforeworkEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
@@ -451,8 +450,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		Date nowDate = DateUtil.nowDate();
 
 		Map<String, String> map = new HashMap<String, String>();
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		String YuShangComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID"));
+		Integer US_YUSHANG_COM_ID = Integer.valueOf(YuShangComIdStr);
 		//基本信息
-		addForm.setComid(US_YUSHANG_COMID);
+		addForm.setComid(US_YUSHANG_COM_ID);
 		//addForm.setUserid(userId);
 		//addForm.setOpid(userId);
 		addForm.setIsidentificationnumberapply(IsYesOrNoEnum.YES.intKey());
@@ -1115,6 +1117,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			orderUSViewService.insertLogs(orderus.getId(), USOrderListStatusEnum.FILlED.intKey(), loginUser.getId());
 			basic.setIscompleted(IsYesOrNoEnum.YES.intKey());
 			dbDao.update(basic);
+			//改变订单状态
+			if (orderus.getStatus() < USOrderListStatusEnum.FILlED.intKey()) {
+				orderus.setStatus(USOrderListStatusEnum.FILlED.intKey());
+				dbDao.update(orderus);
+			}
 		}
 		return JsonResult.success("保存成功");
 	}
@@ -1580,10 +1587,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		return dateStr;
 	}
 
+	//工作人员下单
 	public Object addOrderStaff(TAppStaffBasicinfoAddForm addForm, HttpSession session) {
 
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		//Integer comId = loginCompany.getId();
+		Integer loginComId = loginCompany.getId();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//Integer userId = loginUser.getId();
 
@@ -1591,7 +1599,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		Map<String, String> map = new HashMap<String, String>();
 		//基本信息
-		addForm.setComid(US_YUSHANG_COMID);
+		addForm.setComid(loginComId);
 		//addForm.setUserid(userId);
 		//addForm.setOpid(userId);
 		addForm.setIsidentificationnumberapply(IsYesOrNoEnum.YES.intKey());

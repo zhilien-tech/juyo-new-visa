@@ -6,17 +6,19 @@
 
 package com.juyo.visa.admin.orderUS.form;
 
+import lombok.Data;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.UserLoginEnum;
+import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
-
-import lombok.Data;
 
 /**
  * 美国订单列表form
@@ -66,8 +68,17 @@ public class OrderUSListDataForm implements SQLParamForm {
 		Cnd cnd = Cnd.NEW();
 		//订单状态检索
 		if (!Util.isEmpty(status)) {
-			cnd.and("tou.status", "like", "%" + status + "%");
+			if (Util.eq(status, USOrderListStatusEnum.DISABLED.intKey())) {
+				cnd.and("tou.isdisable", "=", IsYesOrNoEnum.YES.intKey());
+			} else {
+				SqlExpressionGroup e1 = Cnd.exps("tou.status", "=", status).and("tou.isdisable", "=",
+						IsYesOrNoEnum.NO.intKey());
+				cnd.and(e1);
+			}
 		}
+		/*if (!Util.isEmpty(status)) {
+			cnd.and("tou.status", "like", "%" + status + "%");
+		}*/
 		//领区检索
 		if (!Util.isEmpty(cityid)) {
 			cnd.and("tou.cityid", "like", "%" + cityid + "%");
@@ -96,6 +107,7 @@ public class OrderUSListDataForm implements SQLParamForm {
 			} else {
 				//普通的操作员
 				cnd.and("tu.usertype", "=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
+				cnd.and("tou.comId", "=", companyid);
 			}
 		} else {
 			//我的

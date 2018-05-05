@@ -61,8 +61,10 @@
         <li>住址(市) <input type="text" class="txtInput" v-model="applicatdata.cardcity"/></li>
         <li>住址(街楼) <input type="text" class="txtInput" style="width:70%;" v-model="applicatdata.address"/></li>
         <li>签发机关 <input type="text" class="txtInput" v-model="applicatdata.issueorganization"/></li>
+        <!--  
         <li>签发日期 <input id="issueDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="applicatdata.validstartdate"/></li>
         <li>有效期至<input id="birthDate" type="text" class="txtInput" data-lcalendar="2011-01-1,2019-12-31" readonly="" v-model="applicatdata.validenddate"/></li>
+        -->
         <li>现在地址是否与身份证一致<span class="onOff"> <input type="checkbox" id="consistent" class="consistent checkBox"> <label for="consistent" class="green"></label> </span></li>
         <li class="isclose">住址(省) <input type="text" class="txtInput" v-model="applicatdata.province"/></li>
         <li class="isclose">住址(市) <input type="text" class="txtInput" v-model="applicatdata.city"/></li>
@@ -78,6 +80,7 @@
    		<li class="afterNatAndIDinput">国籍 <input type="text" class="txtInput" id="" v-model="applicatdata.nationality"/></li>
    		<li>紧急联系人姓名 <input type="text" class="txtInput" id="" v-model="applicatdata.emergencylinkman"/></li>
    		<li>紧急联系人手机号 <input type="text" class="txtInput emergencyContact" maxlength="11" v-model="applicatdata.emergencytelephone"/></li>
+        <li>紧急联系人地址 <input type="text" class="txtInput emergencyContact" v-model="applicatdata.emergencyaddress"/></li>
     </ul>
 <div class="bottom">
     <a class="clear btn">清除</a><a class="next btn" >下一步</a>

@@ -575,17 +575,6 @@
 				content:'/admin/pcVisa/updatePhoto.html?staffid='+id+'&flag=1'
 			});
 		}
-		//姓名处理
-		var firstname =  '${obj.passportInfo.firstname }';
-		var lastname =  '${obj.passportInfo.lastname }';
-		var firstnameen =  '${obj.passportInfo.firstnameen }';
-		var lastnameen =  '${obj.passportInfo.lastnameen }';
-		if((firstname != "" || lastname != "") && (firstnameen == "" || lastnameen == "")){
-			$("#allname").val(firstname+lastname+"/"+getPinyinStr(firstname)+getPinyinStr(lastname));
-		}
-		if((firstname == "" && lastname == "") && (firstnameen == "" && lastnameen == "")){
-			$("#allname").val("");
-		}
 		//将汉字转为拼音
 		function getPinyinStr(hanzi){
 			var onehanzi = hanzi.split('');
@@ -1055,7 +1044,7 @@
 					}else{
 						$('#imgInch').attr('src', '');
 					}
-					$('#allname').val(data.passportInfo.firstname+data.passportInfo.lastname+'/'+data.passportInfo.firstnameen+data.passportInfo.lastnameen);
+					//$('#allname').val(data.passportInfo.firstname+data.passportInfo.lastname+'/'+data.passportInfo.firstnameen+data.passportInfo.lastnameen);
 					$('#sex').val(data.passportInfo.sex);
 					$('#birthday').val(data.birthday);
 					$('#realinfo').val(data.realinfo);
@@ -1063,6 +1052,18 @@
 					$('#aacode').val(data.summaryInfo.aacode);
 					$('#passport').val(data.passportInfo.passport);
 					$('#interviewdate').val(data.summaryInfo.Interviewdate);
+					
+					//姓名处理
+					var firstname = data.passportInfo.firstname;
+					var lastname = data.passportInfo.lastname;
+					var firstnameen = data.passportInfo.firstnameen;
+					var lastnameen = data.passportInfo.lastnameen;
+					if((firstname != "" || lastname != "") && (firstnameen == undefined || lastnameen == undefined)){
+						$("#allname").val(firstname+lastname+"/"+getPinyinStr(firstname)+getPinyinStr(lastname));
+					}
+					if((firstname != undefined && lastname != undefined) && (firstnameen != undefined && lastnameen != undefined)){
+						$('#allname').val(data.passportInfo.firstname+data.passportInfo.lastname+'/'+data.passportInfo.firstnameen+data.passportInfo.lastnameen);
+					}
 				}
 			});
 		}

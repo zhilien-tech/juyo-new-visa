@@ -247,12 +247,18 @@
 										<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.address }"/>
 									</div>
 								</div>
+								<div class="col-sm-4 preSchool">
+									<div class="form-group">
+										<label><span>*</span>职位</label>
+										<input id="position" name="position" type="text" class="form-control input-sm" value="${obj.workJp.position }"/>
+									</div>
+								</div>
 							</div>
 							
 							<!-- end 单位地址 -->
 							<!-- 父母职业/配偶职业 -->
 							<div class="row unitNameRow">
-								<div class="col-sm-8 preSchool">
+								<div class="col-sm-4 preSchool">
 									<div class="form-group">
 										<label id="unitNameLabel"></label>
 										<input id="unitName" name="unitName" type="text" class="form-control input-sm" value="${obj.workJp.unitName }"/>

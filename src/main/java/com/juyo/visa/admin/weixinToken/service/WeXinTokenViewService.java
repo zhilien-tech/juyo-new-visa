@@ -26,11 +26,13 @@ import com.alibaba.druid.support.logging.Log;
 import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
+import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
+import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TConfWxEntity;
 import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
@@ -56,8 +58,10 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 	//获取accessToken
 	public Object getAccessToken() {
-
-		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 2);
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		String wxConfigStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID"));
+		Long T_APP_STAFF_CONF_WX_ID = Long.valueOf(wxConfigStr);
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		String WX_APPID = wx.getAppid();
 		String WX_APPSECRET = wx.getAppsecret();
 		String WX_TOKENKEY = wx.getAccesstokenkey();
@@ -84,6 +88,13 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		return accessTokenUrl;
 	}
 
+	//获取 九宫格访问路径
+	public String getFenrollUrl() {
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		String T_APP_STAFF_Fenroll_WX_URL = (String) kvConfigProperties.get("T_APP_STAFF_Fenroll_WX_URL");
+		return T_APP_STAFF_Fenroll_WX_URL;
+	}
+
 	//获取ticket
 	public JSONObject getJsApiTicket() {
 		String accessToken = (String) getAccessToken();
@@ -95,8 +106,10 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 	//生成微信权限验证的参数
 	public Map<String, String> makeWXTicket(String jsApiTicket, String url) {
-
-		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, 2);
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		String wxConfigStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID"));
+		Long T_APP_STAFF_CONF_WX_ID = Long.valueOf(wxConfigStr);
+		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		String WX_APPID = wx.getAppid();
 
 		Map<String, String> ret = new HashMap<String, String>();
@@ -189,7 +202,6 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	public Object wechatJsSDKNewuploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type,
 			Integer mainid, Integer sequence, Integer status) {
 		Date nowDate = DateUtil.nowDate();
-
 		TAppStaffCredentialsEntity credentialEntity = new TAppStaffCredentialsEntity();
 		if (type == TAppStaffCredentialsEnum.IDCARD.intKey()) {//身份证
 			credentialEntity = dbDao.fetch(TAppStaffCredentialsEntity.class,
@@ -219,6 +231,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 					credentialEntity.setStatus(status);
 					credentialEntity.setUpdatetime(new Date());
 					int update = dbDao.update(credentialEntity);
+
 				} else {
 					credentialEntity = new TAppStaffCredentialsEntity();
 					credentialEntity.setCreatetime(new Date());
@@ -230,6 +243,13 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 					credentialEntity.setStatus(status);
 					credentialEntity.setMainid(mainid);
 					dbDao.insert(credentialEntity);
+				}
+				//更新婚姻状态
+				if (type == TAppStaffCredentialsEnum.MARRAY.intKey()) {
+					TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffId.longValue());
+					basic.setMarrystatus(status);
+					basic.setMarrystatusen(status);
+					dbDao.update(basic);
 				}
 			}
 		}

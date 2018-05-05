@@ -75,8 +75,14 @@
 								<div class="ctid"><label>领区：</label><span>{{data.cityid}}</span></div>
 								<div><label>面试时间：</label><span></span></div>
 								<div><label>是否付款：</label><span>{{data.ispayed}}</span></div>
-								<div><label></label><span>{{data.orderstatus}}</span>
+								<div v-if="data.isdisable==1">
+								<label></label><span>作废</span>
 								</div>
+								<div v-else>
+								<label></label><span>{{data.orderstatus}}</span>
+								</div>
+								<!-- <div><label></label><span>{{data.orderstatus}}</span>
+								</div> -->
 								<div>
 									<label>操作：</label>
 									<div class="editBtn" v-if="data.isdisable==1">
