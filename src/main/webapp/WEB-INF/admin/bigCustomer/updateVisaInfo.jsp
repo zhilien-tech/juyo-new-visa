@@ -2139,7 +2139,7 @@
 						<!--yes-->
 						<c:if test="${!empty obj.zhiFamilyList }">
 							<c:forEach var="zhifamily" items="${obj.zhiFamilyList }">
-								<div class="directRelativesYesen">
+								<div class="directRelativesYes directRelativesYesen">
 									<div class="floatLeft leftNo groupInputInfo">
 										<label>Surnames</label>
 										<input name="relativesfirstnameen" id="relativesfirtstnameen" value="${zhifamily.relativesfirstnameen }" type="text" />
@@ -2181,7 +2181,7 @@
 							</c:forEach>
 						</c:if>
 						<c:if test="${empty obj.zhiFamilyList}">
-							<div class="directRelativesYesen">
+							<div class="directRelativesYes directRelativesYesen">
 								<div class="floatLeft leftNo groupInputInfo">
 									<label>Surnames</label>
 									<input name="relativesfirstnameen" id="relativesfirtstnameen"  type="text" />
